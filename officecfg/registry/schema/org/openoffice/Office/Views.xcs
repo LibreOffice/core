@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Views.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:32:50 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 				<desc xml:lang="sv">Contains the persistent data for a general office dialog.</desc>
 				<desc xml:lang="pl">Contains the persistent data for a general office dialog.</desc>
 				<desc xml:lang="pt-BR">Contains the persistent data for a general office dialog.</desc>
-				<desc xml:lang="ja">Contains the persistent data for a general office dialog.</desc>
+				<desc xml:lang="ja">全般的なオフィスダイアログの持続データが含まれます。</desc>
 				<desc xml:lang="ko">Contains the persistent data for a general office dialog.</desc>
 				<desc xml:lang="tr">Contains the persistent data for a general office dialog.</desc>
 				<desc xml:lang="th">Contains the persistent data for a general office dialog.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a general office dialog.</desc>
+				<desc xml:lang="x-comment">Contains the persistent data for a general office dialog.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -114,11 +115,12 @@
 					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
 					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -142,11 +144,12 @@
 					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
 					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -171,11 +174,12 @@
 				<desc xml:lang="sv">Contains the persistent data for a special tab dialog.</desc>
 				<desc xml:lang="pl">Contains the persistent data for a special tab dialog.</desc>
 				<desc xml:lang="pt-BR">Contains the persistent data for a special tab dialog.</desc>
-				<desc xml:lang="ja">Contains the persistent data for a special tab dialog.</desc>
+				<desc xml:lang="ja">特殊なタブダイアログの持続データが含まれます。</desc>
 				<desc xml:lang="ko">Contains the persistent data for a special tab dialog.</desc>
 				<desc xml:lang="tr">Contains the persistent data for a special tab dialog.</desc>
 				<desc xml:lang="th">Contains the persistent data for a special tab dialog.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a special tab dialog.</desc>
+				<desc xml:lang="x-comment">Contains the persistent data for a special tab dialog.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -198,11 +202,12 @@
 					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
 					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<prop oor:name="PageID" oor:type="xs:int">
@@ -226,11 +231,12 @@
 					<desc xml:lang="sv">Represents the number of an active tab page inside a dialog.</desc>
 					<desc xml:lang="pl">Represents the number of an active tab page inside a dialog.</desc>
 					<desc xml:lang="pt-BR">Represents the number of an active tab page inside a dialog.</desc>
-					<desc xml:lang="ja">Represents the number of an active tab page inside a dialog.</desc>
+					<desc xml:lang="ja">ダイアログ内部のアクティブなタブページの数を示します。</desc>
 					<desc xml:lang="ko">Represents the number of an active tab page inside a dialog.</desc>
 					<desc xml:lang="tr">Represents the number of an active tab page inside a dialog.</desc>
 					<desc xml:lang="th">Represents the number of an active tab page inside a dialog.</desc>
 					<desc xml:lang="hi-IN">Represents the number of an active tab page inside a dialog.</desc>
+					<desc xml:lang="x-comment">Represents the number of an active tab page inside a dialog.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -254,11 +260,12 @@
 					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
 					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -283,11 +290,12 @@
 				<desc xml:lang="sv">Contains the persistent data for a tab page.</desc>
 				<desc xml:lang="pl">Contains the persistent data for a tab page.</desc>
 				<desc xml:lang="pt-BR">Contains the persistent data for a tab page.</desc>
-				<desc xml:lang="ja">Contains the persistent data for a tab page.</desc>
+				<desc xml:lang="ja">タブページの持続データが含まれます。</desc>
 				<desc xml:lang="ko">Contains the persistent data for a tab page.</desc>
 				<desc xml:lang="tr">Contains the persistent data for a tab page.</desc>
 				<desc xml:lang="th">Contains the persistent data for a tab page.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a tab page.</desc>
+				<desc xml:lang="x-comment">Contains the persistent data for a tab page.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -310,11 +318,12 @@
 					<desc xml:lang="sv">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pl">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pt-BR">Includes information (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
 					<desc xml:lang="ko">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="tr">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="th">Includes information (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="x-comment">Includes information (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -338,11 +347,12 @@
 					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
 					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -367,11 +377,12 @@
 				<desc xml:lang="sv">Contains the persistent data for a general office window.</desc>
 				<desc xml:lang="pl">Contains the persistent data for a general office window.</desc>
 				<desc xml:lang="pt-BR">Contains the persistent data for a general office window.</desc>
-				<desc xml:lang="ja">Contains the persistent data for a general office window.</desc>
+				<desc xml:lang="ja">全般的なオフィスウィンドウの持続データが含まれます。</desc>
 				<desc xml:lang="ko">Contains the persistent data for a general office window.</desc>
 				<desc xml:lang="tr">Contains the persistent data for a general office window.</desc>
 				<desc xml:lang="th">Contains the persistent data for a general office window.</desc>
 				<desc xml:lang="hi-IN">Contains the persistent data for a general office window.</desc>
+				<desc xml:lang="x-comment">Contains the persistent data for a general office window.</desc>
 			</info>
 			<prop oor:name="WindowState" oor:type="xs:string">
 				<info>
@@ -394,11 +405,12 @@
 					<desc xml:lang="sv">Includes information  (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pl">Includes information  (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="pt-BR">Includes information  (position,size, and states) about the used vcl window.</desc>
-					<desc xml:lang="ja">Includes information  (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="ja">使用中の vcl ウィンドウに関する情報 (位置、サイズ、および状態) が含まれます。</desc>
 					<desc xml:lang="ko">Includes information  (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="tr">Includes information  (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="th">Includes information  (position,size, and states) about the used vcl window.</desc>
 					<desc xml:lang="hi-IN">Includes information  (position,size, and states) about the used vcl window.</desc>
+					<desc xml:lang="x-comment">Includes information  (position,size, and states) about the used vcl window.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Visible" oor:type="xs:boolean">
@@ -422,11 +434,12 @@
 					<desc xml:lang="sv">Makes window visible.</desc>
 					<desc xml:lang="pl">Makes window visible.</desc>
 					<desc xml:lang="pt-BR">Makes window visible.</desc>
-					<desc xml:lang="ja">Makes window visible.</desc>
+					<desc xml:lang="ja">ウィンドウを表示可能にします。</desc>
 					<desc xml:lang="ko">Makes window visible.</desc>
 					<desc xml:lang="tr">Makes window visible.</desc>
 					<desc xml:lang="th">Makes window visible.</desc>
 					<desc xml:lang="hi-IN">Makes window visible.</desc>
+					<desc xml:lang="x-comment">Makes window visible.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
@@ -450,11 +463,12 @@
 					<desc xml:lang="sv">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pl">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="pt-BR">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
-					<desc xml:lang="ja">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="ja">任意のデータに対するその他のフィールドが表示されます。このフィールドに関連する特殊なセマンティックは存在しません。アプリケーションはユーザーによって決定されます。</desc>
 					<desc xml:lang="ko">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="tr">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="th">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 					<desc xml:lang="hi-IN">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+					<desc xml:lang="x-comment">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -481,11 +495,12 @@
 				<desc xml:lang="sv">Lists persistent dialog states.</desc>
 				<desc xml:lang="pl">Lists persistent dialog states.</desc>
 				<desc xml:lang="pt-BR">Lists persistent dialog states.</desc>
-				<desc xml:lang="ja">Lists persistent dialog states.</desc>
+				<desc xml:lang="ja">ダイアログの持続状態のリストを表示します。</desc>
 				<desc xml:lang="ko">Lists persistent dialog states.</desc>
 				<desc xml:lang="tr">Lists persistent dialog states.</desc>
 				<desc xml:lang="th">Lists persistent dialog states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent dialog states.</desc>
+				<desc xml:lang="x-comment">Lists persistent dialog states.</desc>
 			</info>
 		</set>
 		<set oor:name="TabDialogs" oor:node-type="TabDialogType">
@@ -509,11 +524,12 @@
 				<desc xml:lang="sv">Lists persistent tab dialog states.</desc>
 				<desc xml:lang="pl">Lists persistent tab dialog states.</desc>
 				<desc xml:lang="pt-BR">Lists persistent tab dialog states.</desc>
-				<desc xml:lang="ja">Lists persistent tab dialog states.</desc>
+				<desc xml:lang="ja">タブダイアログの持続状態のリストを表示します。</desc>
 				<desc xml:lang="ko">Lists persistent tab dialog states.</desc>
 				<desc xml:lang="tr">Lists persistent tab dialog states.</desc>
 				<desc xml:lang="th">Lists persistent tab dialog states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent tab dialog states.</desc>
+				<desc xml:lang="x-comment">Lists persistent tab dialog states.</desc>
 			</info>
 		</set>
 		<set oor:name="TabPages" oor:node-type="TabPageType">
@@ -537,11 +553,12 @@
 				<desc xml:lang="sv">Lists persistent tab page states.</desc>
 				<desc xml:lang="pl">Lists persistent tab page states.</desc>
 				<desc xml:lang="pt-BR">Lists persistent tab page states.</desc>
-				<desc xml:lang="ja">Lists persistent tab page states.</desc>
+				<desc xml:lang="ja">タブページの持続状態のリストを表示します。</desc>
 				<desc xml:lang="ko">Lists persistent tab page states.</desc>
 				<desc xml:lang="tr">Lists persistent tab page states.</desc>
 				<desc xml:lang="th">Lists persistent tab page states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent tab page states.</desc>
+				<desc xml:lang="x-comment">Lists persistent tab page states.</desc>
 			</info>
 		</set>
 		<set oor:name="Windows" oor:node-type="WindowType">
@@ -565,15 +582,17 @@
 				<desc xml:lang="sv">Lists persistent window states.</desc>
 				<desc xml:lang="pl">Lists persistent window states.</desc>
 				<desc xml:lang="pt-BR">Lists persistent window states.</desc>
-				<desc xml:lang="ja">Lists persistent window states.</desc>
+				<desc xml:lang="ja">ウィンドウの持続状態のリストを表示します。</desc>
 				<desc xml:lang="ko">Lists persistent window states.</desc>
 				<desc xml:lang="tr">Lists persistent window states.</desc>
 				<desc xml:lang="th">Lists persistent window states.</desc>
 				<desc xml:lang="hi-IN">Lists persistent window states.</desc>
+				<desc xml:lang="x-comment">Lists persistent window states.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
