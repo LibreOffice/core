@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:10:56 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ TabPage RID_SVXPAGE_CHAR_STD
         Text[ portuguese ] = "Sem %s";
         Text[ russian ] = "Íåò %s";
         Text[ dutch ] = "Niet %s";
-        Text[ french ] = "Sans %s";
+        Text[ french ] = "Pas %s";
         Text[ spanish ] = "No %s";
         Text[ italian ] = "Senza %s";
         Text[ danish ] = "Ikke %s";
@@ -3103,7 +3103,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ portuguese ] = "Sem %s";
         Text[ russian ] = "Áåç %s";
         Text[ dutch ] = "Niet %s";
-        Text[ french ] = "Sans %s";
+        Text[ french ] = "Pas %s";
         Text[ spanish ] = "No %s";
         Text[ italian ] = "Senza %s";
         Text[ danish ] = "Ikke %s";
@@ -3957,10 +3957,10 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ spanish ] =
     {
             < "(Sin)" ; default ; > ;
-        < "Dot" ; default ; > ;
+        < "Punto" ; default ; > ;
         < "Círculo" ; default ; > ;
-        < "Scheibe" ; default ; > ;
-        < "Akzent" ; default ; > ;
+        < "Disco" ; default ; > ;
+        < "Acento" ; default ; > ;
     };
     StringList [ italian ] =
     {
@@ -3980,7 +3980,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     StringList [ swedish ] =
     {
-            < "(Ingen)" ; default ; > ;
+            < "(Inget)" ; default ; > ;
         < "Punkt" ; default ; > ;
         < "Cirkel" ; default ; > ;
         < "Skiva" ; default ; > ;
@@ -4385,7 +4385,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Text[ greek ] = "AíÜãëõöï";
         Text[ dutch ] = "~Reliëf";
         Text[ french ] = "~Relief";
-        Text[ spanish ] = "Relief";
+        Text[ spanish ] = "Relieve";
         Text[ italian ] = "Relief";
         Text[ danish ] = "Relief";
         Text[ swedish ] = "~Relief";
@@ -4454,14 +4454,14 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     StringList [ french ] =
     {
             < "Aucun" ; Default ; > ;
-        < "En relief" ; Default ; > ;
-        < "Approfondi" ; Default ; > ;
+        < "Relief" ; Default ; > ;
+        < "Empreinte" ; Default ; > ;
     };
     StringList [ spanish ] =
     {
-            < "Keine" ; Default ; > ;
-        < "Erhaben" ; Default ; > ;
-        < "Vertieft" ; Default ; > ;
+            < "Ninguno" ; Default ; > ;
+        < "Saliente" ; Default ; > ;
+        < "Ahondado" ; Default ; > ;
     };
     StringList [ italian ] =
     {
@@ -5059,7 +5059,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ greek ] = "Scaling";
         Text[ dutch ] = "Schaalverdeling";
         Text[ french ] = "Échelle";
-        Text[ spanish ] = "Scaling";
+        Text[ spanish ] = "Escala";
         Text[ italian ] = "Scaling";
         Text[ danish ] = "Scaling";
         Text[ swedish ] = "Skalning";
@@ -5496,7 +5496,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ russian ] = "Äâå ñòðîêè";
         Text[ greek ] = "Äßãñáììï";
         Text[ dutch ] = "Tweeregelig";
-        Text[ french ] = "Doubles lignes";
+        Text[ french ] = "Deux lignes en une";
         Text[ spanish ] = "Doble";
         Text[ italian ] = "Due righe";
         Text[ danish ] = "Two lines";
@@ -5521,7 +5521,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ russian ] = "Äâå ñòðîêè â îäíîé";
         Text[ greek ] = "~Äßãñáììç åããñáöÞ";
         Text[ dutch ] = "T~wee regels per rij";
-        Text[ french ] = "Doubles lignes";
+        Text[ french ] = "~Deux lignes en une pour l'écriture";
         Text[ spanish ] = "Dos líneas por renglón";
         Text[ italian ] = "Scrivi due rig~he per riga";
         Text[ danish ] = "Two lines each line";
@@ -5545,7 +5545,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Text[ russian ] = "Îáâåäåííûå çíàêè";
         Text[ greek ] = "Ðåñéêëåéüìåíïé ÷áñáêôÞñåò";
         Text[ dutch ] = "Omhullend teken";
-        Text[ french ] = "Caractères englobants";
+        Text[ french ] = "Caractères d'encadrement";
         Text[ spanish ] = "Caracteres de inclusión";
         Text[ italian ] = "Carattere di inclusione";
         Text[ danish ] = "Enclose character";
