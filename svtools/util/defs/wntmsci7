@@ -9028,3 +9028,4 @@ lpfnGetWindowTextW
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUCurrency@i18n@345@@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUFormatElement@i18n@345@@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUNumberFormatCode@i18n@345@@Z
+?GetLocaleLanguageType@SvtSysLocaleOptions@@QBEGXZ
