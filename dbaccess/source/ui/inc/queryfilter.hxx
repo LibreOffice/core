@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 14:26:17 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,10 +78,6 @@
 #include <vcl/fixed.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -142,7 +138,7 @@ namespace dbaui
         FixedText       aFT_WHERECOMP;
         FixedText       aFT_WHEREVALUE;
         FixedText       aFT_WHEREOPER;
-        GroupBox        aGB_FIELDS;
+        FixedLine       aFL_FIELDS;
         OKButton        aBT_OK;
         CancelButton    aBT_CANCEL;
         HelpButton      aBT_HELP;

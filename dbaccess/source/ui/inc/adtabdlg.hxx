@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 12:41:58 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #include <vcl/dialog.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -103,7 +99,7 @@ namespace dbaui
         PushButton          aAddButton;
         CancelButton        aCloseButton;
         HelpButton          aHelpButton;
-        GroupBox            aGroupBoxTable;
+        FixedLine           aFixedLineTable;
 
         String              aDefaultString;
 

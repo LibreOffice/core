@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 16:10:13 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,6 @@
 #include <vcl/fixed.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
@@ -132,7 +128,6 @@ namespace dbaui
         ListBox         aLB_ORDERFIELD3;
         ListBox         aLB_ORDERVALUE3;
         FixedText       aFT_ORDERFIELD;
-        FixedText       aFT_ORDERVALUE;
         FixedText       aFT_ORDERAFTER1;
         FixedText       aFT_ORDERAFTER2;
         FixedText       aFT_ORDEROPER;
@@ -140,7 +135,7 @@ namespace dbaui
         OKButton        aBT_OK;
         CancelButton    aBT_CANCEL;
         HelpButton      aBT_HELP;
-        GroupBox        aGB_ORDER;
+        FixedLine       aFL_ORDER;
         String          aSTR_NOENTRY;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> m_xQueryComposer;

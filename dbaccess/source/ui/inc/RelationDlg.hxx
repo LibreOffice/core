@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:08:37 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
-
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 
 #ifndef _BUTTON_HXX //autogen
@@ -151,18 +147,18 @@ namespace dbaui
     //========================================================================
     class ORelationDialog : public ModalDialog
     {
-        GroupBox    aGB_InvolvedTables;
+        FixedLine   aFL_InvolvedTables;
         ListBox     m_lmbLeftTable,
                     m_lmbRightTable;
 
-        GroupBox    aGB_InvolvedFields;
+        FixedLine    aFL_InvolvedFields;
 
-        GroupBox    aGB_CascUpd;
+        FixedLine    aFL_CascUpd;
         RadioButton aRB_NoCascUpd,
                     aRB_CascUpd,
                     aRB_CascUpdNull,
                     aRB_CascUpdDefault;
-        GroupBox    aGB_CascDel;
+        FixedLine    aFL_CascDel;
         RadioButton aRB_NoCascDel,
                     aRB_CascDel,
                     aRB_CascDelNull,

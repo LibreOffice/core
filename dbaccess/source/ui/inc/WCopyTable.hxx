@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 08:44:07 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,11 @@ namespace dbaui
         ODatabaseExport::TColumns       m_vSourceColumns;
         ODatabaseExport::TColumnVector  m_vSourceVec;
 
-        OKButton                m_pbFinish;
+        HelpButton              m_pbHelp;
         CancelButton            m_pbCancel;
-        PushButton              m_pbNext;
         PushButton              m_pbPrev;
+        PushButton              m_pbNext;
+        OKButton                m_pbFinish;
         String                  m_sTypeNames;       // these type names are the ones out of the resource file
         sal_uInt32              m_nPageCount;
 

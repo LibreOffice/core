@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:58:35 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
 #endif
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
@@ -147,9 +144,9 @@ namespace dbaui
 
     protected:
         OWizTypeSelectList      m_lbColumnNames;
-        GroupBox                m_gpColumns;
+        FixedLine               m_flColumns;
         OWizTypeSelectControl   m_aTypeControl;
-        GroupBox                m_gpAutoType;
+        FixedLine               m_flAutoType;
         FixedText               m_ftAuto;
         NumericField            m_etAuto;
         PushButton              m_pbAuto;

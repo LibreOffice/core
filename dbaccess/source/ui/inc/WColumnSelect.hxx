@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:59:21 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef DBAUI_WIZ_TABBPAGE_HXX
 #include "WTabPage.hxx"
 #endif
-#ifndef _SV_GROUP_HXX
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
@@ -83,12 +83,12 @@ namespace dbaui
     class OWizColumnSelect : public OWizardPage
     {
 
-        GroupBox                m_gpColumns;
+        FixedLine               m_flColumns;
         MultiListBox            m_lbOrgColumnNames; // left side
-        PushButton              m_pbColumn_RH;
-        PushButton              m_pbColumns_RH;
-        PushButton              m_pbColumn_LH;
-        PushButton              m_pbColumns_LH;
+        ImageButton             m_ibColumn_RH;
+        ImageButton             m_ibColumns_RH;
+        ImageButton             m_ibColumn_LH;
+        ImageButton             m_ibColumns_LH;
         MultiListBox            m_lbNewColumnNames; // right side
         sal_Bool                m_bAttrsChanged;
 
