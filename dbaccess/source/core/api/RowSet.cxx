@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 08:45:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2117,8 +2117,8 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const Any& _rOldValue)
 {
-    OSL_ENSURE(_nPos <= m_aDataColumns.size(),"nPos is invalid!");
-    m_aDataColumns[_nPos-1]->fireValueChange(_rOldValue);
+    OSL_ENSURE(_nPos < m_aDataColumns.size(),"nPos is invalid!");
+    m_aDataColumns[_nPos]->fireValueChange(_rOldValue);
 }
 // -------------------------------------------------------------------------
 void ORowSet::checkInsert()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 08:45:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
             aOldValues = &m_aOldRow;     // remember the old values
 
         sal_Bool bMoved = sal_False;
-        if(!isFirst() || bWasNew)
+        if(bWasNew || !isFirst())
             bMoved = sal_True;
 
         bRet = m_pCache->first();
@@ -760,7 +760,7 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
             aOldValues = &m_aOldRow;     // remember the old values
 
         sal_Bool bMoved = sal_False;
-        if(!isLast() || bWasNew)
+        if(bWasNew || !isLast())
             bMoved = sal_True;
 
         bRet = m_pCache->last();

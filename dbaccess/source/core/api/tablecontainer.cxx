@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 14:03:54 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,23 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
     {
         if (m_xMetaData.is())
         {
-            const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
-            Reference< XResultSet > xTables = m_xMetaData->getTables(Any(), sAll, sAll, _rTableTypeFilter);
+            static const ::rtl::OUString sAll = ::rtl::OUString::createFromAscii("%");
+            Sequence< ::rtl::OUString > sTableTypes;
+            if(_rTableTypeFilter.getLength() == 0)
+            {
+                // we want all catalogues, all schemas, all tables
+                sTableTypes.realloc(3);
+
+                static const ::rtl::OUString s_sTableTypeView(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+                static const ::rtl::OUString s_sTableTypeTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+                sTableTypes[0] = s_sTableTypeView;
+                sTableTypes[1] = s_sTableTypeTable;
+                sTableTypes[2] = sAll;  // just to be sure to include anything else ....
+            }
+            else
+                sTableTypes = _rTableTypeFilter;
+
+            Reference< XResultSet > xTables = m_xMetaData->getTables(Any(), sAll, sAll, sTableTypes);
             Reference< XRow > xCurrentRow(xTables, UNO_QUERY);
             if (xCurrentRow.is())
             {
