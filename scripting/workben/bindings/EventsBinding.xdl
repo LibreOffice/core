@@ -40,10 +40,10 @@
   <dlg:text dlg:id="Label9" dlg:tab-index="16" dlg:left="12" dlg:top="51" dlg:width="23" dlg:height="13" dlg:value="Script"/>
   <dlg:text dlg:id="Label10" dlg:tab-index="17" dlg:left="103" dlg:top="-19" dlg:width="3" dlg:height="0" dlg:value="Label10"/>
   <dlg:radiogroup>
-   <dlg:radio dlg:id="AllAppsOption" dlg:tab-index="18" dlg:left="12" dlg:top="107" dlg:width="51" dlg:height="10" dlg:value="All Applications" dlg:checked="true">
+   <dlg:radio dlg:id="AllAppsOption" dlg:tab-index="18" dlg:left="12" dlg:top="107" dlg:width="51" dlg:height="10" dlg:value="All Applications">
     <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.AppDocEventListener" script:language="StarBasic"/>
    </dlg:radio>
-   <dlg:radio dlg:id="DocumentOption" dlg:tab-index="19" dlg:left="12" dlg:top="119" dlg:width="46" dlg:height="10" dlg:value="Document">
+   <dlg:radio dlg:id="DocumentOption" dlg:tab-index="19" dlg:left="12" dlg:top="119" dlg:width="46" dlg:height="10" dlg:value="Document" dlg:checked="true">
     <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.AppDocEventListener" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>
