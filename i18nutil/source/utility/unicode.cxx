@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unicode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 17:12:56 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,16 @@ sal_Bool SAL_CALL
 unicode::isUnicodeScriptType( const sal_Unicode ch, sal_Int16 type) {
     return ch >= UnicodeScriptType[type][UnicodeScriptTypeFrom] &&
         ch <= UnicodeScriptType[type][UnicodeScriptTypeTo];
+}
+
+sal_Unicode SAL_CALL
+unicode::getUnicodeScriptStart( UnicodeScript type) {
+    return UnicodeScriptType[type][UnicodeScriptTypeFrom];
+}
+
+sal_Unicode SAL_CALL
+unicode::getUnicodeScriptEnd( UnicodeScript type) {
+    return UnicodeScriptType[type][UnicodeScriptTypeTo];
 }
 
 sal_Int16 SAL_CALL
