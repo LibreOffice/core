@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-10 11:26:55 $
+ *  last change: $Author: cd $ $Date: 2002-04-09 12:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,10 +727,9 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                 {
                     // Do handle file URL differently => convert it to a system
                     // path and abbreviate it with a special function:
-                    String aPhysicalName;
-                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
+                    String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-                    ::rtl::OUString aSystemPath( aPhysicalName );
+                    ::rtl::OUString aSystemPath( aFileSystemPath );
                     ::rtl::OUString aCompactedSystemPath;
 
                     aTipHelpText = aSystemPath;
@@ -738,7 +737,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
                     if ( !nError )
                         aMenuTitle = String( aCompactedSystemPath );
                     else
-                        aMenuTitle = aPhysicalName;
+                        aMenuTitle = aSystemPath;
                 }
                 else
                 {
