@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-20 17:08:45 $
+ *  last change: $Author: aw $ $Date: 2000-11-21 14:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
         pObj->GetSubList()->NbcInsertObject( pSdrShape );
 
         if(pShape)
-            pShape->Create( pObj, pPage );
+            pShape->Create( pSdrShape, pPage );
     }
     else
     {
