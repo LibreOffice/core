@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IProtocol.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:27 $
+ *  last change: $Author: kr $ $Date: 2001-04-19 16:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
  * This interface provides an abstraction for protocols
  * for remote bridges.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:01:27 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-04-19 16:24:57 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IMessage
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -90,22 +90,6 @@ public interface IProtocol {
      * @result  the name of the protocol
      */
     String getName();
-
-    /**
-     * Tells the protocol to ignore the next <code>closeConnection</code>
-     * meta request.
-     * <p>
-     */
-    void ignore_next_closeConnection();
-
-    /**
-     * Tells the protocol to send a <code>closeConnection</code>
-     * meta request.
-     * <p>
-     * @param outputStream   the output stream
-     */
-    void send_closeConnection(OutputStream outputStream) throws IOException;
-
 
     /**
      * Reads a job from the given stream.

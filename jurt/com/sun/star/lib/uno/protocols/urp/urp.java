@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-12 15:46:07 $
+ *  last change: $Author: kr $ $Date: 2001-04-19 16:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2001-03-12 15:46:07 $
+ * @version     $Revision: 1.6 $ $ $Date: 2001-04-19 16:24:57 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -111,7 +111,6 @@ public class urp extends Protocol {
 
 
     protected IBridge           _iBridge;
-    protected boolean           _bIgnoreNextCloseConnection = false;
 
     private String   _in_oid;
     private TypeDescription     _in_interface;
@@ -171,26 +170,6 @@ public class urp extends Protocol {
      */
     public String getName() {
         return "urp";
-    }
-
-    /**
-     * Tells the protocol to ignore the next <code>closeConnection</code>
-     * meta request.
-     * <p>
-     * @see     com.sun.star.lib.uno.environments.remote.IProtocol#ignore_next_closeConnection
-     */
-    public void ignore_next_closeConnection() {
-        _bIgnoreNextCloseConnection = true;
-    }
-
-    /**
-     * Tells the protocol to send a <code>closeConnection</code>
-     * meta request.
-     * <p>
-     * @param outputStream   the output stream
-     * @see                  com.sun.star.lib.uno.environments.remote.IProtocol#send_closeConnection
-     */
-    public void send_closeConnection(OutputStream outputStream) throws IOException {
     }
 
     private Object readReply(byte header, boolean exception[]) throws Exception {
@@ -622,13 +601,9 @@ public class urp extends Protocol {
                 _unmarshal.reset(bytes);
             }
 
-            if(_unmarshal.bytesLeft() == 0) {// we already got a new block and there are still no bytes left? -> close or ignore
-                // (i hope we can rid of this in the nead future
-                if(!_bIgnoreNextCloseConnection)
-                    inputStream.close();
-
+            if(_unmarshal.bytesLeft() == 0) // we already got a new block and there are still no bytes left? -> a close message
                 throw new java.io.IOException("connection close message received");
-            }
+
             else {
                 String operation[]  = new String[1];
                 Object params[][]   = new Object[1][];

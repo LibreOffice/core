@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-19 15:56:19 $
+ *  last change: $Author: kr $ $Date: 2001-04-19 16:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.18 $ $ $Date: 2001-04-19 15:56:19 $
+ * @version     $Revision: 1.19 $ $ $Date: 2001-04-19 16:24:56 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -707,30 +707,6 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
         catch(Exception exception) {
             System.err.println("######### " + getClass().getName() + ".release - exception:" + exception);
-        }
-    }
-
-    /**
-     * Resets the bridge, sends an procotol "closeConnection"
-     * and ignores the next incoming procotol "closeConnection".
-     * E.g. this is useful for inheriting connections on the server
-     * side from one process to another.
-     * Resets the proxy and stub refs.
-     * <p>
-     * @see com.sun.star.uno.IBridge#reset
-     */
-    public synchronized void reset() throws IOException {
-        // we need to release the outmapped objects here
-        freeHolders();
-
-        // unfortunately we can not set the _life_count to zero
-        // because there can be active proxies
-//          _life_count = 0;
-
-        synchronized(_outputStream) {
-            _iProtocol.ignore_next_closeConnection();
-            _iProtocol.send_closeConnection(_outputStream);
-            _outputStream.flush();
         }
     }
 
