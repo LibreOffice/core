@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2001-01-19 16:09:04 $
+ *  last change: $Author: mfe $ $Date: 2001-02-26 16:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,6 +1254,13 @@ OAcceptorSocket::OAcceptorSocket(const OAcceptorSocket& sock) :
 /*****************************************************************************/
 OAcceptorSocket::~OAcceptorSocket()
 {
+    if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
+    {
+        /* mfe: prepare for forthcoming api change */
+        osl_closeSocket((*m_pSockRef)());
+        osl_destroySocket((*m_pSockRef)());
+        delete m_pSockRef;
+    }
 }
 
 /*****************************************************************************/
@@ -1263,27 +1270,9 @@ void OAcceptorSocket::close()
 {
     if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
     {
-        rtl::OUString Buffer;
-        Buffer = rtl::OUString::createFromAscii("127.0.0.1");
-        OInetSocketAddr aAddr(Buffer, getLocalPort());
-        OConnectorSocket aConnSocket;
-
-        if ((oslSocketAddr)aAddr != NULL)
-        {
-            // mfe : connect to self to wake up
-            //       on Linux with pthreads accept won't
-            //       return if the accept socket is closed
-            //       we are doing the hard way
-            if (aConnSocket.connect(aAddr) == ISocketTypes::TResult_Ok)
-            {
-            }
-        }
-
-        // shutdown() needed only on some systems to unblock accept
-        osl_shutdownSocket((*m_pSockRef)(), osl_Socket_DirReadWrite);
-        osl_destroySocket((*m_pSockRef)());
-        delete m_pSockRef;
+        osl_closeSocket((*m_pSockRef)());
     }
+
     m_pSockRef= 0;
 }
 
