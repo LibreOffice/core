@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.34 2001-04-20 13:21:26 mib Exp $
+	$Id: style.mod,v 1.35 2001-04-27 07:28:14 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -105,8 +105,8 @@
 <!ATTLIST style:properties style:vertical-pos (top|middle|bottom|from-top) #IMPLIED>
 <!ATTLIST style:properties style:vertical-rel (page|page-content|
 											   frame|frame-content|
-											   paragraph|paragraph-content|
-											   line|baseline|char) #IMPLIED>
+											   paragraph|paragraph-content|char|
+											   line|baseline|text) #IMPLIED>
 <!ATTLIST style:properties style:horizontal-pos (left|center|right|from-left|inside|outside|from-inside) #IMPLIED>
 <!ATTLIST style:properties style:horizontal-rel (page|page-content|
 											   frame|frame-content|

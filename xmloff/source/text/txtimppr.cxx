@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
+ *  last change: $Author: mib $ $Date: 2001-04-27 07:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -446,44 +443,39 @@ void XMLTextImportPropertyMapper::finished(
 
     if( pVertOrient && pVertOrientRelAsChar )
     {
-        TextContentAnchorType eAnchorType;
-        if( pAnchorType && (pAnchorType->maValue >>= eAnchorType) &&
-            TextContentAnchorType_AS_CHARACTER == eAnchorType )
+        sal_Int16 nVertOrient;
+        pVertOrient->maValue >>= nVertOrient;
+        sal_Int16 nVertOrientRel;
+        pVertOrientRelAsChar->maValue >>= nVertOrientRel;
+        switch( nVertOrient )
         {
-            sal_Int16 nVertOrient;
-            pVertOrient->maValue >>= nVertOrient;
-            sal_Int16 nVertOrientRel;
-            pVertOrientRelAsChar->maValue >>= nVertOrientRel;
-            switch( nVertOrient )
+        case VertOrientation::TOP:
+            nVertOrient = nVertOrientRel;
+            break;
+        case VertOrientation::CENTER:
+            switch( nVertOrientRel )
             {
-            case VertOrientation::TOP:
-                nVertOrient = nVertOrientRel;
+            case VertOrientation::CHAR_TOP:
+                nVertOrient = VertOrientation::CHAR_CENTER;
                 break;
-            case VertOrientation::CENTER:
-                switch( nVertOrientRel )
-                {
-                case VertOrientation::CHAR_TOP:
-                    nVertOrient = VertOrientation::CHAR_CENTER;
-                    break;
-                case VertOrientation::LINE_TOP:
-                    nVertOrient = VertOrientation::LINE_CENTER;
-                    break;
-                }
-                break;
-            case VertOrientation::BOTTOM:
-                switch( nVertOrientRel )
-                {
-                case VertOrientation::CHAR_TOP:
-                    nVertOrient = VertOrientation::CHAR_BOTTOM;
-                    break;
-                case VertOrientation::LINE_TOP:
-                    nVertOrient = VertOrientation::LINE_BOTTOM;
-                    break;
-                }
+            case VertOrientation::LINE_TOP:
+                nVertOrient = VertOrientation::LINE_CENTER;
                 break;
             }
-            pVertOrient->maValue <<= nVertOrientRel;
+            break;
+        case VertOrientation::BOTTOM:
+            switch( nVertOrientRel )
+            {
+            case VertOrientation::CHAR_TOP:
+                nVertOrient = VertOrientation::CHAR_BOTTOM;
+                break;
+            case VertOrientation::LINE_TOP:
+                nVertOrient = VertOrientation::LINE_BOTTOM;
+                break;
+            }
+            break;
         }
+        pVertOrient->maValue <<= nVertOrient;
         pVertOrientRelAsChar->mnIndex = -1;
     }
 

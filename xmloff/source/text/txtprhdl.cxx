@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-04 13:55:56 $
+ *  last change: $Author: mib $ $Date: 2001-04-27 07:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,9 +256,9 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VertRelAsChar_Enum[] =
     { sXML_baseline,        VertOrientation::TOP        },
     { sXML_baseline,        VertOrientation::CENTER     },  // export only
     { sXML_baseline,        VertOrientation::BOTTOM     },  // export only
-    { sXML_char,            VertOrientation::CHAR_TOP   },
-    { sXML_char,            VertOrientation::CHAR_CENTER    },  // export only
-    { sXML_char,            VertOrientation::CHAR_BOTTOM    },  // export only
+    { sXML_text,            VertOrientation::CHAR_TOP   },
+    { sXML_text,            VertOrientation::CHAR_CENTER    },  // export only
+    { sXML_text,            VertOrientation::CHAR_BOTTOM    },  // export only
     { sXML_line,            VertOrientation::LINE_TOP   },
     { sXML_line,            VertOrientation::LINE_CENTER    },  // export only
     { sXML_line,            VertOrientation::LINE_BOTTOM    },  // export only
