@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:02:35 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,11 @@ namespace pcr
     #define PROPERTY_ID_SPININCREMENT        132
     #define PROPERTY_ID_REPEAT               133
     #define PROPERTY_ID_SHOW_SCROLLBARS      134
+    #define PROPERTY_ID_ICONSIZE             135
+    #define PROPERTY_ID_SHOW_POSITION        136
+    #define PROPERTY_ID_SHOW_NAVIGATION      137
+    #define PROPERTY_ID_SHOW_RECORDACTIONS   138
+    #define PROPERTY_ID_SHOW_FILTERSORT      139
 
 //............................................................................
 } // namespace pcr
