@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 13:56:45 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,14 +1189,14 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ dutch ] = "Re~gelafbreking" ;
         Text [ spanish ] = "Salto de ~línea automático" ;
         Text [ english_us ] = "Automatic ~line break" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨æ¢è¡Œ(~L)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨æ¢è¡Œ";
         Text[ russian ] = "Ïåğåíîñèòü ïî ñëîâàì";
         Text[ polish ] = "Podzia³ wiersza";
         Text[ japanese ] = "è‡ªå‹•çš„ã«æŠ˜ã‚Šè¿”ã™(~L)";
         Text[ chinese_traditional ] = "è‡ªå‹•æ›è¡Œ(~L)";
         Text[ arabic ] = "İÇÕá ÃÓØÑ";
         Text[ dutch ] = "Re~gelafbreking";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨æ¢è¡Œ(~L)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨æ¢è¡Œ";
         Text[ greek ] = "ÁëëáãŞ ãñáììŞò";
         Text[ korean ] = "ìë™ ì¤„ ë°”ê¿ˆ(~L)";
         Text[ turkish ] = "Satır sonu";
