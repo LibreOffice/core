@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:25:57 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,12 @@ String SvxMacro::GetLanguage()const
         return UniString::CreateFromAscii(
                    RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT));
     }
+    else if(eType==EXTENDED_STYPE)
+    {
+        return UniString::CreateFromAscii(
+                   RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_SF));
 
+    }
     return aLibName;
 }
 
