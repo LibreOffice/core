@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-02-11 15:50:22 $
+dnl * Date: $Date: 2005-02-11 17:16:13 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.91 $ )
+AC_REVISION( $Revision: 1.92 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1885,10 +1885,26 @@ else
     # different
     # This test _should_ work because the one accepts -V (ours) and one
     # (the other) not...
-    dmake -V 2>/dev/null | grep 'dmake .* Version .*' >/dev/null
+    $DMAKE -V 2>/dev/null | grep 'dmake .* Version .*' >/dev/null
     if test $? -eq 0; then 
        BUILD_DMAKE=NO
        AC_MSG_RESULT([yes])
+       AC_MSG_CHECKING([the dmake version])
+       DMAKE_VERSION=`$DMAKE -V | $SED -n 's/.*Version \([[0-9.]]\+\).*/\1/p'`
+       if test "$DMAKE_VERSION" = "4.10"; then
+	 AC_MSG_RESULT([too old. >= 4.3 is needed. (Your old 4.1 version identifies itself as 4.10, PL 0.)])
+	 echo "A newer dmake will be built on ./bootstrap"
+	 BUILD_DMAKE=YES
+       elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
+	 AC_MSG_RESULT([OK, >= 4.3])
+       elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" = "4" && \
+	    test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "3"; then
+	 AC_MSG_RESULT([OK, >= 4.3])
+       else
+	 AC_MSG_RESULT([too old. >= 4.3 is needed])
+	 echo "A newer dmake will be built on ./bootstrap"
+	 BUILD_DMAKE=YES
+       fi
     else
        AC_MSG_RESULT([no])
        echo "dmake will be built on ./bootstrap"
