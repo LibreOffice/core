@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 12:05:00 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 21:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ chinese_traditional ] =
     {
              < "µL" ; > ;
-        < "¦Û°Ê" ; > ;
+        < "¤â°Ê" ; > ;
         < "¤â°Ê" ; > ;
     };
     StringList [ turkish ] =
@@ -745,7 +745,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b0©M255¤§¶¡ªº¼Æ­È¡C";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 0 æ 255.";
         Text[ greek ] = "äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı ôïõ 0 êáé 255.";
-        Text[ korean ] = "ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 0°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = " ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 0°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "bu alan için geçerli bir değer değil. 0 ile 255 arasında bir değer girin.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 0 y 255.";
@@ -771,7 +771,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b1©M255¤§¶¡ªº¼Æ­È¡C";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 1 æ 255.";
         Text[ greek ] = "äåí åßíáé İãêõñç êáôá÷şñéóç ãéá áõôü ôï ğåäßï. Ğáñáêáëş åéóÜãåôå ìéá ôéìŞ ìåôáîı ôïõ 1 êáé 255.";
-        Text[ korean ] = "ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 1°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = " ÀÌ ÇÊµå¿¡ À¯È¿ÇÏÁö ¾ÊÀº Ç×¸ñÀÔ´Ï´Ù. 1°ú 255 »çÀÌÀÇ °ªÀ» ÁöÁ¤ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "bu alan için geçerli bir değer değil. 1 ile 255 arasında bir değer girin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 1 y 255.";
@@ -1047,7 +1047,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ portuguese ] = "Su~fixo" ;
         Text[ chinese_simplified ] = "ºó×º(~X)";
         Text[ russian ] = "Ñóôôèêñ";
-        Text[ polish ] = "Przyrostek";
+        Text[ polish ] = "Sufiks";
         Text[ japanese ] = "»Ì¨¯¸½(~X)";
         Text[ chinese_traditional ] = "«áºó(~X)";
         Text[ arabic ] = "ÇáãŞØÚ ÇáÃÎíÑ";
@@ -1544,7 +1544,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ English ] = "D~efault" ;
         Text [ english_us ] = "D~efault" ;
         Text [ portuguese_brazilian ] = "S~tandard" ;
-        Text [ swedish ] = "S~tandard" ;
+        Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
         Text [ italian ] = "S~tandard" ;
         Text [ spanish ] = "~Predeterminado" ;
@@ -1639,7 +1639,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ portuguese ] = "~Executar sempre" ;
         Text[ chinese_simplified ] = "×ÜÊÇÖ´ĞĞ(~X)";
         Text[ russian ] = "Âûïîëíÿòü âñåãäà";
-        Text[ polish ] = "Zawsze wykonuj";
+        Text[ polish ] = "Wykonuj zawsze";
         Text[ japanese ] = "í‚ÉÀs(~X)";
         Text[ chinese_traditional ] = "Á`¬O°õ¦æ(~X)";
         Text[ arabic ] = "ÇáÊäİíĞ ÏÇÆãÇğ";
@@ -1667,7 +1667,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ portuguese ] = "~Não executar nunca" ;
         Text[ chinese_simplified ] = "²»Ö´ĞĞ(~N)";
         Text[ russian ] = "Íèêîãäà";
-        Text[ polish ] = "Nigdy nie wykonuj";
+        Text[ polish ] = "Nie wykonuj nigdy";
         Text[ japanese ] = "Às‚µ‚È‚¢(~N)";
         Text[ chinese_traditional ] = "¤£°õ¦æ(~N)";
         Text[ arabic ] = "ÚÏã ÇáÊäİíĞ äåÇÆíÇğ";
@@ -2107,7 +2107,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ English ] = "PlugIns" ;
         Text [ english_us ] = "Plug-ins" ;
         Text [ portuguese_brazilian ] = "~Plugins" ;
-        Text [ swedish ] = "Plug-ins" ;
+        Text [ swedish ] = "~Plug-ins" ;
         Text [ danish ] = "aktiver" ;
         Text [ italian ] = "Abilita" ;
         Text [ spanish ] = "Plug-ins" ;
@@ -2143,7 +2143,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ finnish ] = "Sovelmat";
         Text[ italian ] = "Applets";
         Text[ danish ] = "Applets";
-        Text[ swedish ] = "Applets";
+        Text[ swedish ] = "~Appletprogram";
         Text[ polish ] = "Aplety";
         Text[ portuguese_brazilian ] = "Applets";
         Text[ japanese ] = "±ÌßÚ¯Ä";
@@ -2281,5 +2281,6 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
