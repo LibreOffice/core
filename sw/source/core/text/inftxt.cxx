@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-20 08:21:51 $
+ *  last change: $Author: tl $ $Date: 2001-03-29 08:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #endif
 
 #pragma hdrstop
+
+#include <com/sun/star/uno/Sequence.h>
+
+#ifndef _SVTOOLS_LINGUPROPS_HXX_
+#include <svtools/linguprops.hxx>
+#endif
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -175,6 +181,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 #define DARK_COLOR 154
@@ -790,6 +798,49 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 }
 
 /*************************************************************************
+ *                  lcl_InitHyphValues()
+ *************************************************************************/
+
+static lcl_InitHyphValues( PropertyValues &rVals,
+            INT16 nMinLeading, INT16 nMinTrailing )
+{
+    INT32 nLen = rVals.getLength();
+
+    if (0 == nLen)  // yet to be initialized?
+    {
+        rVals.realloc( 2 );
+        PropertyValue *pVal = rVals.getArray();
+
+        pVal[0].Name    = C2U( UPN_HYPH_MIN_LEADING );
+        pVal[0].Handle  = UPH_HYPH_MIN_LEADING;
+        pVal[0].Value   <<= nMinLeading;
+
+        pVal[1].Name    = C2U( UPN_HYPH_MIN_TRAILING );
+        pVal[1].Handle  = UPH_HYPH_MIN_TRAILING;
+        pVal[1].Value   <<= nMinTrailing;
+    }
+    else if (2 == nLen) // already initialized once?
+    {
+        PropertyValue *pVal = rVals.getArray();
+        pVal[0].Value <<= nMinLeading;
+        pVal[1].Value <<= nMinTrailing;
+    }
+    else
+        DBG_ERROR( "unxpected size of sequence" );
+}
+
+/*************************************************************************
+ *                  SwTxtFormatInfo::GetHyphValues()
+ *************************************************************************/
+
+const PropertyValues & SwTxtFormatInfo::GetHyphValues() const
+{
+    DBG_ASSERT( 2 == aHyphVals.getLength(),
+            "hyphenation values not yet initialized" );
+    return aHyphVals;
+}
+
+/*************************************************************************
  *                  SwTxtFormatInfo::InitHyph()
  *************************************************************************/
 
@@ -804,56 +855,14 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyph )
     sal_Bool bAuto = bAutoHyph || rAttr.IsHyphen();
     if( bAuto || bInterHyph )
     {
-        uno::Reference< beans::XPropertySet > xProp( ::GetLinguPropertySet() );
         nHyphStart = nHyphWrdStart = STRING_LEN;
         nHyphWrdLen = 0;
 
-        // save hyphenation relevant Lingu properties for later restoration
-        // before changing them
-        if( xProp.is() && !bRestoreHyphOptions )
-        {
-            // paraex.hxx zeigt, dass im Attribut nMinLead = nMinTrail = 0
-            // initialisiert wird.
-
-            sal_Int16 nTemp;
-            xProp->getPropertyValue( C2U(UPN_HYPH_MIN_LEADING) ) >>= nTemp;
-            nMinLeading = nTemp;
-            xProp->getPropertyValue( C2U(UPN_HYPH_MIN_LEADING) ) >>= nTemp;
-            nMinTrailing = nTemp;
-            // nMinWordLength = ; noch nicht am Absatz verwendet
-            INT16 nNewMinLeading  = Max(rAttr.GetMinLead(), sal_uInt8(2));
-            INT16 nNewMinTrailing = rAttr.GetMinTrail();
-            bRestoreHyphOptions = (nMinLeading  != nNewMinLeading) ||
-                                  (nMinTrailing != nNewMinTrailing);
-
-            if (bRestoreHyphOptions)
-            {
-                uno::Any aTemp;
-                aTemp <<= nNewMinLeading;
-                xProp->setPropertyValue( C2U(UPN_HYPH_MIN_LEADING), aTemp );
-                aTemp <<= nNewMinTrailing;
-                xProp->setPropertyValue( C2U(UPN_HYPH_MIN_TRAILING), aTemp );
-            }
-        }
+        INT16 nMinLeading  = Max(rAttr.GetMinLead(), sal_uInt8(2));
+        INT16 nMinTrailing = rAttr.GetMinTrail();
+        lcl_InitHyphValues( aHyphVals, nMinLeading, nMinTrailing);
     }
     return bAuto;
-}
-/*************************************************************************
- *                  SwTxtFormatInfo::RestoreHyphOptions()
- *************************************************************************/
-
-void SwTxtFormatInfo::RestoreHyphOptions()
-{
-    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    if (xProp.is())
-    {
-        uno::Any aVal;
-        aVal <<= (sal_Int16)nMinLeading;
-        xProp->setPropertyValue( C2U(UPN_HYPH_MIN_LEADING), aVal );
-        aVal <<= (sal_Int16)nMinTrailing;
-        xProp->setPropertyValue( C2U(UPN_HYPH_MIN_TRAILING), aVal );
-        //xProp->setPropertyValue( C2U(UPN_HYPH_MIN_WORDLENGTH),  );
-    }
 }
 
 /*************************************************************************
@@ -873,7 +882,6 @@ void SwTxtFormatInfo::CtorInit( SwTxtFrm *pNewFrm, const sal_Bool bNewInterHyph,
     nMinLeading     = 2;
     nMinTrailing    = 2;
     nMinWordLength  = 0;
-    bRestoreHyphOptions = sal_False;
     bAutoHyph = InitHyph();
 
     bIgnoreFly = sal_False;
@@ -995,7 +1003,6 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nMinLeading = 0;
     nMinTrailing = 0;
     nMinWordLength = 0;
-    bRestoreHyphOptions = FALSE;
     bFull = FALSE;
     bFtnDone = TRUE;
     bErgoDone = TRUE;

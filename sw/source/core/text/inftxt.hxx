@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 09:54:20 $
+ *  last change: $Author: tl $ $Date: 2001-03-29 08:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #define _INFTXT_HXX
 
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
 
 #include "swtypes.hxx"
 #include "txttypes.hxx"
@@ -432,6 +435,9 @@ public:
 
 class SwTxtFormatInfo : public SwTxtPaintInfo
 {
+    // temporary arguments for hyphenation
+    com::sun::star::beans::PropertyValues   aHyphVals;
+
     SwLineLayout    *pRoot;       // die Root der aktuellen Zeile (pCurr)
     SwLinePortion   *pLast;       // die letzte Portion
     SwFlyPortion    *pFly;        // die nachfolgende FlyPortion
@@ -457,7 +463,7 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     INT16  nMinLeading;     // minimum number of chars before hyphenation point
     INT16  nMinTrailing;    // minimum number of chars after hyphenation point
     INT16  nMinWordLength;  // minimum length of word to be hyphenated
-    sal_Bool bRestoreHyphOptions : 1;
+
     sal_Bool bFull   : 1;      // Zeile ist voll
     sal_Bool bFtnDone  : 1;    // Ftn bereits formatiert
     sal_Bool bErgoDone : 1;    // ErgoDone bereits formatiert
@@ -612,12 +618,12 @@ public:
     inline void SetHyphWrdLen( const xub_StrLen nNew ) { nHyphWrdLen = nNew; }
     inline xub_StrLen GetHyphWrdLen() const { return nHyphWrdLen; }
 
-    inline sal_Bool IsRestoreHyphOptions() const    { return bRestoreHyphOptions; }
-    void        RestoreHyphOptions();
     // ruft HyphenateWord() des Hyphenators
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord >
                 HyphWord( const String &rTxt, const USHORT nMinTrail );
+    const com::sun::star::beans::PropertyValues &
+                GetHyphValues() const;
 
     sal_Bool CheckFtnPortion( SwLineLayout* pCurr )
         { return IsFtnInside() && _CheckFtnPortion( pCurr ); }
