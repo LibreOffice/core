@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-01 11:31:20 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 10:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,19 +187,27 @@ using namespace ::com::sun::star::ucb;
 class SfxLockBytesHandler_Impl : public ::utl::UcbLockBytesHandler
 {
     ULONG           m_nAcquireCount;
-    SfxMediumWeak   m_wMedium;
+    SfxMedium*      m_pMedium;
+    ::vos::OMutex   m_aMutex;
 public:
                     SfxLockBytesHandler_Impl( SfxMedium* pMedium )
-                        : m_wMedium( pMedium )
+                        : m_pMedium( pMedium )
                         , m_nAcquireCount( 0 )
                     {}
 
     virtual void    Handle( ::utl::UcbLockBytesHandler::LoadHandlerItem nWhich, ::utl::UcbLockBytesRef xLockBytes );
+    ::vos::OMutex&  GetMutex()
+                    { return m_aMutex; }
+    void            ReleaseMedium()
+                    { m_pMedium = NULL; }
 };
+
+SV_DECL_IMPL_REF( SfxLockBytesHandler_Impl );
 
 void SfxLockBytesHandler_Impl::Handle( ::utl::UcbLockBytesHandler::LoadHandlerItem nWhich, ::utl::UcbLockBytesRef xLockBytes )
 {
-    if ( IsActive() && m_wMedium.Is() && xLockBytes.Is() )
+    ::vos::OGuard aGuard( m_aMutex );
+    if ( IsActive() && xLockBytes.Is()&& m_pMedium )
     {
         switch( nWhich )
         {
@@ -226,13 +234,13 @@ void SfxLockBytesHandler_Impl::Handle( ::utl::UcbLockBytesHandler::LoadHandlerIt
                 break;
 
             case DATA_AVAILABLE :
-                m_wMedium->DataAvailable_Impl();
+                m_pMedium->DataAvailable_Impl();
                 break;
             case DONE :
-                m_wMedium->Done_Impl( xLockBytes->GetError() );
+                m_pMedium->Done_Impl( xLockBytes->GetError() );
                 break;
             case CANCEL :
-                m_wMedium->Cancel_Impl();
+                m_pMedium->Cancel_Impl();
                 break;
             default:
                 break;
@@ -564,7 +572,7 @@ public:
 
     AsynchronLink       aDoneLink;
     AsynchronLink       aAvailableLink;
-    ::utl::UcbLockBytesHandlerRef  aHandler;
+    SfxLockBytesHandler_ImplRef  aHandler;
 
     SfxVersionTableDtor*    pVersions;
     FileSource_Impl*    pSource;
@@ -629,6 +637,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bDontCreateCancellable( sal_False ), pSource( NULL ), pSink( NULL ), pTempDir( NULL ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
 {
+    aHandler = new SfxLockBytesHandler_Impl( pAntiImpl );
     aDoneLink.CreateMutex();
 }
 
@@ -1227,7 +1236,7 @@ void SfxMedium::SetOpenMode( StreamMode nStorOpen,
 //------------------------------------------------------------------
 void SfxMedium::Transfer_Impl()
 {
-    if( pImp->pTempFile && !eError )
+    if( pImp->pTempFile && ( !eError || eError & ERRCODE_WARNING_MASK ) )
     {
         Reference < XContent > xContent = GetContent();
         if ( ! xContent.is() )
@@ -1416,8 +1425,6 @@ void SfxMedium::GetMedium_Impl()
         pImp->bStreamReady = sal_False;
 
         ::utl::UcbLockBytesRef xLockBytes;
-        if ( !pImp->aHandler.Is() )
-            pImp->aHandler = new SfxLockBytesHandler_Impl( this );
         ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
 
         BOOL bSynchron = pImp->bForceSynchron || ! pImp->aDoneLink.IsSet();
@@ -1941,6 +1948,10 @@ SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
 SfxMedium::~SfxMedium()
 {
 //  CancelTransfers();
+    ::vos::OClearableGuard aGuard( pImp->aHandler->GetMutex() );
+    pImp->aHandler->ReleaseMedium();
+    aGuard.clear();
+
     Close();
 
     delete pSet;
