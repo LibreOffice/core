@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:47:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1231,7 +1231,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             DBG_ASSERT( pImplNames, "service implementation names missing" )
             if (pImplNames)
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 const OUString *pTmpStr = pImplNames->getConstArray();
 #endif
                 Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
