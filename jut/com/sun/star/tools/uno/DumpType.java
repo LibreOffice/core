@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DumpType.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-08 13:13:36 $
+ *  last change: $Author: kr $ $Date: 2001-04-05 10:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,15 +87,26 @@ public class DumpType {
         MethodDescription methodDescriptions[] = typeDescription.getMethodDescriptions();
         if(methodDescriptions != null)
             for(int i = 0; i < methodDescriptions.length; ++ i) {
-                System.err.println("\tName: " + methodDescriptions[i].getName());
-                System.err.println("\tindex: " + methodDescriptions[i].getIndex());
-                System.err.println("\tisOneyWay: " + methodDescriptions[i].isOneway());
-                System.err.println("\tisConst: " + methodDescriptions[i].isConst());
-                System.err.println("\tisUnsigned: " + methodDescriptions[i].isUnsigned());
-                System.err.println("\tisAny: " + methodDescriptions[i].isAny());
+                System.err.print("Name: " + methodDescriptions[i].getName());
+                System.err.print(" index: " + methodDescriptions[i].getIndex());
+                System.err.print(" isOneyWay: " + methodDescriptions[i].isOneway());
+                System.err.print(" isConst: " + methodDescriptions[i].isConst());
+                System.err.print(" isUnsigned: " + methodDescriptions[i].isUnsigned());
+                System.err.print(" isAny: " + methodDescriptions[i].isAny());
                 System.err.println("\tisInterface: " + methodDescriptions[i].isInterface());
-                System.err.println("\tgetInSignature: " + methodDescriptions[i].getInSignature());
-                System.err.println("\tgetOutSignature: " + methodDescriptions[i].getOutSignature());
+
+                System.err.print("\tgetInSignature: ");
+                TypeDescription in_sig[] = methodDescriptions[i].getInSignature();
+                for(int j = 0; j < in_sig.length; ++ j)
+                    System.err.print("\t\t" + in_sig[j]);
+                System.err.println();
+
+                System.err.print("\tgetOutSignature: ");
+                TypeDescription out_sig[] = methodDescriptions[i].getOutSignature();
+                for(int j = 0; j < out_sig.length; ++ j)
+                    System.err.print("\t\t" + out_sig[j]);
+                System.err.println();
+
                 System.err.println("\tgetReturnSig: " + methodDescriptions[i].getReturnSig());
                 System.err.println("\tgetMethod:" + methodDescriptions[i].getMethod());
             }
