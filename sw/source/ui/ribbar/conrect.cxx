@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:38:56 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     aItemSet.Put( SdrTextAniAmountItem(
                             (INT16)pWin->PixelToLogic(Size(2,1)).Width()) );
 
-//-/                pObj->SetAttributes(aItemSet, FALSE);
-                    pObj->SetItemSetAndBroadcast(aItemSet);
+                    pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
             }
             else if(mbVertical && pObj && pObj->ISA(SdrTextObj))
@@ -223,7 +222,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-                pText->SetItemSet(aSet);
+                pText->SetMergedItemSet(aSet);
             }
             if( pObj )
             {
