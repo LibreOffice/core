@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNameMapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,14 @@ namespace connectivity
 
 
                 typedef ::std::multimap< ::rtl::OUString, nsIAbDirectory *, ltstr > dirMap;
+                typedef ::std::multimap< ::rtl::OUString, nsIAbDirectory *, ltstr > uriMap;
 
                 static MNameMapper    *instance;
                 dirMap                     *mDirMap;
+                uriMap                     *mUriMap;
+
+                //clear dirs
+                void clear();
 
             public:
                 static MNameMapper* getInstance();
@@ -96,7 +101,10 @@ namespace connectivity
                 ~MNameMapper();
 
                 // May modify the name passed in so that it's unique
-                void add( ::rtl::OUString& str, nsIAbDirectory* abook );
+                nsresult add( ::rtl::OUString& str, nsIAbDirectory* abook );
+
+                //reset dirs
+                void reset();
 
                 // Will replace the given dir
                 void replace( const ::rtl::OUString& str, nsIAbDirectory* abook );
