@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:30:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,7 @@ sal_Bool SdrOle2Obj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec&
     // for empty groups, additionally draw empty OLE bitmap
     else
     {
-        if(!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet(nLayerId))
+        if(!rInfoRec.bPrinter && rInfoRec.aPaintLayer.IsSet((sal_uInt8)nLayerId))
         {
             OutputDevice* pOutDev = rOut.GetOutDev();
 
