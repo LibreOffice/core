@@ -23,4 +23,28 @@ HKCR
 			'TypeLib' = s '{BFE10EB1-8584-11D4-8335-005004526AB4}'
 		}
 	}
+	AxTestComponents.Foo.1 = s 'Foo Class'
+	{
+		CLSID = s '{14DE9D5D-EB9D-4091-8E1B-A1B1672D8C1D}'
+	}
+	AxTestComponents.Foo = s 'Foo Class'
+	{
+		CLSID = s '{14DE9D5D-EB9D-4091-8E1B-A1B1672D8C1D}'
+		CurVer = s 'AxTestComponents.Foo.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {14DE9D5D-EB9D-4091-8E1B-A1B1672D8C1D} = s 'Foo Class'
+		{
+			ProgID = s 'AxTestComponents.Foo.1'
+			VersionIndependentProgID = s 'AxTestComponents.Foo'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{BFE10EB1-8584-11D4-8335-005004526AB4}'
+		}
+	}
+
 }
