@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@ TabPage RID_SVXPAGE_GRID
         Text [ SWEDISH ] = "~Fäst mot stödraster" ;
         Text [ PORTUGUESE ] = "Fixar na ~quadrícula" ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÍø¸ñ×ø±ê(~S)";
-        Text[ russian ] = "Ïğèâÿçàòü ê ğåøåòêå";
+        Text[ russian ] = "Ïğèâÿçàòü ê ñåòêå";
         Text[ polish ] = "U¿yj siatki zaczepu";
         Text[ japanese ] = "½Å¯Ìß–Ô–Ú½¸Ø°İ‚Ìg—p(~S)";
         Text[ chinese_traditional ] = "¨Ï¥Îºô®æ§¤¼Ğ(~S)";
         Text[ arabic ] = "ÇÓÊÎÏÇã ÔÈßÉ ÇáÍÈÓ";
-        Text[ greek ] = "×ñŞóç ğëİãìáôïò ğ~ñïóêüëëçóçò";
+        Text[ greek ] = "×ñŞóç ğëİãìáôïò ğñïóêüëëçóçò";
         Text[ korean ] = "¸ÂÃã ´«±İ »ç¿ë(~S)";
         Text[ turkish ] = "Kavrama kılavuz çizgileri kullan";
         Text[ language_user1 ] = " ";
@@ -276,7 +276,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ SWEDISH ] = "Indelning" ;
         Text [ PORTUGUESE ] = "~Subdivisão" ;
         Text[ chinese_simplified ] = "Ïßµã¼ä¸ô(~S)";
-        Text[ russian ] = "Ïîäğàçäåëåíèå";
+        Text[ russian ] = "Ğàçäåëåíèå";
         Text[ polish ] = "Podpodzia³";
         Text[ japanese ] = "“_‚ÌŠÔŠu(~S)";
         Text[ chinese_traditional ] = "½uÂI¶¡¹j(~S)";
@@ -371,12 +371,12 @@ TabPage RID_SVXPAGE_GRID
         Text [ SWEDISH ] = "Synligt ~raster" ;
         Text [ PORTUGUESE ] = "~Quadrícula visível" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾Íø¸ñÏß(~V)";
-        Text[ russian ] = "Ïîêàçàòü ğåøåòêó";
+        Text[ russian ] = "Ïîêàçàòü ñåòêó";
         Text[ polish ] = "Raster widoczny";
         Text[ japanese ] = "¸ŞØ¯ÄŞ‚ğ•\\¦‚·‚é(~V)";
         Text[ chinese_traditional ] = "Åã¥Üºô®æ½u(~V)";
         Text[ arabic ] = "ÔÈßÉ ãÑÆíÉ";
-        Text[ greek ] = "Ğëİãìá (êïõêßäåò) ïñáôü";
+        Text[ greek ] = "Ğëİãìá ïñá~ôÜ";
         Text[ korean ] = "´«±İÀ» º¸ÀÌ°Ô(~V)";
         Text[ turkish ] = "Kılavuz çizgileri göster";
         Text[ language_user1 ] = " ";
@@ -400,7 +400,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ PORTUGUESE ] = "Ajustar à quadrícula" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ºÍÍø¸ñ×ø±êÍ¬²½(~T)";
-        Text[ russian ] = "Ïî ğàçìåğó ğåøåòêè";
+        Text[ russian ] = "Ïî ğàçìåğó ñåòêè";
         Text[ polish ] = "Ustaw wed³ug rastra";
         Text[ japanese ] = "¸ŞØ¯ÄŞ‚É‡‚í‚¹‚é(~T)";
         Text[ chinese_traditional ] = "©Mºô®æ§¤¼Ğ¦P¨B(~T)";
@@ -518,12 +518,12 @@ TabPage RID_SVXPAGE_GRID
         Text [ SWEDISH ] = "Raster" ;
         Text [ PORTUGUESE ] = "Grelha" ;
         Text[ chinese_simplified ] = "Íø¸ñ";
-        Text[ russian ] = "Ğåøåòêà";
+        Text[ russian ] = "Ñåòêà";
         Text[ polish ] = "Raster";
         Text[ japanese ] = "¸ŞØ¯ÄŞ";
         Text[ chinese_traditional ] = "ºô®æ";
         Text[ arabic ] = "ÇáÔÈßÉ";
-        Text[ greek ] = "Ğëİãìá (êïõêßäåò)";
+        Text[ greek ] = "Ğëİãìá";
         Text[ korean ] = "´«±İ";
         Text[ turkish ] = "Kılavuz çizgiler";
         Text[ language_user1 ] = " ";
