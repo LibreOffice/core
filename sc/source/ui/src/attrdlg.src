@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:45:38 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ TabDialog RID_SCDLG_ATTR
                 Text = "Schrifteffekt" ;
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text[ english_us ] = "Font Effects";
-                Text[ portuguese ] = "Efeitos de caracteres";
+                Text[ portuguese ] = "Efeitos do tipo de letra";
                 Text[ russian ] = "έττεκς ψπθτςΰ";
                 Text[ greek ] = "Εφέ γραφής";
                 Text[ dutch ] = "Schrifteffect";
