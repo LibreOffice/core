@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 12:59:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
         }
         else
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             out( "\n> identified option -" );
             out( pOpt );
             out( " = " );
@@ -220,7 +220,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
       else if (aArg.indexOf(aOpt) == 1)
     {
         *pValue = aArg.copy(1 + aOpt.getLength());
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         out( "\n> identified option -" );
         out( pOpt );
         out( " = " );
@@ -244,7 +244,7 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     {
         ++(*pnIndex);
         *pbOpt = sal_True;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         out( "\n> identified option --" );
         out( pOpt );
 #endif
@@ -726,7 +726,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
         // ReadOnly registries
         for ( size_t nReg = 0; nReg < aReadOnlyRegistries.size(); ++nReg )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             out( "\n> trying to open ro registry: " );
             out( OUStringToOString( aReadOnlyRegistries[ nReg ], RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
@@ -737,7 +737,7 @@ extern "C" int SAL_CALL main( int argc, const char * argv[] )
         }
         if (aReadWriteRegistry.getLength())
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             out( "\n> trying to open rw registry: " );
             out( OUStringToOString( aReadWriteRegistry, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
