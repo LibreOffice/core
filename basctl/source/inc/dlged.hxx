@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:39:49 $
+ *  last change: $Author: tbe $ $Date: 2002-04-24 14:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 
 enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST, DLGED_READONLY };
 
+
 //============================================================================
 // DlgEditor
 //============================================================================
@@ -140,6 +141,7 @@ public:
     ScrollBar*      GetHScroll() const { return pHScroll; }
     ScrollBar*      GetVScroll() const { return pVScroll; }
     void            DoScroll( ScrollBar* pActScroll );
+    void            UpdateScrollBars();
 
     void            SetDialog( ::com::sun::star::uno::Reference<
                         ::com::sun::star::container::XNameContainer > xUnoControlDialogModel );
@@ -172,6 +174,7 @@ public:
     void            SetMode( DlgEdMode eMode );
     void            SetInsertObj( USHORT eObj );
     USHORT          GetInsertObj() const;
+    void            CreateDefaultObject();
     DlgEdMode       GetMode() const { return eMode; }
     BOOL            IsCreateOK() const { return bCreateOK; }
 

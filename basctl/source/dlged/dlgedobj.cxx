@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 11:06:10 $
+ *  last change: $Author: tbe $ $Date: 2002-04-24 14:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,20 +407,6 @@ sal_Int32 DlgEdObj::GetStep() const
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::SetStep( sal_Int32 nStep )
-{
-    // set step property
-    uno::Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), uno::UNO_QUERY );
-    if (xPSet.is())
-    {
-        uno::Any aStep;
-        aStep <<= nStep;
-        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Step" ) ), aStep );
-    }
-}
-
-//----------------------------------------------------------------------------
-
 void DlgEdObj::UpdateStep()
 {
     sal_Int32 nCurStep = GetDlgEdForm()->GetStep();
@@ -464,7 +450,7 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
         Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
         const ::rtl::OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
-        ::std::vector< ::rtl::OUString > aNameList(nCtrls);
+        ::std::vector< ::rtl::OUString > aNameList( nCtrls );
 
         // fill helper list
         for ( sal_Int16 i = 0; i < nCtrls; i++ )
@@ -477,14 +463,10 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
         evt.OldValue >>= nOldTabIndex;
         sal_Int16 nNewTabIndex;
         evt.NewValue >>= nNewTabIndex;
-        if (nNewTabIndex < 0)
-        {
+        if ( nNewTabIndex < 0 )
             nNewTabIndex = 0;
-        }
-        else if (nNewTabIndex > nCtrls - 1)
-        {
+        else if ( nNewTabIndex > nCtrls - 1 )
             nNewTabIndex = nCtrls - 1;
-        }
 
         // reorder helper list
         ::rtl::OUString aCtrlName = aNameList[nOldTabIndex];
@@ -502,7 +484,7 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
             // set new tabindex
             Reference< ::com::sun::star::beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
-            if (xPSet.is())
+            if ( xPSet.is() )
             {
                 Any aTabIndex;
                 aTabIndex <<= (sal_Int16) i;
@@ -513,6 +495,9 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
             xCont->removeByName( aName );
             xCont->insertByName( aName , aCtrl );
         }
+
+        // reorder objects in drawing page
+        GetModel()->GetPage(0)->SetObjectOrdNum( nOldTabIndex + 1, nNewTabIndex + 1 );
     }
 
     // start listening with all childs
@@ -857,68 +842,91 @@ FASTBOOL DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
+    SetDefaults();
+
+    return bResult;
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdObj::SetDefaults()
+{
     // stop listening
-    EndListening(sal_False);
+    EndListening( sal_False );
 
     // set parent form
     pDlgEdForm = ((DlgEdPage*)GetPage())->GetDlgEdForm();
 
     // add child to parent form
-    pDlgEdForm->AddChild(this);
+    pDlgEdForm->AddChild( this );
 
-    // get unique name
-    ::rtl::OUString aOUniqueName( GetUniqueName() );
-
-    // set name property
-    uno::Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), uno::UNO_QUERY );
-    uno::Any aUniqueName;
-    aUniqueName <<= aOUniqueName;
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
-
-    // set labels
-    ::rtl::OUString aServiceName = GetServiceName();
-    if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) ||
-        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) ||
-        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) ||
-        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) ||
-        aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) )
+    Reference< beans::XPropertySet > xPSet( GetUnoControlModel(), UNO_QUERY );
+    if ( xPSet.is() )
     {
-        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
+        // get unique name
+        ::rtl::OUString aOUniqueName( GetUniqueName() );
+
+        // set name property
+        Any aUniqueName;
+        aUniqueName <<= aOUniqueName;
+        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
+
+        // set labels
+        ::rtl::OUString aServiceName = GetServiceName();
+        if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) ||
+            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) ||
+            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) ||
+            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) ||
+            aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) )
+        {
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" ) ), aUniqueName );
+        }
+
+        // set number formats supplier for formatted field
+        if ( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ) )
+        {
+            Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor()->GetNumberFormatsSupplier();
+            if ( xSupplier.is() )
+            {
+                Any aSupplier;
+                aSupplier <<= xSupplier;
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatsSupplier" ) ), aSupplier );
+            }
+        }
+
+        // set geometry properties
+        SetPropsFromRect();
+
+        Reference< container::XNameContainer > xCont( GetDlgEdForm()->GetUnoControlModel() , UNO_QUERY );
+        if ( xCont.is() )
+        {
+            // set tabindex
+               Sequence< OUString > aNames = xCont->getElementNames();
+            uno::Any aTabIndex;
+            aTabIndex <<= (sal_Int16) aNames.getLength();
+            xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+
+            // set step
+            Reference< beans::XPropertySet > xPSetForm( xCont, UNO_QUERY );
+            if ( xPSetForm.is() )
+            {
+                Any aStep = xPSetForm->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Step" ) ) );
+                xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Step" ) ), aStep );
+            }
+
+            // insert control model in dialog model
+            Reference< awt::XControlModel > xCtrl( xPSet , UNO_QUERY );
+            Any aAny;
+            aAny <<= xCtrl;
+            xCont->insertByName( aOUniqueName , aAny );
+        }
     }
-
-    // set number formats supplier for formatted field
-    if ( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ) )
-    {
-        uno::Reference< util::XNumberFormatsSupplier > xSupplier = GetDlgEdForm()->GetDlgEditor()->GetNumberFormatsSupplier();
-        uno::Any aSupplier;
-        aSupplier <<= xSupplier;
-        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatsSupplier" ) ), aSupplier );
-    }
-
-    // set geometry properties
-    SetPropsFromRect();
-
-    // set tabindex
-    uno::Reference< container::XNameAccess > xNameAcc( (GetDlgEdForm()->GetUnoControlModel()) , uno::UNO_QUERY );
-       Sequence< OUString > aNames = xNameAcc->getElementNames();
-    uno::Any aTabIndex;
-    aTabIndex <<= (sal_Int16) aNames.getLength();
-    xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
-
-    // insert control model in dialog model
-    uno::Reference< container::XNameContainer > xC( xNameAcc , uno::UNO_QUERY );
-    uno::Reference< awt::XControlModel > xCtrl( xPSet , uno::UNO_QUERY );
-    uno::Any aAny;
-    aAny <<= xCtrl;
-    xC->insertByName( aOUniqueName , aAny );
 
     // dialog model changed
-    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
+    GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged( TRUE );
 
     // start listening
     StartListening();
-
-    return bResult;
 }
 
 //----------------------------------------------------------------------------

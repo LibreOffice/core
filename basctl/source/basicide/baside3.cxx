@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-07 11:48:47 $
+ *  last change: $Author: tbe $ $Date: 2002-04-24 14:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,6 @@ DialogWindow::DialogWindow( Window* pParent, StarBASIC* pBasic,
 
     SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 
-    // new
-
     // set readonly mode for readonly libraries
     ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
@@ -157,8 +155,6 @@ DialogWindow::DialogWindow( Window* pParent, StarBASIC* pBasic,
 
     if ( pShell && pShell->IsReadOnly() )
         SetReadOnly( TRUE );
-
-    // end of new
 }
 
 DialogWindow::DialogWindow( DialogWindow* pOrgWin ) :
@@ -609,11 +605,14 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 }
                 break;
             }
-            BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
-            #ifdef DEBUG
-                BOOL bModified = IsModified();
-            #endif
 
+            if ( rReq.GetModifier() & KEY_MOD1 )
+            {
+                if ( GetEditor()->GetMode() == DLGED_INSERT )
+                    GetEditor()->CreateDefaultObject();
+            }
+
+            BasicIDE::GetBindings().Invalidate( SID_DOC_MODIFIED );
         }
         break;
 

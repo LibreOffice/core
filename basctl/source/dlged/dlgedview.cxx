@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 11:12:04 $
+ *  last change: $Author: tbe $ $Date: 2002-04-24 14:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #include "dlgedview.hxx"
 #endif
 
+#ifndef _BASCTL_DLGED_HXX
+#include "dlged.hxx"
+#endif
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -97,8 +101,9 @@ void DlgEdView::MarkListHasChanged()
 
 //----------------------------------------------------------------------------
 
-DlgEdView::DlgEdView(SdrModel* pModel1, OutputDevice* pOut) :
-    SdrView( pModel1, pOut )
+DlgEdView::DlgEdView( SdrModel* pModel, OutputDevice* pOut, DlgEditor* pEditor )
+    :SdrView( pModel, pOut )
+    ,pDlgEditor( pEditor )
 {
 }
 
@@ -106,6 +111,16 @@ DlgEdView::DlgEdView(SdrModel* pModel1, OutputDevice* pOut) :
 
 DlgEdView::~DlgEdView()
 {
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
+{
+    SdrPaintView::MakeVisible( rRect, rWin );
+
+    if ( pDlgEditor )
+        pDlgEditor->UpdateScrollBars();
 }
 
 //----------------------------------------------------------------------------

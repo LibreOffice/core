@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:38:41 $
+ *  last change: $Author: tbe $ $Date: 2002-04-24 14:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 
 #ifndef _BASCTL_DLGED_HXX
 #include "dlged.hxx"
-#endif
-
-#ifndef _BASCTL_DLGEDOBJ_HXX
-#include "dlgedobj.hxx"
 #endif
 
 #ifndef _SV_SELENG_HXX //autogen
@@ -185,15 +181,230 @@ BOOL DlgEdFunc::MouseMove( const MouseEvent& rMEvt )
 
 BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 {
-    if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE )
+    BOOL bReturn = FALSE;
+
+    SdrView* pView = pParent->GetView();
+    Window* pWindow = pParent->GetWindow();
+
+    KeyCode aCode = rKEvt.GetKeyCode();
+    USHORT nCode = aCode.GetCode();
+
+    switch ( nCode )
     {
-        if( pParent->GetView() )
+        case KEY_ESCAPE:
         {
-            pParent->GetView()->BrkAction();
-            return TRUE;
+            if ( pView->IsAction() )
+            {
+                pView->BrkAction();
+                bReturn = TRUE;
+            }
+            else if ( pView->HasMarkedObj() )
+            {
+                const SdrHdlList& rHdlList = pView->GetHdlList();
+                SdrHdl* pHdl = rHdlList.GetFocusHdl();
+                if ( pHdl )
+                    ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                else
+                    pView->UnmarkAll();
+
+                bReturn = TRUE;
+            }
         }
+        break;
+        case KEY_TAB:
+        {
+            if ( !aCode.IsMod1() && !aCode.IsMod2() )
+            {
+                // mark next object
+                if ( !pView->MarkNextObj( !aCode.IsShift() ) )
+                {
+                    // if no next object, mark first/last
+                    pView->UnmarkAllObj();
+                    pView->MarkNextObj( !aCode.IsShift() );
+                }
+
+                if ( pView->HasMarkedObj() )
+                    pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
+
+                bReturn = TRUE;
+            }
+            else if ( aCode.IsMod1() )
+            {
+                // selected handle
+                const SdrHdlList& rHdlList = pView->GetHdlList();
+                ((SdrHdlList&)rHdlList).TravelFocusHdl( !aCode.IsShift() );
+
+                // guarantee visibility of focused handle
+                SdrHdl* pHdl = rHdlList.GetFocusHdl();
+                if ( pHdl )
+                {
+                    Point aHdlPosition( pHdl->GetPos() );
+                    Rectangle aVisRect( aHdlPosition - Point( 100, 100 ), Size( 200, 200 ) );
+                    pView->MakeVisible( aVisRect, *pWindow );
+                }
+
+                bReturn = TRUE;
+            }
+        }
+        break;
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        {
+            long nX = 0;
+            long nY = 0;
+
+            if ( nCode == KEY_UP )
+            {
+                // scroll up
+                nX =  0;
+                nY = -1;
+            }
+            else if ( nCode == KEY_DOWN )
+            {
+                // scroll down
+                nX =  0;
+                nY =  1;
+            }
+            else if ( nCode == KEY_LEFT )
+            {
+                // scroll left
+                nX = -1;
+                nY =  0;
+            }
+            else if ( nCode == KEY_RIGHT )
+            {
+                // scroll right
+                nX =  1;
+                nY =  0;
+            }
+
+            if ( pView->HasMarkedObj() && !aCode.IsMod1() )
+            {
+                if ( aCode.IsMod2() )
+                {
+                    // move in 1 pixel distance
+                    Size aPixelSize = pWindow ? pWindow->PixelToLogic( Size( 1, 1 ) ) : Size( 100, 100 );
+                    nX *= aPixelSize.Width();
+                    nY *= aPixelSize.Height();
+                }
+                else
+                {
+                    // move in 1 mm distance
+                    nX *= 100;
+                    nY *= 100;
+                }
+
+                const SdrHdlList& rHdlList = pView->GetHdlList();
+                SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                if ( pHdl == 0 )
+                {
+                    // no handle selected
+                    if ( pView->IsMoveAllowed() )
+                    {
+                        // restrict movement to work area
+                        const Rectangle& rWorkArea = pView->GetWorkArea();
+
+                        if ( !rWorkArea.IsEmpty() )
+                        {
+                            Rectangle aMarkRect( pView->GetMarkedObjRect() );
+                            aMarkRect.Move( nX, nY );
+
+                            if ( !rWorkArea.IsInside( aMarkRect ) )
+                            {
+                                if ( aMarkRect.Left() < rWorkArea.Left() )
+                                    nX += rWorkArea.Left() - aMarkRect.Left();
+
+                                if ( aMarkRect.Right() > rWorkArea.Right() )
+                                    nX -= aMarkRect.Right() - rWorkArea.Right();
+
+                                if ( aMarkRect.Top() < rWorkArea.Top() )
+                                    nY += rWorkArea.Top() - aMarkRect.Top();
+
+                                if ( aMarkRect.Bottom() > rWorkArea.Bottom() )
+                                    nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                            }
+                        }
+
+                        if ( nX != 0 || nY != 0 )
+                        {
+                            pView->MoveAllMarked( Size( nX, nY ) );
+                            pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
+                        }
+                    }
+                }
+                else
+                {
+                    // move the handle
+                    if ( pHdl && ( nX || nY ) )
+                    {
+                        Point aStartPoint( pHdl->GetPos() );
+                        Point aEndPoint( pHdl->GetPos() + Point( nX, nY ) );
+                        const SdrDragStat& rDragStat = pView->GetDragStat();
+
+                        // start dragging
+                        pView->BegDragObj( aStartPoint, 0, pHdl, 0 );
+
+                        if ( pView->IsDragObj() )
+                        {
+                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                            BOOL bWasSnapEnabled = pView->IsSnapEnabled();
+
+                            // switch snapping off
+                            if ( !bWasNoSnap )
+                                ((SdrDragStat&)rDragStat).SetNoSnap( TRUE );
+                            if ( bWasSnapEnabled )
+                                pView->SetSnapEnabled( FALSE );
+
+                            pView->MovAction( aEndPoint );
+                            pView->EndDragObj();
+
+                            // restore snap
+                            if ( !bWasNoSnap )
+                                ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
+                            if ( bWasSnapEnabled )
+                                pView->SetSnapEnabled( bWasSnapEnabled );
+                        }
+
+                        // make moved handle visible
+                        Rectangle aVisRect( aEndPoint - Point( 100, 100 ), Size( 200, 200 ) );
+                        pView->MakeVisible( aVisRect, *pWindow );
+                    }
+                }
+            }
+            else
+            {
+                // scroll page
+                ScrollBar* pScrollBar = ( nX != 0 ) ? pParent->GetHScroll() : pParent->GetVScroll();
+                if ( pScrollBar )
+                {
+                    long nRangeMin = pScrollBar->GetRangeMin();
+                    long nRangeMax = pScrollBar->GetRangeMax();
+                    long nThumbPos = pScrollBar->GetThumbPos() + ( ( nX != 0 ) ? nX : nY ) * pScrollBar->GetLineSize();
+                    if ( nThumbPos < nRangeMin )
+                        nThumbPos = nRangeMin;
+                    if ( nThumbPos > nRangeMax )
+                        nThumbPos = nRangeMax;
+                    pScrollBar->SetThumbPos( nThumbPos );
+                    pParent->DoScroll( pScrollBar );
+                }
+            }
+
+            bReturn = TRUE;
+        }
+        break;
+        default:
+        {
+        }
+        break;
     }
-    return FALSE;
+
+    if ( bReturn )
+        pWindow->ReleaseMouse();
+
+    return bReturn;
 }
 
 //----------------------------------------------------------------------------
@@ -280,14 +491,6 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
         {
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetObj();
-
-            DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
-            if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
-            {
-                sal_Int32 nCurStep = pDlgEdObj->GetDlgEdForm()->GetStep();
-                pDlgEdObj->SetStep( nCurStep );
-                pDlgEdObj->UpdateStep();
-            }
         }
 
         if ( !pView->HasMarkedObj() )
@@ -498,4 +701,3 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 }
 
 //----------------------------------------------------------------------------
-

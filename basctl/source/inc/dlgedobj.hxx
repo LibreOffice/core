@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-18 16:28:17 $
+ *  last change: $Author: tbe $ $Date: 2002-04-24 14:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,9 @@ public:
     virtual ::rtl::OUString GetUniqueName() const;
 
     virtual sal_Int32   GetStep() const;
-    virtual void        SetStep( sal_Int32 nStep );
     virtual void        UpdateStep();
 
+    virtual void SetDefaults();
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
 
