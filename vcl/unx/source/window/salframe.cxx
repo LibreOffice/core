@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-13 11:05:34 $
+ *  last change: $Author: pl $ $Date: 2001-10-10 17:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ static bool     bWasIntroBitmap = false;
 static long sal_CallbackDummy( void*, SalFrame*, USHORT, const void* )
 { return 0; }
 
+
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalFrame *SalInstance::CreateFrame( SalFrame *pParent,
@@ -348,8 +349,8 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 
         if( ! pFrame )
         {
-            XSelectInput( GetDisplay()->GetDisplay(), hForeignParent_, StructureNotifyMask );
-            XSelectInput( GetDisplay()->GetDisplay(), hForeignTopLevelWindow_, StructureNotifyMask );
+            XSelectInput( GetDisplay()->GetDisplay(), hForeignParent_, StructureNotifyMask | FocusChangeMask );
+            XSelectInput( GetDisplay()->GetDisplay(), hForeignTopLevelWindow_, StructureNotifyMask | FocusChangeMask );
         }
 
         SetPosSize( Rectangle( Point( 0, 0 ), Size( w, h ) ) );
@@ -1935,8 +1936,8 @@ long SalFrameData::HandleMouseEvent( XEvent *pEvent )
         // is "a little tricky"
         // on some wm however, this leads to closing our menues before the menu event
         // was fired (#89867), so we cancel this now
-          //if( nStyle_ & SAL_FRAME_STYLE_CHILD )
-        //XSetInputFocus( GetDisplay()->GetDisplay(), GetWindow(), RevertToParent, CurrentTime );
+        // if( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        //    XSetInputFocus( GetDisplay()->GetDisplay(), GetWindow(), RevertToParent, CurrentTime );
         if( pEvent->xbutton.button == Button1 ||
             pEvent->xbutton.button == Button2 ||
             pEvent->xbutton.button == Button3 )
@@ -2291,7 +2292,10 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
          */
     }
 
-    if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed )
+
+    if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed ||
+         ( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == hForeignTopLevelWindow_ )
+         )
     {
         if( FocusIn == pEvent->type )
         {
@@ -2871,6 +2875,9 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                             maResizeTimer.Start();
                         }
                     }
+
+                    if( nStyle_ & SAL_FRAME_STYLE_CHILD )
+                        XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
                 }
                 break;
 
@@ -2946,6 +2953,17 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 nRet = HandleNCExposeEvent( pEvent );
                 break;
 #endif
+             case FocusIn:
+             case FocusOut:
+                if( ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+                    && (   pEvent->xfocus.window == hForeignTopLevelWindow_
+                           || pEvent->xfocus.window == hForeignParent_ )
+                    )
+                {
+                    nRet = HandleFocusEvent( &pEvent->xfocus );
+                }
+                 break;
+
             case ConfigureNotify:
                 if( pEvent->xconfigure.window == hForeignParent_ ||
                     pEvent->xconfigure.window == hForeignTopLevelWindow_ )
