@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-03 12:17:55 $
+ *  last change: $Author: cl $ $Date: 2001-05-11 11:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ struct XML_SERVICEMAP
 {
     const sal_Char* mpService;
     const sal_Char* mpStream;
+    sal_Bool mbPlain;
 };
 
 
@@ -524,18 +525,22 @@ sal_Bool SdXMLFilter::Export()
 
             XML_SERVICEMAP aServices[5]; sal_uInt16 i = 0;
             aServices[i  ].mpService = IsDraw() ? sXML_export_draw_styles_service : sXML_export_impress_styles_service;
-            aServices[i++].mpStream  = sXML_styleStreamName;
+            aServices[i  ].mpStream  = sXML_styleStreamName;
+            aServices[i++].mbPlain = sal_False;
 
             aServices[i  ].mpService = IsDraw() ? sXML_export_draw_content_service : sXML_export_impress_content_service;
-            aServices[i++].mpStream  = sXML_contentStreamName;
+            aServices[i  ].mpStream  = sXML_contentStreamName;
+            aServices[i++].mbPlain = sal_False;
 
             aServices[i  ].mpService = IsDraw() ? sXML_export_draw_settings_service : sXML_export_impress_settings_service;
-            aServices[i++].mpStream  = sXML_settingsStreamName;
+            aServices[i  ].mpStream  = sXML_settingsStreamName;
+            aServices[i++].mbPlain = sal_False;
 
             if( mrDocShell.GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 aServices[i  ].mpService = IsDraw() ? sXML_export_draw_meta_service : sXML_export_impress_meta_service;
-                aServices[i++].mpStream  = sXML_metaStreamName;
+                aServices[i  ].mpStream  = sXML_metaStreamName;
+                aServices[i++].mbPlain = sal_True;
             };
 
             aServices[i].mpService = NULL;
@@ -560,6 +565,15 @@ sal_Bool SdXMLFilter::Export()
 
                     uno::Any aAny; aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
                     xDocStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
+
+                    if( pServices->mbPlain )
+                    {
+                        xDocStream->SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") ), uno::makeAny( (sal_Bool) sal_False ) );
+                    }
+                    else
+                    {
+                        xDocStream->SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), uno::makeAny( (sal_Bool)sal_True ) );
+                    }
 
                 }
                 else
