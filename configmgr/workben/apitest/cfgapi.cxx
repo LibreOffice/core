@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-03 11:56:29 $
+ *  last change: $Author: lla $ $Date: 2000-11-10 15:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ int _cdecl main( int argc, char * argv[] )
         OUString sPasswd = enterValue("Enter Password: ", "", true);
         cout << endl;
         // rtl::OUString sFilePath = enterValue("Enter Filepath: ", "d:/local/609/SRC609/configmgr/workben/local_io",false);
-        rtl::OUString sFilePath = enterValue("Enter Filepath: ", "f:/local/609/SRC609/configmgr/workben/local_io",false);
+        rtl::OUString sFilePath = enterValue("Enter Filepath: ", "f:/local/611/SRC611/configmgr/workben/local_io",false);
         // rtl::OUString sFilePath = enterValue("Enter Filepath: ", "f:/office60/user/config/registry", false);
         cout << endl;
 
@@ -357,10 +357,18 @@ int _cdecl main( int argc, char * argv[] )
         aArgs = createSequence(sUser, ASCII(""));
         aArgs.realloc(aArgs.getLength() + 1);
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
-
         aArgs.realloc(aArgs.getLength() + 1);
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
+/*
+#else
+        OUString aStr = ASCII("String");
+        sal_Int32 nDepth = 10;
+        Sequence< Any > aArgs(2);
 
+        aArgs[0] <<= aStr;
+        aArgs[1] <<= nDepth;
+#endif
+*/
         Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
             OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
             aArgs);
