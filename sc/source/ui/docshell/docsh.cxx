@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:50:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,8 @@ sal_uInt16 ScDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 
 void ScDocShell::BeforeXMLLoading()
 {
+    aDocument.DisableIdle( TRUE );
+
     // prevent unnecessary broadcasts and updates
     DBG_ASSERT(pModificator == NULL, "The Modificator should not exist");
     pModificator = new ScDocShellModificator( *this );
@@ -646,6 +648,8 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
         DBG_ERROR("The Modificator should exist");
+
+    aDocument.DisableIdle( FALSE );
 }
 
 BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
@@ -681,12 +685,17 @@ BOOL ScDocShell::SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Refer
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::SaveXML" );
 
+    aDocument.DisableIdle( TRUE );
+
     ScXMLImportWrapper aImport( aDocument, pMedium, xStor );
     sal_Bool bRet(sal_False);
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Export(sal_False);
     else
         bRet = aImport.Export(sal_True);
+
+    aDocument.DisableIdle( FALSE );
+
     return bRet;
 }
 
