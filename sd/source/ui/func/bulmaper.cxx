@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bulmaper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-16 13:55:39 $
+ *  last change: $Author: cl $ $Date: 2001-02-27 14:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,8 +179,8 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
         const SvxNumberFormat& rSrcLevel = aNumRule.GetLevel(nLevel);
         SvxNumberFormat aNewLevel( rSrcLevel );
 
-        if(rSrcLevel.GetNumType() != SVX_NUM_CHAR_SPECIAL &&
-           rSrcLevel.GetNumType() != SVX_NUM_NUMBER_NONE )
+        if(rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::CHAR_SPECIAL &&
+           rSrcLevel.GetNumberingType() != com::sun::star::style::NumberingType::NUMBER_NONE )
         {
             // wenn Aufzaehlung statt Bullet gewaehlt wurde, wird der Bullet-Font
             // dem Vorlagen-Font angeglichen
@@ -242,7 +242,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
 //          aNewLevel.SetBulletRelSize( 75 );
             aNumRule.SetLevel(nLevel, aNewLevel );
         }
-        else if( rSrcLevel.GetNumType() == SVX_NUM_CHAR_SPECIAL )
+        else if( rSrcLevel.GetNumberingType() == com::sun::star::style::NumberingType::CHAR_SPECIAL )
         {
             String aEmpty;
             aNewLevel.SetPrefix( aEmpty );
