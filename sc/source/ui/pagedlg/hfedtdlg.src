@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:11:57 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,16 @@
     Text [ dutch ] = "Kop-/voettekst" ; \
     Text [ spanish ] = "Encabezam./Pie de página" ; \
     Text [ english_us ] = "Headers/Footers" ; \
-    Text[ chinese_simplified ] = "Ò³Ã¼/Ò³½Å";   \
+    Text[ chinese_simplified ] = "é¡µçœ‰/é¡µè„š";   \
     Text[ russian ] = "Âåğõíèé/Íèæíèé êîëîíòèòóëû"; \
     Text[ polish ] = "Nag³ówki-/Stopki";    \
-    Text[ japanese ] = "Í¯ÀŞ/Ì¯À";  \
-    Text[ chinese_traditional ] = "­¶­º©M­¶§À"; \
+    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾/ï¾Œï½¯ï¾€";    \
+    Text[ chinese_traditional ] = "é é¦–å’Œé å°¾";    \
     Text[ arabic ] = "ÑÄæÓ/ÊĞííáÇÊ ÇáÕİÍÇÊ";    \
     Text[ dutch ] = "Kop-/voettekst";   \
-    Text[ chinese_simplified ] = "Ò³Ã¼/Ò³½Å";   \
+    Text[ chinese_simplified ] = "é¡µçœ‰/é¡µè„š";   \
     Text[ greek ] = "Êåöáëßäåò/Õğïóİëéäá";  \
-    Text[ korean ] = "¸Ó¸®±Û/¹Ù´Ú±Û";   \
+    Text[ korean ] = "ë¨¸ë¦¬ê¸€/ë°”ë‹¥ê¸€"; \
     Text[ turkish ] = "Üst/Altbilgi";   \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Encabezam./Pie de página";
@@ -104,16 +104,16 @@
     Text [ dutch ] = "Koptekst" ; \
     Text [ spanish ] = "Encabezamiento" ; \
     Text [ english_us ] = "Header" ; \
-    Text[ chinese_simplified ] = "Ò³Ã¼";    \
+    Text[ chinese_simplified ] = "é¡µçœ‰";  \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë"; \
     Text[ polish ] = "Nag³ówek";    \
-    Text[ japanese ] = "Í¯ÀŞ";  \
-    Text[ chinese_traditional ] = "­¶­º";   \
+    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾";  \
+    Text[ chinese_traditional ] = "é é¦–"; \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";  \
     Text[ dutch ] = "Koptekst"; \
-    Text[ chinese_simplified ] = "Ò³Ã¼";    \
+    Text[ chinese_simplified ] = "é¡µçœ‰";  \
     Text[ greek ] = "Êåöáëßäá"; \
-    Text[ korean ] = "¸Ó¸®±Û";  \
+    Text[ korean ] = "ë¨¸ë¦¬ê¸€";   \
     Text[ turkish ] = "Üstbilgi";   \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Encabezamiento";
@@ -133,16 +133,16 @@
     Text [ dutch ] = "Voettekst" ; \
     Text [ spanish ] = "Pie de página" ; \
     Text [ english_us ] = "Footer" ; \
-    Text[ chinese_simplified ] = "Ò³½Å";    \
+    Text[ chinese_simplified ] = "é¡µè„š";  \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë";  \
     Text[ polish ] = "Stopka";  \
-    Text[ japanese ] = "Ì¯À";   \
-    Text[ chinese_traditional ] = "­¶§À";   \
+    Text[ japanese ] = "ï¾Œï½¯ï¾€"; \
+    Text[ chinese_traditional ] = "é å°¾"; \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";    \
     Text[ dutch ] = "Voettekst";    \
-    Text[ chinese_simplified ] = "Ò³½Å";    \
+    Text[ chinese_simplified ] = "é¡µè„š";  \
     Text[ greek ] = "Õğïóİëéäï";    \
-    Text[ korean ] = "¹Ù´Ú±Û";  \
+    Text[ korean ] = "ë°”ë‹¥ê¸€";   \
     Text[ turkish ] = "Altbilgi";   \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Pie de página";
@@ -161,16 +161,16 @@
     Text [ dutch ] = "Koptekst (rechts)" ; \
     Text [ spanish ] = "Encabezam. (der.)" ; \
     Text [ english_us ] = "Header (right)" ; \
-    Text[ chinese_simplified ] = "Ò³Ã¼(ÓÒ)";    \
+    Text[ chinese_simplified ] = "é¡µçœ‰(å³)"; \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñïğàâà)";    \
     Text[ polish ] = "Wiersz nag³ówka (z prawej)";  \
-    Text[ japanese ] = "Í¯ÀŞ(‰E)";  \
-    Text[ chinese_traditional ] = "­¶­º(¥k)";   \
+    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾(å³)"; \
+    Text[ chinese_traditional ] = "é é¦–(å³)";    \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íãíä)";   \
     Text[ dutch ] = "Koptekst (rechts)";    \
-    Text[ chinese_simplified ] = "Ò³Ã¼(ÓÒ)";    \
+    Text[ chinese_simplified ] = "é¡µçœ‰(å³)"; \
     Text[ greek ] = "Êåöáëßäá (äåîéÜ)"; \
-    Text[ korean ] = "¸Ó¸®±Û(¿À¸¥ÂÊ)";  \
+    Text[ korean ] = "ë¨¸ë¦¬ê¸€(ì˜¤ë¥¸ìª½)";    \
     Text[ turkish ] = "Altbilgi (sağ)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Encabezam. (der.)";
@@ -189,16 +189,16 @@
     Text [ dutch ] = "Koptekst (links)" ; \
     Text [ spanish ] = "Encabezam. (izq.)" ; \
     Text [ english_us ] = "Header (left)" ; \
-    Text[ chinese_simplified ] = "Ò³Ã¼(×ó)";    \
+    Text[ chinese_simplified ] = "é¡µçœ‰(å·¦)"; \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñëåâà)"; \
     Text[ polish ] = "Wiersz nag³ówka (z lewej)";   \
-    Text[ japanese ] = "Í¯ÀŞ(¶)";  \
-    Text[ chinese_traditional ] = "­¶­º(¥ª)";   \
+    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾(å·¦)"; \
+    Text[ chinese_traditional ] = "é é¦–(å·¦)";    \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íÓÇÑ)";   \
     Text[ dutch ] = "Koptekst (links)"; \
-    Text[ chinese_simplified ] = "Ò³Ã¼(×ó)";    \
+    Text[ chinese_simplified ] = "é¡µçœ‰(å·¦)"; \
     Text[ greek ] = "Êåöáëßäá (áñéóôåñÜ)";  \
-    Text[ korean ] = "¸Ó¸®±Û(¿ŞÂÊ)";    \
+    Text[ korean ] = "ë¨¸ë¦¬ê¸€(ì™¼ìª½)";   \
     Text[ turkish ] = "Üstbilgi (sol)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Encabezam. (izq.)";
@@ -218,16 +218,16 @@
     Text [ dutch ] = "Voettekst (rechts)" ; \
     Text [ spanish ] = "Pie de página (derecha)" ; \
     Text [ english_us ] = "Footer (right)" ; \
-    Text[ chinese_simplified ] = "Ò³½Å(ÓÒ)";    \
+    Text[ chinese_simplified ] = "é¡µè„š(å³)"; \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñïğàâà)"; \
     Text[ polish ] = "Wiersz stopki (z prawej)";    \
-    Text[ japanese ] = "Ì¯À(‰E)";   \
-    Text[ chinese_traditional ] = "­¶§À(¥k)";   \
+    Text[ japanese ] = "ï¾Œï½¯ï¾€(å³)";    \
+    Text[ chinese_traditional ] = "é å°¾(å³)";    \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íãíä)"; \
     Text[ dutch ] = "Voettekst (rechts)";   \
-    Text[ chinese_simplified ] = "Ò³½Å(ÓÒ)";    \
+    Text[ chinese_simplified ] = "é¡µè„š(å³)"; \
     Text[ greek ] = "Õğïóİëéäï (äåîéÜ)";    \
-    Text[ korean ] = "¹Ù´Ú±Û (¿À¸¥ÂÊ)"; \
+    Text[ korean ] = "ë°”ë‹¥ê¸€ (ì˜¤ë¥¸ìª½)";   \
     Text[ turkish ] = "Altbilgi (sağ)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Pie de página (derecha)";
@@ -247,16 +247,16 @@
     Text [ dutch ] = "Voettekst (links)" ; \
     Text [ spanish ] = "Pie de página (izquierda)" ; \
     Text [ english_us ] = "Footer (left)" ; \
-    Text[ chinese_simplified ] = "Ò³½Å(×ó)";    \
+    Text[ chinese_simplified ] = "é¡µè„š(å·¦)"; \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñëåâà)";  \
     Text[ polish ] = "Wiersz stopki (z lewej)"; \
-    Text[ japanese ] = "Ì¯À(¶)";   \
-    Text[ chinese_traditional ] = "­¶§À(¥ª)";   \
+    Text[ japanese ] = "ï¾Œï½¯ï¾€(å·¦)";    \
+    Text[ chinese_traditional ] = "é å°¾(å·¦)";    \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íÓÇÑ)"; \
     Text[ dutch ] = "Voettekst (links)";    \
-    Text[ chinese_simplified ] = "Ò³½Å(×ó)";    \
+    Text[ chinese_simplified ] = "é¡µè„š(å·¦)"; \
     Text[ greek ] = "Õğïóİëéäï (áñéóôåñÜ)"; \
-    Text[ korean ] = "¹Ù´Ú±Û (¿ŞÂÊ)";   \
+    Text[ korean ] = "ë°”ë‹¥ê¸€ (ì™¼ìª½)";  \
     Text[ turkish ] = "Altbilgi (sol)"; \
     Text[ language_user1 ] = " ";   \
     Text[ catalan ] = "Pie de página (izquierda)";
@@ -306,16 +306,16 @@ TabDialog RID_SCDLG_HFED_HEADER
             };
         };
     };
-    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ chinese_simplified ] = "é¡µçœ‰";
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
     Text[ polish ] = "Nag³ówki";
-    Text[ japanese ] = "Í¯ÀŞ";
-    Text[ chinese_traditional ] = "­¶­º";
+    Text[ japanese ] = "ï¾ï½¯ï¾€ï¾";
+    Text[ chinese_traditional ] = "é é¦–";
     Text[ arabic ] = "ÑÄæÓ ÇáÕİÍÇÊ";
     Text[ dutch ] = "Kopteksten";
-    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ chinese_simplified ] = "é¡µçœ‰";
     Text[ greek ] = "Êåöáëßäåò";
-    Text[ korean ] = "¸Ó¸®±Û";
+    Text[ korean ] = "ë¨¸ë¦¬ê¸€";
     Text[ turkish ] = "Üstbilgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezamientos";
@@ -363,16 +363,16 @@ TabDialog RID_SCDLG_HFED_FOOTER
             };
         };
     };
-    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ chinese_simplified ] = "é¡µè„š";
     Text[ russian ] = "Íèæíèé êîëîíòèòóë";
     Text[ polish ] = "Stopki";
-    Text[ japanese ] = "Ì¯À";
-    Text[ chinese_traditional ] = "­¶§À";
+    Text[ japanese ] = "ï¾Œï½¯ï¾€";
+    Text[ chinese_traditional ] = "é å°¾";
     Text[ arabic ] = "ÊĞííáÇÊ ÇáÕİÍÉ";
     Text[ dutch ] = "Voetteksten";
-    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ chinese_simplified ] = "é¡µè„š";
     Text[ greek ] = "Õğïóİëéäá";
-    Text[ korean ] = "¹Ù´Ú±Û";
+    Text[ korean ] = "ë°”ë‹¥ê¸€";
     Text[ turkish ] = "Altbilgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pies de página";
@@ -716,16 +716,16 @@ TabPage RID_HFBASE
         Text [ dutch ] = "~Linker bereik" ;
         Text [ spanish ] = "Área ~izquierda" ;
         Text [ english_us ] = "~Left Area" ;
-        Text[ chinese_simplified ] = "×ó±ßÇøÓò(~L)";
+        Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
         Text[ russian ] = "Ëåâàÿ îáëàñòü";
         Text[ polish ] = "Lewy obszar";
-        Text[ japanese ] = "¶‚Ì”ÍˆÍ(~L)";
-        Text[ chinese_traditional ] = "¥ª°Ï°ì(~L)";
+        Text[ japanese ] = "å·¦ã®ç¯„å›²(~L)";
+        Text[ chinese_traditional ] = "å·¦å€åŸŸ(~L)";
         Text[ arabic ] = "ãäØŞÉ íÓÑì";
         Text[ dutch ] = "~Linker bereik";
-        Text[ chinese_simplified ] = "×ó±ßÇøÓò(~L)";
+        Text[ chinese_simplified ] = "å·¦è¾¹åŒºåŸŸ(~L)";
         Text[ greek ] = "ÁñéóôåñŞ ğåñéï÷Ş";
-        Text[ korean ] = "¿ŞÂÊ ¿µ¿ª(~L)";
+        Text[ korean ] = "ì™¼ìª½ ì˜ì—­(~L)";
         Text[ turkish ] = "~Sol bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área ~izquierda";
@@ -756,16 +756,16 @@ TabPage RID_HFBASE
         Text [ dutch ] = "~Middelste bereik" ;
         Text [ spanish ] = "Área ~central" ;
         Text [ english_us ] = "~Center Area" ;
-        Text[ chinese_simplified ] = "ÖĞ¼äÇøÓò(~C)";
+        Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ(~C)";
         Text[ russian ] = "Öåíòğàëüíàÿ îáëàñòü";
         Text[ polish ] = "Œrodkowy obszar";
-        Text[ japanese ] = "’†‰›‚Ì”ÍˆÍ(~C)";
-        Text[ chinese_traditional ] = "¤¤¶¡°Ï°ì(~C)";
+        Text[ japanese ] = "ä¸­å¤®ã®ç¯„å›²(~C)";
+        Text[ chinese_traditional ] = "ä¸­é–“å€åŸŸ(~C)";
         Text[ arabic ] = "ãäØŞÉ æÓØì";
         Text[ dutch ] = "~Middelste bereik";
-        Text[ chinese_simplified ] = "ÖĞ¼äÇøÓò(~C)";
+        Text[ chinese_simplified ] = "ä¸­é—´åŒºåŸŸ(~C)";
         Text[ greek ] = "ÊåíôñéêŞ ğåñéï÷Ş";
-        Text[ korean ] = "Áß½É ¿µ¿ª(~C)";
+        Text[ korean ] = "ì¤‘ì‹¬ ì˜ì—­(~C)";
         Text[ turkish ] = "~Orta bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área ~central";
@@ -796,16 +796,16 @@ TabPage RID_HFBASE
         Text [ dutch ] = "~Rechter bereik" ;
         Text [ spanish ] = "Área ~derecha" ;
         Text [ english_us ] = "R~ight Area" ;
-        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~I)";
+        Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
         Text[ russian ] = "Ïğàâàÿ îáëàñòü";
         Text[ polish ] = "Prawy obszar";
-        Text[ japanese ] = "‰E‚Ì”ÍˆÍ(~I)";
-        Text[ chinese_traditional ] = "¥k°Ï°ì(~I)";
+        Text[ japanese ] = "å³ã®ç¯„å›²(~I)";
+        Text[ chinese_traditional ] = "å³å€åŸŸ(~I)";
         Text[ arabic ] = "ãäØŞÉ íãäì";
         Text[ dutch ] = "~Rechter bereik";
-        Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~I)";
+        Text[ chinese_simplified ] = "å³è¾¹åŒºåŸŸ(~I)";
         Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª(~I)";
+        Text[ korean ] = "ì˜¤ë¥¸ìª½ ì˜ì—­(~I)";
         Text[ turkish ] = "~Sağ bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área ~derecha";
@@ -846,14 +846,14 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Ändern der Textattribute der aktuellen Selektion : ndern der Textattribute der aktuellen Selektion */
     QuickHelpText[ russian ] = "Àòğèáóòû òåêñòà";
         QuickHelpText[ polish ] = "Atrybuty tekstu";
-        QuickHelpText[ japanese ] = "Ã·½Ä‚Ì‘®«";
-        QuickHelpText[ chinese_simplified ] = "ÕıÎÄÊôĞÔ";
-        QuickHelpText[ chinese_traditional ] = "¤å¦rÄİ©Ê";
+        QuickHelpText[ japanese ] = "ï¾ƒï½·ï½½ï¾„ã®å±æ€§";
+        QuickHelpText[ chinese_simplified ] = "æ­£æ–‡å±æ€§";
+        QuickHelpText[ chinese_traditional ] = "æ–‡å­—å±¬æ€§";
         QuickHelpText[ arabic ] = "ÓãÇÊ ÇáäÕ";
         QuickHelpText[ dutch ] = "Tekstattributen";
-        QuickHelpText[ chinese_simplified ] = "ÕıÎÄÊôĞÔ";
+        QuickHelpText[ chinese_simplified ] = "æ­£æ–‡å±æ€§";
         QuickHelpText[ greek ] = "Éäéüôçôåò êåéìİíïõ";
-        QuickHelpText[ korean ] = "ÅØ½ºÆ®¡¡¼Ó¼º";
+        QuickHelpText[ korean ] = "í…ìŠ¤íŠ¸ã€€ì†ì„±";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Textattribute";
         QuickHelpText[ catalan ] = "Atributos de texto";
@@ -885,14 +885,14 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen des Dateinames des aktuellen Dokumentes : Einf³gen des Dateinames des aktuellen Dokumentes */
         QuickHelpText[ russian ] = "Èìÿ ôàéëà";
         QuickHelpText[ polish ] = "Nazwa pliku";
-        QuickHelpText[ japanese ] = "Ì§²Ù–¼";
-        QuickHelpText[ chinese_simplified ] = "ÎÄ¼şÃû";
-        QuickHelpText[ chinese_traditional ] = "ÀÉ®×¦WºÙ";
+        QuickHelpText[ japanese ] = "ï¾Œï½§ï½²ï¾™å";
+        QuickHelpText[ chinese_simplified ] = "æ–‡ä»¶å";
+        QuickHelpText[ chinese_traditional ] = "æª”æ¡ˆåç¨±";
         QuickHelpText[ arabic ] = "ÇÓã Çáãáİ";
         QuickHelpText[ dutch ] = "Bestandsnaam";
-        QuickHelpText[ chinese_simplified ] = "ÎÄ¼şÃû";
+        QuickHelpText[ chinese_simplified ] = "æ–‡ä»¶å";
         QuickHelpText[ greek ] = "¼íïìá áñ÷åßïõ";
-        QuickHelpText[ korean ] = "ÆÄÀÏ¡¡ÀÌ¸§";
+        QuickHelpText[ korean ] = "íŒŒì¼ã€€ì´ë¦„";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dateiname";
         QuickHelpText[ catalan ] = "Nombre de archivo";
@@ -917,16 +917,16 @@ TabPage RID_HFBASE
                 Text[ dutch ] = "Titel";
                 Text[ spanish ] = "Título";
                 Text[ english_us ] = "Title";
-    Text[ chinese_simplified ] = "±êÌâ";
+    Text[ chinese_simplified ] = "æ ‡é¢˜";
                 Text[ russian ] = "Çàãîëîâîê";
                 Text[ polish ] = "Tytu³";
-                Text[ japanese ] = "À²ÄÙ";
-                Text[ chinese_traditional ] = "¼ĞÃD";
+                Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™";
+                Text[ chinese_traditional ] = "æ¨™é¡Œ";
                 Text[ arabic ] = "ÇáÚäæÇä";
                 Text[ dutch ] = "Titel";
-                Text[ chinese_simplified ] = "±êÌâ";
+                Text[ chinese_simplified ] = "æ ‡é¢˜";
                 Text[ greek ] = "Ôßôëïò";
-                Text[ korean ] = "Á¦¸ñ";
+                Text[ korean ] = "ì œëª©";
                 Text[ turkish ] = "Başlık";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Título";
@@ -948,16 +948,16 @@ TabPage RID_HFBASE
                 Text[ dutch ] = "Bestandsnaam";
                 Text[ spanish ] = "Nombre del archivo";
                 Text[ english_us ] = "File Name";
-    Text[ chinese_simplified ] = "ÎÄ¼şÃû";
+    Text[ chinese_simplified ] = "æ–‡ä»¶å";
                 Text[ russian ] = "Èìÿ ôàéëà";
                 Text[ polish ] = "Nazwa pliku";
-                Text[ japanese ] = "Ì§²Ù–¼";
-                Text[ chinese_traditional ] = "ÀÉ®×¦WºÙ";
+                Text[ japanese ] = "ï¾Œï½§ï½²ï¾™å";
+                Text[ chinese_traditional ] = "æª”æ¡ˆåç¨±";
                 Text[ arabic ] = "ÇÓã Çáãáİ";
                 Text[ dutch ] = "Bestandsnaam";
-                Text[ chinese_simplified ] = "ÎÄ¼şÃû";
+                Text[ chinese_simplified ] = "æ–‡ä»¶å";
                 Text[ greek ] = "¼íïìá áñ÷åßïõ";
-                Text[ korean ] = "ÆÄÀÏ ÀÌ¸§";
+                Text[ korean ] = "íŒŒì¼ ì´ë¦„";
                 Text[ turkish ] = "Dosya adı";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Nombre del archivo";
@@ -979,16 +979,16 @@ TabPage RID_HFBASE
                 Text[ dutch ] = "Pad/Bestandsnaam";
                 Text[ spanish ] = "Ruta/Nombre de archivo";
                 Text[ english_us ] = "Path/File Name";
-    Text[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
+    Text[ chinese_simplified ] = "è·¯å¾„/æ–‡ä»¶å";
                 Text[ russian ] = "Èìÿ ïóòè/ôàéëà";
                 Text[ polish ] = "Œcie¿ka/Nazwa pliku";
-                Text[ japanese ] = "Êß½/Ì§²Ù–¼";
-                Text[ chinese_traditional ] = "¸ô®|/ÀÉ®×¦WºÙ";
+                Text[ japanese ] = "ï¾Šï¾Ÿï½½/ï¾Œï½§ï½²ï¾™å";
+                Text[ chinese_traditional ] = "è·¯å¾‘/æª”æ¡ˆåç¨±";
                 Text[ arabic ] = "ÇáãÓÇÑ/ÇÓã Çáãáİ";
                 Text[ dutch ] = "Pad/Bestandsnaam";
-                Text[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
+                Text[ chinese_simplified ] = "è·¯å¾„/æ–‡ä»¶å";
                 Text[ greek ] = "¼íïìá äéáäñïìŞò/ïíüìáôïò";
-                Text[ korean ] = "°æ·Î/ÆÄÀÏ¡¡ÀÌ¸§";
+                Text[ korean ] = "ê²½ë¡œ/íŒŒì¼ã€€ì´ë¦„";
                 Text[ turkish ] = "Yol/dosya adı";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Ruta/Nombre de archivo";
@@ -1024,14 +1024,14 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Tabellennamens : Einf³gen des aktuellen Tabellennamens */
     QuickHelpText[ russian ] = "Èìÿ ëèñòà";
         QuickHelpText[ polish ] = "Nazwa tabeli";
-        QuickHelpText[ japanese ] = "•\\–¼";
-        QuickHelpText[ chinese_simplified ] = "±í¸ñÃû³Æ";
-        QuickHelpText[ chinese_traditional ] = "¤u§@ªí¦WºÙ";
+        QuickHelpText[ japanese ] = "è¡¨å";
+        QuickHelpText[ chinese_simplified ] = "è¡¨æ ¼åç§°";
+        QuickHelpText[ chinese_traditional ] = "å·¥ä½œè¡¨åç¨±";
         QuickHelpText[ arabic ] = "ÇÓã ÇáÌÏæá";
         QuickHelpText[ dutch ] = "Tabelnaam";
-        QuickHelpText[ chinese_simplified ] = "±í¸ñÃû³Æ";
+        QuickHelpText[ chinese_simplified ] = "è¡¨æ ¼åç§°";
         QuickHelpText[ greek ] = "¼íïìá ğßíáêá";
-        QuickHelpText[ korean ] = "Ç¥¡¡ÀÌ¸§";
+        QuickHelpText[ korean ] = "í‘œã€€ì´ë¦„";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenname";
         QuickHelpText[ catalan ] = "Nombre de la hoja";
@@ -1063,14 +1063,14 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Seitenzahl : Einf³gen der aktuellen Seitenzahl */
     QuickHelpText[ russian ] = "Ñòğàíèöà";
         QuickHelpText[ polish ] = "Strona";
-        QuickHelpText[ japanese ] = "Íß°¼Ş";
-        QuickHelpText[ chinese_simplified ] = "Ò³Ãæ";
-        QuickHelpText[ chinese_traditional ] = "­¶";
+        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾";
+        QuickHelpText[ chinese_simplified ] = "é¡µé¢";
+        QuickHelpText[ chinese_traditional ] = "é ";
         QuickHelpText[ arabic ] = "ÕİÍÉ";
         QuickHelpText[ dutch ] = "Pagina";
-        QuickHelpText[ chinese_simplified ] = "Ò³Ãæ";
+        QuickHelpText[ chinese_simplified ] = "é¡µé¢";
         QuickHelpText[ greek ] = "Óåëßäá";
-        QuickHelpText[ korean ] = "ÂÊ";
+        QuickHelpText[ korean ] = "ìª½";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seite";
         QuickHelpText[ catalan ] = "Página";
@@ -1102,14 +1102,14 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der letzten Seitenzahl : Einf³gen der letzten Seitenzahl */
     QuickHelpText[ russian ] = "Ñòğàíèöû";
         QuickHelpText[ polish ] = "Strony";
-        QuickHelpText[ japanese ] = "Íß°¼Ş";
-        QuickHelpText[ chinese_simplified ] = "Ò³Êı";
-        QuickHelpText[ chinese_traditional ] = "­¶";
+        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾";
+        QuickHelpText[ chinese_simplified ] = "é¡µæ•°";
+        QuickHelpText[ chinese_traditional ] = "é ";
         QuickHelpText[ arabic ] = "ÕİÍÇÊ";
         QuickHelpText[ dutch ] = "Pagina's";
-        QuickHelpText[ chinese_simplified ] = "Ò³Êı";
+        QuickHelpText[ chinese_simplified ] = "é¡µæ•°";
         QuickHelpText[ greek ] = "Óåëßäåò";
-        QuickHelpText[ korean ] = "ÂÊµé";
+        QuickHelpText[ korean ] = "ìª½ë“¤";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Seiten";
         QuickHelpText[ catalan ] = "Páginas";
@@ -1141,14 +1141,14 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Datums : Einf³gen des aktuellen Datums */
     QuickHelpText[ russian ] = "Äàòà";
         QuickHelpText[ polish ] = "Data";
-        QuickHelpText[ japanese ] = "“ú•t";
-        QuickHelpText[ chinese_simplified ] = "ÈÕÆÚ";
-        QuickHelpText[ chinese_traditional ] = "¤é´Á";
+        QuickHelpText[ japanese ] = "æ—¥ä»˜";
+        QuickHelpText[ chinese_simplified ] = "æ—¥æœŸ";
+        QuickHelpText[ chinese_traditional ] = "æ—¥æœŸ";
         QuickHelpText[ arabic ] = "ÇáÊÇÑíÎ";
         QuickHelpText[ dutch ] = "Datum";
-        QuickHelpText[ chinese_simplified ] = "ÈÕÆÚ";
+        QuickHelpText[ chinese_simplified ] = "æ—¥æœŸ";
         QuickHelpText[ greek ] = "Çìåñïìçíßá";
-        QuickHelpText[ korean ] = "³¯Â¥";
+        QuickHelpText[ korean ] = "ë‚ ì§œ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum";
         QuickHelpText[ catalan ] = "Fecha";
@@ -1180,14 +1180,14 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Uhrzeit : Einf³gen der aktuellen Uhrzeit */
     QuickHelpText[ russian ] = "Âğåìÿ";
         QuickHelpText[ polish ] = "Godzina";
-        QuickHelpText[ japanese ] = "";
-        QuickHelpText[ chinese_simplified ] = "Ê±¼ä";
-        QuickHelpText[ chinese_traditional ] = "®É¶¡";
+        QuickHelpText[ japanese ] = "æ™‚åˆ»";
+        QuickHelpText[ chinese_simplified ] = "æ—¶é—´";
+        QuickHelpText[ chinese_traditional ] = "æ™‚é–“";
         QuickHelpText[ arabic ] = "ÇáæŞÊ";
         QuickHelpText[ dutch ] = "Tijd";
-        QuickHelpText[ chinese_simplified ] = "Ê±¼ä";
+        QuickHelpText[ chinese_simplified ] = "æ—¶é—´";
         QuickHelpText[ greek ] = "¿ñá";
-        QuickHelpText[ korean ] = "½Ã°£";
+        QuickHelpText[ korean ] = "ì‹œê°„";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Uhrzeit";
         QuickHelpText[ catalan ] = "Hora";
@@ -1211,16 +1211,16 @@ TabPage RID_HFBASE
         Text [ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen." ;
         Text [ spanish ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc." ;
         Text [ english_us ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
-        Text[ chinese_simplified ] = "Çëµã»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
+        Text[ chinese_simplified ] = "è¯·ç‚¹å‡»æŒ‰é’®ï¼Œæ›´æ”¹å­—ä½“æˆ–æ’å…¥æ—¥æœŸï¼Œæ—¶é—´ç­‰åŒºåŸŸæŒ‡ä»¤ã€‚";
         Text[ russian ] = "Äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ êàê äàòà, âğåìÿ è ò.ä. èñïîëüçóéòå êíîïêè.";
         Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
-        Text[ japanese ] = "Ì«İÄ‚Ì•ÏX‚Ü‚½‚Í“ú•tÌ¨°ÙÄŞ‚âÌ¨°ÙÄŞ‚È‚Ç‚ğ‘}“ü‚·‚é‚Æ‚«‚ÍA•ÏXÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ü‚·B";
-        Text[ chinese_traditional ] = "½Ğ±z«ö¤@¤U«ö¶s¡MÅÜ§ó¦r«¬©Î´¡¤J¤é´Á¡M®É¶¡µ¥°Ï°ì«ü¥O¡C";
+        Text[ japanese ] = "ï¾Œï½«ï¾ï¾„ã®å¤‰æ›´ã¾ãŸã¯æ—¥ä»˜ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã‚„æ™‚åˆ»ï¾Œï½¨ï½°ï¾™ï¾„ï¾ãªã©ã‚’æŒ¿å…¥ã™ã‚‹ã¨ãã¯ã€å¤‰æ›´ï¾ï¾ï¾€ï¾ã‚’ï½¸ï¾˜ï½¯ï½¸ã—ã¾ã™ã€‚";
+        Text[ chinese_traditional ] = "è«‹æ‚¨æŒ‰ä¸€ä¸‹æŒ‰éˆ•ï¹è®Šæ›´å­—å‹æˆ–æ’å…¥æ—¥æœŸï¹æ™‚é–“ç­‰å€åŸŸæŒ‡ä»¤ã€‚";
         Text[ arabic ] = "ÇÓÊÎÏã ÇáãİÇÊíÍ áÊÛííÑ äæÚ ÇáÎØ Ãæ áÅÖÇİÉ ÃæÇãÑ ÍŞæá¡ ãËá ÇáÊÇÑíÎ¡ Ãæ ÇáæŞÊ ...ÅáÎ.";
         Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
-        Text[ chinese_simplified ] = "Çëµã»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
+        Text[ chinese_simplified ] = "è¯·ç‚¹å‡»æŒ‰é’®ï¼Œæ›´æ”¹å­—ä½“æˆ–æ’å…¥æ—¥æœŸï¼Œæ—¶é—´ç­‰åŒºåŸŸæŒ‡ä»¤ã€‚";
         Text[ greek ] = "×ñçóéìïğïéŞóôå ôá ğåäßá åíôïëŞò ãéá íá áëëÜîåôå ôçí ãñáììáôïóåéñÜ Ş ãéá íá åéóÜãåôå ğåäßá åíôïëşí, üğùò ğ.÷. çìåñïìçíßá, şñá, êôë.";
-        Text[ korean ] = "±Û²ÃÀ» º¯°æÇÏ°Å³ª ³¯Â¥, ½Ã°£µîÀÇ ÇÊµå ¸í·É¾î¸¦ »ğÀÔÇÏ±â À§ÇØ¼­´Â ¹öÆ°À» »ç¿ëÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = "ê¸€ê¼´ì„ ë³€ê²½í•˜ê±°ë‚˜ ë‚ ì§œ, ì‹œê°„ë“±ì˜ í•„ë“œ ëª…ë ¹ì–´ë¥¼ ì‚½ì…í•˜ê¸° ìœ„í•´ì„œëŠ” ë²„íŠ¼ì„ ì‚¬ìš©í•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "Yazıtipini değiştirmek ya da tarih, saat gibi alan komutları eklemek için düğmeleri kullanınız.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc.";
@@ -1242,16 +1242,16 @@ TabPage RID_HFBASE
         Text [ dutch ] = "Tip" ;
         Text [ spanish ] = "Indicación" ;
         Text [ english_us ] = "Note" ;
-        Text[ chinese_simplified ] = "ÌáÊ¾";
+        Text[ chinese_simplified ] = "æç¤º";
         Text[ russian ] = "Óêàçàíèå";
         Text[ polish ] = "Wskazówka";
-        Text[ japanese ] = "w¦";
-        Text[ chinese_traditional ] = "´£¥Ü";
+        Text[ japanese ] = "æŒ‡ç¤º";
+        Text[ chinese_traditional ] = "æç¤º";
         Text[ arabic ] = "ãáÇÍÙÉ";
         Text[ dutch ] = "Tip";
-        Text[ chinese_simplified ] = "ÌáÊ¾";
+        Text[ chinese_simplified ] = "æç¤º";
         Text[ greek ] = "ÓõìâïõëŞ";
-        Text[ korean ] = "ÁÖ";
+        Text[ korean ] = "ì£¼";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Indicación";
@@ -1375,6 +1375,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
 
