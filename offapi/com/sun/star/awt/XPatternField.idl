@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPatternField.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:03:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 /** gives access to the value and formatting of a pattern field.
  */
-interface XPatternField: com::sun::star::uno::XInterface
+published interface XPatternField: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
