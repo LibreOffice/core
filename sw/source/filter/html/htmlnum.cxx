@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:07:31 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,13 +131,13 @@ static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
 
 void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
 {
-    if( rTxtNd.GetNum() )
+    if( rTxtNd.GetNumNoOutline() )
     {
         pNumRule = (SwNumRule *)rTxtNd.GetNumRule();
-        const SwNodeNum& rNum = *rTxtNd.GetNum();
+        const SwNodeNum& rNum = *rTxtNd.GetNumNoOutline();
         nDeep = pNumRule ? GetRealLevel( rNum.GetLevel() )+1 : 0;
         bNumbered = rNum.IsNum();
-        bRestart = rTxtNd.GetNum()->IsStart();
+        bRestart = rTxtNd.GetNumNoOutline()->IsStart();
     }
     else
     {
@@ -438,8 +438,8 @@ void SwHTMLParser::EndNumBulList( int nToken )
     if( !bAppend )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
-        bAppend = (pTxtNode && pTxtNode->GetNum() &&
-                   pTxtNode->GetNum()->IsNum()) ||
+        bAppend = (pTxtNode && pTxtNode->GetNumNoOutline() &&
+                   pTxtNode->GetNumNoOutline()->IsNum()) ||
             HasCurrentParaFlys();
     }
 
@@ -833,6 +833,9 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                                 // node isn't numbered => check completed
                                 break;
                             }
+
+                            ASSERT(! pTxtNd->IsOutline(),
+                                   "outline not expected");
 
                             const SwNodeNum& rNum = *pTxtNd->GetNum();
                             if( GetRealLevel( rNum.GetLevel() )+1 <
