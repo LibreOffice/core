@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-11 18:06:37 $
+ *  last change: $Author: nn $ $Date: 2002-09-18 17:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1704,6 +1704,10 @@ void ScInputHandler::DataChanged()
         //  wenn der Cursor vor dem Absatzende steht, werden Teile rechts rausgeschoben
         //  (unabhaengig von eMode)     -> View anpassen!
         //  wenn der Cursor am Ende steht, reicht der Status-Handler an der ViewData
+
+    //  #93767# first make sure the status handler is called now if the cursor
+    //  is outside the visible area
+    pEngine->QuickFormatDoc();
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (pActiveView && pActiveViewSh)
