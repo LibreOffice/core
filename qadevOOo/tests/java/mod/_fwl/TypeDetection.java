@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-12-10 17:03:50 $
+ *  last change:$Date: 2005-03-15 09:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ public class TypeDetection extends TestCase {
 
         } catch( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create Bookmark", e );
+            throw new StatusException( "Couldn't create Bookmark", e );
         }
 
         tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
