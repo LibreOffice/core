@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:04:10 $
+ *  last change: $Author: mav $ $Date: 2001-05-14 15:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef UUI_IAHNDL_HXX
 #define UUI_IAHNDL_HXX
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -71,14 +74,12 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XPASSWORDCONTAINER_HPP_
+#include <com/sun/star/task/XPasswordContainer.hpp>
+#endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-    class XSingleServiceFactory;
-} } } }
 
 //============================================================================
 class UUIInteractionHandler:
@@ -87,8 +88,13 @@ class UUIInteractionHandler:
     public com::sun::star::lang::XTypeProvider,
     public com::sun::star::task::XInteractionHandler
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XPasswordContainer > mPContainer;
+
 public:
     static sal_Char const m_aImplementationName[];
+
+    UUIInteractionHandler( com::sun::star::uno::Reference<
+                      com::sun::star::lang::XMultiServiceFactory > const & );
 
     virtual com::sun::star::uno::Any SAL_CALL
     queryInterface(com::sun::star::uno::Type const & rType)
