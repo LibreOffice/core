@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-13 18:00:37 $
+ *  last change: $Author: mib $ $Date: 2001-11-15 15:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,6 +746,7 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     M_E( "EndnoteNumberingPrefix",      TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_PREFIX ),
     M_E( "EndnoteNumberingSuffix",      TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_SUFFIX ),
     M_E( "EndnoteIsCollectAtTextEnd",   TEXT,   ENDNOTES_CONFIGURATION,     MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
+    M_E( "UserDefinedAttributes",       TEXT,   XMLNS,      XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
     M_END()
 };
