@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTypeInfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:03:01 $
+ *  last change: $Author: oj $ $Date: 2002-07-15 12:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ namespace connectivity
 
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
+
+        inline ::rtl::OUString getDBName() const { return aTypeName; }
     };
 }
 #endif // _CONNECTIVITY_OTYPEINFO_HXX_
