@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wallitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+ *  last change: $Author: kso $ $Date: 2000-10-11 07:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHAOS_WALLPAPER_HPP_
-#include <com/sun/star/chaos/WallPaper.hpp>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
@@ -295,13 +292,7 @@ SfxPoolItem* SfxWallpaperItem::Clone( SfxItemPool* ) const
 BOOL SfxWallpaperItem::QueryValue( com::sun::star::uno::Any& rVal,
                                    BYTE nMemberId ) const
 {
-    com::sun::star::chaos::WallPaper aVal;
-
-    aVal.Style = (com::sun::star::chaos::WallpaperStyle)_aWallpaper.GetStyle();
-    aVal.Color = (sal_Int32) _aWallpaper.GetColor().GetColor();
-    aVal.ImageURL = GetBitmapURL();
-    rVal <<= aVal;
-    return TRUE;
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -309,19 +300,6 @@ BOOL SfxWallpaperItem::QueryValue( com::sun::star::uno::Any& rVal,
 BOOL SfxWallpaperItem::PutValue( const com::sun::star::uno::Any& rVal,
                                  BYTE nMemberId )
 {
-    com::sun::star::chaos::WallPaper aVal;
-    if ( rVal >>= aVal )
-    {
-        if ( aVal.ImageURL.getLength() )
-            SetBitmapURL( aVal.ImageURL, GetBitmapFilter() );
-
-        SetColor( aVal.Color );
-        SetStyle( (WallpaperStyle)aVal.Style );
-
-        return TRUE;
-    }
-
-    DBG_ERROR( "SfxWallpaperItem::PutValue - Wrong type!" );
     return FALSE;
 }
 
@@ -647,48 +625,3 @@ void SAL_CALL WallpaperSink_Impl::closeOutput()
     _aSource = com::sun::star::uno::Reference<
                                 com::sun::star::io::XActiveDataSource >();
 }
-
-////////////////////////////////////////////////////////////////////////////////
-/*
-    $Log: not supported by cvs2svn $
-    Revision 1.23  2000/09/18 14:13:36  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.22  2000/08/31 13:41:29  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.21  2000/06/30 11:35:56  pb
-    chg: GetAppWindow() replaced
-
-    Revision 1.20  2000/04/12 08:01:40  sb
-    Adapted to Unicode.
-
-    Revision 1.19  2000/03/22 11:49:38  kso
-    Removed: SmartUno leftovers.
-
-    Revision 1.18  2000/03/21 11:37:55  kso
-    Added: [Put|QueryValue( ... com::sun::star::uno::Any ... )
-
-    Revision 1.17  2000/02/09 16:24:16  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.16  2000/01/28 11:23:43  dv
-    #70466# Changed service name
-
-    Revision 1.15  1999/11/19 17:12:36  sb
-    Module structure transposition.
-
-    Revision 1.14  1999/10/26 12:46:30  dv
-    Don't use GetGlobalServiceMgr() any longer
-
-    Revision 1.13  1999/08/23 13:30:58  dv
-    The CntWallpaperItem now uses the class Color
-
-    Revision 1.12  1999/08/18 14:14:21  dv
-    added: include cntwall.hxx
-
-    Revision 1.11  1999/08/18 09:12:51  dv
-    #66082# The WallpaperLoader is now constructed with a CntWallpaperItem
-
-*/
-
