@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:27:55 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 15:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,53 +268,54 @@ void OResultSet::releaseBuffer()
 {
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
-    for(sal_Int32 i = 0;i<nLen;++i)
+    void** pValue = m_aBindVector.begin() + 1;
+    for(sal_Int32 i = 1; i<=nLen; ++i, ++pValue)
     {
-        switch (xMeta->getColumnType(i+1))
+        switch (xMeta->getColumnType(i))
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
-                delete (::rtl::OString*) m_aBindVector[i];
+                delete static_cast< ::rtl::OString* >(*pValue);
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::BIGINT:
-                delete (::rtl::OString*) m_aBindVector[i];
+                delete static_cast< ::rtl::OString* >(*pValue);
                 break;
             case DataType::DOUBLE:
-                m_aBindVector.push_back(new double(0.0));
+                delete static_cast< double* >(*pValue);
                 break;
             case DataType::LONGVARCHAR:
-                delete (char*) m_aBindVector[i];
+                delete static_cast< char* >(*pValue);
                 break;
             case DataType::LONGVARBINARY:
-                delete (char*) m_aBindVector[i];
+                delete static_cast< char* >(*pValue);
                 break;
             case DataType::DATE:
-                delete (DATE_STRUCT*) m_aBindVector[i];
+                delete static_cast< DATE_STRUCT* >(*pValue);
                 break;
             case DataType::TIME:
-                delete (TIME_STRUCT*) m_aBindVector[i];
+                delete static_cast< TIME_STRUCT* >(*pValue);
                 break;
             case DataType::TIMESTAMP:
-                delete (TIMESTAMP_STRUCT*) m_aBindVector[i];
+                delete static_cast< TIMESTAMP_STRUCT* >(*pValue);
                 break;
             case DataType::BIT:
-                delete (sal_Int8*) m_aBindVector[i];
+                delete static_cast< sal_Int8* >(*pValue);
                 break;
             case DataType::TINYINT:
             case DataType::SMALLINT:
-                delete (sal_Int16*) m_aBindVector[i];
+                delete static_cast< sal_Int16* >(*pValue);
                 break;
             case DataType::INTEGER:
-                delete (sal_Int32*) m_aBindVector[i];
+                delete static_cast< sal_Int32* >(*pValue);
                 break;
             case DataType::REAL:
-                delete (float*) m_aBindVector[i];
+                delete static_cast< float* >(*pValue);
                 break;
             case DataType::BINARY:
             case DataType::VARBINARY:
-                delete (sal_Int8*) m_aBindVector[i];
+                delete static_cast< sal_Int8* >(*pValue);
                 break;
         }
     }
