@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inscodlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:25:28 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,13 @@
 #endif
 
 //------------------------------------------------------------------------
-#define INS_CONT_NOEMPTY    0x0100
-#define INS_CONT_TRANS      0x0200
-#define INS_CONT_LINK       0x0400
-
-#define SC_CELL_SHIFT_DISABLE_DOWN  0x01
-#define SC_CELL_SHIFT_DISABLE_RIGHT 0x02
+//CHINA001 #define INS_CONT_NOEMPTY     0x0100
+//CHINA001 #define INS_CONT_TRANS       0x0200
+//CHINA001 #define INS_CONT_LINK        0x0400
+//CHINA001
+//CHINA001 #define SC_CELL_SHIFT_DISABLE_DOWN   0x01
+//CHINA001 #define SC_CELL_SHIFT_DISABLE_RIGHT  0x02
+#include "scui_def.hxx"
 
 class ScInsertContentsDlg : public ModalDialog
 {
