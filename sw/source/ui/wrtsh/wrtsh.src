@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:03:19 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ String STR_SPLITNODE_UNDO
     TEXT [ finnish ] = "uusi kappale" ;
     TEXT [ danish ] = "nyt afsnit" ;
     TEXT [ french ] = "Nouveau paragraphe" ;
-    TEXT [ swedish ] = "nytt stycke" ;
+    TEXT [ swedish ] = "Nytt stycke" ;
     TEXT [ dutch ] = "Nieuwe alinea" ;
     TEXT [ spanish ] = "P·rrafo nuevo" ;
     TEXT [ english_us ] = "New Paragraph" ;
@@ -268,7 +268,7 @@ String STR_SETFMTCOLL_UNDO
     TEXT [ finnish ] = "K‰yt‰ tyylej‰" ;
     TEXT [ danish ] = "Anvend typografi" ;
     TEXT [ french ] = "Appliquer les styles" ;
-    TEXT [ swedish ] = "Anv‰nd formatmallar" ;
+    TEXT [ swedish ] = "Anv‰nd mallar" ;
     TEXT [ dutch ] = "Opmaakprofielen toepassen" ;
     TEXT [ spanish ] = "Aplicar estilos" ;
     TEXT [ english_us ] = "Apply Styles" ;
@@ -1126,7 +1126,7 @@ String STR_CHANGEDEFATTR
     TEXT [ finnish ] = "Muuta oletuksia" ;
     TEXT [ danish ] = "Modificer standardvÊrdier" ;
     TEXT [ french ] = "Changement des valeurs standard" ;
-    TEXT [ swedish ] = "ƒndra de standardv‰rdena" ;
+    TEXT [ swedish ] = "ƒndra standardv‰rden" ;
     TEXT [ dutch ] = "Standaardwaarden wijzigen" ;
     TEXT [ spanish ] = "Modificar valores est·ndar" ;
     TEXT [ english_us ] = "Modify default values" ;
@@ -1629,7 +1629,7 @@ String STR_TRANSLITERATE
 {
     TEXT = "Groﬂ-/Kleinschreibung" ;
     TEXT [ English ] = "Change case" ;
-    TEXT[ english_us ] = "Change case";
+    TEXT[ english_us ] = "Case/Characters";
     TEXT[ portuguese ] = "Change case";
     TEXT[ russian ] = "«‡„Î‡‚Ì˚Â/ÒÚÓ˜Ì˚Â ·ÛÍ‚˚";
     TEXT[ greek ] = " Âˆ·Î·ﬂ·/–ÂÊ‹";
