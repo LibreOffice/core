@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:12:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,9 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             }
 
             sal_Bool bTransportOwnEncrStreamAsRaw = sal_False;
+            // During the storing the original size of the stream can be changed
+            // TODO/LATER: get rid of this hack
+            sal_Int32 nOwnStreamOrigSize = bRawStream ? pStream->GetMagicalHackSize() : pStream->getSize();
             Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
             try
             {
@@ -394,8 +397,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     // at the beginning of the actual data
                     if ( !bToBeCompressed || bRawStream )
                     {
+                        // The raw stream can neither be encrypted nor connected
+                        OSL_ENSURE( !bRawStream || !bToBeCompressed && !bToBeEncrypted, "The stream is already encrypted!\n" );
                         xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
                         ImplSetStoredData ( *pTempEntry, xStream );
+
+                        // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
                     }
                     else if ( bToBeEncrypted )
                         pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
@@ -414,8 +421,9 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                         if ( pStream->IsEncrypted() && pStream->IsToBeEncrypted() )
                         {
                             // Should be handled close to the raw stream handling
-                            pTempEntry->nMethod = STORED;
                             bTransportOwnEncrStreamAsRaw = sal_True;
+                            pTempEntry->nMethod = STORED;
+                            pTempEntry->nSize = pTempEntry->nCompressedSize;
                         }
                     }
                     else
@@ -470,7 +478,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 // Need to store the uncompressed size in the manifest
                 pValue[5].Name = sSizeProperty;
-                pValue[5].Value <<= bRawStream ? pStream->GetMagicalHackSize() : pTempEntry->nSize;
+                pValue[5].Value <<= nOwnStreamOrigSize;
 
                 if ( bRawStream || bTransportOwnEncrStreamAsRaw )
                 {
@@ -611,6 +619,11 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 ZipPackageFolder::copyZipEntry ( pStream->aEntry, *pTempEntry );
                 // all the dangerous stuff has passed, so we can release pTempEntry
                 pTempEntry.release();
+
+                // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
+                if ( pStream->IsEncrypted() )
+                    pStream->setSize( nOwnStreamOrigSize );
+
                 pStream->aEntry.sName = rShortName;
                 pStream->aEntry.nOffset *= -1;
             }
