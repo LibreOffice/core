@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 14:04:08 $
+ *  last change: $Author: os $ $Date: 2000-12-09 14:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,6 +1482,11 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleLevel9"),  WID_PARA_LEV9,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel10"),     WID_PARA_LEV10,     &::getCppuType((const OUString*)0)  , 0,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_RELATIVE_TABSTOPS), WID_IS_RELATIVE_TABSTOPS, &::getBooleanCppuType(), PROPERTY_NONE, 0},
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),      WID_INDEX_MARKS, new uno::Type(::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0)),         PropertyAttribute::READONLY ,0       },
+#else
+                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),      WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0),           PropertyAttribute::READONLY ,0       },
+#endif
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXContentMap_Impl;
