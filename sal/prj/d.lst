@@ -15,6 +15,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 ..\inc\rtl\ustring.tmp %_DEST%\inc%_EXT%\rtl\ustring
 ..\inc\systools\*.h %_DEST%\inc%_EXT%\*.h
 ..\inc\systools\win32\*.h %_DEST%\inc%_EXT%\systools\win32\*.h
+..\inc\systools\win32\*.hxx %_DEST%\inc%_EXT%\systools\win32\*.hxx
 ..\inc\systools\unx\*.h %_DEST%\inc%_EXT%\systools\unx\*.h
 
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
