@@ -49,7 +49,7 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-
+   
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:output method="xml" indent="no" encoding="UTF-8" version="1.0" standalone="yes"/>
@@ -77,7 +77,13 @@
     </xsl:template>
     <xsl:template match="office:document">
         <xsl:processing-instruction name="mso-application">progid="Word.Document"</xsl:processing-instruction>
-        <w:wordDocument xml:space="preserve">
+        <xsl:variable name="embeddedObjPresent">
+            <xsl:choose>
+                <xsl:when test="//draw:object-ole[1]">yes</xsl:when>
+                <xsl:otherwise>no</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <w:wordDocument xml:space="preserve" w:embeddedObjPresent="{$embeddedObjPresent}">
             <xsl:apply-templates select="office:meta"/>
             <xsl:apply-templates select="office:font-face-decls"/>
             <xsl:if test="office:styles/text:outline-style | office:styles/text:list-style | office:automatic-styles/text:list-style">
@@ -91,11 +97,13 @@
                 <xsl:call-template name="add_comments_style"/>
                 <!--add for comments style G.Y.-->
             </w:styles>
+            <xsl:call-template name="export-oledata"/>
             <xsl:apply-templates select="office:settings"/>
             <xsl:apply-templates select="office:body"/>
         </w:wordDocument>
     </xsl:template>
     <xsl:template match="office:body">
+        <xsl:call-template name="page-background"/>
         <xsl:apply-templates select="office:text"/>
     </xsl:template>
     <xsl:template match="office:font-face-decls">
