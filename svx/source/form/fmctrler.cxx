@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:38:26 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
-
-
+#ifndef _COM_SUN_STAR_FORM_VALIDATION_XVALIDATABLEFORMCOMPONENT_HPP_
+#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XRESET_HPP_
 #include <com/sun/star/form/XReset.hpp>
 #endif
@@ -240,8 +241,10 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::form::validation;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::connectivity;
 using namespace ::svxform;
@@ -2966,6 +2969,95 @@ Window* FmXFormController::getDialogParentWindow()
 
     return pParent;
 }
+//------------------------------------------------------------------------------
+bool FmXFormController::checkFormComponentValidity( ::rtl::OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel ) SAL_THROW(())
+{
+    try
+    {
+        Reference< XEnumerationAccess > xControlEnumAcc( getModel(), UNO_QUERY );
+        Reference< XEnumeration > xControlEnumeration;
+        if ( xControlEnumAcc.is() )
+            xControlEnumeration = xControlEnumAcc->createEnumeration();
+        OSL_ENSURE( xControlEnumeration.is(), "FmXFormController::checkFormComponentValidity: cannot enumerate the controls!" );
+        if ( !xControlEnumeration.is() )
+            // assume all valid
+            return true;
+
+        Reference< XValidatableFormComponent > xValidatable;
+        while ( xControlEnumeration->hasMoreElements() )
+        {
+            if ( !( xControlEnumeration->nextElement() >>= xValidatable ) )
+                // control does not support validation
+                continue;
+
+            if ( xValidatable->isValid() )
+                continue;
+
+            Reference< XValidator > xValidator( xValidatable->getValidator() );
+            OSL_ENSURE( xValidator.is(), "FmXFormController::checkFormComponentValidity: invalid, but no validator?" );
+            if ( !xValidator.is() )
+                // this violates the interface definition of css.form.validation.XValidatableFormComponent ...
+                continue;
+
+            _rFirstInvalidityExplanation = xValidator->explainInvalid( xValidatable->getCurrentValue() );
+            _rxFirstInvalidModel = _rxFirstInvalidModel.query( xValidatable );
+            return false;
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXFormController::checkFormComponentValidity: caught an exception!" );
+    }
+    return true;
+}
+
+//------------------------------------------------------------------------------
+Reference< XControl > FmXFormController::locateControl( const Reference< XControlModel >& _rxModel ) SAL_THROW(())
+{
+    try
+    {
+        Sequence< Reference< XControl > > aControls( getControls() );
+        const Reference< XControl >* pControls = aControls.getConstArray();
+        const Reference< XControl >* pControlsEnd = aControls.getConstArray() + aControls.getLength();
+
+        for ( ; pControls != pControlsEnd; ++pControls )
+        {
+            OSL_ENSURE( pControls->is(), "FmXFormController::locateControl: NULL-control?" );
+            if ( pControls->is() )
+            {
+                if ( ( *pControls)->getModel() == _rxModel )
+                    return *pControls;
+            }
+        }
+        OSL_ENSURE( sal_False, "FmXFormController::locateControl: did not find a control for this model!" );
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXFormController::locateControl: caught an exception!" );
+    }
+    return NULL;
+}
+
+//------------------------------------------------------------------------------
+namespace
+{
+    void displayErrorSetFocus( const String& _rMessage, const Reference< XControl >& _rxFocusControl, Window* _pDialogParent )
+    {
+        SQLContext aError;
+        aError.Message = String( SVX_RES( RID_STR_WRITEERROR ) );
+        aError.Details = _rMessage;
+        displayException( aError, _pDialogParent );
+
+        if ( _rxFocusControl.is() )
+        {
+            Reference< XWindow > xControlWindow( _rxFocusControl, UNO_QUERY );
+            OSL_ENSURE( xControlWindow.is(), "displayErrorSetFocus: invalid control!" );
+            if ( xControlWindow.is() )
+                xControlWindow->setFocus();
+        }
+    }
+}
+
 // ::com::sun::star::sdb::XRowSetApproveListener
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sdb::RowChangeEvent& aEvent) throw( RuntimeException )
@@ -2992,7 +3084,16 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
                 // we're not active
                 return sal_True;
         }
-        // default handling
+
+        // if some of the control modes are bound to validators, check them
+        ::rtl::OUString sInvalidityExplanation;
+        Reference< XControlModel > xInvalidModel;
+        if ( !checkFormComponentValidity( sInvalidityExplanation, xInvalidModel ) )
+        {
+            displayErrorSetFocus( sInvalidityExplanation, locateControl( xInvalidModel ), getDialogParentWindow() );
+            return false;
+        }
+
         // check Values on NULL and required flag
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(aEvent.Source, UNO_QUERY);
         Reference< ::com::sun::star::container::XEnumerationAccess >  xEnumAccess;
@@ -3051,19 +3152,10 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
                     }
                 }
 
-                String aMsg(SVX_RES(RID_ERR_FIELDREQUIRED));
-                aMsg.SearchAndReplace('#', aFieldName.getStr());
+                String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );
+                sMessage.SearchAndReplace('#', aFieldName.getStr());
+                displayErrorSetFocus( sMessage, ( i < nLength ) ? pControls[i] : Reference< XControl >(), getDialogParentWindow() );
 
-                SQLContext aError;
-                aError.Message = String(SVX_RES(RID_STR_WRITEERROR));
-                aError.Details = aMsg;
-                displayException(aError, getDialogParentWindow());
-
-                if ( i < nLength)
-                {
-                    Reference< ::com::sun::star::awt::XWindow >  xWindow(pControls[i], UNO_QUERY);
-                    xWindow->setFocus();
-                }
                 return sal_False;
             }
         }
