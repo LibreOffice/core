@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:38:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 08:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text[ turkish ] = "D~il...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Idioma...";
+        Text[ finnish ] = "~Kieli";
     };
     HelpButton BTN_THES_HELP
     {
@@ -204,7 +205,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ italian ] = "~Significato " ;
         Text [ portuguese_brazilian ] = "~Significado " ;
         Text [ portuguese ] = "~Significado " ;
-        Text [ finnish ] = "~Merkitys" ;
+        Text [ finnish ] = "~Merkitys " ;
         Text [ danish ] = "Betydning " ;
         Text [ french ] = "~Signification " ;
         Text [ swedish ] = "~Betydelse  " ;
@@ -342,7 +343,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text [ italian ] = "Parola non trovata nel dizionario dei sinonimi" ;
         Text [ portuguese_brazilian ] = "Palavra nÆo encontrada no Thesaurus" ;
         Text [ portuguese ] = "Palavra não se encontra no dicionário de sinónimos." ;
-        Text [ finnish ] = "Sanaa ei ole synonyymisanastossa" ;
+        Text [ finnish ] = "Sanaa ei löytynyt synonyymisanastosta" ;
         Text [ danish ] = "Ordet findes ikke i synonymordbogen" ;
         Text [ french ] = "Mot ne figurant pas dans le dictionnaire des synonymes" ;
         Text [ swedish ] = "Ordet finns inte i synonymordlistan" ;
@@ -427,6 +428,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     OKButton BTN_LANG_OK
     {
@@ -455,5 +457,6 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ turkish ] = "Dil seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar idioma";
+    Text[ finnish ] = "Valitse kieli";
 };
  // ********************************************************************** EOF
