@@ -111,6 +111,7 @@ common
 		PROFILE
 		profile
         product
+        PROSWITCH
 		REMOTE_BUILD_FLAG
 		RES_ARAB
 		RES_CHINSIM
@@ -144,6 +145,7 @@ common
 		SOLARINC
 		SOLARLIB
 		SOLARVERSION
+        SOURCE_ROOT_USED
         STAR_RESOURCEPATH
 		STLPORT4
 		SYSPATH
