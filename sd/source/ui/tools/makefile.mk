@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-04 09:00:29 $
+#   last change: $Author: rt $ $Date: 2004-09-20 13:36:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ AUTOSEG=true
 
 SLOFILES =      							\
     $(SLO)$/IconCache.obj					\
+    $(SLO)$/PreviewRenderer.obj				\
     $(SLO)$/SdGlobalResourceContainer.obj
 
 EXCEPTIONSFILES=
