@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:46:52 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ long SwWrtShell::DelNxtWord()
     ResetCursorStack();
     EnterStdMode();
     SetMark();
-    if(IsEndWrd())
+    if(IsEndWrd() && !IsSttWrd())
         _NxtWrd();
     if(IsSttWrd() || IsEndPara())
         _NxtWrd();
