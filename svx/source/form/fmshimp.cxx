@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 16:38:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,6 @@ sal_Int16 SelObjectSlotMap[] =  // vom SelObject abhaengige Slots
     SID_FM_CONVERTTO_RADIOBUTTON,
     SID_FM_CONVERTTO_GROUPBOX,
     SID_FM_CONVERTTO_COMBOBOX,
-    SID_FM_CONVERTTO_GRID,
     SID_FM_CONVERTTO_IMAGEBUTTON,
     SID_FM_CONVERTTO_FILECONTROL,
     SID_FM_CONVERTTO_DATE,
@@ -354,7 +353,6 @@ sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_RADIOBUTTON,
     SID_FM_CONVERTTO_GROUPBOX,
     SID_FM_CONVERTTO_COMBOBOX,
-    SID_FM_CONVERTTO_GRID,
     SID_FM_CONVERTTO_IMAGEBUTTON,
     SID_FM_CONVERTTO_FILECONTROL,
     SID_FM_CONVERTTO_DATE,
@@ -378,7 +376,6 @@ sal_Int16 nCreateSlots[] =
     SID_FM_RADIOBUTTON,
     SID_FM_GROUPBOX,
     SID_FM_COMBOBOX,
-    SID_FM_DBGRID,
     SID_FM_IMAGEBUTTON,
     SID_FM_FILECONTROL,
     SID_FM_DATEFIELD,
@@ -402,7 +399,6 @@ sal_Int16 nObjectTypes[] =
     OBJ_FM_RADIOBUTTON,
     OBJ_FM_GROUPBOX,
     OBJ_FM_COMBOBOX,
-    OBJ_FM_GRID,
     OBJ_FM_IMAGEBUTTON,
     OBJ_FM_FILECONTROL,
     OBJ_FM_DATEFIELD,
@@ -4916,6 +4912,7 @@ sal_Bool SearchableControlIterator::ShouldStepInto(const Reference< XInterface>&
 
 //==============================================================================
 //==============================================================================
+
 SV_IMPL_PTRARR(StatusForwarderArray, SfxStatusForwarder*)
 
 SFX_IMPL_MENU_CONTROL(ControlConversionMenuController, SfxBoolItem);
