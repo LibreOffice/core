@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:46:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace sd {
 
 class Client;
 class DrawDocShell;
-class DrawSubController;
+class DrawController;
 class FrameView;
 class FuPoor;
 class FuSearch;
@@ -328,7 +328,6 @@ public:
     */
     ::sd::WindowUpdater* GetWindowUpdater (void) const;
 
-    virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
 
     /** Return the current/main window of this view shell.
         This method exists for reasons of compatibility.
@@ -339,22 +338,21 @@ public:
     ViewShellBase& GetViewShellBase (void) const;
     ObjectBarManager& GetObjectBarManager (void) const;
 
-    /** Return an object that implements the necessary UNO interfaces
-        to act as a sub-controller for a DrawController object.  The
-        sub-controller is created if it does not exist.  It is owned
-        by the called object and is disposed by it when the called
-        object is destroyed.
+    /** Return an object that implements the necessary UNO interfaces to act
+        as a controller for the ViewShellBase object.  The controller is
+        created if it does not exist.  It is owned by the caller.
         @return
-            Returns NULL when sub-controller does not yet exist and
-            can not be created.
+            Returns NULL when the controller does not yet exist and can not
+            be created.
     */
-    DrawSubController* GetSubController (void);
+    DrawController* GetController (void);
 
     /** Return the type of the shell.
     */
     virtual ShellType GetShellType (void) const;
 
     virtual void InnerResizePixel(const Point &rPos, const Size &rSize);
+    virtual void OuterResizePixel(const Point &rPos, const Size &rSize);
 
     /** This function is called from the underlying ViewShellBase
         object to handle a verb execution request.
@@ -382,6 +380,8 @@ public:
                          PageKind ePageKind, BOOL bPrintMarkedOnly);
 
 protected:
+    friend class ViewShellBase;
+
     // #96090# Support methods for centralized UNDO/REDO
     /** Return the undo manager of the currently active object bar.
         This is usually the one of the document.  Only the outline
@@ -440,10 +440,10 @@ protected:
     // Bereich aller Fenster, wenn Splitter aktiv sind
     Rectangle   aAllWindowRect;
 
-    /// The sub-controller.  Returned by GetSubController.  Owned by
-    /// this base class once it has been created.
+    /// The controller.  Returned by GetController().
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-        mxSubController;
+        mxController;
+    DrawController* mpController;
 
     /// The type of the shell.  Returned by GetShellType().
     ShellType meShellType;
