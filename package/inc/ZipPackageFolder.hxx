@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:20:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,14 @@ class ZipPackageFolder : public cppu::ImplInheritanceHelper2
 >
 {
     static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
+
 protected:
     ContentHash maContents;
+    const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+
 public:
 
-    ZipPackageFolder ();
+    ZipPackageFolder( const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual ~ZipPackageFolder();
 
     void doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
