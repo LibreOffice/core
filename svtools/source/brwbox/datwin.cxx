@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-09 07:24:53 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 06:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,35 +79,6 @@
 DECLARE_LIST( BrowserColumns, BrowserColumn* );
 
 //===================================================================
-
-static String FitInWidth( OutputDevice& rWin, String aVal, ULONG nWidth, BOOL bAbbr )
-{
-    if ( nWidth < 8 )
-        return String();
-    ULONG nValWidth = rWin.GetTextWidth( aVal );
-    if ( nValWidth > nWidth )
-    {
-        String aDots( "...", RTL_TEXTENCODING_IBM_850 );
-        ULONG nDotsWidth = 2;
-        if ( bAbbr )
-            nDotsWidth = rWin.GetTextWidth( aDots );
-        if ( nDotsWidth > nWidth )
-            aVal.Erase();
-        else
-        {
-            aVal.Erase( aVal.Len() - 1 );
-            while ( aVal.Len() && rWin.GetTextWidth( aVal ) + nDotsWidth > nWidth )
-                aVal.Erase( aVal.Len() - 1 );
-            if ( bAbbr )
-                aVal += aDots;
-        }
-    }
-
-    return aVal;
-}
-
-//-------------------------------------------------------------------
-
 void ButtonFrame::Draw( OutputDevice& rDev )
 {
     Color aOldFillColor = rDev.GetFillColor();
@@ -131,7 +102,8 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
     if ( aText.Len() )
     {
-        String aVal( FitInWidth( rDev, aText, aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH, bAbbr ) );
+        String aVal = rDev.GetEllipsisString(aText,aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH);
+
         Font aFont( rDev.GetFont() );
         BOOL bOldTransp = aFont.IsTransparent();
         if ( !bOldTransp )
