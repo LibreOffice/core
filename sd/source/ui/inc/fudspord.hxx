@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudspord.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,46 +59,58 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUDSPORD_HXX
-#define _SD_FUDSPORD_HXX
+#ifndef SD_FU_DISPLAY_ORDER_HXX
+#define SD_FU_DISPLAY_ORDER_HXX
 
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
+
+#ifndef _VCL_POINTR_HXX
+#include <vcl/pointr.hxx>
 #endif
 
 class SdrObject;
 class SdrViewUserMarker;
+
+namespace sd {
+
 /*************************************************************************
 |*
 |* Funktion DisplayOrder
 |*
 \************************************************************************/
 
-class FuDisplayOrder : public FuPoor
+class FuDisplayOrder
+    : public FuPoor
 {
- protected:
-     Pointer            aPtr;
-     SdrObject*         pRefObj;
-     SdrViewUserMarker* pUserMarker;
-
- public:
+public:
     TYPEINFO();
 
-    FuDisplayOrder(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                   SdDrawDocument* pDoc, SfxRequest& rReq);
+    FuDisplayOrder (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuDisplayOrder (void);
 
-    virtual ~FuDisplayOrder();
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
+
+protected:
+     Pointer            aPtr;
+     SdrObject*         pRefObj;
+     SdrViewUserMarker* pUserMarker;
 };
 
-
+} // end of namespace sd
 
 #endif      // _SD_FUDSPORD_HXX
 
