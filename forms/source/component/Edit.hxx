@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 11:55:53 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 12:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,9 @@ public:
     virtual sal_Bool _commit();
 
 // ::com::sun::star::io::XPersistObject
-    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
-    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
-    virtual ::rtl::OUString SAL_CALL getServiceName();
+    virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -183,16 +183,16 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
 // ::com::sun::star::form::XChangeBroadcaster
-    virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener);
-    virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener);
+    virtual void SAL_CALL addChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener>& _rxListener) throw ( ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::awt::XFocusListener
-    virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e );
-    virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e );
+    virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw ( ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::awt::XKeyListener
-    virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e);
-    virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e);
+    virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
 
 private:
     DECL_LINK( OnKeyPressed, void* );
