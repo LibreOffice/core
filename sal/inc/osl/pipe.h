@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: jbu $ $Date: 2001-04-27 11:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,18 +110,10 @@ void    SAL_CALL osl_releasePipe( oslPipe );
  */
 void    SAL_CALL osl_acquirePipe( oslPipe Pipe );
 
-/** @deprecated  use osl_releasePipe instead
- */
-void    SAL_CALL osl_destroyPipe(oslPipe Pipe);
-
 /** closes the pipe, any read,write or accept actions stop immeadiatly.
  */
 void    SAL_CALL osl_closePipe( oslPipe );
 
-
-/** @deprecated use osl_acquirePipe instead
- */
-oslPipe SAL_CALL osl_copyPipe(oslPipe Pipe);
 
 oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe);
 
