@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 07:58:44 $
+ *  last change: $Author: ka $ $Date: 2001-05-04 12:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,9 +226,9 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl( const OUString& rConfigRoot ) :
     m_nReducedGradientMode( 0 ),
     m_nReducedGradientStepCount( 64 ),
     m_bReduceBitmaps( sal_False ),
-    m_nReducedBitmapMode( 0 ),
+    m_nReducedBitmapMode( 1 ),
     m_nReducedBitmapResolution( 3 ),
-    m_bReducedBitmapIncludesTransparency( sal_False ),
+    m_bReducedBitmapIncludesTransparency( sal_True ),
        m_bConvertToGreyscales( sal_False )
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
