@@ -1558,7 +1558,7 @@ SfxVoidItem CompileBasic SID_BASICCOMPILE
 
 //--------------------------------------------------------------------------
 SfxVoidItem ConfigureDialog SID_CONFIG
-()
+(SfxStringItem ResourceURL SID_CONFIG)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5908,10 +5908,9 @@ SfxBoolItem MacroRecordingFloat SID_RECORDING_FLOATWINDOW
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem RedoAction SID_REDO
+SfxVoidItem Redo SID_REDO
+( SfxUInt16Item Redo SID_REDO )
 [
-    SfxVoidItem Redo();
-
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -5925,7 +5924,8 @@ SfxStringItem RedoAction SID_REDO
     RecordPerSet;
     Synchron;
 
-    Readonly = TRUE,
+    /* status: */
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -7550,10 +7550,9 @@ SfxVoidItem ToolsMacroEdit SID_EDITMACRO
 ]
 
 //--------------------------------------------------------------------------
-SfxStringItem UndoAction SID_UNDO
+SfxVoidItem Undo SID_UNDO
+( SfxUInt16Item Undo SID_UNDO )
 [
-    SfxVoidItem Undo();
-
     /* flags: */
     AutoUpdate = FALSE,
     Cachable = Volatile,
@@ -7567,7 +7566,8 @@ SfxStringItem UndoAction SID_UNDO
     RecordPerSet;
     Synchron;
 
-    Readonly = TRUE,
+    /* status: */
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
