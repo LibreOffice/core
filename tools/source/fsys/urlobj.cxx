@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 08:00:24 $
+ *  last change: $Author: sb $ $Date: 2001-10-17 07:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1760,12 +1760,12 @@ bool INetURLObject::convertAbsToRel(UniString const & rTheAbsURIRef,
         return false;
     }
 
-    // Convert the input (absolute URI ref, relative URI ref, file path) to an
-    // absolute URI ref:
+    // Convert the input (absolute or relative URI ref) to an absolute URI
+    // ref:
     INetURLObject aSubject;
     bool bWasAbsolute;
     if (!convertRelToAbs(rTheAbsURIRef, bOctets, aSubject, bWasAbsolute,
-                         eEncodeMechanism, eCharset, false, true, false,
+                         eEncodeMechanism, eCharset, false, false, false,
                          eStyle))
     {
         rTheRelURIRef
