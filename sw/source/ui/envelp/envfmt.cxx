@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-20 17:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,17 @@
 #endif
 
 #pragma hdrstop
+
+
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
+
 #include <tools/pstm.hxx>
-#include "hintids.hxx"
+
+#define _SVSTDARR_LONGSSORT
+#define _SVSTDARR_LONGS
+#include <svtools/svstdarr.hxx>
 
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
@@ -86,34 +95,59 @@
 #include <vcl/menu.hxx>
 #endif
 
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _BASESH_HXX
+#include <basesh.hxx>
+#endif
+#ifndef _CHRDLG_HXX
+#include <chrdlg.hxx>
+#endif
+#ifndef _DRPCPS_HXX
+#include <drpcps.hxx>
+#endif
+#ifndef _ENVFMT_HXX
+#include <envfmt.hxx>
+#endif
+#ifndef _FMTCOL_HXX
+#include <fmtcol.hxx>
+#endif
+#ifndef _PARDLG_HXX
+#include <pardlg.hxx>
+#endif
+#ifndef _PATTERN_HXX
+#include <pattern.hxx>
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _UIBORDER_HXX
+#include <uiborder.hxx>
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
 
-#include "cmdid.h"
-#include "frmatr.hxx"
-#include "swtypes.hxx"
-#include "wrtsh.hxx"
-#include "view.hxx"
-#include "basesh.hxx"
-#include "chrdlg.hxx"
-#include "drpcps.hxx"
-#include "envfmt.hxx"
-#include "fmtcol.hxx"
-#include "pardlg.hxx"
-#include "pattern.hxx"
-#include "poolfmt.hxx"
-#include "uiborder.hxx"
-#include "uitool.hxx"
-
-#include "envfmt.hrc"
+#ifndef _ENVFMT_HRC
+#include <envfmt.hrc>
+#endif
 
 static PopupMenu *pMenu;
 static long lUserW = 5669; // 10 cm
 static long lUserH = 5669; // 10 cm
-
-SV_DECL_VARARR_SORT( ItemRanges, long, 0, 10 )
-SV_IMPL_VARARR_SORT( ItemRanges, long )
-
-SV_DECL_VARARR( CompactRanges, long, 0, 10 )
-SV_IMPL_VARARR( CompactRanges, long )
 
 // --------------------------------------------------------------------------
 
@@ -375,7 +409,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
 
         // BruteForce-Merge, weil MergeRange in SvTools buggy ist:
         USHORT i = 0;
-        ItemRanges aMergedRanges;
+        SvLongsSort aMergedRanges( 0, 10 );
 
         while (pRanges[i])
         {
@@ -394,7 +428,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
         }
 
         // Ranges kompaktieren
-        CompactRanges aCompactedRanges;
+        SvLongs aCompactedRanges( 0, 10 );
 
         aCompactedRanges.Insert(aMergedRanges[0], aCompactedRanges.Count());
 
@@ -648,6 +682,9 @@ void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 
 /*--------------------------------------------------------------------
 $Log: not supported by cvs2svn $
+Revision 1.2  2001/02/09 09:07:12  tl
+TabPages modification
+
 Revision 1.1.1.1  2000/09/18 17:14:35  hr
 initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-14 15:54:34 $
+ *  last change: $Author: jp $ $Date: 2001-03-20 17:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <hintids.hxx>
 #endif
 
+#define _SVSTDARR_ULONGSSORT
+#include <svtools/svstdarr.hxx>
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
@@ -221,9 +223,6 @@
 #endif
 
 using namespace ::com::sun::star;
-
-SV_DECL_VARARR_SORT( SvULongsSort, ULONG, 1, 1 )
-SV_IMPL_VARARR_SORT( SvULongsSort, ULONG )
 
 #define sEscherStream       String::CreateFromAscii( \
                                 RTL_CONSTASCII_STRINGPARAM( "tempEsher" ))
@@ -2260,11 +2259,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.11 2001-03-14 15:54:34 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.12 2001-03-20 17:03:58 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/03/14 15:54:34  jp
+      remove hard mapping of EditEngine- and Writer WhichIds
+
       Revision 1.10  2001/03/09 13:50:44  jp
       use instead of SvData the GetGDIMetaFile from the SvInPlaceObject
 
