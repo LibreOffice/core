@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:17 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,20 +994,7 @@ void ScAcceptChgDlg::Resize()
     Size aSize=GetOutputSizePixel();
     aAcceptChgCtr.SetSizePixel(aSize);
 }
-/*
-void ScAcceptChgDlg::SetActive()
-{
-    if(pTPFilter!=NULL)
-    {
-        aAcceptChgCtr.GetFilterPage()->SetFocusToRange();
-        aEdAssign.Hide();
-        aRbAssign.Hide();
-        Application::GetAppWindow()->Enable();
-        SFX_APP()->LockDispatcher( FALSE);
-    }
-    //RefInputDone();
-}
-*/
+
 IMPL_LINK( ScAcceptChgDlg, MinSizeHandle, SvxAcceptChgCtr*, pCtr )
 {
     if(pCtr==&aAcceptChgCtr)
