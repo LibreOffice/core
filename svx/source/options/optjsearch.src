@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:52:55 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ italian ] = "Forme larghezza normale/dimezzata";
         Text[ danish ] = "Match full/half width form";
         Text[ swedish ] = "Normala/halvbreda former";
-        Text[ polish ] = "Zwyk≥a/po≥owa szeroko?ci";
+        Text[ polish ] = "Zwyk≥a/po≥owa szerokoúci";
         Text[ portuguese_brazilian ] = "Match full/half width form";
         Text[ japanese ] = "ëSäp/îºäp";
         Text[ korean ] = "¿¸∆¯/π›∆¯ «¸Ωƒ";
@@ -229,7 +229,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ italian ] = "Meno/trattino/cho-on";
         Text[ danish ] = "Match minus/dash/cho-on";
         Text[ swedish ] = "Minus/bindestreck/cho-on";
-        Text[ polish ] = "Minus/my?lnik/cho-on";
+        Text[ polish ] = "Minus/myúlnik/cho-on";
         Text[ portuguese_brazilian ] = "Match minus/dash/cho-on";
         Text[ japanese ] = "É}ÉCÉiÉX/ÉnÉCÉtÉì/í∑âπ[Å|/Å]/Å[]";
         Text[ korean ] = "∏∂¿Ã≥ Ω∫/¥ÎΩ√/cho-on";
@@ -645,7 +645,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ italian ] = "Punto al centro";
         Text[ danish ] = "Middle dots";
         Text[ swedish ] = "Mittpunkt";
-        Text[ polish ] = "Kropka po?rodku";
+        Text[ polish ] = "Kropka poúrodku";
         Text[ portuguese_brazilian ] = "Middle dots";
         Text[ japanese ] = "íÜçï";
         Text[ korean ] = "¡ﬂ∞£ ¡°";
@@ -656,6 +656,26 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ catalan ] = "Punto centrado";
         Text[ finnish ] = "Mittiger Punkt";
     };
+    Text[ english_us ] = "Searching in Japanese";
+    Text[ portuguese ] = "Searching in Japanese";
+    Text[ russian ] = "Searching in Japanese";
+    Text[ greek ] = "Searching in Japanese";
+    Text[ dutch ] = "Searching in Japanese";
+    Text[ french ] = "Searching in Japanese";
+    Text[ spanish ] = "Searching in Japanese";
+    Text[ finnish ] = "Searching in Japanese";
+    Text[ italian ] = "Searching in Japanese";
+    Text[ danish ] = "Searching in Japanese";
+    Text[ swedish ] = "Sˆkalternativ fˆr japanska";
+    Text[ polish ] = "Searching in Japanese";
+    Text[ portuguese_brazilian ] = "Searching in Japanese";
+    Text[ japanese ] = "Searching in Japanese";
+    Text[ korean ] = "Searching in Japanese";
+    Text[ chinese_simplified ] = "Searching in Japanese";
+    Text[ chinese_traditional ] = "Searching in Japanese";
+    Text[ turkish ] = "Searching in Japanese";
+    Text[ arabic ] = "Searching in Japanese";
+    Text[ catalan ] = "Searching in Japanese";
 };
 // end TabPage
 
