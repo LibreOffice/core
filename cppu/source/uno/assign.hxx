@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:41:39 $
+ *  last change: $Author: jbu $ $Date: 2001-06-22 09:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ inline sal_Bool __assignData(
     {
         __destructData( pDest, pDestType, pDestTypeDescr, release );
         __defaultConstructData( pDest, pDestType, pDestTypeDescr );
-        return sal_True;
+        return sal_False;
     }
     while (typelib_TypeClass_ANY == pSourceType->eTypeClass)
     {
