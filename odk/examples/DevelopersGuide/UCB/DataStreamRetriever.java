@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataStreamRetriever.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:05:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,8 +38,9 @@
  *
  *************************************************************************/
 
-// base classes
-import com.sun.star.ucb.*;
+import com.sun.star.ucb.OpenCommandArgument2;
+import com.sun.star.ucb.OpenMode;
+import com.sun.star.ucb.XContent;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
 
@@ -53,15 +54,13 @@ public class DataStreamRetriever {
      */
     private  Helper   m_helper;
     private  XContent m_content;
-    private  String   m_connectString = "";
     private  String   m_contenturl    = "";
 
     /**
      * Constructor.
      *
      *@param      String[]   This construtor requires the arguments:
-     *                          -connect=socket,host=..., port=...
-     *                          -url=...
+     *                          -url=... (optional)
      *                       See Help (method printCmdLineUsage()).
      *                       Without the arguments a new connection to a
      *                       running office cannot created.
@@ -71,11 +70,9 @@ public class DataStreamRetriever {
 
         // Parse arguments
         parseArguments( args );
-        String connect = getConnect();
-        String url     = getContentURL();
 
         // Init
-        m_helper       = new Helper( connect, url );
+        m_helper       = new Helper( getContentURL() );
 
         // Create UCB content
         m_content      = m_helper.createUCBContent();
@@ -125,15 +122,6 @@ public class DataStreamRetriever {
     }
 
     /**
-     * Get source data connection.
-     *
-     *@return String  That contains the source data connection
-     */
-    public String getConnect() {
-        return m_connectString;
-    }
-
-    /**
      * Parse arguments
      *
      *@param      String[]   Arguments
@@ -142,9 +130,7 @@ public class DataStreamRetriever {
     public void parseArguments( String[] args ) throws java.lang.Exception {
 
         for ( int i = 0; i < args.length; i++ ) {
-            if ( args[i].startsWith( "-connect=" )) {
-                m_connectString = args[i].substring( 9 );
-            } else if ( args[i].startsWith( "-url=" )) {
+            if ( args[i].startsWith( "-url=" )) {
                 m_contenturl    = args[i].substring( 5 );
             } else if ( args[i].startsWith( "-help" ) ||
                         args[i].startsWith( "-?" )) {
@@ -153,12 +139,8 @@ public class DataStreamRetriever {
             }
         }
 
-        if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=2083";
-        }
-
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
-            m_contenturl = Helper.getAbsoluteFileURL( "data/data.txt" );
+            m_contenturl = Helper.prependCurrentDirAsAbsoluteFileURL( "data/data.txt" );
         }
     }
 
@@ -167,9 +149,9 @@ public class DataStreamRetriever {
      */
     public void printCmdLineUsage() {
         System.out.println(
-            "Usage   : DataStreamRetriever -connect=socket,host=...,port=... -url=..." );
+            "Usage   : DataStreamRetriever -url=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt" );
+            "Defaults: -url=<currentdir>/data/data.txt" );
         System.out.println(
             "\nExample : -url=file:///temp/my.txt" );
     }
