@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-19 00:45:44 $
+#   last change: $Author: rt $ $Date: 2004-07-13 13:50:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,9 @@ SRC1FILES =\
     brkdlg.src\
     vectdlg.src\
     dlgolbul.src \
-    PreviewWindow.src	
+    LayerDialog.src			\
+    PreviewWindow.src		\
+    PaneDockingWindow.src
 
 
 SLOFILES =  \
@@ -156,6 +158,9 @@ SLOFILES =  \
         $(SLO)$/docprev.obj     \
         $(SLO)$/AnimationChildWindow.obj	\
         $(SLO)$/EffectChildWindow.obj		\
+        $(SLO)$/LayerDialogChildWindow.obj	\
+        $(SLO)$/LayerDialogContent.obj		\
+        $(SLO)$/LayerTabBar.obj				\
         $(SLO)$/NavigatorChildWindow.obj	\
         $(SLO)$/PreviewWindow.obj			\
         $(SLO)$/PreviewChildWindow.obj		\
@@ -163,7 +168,9 @@ SLOFILES =  \
         $(SLO)$/TemplateScanner.obj \
                 $(SLO)$/sduiexp.obj \
         $(SLO)$/sddlgfact.obj \
-        $(SLO)$/sdabstdlg.obj 
+        $(SLO)$/sdabstdlg.obj \
+        $(SLO)$/PaneChildWindows.obj			\
+        $(SLO)$/PaneDockingWindow.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/filedlg.obj   	    \
@@ -194,16 +201,22 @@ LIB1OBJFILES= \
         $(SLO)$/slchghdl.obj   \
         $(SLO)$/slchghlp.obj   \
         $(SLO)$/docprev.obj     \
+        $(SLO)$/ins_paste.obj \
         $(SLO)$/AnimationChildWindow.obj	\
         $(SLO)$/EffectChildWindow.obj		\
+        $(SLO)$/LayerDialogChildWindow.obj	\
+        $(SLO)$/LayerDialogContent.obj		\
+        $(SLO)$/LayerTabBar.obj				\
         $(SLO)$/NavigatorChildWindow.obj	\
         $(SLO)$/PreviewWindow.obj			\
         $(SLO)$/PreviewChildWindow.obj		\
         $(SLO)$/SlideChangeChildWindow.obj	\
         $(SLO)$/TemplateScanner.obj \
-                $(SLO)$/sdabstdlg.obj 
+                $(SLO)$/sdabstdlg.obj 		\
+        $(SLO)$/PaneChildWindows.obj		\
+        $(SLO)$/PaneDockingWindow.obj
 
-        
+
 LIB2TARGET= $(SLB)$/sdui.lib
 
 LIB2OBJFILES= \
