@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:22:38 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ TabDialog DLG_MULTI_TOX
     Text[ swedish ] = "Infoga f鰎teckning";
     Text[ polish ] = "Wstaw indeks";
     Text[ portuguese_brazilian ] = "Insert index";
-    Text[ japanese ] = "栚師偲嶕堷偺憓擖";
+    Text[ japanese ] = "栚師鯃鴤虘}擖";
     Text[ korean ] = "祸牢 火涝";
     Text[ chinese_simplified ] = "插入目录";
     Text[ chinese_traditional ] = "础ヘ魁";
@@ -400,7 +400,7 @@ TabDialog DLG_MULTI_TOX
     Text[ swedish ] = "Infoga f鰎teckning";
     Text[ polish ] = "Wstaw indeks";
     Text[ portuguese_brazilian ] = "Insert index";
-    Text[ japanese ] = "栚師偲嶕堷偺憓擖";
+    Text[ japanese ] = "栚師鯃鴤虘}擖";
     Text[ korean ] = "祸牢 火涝";
     Text[ chinese_simplified ] = "插入目录";
     Text[ chinese_traditional ] = "础ヘ魁";
@@ -1030,7 +1030,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "F鰎teckningsm~arkeringar";
         Text[ polish ] = "Zaz~naczanie indeks體";
         Text[ portuguese_brazilian ] = "Index entries";
-        Text[ japanese ] = "慖戰崁栚(~X)";
+        Text[ japanese ] = "栚師鯃鴯�栚(~X)";
         Text[ korean ] = "祸牢 付农(~X)";
         Text[ chinese_simplified ] = "标记目录条目(~X)";
         Text[ chinese_traditional ] = "ヘ魁夹癘(~X)";
