@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-11 14:12:34 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:26:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,10 +499,10 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
 
                     if(bIsVertical)
                     {
-                        SfxItemSet aSet(pObj->GetItemSet());
+                        SfxItemSet aSet(pObj->GetMergedItemSet());
                         aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
                         aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-                        pObj->SetItemSet(aSet);
+                        pObj->SetMergedItemSet(aSet);
                     }
 
                     //  #105815# don't set default text, start edit mode instead
@@ -532,7 +532,7 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
         }
 
         SfxItemSet aAttr(pDrDoc->GetItemPool());
-        pObj->SetItemSet(aAttr);
+        pObj->SetMergedItemSet(aAttr);
     }
 
     return pObj;
