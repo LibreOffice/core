@@ -1,70 +1,70 @@
 ### 109882 ###
 cfgmgr2.BootstrapContext::com::sun::star::uno::XComponentContext
 
-### 112549 ###
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertySetInfo
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::util::XChangesNotifier
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNameReplace
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XMultiServiceFactory
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertyWithState
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XLocalizable
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XMultiPropertyStates
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XChild
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XElementAccess
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XHierarchicalPropertySet
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::util::XStringEscape
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XProperty
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XSingleServiceFactory
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertyState
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNamed
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::configuration::XTemplateInstance
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::configuration::XTemplateContainer
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNameContainer
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XComponent
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::util::XChangesBatch
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNameAccess
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XMultiHierarchicalPropertySet
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XHierarchicalName
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XMultiPropertySet
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertySet
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XExactName
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XHierarchicalNameAccess
+### 112549 ### since cws qadev18
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertySetInfo
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::util::XChangesNotifier
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNameReplace
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XMultiServiceFactory
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertyWithState
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XLocalizable
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XMultiPropertyStates
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XChild
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XElementAccess
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XHierarchicalPropertySet
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::util::XStringEscape
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XProperty
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XSingleServiceFactory
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertyState
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNamed
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::configuration::XTemplateInstance
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::configuration::XTemplateContainer
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNameContainer
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::lang::XComponent
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::util::XChangesBatch
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XNameAccess
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XMultiHierarchicalPropertySet
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XHierarchicalName
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XMultiPropertySet
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XPropertySet
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::beans::XExactName
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XHierarchicalNameAccess
 
-### 112671 ###
-cfgmgr2.SchemaParser::com::sun::star::configuration::backend::XSchema
+### 112671 ### since cws cfgapi
+#cfgmgr2.SchemaParser::com::sun::star::configuration::backend::XSchema
 
 ### 112741 ###
 cfgmgr2.LocalSingleBackend::com::sun::star::configuration::backend::XMultiLayerStratum
 
-### 112742 ###
-cfgmgr2.SingleBackendAdapter::com::sun::star::configuration::backend::XSchemaSupplier
+### 112742 ### since cws cfgapi
+#cfgmgr2.SingleBackendAdapter::com::sun::star::configuration::backend::XSchemaSupplier
 
 ### 112752 ###
 cfgmgr2.SingleBackendAdapter::com::sun::star::configuration::backend::XBackend
 
-### 114056 ###
-cfgmgr2.ORootElementGroupInfoAccess::com::sun::star::container::XContainer
-cfgmgr2.ORootElementGroupUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.ORootElementSetInfoAccess::com::sun::star::container::XContainer
-cfgmgr2.ORootElementTreeSetUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.OSetElementGroupInfoAccess::com::sun::star::container::XContainer
-cfgmgr2.OSetElementGroupUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.OSetElementSetInfoAccess::com::sun::star::container::XContainer
-cfgmgr2.OSetElementTreeSetUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.OInnerGroupInfoAccess::com::sun::star::container::XContainer
-cfgmgr2.OInnerGroupUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.OInnerSetInfoAccess::com::sun::star::container::XContainer
-cfgmgr2.OInnerTreeSetUpdateAccess::com::sun::star::container::XContainer
-cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::container::XContainer
+### 114056 ### since cws qadev14
+#cfgmgr2.ORootElementGroupInfoAccess::com::sun::star::container::XContainer
+#cfgmgr2.ORootElementGroupUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.ORootElementSetInfoAccess::com::sun::star::container::XContainer
+#cfgmgr2.ORootElementTreeSetUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.OSetElementGroupInfoAccess::com::sun::star::container::XContainer
+#cfgmgr2.OSetElementGroupUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.OSetElementSetInfoAccess::com::sun::star::container::XContainer
+#cfgmgr2.OSetElementTreeSetUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.OSetElementValueSetUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.OInnerGroupInfoAccess::com::sun::star::container::XContainer
+#cfgmgr2.OInnerGroupUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.OInnerSetInfoAccess::com::sun::star::container::XContainer
+#cfgmgr2.OInnerTreeSetUpdateAccess::com::sun::star::container::XContainer
+#cfgmgr2.OInnerValueSetUpdateAccess::com::sun::star::container::XContainer
 
-### i23113 ###
-cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::util::XChangesBatch
+### i23113 ### since cws cfgapi
+#cfgmgr2.ORootElementValueSetUpdateAccess::com::sun::star::util::XChangesBatch
 
 ### i23145 ###
 cfgmgr2.OSetElementGroupUpdateAccess::com::sun::star::container::XChild
 
-### i23249 ###
-cfgmgr2.ORootElementGroupUpdateAccess::com::sun::star::beans::XMultiPropertyStates
+### i23249 ### since cws cfgapi
+#cfgmgr2.ORootElementGroupUpdateAccess::com::sun::star::beans::XMultiPropertyStates
