@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-20 09:54:19 $
+ *  last change: $Author: aw $ $Date: 2001-01-17 17:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,20 +161,21 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
             case SID_3D_CUBE:
                 p3DObj = new E3dCubeObj(
                     pView->Get3DDefaultAttributes(),
-                    Vector3D(-500, -500, -500),
-                    Vector3D(1000, 1000, 1000));
+                    Vector3D(-2500, -2500, -2500),
+                    Vector3D(5000, 5000, 5000));
                 break;
 
             case SID_3D_SPHERE:
                 p3DObj = new E3dSphereObj(
                     pView->Get3DDefaultAttributes(),
                     Vector3D(0, 0, 0),
-                    Vector3D(1000, 1000, 1000));
+                    Vector3D(5000, 5000, 5000));
                 break;
 
             case SID_3D_SHELL:
             {
                 XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, FALSE);
+                aXPoly.Scale(5.0, 5.0);
 
                 p3DObj = new E3dLatheObj(
                     pView->Get3DDefaultAttributes(),
@@ -182,7 +183,6 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
 
                 // Dies ist ein offenes Objekt, muss daher defaultmaessig
                 // doppelseitig behandelt werden
-//-/                p3DObj->SetDoubleSided(TRUE);
                 p3DObj->SetItem(Svx3DDoubleSidedItem(TRUE));
             }
             break;
@@ -190,15 +190,16 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
             case SID_3D_HALF_SPHERE:
             {
                 XPolygon aXPoly(Point (0, 1250), 2500, 2500, 0, 900, FALSE);
+                aXPoly.Scale(5.0, 5.0);
 
-                aXPoly.Insert(0, Point (2400, 1250), XPOLY_NORMAL);
-                aXPoly.Insert(0, Point (2000, 1250), XPOLY_NORMAL);
-                aXPoly.Insert(0, Point (1500, 1250), XPOLY_NORMAL);
-                aXPoly.Insert(0, Point (1000, 1250), XPOLY_NORMAL);
-                aXPoly.Insert(0, Point (500, 1250), XPOLY_NORMAL);
-                aXPoly.Insert(0, Point (250, 1250), XPOLY_NORMAL);
-                aXPoly.Insert(0, Point (50, 1250), XPOLY_NORMAL);
-                aXPoly.Insert(0, Point (0, 1250), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (2400*5, 1250*5), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (2000*5, 1250*5), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (1500*5, 1250*5), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (1000*5, 1250*5), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (500*5, 1250*5), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (250*5, 1250*5), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (50*5, 1250*5), XPOLY_NORMAL);
+                aXPoly.Insert(0, Point (0*5, 1250*5), XPOLY_NORMAL);
                 p3DObj = new E3dLatheObj(
                     pView->Get3DDefaultAttributes(),
                     (XPolygon)XOutCreatePolygon (aXPoly, pWindow));
@@ -214,22 +215,22 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
             case SID_3D_CYLINDER:
             {
                 XPolygon aXPoly(16);
-                aXPoly[0] = Point(0, 1000);
-                aXPoly[1] = Point(50, 1000);
-                aXPoly[2] = Point(100, 1000);
-                aXPoly[3] = Point(200, 1000);
-                aXPoly[4] = Point(300, 1000);
-                aXPoly[5] = Point(400, 1000);
-                aXPoly[6] = Point(450, 1000);
-                aXPoly[7] = Point(500, 1000);
-                aXPoly[8] = Point(500, -1000);
-                aXPoly[9] = Point(450, -1000);
-                aXPoly[10] = Point(400, -1000);
-                aXPoly[11] = Point(300, -1000);
-                aXPoly[12] = Point(200, -1000);
-                aXPoly[13] = Point(100, -1000);
-                aXPoly[14] = Point(50, -1000);
-                aXPoly[15] = Point(0, -1000);
+                aXPoly[0] = Point(0, 1000*5);
+                aXPoly[1] = Point(50*5, 1000*5);
+                aXPoly[2] = Point(100*5, 1000*5);
+                aXPoly[3] = Point(200*5, 1000*5);
+                aXPoly[4] = Point(300*5, 1000*5);
+                aXPoly[5] = Point(400*5, 1000*5);
+                aXPoly[6] = Point(450*5, 1000*5);
+                aXPoly[7] = Point(500*5, 1000*5);
+                aXPoly[8] = Point(500*5, -1000*5);
+                aXPoly[9] = Point(450*5, -1000*5);
+                aXPoly[10] = Point(400*5, -1000*5);
+                aXPoly[11] = Point(300*5, -1000*5);
+                aXPoly[12] = Point(200*5, -1000*5);
+                aXPoly[13] = Point(100*5, -1000*5);
+                aXPoly[14] = Point(50*5, -1000*5);
+                aXPoly[15] = Point(0*5, -1000*5);
 
                 p3DObj = new E3dLatheObj(
                     pView->Get3DDefaultAttributes(),
@@ -240,20 +241,20 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
             case SID_3D_CONE:
             {
                 XPolygon aXPoly(14);
-                aXPoly[0] = Point(0, -1000);
-                aXPoly[1] = Point(25, -900);
-                aXPoly[2] = Point(50, -800);
-                aXPoly[3] = Point(100, -600);
-                aXPoly[4] = Point(200, -200);
-                aXPoly[5] = Point(300, 200);
-                aXPoly[6] = Point(400, 600);
-                aXPoly[7] = Point(500, 1000);
-                aXPoly[8] = Point(400, 1000);
-                aXPoly[9] = Point(300, 1000);
-                aXPoly[10] = Point(200, 1000);
-                aXPoly[11] = Point(100, 1000);
-                aXPoly[12] = Point(50, 1000);
-                aXPoly[13] = Point(0, 1000);
+                aXPoly[0] = Point(0, -1000*5);
+                aXPoly[1] = Point(25*5, -900*5);
+                aXPoly[2] = Point(50*5, -800*5);
+                aXPoly[3] = Point(100*5, -600*5);
+                aXPoly[4] = Point(200*5, -200*5);
+                aXPoly[5] = Point(300*5, 200*5);
+                aXPoly[6] = Point(400*5, 600*5);
+                aXPoly[7] = Point(500*5, 1000*5);
+                aXPoly[8] = Point(400*5, 1000*5);
+                aXPoly[9] = Point(300*5, 1000*5);
+                aXPoly[10] = Point(200*5, 1000*5);
+                aXPoly[11] = Point(100*5, 1000*5);
+                aXPoly[12] = Point(50*5, 1000*5);
+                aXPoly[13] = Point(0*5, 1000*5);
 
                 p3DObj = new E3dLatheObj(
                     pView->Get3DDefaultAttributes(),
@@ -264,37 +265,28 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
             case SID_3D_PYRAMID:
             {
                 XPolygon aXPoly(14);
-                aXPoly[0] = Point(0, -1000);
-                aXPoly[1] = Point(25, -900);
-                aXPoly[2] = Point(50, -800);
-                aXPoly[3] = Point(100, -600);
-                aXPoly[4] = Point(200, -200);
-                aXPoly[5] = Point(300, 200);
-                aXPoly[6] = Point(400, 600);
-                aXPoly[7] = Point(500, 1000);
-                aXPoly[8] = Point(400, 1000);
-                aXPoly[9] = Point(300, 1000);
-                aXPoly[10] = Point(200, 1000);
-                aXPoly[11] = Point(100, 1000);
-                aXPoly[12] = Point(50, 1000);
-                aXPoly[13] = Point(0, 1000);
+                aXPoly[0] = Point(0, -1000*5);
+                aXPoly[1] = Point(25*5, -900*5);
+                aXPoly[2] = Point(50*5, -800*5);
+                aXPoly[3] = Point(100*5, -600*5);
+                aXPoly[4] = Point(200*5, -200*5);
+                aXPoly[5] = Point(300*5, 200*5);
+                aXPoly[6] = Point(400*5, 600*5);
+                aXPoly[7] = Point(500*5, 1000*5);
+                aXPoly[8] = Point(400*5, 1000*5);
+                aXPoly[9] = Point(300*5, 1000*5);
+                aXPoly[10] = Point(200*5, 1000*5);
+                aXPoly[11] = Point(100*5, 1000*5);
+                aXPoly[12] = Point(50*5, 1000*5);
+                aXPoly[13] = Point(0, 1000*5);
 
                 p3DObj = new E3dLatheObj(
                     pView->Get3DDefaultAttributes(),
                     aXPoly);
-//-/                ((E3dLatheObj*)p3DObj)->SetHSegments(4);
                 p3DObj->SetItem(Svx3DHorizontalSegmentsItem(4));
             }
             break;
         }
-
-        // Objekte groesser machen, da meisst nur 1x1x1 cm gross nach
-        // dem Erzeugen
-        Matrix4D aScaleMat;
-        aScaleMat.Scale(Vector3D(5.0, 5.0, 5.0));
-        const Matrix4D& rObjectMat = p3DObj->GetTransform();
-        aScaleMat = rObjectMat * aScaleMat;
-        p3DObj->SetTransform(aScaleMat);
 
         pView->SetCurrent3DObj(p3DObj);
         E3dScene *pScene   = (E3dScene*) pView->GetCurrentLibObj();
