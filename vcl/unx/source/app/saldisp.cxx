@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-17 18:35:57 $
+ *  last change: $Author: cp $ $Date: 2000-11-20 13:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,8 @@ extern "C" { int gethostname(char*,int); }
 #include "airbrush_mask.h"
 #include "fill_curs.h"
 #include "fill_mask.h"
+#include "vertcurs_curs.h"
+#include "vertcurs_mask.h"
 
 #include "invert50.h"
 #if !(defined S390 || defined AIX)
@@ -2331,6 +2333,9 @@ final XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
         case POINTER_AIRBRUSH:
             MAKE_CURSOR( airbrush_ );
+            break;
+        case POINTER_TEXT_VERTICAL:
+            MAKE_CURSOR( vertcurs_ );
             break;
         default:
             DBG_ERROR("pointer not implemented");
