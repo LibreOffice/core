@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 16:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace connectivity;
+
+#include <algorithm>
 
 //==========================================================================
 //= OPoolTimer
