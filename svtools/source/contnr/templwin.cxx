@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:25:11 $
+ *  last change: $Author: os $ $Date: 2002-11-29 17:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,18 @@ void SvtIconWindow_Impl::UpdateIcons( sal_Bool _bHiContrast )
         Image( SvtResId( _bHiContrast ? IMG_SVT_MYDOCS_HC : IMG_SVT_MYDOCS ) ) );
     aIconCtrl.GetEntry( ICON_POS_SAMPLES )->SetImage(
         Image( SvtResId( _bHiContrast ? IMG_SVT_SAMPLES_HC : IMG_SVT_SAMPLES ) ) );
+}
+/* -----------------27.11.2002 16:58-----------------
+ *
+ * --------------------------------------------------*/
+void SvtIconWindow_Impl::SelectFolder(sal_Int32 nFolderPosition)
+{
+    SvxIconChoiceCtrlEntry* pEntry = aIconCtrl.GetEntry( nFolderPosition );
+    if(pEntry)
+    {
+        aIconCtrl.SetCursor( pEntry );
+        aIconCtrl.GetClickHdl().Call(&aIconCtrl);
+    }
 }
 
 // class SvtFileViewWindow_Impl -----------------------------------------_
@@ -1644,7 +1656,14 @@ void SvtTemplateWindow::WriteViewSettings()
     SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
     aViewSettings.SetUserData( aSettings );
 }
+/* -----------------27.11.2002 17:20-----------------
+ *
+ * --------------------------------------------------*/
 
+void SvtTemplateWindow::SelectFolder(sal_Int32 nFolderPosition)
+{
+    pIconWin->SelectFolder(nFolderPosition);
+}
 // struct SvtTmplDlg_Impl ------------------------------------------------
 
 struct SvtTmplDlg_Impl
@@ -1920,5 +1939,12 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
         }
     }
     return 0;
+}
+/* -----------------27.11.2002 16:54-----------------
+ *
+ * --------------------------------------------------*/
+void SvtDocumentTemplateDialog::SelectTemplateFolder()
+{
+    pImpl->pWin->SelectFolder(ICON_POS_TEMPLATES);
 }
 

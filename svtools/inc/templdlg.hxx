@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-07 14:27:22 $
+ *  last change: $Author: os $ $Date: 2002-11-29 17:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ public:
 
     sal_Bool    IsFileSelected( ) const;
     String      GetSelectedFileURL( ) const;
+
+    void        SelectTemplateFolder();
 
 private:
     void InitImpl( );

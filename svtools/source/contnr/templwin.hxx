@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-31 10:28:47 $
+ *  last change: $Author: os $ $Date: 2002-11-29 17:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ public:
 
     inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
     inline const String&    GetSamplesFolderURL() const;
+
+    void                SelectFolder(sal_Int32 nFolderPos);
 };
 
 inline sal_Bool SvtIconWindow_Impl::ProcessKeyEvent( const KeyEvent& rKEvt )
@@ -330,6 +332,8 @@ public:
     void                SetPrevLevelButtonState( const String& rURL );  // sets state (enable/disable) for previous level button
     void                ClearHistory();
     long                CalcHeight() const;
+
+    void                SelectFolder(sal_Int32 nFolderPosition);
 };
 
 #endif // _SVTOOLS_TEMPLWIN_HXX
