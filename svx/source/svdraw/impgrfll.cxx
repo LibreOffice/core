@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-08 16:20:42 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 18:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,10 +206,10 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
             aTransform.matrix[4] *= aHatch.GetDistance();
 
             // rotate
-            aTransform.matrix[0] *= cos( aHatch.GetAngle() );
-            aTransform.matrix[1] *= -sin( aHatch.GetAngle() );
-            aTransform.matrix[3] *= sin( aHatch.GetAngle() );
-            aTransform.matrix[4] *= cos( aHatch.GetAngle() );
+            aTransform.matrix[0] *= cos( (double) aHatch.GetAngle() );
+            aTransform.matrix[1] *= -sin( (double) aHatch.GetAngle() );
+            aTransform.matrix[3] *= sin( (double) aHatch.GetAngle() );
+            aTransform.matrix[4] *= cos( (double) aHatch.GetAngle() );
         }
 
         SvtGraphicFill::GradientType eGrad;
