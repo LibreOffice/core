@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-31 14:11:00 $
+ *  last change: $Author: tl $ $Date: 2001-09-03 10:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,8 +379,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 GetParent()->ToTop();
                 PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_VIEWMENU));
                 pPopupMenu->SetSelectHdl(LINK(this, SmGraphicWindow, MenuSelectHdl));
-                pPopupMenu->Execute( this,
-                        OutputToScreenPixel(rCEvt.GetMousePosPixel()) );
+                pPopupMenu->Execute( this, rCEvt.GetMousePosPixel() );
                 delete pPopupMenu;
                 bCallBase = FALSE;
             }
