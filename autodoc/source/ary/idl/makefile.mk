@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 15:20:08 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:31:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,7 @@ OBJFILES= \
     $(OBJ)$/it_ce.obj           \
     $(OBJ)$/it_explicit.obj     \
     $(OBJ)$/it_sequence.obj     \
+    $(OBJ)$/it_tplparam.obj     \
     $(OBJ)$/it_xnameroom.obj
 
 
@@ -123,6 +124,3 @@ OBJFILES= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
-
