@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ SfxItemPool* XOutdevItemPool::Clone() const
 XOutdevItemPool::~XOutdevItemPool()
 {
 #if SUPD<355
-    if (pSlotIds!=NULL) delete pSlotIds;
+    if (pSlotIds!=NULL) delete[] pSlotIds;
 #endif
 
     Delete();
@@ -462,7 +462,7 @@ XOutdevItemPool::~XOutdevItemPool()
                 delete *ppDefaultItem;
             }
         }
-        delete ppPoolDefaults;
+        delete[] ppPoolDefaults;
     }
     if (pItemInfos!=NULL) delete[] pItemInfos;
 
