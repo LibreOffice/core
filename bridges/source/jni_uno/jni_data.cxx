@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-22 11:54:00 $
+ *  last change: $Author: dbo $ $Date: 2002-11-28 17:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "jni_bridge.h"
 
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <uno/sequence2.h>
 
 
@@ -251,6 +252,14 @@ void jni_Bridge::map_to_uno(
             attach.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
+        if (0 == java_data.l)
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
+        }
         if (! assign)
             *(rtl_uString **)uno_data = 0;
         jstring_to_ustring(
@@ -267,23 +276,37 @@ void jni_Bridge::map_to_uno(
             attach.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
+        if (0 == java_data.l)
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
+        }
 
         // type name
         JLocalAutoRef jo_type_name(
             attach, attach->GetObjectField( java_data.l, m_jni_info->m_field_Type__typeName ) );
         if (! jo_type_name.is())
         {
-            throw BridgeRuntimeError(
-                OUSTR("[map_to_uno():typelib_TypeClass_TYPE] "
-                      "incomplete type object: no type name!") );
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii(
+                RTL_CONSTASCII_STRINGPARAM("] incomplete type object: no type name!") );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         OUString type_name( jstring_to_oustring( attach, (jstring)jo_type_name.get() ) );
         ::com::sun::star::uno::TypeDescription td( type_name );
         if (! td.is())
         {
-            throw BridgeRuntimeError(
-                OUSTR("[map_to_uno():typelib_TypeClass_TYPE] "
-                      "UNO type not found: ") + type_name );
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
+            buf.append( type_name );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         typelib_typedescriptionreference_acquire( td.get()->pWeakRef );
         if (assign)
@@ -303,6 +326,14 @@ void jni_Bridge::map_to_uno(
                 attach, attach->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
             attach.ensure_no_exception();
             java_data.l = jo_out_holder.get();
+        }
+        if (0 == java_data.l)
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
         uno_Any * pAny = (uno_Any *)uno_data;
@@ -336,9 +367,12 @@ void jni_Bridge::map_to_uno(
                 attach, attach->GetObjectField( java_data.l, m_jni_info->m_field_Any__type ) );
             if (! jo_type.is())
             {
-                throw BridgeRuntimeError(
-                    OUSTR("[map_to_uno():typelib_TypeClass_ANY] "
-                          "no type set at com.sun.star.uno.Any!") );
+                OUStringBuffer buf( 128 );
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+                buf.appendAscii(
+                    RTL_CONSTASCII_STRINGPARAM("] no type set at com.sun.star.uno.Any!") );
+                throw BridgeRuntimeError( buf.makeStringAndClear() );
             }
             // wrapped value
             jo_wrapped_holder.reset(
@@ -373,9 +407,12 @@ void jni_Bridge::map_to_uno(
         ::com::sun::star::uno::TypeDescription value_td( type_name );
         if (! value_td.is())
         {
-            throw BridgeRuntimeError(
-                OUSTR("[map_to_uno():typelib_TypeClass_ANY] "
-                      "UNO type not found: ") + type_name );
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] UNO type not found: ") );
+            buf.append( type_name );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
         typelib_TypeClass type_class = value_td.get()->eTypeClass;
 
@@ -509,9 +546,13 @@ void jni_Bridge::map_to_uno(
                 break;
             }
             default:
-                throw BridgeRuntimeError(
-                    OUSTR("[map_to_uno():typelib_TypeClass_ANY] "
-                          "unsupported value type of any: ") + type_name );
+            {
+                OUStringBuffer buf( 128 );
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+                buf.append( type_name );
+                buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported value type of any!") );
+                throw BridgeRuntimeError( buf.makeStringAndClear() );
+            }
             }
         }
         catch (...)
@@ -534,6 +575,14 @@ void jni_Bridge::map_to_uno(
             attach.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
+        if (0 == java_data.l)
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
+        }
 
         *(jint *)uno_data = attach->GetIntField(
             java_data.l, m_jni_info->m_field_Enum_m_value );
@@ -549,6 +598,14 @@ void jni_Bridge::map_to_uno(
                 attach, attach->GetObjectArrayElement( (jobjectArray)java_data.l, 0 ) );
             attach.ensure_no_exception();
             java_data.l = jo_out_holder.get();
+        }
+        if (0 == java_data.l)
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
         }
 
         if (0 == info)
@@ -666,12 +723,22 @@ void jni_Bridge::map_to_uno(
             attach.ensure_no_exception();
             java_data.l = jo_out_holder.get();
         }
+        if (0 == java_data.l)
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] null-ref given!") );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
+        }
 
         TypeDescr td( type );
         typelib_TypeDescriptionReference * element_type =
             ((typelib_IndirectTypeDescription *)td.get())->pType;
+
         auto_ptr< rtl_mem > seq;
         sal_Int32 nElements = attach->GetArrayLength( (jarray)java_data.l );
+
         switch (element_type->eTypeClass)
         {
         case typelib_TypeClass_CHAR:
@@ -788,10 +855,14 @@ void jni_Bridge::map_to_uno(
             break;
         }
         default:
-            throw BridgeRuntimeError(
-                OUSTR("[map_to_uno():typelib_TypeClass_SEQUENCE] "
-                      "unsupported sequence element type: ") +
-                *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported sequence element type: ") );
+            buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
+        }
         }
 
         if (assign)
@@ -839,9 +910,13 @@ void jni_Bridge::map_to_uno(
         break;
     }
     default:
-        throw BridgeRuntimeError(
-            OUSTR("[map_to_uno()] unsupported data type: ") +
-            *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+    {
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_uno():") );
+        buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+        throw BridgeRuntimeError( buf.makeStringAndClear() );
+    }
     }
 }
 
@@ -1456,7 +1531,7 @@ void jni_Bridge::map_to_java(
         }
         break;
     }
-    case typelib_TypeClass_SEQUENCE:
+    case typelib_TypeClass_SEQUENCE: // xxx todo: possible opt for pure out sequences
     {
         JLocalAutoRef jo_ar;
 
@@ -1745,10 +1820,14 @@ void jni_Bridge::map_to_java(
             break;
         }
         default:
-            throw BridgeRuntimeError(
-                OUSTR("[map_to_java():typelib_TypeClass_SEQUENCE] "
-                      "unsupported element data type: ") +
-                *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+        {
+            OUStringBuffer buf( 128 );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_java():") );
+            buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported element type: ") );
+            buf.append( *reinterpret_cast< OUString const * >( &element_type->pTypeName ) );
+            throw BridgeRuntimeError( buf.makeStringAndClear() );
+        }
         }
 
         if (out_param)
@@ -1838,9 +1917,13 @@ void jni_Bridge::map_to_java(
         break;
     }
     default:
-        throw BridgeRuntimeError(
-            OUSTR("[map_to_java()] unsupported data type: ") +
-            *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+    {
+        OUStringBuffer buf( 128 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[map_to_java():") );
+        buf.append( *reinterpret_cast< OUString const * >( &type->pTypeName ) );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] unsupported type!") );
+        throw BridgeRuntimeError( buf.makeStringAndClear() );
+    }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-22 11:54:00 $
+ *  last change: $Author: dbo $ $Date: 2002-11-28 17:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ jobject jni_Bridge::call_uno(
                         uno_type_destructData( uno_args[ nPos ], pParams[ nPos ].pTypeRef, 0 );
                     }
                     // cleanup uno return value
-                    if (return_type)
+                    if (0 != return_type)
                     {
                         uno_type_destructData( uno_ret, return_type, 0 );
                     }
