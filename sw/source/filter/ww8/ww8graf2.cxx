@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:36:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,12 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
 
     if (pWwFib->envr != 1) // !MAC als Creator
     {
+
+/* SJ: #i40742#, we will use the prefsize from the mtf directly.
+The scaling has been done in former days, because the wmf filter was sometimes not
+able to calculate the proper prefsize (especially if the wmf fileheader was missing)
+
+
         aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
         // MetaFile auf neue Groesse skalieren und
         // neue Groesse am MetaFile setzen
@@ -411,7 +417,7 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
             aWMF.Scale(aFracX, aFracY);
             aWMF.SetPrefSize(aNewSiz);
         }
-
+*/
         rpGraphic = new Graphic( aWMF );
         return true;
     }
