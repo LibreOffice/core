@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 11:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,6 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     //#39076# Silent kann lt. SFX entfernt werden.
 //  SfxBoolItem aSilent( SID_SILENT, TRUE );
-    SfxBoolItem aReadOnly( SID_BROWSING, TRUE );
     SfxBoolItem aBrowse( SID_BROWSE, TRUE );
 
     if( nFilter & URLLOAD_NEWVIEW )
