@@ -117,6 +117,7 @@
             <menu:menuitem menu:id=".uno:InsertTable" menu:helpid="20330" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertGraphicRuler" menu:helpid="21411" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertGraphic" menu:helpid="10241" menu:label="" />
+            <menu:menuitem menu:id=".uno:InsertAVMedia" menu:helpid="6695" menu:label="" />
             <menu:menu menu:id=".uno:ObjectMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject" menu:helpid="5561" menu:label="" />
@@ -313,6 +314,7 @@
             <menu:menuitem menu:id=".uno:FootnoteDialog" menu:helpid="20468" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Gallery" menu:helpid="5960" menu:label="" />
+            <menu:menuitem menu:id=".uno:AVMediaPlayer" menu:helpid="6694" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:BibliographyComponent" menu:helpid="10880" menu:label="" />
             <menu:menuseparator/>
