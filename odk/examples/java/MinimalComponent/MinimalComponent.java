@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MinimalComponent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bnolte $ $Date: 2001-11-09 09:07:08 $
+ *  last change: $Author: bnolte $ $Date: 2002-01-11 10:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ import com.sun.star.uno.Type;
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2001-11-09 09:07:08 $
+ * @version $Date: 2002-01-11 10:31:50 $
  * @author Bertram Nolte
  */
 public class MinimalComponent {
@@ -179,15 +179,9 @@ public class MinimalComponent {
      * @return Array of bytes, in order to distinguish between two sets.
      */
     public byte[] getImplementationId() {
-      byte[] byteReturn = {};
+        byte[] byteReturn = {};
 
-      try {
-        byteReturn = new String( "" + this.hashCode() ).getBytes();
-      } catch( Exception exception ) {
-        System.err.println( exception );
-      }
-
-      return( byteReturn );
+        return( byteReturn );
     }
   }
 
