@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:26:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,6 +756,28 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
     mpHorizontalScrollBar->SetPosSizePixel(aPos, aScrSize);
 
     return 0;
+}
+
+/// inherited from sd::ViewShell
+SdPage* DrawViewShell::getCurrentPage() const
+{
+    const sal_Int32 nPageCount = (eEditMode == EM_PAGE)?
+                                    GetDoc()->GetSdPageCount(ePageKind):
+                                    GetDoc()->GetMasterSdPageCount(ePageKind);
+
+    sal_Int32 nCurrentPage = aTabControl.GetCurPageId() - 1;
+    DBG_ASSERT( (nPageCount>0) && (nCurrentPage<nPageCount), "sd::DrawViewShell::getCurrentPage(), illegal page index!" );
+    if( (nPageCount < 0) || (nCurrentPage>=nPageCount) )
+        nCurrentPage = 0; // play safe here
+
+    if (eEditMode == EM_PAGE)
+    {
+        return GetDoc()->GetSdPage(nCurrentPage, ePageKind);
+    }
+    else // EM_MASTERPAGE
+    {
+        return GetDoc()->GetMasterSdPage(nCurrentPage, ePageKind);
+    }
 }
 
 /*************************************************************************
