@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:57:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 08:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,6 +1087,9 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         Reference<XNameAccess> xElements = getElements();
         if(xElements.is())
         {
+            if(!getContainer()->checkStatement())
+                return;
+
             ::rtl::OUString sTranslatedStmt = translateStatement();
 
             if(sTranslatedStmt.getLength())
