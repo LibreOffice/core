@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:24:52 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -1380,15 +1381,23 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
 
 uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments(
                                 const rtl::OUString& ServiceSpecifier,
-                                const uno::Sequence<uno::Any>& Arguments )
+                                const uno::Sequence<uno::Any>& aArgs )
                                 throw(uno::Exception, uno::RuntimeException)
 {
     //! unterscheiden zwischen eigenen Services und denen vom Drawing-Layer?
 
     ScUnoGuard aGuard;
     uno::Reference<uno::XInterface> xInt = createInstance(ServiceSpecifier);
-    //die Any-Sequence dient zur Initialisierung von Objekten, die auf
-    //Parameter zwingend angewiesen sind - bis jetzt haben wir das nicht
+
+    if ( aArgs.getLength() )
+    {
+        //  used only for cell value binding so far - it can be initialized after creating
+
+        uno::Reference<lang::XInitialization> xInit( xInt, uno::UNO_QUERY );
+        if ( xInit.is() )
+            xInit->initialize( aArgs );
+    }
+
     return xInt;
 }
 
