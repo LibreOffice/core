@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-29 19:40:27 $
+ *  last change: $Author: tl $ $Date: 2001-03-30 12:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,6 +1203,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 delete pMedium;
 
                 SetFormulaArranged(FALSE);
+                ArrangeFormula();
+                Resize();
                 // Fenster anpassen, neuzeichnen, ModifyCount erhöhen,...
                 if (pBindings)
                     pBindings->Invalidate(SID_GRAPHIC);
