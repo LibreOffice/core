@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     XMLPropertyState* pFooterHeight = NULL;
     XMLPropertyState* pFooterMinHeight = NULL;
     XMLPropertyState* pFooterDynamic = NULL;
+    sal_uInt16 i;  // for the "for" loop
+
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
     for (property; property != rProperties.end(); property++)
     {
@@ -231,7 +233,7 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
         }
     }
 
-    for (sal_uInt16 i = 0; i < 4; i++)
+    for ( i = 0; i < 4; i++)
     {
         if (pAllPaddingProperty && !pPadding[i])
             pNewPadding[i] = new XMLPropertyState(pAllPaddingProperty->mnIndex + 1 + i, pAllPaddingProperty->maValue);
