@@ -40,15 +40,24 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\misc\svx.csv %_DEST%\inc%_EXT%\svx.csv
 ..\%__SRC%\bin\svl*.dll %_DEST%\bin%_EXT%\svl*.dll
 ..\%__SRC%\bin\svl*.sym %_DEST%\bin%_EXT%\svl*.sym
-..\%__SRC%\bin\svxslots.tlb %_DEST%\bin%_EXT%\svxslots.tlb
-..\%__SRC%\srs\svxslots.srs %_DEST%\res%_EXT%\svxslots.srs
 ..\%COMMON_OUTDIR%\srs\svxslots_srs.hid %COMMON_DEST%\res%_EXT%\svxslots_srs.hid
 ..\%__SRC%\lib\svxl.lib %_DEST%\lib%_EXT%\svxl.lib
 ..\%__SRC%\lib\libsvxl.a %_DEST%\lib%_EXT%\libsvxl.a
 
+mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
+mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
+..\res\cjkabout.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\about.bmp
+..\res\cjkintro.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\intro.bmp
+..\res\ofaabout.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\about.bmp
+..\res\soffice.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\intro.bmp
+
 mkdir: %_DEST%\inc%_EXT%\svx
 hedabu: ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
+hedabu: ..\source\inc\fmresids.hrc %_DEST%\inc%_EXT%\svx\fmresids.hrc
+hedabu: ..\inc\svxgrahicitem.hxx %_DEST%\inc%_EXT%\svx\svxgrahicitem.hxx
 hedabu: ..\inc\dialdll.hxx %_DEST%\inc%_EXT%\svx\dialdll.hxx
+hedabu: ..\inc\dstribut_enum.hxx %_DEST%\inc%_EXT%\svx\dstribut_enum.hxx
+hedabu: ..\inc\zoom_def.hxx %_DEST%\inc%_EXT%\svx\zoom_def.hxx
 hedabu: ..\inc\svdfield.hxx %_DEST%\inc%_EXT%\svx\svdfield.hxx
 hedabu: ..\inc\svxitems.hrc %_DEST%\inc%_EXT%\svx\svxitems.hrc
 hedabu: ..\inc\multipat.hxx %_DEST%\inc%_EXT%\svx\multipat.hxx
@@ -71,7 +80,7 @@ hedabu: ..\inc\asiancfg.hxx %_DEST%\inc%_EXT%\svx\asiancfg.hxx
 hedabu: ..\inc\simptabl.hxx %_DEST%\inc%_EXT%\svx\simptabl.hxx
 hedabu: ..\inc\ctredlin.hxx %_DEST%\inc%_EXT%\svx\ctredlin.hxx
 hedabu: ..\inc\backgrnd.hxx %_DEST%\inc%_EXT%\svx\backgrnd.hxx
-hedabu: ..\inc\bbdlg.hxx %_DEST%\inc%_EXT%\svx\bbdlg.hxx
+#hedabu: ..\inc\bbdlg.hxx %_DEST%\inc%_EXT%\svx\bbdlg.hxx
 hedabu: ..\inc\blnkitem.hxx %_DEST%\inc%_EXT%\svx\blnkitem.hxx
 hedabu: ..\inc\bmpmask.hxx %_DEST%\inc%_EXT%\svx\bmpmask.hxx
 hedabu: ..\inc\bolnitem.hxx %_DEST%\inc%_EXT%\svx\bolnitem.hxx
@@ -91,8 +100,9 @@ hedabu: ..\inc\cmapitem.hxx %_DEST%\inc%_EXT%\svx\cmapitem.hxx
 hedabu: ..\inc\cntritem.hxx %_DEST%\inc%_EXT%\svx\cntritem.hxx
 hedabu: ..\inc\colritem.hxx %_DEST%\inc%_EXT%\svx\colritem.hxx
 hedabu: ..\inc\connctrl.hxx %_DEST%\inc%_EXT%\svx\connctrl.hxx
-hedabu: ..\inc\connect.hxx %_DEST%\inc%_EXT%\svx\connect.hxx
 hedabu: ..\inc\contdlg.hxx %_DEST%\inc%_EXT%\svx\contdlg.hxx
+hedabu: ..\inc\tabarea.hxx %_DEST%\inc%_EXT%\svx\tabarea.hxx
+hedabu: ..\inc\tabline.hxx %_DEST%\inc%_EXT%\svx\tabline.hxx
 hedabu: ..\inc\crsditem.hxx %_DEST%\inc%_EXT%\svx\crsditem.hxx
 hedabu: ..\inc\ctrdial.hxx %_DEST%\inc%_EXT%\svx\ctrdial.hxx
 hedabu: ..\inc\cscoitem.hxx %_DEST%\inc%_EXT%\svx\cscoitem.hxx
@@ -145,11 +155,10 @@ hedabu: ..\inc\imapdlg.hxx %_DEST%\inc%_EXT%\svx\imapdlg.hxx
 hedabu: ..\inc\impgrf.hxx %_DEST%\inc%_EXT%\svx\impgrf.hxx
 hedabu: ..\inc\opengrf.hxx %_DEST%\inc%_EXT%\svx\opengrf.hxx
 hedabu: ..\inc\insctrl.hxx %_DEST%\inc%_EXT%\svx\insctrl.hxx
-hedabu: ..\inc\itemdata.hxx %_DEST%\inc%_EXT%\svx\itemdata.hxx
 hedabu: ..\inc\itemwin.hxx %_DEST%\inc%_EXT%\svx\itemwin.hxx
 hedabu: ..\inc\keepitem.hxx %_DEST%\inc%_EXT%\svx\keepitem.hxx
 hedabu: ..\inc\kernitem.hxx %_DEST%\inc%_EXT%\svx\kernitem.hxx
-hedabu: ..\inc\labdlg.hxx %_DEST%\inc%_EXT%\svx\labdlg.hxx
+#hedabu: ..\inc\labdlg.hxx %_DEST%\inc%_EXT%\svx\labdlg.hxx
 hedabu: ..\inc\label3d.hxx %_DEST%\inc%_EXT%\svx\label3d.hxx
 hedabu: ..\inc\langbox.hxx %_DEST%\inc%_EXT%\svx\langbox.hxx
 hedabu: ..\inc\langitem.hxx %_DEST%\inc%_EXT%\svx\langitem.hxx
@@ -166,7 +175,6 @@ hedabu: ..\inc\lrspitem.hxx %_DEST%\inc%_EXT%\svx\lrspitem.hxx
 hedabu: ..\inc\lspcitem.hxx %_DEST%\inc%_EXT%\svx\lspcitem.hxx
 hedabu: ..\inc\matrix3d.hxx %_DEST%\inc%_EXT%\svx\matrix3d.hxx
 hedabu: ..\inc\measctrl.hxx %_DEST%\inc%_EXT%\svx\measctrl.hxx
-hedabu: ..\inc\measure.hxx %_DEST%\inc%_EXT%\svx\measure.hxx
 hedabu: ..\inc\dstribut.hxx %_DEST%\inc%_EXT%\svx\dstribut.hxx
 hedabu: ..\inc\modctrl.hxx %_DEST%\inc%_EXT%\svx\modctrl.hxx
 hedabu: ..\inc\multifil.hxx %_DEST%\inc%_EXT%\svx\multifil.hxx
@@ -372,18 +380,15 @@ hedabu: ..\inc\sxsalitm.hxx %_DEST%\inc%_EXT%\svx\sxsalitm.hxx
 hedabu: ..\inc\sxsiitm.hxx %_DEST%\inc%_EXT%\svx\sxsiitm.hxx
 hedabu: ..\inc\sxsoitm.hxx %_DEST%\inc%_EXT%\svx\sxsoitm.hxx
 hedabu: ..\inc\sxtraitm.hxx %_DEST%\inc%_EXT%\svx\sxtraitm.hxx
-hedabu: ..\inc\tabarea.hxx %_DEST%\inc%_EXT%\svx\tabarea.hxx
-hedabu: ..\inc\tabline.hxx %_DEST%\inc%_EXT%\svx\tabline.hxx
 hedabu: ..\inc\tabstpge.hxx %_DEST%\inc%_EXT%\svx\tabstpge.hxx
 hedabu: ..\inc\tbcontrl.hxx %_DEST%\inc%_EXT%\svx\tbcontrl.hxx
 hedabu: ..\inc\tbxalign.hxx %_DEST%\inc%_EXT%\svx\tbxalign.hxx
 hedabu: ..\inc\tbxctl.hxx %_DEST%\inc%_EXT%\svx\tbxctl.hxx
 hedabu: ..\inc\tbxdraw.hxx %_DEST%\inc%_EXT%\svx\tbxdraw.hxx
-hedabu: ..\inc\textanim.hxx %_DEST%\inc%_EXT%\svx\textanim.hxx
 hedabu: ..\inc\textattr.hxx %_DEST%\inc%_EXT%\svx\textattr.hxx
 hedabu: ..\inc\thesdlg.hxx %_DEST%\inc%_EXT%\svx\thesdlg.hxx
 hedabu: ..\inc\tp3dattr.hxx %_DEST%\inc%_EXT%\svx\tp3dattr.hxx
-hedabu: ..\inc\transfrm.hxx %_DEST%\inc%_EXT%\svx\transfrm.hxx
+#hedabu: ..\inc\transfrm.hxx %_DEST%\inc%_EXT%\svx\transfrm.hxx
 hedabu: ..\inc\tstpitem.hxx %_DEST%\inc%_EXT%\svx\tstpitem.hxx
 hedabu: ..\inc\txencbox.hxx %_DEST%\inc%_EXT%\svx\txencbox.hxx
 hedabu: ..\inc\txenctab.hxx %_DEST%\inc%_EXT%\svx\txenctab.hxx
@@ -550,11 +555,12 @@ hedabu: ..\inc\fmgridif.hxx %_DEST%\inc%_EXT%\svx\fmgridif.hxx
 hedabu: ..\inc\gridctrl.hxx %_DEST%\inc%_EXT%\svx\gridctrl.hxx
 hedabu: ..\inc\pfiledlg.hxx %_DEST%\inc%_EXT%\svx\pfiledlg.hxx
 hedabu: ..\inc\hyperdlg.hxx %_DEST%\inc%_EXT%\svx\hyperdlg.hxx
+hedabu: ..\source\dialog\hyprlink.hxx %_DEST%\inc%_EXT%\svx\hyprlink.hxx
 hedabu: ..\inc\hlnkitem.hxx %_DEST%\inc%_EXT%\svx\hlnkitem.hxx
 hedabu: ..\inc\unofdesc.hxx %_DEST%\inc%_EXT%\svx\unofdesc.hxx
 hedabu: ..\source\xmlfilt\xmlnumi.hxx %_DEST%\inc%_EXT%\svx\xmlnumi.hxx
 hedabu: ..\source\xmlfilt\xmlnume.hxx %_DEST%\inc%_EXT%\svx\xmlnume.hxx
-hedabu: ..\inc\iconcdlg.hxx %_DEST%\inc%_EXT%\svx\iconcdlg.hxx
+#hedabu: ..\inc\iconcdlg.hxx %_DEST%\inc%_EXT%\svx\iconcdlg.hxx
 hedabu: ..\source\xmlfilt\xmltabe.hxx %_DEST%\inc%_EXT%\svx\xmltabe.hxx
 hedabu: ..\source\xmlfilt\xmltabi.hxx %_DEST%\inc%_EXT%\svx\xmltabi.hxx
 hedabu: ..\source\xmlfilt\xmlbrshe.hxx %_DEST%\inc%_EXT%\svx\xmlbrshe.hxx
@@ -619,6 +625,9 @@ hedabu: ..\inc\writingmodeitem.hxx %_DEST%\inc%_EXT%\svx\writingmodeitem.hxx
 hedabu: ..\inc\ParseContext.hxx %_DEST%\inc%_EXT%\svx\ParseContext.hxx
 hedabu: ..\inc\countryid.hxx %_DEST%\inc%_EXT%\svx\countryid.hxx
 hedabu: ..\inc\svxdlg.hxx %_DEST%\inc%_EXT%\svx\svxdlg.hxx
+hedabu: ..\inc\acorrcfg.hxx %_DEST%\inc%_EXT%\svx\acorrcfg.hxx
+hedabu: ..\inc\htmlcfg.hxx %_DEST%\inc%_EXT%\svx\htmlcfg.hxx
+hedabu: ..\inc\ofaitem.hxx %_DEST%\inc%_EXT%\svx\ofaitem.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
