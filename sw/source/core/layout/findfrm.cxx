@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:20:31 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,6 +1257,8 @@ void SwFrm::SetDirFlags( BOOL bVert )
 {
     if( bVert )
     {
+        // OD 2004-01-21 #114969# - if derived, valid vertical flag only if
+        // vertical flag of upper/anchor is valid.
         if( bDerivedVert )
         {
             SwFrm* pAsk = IsFlyFrm() ?
