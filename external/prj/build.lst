@@ -1,4 +1,42 @@
-es	external_stub							usr1	-	all	es_mkout NULL
-ef      external\psprint             nmake   -       all     ef_psprint NULL
-ef      external\psprint\afm             nmake   -       all     ef_afm NULL
-ef      external\psprint\ppds             nmake   -       all     ef_ppds NULL
+es      external :       soltools NULL
+es	external					usr1 - all es_mkout NULL
+es	external\ado		nmake	-	w	es_ado NULL
+es	external\atl		nmake	-	w	es_atl NULL
+es	external\audio		nmake	-	u	es_audio NULL
+es	external\dt		nmake	-	u	es_dt NULL
+es 	external\expat		nmake	-	all	es_expat NULL
+es	external\expat\rtufiles	nmake	-	all	ex_expatrtu NULL
+es	external\expat\rtufiles\xmlparse	nmake	-	all	ex_expatxmlparse NULL
+es	external\expat\rtufiles\xmltok	nmake	-	all	ex_expatxmltok NULL
+es 	external\freetype	nmake	-	u	es_freetype NULL
+es	external\freetype\freetype-2.0.2\src\base		nmake	-	u	es_freebase es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\cache 		nmake   -       u       es_freecache es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\sfnt 		nmake   -       u       es_freesfnt es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\cff 		nmake   -       u       es_freecff es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\autohint 	nmake   -       u       es_freeautohint es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\psnames		nmake   -       u       es_freepsnames es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\psaux		nmake   -       u       es_freepsaux es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\truetype		nmake   -       u       es_freetruetype	es_freetype.u NULL
+es      external\freetype\freetype-2.0.2\src\type1		nmake   -       u       es_freetype1 es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\cid		nmake   -       u       es_freecid es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\smooth		nmake   -       u       es_freesmooth es_freetype.u	NULL
+es      external\freetype\freetype-2.0.2\src\raster		nmake   -       u       es_freeraster es_freetype.u	NULL
+es	external\glibc		nmake	-	all	es_glibc NULL
+es	external\glibc\rtufiles	nmake	-	all	es_glibcrtu NULL
+es	external\gpc		nmake	-	u	es_gpc NULL
+es      external\gpc            nmake   -       w       es_gpc NULL
+es	external\jpeg		nmake 	-	all	es_jpeg NULL
+es	external\jpeg\rtufiles	nmake	-	all	es_jpegrtu NULL
+es	external\npsdk		nmake	-	all	es_npsdk NULL
+es	external\npsdk\rtufiles	nmake	-	all	es_npsdkrtu NULL
+es	external\odbc		nmake	-	all	es_odbc NULL
+es      external\psprint	nmake	-	u	es_psprint es_psprintafm.u es_psprintppds.u NULL
+es	external\psprint\afm	nmake	-	u	es_psprintafm NULL
+es	external\psprint\ppds	nmake	-	u	es_psprintppds NULL
+es      external\sane		nmake	-	all	es_sane NULL
+es      external\twain		nmake	-	all	es_twain NULL
+es      external\w4w		nmake	-	u	es_w4w NULL
+es      external\zlib		nmake	-	all	es_zlib NULL
+es	external\zlib\rtufiles	nmake	-	all	es_zlibrtu NULL
+es      external\neon		nmake	-	all	es_neon NULL
+es	external\neon\rtufiles	nmake	-	all	es_neonrtu NULL
