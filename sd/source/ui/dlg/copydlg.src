@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:25:37 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ ModalDialog DLG_COPY
         QuickHelpText[ korean ] = "¼±ÅÃÀ¸·ÎºÎÅÍÀÇ¡¡°ª¡¡ÀÎ¼ö!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Werte von Selektion aufnehmen";
+        QuickHelpText[ catalan ] = "Valores seleccionados";
     };
     NumericField NUM_FLD_COPIES
     {
@@ -174,6 +175,7 @@ ModalDialog DLG_COPY
         Text[ arabic ] = "ÇÝÊÑÇÖí";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Predeterminado";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -209,6 +211,7 @@ ModalDialog DLG_COPY
         CustomUnitText[ korean ] = "µµ";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
+        CustomUnitText[ catalan ] = "grados";
     };
     FixedText FT_COPIES
     {
@@ -237,6 +240,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "º¹»ç ¼ö·®(~C)";
         Text[ turkish ] = "Kopya sayýsý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Número de c~opias";
     };
     FixedText FT_ANGLE
     {
@@ -265,6 +269,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "È¸Àü°¢(~A)";
         Text[ turkish ] = "Açý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Á~ngulo de rot.";
     };
     FixedText FT_MOVE_X
     {
@@ -293,6 +298,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "~X Ãà";
         Text[ turkish ] = "X ekseni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eje ~X";
     };
     MetricField MTR_FLD_MOVE_X
     {
@@ -389,6 +395,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "~Y Ãà";
         Text[ turkish ] = "Y ekseni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eje ~Y";
     };
     FixedText FT_WIDTH
     {
@@ -417,6 +424,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ancho";
     };
     FixedText FT_HEIGHT
     {
@@ -446,6 +454,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Yüks.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     GroupBox GRP_MOVEMENT
     {
@@ -474,6 +483,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "ÀÌµ¿";
         Text[ turkish ] = "Kaydýrma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desplazamiento";
     };
     GroupBox GRP_ENLARGEMENT
     {
@@ -503,6 +513,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "È®´ë";
         Text[ turkish ] = "Büyütme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aumento";
     };
     GroupBox GRP_COLOR
     {
@@ -531,6 +542,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "»ö»ó";
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Colores";
     };
     ListBox LB_START_COLOR
     {
@@ -570,6 +582,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "½ÃÀÛ(~S)";
         Text[ turkish ] = "Ýlk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Comienzo";
     };
     ListBox LB_END_COLOR
     {
@@ -609,6 +622,7 @@ ModalDialog DLG_COPY
         Text[ korean ] = "³¡(~E)";
         Text[ turkish ] = "Son";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Terminar";
     };
     Text[ chinese_simplified ] = "¸´ÖÆ¼þ";
     Text[ russian ] = "Äóáëèðîâàòü";
@@ -620,4 +634,5 @@ ModalDialog DLG_COPY
     Text[ korean ] = "ÀÌÁß";
     Text[ turkish ] = "Çoðalt";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Duplicar";
 };
