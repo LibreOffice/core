@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-03 09:45:51 $
+ *  last change: $Author: as $ $Date: 2000-11-16 08:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,11 +632,17 @@ sal_Bool SvtModuleOptions_Impl::IsMath( sal_Bool bClient ) const
     // Try to specify right install state for given search parameter!
     if( bClient == sal_True )
     {
-        bState = ( m_nClientModules & FEATUREFLAG_MATH );
+        if( ( m_nClientModules & FEATUREFLAG_MATH ) == FEATUREFLAG_MATH )
+        {
+            bState = sal_True;
+        }
     }
     else
     {
-        bState = ( m_nPortalModules & FEATUREFLAG_MATH );
+        if( ( m_nPortalModules & FEATUREFLAG_MATH ) == FEATUREFLAG_MATH )
+        {
+            bState = sal_True;
+        }
     }
     // Return install state.
     return bState;
@@ -652,11 +658,17 @@ sal_Bool SvtModuleOptions_Impl::IsChart( sal_Bool bClient ) const
     // Try to specify right install state for given search parameter!
     if( bClient == sal_True )
     {
-        bState = ( m_nClientModules & FEATUREFLAG_CHART );
+        if( ( m_nClientModules & FEATUREFLAG_CHART ) == FEATUREFLAG_CHART )
+        {
+            bState = sal_True;
+        }
     }
     else
     {
-        bState = ( m_nPortalModules & FEATUREFLAG_CHART );
+        if( ( m_nPortalModules & FEATUREFLAG_CHART ) == FEATUREFLAG_CHART )
+        {
+            bState = sal_True;
+        }
     }
     // Return install state.
     return bState;
@@ -672,11 +684,17 @@ sal_Bool SvtModuleOptions_Impl::IsCalc( sal_Bool bClient ) const
     // Try to specify right install state for given search parameter!
     if( bClient == sal_True )
     {
-        bState = ( m_nClientModules & FEATUREFLAG_CALC );
+        if( ( m_nClientModules & FEATUREFLAG_CALC ) == FEATUREFLAG_CALC )
+        {
+            bState = sal_True;
+        }
     }
     else
     {
-        bState = ( m_nPortalModules & FEATUREFLAG_CALC );
+        if( ( m_nPortalModules & FEATUREFLAG_CALC ) == FEATUREFLAG_CALC )
+        {
+            bState = sal_True;
+        }
     }
     // Return install state.
     return bState;
@@ -692,11 +710,17 @@ sal_Bool SvtModuleOptions_Impl::IsDraw( sal_Bool bClient ) const
     // Try to specify right install state for given search parameter!
     if( bClient == sal_True )
     {
-        bState = ( m_nClientModules & FEATUREFLAG_DRAW );
+        if( ( m_nClientModules & FEATUREFLAG_DRAW ) == FEATUREFLAG_DRAW )
+        {
+            bState = sal_True;
+        }
     }
     else
     {
-        bState = ( m_nPortalModules & FEATUREFLAG_DRAW );
+        if( ( m_nPortalModules & FEATUREFLAG_DRAW ) == FEATUREFLAG_DRAW )
+        {
+            bState = sal_True;
+        }
     }
     // Return install state.
     return bState;
@@ -712,11 +736,17 @@ sal_Bool SvtModuleOptions_Impl::IsWriter( sal_Bool bClient ) const
     // Try to specify right install state for given search parameter!
     if( bClient == sal_True )
     {
-        bState = ( m_nClientModules & FEATUREFLAG_WRITER );
+        if( ( m_nClientModules & FEATUREFLAG_WRITER ) == FEATUREFLAG_WRITER )
+        {
+            bState = sal_True;
+        }
     }
     else
     {
-        bState = ( m_nPortalModules & FEATUREFLAG_WRITER );
+        if( ( m_nPortalModules & FEATUREFLAG_WRITER ) == FEATUREFLAG_WRITER )
+        {
+            bState = sal_True;
+        }
     }
     // Return install state.
     return bState;
@@ -732,11 +762,17 @@ sal_Bool SvtModuleOptions_Impl::IsImpress( sal_Bool bClient ) const
     // Try to specify right install state for given search parameter!
     if( bClient == sal_True )
     {
-        bState = ( m_nClientModules & FEATUREFLAG_IMPRESS );
+        if( ( m_nClientModules & FEATUREFLAG_IMPRESS ) == FEATUREFLAG_IMPRESS )
+        {
+            bState = sal_True;
+        }
     }
     else
     {
-        bState = ( m_nPortalModules & FEATUREFLAG_IMPRESS );
+        if( ( m_nPortalModules & FEATUREFLAG_IMPRESS ) == FEATUREFLAG_IMPRESS )
+        {
+            bState = sal_True;
+        }
     }
     // Return install state.
     return bState;
@@ -752,11 +788,17 @@ sal_Bool SvtModuleOptions_Impl::IsBasicIDE( sal_Bool bClient ) const
     // Try to specify right install state for given search parameter!
     if( bClient == sal_True )
     {
-        bState = ( m_nClientModules & FEATUREFLAG_BASICIDE );
+        if( ( m_nClientModules & FEATUREFLAG_BASICIDE ) == FEATUREFLAG_BASICIDE )
+        {
+            bState = sal_True;
+        }
     }
     else
     {
-        bState = ( m_nPortalModules & FEATUREFLAG_BASICIDE );
+        if( ( m_nPortalModules & FEATUREFLAG_BASICIDE ) == FEATUREFLAG_BASICIDE )
+        {
+            bState = sal_True;
+        }
     }
     // Return install state.
     return bState;
