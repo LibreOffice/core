@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:52:04 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,6 +701,7 @@
 #define FID_SCREEN_OPTIONS      (VIEW_MENU_START + 6)
 #define FID_PAGEBREAKMODE       (VIEW_MENU_START + 7)
 #define FID_FUNCTION_BOX        (VIEW_MENU_START + 8)
+#define FID_NORMALVIEWMODE      (VIEW_MENU_START + 9)
 // Compare/Merge jetzt aus Sfx
 //#define FID_CHG_COMPARE       (VIEW_MENU_START + 16)// DANGER DIRTY ID
 //#define FID_CHG_MERGE         (VIEW_MENU_START + 17)// DANGER DIRTY ID
@@ -975,6 +976,7 @@
 #define SID_FILL_DIR            (SID_NEW_SLOTS+7)
 #define SID_FILL_COUNT          (SID_NEW_SLOTS+8)
 #define SID_WITH_UNDO           (SID_NEW_SLOTS+9)
+#define FID_MERGE_TOGGLE        (SID_NEW_SLOTS+10)
 //aus sfx: #define SID_ATTR_SECIALCHAR      (SID_NEW_SLOTS+10)
 #define SID_ATTR_ROWHEADERS     (SID_NEW_SLOTS+11)
 #define SID_ATTR_COLHEADERS     (SID_NEW_SLOTS+12)
