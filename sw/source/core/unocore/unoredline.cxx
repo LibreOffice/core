@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 08:43:51 $
+ *  last change: $Author: dvo $ $Date: 2002-08-02 09:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,34 @@ Reference<XTextCursor> SwXRedlineText::createTextCursor(void)
                                              GetDoc());
     SwUnoCrsr* pUnoCursor = pCrsr->GetCrsr();
     pUnoCursor->Move(fnMoveForward, fnGoNode);
+
+    // #101929# prevent a newly created text cursor from running inside a table
+    // because table cells have their own XText.
+    // Patterned after SwXTextFrame::createTextCursor(void).
+
+    // skip all tables at the beginning
+    SwTableNode* pTableNode = pUnoCursor->GetNode()->FindTableNode();
+    SwCntntNode* pContentNode = NULL;
+    while( pTableNode != NULL )
+    {
+        pUnoCursor->GetPoint()->nNode = *(pTableNode->EndOfSectionNode());
+        pContentNode = GetDoc()->GetNodes().GoNext(&pUnoCursor->GetPoint()->nNode);
+        pTableNode = pContentNode->FindTableNode();
+    }
+    if( pContentNode != NULL )
+        pUnoCursor->GetPoint()->nContent.Assign( pContentNode, 0 );
+    if( pUnoCursor->GetNode()->FindStartNode() != GetStartNode() )
+    {
+        // We have gone too far and have left our own redline. This means that
+        // no content node outside of a table could be found, and therefore we
+        // except.
+        uno::RuntimeException aExcept;
+        aExcept.Message = OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "No content node found that is inside this change section "
+            "but outside of a table" ) );
+        throw aExcept;
+    }
+
     return (XWordCursor*)pCrsr;
 }
 /* ---------------------------------------------------------------------------
