@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:47:45 $
+ *  last change: $Author: fs $ $Date: 2001-06-19 10:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,6 +707,13 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ catalan ] = "Administrate ~Data Sources..."; \
     Text[ catalan ] = "Administrate ~Data Sources...";
 
+#define MID_DIRECT_SQL  \
+    Identifier = ID_DIRECT_SQL ;    \
+    HelpId = HID_DSBROWSER_DIRECTSQL ; \
+    Text = "SQL..." ; \
+    Text [ english ] = "SQL..." ; \
+    Text [ english_us ] = "SQL..." ;
+
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
     HelpId = HID_BROWSER_CLOSECONN ;    \
@@ -765,6 +772,14 @@ String RID_STR_BOOKMARKS_CONTAINER
     MenuItem    \
     {   \
         MID_ADMINISTRATE    \
+    };  \
+    MenuItem    \
+    {   \
+        Separator = TRUE;   \
+    };  \
+    MenuItem    \
+    {   \
+        MID_DIRECT_SQL  \
     };  \
     MenuItem    \
     {   \
