@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:55:03 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog DLG_DOC_FOOTNOTE
     Text [ italian ] = "Impostazioni note a piè pagina" ;
     Text [ portuguese_brazilian ] = "Opções de nota de rodapé" ;
     Text [ portuguese ] = "Opções de notas de rodapé" ;
-    Text [ finnish ] = "Alaviitteen määritykset" ;
+    Text [ finnish ] = "Alaviitteen asetukset" ;
     Text [ danish ] = "Fodnoteindstillinger" ;
     Text [ french ] = "Paramètres des notes de bas de page" ;
     Text [ swedish ] = "Fotnotsinställning" ;
@@ -113,6 +113,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ turkish ] = "Dipnot";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Notas al pie";
+                Text[ finnish ] = "Alaviitteet";
             };
             PageItem
             {
@@ -140,6 +141,7 @@ TabDialog DLG_DOC_FOOTNOTE
                 Text[ turkish ] = "Sonnot";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Notas finales";
+                Text[ finnish ] = "Loppuhuomautukset";
             };
         };
     };
@@ -172,7 +174,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "Numerazione automatica" ;
         Text [ portuguese_brazilian ] = "Numeração automática" ;
         Text [ portuguese ] = "Numeração automática" ;
-        Text [ finnish ] = "Automaattinumerointi" ;
+        Text [ finnish ] = "Automaattinen numerointi" ;
         Text [ danish ] = "Automatisk nummerering" ;
         Text [ french ] = "Numérotation automatique" ;
         Text [ swedish ] = "Automatisk numrering" ;
@@ -217,6 +219,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "Numbering";
         Text[ arabic ] = "ÇáÊÑÞíã";
         Text[ catalan ] = "~Numeración";
+        Text[ finnish ] = "Nu~mmerierung";
     };
     ListBox LB_NUMVIEW
     {
@@ -254,6 +257,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "B~aþlangýç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comen~zar en";
+        Text[ finnish ] = "~Aloita kohdasta";
     };
     NumericField FLD_OFFSET
     {
@@ -292,6 +296,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "Counting";
         Text[ arabic ] = "ÊÚÏÇÏ";
         Text[ catalan ] = "Contar";
+        Text[ finnish ] = "~Zählung";
     };
     ListBox LB_NUMCOUNT
     {
@@ -340,9 +345,9 @@ TabPage TP_FOOTNOTEOPTION
         };
         StringList [ finnish ] =
         {
-            < "Pro Seite" ; > ;
-            < "Pro Kapitel" ; > ;
-            < "Pro Dokument" ; > ;
+            < "Sivulla" ; > ;
+            < "Kappaleessa" ; > ;
+            < "Asiakirjassa" ; > ;
         };
         StringList [ danish ] =
         {
@@ -457,7 +462,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "~Davanti" ;
         Text [ portuguese_brazilian ] = "Antes" ;
         Text [ portuguese ] = "An~tes" ;
-        Text [ finnish ] = "Edellä" ;
+        Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "Før" ;
         Text [ french ] = "Avant" ;
         Text [ swedish ] = "~Framför" ;
@@ -496,7 +501,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "Die~tro" ;
         Text [ portuguese_brazilian ] = "Atrás" ;
         Text [ portuguese ] = "At~rás" ;
-        Text [ finnish ] = "Jäljessä" ;
+        Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "Après" ;
         Text [ swedish ] = "B~akom" ;
@@ -551,6 +556,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición";
+        Text[ finnish ] = "Position";
     };
     RadioButton RB_POS_PAGE
     {
@@ -593,7 +599,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "Fine ~documento" ;
         Text [ portuguese_brazilian ] = "Final de~doc." ;
         Text [ portuguese ] = "Fim do ~documento" ;
-        Text [ finnish ] = "~Asiakirjan loppu" ;
+        Text [ finnish ] = "Asiakirjan l~oppu" ;
         Text [ danish ] = "Dokumentets slutn." ;
         Text [ french ] = "Fin de ~document" ;
         Text [ swedish ] = "Do~kumentslut" ;
@@ -746,6 +752,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "Karakter biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilos de carácter";
+        Text[ finnish ] = "Merkkityylit";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -774,6 +781,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "Metin a~laný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área de ~texto";
+        Text[ finnish ] = "Teksti~alue";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -811,6 +819,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ turkish ] = "D~ipnot alaný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área de ~nota al pie";
+        Text[ finnish ] = "~Alaviitealue";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -831,7 +840,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "Avvertenza che la nota continua" ;
         Text [ portuguese_brazilian ] = "Aviso de continuação" ;
         Text [ portuguese ] = "Continuação das notas de rodapé" ;
-        Text [ finnish ] = "Jatkumisilmoitus" ;
+        Text [ finnish ] = "Jatkoilmoitus" ;
         Text [ danish ] = "Henvisningstekst for flersidede fodnoter" ;
         Text [ french ] = "Indication de suite" ;
         Text [ swedish ] = "Hänvisningstext för flersidiga fotnoter" ;
@@ -860,7 +869,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "Alla fine del piè pagina" ;
         Text [ portuguese_brazilian ] = "~Continuado" ;
         Text [ portuguese ] = "~No final da nota" ;
-        Text [ finnish ] = "~Jatkuu" ;
+        Text [ finnish ] = "Ala~selitteen loppu" ;
         Text [ danish ] = "Ved fodnotens slutning" ;
         Text [ french ] = "En ~fin de note" ;
         Text [ swedish ] = "Vid slutet av f~otnoten" ;
@@ -899,7 +908,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "Alla pagina succ." ;
         Text [ portuguese_brazilian ] = "~Iniciado" ;
         Text [ portuguese ] = "~Página seguinte" ;
-        Text [ finnish ] = "~Alkaa" ;
+        Text [ finnish ] = "~Seuraavan sivun aloitus" ;
         Text [ danish ] = "På næste side" ;
         Text [ french ] = "~Sur la page suivante" ;
         Text [ swedish ] = "~På följande sida" ;
@@ -946,7 +955,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ italian ] = "Numerazione automatica" ;
         Text [ portuguese_brazilian ] = "Numeração automática" ;
         Text [ portuguese ] = "Numeração automática" ;
-        Text [ finnish ] = "Automaattinumerointi" ;
+        Text [ finnish ] = "Automaattinen numerointi" ;
         Text [ danish ] = "Automatisk nummerering" ;
         Text [ french ] = "Numérotation automatique" ;
         Text [ swedish ] = "Automatisk numrering" ;
@@ -991,6 +1000,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ turkish ] = "Numbering";
         Text[ arabic ] = "ÇáÊÑÞíã";
         Text[ catalan ] = "Numeración";
+        Text[ finnish ] = "Nu~mmerierung";
     };
     ListBox LB_NUMVIEW
     {
@@ -1039,6 +1049,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ turkish ] = "B~aþlangýç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comen~zar en";
+        Text[ finnish ] = "~Aloita kohdasta";
     };
     NumericField FLD_OFFSET
     {
@@ -1076,7 +1087,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ italian ] = "~Davanti" ;
         Text [ portuguese_brazilian ] = "Antes" ;
         Text [ portuguese ] = "An~tes" ;
-        Text [ finnish ] = "Edellä" ;
+        Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "Før" ;
         Text [ french ] = "Avant" ;
         Text [ swedish ] = "~Framför" ;
@@ -1115,7 +1126,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ italian ] = "Die~tro" ;
         Text [ portuguese_brazilian ] = "Atrás" ;
         Text [ portuguese ] = "A~trás" ;
-        Text [ finnish ] = "Jäljessä" ;
+        Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "Après" ;
         Text [ swedish ] = "Ba~kom" ;
@@ -1343,6 +1354,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ turkish ] = "Karakter biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estilos de carácter";
+        Text[ finnish ] = "Merkkityylit";
     };
     FixedText FT_ANCHR_CHARFMT
     {
@@ -1370,6 +1382,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "ÅØ½ºÆ® ¿µ¿ª(~X)";
         Text[ turkish ] = "Metin ~alaný";
         Text[ catalan ] = "Área de ~texto";
+        Text[ finnish ] = "Teksti~alue";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -1406,6 +1419,7 @@ TabPage TP_ENDNOTEOPTION
         Text[ korean ] = "¹ÌÁÖ ¿µ¿ª(~E)";
         Text[ turkish ] = "S~onnot alaný";
         Text[ catalan ] = "Área de n~ota al final";
+        Text[ finnish ] = "~Loppuviitealue";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -1427,7 +1441,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ italian ] = "Avvertenza che la nota continua" ;
         Text [ portuguese_brazilian ] = "Aviso de continuação" ;
         Text [ portuguese ] = "Continuação das notas de rodapé" ;
-        Text [ finnish ] = "Jatkumisilmoitus" ;
+        Text [ finnish ] = "Jatkoilmoitus" ;
         Text [ danish ] = "Henvisningstekst for flersidede fodnoter" ;
         Text [ french ] = "Indication de suite" ;
         Text [ swedish ] = "Hänvisningstext för flersidiga fotnoter" ;
@@ -1456,7 +1470,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ italian ] = "Pagina su~cc." ;
         Text [ portuguese_brazilian ] = "~Continuado" ;
         Text [ portuguese ] = "Página ~seguinte" ;
-        Text [ finnish ] = "~Jatkuu" ;
+        Text [ finnish ] = "~Seuraava sivu" ;
         Text [ danish ] = "Næste side" ;
         Text [ french ] = "~Page suivante" ;
         Text [ swedish ] = "~Följande sida" ;
@@ -1495,7 +1509,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ italian ] = "~Inizio" ;
         Text [ portuguese_brazilian ] = "~Iniciado" ;
         Text [ portuguese ] = "~Início" ;
-        Text [ finnish ] = "~Alkaa" ;
+        Text [ finnish ] = "~Aloita" ;
         Text [ danish ] = "Begyndelse" ;
         Text [ french ] = "~Début" ;
         Text [ swedish ] = "~Börja" ;
