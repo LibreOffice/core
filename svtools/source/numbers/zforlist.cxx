@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2000-12-07 15:51:26 $
+ *  last change: $Author: er $ $Date: 2000-12-12 15:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,9 +1385,27 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             const ::com::sun::star::i18n::NumberFormatCode& rCode,
             ULONG nPos )
 {
-    String aTmp( rCode.Code );
+    String aCodeStr( rCode.Code );
+    if ( rCode.Index < NF_INDEX_TABLE_ENTRIES &&
+            rCode.Usage == ::com::sun::star::i18n::KNumberFormatUsage::CURRENCY &&
+            rCode.Index != NF_CURRENCY_1000DEC2_CCC )
+    {   // strip surrounding [$...] on automatic currency
+        if ( aCodeStr.SearchAscii( "[$" ) != STRING_NOTFOUND )
+            aCodeStr = SvNumberformat::StripNewCurrencyDelimiters( aCodeStr, FALSE );
+        else
+        {
+#ifndef PRODUCT
+            if ( rCode.Index != NF_CURRENCY_1000DEC2_CCC )
+            {
+                ByteString aMsg( "ImpInsertFormat: no [$...] on currency: " );
+                aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+                DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
+            }
+#endif
+        }
+    }
     xub_StrLen nCheckPos = 0;
-    SvNumberformat* pFormat = new SvNumberformat(aTmp,
+    SvNumberformat* pFormat = new SvNumberformat(aCodeStr,
                                                  pFormatScanner,
                                                  pStringScanner,
                                                  nCheckPos,
@@ -1408,8 +1426,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         ByteString aMsg( "ImpInsertFormat: can't insert number format key: " );
         aMsg += ByteString::CreateFromInt32( nPos );
         aMsg.Append( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-        aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
-        aMsg += ByteString::CreateFromInt32( nPos );
+        aMsg += ByteString( aCodeStr, RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( (pLocaleData->AppendLocaleInfo( aMsg )).GetBuffer() );
 #endif
         delete pFormat;
@@ -2821,7 +2838,7 @@ void NfCurrencyEntry::BuildSymbolString( String& rStr, BOOL bBank,
         if ( !bWithoutExtension && eLanguage != LANGUAGE_DONTKNOW && eLanguage != LANGUAGE_SYSTEM )
         {
             rStr += '-';
-            rStr += UniString::CreateFromInt32( sal_Int32( eLanguage ), 16 );
+            rStr += String::CreateFromInt32( sal_Int32( eLanguage ), 16 );
         }
     }
     rStr += ']';
