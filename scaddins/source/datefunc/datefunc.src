@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-07 21:31:18 $
+ *  last change: $Author: kz $ $Date: 2001-11-16 23:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,7 +1128,7 @@ Resource RID_DATE_FUNCTION_NAMES
         Text[ french ] = "ESTBISSEXTILE";
         Text[ spanish ] = "ESAÑOBISIESTO";
         Text[ finnish ] = "ISLEAPYEAR";
-        Text[ italian ] = "ANNO.BISESTILE ";
+        Text[ italian ] = "ANNO.BISESTILE";
         Text[ danish ] = "ISLEAPYEAR";
         Text[ swedish ] = "ÄRSKOTTÅR";
         Text[ polish ] = "ROKPRZESTÊPNY";
@@ -1316,6 +1316,7 @@ Resource RID_DATE_DEFFUNCTION_NAMES
         };
     };
 };
+
 
 
 
