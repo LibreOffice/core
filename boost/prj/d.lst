@@ -5,6 +5,7 @@ mkdir: %_DEST%\inc%_EXT%\external\boost\config\compiler
 mkdir: %_DEST%\inc%_EXT%\external\boost\config\platform
 mkdir: %_DEST%\inc%_EXT%\external\boost\config\stdlib
 mkdir: %_DEST%\inc%_EXT%\external\boost\detail
+mkdir: %_DEST%\inc%_EXT%\external\boost\bind
 
 ..\%__SRC%\misc\build\boost_1_27_0\boost\config.hpp             %_DEST%\inc%_EXT%\external\boost\config.hpp
 ..\%__SRC%\misc\build\boost_1_27_0\boost\config\*.hpp           %_DEST%\inc%_EXT%\external\boost\config\*.hpp
@@ -26,6 +27,12 @@ mkdir: %_DEST%\inc%_EXT%\external\boost\detail
 ..\%__SRC%\misc\build\boost_1_27_0\boost\shared_ptr.hpp     %_DEST%\inc%_EXT%\external\boost\shared_ptr.hpp
 ..\%__SRC%\misc\build\boost_1_27_0\boost\shared_array.hpp   %_DEST%\inc%_EXT%\external\boost\shared_array.hpp
 ..\%__SRC%\misc\build\boost_1_27_0\boost\weak_ptr.hpp       %_DEST%\inc%_EXT%\external\boost\weak_ptr.hpp
+
+..\%__SRC%\misc\build\boost_1_27_0\boost\bind.hpp           %_DEST%\inc%_EXT%\external\boost\bind.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\bind\*.hpp         %_DEST%\inc%_EXT%\external\boost\bind\*.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\ref.hpp       		%_DEST%\inc%_EXT%\external\boost\ref.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\mem_fn.hpp    		%_DEST%\inc%_EXT%\external\boost\mem_fn.hpp
+..\%__SRC%\misc\build\boost_1_27_0\boost\type.hpp    		%_DEST%\inc%_EXT%\external\boost\type.hpp
 
 ..\%__SRC%\lib\*.lib    %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\lib\*.so     %_DEST%\lib%_EXT%\*.so
