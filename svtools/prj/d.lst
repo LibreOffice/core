@@ -209,6 +209,7 @@ hedabu: ..\inc\addresstemplate.hxx %_DEST%\inc%_EXT%\svtools\addresstemplate.hxx
 hedabu: ..\inc\genericunodialog.hxx %_DEST%\inc%_EXT%\svtools\genericunodialog.hxx
 hedabu: ..\inc\editbrowsebox.hxx %_DEST%\inc%_EXT%\svtools\editbrowsebox.hxx
 hedabu: ..\inc\templatefoldercache.hxx %_DEST%\inc%_EXT%\svtools\templatefoldercache.hxx
+hedabu: ..\inc\folderrestriction.hxx %_DEST%\inc%_EXT%\svtools\folderrestriction.hxx
 
 hedabu: ..\inc\imap.hxx %_DEST%\inc%_EXT%\svtools\imap.hxx
 hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
