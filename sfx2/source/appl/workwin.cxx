@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:47:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "objsh.hxx"
 #include "app.hxx"
@@ -304,6 +307,8 @@ USHORT ChildAlignValue(SfxChildAlignment eAlign)
         case SFX_ALIGN_TOOLBOXRIGHT:
             ret = 16;
             break;
+        case SFX_ALIGN_NOALIGNMENT:
+            break;  // -Wall not handled...
     }
 
     return ret;
@@ -363,6 +368,8 @@ USHORT ChildTravelValue( SfxChildAlignment eAlign )
         case SFX_ALIGN_LASTRIGHT:
             ret = 16;
             break;
+        case SFX_ALIGN_NOALIGNMENT:
+            break;  // -Wall not handled.
     }
 
     return ret;
@@ -463,17 +470,17 @@ SfxIPWorkWin_Impl::SfxIPWorkWin_Impl( WorkWindow *pWin, SfxBindings& rB,
 // ctor der Basisklasse
 
 SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pParentWorkwin ) :
-    pWorkWin (pWin),
     pParent( pParentWorkwin ),
-    bSorted( TRUE ),
     pBindings(&rB),
+    pWorkWin (pWin),
+    pConfigShell( 0 ),
+    pActiveChild( 0 ),
+    nChilds( 0 ),
+    nOrigMode( 0 ),
+    bSorted( TRUE ),
     bDockingAllowed(TRUE),
     bInternalDockingAllowed(TRUE),
     bAllChildsVisible(TRUE),
-    nChilds( 0 ),
-    nOrigMode( 0 ),
-    pConfigShell( 0 ),
-    pActiveChild( 0 ),
     bIsFullScreen( FALSE ),
     bShowStatusBar( TRUE ),
     bLocked( FALSE )
@@ -1338,7 +1345,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     }
 
     // was man so "ofters braucht, merkt man sich (spart Code und Laufzeit)
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
 
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
