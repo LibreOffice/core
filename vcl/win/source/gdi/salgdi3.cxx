@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-09 11:38:24 $
+ *  last change: $Author: sb $ $Date: 2002-08-13 12:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1801,13 +1801,86 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
 
 // -----------------------------------------------------------------------
 
+namespace {
+
+// TODO:  Replace this class with boost::scoped_array
+class ScopedCharArray
+{
+public:
+    inline explicit ScopedCharArray(char * pArray): m_pArray(pArray) {}
+
+    inline ~ScopedCharArray() { delete[] m_pArray; }
+
+    inline char * get() const { return m_pArray; }
+
+private:
+    char * m_pArray;
+};
+
+class ScopedFont
+{
+public:
+    explicit ScopedFont(SalGraphicsData & rData);
+
+    ~ScopedFont();
+
+private:
+    SalGraphicsData m_rData;
+    HFONT m_hOrigFont;
+};
+
+ScopedFont::ScopedFont(SalGraphicsData & rData): m_rData(rData)
+{
+    m_hOrigFont = m_rData.mhFont;
+    m_rData.mhFont = 0; // avoid deletion of current font
+}
+
+ScopedFont::~ScopedFont()
+{
+    if (m_hOrigFont)
+    {
+        // restore original font, destroy temporary font
+        HFONT hTempFont = m_rData.mhFont;
+        m_rData.mhFont = m_hOrigFont;
+        SelectObject(m_rData.mhDC, m_hOrigFont);
+        DeleteObject(hTempFont);
+    }
+}
+
+class ScopedTrueTypeFont
+{
+public:
+    inline ScopedTrueTypeFont(): m_pFont(0) {}
+
+    ~ScopedTrueTypeFont();
+
+    int open(void * pBuffer, sal_uInt32 nLen, sal_uInt32 nFaceNum);
+
+    inline TrueTypeFont * get() const { return m_pFont; }
+
+private:
+    TrueTypeFont * m_pFont;
+};
+
+ScopedTrueTypeFont::~ScopedTrueTypeFont()
+{
+    if (m_pFont != 0)
+        CloseTTFont(m_pFont);
+}
+
+int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
+                             sal_uInt32 nFaceNum)
+{
+    OSL_ENSURE(m_pFont == 0, "already open");
+    return OpenTTFont(pBuffer, nLen, nFaceNum, &m_pFont);
+}
+
+}
+
 BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pWidths, int nGlyphs, FontSubsetInfo& rInfo )
 {
-    // TODO: replace "return FALSE" error with something that cleans up
-    BOOL bRet = FALSE;
-
     // create matching ImplFontSelectData
     ImplFontSelectData aIFSD;
     aIFSD.mpFontData        = pFont;
@@ -1830,8 +1903,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     aIFSD.mbNonAntialiased  = false;
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
-    HFONT hOrigFont = maGraphicsData.mhFont;
-    maGraphicsData.mhFont = NULL;   // avoid deletion of current font
+    ScopedFont aOldFont(maGraphicsData);
     SetFont( &aIFSD );
 
 #ifdef DEBUG
@@ -1850,20 +1922,20 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     DWORD nFontSize = ::GetFontData( maGraphicsData.mhDC, 0, 0, NULL, 0 );
     if( nFontSize == GDI_ERROR )
         return FALSE;
-    char* pRawFontData = new char[ nFontSize ];
-    DWORD nFontSize2 = ::GetFontData( maGraphicsData.mhDC, 0, 0, (void*)pRawFontData, nFontSize );
+    ScopedCharArray xRawFontData(new char[ nFontSize ]);
+    DWORD nFontSize2 = ::GetFontData( maGraphicsData.mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize );
     if( nFontSize != nFontSize2 )
         return FALSE;
 
     // open font file
     int nFaceNum = 0; // TODO: find correct face number
-    TrueTypeFont* pSftTTF = NULL;
-    int nRC = ::OpenTTFont( pRawFontData, nFontSize, nFaceNum, &pSftTTF );
+    ScopedTrueTypeFont aSftTTF;
+    int nRC = aSftTTF.open( xRawFontData.get(), nFontSize, nFaceNum );
     if( nRC != SF_OK )
         return FALSE;
 
     TTGlobalFontInfo aTTInfo;
-    ::GetTTGlobalFontInfo( pSftTTF, &aTTInfo );
+    ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
     rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TRUETYPE;
     rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
     rInfo.m_nAscent     = +aTTInfo.winAscent;
@@ -1904,7 +1976,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     // fill pWidth array
     TTSimpleGlyphMetrics* pMetrics =
-        ::GetTTSimpleGlyphMetrics( pSftTTF, aShortIDs, nGlyphs, aIFSD.mbVertical );
+        ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphs, aIFSD.mbVertical );
     if( !pMetrics )
         return FALSE;
     sal_uInt16 nNotDefAdv   = pMetrics[0].adv;
@@ -1920,26 +1992,9 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         return FALSE;
     rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
     ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
-    nRC = ::CreateTTFromTTGlyphs( pSftTTF, aToFile.GetBuffer(), aShortIDs,
+    nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.GetBuffer(), aShortIDs,
             aTempEncs, nGlyphs, 0, NULL, TTCF_IncludeOS2 );
-    if( nRC == SF_OK )
-        bRet = TRUE;
-
-    // cleanup:
-    if( hOrigFont )
-    {
-        // restore original font, destroy temporary font
-        HFONT hTempFont = maGraphicsData.mhFont;
-        ::SelectObject( maGraphicsData.mhDC, hOrigFont );
-        maGraphicsData.mhFont = hOrigFont;
-        DeleteObject( hTempFont );
-    }
-    // close source font of subsetter
-    if( pSftTTF )
-        ::CloseTTFont( pSftTTF );
-    // delete source font raw data
-    delete[] pRawFontData;
-    return bRet;
+    return nRC == SF_OK;
 }
 
 //--------------------------------------------------------------------------
