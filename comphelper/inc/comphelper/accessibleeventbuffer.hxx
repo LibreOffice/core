@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventbuffer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-22 06:58:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
 } } } }
-namespace drafts { namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star {
     namespace accessibility { struct AccessibleEventObject; }
-} } } }
+} } }
 
 namespace comphelper {
 
@@ -138,7 +138,7 @@ public:
        operations on ::std::vector, especially ::std::bad_alloc.
      */
     void addEvent(
-        ::drafts::com::sun::star::accessibility::AccessibleEventObject const &
+        ::com::sun::star::accessibility::AccessibleEventObject const &
         rEvent,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > > const & rListeners);
