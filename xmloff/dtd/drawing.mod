@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.84 2003-09-01 11:56:17 obo Exp $
+	$Id: drawing.mod,v 1.85 2004-03-30 16:11:47 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -525,6 +525,7 @@
 <!-- Presentation notes -->
 <!ELEMENT presentation:notes (%shapes;)*>
 <!ATTLIST presentation:notes style:page-master-name %styleName; #IMPLIED>
+<!ATTLIST presentation:notes draw:style-name %styleName; #IMPLIED>
 
 <!-- presentation page layouts -->
 <!ELEMENT style:presentation-page-layout (presentation:placeholder)* >
