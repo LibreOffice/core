@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:24:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "¼±";
         Text[ turkish ] = "Çizgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea";
     };
     FixedText FT_LINE_STYLE
     {
@@ -146,6 +147,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "À¯Çü(~S)";
         Text[ turkish ] = "Biçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Estilo";
     };
     ListBox LB_LINE_STYLE
     {
@@ -183,6 +185,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "»ö(~C)";
         Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Color";
     };
     ListBox LB_COLOR
     {
@@ -220,6 +223,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField MTR_FLD_LINE_WIDTH
     {
@@ -263,6 +267,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "Åõ¸í(~T)";
         Text[ turkish ] = "Saydamlýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tran~sparencia";
     };
     MetricField MTR_LINE_TRANSPARENT
     {
@@ -306,6 +311,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "¼± ³¡";
         Text[ turkish ] = "Çizgi uçlarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fin de línea";
     };
     FixedText FT_LINE_ENDS_STYLE
     {
@@ -334,6 +340,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "À¯Çü(~Y)";
         Text[ turkish ] = "Biçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Es~tilo";
     };
     ListBox LB_START_STYLE
     {
@@ -380,6 +387,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "³Êºñ(~D)";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField MTR_FLD_START_WIDTH
     {
@@ -443,6 +451,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "°¡¿îµ¥(~N)";
         Text[ turkish ] = "Ortala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cen~trado";
     };
     TriStateBox TSB_CENTER_END
     {
@@ -472,6 +481,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "°¡¿îµ¥(~E)";
         Text[ turkish ] = "Ortala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cent~rado";
     };
     CheckBox CBX_SYNCHRONIZE
     {
@@ -501,6 +511,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "µ¿±âÈ­ Á¾·á(~Z)";
         Text[ turkish ] = "Uç~larý eþitle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sincroni~zar finales";
     };
     GroupBox GRP_PREVIEW
     {
@@ -529,6 +540,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -566,6 +578,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "±âÈ£";
         Text[ turkish ] = "Simge";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Símbolo";
     };
 
     MenuButton MB_SYMBOL_BITMAP
@@ -604,6 +617,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ korean ] = "±âÈ£°¡ ¾ø½À´Ï´Ù.";
                     Text[ turkish ] = "Simge yok";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "Sin símbolo";
                 };
                 MenuItem
                 {
@@ -621,7 +635,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ swedish ] = "Automatiskt";
                     Text[ polish ] = "Automatycznie";
                     Text[ portuguese_brazilian ] = "Automatic";
-                    Text[ japanese ] = "Ž©“®“I";
+                    Text[ japanese ] = "Ž©“®";
                     Text[ chinese_simplified ] = "×Ô¶¯";
                     Text[ chinese_traditional ] = "¦Û°Ê";
                     Text[ arabic ] = "ÊáÞÇÆí";
@@ -629,6 +643,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ korean ] = "ÀÚµ¿";
                     Text[ turkish ] = "Otomatik";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "Automático";
                 };
                 MenuItem
                 {
@@ -654,6 +669,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ korean ] = "... ÆÄÀÏ·Î ºÎÅÍ ";
                     Text[ turkish ] = "Dosyadan...";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "De archivo...";
                 };
                 MenuItem
                 {
@@ -679,6 +695,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ korean ] = "°¶·¯¸®";
                     Text[ turkish ] = "Galeri";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "Gallery";
                 };
                 MenuItem
                 {
@@ -704,6 +721,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ korean ] = "±âÈ£";
                     Text[ turkish ] = "Simgeler";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "Símbolos";
                 };
             };
         };
@@ -726,6 +744,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "¼±ÅÃ...";
         Text[ turkish ] = "Seçim...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selec~ción...";
     };
     FixedText FT_SYMBOL_WIDTH
     {
@@ -753,6 +772,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField MF_SYMBOL_WIDTH
     {
@@ -799,6 +819,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField MF_SYMBOL_HEIGHT
     {
@@ -845,9 +866,11 @@ TabPage RID_SVXPAGE_LINE
         Text[ korean ] = "Á¶Á¤";
         Text[ turkish ] = "Orantýlý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sincronización";
     };
     Text[ turkish ] = "Çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea";
 };
 
 // Defining LineStyles --------------------
@@ -898,6 +921,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "Á¤ÀÇ";
         Text[ turkish ] = "Taným";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Definición";
     };
     FixedText FT_TYPE
     {
@@ -926,6 +950,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "Çü½Ä(~T)";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Tipo";
     };
     ListBox LB_TYPE_1
     {
@@ -1049,6 +1074,11 @@ TabPage RID_SVXPAGE_LINE_DEF
                 < " " ; Default ; > ;
             < " " ; Default ; > ;
         };
+    StringList [ catalan ] =
+    {
+            < "Punto" ; Default ; > ;
+        < "Trazo" ; Default ; > ;
+    };
     };
     ListBox LB_TYPE_2
     {
@@ -1172,6 +1202,11 @@ TabPage RID_SVXPAGE_LINE_DEF
                 < " " ; Default ; > ;
             < " " ; Default ; > ;
         };
+    StringList [ catalan ] =
+    {
+            < "Punto" ; Default ; > ;
+        < "Trazo" ; Default ; > ;
+    };
     };
     FixedText FT_NUMBER
     {
@@ -1200,6 +1235,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "¼ö(~N)";
         Text[ turkish ] = "Sayý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Número";
     };
     NumericField NUM_FLD_1
     {
@@ -1256,6 +1292,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "±æÀÌ(~L)";
         Text[ turkish ] = "Uzunluk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "L~ongitud";
     };
     MetricField MTR_FLD_LENGTH_1
     {
@@ -1324,6 +1361,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "°£°Ý(~S)";
         Text[ turkish ] = "Aralýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~spacio";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1371,6 +1409,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "¼± ³Êºñ¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "Çizgi~ geniþliðine uydur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar al ancho de la línea";
     };
 
     // ----------------------------------------
@@ -1402,6 +1441,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "¼± À¯Çü";
         Text[ turkish ] = "Çizgi biçimleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estilos de línea";
     };
     ListBox LB_LINESTYLES
     {
@@ -1440,6 +1480,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "Ãß°¡(~A)...";
         Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir...";
     };
     PushButton BTN_MODIFY
     {
@@ -1469,6 +1510,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "¼öÁ¤(~M)...";
         Text[ turkish ] = "Deðiþtir...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Modificar...";
     };
     PushButton BTN_DELETE
     {
@@ -1498,6 +1540,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "»èÁ¦(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar...";
     };
     ImageButton BTN_LOAD
     {
@@ -1541,6 +1584,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienstiltabelle laden";
+        QuickHelpText[ catalan ] = "Cargar tabla de estilos de líneas";
     };
     ImageButton BTN_SAVE
     {
@@ -1584,6 +1628,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienstiltabelle sichern";
+        QuickHelpText[ catalan ] = "Guardar tabla de estilos de líneas";
     };
     GroupBox GRP_PREVIEW
     {
@@ -1612,6 +1657,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -1631,6 +1677,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     Text[ korean ] = "¼± À¯Çü Á¤ÀÇ";
     Text[ turkish ] = "Çizgi biçimlerini tanýmla";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir estilos de línea";
 };
 
 // Defining LineEnds --------------------
@@ -1681,6 +1728,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Indicación";
     };
     FixedText FI_TIP
     {
@@ -1711,6 +1759,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ korean ] = "¼±ÅÃµÈ °³Ã¼¸¦ Ãß°¡ÇÏ¿© »õ·Î¿î ¼± ³¡À» ¸¸µé±â";
         Text[ turkish ] = "Seçilen bir nesneyi ekleyerek yeni çizgi uçlarý elde edebilirsiniz.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Añada un objeto seleccionado para obtener nuevos finales de línea.";
     };
 
     GroupBox GRP_LINEENDS
@@ -1740,6 +1789,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ korean ] = "¼± ³¡";
         Text[ turkish ] = "Çizgi ucu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fin de línea";
     };
     Edit EDT_NAME
     {
@@ -1785,6 +1835,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ korean ] = "Ãß°¡(~A)...";
         Text[ turkish ] = "Ekle...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Añadir...";
     };
     PushButton BTN_MODIFY
     {
@@ -1814,6 +1865,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ korean ] = "¼öÁ¤(~M)";
         Text[ turkish ] = "Deðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Modificar";
     };
     PushButton BTN_DELETE
     {
@@ -1843,6 +1895,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ korean ] = "»èÁ¦(~D)...";
         Text[ turkish ] = "Sil...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar...";
     };
     ImageButton BTN_LOAD
     {
@@ -1886,6 +1939,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienendentabelle laden";
+        QuickHelpText[ catalan ] = "Cargar tabla de finales de línea";
     };
     ImageButton BTN_SAVE
     {
@@ -1929,6 +1983,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienendentabelle sichern";
+        QuickHelpText[ catalan ] = "Guardar tabla de finales de línea";
     };
 
     GroupBox GRP_PREVIEW
@@ -1958,6 +2013,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ korean ] = "¹Ì¸®º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Previsualización";
     };
     Control CTL_PREVIEW
     {
@@ -1977,6 +2033,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     Text[ korean ] = "¼± ³¡ Á¤ÀÇ";
     Text[ turkish ] = "Çizgi uçlarýný tanýmla";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Definir fin de líneas";
 };
  // RID_SVXDLG_LINE ----------------------------------------------------------
 TabDialog RID_SVXDLG_LINE
@@ -2032,6 +2089,7 @@ TabDialog RID_SVXDLG_LINE
                 Text[ korean ] = "¼±";
                 Text[ turkish ] = "Çizgi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Línea";
             };
             PageItem
             {
@@ -2060,6 +2118,7 @@ TabDialog RID_SVXDLG_LINE
                 Text[ korean ] = "¼± À¯Çü";
                 Text[ turkish ] = "Çizgi biçimleri";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Estilos de línea";
             };
             PageItem
             {
@@ -2088,6 +2147,7 @@ TabDialog RID_SVXDLG_LINE
                 Text[ korean ] = "¼± ³¡";
                 Text[ turkish ] = "Çizgi uçlarý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fin de línea";
             };
         };
     };
@@ -2101,6 +2161,7 @@ TabDialog RID_SVXDLG_LINE
     Text[ korean ] = "¼±";
     Text[ turkish ] = "Çizgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea";
 };
  // ********************************************************************** EOF
 
