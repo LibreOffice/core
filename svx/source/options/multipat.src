@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-07 22:26:13 $
+ *  last change: $Author: pb $ $Date: 2001-12-12 10:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     {
         Pos = MAP_APPFONT ( 200 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
     };
     CancelButton BTN_MULTIPATH_CANCEL
     {
@@ -372,15 +373,4 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ catalan ] = "El archivo %1 ya existe.";
     Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
 };
-
-
-
-
-
-
-
-
-
-
-
 
