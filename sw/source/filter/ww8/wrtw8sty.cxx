@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:40:59 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ void WW8WrtStyle::Set1StyleDefaults(const SwFmt& rFmt, bool bPap)
     }
     else
     {
-           aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ RES_CHRATR_FONTSIZE - RES_CHRATR_BEGIN ] = 1;
         aFlags[ RES_CHRATR_LANGUAGE - RES_CHRATR_BEGIN ] = 1;
     }
 
