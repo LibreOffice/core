@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: npower $ $Date: 2003-02-18 14:54:34 $
+#   last change: $Author: dfoster $ $Date: 2003-02-18 18:14:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,8 +79,8 @@
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <!-- <pathelement location="${solar.jar}/unoil.jar"/> -->
-    <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>  -->
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
@@ -188,14 +188,8 @@
   <target name="buildunopackage_win9" depends="build.conditions" if="win9.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <exec executable="regmerge">
-        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
-        <arg value="/"/>
-        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcssscriptframework.db"/>
-        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfprovider.db"/>
-        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfstorage.db"/>
-        <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfsecurity.db"/>
-    </exec>
+    <copy file="${solar.bin}/ScriptFramework.rdb"
+        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -207,23 +201,13 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${prj}/../unoil/wntmsci9${proext}/class/unoil.jar"
+    <copy file="${solar.jar}/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
 <!--  <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <exec executable="regmerge">
-        <arg value="/tmp/ScriptFramework.rdb"/>
-        <arg value="/"/>
-        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcssscriptframework.db"/>
-        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfprovider.db"/>
-        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfstorage.db"/>
-        <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfsecurity.db"/>
-    </exec>
-    <copy file="/tmp/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/>
-    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
+    <copy file="${solar.bin}/ScriptFramework.rdb"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
@@ -236,24 +220,14 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${prj}/../unoil/wntmsci7${proext}/class/unoil.jar"
+    <copy file="${solar.jar}/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target> -->
   <target name="buildunopackage_linux" depends="build.conditions" if="linx86.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <exec executable="regmerge">
-        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
-        <arg value="/"/>
-        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcssscriptframework.db"/>
-        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfprovider.db"/>
-        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfstorage.db"/>
-        <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfsecurity.db"/>
-    </exec>
-    <!-- <copy file="/tmp/ScriptFramework.rdb"
+    <copy file="${solar.bin}/ScriptFramework.rdb"
         todir="${out}/class/sframework/"/>
-    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
-        todir="${out}/class/sframework/"/> -->
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -265,24 +239,14 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${prj}/../unoil/unxlngi4${proext}/class/unoil.jar"
+    <copy file="${solar.jar}/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
   <target name="buildunopackage_solaris" depends="build.conditions" if="solsparc.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
-    <exec executable="regmerge">
-        <arg value="${out}/class/sframework/ScriptFramework.rdb"/>
-        <arg value="/"/>
-        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcssscriptframework.db"/>
-        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcsssfprovider.db"/>
-        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcsssfstorage.db"/>
-        <arg value="${prj}/../offapi/unxsols4${proext}/ucr/dcsssfsecurity.db"/>
-    </exec>
-    <!-- <copy file="/tmp/ScriptFramework.rdb"
+    <copy file="${solar.bin}/ScriptFramework.rdb"
         todir="${out}/class/sframework/"/>
-    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
-        todir="${out}/class/sframework/"/>-->
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -294,7 +258,7 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${prj}/../unoil/unxsols4${proext}/class/unoil.jar"
+    <copy file="${solar.jar}/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
   <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_linux,buildunopackage_solaris">
