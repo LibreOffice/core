@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-08 15:42:14 $
+ *  last change: $Author: vg $ $Date: 2001-11-14 15:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,8 @@ namespace sfx2
     {
         // reset
         m_bValidCurrentState = sal_False;
-        m_aCurrentState.swap( TemplateFolderContent() );
+        TemplateFolderContent aTemplateFolderContent;
+        m_aCurrentState.swap( aTemplateFolderContent );
 
         // the template directories from the config
         String      aDirs = SvtPathOptions().GetTemplatePath();
@@ -744,7 +745,8 @@ namespace sfx2
         DBG_ASSERT( m_pCacheStream, "TemplateFolderCacheImpl::readPreviousState: not to be called without stream!" );
 
         // reset
-        m_aPreviousState.swap( TemplateFolderContent() );
+        TemplateFolderContent aTemplateFolderContent;
+        m_aPreviousState.swap( aTemplateFolderContent );
 
         // check the magic number
         sal_Int32 nMagic = 0;
@@ -880,6 +882,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/11/08 15:42:14  obo
+ *  #65293# compile err solaris
+ *
  *  Revision 1.1  2001/11/07 14:28:21  fs
  *  initial checkin - helper class for caching the state of OOo's template folders
  *
