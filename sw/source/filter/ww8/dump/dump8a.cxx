@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dump8a.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-24 14:01:34 $
+ *  last change: $Author: khz $ $Date: 2000-11-02 13:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2455,6 +2455,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
     case 0xF014:    pRecNm = "DFF_msofbtArcRule"; break;
     case 0xF015:    pRecNm = "DFF_msofbtClientRule"; break;
     case 0xF017:    pRecNm = "DFF_msofbtCalloutRule"; break;
+    case 0xF122:    pRecNm = "DFF_msofbtUDefProp"; break;
     }
 
     *pOut << hex6 << nPos << indent1;
@@ -2566,6 +2567,25 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
         }
         break;
 
+    case 0xF122:
+        {
+            if( 3 < nLength )
+            {
+                *pOut << "      " << indent1 << " Data:" << hex;
+                UINT8 nParam;
+                for( UINT32 n = 0; n < nLength; ++n )
+                {
+                    if( !WW8ReadBYTE( *xTableStream, nParam ) )
+                        break;
+
+                    UINT16 nHexParam = nParam;
+                    *pOut << " 0x" << nHexParam;
+                }
+                *pOut << dec << endl1;
+            }
+        }
+        break;
+
     case 0xF016:    //ESCHER_CLSID
     case 0xF11A:    //ESCHER_ColorMRU
     case 0xF11E:    //ESCHER_SplitMenuColors
@@ -2629,15 +2649,17 @@ void DumpEscherRecs( ULONG nPos, UINT32 nLength )
         if( !::ReadEsherRec( *xTableStream, nVer, nInst, nFbt, nRecLen ))
             break;
 
-        if( !( 0xf000 <= nFbt && nFbt <= 0xf120 ))
+        if( (0xf000 > nFbt) )//|| (0xf122 < nFbt) )
         {
             xTableStream->Seek( nPos + nReadLen );
             unsigned char c;
             *xTableStream >> c;
 
             ++nReadLen;
-            if( !::ReadEsherRec( *xTableStream, nVer, nInst, nFbt, nRecLen )
-                || !( 0xf000 <= nFbt && nFbt <= 0xf120 ) )
+            if(    ( !::ReadEsherRec( *xTableStream, nVer, nInst, nFbt, nRecLen ) )
+                || ( 0xf000 > nFbt )
+                //|| ( 0xf122 < nFbt )
+                )
                 break;
 
             *pOut << hex6 << nPos + nReadLen - 1 << indent1
@@ -3062,11 +3084,14 @@ void DeInit()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8a.cxx,v 1.2 2000-10-24 14:01:34 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/dump/dump8a.cxx,v 1.3 2000-11-02 13:58:01 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/24 14:01:34  jp
+      changes for unicode
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 
