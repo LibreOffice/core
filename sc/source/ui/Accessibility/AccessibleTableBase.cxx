@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:13:40 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
 }
 
@@ -153,6 +154,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
 
@@ -176,6 +178,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
@@ -196,6 +199,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
@@ -297,6 +301,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     nRow -= maRange.aStart.Row();
     nColumn -= maRange.aStart.Col();
     return (nRow * maRange.aEnd.Col() + 1) + nColumn;
@@ -306,6 +311,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nRow(-1);
     nRow = nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
     return nRow;
@@ -315,6 +321,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nColumn(-1);
     nColumn = nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
     return nColumn;
@@ -327,8 +334,9 @@ sal_Int32 SAL_CALL
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-/*  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1)
-            (maRange.aEnd.Col() - maRange.aStart.Col() + 1);*/
+    IsObjectValid();
+//  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
+//          (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
     return 1;
 }
 
@@ -338,6 +346,7 @@ uno::Reference< XAccessible > SAL_CALL
         lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nRow(0);
     sal_Int32 nColumn(0);
     sal_Int32 nTemp(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
@@ -358,6 +367,7 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     rtl::OUString sName;
     String sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
@@ -452,6 +462,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:12:02 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessible
         throw (uno::RuntimeException)
 {
      ScUnoGuard aGuard;
+    IsObjectValid();
     if(!mpTextHelper)
         CreateTextHelper();
 
@@ -151,6 +152,7 @@ sal_Int32 SAL_CALL
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChildCount();
@@ -162,6 +164,7 @@ uno::Reference< XAccessible > SAL_CALL
         lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);
@@ -179,14 +182,17 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         xParentStates = xParentContext->getAccessibleStateSet();
     }
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
-//  if (IsDefunc(xParentStates))
-//      pStateSet->AddState(AccessibleStateType::DEFUNC);
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::MULTILINE);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    if (IsDefunc())
+        pStateSet->AddState(AccessibleStateType::DEFUNC);
+    else
+    {
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::MULTILINE);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
+    }
     return pStateSet;
 }
 
@@ -197,6 +203,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:17:17 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  Internal  ========================================================
+    void SetDrawBroadcaster();
+
     sal_Int32 GetCount() const;
     uno::Reference< XAccessible > Get(sal_Int32 nIndex) const;
     uno::Reference< XAccessible > GetAt(const awt::Point& rPoint) const;
@@ -329,6 +331,16 @@ ScChildrenShapes::~ScChildrenShapes()
         SfxBroadcaster* pDrawBC = mpViewShell->GetViewData()->GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
             EndListening(*pDrawBC);
+    }
+}
+
+void ScChildrenShapes::SetDrawBroadcaster()
+{
+    if (mpViewShell)
+    {
+        SfxBroadcaster* pDrawBC = mpViewShell->GetViewData()->GetDocument()->GetDrawBroadcaster();
+        if (pDrawBC)
+            StartListening(*pDrawBC, TRUE);
     }
 }
 
@@ -468,7 +480,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
         if (pWindow)
         {
             Point aPnt( rPoint.X, rPoint.Y );
-            pWindow->PixelToLogic( aPnt );
+            aPnt = pWindow->PixelToLogic( aPnt );
             SdrObject * pObj = GetDrawPage()->CheckHit(aPnt, 1, NULL, false);
             if (pObj->GetLayer() != SC_LAYER_INTERN)
             {
@@ -739,6 +751,7 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
         uno::Reference<container::XEnumeration> xEnum = xEnumAcc->createEnumeration();
         if (xEnum.is())
         {
+            sal_Int32 nSelectedShapesCount(0);
             SortedShapesList aShapesList;
             while (xEnum->hasMoreElements())
             {
@@ -749,6 +762,7 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                     ScAccessibleShapeData aShapeData;
                     aShapeData.xShape = xShape;
                     aShapesList.insert(aShapeData);
+                    ++nSelectedShapesCount;
                 }
             }
 
@@ -757,6 +771,7 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
             SortedShapesList::const_iterator aXShapesEndItr(aShapesList.end());
             SortedShapesList::iterator aDataItr(maSortedShapes.begin());
             SortedShapesList::const_iterator aDataEndItr(maSortedShapes.end());
+            SortedShapesList::const_iterator aFocusedItr = aDataEndItr;
             while((aDataItr != aDataEndItr))
             {
                 sal_Int8 nComp(0);
@@ -770,7 +785,11 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                     {
                         aDataItr->bSelected = sal_True;
                         if (aDataItr->pAccShape)
+                        {
                             aDataItr->pAccShape->SetState(AccessibleStateType::SELECTED);
+                            aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                        }
+                        aFocusedItr = aDataItr;
                     }
                     ++aDataItr;
                     ++aXShapesItr;
@@ -781,7 +800,10 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                     {
                         aDataItr->bSelected = sal_False;
                         if (aDataItr->pAccShape)
+                        {
                             aDataItr->pAccShape->ResetState(AccessibleStateType::SELECTED);
+                            aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                        }
                     }
                     ++aDataItr;
                 }
@@ -791,6 +813,8 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                     ++aXShapesItr;
                 }
             }
+            if ((aFocusedItr != aDataEndItr) && aFocusedItr->pAccShape && (nSelectedShapesCount == 1))
+                aFocusedItr->pAccShape->SetState(AccessibleStateType::FOCUSED);
         }
     }
 }
@@ -1112,6 +1136,11 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             CommitChange(aEvent); // there is a new child - event
         }
+        else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        {
+            if (mpChildrenShapes)
+                mpChildrenShapes->SetDrawBroadcaster();
+        }
     }
 
     ScAccessibleDocumentBase::Notify(rBC, rHint);
@@ -1173,6 +1202,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Reference<XAccessible> xAccessible = NULL;
     if (mpChildrenShapes)
         xAccessible = mpChildrenShapes->GetAt(rPoint);
@@ -1185,6 +1215,7 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -1210,6 +1241,7 @@ sal_Int32 SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nShapesCount(0);
     if (mpChildrenShapes)
         nShapesCount = mpChildrenShapes->GetCount();
@@ -1223,6 +1255,7 @@ uno::Reference<XAccessible> SAL_CALL
         lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Reference<XAccessible> xAccessible;// = GetChild(nIndex);
     if (!xAccessible.is())
     {
@@ -1249,14 +1282,17 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-    if (IsEditable(xParentStates))
-        pStateSet->AddState(AccessibleStateType::EDITABLE);
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    else
+    {
+        if (IsEditable(xParentStates))
+            pStateSet->AddState(AccessibleStateType::EDITABLE);
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::OPAQUE);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
+    }
     return pStateSet;
 }
 
@@ -1267,6 +1303,7 @@ void SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (nChildIndex == 0)
     {
         if (mpViewShell)
@@ -1292,6 +1329,7 @@ sal_Bool SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Bool bResult(sal_False);
 
     if (nChildIndex == 0)
@@ -1312,6 +1350,7 @@ void SAL_CALL
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     if (mpChildrenShapes)
         mpChildrenShapes->DeselectAll(); //deselects all (also the table)
@@ -1322,6 +1361,7 @@ void SAL_CALL
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     if (mpChildrenShapes)
         mpChildrenShapes->SelectAll();
@@ -1338,6 +1378,7 @@ sal_Int32 SAL_CALL
         throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     sal_Int32 nCount(0);
 
     if (mpChildrenShapes)
@@ -1354,6 +1395,7 @@ uno::Reference<XAccessible > SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
     sal_Bool bTabMarked(IsTableSelected());
 
@@ -1376,6 +1418,7 @@ void SAL_CALL
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     sal_Bool bTabMarked(IsTableSelected());
 
@@ -1432,6 +1475,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
@@ -1446,12 +1490,14 @@ uno::Sequence<sal_Int8> SAL_CALL
 sal_Bool ScAccessibleDocument::IsValid (void) const
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     return (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose);
 }
 
 Rectangle ScAccessibleDocument::GetVisibleArea() const
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     Rectangle aVisRect(GetBoundingBox());
 
     aVisRect.SetPos(Point(0, 0));
@@ -1466,6 +1512,7 @@ Rectangle ScAccessibleDocument::GetVisibleArea() const
 Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     Point aPoint;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
@@ -1476,6 +1523,7 @@ Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
 Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     Size aSize;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
@@ -1486,6 +1534,7 @@ Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
 Point ScAccessibleDocument::PixelToLogic (const Point& rPoint) const
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     Point aPoint;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
@@ -1496,6 +1545,7 @@ Point ScAccessibleDocument::PixelToLogic (const Point& rPoint) const
 Size ScAccessibleDocument::PixelToLogic (const Size& rSize) const
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     Size aSize;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
@@ -1525,6 +1575,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM ("Spreadsheet Document View "));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += rtl::OUString::valueOf(nNumber);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-28 14:25:37 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,6 +662,8 @@ public:
     uno::Reference<XAccessible> GetForeShape(sal_Int32 nIndex) const;
     sal_Int32 GetControlCount() const;
     uno::Reference<XAccessible> GetControl(sal_Int32 nIndex) const;
+
+    void SetDrawBroadcaster();
 private:
     ScAccessibleDocumentPagePreview* mpAccDoc;
     ScPreviewShell* mpViewShell;
@@ -701,6 +703,16 @@ ScShapeChilds::~ScShapeChilds()
         SfxBroadcaster* pDrawBC = mpViewShell->GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
             EndListening(*pDrawBC);
+    }
+}
+
+void ScShapeChilds::SetDrawBroadcaster()
+{
+    if (mpViewShell)
+    {
+        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument()->GetDrawBroadcaster();
+        if (pDrawBC)
+            StartListening(*pDrawBC, TRUE);
     }
 }
 
@@ -1403,6 +1415,10 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             Rectangle aVisRect( aPoint, aOutputSize );
             GetNotesChilds()->DataChanged(aVisRect);
         }
+        else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        {
+            GetShapeChilds()->SetDrawBroadcaster();
+        }
     }
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }
@@ -1413,6 +1429,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                                 throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
 
     if ( mpViewShell )
@@ -1449,6 +1466,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
 void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard();
+    IsObjectValid();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -1465,6 +1483,7 @@ void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeEx
 long SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void) throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     long nRet = 0;
     if ( mpViewShell )
@@ -1480,6 +1499,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
                 throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     uno::Reference<XAccessible> xAccessible;
 
     if ( mpViewShell )
@@ -1548,13 +1568,16 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::ge
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-    // never editable
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    else
+    {
+        // never editable
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::OPAQUE);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
+    }
     return pStateSet;
 }
 
@@ -1586,6 +1609,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
@@ -1607,6 +1631,7 @@ uno::Sequence<sal_Int8> SAL_CALL
                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Spreadsheet Document Page Preview"));
     return sName;
 }

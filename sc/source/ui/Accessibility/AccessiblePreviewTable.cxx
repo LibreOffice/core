@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:19:18 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ void SAL_CALL ScAccessiblePreviewTable::release()
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount() throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -178,6 +179,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowCount() throw (uno:
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount() throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -191,6 +193,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sa
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -220,6 +223,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -249,6 +253,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -282,6 +287,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_In
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -353,6 +359,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCe
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -411,6 +418,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleIndex( sal_Int32 nRow,
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -430,6 +438,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRow( sal_Int32 nChildI
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -448,6 +457,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumn( sal_Int32 nChi
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -468,6 +478,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
                                 throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -506,6 +517,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleAt
 void SAL_CALL ScAccessiblePreviewTable::grabFocus() throw (uno::RuntimeException)
 {
      ScUnoGuard aGuard;
+    IsObjectValid();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -519,6 +531,7 @@ void SAL_CALL ScAccessiblePreviewTable::grabFocus() throw (uno::RuntimeException
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleChildCount() throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -532,6 +545,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCh
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     FillTableInfo();
 
@@ -580,12 +594,15 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAcce
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    else
+    {
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::OPAQUE);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
+    }
     return pStateSet;
 }
 

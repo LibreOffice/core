@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-28 15:00:24 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAt( 
                                 throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     uno::Reference<XAccessible> xRet;
 
@@ -234,6 +235,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAt( 
 void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException)
 {
      ScUnoGuard aGuard;
+    IsObjectValid();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -247,6 +249,7 @@ void SAL_CALL ScAccessiblePageHeader::grabFocus() throw (uno::RuntimeException)
 sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     if((mnChildCount < 0) && mpViewShell)
     {
@@ -280,6 +283,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
 
     uno::Reference<XAccessible> xRet;
 
@@ -316,12 +320,15 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccess
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    else
+    {
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::OPAQUE);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
+    }
     return pStateSet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:21:43 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAt(
                                 throw (uno::RuntimeException)
 {
      ScUnoGuard aGuard;
+    IsObjectValid();
     if(!mpTextHelper)
         CreateTextHelper();
 
@@ -145,6 +146,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAt(
 void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
 {
      ScUnoGuard aGuard;
+    IsObjectValid();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -158,6 +160,7 @@ void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
 sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChildCount();
@@ -167,6 +170,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChi
                             throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     if (!mpTextHelper)
         CreateTextHelper();
     return mpTextHelper->GetChild(nIndex);
@@ -186,15 +190,18 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
-    pStateSet->AddState(AccessibleStateType::ENABLED);
-    pStateSet->AddState(AccessibleStateType::MULTILINE);
-    if (IsOpaque(xParentStates))
-        pStateSet->AddState(AccessibleStateType::OPAQUE);
-    if (isShowing())
-        pStateSet->AddState(AccessibleStateType::SHOWING);
-    pStateSet->AddState(AccessibleStateType::TRANSIENT);
-    if (isVisible())
-        pStateSet->AddState(AccessibleStateType::VISIBLE);
+    else
+    {
+        pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::MULTILINE);
+        if (IsOpaque(xParentStates))
+            pStateSet->AddState(AccessibleStateType::OPAQUE);
+        if (isShowing())
+            pStateSet->AddState(AccessibleStateType::SHOWING);
+        pStateSet->AddState(AccessibleStateType::TRANSIENT);
+        if (isVisible())
+            pStateSet->AddState(AccessibleStateType::VISIBLE);
+    }
     return pStateSet;
 }
 
@@ -225,6 +232,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    IsObjectValid();
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {

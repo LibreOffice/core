@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:05:28 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 08:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,6 +523,8 @@ ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
 
 ScAccessibleCellTextData::~ScAccessibleCellTextData()
 {
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl(Link());
     if (mpViewForwarder)
         delete mpViewForwarder;
     if (mpEditViewForwarder)
@@ -568,7 +570,8 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             mpViewShell->GetViewData()->GetEditView( meSplitPos, pEditView, nCol, nRow );
             if (pEditView)
             {
-                pForwarder = new SvxEditEngineForwarder(*(pEditView->GetEditEngine()));
+                pEditEngine = (ScFieldEditEngine*)pEditView->GetEditEngine();
+                pForwarder = new SvxEditEngineForwarder(*pEditEngine);
                 bHasForwarder = sal_True;
             }
         }
@@ -580,14 +583,16 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         // remove Forwarder created with EditEngine from EditView
         if (pForwarder)
             DELETEZ( pForwarder );
+        pEditEngine->SetNotifyHdl(Link());
         // don't delete, because it is the EditEngine of the EditView
         pEditEngine = NULL;
+        mbViewEditEngine = sal_False;
     }
 
     if (!bHasForwarder)
         ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
 
-    if (pEditEngine)
+    if (pEditEngine && mpViewShell)
     {
         sal_Int32 nSizeX, nSizeY;
         mpViewShell->GetViewData()->GetMergeSizePixel(
@@ -597,7 +602,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 
         Window* pWin = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWin)
-            pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+            aSize = pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
 
         pEditEngine->SetPaperSize(aSize);
 
@@ -659,6 +664,8 @@ ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell*
 
 ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
 {
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl(Link());
     if (mpViewForwarder)
         delete mpViewForwarder;
 }
@@ -692,7 +699,7 @@ SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
         Size aSize(mpViewShell->GetLocationData().GetCellOutputRect(aCellPos).GetSize());
         Window* pWin = mpViewShell->GetWindow();
         if (pWin)
-            pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+            aSize = pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
         pEditEngine->SetPaperSize(aSize);
     }
 
@@ -745,6 +752,8 @@ ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScP
 
 ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 {
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl(Link());
     if (mpViewForwarder)
         delete mpViewForwarder;
 }
@@ -811,7 +820,7 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
             Rectangle aVisRect( aPoint, aOutputSize );
             Size aSize(mpViewShell->GetLocationData().GetHeaderCellOutputRect(aVisRect, aCellPos, mbColHeader).GetSize());
             if (pWindow)
-                pWindow->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+                aSize = pWindow->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
             pEditEngine->SetPaperSize(aSize);
         }
         pEditEngine->SetText( maText );
@@ -878,6 +887,8 @@ ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
 
     if (mpDocSh)
         mpDocSh->GetDocument()->RemoveUnoObject(*this);
+    if (mpEditEngine)
+        mpEditEngine->SetNotifyHdl(Link());
     delete mpEditEngine;
     delete mpForwarder;
 }
@@ -946,7 +957,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         Size aSize(aVisRect.GetSize());
         Window* pWin = mpViewShell->GetWindow();
         if (pWin)
-            pWin->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
+            aSize = pWin->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
         mpEditEngine->SetPaperSize(aSize);
     }
     if (mpEditObj)
@@ -988,6 +999,8 @@ ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
 
     if (mpDocSh)
         mpDocSh->GetDocument()->RemoveUnoObject(*this);
+    if (mpEditEngine)
+        mpEditEngine->SetNotifyHdl(Link());
     delete mpEditEngine;
     delete mpForwarder;
 }
@@ -1054,7 +1067,7 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
             Rectangle aVisRect( aPoint, aOutputSize );
             Size aSize(mpViewShell->GetLocationData().GetNoteInRangeOutputRect(aVisRect, mbMarkNote, maCellPos).GetSize());
             if (pWindow)
-                pWindow->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
+                aSize = pWindow->PixelToLogic(aSize, mpEditEngine->GetRefMapMode());
             mpEditEngine->SetPaperSize(aSize);
         }
         mpEditEngine->SetText( msText );
