@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-15 15:10:20 $
+ *  last change: $Author: mba $ $Date: 2001-11-19 11:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,7 +998,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             else
                 pImp->bDidDangerousSave=sal_False;
 
-        SetEAs_Impl(rMedium);
+        if ( pImp->bIsSaving )
+            SetEAs_Impl(rMedium);
     }
 
     return bOk;
