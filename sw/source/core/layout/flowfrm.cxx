@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:48:53 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@
 #include "section.hxx"
 #include "dbg_lay.hxx"
 #include "lineinfo.hxx"
+// OD 2004-03-02 #106629#
+#ifndef _FMTCLBL_HXX
+#include <fmtclbl.hxx>
+#endif
 
 BOOL SwFlowFrm::bMoveBwdJump = FALSE;
 
@@ -1378,8 +1382,24 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             pPre = pSect->FindLastCntnt();
             // If the last content is in a table _inside_ the section,
             // take the table herself.
-            if( pPre && pPre->IsInTab() && !pSect->IsInTab() )
-                pPre = pPre->FindTabFrm();
+            // OD 2004-02-18 #106629# - correction:
+            // Check directly, if table is inside table, instead of indirectly
+            // by checking, if section isn't inside a table
+            if ( pPre && pPre->IsInTab() )
+            {
+                const SwTabFrm* pTableFrm = pPre->FindTabFrm();
+                if ( pSect->IsAnLower( pTableFrm ) )
+                {
+                    pPre = pTableFrm;
+                }
+            }
+            // OD 2004-02-18 #106629# correction: skip hidden text frames
+            while ( pPre &&
+                    pPre->IsTxtFrm() &&
+                    static_cast<const SwTxtFrm*>(pPre)->IsHiddenNow() )
+            {
+                pPre = pPre->GetPrev();
+            }
         }
         break;
     } while( pPre );
@@ -1522,6 +1542,44 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
 
     delete pAccess;
     return nUpper;
+}
+
+/** calculation of lower space
+
+    OD 2004-03-02 #106629#
+
+    @author OD
+*/
+SwTwips SwFlowFrm::CalcLowerSpace( const SwBorderAttrs* _pAttrs ) const
+{
+    SwTwips nLowerSpace = 0;
+
+    SwBorderAttrAccess* pAttrAccess = 0L;
+    if ( !_pAttrs )
+    {
+        pAttrAccess = new SwBorderAttrAccess( SwFrm::GetCache(), &rThis );
+        _pAttrs = pAttrAccess->Get();
+    }
+
+    sal_Bool bCommonBorder = sal_True;
+    if ( rThis.IsInSct() && rThis.GetUpper()->IsColBodyFrm() )
+    {
+        const SwSectionFrm* pSectFrm = rThis.FindSctFrm();
+        bCommonBorder = pSectFrm->GetFmt()->GetBalancedColumns().GetValue();
+    }
+    nLowerSpace = bCommonBorder ?
+                  _pAttrs->GetBottomLine( &rThis ) :
+                  _pAttrs->CalcBottomLine();
+
+    if ( rThis.GetShell()->GetDoc()->IsAddParaSpacingToTableCells() &&
+         rThis.IsInTab() && !rThis.GetIndNext() )
+    {
+        nLowerSpace += _pAttrs->GetULSpace().GetLower();
+    }
+
+    delete pAttrAccess;
+
+    return nLowerSpace;
 }
 
 /*************************************************************************
