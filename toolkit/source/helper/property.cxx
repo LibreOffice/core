@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-21 12:06:09 $
+ *  last change: $Author: mt $ $Date: 2002-12-10 07:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         {
             static ImplPropertyInfo __FAR_DATA aImplPropertyInfos [] =
             {
+            ImplPropertyInfo( ::rtl::OUString::createFromAscii( "AccessibleName" ),     BASEPROPERTY_ACCESSIBLENAME,    ::getCppuType((const ::rtl::OUString*)0),       ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Align" ),              BASEPROPERTY_ALIGN,             ::getCppuType((const sal_Int16*)0),     ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT|::com::sun::star::beans::PropertyAttribute::MAYBEVOID ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "Autocomplete" ),       BASEPROPERTY_AUTOCOMPLETE,      ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND|::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT ),
             ImplPropertyInfo( ::rtl::OUString::createFromAscii( "AutoMnemonics" ),      BASEPROPERTY_AUTOMNEMONICS,     ::getBooleanCppuType(),         ::com::sun::star::beans::PropertyAttribute::BOUND ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-21 12:07:05 $
+ *  last change: $Author: mt $ $Date: 2002-12-10 07:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,6 +966,13 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     pWindow->SetText( aText );
             }
             break;
+            case BASEPROPERTY_ACCESSIBLENAME:
+            {
+                ::rtl::OUString aText;
+                if ( Value >>= aText )
+                    pWindow->SetAccessibleName( aText );
+            }
+            break;
             case BASEPROPERTY_HELPURL:
             {
                 ::rtl::OUString aURL;
@@ -1235,6 +1242,12 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_TITLE:
             {
                 ::rtl::OUString aText = GetWindow()->GetText();
+                aProp <<= aText;
+            }
+            break;
+            case BASEPROPERTY_ACCESSIBLENAME:
+            {
+                ::rtl::OUString aText = GetWindow()->GetAccessibleName();
                 aProp <<= aText;
             }
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-21 12:05:57 $
+ *  last change: $Author: mt $ $Date: 2002-12-10 07:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ namespace rtl {
 #define BASEPROPERTY_DISPLAYBACKGROUNDCOLOR 89  // sal_Int32
 #define BASEPROPERTY_AUTOMNEMONICS          90  // sal_Bool
 #define BASEPROPERTY_MOUSETRANSPARENT       91  // sal_Bool
+#define BASEPROPERTY_ACCESSIBLENAME         92  // ::rtl::OUString
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
