@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-18 09:22:27 $
+ *  last change: $Author: pl $ $Date: 2002-03-05 13:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _SV_CVTGRF_HXX
 #include <cvtgrf.hxx>
 #endif
-#ifndef _SV_STRHELPER_HXX
-#include <strhelper.hxx>
+#ifndef _PSPRINT_STRHELPER_HXX
+#include <psprint/strhelper.hxx>
 #endif
 #ifndef _SV_SOICON_HXX
 #include <soicon.hxx>
@@ -103,6 +103,8 @@
 #include <tools/string.hxx>
 
 #include "soicons.inc"
+
+using namespace psp;
 
 typedef struct {
     int id;                 // 'resource' id
