@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:40:55 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ void SalInfoPrinter::GetPageInfo(
         else
         {
             aData.m_aContext.getPageSize( aPaper, height, width );
-            aData.m_pParser->getMargins( aPaper, bottom, top, left, right );
+            aData.m_pParser->getMargins( aPaper, top, bottom, right, left );
         }
 
         rPageWidth  = width * nDPI / 72;
