@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-08-09 05:36:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-09 10:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2459,6 +2459,8 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                 : (bLink
                                     ? 0
                                     : FN_QRY_INSERT_FIELD );
+        DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
+        sal_Bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR);
         if( nWh )
         {
             SfxUsrAnyItem* pConnectionItem = 0;
@@ -2468,10 +2470,9 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SfxUsrAnyItem* pCommandTypeItem = 0;
             SfxUsrAnyItem* pColumnNameItem = 0;
 
-            ODataAccessDescriptor aDesc;
-            DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
             BOOL bDataAvailable = TRUE;
-            if(OColumnTransferable::canExtractColumnDescriptor(rVector, CTF_COLUMN_DESCRIPTOR))
+            ODataAccessDescriptor aDesc;
+            if(bHaveColumnDescriptor)
                 aDesc = OColumnTransferable::extractColumnDescriptor(rData);
             else if(ODataAccessObjectTransferable::canExtractObjectDescriptor(rVector) )
                 aDesc = ODataAccessObjectTransferable::extractObjectDescriptor(rData);
@@ -2509,8 +2510,11 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SdrObject* pObj;
             rSh.MakeDrawView();
             FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
-            if( pFmView && 0 != (pObj = pFmView->CreateFieldControl(sTxt) ))
-                rSh.SwFEShell::Insert( *pObj, 0, 0, pDragPt );
+            if (pFmView && bHaveColumnDescriptor)
+            {
+                if ( 0 != (pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) ) ) )
+                    rSh.SwFEShell::Insert( *pObj, 0, 0, pDragPt );
+            }
         }
         nRet = 1;
     }
