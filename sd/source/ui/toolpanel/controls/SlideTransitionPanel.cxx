@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPanel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:26:30 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #include "SlideTransitionPanel.hxx"
 
+#include "taskpane/TaskPaneControlFactory.hxx"
+
 #include "strings.hrc"
 #include "sdresid.hxx"
 
@@ -76,6 +78,7 @@ namespace sd
 namespace toolpanel { namespace controls {
 
 
+
 SlideTransitionPanel::SlideTransitionPanel(TreeNode* pParent, ViewShellBase& rBase)
     : SubToolPanel (pParent),
       maPreferredSize( 100, 200 )
@@ -87,6 +90,12 @@ SlideTransitionPanel::SlideTransitionPanel(TreeNode* pParent, ViewShellBase& rBa
 SlideTransitionPanel::~SlideTransitionPanel()
 {
     delete mpWrappedControl;
+}
+
+std::auto_ptr<ControlFactory> SlideTransitionPanel::CreateControlFactory (ViewShellBase& rBase)
+{
+    return std::auto_ptr<ControlFactory>(
+        new ControlFactoryWithArgs1<SlideTransitionPanel,ViewShellBase>(rBase));
 }
 
 Size SlideTransitionPanel::GetPreferredSize()
