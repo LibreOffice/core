@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 11:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,13 +114,19 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
         {
             if(xRow->getString(4) == _rName)
             {
+                sal_Int32 nType             = xRow->getInt(5);
+                ::rtl::OUString sTypeName   = xRow->getString(6);
+                static const ::rtl::OUString sDecimal = ::rtl::OUString::createFromAscii("DECIMAL");
+                if(nType == DataType::DECIMAL && sTypeName == sDecimal)
+                    nType = DataType::NUMERIC;
+
                 OColumn* pRet = new OColumn(_rName,
-                                            xRow->getString(6),
+                                            sTypeName,
                                             xRow->getString(13),
                                             xRow->getInt(11),
                                             xRow->getInt(7),
                                             xRow->getInt(9),
-                                            xRow->getInt(5),
+                                            nType,
                                             sal_False,sal_False,sal_False,sal_True);
                 xRet = pRet;
                 break;

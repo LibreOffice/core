@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-15 08:48:17 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 11:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _CONNECTIVITY_ADABAS_BDATABASEMETADATA_HXX_
 #include "adabas/BDatabaseMetaData.hxx"
 #endif
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
+#endif
 
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
@@ -80,6 +83,108 @@ using namespace ::com::sun::star::lang;
 sal_Bool SAL_CALL OAdabasDatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
+}
+// -----------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OAdabasDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+{
+
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xNewRes = pResult;
+    pResult->setTypeInfoMap();
+    static ORows aRows;
+    if(!aRows.size())
+    {
+        Reference< XResultSet > xRes = OAdabasDatabaseMetaData_BASE::getTypeInfo();
+
+        if(xRes.is())
+        {
+            ORow aRow(19);
+            ORow::iterator aIter = aRow.begin();
+            for(;aIter != aRow.end();++aIter)
+                aIter->setBound(sal_True);
+
+            Reference< XRow> xRow(xRes,UNO_QUERY);
+            while(xRes->next())
+            {
+                sal_Int32 nPos = 1;
+                aRow[nPos++] = xRow->getString  (1);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getInt     (2);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getInt     (3);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getString  (4);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getString  (5);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getString  (6);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getInt     (7);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getBoolean (8);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getShort   (9);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getBoolean (10);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getInt     (11);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getBoolean (12);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getString  (13);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getShort   (14);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getShort   (15);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getInt     (16);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = xRow->getInt     (17);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+                aRow[nPos++] = (sal_Int16)xRow->getInt(18);
+                if(xRow->wasNull())
+                    aRow[nPos-1].setNull();
+
+                // we have to fix some incorrect entries
+                if(!aRow[2].isNull())
+                {
+                    switch((sal_Int32)aRow[2])
+                    {
+                        case DataType::FLOAT:
+                        case DataType::REAL:
+                        case DataType::DOUBLE:
+                            aRow[3] = sal_Int32(18);
+                            break;
+                        case DataType::TIMESTAMP:
+                            aRow[3] = sal_Int32(27);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                aRows.push_back(aRow);
+            }
+        }
+    }
+    pResult->setRows(aRows);
+    return xNewRes;
 }
 // -----------------------------------------------------------------------------
 
