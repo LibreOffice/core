@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-26 11:08:57 $
+ *  last change: $Author: os $ $Date: 2002-01-18 09:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2394,11 +2394,14 @@ BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 {
     switch( nMId )
     {
-    case FIELD_PROP_USHORT1:
-        rAny <<= (sal_Int16)GetFormat();
+        case FIELD_PROP_USHORT1:
+            rAny <<= (sal_Int16)GetFormat();
         break;
-    default:
-        DBG_ERROR("illegal property");
+        case FIELD_PROP_PAR1:
+            rAny <<= OUString(sTxt);
+        break;
+        default:
+            DBG_ERROR("illegal property");
     }
     return sal_True;
 }
@@ -2409,7 +2412,7 @@ BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, BYTE nMId )
 {
     switch( nMId )
     {
-    case FIELD_PROP_USHORT1:
+        case FIELD_PROP_USHORT1:
         {
             sal_Int16 nSet;
             rAny >>= nSet;
@@ -2418,6 +2421,13 @@ BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, BYTE nMId )
             else
                 //exception(wrong_value)
                 ;
+        }
+        break;
+        case FIELD_PROP_PAR1:
+        {
+            OUString sTmp;
+            rAny >>= sTmp;
+            sTxt = sTmp;
         }
         break;
     default:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2002-01-11 13:58:29 $
+ *  last change: $Author: os $ $Date: 2002-01-18 09:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1575,6 +1575,7 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_REFPAGEGETFLD);
                 pFld = new SwRefPageGetField( (SwRefPageGetFieldType*)pFldType,
                                                 m_pProps->nUSHORT1 );
+                ((SwRefPageGetField*)pFld)->SetText(m_pProps->sPar1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_PAGE_NUM:
