@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-10-23 14:37:31 $
+ *  last change: $Author: fs $ $Date: 2001-03-08 14:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,15 +140,22 @@ void ButtonFrame::Draw( OutputDevice& rDev )
             rDev.SetFont( aFont );
         }
 
+        Color aOldColor = rDev.GetTextColor();
+        if (m_bDrawDisabled)
+            rDev.SetTextColor(rSettings.GetDisableColor());
+
         rDev.DrawText( Point(
             ( aInnerRect.Left() + aInnerRect.Right() ) / 2 - ( rDev.GetTextWidth(aVal) / 2 ),
             aInnerRect.Top() ), aVal );
 
+        // restore settings
         if ( !bOldTransp )
         {
             aFont.SetTransparent(FALSE);
             rDev.SetFont( aFont );
         }
+        if (m_bDrawDisabled)
+            rDev.SetTextColor(aOldColor);
     }
 
     if ( bCurs )
