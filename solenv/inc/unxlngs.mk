@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-09 12:19:51 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 13:55:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 #*************************************************************************
 
 # mk file for unxlngs
-ASM=gcc
+ASM=$(CC)
 AFLAGS=-Wa,-Av8plus,-K,PIC -c $(CDEFS)
 
 SOLAR_JAVA*=TRUE
