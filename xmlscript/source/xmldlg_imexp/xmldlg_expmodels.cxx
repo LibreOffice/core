@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -103,8 +103,8 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -117,8 +117,8 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     sal_Bool bTriState = sal_False;
     if ((readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TriState") ) ) >>= bTriState) && bTriState)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tristate") ),
-                 OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tristate") ),
+                      OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
     }
     sal_Int16 nState;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
@@ -126,12 +126,12 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
         switch (nState)
         {
         case 0:
-            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
             break;
         case 1:
-            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             break;
         case 2: // tristate=true exported, checked omitted => dont know!
             OSL_ENSURE( bTriState, "### detected tristate value, but TriState is not set!" );
@@ -156,8 +156,8 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -192,12 +192,12 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
             ElementDescriptor * item = new ElementDescriptor(
                 _xProps, _xPropState,
                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":menuitem") ) );
-            item->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
-                           pItemValues[ nPos ] );
-            popup->addSubElem( item );
+            item->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
+                                pItemValues[ nPos ] );
+            popup->addSubElement( item );
         }
 
-        addSubElem( popup );
+        addSubElement( popup );
     }
     readEvents();
 }
@@ -217,8 +217,8 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -250,9 +250,9 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
             ElementDescriptor * item = new ElementDescriptor(
                 _xProps, _xPropState,
                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":menuitem") ) );
-            item->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
-                           pItemValues[ nPos ] );
-            popup->addSubElem( item );
+            item->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
+                                pItemValues[ nPos ] );
+            popup->addSubElement( item );
         }
 
         Sequence< sal_Int16 > selected;
@@ -262,13 +262,13 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
             for ( nPos = selected.getLength(); nPos--; )
             {
                 ElementDescriptor * item = static_cast< ElementDescriptor * >(
-                    popup->getSubElemAt( pSelected[ nPos ] ).get() );
-                item->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":selected") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+                    popup->getSubElement( pSelected[ nPos ] ).get() );
+                item->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":selected") ),
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             }
         }
 
-        addSubElem( popup );
+        addSubElement( popup );
     }
     readEvents();
 }
@@ -284,8 +284,8 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -301,16 +301,16 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
         switch (nState)
         {
         case 0:
-            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
             break;
         case 1:
-            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             break;
         case 2: // tristate=true exported, checked omitted => dont know!
-            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tristate") ),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tristate") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             break;
         }
     }
@@ -328,8 +328,8 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -341,9 +341,9 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
         ElementDescriptor * title = new ElementDescriptor(
             _xProps, _xPropState,
             OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
-        title->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
-                        aTitle );
-        addSubElem( title );
+        title->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
+                             aTitle );
+        addSubElement( title );
     }
 }
 //__________________________________________________________________________________________________
@@ -362,8 +362,8 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -391,8 +391,8 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -419,8 +419,8 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("EchoChar") ) ) >>= nEcho)
     {
         sal_Unicode cEcho = (sal_Unicode)nEcho;
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":echochar") ),
-                 OUString( &cEcho, 1 ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":echochar") ),
+                      OUString( &cEcho, 1 ) );
     }
     readEvents();
 }
@@ -436,8 +436,8 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
         aStyle._set |= 0x4;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -462,8 +462,8 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -490,8 +490,8 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -536,8 +536,8 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -576,8 +576,8 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -620,8 +620,8 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements
@@ -660,8 +660,8 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
         aStyle._set |= 0x8;
     if (aStyle._set)
     {
-        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
-                 all_styles->getStyleId( aStyle ) );
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
     }
 
     // collect elements

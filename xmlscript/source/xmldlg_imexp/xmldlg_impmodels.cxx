@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,7 +873,7 @@ Reference< xml::XImportContext > RadioGroupElement::createChildContext(
     else
     {
         throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected radio element!") ),
             Reference< XInterface >(), Any() );
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,11 @@
  *
  ************************************************************************/
 #include <hash_map>
-#include <vector>
 
 #include <xmlscript/xmldlg_imexp.hxx>
+#include <xmlscript/xml_helper.hxx>
 
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -91,7 +90,7 @@ struct Style
 
     OUString _id;
 
-    Style( short all_ ) SAL_THROW( () )
+    inline Style( short all_ ) SAL_THROW( () )
         : _all( all_ )
         , _set( 0 )
         {}
@@ -101,6 +100,7 @@ struct Style
 class StyleBag
 {
     vector< Style * > _styles;
+
 public:
     ~StyleBag() SAL_THROW( () );
 
@@ -110,16 +110,10 @@ public:
 };
 
 class ElementDescriptor
-    : public ::cppu::WeakImplHelper1< xml::sax::XAttributeList >
+    : public ::xmlscript::XMLElement
 {
     Reference< beans::XPropertySet > _xProps;
     Reference< beans::XPropertyState > _xPropState;
-
-    OUString _name;
-    vector< OUString > _attrNames;
-    vector< OUString > _attrValues;
-
-    vector< Reference< xml::sax::XAttributeList > > _subElems;
 
 public:
     inline ElementDescriptor(
@@ -127,23 +121,16 @@ public:
         Reference< beans::XPropertyState > const & xPropState,
         OUString const & name )
         SAL_THROW( () )
-        : _xProps( xProps )
+        : XMLElement( name )
+        , _xProps( xProps )
         , _xPropState( xPropState )
-        , _name( name )
         {}
     inline ElementDescriptor(
         OUString const & name )
         SAL_THROW( () )
-        : _name( name )
+        : XMLElement( name )
         {}
-    //
-    inline OUString getName() SAL_THROW( () )
-        { return _name; }
-    //
-    void addSubElem( Reference< xml::sax::XAttributeList > const & xElem ) SAL_THROW( () );
-    inline Reference< xml::sax::XAttributeList > getSubElemAt( sal_Int32 nIndex ) SAL_THROW( () )
-        { return _subElems[ nIndex ]; }
-    void dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut );
+
     //
     Any readProp( OUString const & rPropName );
     //
@@ -159,7 +146,6 @@ public:
     void readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     void readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     //
-    inline void addAttr( OUString const & rAttrName, OUString const & rValue ) SAL_THROW( () );
     inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue ) SAL_THROW( () );
 
     //
@@ -180,36 +166,15 @@ public:
     void readNumericFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readPatternFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
     void readTimeFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
-
-    // XAttributeList
-    virtual sal_Int16 SAL_CALL getLength()
-        throw (RuntimeException);
-    virtual OUString SAL_CALL getNameByIndex( sal_Int16 nPos )
-        throw (RuntimeException);
-    virtual OUString SAL_CALL getTypeByIndex( sal_Int16 nPos )
-        throw (RuntimeException);
-    virtual OUString SAL_CALL getTypeByName( OUString const & rName )
-        throw (RuntimeException);
-    virtual OUString SAL_CALL getValueByIndex( sal_Int16 nPos )
-        throw (RuntimeException);
-    virtual OUString SAL_CALL getValueByName( OUString const & rName )
-        throw (RuntimeException);
 };
-//__________________________________________________________________________________________________
-inline void ElementDescriptor::addAttr( OUString const & rAttrName, OUString const & rValue )
-    SAL_THROW( () )
-{
-    _attrNames.push_back( rAttrName );
-    _attrValues.push_back( rValue );
-}
 //__________________________________________________________________________________________________
 inline void ElementDescriptor::addBoolAttr( OUString const & rAttrName, sal_Bool bValue )
     SAL_THROW( () )
 {
-    addAttr( rAttrName,
-             (bValue
-              ? OUString( RTL_CONSTASCII_USTRINGPARAM("true") )
-              : OUString( RTL_CONSTASCII_USTRINGPARAM("false") )) );
+    addAttribute( rAttrName,
+                  (bValue
+                   ? OUString( RTL_CONSTASCII_USTRINGPARAM("true") )
+                   : OUString( RTL_CONSTASCII_USTRINGPARAM("false") )) );
 }
 
 //##################################################################################################

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <xmlscript/xml_helper.hxx>
-
 
 namespace xmlscript
 {
@@ -90,7 +88,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style") ) );
 
     // style-id
-    pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ), _id );
+    pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ), _id );
 
     // background-color
     if (_set & 0x1)
@@ -99,8 +97,8 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         buf.append( (sal_Unicode)'0' );
         buf.append( (sal_Unicode)'x' );
         buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_backgroundColor, 16 ) );
-        pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":background-color") ),
-                         buf.makeStringAndClear() );
+        pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":background-color") ),
+                              buf.makeStringAndClear() );
     }
 
     // text-color
@@ -110,8 +108,8 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         buf.append( (sal_Unicode)'0' );
         buf.append( (sal_Unicode)'x' );
         buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)_textColor, 16 ) );
-        pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":text-color") ),
-                         buf.makeStringAndClear() );
+        pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":text-color") ),
+                              buf.makeStringAndClear() );
     }
 
     // border
@@ -120,16 +118,16 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         switch (_border)
         {
         case 0:
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("none") ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("none") ) );
             break;
         case 1:
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("3d") ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("3d") ) );
             break;
         case 2:
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("simple") ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":border") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("simple") ) );
             break;
         default:
             OSL_ENSURE( 0, "### unexpected border value!" );
@@ -144,26 +142,26 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         // dialog:font-name CDATA #IMPLIED
         if (def_descr.Name != _descr.Name)
         {
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-name") ),
-                             _descr.Name );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-name") ),
+                                  _descr.Name );
         }
         // dialog:font-height %numeric; #IMPLIED
         if (def_descr.Height != _descr.Height)
         {
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-height") ),
-                             OUString::valueOf( (sal_Int32)_descr.Height ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-height") ),
+                                  OUString::valueOf( (sal_Int32)_descr.Height ) );
         }
         // dialog:font-width %numeric; #IMPLIED
         if (def_descr.Width != _descr.Width)
         {
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-width") ),
-                             OUString::valueOf( (sal_Int32)_descr.Width ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-width") ),
+                                  OUString::valueOf( (sal_Int32)_descr.Width ) );
         }
         // dialog:font-stylename CDATA #IMPLIED
         if (def_descr.StyleName != _descr.StyleName)
         {
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-stylename") ),
-                             _descr.StyleName );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-stylename") ),
+                                  _descr.StyleName );
         }
         // dialog:font-family "(decorative|modern|roman|script|swiss|system)" #IMPLIED
         if (def_descr.Family != _descr.Family)
@@ -171,28 +169,28 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             switch (_descr.Family)
             {
             case awt::FontFamily::DECORATIVE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("decorative") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("decorative") ) );
                 break;
             case awt::FontFamily::MODERN:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("modern") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("modern") ) );
                 break;
             case awt::FontFamily::ROMAN:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("roman") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("roman") ) );
                 break;
             case awt::FontFamily::SCRIPT:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("script") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("script") ) );
                 break;
             case awt::FontFamily::SWISS:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("swiss") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("swiss") ) );
                 break;
             case awt::FontFamily::SYSTEM:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("system") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-family") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("system") ) );
                 break;
             }
         }
@@ -202,44 +200,44 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             switch (_descr.CharSet)
             {
             case awt::CharSet::ANSI:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("ansi") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("ansi") ) );
                 break;
             case awt::CharSet::MAC:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("mac") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("mac") ) );
                 break;
             case awt::CharSet::IBMPC_437:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_437") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_437") ) );
                 break;
             case awt::CharSet::IBMPC_850:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_850") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_850") ) );
                 break;
             case awt::CharSet::IBMPC_860:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_860") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_860") ) );
                 break;
             case awt::CharSet::IBMPC_861:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_861") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_861") ) );
                 break;
             case awt::CharSet::IBMPC_863:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_863") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_863") ) );
                 break;
             case awt::CharSet::IBMPC_865:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_865") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("ibmpc_865") ) );
                 break;
             case awt::CharSet::SYSTEM:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("system") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("system") ) );
                 break;
             case awt::CharSet::SYMBOL:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("symbol") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charset") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("symbol") ) );
                 break;
             }
         }
@@ -249,26 +247,26 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             switch (_descr.Pitch)
             {
             case awt::FontPitch::FIXED:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-pitch") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("fixed") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-pitch") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("fixed") ) );
                 break;
             case awt::FontPitch::VARIABLE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-pitch") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("variable") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-pitch") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("variable") ) );
                 break;
             }
         }
         // dialog:font-charwidth CDATA #IMPLIED
         if (def_descr.CharacterWidth != _descr.CharacterWidth)
         {
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charwidth") ),
-                             OUString::valueOf( (float)_descr.CharacterWidth ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-charwidth") ),
+                                  OUString::valueOf( (float)_descr.CharacterWidth ) );
         }
         // dialog:font-weight CDATA #IMPLIED
         if (def_descr.Weight != _descr.Weight)
         {
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-weight") ),
-                             OUString::valueOf( (float)_descr.Weight ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-weight") ),
+                                  OUString::valueOf( (float)_descr.Weight ) );
         }
         // dialog:font-slant "(oblique|italic|reverse_oblique|reverse_italic)" #IMPLIED
         if (def_descr.Slant != _descr.Slant)
@@ -276,20 +274,20 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             switch (_descr.Slant)
             {
             case awt::FontSlant_OBLIQUE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("oblique") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("oblique") ) );
                 break;
             case awt::FontSlant_ITALIC:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("italic") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("italic") ) );
                 break;
             case awt::FontSlant_REVERSE_OBLIQUE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("reverse_oblique") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("reverse_oblique") ) );
                 break;
             case awt::FontSlant_REVERSE_ITALIC:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("reverse_italic") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-slant") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("reverse_italic") ) );
                 break;
             }
         }
@@ -299,72 +297,72 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             switch (_descr.Underline)
             {
             case awt::FontUnderline::SINGLE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("single") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("single") ) );
                 break;
             case awt::FontUnderline::DOUBLE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("double") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("double") ) );
                 break;
             case awt::FontUnderline::DOTTED:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("dotted") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("dotted") ) );
                 break;
             case awt::FontUnderline::DASH:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("dash") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("dash") ) );
                 break;
             case awt::FontUnderline::LONGDASH:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("longdash") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("longdash") ) );
                 break;
             case awt::FontUnderline::DASHDOT:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("dashdot") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("dashdot") ) );
                 break;
             case awt::FontUnderline::DASHDOTDOT:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("dashdotdot") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("dashdotdot") ) );
                 break;
             case awt::FontUnderline::SMALLWAVE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("smallwave") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("smallwave") ) );
                 break;
             case awt::FontUnderline::WAVE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("wave") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("wave") ) );
                 break;
             case awt::FontUnderline::DOUBLEWAVE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("doublewave") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("doublewave") ) );
                 break;
             case awt::FontUnderline::BOLD:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("bold") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("bold") ) );
                 break;
             case awt::FontUnderline::BOLDDOTTED:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("bolddotted") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("bolddotted") ) );
                 break;
             case awt::FontUnderline::BOLDDASH:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("bolddash") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("bolddash") ) );
                 break;
             case awt::FontUnderline::BOLDLONGDASH:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("boldlongdash") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("boldlongdash") ) );
                 break;
             case awt::FontUnderline::BOLDDASHDOT:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("bolddashdot") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("bolddashdot") ) );
                 break;
             case awt::FontUnderline::BOLDDASHDOTDOT:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("bolddashdotdot") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("bolddashdotdot") ) );
                 break;
             case awt::FontUnderline::BOLDWAVE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("boldwave") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-underline") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("boldwave") ) );
                 break;
             }
         }
@@ -374,32 +372,32 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             switch (_descr.Strikeout)
             {
             case awt::FontStrikeout::SINGLE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("single") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("single") ) );
                 break;
             case awt::FontStrikeout::DOUBLE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("double") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("double") ) );
                 break;
             case awt::FontStrikeout::BOLD:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("bold") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("bold") ) );
                 break;
             case awt::FontStrikeout::SLASH:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("slash") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("slash") ) );
                 break;
             case awt::FontStrikeout::X:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("x") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-strikeout") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("x") ) );
                 break;
             }
         }
         // dialog:font-orientation CDATA #IMPLIED
         if (def_descr.Orientation != _descr.Orientation)
         {
-            pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-orientation") ),
-                             OUString::valueOf( (float)_descr.Orientation ) );
+            pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-orientation") ),
+                                  OUString::valueOf( (float)_descr.Orientation ) );
         }
         // dialog:font-kerning %boolean; #IMPLIED
         if ((def_descr.Kerning != sal_False) != (_descr.Kerning != sal_False))
@@ -419,16 +417,16 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             switch (_descr.Type)
             {
             case awt::FontType::RASTER:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-type") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("raster") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-type") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("raster") ) );
                 break;
             case awt::FontType::DEVICE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-type") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("device") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-type") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("device") ) );
                 break;
             case awt::FontType::SCALABLE:
-                pStyle->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-type") ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM("scalable") ) );
+                pStyle->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":font-type") ),
+                                      OUString( RTL_CONSTASCII_USTRINGPARAM("scalable") ) );
                 break;
             }
         }
@@ -439,57 +437,6 @@ Reference< xml::sax::XAttributeList > Style::createElement()
 
 //##################################################################################################
 
-// XAttributeList
-//__________________________________________________________________________________________________
-sal_Int16 ElementDescriptor::getLength()
-    throw (RuntimeException)
-{
-    return _attrNames.size();
-}
-//__________________________________________________________________________________________________
-OUString ElementDescriptor::getNameByIndex( sal_Int16 nPos )
-    throw (RuntimeException)
-{
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
-    return _attrNames[ nPos ];
-}
-//__________________________________________________________________________________________________
-OUString ElementDescriptor::getTypeByIndex( sal_Int16 nPos )
-    throw (RuntimeException)
-{
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
-    // xxx todo
-    return OUString();
-}
-//__________________________________________________________________________________________________
-OUString ElementDescriptor::getTypeByName( OUString const & rName )
-    throw (RuntimeException)
-{
-    // xxx todo
-    return OUString();
-}
-//__________________________________________________________________________________________________
-OUString ElementDescriptor::getValueByIndex( sal_Int16 nPos )
-    throw (RuntimeException)
-{
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
-    return _attrValues[ nPos ];
-}
-//__________________________________________________________________________________________________
-OUString ElementDescriptor::getValueByName( OUString const & rName )
-    throw (RuntimeException)
-{
-    for ( size_t nPos = 0; nPos < _attrNames.size(); ++nPos )
-    {
-        if (_attrNames[ nPos ] == rName)
-        {
-            return _attrValues[ nPos ];
-        }
-    }
-    return OUString();
-}
-
-//
 //__________________________________________________________________________________________________
 Any ElementDescriptor::readProp( OUString const & rPropName )
 {
@@ -507,7 +454,7 @@ void ElementDescriptor::readStringAttr( OUString const & rPropName, OUString con
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_STRING)
         {
-            addAttr( rAttrName, * reinterpret_cast< const OUString * >( a.getValue() ) );
+            addAttribute( rAttrName, * reinterpret_cast< const OUString * >( a.getValue() ) );
         }
     }
 }
@@ -519,7 +466,7 @@ void ElementDescriptor::readDoubleAttr( OUString const & rPropName, OUString con
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_DOUBLE)
         {
-            addAttr( rAttrName, OUString::valueOf( *(double const *)a.getValue() ) );
+            addAttribute( rAttrName, OUString::valueOf( *(double const *)a.getValue() ) );
         }
     }
 }
@@ -531,7 +478,7 @@ void ElementDescriptor::readLongAttr( OUString const & rPropName, OUString const
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_LONG)
         {
-            addAttr( rAttrName, OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
+            addAttribute( rAttrName, OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue() ) );
         }
     }
 }
@@ -547,7 +494,7 @@ void ElementDescriptor::readHexLongAttr( OUString const & rPropName, OUString co
             buf.append( (sal_Unicode)'0' );
             buf.append( (sal_Unicode)'x' );
             buf.append( OUString::valueOf( (sal_Int64)(sal_uInt64)*(sal_uInt32 *)a.getValue(), 16 ) );
-            addAttr( rAttrName, buf.makeStringAndClear() );
+            addAttribute( rAttrName, buf.makeStringAndClear() );
         }
     }
 }
@@ -559,7 +506,7 @@ void ElementDescriptor::readShortAttr( OUString const & rPropName, OUString cons
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (a.getValueTypeClass() == TypeClass_SHORT)
         {
-            addAttr( rAttrName, OUString::valueOf( (sal_Int32)*(sal_Int16 *)a.getValue() ) );
+            addAttribute( rAttrName, OUString::valueOf( (sal_Int32)*(sal_Int16 *)a.getValue() ) );
         }
     }
 }
@@ -586,40 +533,40 @@ void ElementDescriptor::readDateFormatAttr( OUString const & rPropName, OUString
             switch (*(sal_Int16 const *)a.getValue())
             {
             case 0:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short") ) );
                 break;
             case 1:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short_YY") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short_YY") ) );
                 break;
             case 2:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short_YYYY") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_short_YYYY") ) );
                 break;
             case 3:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_long") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("system_long") ) );
                 break;
             case 4:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_DDMMYY") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_DDMMYY") ) );
                 break;
             case 5:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_MMDDYY") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_MMDDYY") ) );
                 break;
             case 6:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYMMDD") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYMMDD") ) );
                 break;
             case 7:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_DDMMYYYY") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_DDMMYYYY") ) );
                 break;
             case 8:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_MMDDYYYY") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_MMDDYYYY") ) );
                 break;
             case 9:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD") ) );
                 break;
             case 10:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYMMDD_DIN5008") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYMMDD_DIN5008") ) );
                 break;
             case 11:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD_DIN5008") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("short_YYYYMMDD_DIN5008") ) );
                 break;
             }
         }
@@ -636,22 +583,22 @@ void ElementDescriptor::readTimeFormatAttr( OUString const & rPropName, OUString
             switch (*(sal_Int16 const *)a.getValue())
             {
             case 0:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h_short") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h_short") ) );
                 break;
             case 1:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h_long") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("24h_long") ) );
                 break;
             case 2:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h_short") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h_short") ) );
                 break;
             case 3:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h_long") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("12h_long") ) );
                 break;
             case 4:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_short") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_short") ) );
                 break;
             case 5:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_long") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("Duration_long") ) );
                 break;
             }
         }
@@ -668,13 +615,13 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
             switch (*(sal_Int16 const *)a.getValue())
             {
             case 0:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) );
                 break;
             case 1:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("center") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("center") ) );
                 break;
             case 2:
-                addAttr( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("right") ) );
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("right") ) );
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal alignment value!" );
@@ -686,7 +633,7 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
 void ElementDescriptor::readDefaults()
 {
     Any a( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) );
-    addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ),
+    addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ),
              * reinterpret_cast< const OUString * >( a.getValue() ) );
     readShortAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tab-index") ) );
@@ -696,8 +643,8 @@ void ElementDescriptor::readDefaults()
     {
         if (! bEnabled)
         {
-            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":disabled") ),
-                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+            addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":disabled") ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
         }
     }
     else
@@ -744,32 +691,32 @@ void ElementDescriptor::readEvents()
                     OSL_ENSURE( descr.ListenerType.getLength() > 0 &&
                                 descr.EventMethod.getLength() > 0,
                                 "### invalid listener/ event method descr!" );
-                    pElem->addAttr(
+                    pElem->addAttribute(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":listener-type") ),
                         descr.ListenerType );
-                    pElem->addAttr(
+                    pElem->addAttribute(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":event-method") ),
                         descr.EventMethod );
                     if (descr.ScriptType.getLength())
                     {
-                        pElem->addAttr(
+                        pElem->addAttribute(
                             OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":script-type") ),
                             descr.ScriptType );
                     }
                     if (descr.ScriptCode.getLength())
                     {
-                        pElem->addAttr(
+                        pElem->addAttribute(
                             OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":script-code") ),
                             descr.ScriptCode );
                     }
                     if (descr.AddListenerParam.getLength())
                     {
-                        pElem->addAttr(
+                        pElem->addAttribute(
                             OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":param") ),
                             descr.AddListenerParam );
                     }
 
-                    addSubElem( xElem );
+                    addSubElement( xElem );
                 }
                 else
                 {
@@ -901,28 +848,6 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
 
 //##################################################################################################
 
-//__________________________________________________________________________________________________
-void ElementDescriptor::addSubElem( Reference< xml::sax::XAttributeList > const & xElem )
-    SAL_THROW( () )
-{
-    _subElems.push_back( xElem );
-}
-//__________________________________________________________________________________________________
-void ElementDescriptor::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
-{
-    xOut->ignorableWhitespace( OUString() );
-    xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
-    // write sub elements
-    for ( size_t nPos = 0; nPos < _subElems.size(); ++nPos )
-    {
-        ElementDescriptor * pElem = static_cast< ElementDescriptor * >( _subElems[ nPos ].get() );
-        pElem->dump( xOut );
-    }
-    //
-    xOut->ignorableWhitespace( OUString() );
-    xOut->endElement( _name );
-}
-
 //==================================================================================================
 SAL_DLLEXPORT void SAL_CALL exportDialogModel(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
@@ -980,7 +905,7 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModel(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":radio") ) );
             xElem = static_cast< xml::sax::XAttributeList * >( pElem );
             pElem->readRadioButtonModel( &all_styles );
-            pRadioGroup->addSubElem( xElem );
+            pRadioGroup->addSubElement( xElem );
         }
         else // no radio
         {
@@ -1127,8 +1052,8 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModel(
         OUString aWindowName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":window") );
         ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName );
         Reference< xml::sax::XAttributeList > xWindow( pWindow );
-        pWindow->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
+        pWindow->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),

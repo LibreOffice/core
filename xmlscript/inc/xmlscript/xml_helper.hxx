@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:40 $
+ *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,21 @@
 #ifndef _XMLSCRIPT_XML_HELPER_HXX_
 #define _XMLSCRIPT_XML_HELPER_HXX_
 
+#include <vector>
+
 #ifndef _RTL_BYTESEQ_HXX_
 #include <rtl/byteseq.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_XML_XIMPORTER_HXX_
 #include <com/sun/star/xml/XImporter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HXX_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HDL_
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HXX_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -82,6 +88,13 @@
 namespace xmlscript
 {
 
+/*##################################################################################################
+
+    IMPORTING
+
+##################################################################################################*/
+
+//==================================================================================================
 struct NameSpaceUid
 {
     ::rtl::OUString     sURI;
@@ -102,11 +115,104 @@ SAL_CALL createDocumentHandler(
     bool bSingleThreadedUse = true )
     SAL_THROW( () );
 
+
+/*##################################################################################################
+
+    EXPORTING
+
+##################################################################################################*/
+
+//==================================================================================================
+class XMLElement
+    : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XAttributeList >
+{
+public:
+    inline XMLElement( ::rtl::OUString const & name )
+        SAL_THROW( () )
+        : _name( name )
+        {}
+
+    /** Adds a sub element of element.
+
+        @param xElem
+               element reference
+    */
+    void SAL_CALL addSubElement( ::com::sun::star::uno::Reference<
+                                 ::com::sun::star::xml::sax::XAttributeList > const & xElem )
+        SAL_THROW( () );
+
+    /** Gets sub element of given index.  The index follows order in which sub elements
+        were added.
+
+        @param nIndex
+               index of sub element
+    */
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::xml::sax::XAttributeList > SAL_CALL getSubElement( sal_Int32 nIndex )
+        SAL_THROW( () );
+
+    /** Adds an attribute to elements
+
+        @param rAttrName qname of attribute
+        @param rValue value string of element
+    */
+    void SAL_CALL addAttribute(
+        ::rtl::OUString const & rAttrName, ::rtl::OUString const & rValue )
+        SAL_THROW( () );
+
+    /** Gets the tag name (qname) of element
+
+        @return
+                qname of element
+    */
+    inline ::rtl::OUString SAL_CALL getName() SAL_THROW( () )
+        { return _name; }
+
+    /** Dumps out element (and all sub element).
+
+        @param xOut
+               document handler to be written to
+    */
+    void SAL_CALL dump( ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut );
+
+    // XAttributeList
+    virtual sal_Int16 SAL_CALL getLength()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getNameByIndex( sal_Int16 nPos )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTypeByIndex( sal_Int16 nPos )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTypeByName( ::rtl::OUString const & rName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getValueByIndex( sal_Int16 nPos )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getValueByName( ::rtl::OUString const & rName )
+        throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+    ::rtl::OUString _name;
+
+    ::std::vector< ::rtl::OUString > _attrNames;
+    ::std::vector< ::rtl::OUString > _attrValues;
+
+    ::std::vector< ::com::sun::star::uno::Reference<
+                   ::com::sun::star::xml::sax::XAttributeList > > _subElems;
+};
+
+
+/*##################################################################################################
+
+    STREAMING
+
+##################################################################################################*/
+
 //==================================================================================================
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
 SAL_CALL createInputStream(
     ::rtl::ByteSequence const & rInData )
     SAL_THROW( () );
+
 //==================================================================================================
 SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
 SAL_CALL createOutputStream(
