@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-16 12:48:14 $
+ *  last change: $Author: dvo $ $Date: 2001-02-16 16:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,8 @@ void SwXTextSection::setPropertyValues(
         const Any* pValues = rValues.getConstArray();
         SwSectItemSet_Impl aItemSet;
 
+        sal_Bool bLinkModeChanged = sal_False;
+        sal_Bool bLinkMode;
         for(sal_Int32 nProperty = 0; nProperty < rPropertyNames.getLength(); nProperty++)
         {
             const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
@@ -573,13 +575,8 @@ void SwXTextSection::setPropertyValues(
                         }
                         else
                         {
-                            // set update type; needs an established link
-                            if (! pSect->IsConnected())
-                            {
-                                pSect->CreateLink(CREATE_CONNECT);
-                            }
-                            pSect->SetUpdateType(bVal ? LINKUPDATE_ALWAYS
-                                                 : LINKUPDATE_ONCALL);
+                            bLinkModeChanged = sal_True;
+                            bLinkMode = bVal;
                         }
                     }
                     break;
@@ -711,7 +708,17 @@ void SwXTextSection::setPropertyValues(
                 if(rFmts[i]->GetSection()->GetName() == pSect->GetName())
                 {
                     pDoc->ChgSection( i, aSection, aItemSet.pItemSet, pDoc->IsInReading());
-                    break;
+                    SwSection* pSect = pFmt->GetSection();
+                    if( bLinkModeChanged && pSect->GetType() == DDE_LINK_SECTION)
+                    {
+                        // set update type; needs an established link
+                        if(!pSect->IsConnected())
+                        {
+                            pSect->CreateLink(CREATE_CONNECT);
+                        }
+                        pSect->SetUpdateType(bLinkMode ? LINKUPDATE_ALWAYS
+                                                 : LINKUPDATE_ONCALL);
+                    }
                 }
             }
         }
