@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:18:41 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kohei Yoshida__________________________
  *
  *
  ************************************************************************/
@@ -326,7 +326,8 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh )
         bDelMarkValid( FALSE ),
         bActive     ( TRUE ),                   //! wie initialisieren?
         bPagebreak  ( FALSE ),
-        pSpellingView ( NULL )
+        pSpellingView ( NULL ),
+        bSelCtrlMouseClick( FALSE )
 {
 
     SetGridMode     ( TRUE );
@@ -391,7 +392,8 @@ ScViewData::ScViewData( const ScViewData& rViewData )
         bDelMarkValid( FALSE ),
         bActive     ( TRUE ),                               //! wie initialisieren?
         bPagebreak  ( rViewData.bPagebreak ),
-        pSpellingView ( rViewData.pSpellingView )
+        pSpellingView ( rViewData.pSpellingView ),
+        bSelCtrlMouseClick( rViewData.bSelCtrlMouseClick )
 {
 
     SetGridMode     ( rViewData.IsGridMode() );
