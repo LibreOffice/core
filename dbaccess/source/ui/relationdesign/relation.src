@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 07:38:06 $
+ *  last change: $Author: obo $ $Date: 2001-10-11 20:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ chinese_traditional ] = "ç·¨è¼¯";
             Text[ turkish ] = "Edit";
             Text[ arabic ] = "ÊÍÑíÑ";
-            Text[ catalan ] = "Editar";
+            Text[ catalan ] = "Edita";
             Text[ finnish ] = "Muokkaa";
         };
         ToolBoxItem
@@ -153,7 +153,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ chinese_traditional ] = "å„²å­˜";
             Text[ turkish ] = "Save";
             Text[ arabic ] = "ÍİÙ";
-            Text[ catalan ] = "Guardar";
+            Text[ catalan ] = "Desa";
             Text[ finnish ] = "Tallenna";
         };
         ToolBoxItem
@@ -181,7 +181,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ chinese_traditional ] = "åˆ—å°";
             Text[ turkish ] = "Print";
             Text[ arabic ] = "ØÈÇÚÉ";
-            Text[ catalan ] = "Imprimir";
+            Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulostetaan";
         };
         ToolBoxItem
@@ -212,7 +212,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ chinese_traditional ] = "å¾©åŸ";
             Text[ turkish ] = "Undo";
             Text[ arabic ] = "ÊÑÇÌÚ";
-            Text[ catalan ] = "Deshacer";
+            Text[ catalan ] = "Desfés";
             Text[ finnish ] = "Peruuta ";
         };
         ToolBoxItem
@@ -240,7 +240,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤";
             Text[ turkish ] = "Redo";
             Text[ arabic ] = "ÅÚÇÏÉ";
-            Text[ catalan ] = "Restaurar";
+            Text[ catalan ] = "Refés";
             Text[ finnish ] = "Palauta";
         };
         ToolBoxItem
@@ -271,7 +271,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ chinese_traditional ] = "æ–°å¢è¡¨æ ¼...";
             Text[ turkish ] = "Add tables ...";
             Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá...";
-            Text[ catalan ] = "Añadir tablas ...";
+            Text[ catalan ] = "Afegeix les taules...";
             Text[ finnish ] = "Tabellen hinzufügen ...";
         };
         ToolboxItem
@@ -318,7 +318,7 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ chinese_traditional ] = "é€™å€‹é—œä¿‚å·²ç¶“å­˜åœ¨ã€‚è¦ç·¨è¼¯å®ƒï¼Ÿ";
     Text[ arabic ] = "åĞå ÇáÚáÇŞÉ ãæÌæÏÉ ÈÇáİÚá. åá ÊÑíÏ ÊÍÑíÑåÇ¿";
     Text[ turkish ] = "Bu ilişki mevcut durumda. Düzenlemek istiyor musunuz?";
-    Text[ catalan ] = "Ya existe esta relación. ¿Desea editarla?";
+    Text[ catalan ] = "Aquesta relació ja existeix. Voleu editar-la?";
     Text[ finnish ] = "Diese Relation existiert bereits. Möchten Sie sie bearbeiten?";
 };
 String STR_RELATIONDESIGN
@@ -343,7 +343,7 @@ String STR_RELATIONDESIGN
     Text[ chinese_traditional ] = "é—œä¿‚è¨­è¨ˆ";
     Text[ turkish ] = "Relation design";
     Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
-    Text[ catalan ] = "Diseño de relaciones";
+    Text[ catalan ] = "Disseny de la relació";
     Text[ finnish ] = "Relationenentwurf";
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
@@ -368,7 +368,7 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text[ chinese_traditional ] = "é€™å€‹è³‡æ–™åº«ä¸æ”¯æ´é—œä¿‚åŠŸèƒ½ï¼";
     Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
     Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ áÇ ÊÏÚã ÃíÉ ÚáÇŞÇÊ.";
-    Text[ catalan ] = "La base de datos no apoya ninguna relación. ¡El diseño de relación se cerrará!";
+    Text[ catalan ] = "La base de dades no permet les relacions.";
     Text[ finnish ] = "Die Datenbank unterstützt keine Relationen!";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
@@ -395,7 +395,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message[ chinese_traditional ] = "é€™å€‹é—œä¿‚è¨­è¨ˆå·²ç¶“è®Šæ›´ã€‚\nè¦å„²å­˜è®Šæ›´å…§å®¹ï¼Ÿ";
     Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ arabic ] = "Êã ÊÛííÑ ÊÕãíã ÇáÚáÇŞÇÊ.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
-    Message[ catalan ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ catalan ] = "El disseny de la relació ha canviat.\nVoleu desar els canvis?";
     Message[ finnish ] = "Der Relationeneentwurf wurde geändert.\nSollen die Änderungen gespeichert werden?";
 };
 
@@ -494,7 +494,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ chinese_traditional ] = "å¾©åŸ";
                     Text[ turkish ] = "Undo";
                     Text[ arabic ] = "ÊÑÇÌÚ";
-                    Text[ catalan ] = "Undo";
+                    Text[ catalan ] = "Desfés";
                         Text[ finnish ] = "Peruuta ";
                     };
                 MenuItem
@@ -524,7 +524,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤";
                     Text[ turkish ] = "Redo";
                     Text[ arabic ] = "ÅÚÇÏÉ";
-                    Text[ catalan ] = "Redo";
+                    Text[ catalan ] = "Refés";
                         Text[ finnish ] = "Palauta";
                     };
                 MenuItem
@@ -543,7 +543,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ korean ] = "í¸ì§‘(~E)";
             Text[ turkish ] = "~Düzenle";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Edit";
+            Text[ catalan ] = "~Edita";
         };
 
     MenuItem
@@ -599,7 +599,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ arabic ] = "Ã~ÏæÇÊ";
             Text[ turkish ] = "~Araçlar";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Tools";
+            Text[ catalan ] = "~Eines";
         };
         GLOBLMN_WINMN
         {
@@ -633,8 +633,9 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ chinese_traditional ] = "å¦‚æœåˆªé™¤é€™å€‹è¡¨æ ¼ï¼Œä¹Ÿå°±æœƒä¸€èµ·åˆªé™¤å…¨éƒ¨çš„å¾å±¬é—œä¿‚ã€‚è¦ç¹¼çºŒï¼Ÿ";
     Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
-    Text[ catalan ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ catalan ] = "Quan s'elimini aquesta taula també de suprimiran les seves relacions associades. Voleu continuar?";
 };
+
 
 
 
