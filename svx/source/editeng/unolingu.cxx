@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-13 12:26:09 $
+ *  last change: $Author: tl $ $Date: 2001-06-18 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,15 +431,10 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
     const OUString aDicName( RTL_CONSTASCII_USTRINGPARAM( "standard.dic" ) );
     Reference< XDictionary1 >   xDic( xTmpDicList->getDictionaryByName( aDicName ),
                                       UNO_QUERY );
-    Reference< XStorable >      xStor( xDic, UNO_QUERY );
-
-    if (   !(xDic.is() && xDic->getDictionaryType() != DictionaryType_NEGATIVE &&
-                xDic->getLanguage() == LANGUAGE_NONE)
-        || !(xStor.is() && xStor->hasLocation() && !xStor->isReadonly()) )
+    if (!xDic.is())
     {
-        Reference< XDictionary >  xTmp;
-
         // try to create standard dictionary
+        Reference< XDictionary >    xTmp;
         try
         {
             xTmp =  xTmpDicList->createDictionary( aDicName,
@@ -447,7 +442,7 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
                         DictionaryType_POSITIVE,
                         SvxGetDictionaryURL( aDicName, sal_True ) );
         }
-        catch(...)
+        catch(com::sun::star::uno::Exception &)
         {
         }
 
@@ -456,8 +451,15 @@ Reference< XDictionary1 > LinguMgr::GetStandard()
             xTmpDicList->addDictionary( xTmp );
         xDic = Reference< XDictionary1 > ( xTmp, UNO_QUERY );
     }
-    DBG_ASSERT(xDic.is() && xDic->getDictionaryType() != DictionaryType_NEGATIVE,
-        "wrong dictionary type");
+#ifdef DEBUG
+    Reference< XStorable >      xStor( xDic, UNO_QUERY );
+    DBG_ASSERT( xDic.is() && xDic->getDictionaryType() == DictionaryType_POSITIVE,
+            "wrong dictionary type");
+    DBG_ASSERT( xDic.is() && xDic->getLanguage() == LANGUAGE_NONE,
+            "wrong dictionary language");
+    DBG_ASSERT( !xStor.is() || (xStor->hasLocation() && !xStor->isReadonly()),
+            "dictionary not editable" );
+#endif
 
     return xDic;
 }
@@ -692,7 +694,7 @@ sal_Bool SvxSaveDictionaries( const Reference< XDictionaryList >  &xDicList )
                     xStor->store();
             }
         }
-        catch(...)
+        catch(com::sun::star::uno::Exception &)
         {
             bRet = sal_False;
         }
