@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-20 10:18:59 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:15:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -123,7 +121,8 @@ SLOFILES=   \
             $(SLO)$/vclxwindow1.obj 						\
             $(SLO)$/vclxwindows.obj
 
-SRCFILES=\
+SRS1NAME=$(TARGET)
+SRC1FILES=\
             accessiblestrings.src
 
 # --- Targets ------------------------------------------------------
