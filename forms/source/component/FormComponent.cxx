@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:08:00 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 14:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
 OControlModel::OControlModel(
                         const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
             const ::rtl::OUString& _rUnoControlModelTypeName,
-            const ::rtl::OUString& rDefault)
+            const ::rtl::OUString& rDefault, const sal_Bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
     ,m_aUnoControlModelTypeName(_rUnoControlModelTypeName)
@@ -516,13 +516,11 @@ OControlModel::OControlModel(
                 m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, makeAny(rDefault));
         }
 
-        if (m_xAggregate.is())
-        {
-            m_xAggregate->setDelegator(static_cast<XWeak*>(this));
-        }
+        if (_bSetDelegator)
+            doSetDelegator();
 
         // Refcount wieder bei NULL
-        sal_Int32 n = decrement(m_refCount);
+        decrement(m_refCount);
     }
 }
 
@@ -535,19 +533,37 @@ OControlModel::~OControlModel()
         m_xAggregate->setDelegator(InterfaceRef());
 }
 
+//------------------------------------------------------------------------------
+void OControlModel::doResetDelegator()
+{
+    if (m_xAggregate.is())
+        m_xAggregate->setDelegator(NULL);
+}
+
+//------------------------------------------------------------------------------
+void OControlModel::doSetDelegator()
+{
+    increment(m_refCount);
+    if (m_xAggregate.is())
+    {
+        m_xAggregate->setDelegator(static_cast<XWeak*>(this));
+    }
+    decrement(m_refCount);
+}
+
 // XChild
 //------------------------------------------------------------------------------
 void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-        Reference<com::sun::star::lang::XComponent> xComp(m_xParent, UNO_QUERY);
+    Reference<com::sun::star::lang::XComponent> xComp(m_xParent, UNO_QUERY);
     if (xComp.is())
-                xComp->removeEventListener(static_cast<XPropertiesChangeListener*>(this));
+        xComp->removeEventListener(static_cast<XPropertiesChangeListener*>(this));
 
-        xComp = Reference<com::sun::star::lang::XComponent>(_rxParent, UNO_QUERY);
+    xComp = Reference<com::sun::star::lang::XComponent>(_rxParent, UNO_QUERY);
     if (xComp.is())
-                xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
+        xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
     m_xParent = _rxParent;
 }
 
@@ -608,7 +624,7 @@ void SAL_CALL OControlModel::disposing(const com::sun::star::lang::EventObject& 
     }
     else
     {
-                Reference<com::sun::star::lang::XEventListener> xEvtLst;
+        Reference<com::sun::star::lang::XEventListener> xEvtLst;
         if (query_aggregation(m_xAggregate, xEvtLst))
         {
             osl::MutexGuard aGuard(m_aMutex);
@@ -623,11 +639,11 @@ void OControlModel::disposing()
 {
     OPropertySetAggregationHelper::disposing();
 
-        Reference<com::sun::star::lang::XComponent> xComp;
+    Reference<com::sun::star::lang::XComponent> xComp;
     if (query_aggregation(m_xAggregate, xComp))
         xComp->dispose();
 
-        setParent(Reference<XFormComponent>());
+    setParent(Reference<XFormComponent>());
 }
 
 //------------------------------------------------------------------------------
@@ -802,8 +818,9 @@ OBoundControlModel::OBoundControlModel(
                                 const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
                 const ::rtl::OUString& _rUnoControlModelTypeName,
                 const ::rtl::OUString& _rDefault,
-                sal_Bool _bCommitable)
-      :OControlModel(_rxFactory, _rUnoControlModelTypeName, _rDefault)
+                const sal_Bool _bCommitable,
+                const sal_Bool _bSetDelegator)
+      :OControlModel(_rxFactory, _rUnoControlModelTypeName, _rDefault, _bSetDelegator)
       ,m_aUpdateListeners(m_aMutex)
       ,m_aResetListeners(m_aMutex)
       ,m_bLoaded(sal_False)
