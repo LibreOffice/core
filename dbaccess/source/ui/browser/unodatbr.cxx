@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:37:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,7 +997,7 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
                 {
                     // if it's the slot for the document data source, remember the state
                     Sequence< PropertyValue > aDescriptor;
-    #ifdef _DEBUG
+    #if OSL_DEBUG_LEVEL > 0
                     sal_Bool bProperFormat =
     #endif
                     _rEvent.State >>= aDescriptor;
@@ -1709,7 +1709,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                 ::rtl::OUString sNewQueryCommand;
                 sal_Bool bNewQueryEP;
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                 sal_Bool bIsQuery =
 #endif
                 implGetQuerySignature( sNewQueryCommand, bNewQueryEP );
@@ -2877,7 +2877,7 @@ void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bo
         Reference< XPropertySet > xProp(getRowSet(),UNO_QUERY);
         Reference< XConnection > xConn;
         ::cppu::extractInterface(xConn, xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION));
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         {
             Reference< XComponent > xComp;
             ::cppu::extractInterface(xComp, xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION));
