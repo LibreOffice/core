@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-21 10:54:15 $
+#   last change: $Author: kso $ $Date: 2000-11-21 11:43:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,10 +60,17 @@
 #
 #*************************************************************************
 
-PRJ=..
+# 2 == Unicode
+MAJOR_VERSION=2
 
+PRJ=..
 PRJNAME=package
 TARGET=package
+
+ENABLE_EXCEPTIONS=TRUE
+USE_DEFFILE=TRUE
+NO_BSYMBOLIC=TRUE
+
 
 # --- Settings -----------------------------------------------------
 
@@ -71,50 +78,37 @@ TARGET=package
 
 # --- General ----------------------------------------------------
 
-LIB1TARGET= $(SLB)$/package.lib
+LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	\
     $(SLB)$/zipapi.lib \
-    $(SLB)$/zippackage.lib 
+    $(SLB)$/zippackage.lib
 
 # --- Shared-Library -----------------------------------------------
 
-SHL1TARGET= package$(DLLPOSTFIX)
-SHL1IMPLIB= _ipackage
+SHL1TARGET=$(TARGET)$(MAJOR_VERSION)
+SHL1IMPLIB=i$(TARGET)
+SHL1VERSIONMAP=exports.map
 
-SHL1STDLIBS= \
-        $(VOSLIB)		\
-        $(CPPULIB)		\
-        $(UCBHELPERLIB)\
-        $(CPPUHELPERLIB)\
-        $(COMPHELPERLIB)\
-        $(RTLLIB)		\
-        $(SALLIB)		\
-        $(TOOLSLIB)		\
-        $(ZLIB3RDLIB) 
-        #$(UNOTOOLSLIB)	\
+SHL1STDLIBS=\
+    $(VOSLIB)		\
+    $(CPPULIB)		\
+    $(UCBHELPERLIB)		\
+    $(CPPUHELPERLIB)	\
+    $(COMPHELPERLIB)	\
+    $(SALLIB)		\
+    $(TOOLSLIB)		\
+    $(ZLIB3RDLIB)
 
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=   $(LIB1TARGET)
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1LIBS=$(LIB1TARGET)
 
 # --- Def-File ---------------------------------------------------------
 
-DEF1NAME    =$(SHL1TARGET)
-DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME =package
-DEF1DES     =Package Lib
-
+DEF1NAME=$(SHL1TARGET)
+DEF1EXPORTFILE=exports.dxp
+DEF1DES=Package Lib
 
 # --- Targets ----------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-# --- Filter ----------------------------------------------------------
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-.IF "$(GUI)"=="WNT"
-#	+echo	_CT?	   >	$@
-.ENDIF
-#	+echo	_CTA	   >>	$@
-    +echo	Fzt_	   >>	$@
-
 
