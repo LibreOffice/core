@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:45:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5047,7 +5047,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 }
 
 
-void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const String& rStrmName )
+void Biff8RecDumper::DumpSubStream( SotStorage* pStorage, const String& rStrmName )
 {
     ByteString sOutput;
 
@@ -5062,7 +5062,7 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const String& rStrmName
     if( !pStorage->IsContained( rStrmName ) || !pStorage->IsStream( rStrmName ) )
         return;
 
-    SvStorageStreamRef xSvStrm = OpenStream( pStorage, rStrmName );
+    SotStorageStreamRef xSvStrm = OpenStream( pStorage, rStrmName );
 
     if( !xSvStrm.Is() )
     {
@@ -5115,7 +5115,7 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const String& rStrmName
 
 void Biff8RecDumper::DumpPivotCache( const UINT16 nStrId )
 {
-    SvStorageRef xStrg = OpenStorage( EXC_STORAGE_PTCACHE );
+    SotStorageRef xStrg = OpenStorage( EXC_STORAGE_PTCACHE );
     DumpSubStream( xStrg, ScfTools::GetHexStr( nStrId ) );
 }
 
@@ -8723,7 +8723,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
 
             pIn = NULL;
 
-            SvStorageStream*    pContrIn = GetRootStorage()->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
+            SotStorageStream*    pContrIn = GetRootStorage()->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
             if( pContrIn )
                 ControlsDump( *pContrIn );
         }
