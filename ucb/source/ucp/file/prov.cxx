@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2000-10-17 13:11:30 $
+ *  last change: $Author: sb $ $Date: 2000-10-18 10:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,44 +780,44 @@ FileProvider::removeVetoableChangeListener(
 
 // XFileIdentifierConverter
 
-rtl::OUString SAL_CALL FileProvider::getHostName()
+rtl::OUString SAL_CALL FileProvider::getFileURLFromNormalizedPath( const rtl::OUString& HostName,
+                                                                   const rtl::OUString& NormalizedPath )
     throw( uno::RuntimeException )
 {
     initProperties();
-    return m_HostName;
-}
+    if ( HostName != m_HostName )
+        return rtl::OUString();
 
-rtl::OUString SAL_CALL FileProvider::getFileURLFromNormalizedPath( const rtl::OUString& NormalizedPath )
-    throw( IllegalIdentifierException,
-           uno::RuntimeException )
-{
     rtl::OUString aRed;
     sal_Bool success = m_pMyShell->uncheckMountPoint( NormalizedPath,aRed );
     if( ! success )
-        throw IllegalIdentifierException();
-
+        return rtl::OUString();
 
     rtl::OUString aUrl;
     sal_Bool err = m_pMyShell->getUrlFromUnq( aRed,aUrl );
     if( err )
-        throw IllegalIdentifierException();
+        return rtl::OUString();
 
     return aUrl;
 }
 
-rtl::OUString SAL_CALL FileProvider::getNormalizedPathFromFileURL( const rtl::OUString& FileURL )
-    throw( IllegalIdentifierException,
-           uno::RuntimeException )
+rtl::OUString SAL_CALL FileProvider::getNormalizedPathFromFileURL( const rtl::OUString& HostName,
+                                                                   const rtl::OUString& URL )
+    throw( uno::RuntimeException )
 {
+    initProperties();
+    if ( HostName != m_HostName )
+        return rtl::OUString();
+
     rtl::OUString aUnq;
-    sal_Bool err = m_pMyShell->getUnqFromUrl( FileURL,aUnq );
+    sal_Bool err = m_pMyShell->getUnqFromUrl( URL,aUnq );
     if( err )
-        throw IllegalIdentifierException();
+        return rtl::OUString();
 
     rtl::OUString aRed;
     sal_Bool success = m_pMyShell->checkMountPoint( aUnq,aRed );
     if( ! success )
-        throw IllegalIdentifierException();
+        return rtl::OUString();
 
     return aRed;
 }

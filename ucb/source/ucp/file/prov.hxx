@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2000-10-17 12:39:23 $
+ *  last change: $Author: sb $ $Date: 2000-10-18 10:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,16 +243,13 @@ namespace fileaccess {
 
         // XFileIdentifierConverter
 
-        virtual rtl::OUString SAL_CALL getHostName()
+        virtual rtl::OUString SAL_CALL getFileURLFromNormalizedPath( const rtl::OUString& HostName,
+                                                                     const rtl::OUString& NormalizedPath )
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL getFileURLFromNormalizedPath( const rtl::OUString& NormalizedPath )
-            throw( com::sun::star::ucb::IllegalIdentifierException,
-                   com::sun::star::uno::RuntimeException );
-
-        virtual rtl::OUString SAL_CALL getNormalizedPathFromFileURL( const rtl::OUString& FileURL )
-            throw( com::sun::star::ucb::IllegalIdentifierException,
-                   com::sun::star::uno::RuntimeException );
+        virtual rtl::OUString SAL_CALL getNormalizedPathFromFileURL( const rtl::OUString& HostName,
+                                                                     const rtl::OUString& URL )
+            throw( com::sun::star::uno::RuntimeException );
 
 
     private:
