@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:17:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,9 @@
 #ifndef _DBA_COREAPI_QUERYDESCRIPTOR_HXX_
 #include "querydescriptor.hxx"
 #endif
-#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
-#include "configurationflushable.hxx"
-#endif
-
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #endif
@@ -85,9 +80,11 @@
 #ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
 #endif
-#ifndef INCLUDED_MAP
-#include <map>
+#ifndef DBA_CONTENTHELPER_HXX
+#include "ContentHelper.hxx"
 #endif
+
+#include <map>
 
 //........................................................................
 namespace dbaccess
@@ -107,10 +104,11 @@ class OColumn;
 typedef ::comphelper::OPropertyArrayUsageHelper< OQuery >   OQuery_ArrayHelperBase;
 
 
-class OQuery    :public OQueryDescriptor
+class OQuery    :public OContentHelper
+                ,public OQueryDescriptor_Base
                 ,public OQuery_Base
-                ,public OConfigurationFlushable
                 ,public OQuery_ArrayHelperBase
+                ,public ODataSettings
 {
     friend struct TRelease;
 
@@ -124,6 +122,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                         m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > m_xCommandPropInfo;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xColumnMediator;
+    OContainerMediator* m_pMediator;
     IWarningsContainer* m_pWarnings;
     sal_Bool            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
 
@@ -145,26 +145,24 @@ protected:
     };
 
 protected:
-    ~OQuery();
+    virtual ~OQuery();
 
-public:
-    OQuery(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn
-        );
-
-// ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw();
-    virtual void SAL_CALL release(  ) throw();
-
-protected:
 // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
     ::cppu::IPropertyArrayHelper*   getArrayHelper() { return OQuery_ArrayHelperBase::getArrayHelper(); }
 
-// ::com::sun::star::uno::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
+public:
+    OQuery(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+        );
+
+// com::sun::star::lang::XTypeProvider
+    DECLARE_TYPEPROVIDER( );
+
+// ::com::sun::star::uno::XInterface
+    DECLARE_XINTERFACE( )
 
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -195,25 +193,13 @@ public:
     void                setWarningsContainer( IWarningsContainer* _pWarnings )  { m_pWarnings = _pWarnings; }
     IWarningsContainer* getWarningsContainer( ) const                           { return m_pWarnings; }
 
-public:
-// helper
-
-// pseudo-XComponent
-    virtual void SAL_CALL dispose();
-
-// OQueryDescriptor
-    void    storeTo( const ::utl::OConfigurationNode& _rConfigLocation );
-    void    loadFrom( const ::utl::OConfigurationNode& _rConfigLocation );
-
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-// OConfigurationFlushable
-    virtual void flush_NoBroadcast_NoCommit();
-    virtual OColumn* createColumn(const ::rtl::OUString& _rName) const;
+    virtual void SAL_CALL disposing();
 
-    virtual ::utl::OConfigurationNode getObjectLocation() const;
+    virtual OColumn* createColumn(const ::rtl::OUString& _rName) const;
 
     virtual void rebuildColumns( );
 
@@ -223,6 +209,8 @@ private:
         if <TRUE/>, the resulting columns are inserted into m_aColumnMap only, else they're really appended to m_pColumns
     */
     void implCollectColumns( );
+
+    void registerProperties();
 };
 
 //........................................................................
