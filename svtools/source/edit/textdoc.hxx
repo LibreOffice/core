@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdoc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include <tools/list.hxx>
 #endif
 
-
 typedef TextCharAttrib* TextCharAttribPtr;
 SV_DECL_PTRARR_DEL( TextCharAttribs, TextCharAttribPtr, 0, 4 );
 
@@ -141,7 +140,6 @@ public:
 
 
     const String&               GetText() const         { return maText; }
-//  String&                     GetText()               { return maText; }
 
     const TextCharAttribList&   GetCharAttribs() const  { return maCharAttribs; }
     TextCharAttribList&         GetCharAttribs()        { return maCharAttribs; }
@@ -154,14 +152,10 @@ public:
     void                Append( const TextNode& rNode );
 };
 
-
-
-DECLARE_LIST( TextNodeList, TextNode* );
-
 class TextDoc
 {
 private:
-    TextNodeList        maTextNodes;
+    ToolsList<TextNode*> maTextNodes;
     USHORT              mnLeftMargin;
 
 protected:
@@ -173,8 +167,8 @@ public:
 
     void                Clear();
 
-    TextNodeList&       GetNodes()              { return maTextNodes; }
-    const TextNodeList& GetNodes() const        { return maTextNodes; }
+    ToolsList<TextNode*>&       GetNodes()              { return maTextNodes; }
+    const ToolsList<TextNode*>& GetNodes() const        { return maTextNodes; }
 
     TextPaM             RemoveChars( const TextPaM& rPaM, USHORT nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
