@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:25:53 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,11 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             }
             XFree (pProperty);
         }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
     }
     if( m_aWMName.Len() == 0 )
     {
@@ -345,6 +350,11 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                 m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("Windowmaker" ) );
             XFree( pProperty );
             m_nInitWinGravity = NorthWestGravity;
+        }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
         }
     }
     if( m_aWMName.Len() == 0 )
@@ -502,6 +512,11 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = NULL;
         }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
 
         // get number of desktops
         if( m_aWMAtoms[ NET_NUMBER_OF_DESKTOPS ]
@@ -573,6 +588,16 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 }
             }
         }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+    }
+    else if( pProperty )
+    {
+        XFree( pProperty );
+        pProperty = NULL;
     }
 }
 
@@ -662,6 +687,11 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             }
             m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
         }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
     }
     if( m_bValid
         && XGetWindowProperty( m_pDisplay,
@@ -740,6 +770,11 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = NULL;
         }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
 
         // get number of desktops
         if( m_aWMAtoms[ WIN_WORKSPACE_COUNT ]
@@ -761,6 +796,16 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = NULL;
         }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+    }
+    else if( pProperty )
+    {
+        XFree( pProperty );
+        pProperty = NULL;
     }
 }
 
@@ -860,9 +905,24 @@ bool WMAdaptor::getNetWmName()
                         XFree( pProperty );
                         pProperty = NULL;
                     }
+                    else if( pProperty )
+                    {
+                        XFree( pProperty );
+                        pProperty = NULL;
+                    }
                 }
             }
+            else if( pProperty )
+            {
+                XFree( pProperty );
+                pProperty = NULL;
+            }
             m_pSalDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
+        }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
         }
     }
     return bNetWM;
@@ -1160,6 +1220,11 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
                     nCurrent = *(sal_Int32*)pProperty;
                     XFree( pProperty );
                 }
+                else if( pProperty )
+                {
+                    XFree( pProperty );
+                    pProperty = NULL;
+                }
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
@@ -1270,6 +1335,11 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
                 {
                     nCurrent = *(sal_Int32*)pProperty;
                     XFree( pProperty );
+                }
+                else if( pProperty )
+                {
+                    XFree( pProperty );
+                    pProperty = NULL;
                 }
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
