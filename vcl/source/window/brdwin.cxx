@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:20:46 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,8 +1184,10 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
     {
         switch( pCtrl->GetType() )
         {
-            case WINDOW_EDIT:
             case WINDOW_MULTILINEEDIT:
+                aCtrlType = CTRL_MULTILINE_EDITBOX;
+                break;
+            case WINDOW_EDIT:
             case WINDOW_PATTERNFIELD:
             case WINDOW_METRICFIELD:
             case WINDOW_CURRENCYFIELD:
