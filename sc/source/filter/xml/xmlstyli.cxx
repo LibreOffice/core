@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 22:11:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,7 @@ void XMLTableStyleContext::FillPropertySet(
             {
                 rtl::OUString sParentName = GetParent();
                 uno::Any aStyleName;
-                aStyleName <<= sParentName;
+                aStyleName <<= GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, sParentName );
                 AddProperty(CTF_SC_CELLSTYLE, aStyleName);
                 bParentSet = sal_True;
             }
@@ -657,7 +657,7 @@ void XMLTableStyleContext::FillPropertySet(
             if (sPageStyle.getLength())
             {
                 uno::Any aAny;
-                aAny <<= sPageStyle;
+                aAny <<= GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sPageStyle );
                 AddProperty(CTF_SC_MASTERPAGENAME, aAny);
             }
         }
