@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-12-05 19:12:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #define BREAKITERATOR_ALL
 #include <breakiterator_cjk.hxx>
-#include <unicode.hxx>
+#include <i18nutil/unicode.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
