@@ -214,7 +214,14 @@ sub get_feature_attributes
 
     my $attributes;
 
-    $attributes = "8";  # no advertising of features.
+    # No advertising of features and no leaving on network.
+    # Feature without parent must not have the "2"
+
+    my $parentgid = "";
+    if ( $onefeature->{'ParentID'} ) { $parentgid = $onefeature->{'ParentID'}; }
+
+    if (( $parentgid eq "" ) || ( $parentgid eq "gid_Module_Root" )) { $attributes = "8"; }
+    else { $attributes = "10"; }
 
     return $attributes
 }
@@ -231,7 +238,9 @@ sub get_localized_string
     my $locallanguage = "";
     if ( $featuregid =~ /^\s*(\w+)_(.+?)\s*$/ ) { $locallanguage = $2; }
 
-    my $windowslanguage = installer::windows::language::get_windows_language($locallanguage);
+    my $windowslanguage = "";
+    if ( $locallanguage =~ /top/i ) { $windowslanguage = $locallanguage; }
+    else { $windowslanguage = installer::windows::language::get_windows_language($locallanguage); }
 
     my $searchstring = "";
     if ( $type eq "Name" ) { $searchstring = "OOO_LANGPACK_NAME_" . $windowslanguage; }
@@ -241,6 +250,41 @@ sub get_localized_string
     my $newstring = installer::windows::idtglobal::get_language_string_from_language_block($language_block, $onelanguage, $searchstring);
 
     return $newstring;
+}
+
+#####################################################################
+# For multilingual installation sets, the language dependent files
+# are advised to the language feature.
+#####################################################################
+
+sub change_modules_in_filescollector
+{
+    my ($filesref) = @_;
+
+    my $feature = "gid_Module_Dynamic_Language_TOP";
+    push(@installer::globals::multilanguagemodules, $feature);
+
+    my $onefile;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        $onefile =  ${$filesref}[$i];
+
+        # Searching for multilingual files
+
+        if ( $onefile->{'ismultilingual'} )
+        {
+            my $officelanguage = $onefile->{'specificlanguage'};
+            $feature = "gid_Module_Dynamic_Language_" . $officelanguage;     # gid_Module_Dynamic_Language_de
+            $onefile->{'modules'} = $feature;   # assigning the new language feature !
+
+            # Collecting all new feature
+            if ( ! installer::existence::exists_in_array($feature, \@installer::globals::multilanguagemodules) )
+            {
+                push(@installer::globals::multilanguagemodules, $feature);
+            }
+        }
+    }
 }
 
 ##############################################################
@@ -283,6 +327,51 @@ sub add_language_pack_feature
 
 }
 
+##################################################################
+# Creating the feature for the multilingual installation sets.
+##################################################################
+
+sub add_multilingual_features
+{
+    my ($featuretableref, $translationfile, $onelanguage) = @_;
+
+    # Adding the new dynamic language modules, collected in change_modules_in_filescollector
+
+     my $topmodulegid = $installer::globals::multilanguagemodules[0];
+    installer::windows::idtglobal::shorten_feature_gid(\$topmodulegid);
+
+    for ( my $i = 0; $i <= $#installer::globals::multilanguagemodules; $i++ )
+    {
+        my %feature = ();
+
+        my $gid = $installer::globals::multilanguagemodules[$i];
+        # Attention: Maximum feature length is 38!
+        installer::windows::idtglobal::shorten_feature_gid(\$gid);
+
+        my $deselectable = 1;   # feature can be deselected
+        if (( $i == 0 ) || ( $i == 1 )) { $deselectable = 0; } # Toplevel module and english cannot be deselected
+
+        $feature{'feature'} = $gid;
+        if ( $i == 0 ) { $feature{'feature_parent'} = ""; }
+        else { $feature{'feature_parent'} = $topmodulegid; }
+        $feature{'Title'} = get_localized_string($gid, $onelanguage, $translationfile, "Name");
+        $feature{'Description'} = get_localized_string($gid, $onelanguage, $translationfile, "Description");
+        $feature{'Display'} = "4";  # determines order of feature and visibility.
+        $feature{'Level'} =  "20";
+        $feature{'Directory_'} =  "INSTALLLOCATION";
+        if ( $i == 0 ) { $feature{'Attributes'} = "8"; }
+        else { $feature{'Attributes'} =  "10"; }
+
+        if ( $deselectable == 0 ) { $feature{'Attributes'} = $feature{'Attributes'} + 16; } # making feature not deselectable
+
+        $oneline = $feature{'feature'} . "\t" . $feature{'feature_parent'} . "\t" . $feature{'Title'} . "\t"
+                    . $feature{'Description'} . "\t" . $feature{'Display'} . "\t" . $feature{'Level'} . "\t"
+                    . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
+
+        push(@{$featuretableref}, $oneline);
+    }
+}
+
 #################################################################################
 # Replacing one variable in one files
 #################################################################################
@@ -323,7 +412,7 @@ sub create_feature_table
     my ($modulesref, $basedir, $languagesarrayref, $allvariableshashref) = @_;
 
     my $translationfile = "";
-    if ( $installer::globals::languagepack )
+    if (( $installer::globals::languagepack ) || ( $installer::globals::ismultilingual ))
     {
         $translationfile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::langpackfilename);
         replace_variables($translationfile, $allvariableshashref);
@@ -368,6 +457,8 @@ sub create_feature_table
         }
 
         if ( $installer::globals::languagepack ) { add_language_pack_feature(\@featuretable, $translationfile, $onelanguage); }
+
+        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack )) { add_multilingual_features(\@featuretable, $translationfile, $onelanguage); }
 
         # Saving the file
 
