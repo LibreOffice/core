@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:39:32 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,7 +1261,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
             sal_Bool bInserting = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
             if (!bInserting)
-                xUpdateCursor->cancelRowUpdates();
+                DO_SAFE( xUpdateCursor->cancelRowUpdates(); );
 
 
 //          GetImpl()->ResetCurrent(GetImpl()->getActiveController());
@@ -1810,9 +1810,11 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         rSet.DisableItem(nWhich);
     else
     {
-        sal_Bool    bEnable = sal_False;
-        switch (nWhich)
+        sal_Bool bEnable = sal_False;
+        try
         {
+            switch (nWhich)
+            {
             case SID_FM_VIEW_AS_GRID:
                 if (GetImpl()->m_xAttachedFrame.is() && GetImpl()->getNavController().is())
                 {
@@ -2004,6 +2006,11 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                 sal_Bool bIsModified = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISMODIFIED));
                 bEnable = bIsModified || GetImpl()->isActiveModified();
             }   break;
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "FmFormShell::GetFormState: caught an exception while determining the state!" );
         }
         if (!bEnable)
             rSet.DisableItem(nWhich);
