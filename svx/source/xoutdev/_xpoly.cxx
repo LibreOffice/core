@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:04:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
 #endif
 
 #define GLOBALOVERFLOW
@@ -742,11 +746,29 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
 |*
 *************************************************************************/
 
-Rectangle XPolygon::GetBoundRect(OutputDevice *pOut) const
+//BFS09Rectangle XPolygon::GetBoundRect(OutputDevice *pOut) const
+Rectangle XPolygon::GetBoundRect() const
 {
     pImpXPolygon->CheckPointDelete();
+    Rectangle aRetval;
 
-    Rectangle aRect(XOutCalcXPolyExtent(*this, pOut));
+    if(pImpXPolygon->nPoints)
+    {
+        const ::basegfx::B2DPolygon aPolygon(getB2DPolygon());
+        const ::basegfx::B2DRange aPolygonRange(::basegfx::tools::getRange(aPolygon));
+        aRetval = Rectangle(
+            FRound(aPolygonRange.getMinX()), FRound(aPolygonRange.getMinY()),
+            FRound(aPolygonRange.getMaxX()), FRound(aPolygonRange.getMaxY()));
+
+//BFS09     if(pOut)
+//BFS09     {
+//BFS09         aRetval = pOut->PixelToLogic(aRetval);
+//BFS09     }
+    }
+
+    return aRetval;
+
+//BFS09 Rectangle aRect(XOutCalcXPolyExtent(*this, pOut));
 
 //  USHORT  nCount = pImpXPolygon->nPoints;
 //  if( !nCount )
@@ -778,7 +800,7 @@ Rectangle XPolygon::GetBoundRect(OutputDevice *pOut) const
             aRect.Bottom() += nHDiff;
         }
     }
-*/  return aRect;
+*/  //BFS09return aRect;
 }
 
 /*************************************************************************
@@ -1549,114 +1571,114 @@ void XPolygon::Rotate20()
 |*
 *************************************************************************/
 
-SvStream& operator>>( SvStream& rIStream, XPolygon& rXPoly )
-{
-    DBG_CHKOBJ( &rXPoly, XPolygon, NULL );
-
-    USHORT          i;
-    USHORT          nStart;
-    USHORT          nCurPoints;
-    USHORT          nReadPoints; // Anzahl der Punkte im Stream
-    USHORT          nMerkPoints; // Anzahl der Punkte die ich speichern kann
-    unsigned char   bShort;
-    short           nShortX;
-    short           nShortY;
-    long            nLongX;
-    long            nLongY;
-
-    rXPoly.pImpXPolygon->CheckPointDelete();
-
-    // Anzahl der Punkte einlesen und Array erzeugen
-    rIStream >> nReadPoints;
-    nMerkPoints=nReadPoints;
-    if (nMerkPoints>XPOLY_MAXPOINTS) {
-        nMerkPoints=XPOLY_MAXPOINTS;
-        // hier koennte man ein Flag am Stream setzen um zu vermerken
-        // dass beim Lesen Informationsverlusst aufgetreten ist !!!!!
-    }
-    rXPoly.pImpXPolygon->nPoints = nMerkPoints;
-
-    if ( rXPoly.pImpXPolygon->nRefCount != 1 )
-    {
-        if ( rXPoly.pImpXPolygon->nRefCount )
-            rXPoly.pImpXPolygon->nRefCount--;
-        rXPoly.pImpXPolygon = new ImpXPolygon( nMerkPoints );
-    }
-    else
-        rXPoly.pImpXPolygon->Resize( nMerkPoints );
-
-    // Je nach CompressMode das Polygon einlesen
-    if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
-    {
-        i = 0;
-        while ( i < nReadPoints )
-        {
-            rIStream >> bShort >> nCurPoints;
-
-            if ( bShort )
-            {
-                for ( nStart = i; i < nStart+nCurPoints; i++ )
-                {
-                    rIStream >> nShortX >> nShortY;
-                    if (i<nMerkPoints) { // restliche Punkte ueberspringen
-                        rXPoly.pImpXPolygon->pPointAry[i].X() = nShortX;
-                        rXPoly.pImpXPolygon->pPointAry[i].Y() = nShortY;
-                    }
-                }
-            }
-            else
-            {
-                for ( nStart = i; i < nStart+nCurPoints; i++ )
-                {
-                    rIStream >> nLongX >> nLongY;
-                    if (i<nMerkPoints) { // restliche Punkte ueberspringen
-                        rXPoly.pImpXPolygon->pPointAry[i].X() = nLongX;
-                        rXPoly.pImpXPolygon->pPointAry[i].Y() = nLongY;
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        // Feststellen, ob ueber die Operatoren gelesen werden muss
-#if (SAL_TYPES_SIZEOFLONG) != 4
-        if ( 1 )
-#else
-#ifdef OSL_BIGENDIAN
-        if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
-#else
-        if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
-#endif
-#endif
-        {
-            for( i = 0; i < nReadPoints; i++ ) {
-                long x,y;
-                rIStream >> x >> y;
-                if (i<nMerkPoints) { // restliche Punkte ueberspringen
-                    rXPoly.pImpXPolygon->pPointAry[i].X()=x;
-                    rXPoly.pImpXPolygon->pPointAry[i].Y()=y;
-                }
-            }
-        } else {
-            rIStream.Read( rXPoly.pImpXPolygon->pPointAry, nMerkPoints*sizeof(Point) );
-            if (nReadPoints>nMerkPoints) { // restliche Punkte ueberspringen
-                rIStream.SeekRel( ULONG(nReadPoints-nMerkPoints)*sizeof(Point) );
-            }
-        }
-    }
-    rIStream.Read( rXPoly.pImpXPolygon->pFlagAry, nMerkPoints );
-    if (nReadPoints>nMerkPoints) { // Flags der restlichen Punkte ueberspringen
-        rIStream.SeekRel( ULONG(nReadPoints-nMerkPoints) );
-        // Poly muesste hier noch etwas korregiert werden (Bezier-Kontrollpunkte am Ende..., geschlossen?)
-    }
-    while (rXPoly.GetPointCount()>0 && rXPoly.GetFlags(USHORT(rXPoly.GetPointCount()-1))==XPOLY_CONTROL) {
-        // Kontrollpunkte am Ende entfernen (kann auftreten bei truncate wg. 64k-Grenze!)
-        rXPoly.Remove(USHORT(rXPoly.GetPointCount()-1),1);
-    }
-
-    return rIStream;
-}
+//BFS01SvStream& operator>>( SvStream& rIStream, XPolygon& rXPoly )
+//BFS01{
+//BFS01 DBG_CHKOBJ( &rXPoly, XPolygon, NULL );
+//BFS01
+//BFS01 USHORT          i;
+//BFS01 USHORT          nStart;
+//BFS01 USHORT          nCurPoints;
+//BFS01 USHORT          nReadPoints; // Anzahl der Punkte im Stream
+//BFS01 USHORT          nMerkPoints; // Anzahl der Punkte die ich speichern kann
+//BFS01 unsigned char   bShort;
+//BFS01 short           nShortX;
+//BFS01 short           nShortY;
+//BFS01 long            nLongX;
+//BFS01 long            nLongY;
+//BFS01
+//BFS01 rXPoly.pImpXPolygon->CheckPointDelete();
+//BFS01
+//BFS01 // Anzahl der Punkte einlesen und Array erzeugen
+//BFS01 rIStream >> nReadPoints;
+//BFS01 nMerkPoints=nReadPoints;
+//BFS01 if (nMerkPoints>XPOLY_MAXPOINTS) {
+//BFS01     nMerkPoints=XPOLY_MAXPOINTS;
+//BFS01     // hier koennte man ein Flag am Stream setzen um zu vermerken
+//BFS01     // dass beim Lesen Informationsverlusst aufgetreten ist !!!!!
+//BFS01 }
+//BFS01 rXPoly.pImpXPolygon->nPoints = nMerkPoints;
+//BFS01
+//BFS01 if ( rXPoly.pImpXPolygon->nRefCount != 1 )
+//BFS01 {
+//BFS01     if ( rXPoly.pImpXPolygon->nRefCount )
+//BFS01         rXPoly.pImpXPolygon->nRefCount--;
+//BFS01     rXPoly.pImpXPolygon = new ImpXPolygon( nMerkPoints );
+//BFS01 }
+//BFS01 else
+//BFS01     rXPoly.pImpXPolygon->Resize( nMerkPoints );
+//BFS01
+//BFS01 // Je nach CompressMode das Polygon einlesen
+//BFS01 if ( rIStream.GetCompressMode() == COMPRESSMODE_FULL )
+//BFS01 {
+//BFS01     i = 0;
+//BFS01     while ( i < nReadPoints )
+//BFS01     {
+//BFS01         rIStream >> bShort >> nCurPoints;
+//BFS01
+//BFS01         if ( bShort )
+//BFS01         {
+//BFS01             for ( nStart = i; i < nStart+nCurPoints; i++ )
+//BFS01             {
+//BFS01                 rIStream >> nShortX >> nShortY;
+//BFS01                 if (i<nMerkPoints) { // restliche Punkte ueberspringen
+//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].X() = nShortX;
+//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].Y() = nShortY;
+//BFS01                 }
+//BFS01             }
+//BFS01         }
+//BFS01         else
+//BFS01         {
+//BFS01             for ( nStart = i; i < nStart+nCurPoints; i++ )
+//BFS01             {
+//BFS01                 rIStream >> nLongX >> nLongY;
+//BFS01                 if (i<nMerkPoints) { // restliche Punkte ueberspringen
+//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].X() = nLongX;
+//BFS01                     rXPoly.pImpXPolygon->pPointAry[i].Y() = nLongY;
+//BFS01                 }
+//BFS01             }
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     // Feststellen, ob ueber die Operatoren gelesen werden muss
+//BFS01#if (SAL_TYPES_SIZEOFLONG) != 4
+//BFS01     if ( 1 )
+//BFS01#else
+//BFS01#ifdef OSL_BIGENDIAN
+//BFS01     if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
+//BFS01#else
+//BFS01     if ( rIStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
+//BFS01#endif
+//BFS01#endif
+//BFS01     {
+//BFS01         for( i = 0; i < nReadPoints; i++ ) {
+//BFS01             long x,y;
+//BFS01             rIStream >> x >> y;
+//BFS01             if (i<nMerkPoints) { // restliche Punkte ueberspringen
+//BFS01                 rXPoly.pImpXPolygon->pPointAry[i].X()=x;
+//BFS01                 rXPoly.pImpXPolygon->pPointAry[i].Y()=y;
+//BFS01             }
+//BFS01         }
+//BFS01     } else {
+//BFS01         rIStream.Read( rXPoly.pImpXPolygon->pPointAry, nMerkPoints*sizeof(Point) );
+//BFS01         if (nReadPoints>nMerkPoints) { // restliche Punkte ueberspringen
+//BFS01             rIStream.SeekRel( ULONG(nReadPoints-nMerkPoints)*sizeof(Point) );
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01 rIStream.Read( rXPoly.pImpXPolygon->pFlagAry, nMerkPoints );
+//BFS01 if (nReadPoints>nMerkPoints) { // Flags der restlichen Punkte ueberspringen
+//BFS01     rIStream.SeekRel( ULONG(nReadPoints-nMerkPoints) );
+//BFS01     // Poly muesste hier noch etwas korregiert werden (Bezier-Kontrollpunkte am Ende..., geschlossen?)
+//BFS01 }
+//BFS01 while (rXPoly.GetPointCount()>0 && rXPoly.GetFlags(USHORT(rXPoly.GetPointCount()-1))==XPOLY_CONTROL) {
+//BFS01     // Kontrollpunkte am Ende entfernen (kann auftreten bei truncate wg. 64k-Grenze!)
+//BFS01     rXPoly.Remove(USHORT(rXPoly.GetPointCount()-1),1);
+//BFS01 }
+//BFS01
+//BFS01 return rIStream;
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1668,105 +1690,105 @@ SvStream& operator>>( SvStream& rIStream, XPolygon& rXPoly )
 |*
 *************************************************************************/
 
-SvStream& operator<<( SvStream& rOStream, const XPolygon& rXPoly )
-{
-    DBG_CHKOBJ( &rXPoly, XPolygon, NULL );
-
-    unsigned char   bShort;
-    unsigned char   bCurShort;
-    USHORT          nStart;
-    USHORT          i;
-    USHORT          nPoints = rXPoly.GetPointCount();
-
-    rXPoly.pImpXPolygon->CheckPointDelete();
-
-    // Anzahl der Punkte rausschreiben
-    rOStream << nPoints;
-
-    // Je nach CompressMode das Polygon rausschreiben
-    if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
-    {
-        i = 0;
-        while ( i < nPoints )
-        {
-            nStart = i;
-
-            // Feststellen, welcher Typ geschrieben werden soll
-            if ( ((rXPoly.pImpXPolygon->pPointAry[nStart].X() >= SHRT_MIN) &&
-                  (rXPoly.pImpXPolygon->pPointAry[nStart].X() <= SHRT_MAX)) &&
-                 ((rXPoly.pImpXPolygon->pPointAry[nStart].Y() >= SHRT_MIN) &&
-                  (rXPoly.pImpXPolygon->pPointAry[nStart].Y() <= SHRT_MAX)) )
-                bShort = TRUE;
-            else
-                bShort = FALSE;
-            while ( i < nPoints )
-            {
-                // Feststellen, welcher Typ geschrieben werden soll
-                if ( ((rXPoly.pImpXPolygon->pPointAry[nStart].X() >= SHRT_MIN) &&
-                      (rXPoly.pImpXPolygon->pPointAry[nStart].X() <= SHRT_MAX)) &&
-                     ((rXPoly.pImpXPolygon->pPointAry[nStart].Y() >= SHRT_MIN) &&
-                      (rXPoly.pImpXPolygon->pPointAry[nStart].Y() <= SHRT_MAX)) )
-                    bCurShort = TRUE;
-                else
-                    bCurShort = FALSE;
-
-                // Wenn sich die Werte in einen anderen Bereich begeben,
-                // muessen wir neu rausschreiben
-                if ( bCurShort != bShort )
-                {
-                    bShort = bCurShort;
-                    break;
-                }
-
-                i++;
-            }
-
-            rOStream << bShort << (USHORT)(i-nStart);
-
-            if ( bShort )
-            {
-                for( ; nStart < i; nStart++ )
-                {
-                    rOStream << (short)rXPoly.pImpXPolygon->pPointAry[nStart].X()
-                             << (short)rXPoly.pImpXPolygon->pPointAry[nStart].Y();
-                }
-            }
-            else
-            {
-                for( ; nStart < i; nStart++ )
-                {
-                    rOStream << rXPoly.pImpXPolygon->pPointAry[nStart].X()
-                             << rXPoly.pImpXPolygon->pPointAry[nStart].Y();
-                }
-            }
-        }
-    }
-    else
-    {
-        // Feststellen, ob ueber die Operatoren geschrieben werden muss
-#if (SAL_TYPES_SIZEOFLONG) != 4
-        if ( 1 )
-#else
-#ifdef OSL_BIGENDIAN
-        if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
-#else
-        if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
-#endif
-#endif
-        {
-            for( i = 0; i < nPoints; i++ )
-                rOStream << rXPoly.pImpXPolygon->pPointAry[i].X()
-                         << rXPoly.pImpXPolygon->pPointAry[i].Y();
-        }
-        else if ( nPoints )
-            rOStream.Write( rXPoly.pImpXPolygon->pPointAry, nPoints*sizeof(Point) );
-    }
-
-    if ( nPoints )
-        rOStream.Write( rXPoly.pImpXPolygon->pFlagAry, nPoints );
-
-    return rOStream;
-}
+//BFS01SvStream& operator<<( SvStream& rOStream, const XPolygon& rXPoly )
+//BFS01{
+//BFS01 DBG_CHKOBJ( &rXPoly, XPolygon, NULL );
+//BFS01
+//BFS01 unsigned char   bShort;
+//BFS01 unsigned char   bCurShort;
+//BFS01 USHORT          nStart;
+//BFS01 USHORT          i;
+//BFS01 USHORT          nPoints = rXPoly.GetPointCount();
+//BFS01
+//BFS01 rXPoly.pImpXPolygon->CheckPointDelete();
+//BFS01
+//BFS01 // Anzahl der Punkte rausschreiben
+//BFS01 rOStream << nPoints;
+//BFS01
+//BFS01 // Je nach CompressMode das Polygon rausschreiben
+//BFS01 if ( rOStream.GetCompressMode() == COMPRESSMODE_FULL )
+//BFS01 {
+//BFS01     i = 0;
+//BFS01     while ( i < nPoints )
+//BFS01     {
+//BFS01         nStart = i;
+//BFS01
+//BFS01         // Feststellen, welcher Typ geschrieben werden soll
+//BFS01         if ( ((rXPoly.pImpXPolygon->pPointAry[nStart].X() >= SHRT_MIN) &&
+//BFS01               (rXPoly.pImpXPolygon->pPointAry[nStart].X() <= SHRT_MAX)) &&
+//BFS01              ((rXPoly.pImpXPolygon->pPointAry[nStart].Y() >= SHRT_MIN) &&
+//BFS01               (rXPoly.pImpXPolygon->pPointAry[nStart].Y() <= SHRT_MAX)) )
+//BFS01             bShort = TRUE;
+//BFS01         else
+//BFS01             bShort = FALSE;
+//BFS01         while ( i < nPoints )
+//BFS01         {
+//BFS01             // Feststellen, welcher Typ geschrieben werden soll
+//BFS01             if ( ((rXPoly.pImpXPolygon->pPointAry[nStart].X() >= SHRT_MIN) &&
+//BFS01                   (rXPoly.pImpXPolygon->pPointAry[nStart].X() <= SHRT_MAX)) &&
+//BFS01                  ((rXPoly.pImpXPolygon->pPointAry[nStart].Y() >= SHRT_MIN) &&
+//BFS01                   (rXPoly.pImpXPolygon->pPointAry[nStart].Y() <= SHRT_MAX)) )
+//BFS01                 bCurShort = TRUE;
+//BFS01             else
+//BFS01                 bCurShort = FALSE;
+//BFS01
+//BFS01             // Wenn sich die Werte in einen anderen Bereich begeben,
+//BFS01             // muessen wir neu rausschreiben
+//BFS01             if ( bCurShort != bShort )
+//BFS01             {
+//BFS01                 bShort = bCurShort;
+//BFS01                 break;
+//BFS01             }
+//BFS01
+//BFS01             i++;
+//BFS01         }
+//BFS01
+//BFS01         rOStream << bShort << (USHORT)(i-nStart);
+//BFS01
+//BFS01         if ( bShort )
+//BFS01         {
+//BFS01             for( ; nStart < i; nStart++ )
+//BFS01             {
+//BFS01                 rOStream << (short)rXPoly.pImpXPolygon->pPointAry[nStart].X()
+//BFS01                          << (short)rXPoly.pImpXPolygon->pPointAry[nStart].Y();
+//BFS01             }
+//BFS01         }
+//BFS01         else
+//BFS01         {
+//BFS01             for( ; nStart < i; nStart++ )
+//BFS01             {
+//BFS01                 rOStream << rXPoly.pImpXPolygon->pPointAry[nStart].X()
+//BFS01                          << rXPoly.pImpXPolygon->pPointAry[nStart].Y();
+//BFS01             }
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     // Feststellen, ob ueber die Operatoren geschrieben werden muss
+//BFS01#if (SAL_TYPES_SIZEOFLONG) != 4
+//BFS01     if ( 1 )
+//BFS01#else
+//BFS01#ifdef OSL_BIGENDIAN
+//BFS01     if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN )
+//BFS01#else
+//BFS01     if ( rOStream.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN )
+//BFS01#endif
+//BFS01#endif
+//BFS01     {
+//BFS01         for( i = 0; i < nPoints; i++ )
+//BFS01             rOStream << rXPoly.pImpXPolygon->pPointAry[i].X()
+//BFS01                      << rXPoly.pImpXPolygon->pPointAry[i].Y();
+//BFS01     }
+//BFS01     else if ( nPoints )
+//BFS01         rOStream.Write( rXPoly.pImpXPolygon->pPointAry, nPoints*sizeof(Point) );
+//BFS01 }
+//BFS01
+//BFS01 if ( nPoints )
+//BFS01     rOStream.Write( rXPoly.pImpXPolygon->pFlagAry, nPoints );
+//BFS01
+//BFS01 return rOStream;
+//BFS01}
 
 // #116512# convert to ::basegfx::B2DPolygon and return
 ::basegfx::B2DPolygon XPolygon::getB2DPolygon() const
@@ -2291,7 +2313,8 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
 |*
 *************************************************************************/
 
-Rectangle XPolyPolygon::GetBoundRect(OutputDevice* pOut) const
+//BFS09Rectangle XPolyPolygon::GetBoundRect(OutputDevice* pOut) const
+Rectangle XPolyPolygon::GetBoundRect() const
 {
     USHORT    nXPoly = (USHORT)pImpXPolyPolygon->aXPolyList.Count();
     Rectangle aRect;
@@ -2300,7 +2323,8 @@ Rectangle XPolyPolygon::GetBoundRect(OutputDevice* pOut) const
     {
         const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.GetObject( n );
 
-        aRect.Union( pXPoly->GetBoundRect(pOut) );
+//BFS09     aRect.Union( pXPoly->GetBoundRect(pOut) );
+        aRect.Union( pXPoly->GetBoundRect() );
     }
 
     return aRect;
@@ -2549,51 +2573,51 @@ void XPolyPolygon::Distort(const Rectangle& rRefRect,
 |*
 *************************************************************************/
 
-SvStream& operator>>( SvStream& rIStream, XPolyPolygon& rXPolyPoly )
-{
-    DBG_CHKOBJ( &rXPolyPoly, XPolyPolygon, NULL );
-
-    XPolygon* pXPoly;
-
-    // Anzahl der Polygone einlesen
-    USHORT nXPolyCount;
-    rIStream >> nXPolyCount;
-
-    FASTBOOL bTruncated=FALSE;
-    ULONG nAllPointCount=0; // Gesamtanzahl der Punkte mitzaehlen
-
-    if ( rXPolyPoly.pImpXPolyPolygon->nRefCount > 1 ) {
-        rXPolyPoly.pImpXPolyPolygon->nRefCount--;
-    } else {
-        delete rXPolyPoly.pImpXPolyPolygon;
-    }
-    rXPolyPoly.pImpXPolyPolygon = new ImpXPolyPolygon( nXPolyCount );
-
-    while (nXPolyCount>0) {
-        pXPoly = new XPolygon;
-        rIStream >> *pXPoly;
-        nAllPointCount+=pXPoly->GetPointCount();
-        if (!bTruncated) {
-            if (nAllPointCount>XPOLY_MAXPOINTS) {
-                USHORT nDel=(USHORT)(nAllPointCount-XPOLY_MAXPOINTS);
-                USHORT nPos=pXPoly->GetPointCount()-nDel;
-                pXPoly->Remove(nPos,nDel);
-                bTruncated=TRUE; // Alle nachfolgenden Polygone werden ignoriert
-            }
-            rXPolyPoly.pImpXPolyPolygon->aXPolyList.Insert( pXPoly, LIST_APPEND );
-        } else {
-            delete pXPoly;
-        }
-        nXPolyCount--;
-    }
-
-    if (bTruncated) {
-        // hier koennte man ein Flag am Stream setzen um zu vermerken
-        // dass beim Lesen Informationsverlusst aufgetreten ist !!!!!
-    }
-
-    return rIStream;
-}
+//BFS01SvStream& operator>>( SvStream& rIStream, XPolyPolygon& rXPolyPoly )
+//BFS01{
+//BFS01 DBG_CHKOBJ( &rXPolyPoly, XPolyPolygon, NULL );
+//BFS01
+//BFS01 XPolygon* pXPoly;
+//BFS01
+//BFS01 // Anzahl der Polygone einlesen
+//BFS01 USHORT nXPolyCount;
+//BFS01 rIStream >> nXPolyCount;
+//BFS01
+//BFS01 FASTBOOL bTruncated=FALSE;
+//BFS01 ULONG nAllPointCount=0; // Gesamtanzahl der Punkte mitzaehlen
+//BFS01
+//BFS01 if ( rXPolyPoly.pImpXPolyPolygon->nRefCount > 1 ) {
+//BFS01     rXPolyPoly.pImpXPolyPolygon->nRefCount--;
+//BFS01 } else {
+//BFS01     delete rXPolyPoly.pImpXPolyPolygon;
+//BFS01 }
+//BFS01 rXPolyPoly.pImpXPolyPolygon = new ImpXPolyPolygon( nXPolyCount );
+//BFS01
+//BFS01 while (nXPolyCount>0) {
+//BFS01     pXPoly = new XPolygon;
+//BFS01     rIStream >> *pXPoly;
+//BFS01     nAllPointCount+=pXPoly->GetPointCount();
+//BFS01     if (!bTruncated) {
+//BFS01         if (nAllPointCount>XPOLY_MAXPOINTS) {
+//BFS01             USHORT nDel=(USHORT)(nAllPointCount-XPOLY_MAXPOINTS);
+//BFS01             USHORT nPos=pXPoly->GetPointCount()-nDel;
+//BFS01             pXPoly->Remove(nPos,nDel);
+//BFS01             bTruncated=TRUE; // Alle nachfolgenden Polygone werden ignoriert
+//BFS01         }
+//BFS01         rXPolyPoly.pImpXPolyPolygon->aXPolyList.Insert( pXPoly, LIST_APPEND );
+//BFS01     } else {
+//BFS01         delete pXPoly;
+//BFS01     }
+//BFS01     nXPolyCount--;
+//BFS01 }
+//BFS01
+//BFS01 if (bTruncated) {
+//BFS01     // hier koennte man ein Flag am Stream setzen um zu vermerken
+//BFS01     // dass beim Lesen Informationsverlusst aufgetreten ist !!!!!
+//BFS01 }
+//BFS01
+//BFS01 return rIStream;
+//BFS01}
 
 /*************************************************************************
 |*
@@ -2605,24 +2629,24 @@ SvStream& operator>>( SvStream& rIStream, XPolyPolygon& rXPolyPoly )
 |*
 *************************************************************************/
 
-SvStream& operator<<( SvStream& rOStream, const XPolyPolygon& rXPolyPoly )
-{
-    DBG_CHKOBJ( &rXPolyPoly, XPolyPolygon, NULL );
-
-    // Anzahl der Polygone rausschreiben
-    rOStream << rXPolyPoly.Count();
-
-    // Die einzelnen Polygone ausgeben
-    XPolygon* pXPoly = rXPolyPoly.pImpXPolyPolygon->aXPolyList.First();
-
-    while( pXPoly )
-    {
-        rOStream << *pXPoly;
-        pXPoly = rXPolyPoly.pImpXPolyPolygon->aXPolyList.Next();
-    }
-
-    return rOStream;
-}
+//BFS01SvStream& operator<<( SvStream& rOStream, const XPolyPolygon& rXPolyPoly )
+//BFS01{
+//BFS01 DBG_CHKOBJ( &rXPolyPoly, XPolyPolygon, NULL );
+//BFS01
+//BFS01 // Anzahl der Polygone rausschreiben
+//BFS01 rOStream << rXPolyPoly.Count();
+//BFS01
+//BFS01 // Die einzelnen Polygone ausgeben
+//BFS01 XPolygon* pXPoly = rXPolyPoly.pImpXPolyPolygon->aXPolyList.First();
+//BFS01
+//BFS01 while( pXPoly )
+//BFS01 {
+//BFS01     rOStream << *pXPoly;
+//BFS01     pXPoly = rXPolyPoly.pImpXPolyPolygon->aXPolyList.Next();
+//BFS01 }
+//BFS01
+//BFS01 return rOStream;
+//BFS01}
 
 // #116512# convert to ::basegfx::B2DPolyPolygon and return
 ::basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
