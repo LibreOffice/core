@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:27:49 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     Text[ french ] = "Gallery";
     Text[ spanish ] = "Gallery";
     Text[ italian ] = "Gallery";
-    Text[ danish ] = "Gallery";
+    Text[ danish ] = "Galleri";
     Text[ swedish ] = "Gallery";
     Text[ polish ] = "Galeria";
     Text[ portuguese_brazilian ] = "Galeria";
@@ -129,6 +129,8 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     Text[ hebrew ] = "‮גלריה‬";
     Text[ hindi ] = "गेलरी";
     Text[ slovak ] = "Galéria";
+    Text[ hungarian ] = "Képtár";
+    Text[ slovenian ] = "Galerija";
 };
 
 
@@ -140,13 +142,13 @@ TabDialog RID_SVXTABDLG_GALLERY
     SVLook = TRUE ;
     Text = "Eigenschaften von " ;
     Text [ ENGLISH ] = "Settings of " ;
-    Text [ dutch ] = "Eigenschappen van" ;
+    Text [ dutch ] = "Eigenschappen van " ;
     Text [ english_us ] = "Properties of " ;
     Text [ italian ] = "Propriet� di  " ;
     Text [ spanish ] = "Propiedades de " ;
     Text [ french ] = "Propri�t�s de " ;
     Text [ swedish ] = "Egenskaper f�r " ;
-    Text [ danish ] = "Egenskaber af " ;
+    Text [ danish ] = "Egenskaber for " ;
     Text [ portuguese ] = "Propriedades de  " ;
     Text [ portuguese_brazilian ] = "Propriedades de" ;
     Text[ chinese_simplified ] = "属性： ";
@@ -155,7 +157,7 @@ TabDialog RID_SVXTABDLG_GALLERY
     Text[ japanese ] = "プロパティ ";
     Text[ chinese_traditional ] = "屬性： ";
     Text[ arabic ] = "�����";
-    Text[ dutch ] = "Eigenschappen van";
+    Text[ dutch ] = "Eigenschappen van ";
     Text[ chinese_simplified ] = "属性： ";
     Text[ greek ] = "��������� ��� ";
     Text[ korean ] = "등록 정보 ";
@@ -202,6 +204,8 @@ TabDialog RID_SVXTABDLG_GALLERY
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
                 Text[ slovak ] = "Všeobecný";
+                Text[ hungarian ] = "Általános";
+                Text[ slovenian ] = "Splošno";
             };
         };
     };
@@ -210,6 +214,8 @@ TabDialog RID_SVXTABDLG_GALLERY
     Text[ hebrew ] = "‮מאפיינים של ‬";
     Text[ hindi ] = "का विशेषतायें ";
     Text[ slovak ] = "Vlastnosti ";
+    Text[ hungarian ] = "Tulajdonságok:";
+    Text[ slovenian ] = "Lastnosti ";
 };
 
 /******************************************************************************/
@@ -220,13 +226,13 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     SVLook = TRUE ;
     Text = "Eigenschaften von " ;
     Text [ ENGLISH ] = "Settings of " ;
-    Text [ dutch ] = "Eigenschappen van" ;
+    Text [ dutch ] = "Eigenschappen van " ;
     Text [ english_us ] = "Properties of " ;
     Text [ italian ] = "Propriet� di  " ;
     Text [ spanish ] = "Propiedades de " ;
     Text [ french ] = "Propri�t�s de " ;
     Text [ swedish ] = "Egenskaper f�r " ;
-    Text [ danish ] = "Egenskaber af " ;
+    Text [ danish ] = "Egenskaber for " ;
     Text [ portuguese ] = "Propriedades de  " ;
     Text [ portuguese_brazilian ] = "Propriedades de" ;
     Text[ chinese_simplified ] = "属性： ";
@@ -235,7 +241,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     Text[ japanese ] = "プロパティ ";
     Text[ chinese_traditional ] = "屬性： ";
     Text[ arabic ] = "�����";
-    Text[ dutch ] = "Eigenschappen van";
+    Text[ dutch ] = "Eigenschappen van ";
     Text[ chinese_simplified ] = "属性： ";
     Text[ greek ] = "��������� ��� ";
     Text[ korean ] = "등록 정보 ";
@@ -282,6 +288,8 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
                 Text[ slovak ] = "Všeobecný";
+                Text[ hungarian ] = "Általános";
+                Text[ slovenian ] = "Splošno";
             };
             PageItem
             {
@@ -316,6 +324,8 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ hebrew ] = "‮קבצים‬";
                 Text[ hindi ] = "फाइलें";
                 Text[ slovak ] = "Súbory";
+                Text[ hungarian ] = "Fájlok";
+                Text[ slovenian ] = "Datoteke";
             };
         };
     };
@@ -324,6 +334,8 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     Text[ hebrew ] = "‮מאפיינים של ‬";
     Text[ hindi ] = "का विशेषतायें ";
     Text[ slovak ] = "Vlastnosti ";
+    Text[ hungarian ] = "Tulajdonságok:";
+    Text[ slovenian ] = "Lastnosti";
 };
 
 /******************************************************************************/
@@ -384,6 +396,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ hebrew ] = "‮סוג:‬";
         Text[ hindi ] = "वर्ग:";
         Text[ slovak ] = "Typ:";
+        Text[ hungarian ] = "Típus:";
+        Text[ slovenian ] = "Vrsta:";
     };
     FixedText FT_MS_SHOW_TYPE
     {
@@ -403,7 +417,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text [ french ] = "Emplacement :" ;
         Text [ dutch ] = "Plaats:" ;
         Text [ swedish ] = "Placering:" ;
-        Text [ danish ] = "Sted:" ;
+        Text [ danish ] = "Placering:" ;
         Text [ portuguese_brazilian ] = "Local:" ;
         Text [ portuguese ] = "Local:" ;
         Text[ chinese_simplified ] = "位置:";
@@ -425,6 +439,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ hebrew ] = "‮מיקום:‬";
         Text[ hindi ] = "स्थान:";
         Text[ slovak ] = "Umiestnenie:";
+        Text[ hungarian ] = "Hely:";
+        Text[ slovenian ] = "Mesto:";
     };
     FixedText FT_MS_SHOW_PATH
     {
@@ -466,6 +482,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ hebrew ] = "‮תוכן:‬";
         Text[ hindi ] = "विषयें:";
         Text[ slovak ] = "Obsah:";
+        Text[ hungarian ] = "Tartalom:";
+        Text[ slovenian ] = "Vsebina:";
     };
     FixedText FT_MS_SHOW_CONTENT
     {
@@ -490,7 +508,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text [ spanish ] = "Modificado el:" ;
         Text [ french ] = "Modifi� le :" ;
         Text [ swedish ] = "�ndrat den:" ;
-        Text [ danish ] = "�ndret den:" ;
+        Text [ danish ] = "�ndret:" ;
         Text [ portuguese ] = "Alterado em:" ;
         Text [ portuguese_brazilian ] = "Modificado em:" ;
         Text[ chinese_simplified ] = "更改日期:";
@@ -512,6 +530,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ hebrew ] = "‮עודכן:‬";
         Text[ hindi ] = "सुधार किया:";
         Text[ slovak ] = "Zmenené:";
+        Text[ hungarian ] = "Módosítva:";
+        Text[ slovenian ] = "Spremenjeno:";
     };
     FixedText FT_MS_SHOW_CHANGEDATE
     {
@@ -540,7 +560,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text [ french ] = "Type de fichier" ;
         Text [ dutch ] = "~Bestandstype" ;
         Text [ swedish ] = "Filtyp" ;
-        Text [ danish ] = "Filtype" ;
+        Text [ danish ] = "~Filtype" ;
         Text [ portuguese_brazilian ] = "~Tipo de arquivo" ;
         Text [ portuguese ] = "Tipo de ficheiro" ;
         Text[ chinese_simplified ] = "文件类型(~F)";
@@ -562,6 +582,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ hebrew ] = "‮סוג קובץ‬";
         Text[ hindi ] = "फाइल वर्ग";
         Text[ slovak ] = "Typ ~súboru";
+        Text[ hungarian ] = "~Fájltípus";
+        Text[ slovenian ] = "Vrsta ~datoteke";
     };
     ComboBox CBB_FILETYPE
     {
@@ -615,6 +637,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ hebrew ] = "‮חיפוש קבצים...‬";
         Text[ hindi ] = "~फाइलों को अन्वेषण करो...";
         Text[ slovak ] = "~Nájsť súbory...";
+        Text[ hungarian ] = "~Fájl keresése...";
+        Text[ slovenian ] = "~Najdi datoteke...";
     };
     PushButton BTN_TAKE
     {
@@ -629,7 +653,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text [ spanish ] = "~A�adir" ;
         Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~L�gg till" ;
-        Text [ danish ] = "Ti~lf�j" ;
+        Text [ danish ] = "~Tilf�j" ;
         Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text[ chinese_simplified ] = "新增(~A)";
@@ -651,6 +675,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "Prid~ať";
+        Text[ hungarian ] = "~Hozzáadás";
+        Text[ slovenian ] = "~Dodaj";
     };
     PushButton BTN_TAKEALL
     {
@@ -687,6 +713,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ hebrew ] = "‮הוספת הכל‬";
         Text[ hindi ] = "~सब जोड़ो";
         Text[ slovak ] = "Pri~dať všetko";
+        Text[ hungarian ] = "Öss~zes hozzáadása";
+        Text[ slovenian ] = "Do~daj vse";
     };
     CheckBox CBX_PREVIEW
     {
@@ -695,7 +723,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text = "V~orschau" ;
         Text [ ENGLISH ] = "Pr~eview" ;
         Text [ NORWEGIAN ] = "Pr~eview" ;
-        Text [ DANISH ] = "E~ksempel" ;
+        Text [ DANISH ] = "~Eksempel" ;
         Text [ ENGLISH_US ] = "Pr~eview" ;
         Text [ SPANISH ] = "Pr~evisualizaci�n" ;
         Text [ FINNISH ] = "Esi~katselu" ;
@@ -723,6 +751,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ hebrew ] = "‮תצוגה מקדימה‬";
         Text[ hindi ] = "~पूर्वदृश्य";
         Text[ slovak ] = "~Náhľad";
+        Text[ hungarian ] = "~Előnézet";
+        Text[ slovenian ] = "Pr~edogled";
     };
     Window WND_BRSPRV
     {
@@ -766,6 +796,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ hebrew ] = "‮Maddin1‬";
         Text[ hindi ] = "Maddin1";
         Text[ slovak ] = "Maddin1";
+        Text[ hungarian ] = "Maddin1";
+        Text[ slovenian ] = "Maddin1";
     };
     PushButton BTN_MADDIN2
     {
@@ -802,6 +834,8 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ hebrew ] = "‮Maddin2‬";
         Text[ hindi ] = "Maddin2";
         Text[ slovak ] = "Maddin2";
+        Text[ hungarian ] = "Maddin2";
+        Text[ slovenian ] = "Maddin2";
     };
 };
 
@@ -889,6 +923,8 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "शीर्षक";
         Text[ slovak ] = "Titul";
+        Text[ hungarian ] = "Cím";
+        Text[ slovenian ] = "Naslov";
     };
     Edit EDT_TITLE
     {
@@ -901,6 +937,8 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     Text[ hebrew ] = "‮הכנסת כותרת‬";
     Text[ hindi ] = "शीर्षक प्रविष्ट करो";
     Text[ slovak ] = "Zadajte názov";
+    Text[ hungarian ] = "Írjon be címet";
+    Text[ slovenian ] = "Vnesite naslov";
 };
 
 /******************************************************************************/
@@ -950,7 +988,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text [ spanish ] = "Directorio" ;
         Text [ french ] = "R�pertoire" ;
         Text [ swedish ] = "Katalog" ;
-        Text [ danish ] = "Bibliotek" ;
+        Text [ danish ] = "Katalog" ;
         Text [ portuguese ] = "Direct�rio" ;
         Text [ portuguese_brazilian ] = "Diret�rio" ;
         Text[ chinese_simplified ] = "目录";
@@ -972,6 +1010,8 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ hebrew ] = "‮ספריה‬";
         Text[ hindi ] = "डैरक्टरी";
         Text[ slovak ] = "Adresár";
+        Text[ hungarian ] = "Könyvtár";
+        Text[ slovenian ] = "Mapa";
     };
     FixedText FT_SEARCH_DIR
     {
@@ -1018,6 +1058,8 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ hebrew ] = "‮סוג קובץ‬";
         Text[ hindi ] = "फाइल वर्ग";
         Text[ slovak ] = "Typ súboru";
+        Text[ hungarian ] = "Fájltípus";
+        Text[ slovenian ] = "Vrsta datoteke";
     };
     FixedText FT_SEARCH_TYPE
     {
@@ -1029,6 +1071,8 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Text[ hebrew ] = "‮חיפוש‬";
     Text[ hindi ] = "अन्वेषण";
     Text[ slovak ] = "Nájsť";
+    Text[ hungarian ] = "Keresés";
+    Text[ slovenian ] = "Najdi";
 };
 
 /******************************************************************************/
@@ -1100,6 +1144,8 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "फाइल";
         Text[ slovak ] = "Súbor";
+        Text[ hungarian ] = "Fájl";
+        Text[ slovenian ] = "Datoteka";
     };
     FixedText FT_TAKE_FILE
     {
@@ -1117,6 +1163,8 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Text[ hebrew ] = "‮יישום‬";
     Text[ hindi ] = "लागू करो";
     Text[ slovak ] = "Použiť";
+    Text[ hungarian ] = "Alkalmaz";
+    Text[ slovenian ] = "Uporabi";
 };
 
 /******************************************************************************/
@@ -1188,6 +1236,8 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "फाइल";
         Text[ slovak ] = "Súbor";
+        Text[ hungarian ] = "Fájl";
+        Text[ slovenian ] = "Datoteka";
     };
     FixedText FT_ACTUALIZE_FILE
     {
@@ -1205,6 +1255,8 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
     Text[ hebrew ] = "‮עידכון‬";
     Text[ hindi ] = "अपडेट् करो";
     Text[ slovak ] = "Aktualizácia";
+    Text[ hungarian ] = "Frissítés";
+    Text[ slovenian ] = "Posodobi";
 };
 
 ModalDialog RID_SVXDLG_GALLERY_THEMEID
@@ -1222,7 +1274,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Text[ french ] = "ID du th�me";
     Text[ spanish ] = "Temas ID";
     Text[ italian ] = "ID tema";
-    Text[ danish ] = "Emne-ID";
+    Text[ danish ] = "Tema-ID";
     Text[ swedish ] = "Tema-ID";
     Text[ polish ] = "Identyfikator tematu";
     Text[ portuguese_brazilian ] = "ID do tema";
@@ -1286,6 +1338,8 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
         Text[ hebrew ] = "‮מזהה‬";
         Text[ hindi ] = "ID";
         Text[ slovak ] = "ID";
+        Text[ hungarian ] = "Azonosító";
+        Text[ slovenian ] = "ID";
     };
     ListBox LB_RESNAME
     {
@@ -1302,6 +1356,8 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Text[ hebrew ] = "‮מזהה נושא‬";
     Text[ hindi ] = "प्रकरण ID";
     Text[ slovak ] = "Identifikácia témy";
+    Text[ hungarian ] = "Témaazonosító";
+    Text[ slovenian ] = "ID teme";
 };
 
 /******************************************************************************/
@@ -1319,7 +1375,7 @@ CheckBox RID_SVXDLG_GALLERY_CBX
     Text [ spanish ] = "~Subdirectorios" ;
     Text [ french ] = "~Sous-r�pertoires" ;
     Text [ swedish ] = "~Underordnade kataloger" ;
-    Text [ danish ] = "~Underbiblioteker" ;
+    Text [ danish ] = "~Underkataloger" ;
     Text [ portuguese_brazilian ] = "~Subdiret�rios" ;
     Text [ portuguese ] = "~Subdirect�rios" ;
     Text[ chinese_simplified ] = "子目录(~U)";
@@ -1341,6 +1397,8 @@ CheckBox RID_SVXDLG_GALLERY_CBX
     Text[ hebrew ] = "‮תתי ספריות‬";
     Text[ hindi ] = "~अधीनडैरक्टरियाँ";
     Text[ slovak ] = "~Podadresáre";
+    Text[ hungarian ] = "A~lkönyvtár";
+    Text[ slovenian ] = "P~odmape";
 };
 String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 {
@@ -1374,6 +1432,8 @@ String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
     Text[ hebrew ] = "‮עידכון‬";
     Text[ hindi ] = "अपडेट् करो";
     Text[ slovak ] = "Aktualizácia";
+    Text[ hungarian ] = "Frissítés";
+    Text[ slovenian ] = "Posodobi";
 };
 String RID_SVXSTR_GALLERY_FOPENERROR
 {
@@ -1407,6 +1467,8 @@ String RID_SVXSTR_GALLERY_FOPENERROR
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ זה‬";
     Text[ hindi ] = "इस फाइल को नहीं खोल सकते है";
     Text[ slovak ] = "Tento súbor nemožno otvoriť";
+    Text[ hungarian ] = "A fájl megnyitása nem sikerült";
+    Text[ slovenian ] = "Te datoteke ni mogoče odpreti";
 };
 String RID_SVXSTR_GALLERY_NOFILES
 {
@@ -1440,6 +1502,8 @@ String RID_SVXSTR_GALLERY_NOFILES
     Text[ hebrew ] = "‮<אין קבצים>‬";
     Text[ hindi ] = "<कोई फाइल नहीं>";
     Text[ slovak ] = "<Žiadne súbory>";
+    Text[ hungarian ] = "<Nincs fájl>";
+    Text[ slovenian ] = "<Ni datotek>";
 };
 String RID_SVXSTR_GALLERY_NOTHEME
 {
@@ -1451,7 +1515,7 @@ String RID_SVXSTR_GALLERY_NOTHEME
     Text [ spanish ] = "�El nombre del tema no es v�lido!" ;
     Text [ french ] = "Le nom du th�me est incorrect !" ;
     Text [ swedish ] = "Temanamnet �r ogiltigt!" ;
-    Text [ danish ] = "Emnenavnet er ugyldigt!" ;
+    Text [ danish ] = "Temanavnet er ugyldigt!" ;
     Text [ portuguese ] = "O nome do tema n�o � v�lido!" ;
     Text [ portuguese_brazilian ] = "O nome do tema � inv�lido!" ;
     Text[ chinese_simplified ] = "这个主题名称无效！";
@@ -1473,6 +1537,8 @@ String RID_SVXSTR_GALLERY_NOTHEME
     Text[ hebrew ] = "‮שם נושא לא חוקי!‬";
     Text[ hindi ] = "अमान्य प्रकरण नाम!";
     Text[ slovak ] = "Neplatný názov motívu!";
+    Text[ hungarian ] = "Érvénytelen témanév!";
+    Text[ slovenian ] = "Neveljavno ime teme!";
 };
 String RID_SVXSTR_GALLERY_DELETEOBJ
 {
@@ -1484,7 +1550,7 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text [ spanish ] = "�Desea realmente\nborrar este objeto?" ;
     Text [ french ] = "Voulez-vous vraiment\nsupprimer cet objet ?" ;
     Text [ swedish ] = "Vill du verkligen radera\ndet h�r objektet?" ;
-    Text [ danish ] = "Skal dette objekt\nvirkelig slettes?" ;
+    Text [ danish ] = "Er du sikker p�, at du vil slette dette objekt?" ;
     Text [ portuguese ] = "Eliminar realmente\neste objecto?" ;
     Text [ portuguese_brazilian ] = "Deseja realmente\nexcluir este objeto?" ;
     Text[ chinese_simplified ] = "您真的要删除这个对象吗？";
@@ -1506,6 +1572,8 @@ String RID_SVXSTR_GALLERY_DELETEOBJ
     Text[ hebrew ] = "‮האם אכן למחוק עצם זה?‬";
     Text[ hindi ] = "आप सचमुच इस वस्तु को\nमिटाना चाहते है?";
     Text[ slovak ] = "Naozaj chcete zmazať\ntento objekt?";
+    Text[ hungarian ] = "Biztosan törölni kívánja\nezt az objektumot?";
+    Text[ slovenian ] = "Ali ste prepričani, da želite\nizbrisati ta predmet?";
 };
 String RID_SVXSTR_GALLERY_DELETETHEME
 {
@@ -1519,7 +1587,7 @@ String RID_SVXSTR_GALLERY_DELETETHEME
     Text[ french ] = "Voulez-vous vraiment\nsupprimer ce th�me ?";
     Text[ spanish ] = "�Desea realmente borrar\neste tema?";
     Text[ italian ] = "Volete cancellare\nquesto argomento?";
-    Text[ danish ] = "Skal dette emne\nvirkelig slettes?";
+    Text[ danish ] = "Er du sikker p�, at du vil slette dette tema?";
     Text[ swedish ] = "Vill du verkligen radera det\n h�r temat?";
     Text[ polish ] = "Czy na pewno\nchcesz usun�� ten temat?";
     Text[ portuguese_brazilian ] = "Deseja realmente \nexcluir este tema?";
@@ -1536,6 +1604,8 @@ String RID_SVXSTR_GALLERY_DELETETHEME
     Text[ hebrew ] = "‮האם אכן למחוק נושא זה?‬";
     Text[ hindi ] = "आप सचमुच इस प्रकरण को\nमिटाना चाहते है?";
     Text[ slovak ] = "Naozaj chcete zmazať\ntento motív?";
+    Text[ hungarian ] = "Biztosan törölni akarja \nezt a témát?";
+    Text[ slovenian ] = "Ali ste prepričani, da želite\nizbrisati to temo?";
 };
 String RID_SVXSTR_EXTFORMAT1_SYS
 {
@@ -1573,6 +1643,8 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text[ hebrew ] = "‮קובץ שמע Wave‬";
     Text[ hindi ] = "Wave - ध्वनि फाइल";
     Text[ slovak ] = "Wave - zvukový súbor";
+    Text[ hungarian ] = "Wave - Hangfájl";
+    Text[ slovenian ] = "Wave - zvočna datoteka";
 };
 String RID_SVXSTR_EXTFORMAT2_SYS
 {
@@ -1610,6 +1682,8 @@ String RID_SVXSTR_EXTFORMAT2_UI
     Text[ hebrew ] = "‮Audio Interchange File Format‬";
     Text[ hindi ] = "Audio अदला-बदला फाइल रचना";
     Text[ slovak ] = "Formát Audio Interchange File";
+    Text[ hungarian ] = "AIFF (Audio Interchange File Format)";
+    Text[ slovenian ] = "Audio Interchange File Format";
 };
 String RID_SVXSTR_EXTFORMAT3_SYS
 {
@@ -1644,6 +1718,8 @@ String RID_SVXSTR_EXTFORMAT3_UI
     Text[ hebrew ] = "‮קובץ שמע AU‬";
     Text[ hindi ] = "AU - ध्वनि फाइल";
     Text[ slovak ] = "AU - zvukový súbor";
+    Text[ hungarian ] = "AU - hangfájl";
+    Text[ slovenian ] = "AU - zvočna datoteka";
 };
 String RID_SVXSTR_GALLERY_FILTER
 {
@@ -1677,6 +1753,8 @@ String RID_SVXSTR_GALLERY_FILTER
     Text[ hebrew ] = "‮מסנן גרפיקה‬";
     Text[ hindi ] = "सुचित्र फ़िल्टर";
     Text[ slovak ] = "Grafický filter";
+    Text[ hungarian ] = "Grafikus szűrő";
+    Text[ slovenian ] = "Grafični filter";
 };
 String RID_SVXSTR_GALLERY_LENGTH
 {
@@ -1710,6 +1788,8 @@ String RID_SVXSTR_GALLERY_LENGTH
     Text[ hebrew ] = "‮אורך:‬";
     Text[ hindi ] = "लम्बाई:";
     Text[ slovak ] = "Dĺžka:";
+    Text[ hungarian ] = "Hossz:";
+    Text[ slovenian ] = "Dolžina:";
 };
 String RID_SVXSTR_GALLERY_SIZE
 {
@@ -1743,6 +1823,8 @@ String RID_SVXSTR_GALLERY_SIZE
     Text[ hebrew ] = "‮גודל:‬";
     Text[ hindi ] = "परिमाण:";
     Text[ slovak ] = "Veľkosť:";
+    Text[ hungarian ] = "Méret:";
+    Text[ slovenian ] = "Velikost:";
 };
 String RID_SVXSTR_GALLERY_DELETEDD
 {
@@ -1776,6 +1858,8 @@ String RID_SVXSTR_GALLERY_DELETEDD
     Text[ hebrew ] = "‮האם למחוק את הקובץ המקושר?‬";
     Text[ hindi ] = "आप लिंक किया हुआ फाइल को मिटाना चाहते है?";
     Text[ slovak ] = "Prajete si zmazať prepojený súbor?";
+    Text[ hungarian ] = "Akarja törölni a kapcsolt fájlt?";
+    Text[ slovenian ] = "Ali želite izbrisati povezano datoteko?";
 };
 String RID_SVXSTR_GALLERY_SEARCH
 {
@@ -1809,6 +1893,8 @@ String RID_SVXSTR_GALLERY_SEARCH
     Text[ hebrew ] = "‮האם לעדכן את רשימת הקבצים?‬";
     Text[ hindi ] = "आप फाइल सूची को अपडेट् करना चाहते है?";
     Text[ slovak ] = "Prajete si aktualizovať zoznam súborov?";
+    Text[ hungarian ] = "Frissíti a fájllistát?";
+    Text[ slovenian ] = "Ali želite posodobiti seznam datotek?";
 };
 String RID_SVXSTR_GALLERY_SGIERROR
 {
@@ -1820,7 +1906,7 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text [ french ] = "Impossible d'ouvrir ce fichier.\nVoulez-vous indiquer un autre chemin de recherche ? " ;
     Text [ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad opgeven?" ;
     Text [ swedish ] = "Den h�r filen kan inte �ppnas.\nVill du ange en annan s�kv�g? " ;
-    Text [ danish ] = "Det er ikke muligt at �bne denne fil.\nVil du angive en ny s�gesti? " ;
+    Text [ danish ] = "Det er ikke muligt at �bne denne fil.\nVil du angive en anden s�gesti? " ;
     Text [ portuguese ] = "Imposs�vel abrir este ficheiro.\nDeseja indicar outro atalho de localiza��o?  " ;
     Text [ portuguese_brazilian ] = "N�o � poss�vel abrir este arquivo. \nDeseja indicar outro caminho de pesquisa?" ;
     Text[ chinese_simplified ] = "无法打开这个文件。\n您要指定另一个路径？ ";
@@ -1842,6 +1928,8 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text[ hebrew ] = "‮לא ניתן לפתוח קובץ זה.\nהאם להשתמש במסלול חיפוש אחר? ‬";
     Text[ hindi ] = "इस फाइल को नहीं खोल सकते है ।\nआप अन्य अन्वेषण मार्ग को प्रवेश करना चाहते है? ";
     Text[ slovak ] = "Tento súbor sa nedá otvoriť.\nPrajete si zadať inú cestu k prehľadaniu?";
+    Text[ hungarian ] = "Ez a fájl nem megnyitható.\nAkar más keresési útvonalat megadni?";
+    Text[ slovenian ] = "Te datoteke ni mogoče odpreti.\nAli želite vnesti drugo pot za iskanje?";
 };
 String RID_SVXSTR_GALLERY_NEWTHEME
 {
@@ -1850,7 +1938,7 @@ String RID_SVXSTR_GALLERY_NEWTHEME
     Text [ english_us ] = "New Theme" ;
     Text [ dutch ] = "Nieuw onderwerp" ;
     Text [ swedish ] = "Nytt tema" ;
-    Text [ danish ] = "Nyt emne" ;
+    Text [ danish ] = "Nyt tema" ;
     Text [ italian ] = "Nuovo argomento" ;
     Text [ spanish ] = "Tema nuevo" ;
     Text [ french ] = "Nouveau th�me" ;
@@ -1875,6 +1963,8 @@ String RID_SVXSTR_GALLERY_NEWTHEME
     Text[ hebrew ] = "‮נושא חדש‬";
     Text[ hindi ] = "नया प्रकरण";
     Text[ slovak ] = "Nová téma";
+    Text[ hungarian ] = "Új téma";
+    Text[ slovenian ] = "Nova tema";
 };
 String RID_SVXSTR_GALLERY_BROWSER
 {
@@ -1908,6 +1998,8 @@ String RID_SVXSTR_GALLERY_BROWSER
     Text[ hebrew ] = "‮אירגון‬";
     Text[ hindi ] = "~व्यवस्थापक...";
     Text[ slovak ] = "~Organizátor...";
+    Text[ hungarian ] = "~Szervező...";
+    Text[ slovenian ] = "~Organizator...";
 };
 String RID_SVXSTR_GALLERY_THEMEERR
 {
@@ -1919,7 +2011,7 @@ String RID_SVXSTR_GALLERY_THEMEERR
     Text [ spanish ] = "Este nombre de tema ya existe.\nPor favor elija otro nombre." ;
     Text [ french ] = "Le nom de ce th�me existe d�j�.\nVeuillez en choisir un autre." ;
     Text [ swedish ] = "Det h�r temanamnet finns redan.\nV�lj ett annat namn." ;
-    Text [ danish ] = "Dette emnenavn findes allerede.\nV�lg et andet navn." ;
+    Text [ danish ] = "Dette temanavn findes allerede.\nV�lg et andet navn." ;
     Text [ portuguese ] = "Este nome de tema j� existe.\nQueira escolher outro." ;
     Text [ portuguese_brazilian ] = "Este nome de tema j� existe.\n Indique outro diferente." ;
     Text[ chinese_simplified ] = "这个主题名称已经存在。\n请您选择一个其他的名称。";
@@ -1941,6 +2033,8 @@ String RID_SVXSTR_GALLERY_THEMEERR
     Text[ hebrew ] = "‮נושא זה כבר קיים.\nנא לבחור אחר.‬";
     Text[ hindi ] = "इस प्रकरण नाम पहिले से ही अस्तित्व में है ।\nकृपया किसी दूसरा चुनिए ।";
     Text[ slovak ] = "Zadaný názov témy už existuje.\nProsím zvoľte iný.";
+    Text[ hungarian ] = " Ez a témanév már létezik. \nKérem, válasszon másikat.";
+    Text[ slovenian ] = "To ime teme že obstaja.\nIzberite drugo ime";
 };
 String RID_SVXSTR_GALLERYPROPS_THEME
 {
@@ -1952,7 +2046,7 @@ String RID_SVXSTR_GALLERYPROPS_THEME
     Text [ french ] = "Th�me;Th�mes" ;
     Text [ dutch ] = "Onderwerp;Onderwerpen" ;
     Text [ swedish ] = "Tema;Teman" ;
-    Text [ danish ] = "Emne;Emner" ;
+    Text [ danish ] = "Tema;Temaer" ;
     Text [ portuguese_brazilian ] = "Tema;Temas" ;
     Text [ portuguese ] = "Tema;Temas" ;
     Text[ chinese_simplified ] = "主题;主题";
@@ -1974,6 +2068,8 @@ String RID_SVXSTR_GALLERYPROPS_THEME
     Text[ hebrew ] = "‮נושא;נושאים‬";
     Text[ hindi ] = "प्रकरण;प्रकरण";
     Text[ slovak ] = "Téma;Témy";
+    Text[ hungarian ] = "Téma;Témák";
+    Text[ slovenian ] = "Tema;Teme";
 };
 String RID_SVXSTR_GALLERYPROPS_OBJECT
 {
@@ -2007,6 +2103,8 @@ String RID_SVXSTR_GALLERYPROPS_OBJECT
     Text[ hebrew ] = "‮עצם;עצמים‬";
     Text[ hindi ] = "वस्तु;वस्तु";
     Text[ slovak ] = "Objekt;Objekty";
+    Text[ hungarian ] = "Objektum;Objektumok";
+    Text[ slovenian ] = "Predmet;Predmeti";
 };
 String RID_SVXSTR_GALLERYPROPS_GALTHEME
 {
@@ -2018,7 +2116,7 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text [ spanish ] = "Tema de Gallery" ;
     Text [ french ] = "Th�me de la Gallery" ;
     Text [ swedish ] = "Gallery-tema" ;
-    Text [ danish ] = "Gallery-emne" ;
+    Text [ danish ] = "Galleritema" ;
     Text [ portuguese ] = "Tema da Gallery" ;
     Text [ portuguese_brazilian ] = "Tema da Galeria" ;
     Text[ chinese_simplified ] = "画廊主题";
@@ -2040,6 +2138,8 @@ String RID_SVXSTR_GALLERYPROPS_GALTHEME
     Text[ hebrew ] = "‮נושא גלריה‬";
     Text[ hindi ] = "गेलरी प्रकरण";
     Text[ slovak ] = "Téma v galérii";
+    Text[ hungarian ] = "Tematikus képtár";
+    Text[ slovenian ] = "Galerijska tema";
 };
 String RID_SVXSTR_GALLERY_IMPORTTHEME
 {
@@ -2073,6 +2173,8 @@ String RID_SVXSTR_GALLERY_IMPORTTHEME
     Text[ hebrew ] = "‮יבוא‬";
     Text[ hindi ] = "आ~यात...";
     Text[ slovak ] = "I~mportovať...";
+    Text[ hungarian ] = "I~mportálás...";
+    Text[ slovenian ] = "U~voz...";
 };
 String RID_SVXSTR_GALLERY_CREATETHEME
 {
@@ -2081,7 +2183,7 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text [ english_us ] = "New Theme..." ;
     Text [ dutch ] = "Nieuw onderwerp..." ;
     Text [ swedish ] = "Nytt tema..." ;
-    Text [ danish ] = "Nyt emne..." ;
+    Text [ danish ] = "Nyt tema..." ;
     Text [ italian ] = "Nuovo argomento..." ;
     Text [ spanish ] = "Tema nuevo..." ;
     Text [ french ] = "Nouveau th�me..." ;
@@ -2106,6 +2208,8 @@ String RID_SVXSTR_GALLERY_CREATETHEME
     Text[ hebrew ] = "‮נושא חדש‬";
     Text[ hindi ] = "नया प्रकरण...";
     Text[ slovak ] = "Nová téma...";
+    Text[ hungarian ] = "Új téma...";
+    Text[ slovenian ] = "Nova tema...";
 };
 String RID_SVXSTR_GALLERY_READONLY
 {
@@ -2140,6 +2244,8 @@ String RID_SVXSTR_GALLERY_READONLY
     Text[ hebrew ] = "‮ (קריאה בלבד)‬";
     Text[ hindi ] = " (केवल पढ़ने केलिए)";
     Text[ slovak ] = " (Iba na čítanie)";
+    Text[ hungarian ] = "(csak olvasható)";
+    Text[ slovenian ] = " (samo za branje)";
 };
 String RID_SVXSTR_GALLERY_ALLFILES
 {
@@ -2173,6 +2279,8 @@ String RID_SVXSTR_GALLERY_ALLFILES
     Text[ hebrew ] = "‮<כל הקבצים>‬";
     Text[ hindi ] = "<सब फाइलें>";
     Text[ slovak ] = "<Všetky súbory>";
+    Text[ hungarian ] = "<Minden fájl>";
+    Text[ slovenian ] = "<Vse datoteke>";
 };
 String RID_SVXSTR_GALLERY_DIALOGID
 {
@@ -2206,6 +2314,8 @@ String RID_SVXSTR_GALLERY_DIALOGID
     Text[ hebrew ] = "‮השמת זיהוי (ID)‬";
     Text[ hindi ] = "ID निर्दिष्ट करो";
     Text[ slovak ] = "Priradiť ID";
+    Text[ hungarian ] = "Azonosító hozzárendelése";
+    Text[ slovenian ] = "Dodeli ID";
 };
 String RID_SVXSTR_GALLERY_ID_EXISTS
 {
@@ -2239,6 +2349,8 @@ String RID_SVXSTR_GALLERY_ID_EXISTS
     Text[ hebrew ] = "‮מזהה זה (ID) כבר קיים...‬";
     Text[ hindi ] = "इस ID पहिले से ही अस्तित्व में है...";
     Text[ slovak ] = "Také ID už existuje...";
+    Text[ hungarian ] = "Ez az azonosító már létezik...";
+    Text[ slovenian ] = "Ta ID že obstaja...";
 };
 String RID_SVXSTR_GALLERY_TITLE
 {
@@ -2269,6 +2381,8 @@ String RID_SVXSTR_GALLERY_TITLE
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
     Text[ slovak ] = "Titul";
+    Text[ hungarian ] = "Cím";
+    Text[ slovenian ] = "Naslov";
 };
 String RID_SVXSTR_GALLERY_PATH
 {
@@ -2301,6 +2415,8 @@ String RID_SVXSTR_GALLERY_PATH
     Text[ hebrew ] = "‮מסלול‬";
     Text[ hindi ] = "मार्ग";
     Text[ slovak ] = "Cesta";
+    Text[ hungarian ] = "Útvonal";
+    Text[ slovenian ] = "Pot";
 };
 String RID_SVXSTR_GALLERY_ICONVIEW
 {
@@ -2331,6 +2447,8 @@ String RID_SVXSTR_GALLERY_ICONVIEW
     Text[ hebrew ] = "‮מבט צלמית‬";
     Text[ hindi ] = "अइकॉन दृश्य";
     Text[ slovak ] = "Pohľad s ikonami";
+    Text[ hungarian ] = "Ikonnézet";
+    Text[ slovenian ] = "Pogled z ikonami";
 };
 String RID_SVXSTR_GALLERY_LISTVIEW
 {
@@ -2361,6 +2479,8 @@ String RID_SVXSTR_GALLERY_LISTVIEW
     Text[ hebrew ] = "‮מבט מפורט‬";
     Text[ hindi ] = "विस्तारपूर्वक वर्णन दृश्य ";
     Text[ slovak ] = "Detailný pohľad";
+    Text[ hungarian ] = "Részletes nézet";
+    Text[ slovenian ] = "Pogled s podrobnostmi";
 };
 
 /******************************************************************************/
@@ -2520,6 +2640,8 @@ Menu RID_SVXMN_GALLERY1
             Text[ hebrew ] = "‮עידכון‬";
             Text[ hindi ] = "अपडेट् करो";
             Text[ slovak ] = "Aktualizácia";
+            Text[ hungarian ] = "Frissítés";
+            Text[ slovenian ] = "Posodobi";
         };
         MenuItem
         {
@@ -2557,6 +2679,8 @@ Menu RID_SVXMN_GALLERY1
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
             Text[ slovak ] = "~Zmazať";
+            Text[ hungarian ] = "~Törlés";
+            Text[ slovenian ] = "~Izbriši";
         };
         MenuItem
         {
@@ -2567,7 +2691,7 @@ Menu RID_SVXMN_GALLERY1
             Text [ english_us ] = "~Rename" ;
             Text [ portuguese_brazilian ] = "~Renomear" ;
             Text [ swedish ] = "B~yt namn" ;
-            Text [ danish ] = "O~md�b" ;
+            Text [ danish ] = "~Omd�b" ;
             Text [ italian ] = "~Rinomina" ;
             Text [ spanish ] = "~Cambiar nombre" ;
             Text [ french ] = "~Renommer" ;
@@ -2592,6 +2716,8 @@ Menu RID_SVXMN_GALLERY1
             Text[ hebrew ] = "‮שינוי שם‬";
             Text[ hindi ] = "~पुनः नाम दो";
             Text[ slovak ] = "P~remenovať";
+            Text[ hungarian ] = "~Átnevezés";
+            Text[ slovenian ] = "P~reimenuj";
         };
         MenuItem
         {
@@ -2630,6 +2756,8 @@ Menu RID_SVXMN_GALLERY1
             Text[ hebrew ] = "‮השמת מזהה (ID)‬";
             Text[ hindi ] = "~ID निर्दिष्ट करो";
             Text[ slovak ] = "Priradiť ~ID";
+            Text[ hungarian ] = "A~zonosító hozzárendelése";
+            Text[ slovenian ] = "Dodeli ~ID";
         };
         MenuItem
         {
@@ -2643,7 +2771,7 @@ Menu RID_SVXMN_GALLERY1
             Text [ ENGLISH ] = "~Properties ..." ;
             Text [ english_us ] = "Propert~ies ..." ;
             Text [ swedish ] = "~Egenskaper..." ;
-            Text [ danish ] = "Egenskaber..." ;
+            Text [ danish ] = "~Egenskaber..." ;
             Text [ italian ] = "Propri~et�..." ;
             Text [ spanish ] = "Prop~iedades..." ;
             Text [ french ] = "~Propri�t�s ..." ;
@@ -2669,6 +2797,8 @@ Menu RID_SVXMN_GALLERY1
             Text[ hebrew ] = "‮מאפיינים...‬";
             Text[ hindi ] = "विशे~षतायें ...";
             Text[ slovak ] = "Vlastnost~i...";
+            Text[ hungarian ] = "~Tulajdonságok...";
+            Text[ slovenian ] = "La~stnosti ...";
         };
     };
 };
@@ -2691,7 +2821,7 @@ Menu RID_SVXMN_GALLERY2
             Text [ spanish ] = "~A�adir" ;
             Text [ french ] = "~Ajouter" ;
             Text [ swedish ] = "~L�gg till" ;
-            Text [ danish ] = "Tilf�j" ;
+            Text [ danish ] = "~Inds�t" ;
             Text [ portuguese_brazilian ] = "~Inserir" ;
             Text [ portuguese ] = "~Adicionar" ;
             Text[ chinese_simplified ] = "加入(~I)";
@@ -2724,7 +2854,7 @@ Menu RID_SVXMN_GALLERY2
                         Text [ french ] = "C~opie" ;
                         Text [ dutch ] = "~Kopie" ;
                         Text [ swedish ] = "~Kopia" ;
-                        Text [ danish ] = "Kopi" ;
+                        Text [ danish ] = "K~opier" ;
                         Text [ portuguese ] = "~C�pia" ;
                         Text [ portuguese_brazilian ] = "~Copiar" ;
                         Text[ chinese_simplified ] = "复制(~C)";
@@ -2746,6 +2876,8 @@ Menu RID_SVXMN_GALLERY2
                         Text[ hebrew ] = "‮העתקה‬";
                         Text[ hindi ] = "~प्रतिलिपि";
                         Text[ slovak ] = "~Kopírovať";
+                        Text[ hungarian ] = "~Másolás";
+                        Text[ slovenian ] = "Kopir~aj";
                     };
                     MenuItem
                     {
@@ -2781,6 +2913,8 @@ Menu RID_SVXMN_GALLERY2
                         Text[ hebrew ] = "‮קישור‬";
                         Text[ hindi ] = "लिंक";
                         Text[ slovak ] = "Odkaz";
+                        Text[ hungarian ] = "Hivatkozás";
+                        Text[ slovenian ] = "Povezava";
                     };
                     MenuItem
                     {
@@ -2820,6 +2954,8 @@ Menu RID_SVXMN_GALLERY2
                         Text[ hebrew ] = "‮רקע‬";
                         Text[ hindi ] = "पृष्टभा~ग";
                         Text[ slovak ] = "Po~zadie";
+                        Text[ hungarian ] = "Há~ttér";
+                        Text[ slovenian ] = "~Ozadje";
                     };
                 };
             };
@@ -2828,6 +2964,8 @@ Menu RID_SVXMN_GALLERY2
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~जोड़ो";
             Text[ slovak ] = "~Vložiť";
+            Text[ hungarian ] = "~Beszúrás";
+            Text[ slovenian ] = "~Vstavi";
         };
         MenuItem
         {
@@ -2845,7 +2983,7 @@ Menu RID_SVXMN_GALLERY2
             Text [ french ] = "A~per�u" ;
             Text [ dutch ] = "~Voorbeeld" ;
             Text [ swedish ] = "F�rhands~visning" ;
-            Text [ danish ] = "Eksempel" ;
+            Text [ danish ] = "~Eksempel" ;
             Text [ portuguese_brazilian ] = "~Visualizar" ;
             Text [ portuguese ] = "~Previsualizar" ;
             Text[ russian ] = "��������������� ��������";
@@ -2865,6 +3003,8 @@ Menu RID_SVXMN_GALLERY2
             Text[ hebrew ] = "‮תצוגה מקדימה‬";
             Text[ hindi ] = "~पूर्वदृश्य";
             Text[ slovak ] = "~Náhľad";
+            Text[ hungarian ] = "~Előnézet";
+            Text[ slovenian ] = "~Predogled";
         };
         MenuItem
         {
@@ -2901,6 +3041,8 @@ Menu RID_SVXMN_GALLERY2
             Text[ hebrew ] = "‮כותרת‬";
             Text[ hindi ] = "~शीर्षक";
             Text[ slovak ] = "~Titul";
+            Text[ hungarian ] = "~Cím";
+            Text[ slovenian ] = "~Naslov";
         };
         MenuItem
         {
@@ -2938,6 +3080,8 @@ Menu RID_SVXMN_GALLERY2
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~मिटाओ";
             Text[ slovak ] = "~Zmazať";
+            Text[ hungarian ] = "~Törlés";
+            Text[ slovenian ] = "~Izbriši";
         };
         MenuItem
         {
@@ -2954,7 +3098,7 @@ Menu RID_SVXMN_GALLERY2
             Text [ portuguese_brazilian ] = "~Copiar" ;
             Text [ portuguese ] = "~Copiar" ;
             Text [ finnish ] = "K~opioi" ;
-            Text [ danish ] = "~Kopier" ;
+            Text [ danish ] = "K~opier" ;
             Text [ french ] = "~Copier" ;
             Text [ swedish ] = "~Kopiera" ;
             Text [ dutch ] = "~Kopi�ren" ;
@@ -2977,6 +3121,8 @@ Menu RID_SVXMN_GALLERY2
             Text[ hebrew ] = "‮העתקה‬";
             Text[ hindi ] = "~प्रतिलिपि";
             Text[ slovak ] = "~Kopírovať";
+            Text[ hungarian ] = "~Másolás";
+            Text[ slovenian ] = "Kopir~aj";
         };
         MenuItem
         {
@@ -2989,7 +3135,7 @@ Menu RID_SVXMN_GALLERY2
             Text [ portuguese_brazilian ] = "~Inserir" ;
             Text [ portuguese ] = "~Inserir" ;
             Text [ finnish ] = "Lis~��" ;
-            Text [ danish ] = "S�t i~nd" ;
+            Text [ danish ] = "~Inds�t" ;
             Text [ french ] = "C~oller" ;
             Text [ swedish ] = "~Infoga" ;
             Text [ dutch ] = "P~lakken" ;
@@ -3010,9 +3156,18 @@ Menu RID_SVXMN_GALLERY2
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~जोड़ो";
             Text[ slovak ] = "~Vložiť";
+            Text[ hungarian ] = "~Beszúrás";
+            Text[ slovenian ] = "~Vstavi";
         };
     };
 };
+
+
+
+
+
+
+
 
 
 
