@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:15:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
@@ -293,9 +290,7 @@ Graphic SwNoTxtNode::GetGraphic() const
     else
     {
         ASSERT( GetOLENode(), "new type of Node?" );
-        SvInPlaceObjectRef xObj( ((SwOLENode*)this)->GetOLEObj().GetOleRef() );
-        GDIMetaFile aMtf;
-        aRet = xObj->GetGDIMetaFile( aMtf );
+        aRet = *((SwOLENode*)this)->SwOLENode::GetGraphic();
     }
     return aRet;
 }
