@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-06 12:22:59 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2026,9 +2026,20 @@ Size SwAccessibleMap::PixelToLogic( const Size& rSize ) const
 
 sal_Bool SwAccessibleMap::ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
-        ::accessibility::AccessibleShape* pReplacement)
-        throw (::com::sun::star::uno::RuntimeException)
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const long _nIndex,
+        const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
+    )   throw (::com::sun::star::uno::RuntimeException)
 {
+    // create the new child
+    ::accessibility::AccessibleShape* pReplacement = ::accessibility::ShapeTypeHandler::Instance().CreateAccessibleObject (
+        ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex ),
+        _rShapeTreeInfo
+    );
+    Reference< XAccessible > xNewChild( pReplacement ); // keep this alive (do this before calling Init!)
+    if ( pReplacement )
+        pReplacement->Init();
+
     const SdrObject *pObj = 0;
     {
         vos::OGuard aGuard( maMutex );

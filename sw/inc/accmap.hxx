@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 12:43:23 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,8 +251,10 @@ public:
     // IAccessibleParent
     virtual sal_Bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
-        ::accessibility::AccessibleShape* pReplacement)
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const long _nIndex,
+        const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
+    )   throw (::com::sun::star::uno::RuntimeException);
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview
