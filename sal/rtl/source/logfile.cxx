@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2002-11-19 08:56:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ extern "C" void SAL_CALL rtl_logfile_trace  ( const char *pszFormat, ... )
             sal_Int64 nConverted, nWritten;
             MutexGuard guard( getLogMutex() );
             nConverted = vsnprintf( g_buffer , g_BUFFERSIZE, pszFormat, args );
-            nConverted = (nConverted > g_BUFFERSIZE, g_BUFFERSIZE, nConverted );
+            nConverted = (nConverted > g_BUFFERSIZE ? g_BUFFERSIZE : nConverted );
             if( nConverted > 0 )
                 osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64*)&nWritten );
         }
