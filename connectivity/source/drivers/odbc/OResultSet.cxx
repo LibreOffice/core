@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 12:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,6 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ) :  OResultSet_BASE(m_aMutex
 OResultSet::~OResultSet()
 {
     delete m_pRowStatusArray;
-    if(m_aBindVector.size())
-        releaseBuffer();
 }
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
@@ -199,6 +197,10 @@ void OResultSet::disposing(void)
         N3SQLFreeHandle(SQL_HANDLE_STMT,m_aStatementHandle);
         m_aStatementHandle = NULL;
     }
+
+    if(m_aBindVector.size())
+        releaseBuffer();
+
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
 }
