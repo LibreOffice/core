@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:02:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _FRM_DATABASEFORM_HXX_
 #define _FRM_DATABASEFORM_HXX_
 
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_XSQLERRORLISTENER_HPP_
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 #endif
@@ -607,7 +610,7 @@ private:
     sal_Bool InsertFilePart(INetMIMEMessage& rParent, const ::rtl::OUString& rName, const ::rtl::OUString& rFileName);
     void Encode(::rtl::OUString& rString) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  getConnection();
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection();
 
     DECL_LINK( OnTimeout, void* );
 };
