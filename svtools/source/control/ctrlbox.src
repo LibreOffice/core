@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-21 20:12:57 $
+ *  last change: $Author: obo $ $Date: 2001-09-25 20:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ String STR_SVT_COLLATE_UNICODE
     Text[ japanese ] = "ﾕﾆｺｰﾄﾞ";
     Text[ korean ] = "Unicode";
     Text[ chinese_simplified ] = "统一码";
-    Text[ chinese_traditional ] = "Unicode";
+    Text[ chinese_traditional ] = "統一碼";
     Text[ turkish ] = "Unicode";
     Text[ arabic ] = "Unicode";
     Text[ catalan ] = "Unicode";
@@ -355,6 +355,7 @@ String STR_SVT_COLLATE_ZHUYIN
     Text[ catalan ] = "Zhuyin";
     Text[ finnish ] = "Zhuyin";
 };
+
 
 
 
