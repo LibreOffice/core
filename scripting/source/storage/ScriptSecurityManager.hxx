@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-02-28 13:43:04 $
+*  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -67,6 +67,8 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/security/AccessControlException.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptInfo.hpp>
 
 namespace scripting_securitymgr
@@ -93,26 +95,28 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext )
         throw ( css::uno::RuntimeException );
     ~ScriptSecurityManager();
-    void addScriptStorage( rtl::OUString scriptStorageURL, sal_Int32 storageID);
+    void addScriptStorage( rtl::OUString scriptStorageURL, sal_Int32 storageID)
+        throw ( css::uno::RuntimeException );
 /**
  * checks to see if the requested permission can be granted
  * checks to see whether the requested ScriptPeremission is allowed.
- * This was modelled after the Java AccessController, but at this time
- * we can't see a good reason not to return a bool, rather than throw
- * an exception if the request is not granted (as is the case in Java).
  */
     sal_Bool checkPermission( const rtl::OUString & scriptStorageURL,
         const rtl::OUString & permissionRequest )
-        throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException, css::lang::IllegalArgumentException,
+            css::security::AccessControlException );
     void removePermissionSettings ( ::rtl::OUString & scriptStorageURL );
 private:
     void readConfiguration() throw (css::uno::RuntimeException);
-    short executeDialog ( const rtl::OUString & path );
-    void addToSecurePaths ( const rtl::OUString & path );
+    short executeDialog ( const rtl::OUString & path )
+        throw (css::uno::RuntimeException);
+    void addToSecurePaths ( const rtl::OUString & path )
+        throw (css::uno::RuntimeException);
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     sal_Bool m_confirmationRequired;
     sal_Bool m_warning;
-    sal_Int32 m_officeBasic;
+    sal_Int32 m_runMacroSetting;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvFactory;
     css::uno::Sequence< rtl::OUString > m_secureURL;
     Permission_Hash m_permissionSettings;
 

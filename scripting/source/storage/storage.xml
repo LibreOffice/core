@@ -33,6 +33,9 @@
         <type>com.sun.star.xml.sax.SAXException</type>
         <type>com.sun.star.xml.sax.XAttributeList</type>
         <type>com.sun.star.io.XActiveDataSource</type>
+        <type>com.sun.star.security.AccessControlException</type>
+        <type>com.sun.star.security.RuntimePermission</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>
     </component-description>
     <project-build-dependency>cppuhelper</project-build-dependency>
     <project-build-dependency>cppu</project-build-dependency>

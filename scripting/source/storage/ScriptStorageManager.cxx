@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.22 $
+*  $Revision: 1.23 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-02-28 13:43:04 $
+*  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -298,7 +298,16 @@ throw ( RuntimeException )
 
     if( displayDialog )
     {
-        m_securityMgr.addScriptStorage( stringURI, returnedID );
+        try
+        {
+            m_securityMgr.addScriptStorage( stringURI, returnedID );
+        }
+        catch ( RuntimeException & rte )
+        {
+            throw RuntimeException(
+                OUSTR( "ScriptStorageManager::createScriptStorageWithURI: " ).concat(
+                    rte.Message ), Reference< XInterface >() );
+        }
     }
     return returnedID;
 }
@@ -410,9 +419,32 @@ throw( RuntimeException )
 sal_Bool SAL_CALL
 ScriptStorageManager::checkPermission( const OUString &
 scriptStorageURI, const OUString & permissionRequest )
-throw ( css::uno::RuntimeException )
+throw ( RuntimeException, lang::IllegalArgumentException, css::security::AccessControlException )
 {
-    return m_securityMgr.checkPermission( scriptStorageURI, permissionRequest );
+    sal_Bool result;
+    try
+    {
+        result = m_securityMgr.checkPermission( scriptStorageURI, permissionRequest );
+    }
+    catch ( RuntimeException & e )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::checkPermission: " ).concat(
+                e.Message ), Reference< XInterface >() );
+    }
+    catch ( lang::IllegalArgumentException & e )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::checkPermission: " ).concat(
+                e.Message ), Reference< XInterface >() );
+    }
+    catch ( css::security::AccessControlException & e )
+    {
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::checkPermission: " ).concat(
+                e.Message ), Reference< XInterface >() );
+    }
+    return result;
 }
 
 //*************************************************************************
@@ -503,9 +535,8 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
     // erase the entry from the hash
     m_ScriptStorageMap.erase( scriptStorageID );
-    m_securityMgr.removePermissionSettings ( docURI );
-
     removeScriptDocURIHashEntry( docURI );
+    m_securityMgr.removePermissionSettings ( docURI );
 }
 
 

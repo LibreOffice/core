@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: npower $ $Date: 2003-02-12 16:21:43 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/security/AccessControlException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
@@ -215,7 +217,8 @@ public:
     virtual sal_Bool SAL_CALL ScriptStorageManager::checkPermission(
         const rtl::OUString & scriptStorageURI,
         const rtl::OUString & permissionRequest )
-        throw ( css::uno::RuntimeException );
+        throw ( css::uno::RuntimeException, css::lang::IllegalArgumentException,
+            css::security::AccessControlException );
     //======================================================================
 
     //XEventListener

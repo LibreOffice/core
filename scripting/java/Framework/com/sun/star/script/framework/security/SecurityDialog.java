@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-14 16:57:23 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,15 +86,19 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.task.XJobExecutor;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.XComponentContext;
 
+import com.sun.star.scripting.runtime.java.ScriptRuntimeForJava;
 
-public class SecurityDialog extends WeakBase implements XServiceInfo, XDialog,
+public class SecurityDialog extends WeakBase implements XComponent, XServiceInfo, XDialog,
 XInitialization {
 
     static final String __serviceName = "com.sun.star.script.framework.security.SecurityDialog";
@@ -164,10 +168,12 @@ XInitialization {
     private static final int label5H = 9;
 
     private boolean checkBoxDialog;
-    private short _checkBoxState = (short)0;
+    private short _checkBoxState = 0;
     private boolean extraPathLine=false;
     private String checkBoxPath="";
     private String checkBoxPath2="";
+    private static final int lineWrapLength = 21;
+    private static final int lineWrapH = 12;
     private String _pushed = _doNotRunButtonName;
 
     private XComponentContext _xComponentContext;
@@ -175,37 +181,45 @@ XInitialization {
 
     public SecurityDialog( XComponentContext xComponentContext )
     {
-        System.out.println("SecurityDialog ctor");
+        ScriptRuntimeForJava.DEBUG( "SecurityDialog ctor" );
         _xComponentContext = xComponentContext;
     }
 
-    public void initialize( Object[] args )
+    public void initialize( Object[] args ) throws RuntimeException
     {
-        System.out.println("SecurityDialog init");
+        ScriptRuntimeForJava.DEBUG( "SecurityDialog init" );
         // figure out if we need a checkbox
-        if ( args.length == 1)
+        if ( args.length == 1 && AnyConverter.isString( args[0] ) )
         {
             //check args is a path
             // set checkBoxPath with the arg
-            System.out.println("checkbox");
-            checkBoxPath = (String) args[0];
-            System.out.println("path: "+checkBoxPath);
-            checkBoxDialog=true;
-            if( checkBoxPath.length() > 21 )
+            ScriptRuntimeForJava.DEBUG( "checkbox" );
+            try
             {
-                extraPathLine=true;
-                cbIncrH+=12;
-                checkBoxPath2=checkBoxPath.substring(21);
-                checkBoxPath=checkBoxPath.substring(0,21);
+                checkBoxPath = AnyConverter.toString( args[0] );
+            }
+            catch ( IllegalArgumentException e )
+            {
+                throw new RuntimeException( "SecurityDialog::initialize: " + e.getMessage() );
+            }
+            ScriptRuntimeForJava.DEBUG( "path: " + checkBoxPath );
+            checkBoxDialog = true;
+            if( checkBoxPath.length() > lineWrapLength )
+            {
+                extraPathLine = true;
+                cbIncrH += lineWrapH;
+                checkBoxPath2 = checkBoxPath.substring( lineWrapLength );
+                checkBoxPath = checkBoxPath.substring( 0, lineWrapLength );
             }
 
         }
         else
         {
-            System.out.println("no checkbox: # of args="+args.length);
+            ScriptRuntimeForJava.DEBUG( "no checkbox: # of args=" +
+                args.length );
             cbIncrW = 0;
             cbIncrH = 0;
-            checkBoxDialog=false;
+            checkBoxDialog = false;
         }
 
         // now try and create the dialog
@@ -215,13 +229,15 @@ XInitialization {
         }
         catch ( com.sun.star.uno.Exception e )
         {
-            System.out.println("Couldn't create dialog");
-            System.out.println("uno message: "+e.getMessage());
+            ScriptRuntimeForJava.DEBUG( "Couldn't create dialog" );
+            ScriptRuntimeForJava.DEBUG( "uno message: " + e.getMessage());
+            throw new RuntimeException( e.getMessage() );
         }
         catch ( Exception e )
         {
-            System.out.println("Couldn't create dialog");
-            System.out.println("message: "+e.getMessage());
+            ScriptRuntimeForJava.DEBUG( "Couldn't create dialog" );
+            ScriptRuntimeForJava.DEBUG( "message: " + e.getMessage());
+            throw new RuntimeException( e.getMessage() );
         }
 
     }
@@ -285,24 +301,13 @@ XInitialization {
         XMultiServiceFactory xMultiServiceFactory = ( XMultiServiceFactory )UnoRuntime.queryInterface(
             XMultiServiceFactory.class, dialogModel );
 
-        // create the image model and set the properties
-        /*Object imageModel = xMultiServiceFactory.createInstance(
-            "com.sun.star.awt.UnoControlImageModel" );
-        XPropertySet xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
-            XPropertySet.class, imageModel );
-        xPSetImage.setPropertyValue( "PositionX", new Integer( (((dialogW+cbIncrX)/2)-runButtonW -1) ));
-        xPSetImage.setPropertyValue( "PositionY", new Integer( dialogH+cbIncrY-runButtonH-1));
-        xPSetImage.setPropertyValue( "Width", new Integer( runButtonW ));
-        xPSetImage.setPropertyValue( "Height", new Integer( runButtonW ));
-        xPSetImage.setPropertyValue( "ImageURL", new Integer( runButtonH )); */
-
         // create the Run Macro button model and set the properties
         Object runButtonModel = xMultiServiceFactory.createInstance(
             "com.sun.star.awt.UnoControlButtonModel" );
         XPropertySet xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, runButtonModel );
-        System.out.println("run: x="+(((dialogW+cbIncrW)/2)-runButtonW -1) );
-        System.out.println("run: y="+(dialogH+cbIncrH-runButtonH-1));
+        ScriptRuntimeForJava.DEBUG("run: x="+(((dialogW+cbIncrW)/2)-runButtonW -1) );
+        ScriptRuntimeForJava.DEBUG("run: y="+(dialogH+cbIncrH-runButtonH-1));
         xPSetButton.setPropertyValue( "PositionX", new Integer( (((dialogW+cbIncrW)/2)-runButtonW -1) ));
         xPSetButton.setPropertyValue( "PositionY", new Integer( dialogH+cbIncrH-runButtonH-1));
         xPSetButton.setPropertyValue( "Width", new Integer( runButtonW ));
@@ -316,8 +321,8 @@ XInitialization {
             "com.sun.star.awt.UnoControlButtonModel" );
         xPSetButton = ( XPropertySet )UnoRuntime.queryInterface(
             XPropertySet.class, doNotRunButtonModel );
-        System.out.println("dontrun: x="+(((dialogW+cbIncrW)/2)-1) );
-        System.out.println("dontrun: y="+(dialogH+cbIncrH-doNotRunButtonH-1 ));
+        ScriptRuntimeForJava.DEBUG("dontrun: x="+(((dialogW+cbIncrW)/2)-1) );
+        ScriptRuntimeForJava.DEBUG("dontrun: y="+(dialogH+cbIncrH-doNotRunButtonH-1 ));
         xPSetButton.setPropertyValue( "PositionX", new Integer(  (((dialogW+cbIncrW)/2) + 1) ));
         xPSetButton.setPropertyValue( "PositionY", new Integer(  (dialogH+cbIncrH-doNotRunButtonH-1 ) ));
         xPSetButton.setPropertyValue( "Width", new Integer( doNotRunButtonW ));
@@ -334,7 +339,7 @@ XInitialization {
 
         if ( checkBoxDialog )
         {
-            System.out.println("creating label & checkbox");
+            ScriptRuntimeForJava.DEBUG("creating label & checkbox");
             // create the label model and set the properties
             Object label2Model = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
@@ -484,14 +489,10 @@ XInitialization {
 
         short result = 0;
         _pushed = _doNotRunButtonName;
-        System.out.println("*DF* Before execute " );
+        ScriptRuntimeForJava.DEBUG("*DF* Before execute " );
         _xDialog.execute();
-        System.out.println("*DF* After execute " );
+        ScriptRuntimeForJava.DEBUG("*DF* After execute " );
 
-        /*// dispose the dialog
-        XComponent xComponent = ( XComponent )UnoRuntime.queryInterface(
-            XComponent.class, dialog );
-        xComponent.dispose();*/
         if ( _pushed.equals( _runButtonName ) )
         {
             result += 1;
@@ -556,7 +557,7 @@ XInitialization {
         // XActionListener
         public void actionPerformed( ActionEvent actionEvent ) {
           _pushed = _buttonName;
-          System.out.println("** Button pushed ->" + _pushed );
+          ScriptRuntimeForJava.DEBUG("** Button pushed ->" + _pushed );
 
           _xDialog.endExecute();
         }
@@ -578,7 +579,7 @@ XInitialization {
         // XAdjustmentListener
         public void itemStateChanged( ItemEvent itemEvent ) {
           _checkBoxState = _xCheckBox.getState();
-          System.out.println("** checkbox state ->" + _checkBoxState );
+          ScriptRuntimeForJava.DEBUG("** checkbox state ->" + _checkBoxState );
         }
     }
 }
