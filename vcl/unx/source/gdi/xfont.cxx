@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:10:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 10:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,17 +654,21 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
+        int nGlyphIndex = cChar | GF_ISCHAR;
 
         // request fallback glyph if necessary
         if( !mrFont.HasUnicodeChar( cChar ) )
+        {
             rArgs.NeedFallback( nCharPos, bRightToLeft );
+            if( rArgs.mnFlags & SAL_LAYOUT_FOR_FALLBACK )
+                nGlyphIndex = 0; // drop NotDef fallback glyphs
+        }
 
         long nGlyphWidth;
         mrFont.GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
         int nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
         if( bRightToLeft )
             nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
-        int nGlyphIndex = cChar | GF_ISCHAR;
         GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
         AppendGlyph( aGI );
 
