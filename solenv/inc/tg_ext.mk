@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-08 14:42:47 $
+#   last change: $Author: hjs $ $Date: 2002-03-04 16:26:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,12 +119,17 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.Z
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+-$(RM) $@
-    @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
+    @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz $(TARFILE_FILTER) | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
     @+-$(RM) $@
     +echo $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
+    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
+
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
+    @+-$(RM) $@
+    +echo $(assign UNPACKCMD := unzip $(BACK_PATH)download$/$(TARFILE_NAME).zip) > $(NULLDEV)
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 #untar
