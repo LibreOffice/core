@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 10:19:34 $
+ *  last change: $Author: pb $ $Date: 2001-03-22 14:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #endif
 
 #include <svtools/pathoptions.hxx>
+#include <svtools/helpopt.hxx>
 
 #pragma hdrstop
 
@@ -808,6 +809,28 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_HELPBALLOONS:
+        {
+            // Parameter auswerten
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, FALSE);
+            FASTBOOL bOn = pOnItem
+                            ? ((SfxBoolItem*)pOnItem)->GetValue()
+                            : !Help::IsBalloonHelpEnabled();
+
+            // ausf"uhren
+            if ( bOn )
+                Help::EnableBalloonHelp();
+            else
+                Help::DisableBalloonHelp();
+            SvtHelpOptions().SetExtendedHelp( bOn );
+
+            // ggf. recorden
+            if ( !rReq.IsAPI() )
+                rReq.AppendItem( SfxBoolItem( SID_HELPBALLOONS, bOn) );
+            break;
+        }
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
         {
             ModalDialog *pDlg = CreateAboutDialog();
@@ -944,16 +967,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 break;
                 case SID_HELPBALLOONS:
                 {
-/*! (pb) what about help?
-                    short nHelpMode = ImplGetHelpMode();
-                    if ( ( nHelpMode & HELPTEXTMODE_NORESHELPTEXT ) && !( nHelpMode & HELPTEXTMODE_EXTERN ) )
-                    {
-                        rSet.DisableItem( SID_HELPBALLOONS );
-                    }
-                    else
-                        rSet.Put( SfxBoolItem( SID_HELPBALLOONS, Help::IsBalloonHelpEnabled() ) );
-*/
-                    rSet.DisableItem( SID_HELPBALLOONS );
+                    rSet.Put( SfxBoolItem( SID_HELPBALLOONS, Help::IsBalloonHelpEnabled() ) );
                 }
                 break;
                 case SID_EXTENDEDHELP:
