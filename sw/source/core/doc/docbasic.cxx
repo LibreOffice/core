@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbasic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:49:14 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #endif
 #ifndef __SBX_SBXVALUE
 #include <svtools/sbxvar.hxx>
-#endif
-#ifndef _SVCONFIG_HXX
-#include <svtools/config.hxx>
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
