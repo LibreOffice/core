@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-07-03 14:32:19 $
+ *  last change: $Author: mh $ $Date: 2001-10-16 07:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,9 +282,8 @@ void ImplDbgUnlock()
 
 // =======================================================================
 
-// Aus DBMEM.CXX
 #if (defined( WNT ) || defined( OS2 ) || defined( MAC )) && !defined ( SVX_LIGHT )
-#define SV_MEMMGR
+//#define SV_MEMMGR //
 #endif
 #ifdef SV_MEMMGR
 void DbgImpCheckMemory( void* p = NULL );
