@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-15 13:02:56 $
+ *  last change: $Author: cl $ $Date: 2002-07-24 11:21:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,7 +638,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             {
                 bPreview = ((const SfxBoolItem&) (rReq.GetArgs()->Get(SID_PREVIEW_WIN))).GetValue();
                 GetViewFrame()->SetChildWindow(SdPreviewChildWindow::GetChildWindowId(),
-                                          bPreview);
+                                          bPreview,false);
             }
             else
             {
