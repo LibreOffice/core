@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:59:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,6 +493,7 @@ namespace dbaccess
                         aRet.push_back( *pSupported );
                     }
                 }
+
                 return Sequence< PropertyValue >(aRet.begin(),aRet.size());
             }
             return Sequence< PropertyValue >();
@@ -663,15 +664,55 @@ void ODatabaseSource::release() throw ()
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
-    OWeakConnectionArray::iterator aEnd = m_aConnections.end();
-    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+    Reference<XConnection> xCon(Source.Source,UNO_QUERY);
+    if ( xCon.is() )
     {
-        if ( Source.Source == i->get() )
+        sal_Bool bStore = sal_False;
+        OWeakConnectionArray::iterator aEnd = m_aConnections.end();
+        for (OWeakConnectionArray::iterator i = m_aConnections.begin(); aEnd != i; ++i)
         {
-            *i = OWeakConnection();
+            if ( xCon == i->get() )
+            {
+                *i = OWeakConnection();
+                try
+                {
+                    TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
+                    if ( aFind != m_aStorages.end() )
+                    {
+                        Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
+                        if ( bStore = xTrans.is() )
+                            xTrans->commit();
+                    }
+                }
+                catch(Exception&)
+                {
+                    OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+                }
+            }
+        }
+
+        if ( bStore )
+        {
+            try
+            {
+                Reference<XTransactedObject> xTransact(getStorage(),UNO_QUERY);
+                if ( xTransact.is() )
+                    xTransact->commit();
+            }
+            catch(Exception)
+            {
+                OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+            }
         }
     }
-
+    else // storage
+    {
+        Reference<XStorage> xStorage(Source.Source,UNO_QUERY);
+        TStorages::iterator aFind = ::std::find_if(m_aStorages.begin(),m_aStorages.end(),
+                                            ::std::compose1(::std::bind2nd(::std::equal_to<Reference<XStorage> >(),xStorage),::std::select2nd<TStorages::value_type>()));
+        if ( aFind != m_aStorages.end() )
+            m_aStorages.erase(aFind);
+    }
 }
 // XServiceInfo
 //------------------------------------------------------------------------------
@@ -872,6 +913,15 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         {
             Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(xDriver,m_sConnectURL,m_aInfo);
 
+            if ( m_sConnectURL.compareToAscii("sdbc:embedded:",14) == 0 )
+            {
+                sal_Int32 nCount = aDriverInfo.getLength();
+                aDriverInfo.realloc(nCount + 2 );
+                aDriverInfo[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
+                aDriverInfo[nCount++].Value <<= getURL();
+                aDriverInfo[nCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage"));
+                aDriverInfo[nCount++].Value <<= getStorage(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")),ElementModes::READWRITE);
+            }
             if (nAdditionalArgs)
                 xReturn = xManager->getConnectionWithInfo(m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));
             else
