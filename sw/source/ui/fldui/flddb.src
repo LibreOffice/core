@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:54:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage TP_FLD_DB
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Felttype" ;
+        Text [ danish ] = "~Type" ;
         Text [ french ] = "~Type de champ" ;
         Text [ swedish ] = "~F�lttyp" ;
         Text [ dutch ] = "~Veldtype" ;
@@ -103,6 +103,8 @@ TabPage TP_FLD_DB
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_DBTYPE
     {
@@ -132,7 +134,7 @@ TabPage TP_FLD_DB
         TEXT [ portuguese_brazilian ] = "~Condi��o" ;
         TEXT [ portuguese ] = "~Condi��o" ;
         TEXT [ finnish ] = "~Ehto" ;
-        TEXT [ danish ] = "Betingelse" ;
+        TEXT [ danish ] = "~Betingelse" ;
         TEXT [ french ] = "Condition" ;
         TEXT [ swedish ] = "~Villkor" ;
         TEXT [ dutch ] = "~Voorwaarde" ;
@@ -154,6 +156,8 @@ TabPage TP_FLD_DB
         TEXT[ hebrew ] = "Bedin~gung";
         TEXT[ hindi ] = "~शर्त";
         TEXT[ slovak ] = "~Podmienka";
+        TEXT[ hungarian ] = "~Feltétel";
+        TEXT[ slovenian ] = "~Pogoj";
     };
     Edit ED_DBCONDITION
     {
@@ -196,6 +200,8 @@ TabPage TP_FLD_DB
         TEXT[ hebrew ] = "Sat~znummer";
         TEXT[ hindi ] = "अभिलेख संख्या";
         TEXT[ slovak ] = "Číslo záznamu";
+        TEXT[ hungarian ] = "Rekordszám";
+        TEXT[ slovenian ] = "Številka zapisa";
     };
     Edit ED_DBSETNUMBER
     {
@@ -237,6 +243,8 @@ TabPage TP_FLD_DB
         Text[ hebrew ] = "Datenbank~auswahl";
         Text[ hindi ] = "लेखासंचय चु~नाव";
         Text[ slovak ] = "Výb~er databázy";
+        Text[ hungarian ] = "~Adatbázis kiválasztás";
+        Text[ slovenian ] = "~Izbor zbirke podatkov";
     };
     Control TLB_DBLIST
     {
@@ -277,6 +285,8 @@ TabPage TP_FLD_DB
         Text[ hebrew ] = "A~us Datenbank";
         Text[ hindi ] = "लेखासंचय से";
         Text[ slovak ] = "Z databázy";
+        Text[ hungarian ] = "Adatbázisból";
+        Text[ slovenian ] = "Iz zbirke podatkov";
     };
     RadioButton RB_DBFORMAT
     {
@@ -287,7 +297,7 @@ TabPage TP_FLD_DB
         Text [ english_us ] = "User-defined" ;
         Text [ portuguese_brazilian ] = "Definido pelo usu�rio" ;
         Text [ swedish ] = "An~v�ndardefinierat" ;
-        Text [ danish ] = "~Brugerdefineret" ;
+        Text [ danish ] = "Brugerdefineret" ;
         Text [ italian ] = "Personalizzato" ;
         Text [ spanish ] = "Definido por el usuario" ;
         Text [ french ] = "D�fini par l'utilisateur" ;
@@ -309,6 +319,8 @@ TabPage TP_FLD_DB
         Text[ hebrew ] = "Se~lbst definiert";
         Text[ hindi ] = "उपभोक्ता से परिभाषित";
         Text[ slovak ] = "Definované užívateľom";
+        Text[ hungarian ] = "Egyéni";
+        Text[ slovenian ] = "Uporabniško določeno";
     };
     ListBox LB_DBNUMFORMAT
     {
@@ -361,6 +373,8 @@ TabPage TP_FLD_DB
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
         Text[ slovak ] = "Formát";
+        Text[ hungarian ] = "Formátum";
+        Text[ slovenian ] = "Oblika";
     };
     FixedLine FL_DBFORMAT_VERT
     {
@@ -393,7 +407,10 @@ TabPage TP_FLD_DB
     Text[ hebrew ] = "Datenbank";
     Text[ hindi ] = "लेखासंचय";
     Text[ slovak ] = "Databáza";
+    Text[ hungarian ] = "Adatbázis";
+    Text[ slovenian ] = "Zbirka podatkov";
 };
+
 
 
 
