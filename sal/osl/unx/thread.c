@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mhu $ $Date: 2002-10-30 23:23:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,24 +780,24 @@ static void osl_thread_priority_init_Impl (void)
         OSL_TRACE("Min Prioriy for policy '%i' == '%i'\n",policy,nRet);
         g_thread.m_priority.m_Lowest=nRet;
     }
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
     else
     {
         fprintf(stderr,"failed to get min sched param [%s]\n",strerror(errno));
     }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
     if ((nRet = sched_get_priority_max(policy) ) != -1)
     {
         OSL_TRACE("Max Prioriy for policy '%i' == '%i'\n",policy,nRet);
         g_thread.m_priority.m_Highest=nRet;
     }
-#if defined(DEBUG)
+#if OSL_DEBUG_LEVEL > 1
     else
     {
         fprintf(stderr,"failed to get max sched param [%s]\n",strerror(errno));
     }
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL */
 
     g_thread.m_priority.m_Normal =
         (g_thread.m_priority.m_Lowest + g_thread.m_priority.m_Highest) / 2;
