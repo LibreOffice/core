@@ -166,7 +166,7 @@ Dim sOldExtension as String
 				TargetFile = TargetFile &amp; sExtension
 				TargetDir = RTrimStr(TargetFile, sFileName &amp; &quot;.&quot; &amp; sExtension)
 				If Not oUcb.Exists(TargetDir) Then
-					oUcb.CreateFolder(TargetDir)
+					CreateFolder(TargetDir)
 				End If
 				If oUcb.Exists(TargetFile) Then
 					sCurFileExists = ReplaceString(sFileExists, ConvertFromUrl(TargetFile), &quot;&lt;1&gt;&quot;)

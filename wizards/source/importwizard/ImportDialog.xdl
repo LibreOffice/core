@@ -18,7 +18,7 @@
    </dlg:textfield>
    <dlg:textfield dlg:id="txtDocumentExportPath" dlg:tab-index="8" dlg:left="73" dlg:top="165" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34589"/>
    <dlg:text dlg:id="SummaryHeaderLabel" dlg:tab-index="9" dlg:left="6" dlg:top="37" dlg:width="258" dlg:height="8" dlg:page="3" dlg:value="SummaryHeaderLabel"/>
-   <dlg:textfield dlg:id="SummaryTextbox" dlg:tab-index="10" dlg:left="5" dlg:top="48" dlg:width="259" dlg:height="125" dlg:page="3" dlg:help-url="HID:34595" dlg:vscroll="true" dlg:multiline="true"/>
+   <dlg:textfield dlg:id="SummaryTextbox" dlg:tab-index="10" dlg:left="5" dlg:top="48" dlg:width="259" dlg:height="125" dlg:page="3" dlg:help-url="HID:34595" dlg:vscroll="true" dlg:multiline="true" dlg:readonly="true"/>
    <dlg:text dlg:id="LabelRetrieval" dlg:tab-index="11" dlg:left="10" dlg:top="67" dlg:width="240" dlg:height="8" dlg:page="4" dlg:value="LabelRetrieval"/>
    <dlg:text dlg:id="LabelCurTemplateRetrieval" dlg:tab-index="12" dlg:left="15" dlg:top="79" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurTemplateRetrieval"/>
    <dlg:text dlg:id="LabelCurDocumentRetrieval" dlg:tab-index="13" dlg:left="15" dlg:top="91" dlg:width="235" dlg:height="8" dlg:page="4" dlg:value="LabelCurDocumentRetrieval"/>

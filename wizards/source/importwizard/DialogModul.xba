@@ -415,25 +415,37 @@ End Function
 
 Function CheckInputPaths() as Boolean
 Dim bChangePage as Boolean
-	bChangePage = CheckTextBoxPath(ImportDialog.txtTemplateImportPath, True, False)
-	bChangePage = CheckTextBoxPath(ImportDialog.txtTemplateExportPath, bChangePage, True)
-	bChangePage = CheckTextBoxPath(ImportDialog.txtDocumentImportPath, bChangePage, False)
-	bChangePage = CheckTextBoxPath(ImportDialog.txtDocumentExportPath, bChangePage, True)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtTemplateImportPath, True, False, sTitle, False)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtTemplateExportPath, bChangePage, True, sTitle, False)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtDocumentImportPath, bChangePage, False, sTitle, False)
+	bChangePage = CheckTextBoxPath(ImportDialog.txtDocumentExportPath, bChangePage, True, sTitle, False)
 	CheckInputPaths = bChangePage
 End Function
 
 
-Function CheckTextBoxPath(oTextBox as Object, ByVal bCheck as Boolean, bCreateNew as Boolean) as Boolean
+Function CheckTextBoxPath(oTextBox as Object, ByVal bCheck as Boolean, bCreateNew as Boolean, sTitle as String, bgetResources as Boolean) as Boolean
 Dim iCreate as Integer
 Dim sQueryMessage as String
 Dim sUrlPath as String
 Dim sMessageNoDir as String
 Dim sShowPath as String
+Dim oLocUcb as Object
+	oLocUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
+	If bGetResources Then
+		If InitResources(&quot;ImportWizard&quot;,&quot;imp&quot;) then
+ 			sNoDirCreation = GetResText(1050)
+			sMsgDirNotThere = GetResText(1051)
+			sQueryForNewCreation = GetResText(1052)
+		Else
+			CheckTextBoxPath() = False
+			Exit Function
+		End If
+	End If
 	If oTextBox.Enabled Then
 		If bCheck Then
 			sShowPath = oTextBox.Text
 			sUrlPath = ConvertToUrl(sShowPath)
-			If Not oUcb.Exists(sUrlPath) Then
+			If Not oLocUcb.Exists(sUrlPath) Then
 				If Not bCreateNew Then
 					&apos; Sourcedirectories must be existing, Targetdirectories may be created new
 					sQueryMessage = ReplaceString(sMsgDirNotThere, sShowPath,&quot;%1&quot;)
@@ -446,8 +458,8 @@ Dim sShowPath as String
 					iCreate = Msgbox (sQueryMessage, 36, sTitle)
 					If iCreate = 6 Then
 						On Local Error Goto NOVALIDPATH
-						oUcb.CreateFolder(sUrlPath)
-						If Not oUcb.Exists(sUrlPath) Then
+						oLocUcb.CreateFolder(sUrlPath)
+						If Not oLocUcb.Exists(sUrlPath) Then
 							Goto NOVALIDPATH
 						End If
 					Else
