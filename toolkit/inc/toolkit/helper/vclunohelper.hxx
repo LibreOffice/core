@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:34:45 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #define _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
@@ -103,7 +107,7 @@ class OutputDevice;
 //  ----------------------------------------------------
 //  class VclUnoHelper
 //  ----------------------------------------------------
-class VCLUnoHelper
+class TOOLKIT_DLLPUBLIC VCLUnoHelper
 {
 public:
     // Toolkit
