@@ -348,8 +348,8 @@ Dim sTargetPath as String
 Dim TypeNames(0,2) as String
 Dim oMasterKey as Object
 Dim oTypes() as Object
-	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-	oTypes() = oMasterKey.Filters
+	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.TypeDetection.Types/&quot;)
+	oTypes() = oMasterKey.Types
 	TypeNames(0,0) = GetFilterName(&quot;StarOffice XML (Writer)&quot;)
 	TypeNames(0,1) = &quot;*.sxw&quot;
 	TypeNames(0,2) = &quot;&quot;
@@ -358,6 +358,7 @@ Dim oTypes() as Object
 		DlgFormDB.EndExecute()
 	End If
 End Sub
+
 
 
 Sub EmptyFieldsListboxes()
