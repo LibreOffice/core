@@ -2,9 +2,9 @@
  *
  *  $RCSfile: counter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:52:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -180,7 +180,7 @@ Sequence<OUString> SAL_CALL MyCounterImpl::getSupportedServiceNames_Static(  )
 Reference< XInterface > SAL_CALL MyCounterImpl_create(
     const Reference< XMultiServiceFactory > & xMgr )
 {
-    return Reference< XCountable >( new MyCounterImpl( xMgr ) );
+    return Reference<XInterface>(static_cast<XCountable*>(new MyCounterImpl(xMgr)));
 }
 
 
