@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 08:38:38 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,7 +919,7 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ polish ] = "~Wstaw kwerend�...";
             Text[ portuguese_brazilian ] = "~Insert Query...";
             Text[ japanese ] = "クエリーの挿入(~P)...";
-            Text[ korean ] = "질의 삽입(~P)...";
+            Text[ korean ] = "질의 붙여넣기(~P)...";
             Text[ chinese_simplified ] = "插入查询(~P)...";
             Text[ chinese_traditional ] = "插入查詢(~P)...";
             Text[ turkish ] = "~Insert Query...";
@@ -993,7 +993,7 @@ Menu MENU_BROWSER_TABLECONTEXT
                 Text[ polish ] = "~Wstaw tabel�...";
                 Text[ portuguese_brazilian ] = "~insert table";
                 Text[ japanese ] = "テーブルの挿入(~P)";
-                Text[ korean ] = "시트 삽입(~P)";
+                Text[ korean ] = "시트 붙여넣기(~P)";
                 Text[ chinese_simplified ] = "插入表格(~P)...";
                 Text[ chinese_traditional ] = "插入表格(~P)...";
                 Text[ turkish ] = "~insert table";
@@ -1097,7 +1097,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ polish ] = "~Wstaw widok";
                 Text[ portuguese_brazilian ] = "~Insert View";
                 Text[ japanese ] = "ビューの挿入(~P)";
-                Text[ korean ] = "보기 삽입(~P)";
+                Text[ korean ] = "보기 붙여넣기(~P)";
                 Text[ chinese_simplified ] = "插入视图(~P)";
                 Text[ chinese_traditional ] = "貼上檢視(~P)";
                 Text[ turkish ] = "~Insert View";
