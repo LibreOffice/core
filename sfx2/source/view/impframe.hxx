@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impframe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:29:22 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #pragma hdrstop
 
 #include "frame.hxx"
-#include "loadenv.hxx"
 
 class SfxViewFrame;
 class SfxObjectShell;
@@ -111,7 +110,6 @@ friend class SfxFrame;
     sal_uInt32              nHistoryPos;
     SfxViewFrame*           pCurrentViewFrame;
     SfxObjectShell*         pCurrentObjectShell;
-    LoadEnvironment_Impl*   pLoadEnv;
     SfxFrameDescriptor*     pDescr;
     SfxExplorerBrowserConfig* pBrowserCfg;
     sal_uInt16              nFrameId;
@@ -139,7 +137,6 @@ friend class SfxFrame;
                                 nType( 0L ),
                                 nHistoryPos( 0 ),
                                 nFrameId( 0 ),
-                                pLoadEnv( NULL ),
                                 pCurrentObjectShell( NULL ),
                                 pCurrentViewFrame( NULL ),
                                 bInCancelTransfers( sal_False ),
