@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:57:52 $
+ *  last change: $Author: fme $ $Date: 2002-07-29 13:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,10 @@ void SwWrtShell::Insert( const String &rStr )
         bCallIns = bIns /*|| bHasSel*/;
 
     // Notify abschalten
-    SwChgLinkFlag *pChgFlg = bCallIns ? new SwChgLinkFlag( *this ) : 0;
+    // FME: This seems to be an optimisation: CallChgLink should not be called
+    // for an insert event. This cannot hold any longer, since inserting
+    // characters from a different script type has to call CallChgLink.
+//    SwChgLinkFlag *pChgFlg = bCallIns ? new SwChgLinkFlag( *this ) : 0;
 
     if( bHasSel )
     {
@@ -382,7 +385,7 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
         EndAllAction();
         EndUndo(UNDO_INSERT);
     }
-    delete pChgFlg;
+//    delete pChgFlg;
 }
 
 /* Begrenzung auf maximale Hoehe geht nicht, da die maximale Hoehe

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callnk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-23 20:01:05 $
+ *  last change: $Author: fme $ $Date: 2002-07-29 13:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 #ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
 #endif
@@ -223,6 +226,19 @@ SwCallLink::~SwCallLink()
             if( pBreakIt->xBreak.is() )
             {
                 const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
+#ifdef BIDI
+                const USHORT nCurrScript = pBreakIt->xBreak->getScriptType( rTxt, nCmp );
+
+                if ( ! nCmp ||
+                     ( nCurrScript != pBreakIt->xBreak->getScriptType( rTxt, nCmp - 1 ) ) ||
+                     ( ' ' == rTxt.GetChar( nCmp - 1 ) && nCmp > 2 &&
+                       nCurrScript !=
+                       pBreakIt->xBreak->getScriptType( rTxt, nCmp - 2 ) ) )
+                {
+                    rShell.CallChgLnk();
+                    return;
+                }
+#else
                 if( !nCmp ||
                     pBreakIt->xBreak->getScriptType( rTxt, nCmp )
                      != pBreakIt->xBreak->getScriptType( rTxt, nCmp - 1 ))
@@ -230,6 +246,7 @@ SwCallLink::~SwCallLink()
                     rShell.CallChgLnk();
                     return;
                 }
+#endif
             }
         }
         else
@@ -274,43 +291,43 @@ long SwCallLink::GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm )
 /*---------------------------------------------------------------------*/
 
 
-SwChgLinkFlag::SwChgLinkFlag( SwCrsrShell& rShell )
-    : rCrsrShell( rShell ), bOldFlag( rShell.bCallChgLnk ), nLeftFrmPos( 0 )
-{
-    rCrsrShell.bCallChgLnk = FALSE;
-    if( bOldFlag && !rCrsrShell.pTblCrsr )
-    {
-        SwNode* pNd = rCrsrShell.pCurCrsr->GetNode();
-        if( ND_TEXTNODE & pNd->GetNodeType() )
-            nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)*pNd,
-                    rCrsrShell.pCurCrsr->GetPoint()->nContent.GetIndex(),
-                    !rCrsrShell.ActionPend() );
-    }
-}
+//SwChgLinkFlag::SwChgLinkFlag( SwCrsrShell& rShell )
+//    : rCrsrShell( rShell ), bOldFlag( rShell.bCallChgLnk ), nLeftFrmPos( 0 )
+//{
+//    rCrsrShell.bCallChgLnk = FALSE;
+//    if( bOldFlag && !rCrsrShell.pTblCrsr )
+//    {
+//        SwNode* pNd = rCrsrShell.pCurCrsr->GetNode();
+//        if( ND_TEXTNODE & pNd->GetNodeType() )
+//            nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)*pNd,
+//                    rCrsrShell.pCurCrsr->GetPoint()->nContent.GetIndex(),
+//                    !rCrsrShell.ActionPend() );
+//    }
+//}
 
 
-SwChgLinkFlag::~SwChgLinkFlag()
-{
-    rCrsrShell.bCallChgLnk = bOldFlag;
-    if( bOldFlag && !rCrsrShell.pTblCrsr )
-    {
-        // die Spalten Ueberwachung brauchen wir immer!!!
-        SwNode* pNd = rCrsrShell.pCurCrsr->GetNode();
-        if( ND_TEXTNODE & pNd->GetNodeType() &&
-            nLeftFrmPos != SwCallLink::GetFrm( (SwTxtNode&)*pNd,
-                    rCrsrShell.pCurCrsr->GetPoint()->nContent.GetIndex(),
-                    !rCrsrShell.ActionPend() ))
-        {
-            /* immer, wenn zwischen Frames gesprungen wird, gelten
-             * neue Attribute. Es muesste also festgestellt werden, welche
-             * Attribute jetzt gelten; das kann gleich der Handler machen.
-             * Diesen direkt rufen !!!
-             */
-            rCrsrShell.aChgLnk.Call( &rCrsrShell );
-            rCrsrShell.bChgCallFlag = FALSE;        // Flag zuruecksetzen
-        }
-    }
-}
+//SwChgLinkFlag::~SwChgLinkFlag()
+//{
+//    rCrsrShell.bCallChgLnk = bOldFlag;
+//    if( bOldFlag && !rCrsrShell.pTblCrsr )
+//    {
+//        // die Spalten Ueberwachung brauchen wir immer!!!
+//        SwNode* pNd = rCrsrShell.pCurCrsr->GetNode();
+//        if( ND_TEXTNODE & pNd->GetNodeType() &&
+//            nLeftFrmPos != SwCallLink::GetFrm( (SwTxtNode&)*pNd,
+//                    rCrsrShell.pCurCrsr->GetPoint()->nContent.GetIndex(),
+//                    !rCrsrShell.ActionPend() ))
+//        {
+//            /* immer, wenn zwischen Frames gesprungen wird, gelten
+//             * neue Attribute. Es muesste also festgestellt werden, welche
+//             * Attribute jetzt gelten; das kann gleich der Handler machen.
+//             * Diesen direkt rufen !!!
+//             */
+//            rCrsrShell.aChgLnk.Call( &rCrsrShell );
+//            rCrsrShell.bChgCallFlag = FALSE;        // Flag zuruecksetzen
+//        }
+//    }
+//}
 
 
 
