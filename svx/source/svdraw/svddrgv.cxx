@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:52:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
             BOOL b1st=TRUE;
             for (USHORT nv=0; nv<GetPageViewCount(); nv++) {
                 SdrPageView* pPV=GetPageViewPvNum(nv);
-                if (pPV->HasMarkedObj()) {
+                if (pPV->HasMarkedObjPageView()) {
                     Rectangle aR(pPV->DragPoly().GetBoundRect(GetWin(0)));
                     aR+=pPV->GetOffset();
                     if (b1st) {
@@ -235,15 +235,15 @@ void SdrDragView::ToggleShownXor(OutputDevice* pOut, const Region* pRegion) cons
 void SdrDragView::SetDragPolys(BOOL bReset, BOOL bSeparate)
 {
     USHORT nPvAnz=GetPageViewCount();
-    ULONG nMarkAnz=aMark.GetMarkCount();
+    ULONG nMarkAnz=GetMarkedObjectCount();
     if (!bReset && (IsDraggingPoints() || IsDraggingGluePoints())) {
         BOOL bGlue=IsDraggingGluePoints();
         for (USHORT nv=0; nv<nPvAnz; nv++) {
             SdrPageView* pPV=GetPageViewPvNum(nv);
             pPV->DragPoly0().Clear();
-            if (pPV->HasMarkedObj()) {
+            if (pPV->HasMarkedObjPageView()) {
                 for (ULONG nm=0; nm<nMarkAnz; nm++) {
-                    SdrMark* pM=aMark.GetMark(nm);
+                    SdrMark* pM=GetSdrMarkByIndex(nm);
                     if (pM->GetPageView()==pPV) {
                         const SdrUShortCont* pPts=bGlue ? pM->GetMarkedGluePoints() : pM->GetMarkedPoints();
                         if (pPts!=NULL && pPts->GetCount()!=0) {
@@ -284,19 +284,19 @@ void SdrDragView::SetDragPolys(BOOL bReset, BOOL bSeparate)
     XPolygon aEmptyPoly(0); // Lerres XPoly fuer Separate
     ULONG nMaxObj=nDragXorPolyLimit;
     ULONG nMaxPnt=nDragXorPointLimit;
-    BOOL bNoPoly = IsNoDragXorPolys() || aMark.GetMarkCount()>nMaxObj;
+    BOOL bNoPoly = IsNoDragXorPolys() || GetMarkedObjectCount()>nMaxObj;
     BOOL bBrk=FALSE;
     ULONG nPolyCnt=0; // Max nDragXorPolyLimit Polys
     ULONG nPntCnt=0;  // Max 5*nDragXorPolyLimit Punkte
     if (!bNoPoly && !bReset) {
         for (USHORT nv=0; nv<nPvAnz && !bBrk; nv++) {
             SdrPageView* pPV=GetPageViewPvNum(nv);
-            if (pPV->HasMarkedObj()) {
+            if (pPV->HasMarkedObjPageView()) {
                 pPV->DragPoly0().Clear();
                 BOOL b1st=TRUE;
                 XPolyPolygon aDazuXPP;
                 for (ULONG nm=0; nm<nMarkAnz && !bBrk; nm++) {
-                    SdrMark* pM=aMark.GetMark(nm);
+                    SdrMark* pM=GetSdrMarkByIndex(nm);
                     if (pM->GetPageView()==pPV) {
                         pM->GetObj()->TakeXorPoly(aDazuXPP,FALSE);
                         USHORT nDazuPolyAnz=aDazuXPP.Count();
@@ -337,7 +337,7 @@ void SdrDragView::SetDragPolys(BOOL bReset, BOOL bSeparate)
         for (USHORT nv=0; nv<nPvAnz; nv++) {
             SdrPageView* pPV=GetPageViewPvNum(nv);
             if (!bReset) {
-                if (pPV->HasMarkedObj()) {
+                if (pPV->HasMarkedObjPageView()) {
                     Rectangle aR(pPV->MarkSnap());
                     if (TRUE) {
                         BOOL bMorePoints=TRUE;
@@ -410,11 +410,11 @@ BOOL SdrDragView::TakeDragObjAnchorPos(Point& rPos, BOOL bTR ) const
     Rectangle aR;
     TakeActionRect(aR);
     rPos = bTR ? aR.TopRight() : aR.TopLeft();
-    if (aMark.GetMarkCount()==1 && IsDragObj() && // nur bei Einzelselektion
+    if (GetMarkedObjectCount()==1 && IsDragObj() && // nur bei Einzelselektion
         !IsDraggingPoints() && !IsDraggingGluePoints() && // nicht beim Punkteschieben
         !pDragBla->ISA(SdrDragMovHdl)) // nicht beim Handlesschieben
     {
-        SdrObject* pObj=aMark.GetMark(0)->GetObj();
+        SdrObject* pObj=GetMarkedObjectByIndex(0);
         if (pObj->ISA(SdrCaptionObj)) {
             Point aPt(((SdrCaptionObj*)pObj)->GetTailPos());
             BOOL bTail=eDragHdl==HDL_POLY; // Schwanz wird gedraggt (nicht so ganz feine Abfrage hier)
@@ -425,7 +425,7 @@ BOOL SdrDragView::TakeDragObjAnchorPos(Point& rPos, BOOL bTR ) const
                     rPos=aPt;
                 } else {
                     // hier nun dragging des gesamten Objekts (Move, Resize, ...)
-                    pDragBla->MovPoint(aPt,aMark.GetMark(0)->GetPageView()->GetOffset());
+                    pDragBla->MovPoint(aPt,GetSdrPageViewOfMarkedByIndex(0)->GetOffset());
                 }
             }
         }
@@ -447,7 +447,7 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
     BOOL bRet=FALSE;
     {
         SetDragWithCopy(FALSE);
-        ForceEdgesOfMarkedNodes();
+        //ForceEdgesOfMarkedNodes();
         aAni.Reset();
         pDragBla=NULL;
         bDragSpecial=FALSE;
@@ -503,9 +503,9 @@ BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         case HDL_UPPER: case HDL_LOWER: {
                             // Sind 3D-Objekte selektiert?
                             BOOL b3DObjSelected = FALSE;
-                            for(UINT32 a=0;!b3DObjSelected && a<aMark.GetMarkCount();a++)
+                            for(UINT32 a=0;!b3DObjSelected && a<GetMarkedObjectCount();a++)
                             {
-                                SdrObject* pObj = aMark.GetMark(a)->GetObj();
+                                SdrObject* pObj = GetMarkedObjectByIndex(a);
                                 if(pObj && pObj->ISA(E3dObject))
                                     b3DObjSelected = TRUE;
                             }
@@ -737,10 +737,10 @@ BOOL SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
 BOOL SdrDragView::IsInsGluePointPossible() const
 {
     BOOL bRet=FALSE;
-    if (IsInsGluePointMode() && HasMarkedObj()) {
-        if (aMark.GetMarkCount()==1) {
+    if (IsInsGluePointMode() && AreObjectsMarked()) {
+        if (GetMarkedObjectCount()==1) {
             // FALSE liefern, wenn 1 Objekt und dieses ein Verbinder ist.
-            const SdrObject* pObj=aMark.GetMark(0)->GetObj();
+            const SdrObject* pObj=GetMarkedObjectByIndex(0);
             if (!HAS_BASE(SdrEdgeObj,pObj)) {
                bRet=TRUE;
             }
@@ -760,7 +760,7 @@ BOOL SdrDragView::BegInsGluePoint(const Point& rPnt)
     if (PickMarkedObj(rPnt,pObj,pPV,&nMarkNum,SDRSEARCH_PASS2BOUND)) {
         BrkAction();
         UnmarkAllGluePoints();
-        SdrMark* pM=aMark.GetMark(nMarkNum);
+        SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
         pInsPointUndo=new SdrUndoGeoObj(*pObj);
         XubString aStr(ImpGetResStr(STR_DragInsertGluePoint));
         XubString aName; pObj->TakeObjNameSingul(aName);
@@ -969,7 +969,7 @@ BOOL SdrDragView::IsMoveOnlyDragObj(BOOL bAskRTTI) const
 
 void SdrDragView::ImpDrawEdgeXor(ExtOutputDevice& rXOut, BOOL bFull) const
 {
-    ULONG nEdgeAnz=aEdgesOfMarkedNodes.GetMarkCount();
+    ULONG nEdgeAnz = GetEdgesOfMarkedNodes().GetMarkCount();
     BOOL bNo=(!IsRubberEdgeDragging() && !IsDetailedEdgeDragging()) || nEdgeAnz==0 ||
                  IsDraggingPoints() || IsDraggingGluePoints();
     if (!pDragBla->IsMoveOnly() &&
@@ -982,7 +982,7 @@ void SdrDragView::ImpDrawEdgeXor(ExtOutputDevice& rXOut, BOOL bFull) const
                           nEdgeAnz>nRubberEdgeDraggingLimit)) bNo=TRUE;
         if (!bNo) {
             for (USHORT i=0; i<nEdgeAnz; i++) {
-                SdrMark* pEM=aEdgesOfMarkedNodes.GetMark(i);
+                SdrMark* pEM = GetEdgesOfMarkedNodes().GetMark(i);
                 SdrObject* pEdge=pEM->GetObj();
                 SdrPageView* pEPV=pEM->GetPageView();
                 pXOut->SetOffset(pEPV->GetOffset());
@@ -1097,7 +1097,7 @@ BOOL SdrDragView::IsOrthoDesired() const
 void SdrDragView::SetRubberEdgeDragging(BOOL bOn)
 {
     if (bOn!=IsRubberEdgeDragging()) {
-        ULONG nAnz=aEdgesOfMarkedNodes.GetMarkCount();
+        ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=nAnz!=0 && IsDragObj() &&
                  (nRubberEdgeDraggingLimit>=nAnz);
         if (bShowHide) HideDragObj(NULL);
@@ -1109,7 +1109,7 @@ void SdrDragView::SetRubberEdgeDragging(BOOL bOn)
 void SdrDragView::SetRubberEdgeDraggingLimit(USHORT nEdgeObjAnz)
 {
     if (nEdgeObjAnz!=nRubberEdgeDraggingLimit) {
-        ULONG nAnz=aEdgesOfMarkedNodes.GetMarkCount();
+        ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=IsRubberEdgeDragging() && nAnz!=0 && IsDragObj() &&
                  (nEdgeObjAnz>=nAnz)!=(nRubberEdgeDraggingLimit>=nAnz);
         if (bShowHide) HideDragObj(NULL);
@@ -1121,7 +1121,7 @@ void SdrDragView::SetRubberEdgeDraggingLimit(USHORT nEdgeObjAnz)
 void SdrDragView::SetDetailedEdgeDragging(BOOL bOn)
 {
     if (bOn!=IsDetailedEdgeDragging()) {
-        ULONG nAnz=aEdgesOfMarkedNodes.GetMarkCount();
+        ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=nAnz!=0 && IsDragObj() &&
                  (nDetailedEdgeDraggingLimit>=nAnz);
         if (bShowHide) HideDragObj(NULL);
@@ -1133,7 +1133,7 @@ void SdrDragView::SetDetailedEdgeDragging(BOOL bOn)
 void SdrDragView::SetDetailedEdgeDraggingLimit(USHORT nEdgeObjAnz)
 {
     if (nEdgeObjAnz!=nDetailedEdgeDraggingLimit) {
-        ULONG nAnz=aEdgesOfMarkedNodes.GetMarkCount();
+        ULONG nAnz = GetEdgesOfMarkedNodes().GetMarkCount();
         BOOL bShowHide=IsDetailedEdgeDragging() && nAnz!=0 && IsDragObj() &&
                  (nEdgeObjAnz>=nAnz)!=(nDetailedEdgeDraggingLimit>=nAnz);
         if (bShowHide) HideDragObj(NULL);
