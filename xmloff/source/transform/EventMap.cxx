@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventMap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:48:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,5 +130,13 @@ XMLTransformerEventMapEntry aTransformerEventMap[] =
     { XML_NAMESPACE_FORM,   "cursormove",   "on-cursormove" },
     { XML_NAMESPACE_FORM,   "supplyparameter",  "on-supplyparameter" },
     { XML_NAMESPACE_FORM,   "adjust",   "on-adjust" },
+    { 0, 0, 0 }
+};
+
+XMLTransformerEventMapEntry aFormTransformerEventMap[] =
+{
+    { XML_NAMESPACE_DOM,    "mouseover",    "on-mouseover" },
+    { XML_NAMESPACE_DOM,    "mouseout", "on-mouseout" },
+    { XML_NAMESPACE_DOM,    "DOMFocusOut",  "on-blur" },
     { 0, 0, 0 }
 };

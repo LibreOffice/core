@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventOASISTContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:48:53 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,13 @@ public:
                            const ::rtl::OUString& rQName );
     virtual ~XMLEventOASISTransformerContext();
 
+    static XMLTransformerOASISEventMap_Impl *CreateFormEventMap();
     static XMLTransformerOASISEventMap_Impl *CreateEventMap();
     static void FlushEventMap( XMLTransformerOASISEventMap_Impl *p );
     static ::rtl::OUString GetEventName( sal_uInt16 nPrefix,
-                                           const ::rtl::OUString& rName,
-                                     XMLTransformerOASISEventMap_Impl& rMap );
+                             const ::rtl::OUString& rName,
+                             XMLTransformerOASISEventMap_Impl& rMap,
+                             XMLTransformerOASISEventMap_Impl* pMap2    );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };

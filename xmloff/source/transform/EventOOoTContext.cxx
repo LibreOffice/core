@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventOOoTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:49:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,31 +102,43 @@ class XMLTransformerOOoEventMap_Impl:
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:
-    XMLTransformerOOoEventMap_Impl( XMLTransformerEventMapEntry *pInit );
+
+    void AddMap( XMLTransformerEventMapEntry *pInit );
+
+    XMLTransformerOOoEventMap_Impl( XMLTransformerEventMapEntry *pInit,
+                                       XMLTransformerEventMapEntry *pInit2  );
     ~XMLTransformerOOoEventMap_Impl();
 };
 
-XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl( XMLTransformerEventMapEntry *pInit )
+void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit )
+{
+    XMLTransformerOOoEventMap_Impl::key_type aKey;
+    XMLTransformerOOoEventMap_Impl::data_type aData;
+    while( pInit->m_pOOoName )
+    {
+        aKey = OUString::createFromAscii(pInit->m_pOOoName);
+
+        OSL_ENSURE( find( aKey ) == end(), "duplicate event map entry" );
+
+        aData.m_nPrefix = pInit->m_nOASISPrefix;
+        aData.m_aLocalName = OUString::createFromAscii(pInit->m_pOASISName);
+
+        XMLTransformerOOoEventMap_Impl::value_type aVal( aKey, aData );
+
+        bool bInserted = insert( aVal ).second;
+        OSL_ENSURE( bInserted, "duplicate OOo event name extry" );
+        ++pInit;
+    }
+}
+
+XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl(
+        XMLTransformerEventMapEntry *pInit,
+        XMLTransformerEventMapEntry *pInit2 )
 {
     if( pInit )
-    {
-        XMLTransformerOOoEventMap_Impl::key_type aKey;
-        XMLTransformerOOoEventMap_Impl::data_type aData;
-        while( pInit->m_pOOoName )
-        {
-            aKey = OUString::createFromAscii(pInit->m_pOOoName);
-
-            OSL_ENSURE( find( aKey ) == end(), "duplicate event map entry" );
-
-            aData.m_nPrefix = pInit->m_nOASISPrefix;
-            aData.m_aLocalName = OUString::createFromAscii(pInit->m_pOASISName);
-
-            XMLTransformerOOoEventMap_Impl::value_type aVal( aKey, aData );
-
-            insert( aVal );
-            ++pInit;
-        }
-    }
+        AddMap( pInit );
+    if( pInit )
+        AddMap( pInit2 );
 }
 
 XMLTransformerOOoEventMap_Impl::~XMLTransformerOOoEventMap_Impl()
@@ -154,7 +166,8 @@ XMLEventOOoTransformerContext::~XMLEventOOoTransformerContext()
 XMLTransformerOOoEventMap_Impl
     *XMLEventOOoTransformerContext::CreateEventMap()
 {
-    return new XMLTransformerOOoEventMap_Impl( aTransformerEventMap );
+    return new XMLTransformerOOoEventMap_Impl( aTransformerEventMap,
+                                                  aFormTransformerEventMap );
 }
 
 void XMLEventOOoTransformerContext::FlushEventMap(
