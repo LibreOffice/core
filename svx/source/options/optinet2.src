@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:25:25 $
+ *  last change: $Author: os $ $Date: 2002-01-09 10:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,8 +341,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedText FT_HTTP_PORT
     {
-        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 29 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 29 ) ;
+        Size = MAP_APPFONT ( 29 , 8 ) ;
         Text = "~Port" ;
         Text [ English ] = "~Port" ;
         Text [ english_us ] = "~Port" ;
@@ -409,8 +409,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedText FT_FTP_PORT
     {
-        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 45 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 45 ) ;
+        Size = MAP_APPFONT ( 29 , 8 ) ;
         Text = "P~ort" ;
         Text [ English ] = "P~ort" ;
         Text [ english_us ] = "P~ort" ;
@@ -477,8 +477,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedText FT_SOCKS_PORT
     {
-        Pos = MAP_APPFONT ( 199 , GB_TYPES_TOP + 61 ) ;
-        Size = MAP_APPFONT ( 20 , 8 ) ;
+        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 61 ) ;
+        Size = MAP_APPFONT ( 29 , 8 ) ;
         Text = "Po~rt" ;
         Text [ English ] = "Po~rt" ;
         Text [ english_us ] = "Po~rt" ;
@@ -545,8 +545,8 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     FixedText ED_NOPROXYDESC
     {
-        Pos = MAP_APPFONT ( 194 , GB_TYPES_TOP + 77 ) ;
-        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 77 ) ;
+        Size = MAP_APPFONT ( 56 , 8 ) ;
         Text = "Trennzeichen ;" ;
         Text [ English ] = "Separator ;" ;
         Text [ english_us ] = "Separator ;" ;
@@ -782,11 +782,12 @@ TabPage RID_SVXPAGE_INET_SEARCH
     ListBox LB_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , GB_SEARCH_TOP + 11 ) ;
-        Size = MAP_APPFONT ( 54 , 120 ) ;
+        Size = MAP_APPFONT ( 50 , 120 ) ;
         Border = TRUE ;
+        AutoHScroll = TRUE;
     };
-    #define LABEL_START_XPOS (GB_SEARCH_LEFT + 6 + 54 + 6)
-    #define LABEL_LEN 33
+    #define LABEL_START_XPOS (GB_SEARCH_LEFT + 6 + 50 + 3)
+    #define LABEL_LEN 40
     #define EDIT_START_XPOS (LABEL_START_XPOS + LABEL_LEN + 3)
     FixedText FT_SEARCH_NAME
     {
@@ -1040,7 +1041,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     FixedText FT_CASE
     {
         Pos = MAP_APPFONT ( LABEL_START_XPOS, GB_SEARCH_TOP + 90 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
         Text = "~Schreibstil" ;
         Text [ English ] = "~Case" ;
         Text [ dutch ] = "S~chrijfstijl" ;
