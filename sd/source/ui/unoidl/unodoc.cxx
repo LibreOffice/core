@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:33:52 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,9 @@ using namespace ::com::sun::star;
 
 uno::Sequence< rtl::OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq( 3 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
-    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
-    aSeq[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
+    uno::Sequence< rtl::OUString > aSeq( 2 );
+    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
+    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
 
     return aSeq;
 }
@@ -122,11 +121,13 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 
 uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq( 3 );
-    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
-    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
-    aSeq[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
-    //aSeq[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
+    // dont register for generic services!
+    uno::Sequence< rtl::OUString > aSeq( 2 );
+
+    // TODO: Presentation module cant use DrawingDocumentFactory!?
+    //       It has to use own or a shared factory.
+    aSeq[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
+    aSeq[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
 
     return aSeq;
 }
