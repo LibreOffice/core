@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddetect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:14:34 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ SdFilterDetect::~SdFilterDetect()
                                 if( SvtModuleOptions().IsImpress() )
                                 {
                                     INetURLObject aURL( aFileName );
-                                    if( aURL.getExtension().EqualsIgnoreCaseAscii( "cgm" ) )
+                                    if( aURL.getExtension().equalsIgnoreAsciiCaseAscii( "cgm" ) )
                                     {
                                         sal_uInt8 n8;
                                         pStm->Seek( STREAM_SEEK_TO_BEGIN );
