@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-10-11 14:06:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,33 +372,27 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
         aRightMF.SetPrcntValue(0);
         nSaveWidth = aWidthMF.Denormalize(aWidthMF.GetValue(FUNIT_TWIP ));
         aWidthMF.SetPrcntValue(aWidthMF.Normalize( pTblData->GetSpace() ), FUNIT_TWIP );
-        aLeftMF.SetText( aEmptyStr );
-        aRightMF.SetText( aEmptyStr );
         bFull = TRUE;
         bRestore = FALSE;
     }
     else if( (RadioButton *) pBox == &aLeftBtn )
     {
         bRightEnable = bWidthEnable = TRUE;
-        aLeftMF.SetText( aEmptyStr );
         aLeftMF.SetPrcntValue(0);
     }
     else if( (RadioButton *) pBox == &aFromLeftBtn )
     {
         bLeftEnable = bWidthEnable = TRUE;
-        aRightMF.SetText( aEmptyStr );
         aRightMF.SetPrcntValue(0);
     }
     else if( (RadioButton *) pBox == &aRightBtn )
     {
         bLeftEnable = bWidthEnable = TRUE;
         aRightMF.SetPrcntValue(0);
-        aRightMF.SetText( aEmptyStr );
     }
     else if( ( RadioButton * ) pBox == &aCenterBtn )
     {
         bLeftEnable = bWidthEnable = TRUE;
-        aRightMF.SetText( aEmptyStr );
     }
     else if( ( RadioButton * ) pBox == &aFreeBtn )
     {
@@ -701,8 +695,6 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
             {
                 bSetRight = bSetLeft = TRUE;
                 aFullBtn.Check();
-                aRightMF.SetText( aEmptyStr );
-                aLeftMF.SetText( aEmptyStr );
                 aWidthMF.Enable(FALSE);
                 aRelWidthCB.Enable(FALSE);
                 aWidthFT.Enable(FALSE);
@@ -712,28 +704,24 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
             {
                 bSetLeft = TRUE;
                 aLeftBtn.Check();
-                aLeftMF.SetText( aEmptyStr );
             }
             break;
             case HORI_LEFT_AND_WIDTH :
             {
                 bSetRight = TRUE;
                 aFromLeftBtn.Check();
-                aRightMF.SetText( aEmptyStr );
             }
             break;
             case HORI_RIGHT:
             {
                 bSetRight = TRUE;
                 aRightBtn.Check();
-                aRightMF.SetText( aEmptyStr );
             }
             break;
             case HORI_CENTER:
             {
                 bSetRight = TRUE;
                 aCenterBtn.Check();
-                aRightMF.SetText( aEmptyStr );
             }
             break;
         }
