@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-09 12:46:23 $
+ *  last change: $Author: jp $ $Date: 2001-08-23 14:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,6 +1138,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
                 ErrorHandler::HandleError(ErrCode(nRes));
                 aEditWin.SetReadonly(TRUE);
             }
+            aMedium.Commit();
             SvStream* pInStream = aMedium.GetInStream();
             pInStream->Seek(0);
             pInStream->SetStreamCharSet( eDestEnc );
