@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targets.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-02 14:08:47 $
+ *  last change: $Author: fs $ $Date: 2001-05-07 13:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace framework{
 #define SPECIALTARGET_BLANK                                     DECLARE_ASCII("_blank"      )   // Create a new task.
 #define SPECIALTARGET_BEAMER                                    DECLARE_ASCII("_beamer"     )   // special frame in hierarchy
 #define SPECIALTARGET_MENUBAR                                   DECLARE_ASCII("_menubar"    )   // special target for menubars
+#define SPECIALTARGET_HELPAGENT                                 DECLARE_ASCII("_helpagent"  )   // special target for the help agent window
 /* not supported yet!
 #define SPECIALTARGET_DOCUMENT                                  DECLARE_ASCII("_document"   )
 #define SPECIALTARGET_EXPLORER                                  DECLARE_ASCII("_explorer"   )
