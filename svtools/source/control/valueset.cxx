@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-16 19:18:50 $
+ *  last change: $Author: ka $ $Date: 2000-11-17 10:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1907,6 +1907,13 @@ Rectangle ValueSet::GetItemRect( USHORT nItemId ) const
         return mpItemList->GetObject( nPos )->maRect;
     else
         return Rectangle();
+}
+
+// -----------------------------------------------------------------------
+
+void ValueSet::EnableFullItemMode( BOOL bFullMode )
+{
+    mbFullMode = bFullMode;
 }
 
 // -----------------------------------------------------------------------
