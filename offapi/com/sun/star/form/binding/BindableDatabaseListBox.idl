@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BindableDatabaseListBox.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:37:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,18 +79,21 @@ module com {  module sun {  module star {  module form {  module binding {
 /** This service specifies a list box model which is data-aware and thus can be bound to a
     database field, and additionally supports binding to arbitrary external values.
 
-    <p>There are two possible ways how a <type>BindableDatabaseListBox</type> exchanges
-    values with an external binding:
-    <ul><li>If the binding supports string sequences, then this
-            type will be used for data exchange. The string value in the external binding will then
-            be reflected in the selection of the list box.</li>
-        <li>If the binding does not support string sequences, it must support exchanging simple
-            <em>string</em>s. In this case, the string of the external value will be reflected
-            in a single-selection in the list.<br/>
-            If no entry is selected in the list box, an empty string will be transferred to the external
-            binding. If exactly one entry is selected, the text of this entry will be transferred.
-            If multiple entries are selected, then <NULL/> is transfered.</li>
-    </ul></p>
+    <p>There are four possible ways how a <type>BindableDatabaseListBox</type> exchanges
+    values with an external binding, the following lists explains all of them. If a new binding
+    is set at a <type>BindableDatabaseListBox</type>, the types from the following list are
+    tried in descending order: The first type supported by the binding is used for data exchange.
+    <ol><li><em>sequences of integers</em>: When used, the integers in the sequence will represent
+            the indexes of the selected entries of the list box.</li>
+        <li><em>integer values</em>: When used, the value will represent the index of the selected entry.
+            If no entry is selected, -1 will be transfered. If more than one entry is selected, <NULL/>
+            will be transfered.</li>
+        <li><em>sequences of strings</em>: When used, the strings in the sequence present the texts
+            of the selected entries of the list box.</li>
+        <li><em>string values</em>: When used. the value will represent the text of the selected entry.
+            If no entry is selected, an empty string will be transfered. If more than one entry is selected,
+            <NULL/> will be transfered.</li>
+    </ol></p>
 
     @see com::sun::star::form::binding::XValueBinding::supportsType
  */
