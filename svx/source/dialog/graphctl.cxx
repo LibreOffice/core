@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-22 09:39:25 $
+ *  last change: $Author: er $ $Date: 2002-01-08 12:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,6 @@
  *
  ************************************************************************/
 
-#if defined( OS2 ) || defined( WIN ) || defined( UNX ) || defined( WNT )
-#include <stdlib.h>         //wegen fcvt
-#endif
-#if defined(MAC) || defined(NETBSD) || defined (FREEBSD)
-#if defined(NETBSD)
-extern "C" {
-#endif
-char *fcvt(double value, int ndigit, int *decpt, int *sign);
-#if defined(NETBSD)
-}
-#endif
-#endif
-
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
@@ -79,6 +66,13 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign);
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
 #endif
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -651,27 +645,10 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
 
 String GraphCtrl::GetStringFromDouble( const double& rDouble )
 {
-    int             nDec;
-    int             nSign;
-    String          aString( String::CreateFromAscii( fcvt( rDouble, 2, &nDec, &nSign ) ) );
-    String          aStr;
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    sal_Unicode     cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
-
-    if ( nDec > -1 )
-    {
-        aString.Insert( cSep, nDec );
-        if ( !nDec )
-            aString.Insert( sal_Unicode('0'), 0 );
-    }
-    else
-    {
-        aString.Insert( sal_Unicode('0'), 0 );
-        aString.Insert( cSep, 0 );
-        aString.Insert( sal_Unicode('0'), 0 );
-    }
-
-    return aString;
+    String aStr;
+    sal_Unicode cSep = SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
+    SolarMath::DoubleToString( aStr, rDouble, 'F', 2, cSep );
+    return aStr;
 }
 
 
