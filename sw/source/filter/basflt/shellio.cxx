@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:41:45 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <hintids.hxx>
 
@@ -1021,7 +1020,10 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 
     // falls der Standart PageDesc. immer noch auf initalen Werten steht
     // (wenn z.B. kein Drucker gesetzt wurde) dann setze jetzt auf DIN A4
-    if( !pOutDoc->GetPrt() )
+    // --> OD 2004-11-17 #i37248# - Modifications are only allowed at a new document.
+    // <pOutDoc> contains a new document, if <pDoc> is set - see above.
+    if ( pDoc && !pOutDoc->GetPrt() )
+    // <--
     {
         const SwPageDesc& rPgDsc = const_cast<const SwDoc *>(pOutDoc)->GetPageDesc( 0 );
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );;
