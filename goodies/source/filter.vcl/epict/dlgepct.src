@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:09:51 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "परिमाण";
         Text[ slovak ] = "Veľkosť";
+        Text[ hungarian ] = "Méret";
+        Text[ slovenian ] = "Velikost";
     };
     FixedText FT_SIZEX
     {
@@ -182,6 +184,8 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
         Text[ slovak ] = "Šírka";
+        Text[ hungarian ] = "Szélesség";
+        Text[ slovenian ] = "Širina";
     };
     FixedText FT_SIZEY
     {
@@ -217,6 +221,8 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
         Text[ slovak ] = "Výška";
+        Text[ hungarian ] = "Magasság";
+        Text[ slovenian ] = "Višina";
     };
     OKButton BTN_OK
     {
@@ -272,6 +278,8 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ hebrew ] = "‮מקורי‬";
         Text[ hindi ] = "~यथार्थ";
         Text[ slovak ] = "Pô~vodný";
+        Text[ hungarian ] = "~Eredeti";
+        Text[ slovenian ] = "~Izvirnik";
     };
     RadioButton RB_SIZE
     {
@@ -308,6 +316,8 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ hebrew ] = "‮גודל‬";
         Text[ hindi ] = "~परिमाण";
         Text[ slovak ] = "Veľko~sť";
+        Text[ hungarian ] = "~Méret";
+        Text[ slovenian ] = "Veliko~st";
     };
     FixedLine GRP_MODE
     {
@@ -321,7 +331,7 @@ ModalDialog DLG_EXPORT_EPCT
         Text [ spanish ] = "Modo" ;
         Text [ french ] = "Mode" ;
         Text [ swedish ] = "L�ge" ;
-        Text [ danish ] = "Modus" ;
+        Text [ danish ] = "Tilstand" ;
         Text [ portuguese_brazilian ] = "Modo" ;
         Text [ portuguese ] = "Modo" ;
         Text[ chinese_simplified ] = "模式";
@@ -343,6 +353,8 @@ ModalDialog DLG_EXPORT_EPCT
         Text[ hebrew ] = "‮מצב עבודה‬";
         Text[ hindi ] = "प्रकार";
         Text[ slovak ] = "Režim";
+        Text[ hungarian ] = "Mód";
+        Text[ slovenian ] = "Način";
     };
     Text[ chinese_simplified ] = "PICT 选项";
     Text[ russian ] = "��������� PICT";
@@ -363,7 +375,10 @@ ModalDialog DLG_EXPORT_EPCT
     Text[ hebrew ] = "‮אפשריות PICT‬";
     Text[ hindi ] = "PICT विकल्प";
     Text[ slovak ] = "Nastavenia pre formát PICT";
+    Text[ hungarian ] = "PICT-beállítások";
+    Text[ slovenian ] = "Možnosti za PICT";
 };
+
 
 
 
