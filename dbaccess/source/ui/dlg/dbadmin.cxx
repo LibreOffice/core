@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-03 09:15:07 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 16:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,6 +1808,11 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
     }
     while (nDelayed);
 
+    // reset some meta-data-items in the the example set
+    // 00/11/10 - 80185 - FS
+    pExampleSet->Put(SfxBoolItem(DSID_NEWDATASOURCE, sal_False));
+    pExampleSet->Put(SfxBoolItem(DSID_DELETEDDATASOURCE, sal_False));
+
     // disable the apply button
     GetApplyButton()->Enable(sal_False);
 
@@ -2179,6 +2184,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2000/11/03 09:15:07  fs
+ *  #79998# SetSavePasswordText
+ *
  *  Revision 1.15  2000/10/31 08:03:35  fs
  *  +selectDataSource - supporting an initial selecting when creating as service
  *
