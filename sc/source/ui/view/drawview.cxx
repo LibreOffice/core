@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 15:39:46 $
+ *  last change: $Author: nn $ $Date: 2000-11-24 20:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,9 +278,17 @@ void ScDrawView::InvalidateDrawTextAttrs()
     SfxBindings& rBindings = pViewData->GetBindings();
 
     rBindings.Invalidate( SID_ATTR_CHAR_FONT );
+    rBindings.Invalidate( SID_ATTR_CHAR_CJK_FONT );
+    rBindings.Invalidate( SID_ATTR_CHAR_CTL_FONT );
     rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+    rBindings.Invalidate( SID_ATTR_CHAR_CJK_FONTHEIGHT );
+    rBindings.Invalidate( SID_ATTR_CHAR_CTL_FONTHEIGHT );
     rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
+    rBindings.Invalidate( SID_ATTR_CHAR_CJK_WEIGHT );
+    rBindings.Invalidate( SID_ATTR_CHAR_CTL_WEIGHT );
     rBindings.Invalidate( SID_ATTR_CHAR_POSTURE );
+    rBindings.Invalidate( SID_ATTR_CHAR_CJK_POSTURE );
+    rBindings.Invalidate( SID_ATTR_CHAR_CTL_POSTURE );
     rBindings.Invalidate( SID_ATTR_CHAR_UNDERLINE );
     rBindings.Invalidate( SID_ULINE_VAL_NONE );
     rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
