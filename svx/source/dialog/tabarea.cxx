@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:36:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 #include "globl3d.hxx"
 #include "svdmodel.hxx"
 #include "drawitem.hxx"
-#include "tabarea.hxx"
+#include "cuitabarea.hxx"
 #include "tabarea.hrc"
 #include "dlgname.hxx"
 #include "dlgname.hrc"
@@ -275,9 +275,12 @@ void SvxAreaTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).SetGradientList( pGradientList );
             ( (SvxAreaTabPage&) rPage ).SetHatchingList( pHatchingList );
             ( (SvxAreaTabPage&) rPage ).SetBitmapList( pBitmapList );
-            ( (SvxAreaTabPage&) rPage ).SetPageType( &nPageType );
-            ( (SvxAreaTabPage&) rPage ).SetDlgType( &nDlgType );
-            ( (SvxAreaTabPage&) rPage ).SetPos( &nPos );
+            //CHINA001 ( (SvxAreaTabPage&) rPage ).SetPageType( &nPageType );
+            ( (SvxAreaTabPage&) rPage ).SetPageType( nPageType ); //add CHINA001
+            //CHINA001 ( (SvxAreaTabPage&) rPage ).SetDlgType( &nDlgType );
+            ( (SvxAreaTabPage&) rPage ).SetDlgType( nDlgType );//add CHINA001
+            //CHINA001 ( (SvxAreaTabPage&) rPage ).SetPos( &nPos );
+            ( (SvxAreaTabPage&) rPage ).SetPos( nPos );//add CHINA001
             ( (SvxAreaTabPage&) rPage ).SetAreaTP( &bAreaTP );
             ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &nGradientListState );
             ( (SvxAreaTabPage&) rPage ).SetHtchChgd( &nHatchingListState );
@@ -292,8 +295,8 @@ void SvxAreaTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         case RID_SVXPAGE_SHADOW:
         {
             ( (SvxShadowTabPage&) rPage ).SetColorTable( pColorTab );
-            ( (SvxShadowTabPage&) rPage ).SetPageType( &nPageType );
-            ( (SvxShadowTabPage&) rPage ).SetDlgType( &nDlgType );
+            ( (SvxShadowTabPage&) rPage ).SetPageType( nPageType );//CHINA001 ( (SvxShadowTabPage&) rPage ).SetPageType( &nPageType );
+            ( (SvxShadowTabPage&) rPage ).SetDlgType( nDlgType );//CHINA001 ( (SvxShadowTabPage&) rPage ).SetDlgType( &nDlgType );
             //( (SvxShadowTabPage&) rPage ).SetPos( &nPos );
             ( (SvxShadowTabPage&) rPage ).SetAreaTP( &bAreaTP );
             ( (SvxShadowTabPage&) rPage ).SetColorChgd( &nColorTableState );
@@ -349,8 +352,8 @@ void SvxAreaTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
 
         case RID_SVXPAGE_TRANSPARENCE:
-            ( (SvxTransparenceTabPage&) rPage ).SetPageType( &nPageType );
-            ( (SvxTransparenceTabPage&) rPage ).SetDlgType( &nDlgType );
+            ( (SvxTransparenceTabPage&) rPage ).SetPageType( nPageType );//CHINA001 ( (SvxTransparenceTabPage&) rPage ).SetPageType( &nPageType );
+            ( (SvxTransparenceTabPage&) rPage ).SetDlgType( nDlgType );//CHINA001 ( (SvxTransparenceTabPage&) rPage ).SetDlgType( &nDlgType );
             ( (SvxTransparenceTabPage&) rPage ).Construct();
         break;
 
