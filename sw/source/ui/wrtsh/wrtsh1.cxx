@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:13:46 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
         else if ( aSz.Width() != DFLT_WIDTH && aSz.Height() != DFLT_HEIGHT )
             bSetGrfSize = FALSE;
 
-        pFrmMgr->SetSizeType(ATT_FIX_SIZE);
+        pFrmMgr->SetHeightSizeType(ATT_FIX_SIZE);
 
     }
 
@@ -713,7 +713,7 @@ BOOL SwWrtShell::InsertOle( SvInPlaceObjectRef aRef )
         EnterSelFrmMode();
 
         SwFlyFrmAttrMgr aFrmMgr( TRUE, this, FRMMGR_TYPE_OLE );
-        aFrmMgr.SetSizeType(ATT_FIX_SIZE);
+        aFrmMgr.SetHeightSizeType(ATT_FIX_SIZE);
 
         SwRect aBound;
         CalcBoundRect( aBound, aFrmMgr.GetAnchor() );
