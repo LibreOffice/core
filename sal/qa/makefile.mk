@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: lla $ $Date: 2002-10-14 13:30:07 $
+#   last change: $Author: lwang $ $Date: 2002-11-06 03:09:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,8 @@ REGEXP='s/^[\#].*$$//'
 DEPOBJFILES = \
             $(SLO)$/rtl_String_Utils.obj \
             $(SLO)$/rtl_OString.obj \
-            $(SLO)$/rtl_OUString.obj
+            $(SLO)$/rtl_OUString.obj \
+            $(SLO)$/rtl_OUStringBuffer.obj
 
 SHL1OBJS = \
             $(SLO)$/rtl_String_Utils.obj \
@@ -118,6 +119,29 @@ SHL2IMPLIB= i$(SHL2TARGET)
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME    =$(SHL2TARGET)
+#-------------------------------------------------------------------------------
+
+.IF "$(COM)"=="GCC"
+NOOPTFILES= \
+    $(SLO)$/rtl_String_Utils.obj \
+   $(SLO)$/rtl_OUStringBuffer.obj
+.ENDIF
+
+SHL3OBJS = \
+            $(SLO)$/rtl_String_Utils.obj \
+            $(SLO)$/rtl_OUStringBuffer.obj
+
+SHL3TARGET= rtl_OUStringBuffer
+SHL3STDLIBS+=\
+            $(SALLIB) \
+            $(SALHELPERLIB)
+
+SHL3VERSIONMAP = $(MISC)$/$(SHL3TARGET).map
+SHL3DEPN=
+SHL3IMPLIB= i$(SHL3TARGET)
+SHL3DEF=    $(MISC)$/$(SHL3TARGET).def
+
+DEF3NAME    =$(SHL3TARGET)
 
 
 # --- Targets ------------------------------------------------------
@@ -145,16 +169,32 @@ $(MISC)$/$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce
         +$(TYPE) $(MISC)$/$(SHL2TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL2TARGET).map
         +$(RM) $(MISC)$/$(SHL2TARGET).map1
         +$(TYPE) mapFooter >> $(MISC)$/$(SHL2TARGET).map
+        
+$(MISC)$/$(SHL3TARGET).map : sce$/$(SHL3TARGET).sce
+        +$(RM)  $(MISC)$/$(SHL3TARGET).tst
+        +$(RM)  $(MISC)$/$(SHL3TARGET).map
+        +$(TYPE) $< | sed $(REGEXP) > $@
+        +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL3TARGET).tst
+        +$(TYPE) mapHeader > $(MISC)$/$(SHL3TARGET).map
+        +$(TYPE) $(MISC)$/$(SHL3TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL3TARGET).map1"
+        +$(TYPE) $(MISC)$/$(SHL3TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL3TARGET).map
+        +$(RM) $(MISC)$/$(SHL3TARGET).map1
+        +$(TYPE) mapFooter >> $(MISC)$/$(SHL3TARGET).map
 
 cleanup:
     +$(RM) $(MISCX)$/$(SHL1TARGET).map
     +$(RM) $(MISCX)$/$(SHL2TARGET).map
+    +$(RM) $(MISCX)$/$(SHL3TARGET).map
     +$(RM) $(MISCX)$/$(SHL1TARGET).tst
     +$(RM) $(MISCX)$/$(SHL2TARGET).tst
+    +$(RM) $(MISCX)$/$(SHL3TARGET).tst
     +$(RM) $(MISCX)$/$(SHL1TARGET).def
     +$(RM) $(MISCX)$/$(SHL2TARGET).def
+    +$(RM) $(MISCX)$/$(SHL3TARGET).def
     +$(RM) sce$/$(SHL1TARGET).out
     +$(RM) sce$/$(SHL2TARGET).out
+    +$(RM) sce$/$(SHL3TARGET).out
     +$(RM) sce$/$(SHL1TARGET).qadev
     +$(RM) sce$/$(SHL2TARGET).qadev
+    +$(RM) sce$/$(SHL3TARGET).qadev
 
