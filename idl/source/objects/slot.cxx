@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-28 16:01:23 $
+ *  last change: $Author: mba $ $Date: 2002-04-12 10:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1899,60 +1899,41 @@ void WriteBool( BOOL bSet, SvStream& rStream )
 
 void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
 {
-    rStrm << "PROJECT" << ",,";
+    rStrm << "PROJECT,";
+    rStrm << GetSlotId().GetBuffer() << ',';
+    USHORT nId = (USHORT) GetSlotId().GetValue();
+    rStrm << ByteString::CreateFromInt32( GetSlotId().GetValue() ).GetBuffer() << ',';
+
+    if ( GetPseudoPrefix().Len() )
+        rStrm << GetPseudoPrefix().GetBuffer() << ',';
+    else
+        rStrm << ',';
+
+    rStrm << GetGroupId().GetBuffer() << ',';
+
+    WriteBool( GetAccelConfig(), rStrm );
+    WriteBool( GetMenuConfig(), rStrm );
+    WriteBool( GetStatusBarConfig(), rStrm );
+    WriteBool( GetToolBoxConfig(), rStrm );
+
     if ( GetSlotType() )
         rStrm << GetSlotType()->GetName().GetBuffer() << ',';
     else
         rStrm << ',';
 
-    rStrm << GetType()->GetSvName().GetBuffer() << ',';
-    rStrm << GetName().GetBuffer() << ',';
-    rStrm << GetUnoName().GetBuffer() << ',';
-    rStrm << GetSlotId().GetBuffer() << ',';
-    USHORT nId = (USHORT) GetSlotId().GetValue();
-    rStrm << ByteString::CreateFromInt32( GetSlotId().GetValue() ).GetBuffer() << ',';
-    rStrm << "\"" << GetConfigName().GetBuffer() << "\"" << ',';
-    rStrm << "\"" << GetHelpText().GetBuffer()   << "\"" << ',';
-
-    rStrm << ",,,";
-
-    WriteBool( GetAccelConfig(), rStrm );
-    WriteBool( GetAutomation(), rStrm );
     WriteBool( GetAutoUpdate(), rStrm );
-
     if ( GetCachable() )
         rStrm << "Cachable" << ',';
     else
         rStrm << "Volatile" << ',';
 
     WriteBool( GetContainer(), rStrm );
-    WriteBool( GetExport(), rStrm );
     WriteBool( GetFastCall(), rStrm );
-    WriteBool( GetHidden(), rStrm );
-
-    rStrm << GetGroupId().GetBuffer() << ',';
-
-    rStrm << ',';
-    rStrm << GetDisableFlags().GetBuffer() << ',';
-
     WriteBool( GetHasCoreId(), rStrm );
     WriteBool( GetHasDialog(), rStrm );
-    WriteBool( GetIsCollection(), rStrm );
-    WriteBool( GetMenuConfig(), rStrm );
-    WriteBool( GetPlugComm(), rStrm );
-    WriteBool( GetReadonly(), rStrm );
     WriteBool( GetReadOnlyDoc(), rStrm );
 
-    if( GetRecordPerSet() )
-        rStrm << "RecordPerSet" << ',';
-    else
-        rStrm << "RecordPerItem" << ',';
-
-    WriteBool( GetRecordAbsolute(), rStrm );
-
-    rStrm << ',';
-
-    WriteBool( GetStatusBarConfig(), rStrm );
+    rStrm << GetDisableFlags().GetBuffer() << ',';
 
     if( GetSynchron() )
         rStrm << "Synchron" << ',';
@@ -1960,14 +1941,14 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
         rStrm << "Asynchron" << ',';
 
     WriteBool( GetToggle(), rStrm );
-    WriteBool( GetToolBoxConfig(), rStrm );
-
-    if ( GetPseudoPrefix().Len() )
-        rStrm << GetPseudoPrefix().GetBuffer() << ',';
+    WriteBool( GetReadonly(), rStrm );
+    WriteBool( GetExport(), rStrm );
+    if( GetRecordPerSet() )
+        rStrm << "RecordPerSet" << ',';
     else
-        rStrm << ',';
+        rStrm << "RecordPerItem" << ',';
 
-    rStrm << ',';
+    WriteBool( GetRecordAbsolute(), rStrm );
 
     if ( GetType()->GetType() != TYPE_METHOD && GetMethod() )
     {
@@ -1979,7 +1960,8 @@ void SvMetaSlot::WriteCSV( SvIdlDataBase& rBase, SvStream& rStrm )
         rStrm << ",,";
     }
 
-    rStrm << "TRUE,";
+    rStrm << GetType()->GetSvName().GetBuffer() << ',';
+    rStrm << GetName().GetBuffer() << ',';
 
     if ( GetType()->GetType() == TYPE_METHOD || GetMethod() )
     {
