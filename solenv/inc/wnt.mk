@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-18 10:58:18 $
+#   last change: $Author: kz $ $Date: 2004-01-29 11:53:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -428,8 +428,10 @@ RDBMAKER=$(WRAPCMD) rdbmaker
 STARDEP=$(WRAPCMD) javadep
 JAVAC=$(WRAPCMD) javac
 JAVA=$(WRAPCMD) java
-SCPCOMP=$(WRAPCMD) scpcomp
-SCPLINK=$(WRAPCMD) scplink
+#SCPCOMP=$(WRAPCMD) scpcomp
+#SCPLINK=$(WRAPCMD) scplink
+SCPCOMP=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin/pre2par.pl
+SCPLINK=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin/par2script.pl
 LZIP=$(WRAPCMD) -env lzip
 CPPLCC=$(WRAPCMD) cpplcc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
