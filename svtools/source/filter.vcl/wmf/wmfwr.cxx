@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 14:17:10 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,14 @@ void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
 
     WriteRecordHeader(0x00000000,W_META_CREATEFONTINDIRECT);
 
-    WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
+    if ( !rFont.GetSize().Width() )
+    {
+        VirtualDevice aDev;
+        FontMetric aMetric( aDev.GetFontMetric( rFont ) );
+        WriteHeightWidth(Size(aMetric.GetWidth(),-rFont.GetSize().Height()));
+    }
+    else
+        WriteHeightWidth(Size(rFont.GetSize().Width(),-rFont.GetSize().Height()));
 
     *pWMF << (short)rFont.GetOrientation() << (short)rFont.GetOrientation();
 
