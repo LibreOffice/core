@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:26:47 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 10:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1628,6 +1628,9 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
     int         i;
     WaitObject aWait( GetFrameWin() );
 
+    while ( nNewTab > 0 && !pDoc->IsVisible( nNewTab ) )
+        --nNewTab;
+
     BOOL bWasLinked = FALSE;
     ScDocument* pUndoDoc = NULL;
     ScRefUndoData* pUndoData = NULL;
@@ -1669,6 +1672,7 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
                 BOOL bActive = pDoc->IsActiveScenario( nTab );
                 pUndoDoc->SetActiveScenario( nTab, bActive );
             }
+            pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
 
             //  Drawing-Layer muss sein Undo selbst in der Hand behalten !!!
             //      pUndoDoc->TransferDrawPage(pDoc, nTab,nTab);
@@ -1681,13 +1685,13 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
         pUndoData = new ScRefUndoData( pDoc );
     }
 
-    BOOL bDelError=FALSE;
+    BOOL bDelDone = FALSE;
 
     for(i=TheTabs.Count()-1;i>=0;i--)
     {
         if (pDoc->DeleteTab( TheTabs[i], pUndoDoc ))
         {
-            bDelError=TRUE;
+            bDelDone = TRUE;
             pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[i] ) );
         }
     }
@@ -1699,12 +1703,13 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
     }
 
 
-    if(bDelError)
+    if (bDelDone)
     {
         if ( nNewTab >= pDoc->GetTableCount() )
-                --nNewTab;
+            nNewTab = pDoc->GetTableCount() - 1;
 
-            SetTabNo( nNewTab, TRUE );
+        SetTabNo( nNewTab, TRUE );
+
         if (bWasLinked)
         {
             pDocSh->UpdateLinks();              // Link-Manager updaten
@@ -1720,7 +1725,7 @@ BOOL ScViewFunc::DeleteTables(const SvUShorts &TheTabs, BOOL bRecord )
         delete pUndoDoc;
         delete pUndoData;
     }
-    return bDelError;
+    return bDelDone;
 }
 
 

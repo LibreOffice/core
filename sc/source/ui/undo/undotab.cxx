@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:54:02 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 10:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,14 @@ void ScUndoDeleteTab::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
+USHORT lcl_GetVisibleTabBefore( ScDocument& rDoc, USHORT nTab )
+{
+    while ( nTab > 0 && !rDoc.IsVisible( nTab ) )
+        --nTab;
+
+    return nTab;
+}
+
 void __EXPORT ScUndoDeleteTab::Undo()
 {
     BeginUndo();
@@ -426,6 +434,7 @@ void __EXPORT ScUndoDeleteTab::Undo()
                 BOOL bActive = pRefUndoDoc->IsActiveScenario( theTabs[i] );
                 pDoc->SetActiveScenario( theTabs[i], bActive );
             }
+            pDoc->SetVisible( theTabs[i], pRefUndoDoc->IsVisible( theTabs[i] ) );
 
             //  Drawing-Layer passiert beim MoveUndo::EndUndo
     //      pDoc->TransferDrawPage(pRefUndoDoc, nTab,nTab);
@@ -453,7 +462,7 @@ void __EXPORT ScUndoDeleteTab::Undo()
     //  nicht ShowTable wegen SetTabNo(..., TRUE):
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->SetTabNo( theTabs[0], TRUE );
+        pViewShell->SetTabNo( lcl_GetVisibleTabBefore( *pDoc, theTabs[0] ), TRUE );
 
 //  EndUndo();
 }
@@ -461,7 +470,7 @@ void __EXPORT ScUndoDeleteTab::Undo()
 void __EXPORT ScUndoDeleteTab::Redo()
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    pViewShell->SetTabNo( theTabs[0] );
+    pViewShell->SetTabNo( lcl_GetVisibleTabBefore( *pDocShell->GetDocument(), theTabs[0] ) );
 
     if (pDrawUndo)
         RedoSdrUndoAction( pDrawUndo );         // Draw Redo vorneweg

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 10:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1835,6 +1835,7 @@ BOOL ScDocFunc::DeleteTable( USHORT nTab, BOOL bRecord, BOOL bApi )
             BOOL bActive = pDoc->IsActiveScenario( nTab );
             pUndoDoc->SetActiveScenario( nTab, bActive );
         }
+        pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
 
         //  Drawing-Layer muss sein Undo selbst in der Hand behalten !!!
         pDoc->BeginDrawUndo();                          //  DeleteTab erzeugt ein SdrUndoDelPage
