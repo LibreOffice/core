@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 10:02:02 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,7 +609,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
                 SwFmtFrmSize aSz( bHead ? pHeaderFmt->GetFrmSize() :
                                           pFooterFmt->GetFrmSize() );
-                aSz.SetSizeType( ATT_FIX_SIZE );
+                aSz.SetHeightSizeType( ATT_FIX_SIZE );
                 aSz.SetHeight(nPageHeight - aLongULSpace.GetLower() -
                                             aLongULSpace.GetUpper() );
                 if ( bHead )
