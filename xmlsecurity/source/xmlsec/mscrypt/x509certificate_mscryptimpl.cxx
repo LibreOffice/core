@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:10:47 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl :: getNotBefore() throw ( ::com::sun::star::uno::RuntimeException ) {
+::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl :: getNotValidBefore() throw ( ::com::sun::star::uno::RuntimeException ) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
@@ -286,7 +286,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl :: getNotAfter() throw ( ::com::sun::star::uno::RuntimeException) {
+::com::sun::star::util::DateTime SAL_CALL X509Certificate_MSCryptImpl :: getNotValidAfter() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
@@ -360,7 +360,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl :: findCertExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) {
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl :: findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
         CERT_EXTENSION* pExtn ;
@@ -564,5 +564,49 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
 {
     return getThumbprint(m_pCertContext, CERT_MD5_HASH_PROP_ID);
 }
+
+sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    sal_Int32 usage =
+        CERT_DATA_ENCIPHERMENT_KEY_USAGE |
+        CERT_DIGITAL_SIGNATURE_KEY_USAGE |
+        CERT_KEY_AGREEMENT_KEY_USAGE |
+        CERT_KEY_CERT_SIGN_KEY_USAGE |
+        CERT_KEY_ENCIPHERMENT_KEY_USAGE |
+        CERT_NON_REPUDIATION_KEY_USAGE |
+        CERT_OFFLINE_CRL_SIGN_KEY_USAGE;
+
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 )
+    {
+        CERT_EXTENSION* pExtn = CertFindExtension(
+            szOID_KEY_USAGE,
+            m_pCertContext->pCertInfo->cExtension,
+            m_pCertContext->pCertInfo->rgExtension);
+
+        if (pExtn != NULL)
+        {
+            CERT_KEY_USAGE_RESTRICTION_INFO keyUsage;
+            DWORD length = sizeof(CERT_KEY_USAGE_RESTRICTION_INFO);
+
+            bool rc = CryptDecodeObject(
+                X509_ASN_ENCODING,
+                X509_KEY_USAGE,
+                pExtn->Value.pbData,
+                pExtn->Value.cbData,
+                CRYPT_DECODE_NOCOPY_FLAG,
+                (void *)&keyUsage,
+                &length);
+
+            if (rc && keyUsage.RestrictedKeyUsage.cbData!=0)
+            {
+                usage = (sal_Int32)keyUsage.RestrictedKeyUsage.pbData;
+            }
+        }
+    }
+
+    return usage;
+}
+
 // MM : end
 
