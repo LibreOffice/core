@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-22 14:10:15 $
+ *  last change: $Author: ka $ $Date: 2002-07-19 08:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,10 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     }
                     else
                     {
-                        ( (SdrTextObj*) pObj)->GetOutlinerParaObject()->SetStyleSheets( i,  aFullName, SD_LT_FAMILY );
+                        OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
+
+                        if( pOPO )
+                            pOPO->SetStyleSheets( i,  aFullName, SD_LT_FAMILY );
                     }
                 }
 
