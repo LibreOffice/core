@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:08:45 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,10 @@ void MyApp::Main()
     Sequence< Any > aArgs( 2 );
     aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
     aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    sal_Bool bSuccess = ::ucb::ContentBroker::initialize( xFactory, aArgs );
+#if OSL_DEBUG_LEVEL > 1
+    sal_Bool bSuccess =
+#endif
+        ::ucb::ContentBroker::initialize( xFactory, aArgs );
 
     if ( !bSuccess )
     {
