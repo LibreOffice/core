@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-11 09:20:21 $
+ *  last change: $Author: nn $ $Date: 2001-01-29 16:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,12 @@ Resource RSC_DATASOURCE_TYPES
 {
     String STR_CONNTYPES
     {
-        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:" ;
+        Text = "sdbc:adabas:;jdbc:;sdbc:odbc:;sdbc:dbase:;sdbc:ado:;sdbc:flat:;sdbc:calc:" ;
     };
     String STR_CONNUINAMES
     {
-        Text = "Adabas;JDBC;ODBC;dBase;ADO;Text" ;
-        Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text" ;
+        Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument" ;
+        Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
         Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text" ;
         Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto";
         Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;Текст";
@@ -179,6 +179,9 @@ String STR_OBJECT_ALREADY_EXSISTS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/01/11 09:20:21  oj
+ *  #81232# new string
+ *
  *  Revision 1.8  2001/01/04 11:21:03  fs
  *  #81485# added dsn type ADO
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:20:23 $
+ *  last change: $Author: nn $ $Date: 2001-01-29 16:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_ADO;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
         return DST_TEXT;
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
+        return DST_CALC;
 
     // find third :
     nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
@@ -378,6 +380,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/01/04 11:20:23  fs
+ *  #81485# +DST_ADO
+ *
  *  Revision 1.4  2000/11/21 15:02:06  oj
  *  #80549# wrong dsn for text
  *
