@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:24:42 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1054,10 +1054,10 @@ Resource RID_SW_SHELLRES
         Text[ english_us ] = "First convert $(ARG1)";
         Text[ portuguese ] = "First convert $(ARG1)";
         Text[ russian ] = "Οεπβξε οπεξαπΰηξβΰνθε $(ARG1)";
-        Text[ greek ] = "Πρώτη μετατροπή $(ARG1)";
+        Text[ greek ] = "Πρώτη Μετατροπή $(ARG1)";
         Text[ dutch ] = "First convert $(ARG1)";
         Text[ french ] = "First convert $(ARG1)";
-        Text[ spanish ] = "Primera conversiσn $(ARG1)";
+        Text[ spanish ] = "Primer Convertir $(ARG1)";
         Text[ italian ] = "First convert $(ARG1)";
         Text[ danish ] = "First convert $(ARG1)";
         Text[ swedish ] = "Fφrsta konvertering $(ARG1)";
@@ -1078,16 +1078,16 @@ Resource RID_SW_SHELLRES
         Text[ english_us ] = "Next convert $(ARG1)";
         Text[ portuguese ] = "Convert follow $(ARG1)";
         Text[ russian ] = "Οξρλεδξβΰςελόνξρςό οπεξαπΰηξβΰνθÿ $(ARG1)";
-        Text[ greek ] = "Μετατροπή συνέχεια $(ARG1)";
+        Text[ greek ] = "Μετατροπή Συνέχεια $(ARG1)";
         Text[ dutch ] = "Convert follow $(ARG1)";
         Text[ french ] = "Convert follow $(ARG1)";
-        Text[ spanish ] = "Convertir serie $(ARG1)";
+        Text[ spanish ] = "Convertir, serie $(ARG1)";
         Text[ italian ] = "Convert follow $(ARG1)";
         Text[ danish ] = "Convert follow $(ARG1)";
         Text[ swedish ] = "Konvertering fφljd $(ARG1)";
         Text[ polish ] = "Kolejnoζ konwersji $(ARG1)";
         Text[ portuguese_brazilian ] = "Convert follow $(ARG1)";
-        Text[ japanese ] = "‘±‚―‚Δ $(ARG1) ‚π•Ο·";
+        Text[ japanese ] = "‚Ι $(ARG1) ‚π•Ο·";
         Text[ korean ] = "Convert follow $(ARG1)";
         Text[ chinese_simplified ] = "Χª»»Χι $(ARG1)";
         Text[ chinese_traditional ] = "Βΰ΄«²Υ $(ARG1)";
@@ -1161,7 +1161,7 @@ String STR_AUTH_TYPE_BOOKLET
     Text[ swedish ] = "Broschyr";
     Text[ polish ] = "Broszura";
     Text[ portuguese_brazilian ] = "Booklet";
-    Text[ japanese ] = "ΚίέΜΪ―Δ";
+    Text[ japanese ] = "ϋq";
     Text[ korean ] = "ΖΚΗΓ·Ώ";
     Text[ chinese_simplified ] = "Π΅²αΧΣ";
     Text[ chinese_traditional ] = "¤p¤β¥U";
@@ -1281,7 +1281,7 @@ String STR_AUTH_TYPE_JOURNAL
     Text[ swedish ] = "Tidskrift";
     Text[ polish ] = "Czasopismo";
     Text[ portuguese_brazilian ] = "Journal";
-    Text[ japanese ] = "G";
+    Text[ japanese ] = "G–Ό";
     Text[ korean ] = "ΐβΑφ";
     Text[ chinese_simplified ] = "ΤΣΦΎ";
     Text[ chinese_traditional ] = "Βψ»x";
@@ -1689,7 +1689,7 @@ String STR_AUTH_FIELD_ADDRESS
     Text[ swedish ] = "Fφrlagsadress";
     Text[ polish ] = "Adres wydawnictwa";
     Text[ portuguese_brazilian ] = "Publisher address";
-    Text[ japanese ] = "o”ΕΠ‚ΜZ";
+    Text[ japanese ] = "o”Ε’n";
     Text[ korean ] = "ΓβΖΗ»η ΑΦΌÒ";
     Text[ chinese_simplified ] = "³φ°ζΙηµΨΦ·";
     Text[ chinese_traditional ] = "¥Xª©ªΐ¦a§}";
@@ -1833,7 +1833,7 @@ String STR_AUTH_FIELD_EDITOR
     Text[ swedish ] = "Utgivare";
     Text[ polish ] = "Wydawca";
     Text[ portuguese_brazilian ] = "Editor";
-    Text[ japanese ] = "”­sÒ";
+    Text[ japanese ] = "•ÒÒ";
     Text[ korean ] = "ΖνΑύΐΪ";
     Text[ chinese_simplified ] = "³φ°ζΥί";
     Text[ chinese_traditional ] = "¥Xª©ªΜ";
