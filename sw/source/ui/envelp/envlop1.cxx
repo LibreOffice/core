@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 09:43:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
