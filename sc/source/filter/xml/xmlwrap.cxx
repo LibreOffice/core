@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-02 16:27:42 $
+ *  last change: $Author: mib $ $Date: 2000-12-03 08:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ sal_Bool ScXMLImportWrapper::Export()
 
     uno::Reference<io::XOutputStream> xOut;
     SvStorageStreamRef xDocStream;
-    SvStorage *pStorage = rMedium.GetStorage();
+    SvStorage *pStorage = rMedium.GetOutputStorage( sal_True );
     if( pStorage )
     {
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content" ) );
