@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 14:55:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1122,7 +1122,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         KSHORT nOldWidth = rPor.Width();
-        ((SwLinePortion&)rPor).Width( ((SwBreakPortion&)rPor).GetRestWidth() );
+        ((SwLinePortion&)rPor).Width( LINE_BREAK_WIDTH );
 
         SwRect aRect;
 
