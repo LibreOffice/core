@@ -77,14 +77,7 @@ public abstract class AbstractExporter implements Exporter {
             props.put("Hidden", Boolean.TRUE);
             props.put("MacroExecutionMode", new Short(MacroExecMode.NEVER_EXECUTE));
             props.put( "UpdateDocMode", new Short(UpdateDocMode.NO_UPDATE));
-            document = (
-                (XComponentLoader) UnoRuntime.queryInterface(
-                    XComponentLoader.class,
-                    desktop)).loadComponentFromURL(
-                doc.cp_URL,
-                "_blank",
-                0,
-                props.getProperties());
+            document = ((XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, desktop)).loadComponentFromURL( doc.cp_URL, "_blank", 0, props.getProperties());
         } catch (com.sun.star.lang.IllegalArgumentException iaex) {
         }
         //try to get the number of pages in the document;
