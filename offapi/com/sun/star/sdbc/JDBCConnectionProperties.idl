@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDBCConnectionProperties.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:55 $
+ *  last change: $Author: mi $ $Date: 2003-01-16 09:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,12 @@ service JDBCConnectionProperties
     [optional, property] string JavaDriverClass;
 
     /** specifies if retrieving of auto generated values should be enabled or not.
-        If <TRUE/> than the statement will support the XGeneratedResultSet interface, otherwise not.
-        @see com::sun::star::sdbc::XGeneratedResultSet
+        If <TRUE/> than the statement will support the XGeneratedResultSet (future concept) interface, otherwise not.
     */
     [optional, property] boolean IsAutoRetrievingEnabled;
 
     /** specifies the statement which should be executed
-        when asking an "INSERT" statement for the XGeneratedResultSet interface.
-        @see com::sun::star::sdbc::XGeneratedResultSet
+        when asking an "INSERT" statement for the XGeneratedResultSet (future concept) interface.
     */
     [optional, property] string AutoRetrievingStatement;
 };
