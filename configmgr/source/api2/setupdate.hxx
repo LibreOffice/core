@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setupdate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,15 @@
 #ifndef CONFIGMGR_API_SETUPDATE_HXX_
 #define CONFIGMGR_API_SETUPDATE_HXX_
 
+#ifndef CONFIGMGR_API_SETACCESS_HXX_
 #include "setaccess.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYWITHSTATE_HPP_
+#include <com/sun/star/beans/XPropertyWithState.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -90,6 +95,7 @@ namespace configmgr
     class BasicSet
     : public BasicSetAccess
     , public css::container::XNameContainer
+    , public css::beans::XPropertyWithState
     , public css::lang::XSingleServiceFactory
     {
     protected:
@@ -138,6 +144,19 @@ namespace configmgr
             removeByName( const OUString& rName )
                 throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
+        // XPropertyWithState
+        virtual css::beans::PropertyState SAL_CALL
+            getStateAsProperty(  )
+                throw (uno::RuntimeException);
+
+        virtual void SAL_CALL
+            setToDefaultAsProperty(  )
+                throw (css::lang::WrappedTargetException, uno::RuntimeException);
+
+        virtual uno::Reference< uno::XInterface > SAL_CALL
+            getDefaultAsProperty(  )
+                throw (css::lang::WrappedTargetException, uno::RuntimeException);
+
         // XSingleServiceFactory
         virtual uno::Reference< uno::XInterface > SAL_CALL
             createInstance(  )
@@ -160,6 +179,7 @@ namespace configmgr
 */
     class BasicValueSet
     : public BasicSetAccess
+    , public css::beans::XPropertyWithState
     , public css::container::XNameContainer
     {
     protected:
@@ -207,6 +227,19 @@ namespace configmgr
         virtual void SAL_CALL
             removeByName( const OUString& rName )
                 throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
+
+        // XPropertyWithState
+        virtual css::beans::PropertyState SAL_CALL
+            getStateAsProperty(  )
+                throw (uno::RuntimeException);
+
+        virtual void SAL_CALL
+            setToDefaultAsProperty(  )
+                throw (css::lang::WrappedTargetException, uno::RuntimeException);
+
+        virtual uno::Reference< uno::XInterface > SAL_CALL
+            getDefaultAsProperty(  )
+                throw (css::lang::WrappedTargetException, uno::RuntimeException);
 
     protected:
                 configapi::NodeValueSetAccess&  getSetNode();

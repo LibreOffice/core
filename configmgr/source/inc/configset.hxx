@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-06 15:25:20 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,30 @@
 #ifndef CONFIGMGR_CONFIGSET_HXX_
 #define CONFIGMGR_CONFIGSET_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIG_DEFAULTPROVIDER_HXX_
+#include "configdefaultprovider.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGTEMPLATE_HXX_
 #include "template.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
 
+#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace script { class XTypeConverter; }
@@ -243,6 +260,22 @@ namespace configmgr
             ElementTreeHolder makeValueElement(Name const& aName, ElementNodeRef const& aElementTree, UnoAny const& aValue);
             ElementTreeHolder makeValueElement(Name const& aName, UnoAny const& aValue);
             static ElementNodeRef extractElementNode(ElementRef const& aElement);
+        };
+//-----------------------------------------------------------------------------
+
+        /// allows to restore to its default state a <type>Node</type> that is a Container ("set") of full-fledged trees.
+        class SetDefaulter
+        {
+            Tree    m_aParentTree;
+            NodeRef m_aSetNode;
+            DefaultProvider m_aDefaultProvider;
+        public:
+            SetDefaulter(Tree const& aParentTree, NodeRef const& aSetNode, DefaultProvider const& aDefaultProvider);
+
+            NodeChange validateSetToDefaultState();
+
+        private:
+            void implValidateSet();
         };
 //-----------------------------------------------------------------------------
     }

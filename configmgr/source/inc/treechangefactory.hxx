@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangefactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-16 17:02:18 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,22 @@ namespace configmgr
     class OTreeChangeFactory
     {
     public:
-        typedef configuration::Name Name;
+        typedef rtl::OUString Name;
     public:
     //= ValueChanges ============================================================
         std::auto_ptr<ValueChange> createValueChange(
                                         Name const& _aName,
-                                        uno::Any const& _aNewValue,
                                         configuration::Attributes _aAttrs,
-                                        ValueChange::Mode _eMode = ValueChange::changeValue,
+                                        ValueChange::Mode _eMode,
+                                        uno::Any const& _aNewValue,
+                                        uno::Any _aOldValue = uno::Any()
+                                        );
+
+        //-----------------------------------------------
+        std::auto_ptr<ValueChange> createValueChange(
+                                        Name const& _aName,
+                                        configuration::Attributes _aAttrs,
+                                        uno::Any const& _aNewValue,
                                         uno::Any _aOldValue = uno::Any()
                                         );
 
@@ -111,29 +119,33 @@ namespace configmgr
     //= SubtreeChanges ============================================================
         std::auto_ptr<SubtreeChange> createGroupNodeChange(
                                         Name const& _aName,
-                                        configuration::Attributes _aAttrs);
+                                        configuration::Attributes _aAttrs,
+                                        bool _bToDefault = false);
 
         //-----------------------------------------------
         std::auto_ptr<SubtreeChange> createSetNodeChange(
                                         Name const& _aName,
                                         Name const& _aTemplateName,
                                         Name const& _aTemplateModule,
-                                        configuration::Attributes _aAttrs);
+                                        configuration::Attributes _aAttrs,
+                                        bool _bToDefault = false);
         //-----------------------------------------------
 
     //= Set Changes ============================================================
         std::auto_ptr<AddNode>      createAddNodeChange(
                                         std::auto_ptr<INode> _aNewNode,
-                                        Name const& _aName);
+                                        Name const& _aName,
+                                        bool _bToDefault = false);
 
         //-----------------------------------------------
         std::auto_ptr<RemoveNode>   createRemoveNodeChange(
-                                        Name const& _aName);
+                                        Name const& _aName,
+                                        bool _bToDefault = false);
 
     //= special case: Dummy ISubtree ============================================================
         static std::auto_ptr<SubtreeChange> createDummyChange(
-                                                Name const& _aName,
-                                                Name const& _aElementTypeName);
+                                                configuration::Name const& _aName,
+                                                configuration::Name const& _aElementTypeName);
 
     //-----------------------------------------------
     };

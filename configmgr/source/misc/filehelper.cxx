@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-21 13:59:07 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,10 +111,10 @@ namespace configmgr
 
     // -----------------------------------------------------------------------------
     void FileHelper::replaceFile(
-        const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException)
+        const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) throw (io::IOException)
     {
-        FileHelper::removeFile(_aFromURL);
-        FileBase::RC eError = File::move(_aToURL, _aFromURL);
+        FileHelper::removeFile(_aToURL);
+        FileBase::RC eError = File::move(_aFromURL, _aToURL);
         if (eError != osl_File_E_None)
         {
             rtl::OUString sError = ASCII("createBackupAndRemove: ") + FileHelper::createOSLErrorString(eError) + ASCII("\n with URL: ") + _aFromURL;

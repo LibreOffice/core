@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,15 +84,37 @@ namespace configmgr
         struct NodeFactory;
 
         class ElementTreeImpl;
-        typedef vos::ORef<ElementTreeImpl> ElementTreeHolder;
+
+    //-----------------------------------------------------------------------------
 
     // basic implementations of set node contents
+    //-----------------------------------------------------------------------------
+
+        struct ElementTreeData
+        {
+            typedef vos::ORef<ElementTreeImpl> ElementTreeHolder;
+
+            // construction
+            ElementTreeData() : tree(), inDefault(false) {}
+
+            ElementTreeData(ElementTreeHolder const& _tree, bool _bDefault)
+             : tree(_tree), inDefault(_bDefault) {}
+
+            // ORef compatibility
+            sal_Bool isValid() const { return this->tree.isValid(); }
+            ElementTreeImpl* getBodyPtr() const { return this->tree.getBodyPtr(); }
+            ElementTreeHolder const& operator->() const { return this->tree; }
+
+            // data
+            ElementTreeHolder   tree;
+            bool                inDefault;
+        };
     //-----------------------------------------------------------------------------
 
         class ElementSet
         {
         public:
-            typedef ElementTreeHolder Element;
+            typedef ElementTreeData Element;
             typedef std::map<Name, Element> Data;
 
         // the following must be implemented by derived classes
@@ -194,6 +216,8 @@ namespace configmgr
 
             SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
 
+            static Element entryToElement(SetEntry const& _anEntry);
+
             void    implInsertElement(Name const& aName, Element const& aNewElement, bool bCommit);
             void    implReplaceElement(Name const& aName, Element const& aNewElement, bool bCommit);
             void    implRemoveElement(Name const& aName, bool bCommit);
@@ -253,7 +277,10 @@ namespace configmgr
             void initHelper(NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth);
             Element makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth);
 
-            ElementTreeHolder implMakeElement(ElementTreeHolder const& aNewEntry);
+            Element implValidateElement(Element const& aNewElement);
+
+            Element implMakeElement(SetEntry const& aNewEntry)
+            { return implValidateElement( entryToElement(aNewEntry) ); }
         };
     //-------------------------------------------------------------------------
 
@@ -276,7 +303,10 @@ namespace configmgr
             void initHelper( NodeFactory& rFactory, ISubtree& rTree);
             Element makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange);
 
-            ElementTreeHolder implMakeElement(ElementTreeHolder const& aNewEntry);
+            Element implValidateElement(Element const& aNewElement);
+
+            Element implMakeElement(SetEntry const& aNewEntry)
+            { return implValidateElement( entryToElement(aNewEntry) ); }
         };
 
 //-----------------------------------------------------------------------------

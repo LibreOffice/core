@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
+            virtual void doMarkAsDefault();
+
             virtual void doInitElements( ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
@@ -320,6 +322,8 @@ namespace configmgr
 
             virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
+
+            virtual void doMarkAsDefault();
 
         // NodeImpl implementation
             virtual Attributes doGetAttributes() const;
@@ -349,6 +353,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
+            virtual void doMarkAsDefault();
+
             virtual void doInitElements( ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
@@ -377,6 +383,8 @@ namespace configmgr
         // NodeImpl implementation
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
+
+            virtual void doMarkAsDefault();
 
             virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
@@ -417,6 +425,9 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
+            virtual void doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
+            virtual void doMarkAsDefault();
+
             virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
@@ -438,6 +449,7 @@ namespace configmgr
 
             ElementSet m_aChangedData;
             bool    m_bChanged;
+            bool    m_bDefault;
         };
 //-----------------------------------------------------------------------------
 
@@ -469,6 +481,9 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
+            virtual void doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
+            virtual void doMarkAsDefault();
+
             virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
             virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
@@ -490,6 +505,7 @@ namespace configmgr
 
             ElementSet m_aChangedData;
             bool    m_bChanged;
+            bool    m_bDefault;
         };
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,63 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
         e.unhandled();
     }
 
+}
+//-----------------------------------------------------------------------------------
+
+// XPropertyWithState
+//-----------------------------------------------------------------------------------
+
+void implSetToDefaultAsProperty(NodeSetAccess& rNode)
+    throw (css::lang::WrappedTargetException, uno::RuntimeException)
+{
+    try
+    {
+        GuardedSetUpdateAccess impl( rNode );
+
+        Tree const aTree( impl->getTree() );
+        NodeRef const aNode( impl->getNode() );
+
+        configuration::SetDefaulter aDefaulter = impl->getNodeDefaulter();
+
+        NodeChange aChange = aDefaulter.validateSetToDefaultState();
+
+        const bool bLocal = true;
+
+        if (aChange.test().isChange() )
+        {
+            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,bLocal));
+
+            aSender.queryConstraints(aChange);
+
+            aTree.integrate(aChange, aNode, bLocal);
+
+            impl.clearForBroadcast();
+            aSender.notifyListeners(aChange);
+        }
+    }
+    catch (configuration::ConstraintViolation & ex)
+    {
+        ExceptionMapper e(ex);
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default: ") );
+        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+
+        throw lang::WrappedTargetException( sMessage += e.message(), xContext, uno::Any());
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.unhandled();
+    }
+    catch (lang::WrappedTargetException& )  { throw;}
+    catch (uno::RuntimeException& )         { throw;}
+    catch (uno::Exception& e)
+    {
+        OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default: ") );
+        Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
+
+        throw lang::WrappedTargetException( sMessage += e.Message, xContext, uno::makeAny(e));
+    }
 }
 //-----------------------------------------------------------------------------------
 

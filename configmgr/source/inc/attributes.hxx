@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-25 16:00:39 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,16 @@
 #define CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
 namespace configmgr
 {
-    namespace configuration
+    namespace node
     {
         /// holds attributes a node in the schema
         struct Attributes
         {
             bool bWritable      : 1;    // write-protected, if false
-            bool bFinalized     : 1;    // write-protected, but not here
+            bool bFinalized     : 1;    // can not be overridden - write protected when merged upwards
 
-            bool bReplacing     : 1;    // node does not exist in the default layer
-            bool bDefaultable   : 1;    // values only: a default value does exist
+            bool bReplaced      : 1;    // node not merged: it does not exist in the default layer
+            bool bDefaulted     : 1;    // node not merged: it exists only in the default layer
 
             bool bNullable      : 1;    // values only: can be NULL
             bool bLocalized     : 1;    // values only: value may depend on locale
@@ -83,16 +83,25 @@ namespace configmgr
 
             Attributes()
             : bWritable(true)
+            , bFinalized(false)
+            , bReplaced(false)
+            , bDefaulted(false)
             , bNullable(true)
+            , bLocalized(false)
             , bNotified(true)
             , bConstrained(false)
-            , bReplacing(false)
-            , bLocalized(false)
-            , bDefaultable(false)
-            , bFinalized(false)
             {}
+            /* ! IMPORTANT: if these defaults are changed,
+                the handling in CmXMLFormater::handleAttributes()
+                and OValueHandler::startElement() should be reviewed
+            */
         };
 
+    }
+    // for backward compatibility - this used to be in namespace configuration
+    namespace configuration
+    {
+        using node::Attributes;
     }
 }
 

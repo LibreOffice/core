@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anynoderef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ namespace configmgr
                 and <var>aPath</var> is empty)<BR/>
                 an invalid node otherwise
         */
-        AnyNodeRef getLocalDescendant(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
+        AnyNodeRef getLocalDescendant(Tree const& aTree, NodeRef const& aNode, RelativePath const& aPath);
 
         /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
             <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>

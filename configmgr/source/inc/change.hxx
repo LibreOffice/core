@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-08 11:21:36 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,17 +122,23 @@ namespace configmgr
     {
     protected:
         rtl::OUString m_aName;
+        bool m_bIsToDefault;
 
         void swap(Change& aOther);
 
     public:
         explicit
-        Change(rtl::OUString const& _rName) : m_aName(_rName){}
-        Change(Change const& _rChange):m_aName(_rChange.m_aName){}
+        Change(rtl::OUString const& _rName, bool _bToDefault)
+        : m_aName(_rName)
+        , m_bIsToDefault(_bToDefault)
+        {}
+
         virtual ~Change() {}
 
         rtl::OUString getNodeName() const { return m_aName; }
         void setNodeName(const rtl::OUString &aName) {m_aName = aName;}
+
+        bool isToDefault() const { return m_bIsToDefault;  }
 
         Change* getSubChange(rtl::OUString const& _rName) { return doGetChild(_rName); }
         Change const* getSubChange(rtl::OUString const& _rName) const { return doGetChild(_rName); }
@@ -157,18 +163,29 @@ namespace configmgr
         typedef uno::Any Any;
         struct SetToDefault {};
         enum Mode { wasDefault, changeValue, setToDefault, changeDefault, typeIsAny };
-        configuration::Attributes   m_aAttributes;
 
     private:
-        uno::Any        m_aValue;
-        uno::Any        m_aOldValue;
-        Mode            m_eMode;
+        uno::Any            m_aValue;
+        uno::Any            m_aOldValue;
+        node::Attributes    m_aAttributes;
+        Mode                m_eMode;
     public:
-        ValueChange(rtl::OUString const& _rName, uno::Any aNewValue, const configuration::Attributes& _rAttributes,
-                    Mode aMode = changeValue, uno::Any aOldValue = uno::Any());
+        ValueChange(
+            rtl::OUString const& _rName,
+            const node::Attributes& _rAttributes,
+            uno::Any aNewValue,
+            uno::Any aOldValue = uno::Any());
+
+        ValueChange(
+            rtl::OUString const& _rName,
+            const node::Attributes& _rAttributes,
+            Mode aMode,
+            uno::Any aNewValue,
+            uno::Any aOldValue = uno::Any());
+
         ValueChange(uno::Any aNewValue, ValueNode const& aOldValue);
         ValueChange(SetToDefault, ValueNode const& aOldValue);
-        ValueChange(const ValueChange&);
+
         virtual Change* clone() const;
 
         uno::Any    getNewValue() const { return m_aValue; }
@@ -178,8 +195,8 @@ namespace configmgr
         void        setNewValue(const uno::Any& _rNewVal, Mode aMode)
         { setNewValue(_rNewVal); m_eMode = aMode;}
 
-        bool isReplacing() const {return m_aAttributes.bReplacing;}
-        bool isLocalized() const {return m_aAttributes.bLocalized;}
+        bool isReplacedValue()   const {return m_aAttributes.bReplaced;}
+        bool isLocalizedValue()  const {return m_aAttributes.bLocalized;}
 
         Mode getMode() const { return m_eMode; }
 
@@ -209,13 +226,15 @@ namespace configmgr
         INode*                          m_pOldNode;
         bool                            m_bReplacing;
 
-        // don't create CopyCTor automatically
-        void operator=(AddNode const&);
+    private:
+        void operator=(AddNode const&); // not implemented
 
-    public:
-        AddNode(std::auto_ptr<INode> aNewNode_,rtl::OUString const& _rName);
-        ~AddNode();
+        // needed for clone()
         AddNode(AddNode const&);
+    public:
+        AddNode(std::auto_ptr<INode> aNewNode_,rtl::OUString const& _rName, bool _bToDefault);
+        ~AddNode();
+
         virtual Change* clone() const;
 
         /// marks this as not merely adding a node but replacing another
@@ -278,12 +297,17 @@ namespace configmgr
     protected:
         INode*                          m_pOldNode;
         std::auto_ptr<INode>            m_aOwnOldNode;
+        bool                            m_bIsToDefault;
 
+    private:
+        RemoveNode& operator=(const RemoveNode&); // not implemented
+        // needed for clone()
+        RemoveNode(const RemoveNode&);
     public:
         explicit
-        RemoveNode(rtl::OUString const& _rName);
+        RemoveNode(rtl::OUString const& _rName, bool _bToDefault);
         ~RemoveNode();
-        RemoveNode(const RemoveNode&);
+
         virtual Change* clone() const;
 
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
@@ -325,9 +349,10 @@ namespace configmgr
         Children                    m_aChanges;
         ::rtl::OUString             m_sTemplateName;            /// path of the template for child instantiation
         ::rtl::OUString             m_sTemplateModule;          /// module of the template for child instantiation
-        configuration::Attributes   m_aAttributes;
+        node::Attributes            m_aAttributes;
 
-        // don't create CopyCTor automatically
+        // don't create copy ops automatically
+        SubtreeChange(const SubtreeChange&);
         void operator=(SubtreeChange&);
 
     public:
@@ -343,46 +368,58 @@ namespace configmgr
     public:
         /// A parameter for disabling copying of children
         typedef treeop::NoChildCopy NoChildCopy;
+        typedef treeop::DeepChildCopy DeepChildCopy;
 
         SubtreeChange(const rtl::OUString& _rName,
-                      const configuration::Attributes& _rAttr)
-            :Change(_rName)
-            ,m_aAttributes(_rAttr)
-        {}
+                      const node::Attributes& _rAttr,
+                      bool _bToDefault = false)
+        : Change(_rName,_bToDefault)
+        , m_aAttributes(_rAttr)
+        {
+            m_aAttributes.bDefaulted = _bToDefault;
+        }
 
         SubtreeChange(const rtl::OUString& _rName,
                       const rtl::OUString& _rTemplateName,
                       const rtl::OUString& _rTemplateModule,
-                      const configuration::Attributes& _rAttr)
-            :Change(_rName)
-            ,m_sTemplateName(_rTemplateName)
-            ,m_sTemplateModule(_rTemplateModule)
-            ,m_aAttributes(_rAttr)
-        {}
+                      const node::Attributes& _rAttr,
+                      bool _bToDefault = false)
+        : Change(_rName,_bToDefault)
+        , m_sTemplateName(_rTemplateName)
+        , m_sTemplateModule(_rTemplateModule)
+        , m_aAttributes(_rAttr)
+        {
+            m_aAttributes.bDefaulted = _bToDefault;
+        }
 
-        SubtreeChange(const ISubtree& _rTree)
-            :Change(_rTree.getName())
-            ,m_aAttributes(_rTree.getAttributes())
-            ,m_sTemplateName(_rTree.getElementTemplateName())
-            ,m_sTemplateModule(_rTree.getElementTemplateModule())
-        {}
+        SubtreeChange(const ISubtree& _rTree, bool _bToDefault = false)
+        : Change(_rTree.getName(),_bToDefault)
+        , m_aAttributes(_rTree.getAttributes())
+        , m_sTemplateName(_rTree.getElementTemplateName())
+        , m_sTemplateModule(_rTree.getElementTemplateModule())
+        {
+            m_aAttributes.bDefaulted = _bToDefault;
+        }
 
         SubtreeChange(const SubtreeChange& _rChange, NoChildCopy)
-            :Change(_rChange)
-            ,m_sTemplateName(_rChange.getElementTemplateName())
-            ,m_sTemplateModule(_rChange.getElementTemplateModule())
-            ,m_aAttributes(_rChange.getAttributes()){}
+        : Change(_rChange)
+        , m_sTemplateName(_rChange.getElementTemplateName())
+        , m_sTemplateModule(_rChange.getElementTemplateModule())
+        , m_aAttributes(_rChange.getAttributes())
+        {}
 
         ~SubtreeChange();
 
-        SubtreeChange(const SubtreeChange&);
+        SubtreeChange(const SubtreeChange&, DeepChildCopy);
+
         virtual Change* clone() const;
 
         void swap(SubtreeChange& aOther);
 
-        bool isReplacing() const {return m_aAttributes.bReplacing;}
-        bool isLocalized() const {return m_aAttributes.bLocalized;}
-        const configuration::Attributes& getAttributes() const {return m_aAttributes;}
+        bool isReplacedNode()       const { return m_aAttributes.bReplaced;  }
+        bool isLocalizedContainer() const { return m_aAttributes.bLocalized; }
+
+        const node::Attributes& getAttributes() const {return m_aAttributes;}
 
         bool            isSetNodeChange() const { return m_sTemplateName.getLength() != 0; }
 
@@ -392,7 +429,7 @@ namespace configmgr
         void            setElementTemplate(const rtl::OUString& _rName, const rtl::OUString& _rModule)
         { m_sTemplateName = _rName; m_sTemplateModule = _rModule; }
 
-        sal_Int32                   size() const { return m_aChanges.size(); }
+        sal_Int32                       size() const { return m_aChanges.size(); }
         uno::Sequence< rtl::OUString >  elementNames() const;
 
         void                    addChange(std::auto_ptr<Change> aChange);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,48 @@
 #include <stdio.h>
 #include "nodeimpl.hxx"
 
+#ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 #include "groupnodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_SETNODEIMPL_HXX_
 #include "setnodeimpl.hxx"
+#endif
 
+#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #include "treeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEIMPL_HXX_
 #include "nodechangeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #include "nodechangeinfo.hxx"
+#endif
+#ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
+#endif
+#ifndef CONFIGMGR_COLLECTCHANGES_HXX_
 #include "collectchanges.hxx"
+#endif
+#ifndef _CONFIGMGR_TREEACTIONS_HXX_
+#include "treeactions.hxx"
+#endif
+#ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
+#include "treechangefactory.hxx"
+#endif
 
+#ifndef CONFIGMGR_CMTREEMODEL_HXX
 #include "cmtreemodel.hxx"
+#endif
 
+#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
 
 namespace configmgr
 {
@@ -159,9 +187,7 @@ void NodeImpl::makeIndirect(NodeImplHolder& aThis,bool bIndirect)
 
 void NodeImpl::addLocalChangeHelper( NodeChangesInformation& rLocalChanges_, NodeChange const& aChange_)
 {
-    NodeChangeInformation aThisInfo;
-    if (aChange_.getChangeInfo(aThisInfo))
-        rLocalChanges_.push_back( aThisInfo );
+    aChange_.getChangeInfos(rLocalChanges_);
 }
 
 
@@ -193,6 +219,12 @@ OUString GroupNodeImpl::getOriginalNodeName() const
 bool GroupNodeImpl::hasValue(Name const& aName) const
 {
     return this->getOriginalValueNode(aName) != NULL;
+}
+//-----------------------------------------------------------------------------
+
+bool GroupNodeImpl::areValueDefaultsAvailable() const
+{
+    return m_rOriginal.getDefaultsLevel() != 0 || m_rOriginal.getAttributes().bDefaulted;
 }
 //-----------------------------------------------------------------------------
 
@@ -344,6 +376,33 @@ void SetNodeImpl::removeElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
+std::auto_ptr<SubtreeChange> SetNodeImpl::differenceToDefaultState(ISubtree& _rDefaultTree)
+{
+    std::auto_ptr<SubtreeChange> aResult;
+    if (!getOriginalSetNode().isDefault())
+    {
+        aResult.reset( new SubtreeChange( getOriginalSetNode(), true ) );
+
+        if (this->hasChanges())
+        {
+            OSL_ENSURE(implHasLoadedElements(),"Unexpected: Found set with changes but elements are not loaded");
+            this->doDifferenceToDefaultState(*aResult,_rDefaultTree);
+        }
+        else
+            this->implDifferenceToDefaultState(*aResult,_rDefaultTree);
+    }
+    return aResult;
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
+{
+    OSL_ENSURE(!hasChanges(), "ERROR: SetNodeImpl::doDifferenceToDefaultState does not account for changes");
+
+    implDifferenceToDefaultState(_rChangeToDefault,_rDefaultTree);
+}
+//-----------------------------------------------------------------------------
+
 SetNodeVisitor::Result SetNodeImpl::dispatchToElements(SetNodeVisitor& aVisitor)
 {
     if (implLoadElements())
@@ -364,20 +423,20 @@ NodeType::Enum  SetNodeImpl::doGetType() const
 {
     return NodeType::eSET;
 }
-
 //-----------------------------------------------------------------------------
+
 void SetNodeImpl::doDispatch(INodeHandler& rHandler)
 {
     rHandler.handle(*this);
 }
-
 //-----------------------------------------------------------------------------
+
 bool SetNodeImpl::implHasLoadedElements() const
 {
     return m_aInit == 0; // cannot check whether init was called though ...
 }
-
 //-----------------------------------------------------------------------------
+
 bool SetNodeImpl::implLoadElements()
 {
     if (m_aInit > 0)
@@ -390,15 +449,15 @@ bool SetNodeImpl::implLoadElements()
 
     return m_aInit == 0;
 }
-
 //-----------------------------------------------------------------------------
+
 void SetNodeImpl::implEnsureElementsLoaded()
 {
     if (!implLoadElements())
         throw ConstraintViolation("Trying to access set elements beyond the loaded nestíng level");
 }
-
 //-----------------------------------------------------------------------------
+
 bool SetNodeImpl::implInitElements(InitHelper const& aInit)
 {
     TreeDepth nDepth = aInit;
@@ -413,8 +472,8 @@ bool SetNodeImpl::implInitElements(InitHelper const& aInit)
     else
         return false;
 }
-
 //-----------------------------------------------------------------------------
+
 void SetNodeImpl::initElements(TemplateProvider const& aTemplateProvider,TreeImpl& rParentTree,NodeOffset nPos,TreeDepth nDepth)
 {
     OSL_ENSURE(m_pParentTree == 0 || m_pParentTree == &rParentTree, "WARNING: Set Node: Changing parent");
@@ -434,6 +493,131 @@ void SetNodeImpl::initElements(TemplateProvider const& aTemplateProvider,TreeImp
         m_aTemplateProvider = aTemplateProvider;
     }
 }
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::implMarkAsDefault(bool bDefault)
+{
+    m_rOriginal.markAsDefault(bDefault);
+}
+//-----------------------------------------------------------------------------
+
+namespace
+{
+    //-------------------------------------------------------------------------
+    class DiffToDefault : NodeAction
+    {
+        SubtreeChange&          m_rChange;
+        ISubtree&               m_rDefaultTree;
+        OTreeChangeFactory&     m_rChangeFactory;
+    public:
+        explicit
+        DiffToDefault(SubtreeChange& _rChange, ISubtree& _rDefaultTree)
+        : m_rChange(_rChange)
+        , m_rDefaultTree(_rDefaultTree)
+        , m_rChangeFactory( getDefaultTreeChangeFactory() )
+        {
+        }
+
+        void diff(ISubtree const& _rActualTree)
+        {
+            translate(m_rDefaultTree);
+            applyToChildren(_rActualTree);
+        }
+
+    private:
+        void translate(ISubtree& _rDefaultTree);
+        void handleDefault(std::auto_ptr<INode> _pDefaultNode);
+        void handleActual(INode const& _rNode);
+
+        virtual void handle(ValueNode const& _aValue)   { handleActual(_aValue); }
+        virtual void handle(ISubtree const&  _aTree)    { handleActual(_aTree); }
+    };
+    //-------------------------------------------------------------------------
+
+    void DiffToDefault::translate(ISubtree& _rDefaultTree)
+    {
+        typedef CollectNames::NameList::const_iterator NameIter;
+
+        CollectNames aCollector;
+        aCollector.applyToChildren(_rDefaultTree);
+
+        CollectNames::NameList const& aNames = aCollector.list();
+
+        for(NameIter it = aNames.begin(); it != aNames.end(); ++it)
+        {
+            handleDefault(_rDefaultTree.removeChild(*it));
+        }
+
+    }
+    //-------------------------------------------------------------------------
+
+    void DiffToDefault::handleDefault(std::auto_ptr<INode> _pDefaultNode)
+    {
+        OSL_PRECOND(_pDefaultNode.get(), "Unexpected NULL default node");
+        if (!_pDefaultNode.get()) return;
+
+        OUString sName = _pDefaultNode->getName();
+
+        OSL_ENSURE(_pDefaultNode->isDefault(), "Missing default attribute on default data node");
+
+        std::auto_ptr<AddNode> pAddIt( m_rChangeFactory.createAddNodeChange(_pDefaultNode, sName,true) );
+
+        m_rChange.addChange(base_ptr(pAddIt));
+    }
+    //-------------------------------------------------------------------------
+
+    void DiffToDefault::handleActual(INode const& _rNode)
+    {
+        //needed, as the expect.. functions take a non-const pointer
+        INode* pActualNode = const_cast<INode*>(&_rNode);
+
+        OUString sName = _rNode.getName();
+
+        if (Change* pDefaultNode = m_rChange.getChange(sName) )
+        {
+            if (pDefaultNode->ISA(AddNode))
+            {
+                AddNode* pAddIt = static_cast<AddNode*>(pDefaultNode);
+                if (_rNode.isDefault())
+                {
+                    m_rDefaultTree.addChild( pAddIt->releaseAddedNode() );
+
+                    // no change needed - remove the change and recover the default
+                    m_rChange.removeChange(sName);
+                }
+                else
+                {
+                    OSL_ENSURE(!pAddIt->getReplacedNode_Unsafe(), "Duplicate node name in actual tree");
+
+                    pAddIt->expectReplacedNode(pActualNode);
+                }
+            }
+            else
+            {
+                // should never happen
+                OSL_ENSURE(pDefaultNode->ISA(RemoveNode), "Unexpected node type found in translated default tree");
+                OSL_ENSURE(!pDefaultNode->ISA(RemoveNode), "Duplicate node name in actual tree");
+
+                if (_rNode.isDefault()) m_rChange.removeChange(sName);
+            }
+        }
+        else
+        {
+            OSL_ENSURE(!_rNode.isDefault(), "Node marked 'default' not found in actual default data");
+
+            std::auto_ptr<RemoveNode> pRemoveIt( m_rChangeFactory.createRemoveNodeChange(sName,true) );
+            pRemoveIt->expectRemovedNode(pActualNode);
+            m_rChange.addChange(base_ptr(pRemoveIt));
+        }
+    }
+    //-------------------------------------------------------------------------
+}
+//-----------------------------------------------------------------------------
+void SetNodeImpl::implDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree) const
+{
+    DiffToDefault(_rChangeToDefault,_rDefaultTree).diff(m_rOriginal);
+}
+//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // class ValueElementNodeImpl
@@ -472,9 +656,7 @@ UnoType ValueElementNodeImpl::getValueType() const
 
 Attributes ValueElementNodeImpl::doGetAttributes() const
 {
-    Attributes  aResult = fetchAttributes(m_rOriginal);
-    aResult.bDefaultable = false;
-    return aResult;
+    return fetchAttributes(m_rOriginal);
 }
 //-----------------------------------------------------------------------------
 

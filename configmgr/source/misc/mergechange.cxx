@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-18 19:12:17 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ namespace configmgr
         }
         void handleChange(Change &_rNode)
         {
-            applyToChange(_rNode);
+            this->applyToChange(_rNode);
         }
     private:
         virtual void handle(ValueChange& _rValueChange)
@@ -172,46 +172,57 @@ namespace configmgr
         }
         virtual void handle(AddNode& _rAddNode)
         {
-            // POST: Handle ValueChange in AddNode
-            INode* pINode = _rAddNode.getAddedNode();
-
-            if (ValueNode *pValueNode = pINode->asValueNode())
-                pValueNode->setValue( m_aValueChange.getNewValue() );
-
-            else if (ISubtree* pValueSetNode = pINode->asISubtree() )
+            if (m_aValueChange.isToDefault())
             {
-                if ( isLocalizedValueSet(*pValueSetNode) )
-                {
-                    std::auto_ptr<ValueNode> pNewValueNode = createNodeFromChange(m_aValueChange);
-                    if (pNewValueNode.get())
-                    {
-                        OSL_ENSURE(pNewValueNode->isLocalized(), "OMergeValueChange:handle(AddNode): have a non-localized ValueChange a for a localized node!");
-
-                        std::auto_ptr<INode> pNewNode(pNewValueNode.release());
-
-                        std::auto_ptr<AddNode> pNewAdd( new AddNode(pNewNode,m_aValueChange.getNodeName()) );
-                        if (_rAddNode.isReplacing())
-                            pNewAdd->setReplacing();
-
-                        std::auto_ptr<Change> pNewChange( pNewAdd.release() );
-                        replaceExistingEntry(pNewChange);
-                    }
-                    else
-                        OSL_ENSURE(false, "OMergeValueChange:handle(SubtreeChange): Creating a NULL node to replace a localized value set not yet supported");
-
-                }
-                else
-                    OSL_ENSURE(sal_False, "OMergeValueChange:handle(AddNode): have a ValueChange a for non-value node!");
+                std::auto_ptr<Change> aChangeToDefault(m_aValueChange.clone());
+                m_rTargetParent.removeChange(_rAddNode.getNodeName());
+                m_rTargetParent.addChange( aChangeToDefault );
             }
             else
-                OSL_ENSURE(sal_False, "OMergeValueChange:handle(AddNode): Found unknown node type!");
+            {
+                // POST: Handle ValueChange in AddNode
+                INode* pINode = _rAddNode.getAddedNode();
+
+                if (ValueNode *pValueNode = pINode->asValueNode())
+                {
+                    m_aValueChange.applyChangeNoRecover(*pValueNode);
+                }
+
+                else if (ISubtree* pValueSetNode = pINode->asISubtree() )
+                {
+                    if ( isLocalizedValueSet(*pValueSetNode) )
+                    {
+                        std::auto_ptr<ValueNode> pNewValueNode = createNodeFromChange(m_aValueChange);
+                        if (pNewValueNode.get())
+                        {
+                            OSL_ENSURE(pNewValueNode->isLocalized(), "OMergeValueChange:handle(AddNode): have a non-localized ValueChange a for a localized node!");
+
+                            std::auto_ptr<INode> pNewNode(pNewValueNode.release());
+
+                            std::auto_ptr<AddNode> pNewAdd( new AddNode(pNewNode,m_aValueChange.getNodeName(), m_aValueChange.isToDefault()) );
+                            if (_rAddNode.isReplacing())
+                                pNewAdd->setReplacing();
+
+                            std::auto_ptr<Change> pNewChange( pNewAdd.release() );
+                            replaceExistingEntry(pNewChange);
+                        }
+                        else
+                            OSL_ENSURE(false, "OMergeValueChange:handle(SubtreeChange): Creating a NULL node to replace a localized value set not yet supported");
+
+                    }
+                    else
+                        OSL_ENSURE(sal_False, "OMergeValueChange:handle(AddNode): have a ValueChange a for non-value node!");
+                }
+                else
+                    OSL_ENSURE(sal_False, "OMergeValueChange:handle(AddNode): Found unknown node type!");
+            }
         }
         virtual void handle(SubtreeChange& _rSubtree)
         {
             if ( isLocalizedValueSet(_rSubtree) )
             {
                 std::auto_ptr<ValueChange> pNewValueChange( new ValueChange(m_aValueChange) );
-                OSL_ENSURE(pNewValueChange->isLocalized(), "OMergeValueChange:handle(SubtreeChange): have a non-localized ValueChange a for a localized node!");
+                OSL_ENSURE(pNewValueChange->isLocalizedValue(), "OMergeValueChange:handle(SubtreeChange): have a non-localized ValueChange a for a localized node!");
 
                 std::auto_ptr<Change> pNewChange( pNewValueChange.release() );
 
@@ -532,7 +543,7 @@ namespace configmgr
         // insert manually
         auto_ptr<INode> pNode = auto_ptr<INode>(_rAddNode.getAddedNode()->clone());
 
-        auto_ptr<AddNode> pNewAdd(new AddNode(pNode, _rAddNode.getNodeName()));
+        auto_ptr<AddNode> pNewAdd(new AddNode(pNode, _rAddNode.getNodeName(), _rAddNode.isToDefault()));
         if (bReplacing)
             pNewAdd->setReplacing();
 
@@ -567,7 +578,7 @@ namespace configmgr
             // defaulting this so that the node will be marked as deleted
         case OMergeRemoveNode::FlagDeleted:
         {
-            auto_ptr<Change> pNewChange(new RemoveNode(_rRemoveNode.getNodeName()));
+            auto_ptr<Change> pNewChange(new RemoveNode(_rRemoveNode.getNodeName(),_rRemoveNode.isToDefault()));
             m_pCurrentParent->addChange(pNewChange);
         }
         break;
@@ -641,24 +652,35 @@ namespace configmgr
         else if (pChange->ISA(AddNode))
         {
             // in this AddNode should be a subtree, NOT a subtreechange
-
             AddNode* pAddNode = static_cast<AddNode*>(pChange);
-            INode* pNode = pAddNode->getAddedNode();
-            ISubtree* pSubtree = pNode ? pNode->asISubtree() : 0;
-            if (pSubtree)
-            {
-                // pSubtree = pSubtree + _rSubtree;
-                AbsolutePath aSubtreePath = this->createPath( ONameCreator::createName(_rSubtree,m_pCurrentParent) );
-                OSL_ASSERT( aSubtreePath.getLocalName().getName().toString() == pSubtree->getName() );
 
-                // Now apply _rSubtree to the subtree
-                TreeChangeList aChangeList(m_aTreeChangeList.getOptions(), aSubtreePath, Chg(), _rSubtree); // expensive!
-                applyChanges(aChangeList, *pSubtree);
+            if (_rSubtree.isToDefault())
+            {
+                std::auto_ptr<Change> aChangeToDefault(_rSubtree.clone());
+
+                m_pCurrentParent->removeChange(pAddNode->getNodeName());
+                m_pCurrentParent->addChange( aChangeToDefault );
             }
             else
             {
-                OSL_ENSURE(false, "OMergeTreeChangeList: Unexpected node type found in an AddNode.");
-                /* wrong type of node found: böse ASSERTEN/WERFEN */;
+
+                INode* pNode = pAddNode->getAddedNode();
+                ISubtree* pSubtree = pNode ? pNode->asISubtree() : 0;
+                if (pSubtree)
+                {
+                    // pSubtree = pSubtree + _rSubtree;
+                    AbsolutePath aSubtreePath = this->createPath( ONameCreator::createName(_rSubtree,m_pCurrentParent) );
+                    OSL_ASSERT( aSubtreePath.getLocalName().getName().toString() == pSubtree->getName() );
+
+                    // Now apply _rSubtree to the subtree
+                    TreeChangeList aChangeList(m_aTreeChangeList.getOptions(), aSubtreePath, _rSubtree, SubtreeChange::DeepChildCopy()); // expensive!
+                    applyChanges(aChangeList, *pSubtree);
+                }
+                else
+                {
+                    OSL_ENSURE(false, "OMergeTreeChangeList: Unexpected node type found in an AddNode.");
+                    /* wrong type of node found: böse ASSERTEN/WERFEN */;
+                }
             }
         }
         else
@@ -675,6 +697,7 @@ namespace configmgr
     : m_rSubtreeChange(_rTree), m_pCurrentParent(NULL)
     {
     }
+    // -----------------------------------------------------------------------------
 
     void OMergeChanges::initRoot(const SubtreeChange &_rRootChange, const RelativePath& _aPathToChange)
     {
@@ -840,7 +863,7 @@ namespace configmgr
         // insert manually
         auto_ptr<INode> pNode = auto_ptr<INode>(_rAddNode.getAddedNode()->clone());
 
-        auto_ptr<AddNode> pNewAdd(new AddNode(pNode, _rAddNode.getNodeName()));
+        auto_ptr<AddNode> pNewAdd(new AddNode(pNode, _rAddNode.getNodeName(), _rAddNode.isToDefault()));
         if (bReplacing)
             pNewAdd->setReplacing();
 
@@ -876,7 +899,7 @@ namespace configmgr
             // defaulting this so that the node will be marked as deleted
         case OMergeRemoveNode::FlagDeleted:
         {
-            auto_ptr<Change> pNewChange(new RemoveNode(_rRemoveNode.getNodeName()));
+            auto_ptr<Change> pNewChange(new RemoveNode(_rRemoveNode.getNodeName(),_rRemoveNode.isToDefault()));
             m_pCurrentParent->addChange(pNewChange);
         }
         break;
@@ -884,7 +907,53 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
+    inline
+    void OStripDefaults::stripOne(Change& _rChange)
+    {
+        m_rParent.removeChange(_rChange.getNodeName());
+    }
 
+    void OStripDefaults::handle(ValueChange& _rValueNode)
+    {
+        if (_rValueNode.isToDefault())
+            stripOne(_rValueNode);
+    }
+    void OStripDefaults::handle(AddNode& _rAddNode)
+    {
+        if (_rAddNode.isToDefault())
+        {
+            INode* pAdded = _rAddNode.getAddedNode();
+            OSL_ENSURE(pAdded,"No Data in AddNode");
+            if (pAdded == NULL || pAdded->getAttributes().bDefaulted)
+                stripOne(_rAddNode);
+
+            // else we should strip the defaults from the added node
+        }
+    }
+    void OStripDefaults::handle(RemoveNode& _rRemoveNode)
+    {
+        if (_rRemoveNode.isToDefault())
+            stripOne(_rRemoveNode);
+    }
+    void OStripDefaults::handle(SubtreeChange& _rSubtree)
+    {
+        if ( strip(_rSubtree) )
+            stripOne(_rSubtree);
+    }
+
+    OStripDefaults& OStripDefaults::strip()
+    {
+        typedef SubtreeChange::MutatingChildIterator Iter;
+
+        Iter it = m_rParent.begin_changes(), stop = m_rParent.end_changes();
+
+        while (it != stop)
+        {
+            this->applyToChange(*it++);
+        }
+
+        return *this;
+    }
 
 
 // -----------------------------------------------------------------------------
@@ -952,6 +1021,8 @@ namespace configmgr
             ISubtree* pSubtree = pNode ? pNode->asISubtree() : 0;
             if (pSubtree)
             {
+                pSubtree->markAsDefault( _rSubtree.isToDefault() );
+
                 // Now apply _rSubtree to the subtree
                 TreeUpdater aTreeUpdate(pSubtree);
                 aTreeUpdate.applyToChildren(_rSubtree);
@@ -1064,7 +1135,11 @@ namespace configmgr
         }
 #endif
         // recurse
-        if (m_pCurrentSubtree) _aSubtree.forEachChange(*this);
+        if (m_pCurrentSubtree)
+        {
+            m_pCurrentSubtree->markAsDefault( _aSubtree.isToDefault() );
+            _aSubtree.forEachChange(*this);
+        }
 
         m_pCurrentSubtree = pOldSubtree;
     }

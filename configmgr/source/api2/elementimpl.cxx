@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,7 @@ uno::Sequence< css::util::ElementChange > implGetPendingChanges( TreeElement& rE
         throw(uno::RuntimeException)
 {
     using css::util::ElementChange;
+    using configuration::NodeChangesInformation;
 
     std::vector<ElementChange> aResult;
     try
@@ -589,23 +590,25 @@ uno::Sequence< css::util::ElementChange > implGetPendingChanges( TreeElement& rE
 
         Tree aTree( aLocked->getTree() );
 
-        NodeChanges aChanges;
-        if (aLocked->getTree().collectChanges(aChanges))
-        {
-            Factory& rFactory = aLocked->getFactory();
+        NodeChangesInformation aInfos;
 
-            for(NodeChanges::Iterator it = aChanges.begin(), stop = aChanges.end();
-                it != stop;
-                ++it)
+        {
+            NodeChanges aChanges;
+            if (aLocked->getTree().collectChanges(aChanges))
             {
-                configuration::NodeChangeInformation aInfo;
-                if (it->getChangeInfo(aInfo))
-                {
-                    ElementChange aChange;
-                    fillChange(aChange,aInfo,aTree,rFactory);
-                    aResult.push_back(aChange);
-                }
+                aChanges.getChangesInfos(aInfos);
             }
+        }
+
+        Factory& rFactory = aLocked->getFactory();
+
+        for(NodeChangesInformation::Iterator it = aInfos.begin(), stop = aInfos.end();
+            it != stop;
+            ++it)
+        {
+            ElementChange aChange;
+            fillChange(aChange,*it,aTree,rFactory);
+            aResult.push_back(aChange);
         }
     }
     catch (configuration::Exception& ex)

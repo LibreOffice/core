@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangelist.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ namespace configmgr
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-    struct Chg {};
 
     //==========================================================================
     //= TreeChangeList
@@ -97,18 +96,19 @@ namespace configmgr
         typedef configuration::Attributes     NodeAttributes;
 
         TreeChangeList(const vos::ORef < OOptions >& _xOptions,
-                        const AbsolutePath& _rRootPath, Chg,
-                        const SubtreeChange& _aSubtree)
+                        const AbsolutePath& _rRootPath,
+                        const SubtreeChange& _aSubtree,
+                        SubtreeChange::DeepChildCopy _doDeepCopy)
                 : m_xOptions(_xOptions),
                   m_aLocation(_rRootPath),
-                  root(_aSubtree)   /* EXPENSIVE!!! (deep copy) */
+                  root(_aSubtree,_doDeepCopy)
             {}
 
         /** ctor
         @param      _rRootPath      path to the root of the whole to-be-updated subtree
         */
         TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const AbsolutePath& _rRootPath, Chg,
+                        const AbsolutePath& _rRootPath,
                         const NodeAttributes& _rAttr = NodeAttributes())
                 : m_xOptions(_xOptions)
                 , m_aLocation(_rRootPath)
@@ -119,7 +119,7 @@ namespace configmgr
         @param      _rLocalName         relative path within the to-be-updated subtree
         */
         TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const AbsolutePath& _rRootPath, Chg,
+                        const AbsolutePath& _rRootPath,
                         const Name& _rChildTemplateName,
                         const Name& _rChildTemplateModule,
                         const NodeAttributes& _rAttr = NodeAttributes())
@@ -127,42 +127,12 @@ namespace configmgr
                 , m_aLocation(_rRootPath)
                 , root(_rRootPath.getLocalName().getName().toString(), _rChildTemplateName.toString(), _rChildTemplateModule.toString(), _rAttr)
         {}
-        /** ctor
-        @param      _rPathToRoot        path to parent of the the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        * /
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const AbsolutePath& _rPathToRoot, Chg,
-                        const Name& _rLocalName,
-                        const NodeAttributes& _rAttr)
-                : m_xOptions(_xOptions)
-                , m_aLocation(_rPathToRoot.compose(_rLocalName))
-                , root(_rLocalName.getName().toString(), _rAttr)
-        {}
-        */
 
         /** ctor
         @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
         @param      _rLocalName         relative path within the to-be-updated subtree
-        * /
         TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const AbsolutePath& _rPathToRoot, Chg,
-                        const Name& _rLocalName,
-                        const Name& _rChildTemplateName,
-                        const Name& _rChildTemplateModule,
-                        const NodeAttributes& _rAttr)
-                : m_xOptions(_xOptions)
-                , m_aLocation(_rPathToRoot)
-                , root(_rLocalName.toString(), _rChildTemplateName.toString(), _rChildTemplateModule.toString(), _rAttr)
-        {}
-        */
-
-        /** ctor
-        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        */
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const AbsolutePath& _rRootPath, Chg,
+                        const AbsolutePath& _rRootPath,
                         const ISubtree& _rTree)
                 : m_xOptions(_xOptions)
                 , m_aLocation(_rRootPath)
@@ -170,6 +140,7 @@ namespace configmgr
         {
             OSL_ENSURE(false, "Test only, because deep copy of subtreechange is very expensive.");
         }
+        */
 
         /** ctor
         @param      _rTreeList          list to initialize the path, no childs are copied
@@ -194,7 +165,7 @@ namespace configmgr
         AbsolutePath const& getRootNodePath() const { return m_aLocation; }
 
         /// get the full path to the root (location)
-        AbsolutePath getRootContextPath(Chg) const { return m_aLocation.getParentPath(); }
+        AbsolutePath getRootContextPath() const { return m_aLocation.getParentPath(); }
 
         vos::ORef < OOptions > getOptions() const { return m_xOptions; }
 

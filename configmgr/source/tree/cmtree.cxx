@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-25 16:34:29 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace configmgr
 {
 
 // ------------------------ ChildListSet implementations ------------------------
-    ChildListSet::ChildListSet(ChildListSet const& aSet)
+    ChildListSet::ChildListSet(ChildListSet const& aSet, treeop::DeepChildCopy)
     {
         for(ChildList::iterator it = aSet.GetSet().begin();
             it != aSet.GetSet().end();
@@ -173,19 +173,27 @@ namespace configmgr
     */
     struct OPropagateLevels : public NodeModification
     {
-    protected:
-        sal_Int32   nChildLevel;
     public:
-        OPropagateLevels(sal_Int32 _nParentLevel)
+        typedef sal_Int16 Level;
+        OPropagateLevels(Level _nParentLevel, Level _nParentDefaultLevel)
+        : m_nLevel          ( childLevel(_nParentLevel) )
+        , m_nDefaultLevel   ( childLevel(_nParentDefaultLevel) )
         {
-            nChildLevel = (ITreeProvider::ALL_LEVELS == _nParentLevel) ? ITreeProvider::ALL_LEVELS : _nParentLevel - 1;
         }
         virtual void handle(ValueNode&) { /* not interested in value nodes */ }
         virtual void handle(ISubtree& _rSubtree)
         {
-            if ((ITreeProvider::ALL_LEVELS == nChildLevel) || nChildLevel > _rSubtree.getLevel())
-                _rSubtree.setLevel(nChildLevel);
+            _rSubtree.setLevels(m_nLevel, m_nDefaultLevel);
         }
+
+        static Level childLevel(Level _nLevel)
+        {
+            OSL_ASSERT(0 > ITreeProvider::ALL_LEVELS);
+            return (_nLevel > 0) ? _nLevel-1 : _nLevel;
+        }
+    protected:
+        Level   m_nLevel;
+        Level   m_nDefaultLevel;
     };
 
 
@@ -194,20 +202,37 @@ namespace configmgr
     ISubtree const* ISubtree::asISubtree() const {return this;}
 
     //--------------------------------------------------------------------------
-    void ISubtree::setLevel(sal_Int16 _nLevel)
+    static inline bool adjustLevel(sal_Int16& _rLevel, sal_Int16 _nNewLevel)
     {
-        m_nLevel = _nLevel;
-        if (0 == _nLevel)
-            // nothing more to do, this means "nothing known about any children"
-            return;
+        if (_rLevel == ITreeProvider::ALL_LEVELS)   return false;
+        if (_nNewLevel <= _rLevel &&
+            _nNewLevel != ITreeProvider::ALL_LEVELS) return false;
 
-        // forward the level number to any child subtrees we have
-        OPropagateLevels aDeeperInto(_nLevel);
-        aDeeperInto.applyToChildren(*this);
+        _rLevel = _nNewLevel;
+        return true;
+    }
+
+    //--------------------------------------------------------------------------
+    void ISubtree::setLevels(sal_Int16 _nLevel, sal_Int16 _nDefaultLevels)
+    {
+        bool bActive = false;
+
+        if (_nLevel && adjustLevel(m_nLevel, _nLevel))
+            bActive = true;
+
+        if (_nDefaultLevels && adjustLevel(m_nDefaultLevels, _nDefaultLevels))
+            bActive = true;
+
+        // forward the level numbers to any child subtrees we have
+        if (bActive)
+        {
+            OPropagateLevels aPropagate(_nLevel,_nDefaultLevels);
+            aPropagate.applyToChildren(*this);
+        }
     }
 
 // --------------------------- Subtree implementation ---------------------------
-    INode* Subtree::clone() const {return new Subtree(*this);}
+    INode* Subtree::clone() const {return new Subtree(*this, treeop::DeepChildCopy());}
 
     INode* Subtree::doGetChild(OUString const& aName) const
     {
@@ -254,79 +279,8 @@ namespace configmgr
         }
         return aReturn;
     }
+//  // -------------------------- ValueNode implementation --------------------------
 
-    //==========================================================================
-    //= OBuildChangeTree - historic
-    //==========================================================================
-    /** generates a change tree by comparing two trees
-    */
-/*  struct OBuildChangeTree : public NodeModification
-    {
-    protected:
-        SubtreeChange&  m_rChangeList;
-        INode*          m_pCacheNode;
-
-    public:
-        OBuildChangeTree(SubtreeChange& rList, INode* pNode)
-            :m_rChangeList(rList)
-            ,m_pCacheNode(pNode)
-        {
-        }
-
-        virtual void handle(ValueNode& _nNode)
-        {
-            OUString aNodeName = _nNode.getName();
-            ISubtree* pTree = m_pCacheNode->asISubtree();
-            OSL_ENSURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
-            if (pTree)
-            {
-                INode* pChild = pTree->getChild(aNodeName);
-                ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
-                OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
-
-                // if the values differ add a new change
-                if (pValueNode && _nNode.getValue() != pValueNode->getValue())
-                {
-                    ValueChange* pChange = new ValueChange(_nNode.getValue(), *pValueNode);
-                    m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
-                }
-            }
-        }
-
-        virtual void handle(ISubtree& _rSubtree)
-        {
-            OUString aNodeName = _rSubtree.getName();
-            ISubtree* pTree = m_pCacheNode->asISubtree();
-            OSL_ENSURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
-            if (pTree)
-            {
-                INode* pChild = pTree->getChild(aNodeName);
-                // node not in cache, so ignore it
-                // later, when we get additions and removements within on transaction, then we have to care about
-                if (pChild)
-                {
-                    ISubtree* pSubTree = pChild->asISubtree();
-                    OSL_ENSURE(pSubTree, "OBuildChangeTree::handle : node must be a inner node!");
-                    // generate a new change
-
-                    SubtreeChange* pChange = new SubtreeChange(_rSubtree);
-                    OBuildChangeTree aNextLevel(*pChange, pSubTree);
-                    aNextLevel.applyToChildren(_rSubtree);
-
-                    // now count if there are any changes
-                    OChangeCounter aCounter;
-                    pChange->dispatch(aCounter);
-
-                    if (aCounter.nCount != 0)
-                        m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
-                    else
-                        delete pChange;
-                }
-            }
-        }
-    };
-
-*/
     void Subtree::forEachChild(NodeAction& anAction) const {
         for(ChildList::const_iterator it = m_aChildren.GetSet().begin();
             it != m_aChildren.GetSet().end();
@@ -342,20 +296,10 @@ namespace configmgr
       }
 
 //  // -------------------------- ValueNode implementation --------------------------
-      void ValueNode::check_init()  // may throw in the future
-      {
-          m_aValuePair.check_init();
-      }
-
-      void ValueNode::init()
-      {
-          m_aValuePair.init();
-    }
-
-
     void ValueNode::setValue(Any const& _aValue)
     {
         m_aValuePair.setFirst(_aValue);
+        this->markAsDefault(false);
     }
 
     void ValueNode::changeDefault(Any const& _aValue)
@@ -365,11 +309,10 @@ namespace configmgr
 
     void ValueNode::setDefault()
     {
-        // PRE: ????
-        // POST: isDefault() == true
-        // OSL_ENSURE(false, "ValueNode::setDefault(): this isn't really defined yet.");
-        // m_aValue = Any();
-        // m_pFirst = NULL;
+        OSL_PRECOND( hasDefault(), "No default value to set for value node");
+        m_aValuePair.clear( selectValue() );
+        this->markAsDefault();
+        OSL_POSTCOND( isDefault(), "Could not set value node to default");
     }
 
     INode* ValueNode::clone() const

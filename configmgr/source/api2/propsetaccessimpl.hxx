@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,20 +154,28 @@ namespace configmgr
         void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
             throw(uno::RuntimeException);
 
-#ifndef CONFIGMGR_NO_PROPERTYSTATE
     // XPropertyState
-        beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& PropertyName )
+        beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sPropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
+        void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sPropertyName )
+            throw(beans::UnknownPropertyException, uno::RuntimeException);
+
+        uno::Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const OUString& sPropertyName )
+            throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+
+    // XMultiPropertyState
         uno::Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const uno::Sequence< OUString >& aPropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
-        void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& PropertyName )
+        void implSetPropertiesToDefault( NodeGroupAccess& rNode, const uno::Sequence< OUString >& aPropertyNames )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
-        uno::Any implGetPropertyDefault( NodeAccess& rNode, const OUString& aPropertyName )
+        void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
+            throw(uno::RuntimeException);
+
+        uno::Sequence< uno::Any > implGetPropertyDefaults( NodeGroupInfoAccess& rNode, const uno::Sequence< OUString >& aPropertyNames )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-#endif
     }
 
 }

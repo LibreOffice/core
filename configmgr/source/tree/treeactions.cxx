@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,149 +159,156 @@ void OChangeActionCounter::handle(SubtreeChange const& aSubtree)
 //==========================================================================
 //= OMergeTreeAction
 //==========================================================================
-void OMergeTreeAction::ensure()
+bool OMergeTreeAction::checkTree() const
 {
     // Change a Value
     OSL_ENSURE(m_pRefTree,"OMergeTreeAction::handle: Invalid subtree");
 
     // if we don't have a tree or the tree level is 0 we can leave
-    if (!m_pRefTree || 0 == m_pRefTree->getLevel())
-        return;
+    return m_pRefTree != NULL;
 }
 
 //--------------------------------------------------------------------------
 void OMergeTreeAction::handle(ValueChange& _rChange)
 {
-    ensure();
-
-    // We need to find the element in the tree
-    const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
-
-    // We have a node so we can keep the Change and the values do not differ
-    if (pChild)
+    if (checkTree())
     {
-        const ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
-        OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
+        // We need to find the element in the tree
+        const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
 
-        if (pValueNode && _rChange.getNewValue() != pValueNode->getValue())
+        // We have a node so we can keep the Change and the values do not differ
+        if (pChild)
         {
-            ValueChange* pChange = new ValueChange(_rChange);
-            m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
-        }
-    }
-    else
-    {
-        std::auto_ptr<ValueNode> pNode = ONodeConverter::createCorrespondingNode(_rChange,m_rNodeFactory);
+            const ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
+            OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
 
-        // add the tree to the change list
-        AddNode* pChange = new AddNode( base_ptr(pNode),_rChange.getNodeName());
-        m_rChangeList.addChange(std::auto_ptr<Change>(pChange));
+            // DEFAULT-TODO
+            if (pValueNode && _rChange.getNewValue() != pValueNode->getValue())
+            {
+                ValueChange* pChange = new ValueChange(_rChange);
+                m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+            }
+        }
+        else
+        {
+            std::auto_ptr<ValueNode> pNode = ONodeConverter::createCorrespondingNode(_rChange,m_rNodeFactory);
+
+            // add the tree to the change list
+            AddNode* pChange = new AddNode( base_ptr(pNode),_rChange.getNodeName(), _rChange.isToDefault());
+            m_rChangeList.addChange(std::auto_ptr<Change>(pChange));
+        }
     }
 }
 
 //--------------------------------------------------------------------------
 void OMergeTreeAction::handle(SubtreeChange& _rChange)
 {
-    ensure();
-
-    // We need to find the element in the tree
-    const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
-
-    // if there is a node we continue
-    if (pChild)
+    if (checkTree())
     {
-        const ISubtree* pSubTree = pChild->asISubtree();
-        OSL_ENSURE(pSubTree, "OMergeTreeAction::handle : node must be a inner node!");
+        // We need to find the element in the tree
+        const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
 
-        if (pSubTree)
+        // if there is a node we continue
+        if (pChild)
         {
-            // generate a new change
-            SubtreeChange* pChange = new SubtreeChange(_rChange, SubtreeChange::NoChildCopy());
+            const ISubtree* pSubTree = pChild->asISubtree();
+            OSL_ENSURE(pSubTree, "OMergeTreeAction::handle : node must be a inner node!");
 
-            OMergeTreeAction aNextLevel(*pChange, pSubTree);
-            _rChange.forEachChange(aNextLevel);
+            if (pSubTree)
+            {
+                // generate a new change
+                SubtreeChange* pChange = new SubtreeChange(_rChange, SubtreeChange::NoChildCopy());
 
-            // now count if there are any changes
-            OChangeActionCounter aCounter;
-            aCounter.handle(*pChange);
+                OMergeTreeAction aNextLevel(*pChange, pSubTree);
+                _rChange.forEachChange(aNextLevel);
 
-            if (aCounter.hasChanges())
-                m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+                // now count if there are any changes
+                OChangeActionCounter aCounter;
+                aCounter.handle(*pChange);
+
+                if (aCounter.hasChanges())
+                    m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+                else
+                    delete pChange;
+            }
             else
-                delete pChange;
+                OSL_ENSURE(false, "Inconsistent data: Subtree Change is merged into non-subtree node.");
         }
-    }
-    // otherwise we have to create the node
-    else
-    {
-        std::auto_ptr<ISubtree> pNode = OCreateSubtreeAction::createSubtree(_rChange,m_rNodeFactory);
-        OSL_ASSERT(pNode.get() != NULL);
+        // otherwise we have to create the node
+        else
+        {
+            std::auto_ptr<ISubtree> pNode = OCreateSubtreeAction::createSubtree(_rChange,m_rNodeFactory);
+            OSL_ASSERT(pNode.get() != NULL);
 
-        // set the level
-        pNode->setLevel(ITreeProvider::ALL_LEVELS);
+            // set the level
+            pNode->setLevels(ITreeProvider::ALL_LEVELS,ITreeProvider::ALL_LEVELS);
 
-        // add the tree to the change list
-        std::auto_ptr<Change> pChange( new AddNode(base_ptr(pNode),_rChange.getNodeName()) );
-        m_rChangeList.addChange( pChange );
+            // add the tree to the change list
+            std::auto_ptr<Change> pChange( new AddNode(base_ptr(pNode),_rChange.getNodeName(), _rChange.isToDefault()) );
+            m_rChangeList.addChange( pChange );
+        }
     }
 }
 
 //--------------------------------------------------------------------------
 void OMergeTreeAction::handle(RemoveNode& _rChange)
 {
-    ensure();
-
-    // We need to find the element in the tree
-    const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
-
-    // only if there is a node, we will keep the change
-    if (pChild)
+    if (checkTree())
     {
-        // generate a new change
-        RemoveNode* pChange = new RemoveNode(_rChange.getNodeName());
-        m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+        // We need to find the element in the tree
+        const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
+
+        // only if there is a node, we will keep the change
+        if (pChild)
+        {
+            // generate a new change
+            RemoveNode* pChange = new RemoveNode(_rChange.getNodeName(),_rChange.isToDefault());
+            m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+        }
     }
 }
 
 //--------------------------------------------------------------------------
 void OMergeTreeAction::handle(AddNode& _rChange)
 {
-    ensure();
-
-    // We need to find the element in the tree
-    const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
-
-    // if the node exists, this must be a ValueNode,
-    // otherwise we are not able to clone
-    if (pChild && pChild->ISA(ValueNode))
+    if (checkTree())
     {
-        const ValueNode* pValueNode = pChild->asValueNode();
+        // We need to find the element in the tree
+        const INode* pChild = m_pRefTree->getChild(_rChange.getNodeName());
 
-        std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
-        OSL_ENSURE(pValueNode && aNewNode.get() && aNewNode.get()->asValueNode(), "OMergeTreeAction::handle : node must be a value node!");
-        if (!pValueNode || !aNewNode.get() || !aNewNode.get()->asValueNode())
-            return;
-
-        ValueNode* pNewValueNode = aNewNode.get()->asValueNode();
-        if (pNewValueNode->getValue() != pValueNode->getValue())
+        // if the node exists, this must be a ValueNode,
+        // otherwise we are not able to clone
+        if (pChild && pChild->ISA(ValueNode))
         {
-            ValueChange* pChange = new ValueChange(_rChange.getNodeName(),
-                                                   pNewValueNode->getValue(),
-                                                   pNewValueNode->getAttributes(),
-                                                   ValueChange::changeValue,
-                                                   pValueNode->getValue());
+            // DEFAULT-TODO
+            const ValueNode* pValueNode = pChild->asValueNode();
+
+            std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
+            OSL_ENSURE(pValueNode && aNewNode.get() && aNewNode.get()->asValueNode(), "OMergeTreeAction::handle : node must be a value node!");
+            if (!pValueNode || !aNewNode.get() || !aNewNode.get()->asValueNode())
+                return;
+
+            ValueNode* pNewValueNode = aNewNode.get()->asValueNode();
+            if (pNewValueNode->getValue() != pValueNode->getValue())
+            {
+                ValueChange* pChange = new ValueChange(_rChange.getNodeName(),
+                                                       pNewValueNode->getAttributes(),
+                                                       pNewValueNode->isDefault() ? ValueChange::setToDefault : ValueChange::changeValue,
+                                                       pNewValueNode->getValue(),
+                                                       pValueNode->getValue());
+                m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
+            }
+        }
+        else
+        {
+            std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
+            AddNode* pChange = new AddNode(aNewNode,_rChange.getNodeName(),_rChange.isToDefault());
+            if (pChild != NULL)
+            {
+                pChange->setReplacing();
+            }
             m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
         }
-    }
-    else
-    {
-        std::auto_ptr<INode> aNewNode = _rChange.releaseAddedNode();
-        AddNode* pChange = new AddNode(aNewNode,_rChange.getNodeName());
-        if (pChild != NULL)
-        {
-            pChange->setReplacing();
-        }
-        m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
     }
 }
 
@@ -353,14 +360,23 @@ std::auto_ptr<ISubtree>  ONodeConverter::createCorrespondingNode(SubtreeChange c
 //--------------------------------------------------------------------------
 std::auto_ptr<ValueNode> ONodeConverter::createCorrespondingNode(ValueChange const&  _rChange, OTreeNodeFactory& _rFactory)
 {
-    OSL_ENSURE(_rChange.getNewValue().hasValue(), "Losing type information converting change to value");
+   // DEFAULT-TODO
+    OSL_ENSURE(_rChange.getNewValue().hasValue() || _rChange.getOldValue().hasValue(), "Losing type information converting change to value");
 
-    std::auto_ptr<ValueNode> aRet = _rFactory.createValueNode(_rChange.getNodeName(), _rChange.getNewValue(), _rChange.getAttributes());
+    std::auto_ptr<ValueNode> aRet;
+    if (_rChange.getNewValue().hasValue())
+       aRet = _rFactory.createValueNode(_rChange.getNodeName(), _rChange.getNewValue(), _rChange.getAttributes());
+
+    else
+       aRet = _rFactory.createNullValueNode(_rChange.getNodeName(), _rChange.getOldValue().getValueType(), _rChange.getAttributes());
+
+    OSL_ENSURE(aRet.get() && aRet->isValid(), "Could not create corresponding value node");
+
     return aRet;
 }
 
 //--------------------------------------------------------------------------
-std::auto_ptr<INode>ONodeConverter::extractCorrespondingNode(AddNode& _rChange)
+std::auto_ptr<INode> ONodeConverter::extractCorrespondingNode(AddNode& _rChange)
 {
     std::auto_ptr<INode> aRet = _rChange.releaseAddedNode();
     return aRet;
@@ -542,6 +558,9 @@ void OCreateSubtreeAction::handle(AddNode& _rChange)
         if (!m_pCurrentSubtree)
             aLog.push_back(aStr);
 #endif
+
+        if (m_pCurrentSubtree)
+            m_pCurrentSubtree->markAsDefault( aSubtree.isToDefault() );
 
         aSubtree.forEachChange(*this);
         m_pCurrentSubtree = pOldSubtree;

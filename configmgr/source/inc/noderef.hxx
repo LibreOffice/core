@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,26 +336,32 @@ namespace configmgr
             UnoAny      getNodeValue(ValueRef const& aNode)     const; // only works for value nodes
 
         // default value handling
-            /// ensure default values are available for nodes where they can be provided at all
-            void        ensureDefaults() const;
+            /// checks whether <var>aNode</var> has a default value
+            bool        hasNodeDefault(ValueRef const& aNode)   const; // only works for value nodes
 
             /// checks whether <var>aNode</var> assumes its default value
             bool        isNodeDefault(ValueRef const& aNode)        const; // only works for value nodes
 
+            /// checks whether <var>aNode</var> has a default state
+            bool        hasNodeDefault(NodeRef const& aNode)    const;
+
+            /// checks whether <var>aNode</var> assumes its default state
+            bool        isNodeDefault(NodeRef const& aNode)         const;
+
+            /// checks whether <var>aNode</var> has a default state
+            bool        hasNodeDefault(AnyNodeRef const& aNode) const;
+
             /// checks whether <var>aNode</var> assumes its default state
             bool        isNodeDefault(AnyNodeRef const& aNode)      const;
 
-            /** retrieves the default value for <var>aNode</var>, provided there is one and it
-                is available.
-                <p>call <method>Tree::ensureDefaults</method> first to achieve best results</p>
-            */
-            UnoAny      getNodeDefault(ValueRef const& aNode)       const; // only works for value nodes
+            /// checks whether the default values are available for the children of <var>aNode</var> (if applicable)
+            bool        areValueDefaultsAvailable(NodeRef const& aNode) const;
 
             /** retrieves the default value for <var>aNode</var>, provided there is one and it
                 is available.
                 <p>call <method>Tree::ensureDefaults</method> first to achieve best results</p>
             */
-            UnoAny      getNodeDefault(AnyNodeRef const& aNode)     const;
+            UnoAny      getNodeDefaultValue(ValueRef const& aNode)      const; // only works for value nodes
 
         // Tree context handling
         public:

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jb $ $Date: 2001-06-20 20:43:22 $
+#   last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,10 +75,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=	\
         $(SLO)$/collectchanges.obj \
+        $(SLO)$/configdefaultprovider.obj	\
         $(SLO)$/configexcept.obj	\
         $(SLO)$/configgroup.obj	\
         $(SLO)$/configpath.obj	\
         $(SLO)$/configset.obj	\
+        $(SLO)$/defaultproviderproxy.obj	\
         $(SLO)$/valuemembernode.obj	\
         $(SLO)$/nodechange.obj	\
         $(SLO)$/nodechangeimpl.obj	\

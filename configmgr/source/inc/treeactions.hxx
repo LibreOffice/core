@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:25:26 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ public:
 
 private:
     // ensuring the correct state
-    void ensure();
+    bool checkTree() const;
 };
 
 //==========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 09:18:39 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,9 +296,15 @@ namespace configmgr
     // access to the raw notifications
     IConfigBroadcaster* OProviderImpl::getNotifier() { OSL_ASSERT(m_pTreeMgr); return m_pTreeMgr->getBroadcaster(); }
 
+    // DefaultProvider access
+    //-----------------------------------------------------------------------------
+    IDefaultProvider&  OProviderImpl::getDefaultProvider() const
+    {
+        return *m_pTreeMgr;
+    }
+
     // TemplateProvider access
     //-----------------------------------------------------------------------------
-
     ITemplateProvider&  OProviderImpl::getTemplateProvider() const
     {
         return *m_pTreeMgr;
@@ -364,6 +370,12 @@ namespace configmgr
     void OProviderImpl::fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) throw()
     {
         m_pTreeMgr->fetchSubtree(aSubtreePath, _xOptions, nMinLevels);
+    }
+
+    //-----------------------------------------------------------------------------
+    sal_Bool OProviderImpl::fetchDefaultData(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) throw()
+    {
+        return m_pTreeMgr->fetchDefaultData(aSubtreePath, _xOptions, nMinLevels);
     }
 
     // IInterface

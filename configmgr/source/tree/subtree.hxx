@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-08 11:23:48 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,14 @@ namespace configmgr
     class ChildListSet {
         ChildList m_aChildList;
 
+        ChildListSet(ChildListSet const&);
         ChildListSet& operator=(ChildListSet const& aSet);
     public:
         ChildList& GetSet() {return m_aChildList;}
         ChildList const& GetSet() const {return m_aChildList;}
 
         ChildListSet() {}
-        ChildListSet(ChildListSet const&);
+        ChildListSet(ChildListSet const&, treeop::DeepChildCopy);
         ~ChildListSet();
     };
 
@@ -122,6 +123,9 @@ namespace configmgr
                 const OUString& _rTemplateName, const OUString& _rTemplateModule,
                 const configuration::Attributes& _rAttrs)
                 :ISubtree(_rName, _rTemplateName, _rTemplateModule, _rAttrs){};
+
+        Subtree(const Subtree& _rOther, treeop::DeepChildCopy _dc)
+            : ISubtree(_rOther), m_aChildren(_rOther.m_aChildren,_dc){}
 
         virtual INode* addChild(std::auto_ptr<INode> node); // takes ownership
         virtual ::std::auto_ptr<INode> removeChild(OUString const& name);

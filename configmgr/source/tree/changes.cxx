@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 
 #include <stdio.h>
-#include "cmtreemodel.hxx"
+
+#include "change.hxx"
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -72,41 +74,53 @@ using namespace configmgr;
 //= ValueChange
 //==========================================================================
 // -------------------------------------------------------------------------
-ValueChange::ValueChange(OUString const& _rName,Any aNewValue, const configuration::Attributes& _rAttributes, Mode aMode, Any aOldValue)
-    : Change(_rName)
+ValueChange::ValueChange(OUString const& _rName,
+                         const node::Attributes& _rAttributes,
+                         Any aNewValue, Any aOldValue)
+    : Change(_rName,false)
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue)
-     ,m_eMode(aMode)
      ,m_aAttributes(_rAttributes)
 {
+     m_eMode = _rAttributes.bDefaulted ? wasDefault : changeValue;
+     m_aAttributes.bDefaulted = false;
+}
+// -------------------------------------------------------------------------
+static inline bool isDefaultMode(ValueChange::Mode _eMode)
+{ return (_eMode == ValueChange::setToDefault) || (_eMode == ValueChange::changeDefault); }
+// -------------------------------------------------------------------------
+ValueChange::ValueChange(OUString const& _rName,
+                         const node::Attributes& _rAttributes,
+                         Mode _eMode,
+                         Any aNewValue, Any aOldValue)
+    : Change(_rName, isDefaultMode(_eMode))
+     ,m_aValue(aNewValue)
+     ,m_aOldValue(aOldValue)
+     ,m_eMode(_eMode)
+     ,m_aAttributes(_rAttributes)
+{
+    m_aAttributes.bDefaulted = Change::isToDefault();
 }
 // -------------------------------------------------------------------------
 ValueChange::ValueChange(Any aNewValue, ValueNode const& aOldValue)
-    : Change(aOldValue.getName())
+    : Change(aOldValue.getName(),false)
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue.getValue())
      ,m_aAttributes(aOldValue.getAttributes())
 {
     m_eMode = aOldValue.isDefault() ? wasDefault : changeValue;
+    m_aAttributes.bDefaulted = false;
 }
 // -------------------------------------------------------------------------
 ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
-    : Change(aOldValue.getName())
+    : Change(aOldValue.getName(),true)
      ,m_aValue(aOldValue.getDefault())
      ,m_aOldValue(aOldValue.getValue())
      ,m_eMode(setToDefault)
      ,m_aAttributes(aOldValue.getAttributes())
 {
+     m_aAttributes.bDefaulted = true;
 }
-
-// -------------------------------------------------------------------------
-ValueChange::ValueChange(const ValueChange& _rChange)
-            :Change(_rChange.getNodeName())
-            ,m_aValue(_rChange.getNewValue())
-            ,m_aOldValue(_rChange.getOldValue())
-            ,m_eMode(_rChange.getMode())
-            ,m_aAttributes(_rChange.getAttributes())
-{}
 
 // -----------------------------------------------------------------------------
 Change* ValueChange::clone() const
@@ -219,8 +233,8 @@ void ValueChange::setModeAsString(const ::rtl::OUString& _rMode)
 //= AddNode
 //==========================================================================
 //--------------------------------------------------------------------------
-AddNode::AddNode(std::auto_ptr<INode> aNewNode_, OUString const& _rName)
-    :Change(_rName)
+AddNode::AddNode(std::auto_ptr<INode> aNewNode_, OUString const& _rName, bool _bToDefault)
+    :Change(_rName,_bToDefault)
     ,m_aOwnNewNode(aNewNode_)
     ,m_aOwnOldNode()
     ,m_pOldNode(0)
@@ -275,8 +289,8 @@ void AddNode::takeReplacedNode(std::auto_ptr<INode> aNode)
 //==========================================================================
 //= RemoveNode
 //==========================================================================
-RemoveNode::RemoveNode(OUString const& _rName)
-    :Change(_rName)
+RemoveNode::RemoveNode(OUString const& _rName, bool _bToDefault)
+    :Change(_rName,_bToDefault)
     ,m_aOwnOldNode()
     ,m_pOldNode(0)
 {

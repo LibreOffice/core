@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,25 +62,43 @@
 #ifndef CONFIGMGR_CONFIGCHANGEIMPL_HXX_
 #define CONFIGMGR_CONFIGCHANGEIMPL_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #include "treeimpl.hxx"
+#endif
 
+#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif
+
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace configmgr
 {
+    class ISubtree;
+
     namespace configuration
     {
 //-----------------------------------------------------------------------------
 
         typedef com::sun::star::uno::Type       UnoType;
         typedef com::sun::star::uno::Any        UnoAny;
-//-----------------------------------------------------------------------------
-
-        typedef vos::ORef<TreeImpl>         TreeHolder;
-        typedef vos::ORef<ElementTreeImpl>  ElementTreeHolder;
 //-----------------------------------------------------------------------------
 
         class Node;
@@ -91,6 +109,33 @@ namespace configmgr
         class NodeChangeData;
         class NodeChangeLocation;
         class NodeChangeInformation;
+//-----------------------------------------------------------------------------
+
+        typedef vos::ORef<TreeImpl>         TreeHolder;
+        typedef vos::ORef<ElementTreeImpl>  ElementTreeHolder;
+//-----------------------------------------------------------------------------
+        struct ElementTreeChange
+        {
+            Path::Component   m_aElementName;
+            ElementTreeHolder m_aAddedElement;
+            ElementTreeHolder m_aRemovedElement;
+
+            ElementTreeChange(
+                Path::Component const& _aElementName,
+                ElementTreeHolder const& _aAddedElement,
+                ElementTreeHolder const& _aRemovedElement
+             )
+            : m_aElementName(_aElementName)
+            , m_aAddedElement(_aAddedElement)
+            , m_aRemovedElement(_aRemovedElement)
+            {}
+
+            bool isChange() const
+            {
+                return !!(m_aAddedElement != m_aRemovedElement);
+            }
+        };
+//-----------------------------------------------------------------------------
 
 
         /// represents a node position in some tree
@@ -113,26 +158,29 @@ namespace configmgr
             /// the node that is affected by the change
             NodeOffset getAffectedNode() const;
 
-            /// the path from the base to the changing node
-            RelativePath getPathToChangingNode() const;
-
         protected:
             /// setup the 'target' node that is to be affected or changed
             void setAffected(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
 
         public:
-        // related/affected nodes and trees
+        // getting information
+            typedef sal_uInt32 ChangeCount;
+            /*static const ChangeCount*/ enum { scCommonBase = ~0u };
+
             /// checks, if this represents an actual change - with or without requiring a preceding test
             bool isChange(bool bAllowUntested) const;
 
-            /// fills in pre- and post-change values, returns whether they may differ
-            bool fillChangeData(NodeChangeData& rChange) const;
+            /// return the number of distict changes in this object
+            ChangeCount getChangeDataCount() const;
 
-            /// fills in change location, returns whether it is set
-            bool fillChangeLocation(NodeChangeLocation& rChange) const;
+            /// fills in base change location, returns whether it is set
+            bool fillChangeLocation(NodeChangeLocation& rChange, ChangeCount _ix = scCommonBase) const;
+
+            /// fills in pre- and post-change values, returns whether they may differ
+            bool fillChangeData(NodeChangeData& rChange, ChangeCount _ix) const;
 
             /// fills in change location and values, returns whether data may be changed
-            bool fillChangeInfo(NodeChangeInformation& rChange) const;
+            bool fillChangeInfo(NodeChangeInformation& rChange, ChangeCount _ix) const;
 
         /// test whether this really is a change to the stored 'changing' node
             void test();
@@ -140,31 +188,28 @@ namespace configmgr
         /// apply this change to the stored 'changing' node
             void apply();
 
-        protected:
-        /// virtual hooks for some of the public methods
-            /// the tree on which the operation originated
-            virtual TreeHolder doGetBaseTree() const; // default is the same as the target tree
-
-            /// the node thru which the operation originated
-            virtual NodeOffset doGetBaseNode() const; // default is the the same as the owning node
         private:
-            /// the path from base to 'affected' node
-            virtual RelativePath doGetChangingNodePath() const = 0;
+        /// virtual hooks for some of the public methods
+            /// return the number of distict changes in this object
+            ChangeCount doGetChangeCount() const;
 
-            /// is the change really affecting a child of the affected node (true for values)
+            /// the path from base to 'changing' node
+            virtual RelativePath doGetChangingNodePath(ChangeCount _ix) const = 0;
+
+            /// is the change really affecting a child (or children) of the affected node (true for values)
             virtual bool doIsChangingSubnode() const = 0;
 
-        private:
             /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const = 0;
+            virtual bool doIsChange() const = 0;
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeData& rChange) const = 0;
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const = 0;
 
             /// dry-check whether this is a change
             virtual void doTest( Node& rTarget) = 0;
             /// do apply the actual change
             virtual void doApply( Node& rTarget) = 0;
+
         private:
             typedef sal_uInt16 State;
             TreeHolder m_aAffectedTree;
@@ -205,7 +250,7 @@ namespace configmgr
         protected:
         // override information items
             /// the path from base to 'affected' node - here is the name of the changing node
-            virtual RelativePath doGetChangingNodePath() const;
+            virtual RelativePath doGetChangingNodePath(ChangeCount _ix) const;
 
             /// is the change really affecting a child of the affected node (true here)
             virtual bool doIsChangingSubnode() const;
@@ -213,10 +258,10 @@ namespace configmgr
         protected:
         // override change information items
             /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const;
+            virtual bool doIsChange() const;
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeData& rChange) const = 0;
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const = 0;
 
         protected:
         // override apply functionality
@@ -249,7 +294,7 @@ namespace configmgr
             virtual void doApplyChange( ValueMemberUpdate& rNode);
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeData& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
 
 //          friend class SetReplaceValueImpl;
         };
@@ -271,42 +316,74 @@ namespace configmgr
             virtual void doApplyChange( ValueMemberUpdate& rNode);
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeData& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
         };
 //-----------------------------------------------------------------------------
 
-        /// represents setting a deeply nested value node to a given value
-        class DeepValueReplaceImpl
-        : public ValueReplaceImpl
-        {
-            TreeHolder m_aBaseTree;
-            NodeOffset m_nBaseNode;
-            RelativePath m_aNestedPath;
-        public:
-            explicit DeepValueReplaceImpl(RelativePath const& aNestedPath, UnoAny const& aNewValue);
-            explicit DeepValueReplaceImpl(RelativePath const& aNestedPath, UnoAny const& aNewValue, UnoAny const& aOldValue);
-
-            /// set up the node where this is originated
-            void setBaseContext(TreeHolder const& aBaseTree, NodeOffset nBaseNode);
-
-        protected:
-            /// the path from base to 'affected' node - uses own (explicit) path
-            virtual RelativePath doGetChangingNodePath() const;
-
-            /// the tree on which the operation originated
-            virtual TreeHolder doGetBaseTree() const; // uses own
-            /// the node thru which the operation originated
-            virtual NodeOffset doGetBaseNode() const; // uses own
-        };
-//-----------------------------------------------------------------------------
 
         /// represents a change to a set (as a container)
         class SetChangeImpl
         : public NodeChangeImpl
         {
+        public:
+            explicit SetChangeImpl(bool bNoCheck = false);
+
+            /// setup the 'target' node that is to be affected or changed
+            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
+
+        protected:
+        /// virtual hooks for some of the public methods
+            /// is the change really affecting a child of the affected node (false here)
+            virtual bool doIsChangingSubnode() const;
+        };
+//-----------------------------------------------------------------------------
+        class SetElementFactory;
+
+        /// represents setting to its default state a set (as a container)
+        class SetResetImpl
+        : public SetChangeImpl
+        {
+            typedef std::vector< ElementTreeChange >    TreeChanges;
+
+            std::auto_ptr<ISubtree>             m_aDefaultData;
+            SetElementFactory&                  m_rElementFactory;
+            TreeChanges                         m_aTreeChanges;
+        public:
+            explicit SetResetImpl(
+                SetElementFactory& _rElementFactory,
+                std::auto_ptr<ISubtree> _pDefaultData,
+                bool _bNoCheck = false);
+
+            ~SetResetImpl();
+
+        protected:
+        /// virtual hooks for some of the public methods
+            /// retrieve the count of elements affected
+            ChangeCount doGetChangeCount() const;
+
+            /// the path from base to 'affected' node
+            virtual RelativePath doGetChangingNodePath(ChangeCount _ix) const;
+
+            /// checks, if this represents an actual change (given whether the change has been applied or not)
+            virtual bool doIsChange() const;
+            /// fills in pre- and post-change values, returns wether they differ
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
+
+
+            /// retrieve the old value from the given node
+            virtual void doTest( Node& rTarget);
+            /// do apply the actual change
+            virtual void doApply( Node& rTarget);
+        };
+//-----------------------------------------------------------------------------
+
+        /// represents a change to an element of a set (as a container)
+        class SetElementChangeImpl
+        : public SetChangeImpl
+        {
             Path::Component m_aName;
         public:
-            explicit SetChangeImpl(Path::Component const& aName, bool bNoCheck = false);
+            explicit SetElementChangeImpl(Path::Component const& aName, bool bNoCheck = false);
 
             /// the name of the element being changed
             Path::Component getFullElementName() const { return m_aName; }
@@ -314,15 +391,10 @@ namespace configmgr
             /// the name of the element being changed
             Name getElementName() const { return m_aName.getName(); }
 
-            /// setup the 'target' node that is to be affected or changed
-            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
         protected:
         /// virtual hooks for some of the public methods
             /// the path from base to 'affected' node - use element name
-            virtual RelativePath doGetChangingNodePath() const;
-
-            /// is the change really affecting a child of the affected node (false here)
-            virtual bool doIsChangingSubnode() const;
+            virtual RelativePath doGetChangingNodePath(ChangeCount _ix) const;
 
             /// retrieve the old value from the given node
             virtual void doTest( Node& rTarget);
@@ -338,18 +410,18 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         /// represents an insertion into a set of trees
-        class SetInsertTreeImpl
-        : public SetChangeImpl
+        class SetInsertImpl
+        : public SetElementChangeImpl
         {
             ElementTreeHolder m_aNewTree;
         public:
-            explicit SetInsertTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, bool bNoCheck = false);
+            explicit SetInsertImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, bool bNoCheck = false);
 
         protected:
             /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const;
+            virtual bool doIsChange() const;
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeData& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
 
             /// new overridable: retrieve the old value from a properly typed node
             virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
@@ -359,20 +431,20 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         /// represents a substitution within a set of trees
-        class SetReplaceTreeImpl
-        : public SetChangeImpl
+        class SetReplaceImpl
+        : public SetElementChangeImpl
         {
             ElementTreeHolder m_aNewTree;
             ElementTreeHolder m_aOldTree;
         public:
-            explicit SetReplaceTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree);
-            explicit SetReplaceTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, ElementTreeHolder const& aOldTree);
+            explicit SetReplaceImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree);
+            explicit SetReplaceImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, ElementTreeHolder const& aOldTree);
 
         protected:
             /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const;
+            virtual bool doIsChange() const;
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeData& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
 
             /// new overridable: retrieve the old value from a properly typed node
             virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
@@ -382,46 +454,19 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         /// represents a removal from of a set of trees
-        class SetRemoveTreeImpl
-        : public SetChangeImpl
+        class SetRemoveImpl
+        : public SetElementChangeImpl
         {
             ElementTreeHolder m_aOldTree;
         public:
-            explicit SetRemoveTreeImpl(Path::Component const& aName);
-            explicit SetRemoveTreeImpl(Path::Component const& aName, ElementTreeHolder const& aOldTree);
+            explicit SetRemoveImpl(Path::Component const& aName);
+            explicit SetRemoveImpl(Path::Component const& aName, ElementTreeHolder const& aOldTree);
 
         protected:
             /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const;
+            virtual bool doIsChange() const;
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeData& rChange) const;
-
-            /// new overridable: retrieve the old value from a properly typed node
-            virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
-            /// new overridable: apply the change to a properly typed node
-            virtual void doApplyToElement(SetNodeImpl& rNode, Name const& aName);
-        };
-//-----------------------------------------------------------------------------
-        typedef SetInsertTreeImpl   SetInsertValueImpl;
-        typedef SetReplaceTreeImpl  SetReplaceValueImpl;
-        typedef SetRemoveTreeImpl   SetRemoveValueImpl;
-/*
-        /// represents an insertion into a set of values
-        class SetInsertValueImpl
-        : public SetChangeImpl
-        {
-            UnoAny  m_aNewValue;
-        public:
-            explicit SetInsertValueImpl(Name const& aName, UnoAny const& aNewValue);
-
-            /// get the post-change value (if known)
-            UnoAny getNewValue() const { return m_aNewValue; }
-
-        protected:
-            /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const;
-            /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
 
             /// new overridable: retrieve the old value from a properly typed node
             virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
@@ -430,57 +475,6 @@ namespace configmgr
         };
 //-----------------------------------------------------------------------------
 
-        /// represents a substitution within a set of trees
-        class SetReplaceValueImpl
-        : public SetChangeImpl
-        {
-            ElementTreeHolder   m_aOldTree;
-            UnoAny  m_aNewValue;
-        public:
-            explicit SetReplaceValueImpl(Name const& aName, UnoAny const& aNewValue);
-
-            /// get the post-change value (if known)
-            UnoAny getNewValue() const { return m_aNewValue; }
-            /// get the pre-change value (if known)
-            UnoAny getOldValue() const;
-
-        protected:
-            /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const;
-            /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
-
-            /// new overridable: retrieve the old value from a properly typed node
-            virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
-            /// new overridable: apply the change to a properly typed node
-            virtual void doApplyToElement(SetNodeImpl& rNode, Name const& aName);
-        };
-
-//-----------------------------------------------------------------------------
-
-        /// represents a removal from of a set of values
-        class SetRemoveValueImpl
-        : public SetChangeImpl
-        {
-            ElementTreeHolder   m_aOldTree;
-        public:
-            explicit SetRemoveValueImpl(Name const& aName);
-
-            /// get the pre-change value (if known)
-            UnoAny getOldValue() const;
-
-        protected:
-            /// checks, if this represents an actual change (given whether the change has been applied or not)
-            virtual bool doIsChange(bool bBefore) const;
-            /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
-
-            /// new overridable: retrieve the old value from a properly typed node
-            virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
-            /// new overridable: apply the change to a properly typed node
-            virtual void doApplyToElement(SetNodeImpl& rNode, Name const& aName);
-        };
-*/
 //-----------------------------------------------------------------------------
     }
 }

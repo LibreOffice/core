@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: propertyinfohelper.cxx,v $
+ *  $RCSfile: defaultproviderproxy.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,45 +59,73 @@
  *
  ************************************************************************/
 
-#include "propertyinfohelper.hxx"
+#ifndef CONFIGMGR_DEFAULTPROVIDER_PROXY_HXX_
+#define CONFIGMGR_DEFAULTPROVIDER_PROXY_HXX_
 
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HDL_
-#include <com/sun/star/beans/PropertyAttribute.hdl>
+
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/SimpleReferenceObject.hxx>
+#endif
+
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
+
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
 #endif
 
 namespace configmgr
 {
-    namespace css = ::com::sun::star;
-    namespace uno = ::com::sun::star::uno;
-    namespace beans = ::com::sun::star::beans;
-
-    namespace configapi
+//-----------------------------------------------------------------------------
+    class ISubtree;
+    class IDefaultProvider;
+    class IDefaultableTreeManager;
+    class OOptions;
+//-----------------------------------------------------------------------------
+    namespace configuration
     {
 //-----------------------------------------------------------------------------
-beans::Property helperMakeProperty(configuration::Name const& aName,
-                                   configuration::Attributes const aAttributes,
-                                   uno::Type const& aType,
-                                   bool bDefaultable )
-    throw(uno::RuntimeException)
-{
-    namespace PropertyAttribute = com::sun::star::beans::PropertyAttribute;
 
-    sal_Int16 nPropAttributes = 0;
-    if (!aAttributes.bWritable)     nPropAttributes |= PropertyAttribute::READONLY;
-    if ( aAttributes.bNullable)     nPropAttributes |= PropertyAttribute::MAYBEVOID;
-    if ( aAttributes.bNotified)     nPropAttributes |= PropertyAttribute::BOUND;
-    if ( aAttributes.bConstrained)  nPropAttributes |= PropertyAttribute::CONSTRAINED;
+        /// provides access to the defaults for a given request
+        class DefaultProviderProxy
+        : public salhelper::SimpleReferenceObject
+        {
+            // the data defining a request
+            AbsolutePath            m_aBaseLocation;
+            vos::ORef< OOptions >   m_xOptions;
+            sal_Int16               m_nRequestDepth;
 
-    if ( bDefaultable)  nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
+            // the object(s) that provide the defaults
+            IDefaultProvider *          m_pDefaultTreeProvider;
+            IDefaultableTreeManager *   m_pDefaultTreeManager;
+        public:
+            explicit
+            DefaultProviderProxy(
+                    IDefaultProvider *          _pDefaultTreeProvider,
+                    IDefaultableTreeManager *   _pDefaultTreeManager,
+                    AbsolutePath        const&  _aBaseLocation,
+                    vos::ORef<OOptions> const&  _xOptions,
+                    sal_Int16                   _nRequestDepth
+                );
 
-    return beans::Property(aName.toString(), -1, aType, nPropAttributes);
-}
+            ~DefaultProviderProxy();
+
+        /// tries to load default data into the specified location (which must be within the request range owned)
+            bool fetchDefaultData(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception));
+
+        /// tries to load a default instance of the specified node (which must be within the request range owned)
+            std::auto_ptr<ISubtree> getDefaultTree(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception));
+
+        private:
+            sal_Int16 implGetRemainingDepth(AbsolutePath const& _aLocation) const;
+        };
 //-----------------------------------------------------------------------------
     }
-
 }
 
-
+#endif // CONFIGMGR_DEFAULTPROVIDER_PROXY_HXX_

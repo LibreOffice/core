@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupnodeimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-03 12:55:06 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ namespace configmgr
 
             /// does this hold a child value of the given name
             bool hasValue(Name const& aName) const;
+
+            /// are defaults for this node available ?
+            bool areValueDefaultsAvailable() const;
 
             /// retrieve data for the child value of the given name
             ValueMemberNode getValue(Name const& aName)

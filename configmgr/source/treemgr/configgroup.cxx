@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:34:36 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,35 @@
  ************************************************************************/
 
 #include "configgroup.hxx"
-#include "valueref.hxx"
-#include "anynoderef.hxx"
-#include "nodechange.hxx"
-#include "nodechangeimpl.hxx"
-#include "treeimpl.hxx"
-#include "groupnodeimpl.hxx"
-#include "tracer.hxx"
 
+#ifndef CONFIGMGR_CONFIGSET_HXX_
+#include "configset.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGVALUEREF_HXX_
+#include "valueref.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGANYNODE_HXX_
+#include "anynoderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
+#include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEIMPL_HXX_
+#include "nodechangeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
+#include "treeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
+#include "groupnodeimpl.hxx"
+#endif
+#ifndef _CONFIGMGR_TRACER_HXX_
+#include "tracer.hxx"
+#endif
+
+#ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -80,22 +100,49 @@ namespace configmgr
     {
 
 //-----------------------------------------------------------------------------
-// class GroupUpdater
+// class GroupUpdateHelper
 //-----------------------------------------------------------------------------
 
-GroupUpdater::GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter)
+GroupUpdateHelper::GroupUpdateHelper(Tree const& aParentTree, NodeRef const& aGroupNode)
 : m_aTree(aParentTree)
 , m_aNode(aGroupNode)
-, m_xTypeConverter(xConverter)
 {
-    implValidateGroup(m_aTree,m_aNode);
+    implValidateTree(m_aTree);
+    implValidateNode(m_aTree,m_aNode);
 
     if (!TreeImplHelper::isGroup(m_aNode))
         throw Exception("INTERNAL ERROR: Group Member Update: node is not a group");
 }
 //-----------------------------------------------------------------------------
 
-void GroupUpdater::implValidateNode(Tree const& aTree, ValueRef const& aNode) const
+void GroupUpdateHelper::implValidateTree(Tree const& aTree) const
+{
+    if (aTree.isEmpty())
+        throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL tree");
+
+    // check for proper nesting
+    TreeHolder const aParentTree = TreeImplHelper::impl(m_aTree);
+    for(TreeHolder aTestTree =  TreeImplHelper::impl(aTree);
+        aTestTree != aParentTree;           // search this as ancestor tree
+        aTestTree = aTestTree->getContextTree() )
+    {
+        if (!aTestTree.isValid()) // no more trees to look for
+            throw Exception("INTERNAL ERROR: Group Member Update: improper tree relationship");
+    }
+}
+//-----------------------------------------------------------------------------
+
+void GroupUpdateHelper::implValidateNode(Tree const& aTree, NodeRef const& aNode) const
+{
+    if (!aNode.isValid())
+        throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL node");
+
+    if (!aTree.isValidNode(aNode))
+        throw Exception("INTERNAL ERROR: Group Member Update: node does not match tree");
+}
+//-----------------------------------------------------------------------------
+
+void GroupUpdateHelper::implValidateNode(Tree const& aTree, ValueRef const& aNode) const
 {
     if (!aNode.isValid())
         throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL node");
@@ -106,6 +153,18 @@ void GroupUpdater::implValidateNode(Tree const& aTree, ValueRef const& aNode) co
     if (!aTree.getAttributes(aNode).bWritable)
         throw ConstraintViolation( "Group Member Update: Node is read-only !" );
 
+}
+//-----------------------------------------------------------------------------
+
+void GroupUpdateHelper::validateNode(ValueRef const& aNode) const
+{
+    implValidateNode(m_aTree,aNode);
+}
+//-----------------------------------------------------------------------------
+
+void GroupUpdateHelper::validateNode(NodeRef const& aNode) const
+{
+    implValidateNode(m_aTree,aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -155,8 +214,17 @@ bool convertCompatibleValue(UnoTypeConverter const& xTypeConverter, uno::Any& rC
 
     return true;
 }
+//-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// class GroupUpdater
+//-----------------------------------------------------------------------------
 
+GroupUpdater::GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter)
+: m_aHelper(aParentTree,aGroupNode)
+, m_xTypeConverter(xConverter)
+{
+}
 //-----------------------------------------------------------------------------
 
 UnoAny GroupUpdater::implValidateValue(Tree const& aTree, ValueRef const& aNode, UnoAny const& aValue) const
@@ -198,97 +266,135 @@ UnoAny GroupUpdater::implValidateValue(Tree const& aTree, ValueRef const& aNode,
 }
 //-----------------------------------------------------------------------------
 
-void GroupUpdater::implValidateTree(Tree const& aTree) const
-{
-    if (aTree.isEmpty())
-        throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL tree");
-
-    // check for proper nesting
-    TreeHolder const aParentTree = TreeImplHelper::impl(m_aTree);
-    for(TreeHolder aTestTree =  TreeImplHelper::impl(aTree);
-        aTestTree != aParentTree;           // search this as ancestor tree
-        aTestTree = aTestTree->getContextTree() )
-    {
-        if (!aTestTree.isValid()) // no more trees to look for
-            throw Exception("INTERNAL ERROR: Group Member Update: improper tree relationship");
-    }
-}
-//-----------------------------------------------------------------------------
-
-void GroupUpdater::implValidateGroup(Tree const& aTree, NodeRef const& aNode) const
-{
-    implValidateTree(aTree);
-
-    if (!aNode.isValid())
-        throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL node");
-
-    if (!aTree.isValidNode(aNode))
-        throw Exception("INTERNAL ERROR: Group Member Update: node does not match tree");
-}
-//-----------------------------------------------------------------------------
-
-NodeChange GroupUpdater::validateSetDefault(ValueRef const& aValueNode)
-{
-    implValidateNode(m_aTree, aValueNode);
-
-    if (!m_aTree.getAttributes(aValueNode).bDefaultable)
-        throw ConstraintViolation( "Group Member Update: Node may not be default !" );
-
-    //if (!TreeImplHelper::member_node(aValueNode).canGetDefaultValue())
-    //  m_aTree.ensureDefaults();
-
-    if (!TreeImplHelper::member_node(aValueNode).canGetDefaultValue())
-        throw Exception("INTERNAL ERROR: Group Member Update: default value is not available" );
-
-    // now build the specific change
-    std::auto_ptr<ValueChangeImpl> pChange( new ValueResetImpl() );
-
-    pChange->setTarget(TreeImplHelper::impl(m_aTree), TreeImplHelper::parent_offset(aValueNode), m_aTree.getName(aValueNode));
-
-    return NodeChange(pChange.release());
-}
-//-----------------------------------------------------------------------------
-
-NodeChange GroupUpdater::validateSetDefault(AnyNodeRef const& aNode)
-{
-    if ( aNode.isNode() )
-    {
-        OSL_ENSURE(!m_aTree.getAttributes(aNode).bDefaultable,"Inner Node marked as defaultable");
-        throw ConstraintViolation( "Group Member Update: Inner Node may not be set to default !" );
-    }
-
-    return this->validateSetDefault( aNode.toValue() );
-}
-//-----------------------------------------------------------------------------
-
 NodeChange GroupUpdater::validateSetValue(ValueRef const& aValueNode, UnoAny const& newValue )
 {
-    implValidateNode(m_aTree, aValueNode);
-    UnoAny aNewValue = implValidateValue(m_aTree, aValueNode, newValue);
+    m_aHelper.validateNode(aValueNode);
+
+    UnoAny aNewValue = implValidateValue(m_aHelper.tree(), aValueNode, newValue);
 
     // now build the specific change
     std::auto_ptr<ValueChangeImpl> pChange( new ValueReplaceImpl(aNewValue) );
 
-    pChange->setTarget(TreeImplHelper::impl(m_aTree), TreeImplHelper::parent_offset(aValueNode),m_aTree.getName(aValueNode));
+    pChange->setTarget(
+                TreeImplHelper::impl(m_aHelper.tree()),
+                TreeImplHelper::parent_offset(aValueNode),
+                m_aHelper.tree().getName(aValueNode)
+            );
+
+    return NodeChange(pChange.release());
+}
+
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// helper class NodeDefaulter
+//-----------------------------------------------------------------------------
+
+namespace
+{
+    struct NodeDefaulter : NodeVisitor
+    {
+        GroupDefaulter& updater;
+        NodeChanges     result;
+
+        explicit
+        NodeDefaulter(GroupDefaulter& _rUpdater) : updater(_rUpdater), result() {}
+
+        /// do the operation on <var>aNode</var>. needs to be implemented by concrete visitor classes
+        Result handle(Tree const& aTree, NodeRef const& aNode);
+
+        /// do the operation on <var>aValue</var>. needs to be implemented by concrete visitor classes
+        Result handle(Tree const& aTree, ValueRef const& aValue);
+
+        inline void addResult(NodeChange const& aChange)
+        {
+            if (aChange.maybeChange())
+                this->result.add(aChange);
+        }
+    };
+
+    NodeVisitor::Result NodeDefaulter::handle(Tree const& , NodeRef const& aNode)
+    {
+        addResult( updater.validateSetToDefaultState(aNode) );
+        return CONTINUE;
+    }
+
+    NodeVisitor::Result NodeDefaulter::handle(Tree const& , ValueRef const& aValue)
+    {
+        addResult( updater.validateSetToDefaultValue(aValue) );
+        return CONTINUE;
+    }
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// class GroupDefaulter
+//-----------------------------------------------------------------------------
+
+GroupDefaulter::GroupDefaulter(Tree const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aProvider)
+: m_aHelper(_aParentTree,_aGroupNode)
+, m_aDefaultProvider(_aProvider)
+, m_bHasDoneSet(false)
+{
+}
+//-----------------------------------------------------------------------------
+
+bool GroupDefaulter::ensureDataAvailable()
+{
+    if ( m_aHelper.tree().areValueDefaultsAvailable(m_aHelper.node()) ) return true;
+
+    return m_aDefaultProvider.fetchDefaultData( m_aHelper.tree() );
+}
+//-----------------------------------------------------------------------------
+
+NodeChange GroupDefaulter::validateSetToDefaultValue(ValueRef const& aValueNode)
+{
+    m_aHelper.validateNode(aValueNode);
+
+    //if (!TreeImplHelper::member_node(aValueNode).canGetDefaultValue())
+    //  m_aTree.ensureDefaults();
+
+    if (!m_aHelper.tree().hasNodeDefault(aValueNode))
+        throw Exception("INTERNAL ERROR: Group Member Update: Node has no default value" );
+
+    // now build the specific change
+    std::auto_ptr<ValueChangeImpl> pChange( new ValueResetImpl() );
+
+    pChange->setTarget(
+                TreeImplHelper::impl(m_aHelper.tree()),
+                TreeImplHelper::parent_offset(aValueNode),
+                m_aHelper.tree().getName(aValueNode)
+             );
 
     return NodeChange(pChange.release());
 }
 //-----------------------------------------------------------------------------
 
-NodeChange GroupUpdater::validateSetDeepValue(  Tree const& aNestedTree, ValueRef const& aNestedNode,
-                                                RelativePath const& aRelPath,UnoAny const& newValue)
+NodeChange GroupDefaulter::validateSetToDefaultState(NodeRef const& aNode)
 {
-    implValidateTree(aNestedTree);
-    implValidateNode(aNestedTree, aNestedNode);
-    UnoAny aNewValue = implValidateValue(aNestedTree, aNestedNode, newValue);
+    m_aHelper.validateNode(aNode);
 
-    // now build the specific change
-    std::auto_ptr<DeepValueReplaceImpl> pChange( new DeepValueReplaceImpl(aRelPath, aNewValue) );
+    NodeChange aResult;
 
-    pChange->setBaseContext(TreeImplHelper::impl(m_aTree), TreeImplHelper::offset(m_aNode));
-    pChange->setTarget(TreeImplHelper::impl(aNestedTree), TreeImplHelper::parent_offset(aNestedNode),aNestedTree.getName(aNestedNode));
+    // only works for set nodes - groups are left alone
+    if ( TreeImplHelper::isSet(aNode) )
+    {
+       aResult = SetDefaulter( m_aHelper.tree(), aNode, m_aDefaultProvider ).validateSetToDefaultState();
+    }
 
-    return NodeChange(pChange.release());
+    m_bHasDoneSet = aResult.maybeChange();
+
+    return aResult;
+}
+//-----------------------------------------------------------------------------
+
+NodeChanges GroupDefaulter::validateSetAllToDefault()
+{
+    NodeDefaulter aDefaulter(*this);
+
+    m_aHelper.tree().dispatchToChildren(m_aHelper.node(),aDefaulter);
+
+    return aDefaulter.result;
 }
 //-----------------------------------------------------------------------------
 

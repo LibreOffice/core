@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,8 @@ bool ValueMemberNode::isDefault() const
 
 bool ValueMemberNode::canGetDefaultValue() const
 {
-    if (this->getAttributes().bDefaultable)
+    // Nullable values have a default-default, namely NULL
+    if (this->getAttributes().bNullable)
         return true;
 
     return hasOriginalNodeDefault(m_pOriginal);
@@ -334,8 +335,10 @@ std::auto_ptr<ValueChange> ValueMemberNode::DeferredImpl::preCommitChange()
         eMode = ValueChange::wasDefault;
 
     // now make a ValueChange
-    std::auto_ptr<ValueChange>pChange( new ValueChange( getOriginalNodeName(&m_rOriginal), this->getNewValue(),
-                                                        getOriginalNodeAttributes(&m_rOriginal), eMode,
+    std::auto_ptr<ValueChange>pChange( new ValueChange( getOriginalNodeName(&m_rOriginal),
+                                                        getOriginalNodeAttributes(&m_rOriginal),
+                                                        eMode,
+                                                        this->getNewValue(),
                                                         getOriginalNodeValue(&m_rOriginal)
                                                       ) );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-16 08:15:45 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,37 @@
 #ifndef CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 #define CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
 
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGSET_HXX_
 #include "configset.hxx"
-
+#endif
+#ifndef CONFIGMGR_CONFIG_DEFAULTPROVIDER_HXX_
+#include "configdefaultprovider.hxx"
+#endif
+#ifndef CONFIGMGR_API_EVENTS_HXX_
 #include "confevents.hxx"
+#endif
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
+#endif
 
-#include <osl/mutex.hxx>
+#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -138,9 +158,11 @@ namespace configmgr
             typedef uno::Reference<com::sun::star::lang::XComponent> UnoComponent;
 
             typedef configuration::Tree Tree;
+            typedef configuration::DefaultProvider DefaultProvider;
 
             Tree                m_aTree;
             NotifierImplHolder  m_aNotifier;
+            DefaultProvider     m_aDefaultProvider;
             ComponentRef        m_xProvider;
             ApiProvider&        m_rProvider;
             ApiTreeImpl*        m_pParentTree;
@@ -148,7 +170,8 @@ namespace configmgr
 
         public:
             explicit ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl& rParentTree);
-            explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree = 0);
+            explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree);
+            explicit ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, Tree const& _aTree, DefaultProvider const & _aDefaultProvider);
             ~ApiTreeImpl();
 
         // initialization
@@ -167,6 +190,7 @@ namespace configmgr
         // api object handling
             Factory&                    getFactory()    const   { return m_rProvider.getFactory(); }
             Notifier                    getNotifier()   const;
+            DefaultProvider             getDefaultProvider()    const { return m_aDefaultProvider; }
 
         // needs external locking
             ApiTreeImpl const*          getRootTreeImpl() const;
@@ -202,6 +226,7 @@ namespace configmgr
         {
             typedef configuration::Tree Tree;
             typedef configuration::AbsolutePath AbsolutePath;
+            typedef configuration::DefaultProvider DefaultProvider;
             vos::ORef< OOptions > m_xOptions;
 
         public:
@@ -217,7 +242,7 @@ namespace configmgr
             bool disposeTree();
 
             /// toggle whether this object relays notifications from the base provider
-            bool                        enableNotification(bool bEnable);
+            bool enableNotification(bool bEnable);
         private:
             IConfigBroadcaster* implSetNotificationSource(IConfigBroadcaster* pNew);
             void implSetLocation();

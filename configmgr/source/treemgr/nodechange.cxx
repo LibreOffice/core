@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:31:32 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,15 +140,29 @@ bool NodeChange::isChange() const
 }
 //-----------------------------------------------------------------------------
 
-bool NodeChange::getChangeInfo(NodeChangeInformation& rInfo) const
+sal_uInt32 NodeChange::getChangeInfos(NodeChangesInformation& _rInfos) const
 {
-    rInfo.change.type = NodeChangeData::eNoChange;
+    sal_uInt32 nCount = 0;
     if (m_pImpl)
-        m_pImpl->fillChangeInfo(rInfo);
-    else
-        OSL_ASSERT(rInfo.isEmptyChange());
+    {
+        NodeChangeImpl::ChangeCount nChanges = m_pImpl->getChangeDataCount();
 
-    return !rInfo.isEmptyChange();
+        for (NodeChangeImpl::ChangeCount ix = 0; ix < nChanges; ++ix)
+        {
+            NodeChangeInformation aSingleInfo;
+            aSingleInfo.change.type = NodeChangeData::eNoChange;
+
+            m_pImpl->fillChangeInfo(aSingleInfo,ix);
+
+            if ( !aSingleInfo.isEmptyChange() )
+            {
+                _rInfos.push_back(aSingleInfo);
+                ++nCount;
+            }
+        }
+    }
+
+    return nCount;
 }
 //-----------------------------------------------------------------------------
 
@@ -156,23 +170,6 @@ bool NodeChange::getChangeLocation(NodeChangeLocation& rLoc) const
 {
     return m_pImpl && m_pImpl->fillChangeLocation(rLoc);
 }
-//-----------------------------------------------------------------------------
-/*
-bool NodeChange::getChangeInfo(ExtendedNodeChangeInfo& rInfo) const
-{
-    if (this->getChangeInfo( rInfo.change))
-    {
-        rInfo.baseTree = getBaseTree();
-        rInfo.baseNode = getBaseNode();
-        rInfo.accessor = m_pImpl->getPathToChangingNode();
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-*/
 //-----------------------------------------------------------------------------
 
 Tree NodeChange::getBaseTree() const
@@ -316,11 +313,18 @@ void NodeChanges::implApply() const
 //Tree getBaseTree() const;
 
 /** insert a change into this collection
-    <p>if there is an existing change for this element, they are combine using <method>NodeChange::combine</method>
 */
 void NodeChanges::add(NodeChange const& aChange)
 {
     m_aChanges.push_back(aChange);
+}
+//-----------------------------------------------------------------------------
+
+/** insert multiple changes into this collection
+*/
+void NodeChanges::add(NodeChanges const& aChanges)
+{
+    m_aChanges.insert(m_aChanges.end(),aChanges.begin(),aChanges.end());
 }
 //-----------------------------------------------------------------------------
 
@@ -330,21 +334,20 @@ void NodeChanges::reset(Node const& aNode)
 }
 */
 
-bool NodeChanges::getChangesInfo(NodeChangesInformation& rInfos) const
+sal_uInt32 NodeChanges::getChangesInfos(NodeChangesInformation& _rInfos) const
 {
-    if (isEmpty()) return false;
+    if (isEmpty()) return 0;
 
-    rInfos.clear();
-    rInfos.reserve(getCount());
+    _rInfos.reserve(_rInfos.size() + this->getCount());
 
+    sal_Int32 nResult = 0;
     for (Iterator it = begin(); it != end(); ++it)
     {
         NodeChangeInformation aInfo;
-        if ( it->getChangeInfo(aInfo) )
-            rInfos.push_back(aInfo);
+        nResult += it->getChangeInfos(_rInfos);
     }
 
-    return !rInfos.empty();
+    return nResult;
 }
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

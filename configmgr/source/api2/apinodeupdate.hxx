@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,10 @@ namespace configmgr
     namespace configuration
     {
         class GroupUpdater;
+        class GroupDefaulter;
         class TreeSetUpdater;
         class ValueSetUpdater;
+        class SetDefaulter;
         class SetElementFactory;
         class ElementTree;
 
@@ -91,8 +93,8 @@ namespace configmgr
         class NodeGroupAccess : public NodeGroupInfoAccess
         {
         public:
-            // currently only used for tagging group nodes with update capability
-            configuration::GroupUpdater getNodeUpdater();
+            configuration::GroupUpdater     getNodeUpdater();
+            configuration::GroupDefaulter   getNodeDefaulter();
 
             ISynchronizedData* getDataLock();
         };
@@ -101,6 +103,8 @@ namespace configmgr
         class NodeSetAccess : public NodeSetInfoAccess
         {
         public:
+            configuration::SetDefaulter     getNodeDefaulter();
+
             ISynchronizedData* getDataLock();
         };
 

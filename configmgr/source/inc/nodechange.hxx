@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:26:39 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ namespace configmgr
             bool maybeChange() const;
             /// checks, if this represents an actual change (PRE: must be tested)
             bool isChange() const;
-            /// retrieve information about the changed data
-            bool getChangeInfo(NodeChangeInformation& rInfo) const;
+            /// retrieve information about the changed data, appending to a sequence, returning the count
+            sal_uInt32 getChangeInfos(NodeChangesInformation& rInfo) const;
             /// retrieve information about what node is changed
             bool getChangeLocation(NodeChangeLocation& rLoc) const;
 
@@ -173,8 +173,8 @@ namespace configmgr
             /// retrieves the total count of changes in this collection
             ChangesList::size_type getCount() const { return m_aChanges.size(); }
 
-            /// retrieve information about the changed data
-            bool getChangesInfo(NodeChangesInformation& rInfos) const;
+            /// retrieve information about the changed data, appending to a sequence, returning the count
+            sal_uInt32 getChangesInfos(NodeChangesInformation& rInfos) const;
 
             /// test all changes
             NodeChanges& test()             { implTest(); return *this; }
@@ -188,9 +188,12 @@ namespace configmgr
             NodeChanges& compact();
 
             /** insert a change into this collection
-                <p>if there is an existing change for this element, they are combine using <method>NodeChange::combine</method>
             */
             void add(NodeChange const& aChange);
+
+            /** insert changes into this collection
+            */
+            void add(NodeChanges const& aChanges);
 
             /// returns an STL-style iterator to the first element of the collection
             Iterator begin() const      { return m_aChanges.begin(); }

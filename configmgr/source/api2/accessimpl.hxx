@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
 #include <com/sun/star/beans/XProperty.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYWITHSTATE_HPP_
+#include <com/sun/star/beans/XPropertyWithState.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
 #include <com/sun/star/util/XStringEscape.hpp>
 #endif
@@ -156,6 +159,16 @@ namespace configmgr
         // XProperty
         css::beans::Property implGetAsProperty(NodeAccess& rNode)
             throw(uno::RuntimeException);
+
+        // XPropertyWithState
+        css::beans::PropertyState implGetStateAsProperty(NodeAccess& rNode)
+            throw (uno::RuntimeException);
+
+        void implSetToDefaultAsProperty(NodeAccess& rNode)
+            throw (css::lang::WrappedTargetException, uno::RuntimeException);
+
+        uno::Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& rNode)
+            throw (css::lang::WrappedTargetException, uno::RuntimeException);
 
         // set-specific interfaces
 

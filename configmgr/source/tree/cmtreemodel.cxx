@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ bool isLocalizedValueSet(ISubtree const& _aSubtree)
 bool isLocalizedValueSet(SubtreeChange const& _aSubtree)
 {
     if ( !_aSubtree.isSetNodeChange())  return false;
-    if ( !_aSubtree.isLocalized())  return false;
+    if ( !_aSubtree.isLocalizedContainer()) return false;
     if ( !_aSubtree.getElementTemplateModule().equals(TEMPLATE_MODULE_LOCALIZED_VALUE) )    return false;
     return true;
 }
@@ -112,6 +112,7 @@ bool isLocalizedValueSet(SubtreeChange const& _aSubtree)
 void Change::swap(Change& aOther)
 {
     std::swap(m_aName, aOther.m_aName);
+    std::swap(m_bIsToDefault, aOther.m_bIsToDefault);
 }
 
 //==========================================================================
@@ -140,7 +141,7 @@ SubtreeChange::~SubtreeChange()
 }
 
 // -----------------------------------------------------------------------------
-SubtreeChange::SubtreeChange(const SubtreeChange& _aObj)
+SubtreeChange::SubtreeChange(const SubtreeChange& _aObj, DeepChildCopy)
         :Change(_aObj),
          m_sTemplateName(_aObj.m_sTemplateName),
          m_sTemplateModule(_aObj.m_sTemplateModule),
@@ -159,7 +160,7 @@ SubtreeChange::SubtreeChange(const SubtreeChange& _aObj)
 // -----------------------------------------------------------------------------
 Change* SubtreeChange::clone() const
 {
-    return new SubtreeChange(*this);
+    return new SubtreeChange(*this, DeepChildCopy());
 }
 //--------------------------------------------------------------------------
 void SubtreeChange::addChange(std::auto_ptr<Change> aChange)

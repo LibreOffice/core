@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: committer.cxx,v $
+ *  $RCSfile: configdefaultprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,105 +58,117 @@
  *
  *
  ************************************************************************/
-#include <stdio.h>
-#include "committer.hxx"
 
-#include "apitreeimplobj.hxx"
-#include "roottree.hxx"
-#include "cmtreemodel.hxx"
-#include "confproviderimpl2.hxx"
+#include "configdefaultprovider.hxx"
+
+#ifndef CONFIGMGR_DEFAULTPROVIDER_PROXY_HXX_
+#include "defaultproviderproxy.hxx"
+#endif
+
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
+#include "noderef.hxx"
+#endif
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
+#include "treeimpl.hxx"
+#endif
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    namespace configapi
+    namespace configuration
     {
 //-----------------------------------------------------------------------------
-        using configuration::Tree;
-        using configuration::CommitHelper;
+// class DefaultProvider
 //-----------------------------------------------------------------------------
-namespace
+
+// standard c/d-tors to make compiler barrier
+DefaultProvider DefaultProvider::createEmpty()
 {
-    //-------------------------------------------------------------------------
-    struct NotifyDisabler
-    {
-        ApiRootTreeImpl& m_rTree;
-        bool m_bOldState;
-
-        NotifyDisabler(ApiRootTreeImpl& rTree)
-        : m_rTree(rTree)
-        , m_bOldState(rTree .enableNotification(false) )
-        {
-        }
-
-        ~NotifyDisabler()
-        {
-            m_rTree.enableNotification(m_bOldState);
-        }
-    };
-    //-------------------------------------------------------------------------
+    return DefaultProvider(NULL);
 }
-
-//-----------------------------------------------------------------------------
-// class Committer
 //-----------------------------------------------------------------------------
 
-Committer::Committer(ApiRootTreeImpl& rTree)
-: m_rTree(rTree)
-{}
-//-----------------------------------------------------------------------------
-
-ITreeManager* Committer::getUpdateProvider()
+DefaultProvider DefaultProvider::create(Tree const& _aRootTree, vos::ORef<OOptions> const& _xOptions,
+                                          IDefaultProvider* _pDefaultProvider,
+                                          IDefaultableTreeManager* _pFetchProvider)
 {
-    return &m_rTree.getApiTree().getProvider().getProviderImpl();
-}
+    OSL_PRECOND( !_aRootTree.isEmpty(), "ERROR: Cannot create DefaultProvider for NULL tree");
 
-//-----------------------------------------------------------------------------
-void Committer::commit()
-{
-    ApiTreeImpl& rApiTree = m_rTree.getApiTree();
-    OClearableWriteSynchronized aProviderGuard(rApiTree.getProviderLock());
-    OClearableWriteSynchronized aLocalGuard(rApiTree.getDataLock());
+    rtl::Reference< DefaultProviderProxy > xNewProxy;
 
-    Tree aTree(rApiTree.getTree());
-    if (!aTree.hasChanges()) return;
-
-    OSL_ENSURE(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
-    TreeChangeList  aChangeList(m_rTree.getOptions(),
-                                aTree.getRootPath(),
-                                aTree.getAttributes(aTree.getRootNode()));
-
-    ITreeManager* pUpdateProvider = getUpdateProvider();
-    OSL_ASSERT(pUpdateProvider);
-
-    CommitHelper    aHelper(aTree);
-    if (aHelper.prepareCommit(aChangeList))
-    try
+    if (!_aRootTree.isEmpty())
     {
-        pUpdateProvider->updateTree(aChangeList);
-        aHelper.finishCommit(aChangeList);
+        TreeDepth nDepth = TreeImplHelper::impl(_aRootTree)->getAvailableDepth();
 
-        aLocalGuard.clear();        // done locally
-        aProviderGuard.downgrade(); // keep a read lock for notification
-
-        NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
-        pUpdateProvider->notifyUpdate(aChangeList);
+        xNewProxy = new DefaultProviderProxy(_pDefaultProvider, _pFetchProvider,
+                                             _aRootTree.getRootPath(), _xOptions, nDepth );
     }
-    catch(...)
-    {
-        // should be a special clean-up routine, but for now we just need a consistent state
-        try
-        {
-//          aHelper.finishCommit(aChangeList);
-            aHelper.failedCommit(aChangeList);
-        }
-        catch(configuration::Exception&)
-        {
-            OSL_ENSURE(false, "Cleanup really should not throw");
-        }
-        throw;
-    }
+
+    return DefaultProvider( xNewProxy );
 }
+//-----------------------------------------------------------------------------
+
+DefaultProvider::DefaultProvider(DefaultProvider const& _aOther)
+: m_aProxy(_aOther.m_aProxy)
+{
+}
+//-----------------------------------------------------------------------------
+
+DefaultProvider& DefaultProvider::operator=(DefaultProvider const& _aOther)
+{
+    m_aProxy = _aOther.m_aProxy;
+    return *this;
+}
+//-----------------------------------------------------------------------------
+
+DefaultProvider::~DefaultProvider()
+{
+}
+//-----------------------------------------------------------------------------
+
+DefaultProvider::DefaultProvider(rtl::Reference< DefaultProviderProxy > const& _xProviderProxy)
+: m_aProxy(_xProviderProxy)
+{
+}
+//-----------------------------------------------------------------------------
+
+/// tries to load default data into the specified tree
+bool DefaultProvider::fetchDefaultData(Tree const& _aTree) const SAL_THROW((uno::Exception))
+{
+    node::Attributes aAttributes = _aTree.getAttributes(_aTree.getRootNode());
+
+    if (aAttributes.bDefaulted) return true;
+
+    // in replaced/added parts, defaults are considered non-existing
+    if (aAttributes.bReplaced)  return false;
+
+    if (!m_aProxy.is()) return false;
+
+    return m_aProxy->fetchDefaultData(_aTree.getRootPath());
+}
+//-----------------------------------------------------------------------------
+
+/// tries to load a default instance of the specified node
+std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const SAL_THROW((uno::Exception))
+{
+    std::auto_ptr<ISubtree> aRet;
+
+    node::Attributes aAttributes = _aTree.getAttributes(_aNode);
+
+//    if (aAttributes.bDefaulted)
+//        clone the ISubtree (no interface for that) :-(
+
+    if (m_aProxy.is() && !aAttributes.bReplaced)
+    {
+        aRet = m_aProxy->getDefaultTree(_aTree.getAbsolutePath(_aNode));
+    }
+
+    return aRet;
+}
+
 //-----------------------------------------------------------------------------
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-06 15:25:20 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,12 @@ namespace configmgr
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-
+typedef SetInsertImpl  SetInsertTreeImpl;
+typedef SetRemoveImpl  SetRemoveTreeImpl;
+typedef SetReplaceImpl SetReplaceTreeImpl;
+typedef SetInsertImpl  SetInsertValueImpl;
+typedef SetRemoveImpl  SetRemoveValueImpl;
+typedef SetReplaceImpl SetReplaceValueImpl;
 //-----------------------------------------------------------------------------
 // class ElementRef
 //-----------------------------------------------------------------------------
@@ -456,6 +461,16 @@ ValueSetUpdater::ValueSetUpdater(Tree const& aParentTree, NodeRef const& aSetNod
 }
 //-----------------------------------------------------------------------------
 
+SetDefaulter::SetDefaulter(Tree const& aParentTree, NodeRef const& aSetNode,
+                            DefaultProvider const& aDefaultProvider)
+: m_aParentTree(aParentTree)
+, m_aSetNode(aSetNode)
+, m_aDefaultProvider(aDefaultProvider)
+{
+    implValidateSet();
+}
+//-----------------------------------------------------------------------------
+
 /// validates that a actual set and an updater's construction parameters match
 static void doValidateSet(Tree const& aParentTree, NodeRef const& aSetNode)
 {
@@ -515,6 +530,16 @@ void ValueSetUpdater::implValidateSet()
 }
 //-----------------------------------------------------------------------------
 
+/// validates that the actual set and the construction parameters match
+void SetDefaulter::implValidateSet()
+{
+    doValidateSet(m_aParentTree,m_aSetNode);
+
+    if (!m_aDefaultProvider.isValid())
+        throw Exception("INTERNAL ERROR: No default provider available for restoring set default state");
+}
+//-----------------------------------------------------------------------------
+
 static void doValidateElement(ElementRef const& aElement)
 {
     if (!aElement.isValid())
@@ -535,10 +560,12 @@ Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement)
 {
     doValidateElement(aElement);
 
-//  ElementTreeImpl* pElement = TreeImplHelper::elementImpl(aTree)->isTemplateInstance();
-//  OSL_ENSURE( pElement, "INTERNAL ERROR: Set Element has wrong type of tree");
-//  OSL_ENSURE( !pElement || pElement->isTemplateInstance(), "INTERNAL ERROR: Set Element without associated template found");
-//  OSL_ENSURE( !pElement || pElement->isInstanceOf(m_aTemplate), "INTERNAL ERROR: Set Update: existing element does not match template");
+#if 0 // maybe reeanable for DEBUG ?
+    ElementTreeImpl* pElement = TreeImplHelper::elementImpl(aTree)->isTemplateInstance();
+    OSL_ENSURE( pElement, "INTERNAL ERROR: Set Element has wrong type of tree");
+    OSL_ENSURE( !pElement || pElement->isTemplateInstance(), "INTERNAL ERROR: Set Element without associated template found");
+    OSL_ENSURE( !pElement || pElement->isInstanceOf(m_aTemplate), "INTERNAL ERROR: Set Update: existing element does not match template");
+#endif
 
     return aElement.getFullName();
 }
@@ -656,7 +683,7 @@ NodeChange TreeSetUpdater::validateInsertElement (Name const& aName, ElementTree
 
     implValidateTree(aNewElement);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetInsertTreeImpl(aNewElement->makeExtendedName(aName), aNewElement.get()) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetInsertTreeImpl(aNewElement->makeExtendedName(aName), aNewElement.get()) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -674,7 +701,7 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
 
     ElementTreeHolder aNewElement = makeValueElement(aName, aValidValue);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetInsertValueImpl(aNewElement->makeExtendedName(aName), aNewElement) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetInsertValueImpl(aNewElement->makeExtendedName(aName), aNewElement) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -688,7 +715,7 @@ NodeChange TreeSetUpdater::validateReplaceElement(ElementRef const& aElement, El
 
     implValidateTree(aNewElement);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetReplaceTreeImpl(aName, aNewElement.get()) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceTreeImpl(aName, aNewElement.get()) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -706,7 +733,7 @@ NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, U
 
     ElementTreeHolder aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetReplaceValueImpl(aName, aNewElement) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetReplaceValueImpl(aName, aNewElement) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -718,7 +745,7 @@ NodeChange TreeSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
     Path::Component aName = implValidateElement(aElement);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetRemoveTreeImpl(aName) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveTreeImpl(aName) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -731,13 +758,31 @@ NodeChange ValueSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
     Path::Component aName = implValidateElement(aElement);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetRemoveValueImpl(aName) );
+    std::auto_ptr<SetElementChangeImpl> pChange( new SetRemoveValueImpl(aName) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
     return NodeChange(pChange.release());
 }
 
+//-----------------------------------------------------------------------------
+
+NodeChange SetDefaulter::validateSetToDefaultState()
+{
+    std::auto_ptr< ISubtree > aDefault = m_aDefaultProvider.getDefaultTree(m_aParentTree,m_aSetNode);
+
+    // now build the specific change
+    std::auto_ptr<SetChangeImpl> pChange;
+
+    if (aDefault.get())
+    {
+        TemplateProvider aProvider = SetElementFactory::findTemplateProvider(m_aParentTree,m_aSetNode);
+
+        pChange.reset( new SetResetImpl(SetElementFactory(aProvider),aDefault) );
+        pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
+    }
+    return NodeChange(pChange.release());
+}
 //-----------------------------------------------------------------------------
 
 static inline

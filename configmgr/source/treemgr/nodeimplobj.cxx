@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,6 +663,12 @@ NodeImplHolder ReadOnlyTreeSetNodeImpl::doCloneIndirect(bool)
 }
 //-----------------------------------------------------------------------------
 
+void ReadOnlyTreeSetNodeImpl::doMarkAsDefault()
+{
+    failReadOnly();
+}
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 // class ReadOnlyValueSetNodeImpl
 //-----------------------------------------------------------------------------
@@ -726,6 +732,12 @@ NodeImplHolder ReadOnlyValueSetNodeImpl::doCloneIndirect(bool)
 }
 //-----------------------------------------------------------------------------
 
+void ReadOnlyValueSetNodeImpl::doMarkAsDefault()
+{
+    failReadOnly();
+}
+//-----------------------------------------------------------------------------
+
 
 //-----------------------------------------------------------------------------
 // class DirectTreeSetNodeImpl
@@ -748,12 +760,14 @@ void DirectTreeSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& a
 {
     TreeSetNodeImpl::doInsertElement(aName,aNewEntry);
     aNewEntry.tree()->makeIndirect(false);
+    implMarkAsDefault(false);
 }
 //-----------------------------------------------------------------------------
 
 void DirectTreeSetNodeImpl::doRemoveElement(Name const& aName)
 {
     TreeSetNodeImpl::doRemoveElement(aName);
+    implMarkAsDefault(false);
 }
 //-----------------------------------------------------------------------------
 
@@ -788,7 +802,7 @@ void DirectTreeSetNodeImpl::doCommitChanges()
 
 void DirectTreeSetNodeImpl::doMarkChanged()
 {
-    // ignore
+    implMarkAsDefault(false);
 }
 //-----------------------------------------------------------------------------
 
@@ -804,6 +818,12 @@ NodeImplHolder DirectTreeSetNodeImpl::doCloneIndirect(bool bIndirect)
         return new DeferredTreeSetNodeImpl(*this);
     else
         return this;
+}
+//-----------------------------------------------------------------------------
+
+void DirectTreeSetNodeImpl::doMarkAsDefault()
+{
+    implMarkAsDefault(true);
 }
 //-----------------------------------------------------------------------------
 
@@ -828,12 +848,14 @@ void DirectValueSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& 
 {
     ValueSetNodeImpl::doInsertElement(aName,aNewElement);
     aNewElement.tree()->makeIndirect(false);
+    implMarkAsDefault(false);
 }
 //-----------------------------------------------------------------------------
 
 void DirectValueSetNodeImpl::doRemoveElement(Name const& aName)
 {
     ValueSetNodeImpl::doRemoveElement(aName);
+    implMarkAsDefault(false);
 }
 //-----------------------------------------------------------------------------
 
@@ -869,6 +891,7 @@ void DirectValueSetNodeImpl::doCommitChanges()
 void DirectValueSetNodeImpl::doMarkChanged()
 {
     // Ignore
+    implMarkAsDefault(false);
 }
 //-----------------------------------------------------------------------------
 
@@ -887,6 +910,12 @@ NodeImplHolder DirectValueSetNodeImpl::doCloneIndirect(bool bIndirect)
 }
 //-----------------------------------------------------------------------------
 
+void DirectValueSetNodeImpl::doMarkAsDefault()
+{
+    implMarkAsDefault(true);
+}
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 // class DeferredTreeSetNodeImpl
 //-----------------------------------------------------------------------------
@@ -895,6 +924,7 @@ DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(ISubtree& rOriginal, Template* 
 : TreeSetNodeImpl(rOriginal,pTemplate)
 , m_aChangedData()
 , m_bChanged(false)
+, m_bDefault(false)
 {
 }
 //-----------------------------------------------------------------------------
@@ -903,6 +933,7 @@ DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(DirectTreeSetNodeImpl& rOrigina
 : TreeSetNodeImpl(rOriginal)
 , m_aChangedData()
 , m_bChanged(false)
+, m_bDefault(false)
 {
     implMakeIndirect(true);
 }
@@ -982,13 +1013,15 @@ SetNodeVisitor::Result DeferredTreeSetNodeImpl::doDispatchToElements(SetNodeVisi
 
 void DeferredTreeSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
 {
-    implInsertNewElement(aName, TreeSetNodeImpl::implMakeElement(aNewEntry.tree()));
+    implInsertNewElement(aName, TreeSetNodeImpl::implMakeElement(aNewEntry));
+    m_bDefault = false;
 }
 //-----------------------------------------------------------------------------
 
 void DeferredTreeSetNodeImpl::doRemoveElement(Name const& aName)
 {
     implRemoveOldElement(aName);
+    m_bDefault = false;
 }
 //-----------------------------------------------------------------------------
 
@@ -1153,6 +1186,7 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(Element
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
+            OSL_ENSURE( !m_bDefault || it->second.inDefault, "m_bDefault is inconsistent");
 
             std::auto_ptr<SubtreeChange> pNewChange( it->second->preCommitChanges(_rRemovedElements) );
             if (pNewChange.get() != 0)
@@ -1181,8 +1215,9 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(Element
                 aNewElement->releaseTo( aAddedTree );
 
                 OSL_ENSURE( aAddedTree.get(), "Could not take the new tree from the ElementTree");
+                OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
 
-                AddNode* pAddNode = new AddNode(aAddedTree, aName.toString() );
+                AddNode* pAddNode = new AddNode(aAddedTree, aName.toString(), aNewElement.inDefault );
 
                 std::auto_ptr<Change> pNewChange( pAddNode );
 
@@ -1195,7 +1230,9 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(Element
             {
                 if (pOriginal)
                 {
-                    std::auto_ptr<Change> pNewChange( new RemoveNode(aName.toString()) );
+                    OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
+
+                    std::auto_ptr<Change> pNewChange( new RemoveNode(aName.toString(),aNewElement.inDefault) );
 
                     pSetChange->addChange(pNewChange);
                 }
@@ -1204,7 +1241,7 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(Element
 
             // collect removed or replaced element
             if (pOriginal)
-                _rRemovedElements.push_back( *pOriginal );
+                _rRemovedElements.push_back( pOriginal->tree );
 
             ++it;
         }
@@ -1490,6 +1527,7 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
         }
     }
     m_bChanged = false;
+    m_bDefault = false;
 
     OSL_ENSURE(m_aChangedData.isEmpty(), "ERROR: Uncommitted changes left in set node");
 }
@@ -1602,6 +1640,7 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLo
 
 NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
 {
+    m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
         // We have another element replacing ours - what do we do ?
@@ -1640,6 +1679,7 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToAddedElement(Name const& aNam
 
 NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
 {
+    m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
         if (Element* pOriginal = getStoredElement(aName))
@@ -1667,6 +1707,90 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aN
 }
 //-----------------------------------------------------------------------------
 
+void DeferredTreeSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
+{
+    if (!m_bDefault)
+    {
+        implDifferenceToDefaultState(_rChangeToDefault,_rDefaultTree);
+
+        NativeIterator it = m_aChangedData.beginNative();
+        NativeIterator const stop = m_aChangedData.endNative();
+
+        while(it != stop)
+        {
+            Name    aName       = it->first;
+            Element aElement    = it->second;
+
+            Change* pChange = _rChangeToDefault.getChange( aName.toString() );
+            OSL_ENSURE(pChange == NULL || pChange->ISA(AddNode) || pChange->ISA(RemoveNode),
+                        "Unexpected change type found in difference to default tree");
+
+            if (pChange == NULL)
+            {
+                std::auto_ptr<INode> aDefaultTree = _rDefaultTree.removeChild(aName.toString());
+
+                OSL_ENSURE( aDefaultTree.get(), "Error: unused Default tree not after SetNodeImpl::implDifferenceToDefaultState");
+
+                AddNode* pAddIt = new AddNode(aDefaultTree, aName.toString(), true );
+
+                std::auto_ptr<Change> pNewChange( pAddIt );
+
+                if (aElement.isValid())
+                {
+                    OSL_ENSURE(!aElement.inDefault, "Default element replaced by default");
+                    pAddIt->setReplacing();
+                }
+
+                _rChangeToDefault.addChange(pNewChange);
+
+            }
+            else if ( pChange->ISA(AddNode) )
+            {
+                // adjust the AddNode - remove the original expected node
+                AddNode* pAddIt = static_cast<AddNode*>(pChange);
+                pAddIt->expectReplacedNode(NULL);
+
+                if (aElement.isValid())
+                {
+                    if (aElement.inDefault)
+                    {
+                        // change already done locally
+                        _rChangeToDefault.removeChange(aName.toString());
+                    }
+                    else // adjust here
+                        pAddIt->setReplacing();
+                }
+
+                else
+                    OSL_ENSURE(!pAddIt->isReplacing(),"Could not unmark the 'replacing' state of an AddNode");
+            }
+            else if ( pChange->ISA(RemoveNode) )
+            {
+                if (aElement.isValid())
+                {
+                    OSL_ENSURE(!aElement.inDefault, "Default element replaced by default");
+                    // adjust the RemoveNode - remove the original expected node
+                    RemoveNode* pRemoveIt = static_cast<RemoveNode*>(pChange);
+                    pRemoveIt->expectRemovedNode(NULL);
+                }
+                else
+                {
+                    // change already done locally
+                    _rChangeToDefault.removeChange(aName.toString());
+                }
+                // TODO: mark local removal as to-default
+            }
+        }
+    }
+}
+//-----------------------------------------------------------------------------
+
+void DeferredTreeSetNodeImpl::doMarkAsDefault()
+{
+    m_bDefault = true;
+}
+//-----------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------
 // class DeferredValueSetNodeImpl
 //-----------------------------------------------------------------------------
@@ -1675,6 +1799,7 @@ DeferredValueSetNodeImpl::DeferredValueSetNodeImpl(ISubtree& rOriginal, Template
 : ValueSetNodeImpl(rOriginal,pTemplate)
 , m_aChangedData()
 , m_bChanged(false)
+, m_bDefault(false)
 {
 }
 //-----------------------------------------------------------------------------
@@ -1683,6 +1808,7 @@ DeferredValueSetNodeImpl::DeferredValueSetNodeImpl(DirectValueSetNodeImpl& rOrig
 : ValueSetNodeImpl(rOriginal)
 , m_aChangedData()
 , m_bChanged(false)
+, m_bDefault(false)
 {
     implMakeIndirect(true);
 }
@@ -1762,13 +1888,15 @@ SetNodeVisitor::Result DeferredValueSetNodeImpl::doDispatchToElements(SetNodeVis
 
 void DeferredValueSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
 {
-    implInsertNewElement(aName, ValueSetNodeImpl::implMakeElement(aNewEntry.tree()));
+    implInsertNewElement(aName, ValueSetNodeImpl::implMakeElement(aNewEntry));
+    m_bDefault = false;
 }
 //-----------------------------------------------------------------------------
 
 void DeferredValueSetNodeImpl::doRemoveElement(Name const& aName)
 {
     implRemoveOldElement(aName);
+    m_bDefault = false;
 }
 //-----------------------------------------------------------------------------
 
@@ -1932,6 +2060,8 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges(Elemen
             std::auto_ptr<SubtreeChange> pNewChange( it->second->preCommitChanges(_rRemovedElements) );
 
             OSL_ENSURE(pNewChange.get() == NULL, "Unexpected change generated by value set element - ignoring that change");
+
+            OSL_ENSURE( !m_bDefault || it->second.inDefault, "m_bDefault is inconsistent");
         }
     }}
 
@@ -1953,8 +2083,9 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges(Elemen
                 aNewElement->releaseTo( aAddedTree );
 
                 OSL_ENSURE( aAddedTree.get(), "Could not take the new tree from the ElementTree");
+                OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
 
-                AddNode* pAddNode = new AddNode(aAddedTree, aName.toString() );
+                AddNode* pAddNode = new AddNode(aAddedTree, aName.toString(), aNewElement.inDefault );
 
                 std::auto_ptr<Change> pNewChange( pAddNode );
 
@@ -1967,7 +2098,9 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges(Elemen
             {
                 if (pOriginal)
                 {
-                    std::auto_ptr<Change> pNewChange( new RemoveNode(aName.toString()) );
+                    OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
+
+                    std::auto_ptr<Change> pNewChange( new RemoveNode(aName.toString(), aNewElement.inDefault) );
 
                     pSetChange->addChange(pNewChange);
                 }
@@ -1976,11 +2109,12 @@ std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges(Elemen
 
             // collect removed or replaced element
             if (pOriginal)
-                _rRemovedElements.push_back( *pOriginal );
+                _rRemovedElements.push_back( pOriginal->tree );
 
             ++it;
         }
     }
+
     return pSetChange;
 }
 //-----------------------------------------------------------------------------
@@ -2250,6 +2384,7 @@ void DeferredValueSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
         }
     }
     m_bChanged = false;
+    m_bDefault = false;
 
     OSL_ENSURE(m_aChangedData.isEmpty(), "ERROR: Uncommitted changes left in set node");
 }
@@ -2351,6 +2486,7 @@ void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rL
 
 NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
 {
+    m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
         // We have another element replacing ours - what do we do ?
@@ -2389,6 +2525,7 @@ NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToAddedElement(Name const& aNa
 
 NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
 {
+    m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
         if (Element* pOriginal = getStoredElement(aName))
@@ -2416,7 +2553,88 @@ NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToRemovedElement(Name const& a
 }
 //-----------------------------------------------------------------------------
 
+void DeferredValueSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
+{
+    if (!m_bDefault)
+    {
+        implDifferenceToDefaultState(_rChangeToDefault,_rDefaultTree);
 
+        NativeIterator it = m_aChangedData.beginNative();
+        NativeIterator const stop = m_aChangedData.endNative();
+
+        while(it != stop)
+        {
+            Name    aName       = it->first;
+            Element aElement    = it->second;
+
+            Change* pChange = _rChangeToDefault.getChange( aName.toString() );
+            OSL_ENSURE(pChange == NULL || pChange->ISA(AddNode) || pChange->ISA(RemoveNode),
+                        "Unexpected change type found in difference to default tree");
+
+            if (pChange == NULL)
+            {
+                std::auto_ptr<INode> aDefaultTree = _rDefaultTree.removeChild(aName.toString());
+
+                OSL_ENSURE( aDefaultTree.get(), "Error: unused Default tree not after SetNodeImpl::implDifferenceToDefaultState");
+
+                AddNode* pAddIt = new AddNode(aDefaultTree, aName.toString(), true );
+
+                std::auto_ptr<Change> pNewChange( pAddIt );
+
+                if (aElement.isValid())
+                {
+                    OSL_ENSURE(!aElement.inDefault, "Default element replaced by default");
+                    pAddIt->setReplacing();
+                }
+
+                _rChangeToDefault.addChange(pNewChange);
+
+            }
+            else if ( pChange->ISA(AddNode) )
+            {
+                // adjust the AddNode - remove the original expected node
+                AddNode* pAddIt = static_cast<AddNode*>(pChange);
+                pAddIt->expectReplacedNode(NULL);
+
+                if (aElement.isValid())
+                {
+                    if (aElement.inDefault)
+                    {
+                        // change already done locally
+                        _rChangeToDefault.removeChange(aName.toString());
+                    }
+                    else // adjust here
+                        pAddIt->setReplacing();
+                }
+
+                else
+                    OSL_ENSURE(!pAddIt->isReplacing(),"Could not unmark the 'replacing' state of an AddNode");
+            }
+            else if ( pChange->ISA(RemoveNode) )
+            {
+                if (aElement.isValid())
+                {
+                    OSL_ENSURE(!aElement.inDefault, "Default element replaced by default");
+                    // adjust the RemoveNode - remove the original expected node
+                    RemoveNode* pRemoveIt = static_cast<RemoveNode*>(pChange);
+                    pRemoveIt->expectRemovedNode(NULL);
+                }
+                else
+                {
+                    // change already done locally
+                    _rChangeToDefault.removeChange(aName.toString());
+                }
+                // TODO: mark local removal as to-default
+            }
+        }
+    }
+}
+//-----------------------------------------------------------------------------
+
+void DeferredValueSetNodeImpl::doMarkAsDefault()
+{
+    m_bDefault = true;
+}
 
 //-----------------------------------------------------------------------------
     }

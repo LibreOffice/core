@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,26 +246,52 @@ void SAL_CALL BasicPropertySet::firePropertiesChangeEvent( const uno::Sequence< 
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-// XPropertyState
+// XPropertyState / XMultiPropertyStates
 //////////////////////////////////////////////////////////////////////////////////
-#ifndef CONFIGMGR_NO_PROPERTYSTATE
+
+// getting property states
+//////////////////////////////////////////////////////////////////////////////////
+
 beans::PropertyState SAL_CALL BasicPropertySet::getPropertyState( const OUString& sPropertyName )
         throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     return implGetPropertyState( getNode(), sPropertyName);
 }
+//---------------------------------------------------------------------------------
 
 uno::Sequence< beans::PropertyState > SAL_CALL BasicPropertySet::getPropertyStates( const uno::Sequence< OUString >& aPropertyNames )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     return implGetPropertyStates( getNode(), aPropertyNames );
 }
+//---------------------------------------------------------------------------------
+
+// setting to default state
+//////////////////////////////////////////////////////////////////////////////////
 
 void SAL_CALL BasicPropertySet::setPropertyToDefault( const OUString& sPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     implSetPropertyToDefault( getGroupNode(), sPropertyName);
 }
+//---------------------------------------------------------------------------------
+
+void SAL_CALL BasicPropertySet::setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    implSetPropertiesToDefault( getGroupNode(), aPropertyNames);
+}
+//---------------------------------------------------------------------------------
+
+void SAL_CALL BasicPropertySet::setAllPropertiesToDefault(  )
+    throw (uno::RuntimeException)
+{
+    implSetAllPropertiesToDefault( getGroupNode() );
+}
+//---------------------------------------------------------------------------------
+
+// getting defaults
+//////////////////////////////////////////////////////////////////////////////////
 
 uno::Any SAL_CALL BasicPropertySet::getPropertyDefault( const OUString& sPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -273,7 +299,15 @@ uno::Any SAL_CALL BasicPropertySet::getPropertyDefault( const OUString& sPropert
 {
     return implGetPropertyDefault( getNode(), sPropertyName);
 }
-#endif
+//---------------------------------------------------------------------------------
+
+uno::Sequence< uno::Any > SAL_CALL BasicPropertySet::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
+        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    return implGetPropertyDefaults( getNode(), aPropertyNames);
+}
+//---------------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------------
 } // namespace configmgr
 

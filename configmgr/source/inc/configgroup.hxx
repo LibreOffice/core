@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:27:17 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,18 @@
 #ifndef CONFIGMGR_CONFIGGROUP_HXX_
 #define CONFIGMGR_CONFIGGROUP_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIG_DEFAULTPROVIDER_HXX_
+#include "configdefaultprovider.hxx"
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace script { class XTypeConverter; }
@@ -86,29 +95,59 @@ namespace configmgr
         class RelativePath;
 //-----------------------------------------------------------------------------
 
-        /// allows to update values of a simple type within a <type>NodeRef</type> that refers to a Group
-        class GroupUpdater
+        /// helper for updating a <type>NodeRef</type> that refers to a Group
+        class GroupUpdateHelper
         {
             Tree    m_aTree;
             NodeRef m_aNode;
-            UnoTypeConverter m_xTypeConverter;
+        public:
+            GroupUpdateHelper(Tree const& aParentTree, NodeRef const& aGroupNode);
+            ~GroupUpdateHelper() {}
+
+            void validateNode(ValueRef const& aNode) const;
+            void validateNode(NodeRef const& aNode) const;
+
+            Tree    const& tree() const { return m_aTree; }
+            NodeRef const& node() const { return m_aNode; }
+        private:
+            void implValidateTree(Tree const& aTree) const;
+            void implValidateNode(Tree const& aTree, NodeRef const& aNode) const;
+            void implValidateNode(Tree const& aTree, ValueRef const& aNode) const;
+        };
+//-----------------------------------------------------------------------------
+        /// allows to update values of a simple type within a <type>NodeRef</type> that refers to a Group
+        class GroupUpdater
+        {
+            GroupUpdateHelper   m_aHelper;
+            UnoTypeConverter    m_xTypeConverter;
         public:
             GroupUpdater(Tree const& aParentTree, NodeRef const& aGroupNode, UnoTypeConverter const& xConverter);
 
-            NodeChange validateSetDefault(AnyNodeRef const& aNode);
-
-            NodeChange validateSetDefault(ValueRef const& aValueNode);
-
             NodeChange validateSetValue(ValueRef const& aValueNode, UnoAny const& newValue );
 
-            NodeChange validateSetDeepValue(Tree const& aNestedTree, ValueRef const& aNestedValueNode,
-                                            RelativePath const& aRelPath,UnoAny const& newValue);
-
         private:
-            void implValidateTree(Tree const& aTree) const;
-            void implValidateGroup(Tree const& aTree, NodeRef const& aNode) const;
-            void implValidateNode(Tree const& aTree, ValueRef const& aNode) const;
             UnoAny implValidateValue(Tree const& aTree, ValueRef const& aNode, UnoAny const& aValue) const;
+        };
+//-----------------------------------------------------------------------------
+
+        /// allows to reset to default value or state members of a <type>NodeRef</type> that refers to a Group
+        class GroupDefaulter
+        {
+            GroupUpdateHelper   m_aHelper;
+            DefaultProvider     m_aDefaultProvider;
+            bool                m_bHasDoneSet;
+        public:
+            GroupDefaulter(Tree const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aProvider);
+
+            bool hasDoneSet() const { return m_bHasDoneSet; }
+
+            bool ensureDataAvailable();
+
+            NodeChange validateSetToDefaultValue(ValueRef const& aValueNode);
+
+            NodeChange validateSetToDefaultState(NodeRef const& aNode);
+
+            NodeChanges validateSetAllToDefault();
         };
 //-----------------------------------------------------------------------------
         bool convertCompatibleValue(UnoTypeConverter const& xConverter, uno::Any& rConverted,

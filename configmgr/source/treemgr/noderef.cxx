@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-06 15:25:20 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,43 @@ namespace
         m_rValueList.push_back(SubNodeID( m_aParentID, aValueName));
 
         return CONTINUE;
+    }
+//-----------------------------------------------------------------------------
+    struct FindNonDefaultElement : SetNodeVisitor
+    {
+        Result visit(SetEntry const& anEntry);
+
+        static bool hasNonDefaultElement(SetNodeImpl& _rSet);
+    };
+
+    SetNodeVisitor::Result FindNonDefaultElement::visit(SetEntry const& anEntry)
+    {
+        OSL_ASSERT(anEntry.isValid());
+
+        Result aResult = DONE; // if we find a NULL element we consider this
+
+        if (TreeImpl* pTree = anEntry.tree())
+        {
+            Tree aTree( pTree );
+
+            Attributes aElementAttributes = aTree.getAttributes(aTree.getRootNode());
+
+            // a set element is considered default iff it is not replaced/added
+            bool bDefault = !aElementAttributes.bReplaced;
+
+            aResult = bDefault ? CONTINUE : DONE;
+        }
+        else
+            OSL_ENSURE(false,"Unexpected NULL SetEntry considered as non-default.");
+
+        return aResult;
+    }
+
+    bool FindNonDefaultElement::hasNonDefaultElement(SetNodeImpl& _rSet)
+    {
+        FindNonDefaultElement aCheck;
+        Result aRes = _rSet.dispatchToElements(aCheck);
+        return aRes == DONE;
     }
 //-----------------------------------------------------------------------------
 }
@@ -1106,10 +1143,21 @@ bool Tree::isRootNode(NodeRef const& aNode) const
 }
 //-----------------------------------------------------------------------------
 
-void Tree::ensureDefaults() const
+bool Tree::hasNodeDefault(ValueRef const& aNode)        const // only works for value nodes
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    OSL_ENSURE(false,"Configuration: WARNING: Default handling not really implemented yet");
+    OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Value operation requires a valid ValueRef");
+    OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: ValueRef does not point to valid value");
+
+    bool bHasDefault = false;
+    if (aNode.isValid())
+    {
+        ValueMemberNode  aValueMember = TreeImplHelper::member_node(aNode);
+
+        bHasDefault = aValueMember.canGetDefaultValue();
+    }
+
+    return bHasDefault;
 }
 //-----------------------------------------------------------------------------
 
@@ -1119,9 +1167,49 @@ bool Tree::isNodeDefault(ValueRef const& aNode) const // only works for value no
     OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Value operation requires a valid ValueRef");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: ValueRef does not point to valid value");
 
-    if (!aNode.isValid()) return false;
+    if (!hasNodeDefault(aNode)) return false;
 
     return  TreeImplHelper::member_node(aNode).isDefault();
+}
+//-----------------------------------------------------------------------------
+
+bool Tree::hasNodeDefault(NodeRef const& aNode)     const
+{
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Value operation requires a valid ValueRef");
+    OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: ValueRef does not point to valid value");
+
+    // not a set - then it has no default
+    return aNode.isValid() && aNode.m_pImpl->isSetNode();
+}
+//-----------------------------------------------------------------------------
+
+bool Tree::isNodeDefault(NodeRef const& aNode) const
+{
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Node operation requires a valid Node");
+    OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: Node does not match Tree");
+
+    if (!hasNodeDefault(aNode)) return false;
+
+    // not a set - then it isn't default
+    OSL_ASSERT(aNode.m_pImpl->isSetNode());
+
+    // a set is defaults, if all its elements are default
+    return !FindNonDefaultElement::hasNonDefaultElement(aNode.m_pImpl->setImpl());
+}
+//-----------------------------------------------------------------------------
+
+bool Tree::hasNodeDefault(AnyNodeRef const& aNode) const
+{
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Node operation requires a valid Node");
+    OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: Node does not match Tree");
+
+    if (aNode.isNode())
+        return this->hasNodeDefault( aNode.toNode() );
+    else
+        return this->hasNodeDefault( aNode.toValue() );
 }
 //-----------------------------------------------------------------------------
 
@@ -1131,14 +1219,28 @@ bool Tree::isNodeDefault(AnyNodeRef const& aNode) const
     OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Node operation requires a valid Node");
     OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: Node does not match Tree");
 
-    // not a value - then it isn't default
-    if (aNode.isNode()) return false;
-
-    return this->isNodeDefault( aNode.toValue() );
+    if (aNode.isNode())
+        return this->isNodeDefault( aNode.toNode() );
+    else
+        return this->isNodeDefault( aNode.toValue() );
 }
 //-----------------------------------------------------------------------------
 
-UnoAny Tree::getNodeDefault(ValueRef const& aNode)      const // only works for value nodes
+bool Tree::areValueDefaultsAvailable(NodeRef const& aNode) const
+{
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Node operation requires a valid Node");
+    OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: Node does not match Tree");
+
+    OSL_PRECOND(  aNode.m_pImpl && aNode.m_pImpl->isGroupNode(),
+                "WARNING: Configuration: Group Node expected. Result is not meaningful");
+
+    return  aNode.m_pImpl && aNode.m_pImpl->isGroupNode() &&
+            aNode.m_pImpl->groupImpl().areValueDefaultsAvailable();
+}
+//-----------------------------------------------------------------------------
+
+UnoAny Tree::getNodeDefaultValue(ValueRef const& aNode)     const // only works for value nodes
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Value operation requires a valid ValueRef");
@@ -1153,20 +1255,6 @@ UnoAny Tree::getNodeDefault(ValueRef const& aNode)      const // only works for 
     }
 
     return UnoAny();
-}
-//-----------------------------------------------------------------------------
-
-UnoAny Tree::getNodeDefault(AnyNodeRef const& aNode)        const // only works for value nodes
-{
-    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Node operation requires a valid Node");
-    OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: Node does not match Tree");
-
-
-    // not a value - then there isn't a default
-    if (aNode.isNode()) return UnoAny();
-
-    return this->getNodeDefault( aNode.toValue() );
 }
 //-----------------------------------------------------------------------------
 
@@ -1768,27 +1856,22 @@ bool identifiesLocalValue(Tree const& aTree, NodeRef const& aNode, RelativePath 
 }
 //-----------------------------------------------------------------------------
 
-AnyNodeRef getLocalDescendant(Tree /*const*/& aTree, NodeRef& aNode, RelativePath& rPath)
+AnyNodeRef getLocalDescendant(Tree const& aTree, NodeRef const& aNode, RelativePath const& rPath)
 {
-    if ( findLocalInnerDescendant(aTree,aNode,rPath) )
+    NodeRef aNestedNode( aNode );
+    RelativePath aRemainingPath(rPath);
+
+    if ( findLocalInnerDescendant(aTree,aNestedNode,aRemainingPath) )
     {
-        OSL_ASSERT(aTree.isValidNode(aNode));
-        return AnyNodeRef(aNode);
+        OSL_ASSERT(aTree.isValidNode(aNestedNode));
+        return AnyNodeRef(aNestedNode);
     }
 
-    if ( identifiesLocalValue(aTree,aNode,rPath) )
+    if ( identifiesLocalValue(aTree,aNestedNode,aRemainingPath) )
     {
         ValueRef aValue = aTree.getChildValue(aNode,rPath.getLocalName().getName());
         OSL_ASSERT(aTree.isValidNode(aValue));
         return AnyNodeRef(aValue);
-    }
-
-    // compatibility hack
-    if (aTree.hasElement(aNode,rPath.getFirstName()))
-    {
-        OSL_ENSURE(false, "WARNING: Hierarchical Access to set elements is not specified for this interface. This usage is deprecated");
-        // compatibility access only
-        return getDeepDescendant(aTree,aNode,rPath);
     }
 
     return AnyNodeRef();

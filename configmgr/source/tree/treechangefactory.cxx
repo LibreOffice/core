@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangefactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-16 17:02:18 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,24 @@ OTreeChangeFactory& getDefaultTreeChangeFactory()
 //= ValueNodes ============================================================
 std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
                                     Name const& _aName,
-                                    uno::Any const& _aNewValue,
                                     configuration::Attributes _aAttrs,
                                     ValueChange::Mode _eMode,
+                                    uno::Any const& _aNewValue,
                                     uno::Any _aOldValue
                                 )
 {
-    return std::auto_ptr<ValueChange>(new ValueChange(_aName.toString(),_aNewValue,_aAttrs,_eMode,_aOldValue));
+    return std::auto_ptr<ValueChange>(new ValueChange(_aName,_aAttrs,_eMode,_aNewValue,_aOldValue));
+}
+
+//-----------------------------------------------
+std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
+                                    Name const& _aName,
+                                    configuration::Attributes _aAttrs,
+                                    uno::Any const& _aNewValue,
+                                    uno::Any _aOldValue
+                                )
+{
+    return std::auto_ptr<ValueChange>(new ValueChange(_aName,_aAttrs,_aNewValue,_aOldValue));
 }
 
 //-----------------------------------------------
@@ -138,8 +149,8 @@ std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
 
 //= SubtreeChanges ============================================================
 std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
-                                        Name const& _aName,
-                                        Name const& _aElementTypeName)
+                                    configuration::Name const& _aName,
+                                    configuration::Name const& _aElementTypeName)
 {
     std::auto_ptr<SubtreeChange> pResult;
 
@@ -160,9 +171,10 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createDummyChange(
 //-----------------------------------------------
 std::auto_ptr<SubtreeChange> OTreeChangeFactory::createGroupNodeChange(
                                 Name const& _aName,
-                                configuration::Attributes _aAttrs)
+                                configuration::Attributes _aAttrs,
+                                bool _bToDefault)
 {
-    return std::auto_ptr<SubtreeChange>(new SubtreeChange(_aName.toString(),_aAttrs));
+    return std::auto_ptr<SubtreeChange>(new SubtreeChange(_aName,_aAttrs,_bToDefault));
 }
 
 //-----------------------------------------------
@@ -170,28 +182,31 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createSetNodeChange(
                                 Name const& _aName,
                                 Name const& _aTemplateName,
                                 Name const& _aTemplateModule,
-                                configuration::Attributes _aAttrs)
+                                configuration::Attributes _aAttrs,
+                                bool _bToDefault)
 {
-    return std::auto_ptr<SubtreeChange>(new SubtreeChange(_aName.toString(),
-                                                        _aTemplateName.toString(),
-                                                        _aTemplateModule.toString(),
-                                                        _aAttrs));
+    return std::auto_ptr<SubtreeChange>(new SubtreeChange(_aName,
+                                                        _aTemplateName,
+                                                        _aTemplateModule,
+                                                        _aAttrs,_bToDefault));
 }
 //-----------------------------------------------
 
 //= Set Changes ============================================================
 std::auto_ptr<AddNode> OTreeChangeFactory::createAddNodeChange(
                                 std::auto_ptr<INode> _aNewNode,
-                                Name const& _aName)
+                                Name const& _aName,
+                                bool _bToDefault)
 {
-    return std::auto_ptr<AddNode>(new AddNode(_aNewNode,_aName.toString()));
+    return std::auto_ptr<AddNode>(new AddNode(_aNewNode,_aName,_bToDefault));
 }
 
 //-----------------------------------------------
 std::auto_ptr<RemoveNode> OTreeChangeFactory::createRemoveNodeChange(
-                                Name const& _aName)
+                                Name const& _aName,
+                                bool _bToDefault)
 {
-    return std::auto_ptr<RemoveNode>(new RemoveNode(_aName.toString()));
+    return std::auto_ptr<RemoveNode>(new RemoveNode(_aName,_bToDefault));
 }
 
 //-----------------------------------------------

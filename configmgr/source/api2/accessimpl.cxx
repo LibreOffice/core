@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-18 19:27:13 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVETOEXCEPTION_HPP_
+#include <com/sun/star/beans/PropertyVetoException.hpp>
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -549,7 +555,7 @@ beans::Property implGetAsProperty(NodeAccess& rNode)
         Attributes  aAttributes = aTree.getAttributes(aNode);
         uno::Type   aApiType    = getUnoInterfaceType();
 
-        return helperMakeProperty( aName,aAttributes,aApiType );
+        return helperMakeProperty( aName,aAttributes,aApiType, aTree.hasNodeDefault(aNode) );
     }
     catch (configuration::Exception& ex)
     {
@@ -762,6 +768,57 @@ Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalNa
     OSL_ASSERT(!"Unreachable code");
     return Any();
 }
+
+// XPropertyWithState
+//---------------------------------------------------------------------
+css::beans::PropertyState implGetStateAsProperty(NodeAccess& rNode)
+    throw (uno::RuntimeException)
+{
+    using namespace css::beans;
+
+    PropertyState aRet = PropertyState_AMBIGUOUS_VALUE;
+    try
+    {
+        GuardedNodeDataAccess impl( rNode );
+
+        if ( rNode.getTree().isNodeDefault( rNode.getNode() ) )
+            aRet = PropertyState_DEFAULT_VALUE;
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.unhandled();
+    }
+    return aRet;
+}
+
+void implSetToDefaultAsProperty(NodeAccess& rNode)
+    throw (css::lang::WrappedTargetException, uno::RuntimeException)
+{
+    GuardedNodeAccess impl( rNode );
+
+    OUString const sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot set Property object to default: Object or View is read-only"));
+    beans::PropertyVetoException aVeto(sMessage, rNode.getUnoInstance());
+
+    OUString const sWrapMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Operation failed: "));
+    throw lang::WrappedTargetException(sWrapMessage + sMessage, rNode.getUnoInstance(), uno::makeAny(aVeto));
+}
+
+Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& rNode)
+    throw (css::lang::WrappedTargetException, uno::RuntimeException)
+{
+    // not really supported
+
+    /* possible, but nor really useful:
+    GuardedNodeAccess impl( rNode );
+    if (implGetStateAsProperty(rNode) == PropertyState_DEFAULT_VALUE)
+        return rNode.getUnoInstance();
+    */
+
+    return Reference< uno::XInterface >();
+}
+
 
 // set-specific Interfaces
 //-----------------------------------------------------------------------------------

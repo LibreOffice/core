@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,23 +62,30 @@
 #ifndef CONFIGMGR_API_PROVIDERIMPL_HXX_
 #define CONFIGMGR_API_PROVIDERIMPL_HXX_
 
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
 #include "treeprovider.hxx"
+#endif
+#ifndef CONFIGMGR_DEFAULTPROVIDER_HXX
+#include "defaultprovider.hxx"
+#endif
+
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
+#include "options.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-
-#include <com/sun/star/lang/XComponent.hpp>
-
-#include "options.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace uno
@@ -107,6 +114,7 @@ namespace configmgr
 
     class ISubtree;
     class ITemplateProvider;
+    class IDefaultProvider;
     class IConfigSession;
     class TreeManager;
     class ConnectionSettings;
@@ -121,7 +129,7 @@ namespace configmgr
     }
 
     // -----------------------------------------------------------------------------
-    class OProviderImpl : public ITreeManager, public IInterface
+    class OProviderImpl : public ITreeManager, public IDefaultableTreeManager, public IInterface
     {
         friend class OProvider;
         OProvider*                          m_pProvider;        /// used for ref counting, uno representation
@@ -203,10 +211,16 @@ namespace configmgr
         virtual void notifyUpdate(TreeChangeList const& aChanges) throw (uno::RuntimeException);
         virtual void disposeData(const vos::ORef < OOptions >& _xOptions) throw();
         virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) throw();
+        /// IDefaultableTreeManager
+        virtual sal_Bool fetchDefaultData(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
+                                            sal_Int16 nMinLevels) throw (uno::Exception);
 
         // IInterface
         virtual void SAL_CALL acquire(  ) throw ();
         virtual void SAL_CALL release(  ) throw ();
+
+        // DefaultProvider access
+        IDefaultProvider&  getDefaultProvider() const;
 
         // TemplateProvider access
         ITemplateProvider&  getTemplateProvider() const;

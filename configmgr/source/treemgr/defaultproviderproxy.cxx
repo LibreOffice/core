@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: committer.cxx,v $
+ *  $RCSfile: defaultproviderproxy.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,105 +58,96 @@
  *
  *
  ************************************************************************/
-#include <stdio.h>
-#include "committer.hxx"
 
-#include "apitreeimplobj.hxx"
-#include "roottree.hxx"
-#include "cmtreemodel.hxx"
-#include "confproviderimpl2.hxx"
+#include "defaultproviderproxy.hxx"
+
+#ifndef CONFIGMGR_DEFAULTPROVIDER_HXX
+#include "defaultprovider.hxx"
+#endif
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
+#include "treeprovider.hxx"
+#endif
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
+#include "options.hxx"
+#endif
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    namespace configapi
+    namespace configuration
     {
 //-----------------------------------------------------------------------------
-        using configuration::Tree;
-        using configuration::CommitHelper;
-//-----------------------------------------------------------------------------
-namespace
+
+DefaultProviderProxy::DefaultProviderProxy(
+        IDefaultProvider *          _pDefaultTreeProvider,
+        IDefaultableTreeManager *   _pDefaultTreeManager,
+        AbsolutePath        const&  _aBaseLocation,
+        vos::ORef<OOptions> const&  _xOptions,
+        sal_Int16                   _nRequestDepth
+    )
+: m_aBaseLocation(_aBaseLocation)
+, m_xOptions(_xOptions)
+, m_nRequestDepth(_nRequestDepth)
+, m_pDefaultTreeProvider(_pDefaultTreeProvider)
+, m_pDefaultTreeManager(_pDefaultTreeManager)
 {
-    //-------------------------------------------------------------------------
-    struct NotifyDisabler
-    {
-        ApiRootTreeImpl& m_rTree;
-        bool m_bOldState;
-
-        NotifyDisabler(ApiRootTreeImpl& rTree)
-        : m_rTree(rTree)
-        , m_bOldState(rTree .enableNotification(false) )
-        {
-        }
-
-        ~NotifyDisabler()
-        {
-            m_rTree.enableNotification(m_bOldState);
-        }
-    };
-    //-------------------------------------------------------------------------
 }
-
-//-----------------------------------------------------------------------------
-// class Committer
 //-----------------------------------------------------------------------------
 
-Committer::Committer(ApiRootTreeImpl& rTree)
-: m_rTree(rTree)
-{}
-//-----------------------------------------------------------------------------
-
-ITreeManager* Committer::getUpdateProvider()
+DefaultProviderProxy::~DefaultProviderProxy()
 {
-    return &m_rTree.getApiTree().getProvider().getProviderImpl();
 }
-
 //-----------------------------------------------------------------------------
-void Committer::commit()
+
+sal_Int16 DefaultProviderProxy::implGetRemainingDepth(AbsolutePath const& _aLocation) const
 {
-    ApiTreeImpl& rApiTree = m_rTree.getApiTree();
-    OClearableWriteSynchronized aProviderGuard(rApiTree.getProviderLock());
-    OClearableWriteSynchronized aLocalGuard(rApiTree.getDataLock());
+    OSL_ENSURE( Path::hasPrefix(_aLocation,m_aBaseLocation),
+                "ERROR: DefaultProviderProxy called for out-of-scope location" );
 
-    Tree aTree(rApiTree.getTree());
-    if (!aTree.hasChanges()) return;
-
-    OSL_ENSURE(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
-    TreeChangeList  aChangeList(m_rTree.getOptions(),
-                                aTree.getRootPath(),
-                                aTree.getAttributes(aTree.getRootNode()));
-
-    ITreeManager* pUpdateProvider = getUpdateProvider();
-    OSL_ASSERT(pUpdateProvider);
-
-    CommitHelper    aHelper(aTree);
-    if (aHelper.prepareCommit(aChangeList))
-    try
+    sal_Int16 nDepth = m_nRequestDepth;
+    if (nDepth != ITreeProvider::ALL_LEVELS)
     {
-        pUpdateProvider->updateTree(aChangeList);
-        aHelper.finishCommit(aChangeList);
+        sal_Int16 nLocalDepth = sal_Int16(_aLocation.getDepth()) - sal_Int16(m_aBaseLocation.getDepth());
 
-        aLocalGuard.clear();        // done locally
-        aProviderGuard.downgrade(); // keep a read lock for notification
+        OSL_ENSURE( 0 <= nLocalDepth && nLocalDepth < nDepth,
+                    "WARNING: DefaultProviderProxy called for tree outside available depth" );
 
-        NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
-        pUpdateProvider->notifyUpdate(aChangeList);
+        if (nDepth >= nLocalDepth)
+            nDepth -= nLocalDepth;
+
+        else
+            nDepth = 0;
     }
-    catch(...)
-    {
-        // should be a special clean-up routine, but for now we just need a consistent state
-        try
-        {
-//          aHelper.finishCommit(aChangeList);
-            aHelper.failedCommit(aChangeList);
-        }
-        catch(configuration::Exception&)
-        {
-            OSL_ENSURE(false, "Cleanup really should not throw");
-        }
-        throw;
-    }
+    return nDepth;
 }
+//-----------------------------------------------------------------------------
+
+/// tries to load default data into the specified location (which must be within the request range owned)
+bool DefaultProviderProxy::fetchDefaultData(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception))
+{
+    sal_Int16 nDepth = implGetRemainingDepth(_aLocation);
+
+    return nDepth != 0 && m_pDefaultTreeManager != NULL &&
+            m_pDefaultTreeManager->fetchDefaultData(_aLocation, m_xOptions, nDepth);
+}
+//-----------------------------------------------------------------------------
+
+/// tries to load a default instance of the specified node (which must be within the request range owned)
+std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception))
+{
+    sal_Int16 nDepth = implGetRemainingDepth(_aLocation);
+
+    std::auto_ptr<ISubtree> aRet;
+
+    if (nDepth != 0 && m_pDefaultTreeProvider != NULL)
+        aRet = m_pDefaultTreeProvider->requestDefaultData(_aLocation, m_xOptions, nDepth);
+
+    return aRet;
+}
+
 //-----------------------------------------------------------------------------
     }
 }

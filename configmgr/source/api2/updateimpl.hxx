@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYWITHSTATE_HPP_
+#include <com/sun/star/beans/XPropertyWithState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
 
 namespace configmgr
 {
@@ -77,15 +83,17 @@ namespace configmgr
 
     /* implementations of the interfaces supported by a (parent) node
         within the configuration tree.
-        (read-only operation)
+        (updating operation)
     */
     namespace configapi
     {
+        class NodeSetAccess;
         class NodeTreeSetAccess;
         class NodeValueSetAccess;
         class NodeGroupAccess;
 
         // XNameReplace
+        //---------------------------------------------------------------------
         void implReplaceByName(NodeGroupAccess& rNode, const OUString& rName, const uno::Any& rElement )
             throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
@@ -96,6 +104,7 @@ namespace configmgr
             throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
         // XNameContainer
+        //---------------------------------------------------------------------
         void implInsertByName(NodeTreeSetAccess& rNode, const OUString& rName, const uno::Any& rElement)
             throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, uno::RuntimeException);
 
@@ -108,12 +117,20 @@ namespace configmgr
         void implRemoveByName(NodeValueSetAccess& rNode, const OUString& rName )
             throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException);
 
+        // XPropertyWithState - updating operation only
+        //---------------------------------------------------------------------
+        void implSetToDefaultAsProperty(NodeSetAccess& rNode)
+            throw (css::lang::WrappedTargetException, uno::RuntimeException);
+
         // XSingleServiceFactory
+        //---------------------------------------------------------------------
         uno::Reference< uno::XInterface > implCreateElement(NodeTreeSetAccess& rNode )
             throw(uno::Exception, uno::RuntimeException);
 
         uno::Reference< uno::XInterface > implCreateElement(NodeTreeSetAccess& rNode, const uno::Sequence< uno::Any >& aArguments )
             throw(uno::Exception, uno::RuntimeException);
+
+        //---------------------------------------------------------------------
     }
 
 }

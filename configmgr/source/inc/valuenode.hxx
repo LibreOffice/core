@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-25 16:02:53 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,23 +62,28 @@
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #define _CONFIGMGR_TREE_VALUENODE_HXX
 
-#include <memory>
+#ifndef CONFIGMGR_RTTIMACROS_HXX
 #include "rttimacros.hxx"
-#include <rtl/ustring.hxx>
+#endif
+#ifndef CFGMGR_ANYPAIR_HXX
+#include "anypair.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
 
-#ifndef CONFIGMGR_CONFIGPATH_HXX_
-#include "configpath.hxx"
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
-#ifndef _UNO_ANY2_H_
-#include <uno/any2.h>
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
 #endif
-
-#include <anypair.hxx>
 
 namespace configmgr
 {
@@ -90,8 +95,10 @@ namespace configmgr
     class ISubtree;
     class ValueNode;
 
+    using rtl::OUString;
+
     // helper (tag) class
-    namespace treeop { struct NoChildCopy {}; }
+    namespace treeop { struct NoChildCopy {}; struct DeepChildCopy {}; }
     //==========================================================================
     //= Visitors
     //==========================================================================
@@ -115,29 +122,35 @@ namespace configmgr
 
     class INode
     {
-        rtl::OUString                       m_aName;
-        configuration::Attributes           m_aAttributes;
+        OUString                        m_aName;
+        node::Attributes            m_aAttributes;
 
     protected:
         INode(){}
 
+        bool markAsDefault(bool _bDefault = true) { m_aAttributes.bDefaulted = _bDefault;}
     public:
-        explicit INode(configuration::Attributes);
-        INode(rtl::OUString const& aName, configuration::Attributes);
+        explicit
+        INode(node::Attributes);
+        INode(OUString const& aName, node::Attributes);
+
         virtual ~INode();
+
         virtual INode* clone() const = 0;
+    public:
 
-        const rtl::OUString& getName() const {return m_aName;}
-        configuration::Attributes getAttributes() const {return m_aAttributes;}
+        const OUString& getName() const { return m_aName; }
+        node::Attributes getAttributes() const { return m_aAttributes; }
 
-        bool isLocalized() const {return m_aAttributes.bLocalized;}
-        bool isReplacing() const {return m_aAttributes.bReplacing;}
+        bool isDefault()   const { return m_aAttributes.bDefaulted; }
+        bool isLocalized() const { return m_aAttributes.bLocalized; }
+        bool isReplaced()  const { return m_aAttributes.bReplaced; }
 
         void forceWritableToFinalized(); /// make non-writable nodes writable but finalized
 
-        void setName(const rtl::OUString& _rNewName) { m_aName = _rNewName; }
             // to be used with caution. If the node is referenced from somewhere else under it's old name,
             // you may have problems with this inconsistence
+        void setName(const OUString& _rNewName) { m_aName = _rNewName; }
 
         virtual ValueNode* asValueNode();
         virtual ValueNode const* asValueNode() const;
@@ -153,7 +166,7 @@ namespace configmgr
     };
 
 
-
+#if 0 // for future redesign
     //==========================================================================
     //= ISubtree
     //==========================================================================
@@ -161,8 +174,8 @@ namespace configmgr
 
     class ASubtree : public INode
     {
-        sal_Int16           m_nLevel;                   /// determines if everything is read
-        ::rtl::OUString     m_sId;
+        sal_Int16       m_nLevel;                   /// determines if everything is read
+        OUString        m_sId;
 
     public:
         virtual bool isSetNode() const = 0;
@@ -184,17 +197,12 @@ namespace configmgr
     //==========================================================================
     class SetTree : public ASubtree
     {
-        ::rtl::OUString     m_sTemplateName;            /// path of the template for child instantiation
-        ::rtl::OUString     m_sTemplateModule;          /// module of the template for child instantiation
+        OUString        m_sTemplateName;            /// path of the template for child instantiation
+        OUString        m_sTemplateModule;          /// module of the template for child instantiation
     public:
         virtual bool isSetNode() const; // always true!
     };
-
-
-
-
-
-
+#endif
 
 // -----------------------------------------------------------------------------
 // ----------------------------------- O L D -----------------------------------
@@ -205,12 +213,13 @@ namespace configmgr
     //==========================================================================
     class ISubtree : public INode
     {
-        sal_Int16           m_nLevel;                   /// determines if everything is read
-        ::rtl::OUString     m_sId;
-        ::rtl::OUString     m_sTemplateName;            /// path of the template for child instantiation
-        ::rtl::OUString     m_sTemplateModule;          /// module of the template for child instantiation
+        sal_Int16       m_nLevel;                   /// determines if everything is read
+        sal_Int16       m_nDefaultLevels;           /// determines if defaults are read
+        OUString        m_sId;
+        OUString        m_sTemplateName;            /// path of the template for child instantiation
+        OUString        m_sTemplateModule;          /// module of the template for child instantiation
 
-        virtual INode* doGetChild(rtl::OUString const& name) const = 0;
+        virtual INode* doGetChild(OUString const& name) const = 0;
 
     protected:
         ISubtree():m_nLevel(0){}
@@ -218,47 +227,52 @@ namespace configmgr
         ISubtree(ISubtree const& other)
         :INode(other)
         ,m_nLevel(other.m_nLevel)
+        ,m_nDefaultLevels(other.m_nDefaultLevels)
         ,m_sTemplateName(other.m_sTemplateName)
         ,m_sTemplateModule(other.m_sTemplateModule)
         ,m_sId() // do not copy ID while cloning !
         {}
 
     public:
-        // subtree does current not support attributes in the right way
-        // ISubtree(const configuration::Attributes& _rAttrs) : INode(_rAttrs), m_nLevel(0) {}
-
         // Ctor for group trees
-        ISubtree(const rtl::OUString& aName, const configuration::Attributes& _rAttrs)
+        ISubtree(const rtl::OUString& aName, const node::Attributes& _rAttrs)
             :INode(aName, _rAttrs)
             ,m_nLevel(0)
+            ,m_nDefaultLevels(0)
             {}
 
         // Ctor for set trees
         ISubtree(const rtl::OUString& aName,
                  const rtl::OUString& _rTemplateName,
                  const rtl::OUString& _rTemplateModule,
-                 const configuration::Attributes& _rAttrs)
+                 const node::Attributes& _rAttrs)
             :INode(aName, _rAttrs)
             ,m_nLevel(0)
+            ,m_nDefaultLevels(0)
             ,m_sTemplateName(_rTemplateName)
             ,m_sTemplateModule(_rTemplateModule){}
 
-        bool            hasId() const           { return m_sId.getLength() != 0; }
-        ::rtl::OUString getId() const           { return m_sId; }
-        void            setId(const ::rtl::OUString& _rId)  { m_sId = _rId; }
+        bool        hasId() const               { return m_sId.getLength() != 0; }
+        OUString    getId() const               { return m_sId; }
+        void        setId(const OUString& _rId) { m_sId = _rId; }
 
-        INode* getChild(rtl::OUString const& name)              { return doGetChild(name); }
-        INode const* getChild(rtl::OUString const& name) const  { return doGetChild(name); }
+        INode* getChild(OUString const& name)               { return doGetChild(name); }
+        INode const* getChild(OUString const& name) const   { return doGetChild(name); }
 
         ISubtree* asISubtree();
         ISubtree const* asISubtree() const;
 
-        sal_Int16 getLevel() const {return m_nLevel;}
-        void setLevel(sal_Int16);
+        using INode::markAsDefault;
 
-        bool                isSetNode() const { return m_sTemplateName.getLength() != 0; }
-        ::rtl::OUString     getElementTemplateName() const { return m_sTemplateName; }
-        ::rtl::OUString     getElementTemplateModule() const { return m_sTemplateModule; }
+        sal_Int16 getLevel()         const { return m_nLevel; }
+        sal_Int16 getDefaultsLevel() const { return m_nDefaultLevels; }
+
+        void setLevels(sal_Int16 _nLevel,sal_Int16 _nDefaultsLevel);
+
+        bool isSetNode() const { return m_sTemplateName.getLength() != 0; }
+
+        OUString const& getElementTemplateName()   const { return m_sTemplateName; }
+        OUString const& getElementTemplateModule() const { return m_sTemplateModule; }
 
         virtual INode* addChild(std::auto_ptr<INode> node) =0;                      // takes ownership
         virtual ::std::auto_ptr<INode> removeChild(rtl::OUString const& name) =0;   // releases ownership
@@ -286,41 +300,45 @@ namespace configmgr
         // uno::Any     m_aDefaultValue;
 
     public:
-        ValueNode(){}
+        //ValueNode(){}
 
-        explicit ValueNode(configuration::Attributes _aAttrs):INode(_aAttrs){}
+        //explicit ValueNode(node::Attributes _aAttrs):INode(_aAttrs){}
 
-        ValueNode(rtl::OUString const& aName, configuration::Attributes _aAttrs)
-            :INode(aName, _aAttrs)
+        /*
+        ValueNode(OUString const& aName, node::Attributes _aAttrs)
+        : INode(aName, _aAttrs)
+        , m_aValuePair()
         {}
-        ValueNode(rtl::OUString const& aName,uno::Type const& aType, configuration::Attributes _aAttrs)
-            :INode(aName, _aAttrs), m_aValuePair(aType)
-            {
-                check_init();
-            }
-        ValueNode(rtl::OUString const& aName,uno::Any const& anAny, configuration::Attributes _aAttrs)
-            :INode(aName, _aAttrs), m_aValuePair(anAny)
+        */
+        ValueNode(OUString const& aName,uno::Type const& aType, node::Attributes _aAttrs)
+        : INode(aName, _aAttrs)
+        , m_aValuePair(aType)
         {
-            init();
         }
-        ValueNode(rtl::OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault, configuration::Attributes _aAttrs)
-            :INode(aName, _aAttrs), m_aValuePair(anAny, aDefault)
+        ValueNode(OUString const& aName,uno::Any const& anAny, node::Attributes _aAttrs)
+        : INode(aName, _aAttrs)
+        , m_aValuePair(anAny, selectMember(_aAttrs.bDefaulted))
         {
-            init();
+        }
+        ValueNode(OUString const& aName,uno::Any const& anAny,uno::Any const& aDefault, node::Attributes _aAttrs)
+        : INode(aName, _aAttrs)
+        , m_aValuePair(anAny, aDefault)
+        {
         }
 
+        bool isValid()      const {return !m_aValuePair.isEmpty();}
 
-        bool isNull() const {return m_aValuePair.isNull();}
-        bool hasDefault() const {return getAttributes().bNullable || m_aValuePair.hasSecond();}
-        bool isDefault() const {return !m_aValuePair.hasFirst() && hasDefault();}
+        bool isNull()       const {return m_aValuePair.isNull();}
+        bool hasDefault()   const {return getAttributes().bNullable || m_aValuePair.hasSecond();}
 
-        uno::Type getValueType() const {return m_aValuePair.getValueType();}
-        uno::Any getValue() const {return isDefault() ? m_aValuePair.getSecond() : m_aValuePair.getFirst();}
-        uno::Any getDefault() const {return m_aValuePair.getSecond();}
+        uno::Type   getValueType()  const {return m_aValuePair.getValueType();}
+        uno::Any    getValue()      const {return m_aValuePair.getValue( selectMember(this->isDefault()) );}
+        uno::Any    getDefault()    const {return m_aValuePair.getSecond();}
 
         void setValue(uno::Any const& _aValue);
-        void changeDefault(uno::Any const& _aValue);
         void setDefault();
+
+        void changeDefault(uno::Any const& _aValue);
 
         virtual INode* clone() const;
 
@@ -333,8 +351,10 @@ namespace configmgr
         // "rtti"
         RTTI(ValueNode, INode);
     private:
-        void init();
-        void check_init();
+        static AnyPair::SelectMember selectValue() { return AnyPair::SELECT_FIRST; }
+        static AnyPair::SelectMember selectDeflt() { return AnyPair::SELECT_SECOND; }
+        static AnyPair::SelectMember selectMember(bool bDeflt)
+        { return bDeflt ? AnyPair::SELECT_SECOND : AnyPair::SELECT_FIRST; }
     };
     //==========================================================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:21:10 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,12 @@ configuration::GroupUpdater NodeGroupAccess::getNodeUpdater()
 }
 //-----------------------------------------------------------------------------
 
+configuration::GroupDefaulter NodeGroupAccess::getNodeDefaulter()
+{
+    return configuration::GroupDefaulter(getTree(),getNode(), getApiTree().getDefaultProvider());
+}
+//-----------------------------------------------------------------------------
+
 ISynchronizedData* NodeGroupAccess::getDataLock()
 {
     return getApiTree().getDataLock();
@@ -99,6 +105,12 @@ configuration::SetElementFactory NodeTreeSetAccess::getElementFactory()
     using namespace configuration;
     TemplateProvider aProvider = SetElementFactory::findTemplateProvider(getTree(),getNode());
     return SetElementFactory(aProvider);
+}
+//-----------------------------------------------------------------------------
+
+configuration::SetDefaulter NodeSetAccess::getNodeDefaulter()
+{
+    return configuration::SetDefaulter(getTree(),getNode(), getApiTree().getDefaultProvider());
 }
 //-----------------------------------------------------------------------------
 

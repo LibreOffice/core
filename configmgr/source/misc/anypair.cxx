@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anypair.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-20 14:32:03 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,25 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     sal_Bool anypair_assign_second(cfgmgr_AnyPair* _pAnyPair, uno_Any const * _pUnoAny)
     {
+        CFG_PRECOND( _pAnyPair     != NULL );
+        CFG_PRECOND( _pUnoAny != NULL );
+
         return anypair_any_assign_Data(&_pAnyPair->desc, &_pAnyPair->second, cfgmgr_SELECT_SECOND, _pUnoAny);
+    }
+
+// -----------------------------------------------------------------------------
+    sal_Bool anypair_assign_both(cfgmgr_AnyPair* _pAnyPair, uno_Any const * _pUnoAny)
+    {
+        CFG_PRECOND( _pAnyPair     != NULL );
+        CFG_PRECOND( _pUnoAny != NULL );
+
+        sal_Bool bOK = anypair_assign_first(_pAnyPair,_pUnoAny);
+        if (bOK)
+        {
+            // same type - second assignment must succeed as well
+            OSL_VERIFY( anypair_assign_second(_pAnyPair,_pUnoAny) );
+        }
+        return bOK;
     }
 
 // -----------------------------------------------------------------------------
@@ -626,9 +644,17 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    AnyPair::AnyPair(uno::Any const& _aAny)          // one any
+    AnyPair::AnyPair(uno::Any const& _aAny, SelectMember _select)
     {
-        anypair_construct_first(&m_aAnyPair,&_aAny);
+        switch (_select)
+        {
+        case SELECT_FIRST:  anypair_construct_first(&m_aAnyPair,&_aAny);  break;
+        case SELECT_SECOND: anypair_construct_second(&m_aAnyPair,&_aAny); break;
+        case SELECT_BOTH:   OSL_VERIFY( anypair_construct(&m_aAnyPair,&_aAny,&_aAny) ); break;
+
+        default:            OSL_ENSURE(false, "AnyPair: Unknown member selector");
+                            anypair_construct_default(&m_aAnyPair); break;
+        }
     }
 
 // -----------------------------------------------------------------------------
@@ -636,7 +662,7 @@ namespace configmgr
     {
         if (!anypair_construct(&m_aAnyPair,&_aAny, &_aAny2))
         {
-            // throw lang::IllegalArgumentException(rtl::OUString::createFromAscii("Types are not equal."));
+            lang::IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnyPair: Type mismatch in constructor.")),NULL,-1);
         }
     }
 
@@ -676,6 +702,40 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
+    sal_Bool AnyPair::setValue(uno::Any const& _aAny, SelectMember _select)
+    {
+        switch (_select)
+        {
+        case SELECT_FIRST:  return anypair_assign_first (&m_aAnyPair,&_aAny);
+        case SELECT_SECOND: return anypair_assign_second(&m_aAnyPair,&_aAny);
+        case SELECT_BOTH:   return anypair_assign_both  (&m_aAnyPair,&_aAny);
+
+        default:            OSL_ENSURE(false, "AnyPair: Unknown member selector");
+                            return false;
+        }
+    }
+
+// -----------------------------------------------------------------------------
+    void AnyPair::clear(SelectMember _select)
+    {
+        switch (_select)
+        {
+        case SELECT_FIRST:  anypair_clear_first(&m_aAnyPair);  break;
+        case SELECT_SECOND: anypair_clear_second(&m_aAnyPair); break;
+        case SELECT_BOTH:   anypair_clear_values(&m_aAnyPair); break;
+
+        default:            OSL_ENSURE(false, "AnyPair: Unknown member selector");
+                            break;
+        }
+    }
+
+// -----------------------------------------------------------------------------
+    uno::Type AnyPair::getValueType() const
+    {
+        return uno::Type(m_aAnyPair.desc.pType);
+    }
+
+// -----------------------------------------------------------------------------
     uno::Any AnyPair::getFirst() const
     {
         return anypair_Data_toAny( &m_aAnyPair.desc, &m_aAnyPair.first, cfgmgr_SELECT_FIRST );
@@ -687,9 +747,17 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    uno::Type AnyPair::getValueType() const
+    uno::Any AnyPair::getValue(SelectMember _select) const
     {
-        return uno::Type(m_aAnyPair.desc.pType);
+        switch (_select)
+        {
+        case SELECT_FIRST:  return getFirst();
+        case SELECT_SECOND: return getSecond();
+
+        default:            OSL_ENSURE(false, "AnyPair: Unknown member selector");
+        case SELECT_BOTH:   OSL_ENSURE(false, "AnyPair: Cannot get value - Invalid selector");
+                            return uno::Any();
+        }
     }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setupdate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,24 @@
  ************************************************************************/
 
 #include "setupdate.hxx"
-#include "updateimpl.hxx"
-#include "apinodeaccess.hxx"
 
+#ifndef CONFIGMGR_API_BASEACCESSIMPL_HXX_
+#include "accessimpl.hxx"
+#endif
+#ifndef CONFIGMGR_API_BASEUPDATEIMPL_HXX_
+#include "updateimpl.hxx"
+#endif
+
+#ifndef CONFIGMGR_API_NODEUPDATE_HXX_
+#include "apinodeupdate.hxx"
+#endif
+
+#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
 
 namespace configmgr
 {
@@ -214,6 +227,44 @@ void SAL_CALL BasicValueSet::removeByName( const OUString& rName )
         throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, uno::RuntimeException)
 {
     implRemoveByName( getSetNode(), rName );
+}
+
+// XPropertyWithState
+//////////////////////////////////////////////////////////////////////////////////
+
+css::beans::PropertyState SAL_CALL BasicSet::getStateAsProperty() throw (uno::RuntimeException)
+{
+    return implGetStateAsProperty( getSetNode() );
+}
+//..............................................................................
+
+css::beans::PropertyState SAL_CALL BasicValueSet::getStateAsProperty() throw (uno::RuntimeException)
+{
+    return implGetStateAsProperty( getSetNode() );
+}
+//-----------------------------------------------------------------------------------
+
+void SAL_CALL BasicSet::setToDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
+{
+    implSetToDefaultAsProperty( getSetNode() );
+}
+//..............................................................................
+
+void SAL_CALL BasicValueSet::setToDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
+{
+    implSetToDefaultAsProperty( getSetNode() );
+}
+//-----------------------------------------------------------------------------------
+
+uno::Reference< uno::XInterface > SAL_CALL BasicSet::getDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
+{
+    return implGetDefaultAsProperty( getSetNode() );
+}
+//..............................................................................
+
+uno::Reference< uno::XInterface > SAL_CALL BasicValueSet::getDefaultAsProperty() throw (css::lang::WrappedTargetException, uno::RuntimeException)
+{
+    return implGetDefaultAsProperty( getSetNode() );
 }
 
 // XSingleServiceFactory (not for ValueSet)

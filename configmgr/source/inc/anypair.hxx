@@ -75,49 +75,60 @@ namespace configmgr
         cfgmgr_AnyPair m_aAnyPair;
 
     public:
+        enum SelectMember
+        {
+           SELECT_FIRST   = cfgmgr_SELECT_FIRST,
+           SELECT_SECOND  = cfgmgr_SELECT_SECOND,
+           SELECT_BOTH    = cfgmgr_SELECT_BOTH
+        };
+    public:
         // ctors
         AnyPair();
         explicit AnyPair(uno::Type const& _aType); // one Type, any's are null
-        explicit AnyPair(uno::Any const& _aAny); // one any - to first
+        explicit AnyPair(uno::Any const& _aAny, SelectMember _select); // one selected any
 
         explicit AnyPair(uno::Any const& _aAny, uno::Any const& _aAny2) SAL_THROW((lang::IllegalArgumentException));
 
-        // copy-ctor
+        // copy
         AnyPair(AnyPair const& _aAny);
-
-        // assign operator
         AnyPair& operator=(AnyPair const& _aAny);
 
         // d-tor
         ~AnyPair();
 
-        // set-types
+        // elementwise setters
         sal_Bool setFirst(uno::Any const& _aAny);
         sal_Bool setSecond(uno::Any const& _aAny);
+        sal_Bool setValue(uno::Any const& _aAny, SelectMember _select);
+
+        // clear data (but not type)
+        void clear(SelectMember _select = SELECT_BOTH);
 
 
-        uno::Any getFirst() const;
-        uno::Any getSecond() const;
-        uno::Type getValueType() const;
+        // checking state and availablity of values
+        bool isEmpty()   const { return cfgmgr_AnyPair_isEmpty(&m_aAnyPair.desc); }
 
+        bool isNull  ()  const { return ! hasValue(); }
+
+        bool hasValue(SelectMember _select = SELECT_BOTH)  const
+        {
+            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, _select);
+        }
         bool hasFirst()  const
         {
-            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, cfgmgr_SELECT_FIRST);
+            return hasValue(SELECT_FIRST);
         }
         bool hasSecond() const
         {
-            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, cfgmgr_SELECT_SECOND);
+            return hasValue(SELECT_SECOND);
         }
-        bool hasValue() const
-        {
-            return !cfgmgr_AnyPair_isNull(&m_aAnyPair.desc, cfgmgr_SELECT_BOTH);
-        }
-        bool isNull  ()  const { return ! hasValue(); }
 
-        bool isEmpty()   const { return cfgmgr_AnyPair_isEmpty(&m_aAnyPair.desc); }
+        // elementwise getters
+        uno::Type getValueType() const;
+        uno::Any getFirst() const;
+        uno::Any getSecond() const;
+        uno::Any getValue(SelectMember _select) const;
 
-        void check_init() {};
-        void init() {};
     };
 
 

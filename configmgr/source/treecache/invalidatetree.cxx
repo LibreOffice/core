@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,14 +198,14 @@ namespace configmgr
                             // Subtree not in Cache, add in TreeChangeList
                             // SubtreeChange* pChange = new SubtreeChange(_rSubtree);
                             INode *pSubtree = _rSubtree.clone();
-                            auto_ptr<Change> pAdd(new AddNode(auto_ptr<INode>(pSubtree), aNodeName));
+                            auto_ptr<Change> pAdd(new AddNode(auto_ptr<INode>(pSubtree), aNodeName, _rSubtree.isDefault()));
 
                             m_rChangeList.addChange(::std::auto_ptr<Change>(pAdd));
                         }
                         else
                         {
                             // Remove Node
-                            auto_ptr<Change> pRemove(new RemoveNode(aNodeName));
+                            auto_ptr<Change> pRemove(new RemoveNode(aNodeName,false));
                             m_rChangeList.addChange(::std::auto_ptr<Change>(pRemove));
                         }
                     }
@@ -222,7 +222,7 @@ auto_ptr<TreeChangeList> createDiffs(ISubtree* _pCachedTree, ISubtree * _pLoaded
 
     // Create a TreeChangeList with the right name, parentname and ConfigurationProperties
     std::auto_ptr<TreeChangeList> aNewChangeList(
-                                        new TreeChangeList(_rOptions, _aAbsoluteSubtreePath,Chg()) );
+                                        new TreeChangeList(_rOptions, _aAbsoluteSubtreePath) );
 
     // create the differences
     OBuildChangeTree aNewChangeTree(aNewChangeList.get()->root, _pCachedTree, 1);
@@ -350,7 +350,7 @@ void TreeManager::refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath, cons
         TreeInfo* pTreeInfo = this->requestTreeInfo(_aOptions, false);
         if (pTreeInfo != NULL)
         {
-            ISubtree* pCachedTree = pTreeInfo->acquireSubtreeWithDepth(_aAbsoluteSubtreePath, 0);
+            ISubtree* pCachedTree = pTreeInfo->acquireSubtreeWithDepth(_aAbsoluteSubtreePath, 0, 0);
             if (pCachedTree != NULL)
             {
                 auto_ptr<TreeChangeList> aTreeChanges( createDiffs(pCachedTree, aLoadedSubtree.get(), _aOptions, _aAbsoluteSubtreePath) );

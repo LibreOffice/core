@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-18 19:11:44 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,9 @@ namespace configmgr
         */
         bool mkdirs(rtl::OUString const& _aDirectory);
 
-        /** replaces a file specified by _aFromURL with a file specified by _aToURL.
+        /** replaces a file specified by _aToURL with a file specified by _aFromURL.
         */
-        void replaceFile(const rtl::OUString& _aFromURL, const rtl::OUString &_aToURL) throw (io::IOException);
+        void replaceFile(const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) throw (io::IOException);
 
         /** removes a file specified by _aURL. Ignores the case of a non-existing file.
         */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-18 19:11:44 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ namespace configmgr
         // start function, with the Change we want to do.
         // WARNING this could be a big tree, because a change can contain subtreechanges!
         void mergeChanges(TreeChangeList const&_rList);
-
     private:
         void initRoot(TreeChangeList const& _aChanges);
 
@@ -135,6 +134,32 @@ namespace configmgr
         virtual void handle(SubtreeChange const& _rSubtree);
 
     };
+
+    // -----------------------------------------------------------------------------
+    class OStripDefaults : private ChangeTreeModification
+    {
+        SubtreeChange& m_rParent;
+    public:
+        OStripDefaults(SubtreeChange& _rSubtree) : m_rParent(_rSubtree) {}
+
+        bool isEmpty() const { return m_rParent.size() == 0; }
+
+        OStripDefaults& strip();
+
+        static bool strip(SubtreeChange& _rSubtree)
+        {
+            return OStripDefaults(_rSubtree).strip().isEmpty();
+        }
+    private:
+        void stripOne(Change& _rChange);
+
+        virtual void handle(ValueChange& _rValueNode);
+        virtual void handle(AddNode& _rAddNode);
+        virtual void handle(RemoveNode& _rRemoveNode);
+        virtual void handle(SubtreeChange& _rSubtree);
+    };
+
+    // -----------------------------------------------------------------------------
 } // namespace configmgr
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-13 09:14:56 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,7 @@ namespace configmgr
                             break;
 
 
+                        case NodeChangeData::eResetSetDefault:
                         case NodeChangeData::eRenameElementTree:
                         case NodeChangeData::eNoChange:
                             OSL_ASSERT(false);
@@ -966,7 +967,7 @@ namespace configmgr
         NotifierData aRootData(rNotifierImpl, pTreeImpl);
 
         NodeChangesInformation aChangeInfos;
-        if (aChanges.getChangesInfo(aChangeInfos))
+        if (aChanges.getChangesInfos(aChangeInfos))
         {
             return create(rNotifierImpl,pTreeImpl,aChangeInfos,bLocal);
         }
@@ -1052,42 +1053,44 @@ namespace configmgr
     }
 // ---------------------------------------------------------------------------------------------------
 
-    bool Broadcaster::Impl::translateChanges(NodeChangesInformation& aInfos, NodeChanges const& aChanges, bool bSingleBase) const
+    bool Broadcaster::Impl::translateChanges(NodeChangesInformation& _rInfos, NodeChanges const& aChanges, bool bSingleBase) const
     {
-        NodeChangesInformation aNewInfos;
-        aNewInfos.reserve( aChanges.getCount() );
-
         Tree aBaseTree = m_aNotifierData.second->getTree();
         Factory& rFactory = m_aNotifierData.second->getFactory();
 
-        for (NodeChanges::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
-        {
-            NodeChangeInformation aInfo;
-            if (!it->getChangeInfo(aInfo))
-            {
-                OSL_TRACE("Cannot get info for change - skipping for notification");
-                continue;
-            }
+        NodeChangesInformation aRawInfos;
 
-            // enabling the Single base optimization requires a base node (not only a base tree) for correct accessors
-            //if (!bSingleBase || !configuration::equalTree(aBaseTree,aNewChange.info.baseTree))
+        sal_uInt32 nChanges = aChanges.getChangesInfos(aRawInfos);
+
+        OSL_ENSURE(nChanges, "Cannot get info(s) for change - skipping for notification");
+        OSL_ENSURE(nChanges == aRawInfos.size(), "Incorrect change count returned");
+
+        NodeChangesInformation aNewInfos;
+        aNewInfos.reserve(nChanges);
+
+        // enabling the Single base optimization requires a base node (not only a base tree) for correct accessors
+        //if (!bSingleBase || !configuration::equalTree(aBaseTree,aNewChange.info.baseTree))
+
+        for (NodeChangesInformation::Iterator pos = aRawInfos.begin(); pos != aRawInfos.end(); ++pos)
+        {
+            NodeChangeInformation aInfo = *pos;
+
             if( !configapi::rebaseChange(aInfo.location,aBaseTree) )
             {
                 OSL_TRACE("Change is not within expected tree - skipping for notification");
                 continue;
             }
 
-            if( !configapi::resolveToUno(aInfo.change,rFactory) )
-            {
-                // it actually is expected that elements may not be found
-                // OSL_TRACE("Cannot find affected elements of Change");
-            }
+            OSL_ENSURE(!pos->isEmptyChange(), "Empty Change Found for Notification");
+            // it actually is expected that elements may not be found - thus ignoring result
+            configapi::resolveToUno(aInfo.change,rFactory);
 
             aNewInfos.push_back( aInfo );
         }
 
-        aNewInfos.swap(aInfos);
-        return !aInfos.empty();
+        aNewInfos.swap(_rInfos);
+
+        return !_rInfos.empty();
     }
 
 // ---------------------------------------------------------------------------------------------------

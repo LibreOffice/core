@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,20 +75,15 @@
 #include <com/sun/star/beans/XMultiHierarchicalPropertySet.hpp>
 #endif
 
-#ifndef CONFIGMGR_NO_PROPERTYSTATE
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
-#include <com/sun/star/beans/XProperty.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYWITHSTATE_HPP_
-#include <com/sun/star/beans/XPropertyWithState.hpp>
-#endif
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSTATES_HPP_
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 
 #ifndef CONFIGMGR_APITYPES_HXX_
@@ -116,12 +111,13 @@ namespace configmgr
     <p> Is an interface adapter around <type scope='configmgr::configapi'>NodeGroup(Info)Access</type>.</p>
 */
 class BasicPropertySet
-: public ::cppu::ImplHelper4
+: public ::cppu::ImplHelper6
             <   beans::XPropertySet
             ,   beans::XMultiPropertySet
             ,   beans::XHierarchicalPropertySet
             ,   beans::XMultiHierarchicalPropertySet
-//          ,   beans::XPropertyState
+            ,   beans::XPropertyState
+            ,   beans::XMultiPropertyStates
             >
 {
 protected:
@@ -224,15 +220,15 @@ public:
         firePropertiesChangeEvent( const uno::Sequence< OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
             throw(uno::RuntimeException);
 
-#ifndef CONFIGMGR_NO_PROPERTYSTATE
 // XPropertyState
     virtual beans::PropertyState SAL_CALL
         getPropertyState( const OUString& PropertyName )
             throw(beans::UnknownPropertyException, uno::RuntimeException);
 
-    virtual uno::Sequence< beans::PropertyState > SAL_CALL
-        getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
-            throw(beans::UnknownPropertyException, uno::RuntimeException);
+    // see below:
+    // virtual uno::Sequence< beans::PropertyState > SAL_CALL
+    //    getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
+    //      throw(beans::UnknownPropertyException, uno::RuntimeException);
 
     virtual void SAL_CALL
         setPropertyToDefault( const OUString& PropertyName )
@@ -242,7 +238,22 @@ public:
         getPropertyDefault( const OUString& aPropertyName )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
-#endif
+// XMultiPropertyStates
+    virtual uno::Sequence< beans::PropertyState > SAL_CALL
+        getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
+            throw (beans::UnknownPropertyException, uno::RuntimeException);
+
+    virtual void SAL_CALL
+        setAllPropertiesToDefault(  )
+            throw (uno::RuntimeException);
+
+    virtual void SAL_CALL
+        setPropertiesToDefault( const uno::Sequence< OUString >& aPropertyNames )
+            throw (beans::UnknownPropertyException, uno::RuntimeException);
+
+    virtual uno::Sequence< uno::Any > SAL_CALL
+        getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
+            throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
 
 protected:
     virtual configapi::NodeGroupInfoAccess&         getNode() = 0;
@@ -250,116 +261,6 @@ protected:
     virtual configapi::NodeGroupAccess*             maybeGetUpdateAccess() = 0;
 };
 
-//--------------------------------------------------------------------------
-
-/** implements the interface supported by a node, that is not a group,
-    and can't be viewed as property set but which does support children with a default state
-    <p> Is an interface adapter around <type scope='configmgr::configapi'>NodeSet(Info)Access</type>.</p>
-*/
-/*
-class BasicPropertyState
-: public ::cppu::ImplHelper1 < beans::XPropertyState >
-{
-public:
-// Constructors & Destructors
-    ~BasicPropertyState() {}
-
-public:
-    virtual beans::PropertyState SAL_CALL
-        getPropertyState( const OUString& PropertyName )
-            throw(beans::UnknownPropertyException, uno::RuntimeException);
-
-    virtual uno::Sequence< beans::PropertyState > SAL_CALL
-        getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
-            throw(beans::UnknownPropertyException, uno::RuntimeException);
-
-    virtual void SAL_CALL
-        setPropertyToDefault( const OUString& PropertyName )
-            throw(beans::UnknownPropertyException, uno::RuntimeException);
-
-    virtual uno::Any SAL_CALL
-        getPropertyDefault( const OUString& aPropertyName )
-            throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
-
-protected:
-    virtual configapi::NodeSetInfoAccess&           getNode() = 0;
-            configapi::NodeSetAccess&               getSetNode();
-    virtual configapi::NodeSetAccess*               maybeGetUpdateAccess() = 0;
-};
-*/
-/** implements the interface supported by a node, that is contained in a group,
-    viewed as property set but which does not support a default state
-    <p> Is an interface adapter around <type scope='configmgr::configapi'>NodeAccess</type>.</p>
-*/
-/*
-class BasicPropertySetElement
-: public ::cppu::ImplHelper1 < beans::XProperty >
-{
-public:
-// Constructors & Destructors
-    ~BasicPropertySetElement() {}
-
-public:
-// XProperty
-    virtual beans::Property SAL_CALL
-        getAsProperty(  )
-            throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-    virtual configapi::NodeSetInfoAccess&           getNode() = 0;
-            configapi::NodeSetAccess&               getSetNode();
-    virtual configapi::NodeSetAccess*               maybeGetUpdateAccess() = 0;
-};
-*/
-/** implements the interface supported by a node, that supports a default state
-    <p> Is an interface adapter around <type scope='configmgr::configapi'>NodeAccess</type>.</p>
-*/
-/*class BasicElementWithState
-: public ::cppu::ImplHelper2
-            <   beans::XProperty
-            ,   beans::XPropertyWithState
-            >
-{
-public:
-// Constructors & Destructors
-    ~BasicElementWithState() {}
-
-public:
-// XProperty
-    virtual beans::Property SAL_CALL
-        getAsProperty(  )
-            throw(::com::sun::star::uno::RuntimeException);
-
-protected:
-};
-*/
-//--------------------------------------------------------------------------
-/*class BasicPropertySetInfo
-: public cppu::WeakImplHelper1< beans::XPropertySetInfo >
-{
-    // class Impl;
-    typedef configapi::NodeSetInfoImpl Impl;
-    Impl* const m_pImpl;
-public:
-// Constructors & Destructors
-    NodePropertySetInfo( Impl* pImpl);
-    ~NodePropertySetInfo() {}
-
-public:
-// XPropertySetInfo
-    virtual uno::Sequence< beans::Property > SAL_CALL
-        getProperties(void)
-            throw(uno::RuntimeException);
-
-    virtual beans::Property SAL_CALL
-        getPropertyByName(const OUString& sPropertyName)
-            throw(beans::UnknownPropertyException, uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL
-        hasPropertyByName(const OUString& sPropertyName)
-            throw(uno::RuntimeException);
-};
-*/
 //--------------------------------------------------------------------------
 
 }
