@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-03 08:12:29 $
+ *  last change: $Author: sab $ $Date: 2002-04-19 17:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return rtl::OUString();
 }
 
-void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
+void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) const
 {
     if (mpEventListeners)
     {
@@ -651,17 +651,17 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
     }
 }
 
-void ScAccessibleContextBase::CommitDefunc()
+void ScAccessibleContextBase::CommitDefunc() const
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
-    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.NewValue <<= AccessibleStateType::DEFUNC;
 
     CommitChange(aEvent);
 }
 
-void ScAccessibleContextBase::CommitFocusGained(const awt::FocusEvent& rFocusEvent)
+void ScAccessibleContextBase::CommitFocusGained(const awt::FocusEvent& rFocusEvent) const
 {
     if (mpFocusListeners)
     {
@@ -697,7 +697,7 @@ void ScAccessibleContextBase::CommitFocusGained(const awt::FocusEvent& rFocusEve
     }
 }
 
-void ScAccessibleContextBase::CommitFocusLost(const awt::FocusEvent& rFocusEvent)
+void ScAccessibleContextBase::CommitFocusLost(const awt::FocusEvent& rFocusEvent) const
 {
     if (mpFocusListeners)
     {
