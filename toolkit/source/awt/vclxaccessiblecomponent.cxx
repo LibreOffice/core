@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-19 16:15:21 $
+ *  last change: $Author: pb $ $Date: 2002-08-23 10:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,11 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
+        {
+            ULONG nCount = Application::ReleaseSolarMutex();
             ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+            Application::AcquireSolarMutex( nCount );
+        }
     }
     return 0;
 }
@@ -206,7 +210,11 @@ IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, p
     {
         DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "Window???" );
         if( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+        {
+            ULONG nCount = Application::ReleaseSolarMutex();
             ProcessWindowChildEvent( *(VclWindowEvent*)pEvent );
+            Application::AcquireSolarMutex( nCount );
+        }
     }
     return 0;
 }
