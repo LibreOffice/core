@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:46:14 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,19 +130,19 @@ class SwEscherEx : public SwBasicEscherEx
 {
 private:
     SvULongs aFollowShpIds;
-    std::vector<short> maDirections;
-    SvPtrarr aSortFmts;
     EscherExHostAppData aHostData;
     WinwordAnchoring aWinwordAnchoring;
     WW8_WrPlcTxtBoxes *pTxtBxs;
 
-    UINT32 GetFlyShapeId( const SwFrmFmt& rFmt );
+    UINT32 GetFlyShapeId(const SwFrmFmt& rFmt,
+        unsigned int nHdFtIndex, DrawObjPointerVector &rPVec);
     void MakeZOrderArrAndFollowIds(std::vector<DrawObj>& rSrcArr,
-        std::vector<DrawObj*>& rDstArr);
+        DrawObjPointerVector& rDstArr);
 
-    INT32 WriteFlyFrm(const SwFrmFmt& rFmt,UINT32 &rShapeId, short nDirection);
-    INT32 WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
-        UINT32 nTxtBox, short nDirection);
+    INT32 WriteFlyFrm(const DrawObj &rObj, UINT32 &rShapeId,
+        DrawObjPointerVector &rPVec);
+    INT32 WriteTxtFlyFrame(const DrawObj &rObj, UINT32 nShapeId,
+        UINT32 nTxtBox, DrawObjPointerVector &rPVec);
     void WriteOCXControl(const SwFrmFmt& rFmt,UINT32 nShapeId);
     virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);
