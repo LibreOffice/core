@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:08:41 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include <stdlib.h>
 #endif
 
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
@@ -136,7 +136,7 @@
 
 #pragma hdrstop
 
-#include <svtools/agprop.hxx>
+//#include <svtools/agprop.hxx>
 #include <sj2/sjapplet.hxx>
 
 #ifndef _SFXISETHINT_HXX
