@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-16 16:50:04 $
+ *  last change: $Author: ssa $ $Date: 2002-12-03 14:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,6 +865,10 @@ void Window::EndTracking( USHORT nFlags )
         if ( !(nFlags & ENDTRACK_DONTCALLHDL) )
         {
             Point           aMousePos( mpFrameData->mnLastMouseX, mpFrameData->mnLastMouseY );
+            if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
+                // - RTL - re-mirror frame pos at pChild
+                ImplReMirror( aMousePos );
+
             MouseEvent      aMEvt( ImplFrameToOutput( aMousePos ),
                                    mpFrameData->mnClickCount, 0,
                                    mpFrameData->mnMouseCode, mpFrameData->mnMouseCode );
