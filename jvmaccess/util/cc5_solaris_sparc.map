@@ -1,38 +1,5 @@
 UDK_3.1 {
     global:
-        # jvmaccess/javainfo.hxx:
-        __1cJjvmaccessIJavaInfoNInitException2t6M_v_; # jvmaccess::JavaInfo::InitException::InitException()
-        __1cJjvmaccessIJavaInfoNInitException2t6Mrk2_v_; # jvmaccess::JavaInfo::InitException::InitException(InitException const &)
-        __1cJjvmaccessIJavaInfoNInitException2T6M_v_; # jvmaccess::JavaInfo::InitException::~InitException()
-        __1cJjvmaccessIJavaInfoNInitException2G6Mrk2_r2_; # jvmaccess::JavaInfo::InitException::operator=(InitException const &)
-        __1cJjvmaccessbS__RTTI__1nJjvmaccessIJavaInfoNInitException__; # RTTI for jvmaccess::JavaInfo::InitException
-        __1cJjvmaccessIJavaInfoUUnsupportedException2t6M_v_; # jvmaccess::JavaInfo::UnsupportedException::UnsupportedException()
-        __1cJjvmaccessIJavaInfoUUnsupportedException2t6Mrk2_v_; # jvmaccess::JavaInfo::UnsupportedException::UnsupportedException(UnsupportedException const &)
-        __1cJjvmaccessIJavaInfoUUnsupportedException2T6M_v_; # jvmaccess::JavaInfo::UnsupportedException::~UnsupportedException()
-        __1cJjvmaccessIJavaInfoUUnsupportedException2G6Mrk2_r2_; # jvmaccess::JavaInfo::UnsupportedException::operator =(UnsupportedException const &)
-        __1cJjvmaccessbZ__RTTI__1nJjvmaccessIJavaInfoUUnsupportedException__; # RTTI for jvmaccess::JavaInfo::UnsupportedException
-        __1cJjvmaccessIJavaInfo2t6MrknDrtlIOUString__v_; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &)
-        __1cJjvmaccessIJavaInfo2t5B6MrknDrtlIOUString__v_; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &) #Nvariant 1
-        __1cJjvmaccessIJavaInfo2t6MrknDrtlIOUString_i_v_; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &, int)
-        __1cJjvmaccessIJavaInfo2t5B6MrknDrtlIOUString_i_v_; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &, int) #Nvariant 1
-        __1cJjvmaccessIJavaInfo2t6Mrk1_v_; # jvmaccess::JavaInfo::JavaInfo(JavaInfo const &)
-        __1cJjvmaccessIJavaInfo2t5B6Mrk1_v_; # jvmaccess::JavaInfo::JavaInfo(JavaInfo const &) #Nvariant 1
-        __1cJjvmaccessIJavaInfo2T6M_v_; # jvmaccess::JavaInfo::~JavaInfo()
-        __1cJjvmaccessIJavaInfo2T5B6M_v_; # jvmaccess::JavaInfo::~JavaInfo() #Nvariant 1
-        __1cJjvmaccessIJavaInfo2G6Mrk1_r1_; # jvmaccess::JavaInfo::operator =(jvmaccess::JavaInfo const &)
-        __1cJjvmaccessIJavaInfoNcreateAllInfo6FpnE_STLGvector4n0B_n0CJallocator4n0B______v_; # jvmaccess::JavaInfo::createAllInfo(srd::vector< JavaInfo > *)
-        __1cJjvmaccessIJavaInfoOcreateBestInfo6Fb_1_; # jvmaccess::JavaInfo::createBestInfo(bool)
-        __1cJjvmaccessIJavaInfoGisSame6kMrk1_b_; # jvmaccess::JavaInfo::isSame(JavaInfo const &) const
-        __1cJjvmaccessIJavaInfoHisEqual6kMrk1_b_; # jvmaccess::JavaInfo::isEqual(JavaInfo const &) const
-        __1cJjvmaccessIJavaInfoPcompareVersions6kMrk1_i_; # jvmaccess::JavaInfo::compareVersions(JavaInfo const &) const
-        __1cJjvmaccessIJavaInfoKgetVersion6kM_rknDrtlIOUString__; # jvmaccess::JavaInfo::getVersion() const
-        __1cJjvmaccessIJavaInfoXgetInstallationLocation6kM_rknDrtlIOUString__; # jvmaccess::JavaInfo::getInstallationLocation() const
-        __1cJjvmaccessIJavaInfoHgetType6kM_rknDrtlIOUString__; # jvmaccess::JavaInfo::getType() const
-        __1cJjvmaccessIJavaInfoVgetRuntimeLibLocation6kM_rknDrtlIOUString__; # jvmaccess::JavaInfo::getRuntimeLibLocation() const
-        __1cJjvmaccessIJavaInfoVsupportsAccessibility6kM_b_; # jvmaccess::JavaInfo::supportsAccessibility() const
-        __1cJjvmaccessIJavaInfoPgetLibLocations6kM_rknDrtlIOUString__; # jvmaccess::JavaInfo::getLibLocations() const
-        __1cJjvmaccessIJavaInfoOgetJarFilePath6kMrknDrtlIOUString__3_; # jvmaccess::JavaInfo::getJarFilePath(rtl::OUString const &) const
-
         # jvmaccess/virtualmachine.hxx:
         __1cJjvmaccessOVirtualMachineLAttachGuardRCreationException2t6M_v_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
         __1cJjvmaccessOVirtualMachineLAttachGuardRCreationException2t6Mrk3_v_; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException(CreationException const &)
