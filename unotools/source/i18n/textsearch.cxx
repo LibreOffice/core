@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-02 09:58:02 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+//#include <tools/intn.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
