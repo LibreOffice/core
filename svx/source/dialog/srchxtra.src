@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:45:44 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Rientri e distanze" ;
-                Text [ portuguese_brazilian ] = "Parágrafo" ;
+                Text [ portuguese_brazilian ] = "Par?grafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennys ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -254,7 +254,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ ENGLISH ] = "Paragraph Extensions" ;
                 Text [ norwegian ] = "Utvidelse av avsnitt" ;
                 Text [ italian ] = "Flusso di testo" ;
-                Text [ portuguese_brazilian ] = "Extens es de Parágrafo" ;
+                Text [ portuguese_brazilian ] = "Extens es de Par?grafo" ;
                 Text [ portuguese ] = "Fluxo de texto" ;
                 Text [ finnish ] = "Tekstin rivitys" ;
                 Text [ danish ] = "Tekstretning" ;
@@ -504,7 +504,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ dutch ] = "Tekens ~toevoegen" ;
         Text [ swedish ] = "Lägg till t~ecken" ;
         Text [ danish ] = "Tilføj tegn" ;
-        Text [ portuguese_brazilian ] = "Z~eichen hinzufügen" ;
+        Text [ portuguese_brazilian ] = "Z~eichen hinzuf?en" ;
         Text [ portuguese ] = "Inserir ~caracteres" ;
         Text[ chinese_simplified ] = "ÐÂÔö×Ö·û(~A)";
         Text[ russian ] = "Äîáàâèòü çíàêè";
@@ -655,7 +655,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text [ swedish ] = "Likhetssökning" ;
     Text [ danish ] = "Søg lignende" ;
     Text [ portuguese ] = "Procura por semelhança" ;
-    Text [ portuguese_brazilian ] = "Ähnlichkeitssuche" ;
+    Text [ portuguese_brazilian ] = "?hnlichkeitssuche" ;
     Text[ chinese_simplified ] = "ÀàËÆËÑÑ°";
     Text[ russian ] = "Ïîèñê ïîõîæèõ";
     Text[ polish ] = "Szukaj podobnych";
