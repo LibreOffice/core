@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:58:17 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,10 +632,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         xPropSet->setPropertyValue(DECLARE_ASCII("Title"), aTitle);
     }
 
-    // create a status bar to be able to show a progress
-    StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory(m_xSMGR, m_xWindow, sal_True);
-    m_xStatus = css::uno::Reference< css::task::XStatusIndicatorFactory >(static_cast< ::cppu::OWeakObject* >(pIndicatorFactoryHelper), css::uno::UNO_QUERY);
-
     // create the menu bar for the backing component
     if ( xPropSet.is() )
     {
@@ -645,52 +641,16 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
         a >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
+            xLayoutManager->lock();
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar" ));
             xLayoutManager->createElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
             xLayoutManager->showElement( DECLARE_ASCII( "private:resource/toolbar/standardbar" ));
+            xLayoutManager->showElement( DECLARE_ASCII( "private:resource/statusbar/statusbar" ));
+            xLayoutManager->unlock();
         }
     }
 
-/*
-    // load the default menu from the ofa resource
-    ResMgr* pOfaResMgr = CREATERESMGR(ofa);
-    if (pOfaResMgr)
-    {
-        ::rtl::OUString sResPath(pOfaResMgr->GetFileName());
-        ::rtl::OUString sResFile;
-        if (::osl::FileBase::getFileURLFromSystemPath(sResPath, sResFile) == ::osl::FileBase::E_None)
-        {
-            INetURLObject aResFile(sResFile);
-            String        sResName = aResFile.GetName();
-
-            if (sResName.Len())
-            {
-                ::rtl::OUStringBuffer sMenuRes(256);
-                sMenuRes.appendAscii("private:resource/");
-                sMenuRes.append     (sResName           );
-                sMenuRes.appendAscii("/261"             );
-                sMenuRes.appendAscii("?accel="          );
-                sMenuRes.append     (sResName           );
-                sMenuRes.appendAscii("/262"             );
-
-                css::util::URL aURL;
-                aURL.Complete = sMenuRes.makeStringAndClear();
-
-                css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
-                if (xParser.is())
-                    xParser->parseStrict(aURL);
-
-                css::uno::Reference< css::frame::XDispatchProvider > xProvider(m_xFrame, css::uno::UNO_QUERY);
-                if (xProvider.is())
-                {
-                    css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, SPECIALTARGET_MENUBAR, 0);
-                    if (xDispatch.is())
-                        xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue>());
-                }
-            }
-        }
-    }
-*/
     // establish listening for key accelerators
     m_xWindow->addKeyListener(css::uno::Reference< css::awt::XKeyListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY));
 
@@ -900,7 +860,6 @@ void SAL_CALL BackingComp::dispose()
     // forget all other used references
     m_xFrame  = css::uno::Reference< css::frame::XFrame >();
     m_xSMGR   = css::uno::Reference< css::lang::XMultiServiceFactory >();
-    m_xStatus = css::uno::Reference< css::task::XStatusIndicatorFactory >();
 
     aWriteLock.unlock();
     /* } SAFE */
@@ -1014,8 +973,27 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL BackingComp::getStat
     css::uno::Reference< css::task::XStatusIndicator > xStatus;
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    if (m_xStatus.is())
-        xStatus = m_xStatus->createStatusIndicator();
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        css::uno::Any a;
+        css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        a = xPropSet->getPropertyValue( DECLARE_ASCII( "LayoutManager" ));
+        a >>= xLayoutManager;
+        if ( xLayoutManager.is() )
+        {
+            rtl::OUString aProgressBarResStr = DECLARE_ASCII( "private:resource/progressbar/progressbar" );
+            xLayoutManager->createElement( aProgressBarResStr );
+            css::uno::Reference< drafts::com::sun::star::ui::XUIElement > xProgressBar =
+                xLayoutManager->getElement( aProgressBarResStr );
+            if ( xProgressBar.is() )
+            {
+                xStatus = css::uno::Reference< css::task::XStatusIndicator >(
+                    xProgressBar->getRealInterface(), css::uno::UNO_QUERY );
+            }
+        }
+    }
     aReadLock.unlock();
     /* } SAFE */
 
