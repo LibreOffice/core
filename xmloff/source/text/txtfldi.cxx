@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3260,7 +3260,7 @@ void XMLUrlFieldImportContext::ProcessAttribute(
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_HREF:
-            sURL = sAttrValue;
+            sURL = GetImport().GetAbsoluteReference( sAttrValue );
             bValid = sal_True;
             break;
         case XML_TOK_TEXTFIELD_TARGET_FRAME:
@@ -3674,7 +3674,7 @@ void XMLScriptImportContext::ProcessAttribute(
     switch (nAttrToken)
     {
         case XML_TOK_TEXTFIELD_HREF:
-            sContent = sAttrValue;
+            sContent = GetImport().GetAbsoluteReference( sAttrValue );
             bContentOK = sal_True;
             break;
 
