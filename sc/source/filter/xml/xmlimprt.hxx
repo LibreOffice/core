@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:00:26 $
+ *  last change: $Author: sab $ $Date: 2000-12-07 10:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ enum ScXMLDocTokens
     XML_TOK_DOC_AUTOSTYLES,
     XML_TOK_DOC_MASTERSTYLES,
     XML_TOK_DOC_META,
+    XML_TOK_DOC_SCRIPTS,
     XML_TOK_DOC_BODY,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
@@ -757,6 +758,8 @@ public:
 
     // namespace office
     SvXMLImportContext *CreateMetaContext(
+                                    const NAMESPACE_RTL(OUString)& rLocalName );
+    SvXMLImportContext *CreateScriptContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
     SvXMLImportContext *CreateStylesContext(const NAMESPACE_RTL(OUString)& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );

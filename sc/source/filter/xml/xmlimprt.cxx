@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:00:26 $
+ *  last change: $Author: sab $ $Date: 2000-12-07 10:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #ifndef _XMLOFF_XMLNUMFI_HXX
 #include <xmloff/xmlnumfi.hxx>
 #endif
+#ifndef _XMLOFF_XMLSCRIPTI_HXX
+#include <xmloff/xmlscripti.hxx>
+#endif
+
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
@@ -138,6 +142,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_automatic_styles,  XML_TOK_DOC_AUTOSTYLES  },
     { XML_NAMESPACE_OFFICE, sXML_master_styles,     XML_TOK_DOC_MASTERSTYLES},
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META        },
+    { XML_NAMESPACE_OFFICE, sXML_script,            XML_TOK_DOC_SCRIPTS     },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY        },
     XML_TOKEN_MAP_END
 };
@@ -730,6 +735,9 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_DOC_META:
         pContext = GetScImport().CreateMetaContext( rLocalName );
+        break;
+    case XML_TOK_DOC_SCRIPTS:
+        pContext = GetScImport().CreateScriptContext( rLocalName );
         break;
     case XML_TOK_DOC_BODY:
         pContext = GetScImport().CreateBodyContext( rLocalName );
@@ -1441,6 +1449,25 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
         pContext = new SfxXMLMetaContext( *this,
                             XML_NAMESPACE_OFFICE, rLocalName,
                             GetModel() );
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( *this, XML_NAMESPACE_OFFICE,
+                                              rLocalName );
+
+    return pContext;
+}
+
+SvXMLImportContext *ScXMLImport::CreateScriptContext(
+                                       const OUString& rLocalName )
+{
+    SvXMLImportContext *pContext = 0;
+
+    if( !(IsStylesOnlyMode()) )
+    {
+        pContext = new XMLScriptContext( *this,
+                                    XML_NAMESPACE_OFFICE, rLocalName,
+                                    GetModel() );
     }
 
     if( !pContext )
