@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Day.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:13:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,22 +81,22 @@ service Day
     /** specifies the inclusive upper bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-maxInclusive
     */
-    [property, maybevoid] byte MaxInclusive;
+    [property, maybevoid] short MaxInclusiveInt;
 
     /** specifies the exclusive upper bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-maxExclusive
     */
-    [property, maybevoid] byte MaxExclusive;
+    [property, maybevoid] short MaxExclusiveInt;
 
     /** specifies the inclusive lower bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-minInclusive
     */
-    [property, maybevoid] byte MinInclusive;
+    [property, maybevoid] short MinInclusiveInt;
 
     /** specifies the exclusive lower bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-minExclusive
     */
-    [property, maybevoid] byte MinExclusive;
+    [property, maybevoid] short MinExclusiveInt;
 };
 
 //=============================================================================
