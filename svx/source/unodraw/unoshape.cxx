@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-09 11:43:53 $
+ *  last change: $Author: sab $ $Date: 2002-07-12 07:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,6 +1019,12 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
     if( pObj == NULL )
         return;
 
+    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    if (!pSdrHint || ((pSdrHint->GetKind() != HINT_OBJREMOVED) &&
+        (pSdrHint->GetKind() != HINT_MODELCLEARED) &&
+        (pSdrHint->GetKind() != HINT_OBJLISTCLEAR)))
+        return;
+
     uno::Reference< uno::XInterface > xSelf( pObj->getWeakUnoShape() );
     if( !xSelf.is() )
     {
@@ -1026,38 +1032,32 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
         return;
     }
 
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-
-
     sal_Bool bClearMe = sal_False;
 
-    if( pSdrHint && pObj)
+    if( pSdrHint->GetKind() == HINT_OBJREMOVED )
     {
-        if( pSdrHint->GetKind() == HINT_OBJREMOVED )
-        {
-            if( pObj == pSdrHint->GetObject() )
-            {
-                bClearMe = sal_True;
-            }
-        }
-        else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+        if( pObj == pSdrHint->GetObject() )
         {
             bClearMe = sal_True;
-            pModel = NULL;
         }
-        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
+    }
+    else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+    {
+        bClearMe = sal_True;
+        pModel = NULL;
+    }
+    else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
+    {
+        SdrObjList* pObjList = pObj ? pObj->GetObjList() : NULL;
+        while( pObjList )
         {
-            SdrObjList* pObjList = pObj ? pObj->GetObjList() : NULL;
-            while( pObjList )
+            if( pSdrHint->GetObjList() == pObjList )
             {
-                if( pSdrHint->GetObjList() == pObjList )
-                {
-                    bClearMe = sal_True;
-                    break;
-                }
-
-                pObjList = pObjList->GetUpList();
+                bClearMe = sal_True;
+                break;
             }
+
+            pObjList = pObjList->GetUpList();
         }
     }
 
