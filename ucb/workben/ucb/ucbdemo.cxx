@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:32:53 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_GLOBALTRANSFERCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
@@ -1473,25 +1476,94 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
 //----------------------------------------------------------------------------
 void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
 {
-/*
-    TransferInfo:
-
-    sal_Bool MoveData;
-    ::rtl::OUString SourceURL;
-    ::rtl::OUString NewTitle;
-    sal_Int32 NameClash;
-*/
-
     if ( bMove )
         print( "Moving content..." );
     else
         print( "Copying content..." );
+
+#if 1 /* globalTransfer */
+
+    Reference< XCommandProcessor > xCommandProcessor(
+                                    m_rUCB.getContentProvider(), UNO_QUERY );
+    if ( xCommandProcessor.is() )
+    {
+
+#if 0
+        Command aCommand(
+            OUString::createFromAscii( "getCommandInfo" ), -1, Any() );
+        Reference< XCommandInfo > xInfo;
+        xCommandProcessor->execute(
+            aCommand, 0, Reference< XCommandEnvironment >() ) >>= xInfo;
+        if ( xInfo.is() )
+        {
+            CommandInfo aInfo
+                = xInfo->getCommandInfoByName(
+                    OUString::createFromAscii( "globalTransfer" ) );
+
+            Sequence< CommandInfo > aCommands = xInfo->getCommands();
+            const CommandInfo* pCommands = aCommands.getConstArray();
+
+            String aText( UniString::CreateFromAscii(
+                            RTL_CONSTASCII_STRINGPARAM( "Commands:\n" ) ) );
+            sal_uInt32 nCount = aCommands.getLength();
+            for ( sal_uInt32 n = 0; n < nCount; ++n )
+            {
+                aText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "    " ) );
+                aText += String( pCommands[ n ].Name );
+                aText += '\n';
+            }
+            print( aText );
+        }
+#endif
+        GlobalTransferCommandArgument aArg(
+                            bMove ? TransferCommandOperation_MOVE
+                                  : TransferCommandOperation_COPY,
+                            rSourceURL,
+                            getURL(),
+                            OUString(),
+                            //OUString::createFromAscii( "NewTitle" ),
+                            NameClash::ERROR );
+
+        Command aTransferCommand( OUString::createFromAscii( "globalTransfer" ),
+                                  -1,
+                                  makeAny( aArg ) );
+
+        Reference< XInteractionHandler > xInteractionHandler;
+        if (m_rUCB.getServiceFactory().is())
+            xInteractionHandler
+                = Reference< XInteractionHandler >(
+                          m_rUCB.getServiceFactory()->
+                              createInstance(
+                                  OUString::createFromAscii(
+                                      "com.sun.star.uui.InteractionHandler")),
+                          UNO_QUERY);
+        Reference< XProgressHandler > xProgressHandler(
+            new ProgressHandler(m_rUCB));
+        Reference< XCommandEnvironment > xEnv(
+            new UcbTaskEnvironment( xInteractionHandler, xProgressHandler ) );
+
+        try
+        {
+            xCommandProcessor->execute( aTransferCommand, 0, xEnv );
+        }
+        catch ( Exception const & )
+        {
+            print( "globalTransfer threw exception!" );
+            return;
+        }
+
+        print( "globalTransfer finished successfully" );
+    }
+
+#else /* transfer */
 
     Any aArg;
     aArg <<= TransferInfo( bMove, rSourceURL, OUString(), NameClash::ERROR );
     executeCommand( OUString::createFromAscii( "transfer" ), aArg );
 
 //  executeCommand( OUString::createFromAscii( "flush" ), Any() );
+
+#endif
 }
 
 //----------------------------------------------------------------------------
@@ -2178,7 +2250,7 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_pCmdEdit = new Edit( this );
     m_pCmdEdit->SetReadOnly( FALSE );
     m_pCmdEdit->SetText( UniString::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.pkg://file%3A%2F%2F%2fe%3a%2fx.zip/" ) ) );
+                            RTL_CONSTASCII_STRINGPARAM( "file:///" ) ) );
     m_pCmdEdit->Show();
 
     // MyOutWindow.
@@ -2657,8 +2729,9 @@ void MyApp::Main()
     pMyWin->
         SetText(
             UniString::CreateFromAscii(
-                RTL_CONSTASCII_STRINGPARAM(
-                    "UCB Demo/Test Application ( Local UCB Client )" ) ) );
+                RTL_CONSTASCII_STRINGPARAM( "UCB Demo/Test Application" ) ) );
+
+    pMyWin->SetPosSizePixel( 0, 0, 1024, 768 );
 
     pMyWin->Show();
 
