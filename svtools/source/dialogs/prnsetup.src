@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:19:07 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ String STR_SVT_PRNDLG_IO_ACTIVE
     Text [ spanish ] = "I/O activos" ;
     Text [ french ] = "E/S active" ;
     Text [ dutch ] = "I/O actief" ;
-    Text[ chinese_simplified ] = "Љ§їо д»л/ д≥ц";
+    Text[ chinese_simplified ] = "∆фґѓ д»л/ д≥ц";
     Text[ russian ] = "јктивный ¬ход/¬ыход";
     Text[ polish ] = "We/Wy aktywne";
     Text[ japanese ] = "I/O ±Є√®ћё";
@@ -1039,6 +1039,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ catalan ] = "Configurar impresora";
     Text[ finnish ] = "Tulostimen asetukset";
 };
+
 
 
 
