@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-19 16:26:00 $
+ *  last change: $Author: os $ $Date: 2001-06-20 08:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,7 +969,25 @@ IMPL_LINK(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
 /*-----------------07.02.97 15.59-------------------
 
 --------------------------------------------------*/
+void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
+                        const OUString& rBulletChar, const OUString& rText, const OUString& rFontName,
+                        Point& rLeft, Font& rRuleFont, const Font& rTextFont)
+{
 
+    if(NumberingType::CHAR_SPECIAL == nNumberingType )
+    {
+        rRuleFont.SetStyleName(rFontName);
+        pVDev->SetFont(rRuleFont);
+        pVDev->DrawText(rLeft, rBulletChar);
+        rLeft.X() += pVDev->GetTextWidth(rBulletChar);
+    }
+    else
+    {
+        pVDev->SetFont(rTextFont);
+        pVDev->DrawText(rLeft, rText);
+        rLeft.X() += pVDev->GetTextWidth(rText);
+    }
+}
 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     static USHORT __READONLY_DATA aLinesArr[] =
@@ -979,11 +997,11 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         25, 50,
         30, 70,
         35, 90, // up to here line positions
-        10, 10, // character positions
-        15, 30,
-        20, 50,
-        25, 70,
-        30, 90,
+        05, 10, // character positions
+        10, 30,
+        15, 50,
+        20, 70,
+        25, 90,
     };
 
     OutputDevice*  pDev = rUDEvt.GetDevice();
@@ -1092,8 +1110,18 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             Reference<XIndexAccess> xLevel = aOutlineSettings.getArray()[nItemId - 1];
             try
             {
-                String sText;
-                for( xub_StrLen i = 0; i < xLevel->getCount() && i < 5; i++)
+                OUString sLevelTexts[5];
+                OUString sFontNames[5];
+                OUString sBulletChars[5];
+                sal_Int16 aNumberingTypes[5];
+                OUString sPrefixes[5];
+                OUString sSuffixes[5];
+                sal_Int16 aParentNumberings[5];
+
+                sal_Int32 nLevelCount = xLevel->getCount();
+                if(nLevelCount > 5)
+                    nLevelCount = 5;
+                for( sal_Int32 i = 0; i < nLevelCount && i < 5; i++)
                 {
                     long nTop = nStartY + nRectHeight * (aLinesArr[2 * i + 11])/100 ;
                     Point aLeft(nStartX + nRectWidth *  (aLinesArr[2 * i + 10])/ 100, nTop );
@@ -1101,50 +1129,88 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     Any aLevelAny = xLevel->getByIndex(i);
                     Sequence<PropertyValue> aLevel;
                     aLevelAny >>= aLevel;
-                    aLevel.realloc(aLevel.getLength() + 1);
-                    PropertyValue& rValue = aLevel.getArray()[aLevel.getLength() - 1];
-                    rValue.Name = sValue;
-                    rValue.Value <<= (sal_Int32) 1;
+                    const PropertyValue* pValues = aLevel.getConstArray();
+                    aNumberingTypes[i] = 0;
+                    for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
+                    {
+                        if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
+                            pValues[nProperty].Value >>= aNumberingTypes[i];
+                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
+                            pValues[nProperty].Value >>= sFontNames[i];
+                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
+                            pValues[nProperty].Value >>= sBulletChars[i];
+                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cPrefix)))
+                            pValues[nProperty].Value >>= sPrefixes[i];
+                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSuffix)))
+                            pValues[nProperty].Value >>= sSuffixes[i];
+                        else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cParentNumbering)))
+                            pValues[nProperty].Value >>= aParentNumberings[i];
+                    }
+                    Sequence< PropertyValue > aProperties(2);
+                    PropertyValue* pProperties = aProperties.getArray();
+                    pProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType"));
+                    pProperties[0].Value <<= aNumberingTypes[i];
+                    pProperties[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"));
+                    pProperties[1].Value <<= (sal_Int32)1;
                     try
                     {
-                        sText = xFormatter->makeNumberingString( aLevel, aLocale );
+                        sLevelTexts[i] = xFormatter->makeNumberingString( aProperties, aLocale );
                     }
                     catch(Exception&)
                     {
                         DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString")
                     }
 
-                    if(!sText.Len())
+                    aLeft.Y() -= (pDev->GetTextHeight()/2);
+                    if(sPrefixes[i].getLength() &&
+                        !sPrefixes[i].equalsAsciiL(" ", 1) &&
+                        sPrefixes[i].getStr()[0] != 0)
                     {
-                        OUString sFontName;
-                        OUString sBulletChar;
-                        const PropertyValue* pValues = aLevel.getConstArray();
-                        sal_Int32 nNumberingType = 0;
-                        for(sal_Int32 nProperty = 0; nProperty < aLevel.getLength() - 1; nProperty++)
+                        pVDev->SetFont(aFont);
+                        pVDev->DrawText(aLeft, sPrefixes[i]);
+                        aLeft.X() += pDev->GetTextWidth(sPrefixes[i]);
+                    }
+                    if(aParentNumberings[i])
+                    {
+                        //insert old numberings here
+                        sal_Int16 nStartLevel = std::min((sal_Int32)aParentNumberings[i], i);
+                        for(sal_Int16 nParentLevel = i - nStartLevel; nParentLevel < i; nParentLevel++)
                         {
-                            if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cNumberingType)))
-                                pValues[nProperty].Value >>= nNumberingType;
-                            else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletFontName)))
-                                pValues[nProperty].Value >>= sFontName;
-                            else if(pValues[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cBulletChar)))
-                                pValues[nProperty].Value >>= sBulletChar;
-                        };
-                        if(nNumberingType == NumberingType::CHAR_SPECIAL)
-                        {
-                            sText = sBulletChar;
-                            pVDev->SetFont(aRuleFont);
+                            OUString sTmp(sLevelTexts[nParentLevel]);
+                            sTmp += C2U(".");
+                            lcl_PaintLevel(pVDev,
+                                    aNumberingTypes[nParentLevel],
+                                    sBulletChars[nParentLevel],
+                                    sTmp,
+                                    sFontNames[nParentLevel],
+                                    aLeft,
+                                    aRuleFont,
+                                    aFont);
                         }
                     }
-                    else
+                    lcl_PaintLevel(pVDev,
+                                    aNumberingTypes[i],
+                                    sBulletChars[i],
+                                    sLevelTexts[i],
+                                    sFontNames[i],
+                                    aLeft,
+                                    aRuleFont,
+                                    aFont);
+                    if(sSuffixes[i].getLength()&&
+                        !sSuffixes[i].equalsAsciiL(" ", 1) &&
+                        sSuffixes[i].getStr()[0] != 0)
+                    {
                         pVDev->SetFont(aFont);
-                    aLeft.Y() -= (pDev->GetTextHeight()/2);
-                    pVDev->DrawText(aLeft, sText);
+                        pVDev->DrawText(aLeft, sSuffixes[i]);
+                        aLeft.X() += pDev->GetTextWidth(sSuffixes[i]);
+                    }
 
                     long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
-                    Point aLineLeft(pDev->GetTextWidth(sText) + nStartX + nRectWidth * aLinesArr[2 * i] / 100, nLineTop );
+                    Point aLineLeft(aLeft.X() /*+ nStartX + nRectWidth * aLinesArr[2 * i]/ 100*/, nLineTop );
                     Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
                     pVDev->DrawLine(aLineLeft,  aLineRight);
                 }
+
             }
 #ifdef DBG_UTIL
             catch(Exception&)
