@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 14:45:40 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 21:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: vg $ $Date: 2001-05-16 14:45:40 $ $Revision: 1.10 $
+// $Author: vg $ $Date: 2001-06-08 21:41:36 $ $Revision: 1.11 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -131,7 +131,7 @@ String STR_ERROR_FILEIO
     Text[ english ] = "Error accessing file ($URL1)";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá Åáì Çáãáİ ($URL1)";
     Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡ÎÄ¼ş($URL1)Ê±·¢Éú´íÎó";
-    Text[ chinese_traditional ] = "Åª¨úÀÉ®× ($URL1) µo¥Í¿ù»~";
+    Text[ chinese_traditional ] = "¦s¨úÀÉ®× ($URL1) µo¥Í¿ù»~";
     Text[ danish ] = "Fejl ved adgang til filen ($URL1)";
     Text[ dutch ] = "Fout bij toegang tot bestand ($URL1)";
     Text[ english_us ] = "Error accessing file ($URL1)";
@@ -166,7 +166,7 @@ String STR_ERROR_WRONGMEDIUM
     Text[ italian ] = "Inserite il supporto dati $$.";
     Text[ japanese ] = "”}‘Ì $$ ‚ğ“ü‚ê‚Ä‚­‚¾‚³‚¢B";
     Text[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼ $$À»(¸¦) »ğÀÔÇÏ½Ê½Ã¿À .";
-    Text[ polish ] = "Wsuñ proszê no?nik danych $$.";
+    Text[ polish ] = "Wsuñ proszê noœnik danych $$.";
     Text[ portuguese ] = "Introduza o media $$.";
     Text[ portuguese_brazilian ] = "Please insert disk $$.";
     Text[ russian ] = "Âñòàâüòå, ïîæàëóéñòà, äèñê $$.";
@@ -176,4 +176,5 @@ String STR_ERROR_WRONGMEDIUM
     Text[ catalan ] = "Inserte por favor el medio $$.";
     Text[ finnish ] = "Syötä tallennusväline $$.";
 };
+
 
