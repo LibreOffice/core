@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: sj $ $Date: 2002-10-31 10:59:54 $
+#   last change: $Author: gh $ $Date: 2002-12-11 09:36:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..
 PRJNAME=filter
 TARGET=pdffilter
-GEN_HID=true
+GEN_HID=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
