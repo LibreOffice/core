@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:42:40 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,9 +684,34 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
         SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
         if ( !pObj->IsWriterFlyFrame() )
         {
-            SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
+            SwDrawContact* pContact = (SwDrawContact*)GetUserCall(pObj);
 
-            const SwFrm *pOldAnch = pContact->GetAnchor();
+            // OD 27.06.2003 #108784# - consider, that drawing object has
+            // no user call. E.g.: a 'virtual' drawing object is disconnected by
+            // the anchor type change of the 'master' drawing object.
+            // Continue with next selected object and assert, if this isn't excepted.
+            if ( !pContact )
+            {
+#ifndef PRODUCT
+                bool bNoUserCallExcepted =
+                        pObj->ISA(SwDrawVirtObj) &&
+                        !static_cast<SwDrawVirtObj*>(pObj)->IsConnected();
+                ASSERT( bNoUserCallExcepted, "SwDoc::ChgAnchor(..) - no contact at selected drawing object" );
+#endif
+                continue;
+            }
+
+            // OD 17.06.2003 #108784# - determine correct 'old' anchor frame,
+            // considering 'virtual' drawing objects.
+            const SwFrm* pOldAnch = 0L;
+            if ( pObj->ISA(SwDrawVirtObj) )
+            {
+                pOldAnch = static_cast<SwDrawVirtObj*>(pObj)->GetAnchorFrm();
+            }
+            else
+            {
+                pOldAnch = pContact->GetAnchor();
+            }
             const SwFrm *pNewAnch = pOldAnch;
 
             BOOL bChanges = TRUE;
@@ -727,7 +752,8 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                                              pObj->GetBoundRect().TopRight() :
                                              aPt;
 
-                    pNewAnch = ::FindAnchor( pOldAnch, aNewPoint, TRUE );
+                    // OD 18.06.2003 #108784# - allow drawing objects in header/footer
+                    pNewAnch = ::FindAnchor( pOldAnch, aNewPoint, false );
                     if( pNewAnch->IsTxtFrm() && ((SwTxtFrm*)pNewAnch)->IsFollow() )
                         pNewAnch = ((SwTxtFrm*)pNewAnch)->FindMaster();
                     if( pNewAnch->IsProtected() )
@@ -752,8 +778,10 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                         Point aPoint( aPt );
                         aPoint.X() -= 1;
                         GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
+                        // OD 20.06.2003 #108784# - consider that drawing objects
+                        // can be in header/footer. Thus, <GetFrm()> by left-top-corner
                         pTxtFrm = aPos.nNode.GetNode().
-                                         GetCntntNode()->GetFrm( 0, 0, FALSE );
+                                        GetCntntNode()->GetFrm( &aPt, 0, FALSE );
                     }
                     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aPt );
                     pNewAnch = pTmp->FindFlyFrm();
@@ -785,7 +813,6 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 {
                     SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
                     const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
-#ifdef VERTICAL_LAYOUT
                     SwTwips nRelPos = pObj->GetRelativePos().Y();
                     const SwFrm *pTmp = pContact->GetAnchor();
                     if( pTmp && pTmp->IsVertical() )
@@ -794,9 +821,6 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                         if( !pTmp->IsReverse() )
                             nRelPos = -nRelPos -pObj->GetSnapRect().GetWidth();
                     }
-#else
-                    SwTwips nRelPos = pObj->GetRelativePos().Y();
-#endif
                     if ( rVert.GetPos() != nRelPos ||
                             VERT_NONE != rVert.GetVertOrient() )
                     {
@@ -817,7 +841,8 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 }
                 else            // Ankerwechsel
                 {
-                    pNewAnch = ::FindAnchor( pOldAnch, aPt, TRUE );
+                    // OD 18.06.2003 #108784# - allow drawing objects in header/footer
+                    pNewAnch = ::FindAnchor( pOldAnch, aPt, false );
                     if( pNewAnch->IsProtected() )
                     {
                         pNewAnch = 0;
@@ -860,10 +885,39 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
 
             if( bChanges && pNewAnch )
             {
+                // OD 20.06.2003 #108784# - consider that a 'virtual' drawing
+                // object is disconnected from layout, e.g. caused by an anchor
+                // type change.
+                if ( pObj->ISA(SwDrawVirtObj) )
+                {
+                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                    if ( !pDrawVirtObj->IsConnected() )
+                    {
+                        // 'virtual' drawing object disconnected from layout.
+                        // Thus, change to 'master' drawing object
+                        pObj = &(pDrawVirtObj->ReferencedObj());
+                    }
+                }
+#ifndef PRODUCT
                 // SetAttr() removes the ParaPortion of pNewAnch, which is required by
                 // GetFrmAnchorPos. Therefore aTmpPoint has to be calculated before
                 // the call of SetAttr().
-                const Point aTmpPoint( pNewAnch->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                // OD 20.06.2003 #108784# - refine for assertion:
+                // consider anchor change from page to something in header/footer
+                Point aProposedAnchorPos;
+                if ( nOld == FLY_PAGE &&
+                     pContact->GetAnchor()->FindFooterOrHeader() )
+                {
+                    aProposedAnchorPos = pContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) );
+                }
+                else
+                {
+                    // SetAttr() removes the ParaPortion of pNewAnch, which is required by
+                    // GetFrmAnchorPos. Therefore aTmpPoint has to be calculated before
+                    // the call of SetAttr().
+                    aProposedAnchorPos = pNewAnch->GetFrmAnchorPos( ::HasWrap( pObj ) );
+                }
+#endif
                 SetAttr( aNewAnch, *pContact->GetFmt() );
                 if( bPosCorr )
                 {
@@ -875,11 +929,11 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                 }
 
 #ifndef PRODUCT
-                {
+        {
                     const Point aIstA( pObj->GetAnchorPos() );
-                    ASSERT( pOldAnch == pNewAnch ||
-                            aIstA == aTmpPoint, "ChgAnchor: Wrong Anchor-Pos." );
-                }
+                    ASSERT( pOldAnch == pNewAnch || aIstA == aProposedAnchorPos,
+                "SwDoc::ChgAnchor(..): Wrong Anchor-Pos." );
+        }
 #endif
             }
 
