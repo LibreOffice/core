@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 06:56:39 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,11 @@ hidspecial HID_DLG_COLWIDTH                             { HelpId = HID_DLG_COLWI
 hidspecial HID_TLB_QUERYDESIGN                          { HelpId = HID_TLB_QUERYDESIGN; };
 hidspecial HID_CTL_QRYSQLEDIT                           { HelpId = HID_CTL_QRYSQLEDIT; };
 
-hidspecial HID_BROWSER_QUERY_CREATE                     { HelpId = HID_BROWSER_QUERY_CREATE; };
+hidspecial HID_DSADMIN_SPECIAL_MESSAGE                  { HelpId = HID_DSADMIN_SPECIAL_MESSAGE; };
+
+hidspecial HID_BROWSER_QUERY_CREATE_DESIGN              { HelpId = HID_BROWSER_QUERY_CREATE_DESIGN; };
+hidspecial HID_BROWSER_QUERY_CREATE_TEXT                { HelpId = HID_BROWSER_QUERY_CREATE_TEXT; };
+
 hidspecial HID_DLG_ERROR                                { HelpId = HID_DLG_ERROR; };
 hidspecial HID_DLG_TEXT                                 { HelpId = HID_DLG_TEXT; };
 hidspecial UID_SQLERROR_BUTTONMORE                      { HelpId = UID_SQLERROR_BUTTONMORE; };
@@ -149,6 +153,30 @@ hidspecial HID_DSADMIN_PWDREC_ADO                       { HelpId = HID_DSADMIN_P
 hidspecial HID_DSADMIN_CONNURL_ADOPAGE                  { HelpId = HID_DSADMIN_CONNURL_ADOPAGE; };
 hidspecial HID_DSADMIN_PAGE_ADO                         { HelpId = HID_DSADMIN_PAGE_ADO; };
 
+hidspecial HID_JOINSH_ADDTAB_CLOSE                      { HelpId = HID_JOINSH_ADDTAB_CLOSE; };
+hidspecial HID_JOINSH_ADDTAB_TABLELIST                  { HelpId = HID_JOINSH_ADDTAB_TABLELIST; };
+hidspecial HID_CTL_QRYDGNTAB                            { HelpId = HID_CTL_QRYDGNTAB; };
+hidspecial HID_DLG_QRY_JOIN                             { HelpId = HID_DLG_QRY_JOIN; };
+hidspecial HID_DLG_QRY_INNER                            { HelpId = HID_DLG_QRY_INNER; };
+hidspecial HID_DLG_QRY_LEFT                             { HelpId = HID_DLG_QRY_LEFT; };
+hidspecial HID_DLG_QRY_RIGHT                            { HelpId = HID_DLG_QRY_RIGHT; };
+hidspecial HID_DLG_QRY_FULL                             { HelpId = HID_DLG_QRY_FULL; };
+hidspecial HID_DLG_QRY_HELPTEXT                         { HelpId = HID_DLG_QRY_HELPTEXT; };
+
+hidspecial HID_CTL_QRYDGNCRIT                           { HelpId = HID_CTL_QRYDGNCRIT; };
+hidspecial HID_QRYDGN_ROW_VISIBLE                       { HelpId = HID_QRYDGN_ROW_VISIBLE; };
+hidspecial HID_QRYDGN_ROW_TABLE                         { HelpId = HID_QRYDGN_ROW_TABLE; };
+hidspecial HID_QRYDGN_ROW_FIELD                         { HelpId = HID_QRYDGN_ROW_FIELD; };
+hidspecial HID_QRYDGN_ROW_ORDER                         { HelpId = HID_QRYDGN_ROW_ORDER; };
+hidspecial HID_QRYDGN_ROW_FUNCTION                      { HelpId = HID_QRYDGN_ROW_FUNCTION; };
+hidspecial HID_QRYDGN_ROW_ALIAS                         { HelpId = HID_QRYDGN_ROW_ALIAS; };
+hidspecial HID_QRYDGN_ROW_CRIT                          { HelpId = HID_QRYDGN_ROW_CRIT; };
+
+hidspecial HID_QUERY_FUNCTION                           { HelpId = HID_QUERY_FUNCTION; };
+hidspecial HID_QUERY_TABLENAME                          { HelpId = HID_QUERY_TABLENAME; };
+hidspecial HID_QUERY_ALIASNAME                          { HelpId = HID_QUERY_ALIASNAME; };
+hidspecial HID_QUERY_DISTINCT                           { HelpId = HID_QUERY_DISTINCT; };
+
 hidspecial HID_DSADMIN_QUERYADMINISTRATION              { HelpId = HID_DSADMIN_QUERYADMINISTRATION; };
 hidspecial HID_DSADMIN_QUERIES                          { HelpId = HID_DSADMIN_QUERIES; };
 hidspecial HID_DSADMIN_QUERIES_NEW                      { HelpId = HID_DSADMIN_QUERIES_NEW; };
@@ -158,6 +186,9 @@ hidspecial HID_DSADMIN_QUERIES_DELETE                   { HelpId = HID_DSADMIN_Q
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/01/26 06:56:39  fs
+ *  some new help ids for the query administration
+ *
  *  Revision 1.11  2001/01/23 08:16:13  oj
  *  #83023##83022##83027#
  *
