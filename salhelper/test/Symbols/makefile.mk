@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jl $ $Date: 2001-03-29 14:36:29 $
+#   last change: $Author: jl $ $Date: 2001-04-19 15:12:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,25 +62,22 @@
 
 PRJ=..$/..$/
 
-PRJNAME=dtrans
-TARGET=dndTest
+PRJNAME=salhelper
+TARGET=dynloader
+TARGET1=samplelib
 TARGETTYPE=CUI
 LIBTARGET=NO
 
-#USE_DEFFILE=	TRUE
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 BOOTSTRAP_SERVICE=FALSE
 
 # --- Settings ---
 
-.INCLUDE : svpre.mk
 .INCLUDE : settings.mk
-.INCLUDE : sv.mk
 
 # --- Files ---
 
-# CFLAGS+=/GR -DUNICODE -D_UNICODE
 UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 
@@ -92,13 +89,44 @@ CPPUMAKERFLAGS += -C
 UNOUCROUT=	$(OUT)$/inc
 .ENDIF
 
+#RTTI on
+.IF "$(OS)" == "WNT"
+CFLAGS+= -GR
+.ENDIF
+
+
 # UNOTYPES= com.sun.star.lang.XInitialization \
-          
+#---------------------------------------------------------------------------
+# Build the test library which is loaded by the 
+# RealDynamicLoader
+
+SLOFILES= \
+        $(SLO)$/samplelib.obj
+
+LIB1TARGET=$(SLB)$/$(TARGET1).lib
+LIB1OBJFILES= \
+        $(SLO)$/samplelib.obj
 
 
-.IF "$(depend)" != ""
+SHL1TARGET=	$(TARGET1)
 
-.ENDIF # depend
+SHL1STDLIBS= \
+        $(CPPULIB)		\
+        $(CPPUHELPERLIB)	\
+        $(SALLIB)
+
+SHL1DEPN=
+SHL1IMPLIB=	i$(TARGET1)
+SHL1LIBS=	$(SLB)$/$(TARGET1).lib
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=	$(SHL1TARGET)
+DEFLIB1NAME =$(TARGET1)
+DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
+
+#DEF1EXPORTFILE=	exports.dxp
+
+# ------------------------------------------------------------------------------
 
 APP1NOSAL=TRUE
 
@@ -127,4 +155,11 @@ APP1DEF=	$(MISC)\$(APP1TARGET).def
 # --- Targets ---
 
 .INCLUDE : target.mk
+
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo __CT>>$@
+
 

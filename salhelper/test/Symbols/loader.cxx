@@ -1,58 +1,37 @@
 
-
-/*
-This small test program tests whether all necessary symbols are exported from
-isalhelper.lib. If this linker runs without errors than it is ok.
-
-(public)
-static class salhelper::ORealDynamicLoader * __cdecl salhelper::ORealDynamicLoader::newInstance(class salhelper::ORealDynamicLoader * *,class rtl::OUString const &,class rtl::OUString const &)
-
-unsigned long __cdecl salhelper::ORealDynamicLoader::acquire(void)
-
-unsigned long __cdecl salhelper::ORealDynamicLoader::release(void)
-
-void * __cdecl salhelper::ORealDynamicLoader::getApi(void)const
-
-(protected)
-salhelper::ORealDynamicLoader::ORealDynamicLoader( ORealDynamicLoader ** ppSetToZeroInDestructor,
-                        const ::rtl::OUString& strModuleName,
-                        const ::rtl::OUString& strInitFunction,
-                        void* pApi,
-                        oslModule pModule );
-
-
-virtual salhelper::ORealDynamicLoader::~ORealDynamicLoader();
-
-*/
-
 #include  <salhelper/dynload.hxx>
 #include <rtl/ustring>
+#include <stdio.h>
+#include "samplelib.hxx"
+
 
 using namespace salhelper;
 using namespace rtl;
 
-class Loader:public ORealDynamicLoader
+
+class SampleLibLoader
+    : public ::salhelper::ODynamicLoader<SampleLib_Api>
 {
 public:
-    Loader(){}
+    SampleLibLoader():
+        ::salhelper::ODynamicLoader<SampleLib_Api>
+            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "samplelib") ) ),
+             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(SAMPLELIB_INIT_FUNCTION_NAME) ))
+        {}
 
-    void deletethis()
-    {
-        delete this;
-    }
 };
+
 
 int main( int argc, char *argv[ ], char *envp[ ] )
 {
-    ORealDynamicLoader* pLoader= ORealDynamicLoader::newInstance( NULL, OUString(), OUString());
+    SampleLibLoader Loader;
+    SampleLibLoader Loader2;
+    Loader= Loader2;
+    SampleLib_Api *pApi= Loader.getApi();
 
-    pLoader->acquire();
+    sal_Int32 retint= pApi->funcA( 10);
+    double retdouble= pApi->funcB( 3.14);
 
-    pLoader->getApi();
-    pLoader->release();
-
-    Loader* pLoader2= new Loader();
-    pLoader2->deletethis();
 
     return 0;
 }
