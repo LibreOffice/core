@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:18:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Horiz. distance" ;
         Text [ norwegian ] = "Horiz. distance" ;
         Text [ italian ] = "Distanza ~orizzont." ;
-        Text [ portuguese_brazilian ] = "Dist‚ncia horizontal" ;
+        Text [ portuguese_brazilian ] = "Dist?ncia horizontal" ;
         Text [ portuguese ] = "EspaÁamento ~horiz." ;
         Text [ finnish ] = "~Vaakaet‰isyys" ;
         Text [ danish ] = "Vandret afstand" ;
@@ -137,7 +137,7 @@ TabPage TP_LAB_FMT
         Text [ English ] = "Vert. distance" ;
         Text [ norwegian ] = "Vert. distance" ;
         Text [ italian ] = "Distanza verticale" ;
-        Text [ portuguese_brazilian ] = "Dist‚ncia vertical" ;
+        Text [ portuguese_brazilian ] = "Dist?ncia vertical" ;
         Text [ portuguese ] = "EspaÁamento vertical" ;
         Text [ finnish ] = "~Pystyet‰isyys" ;
         Text [ danish ] = "Lodret afstand" ;
@@ -467,7 +467,7 @@ String STR_HDIST
     Text [ English ] = "H. distance" ;
     Text [ norwegian ] = "H. distance" ;
     Text [ italian ] = "Distanza orizzontale" ;
-    Text [ portuguese_brazilian ] = "Dist‚ncia h." ;
+    Text [ portuguese_brazilian ] = "Dist?ncia h." ;
     Text [ portuguese ] = "EspaÁo H." ;
     Text [ finnish ] = "V.et‰isyys" ;
     Text [ danish ] = "V. afstand" ;
@@ -494,7 +494,7 @@ String STR_VDIST
     Text [ English ] = "V. distance" ;
     Text [ norwegian ] = "V. distance" ;
     Text [ italian ] = "Distanza verticale" ;
-    Text [ portuguese_brazilian ] = "Dist‚ncia v." ;
+    Text [ portuguese_brazilian ] = "Dist?ncia v." ;
     Text [ portuguese ] = "EspaÁo V." ;
     Text [ finnish ] = "P.et‰isyys" ;
     Text [ danish ] = "L. afstand" ;
@@ -532,7 +532,7 @@ String STR_WIDTH
     Text [ english_us ] = "Width" ;
     Text[ chinese_simplified ] = "øÌ";
     Text[ russian ] = "ÿËËÌ‡";
-    Text[ polish ] = "SzerokoúÊ";
+    Text[ polish ] = "Szeroko?Ê";
     Text[ japanese ] = "ïù";
     Text[ chinese_traditional ] = "ºe";
     Text[ arabic ] = "«·⁄—÷";
@@ -559,7 +559,7 @@ String STR_HEIGHT
     Text [ english_us ] = "Height" ;
     Text[ chinese_simplified ] = "∏ﬂ";
     Text[ russian ] = "¬˚ÒÓÚ‡";
-    Text[ polish ] = "WysokoúÊ";
+    Text[ polish ] = "Wysoko?Ê";
     Text[ japanese ] = "çÇÇ≥";
     Text[ chinese_traditional ] = "∞™";
     Text[ arabic ] = "«·«— ›«⁄";
