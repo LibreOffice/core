@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-31 11:56:44 $
+ *  last change: $Author: aw $ $Date: 2001-07-31 16:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,16 +373,19 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
 
         if( bRet )
         {
-            SfxMedium   aMedium( pStore );
             SdFilter*   pFilter = NULL;
 
             if( bBinary )
+            {
+                SfxMedium   aMedium( pStore );
                 pFilter = new SdBINFilter( aMedium, *this, sal_True );
+            }
             else if( bXML )
             {
                 pDoc->NewOrLoadCompleted( NEW_DOC );
 
-                pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+                // #80365# use the medium from the DrawDocShell, do not construct an own one
+                pFilter = new SdXMLFilter( *GetMedium(), *this, sal_True );
             }
 
             bRet = pFilter ? pFilter->Import() : FALSE;
@@ -465,13 +468,12 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
     }
     else
     {
-        SfxMedium   aMedium( pStor );
-
         pDoc->NewOrLoadCompleted( NEW_DOC );
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
 
-        SdFilter*   pFilter = new SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer );
+        // #80365# use the medium from the DrawDocShell, do not construct an own one
+        SdFilter*   pFilter = new SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Organizer );
 
         bRet = pFilter ? pFilter->Import() : FALSE;
         delete pFilter;
