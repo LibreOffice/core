@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-25 08:39:16 $
+ *  last change: $Author: ka $ $Date: 2001-05-09 15:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,32 +526,6 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
     }
-    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SVXB ) )
-    {
-        SotStorageStreamRef xStm;
-
-        if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
-        {
-            Graphic aGraphic;
-
-            *xStm >> aGraphic;
-
-            if( pOwnData )
-            {
-                SdrPage* pWorkPage = ( (SdrModel*) pOwnData->GetWorkDocument() )->GetPage( 0 );
-
-                pWorkPage->SetRectsDirty();
-
-                Size aSize( pWorkPage->GetSize() );
-
-                aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-                aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
-            }
-
-            InsertGraphic( aGraphic, nAction, aDropPos, NULL, pImageMap );
-            bReturn = TRUE;
-        }
-    }
     else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
     {
         String aString;
@@ -678,6 +652,34 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                     bReturn = TRUE;
                 }
             }
+        }
+    }
+    else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SVXB ) )
+    {
+        SotStorageStreamRef xStm;
+
+        if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVXB, xStm ) )
+        {
+            Point   aInsertPos( rPos );
+            Graphic aGraphic;
+
+            *xStm >> aGraphic;
+
+            if( pOwnData && pOwnData->GetWorkDocument() )
+            {
+                SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
+                SdrPage*    pWorkPage = pWorkModel->GetPage( 0 );
+
+                pWorkPage->SetRectsDirty();
+
+                Size aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
+
+                aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
+                aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
+            }
+
+            InsertGraphic( aGraphic, nAction, aDropPos, NULL, pImageMap );
+            bReturn = TRUE;
         }
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_GDIMETAFILE ) )
