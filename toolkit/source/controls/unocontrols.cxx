@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:46:21 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,17 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
+
+
 #ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include <toolkit/controls/formattedcontrol.hxx>
 #endif
@@ -106,6 +111,9 @@
 #endif
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+#ifndef TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
+#include <toolkit/helper/imagealign.hxx>
 #endif
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -195,6 +203,7 @@ UnoControlEditModel::UnoControlEditModel()
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ECHOCHAR );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
@@ -211,6 +220,7 @@ UnoControlEditModel::UnoControlEditModel()
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
     ImplRegisterProperty( BASEPROPERTY_VSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 ::rtl::OUString UnoControlEditModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
@@ -574,6 +584,7 @@ UnoControlFileControlModel::UnoControlFileControlModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
@@ -583,6 +594,7 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 ::rtl::OUString UnoControlFileControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -632,6 +644,141 @@ UnoFileControl::UnoFileControl()
 }
 
 //  ----------------------------------------------------
+//  class ImageProducerControlModel
+//  ----------------------------------------------------
+uno::Any SAL_CALL ImageProducerControlModel::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    return UnoControlModel::queryInterface( rType );
+}
+
+uno::Any SAL_CALL ImageProducerControlModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XImageProducer*, this ) );
+    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
+}
+
+void SAL_CALL ImageProducerControlModel::acquire() throw()
+{
+    UnoControlModel::acquire();
+}
+
+void SAL_CALL ImageProducerControlModel::release() throw()
+{
+    UnoControlModel::release();
+}
+
+void SAL_CALL ImageProducerControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
+{
+    UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+
+    // ImageAlign and ImagePosition both need to correspond to each other
+    try
+    {
+        switch ( nHandle )
+        {
+        case BASEPROPERTY_IMAGEALIGN:
+            if ( !mbAdjustingImagePosition && ImplHasProperty( BASEPROPERTY_IMAGEPOSITION ) )
+            {
+                mbAdjustingImagePosition = sal_True;
+                sal_Int16 nUNOValue = 0;
+                OSL_VERIFY( rValue >>= nUNOValue );
+                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEPOSITION ), uno::makeAny( getExtendedImagePosition( nUNOValue ) ) );
+                mbAdjustingImagePosition = sal_False;
+            }
+            break;
+        case BASEPROPERTY_IMAGEPOSITION:
+            if ( !mbAdjustingImagePosition && ImplHasProperty( BASEPROPERTY_IMAGEALIGN ) )
+            {
+                mbAdjustingImagePosition = sal_True;
+                sal_Int16 nUNOValue = 0;
+                OSL_VERIFY( rValue >>= nUNOValue );
+                setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEALIGN ), uno::makeAny( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
+                mbAdjustingImagePosition = sal_False;
+            }
+            break;
+        }
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "ImageProducerControlModel::setFastPropertyValue_NoBroadcast: caught an exception while aligning the ImagePosition/ImageAlign properties!" );
+        mbAdjustingImagePosition = sal_False;
+    }
+}
+
+void ImageProducerControlModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maListeners.push_back( xConsumer );
+}
+
+void ImageProducerControlModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maListeners.remove( xConsumer );
+}
+
+void ImageProducerControlModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Sequence<uno::Any> aArgs(1);
+    aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
+    if ( xImageProducer.is() )
+    {
+        std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
+        while ( aIter != maListeners.end() )
+        {
+            xImageProducer->addConsumer( *aIter );
+            aIter++;
+        }
+        xImageProducer->startProduction();
+    }
+}
+
+//  ----------------------------------------------------
+//  class ImageConsumerControl
+//  ----------------------------------------------------
+
+sal_Bool SAL_CALL ImageConsumerControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
+{
+    // remove the peer as image consumer from the model
+    lcl_knitImageComponents( getModel(), getPeer(), false );
+
+    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
+
+    // add the peer as image consumer to the model
+    lcl_knitImageComponents( getModel(), getPeer(), true );
+
+    return bReturn;
+}
+
+void SAL_CALL ImageConsumerControl::createPeer( const uno::Reference< awt::XToolkit >& rxToolkit, const uno::Reference< awt::XWindowPeer >& rParentPeer ) throw(uno::RuntimeException)
+{
+    // remove the peer as image consumer from the model
+    lcl_knitImageComponents( getModel(), getPeer(), false );
+
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
+
+    // add the peer as image consumer to the model
+    lcl_knitImageComponents( getModel(), getPeer(), true );
+}
+
+void ImageConsumerControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+{
+    sal_uInt16 nType = GetPropertyId( rPropName );
+    if ( nType == BASEPROPERTY_IMAGEURL )
+    {
+        uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
+        uno::Reference < awt::XImageConsumer > xImgCons( getPeer(), uno::UNO_QUERY );
+
+        if ( xImgProd.is() && xImgCons.is() )
+        {
+            xImgProd->startProduction();
+        }
+    }
+    else
+        UnoControlBase::ImplSetPeerProperty( rPropName, rVal );
+}
+
+//  ----------------------------------------------------
 //  class UnoControlButtonModel
 //  ----------------------------------------------------
 UnoControlButtonModel::UnoControlButtonModel()
@@ -644,6 +791,7 @@ UnoControlButtonModel::UnoControlButtonModel()
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_IMAGEALIGN );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEPOSITION );
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
@@ -652,12 +800,18 @@ UnoControlButtonModel::UnoControlButtonModel()
     ImplRegisterProperty( BASEPROPERTY_REPEAT_DELAY );
     ImplRegisterProperty( BASEPROPERTY_STATE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-}
+    ImplRegisterProperty( BASEPROPERTY_TOGGLE );
+    ImplRegisterProperty( BASEPROPERTY_FOCUSONCLICK );
+    ImplRegisterProperty( BASEPROPERTY_MULTILINE );
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
 
-uno::Any UnoControlButtonModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XImageProducer*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        setFastPropertyValue_NoBroadcast( BASEPROPERTY_IMAGEALIGN, ImplGetDefaultValue( BASEPROPERTY_IMAGEALIGN ) );
+        // this ensures that our ImagePosition is consistent with our ImageAlign property (since both
+        // defaults are not per se consistent), since both are coupled in setFastPropertyValue_NoBroadcast
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 ::rtl::OUString UnoControlButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -667,15 +821,20 @@ uno::Any UnoControlButtonModel::queryAggregation( const uno::Type & rType ) thro
 
 uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    switch ( nPropId )
     {
-        uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlButton );
-        return aAny;
+    case BASEPROPERTY_DEFAULTCONTROL:
+        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlButton ) );
+    case BASEPROPERTY_TOGGLE:
+        return uno::makeAny( (sal_Bool)sal_False );
+    case BASEPROPERTY_ALIGN:
+        return uno::makeAny( (sal_Int16)PROPERTY_ALIGN_CENTER );
+    case BASEPROPERTY_FOCUSONCLICK:
+        return uno::makeAny( (sal_Bool)sal_True );
     }
-    return UnoControlModel::ImplGetDefaultValue( nPropId );
-}
 
+    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
+}
 
 ::cppu::IPropertyArrayHelper& UnoControlButtonModel::getInfoHelper()
 {
@@ -693,34 +852,6 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
-}
-
-void UnoControlButtonModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.push_back( xConsumer );
-}
-
-void UnoControlButtonModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.remove( xConsumer );
-}
-
-void UnoControlButtonModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    uno::Sequence<uno::Any> aArgs(1);
-    aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
-    if ( xImageProducer.is() )
-    {
-        std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
-        while ( aIter != maListeners.end() )
-        {
-            xImageProducer->addConsumer( *aIter );
-            aIter++;
-        }
-        xImageProducer->startProduction();
-    }
 }
 
 //  ----------------------------------------------------
@@ -764,14 +895,14 @@ uno::Any UnoButtonControl::queryAggregation( const uno::Type & rType ) throw(uno
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( awt::XButton*, this ),
                                         SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : ImageConsumerControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoButtonControl )
 getCppuType( ( uno::Reference< awt::XButton>* ) NULL ),
 getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
-UnoControlBase::getTypes()
+ImageConsumerControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoButtonControl::dispose() throw(uno::RuntimeException)
@@ -779,56 +910,17 @@ void UnoButtonControl::dispose() throw(uno::RuntimeException)
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maActionListeners.disposeAndClear( aEvt );
-    UnoControl::dispose();
-}
-
-sal_Bool SAL_CALL UnoButtonControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
-
-    return bReturn;
+    ImageConsumerControl::dispose();
 }
 
 void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    uno::Reference< awt::XImageProducer > xProducer( getModel(), uno::UNO_QUERY );
-
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    UnoControl::createPeer( rxToolkit, rParentPeer );
+    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
     uno::Reference < awt::XButton > xButton( getPeer(), uno::UNO_QUERY );
     xButton->setActionCommand( maActionCommand );
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
 }
-
-void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
-{
-    sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( getPeer().is() && ( nType == BASEPROPERTY_IMAGEURL ) )
-    {
-        uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
-        uno::Reference < awt::XImageConsumer > xImgCons( getPeer(), uno::UNO_QUERY );
-
-        if ( xImgProd.is() && xImgCons.is() )
-        {
-            xImgProd->startProduction();
-        }
-    }
-    else
-        UnoControl::ImplSetPeerProperty( rPropName, rVal );
-}
-
 
 void UnoButtonControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
@@ -889,6 +981,7 @@ UnoControlImageControlModel::UnoControlImageControlModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
@@ -897,12 +990,6 @@ UnoControlImageControlModel::UnoControlImageControlModel()
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_SCALEIMAGE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-}
-
-uno::Any UnoControlImageControlModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
-{
-    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XImageProducer*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
 }
 
 ::rtl::OUString UnoControlImageControlModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -918,7 +1005,7 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
         aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlImageControl );
         return aAny;
     }
-    return UnoControlModel::ImplGetDefaultValue( nPropId );
+    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
 }
 
 
@@ -939,36 +1026,6 @@ uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getProper
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-
-// ::com::sun::star::awt::XImageProducer
-void UnoControlImageControlModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.push_back( xConsumer );
-}
-
-void UnoControlImageControlModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
-{
-    maListeners.remove( xConsumer );
-}
-
-void UnoControlImageControlModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    uno::Sequence<uno::Any> aArgs(1);
-    aArgs.getArray()[0] = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
-    if ( xImageProducer.is() )
-    {
-        std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
-        while ( aIter != maListeners.end() )
-        {
-            xImageProducer->addConsumer( *aIter );
-            aIter++;
-        }
-        xImageProducer->startProduction();
-    }
-}
-
 
 //  ----------------------------------------------------
 //  class UnoImageControlControl
@@ -1028,48 +1085,6 @@ awt::Size UnoImageControlControl::calcAdjustedSize( const awt::Size& rNewSize ) 
     return Impl_calcAdjustedSize( rNewSize );
 }
 
-void UnoImageControlControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
-{
-    sal_uInt16 nType = GetPropertyId( rPropName );
-    if ( getPeer().is() && ( nType == BASEPROPERTY_IMAGEURL ) )
-    {
-        uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
-        uno::Reference < awt::XImageConsumer > xImgCons( getPeer(), uno::UNO_QUERY );
-
-        if ( xImgProd.is() && xImgCons.is() )
-        {
-            xImgProd->startProduction();
-        }
-    }
-    else
-        UnoControl::ImplSetPeerProperty( rPropName, rVal );
-}
-
-
-sal_Bool SAL_CALL UnoImageControlControl::setModel(const uno::Reference< awt::XControlModel >& _rModel) throw ( uno::RuntimeException )
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    sal_Bool bReturn = UnoControlBase::setModel( _rModel );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
-
-    return bReturn;
-}
-
-void UnoImageControlControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
-{
-    // remove the peer as image consumer from the model
-    lcl_knitImageComponents( getModel(), getPeer(), false );
-
-    UnoControlBase::createPeer( rxToolkit, rParentPeer );
-
-    // add the peer as image consumer to the model
-    lcl_knitImageComponents( getModel(), getPeer(), true );
-}
-
 //  ----------------------------------------------------
 //  class UnoControlRadioButtonModel
 //  ----------------------------------------------------
@@ -1080,10 +1095,16 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEPOSITION );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_STATE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
+    ImplRegisterProperty( BASEPROPERTY_VISUALEFFECT );
+    ImplRegisterProperty( BASEPROPERTY_MULTILINE );
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
 }
 
 ::rtl::OUString UnoControlRadioButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -1093,13 +1114,16 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel()
 
 uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    switch ( nPropId )
     {
-        uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButton );
-        return aAny;
+    case BASEPROPERTY_DEFAULTCONTROL:
+        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlRadioButton ) );
+
+    case BASEPROPERTY_VISUALEFFECT:
+        return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
     }
-    return UnoControlModel::ImplGetDefaultValue( nPropId );
+
+    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlRadioButtonModel::getInfoHelper()
@@ -1146,7 +1170,7 @@ uno::Any UnoRadioButtonControl::queryAggregation( const uno::Type & rType ) thro
                                         SAL_STATIC_CAST( awt::XItemListener*, this ),
                                         SAL_STATIC_CAST( lang::XEventListener*, SAL_STATIC_CAST( awt::XItemListener*, this ) ),
                                         SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : ImageConsumerControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
@@ -1155,7 +1179,7 @@ IMPL_XTYPEPROVIDER_START( UnoRadioButtonControl )
     getCppuType( ( uno::Reference< awt::XRadioButton>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XItemListener>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
-    UnoControlBase::getTypes()
+    ImageConsumerControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoRadioButtonControl::dispose() throw(uno::RuntimeException)
@@ -1163,7 +1187,7 @@ void UnoRadioButtonControl::dispose() throw(uno::RuntimeException)
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aEvt );
-    UnoControl::dispose();
+    ImageConsumerControl::dispose();
 }
 
 
@@ -1174,7 +1198,7 @@ sal_Bool UnoRadioButtonControl::isTransparent() throw(uno::RuntimeException)
 
 void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    UnoControl::createPeer( rxToolkit, rParentPeer );
+    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XRadioButton >  xRadioButton( getPeer(), uno::UNO_QUERY );
     xRadioButton->addItemListener( this );
@@ -1313,11 +1337,17 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel()
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEPOSITION );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_LABEL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_STATE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TRISTATE );
+    ImplRegisterProperty( BASEPROPERTY_VISUALEFFECT );
+    ImplRegisterProperty( BASEPROPERTY_MULTILINE );
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
 }
 
 ::rtl::OUString UnoControlCheckBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -1327,13 +1357,16 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel()
 
 uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    switch ( nPropId )
     {
-        uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBox );
-        return aAny;
+    case BASEPROPERTY_DEFAULTCONTROL:
+        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlCheckBox ) );
+
+    case BASEPROPERTY_VISUALEFFECT:
+        return uno::makeAny( (sal_Int16)awt::VisualEffect::LOOK3D );
     }
-    return UnoControlModel::ImplGetDefaultValue( nPropId );
+
+    return ImageProducerControlModel::ImplGetDefaultValue( nPropId );
 }
 
 
@@ -1381,7 +1414,7 @@ uno::Any UnoCheckBoxControl::queryAggregation( const uno::Type & rType ) throw(u
                                         SAL_STATIC_CAST( awt::XItemListener*, this ),
                                         SAL_STATIC_CAST( lang::XEventListener*, SAL_STATIC_CAST( awt::XItemListener*, this ) ),
                                         SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
-    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
+    return (aRet.hasValue() ? aRet : ImageConsumerControl::queryAggregation( rType ));
 }
 
 // lang::XTypeProvider
@@ -1390,7 +1423,7 @@ IMPL_XTYPEPROVIDER_START( UnoCheckBoxControl )
     getCppuType( ( uno::Reference< awt::XCheckBox>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XItemListener>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
-    UnoControlBase::getTypes()
+    ImageConsumerControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 void UnoCheckBoxControl::dispose() throw(uno::RuntimeException)
@@ -1398,7 +1431,7 @@ void UnoCheckBoxControl::dispose() throw(uno::RuntimeException)
     lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aEvt );
-    UnoControl::dispose();
+    ImageConsumerControl::dispose();
 }
 
 sal_Bool UnoCheckBoxControl::isTransparent() throw(uno::RuntimeException)
@@ -1408,7 +1441,7 @@ sal_Bool UnoCheckBoxControl::isTransparent() throw(uno::RuntimeException)
 
 void UnoCheckBoxControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
 {
-    UnoControl::createPeer( rxToolkit, rParentPeer );
+    ImageConsumerControl::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XCheckBox >  xCheckBox( getPeer(), uno::UNO_QUERY );
     xCheckBox->addItemListener( this );
@@ -1522,6 +1555,7 @@ UnoControlFixedTextModel::UnoControlFixedTextModel()
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
@@ -1729,6 +1763,7 @@ UnoControlListBoxModel::UnoControlListBoxModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_DROPDOWN );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
@@ -1742,6 +1777,7 @@ UnoControlListBoxModel::UnoControlListBoxModel()
     ImplRegisterProperty( BASEPROPERTY_STRINGITEMLIST );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
 }
 
 ::rtl::OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -2198,6 +2234,7 @@ UnoControlComboBoxModel::UnoControlComboBoxModel()
     ImplRegisterProperty( BASEPROPERTY_AUTOCOMPLETE );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_DROPDOWN );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
@@ -2211,6 +2248,8 @@ UnoControlComboBoxModel::UnoControlComboBoxModel()
     ImplRegisterProperty( BASEPROPERTY_STRINGITEMLIST );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
 }
 
 ::rtl::OUString UnoControlComboBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -2550,6 +2589,7 @@ UnoControlDateFieldModel::UnoControlDateFieldModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DATE );
     ImplRegisterProperty( BASEPROPERTY_DATEMAX );
     ImplRegisterProperty( BASEPROPERTY_DATEMIN );
@@ -2570,6 +2610,7 @@ UnoControlDateFieldModel::UnoControlDateFieldModel()
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 ::rtl::OUString UnoControlDateFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -2811,6 +2852,7 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED);
     ImplRegisterProperty( BASEPROPERTY_EXTTIMEFORMAT );
@@ -2829,6 +2871,7 @@ UnoControlTimeFieldModel::UnoControlTimeFieldModel()
     ImplRegisterProperty( BASEPROPERTY_TIMEMIN );
     ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 ::rtl::OUString UnoControlTimeFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -3029,6 +3072,7 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DECIMALACCURACY );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
@@ -3048,6 +3092,7 @@ UnoControlNumericFieldModel::UnoControlNumericFieldModel()
     ImplRegisterProperty( BASEPROPERTY_VALUESTEP_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUE_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 ::rtl::OUString UnoControlNumericFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -3245,6 +3290,7 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_CURRENCYSYMBOL );
     ImplRegisterProperty( BASEPROPERTY_CURSYM_POSITION );
     ImplRegisterProperty( BASEPROPERTY_DECIMALACCURACY );
@@ -3266,6 +3312,7 @@ UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel()
     ImplRegisterProperty( BASEPROPERTY_VALUESTEP_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_VALUE_DOUBLE );
     ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 ::rtl::OUString UnoControlCurrencyFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -3466,6 +3513,7 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_EDITMASK );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
@@ -3479,6 +3527,7 @@ UnoControlPatternFieldModel::UnoControlPatternFieldModel()
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
 
 ::rtl::OUString UnoControlPatternFieldModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -3609,6 +3658,7 @@ UnoControlProgressBarModel::UnoControlProgressBarModel()
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_FILLCOLOR );
