@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
+#   last change: $Author: fs $ $Date: 2001-08-28 16:10:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,24 +65,19 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=browser
 
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 
-SLOFILES =\
+EXCEPTIONSFILES=\
             $(SLO)$/dbtreemodel.obj				\
             $(SLO)$/dsbrowserDnD.obj			\
-            $(SLO)$/AsyncronousLink.obj			\
             $(SLO)$/dataview.obj				\
             $(SLO)$/genericcontroller.obj		\
             $(SLO)$/dbexchange.obj				\
             $(SLO)$/dbloader.obj				\
-            $(SLO)$/dbtreelistbox.obj			\
-            $(SLO)$/dbtreeview.obj				\
             $(SLO)$/sbagrid.obj					\
             $(SLO)$/formadapter.obj				\
             $(SLO)$/brwview.obj					\
@@ -90,6 +85,12 @@ SLOFILES =\
             $(SLO)$/unodatbr.obj				\
             $(SLO)$/sbamultiplex.obj			\
             $(SLO)$/exsrcbrw.obj
+
+SLOFILES =\
+            $(EXCEPTIONSFILES)\
+            $(SLO)$/AsyncronousLink.obj			\
+            $(SLO)$/dbtreeview.obj				\
+            $(SLO)$/dbtreelistbox.obj			\
 
 SRCFILES =  sbabrw.src	\
             sbagrid.src
