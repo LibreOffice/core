@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:27:02 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,7 +1189,7 @@ xub_StrLen SwCntntNode::Len() const { return 0; }
 
 SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
-    ASSERT( pNewColl, Collectionpointer ist 0. );
+    ASSERT( pNewColl, "Collectionpointer ist 0." );
     SwFmtColl *pOldColl = GetFmtColl();
     if( pNewColl != pOldColl )
     {
@@ -1438,14 +1438,22 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
         }
         break;
     case RES_GETNUMNODES:
-        if( IsTxtNode() && 0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
-            RES_PARATR_NUMRULE, TRUE )) &&
-            pItem->GetValue().Len() &&
-            pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
-            GetNodes().IsDocNodes() )
+        // #111955# only numbered nodes in rInfo
+        if( IsTxtNode())
         {
-            ((SwNumRuleInfo&)rInfo).AddNode( *(SwTxtNode*)this );
+            SwTxtNode * pTxtNode = (SwTxtNode*)this;
+            pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
+            const SwNodeNum * pNum = pTxtNode->GetNum(pTxtNode->IsOutlineNum());
+
+            if (0 != pItem  &&
+                pItem->GetValue().Len() &&
+                pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
+                GetNodes().IsDocNodes() && 0 != pNum)
+            {
+                ((SwNumRuleInfo&)rInfo).AddNode( *pTxtNode );
+            }
         }
+
         return TRUE;
 
     case RES_GETLOWERNUMLEVEL:
@@ -1453,7 +1461,7 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
             0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
             RES_PARATR_NUMRULE, TRUE )) && pItem->GetValue().Len() &&
             pItem->GetValue() == ((SwNRuleLowerLevel&)rInfo).GetName() &&
-            (((SwTxtNode*)this)->GetNum()->GetLevel() & ~NO_NUMLEVEL)
+            ((SwTxtNode*)this)->GetNum()->GetRealLevel()
                 > ((SwNRuleLowerLevel&)rInfo).GetLevel() )
         {
             return FALSE;
