@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-22 08:04:44 $
+ *  last change: $Author: cd $ $Date: 2002-03-04 16:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ class SfxImageManager
 {
     SfxImageManager_Impl* pImp;
     SfxImageManagerData_Impl* pData;
+    SfxImageManagerData_Impl* pHCData; // internal instance for high contrast mode
 
     void            SetSymbolSet_Impl( sal_Int16 );
     void            SetOutStyle_Impl( sal_Int16 );
