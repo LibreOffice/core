@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:41:51 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,10 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
-
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 //Fuer SwFlyFrm::GetCrsrOfst
 class SwCrsrOszControl
@@ -211,7 +214,8 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     BOOL bRet = FALSE;
     const SwFrm *pFrm = Lower();
     while ( !bRet && pFrm )
-    {   pFrm->Calc();
+    {
+        pFrm->Calc();
         SwRect aPaintRect( pFrm->PaintArea() );
         if ( aPaintRect.IsInside( rPoint ) &&
             pFrm->GetCrsrOfst( pPos, rPoint, pCMS ) )
@@ -292,8 +296,9 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             aIter.Top();
             while ( aIter() )
             {
-                SwVirtFlyDrawObj* pObj = (SwVirtFlyDrawObj*)aIter();
-                SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
+                const SwVirtFlyDrawObj* pObj =
+                                static_cast<const SwVirtFlyDrawObj*>(aIter());
+                const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
                 if ( pFly &&
                      ( ( pCMS ? pCMS->bSetInReadOnly : FALSE ) ||
                        !pFly->IsProtected() ) &&
@@ -502,8 +507,8 @@ BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         aIter.Top();
         while ( aIter() && !bRet )
         {
-            SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)aIter();
-            SwFlyFrm *pFly = pObj ? pObj->GetFlyFrm() : 0;
+            const SwVirtFlyDrawObj* pObj = static_cast<const SwVirtFlyDrawObj*>(aIter());
+            const SwFlyFrm* pFly = pObj ? pObj->GetFlyFrm() : 0;
             if ( pFly && pFly->Frm().IsInside( rPoint ) &&
                  Frm().IsInside( pFly->Frm() ) )
             {
@@ -2035,13 +2040,13 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 
     //Damit die FlyFrms, in denen selektierte Frames stecken, nicht
     //abgezogen werden
-    SwSortDrawObjs aSortObjs;
+    SwSortedObjs aSortObjs;
     if ( pStartFrm->IsInFly() )
     {
-        const SdrObjectPtr pObj = (SdrObject*)pStartFrm->FindFlyFrm()->GetVirtDrawObj();
-        aSortObjs.Insert( pObj );
-        const SdrObjectPtr pObj2 = (SdrObject*)pEndFrm->FindFlyFrm()->GetVirtDrawObj();
-        aSortObjs.Insert( pObj2 );
+        const SwAnchoredObject* pObj = pStartFrm->FindFlyFrm();
+        aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
+        const SwAnchoredObject* pObj2 = pEndFrm->FindFlyFrm();
+        aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj2)) );
     }
 
     //Fall 4: Tabellenselection
@@ -2491,8 +2496,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             {
                 if ( pCntnt->IsInFly() )
                 {
-                    const SdrObjectPtr pObj = (SdrObject*)pCntnt->FindFlyFrm()->GetVirtDrawObj();
-                    aSortObjs.Insert( pObj );
+                    const SwAnchoredObject* pObj = pCntnt->FindFlyFrm();
+                    aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
                 }
 
                 // Consider only frames which have the same IsInDocBody value like pStartFrm
@@ -2567,27 +2572,29 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
     {
         if ( pPage->GetSortedObjs() )
         {
-            const SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+            const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
-                SdrObject *pO = rObjs[i];
-                if ( !pO->ISA(SwVirtFlyDrawObj) )
+                SwAnchoredObject* pAnchoredObj = rObjs[i];
+                if ( !pAnchoredObj->ISA(SwFlyFrm) )
                     continue;
-                const SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
-                const SwLayoutFrm *pFly = pObj->GetFlyFrm();
+                const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
+                const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
                 if ( !pFly->IsAnLower( pStartFrm ) &&
                      (rSur.GetSurround() != SURROUND_THROUGHT &&
                       !rSur.IsContour()) )
                 {
-                    if ( aSortObjs.Seek_Entry( pO ) )
+                    if ( aSortObjs.Contains( *pAnchoredObj ) )
                         continue;
 
                     FASTBOOL bSub = TRUE;
                     const UINT32 nPos = pObj->GetOrdNum();
                     for ( USHORT k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
-                        const SwFlyFrm *pTmp = ((SwVirtFlyDrawObj*)aSortObjs[k])->GetFlyFrm();
+                        ASSERT( aSortObjs[k]->ISA(SwFlyFrm),
+                                "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexcepted type" );
+                        const SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(aSortObjs[k]);
                         do
                         {   if ( nPos < pTmp->GetVirtDrawObj()->GetOrdNumDirect() )
                                 bSub = FALSE;
