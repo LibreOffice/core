@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:07:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 
 #include <svx/svxids.hrc>
 #include <svx/srchitem.hxx>
+#include <svx/eeitem.hxx>
+#define ITEMID_SCRIPTSPACE      EE_PARA_ASIANCJKSPACING
+#include <svx/scriptspaceitem.hxx>
 
 #ifndef _OSPLCFG_HXX
 #include <offmgr/osplcfg.hxx>
@@ -508,6 +511,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     {
         // ... then we have to set this as a default
         SetDefaultWritingMode( ::com::sun::star::text::WritingMode_RL_TB );
+    }
+
+    // for korean and japanese languages we have a different default for apply spacing between asian, latin and ctl text
+    if( ( LANGUAGE_KOREAN  == eRealCTLLanguage ) || ( LANGUAGE_KOREAN_JOHAB == eRealCTLLanguage ) || ( LANGUAGE_JAPANESE == eRealCTLLanguage ) )
+    {
+        GetPool().GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( FALSE ) );
     }
 
     // DefTab und SpellOptions setzen
