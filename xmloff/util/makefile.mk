@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: svesik $ $Date: 2001-05-14 15:20:38 $
+#   last change: $Author: mib $ $Date: 2001-06-20 05:03:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,25 @@ DEF1EXPORTFILE=	exports.dxp
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
 .IF "$(GUI)"=="WNT"
     +echo	_CT?	   >	$@
+    +echo ??_5>>$@
+    +echo ??_7>>$@
+    +echo ??_8>>$@
+    +echo ??_9>>$@
+    +echo ??_C>>$@
+    +echo ??_E>>$@
+    +echo ??_F>>$@
+    +echo ??_G>>$@
+    +echo ??_H>>$@
+    +echo ??_I>>$@
+    +echo __CT>>$@
 .ENDIF
     +echo	_CTA	   >>	$@
     +echo	sXML_	   >>	$@
+    +echo 	lcl 	   >>	$@
+    +echo	_Impl	   >>	$@
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
+    +echo WEP>>$@
+    +echo LIBMAIN>>$@
+    +echo LibMain>>$@
+.ENDIF
 
