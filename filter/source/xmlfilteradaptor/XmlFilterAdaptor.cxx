@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aidan $ $Date: 2002-10-02 11:46:25 $
+ *  last change: $Author: obo $ $Date: 2002-10-11 13:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
-using com::sun::star;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
@@ -139,6 +138,7 @@ using com::sun::star::xml::sax::InputSource;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
+using namespace ::com::sun::star::frame;
 
 Reference< com::sun::star::frame::XModel > xModel;
 
@@ -208,15 +208,15 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
      //Template Loading if Required
      //********************
      if (!msTemplateName.equalsAscii("")){
-             Reference< com::sun::star::frame::XModel >xModel ( Reference< com::sun::star::frame::XModel >::query( mxDoc ) );
-         Reference< com::sun::star::style::XStyleFamiliesSupplier > xstylefamiliessupplier ( Reference< com::sun::star::style::XStyleFamiliesSupplier >::query( mxDoc ) );
+             com::sun::star::uno::Reference< XModel >xModel ( com::sun::star::uno::Reference< XModel >::query( mxDoc ) );
+         com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xstylefamiliessupplier ( com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier >::query( mxDoc ) );
 
          Reference< com::sun::star::container::XNameAccess >xName;
          if(xstylefamiliessupplier.is()){
                //fprintf (stderr, "\n\nCreated xstylefamiliessupplier\n");
                xName=xstylefamiliessupplier->getStyleFamilies();
          }
-         Reference< com::sun::star::style::XStyleLoader > xstyleLoader ( Reference< com::sun::star::style::XStyleLoader >::query( xstylefamiliessupplier->getStyleFamilies()) );
+         com::sun::star::uno::Reference< com::sun::star::style::XStyleLoader > xstyleLoader ( com::sun::star::uno::Reference< com::sun::star::style::XStyleLoader >::query( xstylefamiliessupplier->getStyleFamilies()) );
 
 
          if(xstyleLoader.is()){
@@ -364,7 +364,7 @@ void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::
 {
     meType = FILTER_EXPORT;
     mxDoc = xDoc;
-        Reference< com::sun::star::frame::XModel >rModel ( Reference< com::sun::star::frame::XModel >::query( xDoc ) );
+        com::sun::star::uno::Reference< com::sun::star::frame::XModel >rModel ( com::sun::star::uno::Reference< com::sun::star::frame::XModel >::query( xDoc ) );
     xModel=rModel;
 
 }
