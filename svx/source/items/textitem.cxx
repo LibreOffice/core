@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: sab $ $Date: 2001-05-30 16:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #include <toolkit/unohlp.hxx>
 #include <math.h>
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -1261,9 +1264,9 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             }
             else
             {
-                float fTwips = MM100_TO_TWIP((long)nHeight) / 20.0f;
-                fTwips = ceil( fTwips * 10.0 ) * 0.1;
-                rVal <<= fTwips;
+                double fPoints = MM100_TO_TWIP((long)nHeight) / 20.0;
+                float fRoundPoints = static_cast<float>(SolarMath::Round(fPoints, 1));
+                rVal <<= fRoundPoints;
             }
         }
         break;
