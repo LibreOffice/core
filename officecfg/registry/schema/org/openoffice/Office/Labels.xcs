@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Labels.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:04:14 $
+ *  last change: $Author: tl $ $Date: 2002-07-18 10:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,27 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Labels" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!-- Responsible: OS -->
+  <!-- UIHints: File - New - Labels - Labels -->
+  <info>
+    <desc xml:lang="en-US">Containings settings for Writer documents used as labels.</desc>
+  </info>
   <templates>
     <group oor:name="LabelType">
+      <info>
+        <desc xml:lang="en-US">Contains the properties used for a label.</desc>
+      </info>
       <prop oor:name="Name" oor:type="xs:string">
         <!--Label: Type Description: Name of the format-->
+        <info>
+          <desc xml:lang="en-US">The descriptive name for the label format.</desc>
+        </info>
       </prop>
       <prop oor:name="Measure" oor:type="xs:string">
         <!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'-->
+        <info>
+          <desc xml:lang="en-US">Contains the measurement data of the label conacenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'.</desc>
+        </info>
       </prop>
     </group>
     <set oor:name="Labels" oor:node-type="LabelType">
@@ -77,6 +91,9 @@
     </set>
   </templates>
   <component>
+    <info>
+      <desc xml:lang="en-US">The settings for documents used as labels.</desc>
+    </info>
     <set oor:name="Manufacturer" oor:node-type="Labels">
       <info>
         <desc xml:lang="en-US">The list of label manufacturer.</desc>
