@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:32:03 $
+ *  last change: $Author: oj $ $Date: 2001-04-24 14:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,6 +887,14 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ chinese_traditional ] = "½s¿èªí®æ(~B)";
             Text[ turkish ] = "edit ta~ble";
             Text[ arabic ] = "ÊÍÑíÑ ÌÏæá";
+        };
+        MenuItem
+        {
+            Identifier = ID_TREE_VIEW_CREATE_DESIGN ;
+            HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ;
+            Text = "neuer ~Ansichtsentwurf" ;
+            Text [ english ] = "new ~viewdesign" ;
+            Text [ english_us ] = "New ~View Design" ;
         };
         MenuItem
         {
