@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoback.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@ void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
 
     mrPage.SetBackgroundObj( mpBackgroundObj );
     mpBackgroundObj = pOldObj;
+
+    // #110094#-15
+    // tell the page that it's visualization has changed
+    mrPage.ActionChanged();
 }
 
 // -----------------------------------------------------------------------------
