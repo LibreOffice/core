@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 18:12:20 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #define SC_UNO_NAMEDRANGES          "NamedRanges"
 #define SC_UNO_ROWLABELRNG          "RowLabelRanges"
 #define SC_UNO_SHEETLINKS           "SheetLinks"
+#define SC_UNO_FORBIDDEN            "ForbiddenCharacters"
 
 //  CharacterProperties
 #define SC_UNONAME_CCOLOR           "CharColor"

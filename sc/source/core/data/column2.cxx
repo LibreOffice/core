@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:29:33 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fhgtitem.hxx>
+#include <svx/forbiddencharacterstable.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svtools/zforlist.hxx>
@@ -1353,6 +1354,7 @@ void ScColumn::RemoveEditAttribs( USHORT nStartRow, USHORT nEndRow )
                 pEngine = new ScFieldEditEngine( pDocument->GetEditPool() );
                 //  EE_CNTRL_ONLINESPELLING falls schon Fehler drin sind
                 pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_ONLINESPELLING );
+                pEngine->SetForbiddenCharsTable( pDocument->GetForbiddenCharacters() );
             }
             pEngine->SetText( *pData );
             USHORT nParCount = pEngine->GetParagraphCount();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 13:52:19 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/editstat.hxx>
 #include <svx/editview.hxx>
 #include <svx/escpitem.hxx>
+#include <svx/forbiddencharacterstable.hxx>
 #include <svx/langitem.hxx>
 #include <svx/svxacorr.hxx>
 #include <svx/unolingu.hxx>
@@ -486,6 +487,8 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
                 nCntrl |= EE_CNTRL_AUTOCORRECT;
             if ( nCntrl != nOld )
                 pEngine->SetControlWord(nCntrl);
+
+            pEngine->SetForbiddenCharsTable( pViewData->GetDocument()->GetForbiddenCharacters() );
         }
 
         //  language is set separately, so the speller is needed only if online

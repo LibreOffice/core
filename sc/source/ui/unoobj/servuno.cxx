@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 05:34:13 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,8 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         "com.sun.star.text.NumberingRules",         // SC_SERVICE_NUMRULES
         "com.sun.star.sheet.Defaults",              // SC_SERVICE_DOCDEFLTS
         "com.sun.star.drawing.Defaults",            // SC_SERVICE_DRAWDEFLTS
-        "com.sun.star.sheet.DocumentConfiguration"  // SC_SERVICE_DOCCONF
+        "com.sun.star.comp.SpreadsheetSettings",    // SC_SERVICE_DOCSPRSETT
+        "com.sun.star.document.Settings"            // SC_SERVICE_DOCCONF
     };
 
 //
@@ -144,6 +145,7 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_NUMRULES
         "",                                         // SC_SERVICE_DOCDEFLTS
         "",                                         // SC_SERVICE_DRAWDEFLTS
+        "",                                         // SC_SERVICE_DOCSPRSETT
         ""                                          // SC_SERVICE_DOCCONF
     };
 
@@ -260,6 +262,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             if (pDocShell)
                 xRet = SvxCreateNumRule( pDocShell->MakeDrawLayer() );
             break;
+        case SC_SERVICE_DOCSPRSETT:
         case SC_SERVICE_DOCCONF:
             if (pDocShell)
                 xRet = (beans::XPropertySet*)new ScDocumentConfiguration(pDocShell);

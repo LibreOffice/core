@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: sab $ $Date: 2001-03-29 05:39:48 $
+#   last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ CXXFILES = \
         chartuno.cxx \
         shapeuno.cxx \
         pageuno.cxx \
+        forbiuno.cxx \
         styleuno.cxx \
         afmtuno.cxx \
         fmtuno.cxx \
@@ -138,6 +139,7 @@ SLOFILES =  \
         $(SLO)$/chartuno.obj \
         $(SLO)$/shapeuno.obj \
         $(SLO)$/pageuno.obj \
+        $(SLO)$/forbiuno.obj \
         $(SLO)$/styleuno.obj \
         $(SLO)$/afmtuno.obj \
         $(SLO)$/fmtuno.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:43:25 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ class SvxBorderLine;
 class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxBrushItem;
+class SvxForbiddenCharactersTable;
 class SvxLinkManager;
 class SvxSearchItem;
 class SvxShadowItem;
@@ -361,6 +362,7 @@ private:
     SfxBroadcaster*     pUnoBroadcaster;
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
+    vos::ORef<SvxForbiddenCharactersTable> xForbiddenCharacters;
 
     com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
     String              aDocName;                       // opt: Dokumentname
@@ -1333,6 +1335,9 @@ public:
 
     ScChangeViewSettings* GetChangeViewSettings() const     { return pChangeViewSettings; }
     void                SetChangeViewSettings(const ScChangeViewSettings& rNew);
+
+    vos::ORef<SvxForbiddenCharactersTable> GetForbiddenCharacters();
+    void            SetForbiddenCharacters( const vos::ORef<SvxForbiddenCharactersTable> xNew );
 
     ScLkUpdMode     GetLinkMode() const             { return eLinkMode ;}
     void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}

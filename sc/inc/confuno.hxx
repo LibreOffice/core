@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 05:31:14 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,7 @@ private:
 
 public:
                             ScDocumentConfiguration(ScDocShell* pDocShell);
-                            ScDocumentConfiguration();
     virtual                 ~ScDocumentConfiguration();
-
-    static ::rtl::OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
 
                             // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

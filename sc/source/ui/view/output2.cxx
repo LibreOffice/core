@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:24:45 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/colritem.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fhgtitem.hxx>
+#include <svx/forbiddencharacterstable.hxx>
 #include <svx/langitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/scripttypeitem.hxx>
@@ -670,6 +671,8 @@ inline BOOL StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAtt
     else if ( &rpNewPattern->GetItem( ATTR_MARGIN ) != &rpOldPattern->GetItem( ATTR_MARGIN ) )
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_ROTATE_VALUE ) != &rpOldPattern->GetItem( ATTR_ROTATE_VALUE ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_FORBIDDEN_RULES ) != &rpOldPattern->GetItem( ATTR_FORBIDDEN_RULES ) )
         return TRUE;
     else
     {
@@ -1564,6 +1567,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                             if ( eType == OUTTYPE_PRINTER )
                                 nCtrl &= ~EE_CNTRL_MARKFIELDS;
                             pEngine->SetControlWord( nCtrl );
+                            pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                         }
                         else
                             lcl_ClearEdit( *pEngine );
@@ -2316,6 +2320,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             if ( eType == OUTTYPE_PRINTER )
                                 nCtrl &= ~EE_CNTRL_MARKFIELDS;
                             pEngine->SetControlWord( nCtrl );
+                            pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                         }
                         else
                             lcl_ClearEdit( *pEngine );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:06:27 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,7 @@
 #include "scitems.hxx"
 
 #include <svx/editeng.hxx>
+#include <svx/forbiddencharacterstable.hxx>
 #include <svx/langitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
@@ -600,6 +601,7 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
         pEditEngine->SetUpdateMode( FALSE );
         pEditEngine->EnableUndo( FALSE );
         pEditEngine->SetRefMapMode( MAP_100TH_MM );
+        pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
     }
     return *pEditEngine;
 }

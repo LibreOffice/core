@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 15:02:10 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,9 @@
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
 #include <offmgr/app.hxx>
+#include <svx/asiancfg.hxx>
+#include <svx/forbiddencharacterstable.hxx>
+#include <svx/unolingu.hxx>
 
 
 
@@ -339,6 +342,8 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "sc.hrc"
+
+using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
@@ -422,6 +427,31 @@ void ScDocShell::InitItems()
         //  always use global color table instead of local copy
 
         PutItem( SvxColorTableItem( OFF_APP()->GetStdColorTable() ) );
+    }
+
+    if ( !aDocument.GetForbiddenCharacters().isValid() )
+    {
+        // set forbidden characters if necessary
+        SvxAsianConfig aAsian;
+        uno::Sequence<lang::Locale> aLocales = aAsian.GetStartEndCharLocales();
+        if (aLocales.getLength())
+        {
+            vos::ORef<SvxForbiddenCharactersTable> xForbiddenTable =
+                    new SvxForbiddenCharactersTable( aDocument.GetServiceManager() );
+
+            const lang::Locale* pLocales = aLocales.getConstArray();
+            for (sal_Int32 i = 0; i < aLocales.getLength(); i++)
+            {
+                i18n::ForbiddenCharacters aForbidden;
+                aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine );
+                LanguageType eLang = SvxLocaleToLanguage(pLocales[i]);
+                //pDoc->SetForbiddenCharacters( eLang, aForbidden );
+
+                xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
+            }
+
+            aDocument.SetForbiddenCharacters( xForbiddenTable );
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:53:33 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
 #include <svx/fontitem.hxx>
+#include <svx/forbiddencharacterstable.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
@@ -100,6 +101,7 @@
 #include "docpool.hxx"
 #include "chartarr.hxx"
 #include "detfunc.hxx"      // for UpdateAllComments
+#include "editutil.hxx"
 
 
 // -----------------------------------------------------------------------
@@ -282,6 +284,8 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         UpdateDrawPrinter();
         if (bImportingXML)
             pDrawLayer->EnableAdjust(FALSE);
+
+        pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
     }
 }
 
@@ -849,4 +853,19 @@ void ScDocument::SetImportingXML( BOOL bVal )
     if (pDrawLayer)
         pDrawLayer->EnableAdjust(!bImportingXML);
 }
+
+vos::ORef<SvxForbiddenCharactersTable> ScDocument::GetForbiddenCharacters()
+{
+    return xForbiddenCharacters;
+}
+
+void ScDocument::SetForbiddenCharacters( const vos::ORef<SvxForbiddenCharactersTable> xNew )
+{
+    xForbiddenCharacters = xNew;
+    if ( pEditEngine )
+        pEditEngine->SetForbiddenCharsTable( xForbiddenCharacters );
+    if ( pDrawLayer )
+        pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
+}
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 18:13:29 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,10 @@
 #include "scdll.hxx"
 #include "docsh.hxx"
 #include "miscuno.hxx"
+#include "forbiuno.hxx"
 #include "viewopti.hxx"
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
@@ -82,7 +85,9 @@
 
 using namespace com::sun::star;
 
-#define SCDOCUMENTCONFIGURATION_SERVICE "com.sun.star.sheet.DocumentConfiguration"
+#define SCCOMPSCPREADSHEETSETTINGS_SERVICE      "com.sun.star.comp.SpreadsheetSettings"
+#define SCDOCUMENTSETTINGS_SERVICE              "com.sun.star.document.Settings"
+
 
 const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
 {
@@ -107,6 +112,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_AUTOCALC),     0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_PRINTERNAME),  0,  &getCppuType((rtl::OUString*)0),    0},
         {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -119,11 +125,6 @@ ScDocumentConfiguration::ScDocumentConfiguration(ScDocShell* pDocSh)
     pDocShell(pDocSh)
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
-}
-
-ScDocumentConfiguration::ScDocumentConfiguration()
-    : aPropSet ( lcl_GetConfigPropertyMap() )
-{
 }
 
 ScDocumentConfiguration::~ScDocumentConfiguration()
@@ -141,28 +142,6 @@ void ScDocumentConfiguration::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     {
         pDocShell = NULL;       // ungueltig geworden
     }
-}
-
-uno::Reference<uno::XInterface> SAL_CALL ScDocumentConfiguration_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
-{
-    ScUnoGuard aGuard;
-    SC_DLL()->Load();       // load module
-    static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScDocumentConfiguration();
-    return xInst;
-}
-
-rtl::OUString ScDocumentConfiguration::getImplementationName_Static()
-{
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScDocumentConfiguration" );
-}
-
-uno::Sequence<rtl::OUString> ScDocumentConfiguration::getSupportedServiceNames_Static()
-{
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCDOCUMENTCONFIGURATION_SERVICE );
-    return aRet;
 }
 
 // XPropertySet
@@ -241,6 +220,10 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
                 pDocShell->GetDocInfo().SetUseUserData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
+            {
+                //  read-only - should not be set
+            }
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -317,6 +300,11 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsUseUserData() );
+            else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
+            {
+                uno::Reference<i18n::XForbiddenCharacters> xForbidden = new ScForbiddenCharsObj( pDocShell );
+                aRet <<= xForbidden;
+            }
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
@@ -348,6 +336,31 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
-SC_SIMPLE_SERVICE_INFO( ScDocumentConfiguration, "ScDocumentConfiguration", SCDOCUMENTCONFIGURATION_SERVICE )
+
+// XServiceInfo
+
+rtl::OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii( "ScDocumentConfiguration" );
+}
+
+sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString& rServiceName )
+                                                    throw(uno::RuntimeException)
+{
+    String aServiceStr( rServiceName );
+    return aServiceStr.EqualsAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE ) ||
+           aServiceStr.EqualsAscii( SCDOCUMENTSETTINGS_SERVICE );
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
+                                                    throw(uno::RuntimeException)
+{
+    uno::Sequence<rtl::OUString> aRet(2);
+    rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = rtl::OUString::createFromAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCDOCUMENTSETTINGS_SERVICE );
+    return aRet;
+}
 
 //-------------------------------------------------------------------------
+

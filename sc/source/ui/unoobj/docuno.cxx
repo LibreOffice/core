@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 16:09:23 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 
 #include "docuno.hxx"
 #include "cellsuno.hxx"
@@ -93,6 +94,7 @@
 #include "targuno.hxx"
 #include "convuno.hxx"
 #include "optuno.hxx"
+#include "forbiuno.hxx"
 #include "docsh.hxx"
 #include "hints.hxx"
 #include "docfunc.hxx"
@@ -127,6 +129,7 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),  0,  &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
         {MAP_CHAR_LEN(SC_UNO_DDELINKS),     0,  &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
         {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),   0,  &getCppuType((sal_Int16*)0),                              0},
+        {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
         {MAP_CHAR_LEN(SC_UNO_IGNORECASE),   0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_ITERENABLED),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),    0,  &getCppuType((sal_Int32*)0),                              0},
@@ -934,6 +937,11 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
             ScDrawLayer* pModel = pDoc->GetDrawLayer();
             sal_Bool bAutoControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
             ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoControlFocus );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_FORBIDDEN ) )
+        {
+            uno::Reference<i18n::XForbiddenCharacters> xForbidden = new ScForbiddenCharsObj( pDocShell );
+            aRet <<= xForbidden;
         }
     }
 

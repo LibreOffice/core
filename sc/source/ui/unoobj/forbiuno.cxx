@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: servuno.hxx,v $
+ *  $RCSfile: forbiuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:29:40 $
+ *  last change: $Author: nn $ $Date: 2001-04-06 14:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,69 +59,59 @@
  *
  ************************************************************************/
 
-#ifndef SC_SERVUNO_HXX
-#define SC_SERVUNO_HXX
-
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
-#include <com/sun/star/uno/XInterface.hpp>
+#ifdef PCH
+#include "ui_pch.hxx"
 #endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-//#ifndef _USR_USTRING_HXX
-//#include <usr/ustring.hxx>
-//#endif
 
-class ScDocShell;
+#pragma hdrstop
 
+#include <svx/forbiddencharacterstable.hxx>
 
-//! AutoFormat wirklich hier oder besser global??????
+#include "forbiuno.hxx"
+#include "docsh.hxx"
 
-#define SC_SERVICE_SHEET        0
-#define SC_SERVICE_URLFIELD     1
-#define SC_SERVICE_PAGEFIELD    2
-#define SC_SERVICE_PAGESFIELD   3
-#define SC_SERVICE_DATEFIELD    4
-#define SC_SERVICE_TIMEFIELD    5
-#define SC_SERVICE_TITLEFIELD   6
-#define SC_SERVICE_FILEFIELD    7
-#define SC_SERVICE_SHEETFIELD   8
-#define SC_SERVICE_CELLSTYLE    9
-#define SC_SERVICE_PAGESTYLE    10
-#define SC_SERVICE_AUTOFORMAT   11
-#define SC_SERVICE_CELLRANGES   12
+using namespace ::com::sun::star;
 
-//  drawing layer tables
-#define SC_SERVICE_GRADTAB      13
-#define SC_SERVICE_HATCHTAB     14
-#define SC_SERVICE_BITMAPTAB    15
-#define SC_SERVICE_TRGRADTAB    16
-#define SC_SERVICE_MARKERTAB    17
-#define SC_SERVICE_DASHTAB      18
-#define SC_SERVICE_NUMRULES     19
+//------------------------------------------------------------------------
 
-#define SC_SERVICE_DOCDEFLTS    20
-#define SC_SERVICE_DRAWDEFLTS   21
-
-#define SC_SERVICE_DOCSPRSETT   22
-#define SC_SERVICE_DOCCONF      23
-
-#define SC_SERVICE_COUNT        24
-#define SC_SERVICE_INVALID      USHRT_MAX
-
-
-class ScServiceProvider
+vos::ORef<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {
-public:
-                            // pDocShell wird nicht fuer alle Services benoetigt
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                            MakeInstance( sal_uInt16 nType, ScDocShell* pDocShell );
-    static ::com::sun::star::uno::Sequence<rtl::OUString> GetAllServiceNames();
-    static String           GetProviderName(sal_uInt16 nObjectType);
-    static sal_uInt16       GetProviderType(const String& rServiceName);
-};
+    vos::ORef<SvxForbiddenCharactersTable> xRet;
+    if ( pDocSh )
+        xRet = pDocSh->GetDocument()->GetForbiddenCharacters();
+    return xRet;
+}
 
+ScForbiddenCharsObj::ScForbiddenCharsObj( ScDocShell* pDocSh ) :
+    SvxUnoForbiddenCharsTable( lcl_GetForbidden( pDocSh ) ),
+    pDocShell( pDocSh )
+{
+    if (pDocShell)
+        pDocShell->GetDocument()->AddUnoObject(*this);
+}
 
+ScForbiddenCharsObj::~ScForbiddenCharsObj()
+{
+    if (pDocShell)
+        pDocShell->GetDocument()->RemoveUnoObject(*this);
+}
 
-#endif
+void ScForbiddenCharsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) &&
+            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    {
+        pDocShell = NULL;       // document gone
+    }
+}
+
+void ScForbiddenCharsObj::onChange()
+{
+    if (pDocShell)
+    {
+        pDocShell->GetDocument()->SetForbiddenCharacters( mxForbiddenChars );
+        pDocShell->PostPaintGridAll();
+        pDocShell->SetDocumentModified();
+    }
+}
 
