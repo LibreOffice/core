@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 11:30:49 $
+ *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
-
-#define EXCEPT_ON_PROTECTION(rUnoCrsr)  \
-    if((rUnoCrsr).HasReadonlySel()) \
-        throw uno::RuntimeException();
 
 const sal_Char cInvalidObject[] = "this object is invalid";
 /******************************************************************
@@ -776,7 +772,6 @@ void SwXText::removeTextContentBefore(
         if(aTblIdx.GetNode().IsTxtNode())
         {
             SwPaM aBefore(aTblIdx);
-            EXCEPT_ON_PROTECTION(aBefore)
             bRet = GetDoc()->DelFullPara( aBefore );
         }
     }
@@ -791,7 +786,6 @@ void SwXText::removeTextContentBefore(
         if(aSectIdx.GetNode().IsTxtNode())
         {
             SwPaM aBefore(aSectIdx);
-            EXCEPT_ON_PROTECTION(aBefore)
             bRet = GetDoc()->DelFullPara( aBefore );
         }
     }
@@ -826,7 +820,6 @@ void SwXText::removeTextContentAfter(const Reference< XTextContent>& xPredecesso
         if(aTblIdx.GetNode().IsTxtNode())
         {
             SwPaM aPaM(aTblIdx);
-            EXCEPT_ON_PROTECTION(aPaM)
             bRet = GetDoc()->DelFullPara( aPaM );
         }
     }
@@ -841,7 +834,6 @@ void SwXText::removeTextContentAfter(const Reference< XTextContent>& xPredecesso
         if(aSectIdx.GetNode().IsTxtNode())
         {
             SwPaM aAfter(aSectIdx);
-            EXCEPT_ON_PROTECTION(aAfter)
             bRet = GetDoc()->DelFullPara( aAfter );
         }
     }

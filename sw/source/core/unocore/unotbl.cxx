@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 10:49:24 $
+ *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,14 +238,6 @@ BOOL lcl_IsNumeric(const String&);
 //aus unoobj.cxx
 extern void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)    throw (IllegalArgumentException);
 #define UNO_TABLE_COLUMN_SUM    10000
-
-#define EXCEPT_ON_PROTECTION(rUnoCrsr)  \
-    if((rUnoCrsr).HasReadonlySel()) \
-        throw uno::RuntimeException();
-
-#define EXCEPT_ON_TBL_PROTECTION(rUnoTblCrsr)   \
-    if((rUnoTblCrsr).HasReadOnlyBoxSel()) \
-        throw uno::RuntimeException();
 
 /* -----------------17.07.98 15:47-------------------
  *
@@ -1620,7 +1612,6 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
         }
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         pTblCrsr->MakeBoxSels();
-        EXCEPT_ON_TBL_PROTECTION(*pTblCrsr)
 
         bRet = TBLMERGE_OK == pTblCrsr->GetDoc()->MergeTbl(*pTblCrsr);
         pTblCrsr->MakeBoxSels();
@@ -1643,7 +1634,6 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) th
         }
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         pTblCrsr->MakeBoxSels();
-        EXCEPT_ON_TBL_PROTECTION(*pTblCrsr)
 
         bRet = pTblCrsr->GetDoc()->SplitTbl( pTblCrsr->GetBoxes(), !Horizontal, Count );
         pTblCrsr->MakeBoxSels();
@@ -1677,7 +1667,6 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
-        EXCEPT_ON_TBL_PROTECTION(*pTblCrsr)
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                                     aPropSet.getPropertyMap(), rPropertyName);
         if(pMap)
@@ -1707,8 +1696,6 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                 break;
                 default:
                 {
-                    EXCEPT_ON_PROTECTION(*pUnoCrsr)
-
                     SfxItemSet rSet(pDoc->GetAttrPool(),
                         RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,

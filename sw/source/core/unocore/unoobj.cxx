@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 17:36:07 $
+ *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,11 +312,6 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
-
-//TODO: new Interface & new uno::Exception for protected content
-#define EXCEPT_ON_PROTECTION(rUnoCrsr)  \
-    if((rUnoCrsr).HasReadonlySel()) \
-        throw uno::RuntimeException();
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2551,8 +2546,6 @@ void SwXTextCursor::setString(const OUString& aString) throw( uno::RuntimeExcept
     if(!pUnoCrsr)
         throw uno::RuntimeException();
 
-    EXCEPT_ON_PROTECTION(*pUnoCrsr)
-
     DeleteAndInsert(aString);
 }
 /* -----------------------------03.05.00 12:56--------------------------------
@@ -2595,7 +2588,6 @@ void SwXTextCursor::SetPropertyValue(
             IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     Any aAny;
-    EXCEPT_ON_PROTECTION(rPaM)
 
     SwDoc* pDoc = rPaM.GetDoc();
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(

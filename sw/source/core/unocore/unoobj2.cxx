@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-06 13:56:41 $
+ *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,11 +312,6 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
-
-//TODO: new Interface & new uno::Exception for protected content
-#define EXCEPT_ON_PROTECTION(rUnoCrsr)  \
-    if((rUnoCrsr).HasReadonlySel()) \
-        throw uno::RuntimeException();
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1135,7 +1130,6 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
             aNewCrsr.SetMark();
             *aNewCrsr.GetMark() = *pMark;
         }
-        EXCEPT_ON_PROTECTION(aNewCrsr)
 
         UnoActionContext aAction(aNewCrsr.GetDoc());
         pDoc->StartUndo(UNDO_INSERT);
@@ -2547,7 +2541,6 @@ void SwXParagraph::setString(const OUString& aString) throw( uno::RuntimeExcepti
 
     if(pUnoCrsr)
     {
-        EXCEPT_ON_PROTECTION(*pUnoCrsr)
         if(!lcl_IsStartOfPara(*pUnoCrsr))
             pUnoCrsr->MovePara(fnParaCurr, fnParaStart);
         SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-12 21:37:12 $
+ *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
-//TODO: new Interface & new uno::Exception for protected content
-#define EXCEPT_ON_PROTECTION(rUnoCrsr)  \
-    if((rUnoCrsr).HasReadonlySel()) \
-        throw uno::RuntimeException();
 
 /******************************************************************
  * SwXTextPortion
@@ -268,7 +264,6 @@ void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeExcep
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    EXCEPT_ON_PROTECTION(*pUnoCrsr)
     if(pUnoCrsr)
         SwXTextCursor::SetString(*pUnoCrsr, aString);
     else
