@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     SbTextPortion& rLast = aPortionList[nCount-1];
     if ( rLast.nStart > rLast.nEnd )    // Nur bis Bug von MD behoben
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         DBG_ERROR( "MD-Bug nicht beseitigt!" );
 #endif
         nCount--;
