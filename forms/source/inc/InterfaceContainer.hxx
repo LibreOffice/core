@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 16:50:06 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,16 @@ protected:
     virtual void implReplaced(const InterfaceRef& _rxReplacedObject, const InterfaceRef& _rxNewObject) { }
 
     void SAL_CALL writeEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
-    void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream, sal_Int32 nCount);
+    void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
+
+private:
+    // the runtime event format has changed from version SO5.2 to OOo
+    enum EventFormat
+    {
+        efVersionSO5x,
+        efVersionSO6x
+    };
+    void    transformEvents( const EventFormat _eTargetFormat );
 };
 
 //==================================================================
