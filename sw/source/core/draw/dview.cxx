@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:05:32 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,8 +598,14 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
         const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
         while ( pTmpObj )
         {
-            const SwFlyFrm* pTmpParentObj =
-                                lcl_FindAnchor( pTmpObj, TRUE )->FindFlyFrm();
+            // --> OD 2004-12-07 #i38563# - assure, that anchor frame exists.
+            // If object is anchored inside a invisible part of the document
+            // (e.g. page header, whose page style isn't applied, or hidden
+            // section), no anchor frame exists.
+            const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, TRUE );
+            const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
+                                            ? pTmpAnchorFrm->FindFlyFrm() : 0L;
+            // <--
             if ( pTmpParentObj &&
                  &(pTmpParentObj->GetFrmFmt()) != pParentFrmFmt )
             {
@@ -646,8 +652,14 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
             if ( pTmpObj == pObj )
                 break;
 
-            const SwFlyFrm* pTmpParentObj =
-                                lcl_FindAnchor( pTmpObj, TRUE )->FindFlyFrm();
+            // --> OD 2004-12-07 #i38563# - assure, that anchor frame exists.
+            // If object is anchored inside a invisible part of the document
+            // (e.g. page header, whose page style isn't applied, or hidden
+            // section), no anchor frame exists.
+            const SwFrm* pTmpAnchorFrm = lcl_FindAnchor( pTmpObj, TRUE );
+            const SwFlyFrm* pTmpParentObj = pTmpAnchorFrm
+                                            ? pTmpAnchorFrm->FindFlyFrm() : 0L;
+            // <--
             if ( pTmpParentObj &&
                  ( ( pTmpParentObj == pFlyFrm ) ||
                    ( pFlyFrm->IsUpperOf( *pTmpParentObj ) ) ) )
