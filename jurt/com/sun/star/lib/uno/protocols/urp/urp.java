@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:12:36 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.12 $ $ $Date: 2004-02-03 13:12:36 $
+ * @version     $Revision: 1.13 $ $ $Date: 2004-03-25 14:54:26 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -233,12 +233,12 @@ public class urp extends Protocol {
     private void readShortRequest(byte header, String operation[], Object param[][], boolean synchron[]) {
         ++ _requestsRecieved;
 
-        int methodId = 0;
-
-        if((header & DIR_MID) != 0)
-            methodId = (((header & 0x3f) << 8) | _unmarshal.readbyte()) & 0x3fff;
-        else
-            methodId = (header & 0x3f);
+        int methodId;
+        if ((header & DIR_MID) != 0) {
+            methodId = ((header & 0x3F) << 8) | (_unmarshal.readbyte() & 0xFF);
+        } else {
+            methodId = header & 0x3F;
+        }
 
         IMethodDescription iMethodDescription = _in_interface.getMethodDescription(methodId);
         operation[0] = iMethodDescription.getName();
@@ -265,12 +265,12 @@ public class urp extends Protocol {
             synchron[0]  = (exFlags & SYNCHRONOUSE) != 0;
         }
 
-        // read the method id
-        int methodId = 0;
-        if((header & LONGMETHODID) != 0) // usigned short ?
-            methodId = _unmarshal.readshort();
-        else
-            methodId = _unmarshal.readbyte();
+        int methodId;
+        if ((header & LONGMETHODID) != 0) {
+            methodId = _unmarshal.readshort() & 0xFFFF;
+        } else {
+            methodId = _unmarshal.readbyte() & 0xFF;
+        }
 
         if((header & NEWTYPE) != 0)
             _in_interface = _unmarshal.readTypeDescription();
@@ -302,7 +302,6 @@ public class urp extends Protocol {
         byte header = _unmarshal.readbyte();
 
         Class signature[];
-        int methodId;
         Object result = null;
 
         if((header & BIG_HEADER) != 0) { // full header?
@@ -391,12 +390,22 @@ public class urp extends Protocol {
         else
             mustReply[0] = synchron[0];
 
+        // Long request headers can handle 16-bit method IDs, and short request
+        // headers can handle 14-bit method IDs:
+        int methodId = iMethodDescription.getIndex();
+        if (methodId < 0 || methodId >= 0x10000) {
+            throw new IllegalArgumentException(
+                "Method ID " + methodId + " out of range");
+        } else if (methodId >= 0xC000) {
+            bigHeader = true;
+        }
+
         if(bigHeader) { // something has changed, send big header
             header |= BIG_HEADER; // big header
             header |= REQUEST;
             header |= hasExFlags ? MOREFLAGS : 0;
 
-            if(iMethodDescription.getIndex() > 255)
+            if(methodId > 255)
                 header |= LONGMETHODID;
 
             _marshal.writebyte(header);
@@ -411,10 +420,10 @@ public class urp extends Protocol {
             }
 
             // write the method id
-            if(iMethodDescription.getIndex() > 255)
-                _marshal.writeshort((short)iMethodDescription.getIndex());
+            if(methodId > 255)
+                _marshal.writeshort((short)methodId);
             else
-                _marshal.writebyte((byte)iMethodDescription.getIndex());
+                _marshal.writebyte((byte)methodId);
 
             if(zInterface != null) // has the interface changed? -> write it
                 _marshal.writeTypeDescrption(zInterface);
@@ -426,14 +435,14 @@ public class urp extends Protocol {
                 _marshal.writeThreadId(threadId);
         }
         else { // simple request
-            if(iMethodDescription.getIndex() <= 0x2f) // does the method id fit in the header?
-                _marshal.writebyte((byte)iMethodDescription.getIndex());
+            if(methodId <= 0x2f) // does the method id fit in the header?
+                _marshal.writebyte((byte)methodId);
             else { // no
                 header |= DIR_MID;
-                header |= iMethodDescription.getIndex() >> 8;
+                header |= methodId >> 8;
 
                 _marshal.writebyte(header);
-                _marshal.writebyte((byte)(iMethodDescription.getIndex() & 0xff));
+                _marshal.writebyte((byte)(methodId & 0xff));
             }
         }
 
