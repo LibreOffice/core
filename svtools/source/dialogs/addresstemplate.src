@@ -1,0 +1,431 @@
+/*************************************************************************
+ *
+ *  $RCSfile: addresstemplate.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2000-11-24 12:31:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SVTOOLS_HRC
+#include "svtools.hrc"
+#endif
+#ifndef _SVT_ADDRESSTEMPLATE_HRC_
+#include "addresstemplate.hrc"
+#endif
+
+#define FIELD_ROW_HEIGHT    17
+
+ModalDialog DLG_ADDRESSBOOKSOURCE
+{
+    SVLook = TRUE ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 86 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+    Hide = TRUE ;
+    Moveable = TRUE ;
+    Text = "Vorlagen: Adressbuch-Zuordnung";
+    Text [ english ] = "Templates: Address Book assignment";
+    Text [ english_us ] = "Templates: Address Book assignment";
+
+    GroupBox GB_DATASOURCEFRAME
+    {
+        Text = "Adressbuchquelle";
+        Text [ english ] = "Address Book Source";
+        Text [ english_us ] = "Address Book Source";
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 2 ) ;
+        Size = MAP_APPFONT ( 248 , 48 ) ;
+    };
+    FixedText FT_DATASOURCE
+    {
+        Text = "Datenquelle";
+        Text [ english ] = "Datasource";
+        Text [ english_us ] = "Datasource";
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+
+        Group = TRUE;
+    };
+    ComboBox CB_DATASOURCE
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 105, 13 ) ;
+        Size = MAP_APPFONT ( 87, 55 ) ;
+
+        DropDown = TRUE;
+        TabStop = TRUE;
+    };
+    PushButton PB_ADMINISTATE_DATASOURCES
+    {
+        Text = "~Administrieren ...";
+        Text [ english ] = "~Administrate ...";
+        Text [ english_us ] = "~Administrate ...";
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 198, 13 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
+        TabStop = TRUE;
+    };
+    FixedText FT_TABLE
+    {
+        Text = "Tabelle";
+        Text [ english ] = "Table";
+        Text [ english_us ] = "Table";
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+
+        Group = TRUE;
+    };
+    ComboBox CB_TABLE
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 105, 30 ) ;
+        Size = MAP_APPFONT ( 87, 55 ) ;
+
+        DropDown = TRUE;
+        TabStop = TRUE;
+    };
+    GroupBox GB_FIELDS
+    {
+        Text = "Feldzuordnung";
+        Text [ english ] = "Field assignment";
+        Text [ english_us ] = "Field assignment";
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6, 52 ) ;
+        Size = MAP_APPFONT ( 248 , 10 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+    };
+
+#define DECLARE_FIELD( row, column )    \
+        FixedText FT_FIELD_BASE + row * 2 + column  \
+        {   \
+            SVLook = TRUE ; \
+            Pos = MAP_APPFONT ( 12 + column * 116, 64 + row * FIELD_ROW_HEIGHT ) ;  \
+            Size = MAP_APPFONT ( 60 , 10 ) ;    \
+            Group = TRUE;   \
+        };  \
+        ListBox LB_FIELD_BASE + row * 2 + column    \
+        {   \
+            SVLook = TRUE;  \
+            Pos = MAP_APPFONT ( 78 + column * 116, 62 + row * FIELD_ROW_HEIGHT ) ;  \
+            Size = MAP_APPFONT ( 43 , 14 ) ;    \
+            Border = TRUE;  \
+            DropDown = TRUE;    \
+            TabStop = TRUE; \
+        }   \
+
+#if FIELD_PAIRS_VISIBLE > 0
+    DECLARE_FIELD( 0, 0 );
+    DECLARE_FIELD( 0, 1 );
+#endif
+#if FIELD_PAIRS_VISIBLE > 1
+    DECLARE_FIELD( 1, 0 );
+    DECLARE_FIELD( 1, 1 );
+#endif
+#if FIELD_PAIRS_VISIBLE > 2
+    DECLARE_FIELD( 3, 0 );
+    DECLARE_FIELD( 3, 1 );
+#endif
+#if FIELD_PAIRS_VISIBLE > 3
+    DECLARE_FIELD( 2, 0 );
+    DECLARE_FIELD( 2, 1 );
+#endif
+#if FIELD_PAIRS_VISIBLE > 4
+    DECLARE_FIELD( 4, 0 );
+    DECLARE_FIELD( 4, 1 );
+#endif
+
+    ScrollBar SB_FIELDSCROLLER
+    {
+        SVLook = TRUE;
+        Pos = MAP_APPFONT ( 240, 62 ) ;
+        Size = MAP_APPFONT ( 8 , 14 + FIELD_ROW_HEIGHT * (FIELD_PAIRS_VISIBLE - 1) ) ;
+    };
+
+    OKButton PB_OK
+    {
+        SVLook = TRUE;
+        DefButton = TRUE;
+        Pos = MAP_APPFONT ( 151, 68 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    CancelButton PB_CANCEL
+    {
+        SVLook = TRUE;
+        Pos = MAP_APPFONT ( 204, 68 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    String STR_LOCAGICAL_FIELD_NAMES
+    {
+        Text = "Company;Department;FirstName;LastName;Street;Country;Zip;City;Title;Position;AddrForm;Code;AddrFormMail;PhonePriv;PhoneComp;Fax;EMail;URL;Note;Altfield1;Altfield2;Altfield3;Altfield4;Id;State;PhoneOffice;Pager;PhoneCell;PhoneOther;CalendarURL;InviteParticipant";
+        // no need to translate this
+        // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the
+        // field label list of the dialog
+    };
+
+    String STR_NO_FIELD_SELECTION
+    {
+        Text = "<kein>";
+        Text[ english ] = "<none>";
+        Text[ english_us ] = "<none>";
+        Text[ portuguese ] = "<nenhum>";
+        Text[ russian ] = "<áåç>";
+        Text[ greek ] = "<êáíÝíá>";
+        Text[ dutch ] = "<geen>";
+        Text[ french ] = "<aucun>";
+        Text[ spanish ] = "<ninguno>";
+        Text[ italian ] = "<nessuno>";
+        Text[ danish ] = "<ingen>";
+        Text[ swedish ] = "<ingen>";
+        Text[ polish ] = "<brak>";
+        Text[ portuguese_brazilian ] = "<none>";
+        Text[ japanese ] = "<‚È‚µ>";
+        Text[ korean ] = "<¾øÀ½>";
+        Text[ chinese_simplified ] = "<ÎÞ>";
+        Text[ chinese_traditional ] = "<µL>";
+        Text[ arabic ] = "<ÈÏæä>";
+        Text[ turkish ] = "<Yok>";
+    };
+
+    String STR_FIELD_COMPANY
+    {
+        Text = "Firma";
+        Text [ english ] = "Company";
+        Text [ english_us ] = "Company";
+    };
+    String STR_FIELD_DEPARTMENT
+    {
+        Text = "Abteilung";
+        Text [ english ] = "Department";
+        Text [ english_us ] = "Department";
+    };
+    String STR_FIELD_FIRSTNAME
+    {
+        Text = "Vorname";
+        Text [ english ] = "First name";
+        Text [ english_us ] = "First name";
+    };
+    String STR_FIELD_LASTNAME
+    {
+        Text = "Name";
+        Text [ english ] = "Last name";
+        Text [ english_us ] = "Last name";
+    };
+    String STR_FIELD_STREET
+    {
+        Text = "Straße";
+        Text [ english ] = "Street";
+        Text [ english_us ] = "Street";
+    };
+    String STR_FIELD_COUNTRY
+    {
+        Text = "Land";
+        Text [ english ] = "Country";
+        Text [ english_us ] = "Country";
+    };
+    String STR_FIELD_ZIPCODE
+    {
+        Text = "PLZ";
+        Text [ english ] = "ZIP code";
+        Text [ english_us ] = "ZIP code";
+    };
+    String STR_FIELD_CITY
+    {
+        Text = "Ort";
+        Text [ english ] = "City";
+        Text [ english_us ] = "City";
+    };
+    String STR_FIELD_TITLE
+    {
+        Text = "Titel";
+        Text [ english ] = "Title";
+        Text [ english_us ] = "Title";
+    };
+    String STR_FIELD_POSITION
+    {
+        Text = "Position";
+        Text [ english ] = "Position";
+        Text [ english_us ] = "Position";
+    };
+    String STR_FIELD_ADDRFORM
+    {
+        Text = "Anrede";
+        Text [ english ] = "Addr. form";
+        Text [ english_us ] = "Addr. form";
+    };
+    String STR_FIELD_INITIALS
+    {
+        Text = "Kürzel";
+        Text [ english ] = "Initials";
+        Text [ english_us ] = "Initials";
+    };
+    String STR_FIELD_SALUTATION
+    {
+        Text = "Anrede";
+        Text [ english ] = "Salutation";
+        Text [ english_us ] = "Salutation";
+    };
+    String STR_FIELD_HOMETEL
+    {
+        Text = "Telefon priv.";
+        Text [ english ] = "Telephon Home";
+        Text [ english_us ] = "Telephon Home";
+    };
+    String STR_FIELD_WORKTEL
+    {
+        Text = "Telefon gesch.";
+        Text [ english ] = "Telephon Work";
+        Text [ english_us ] = "Telephon Work";
+    };
+    String STR_FIELD_FAX
+    {
+        Text = "FAX";
+        Text [ english ] = "FAX";
+        Text [ english_us ] = "FAX";
+    };
+    String STR_FIELD_EMAIL
+    {
+        Text = "E-Mail";
+        Text [ english ] = "E-Mail";
+        Text [ english_us ] = "E-Mail";
+    };
+    String STR_FIELD_URL
+    {
+        Text = "URL";
+        Text [ english ] = "URL";
+        Text [ english_us ] = "URL";
+    };
+    String STR_FIELD_NOTE
+    {
+        Text = "Notiz";
+        Text [ english ] = "Note";
+        Text [ english_us ] = "Note";
+    };
+    String STR_FIELD_USER1
+    {
+        Text = "Benutzer 1";
+        Text [ english ] = "User 1";
+        Text [ english_us ] = "User 1";
+    };
+    String STR_FIELD_USER2
+    {
+        Text = "Benutzer 2";
+        Text [ english ] = "User 2";
+        Text [ english_us ] = "User 2";
+    };
+    String STR_FIELD_USER3
+    {
+        Text = "Benutzer 3";
+        Text [ english ] = "User 3";
+        Text [ english_us ] = "User 3";
+    };
+    String STR_FIELD_USER4
+    {
+        Text = "Benutzer 4";
+        Text [ english ] = "User 4";
+        Text [ english_us ] = "User 4";
+    };
+
+    String STR_FIELD_ID
+    {
+        Text = "ID";
+        Text [ english ] = "ID";
+        Text [ english_us ] = "ID";
+    };
+    String STR_FIELD_STATE
+    {
+        Text = "Bund.land";
+        Text [ english ] = "State";
+        Text [ english_us ] = "State";
+    };
+    String STR_FIELD_OFFICETEL
+    {
+        Text = "Telefon Büro";
+        Text [ english ] = "Telephon Office";
+        Text [ english_us ] = "Telephon Office";
+    };
+    String STR_FIELD_PAGER
+    {
+        Text = "Telefon Funk";
+        Text [ english ] = "Pager";
+        Text [ english_us ] = "Pager";
+    };
+    String STR_FIELD_MOBILE
+    {
+        Text = "Handy";
+        Text [ english ] = "Mobile";
+        Text [ english_us ] = "Mobile";
+    };
+    String STR_FIELD_TELOTHER
+    {
+        Text = "Telefon andere";
+        Text [ english ] = "Telephon other";
+        Text [ english_us ] = "Telephon other";
+    };
+    String STR_FIELD_CALENDAR
+    {
+        Text = "Kalender";
+        Text [ english ] = "Calendar";
+        Text [ english_us ] = "Calendar";
+    };
+    String STR_FIELD_INVITE
+    {
+        Text = "Einladen";
+        Text [ english ] = "Invite";
+        Text [ english_us ] = "Invite";
+    };
+};
