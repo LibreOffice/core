@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:45:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ void SmDocShell::SetText(const String& rBuffer)
         if( pViewSh )
         {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
-            if (GetProtocol().IsInPlaceActive())
+            if ( GetProtocol().IsInPlaceActive() || SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
                 Resize();
             else
                 pViewSh->GetGraphicWindow().Invalidate();
@@ -1798,8 +1798,7 @@ void SmDocShell::SetVisArea (const Rectangle & rVisArea)
     // If outplace editing, then dont resize the OutplaceWindow. But the
     // ObjectShell has to resize. Bug 56470
     BOOL bUnLockFrame;
-    if( GetProtocol().IsEmbed() && !GetProtocol().IsInPlaceActive() &&
-        GetFrame() )
+    if( ( GetProtocol().IsEmbed() || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && !GetProtocol().IsInPlaceActive() && GetFrame() )
     {
         GetFrame()->LockAdjustPosSizePixel();
         bUnLockFrame = TRUE;
