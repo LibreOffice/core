@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:18:19 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #include "rangelst.hxx"
 #endif
 
-#ifndef SC_XEHELPER_HXX
-#include "xehelper.hxx"
+#ifndef SC_XESTRING_HXX
+#include "xestring.hxx"
 #endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
@@ -392,18 +392,6 @@ public:
 // sheet dummies: CALCMODE to SETUP
 
 class ExcDummy_02a : public ExcDummyRec
-{
-private:
-    static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
-public:
-    virtual ULONG           GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
-};
-
-
-// sheet dummies: GRIDSET
-class ExcDummy_02b : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
@@ -1205,129 +1193,11 @@ public:
 class XclExpWsbool : public XclExpUInt16Record
 {
 public:
-                            XclExpWsbool( RootData& rRootData );
-};
-
-
-//------------------------------------------------------------ class ExcSetup -
-
-class ExcSetup : public ExcRecord
-{
-private:
-    UINT16                  nPaperSize;
-    UINT16                  nScale;
-    UINT16                  nPageStart;
-    sal_uInt16              nFitToPages;
-    UINT16                  nGrbit;
-    sal_uInt16              nHeaderMargin;
-    sal_uInt16              nFooterMargin;
-
-    virtual void            SaveCont( XclExpStream& rStrm );
-
-public:
-                            ExcSetup( RootData* );
-
-    virtual UINT16          GetNum( void ) const;
-    virtual ULONG           GetLen( void ) const;
-};
-
-
-// Header/Footer ==============================================================
-
-/** Base class for header/footer contents. Constructs the complete format string
-    based on the given which IDs. */
-class XclExpHeaderFooter : public XclExpRecord, public ExcRoot
-{
-private:
-    String                      maFormatString;     /// The content of the header/footer.
-    bool                        mbUnicode;          /// true = write Unicode string.
-
-public:
-    /** @param nHFSetWhichId  The which ID of the SetItem of the header/footer.
-        @param nHFTextWhichId  The which ID od the text contents of the header/footer. */
-                                XclExpHeaderFooter(
-                                    sal_uInt16 nRecId,
-                                    RootData& rRootData,
-                                    sal_uInt16 nHFSetWhichId,
-                                    sal_uInt16 nHFTextWhichId );
-
-    /** Writes the record, if the text is not empty. */
-    virtual void                Save( XclExpStream& rStrm );
-
-private:
-    /** Constructs the contents of the complete header/footer. */
-    static void                 GetFormatString( String& rString, RootData& rRootData, sal_uInt16 nWhich );
-
-    /** Writes the string (Byte or Unicode, depending on mbUnicode). */
-    virtual void                WriteBody( XclExpStream& rStrm );
-};
-
-
-/** Contains the header text of a sheet. */
-class XclExpHeader : public XclExpHeaderFooter
-{
-public:
-                                XclExpHeader( RootData& rRootData );
-};
-
-
-/** Contains the footer text of a sheet. */
-class XclExpFooter : public XclExpHeaderFooter
-{
-public:
-                                XclExpFooter( RootData& rRootData );
+    explicit                    XclExpWsbool( bool bFitToPages );
 };
 
 
 // ============================================================================
-//----------------------------------------------------- class ExcPrintheaders -
-
-class ExcPrintheaders : public ExcBoolRecord
-{
-private:
-public:
-                            ExcPrintheaders( SfxItemSet* );
-
-    virtual UINT16          GetNum( void ) const;
-};
-
-
-//--------------------------------------------------- class ExcPrintGridlines -
-
-class ExcPrintGridlines : public ExcBoolRecord
-{
-private:
-public:
-                            ExcPrintGridlines( SfxItemSet* );
-
-    virtual UINT16          GetNum( void ) const;
-};
-
-
-//---------------------------------------------------------- class ExcHcenter -
-
-class ExcHcenter : public ExcBoolRecord
-{
-private:
-public:
-                            ExcHcenter( SfxItemSet* );
-
-    virtual UINT16          GetNum( void ) const;
-};
-
-
-//---------------------------------------------------------- class ExcVcenter -
-
-class ExcVcenter : public ExcBoolRecord
-{
-private:
-public:
-                            ExcVcenter( SfxItemSet* );
-
-    virtual UINT16          GetNum( void ) const;
-};
-
-
 //---------------------------------------------------------------- AutoFilter -
 // classes: ExcFilterMode, ExcAutoFilterInfo, ExcFilterCondition,
 //          ExcAutoFilter, ExcAutoFilterRecs
@@ -1438,62 +1308,6 @@ public:
 };
 
 
-// ----------------------------------------------------------------------------
-
-/** Stores the margin value of one border of the page. */
-class XclExpMargin : public XclExpDoubleRecord
-{
-public:
-    /** @param nMargin  The margin value in twips.
-        @param eSide  The page border identifier. */
-                                XclExpMargin( sal_Int32 nMargin, XclMarginType eSide );
-};
-
-
-// Manual page breaks =========================================================
-
-/** Stores an array of manual page breaks for columns or rows. */
-class XclExpPagebreaks : public XclExpRecord
-{
-protected:
-    ScfUInt16List               maPagebreaks;   /// Array of manual page breaks.
-
-public:
-                                XclExpPagebreaks(
-                                    RootData& rRootData,
-                                    sal_uInt16 nScTab,
-                                    XclPBOrientation eOrient );
-
-    /** Writes the record, if the list is not empty. */
-    virtual void                Save( XclExpStream& rStrm );
-
-private:
-    /** Writes the page break list. */
-    virtual void                WriteBody( XclExpStream& rStrm );
-};
-
-
-// ----------------------------------------------------------------------------
-
-/** Stores an array of manual page breaks for columns or rows (BIFF8). */
-class XclExpPagebreaks8 : public XclExpPagebreaks
-{
-private:
-    sal_uInt16                  mnRangeMax;     /// Index of last row/column.
-
-public:
-                                XclExpPagebreaks8(
-                                    RootData& rRootData,
-                                    sal_uInt16 nScTab,
-                                    XclPBOrientation eOrient );
-
-private:
-    /** Writes the page break list. */
-    virtual void                WriteBody( XclExpStream& rStrm );
-};
-
-
-// ============================================================================
 //------------------------ class ExcArray, class ExcArrays, class ExcShrdFmla -
 
 class ExcArray : public ExcRecord
