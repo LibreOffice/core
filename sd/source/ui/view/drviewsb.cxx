@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:56:56 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
 
 #include <svx/hyprlink.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SVX_HLNKITEM_HXX
 #include <svx/hlnkitem.hxx>
