@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:57:06 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,7 +1184,7 @@ InfoBox MSG_SRTERR
     MESSAGE[ russian ] = "Ρξπςθπξβκΰ ξςαξπΰ νεβξημξζνΰ";
     MESSAGE[ polish ] = "Nie moΏna sortowaζ selekcji";
     MESSAGE[ japanese ] = "‘I‘π”ΝΝ‚Ν•ΐ‚Χ‘Φ‚¦‚Ε‚«‚ά‚Ή‚ρB";
-    MESSAGE[ chinese_traditional ] = "µLªk±Ζ§ΗΏοΎάªΊ¤Ί®e΅C";
+    MESSAGE[ chinese_traditional ] = "µLªk±Ζ§ΗΏο¨ϊªΊ¤Ί®e΅C";
     MESSAGE[ arabic ] = "ΚΪΠΡ έΡÒ ΗαΚΝΟνΟ";
     MESSAGE[ greek ] = "Η ταξινόμηση της επιλογής δεν ήταν δυνατή";
     MESSAGE[ korean ] = "Ό±ΕΓΐ» Α¤·ΔΗÒ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
