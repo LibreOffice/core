@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:42:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,9 +524,9 @@ void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& 
 {
     appendPoint( rRect.BottomLeft() + Point( 0, 1 ), rBuffer );
     rBuffer.append( ' ' );
-    appendMappedLength( rRect.GetWidth(), rBuffer, false );
+    appendMappedLength( (sal_Int32)rRect.GetWidth(), rBuffer, false );
     rBuffer.append( ' ' );
-    appendMappedLength( rRect.GetHeight(), rBuffer, true );
+    appendMappedLength( (sal_Int32)rRect.GetHeight(), rBuffer, true );
     rBuffer.append( " re" );
 }
 
@@ -641,23 +641,23 @@ void PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         rBuffer.append( "[ " );
         for( int n = 0; n < rInfo.GetDashCount(); n++ )
         {
-            appendMappedLength( rInfo.GetDashLen(), rBuffer );
+            appendMappedLength( (sal_Int32)rInfo.GetDashLen(), rBuffer );
             rBuffer.append( ' ' );
-            appendMappedLength( rInfo.GetDistance(), rBuffer );
+            appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
             rBuffer.append( ' ' );
         }
         for( int m = 0; m < rInfo.GetDotCount(); m++ )
         {
-            appendMappedLength( rInfo.GetDotLen(), rBuffer );
+            appendMappedLength( (sal_Int32)rInfo.GetDotLen(), rBuffer );
             rBuffer.append( ' ' );
-            appendMappedLength( rInfo.GetDistance(), rBuffer );
+            appendMappedLength( (sal_Int32)rInfo.GetDistance(), rBuffer );
             rBuffer.append( ' ' );
         }
         rBuffer.append( "] 0 d\r\n" );
     }
     if( rInfo.GetWidth() > 1 )
     {
-        appendMappedLength( rInfo.GetWidth(), rBuffer );
+        appendMappedLength( (sal_Int32)rInfo.GetWidth(), rBuffer );
         rBuffer.append( " w\r\n" );
     }
     else if( rInfo.GetWidth() == 0 )
@@ -1988,7 +1988,7 @@ sal_Int32 PDFWriterImpl::emitFonts()
     {
         for( FontEmitList::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
         {
-            long pGlyphIDs[ 256 ];
+            sal_Int32 pGlyphIDs[ 256 ];
             sal_Int32 pWidths[ 256 ];
             sal_uInt8 pEncoding[ 256 ];
             sal_Unicode pUnicodes[ 256 ];
@@ -2553,7 +2553,7 @@ bool PDFWriterImpl::emit()
 
 void PDFWriterImpl::registerGlyphs(
                                    int nGlyphs,
-                                   long* pGlyphs,
+                                   sal_Int32* pGlyphs,
                                    sal_Unicode* pUnicodes,
                                    sal_uInt8* pMappedGlyphs,
                                    sal_Int32* pMappedFontObjects,
@@ -2776,15 +2776,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
 
     const int nMaxGlyphs = 256;
 
-    long pGlyphs[nMaxGlyphs];
+    sal_Int32 pGlyphs[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
     sal_Unicode pUnicodes[nMaxGlyphs];
     int pCharPosAry[nMaxGlyphs];
-    long nAdvanceWidths[nMaxGlyphs];
+    sal_Int32 nAdvanceWidths[nMaxGlyphs];
     ImplFontData* pFallbackFonts[nMaxGlyphs];
-    long *pAdvanceWidths = m_aCurrentPDFState.m_aFont.IsVertical() ? nAdvanceWidths : NULL;
-    long nGlyphFlags[nMaxGlyphs];
+    sal_Int32 *pAdvanceWidths = m_aCurrentPDFState.m_aFont.IsVertical() ? nAdvanceWidths : NULL;
+    sal_Int32 nGlyphFlags[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
     Point aPos, aLastPos(0, 0), aCumulativePos(0,0), aGlyphPos;
@@ -3031,12 +3031,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 {
                     sal_Int32 nDiffL = 0;
                     Point aDiff = aPos - aLastPos;
-                    m_aPages.back().appendMappedLength( aDiff.X(), aLine, false, &nDiffL );
+                    m_aPages.back().appendMappedLength( (sal_Int32)aDiff.X(), aLine, false, &nDiffL );
                     aCumulativePos.X() += nDiffL;
                     aLine.append( ' ' );
                     if( bWasYChange )
                     {
-                        m_aPages.back().appendMappedLength( aDiff.Y(), aLine, true, &nDiffL );
+                        m_aPages.back().appendMappedLength( (sal_Int32)aDiff.Y(), aLine, true, &nDiffL );
                         aCumulativePos.Y() += nDiffL;
                     }
                     else
@@ -3124,10 +3124,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
             Point aPos, aStartPt;
-            long nWidth = 0, nAdvance=0;
+            sal_Int32 nWidth = 0, nAdvance=0;
             for( int nStart = 0;;)
             {
-                long nGlyphIndex;
+                sal_Int32 nGlyphIndex;
                 if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                     break;
 
@@ -3226,7 +3226,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         for( int nStart = 0;;)
         {
             Point aPos;
-            long nGlyphIndex, nAdvance;
+            sal_Int32 nGlyphIndex, nAdvance;
             if( !rLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                 break;
 
@@ -3307,7 +3307,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const String& rText, xub_StrLen
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const long* pDXArray, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const sal_Int32* pDXArray, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawText with array" );
 
@@ -3685,7 +3685,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
         if ( eUnderline == UNDERLINE_BOLDWAVE )
             nLineWidth = 3*nLineWidth/2;
 
-        m_aPages.back().appendMappedLength( nLineWidth, aLine );
+        m_aPages.back().appendMappedLength( (sal_Int32)nLineWidth, aLine );
         aLine.append( " w " );
 
         if ( eUnderline == UNDERLINE_DOUBLEWAVE )
@@ -3800,7 +3800,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
 
         if ( nLineHeight )
         {
-            m_aPages.back().appendMappedLength( nLineHeight, aLine, true );
+            m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, true );
             aLine.append( " w " );
             appendStrokingColor( aUnderlineColor, aLine );
             aLine.append( "\r\n" );
@@ -3809,7 +3809,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
                  (eUnderline == UNDERLINE_BOLDDOTTED) )
             {
                 aLine.append( "[ " );
-                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
                 aLine.append( " ] 0 d\r\n" );
             }
             else if ( (eUnderline == UNDERLINE_DASH) ||
@@ -3838,7 +3838,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( " ] 0 d\r\n" );
@@ -3854,31 +3854,31 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( nLineHeight, aLine, false );
+                m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, false );
                 aLine.append( ' ' );
                 m_aPages.back().appendMappedLength( nVoidLength, aLine, false );
                 aLine.append( " ] 0 d\r\n" );
             }
 
             aLine.append( "0 " );
-            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
             aLine.append( " m " );
-            m_aPages.back().appendMappedLength( nWidth, aLine, false );
+            m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
             aLine.append( ' ' );
-            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
             aLine.append( " l S\r\n" );
             if ( eUnderline == UNDERLINE_DOUBLE )
             {
                 aLine.append( "0 " );
-                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
+                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
                 aLine.append( " m " );
-                m_aPages.back().appendMappedLength( nWidth, aLine, false );
+                m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, false );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
+                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
                 aLine.append( " l S\r\n" );
             }
         }
@@ -3914,27 +3914,27 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
 
         if ( nLineHeight )
         {
-            m_aPages.back().appendMappedLength( nLineHeight, aLine, true );
+            m_aPages.back().appendMappedLength( (sal_Int32)nLineHeight, aLine, true );
             aLine.append( " w " );
             appendStrokingColor( aStrikeoutColor, aLine );
             aLine.append( "\r\n" );
 
             aLine.append( "0 " );
-            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
             aLine.append( " m " );
-            m_aPages.back().appendMappedLength( nWidth, aLine, true );
+            m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, true );
             aLine.append( ' ' );
-            m_aPages.back().appendMappedLength( -nLinePos, aLine, true );
+            m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos), aLine, true );
             aLine.append( " l S\r\n" );
 
             if ( eStrikeout == STRIKEOUT_DOUBLE )
             {
                 aLine.append( "0 " );
-                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
+                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
                 aLine.append( " m " );
-                m_aPages.back().appendMappedLength( nWidth, aLine, true );
+                m_aPages.back().appendMappedLength( (sal_Int32)nWidth, aLine, true );
                 aLine.append( ' ' );
-                m_aPages.back().appendMappedLength( -nLinePos2-nLineHeight, aLine, true );
+                m_aPages.back().appendMappedLength( (sal_Int32)(-nLinePos2-nLineHeight), aLine, true );
                 aLine.append( " l S\r\n" );
 
             }
@@ -4913,9 +4913,9 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, c
         delete pStream;
 
     aLine.append( "q " );
-    m_aPages.back().appendMappedLength( rTargetArea.GetWidth(), aLine, false );
+    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetWidth(), aLine, false );
     aLine.append( " 0 0 " );
-    m_aPages.back().appendMappedLength( rTargetArea.GetHeight(), aLine, true );
+    m_aPages.back().appendMappedLength( (sal_Int32)rTargetArea.GetHeight(), aLine, true );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rTargetArea.BottomLeft(), aLine );
     aLine.append( " cm\r\n  /Im" );
@@ -4935,9 +4935,9 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
         appendNonStrokingColor( rFillColor, aLine );
         aLine.append( ' ' );
     }
-    m_aPages.back().appendMappedLength( rDestSize.Width(), aLine, false );
+    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Width(), aLine, false );
     aLine.append( " 0 0 " );
-    m_aPages.back().appendMappedLength( rDestSize.Height(), aLine, true );
+    m_aPages.back().appendMappedLength( (sal_Int32)rDestSize.Height(), aLine, true );
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
     aLine.append( " cm\r\n  /Im" );
@@ -5055,9 +5055,9 @@ void PDFWriterImpl::drawGradient( const Rectangle& rRect, const Gradient& rGradi
     if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) )
         aLine.append( "q " );
     aLine.append( "0 0 " );
-    m_aPages.back().appendMappedLength( rRect.GetWidth(), aLine, false );
+    m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetWidth(), aLine, false );
     aLine.append( ' ' );
-    m_aPages.back().appendMappedLength( rRect.GetHeight(), aLine, true );
+    m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetHeight(), aLine, true );
     aLine.append( " re W n\r\n" );
 
     aLine.append( "/P" );
@@ -5066,9 +5066,9 @@ void PDFWriterImpl::drawGradient( const Rectangle& rRect, const Gradient& rGradi
     if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) )
     {
         aLine.append( "Q 0 0 " );
-        m_aPages.back().appendMappedLength( rRect.GetWidth(), aLine, false );
+        m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetWidth(), aLine, false );
         aLine.append( ' ' );
-        m_aPages.back().appendMappedLength( rRect.GetHeight(), aLine, true );
+        m_aPages.back().appendMappedLength( (sal_Int32)rRect.GetHeight(), aLine, true );
         aLine.append( " re S " );
     }
     aLine.append( "Q\r\n" );
