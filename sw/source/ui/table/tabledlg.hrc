@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tabledlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "globals.hrc"
+
+#define ED_WIDTH        1
+#define GB_WIDTH        3
+#define CB_REL_WIDTH    4
+#define RB_LEFT         10
+#define RB_RIGHT        11
+#define RB_CENTER       12
+#define RB_FREE         13
+#define RB_FULL         14
+#define GB_POS          15
+#define ED_LEFT_DIST    51
+#define ED_RIGHT_DIST   52
+#define FT_RIGHT_DIST   53
+#define FT_LEFT_DIST    54
+#define FT_TOP_DIST     20
+#define ED_TOP_DIST     21
+#define FT_BOTTOM_DIST  22
+#define ED_BOTTOM_DIST  23
+#define GB_DIST         24
+#define FT_WIDTH        25
+#define FT_SCOL         30
+#define DLB_SCOL        31
+#define FT_POS          32
+#define DLB_SPOS        33
+#define FT_SSZ          34
+#define ED_SSZ          36
+#define GB_SHADE        37
+#define CB_HEADLINE     40
+#define GB_HEADLINE     41
+#define BT_OK           100
+#define BT_CANCEL       101
+#define BT_MORE         102
+#define ED_NAME         103
+#define FT_NAME         104
+#define GB_OPTIONS      105
+#define GB_NAME         106
+#define COL_FT_1        107
+#define COL_MF_1        108
+#define COL_FT_2        109
+#define COL_MF_2        110
+#define COL_FT_3        111
+#define COL_MF_3        112
+#define COL_FT_4        113
+#define COL_MF_4        114
+#define COL_FT_5        115
+#define COL_MF_5        116
+#define COL_FT_6        117
+#define COL_MF_6        118
+#define COL_GB_LAYOUT   119
+#define COL_BTN_UP      120
+#define COL_BTN_DOWN    121
+#define CB_MOD_TBL      122
+#define CB_PROP         123
+#define CB_INV          124
+#define FT_SPACE        125
+#define ED_SPACE        126
+
+#define GB_FLOW             130
+#define CB_PAGEBREAK        131
+#define RB_BREAKPAGE        132
+#define RB_BREAKCOLUMN      133
+#define RB_PAGEBREAKBEFORE  134
+#define RB_PAGEBREAKAFTER   135
+#define CB_PAGECOLL         136
+#define LB_PAGECOLL         137
+#define FT_PAGENUM          138
+#define NF_PAGENUM          139
+#define CB_KEEP             144
+#define CB_SPLIT            145
+
+#define GB_VERT_ORIENT      140
+#define RB_VERT_TOP         141
+#define RB_VERT_CENTER      142
+#define RB_VERT_BOTTOM      143
+
+#define RB_FROM_LEFT        144

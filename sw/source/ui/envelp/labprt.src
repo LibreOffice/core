@@ -1,0 +1,317 @@
+/*************************************************************************
+ *
+ *  $RCSfile: labprt.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+ // #include *****************************************************************
+#include "labprt.hrc"
+#include "helpid.h"
+ // TP_LAB_PRT ---------------------------------------------------------------
+TabPage TP_LAB_PRT
+{
+    HelpID = HID_LAB_PRT ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    RadioButton BTN_PAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Text = "~Ganze Seite" ;
+        Text [ ENGLISH ] = "Whole page" ;
+        Text [ NORWEGIAN ] = "Hele siden" ;
+        Text [ DANISH ] = "Hele siden" ;
+        Text [ ENGLISH_US ] = "~Entire page" ;
+        Text [ SPANISH ] = "~Toda la p·gina" ;
+        Text [ FINNISH ] = "Koko sivu" ;
+        Text [ FRENCH ] = "~Page entiËre" ;
+        Text [ ITALIAN ] = "Pagina ~intera" ;
+        Text [ DUTCH ] = "~Hele pagina" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Pﬂgina inteira" ;
+        Text [ SWEDISH ] = "H~ela sidan" ;
+        Text [ PORTUGUESE ] = "P·gina ~inteira" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "’˚“≥(~E)";
+        Text[ russian ] = "¬Òˇ ÒÚ‡ÌËˆ‡";
+        Text[ polish ] = "Ca≥a strona";
+        Text[ japanese ] = "Õﬂ∞ºﬁëSëÃ(~E)";
+        Text[ chinese_traditional ] = "æ„≠∂(~E)";
+        Text[ arabic ] = "’›Õ… ﬂ«„·…";
+        Text[ greek ] = "œÎ¸ÍÎÁÒÁ ÛÂÎﬂ‰·";
+        Text[ korean ] = "¿¸√º ∆‰¿Ã¡ˆ(~E)";
+        Text[ turkish ] = "~Tam sayfa";
+    };
+    RadioButton BTN_SINGLE
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text = "Einzelnes Eti~kett" ;
+        Text [ ENGLISH ] = "Single label" ;
+        Text [ NORWEGIAN ] = "Single label" ;
+        Text [ DANISH ] = "Enkelt etiket" ;
+        Text [ ENGLISH_US ] = "~Single label" ;
+        Text [ SPANISH ] = "~Una etiqueta" ;
+        Text [ FINNISH ] = "Yksi tarra" ;
+        Text [ FRENCH ] = "~…tiquette unique" ;
+        Text [ ITALIAN ] = "Singola etichetta" ;
+        Text [ DUTCH ] = "~Een enkel" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Etiqueta simples" ;
+        Text [ SWEDISH ] = "Enstaka eti~kett" ;
+        Text [ PORTUGUESE ] = "E~tiqueta ˙nica" ;
+        Text[ chinese_simplified ] = "µ•∏ˆ±Í«©(~S)";
+        Text[ russian ] = "ŒÚ‰ÂÎ¸Ì‡ˇ Ì‡ÍÎÂÈÍ‡";
+        Text[ polish ] = "Poj~edyncza etykieta";
+        Text[ japanese ] = "1ñáÇ√Ç¬ÇÃ◊ÕﬁŸ(~S)";
+        Text[ chinese_traditional ] = "≥Ê≠”∂Kº–(~S)";
+        Text[ arabic ] = "»ÿ«ﬁ… ⁄‰Ê‰… „›—œ…";
+        Text[ greek ] = "ÃÂÏÔÌ˘Ï›ÌÁ ÂÙÈÍ›Ù·";
+        Text[ korean ] = "¥‹¿œ ∂Û∫ß(~S)";
+        Text[ turkish ] = "Tek Eti~ket";
+    };
+    FixedText TXT_COL
+    {
+        Pos = MAP_APPFONT ( 132 , 27 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Text = "S~palte" ;
+        Text [ ENGLISH ] = "Column" ;
+        Text [ NORWEGIAN ] = "Column" ;
+        Text [ DANISH ] = "Kolonne" ;
+        Text [ ENGLISH_US ] = "Colu~mn" ;
+        Text [ SPANISH ] = "C~olumna" ;
+        Text [ FINNISH ] = "Sarake" ;
+        Text [ FRENCH ] = "~Colonne" ;
+        Text [ ITALIAN ] = "Colonna" ;
+        Text [ DUTCH ] = "~Kolom" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Coluna" ;
+        Text [ SWEDISH ] = "Kolu~mn" ;
+        Text [ PORTUGUESE ] = "~Coluna" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¡–(~M)";
+        Text[ russian ] = " ÓÎÓÌÍ‡";
+        Text[ polish ] = "Kolumna";
+        Text[ japanese ] = "óÒ(~M)";
+        Text[ chinese_traditional ] = "ƒÊ(~M)";
+        Text[ arabic ] = "⁄„Êœ";
+        Text[ greek ] = "”ÙﬁÎÁ";
+        Text[ korean ] = "ø≠(~M)";
+        Text[ turkish ] = "~S¸tun";
+    };
+    NumericField FLD_COL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 161 , 24 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+    };
+    FixedText TXT_ROW
+    {
+        Pos = MAP_APPFONT ( 193 , 27 ) ;
+        Size = MAP_APPFONT ( 28 , 10 ) ;
+        Text = "Zei~le" ;
+        Text [ ENGLISH ] = "Row" ;
+        Text [ NORWEGIAN ] = "Row" ;
+        Text [ DANISH ] = "RÊkke" ;
+        Text [ ENGLISH_US ] = "Ro~w" ;
+        Text [ SPANISH ] = "~Fila" ;
+        Text [ FINNISH ] = "Rivi" ;
+        Text [ FRENCH ] = "~Ligne" ;
+        Text [ ITALIAN ] = "Riga" ;
+        Text [ DUTCH ] = "~Rij" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Fileira" ;
+        Text [ SWEDISH ] = "~Rad" ;
+        Text [ PORTUGUESE ] = "~Linha" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "––(~W)";
+        Text[ russian ] = "—ÚÓÍ‡";
+        Text[ polish ] = "Wiersz";
+        Text[ japanese ] = "çs(~WÅj";
+        Text[ chinese_traditional ] = "¶Ê(~W)";
+        Text[ arabic ] = "’›";
+        Text[ greek ] = "√Ò·ÏÏﬁ";
+        Text[ korean ] = "«‡(~W)";
+        Text[ turkish ] = "S~at˝r";
+    };
+    NumericField FLD_ROW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 224 , 24 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+    };
+    CheckBox CB_SYNCHRON
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "Inhalte ~synchronisieren" ;
+        Text [ ENGLISH ] = "~Synchronize content" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Synchroni~ze contents" ;
+        Text [ portuguese_brazilian ] = "Inhalte ~synchronisieren" ;
+        Text [ swedish ] = "~Synkronisera innehÂll" ;
+        Text [ danish ] = "Synkroniser indhold" ;
+        Text [ italian ] = "Sincronizza ~contenuti" ;
+        Text [ spanish ] = "~Sincronizar contenidos" ;
+        Text [ french ] = "~Synchroniser le contenu" ;
+        Text [ dutch ] = "Inhoud ~synchroniseren" ;
+        Text [ portuguese ] = "~Sincronizar conte˙dos" ;
+        Text[ chinese_simplified ] = "ƒ⁄»›Õ¨≤ΩªØ(~S)";
+        Text[ russian ] = "—ËÌıÓÌËÁ‡ˆËˇ ÒÓ‰ÂÊËÏÓ„Ó";
+        Text[ polish ] = "Synchronizacja treúci";
+        Text[ japanese ] = "ì‡óeÇìØä˙Ç∑ÇÈ(~S)";
+        Text[ chinese_traditional ] = "§∫Æe¶P®B§∆(~S)";
+        Text[ arabic ] = " “«„‰ «·„Õ ÊÌ« ";
+        Text[ greek ] = "”ı„˜ÒÔÌÈÛÏ¸Ú ÂÒÈÂ˜ÔÏ›Ì˘Ì";
+        Text[ korean ] = "≥ªøÎ µø±‚»≠(~Z)";
+        Text[ turkish ] = "›Áerii Áoalt";
+    };
+    GroupBox GB_DONTKNOW
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 60 ) ;
+    };
+    FixedText INF_PRINTER
+    {
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
+        Size = MAP_APPFONT ( 171 , 10 ) ;
+        Text = "Druckername" ;
+        Text [ ENGLISH ] = "Printer name" ;
+        Left = TRUE ;
+        Text [ english_us ] = "Printer Name" ;
+        Text [ italian ] = "Nome stampante" ;
+        Text [ spanish ] = "Nombre de la impresora" ;
+        Text [ french ] = "Nom de l'imprimante" ;
+        Text [ dutch ] = "Printer naam" ;
+        Text [ swedish ] = "Skrivarnamn" ;
+        Text [ danish ] = "Printernavn" ;
+        Text [ portuguese_brazilian ] = "Druckername" ;
+        Text [ portuguese ] = "Nome da impressora" ;
+        Text[ chinese_simplified ] = "¥Ú”°ª˙√˚≥∆";
+        Text[ russian ] = "Õ‡Á‚‡ÌËÂ ÔËÌÚÂ‡";
+        Text[ polish ] = "Nazwa drukarki";
+        Text[ japanese ] = "Ãﬂÿ›¿ñº";
+        Text[ chinese_traditional ] = "¶L™Ìæ˜¶W∫Ÿ";
+        Text[ arabic ] = "«”„ «·ÿ«»⁄…";
+        Text[ greek ] = "ºÌÔÏ· ÂÍÙı˘Ùﬁ";
+        Text[ korean ] = "«¡∏∞≈Õ ¿Ã∏ß";
+        Text[ turkish ] = "Yaz˝c˝ ad˝";
+    };
+    PushButton BTN_PRTSETUP
+    {
+        Pos = MAP_APPFONT ( 200 , 80 ) ;
+        Size = MAP_APPFONT ( 48 , 14 ) ;
+        Text = "~Einrichten..." ;
+        Text [ ENGLISH ] = "Setup..." ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Setup..." ;
+        Text [ italian ] = "Imposta..." ;
+        Text [ spanish ] = "Configurar..." ;
+        Text [ french ] = "~ParamÈtrer..." ;
+        Text [ dutch ] = "~Configureren..." ;
+        Text [ swedish ] = "Inr‰tta..." ;
+        Text [ danish ] = "Indstil..." ;
+        Text [ portuguese_brazilian ] = "Einrichten..." ;
+        Text [ portuguese ] = "~Configurar..." ;
+        Text[ chinese_simplified ] = "…Ë÷√...";
+        Text[ russian ] = "Õ‡ÒÚÓÈÍ‡...";
+        Text[ polish ] = "Ust~aw";
+        Text[ japanese ] = "ê›íË...";
+        Text[ chinese_traditional ] = "≥]∏m...";
+        Text[ arabic ] = "...≈⁄œ«œ";
+        Text[ greek ] = "~≈„Í·Ù‹ÛÙ·ÛÁ...";
+        Text[ korean ] = "º≥¡§...";
+        Text[ turkish ] = "Ayarlar...";
+    };
+    GroupBox GB_PRINTER
+    {
+        Pos = MAP_APPFONT ( 6 , 70 ) ;
+        Size = MAP_APPFONT ( 248 , 32 ) ;
+        Text = " Drucker " ;
+        Text [ ENGLISH ] = " Printer " ;
+        Text [ dutch ] = "Printer " ;
+        Text [ english_us ] = "Printer " ;
+        Text [ italian ] = "Stampante " ;
+        Text [ spanish ] = "Impresora  " ;
+        Text [ french ] = "Imprimante " ;
+        Text [ swedish ] = "Skrivare  " ;
+        Text [ danish ] = "Printer " ;
+        Text [ portuguese_brazilian ] = "Drucker " ;
+        Text [ portuguese ] = "Impressora " ;
+        Text[ chinese_simplified ] = "¥Ú”°ª˙ ";
+        Text[ russian ] = "œËÌÚÂ  ";
+        Text[ polish ] = "Drukarka ";
+        Text[ japanese ] = "Ãﬂÿ›¿ ";
+        Text[ chinese_traditional ] = "¶L™Ìæ˜ ";
+        Text[ arabic ] = "«·ÿ«»⁄… ";
+        Text[ greek ] = "≈ÍÙı˘ÙﬁÚ ";
+        Text[ korean ] = "«¡∏∞≈Õ ";
+        Text[ turkish ] = "Yaz˝c˝ ";
+    };
+};
+ // **************************************************************************

@@ -1,0 +1,133 @@
+/*************************************************************************
+ *
+ *  $RCSfile: outline.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define RB_1            1
+#define RB_2            2
+#define RB_3            3
+#define RB_4            4
+#define RB_5            5
+#define FT_1            6
+#define FT_2            7
+#define FT_3            8
+#define FT_4            9
+#define FT_5            10
+#define FI_1            11
+#define FI_2            12
+#define FI_3            13
+#define FI_4            14
+#define FI_5            15
+//#define GB_LEVEL        16
+
+#define FT_COLL         20
+#define LB_COLL         21
+#define FT_NUMBER       22
+#define LB_NUMBER       23
+#define FT_DELIM        24
+#define FT_DELIM_BEVOR  25
+#define FT_DELIM_AFTER  26
+#define ED_DELIM_BEVOR  27
+#define ED_DELIM_AFTER  28
+#define CB_COMPLETE     29
+#define GB_NUMBER       30
+
+#define LB_ALIGN        31
+#define GB_ALIGN        33
+
+#define FT_START        40
+#define ED_START        41
+#define GB_START        42
+
+#define BT_OK           100
+#define BT_CANCEL       101
+#define BT_HELP         102
+#define BT_FORM         103
+#define BT_RESET        104
+#define GB_FORM         105
+#define LB_FORM         106
+#define ED_FORM         107
+#define FT_ALL_LEVEL    108
+#define NF_ALL_LEVEL    109
+
+#define MN_FORM     110
+#define MN_FORM1        111
+#define MN_FORMBASE     MN_FORM1
+#define MN_FORM2        112
+#define MN_FORM3        113
+#define MN_FORM4        114
+#define MN_FORM5        115
+#define MN_FORM6        116
+#define MN_FORM7        117
+#define MN_FORM8        118
+#define MN_FORM9        119
+#define MN_SAVE         120
+
+#define GB_LEVEL        130
+#define LB_LEVEL        131
+#define WIN_PREVIEW     132
+#define GB_PREVIEW      133
+#define FT_SUFFIX       134
+#define ED_SUFFIX       135
+#define FT_PREFIX       136
+#define ED_PREFIX       137
+#define ST_NO_COLL      138
+
+#define ST_FORM         140
+#define FT_CHARFMT      141
+#define LB_CHARFMT      141

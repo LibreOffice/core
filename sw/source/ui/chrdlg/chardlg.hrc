@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ *  $RCSfile: chardlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define FONT_FT        1
+#define FONT_CB        2
+#define FACE_FT        3
+#define FACE_LB        4
+#define SIZE_FT        5
+#define SIZE_CB        6
+#define OUTLINE_TB     7
+#define SHADOW_TB      8
+#define UNDERL_TB      9
+#define STRIKETHRU_TB  10
+#define COLOR_FT       11
+#define COLOR_LB       12
+#define LANG_FT        13
+#define LANG_LB        14
+#define EXAMPLE_WN     15
+#define EXAMPLE_GB     16
+#define CASEMAP_GB     17
+#define NONE_RB        20
+#define CAPS_RB        21
+#define LOWERCASE_RB   22
+#define SMALLCAPS_RB   23
+#define TITEL_RB       24
+#define HIGH_RB        25
+#define NORMAL_RB      26
+#define DEEP_RB        27
+#define DEEPHIGHT_FT   28
+#define DEEPHIGH_MF    29
+#define RELSIZE_FT     30
+#define RELSIZE_MF     31
+#define KERN_LB        32
+#define KERN_FT        33
+#define KERN_MF        34
+#define UNDERLINE_FT   35
+#define UNDERLINE_LB   36
+#define STRIKE_FT      37
+#define STRIKE_LB      38
+#define STRIKE_CB      39
+#define EFFECT_GB      41
+#define POS_GB         42
+#define POSEXT_GB      43
+#define KERN_GB        45
+#define FONTTYPE_FT    46
+
+#define GB_URL      50
+#define FT_URL          51
+#define ED_URL          52
+#define GB_STYLE        53
+#define FT_VISITED      55
+#define LB_VISITED      56
+#define FT_NOT_VISITED  57
+#define LB_NOT_VISITED  58
+#define PB_EVENT        59
+#define PB_URL          60
+#define LB_TARGET       61
+#define FT_TARGET   62
+#define FT_TEXT         63
+#define ED_TEXT         64
+#define FT_NAME         65
+#define ED_NAME         66
+

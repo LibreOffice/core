@@ -1,0 +1,473 @@
+/*************************************************************************
+ *
+ *  $RCSfile: envlop.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+ // #include *****************************************************************
+#include "envlop.hrc"
+#include "helpid.h"
+ // DLG_ENV ------------------------------------------------------------------
+TabDialog DLG_ENV
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Briefumschlag" ;
+    Text [ ENGLISH ] = "Envelope" ;
+    Text [ norwegian ] = "Envelope" ;
+    Text [ italian ] = "Busta" ;
+    Text [ portuguese_brazilian ] = "Envelope" ;
+    Text [ portuguese ] = "Envelope" ;
+    Text [ finnish ] = "Kirjekuori" ;
+    Text [ danish ] = "Konvolut" ;
+    Text [ french ] = "Enveloppe" ;
+    Text [ swedish ] = "Kuvert" ;
+    Text [ dutch ] = "Envelop" ;
+    Text [ spanish ] = "Sobre" ;
+    Text [ english_us ] = "Envelope" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_ENV_ENV ;
+                Text = "Umschlag" ;
+                Text [ ENGLISH ] = "Envelop" ;
+                Text [ norwegian ] = "Konvolutt" ;
+                Text [ italian ] = "Busta" ;
+                Text [ portuguese_brazilian ] = "Envelope" ;
+                Text [ portuguese ] = "Envelope" ;
+                Text [ finnish ] = "Kirjekuori" ;
+                Text [ danish ] = "Konvolut" ;
+                Text [ french ] = "Enveloppe" ;
+                Text [ swedish ] = "Kuvert" ;
+                Text [ dutch ] = "Envelop" ;
+                Text [ spanish ] = "Sobre" ;
+                Text [ english_us ] = "Envelope" ;
+                PageResID = TP_ENV_ENV ;
+                Text[ chinese_simplified ] = "–≈∑‚";
+                Text[ russian ] = " ÓÌ‚ÂÚ";
+                Text[ polish ] = "Koperta";
+                Text[ japanese ] = "ïïìõ";
+                Text[ chinese_traditional ] = "´H´ ";
+                Text[ arabic ] = "Ÿ—›";
+                Text[ greek ] = "÷‹ÍÂÎÔÚ";
+                Text[ korean ] = "∫¿≈ı";
+                Text[ turkish ] = "Zarf";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_ENV_FMT ;
+                Text = "Format" ;
+                Text[English] = "Format" ;
+                PageResID = TP_ENV_FMT ;
+                Text[ english_us ] = "Format";
+                Text[ portuguese ] = "Formato";
+                Text[ russian ] = "‘ÓÏ‡Ú";
+                Text[ greek ] = "ÃÔÒˆﬁ";
+                Text[ dutch ] = "Formaat";
+                Text[ french ] = "Format";
+                Text[ spanish ] = "Formato";
+                Text[ italian ] = "Formato";
+                Text[ danish ] = "Format";
+                Text[ swedish ] = "Format";
+                Text[ polish ] = "Format";
+                Text[ portuguese_brazilian ] = "Format";
+                Text[ japanese ] = "èëéÆ";
+                Text[ korean ] = "Format";
+                Text[ chinese_simplified ] = "∏Ò Ω";
+                Text[ chinese_traditional ] = "ÆÊ¶°";
+                Text[ turkish ] = "Format";
+                Text[ arabic ] = "«· ‰”Ìﬁ";
+            };
+            PageItem
+            {
+                Identifier = TP_ENV_PRT ;
+                Text = "Drucker" ;
+                Text [ English ] = "Printer" ;
+                Text [ norwegian ] = "Printer" ;
+                Text [ italian ] = "Stampante" ;
+                Text [ portuguese_brazilian ] = "Impressora" ;
+                Text [ portuguese ] = "Impressora" ;
+                Text [ finnish ] = "Kirjoitin" ;
+                Text [ danish ] = "Printer" ;
+                Text [ french ] = "Imprimante" ;
+                Text [ swedish ] = "Skrivare" ;
+                Text [ dutch ] = "Printer" ;
+                Text [ spanish ] = "Impresora" ;
+                Text [ english_us ] = "Printer" ;
+                PageResID = TP_ENV_PRT ;
+                Text[ chinese_simplified ] = "¥Ú”°ª˙";
+                Text[ russian ] = "œËÌÚÂ";
+                Text[ polish ] = "Drukarka";
+                Text[ japanese ] = "Ãﬂÿ›¿";
+                Text[ chinese_traditional ] = "¶L™Ìæ˜";
+                Text[ arabic ] = "«·ÿ«»⁄…";
+                Text[ greek ] = "≈ÍÙı˘ÙﬁÚ";
+                Text[ korean ] = "«¡∏∞≈Õ";
+                Text[ turkish ] = "Yaz˝c˝";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    String ST_INSERT
+    {
+        Text = "~Einf¸gen" ;
+        Text [ English ] = "~Insert" ;
+        Text [ norwegian ] = "~Insert" ;
+        Text [ italian ] = "~Inserisci" ;
+        Text [ portuguese_brazilian ] = "~Inserir" ;
+        Text [ portuguese ] = "~Inserir" ;
+        Text [ finnish ] = "~Lis‰‰" ;
+        Text [ danish ] = "~IndsÊt" ;
+        Text [ french ] = "In~sÈrer" ;
+        Text [ swedish ] = "~Infoga" ;
+        Text [ dutch ] = "~Invoegen" ;
+        Text [ spanish ] = "I~nsertar" ;
+        Text [ english_us ] = "~Insert" ;
+        Text[ chinese_simplified ] = "≤Â»Î(~I)";
+        Text[ russian ] = "¬ÒÚ‡‚Í‡";
+        Text[ polish ] = "Wstaw";
+        Text[ japanese ] = "ë}ì¸(~I)";
+        Text[ chinese_traditional ] = "¥°§J(~I)";
+        Text[ arabic ] = "≈œ—«Ã";
+        Text[ dutch ] = "~Invoegen";
+        Text[ chinese_simplified ] = "≤Â»Î(~I)";
+        Text[ greek ] = "≈ÈÛ·„˘„ﬁ";
+        Text[ korean ] = "ª¿‘(~I)";
+        Text[ turkish ] = "~Ekle";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_CHANGE
+    {
+        Text = "~ƒndern" ;
+        Text [ English ] = "Change" ;
+        Text [ norwegian ] = "Endre" ;
+        Text [ italian ] = "C~ambia" ;
+        Text [ portuguese_brazilian ] = "Mudar" ;
+        Text [ portuguese ] = "~Modificar" ;
+        Text [ finnish ] = "Muuta" ;
+        Text [ danish ] = "Modificer" ;
+        Text [ french ] = "~Modifier" ;
+        Text [ swedish ] = "~ƒndra" ;
+        Text [ dutch ] = "~Wijzigen" ;
+        Text [ spanish ] = "~Modificar" ;
+        Text [ english_us ] = "~Modify" ;
+        Text[ chinese_simplified ] = "∏¸∏ƒ(~M)";
+        Text[ russian ] = "»ÁÏÂÌËÚ¸";
+        Text[ polish ] = "Modyfikuj";
+        Text[ japanese ] = "ïœçX(~M)";
+        Text[ chinese_traditional ] = "≠◊ßÔ(~M)";
+        Text[ arabic ] = " ⁄œÌ·";
+        Text[ dutch ] = "~Wijzigen";
+        Text[ chinese_simplified ] = "∏¸∏ƒ(~M)";
+        Text[ greek ] = "‘ÒÔÔÔﬂÁÛÁ";
+        Text[ korean ] = "ºˆ¡§(~M)";
+        Text[ turkish ] = "D~ei˛tir";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "–≈∑‚";
+    Text[ russian ] = " ÓÌ‚ÂÚ";
+    Text[ polish ] = "Koperta listowa";
+    Text[ japanese ] = "ïïìõ";
+    Text[ chinese_traditional ] = "´H´ ";
+    Text[ arabic ] = "Ÿ—›";
+    Text[ greek ] = "÷‹ÍÂÎÔÚ";
+    Text[ korean ] = "∫¿≈ı";
+    Text[ turkish ] = "Zarf";
+    Text[ language_user1 ] = " ";
+};
+ // TP_ENV_ENV ---------------------------------------------------------------
+TabPage TP_ENV_ENV
+{
+    HelpID = HID_ENV_ENV ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    FixedText TXT_ADDR
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text = "~Empf‰nger" ;
+        Text [ English ] = "Addressee" ;
+        Text [ norwegian ] = "Addressee" ;
+        Text [ italian ] = "Destinatario" ;
+        Text [ portuguese_brazilian ] = "EndereÁo" ;
+        Text [ portuguese ] = "~Destinat·rio" ;
+        Text [ finnish ] = "Vastaanottaja" ;
+        Text [ danish ] = "Modtager" ;
+        Text [ french ] = "~Destinataire" ;
+        Text [ swedish ] = "Mottagar~e" ;
+        Text [ dutch ] = "~Geadresseerde" ;
+        Text [ spanish ] = "~Destinatario" ;
+        Text [ english_us ] = "Addr~essee" ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = " ’º˛»À(~E)";
+        Text[ russian ] = "œÓÎÛ˜‡ÚÂÎ¸";
+        Text[ polish ] = "Odbiorca";
+        Text[ japanese ] = "éÛêMé“(~E)";
+        Text[ chinese_traditional ] = "¶¨•Û™Ã(~E)";
+        Text[ arabic ] = "«·„” ·„";
+        Text[ greek ] = "–·Ò·ÎﬁÙÁÚ";
+        Text[ korean ] = "πﬁ¥¬ ªÁ∂˜(~E)";
+        Text[ turkish ] = "Al˝c˝";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit EDT_ADDR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 110 , 44 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        HScroll = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE;
+    };
+    FixedText FT_DATABASE
+    {
+        Pos = MAP_APPFONT ( 122 , 3 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "~Datenbank" ;
+        Text [ English ] = "Database" ;
+        Text [ norwegian ] = "Database" ;
+        Text [ italian ] = "Database" ;
+        Text [ portuguese_brazilian ] = "Base de Dados" ;
+        Text [ portuguese ] = "~Base de dados" ;
+        Text [ finnish ] = "Tietokanta" ;
+        Text [ danish ] = "Database" ;
+        Text [ french ] = "~Base de donnÈes" ;
+        Text [ swedish ] = "~Databas" ;
+        Text [ dutch ] = "~Database" ;
+        Text [ spanish ] = "Base de datos" ;
+        Text [ english_us ] = "Database" ;
+        Text[ chinese_simplified ] = " ˝æ›ø‚(~D)";
+        Text[ russian ] = "¡‡Á‡ ‰‡ÌÌ˚ı";
+        Text[ polish ] = "Baza danych";
+        Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω";
+        Text[ chinese_traditional ] = "∏ÍÆ∆Æw";
+        Text[ arabic ] = "ﬁ«⁄œ… «·»Ì«‰« ";
+        Text[ greek ] = "¬‹ÛÁ ~‰Â‰ÔÏ›Ì˘Ì";
+        Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫";
+        Text[ turkish ] = "Veritaban˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DATABASE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 122 , 14 ) ;
+        Size = MAP_APPFONT ( 57 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_TABLE
+    {
+        Pos = MAP_APPFONT ( 185 , 3 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "~Tabelle" ;
+        Text [ ENGLISH ] = "Table" ;
+        Text [ english_us ] = "Table" ;
+        Text [ italian ] = "Tabella" ;
+        Text [ spanish ] = "Tabla" ;
+        Text [ french ] = "~Table" ;
+        Text [ dutch ] = "~Tabel" ;
+        Text [ swedish ] = "~Tabell" ;
+        Text [ danish ] = "Tabel" ;
+        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ portuguese ] = "~Tabela" ;
+        Text[ chinese_simplified ] = "±Ì∏Ò(~T)";
+        Text[ russian ] = "“‡·ÎËˆ‡";
+        Text[ polish ] = "Tabela";
+        Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω";
+        Text[ chinese_traditional ] = "™ÌÆÊ";
+        Text[ arabic ] = "«·ÃœÊ·";
+        Text[ greek ] = "–ﬂÌ·Í·Ú";
+        Text[ korean ] = "«•";
+        Text[ turkish ] = "Tablo";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_TABLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 14 ) ;
+        Size = MAP_APPFONT ( 57 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_INSERT
+    {
+        Pos = MAP_APPFONT ( 122 , 45 ) ;
+        Size = MAP_APPFONT ( 18 , 12 ) ;
+        SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DBFIELD
+    {
+        Pos = MAP_APPFONT ( 146 , 34 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "Datenbank~feld" ;
+        Text [ English ] = "Database field" ;
+        Text [ norwegian ] = "Database field" ;
+        Text [ italian ] = "Campo database" ;
+        Text [ portuguese_brazilian ] = "Campo base de dados" ;
+        Text [ portuguese ] = "Campo base de dados" ;
+        Text [ finnish ] = "Tietokantakentt‰" ;
+        Text [ danish ] = "Databasefelt" ;
+        Text [ french ] = "~Champ de B.D." ;
+        Text [ swedish ] = "Databas~f‰lt" ;
+        Text [ dutch ] = "Database~veld" ;
+        Text [ spanish ] = "~Campo base de datos" ;
+        Text [ english_us ] = "~Database field" ;
+        Text[ chinese_simplified ] = " ˝æ›ø‚◊÷∂Œ(~D)";
+        Text[ russian ] = "œÓÎÂ ·‡Á˚ ‰‡ÌÌ˚ı";
+        Text[ polish ] = "Pole bazy danych";
+        Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω Ã®∞Ÿƒﬁ(~D)";
+        Text[ chinese_traditional ] = "∏ÍÆ∆ÆwƒÊ¶Ï(~D)";
+        Text[ arabic ] = "Õﬁ· ﬁ«⁄œ… «·»Ì«‰« ";
+        Text[ greek ] = "–Â‰ﬂÔ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+        Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ « µÂ(~D)";
+        Text[ turkish ] = "Veritaban˝ alan˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DBFIELD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 146 , 45 ) ;
+        Size = MAP_APPFONT ( 96 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    CheckBox BOX_SEND
+    {
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Absender" ;
+        Text [ English ] = "Sender" ;
+        Text [ norwegian ] = "Sender" ;
+        Text [ italian ] = "Mittente" ;
+        Text [ portuguese_brazilian ] = "Remetente" ;
+        Text [ portuguese ] = "~Remetente" ;
+        Text [ finnish ] = "L‰hett‰j‰" ;
+        Text [ danish ] = "Afsender" ;
+        Text [ french ] = "~ExpÈditeur" ;
+        Text [ swedish ] = "~Avs‰ndare" ;
+        Text [ dutch ] = "Af~zender" ;
+        Text [ spanish ] = "R~emitente" ;
+        Text [ english_us ] = "~Sender" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "∑¢º˛»À(~S)";
+        Text[ russian ] = "ŒÚÔ‡‚ËÚÂÎ¸";
+        Text[ polish ] = "Nadawca";
+        Text[ japanese ] = "ç∑èoêl(~S)";
+        Text[ chinese_traditional ] = "±H•Û™Ã(~S)";
+        Text[ arabic ] = "«·„—”·";
+        Text[ greek ] = "¡ÔÛÙÔÎ›·Ú";
+        Text[ korean ] = "∫∏≥Ω ªÁ∂˜(~S)";
+        Text[ turkish ] = "Gˆnderen";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit EDT_SEND
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Size = MAP_APPFONT ( 110 , 44 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        HScroll = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE;
+    };
+    Window WIN_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 122 , 68 ) ;
+        Size = MAP_APPFONT ( 83 , 61 ) ;
+    };
+};
+ // Strings ******************************************************************
+String STR_DOC_TITLE
+{
+    Text = "Briefumschlag" ;
+    Text [ English ] = "Envelope" ;
+    Text [ norwegian ] = "Envelope" ;
+    Text [ italian ] = "Busta" ;
+    Text [ portuguese_brazilian ] = "Envelope" ;
+    Text [ portuguese ] = "Envelope" ;
+    Text [ finnish ] = "Kirjekuori" ;
+    Text [ danish ] = "Konvolut" ;
+    Text [ french ] = "Enveloppe" ;
+    Text [ swedish ] = "Kuvert" ;
+    Text [ dutch ] = "Envelop" ;
+    Text [ spanish ] = "Sobre" ;
+    Text [ english_us ] = "Envelope" ;
+    Text[ chinese_simplified ] = "–≈∑‚";
+    Text[ russian ] = " ÓÌ‚ÂÚ";
+    Text[ polish ] = "Koperta listowa";
+    Text[ japanese ] = "ïïìõ";
+    Text[ chinese_traditional ] = "´H´ ";
+    Text[ arabic ] = "Ÿ—›";
+    Text[ greek ] = "÷‹ÍÂÎÔÚ";
+    Text[ korean ] = "∫¿≈ı";
+    Text[ turkish ] = "Zarf";
+    Text[ language_user1 ] = " ";
+};

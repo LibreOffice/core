@@ -1,0 +1,198 @@
+/*************************************************************************
+ *
+ *  $RCSfile: utlui.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _UTLUI_HRC
+#define _UTLUI_HRC
+
+#include "rcid.hrc"
+
+
+#define RID_SW_SHELLRES             (RC_UTLUI_BEGIN + 1)
+#define RID_STR_SYSTEM              (RC_UTLUI_BEGIN + 2)
+
+// ------------------------------------------------------------------------
+
+// Strings in NumberFormatter-Listbox
+#define STR_DEFINE_NUMBERFORMAT                 (RC_UTLUI_BEGIN + 4)
+
+// Namene der Inhaltstypen                      (RC_UTLUI_BEGIN + 7)
+#define STR_CONTENT_TYPE_FIRST                  (RC_UTLUI_BEGIN + 8)
+#define STR_CONTENT_TYPE_OUTLINE                STR_CONTENT_TYPE_FIRST
+#define STR_CONTENT_TYPE_TABLE                  (RC_UTLUI_BEGIN + 9)
+#define STR_CONTENT_TYPE_FRAME                  (RC_UTLUI_BEGIN + 10)
+#define STR_CONTENT_TYPE_GRAPHIC                (RC_UTLUI_BEGIN + 11)
+#define STR_CONTENT_TYPE_OLE                    (RC_UTLUI_BEGIN + 12)
+#define STR_CONTENT_TYPE_BOOKMARK               (RC_UTLUI_BEGIN + 13)
+#define STR_CONTENT_TYPE_REGION                 (RC_UTLUI_BEGIN + 14)
+#define STR_CONTENT_TYPE_URLFIELD               (RC_UTLUI_BEGIN + 15)
+#define STR_CONTENT_TYPE_REFERENCE              (RC_UTLUI_BEGIN + 16)
+#define STR_CONTENT_TYPE_INDEX                  (RC_UTLUI_BEGIN + 17)
+#define STR_CONTENT_TYPE_POSTIT                 (RC_UTLUI_BEGIN + 18)
+#define STR_CONTENT_TYPE_DRAWOBJECT             (RC_UTLUI_BEGIN + 19)
+#define STR_CONTENT_END                         (RC_UTLUI_BEGIN + 19)
+
+#define STR_CONTENT_TYPE_SINGLE_FIRST           (STR_CONTENT_END + 1)
+#define STR_CONTENT_TYPE_SINGLE_OUTLINE         (STR_CONTENT_TYPE_SINGLE_FIRST + 0)
+#define STR_CONTENT_TYPE_SINGLE_TABLE           (STR_CONTENT_TYPE_SINGLE_FIRST + 1)
+#define STR_CONTENT_TYPE_SINGLE_FRAME           (STR_CONTENT_TYPE_SINGLE_FIRST + 2)
+#define STR_CONTENT_TYPE_SINGLE_GRAPHIC         (STR_CONTENT_TYPE_SINGLE_FIRST + 3)
+#define STR_CONTENT_TYPE_SINGLE_OLE             (STR_CONTENT_TYPE_SINGLE_FIRST + 4)
+#define STR_CONTENT_TYPE_SINGLE_BOOKMARK        (STR_CONTENT_TYPE_SINGLE_FIRST + 5)
+#define STR_CONTENT_TYPE_SINGLE_REGION          (STR_CONTENT_TYPE_SINGLE_FIRST + 6)
+#define STR_CONTENT_TYPE_SINGLE_URLFIELD        (STR_CONTENT_TYPE_SINGLE_FIRST + 7)
+#define STR_CONTENT_TYPE_SINGLE_REFERENCE       (STR_CONTENT_TYPE_SINGLE_FIRST + 8)
+#define STR_CONTENT_TYPE_SINGLE_INDEX           (STR_CONTENT_TYPE_SINGLE_FIRST + 9)
+#define STR_CONTENT_TYPE_SINGLE_POSTIT          (STR_CONTENT_TYPE_SINGLE_FIRST + 10)
+#define STR_CONTENT_TYPE_SINGLE_DRAWOBJECT      (STR_CONTENT_TYPE_SINGLE_FIRST + 11)
+#define STR_CONTENT_SINGLE_END                  STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
+
+#define FLD_DOCINFO_BEGIN   STR_CONTENT_SINGLE_END
+#define FLD_DOCINFO_TITEL   FLD_DOCINFO_BEGIN
+#define FLD_DOCINFO_THEMA   (FLD_DOCINFO_BEGIN + 1)
+#define FLD_DOCINFO_KEYS    (FLD_DOCINFO_BEGIN + 2)
+#define FLD_DOCINFO_COMMENT (FLD_DOCINFO_BEGIN + 3)
+#define FLD_DOCINFO_INFO1   (FLD_DOCINFO_BEGIN + 4)
+#define FLD_DOCINFO_INFO2   (FLD_DOCINFO_BEGIN + 5)
+#define FLD_DOCINFO_INFO3   (FLD_DOCINFO_BEGIN + 6)
+#define FLD_DOCINFO_INFO4   (FLD_DOCINFO_BEGIN + 7)
+#define FLD_DOCINFO_CREATE  (FLD_DOCINFO_BEGIN + 8)
+#define FLD_DOCINFO_CHANGE  (FLD_DOCINFO_BEGIN + 9)
+#define FLD_DOCINFO_PRINT   (FLD_DOCINFO_BEGIN + 10)
+#define FLD_DOCINFO_DOCNO   (FLD_DOCINFO_BEGIN + 11)
+#define FLD_DOCINFO_EDIT    (FLD_DOCINFO_BEGIN + 12)
+#define FLD_DOCINFO_END     (FLD_DOCINFO_BEGIN + 13)
+
+#define STR_SERVICE_UNAVAILABLE (FLD_DOCINFO_END  + 1)
+
+#define STR_AUTH_TYPE_START     (FLD_DOCINFO_END  + 2)
+#define STR_AUTH_TYPE_ARTICLE       (STR_AUTH_TYPE_START + 0)
+#define STR_AUTH_TYPE_BOOK          (STR_AUTH_TYPE_START + 1)
+#define STR_AUTH_TYPE_BOOKLET       (STR_AUTH_TYPE_START + 2)
+#define STR_AUTH_TYPE_CONFERENCE    (STR_AUTH_TYPE_START + 3)
+#define STR_AUTH_TYPE_INBOOK        (STR_AUTH_TYPE_START + 4)
+#define STR_AUTH_TYPE_INCOLLECTION  (STR_AUTH_TYPE_START + 5)
+#define STR_AUTH_TYPE_INPROCEEDINGS (STR_AUTH_TYPE_START + 6)
+#define STR_AUTH_TYPE_JOURNAL       (STR_AUTH_TYPE_START + 7)
+#define STR_AUTH_TYPE_MANUAL        (STR_AUTH_TYPE_START + 8)
+#define STR_AUTH_TYPE_MASTERSTHESIS (STR_AUTH_TYPE_START + 9)
+#define STR_AUTH_TYPE_MISC          (STR_AUTH_TYPE_START + 10)
+#define STR_AUTH_TYPE_PHDTHESIS     (STR_AUTH_TYPE_START + 11)
+#define STR_AUTH_TYPE_PROCEEDINGS   (STR_AUTH_TYPE_START + 12)
+#define STR_AUTH_TYPE_TECHREPORT    (STR_AUTH_TYPE_START + 13)
+#define STR_AUTH_TYPE_UNPUBLISHED   (STR_AUTH_TYPE_START + 14)
+#define STR_AUTH_TYPE_EMAIL         (STR_AUTH_TYPE_START + 15)
+#define STR_AUTH_TYPE_WWW           (STR_AUTH_TYPE_START + 16)
+#define STR_AUTH_TYPE_CUSTOM1       (STR_AUTH_TYPE_START + 17)
+#define STR_AUTH_TYPE_CUSTOM2       (STR_AUTH_TYPE_START + 18)
+#define STR_AUTH_TYPE_CUSTOM3       (STR_AUTH_TYPE_START + 19)
+#define STR_AUTH_TYPE_CUSTOM4       (STR_AUTH_TYPE_START + 20)
+#define STR_AUTH_TYPE_CUSTOM5       (STR_AUTH_TYPE_START + 21)
+#define STR_AUTH_TYPE_END           (STR_AUTH_TYPE_CUSTOM5)
+
+#define STR_AUTH_FIELD_START            (STR_AUTH_TYPE_END + 1)
+#define STR_AUTH_FIELD_IDENTIFIER       (STR_AUTH_FIELD_START + 0)
+#define STR_AUTH_FIELD_AUTHORITY_TYPE   (STR_AUTH_FIELD_START + 1)
+#define STR_AUTH_FIELD_ADDRESS          (STR_AUTH_FIELD_START + 2)
+#define STR_AUTH_FIELD_ANNOTE           (STR_AUTH_FIELD_START + 3)
+#define STR_AUTH_FIELD_AUTHOR           (STR_AUTH_FIELD_START + 4)
+#define STR_AUTH_FIELD_BOOKTITLE        (STR_AUTH_FIELD_START + 5)
+#define STR_AUTH_FIELD_CHAPTER          (STR_AUTH_FIELD_START + 6)
+#define STR_AUTH_FIELD_EDITION          (STR_AUTH_FIELD_START + 7)
+#define STR_AUTH_FIELD_EDITOR           (STR_AUTH_FIELD_START + 8)
+#define STR_AUTH_FIELD_HOWPUBLISHED     (STR_AUTH_FIELD_START + 9)
+#define STR_AUTH_FIELD_INSTITUTION      (STR_AUTH_FIELD_START + 10)
+#define STR_AUTH_FIELD_JOURNAL          (STR_AUTH_FIELD_START + 11)
+#define STR_AUTH_FIELD_MONTH            (STR_AUTH_FIELD_START + 12)
+#define STR_AUTH_FIELD_NOTE             (STR_AUTH_FIELD_START + 13)
+#define STR_AUTH_FIELD_NUMBER           (STR_AUTH_FIELD_START + 14)
+#define STR_AUTH_FIELD_ORGANIZATIONS    (STR_AUTH_FIELD_START + 15)
+#define STR_AUTH_FIELD_PAGES            (STR_AUTH_FIELD_START + 16)
+#define STR_AUTH_FIELD_PUBLISHER        (STR_AUTH_FIELD_START + 17)
+#define STR_AUTH_FIELD_SCHOOL           (STR_AUTH_FIELD_START + 18)
+#define STR_AUTH_FIELD_SERIES           (STR_AUTH_FIELD_START + 19)
+#define STR_AUTH_FIELD_TITLE            (STR_AUTH_FIELD_START + 20)
+#define STR_AUTH_FIELD_TYPE             (STR_AUTH_FIELD_START + 21)
+#define STR_AUTH_FIELD_VOLUME           (STR_AUTH_FIELD_START + 22)
+#define STR_AUTH_FIELD_YEAR             (STR_AUTH_FIELD_START + 23)
+#define STR_AUTH_FIELD_URL              (STR_AUTH_FIELD_START + 24)
+#define STR_AUTH_FIELD_CUSTOM1          (STR_AUTH_FIELD_START + 25)
+#define STR_AUTH_FIELD_CUSTOM2          (STR_AUTH_FIELD_START + 26)
+#define STR_AUTH_FIELD_CUSTOM3          (STR_AUTH_FIELD_START + 27)
+#define STR_AUTH_FIELD_CUSTOM4          (STR_AUTH_FIELD_START + 28)
+#define STR_AUTH_FIELD_CUSTOM5          (STR_AUTH_FIELD_START + 29)
+#define STR_AUTH_FIELD_ISBN             (STR_AUTH_FIELD_START + 30)
+#define STR_AUTH_FIELD_END              (STR_AUTH_FIELD_ISBN)
+
+#define RES_FRMEX_MENU                  (STR_AUTH_FIELD_END + 1)
+
+#define DLG_NAVIGATION_PI           (RC_UTLUI_BEGIN + 1)
+#define DLG_ADDR_PI                 (RC_UTLUI_BEGIN + 2)
+#define DLG_GLOSSARY_DECIDE_DLG     (RC_UTLUI_BEGIN + 3)
+
+#define IMG_NAVI_ENTRYBMP           (RC_UTLUI_BEGIN + 4)
+
+#define UTLUI_ACT_END               RES_FRMEX_MENU
+
+#if UTLUI_ACT_END > RC_UTLUI_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

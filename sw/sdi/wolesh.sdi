@@ -1,0 +1,47 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   WOLESH.IDL  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wolesh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   OleShell fuer StarWriter/Web
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface WebOLEObject : BaseTextOLEObject
+[
+    uuid = "B47F0DE2-1E1F-11d1-89CA-008029E4B0B1"
+]
+{
+    import WebFrame;
+}
+
+
+ //=========================================================================
+
+shell SwWebOleShell : SwWebFrameShell
+{
+        import WebOLEObject[Automation];
+}
+
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.3  1997/09/10 06:56:54  OS
+    OLE importiert Frame
+
+
+      Rev 1.2   10 Sep 1997 08:56:54   OS
+   OLE importiert Frame
+
+      Rev 1.1   28 Aug 1997 12:37:54   MBA
+   Neue Interface-Namen
+
+      Rev 1.0   31 Jan 1997 13:29:02   OS
+   Initial revision.
+
+------------------------------------------------------------------------*/
+

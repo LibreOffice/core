@@ -1,0 +1,306 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fldtdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldui.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabDialog DLG_FLD_INSERT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Feldbefehle" ;
+    Text [ ENGLISH ] = "Fields" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_FLD_DOK ;
+                Text = "Dokument" ;
+                Text [ ENGLISH ] = "Document" ;
+                PageResID = TP_FLD_DOK ;
+                Text [ english_us ] = "Document" ;
+                Text [ portuguese_brazilian ] = "Dokument" ;
+                Text [ swedish ] = "Dokument" ;
+                Text [ danish ] = "Dokument" ;
+                Text [ italian ] = "Documento" ;
+                Text [ spanish ] = "Documento" ;
+                Text [ french ] = "Document" ;
+                Text [ dutch ] = "Document" ;
+                Text [ portuguese ] = "Documento" ;
+                Text[ chinese_simplified ] = "Œƒµµ";
+                Text[ russian ] = "ƒÓÍÛÏÂÌÚ";
+                Text[ polish ] = "Dokument";
+                Text[ japanese ] = "ï∂èë";
+                Text[ chinese_traditional ] = "§Â•Û";
+                Text[ arabic ] = "«·„” ‰œ";
+                Text[ greek ] = "∏„„Ò·ˆÔ";
+                Text[ korean ] = "πÆº≠";
+                Text[ turkish ] = "Belge";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FLD_REF ;
+                Text = "Referenzen" ;
+                Text [ ENGLISH ] = "References" ;
+                PageResID = TP_FLD_REF ;
+                Text [ english_us ] = "References" ;
+                Text [ portuguese_brazilian ] = "Referenzen" ;
+                Text [ swedish ] = "Referenser" ;
+                Text [ danish ] = "Referencer" ;
+                Text [ italian ] = "Riferimenti" ;
+                Text [ spanish ] = "Referencias" ;
+                Text [ french ] = "RÈfÈrences" ;
+                Text [ dutch ] = "Verwijzingen" ;
+                Text [ portuguese ] = "ReferÍncias" ;
+                Text[ chinese_simplified ] = "“˝”√";
+                Text[ russian ] = "—Ò˚ÎÍË";
+                Text[ polish ] = "Odwo≥ania";
+                Text[ japanese ] = "éQè∆";
+                Text[ chinese_traditional ] = "∞—∑”";
+                Text[ arabic ] = "„—«Ã⁄";
+                Text[ greek ] = "¡Ì·ˆÔÒ›Ú";
+                Text[ korean ] = "¬¸¡∂";
+                Text[ turkish ] = "Referanslar";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FLD_FUNC ;
+                Text = "Funktionen" ;
+                Text [ ENGLISH ] = "Functions" ;
+                PageResID = TP_FLD_FUNC ;
+                Text [ english_us ] = "Functions" ;
+                Text [ portuguese_brazilian ] = "Funktionen" ;
+                Text [ swedish ] = "Funktioner" ;
+                Text [ danish ] = "Funktioner" ;
+                Text [ italian ] = "Funzioni" ;
+                Text [ spanish ] = "Funciones" ;
+                Text [ french ] = "Fonctions" ;
+                Text [ dutch ] = "Functies" ;
+                Text [ portuguese ] = "FunÁıes" ;
+                Text[ chinese_simplified ] = "π¶ƒ‹";
+                Text[ russian ] = "‘ÛÌÍˆËË";
+                Text[ polish ] = "Funkcje";
+                Text[ japanese ] = "ã@î\\";
+                Text[ chinese_traditional ] = "•\\Ø‡";
+                Text[ arabic ] = "„Â«„";
+                Text[ greek ] = "ÀÂÈÙÔıÒ„ﬂÂÚ";
+                Text[ korean ] = "±‚¥…";
+                Text[ turkish ] = "›˛levler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FLD_DOKINF ;
+                Text = "Dokumentinfo" ;
+                Text [ ENGLISH ] = "Document information" ;
+                PageResID = TP_FLD_DOKINF ;
+                Text [ english_us ] = "DocInformation" ;
+                Text [ portuguese_brazilian ] = "Dokumentinfo" ;
+                Text [ swedish ] = "Dokumentinfo" ;
+                Text [ danish ] = "Dokumentinfo" ;
+                Text [ italian ] = "Info documento" ;
+                Text [ spanish ] = "InformaciÛn del documento" ;
+                Text [ french ] = "Info document" ;
+                Text [ dutch ] = "Documentinfo" ;
+                Text [ portuguese ] = "Info. sobre documento" ;
+                Text[ chinese_simplified ] = "Œƒµµ–≈œ¢";
+                Text[ russian ] = "—‚Â‰ÂÌËˇ Ó ‰ÓÍÛÏÂÌÚÂ";
+                Text[ polish ] = "Informacje o dokumencie";
+                Text[ japanese ] = "ƒﬁ∑≠“›ƒ ≤›Ã´“∞ºÆ›";
+                Text[ chinese_traditional ] = "§Â•Û∏Í∞T";
+                Text[ arabic ] = "„⁄·Ê„«  «·„” ‰œ";
+                Text[ greek ] = "–ÎÁÒÔˆÔÒﬂÂÚ Â„„Ò‹ˆÔı";
+                Text[ korean ] = "µÓ∑œ¡§∫∏";
+                Text[ turkish ] = "Belge bilgileri";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FLD_VAR ;
+                Text = "Variablen" ;
+                Text [ ENGLISH ] = "Variables" ;
+                PageResID = TP_FLD_VAR ;
+                Text [ english_us ] = "Variables" ;
+                Text [ portuguese_brazilian ] = "Variablen" ;
+                Text [ swedish ] = "Variabler" ;
+                Text [ danish ] = "Variabler" ;
+                Text [ italian ] = "Variabili" ;
+                Text [ spanish ] = "Variables" ;
+                Text [ french ] = "Variables" ;
+                Text [ dutch ] = "Variabelen" ;
+                Text [ portuguese ] = "Vari·veis" ;
+                Text[ chinese_simplified ] = "±‰¡ø";
+                Text[ russian ] = "œÂÂÏÂÌÌ˚Â";
+                Text[ polish ] = "Zmienne";
+                Text[ japanese ] = "ïœêî";
+                Text[ chinese_traditional ] = "≈‹∂q";
+                Text[ arabic ] = "„ €Ì—« ";
+                Text[ greek ] = "ÃÂÙ·‚ÎÁÙ›Ú";
+                Text[ korean ] = "∫Øºˆ";
+                Text[ turkish ] = "Dei˛kenler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FLD_DB ;
+                Text = "Datenbank" ;
+                Text [ ENGLISH ] = "Database" ;
+                PageResID = TP_FLD_DB ;
+                Text [ english_us ] = "Database" ;
+                Text [ portuguese_brazilian ] = "Datenbank" ;
+                Text [ swedish ] = "Databas" ;
+                Text [ danish ] = "Database" ;
+                Text [ italian ] = "Database" ;
+                Text [ spanish ] = "Base de datos" ;
+                Text [ french ] = "Base de donnÈes" ;
+                Text [ dutch ] = "Database" ;
+                Text [ portuguese ] = "Base de dados" ;
+                Text[ chinese_simplified ] = " ˝æ›ø‚";
+                Text[ russian ] = "¡‡Á‡ ‰‡ÌÌ˚ı";
+                Text[ polish ] = "Baza danych";
+                Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω";
+                Text[ chinese_traditional ] = "∏ÍÆ∆Æw";
+                Text[ arabic ] = "ﬁ«⁄œ… «·»Ì«‰« ";
+                Text[ greek ] = "¬‹ÛÁ ‰Â‰ÔÏ›Ì˘Ì";
+                Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫";
+                Text[ turkish ] = "Veritaban˝";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    String STR_FLD_INSERT
+    {
+        Text = "~Einf¸gen" ;
+        Text [ ENGLISH ] = "~Insert" ;
+        Text [ norwegian ] = "~Insert" ;
+        Text [ italian ] = "~Inserisci" ;
+        Text [ portuguese_brazilian ] = "~Inserir" ;
+        Text [ portuguese ] = "~Inserir" ;
+        Text [ finnish ] = "~Lis‰‰" ;
+        Text [ danish ] = "~IndsÊt" ;
+        Text [ french ] = "~InsÈrer" ;
+        Text [ swedish ] = "~Infoga" ;
+        Text [ dutch ] = "~Invoegen" ;
+        Text [ spanish ] = "~Insertar" ;
+        Text [ english_us ] = "~Insert" ;
+        Text[ chinese_simplified ] = "≤Â»Î(~I)";
+        Text[ russian ] = "¬ÒÚ‡‚Í‡";
+        Text[ polish ] = "Wstaw";
+        Text[ japanese ] = "ë}ì¸(~I)";
+        Text[ chinese_traditional ] = "¥°§J(~I)";
+        Text[ arabic ] = "≈œ—«Ã";
+        Text[ greek ] = "≈ÈÛ·„˘„ﬁ";
+        Text[ korean ] = "ª¿‘(~I)";
+        Text[ turkish ] = "~Ekle";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_FLD_CLOSE
+    {
+        Text = "~Schlieﬂen" ;
+        Text [ ENGLISH ] = "C~lose" ;
+        Text [ english_us ] = "~Close" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ french ] = "~Fermer" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ swedish ] = "~St‰ng" ;
+        Text [ danish ] = "Luk" ;
+        Text [ portuguese_brazilian ] = "~Schlieﬂen" ;
+        Text [ portuguese ] = "~Sair" ;
+        Text[ chinese_simplified ] = "πÿ±’(~C)";
+        Text[ russian ] = "«‡Í˚Ú¸";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "ï¬Ç∂ÇÈ(~C)";
+        Text[ chinese_traditional ] = "√ˆ≥¨(~C)";
+        Text[ arabic ] = "≈€·«ﬁ";
+        Text[ greek ] = " ÎÂﬂÛÈÏÔ";
+        Text[ korean ] = "¥›±‚(~C)";
+        Text[ turkish ] = "~«˝k˝˛";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Fields" ;
+    Text [ portuguese_brazilian ] = "Feldbefehle" ;
+    Text [ swedish ] = "F‰ltkommandon" ;
+    Text [ danish ] = "Felter" ;
+    Text [ italian ] = "Comandi di campo" ;
+    Text [ spanish ] = "Comandos de campo" ;
+    Text [ french ] = "Instructions de champ" ;
+    Text [ dutch ] = "Veldopdracht" ;
+    Text [ portuguese ] = "Campos" ;
+    Text[ chinese_simplified ] = "◊÷∂Œ÷∏¡Ó";
+    Text[ russian ] = "œÓÎÂ";
+    Text[ polish ] = "Pola";
+    Text[ japanese ] = "Ã®∞Ÿƒﬁ";
+    Text[ chinese_traditional ] = "ƒÊ¶Ï´¸•O";
+    Text[ arabic ] = "ÕﬁÊ·";
+    Text[ greek ] = "≈ÌÙÔÎ›Ú Â‰ﬂ˘Ì";
+    Text[ korean ] = "« µÂ";
+    Text[ turkish ] = "Alan ˆeleri";
+    Text[ language_user1 ] = " ";
+};

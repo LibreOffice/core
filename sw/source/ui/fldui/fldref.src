@@ -1,0 +1,352 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fldref.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabPage TP_FLD_REF
+{
+    HelpID = HID_FLD_REF ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Referenzen" ;
+    Text [ ENGLISH ] = "References" ;
+    FixedText FT_REFTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Feldtyp" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "~Tipo di campo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo de ~campo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Felttype" ;
+        Text [ french ] = "~Type de champ" ;
+        Text [ swedish ] = "~F‰lttyp" ;
+        Text [ dutch ] = "~Veldtype" ;
+        Text [ spanish ] = "~Tipo de campo" ;
+        Text [ english_us ] = "~Type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "◊÷∂Œ¿‡–Õ(~T)";
+        Text[ russian ] = "“ËÔ ÔÓÎˇ";
+        Text[ polish ] = "Typ pola";
+        Text[ japanese ] = "Ã®∞ŸƒﬁÇÃéÌóﬁ(~T)";
+        Text[ chinese_traditional ] = "√˛´¨(~T)";
+        Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
+        Text[ greek ] = "~‘˝ÔÚ Â‰ﬂÔı";
+        Text[ korean ] = "«¸≈¬(~T)";
+        Text[ turkish ] = "~Alan tipi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_REFTYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+         // JP 05.11.96: darf nicht sortiert sein!
+         //        Sort = FALSE;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_REFSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Auswahl" ;
+        Text [ ENGLISH ] = "Selection" ;
+        Text [ norwegian ] = "Selection" ;
+        Text [ italian ] = "~Selezione" ;
+        Text [ portuguese_brazilian ] = "SeleÁ„o" ;
+        Text [ portuguese ] = "~SelecÁ„o" ;
+        Text [ finnish ] = "Valinta" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ french ] = "~SÈlection" ;
+        Text [ swedish ] = "~Urval" ;
+        Text [ dutch ] = "~Selectie" ;
+        Text [ spanish ] = "Se~lecciÛn" ;
+        Text [ english_us ] = "S~election" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "—°‘Ò(~E)";
+        Text[ russian ] = "¬˚·Ó";
+        Text[ polish ] = "WybÛr";
+        Text[ japanese ] = "ëIë(~E)";
+        Text[ chinese_traditional ] = "øÔ®˙(~E)";
+        Text[ arabic ] = "«· ÕœÌœ";
+        Text[ greek ] = "~≈ÈÎÔ„ﬁ";
+        Text[ korean ] = "º±≈√(~E)";
+        Text[ turkish ] = "S~eÁim";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_REFSELECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_REFFORMAT
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        TEXT = "F~ormat" ;
+        TEXT [ English ] = "Format" ;
+        Left = TRUE ;
+        Text [ english_us ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ swedish ] = "F~ormat" ;
+        Text [ danish ] = "Format" ;
+        Text [ italian ] = "F~ormato" ;
+        Text [ spanish ] = "F~ormato" ;
+        Text [ french ] = "F~ormat" ;
+        Text [ dutch ] = "F~ormaat" ;
+        Text [ portuguese ] = "F~ormato" ;
+        Text[ chinese_simplified ] = "∏Ò Ω(~O)";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ(~O)";
+        Text[ chinese_traditional ] = "ÆÊ¶°(~O)";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
+        Text[ greek ] = "Ã~ÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ(~O)";
+        Text[ turkish ] = "F~ormat";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_REFFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+        Size = MAP_APPFONT ( 84 , 56 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+         // Sort = TRUE;
+    };
+    FixedText FT_REFNAME
+    {
+        Pos = MAP_APPFONT ( 170 , 78 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text = "Na~me" ;
+        TEXT [ English ] = "Na~me" ;
+        Left = TRUE ;
+        Text [ english_us ] = "Na~me" ;
+        Text [ portuguese_brazilian ] = "Na~me" ;
+        Text [ swedish ] = "Na~mn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ italian ] = "No~me" ;
+        Text [ spanish ] = "No~mbre" ;
+        Text [ french ] = "~Nom" ;
+        Text [ dutch ] = "Naa~m" ;
+        Text [ portuguese ] = "No~me" ;
+        Text[ chinese_simplified ] = "√˚≥∆(~M)";
+        Text[ russian ] = "»Ïˇ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "ñºëO(~M)";
+        Text[ chinese_traditional ] = "¶W∫Ÿ(~M)";
+        Text[ arabic ] = "«·«”„";
+        Text[ greek ] = "ºÌÔÏ·";
+        Text[ korean ] = "¿Ã∏ß(~M)";
+        Text[ turkish ] = "~Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_REFNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 90 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_REFVALUE
+    {
+        Pos = MAP_APPFONT ( 170 , 105 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text = "~Wert" ;
+        Text [ ENGLISH ] = "Value" ;
+        Text [ norwegian ] = "Verdi" ;
+        Text [ italian ] = "~Valore" ;
+        Text [ portuguese_brazilian ] = "Valor" ;
+        Text [ portuguese ] = "Valor" ;
+        Text [ finnish ] = "Arvo" ;
+        Text [ danish ] = "VÊrdi" ;
+        Text [ french ] = "~Valeur" ;
+        Text [ swedish ] = "~V‰rde" ;
+        Text [ dutch ] = "~Waarde" ;
+        Text [ spanish ] = "~Valor" ;
+        Text [ english_us ] = "~Value" ;
+        Disable = TRUE ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = " ˝÷µ(~V)";
+        Text[ russian ] = "«Ì‡˜ÂÌËÂ";
+        Text[ polish ] = "WartoúÊ";
+        Text[ japanese ] = "íl(~V)";
+        Text[ chinese_traditional ] = "º∆≠»(~V)";
+        Text[ arabic ] = "«·ﬁÌ„…";
+        Text[ greek ] = "‘ÈÏﬁ";
+        Text[ korean ] = "∞™(~V)";
+        Text[ turkish ] = "~Deer";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_REFVALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Left = TRUE ;
+    };
+    String STR_REFBOOKMARK
+    {
+        TEXT = "Textmarken" ;
+        TEXT [ English ] = "Bookmarks" ;
+        Text [ dutch ] = "Tekstmarkeringen" ;
+        Text [ english_us ] = "Bookmarks" ;
+        Text [ italian ] = "Segnalibri di testo" ;
+        Text [ spanish ] = "Marcas de texto" ;
+        Text [ french ] = "RepËres de texte" ;
+        Text [ swedish ] = "Bokm‰rken" ;
+        Text [ danish ] = "Tekstmarkeringer" ;
+        Text [ portuguese ] = "Marcadores de texto" ;
+        Text [ portuguese_brazilian ] = "Textmarken" ;
+        Text[ chinese_simplified ] = " È«©";
+        Text[ russian ] = "«‡ÍÎ‡‰ÍË";
+        Text[ polish ] = "Zak≥adki";
+        Text[ japanese ] = "√∑Ωƒœ∞∏";
+        Text[ chinese_traditional ] = "§∫§Âº–≈“";
+        Text[ arabic ] = "≈‘«—«  „—Ã⁄Ì…";
+        Text[ greek ] = "”ÂÎÈ‰Ô‰ÂﬂÍÙÂÚ";
+        Text[ korean ] = "√• ∞•««";
+        Text[ turkish ] = "Metin i˛areti";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_REFFOOTNOTE
+    {
+        Text = "Fuﬂnoten" ;
+        Text [ English ] = "Footnotes" ;
+        Text [ norwegian ] = "Fotnoter" ;
+        Text [ italian ] = "Note a piË pagina" ;
+        Text [ portuguese_brazilian ] = "Notas de rodapÈ" ;
+        Text [ portuguese ] = "Notas de rodapÈ" ;
+        Text [ finnish ] = "Alaviitteet" ;
+        Text [ danish ] = "Fodnoter" ;
+        Text [ french ] = "Notes de bas de page" ;
+        Text [ swedish ] = "Fotnoter" ;
+        Text [ dutch ] = "Voetnoten" ;
+        Text [ spanish ] = "Notas al pie" ;
+        Text [ english_us ] = "Footnotes" ;
+        Text[ chinese_simplified ] = "◊¢Ω≈";
+        Text[ russian ] = "—ÌÓÒÍË";
+        Text[ polish ] = "Przypisy dolne";
+        Text[ japanese ] = "ãríç";
+        Text[ chinese_traditional ] = "µ˘∏}";
+        Text[ arabic ] = "ÕÊ«‘Ì ”›·Ì…";
+        Text[ greek ] = "’ÔÛÁÏÂÈ˛ÛÂÈÚ";
+        Text[ korean ] = "∞¢¡÷";
+        Text[ turkish ] = "Dipnotlar";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_REFENDNOTE
+    {
+        Text = "Endnoten" ;
+        Text [ ENGLISH ] = "endnotes" ;
+        Text [ english_us ] = "Endnotes" ;
+        Text [ portuguese_brazilian ] = "Endnoten" ;
+        Text [ swedish ] = "Slutnoter" ;
+        Text [ danish ] = "Slutnote" ;
+        Text [ italian ] = "Note di chiusura" ;
+        Text [ spanish ] = "Notas finales" ;
+        Text [ french ] = "Notes de fin" ;
+        Text [ dutch ] = "Eindnoten" ;
+        Text [ portuguese ] = "Notas finais" ;
+        Text[ chinese_simplified ] = "Œ≤◊¢";
+        Text[ russian ] = " ÓÌˆÂ‚‡ˇ ÒÌÓÒÍ‡";
+        Text[ polish ] = "Przypisy koÒcowe";
+        Text[ japanese ] = "ï∂ññãríç";
+        Text[ chinese_traditional ] = "ß¿™`";
+        Text[ arabic ] = " ⁄·Ìﬁ«  Œ «„Ì…";
+        Text[ greek ] = "”ÁÏÂÈ˛ÛÂÈÚ Ù›ÎÔıÚ";
+        Text[ korean ] = "πÃ¡÷";
+        Text[ turkish ] = "Son notlar";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "References" ;
+    Text [ portuguese_brazilian ] = "Referenzen" ;
+    Text [ swedish ] = "Referenser" ;
+    Text [ danish ] = "Referencer" ;
+    Text [ italian ] = "Riferimenti" ;
+    Text [ spanish ] = "Referencias" ;
+    Text [ french ] = "RÈfÈrences" ;
+    Text [ dutch ] = "Verwijzingen" ;
+    Text [ portuguese ] = "ReferÍncias" ;
+    Text[ chinese_simplified ] = "Àµ√˜Œƒ";
+    Text[ russian ] = "—Ò˚ÎÍË";
+    Text[ polish ] = "Odwo≥ania";
+    Text[ japanese ] = "éQè∆";
+    Text[ chinese_traditional ] = "∞—∑”§Â";
+    Text[ arabic ] = "«·„—«Ã⁄";
+    Text[ greek ] = "¡Ì·ˆÔÒ›Ú";
+    Text[ korean ] = "¬¸¡∂";
+    Text[ turkish ] = "Referans";
+    Text[ language_user1 ] = " ";
+};

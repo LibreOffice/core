@@ -1,0 +1,623 @@
+/*************************************************************************
+ *
+ *  $RCSfile: web.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define MN_SW_WEB
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+#include "globals.hrc"
+#include "cmdid.h"
+#include "web.hrc"
+#include "swmn.hrc"
+#define ACC_SW_WEB
+#include "swacc.hrc"
+#include "toolbox.hrc"
+#include "helpid.h"
+ACC CFG_SWWEB_ACCEL
+{
+    ItemList =
+    {
+        ALL_ACCELS
+        FUNCTIONKEYS
+    };
+};
+String STR_HUMAN_SWWEBDOC_NAME
+{
+    Text = "HTML" ;
+    Text [ English ] = "HTML" ;
+    Text [ portuguese ] = "HTML" ;
+    Text [ english_us ] = "HTML" ;
+    Text [ portuguese_brazilian ] = "HTML" ;
+    Text [ swedish ] = "HTML" ;
+    Text [ danish ] = "HTML" ;
+    Text [ italian ] = "HTML" ;
+    Text [ spanish ] = "HTML" ;
+    Text [ french ] = "HTML" ;
+    Text [ dutch ] = "HTML" ;
+    Text[ chinese_simplified ] = "HTML";
+    Text[ russian ] = "HTML";
+    Text[ polish ] = "HTML";
+    Text[ japanese ] = "HTML";
+    Text[ chinese_traditional ] = "HTML";
+    Text[ arabic ] = "HTML";
+    Text[ dutch ] = "HTML";
+    Text[ chinese_simplified ] = "HTML";
+    Text[ greek ] = "HTML";
+    Text[ korean ] = "HTML";
+    Text[ turkish ] = "HTML";
+    Text[ language_user1 ] = " ";
+};
+String STR_WRITER_WEBDOC_FULLTYPE_40
+{
+    Text = "StarOffice 4.0 HTML" ;
+    Text [ English ] = "StarOffice 4.0 HTML" ;
+    Text [ english_us ] = "StarOffice 4.0 HTML" ;
+    Text [ portuguese_brazilian ] = "StarOffice 4.0 HTML" ;
+    Text [ swedish ] = "StarOffice 4.0 HTML" ;
+    Text [ danish ] = "StarOffice 4.0 HTML" ;
+    Text [ italian ] = "HTML StarOffice 4.0" ;
+    Text [ spanish ] = "HTML de StarOffice 4.0" ;
+    Text [ french ] = "HTML StarOffice 4.0" ;
+    Text [ dutch ] = "StarOffice 4.0 HTML" ;
+    Text [ portuguese ] = "HTML (StarOffice 4.0)" ;
+    Text[ chinese_simplified ] = "StarOffice 4.0 HTML";
+    Text[ russian ] = "StarOffice 4.0 HTML";
+    Text[ polish ] = "StarOffice 4.0 HTML";
+    Text[ japanese ] = "StarOffice 4.0 HTML";
+    Text[ chinese_traditional ] = "StarOffice 4.0 HTML";
+    Text[ arabic ] = "StarOffice 4.0 HTML";
+    Text[ dutch ] = "StarOffice 4.0 HTML";
+    Text[ chinese_simplified ] = "StarOffice 4.0 HTML";
+    Text[ greek ] = "StarOffice 4.0 HTML";
+    Text[ korean ] = "HTML (StarOffice 4.0)";
+    Text[ turkish ] = "StarOffice 4.0 HTML";
+    Text[ language_user1 ] = " ";
+};
+String STR_WRITER_WEBDOC_FULLTYPE
+{
+    Text = "StarOffice 5.0 HTML" ;
+    Text [ English ] = "StarOffice 5.0 HTML" ;
+    Text [ english_us ] = "StarOffice 5.0 HTML" ;
+    Text [ portuguese_brazilian ] = "StarOffice 5.0 HTML" ;
+    Text [ swedish ] = "StarOffice 5.0 HTML" ;
+    Text [ danish ] = "StarOffice 5.0 HTML" ;
+    Text [ italian ] = "HTML StarOffice 5.0" ;
+    Text [ spanish ] = "HTML de StarOffice 5.0" ;
+    Text [ french ] = "HTML StarOffice 5.0" ;
+    Text [ dutch ] = "StarOffice 5.0 HTML" ;
+    Text [ portuguese ] = "HTML (StarOffice 5.0)" ;
+    Text[ chinese_simplified ] = "StarOffice 5.0 HTML";
+    Text[ russian ] = "StarOffice 5.0 HTML";
+    Text[ polish ] = "StarOffice 5.0 HTML";
+    Text[ japanese ] = "StarOffice 5.0 HTML";
+    Text[ chinese_traditional ] = "StarOffice 5.0 HTML";
+    Text[ arabic ] = "StarOffice 5.0 HTML";
+    Text[ dutch ] = "StarOffice 5.0 HTML";
+    Text[ chinese_simplified ] = "StarOffice 5.0 HTML";
+    Text[ greek ] = "StarOffice 5.0 HTML";
+    Text[ korean ] = "HTML (StarOffice 5.0)";
+    Text[ turkish ] = "StarOffice 5.0 HTML";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_WEBTEXT
+{
+    Text = "Text/Web" ;
+    Text [ ENGLISH ] = "Text/Web" ;
+    Text [ dutch ] = "Tekst/Web" ;
+    Text [ english_us ] = "Text/Web" ;
+    Text [ italian ] = "Testo/Web" ;
+    Text [ spanish ] = "Texto/Web" ;
+    Text [ french ] = "Texte/Web" ;
+    Text [ swedish ] = "Text/Webb" ;
+    Text [ danish ] = "Tekst/Web" ;
+    Text [ portuguese_brazilian ] = "Text/Web" ;
+    Text [ portuguese ] = "Texto/Web" ;
+    Text[ chinese_simplified ] = "Œƒ◊÷/ÕÚŒ¨Õ¯";
+    Text[ russian ] = "“ÂÍÒÚ/Web";
+    Text[ polish ] = "Tekst/Web";
+    Text[ japanese ] = "√∑Ωƒ/Web";
+    Text[ chinese_traditional ] = "§Â¶r/Web";
+    Text[ arabic ] = "‰’/ÊÌ»";
+    Text[ dutch ] = "Tekst/Web";
+    Text[ chinese_simplified ] = "Œƒ◊÷/ÕÚŒ¨Õ¯";
+    Text[ greek ] = " ÂﬂÏÂÌÔ/Web";
+    Text[ korean ] = "≈ÿΩ∫∆Æ/¿•";
+    Text[ turkish ] = "Metin/Web";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_WEBFRAME
+{
+    Text = "Rahmen/Web" ;
+    Text [ ENGLISH ] = "Frame/Web" ;
+    Text [ dutch ] = "Kader/Web" ;
+    Text [ english_us ] = "Frame/Web" ;
+    Text [ italian ] = "Cornice/Web" ;
+    Text [ spanish ] = "Marco/Web" ;
+    Text [ french ] = "Cadre/Web" ;
+    Text [ swedish ] = "Ram/Webb" ;
+    Text [ danish ] = "Ramme/Web" ;
+    Text [ portuguese_brazilian ] = "Rahmen/Web" ;
+    Text [ portuguese ] = "Moldura/Web" ;
+    Text[ chinese_simplified ] = "øÚ/ÕÚŒ¨Õ¯";
+    Text[ russian ] = " ‡‰/Web";
+    Text[ polish ] = "Ramka/Web";
+    Text[ japanese ] = "òg/Web";
+    Text[ chinese_traditional ] = "∞TÆÿ/Web";
+    Text[ arabic ] = "≈ÿ«—/ÊÌ»";
+    Text[ dutch ] = "Kader/Web";
+    Text[ chinese_simplified ] = "øÚ/ÕÚŒ¨Õ¯";
+    Text[ greek ] = "–Î·ﬂÛÈÔ/Web";
+    Text[ korean ] = "«¡∑π¿”/¿•";
+    Text[ turkish ] = "«erÁeve/Web";
+    Text[ language_user1 ] = " ";
+};
+String RID_WEBTOOLS_TOOLBOX
+{
+    Text = "Werkzeugleiste/Web" ;
+    Text [ English ] = "Toolbar/Web" ;
+    Text [ english_us ] = "Main Toolbar/Web" ;
+    Text [ italian ] = "Barra degli strumenti/Web" ;
+    Text [ spanish ] = "Barra de herramientas/Web" ;
+    Text [ french ] = "Barre d'instruments/Web" ;
+    Text [ dutch ] = "Werktuigbalk/Web" ;
+    Text [ swedish ] = "Verktygslist/Webb" ;
+    Text [ danish ] = "VÊrkt¯jslinje/Web" ;
+    Text [ portuguese_brazilian ] = "Werkzeugleiste/Web" ;
+    Text [ portuguese ] = "Barra de ferramentas/Web" ;
+    Text[ chinese_simplified ] = "÷˜π§æﬂ¿∏/ÕÚŒ¨Õ¯";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ËÌÒÚÛÏÂÌÚÓ‚/Web";
+    Text[ polish ] = "Pasek narzÍdziowy/Web";
+    Text[ japanese ] = "ïWèÄ¬∞Ÿ ﬁ∞/Web";
+    Text[ chinese_traditional ] = "•D§u®„¶C/Web";
+    Text[ arabic ] = "‘—Ìÿ «·√œÊ« /ÊÌ»";
+    Text[ dutch ] = "Werktuigbalk/Web";
+    Text[ chinese_simplified ] = "÷˜π§æﬂ¿∏/ÕÚŒ¨Õ¯";
+    Text[ greek ] = "√Ò·ÏÏﬁ ÂÒ„·ÎÂÈ˛Ì/Web";
+    Text[ korean ] = "¡÷ µµ±∏ ∏¿Ω/¿•";
+    Text[ turkish ] = "Ana araÁ Áubuu/Web";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_WEBTOOLS_TOOLBOX
+{
+    HelpID = HID_WEBTOOLS_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Scroll = TRUE ;
+    Hide = TRUE ;
+    Align = BOXALIGN_LEFT ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_CTRL ;
+            HelpID = HID_INSERT_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_FIELD_CTRL ;
+            HelpID = HID_INSERT_FIELD_CTRL ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_HEADER ;
+            HelpID = FN_INSERT_HEADER ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_INSERT_FOOTER ;
+            HelpID = FN_INSERT_FOOTER ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DRAW_TEXT_MARQUEE ;
+            HelpID = SID_DRAW_TEXT_MARQUEE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_CONFIG ;
+            HelpID = SID_FM_CONFIG;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_GLOSSARY_DLG ;
+            HelpID = FN_GLOSSARY_DLG ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_SPELLING_DLG ;
+            HelpID = FN_SPELLING_DLG ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_AUTOSPELL_CHECK
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_HYPHENATE_OPT_DLG;
+            HelpID = FN_HYPHENATE_OPT_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_THESAURUS_DLG;
+            HelpID = FN_THESAURUS_DLG;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SEARCH_DLG ;
+            HelpID = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HYPERLINK_INSERT ;
+            HelpID = SID_HYPERLINK_INSERT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_ZOOM;
+            HelpID = SID_ATTR_ZOOM ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_META_CHARS ;
+            HelpID = FN_VIEW_META_CHARS ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_VIEW_GRAPHIC ;
+            HelpID = FN_VIEW_GRAPHIC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_PRINT_LAYOUT ;
+            HelpID = FN_PRINT_LAYOUT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SOURCEVIEW ;
+            HelpID = HID_SOURCEVIEW ;
+        };
+    };
+};
+/*************************************************************************
+    Textleiste
+*************************************************************************/
+String RID_WEBTEXT_TOOLBOX
+{
+    Text = "Textobjektleiste/Web" ;
+    Text [ English ] = "Text objectbar/Web" ;
+    Text [ dutch ] = "Tekstobjectbalk/Web" ;
+    Text [ english_us ] = "Text Object Bar/Web" ;
+    Text [ italian ] = "Barra degli oggetti di testo/Web" ;
+    Text [ spanish ] = "Barra de objetos de texto/Web" ;
+    Text [ french ] = "Barre d'objets de texte/web" ;
+    Text [ swedish ] = "Textobjektlist/Webb" ;
+    Text [ danish ] = "Tekstobjektlinje/Web" ;
+    Text [ portuguese ] = "Barra de objectos de texto/Web" ;
+    Text [ portuguese_brazilian ] = "Textobjektleiste/Web" ;
+    Text[ chinese_simplified ] = "Œƒ◊÷∂‘œÛ¿∏/ÕÚŒ¨Õ¯";
+    Text[ russian ] = "œ‡ÌÂÎ¸ Ó·˙ÂÍÚÓ‚ ÚÂÍÒÚ‡/Web";
+    Text[ polish ] = "Pasek obiektÛw tekstu/Web";
+    Text[ japanese ] = "√∑ΩƒµÃﬁºﬁ™∏ƒ ﬁ∞/Web";
+    Text[ chinese_traditional ] = "§Â¶r™´•Û¶C/Web";
+    Text[ arabic ] = "‘—Ìÿ ﬂ«∆‰«  «·‰’/ÊÌ»";
+    Text[ dutch ] = "Tekstobjectbalk/Web";
+    Text[ chinese_simplified ] = "Œƒ◊÷∂‘œÛ¿∏/ÕÚŒ¨Õ¯";
+    Text[ greek ] = "√Ò·ÏÏﬁ ·ÌÙÈÍÂÈÏ›Ì˘Ì ÍÂÈÏ›ÌÔı/Web";
+    Text[ korean ] = "≈ÿΩ∫∆Æ ∞≥√º ∏¿Ω/¿•";
+    Text[ turkish ] = "Metin nesne Áubuu/Web";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_WEBTEXT_TOOLBOX
+{
+    HelpID = HID_WEBTEXT_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Hide = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    ItemList =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        MN_TEXT1(TRUE)
+        MN_TEXT_LINESPACE
+        MN_TEXT2
+        MN_TEXT_BACKGROUND
+        MN_TEXT_DIALOGS(TRUE)
+    };
+    Scroll = TRUE ;
+};
+String RID_WEBFRAME_TOOLBOX
+{
+    Text = "Rahmenobjektleiste/Web" ;
+    Text [ English ] = "Frame objectbar/Web" ;
+    Text [ norwegian ] = "Ramme/Web" ;
+    Text [ italian ] = "Barra degli oggetti per cornice/Web" ;
+    Text [ portuguese_brazilian ] = "Moldura/Web" ;
+    Text [ portuguese ] = "Barra de objectos de moldura/Web" ;
+    Text [ finnish ] = "Kehys/Web" ;
+    Text [ danish ] = "Rammeobjektlinje/Web" ;
+    Text [ french ] = "Barre d'objets de cadre/Web" ;
+    Text [ swedish ] = "Ramobjektlist/Webb" ;
+    Text [ dutch ] = "Kaderobjectbalk/Web" ;
+    Text [ spanish ] = "Barra de objetos de marco/Web" ;
+    Text [ english_us ] = "Frame Object Bar/Web" ;
+    Text[ chinese_simplified ] = "øÚ∂‘œÛ¿∏/ÕÚŒ¨Õ¯";
+    Text[ russian ] = "œ‡ÌÂÎ¸ Ó·˙ÂÍÚ‡ Í‡‰‡/Web";
+    Text[ polish ] = "Pasek obiektÛw ramki/Web";
+    Text[ japanese ] = "ògµÃﬁºﬁ™∏ƒ ﬁ∞/Web";
+    Text[ chinese_traditional ] = "∞TÆÿ™´•Û¶C/Web";
+    Text[ arabic ] = "‘—Ìÿ ﬂ«∆‰ ≈ÿ«—/ÊÌ»";
+    Text[ dutch ] = "Kaderobjectbalk/Web";
+    Text[ chinese_simplified ] = "øÚ∂‘œÛ¿∏/ÕÚŒ¨Õ¯";
+    Text[ greek ] = "√Ò·ÏÏﬁ ·ÌÙÈÍÂÈÏ›Ì˘Ì Î·ÈÛﬂÔı/Web";
+    Text[ korean ] = "«¡∑π¿” ∞≥√º ∏¿Ω/¿•";
+    Text[ turkish ] = "«erÁeve nesne Áubuu/Web";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_WEBFRAME_TOOLBOX
+{
+    HelpID = HID_WEBFRAME_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Hide = TRUE ;
+    LineSpacing = TRUE ;
+    MenuStrings = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    ItemList =
+    {
+        MN_FRAME_WRAP_WEB
+        MN_FRAME1
+        MN_FRAME3
+        MN_LINESTYLE
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        MN_BACKGROUND_COLOR
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_ATTRIBUTES_FRAME
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_LAYER
+        ToolBoxItem
+        {
+            Identifier = FN_TOOL_ANKER ;
+            HelpID = FN_TOOL_ANKER ;
+        };
+    };
+    Scroll = TRUE ;
+};
+String RID_WEBGRAPHIC_TOOLBOX
+{
+    Text = "Grafikobjektleiste/Web" ;
+    Text [ English ] = "Graphic objectbar/Web" ;
+    Text [ norwegian ] = "Graphic/Web" ;
+    Text [ italian ] = "Barra degli oggetti grafici/Web" ;
+    Text [ portuguese_brazilian ] = "Gr†fico/Web" ;
+    Text [ portuguese ] = "Barra de objectos gr·ficos/Web" ;
+    Text [ finnish ] = "Kuva/Web" ;
+    Text [ danish ] = "Grafikobjektlinje/Web" ;
+    Text [ french ] = "Barre d'objets graphiques/Web" ;
+    Text [ swedish ] = "Grafikobjektlist/Webb" ;
+    Text [ dutch ] = "Objectbalk afbeeldingen/Web" ;
+    Text [ spanish ] = "Barra de objetos gr·ficos/Web" ;
+    Text [ english_us ] = "Graphics Object Bar/Web" ;
+    Text[ chinese_simplified ] = "Õº–Œ∂‘œÛ¿∏/Web";
+    Text[ russian ] = "œ‡ÌÂÎ¸ „‡ÙË˜ÂÒÍËı Ó·˙ÂÍÚÓ‚/Web";
+    Text[ polish ] = "Pasek obiektÛw graficznych/Web";
+    Text[ japanese ] = "ê}å`ï`âÊµÃﬁºﬁ™∏ƒ ﬁ∞/Web";
+    Text[ chinese_traditional ] = "πœ§˘™´•Û¶C/Web";
+    Text[ arabic ] = "‘—Ìÿ ﬂ«∆‰ ’Ê—…/ ÊÌ»";
+    Text[ dutch ] = "Objectbalk afbeeldingen/Web";
+    Text[ chinese_simplified ] = "Õº–Œ∂‘œÛ¿∏/Web";
+    Text[ greek ] = "√Ò·ÏÏﬁ ·ÌÙÈÍÂÈÏ›Ì˘Ì Û˜Â‰È·ÛÏÔ˝/Web";
+    Text[ korean ] = "±◊∑°«» ∞≥√º ∏¿Ω/¿•";
+    Text[ turkish ] = "Grafik nesne Áubuu/Web";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_WEBGRAPHIC_TOOLBOX
+{
+    HelpID = HID_WEBGRAPHIC_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    MenuStrings = TRUE ;
+    Customize = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        MN_FRAME_WRAP_WEB
+        MN_FRAME1
+        MN_FRAME3
+        MN_LINESTYLE
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_SIM_START
+        };
+        MN_ATTRIBUTES_GRAFIK
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_LAYER
+        ToolBoxItem
+        {
+            Identifier = FN_TOOL_ANKER ;
+            HelpID = FN_TOOL_ANKER ;
+            DropDown = TRUE ;
+        };
+    };
+    Scroll = TRUE ;
+};
+String RID_WEBOLE_TOOLBOX
+{
+    Text = "Objekt" ;
+    Text [ English ] = "Object" ;
+    Text [ norwegian ] = "Object" ;
+    Text [ italian ] = "Oggetto" ;
+    Text [ portuguese_brazilian ] = "Objeto" ;
+    Text [ portuguese ] = "Objecto" ;
+    Text [ finnish ] = "Objekti" ;
+    Text [ danish ] = "Objekt" ;
+    Text [ french ] = "Objet" ;
+    Text [ swedish ] = "Objekt" ;
+    Text [ dutch ] = "Object" ;
+    Text [ spanish ] = "Objeto" ;
+    Text [ english_us ] = "Object" ;
+    Text[ chinese_simplified ] = "∂‘œÛ";
+    Text[ russian ] = "Œ·˙ÂÍÚ";
+    Text[ polish ] = "Obiekt";
+    Text[ japanese ] = "µÃﬁºﬁ™∏ƒ";
+    Text[ chinese_traditional ] = "™´•Û";
+    Text[ arabic ] = "ﬂ«∆‰";
+    Text[ dutch ] = "Object";
+    Text[ chinese_simplified ] = "∂‘œÛ";
+    Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌÔ";
+    Text[ korean ] = "∞≥√º";
+    Text[ turkish ] = "Nesne";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_WEBOLE_TOOLBOX
+{
+    HelpID = HID_OLE_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    Scroll = TRUE ;
+    ItemList =
+    {
+        MN_FRAME_WRAP_WEB
+        MN_FRAME1
+        MN_FRAME3
+        MN_LINESTYLE
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_ATTRIBUTES_OLE
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_LAYER
+        ToolBoxItem
+        {
+            Identifier = FN_TOOL_ANKER ;
+            HelpID = FN_TOOL_ANKER ;
+            DropDown = TRUE ;
+        };
+    };
+};
+/*************************************************************************
+
+*************************************************************************/

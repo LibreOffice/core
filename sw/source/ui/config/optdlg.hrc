@@ -1,0 +1,263 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optdlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+/* TabPage Ansicht*/
+#define GB_DISP         1
+#define GB_NOPRINT              2
+#define GB_WINDOW               3
+#define GB_BACK                 4
+#define GB_METRIC       5
+#define ST_METRIC       6
+#define GB_TAB          7
+#define MF_TAB                  8
+
+#define CB_GRF              1
+#define CB_TBL                  2
+#define CB_DRWFAST              3
+#define CB_FIELD                4
+#define CB_PARA                 5
+#define CB_TAB                  6
+#define CB_SPACE                7
+#define CB_HSPACE               8
+#define CB_SHYPH                9
+#define CB_HIDDEN               10
+#define CB_BREAK                11
+#define CB_TXTBEG               12
+#define CB_TABBEG               13
+#define CB_CROSS        14
+#define CB_HSCROLL              15
+#define CB_VSCROLL              16
+#define CB_HRULER               17
+#define CB_VRULER               18
+#define CB_IDX_ENTRY            19
+#define CB_FOOTBACK             20
+#define CB_FLDBACK              21
+#define GB_LINE                 22
+#define CB_POSTIT               23
+#define LB_METRIC       24
+#define CB_BIGHANDLE                  25
+
+#define CB_TEST1        25
+#define CB_TEST2        26
+#define CB_TEST3        27
+#define CB_TEST4        28
+#define CB_TEST5        29
+#define CB_TEST6        30
+#define CB_TEST7        31
+#define CB_TEST8        32
+#define CB_TEST9        33
+#define CB_TEST10       34
+#define GB_TEST         35
+
+#define CB_HIDDEN_PARA  36  //Mittendrin, damit die HelpIds zum FPII kompatibel bleiben
+#define CB_SMOOTH_SCROLL 37
+
+#define BT_OK           38
+#define BT_CANCEL       39
+#define BT_MORE         40
+#define BT_GRID         41
+#define MF_HFRAME       42
+#define MF_VFRAME       43
+
+#define CB_INDEX        44
+
+#define LB_COLOR        50
+#define GB_1            51
+#define WIN_COLOR       52
+#define ED_COLORNAME    53
+#define GB_2            54
+#define BT_EDIT         55
+#define BT_NEW          56
+#define BT_DELETE       57
+#define BT_DEFAULT      58
+#define CB_HANDLE       59
+#define CB_SECT_BOUNDS  60
+// Print-Extra-Page
+#define CB_PGRF            61
+#define CB_PTAB            62
+#define CB_PDRAW           63
+#define CB_LEFTP           64
+#define CB_RIGHTP          65
+#define CB_REVERSE         66
+#define CB_PROSPECT        67
+#define CB_SINGLEJOBS      68
+#define CB_CTRLFLD         69
+#define CB_PAPERFROMSETUP  70
+#define GRP_1              71
+#define GRP_2              72
+#define GRP_3              73
+#define GRP_4              74
+#define GRP_5              75
+#define GB_FAX             76
+#define CB_BACKGROUND      79
+
+#define RB_NO              80
+#define RB_ONLY            81
+#define RB_END             82
+#define RB_PAGEEND         83
+#define LB_FAX             86
+#define CB_BLACK_FONT      87
+
+//Grid-Page
+#define GB_GRID             90
+#define MTR_FLD_GRID        2
+#define BTN_MORE            3
+#define GRP_DRAWGRID        4
+#define GRP_OPTIONS         5
+#define GRP_SNAPGRID        6
+#define GRP_ORIGIN          7
+#define CBX_GRID_SNAP       8
+#define CBX_SYNCHRONIZE     9
+#define CBX_EQUAL_GRID     10
+#define CBX_SNAPGRID       11
+#define CBX_ORIGIN          12
+#define CBX_GRID_VISIBLE    13
+#define MTR_FLD_DRAW_Y      18
+#define MTR_FLD_DRAW_X      21
+#define MTR_FLD_DIVISION_X  22
+#define MTR_FLD_DIVISION_Y  23
+#define FT_DRAW_X           26
+#define FT_DRAW_Y           27
+#define FT_RESOLUTION       28
+#define FT_DIVISION         29
+#define CBX_CROSSHAIR       30
+#define CB_RULER            31
+
+
+// DefaultFarben
+#define SW_COLOR_START              1
+#define CL_BLACK                    (SW_COLOR_START +  0)
+#define CL_BLUE                     (SW_COLOR_START +  1)
+#define CL_GREEN                    (SW_COLOR_START +  2)
+#define CL_CYAN                     (SW_COLOR_START +  3)
+#define CL_RED                      (SW_COLOR_START +  4)
+#define CL_MAGENTA                  (SW_COLOR_START +  5)
+#define CL_BROWN                    (SW_COLOR_START +  6)
+#define CL_GRAY                     (SW_COLOR_START +  7)
+#define CL_LIGHTGRAY                (SW_COLOR_START +  8)
+#define CL_LIGHTBLUE                (SW_COLOR_START +  9)
+#define CL_LIGHTGREEN               (SW_COLOR_START + 10)
+#define CL_LIGHTCYAN                (SW_COLOR_START + 11)
+#define CL_LIGHTRED                 (SW_COLOR_START + 12)
+#define CL_LIGHTMAGENTA             (SW_COLOR_START + 13)
+#define CL_YELLOW                   (SW_COLOR_START + 14)
+#define CL_WHITE                    (SW_COLOR_START + 15)
+#define SW_COLOR_END                CL_WHITE
+
+// Tabpage Grundschriften
+#define FT_STANDARD         90
+#define LB_STANDARD                     91
+#define FT_TITLE                        92
+#define LB_TITLE                        93
+#define FT_LIST                         94
+#define LB_LIST                         95
+#define FT_LABEL                        96
+#define LB_LABEL                        97
+#define FT_IDX                          98
+#define LB_IDX                          99
+#define GB_STDCHR                      100
+#define PB_STANDARD                    101
+#define CB_DOCONLY                     102
+
+//Tabpage Tabelle
+#define GB_MOVE             110
+#define FT_ROWMOVE                  111
+#define MF_ROWMOVE                  112
+#define FT_COLMOVE                  113
+#define MF_COLMOVE                  114
+#define GB_INSERT                   115
+#define FT_ROWINSERT                    116
+#define MF_ROWINSERT                    117
+#define FT_COLINSERT                    118
+#define MF_COLINSERT                    119
+#define GB_HANDLING                     120
+#define RB_FIX                      121
+#define RB_FIXPROP                  122
+#define RB_VAR                      123
+#define FT_FIX                      124
+#define FT_FIXPROP                  125
+#define FT_VAR                      126
+#define FT_DESC                     127
+
+#define GB_COLOR                    130
+#define FT_SGML                     131
+#define LB_SGML                     132
+#define FT_COMMENT                  133
+#define LB_COMMENT                  134
+#define FT_KEYWD                    135
+#define LB_KEYWD                    136
+#define FT_UNKNOWN                  137
+#define LB_UNKNOWN                  138
+
+#define GB_SHDWCRSFLAG                 1
+#define CB_SHDWCRSONOFF                2
+#define GB_SHDWCRSMODE                 3
+#define FT_SHDWCRSFILLMODE             4
+#define RB_SHDWCRSFILLMARGIN           5
+#define RB_SHDWCRSFILLINDENT           6
+#define RB_SHDWCRSFILLTAB              7
+#define RB_SHDWCRSFILLSPACE            8
+#define GB_SHDWCRSCOLOR                9
+#define FT_SHDWCRSCOLOR               10
+#define LB_SHDWCRSCOLOR               11
+#define CB_ALLOW_IN_PROT              12
+#define GB_CRSR_OPT                   13
+

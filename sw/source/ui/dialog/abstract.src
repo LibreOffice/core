@@ -1,0 +1,258 @@
+/*************************************************************************
+ *
+ *  $RCSfile: abstract.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "dialog.hrc"
+#include "helpid.h"
+#include "abstract.hrc"
+
+ModalDialog DLG_INSERT_ABSTRACT
+{
+    HelpID = HID_INSERT_ABSTRACT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 239 , 68 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
+    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
+    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
+    Text = "AutoAbstract erzeugen" ;
+    Text [ English ] = "Create abstract" ;
+    Moveable = TRUE ;
+    GroupBox GB_1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 174 , 62 ) ;
+        Text = "Eigenschaften" ;
+        Text [ English ] = "Properties" ;
+        Text [ english_us ] = "Properties" ;
+        Text [ portuguese_brazilian ] = "Eigenschaften" ;
+        Text [ swedish ] = "Egenskaper" ;
+        Text [ danish ] = "Egenskaber" ;
+        Text [ italian ] = "Proprietà" ;
+        Text [ spanish ] = "Propiedades" ;
+        Text [ french ] = "Propriétés" ;
+        Text [ dutch ] = "Eigenschappen" ;
+        Text [ portuguese ] = "Propriedades" ;
+        Text[ chinese_simplified ] = "ÊôĞÔ";
+        Text[ russian ] = "Ñâîéñòâà";
+        Text[ polish ] = "W³aœciwoœci";
+        Text[ japanese ] = "ÌßÛÊßÃ¨";
+        Text[ chinese_traditional ] = "Äİ©Ê";
+        Text[ arabic ] = "ÎÕÇÆÕ";
+        Text[ dutch ] = "Eigenschappen";
+        Text[ chinese_simplified ] = "ÊôĞÔ";
+        Text[ greek ] = "Éäéüôçôåò";
+        Text[ korean ] = "µî·ÏÁ¤º¸";
+        Text[ turkish ] = "Özellikler";
+    };
+    FixedText FT_LEVEL
+    {
+        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Einbezogene Kapitelebenen" ;
+        Text [ English ] = "Included outline levels" ;
+        Text [ english_us ] = "Included outline levels" ;
+        Text [ portuguese_brazilian ] = "Einbezogene Kapitelebenen" ;
+        Text [ swedish ] = "Inkluderade kapitelnivåer" ;
+        Text [ danish ] = "Inkluderede kapitelniveauer" ;
+        Text [ italian ] = "Livelli di capitolo inclusi" ;
+        Text [ spanish ] = "Niveles del capítulo incluidos" ;
+        Text [ french ] = "Niveaux de plan à inclure" ;
+        Text [ dutch ] = "Aantal overzichtsniveau's" ;
+        Text [ portuguese ] = "Níveis de capítulo incluídos" ;
+        Text[ chinese_simplified ] = "°üº¬µÄÕÂ½Ú´ó¸Ù¼¶";
+        Text[ russian ] = "Âêëş÷åííûå óğîâíè ğàçäåëîâ";
+        Text[ polish ] = "W³¹cznie z poziomami rozdzia³u";
+        Text[ japanese ] = "ŠY“–‚·‚é±³Ä×²İ‚ÌÚÍŞÙ";
+        Text[ chinese_traditional ] = "¥]§tªº³¹¸`¤jºõ";
+        Text[ arabic ] = "ãÓÊæíÇÊ ÇáİÕá ÇáãÖãäÉ";
+        Text[ dutch ] = "Aantal overzichtsniveau's";
+        Text[ chinese_simplified ] = "°üº¬µÄÕÂ½Ú´ó¸Ù¼¶";
+        Text[ greek ] = "Óõìğåñéëáìâáíüìåíá åğßğåäá êåöáëáßùí";
+        Text[ korean ] = "°³¿ä¼öÁØÀÌ Æ÷ÇÔµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Dahil edilen bölüm düzeyleri";
+    };
+    NumericField NF_LEVEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 153 , 12 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 5 ;
+        Value = 3 ;
+        First = 1 ;
+        Last = 5 ;
+    };
+    FixedText FT_PARA
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Absätze je Kapitel : Absõtze je Kapitel */
+        Text = "Absätze je Kapitel" ;
+        Text [ English ] = "Paragraphs per Outline" ;
+        Text [ english_us ] = "Subpoints per level" ;
+        Text [ portuguese_brazilian ] = "Absätze je Kapitel" ;
+        Text [ swedish ] = "Stycken per kapitel" ;
+        Text [ danish ] = "Afsnit per kapitel" ;
+        Text [ italian ] = "Paragrafi per capitolo" ;
+        Text [ spanish ] = "Párrafos por capítulo" ;
+        Text [ french ] = "Nbre resp. de paragraphes" ;
+        Text [ dutch ] = "Alinea's per kop" ;
+        Text [ portuguese ] = "Parágrafos por capítulo" ;
+        Text[ chinese_simplified ] = "Ã¿ÕÂ½Ú°üº¬µÄ¶ÎÂä";
+        Text[ russian ] = "Àáçàöåâ â ãëàâå";
+        Text[ polish ] = "Akapity w rozdziale";
+        Text[ japanese ] = "Í‚²‚Æ‚Ì’i—";
+        Text[ chinese_traditional ] = "¨C³¹¸`¥]§tªº¬q¸¨";
+        Text[ arabic ] = "İŞÑÇÊ İí ßá İÕá";
+        Text[ dutch ] = "Alinea's per kop";
+        Text[ chinese_simplified ] = "Ã¿ÕÂ½Ú°üº¬µÄ¶ÎÂä";
+        Text[ greek ] = "ĞáñÜãñáöïé áíÜ êåöÜëáéï";
+        Text[ korean ] = "·¹º§´ç ¼­ºêÆ÷ÀÎÆ®";
+        Text[ turkish ] = "Beher bölüm paragraf sayısı";
+    };
+    NumericField NF_PARA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 153 , 27 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 5 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 5 ;
+    };
+    FixedText FT_DESC
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 165 , 16 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Im Abstrakt erscheint die ausgewählte Anzahl von Absätzen aus den einbezogenen Kapitelebenen. : Im Abstrakt erscheint die ausgewõhlte Anzahl von Absõtzen aus den einbezogenen Kapitelebenen. */
+        Text = "Im Abstrakt erscheint die ausgewählte Anzahl von Absätzen aus den einbezogenen Kapitelebenen." ;
+        Text [ English ] = "The selected number of paragraphs of the included outline levels will be used to create the summary." ;
+        WordBreak = TRUE ;
+        Text [ english_us ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
+        Text [ portuguese_brazilian ] = "Im Abstrakt erscheint die ausgewählte Anzahl von Absätzen aus den einbezogenen Kapitelebenen." ;
+        Text [ swedish ] = "Utdraget innehåller det utvalda antalet stycken från de inkluderade kapitelnivåerna." ;
+        Text [ danish ] = "Abstractet indeholder det valgte antal afsnit fra de inkluderede kapitelniveauer." ;
+        Text [ italian ] = "Il sunto contiene il numero di paragrafi scelto dai livelli di capitolo inclusi." ;
+        Text [ spanish ] = "En el extracto aparece la cantidad deseada de párrafos de los niveles de los capítulos incluidos." ;
+        Text [ french ] = "La synthèse reprendra, pour chaque niveau de plan inclus, le nombre de paragraphes indiqué." ;
+        Text [ dutch ] = "In het extract verschijnt het geselecteerde aantal alinea´s van de erbij betrokken overzichtsniveaus." ;
+        Text [ portuguese ] = "O Abstracto contém a quantidade de parágrafos seleccionada dos níveis de capítulos incluídos." ;
+        Text[ chinese_simplified ] = "´Ó°üÀ¨µÄÕÂ½Ú¼¶ÖĞÑ¡³öµÄÒ»¶¨ÊıÄ¿µÄ¶ÎÂäÏÔÊ¾ÔÚÕªÒªÖĞ¡£";
+        Text[ russian ] = "Â Ïğîñìîòğå ïîÿâèòñÿ âûáğàííîå ÷èñëî àáçàöåâ èç âêëş÷åííûõ óğîâíåé ãëàâ";
+        Text[ polish ] = "Abstrakt zawiera wybran¹ iloœæ akapitów z awieraj¹cych w³¹czone poziomy akapitu.";
+        Text[ japanese ] = "—v–ñ‚É‚ÍAŠY“–‚·‚é±³Ä×²İ‚ÌÚÍŞÙ‚©‚ç‘I‘ğ‚³‚ê‚½’i—‚Ì”‚ª•\\¦‚³‚ê‚Ü‚·B";
+        Text[ chinese_traditional ] = "ºK­n¼Ò¦¡Åã¥Ü¬ÛÃö³¹¸`¤¤¿ï¨úªº¤@©w¼Æ¥Øªº¬q¸¨";
+        Text[ arabic ] = "Óæİ íÙåÑ İí ÇáÊáÎíÕ ÚÏÏ ÇáİŞÑÇÊ ÇáÊí Êã ÊÍÏíÏåÇ ãä Èíä ãÓÊæíÇÊ ÇáİÕæá ÇáãÖãäÉ.";
+        Text[ dutch ] = "In het extract verschijnt het geselecteerde aantal alinea´s van de erbij betrokken overzichtsniveaus.";
+        Text[ chinese_simplified ] = "´Ó°üÀ¨µÄÕÂ½Ú¼¶ÖĞÑ¡³öµÄÒ»¶¨ÊıÄ¿µÄ¶ÎÂäÏÔÊ¾ÔÚÕªÒªÖĞ¡£";
+        Text[ greek ] = "Óôï Abstract åìöáíßæåôáé ôï åğéëåãìİíï ğëŞèïò ğáñáãñÜöùí áğü ôá óõìğåñéëáìâáíüìåíá åğßğåäá êåöáëáßùí.";
+        Text[ korean ] = "Ãß»ó¿¡¼­´Â ¿¬°üµÈ °³¿ä ·¹º§¿¡¼­ ¼±ÅÃÇÑ ´Ü¶ôÀÇ ¼ö°¡ ³ªÅ¸³³´Ï´Ù.";
+        Text[ turkish ] = "Özet içinde, dahil edilen bölüm düzeylerinden seçilen paragraflar bulunuyor.";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 186 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 186 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 186 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Create AutoAbstract" ;
+    Text [ portuguese_brazilian ] = "AutoAbstrakt erzeugen" ;
+    Text [ swedish ] = "Skapa AutoUtdrag" ;
+    Text [ danish ] = "Opret AutoAbstract" ;
+    Text [ italian ] = "Crea un sommario automatico" ;
+    Text [ spanish ] = "Crear abstracto automático" ;
+    Text [ french ] = "Création d'une AutoSynthèse" ;
+    Text [ dutch ] = "AutoExtract maken" ;
+    Text [ portuguese ] = "Criar AutoAbstracto" ;
+    Text[ chinese_simplified ] = "Éú³É×Ô¶¯ÕªÒª";
+    Text[ russian ] = "Ñîçäàòü Àâòîğåôåğàò";
+    Text[ polish ] = "Utwórz AutoAbstract ";
+    Text[ japanese ] = "©“®’Šo‚Ìì¬";
+    Text[ chinese_traditional ] = "¥Í¦¨¦Û°ÊºK­n";
+    Text[ arabic ] = "ÅäÔÇÁ ÊáÎíÕ ÊáŞÇÆí";
+    Text[ dutch ] = "AutoExtract maken";
+    Text[ chinese_simplified ] = "Éú³É×Ô¶¯ÕªÒª";
+    Text[ greek ] = "Äçìéïõñãßá AutoAbstract";
+    Text[ korean ] = "ÀÚµ¿ Ãß»ó ¸¸µé±â";
+    Text[ turkish ] = "Otomatik özet oluştur";
+};

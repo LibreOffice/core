@@ -1,0 +1,319 @@
+/*************************************************************************
+ *
+ *  $RCSfile: javaedit.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "javaedit.hrc"
+#include "fldui.hrc"
+#include "helpid.h"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_POSTIT -----------------------------------------------------
+ModalDialog DLG_JAVAEDIT
+{
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Size = MAP_APPFONT ( 248 , 157 ) ;
+    Text = "Script bearbeiten" ;
+    Text [ ENGLISH ] = "Edit script" ;
+    Moveable = TRUE ;
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Script-T~yp" ;
+        Text [ ENGLISH ] = "Script type" ;
+        Text [ english_us ] = "Script type" ;
+        Text [ portuguese_brazilian ] = "Script-Typ" ;
+        Text [ swedish ] = "Skriptt~yp" ;
+        Text [ danish ] = "Script-type" ;
+        Text [ italian ] = "Tipo di script" ;
+        Text [ spanish ] = "Tipo de script" ;
+        Text [ french ] = "T~ype de script" ;
+        Text [ dutch ] = "Scriptt~ype" ;
+        Text [ portuguese ] = "~Tipo de Script" ;
+        Text[ chinese_simplified ] = "Ω≈±æ¿‡–Õ";
+        Text[ russian ] = "“ËÔ ÒÍËÔÚ‡";
+        Text[ polish ] = "Typ Scriptu";
+        Text[ japanese ] = "Ω∏ÿÃﬂƒÇÃéÌóﬁ";
+        Text[ chinese_traditional ] = "©R•OΩZ√˛´¨";
+        Text[ arabic ] = "‰Ê⁄ «·”ﬂ—Ì» ";
+        Text[ greek ] = "‘˝ÔÚ ÙÔı Script";
+        Text[ korean ] = "Ω∫≈©∏≥∆Æ «¸≈¬";
+        Text[ turkish ] = "Script tipi";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TYPE
+    {
+        Border = TRUE ;
+        Text = "JavaScript" ;
+         // Nicht uebersetzen!!!
+        Pos = MAP_APPFONT ( 57 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_URL
+    {
+        Text = "~URL" ;
+        Text [ ENGLISH ] = "URL" ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~URL" ;
+        Text [ english_us ] = "URL" ;
+        Text [ portuguese_brazilian ] = "URL" ;
+        Text [ swedish ] = "~URL" ;
+        Text [ danish ] = "URL" ;
+        Text [ italian ] = "URL" ;
+        Text [ spanish ] = "URL" ;
+        Text [ french ] = "~URL" ;
+        Text [ dutch ] = "~URL" ;
+        Text[ chinese_simplified ] = "URL";
+        Text[ russian ] = "URL";
+        Text[ polish ] = "URL";
+        Text[ japanese ] = "URL";
+        Text[ chinese_traditional ] = "URL";
+        Text[ arabic ] = "URL";
+        Text[ greek ] = "~URL";
+        Text[ korean ] = "URL";
+        Text[ turkish ] = "URL";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_URL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 57 , 27 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_URL
+    {
+        Pos = MAP_APPFONT ( 163 , 26 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~..." ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_EDIT
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Text" ;
+        Text [ English ] = "~Text" ;
+        Text [ norwegian ] = "~Text" ;
+        Text [ italian ] = "~Testo" ;
+        Text [ portuguese_brazilian ] = "~Texto" ;
+        Text [ portuguese ] = "~Texto" ;
+        Text [ finnish ] = "~Teksti" ;
+        Text [ danish ] = "Tekst" ;
+        Text [ french ] = "~Texte" ;
+        Text [ swedish ] = "~Text" ;
+        Text [ dutch ] = "~Tekst" ;
+        Text [ spanish ] = "~Texto" ;
+        Text [ english_us ] = "~Text" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "Œƒ◊÷(~T)";
+        Text[ russian ] = "“ÂÍÒÚ";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "√∑Ωƒ(~T)";
+        Text[ chinese_traditional ] = "§Â¶r(~T)";
+        Text[ arabic ] = "‰’";
+        Text[ greek ] = " ÂﬂÏÂÌÔ";
+        Text[ korean ] = "≈ÿΩ∫∆Æ(~T)";
+        Text[ turkish ] = "~Metin";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit ED_EDIT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 23 , 54 ) ;
+        Size = MAP_APPFONT ( 155 , 91 ) ;
+        Left = TRUE ;
+        VScroll = TRUE ;
+        HScroll = TRUE ;
+        IgnoreTab = TRUE ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_POSTIT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 179 , 147 ) ;
+        Text = "Inhalt" ;
+        Text [ ENGLISH ] = "Contents" ;
+        Text [ norwegian ] = "Innhold  " ;
+        Text [ italian ] = "Contenuto" ;
+        Text [ portuguese_brazilian ] = "Conte˙do" ;
+        Text [ portuguese ] = "Conte˙do" ;
+        Text [ finnish ] = "Sis‰ltˆ" ;
+        Text [ danish ] = "Indhold" ;
+        Text [ french ] = "Contenu" ;
+        Text [ swedish ] = "InnehÂll" ;
+        Text [ dutch ] = "Inhoud" ;
+        Text [ spanish ] = "Contenido" ;
+        Text [ english_us ] = "Contents" ;
+        Text[ chinese_simplified ] = "ƒ⁄»›";
+        Text[ russian ] = "—Ó‰ÂÊËÏÓÂ";
+        Text[ polish ] = "ZawartoúÊ";
+        Text[ japanese ] = "ì‡óe";
+        Text[ chinese_traditional ] = "§∫Æe";
+        Text[ arabic ] = "«·„Õ ÊÌ« ";
+        Text[ greek ] = "–ÂÒÈÂ˜¸ÏÂÌ·";
+        Text[ korean ] = "≥ªøÎ";
+        Text[ turkish ] = "›Áerik";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_POST_OK
+    {
+        Pos = MAP_APPFONT ( 191 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_POST_CANCEL
+    {
+        Pos = MAP_APPFONT ( 191 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+    };
+    HelpButton BTN_POST_HELP
+    {
+        Pos = MAP_APPFONT ( 191 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+    };
+    ImageButton BTN_PREV
+    {
+        Pos = MAP_APPFONT ( 191 , 60 ) ;
+        Size = MAP_APPFONT ( 24 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_LEFT ;
+    };
+    ImageButton BTN_NEXT
+    {
+        Pos = MAP_APPFONT ( 217 , 60 ) ;
+        Size = MAP_APPFONT ( 24 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_RIGHT ;
+    };
+     // lokale Strings
+    String STR_JAVA_EDIT
+    {
+        Text = "Script bearbeiten" ;
+        Text [ English ] = "Edit script" ;
+        Text [ portuguese ] = "Editar Script" ;
+        Text [ english_us ] = "Edit script" ;
+        Text [ portuguese_brazilian ] = "Script bearbeiten" ;
+        Text [ swedish ] = "Redigera skript" ;
+        Text [ danish ] = "Rediger script" ;
+        Text [ italian ] = "Modifica script" ;
+        Text [ spanish ] = "Editar script" ;
+        Text [ french ] = "…diter le script" ;
+        Text [ dutch ] = "Script bewerken" ;
+        Text[ chinese_simplified ] = "±‡º≠Ω≈±æ";
+        Text[ russian ] = "œ‡‚Í‡ ÒÍËÔÚ‡";
+        Text[ polish ] = "Edytuj Script";
+        Text[ japanese ] = "Ω∏ÿÃﬂƒÇÃï“èW";
+        Text[ chinese_traditional ] = "ΩsøË©R•OΩZ";
+        Text[ arabic ] = " Õ—Ì— «·‹ script";
+        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ· Script";
+        Text[ korean ] = "Ω∫≈©∏≥∆Æ ∆Ì¡˝";
+        Text[ turkish ] = "Script bearbeiten";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_JAVA_INSERT
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Script einf¸gen : Script einf≥gen */
+        Text = "Script einf¸gen" ;
+        Text [ English ] = "Insert script" ;
+        Text [ portuguese ] = "Inserir Script" ;
+        Text [ english_us ] = "Insert Script" ;
+        Text [ portuguese_brazilian ] = "Script einf¸gen" ;
+        Text [ swedish ] = "Infoga skript" ;
+        Text [ danish ] = "IndsÊt script" ;
+        Text [ italian ] = "Inserisci script" ;
+        Text [ spanish ] = "Insertar script" ;
+        Text [ french ] = "InsÈrer un script" ;
+        Text [ dutch ] = "Script invoegen" ;
+        Text[ chinese_simplified ] = "≤Â»ÎΩ≈±æ";
+        Text[ russian ] = "¬ÒÚ‡‚ËÚ¸ ÒÍËÔÚ";
+        Text[ polish ] = "Wstaw Script";
+        Text[ japanese ] = "Ω∏ÿÃﬂƒÇÃë}ì¸";
+        Text[ chinese_traditional ] = "¥°§J©R•OΩZ";
+        Text[ arabic ] = "≈œ—«Ã Script";
+        Text[ greek ] = "–ÒÔÛËﬁÍÁ Script";
+        Text[ korean ] = "Ω∫≈©∏≥∆Æ ª¿‘";
+        Text[ turkish ] = "Script einf¸gen";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Edit Script" ;
+    Text [ portuguese_brazilian ] = "Script bearbeiten" ;
+    Text [ swedish ] = "Redigera skript" ;
+    Text [ danish ] = "Rediger script" ;
+    Text [ italian ] = "Modifica script" ;
+    Text [ spanish ] = "Editar script" ;
+    Text [ french ] = "…diter le script" ;
+    Text [ dutch ] = "Script bewerken" ;
+    Text [ portuguese ] = "Editar Script" ;
+    Text[ chinese_simplified ] = "±‡º≠Ω≈±æ";
+    Text[ russian ] = "œ‡‚Í‡ ÒÍËÔÚ‡";
+    Text[ polish ] = "Edytuj Script";
+    Text[ japanese ] = "Ω∏ÿÃﬂƒÇÃï“èW";
+    Text[ chinese_traditional ] = "ΩsøË©R•OΩZ";
+    Text[ arabic ] = " Õ—Ì— «·‹ Script";
+    Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ· Script";
+    Text[ korean ] = "Ω∫≈©∏≥∆Æ ∆Ì¡˝";
+    Text[ turkish ] = "Script'i d¸zenle";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,949 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ccoll.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+ // #include *****************************************************************
+#include "globals.hrc"
+#include "chrdlg.hrc"
+#include "ccoll.hrc"
+#include "helpid.h"
+ // TabPage ******************************************************************
+TabPage TP_CONDCOLL
+{
+    HelpID = HID_COND_COLL ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    CheckBox CB_CONDITION
+    {
+        Pos = MAP_APPFONT ( 12 , 10 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Als bedingte Vorlage" ;
+        Text [ English ] = "~As conditioned Style" ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text [ english_us ] = "~Conditional Style" ;
+        Text [ italian ] = "Come modello condizionato" ;
+        Text [ spanish ] = "C~omo estilo condicional" ;
+        Text [ french ] = "Co~mme style conditionnel" ;
+        Text [ dutch ] = "~Als conditioneel opmaakprofiel" ;
+        Text [ swedish ] = "som villkorlig m~all" ;
+        Text [ danish ] = "Som betinget typografi" ;
+        Text [ portuguese_brazilian ] = "~Als bedingte Vorlage" ;
+        Text [ portuguese ] = "~Estilo condicional" ;
+        Text[ chinese_simplified ] = "µ±◊˜”–Ãıº˛µƒ—˘ Ω(~S)";
+        Text[ russian ] = " ‡Í ÛÒÎÓ‚Ì˚È ÒÚËÎ¸";
+        Text[ polish ] = "Jako warunkowy szablon";
+        Text[ japanese ] = "èåèïtÇ´Ω¿≤ŸÇ∆ÇµÇƒ(~S)";
+        Text[ chinese_traditional ] = "∑Ìß@¶≥±¯•Û™∫ºÀ¶°(~S)";
+        Text[ arabic ] = "ﬂ‰„ÿ „‘—Êÿ";
+        Text[ greek ] = "ŸÚ ÂÓ·ÒÙ˛ÏÂÌÔ Ò¸ÙıÔ";
+        Text[ korean ] = "¡∂∞«¿˚ ¿Ø«¸(~C)";
+        Text[ turkish ] = "~Ko˛ullu biÁim olarak";
+        Text[ language_user1 ] = "\"Vorlagen\" Styles are capitalized. EM15.5.00";
+    };
+    FixedText FT_CONTEXT
+    {
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Kontext" ;
+        Text [ English ] = "~Context" ;
+        Disable = TRUE ;
+        Text [ dutch ] = "~Context" ;
+        Text [ english_us ] = "Conte~xt" ;
+        Text [ italian ] = "Contesto" ;
+        Text [ spanish ] = "~Contexto" ;
+        Text [ french ] = "~Contexte" ;
+        Text [ swedish ] = "~Sammanhang" ;
+        Text [ danish ] = "Kontekst" ;
+        Text [ portuguese ] = "~Contexto" ;
+        Text [ portuguese_brazilian ] = "~Kontext" ;
+        Text[ chinese_simplified ] = "…œœ¬Œƒ(~C)";
+        Text[ russian ] = "~ ÓÌÚÂÍÒÚ";
+        Text[ polish ] = "Kontekst";
+        Text[ japanese ] = "∫›√∑Ωƒ(~C)";
+        Text[ chinese_traditional ] = "§W§U§Â(~C)";
+        Text[ arabic ] = "«·”Ì«ﬁ";
+        Text[ greek ] = "”ıÏˆÒ·Ê¸ÏÂÌ·";
+        Text[ korean ] = "≥ªøÎ(~C)";
+        Text[ turkish ] = "Balam";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_USED
+    {
+        Pos = MAP_APPFONT ( 100 , 25 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "Verwendete Vorlage" ;
+        Text [ English ] = "Used Style" ;
+        Disable = TRUE ;
+        Text [ dutch ] = "Gebruikt opmaakprofiel" ;
+        Text [ english_us ] = "Applied Styles" ;
+        Text [ italian ] = "Modello utilizzato" ;
+        Text [ spanish ] = "Estilos utilizados" ;
+        Text [ french ] = "Style utilisÈ" ;
+        Text [ swedish ] = "Anv‰nda formatmallar" ;
+        Text [ danish ] = "Anvendt typografi" ;
+        Text [ portuguese ] = "Estilos em uso" ;
+        Text [ portuguese_brazilian ] = "Verwendete Vorlage" ;
+        Text[ chinese_simplified ] = " π”√µƒ—˘ Ω";
+        Text[ russian ] = "œËÏÂÌÂÌÌ˚Â ÒÚËÎË";
+        Text[ polish ] = "Uøyte style";
+        Text[ japanese ] = "égópÇ≥ÇÍÇΩΩ¿≤Ÿ";
+        Text[ chinese_traditional ] = "®œ•Œ™∫ºÀ¶°";
+        Text[ arabic ] = "√‰„«ÿ ﬁÌœ «·«” Œœ«„";
+        Text[ greek ] = "≈ˆ·ÒÏÔÛÏ›Ì· Ò¸Ùı·";
+        Text[ korean ] = "¿Ø«¸¿Ã ¿˚øÎµ«æ˙Ω¿¥œ¥Ÿ.";
+        Text[ turkish ] = "Uygulanan biÁim";
+        Text[ language_user1 ] = " ";
+    };
+    Control TB_CONDCOLLS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 36 ) ;
+        Size = MAP_APPFONT ( 173 , 80 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Disable = TRUE ;
+        Border = TRUE ;
+    };
+    FixedText FT_STYLE
+    {
+        Pos = MAP_APPFONT ( 190 , 25 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Absatzvorlagen" ;
+        Text [ English ] = "Styles" ;
+        Disable = TRUE ;
+        Text [ dutch ] = "Alineaprofielen" ;
+        Text [ english_us ] = "Paragraph Styles" ;
+        Text [ italian ] = "Modelli di paragrafo" ;
+        Text [ spanish ] = "Estilos de p·rrafo" ;
+        Text [ french ] = "Styles de paragraphe" ;
+        Text [ swedish ] = "Styckeformatmallar" ;
+        Text [ danish ] = "Afsnitstypografier" ;
+        Text [ portuguese ] = "Estilos de par·grafo" ;
+        Text [ portuguese_brazilian ] = "Absatzvorlagen" ;
+        Text[ chinese_simplified ] = "∂Œ¬‰—˘ Ω";
+        Text[ russian ] = "—ÚËÎË ‡·Á‡ˆ‡";
+        Text[ polish ] = "Style akapitu";
+        Text[ japanese ] = "íióéΩ¿≤Ÿ";
+        Text[ chinese_traditional ] = "¨q∏®ºÀ¶°";
+        Text[ arabic ] = "√‰„«ÿ ›ﬁ—…";
+        Text[ greek ] = "–Ò¸Ùı· ·Ò·„Ò‹ˆÔı";
+        Text[ korean ] = "¥‹∂Ù ¿Ø«¸";
+        Text[ turkish ] = "Paragraf biÁimi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_STYLE
+    {
+        Pos = MAP_APPFONT ( 188 , 36 ) ;
+        Size = MAP_APPFONT ( 60 , 60 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Sort = TRUE ;
+        Disable = TRUE ;
+        HScroll = TRUE ;
+    };
+    ListBox LB_FILTER
+    {
+        Pos = MAP_APPFONT ( 188 , 104 ) ;
+        Size = MAP_APPFONT ( 60 , 50 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Disable = TRUE ;
+        HScroll = TRUE ;
+    };
+    PushButton PB_REMOVE
+    {
+        Pos = MAP_APPFONT ( 129 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text = "~Entfernen" ;
+        Text [ English ] = "~Remove" ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text [ dutch ] = "~Verwijderen" ;
+        Text [ english_us ] = "Re~move" ;
+        Text [ italian ] = "~Rimuovi" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "Ta ~bort" ;
+        Text [ danish ] = "Fjern" ;
+        Text [ portuguese ] = "~Remover" ;
+        Text [ portuguese_brazilian ] = "~Entfernen" ;
+        Text[ chinese_simplified ] = "…æ≥˝(~R)";
+        Text[ russian ] = "~”‰‡ÎËÚ¸";
+        Text[ polish ] = "~UsuÒ";
+        Text[ japanese ] = "çÌèú(~R)";
+        Text[ chinese_traditional ] = "ßR∞£(~R)";
+        Text[ arabic ] = "≈“«·…";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "¡¶∞≈(~M)";
+        Text[ turkish ] = "~Kald˝r";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 185 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text = "~Zuweisen" ;
+        Text [ English ] = "Assign" ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text [ dutch ] = "~Toewijzen" ;
+        Text [ english_us ] = "~Apply" ;
+        Text [ italian ] = "~Assegna" ;
+        Text [ spanish ] = "~Asignar" ;
+        Text [ french ] = "~Assigner" ;
+        Text [ swedish ] = "Till~dela" ;
+        Text [ danish ] = "Tildel" ;
+        Text [ portuguese ] = "~Atribuir" ;
+        Text [ portuguese_brazilian ] = "~Zuweisen" ;
+        Text[ chinese_simplified ] = "÷∏∂®(~A)";
+        Text[ russian ] = "~Õ‡ÁÌ‡˜ËÚ¸";
+        Text[ polish ] = "P~rzypisz";
+        Text[ japanese ] = "äÑÇËìñÇƒ(~A)";
+        Text[ chinese_traditional ] = "§¿∞t(~A)";
+        Text[ arabic ] = " ⁄ÌÌ‰";
+        Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ";
+        Text[ korean ] = "¡ˆ¡§(~A)";
+        Text[ turkish ] = "~Ata";
+        Text[ language_user1 ] = " ";
+    };
+    StringArray STR_REGIONS
+    {
+        ItemList =
+        {
+            < "Tabellen Kopfzeile" ; > ;
+            < "Tabelle" ; > ;
+            < "Rahmen" ; > ;
+            < "Bereich" ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : Fuﬂnote*/
+            < "Fuﬂnote" ; > ;
+            < "Endnote" ; > ;
+            < "Kopfzeile" ; > ;
+            < "Fusszeile" ; > ;
+            < " 1. Ebene Gliederung" ; > ;
+            < " 2. Ebene Gliederung" ; > ;
+            < " 3. Ebene Gliederung" ; > ;
+            < " 4. Ebene Gliederung" ; > ;
+            < " 5. Ebene Gliederung" ; > ;
+            < " 6. Ebene Gliederung" ; > ;
+            < " 7. Ebene Gliederung" ; > ;
+            < " 8. Ebene Gliederung" ; > ;
+            < " 9. Ebene Gliederung" ; > ;
+            < "10. Ebene Gliederung" ; > ;
+            < " 1. Ebene Nummerierung" ; > ;
+            < " 2. Ebene Nummerierung" ; > ;
+            < " 3. Ebene Nummerierung" ; > ;
+            < " 4. Ebene Nummerierung" ; > ;
+            < " 5. Ebene Nummerierung" ; > ;
+            < " 6. Ebene Nummerierung" ; > ;
+            < " 7. Ebene Nummerierung" ; > ;
+            < " 8. Ebene Nummerierung" ; > ;
+            < " 9. Ebene Nummerierung" ; > ;
+            < "10. Ebene Nummerierung" ; > ;
+        };
+        ItemList [ English ] =
+        {
+            < "Tabellen Kopfzeile" ; > ;
+            < "Tabelle" ; > ;
+            < "Rahmen" ; > ;
+            < "Bereich" ; > ;
+            < "Fuﬂnote" ; > ;
+            < "Endnote" ; > ;
+            < "Kopfzeile" ; > ;
+            < "Fusszeile" ; > ;
+            < " 1. Ebene Gliederung" ; > ;
+            < " 2. Ebene Gliederung" ; > ;
+            < " 3. Ebene Gliederung" ; > ;
+            < " 4. Ebene Gliederung" ; > ;
+            < " 5. Ebene Gliederung" ; > ;
+            < " 6. Ebene Gliederung" ; > ;
+            < " 7. Ebene Gliederung" ; > ;
+            < " 8. Ebene Gliederung" ; > ;
+            < " 9. Ebene Gliederung" ; > ;
+            < "10. Ebene Gliederung" ; > ;
+            < " 1. Ebene Numerierung" ; > ;
+            < " 2. Ebene Numerierung" ; > ;
+            < " 3. Ebene Numerierung" ; > ;
+            < " 4. Ebene Numerierung" ; > ;
+            < " 5. Ebene Numerierung" ; > ;
+            < " 6. Ebene Numerierung" ; > ;
+            < " 7. Ebene Numerierung" ; > ;
+            < " 8. Ebene Numerierung" ; > ;
+            < " 9. Ebene Numerierung" ; > ;
+            < "10. Ebene Numerierung" ; > ;
+        };
+        itemlist [ portuguese ] =
+        {
+            < "CabeÁalho de folha" ; > ;
+            < "Folha" ; > ;
+            < "Moldura" ; > ;
+            < "SecÁ„o" ; > ;
+            < "Nota de rodapÈ" ; > ;
+            < "Nota final" ; > ;
+            < "CabeÁalho" ; > ;
+            < "RodapÈ" ; > ;
+            < "1∞ nÌvel do esquema" ; > ;
+            < "2∞ nÌvel do esquema" ; > ;
+            < "3∞ nÌvel do esquema" ; > ;
+            < "4∞ nÌvel do esquema" ; > ;
+            < "5∞ nÌvel do esquema" ; > ;
+            < "6∞ nÌvel do esquema" ; > ;
+            < "7∞ nÌvel do esquema" ; > ;
+            < "8∞ nÌvel do esquema" ; > ;
+            < "9∞ nÌvel do esquema" ; > ;
+            < "10∞ nÌvel do esquema" ; > ;
+            < "1∞ nÌvel de numeraÁ„o" ; > ;
+            < "2∞ nÌvel de numeraÁ„o" ; > ;
+            < "3∞ nÌvel de numeraÁ„o" ; > ;
+            < "4∞ nÌvel de numeraÁ„o" ; > ;
+            < "5∞ nÌvel de numeraÁ„o" ; > ;
+            < "6∞ nÌvel de numeraÁ„o" ; > ;
+            < "7∞ nÌvel de numeraÁ„o" ; > ;
+            < "8∞ nÌvel de numeraÁ„o" ; > ;
+            < "9∞ nÌvel de numeraÁ„o" ; > ;
+            < "10∞ nÌvel de numeraÁ„o" ; > ;
+        };
+        itemlist [ english_us ] =
+        {
+            < "Sheet Header" ; > ;
+            < "Table" ; > ;
+            < "Frame" ; > ;
+            < "Section" ; > ;
+            < "Footnote" ; > ;
+            < "Endnote" ; > ;
+            < "Header" ; > ;
+            < "Footer" ; > ;
+            < " 1st Outline Level" ; > ;
+            < " 2nd Outline Level" ; > ;
+            < " 3rd Outline Level" ; > ;
+            < " 4th Outline Level" ; > ;
+            < " 5th Outline Level" ; > ;
+            < " 6th Outline Level" ; > ;
+            < " 7th Outline Level" ; > ;
+            < " 8th Outline Level" ; > ;
+            < " 9th Outline Level" ; > ;
+            < "10th Outline Level" ; > ;
+            < " 1st Numbering Level" ; > ;
+            < " 2nd Numbering Level" ; > ;
+            < " 3rd Numbering Level" ; > ;
+            < " 4th Numbering Level" ; > ;
+            < " 5th Numbering Level" ; > ;
+            < " 6th Numbering Level" ; > ;
+            < " 7th Numbering Level" ; > ;
+            < " 8th Numbering Level" ; > ;
+            < " 9th Numbering Level" ; > ;
+            < "10th Numbering Level" ; > ;
+        };
+        itemlist [ portuguese_brazilian ] =
+        {
+            < "Tabellen Kopfzeile" ; > ;
+            < "Tabelle" ; > ;
+            < "Rahmen" ; > ;
+            < "Bereich" ; > ;
+            < "Fuﬂnote" ; > ;
+            < "Kopfzeile" ; > ;
+            < "Fusszeile" ; > ;
+            < "1. Ebene Gliederung" ; > ;
+            < "2. Ebene Gliederung" ; > ;
+            < "3. Ebene Gliederung" ; > ;
+            < "4. Ebene Gliederung" ; > ;
+            < "5. Ebene Gliederung" ; > ;
+            < "1. Ebene Numerierung" ; > ;
+            < "2. Ebene Numerierung" ; > ;
+            < "3. Ebene Numerierung" ; > ;
+            < "4. Ebene Numerierung" ; > ;
+            < "5. Ebene Numerierung" ; > ;
+            < "10. Ebene Gliederung" ; > ;
+            < "1. Ebene Numerierung" ; > ;
+            < "2. Ebene Numerierung" ; > ;
+            < "3. Ebene Numerierung" ; > ;
+            < "4. Ebene Numerierung" ; > ;
+            < "5. Ebene Numerierung" ; > ;
+            < "6. Ebene Numerierung" ; > ;
+            < "7. Ebene Numerierung" ; > ;
+            < "8. Ebene Numerierung" ; > ;
+            < "9. Ebene Numerierung" ; > ;
+            < "10. Ebene Numerierung" ; > ;
+        };
+        itemlist [ swedish ] =
+        {
+            < "Sidhuvud tabell" ; > ;
+            < "Tabell" ; > ;
+            < "Ram" ; > ;
+            < "OmrÂde" ; > ;
+            < "Fotnot" ; > ;
+            < "Slutnot" ; > ;
+            < "Sidhuvud" ; > ;
+            < "Sidfot" ; > ;
+            < "1:a dispositionsnivÂn" ; > ;
+            < "2:a dispositionsnivÂn" ; > ;
+            < "3:e dispositionsnivÂn" ; > ;
+            < "4:e dispositionsnivÂn" ; > ;
+            < "5:e dispositionsnivÂn" ; > ;
+            < "2:a dispositionsnivÂn" ; > ;
+            < "7:e dispositionsnivÂn" ; > ;
+            < "8:e dispositionsnivÂn" ; > ;
+            < "9:e dispositionsnivÂn" ; > ;
+            < "10:e dispositionsnivÂn" ; > ;
+            < "1:a numreringsnivÂn" ; > ;
+            < "2:a numreringsnivÂn" ; > ;
+            < "3:e numreringsnivÂn" ; > ;
+            < "4:e numreringsnivÂn" ; > ;
+            < "5:e numreringsnivÂn" ; > ;
+            < "6:e numreringsnivÂn" ; > ;
+            < "7:e numreringsnivÂn" ; > ;
+            < "8:e numreringsnivÂn" ; > ;
+            < "9:e numreringsnivÂn" ; > ;
+            < "10:e numreringsnivÂn" ; > ;
+        };
+        itemlist [ danish ] =
+        {
+            < "Tabelsidehoved" ; > ;
+            < "Tabel" ; > ;
+            < "Ramme" ; > ;
+            < "OmrÂde" ; > ;
+            < "Fodnote" ; > ;
+            < "Slutnote" ; > ;
+            < "Sidehoved" ; > ;
+            < "Sidefod" ; > ;
+            < "1. dispositionsniveau" ; > ;
+            < "2. dispositionsniveau" ; > ;
+            < "3. dispositionsniveau" ; > ;
+            < "4. dispositionsniveau" ; > ;
+            < "5. dispositionsniveau" ; > ;
+            < "6. dispositionsniveau" ; > ;
+            < "7. dispositionsniveau" ; > ;
+            < "8. dispositionsniveau" ; > ;
+            < "9. dispositionsniveau" ; > ;
+            < "10. dispositionsniveau" ; > ;
+            < "1. nummereringsniveau" ; > ;
+            < "2. nummereringsniveau" ; > ;
+            < "3. nummereringsniveau" ; > ;
+            < "4. nummereringsniveau" ; > ;
+            < "5. nummereringsniveau" ; > ;
+            < "6. nummereringsniveau" ; > ;
+            < "7. nummereringsniveau" ; > ;
+            < "8. nummereringsniveau" ; > ;
+            < "9. nummereringsniveau" ; > ;
+            < "10. nummereringsniveau" ; > ;
+        };
+        itemlist [ italian ] =
+        {
+            < "Intestazione tabella" ; > ;
+            < "Tabella" ; > ;
+            < "Cornice" ; > ;
+            < "Sezione" ; > ;
+            < "Nota a piË pagina" ; > ;
+            < "Nota di chiusura" ; > ;
+            < "Riga d'intestazione" ; > ;
+            < "PiË di pagina" ; > ;
+            < "Livello struttura 1" ; > ;
+            < "Livello struttura 2" ; > ;
+            < "Livello struttura 3" ; > ;
+            < "Livello struttura 4" ; > ;
+            < "Livello struttura 5" ; > ;
+            < "Livello struttura 6" ; > ;
+            < "Livello struttura 7 " ; > ;
+            < "Livello struttura 8" ; > ;
+            < "Livello struttura 9" ; > ;
+            < "10∞ livello di struttura" ; > ;
+            < "1∞ livello di numerazione" ; > ;
+            < "2∞ livello di numerazione" ; > ;
+            < "3∞ livello di numerazione" ; > ;
+            < "4∞ livello di numerazione" ; > ;
+            < "5∞ livello di numerazione" ; > ;
+            < "6∞ livello di numerazione" ; > ;
+            < "7∞ livello di numerazione" ; > ;
+            < "8∞ livello di numerazione" ; > ;
+            < "9∞ livello di numerazione" ; > ;
+            < "10∞ livello di numerazione" ; > ;
+        };
+        itemlist [ spanish ] =
+        {
+            < "Encabezamiento de la hoja" ; > ;
+            < "Tabla" ; > ;
+            < "Marco" ; > ;
+            < "Area" ; > ;
+            < "Nota al pie" ; > ;
+            < "Nota al final" ; > ;
+            < "Encabezamiento" ; > ;
+            < "Pie de p·gina" ; > ;
+            < "1∞ nivel del esquema" ; > ;
+            < "2∞ nivel del esquema" ; > ;
+            < "3∞ nivel del esquema" ; > ;
+            < "4∞ nivel del esquema" ; > ;
+            < "5∞ nivel del esquema" ; > ;
+            < "6∞ nivel del esquema" ; > ;
+            < "7∞ nivel del esquema" ; > ;
+            < "8∞ nivel del esquema" ; > ;
+            < "9∞ nivel del esquema" ; > ;
+            < "10∞ nivel del esquema" ; > ;
+            < "1∞ nivel de la numeraciÛn" ; > ;
+            < "2∞ nivel de la numeraciÛn" ; > ;
+            < "3∞ nivel de la numeraciÛn" ; > ;
+            < "4∞ nivel de la numeraciÛn" ; > ;
+            < "5∞ nivel de la numeraciÛn" ; > ;
+            < "6∞ nivel de la numeraciÛn" ; > ;
+            < "7∞ nivel de la numeraciÛn" ; > ;
+            < "8∞ nivel de la numeraciÛn" ; > ;
+            < "9∞ nivel de la numeraciÛn" ; > ;
+            < "10∞ nivel de numeraciÛn" ; > ;
+        };
+        itemlist [ french ] =
+        {
+            < "En-tÍte tableau" ; > ;
+            < "Tableau" ; > ;
+            < "Cadre" ; > ;
+            < "Section" ; > ;
+            < "Note de bas de page" ; > ;
+            < "Note de fin" ; > ;
+            < "En-tÍte" ; > ;
+            < "Pied de page" ; > ;
+            < "1er niveau de plan" ; > ;
+            < "2Ëme niveau de plan" ; > ;
+            < "3Ëme niveau de plan" ; > ;
+            < "4Ëme niveau de plan" ; > ;
+            < "5Ëme niveau de plan" ; > ;
+            < "6Ëme niveau de plan" ; > ;
+            < "7Ëme niveau de plan" ; > ;
+            < "8Ëme niveau de plan" ; > ;
+            < "9Ëme niveau de plan" ; > ;
+            < "10Ëme niveau de plan" ; > ;
+            < "1er niveau de numÈrotation" ; > ;
+            < "2Ëme niveau de numÈrotation" ; > ;
+            < "3Ëme niveau de numÈrotation" ; > ;
+            < "4Ëme niveau de numÈrotation" ; > ;
+            < "5Ëme niveau de numÈrotation" ; > ;
+            < "6Ëme niveau de numÈrotation" ; > ;
+            < "7Ëme niveau de numÈrotation" ; > ;
+            < "8Ëme niveau de numÈrotation" ; > ;
+            < "9Ëme niveau de numÈrotation" ; > ;
+            < "10Ëme niveau de numÈrotation" ; > ;
+        };
+        itemlist [ dutch ] =
+        {
+            < "Koptekst tabel" ; > ;
+            < "Tabel" ; > ;
+            < "Kader" ; > ;
+            < "Bereik" ; > ;
+            < "Voetnoot" ; > ;
+            < "Eindnoot" ; > ;
+            < "Koptekst" ; > ;
+            < "Voettekst" ; > ;
+            < "1. niveau overzicht" ; > ;
+            < "2. niveau overzicht" ; > ;
+            < "3. niveau overzicht" ; > ;
+            < "4. niveau overzicht" ; > ;
+            < "5. niveau nummering" ; > ;
+            < "6. niveau overzicht" ; > ;
+            < "7. niveau overzicht" ; > ;
+            < "8. niveau overzicht" ; > ;
+            < "9. niveau overzicht" ; > ;
+            < "10. niveau overzicht" ; > ;
+            < "1. niveau nummering" ; > ;
+            < "2.niveau nummering" ; > ;
+            < "3.niveau nummering" ; > ;
+            < "4. niveau nummering" ; > ;
+            < "5. niveau nummering" ; > ;
+            < "6. niveau nummering" ; > ;
+            < "7. niveau nummering" ; > ;
+            < "8. niveau nummering" ; > ;
+            < "9. niveau nummering" ; > ;
+            < "10. niveau nummering" ; > ;
+        };
+    ItemList [ chinese_simplified ] =
+    {
+            < "±Ì∏Ò“≥√º" ; > ;
+        < "±Ì∏Ò" ; > ;
+        < "øÚ" ; > ;
+        < "«¯”Ú" ; > ;
+        < "◊¢Ω≈" ; > ;
+        < "Œ≤◊¢" ; > ;
+        < "“≥√º" ; > ;
+        < "“≥Ω≈" ; > ;
+        < "µ⁄“ª∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄∂˛∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄»˝∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄Àƒ∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄ŒÂ∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄¡˘∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄∆ﬂ∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄∞À∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄æ≈∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄ Æ∏ˆ¥Û∏Ÿº∂" ; > ;
+        < "µ⁄“ªº∂±‡∫≈" ; > ;
+        < "µ⁄∂˛º∂±‡∫≈" ; > ;
+        < "µ⁄»˝º∂±‡∫≈" ; > ;
+        < "µ⁄Àƒº∂±‡∫≈" ; > ;
+        < "µ⁄ŒÂº∂±‡∫≈" ; > ;
+        < "µ⁄¡˘º∂±‡∫≈" ; > ;
+        < "µ⁄∆ﬂº∂±‡∫≈" ; > ;
+        < "µ⁄∞Àº∂±‡∫≈" ; > ;
+        < "µ⁄æ≈º∂±‡∫≈" ; > ;
+        < "µ⁄ Æº∂±‡∫≈" ; > ;
+    };
+    ItemList [ russian ] =
+    {
+            < "¬ÂıÌËÈ ÍÓÎÓÌÚËÚÛÎ Ú‡·ÎËˆ˚" ; > ;
+        < "“‡·ÎËˆ‡" ; > ;
+        < "–‡ÏÍ‡" ; > ;
+        < "Œ·Î‡ÒÚ¸" ; > ;
+        < "—ÌÓÒÍ‡" ; > ;
+        < " ÓÌˆÂ‚‡ˇ ÒÌÓÒÍ‡" ; > ;
+        < "¬ÂıÌËÈ ÍÓÎÓÌÚËÚÛÎ" ; > ;
+        < "ÕËÊÌËÈ ÍÓÎÓÌÚËÚÛÎ" ; > ;
+        < "1-˚È ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "2-ÓÈ ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "3-ËÈ ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "4-˚È ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "5-˚È ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "6-ÓÈ ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "7-ÓÈ ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "8-ÓÈ ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "9-˚È ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "10-˚È ÛÓ‚ÂÌ¸ ÒÚÛÍÚÛ˚" ; > ;
+        < "1-˚È ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "2-ÓÈ ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "3-ËÈ ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "4-˚È ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "5-˚È ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "6-ÓÈ ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "7-ÓÈ ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "8-ÓÈ ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "9-˚È ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+        < "10-˚È ÛÓ‚ÂÌ¸ ÌÛÏÂ‡ˆËË" ; > ;
+    };
+    ItemList [ polish ] =
+    {
+            < "Tabele Nag≥Ûwek" ; > ;
+        < "Tabela" ; > ;
+        < "Ramka" ; > ;
+        < "Sekcja" ; > ;
+        < "Przypis dolny" ; > ;
+        < "Przypis koÒc." ; > ;
+        < "Nag≥Ûwek" ; > ;
+        < "Stopka" ; > ;
+        < "1. Poziom kontekstu" ; > ;
+        < "2. poziom konspektu" ; > ;
+        < "3. Poziom konspektu" ; > ;
+        < "4. Poziom konspektu" ; > ;
+        < "5. Poziom konspektu" ; > ;
+        < "6. Poziom konspektu" ; > ;
+        < "7. Poziom konspektu" ; > ;
+        < "8. Poziom konspektu" ; > ;
+        < "9. Poziom konspektu" ; > ;
+        < "10. Poziom konspektu" ; > ;
+        < "1 Poziom numeracji" ; > ;
+        < "2. Poziom numeracji" ; > ;
+        < "3. Poziom numeracji" ; > ;
+        < "4. Poziom numeracji" ; > ;
+        < "5. Poziom numeracji" ; > ;
+        < "6. Poziom numeracji" ; > ;
+        < "7. Poziom numeracji" ; > ;
+        < "8. Poziom numeracji" ; > ;
+        < "9. Poziom numeracji" ; > ;
+        < "10. Poziom numeracji" ; > ;
+    };
+    ItemList [ japanese ] =
+    {
+            < "ï\\ÇÃÕØ¿ﬁ" ; > ;
+        < "ï\\" ; > ;
+        < "òg" ; > ;
+        < "îÕàÕ" ; > ;
+        < "ãríç" ; > ;
+        < "ï∂ññãríç" ; > ;
+        < "ÕØ¿ﬁ" ; > ;
+        < "ÃØ¿" ; > ;
+        < "1⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "2⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "3⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "4⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "5⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "6⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "7⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "8⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "9⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "10⁄ÕﬁŸñ⁄ÇÃ±≥ƒ◊≤›" ; > ;
+        < "1⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "2⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "3⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "4⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "5⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "6⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "7⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "8⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "9⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+        < "10⁄ÕﬁŸñ⁄ÇÃî‘çÜïtÇØ" ; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+            < "™ÌÆÊ≠∂≠∫" ; > ;
+        < "™ÌÆÊ" ; > ;
+        < "§Â¶r§Ë∂Ù" ; > ;
+        < "∞œ∞Ï" ; > ;
+        < "µ˘∏}" ; > ;
+        < "ß¿™`" ; > ;
+        < "≠∂≠∫" ; > ;
+        < "≠∂ß¿" ; > ;
+        < "≤ƒ§@≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§G≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§T≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ•|≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§≠≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§ª≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§C≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§K≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§E≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§Q≠”§j∫ıØ≈" ; > ;
+        < "≤ƒ§@Ø≈Ωs∏π" ; > ;
+        < "≤ƒ§GØ≈Ωs∏π" ; > ;
+        < "≤ƒ§TØ≈Ωs∏π" ; > ;
+        < "≤ƒ•|Ø≈Ωs∏π" ; > ;
+        < "≤ƒ§≠Ø≈Ωs∏π" ; > ;
+        < "≤ƒ§ªØ≈Ωs∏π" ; > ;
+        < "≤ƒ§CØ≈Ωs∏π" ; > ;
+        < "≤ƒ§KØ≈Ωs∏π" ; > ;
+        < "≤ƒ§EØ≈Ωs∏π" ; > ;
+        < "≤ƒ§QØ≈Ωs∏π" ; > ;
+    };
+    ItemList [ arabic ] =
+    {
+            < "—√” «·ÃœÊ·" ; > ;
+        < "ÃœÊ·" ; > ;
+        < "≈ÿ«—" ; > ;
+        < "‰ÿ«ﬁ" ; > ;
+        < "Õ«‘Ì… ”›·Ì…" ; > ;
+        < " ⁄·Ìﬁ Œ «„Ì" ; > ;
+        < "—√” «·’›Õ…" ; > ;
+        < " –ÌÌ· «·’›Õ…" ; > ;
+        < "√Ê· „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "À«‰Ì „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "À«·À „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "—«»⁄ „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "Œ«„” „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "”«œ” „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "”«»⁄ „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "À«„‰ „” ÊÏ  ﬁ”Ì„" ; > ;
+        < " «”⁄ „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "⁄«‘— „” ÊÏ  ﬁ”Ì„" ; > ;
+        < "√Ê· „” ÊÏ  —ﬁÌ„" ; > ;
+        < "À«‰Ì „” ÊÏ  —ﬁÌ„" ; > ;
+        < "À«·À „” ÊÏ  —ﬁÌ„" ; > ;
+        < "—«»⁄ „” ÊÏ  —ﬁÌ„" ; > ;
+        < "Œ«„” „” ÊÏ  —ﬁÌ„" ; > ;
+        < "”«œ” „” ÊÏ  —ﬁÌ„" ; > ;
+        < "”«»⁄ „” ÊÏ  —ﬁÌ„" ; > ;
+        < "À«„‰ „” ÊÏ  —ﬁÌ„" ; > ;
+        < " «”⁄ „” ÊÏ  —ﬁÌ„" ; > ;
+        < "⁄«‘— „” ÊÏ  —ﬁÌ„" ; > ;
+    };
+    ItemList [ greek ] =
+    {
+            < " Âˆ·Îﬂ‰· ﬂÌ·Í·" ; > ;
+        < "–ﬂÌ·Í·Ú" ; > ;
+        < "–ÂÒﬂ„Ò·ÏÏ·" ; > ;
+        < "≈Ì¸ÙÁÙ·" ; > ;
+        < "’ÔÛÁÏÂﬂ˘ÛÁ" ; > ;
+        < "”ÁÏÂﬂ˘ÛÁ Ù›ÎÔıÚ" ; > ;
+        < " Âˆ·Îﬂ‰·" ; > ;
+        < "’ÔÛ›ÎÈ‰Ô" ; > ;
+        < "1Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "2Ô. ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "3Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "4Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "5Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "6Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "7Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "8Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "9Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "10Ô ≈ﬂÂ‰Ô ıÔ‰È·ﬂÒÂÛÁÚ" ; > ;
+        < "1Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "2Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "3Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "4Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "5Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "6Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "7Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "8Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "9Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+        < "10Ô. ≈ﬂÂ‰Ô ·ÒﬂËÏÁÛÁÚ" ; > ;
+    };
+    ItemList [ korean ] =
+    {
+            < "Ω√∆Æ ∏”∏Æ∏ª" ; > ;
+        < "«•" ; > ;
+        < "≈ÿΩ∫∆Æ π⁄Ω∫" ; > ;
+        < "±∏ø™" ; > ;
+        < "∞¢¡÷" ; > ;
+        < "πÃ¡÷" ; > ;
+        < "∏”∏Æ±€" ; > ;
+        < "πŸ¥⁄±€" ; > ;
+        < "1π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "2π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "3π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "4π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "5π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "6π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "7π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "8π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "9π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "10π¯¬∞∞≥ø‰ºˆ¡ÿ" ; > ;
+        < "1π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "2π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "3π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "4π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "5π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "6π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "7π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "8π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "9π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+        < "10π¯¬∞ π¯»£ ∏≈±‚±‚ ºˆ¡ÿ" ; > ;
+    };
+    ItemList [ turkish ] =
+    {
+            < "Tablo ba˛l˝˝" ; > ;
+        < "Tablo" ; > ;
+        < "«erÁeve" ; > ;
+        < "Bˆl¸m" ; > ;
+        < "Dipnot" ; > ;
+        < "Sonnot" ; > ;
+        < "‹st bilgi" ; > ;
+        < "Alt bilgi" ; > ;
+        < "1. Anahat d¸zeyi" ; > ;
+        < "2. Anahat d¸zeyi" ; > ;
+        < "3. Anahat d¸zeyi" ; > ;
+        < "4. Anahat d¸zeyi" ; > ;
+        < "5. Anahat d¸zeyi" ; > ;
+        < "6. Anahat d¸zeyi" ; > ;
+        < "7. Anahat d¸zeyi" ; > ;
+        < "8. Anahat d¸zeyi" ; > ;
+        < "9. Anahat d¸zeyi" ; > ;
+        < "10. Anahat d¸zeyi" ; > ;
+        < "1. Numaralama d¸zeyi" ; > ;
+        < "2. Numaralama d¸zeyi" ; > ;
+        < "3. Numaralama d¸zeyi" ; > ;
+        < "4. Numaralama d¸zeyi" ; > ;
+        < "5. Numaralama d¸zeyi" ; > ;
+        < "6. Numaralama d¸zeyi" ; > ;
+        < "7. Numaralama d¸zeyi" ; > ;
+        < "8. Numaralama d¸zeyi" ; > ;
+        < "9. Numaralama d¸zeyi" ; > ;
+        < "10. Numaralama d¸zeyi" ; > ;
+    };
+    ItemList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    String STR_NOTEMPL
+    {
+        Text = "<keine>" ;
+        Text [ English ] = "<none>" ;
+        Text [ dutch ] = "<geen>" ;
+        Text [ english_us ] = "<none>" ;
+        Text [ italian ] = "<nessuno>" ;
+        Text [ spanish ] = "<ninguno>" ;
+        Text [ french ] = "<aucun(e)>" ;
+        Text [ swedish ] = "<ingen>" ;
+        Text [ danish ] = "<ingen>" ;
+        Text [ portuguese ] = "<nenhum>" ;
+        Text [ portuguese_brazilian ] = "<keine>" ;
+        Text[ chinese_simplified ] = "<Œﬁ>";
+        Text[ russian ] = "<ÌÂÚ>";
+        Text[ polish ] = "<brak>";
+        Text[ japanese ] = "<Ç»Çµ>";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "<µL>";
+        Text[ arabic ] = "<»œÊ‰>";
+        Text[ greek ] = "<Í·Ì›Ì·>";
+        Text[ korean ] = "<æ¯¿Ω>";
+        Text[ turkish ] = "<yok>";
+    };
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,199 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bookmark.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "misc.hrc"
+#include "bookmark.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_INSERT_BOOKMARK
+{
+    HelpID = FN_INSERT_BOOKMARK ;
+    OUTPUTSIZE = TRUE ;
+    Size = MAP_APPFONT ( 179 , 96 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Textmarke einfügen : Textmarke einf³gen */
+    TEXT = "Textmarke einfügen" ;
+    TEXT [ English ] = "Insert bookmark" ;
+    TEXT [ norwegian ] = "Sett inn bokmerke" ;
+    TEXT [ italian ] = "Inserisci segnalibro" ;
+    TEXT [ portuguese_brazilian ] = "Inserir marca" ;
+    TEXT [ portuguese ] = "Inserir marcador de texto" ;
+    TEXT [ finnish ] = "Lisää kirjanmerkki" ;
+    TEXT [ danish ] = "Indsæt tekstmarkering" ;
+    TEXT [ french ] = "Insertion d'un repère de texte" ;
+    TEXT [ swedish ] = "Infoga bokmärke" ;
+    TEXT [ dutch ] = "Tekstmarkering invoegen" ;
+    TEXT [ spanish ] = "Insertar marca" ;
+    TEXT [ english_us ] = "Insert Bookmark" ;
+    MOVEABLE = TRUE ;
+    SVLOOK = TRUE ;
+    OkButton BT_OK
+    {
+        DISABLE = TRUE ;
+        Pos = MAP_APPFONT ( 123 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TABSTOP = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 123 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TABSTOP = TRUE ;
+    };
+    ComboBox CB_BOOKMARK
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 99 , 70 ) ;
+        TABSTOP = TRUE ;
+        AutoHScroll = TRUE ;
+        SORT = TRUE ;
+    };
+    PushButton BT_DELETE
+    {
+        Pos = MAP_APPFONT ( 123 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        TEXT = "~Löschen" ;
+        TEXT [ English ] = "~Delete" ;
+        TEXT [ norwegian ] = "~Slett" ;
+        TEXT [ italian ] = "~Elimina" ;
+        TEXT [ portuguese_brazilian ] = "~Apagar" ;
+        TEXT [ portuguese ] = "E~liminar" ;
+        TEXT [ finnish ] = "~Poista" ;
+        TEXT [ danish ] = "Slet" ;
+        TEXT [ french ] = "~Supprimer" ;
+        TEXT [ swedish ] = "~Radera" ;
+        TEXT [ dutch ] = "~Wissen" ;
+        TEXT [ spanish ] = "~Eliminar" ;
+        TEXT [ english_us ] = "~Delete" ;
+        TABSTOP = TRUE ;
+        DISABLE = TRUE ;
+        TEXT[ chinese_simplified ] = "É¾³ı(~D)";
+        TEXT[ russian ] = "Óäàëèòü";
+        TEXT[ polish ] = "~Usuñ";
+        TEXT[ japanese ] = "íœ(~D)";
+        TEXT[ chinese_traditional ] = "§R°£(~D)";
+        TEXT[ greek ] = "ÄéáãñáöŞ";
+        TEXT[ korean ] = "»èÁ¦(~D)";
+        TEXT[ arabic ] = "ÍĞİ";
+        TEXT[ turkish ] = "~Sil";
+    };
+    GroupBox GB_BOOKMARK
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 111 , 87 ) ;
+        TEXT = "Textmarken" ;
+        TEXT [ English ] = "Bookmarks" ;
+        TEXT [ norwegian ] = "Bokmerker" ;
+        TEXT [ italian ] = "Segnalibri" ;
+        TEXT [ portuguese_brazilian ] = "Marcas" ;
+        TEXT [ portuguese ] = "Marcadores de texto" ;
+        TEXT [ finnish ] = "Kirjanmerkit" ;
+        TEXT [ danish ] = "Tekstmarkeringer" ;
+        TEXT [ french ] = "Repères de texte" ;
+        TEXT [ swedish ] = "Bokmärken" ;
+        TEXT [ dutch ] = "Tekstmarkeringen" ;
+        TEXT [ spanish ] = "Marcas de texto" ;
+        TEXT [ english_us ] = "Bookmarks" ;
+        TEXT[ chinese_simplified ] = "ÊéÇ©";
+        TEXT[ russian ] = "Çàêëàäêè";
+        TEXT[ polish ] = "Zak³adki";
+        TEXT[ japanese ] = "Ã·½ÄÏ°¸";
+        TEXT[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
+        TEXT[ greek ] = "Óåëéäïäåßêôåò";
+        TEXT[ korean ] = "Ã¥ °¥ÇÇ";
+        TEXT[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
+        TEXT[ turkish ] = "Metin işareti";
+    };
+    TEXT[ chinese_simplified ] = "²åÈëÊéÇ©";
+    TEXT[ russian ] = "Âñòàâêà çàêëàäîê";
+    TEXT[ polish ] = "Wstaw zak³adkê";
+    TEXT[ japanese ] = "Ã·½ÄÏ°¸‚Ì‘}“ü";
+    TEXT[ chinese_traditional ] = "´¡¤J¤º¤å¼ĞÅÒ";
+    TEXT[ greek ] = "ÅéóáãùãŞ óåëéäïäåßêôç";
+    TEXT[ korean ] = "Ã¥ °¥ÇÇ »ğÀÔ";
+    TEXT[ arabic ] = "ÅÏÑÇÌ ÅÔÇÑÉ ãÑÌÚíÉ";
+    TEXT[ turkish ] = "Metin işareti ekle";
+};
+String STR_REMOVE_WARNING
+{
+    Text = "Die folgenden Zeichen sind nicht zulässig und wurden deshalb entfernt: ";
+    Text [English] = "The following characters are not valid and have been removed: ";
+    Text[ english_us ] = "The following characters are not valid and have been removed: ";
+    Text[ portuguese ] = "Os seguintes caracteres foram eliminados porque não são válidos: ";
+    Text[ russian ] = "Ñëåäóşùèå çíàêè íå äîïóñêàşòñÿ è ïîıòîìó áóäóò óäàëåíû: ";
+    Text[ greek ] = "Ïé áêüëïõèïé ÷áñáêôŞñåò İ÷ïõí äéáãñáöåß åğåéäŞ äåí åßíáé İãêõñïé. ";
+    Text[ dutch ] = "De volgende tekens zijn niet toegestaan en werden daarom verwijderd. ";
+    Text[ french ] = "Les caractères suivants ont été supprimés car ils ne sont pas permis :  ";
+    Text[ spanish ] = "Los siguientes caracteres han sido eliminados porque no se permiten:  ";
+    Text[ italian ] = "I caratteri seguenti non sono ammessi e per questo eliminati. ";
+    Text[ danish ] = "De følgende tegn er ikke tilladte og er derfor blevet fjernet: ";
+    Text[ swedish ] = "Följande tecken är inte tillåtna och har därför tagits bort:  ";
+    Text[ polish ] = "Nastêpuj¹cy znak jest niedozwolony i zosta³ dlatego usuniêty: ";
+    Text[ portuguese_brazilian ] = "The following characters are not valid and have been removed: ";
+    Text[ japanese ] = "Ÿ‚Ì•¶š‚Í‹–‰Â‚³‚ê‚Ä‚¢‚È‚¢‚Ì‚Åœ‹‚³‚ê‚Ü‚µ‚½B ";
+    Text[ korean ] = "´ÙÀ½ÀÇ ¹®ÀÚµéÀº À¯È¿ÇÏÁö ¾Ê¾Æ¼­ Á¦°ÅµÇ¾ú½À´Ï´Ù: ";
+    Text[ chinese_simplified ] = "ÏÂÁĞ×Ö·ûÎŞĞ§ÇÒÒÑ¾­±»É¾³ı£º ";
+    Text[ chinese_traditional ] = "¤U¦Cªº¦r«¬µL®Ä¦Ó³Q§R°£¡G ";
+    Text[ arabic ] = "ÇáÃÍÑİ ÇáÊÇáíÉ ÛíÑ ÕÇáÍÉ¡ áåĞÇ Êã ÍĞİåÇ: ";
+    Text[ turkish ] = "Aşağıdaki karakterler geçerli değiller ve bu nedenle çıkartıldılar: ";
+};
+

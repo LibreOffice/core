@@ -1,0 +1,110 @@
+########################################################################
+#	makescript UI; OK 8.12.1992
+########################################################################
+set DEF_MAKE_SCRIPT nmake
+
+FOR i IN {2}
+	If "{i}" =~ /CO/;	set DEF_MAKE_SCRIPT cmake
+						Break; End
+	If "{i}" =~ /FU/;	set DEF_MAKE_SCRIPT nmake
+						Break; End
+END
+
+echo "-------------------------------"
+echo "MUi        © StarDivision  1992"
+echo {DEF_MAKE_SCRIPT} {1}
+echo "-------------------------------"
+
+############################################################
+set exit 0
+export exit
+set curdir `cd`
+
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:app
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:cctrl
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:chrdlg
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:config
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:dbui
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:dialog
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:dochdl
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:docvw
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:fldui
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:fmtui
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:frmdlg
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:globdoc
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:grfdlg
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:index
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:lingu
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:misc
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:prndlg
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:ribbar
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:shells
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:table
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:tabwin
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:uiview
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:utlui
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:window
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:wizard
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd "{PRJ_ROOT}SW:SOURCE:UI:wrtsh
+{DEF_MAKE_SCRIPT} {Parameters}
+
+cd {curdir}
+
+beep 1c,1
+beep 1d,1
+beep 1e,1
+beep 1f,1
+beep 1g,1
+beep 1a,1
+############################################################

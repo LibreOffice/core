@@ -1,0 +1,1169 @@
+/*************************************************************************
+ *
+ *  $RCSfile: glossary.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "misc.hrc"
+#include "glossary.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ // #define DLG_GLOSSARY 256
+ModalDialog DLG_GLOSSARY
+{
+    HelpID = FN_GLOSSARY_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 375 , 164 ) ;
+    Text = "AutoText" ;
+    Text [ ENGLISH ] = "AutoText" ;
+    Text [ norwegian ] = "AutoTekst" ;
+    Text [ italian ] = "Testo automatico" ;
+    Text [ portuguese_brazilian ] = "Texto autom tico" ;
+    Text [ portuguese ] = "AutoTexto" ;
+    Text [ finnish ] = "Automaattiteksti" ;
+    Text [ danish ] = "AutoTekst" ;
+    Text [ french ] = "AutoTexte" ;
+    Text [ swedish ] = "AutoText" ;
+    Text [ dutch ] = "AutoTekst" ;
+    Text [ spanish ] = "AutoTexto" ;
+    Text [ english_us ] = "AutoText" ;
+    Moveable = TRUE ;
+    GroupBox GB_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 94 , 155 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Preview" ;
+        Text[ english_us ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "Aperçu";
+        Text[ spanish ] = "Previsualización";
+        Text[ italian ] = "Anteprima";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Förhandsvisning";
+        Text[ polish ] = "Podgl¹d";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "ÌßÚËŞ­°";
+        Text[ korean ] = "¹Ì¸®º¸±â";
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_traditional ] = "¹wÄı";
+        Text[ arabic ] = "ÇáãÚÇíäÉ";
+        Text[ turkish ] = "Önizleme";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 82 , 124 ) ;
+    };
+    CheckBox CB_SHOW_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 12 , 143 ) ;
+        Size = MAP_APPFONT ( 82 , 12 ) ;
+        Text = "~Vorschau anzeigen" ;
+        Text [ ENGLISH ] = "Show ~preview" ;
+        Text[ english_us ] = "Sho~w preview";
+        Text[ portuguese ] = "~Mostrar Previsualizar";
+        Text[ russian ] = "Âêëş÷èòü ïğîñìîòğ";
+        Text[ greek ] = "ÅìöÜíéóç ğñïåğéóêüğçóçò";
+        Text[ dutch ] = "~Voorbeeld weergeven";
+        Text[ french ] = "Afficher l'~aperçu";
+        Text[ spanish ] = "Mostrar pre~visualización";
+        Text[ italian ] = "Mostra ~anteprima";
+        Text[ danish ] = "Vis eksempel";
+        Text[ swedish ] = "Visa förhandsvisning";
+        Text[ polish ] = "Wyœwietl podgl¹d";
+        Text[ portuguese_brazilian ] = "Show ~preview";
+        Text[ japanese ] = "ÌßÚËŞ­°•\\¦(~P)";
+        Text[ korean ] = "¹Ì¸®º¸±â º¸±â(~W)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾Ô¤ÊÓ(~P)";
+        Text[ chinese_traditional ] = "±Ä¥Î¹wÄı(~P)";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáãÚÇíäÉ";
+        Text[ turkish ] = "Önizlemeyi görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_INSERT_TIP
+    {
+        Pos = MAP_APPFONT ( 112 , 12 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Rest des Namens bei der Eingabe als Tipp anzeigen" ;
+        Text [ ENGLISH ] = "Show the rest of the name as tip while typing" ;
+        Text [ english_us ] = "~Display remainder of name as suggestion while typing" ;
+        Text [ italian ] = "Visualizza il resto del nome nella digitazione come suggerimento" ;
+        Text [ spanish ] = "~Muestra el resto del nombre como sugerencia durante la entrada" ;
+        Text [ french ] = "Lors de la saisie, afficher le nom complet sous forme d'~infobulle" ;
+        Text [ dutch ] = "~Rest van de naam bij invoer als tip weergeven" ;
+        Text [ swedish ] = "~Visa resten av namnet som tips vid inmatningen" ;
+        Text [ danish ] = "Vis resten af navnet som tip under skrivning" ;
+        Text [ portuguese_brazilian ] = "~Rest des Namens bei der Eingabe als Tip anzeigen" ;
+        Text [ portuguese ] = "Mostrar ~resto do nome durante a digitação como sugestão" ;
+        Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾ÊäÈëÎÄÌáÊ¾(~D)";
+        Text[ russian ] = "Ïğè ââîäå ïîêàçûâàòü âåñü àâòîòåêñò êàê ïîäñêàçêó";
+        Text[ polish ] = "Wyœwietl pozosta³¹ czêœæ nazwy przy wprowadzaniu jako wskazówkê";
+        Text[ japanese ] = "“ü—Í’†‚É“ü—Íx‰‡€–Ú–¼‚ğ•\\¦‚·‚é(~D)";
+        Text[ chinese_traditional ] = "¦Û°Ê§¹¦¨Åã¥Ü(~D)";
+        Text[ arabic ] = "ÚÑÖ ÈŞíÉ ÅÏÎÇá ÇáäÕ ÇáÊáŞÇÆí ÃËäÇÁ ÇáßÊÇÈÉ Úáì Ôßá ÊáãíÍ";
+        Text[ greek ] = "ÅìöÜíéóç ôïõ õğüëïéğïõ ìİ~ñïõò ôïõ ïíüìáôïò ùò õğüäåéîç êáôÜ ôçí äáêôõëïãñÜöçóç";
+        Text[ korean ] = "±âÀÔÇÏ´Â µ¿¾È  Á¦¾ÈÀ¸·Î¼­ ³ª¸ÓÁö ÀÌ¸§ Ç¥½Ã(~D)";
+        Text[ turkish ] = "Giriş sırasında adın tamamını öneri olarak görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 112 , 31 ) ;
+//        Pos = MAP_APPFONT ( 80 , 31 ) ;
+        Size = MAP_APPFONT ( 27 , 8 ) ;
+        Text = "~Name" ;
+        Text [ ENGLISH ] = "~Name" ;
+        Text [ norwegian ] = "~Navn" ;
+        Text [ italian ] = "~Nome" ;
+        Text [ portuguese_brazilian ] = "~Nome" ;
+        Text [ portuguese ] = "~Nome" ;
+        Text [ finnish ] = "~Nimi" ;
+        Text [ danish ] = "Navn" ;
+        Text [ french ] = "~Nom" ;
+        Text [ swedish ] = "~Namn" ;
+        Text [ dutch ] = "~Naam" ;
+        Text [ spanish ] = "N~ombre" ;
+        Text [ english_us ] = "~Name" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ russian ] = "Àâòîòåêñò";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "€–Ú–¼(~N)";
+        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ greek ] = "¼íïìá";
+        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ turkish ] = "Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 145 , 29 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_SHORTNAME
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 248 , 31 ) ;
+        Size = MAP_APPFONT ( 32 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Kürzel : ~K³rzel */
+        Text = "~Kürzel" ;
+        Text [ ENGLISH ] = "~Shortcut" ;
+        Text [ norwegian ] = "+++~Shortcut" ;
+        Text [ italian ] = "Sigla" ;
+        Text [ portuguese_brazilian ] = "~Atalho" ;
+        Text [ portuguese ] = "~Atalho" ;
+        Text [ finnish ] = "~Pikatoiminto" ;
+        Text [ danish ] = "Genvej" ;
+        Text [ french ] = "~Raccourci" ;
+        Text [ swedish ] = "~Förkortning" ;
+        Text [ dutch ] = "~Afkorting" ;
+        Text [ spanish ] = "~Abrev." ;
+        Text [ english_us ] = "~Shortcut" ;
+        Right = TRUE ;
+        Text[ chinese_simplified ] = "ËõĞ´(~S)";
+        Text[ russian ] = "Ñîêğàùåíèå";
+        Text[ polish ] = "Inicja³y";
+        Text[ japanese ] = "¼®°Ä¶¯Ä·°";
+        Text[ chinese_traditional ] = "ÁY¼g(~S)";
+        Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
+        Text[ greek ] = "Óõíôüìåõóç";
+        Text[ korean ] = "¹Ù·Î°¡±â(~S)";
+        Text[ turkish ] = "Kısaltma";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_SHORTNAME
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 286 , 29 ) ;
+        Size = MAP_APPFONT ( 21 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    Control LB_BIB
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 44 ) ;
+        Size = MAP_APPFONT ( 195 , 78 ) ;
+        TabStop = TRUE ;
+         //        Sort = TRUE ;
+         //        CurPos = 0 ;
+        String ST_READONLY
+        {
+            Text = "schreibgeschützt" ;
+            Text [ ENGLISH ] = "readonly" ;
+        };
+    };
+    GroupBox GB_GLOSSARY
+    {
+        Pos = MAP_APPFONT ( 106 , 3 ) ;
+        Size = MAP_APPFONT ( 207 , 125 ) ;
+        Text = "AutoText" ;
+        Text [ ENGLISH ] = "AutoText" ;
+        Text [ norwegian ] = "AutoTekst" ;
+        Text [ italian ] = "Testo automatico" ;
+        Text [ portuguese_brazilian ] = "Texto autom tico" ;
+        Text [ portuguese ] = "AutoTexto" ;
+        Text [ finnish ] = "Automaattiteksti" ;
+        Text [ danish ] = "AutoTekst" ;
+        Text [ french ] = "AutoTexte" ;
+        Text [ swedish ] = "AutoText" ;
+        Text [ dutch ] = "AutoTekst" ;
+        Text [ spanish ] = "AutoTexto" ;
+        Text [ english_us ] = "AutoText" ;
+        Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯";
+        Text[ russian ] = "Àâòîòåêñò";
+        Text[ polish ] = "Autotekst";
+        Text[ japanese ] = "“ü—Íx‰‡";
+        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°";
+        Text[ arabic ] = "äÕ ÊáŞÇÆí";
+        Text[ greek ] = "ÁõôïÊåßìåíï";
+        Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ®";
+        Text[ turkish ] = "Otomatik metin";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_FILE_REL
+    {
+        Pos = MAP_APPFONT ( 114 , 144 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Text = "Im ~Dateisystem" ;
+        Text [ ENGLISH ] = "on ~filesystem" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~File system" ;
+        Text [ italian ] = "Al file system" ;
+        Text [ spanish ] = "En el ~sistema de archivos" ;
+        Text [ french ] = "Dans le système de ~fichiers" ;
+        Text [ dutch ] = "In b~estandsysteem" ;
+        Text [ swedish ] = "I ~filsystem" ;
+        Text [ danish ] = "i ~filsystemet" ;
+        Text [ portuguese_brazilian ] = "Im ~Dateisystem" ;
+        Text [ portuguese ] = "~Sistema do ficheiro" ;
+        Text[ chinese_simplified ] = "ÔÚÎÄ¼şÏµÍ³ÄÚ(~F)";
+        Text[ russian ] = "Â ñèñòåìå ôàéëîâ";
+        Text[ polish ] = "W systemie plików";
+        Text[ japanese ] = "Ì§²Ù ¼½ÃÑ‚É(~F)";
+        Text[ chinese_traditional ] = "ÀÉ®×¨t²Î(~F)";
+        Text[ arabic ] = "İí äÙÇã Çáãáİ";
+        Text[ greek ] = "óôï óıóôçìá áñ÷åßùí";
+        Text[ korean ] = "ÆÄÀÏ ½Ã½ºÅÛ(~F)";
+        Text[ turkish ] = "Dosya sistemi";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_NET_REL
+    {
+        Pos = MAP_APPFONT ( 209 , 144 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Text = "Im ~Internet" ;
+        Text [ ENGLISH ] = "on int~ernet" ;
+        Text [ english_us ] = "Inte~rnet" ;
+        Text [ italian ] = "In ~Internet" ;
+        Text [ spanish ] = "En I~nternet" ;
+        Text [ french ] = "Sur l'~Internet" ;
+        Text [ dutch ] = "In Interne~t" ;
+        Text [ swedish ] = "På ~Internet" ;
+        Text [ danish ] = "på ~Internettet" ;
+        Text [ portuguese_brazilian ] = "Im ~Internet" ;
+        Text [ portuguese ] = "~Internet" ;
+        Text[ chinese_simplified ] = "ÔÚ¹ú¼Ê»¥ÁªÍøÄÚ(~R)";
+        Text[ russian ] = "Â Èíòåğíåòå";
+        Text[ polish ] = "W Int~ernecie";
+        Text[ japanese ] = "²İÀ°È¯Ä(~R)";
+        Text[ chinese_traditional ] = "Inte~rnet";
+        Text[ arabic ] = "İí ÇáÅäÊÑäÊ";
+        Text[ greek ] = "Óôï Internet";
+        Text[ korean ] = "ÀÎÅÍ³İ(~R)";
+        Text[ turkish ] = "Internet";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_RELATIVE
+    {
+        Pos = MAP_APPFONT ( 106 , 134 ) ;
+        Size = MAP_APPFONT ( 207 , 24 ) ;
+        Text= "Verknüpfungen relativ speichern";
+        Text[ italian ] = "Salvare i collegamenti in modo relativo";
+        Text[ portuguese_brazilian ] = "Verknüpfungen relativ speichern";
+        Text[ portuguese ] = "Guardar ligações relacionadas com";
+        Text[ danish ] = "Gem kæderne relativt";
+        Text[ french ] = "Enregistrement relatif des liens";
+        Text[ swedish ] = "Spara länkar relativt";
+        Text[ dutch ] = "Koppelingen relatief opslaan";
+        Text[ spanish ] = "Guardar vínculos relativamente";
+        Text[ english_us ] = "Save links relative to";
+    Text[ chinese_simplified ] = "´æÅÌÏà¶ÔµÄÁ´½Ó";
+        Text = "Verknüpfungen relativ speichern" ;
+    Text[ chinese_traditional ] = "Àx¦s¬Û¹ïªº±¶®|";
+        Text[ russian ] = "Ñîõğàíèòü ññûëêè îòíîñ.";
+        Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç óõíäİóåùí";
+        Text[ polish ] = "Zapisz ³¹cza wzglêdnie";
+        Text[ japanese ] = "Øİ¸‚ÌŠî€‘ÎÛ‚ğ•Û‘¶";
+        Text[ korean ] = "¿¡°üÇÑ ¿¬°á ÀúÀå";
+        Text[ arabic ] = "ÍİÙ ÇáÇÑÊÈÇØÇÊ ÍİÙÇğ äÓÈíÇğ";
+        Text[ turkish ] = "Bağlantıları göreceli kaydet";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton PB_INSERT
+    {
+        Pos = MAP_APPFONT ( 319 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen : ~Einf³gen */
+        Text = "~Einfügen" ;
+        Text [ ENGLISH ] = "~Insert" ;
+        Text [ norwegian ] = "~Insert" ;
+        Text [ italian ] = "~Inserisci" ;
+        Text [ portuguese_brazilian ] = "~Inserir" ;
+        Text [ portuguese ] = "~Inserir" ;
+        Text [ finnish ] = "~Lisää" ;
+        Text [ danish ] = "~Indsæt" ;
+        Text [ french ] = "~Insérer" ;
+        Text [ swedish ] = "Infog~a" ;
+        Text [ dutch ] = "~Invoegen" ;
+        Text [ spanish ] = "~Insertar" ;
+        Text [ english_us ] = "~Insert" ;
+        /* ### ACHTUNG: Neuer Text in Resource? Fügt den aktuellen Textblock ein und schließt das Dialogfeld : F³gt den aktuellen Textblock ein und schlie˜t das Dialogfeld */
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ chinese_simplified ] = "²åÈë(~I)";
+        Text[ russian ] = "Âñòàâèòü";
+        Text[ polish ] = "Wstaw";
+        Text[ japanese ] = "‘}“ü(~I)";
+        Text[ russian ] = "Âñòàâèòü";
+    Text[ polish ] = "Wstaw";
+    Text[ japanese ] = "‘}“ü(~I)";
+    Text[ chinese_simplified ] = "²åÈë(~I)";
+    Text[ chinese_traditional ] = "´¡¤J(~I)";
+        Text[ arabic ] = "ÅÏÑÇÌ";
+        Text[ greek ] = "ÅéóáãùãŞ";
+        Text[ korean ] = "»ğÀÔ(~I)";
+        Text[ turkish ] = "Ekle";
+        Text[ language_user1 ] = " ";
+    };
+    CancelButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 319 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
+        Text = "~Schließen" ;
+        Text [ ENGLISH ] = "~Close" ;
+        Text [ norwegian ] = "~Lukk" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ portuguese_brazilian ] = "~Fechar" ;
+        Text [ portuguese ] = "~Fechar" ;
+        Text [ finnish ] = "~Sulje" ;
+        Text [ danish ] = "~Luk" ;
+        Text [ french ] = "~Fermer" ;
+        Text [ swedish ] = "~Stäng" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ english_us ] = "~Close" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ russian ] = "Çàêğûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ arabic ] = "ÅÛáÇŞ";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´İ±â(~C)";
+        Text[ turkish ] = "Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 319 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    MenuButton PB_EDIT
+    {
+        Pos = MAP_APPFONT ( 319 , 60 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "AutoTe~xt" ;
+        Text [ ENGLISH ] = "AutoTe~xt" ;
+        Text [ norwegian ] = "AutoTekst" ;
+        Text [ italian ] = "Testo auto." ;
+        Text [ portuguese_brazilian ] = "Texto autom tico" ;
+        Text [ portuguese ] = "AutoTe~xto" ;
+        Text [ finnish ] = "Automaattiteksti" ;
+        Text [ danish ] = "AutoTekst" ;
+        Text [ french ] = "~AutoTexte" ;
+        Text [ swedish ] = "AutoTe~xt" ;
+        Text [ dutch ] = "~AutoTekst" ;
+        Text [ spanish ] = "AutoTe~xto" ;
+        Text [ english_us ] = "AutoTe~xt" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯(~X)";
+        Text[ russian ] = "Àâòîòåêñò";
+        Text[ polish ] = "Autote~kst";
+        Text[ japanese ] = "“ü—Íx‰‡(~X)";
+        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°(~X)";
+        Text[ arabic ] = "äÕ ÊáŞÇÆí";
+        Text[ greek ] = "Áõôï~Êåßìåíï";
+        Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ®(~X)";
+        Text[ turkish ] = "Otomatik metin";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_BIB
+    {
+        Pos = MAP_APPFONT ( 319 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Bereiche..." ;
+        Text [ ENGLISH ] = "~Groups..." ;
+        Text [ norwegian ] = "~Grupper..." ;
+        Text [ italian ] = "Categorie..." ;
+        Text [ portuguese_brazilian ] = "~Grupos..." ;
+        Text [ portuguese ] = "~Categorias..." ;
+        Text [ finnish ] = "~Ryhmät..." ;
+        Text [ danish ] = "Områder..." ;
+        Text [ french ] = "Caté~gories..." ;
+        Text [ swedish ] = "~Områden..." ;
+        Text [ dutch ] = "~Bereiken..." ;
+        Text [ spanish ] = "~Areas..." ;
+        Text [ english_us ] = "C~ategories..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "·ÖÀà(~A)...";
+        Text[ russian ] = "Êàòåãîğèè...";
+        Text[ polish ] = "Obszary...";
+        Text[ japanese ] = "”ÍˆÍ(~A)...";
+        Text[ chinese_traditional ] = "°Ï°ì(~A)...";
+        Text[ arabic ] = "İÆÇÊ...";
+        Text[ greek ] = "Êáôçãïñßåò...";
+        Text[ korean ] = "ºĞ·ùÇ×¸ñ(~A)...";
+        Text[ turkish ] = "Bölümler...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_PATH
+    {
+        Pos = MAP_APPFONT ( 319 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Pfad..." ;
+        Text [ ENGLISH ] = "~Path..." ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Atalho..." ;
+        Text [ english_us ] = "~Path..." ;
+        Text [ portuguese_brazilian ] = "~Pfad..." ;
+        Text [ swedish ] = "Sök~väg..." ;
+        Text [ danish ] = "Sti..." ;
+        Text [ italian ] = "~Percorso..." ;
+        Text [ spanish ] = "~Ruta..." ;
+        Text [ french ] = "~Chemin..." ;
+        Text [ dutch ] = "~Pad..." ;
+        Text[ chinese_simplified ] = "Â·¾¶(~P)...";
+        Text[ russian ] = "Ïóòü...";
+        Text[ polish ] = "Œcie¿ka...";
+        Text[ japanese ] = "Êß½(~P)...";
+        Text[ chinese_traditional ] = "¸ô®|(~P)...";
+        Text[ arabic ] = "ÇáãÓÇÑ...";
+        Text[ greek ] = "ÄéáäñïìŞ...";
+        Text[ korean ] = "°æ·Î(~P)...";
+        Text[ turkish ] = "Veri yolu...";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_READONLY_PATH
+    {
+        Text = "Für die Verzeichnisse für 'AutoText' sind sind keine Schreibrechte vorhanden. Möchten Sie den Pfaddialog aufrufen?" ;
+        Text [ ENGLISH ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?" ;
+    };
+    Menu MNU_EDIT
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                Identifier = FN_GL_DEFINE ;
+                HelpID = HID_MD_GLOS_DEFINE ;
+                Text = "~Neu" ;
+                Text [ ENGLISH ] = "~New" ;
+                Text [ norwegian ] = "~New" ;
+                Text [ italian ] = "~Nuovo" ;
+                Text [ portuguese_brazilian ] = "~Novo" ;
+                Text [ portuguese ] = "~Novo" ;
+                Text [ finnish ] = "~Uusi" ;
+                Text [ danish ] = "~Ny(t)" ;
+                Text [ french ] = "~Nouveau" ;
+                Text [ swedish ] = "~Nytt" ;
+                Text [ dutch ] = "N~ieuw" ;
+                Text [ spanish ] = "~Nuevo" ;
+                Text [ english_us ] = "~New" ;
+                Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+                Text[ russian ] = "Ñîçä~àòü";
+                Text[ polish ] = "~Nowy";
+                Text[ japanese ] = "V‹Kì¬(~N)";
+                Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+                Text[ arabic ] = "~ÌÏíÏ";
+                Text[ greek ] = "~Äçìéïõñãßá";
+                Text[ korean ] = "»õ·Î(~N)";
+                Text[ turkish ] = "~Yeni";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_DEFINE_TEXT ;
+                HelpID = HID_MD_GLOS_DEFINE_TEXT ;
+                Text = "Neu (nur ~Text)" ;
+                Text [ ENGLISH ] = "New (only ~text)" ;
+                Text [ english_us ] = "New (text only)" ;
+                Text [ portuguese_brazilian ] = "Neu (nur ~Text)" ;
+                Text [ swedish ] = "Ny (endast ~text)" ;
+                Text [ danish ] = "Ny (kun tekst)" ;
+                Text [ italian ] = "Nuovo (solo ~testo)" ;
+                Text [ spanish ] = "Nuevo (solo ~texto)" ;
+                Text [ french ] = "Nouveau (t~exte seulement)" ;
+                Text [ dutch ] = "Nieuw (alleen ~tekst)" ;
+                Text [ portuguese ] = "Novo (só ~texto)" ;
+                Text[ chinese_simplified ] = "ĞÂ½¨(Ö»ÊÇÎÄ±¾)(~T)";
+                Text[ russian ] = "Ñîçäàòü (òîëüêî òåêñò)";
+                Text[ polish ] = "Nowy (tylko tekst)";
+                Text[ japanese ] = "V‹Kì¬(Ã·½Ä‚Ì‚İ)";
+                Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(¯Â¤å¦r)(~T)";
+                Text[ arabic ] = "ÌÏíÏ (ÇáäÕ İŞØ)";
+                Text[ greek ] = "Äçìéïõñãßá (ìüíï ~êåßìåíï)";
+                Text[ korean ] = "»õ·Î (ÅØ½ºÆ® ¸¸)";
+                Text[ turkish ] = "Yeni (yalnızca metin)";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_COPY_TO_CLIPBOARD;
+                HelpID = HID_MD_COPY_TO_CLIPBOARD;
+                Text = "~Kopieren";
+                Text [English] = "Copy";
+                Text[ english_us ] = "~Copy";
+                Text[ portuguese ] = "~Copiar";
+                Text[ russian ] = "Êîïèğîâàòü";
+                Text[ greek ] = "Áíôé~ãñáöŞ";
+                Text[ dutch ] = "~Kopiëren";
+                Text[ french ] = "~Copier";
+                Text[ spanish ] = "~Copiar";
+                Text[ italian ] = "~Copia";
+                Text[ danish ] = "K~opier";
+                Text[ swedish ] = "Kopiera";
+                Text[ polish ] = "Kopiuj";
+                Text[ portuguese_brazilian ] = "Copy";
+                Text[ japanese ] = "ºËß°(~C)";
+                Text[ korean ] = "º¹»ç(~C)";
+                Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+                Text[ chinese_traditional ] = "Î`»s(~C)";
+                Text[ arabic ] = "äÓÎ";
+                Text[ turkish ] = "Kopyala";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_REPLACE ;
+                HelpID = HID_MD_GLOS_REPLACE ;
+                Text = "~Ersetzen" ;
+                Text [ ENGLISH ] = "~Replace" ;
+                Text [ norwegian ] = "~Erstatte" ;
+                Text [ italian ] = "~Sostituisci" ;
+                Text [ portuguese_brazilian ] = "~Substituir" ;
+                Text [ portuguese ] = "~Substituir" ;
+                Text [ finnish ] = "~Korvaa" ;
+                Text [ danish ] = "~Erstat" ;
+                Text [ french ] = "R~emplacer" ;
+                Text [ swedish ] = "~Ersätta" ;
+                Text [ dutch ] = "V~ervangen" ;
+                Text [ spanish ] = "Ree~mplazar" ;
+                Text [ english_us ] = "Replace" ;
+                Text[ chinese_simplified ] = "¸üÌæ(~R)";
+                Text[ russian ] = "Çàìåíèòü";
+                Text[ polish ] = "Zamieñ";
+                Text[ japanese ] = "’uŠ·";
+                Text[ chinese_traditional ] = "¥N´À(~R)";
+                Text[ arabic ] = "ÇÓÊÈÏÇá";
+                Text[ greek ] = "Á~íôéêáôÜóôáóç";
+                Text[ korean ] = "¹Ù²Ù±â";
+                Text[ turkish ] = "Değiştir";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_RENAME ;
+                HelpID = HID_MD_GLOS_RENAME ;
+                Text = "~Umbenennen..." ;
+                Text [ ENGLISH ] = "Ren~ame..." ;
+                Text [ dutch ] = "~Naam wijzigen..." ;
+                Text [ english_us ] = "Rename..." ;
+                Text [ italian ] = "~Rinomina..." ;
+                Text [ spanish ] = "~Cambiar nombre..." ;
+                Text [ french ] = "~Renommer..." ;
+                Text [ swedish ] = "~Byt namn..." ;
+                Text [ danish ] = "Omdøb" ;
+                Text [ portuguese_brazilian ] = "~Umbenennen" ;
+                Text [ portuguese ] = "~Mudar nome..." ;
+                Text[ chinese_simplified ] = "ÖØÃüÃû(~A)...";
+                Text[ russian ] = "Ïåğåèìåíîâàòü...";
+                Text[ polish ] = "Zmieñ nazwê...";
+                Text[ japanese ] = "–¼‘O‚Ì•ÏX...";
+                Text[ chinese_traditional ] = "­«·s©R¦W(~A)...";
+                Text[ arabic ] = "...ÅÚÇÏÉ ÊÓãíÉ";
+                Text[ greek ] = "~Ìåôïíïìáóßá...";
+                Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â...";
+                Text[ turkish ] = "Yeniden adlandır...";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_DELETE ;
+                HelpID = HID_MD_GLOS_DELETE ;
+                /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+                Text = "~Löschen" ;
+                Text [ ENGLISH ] = "~Delete" ;
+                Text [ norwegian ] = "~Slett" ;
+                Text [ italian ] = "~Elimina" ;
+                Text [ portuguese_brazilian ] = "~Apagar" ;
+                Text [ portuguese ] = "E~liminar" ;
+                Text [ finnish ] = "~Poista" ;
+                Text [ danish ] = "~Slet" ;
+                Text [ french ] = "~Supprimer" ;
+                Text [ swedish ] = "~Radera" ;
+                Text [ dutch ] = "~Verwijderen" ;
+                Text [ spanish ] = "~Eliminar" ;
+                Text [ english_us ] = "~Delete" ;
+                Text[ chinese_simplified ] = "É¾³ı(~D)";
+                Text[ russian ] = "Óäàëèòü";
+                Text[ polish ] = "Usuñ";
+                Text[ japanese ] = "íœ(~D)";
+                Text[ chinese_traditional ] = "§R°£(~D)";
+                Text[ arabic ] = "ÍĞİ";
+                Text[ greek ] = "Äéáãñá~öŞ";
+                Text[ korean ] = "»èÁ¦(~D)";
+                Text[ turkish ] = "Sil";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_EDIT ;
+                HelpID = HID_MD_GLOS_EDIT ;
+                Text = "~Bearbeiten" ;
+                Text [ ENGLISH ] = "~Edit" ;
+                Text [ norwegian ] = "~Rediger" ;
+                Text [ italian ] = "~Modifica" ;
+                Text [ portuguese_brazilian ] = "~Editar" ;
+                Text [ portuguese ] = "E~ditar" ;
+                Text [ finnish ] = "~Muokkaa" ;
+                Text [ danish ] = "~Rediger" ;
+                Text [ french ] = "~Edition" ;
+                Text [ swedish ] = "~Redigera" ;
+                Text [ dutch ] = "Be~werken" ;
+                Text [ spanish ] = "~Editar" ;
+                Text [ english_us ] = "~Edit" ;
+                Text[ chinese_simplified ] = "±à¼­(~E)";
+                Text[ russian ] = "~Ïğàâêà";
+                Text[ polish ] = "~Edytuj";
+                Text[ japanese ] = "•ÒWi~‚dj";
+                Text[ chinese_traditional ] = "½s¿è(~E)";
+                Text[ arabic ] = "~ÊÍÑíÑ";
+                Text[ greek ] = "~Åğåîåñãáóßá";
+                Text[ korean ] = "ÆíÁı(~E)";
+                Text[ turkish ] = "Düzenle";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_MACRO ;
+                HelpID = HID_MD_GLOS_MACRO ;
+                Text = "~Makro..." ;
+                Text [ ENGLISH ] = "~Macro..." ;
+                Text [ norwegian ] = "~Macro..." ;
+                Text [ italian ] = "Macro..." ;
+                Text [ portuguese_brazilian ] = "~Macro..." ;
+                Text [ portuguese ] = "~Macro..." ;
+                Text [ finnish ] = "~Makro..." ;
+                Text [ danish ] = "~Makro..." ;
+                Text [ french ] = "~Macro..." ;
+                Text [ swedish ] = "~Makro..." ;
+                Text [ dutch ] = "~Macro..." ;
+                Text [ spanish ] = "~Macro..." ;
+                Text [ english_us ] = "~Macro..." ;
+                Text[ chinese_simplified ] = "ºê(~M)...";
+                Text[ russian ] = "Ìàêğîñ...";
+                Text[ polish ] = "Makro...";
+                Text[ japanese ] = "Ï¸Û(~M)...";
+                Text[ chinese_traditional ] = "¥¨¶°(~M)...";
+                Text[ arabic ] = "ÇáãÇßÑæ...";
+                Text[ greek ] = "~ÌáêñïåíôïëŞ...";
+                Text[ korean ] = "¸ÅÅ©·Î(~M)...";
+                Text[ turkish ] = "Makro...";
+                Text[ language_user1 ] = " ";
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Identifier = FN_GL_IMPORT;
+                HelpID = HID_MD_GLOS_IMPORT ;
+                Text = "~Importieren..." ;
+                Text [ ENGLISH ] = "~Import..." ;
+                Text[ english_us ] = "~Import...";
+                Text[ portuguese ] = "~Importar...";
+                Text[ russian ] = "~Èìïîğò...";
+                Text[ greek ] = "Å~éóáãùãŞ...";
+                Text[ dutch ] = "~Importeren...";
+                Text[ french ] = "~Importer...";
+                Text[ spanish ] = "~Importar...";
+                Text[ italian ] = "~Importa...";
+                Text[ danish ] = "~Importer...";
+                Text[ swedish ] = "~Importera...";
+                Text[ polish ] = "~Importuj...";
+                Text[ portuguese_brazilian ] = "~Import...";
+                Text[ japanese ] = "²İÎß°Ä‚·‚é(~I)...";
+                Text[ korean ] = "°¡Á®¿À±â(~I)...";
+                Text[ chinese_simplified ] = "ÊäÈë(~I)...";
+                Text[ chinese_traditional ] = "¿é¤J(~I)...";
+                Text[ arabic ] = "ÇÓÊíÑÇÏ...";
+                Text[ turkish ] = "~İçe aktar...";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯";
+    Text[ russian ] = "Àâòîòåêñò";
+    Text[ polish ] = "Autotekst";
+    Text[ japanese ] = "“ü—Íx‰‡";
+    Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°";
+    Text[ arabic ] = "äÕ ÊáŞÇÆí";
+    Text[ greek ] = "ÁõôïÊåßìåíï";
+    Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ®";
+    Text[ turkish ] = "Otomatik metin";
+    Text[ language_user1 ] = " ";
+};
+InfoBox MSG_DOUBLE_SHORTNAME
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben! : K³rzel wird bereits verwendet. Bitte einen anderen Namen vergeben! */
+    MESSAGE = "Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben!" ;
+    MESSAGE [ ENGLISH ] = "Short name already in use. Please choose annother name!" ;
+    MESSAGE [ norwegian ] = "Kort navn er i bruk. Vennligst velg et annet navn!" ;
+    MESSAGE [ italian ] = "La sigla è già in uso. Scegliere un altro nome." ;
+    MESSAGE [ portuguese_brazilian ] = "AbreviaçÆo j  em uso. Por favor escolha outro nome!" ;
+    MESSAGE [ portuguese ] = "Abreviatura já existe. Por favor escolha outro nome!" ;
+    MESSAGE [ finnish ] = "Lyhenne on jo käytössä. Valitse toinen nimi!" ;
+    MESSAGE [ danish ] = "Denne genvej eksisterer allerede. Vælg venligst et andet navn!" ;
+    MESSAGE [ french ] = "Abréviation déjà utilisée. Choisissez un autre nom !" ;
+    MESSAGE [ swedish ] = "Kortkommandonamnet används redan. Välj ett annat namn!" ;
+    MESSAGE [ dutch ] = "Deze afkorting bestaat al. Probeer een andere naam!" ;
+    MESSAGE [ spanish ] = "Esta abreviatura ya está en uso. ¡Elija otro nombre por favor!" ;
+    MESSAGE [ english_us ] = "Shortcut name already exists. Please choose another name." ;
+    MESSAGE[ chinese_simplified ] = "ÒÑ¾­´æÔÚÕâ¸öËõĞ´¡£ÇëÄúÊäÈëÒ»¸öÆäËûËõĞ´Ãû³Æ£¡";
+    MESSAGE[ russian ] = "İòî ñîêğàùåíèå óæå ñóùåñòâóåò. Ïîæàëóéñòà, âûáåğèòå äğóãîå èìÿ!";
+    MESSAGE[ polish ] = "Te inicja³y ju¿ zosta³y u¿yte. Proszê podaæ inn¹ nazwê!";
+    MESSAGE[ japanese ] = "‚±‚Ì¼®°Ä¶¯Ä·°‚Í‚·‚Å‚Ég—p‚³‚ê‚Ä‚¢‚Ü‚·B•Ê‚Ì·°‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢B";
+    MESSAGE[ chinese_traditional ] = "¤w¸g¨Ï¥Î¤F³o­ÓÁY¼g¡C½Ğ±z¿é¤J¤@­Ó¤£¦Pªº¦WºÙ¡T";
+    MESSAGE[ arabic ] = "åĞÇ ÇáÇÎÊÕÇÑ ãæÌæÏ ÈÇáİÚá. ÇáÑÌÇÁ ÇÓÊÎÏÇã ÇÓã ÌÏíÏ!";
+    MESSAGE[ greek ] = "Ôï üíïìá óõíôüìåõóçò õğÜñ÷åé Şäç. Ğáñáêáëş äşóôå İíá Üëëï üíïìá!";
+    MESSAGE[ korean ] = "¹Ù·Î°¡±â ÀÌ¸§ÀÌ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. ´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇØ ÁÖ½Ê½Ã¿À";
+    MESSAGE[ turkish ] = "Bu kısaltma mevcut durumda. Başka bir ad seçin!";
+    MESSAGE[ language_user1 ] = " ";
+};
+QueryBox MSG_QUERY_DELETE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der AutoText gelöscht werden? : Soll der AutoText gel÷scht werden? */
+    MESSAGE = "Soll der AutoText gelöscht werden?" ;
+    MESSAGE [ English ] = "Delete AutoText?" ;
+    MESSAGE [ norwegian ] = "Slette AutoTekst?" ;
+    MESSAGE [ italian ] = "Elimina inserimento testo automatico?." ;
+    MESSAGE [ portuguese_brazilian ] = "Apagar TextoAutom tico?" ;
+    MESSAGE [ portuguese ] = "Deseja apagar o AutoTexto?" ;
+    MESSAGE [ finnish ] = "Poistetaanko automaattiteksti?" ;
+    MESSAGE [ danish ] = "Skal denne AutoTekst slettes?" ;
+    MESSAGE [ french ] = "Supprimer l'AutoTexte ?" ;
+    MESSAGE [ swedish ] = "Skall AutoText raderas?" ;
+    MESSAGE [ dutch ] = "AutoTekst wissen?" ;
+    MESSAGE [ spanish ] = "¿Desea eliminar el AutoTexto?" ;
+    MESSAGE [ english_us ] = "Delete AutoText?" ;
+    MESSAGE[ chinese_simplified ] = "ÄúÒªÉ¾³ı×Ô¶¯Í¼ÎÄ¼¯?";
+    MESSAGE[ russian ] = "Óäàëèòü àâòîòåêñò?";
+    MESSAGE[ polish ] = "Usun¹æ autotekst?";
+    MESSAGE[ japanese ] = "“ü—Íx‰‡‚ğíœ‚µ‚Ü‚·‚©H";
+    MESSAGE[ chinese_traditional ] = "­n§R°£¦Û°Ê¹Ï¤å¶°?";
+    MESSAGE[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáäÕ ÇáÊáŞÇÆí¿";
+    MESSAGE[ greek ] = "ÄéáãñáöŞ ÁõôïÊåéìİíïõ;";
+    MESSAGE[ korean ] = "ÀÚµ¿ ÅØ½ºÆ®¸¦ »èÁ¦ ÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ turkish ] = "Otomatik metin silinsin mi?";
+    MESSAGE[ language_user1 ] = " ";
+};
+String STR_QUERY_DELETE_GROUP1
+{
+    TEXT = "Soll der Bereich " ;
+    TEXT [ English ] = "Delete Group " ;
+    TEXT [ english_us ] = "Delete the category " ;
+    Text [ dutch ] = "Wilt u het bereik  " ;
+    Text [ italian ] = "Cancellare la categoria  " ;
+    Text [ spanish ] = "¿Desea usted eliminar  " ;
+    Text [ french ] = "Supprimer la catégorie " ;
+    Text [ swedish ] = "Ska kategorin " ;
+    Text [ danish ] = "Skal området " ;
+    Text [ portuguese ] = "Deseja eliminar " ;
+    Text [ portuguese_brazilian ] = "Soll der Bereich " ;
+    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸öÇøÓò ";
+    Text[ russian ] = "Óäàëèòü  ";
+    Text[ polish ] = "Czy ten obszar  ";
+    Text[ japanese ] = "‚±‚Ì•ª—Ş‚ğíœ‚µ‚Ü‚·‚©H ";
+    Text[ chinese_traditional ] = "­n§R°£³o­Ó°Ï°ì ";
+    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáİÆÉ ";
+    Text[ greek ] = "Èİëåôå ç êáôçãïñßá ";
+    Text[ korean ] = "ºĞ·ùÇ×¸ñÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î? ";
+    Text[ turkish ] = "Bölüm ";
+    Text[ language_user1 ] = " ";
+};
+String STR_QUERY_DELETE_GROUP2
+{
+    /* ### ACHTUNG: Neuer Text in Resource?  gelöscht werden? :  gel÷scht werden? */
+    TEXT = " gelöscht werden?" ;
+    TEXT [ English ] = "?" ;
+    TEXT [ english_us ] = "?" ;
+    Text [ dutch ] = "wissen?" ;
+    Text [ italian ] = "?" ;
+    Text [ spanish ] = "la categoría?" ;
+    Text [ french ] = "?" ;
+    Text [ swedish ] = "raderas?" ;
+    Text [ danish ] = "slettes?" ;
+    Text [ portuguese ] = "a secção?" ;
+    Text [ portuguese_brazilian ] = "gelöscht werden?" ;
+    Text[ chinese_simplified ] = "£¿";
+    Text[ russian ] = "îáëàñòü?";
+    Text[ polish ] = "ma zostaæ usuniêty?";
+    Text[ japanese ] = "íœ‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "?";
+    Text[ arabic ] = "¿";
+    Text[ language_user1 ] = " ";
+    Text[ greek ] = "íá äéáãñáöåß;";
+    Text[ korean ] = "?";
+    Text[ turkish ] = "silinsin mi?";
+};
+String STR_GLOSSARY
+{
+    Text = "Textbaustein : " ;
+    Text [ English ] = "Textblock : " ;
+    Text [ norwegian ] = "Textblock : " ;
+    Text [ italian ] = "Modulo di testo: " ;
+    Text [ portuguese_brazilian ] = "Textblock : " ;
+    Text [ portuguese ] = "Módulo de texto : " ;
+    Text [ french ] = "Module de texte :  " ;
+    Text [ dutch ] = "Tekstbouwsteen :  " ;
+    Text [ spanish ] = "Módulo de texto :  " ;
+    Text [ danish ] = "Tekstelement : " ;
+    Text [ swedish ] = "Textblock :  " ;
+    Text [ finnish ] = "Textblock : " ;
+    Text [ english_us ] = "Text block : " ;
+    Text[ chinese_simplified ] = "´ÊÌõ: ";
+    Text[ russian ] = "Òåêñòîâûé áëîê :  ";
+    Text[ polish ] = "Blok tekstu :  ";
+    Text[ japanese ] = "Ã·½ÄÌŞÛ¯¸: ";
+    Text[ chinese_traditional ] = "¶µ¥Ø¡G ";
+    Text[ arabic ] = "ÚäÕÑ ÇáäÕ : ";
+    Text[ greek ] = "ÔìŞìá êåéìİíïõ : ";
+    Text[ korean ] = "ÅØ½ºÆ® ºí·Ï : ";
+    Text[ turkish ] = "Metin öğesi: ";
+    Text[ language_user1 ] = " ";
+};
+ModalDialog DLG_RENAME_GLOS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 287 , 47 ) ;
+    Text = "Textbaustein umbenennen" ;
+    Text [ ENGLISH ] = "Rename textblock" ;
+    Moveable = TRUE ;
+    HelpID = HID_RENAME_GLOSSARY ;
+    OKButton BT_OKNEW
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 231 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        TabStop = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 231 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ON
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+         // ### ACHTUNG: Neuer Text in Resource? Na~me : Name
+        Text = "Na~me" ;
+        Text [ ENGLISH ] = "Name" ;
+        Text [ dutch ] = "Naa~m" ;
+        Text [ english_us ] = "Na~me" ;
+        Text [ italian ] = "Nome" ;
+        Text [ spanish ] = "N~ombre" ;
+        Text [ french ] = "~Nom" ;
+        Text [ swedish ] = "Na~mn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ portuguese_brazilian ] = "Na~me" ;
+        Text [ portuguese ] = "No~me" ;
+        Text[ chinese_simplified ] = "Ãû³Æ(~M)";
+        Text[ russian ] = "Àâòîòåêñò";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "–¼‘O(~M)";
+        Text[ chinese_traditional ] = "¦WºÙ(~M)";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ greek ] = "¼íïìá";
+        Text[ korean ] = "ÀÌ¸§(~M)";
+        Text[ turkish ] = "Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_ON
+    {
+        ReadOnly = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 44 , 12 ) ;
+        Size = MAP_APPFONT ( 118 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_OS
+    {
+        Pos = MAP_APPFONT ( 165 , 14 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
+         // ### ACHTUNG: Neuer Text in Resource? Kü~rzel : Kürzel
+        /* ### ACHTUNG: Neuer Text in Resource? Kü~rzel : K³~rzel */
+        Text = "Kü~rzel" ;
+        Text [ ENGLISH ] = "Shortcut" ;
+        Text [ english_us ] = "Short~cut" ;
+        Text [ italian ] = "Sigla" ;
+        Text [ spanish ] = "~Abrev." ;
+        Text [ french ] = "Ab~r." ;
+        Text [ dutch ] = "Afko~rting" ;
+        Text [ swedish ] = "~Förkortning" ;
+        Text [ danish ] = "Genvej" ;
+        Text [ portuguese_brazilian ] = "Kü~rzel" ;
+        Text [ portuguese ] = "Iniciais" ;
+        Text[ chinese_simplified ] = "ËõĞ´(~C)";
+        Text[ russian ] = "Ñîêğàùåíèå";
+        Text[ polish ] = "Inicja³y";
+        Text[ japanese ] = "¼®°Ä¶¯Ä·°";
+        Text[ chinese_traditional ] = "ÁY¼g(~C)";
+        Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
+        Text[ greek ] = "Óõíôüìåõóç";
+        Text[ korean ] = "¹Ù·Î°¡±â(~C)";
+        Text[ turkish ] = "Kısaltma";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_OS
+    {
+        ReadOnly = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 200 , 12 ) ;
+        Size = MAP_APPFONT ( 21 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_NN
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text = "~Neu" ;
+        Text [ ENGLISH ] = "~New" ;
+        Text [ dutch ] = "~Nieuw" ;
+        Text [ english_us ] = "~New" ;
+        Text [ italian ] = "~Nuovo" ;
+        Text [ spanish ] = "~Nuevo" ;
+        Text [ french ] = "Nou~veau" ;
+        Text [ swedish ] = "~Nytt" ;
+        Text [ danish ] = "Ny" ;
+        Text [ portuguese ] = "~Novo" ;
+        Text [ portuguese_brazilian ] = "~Neu" ;
+        Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+        Text[ russian ] = "Ñîçä~àòü";
+        Text[ polish ] = "Nowy";
+        Text[ japanese ] = "V‹Kì¬(~N)";
+        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+        Text[ arabic ] = "ÌÏíÏ";
+        Text[ greek ] = "Äçìéïõñãßá";
+        Text[ korean ] = "»õ·Î(~N)";
+        Text[ turkish ] = "Yeni";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_NN
+    {
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 44 , 27 ) ;
+        Size = MAP_APPFONT ( 118 , 12 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_NS
+    {
+        Pos = MAP_APPFONT ( 165 , 29 ) ;
+        Size = MAP_APPFONT ( 34 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Kürzel : ~K³rzel */
+        Text = "~Kürzel" ;
+        Text [ ENGLISH ] = "~Shortcut" ;
+        Text [ english_us ] = "~Shortcut" ;
+        Text [ italian ] = "Sigla" ;
+        Text [ spanish ] = "~Abreviatura" ;
+        Text [ french ] = "~Abr." ;
+        Text [ dutch ] = "~Afkorting" ;
+        Text [ swedish ] = "~Ersätt" ;
+        Text [ danish ] = "Erstat" ;
+        Text [ portuguese_brazilian ] = "~Kürzel" ;
+        Text [ portuguese ] = "S~ubstituir" ;
+        Text[ chinese_simplified ] = "Á´½Ó(~S)";
+        Text[ russian ] = "Ñîêğàùåíèå";
+        Text[ polish ] = "Inicja³y";
+        Text[ japanese ] = "¼®°Ä¶¯Ä·°";
+        Text[ chinese_traditional ] = "±¶®|(~S)";
+        Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
+        Text[ greek ] = "Óõíôüìåõóç";
+        Text[ korean ] = "¹Ù·Î°¡±â(~S)";
+        Text[ turkish ] = "Kısaltma";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_NS
+    {
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 200 , 27 ) ;
+        Size = MAP_APPFONT ( 21 , 12 ) ;
+        Left = TRUE ;
+    };
+    GroupBox GB_NN
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 219 , 41 ) ;
+    };
+    Text [ dutch ] = "Naam tekstbouwsteen wijzigen" ;
+    Text [ english_us ] = "Rename Text Block" ;
+    Text [ italian ] = "Rinomina modulo di testo" ;
+    Text [ spanish ] = "Cambiar nombre al módulo de texto" ;
+    Text [ french ] = "Renommer le module de texte" ;
+    Text [ swedish ] = "Byt namn på textblock" ;
+    Text [ danish ] = "Omdøb tekstelement" ;
+    Text [ portuguese_brazilian ] = "Textbaustein umbenennen" ;
+    Text [ portuguese ] = "Mudar nome do módulo de texto" ;
+    Text[ chinese_simplified ] = "ÖØÃüÃû´ÊÌõ";
+    Text[ russian ] = "Ïåğåèìåíîâàòü àâòîòåêñò";
+    Text[ polish ] = "Zmieñ nazwê bloków tekstu";
+    Text[ japanese ] = "Ã·½ÄÌŞÛ¯¸‚Ì–¼‘O‚Ì•ÏX";
+    Text[ chinese_traditional ] = "­«·s©R¦W¶µ¥Ø";
+    Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÚäÕÑ ÇáäÕ";
+    Text[ greek ] = "Ìåôïíïìáóßá ôìŞìáôïò êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ºí·Ï ÀÌ¸§ ¹Ù²Ù±â";
+    Text[ turkish ] = "Metin öğesini yeniden adlandır";
+    Text[ language_user1 ] = " ";
+};
+String STR_SAVE_GLOSSARY
+{
+    Text= "Textbaustein speichern";
+    Text[ italian ] = "Salva modulo di testo";
+    Text[ portuguese_brazilian ] = "Textbaustein speichern";
+    Text[ portuguese ] = "Guardar módulo de texto";
+    Text[ danish ] = "Gem tekstelementer";
+    Text[ french ] = "Enregistrer le module de texte";
+    Text[ swedish ] = "Spara textblock";
+    Text[ dutch ] = "Tekstbouwsteen opslaan";
+    Text[ spanish ] = "Guardar módulo de texto";
+    Text[ english_us ] = "Save Text Block";
+    Text[ chinese_simplified ] = "´æÅÌ´ÊÌõ";
+    Text[ russian ] = "Ñîõğàíèòü òåêñòîâûé áëîê";
+    Text[ polish ] = "Zapisz blok tekstu";
+    Text[ japanese ] = "Ã·½ÄÌŞÛ¯¸‚Ì•Û‘¶";
+    Text[ chinese_traditional ] = "Àx¦s¶µ¥Ø";
+    Text[ arabic ] = "ÍİÙ ÚäÕÑ ÇáäÕ";
+    Text [ English ] = "Save textblock" ;
+    Text[ greek ] = "ÁğïèŞêåõóç ôìŞìáôïò êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ºí·Ï ÀúÀå";
+    Text[ turkish ] = "Metin öğesi";
+    Text[ language_user1 ] = " ";
+};
+InfoBox MSG_NO_GLOSSARIES
+{
+    MESSAGE = "Diese Datei enthält keine Textbausteine." ;
+    MESSAGE [ ENGLISH ] = "There are no textblocks in this file." ;
+    MESSAGE[ english_us ] = "There is no AutoText in this file.";
+    MESSAGE[ portuguese ] = "Este ficheiro não contém módulos de texto.";
+    MESSAGE[ russian ] = "İòîò ôàéë íå ñîäåğæèò ıëåìåíòîâ òåêñòà.";
+    MESSAGE[ greek ] = "Ôï áñ÷åßï áõôü äåí ğåñéİ÷åé ôìŞìáôá êåéìİíïõ.";
+    MESSAGE[ dutch ] = "Dit bestand bevat geen tekstbouwstenen";
+    MESSAGE[ french ] = "Ce fichier ne contient aucun module de texte.";
+    MESSAGE[ spanish ] = "Este archivo no contiene módulos de texto.";
+    MESSAGE[ italian ] = "Questo documento non contiene testi automatici.";
+    MESSAGE[ danish ] = "Denne fil indeholder ingen tekstelementer.";
+    MESSAGE[ swedish ] = "Den här filen innehåller inga textblock.";
+    MESSAGE[ polish ] = "Plik ten nie zawiera ¿adnych bloków tekstu.";
+    MESSAGE[ portuguese_brazilian ] = "There are no textblocks in this file.";
+    MESSAGE[ japanese ] = "‚±‚ÌÌ§²Ù‚É‚ÍÃ·½ÄÌŞÛ¯¸‚ª‚ ‚è‚Ü‚¹‚ñB";
+    MESSAGE[ korean ] = "ÀÌ ÆÄÀÏ¿¡´Â ÀÚµ¿ ÅØ½ºÆ®°¡ ¾ø½À´Ï´Ù. .";
+    MESSAGE[ chinese_simplified ] = "Õâ¸öÎÄ¼şÄÚ²»°üº¬´ÊÌõ";
+    MESSAGE[ chinese_traditional ] = "³o­ÓÀÉ®×¨S¦³¤å¦r¬q";
+    MESSAGE[ arabic ] = "áÇ íÍÊæí åĞÇ Çáãáİ Úáì ßÊá äÕíÉ.";
+    MESSAGE[ turkish ] = "Bu dosya metin bileşenleri içermiyor";
+};

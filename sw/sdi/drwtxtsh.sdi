@@ -1,0 +1,452 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   drwtxtsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/drwtxtsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File DrawTextshell fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextDrawText : Selection
+[
+    uuid = "CA0C4280-293D-11D1-89CB-008029E4B0B1"
+]
+{
+    SID_SELECTALL  // api:
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = NoState ;
+    ]
+
+    SfxVoidItem Cut SID_CUT ( )  // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        Volatile ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_COPY // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        Volatile ;
+    ]
+
+    SID_PASTE   // api:
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_PASTESPECIAL  // api:
+    [
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_ESCAPE // api:
+    [
+        ExecMethod = ExecDraw ;
+    ]
+
+    SID_UNDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+
+        ToolBoxConfig , MenuConfig , AccelConfig , PlugComm ;
+    ]
+
+    SID_REDO // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+
+    SID_REPEAT // api:
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+
+    FN_FORMAT_RESET  // api:
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_SYMBOL // api:
+    [
+        ExecMethod = ExecDraw ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_ATTR_CHAR_WEIGHT // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_POSTURE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_UNDERLINE // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_CONTOUR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_SHADOWED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_STRIKEOUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_LEFT // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_CENTER // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_RIGHT // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_ADJUST_BLOCK // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_10 // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_15 // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LINESPACE_20 // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CHAR_DLG  // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_PARA_DLG // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SET_SUPER_SCRIPT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SET_SUB_SCRIPT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FONTWORK  // api:
+    [
+        ExecMethod = ExecFontWork ;
+        StateMethod = StateFontWork ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_STYLE // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_ADJUST  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_DISTANCE // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_START  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_MIRROR // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_HIDEFORM   // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_OUTLINE // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHADOW  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWCOLOR // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWXVAL  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWYVAL  // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_STDFORM // api:
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_THESAURUS_DLG // api:
+    [
+        ExecMethod = ExecDrawLingu ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SPELLING_DLG  // api:
+    [
+        ExecMethod = ExecDrawLingu ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_DRAWTEXT_ATTR_DLG
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_CATALOG  // ole(no) api(play/rec)
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_AUTOSPELL_CHECK
+    [
+        ExecMethod = Execute;
+        StateMethod = GetDrawTxtCtrlState
+    ]
+
+    SID_AUTOSPELL_MARKOFF
+    [
+        ExecMethod = Execute;
+        StateMethod = GetDrawTxtCtrlState
+    ]
+
+    SID_SEARCH_DLG
+    [
+        StateMethod = StateDisableItems
+    ]
+
+    SID_HYPERLINK_SETLINK  // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_HYPERLINK_GETLINK // status()
+    [
+        StateMethod = StateInsert ;
+    ]
+}
+
+interface TextDrawFont : Object
+[ uuid = "074C35E0-11EF-101D-9757-6E74207A7520"; ]
+{
+    SID_ATTR_CHAR_FONT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_FONTHEIGHT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_COLOR // api:
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTxtCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+}
+
+
+
+shell SwDrawTextShell
+{
+        import TextDrawText[Automation];
+        import TextDrawFont ".DrawFont";
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.72  2000/05/26 07:06:16  os
+    old SW Basic API Slots removed
+
+    Revision 1.71  2000/05/10 12:00:09  os
+    Basic API removed
+
+    Revision 1.70  2000/01/21 13:33:54  tl
+    #70503# GetState method added for FN_THESAURUS_DLG
+
+    Revision 1.69  1999/03/23 11:16:26  MA
+    #63806# ConfigName und HelpText entfernt
+
+
+      Rev 1.68   23 Mar 1999 12:16:26   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.67   12 Nov 1998 17:28:36   MA
+   #58677# Disable Flag
+
+      Rev 1.66   17 Sep 1997 13:09:54   OM
+   Editierbare Links in DrawText-Objekten
+
+      Rev 1.65   09 Sep 1997 18:04:54   MBA
+   DrawTextShell war nicht exportiert
+
+      Rev 1.64   28 Aug 1997 12:53:42   MBA
+   Neue Interface-Namen
+
+      Rev 1.63   19 Jun 1997 13:54:18   OS
+   doppelten DrawText vermieden
+
+      Rev 1.62   17 Jun 1997 15:42:06   MA
+   DrawTxtShell nicht von BaseShell ableiten + Opts
+
+      Rev 1.61   13 Feb 1997 12:44:48   MA
+   unnoetige Texte entfernt
+
+      Rev 1.60   23 Jan 1997 14:32:28   OS
+   Ableitung von _DrawText
+
+      Rev 1.59   13 Dec 1996 16:37:54   OS
+   Autospell fuer aktives DrawTextObject
+
+      Rev 1.58   22 Nov 1996 14:51:40   OS
+   FN_SET_JUSTIFY_PARA -> SID_ATTR_PARA_ADJUST_BLOCK
+
+      Rev 1.57   14 Nov 1996 08:06:52   SWG
+   _TEMPLATE_ -> _STYLE_
+
+      Rev 1.56   21 Sep 1996 17:36:30   OS
+   Sot-Umstellung beendet
+
+      Rev 1.55   16 Sep 1996 10:25:12   MBA
+   FontDialog RecordPerItem
+
+------------------------------------------------------------------------*/
+

@@ -1,0 +1,615 @@
+/*************************************************************************
+ *
+ *  $RCSfile: chardlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "chrdlg.hrc"
+#include "chardlg.hrc"
+#include "helpid.h"
+
+#define LBOX_DIFF 4
+TabDialog DLG_CHAR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    /* ### ACHTUNG: Neuer Text in Resource? Zeichen : Schrift */
+    Text = "Zeichen" ;
+    Text [ ENGLISH ] = "Character" ;
+    Text [ norwegian ] = "Character" ;
+    Text [ italian ] = "Carattere" ;
+    Text [ portuguese_brazilian ] = "Caractere" ;
+    Text [ portuguese ] = "Caracteres" ;
+    Text [ finnish ] = "Merkki" ;
+    Text [ danish ] = "Tegn" ;
+    Text [ french ] = "Caractère" ;
+    Text [ swedish ] = "Tecken" ;
+    Text [ dutch ] = "Teken" ;
+    Text [ spanish ] = "Caracteres" ;
+    Text [ english_us ] = "Character" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_CHAR_STD ;
+                Text = "Schrift" ;
+                Text [ ENGLISH ] = "Character" ;
+                Text [ norwegian ] = "Character" ;
+                Text [ italian ] = "Carattere" ;
+                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese ] = "Tipo de letra" ;
+                Text [ finnish ] = "Merkki" ;
+                Text [ danish ] = "Skrifttype" ;
+                Text [ french ] = "Police" ;
+                Text [ swedish ] = "Teckensnitt" ;
+                Text [ dutch ] = "Lettertype" ;
+                Text [ spanish ] = "Fuente" ;
+                Text [ english_us ] = "Font" ;
+                PageResID = TP_CHAR_STD ;
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ russian ] = "Øğèôò";
+                Text[ polish ] = "Czcionka";
+                Text[ japanese ] = "Ì«İÄ";
+                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ arabic ] = "ÇáÎØ";
+                Text[ dutch ] = "Lettertype";
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ greek ] = "ÃñáììáôïóåéñÜ";
+                Text[ korean ] = "±Û²Ã";
+                Text[ turkish ] = "Yazıtipi";
+            };
+            PageItem
+            {
+                Identifier = TP_CHAR_EXT ;
+                Text = "Schrifteffekt" ;
+                Text [ ENGLISH ] = "Character Extension" ;
+                Text [ norwegian ] = "Character Extension" ;
+                Text [ italian ] = "Effetto carattere" ;
+                Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
+                Text [ portuguese ] = "Efeitos do tipo de letra" ;
+                Text [ finnish ] = "Merkin tehosteet" ;
+                Text [ danish ] = "Skrifteffekt" ;
+                Text [ french ] = "Effet de caractère" ;
+                Text [ swedish ] = "Teckensnittseffekt" ;
+                Text [ dutch ] = "Schrifteffecten" ;
+                Text [ spanish ] = "Efectos de fuente" ;
+                Text [ english_us ] = "Font Effects" ;
+                PageResID = TP_CHAR_EXT ;
+                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ russian ] = "İôôåêòû øğèôòà";
+                Text[ polish ] = "Efekty czcionek";
+                Text[ japanese ] = "Ì«İÄŒø‰Ê";
+                Text[ chinese_traditional ] = "¤å¦r®ÄªG";
+                Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text[ dutch ] = "Schrifteffecten";
+                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
+                Text[ korean ] = "±Û²Ã È¿°ú";
+                Text[ turkish ] = "Yazıtipi efektleri";
+            };
+            PageItem
+            {
+                Identifier = TP_CHAR_URL ;
+                Text = "Hyperlink" ;
+                Text [ ENGLISH ] = "Hyperlink" ;
+                Text [ english_us ] = "Hyperlink" ;
+                Text [ italian ] = "Hyperlink" ;
+                Text [ spanish ] = "Hiperenlace" ;
+                Text [ french ] = "Hyperlien" ;
+                Text [ dutch ] = "Hyperlink" ;
+                Text [ swedish ] = "Hyperlänk" ;
+                Text [ danish ] = "Hyperlink" ;
+                Text [ portuguese_brazilian ] = "Hyperlink" ;
+                Text [ portuguese ] = "Hiperligação" ;
+                Text[ chinese_simplified ] = "³¬Á´½Ó";
+                Text[ russian ] = "Ãèïåğññûëêà";
+                Text[ polish ] = "Hiper³¹cze";
+                Text[ japanese ] = "Ê²Êß°Øİ¸";
+                Text[ chinese_traditional ] = "¶W³sµ²";
+                Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
+                Text[ dutch ] = "Hyperlink";
+                Text[ chinese_simplified ] = "³¬Á´½Ó";
+                Text[ greek ] = "Õğåñ-óıíäåóç";
+                Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
+                Text[ turkish ] = "Hyperlink";
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text = "Hintergrund" ;
+                Text [ ENGLISH ] = "Background" ;
+                Text [ norwegian ] = "Background" ;
+                Text [ italian ] = "Sfondo" ;
+                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese ] = "Plano de fundo" ;
+                Text [ finnish ] = "Tausta" ;
+                Text [ danish ] = "Baggrund" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Bakgrund" ;
+                Text [ dutch ] = "Achtergrond" ;
+                Text [ spanish ] = "Fondo" ;
+                Text [ english_us ] = "Background" ;
+                PageResID = TP_BACKGROUND ;
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ russian ] = "Ôîí";
+                Text[ polish ] = "T³o";
+                Text[ japanese ] = "”wŒi";
+                Text[ chinese_traditional ] = "­I´º";
+                Text[ arabic ] = "ÇáÎáİíÉ";
+                Text[ dutch ] = "Achtergrond";
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ greek ] = "Öüíôï";
+                Text[ korean ] = "¹è°æ";
+                Text[ turkish ] = "Artalan";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "×Ö·û";
+    Text[ russian ] = "Çíàê";
+    Text[ polish ] = "Znak";
+    Text[ japanese ] = "•¶š";
+    Text[ language_user1 ] = "èëè: Ñèìâîë - -";
+    Text[ chinese_traditional ] = "¦r¤¸";
+    Text[ arabic ] = "ÇáÎØ";
+    Text[ dutch ] = "Teken";
+    Text[ chinese_simplified ] = "×Ö·û";
+    Text[ greek ] = "×áñáêôŞñåò";
+    Text[ korean ] = "¹®ÀÚ";
+    Text[ turkish ] = "Karakter";
+};
+TabDialog DLG_DRAWCHAR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Schrift" ;
+    Text [ ENGLISH ] = "Character" ;
+    Text [ norwegian ] = "Character" ;
+    Text [ italian ] = "Carattere" ;
+    Text [ portuguese_brazilian ] = "Caractere" ;
+    Text [ portuguese ] = "Tipo de letra" ;
+    Text [ finnish ] = "Merkki" ;
+    Text [ danish ] = "Skrifttype" ;
+    Text [ french ] = "Police" ;
+    Text [ swedish ] = "Teckensnitt" ;
+    Text [ dutch ] = "Lettertype" ;
+    Text [ spanish ] = "Fuente" ;
+    Text [ english_us ] = "Font" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_CHAR_STD ;
+                Text = "Schrift" ;
+                Text [ ENGLISH ] = "Character" ;
+                Text [ norwegian ] = "Character" ;
+                Text [ italian ] = "Carattere" ;
+                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese ] = "Tipo de letra" ;
+                Text [ finnish ] = "Merkki" ;
+                Text [ danish ] = "Skrifttype" ;
+                Text [ french ] = "Police" ;
+                Text [ swedish ] = "Teckensnitt" ;
+                Text [ dutch ] = "Lettertype" ;
+                Text [ spanish ] = "Fuente" ;
+                Text [ english_us ] = "Font" ;
+                PageResID = TP_CHAR_STD ;
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ russian ] = "Øğèôò";
+                Text[ polish ] = "Czcionka";
+                Text[ japanese ] = "Ì«İÄ";
+                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ arabic ] = "ÇáÎØ";
+                Text[ dutch ] = "Lettertype";
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ greek ] = "ÃñáììáôïóåéñÜ";
+                Text[ korean ] = "±Û²Ã";
+                Text[ turkish ] = "Yazıtipi";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "×ÖÌå";
+    Text[ russian ] = "Øğèôò";
+    Text[ polish ] = "Czcionka";
+    Text[ japanese ] = "Ì«İÄ";
+    Text[ chinese_traditional ] = "¦r«¬";
+    Text[ arabic ] = "ÇáÎØ";
+    Text[ dutch ] = "Lettertype";
+    Text[ chinese_simplified ] = "×ÖÌå";
+    Text[ greek ] = "ÃñáììáôïóåéñÜ";
+    Text[ korean ] = "±Û²Ã";
+    Text[ turkish ] = "Yazıtipi";
+};
+TabPage TP_CHAR_URL
+{
+    HelpID = HID_CHAR_URL ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    GroupBox GB_URL
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 72 + LBOX_DIFF ) ;
+        Text = "Hyperlink" ;
+        Text [ English ] = "Hyperlink" ;
+        Text [ english_us ] = "Hyperlink" ;
+        Text [ italian ] = "Hyperlink" ;
+        Text [ spanish ] = "Hiperenlace" ;
+        Text [ french ] = "Hyperlien" ;
+        Text [ dutch ] = "Hyperlink" ;
+        Text [ swedish ] = "Hyperlänk" ;
+        Text [ danish ] = "Hyperlink" ;
+        Text [ portuguese_brazilian ] = "Hyperlink" ;
+        Text [ portuguese ] = "Hiperligação" ;
+        Text[ chinese_simplified ] = "³¬Á´½Ó";
+        Text[ russian ] = "Ãèïåğññûëêà";
+        Text[ polish ] = "Hiper³¹cze";
+        Text[ japanese ] = "Ê²Êß°Øİ¸";
+        Text[ chinese_traditional ] = "¶W³sµ²";
+        Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
+        Text[ dutch ] = "Hyperlink";
+        Text[ chinese_simplified ] = "³¬Á´½Ó";
+        Text[ greek ] = "Õğåñ-óıíäåóç";
+        Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
+        Text[ turkish ] = "Hyperlink";
+    };
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "U~RL" ;
+        Text [ English ] = "U~RL" ;
+        Text [ english_us ] = "~URL" ;
+        Text [ italian ] = "U~RL" ;
+        Text [ spanish ] = "~URL" ;
+        Text [ french ] = "U~RL" ;
+        Text [ dutch ] = "U~RL" ;
+        Text [ swedish ] = "U~RL" ;
+        Text [ danish ] = "URL" ;
+        Text [ portuguese_brazilian ] = "U~RL" ;
+        Text [ portuguese ] = "U~RL" ;
+        Text[ chinese_simplified ] = "~URL";
+        Text[ russian ] = "U~RL";
+        Text[ polish ] = "URL";
+        Text[ japanese ] = "URL(~U)";
+        Text[ chinese_traditional ] = "~URL";
+        Text[ arabic ] = "U~RL";
+        Text[ dutch ] = "U~RL";
+        Text[ chinese_simplified ] = "~URL";
+        Text[ greek ] = "URL";
+        Text[ korean ] = "~URL";
+        Text[ turkish ] = "U~RL";
+    };
+    Edit ED_URL
+    {
+        Pos = MAP_APPFONT ( 78 , 14 ) ;
+        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_URL
+    {
+        Pos = MAP_APPFONT ( 188 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Auswählen..." ;
+        Text [ English ] = "~Browse..." ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Browse..." ;
+        Text [ portuguese_brazilian ] = "Durch~suchen..." ;
+        Text [ swedish ] = "~Välj ut..." ;
+        Text [ danish ] = "Gennemse..." ;
+        Text [ italian ] = "~Sfoglia..." ;
+        Text [ spanish ] = "~Seleccionar..." ;
+        Text [ french ] = "~Sélectionner..." ;
+        Text [ dutch ] = "~Selecteren..." ;
+        Text [ portuguese ] = "~Pesquisar..." ;
+        Text[ chinese_simplified ] = "Ñ¡Ôñ(~B)...";
+        Text[ russian ] = "~Âûáğàòü...";
+        Text[ polish ] = "Wybierz...";
+        Text[ japanese ] = "‘I‘ğ(~B)...";
+        Text[ chinese_traditional ] = "¿ï¾Ü(~B)...";
+        Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
+        Text[ dutch ] = "~Selecteren...";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ(~B)...";
+        Text[ greek ] = "~ÅğéëïãŞ...";
+        Text[ korean ] = "¼±ÅÃÇÏ±â(~B)...";
+        Text[ turkish ] = "A~raştır...";
+    };
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "Te~xt" ;
+        Text [ English ] = "Text" ;
+        Text[ english_us ] = "Te~xt";
+        Text[ portuguese ] = "Te~xto";
+        Text[ russian ] = "Óêàçàíèå";
+        Text[ greek ] = "Êåßìåíï";
+        Text[ dutch ] = "~Opmerking";
+        Text[ french ] = "~Texte";
+        Text[ spanish ] = "In~dicación";
+        Text[ italian ] = "Nota";
+        Text[ danish ] = "Tekst";
+        Text[ swedish ] = "Hänv~isning";
+        Text[ polish ] = "Tekst";
+        Text[ portuguese_brazilian ] = "H~inweis";
+        Text[ japanese ] = "•¶š—ñ(~K)";
+        Text[ korean ] = "¸Ş¸ğ(~O)";
+        Text[ chinese_simplified ] = "ÎÄ×Ö";
+        Text[ chinese_traditional ] = "¤å¦r";
+        Text[ turkish ] = "B~ilgi";
+        Text[ arabic ] = "äÕ";
+    };
+    Edit ED_TEXT
+    {
+        Pos = MAP_APPFONT ( 78 , 29 ) ;
+        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "~Name" ;
+        Text [ English ] = "~Name" ;
+        Text [ english_us ] = "~Name" ;
+        Text [ italian ] = "~Nome" ;
+        Text [ spanish ] = "~Nombre" ;
+        Text [ french ] = "~Nom" ;
+        Text [ dutch ] = "~Naam" ;
+        Text [ swedish ] = "~Namn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ portuguese_brazilian ] = "~Name" ;
+        Text [ portuguese ] = "~Nome" ;
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ russian ] = "~Èìÿ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ dutch ] = "~Naam";
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ greek ] = "¼íïìá";
+        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ turkish ] = "~Ad";
+    };
+    Edit ED_NAME
+    {
+        Pos = MAP_APPFONT ( 78 , 44 ) ;
+        Size = MAP_APPFONT ( 104 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    FixedText FT_TARGET
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "~Frame" ;
+        Text [ English ] = "Frame" ;
+        Text [ english_us ] = "Target Frame" ;
+        Text [ portuguese_brazilian ] = "~Targetframe" ;
+        Text [ swedish ] = "~Ram" ;
+        Text [ danish ] = "Frame" ;
+        Text [ italian ] = "~Frame" ;
+        Text [ spanish ] = "~Frame" ;
+        Text [ french ] = "~Frame" ;
+        Text [ dutch ] = "~Frame" ;
+        Text [ portuguese ] = "~Frame" ;
+        Text[ chinese_simplified ] = "¿ò¶ÔÏó";
+        Text[ russian ] = "~Êàäğ";
+        Text[ polish ] = "Ramka";
+        Text[ japanese ] = "ÌÚ°Ñ";
+        Text[ chinese_traditional ] = "°T®Ø";
+        Text[ arabic ] = "~Frame";
+        Text[ dutch ] = "~Frame";
+        Text[ chinese_simplified ] = "¿ò¶ÔÏó";
+        Text[ greek ] = "Ğëáßóéï";
+        Text[ korean ] = "¸ñÇ¥ ÇÁ·¹ÀÓ";
+        Text[ turkish ] = "~Frame";
+    };
+    ComboBox LB_TARGET
+    {
+        Pos = MAP_APPFONT ( 78 , 59 ) ;
+        Size = MAP_APPFONT ( 104 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+        Group = TRUE ;
+    };
+    PushButton PB_EVENT
+    {
+        Pos = MAP_APPFONT ( 188 , 31 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Ereignisse..." ;
+        Text [ English ] = "Events..." ;
+        Text [ english_us ] = "~Events..." ;
+        Text [ italian ] = "~Eventi" ;
+        Text [ french ] = "~Événements..." ;
+        Text [ dutch ] = "~Gebeurtenissen" ;
+        Text [ swedish ] = "Händ~elser..." ;
+        Text [ danish ] = "Begivenheder..." ;
+        Text [ spanish ] = "~Acontecimientos..." ;
+        Text [ portuguese_brazilian ] = "~Ereignisse..." ;
+        Text [ portuguese ] = "~Eventos..." ;
+        Text[ chinese_simplified ] = "ÊÂ¼ş(~E)...";
+        Text[ russian ] = "Ñîáûòèÿ...";
+        Text[ polish ] = "Wy~darzenia...";
+        Text[ japanese ] = "ÀsŒ_‹@(~E)...";
+        Text[ chinese_traditional ] = "¬ù·|(~E)...";
+        Text[ arabic ] = "ÃÍÏÇË...";
+        Text[ dutch ] = "~Gebeurtenissen";
+        Text[ chinese_simplified ] = "ÊÂ¼ş(~E)...";
+        Text[ greek ] = "Ãåãïíüôá...";
+        Text[ korean ] = "ÀÌº¥Æ®(~E)...";
+        Text[ turkish ] = "Olaylar...";
+    };
+    GroupBox GB_STYLE
+    {
+        Pos = MAP_APPFONT ( 6 , 78 + LBOX_DIFF ) ;
+        Size = MAP_APPFONT ( 248 , 42 + 2 * LBOX_DIFF ) ;
+        Text = "Zeichenvorlagen" ;
+        Text [ English ] = "Character styles" ;
+        Text [ dutch ] = "Tekenopmaakprofielen" ;
+        Text [ english_us ] = "Character Styles" ;
+        Text [ italian ] = "Modelli di carattere" ;
+        Text [ spanish ] = "Estilos de caracteres" ;
+        Text [ french ] = "Styles de caractère" ;
+        Text [ swedish ] = "Teckenformatmallar" ;
+        Text [ danish ] = "Tegntypografier" ;
+        Text [ portuguese_brazilian ] = "Zeichenvorlagen" ;
+        Text [ portuguese ] = "Estilos de caracteres" ;
+        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
+        Text[ russian ] = "Ñòèëè çíàêîâ";
+        Text[ polish ] = "Style znaku";
+        Text[ japanese ] = "Ã·½Ä½À²Ù";
+        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
+        Text[ arabic ] = "ÃäãÇØ ÃÍÑİ";
+        Text[ dutch ] = "Tekenopmaakprofielen";
+        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
+        Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
+        Text[ korean ] = "¹®ÀÚ À¯Çü";
+        Text[ turkish ] = "Karakter biçimi";
+    };
+    FixedText FT_VISITED
+    {
+        Pos = MAP_APPFONT ( 12 , 91 + LBOX_DIFF ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "~Besuchter Link" ;
+        Text [ English ] = "Visited link" ;
+        Text [ dutch ] = "B~ezochte Link" ;
+        Text [ english_us ] = "~Visited links" ;
+        Text [ italian ] = "Per il ~sito visitato" ;
+        Text [ spanish ] = "Vínculos ~visitados" ;
+        Text [ french ] = "Lien ~visité" ;
+        Text [ swedish ] = "~Besökt länk" ;
+        Text [ danish ] = "Besøgt hyperlink" ;
+        Text [ portuguese_brazilian ] = "~Besuchte Links" ;
+        Text [ portuguese ] = "Links ~visitados" ;
+        Text[ chinese_simplified ] = "·ÃÎÊ¹ıµÄÁ´½Ó(~V)";
+        Text[ russian ] = "Ïîñåùåííûå ññûëêè";
+        Text[ polish ] = "Odwiedzone ³¹cze";
+        Text[ japanese ] = "ŠJ‚¢‚½‚±‚Æ‚Ì‚ ‚éØİ¸(~V)";
+        Text[ chinese_traditional ] = "³X°İ¹Lªº±¶®|(~V)";
+        Text[ arabic ] = "ÇÑÊÈÇØ ÓÈŞ ÒíÇÑÊå";
+        Text[ dutch ] = "B~ezochte Link";
+        Text[ chinese_simplified ] = "·ÃÎÊ¹ıµÄÁ´½Ó(~V)";
+        Text[ greek ] = "Óõíäİóåéò ğïõ İ÷ïõí åğéóêåöèåß";
+        Text[ korean ] = "¹æ¹®ÇÑ ¸µÅ©(~V)";
+        Text[ turkish ] = "~Kullanılmış bağlantı";
+    };
+    ListBox LB_VISITED
+    {
+        Pos = MAP_APPFONT ( 78 , 90 + LBOX_DIFF ) ;
+        Size = MAP_APPFONT ( 104 , 60 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+        Group = TRUE ;
+    };
+    FixedText FT_NOT_VISITED
+    {
+        Pos = MAP_APPFONT ( 12 , 106 + 2 * LBOX_DIFF ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "~Unbesuchter Link" ;
+        Text [ English ] = "Unvisited link" ;
+        Text [ english_us ] = "Unvisited ~links" ;
+        Text [ italian ] = "Per il sito non ~visitato" ;
+        Text [ spanish ] = "Vínculos no v~isitados" ;
+        Text [ french ] = "Lien ~non visité" ;
+        Text [ dutch ] = "N~iet-bezochte Link" ;
+        Text [ swedish ] = "~Obesökt länk" ;
+        Text [ danish ] = "Ubesøgt hyperlink" ;
+        Text [ portuguese_brazilian ] = "~Unbesuchte Links" ;
+        Text [ portuguese ] = "~Link não visitado" ;
+        Text[ chinese_simplified ] = "ÉĞÎ´·ÃÎÊ¹ıµÄÁ´½Ó(~L)";
+        Text[ russian ] = "Íåïîñåùåííûå ññûëêè";
+        Text[ polish ] = "Nie odwiedzone ³¹cze";
+        Text[ japanese ] = "ŠJ‚¢‚½‚±‚Æ‚Ì‚È‚¢Øİ¸(~L)";
+        Text[ chinese_traditional ] = "¥¼³X°İ¹Lªº±¶®|(~L)";
+        Text[ arabic ] = "ÇÑÊÈÇØ áã íÓÈŞ ÒíÇÑÊå";
+        Text[ dutch ] = "N~iet-bezochte Link";
+        Text[ chinese_simplified ] = "ÉĞÎ´·ÃÎÊ¹ıµÄÁ´½Ó(~L)";
+        Text[ greek ] = "Óõíäİóåéò ÷ùñßò åğßóêåøç";
+        Text[ korean ] = "¹æ¹®ÇÏÁö ¾ÊÀº ¸µÅ©(~L)";
+        Text[ turkish ] = "Kullanıl~mamış bağlantı";
+    };
+    ListBox LB_NOT_VISITED
+    {
+        Pos = MAP_APPFONT ( 78 , 105 + 2 * LBOX_DIFF ) ;
+        Size = MAP_APPFONT ( 104 , 60 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+        Group = TRUE ;
+    };
+};

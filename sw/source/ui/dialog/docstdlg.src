@@ -1,0 +1,411 @@
+/*************************************************************************
+ *
+ *  $RCSfile: docstdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "docstdlg.hrc"
+#include "helpid.h"
+ // #define TP_DOC_STAT 256
+TabPage TP_DOC_STAT
+{
+    HelpID = HID_DOC_STAT ;
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedText FT_PAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Seiten:" ;
+        Text [ ENGLISH ] = "Number of pages:" ;
+        Text [ norwegian ] = "Number of pages:" ;
+        Text [ italian ] = "Numero di pagine:" ;
+        Text [ portuguese_brazilian ] = "Número de páginas:" ;
+        Text [ portuguese ] = "Número de páginas:" ;
+        Text [ finnish ] = "Sivuja:" ;
+        Text [ danish ] = "Antal sider:" ;
+        Text [ french ] = "Nombre de pages :" ;
+        Text [ swedish ] = "Antal sidor:" ;
+        Text [ dutch ] = "Aantal pagina's:" ;
+        Text [ spanish ] = "Número de páginas:" ;
+        Text [ english_us ] = "Number of Pages:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "Ò³ÃæÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö:";
+        Text[ polish ] = "Liczba stron:";
+        Text[ japanese ] = "Íß°¼Ş‘”:";
+        Text[ chinese_traditional ] = "¼Æ¥Ø ­¶¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ:";
+        Text[ greek ] = "Áñéèìüò óåëßäùí:";
+        Text[ korean ] = "ÆäÀÌÁö ¼ö:";
+        Text[ turkish ] = "Sayfa:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TABLE
+    {
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Tabellen:" ;
+        Text [ ENGLISH ] = "Number of tables:" ;
+        Text [ norwegian ] = "Number of tables:" ;
+        Text [ italian ] = "Numero di tabelle:" ;
+        Text [ portuguese_brazilian ] = "Número de tabelas:" ;
+        Text [ portuguese ] = "Número de tabelas:" ;
+        Text [ finnish ] = "Taulukoita:" ;
+        Text [ danish ] = "Antal tabeller:" ;
+        Text [ french ] = "Nombre de tableaux :" ;
+        Text [ swedish ] = "Antal tabeller:" ;
+        Text [ dutch ] = "Aantal tabellen:" ;
+        Text [ spanish ] = "Número de tablas:" ;
+        Text [ english_us ] = "Number of Tables:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "±í¸ñÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî òàáëèö:";
+        Text[ polish ] = "Liczba tabel:";
+        Text[ japanese ] = "•\\”:";
+        Text[ chinese_traditional ] = "ªí®æ¼Æ¥Ø¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÌÏÇæá:";
+        Text[ greek ] = "Áñéèìüò ğéíÜêùí:";
+        Text[ korean ] = "Ç¥ °³¼ö:";
+        Text[ turkish ] = "Tablo:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_GRF
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Grafiken:" ;
+        Text [ ENGLISH ] = "Number of graphics:" ;
+        Text [ norwegian ] = "Number of graphics:" ;
+        Text [ italian ] = "Numero di immagini:" ;
+        Text [ portuguese_brazilian ] = "Número de gráficos:" ;
+        Text [ portuguese ] = "Número de imagens:" ;
+        Text [ finnish ] = "Kuvia:" ;
+        Text [ danish ] = "Antal billeder:" ;
+        Text [ french ] = "Nombre d'images :" ;
+        Text [ swedish ] = "Antal grafiker:" ;
+        Text [ dutch ] = "Aantal afbeeldingen:" ;
+        Text [ spanish ] = "Número de imágenes:" ;
+        Text [ english_us ] = "Number of Graphics:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "Í¼ĞÎÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî ğèñóíêîâ:";
+        Text[ polish ] = "Liczba grafik:";
+        Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì”:";
+        Text[ chinese_traditional ] = "¼Æ¥Ø ¹Ï¤ù¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÑÓæãÇÊ:";
+        Text[ greek ] = "Áñéèìüò ãñáöéêşí:";
+        Text[ korean ] = "±×·¡ÇÈ °³¼ö:";
+        Text[ turkish ] = "Grafik:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_OLE
+    {
+        Pos = MAP_APPFONT ( 6 , 54 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl OLE-Objekte:" ;
+        Text [ ENGLISH ] = "Number of OLE objects:" ;
+        Text [ norwegian ] = "Number of OLE objects:" ;
+        Text [ italian ] = "Numero di oggetti OLE:" ;
+        Text [ portuguese_brazilian ] = "Número de objetos OLE:" ;
+        Text [ portuguese ] = "Número de objectos OLE:" ;
+        Text [ finnish ] = "OLE-objekteja:" ;
+        Text [ danish ] = "Antal OLE-objekter:" ;
+        Text [ french ] = "Nombre d'objets OLE :" ;
+        Text [ swedish ] = "Antal OLE-objekt:" ;
+        Text [ dutch ] = "Aantal OLE-objecten:" ;
+        Text [ spanish ] = "Número de objetos OLE:" ;
+        Text [ english_us ] = "Number of OLE Objects:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "OLE ¶ÔÏóÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî îáúåêòîâ OLÅ:";
+        Text[ polish ] = "Liczba obiektów OLE:";
+        Text[ japanese ] = "OLEµÌŞ¼Şª¸Ä‚Ì”:";
+        Text[ chinese_traditional ] = "¼Æ¥Ø OLE-ª«¥ó¡G";
+        Text[ arabic ] = "ÚÏÏ ßÇÆäÇÊ OLE:";
+        Text[ greek ] = "Áñéèìüò áíôéêåéìİíùí OLE:";
+        Text[ korean ] = "OLE °³Ã¼ °³¼ö:";
+        Text[ turkish ] = "OLE nesneleri:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PARA
+    {
+        Pos = MAP_APPFONT ( 6 , 70 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Anzahl Absätze: : Anzahl Absõtze: */
+        Text = "Anzahl Absätze:" ;
+        Text [ ENGLISH ] = "Number of paragraphs:" ;
+        Text [ norwegian ] = "Number of paragraphs:" ;
+        Text [ italian ] = "Numero di paragrafi:" ;
+        Text [ portuguese_brazilian ] = "Número de parágrafos:" ;
+        Text [ portuguese ] = "Número de parágrafos:" ;
+        Text [ finnish ] = "Kappaleita:" ;
+        Text [ danish ] = "Antal afsnit:" ;
+        Text [ french ] = "Nombre de paragraphes :" ;
+        Text [ swedish ] = "Antal stycken:" ;
+        Text [ dutch ] = "Aantal alinea's:" ;
+        Text [ spanish ] = "Número de párrafos:" ;
+        Text [ english_us ] = "Number of Paragraphs:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¶ÎÂäÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî àáçàöåâ:";
+        Text[ polish ] = "Liczba akapitów:";
+        Text[ japanese ] = "’i—”:";
+        Text[ chinese_traditional ] = "¼Æ¥Ø ¬q¸¨¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáİŞÑÇÊ:";
+        Text[ greek ] = "Áñéèìüò ğáñáãñÜöùí:";
+        Text[ korean ] = "´Ü¶ô °³¼ö:";
+        Text[ turkish ] = "Paragraf:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_WORD
+    {
+        Pos = MAP_APPFONT ( 6 , 86 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Anzahl Wörter: : Anzahl W÷rter: */
+        Text = "Anzahl Wörter:" ;
+        Text [ ENGLISH ] = "Number of words:" ;
+        Text [ norwegian ] = "Number of words:" ;
+        Text [ italian ] = "Numero di parole:" ;
+        Text [ portuguese_brazilian ] = "Número de palavras:" ;
+        Text [ portuguese ] = "Número de palavras:" ;
+        Text [ finnish ] = "Sanoja:" ;
+        Text [ danish ] = "Antal ord:" ;
+        Text [ french ] = "Nombre de mots :" ;
+        Text [ swedish ] = "Antal ord:" ;
+        Text [ dutch ] = "Aantal woorden:" ;
+        Text [ spanish ] = "Número de palabras:" ;
+        Text [ english_us ] = "Number of Words:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "µ¥´ÊÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî ñëîâ:";
+        Text[ polish ] = "Liczba s³ów:";
+        Text[ japanese ] = "Œê”:";
+        Text[ chinese_traditional ] = "¼Æ¥Ø ¦r¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáßáãÇÊ:";
+        Text[ greek ] = "Áñéèìüò ëİîåùí:";
+        Text[ korean ] = "´Ü¾î °³¼ö:";
+        Text[ turkish ] = "Sözcük:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_WORD_DELIM
+    {
+        Pos = MAP_APPFONT ( 144 , 86 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "~Trenner" ;
+        Text [ ENGLISH ] = "Delimiter" ;
+        Left = TRUE ;
+        Text [ portuguese ] = "~Separador" ;
+        Text [ english_us ] = "Separator" ;
+        Text [ portuguese_brazilian ] = "Trenner" ;
+        Text [ swedish ] = "Avgränsare" ;
+        Text [ danish ] = "Separator" ;
+        Text [ italian ] = "~Separatore" ;
+        Text [ spanish ] = "Sepa~rador" ;
+        Text [ french ] = "~Séparateur" ;
+        Text [ dutch ] = "~Scheidingsteken" ;
+        Text[ chinese_simplified ] = "·Ö¸ô·û";
+        Text[ russian ] = "Ğàçäåëèòåëü";
+        Text[ polish ] = "Separator";
+        Text[ japanese ] = "‹æØ‚è‹L†";
+        Text[ chinese_traditional ] = "³s¦r²Å";
+        Text[ arabic ] = "İÇÕá";
+        Text[ greek ] = "Äéá÷ùñéóôéêü";
+        Text[ korean ] = "±¸ºĞÀÚ";
+        Text[ turkish ] = "~Ayırma işareti";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_WORD_DELIM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 204 , 85 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_CHAR
+    {
+        Pos = MAP_APPFONT ( 6 , 102 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Zeichen:" ;
+        Text [ ENGLISH ] = "Number of chars:" ;
+        Text [ norwegian ] = "Number of chars:" ;
+        Text [ italian ] = "Numero di caratteri:" ;
+        Text [ portuguese_brazilian ] = "Número de caracteres:" ;
+        Text [ portuguese ] = "Número de caracteres:" ;
+        Text [ finnish ] = "Merkkejä:" ;
+        Text [ danish ] = "Antal tegn:" ;
+        Text [ french ] = "Nombre de caractères :" ;
+        Text [ swedish ] = "Antal tecken:" ;
+        Text [ dutch ] = "Aantal tekens:" ;
+        Text [ spanish ] = "Número de caracteres:" ;
+        Text [ english_us ] = "Number of Characters:" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "×Ö·ûÊıÄ¿£º";
+        Text[ russian ] = "Êîëè÷åñòâî çíàêîâ:";
+        Text[ polish ] = "Liczba znaków:";
+        Text[ japanese ] = "•¶š”:";
+        Text[ chinese_traditional ] = "¼Æ¥Ø ¦r¤¸¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÃÍÑİ:";
+        Text[ greek ] = "Áñéèìüò ÷áñáêôŞñùí:";
+        Text[ korean ] = "¹®ÀÚ °³¼ö:";
+        Text[ turkish ] = "Karakter:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_LINE
+    {
+        Pos = MAP_APPFONT ( 6 , 118 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Anzahl Zeilen:" ;
+        Text [ ENGLISH ] = "Number of lines:" ;
+        Text [ portuguese ] = "Número de linhas:" ;
+        Text [ english_us ] = "Number of Lines:" ;
+        Text [ portuguese_brazilian ] = "Anzahl Zeilen:" ;
+        Text [ swedish ] = "Antal rader:" ;
+        Text [ danish ] = "Antal rækker:" ;
+        Text [ italian ] = "Numero di righe:" ;
+        Text [ spanish ] = "Número de líneas:" ;
+        Text [ french ] = "Nombre de lignes :" ;
+        Text [ dutch ] = "Aantal regels:" ;
+        Text[ chinese_simplified ] = "ĞĞÊı£º";
+        Text[ russian ] = "Êîëè÷åñòâî ñòğîê:";
+        Text[ polish ] = "Liczba wierszy:";
+        Text[ japanese ] = "s”:";
+        Text[ chinese_traditional ] = "¼Æ¥Ø ¦æ¡G";
+        Text[ arabic ] = "ÚÏÏ ÇáÃÓØÑ:";
+        Text[ greek ] = "Áñéèìüò ãñáììşí:";
+        Text[ korean ] = "¼± °³¼ö:";
+        Text[ turkish ] = "Satır:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PAGE_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 6 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_TABLE_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 22 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_GRF_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 38 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_OLE_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 54 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_PARA_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 70 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_WORD_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 86 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_CHAR_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 102 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_LINE_COUNT
+    {
+        Pos = MAP_APPFONT ( 114 , 118 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Left = TRUE ;
+        Text = "..." ;
+    };
+    PushButton PB_PDATE
+    {
+        Pos = MAP_APPFONT ( 204 , 116 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Aktualisieren" ;
+        Text [ ENGLISH ] = "~Update" ;
+        Text [ portuguese ] = "~Actualizar" ;
+        Text [ english_us ] = "~Update" ;
+        Text [ portuguese_brazilian ] = "Aktualisieren" ;
+        Text [ swedish ] = "Uppd~atera" ;
+        Text [ danish ] = "Opdater" ;
+        Text [ italian ] = "Aggiorna" ;
+        Text [ spanish ] = "~Actualizar" ;
+        Text [ french ] = "~Actualiser" ;
+        Text [ dutch ] = "~Actualiseren" ;
+        Text[ chinese_simplified ] = "¸üĞÂ(~U)";
+        Text[ russian ] = "Îáíîâèòü";
+        Text[ polish ] = "Aktualizuj";
+        Text[ japanese ] = "XV‚·‚é(~U)";
+        Text[ chinese_traditional ] = "§ó·s(~U)";
+        Text[ arabic ] = "ÊÍÏíË";
+        Text[ greek ] = "~Åíçìİñùóç";
+        Text[ korean ] = "¾÷ µ¥ÀÌÆ®(~U)";
+        Text[ turkish ] = "~Güncelle";
+        Text[ language_user1 ] = " ";
+    };
+};

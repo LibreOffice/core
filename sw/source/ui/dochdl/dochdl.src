@@ -1,0 +1,431 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dochdl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#include "dochdl.hrc"
+#include "globals.hrc"
+
+
+String STR_NOGLOS1
+{
+    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum Kürzel '' */
+    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum Kürzel '' */
+    /* ### ACHTUNG: Neuer Text in Resource? AutoText zum Kürzel ' : AutoText zum K³rzel ' */
+    TEXT = "AutoText zum Kürzel '" ;
+    TEXT [ English ] = "AutoText for Short Name '" ;
+    TEXT [ norwegian ] = "AutoText for Short Name '" ;
+    TEXT [ italian ] = "Testo automatico per la sigla" ;
+    TEXT [ portuguese_brazilian ] = "Texto Automático para Abreviação" ;
+    TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
+    TEXT [ finnish ] = "Automaattitekstiä lyhenteelle '" ;
+    TEXT [ danish ] = "AutoTekst til genvej '" ;
+    TEXT [ french ] = "AutoTexte pour raccourci '" ;
+    TEXT [ swedish ] = "AutoText till genvägen '" ;
+    TEXT [ dutch ] = "AutoTekst voor afkortingen'" ;
+    TEXT [ spanish ] = "AutoTexto para la abreviatura '" ;
+    TEXT [ english_us ] = "AutoText for Shortcut '" ;
+    TEXT[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõĞ´ '";
+    TEXT[ russian ] = "Àâòîòåêñò ê ñîêğàùåíèş '";
+    TEXT[ polish ] = "Autotekst do skrótu '";
+    TEXT[ japanese ] = "“ü—Íx‰‡‚Ì¼®°Ä¶¯Ä '";
+    TEXT[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ªºÁY¼g '";
+    TEXT[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ '";
+    TEXT[ dutch ] = "AutoTekst voor afkortingen'";
+    TEXT[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõĞ´ '";
+    TEXT[ greek ] = "Áõôïêåßìåíï ğñïò ôç óõíôüìåõóç '";
+    TEXT[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® ¹Ù·Î°¡±â  '";
+    TEXT[ turkish ] = "Otomatik metin kısaltması '";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_NOGLOS2
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' nicht gefunden. : '' nicht gefunden. */
+    TEXT = "' nicht gefunden." ;
+    TEXT [ English ] = "' not found." ;
+    TEXT [ norwegian ] = "' not found." ;
+    TEXT [ italian ] = "' non trovato." ;
+    TEXT [ portuguese_brazilian ] = "' não encontrado." ;
+    TEXT [ portuguese ] = "' não localizado." ;
+    TEXT [ finnish ] = "' ei löydy." ;
+    TEXT [ danish ] = "' blev ikke fundet." ;
+    TEXT [ french ] = "' introuvable." ;
+    TEXT [ swedish ] = "' hittades inte." ;
+    TEXT [ dutch ] = "' niet gevonden." ;
+    TEXT [ spanish ] = "' no se encontró." ;
+    TEXT [ english_us ] = "' not found." ;
+    TEXT[ chinese_simplified ] = "' Ã»ÓĞ±»ÕÒµ½¡£";
+    TEXT[ russian ] = "' íå íàéäåí.";
+    TEXT[ polish ] = "' nie znaleziono.";
+    TEXT[ japanese ] = "' ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+    TEXT[ chinese_traditional ] = "' ¨S¦³³Q§ä¨ì¡C";
+    TEXT[ arabic ] = "' ÛíÑ ãæÌæÏ.";
+    TEXT[ dutch ] = "' niet gevonden.";
+    TEXT[ chinese_simplified ] = "' Ã»ÓĞ±»ÕÒµ½¡£";
+    TEXT[ greek ] = "' äåí âñİèçêå.";
+    TEXT[ korean ] = "' °¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    TEXT[ turkish ] = "' bulunamadı.";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_NO_TABLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Zu diesem Zeitpunkt kann keine Tabelle eingefügt werden. : Zu diesem Zeitpunkt kann keine Tabelle eingef³gt werden. */
+    Text = "Zu diesem Zeitpunkt kann keine Tabelle eingefügt werden." ;
+    Text [ English ] = "Inserting a table is impossible now." ;
+    Text [ norwegian ] = "Inserting a table is impossible now." ;
+    Text [ italian ] = "Adesso è impossibile inserire una tabella." ;
+    Text [ portuguese_brazilian ] = "Inserir a tabela é agora impossível." ;
+    Text [ portuguese ] = "De momento não é possível inserir a tabela." ;
+    Text [ finnish ] = "Taulukon lisääminen ei ole nyt mahdollista." ;
+    Text [ danish ] = "Det er for tiden ikke muligt at indsætte en tabel" ;
+    Text [ french ] = "Impossible d'insérer un tableau maintenant." ;
+    Text [ swedish ] = "En tabell kan inte infogas vid denna tidpunkt." ;
+    Text [ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd." ;
+    Text [ spanish ] = "Actualmente no se puede insertar ninguna tabla." ;
+    Text [ english_us ] = "It is currently not possible to insert a table" ;
+    Text[ chinese_simplified ] = "µ±Ç°ÎŞ·¨²åÈëÈÎºÎ±í¸ñ¡£";
+    Text[ russian ] = "Â íàñòîÿùåå âğåìÿ âñòàâèòü òàáëèöó íåâîçìîæíî.";
+    Text[ polish ] = "W tym momencie nie mo¿e byæ wstawiona tabela.";
+    Text[ japanese ] = "Œ»İA•\\‚Ì‘}“ü‚Í‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "·í«eµLªk´¡¤J¥ô¦óªí®æ¡C";
+    Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá ÛíÑ ããßä ÍÇáíÇğ.";
+    Text[ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd.";
+    Text[ chinese_simplified ] = "µ±Ç°ÎŞ·¨²åÈëÈÎºÎ±í¸ñ¡£";
+    Text[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá åéóá÷èåß ğßíáêáò.";
+    Text[ korean ] = "Ç¥¸¦ »ğÀÔÇÏ´Â°ÍÀÌ ÇöÀç ºÒ°¡´ÉÇÕ´Ï´Ù.";
+    Text[ turkish ] = "Şu an tablo eklenemiyor.";
+    Text[ language_user1 ] = " ";
+};
+
+
+InfoBox MSG_ERR_INSERT_GLOS
+{
+    MESSAGE = "AutoText konnte nicht angelegt werden." ;
+    MESSAGE [ English ] = "Could not insert AutoText." ;
+    MESSAGE [ norwegian ] = "Could not insert AutoText." ;
+    MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
+    MESSAGE [ portuguese_brazilian ] = "Não pude inserir Texto Automático." ;
+    MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
+    MESSAGE [ finnish ] = "Automaattitekstiä ei voi lisätä." ;
+    MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTeksten." ;
+    MESSAGE [ french ] = "Impossible de créer l'AutoTexte." ;
+    MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
+    MESSAGE [ dutch ] = "AutoTekst kon niet worden gemaakt" ;
+    MESSAGE [ spanish ] = "No se pudo crear el AutoTexto." ;
+    MESSAGE [ english_us ] = "AutoText could not be created." ;
+    MESSAGE[ chinese_simplified ] = "ÎŞ·¨½¨Á¢×Ô¶¯Í¼ÎÄ¼¯¡£";
+    MESSAGE[ russian ] = "Ñîçäàòü àâòîòåêñò íåâîçìîæíî.";
+    MESSAGE[ polish ] = "Autotekst nie móg³ zostaæ utworzony.";
+    MESSAGE[ japanese ] = "“ü—Íx‰‡‚Å‚«‚Ü‚¹‚ñ";
+    MESSAGE[ chinese_traditional ] = "µLªk«Ø¥ß¦Û°Ê¹Ï¤å¶°¡C";
+    MESSAGE[ arabic ] = "ÊÚĞÑ Úãá äÕ ÊáŞÇÆí.";
+    MESSAGE[ dutch ] = "AutoTekst kon niet worden gemaakt";
+    MESSAGE[ chinese_simplified ] = "ÎŞ·¨½¨Á¢×Ô¶¯Í¼ÎÄ¼¯¡£";
+    MESSAGE[ greek ] = "Äåí Şôáí äõíáôŞ ç åéóáãùãŞ ÁõôïÊåßìåíï.";
+    MESSAGE[ korean ] = "ÀÚµ¿ ÅØ½ºÆ®¸¦ »ğÀÔÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    MESSAGE[ turkish ] = "Otomatik metin oluşturulamadı.";
+    MESSAGE[ language_user1 ] = " ";
+};
+
+InfoBox MSG_CLPBRD_FORMAT_ERROR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Gewünschtes Clipboardformat steht nicht zur Verfügung. : Gew³nschtes Clipboardformat steht nicht zur Verf³gung. */
+    MESSAGE = "Gewünschtes Clipboardformat steht nicht zur Verfügung." ;
+    MESSAGE [ English ] = "Requested clipboard format is not available." ;
+    MESSAGE [ norwegian ] = "Requested clipboard format is not available." ;
+    MESSAGE [ italian ] = "Il formato appunti richiesto non è disponibile." ;
+    MESSAGE [ portuguese_brazilian ] = "Formato solicitado de clipboard não está disponível." ;
+    MESSAGE [ portuguese ] = "Formato da área de transferência solicitado não se encontra disponível." ;
+    MESSAGE [ finnish ] = "Pyydetty leikepöydän muoto ei ole käytettävissä." ;
+    MESSAGE [ danish ] = "Det anmodede udskriftsholderformat er ikke tilgængeligt." ;
+    MESSAGE [ french ] = "Le format de presse-papiers souhaité n'est pas disponible." ;
+    MESSAGE [ swedish ] = "Önskat urklippformat står inte till förfogande." ;
+    MESSAGE [ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar." ;
+    MESSAGE [ spanish ] = "El formato deseado del portapapeles no está disponible." ;
+    MESSAGE [ english_us ] = "Requested clipboard format is not available." ;
+    MESSAGE[ chinese_simplified ] = "ËùĞèÒªµÄ²Ã¼ô°å¸ñÊ½²»´æÔÚ¡£";
+    MESSAGE[ russian ] = "Æåëàåìûé ôîğìàò áóôåğà îáìåíà íåäîñòóïåí.";
+    MESSAGE[ polish ] = "Szukany format schowka jest niedostêpny.";
+    MESSAGE[ japanese ] = "w’è‚Ì¸Ø¯ÌßÜ°ÄŞ‘®‚Íg—p‚Å‚«‚Ü‚¹‚ñB";
+    MESSAGE[ chinese_traditional ] = "©Ò»İ­nªºµô°ÅÃ¯®æ¦¡¤£¦s¦b¡C";
+    MESSAGE[ arabic ] = "ÊäÓíŞ ÇáÍÇİÙÉ ÇáãØáæÈ ÛíÑ ãÊæİÑ.";
+    MESSAGE[ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar.";
+    MESSAGE[ chinese_simplified ] = "ËùĞèÒªµÄ²Ã¼ô°å¸ñÊ½²»´æÔÚ¡£";
+    MESSAGE[ greek ] = "Ç æçôïıìåíç ìïñöŞ ôïõ clipboard äåí åßíáé äéáèİóéìç.";
+    MESSAGE[ korean ] = "¿äÃ»µÈ Å¬¸³º¸µå ¼­½ÄÀÌ °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.";
+    MESSAGE[ turkish ] = "İstenen pano formatı mevcut değil.";
+    MESSAGE[ language_user1 ] = " ";
+};
+
+QueryBox MSG_UPDATE_NEW_GLOS_FMT
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    MESSAGE = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?" ;
+    MESSAGE [ English ] = "The file format of the region is out-of-date.\nIt must be converted in order to save modifications.\nDo you want to convert it?" ;
+    MESSAGE [ norwegian ] = "The file format of the region is out-of-date.\nIt must be converted in order to save modifications.\nDo you want to convert it?" ;
+    MESSAGE [ italian ] = "Il formato dell'area è vecchio.\nÈ necessario convertirlo per poter\nsalvare le modifiche apportate\nVolete convertirlo?" ;
+    MESSAGE [ portuguese_brazilian ] = "O formato de arquivo da regiao está desatualizado.\nDeve ser convertido para que se possa gravar modificações.\nDeseja convertê-lo?" ;
+    MESSAGE [ portuguese ] = "O formato do ficheiro está desactualizado.\nDeve ser convertido para que se possam\n guardar as respectivas alterações.\nDeseja convertê-lo?" ;
+    MESSAGE [ finnish ] = "Alueen tiedostomuoto ei ole ajan tasalla.\nSe on muunnettava, jotta muutokset voitaisiin tallentaa.\nHaluatko muuntaa sen?" ;
+    MESSAGE [ danish ] = "Områdets filformat er forældet.\nDet skal konverteres, for at ændringerne kan gemmes.\nVil du konvertere det?" ;
+    MESSAGE [ french ] = "La section se trouve dans un format périmé.\nVous ne pourrrez enregistrer aucune modification \n à moins de le convertir.\nVoulez-vous procéder à la conversion sans plus attendre ?" ;
+    MESSAGE [ swedish ] = "Området har ett gammalt format.\nDet måste konverteras för att\nändringar skall kunna sparas.\nVill Du konvertera det?" ;
+    MESSAGE [ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?" ;
+    MESSAGE [ spanish ] = "El formato del área no es actual.\nHay que convertirlo\npara poder guardar las modificaciones.\n¿Desea usted convertirlo?" ;
+    MESSAGE [ english_us ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
+    /* ### ACHTUNG: Neuer Text in Resource? Der Bereich liegt in einem alten Format vor.\nEr muß konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden? : Der Bereich liegt in einem alten Format vor.\nEr mu˜ konvertiert werden, um nderungen\nspeichern zu k÷nnen.\nSoll er konvertiert werden? */
+    Message = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?" ;
+    Message[ chinese_simplified ] = "Õâ¸öÇøÓò¾ßÓĞµÄ¸ñÊ½ÊÇ¾ÉµÄ¡£\nÒª´æÅÌ¸ü¸Ä¾Í±ØĞë½øĞĞ¸ñÊ½×ª»»¡£\nÒª×ª»»¸ñÊ½Âğ£¿";
+    Message[ russian ] = "Ğàçäåë ïğåäñòàâëåí â ñòàğîì ôîğìàòå.\nÅãî íåîáõîäèìî ïğåîáğàçîâàòü, ñ òåì ÷òîáû ìîæíî \náûëî ñîõğàíèòü èçìåíåíèÿ\n.Ïğåîáğàçîâàòü?";
+    Message[ polish ] = "Format obszaru nie jest aktualny.\nObszar musi byæ skonwertowany, by mo¿na by³o zapisaæ zmiany\n. Skonwertowaæ go?";
+    Message[ japanese ] = "‚±‚Ì”ÍˆÍ‚Í‹Œ‘®‚É‚ ‚è‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚·‚é‚É‚Í\n‘®‚ğ•ÏŠ·‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\n‘®•ÏŠ·‚µ‚Ü‚·‚©?";
+    Message[ chinese_traditional ] = "³o­Ó°Ï°ìªº®æ¦¡¬OÂÂªº¡C\n­nÀx¦sÅÜ§ó´N¥²¶·Âà´«¥¦®æ¦¡¡C\n±z­nÂà´«¥¦ªº®æ¦¡¡H";
+    Message[ arabic ] = "ÊäÓíŞ ÇáäØÇŞ ŞÏíã.\níÌÈ ÊÍæíáå¡ ÍÊì íãßä \nÍİÙ ÇáÊÛííÑÇÊ.\nåá ÊÑíÏ ÊÍæíáå¿";
+    Message[ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
+    Message[ chinese_simplified ] = "Õâ¸öÇøÓò¾ßÓĞµÄ¸ñÊ½ÊÇ¾ÉµÄ¡£\nÒª´æÅÌ¸ü¸Ä¾Í±ØĞë½øĞĞ¸ñÊ½×ª»»¡£\nÒª×ª»»¸ñÊ½Âğ£¿";
+    Message[ greek ] = "Ç ğåñéï÷Ş õğÜñ÷åé óå ğáëéÜ ìïñöŞ.\nĞñİğåé íá ãßíåé ìåôáôñïğŞ ôçò ãéá íá åßíáé äõíáôŞ\nç áğïèŞêåõóç ôùí áëëáãşí.\nÈİëåôå íá ãßíåé ç ìåôáôñïğŞ;";
+    Message[ korean ] = "±¸¿ª ¼­½ÄÀÌ ¿À·¡µÈ°ÍÀÔ´Ï´Ù.\n ÀÌ°ÍÀ» º¯È¯ÇÏ¿©¾ß º¯°æÀÌ\nÀúÀåÀÌµË´Ï´Ù.\n Áö±İ º¯È¯ ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Bölümün formatı eski.\nDeğişikliklerin kaydedilebilmesi n\niçin değiştirilmesi gerekiyor.\nFormat değiştirilsin mi?";
+    Message[ language_user1 ] = " ";
+};
+
+String STR_PRIVATETEXT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? StarWriter : Formatierter Text [StarWriter] */
+    Text = "StarOffice Writer" ;
+    Text [ dutch ] = "StarOffice Writer" ;
+    Text [ english_us ] = "StarOffice Writer" ;
+    Text [ italian ] = "StarOffice Writer" ;
+    Text [ spanish ] = "StarOffice Writer" ;
+    Text [ french ] = "StarOffice Writer" ;
+    Text [ swedish ] = "StarOffice Writer" ;
+    Text [ danish ] = "StarOffice Writer" ;
+    Text [ portuguese ] = "StarOffice Writer" ;
+    Text [ portuguese_brazilian ] = "StarOffice Writer" ;
+    Text[ chinese_simplified ] = "StarOffice Writer";
+    Text[ russian ] = "StarOffice Writer";
+    Text[ polish ] = "StarOffice Writer";
+    Text[ japanese ] = "StarOffice Writer";
+    Text[ chinese_traditional ] = "StarOffice Writer";
+    Text[ arabic ] = "StarOffice Writer";
+    Text[ greek ] = "StarOffice Writer";
+    Text[ korean ] = "StarOffice Writer";
+    Text[ turkish ] = "StarOffice Writer";
+    Text[ language_user1 ] = " ";
+};
+String STR_PRIVATEGRAPHIC
+{
+    Text = "Grafik [StarOffice Writer]" ;
+    Text [ ENGLISH ] = "Graphic [StarOffice Writer]" ;
+    Text [ norwegian ] = "Graphic [StarOffice Writer]" ;
+    Text [ italian ] = "Immagine [StarOffice Writer]" ;
+    Text [ portuguese_brazilian ] = "Gráfico [StarOffice Writer]" ;
+    Text [ portuguese ] = "Imagem [StarOffice Writer]" ;
+    Text [ finnish ] = "Kuva [StarOffice Writer]" ;
+    Text [ danish ] = "Grafik [StarOffice Writer]" ;
+    Text [ french ] = "Image [StarOffice Writer]" ;
+    Text [ swedish ] = "Grafik [StarOffice Writer]" ;
+    Text [ dutch ] = "Afbeelding [StarOffice Writer]" ;
+    Text [ spanish ] = "Imagen [StarOffice Writer]" ;
+    Text [ english_us ] = "Graphics [StarOffice Writer]" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ [StarOffice Writer]";
+    Text[ russian ] = "Ğèñóíîê [StarOffice Writer]";
+    Text[ polish ] = "Grafika [StarOffice Writer]";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸ [StarOffice Writer]";
+    Text[ greek ] = "Ãñáöéêü [StarOffice Writer]";
+    Text[ korean ] = "±×·¡ÇÈ [StarOffice Writer]";
+    Text[ chinese_traditional ] = "¹Ï§Î [StarOffice Writer]";
+    Text[ arabic ] = "[StarOffice Writer] ÑÓæãÇÊ";
+    Text[ turkish ] = "Grafik [StarOffice Writer]";
+};
+String STR_PRIVATEOLE
+{
+    Text = "Objekt [StarOffice Writer]" ;
+    Text [ ENGLISH ] = "Object [StarOffice Writer]" ;
+    Text [ english_us ] = "Object [StarOffice Writer]" ;
+    Text [ italian ] = "Oggetto [StarOffice Writer]" ;
+    Text [ spanish ] = "Objeto [StarOffice Writer]" ;
+    Text [ french ] = "Objet [StarOffice Writer]" ;
+    Text [ dutch ] = "Object [StarOffice Writer]" ;
+    Text [ swedish ] = "Objekt [StarOffice Writer]" ;
+    Text [ danish ] = "Objekt [StarOffice Writer]" ;
+    Text [ portuguese ] = "Objecto [StarOffice Writer]" ;
+    Text [ portuguese_brazilian ] = "Objekt [StarOffice Writer]" ;
+    Text[ chinese_simplified ] = "¶ÔÏó [StarOffice Writer]";
+    Text[ russian ] = "Îáúåêò [StarOffice Writer]";
+    Text[ polish ] = "Obiekt [StarOffice Writer]";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä [StarOffice Writer]";
+    Text[ greek ] = "Áíôéêåßìåíï [StarOffice Writer]";
+    Text[ korean ] = "°³Ã¼ [StarOffice Writer]";
+    Text[ chinese_traditional ] = "ª«¥ó [StarOffice Writer]";
+    Text[ arabic ] = "[StarOffice Writer]ßÇÆä ";
+    Text[ turkish ] = "Nesne [StarOffice Writer]";
+};
+String STR_DDEFORMAT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? DDE Verknüpfung : DDE Verkn³pfung */
+    Text = "DDE Verknüpfung" ;
+    Text [ ENGLISH ] = "DDE link" ;
+    Text [ norwegian ] = "DDE link" ;
+    Text [ italian ] = "Collegamento DDE" ;
+    Text [ portuguese_brazilian ] = "Ligação do DDE" ;
+    Text [ portuguese ] = "Ligação DDE" ;
+    Text [ finnish ] = "DDE-linkki" ;
+    Text [ danish ] = "DDE-kæde" ;
+    Text [ french ] = "Lien DDE" ;
+    Text [ swedish ] = "DDE-länk" ;
+    Text [ dutch ] = "DDE-koppeling" ;
+    Text [ spanish ] = "Vínculo DDE" ;
+    Text [ english_us ] = "DDE link" ;
+    Text[ chinese_simplified ] = "DDE Á´½Ó";
+    Text[ russian ] = "Ññûëêà DDE";
+    Text[ polish ] = "£¹cza DDE ";
+    Text[ japanese ] = "DDE Øİ¸";
+    Text[ chinese_traditional ] = "DDE ±¶®|";
+    Text[ arabic ] = "ÇÑÊÈÇØ DDE";
+    Text[ dutch ] = "DDE-koppeling";
+    Text[ chinese_simplified ] = "DDE Á´½Ó";
+    Text[ greek ] = "Óıíäåóìïò DDE";
+    Text[ korean ] = "DDE ¿¬°á";
+    Text[ turkish ] = "DDE bağlantısı";
+    Text[ language_user1 ] = " ";
+};
+String STR_RTFFORMAT
+{
+    Text = "Formatierter Text [RTF]" ;
+    Text [ ENGLISH ] = "Formatted text [RTF]" ;
+    Text [ norwegian ] = "Formatert tekst [RTF]" ;
+    Text [ italian ] = "Testo formattato [RTF]" ;
+    Text [ portuguese_brazilian ] = "Texto formatado [RTF]" ;
+    Text [ portuguese ] = "Texto formatado [RTF]" ;
+    Text [ finnish ] = "Muotoiltu teksti [RTF]" ;
+    Text [ danish ] = "Formateret tekst [RTF]" ;
+    Text [ french ] = "Texte formaté [RTF]" ;
+    Text [ swedish ] = "Formaterad text [RTF]" ;
+    Text [ dutch ] = "Opgemaakte tekst [RTF]" ;
+    Text [ spanish ] = "Texto formateado [RTF]" ;
+    Text [ english_us ] = "Formatted text [RTF]" ;
+    Text[ chinese_simplified ] = "ÒÑ¸ñÊ½»¯µÄÎÄ±¾[RTF]";
+    Text[ russian ] = "Îòôîğìàòèğîâàííûé òåêñò [RTF]";
+    Text[ polish ] = "Sformatowany tekst [RTF]";
+    Text[ japanese ] = "‘®İ’èÏ‚İ‚ÌÃ·½Ä [RTF]";
+    Text[ greek ] = "Ìïñöïğïéçìİíï êåßìåíï [RTF]";
+    Text[ korean ] = "¼­½ÄÀÖ´Â ÅØ½ºÆ® [RTF]";
+    Text[ chinese_traditional ] = "¤w¸g®æ¦¡¤Æªº¤å¦r [RTF]";
+    Text[ arabic ] = "[RTF]äÕ ãõäÓŞ ";
+    Text[ turkish ] = "Formatlı metin [RTF]";
+};
+String STR_TEXTFORMAT
+{
+    Text = "Unformatierter Text" ;
+    Text [ ENGLISH ] = "Unformatted Text" ;
+    Text [ norwegian ] = "Uformatert Tekst" ;
+    Text [ italian ] = "Testo non formattato" ;
+    Text [ portuguese_brazilian ] = "Texto Não Formatado" ;
+    Text [ portuguese ] = "Texto não formatado" ;
+    Text [ finnish ] = "Muotoilematon teksti" ;
+    Text [ danish ] = "Uformateret tekst" ;
+    Text [ french ] = "Texte non formaté" ;
+    Text [ swedish ] = "Oformaterad text" ;
+    Text [ dutch ] = "Tekst zonder opmaak" ;
+    Text [ spanish ] = "Texto no formateado" ;
+    Text [ english_us ] = "Unformatted text" ;
+    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ±¾";
+    Text[ russian ] = "Íåîòôîğìàòèğîâàííûé òåêñò";
+    Text[ polish ] = "Tekst bez formatu";
+    Text[ japanese ] = "‘®İ’è‚³‚ê‚Ä‚¢‚È‚¢Ã·½Ä";
+    Text[ chinese_traditional ] = "¥¼®æ¦¡¤Æªº¤å¦r";
+    Text[ arabic ] = "äÕ ÛíÑ ãäÓŞ";
+    Text[ dutch ] = "Tekst zonder opmaak";
+    Text[ chinese_simplified ] = "Î´¸ñÊ½»¯µÄÎÄ±¾";
+    Text[ greek ] = "Êåßìåíï ÷ùñßò ìïñöïğïßçóç";
+    Text[ korean ] = "¼­½Ä¾ø´Â ÅØ½ºÆ®";
+    Text[ turkish ] = "Formatlanmamış metin";
+    Text[ language_user1 ] = " ";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

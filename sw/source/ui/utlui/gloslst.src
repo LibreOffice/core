@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ *  $RCSfile: gloslst.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "utlui.hrc"
+#include "helpid.h"
+#include "gloslst.hrc"
+
+ModalDialog DLG_GLOSSARY_DECIDE_DLG
+{
+    HelpID = HID_DLG_GLOSS_DECIDE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 161 , 67 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Textbaustein auswählen:  : Textbaustein auswõhlen:  */
+    Text = "Textbaustein auswählen: " ;
+    Text [ ENGLISH ] = "Select glossary: " ;
+    Moveable = TRUE ;
+    GroupBox GB_GLOSS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93 , 58 ) ;
+        Text = "AutoText - Gruppe" ;
+        Text [ ENGLISH ] = "Glossary group" ;
+        Text [ english_us ] = "AutoText - Group" ;
+        Text [ portuguese_brazilian ] = "AutoText - Gruppe" ;
+        Text [ swedish ] = "AutoText - grupp" ;
+        Text [ danish ] = "AutoTekst - gruppe" ;
+        Text [ italian ] = "Testo automatico - Gruppo" ;
+        Text [ spanish ] = "Grupo AutoTexto" ;
+        Text [ french ] = "AutoTexte - Groupe" ;
+        Text [ dutch ] = "AutoTekst-groep" ;
+        Text [ portuguese ] = "AutoTexto - Grupo" ;
+        Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯Ð¡×é";
+        Text[ russian ] = "Àâòîòåêñò - Ãðóïïà";
+        Text[ polish ] = "Autotekst - Grupa";
+        Text[ japanese ] = "“ü—ÍŽx‰‡  ¸ÞÙ°Ìß";
+        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°¤p²Õ";
+        Text[ arabic ] = "ãÌãæÚÉ äÕ ÊáÞÇÆí";
+        Text[ greek ] = "ÏìÜäá ÁõôïÊåéìÝíïõ";
+        Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® ±×·ì";
+        Text[ turkish ] = "Otomatik metin - Grup";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 105 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    ListBox LB_LIST
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 81 , 40 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    Text [ english_us ] = "Select AutoText: " ;
+    Text [ portuguese_brazilian ] = "Textbaustein auswählen: " ;
+    Text [ swedish ] = "Välj ut textblock:  " ;
+    Text [ danish ] = "Vælg tekstelementer: " ;
+    Text [ italian ] = "Seleziona modulo di testo:  " ;
+    Text [ spanish ] = "Seleccionar módulo de texto:  " ;
+    Text [ french ] = "Sélection du module de texte : " ;
+    Text [ dutch ] = "Tekstbouwsteen selecteren:  " ;
+    Text [ portuguese ] = "Seleccionar módulo de texto:  " ;
+    Text[ chinese_simplified ] = "Ñ¡Ôñ´ÊÌõ£º ";
+    Text[ russian ] = "Âûáðàòü àâòîòåêñò: ";
+    Text[ polish ] = "Zaznacz blok tekstu:  ";
+    Text[ japanese ] = "Ã·½ÄÌÞÛ¯¸‚Ì‘I‘ð: ";
+    Text[ chinese_traditional ] = "¿ï¾Ü¦Û°Ê¹Ï¤å¶°¡G ";
+    Text[ arabic ] = "ÇÎÊíÇÑ ÚäÕÑ ÇáäÕ: ";
+    Text[ greek ] = "ÅðéëïãÞ ôìÞìáôïò êåéìÝíïõ: ";
+    Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® ¼±ÅÃ: ";
+    Text[ turkish ] = "Metin bileþeni seç: ";
+    Text[ language_user1 ] = " ";
+};
+
+

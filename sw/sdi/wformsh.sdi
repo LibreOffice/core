@@ -1,0 +1,25 @@
+interface WebDrawForm: BaseTextDrawForm
+[
+    uuid = "4bac4490-fede-11d1-abff-006097b418c2"
+]
+{
+    import WebDrawBase;
+}
+
+shell SwWebDrawFormShell : SwWebDrawBaseShell
+{
+    import WebDrawForm[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  1998/06/08 16:07:30  OM
+    Initial revision.
+
+
+      Rev 1.0   08 Jun 1998 18:07:30   OM
+   Initial revision.
+
+------------------------------------------------------------------------*/
+

@@ -1,0 +1,155 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   beziersh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/beziersh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File SwBezierShell fuer Sw4
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextBezier : TextSelection
+[
+    uuid = "68EF7EA0-6876-11D0-A887-008029E86826" ]
+{
+    SID_DELETE
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_BACKSPACE
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_ESCAPE // api:
+    [
+        ExecMethod = Execute;
+    ]
+
+    SID_BEZIER_MOVE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_INSERT
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_DELETE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_CUTLINE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_CONVERT
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_EDGE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_SMOOTH
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_SYMMTR
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_CLOSE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_ELIMINATE_POINTS
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+shell SwBezierShell: SwBaseShell
+{
+    import TextBezier[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.9  1998/11/12 16:28:52  MA
+    #58677# Disable Flag
+
+
+      Rev 1.8   12 Nov 1998 17:28:52   MA
+   #58677# Disable Flag
+
+      Rev 1.7   11 Jul 1998 12:47:56   OM
+   #51754# BezierShell ist von SwBaseShell abgeleitet
+
+      Rev 1.6   08 Sep 1997 12:54:08   MBA
+   Bezier von DrawBase abgeleitet
+
+      Rev 1.5   28 Aug 1997 12:52:06   MBA
+   Neue Interface-Namen
+
+      Rev 1.4   13 Feb 1997 12:44:42   MA
+   unnoetige Texte entfernt
+
+      Rev 1.3   23 Jan 1997 14:33:24   OS
+   Ableitung von _Bezier
+
+      Rev 1.2   16 Jan 1997 16:50:34   OM
+   Escape an Bezier-Shell
+
+      Rev 1.1   13 Jan 1997 16:01:42   OM
+   Bezier-Punkte loeschen
+
+      Rev 1.0   08 Jan 1997 12:40:12   OM
+   Initial revision.
+
+------------------------------------------------------------------------*/
+

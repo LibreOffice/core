@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ *  $RCSfile: column.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define FT_NUMBER       1
+#define ED_NUMBER       2
+#define FT_DISTANCE     3
+#define ED_DISTANCE     4
+#define CB_AUTO_WIDTH   4
+#define GB_COLUMNS      6
+
+#define FT_1            20
+#define FT_2            21
+#define FT_3            22
+
+
+#define ED_1            25
+#define ED_2            26
+#define ED_3            27
+
+
+#define BTN_UP          30
+#define BTN_DOWN        31
+#define GB_LAYOUT       32
+
+#define FT_STYLE        33
+#define LB_STYLE        34
+#define FT_HEIGHT       35
+#define ED_HEIGHT       36
+#define FT_POSITION     37
+#define LB_POSITION     38
+#define GB_LINETYPE     39
+
+
+#define GB_BSP          40
+#define WN_BSP          41
+#define LB_REFERENCE        42
+#define CB_REGISTER             43
+#define GB_REGISTER             44
+#define FT_REFERENCE        45
+
+#define ED_DIST1                46
+#define ED_DIST2                47
+
+#define FT_WIDTH                49
+#define FT_DIST                 50
+#define VS_DEFAULTS             51
+#define IL_PRE_COLS             52
+
+#define FT_APPLY_TO             53
+#define LB_APPLY_TO             54
+#define PB_HELP                 55
+#define PB_CANCEL               56
+#define PB_OK                   57
+#define CB_BALANCECOLS          58
+
+#define LISTBOX_SELECTION       0
+#define LISTBOX_SECTION         1
+#define LISTBOX_SECTIONS        2
+#define LISTBOX_PAGE            3
+#define LISTBOX_FRAME           4

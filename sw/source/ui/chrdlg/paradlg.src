@@ -1,0 +1,446 @@
+/*************************************************************************
+ *
+ *  $RCSfile: paradlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "chrdlg.hrc"
+#include "paradlg.hrc"
+#define HelpText "error - hier keine HelpTexte HelpText"
+ // #define DLG_PARA 256
+TabDialog DLG_PARA
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Absatz" ;
+    Text [ ENGLISH ] = "Paragraph" ;
+    Text [ norwegian ] = "Avsnitt" ;
+    Text [ italian ] = "Paragrafo" ;
+    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese ] = "Parágrafo" ;
+    Text [ finnish ] = "Kappale" ;
+    Text [ danish ] = "Afsnit" ;
+    Text [ french ] = "Paragraphe" ;
+    Text [ swedish ] = "Stycke" ;
+    Text [ dutch ] = "Alinea" ;
+    Text [ spanish ] = "Párrafo" ;
+    Text [ english_us ] = "Paragraph" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_PARA_STD ;
+                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
+                Text = "Einzüge und Abstände" ;
+                Text [ ENGLISH ] = "Paragraph" ;
+                Text [ norwegian ] = "Avsnitt" ;
+                Text [ italian ] = "Paragrafo" ;
+                Text [ portuguese_brazilian ] = "Parágrafo" ;
+                Text [ portuguese ] = "Avanços e espaçamento" ;
+                Text [ finnish ] = "Kappale" ;
+                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ french ] = "Retraits et écarts" ;
+                Text [ swedish ] = "Indrag och avstånd" ;
+                Text [ dutch ] = "Inspringen en afstanden" ;
+                Text [ spanish ] = "Sangrías y espacios" ;
+                Text [ english_us ] = "Indents & Spacing" ;
+                PageResID = TP_PARA_STD ;
+                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
+                Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
+                Text[ polish ] = "Wciêcia i odstêpy";
+                Text[ japanese ] = "²İÃŞİÄ‚ÆsŠÔŠu";
+                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
+                Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
+                Text[ korean ] = "µé¿©¾²±â¿Í °£°İ";
+                Text[ turkish ] = "Girinti ve aralıklar";
+                Text[ language_user1 ] = " ";
+            };
+#if SUPD>352
+            PageItem
+            {
+                Identifier = TP_PARA_ALIGN ;
+                Text = "Ausrichtung" ;
+                Text [ ENGLISH ] = "Alignment" ;
+                PageResID = TP_PARA_ALIGN ;
+                Text [ english_us ] = "Alignment" ;
+                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text [ swedish ] = "Justering" ;
+                Text [ danish ] = "Justering" ;
+                Text [ italian ] = "Allineamento" ;
+                Text [ spanish ] = "Alineación" ;
+                Text [ french ] = "Alignement" ;
+                Text [ dutch ] = "Uitlijning" ;
+                Text [ portuguese ] = "Alinhamento" ;
+                Text[ chinese_simplified ] = "¶ÔÆë";
+                Text[ russian ] = "Âûğàâíèâàíèå";
+                Text[ polish ] = "Wyrównanie";
+                Text[ japanese ] = "”z’u";
+                Text[ chinese_traditional ] = "¹ï»ô";
+                Text[ arabic ] = "ÇáãÍÇĞÇÉ";
+                Text[ greek ] = "Óôïß÷éóç";
+                Text[ korean ] = "¸ÂÃã";
+                Text[ turkish ] = "Hizalama";
+                Text[ language_user1 ] = " ";
+            };
+#endif
+            PageItem
+            {
+                Identifier = TP_PARA_EXT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Textfluß : Textflu˜ */
+                Text = "Textfluss" ;
+                Text [ ENGLISH ] = "Paragraph Extensions" ;
+                Text [ norwegian ] = "Utvidelse av avsnitt" ;
+                Text [ italian ] = "Flusso di testo" ;
+                Text [ portuguese_brazilian ] = "Extens es de Parágrafo" ;
+                Text [ portuguese ] = "Fluxo de texto" ;
+                Text [ finnish ] = "Tekstin rivitys" ;
+                Text [ danish ] = "Tekstretning" ;
+                Text [ french ] = "Enchaînements" ;
+                Text [ swedish ] = "Textflöde" ;
+                Text [ dutch ] = "Tekstverloop" ;
+                Text [ spanish ] = "Flujo del texto" ;
+                Text [ english_us ] = "Text Flow" ;
+                PageResID = TP_PARA_EXT ;
+                Text[ chinese_simplified ] = "»»ĞĞºÍ·ÖÒ³";
+                Text[ russian ] = "Ïîëîæåíèå íà ñòğàíèöå";
+                Text[ polish ] = "Tekst";
+                Text[ japanese ] = "‘ÌÙ";
+                Text[ chinese_traditional ] = "´«¦æ©M¤À­¶";
+                Text[ arabic ] = "ÇäÓíÇÈ ÇáäÕ";
+                Text[ language_user1 ] = " ";
+                Text[ greek ] = "ÑïŞ êåéìİíïõ";
+                Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
+                Text[ turkish ] = "Metin akışı";
+            };
+            PageItem
+            {
+                Identifier = TP_NUMPARA ;
+                Text = "Nummerierung" ;
+                Text [ ENGLISH ] = "Numbering" ;
+                Text [ english_us ] = "Numbering" ;
+                Text [ portuguese_brazilian ] = "Numerierung" ;
+                Text [ swedish ] = "Numrering" ;
+                Text [ danish ] = "Nummerering" ;
+                Text [ italian ] = "Numerazione" ;
+                Text [ spanish ] = "Numeración" ;
+                Text [ french ] = "Numérotation" ;
+                Text [ dutch ] = "Nummering" ;
+                Text [ portuguese ] = "Numeração" ;
+                Text[ chinese_simplified ] = "±àºÅ";
+                Text[ russian ] = "Íóìåğàöèÿ";
+                Text[ polish ] = "Numeracja";
+                Text[ japanese ] = "”Ô†•t‚¯";
+                Text[ chinese_traditional ] = "½s¸¹";
+                Text[ arabic ] = "ÇáÊÑŞíã";
+                Text[ greek ] = "Áñßèìçóç";
+                Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+                Text[ turkish ] = "Numaralama";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_TABULATOR ;
+                Text = "Tabulator" ;
+                Text [ ENGLISH ] = "Tab" ;
+                Text [ norwegian ] = "Tab" ;
+                Text [ italian ] = "Tabulazione" ;
+                Text [ portuguese_brazilian ] = "Tabulação" ;
+                Text [ portuguese ] = "Tabulação" ;
+                Text [ finnish ] = "Sarkain" ;
+                Text [ danish ] = "Tabulator" ;
+                Text [ french ] = "Tabulation" ;
+                Text [ swedish ] = "Tabulator" ;
+                Text [ dutch ] = "Tab" ;
+                Text [ spanish ] = "Tabulaciones" ;
+                Text [ english_us ] = "Tabs" ;
+                PageResID = TP_TABULATOR ;
+                Text[ chinese_simplified ] = "ÖÆ±í·û";
+                Text[ russian ] = "Òàáóëÿöèÿ";
+                Text[ polish ] = "Tabulator";
+                Text[ japanese ] = "ÀÌŞ";
+                Text[ chinese_traditional ] = "»sªí²Å";
+                Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
+                Text[ greek ] = "Óôçëïèİôçò";
+                Text[ korean ] = "ÅÇ";
+                Text[ turkish ] = "Sekmeler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_DROPCAPS ;
+                Text = "Initialen" ;
+                Text [ ENGLISH ] = "Drop caps" ;
+                Text [ norwegian ] = "Drop caps" ;
+                Text [ italian ] = "Capolettera" ;
+                Text [ portuguese_brazilian ] = "Capitulares descidas" ;
+                Text [ portuguese ] = "Iniciais" ;
+                Text [ finnish ] = "Anfangit" ;
+                Text [ danish ] = "Initialer" ;
+                Text [ french ] = "Lettrines" ;
+                Text [ swedish ] = "Anfangsbokstäver" ;
+                Text [ dutch ] = "Initialen" ;
+                Text [ spanish ] = "Iniciales" ;
+                Text [ english_us ] = "Drop Caps" ;
+                PageResID = TP_DROPCAPS ;
+                Text[ chinese_simplified ] = "×ÖÊ×´óĞ´";
+                Text[ russian ] = "Èíèöèàëû";
+                Text[ polish ] = "Inicja³y";
+                Text[ japanese ] = "ÄŞÛ¯Ìß·¬¯Ìß";
+                Text[ chinese_traditional ] = "¦r­º¤j¼g";
+                Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
+                Text[ greek ] = "Áñ÷éãñÜììáôá";
+                Text[ korean ] = "´Ü¶ô Ã¹¹®ÀÚ Àå½Ä";
+                Text[ turkish ] = "Başharfler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text = "Umrandung" ;
+                Text [ ENGLISH ] = "Border" ;
+                Text [ norwegian ] = "Border" ;
+                Text [ italian ] = "Bordo" ;
+                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese ] = "Contornos" ;
+                Text [ finnish ] = "Reunaviiva" ;
+                Text [ danish ] = "Ramme" ;
+                Text [ french ] = "Bordure" ;
+                Text [ swedish ] = "Inramning" ;
+                Text [ dutch ] = "Omranding" ;
+                Text [ spanish ] = "Borde" ;
+                Text [ english_us ] = "Borders" ;
+                PageResID = TP_BORDER ;
+                Text[ chinese_simplified ] = "±ß¿ò";
+                Text[ russian ] = "Îáğàìëåíèå";
+                Text[ polish ] = "Obramowanie";
+                Text[ japanese ] = "ŠO˜g";
+                Text[ chinese_traditional ] = "Ãä®Ø";
+                Text[ arabic ] = "ÇáÍÏæÏ";
+                Text[ greek ] = "Ğåñßãñáììá";
+                Text[ korean ] = "°æ°è¼±";
+                Text[ turkish ] = "Kenarlık";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text = "Hintergrund" ;
+                Text [ ENGLISH ] = "Background" ;
+                Text [ norwegian ] = "Background" ;
+                Text [ italian ] = "Sfondo" ;
+                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese ] = "Plano de fundo" ;
+                Text [ finnish ] = "Tausta" ;
+                Text [ danish ] = "Baggrund" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Bakgrund" ;
+                Text [ dutch ] = "Achtergrond" ;
+                Text [ spanish ] = "Fondo" ;
+                Text [ english_us ] = "Background" ;
+                PageResID = TP_BACKGROUND ;
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ russian ] = "Ôîí";
+                Text[ polish ] = "T³o";
+                Text[ japanese ] = "”wŒi";
+                Text[ chinese_traditional ] = "­I´º";
+                Text[ arabic ] = "ÇáÎáİíÉ";
+                Text[ greek ] = "Öüíôï";
+                Text[ korean ] = "¹è°æ";
+                Text[ turkish ] = "Artalan";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "¶ÎÂä";
+    Text[ russian ] = "Àáçàö";
+    Text[ polish ] = "Akapit";
+    Text[ japanese ] = "’i—";
+    Text[ chinese_traditional ] = "¬q¸¨";
+    Text[ arabic ] = "İŞÑÉ";
+    Text[ greek ] = "ĞáñÜãñáöïò";
+    Text[ korean ] = "´Ü¶ô";
+    Text[ turkish ] = "Paragraf";
+    Text[ language_user1 ] = " ";
+};
+TabDialog DLG_DRAWPARA
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Absatz" ;
+    Text [ ENGLISH ] = "Paragraph" ;
+    Text [ norwegian ] = "Avsnitt" ;
+    Text [ italian ] = "Paragrafo" ;
+    Text [ portuguese_brazilian ] = "Parágrafo" ;
+    Text [ portuguese ] = "Parágrafo" ;
+    Text [ finnish ] = "Kappale" ;
+    Text [ danish ] = "Afsnit" ;
+    Text [ french ] = "Paragraphe" ;
+    Text [ swedish ] = "Stycke" ;
+    Text [ dutch ] = "Alinea" ;
+    Text [ spanish ] = "Párrafo" ;
+    Text [ english_us ] = "Paragraph" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_PARA_STD ;
+                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
+                Text = "Einzüge und Abstände" ;
+                Text [ ENGLISH ] = "Paragraph" ;
+                Text [ norwegian ] = "Avsnitt" ;
+                Text [ italian ] = "Rientri e spaziature" ;
+                Text [ portuguese_brazilian ] = "Parágrafo" ;
+                Text [ portuguese ] = "Avanços e espaçamento" ;
+                Text [ finnish ] = "Kappale" ;
+                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ french ] = "Retraits et écarts" ;
+                Text [ swedish ] = "Indrag och avstånd" ;
+                Text [ dutch ] = "Inspringingen en afstanden" ;
+                Text [ spanish ] = "Sangrías y espacios" ;
+                Text [ english_us ] = "Indents & Spacing" ;
+                PageResID = TP_PARA_STD ;
+                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
+                Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
+                Text[ polish ] = "Wciêcia i odstêpy";
+                Text[ japanese ] = "²İÃŞİÄ‚ÆsŠÔŠu";
+                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
+                Text[ language_user1 ] = " ";
+                Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
+                Text[ korean ] = "µé¿©¾²±â¿Í °£°İ";
+                Text[ turkish ] = "Girinti ve aralıklar";
+            };
+#if SUPD>352
+            PageItem
+            {
+                Identifier = TP_PARA_ALIGN ;
+                Text = "Ausrichtung" ;
+                Text [ ENGLISH ] = "Alignment" ;
+                PageResID = TP_PARA_ALIGN ;
+                Text [ english_us ] = "Alignment" ;
+                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text [ swedish ] = "Justering" ;
+                Text [ danish ] = "Justering" ;
+                Text [ italian ] = "Allineamento" ;
+                Text [ spanish ] = "Alineación" ;
+                Text [ french ] = "Alignement" ;
+                Text [ dutch ] = "Uitlijning" ;
+                Text [ portuguese ] = "Alinhamento" ;
+                Text[ chinese_simplified ] = "¶ÔÆë";
+                Text[ russian ] = "Âûğàâíèâàíèå";
+                Text[ polish ] = "Wyrównanie";
+                Text[ japanese ] = "”z’u";
+                Text[ chinese_traditional ] = "¹ï»ô";
+                Text[ arabic ] = "ÇáãÍÇĞÇÉ";
+                Text[ greek ] = "Óôïß÷éóç";
+                Text[ korean ] = "¸ÂÃã";
+                Text[ turkish ] = "Hizalama";
+                Text[ language_user1 ] = " ";
+            };
+#endif
+            PageItem
+            {
+                Identifier = TP_TABULATOR ;
+                Text = "Tabulator" ;
+                Text [ ENGLISH ] = "Tab" ;
+                Text [ norwegian ] = "Tab" ;
+                Text [ italian ] = "Tabulazione" ;
+                Text [ portuguese_brazilian ] = "Tabulação" ;
+                Text [ portuguese ] = "Tabulação" ;
+                Text [ finnish ] = "Sarkain" ;
+                Text [ danish ] = "Tabulator" ;
+                Text [ french ] = "Tabulation" ;
+                Text [ swedish ] = "Tabulator" ;
+                Text [ dutch ] = "Tab" ;
+                Text [ spanish ] = "Tabulaciones" ;
+                Text [ english_us ] = "Tabs" ;
+                PageResID = TP_TABULATOR ;
+                Text[ chinese_simplified ] = "ÖÆ±í·û";
+                Text[ russian ] = "Òàáóëÿöèÿ";
+                Text[ polish ] = "Tabulator";
+                Text[ japanese ] = "ÀÌŞ";
+                Text[ chinese_traditional ] = "»sªí²Å";
+                Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
+                Text[ greek ] = "Óôçëïèİôçò";
+                Text[ korean ] = "ÅÇ";
+                Text[ turkish ] = "Sekmeler";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "¶ÎÂä";
+    Text[ russian ] = "Àáçàö";
+    Text[ polish ] = "Akapit";
+    Text[ japanese ] = "’i—";
+    Text[ chinese_traditional ] = "¬q¸¨";
+    Text[ arabic ] = "İŞÑÉ";
+    Text[ greek ] = "ĞáñÜãñáöïò";
+    Text[ korean ] = "´Ü¶ô";
+    Text[ turkish ] = "Paragraf";
+    Text[ language_user1 ] = " ";
+};

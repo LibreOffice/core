@@ -1,0 +1,50 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   wfrmSH.IDL  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wfrmsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   FrameShell fuer StarWriter/Web
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface WebFrame : BaseTextFrame
+[
+    uuid = "B47F0DE6-1E1F-11d1-89CA-008029E4B0B1"
+]
+{
+    import BaseTextSelection;
+}
+
+
+ //=========================================================================
+
+shell SwWebFrameShell : SwBaseShell
+{
+        import WebFrame[Automation];
+}
+
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.4  2000/02/01 09:45:00  os
+    #72282# SwWebBaseShell removed
+
+    Revision 1.3  1997/08/28 10:51:42  MBA
+    Neue Interface-Namen
+
+
+      Rev 1.2   28 Aug 1997 12:51:42   MBA
+   Neue Interface-Namen
+
+      Rev 1.1   31 Jan 1997 13:24:50   OS
+   SwWebFrameShell
+
+      Rev 1.0   23 Jan 1997 14:46:46   OS
+   Initial revision.
+
+------------------------------------------------------------------------*/
+

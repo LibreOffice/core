@@ -1,0 +1,1624 @@
+/*************************************************************************
+ *
+ *  $RCSfile: utlui.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "utlui.hrc"
+#include "helpid.h"
+#include "comcore.hrc"
+
+
+Resource RID_SHELLRES_AUTOFMTSTRS
+{
+    String STR_AUTOFMTREDL_DEL_EMPTY_PARA+1
+    {
+        Text = "Leere Absätze entfernen" ;
+        Text [ English ] = "Remove empty paragraphs" ;
+        Text [ english_us ] = "Remove empty paragraphs" ;
+        Text [ swedish ] = "Ta bort tomma stycken" ;
+        Text [ danish ] = "Fjern tomme afsnit" ;
+        Text [ italian ] = "Elimina paragrafi vuoti" ;
+        Text [ spanish ] = "Eliminar párrafos vacíos" ;
+        Text [ french ] = "Supprimer les paragraphes vides" ;
+        Text [ dutch ] = "Lege alinea´s verwijderen" ;
+        Text [ portuguese_brazilian ] = "Leere Absätze entfernen" ;
+        Text [ portuguese ] = "Remover parágrafos vazios" ;
+        Text[ chinese_simplified ] = "É¾³ı¿Õ°×¶ÎÂä";
+        Text[ russian ] = "Óäàëèòü ïóñòûå àáçàöû";
+        Text[ polish ] = "Usuñ puste akapity";
+        Text[ japanese ] = "‹ó‚Ì’i—‚ğíœ";
+        Text[ chinese_traditional ] = "§R°£ªÅ¥Õ¬q¸¨";
+        Text[ arabic ] = "ÅÒÇáÉ ÇáİŞÑÇÊ ÇáİÇÑÛÉ";
+        Text[ greek ] = "ÄéáãñáöŞ êåíşí ğáñáãñÜöùí";
+        Text[ korean ] = "ºó ´Ü¶ô Á¦°Å";
+        Text[ turkish ] = "Boş paragrafları kaldır";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_USE_REPLACE+1
+    {
+        Text = "Ersetzungstabelle anwenden" ;
+        Text [ English ] = "Apply replacement table" ;
+        Text [ english_us ] = "Use replacement table" ;
+        Text [ swedish ] = "Använd ersättningstabell" ;
+        Text [ danish ] = "Anvend erstatningstabel" ;
+        Text [ italian ] = "Applica tabella delle sostituzioni" ;
+        Text [ spanish ] = "Usar tabla de sustitución" ;
+        Text [ french ] = "Utiliser la table de remplacement" ;
+        Text [ dutch ] = "Vervangingstabel gebruiken" ;
+        Text [ portuguese_brazilian ] = "Ersetzungstabelle anwenden" ;
+        Text [ portuguese ] = "Aplicar tabela de substituição" ;
+        Text[ chinese_simplified ] = "Ê¹ÓÃ¸üÌæ±í¸ñ";
+        Text[ russian ] = "Ïğèìåíèòü òàáëèöó çàìåí";
+        Text[ polish ] = "U¿yj tabeli zamian";
+        Text[ japanese ] = "’uŠ·Ã°ÌŞÙ‚Ìg—p";
+        Text[ chinese_traditional ] = "¨Ï¥Î¥N´Àªí";
+        Text[ arabic ] = "ÇÓÊÎÏÇã ŞÇÆãÉ ÇáÇÓÊÈÏÇá";
+        Text[ greek ] = "ÅöáñìïãŞ ğßíáêá áíôéêáôÜóôáóçò";
+        Text[ korean ] = "´ëÃ¼ Ç¥ Àû¿ë";
+        Text[ turkish ] = "Değiştirme tablosunu kullan";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_CPTL_STT_WORD+1
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? ZWei Großbuchstaben am WOrtanfang korrigieren : ZWei Gro˜buchstaben am WOrtanfang korrigieren */
+        Text = "ZWei Großbuchstaben am WOrtanfang korrigieren" ;
+        Text [ ENGLISH ] = "REplace two Capital Letters at the WOrd beginning" ;
+        Text [ norwegian ] = "ERstatt to Store Bokstaver i begynnelsen av ORd" ;
+        Text [ italian ] = "COrreggi la doppia MAiuscola ad inizio PArola" ;
+        Text [ portuguese_brazilian ] = "SUbstituir duas Letras Maiosculas no in¡cio da Palavra" ;
+        Text [ portuguese ] = "COrrigir duas maiúsculas no INício da palavra" ;
+        Text [ finnish ] = "Korvaa kaksi ISoa kirjainta sanan alussa" ;
+        Text [ danish ] = "REt andet bogstav i ORd til lille" ;
+        Text [ french ] = "COrriger la 2e majuscule en DÉbut de mot" ;
+        Text [ swedish ] = "KOrrigera två versaler i BÖrjan av ordet" ;
+        Text [ dutch ] = "TWee hoofdletters aan WOordbegin corrigeren" ;
+        Text [ spanish ] = "Corregir DOs MAyúsculas a principio de PAlabra" ;
+        Text [ english_us ] = "Correct TWo INitial CApitals" ;
+        Text[ chinese_simplified ] = "¸üÕı×ÖÊ×Ë«ÖØ´óĞ´×ÖÄ¸";
+        Text[ russian ] = "Èñïğàâëÿòü ÄÂå ÏĞîïèñíûå áóêâû â íà÷àëå ñëîâà";
+        Text[ polish ] = "Poprawiaj DWa POcz¹tkowe WErsaliki";
+        Text[ japanese ] = "2•¶š–Ú‚ğ¬•¶š‚É‚·‚é";
+        Text[ chinese_traditional ] = "®Õ¥¿¦r­ºÂù¤j¼g¦r¥À";
+        Text[ arabic ] = "ÊÕÍíÍ ÍÑİíä ÇÓÊåáÇáííä İí ÈÏÇíÉ ÇáßáãÉ";
+        Text[ greek ] = "Äéüñèùóç ÄÕï êåöáëáßùí ãñáììÜôùí óôçí ÁÑ÷Ş ôçò ëİîçò";
+        Text[ korean ] = "´Ü¾î Ã³À½ÀÇ µÎ ´ë¹®ÀÚ ¼öÁ¤";
+        Text[ turkish ] = "SÖzcük başındaki İKi büyük harfi düzelt";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_CPTL_STT_SENT+1
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Jeden Satz mit einem Großbuchstaben beginnen : Jeden Satz mit einem Gro˜buchstaben beginnen */
+        Text = "Jeden Satz mit einem Großbuchstaben beginnen" ;
+        Text [ ENGLISH ] = "Start each Sentence with a Capital Letter" ;
+        Text [ norwegian ] = "Begynn hver Setning med Stor Bokstav" ;
+        Text [ italian ] = "Inizia ogni frase con la maiuscola" ;
+        Text [ portuguese_brazilian ] = "Iniciar cada Sentença com uma Letra Maioscula" ;
+        Text [ portuguese ] = "Iniciar todas as frases com uma letra maiúscula" ;
+        Text [ finnish ] = "Aloita jokainen virke isolla kirjaimella" ;
+        Text [ danish ] = "Første bogstav i sætninger med stort" ;
+        Text [ french ] = "Majuscule en début de phrase" ;
+        Text [ swedish ] = "Börja varje mening med en versal" ;
+        Text [ dutch ] = "Elke zin met een hoofdletter beginnen" ;
+        Text [ spanish ] = "Iniciar cada frase con una letra mayúscula" ;
+        Text [ english_us ] = "Capitalize first letter of sentences" ;
+        Text[ chinese_simplified ] = "Ã¿¸ö¾äÊ×²ÉÓÃ´óĞ´×ÖÄ¸";
+        Text[ russian ] = "Íà÷èíàòü êàæäîå ïğåäëîæåíèå ñ ïğîïèñíîé áóêâû";
+        Text[ polish ] = "Pocz¹tek zdania z du¿ej litery";
+        Text[ japanese ] = "‚·‚×‚Ä‚Ì•¶‚ğ‘å•¶š‚Ån‚ß‚é";
+        Text[ chinese_traditional ] = "¨C­Ó¥y­º±Ä¥Î¤j¼g¦r¥À";
+        Text[ arabic ] = "ÈÏÁ ßá ÌãáÉ ÈÍÑİ ÇÓÊåáÇáí";
+        Text[ greek ] = "Åêêßíçóç êÜèå ğñüôáóçò ìå êåöáëáßï ãñÜììá";
+        Text[ korean ] = "¸ğµç ¹®ÀåÀ» ´ë¹®ÀÚ·Î ½ÃÀÛ";
+        Text[ turkish ] = "Cümleleri büyük harf ile başlat.";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_TYPO+1
+    {
+        Text = "\"Gerade\" Anführungszeichen durch %1typografische%2 ersetzen" ;
+        Text [ ENGLISH ] = "Replace \"Standard\" Quotes by %1typographical%2 Quotes" ;
+        Text [ norwegian ] = "Erstatt \"Standard\" +++Quotes med %1typografiske%2 +++Quotes" ;
+        Text [ italian ] = "Sostituisci virgolette \"Standard\" con virgolette %1tipografiche%2" ;
+        Text [ portuguese_brazilian ] = "Substituir Citaçäes\"Padrao\" por Citaçäes \\%1typogr ficoal\\%2" ;
+        Text [ portuguese ] = "Substituir aspas \"padrão\" por aspas %1tipográficas%2" ;
+        Text [ finnish ] = "Korvaa \"vakio\"lainausmerkit %1typografisilla%2" ;
+        Text [ danish ] = "Erstat \"lige\" anførselstegn med %1typografiske%2" ;
+        Text [ french ] = "Remplacer les guillemets \"standard\" par des guillemets %1typographiques%2" ;
+        Text [ swedish ] = "Ersätt \"raka\" citationstecken med %1typografiska%2 citationstecken" ;
+        Text [ dutch ] = "\"Rechte\" aanhalingstekens vervangen door %1 typografische%2" ;
+        Text [ spanish ] = "Reemplazar comillas \"rectas\" con comillas %1tipográficas%2" ;
+        Text [ english_us ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
+        Text[ chinese_simplified ] = "\"Ö±ĞÍ\"ÒıºÅÓÉ%1¸öÈËÒıºÅ%2 ´úÌæ";
+        Text[ russian ] = "Çàìåíÿòü \"ïğÿìûå\" êàâû÷êè %1òèïîãğàôñêèìè %2";
+        Text[ polish ] = "Zamieniaj cudzys³owy \"proste\" na %1 \"drukarskie\" %2";
+        Text[ japanese ] = "\"ºİËß­°À—p\"¸«°Ã°¼®İÏ°¸‚ğ%1ˆóü—p%2‚É’uŠ·";
+        Text[ chinese_traditional ] = "\"ª½«¬¤Ş¸¹\"¥Ñ%1­Ó¤H¤Ş¸¹%2 ´À¥N";
+        Text[ arabic ] = "ÇÓÊÈÏÇá ÚáÇãÇÊ ÊäÕíÕ \"ÚÇÏíÉ\" ÈÜÚáÇãÇÊ ÊäÕíÕ%1ØÈæÛÑÇİíøÉ%2";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç \"ßóùí\" åéóáãùãéêşí ìå %1ôõğïãñáöéêÜ%2";
+        Text[ korean ] = "\"Á÷¼±\" ÀÎ¿ëºÎÈ£¸¦ %1ÀÎ¼âÃ¼%2 ÀÎ¿ëºÎÈ£·Î ¹Ù²Ş";
+        Text[ turkish ] = "\"Düz\" tırnak işaretlerini %1tipografik işaretler ile%2 değiştir";
+    };
+    String STR_AUTOFMTREDL_USER_STYLE+1
+    {
+        Text = "Benutzervorlagen ersetzen" ;
+        Text [ English ] = "Replace user styles" ;
+        Text [ dutch ] = "Eigen opmaakprofielen vervangen" ;
+        Text [ english_us ] = "Replace Custom Styles" ;
+        Text [ swedish ] = "Ersätt användardefinierade formatmallar" ;
+        Text [ danish ] = "Erstat brugertypografier" ;
+        Text [ italian ] = "Sostituisci modelli utente" ;
+        Text [ spanish ] = "Reemplazar estilos del usuario" ;
+        Text [ french ] = "Remplacer les styles personnalisés" ;
+        Text [ portuguese ] = "Substituir estilos personalizados" ;
+        Text [ portuguese_brazilian ] = "Benutzervorlagen ersetzen" ;
+        Text[ chinese_simplified ] = "¸üÌæÓÃ»§ÑùÊ½";
+        Text[ russian ] = "Çàìåíèòü ñòèëè ïîëüçîâàòåëÿ";
+        Text[ polish ] = "Zamieñ szablony u¿ytkownika";
+        Text[ japanese ] = "Õ°»Ş°İ’è‚Ì½À²Ù‚É’u‚«Š·‚¦‚é";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "¥N´À¦Û­q¼Ë¦¡";
+        Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÃäãÇØ ÇáãÎÕÕÉ";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç ğñïóáñìïóìİíùí ğñïôığùí";
+        Text[ korean ] = "»ç¿ëÀÚ ¼­½ÄÆÄÀÏ ´ëÃ¼";
+        Text[ turkish ] = "Kullanıcı biçimini değiştir";
+    };
+    String STR_AUTOFMTREDL_BULLET+1
+    {
+        Text = "Bulletzeichen ersetzt" ;
+        Text [ ENGLISH ] = "Replace Bullets" ;
+        Text[ italian ] = "Punti sostituiti";
+        Text[ portuguese_brazilian ] = "Replace Bullets";
+        Text[ portuguese ] = "Marca substituída";
+        Text[ danish ] = "Erstat punkttegn";
+        Text[ french ] = "Remplacer les puces";
+        Text[ swedish ] = "Ersätt uppräkningstecken";
+        Text[ dutch ] = "Opsommingstekens vervangen";
+        Text[ spanish ] = "Viñeta reemplazada";
+        Text[ english_us ] = "Bullets replaced";
+        Text[ chinese_simplified ] = "¸üÌæÏîÄ¿±àºÅ";
+        Text[ language_user1 ] = " ";
+        Text[ russian ] = "Ìàğêåğû çàìåíåíû";
+        Text[ polish ] = "Zamienione znaki wypunktowania";
+        Text[ japanese ] = "‰Óğ‘‚«‹L†‚É’uŠ·";
+        Text[ chinese_traditional ] = "¥N´À¶µ¥Ø½s¸¹";
+        Text[ arabic ] = "ÇÓÊÈÏÇá ÚáÇãÇÊ ÇáÊÚÏÇÏ";
+        Text[ greek ] = "Ç áíôéêáôÜóôáóç êïõêßäùí ïëïêëçñşèçêå";
+        Text[ korean ] = "±Û¸Ó¸®Ç¥ ´ëÃ¼";
+        Text[ turkish ] = "Sıralama işareti değiştirildi";
+    };
+    String STR_AUTOFMTREDL_UNDER+1
+    {
+        Text = "Automatisch _unterstrichen_" ;
+        Text [ English ] = "Automatic _underline_" ;
+        Text[ italian ] = "_Sottolineato_ automatico";
+        Text[ portuguese_brazilian ] = "Automatic _underline_";
+        Text[ portuguese ] = "_sublinhado_automático";
+        Text[ danish ] = "Automatisk _understreget_";
+        Text[ french ] = "_Soulignage_ automatique";
+        Text[ swedish ] = "Automatiskt _understruket_";
+        Text[ dutch ] = "Automatisch _onderstrepen_";
+        Text[ spanish ] = "Subrayado_automático_";
+        Text[ english_us ] = "Automatic _underline_";
+        Text[ chinese_simplified ] = "×Ô¶¯_ÏÂ»®Ïß_";
+        Text[ russian ] = "Àâòîìàòè÷åñêîå _ïîä÷åğêèâàíèå_";
+        Text[ polish ] = "Automatyczne _podkreœlenie_";
+        Text[ japanese ] = "©“®_‰ºü_";
+        Text[ chinese_traditional ] = "¦Û°Ê_¤U¹º½u_";
+        Text[ arabic ] = "_ÎØ ÊÍÊí_ ÊáŞÇÆíÇğ";
+        Text[ greek ] = "Áõôüìáôç _õğïãñÜììéóç_";
+        Text[ korean ] = "ÀÚµ¿ _¹ØÁÙ_";
+        Text[ turkish ] = "Altını_otomatik_çiz_";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_BOLD+1
+    {
+        Text = "Automatisch *fett*" ;
+        Text [ English ] = "Automatic *bold*" ;
+        Text[ italian ] = "*Grassetto* automatico";
+        Text[ portuguese_brazilian ] = "Automatic *bold*";
+        Text[ portuguese ] = "*negrito* automático";
+        Text[ danish ] = "Automatisk *fed*";
+        Text[ french ] = "*Gras* automatique";
+        Text[ swedish ] = "Automatiskt *fet*";
+        Text[ dutch ] = "Automatisch *vet*";
+        Text[ spanish ] = "*Negrita* automático";
+        Text[ english_us ] = "Automatic *bold*";
+        Text[ chinese_simplified ] = "×Ô¶¯ *´ÖÌå*";
+        Text[ russian ] = "Àâòîìàòè÷åñêè *æèğíûé*";
+        Text[ polish ] = "Automatyczne *pogrubienie*";
+        Text[ japanese ] = "©“® *‘¾š*";
+        Text[ chinese_traditional ] = "¦Û°Ê *²ÊÅé*";
+        Text[ arabic ] = "*ÚÑíÖ* ÊáŞÇÆíÇğ";
+        Text[ greek ] = "ÁõôïìÜôùò *İíôïíá*";
+        Text[ korean ] = "ÀÚµ¿À¸·Î *ÁøÇÏ°Ô*";
+        Text[ turkish ] = "Otomatik *kalın*";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_FRACTION+1
+    {
+        Text = "1/2 ... durch ½ ... ersetzen" ;
+        Text [ English ] = "Replace 1/2 ... with ½ ..." ;
+        Text [ english_us ] = "Replace 1/2 ... with ½ ..." ;
+        Text [ swedish ] = "Ersätt 1/2 ... med  ½ ..." ;
+        Text [ danish ] = "Erstat 1/2 ...med ½ ..." ;
+        Text [ italian ] = "Sostituisci 1/2 ... con ½" ;
+        Text [ spanish ] = "Reemplazar 1/2 ... por ½ ..." ;
+        Text [ dutch ] = "1/2 ... vervangen door ½ ..." ;
+        Text [ portuguese_brazilian ] = "1/2 ... gegen ½ ... ersetzen" ;
+        Text [ french ] = "Remplacer 1/2 ... par ½ ..." ;
+        Text [ portuguese ] = "Substituir 1/2 ... por ½ ..." ;
+        Text[ chinese_simplified ] = "ÓÃ ?... ¸üÌæ 1/2 ...";
+        Text[ russian ] = "Çàìåíÿòü 1/2 ... íà ñèìâîëû";
+        Text[ polish ] = "Zamieñ 1/2 ... na \" ... ";
+        Text[ japanese ] = "1/2 ... ‚ğ  ½  ... ‚É’u‚«Š·‚¦‚é";
+        Text[ chinese_traditional ] = "¥Î ?... ¥N´À 1/2 ...";
+        Text[ arabic ] = "ÇÓÊÈÏÇá 1/2 ... ÈÜ ½...";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç 1/2 ... ìå ½ ...";
+        Text[ korean ] = "1/2 ...À» ?...·Î ´ëÃ¼";
+        Text[ turkish ] = "1/2 ... yazıldığında ½ ... ile değiştir";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_DETECT_URL+1
+    {
+        Text = "URL erkennen" ;
+        Text [ English ] = "Detect URL" ;
+        Text [ english_us ] = "URL recognition" ;
+        Text [ italian ] = "Riconosci URL" ;
+        Text [ spanish ] = "Reconocer URL" ;
+        Text [ french ] = "Détecter les URLs" ;
+        Text [ dutch ] = "URL herkennen" ;
+        Text [ swedish ] = "Känn igen URL" ;
+        Text [ danish ] = "Identificer URL" ;
+        Text [ portuguese_brazilian ] = "URL erkennen" ;
+        Text [ portuguese ] = "Reconhecer URL" ;
+        Text[ chinese_simplified ] = "Ê¶±ğ URL";
+        Text[ russian ] = "Ğàñïîçíàâàòü URL";
+        Text[ polish ] = "Rozpoznanie URL";
+        Text[ japanese ] = "URL ”F¯";
+        Text[ chinese_traditional ] = "ÃÑ§O URL";
+        Text[ arabic ] = "ÇáÊÚÑİ Úáì URL";
+        Text[ greek ] = "Áíáãíşñéóç URL";
+        Text[ korean ] = "URL ÀÎ½Ä";
+        Text[ turkish ] = "URL tanı";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_DASH+1
+    {
+        Text = "Gedankenstriche ersetzen" ;
+        Text [ English ] = "Replace dashes" ;
+        Text [ english_us ] = "Replace dashes" ;
+        Text [ swedish ] = "Ersätt tankstreck" ;
+        Text [ danish ] = "Erstat tankestreger" ;
+        Text [ italian ] = "Sostituisci trattini" ;
+        Text [ spanish ] = "Reemplazar comillas" ;
+        Text [ french ] = "Remplacer les tirets" ;
+        Text [ dutch ] = "Streepjes vervangen" ;
+        Text [ portuguese_brazilian ] = "Gedankenstriche ersetzen" ;
+        Text [ portuguese ] = "Substituir hífens" ;
+        Text[ chinese_simplified ] = "¸üÌæÆÆÕÛºÅ";
+        Text[ russian ] = "Çàìåíèòü òèğå";
+        Text[ polish ] = "Zamieniaj myœlniki";
+        Text[ japanese ] = "ÀŞ¯¼­‚É’uŠ·";
+        Text[ chinese_traditional ] = "¥N´À¯}§é¸¹";
+        Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÔõÑóØ";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç ğáõëşí";
+        Text[ korean ] = "´ë½Ã ´ëÃ¼";
+        Text[ turkish ] = "Tireleri değiştir";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_ORDINAL+1
+    {
+        Text = "1st ... durch 1^st ... ersetzen" ;
+        Text [ English ] = "Replace 1st with 1^st" ;
+        Text [ english_us ] = "Replace 1st... with 1^st..." ;
+        Text [ italian ] = "Sostituisci 1o ... con 1° ..." ;
+        Text [ spanish ] = "Reemplazar 1st ... con 1^st ..." ;
+        Text [ french ] = "Remplacer 1er ... par 1^er ..." ;
+        Text [ dutch ] = "1st ... vervangen door 1^st ..." ;
+        Text [ swedish ] = "Ersätt engelska ordningstal (1st)... med 1^st..." ;
+        Text [ danish ] = "Erstat 1st ... med 1^st ..." ;
+        Text [ portuguese_brazilian ] = "1st ... gegen 1^st ... ersetzen" ;
+        Text [ portuguese ] = "Substituir 1o... por 1º..." ;
+        Text[ chinese_simplified ] = "ÓÃ 1^st... ¸üÌæ 1st...";
+        Text[ russian ] = "Çàìåíèòü 1st ... íà 1^st ...";
+        Text[ polish ] = "Zamieñ 1st ... na 1^st ... ";
+        Text[ japanese ] = "1st ...‚ğ 1^st ... ‚É’u‚«Š·‚¦‚é";
+        Text[ chinese_traditional ] = "¥Î 1^st... ¥N´À 1st...";
+        Text[ arabic ] = "ÇÓÊÈÏÇá 1st ... ÈÜ 1^st ...";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç 1ï... ìå 1^ï...";
+        Text[ korean ] = "1st...À» 1^st...·Î ´ëÃ¼";
+        Text[ turkish ] = "1st ... yazıldığında 1^st ... ile değiştir";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_RIGHT_MARGIN+1
+    {
+        Text = "Zusammenfassen von einzeiligen Absätzen" ;
+        Text [ ENGLISH ] = "Combine single line paragraphs" ;
+        Text[ italian ] = "Mantieni assieme i paragrafi ad una riga";
+        Text[ portuguese_brazilian ] = "Combine single line paragraphs";
+        Text[ portuguese ] = "Unir parágrafos de uma linha";
+        Text[ danish ] = "Kombiner enkeltlinjede afsnit";
+        Text[ french ] = "Fusionner les paragraphes à une seule ligne";
+        Text[ swedish ] = "Sammanfoga enradiga stycken";
+        Text[ dutch ] = "Eenregelige alinea's samenvoegen";
+        Text[ spanish ] = "Unir párrafos de una línea";
+        Text[ english_us ] = "Combine single line paragraphs";
+        Text[ chinese_simplified ] = "ºÏ²¢µ¥ĞĞ¶ÎÂä";
+        Text[ russian ] = "Îáúåäèíåíèå îäíîñòğî÷íûõ àáçàöåâ";
+        Text[ polish ] = "Po³¹czenie akapitów jednowierszowych";
+        Text[ japanese ] = "1s’i—‚ÌŒ‹‡";
+        Text[ chinese_traditional ] = "¦X¨Ö³æ¦æ¬q¸¨";
+        Text[ arabic ] = "ÏãÌ ÇáİŞÑÇÊ ÃÍÇÏíÉ ÇáÃÓØÑ";
+        Text[ greek ] = "¸íùóç ìïíüãñáììùí ğáñáãñÜöùí";
+        Text[ korean ] = "ÇÑÁÙ ´Ü¶ô ÇÕÄ¡±â";
+        Text[ turkish ] = "Tek satırlı paragrafları birleştir";
+        Text[ language_user1 ] = " ";
+    };
+
+    String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
+    {
+        Text = "Setze Vorlage \"Textkörper\"" ;
+        Text [ English ] = "Set template \"Text body\"" ;
+        Text[ italian ] = "Imposta modello \"corpo del testo\"";
+        Text[ portuguese_brazilian ] = "Set template \"Text body\"";
+        Text[ portuguese ] = "Aplicar estilo \"Corpo do texto\"";
+        Text[ danish ] = "Anvend typografi \"Brødtekst\"";
+        Text[ french ] = "Appliquer le style \"Corps de texte\"";
+        Text[ swedish ] = "Använd formatmallen \"Brödtext\"";
+        Text[ dutch ] = "Sjabloon \"Tekstblok\" toepassen";
+        Text[ spanish ] = "Aplicar estilo \"Cuerpo de texto\"";
+        Text[ english_us ] = "Set \"Text body\" Style";
+        Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄ¡±ÑùÊ½";
+        Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îñíîâíîé òåêñò\"";
+        Text[ polish ] = "U?yj szablonu \"Obszar tekstowy\"";
+        Text[ japanese ] = "\"–{•¶\"‚Ì½À²Ùİ’è";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤å¡¨";
+        Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÌÓã ÇáäÕ\"";
+        Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Óşìá êåéìİíïõ\"";
+        Text[ korean ] = "\"º»¹®\" À¯Çü ¼³Á¤";
+        Text[ turkish ] = "\"Metin gövdesi\" biçimini uygula";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
+    {
+        Text = "Setze Vorlage \"Textkörper Einzug\"" ;
+        Text [ English ] = "Set template \"Text body indent\"" ;
+        Text[ italian ] = "Imposta modello \"rientro corpo del testo\"";
+        Text[ portuguese_brazilian ] = "Set template \"Text body indent\"";
+        Text[ portuguese ] = "Aplicar estilo \"Abrir parágrafo\"";
+        Text[ danish ] = "Anvend typografi \"Første linjes indrykning\"";
+        Text[ french ] = "Appliquer le style \"Alinéa\"";
+        Text[ swedish ] = "Använd formatmallen \"Dra in första raden\"";
+        Text[ dutch ] = "Sjabloon \"1e regel inspringen\" toepassen";
+        Text[ spanish ] = "Aplicar estilo \"Sangría de primera línea\"";
+        Text[ english_us ] = "Set \"Text body indent\" Style";
+        Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄËõ½ø¡±ÑùÊ½";
+        Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Ïåğâàÿ ñòğîêà ñ îòñòóïîì\"";
+        Text[ polish ] = "U¿yj szablonu \"Wciêcie obszaru tekstowego\"";
+        Text[ japanese ] = "\"–{•¶²İÃŞİÄ\"‚Ì½À²Ùİ’è";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤åÁY±Æ¡¨";
+        Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã ÇáäÕ\"";
+        Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åóï÷Ş ğñşôçò ãñáììŞò\"";
+        Text[ korean ] = "\"º»¹® µé¿©¾²±â\" À¯Çü ¼³Á¤";
+        Text[ turkish ] = "\"Metin gövdesi - girinti\" biçimini uygula";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
+    {
+        Text = "Setze Vorlage \"Textkörper Einzug negativ\"" ;
+        Text [ English ] = "Set template \"Text body neg. indent\"" ;
+        Text[ italian ] = "Imposta modello \"rientro corpo del testo negativo\"";
+        Text[ portuguese_brazilian ] = "Set template \"Text body neg. indent\"";
+        Text[ portuguese ] = "Aplicar estilo \"Abrir parágrafo negativo\"";
+        Text[ danish ] = "Anvend typografi \"Hængende indrykning\"";
+        Text[ french ] = "Appliquer le style \"Alinéa négatif\"";
+        Text[ swedish ] = "Använd formatmallen \"Negativt indrag av första raden\"";
+        Text[ dutch ] = "Sjabloon \"1e regel uitspringen\" toepassen";
+        Text[ spanish ] = "Aplicar estilo \"Sangría negativa de primera línea\"";
+        Text[ english_us ] = "Set \"Hanging indent\" Style";
+        Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄ¸ºÏòËõ½ø¡±ÑùÊ½";
+        Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îáğàòíûé îòñòóï\"";
+        Text[ polish ] = "U¿yj szablonu \"Neg. wciêcie obszaru tekstu\"";
+        Text[ japanese ] = "\"–{•¶Ï²Å½²İÃŞİÄ\"‚Ì½À²Ùİ’è";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤å­tÁY±Æ¡¨";
+        Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã äÕ ÓáÈíÉ\"";
+        Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"ÁñíçôéêŞ åóï÷Ş óşìáôïò êåéìİíïõ\"";
+        Text[ korean ] = "\"º»¹® ³»¾î¾²±â\" À¯Çü ¼³Á¤";
+        Text[ turkish ] = "\"Asılı girinti\" biçimini uygula";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
+    {
+        Text = "Setze Vorlage \"Textkörper Einrückung\"" ;
+        Text [ English ] = "Set template \"Text body move in\"" ;
+        Text[ italian ] = "Imposta modello \"rientro corpo del testo\"";
+        Text[ portuguese_brazilian ] = "Set template \"Text body move in\"";
+        Text[ portuguese ] = "Aplicar estilo \"Avanço corpo do texto\"";
+        Text[ danish ] = "Anvend typografi \"Brødtekst indrykning\"";
+        Text[ french ] = "Appliquer le style \"Retrait de corps de texte\"";
+        Text[ swedish ] = "Använd formatmallen \"Dra in hela stycket\"";
+        Text[ dutch ] = "Sjabloon \"Tekstblok inspringen\" toepassen";
+        Text[ spanish ] = "Aplicar estilo \"Cuerpo de texto con sangría\"";
+        Text[ english_us ] = "Set \"Text body indent\" Style";
+        Text[ chinese_simplified ] = "Éè¶¨¡°ÕıÎÄËõ½ø¡±ÑùÊ½";
+        Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Îñíîâíîé òåêñò ñ îòñòóïîì\"";
+        Text[ polish ] = "U?yj szablonu \"Wysuniecie obszaru tekst.\"";
+        Text[ japanese ] = "\"–{•¶²İÃŞİÄ\"‚Ì½À²Ùİ’è";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¤º¤åÁY±Æ¡¨";
+        Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÅÒÇÍÉ ÌÓã ÇáäÕ (ÇáÓØÑ ÇáÃæá)\"";
+        Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åóï÷Ş óşìáôïò êåéìİíïõ\"";
+        Text[ korean ] = "À¯Çü \"º»¹® µé¿©¾²±â\" ¼³Á¤";
+        Text[ turkish ] = "\"Metin gövdesi - satırbaşı\" biçimini uygula";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
+    {
+        Text = "Setze Vorlage \"Überschrift $(ARG1)\"" ;
+        Text [ English ] = "Set template \"Headline $(ARG1)\"" ;
+        Text[ italian ] = "Imposta modello \"intestazione $(ARG1)\"";
+        Text[ portuguese_brazilian ] = "Set template \"Headline $(ARG1)\"";
+        Text[ portuguese ] = "Aplicar estilo \"Título $(ARG1)\"";
+        Text[ danish ] = "Anvend typografi \"Overskrift $(ARG1)\"";
+        Text[ french ] = "Appliquer le style \"Titre $(ARG1)\"";
+        Text[ swedish ] = "Använd formatmallen \"Överskrift $(ARG1)\"";
+        Text[ dutch ] = "Sjabloon \"Kop $(ARG1)\" toepassen";
+        Text[ spanish ] = "Aplicar estilo \"Encabezado $(ARG1)\"";
+        Text[ english_us ] = "Set \"Heading $(ARG1)\" Style";
+        Text[ chinese_simplified ] = "Éè¶¨¡°±êÌâ $(ARG1)¡±ÑùÊ½";
+        Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Çàãîëîâîê $(ARG1)\"";
+        Text[ polish ] = "U¿yj szablonu \"Tytu³ $(ARG1)\"";
+        Text[ japanese ] = "\"Œ©o‚µ$(ARG1)\" ‚Ì½À²Ùİ’è";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¼ĞÃD $(ARG1)¡¨";
+        Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÚäæÇä $(ARG1)\"";
+        Text[ greek ] = "Ïñéóìüò ğñïôığïõ \"Åğéêåöáëßäá $(ARG1)\"";
+        Text[ korean ] = "À¯Çü \"¸Ó¸®±Û $(ARG1)\" ¼³Á¤";
+        Text[ turkish ] = "\"Başlık $(ARG1)\" biçimini uygula";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_AUTOFMTREDL_SET_NUMBULET +1
+    {
+        Text = "Setze Vorlage \"Aufzählung\" oder \"Nummerierung\"" ;
+        Text [ English ] = "Set template \"Bullet\" or \"Numbering\"" ;
+        Text[ italian ] = "Imposta modello elenchi \"puntati\" o \"numerati\"";
+        Text[ portuguese_brazilian ] = "Set template \"Bullet\" or \"Numbering\"";
+        Text[ portuguese ] = "Aplicar estilo \"Marcas\" ou \"Numeração\"";
+        Text[ danish ] = "Anvend typografi \"Punktopstilling\" eller \"Nummerering\"";
+        Text[ french ] = "Appliquer le style \"Puces\" ou \"Numérotation\"";
+        Text[ swedish ] = "Använd formatmallen \"Uppräkning\" eller \"Numrering\"";
+        Text[ dutch ] = "Sjabloon \"Opsomming\" of \"Nummering\" toepassen";
+        Text[ spanish ] = "Aplicar estilo \"Viñetas\" o \"Numeración\"";
+        Text[ english_us ] = "Set \"Bullet\" or \"Numbering\" Style";
+        Text[ chinese_simplified ] = "Éè¶¨¡°ÏîÄ¿·ûºÅ¡±»ò¡°±àºÅ¡±ÑùÊ½";
+        Text[ russian ] = "Óñòàíîâèòü ñòèëü \"Ñïèñîê\" èëè \"Íóìåğàöèÿ\"";
+        Text[ polish ] = "U¿yj szablonu \"Wypunktowanie\" lub \"Numerowanie\"";
+        Text[ japanese ] = "\"‰Óğ‘‚«\" ‚Ü‚½‚Í \"”Ô†•t‚¯\"‚Ì½À²Ùİ’è";
+        Text[ chinese_traditional ] = "³]©w¼Ë¦¡¡§¶µ¥Ø²Å¸¹¡¨©M¡§½s¸¹¡¨";
+        Text[ arabic ] = "ÊÚííä ÇáäãØ \"ÊÚÏÇÏ\" Ãæ \"ÊÑŞíã\"";
+        Text[ greek ] = "Ïñéóìüò óôõë \"Êïõêßäá\" Ş \"Áñßèìçóç\"";
+        Text[ korean ] = "À¯Çü \"±Û¸Ó¸®Ç¥\"³ª \"¹øÈ£ ¸Å±â±â\" ¼³Á¤";
+        Text[ turkish ] = "\"Madde\" ya da \"numaralama\" biçimini uygula";
+        Text[ language_user1 ] = " ";
+    };
+
+    String STR_AUTOFMTREDL_DEL_MORELINES +1
+    {
+        Text = "Zusammenfassen von Absätzen" ;
+        Text [ English ] = "Combine paragraphs" ;
+        Text[ italian ] = "Mantieni assieme i paragrafi";
+        Text[ portuguese_brazilian ] = "Combine paragraphs";
+        Text[ portuguese ] = "Unir parágrafos";
+        Text[ danish ] = "Kombiner afsnit";
+        Text[ french ] = "Fusionner des paragraphes";
+        Text[ swedish ] = "Sammanfoga stycken";
+        Text[ dutch ] = "Alinea's samenvoegen";
+        Text[ spanish ] = "Unir párrafos";
+        Text[ english_us ] = "Combine paragraphs";
+        Text[ chinese_simplified ] = "ºÏ²¢¶ÎÂä";
+        Text[ russian ] = "Îáúåäèíåíèå àáçàöåâ";
+        Text[ polish ] = "Po³¹czenie akapitów";
+        Text[ japanese ] = "’i—‚ÌŒ‹‡";
+        Text[ chinese_traditional ] = "¦X¨Ö¬q¸¨";
+        Text[ arabic ] = "Öã ÇáİŞÑÇÊ";
+        Text[ greek ] = "¸íùóç ğáñáãñÜöùí";
+        Text[ korean ] = "´Ü¶ô ÇÕÄ¡±â";
+        Text[ turkish ] = "Paragrafları birleştir";
+        Text[ language_user1 ] = " ";
+    };
+
+};
+
+/*---------------------------------------------------------------------
+    Diverses
+ ---------------------------------------------------------------------*/
+String STR_EVENT_OBJECT_SELECT
+{
+    TEXT = "Objekt anklicken" ;
+    TEXT [ English ] = "Object on click" ;
+    Text [ dutch ] = "Object selecteren" ;
+    Text [ english_us ] = "Click object" ;
+    Text [ italian ] = "Cliccate l'oggetto" ;
+    Text [ spanish ] = "Pulsar el objeto" ;
+    Text [ french ] = "Clic sur l'objet" ;
+    Text [ swedish ] = "Klicka på objekt" ;
+    Text [ danish ] = "Klik på objekt" ;
+    Text [ portuguese ] = "Seleccionar objecto" ;
+    Text [ portuguese_brazilian ] = "Objekt anklicken" ;
+    Text[ chinese_simplified ] = "°´»÷¶ÔÏó";
+    Text[ russian ] = "Âûáîğ îáúåêòà";
+    Text[ polish ] = "Kliknij obiekt";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚ğ¸Ø¯¸‚·‚é";
+    Text[ chinese_traditional ] = "¥Î·Æ¹««öÀ»ª«¥ó";
+    Text[ arabic ] = "ÇáäŞÑ İæŞ ÇáßÇÆä";
+    Text[ greek ] = "ÅğéëïãŞ áíôéêåéìİíïõ";
+    Text[ korean ] = "°³Ã¼ ¼±ÅÃ";
+    Text[ turkish ] = "Nesneye tıkla";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_START_INS_GLOSSARY
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Vor AutoText einfügen : Vor AutoText einf³gen */
+    TEXT = "Vor Einfügen des AutoTextes" ;
+    TEXT [ English ] = "Before insert AutoText" ;
+    TEXT[ english_us ] = "Before inserting AutoText";
+    TEXT[ portuguese ] = "Inserir antes de AutoTexto";
+    TEXT[ russian ] = "Ïåğåä âñòàâêîé àâòîòåêñòà";
+    TEXT[ greek ] = "Ğñéí áğü ôçí ğñïóèŞêç ôïõ ÁõôïÊåßìåíï";
+    TEXT[ dutch ] = "Voor het invoegen van AutoTekst";
+    TEXT[ french ] = "Avant insertion de l'AutoTexte";
+    TEXT[ spanish ] = "Antes de insertar el AutoTexto";
+    TEXT[ italian ] = "Prima d'inserire il testo automatico";
+    TEXT[ danish ] = "Inden input af AutoTekst";
+    TEXT[ swedish ] = "Innan AutoText infogas";
+    TEXT[ polish ] = "Wstaw przed autotekstem";
+    TEXT[ portuguese_brazilian ] = "Vor AutoText einfügen";
+    TEXT[ japanese ] = "“ü—Íx‰‡‚ğ‘}“ü‚·‚é‘O";
+    TEXT[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® »ğÀÔ Àü¿¡";
+    TEXT[ chinese_simplified ] = "ÔÚ²åÈë×Ô¶¯Í¼ÎÄ¼¯Ö®Ç°";
+    TEXT[ chinese_traditional ] = "¦b´¡¤J¦Û°Ê¹Ï¤å¶°¤§«e";
+    TEXT[ arabic ] = "ŞÈá ÅÏÑÇÌ ÇáäÕ ÇáÊáŞÇÆí";
+    TEXT[ turkish ] = "Otomatik metin eklemeden önce";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_EVENT_END_INS_GLOSSARY
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nach AutoText einfügen : Nach AutoText einf³gen */
+    TEXT = "Nach Einfügen des AutoTextes" ;
+    TEXT [ English ] = "After insert AutoText" ;
+    TEXT[ english_us ] = "After inserting AutoText";
+    TEXT[ portuguese ] = "Inserir após AutoTexto";
+    TEXT[ russian ] = "Ïîñëå âñòàâêè àâòîòåêñòà";
+    TEXT[ greek ] = "ÌåôÜ ôçí ğñïóèŞêç ôïõ ÁõôïÊåßìåíï";
+    TEXT[ dutch ] = "Na invoegen van AutoTekst";
+    TEXT[ french ] = "Après insertion de l'AutoTexte";
+    TEXT[ spanish ] = "Tras insertar el AutoTexto";
+    TEXT[ italian ] = "Dopo aver inserito il testo automatico";
+    TEXT[ danish ] = "Efter input af AutoTekst";
+    TEXT[ swedish ] = "Efter att AutoText infogats";
+    TEXT[ polish ] = "Wstaw za autotekstem";
+    TEXT[ portuguese_brazilian ] = "Nach AutoText einfügen";
+    TEXT[ japanese ] = "“ü—Íx‰‡‚ğ‘}“ü‚µ‚½Œã";
+    TEXT[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® »ğÀÔ ÈÄ¿¡";
+    TEXT[ chinese_simplified ] = "ÔÚ²åÈë×Ô¶¯Í¼ÎÄ¼¯Ö®ºó";
+    TEXT[ chinese_traditional ] = "¦b¦Û°Ê¹Ï¤å¶°´¡¤J¤§«á";
+    TEXT[ arabic ] = "ÈÚÏ ÅÏÑÇÌ ÇáäÕ ÇáÊáŞÇÆí";
+    TEXT[ turkish ] = "Otomatik metin ekledikten sonra";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_EVENT_MOUSEOVER_OBJECT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Maus über Objekt : Maus ³ber Objekt */
+    TEXT = "Maus über Objekt" ;
+    TEXT [ English ] = "Mouse over Object" ;
+    Text [ english_us ] = "Mouse over object" ;
+    Text [ italian ] = "Mouse sull'oggetto" ;
+    Text [ spanish ] = "Ratón sobre objeto" ;
+    Text [ french ] = "Souris sur l'objet" ;
+    Text [ dutch ] = "Muis boven object" ;
+    Text [ swedish ] = "Mus över objekt" ;
+    Text [ danish ] = "Mus over objekt" ;
+    Text [ portuguese ] = "Rato sobre objecto" ;
+    Text [ portuguese_brazilian ] = "Maus über Objekt" ;
+    Text[ chinese_simplified ] = "ÖÃÊó±êÓÚ¶ÔÏóÖ®ÉÏ";
+    Text[ russian ] = "Ìûøü íàä îáúåêòîì";
+    Text[ polish ] = "Mysz nad obiektem";
+    Text[ japanese ] = "Ï³½‚ğµÌŞ¼Şª¸Äã‚ÉˆÚ“®";
+    Text[ chinese_traditional ] = "¹«¼Ğ¦bª«¥ó¤§¤W";
+    Text[ arabic ] = "ÇáãÇæÓ İæŞ ÇáßÇÆä";
+    Text[ greek ] = "Ğïíôßêé ğÜíù áğü áíôéêåßìåíï";
+    Text[ korean ] = "°³Ã¼ À§¿¡ ¸¶¿ì½º";
+    Text[ turkish ] = "Fare oku nesne üzerinde";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_MOUSECLICK_OBJECT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hyperlink auslösen : Hyperlink ausl÷sen */
+    TEXT = "Hyperlink auslösen" ;
+    TEXT [ English ] = "Trigger Hyperlink" ;
+    Text [ dutch ] = "Hyperlink uitvoeren" ;
+    Text [ english_us ] = "Trigger hyperlink" ;
+    Text [ italian ] = "Esegui hyperlink" ;
+    Text [ spanish ] = "Ejecutar hiperenlace" ;
+    Text [ french ] = "Déclencher l'hyperlien" ;
+    Text [ swedish ] = "Utför hyperlänk" ;
+    Text [ danish ] = "Udfør hyperlink" ;
+    Text [ portuguese ] = "Activar hiperligação" ;
+    Text [ portuguese_brazilian ] = "Hyperlink auslösen" ;
+    Text[ chinese_simplified ] = "Æô¶¯³¬Á´½Ó";
+    Text[ russian ] = "Âûïîëíèòü ãèïåğññûëêó";
+    Text[ polish ] = "Wykonaj hiper³¹cze";
+    Text[ japanese ] = "Ê²Êß°Øİ¸‚ÌÀs";
+    Text[ chinese_traditional ] = "°õ¦æ¶W³sµ²";
+    Text[ arabic ] = "ÊäİíĞ ÇÑÊÈÇØ ÊÔÚÈí";
+    Text[ greek ] = "ÅöáñìïãŞ õğåñ-óıíäåóçò";
+    Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ© ¼öÇà";
+    Text[ turkish ] = "Hyperlink'i etkinleştir";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_MOUSEOUT_OBJECT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Maus verläßt Objekt : Maus verlõ˜t Objekt */
+    TEXT = "Maus verlässt Objekt" ;
+    TEXT [ English ] = "Mouse leave Object" ;
+    Text [ dutch ] = "Muis verlaat object" ;
+    Text [ english_us ] = "Mouse leaves object" ;
+    Text [ swedish ] = "Mus lämnar objekt" ;
+    Text [ danish ] = "Mus forlader objekt" ;
+    Text [ italian ] = "Mouse abbandona l'oggetto" ;
+    Text [ spanish ] = "El ratón abandona el objeto" ;
+    Text [ french ] = "Souris quitte l'objet" ;
+    Text [ portuguese ] = "Rato abandona objecto" ;
+    Text [ portuguese_brazilian ] = "Maus verläßt Objekt" ;
+    Text[ chinese_simplified ] = "Êó±êÀë¿ª¶ÔÏó";
+    Text[ russian ] = "Ìûøü ïîêèäàåò îáúåêò";
+    Text[ polish ] = "Mysz opuszcza obiekt";
+    Text[ japanese ] = "Ï³½‚ğµÌŞ¼Şª¸ÄŠO‚ÉˆÚ“®";
+    Text[ chinese_traditional ] = "¹«¼ĞÂ÷¶}ª«¥ó";
+    Text[ arabic ] = "ÇÈÊÚÇÏ ÇáãÇæÓ Úä ÇáßÇÆä";
+    Text[ greek ] = "Ğïíôßêé áğïìáêñıíåôáé áğü áíôéêåßìåíï";
+    Text[ korean ] = "¸¶¿ì½º°¡ °³Ã¼¸¦ ¶°³²";
+    Text[ turkish ] = "İmleç nesneden ayrılıyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_IMAGE_LOAD
+{
+    TEXT = "Grafik laden erfolgreich" ;
+    TEXT [ English ] = "Graphic load" ;
+    Text [ dutch ] = "Laden van afbeelding oké" ;
+    Text [ english_us ] = "Graphics load successful" ;
+    Text [ swedish ] = "Laddning av grafik lyckades" ;
+    Text [ danish ] = "Indlæsning af grafik fuldført" ;
+    Text [ italian ] = "Caricamento immagine riuscito" ;
+    Text [ spanish ] = "La carga de la imagen ha finalizado con éxito" ;
+    Text [ french ] = "Chargement de l'image terminé" ;
+    Text [ portuguese ] = "Carregar imagem concluído" ;
+    Text [ portuguese_brazilian ] = "Grafik laden erfolgreich" ;
+    Text[ chinese_simplified ] = "×°ÔØÍ¼ĞÎ³É¹¦";
+    Text[ russian ] = "Çàãğóçêà ãğàôèêè óñïåøíà";
+    Text[ polish ] = "Pomyœlne za³adowanie grafiki";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İŠ®—¹";
+    Text[ chinese_traditional ] = "¸Ë¸ü¹Ï¤ù¦¨¥\\";
+    Text[ arabic ] = "ÊÍãíá ÇáÕæÑÉ ÈäÌÇÍ";
+    Text[ greek ] = "Ç öüñôùóç ôùí ãñáöéêşí ğİôõ÷å";
+    Text[ korean ] = "±×·¡ÇÈÀ» ¼º°øÀûÀ¸·Î ·ÎµåÇÔ";
+    Text[ turkish ] = "Grafik başarıyla yüklendi";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_IMAGE_ABORT
+{
+    TEXT = "Grafik laden abgebrochen" ;
+    TEXT [ English ] = "Graphic load abord" ;
+    Text [ dutch ] = "Afbeelding laden afgebroken" ;
+    Text [ english_us ] = "Graphics load terminated" ;
+    Text [ swedish ] = "Laddning av grafik avbröts" ;
+    Text [ danish ] = "Indlæsning af grafik afbrudt" ;
+    Text [ italian ] = "Caricamento immagine interrotto" ;
+    Text [ spanish ] = "Interrumpida la carga de la imagen" ;
+    Text [ french ] = "Chargement de l'image interrompu" ;
+    Text [ portuguese ] = "Carregar imagem cancelado" ;
+    Text [ portuguese_brazilian ] = "Grafik laden abgebrochen" ;
+    Text[ chinese_simplified ] = "ÖĞ¶Ï×°ÔØÍ¼ĞÎ";
+    Text[ russian ] = "Çàãğóçêà ãğàôèêè ïğåğâàíà";
+    Text[ polish ] = "Przerwane ³adowanie grafiki";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ’†~";
+    Text[ chinese_traditional ] = "¤¤Â_¸Ë¸ü¹Ï¤ù";
+    Text[ arabic ] = "ÇäŞØÇÚ ÚãáíÉ ÊÍãíá ÇáÕæÑÉ";
+    Text[ greek ] = "ÄéáêïğŞ öüñôùóçò ãñáöéêïı";
+    Text[ korean ] = "±×·¡ÇÈ ·Îµå Áß´ÜµÊ";
+    Text[ turkish ] = "Grafik yüklemesi kesildi";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_IMAGE_ERROR
+{
+    TEXT = "Grafik laden fehlerhaft" ;
+    TEXT [ English ] = "Graphic load error" ;
+    Text [ dutch ] = "Fout bij laden van afbeelding" ;
+    Text [ english_us ] = "Graphics load faulty" ;
+    Text [ swedish ] = "Fel vid laddning av grafik" ;
+    Text [ danish ] = "Indlæsning af grafik fejlagtig" ;
+    Text [ italian ] = "Caricamento immagine errato" ;
+    Text [ spanish ] = "Error al cargar la imagen" ;
+    Text [ french ] = "Erreur lors du chargement de l'image" ;
+    Text [ portuguese ] = "Erro ao carregar imagem" ;
+    Text [ portuguese_brazilian ] = "Grafik laden fehlerhaft" ;
+    Text[ chinese_simplified ] = "×°ÔØµÄÍ¼ĞÎ²»ÍêÕû";
+    Text[ russian ] = "Íåïğàâèëüíàÿ çàãğóçêà ãğàôèêè";
+    Text[ polish ] = "B³¹d w ³adowaniu grafiki";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì“Ç‚İ‚İ´×°";
+    Text[ chinese_traditional ] = "¸Ë¸ü¹Ï¤ù¤£§¹¾ã";
+    Text[ arabic ] = "ÎØÃ İí ÚãáíÉ ÊÍãíá ÇáÕæÑÉ";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ãñáöéêïı";
+    Text[ korean ] = "±×·¡ÇÈ ·Îµå ¿À·ù";
+    Text[ turkish ] = "Grafik yüklemede hata";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_FRM_KEYINPUT_A
+{
+    TEXT = "Eingabe von Alphazeichen" ;
+    TEXT [ English ] = "Input of alpha chars" ;
+    Text [ portuguese ] = "Entrada de caracteres alfa" ;
+    Text [ english_us ] = "Input of alpha characters" ;
+    Text [ portuguese_brazilian ] = "Eingabe von Alphazeichen" ;
+    Text [ swedish ] = "Inmatning av alfatecken" ;
+    Text [ danish ] = "Input af alfategn" ;
+    Text [ italian ] = "Digitazione di caratteri alfa" ;
+    Text [ spanish ] = "Entrada de caracteres alfa" ;
+    Text [ french ] = "Saisie de caractères alphanumériques" ;
+    Text [ dutch ] = "Invoer van alfanumerieke tekens" ;
+    Text[ chinese_simplified ] = "ÊäÈëÏ£À°Óï×ÖÄ¸°¢¶û·¨";
+    Text[ russian ] = "Ââîä çíàêîâ àëüôà";
+    Text[ polish ] = "Wprowadzenie znaku alfa";
+    Text[ japanese ] = "±ÙÌ§ÍŞ¯Ä•¶š‚Ì“ü—Í";
+    Text[ chinese_traditional ] = "¿é¤J§ÆÃ¾»y²Ä¤@­Ó¦r¥À";
+    Text[ arabic ] = "ÅÏÎÇá ÃÍÑİ ÃáİÇ";
+    Text[ greek ] = "ÅéóáãùãŞ ÷áñáêôŞñùí áëöáâŞôïõ";
+    Text[ korean ] = "¾ËÆÄºª ¹®ÀÚ ÀÔ·Â";
+    Text[ turkish ] = "Alfa karakter girişi";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_FRM_KEYINPUT_NOA
+{
+    TEXT = "Eingabe von Nicht-Alphazeichen" ;
+    TEXT [ English ] = "Input of non alpha chars" ;
+    Text [ portuguese ] = "Entrada de caracteres não-alfa." ;
+    Text [ english_us ] = "Input of non-alpha characters" ;
+    Text [ swedish ] = "Inmatning av icke-alfatecken" ;
+    Text [ italian ] = "Digitazione di caratteri non alfanumerici" ;
+    Text [ spanish ] = "Entrada de caracteres no-alfa" ;
+    Text [ french ] = "Saisie de caractères non alphanumériques" ;
+    Text [ dutch ] = "Invoer van niet-alfanumerieke tekens" ;
+    Text [ portuguese_brazilian ] = "Eingabe von nicht Alphazeichen" ;
+    Text [ danish ] = "Input af ikke-alfategn" ;
+    Text[ chinese_simplified ] = "ÊäÈëµÄ²»ÊÇÏ£À°Óï×ÖÄ¸°¢¶û·¨";
+    Text[ russian ] = "Ââîä çíàêîâ íåàëüôà";
+    Text[ polish ] = "Wprow. innych znaków (nie alfa)";
+    Text[ japanese ] = "±ÙÌ§ÍŞ¯Ä‚Å‚È‚¢•¶š‚Ì“ü—Í";
+    Text[ chinese_traditional ] = "¿é¤Jªº¤£¬O§ÆÃ¾»y²Ä¤@­Ó¦r¥À";
+    Text[ arabic ] = "ÅÏÎÇá ÃÍÑİ ÛíÑ ÃáİÇ";
+    Text[ greek ] = "ÅéóáãùãŞ ìç-áëöáâçôéêşí ÷áñáêôŞñùí";
+    Text[ korean ] = "¾ËÆÄºªÀÌ ¾Æ´Ñ ¹®ÀÚ ÀÔ·Â";
+    Text[ turkish ] = "Alfa olmayan karakter girişi";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_FRM_RESIZE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Rahmengröße verändern : Rahmengr÷˜e verõndern */
+    TEXT = "Rahmengröße verändern" ;
+    TEXT [ English ] = "Resize Frane" ;
+    Text [ portuguese ] = "Redimensionar moldura" ;
+    Text [ english_us ] = "Resize frame" ;
+    Text [ portuguese_brazilian ] = "Rahmengröße verändern" ;
+    Text [ swedish ] = "Ändra ramstorlek" ;
+    Text [ danish ] = "Modificer rammestørrelse" ;
+    Text [ italian ] = "Cambia dimensione cornice" ;
+    Text [ spanish ] = "Modificar el tamaño del marco" ;
+    Text [ french ] = "Modifier la taille du cadre" ;
+    Text [ dutch ] = "Kadergrootte wijzigen" ;
+    Text[ chinese_simplified ] = "¸ü¸Ä¿òµÄ´óĞ¡";
+    Text[ russian ] = "Èçìåíèòü ğàçìåğ ğàìêè";
+    Text[ polish ] = "Zmieñ rozmiar ramki";
+    Text[ japanese ] = "˜g‚Ì»²½Ş•ÏX";
+    Text[ chinese_traditional ] = "ÅÜ§ó®Ø¤j¤p";
+    Text[ arabic ] = "ÊÚÏíá ÍÌã ÇáÅØÇÑ";
+    Text[ greek ] = "ÁëëáãŞ ìåãİèïõò ğëáéóßïõ";
+    Text[ korean ] = "ÇÁ·¹ÀÓ Å©±â º¯°æ";
+    Text[ turkish ] = "Çerçeve boyutunu değiştir";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENT_FRM_MOVE
+{
+    TEXT = "Rahmen verschieben" ;
+    TEXT [ English ] = "Move Frame" ;
+    Text [ portuguese ] = "Mover moldura" ;
+    Text [ english_us ] = "Move frame" ;
+    Text [ portuguese_brazilian ] = "Rahmen verschieben" ;
+    Text [ swedish ] = "Flytta ram" ;
+    Text [ danish ] = "Flyt ramme" ;
+    Text [ italian ] = "Sposta cornice" ;
+    Text [ spanish ] = "Desplazar marco" ;
+    Text [ french ] = "Déplacer le cadre" ;
+    Text [ dutch ] = "Kader verplaatsen" ;
+    Text[ chinese_simplified ] = "ÒÆ¶¯¿ò";
+    Text[ russian ] = "Ïåğåìåñòèòü ğàìêó";
+    Text[ polish ] = "Przenieœ ramkê";
+    Text[ japanese ] = "˜g‚ÌˆÚ“®";
+    Text[ chinese_traditional ] = "²¾°Ê®Ø";
+    Text[ arabic ] = "ÅÒÇÍÉ ÇáÅØÇÑ";
+    Text[ greek ] = "Ìåôáêßíçóç ğëáéóßïõ";
+    Text[ korean ] = "ÇÁ·¹ÀÓ ÀÌµ¿";
+    Text[ turkish ] = "Çerçeveyi taşı";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_OUTLINE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Überschriften : šberschriften */
+    TEXT = "Überschriften" ;
+    TEXT [ English ] = "Outlines" ;
+    Text [ dutch ] = "Koppen" ;
+    Text [ english_us ] = "Headings" ;
+    Text [ italian ] = "Intestazioni" ;
+    Text [ spanish ] = "Encabezados" ;
+    Text [ french ] = "Titres" ;
+    Text [ swedish ] = "Överskrifter" ;
+    Text [ danish ] = "Overskrifter" ;
+    Text [ portuguese ] = "Títulos" ;
+    Text [ portuguese_brazilian ] = "Überschriften" ;
+    Text[ chinese_simplified ] = "±êÌâ";
+    Text[ russian ] = "Çàãîëîâêè";
+    Text[ polish ] = "Tytu³y";
+    Text[ japanese ] = "Œ©o‚µ";
+    Text[ chinese_traditional ] = "¼ĞÃD";
+    Text[ arabic ] = "ÚäÇæíä";
+    Text[ greek ] = "Åğéêåöáëßäåò";
+    Text[ korean ] = "¸Ó¸®±Û";
+    Text[ turkish ] = "Başlık";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_TABLE
+{
+    TEXT = "Tabellen" ;
+    TEXT [ English ] = "Tables" ;
+    Text [ english_us ] = "Tables" ;
+    Text [ italian ] = "Tabelle" ;
+    Text [ spanish ] = "Tablas" ;
+    Text [ french ] = "Tableaux" ;
+    Text [ dutch ] = "Tabellen" ;
+    Text [ swedish ] = "Tabeller" ;
+    Text [ danish ] = "Tabeller" ;
+    Text [ portuguese ] = "Tabelas" ;
+    Text [ portuguese_brazilian ] = "Tabellen" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöû";
+    Text[ polish ] = "Tabele";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏÇæá";
+    Text[ greek ] = "Ğßíáêåò";
+    Text[ korean ] = "Ç¥";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_FRAME
+{
+    TEXT = "Textrahmen" ;
+    TEXT [ English ] = "Frames" ;
+    Text [ dutch ] = "Tekstkader" ;
+    Text [ english_us ] = "Text frame" ;
+    Text [ italian ] = "Cornice" ;
+    Text [ spanish ] = "Marco de texto" ;
+    Text [ french ] = "Cadres texte" ;
+    Text [ swedish ] = "Textram" ;
+    Text [ danish ] = "Tekstbokse" ;
+    Text [ portuguese ] = "Molduras de texto" ;
+    Text [ portuguese_brazilian ] = "Textrahmen" ;
+    Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
+    Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
+    Text[ polish ] = "Ramka tekstu";
+    Text[ japanese ] = "Ã·½Ä˜g";
+    Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+    Text[ arabic ] = "ÅØÇÑÇÊ äÕ";
+    Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Metin kutusu";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_GRAPHIC
+{
+    TEXT = "Grafiken" ;
+    TEXT [ English ] = "Graphics" ;
+    Text [ english_us ] = "Graphics" ;
+    Text [ italian ] = "Immagini" ;
+    Text [ spanish ] = "Imágenes" ;
+    Text [ french ] = "Images" ;
+    Text [ dutch ] = "Afbeeldingen" ;
+    Text [ swedish ] = "Grafiker" ;
+    Text [ danish ] = "Billeder" ;
+    Text [ portuguese ] = "Imagens" ;
+    Text [ portuguese_brazilian ] = "Grafiken" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ğèñóíêè";
+    Text[ polish ] = "Grafiki";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ chinese_traditional ] = "¹Ï¤ù";
+    Text[ arabic ] = "ÕæÑ";
+    Text[ greek ] = "ÃñáöéêÜ";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_OLE
+{
+    TEXT = "OLE-Objekte" ;
+    TEXT [ English ] = "OLE-Objects" ;
+    Text [ english_us ] = "OLE objects" ;
+    Text [ italian ] = "Oggetti OLE" ;
+    Text [ spanish ] = "Objetos OLE" ;
+    Text [ french ] = "Objets OLE" ;
+    Text [ dutch ] = "OLE-objecten" ;
+    Text [ swedish ] = "OLE-objekt" ;
+    Text [ danish ] = "OLE-objekter" ;
+    Text [ portuguese ] = "Objectos OLE" ;
+    Text [ portuguese_brazilian ] = "OLE-Objekte" ;
+    Text[ chinese_simplified ] = "OLE-¶ÔÏó";
+    Text[ russian ] = "Îáúåêòû OLE";
+    Text[ polish ] = "Obiekty OLE";
+    Text[ japanese ] = "OLE µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "OLE ª«¥ó";
+    Text[ arabic ] = "ßÇÆäÇÊ OLE";
+    Text[ greek ] = "Áíôéêåßìåíá OLE";
+    Text[ korean ] = "OLE °³Ã¼";
+    Text[ turkish ] = "OLE nesnesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_BOOKMARK
+{
+    TEXT = "Textmarken" ;
+    TEXT [ English ] = "Bookmarks" ;
+    Text [ dutch ] = "Tekstmarkeringen" ;
+    Text [ english_us ] = "Bookmarks" ;
+    Text [ italian ] = "Segnalibri di testo" ;
+    Text [ spanish ] = "Marcas de texto" ;
+    Text [ french ] = "Repères de texte" ;
+    Text [ swedish ] = "Bokmärken" ;
+    Text [ danish ] = "Tekstmarkeringer" ;
+    Text [ portuguese ] = "Marcadores de texto" ;
+    Text [ portuguese_brazilian ] = "Textmarken" ;
+    Text[ chinese_simplified ] = "ÊéÇ©";
+    Text[ russian ] = "Çàêëàäêè";
+    Text[ polish ] = "Zak³adki";
+    Text[ japanese ] = "Ã·½ÄÏ°¸";
+    Text[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
+    Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
+    Text[ greek ] = "ÓçìÜíóåéò êåéìİíïõ";
+    Text[ korean ] = "Ã¥°¥ÇÇ";
+    Text[ turkish ] = "Metin işareti";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_REGION
+{
+    TEXT = "Bereiche" ;
+    TEXT [ English ] = "Regions" ;
+    Text [ english_us ] = "Sections" ;
+    Text [ italian ] = "Sezioni" ;
+    Text [ spanish ] = "Categorías" ;
+    Text [ french ] = "Sections" ;
+    Text [ dutch ] = "Bereiken" ;
+    Text [ swedish ] = "Kategorier" ;
+    Text [ danish ] = "Områder" ;
+    Text [ portuguese ] = "Categorias" ;
+    Text [ portuguese_brazilian ] = "Bereiche" ;
+    Text[ chinese_simplified ] = "ÇøÓò";
+    Text[ russian ] = "Îáëàñòè";
+    Text[ polish ] = "Obszary";
+    Text[ japanese ] = "”ÍˆÍ";
+    Text[ chinese_traditional ] = "°Ï°ì";
+    Text[ arabic ] = "äØÇŞÇÊ";
+    Text[ greek ] = "Êáôçãïñßåò";
+    Text[ korean ] = "±¸¿ª";
+    Text[ turkish ] = "Bölüm";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_URLFIELD
+{
+    TEXT = "Hyperlinks" ;
+    TEXT [ English ] = "Hyperlinks" ;
+    Text [ dutch ] = "Hyperlinks" ;
+    Text [ english_us ] = "Hyperlinks" ;
+    Text [ italian ] = "Hyperlink" ;
+    Text [ spanish ] = "Hiperenlaces" ;
+    Text [ french ] = "Hyperliens" ;
+    Text [ swedish ] = "Hyperlänkar" ;
+    Text [ danish ] = "Hyperlinks" ;
+    Text [ portuguese ] = "Hiperligações" ;
+    Text [ portuguese_brazilian ] = "Hyperlinks" ;
+    Text[ chinese_simplified ] = "³¬Á´½Ó";
+    Text[ russian ] = "Ãèïåğññûëêè";
+    Text[ polish ] = "Hiper³¹cza";
+    Text[ japanese ] = "Ê²Êß°Øİ¸";
+    Text[ chinese_traditional ] = "¶W³sµ²";
+    Text[ arabic ] = "ÇÑÊÈÇØÇÊ ÊÔÚÈíÉ";
+    Text[ greek ] = "Õğåñ-óõíäİóåéò";
+    Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
+    Text[ turkish ] = "Hyperlink";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_REFERENCE
+{
+    TEXT = "Referenzen" ;
+    TEXT [ English ] = "References" ;
+    Text [ dutch ] = "Verwijzingen" ;
+    Text [ english_us ] = "References" ;
+    Text [ italian ] = "Riferimenti" ;
+    Text [ spanish ] = "Referencias" ;
+    Text [ french ] = "Références" ;
+    Text [ swedish ] = "Referenser" ;
+    Text [ danish ] = "Referencer" ;
+    Text [ portuguese ] = "Referências" ;
+    Text [ portuguese_brazilian ] = "Referenzen" ;
+    Text[ chinese_simplified ] = "ÒıÓÃ";
+    Text[ russian ] = "Ññûëêè";
+    Text[ polish ] = "Odwo³ania";
+    Text[ japanese ] = "QÆ";
+    Text[ chinese_traditional ] = "°Ñ·Ó";
+    Text[ arabic ] = "ãÑÇÌÚ";
+    Text[ greek ] = "Áíáöïñİò";
+    Text[ korean ] = "ÂüÁ¶";
+    Text[ turkish ] = "Referans";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_INDEX
+{
+    TEXT = "Verzeichnisse" ;
+    TEXT [ English ] = "Indexes" ;
+    Text [ dutch ] = "Indices" ;
+    Text [ english_us ] = "Indexes" ;
+    Text [ italian ] = "Indici" ;
+    Text [ spanish ] = "Índices" ;
+    Text [ french ] = "Index" ;
+    Text [ swedish ] = "Förteckningar" ;
+    Text [ danish ] = "Indeks" ;
+    Text [ portuguese ] = "Indices" ;
+    Text [ portuguese_brazilian ] = "Verzeichnisse" ;
+    Text[ chinese_simplified ] = "Ä¿Â¼";
+    Text[ russian ] = "Óêàçàòåëè";
+    Text[ polish ] = "Indeksy";
+    Text[ japanese ] = "–ÚŸ‚Æõˆø";
+    Text[ chinese_traditional ] = "¥Ø¿ı";
+    Text[ arabic ] = "İåÇÑÓ";
+    Text[ greek ] = "ÅõñåôŞñéá";
+    Text[ korean ] = "»öÀÎ";
+    Text[ turkish ] = "Dizin";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_DRAWOBJECT
+{
+    TEXT = "Zeichenobjekte" ;
+    TEXT [ English ] = "Draw objects" ;
+    Text [ dutch ] = "Tekenobjecten" ;
+    Text [ english_us ] = "Draw objects" ;
+    Text [ italian ] = "Oggetti di disegno" ;
+    Text [ spanish ] = "Objetos de dibujo" ;
+    Text [ french ] = "Objets de dessin" ;
+    Text [ swedish ] = "Ritobjekt" ;
+    Text [ danish ] = "Tegneobjekter" ;
+    Text [ portuguese ] = "Objectos de desenho" ;
+    Text [ portuguese_brazilian ] = "Zeichenobjekte" ;
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+    Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
+    Text[ polish ] = "Obiekty rysunkowe";
+    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
+    Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
+    Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
+    Text[ korean ] = "±×¸®±â °³Ã¼";
+    Text[ turkish ] = "Çizim nesnesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_POSTIT
+{
+    TEXT = "Notizen" ;
+    TEXT [ English ] = "Annotations" ;
+    Text [ dutch ] = "Aantekeningen" ;
+    Text [ english_us ] = "Notes" ;
+    Text [ swedish ] = "Anteckningar" ;
+    Text [ danish ] = "Noter" ;
+    Text [ italian ] = "Note" ;
+    Text [ spanish ] = "Notas" ;
+    Text [ french ] = "Notes" ;
+    Text [ portuguese ] = "Anotações" ;
+    Text [ portuguese_brazilian ] = "Notizen" ;
+    Text[ chinese_simplified ] = "±¸×¢";
+    Text[ russian ] = "Ïğèìå÷àíèÿ";
+    Text[ polish ] = "Notatki";
+    Text[ japanese ] = "ÒÓ’ ";
+    Text[ chinese_traditional ] = "³Æª`";
+    Text[ arabic ] = "ãáÇÍÙÇÊ";
+    Text[ greek ] = "Óçìåéşóåéò";
+    Text[ korean ] = "¸Ş¸ğ";
+    Text[ turkish ] = "Not";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_OUTLINE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
+    TEXT = "Überschrift" ;
+    TEXT [ English ] = "Outline" ;
+    Text [ english_us ] = "Heading" ;
+    Text [ italian ] = "Intestazione" ;
+    Text [ spanish ] = "Encabezado" ;
+    Text [ french ] = "Titre" ;
+    Text [ dutch ] = "Kop" ;
+    Text [ swedish ] = "Överskrift" ;
+    Text [ danish ] = "Overskrift" ;
+    Text [ portuguese ] = "Título" ;
+    Text [ portuguese_brazilian ] = "Überschrift" ;
+    Text[ chinese_simplified ] = "±êÌâ";
+    Text[ russian ] = "Çàãîëîâîê";
+    Text[ polish ] = "Tytu³";
+    Text[ japanese ] = "Œ©o‚µ";
+    Text[ chinese_traditional ] = "¼ĞÃD";
+    Text[ arabic ] = "ÚäæÇä";
+    Text[ greek ] = "Åğéêåöáëßäá";
+    Text[ korean ] = "¸Ó¸®±Û";
+    Text[ turkish ] = "Başlık";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_TABLE
+{
+    TEXT = "Tabelle" ;
+    TEXT [ English ] = "Table" ;
+    Text [ english_us ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ spanish ] = "Tabla" ;
+    Text [ french ] = "Tableau" ;
+    Text [ dutch ] = "Tabel" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ danish ] = "Tabel" ;
+    Text [ portuguese ] = "Tabela" ;
+    Text [ portuguese_brazilian ] = "Tabelle" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ polish ] = "Tabela";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏæá";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "Ç¥";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_FRAME
+{
+    TEXT = "Textrahmen" ;
+    TEXT [ English ] = "Frame" ;
+    Text [ dutch ] = "Tekstkader" ;
+    Text [ english_us ] = "Text frame" ;
+    Text [ italian ] = "Cornice" ;
+    Text [ spanish ] = "Marco de texto" ;
+    Text [ french ] = "Cadre texte" ;
+    Text [ swedish ] = "Textram" ;
+    Text [ danish ] = "Tekstboks" ;
+    Text [ portuguese ] = "Moldura de texto" ;
+    Text [ portuguese_brazilian ] = "Textrahmen" ;
+    Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
+    Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
+    Text[ polish ] = "Ramka tekstu";
+    Text[ japanese ] = "Ã·½Ä˜g";
+    Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+    Text[ arabic ] = "ÅØÇÑ äÕ";
+    Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Metin kutusu";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_GRAPHIC
+{
+    TEXT = "Grafik" ;
+    TEXT [ English ] = "Graphic" ;
+    Text [ english_us ] = "Graphics" ;
+    Text [ italian ] = "Immagine" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ french ] = "Image" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ danish ] = "Billede" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text [ portuguese_brazilian ] = "Grafik" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ polish ] = "Grafika";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ chinese_traditional ] = "¹Ï¤ù";
+    Text[ arabic ] = "ÕæÑÉ";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_OLE
+{
+    TEXT = "OLE-Objekt" ;
+    TEXT [ English ] = "OLE-Object" ;
+    Text [ english_us ] = "OLE object" ;
+    Text [ italian ] = "Oggetto OLE" ;
+    Text [ spanish ] = "Objeto OLE" ;
+    Text [ french ] = "Objet OLE" ;
+    Text [ dutch ] = "OLE-object" ;
+    Text [ swedish ] = "OLE-objekt" ;
+    Text [ danish ] = "OLE-objekt" ;
+    Text [ portuguese ] = "Objecto OLE" ;
+    Text [ portuguese_brazilian ] = "OLE-Objekt" ;
+    Text[ chinese_simplified ] = "OLE-¶ÔÏó";
+    Text[ russian ] = "Îáúåêò OLE";
+    Text[ polish ] = "Obiekt OLE";
+    Text[ japanese ] = "OLE µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "OLE ª«¥ó";
+    Text[ arabic ] = "ßÇÆä OLE";
+    Text[ greek ] = "Áíôéêåßìåíï OLE";
+    Text[ korean ] = "OLE °³Ã¼";
+    Text[ turkish ] = "OLE nesnesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_BOOKMARK
+{
+    TEXT = "Textmarke" ;
+    TEXT [ English ] = "Bookmark" ;
+    Text [ dutch ] = "Tekstmarkering" ;
+    Text [ english_us ] = "Bookmark" ;
+    Text [ italian ] = "Segnalibro" ;
+    Text [ spanish ] = "Marca de texto" ;
+    Text [ french ] = "Repère de texte" ;
+    Text [ swedish ] = "Bokmärke" ;
+    Text [ danish ] = "Tekstmarkering" ;
+    Text [ portuguese ] = "Marcador de texto" ;
+    Text [ portuguese_brazilian ] = "Textmarke" ;
+    Text[ chinese_simplified ] = "ÊéÇ©";
+    Text[ russian ] = "Çàêëàäêà";
+    Text[ polish ] = "Zak³adka";
+    Text[ japanese ] = "Ã·½ÄÏ°¸";
+    Text[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
+    Text[ arabic ] = "ÅÔÇÑÉ ãÑÌÚíÉ";
+    Text[ greek ] = "ÓŞìáíóç êåéìİíïõ";
+    Text[ korean ] = "Ã¥°¥ÇÇ";
+    Text[ turkish ] = "Metin işareti";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_REGION
+{
+    TEXT = "Bereich" ;
+    TEXT [ English ] = "Region" ;
+    Text [ english_us ] = "Section" ;
+    Text [ italian ] = "Area" ;
+    Text [ spanish ] = "Area" ;
+    Text [ french ] = "Section" ;
+    Text [ dutch ] = "Bereik" ;
+    Text [ swedish ] = "Kategori" ;
+    Text [ danish ] = "Område" ;
+    Text [ portuguese ] = "Categoria" ;
+    Text [ portuguese_brazilian ] = "Bereich" ;
+    Text[ chinese_simplified ] = "ÇøÓò";
+    Text[ russian ] = "Îáëàñòü";
+    Text[ polish ] = "Obszar";
+    Text[ japanese ] = "”ÍˆÍ";
+    Text[ chinese_traditional ] = "°Ï°ì";
+    Text[ arabic ] = "äØÇŞ";
+    Text[ greek ] = "Åíüôçôá";
+    Text[ korean ] = "±¸¿ª";
+    Text[ turkish ] = "Bölüm";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_URLFIELD
+{
+    TEXT = "Hyperlink" ;
+    TEXT [ English ] = "Hyperlink" ;
+    Text [ dutch ] = "Hyperlink" ;
+    Text [ english_us ] = "Hyperlink" ;
+    Text [ italian ] = "Hyperlink" ;
+    Text [ spanish ] = "Hiperenlace" ;
+    Text [ french ] = "Hyperlien" ;
+    Text [ swedish ] = "Hyperlänk" ;
+    Text [ danish ] = "Hyperlink" ;
+    Text [ portuguese ] = "Hiperligação" ;
+    Text [ portuguese_brazilian ] = "Hyperlink" ;
+    Text[ chinese_simplified ] = "³¬Á´½Ó";
+    Text[ russian ] = "Ãèïåğññûëêà";
+    Text[ polish ] = "Hiper³¹cze";
+    Text[ japanese ] = "Ê²Êß°Øİ¸";
+    Text[ chinese_traditional ] = "¶W³sµ²";
+    Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
+    Text[ greek ] = "Õğåñ-óıíäåóç";
+    Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
+    Text[ turkish ] = "Hyperlink";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_REFERENCE
+{
+    TEXT = "Referenz" ;
+    TEXT [ English ] = "Reference" ;
+    Text [ dutch ] = "Verwijzing" ;
+    Text [ english_us ] = "Reference" ;
+    Text [ italian ] = "Riferimento" ;
+    Text [ spanish ] = "Referencia" ;
+    Text [ french ] = "Référence" ;
+    Text [ swedish ] = "Referens" ;
+    Text [ danish ] = "Reference" ;
+    Text [ portuguese ] = "Referência" ;
+    Text [ portuguese_brazilian ] = "Referenz" ;
+    Text[ chinese_simplified ] = "ÒıÓÃ";
+    Text[ russian ] = "Ññûëêà";
+    Text[ polish ] = "Odwo³anie";
+    Text[ japanese ] = "QÆ";
+    Text[ chinese_traditional ] = "°Ñ·Ó";
+    Text[ arabic ] = "ãÑÌÚ";
+    Text[ greek ] = "ÁíáöïñÜ";
+    Text[ korean ] = "ÂüÁ¶";
+    Text[ turkish ] = "Referans";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_INDEX
+{
+    TEXT = "Verzeichnis" ;
+    TEXT [ English ] = "Index" ;
+    Text [ dutch ] = "Index" ;
+    Text [ english_us ] = "Index" ;
+    Text [ italian ] = "Indice" ;
+    Text [ spanish ] = "Índice" ;
+    Text [ french ] = "Index" ;
+    Text [ swedish ] = "Förteckning" ;
+    Text [ danish ] = "Indeks" ;
+    Text [ portuguese ] = "Índice" ;
+    Text [ portuguese_brazilian ] = "Verzeichniß" ;
+    Text[ chinese_simplified ] = "Ä¿Â¼";
+    Text[ russian ] = "Óêàçàòåëü";
+    Text[ polish ] = "Indeks";
+    Text[ japanese ] = "õˆø";
+    Text[ chinese_traditional ] = "¥Ø¿ı";
+    Text[ arabic ] = "İåÑÓ";
+    Text[ greek ] = "ÅõñåôŞñéï";
+    Text[ korean ] = "»öÀÎ";
+    Text[ turkish ] = "Dizin";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_POSTIT
+{
+    TEXT = "Notiz" ;
+    TEXT [ English ] = "Annotation" ;
+    Text [ dutch ] = "Aantekening" ;
+    Text [ english_us ] = "Note" ;
+    Text [ swedish ] = "Anteckning" ;
+    Text [ danish ] = "Note" ;
+    Text [ italian ] = "Nota" ;
+    Text [ spanish ] = "Nota" ;
+    Text [ french ] = "Note" ;
+    Text [ portuguese ] = "Anotação" ;
+    Text [ portuguese_brazilian ] = "Notiz" ;
+    Text[ chinese_simplified ] = "±¸×¢";
+    Text[ russian ] = "Ïğèìå÷àíèå";
+    Text[ polish ] = "Notatka";
+    Text[ japanese ] = "ÒÓ";
+    Text[ chinese_traditional ] = "³Æª`";
+    Text[ arabic ] = "ãáÇÍÙÉ";
+    Text[ greek ] = "Óçìåßùóç";
+    Text[ korean ] = "¸Ş¸ğ";
+    Text[ turkish ] = "Not";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
+{
+    TEXT = "Zeichenobjekt" ;
+    TEXT [ English ] = "Draw object" ;
+    Text [ dutch ] = "Tekenobject" ;
+    Text [ english_us ] = "Draw object" ;
+    Text [ italian ] = "Oggetto di disegno" ;
+    Text [ spanish ] = "Objeto de dibujo" ;
+    Text [ french ] = "Objet de dessin" ;
+    Text [ swedish ] = "Ritobjekt" ;
+    Text [ danish ] = "Tegneobjekt" ;
+    Text [ portuguese ] = "Objecto de desenho" ;
+    Text [ portuguese_brazilian ] = "Zeichenobjekt" ;
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
+    Text[ polish ] = "Obiekt rysunkowy";
+    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
+    Text[ arabic ] = "ßÇÆä ÑÓæãí";
+    Text[ greek ] = "Aíôéêåßìåíï ó÷åäßáóçò";
+    Text[ korean ] = "±×¸®±â °³Ã¼";
+    Text[ turkish ] = "Çizim nesnesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_DEFINE_NUMBERFORMAT
+{
+    TEXT = "Weitere Formate..." ;
+    TEXT [ English ] = "Additional formats..." ;
+    Text [ portuguese ] = "Outros formatos..." ;
+    Text [ english_us ] = "Additional formats..." ;
+    Text [ portuguese_brazilian ] = "Weitere Formate..." ;
+    Text [ swedish ] = "Ytterligare format..." ;
+    Text [ danish ] = "Yderligere formater..." ;
+    Text [ italian ] = "Ulteriori formati..." ;
+    Text [ spanish ] = "Otros formatos..." ;
+    Text [ french ] = "Autres formats..." ;
+    Text [ dutch ] = "Andere formaten..." ;
+    Text[ chinese_simplified ] = "ÆäËüµÄ¸ñÊ½...";
+    Text[ russian ] = "Äîïîëíèòåëüíûå ôîğìàòû...";
+    Text[ polish ] = "Dodatkowe formaty...";
+    Text[ japanese ] = "‚»‚Ì‘¼‚Ì‘®...";
+    Text[ chinese_traditional ] = "¨ä¥¦®æ¦¡...";
+    Text[ arabic ] = "...ÊäÓíŞÇÊ ÅÖÇİíÉ";
+    Text[ greek ] = "Åğéğñüóèåôåò ìïñöİò...";
+    Text[ korean ] = "ºÎ°¡ÀûÀÎ ¼­½Ä...";
+    Text[ turkish ] = "Diğer formatlar...";
+    Text[ language_user1 ] = " ";
+};
+String RID_STR_SYSTEM
+{
+    Text = "[System]" ;
+    Text [ ENGLISH ] = " [System]" ;
+    Text[ english_us ] = "[System]";
+    Text[ portuguese ] = "[Sistema]";
+    Text[ russian ] = "[Èç ñèñòåìû]";
+    Text[ greek ] = "[Óıóôçìá]";
+    Text[ dutch ] = "[Systeem]";
+    Text[ french ] = "[Système]";
+    Text[ spanish ] = "[Sistema]";
+    Text[ italian ] = "[Sistema]";
+    Text[ danish ] = "[System]";
+    Text[ swedish ] = "[System]";
+    Text[ polish ] = "[System]";
+    Text[ portuguese_brazilian ] = "[System]";
+    Text[ japanese ] = "[¼½ÃÑ]";
+    Text[ korean ] = "[½Ã½ºÅÛ]";
+    Text[ chinese_simplified ] = "[ÏµÍ³]";
+    Text[ chinese_traditional ] = "[¨t²Î]";
+    Text[ arabic ] = "[äÙÇã]";
+    Text[ turkish ] = "[Sistem]";
+};
+String STR_MULT_INTERACT_SPELL_WARN
+{
+    Text = "Die Interaktive Rechschreibprüfung ist\nbereits in anderem Dokument aktiv" ;
+    Text [ ENGLISH ] = "The interactive spelling already active\in a different document" ;
+    Text[ english_us ] = "The interactive spellcheck is already active\\in a different document";
+    Text[ portuguese ] = "A verificação ortográfica interactiva já está\nactiva noutro documento";
+    Text[ russian ] = "Èíòåğàêòèâíàÿ ïğîâåğêà ïğàâîïèñàíèÿ\nóæå âêëş÷åíà â äğóãîì äîêóìåíòå";
+    Text[ greek ] = "Ôï äéáëïãéêü ğñüãñáììá åëİã÷ïõ ïñèïãñáößáò\n÷ñçóéìïğïéåßôáé áğü êÜğïéï Üëëï İããñáöï";
+    Text[ dutch ] = "De interactieve spellingcontrole is\nreeds actief in een ander document.";
+    Text[ french ] = "La vérification orthographique interactive est\nen cours d'utilisation dans un autre document.";
+    Text[ spanish ] = "La corrección ortográfica interactiva\nya está activada en otro documento";
+    Text[ italian ] = "Il controllo ortografico interattivo è\ngià stato attivato in un altro documento.";
+    Text[ danish ] = "Den interaktive stavekontrol er\nallerede aktiv i et andet dokument";
+    Text[ swedish ] = "Den interaktiva rättstavningskontrollen\när redan aktiv i ett annat dokument";
+    Text[ polish ] = "Interaktywne sprawdzanie pisowni\naktywne jest ju¿ w innym dokumencie.";
+    Text[ portuguese_brazilian ] = "The interactive spelling already active\\in a different document";
+    Text[ japanese ] = "²İÀ×¸Ã¨ÌŞ½ÍßÙÁª¯¸‚Í‚·‚Å‚É\n‚Ù‚©‚ÌÄŞ·­ÒİÄ‚Å±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·";
+    Text[ korean ] = "´ëÈ­Çü ¸ÂÃã¹ıÀº \nÀÌ¹Ì ´Ù¸¥ ¹®¼­¿¡¼­ È°¼º»óÅÂÀÔ´Ï´Ù.";
+    Text[ chinese_simplified ] = "½»»¥Ê½Õı×Ö·¨¼ì²é\nÒÑ¾­Ê¹ÓÃÔÚÒ»¸öÆäËüÎÄµµÖĞ";
+    Text[ chinese_traditional ] = "¥t¤@­Ó¤å¥ó¤w¸g¨Ï¥Î¤¬°Ê¦¡¥¿¦rªk¥\\¯à";
+    Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí ÇáÊÈÇÏáí\näÔØ ÈÇáİÚá İí ãÓÊäÏ ÂÎÑ";
+    Text[ turkish ] = "Etkileşimli yazım denetimi\nşu an başka bir belgede etkin";
+};
+String STR_MULT_INTERACT_HYPH_WARN
+{
+    Text = "Die Interaktive Silbentrennung ist\nbereits in anderem Dokument aktiv" ;
+    Text [ ENGLISH ] = "The interactive hyphenation already active\in a different document" ;
+    Text[ english_us ] = "The interactive hyphenation is already active\\in a different document";
+    Text[ portuguese ] = "A divisão silábica interactiva já está\nactiva noutro documento";
+    Text[ russian ] = "Èíòåğàêòèâíàÿ ğàññòàíîâêà ïåğåíîñîâ\nóæå âêëş÷åíà â äğóãîì äîêóìåíòå";
+    Text[ greek ] = "Ôï äéáëïãéêü ğñüãñáììá óõëëáâéóìïı\n÷ñçóéìïğïéåßôáé áğü êÜğïéï Üëëï İããñáöï";
+    Text[ dutch ] = "De interactieve woordafbreking is\nreeds actief in een ander document";
+    Text[ french ] = "La coupure de mots interactive est\nen cours d'utilisation dans un autre document.";
+    Text[ spanish ] = "La separación silábica interactiva\nya está activa en otro documento";
+    Text[ italian ] = "La sillabazione  interattiva è\ngià stata attivata in un altro documento.";
+    Text[ danish ] = "Den interaktive orddeling er\nallerede aktiv i et andet dokument";
+    Text[ swedish ] = "Den interaktiva avstavningen är\nredan aktiv i ett annat dokument";
+    Text[ polish ] = "Interaktywne dzielenie wyrazów na sylaby\naktywne jest ju¿ w innym dokumencie.";
+    Text[ portuguese_brazilian ] = "The interactive hyphenation already active\\in a different document";
+    Text[ japanese ] = "²İÀ×¸Ã¨ÌŞÊ²ÌÈ°¼®İ‚Í‚·‚Å‚É\n‚Ù‚©‚ÌÄŞ·­ÒİÄ‚Å±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·";
+    Text[ korean ] = "´ëÈ­Çü ÇÏÀÌÇÂ ³Ö±â´Â \nÀÌ¹Ì ´Ù¸¥ ¹®¼­¿¡¼­ È°¼º»óÅÂÀÔ´Ï´Ù.";
+    Text[ chinese_simplified ] = "½»»¥Ê½Á¬×Ö·û\nÒÑ¾­Ê¹ÓÃÔÚÒ»¸öÆäËüÎÄµµÖĞ";
+    Text[ chinese_traditional ] = "¥t¤@­Ó¤å¥ó¤w¸g¨Ï¥Î¤¬°Ê¦¡³s¦r¸¹¥\\¯à";
+    Text[ arabic ] = "İÕá ÇáãŞÇØÚ ÇáÊÈÇÏáí\näÔØ ÈÇáİÚá İí ãÓÊäÏ ÂÎÑ";
+    Text[ turkish ] = "Etkileşimli heceleme\nşu an başka bir belgede etkin";
+};
+String STR_SPELL_TITLE
+{
+    Text = "Rechtschreibprüfung" ;
+    Text [ ENGLISH ] = "Spelling" ;
+    Text[ english_us ] = "Spellcheck";
+    Text[ portuguese ] = "Ortografia";
+    Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ";
+    Text[ greek ] = "¸ëåã÷ïò ïñèïãñáößáò";
+    Text[ dutch ] = "Spellingcontrole";
+    Text[ french ] = "Vérification orthographique";
+    Text[ spanish ] = "Corrección ortográfica";
+    Text[ italian ] = "Controllo ortografico";
+    Text[ danish ] = "Stavekontrol";
+    Text[ swedish ] = "Rättstavningskontroll";
+    Text[ polish ] = "Sprawdzanie pisowni";
+    Text[ portuguese_brazilian ] = "Spelling";
+    Text[ japanese ] = "½ÍßÙÁª¯¸";
+    Text[ korean ] = "¸ÂÃã¹ı °Ë»ç";
+    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é";
+    Text[ chinese_traditional ] = "¥¿¦rªk";
+    Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí";
+    Text[ turkish ] = "Yazım denetimi";
+};
+String STR_HYPH_TITLE
+{
+    Text = "Silbentrennung" ;
+    Text [ ENGLISH ] = "Hyphenation" ;
+    Text[ english_us ] = "Hyphenation";
+    Text[ portuguese ] = "Divisão silábica";
+    Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ";
+    Text[ greek ] = "Óõëëáâéóìüò";
+    Text[ dutch ] = "Woordafbreking";
+    Text[ french ] = "Coupure de mots";
+    Text[ spanish ] = "Separación silábica";
+    Text[ italian ] = "Sillabazione";
+    Text[ danish ] = "Orddeling";
+    Text[ swedish ] = "Avstavning";
+    Text[ polish ] = "Dzielenie wyrazów na sylaby";
+    Text[ portuguese_brazilian ] = "Hyphenation";
+    Text[ japanese ] = "Ê²ÌÈ°¼®İ";
+    Text[ korean ] = "ÇÏÀÌÇÂ ³Ö±â";
+    Text[ chinese_simplified ] = "Á¬×Ö·û";
+    Text[ chinese_traditional ] = "³s¦r¸¹";
+    Text[ arabic ] = "İÕá ÇáãŞÇØÚ";
+    Text[ turkish ] = "Heceleme";
+};
+

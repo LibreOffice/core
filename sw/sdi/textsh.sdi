@@ -1,0 +1,214 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   TEXTSH.SDI  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/textsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File Textshell fuer Sw3
+
+    (c) Copyright 1995 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+
+
+/*
+F23BA0A1-73A0-11d0-89CA-008029E4B0B1
+F23BA0A2-73A0-11d0-89CA-008029E4B0B1
+F23BA0A3-73A0-11d0-89CA-008029E4B0B1
+F23BA0A4-73A0-11d0-89CA-008029E4B0B1
+F23BA0A5-73A0-11d0-89CA-008029E4B0B1
+F23BA0A6-73A0-11d0-89CA-008029E4B0B1
+F23BA0A7-73A0-11d0-89CA-008029E4B0B1
+F23BA0A8-73A0-11d0-89CA-008029E4B0B1
+
+
+ */
+
+interface Text : BaseText
+[
+    uuid = "1BD56200-111A-101D-9757-6E74207A7520"
+]
+{
+    FN_INSERT_FRAME_INTERACT // status()
+    [
+        ExecMethod = ExecInsert ;
+        StateMethod = StateInsert ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Cachable ;
+    ]
+     // hier sollen die Slots eingefuegt werden, die vom StarWriter/WEB
+     // nicht unterstuetzt werden
+
+    import TextSelection;
+
+    /*-----------------24.01.97 08.13-------------------
+    Spezielle Feldbefehle
+--------------------------------------------------*/
+
+    FN_INSERT_FLD_TOPIC
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ReadOnlyDoc = FALSE ;
+    ]
+    /*-----------------24.01.97 08.13-------------------
+    Ende Spezielle Feldbefehle
+--------------------------------------------------*/
+
+    /*-----------------24.01.97 07.36-------------------
+    Verzeichnisse
+--------------------------------------------------*/
+
+    /*
+enum TOXTypes
+{
+    TOX_INDEX,
+    TOX_USER,
+    TOX_CONTENT
+};
+
+ */
+
+    FN_INSERT_IDX_ENTRY_DLG // status(final|play)
+    [
+        ExecMethod = ExecIdx ;
+        StateMethod = GetIdxState ;
+    ]
+
+    FN_INSERT_AUTH_ENTRY_DLG
+    [
+        ExecMethod = ExecIdx ;
+        StateMethod = GetIdxState ;
+    ]
+    FN_EDIT_AUTH_ENTRY_DLG
+    [
+        ExecMethod = ExecIdx ;
+        StateMethod = GetIdxState ;
+    ]
+    FN_EDIT_IDX_ENTRY_DLG // status(final|play)
+    [
+        ExecMethod = ExecIdx ;
+        StateMethod = GetIdxState ;
+    ]
+    FN_INSERT_MULTI_TOX // status(final|play)
+    [
+        ExecMethod = ExecIdx ;
+        StateMethod = GetIdxState ;
+    ]
+    FN_REMOVE_CUR_TOX
+    [
+        ExecMethod = ExecIdx ;
+        StateMethod = GetIdxState ;
+    ]
+    FN_IDX_MARK_TO_IDX // status(final|play)
+    [
+        ExecMethod = ExecIdx ;
+    ]
+
+    /*-----------------24.01.97 08.01-------------------
+    Absatzeinstellungen
+--------------------------------------------------*/
+
+    /*-----------------24.01.97 08.01-------------------
+    Ende Absatzeinstellungen
+--------------------------------------------------*/
+
+}
+
+shell SwTextShell : SwBaseShell
+{
+    import Text[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.239  2000/06/20 14:47:52  os
+    #70060# less occurences of columns in HTML
+
+    Revision 1.238  2000/05/26 07:06:19  os
+    old SW Basic API Slots removed
+
+    Revision 1.237  2000/02/22 14:49:18  os
+    #72894# footnote option dialog in HTML documents
+
+    Revision 1.236  2000/02/10 11:57:08  os
+    #72894# fields pageno, pagecount, title and insert footnote enabled in SW/Web
+
+    Revision 1.235  2000/01/13 09:20:14  os
+    #71814# FN_INSERT_IDX_ENTRY allowed on protected cursor
+
+    Revision 1.234  1999/12/10 15:16:35  os
+    #70711# readonly check for index entries now in GetIdxState
+
+    Revision 1.233  1999/10/15 11:25:59  os
+    new: FN_REMOVE_TOX
+
+    Revision 1.232  1999/09/15 13:56:36  os
+    dialog for authorities
+
+    Revision 1.231  1999/09/10 08:51:10  jp
+    FormatFootnoteDialog: dont disable by protected cursor
+
+    Revision 1.230  1999/07/30 11:14:16  OS
+    indexes: check readonly in status method
+
+
+      Rev 1.229   30 Jul 1999 13:14:16   OS
+   indexes: check readonly in status method
+
+      Rev 1.228   21 Jun 1999 09:56:24   OS
+   extended indexes
+
+      Rev 1.227   23 Mar 1999 12:15:10   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.226   05 Feb 1999 17:04:48   OS
+   #61547# InsertEndnoteDirect
+
+      Rev 1.225   22 Jan 1999 11:54:08   JP
+   Task #58677#: Crsr in Readonly Bereichen zulassen
+
+      Rev 1.224   12 Nov 1998 17:29:18   MA
+   #58677# Disable Flag
+
+      Rev 1.223   06 Apr 1998 09:45:00   OS
+   INSERT_FRAME_INTERACT fuer manche HTML-Exports erlaubt
+
+      Rev 1.222   28 Aug 1997 12:53:10   MBA
+   Neue Interface-Namen
+
+      Rev 1.221   25 Jul 1997 11:31:04   AMA
+   Opt: GroupId und ConfigName aufgeraeumt
+
+      Rev 1.220   13 Feb 1997 12:44:56   MA
+   unnoetige Texte entfernt
+
+      Rev 1.219   05 Feb 1997 13:26:50   OS
+   Blocksatz auch wieder fuer Web
+
+      Rev 1.218   04 Feb 1997 13:40:20   HJS
+   merge 04.02.97
+
+      Rev 1.217   28 Jan 1997 13:27:40   HJS
+   merge 28.01.97
+
+      Rev 1.216   24 Jan 1997 14:58:28   OS
+   nicht-Web-Slots verschoben
+
+      Rev 1.215   23 Jan 1997 14:31:24   OS
+   Ableitung von _Text
+
+      Rev 1.214   21 Jan 1997 12:32:40   HJS
+   merge 21.01.97
+
+      Rev 1.213   15 Jan 1997 16:05:54   OM
+   Neue OLE-Dialog
+
+      Rev 1.212   14 Jan 1997 13:43:24   JP
+   SID_INC_INDENT/_DEC: StatusMethode
+
+------------------------------------------------------------------------*/
+

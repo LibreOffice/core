@@ -1,0 +1,636 @@
+/*-----------------------------------------------------------------------
+
+    $Workfile:   _BASESH.SDI  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_basesh.sdi,v 1.1.1.1 2000-09-18 17:14:29 hr Exp $
+
+    Beschreibung:   interface Base - gemeinsame Basisfunktionalitaet
+                    fuer SW und SW/WEB
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface BaseTextSelection : Selection
+[
+    Automation = FALSE;
+]
+{
+    SID_DELETE  // status(final|play)
+    [
+        ExecMethod = ExecDelete ;
+        StateMethod = GetState ;
+        FastCall = FALSE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_BACKSPACE  // status(final|play)
+    [
+        ExecMethod = ExecDelete ;
+        StateMethod = GetState ;
+        FastCall = FALSE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SHIFT_BACKSPACE // status()
+    [
+        ExecMethod = ExecDelete ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_UNDO // status(final|play)
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+
+    SID_REDO // status(final|play)
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+
+    SID_REPEAT // status()
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CUT // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        Volatile;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_COPY   // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        Volatile;
+    ]
+
+    SID_PASTE  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_PASTESPECIAL  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_REPAGINATE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_CHANGE_DBFIELD
+    [
+        ExecMethod = ExecField ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_SBA_BRW_UPDATE
+    [
+        StateMethod = GetState;
+        ExecMethod = ExecDB;
+        Export = FALSE
+    ]
+
+    SID_SBA_BRW_INSERT
+    [
+        StateMethod = GetState;
+        ExecMethod = ExecDB;
+        Export = FALSE
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_SBA_BRW_MERGE
+    [
+        StateMethod = GetState;
+        ExecMethod = ExecDB;
+        Export = FALSE
+    ]
+
+    FN_UPDATE_FIELDS // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_UPDATE_CHARTS // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_UPDATE_ALL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_UPDATE_INPUTFIELDS  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_FRAME_TO_ANCHOR // status()
+    [
+        /*OS: Datentypen unvertraeglich ?? */
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_NEXT_OBJ // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_PREV_OBJ // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_NEXT_MARK // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_PREV_MARK  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_PREV_BOOKMARK // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_NEXT_BOOKMARK // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    SID_GALLERY_FORMATS // status()
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+    ]
+
+    SID_GALLERY_ENABLE_ADDCOPY
+    [
+        Export = FALSE;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BACKGROUND_COLOR // status()
+    [
+        ExecMethod = ExecBckCol ;
+        StateMethod = GetBckColState ;
+        Cachable , AutoUpdate ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_EDIT_REGION // status(final|play)
+    [
+        ExecMethod = EditRegionDialog ;
+        StateMethod = GetState ;
+    ]
+
+    FN_INSERT_REGION // status(final|play)
+    [
+        ExecMethod = InsertRegionDialog ;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_COLUMN_SECTION // status()
+    [
+        ExecMethod = InsertRegionDialog;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SfxVoidItem PageDialog FN_FORMAT_PAGE_DLG ( )  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_PAGE_COLUMN_DLG  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_CONVERT_TEXT_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_BORDER_DLG // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_BORDER_INNER // status()
+    [
+        StateMethod = GetBorderState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+/*  SID_ATTR_BORDER_OUTER // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetBorderState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+*/
+    FN_FORMAT_BACKGROUND_DLG  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN // status()
+    [
+        SfxUInt16Item WatercanStyleModeOnOff
+        (
+            SfxStringItem Param SID_STYLE_WATERCAN ,
+            SfxUInt16Item Family SID_STYLE_FAMILY
+        ) ;
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+        GroupId = GID_TEMPLATE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_UPDATE_BY_EXAMPLE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_NEW_BY_EXAMPLE // status(fina|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+        FastCall = TRUE; // fuer Macroausfuehrung!
+    ]
+    SID_STYLE_APPLY // status(fina|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+        FastCall = TRUE;// fuer Macroausfuehrung!
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_FAMILY1 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY2 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY3 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY4 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY5 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+     //OS: Selection.Escape gibt es zusaetzlich zu Window.Escape
+
+    FN_ESCAPE // status(final|play|rec)
+    [
+        ExecMethod = Execute ;
+    ]
+
+    SID_IMAP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Toggle = FALSE;
+    ]
+
+    SID_IMAP_EXEC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+// Methode fuer Rahmen und Objekte
+    FN_TOOL_ANKER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_PARAGRAPH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_CHAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_AT_CHAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_FRAME
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_UPDATE_ALL_LINKS // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+/*-----------------22.01.97 09.41-------------------
+// ab hier immer Export = FALSE
+--------------------------------------------------*/
+
+    FN_FRAME_WRAP   // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_IDEAL // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_NOWRAP   // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAPTHRU   // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAPTHRU_TRANSP // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_CONTOUR // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_WRAP_ANCHOR_ONLY // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_LEFT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_RIGHT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+
+
+    SID_GALLERY_BG_BRUSH
+    [
+        ExecMethod = ExecuteGallery;
+        StateMethod = GetGalleryState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+    SID_ATTR_BORDER_SHADOW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.46  2000/05/30 10:12:26  os
+    unused slots removed
+
+    Revision 1.45  2000/05/26 07:06:15  os
+    old SW Basic API Slots removed
+
+    Revision 1.44  2000/05/10 12:00:08  os
+    Basic API removed
+
+    Revision 1.43  1999/10/20 16:36:53  jp
+    Bug #68106#: new slot for update all charts in a document
+
+    Revision 1.42  1999/05/27 11:20:10  OS
+    Einf?gen/Bearbeiten von Spalten ueberarbeitet
+
+
+      Rev 1.41   27 May 1999 13:20:10   OS
+   Einf?gen/Bearbeiten von Spalten ueberarbeitet
+
+      Rev 1.40   15 Apr 1999 12:05:52   OS
+   #64766# SID_IMAP: Toggle = FALSE;
+
+      Rev 1.39   23 Mar 1999 12:15:30   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.38   12 Feb 1999 13:28:02   MA
+   #61262# Zusaetzliche hidden functions in den Toolbars
+
+      Rev 1.37   26 Jan 1999 14:21:38   OS
+   #61140# neuer Slot fuer Felder-Update
+
+      Rev 1.36   12 Nov 1998 17:29:12   MA
+   #58677# Disable Flag
+
+      Rev 1.35   11 Jun 1998 13:02:54   OM
+   #49467# Rahmen in Inhalt-protecteten Parents nicht bearbeiten
+
+      Rev 1.34   23 Apr 1998 12:29:24   OS
+   PageLeft/Right/Top/BottomMargin #49761#
+
+      Rev 1.33   25 Feb 1998 19:16:00   MA
+   Aktualisieren erweitert
+
+      Rev 1.32   29 Jan 1998 15:00:22   OM
+   Am Zeichen verankern
+
+      Rev 1.31   22 Jan 1998 17:40:30   OS
+   SID_BACKGROUND_PATTERN entsorgt
+
+      Rev 1.30   20 Nov 1997 14:02:42   OS
+   StyleNew/UpdateByExample: FastCall wg. Basic #45671#
+
+      Rev 1.29   11 Nov 1997 13:17:18   JP
+   neu: NumRule-Vorlagen
+
+      Rev 1.28   03 Sep 1997 09:30:54   MBA
+   Interior in SVX
+
+      Rev 1.27   02 Sep 1997 10:58:52   JP
+   neu: UpdateAllLinks - uebers Basic alle Links updaten
+
+      Rev 1.26   28 Aug 1997 12:38:32   MBA
+   Neue Interface-Namen
+
+      Rev 1.25   06 Aug 1997 13:38:42   OS
+   ShowCursor geht wieder #42017#,#41945#
+
+      Rev 1.24   25 Jul 1997 11:27:52   AMA
+   Opt: GroupId und ConfigName aufgeraeumt
+
+      Rev 1.23   23 Jul 1997 16:05:14   AMA
+   Opt: ConfigName etc. aufgeraeumt
+
+      Rev 1.22   18 Jul 1997 09:38:06   OM
+   Fkts nicht exportieren
+
+      Rev 1.21   16 Jul 1997 11:30:10   OM
+   sid_gallery entfernt
+
+      Rev 1.20   14 Jul 1997 14:37:12   OS
+   Ableitung _Base:_Object #41369#
+
+      Rev 1.19   08 Jul 1997 15:10:36   OS
+   FN_SHOW_CURSOR
+
+      Rev 1.18   01 Jul 1997 13:45:56   OS
+   Inhalte aus dem Basic einfuegen
+
+      Rev 1.17   27 Jun 1997 16:21:58   OS
+   SID_JUMPTOMARK von der View an die BaseShell
+
+      Rev 1.16   26 Jun 1997 09:44:48   OM
+   Basic: Datenbank in Feldbefehlen ersetzen
+
+      Rev 1.15   19 Jun 1997 13:32:22   MA
+   State fuer galler
+
+      Rev 1.14   17 Jun 1997 14:54:38   OM
+   Methoden fuer ersetzen von Userfeldern
+
+      Rev 1.13   13 Jun 1997 13:18:52   OM
+   Benutzer- und Expression-Felder per Basic loeschen
+
+      Rev 1.12   12 Jun 1997 15:32:34   JP
+   Feld-Slots aus der TextShell in die BaseShell verschoben
+
+      Rev 1.11   24 Apr 1997 14:40:00   JP
+   neu: SetFixDateTimFields
+
+      Rev 1.10   22 Apr 1997 14:03:42   OS
+   Is/SetRegionPassword
+
+      Rev 1.9   17 Apr 1997 15:44:14   AMA
+   New: Rahmengebundene Rahmen
+
+      Rev 1.8   15 Apr 1997 12:00:30   OS
+   Bedingung der Bereiche setzen/lesen
+
+      Rev 1.7   14 Apr 1997 16:10:16   OS
+   Flags und Link der Bereiche setzen/erfragen
+
+      Rev 1.6   22 Feb 1997 15:11:58   OS
+   neue Slots: Actions setzen/ruecksetzen
+
+      Rev 1.5   13 Feb 1997 22:57:38   MA
+   Datenbankfunktionalitaet wieder hergestellt
+
+      Rev 1.4   13 Feb 1997 09:54:20   MA
+   unnoetige und falsche Texte entfernt
+
+      Rev 1.3   12 Feb 1997 16:56:52   OM
+   Datenbankslots ueber Baseshell rufen
+
+      Rev 1.2   06 Feb 1997 13:48:20   MA
+   new: Gallery-Background
+
+      Rev 1.1   27 Jan 1997 16:37:44   OS
+   Web-Slots aus den allg. interfaces raus
+
+      Rev 1.0   23 Jan 1997 08:14:08   OS
+   Initial revision.
+
+
+------------------------------------------------------------------------*/
+
+

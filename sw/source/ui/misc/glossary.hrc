@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ *  $RCSfile: glossary.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+// Box Textbausteine
+#define FT_SHORTNAME        1
+#define ED_SHORTNAME        2
+#define FT_NAME             3
+//#define DCB_NAME          4
+#define ED_NAME             4
+#define CB_INSERT_TIP                   5
+
+//#define FT_BIB                10
+
+#define GB_GLOSSARY         30
+
+#define PB_INSERT           50
+#define PB_EDIT             52
+#define PB_BIB              54
+#define PB_CLOSE            55
+#define PB_PATH             56
+#define PB_HELP             57
+
+#define MNU_EDIT            60
+#define FN_GL_DEFINE        61
+#define FN_GL_DEFINE_TEXT   62
+#define FN_GL_REPLACE       63
+#define FN_GL_EDIT          64
+#define FN_GL_DELETE        65
+#define FN_GL_RENAME        66
+#define FN_GL_MACRO         67
+#define CB_FILE_REL         68
+#define CB_NET_REL          69
+#define GB_RELATIVE         70
+#define GB_EXAMPLE          71
+#define WIN_EXAMPLE         72
+#define CB_SHOW_EXAMPLE     73
+#define FN_GL_COPY_TO_CLIPBOARD 74
+#define FN_GL_IMPORT        75
+#define ST_READONLY         76
+#define ST_READONLY_PATH    77
+
+// Box Bibliothek Textbausteine
+#define GB_EDIT             1
+#define GB_BIB              2
+#define ED_BIB              3
+
+#define PB_NEW              10
+#define PB_DELETE           11
+
+#define BT_OK               100
+
+// beide
+#define LB_BIB              80
+
+// Dialog Namensaenderung
+#define   FT_ON              1
+#define   FT_OS              2
+#define   FT_NN              3
+#define   FT_NS              4
+#define   ED_ON              5
+#define   ED_OS              6
+#define   ED_NN              7
+#define   ED_NS              8
+#define   GB_NN              9
+#define   BT_CANCEL         10
+#define   BT_OKNEW          11
+

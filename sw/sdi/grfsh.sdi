@@ -1,0 +1,64 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   GRFSH.IDL  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/grfsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File GrafShell fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+
+interface TextGraphic : BaseTextGraphic
+[
+    uuid = "1885FE00-111C-101D-9757-6E74207A7520"
+]
+{
+}
+
+ //=========================================================================
+
+shell SwGrfShell : SwBaseShell
+
+{
+    import TextGraphic[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.45  2000/08/08 13:42:51  os
+    #77423# separate graphic shell
+
+    Revision 1.44  1997/08/28 10:55:24  MBA
+    Neue Interface-Namen
+
+
+      Rev 1.43   28 Aug 1997 12:55:24   MBA
+   Neue Interface-Namen
+
+      Rev 1.42   13 Feb 1997 12:45:04   MA
+   unnoetige Texte entfernt
+
+      Rev 1.41   31 Jan 1997 13:25:22   OS
+   von _Graphic abgeleitet
+
+      Rev 1.40   01 Oct 1996 16:52:26   OM
+   Hyperlinks editieren
+
+      Rev 1.39   21 Sep 1996 17:35:40   OS
+   Sot-Umstellung beendet
+
+      Rev 1.38   20 Aug 1996 17:27:00   HJS
+   eu...
+
+      Rev 1.37   17 Jul 1996 07:31:30   OS
+   ReadOnlyDoc - Flag
+
+      Rev 1.36   05 Jul 1996 13:38:50   OS
+   neue Properities: GrfLinkName, GrfLinkFilterName
+
+------------------------------------------------------------------------*/
+

@@ -1,0 +1,347 @@
+/*************************************************************************
+ *
+ *  $RCSfile: redlndlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/* StarView ressource file */
+
+#include "redlndlg.hrc"
+#include "misc.hrc"
+#include "helpid.h"
+
+#define WIDTH 297
+#define HEIGHT 169
+
+#define REDLNDLG \
+    OutputSize = TRUE ; \
+    SVLook = TRUE ; \
+    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ; \
+    Moveable = TRUE ; \
+    Closeable = TRUE ; \
+    Sizeable = TRUE ; \
+    Hide = TRUE ; \
+    Control CTRL_TABPAGES\
+    {\
+        Pos = MAP_APPFONT ( XBORDER , YBORDER ) ; \
+        Size = MAP_APPFONT ( WIDTH - XBORDER * 2 , HEIGHT - YBORDER * 2 ) ; \
+        HelpID = HID_REDLINE_CTRL ; \
+        TabStop = TRUE ; \
+    };\
+
+ModelessDialog DLG_REDLINE_ACCEPT
+{
+    HelpID = HID_REDLINE_ACCEPT ;
+    /* ### ACHTUNG: Neuer Text in Resource? Änderungen akzeptieren oder verwerfen : Redlining */
+    Text = "Änderungen akzeptieren oder verwerfen" ;
+    Text [ English ] = "Accept or reject changes" ;
+    Text [ english_us ] = "Accept or Reject Changes" ;
+    Text [ portuguese_brazilian ] = "Redlining" ;
+    Text [ swedish ] = "Acceptera eller kasta bort ändringarna" ;
+    Text [ danish ] = "Accepter eller forkast ændringer" ;
+    Text [ italian ] = "Accettare o rigettare le modifiche" ;
+    Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
+    Text [ french ] = "Accepter ou rejeter les modifications" ;
+    Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
+    Text [ portuguese ] = "Aceitar ou rejeitar modificações" ;
+    REDLNDLG
+    Text[ chinese_simplified ] = "½ÓÊÜ»òÕßÈ¡Ïû¸ü¸Ä";
+    Text[ russian ] = "Ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
+    Text[ polish ] = "Zaakceptuj albo odrzuæ zmiany";
+    Text[ japanese ] = "•ÏX‰ÓŠ‚ÌŠm”F";
+    Text[ chinese_traditional ] = "±µ¨ü©Î¨ú®øÅÜ§ó";
+    Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÇáÊÛííÑÇÊ";
+    Text[ greek ] = "Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
+    Text[ korean ] = "º¯°æ Àû¿ë ¶Ç´Â Ãë¼Ò";
+    Text[ turkish ] = "Değişiklikleri onayla ya da reddet";
+    Text[ language_user1 ] = " ";
+};
+
+ModalDialog DLG_MOD_REDLINE_ACCEPT
+{
+    HelpID = HID_REDLINE_AUTOFMT_ACCEPT ;
+    Text = "AutoFormat: Änderungen akzeptieren oder verwerfen" ;
+    Text [ English ] = "Accept or reject AutoFormat changes" ;
+    REDLNDLG
+    Text[ italian ] = "Formattazione automatica: accetta o annulla cambiamenti";
+    Text[ portuguese_brazilian ] = "Accept or reject AutoFormat changes";
+    Text[ portuguese ] = "AutoFormato: aceitar ou rejeitar modificações";
+    Text[ danish ] = "Accepter eller forkast AutoFormat ændringer";
+    Text[ french ] = "Revoir les modifications de l'AutoFormat";
+    Text[ swedish ] = "Acceptera eller kasta bort AutoFormat ändringar";
+    Text[ dutch ] = "AutoOpmaak: Wijzigingen accepteren of verwerpen";
+    Text[ spanish ] = "AutoFormato: Aceptar o rechazar cambios";
+    Text[ english_us ] = "Accept or reject AutoFormat changes";
+    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½: ½ÓÊÜ»òÕß¾Ü¾ø¸ü¸Ä";
+    Text[ russian ] = "Àâòîôîğìàò: ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
+    Text[ polish ] = "Autoformatowanie: Zaakceptuj lub odrzuæ zmiany";
+    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚É‚æ‚é•ÏX‚ÌÀs‚ ‚é‚¢‚Í·¬İ¾Ù";
+    Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡: ±µ¨ü©Î©Úµ´ÅÜ§ó";
+    Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
+    Text[ greek ] = "ÁõôïÌïñöïğïßçóç:Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
+    Text[ korean ] = "ÀÚµ¿ ¼­½Ä º¯°æ Àû¿ë ¶Ç´Â Ãë¼Ò";
+    Text[ turkish ] = "Otomatik formatlama: Değişiklikleri onayla ya da reddet";
+    Text[ language_user1 ] = " ";
+};
+
+Menu MN_REDLINE_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_EDIT_COMMENT ;
+            HelpID = HID_EDIT_COMMENT ;
+            Text = "Kommentar bearbeiten..." ;
+            Text [ English ] = "Edit Comment..." ;
+            Text [ english_us ] = "Edit Comment..." ;
+            Text [ portuguese_brazilian ] = "Kommentar bearbeiten..." ;
+            Text [ swedish ] = "Bearbeta kommentar..." ;
+            Text [ danish ] = "Rediger kommentar..." ;
+            Text [ italian ] = "Modifica commento..." ;
+            Text [ spanish ] = "Modificar comentario..." ;
+            Text [ french ] = "Éditer le commentaire..." ;
+            Text [ dutch ] = "Commentaar bewerken..." ;
+            Text [ portuguese ] = "Editar comentário..." ;
+            Text[ chinese_simplified ] = "±à¼­×¢½â...";
+            Text[ russian ] = "Îáğàáîòêà êîììåíòàğèÿ...";
+            Text[ polish ] = "Edytuj komentarz...";
+            Text[ japanese ] = "ºÒİÄ‚Ì•ÒW...";
+            Text[ language_user1 ] = " ";
+            Text[ chinese_traditional ] = "½s¿èª`¸Ñ...";
+            Text[ arabic ] = "ÊÍÑíÑ ÇáÊÚáíŞ...";
+            Text[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ...";
+            Text[ korean ] = "¸Ş¸ğ ÆíÁı...";
+            Text[ turkish ] = "Açıklamaları düzenle...";
+        };
+        MenuItem
+        {
+            Identifier = MN_SUB_SORT ;
+            Text = "Sortiere" ;
+            Text [ english ] = "Sort" ;
+            RadioCheck = TRUE ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_SORT_ACTION ;
+                        HelpID = HID_SORT_ACTION ;
+                        Text = "Aktion" ;
+                        Text [ english ] = "Action" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Action" ;
+                        Text [ portuguese_brazilian ] = "Aktion" ;
+                        Text [ swedish ] = "Aktivitet" ;
+                        Text [ danish ] = "Handling" ;
+                        Text [ italian ] = "Operazione" ;
+                        Text [ spanish ] = "Acción" ;
+                        Text [ french ] = "Action" ;
+                        Text [ dutch ] = "Activiteit" ;
+                        Text [ portuguese ] = "Acção" ;
+                        Text[ chinese_simplified ] = "²Ù×÷";
+                        Text[ russian ] = "Äåéñòâèå";
+                        Text[ polish ] = "Akcja";
+                        Text[ japanese ] = "±¸¼®İ";
+                        Text[ language_user1 ] = " ";
+                        Text[ chinese_traditional ] = "¾Ş§@";
+                        Text[ arabic ] = "ÅÌÑÇÁ";
+                        Text[ greek ] = "Åíİñãåéá";
+                        Text[ korean ] = "µ¿ÀÛ";
+                        Text[ turkish ] = "İşlem";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_SORT_AUTHOR ;
+                        HelpID = HID_SORT_AUTHOR ;
+                        Text = "Autor" ;
+                        Text [ english ] = "Author" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Author" ;
+                        Text [ portuguese_brazilian ] = "Autor" ;
+                        Text [ swedish ] = "Författare" ;
+                        Text [ danish ] = "Forfatter" ;
+                        Text [ italian ] = "Autore" ;
+                        Text [ spanish ] = "Autor" ;
+                        Text [ french ] = "Auteur" ;
+                        Text [ dutch ] = "Auteur" ;
+                        Text [ portuguese ] = "Autor" ;
+                        Text[ chinese_simplified ] = "×÷Õß";
+                        Text[ russian ] = "Àâòîğ";
+                        Text[ polish ] = "Autor";
+                        Text[ japanese ] = "ì¬Ò";
+                        Text[ chinese_traditional ] = "§@ªÌ";
+                        Text[ arabic ] = "ÇáãÄáİ";
+                        Text[ greek ] = "ÓõíôÜêôçò";
+                        Text[ korean ] = "ÀÛ¼ºÀÎ";
+                        Text[ turkish ] = "Yazan";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_SORT_DATE ;
+                        HelpID = HID_SORT_DATE ;
+                        Text = "Datum" ;
+                        Text [ english ] = "Date" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Date" ;
+                        Text [ portuguese_brazilian ] = "Datum" ;
+                        Text [ swedish ] = "Datum" ;
+                        Text [ danish ] = "Dato" ;
+                        Text [ italian ] = "Data" ;
+                        Text [ spanish ] = "Fecha" ;
+                        Text [ french ] = "Date" ;
+                        Text [ dutch ] = "Datum" ;
+                        Text [ portuguese ] = "Data" ;
+                        Text[ chinese_simplified ] = "ÈÕÆÚ";
+                        Text[ russian ] = "Äàòà";
+                        Text[ polish ] = "Data";
+                        Text[ japanese ] = "“ú•t";
+                        Text[ chinese_traditional ] = "¤é´Á";
+                        Text[ arabic ] = "ÇáÊÇÑíÎ";
+                        Text[ greek ] = "Çìåñïìçíßá";
+                        Text[ korean ] = "ÀÏÀÚ";
+                        Text[ turkish ] = "Tarih";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_SORT_COMMENT ;
+                        HelpID = HID_SORT_COMMENT ;
+                        Text = "Beschreibung" ;
+                        Text [ english ] = "Comment" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Comment" ;
+                        Text [ portuguese_brazilian ] = "Beschreibung" ;
+                        Text [ swedish ] = "Beskrivning" ;
+                        Text [ danish ] = "Beskrivelse" ;
+                        Text [ italian ] = "Descrizione" ;
+                        Text [ spanish ] = "Descripción" ;
+                        Text [ french ] = "Description" ;
+                        Text [ dutch ] = "Beschrijving" ;
+                        Text [ portuguese ] = "Descrição" ;
+                        Text[ chinese_simplified ] = "ËµÃ÷";
+                        Text[ russian ] = "Îïèñàíèå";
+                        Text[ polish ] = "Opis";
+                        Text[ japanese ] = "ºÒİÄ";
+                        Text[ chinese_traditional ] = "´y­z";
+                        Text[ arabic ] = "ÊÚáíŞ";
+                        Text[ greek ] = "ĞåñéãñáöŞ";
+                        Text[ korean ] = "¸Ş¸ğ";
+                        Text[ turkish ] = "Açıklama";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_SORT_POSITION ;
+                        HelpID = HID_SW_SORT_POSITION ;
+                        Text = "Dokumentposition" ;
+                        Text [ english ] = "Document position" ;
+                        RadioCheck = TRUE ;
+                        Text [ english_us ] = "Document position" ;
+                        Text [ portuguese_brazilian ] = "Dokumentposition" ;
+                        Text [ swedish ] = "Dokumentposition" ;
+                        Text [ danish ] = "Dokumentplacering" ;
+                        Text [ italian ] = "Posizione documento" ;
+                        Text [ spanish ] = "Posición del documento" ;
+                        Text [ french ] = "Emplacement dans le document" ;
+                        Text [ dutch ] = "Documentpositie" ;
+                        Text [ portuguese ] = "Posição do documento" ;
+                        Text[ chinese_simplified ] = "ÎÄµµÎ»ÖÃ";
+                        Text[ russian ] = "Ïîçèöèÿ äîêóìåíòà";
+                        Text[ polish ] = "Pozycja dokumentu";
+                        Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌˆÊ’u";
+                        Text[ chinese_traditional ] = "¤å¥ó¦ì¸m";
+                        Text[ arabic ] = "ãæŞÚ ÇáãÓÊäÏ";
+                        Text[ greek ] = "Èİóç åããñÜöïõ";
+                        Text[ korean ] = "¹®¼­ À§Ä¡";
+                        Text[ turkish ] = "Belge konumu";
+                        Text[ language_user1 ] = " ";
+                    };
+                };
+            };
+            Text [ english_us ] = "Sorting" ;
+            Text [ portuguese_brazilian ] = "Sortiere" ;
+            Text [ swedish ] = "Sorterar" ;
+            Text [ danish ] = "Sorter" ;
+            Text [ italian ] = "Ordina" ;
+            Text [ spanish ] = "Ordenar" ;
+            Text [ french ] = "Trier" ;
+            Text [ dutch ] = "Sorteer" ;
+            Text [ portuguese ] = "Ordenar" ;
+            Text[ chinese_simplified ] = "ÅÅĞò";
+            Text[ russian ] = "Ñîğòèğîâêà";
+            Text[ polish ] = "Sortuj";
+            Text[ japanese ] = "•À‚×‘Ö‚¦";
+            Text[ chinese_traditional ] = "±Æ§Ç";
+            Text[ arabic ] = "İÑÒ";
+            Text[ greek ] = "Ôáîéíüìçóç";
+            Text[ korean ] = "Á¤¿­";
+            Text[ turkish ] = "Sırala";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+Bitmap BMP_ROOT_CLOSED
+{
+    File = "plus.bmp" ;
+};
+Bitmap BMP_ROOT_OPENED
+{
+    File = "minus.bmp" ;
+};

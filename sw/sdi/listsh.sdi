@@ -1,0 +1,60 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   listSH.IDL  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/listsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File SwBaseShell fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextList : BaseTextList
+[
+    uuid = "509E9100-111A-101D-9757-6E74207A7520"
+]
+{
+    import TextSelection;
+}
+
+ //=========================================================================
+
+shell SwListShell : SwBaseShell
+{
+        import TextList[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.31  1997/08/28 10:51:34  MBA
+    Neue Interface-Namen
+
+
+      Rev 1.30   28 Aug 1997 12:51:34   MBA
+   Neue Interface-Namen
+
+      Rev 1.29   13 Feb 1997 12:44:52   MA
+   unnoetige Texte entfernt
+
+      Rev 1.28   23 Jan 1997 14:31:54   OS
+   Ableitung von _List
+
+      Rev 1.27   21 Sep 1996 17:36:34   OS
+   Sot-Umstellung beendet
+
+      Rev 1.26   20 Aug 1996 17:27:42   HJS
+   eu...
+
+      Rev 1.25   17 Jul 1996 07:31:26   OS
+   ReadOnlyDoc - Flag
+
+      Rev 1.24   13 May 1996 11:40:30   OS
+   Ableitung List : Base
+
+      Rev 1.23   28 Mar 1996 14:20:32   OS
+   neu: NumberOrNoNumber
+
+------------------------------------------------------------------------*/
+

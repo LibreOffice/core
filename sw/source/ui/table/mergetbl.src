@@ -1,0 +1,193 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mergetbl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "table.hrc"
+#include "mergetbl.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_MERGE_TABLE
+{
+    HelpID = FN_TABLE_MERGE_TABLE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 207 , 57 ) ;
+    Text = "Tabellen verbinden" ;
+    Text [ ENGLISH ] = "Join tables" ;
+    Moveable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 151 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 151 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 151 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_MERGE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 139 , 51 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ swedish ] = "Läge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ russian ] = "Ğåæèì";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "Ó°ÄŞ";
+        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ arabic ] = "ÇáÃÓáæÈ";
+        Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
+        Text[ korean ] = "¸ğµå";
+        Text[ turkish ] = "Kip";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_MERGE_PREV
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "mit der ~vorherigen Tabelle verbinden" ;
+        Text [ ENGLISH ] = "Join with ~previous table" ;
+        Check = TRUE ;
+        TabStop = TRUE ;
+        Text[ english_us ] = "Join with ~previous table";
+        Text[ portuguese ] = "Unir à tabela ~anterior";
+        Text[ russian ] = "Îáúåäèíèòü ñ ïğåäûäóùåé òàáëèöåé";
+        Text[ dutch ] = "met de ~vorige tabel verbinden";
+        Text[ french ] = "Fusionner avec le tableau ~précédent";
+        Text[ spanish ] = "unir con la tabla ~anterior";
+        Text[ italian ] = "Unisci alla tabella precedente";
+        Text[ danish ] = "flet med forrige tabel";
+        Text[ swedish ] = "förbind med den ~föregående tabellen";
+        Text[ polish ] = "Sprzêgaj z poprzedni¹ tabel¹";
+        Text[ portuguese_brazilian ] = "Join with ~previous table";
+        Text[ japanese ] = "‘O‚Ì•\\‚ÆŒ‹‡(~P)";
+        Text[ chinese_simplified ] = "ºÍÉÏÒ»¸ö±í¸ñºÏ²¢(~P)";
+        Text[ chinese_traditional ] = "©M¤W¤@­Óªí®æ¦X¦}(~P)";
+        Text[ arabic ] = "ÇáÑÈØ ãÚ ÇáÌÏæá ÇáÓÇÈŞ";
+        Text[ greek ] = "İíùóç ìå ğñïçãïıìåíï ğßíáêá";
+        Text[ korean ] = "ÀÌÀü Ç¥¿Í ÇÔ²²(~P)";
+        Text[ turkish ] = "~Önceki tablo ile birleştir";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_MERGE_NEXT
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "mit der ~nachfolgenden Tabelle verbinden" ;
+        Text [ ENGLISH ] = "Join with ~next table" ;
+        Text[ english_us ] = "Join with ~next table";
+        Text[ portuguese ] = "Unir à tabela ~seguinte";
+        Text[ russian ] = "Îáúåäèíèòü ñî ñëåäóşùåé òàáëèöåé";
+        Text[ dutch ] = "Met de v~olgende tabel verbinden";
+        Text[ french ] = "Fusionner avec le tableau ~suivant";
+        Text[ spanish ] = "unir con la tabla ~siguiente";
+        Text[ italian ] = "Unisci alla tabella successiva";
+        Text[ danish ] = "flet med efterfølgende tabel";
+        Text[ swedish ] = "förbind med den ~efterföljande tabellen";
+        Text[ polish ] = "Sprzêgaj z nastêpn¹ tabel¹";
+        Text[ portuguese_brazilian ] = "Join with ~next table";
+        Text[ japanese ] = "Ÿ‚Ì•\\‚ÆŒ‹‡(~N)";
+        Text[ chinese_simplified ] = "ºÍÏÂÒ»¸ö±í¸ñºÏ²¢(~N)";
+        Text[ chinese_traditional ] = "©M¤U¤@­Óªí®æ¦X¦}(~N)";
+        Text[ arabic ] = "ÇáÑÈØ ãÚ ÇáÌÏæá ÇáÊÇáí";
+        Text[ greek ] = "İíùóç ìå åğüìåíï ğßíáêá";
+        Text[ korean ] = "´ÙÀ½ Ç¥¿Í ÇÔ²²(~N)";
+        Text[ turkish ] = "S~onraki tablo ile birleştir";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ english_us ] = "Join tables";
+    Text[ portuguese ] = "Unir tabelas";
+    Text[ russian ] = "Îáúåäèíèòü òàáëèöû";
+    Text[ dutch ] = "Tabellen verbinden";
+    Text[ french ] = "Fusion de tableaux";
+    Text[ spanish ] = "unir tablas";
+    Text[ italian ] = "Unisci tabelle";
+    Text[ danish ] = "Flet tabeller";
+    Text[ swedish ] = "Förbind tabeller";
+    Text[ polish ] = "Sprzêgaj tabele";
+    Text[ portuguese_brazilian ] = "Join tables";
+    Text[ japanese ] = "•\\‚ÌŒ‹‡";
+    Text[ chinese_simplified ] = "Á¬½Ó±í¸ñ";
+    Text[ chinese_traditional ] = "³sµ²ªí®æ";
+    Text[ arabic ] = "æÕá ÇáÌÏÇæá";
+    Text[ greek ] = "¸íùóç ğéíÜêùí";
+    Text[ korean ] = "Ç¥ ¿¬°á";
+    Text[ turkish ] = "Tabloları birleştir";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fmtui.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "fmtui.hrc"
+#include "globals.hrc"
+
+String STR_FMT_STD
+{
+    TEXT = "(keins)" ;
+    TEXT [ English ] = "(none)" ;
+    TEXT [ norwegian ] = "(ingen)" ;
+    TEXT [ italian ] = "(senza)" ;
+    TEXT [ portuguese_brazilian ] = "(nenhum)" ;
+    TEXT [ portuguese ] = "(nenhum)" ;
+    TEXT [ finnish ] = "(ei mitään)" ;
+    TEXT [ danish ] = "(ingen)" ;
+    TEXT [ french ] = "(aucun(e))" ;
+    TEXT [ swedish ] = "(ingen)" ;
+    TEXT [ dutch ] = "(geen)" ;
+    TEXT [ spanish ] = "(ninguna)" ;
+    TEXT [ english_us ] = "(none)" ;
+    TEXT[ chinese_simplified ] = "(ÎŞ)";
+    TEXT[ russian ] = "(áåç)";
+    TEXT[ polish ] = "(brak)";
+    TEXT[ japanese ] = "(‚È‚µ)";
+    TEXT[ chinese_traditional ] = "(µL)";
+    TEXT[ arabic ] = "(ÈÏæä)";
+    TEXT[ dutch ] = "(geen)";
+    TEXT[ chinese_simplified ] = "(ÎŞ)";
+    TEXT[ greek ] = "(êáíİíá)";
+    TEXT[ korean ] = "(¾øÀ½)";
+    TEXT[ turkish ] = "(yok)";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_TEMPLATE_WILDCARD
+{
+    TEXT = "*.vor" ;
+};
+ //String STR_NONAME    //!! VB
+ //{
+ // TEXT =  "Unbenannt ";
+ // TEXT [English] = "Noname ";
+ // TEXT [norwegian] = "Noname ";
+ // TEXT [italian] = "Senza nome";
+ // TEXT [portuguese_brazilian] = "Semnome ";
+ // TEXT [portuguese] = "Semnome ";
+ // TEXT [finnish] = "Nimetön ";
+ // TEXT [danish] = "Intet navn";
+ // TEXT [french] = "Sansnom ";
+ // TEXT [swedish] = "Namnlös";
+ // TEXT [dutch] = "Naamloos";
+ // TEXT [spanish] = "Sin nombre ";
+ // TEXT [english_us] = "Noname ";
+ //};
+String STR_OVERWRITE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie die Vorlage wirklich überschreiben? : Wollen Sie die Vorlage wirklich ³berschreiben? */
+    TEXT = "Wollen Sie die Vorlage wirklich überschreiben?" ;
+    TEXT [ English ] = "Do you really want to overwrite the template?" ;
+    TEXT [ norwegian ] = "Do you really want to overwrite the template?" ;
+    TEXT [ italian ] = "\nSovrascrivere il modello?" ;
+    TEXT [ portuguese_brazilian ] = "Deseja realmente gravar sobre o modelo?" ;
+    TEXT [ portuguese ] = "Deseja realmente eliminar este modelo?" ;
+    TEXT [ finnish ] = "Haluatko varmasti korvata mallin?" ;
+    TEXT [ danish ] = "Er du sikker på, at du vil overskrive denne skabelon?" ;
+    TEXT [ french ] = "Voulez-vous vraiment écraser le modèle ?" ;
+    TEXT [ swedish ] = "Vill Du verkligen skriva över den här mallen?" ;
+    TEXT [ dutch ] = "\nWilt u deze sjabloon werkelijk overschrijven?" ;
+    TEXT [ spanish ] = "¿Desea realmente sobrescribir la plantilla?" ;
+    TEXT [ english_us ] = "\nAre you sure you want to delete this template?" ;
+    TEXT[ chinese_simplified ] = "ÄúÕæµÄÒª¸²Ğ´Õâ¸öÑùÊ½Âğ£¿";
+    TEXT[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå çàìåíèòü ıòîò øàáëîí?";
+    TEXT[ polish ] = "Chcesz na pewno skasowaæ ten szablon przez zapisanie?";
+    TEXT[ japanese ] = "ÃİÌßÚ°Ä‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
+    TEXT[ chinese_traditional ] = "±z¯u­nÂĞ¼g³o­Ó¼Ë¦¡¡H";
+    TEXT[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÇáßÊÇÈÉ İæŞ ÇáŞÇáÈ¿";
+    TEXT[ dutch ] = "\nWilt u deze sjabloon werkelijk overschrijven?";
+    TEXT[ chinese_simplified ] = "ÄúÕæµÄÒª¸²Ğ´Õâ¸öÑùÊ½Âğ£¿";
+    TEXT[ greek ] = "Èİëåôå óßãïõñá íá áíôéêáôáóôŞóåôå ôï ğñüôõğï;";
+    TEXT[ korean ] = "\nÀÌ ¼­½ÄÆÄÀÏÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    TEXT[ turkish ] = "Bu şablonu silmek istediğinizden emin misiniz?";
+    TEXT[ language_user1 ] = " ";
+};

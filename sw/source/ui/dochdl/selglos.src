@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ *  $RCSfile: selglos.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "selglos.hrc"
+#include "dochdl.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+
+ // #define DLG_SEL_GLOS 256
+ModalDialog DLG_SEL_GLOS
+{
+    HelpID = FN_EXPAND_GLOSSARY ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 100 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? AutoText einfügen : AutoText einf³gen */
+    Text = "AutoText einfügen" ;
+    Text [ ENGLISH ] = "Insert AutoText" ;
+    Text [ norwegian ] = "Insert AutoText" ;
+    Text [ italian ] = "Inserisci testo automatico" ;
+    Text [ portuguese_brazilian ] = "Inserir Texto Automático" ;
+    Text [ portuguese ] = "Inserir AutoTexto" ;
+    Text [ finnish ] = "Lisää automaattiteksti" ;
+    Text [ danish ] = "Indsæt AutoTekst" ;
+    Text [ french ] = "Insérer AutoTexte" ;
+    Text [ swedish ] = "Infoga AutoText" ;
+    Text [ dutch ] = "AutoTekst invoegen" ;
+    Text [ spanish ] = "Insertar AutoTexto" ;
+    Text [ english_us ] = "Insert AutoText" ;
+    Moveable = TRUE ;
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_GLOS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 152 , 91 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? AutoTexte zum Kürzel  : AutoTexte zum K³rzel  */
+        Text = "AutoTexte zum Kürzel " ;
+        Text [ ENGLISH ] = "Entries for Short Name " ;
+        Text [ norwegian ] = "Entries for Short Name " ;
+        Text [ italian ] = "Testo automatico per la sigla " ;
+        Text [ portuguese_brazilian ] = "Entadas para Abreviações " ;
+        Text [ portuguese ] = "AutoTexto Abreviatura " ;
+        Text [ finnish ] = "Lyhenteen vastineet " ;
+        Text [ danish ] = "AutoTekst til genvej " ;
+        Text [ french ] = "AutoTextes pour raccourci " ;
+        Text [ swedish ] = "AutoText till genvägen " ;
+        Text [ dutch ] = "AutoTekst voor afkortingen  " ;
+        Text [ spanish ] = "AutoTexto para abreviatura  " ;
+        Text [ english_us ] = "AutoTexts for shortcut " ;
+        Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõÐ´ ";
+        Text[ russian ] = "Àâòîòåêñò ê ñîêðàùåíèþ  ";
+        Text[ polish ] = "Autotekst do skrótu   ";
+        Text[ japanese ] = "¼®°Ä¶¯Ä“ü—ÍŽx‰‡ ";
+        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ªºÁY¼g ";
+        Text[ arabic ] = "äÕ ÊáÞÇÆí ááÇÎÊÕÇÑ ";
+        Text[ greek ] = "ÁõôïÊåßìåíï ðñïò óõíôüìåõóç ";
+        Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® ¹Ù·Î°¡±â ";
+        Text[ turkish ] = "Otomatik metin kýsaltmasý ";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_GLOS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 140 , 74 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    Text[ chinese_simplified ] = "²åÈë×Ô¶¯Í¼ÎÄ¼¯";
+    Text[ russian ] = "Âñòàâêà àâòîòåêñòà";
+    Text[ polish ] = "Wstaw autotekst";
+    Text[ japanese ] = "“ü—ÍŽx‰‡‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J¦Û°Ê¹Ï¤å¶°";
+    Text[ arabic ] = "ÅÏÑÇÌ äÕ ÊáÞÇÆí";
+    Text[ greek ] = "ÐñïóèÞêç ÁõôïÊåéìÝíïõ";
+    Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® »ðÀÔ";
+    Text[ turkish ] = "Otomatik metin ekle";
+    Text[ language_user1 ] = " ";
+};

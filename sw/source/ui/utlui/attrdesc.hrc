@@ -1,0 +1,149 @@
+/*************************************************************************
+ *
+ *  $RCSfile: attrdesc.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _ATTRDESC_HRC
+#define _ATTRDESC_HRC
+
+#include "rcid.hrc"
+
+#define STR_DROP_OVER                   (RC_ATTR_BEGIN + 1)
+#define STR_DROP_LINES                  (RC_ATTR_BEGIN + 2)
+#define STR_NO_DROP_LINES               (RC_ATTR_BEGIN + 3)
+#define STR_NO_PAGEDESC                 (RC_ATTR_BEGIN + 4)
+#define STR_NO_MIRROR                   (RC_ATTR_BEGIN + 5)
+#define STR_VERT_MIRROR                 (RC_ATTR_BEGIN + 6)
+#define STR_HORI_MIRROR                 (RC_ATTR_BEGIN + 7)
+#define STR_BOTH_MIRROR                 (RC_ATTR_BEGIN + 8)
+#define STR_CHARFMT                     (RC_ATTR_BEGIN + 9)
+#define STR_NO_CHARFMT                  (RC_ATTR_BEGIN + 10)
+#define STR_FOOTER                      (RC_ATTR_BEGIN + 11)
+#define STR_NO_FOOTER                   (RC_ATTR_BEGIN + 12)
+#define STR_HEADER                      (RC_ATTR_BEGIN + 13)
+#define STR_NO_HEADER                   (RC_ATTR_BEGIN + 14)
+#define STR_SURROUND_NONE               (RC_ATTR_BEGIN + 15)
+#define STR_SURROUND_THROUGHT           (RC_ATTR_BEGIN + 16)
+#define STR_SURROUND_PARALLEL           (RC_ATTR_BEGIN + 17)
+#define STR_SURROUND_COLUMN             (RC_ATTR_BEGIN + 18)
+#define STR_SURROUND_LEFT               (RC_ATTR_BEGIN + 19)
+#define STR_SURROUND_RIGHT              (RC_ATTR_BEGIN + 20)
+#define STR_SURROUND_INSIDE             (RC_ATTR_BEGIN + 21)
+#define STR_SURROUND_OUTSIDE            (RC_ATTR_BEGIN + 22)
+#define STR_FRM_WIDTH                   (RC_ATTR_BEGIN + 23)
+#define STR_FRM_FIXEDHEIGHT             (RC_ATTR_BEGIN + 24)
+#define STR_FRM_MINHEIGHT               (RC_ATTR_BEGIN + 25)
+#define STR_FLY_AT_CNTNT                (RC_ATTR_BEGIN + 26)
+#define STR_FLY_IN_CNTNT                (RC_ATTR_BEGIN + 27)
+#define STR_FLY_PAGE                    (RC_ATTR_BEGIN + 28)
+#define STR_POS_X                       (RC_ATTR_BEGIN + 29)
+#define STR_POS_Y                       (RC_ATTR_BEGIN + 30)
+#define STR_VERT_TOP                    (RC_ATTR_BEGIN + 31)
+#define STR_VERT_CENTER                 (RC_ATTR_BEGIN + 32)
+#define STR_VERT_BOTTOM                 (RC_ATTR_BEGIN + 33)
+#define STR_HORI_RIGHT                  (RC_ATTR_BEGIN + 34)
+#define STR_HORI_CENTER                 (RC_ATTR_BEGIN + 35)
+#define STR_HORI_LEFT                   (RC_ATTR_BEGIN + 36)
+#define STR_HORI_INSIDE                 (RC_ATTR_BEGIN + 37)
+#define STR_HORI_OUTSIDE                (RC_ATTR_BEGIN + 38)
+#define STR_HORI_FULL                   (RC_ATTR_BEGIN + 39)
+#define STR_COLUMNS                     (RC_ATTR_BEGIN + 40)
+#define STR_LINE_WIDTH                  (RC_ATTR_BEGIN + 41)
+#define STR_MAX_FTN_HEIGHT              (RC_ATTR_BEGIN + 42)
+#define STR_SURROUND_IDEAL              (RC_ATTR_BEGIN + 43)
+#define STR_LINE_TOP                    (RC_ATTR_BEGIN + 44)
+#define STR_LINE_CENTER                 (RC_ATTR_BEGIN + 45)
+#define STR_LINE_BOTTOM                 (RC_ATTR_BEGIN + 46)
+#define STR_REGISTER_ON                 (RC_ATTR_BEGIN + 47)
+#define STR_REGISTER_OFF                (RC_ATTR_BEGIN + 48)
+#define STR_SURROUND_ANCHORONLY         (RC_ATTR_BEGIN + 49)
+#define STR_EDIT_IN_READONLY            (RC_ATTR_BEGIN + 50)
+#define STR_LAYOUT_SPLIT                (RC_ATTR_BEGIN + 51)
+#define STR_NUMRULE_ON                  (RC_ATTR_BEGIN + 52)
+#define STR_NUMRULE_OFF                 (RC_ATTR_BEGIN + 53)
+#define STR_CONNECT1                    (RC_ATTR_BEGIN + 54)
+#define STR_CONNECT2                    (RC_ATTR_BEGIN + 55)
+#define STR_MIRROR_TOGGLE               (RC_ATTR_BEGIN + 56)
+#define STR_LINECOUNT                   (RC_ATTR_BEGIN + 57)
+#define STR_DONTLINECOUNT               (RC_ATTR_BEGIN + 58)
+#define STR_LINCOUNT_START              (RC_ATTR_BEGIN + 59)
+
+#define STR_LUMINANCE                   (RC_ATTR_BEGIN + 60)
+#define STR_CHANNELR                    (RC_ATTR_BEGIN + 61)
+#define STR_CHANNELG                    (RC_ATTR_BEGIN + 62)
+#define STR_CHANNELB                    (RC_ATTR_BEGIN + 63)
+#define STR_CONTRAST                    (RC_ATTR_BEGIN + 64)
+#define STR_GAMMA                       (RC_ATTR_BEGIN + 65)
+#define STR_TRANSPARENCY                (RC_ATTR_BEGIN + 66)
+#define STR_INVERT                      (RC_ATTR_BEGIN + 67)
+#define STR_INVERT_NOT                  (RC_ATTR_BEGIN + 68)
+#define STR_DRAWMODE                    (RC_ATTR_BEGIN + 69)
+#define STR_DRAWMODE_STD                (RC_ATTR_BEGIN + 70)
+#define STR_DRAWMODE_GREY               (RC_ATTR_BEGIN + 71)
+#define STR_DRAWMODE_BLACKWHITE         (RC_ATTR_BEGIN + 72)
+#define STR_DRAWMODE_WATERMARK          (RC_ATTR_BEGIN + 73)
+#define STR_ROTATION                    (RC_ATTR_BEGIN + 74)
+
+#define ATTR_ACT_END                    STR_DRAWMODE_WATERMARK
+
+#if ATTR_ACT_END > RC_ATTR_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

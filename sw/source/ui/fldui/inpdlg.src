@@ -1,0 +1,228 @@
+/*************************************************************************
+ *
+ *  $RCSfile: inpdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "fldui.hrc"
+#include "inpdlg.hrc"
+#include "helpid.h"
+ModalDialog DLG_FLD_INPUT
+{
+    HelpID = HID_FLD_INPUT ;
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 194 , 119 ) ;
+    Text = "Eingabefeld" ;
+    Text [ english ] = "Input Field" ;
+    Text [ english_us ] = "Input Field" ;
+    Moveable = TRUE ;
+    /*    FixedText FT_LABEL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 115 , 8 ) ;
+        Text = "Eingabe" ;
+        Text [ English ] = "Input" ;
+        Text [ norwegian ] = "Input" ;
+        Text [ italian ] = "Inserisci" ;
+        Text [ portuguese_brazilian ] = "InserÁ„o" ;
+        Text [ portuguese ] = "InserÁ„o" ;
+        Text [ finnish ] = "Syˆttˆ" ;
+        Text [ danish ] = "Input" ;
+        Text [ french ] = "EntrÈe" ;
+        Text [ swedish ] = "Inmatning" ;
+        Text [ dutch ] = "Invoer" ;
+        Text [ spanish ] = "Entrada" ;
+        Text [ english_us ] = "Input" ;
+        Left = TRUE ;
+    };*/
+    Edit ED_LABEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 115 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Text = "Eingabe" ;
+        Text [ English ] = "Input" ;
+        Text [ norwegian ] = "Input" ;
+        Text [ italian ] = "Introduci" ;
+        Text [ portuguese_brazilian ] = "InserÁ„o" ;
+        Text [ portuguese ] = "Entrada" ;
+        Text [ finnish ] = "Syˆttˆ" ;
+        Text [ danish ] = "Input" ;
+        Text [ french ] = "Saisie" ;
+        Text [ swedish ] = "Inmatning" ;
+        Text [ dutch ] = "Invoer" ;
+        Text [ spanish ] = "Entrada" ;
+        Text [ english_us ] = "Input" ;
+        Readonly = TRUE ;
+        Text[ chinese_simplified ] = " ‰»Î";
+        Text[ russian ] = "¬‚Ó‰";
+        Text[ polish ] = "Wejúcie";
+        Text[ japanese ] = "ì¸óÕ";
+        Text[ chinese_traditional ] = "øÈ§J";
+        Text[ arabic ] = "≈œŒ«·";
+        Text[ greek ] = "≈ÈÛ·„˘„ﬁ";
+        Text[ korean ] = "¿‘∑¬";
+        Text[ turkish ] = "Giri˛";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit ED_EDIT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 115 , 72 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    GroupBox GB_EDIT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 127 , 108 ) ;
+        Text = "Bearbeiten" ;
+        Text [ English ] = "Edit" ;
+        Text [ norwegian ] = "Rediger" ;
+        Text [ italian ] = "Modifica" ;
+        Text [ portuguese_brazilian ] = "Editar" ;
+        Text [ portuguese ] = "Editar" ;
+        Text [ finnish ] = "Muokkaa" ;
+        Text [ danish ] = "Rediger" ;
+        Text [ french ] = "Modifier" ;
+        Text [ swedish ] = "Redigera" ;
+        Text [ dutch ] = "Be~werken" ;
+        Text [ spanish ] = "Editar" ;
+        Text [ english_us ] = "Edit" ;
+        Text[ chinese_simplified ] = "±‡º≠";
+        Text[ russian ] = "œ‡‚Í‡";
+        Text[ polish ] = "Edycja";
+        Text[ japanese ] = "ï“èW";
+        Text[ chinese_traditional ] = "ΩsøË";
+        Text[ arabic ] = " Õ—Ì—";
+        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ·";
+        Text[ korean ] = "∆Ì¡˝";
+        Text[ turkish ] = "D¸zenle";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 139 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 139 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_NEXT
+    {
+        Pos = MAP_APPFONT ( 139 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text = "~Weiter" ;
+        Text [ English ] = "~Next" ;
+        Text [ dutch ] = "~Volgende" ;
+        Text [ english_us ] = "~Next" ;
+        Text [ italian ] = "~Avanti" ;
+        Text [ spanish ] = "~Siguiente" ;
+        Text [ french ] = "~Suivant" ;
+        Text [ swedish ] = "~N‰sta" ;
+        Text [ danish ] = "NÊste" ;
+        Text [ portuguese ] = "~Seguinte" ;
+        Text [ portuguese_brazilian ] = "~Weiter" ;
+        Text[ chinese_simplified ] = "ºÃ–¯(~N)";
+        Text[ russian ] = "ƒ‡ÎÂÂ";
+        Text[ polish ] = "~Dalej";
+        Text[ japanese ] = "éüÇ÷(~N)";
+        Text[ chinese_traditional ] = "ƒ~ƒÚ(~N)";
+        Text[ arabic ] = "«· «·Ì";
+        Text[ greek ] = "≈¸ÏÂÌÔ";
+        Text[ korean ] = "¥Ÿ¿Ω(~N)";
+        Text[ turkish ] = "›~leri";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 139 , 60 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ portuguese_brazilian ] = "Eingabefeld" ;
+    Text [ swedish ] = "Inmatningsf‰lt" ;
+    Text [ danish ] = "Inputfelt" ;
+    Text [ italian ] = "Campo di digitazione" ;
+    Text [ spanish ] = "Campo de entrada" ;
+    Text [ french ] = "Champ de saisie" ;
+    Text [ dutch ] = "Invoerveld" ;
+    Text [ portuguese ] = "Campo de entrada" ;
+    Text[ chinese_simplified ] = " ‰»Î¿∏";
+    Text[ russian ] = "œÓÎÂ ‚‚Ó‰‡";
+    Text[ polish ] = "Pole wprowadzania";
+    Text[ japanese ] = "ì¸óÕÃ®∞Ÿƒﬁ";
+    Text[ chinese_traditional ] = "øÈ§JƒÊ¶Ï";
+    Text[ arabic ] = "Õﬁ· ≈œŒ«·";
+    Text[ greek ] = "–Â‰ﬂÔ ÂÈÛ·„˘„ﬁÚ";
+    Text[ korean ] = "« µÂ ¿‘∑¬";
+    Text[ turkish ] = "Giri˛ alan˝";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,349 @@
+/*************************************************************************
+ *
+ *  $RCSfile: chartins.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/* StarView ressource file */
+
+#include "chartins.hrc"
+#include "helpid.h"
+ModelessDialog DLG_INSERT_CHART
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 297 , 169 ) ;
+    Moveable = TRUE ;
+    HelpID = HID_INSERT_CHART ;
+    Hide = TRUE ;
+    Text = "Autoformat Diagramm (1-4)" ;
+    Text [ ENGLISH ] = "Autoformat Chart (1-4)" ;
+    Text [ ENGLISH_US ] = "AutoFormat Chart (1-4)" ;
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 285 , 49 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten : Falls die markierten Zellen nicht die gew³nschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben m÷chten */
+        Text = "Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten" ;
+        Text [ ENGLISH ] =
+        "If the marked area does not represent the desired data, mark your data now.\nInclude the cells containing the column- and row identifier in case you want them to be included in your chart." ;
+        Text [ ENGLISH_US ] = "If the marked cells do not represent the desired data, mark the area now.\nInclude the cells containing the column and row labels if you want them to be included in your chart." ;
+        WordBreak = TRUE ;
+        Text [ italian ] = "Se le celle evidenziate non contengono i dati voluti, selezionate l'area.\n\nIncludete le celle contenenti i titoli delle colonne e delle righe se volete che compaiano nel diagramma." ;
+        Text [ spanish ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico." ;
+        Text [ french ] = "Si les cellules marquées ne contiennent pas les données souhaitées, sélectionnez à présent la plage. \n\nIncluez les cellules avec les intitulés de colonnes et de lignes pour les faire figurer dans le diagramme." ;
+        Text [ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven." ;
+        Text [ swedish ] = "Om de markerade cellerna inte innehåller de önskade data, markera då området nu.\n\nTa med de celler som innehåller kolumn- och radöverskrifter om dessa skall visas i grafiken." ;
+        Text [ danish ] = "Hvis de markerede celler ikke indeholder de ønskede data, marker det ønskede område nu.\n\nInkluder cellerne med kolonne- hhv.rækkeetiketter, hvis de skal vises i din grafik." ;
+        Text [ portuguese_brazilian ] = "Falls die markierten Zellen nicht die gewünschten Daten enthalten, markieren Sie jetzt den Bereich.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbezeichnern mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten" ;
+        Text [ portuguese ] = "Se as células marcadas não incluírem os dados desejados, marque-os agora.\n\nInclua as células contendo os títulos das colunas e linhas se desejar vê-las representadas no seu gráfico." ;
+        Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
+        Text[ russian ] = "Åñëè îòìå÷åííûå ÿ÷åéêè íå ñîäåğæàò æåëàåìûõ äàííûõ, âûäåëèòå ñåé÷àñ ıòó îáëàñòü.\n\nÂêëş÷èòå òàêæå ÿ÷åéêè ñ ïîìåòêàìè ñòîëáöîâ èëè ñòğîê, åñëè Âû õîòèòå èõ ïğåäñòàâèòü íà Âàøåì ğèñóíêå.";
+        Text[ polish ] = "Jeœli zaznaczone komórki nie zawieraj¹ potrzebnych danych, zaznacz teraz ten obszar ponownie.\n\nZaznacz równie¿ komórki z etykietami wierszy lub kolumn , jeœli maj¹ one zostaæ przedstawione w twojej grafice.";
+        Text[ japanese ] = "•K—v‚ÈÃŞ°À‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é¾Ù‚ª‚Ü‚¾‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍA¡‚»‚Ì”ÍˆÍ‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢B\n\n¸Ş×Ì‚É€–Ú–¼‚ğ•\\¦‚·‚é‚½‚ß‚É‚ÍAs‚Æ—ñ‚Ì€–Ú—“‚ğŠÜ‚ß‚½¾Ù”ÍˆÍ‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢B";
+        Text[ chinese_traditional ] = "¦pªG¿ï¨úªºÀx¦s®æ¨S¦³¸ê®Æ¡M´N½Ğ±z¿ï¾Ü°Ï°ì¡C\n\n±z¥i¥H¿ï¤¤¦C¼ĞÃD©M¦æ¼ĞÃD¡A³o¼Ë¡A¹Ïªí¤]·|Åã¥Ü¥X³o¨Ç¸ê®Æ¡C";
+        Text[ arabic ] = "ÅĞÇ ßÇäÊ ÇáÎáÇíÇ ÇáãÍÏÏÉ áÇ ÊÍÊæí Úáì ÇáÈíÇäÇÊ ÇáãØáæÈÉ¡ Şã ÈÊÍÏíÏ ÇáäØÇŞ\n\nÈãÇ İí Ğáß ÇáÎáÇíÇ¡ ÇáÊí ÊÍÊæí Úáì ÚäÇæíä Õİæİ Ãæ ÃÚãÏÉ¡ æĞáß ÅĞÇ ßäÊ ÊÑíÏ ÙåæÑåÇ İí ÑÓãÊß.";
+        Text[ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- resp. rijlabels als u deze in uw afbeelding wilt weergeven.";
+        Text[ chinese_simplified ] = "Èç¹ûÑ¡ÖĞµÄµ¥Ôª¸ñÃ»ÓĞÊı¾İ£¬ÄÇÃ´ÇëÄúÑ¡ÔñÇøÓò¡£\n\nÄú¿ÉÒÔÒ²Ñ¡ÖĞÁĞ±êÌâºÍĞĞ±êÌâ£¬Èç´ËÕâĞ©×ÊÁÏÒ²»á±»ÏÔÊ¾ÔÚÍ¼±íÄÚ¡£";
+        Text[ greek ] = "Áí ôá åğéëåãìİíá êåëéÜ äåí ğåñéİ÷ïõí ôá äåäïìİíá ğïõ åğéèõìåßôå, åğéëİîôå ôçí ğåñéï÷Ş ôşñá. Áí èİëåôå\n\níá åìöáíéóôïıí óôï ãñáöéêü óáò êáé ïé åğéãñáöİò óôçëşí êáé ãñáììşí, ôüôå åğéëİîôå êáé áõôÜ ôá äåäïìİíá.";
+        Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ¼¿ÀÌ ¿øÇÏ´Â µ¥ÀÌÅÍ¸¦ Æ÷ÇÔÇÏ°í ÀÖÁö ¾ÊÀ» °æ¿ì, Áö±İ ¿µ¿ªÀ» Ç¥½ÃÇÏ½Ê½Ã¿À. \n\n¿­ ³»Áö Çà ¶óº§À» Áö´Ñ ¼¿µéÀ» ±×·¡ÇÈ¿¡ ³ªÅ¸³»°í ½ÍÀ¸¸é ÀÌ ¼¿µéÀ» ÇÔ²² Æ÷ÇÔ½ÃÅ°½Ê½Ã¿À.";
+        Text[ turkish ] = "Seçilen hücreler, istenen verileri içermiyorsa aralığı şimdi seçin.\n\nGrafikte görünmelerini istiyorsanız, sütun ya da satır başlıklarını içeren hücreleri de seçin";
+    };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 69 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "~Bereich" ;
+        Text [ ENGLISH ] = "~Area" ;
+        Text [ ENGLISH_US ] = "~Area" ;
+        Text [ italian ] = "Area" ;
+        Text [ spanish ] = "~Área" ;
+        Text [ french ] = "C~atégorie" ;
+        Text [ dutch ] = "~Bereik" ;
+        Text [ swedish ] = "~Område" ;
+        Text [ danish ] = "Område" ;
+        Text [ portuguese_brazilian ] = "~Bereich" ;
+        Text [ portuguese ] = "~Área" ;
+        Text[ chinese_simplified ] = "ÇøÓò(~A)";
+        Text[ russian ] = "Îáëàñòü";
+        Text[ polish ] = "Obszar";
+        Text[ japanese ] = "”ÍˆÍ(~A)";
+        Text[ chinese_traditional ] = "°Ï°ì(~A)";
+        Text[ arabic ] = "ÇáäØÇŞ";
+        Text[ dutch ] = "~Bereik";
+        Text[ chinese_simplified ] = "ÇøÓò(~A)";
+        Text[ greek ] = "Ğåñéï÷Ş";
+        Text[ korean ] = "¿µ¿ª(~A)";
+        Text[ turkish ] = "~Aralık";
+    };
+    Edit ED_RANGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 68 ) ;
+        Size = MAP_APPFONT ( 229 , 12 ) ;
+    };
+    CheckBox CB_FIRST_ROW
+    {
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 150 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "Erste ~Zeile als Beschriftung" ;
+        Text [ ENGLISH ] = "First ~row as label" ;
+        Text [ ENGLISH_US ] = "~First row as caption" ;
+        Check = TRUE ;
+        Text [ italian ] = "Prima riga come dicitura" ;
+        Text [ spanish ] = "Primera ~fila como etiqueta" ;
+        Text [ french ] = "Première ~ligne comme étiquette" ;
+        Text [ dutch ] = "Eerste ~rij als kop" ;
+        Text [ swedish ] = "Första ~raden som etikett" ;
+        Text [ danish ] = "Første række som etiket" ;
+        Text [ portuguese_brazilian ] = "Erste ~Reihe als Beschriftung" ;
+        Text [ portuguese ] = "Primeira ~linha como etiqueta" ;
+        Text[ chinese_simplified ] = "µÚÒ»ĞĞ×÷Îª±êÌâ(~R)";
+        Text[ russian ] = "Ïåğâàÿ ñòğîêà êàê íàçâàíèå";
+        Text[ polish ] = "Pierwszy wiersz jako etykieta";
+        Text[ japanese ] = "Œ©o‚µ‚Æ‚µ‚Ä‚ÌÅ‰‚Ìs(~Rj";
+        Text[ chinese_traditional ] = "²Ä¤@¦æ§@¬°¼ĞÃD(~R)";
+        Text[ arabic ] = "ÇáÕİ ÇáÃæá ßÚäæÇä";
+        Text[ dutch ] = "Eerste ~rij als kop";
+        Text[ chinese_simplified ] = "µÚÒ»ĞĞ×÷Îª±êÌâ(~R)";
+        Text[ greek ] = "Ğñşôç ãñáììŞ ùò åğéãñáöŞ";
+        Text[ korean ] = "Ã¹¹øÂ° ÇàÀ» Ä¸¼ÇÀ¸·Î(~F)";
+        Text[ turkish ] = "Başlıklar ~birinci satırda";
+    };
+    CheckBox CB_FIRST_COL
+    {
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Size = MAP_APPFONT ( 150 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "Erste ~Spalte als Beschriftung" ;
+        Text [ ENGLISH ] = "First ~column as label" ;
+        Text [ ENGLISH_US ] = "First ~column as caption" ;
+        Check = TRUE ;
+        Text [ italian ] = "Prima colonna come dicitura" ;
+        Text [ spanish ] = "Primera c~olumna como etiqueta" ;
+        Text [ french ] = "Première ~colonne comme étiquette" ;
+        Text [ dutch ] = "Eerste ~kolom als kop" ;
+        Text [ swedish ] = "Första kolumnen ~som etikett" ;
+        Text [ danish ] = "Første kolonne som etiket" ;
+        Text [ portuguese_brazilian ] = "Erste ~Spalte als Beschriftung" ;
+        Text [ portuguese ] = "Primeira ~coluna como etiqueta" ;
+        Text[ chinese_simplified ] = "µÚÒ»ÁĞ×÷Îª±êÌâ(~C)";
+        Text[ russian ] = "Ïåğâûé ñòîëáåö êàê íàçâàíèå";
+        Text[ polish ] = "Pierwsza kolumna jako etykieta";
+        Text[ japanese ] = "Œ©o‚µ‚Æ‚µ‚Ä‚ÌÅ‰‚Ì—ñ(~C)";
+        Text[ chinese_traditional ] = "²Ä¤@Äæ·í§@¼ĞÃD(~C)";
+        Text[ arabic ] = "ÇáÚãæÏ ÇáÃæá ßÚäæÇä";
+        Text[ dutch ] = "Eerste ~kolom als kop";
+        Text[ chinese_simplified ] = "µÚÒ»ÁĞ×÷Îª±êÌâ(~C)";
+        Text[ greek ] = "Ğñşôç óôŞëç ùò åğéãñáöŞ";
+        Text[ korean ] = "Ã¹¹øÂ° ¿­À» Ä¸¼ÇÀ¸·Î(~C)";
+        Text[ turkish ] = "Başlıklar ~birinci sütunda";
+    };
+    GroupBox GB_1
+    {
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Size = MAP_APPFONT ( 285 , 65 ) ;
+        Text = "Auswahl" ;
+        Text [ English ] = "Selection" ;
+        Text [ english_us ] = "Selection" ;
+        Text [ italian ] = "Selezione" ;
+        Text [ spanish ] = "Selección" ;
+        Text [ french ] = "Sélection" ;
+        Text [ dutch ] = "Selectie" ;
+        Text [ swedish ] = "Urval" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese ] = "Selecção" ;
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ russian ] = "Âûáîğ";
+        Text[ polish ] = "Wybór";
+        Text[ japanese ] = "‘I‘ğ";
+        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ arabic ] = "ÇáÊÍÏíÏ";
+        Text[ dutch ] = "Selectie";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ turkish ] = "Seçim";
+    };
+    FixedText FT_HORZLINE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 137 ) ;
+        Size = MAP_APPFONT ( 284 , 2 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 6 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 60 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BT_PREV
+    {
+        Pos = MAP_APPFONT ( 130 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+         // ### ACHTUNG: Neuer Text in Resource? << ~Zurück : << Zurück
+        /* ### ACHTUNG: Neuer Text in Resource? << ~Zurück : << ~Zur³ck */
+        Text = "<< Z~urück" ;
+        Text [ ENGLISH ] = "<< Back" ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text [ dutch ] = "<< Vor~ige" ;
+        Text [ english_us ] = "<< ~Back" ;
+        Text [ italian ] = "Selezione" ;
+        Text [ spanish ] = "<< ~Regresar" ;
+        Text [ french ] = "<< ~Précédent" ;
+        Text [ swedish ] = "<< ~Tillbaka" ;
+        Text [ danish ] = "<< Tilbage" ;
+        Text [ portuguese ] = "<< ~Anterior" ;
+        Text [ portuguese_brazilian ] = "<< ~Zurück" ;
+        Text[ chinese_simplified ] = "<< ·µ»Ø(~B)";
+        Text[ russian ] = "<< Íàçàä";
+        Text[ polish ] = "<< Wstecz";
+        Text[ japanese ] = "<<–ß‚é(~B)";
+        Text[ chinese_traditional ] = "<< ªğ¦^(~B)";
+        Text[ arabic ] = ">> ÇáÓÇÈŞ";
+        Text[ dutch ] = "<< Vor~ige";
+        Text[ chinese_simplified ] = "<< ·µ»Ø(~B)";
+        Text[ greek ] = "<< Ğßóù";
+        Text[ korean ] = "<<µÚ·Î(~B)";
+        Text[ turkish ] = "<< G~eri";
+    };
+    PushButton BT_NEXT
+    {
+        Pos = MAP_APPFONT ( 185 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Weiter >>" ;
+        Text [ ENGLISH ] = "Continue >>" ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Volgende >>" ;
+        Text [ english_us ] = "~Next >>" ;
+        Text [ italian ] = "~Avanti >>" ;
+        Text [ spanish ] = "~Siguiente >>" ;
+        Text [ french ] = "~Suivant >>" ;
+        Text [ swedish ] = "~Nästa >>" ;
+        Text [ danish ] = "Næste >>" ;
+        Text [ portuguese ] = "~Continuar >>" ;
+        Text [ portuguese_brazilian ] = "~Weiter >>" ;
+        Text[ chinese_simplified ] = "¼ÌĞø(~N)>>";
+        Text[ russian ] = "Äàëåå >>";
+        Text[ polish ] = "Dalej >>";
+        Text[ japanese ] = "Ÿ‚Ö >>(~N)";
+        Text[ chinese_traditional ] = "Ä~Äò(~N)";
+        Text[ arabic ] = "ÇáÊÇáí <<";
+        Text[ dutch ] = "~Volgende >>";
+        Text[ chinese_simplified ] = "¼ÌĞø(~N)>>";
+        Text[ greek ] = "Åğüìåíï >>";
+        Text[ korean ] = "´ÙÀ½ >>(~N)";
+        Text[ turkish ] = "~İleri >>";
+    };
+    PushButton BT_FINISH
+    {
+        Pos = MAP_APPFONT ( 240 , 151 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Fertig stellen" ;
+        Text [ ENGLISH ] = "Finish >>" ;
+        Text [ dutch ] = "~Voltooien" ;
+        Text [ english_us ] = "Cre~ate" ;
+        Text [ italian ] = "~Crea" ;
+        Text [ spanish ] = "~Crear" ;
+        Text [ french ] = "~Créer" ;
+        Text [ swedish ] = "~Färdigställ" ;
+        Text [ danish ] = "Udfør" ;
+        Text [ portuguese ] = "~Criar" ;
+        Text [ portuguese_brazilian ] = "~Fertigstellen" ;
+        Text[ chinese_simplified ] = "Íê³É(~A)";
+        Text[ russian ] = "Ãîòîâî";
+        Text[ polish ] = "Utwórz";
+        Text[ japanese ] = "Š®—¹(~A)";
+        Text[ chinese_traditional ] = "§¹¦¨(~A)";
+        Text[ arabic ] = "ÅäÔÇÁ";
+        Text[ dutch ] = "~Voltooien";
+        Text[ chinese_simplified ] = "Íê³É(~A)";
+        Text[ greek ] = "Äçìéïõñãßá";
+        Text[ korean ] = "¸¸µé±â(~A)";
+        Text[ turkish ] = "~Oluştur";
+    };
+    Text [ italian ] = "Formattazione automatica diagramma (1-4)" ;
+    Text [ spanish ] = "AutoFormato diagrama (1-4)" ;
+    Text [ french ] = "AutoFormat de diagramme (1-4)" ;
+    Text [ dutch ] = "AutoOpmaak diagram (1-4)" ;
+    Text [ swedish ] = "AutoFormat Diagram (1-4)" ;
+    Text [ danish ] = "AutoFormat diagram (1-4)" ;
+    Text [ portuguese_brazilian ] = "Autoformat Diagramm (1-4)" ;
+    Text [ portuguese ] = "AutoFormato gráfico (1-4)" ;
+    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½Í¼±í(1-4)";
+    Text[ russian ] = "Àâòîôîğìàò äèàãğàììû (1-4)";
+    Text[ polish ] = "Autoformatowanie wykresu (1-4)";
+    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä ¸Ş×Ì(1-4)";
+    Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡¹Ïªí(1-4)";
+    Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí áÑÓã ÈíÇäí (1Ü4)";
+    Text[ dutch ] = "AutoOpmaak diagram (1-4)";
+    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½Í¼±í(1-4)";
+    Text[ greek ] = "ÁõôïÌïñöïğïßçóç äéáãñÜììáôïò (1-4)";
+    Text[ korean ] = "ÀÚµ¿ ¼­½Ä Â÷Æ® (1-4)";
+    Text[ turkish ] = "Otomatik şema formatlama (1-4)";
+};

@@ -1,0 +1,1145 @@
+/*************************************************************************
+ *
+ *  $RCSfile: column.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "column.hrc"
+#include "frmui.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ // #define TP_COLUMN 256
+TabPage TP_COLUMN
+{
+    HelpID = HID_COLUMN ;
+        Hide = TRUE;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Spalten" ;          // Dieser Text ist fuer den SingleTabDialog bestimmt!
+    Text [ ENGLISH ] = "Columns" ;
+    Text [ norwegian ] = "Kolonner" ;
+    Text [ italian ] = "Colonne" ;
+    Text [ portuguese_brazilian ] = "Colunas" ;
+    Text [ portuguese ] = "Colunas" ;
+    Text [ finnish ] = "Sarakkeet" ;
+    Text [ danish ] = "Kolonner" ;
+    Text [ french ] = "Colonnes" ;
+    Text [ swedish ] = "Kolumner" ;
+    Text [ dutch ] = "Kolommen" ;
+    Text [ spanish ] = "Columnas" ;
+    Text [ english_us ] = "Columns" ;
+    FixedText FT_NUMBER
+    {
+        Pos = MAP_APPFONT ( 11 , 16 ) ;
+        Size = MAP_APPFONT ( 28 , 10 ) ;
+        Text = "~Anzahl" ;
+        Text [ ENGLISH ] = "~Num." ;
+        Text [ norwegian ] = "~Num." ;
+        Text [ italian ] = "~Num." ;
+        Text [ portuguese_brazilian ] = "~N£m." ;
+        Text [ portuguese ] = "~Quantidade" ;
+        Text [ finnish ] = "~M‰‰r‰" ;
+        Text [ danish ] = "Antal" ;
+        Text [ french ] = "~Nombre" ;
+        Text [ swedish ] = "~Antal" ;
+        Text [ dutch ] = "~Aantal" ;
+        Text [ spanish ] = "~Cantidad" ;
+        Text [ english_us ] = "~Amount" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = " ˝ƒø(~A)";
+        Text[ russian ] = "◊ËÒÎÓ";
+        Text[ polish ] = "Liczba";
+        Text[ japanese ] = "íiêî(~A)";
+        Text[ chinese_traditional ] = "º∆•ÿ(~A)";
+        Text[ arabic ] = "«·⁄œœ";
+        Text[ dutch ] = "~Aantal";
+        Text[ chinese_simplified ] = " ˝ƒø(~A)";
+        Text[ greek ] = "~¡ÒÈËÏ¸Ú";
+        Text[ korean ] = "æÁ(~A)";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "S~ay˝";
+    };
+    NumericField ED_NUMBER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 11 , 28 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 20 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 20 ;
+        SpinSize = 1 ;
+    };
+    Control VS_DEFAULTS
+    {
+        Pos = MAP_APPFONT ( 50 , 12 ) ;
+        Size = MAP_APPFONT ( 110 , 28 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CB_BALANCECOLS
+    {
+        Pos = MAP_APPFONT ( 11 , 43 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text = "~Spalten ausgleichen" ;
+        Text [ ENGLISH ] = "Balance columns" ;
+        Hide = TRUE;
+        Text[ english_us ] = "~Balance columns";
+        Text[ portuguese ] = "Optimizar ~colunas";
+        Text[ russian ] = "¬˚Ó‚ÌˇÚ¸ ÍÓÎÓÌÍË";
+        Text[ greek ] = "≈ÓÈ~ÛÔÒÒ¸ÁÛÁ ÛÙÁÎ˛Ì";
+        Text[ dutch ] = "~Kolommen uitbalanceren";
+        Text[ french ] = "Optimiser les ~colonnes";
+        Text[ spanish ] = "~Optimar columnas";
+        Text[ italian ] = "Ottimizza colonne";
+        Text[ danish ] = "UdjÊvn kolonner";
+        Text[ swedish ] = "~J‰mna ut kolumner";
+        Text[ polish ] = "~WyrÛwnaj kolumny";
+        Text[ portuguese_brazilian ] = "Balance columns";
+        Text[ japanese ] = "íiÇÃïùÇÇ∑Ç◊ÇƒìØÇ∂Ç…Ç∑ÇÈ(~B)";
+        Text[ korean ] = "¥‹ ±Ê¿Ã ¡∂¡§(~B)";
+        Text[ chinese_simplified ] = "–≠µ˜¿∏";
+        Text[ chinese_traditional ] = "ƒÊ¶P®B§∆";
+        Text[ arabic ] = "√⁄„œ… „ ”«ÊÌ…";
+        Text[ turkish ] = "S~¸tunlar˝ dengele";
+    };
+    GroupBox GB_COLUMNS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 157 , 53 ) ;
+        Text = "Spalten" ;
+        Text [ ENGLISH ] = "Columns" ;
+        Text [ norwegian ] = "Kolonner" ;
+        Text [ italian ] = "Colonne" ;
+        Text [ portuguese_brazilian ] = "Colunas" ;
+        Text [ portuguese ] = "Colunas" ;
+        Text [ finnish ] = "Sarakkeet" ;
+        Text [ danish ] = "Kolonner" ;
+        Text [ french ] = "Colonnes" ;
+        Text [ swedish ] = "Kolumner" ;
+        Text [ dutch ] = "Kolommen" ;
+        Text [ spanish ] = "Columnas" ;
+        Text [ english_us ] = "Columns" ;
+        Text[ chinese_simplified ] = "¿∏";
+        Text[ russian ] = " ÓÎÓÌÍË";
+        Text[ polish ] = "Kolumny";
+        Text[ japanese ] = "íiëgÇ›";
+        Text[ chinese_traditional ] = "ƒÊ";
+        Text[ arabic ] = "«·√⁄„œ…";
+        Text[ dutch ] = "Kolommen";
+        Text[ chinese_simplified ] = "¿∏";
+        Text[ greek ] = "”ÙﬁÎÂÚ";
+        Text[ korean ] = "ø≠";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "S¸tun";
+    };
+    FixedText FT_STYLE
+    {
+        Pos = MAP_APPFONT ( 180 , 70 ) ;
+        Size = MAP_APPFONT ( 18 , 10 ) ;
+        Text = "A~rt" ;
+        Text [ ENGLISH ] = "~Style" ;
+        Text [ norwegian ] = "~Style" ;
+        Text [ italian ] = "~Stile" ;
+        Text [ portuguese_brazilian ] = "~Estilo" ;
+        Text [ portuguese ] = "~Estilo" ;
+        Text [ finnish ] = "~Tyyli" ;
+        Text [ danish ] = "Type" ;
+        Text [ french ] = "~Type" ;
+        Text [ swedish ] = "~Typ" ;
+        Text [ dutch ] = "~Type" ;
+        Text [ spanish ] = "~Tipo" ;
+        Text [ english_us ] = "~Line" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¿‡–Õ(~L)";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "éÌóﬁ(~L)";
+        Text[ chinese_traditional ] = "√˛´¨(~L)";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ dutch ] = "~Type";
+        Text[ chinese_simplified ] = "¿‡–Õ(~L)";
+        Text[ greek ] = "‘˝~ÔÚ";
+        Text[ korean ] = "º±(~L)";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "T~¸r";
+    };
+    ListBox LB_STYLE
+    {
+        Pos = MAP_APPFONT ( 211 , 69 ) ;
+        Size = MAP_APPFONT ( 40 , 66 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Keine" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Keine" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Keine" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Senza" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Nenhum" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Nenhum" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Keine" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Ingen" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "Aucun(e)" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "Ingen" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Geen" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Ninguno" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "None" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+             < "Œﬁ" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+             < "¡ÂÁ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+             < "Brak" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+             < "Ç»Çµ" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+             < " " ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+             < "µL" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+             < "»œÊ‰" ; Default ; > ;
+    };
+    StringList [ dutch ] =
+    {
+             < "Geen" ; Default ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+             < "Œﬁ" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+             < " ·Ì›Ì·" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+             < "æ¯¿Ω" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+             < "Yok" ; Default ; > ;
+    };
+    };
+    FixedText FT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 180 , 90 ) ;
+        Size = MAP_APPFONT ( 22 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Hˆh~e : H˜h~e */
+        Text = "Hˆh~e" ;
+        Text [ ENGLISH ] = "Hei~ght" ;
+        Text [ norwegian ] = "Hei~ght" ;
+        Text [ italian ] = "Altezza" ;
+        Text [ portuguese_brazilian ] = "Altu~ra" ;
+        Text [ portuguese ] = "Altu~ra" ;
+        Text [ finnish ] = "~Korkeus" ;
+        Text [ danish ] = "H¯jde" ;
+        Text [ french ] = "~Hauteur" ;
+        Text [ swedish ] = "Hˆ~jd" ;
+        Text [ dutch ] = "~Hoogte" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ english_us ] = "~Height" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "∏ﬂ(~H)";
+        Text[ russian ] = "¬˚ÒÓÚ‡";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "çÇÇ≥(~H)";
+        Text[ chinese_traditional ] = "∞™(~H)";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ dutch ] = "~Hoogte";
+        Text[ chinese_simplified ] = "∏ﬂ(~H)";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã(~H)";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "~Y¸ks.";
+    };
+    MetricField ED_HEIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 211 , 89 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 25 ;
+        Maximum = 100 ;
+        Value = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        First = 25 ;
+        Last = 100 ;
+    };
+    FixedText FT_POSITION
+    {
+        Pos = MAP_APPFONT ( 180 , 110 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Text = "~Position" ;
+        Text [ English ] = "~Position" ;
+        Left = TRUE ;
+        Text [ portuguese ] = "~PosiÁ„o" ;
+        Text [ english_us ] = "~Position" ;
+        Text [ portuguese_brazilian ] = "~Position" ;
+        Text [ swedish ] = "~Position" ;
+        Text [ danish ] = "Placering" ;
+        Text [ italian ] = "~Posizione" ;
+        Text [ spanish ] = "~PosiciÛn" ;
+        Text [ french ] = "~Position" ;
+        Text [ dutch ] = "~Positie" ;
+        Text[ chinese_simplified ] = "Œª÷√(~P)";
+        Text[ russian ] = "œÓÁËˆËˇ";
+        Text[ polish ] = "Pozycja";
+        Text[ japanese ] = "à íu(~P)";
+        Text[ chinese_traditional ] = "¶Ï∏m(~P)";
+        Text[ arabic ] = "«·„Ê÷⁄";
+        Text[ dutch ] = "~Positie";
+        Text[ chinese_simplified ] = "Œª÷√(~P)";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ korean ] = "¿ßƒ°(~P)";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "~Konum";
+    };
+    ListBox LB_POSITION
+    {
+        Pos = MAP_APPFONT ( 211 , 109 ) ;
+        Size = MAP_APPFONT ( 40 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "In alto" ; Default ; > ;
+            < "Al centro" ; Default ; > ;
+            < "In basso" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Base" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Em cima" ; Default ; > ;
+            < "Centrado" ; Default ; > ;
+            < "Em baixo" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Oben" ; Default ; > ;
+            < "Zentriert" ; Default ; > ;
+            < "Unten" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Foroven" ; Default ; > ;
+            < "Centreret" ; Default ; > ;
+            < "Forneden" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "En haut" ; Default ; > ;
+            < "CentrÈ" ; Default ; > ;
+            < "En bas" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "Uppe" ; Default ; > ;
+            < "Centrerat" ; Default ; > ;
+            < "Nere" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Boven" ; Default ; > ;
+            < "Gecentreerd" ; Default ; > ;
+            < "Beneden" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Arriba" ; Default ; > ;
+            < "Centrado" ; Default ; > ;
+            < "Abajo" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Top" ; Default ; > ;
+            < "Centered" ; Default ; > ;
+            < "Bottom" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "…œ" ; Default ; > ;
+        < "æ”÷–" ; Default ; > ;
+        < "œ¬" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "¬‚ÂıÛ" ; Default ; > ;
+        < "œÓ ˆÂÌÚÛ" ; Default ; > ;
+        < "¬ÌËÁÛ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Na gÛrze" ; Default ; > ;
+        < "Wyúrodkowany" ; Default ; > ;
+        < "Na dole" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "è„" ; Default ; > ;
+        < "íÜâõ" ; Default ; > ;
+        < "â∫" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "§W" ; Default ; > ;
+        < "∏m§§" ; Default ; > ;
+        < "§U" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "√⁄·Ï" ; Default ; > ;
+        < "„ Ê”ÿ" ; Default ; > ;
+        < "√”›·" ; Default ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Boven" ; Default ; > ;
+        < "Gecentreerd" ; Default ; > ;
+        < "Beneden" ; Default ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "…œ" ; Default ; > ;
+        < "æ”÷–" ; Default ; > ;
+        < "œ¬" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "–‹Ì˘" ; Default ; > ;
+        < " ÂÌÙÒ·ÒÈÛÏ›Ì·" ; Default ; > ;
+        < " ‹Ù˘" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "¿ß" ; Default ; > ;
+        < "∞°øÓµ•" ; Default ; > ;
+        < "æ∆∑°" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "‹st" ; Default ; > ;
+        < "Orta" ; Default ; > ;
+        < "Alt" ; Default ; > ;
+    };
+    };
+    GroupBox GB_LINETYPE
+    {
+        Pos = MAP_APPFONT ( 171 , 49 ) ;
+        Size = MAP_APPFONT ( 83 , 80 ) ;
+        Text = "Trennlinie" ;
+        Text [ ENGLISH ] = "Lines between" ;
+        Text [ norwegian ] = "Lines between" ;
+        Text [ italian ] = "Linea di separazione" ;
+        Text [ portuguese_brazilian ] = "Linhas entre" ;
+        Text [ portuguese ] = "Separador" ;
+        Text [ finnish ] = "Rivej‰ v‰liss‰" ;
+        Text [ danish ] = "Separator" ;
+        Text [ french ] = "Trait de sÈparation" ;
+        Text [ swedish ] = "Skiljelinje" ;
+        Text [ dutch ] = "Scheidingslijn" ;
+        Text [ spanish ] = "LÌnea de separaciÛn" ;
+        Text [ english_us ] = "Separator" ;
+        Text[ chinese_simplified ] = "∑÷∏Ùœﬂ";
+        Text[ russian ] = "–‡Á‰ÂÎËÚÂÎ¸Ì‡ˇ ÎËÌËˇ";
+        Text[ polish ] = "Separator";
+        Text[ japanese ] = "ã´äEê¸Çà¯Ç≠";
+        Text[ chinese_traditional ] = "§¿πjΩu";
+        Text[ arabic ] = "«·Œÿ «·›«’·";
+        Text[ dutch ] = "Scheidingslijn";
+        Text[ chinese_simplified ] = "∑÷∏Ùœﬂ";
+        Text[ greek ] = "ƒÈ·˜˘ÒÈÛÙÈÍﬁ „Ò·ÏÏﬁ";
+        Text[ korean ] = "±∏∫–¿⁄";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "Ay˝rma Áizgisi";
+    };
+    FixedText FT_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Text = "Breite" ;
+        Text [ English ] = "Width" ;
+        Left = TRUE ;
+        Text [ dutch ] = "Breedte" ;
+        Text [ english_us ] = "Width" ;
+        Text [ italian ] = "Larghezza" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ french ] = "Largeur" ;
+        Text [ swedish ] = "Bredd" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ portuguese ] = "Largura" ;
+        Text [ portuguese_brazilian ] = "Breite" ;
+        Text[ chinese_simplified ] = "øÌ";
+        Text[ russian ] = "ÿËËÌ‡";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "íiÇÃïù";
+        Text[ chinese_traditional ] = "ºe";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ dutch ] = "Breedte";
+        Text[ chinese_simplified ] = "øÌ";
+        Text[ greek ] = "–Î‹ÙÔÚ";
+        Text[ korean ] = "≥ ∫Ò";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "Geni˛lik";
+    };
+    FixedText FT_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Abstand" ;
+        Text [ English ] = "Distance" ;
+        Left = TRUE ;
+        Text [ dutch ] = "Afstand" ;
+        Text [ english_us ] = "Spacing" ;
+        Text [ italian ] = "Distanza" ;
+        Text [ spanish ] = "Espacio" ;
+        Text [ french ] = "…cart" ;
+        Text [ swedish ] = "AvstÂnd" ;
+        Text [ danish ] = "Afstand" ;
+        Text [ portuguese ] = "EspaÁamento" ;
+        Text [ portuguese_brazilian ] = "Abstand" ;
+        Text[ chinese_simplified ] = "º‰∏Ù";
+        Text[ russian ] = "»ÌÚÂ‚‡Î";
+        Text[ polish ] = "OdstÍp";
+        Text[ japanese ] = "ä‘äu";
+        Text[ chinese_traditional ] = "∂°πj";
+        Text[ arabic ] = "«· »«⁄œ";
+        Text[ dutch ] = "Afstand";
+        Text[ chinese_simplified ] = "º‰∏Ù";
+        Text[ greek ] = "¡¸ÛÙ·ÛÁ";
+        Text[ korean ] = "∞£∞›";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "Aral˝k";
+    };
+    CheckBox CB_AUTO_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 117 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "A~utomatische Breite" ;
+        Text [ ENGLISH ] = "Automatic ~width" ;
+        Text [ norwegian ] = "Automatic ~width" ;
+        Text [ italian ] = "~Larghezza autom." ;
+        Text [ portuguese_brazilian ] = "Autom†tica ~largura" ;
+        Text [ portuguese ] = "~Largura autom·tica" ;
+        Text [ finnish ] = "Automaattinen ~leveys" ;
+        Text [ danish ] = "Automatisk bredde" ;
+        Text [ french ] = "~Largeur automatique" ;
+        Text [ swedish ] = "A~utomatisk bredd" ;
+        Text [ dutch ] = "A~utomatische breedte" ;
+        Text [ spanish ] = "Ancho ~autom·tico" ;
+        Text [ english_us ] = "Auto~Width" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "◊‘∂Øµ˜’˚øÌ∂»(~W)";
+        Text[ russian ] = "¿‚ÚÓÏ. ¯ËËÌ‡";
+        Text[ polish ] = "Automatyczna szerokoúÊ";
+        Text[ japanese ] = "ïùé©ìÆí≤êÆ(~W)";
+        Text[ chinese_traditional ] = "¶€∞ Ω’æ„ºe´◊(~W)";
+        Text[ arabic ] = "⁄—÷  ·ﬁ«∆Ì";
+        Text[ dutch ] = "A~utomatische breedte";
+        Text[ chinese_simplified ] = "◊‘∂Øµ˜’˚øÌ∂»(~W)";
+        Text[ greek ] = "¡ıÙ¸Ï·ÙÔ Î‹ÙÔÚ";
+        Text[ korean ] = "¿⁄µø ≥ ∫Ò(~W)";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "O~tomatik geni˛lik";
+    };
+    ImageButton BTN_UP
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 145 , 69 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        TabStop = TRUE ;
+        SYMBOL = IMAGEBUTTON_ARROW_RIGHT ;
+    };
+    ImageButton BTN_DOWN
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 40 , 69 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        TabStop = TRUE ;
+        SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
+    };
+    FixedText FT_1
+    {
+        Pos = MAP_APPFONT ( 55 , 69 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~1" ;
+        Left = TRUE ;
+        Center = TRUE ;
+        Right = TRUE ;
+    };
+    FixedText FT_2
+    {
+        Pos = MAP_APPFONT ( 90 , 69 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~2" ;
+        Left = TRUE ;
+        Right = TRUE ;
+    };
+    FixedText FT_3
+    {
+        Pos = MAP_APPFONT ( 125 , 69 ) ;
+        Size = MAP_APPFONT ( 9 , 8 ) ;
+        Text = "~3" ;
+        Left = TRUE ;
+        Right = TRUE ;
+    };
+    MetricField ED_1
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 40 , 84 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    MetricField ED_2
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 84 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    MetricField ED_3
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 120 , 84 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    MetricField ED_DIST1
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 101 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    MetricField ED_DIST2
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 100 , 101 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 10 ;
+        Last = 5600 ;
+        SpinSize = 10 ;
+    };
+    GroupBox GB_LAYOUT
+    {
+        Pos = MAP_APPFONT ( 6 , 59 ) ;
+        Size = MAP_APPFONT ( 157 , 70 ) ;
+        Text = "Spaltenbreite" ;
+        Text [ ENGLISH ] = "Column width" ;
+        Text [ norwegian ] = "Bredde pÂ kolonne " ;
+        Text [ italian ] = "Larghezza colonna" ;
+        Text [ portuguese_brazilian ] = "Largura da coluna" ;
+        Text [ portuguese ] = "Largura da coluna" ;
+        Text [ finnish ] = "Sarakeleveys" ;
+        Text [ danish ] = "Kolonnebredde" ;
+        Text [ french ] = "Largeur des colonnes" ;
+        Text [ swedish ] = "Kolumnbredd" ;
+        Text [ dutch ] = "Kolombreedte" ;
+        Text [ spanish ] = "Ancho de columna" ;
+        Text [ english_us ] = "Column width" ;
+        Text[ chinese_simplified ] = "¿∏øÌ";
+        Text[ russian ] = "ÿËËÌ‡ ÍÓÎÓÌÓÍ";
+        Text[ polish ] = "Szer. kolumny";
+        Text[ japanese ] = "íiÇÃïù";
+        Text[ chinese_traditional ] = "ƒÊºe";
+        Text[ arabic ] = "⁄—÷ «·√⁄„œ…";
+        Text[ dutch ] = "Kolombreedte";
+        Text[ chinese_simplified ] = "¿∏øÌ";
+        Text[ greek ] = "–Î‹ÙÔÚ ÛÙﬁÎÁÚ";
+        Text[ korean ] = "ø≠ ≥ ∫Ò";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "S¸tun geni˛lii";
+    };
+    GroupBox GB_BSP
+    {
+        Pos = MAP_APPFONT ( 171 , 3 ) ;
+        Size = MAP_APPFONT ( 83 , 46 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Example" ;
+        Text [ norwegian ] = "Eksempel" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "Exemplo" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ finnish ] = "Malli" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "AperÁu" ;
+        Text [ swedish ] = "Fˆrhandsvisning" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ spanish ] = "PrevisualizaciÛn" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "Podglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "«·„⁄«Ì‰…";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ∫∏±‚";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "÷nizleme";
+    };
+    Window WN_BSP
+    {
+        Pos = MAP_APPFONT ( 176 , 12 ) ;
+        Size = MAP_APPFONT ( 72 , 31 ) ;
+    };
+    Text[ chinese_simplified ] = "¿∏";
+    Text[ russian ] = " ÓÎÓÌÍË";
+    Text[ polish ] = "Kolumny";
+    Text[ japanese ] = "íiëgÇ›";
+    Text[ chinese_traditional ] = "ƒÊ";
+    Text[ arabic ] = "«·√⁄„œ…";
+    Text[ dutch ] = "Kolommen";
+    Text[ chinese_simplified ] = "¿∏";
+    Text[ greek ] = "”ÙﬁÎÂÚ";
+    Text[ korean ] = "ø≠";
+    Text[ language_user1 ] = " ";
+    Text[ turkish ] = "S¸tun";
+};
+
+ModalDialog DLG_COLUMN
+{
+    HelpID = HID_FORMAT_COLUMN;
+    Hide = TRUE;
+    Moveable = TRUE;
+    Size = MAP_APPFONT ( 316 , 135 ) ;
+    Text = "Spalten" ;
+    Text [ ENGLISH ] = "Columns" ;
+    OKButton PB_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 260 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 260 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 260 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_APPLY_TO
+    {
+        Pos = MAP_APPFONT ( 260 , 60 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Anwenden auf:" ;
+        Text [ English ] = "~Apply to:" ;
+        Left = TRUE ;
+        Text[ english_us ] = "~Apply to:";
+        Text[ portuguese ] = "~Aplicar a:";
+        Text[ greek ] = "≈ˆ~·ÒÏÔ„ﬁ ÛÂ:";
+        Text[ dutch ] = "~Toepassen op:";
+        Text[ french ] = "~Appliquer ‡ :";
+        Text[ spanish ] = "~Aplicar a:";
+        Text[ swedish ] = "~Anv‰nd pÂ:";
+        Text[ russian ] = "œËÏÂÌËÚ¸ Í:";
+        Text[ italian ] = "~Applica a:";
+        Text[ danish ] = "Anvend pÂ:";
+        Text[ polish ] = "Zastosuj w";
+        Text[ portuguese_brazilian ] = "~Apply to:";
+        Text[ japanese ] = "ê›íËëŒè€:(~A)";
+        Text[ korean ] = "¿˚øÎ:(~A)";
+        Text[ chinese_simplified ] = "‘À”√‘⁄£∫(~A)";
+        Text[ chinese_traditional ] = "ÆM•Œ®Ï°G(~A)";
+        Text[ arabic ] = " ÿ»Ìﬁ ⁄·Ï:";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "~Uygulanaca˝ yer:";
+    };
+    ListBox LB_APPLY_TO
+    {
+        Pos = MAP_APPFONT ( 260 , 75 ) ;
+        Size = MAP_APPFONT ( 50 , 66 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Selektion" ;             LISTBOX_SELECTION; > ;
+            < "Aktuellen Bereich" ;     LISTBOX_SECTION     ; > ;
+            < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
+            < "Rahmen" ;                LISTBOX_FRAME       ; > ;
+            < "Seitenvorlage: " ;       LISTBOX_PAGE        ; > ;
+        };
+        StringList [ENGLISH]=
+        {
+            < "Selection" ;             LISTBOX_SELECTION; > ;
+            < "Current section" ;       LISTBOX_SECTION     ; > ;
+            < "Selected section" ;      LISTBOX_SECTIONS    ; > ;
+            < "Text Frame" ;            LISTBOX_FRAME       ; > ;
+            < "Page style: " ;          LISTBOX_PAGE        ; > ;
+        };
+    StringList [ language_user1 ] =
+    {
+            < "Selektion" ;             LISTBOX_SELECTION; > ;
+        < " " ;     LISTBOX_SECTION     ; > ;
+        < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
+        < "Rahmen" ;                LISTBOX_FRAME       ; > ;
+        < "Seitenvorlage:" ;        LISTBOX_PAGE        ; > ;
+    };
+    StringList [ english_us ] =
+    {
+            < "Selection" ;             LISTBOX_SELECTION; > ;
+        < "Current Section" ;   LISTBOX_SECTION     ; > ;
+        < "Selected section" ;  LISTBOX_SECTIONS    ; > ;
+        < "Frame" ;                 LISTBOX_FRAME       ; > ;
+        < "Page Style: " ;          LISTBOX_PAGE        ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "SelecÁ„o" ;              LISTBOX_SELECTION; > ;
+        < "SecÁ„o activa" ;     LISTBOX_SECTION     ; > ;
+        < "SecÁıes seleccionadas" ;  LISTBOX_SECTIONS   ; > ;
+        < "Moldura" ;               LISTBOX_FRAME       ; > ;
+        < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "≈ÈÎÔ„ﬁ" ;           LISTBOX_SELECTION; > ;
+        < "‘Ò›˜˘Ì ÂÒÈÔ˜ﬁ" ;    LISTBOX_SECTION     ; > ;
+        < "≈ÈÎÂ„Ï›ÌÂÚ ÂÒÈÔ˜›Ú" ;  LISTBOX_SECTIONS    ; > ;
+        < "–ÂÒﬂ„Ò·ÏÏ·" ;                LISTBOX_FRAME       ; > ;
+        < "–Ò¸ÙıÔ ÛÂÎﬂ‰·Ú: " ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Selectie" ;              LISTBOX_SELECTION; > ;
+        < "Actueel bereik" ;    LISTBOX_SECTION     ; > ;
+        < "Geselecteerd bereik" ;  LISTBOX_SECTIONS ; > ;
+        < "Kader" ;                 LISTBOX_FRAME       ; > ;
+        < "Pagina-opmaakprofiel:  " ;       LISTBOX_PAGE        ; > ;
+    };
+    StringList [ french ] =
+    {
+            < "SÈlection" ;             LISTBOX_SELECTION; > ;
+        < "Section active" ;    LISTBOX_SECTION     ; > ;
+        < "Sections sÈlectionnÈes" ;  LISTBOX_SECTIONS  ; > ;
+        < "Cadre" ;                 LISTBOX_FRAME       ; > ;
+        < "Style de page :  " ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "SelecciÛn" ;             LISTBOX_SELECTION; > ;
+        < "¡rea actual" ;   LISTBOX_SECTION     ; > ;
+        < "¡reas seleccionadas" ;  LISTBOX_SECTIONS ; > ;
+        < "Marco" ;                 LISTBOX_FRAME       ; > ;
+        < "Estilo de p·gina: " ;        LISTBOX_PAGE        ; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "Markering" ;             LISTBOX_SELECTION; > ;
+        < "Aktuellt omrÂde" ;   LISTBOX_SECTION     ; > ;
+        < "Markerade omrÂden" ;  LISTBOX_SECTIONS   ; > ;
+        < "Ram" ;               LISTBOX_FRAME       ; > ;
+        < "Sidformatmall:  " ;          LISTBOX_PAGE        ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "¬˚‰ÂÎÂÌË˛" ;             LISTBOX_SELECTION; > ;
+        < "“ÂÍÛ˘ÂÈ Ó·Î‡ÒÚË" ;   LISTBOX_SECTION     ; > ;
+        < "¬˚‰ÂÎÂÌÌÓÈ Ó·Î‡ÒÚË" ;  LISTBOX_SECTIONS  ; > ;
+        < "–‡ÏÍÂ" ;                 LISTBOX_FRAME       ; > ;
+        < "—ÚËÎ˛ ÒÚ‡ÌËˆ˚:  " ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "Selezione" ;             LISTBOX_SELECTION; > ;
+        < "Sezione corrente" ;      LISTBOX_SECTION     ; > ;
+        < "Aree contrassegnate" ;  LISTBOX_SECTIONS ; > ;
+        < "Cornice" ;               LISTBOX_FRAME       ; > ;
+        < "Modello di pagina: " ;       LISTBOX_PAGE        ; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "Markering" ;             LISTBOX_SELECTION; > ;
+        < "Aktuelt omrÂde" ;    LISTBOX_SECTION     ; > ;
+        < "Markeret omrÂde" ;  LISTBOX_SECTIONS ; > ;
+        < "Ramme" ;                 LISTBOX_FRAME       ; > ;
+        < "Sidetypografi: " ;       LISTBOX_PAGE        ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Selekcja" ;              LISTBOX_SELECTION; > ;
+        < "Aktualny obszar" ;   LISTBOX_SECTION     ; > ;
+        < "Zaznaczone obszary" ;  LISTBOX_SECTIONS  ; > ;
+        < "Ramka" ;                 LISTBOX_FRAME       ; > ;
+        < "Styl strony: " ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "Selektion" ;             LISTBOX_SELECTION; > ;
+        < "Aktuellen Bereich" ;     LISTBOX_SECTION     ; > ;
+        < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
+        < "Rahmen" ;                LISTBOX_FRAME       ; > ;
+        < "Seitenvorlage: " ;       LISTBOX_PAGE        ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "ëIëîÕàÕ" ;              LISTBOX_SELECTION; > ;
+        < "åªç›ÇÃîÕàÕ" ;    LISTBOX_SECTION     ; > ;
+        < "ëIëîÕàÕ" ;  LISTBOX_SECTIONS    ; > ;
+        < "äOòg" ;                  LISTBOX_FRAME       ; > ;
+        < "Õﬂ∞ºﬁΩ¿≤Ÿ: " ;       LISTBOX_PAGE        ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "º±≈√" ;              LISTBOX_SELECTION; > ;
+        < "«ˆ¿Á º±≈√" ;     LISTBOX_SECTION     ; > ;
+        < "º±≈√µ» ±∏ø™" ;  LISTBOX_SECTIONS ; > ;
+        < "«¡∑π¿”" ;                LISTBOX_FRAME       ; > ;
+        < "∆‰¿Ã¡ˆ º≥¡§: " ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "—°÷–" ;              LISTBOX_SELECTION; > ;
+        < "µ±«∞µƒ«¯”Ú" ;    LISTBOX_SECTION     ; > ;
+        < "—°÷–µƒ«¯”Ú" ;  LISTBOX_SECTIONS  ; > ;
+        < "øÚ" ;                LISTBOX_FRAME       ; > ;
+        < "“≥√Ê—˘ Ω£∫ " ;       LISTBOX_PAGE        ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "øÔæ‹" ;              LISTBOX_SELECTION; > ;
+        < "∑Ì´e™∫∞œ∞Ï" ;    LISTBOX_SECTION     ; > ;
+        < "øÔæ‹™∫∞œ∞Ï" ;  LISTBOX_SECTIONS  ; > ;
+        < "Æÿ" ;                LISTBOX_FRAME       ; > ;
+        < "≠∂≠±ºÀ¶°°G " ;       LISTBOX_PAGE        ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "«· ÕœÌœ" ;           LISTBOX_SELECTION; > ;
+        < "«·‰ÿ«ﬁ «·Õ«·Ì" ;     LISTBOX_SECTION     ; > ;
+        < "«·‰ÿ«ﬁ«  «·„Õœœ…" ;  LISTBOX_SECTIONS    ; > ;
+        < "«·≈ÿ«—" ;                LISTBOX_FRAME       ; > ;
+        < "ﬁ«·» «·’›Õ…: " ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "SeÁim" ;             LISTBOX_SELECTION; > ;
+        < "Y¸r¸rl¸kteki bˆl¸m" ;    LISTBOX_SECTION     ; > ;
+        < "SeÁilen bˆl¸m" ;  LISTBOX_SECTIONS   ; > ;
+        < "«erÁeve" ;               LISTBOX_FRAME       ; > ;
+        < "Sayfa biÁimi: " ;        LISTBOX_PAGE        ; > ;
+    };
+    };
+    Text[ english_us ] = "Columns";
+    Text[ portuguese ] = "Colunas";
+    Text[ greek ] = "”ÙﬁÎÂÚ";
+    Text[ dutch ] = "Kolommen";
+    Text[ french ] = "Colonnes";
+    Text[ spanish ] = "Columnas";
+    Text[ swedish ] = "Kolumner";
+    Text[ russian ] = " ÓÎÓÌÍË";
+    Text[ italian ] = "Colonne";
+    Text[ danish ] = "Kolonner";
+    Text[ polish ] = "Kolumny";
+    Text[ portuguese_brazilian ] = "Columns";
+    Text[ japanese ] = "íiëgÇ›";
+    Text[ korean ] = "ø≠";
+    Text[ chinese_simplified ] = "¿∏";
+    Text[ chinese_traditional ] = "ƒÊ";
+    Text[ arabic ] = "√⁄„œ…";
+    Text[ language_user1 ] = " ";
+    Text[ turkish ] = "S¸tun";
+};

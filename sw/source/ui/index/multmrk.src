@@ -1,0 +1,217 @@
+/*************************************************************************
+ *
+ *  $RCSfile: multmrk.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "index.hrc"
+#include "multmrk.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_MULTMRK
+{
+    HelpID = FN_EDIT_IDX_ENTRY_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 95 ) ;
+    Text = "Verzeichnismarkierungen" ;
+    Text [ English ] = "Index marks" ;
+    Text [ norwegian ] = "Stikkordregistermerker" ;
+    Text [ italian ] = "Contrassegni indice" ;
+    Text [ portuguese_brazilian ] = "Marcas do índice" ;
+    Text [ portuguese ] = "Marcas do índice" ;
+    Text [ finnish ] = "Hakemistomerkinnät" ;
+    Text [ danish ] = "Indeksmarkeringer" ;
+    Text [ french ] = "Marques d'index" ;
+    Text [ swedish ] = "Förteckningsmarkeringar" ;
+    Text [ dutch ] = "Indexmarkeringen" ;
+    Text [ spanish ] = "Marcas del índice" ;
+    Text [ english_us ] = "Index Markings" ;
+    Moveable = TRUE ;
+    FixedText FT_ENTRY
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text = "Verzeichnis" ;
+        Text [ English ] = "Index" ;
+        Text [ norwegian ] = "Stikkordregister" ;
+        Text [ italian ] = "Indice" ;
+        Text [ portuguese_brazilian ] = "Índice" ;
+        Text [ portuguese ] = "Índice" ;
+        Text [ finnish ] = "Hakemisto" ;
+        Text [ danish ] = "Indeks" ;
+        Text [ french ] = "Index" ;
+        Text [ swedish ] = "Förteckning" ;
+        Text [ dutch ] = "Index" ;
+        Text [ spanish ] = "Índice" ;
+        Text [ english_us ] = "Index" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "Ä¿Â¼";
+        Text[ russian ] = "Óêàçàòåëü";
+        Text[ polish ] = "Indeks";
+        Text[ japanese ] = "õˆø";
+        Text[ chinese_traditional ] = "¥Ø¿ı";
+        Text[ arabic ] = "ÇáİåÑÓ";
+        Text[ dutch ] = "Index";
+        Text[ chinese_simplified ] = "Ä¿Â¼";
+        Text[ greek ] = "ÅõñåôŞñéï";
+        Text[ korean ] = "»öÀÎ";
+        Text[ turkish ] = "Dizin";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 53 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_TOX
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 41 , 8 ) ;
+        Text = "Eintrag" ;
+        Text [ English ] = "Entry" ;
+        Text [ norwegian ] = "Inngang" ;
+        Text [ italian ] = "Voce" ;
+        Text [ portuguese_brazilian ] = "Entrada" ;
+        Text [ portuguese ] = "Entrada" ;
+        Text [ finnish ] = "Merkintä" ;
+        Text [ danish ] = "Element" ;
+        Text [ french ] = "Entrée" ;
+        Text [ swedish ] = "Post" ;
+        Text [ dutch ] = "Item" ;
+        Text [ spanish ] = "Entrada" ;
+        Text [ english_us ] = "Entry" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "ÌõÄ¿";
+        Text[ russian ] = "İëåìåíò";
+        Text[ polish ] = "Wpis";
+        Text[ japanese ] = "€–Ú";
+        Text[ chinese_traditional ] = "¶µ¥Ø";
+        Text[ arabic ] = "ÇáÅÏÎÇá";
+        Text[ dutch ] = "Item";
+        Text[ chinese_simplified ] = "ÌõÄ¿";
+        Text[ greek ] = "Êáôá÷şñéóç";
+        Text[ korean ] = "Ç×¸ñ";
+        Text[ turkish ] = "Giriş";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton OK_BT
+    {
+        Pos = MAP_APPFONT ( 165 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton CANCEL_BT
+    {
+        Pos = MAP_APPFONT ( 165 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox LB_TOX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 53 , 28 ) ;
+        Size = MAP_APPFONT ( 100 , 52 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    GroupBox GB_TOX
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 153 , 85 ) ;
+        Text = "Auswahl" ;
+        Text [ English ] = "Choice" ;
+        Text [ norwegian ] = "Choice" ;
+        Text [ italian ] = "Scelta" ;
+        Text [ portuguese_brazilian ] = "Escolha" ;
+        Text [ portuguese ] = "Opções" ;
+        Text [ finnish ] = "Määritykset" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ french ] = "Sélection" ;
+        Text [ swedish ] = "Urval" ;
+        Text [ dutch ] = "Selectie" ;
+        Text [ spanish ] = "Opción" ;
+        Text [ english_us ] = "Selection" ;
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ russian ] = "Îòáîğ";
+        Text[ polish ] = "Wybór";
+        Text[ japanese ] = "‘I‘ğ";
+        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ arabic ] = "ÊÍÏíÏ";
+        Text[ dutch ] = "Selectie";
+        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ turkish ] = "Seçim";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç";
+    Text[ russian ] = "Âûäåëåíèÿ óêàçàòåëÿ";
+    Text[ polish ] = "Znaczniki indeksu";
+    Text[ japanese ] = "õˆø‘I‘ğ€–Ú";
+    Text[ chinese_traditional ] = "¯Á¤Ş¿ï¨ú";
+    Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
+    Text[ dutch ] = "Indexmarkeringen";
+    Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç";
+    Text[ greek ] = "ÓçìÜíóåéò åõñåôçñßïõ";
+    Text[ korean ] = "»öÀÎ Ç¥½Ã";
+    Text[ turkish ] = "Dizin için işaretlenen girişler";
+    Text[ language_user1 ] = " ";
+};

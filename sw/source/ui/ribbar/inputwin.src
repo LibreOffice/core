@@ -1,0 +1,1137 @@
+/*************************************************************************
+ *
+ *  $RCSfile: inputwin.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/* HelpID ressource file */
+/* HelpID ressource file */
+
+#include "cmdid.h"
+#include "helpid.h"
+#include "globals.hrc"
+#include "ribbar.hrc"
+#include "inputwin.hrc"
+ToolBox RID_TBX_FORMULA
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 600 , 14 ) ;
+    HelpID = HID_CALC_TOOLBOX ;
+    SVLook = TRUE ;
+    Border = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = FN_FORMULA_CALC ;
+            HelpID = FN_FORMULA_CALC ;
+            DropDown = TRUE ;
+            Text = "Formel" ;
+            Text [ English ] = "Formula" ;
+            Text [ norwegian ] = "Formel" ;
+            Text [ italian ] = "Formula" ;
+            Text [ portuguese_brazilian ] = "Fórmula" ;
+            Text [ portuguese ] = "Fórmula" ;
+            Text [ finnish ] = "Kaava" ;
+            Text [ danish ] = "Formel" ;
+            Text [ french ] = "Formule" ;
+            Text [ swedish ] = "Formel" ;
+            Text [ dutch ] = "Formule" ;
+            Text [ spanish ] = "Fórmula" ;
+            Text [ english_us ] = "Formula" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Formel auswählen : Formel auswõhlen */
+            Text[ chinese_simplified ] = "¹«Ê½";
+            Text[ russian ] = "Ôîğìóëà";
+            Text[ polish ] = "Formu³a";
+            Text[ japanese ] = "”®";
+            Text[ chinese_traditional ] = "¤½¦¡";
+            Text[ arabic ] = "ÕíÛÉ";
+            Text[ dutch ] = "Formule";
+            Text[ chinese_simplified ] = "¹«Ê½";
+            Text[ greek ] = "Ôığïò";
+            Text[ korean ] = "¼ö½Ä";
+            Text[ turkish ] = "Formül";
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FORMULA_CANCEL ;
+            HelpID = FN_FORMULA_CANCEL ;
+            Text = "Abbrechen" ;
+            Text [ English ] = "Cancel" ;
+            Text [ norwegian ] = "Avbryt" ;
+            Text [ italian ] = "Annulla" ;
+            Text [ portuguese_brazilian ] = "Cancelar" ;
+            Text [ portuguese ] = "Cancelar" ;
+            Text [ finnish ] = "Peruuta" ;
+            Text [ danish ] = "Annuller" ;
+            Text [ french ] = "Annuler" ;
+            Text [ swedish ] = "Avbryt" ;
+            Text [ dutch ] = "Annuleren" ;
+            Text [ spanish ] = "Cancelar" ;
+            Text [ english_us ] = "Cancel" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Formel nicht übenehmen : Formel nicht ³benehmen */
+            Text[ chinese_simplified ] = "È¡Ïû";
+            Text[ russian ] = "Îòìåíà";
+            Text[ polish ] = "Anuluj";
+            Text[ japanese ] = "·¬İ¾Ù";
+            Text[ chinese_traditional ] = "¨ú®ø";
+            Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+            Text[ dutch ] = "Annuleren";
+            Text[ chinese_simplified ] = "È¡Ïû";
+            Text[ greek ] = "Áêıñùóç";
+            Text[ korean ] = "Ãë¼Ò";
+            Text[ turkish ] = "İptal";
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FORMULA_APPLY ;
+            HelpID = FN_FORMULA_APPLY ;
+            /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
+            Text = "Übernehmen" ;
+            Text [ English ] = "Apply" ;
+            Text [ norwegian ] = "Benytt" ;
+            Text [ italian ] = "Applica" ;
+            Text [ portuguese_brazilian ] = "Aplicar" ;
+            Text [ portuguese ] = "Aplicar" ;
+            Text [ finnish ] = "Käytä" ;
+            Text [ danish ] = "Anvend" ;
+            Text [ french ] = "Appliquer" ;
+            Text [ swedish ] = "Överta" ;
+            Text [ dutch ] = "Overnemen" ;
+            Text [ spanish ] = "Aplicar" ;
+            Text [ english_us ] = "Apply" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */
+            Text[ chinese_simplified ] = "Ê¹ÓÃ";
+            Text[ russian ] = "Âûïîëíèòü";
+            Text[ polish ] = "Zastosuj";
+            Text[ japanese ] = "“K—p‚·‚é";
+            Text[ chinese_traditional ] = "¨Ï¥Î";
+            Text[ arabic ] = "ÅÏÎÇá";
+            Text[ dutch ] = "Overnemen";
+            Text[ chinese_simplified ] = "Ê¹ÓÃ";
+            Text[ greek ] = "ÅöáñìïãŞ";
+            Text[ korean ] = "Àû¿ë";
+            Text[ turkish ] = "Uygula";
+        };
+    };
+    Edit ED_POS
+    {
+        Border = TRUE ;
+        Size = MAP_APPFONT ( 45 , 11 ) ;
+        ReadOnly = TRUE ;
+        SVLook = TRUE ;
+        Center = TRUE ;
+    };
+    Edit ED_FORMULA
+    {
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Size = MAP_APPFONT ( 500 , 11 ) ;
+        SVLook = TRUE ;
+    };
+};
+Menu MN_CALC_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_CALC_SUM ;
+            HelpID = HID_MN_CALC_SUM ;
+            Text = "~Summe" ;
+            Text [ English ] = "~Sum" ;
+            Text [ dutch ] = "~Soml" ;
+            Text [ spanish ] = "~Suma" ;
+            Text [ english_us ] = "Sum" ;
+            Text [ norwegian ] = "~Sum" ;
+            Text [ italian ] = "~Somma" ;
+            Text [ portuguese_brazilian ] = "~Somatório" ;
+            Text [ portuguese ] = "~Soma" ;
+            Text [ finnish ] = "~Summa" ;
+            Text [ danish ] = "Sum" ;
+            Text [ french ] = "~Somme" ;
+            Text [ swedish ] = "~Summa" ;
+            Text[ chinese_simplified ] = "×Ü¼Æ";
+            Text[ russian ] = "Ñóììà";
+            Text[ polish ] = "Suma";
+            Text[ japanese ] = "‡Œv";
+            Text[ chinese_traditional ] = "¤p­p";
+            Text[ arabic ] = "ÇáãÌãæÚ";
+            Text[ dutch ] = "~Soml";
+            Text[ chinese_simplified ] = "×Ü¼Æ";
+            Text[ greek ] = "¢èñïé~óìá";
+            Text[ korean ] = "ÇÕ°è";
+            Text[ turkish ] = "Toplam";
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_ROUND ;
+            HelpID = HID_MN_CALC_ROUND ;
+            Text = "Run~den" ;
+            Text [ English ] = "Roun~d" ;
+            Text [ english_us ] = "Round" ;
+            Text [ italian ] = "Arroto~nda" ;
+            Text [ spanish ] = "R~edondear" ;
+            Text [ french ] = "A~rrondir" ;
+            Text [ dutch ] = "~Afronden" ;
+            Text [ swedish ] = "~Avrunda" ;
+            Text [ danish ] = "Rund" ;
+            Text [ portuguese ] = "A~rredondar" ;
+            Text [ portuguese_brazilian ] = "Run~den" ;
+            Text[ chinese_simplified ] = "×ª»»³ÉÕûÊı";
+            Text[ russian ] = "Îêğóãëèòü";
+            Text[ polish ] = "Zaokr¹glaj";
+            Text[ japanese ] = "’[”‚ğØ‚èã‚°‚é";
+            Text[ chinese_traditional ] = "Âà´«¦¨¾ã¼Æ";
+            Text[ arabic ] = "ÊŞÑíÈ";
+            Text[ dutch ] = "~Afronden";
+            Text[ chinese_simplified ] = "×ª»»³ÉÕûÊı";
+            Text[ greek ] = "Ó~ôñïããõëïğïßçóç";
+            Text[ korean ] = "¹İ¿Ã¸²";
+            Text[ turkish ] = "Yuvarla";
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_PHD ;
+            HelpID = HID_MN_CALC_PHD ;
+            Text = "~Prozent" ;
+            Text [ English ] = "~Percent" ;
+            Text [ dutch ] = "Pro~cent" ;
+            Text [ spanish ] = "~Porcentaje" ;
+            Text [ english_us ] = "Percent" ;
+            Text [ norwegian ] = "~Prosent" ;
+            Text [ italian ] = "~Percentuale" ;
+            Text [ portuguese_brazilian ] = "~Percentual" ;
+            Text [ portuguese ] = "~Percentagem" ;
+            Text [ finnish ] = "~Prosentti" ;
+            Text [ danish ] = "Procent" ;
+            Text [ french ] = "~Pourcentage" ;
+            Text [ swedish ] = "~Procent" ;
+            Text[ chinese_simplified ] = "°Ù·Ö±È(~P)";
+            Text[ russian ] = "Ïğîöåíòû";
+            Text[ polish ] = "Procent";
+            Text[ japanese ] = "Êß°¾İÄ";
+            Text[ chinese_traditional ] = "¦Ê¤À¤ñ(~P)";
+            Text[ arabic ] = "ÈÇáãÇÆÉ";
+            Text[ dutch ] = "Pro~cent";
+            Text[ chinese_simplified ] = "°Ù·Ö±È(~P)";
+            Text[ greek ] = "~Ğïóïóôü (%)";
+            Text[ korean ] = "¹éºĞÀ²";
+            Text[ turkish ] = "Yüzde";
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_SQRT ;
+            HelpID = HID_MN_CALC_SQRT ;
+            Text = "~Wurzel" ;
+            Text [ English ] = "Square ~Root" ;
+            Text [ dutch ] = "~Vierkantswortel" ;
+            Text [ spanish ] = "~Raíz" ;
+            Text [ english_us ] = "Square Root" ;
+            Text [ norwegian ] = "Kvadrat ~Rot" ;
+            Text [ italian ] = "~Radice" ;
+            Text [ portuguese_brazilian ] = "Raiz ~Quadrada" ;
+            Text [ portuguese ] = "Raíz ~quadrada" ;
+            Text [ finnish ] = "~Neliöjuuri" ;
+            Text [ danish ] = "Kvadratrod" ;
+            Text [ french ] = "~Racine carrée" ;
+            Text [ swedish ] = "~Kvadratrot" ;
+            Text[ chinese_simplified ] = "Æ½·½¸ù(~R)";
+            Text[ russian ] = "Êîğåíü";
+            Text[ polish ] = "Pierwiastek";
+            Text[ japanese ] = "•½•ûª";
+            Text[ chinese_traditional ] = "¥­¤è®Ú(~R)";
+            Text[ arabic ] = "ÌĞÑ";
+            Text[ dutch ] = "~Vierkantswortel";
+            Text[ chinese_simplified ] = "Æ½·½¸ù(~R)";
+            Text[ language_user1 ] = "(ÄÄ) ; - - - - - -";
+            Text[ greek ] = "Ôåôñáã~ùíéêŞ ñßæá";
+            Text[ korean ] = "Á¦°ö±Ù";
+            Text[ turkish ] = "Karekök";
+        };
+        MenuItem
+        {
+            Identifier = MN_CALC_POW ;
+            HelpID = HID_MN_CALC_POW ;
+            Text = "Poten~ziere" ;
+            Text [ English ] = "Po~wer" ;
+            Text [ dutch ] = "~Machtsverheffen" ;
+            Text [ spanish ] = "Po~tenciando" ;
+            Text [ english_us ] = "Power" ;
+            Text [ norwegian ] = "Po~tens" ;
+            Text [ italian ] = "Elevare a potenza" ;
+            Text [ portuguese_brazilian ] = "Po~tência" ;
+            Text [ portuguese ] = "Elevar a po~tência" ;
+            Text [ finnish ] = "Po~tenssi" ;
+            Text [ danish ] = "Opløft i potens" ;
+            Text [ french ] = "Pu~issance" ;
+            Text [ swedish ] = "~Upphöja" ;
+            Text[ chinese_simplified ] = "³ËÃİ(~W)";
+            Text[ russian ] = "Ñòåïåíü";
+            Text[ polish ] = "Potêguj";
+            Text[ japanese ] = "—İæ";
+            Text[ chinese_traditional ] = "­¼¾­(~W)";
+            Text[ arabic ] = "ŞæÉ";
+            Text[ dutch ] = "~Machtsverheffen";
+            Text[ chinese_simplified ] = "³ËÃİ(~W)";
+            Text[ greek ] = "¾ø~ùóç óå äıíáìç";
+            Text[ korean ] = "°ö";
+            Text[ turkish ] = "Kuvvet çıkar";
+        };
+        MenuItem
+        {
+            Identifier = MN_POP_OPS ;
+            HelpID = HID_MN_POP_OPS ;
+            Text = "~Operatoren" ;
+            Text [ ENGLISH ] = "~Operators" ;
+            Text [ dutch ] = "O~peratoren" ;
+            Text [ spanish ] = "~Operadores" ;
+            Text [ english_us ] = "Operators" ;
+            Text [ norwegian ] = "+++~Operators" ;
+            Text [ italian ] = "Operatori" ;
+            Text [ portuguese_brazilian ] = "~Operadores" ;
+            Text [ portuguese ] = "~Operadores" ;
+            Text [ finnish ] = "~Operaattorit" ;
+            Text [ danish ] = "Operatorer" ;
+            Text [ french ] = "~Opérateurs" ;
+            Text [ swedish ] = "~Operatorer" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_LISTSEP ;
+                        HelpID = HID_MN_CALC_LISTSEP ;
+                        Text = "~Listentrenner" ;
+                        Text [ English ] = "Lis~t Separator" ;
+                        Text [ dutch ] = "Lijst~scheidingsteken" ;
+                        Text [ spanish ] = "~Separador de lista" ;
+                        Text [ english_us ] = "List Separator" ;
+                        Text [ norwegian ] = "+++Lis~t Separator" ;
+                        Text [ italian ] = "~Separatore elenco" ;
+                        Text [ portuguese_brazilian ] = "Separador de Lis~ta" ;
+                        Text [ portuguese ] = "Separador de lis~ta" ;
+                        Text [ finnish ] = "~Luettelon erotin" ;
+                        Text [ danish ] = "Listeseparator" ;
+                        Text [ french ] = "Séparateur de lis~te" ;
+                        Text [ swedish ] = "List~avgränsare" ;
+                        Text[ chinese_simplified ] = "ÁĞ±í·Ö¸ô·û(~S)";
+                        Text[ russian ] = "Ğàçäåëèòåëü ñïèñêà";
+                        Text[ polish ] = "Separator list";
+                        Text[ japanese ] = "Ø½Ä‚Ì‹æØ‚è‹L†";
+                        Text[ chinese_traditional ] = "²M³æ¤À¹j²Å(~S)";
+                        Text[ arabic ] = "İÇÕá ÇáŞÇÆãÉ";
+                        Text[ dutch ] = "Lijst~scheidingsteken";
+                        Text[ chinese_simplified ] = "ÁĞ±í·Ö¸ô·û(~S)";
+                        Text[ greek ] = "Äéá÷ùñéóôéêÜ ~ëßóôáò";
+                        Text[ korean ] = "¸ñ·Ï ±¸ºĞÀÚ";
+                        Text[ turkish ] = "~Liste öğeleri ayırıcısı";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_EQ ;
+                        HelpID = HID_MN_CALC_EQ ;
+                        Text = "~Gleich" ;
+                        Text [ English ] = "~Equal" ;
+                        Text [ dutch ] = "~Gelijk aan" ;
+                        Text [ spanish ] = "~Igual" ;
+                        Text [ english_us ] = "Equal" ;
+                        Text [ norwegian ] = "~Lik" ;
+                        Text [ italian ] = "~Uguale" ;
+                        Text [ portuguese_brazilian ] = "~Igual" ;
+                        Text [ portuguese ] = "~Igual" ;
+                        Text [ finnish ] = "~Yhtä suuri kuin" ;
+                        Text [ danish ] = "Lig med" ;
+                        Text [ french ] = "~Égal" ;
+                        Text [ swedish ] = "~Lika med" ;
+                        Text[ chinese_simplified ] = "µÈÓÚ(~E)";
+                        Text[ russian ] = "Ğàâíî";
+                        Text[ polish ] = "Równy";
+                        Text[ japanese ] = "“™‚µ‚¢";
+                        Text[ chinese_traditional ] = "µ¥©ó(~E)";
+                        Text[ arabic ] = "íÓÇæí";
+                        Text[ dutch ] = "~Gelijk aan";
+                        Text[ chinese_simplified ] = "µÈÓÚ(~E)";
+                        Text[ greek ] = "º~óï";
+                        Text[ korean ] = "µ¿ÀÏ";
+                        Text[ turkish ] = "Eşittir";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_NEQ ;
+                        HelpID = HID_MN_CALC_NEQ ;
+                        Text = "~Nicht Gleich" ;
+                        Text [ English ] = "~Not Equal" ;
+                        Text [ dutch ] = "~Niet gelijk aan" ;
+                        Text [ spanish ] = "~No igual" ;
+                        Text [ english_us ] = "Not Equal" ;
+                        Text [ norwegian ] = "~Ulik" ;
+                        Text [ italian ] = "Non uguale" ;
+                        Text [ portuguese_brazilian ] = "~Não Igual" ;
+                        Text [ portuguese ] = "~Desigual" ;
+                        Text [ finnish ] = "~Eri suuri kuin" ;
+                        Text [ danish ] = "Forskellig fra" ;
+                        Text [ french ] = "D~ifférent" ;
+                        Text [ swedish ] = "~Inte lika med" ;
+                        Text[ chinese_simplified ] = "²»µÈÓÚ(~N)";
+                        Text[ russian ] = "Íå ğàâíî";
+                        Text[ polish ] = "Nie równy";
+                        Text[ japanese ] = "“™‚µ‚­‚È‚¢";
+                        Text[ chinese_traditional ] = "¤£µ¥©ó(~N)";
+                        Text[ arabic ] = "áÇ íÓÇæí";
+                        Text[ dutch ] = "~Niet gelijk aan";
+                        Text[ chinese_simplified ] = "²»µÈÓÚ(~N)";
+                        Text[ greek ] = "~ÄéÜöïñï";
+                        Text[ korean ] = "µ¿ÀÏÇÏÁö ¾ÊÀ½";
+                        Text[ turkish ] = "Eşit değil";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_LEQ ;
+                        HelpID = HID_MN_CALC_LEQ ;
+                        Text = "~Kleiner Gleich" ;
+                        Text [ English ] = "Le~ss Equal" ;
+                        Text [ dutch ] = "~Kleiner dan of gelijk aan" ;
+                        Text [ spanish ] = "Me~nor o igual" ;
+                        Text [ english_us ] = "Less Than or Equal" ;
+                        Text [ norwegian ] = "Mind~re enn" ;
+                        Text [ italian ] = "Minore o uguale" ;
+                        Text [ portuguese_brazilian ] = "Me~nor ou Igual" ;
+                        Text [ portuguese ] = "Me~nor ou igual" ;
+                        Text [ finnish ] = "P~ienempi tai yhtä kuin" ;
+                        Text [ danish ] = "Mindre end eller lig med" ;
+                        Text [ french ] = "I~nférieur ou égal à" ;
+                        Text [ swedish ] = "Mi~ndre än eller lika med" ;
+                        Text[ chinese_simplified ] = "Ğ¡ÓÚ»òµÈÓÚ(~Q)";
+                        Text[ russian ] = "Ìåíüøå èëè ğàâíî";
+                        Text[ polish ] = "Mniejszy lub równy";
+                        Text[ japanese ] = "¬‚È‚è²º°Ù";
+                        Text[ chinese_traditional ] = "¤p©ó©Îµ¥©ó(~Q)";
+                        Text[ arabic ] = "ÃÕÛÑ ãä Ãæ íÓÇæí";
+                        Text[ dutch ] = "~Kleiner dan of gelijk aan";
+                        Text[ chinese_simplified ] = "Ğ¡ÓÚ»òµÈÓÚ(~Q)";
+                        Text[ greek ] = "Ìé~êñüôåñï Ş ßóï";
+                        Text[ korean ] = "ÀÌÇÏ";
+                        Text[ turkish ] = "Küçük ya da eşittir";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_GEQ ;
+                        HelpID = HID_MN_CALC_GEQ ;
+                        /* ### ACHTUNG: Neuer Text in Resource? Gr~ößer Gleich : Gr~÷˜er Gleich */
+                        Text = "Gr~ößer Gleich" ;
+                        Text [ English ] = "~Greater Equal" ;
+                        Text [ dutch ] = "G~roter dan of gelijk aan" ;
+                        Text [ spanish ] = "M~ayor o igual" ;
+                        Text [ english_us ] = "Greater Than or Equal" ;
+                        Text [ norwegian ] = "~Større enn" ;
+                        Text [ italian ] = "~Maggiore uguale" ;
+                        Text [ portuguese_brazilian ] = "~Maior ou Igual" ;
+                        Text [ portuguese ] = "M~aior ou igual" ;
+                        Text [ finnish ] = "S~uurempi tai yhtä kuin" ;
+                        Text [ danish ] = "Større end lig med" ;
+                        Text [ french ] = "~Supérieur ou égal" ;
+                        Text [ swedish ] = "St~örre än eller lika med" ;
+                        Text[ chinese_simplified ] = "´óÓÚ»òµÈÓÚ(~G)";
+                        Text[ russian ] = "Áîëüøå èëè ğàâíî";
+                        Text[ polish ] = "Wiêkszy lub równy";
+                        Text[ japanese ] = "‘å‚È‚è²º°Ù";
+                        Text[ chinese_traditional ] = "¤j©ó©Îµ¥©ó(~G)";
+                        Text[ arabic ] = "ÃßÈÑ ãä Ãæ íÓÇæí";
+                        Text[ dutch ] = "G~roter dan of gelijk aan";
+                        Text[ chinese_simplified ] = "´óÓÚ»òµÈÓÚ(~G)";
+                        Text[ greek ] = "Ìå~ãáëıôåñï Ş ßóï";
+                        Text[ korean ] = "ÀÌ»ó";
+                        Text[ turkish ] = "Büyük ya da eşittir";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_LES ;
+                        HelpID = HID_MN_CALC_LES ;
+                        Text = "Kle~iner" ;
+                        Text [ English ] = "~Less" ;
+                        Text [ dutch ] = "K~leiner" ;
+                        Text [ spanish ] = "M~enor" ;
+                        Text [ english_us ] = "Less" ;
+                        Text [ norwegian ] = "~Mindre" ;
+                        Text [ italian ] = "Minore" ;
+                        Text [ portuguese_brazilian ] = "~Menos" ;
+                        Text [ portuguese ] = "~Menor" ;
+                        Text [ finnish ] = "~Pienempi kuin" ;
+                        Text [ danish ] = "Mindre end" ;
+                        Text [ french ] = "In~férieur" ;
+                        Text [ swedish ] = "~Mindre än" ;
+                        Text[ chinese_simplified ] = "Ğ¡ÓÚ(~L)";
+                        Text[ russian ] = "Ìåíüøå";
+                        Text[ polish ] = "Mniejszy";
+                        Text[ japanese ] = "‚æ‚è­‚È‚¢";
+                        Text[ chinese_traditional ] = "¤p©ó(~L)";
+                        Text[ arabic ] = "ÃÕÛÑ";
+                        Text[ dutch ] = "K~leiner";
+                        Text[ chinese_simplified ] = "Ğ¡ÓÚ(~L)";
+                        Text[ greek ] = "Ì~éêñüôåñï";
+                        Text[ korean ] = "¹Ì¸¸";
+                        Text[ turkish ] = "Küçüktür";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_GRE ;
+                        HelpID = HID_MN_CALC_GRE ;
+                        /* ### ACHTUNG: Neuer Text in Resource? G~rößer : G~r÷˜er */
+                        Text = "G~rößer" ;
+                        Text [ English ] = "G~reater" ;
+                        Text [ dutch ] = "Gro~ter" ;
+                        Text [ spanish ] = "~Mayor" ;
+                        Text [ english_us ] = "Greater" ;
+                        Text [ norwegian ] = "S~tørre" ;
+                        Text [ italian ] = "Maggiore" ;
+                        Text [ portuguese_brazilian ] = "M~aior" ;
+                        Text [ portuguese ] = "M~aior" ;
+                        Text [ finnish ] = "~Suurempi kuin" ;
+                        Text [ danish ] = "Større end" ;
+                        Text [ french ] = "S~upérieur" ;
+                        Text [ swedish ] = "~Större än" ;
+                        Text[ chinese_simplified ] = "´óÓÚ(~R)";
+                        Text[ russian ] = "Áîëüøå";
+                        Text[ polish ] = "Wiêkszy";
+                        Text[ japanese ] = "‚æ‚è‘å‚«‚¢";
+                        Text[ chinese_traditional ] = "¤j©ó(~R)";
+                        Text[ arabic ] = "ÃßÈÑ";
+                        Text[ dutch ] = "Gro~ter";
+                        Text[ chinese_simplified ] = "´óÓÚ(~R)";
+                        Text[ greek ] = "Ìåãáëıôå~ñï";
+                        Text[ korean ] = "ÃÊ°ú";
+                        Text[ turkish ] = "Büyüktür";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_OR ;
+                        HelpID = HID_MN_CALC_OR ;
+                        Text = "Logisches ~Oder" ;
+                        Text [ English ] = "Logical ~Or" ;
+                        Text [ dutch ] = "Logisch ~Of" ;
+                        Text [ spanish ] = "~O lógico" ;
+                        Text [ english_us ] = "Boolean Or" ;
+                        Text [ norwegian ] = "Logisk ~Eller" ;
+                        Text [ italian ] = "Logica ~O" ;
+                        Text [ portuguese_brazilian ] = "Ou lógico ~" ;
+                        Text [ portuguese ] = "~OU lógico" ;
+                        Text [ finnish ] = "Looginen ~Or" ;
+                        Text [ danish ] = "Logisk ELLER" ;
+                        Text [ french ] = "~OU logique" ;
+                        Text [ swedish ] = "Logiskt ~Eller" ;
+                        Text[ chinese_simplified ] = "Âß¼­µÄ ~Or";
+                        Text[ russian ] = "Ëîãè÷åñêîå Èëè";
+                        Text[ polish ] = "Funkcja logiczna LUB";
+                        Text[ japanese ] = "˜_—Ï(Or)";
+                        Text[ chinese_traditional ] = "ÅŞ¿èªº ~Or";
+                        Text[ arabic ] = "Ãæ ãäØŞíÉ";
+                        Text[ dutch ] = "Logisch ~Of";
+                        Text[ chinese_simplified ] = "Âß¼­µÄ ~Or";
+                        Text[ greek ] = "ÔåëåóôŞò ~Or ôïõ Boole";
+                        Text[ korean ] = "ºÒ¸®¾ğ Or";
+                        Text[ turkish ] = "Mantıksal Veya";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_XOR ;
+                        HelpID = HID_MN_CALC_XOR ;
+                        Text = "Logisches E~xklusives Oder" ;
+                        Text [ English ] = "Logical ~Xor" ;
+                        Text [ dutch ] = "Logisch e~xclusief Of" ;
+                        Text [ spanish ] = "O lógico e~xclusivo" ;
+                        Text [ english_us ] = "Boolean Xor" ;
+                        Text [ norwegian ] = "Logisk ~Xeller" ;
+                        Text [ italian ] = "Logica O esclusiva" ;
+                        Text [ portuguese_brazilian ] = "Xou lógico" ;
+                        Text [ portuguese ] = "OU lógico e~xclusivo" ;
+                        Text [ finnish ] = "Looginen ~Xor" ;
+                        Text [ danish ] = "Logisk eksklusiv ELLER" ;
+                        Text [ french ] = "Ou logique e~xclusif" ;
+                        Text [ swedish ] = "Logiskt E~xklusivt Eller" ;
+                        Text[ chinese_simplified ] = "Âß¼­µÄ³ıÍâµÄ Or";
+                        Text[ russian ] = "Ëîãè÷åñêîå ğàçäåëèòåëüíîå \"èëè\"";
+                        Text[ polish ] = "Wy³¹czna funkcja logiczna LUB";
+                        Text[ japanese ] = "˜_—˜a(Xor)";
+                        Text[ chinese_traditional ] = "ÅŞ¿èªº°£¥~ªº Or";
+                        Text[ arabic ] = "Ãæ ãäØŞíÉ ÎÇÕÉ";
+                        Text[ dutch ] = "Logisch e~xclusief Of";
+                        Text[ chinese_simplified ] = "Âß¼­µÄ³ıÍâµÄ Or";
+                        Text[ greek ] = "ÔåëåóôŞò ~Xor ôïõ Boole";
+                        Text[ korean ] = "ºÒ¸®¾ğ Xor";
+                        Text[ turkish ] = "Mantıksal ~tek Veya";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_AND ;
+                        HelpID = HID_MN_CALC_AND ;
+                        Text = "Logisches ~Und" ;
+                        Text [ English ] = "Logical ~And" ;
+                        Text [ dutch ] = "Logisch ~En" ;
+                        Text [ spanish ] = "~Y lógico" ;
+                        Text [ english_us ] = "Boolean And" ;
+                        Text [ norwegian ] = "Logisk ~Og" ;
+                        Text [ italian ] = "Logica ~E" ;
+                        Text [ portuguese_brazilian ] = "E ~lógico" ;
+                        Text [ portuguese ] = "~E lógico" ;
+                        Text [ finnish ] = "Looginen ~And" ;
+                        Text [ danish ] = "Logisk OG" ;
+                        Text [ french ] = "~ET logique" ;
+                        Text [ swedish ] = "Logiskt ~Och" ;
+                        Text[ chinese_simplified ] = "Âß¼­µÄ ~And";
+                        Text[ russian ] = "Ëîãè÷åñêîå ~È";
+                        Text[ polish ] = "Funkcja logiczna ORAZ";
+                        Text[ japanese ] = "˜_—Ï(And)";
+                        Text[ chinese_traditional ] = "ÅŞ¿èªº ~And";
+                        Text[ arabic ] = "æ ãäØŞíÉ";
+                        Text[ dutch ] = "Logisch ~En";
+                        Text[ chinese_simplified ] = "Âß¼­µÄ ~And";
+                        Text[ greek ] = "ÔåëåóôŞò ~And ôïõ Boole";
+                        Text[ korean ] = "ºÒ¸®¾ğ And";
+                        Text[ turkish ] = "Mantıksal ~Ve";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_NOT ;
+                        HelpID = HID_MN_CALC_NOT ;
+                        Text = "Logi~sches Nicht" ;
+                        Text [ English ] = "Log~ical Not" ;
+                        Text [ dutch ] = "Log~isch Niet" ;
+                        Text [ spanish ] = "~No lógico" ;
+                        Text [ english_us ] = "Boolean Not" ;
+                        Text [ norwegian ] = "Log~isk Ikke" ;
+                        Text [ italian ] = "Logica Non" ;
+                        Text [ portuguese_brazilian ] = "Não Lóg~ico" ;
+                        Text [ portuguese ] = "~NÃO lógico" ;
+                        Text [ finnish ] = "Looginen ~Not" ;
+                        Text [ danish ] = "Logisk IKKE" ;
+                        Text [ french ] = "NON log~ique" ;
+                        Text [ swedish ] = "Logiskt I~nte" ;
+                        Text[ chinese_simplified ] = "Âß¼­µÄ Not";
+                        Text[ russian ] = "Ëîãè÷åñêîå Íå";
+                        Text[ polish ] = "Funkcja logiczna NIE";
+                        Text[ japanese ] = "˜_—”Û’è(Not)";
+                        Text[ chinese_traditional ] = "ÅŞ¿èªº Not";
+                        Text[ arabic ] = "áÇ ãäØŞíÉ";
+                        Text[ dutch ] = "Log~isch Niet";
+                        Text[ chinese_simplified ] = "Âß¼­µÄ Not";
+                        Text[ greek ] = "Ôåëå~óôŞò Not ôïõ Boole";
+                        Text[ korean ] = "ºÒ¸®¾ğ Not";
+                        Text[ turkish ] = "Matık~al Değil";
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "ÔËËã·û(~O)";
+            Text[ russian ] = "Îïåğàòîğû";
+            Text[ polish ] = "Operatory";
+            Text[ japanese ] = "‰‰Zq";
+            Text[ chinese_traditional ] = "¹Bºâ²Å(~O)";
+            Text[ arabic ] = "ÚæÇãá ÇáÊÔÛíá";
+            Text[ dutch ] = "O~peratoren";
+            Text[ chinese_simplified ] = "ÔËËã·û(~O)";
+            Text[ greek ] = "~Ôåëåóôİò";
+            Text[ korean ] = "¿¬»êÀÚ";
+            Text[ turkish ] = "İşleçler";
+        };
+        MenuItem
+        {
+            Identifier = MN_POP_STATISTICS ;
+            HelpID = HID_MN_POP_STATISTICS ;
+            Text = "S~tatistische Funktionen" ;
+            Text [ ENGLISH ] = "S~tatistical Functions" ;
+            Text [ dutch ] = "~Statistische functies" ;
+            Text [ spanish ] = "F~unciones estadísticas" ;
+            Text [ english_us ] = "Statistical Functions" ;
+            Text [ norwegian ] = "S~tatistiske Funksjoner" ;
+            Text [ italian ] = "Funzioni statistiche" ;
+            Text [ portuguese_brazilian ] = "Funç~oes Estatísticas" ;
+            Text [ portuguese ] = "Funções e~statísticas" ;
+            Text [ finnish ] = "~Tilastofunktiot" ;
+            Text [ danish ] = "Statistiske funktioner" ;
+            Text [ french ] = "Fonctions s~tatistiques" ;
+            Text [ swedish ] = "S~tatistiska funktioner" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_MEAN ;
+                        HelpID = HID_MN_CALC_MEAN ;
+                        Text = "~Mittelwert" ;
+                        Text [ English ] = "Average" ;
+                        Text [ dutch ] = "~Gemiddelde waarde" ;
+                        Text [ spanish ] = "Pro~medio" ;
+                        Text [ english_us ] = "Mean" ;
+                        Text [ norwegian ] = "Gjennomsnitt" ;
+                        Text [ italian ] = "Valore medio" ;
+                        Text [ portuguese_brazilian ] = "Média" ;
+                        Text [ portuguese ] = "~Média" ;
+                        Text [ finnish ] = "Keskiarvo" ;
+                        Text [ danish ] = "Middel" ;
+                        Text [ french ] = "~Moyenne" ;
+                        Text [ swedish ] = "M~edelvärde" ;
+                        Text[ chinese_simplified ] = "Æ½¾ùÖµ(~M)";
+                        Text[ russian ] = "Ñğåäíåå çíà÷åíèå";
+                        Text[ polish ] = "Œrednia wartoœæ";
+                        Text[ japanese ] = "•½‹Ï’l";
+                        Text[ chinese_traditional ] = "¥­§¡­È(~M)";
+                        Text[ arabic ] = "ÇáãÚÏá";
+                        Text[ dutch ] = "~Gemiddelde waarde";
+                        Text[ chinese_simplified ] = "Æ½¾ùÖµ(~M)";
+                        Text[ greek ] = "~Ìİóç ôéìŞ";
+                        Text[ korean ] = "Æò±Õ";
+                        Text[ turkish ] = "Ortalama değer";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_MIN ;
+                        HelpID = HID_MN_CALC_MIN ;
+                        Text = "Mi~nimalwert" ;
+                        Text [ English ] = "Minimum" ;
+                        Text [ dutch ] = "M~inimumwaarde" ;
+                        Text [ spanish ] = "Valor mí~nimo" ;
+                        Text [ english_us ] = "Minimum" ;
+                        Text [ norwegian ] = "Minimum" ;
+                        Text [ italian ] = "Valore minimo" ;
+                        Text [ portuguese_brazilian ] = "Mínimo" ;
+                        Text [ portuguese ] = "Valor mí~nimo" ;
+                        Text [ finnish ] = "Vähintään" ;
+                        Text [ danish ] = "Minimumværdi" ;
+                        Text [ french ] = "~Minimum" ;
+                        Text [ swedish ] = "M~inimum" ;
+                        Text[ chinese_simplified ] = "×îĞ¡Öµ(~N)";
+                        Text[ russian ] = "Ìèíèìàëüíîå çíà÷åíèå";
+                        Text[ polish ] = "Minimum";
+                        Text[ japanese ] = "Å¬’l";
+                        Text[ chinese_traditional ] = "³Ì¤p­È(~N)";
+                        Text[ arabic ] = "ÃÏäì ŞíãÉ";
+                        Text[ dutch ] = "M~inimumwaarde";
+                        Text[ chinese_simplified ] = "×îĞ¡Öµ(~N)";
+                        Text[ greek ] = "ÅëÜ÷éóôç ôé~ìŞ";
+                        Text[ korean ] = "ÃÖ¼Ò";
+                        Text[ turkish ] = "Asgari değer";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_MAX ;
+                        HelpID = HID_MN_CALC_MAX ;
+                        Text = "Ma~ximalwert" ;
+                        Text [ English ] = "Maximum" ;
+                        Text [ dutch ] = "~Maximumwaarde" ;
+                        Text [ spanish ] = "Valor má~ximo" ;
+                        Text [ english_us ] = "Maximum" ;
+                        Text [ norwegian ] = "Maksimum" ;
+                        Text [ italian ] = "Valore massimo" ;
+                        Text [ portuguese_brazilian ] = "Máximo" ;
+                        Text [ portuguese ] = "Valor má~ximo" ;
+                        Text [ finnish ] = "Suurin arvo" ;
+                        Text [ danish ] = "Maksimumværdi" ;
+                        Text [ french ] = "Ma~ximum" ;
+                        Text [ swedish ] = "M~aximum" ;
+                        Text[ chinese_simplified ] = "×î´óÖµ(~X)";
+                        Text[ russian ] = "Ìàêñèìàëüíîå çíà÷åíèå";
+                        Text[ polish ] = "Maksimum";
+                        Text[ japanese ] = "Å‘å’l";
+                        Text[ chinese_traditional ] = "³Ì¤j­È(~X)";
+                        Text[ arabic ] = "ÃŞÕì ŞíãÉ";
+                        Text[ dutch ] = "~Maximumwaarde";
+                        Text[ chinese_simplified ] = "×î´óÖµ(~X)";
+                        Text[ greek ] = "Ìİ~ãéóôç ôéìŞ";
+                        Text[ korean ] = "ÃÖ´ë";
+                        Text[ turkish ] = "Azami değer";
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "Í³¼Æ¹¦ÄÜ(~T)";
+            Text[ russian ] = "Ñòàòèñòè÷åñêèå ôóíêöèè";
+            Text[ polish ] = "Funkcje statystyczne";
+            Text[ japanese ] = "“ŒvŠw“IŠÖ”";
+            Text[ chinese_traditional ] = "²Î­p¥\\¯à(~T)";
+            Text[ arabic ] = "ÏÇáÇÊ ÅÍÕÇÆíÉ";
+            Text[ dutch ] = "~Statistische functies";
+            Text[ chinese_simplified ] = "Í³¼Æ¹¦ÄÜ(~T)";
+            Text[ greek ] = "Ó~ôáôéóôéêİò óõíáñôŞóåéò";
+            Text[ korean ] = "Åë°è ÇÔ¼ö";
+            Text[ turkish ] = "İstatistik işlevleri";
+        };
+        MenuItem
+        {
+            Identifier = MN_POP_FUNC ;
+            HelpID = HID_MN_POP_FUNC ;
+            Text = "~Funktionen" ;
+            Text [ ENGLISH ] = "~Functions" ;
+            Text [ dutch ] = "~Functies" ;
+            Text [ spanish ] = "~Funciones" ;
+            Text [ english_us ] = "Functions" ;
+            Text [ norwegian ] = "~Funksjoner" ;
+            Text [ italian ] = "Funzioni" ;
+            Text [ portuguese_brazilian ] = "~Funções" ;
+            Text [ portuguese ] = "~Funções" ;
+            Text [ finnish ] = "~Funktiot" ;
+            Text [ danish ] = "Funktioner" ;
+            Text [ french ] = "~Fonctions" ;
+            Text [ swedish ] = "~Funktioner" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_SIN ;
+                        HelpID = HID_MN_CALC_SIN ;
+                        Text = "~Sinus" ;
+                        Text [ english ] = "~Sinus" ;
+                        Text [ english_us ] = "Sine" ;
+                        Text [ portuguese_brazilian ] = "~Sinus" ;
+                        Text [ swedish ] = "~sinus" ;
+                        Text [ danish ] = "Sinus" ;
+                        Text [ italian ] = "~Seno" ;
+                        Text [ spanish ] = "~Seno" ;
+                        Text [ french ] = "~Sinus" ;
+                        Text [ dutch ] = "~Sinus" ;
+                        Text [ portuguese ] = "~Seno" ;
+                        Text[ chinese_simplified ] = "ÕıÏÒ(~S)";
+                        Text[ russian ] = "Ñèíóñ";
+                        Text[ polish ] = "Sinus";
+                        Text[ japanese ] = "»²İ";
+                        Text[ chinese_traditional ] = "¥¿©¶(~S)";
+                        Text[ arabic ] = "ÌíÈ ÇáÒÇæíÉ";
+                        Text[ dutch ] = "~Sinus";
+                        Text[ chinese_simplified ] = "ÕıÏÒ(~S)";
+                        Text[ greek ] = "~Çìßôïíï";
+                        Text[ korean ] = "»çÀÎ";
+                        Text[ turkish ] = "Sinüs";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_COS ;
+                        HelpID = HID_MN_CALC_COS ;
+                        Text = "~Cosinus" ;
+                        Text [ english ] = "~Cosinus" ;
+                        Text [ english_us ] = "Cosine" ;
+                        Text [ portuguese_brazilian ] = "~Cosinus" ;
+                        Text [ swedish ] = "~cosinus" ;
+                        Text [ danish ] = "Cosinus" ;
+                        Text [ italian ] = "~Coseno" ;
+                        Text [ spanish ] = "~Coseno" ;
+                        Text [ french ] = "~Cosinus" ;
+                        Text [ dutch ] = "~Cosinus" ;
+                        Text [ portuguese ] = "~Coseno" ;
+                        Text[ chinese_simplified ] = "ÓàÏÒ(~C)";
+                        Text[ russian ] = "Êîñèíóñ";
+                        Text[ polish ] = "Cosinus";
+                        Text[ japanese ] = "º»²İ";
+                        Text[ chinese_traditional ] = "§E©¶(~C)";
+                        Text[ arabic ] = "ÌíÈ ÊãÇã";
+                        Text[ dutch ] = "~Cosinus";
+                        Text[ chinese_simplified ] = "ÓàÏÒ(~C)";
+                        Text[ greek ] = "~Óõíçìßôïíï";
+                        Text[ korean ] = "ÄÚ»çÀÎ";
+                        Text[ turkish ] = "Kosinüs";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_TAN ;
+                        HelpID = HID_MN_CALC_TAN ;
+                        Text = "~Tangens" ;
+                        Text [ english ] = "~Tangens" ;
+                        Text [ english_us ] = "Tangent" ;
+                        Text [ portuguese_brazilian ] = "~Tangens" ;
+                        Text [ swedish ] = "~tangens" ;
+                        Text [ danish ] = "Tangens" ;
+                        Text [ italian ] = "~Tangente" ;
+                        Text [ spanish ] = "~Tangente" ;
+                        Text [ french ] = "~Tangente" ;
+                        Text [ dutch ] = "~Tangens" ;
+                        Text [ portuguese ] = "~Tangente" ;
+                        Text[ chinese_simplified ] = "ÕıÇĞ(~T)";
+                        Text[ russian ] = "Òàíãåíñ";
+                        Text[ polish ] = "Tangens";
+                        Text[ japanese ] = "Àİ¼ŞªİÄ";
+                        Text[ chinese_traditional ] = "¥¿¤Á(~T)";
+                        Text[ arabic ] = "Ùá";
+                        Text[ dutch ] = "~Tangens";
+                        Text[ chinese_simplified ] = "ÕıÇĞ(~T)";
+                        Text[ greek ] = "Åöáğ~ôïìİíç";
+                        Text[ korean ] = "ÅºÁ¨Æ®";
+                        Text[ turkish ] = "Tanjant";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_ASIN ;
+                        HelpID = HID_MN_CALC_ASIN ;
+                        Text = "~Arcussinus" ;
+                        Text [ english ] = "~Arcussinus" ;
+                        Text [ english_us ] = "Arcsine" ;
+                        Text [ portuguese_brazilian ] = "~Arcussinus" ;
+                        Text [ swedish ] = "~arcussinus" ;
+                        Text [ danish ] = "Arcus sinus" ;
+                        Text [ italian ] = "~Arcoseno" ;
+                        Text [ spanish ] = "Seno de ~arco" ;
+                        Text [ french ] = "~Arc sinus" ;
+                        Text [ dutch ] = "~Boogsinus" ;
+                        Text [ portuguese ] = "~Arco seno" ;
+                        Text[ chinese_simplified ] = "·´ÕıÏÒ";
+                        Text[ russian ] = "Àğêñèíóñ";
+                        Text[ polish ] = "Arcus sinus";
+                        Text[ japanese ] = "±°¸»²İ";
+                        Text[ chinese_traditional ] = "¤Ï¥¿©¶";
+                        Text[ arabic ] = "ãŞÇÈá ÇáÌíÈ";
+                        Text[ dutch ] = "~Boogsinus";
+                        Text[ chinese_simplified ] = "·´ÕıÏÒ";
+                        Text[ greek ] = "~Ôüîï çìéôüíïõ";
+                        Text[ korean ] = "¾ÆÅ©»çÀÎ";
+                        Text[ turkish ] = "Arksinüs";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_ACOS ;
+                        HelpID = HID_MN_CALC_ACOS ;
+                        Text = "A~rcuscosinus" ;
+                        Text [ english ] = "A~rcuscosinus" ;
+                        Text [ english_us ] = "Arccosine" ;
+                        Text [ portuguese_brazilian ] = "A~rcuscosinus" ;
+                        Text [ swedish ] = "a~rcuscosinus" ;
+                        Text [ danish ] = "Arcus cosinus" ;
+                        Text [ italian ] = "A~rcocoseno" ;
+                        Text [ spanish ] = "Coseno de a~rco" ;
+                        Text [ french ] = "~Arc cosinus" ;
+                        Text [ dutch ] = "B~oogcosinus" ;
+                        Text [ portuguese ] = "Arco cose~no" ;
+                        Text[ chinese_simplified ] = "·´ÓàÏÒ";
+                        Text[ russian ] = "Àğêêîñèíóñ";
+                        Text[ polish ] = "Arcus cosinus";
+                        Text[ japanese ] = "±°¸º»²İ";
+                        Text[ chinese_traditional ] = "¤Ï§E©¶";
+                        Text[ arabic ] = "ãŞÇÈá ÌíÈ ÇáÊãÇã";
+                        Text[ dutch ] = "B~oogcosinus";
+                        Text[ chinese_simplified ] = "·´ÓàÏÒ";
+                        Text[ greek ] = "Ôü~îï óõíçìéôüíïõ";
+                        Text[ korean ] = "¾ÆÅ© ÄÚ»çÀÎ";
+                        Text[ turkish ] = "Arkkosinüs";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_CALC_ATAN ;
+                        HelpID = HID_MN_CALC_ATAN ;
+                        Text = "Arcustan~gens" ;
+                        Text [ english ] = "Arcustan~gens" ;
+                        Text [ english_us ] = "Arctangent" ;
+                        Text [ portuguese_brazilian ] = "Arcustan~gens" ;
+                        Text [ swedish ] = "arcustan~gens" ;
+                        Text [ danish ] = "Arcus tangens" ;
+                        Text [ italian ] = "Arcotan~gente" ;
+                        Text [ spanish ] = "~Tangente de arco" ;
+                        Text [ french ] = "Arc tan~gente" ;
+                        Text [ dutch ] = "Boogtan~gens" ;
+                        Text [ portuguese ] = "~Arco tangente" ;
+                        Text[ chinese_simplified ] = "·´ÕıÇĞ";
+                        Text[ russian ] = "Àğêòàíãåíñ";
+                        Text[ polish ] = "Arcus tangens";
+                        Text[ japanese ] = "±°¸Àİ¼ŞªİÄ";
+                        Text[ chinese_traditional ] = "¤Ï¥¿¤Á";
+                        Text[ arabic ] = "ãŞÇÈá ÇáÙá";
+                        Text[ dutch ] = "Boogtan~gens";
+                        Text[ chinese_simplified ] = "·´ÕıÇĞ";
+                        Text[ greek ] = "Ôüîï å~öáğôïìİíçò";
+                        Text[ korean ] = "¾ÆÅ© ÅºÁ¨Æ®";
+                        Text[ turkish ] = "Arktanjant";
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "º¯Êı(~F)";
+            Text[ russian ] = "Ôóíêöèè";
+            Text[ polish ] = "Funkcje";
+            Text[ japanese ] = "ŠÖ”";
+            Text[ chinese_traditional ] = "¨ç¼Æ(~F)";
+            Text[ arabic ] = "ÏÇáÇÊ";
+            Text[ dutch ] = "~Functies";
+            Text[ chinese_simplified ] = "º¯Êı(~F)";
+            Text[ language_user1 ] = "(ÄÄ) ; - - - - - -";
+            Text[ greek ] = "~ÓõíáñôŞóåéò";
+            Text[ korean ] = "ÇÔ¼ö";
+            Text[ turkish ] = "İşlevler";
+        };
+    };
+};
+String STR_FORMULA
+{
+    Text = "Textformel" ;
+    Text [ ENGLISH ] = "Text Formula" ;
+    Text [ dutch ] = "Tekstformule" ;
+    Text [ spanish ] = "Fórmula de texto" ;
+    Text [ english_us ] = "Text formula" ;
+    Text [ norwegian ] = "Tekstformel" ;
+    Text [ italian ] = "Formula testo" ;
+    Text [ portuguese_brazilian ] = "Fórmula do Texto" ;
+    Text [ portuguese ] = "Fórmula do texto" ;
+    Text [ finnish ] = "Tekstikaava" ;
+    Text [ danish ] = "Tekstformel" ;
+    Text [ french ] = "Formule texte" ;
+    Text [ swedish ] = "Textformel" ;
+    Text[ chinese_simplified ] = "ÎÄ±¾±í¸ñ";
+    Text[ russian ] = "Ôîğìóëà òåêñòà";
+    Text[ polish ] = "Formu³a tekstu";
+    Text[ japanese ] = "Ã·½ÄŒ`®";
+    Text[ chinese_traditional ] = "¤å¦rªí®æ";
+    Text[ arabic ] = "ÕíÛÉ ÇáäÕ";
+    Text[ dutch ] = "Tekstformule";
+    Text[ chinese_simplified ] = "ÎÄ±¾±í¸ñ";
+    Text[ language_user1 ] = "(ÄÄ) ; - - - - - -";
+    Text[ greek ] = "Ôığïò êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ¼ö½Ä";
+    Text[ turkish ] = "Metin formulü";
+};
+#define TB_INPUT  \
+    ToolBoxItem\
+    {\
+        Identifier = FN_FORMULA_CALC ; \
+        HelpID = FN_FORMULA_CALC ; \
+        Text = "Formel" ; \
+        Text [ English ] = "Formula" ; \
+        Text [ norwegian ] = "Formel" ; \
+        Text [ italian ] = "Formula" ; \
+        Text [ portuguese_brazilian ] = "Fórmula" ; \
+        Text [ portuguese ] = "Fórmula" ; \
+        Text [ finnish ] = "Kaava" ; \
+        Text [ danish ] = "Formel" ; \
+        Text [ french ] = "Formule" ; \
+        Text [ swedish ] = "Formel" ; \
+        Text [ dutch ] = "Formule" ; \
+        Text [ spanish ] = "Fórmula" ; \
+        Text [ english_us ] = "Formula" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Formel auswählen : Formel auswõhlen */\
+        Text[ chinese_simplified ] = "¹«Ê½";\
+        Text[ russian ] = "Ôîğìóëà";\
+        Text[ polish ] = "Formu³a";\
+        Text[ japanese ] = "”®";\
+        Text[ chinese_traditional ] = "¤½¦¡";\
+        Text[ arabic ] = "ÕíÛÉ";\
+        Text[ dutch ] = "Formule";\
+        Text[ chinese_simplified ] = "¹«Ê½";\
+        Text[ greek ] = "Ôığïò";\
+        Text[ korean ] = "¼ö½Ä";\
+        Text[ turkish ] = "Formül";\
+    };\
+    ToolBoxItem\
+    {\
+        Identifier = FN_FORMULA_CANCEL ; \
+        HelpID = FN_FORMULA_CANCEL ; \
+        Text = "Abbrechen" ; \
+        Text [ English ] = "Cancel" ; \
+        Text [ norwegian ] = "Avbryt" ; \
+        Text [ italian ] = "Annulla" ; \
+        Text [ portuguese_brazilian ] = "Cancelar" ; \
+        Text [ portuguese ] = "Cancelar" ; \
+        Text [ finnish ] = "Peruuta" ; \
+        Text [ danish ] = "Annuller" ; \
+        Text [ french ] = "Annuler " ; \
+        Text [ swedish ] = "Avbryt" ; \
+        Text [ dutch ] = "Annuleren" ; \
+        Text [ spanish ] = "Cancelar" ; \
+        Text [ english_us ] = "Cancel" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Formel nicht übenehmen : Formel nicht ³benehmen */\
+        Text[ chinese_simplified ] = "È¡Ïû";\
+        Text[ russian ] = "Îòìåíà";\
+        Text[ polish ] = "Anuluj";\
+        Text[ japanese ] = "·¬İ¾Ù";\
+        Text[ chinese_traditional ] = "¨ú®ø";\
+        Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";\
+        Text[ dutch ] = "Annuleren";\
+        Text[ chinese_simplified ] = "È¡Ïû";\
+        Text[ greek ] = "Áêıñùóç";\
+        Text[ korean ] = "Ãë¼Ò";\
+        Text[ turkish ] = "İptal";\
+    };\
+    ToolBoxItem\
+    {\
+        Identifier = FN_FORMULA_APPLY ; \
+        HelpID = FN_FORMULA_APPLY ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */\
+        Text = "Übernehmen" ; \
+        Text [ English ] = "Apply" ; \
+        Text [ norwegian ] = "Benytt" ; \
+        Text [ italian ] = "Applica" ; \
+        Text [ portuguese_brazilian ] = "Aplicar" ; \
+        Text [ portuguese ] = "Aplicar" ; \
+        Text [ finnish ] = "Käytä" ; \
+        Text [ danish ] = "Anvend" ; \
+        Text [ french ] = "Appliquer" ; \
+        Text [ swedish ] = "Överta" ; \
+        Text [ dutch ] = "Overnemen" ; \
+        Text [ spanish ] = "Aplicar" ; \
+        Text [ english_us ] = "Apply" ; \
+        /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */\
+        Text[ chinese_simplified ] = "Ó¦ÓÃ";\
+        Text[ russian ] = "Âûïîëíèòü";\
+        Text[ polish ] = "Zastosuj";\
+        Text[ japanese ] = "“K—p‚·‚é";\
+        Text[ chinese_traditional ] = "¨Ï¥Î";\
+        Text[ arabic ] = "ÅÏÎÇá";\
+        Text[ dutch ] = "Overnemen";\
+        Text[ chinese_simplified ] = "Ó¦ÓÃ";\
+        Text[ greek ] = "ÅöáñìïãŞ";\
+        Text[ korean ] = "Àû¿ë";\
+        Text[ turkish ] = "Uygula";\
+    };
+

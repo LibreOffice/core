@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ *  $RCSfile: envelp.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+ // #include *****************************************************************
+#include "envelp.hrc"
+#include "globals.hrc"
+ // Strings ******************************************************************
+String STR_DATABASE_NOT_OPENED
+{
+    Text = "Datenbank konnte nicht geöffnet werden." ;
+    Text [ English ] = "Could not open database." ;
+    Text [ norwegian ] = "Could not open database." ;
+    Text [ italian ] = "Impossibile aprire il database." ;
+    Text [ portuguese_brazilian ] = "Não pude abrir base de dados." ;
+    Text [ portuguese ] = "Foi impossível abrir base de dados." ;
+    Text [ finnish ] = "Tietokantaa ei voi avata." ;
+    Text [ danish ] = "Det var ikke muligt at åbne databasen." ;
+    Text [ french ] = "Impossible d'ouvrir la base de données." ;
+    Text [ swedish ] = "Databas kunde inte öppnas." ;
+    Text [ dutch ] = "Database kon niet worden geopend." ;
+    Text [ spanish ] = "No se pudo abrir la base de datos." ;
+    Text [ english_us ] = "Database could not be opened." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÊı¾İ¿â¡£";
+    Text[ russian ] = "Îòêğûòü áàçó äàííûõ íåâîçìîæíî.";
+    Text[ polish ] = "Baza danych nie mog³a byæ otworzona.";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò¸ê®Æ®w¡C";
+    Text[ arabic ] = "ÊÚĞÑ İÊÍ ŞÇÚÏÉ ÇáÈíÇäÇÊ.";
+    Text[ dutch ] = "Database kon niet worden geopend.";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÊı¾İ¿â¡£";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ç âÜóç äåäïìİíùí.";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ ¿­¸±¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Veritabanı açılamadı.";
+    Text[ language_user1 ] = " ";
+};
+String STR_NO_DRIVERS
+{
+    Text = "Keine Datenbanktreiber installiert." ;
+    Text [ English ] = "No database drivers installed." ;
+    Text [ norwegian ] = "No database drivers installed." ;
+    Text [ italian ] = "Non sono installati driver di controllo database." ;
+    Text [ portuguese_brazilian ] = "Nenhum driver de base de dados instalado." ;
+    Text [ portuguese ] = "Controlador da base de dados não instalado." ;
+    Text [ finnish ] = "Tietokanta-ajureita ei ole asennettu." ;
+    Text [ danish ] = "Ingen databasedriverere installeret." ;
+    Text [ french ] = "Aucun gestionnaire de base de données installé." ;
+    Text [ swedish ] = "Inga databasdrivrutiner är installerade." ;
+    Text [ dutch ] = "Geen database-drivers geïnstalleerd." ;
+    Text [ spanish ] = "No se han instalado controladores de bases de datos." ;
+    Text [ english_us ] = "No database drivers installed." ;
+    Text[ chinese_simplified ] = "Ã»ÓĞ°²×°Êı¾İ¿âÇı¶¯³ÌĞò¡£";
+    Text[ russian ] = "Äğàéâåğ äëÿ áàçû äàííûõ íå èíñòàëèğîâàí.";
+    Text[ polish ] = "Nie zainstalowany sterownik bazy danych.";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½ÄŞ×ÊŞ‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¸ê®Æ®wÅX°Êµ{¦¡¡C";
+    Text[ arabic ] = "áÇ íæÌÏ ÈÑÇãÌ ÊÔÛíá ŞæÇÚÏ ÈíÇäÇÊ ãËÈÊå.";
+    Text[ dutch ] = "Geen database-drivers geïnstalleerd.";
+    Text[ chinese_simplified ] = "Ã»ÓĞ°²×°Êı¾İ¿âÇı¶¯³ÌĞò¡£";
+    Text[ greek ] = "Äåí İ÷åé ãßíåé åãêáôÜóôáóç ğñïãñÜììáôïò ïäŞãçóçò âÜóçò äåäïìİíùí.";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º µå¶óÀÌ¹ö°¡ ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Text[ turkish ] = "Kurulmuş veritabanı sürücüsü mevcut değil.";
+    Text[ language_user1 ] = " ";
+};
+String STR_BTN_NEW_DOC
+{
+    Text = "~Neues Dokument" ;
+    Text [ English ] = "~New document" ;
+    Text [ norwegian ] = "~New doc." ;
+    Text [ italian ] = "Nuovo documento" ;
+    Text [ portuguese_brazilian ] = "~Novo doc." ;
+    Text [ portuguese ] = "~Novo documento" ;
+    Text [ finnish ] = "~Uusi asiakirja" ;
+    Text [ danish ] = "Nyt dokument" ;
+    Text [ french ] = "~Nouveau document" ;
+    Text [ swedish ] = "~Nytt dokument" ;
+    Text [ dutch ] = "~Nieuw document" ;
+    Text [ spanish ] = "~Nuevo documento" ;
+    Text [ english_us ] = "~New Document" ;
+    Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ(~N)";
+    Text[ russian ] = "Íîâûé äîêóìåíò";
+    Text[ polish ] = "Nowy dok.";
+    Text[ japanese ] = "V‚µ‚¢•¶‘(~N)";
+    Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+    Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
+    Text[ dutch ] = "~Nieuw document";
+    Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ(~N)";
+    Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
+    Text[ korean ] = "»õ·Î¿î ¹®¼­(~N)";
+    Text[ turkish ] = "~Yeni belge";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_BTN_NEWDOC
+{
+    Text = "~Neues Dok." ;
+    Text [ English ] = "~New doc." ;
+    Text[ english_us ] = "~New doc.";
+    Text[ portuguese ] = "~Novo doc.";
+    Text[ russian ] = "Íîâûé äîêóìåíò";
+    Text[ dutch ] = "~Nieuw doc.";
+    Text[ french ] = "~Nouveau doc.";
+    Text[ spanish ] = "~Nuevo doc.";
+    Text[ italian ] = "Nuovo doc.";
+    Text[ danish ] = "Nyt dok.";
+    Text[ swedish ] = "~Nytt dok.";
+    Text[ polish ] = "Nowy dok.";
+    Text[ portuguese_brazilian ] = "~New doc.";
+    Text[ japanese ] = "V‚µ‚¢•¶‘(~N)";
+    Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ(~N)";
+    Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+    Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
+    Text[ dutch ] = "~Nieuw doc.";
+    Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ(~N)";
+    Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
+    Text[ korean ] = "»õ·Î¿î ¹®¼­.(~N)";
+    Text[ turkish ] = "~Yeni blg.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_SENDER_TOKENS
+{
+    Text = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
+    Text [ English ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text [ english_us ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ portuguese ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
+    Text[ russian ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ greek ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ dutch ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ french ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ spanish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
+    Text[ italian ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
+    Text[ danish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; :CITY;CR;";
+    Text[ swedish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR; ";
+    Text[ polish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ portuguese_brazilian ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ japanese ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ korean ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ chinese_simplified ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ chinese_traditional ] = "COMPANY;CR;FIRSTNAME;;LASTNAME;CR;ADDRESS;CR;CITY;;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ turkish ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+    Text[ arabic ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;CITY; ;STATEPROV; ;POSTALCODE;CR;COUNTRY;CR;";
+};
+

@@ -1,0 +1,2392 @@
+/*************************************************************************
+ *
+ *  $RCSfile: shells.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <svx/svxids.hrc>
+#include <svx/globlmn.hrc>
+#include "toolbox.hrc"
+#include "helpid.h"
+InfoBox MSG_REMOVE_LINK
+{
+    Buttons = WB_YES_NO ;
+    Defbutton = WB_DEF_YES ;
+    Message = "Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten?" ;
+    Message [ English ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Message [ norwegian ] = "Dette er +++linked grafikk. Ønsker du å +++unlink the graphic for å redigere?" ;
+    Message [ italian ] = "Questra immagine è collegata con il documento. Desiderate scollegare l'immagine per poterla modificare?" ;
+    Message [ portuguese_brazilian ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Message [ portuguese ] = "Esta imagem está  ligada a um documento. Deseja cancelar a ligação para poder editá-la?" ;
+    Message [ english_us ] = "This graphic is linked to a document. Do you want to unlink the graphic in order to edit it?" ;
+    Message [ finnish ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Message [ danish ] = "Denne grafik er kædet til dokumentet. Vil du ophæve kæden for at kunne redigere grafikken." ;
+    Message [ french ] = "Cette image est liée à un document. Désirez-vous supprimer le lien pour l'édition ?" ;
+    Message [ swedish ] = "Den här grafiken är länkad till dokumentet. Vill Du upphäva länken för att kunna redigera grafiken?" ;
+    Message [ dutch ] = "Deze afbeelding is met het document gekoppeld. Wilt u de koppeling opheffen om de afbeelding te bewerken?" ;
+    Message [ spanish ] = "Esta imagen está vinculada al documento. ¿Desea deshacer el vínculo para editar la imagen?" ;
+    Message[ chinese_simplified ] = "Õâ¸öÍ¼ĞÎÊÇºÍÒ»¸öÎÄµµÏàÁ´½ÓµÄ¡£ÄúÒªÈ¡ÏûÕâ¸öÁ´½Ó£¬±à¼­Õâ¸öÍ¼ĞÎÂğ£¿";
+    Message[ russian ] = "İòîò ğèñóíîê ññûëàåòñÿ íà äîêóìåíò. Âû õîòèòå ñíÿòü ññûëêó äëÿ âîçìîæíîñòè ïğàâêè ğèñóíêà?";
+    Message[ polish ] = "Ta grafika jest po³¹czona z dokumentem. Czy chcesz usun¹æ to po³¹czenie, aby móc edytowaæ grafikê?";
+    Message[ japanese ] = "‚±‚Ì}‚Í¤ÄŞ·­ÒİÄ‚ÆØİ¸‚³‚ê‚Ä‚¢‚Ü‚·B}‚ğ•ÒW‚·‚é‚½‚ß‚ÉØİ¸‚ğ‰ğœ‚µ‚Ü‚·‚©H";
+    Message[ chinese_traditional ] = "³o­Ó¹Ï¤ù¬O©M¤@­ÓÀÉ®×¬Û³sµ²ªº¡C±z­n¨ú®ø³o­Ó±¶®|¡A½s¿è³o­Ó¹Ï¤ù¡H";
+    Message[ arabic ] = "åĞå ÇáÑÓãÉ ãÑÊÈØÉ ÈÇáãÓÊäÏ. åá ÊÑíÏ ÅÒÇáÉ ÇáÇÑÊÈÇØ áßí ÊÊãßä ãä ÊÍÑíÑ ÇáÑÓãÉ¿";
+    Message[ dutch ] = "Deze afbeelding is met het document gekoppeld. Wilt u de koppeling opheffen om de afbeelding te bewerken?";
+    Message[ chinese_simplified ] = "Õâ¸öÍ¼ĞÎÊÇºÍÒ»¸öÎÄµµÏàÁ´½ÓµÄ¡£ÄúÒªÈ¡ÏûÕâ¸öÁ´½Ó£¬±à¼­Õâ¸öÍ¼ĞÎÂğ£¿";
+    Message[ greek ] = "Ôï ãñáöéêü áõôü åßíáé óõíäåäåìİíï ìå ôï İããñáöï. Èİëåôå íá êáôáñãçèåß ç óıíäåóç ãéá íá åğåîåñãÜóåôå ôï ãñáöéêü;";
+    Message[ korean ] = "ÀÌ ±×·¡ÇÈÀº ¹®¼­¿Í ¿¬°áµÇ¾î ÀÖ½À´Ï´Ù. ±×·¡ÇÈ ÆíÁıÀ» À§ÇØ ¿¬°áÀ» ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Bu grafik belgeye bağlı. Grafigi düzenlemek için bu bağlantıyı kaldırmak istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+InfoBox MSG_NO_RULER
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    MESSAGE = "Es sind keine Grafiken im Gallery-Thema 'Rulers' vorhanden." ;
+    MESSAGE [ English ] = "Thera are no bitmaps in the Gallery theme 'Rulers'." ;
+    Message [ portuguese ] = "Não existem imagens no tema 'Rulers' da Gallery." ;
+    Message [ english_us ] = "There are no bitmaps in the Gallery theme 'Rulers'." ;
+    Message [ portuguese_brazilian ] = "Es sind keine Grafiken im Gallery-Thema 'Rulers' vorhanden." ;
+    Message [ swedish ] = "Det finns inga grafiker i Gallery-temat 'Rulers'." ;
+    Message [ danish ] = "Der findes ingen billeder i Gallery-emnet 'Rulers'." ;
+    Message [ italian ] = "Nella gallery con argomento 'Ruler' non ci sono immagini." ;
+    Message [ spanish ] = "No hay imágenes en el tema de Gallery 'Rulers'." ;
+    Message [ french ] = "Il n'existe pas d'image pour le thème 'Rulers' dans la Gallery." ;
+    Message [ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor." ;
+    Message[ chinese_simplified ] = "ÔÚ»­ÀÈÖ÷Ìâ'³¤ÌõĞÎ'ÄÚÎŞÈÎºÎÍ¼ĞÎ¡£";
+    Message[ russian ] = "Â òåìå ãàëåğåè 'Ëèíåéêè' ğèñóíêîâ íå èìååòñÿ.";
+    Message[ polish ] = "Nie ma ¿adnych grafik w temacie galerii \"Obramowania\"";
+    Message[ japanese ] = "·Ş¬×Ø°Ã°Ï'Ù°×°'‚É¸Ş×Ì¨¯¸½‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Message[ chinese_traditional ] = "µe´Y¥DÃD'ªø±ø§Î'¤ºµL¥ô¦ó¹Ï¤ù¡C";
+    Message[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ İí ãæÖæÚ ÇáÌÇáíÑí 'Rulers'.";
+    Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
+    Message[ chinese_simplified ] = "ÔÚ»­ÀÈÖ÷Ìâ'³¤ÌõĞÎ'ÄÚÎŞÈÎºÎÍ¼ĞÎ¡£";
+    Message[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôç óõëëïãŞ ìå èİìá 'Rulers'.";
+    Message[ korean ] = "Gallery ÁÖÁ¦ 'Rulers'¿¡ ±×·¡ÇÈÀÌ ¾ø½À´Ï´Ù.";
+    Message[ turkish ] = "'Rulers' galeri konusunda bit eşlem grafik mevcut değil.";
+    Message[ language_user1 ] = " ";
+};
+String STR_GRFILTER_OPENERROR
+{
+    Text = "Grafikdatei kann nicht geöffnet werden" ;
+    Text [ English ] = "Can't open graphic file" ;
+    Text [ norwegian ] = "Can't open graphic file" ;
+    Text [ italian ] = "Impossibile aprire il file grafico" ;
+    Text [ portuguese_brazilian ] = "NÆo consigo abrir arquivo gr fico" ;
+    Text [ portuguese ] = "Impossível abrir ficheiro gráfico." ;
+    Text [ finnish ] = "Grafiikkatiedostoa ei voi avata" ;
+    Text [ danish ] = "Det er ikke muligt at åbne grafikfilen" ;
+    Text [ french ] = "Ouverture du fichier graphique impossible" ;
+    Text [ swedish ] = "Grafikfil kan inte öppnas" ;
+    Text [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
+    Text [ spanish ] = "No es posible abrir el archivo gráfico" ;
+    Text [ english_us ] = "Graphics file cannot be opened" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
+    Text[ russian ] = "Îòêğûòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
+    Text[ polish ] = "Pliku graficznego nie mo¿na by³o otworzyæ";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò¹Ï¤ùÀÉ®×";
+    Text[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
+    Text[ greek ] = "Äåí åßíáé äõíáôü ôï Üíïéãìá ôïõ áñ÷åßïõ ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀÌ ¿­·ÁÁöÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Grafik dosyası açılamıyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_GRFILTER_IOERROR
+{
+    Text = "Grafikdatei kann nicht gelesen werden" ;
+    Text [ English ] = "Can't read graphic file" ;
+    Text [ norwegian ] = "Can't read graphic file" ;
+    Text [ italian ] = "Impossibile leggere il file grafico" ;
+    Text [ portuguese_brazilian ] = "NÆo consigo ler arquivo gr fico" ;
+    Text [ portuguese ] = "Impossível ler o ficheiro gráfico." ;
+    Text [ finnish ] = "Grafiikkatiedostoa ei voi lukea" ;
+    Text [ danish ] = "Det er ikke muligt at læse grafikfilen" ;
+    Text [ french ] = "Lecture du fichier graphique impossible" ;
+    Text [ swedish ] = "Grafikfil kan inte läsas" ;
+    Text [ dutch ] = "Grafisch bestand is onleesbaar" ;
+    Text [ spanish ] = "No es posible leer el archivo gráfico" ;
+    Text [ english_us ] = "Graphics file cannot be read" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Í¼ĞÎÎÄ¼ş";
+    Text[ russian ] = "Ïğî÷èòàòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
+    Text[ polish ] = "Pliku graficznego nie mo¿na by³o odczytaæ";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ª“Ç‚ß‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªkÅª¨ú¹Ï¤ùÀÉ®×";
+    Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Grafisch bestand is onleesbaar";
+    Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡Í¼ĞÎÎÄ¼ş";
+    Text[ greek ] = "Äåí åßíáé äõíáôŞ ç áíÜãíùóç ôïõ áñ÷åßïõ ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀÌ ÀĞÇôÁöÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Grafik dosyası okunamıyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_GRFILTER_FORMATERROR
+{
+    Text = "Unbekanntes Grafikformat" ;
+    Text [ English ] = "Unknown graphic format" ;
+    Text [ norwegian ] = "Unknown graphic format" ;
+    Text [ italian ] = "Formato grafico sconosciuto" ;
+    Text [ portuguese_brazilian ] = "Formato gr fico desconhecido" ;
+    Text [ portuguese ] = "Formato de gráfico desconhecido." ;
+    Text [ finnish ] = "Tuntematon grafiikkamuoto" ;
+    Text [ danish ] = "Ukendt grafikformat" ;
+    Text [ french ] = "Format d'image inconnu" ;
+    Text [ swedish ] = "Okänt grafikformat" ;
+    Text [ dutch ] = "Onbekend grafisch formaat" ;
+    Text [ spanish ] = "Formato de imagen desconocido" ;
+    Text [ english_us ] = "Unknown graphic format" ;
+    Text[ chinese_simplified ] = "²»Ã÷µÄÍ¼ĞÎ¸ñÊ½";
+    Text[ russian ] = "Íåèçâåñòíûé ãğàôè÷åñêèé ôîğìàò";
+    Text[ polish ] = "Nieznany format graficzny";
+    Text[ japanese ] = "•s–¾‚È¸Ş×Ì¨¯¸‘®";
+    Text[ chinese_traditional ] = "¤£©úªº¹Ï¤ù®æ¦¡";
+    Text[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
+    Text[ dutch ] = "Onbekend grafisch formaat";
+    Text[ chinese_simplified ] = "²»Ã÷µÄÍ¼ĞÎ¸ñÊ½";
+    Text[ greek ] = "¢ãíùóôç ìïñöŞ ãñáöéêşí";
+    Text[ korean ] = "¾Ë·ÁÁöÁö ¾ÊÀº ±×·¡ÇÈ ¼­½Ä";
+    Text[ turkish ] = "Bilinmeyen grafik formatı";
+    Text[ language_user1 ] = " ";
+};
+String STR_GRFILTER_VERSIONERROR
+{
+    Text = "Die Version der Grafikdatei wird nicht unterstützt" ;
+    Text [ English ] = "Version of graphic file not supported" ;
+    Text [ norwegian ] = "Version of graphic file not supported" ;
+    Text [ italian ] = "Versione del file grafico non supportata" ;
+    Text [ portuguese_brazilian ] = "VersÆo de arquivo gr fico nÆo suportada" ;
+    Text [ portuguese ] = "Versão do ficheiro gráfico não suportada." ;
+    Text [ finnish ] = "Ei tukea grafiikkatiedoston versiolle" ;
+    Text [ danish ] = "Grafikfilens version bliver ikke understøttet" ;
+    Text [ french ] = "Version du fichier graphique non supportée" ;
+    Text [ swedish ] = "Grafikfilens version stöds inte" ;
+    Text [ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund" ;
+    Text [ spanish ] = "No se acepta la versión del archivo gráfico" ;
+    Text [ english_us ] = "This graphic file version is not supported" ;
+    Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸ö°æ±¾µÄÍ¼ĞÎÎÄ¼ş";
+    Text[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
+    Text[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ÌÊŞ°¼Ş®İ‚ÍA»Îß°Ä‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¤£¤ä´©³o­Óª©¥»ªº¹Ï¤ù¤å¥ó";
+    Text[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund";
+    Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸ö°æ±¾µÄÍ¼ĞÎÎÄ¼ş";
+    Text[ greek ] = "Äåí õğïóôçñßæåôáé ç İêäïóç áõôïı ôïõ áñ÷åßïõ ãñáöéêşí";
+    Text[ korean ] = "ÀÌ ±×·¡ÇÈ ÆÄÀÏÀÇ ¹öÁ¯Àº Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Grafik dosyasınının versiyonu desteklenmiyor";
+    Text[ language_user1 ] = " ";
+};
+String STR_GRFILTER_FILTERERROR
+{
+    Text = "Grafikfilter nicht gefunden" ;
+    Text [ English ] = "Graphic filter not found" ;
+    Text [ norwegian ] = "Graphic filter not found" ;
+    Text [ italian ] = "Filtro grafico non trovato" ;
+    Text [ portuguese_brazilian ] = "Filtro gr fico nÆo encontrado" ;
+    Text [ portuguese ] = "Filtro de gráficos não encontrado." ;
+    Text [ finnish ] = "Grafiikkasuodinta ei löydy" ;
+    Text [ danish ] = "Grafikfilter blev ikke fundet" ;
+    Text [ french ] = "Filtre graphique introuvable" ;
+    Text [ swedish ] = "Grafikfilter hittades inte" ;
+    Text [ dutch ] = "Grafische filter niet gevonden" ;
+    Text [ spanish ] = "No se encontró el filtro de imagen" ;
+    Text [ english_us ] = "Graphics filter not found" ;
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
+    Text[ russian ] = "Ãğàôè÷åñêèé ôèëüåğ íå íàéäåí";
+    Text[ polish ] = "Nie znaleziono filtrów graficznych";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì¨ÙÀ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¨S¦³§ä¨ì¹Ï¤ù¹LÂo¾¹";
+    Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Grafische filter niet gevonden";
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
+    Text[ greek ] = "Äåí âñİèçêå ôï ößëôñï ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Grafik filtresi bulunamadı";
+    Text[ language_user1 ] = " ";
+};
+String STR_GRFILTER_TOOBIG
+{
+    Text = "Nicht genug Speicher zum Einfügen der Grafik" ;
+    Text [ English ] = "Not enough memory to insert graphic" ;
+    Text [ norwegian ] = "Not enough memory to insert graphic" ;
+    Text [ italian ] = "Memoria insufficiente per inserirei l'immagine" ;
+    Text [ portuguese_brazilian ] = "Mem¢ria insuficiente para inserir o gr fico" ;
+    Text [ portuguese ] = "Memória insuficiente para inserir gráfico." ;
+    Text [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen" ;
+    Text [ danish ] = "Ikke nok hukommelse til at indsætte billedet" ;
+    Text [ french ] = "Mémoire insuffisante pour l'insertion de l'image" ;
+    Text [ swedish ] = "Inte tillräckligt med minne för att infoga grafiken" ;
+    Text [ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding" ;
+    Text [ spanish ] = "No hay suficiente memoria para insertar la imagen" ;
+    Text [ english_us ] = "Not enough memory to insert the picture." ;
+    Text[ chinese_simplified ] = "ÄÚ´æ²»¹»£¬ÎŞ·¨²åÈëÍ¼ĞÎ";
+    Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè äëÿ âñòàâêè ğèñóíêà";
+    Text[ polish ] = "Za ma³o pamiêci do wstawienia grafiki";
+    Text[ japanese ] = "}‚ğ‘}“ü‚·‚é‚Ì‚ÉÒÓØ‚ª[•ª‚Å‚ ‚è‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬¡AµLªk´¡¤J¹Ï¤ù";
+    Text[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÅÏÑÇÌ ÇáÑÓã";
+    Text[ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding";
+    Text[ chinese_simplified ] = "ÄÚ´æ²»¹»£¬ÎŞ·¨²åÈëÍ¼ĞÎ";
+    Text[ greek ] = "Ç ìíŞìç äåí åğáñêåß ãéá ôçí ğñïóèŞêç ôïõ ãñáöéêïı.";
+    Text[ korean ] = "±×¸²À» »ğÀÔÇÏ´Âµ¥ ¸Ş¸ğ¸®°¡ ºÎÁ· ÇÕ´Ï´Ù.";
+    Text[ turkish ] = "Grafiğin eklenmesi için yeterli bellek yok";
+    Text[ language_user1 ] = " ";
+};
+String STR_INSERT_GRAPHIC
+{
+    Text = "Grafik einfügen" ;
+    Text [ English ] = "Insert graphic" ;
+    Text [ norwegian ] = "Insert graphic" ;
+    Text [ italian ] = "Inserisci immagine" ;
+    Text [ portuguese_brazilian ] = "Inserir gr fico" ;
+    Text [ portuguese ] = "Inserir imagem" ;
+    Text [ finnish ] = "Lisää kuva" ;
+    Text [ danish ] = "Indsæt billede" ;
+    Text [ french ] = "Insérer une image" ;
+    Text [ swedish ] = "Infoga grafik" ;
+    Text [ dutch ] = "Afbeelding invoegen" ;
+    Text [ spanish ] = "Insertar imagen" ;
+    Text [ english_us ] = "Insert Graphics" ;
+    Text[ chinese_simplified ] = "²åÈëÍ¼ĞÎ";
+    Text[ russian ] = "Âñòàâèòü ğèñóíîê";
+    Text[ polish ] = "Wstaw grafikê";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J¹Ï¤ù";
+    Text[ arabic ] = "ÅÏÑÇÌ ÕæÑÉ";
+    Text[ dutch ] = "Afbeelding invoegen";
+    Text[ chinese_simplified ] = "²åÈëÍ¼ĞÎ";
+    Text[ greek ] = "ĞñïóèŞêç ãñáöéêïı";
+    Text[ korean ] = "±×·¡ÇÈ »ğÀÔ";
+    Text[ turkish ] = "Grafik ekle";
+    Text[ language_user1 ] = " ";
+};
+String STR_NO_ADDRESSBOOK
+{
+    Text = "Kein Adressbuch vorhanden" ;
+    Text [ English ] = "No directory available" ;
+    Text [ dutch ] = "Geen adresboek voorhanden" ;
+    Text [ english_us ] = "An Address Book does not exist" ;
+    Text [ italian ] = "Manca la rubrica" ;
+    Text [ spanish ] = "No hay ninguna libreta de direcciones disponible" ;
+    Text [ french ] = "Aucun carnet d'adresses disponible" ;
+    Text [ swedish ] = "Ingen adressbok tillgänglig" ;
+    Text [ danish ] = "Der finde intet adressekartotek" ;
+    Text [ portuguese_brazilian ] = "Kein Adressbuch vorhanden" ;
+    Text [ portuguese ] = "Não há livro de endereços disponível." ;
+    Text[ chinese_simplified ] = "Í¨Ñ¶²¾²»´æÔÚ";
+    Text[ russian ] = "Àäğåñíîé êíèãè íå èìååòñÿ";
+    Text[ polish ] = "Brak ksi¹¿ki adresowej";
+    Text[ japanese ] = "±ÄŞÚ½’ ‚ª‚ ‚è‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "³q°T¿ı¤£¦s¦b";
+    Text[ arabic ] = "áÇ íæÌÏ ÏİÊÑ ÚäÇæíä";
+    Text[ dutch ] = "Geen adresboek voorhanden";
+    Text[ chinese_simplified ] = "Í¨Ñ¶²¾²»´æÔÚ";
+    Text[ greek ] = "Äåí õğÜñ÷åé áôæİíôá";
+    Text[ korean ] = "»ç¿ë °¡´ÉÇÑ ÁÖ¼Ò·ÏÀÌ ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Adres defteri mevcut değil";
+    Text[ language_user1 ] = " ";
+};
+String STR_NOTIZ_INSERT
+{
+    TEXT = "Notiz einfügen" ;
+    TEXT [ English ] = "Insert Note" ;
+    TEXT [ norwegian ] = "Sett inn Merknad" ;
+    TEXT [ italian ] = "Inserisci nota" ;
+    TEXT [ portuguese_brazilian ] = "Inserir Observação" ;
+    TEXT [ portuguese ] = "Inserir anotação" ;
+    TEXT [ finnish ] = "Lisää huomautus" ;
+    TEXT [ danish ] = "Indsæt note" ;
+    TEXT [ french ] = "Insérer une note" ;
+    TEXT [ swedish ] = "Infoga anteckning" ;
+    TEXT [ dutch ] = "Aantekening invoegen" ;
+    TEXT [ spanish ] = "Insertar nota" ;
+    TEXT [ english_us ] = "Insert Note" ;
+    TEXT[ chinese_simplified ] = "²åÈë±¸×¢";
+    TEXT[ russian ] = "Âñòàâèòü ïğèìå÷àíèå";
+    TEXT[ polish ] = "Wstaw notatkê";
+    TEXT[ japanese ] = "ÒÓ‚ğ‘}“ü";
+    TEXT[ chinese_traditional ] = "´¡¤J³Æª`";
+    TEXT[ arabic ] = "ÅÏÑÇÌ ãáÇÍÙÉ";
+    TEXT[ dutch ] = "Aantekening invoegen";
+    TEXT[ chinese_simplified ] = "²åÈë±¸×¢";
+    TEXT[ greek ] = "ĞñïóèŞêç óçìåßùóçò";
+    TEXT[ korean ] = "¸Ş¸ğ »ğÀÔ";
+    TEXT[ turkish ] = "Not ekle";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_REDLINE_COMMENT
+{
+    TEXT = "Kommentieren: " ;
+    TEXT [ English ] = "Comment: " ;
+    Text [ english_us ] = "Comment: " ;
+    Text [ portuguese_brazilian ] = "Kommentieren: " ;
+    Text [ swedish ] = "Kommentera:  " ;
+    Text [ danish ] = "Kommenter: " ;
+    Text [ italian ] = "Commento: " ;
+    Text [ spanish ] = "Comentario:  " ;
+    Text [ french ] = "Commentaire : " ;
+    Text [ dutch ] = "Commentaar:  " ;
+    Text [ portuguese ] = "Comentário: " ;
+    Text[ chinese_simplified ] = "ÆÀÓï£º ";
+    Text[ russian ] = "Êîììåíòèğîâàòü:  ";
+    Text[ polish ] = "Skomentuj:   ";
+    Text[ japanese ] = "ºÒİÄ: ";
+    Text[ chinese_traditional ] = "µû»y¡G ";
+    Text[ arabic ] = "ÊÚáíŞ: ";
+    Text[ dutch ] = "Commentaar:  ";
+    Text[ chinese_simplified ] = "ÆÀÓï£º ";
+    Text[ greek ] = "Ó÷üëéï: ";
+    Text[ korean ] = "¸Ş¸ğ: ";
+    Text[ turkish ] = "Açıklalama ekle: ";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_INSERTED
+{
+    TEXT = "Einfügung" ;
+    TEXT [ English ] = "Inserted" ;
+    Text [ english_us ] = "Insertions" ;
+    Text [ portuguese_brazilian ] = "Einfügung" ;
+    Text [ swedish ] = "Infogning" ;
+    Text [ danish ] = "Indsat" ;
+    Text [ italian ] = "Inserimento" ;
+    Text [ spanish ] = "Inserción" ;
+    Text [ french ] = "Insertion" ;
+    Text [ dutch ] = "Invoeging" ;
+    Text [ portuguese ] = "Inserido" ;
+    Text[ chinese_simplified ] = "²åÈë";
+    Text[ russian ] = "Âñòàâêà";
+    Text[ polish ] = "Wstawienie";
+    Text[ japanese ] = "‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ arabic ] = "ÅÏÑÇÌ";
+    Text[ dutch ] = "Invoeging";
+    Text[ chinese_simplified ] = "²åÈë";
+    Text[ greek ] = "ĞñïóèŞêç";
+    Text[ korean ] = "»ğÀÔ";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_DELETED
+{
+    TEXT = "Löschung" ;
+    TEXT [ English ] = "Deleted" ;
+    Text [ english_us ] = "Deletions" ;
+    Text [ portuguese_brazilian ] = "Löschung" ;
+    Text [ swedish ] = "Radering" ;
+    Text [ danish ] = "Slettet" ;
+    Text [ italian ] = "Elimina" ;
+    Text [ spanish ] = "Eliminación" ;
+    Text [ french ] = "Suppression" ;
+    Text [ dutch ] = "Gewist" ;
+    Text [ portuguese ] = "Eliminado" ;
+    Text[ chinese_simplified ] = "É¾³ı";
+    Text[ russian ] = "Óäàëåíèå";
+    Text[ polish ] = "Usuniêcie";
+    Text[ japanese ] = "íœ";
+    Text[ chinese_traditional ] = "§R°£";
+    Text[ arabic ] = "ÍĞİ";
+    Text[ dutch ] = "Gewist";
+    Text[ chinese_simplified ] = "É¾³ı";
+    Text[ greek ] = "ÄéáãñáöŞ";
+    Text[ korean ] = "»èÁ¦";
+    Text[ turkish ] = "Silindi";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_AUTOFMT
+{
+    TEXT = "AutoFormat" ;
+    TEXT [ English ] = "AutoFormat" ;
+    TEXT[ italian ] = "Formattazione automatica";
+    TEXT[ portuguese_brazilian ] = "AutoFormat";
+    TEXT[ portuguese ] = "AutoFormato";
+    TEXT[ danish ] = "AutoFormat";
+    TEXT[ french ] = "AutoFormat";
+    TEXT[ swedish ] = "AutoFormat";
+    TEXT[ dutch ] = "AutoOpmaak";
+    TEXT[ spanish ] = "AutoFormato";
+    TEXT[ english_us ] = "AutoFormat";
+    TEXT[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    TEXT[ russian ] = "Àâòîôîğìàò";
+    TEXT[ polish ] = "Autoformatowanie";
+    TEXT[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
+    TEXT[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
+    TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
+    TEXT[ dutch ] = "AutoOpmaak";
+    TEXT[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    TEXT[ greek ] = "ÁõôïÌïñöïğïßçóç";
+    TEXT[ korean ] = "ÀÚµ¿ ¼­½Ä";
+    TEXT[ turkish ] = "Otomatik formatlama";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_REDLINE_FORMATED
+{
+    Text = "Attributierung" ;
+    Text [ english ] = "Formatted" ;
+    Text [ english_us ] = "Formats" ;
+    Text [ portuguese_brazilian ] = "Attributierung" ;
+    Text [ swedish ] = "Attributering" ;
+    Text [ danish ] = "Formateret" ;
+    Text [ italian ] = "Attribuzione" ;
+    Text [ spanish ] = "Formateado" ;
+    Text [ french ] = "Mise en forme" ;
+    Text [ dutch ] = "Opmaak" ;
+    Text [ portuguese ] = "Formatado" ;
+    Text[ chinese_simplified ] = "ÊôĞÔ";
+    Text[ russian ] = "Îòôîğìàòèğîâàíî";
+    Text[ polish ] = "Dodawanie atrybutów";
+    Text[ japanese ] = "‘®«‚ğw’è‚·‚é";
+    Text[ chinese_traditional ] = "Äİ©Ê";
+    Text[ arabic ] = "ÊäÓíŞ";
+    Text[ language_user1 ] = " ";
+    Text[ dutch ] = "Opmaak";
+    Text[ chinese_simplified ] = "ÊôĞÔ";
+    Text[ greek ] = "Ìïñöïğïßçóç";
+    Text[ korean ] = "¼­½ÄÀÖ´Â";
+    Text[ turkish ] = "Öznitelikler";
+};
+String STR_REDLINE_TABLECHG
+{
+    Text = "Tabellenänderung" ;
+    Text [ english ] = "Changed table" ;
+    Text [ english_us ] = "Table Changes" ;
+    Text [ portuguese_brazilian ] = "Tabellenänderung" ;
+    Text [ swedish ] = "Tabelländring" ;
+    Text [ danish ] = "Ændret tabel" ;
+    Text [ italian ] = "Modifica tabella" ;
+    Text [ spanish ] = "Modificación de tabla" ;
+    Text [ french ] = "Modification de tableau" ;
+    Text [ dutch ] = "Tabelwijziging" ;
+    Text [ portuguese ] = "Tabela modificada" ;
+    Text[ chinese_simplified ] = "ĞŞ¸Ä±í¸ñ";
+    Text[ russian ] = "Èçìåíåíèÿ òàáëèöû";
+    Text[ polish ] = "Zmiany w tabelach";
+    Text[ japanese ] = "Ã°ÌŞÙ‚Ì•ÏX";
+    Text[ chinese_traditional ] = "­×§ïªí®æ";
+    Text[ arabic ] = "ÊÚÏíá ÇáÌÏæá";
+    Text[ dutch ] = "Tabelwijziging";
+    Text[ chinese_simplified ] = "ĞŞ¸Ä±í¸ñ";
+    Text[ greek ] = "Ôñïğïğïßçóç ğßíáêá";
+    Text[ korean ] = "Ç¥°¡ ¹Ù²î¾ú½À´Ï´Ù.";
+    Text[ turkish ] = "Tablo değişikliği";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_FMTCOLLSET
+{
+    Text = "Absatzvorlage gesetzt" ;
+    Text [ english ] = "Paragraph Styles set" ;
+    Text[ italian ] = "Modello di paragrafo impostato";
+    Text[ portuguese_brazilian ] = "Paragraph Styles set";
+    Text[ portuguese ] = "Estilo de parágrafo definido";
+    Text[ danish ] = "Afsnitstypografi defineret";
+    Text[ french ] = "Le style de paragraphe a été défini";
+    Text[ swedish ] = "Styckeformatmall definierad";
+    Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
+    Text[ spanish ] = "Aplicado estilo de párrafo";
+    Text[ english_us ] = "Applied Paragraph Styles";
+    Text[ chinese_simplified ] = "Éè¶¨ÁË¶ÎÂäÑùÊ½";
+    Text[ russian ] = "Ñòèëü àáçàöà óñòàíîâëåí";
+    Text[ polish ] = "Ustaw styl akapitu";
+    Text[ japanese ] = "’i—½À²Ù‚Ìİ’è";
+    Text[ chinese_traditional ] = "³]©w¤F¬q¸¨¼Ë¦¡";
+    Text[ arabic ] = "Êã ÊÚííä äãØ ÇáİŞÑÉ";
+    Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
+    Text[ chinese_simplified ] = "Éè¶¨ÁË¶ÎÂäÑùÊ½";
+    Text[ greek ] = "Ïñéóìüò ğñïôığïõ ğáñáãñÜöïõ";
+    Text[ korean ] = "´Ü¶ô À¯Çü ¼³Á¤";
+    Text[ turkish ] = "Paragraf biçimi seçildi";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_TITLE
+{
+    Text = "AutoFormat" ;
+    Text [ English ] = "AutoFormat" ;
+    Text[ italian ] = "Formattazione automatica";
+    Text[ portuguese_brazilian ] = "AutoFormat";
+    Text[ portuguese ] = "AutoFormato";
+    Text[ danish ] = "AutoFormat";
+    Text[ french ] = "AutoFormat";
+    Text[ swedish ] = "AutoFormat";
+    Text[ dutch ] = "AutoOpmaak";
+    Text[ spanish ] = "AutoFormato";
+    Text[ english_us ] = "AutoFormat";
+    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    Text[ russian ] = "Àâòîôîğìàò";
+    Text[ polish ] = "Autoformatowanie";
+    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
+    Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
+    Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
+    Text[ dutch ] = "AutoOpmaak";
+    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    Text[ greek ] = "ÁõôïÌïñöïğïßçóç";
+    Text[ korean ] = "ÀÚµ¿ ¼­½Ä";
+    Text[ turkish ] = "Otomatik formatlama";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_MSG
+{
+    Text = "Das AutoFormat ist beendet.\nSie können jetzt alle Änderungen annehmen oder ablehnen,\noder sie einzeln annehmen oder ablehnen." ;
+    Text [ English ] = "AutoFormat completed.\nYou can accept or reject all changes, or\naccept or reject individual changes." ;
+    Text[ italian ] = "La formattazione automatica è terminata.\nPotete accettare o rifiutare tutte le modifiche oppure\naccettare o rifiutare singolarmente le modifiche.";
+    Text[ portuguese_brazilian ] = "AutoFormat completed.\nYou can accept or reject all changes, or\naccept or reject individual changes.";
+    Text[ portuguese ] = "Concluído AutoFormato.\nPoderá aceitar ou rejeitar todas as modificações de\numa só vez ou uma a uma.";
+    Text[ danish ] = "AutoFormat er fuldført.\nDu kan nu acceptere eller forkaste alle ændringer,\neller acceptere eller forkaste dem enkeltvis.";
+    Text[ french ] = "L'AutoFormat a terminé.\nVous pouvez choisir d'en accepter ou rejeter en une seule fois toutes les modifications, ou\n de vous faire afficher toutes les modifications pour les revoir.";
+    Text[ swedish ] = "AutoFormat är färdigt.\nDu kan acceptera eller kasta bort alla ändringar eller\nacceptera eller kasta bort enstaka ändringar.";
+    Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
+    Text[ spanish ] = "El AutoFormato ha concluido.\nAhora puede aceptar o rechazar todos los cambios\na la vez o uno por uno.";
+    Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
+    Text[ chinese_simplified ] = "ÒÑ¾­Íê³É×Ô¶¯¸ñÊ½¡£\nÄúÏÖÔÚÄÜ¹»½ÓÊÜ»ò¾Ü¾øËùÓĞµÄ¸ü¸Ä£¬»òÕß\n½ÓÊÜ»ò¾Ü¾øµ¥¸ö¸ü¸Ä¡£";
+    Text[ russian ] = "Àâòîôîğìàòèğîâàíèå çàêîí÷åíî.\nÑåé÷àñ Âû ìîæåòå ïğèíÿòü èëè îòêëîíèòü ñğàçó âñå èçìåíåíèÿ,\nèëè êàæäîå ïî îòäåëüíîñòè.";
+    Text[ polish ] = "Autoformatowanie jest zakoñczone.\nMo¿esz zaaakceptowaæ lub odrzuciæ teraz wszystkie zmiany,\nlub akceptowaæ je oraz odrzucaæ pojedynczo.";
+    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚ªI—¹‚µ‚Ü‚µ‚½B\n‚·‚×‚Ä‚Ì•ÏX‚ğó‚¯“ü‚ê‚é‚©AŒ³‚É–ß‚·‚±‚Æ‚ª‚Å‚«‚Ü‚·B\n‚Ü‚½‚Í‚Ğ‚Æ‚Â‚Ğ‚Æ‚Â‚Ì•ÏX‚É‚Â‚¢‚ÄŒŸ“¢‚·‚é‚±‚Æ‚à‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "¤w¸g§¹¦¨¦Û°Ê®æ¦¡¡C\n±z²{¦b¯à°÷±µ¨ü©Î©Úµ´©Ò¦³ªºÅÜ§ó¡A±z¤]¯à°÷\n±µ¨ü©Î©Úµ´³æ­ÓªºÅÜ§ó¡C";
+    Text[ arabic ] = "ÊãøóÊ ÚãáíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí.\níãßäß ÇáÂä ŞÈæá Ãæ ÑİÖ ÇáÊÛííÑÇÊ ßáåÇ¡\nÃæ ŞÈæá Ãæ ÑİÖ ßá ÊÛííÑ Úáì ÍÏå.";
+    Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
+    Text[ chinese_simplified ] = "ÒÑ¾­Íê³É×Ô¶¯¸ñÊ½¡£\nÄúÏÖÔÚÄÜ¹»½ÓÊÜ»ò¾Ü¾øËùÓĞµÄ¸ü¸Ä£¬»òÕß\n½ÓÊÜ»ò¾Ü¾øµ¥¸ö¸ü¸Ä¡£";
+    Text[ greek ] = "Ç ÁõôïÌïñöïğïßçóç ïëïêëçñşèçêå.\n¸÷åôå ôç äõíáôüôçôá íá áğïäå÷ôåßôå Ş íá áğïññßøåôå üëåò Ş ìåìïíùìİíåò áëëáãİò.";
+    Text[ korean ] = "ÀÚµ¿ ¼­½ÄÀÌ Á¾·áµÇ¾ú½À´Ï´Ù.\nÁö±İ º¯°æ»çÇ×À» ¸ğµÎ Àû¿ëÇÏ°Å³ª Ãë¼ÒÇÒ ¼ö ÀÖÀ¸¸ç\nÈ¤Àº °³º°ÀûÀ¸·Î Àû¿ëÇÏ°Å³ª Ãë¼ÒÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Otomatik formatlama tamamlandı.\nŞimdi değişiklikleri tümden veya tek tek\n kabul ya da redd edebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_ACCEPT_ALL
+{
+    Text = "Alles ~annehmen" ;
+    Text [ English ] = "~Accept All" ;
+    Text[ italian ] = "~Accetta tutto";
+    Text[ portuguese_brazilian ] = "~Accept All";
+    Text[ portuguese ] = "~Aceitar tudo";
+    Text[ danish ] = "Accepter alle";
+    Text[ french ] = "Tout ~accepter";
+    Text[ swedish ] = "~Acceptera alla";
+    Text[ dutch ] = "~Alles accepteren";
+    Text[ spanish ] = "~Aceptar todo";
+    Text[ english_us ] = "Accept All";
+    Text[ chinese_simplified ] = "È«²¿½ÓÊÜ";
+    Text[ russian ] = "Ïğèíÿòü âñå";
+    Text[ polish ] = "Zaakceptuj wszystko";
+    Text[ japanese ] = "‚·‚×‚Äó‚¯“ü‚ê‚é";
+    Text[ chinese_traditional ] = "¥ş³¡±µ¨ü";
+    Text[ arabic ] = "ŞÈæá Çáßá";
+    Text[ dutch ] = "~Alles accepteren";
+    Text[ chinese_simplified ] = "È«²¿½ÓÊÜ";
+    Text[ greek ] = "Áğïäï÷Ş üëùí";
+    Text[ korean ] = "¸ğµÎ Àû¿ë";
+    Text[ turkish ] = "Tümünü kabul et";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_REJECT_ALL
+{
+    Text = "Alles ableh~nen" ;
+    Text [ English ] = "~Reject All" ;
+    Text[ italian ] = "Rifiuta tutto";
+    Text[ portuguese_brazilian ] = "~Reject All";
+    Text[ portuguese ] = "~Rejeitar tudo";
+    Text[ danish ] = "Forkast alle";
+    Text[ french ] = "~Tout rejeter";
+    Text[ swedish ] = "~Kasta bort alla";
+    Text[ dutch ] = "~Alles verwerpen";
+    Text[ spanish ] = "~Ocultar todo";
+    Text[ english_us ] = "Reject All";
+    Text[ chinese_simplified ] = "È«²¿¾Ü¾ø";
+    Text[ russian ] = "Îòêëîíèòü âñå";
+    Text[ polish ] = "Odrzuæ wszystko";
+    Text[ japanese ] = "‚·‚×‚ÄŒ³‚É–ß‚·";
+    Text[ chinese_traditional ] = "¥ş³¡©Úµ´";
+    Text[ arabic ] = "ÑİÖ Çáßá";
+    Text[ dutch ] = "~Alles verwerpen";
+    Text[ chinese_simplified ] = "È«²¿¾Ü¾ø";
+    Text[ greek ] = "Áğüññéøç üëùí";
+    Text[ korean ] = "¸ğµÎ Ãë¼Ò";
+    Text[ turkish ] = "Tümünü reddet";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_EDIT
+{
+    Text = "Änderungen ~bearbeiten" ;
+    Text [ English ] = "Review ~Changes" ;
+    Text[ italian ] = "Modifica cambiamenti";
+    Text[ portuguese_brazilian ] = "Review ~Changes";
+    Text[ portuguese ] = "Editar ~modificações";
+    Text[ danish ] = "Rediger ændringer";
+    Text[ french ] = "~Revoir les modifications";
+    Text[ swedish ] = "Redigera ~ändringar";
+    Text[ dutch ] = "Wijzigingen ~bewerken";
+    Text[ spanish ] = "Editar ~modificaciones";
+    Text[ english_us ] = "Edit Changes";
+    Text[ chinese_simplified ] = "±à¼­¸ü¸Ä";
+    Text[ russian ] = "Àíàëèç èçìåíåíèé";
+    Text[ polish ] = "Edytuj zmiany";
+    Text[ japanese ] = "•ÏX‚Ì•ÒW";
+    Text[ chinese_traditional ] = "½s¿èÅÜ§ó";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÊÛííÑÇÊ";
+    Text[ dutch ] = "Wijzigingen ~bewerken";
+    Text[ chinese_simplified ] = "±à¼­¸ü¸Ä";
+    Text[ greek ] = "Åğåîåñãáóßá áëëáãşí";
+    Text[ korean ] = "º¯°æ ³»¿ë °ËÅä";
+    Text[ turkish ] = "Değişiklikleri düzenle";
+    Text[ language_user1 ] = " ";
+};
+QueryBox DLG_IMPORT_DBNAME
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    MESSAGE = "Soll der Datenbankname als Standarddatenbank für das Dokument übernommen werden?" ;
+    MESSAGE [ English ] = "Should the database name be used as document default?" ;
+    Message [ dutch ] = "Moet de database-naam als standaard database voor het document worden overgenomen?" ;
+    Message [ english_us ] = "Use database name as default database for the document?" ;
+    Message [ italian ] = "Si vuole che il nome del database venga usato come database standard per il documento?" ;
+    Message [ spanish ] = "¿Desea adoptar el nombre de la base de datos como base de datos estándar para el documento?" ;
+    Message [ french ] = "Le nom de la base de données doit-il être utilisé comme nom de base de données par défaut ?" ;
+    Message [ swedish ] = "Ska databasnamnet övertas som standarddatabas för dokumentet?" ;
+    Message [ danish ] = "Skal databasenavnet overtages som standarddatabase for dokumentet?" ;
+    Message [ portuguese_brazilian ] = "Soll der Datenbankname als Standarddatenbank für das Dokument übernommen werden?" ;
+    Message [ portuguese ] = "Deseja adoptar o nome da base de dados como base de dados padrão para o documento?" ;
+    Message[ chinese_simplified ] = "ÒªÈÃÎÄ¼şÌ×ÓÃÄ¬ÈÏµÄÊı¾İ¿âÃû³Æ£¿";
+    Message[ russian ] = "Èñïîëüçîâàòü èìÿ áàçû äàííûõ â êà÷åñòâå ñòàíäàğòíîé áàçû äàííûõ äëÿ ıòîãî äîêóìåíòà?";
+    Message[ polish ] = "Czy nazwa bazy danych ma zostaæ zastosowana w dokumencie jako standardowa baza danych?";
+    Message[ japanese ] = "‚±‚ÌÃŞ°ÀÍŞ°½‚Ì–¼‘O‚ğ•W€ÃŞ°ÀÍŞ°½‚Æ‚µ‚Ä‚±‚Ì•¶‘‚Ég—p‚µ‚Ü‚·‚©H";
+    Message[ chinese_traditional ] = "Åı¤å¥ó±Ä¥ÎÀq»{ªº¸ê®Æ®w¦WºÙ¡H";
+    Message[ arabic ] = "åá ÊÑíÏ ÇÓÊÎÏÇã ÇÓã ŞÇÚÏÉ ÇáÈíÇäÇÊ ßŞÇÚÏÉ ÈíÇäÇÊ ÇİÊÑÇÖíÉ ááãÓÊäÏ¿";
+    Message[ dutch ] = "Moet de database-naam als standaard database voor het document worden overgenomen?";
+    Message[ chinese_simplified ] = "ÒªÈÃÎÄ¼şÌ×ÓÃÄ¬ÈÏµÄÊı¾İ¿âÃû³Æ£¿";
+    Message[ greek ] = "Èİëåôå íá ÷ñçóéìïğïéçèåß ôï üíïìá ôçò âÜóçò äåäïìİíùí ùò âÜóç äåäïìİíùí ğñïåğéëïãŞò ãéá ôï İããñáöï;";
+    Message[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÀÌ¸§À» ¹®¼­ÀÇ ±âº» µ¥ÀÌÅÍº£ÀÌ½º·Î »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Veritabanı adı, belge için standart veritabanı olarak kullanılsın mı?";
+    Message[ language_user1 ] = " ";
+};
+String STR_PAGE
+{
+    TEXT = "Seite " ;
+    TEXT [ English ] = "Page " ;
+    TEXT [ norwegian ] = "Side " ;
+    TEXT [ italian ] = "Pagina " ;
+    TEXT [ portuguese_brazilian ] = "Página " ;
+    TEXT [ portuguese ] = "Página " ;
+    TEXT [ finnish ] = "Sivu " ;
+    TEXT [ danish ] = "Side " ;
+    TEXT [ french ] = "Page " ;
+    TEXT [ swedish ] = "Sida  " ;
+    TEXT [ dutch ] = "Pagina  " ;
+    TEXT [ spanish ] = "Página  " ;
+    TEXT [ english_us ] = "Page " ;
+    TEXT[ chinese_simplified ] = "Ò³Ãæ ";
+    TEXT[ russian ] = "Ñòğàíèöà  ";
+    TEXT[ polish ] = "Strona  ";
+    TEXT[ japanese ] = "Íß°¼Ş ";
+    TEXT[ chinese_traditional ] = "­¶­± ";
+    TEXT[ arabic ] = "ÕİÍÉ ";
+    TEXT[ dutch ] = "Pagina  ";
+    TEXT[ chinese_simplified ] = "Ò³Ãæ ";
+    TEXT[ greek ] = "Óåëßäá ";
+    TEXT[ korean ] = "ÆäÀÌÁö ";
+    TEXT[ turkish ] = "Sayfa ";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_TEXT_TOOLBOX
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Textobjektleiste : Textleiste */
+    Text = "Textobjektleiste" ;
+    Text [ English ] = "Text object bar" ;
+    Text [ portuguese ] = "Barra de objectos de texto" ;
+    Text [ english_us ] = "Text Object Bar" ;
+    Text [ portuguese_brazilian ] = "Textobjektleiste" ;
+    Text [ swedish ] = "Textobjektlist" ;
+    Text [ danish ] = "Tekstobjektlinje" ;
+    Text [ italian ] = "Barra degli oggetti di testo" ;
+    Text [ spanish ] = "Barra de objetos de texto" ;
+    Text [ french ] = "Barre d'objets de texte" ;
+    Text [ dutch ] = "Tekstbalk" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü îáúåêòîâ òåêñòà";
+    Text[ polish ] = "Pasek obiektów tabeli";
+    Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "¤å¦rª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáäÕ";
+    Text[ dutch ] = "Tekstbalk";
+    Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Metin nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_TEXT_TOOLBOX
+{
+    HelpID = HID_TEXT_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        MN_TEXT1(TRUE)
+        MN_TEXT1_BLOCK
+        MN_TEXT_LINESPACE
+        MN_TEXT2
+        MN_TEXT_BACKGROUND
+        MN_TEXT_DIALOGS(TRUE)
+    };
+    Scroll = TRUE ;
+};
+String RID_TABLE_TOOLBOX
+{
+    Text = "Tabellenobjektleiste" ;
+    Text [ English ] = "Table objectbar" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Barra degli oggetti per tabelle" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Barra de objectos de tabela" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Tabelobjektlinje" ;
+    Text [ french ] = "Barre d'objets de tableau" ;
+    Text [ swedish ] = "Tabellobjektlist" ;
+    Text [ dutch ] = "Tabelobjectbalk" ;
+    Text [ spanish ] = "Barra de objetos para tablas" ;
+    Text [ english_us ] = "Table Object Bar" ;
+    Text[ chinese_simplified ] = "±í¸ñ¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü îáúåêòà òàáëèöû";
+    Text[ polish ] = "Pasek obiektów tabeli";
+    Text[ japanese ] = "•\\µÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "ªí®æª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÌÏæá";
+    Text[ dutch ] = "Tabelobjectbalk";
+    Text[ chinese_simplified ] = "±í¸ñ¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğßíáêá";
+    Text[ korean ] = "Ç¥ °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Tablo nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_TABLE_TOOLBOX
+{
+    HelpID = HID_TABLE_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    Scroll = TRUE ;
+    ItemList =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_AUTOSUM ;
+            HelpID = FN_TABLE_AUTOSUM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_MODE_FIX ;
+            HelpID = FN_TABLE_MODE_FIX ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_MODE_FIX_PROP ;
+            HelpID = FN_TABLE_MODE_FIX_PROP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_MODE_VARIABLE ;
+            HelpID = FN_TABLE_MODE_VARIABLE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_MERGE_CELLS ;
+            HelpID = FN_TABLE_MERGE_CELLS ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_SPLIT_CELLS ;
+            HelpID = FN_TABLE_SPLIT_CELLS ;
+        };
+        ToolBoxItem
+        {
+            DropDown = TRUE ;
+            Identifier = FN_OPTIMIZE_TABLE ;
+            HelpID = FN_OPTIMIZE_TABLE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_INSERT_ROW ;
+            HelpID = FN_TABLE_INSERT_ROW ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_INSERT_COL ;
+            HelpID = FN_TABLE_INSERT_COL ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_DELETE_ROW ;
+            HelpID = FN_TABLE_DELETE_ROW ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_DELETE_COL ;
+            HelpID = FN_TABLE_DELETE_COL ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_SELECT_ALL;
+            HelpID = FN_TABLE_SELECT_ALL;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_SELECT_COL;
+            HelpID = FN_TABLE_SELECT_COL;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_SELECT_ROW;
+            HelpID = FN_TABLE_SELECT_ROW;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_VERT_NONE;
+            HelpID = FN_TABLE_VERT_NONE;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_VERT_CENTER;
+            HelpID = FN_TABLE_VERT_CENTER;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TABLE_VERT_BOTTOM;
+            HelpID = FN_TABLE_VERT_BOTTOM;
+            RadioCheck = TRUE;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_BORDER
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_FRAME_LINESTYLE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_FRAME_LINECOLOR
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_BACKGROUND_COLOR
+        };
+    };
+};
+String RID_FRAME_TOOLBOX
+{
+    Text = "Rahmenobjektleiste" ;
+    Text [ English ] = "Frame objectbar" ;
+    Text [ norwegian ] = "Ramme" ;
+    Text [ italian ] = "Barra degli oggetti per cornice" ;
+    Text [ portuguese_brazilian ] = "Moldura" ;
+    Text [ portuguese ] = "Barra de molduras" ;
+    Text [ finnish ] = "Kehys" ;
+    Text [ danish ] = "Rammeobjektlinje" ;
+    Text [ french ] = "Barre d'objets de cadre" ;
+    Text [ swedish ] = "Ramobjektlist" ;
+    Text [ dutch ] = "Kaderobjectbalk" ;
+    Text [ spanish ] = "Barra de objetos de marco" ;
+    Text [ english_us ] = "Frame Object Bar" ;
+    Text[ chinese_simplified ] = "¿ò¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü îáúåêòîâ êàäğîâ";
+    Text[ polish ] = "Pasek obiektów ramki";
+    Text[ japanese ] = "˜gµÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "®Øª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáÅØÇÑ";
+    Text[ dutch ] = "Kaderobjectbalk";
+    Text[ chinese_simplified ] = "¿ò¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğëáéóßïõ";
+    Text[ korean ] = "ÇÁ·¹ÀÓ °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Çerçeve nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_FRAME_TOOLBOX
+{
+    HelpID = HID_FRAME_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    MenuStrings = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        MN_TEMPLATE
+        MN_FRAME_WRAP
+        MN_FRAME1
+        MN_FRAME2
+        MN_FRAME3
+        MN_LINESTYLE
+        MN_BACKGROUND_COLOR
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_ATTRIBUTES_FRAME
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_LAYER
+        ToolBoxItem
+        {
+            Identifier = FN_TOOL_ANKER ;
+            HelpID = FN_TOOL_ANKER ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_CHAIN ;
+            HelpID = FN_FRAME_CHAIN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_UNCHAIN ;
+            HelpID = FN_FRAME_UNCHAIN ;
+        };
+    };
+    Scroll = TRUE ;
+};
+String RID_GRAFIK_TOOLBOX
+{
+    Text = "Grafikobjektleiste" ;
+    Text [ English ] = "Graphic objectbar" ;
+    Text [ norwegian ] = "Graphic" ;
+    Text [ italian ] = "Barra degli oggetti grafici" ;
+    Text [ portuguese_brazilian ] = "Gr fico" ;
+    Text [ portuguese ] = "Barra de gráficos" ;
+    Text [ finnish ] = "Kuva" ;
+    Text [ danish ] = "Grafikobjektlinje" ;
+    Text [ french ] = "Barre d'objets graphiques" ;
+    Text [ swedish ] = "Grafikobjektlist" ;
+    Text [ dutch ] = "Objectbalk afbeeldingen" ;
+    Text [ spanish ] = "Barra de objetos gráficos" ;
+    Text [ english_us ] = "Graphics Object Bar" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü ãğàôè÷åñêèõ îáúåêòîâ";
+    Text[ polish ] = "Pasek obiektów graficznych";
+    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "¹Ï¤ùª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
+    Text[ dutch ] = "Objectbalk afbeeldingen";
+    Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ ãñáöéêşí áíôéêåéìİíùí";
+    Text[ korean ] = "±×·¡ÇÈ °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Grafik nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_GRAFIK_TOOLBOX
+{
+    HelpID = HID_GRAFIK_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    MenuStrings = TRUE ;
+    Customize = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_MODE;
+            HelpID = SID_ATTR_GRAF_MODE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_RED;
+            HelpID = SID_ATTR_GRAF_RED;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GREEN;
+            HelpID = SID_ATTR_GRAF_GREEN;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_BLUE;
+            HelpID = SID_ATTR_GRAF_BLUE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_LUMINANCE;
+            HelpID = SID_ATTR_GRAF_LUMINANCE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_CONTRAST;
+            HelpID = SID_ATTR_GRAF_CONTRAST;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_GAMMA;
+            HelpID = SID_ATTR_GRAF_GAMMA;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_GRAF_TRANSPARENCE;
+            HelpID = SID_ATTR_GRAF_TRANSPARENCE;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            Identifier = FN_FLIP_VERT_GRAFIC ;
+            HelpID = FN_FLIP_VERT_GRAFIC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FLIP_HORZ_GRAFIC ;
+            HelpID = FN_FLIP_HORZ_GRAFIC ;
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_SIM_START
+        };
+        MN_ATTRIBUTES_GRAFIK
+    };
+    Scroll = TRUE ;
+};
+String RID_OLE_TOOLBOX
+{
+    Text = "Objekt" ;
+    Text [ English ] = "Object" ;
+    Text [ norwegian ] = "Object" ;
+    Text [ italian ] = "Oggetto" ;
+    Text [ portuguese_brazilian ] = "Objeto" ;
+    Text [ portuguese ] = "Objecto" ;
+    Text [ finnish ] = "Objekti" ;
+    Text [ danish ] = "Objekt" ;
+    Text [ french ] = "Objet" ;
+    Text [ swedish ] = "Objekt" ;
+    Text [ dutch ] = "Object" ;
+    Text [ spanish ] = "Objeto" ;
+    Text [ english_us ] = "Object" ;
+    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ russian ] = "Îáúåêò";
+    Text[ polish ] = "Obiekt";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "ª«¥ó";
+    Text[ arabic ] = "ßÇÆä";
+    Text[ dutch ] = "Object";
+    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ greek ] = "Áíôéêåßìåíï";
+    Text[ korean ] = "°³Ã¼";
+    Text[ turkish ] = "Nesne";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_OLE_TOOLBOX
+{
+    HelpID = HID_OLE_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    Scroll = TRUE ;
+    ItemList =
+    {
+        MN_TEMPLATE
+        MN_FRAME_WRAP
+        MN_CONTOUR
+        MN_FRAME1
+        MN_FRAME2
+        MN_FRAME3
+        MN_LINESTYLE
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_ATTRIBUTES_OLE
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        MN_LAYER
+        ToolBoxItem
+        {
+            Identifier = FN_TOOL_ANKER ;
+            HelpID = FN_TOOL_ANKER ;
+            DropDown = TRUE ;
+        };
+    };
+};
+String RID_DRAW_TOOLBOX
+{
+    Text = "Zeichenobjektleiste" ;
+    Text [ English ] = "Draw objectbar" ;
+    Text [ norwegian ] = "Draw" ;
+    Text [ italian ] = "Barra degli oggetti per disegno" ;
+    Text [ portuguese_brazilian ] = "Desenhar" ;
+    Text [ portuguese ] = "Barra de objectos de desenho" ;
+    Text [ finnish ] = "Piirrä" ;
+    Text [ danish ] = "Tegneobjektlinje" ;
+    Text [ french ] = "Barre d'objets de dessin" ;
+    Text [ swedish ] = "Ritobjektlist" ;
+    Text [ dutch ] = "Tekenobjectbalk" ;
+    Text [ spanish ] = "Barra de objetos de dibujo" ;
+    Text [ english_us ] = "Draw Object Bar" ;
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü ãğàôè÷åñêîãî îáúåêòà";
+    Text[ polish ] = "Pasek obiektów rysunkowych";
+    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ";
+    Text[ dutch ] = "Tekenobjectbalk";
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ó÷åäßáóçò";
+    Text[ korean ] = "±×¸®±â °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Çizim nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_DRAW_TOOLBOX
+{
+    HelpID = HID_DRAW_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_EDIT ;
+            HelpID = SID_BEZIER_EDIT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_LINE ;
+            HelpID = SID_ATTRIBUTES_LINE ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINEEND_STYLE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINE_STYLE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINE_WIDTH
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINE_COLOR
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTRIBUTES_AREA ;
+            HelpID = SID_ATTRIBUTES_AREA ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_FILL_STYLE
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_OBJECT_ROTATE
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_TOOL_ANKER ;
+            HelpID = FN_TOOL_ANKER ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_NOWRAP ;
+            HelpID = FN_FRAME_NOWRAP ;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_WRAP ;
+            HelpID = FN_FRAME_WRAP ;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_WRAP_IDEAL ;
+            HelpID = FN_FRAME_WRAP_IDEAL ;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_WRAP_LEFT ;
+            HelpID = FN_FRAME_WRAP_LEFT ;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_WRAP_RIGHT ;
+            HelpID = FN_FRAME_WRAP_RIGHT ;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_WRAPTHRU ;
+            HelpID = FN_FRAME_WRAPTHRU ;
+            RadioCheck = TRUE ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FRAME_WRAP_CONTOUR ;
+            HelpID = FN_FRAME_WRAP_CONTOUR ;
+            Hide = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HEAVEN ;
+            HelpID = SID_OBJECT_HEAVEN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_HELL ;
+            HelpID = SID_OBJECT_HELL ;
+        };
+        MN_LAYER
+        MN_GRID( HIDE=TRUE )
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ALIGN ;
+            HelpID = SID_OBJECT_ALIGN ;
+            DropDown = TRUE ;
+        };
+    };
+    Scroll = TRUE ;
+};
+String RID_DRAWFORM_TOOLBOX
+{
+    Text = "Kontrollfeldleiste" ;
+    Text [ English ] = "Control bar" ;
+    Text [ portuguese ] = "Barra de controlos" ;
+    Text [ english_us ] = "Control Bar" ;
+    Text [ portuguese_brazilian ] = "Kontrollfeldleiste" ;
+    Text [ swedish ] = "Kontrollfältlist" ;
+    Text [ danish ] = "Kontrolelementlinje" ;
+    Text [ italian ] = "Barra dei campi di controllo" ;
+    Text [ spanish ] = "Barra de campos de control" ;
+    Text [ french ] = "Barre de contrôles" ;
+    Text [ dutch ] = "Controleveldbalk" ;
+    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶ÎÀ¸";
+    Text[ russian ] = "Ïàíåëü ıëåìåíòîâ óïğàâëåíèÿ";
+    Text[ polish ] = "Pasek pól kontrolnych";
+    Text[ japanese ] = "ºİÄÛ°ÙÊŞ°";
+    Text[ chinese_traditional ] = "±±¨î¶µ¦C";
+    Text[ arabic ] = "ÔÑíØ ÚäÇÕÑ ÇáÊÍßã";
+    Text[ dutch ] = "Controleveldbalk";
+    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶ÎÀ¸";
+    Text[ greek ] = "ÃñáììŞ åëİã÷ïõ ğåäßùí";
+    Text[ korean ] = "ÄÁÆ®·Ñ ¸ğÀ½";
+    Text[ turkish ] = "Komut alanı çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_DRAWFORM_TOOLBOX
+{
+    HelpID = HID_DRAWFORM_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    Scroll = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = FN_TOOL_ANKER ;
+            HelpID = FN_TOOL_ANKER ;
+            DropDown = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_TRANSFORM ;
+            HelpID = SID_ATTR_TRANSFORM ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_CTL_PROPERTIES ;
+            HelpID = SID_FM_CTL_PROPERTIES ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_PROPERTIES ;
+            HelpID = SID_FM_PROPERTIES ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SHOW_FMEXPLORER ;
+            HelpID = SID_FM_SHOW_FMEXPLORER ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_TAB_DIALOG ;
+            HelpID = SID_FM_TAB_DIALOG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_ADD_FIELD ;
+            HelpID = SID_FM_ADD_FIELD ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_DESIGN_MODE ;
+            HelpID = SID_FM_DESIGN_MODE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        MN_LAYER
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_GROUP ;
+            HelpID = SID_GROUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_UNGROUP ;
+            HelpID = SID_UNGROUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ENTER_GROUP ;
+            HelpID = SID_ENTER_GROUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_LEAVE_GROUP ;
+            HelpID = SID_LEAVE_GROUP ;
+        };
+        MN_GRID( HIDE=FALSE )
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OBJECT_ALIGN ;
+            HelpID = SID_OBJECT_ALIGN ;
+            DropDown = TRUE ;
+        };
+    };
+};
+String RID_BEZIER_TOOLBOX
+{
+    Text = "Bezierobjektleiste" ;
+    Text [ English ] = "Bezier objectbar" ;
+    Text [ english_us ] = "Bézier object bar" ;
+    Text [ swedish ] = "Bézierobjektlist" ;
+    Text [ danish ] = "Bezierobjektlinje" ;
+    Text [ italian ] = "Barra degli oggetti di Bézier" ;
+    Text [ spanish ] = "Barra de objetos Bézier" ;
+    Text [ french ] = "Barre d'objets Bézier" ;
+    Text [ dutch ] = "Bézierobjectbalk" ;
+    Text [ portuguese ] = "Barra de objectos Bézier" ;
+    Text [ portuguese_brazilian ] = "Bezierobjektleiste" ;
+    Text[ chinese_simplified ] = "ÇúÏß¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü îáúåêòîâ Áåçüå";
+    Text[ polish ] = "Pasek obiektów Beziera";
+    Text[ japanese ] = "ÍŞ¼Şª‹ÈüµÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "¦±½uª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ Bézier";
+    Text[ dutch ] = "Bézierobjectbalk";
+    Text[ chinese_simplified ] = "ÇúÏß¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí Bezier";
+    Text[ korean ] = "º£Áö¾î °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Bezier nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_BEZIER_TOOLBOX
+{
+    HelpID = HID_BEZIER_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_EDIT ;
+            HelpID = SID_BEZIER_EDIT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_MOVE ;
+            HelpID = SID_BEZIER_MOVE ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_INSERT ;
+            HelpID = SID_BEZIER_INSERT ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_DELETE ;
+            HelpID = SID_BEZIER_DELETE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_CUTLINE ;
+            HelpID = SID_BEZIER_CUTLINE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_CONVERT ;
+            HelpID = SID_BEZIER_CONVERT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_EDGE ;
+            HelpID = SID_BEZIER_EDGE ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_SMOOTH ;
+            HelpID = SID_BEZIER_SMOOTH ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_SYMMTR ;
+            HelpID = SID_BEZIER_SYMMTR ;
+            RadioCheck = TRUE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_CLOSE ;
+            HelpID = SID_BEZIER_CLOSE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BEZIER_ELIMINATE_POINTS ;
+            HelpID = SID_BEZIER_ELIMINATE_POINTS ;
+        };
+    };
+    Scroll = TRUE ;
+};
+String RID_DRAW_TEXT_TOOLBOX
+{
+    Text = "Textobjektleiste" ;
+    Text [ English ] = "Text objectbar" ;
+    Text [ norwegian ] = "Tegne tekstmodus" ;
+    Text [ italian ] = "Barra degli oggetti di testo" ;
+    Text [ portuguese_brazilian ] = "Modo desenhar texto" ;
+    Text [ portuguese ] = "Barra de objectos de texto" ;
+    Text [ finnish ] = "Piirroksen tekstitila" ;
+    Text [ danish ] = "Tekstobjektlinje" ;
+    Text [ french ] = "Barre d'objets de texte" ;
+    Text [ swedish ] = "Textobjektlist" ;
+    Text [ dutch ] = "Tekstobjectbalk" ;
+    Text [ spanish ] = "Barra de objetos de texto" ;
+    Text [ english_us ] = "Text Object Bar" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü îáúåêòîâ òåêñòà";
+    Text[ polish ] = "Pasek obiektów tekstowych";
+    Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "¤å¦rª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáäÕ";
+    Text[ dutch ] = "Tekstobjectbalk";
+    Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Metin nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_DRAW_TEXT_TOOLBOX
+{
+    HelpID = HID_DRAW_TEXT_TOOLBOX ;
+    Border = TRUE ;
+    Customize = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        MN_FONT
+        MN_TEXT1(FALSE)
+        MN_TEXT1_BLOCK
+        MN_TEXT_LINESPACE
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+            Hide = TRUE;
+        };
+        MN_TEXT_DIALOGS(FALSE)
+    };
+    Scroll = TRUE ;
+};
+String RID_NUM_TOOLBOX
+{
+    Text = "Nummerierungsobjektleiste" ;
+    Text [ English ] = "Outlining objectbar" ;
+    Text [ norwegian ] = "+++Outlining" ;
+    Text [ italian ] = "Barra degli oggetti per la numerazione" ;
+    Text [ portuguese_brazilian ] = "Vazado" ;
+    Text [ portuguese ] = "Barra de objectos de numeração" ;
+    Text [ finnish ] = "Jäsennys" ;
+    Text [ danish ] = "Nummereringsobjektlinje" ;
+    Text [ french ] = "Barre d'objets de numérotation" ;
+    Text [ swedish ] = "Numreringsobjektlist" ;
+    Text [ dutch ] = "Nummeringsobjectbalk" ;
+    Text [ spanish ] = "Barra de objetos de numeración" ;
+    Text [ english_us ] = "Numbering Object Bar" ;
+    Text[ chinese_simplified ] = "±àºÅ¶ÔÏóÀ¸";
+    Text[ russian ] = "Ïàíåëü îáúåêòîâ íóìåğàöèè";
+    Text[ polish ] = "Pasek obiektów numeracji";
+    Text[ japanese ] = "”Ô†•t‚¯µÌŞ¼Şª¸ÄÊŞ°";
+    Text[ chinese_traditional ] = "½s¸¹ª«¥ó¦C";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáÊÑŞíã";
+    Text[ dutch ] = "Nummeringsobjectbalk";
+    Text[ chinese_simplified ] = "±àºÅ¶ÔÏóÀ¸";
+    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí áñßèìçóçò";
+    Text[ korean ] = "¹øÈ£ °³Ã¼ ¸ğÀ½";
+    Text[ turkish ] = "Numaralama nesne çubuğu";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_NUM_TOOLBOX
+{
+    HelpID = HID_NUM_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    LineSpacing = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_OFF ;
+            HelpID = FN_NUM_BULLET_OFF ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_UP ;
+            HelpID = FN_NUM_BULLET_UP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_DOWN ;
+            HelpID = FN_NUM_BULLET_DOWN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_OUTLINE_UP ;
+            HelpID = FN_NUM_BULLET_OUTLINE_UP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_OUTLINE_DOWN ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_NONUM ;
+            HelpID = FN_NUM_BULLET_NONUM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_MOVEUP ;
+            HelpID = FN_NUM_BULLET_MOVEUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_MOVEDOWN ;
+            HelpID = FN_NUM_BULLET_MOVEDOWN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_OUTLINE_MOVEUP ;
+            HelpID = FN_NUM_BULLET_OUTLINE_MOVEUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUM_BULLET_OUTLINE_MOVEDOWN ;
+            HelpID = FN_NUM_BULLET_OUTLINE_MOVEDOWN ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUMBER_NEWSTART ;
+            HelpID = FN_NUMBER_NEWSTART ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_NUMBER_BULLETS ;
+            HelpID = FN_NUMBER_BULLETS ;
+        };
+    };
+    Scroll = TRUE ;
+};
+String STR_SHELLNAME_TEXT
+{
+    Text = "Text" ;
+    Text [ ENGLISH ] = "Text" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ english_us ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ french ] = "Texte" ;
+    Text [ swedish ] = "Text" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese ] = "Texto" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ russian ] = "Òåêñò";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "Ã·½Ä";
+    Text[ chinese_traditional ] = "¤å¦r";
+    Text[ arabic ] = "äÕ";
+    Text[ dutch ] = "Tekst";
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ greek ] = "Êåßìåíï";
+    Text[ korean ] = "ÅØ½ºÆ®";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_TABLE
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "Table" ;
+    Text [ dutch ] = "Tabel" ;
+    Text [ english_us ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ spanish ] = "Tabla" ;
+    Text [ french ] = "Tableau" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ danish ] = "Tabel" ;
+    Text [ portuguese_brazilian ] = "Tabelle" ;
+    Text [ portuguese ] = "Tabela" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ polish ] = "Tabela";
+    Text[ japanese ] = "Ã°ÌŞÙ";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏæá";
+    Text[ dutch ] = "Tabel";
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "Ç¥";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_FRAME
+{
+    Text = "Rahmen" ;
+    Text [ ENGLISH ] = "Frame" ;
+    Text [ dutch ] = "Kader" ;
+    Text [ english_us ] = "Frame" ;
+    Text [ italian ] = "Cornice" ;
+    Text [ spanish ] = "Marco" ;
+    Text [ french ] = "Cadre" ;
+    Text [ swedish ] = "Ram" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ portuguese_brazilian ] = "Rahmen" ;
+    Text [ portuguese ] = "Moldura" ;
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ russian ] = "Òåêñòîâîå ïîëå";
+    Text[ polish ] = "Ramka";
+    Text[ japanese ] = "˜g";
+    Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+    Text[ arabic ] = "ÅØÇÑ";
+    Text[ dutch ] = "Kader";
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ korean ] = "ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Çerçeve";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_GRAPHIC
+{
+    Text = "Grafik" ;
+    Text [ ENGLISH ] = "Graphic" ;
+    Text [ english_us ] = "Graphics" ;
+    Text [ italian ] = "Grafico" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ french ] = "Image" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ danish ] = "Billede" ;
+    Text [ portuguese_brazilian ] = "Grafik" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ polish ] = "Grafika";
+    Text[ japanese ] = "}";
+    Text[ chinese_traditional ] = "¹Ï¤ù";
+    Text[ arabic ] = "ÕæÑÉ";
+    Text[ dutch ] = "Afbeelding";
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_OBJECT
+{
+    Text = "Objekt" ;
+    Text [ ENGLISH ] = "Object" ;
+    Text [ english_us ] = "Object" ;
+    Text [ italian ] = "Oggetto" ;
+    Text [ spanish ] = "Objeto" ;
+    Text [ french ] = "Objet" ;
+    Text [ dutch ] = "Object" ;
+    Text [ swedish ] = "Objekt" ;
+    Text [ danish ] = "Objekt" ;
+    Text [ portuguese_brazilian ] = "Objekt" ;
+    Text [ portuguese ] = "Objecto" ;
+    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ russian ] = "Îáúåêò";
+    Text[ polish ] = "Obiekt";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "ª«¥ó";
+    Text[ arabic ] = "ßÇÆä";
+    Text[ dutch ] = "Object";
+    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ greek ] = "Áíôéêåßìåíï";
+    Text[ korean ] = "°³Ã¼";
+    Text[ turkish ] = "Nesne";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_LIST
+{
+    Text = "Liste" ;
+    Text [ ENGLISH ] = "List" ;
+    Text [ dutch ] = "Lijst" ;
+    Text [ english_us ] = "List" ;
+    Text [ italian ] = "Elenco" ;
+    Text [ spanish ] = "Lista" ;
+    Text [ french ] = "Liste" ;
+    Text [ swedish ] = "Lista" ;
+    Text [ danish ] = "Liste" ;
+    Text [ portuguese_brazilian ] = "Liste" ;
+    Text [ portuguese ] = "Lista" ;
+    Text[ chinese_simplified ] = "ÁĞ±í";
+    Text[ russian ] = "Ñïèñîê";
+    Text[ polish ] = "Lista";
+    Text[ japanese ] = "Ø½Ä";
+    Text[ chinese_traditional ] = "²M³æ";
+    Text[ arabic ] = "ŞÇÆãÉ";
+    Text[ dutch ] = "Lijst";
+    Text[ chinese_simplified ] = "ÁĞ±í";
+    Text[ greek ] = "Ëßóôá";
+    Text[ korean ] = "¸®½ºÆ®";
+    Text[ turkish ] = "Liste";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_DRAW
+{
+    Text = "Zeichnung" ;
+    Text [ ENGLISH ] = "Drawing" ;
+    Text [ dutch ] = "Tekening" ;
+    Text [ english_us ] = "Drawing" ;
+    Text [ italian ] = "Disegno" ;
+    Text [ spanish ] = "Dibujo" ;
+    Text [ french ] = "Dessin" ;
+    Text [ swedish ] = "Teckning" ;
+    Text [ danish ] = "Tegning" ;
+    Text [ portuguese_brazilian ] = "Zeichnung" ;
+    Text [ portuguese ] = "Desenho" ;
+    Text[ chinese_simplified ] = "»æÍ¼";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ polish ] = "Rysunek";
+    Text[ japanese ] = "}Œ`•`‰æ";
+    Text[ chinese_traditional ] = "Ã¸¹Ï";
+    Text[ arabic ] = "ÑÓã";
+    Text[ dutch ] = "Tekening";
+    Text[ chinese_simplified ] = "»æÍ¼";
+    Text[ greek ] = "Ó÷İäéï";
+    Text[ korean ] = "±×¸®±â";
+    Text[ turkish ] = "Çizim";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_DRAWFORM
+{
+    Text = "Forms" ;
+    Text [ ENGLISH ] = "Forms" ;
+    Text [ english_us ] = "Forms" ;
+    Text [ portuguese_brazilian ] = "Forms" ;
+    Text [ swedish ] = "Forms" ;
+    Text [ danish ] = "Formular" ;
+    Text [ italian ] = "Forms" ;
+    Text [ spanish ] = "Formularios" ;
+    Text [ french ] = "Formulaires" ;
+    Text [ dutch ] = "Forms" ;
+    Text [ portuguese ] = "Formulários" ;
+    Text[ chinese_simplified ] = "¹«Ê½";
+    Text[ russian ] = "Ôîğìû";
+    Text[ polish ] = "Kszta³ty";
+    Text[ japanese ] = "Ì«°Ñ";
+    Text[ chinese_traditional ] = "¤½¦¡";
+    Text[ arabic ] = "äãÇĞÌ";
+    Text[ dutch ] = "Forms";
+    Text[ chinese_simplified ] = "¹«Ê½";
+    Text[ greek ] = "Öüñìåò";
+    Text[ korean ] = "¾ç½Ä";
+    Text[ turkish ] = "Form";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_BEZIER
+{
+    Text = "Bezier" ;
+    Text [ ENGLISH ] = "Bezier" ;
+    Text [ english_us ] = "Bézier" ;
+    Text [ portuguese_brazilian ] = "Bezier" ;
+    Text [ swedish ] = "Bézier" ;
+    Text [ danish ] = "Bezier" ;
+    Text [ italian ] = "Bezier" ;
+    Text [ spanish ] = "Bézier" ;
+    Text [ french ] = "Bézier" ;
+    Text [ dutch ] = "Bézier" ;
+    Text [ portuguese ] = "Bézier" ;
+    Text[ chinese_simplified ] = "ÇúÏß";
+    Text[ russian ] = "Áåçüå";
+    Text[ polish ] = "Bezier";
+    Text[ japanese ] = "ÍŞ¼Şª‹Èü";
+    Text[ chinese_traditional ] = "¦±½u";
+    Text[ arabic ] = "Bézier";
+    Text[ dutch ] = "Bézier";
+    Text[ chinese_simplified ] = "ÇúÏß";
+    Text[ greek ] = "Bezier";
+    Text[ korean ] = "º£Áö¾î";
+    Text[ turkish ] = "Bezier";
+    Text[ language_user1 ] = " ";
+};
+String STR_SHELLNAME_DRAW_TEXT
+{
+    Text = "Zeichentext" ;
+    Text [ ENGLISH ] = "Draw text" ;
+    Text [ english_us ] = "Draw text" ;
+    Text [ italian ] = "Testo di disegno" ;
+    Text [ spanish ] = "Texto de diseño" ;
+    Text [ french ] = "Texte dessiné" ;
+    Text [ dutch ] = "Tekentekst" ;
+    Text [ swedish ] = "Teckningstext" ;
+    Text [ danish ] = "Tegnetekst" ;
+    Text [ portuguese_brazilian ] = "Zeichentext" ;
+    Text [ portuguese ] = "Texto de desenho" ;
+    Text[ chinese_simplified ] = "»æÍ¼ÎÄ×Ö";
+    Text[ russian ] = "Òåêñò ğèñóíêà";
+    Text[ polish ] = "Tekst rysunku";
+    Text[ japanese ] = "}Œ`•`‰æÃ·½Ä";
+    Text[ chinese_traditional ] = "Ã¸¹Ï¤å¦r";
+    Text[ arabic ] = "äÕ ÑÓã";
+    Text[ dutch ] = "Tekentekst";
+    Text[ chinese_simplified ] = "»æÍ¼ÎÄ×Ö";
+    Text[ greek ] = "Êåßìåíï ó÷åäßïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ±×¸®±â";
+    Text[ turkish ] = "Çizim metni";
+    Text[ language_user1 ] = " ";
+};
+ //Strings fuer Gallery/Hintergrund
+String STR_SWBG_PARAGRAPH
+{
+    Text = "Absatz" ;
+    Text [ ENGLISH ] = "Paragraph" ;
+    Text [ english_us ] = "Paragraph" ;
+    Text [ portuguese_brazilian ] = "Absatz" ;
+    Text [ swedish ] = "Stycke" ;
+    Text [ danish ] = "Afsnit" ;
+    Text [ italian ] = "Paragrafo" ;
+    Text [ spanish ] = "Párrafo" ;
+    Text [ french ] = "Paragraphe" ;
+    Text [ dutch ] = "Alinea" ;
+    Text [ portuguese ] = "Parágrafo" ;
+    Text[ chinese_simplified ] = "¶ÎÂä";
+    Text[ russian ] = "Àáçàö";
+    Text[ polish ] = "Akapit";
+    Text[ japanese ] = "’i—";
+    Text[ chinese_traditional ] = "¬q¸¨";
+    Text[ arabic ] = "İŞÑÉ";
+    Text[ dutch ] = "Alinea";
+    Text[ chinese_simplified ] = "¶ÎÂä";
+    Text[ greek ] = "ĞáñÜãñáöïò";
+    Text[ korean ] = "´Ü¶ô";
+    Text[ turkish ] = "Paragraf";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_GRAPHIC
+{
+    Text = "Grafik" ;
+    Text [ ENGLISH ] = "Graphic" ;
+    Text [ english_us ] = "Graphics" ;
+    Text [ portuguese_brazilian ] = "Grafik" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ danish ] = "Billede" ;
+    Text [ italian ] = "Immagine" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ french ] = "Image" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ polish ] = "Grafika";
+    Text[ japanese ] = "}";
+    Text[ chinese_traditional ] = "¹Ï¤ù";
+    Text[ arabic ] = "ÕæÑÉ";
+    Text[ dutch ] = "Afbeelding";
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_OLE
+{
+    Text = "OLE Objekt" ;
+    Text [ ENGLISH ] = "OLE Object" ;
+    Text [ english_us ] = "OLE object" ;
+    Text [ portuguese_brazilian ] = "OLE Objekt" ;
+    Text [ swedish ] = "OLE-objekt" ;
+    Text [ danish ] = "OLE-objekt" ;
+    Text [ italian ] = "Oggetto OLE" ;
+    Text [ spanish ] = "Objeto OLE" ;
+    Text [ french ] = "Objet OLE" ;
+    Text [ dutch ] = "OLE-object" ;
+    Text [ portuguese ] = "Objecto OLE" ;
+    Text[ chinese_simplified ] = "OLE ¶ÔÏó";
+    Text[ russian ] = "Îáúåêò OLE";
+    Text[ polish ] = "Obiekt OLE";
+    Text[ japanese ] = "OLE µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "OLE ª«¥ó";
+    Text[ arabic ] = "ßÇÆä OLE";
+    Text[ dutch ] = "OLE-object";
+    Text[ chinese_simplified ] = "OLE ¶ÔÏó";
+    Text[ greek ] = "Áíôéêåßìåíï OLE";
+    Text[ korean ] = "OLE °³Ã¼";
+    Text[ turkish ] = "OLE nesnesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_FRAME
+{
+    Text = "Rahmen" ;
+    Text [ ENGLISH ] = "Frame" ;
+    Text [ english_us ] = "Frame" ;
+    Text [ portuguese_brazilian ] = "Rahmen" ;
+    Text [ swedish ] = "Ram" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ italian ] = "Cornice" ;
+    Text [ spanish ] = "Marco" ;
+    Text [ french ] = "Cadre" ;
+    Text [ dutch ] = "Kader" ;
+    Text [ portuguese ] = "Moldura" ;
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ russian ] = "Òåêñòîâîå ïîëå";
+    Text[ polish ] = "Ramka";
+    Text[ japanese ] = "˜g";
+    Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+    Text[ arabic ] = "ÅØÇÑ";
+    Text[ dutch ] = "Kader";
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ korean ] = "ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Çerçeve";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_TABLE
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "Table" ;
+    Text [ english_us ] = "Table" ;
+    Text [ portuguese_brazilian ] = "Tabelle" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ danish ] = "Tabel" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ spanish ] = "Tabla" ;
+    Text [ french ] = "Tableau" ;
+    Text [ dutch ] = "Tabel" ;
+    Text [ portuguese ] = "Tabela" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ polish ] = "Tabela";
+    Text[ japanese ] = "Ã°ÌŞÙ";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏæá";
+    Text[ dutch ] = "Tabel";
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "Ç¥";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_TABLE_ROW
+{
+    Text = "Tabellenzeile" ;
+    Text [ ENGLISH ] = "Tablerow" ;
+    Text [ english_us ] = "Table row" ;
+    Text [ portuguese_brazilian ] = "Tabellenzeile" ;
+    Text [ swedish ] = "Tabellrad" ;
+    Text [ danish ] = "Tabelrække" ;
+    Text [ italian ] = "Riga" ;
+    Text [ spanish ] = "Fila de la tabla" ;
+    Text [ french ] = "Ligne de table" ;
+    Text [ dutch ] = "Tabelrij" ;
+    Text [ portuguese ] = "Linha de tabela" ;
+    Text[ chinese_simplified ] = "¹¤×÷±íµ¥Ôª¸ñ";
+    Text[ russian ] = "Ñòğîêà òàáëèöû";
+    Text[ polish ] = "Wiersz tabeli";
+    Text[ japanese ] = "•\\‚Ìs";
+    Text[ chinese_traditional ] = "¤u§@ªíÀx¦s®æ";
+    Text[ arabic ] = "Õİ ÌÏæá";
+    Text[ dutch ] = "Tabelrij";
+    Text[ chinese_simplified ] = "¹¤×÷±íµ¥Ôª¸ñ";
+    Text[ greek ] = "ÃñáììŞ ğßíáêá";
+    Text[ korean ] = "Ç¥ Çà";
+    Text[ turkish ] = "Tablo satırı";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_TABLE_CELL
+{
+    Text = "Tabellenzelle" ;
+    Text [ ENGLISH ] = "Tablecell" ;
+    Text [ english_us ] = "Table cell" ;
+    Text [ portuguese_brazilian ] = "Tabellenzelle" ;
+    Text [ swedish ] = "Tabellcell" ;
+    Text [ danish ] = "Tabelcelle" ;
+    Text [ italian ] = "Cella" ;
+    Text [ spanish ] = "Celda de la tabla" ;
+    Text [ french ] = "Cellule de table" ;
+    Text [ dutch ] = "Tabelcel" ;
+    Text [ portuguese ] = "Célula de tabela" ;
+    Text[ chinese_simplified ] = "¹¤×÷±íµ¥Ôª¸ñ";
+    Text[ russian ] = "ß÷åéêà òàáëèöû";
+    Text[ polish ] = "Komórka tabeli";
+    Text[ japanese ] = "Ã°ÌŞÙ‚Ì¾Ù";
+    Text[ chinese_traditional ] = "¤u§@ªíÀx¦s®æ";
+    Text[ arabic ] = "ÎáíÉ ÌÏæá";
+    Text[ dutch ] = "Tabelcel";
+    Text[ chinese_simplified ] = "¹¤×÷±íµ¥Ôª¸ñ";
+    Text[ greek ] = "Êåëß ğßíáêá";
+    Text[ korean ] = "Ç¥ ¼¿";
+    Text[ turkish ] = "Tablo hücresi";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_PAGE
+{
+    Text = "Seite" ;
+    Text [ ENGLISH ] = "Page" ;
+    Text [ english_us ] = "Page" ;
+    Text [ portuguese_brazilian ] = "Seite" ;
+    Text [ swedish ] = "Sida" ;
+    Text [ danish ] = "Side" ;
+    Text [ italian ] = "Pagina" ;
+    Text [ spanish ] = "Página" ;
+    Text [ french ] = "Page" ;
+    Text [ dutch ] = "Pagina" ;
+    Text [ portuguese ] = "Página" ;
+    Text[ chinese_simplified ] = "Ò³";
+    Text[ russian ] = "Ñòğàíèöà";
+    Text[ polish ] = "Strona";
+    Text[ japanese ] = "Íß°¼Ş";
+    Text[ chinese_traditional ] = "­¶";
+    Text[ arabic ] = "ÕİÍÉ";
+    Text[ dutch ] = "Pagina";
+    Text[ chinese_simplified ] = "Ò³";
+    Text[ greek ] = "Óåëßäá";
+    Text[ korean ] = "ÆäÀÌÁö";
+    Text[ turkish ] = "Sayfa";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_HEADER
+{
+    Text = "Kopfzeile" ;
+    Text [ ENGLISH ] = "Header" ;
+    Text [ english_us ] = "Header" ;
+    Text [ portuguese_brazilian ] = "Kopfzeile" ;
+    Text [ swedish ] = "Sidhuvud" ;
+    Text [ danish ] = "Sidehoved" ;
+    Text [ italian ] = "Riga d'intestazione" ;
+    Text [ spanish ] = "Encabezamiento" ;
+    Text [ french ] = "En-tête" ;
+    Text [ dutch ] = "Koptekst" ;
+    Text [ portuguese ] = "Cabeçalho" ;
+    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
+    Text[ polish ] = "Nag³ówek";
+    Text[ japanese ] = "Í¯ÀŞ";
+    Text[ chinese_traditional ] = "­¶­º";
+    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
+    Text[ dutch ] = "Koptekst";
+    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ greek ] = "Êåöáëßäá";
+    Text[ korean ] = "¸Ó¸®±Û";
+    Text[ turkish ] = "Üstbilgi";
+    Text[ language_user1 ] = " ";
+};
+String STR_SWBG_FOOTER
+{
+    Text = "Fußzeile" ;
+    Text [ ENGLISH ] = "Footer" ;
+    Text [ english_us ] = "Footer" ;
+    Text [ portuguese_brazilian ] = "Fußzeile" ;
+    Text [ swedish ] = "Sidfot" ;
+    Text [ danish ] = "Sidefod" ;
+    Text [ italian ] = "Piè di pagina" ;
+    Text [ spanish ] = "Pie de página" ;
+    Text [ french ] = "Pied de page" ;
+    Text [ dutch ] = "Voettekst" ;
+    Text [ portuguese ] = "Rodapé" ;
+    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ russian ] = "Íèæíèé êîëîíòèòóë";
+    Text[ polish ] = "Stopka";
+    Text[ japanese ] = "‹r’";
+    Text[ chinese_traditional ] = "­¶§À";
+    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
+    Text[ dutch ] = "Voettekst";
+    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ greek ] = "Õğïóİëéäï";
+    Text[ korean ] = "¹Ù´Ú±Û";
+    Text[ turkish ] = "Altbilgi";
+    Text[ language_user1 ] = " ";
+};
+ //Ende: Strings fuer Gallery/Hintergrund
+

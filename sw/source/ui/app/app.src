@@ -1,0 +1,2966 @@
+/*************************************************************************
+ *
+ *  $RCSfile: app.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+
+#include <svtools/style.hrc>
+#include <sfx2/sfx.hrc>
+#include <svx/dialogs.hrc>
+#include <svx/globlmn.hrc>
+#include <basctl/basicide.hrc>
+#include <offmgr/sba.hrc>
+#include "cmdid.h"
+#include "globals.hrc"
+#include "app.hrc"
+#include "statstr.hrc"
+#include "swstyle.h"
+#include "comcore.hrc"
+#include "shells.hrc"
+
+
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+
+String RID_SW_NAME
+{
+    TEXT = "StarWriter" ;
+};
+
+String STR_PRINT_MERGE_MACRO
+{
+    TEXT = "Serienbriefe drucken" ;
+    TEXT [ English ] = "Print merge" ;
+    Text [ english_us ] = "Print form letters" ;
+    Text [ italian ] = "Stampa in serie" ;
+    Text [ spanish ] = "Imprimir cartas en serie" ;
+    Text [ french ] = "Imprimer un mailing" ;
+    Text [ dutch ] = "Standaardbrieven afdrukken" ;
+    Text [ swedish ] = "Skriv ut standardbrev" ;
+    Text [ danish ] = "Udskriv flettede breve" ;
+    Text [ portuguese_brazilian ] = "Serienbriefe drucken" ;
+    Text [ portuguese ] = "Imprimir cartas em série" ;
+    Text[ chinese_simplified ] = "´òÓ¡ÓÊ¼şºÏ²¢";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Ïå÷àòü ñëèÿíèÿ";
+    Text[ polish ] = "Drukuj listy seryjne";
+    Text[ japanese ] = "·‚µ‚İˆóü";
+    Text[ chinese_traditional ] = "¦X¨Ö¦C¦L";
+    Text[ arabic ] = "ØÈÇÚÉ ÎØÇÈÇÊ ãÓáÓáÉ";
+    Text[ dutch ] = "Standaardbrieven afdrukken";
+    Text[ chinese_simplified ] = "´òÓ¡ÓÊ¼şºÏ²¢";
+    Text[ greek ] = "Åêôığùóç ïìáäéêŞò åğéóôïëŞò";
+    Text[ korean ] = "¿¬¼ÓÆíÁö ÀÎ¼â";
+    Text[ turkish ] = "Standart mektup yazdır";
+};
+
+String STR_PAGE_COUNT_MACRO
+{
+    TEXT = "Änderung der Seitenanzahl" ;
+    TEXT [ English ] = "Page count changed" ;
+    Text [ english_us ] = "Changing the page count" ;
+    Text [ portuguese_brazilian ] = "Änderung der Seitenanzahl" ;
+    Text [ swedish ] = "Ändring av sidantal" ;
+    Text [ danish ] = "Modificer sideantal" ;
+    Text [ italian ] = "Modifica del numero delle pagine" ;
+    Text [ spanish ] = "Modificación del número de páginas" ;
+    Text [ french ] = "Modification du nombre de pages" ;
+    Text [ dutch ] = "Wijziging van het aantal pagina's" ;
+    Text [ portuguese ] = "Modificar número de páginas" ;
+    Text[ chinese_simplified ] = "¸ü¸ÄÒ³Êı";
+    Text[ russian ] = "Èçìåíåíèå êîëè÷åñòâà ñòğàíèö";
+    Text[ polish ] = "Zmiana liczby stron";
+    Text[ japanese ] = "Íß°¼Ş”‚Ì•ÏX";
+    Text[ chinese_traditional ] = "ÅÜ§ó­¶¼Æ";
+    Text[ arabic ] = "ÊÛííÑ ÚÏÏ ÇáÕİÍÇÊ";
+    Text[ dutch ] = "Wijziging van het aantal pagina's";
+    Text[ chinese_simplified ] = "¸ü¸ÄÒ³Êı";
+    Text[ greek ] = "Äéüñèùóç ğëŞèïõò óåëéäşí";
+    Text[ korean ] = "ÆäÀÌÁö Ä«¿îÆ® º¯°æ";
+    Text[ turkish ] = "Sayfa sayısının değiştirilmesi";
+    Text[ language_user1 ] = " ";
+};
+
+ // Image-Liste ----------------------------------------------------------------
+ //Dafuer gibt es jetzt eine Vorsortierung:
+ //1. SID_
+ //2. RID_
+ //3. FN_
+ //4. Ids, die noch aus der Default-Liste entfernt werden muessen
+
+#define IMAGELIST_AND_COUNT             \
+    IdList = {                          \
+        SID_SELECTALL                   ;\
+        SID_NEWDOCDIRECT                ;\
+        SID_DOCINFO                     ;\
+        SID_CLOSEDOCS                   ;\
+        SID_MAIL_SENDDOC                ;\
+        SID_PRINTPREVIEW                ;\
+                                        \
+           SID_INSERT_GRAPHIC               ;\
+           SID_INSERT_DRAW                  ;\
+        SID_DOCTEMPLATE                 ;\
+        SID_AUTOFORMAT                  ;\
+        SID_AUTOSPELL_CHECK             ;\
+        SID_EXTENDEDHELP                ;\
+        SID_ATTR_CHAR_FONT              ;\
+        SID_ATTR_CHAR_FONTHEIGHT        ;\
+        SID_ATTR_CHAR_STRIKEOUT         ;\
+        SID_ATTR_CHAR_SHADOWED          ;\
+        SID_OBJECT_HELL                 ;\
+        SID_OBJECT_HEAVEN               ;\
+        SID_ATTR_FILL_STYLE             ;\
+        SID_ATTR_LINE_STYLE             ;\
+        SID_ATTR_LINE_WIDTH             ;\
+         SID_ATTR_LINE_COLOR                ;\
+        SID_ATTR_LINEEND_STYLE          ;\
+         SID_BACKGROUND_COLOR           ;\
+         SID_FRAME_LINESTYLE                ;\
+         SID_FRAME_LINECOLOR                ;\
+        SID_SIM_START                   ;\
+        SID_ATTR_ZOOM                   ;\
+        SID_WIN_FULLSCREEN              ;\
+        SID_FRAME_TO_TOP                ;\
+        SID_FRAME_TO_BOTTOM             ;\
+        SID_SBA_ADDRPI                  ;\
+        SID_FONTWORK                    ;\
+                                        \
+        SID_ATTR_TRANSFORM              ;\
+        SID_ATTR_CHAR_COLOR2;\
+        SID_ATTR_CHAR_COLOR_BACKGROUND ;\
+                                        \
+        FN_NUMBER_BULLETS               ;\
+        FN_NUM_BULLET_DOWN              ;\
+         FN_NUM_BULLET_UP               ;\
+         FN_NUM_BULLET_MOVEUP           ;\
+         FN_NUM_BULLET_MOVEDOWN             ;\
+         FN_NUM_BULLET_NONUM                ;\
+         FN_NUM_BULLET_OFF              ;\
+         FN_NUM_BULLET_OUTLINE_DOWN         ;\
+         FN_NUM_BULLET_OUTLINE_UP       ;\
+         FN_NUM_BULLET_OUTLINE_MOVEUP   ;\
+         FN_NUM_BULLET_OUTLINE_MOVEDOWN     ;\
+        FN_NUMBER_NEWSTART ;\
+          FN_INSERT_FIELD                   ;\
+        FN_VIEW_FIELDS                  ;\
+        FN_VIEW_FIELDNAME               ;\
+        FN_VIEW_GRAPHIC                 ;\
+        FN_VIEW_MARKS                   ;\
+           FN_VIEW_META_CHARS               ;\
+           FN_INSERT_TABLE                  ;\
+           FN_INSERT_FRAME_INTERACT     ;\
+           FN_INSERT_FRAME_INTERACT_NOCOL   ;\
+           FN_FRAME_CHAIN                   ;\
+           FN_FRAME_UNCHAIN             ;\
+           FN_INSERT_FRAME                  ;\
+         FN_TOOL_ANKER                  ;\
+        FN_SET_SUPER_SCRIPT             ;\
+        FN_SET_SUB_SCRIPT               ;\
+        FN_UNDERLINE_DOUBLE             ;\
+        SID_ATTR_PARA_ADJUST_BLOCK              ;\
+        FN_FORMAT_FRAME_DLG             ;\
+        FN_FRAME_NOWRAP                 ;\
+        FN_FRAME_WRAP                   ;\
+        FN_FRAME_WRAPTHRU               ;\
+        FN_FRAME_WRAP_IDEAL             ;\
+        FN_FRAME_WRAP_LEFT              ;\
+        FN_FRAME_WRAP_RIGHT             ;\
+        FN_FRAME_WRAP_CONTOUR           ;\
+        SID_CONTOUR_DLG                 ;\
+        FN_FRAME_ALIGN_HORZ_LEFT        ;\
+        FN_FRAME_ALIGN_HORZ_RIGHT       ;\
+        FN_FRAME_ALIGN_HORZ_CENTER      ;\
+        FN_FRAME_ALIGN_VERT_TOP         ;\
+        FN_FRAME_ALIGN_VERT_BOTTOM      ;\
+        FN_FRAME_ALIGN_VERT_CENTER      ;\
+        FN_TABLE_INSERT_ROW             ;\
+        FN_TABLE_INSERT_COL             ;\
+        FN_TABLE_DELETE_ROW             ;\
+        FN_TABLE_DELETE_COL             ;\
+        FN_TABLE_SPLIT_CELLS            ;\
+        FN_TABLE_MERGE_CELLS            ;\
+        FN_TABLE_SELECT_ROW             ;\
+        FN_TABLE_SELECT_COL             ;\
+        FN_TABLE_SELECT_ALL             ;\
+        FN_OPTIMIZE_TABLE ;\
+        FN_TABLE_OPTIMAL_HEIGHT;\
+        FN_TABLE_BALANCE_ROWS  ;\
+        FN_TABLE_ADJUST_CELLS  ;\
+        FN_TABLE_BALANCE_CELLS ;\
+        FN_PAGE_STYLE_SET_COLS          ;\
+        FN_FLIP_HORZ_GRAFIC             ;\
+        FN_FLIP_VERT_GRAFIC             ;\
+        FN_SPELLING_DLG                 ;\
+        FN_START_TABLE                  ;\
+        FN_END_TABLE                    ;\
+        FN_FORMULA_CALC                 ;\
+        FN_FORMULA_CANCEL               ;\
+         FN_FORMULA_APPLY               ;\
+        SID_NAVIGATOR               ;\
+        FN_PAGEUP                       ;\
+        FN_PAGEDOWN                     ;\
+        FN_START_OF_DOCUMENT            ;\
+        FN_END_OF_DOCUMENT              ;\
+        FN_SHOW_TWO_PAGES               ;\
+        FN_SHOW_FOUR_PAGES              ;\
+        FN_FORMAT_PAGE_DLG              ;\
+        FN_PRINT_PAGEPREVIEW            ;\
+        FN_FAX                          ;\
+        FN_QRY_MERGE                    ;\
+        FN_EDIT_FORMULA; \
+        FN_INSERT_CTRL       ;\
+        FN_INSERT_OBJ_CTRL   ;\
+        FN_INSERT_FIELD_CTRL ;\
+        SID_SOURCEVIEW;\
+        FN_TABLE_VERT_NONE;\
+        FN_TABLE_VERT_CENTER;\
+        FN_TABLE_VERT_BOTTOM;\
+        FN_TABLE_MODE_FIX      ;\
+        FN_TABLE_MODE_FIX_PROP ;\
+        FN_TABLE_MODE_VARIABLE ;\
+        FN_PRINT_LAYOUT ;\
+        FN_INSERT_HEADER;\
+        FN_INSERT_FOOTER;\
+        FN_TABLE_AUTOSUM;\
+        FN_PREVIEW_PRINT_OPTIONS;\
+        FN_PREVIEW_ZOOM;\
+                                        \
+        SID_STYLE_APPLY                 ;\
+        SID_STYLE_NEW_BY_EXAMPLE        ;\
+        SID_STYLE_UPDATE_BY_EXAMPLE ;\
+         SID_ATTR_BORDER                    ;\
+        SID_PLAYMACRO                   ;\
+        SID_CHAR_DLG                    ;\
+        SID_PARA_DLG                    ;\
+        SID_INSERT_PREVIEW ; \
+        SID_INSERT_SPINBUTTON ;\
+        SID_INSERT_HSCROLLBAR ;\
+        SID_INSERT_VSCROLLBAR ;\
+           FN_QRY                           ;\
+           FN_INSERT_OBJECT_DLG         ;\
+           FN_INSERT_SYMBOL             ;\
+           FN_POSTIT                        ;\
+        FN_GROW_FONT_SIZE               ;\
+        FN_SHRINK_FONT_SIZE             ;\
+        FN_THESAURUS_DLG                ;\
+        FN_HYPHENATE_OPT_DLG            ;\
+        FN_GLOSSARY_DLG                 ;\
+        SID_INSERT_URLBUTTON            ;\
+                                                    \
+        FN_INSERT_FLD_DATE    ;\
+        FN_INSERT_FLD_TIME    ;\
+        FN_INSERT_FLD_PGNUMBER;\
+        FN_INSERT_FLD_PGCOUNT ;\
+        FN_INSERT_FLD_TOPIC   ;\
+        FN_INSERT_FLD_TITLE   ;\
+        FN_INSERT_FLD_AUTHOR  ;\
+        FN_INSERT_SIM;        \
+        FN_INSERT_SMA;        \
+        FN_INSERT_FOOTNOTE;    \
+        FN_INSERT_ENDNOTE;    \
+        FN_INSERT_IDX_ENTRY_DLG;\
+        FN_INSERT_BOOKMARK;      \
+        SID_SEARCH_DLG; \
+        SID_INSERTDOC;              \
+        SID_INSERT_FLOATINGFRAME;\
+        FN_SHADOWCURSOR;\
+        FN_INSERT_CAPTION;\
+        FN_INSERT_REF_FIELD;\
+        FN_INSERT_COLUMN_SECTION;\
+                                        \
+                                        \
+        };                              \
+    IdCount = {                         \
+        172;                            \
+    };
+
+
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_out.bmp" ;
+        File [ english ] = "sc_out01.bmp" ;
+        File [ english_us ] = "sc_out01.bmp" ;
+        File [ dutch ] = "sc_out31.bmp" ;
+        File [ french ] = "sc_out33.bmp" ;
+        File [ spanish ] = "sc_out34.bmp" ;
+        File [ italian ] = "sc_out39.bmp" ;
+        File [ swedish ] = "sc_out46.bmp" ;
+        File [ danish ] = "sc_out45.bmp" ;
+        File [ russian ] = "sc_out07.bmp" ;
+        File [ polish ] = "sc_out48.bmp" ;
+        File [ greek ] = "sc_out30.bmp" ;
+        File [ japanese ] = "sc_out81.bmp" ;
+        File [ portuguese ] = "sc_out03.bmp" ;
+    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGELIST_AND_COUNT
+};
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_out.bmp" ;
+        File [ english ] = "lc_out01.bmp" ;
+        File [ english_us ] = "lc_out01.bmp" ;
+        File [ dutch ] = "lc_out31.bmp" ;
+        File [ french ] = "lc_out33.bmp" ;
+        File [ spanish ] = "lc_out34.bmp" ;
+        File [ italian ] = "lc_out39.bmp" ;
+        File [ swedish ] = "lc_out46.bmp" ;
+        File [ danish ] = "lc_out45.bmp" ;
+        File [ russian ] = "lc_out07.bmp" ;
+        File [ polish ] = "lc_out48.bmp" ;
+        File [ greek ] = "lc_out30.bmp" ;
+        File [ japanese ] = "lc_out81.bmp" ;
+        File [ portuguese ] = "lc_out03.bmp" ;
+    };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGELIST_AND_COUNT
+};
+
+ // Vorlagen
+SfxStyleFamilies DLG_STYLE_DESIGNER
+{
+    StyleFamilyList =
+    {
+        SfxStyleFamilyItem
+        {
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "catpar.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
+            Text = "Absatzvorlagen" ;
+            Text [ ENGLISH ] = "Paragraph Styles" ;
+            Text [ norwegian ] = "Avsnittsmaler" ;
+            Text [ italian ] = "Modelli di paragrafo" ;
+            Text [ portuguese_brazilian ] = "Estilos de parágrafo" ;
+            Text [ portuguese ] = "Estilos de parágrafo" ;
+            Text [ finnish ] = "Kappaletyylit" ;
+            Text [ danish ] = "Afsnitstypografier" ;
+            Text [ french ] = "Styles de paragraphe" ;
+            Text [ swedish ] = "Styckeformatmallar" ;
+            Text [ dutch ] = "Alinea-opmaakprofielen" ;
+            Text [ spanish ] = "Estilos de párrafo" ;
+            Text [ english_us ] = "Paragraph Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            FilterList =
+            {
+                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
+                < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
+                < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
+                < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
+                < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
+                < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            FilterList [ ENGLISH ] =
+            {
+                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
+                < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
+                < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
+                < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
+                < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
+                < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ english_us ] =
+            {
+                < "Automatic" ; SFXSTYLEBIT_AUTO ; > ;
+                < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Text Styles" ; SWSTYLEBIT_TEXT ; > ;
+                < "Chapter Styles" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "List Styles" ; SWSTYLEBIT_LIST ; > ;
+                < "Index Styles" ; SWSTYLEBIT_IDX ; > ;
+                < "Special Styles" ; SWSTYLEBIT_EXTRA ; > ;
+                < "HTML Styles" ; SWSTYLEBIT_HTML ; > ;
+                < "Conditional Styles" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ portuguese_brazilian ] =
+            {
+                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
+                < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
+                < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
+                < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
+                < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
+                < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ swedish ] =
+            {
+                < "Automatiskt" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Alla formatmallar" ; SFXSTYLEBIT_ALL ; > ;
+                < "Använda formatmallar" ; SFXSTYLEBIT_USED ; > ;
+                < "Användardefinierade formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Textformatmallar" ; SWSTYLEBIT_TEXT ; > ;
+                < "Kapitelformatmallar" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Listformatmallar" ; SWSTYLEBIT_LIST ; > ;
+                < "Förteckningsformatmallar" ; SWSTYLEBIT_IDX ; > ;
+                < "Formatmallar specialområde" ; SWSTYLEBIT_EXTRA ; > ;
+                < "HTML formatmallar" ; SWSTYLEBIT_HTML ; > ;
+                < "Villkorliga formatmallar" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ danish ] =
+            {
+                < "Automatisk" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Alle typografier" ; SFXSTYLEBIT_ALL ; > ;
+                < "Anvendte typografier" ; SFXSTYLEBIT_USED ; > ;
+                < "Brugerdefinerede typografier" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Teksttypografier" ; SWSTYLEBIT_TEXT ; > ;
+                < "Kapiteltypografier" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Listetypografier" ; SWSTYLEBIT_LIST ; > ;
+                < "Indekstypografier" ; SWSTYLEBIT_IDX ; > ;
+                < "Typografi særområder" ; SWSTYLEBIT_EXTRA ; > ;
+                < "HTML-typografier" ; SWSTYLEBIT_HTML ; > ;
+                < "Betingede typografier" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ italian ] =
+            {
+                < "Automatico" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Tutti i modelli" ; SFXSTYLEBIT_ALL ; > ;
+                < "Modelli usati" ; SFXSTYLEBIT_USED ; > ;
+                < "Modelli utente" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Modelli di testo" ; SWSTYLEBIT_TEXT ; > ;
+                < "Modelli di capitolo" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Modelli di elenchi" ; SWSTYLEBIT_LIST ; > ;
+                < "Modelli di indice" ; SWSTYLEBIT_IDX ; > ;
+                < "Modelli aree speciali" ; SWSTYLEBIT_EXTRA ; > ;
+                < "Modelli HTML" ; SWSTYLEBIT_HTML ; > ;
+                < "Modelli condizionati" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ spanish ] =
+            {
+                < "Automático" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Todos los estilos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
+                < "Estilos de capítulos" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
+                < "Estilos de índices" ; SWSTYLEBIT_IDX ; > ;
+                < "Estilos de áreas especiales" ; SWSTYLEBIT_EXTRA ; > ;
+                < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
+                < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ french ] =
+            {
+                < "Automatiquement" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Tous les styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Styles utilisés" ; SFXSTYLEBIT_USED ; > ;
+                < "Styles personnalisés" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Styles de texte" ; SWSTYLEBIT_TEXT ; > ;
+                < "Styles de chapitre" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Styles de liste" ; SWSTYLEBIT_LIST ; > ;
+                < "Styles d'index/de tables des matières" ; SWSTYLEBIT_IDX ; > ;
+                < "Styles pour zones spéciales" ; SWSTYLEBIT_EXTRA ; > ;
+                < "Styles HTML" ; SWSTYLEBIT_HTML ; > ;
+                < "Styles conditionnels" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ dutch ] =
+            {
+                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Alle opmaakprofielen" ; SFXSTYLEBIT_ALL ; > ;
+                < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+                < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Tekstopmaakprofielen" ; SWSTYLEBIT_TEXT ; > ;
+                < "Opmaakprofielen voor hoofdtukken" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Lijstopmaakprofielen" ; SWSTYLEBIT_LIST ; > ;
+                < "Indexopmaakprofielen" ; SWSTYLEBIT_IDX ; > ;
+                < "Opmaakprof. speciale bereiken" ; SWSTYLEBIT_EXTRA ; > ;
+                < "HTML-opmaakprofielen" ; SWSTYLEBIT_HTML ; > ;
+                < "Conditionele opmaakprofielen" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            filterlist [ portuguese ] =
+            {
+                < "Automático" ; SFXSTYLEBIT_AUTO ; > ;
+                < "Estilos todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos usados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos personalizados" ; SFXSTYLEBIT_USERDEF ; > ;
+                < "Estilos de texto" ; SWSTYLEBIT_TEXT ; > ;
+                < "Estilos de capítulos" ; SWSTYLEBIT_CHAPTER ; > ;
+                < "Estilos de listas" ; SWSTYLEBIT_LIST ; > ;
+                < "Estilos de índices" ; SWSTYLEBIT_IDX ; > ;
+                < "Estilos de áreas especiais" ; SWSTYLEBIT_EXTRA ; > ;
+                < "Estilos HTML" ; SWSTYLEBIT_HTML ; > ;
+                < "Estilos condicionados" ; SWSTYLEBIT_CONDCOLL ; > ;
+            };
+            Text[ chinese_simplified ] = "¶ÎÂäÑùÊ½";
+            FilterList [ chinese_simplified ] =
+        {
+            < "×Ô¶¯" ; SFXSTYLEBIT_AUTO ; > ;
+            < "È«²¿ÑùÊ½" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ÎÄ×ÖÑùÊ½" ; SWSTYLEBIT_TEXT ; > ;
+            < "ÕÂÑùÊ½" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "ÁĞµ¥ÑùÊ½" ; SWSTYLEBIT_LIST ; > ;
+            < "Ë÷ÒıÑùÊ½" ; SWSTYLEBIT_IDX ; > ;
+            < "ÑùÊ½ÌØÊâÇøÓò" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML ÑùÊ½" ; SWSTYLEBIT_HTML ; > ;
+            < "ÓĞÌõ¼şµÄÑùÊ½" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < " " ; SFXSTYLEBIT_AUTO ; > ;
+            < " " ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+            < " " ; SWSTYLEBIT_TEXT ; > ;
+            < " " ; SWSTYLEBIT_CHAPTER ; > ;
+            < " " ; SWSTYLEBIT_LIST ; > ;
+            < " " ; SWSTYLEBIT_IDX ; > ;
+            < " " ; SWSTYLEBIT_EXTRA ; > ;
+            < " " ; SWSTYLEBIT_HTML ; > ;
+            < " " ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < " " ; SFXSTYLEBIT_AUTO ; > ;
+            < " " ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+            < " " ; SWSTYLEBIT_TEXT ; > ;
+            < " " ; SWSTYLEBIT_CHAPTER ; > ;
+            < " " ; SWSTYLEBIT_LIST ; > ;
+            < " " ; SWSTYLEBIT_IDX ; > ;
+            < " " ; SWSTYLEBIT_EXTRA ; > ;
+            < " " ; SWSTYLEBIT_HTML ; > ;
+            < " " ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        Text[ language_user1 ] = " ";
+            Text[ russian ] = "Ñòèëè àáçàöà";
+            Text[ polish ] = "Style akapitu";
+            Text[ japanese ] = "’i—½À²Ù";
+            FilterList [ russian ] =
+        {
+            < "Àâòîìàòè÷åñêè" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Âñå ñòèëè" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ïğèìåíåííûå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
+            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Ñòèëè òåêñòà" ; SWSTYLEBIT_TEXT ; > ;
+            < "Ñòèëè ãëàâû" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Ñòèëè ñïèñêà" ; SWSTYLEBIT_LIST ; > ;
+            < "Ñòèëè óêàçàòåëÿ" ; SWSTYLEBIT_IDX ; > ;
+            < "Ñòèëè ñïåöèàëüíûõ îáëàñòåé" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Ñòèëè HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Óñëîâíûå ñòèëè" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ polish ] =
+        {
+            < "Automatycznie" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Wszystkie style" ; SFXSTYLEBIT_ALL ; > ;
+            < "U¿yte style" ; SFXSTYLEBIT_USED ; > ;
+            < "Style u¿ytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Style tekstu" ; SWSTYLEBIT_TEXT ; > ;
+            < "Style rozdzia³u" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Style listy" ; SWSTYLEBIT_LIST ; > ;
+            < "Style indeksu" ; SWSTYLEBIT_IDX ; > ;
+            < "Style dla specjalnych zadañ" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Style HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Warunkowe style" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ japanese ] =
+        {
+            < "©“®" ; SFXSTYLEBIT_AUTO ; > ;
+            < "‚·‚×‚Ä‚Ì½À²Ù" ; SFXSTYLEBIT_ALL ; > ;
+            < "g—p‚µ‚½½À²Ù" ; SFXSTYLEBIT_USED ; > ;
+            < "Õ°»Ş°’è‹`‚Ì½À²Ù" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "•¶‘½À²Ù" ; SWSTYLEBIT_TEXT ; > ;
+            < "Í‚Ì½À²Ù" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Ø½Ä‚Ì½À²Ù" ; SWSTYLEBIT_LIST ; > ;
+            < "õˆø½À²Ù" ; SWSTYLEBIT_IDX ; > ;
+            < "“Á•Ê”ÍˆÍ‚Ì½À²Ù" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML½À²Ù" ; SWSTYLEBIT_HTML ; > ;
+            < "ğŒ•t‚«½À²Ù" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        Text[ chinese_traditional ] = "¬q¸¨¼Ë¦¡";
+            FilterList [ chinese_traditional ] =
+        {
+            < "¦Û°Ê" ; SFXSTYLEBIT_AUTO ; > ;
+            < "¥ş³¡¼Ë¦¡" ; SFXSTYLEBIT_ALL ; > ;
+            < "¨Ï¥Îªº¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
+            < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "¤å¦r¼Ë¦¡" ; SWSTYLEBIT_TEXT ; > ;
+            < "³¹¼Ë¦¡" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "²M³æ¼Ë¦¡" ; SWSTYLEBIT_LIST ; > ;
+            < "¥Ø¿ı¼Ë¦¡" ; SWSTYLEBIT_IDX ; > ;
+            < "¼Ë¦¡¯S®í°Ï°ì" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML ¼Ë¦¡" ; SWSTYLEBIT_HTML ; > ;
+            < "¦³±ø¥óªº¼Ë¦¡" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        Text[ arabic ] = "ÃäãÇØ İŞÑÉ";
+            FilterList [ arabic ] =
+        {
+            < "ÊáŞÇÆí" ; SFXSTYLEBIT_AUTO ; > ;
+            < "ßá ÇáÃäãÇØ" ; SFXSTYLEBIT_ALL ; > ;
+            < "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã" ; SFXSTYLEBIT_USED ; > ;
+            < "ÃäãÇØ ãÎÕÕÉ" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ÃäãÇØ äÕ" ; SWSTYLEBIT_TEXT ; > ;
+            < "ÃäãÇØ ÇáİÕá" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "ÃäãÇØ ÇáŞÇÆãÉ" ; SWSTYLEBIT_LIST ; > ;
+            < "ÃäãÇØ İåÑÓ" ; SWSTYLEBIT_IDX ; > ;
+            < "ÃäãÇØ äØÇŞÇÊ ÎÇÕÉ" ; SWSTYLEBIT_EXTRA ; > ;
+            < "ÃäãÇØ  HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "ÃäãÇØ ãÔÑæØÉ" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        Text[ dutch ] = "Alinea-opmaakprofielen";
+            Text[ chinese_simplified ] = "¶ÎÂäÑùÊ½";
+            FilterList [ dutch ] =
+        {
+            < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Alle opmaakprofielen" ; SFXSTYLEBIT_ALL ; > ;
+            < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+            < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Tekstopmaakprofielen" ; SWSTYLEBIT_TEXT ; > ;
+            < "Opmaakprofielen voor hoofdtukken" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Lijstopmaakprofielen" ; SWSTYLEBIT_LIST ; > ;
+            < "Indexopmaakprofielen" ; SWSTYLEBIT_IDX ; > ;
+            < "Opmaakprof. speciale bereiken" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML-opmaakprofielen" ; SWSTYLEBIT_HTML ; > ;
+            < "Conditionele opmaakprofielen" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ chinese_simplified ] =
+        {
+            < "×Ô¶¯" ; SFXSTYLEBIT_AUTO ; > ;
+            < "È«²¿ÑùÊ½" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ÎÄ×ÖÑùÊ½" ; SWSTYLEBIT_TEXT ; > ;
+            < "ÕÂÑùÊ½" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "ÁĞµ¥ÑùÊ½" ; SWSTYLEBIT_LIST ; > ;
+            < "Ë÷ÒıÑùÊ½" ; SWSTYLEBIT_IDX ; > ;
+            < "ÑùÊ½ÌØÊâÇøÓò" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML ÑùÊ½" ; SWSTYLEBIT_HTML ; > ;
+            < "ÓĞÌõ¼şµÄÑùÊ½" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        Text[ greek ] = "Ğñüôõğá ğáñáãñÜöùí";
+            Text[ korean ] = "´Ü¶ô À¯Çü";
+            FilterList [ greek ] =
+        {
+            < "Áõôüìáôá" ; SFXSTYLEBIT_AUTO ; > ;
+            < "¼ëá ôá ğñüôõğá" ; SFXSTYLEBIT_ALL ; > ;
+            < "Åöáñìïóìİíá óôõë" ; SFXSTYLEBIT_USED ; > ;
+            < "Ğñüôõğá ÷ñŞóôç" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Ğñüôõğï êåéìİíïõ" ; SWSTYLEBIT_TEXT ; > ;
+            < "Ğñüôõğá êåöáëáßùí" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Óôõë ëßóôáò" ; SWSTYLEBIT_LIST ; > ;
+            < "Ğñüôõğá åõñåôçñßùí" ; SWSTYLEBIT_IDX ; > ;
+            < "Ğñüôõğá åéäéêşí ğåñéï÷şí" ; SWSTYLEBIT_EXTRA ; > ;
+            < "Ğñüôõğá HTML" ; SWSTYLEBIT_HTML ; > ;
+            < "Ğñüôõğá õğü üñïõò" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        FilterList [ korean ] =
+        {
+            < "ÀÚµ¿" ; SFXSTYLEBIT_AUTO ; > ;
+            < "ÀüÃ¼ À¯Çü" ; SFXSTYLEBIT_ALL ; > ;
+            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "ÅØ½ºÆ® À¯Çü" ; SWSTYLEBIT_TEXT ; > ;
+            < "Àå À¯Çü" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "¸®½ºÆ® À¯Çü" ; SWSTYLEBIT_LIST ; > ;
+            < "»öÀÎ À¯Çü" ; SWSTYLEBIT_IDX ; > ;
+            < "Æ¯º° Áö¿ª À¯Çü" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML À¯Çü" ; SWSTYLEBIT_HTML ; > ;
+            < "Á¶°ÇÀû À¯Çü" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+        Text[ turkish ] = "Paragraf biçimi";
+            FilterList [ turkish ] =
+        {
+            < "Otomatik" ; SFXSTYLEBIT_AUTO ; > ;
+            < "Bütün biçimler" ; SFXSTYLEBIT_ALL ; > ;
+            < "Kullanılan biçim" ; SFXSTYLEBIT_USED ; > ;
+            < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Metin biçimi" ; SWSTYLEBIT_TEXT ; > ;
+            < "Bölüm biçimi" ; SWSTYLEBIT_CHAPTER ; > ;
+            < "Liste biçimi" ; SWSTYLEBIT_LIST ; > ;
+            < "Dizin biçimi" ; SWSTYLEBIT_IDX ; > ;
+            < "Özel bölüm biçimi" ; SWSTYLEBIT_EXTRA ; > ;
+            < "HTML biçimi" ; SWSTYLEBIT_HTML ; > ;
+            < "Koşullu biçim" ; SWSTYLEBIT_CONDCOLL ; > ;
+        };
+    };
+        SfxStyleFamilyItem
+        {
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "catabc.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
+            Text = "Zeichenvorlagen" ;
+            Text [ ENGLISH ] = "Character Styles" ;
+            Text [ norwegian ] = "Tegnmaler" ;
+            Text [ italian ] = "Modelli di carattere" ;
+            Text [ portuguese_brazilian ] = "Estilo de Caracter" ;
+            Text [ portuguese ] = "Estilos de caracteres" ;
+            Text [ finnish ] = "Merkkityylit" ;
+            Text [ danish ] = "Tegntypografier" ;
+            Text [ french ] = "Styles de caractère" ;
+            Text [ swedish ] = "Teckenformatmallar" ;
+            Text [ dutch ] = "Tekenopmaakprofielen" ;
+            Text [ spanish ] = "Estilos de caracteres" ;
+            Text [ english_us ] = "Character Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_CHAR ;
+            FilterList =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            FilterList [ ENGLISH ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ dutch ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+                < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ english_us ] =
+            {
+                < "All" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ italian ] =
+            {
+                < "Tutti" ; SFXSTYLEBIT_ALL ; > ;
+                < "Modelli usati" ; SFXSTYLEBIT_USED ; > ;
+                < "Modelli utente" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ spanish ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ french ] =
+            {
+                < "Tous les styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Styles utilisés" ; SFXSTYLEBIT_USED ; > ;
+                < "Styles personnalisés" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese_brazilian ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ swedish ] =
+            {
+                < "Alla" ; SFXSTYLEBIT_ALL ; > ;
+                < "Använda formatmallar" ; SFXSTYLEBIT_USED ; > ;
+                < "Användardefinierade formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ danish ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Anvendte typografier" ; SFXSTYLEBIT_USED ; > ;
+                < "Brugerdefinerede typografier" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos utilizados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos personalizados" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
+            FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ language_user1 ] = " ";
+            Text[ russian ] = "Ñòèëè çíàêîâ";
+            Text[ polish ] = "Style znaku";
+            Text[ japanese ] = "•¶š½À²Ù";
+            FilterList [ russian ] =
+        {
+            < "Âñå" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ïğèìåíåííûå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
+            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ polish ] =
+        {
+            < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
+            < "U¿yte style" ; SFXSTYLEBIT_USED ; > ;
+            < "Style u¿ytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ japanese ] =
+        {
+            < "‚·‚×‚Ä" ; SFXSTYLEBIT_ALL ; > ;
+            < "g—p‚µ‚½½À²Ù" ; SFXSTYLEBIT_USED ; > ;
+            < "Õ°»Ş°’è‹`‚Ì½À²Ù" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ chinese_traditional ] = "¤å¦r¼Ë¦¡";
+            FilterList [ chinese_traditional ] =
+        {
+            < "¥ş³¡" ; SFXSTYLEBIT_ALL ; > ;
+            < "¨Ï¥Îªº¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
+            < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ arabic ] = "ÃäãÇØ ÃÍÑİ";
+            FilterList [ arabic ] =
+        {
+            < "Çáßá" ; SFXSTYLEBIT_ALL ; > ;
+            < "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã" ; SFXSTYLEBIT_USED ; > ;
+            < "ÃäãÇØ ãÎÕÕÉ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ dutch ] = "Tekenopmaakprofielen";
+            Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
+            FilterList [ dutch ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+            < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
+            Text[ korean ] = "¹®ÀÚ À¯Çü";
+            FilterList [ greek ] =
+        {
+            < "¼ëá" ; SFXSTYLEBIT_ALL ; > ;
+            < "Åöáñìïóìİíá óôõë" ; SFXSTYLEBIT_USED ; > ;
+            < "Ğñüôõğá ÷ñŞóôç" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ korean ] =
+        {
+            < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
+            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ turkish ] = "Karakter biçimi";
+            FilterList [ turkish ] =
+        {
+            < "Tümü" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uygulanan biçim" ; SFXSTYLEBIT_USED ; > ;
+            < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+    };
+        SfxStyleFamilyItem
+        {
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "catfrm.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
+            Text = "Rahmenvorlagen" ;
+            Text [ ENGLISH ] = "Frame Styles" ;
+            Text [ norwegian ] = "Rammemaler" ;
+            Text [ italian ] = "Modelli di cornice" ;
+            Text [ portuguese_brazilian ] = "Estilos de Moldura" ;
+            Text [ portuguese ] = "Estilos de molduras" ;
+            Text [ finnish ] = "Kehystyylit" ;
+            Text [ danish ] = "Rammetypografier" ;
+            Text [ french ] = "Styles de cadre" ;
+            Text [ swedish ] = "Ramformatmallar" ;
+            Text [ dutch ] = "Kaderopmaakprofielen" ;
+            Text [ spanish ] = "Estilos de marcos" ;
+            Text [ english_us ] = "Frame Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_FRAME ;
+            FilterList =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            FilterList [ ENGLISH ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ dutch ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+                < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ english_us ] =
+            {
+                < "All" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ italian ] =
+            {
+                < "Tutti" ; SFXSTYLEBIT_ALL ; > ;
+                < "Modelli usati" ; SFXSTYLEBIT_USED ; > ;
+                < "Modelli utente" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ spanish ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ french ] =
+            {
+                < "Tous les styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Styles utilisés" ; SFXSTYLEBIT_USED ; > ;
+                < "Styles personnalisés" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese_brazilian ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ swedish ] =
+            {
+                < "Alla" ; SFXSTYLEBIT_ALL ; > ;
+                < "Använda formatmallar" ; SFXSTYLEBIT_USED ; > ;
+                < "Användardefinierade formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ danish ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Anvendte typografier" ; SFXSTYLEBIT_USED ; > ;
+                < "Brugerdefinerede typografier" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos usados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos personalizados" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            Text[ chinese_simplified ] = "¿òÑùÊ½";
+            FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ language_user1 ] = " ";
+            Text[ russian ] = "Ñòèëè ğàìîê";
+            Text[ polish ] = "Style ramek";
+            Text[ japanese ] = "˜g½À²Ù";
+            FilterList [ russian ] =
+        {
+            < "Âñå" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ïğèìåíåííûå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
+            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ polish ] =
+        {
+            < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
+            < "U¿yte style" ; SFXSTYLEBIT_USED ; > ;
+            < "Style u¿ytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ japanese ] =
+        {
+            < "‚·‚×‚Ä" ; SFXSTYLEBIT_ALL ; > ;
+            < "g—p‚µ‚½½À²Ù" ; SFXSTYLEBIT_USED ; > ;
+            < "Õ°»Ş°’è‹`‚Ì½À²Ù" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ chinese_traditional ] = "®Ø¼Ë¦¡";
+            FilterList [ chinese_traditional ] =
+        {
+            < "¥ş³¡" ; SFXSTYLEBIT_ALL ; > ;
+            < "¨Ï¥Îªº¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
+            < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ arabic ] = "ÃäãÇØ ÅØÇÑ";
+            FilterList [ arabic ] =
+        {
+            < "Çáßá" ; SFXSTYLEBIT_ALL ; > ;
+            < "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã" ; SFXSTYLEBIT_USED ; > ;
+            < "ÃäãÇØ ãÎÕÕÉ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ dutch ] = "Kaderopmaakprofielen";
+            Text[ chinese_simplified ] = "¿òÑùÊ½";
+            FilterList [ dutch ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+            < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ greek ] = "Ğñüôõğá ğëáéóßïõ";
+            Text[ korean ] = "ÇÁ·¹ÀÓ À¯Çü";
+            FilterList [ greek ] =
+        {
+            < "¼ëá" ; SFXSTYLEBIT_ALL ; > ;
+            < "Åöáñìïóìİíá óôõë" ; SFXSTYLEBIT_USED ; > ;
+            < "Ğñüôõğá ÷ñŞóôç" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ korean ] =
+        {
+            < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
+            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ turkish ] = "Çerçeve biçimi";
+            FilterList [ turkish ] =
+        {
+            < "Tümü" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uygulanan biçim" ; SFXSTYLEBIT_USED ; > ;
+            < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+    };
+        SfxStyleFamilyItem
+        {
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "catpag.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
+            Text = "Seitenvorlagen" ;
+            Text [ ENGLISH ] = "Page Styles" ;
+            Text [ norwegian ] = "Sidetyper" ;
+            Text [ italian ] = "Modelli di pagina" ;
+            Text [ portuguese_brazilian ] = "Estilos da Página" ;
+            Text [ portuguese ] = "Estilos de página" ;
+            Text [ finnish ] = "Sivutyylit" ;
+            Text [ danish ] = "Sidetypografier" ;
+            Text [ french ] = "Styles de page" ;
+            Text [ swedish ] = "Sidformatmallar" ;
+            Text [ dutch ] = "Pagina-opmaakprofielen" ;
+            Text [ spanish ] = "Estilos de página" ;
+            Text [ english_us ] = "Page Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_PAGE ;
+            FilterList =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            FilterList [ ENGLISH ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ dutch ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+                < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ english_us ] =
+            {
+                < "All" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ italian ] =
+            {
+                < "Tutti" ; SFXSTYLEBIT_ALL ; > ;
+                < "Modeli usati" ; SFXSTYLEBIT_USED ; > ;
+                < "Modelli utente" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ spanish ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ french ] =
+            {
+                < "Tous les styles" ; SFXSTYLEBIT_ALL ; > ;
+                < "Styles utilisés" ; SFXSTYLEBIT_USED ; > ;
+                < "Styles personnalisés" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese_brazilian ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ swedish ] =
+            {
+                < "Alla" ; SFXSTYLEBIT_ALL ; > ;
+                < "Använda formatmallar" ; SFXSTYLEBIT_USED ; > ;
+                < "Användardefinierade formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ danish ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Anvendte typografier" ; SFXSTYLEBIT_USED ; > ;
+                < "Brugerdefinerede typografier" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos usados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos personalizados" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ russian ] =
+        {
+            < "Âñå" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ïğèìåíåííûå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
+            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ polish ] =
+        {
+            < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
+            < "U¿yte style" ; SFXSTYLEBIT_USED ; > ;
+            < "Style u¿ytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ japanese ] =
+        {
+            < "‚·‚×‚Ä" ; SFXSTYLEBIT_ALL ; > ;
+            < "g—p‚µ‚½½À²Ù" ; SFXSTYLEBIT_USED ; > ;
+            < "Õ°»Ş°’è‹`‚Ì½À²Ù" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ chinese_traditional ] =
+        {
+            < "¥ş³¡" ; SFXSTYLEBIT_ALL ; > ;
+            < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
+            < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ russian ] = "Ñòèëè ñòğàíèöû";
+            Text[ polish ] = "Style strony";
+            Text[ japanese ] = "Íß°¼Ş½À²Ù";
+            Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
+            Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
+            Text[ arabic ] = "ÃäãÇØ ÕİÍÉ";
+            FilterList [ arabic ] =
+        {
+            < "Çáßá" ; SFXSTYLEBIT_ALL ; > ;
+            < "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã" ; SFXSTYLEBIT_USED ; > ;
+            < "ÃäãÇØ ãÎÕÕÉ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ dutch ] = "Pagina-opmaakprofielen";
+            Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
+            FilterList [ dutch ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+            < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ greek ] = "Ğñüôõğá óåëéäşí";
+            Text[ korean ] = "ÆäÀÌÁö À¯Çü";
+            FilterList [ greek ] =
+        {
+            < "¼ëá" ; SFXSTYLEBIT_ALL ; > ;
+            < "Åöáñìïóìİíá óôõë" ; SFXSTYLEBIT_USED ; > ;
+            < "Ğñüôõğá ÷ñŞóôç" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ korean ] =
+        {
+            < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
+            < "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù." ; SFXSTYLEBIT_USED ; > ;
+            < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ turkish ] = "Sayfa biçimi";
+            FilterList [ turkish ] =
+        {
+            < "Tümü" ; SFXSTYLEBIT_ALL ; > ;
+            < "Uygulanan biçim" ; SFXSTYLEBIT_USED ; > ;
+            < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ language_user1 ] = " ";
+        };
+        SfxStyleFamilyItem
+        {
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "catnum.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
+            Text = "Nummerierungsvorlagen" ;
+            Text [ ENGLISH ] = "Number Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            FilterList =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            FilterList [ ENGLISH ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ dutch ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+                < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ english_us ] =
+            {
+                < "All" ; SFXSTYLEBIT_ALL ; > ;
+                < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
+                < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ italian ] =
+            {
+                < "Tutti" ; SFXSTYLEBIT_ALL ; > ;
+                < "Modeli usati" ; SFXSTYLEBIT_USED ; > ;
+                < "Modelli utente" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ spanish ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos aplicados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos del usuario" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ french ] =
+            {
+                < "Tous" ; SFXSTYLEBIT_ALL ; > ;
+                < "Styles utilisés" ; SFXSTYLEBIT_USED ; > ;
+                < "Styles personnalisés" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese_brazilian ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
+                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ swedish ] =
+            {
+                < "Alla" ; SFXSTYLEBIT_ALL ; > ;
+                < "Använda formatmallar" ; SFXSTYLEBIT_USED ; > ;
+                < "Användardefinierade formatmallar" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ danish ] =
+            {
+                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+                < "Anvendte typografier" ; SFXSTYLEBIT_USED ; > ;
+                < "Brugerdefinerede typografier" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            filterlist [ portuguese ] =
+            {
+                < "Todos" ; SFXSTYLEBIT_ALL ; > ;
+                < "Estilos usados" ; SFXSTYLEBIT_USED ; > ;
+                < "Estilos personalizados" ; SFXSTYLEBIT_USERDEF ; > ;
+            };
+            Text [ portuguese ] = "Estilos de numeração" ;
+            Text [ english_us ] = "Numbering Styles" ;
+            Text [ portuguese_brazilian ] = "Numerierungsvorlagen" ;
+            Text [ swedish ] = "Numreringsformatmallar" ;
+            Text [ danish ] = "Nummereringstypografier" ;
+            Text [ italian ] = "Modelli di numerazione" ;
+            Text [ spanish ] = "Estilos de numeración" ;
+            Text [ french ] = "Styles de numérotation" ;
+            Text [ dutch ] = "Opmaakprofielen voor nummering" ;
+            Text[ chinese_simplified ] = "±àºÅÑùÊ½";
+            FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < " " ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ language_user1 ] =
+        {
+            < " " ; SFXSTYLEBIT_ALL ; > ;
+            < " " ; SFXSTYLEBIT_USED ; > ;
+            < " " ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ language_user1 ] = "èë? ñòèë? òèE";
+            Text[ russian ] = "Ñòèëè íóìåğàöèè";
+            Text[ polish ] = "Style numeracji";
+            Text[ japanese ] = "”Ô†•t‚¯½À²Ù";
+            FilterList [ russian ] =
+        {
+            < "Âñå" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ïğèìåíåííûå ñòèëè" ; SFXSTYLEBIT_USED ; > ;
+            < "Ñòèëè ïîëüçîâàòåëÿ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ polish ] =
+        {
+            < "Wszystkie" ; SFXSTYLEBIT_ALL ; > ;
+            < "U¿yte style" ; SFXSTYLEBIT_USED ; > ;
+            < "Style u¿ytkownika" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ japanese ] =
+        {
+            < "‚·‚×‚Ä" ; SFXSTYLEBIT_ALL ; > ;
+            < "g—p‚µ‚½½À²Ù" ; SFXSTYLEBIT_USED ; > ;
+            < "Õ°»Ş°’è‹`‚Ì½À²Ù" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ chinese_traditional ] = "½s¸¹¼Ë¦¡";
+            FilterList [ chinese_traditional ] =
+        {
+            < "¥ş³¡" ; SFXSTYLEBIT_ALL ; > ;
+            < "¨Ï¥Îªº¼Ë¦¡" ; SFXSTYLEBIT_USED ; > ;
+            < "¦Û­q¼Ë¦¡" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ arabic ] = "ÃäãÇØ ÇáÊÑŞíã";
+            FilterList [ arabic ] =
+        {
+            < "Çáßá" ; SFXSTYLEBIT_ALL ; > ;
+            < "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã" ; SFXSTYLEBIT_USED ; > ;
+            < "ÇáÃäãÇØ ÇáãÎÕÕÉ" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ dutch ] = "Opmaakprofielen voor nummering";
+            Text[ chinese_simplified ] = "±àºÅÑùÊ½";
+            FilterList [ dutch ] =
+        {
+            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
+            < "Gebruikte opmaakprofielen" ; SFXSTYLEBIT_USED ; > ;
+            < "Eigen opmaakprofielen" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ chinese_simplified ] =
+        {
+            < "È«²¿" ; SFXSTYLEBIT_ALL ; > ;
+            < "Ê¹ÓÃµÄÑùÊ½" ; SFXSTYLEBIT_USED ; > ;
+            < "×Ô¶¨ÑùÊ½" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ greek ] = "Óôõë áñßèìçóçò";
+            Text[ korean ] = "¹øÈ£ ¸Å±â±â À¯Çü";
+            FilterList [ greek ] =
+        {
+            < "¼ëá" ; SFXSTYLEBIT_ALL ; > ;
+            < "Åöáñìïóìİíá óôõë" ; SFXSTYLEBIT_USED ; > ;
+            < "Ğñüôõğá ÷ñŞóôç" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        FilterList [ korean ] =
+        {
+            < "ÀüºÎ" ; SFXSTYLEBIT_ALL ; > ;
+            < "À¯Çü Àû¿ë" ; SFXSTYLEBIT_USED ; > ;
+            < "»ç¿ëÀÚ Á¤ÀÇ À¯Çü" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+        Text[ turkish ] = "Numaralama biçimi";
+            FilterList [ turkish ] =
+        {
+            < "Tümü" ; SFXSTYLEBIT_ALL ; > ;
+            < "Kullanılan biçim" ; SFXSTYLEBIT_USED ; > ;
+            < "Kullanıcı biçimi" ; SFXSTYLEBIT_USERDEF ; > ;
+        };
+    };
+    };
+};
+
+
+
+ // Default Bitmap fuer Toolbox
+BITMAP BMP_FEHLT { FILE = "x.bmp" ; };
+ // Bitmap fuer die NumerierungsVorlagen im Organizer
+Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
+
+String STR_ENV_TITLE
+{
+    Text = "Briefumschlag" ;
+    Text [ English ] = "Envelop" ;
+    Text [ norwegian ] = "Konvolutt" ;
+    Text [ italian ] = "Busta" ;
+    Text [ portuguese_brazilian ] = "Envelope" ;
+    Text [ portuguese ] = "Envelope" ;
+    Text [ finnish ] = "Kirjekuori" ;
+    Text [ danish ] = "Konvolut" ;
+    Text [ french ] = "Enveloppe" ;
+    Text [ swedish ] = "Kuvert" ;
+    Text [ dutch ] = "Envelop" ;
+    Text [ spanish ] = "Sobre" ;
+    Text [ english_us ] = "Envelope" ;
+    Text[ chinese_simplified ] = "ĞÅ·â";
+    Text[ russian ] = "Êîíâåğò";
+    Text[ polish ] = "Koperta";
+    Text[ japanese ] = "••“›";
+    Text[ chinese_traditional ] = "«H«Ê";
+    Text[ arabic ] = "ÙÑİ";
+    Text[ dutch ] = "Envelop";
+    Text[ chinese_simplified ] = "ĞÅ·â";
+    Text[ greek ] = "ÖÜêåëïò";
+    Text[ korean ] = "ºÀÅõ";
+    Text[ turkish ] = "Zarf";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_LAB_TITLE
+{
+    Text = "Etiketten" ;
+    Text [ English ] = "Labels" ;
+    Text [ norwegian ] = "Etiketter" ;
+    Text [ italian ] = "Etichette" ;
+    Text [ portuguese_brazilian ] = "Etiquetas" ;
+    Text [ portuguese ] = "Etiquetas" ;
+    Text [ finnish ] = "Tarrat" ;
+    Text [ danish ] = "Etiketter" ;
+    Text [ french ] = "Étiquettes" ;
+    Text [ swedish ] = "Etiketter" ;
+    Text [ dutch ] = "Etiketten" ;
+    Text [ spanish ] = "Etiquetas" ;
+    Text [ english_us ] = "Labels" ;
+    Text[ chinese_simplified ] = "±êÇ©";
+    Text[ russian ] = "Íàêëåéêè";
+    Text[ polish ] = "Etykiety";
+    Text[ japanese ] = "×ÍŞÙ";
+    Text[ chinese_traditional ] = "¶K¼Ğ";
+    Text[ arabic ] = "ÈØÇŞÇÊ ÚäæäÉ";
+    Text[ dutch ] = "Etiketten";
+    Text[ chinese_simplified ] = "±êÇ©";
+    Text[ greek ] = "Åôéêİôåò";
+    Text[ korean ] = "¶óº§";
+    Text[ turkish ] = "Etiket";
+    Text[ language_user1 ] = " ";
+};
+
+ // ShortName!!!
+String STR_HUMAN_SWDOC_NAME
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Text : Dokument */
+    Text = "Text" ;
+    Text [ English ] = "Text" ;
+    Text [ english_us ] = "Text" ;
+    Text [ swedish ] = "Text" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ italian ] = "Testo" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ french ] = "Texte" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese ] = "Texto" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ russian ] = "Òåêñò";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "Ã·½Ä";
+    Text[ chinese_traditional ] = "¤å¦r";
+    Text[ arabic ] = "ÇáäÕ";
+    Text[ dutch ] = "Tekst";
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ greek ] = "Êåßìåíï";
+    Text[ korean ] = "ÅØ½ºÆ®";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_WRITER_DOCUMENT_FULLTYPE_31
+{
+    Text = "StarOffice 3.0 Text" ;
+    Text [ English ] = "StarOffice 3.0 Text" ;
+    Text [ english_us ] = "Text (StarOffice 3.0)" ;
+    Text [ portuguese_brazilian ] = "StarOffice 3.0 Text" ;
+    Text [ swedish ] = "StarOffice 3.0 text" ;
+    Text [ danish ] = "StarOffice 3.0 tekst" ;
+    Text [ italian ] = "Test StarOffice 3.0" ;
+    Text [ spanish ] = "Texto de StarOffice 3.0" ;
+    Text [ french ] = "Texte StarOffice 3.0" ;
+    Text [ dutch ] = "StarOffice 3.0 Tekst" ;
+    Text [ portuguese ] = "StarOffice 3.0 Text" ;
+    Text[ chinese_simplified ] = "StarOffice 3.0 ÎÄ±¾";
+    Text[ russian ] = "Òåêñò â StarOffice 3.0";
+    Text[ polish ] = "Tekst StarOffice 3.0";
+    Text[ japanese ] = "StarOffice 3.0 Ã·½Ä";
+    Text[ chinese_traditional ] = "StarOffice 3.0 ¤å¦r¤å¥ó";
+    Text[ arabic ] = "äÕ ãä StarOffice 3.0";
+    Text[ dutch ] = "StarOffice 3.0 Tekst";
+    Text[ chinese_simplified ] = "StarOffice 3.0 ÎÄ±¾";
+    Text[ greek ] = "Êåßìåíï (StarOffice 3.0)";
+    Text[ korean ] = "ÅØ½ºÆ® (StarOffice 3.0)";
+    Text[ turkish ] = "StarOffice 3.0 metni";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_WRITER_DOCUMENT_FULLTYPE_40
+{
+    Text = "StarOffice 4.0 Text" ;
+    Text [ English ] = "StarOffice 4.0 Text" ;
+    Text [ english_us ] = "Text (StarOffice 4.0)" ;
+    Text [ portuguese_brazilian ] = "StarOffice 4.0 Text" ;
+    Text [ swedish ] = "StarOffice 4.0 text" ;
+    Text [ danish ] = "StarOffice 4.0 tekst" ;
+    Text [ italian ] = "Testo StarOffice 4.0" ;
+    Text [ spanish ] = "Texto de StarOffice 4.0" ;
+    Text [ french ] = "Texte StarOffice 4.0" ;
+    Text [ dutch ] = "StarOffice 4.0 Tekst" ;
+    Text [ portuguese ] = "Texto (StarOffice 4.0)" ;
+    Text[ chinese_simplified ] = "StarOffice 4.0 ÎÄ±¾";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Òåêñò â StarOffice 4.0";
+    Text[ polish ] = "Tekst StarOffice 4.0";
+    Text[ japanese ] = "StarOffice 4.0 Ã·½Ä";
+    Text[ chinese_traditional ] = "StarOffice 4.0 ¤å¦r¤å¥ó";
+    Text[ arabic ] = "äÕ ãä StarOffice 4.0";
+    Text[ dutch ] = "StarOffice 4.0 Tekst";
+    Text[ chinese_simplified ] = "StarOffice 4.0 ÎÄ±¾";
+    Text[ greek ] = "Êåßìåíï (StarOffice 4.0)";
+    Text[ korean ] = "ÅØ½ºÆ® (StarOffice 4.0)";
+    Text[ turkish ] = "StarOffice 4.0 metni";
+};
+
+String STR_WRITER_DOCUMENT_FULLTYPE
+{
+    Text = "StarOffice 5.0 Text" ;
+    Text [ English ] = "StarOffice 5.0 Text" ;
+    Text [ english_us ] = "Text (StarOffice 5.0)" ;
+    Text [ portuguese_brazilian ] = "StarOffice 4.0 Text" ;
+    Text [ swedish ] = "StarOffice 5.0 text" ;
+    Text [ danish ] = "StarOffice 4.0 tekst" ;
+    Text [ italian ] = "Testo StarOffice 5.0" ;
+    Text [ spanish ] = "Texto de StarOffice 5.0" ;
+    Text [ french ] = "Texte StarOffice 5.0" ;
+    Text [ dutch ] = "StarOffice 5.0 Tekst" ;
+    Text [ portuguese ] = "Texto (StarOffice 5.0)" ;
+    Text[ chinese_simplified ] = "StarOffice 5.0 ÎÄ±¾";
+    Text[ russian ] = "Òåêñò â StarOffice 5.0";
+    Text[ polish ] = "Tekst StarOffice 5.0";
+    Text[ japanese ] = "StarOffice 5.0 Ã·½Ä";
+    Text[ chinese_traditional ] = "StarOffice 5.0 ¤å¦r¤å¥ó";
+    Text[ arabic ] = "äÕ ãä StarOffice 5.0";
+    Text[ dutch ] = "StarOffice 5.0 Tekst";
+    Text[ chinese_simplified ] = "StarOffice 5.0 ÎÄ±¾";
+    Text[ greek ] = "Êåßìåíï (StarOffice 5.0)";
+    Text[ korean ] = "ÅØ½ºÆ® (StarOffice 5.0)";
+    Text[ turkish ] = "StarOffice 5.0 metni";
+    Text[ language_user1 ] = " ";
+};
+
+
+String STR_CANTOPEN
+{
+    TEXT = "Kann das Dokument nicht öffnen." ;
+    TEXT [ English ] = "Can't open document." ;
+    TEXT [ norwegian ] = "Kan ikke åpne dokumentet." ;
+    TEXT [ italian ] = "Impossibile aprire il documento" ;
+    TEXT [ portuguese_brazilian ] = "Não posso abrir o documento." ;
+    TEXT [ portuguese ] = "Impossível abrir o documento." ;
+    TEXT [ finnish ] = "Asiakirjaa ei voi avata." ;
+    TEXT [ danish ] = "Kan ikke åbne dokument." ;
+    TEXT [ french ] = "Impossible d'ouvrir le document." ;
+    TEXT [ swedish ] = "Kan inte öppna dokumentet." ;
+    TEXT [ dutch ] = "Document kan niet worden geopend." ;
+    TEXT [ spanish ] = "No es posible abrir el documento." ;
+    TEXT [ english_us ] = "Cannot open document." ;
+    TEXT[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄµµ¡£";
+    TEXT[ russian ] = "Îòêğûòü äîêóìåíò íåâîçìîæíî.";
+    TEXT[ polish ] = "Nie mo¿e otworzyæ dokumentu.";
+    TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñ";
+    TEXT[ chinese_traditional ] = "µLªk¶}±Ò³o­Ó¤å¥ó¡C";
+    TEXT[ arabic ] = "áÇ íÓÊØíÚ İÊÍ ÇáãÓÊäÏ.";
+    TEXT[ dutch ] = "Document kan niet worden geopend.";
+    TEXT[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄµµ¡£";
+    TEXT[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï İããñáöï.";
+    TEXT[ korean ] = "¹®¼­¸¦ ¿­¼ö ¾ø½À´Ï´Ù.";
+    TEXT[ turkish ] = "Belge açılamıyor.";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_CANTCREATE
+{
+    TEXT = "Das Dokument konnte nicht erzeugt werden." ;
+    TEXT [ English ] = "Can't create document." ;
+    TEXT[ italian ] = "Impossibile creare un documento";
+    TEXT[ portuguese_brazilian ] = "Can't create document.";
+    TEXT[ portuguese ] = "Foi impossível criar documento.";
+    TEXT[ danish ] = "Det var ikke muligt at oprette dokumentet.";
+    TEXT[ french ] = "Impossible de créer le document.";
+    TEXT[ swedish ] = "Dokumentet kunde inte skapas.";
+    TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
+    TEXT[ spanish ] = "El documento no pudo ser creado.";
+    TEXT[ english_us ] = "Can't create document.";
+    TEXT[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÎÄµµ";
+    TEXT[ russian ] = "İòîò äîêóìåíò ñîçäàòü íåâîçìîæíî.";
+    TEXT[ polish ] = "Dokument nie móg³ zostaæ utworzony.";
+    TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚ğì¬‚Å‚«‚Ü‚¹‚ñB";
+    TEXT[ chinese_traditional ] = "µLªk¥Í¦¨¤å¥ó";
+    TEXT[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáãÓÊäÏ.";
+    TEXT[ dutch ] = "Het document kon niet worden gemaakt.";
+    TEXT[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÎÄµµ";
+    TEXT[ greek ] = "Äåí åßíáé äõíáôŞ ç äçìéïõñãßá ôïõ åããñÜöïõ.";
+    TEXT[ korean ] = "¹®¼­¸¦ ¸¸µé ¼ö ¾ø½À´Ï´Ù.";
+    TEXT[ turkish ] = "Belge oluşturulamadı.";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_DLLNOTFOUND
+{
+    TEXT = "Filter nicht gefunden." ;
+    TEXT [ English ] = "Filter not found." ;
+    TEXT [ norwegian ] = "Finner ikke filter." ;
+    TEXT [ italian ] = "Filtro non trovato." ;
+    TEXT [ portuguese_brazilian ] = "Filtro não encontrado." ;
+    TEXT [ portuguese ] = "Filtro não encontrado." ;
+    TEXT [ finnish ] = "Suodinta ei löydy." ;
+    TEXT [ danish ] = "Filter blev ikke fundet." ;
+    TEXT [ french ] = "Filtre introuvable." ;
+    TEXT [ swedish ] = "Filter hittades ej." ;
+    TEXT [ dutch ] = "Filter niet gevonden." ;
+    TEXT [ spanish ] = "No se encontró el filtro." ;
+    TEXT [ english_us ] = "Filter not found." ;
+    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½É¸Ñ¡¡£";
+    TEXT[ russian ] = "Ôèëüòğ íåíàéäåí.";
+    TEXT[ polish ] = "Filtru nie znaleziono.";
+    TEXT[ japanese ] = "Ì¨ÙÀ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
+    TEXT[ chinese_traditional ] = "¨S¦³§ä¨ì¿z¿ï¡C";
+    TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáİáÊÑ.";
+    TEXT[ dutch ] = "Filter niet gevonden.";
+    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½É¸Ñ¡¡£";
+    TEXT[ greek ] = "Äåí âñİèçêå ôï ößëôñï.";
+    TEXT[ korean ] = "ÇÊÅÍ°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    TEXT[ turkish ] = "Filtre bulunamadı.";
+    TEXT[ language_user1 ] = " ";
+};
+
+
+String STR_UNBENANNT
+{
+    TEXT = "Unbenannt" ;
+    TEXT [ English ] = "Untitled" ;
+    TEXT [ norwegian ] = "Uten tittel" ;
+    TEXT [ italian ] = "Senza nome" ;
+    TEXT [ portuguese_brazilian ] = "Sem título" ;
+    TEXT [ portuguese ] = "Sem nome" ;
+    TEXT [ finnish ] = "Nimetön" ;
+    TEXT [ danish ] = "Ikke-navngivet" ;
+    TEXT [ french ] = "Sans titre" ;
+    TEXT [ swedish ] = "Namnlös" ;
+    TEXT [ dutch ] = "Naamloos" ;
+    TEXT [ spanish ] = "Sin nombre" ;
+    TEXT [ english_us ] = "Untitled" ;
+    TEXT[ chinese_simplified ] = "Î´ÃüÃû";
+    TEXT[ russian ] = "Áåç èìåíè";
+    TEXT[ polish ] = "Bez tytu³u";
+    TEXT[ japanese ] = "–³‘è";
+    TEXT[ chinese_traditional ] = "¥¼©R¦W";
+    TEXT[ arabic ] = "ÈÏæä ÚäæÇä";
+    TEXT[ dutch ] = "Naamloos";
+    TEXT[ chinese_simplified ] = "Î´ÃüÃû";
+    TEXT[ greek ] = "Äß÷ùò üíïìá";
+    TEXT[ korean ] = "Á¦¸ñ ¾øÀ½";
+    TEXT[ turkish ] = "Adsız";
+    TEXT[ language_user1 ] = " ";
+};
+
+
+String STR_LOAD_GLOBAL_DOC
+{
+    TEXT = "Name und Pfad des Globaldokuments" ;
+    TEXT [ English ] = "Name and path of the global document" ;
+    Text [ english_us ] = "Name and Path of Master Document" ;
+    Text [ portuguese_brazilian ] = "Name und Pfad des Globaldokuments" ;
+    Text [ swedish ] = "Samlingsdokumentets namn och sökväg" ;
+    Text [ danish ] = "Hoveddokumentets navn og sti" ;
+    Text [ italian ] = "Nome e percorso del documento master" ;
+    Text [ spanish ] = "Nombre y ruta del documento maestro" ;
+    Text [ french ] = "Nom et chemin du document maître" ;
+    Text [ dutch ] = "Naam en pad van het master-document" ;
+    Text [ portuguese ] = "Nome e atalho do documento-mestre" ;
+    Text[ chinese_simplified ] = "Ö÷¿ØÎÄµµµÄÃû³ÆºÍÂ·¾¶";
+    Text[ russian ] = "Èìÿ è ïóòü ãëàâíîãî äîêóìåíòà";
+    Text[ polish ] = "Nazwa i œcie¿ka dokumentu g³ównego";
+    Text[ japanese ] = "Ï½À°ÄŞ·­ÒİÄ‚Ì–¼‘O‚ÆÊß½";
+    Text[ chinese_traditional ] = "¥D±±¤å¥óªº¦WºÙ©M¸ô®|";
+    Text[ arabic ] = "ÇÓã æãÓÇÑ ÇáãÓÊäÏ ÇáÔÇãá";
+    Text[ dutch ] = "Naam en pad van het master-document";
+    Text[ chinese_simplified ] = "Ö÷¿ØÎÄµµµÄÃû³ÆºÍÂ·¾¶";
+    Text[ greek ] = "¼íïìá êáé äéáäñïìŞ ôïõ êõñßïõ åããñÜöïõ";
+    Text[ korean ] = "¸¶½ºÅ¸ ¹®¼­ÀÇ ÀÌ¸§°ú °æ·Î";
+    Text[ turkish ] = "Ana belgenin adı ve veri yolu";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_LOAD_HTML_DOC
+{
+    TEXT = "Name und Pfad des HTML Dokuments" ;
+    TEXT [ English ] = "Name and path of the html document" ;
+    Text [ english_us ] = "Name and path of the html document" ;
+    Text [ portuguese_brazilian ] = "Name und Pfad des HTML Dokuments" ;
+    Text [ swedish ] = "HTML-dokumentets namn och sökväg" ;
+    Text [ danish ] = "HTML-dokumentets navn og sti" ;
+    Text [ italian ] = "Nome e percorso del documento HTML " ;
+    Text [ spanish ] = "Nombre y ruta del documento HTML " ;
+    Text [ french ] = "Nom et chemin du document HTML" ;
+    Text [ dutch ] = "Naam en pad van het HTML document" ;
+    Text [ portuguese ] = "Nome e atalho do documento HTML" ;
+    Text[ chinese_simplified ] = "HTML ÎÄµµÃû³ÆºÍÂ·¾¶";
+    Text[ russian ] = "Èìÿ è ïóòü äîêóìåíòà HTML";
+    Text[ polish ] = "Nazwa i œcie¿ka dokumentu HTML";
+    Text[ japanese ] = "HTMLŒ`®ÄŞ·­ÒİÄ‚Ì–¼‘O‚ÆÊß½";
+    Text[ chinese_traditional ] = "HTML ¤å¥ó¦WºÙ©M¸ô®|";
+    Text[ arabic ] = "ÇÓã æãÓÇÑ ãÓÊäÏ   HTML";
+    Text[ dutch ] = "Naam en pad van het HTML document";
+    Text[ chinese_simplified ] = "HTML ÎÄµµÃû³ÆºÍÂ·¾¶";
+    Text[ greek ] = "¼íïìá êáé äéáäñïìŞ ôïõ åããñÜöïõ HTML";
+    Text[ korean ] = "HTML ¸¶½ºÅ¸ ¹®¼­ÀÇ ÀÌ¸§°ú °æ·Î";
+    Text[ turkish ] = "HTML belgesinin adı ve veri yolu";
+    Text[ language_user1 ] = " ";
+};
+
+InfoBox MSG_ERROR_SEND_MAIL
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    MESSAGE = "Fehler beim Versenden der Nachricht." ;
+    MESSAGE [ English ] = "Error while sending mail." ;
+    MESSAGE [ norwegian ] = "Feil ved sending av mail." ;
+    MESSAGE [ italian ] = "Errore durante l'invio di un messaggio." ;
+    MESSAGE [ portuguese_brazilian ] = "Erro ao enviar correio." ;
+    MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
+    MESSAGE [ finnish ] = "Virhe sähköpostia lähetettäessä." ;
+    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen." ;
+    MESSAGE [ french ] = "Erreur lors de l'envoi du message." ;
+    MESSAGE [ swedish ] = "Fel vid sändning av meddelande." ;
+    MESSAGE [ dutch ] = "Fout bij verzenden van bericht." ;
+    MESSAGE [ spanish ] = "Error al enviar el mensaje." ;
+    MESSAGE [ english_us ] = "Error sending mail." ;
+    MESSAGE[ chinese_simplified ] = "ÔÚ¼Ä·¢µç×ÓÓÊ¼şÊ±·¢Éú´íÎó¡£";
+    MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ russian ] = "Îøèáêà ïğè îòïğàâëåíèè ñîîáùåíèÿ.";
+    MESSAGE[ polish ] = "B³¹d przy wysy³aniu wiadomoœci.";
+    MESSAGE[ japanese ] = "Ò°Ù‘—M‚ÌÛ‚Ì´×°";
+    MESSAGE[ chinese_traditional ] = "¦b±Hµo¹q¤l¶l¥ó®Éµo¥Í¿ù»~¡C";
+    MESSAGE[ arabic ] = "ÎØÃ ÃËäÇÁ ÅÑÓÇá ÇáÑÓÇáÉ.";
+    MESSAGE[ dutch ] = "Fout bij verzenden van bericht.";
+    MESSAGE[ chinese_simplified ] = "ÔÚ¼Ä·¢µç×ÓÓÊ¼şÊ±·¢Éú´íÎó¡£";
+    MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áğïóôïëŞ ôïõ ìçíıìáôïò.";
+    MESSAGE[ korean ] = "¸ŞÀÏ º¸³»±â ¿À·ù.";
+    MESSAGE[ turkish ] = "İleti gönderilirken hata oluştu.";
+};
+InfoBox MSG_ERROR_PASSWD
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    MESSAGE = "Fehlerhaftes Passwort." ;
+    MESSAGE [ English ] = "Password doesn't match." ;
+    MESSAGE [ norwegian ] = "Passord passer ikke." ;
+    MESSAGE [ italian ] = "La password non corrisponde." ;
+    MESSAGE [ portuguese_brazilian ] = "A senha não combina." ;
+    MESSAGE [ portuguese ] = "A senha não é válida." ;
+    MESSAGE [ finnish ] = "Salasana ei kelpaa." ;
+    MESSAGE [ danish ] = "Fejagtig adgangskode" ;
+    MESSAGE [ french ] = "Mot de passe incorrect." ;
+    MESSAGE [ swedish ] = "Felaktigt lösenord." ;
+    MESSAGE [ dutch ] = "Wachtwoord niet correct." ;
+    MESSAGE [ spanish ] = "Contraseña no válida" ;
+    MESSAGE [ english_us ] = "Invalid password." ;
+    MESSAGE[ chinese_simplified ] = "´íÎóµÄ¿ÚÁî¡£";
+    MESSAGE[ russian ] = "Îøèáêà â ïàğîëå.";
+    MESSAGE[ polish ] = "Nieprawid³owe has³o.";
+    MESSAGE[ japanese ] = "³‚µ‚­‚È‚¢Êß½Ü°ÄŞ";
+    MESSAGE[ chinese_traditional ] = "±K½XµL®Ä¡C";
+    MESSAGE[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÇáÍÉ.";
+    MESSAGE[ dutch ] = "Wachtwoord niet correct.";
+    MESSAGE[ chinese_simplified ] = "´íÎóµÄ¿ÚÁî¡£";
+    MESSAGE[ greek ] = "Åóöáëìİíïò êùäéêüò ğñüóâáóçò.";
+    MESSAGE[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÆĞ½º¿öµå";
+    MESSAGE[ turkish ] = "Yanlış şifre.";
+    MESSAGE[ language_user1 ] = " ";
+};
+
+/*
+ * auskommentiert, da die Toolbox z. Zt. nicht aus der Resource
+ * geladen werden kann
+Window WIN_TOOLBOX {
+HelpText [English] = "";
+HelpText [norwegian] = "";
+HelpText [italian] = "";
+HelpText [portuguese_brazilian] = "";
+HelpText [portuguese] = "";
+HelpText [finnish] = "";
+HelpText [danish] = "";
+HelpText [french] = "";
+HelpText [swedish] = "";
+HelpText [dutch] = "";
+HelpText [spanish] = "";
+HelpText [english_us] = "";
+HelpText = "Die Objektleiste enthält, je nach Bedarf, Buttons für die "
+       "Bearbeitung von Text, Rahmen, Grafik, Tabellen oder "
+       "Numerierungen.";
+HelpText[English] = "The objectbar contains, depending on your current "
+            "working context, buttons for the editing of text, "
+            "frames, graphics, tables or numberings.";
+HelpText[norwegian] = "Objektlinjen inneholder, avhengig av  din aktuelle arbeidssituasjon, "
+            "knapper for redigering av tekst,"
+            " rammer, grafikker, tabeller eller nummereringer.";
+HelpText[italian] = "La barra dell'oggetto attivo contiene, in base al proprio"
+            "contesto lavorativo, pulsanti per la modifica del testo,"
+            "cornici, grafici, tabelle o numerazioni..";
+HelpText[portuguese_brazilian] = "A barra de objetos conter , dependendo do contexto de trabalho "
+            "atual, bot es para edição de texto, "
+            "molduras, gráficos, tabelas ou numeração.";
+HelpText[portuguese] = "A barra de objectos conterá, dependendo do contexto de trabalho "
+            "actual, botões para edição de texto, "
+            "molduras, gráficos, tabelas ou numeração.";
+HelpText[finnish] = "Toimintorivillä on tilanteen mukaan painikkeita, "
+            "joilla muokataan tekstiä, kehyksiä, kuvia, "
+            "taulukoita tai numeronteja.";
+HelpText[danish] = "Afhængig af din aktuelle arbejdskontekst"
+            " rummer ikonbåndet knapper for redigering af tekst, "
+            "tekstruder, grafik, tabeller eller nummereringer.";
+HelpText[french] = "Selon votre contexte de travail, la barre d'objets "
+            "contient des boutons de modification du texte, des "
+            "cadres, des graphiques, des tables ou des numérotations.";
+HelpText[swedish] = "Objektlisten innehåller, beroende på aktuellt"
+            "arbetsområde, knappar för redigering av text,"
+            "ramar, bilder, tabeller eller numreringar.";
+HelpText[dutch] = "Afhankelijk van de huidige werkomgeving bevat de objectbalk "
+            "knoppen voor het bewerken van tekst, kaders, illustraties "
+            "of nummeringen.";
+HelpText[spanish] = "La barra de objetos contiene, dependiendo del contexto "
+            "de trabajo actual, botones para la edición de texto, "
+            "marcos, gráficos, tablas o numeraciones.";
+HelpText[english_us] = "The objectbar contains, depending on your current "
+            "working context, buttons for the editing of text, "
+            "frames, graphics, tables or numberings.";
+    OUTPUTSIZE = TRUE;
+    BORDER = TRUE;
+    Size = (28,27);
+};
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+String RID_BUILDVERSION
+{
+    TEXT = UPDVER ;
+};
+
+
+String STR_FMT_STD
+{
+    TEXT = "(keins)" ;
+    TEXT [ English ] = "(none)" ;
+    TEXT [ norwegian ] = "(ingen)" ;
+    TEXT [ italian ] = "(senza)" ;
+    TEXT [ portuguese_brazilian ] = "(nenhum)" ;
+    TEXT [ portuguese ] = "(nenhum)" ;
+    TEXT [ finnish ] = "(ei mitään)" ;
+    TEXT [ danish ] = "(ingen)" ;
+    TEXT [ french ] = "(aucun(e))" ;
+    TEXT [ swedish ] = "(ingen)" ;
+    TEXT [ dutch ] = "(geen)" ;
+    TEXT [ spanish ] = "(ninguna)" ;
+    TEXT [ english_us ] = "(none)" ;
+    TEXT[ chinese_simplified ] = "(ÎŞ)";
+    TEXT[ russian ] = "(áåç)";
+    TEXT[ polish ] = "(brak)";
+    TEXT[ japanese ] = "(‚È‚µ)";
+    TEXT[ chinese_traditional ] = "(µL)";
+    TEXT[ arabic ] = "(ÈÏæä)";
+    TEXT[ dutch ] = "(geen)";
+    TEXT[ chinese_simplified ] = "(ÎŞ)";
+    TEXT[ greek ] = "(êáíİíá)";
+    TEXT[ korean ] = "(¾øÀ½)";
+    TEXT[ turkish ] = "(yok)";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_DOC_STAT
+{
+    TEXT = "Statistik" ;
+    TEXT [ English ] = "Statistics" ;
+    TEXT [ norwegian ] = "Statistics" ;
+    TEXT [ italian ] = "Statistiche" ;
+    TEXT [ portuguese_brazilian ] = "Estatística" ;
+    TEXT [ portuguese ] = "Estatística" ;
+    TEXT [ finnish ] = "Tilasto" ;
+    TEXT [ danish ] = "Statistik" ;
+    TEXT [ french ] = "Statistique" ;
+    TEXT [ swedish ] = "Statistik" ;
+    TEXT [ dutch ] = "Statistiek" ;
+    TEXT [ spanish ] = "Estadística" ;
+    TEXT [ english_us ] = "Statistics" ;
+    TEXT[ chinese_simplified ] = "Í³¼Æ";
+    TEXT[ russian ] = "Ñòàòèñòèêà";
+    TEXT[ polish ] = "Statystyka";
+    TEXT[ japanese ] = "“Œv";
+    TEXT[ chinese_traditional ] = "²Î­p";
+    TEXT[ arabic ] = "ÅÍÕÇÆíÇÊ";
+    TEXT[ dutch ] = "Statistiek";
+    TEXT[ chinese_simplified ] = "Í³¼Æ";
+    TEXT[ greek ] = "ÓôáôéóôéêÜ";
+    TEXT[ korean ] = "Åë°è";
+    TEXT[ turkish ] = "İstatistik";
+    TEXT[ language_user1 ] = " ";
+};
+
+ // ----------------------------
+ // Statusleisten-Ueberschriften
+ // ----------------------------
+
+String STR_STATSTR_W4WREAD
+{
+    Text = "Dokument wird importiert..." ;
+    Text [ English ] = "Importing..." ;
+    Text [ norwegian ] = "Importerer..." ;
+    Text [ italian ] = "Il documento viene importato..." ;
+    Text [ portuguese_brazilian ] = "Importando..." ;
+    Text [ portuguese ] = "A importar documento..." ;
+    Text [ finnish ] = "Tuonti..." ;
+    Text [ danish ] = "Importerer dokument..." ;
+    Text [ french ] = "Import du document en cours..." ;
+    Text [ swedish ] = "Dokument importeras..." ;
+    Text [ dutch ] = "Document wordt geïmporteerd..." ;
+    Text [ spanish ] = "Importando el documento..." ;
+    Text [ english_us ] = "Importing document..." ;
+    Text[ chinese_simplified ] = "ÊäÈëÎÄµµ...";
+    Text[ russian ] = "Èìïîğò äîêóìåíòà...";
+    Text[ polish ] = "Importowanie dokumentu...";
+    Text[ japanese ] = "•¶‘‚Ì²İÎß°Ä...";
+    Text[ chinese_traditional ] = "¿é¤J¤å¥ó...";
+    Text[ arabic ] = "ÌÇÑí ÇÓÊíÑÇÏ ÇáãÓÊäÏ...";
+    Text[ dutch ] = "Document wordt geïmporteerd...";
+    Text[ chinese_simplified ] = "ÊäÈëÎÄµµ...";
+    Text[ greek ] = "ÅéóáãùãŞ åããñÜöïõ...";
+    Text[ korean ] = "¹®¼­ °¡Á®¿À±â...";
+    Text[ turkish ] = "Belge içe aktarılıyor...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_W4WWRITE
+{
+    Text = "Dokument wird exportiert..." ;
+    Text [ English ] = "Exporting..." ;
+    Text [ norwegian ] = "Eksporterer..." ;
+    Text [ italian ] = "Il documento viene esportato..." ;
+    Text [ portuguese_brazilian ] = "Exportando..." ;
+    Text [ portuguese ] = "A exportar documento..." ;
+    Text [ finnish ] = "Vienti..." ;
+    Text [ danish ] = "Eksporterer dokument" ;
+    Text [ french ] = "Export du document en cours..." ;
+    Text [ swedish ] = "Dokument exporteras..." ;
+    Text [ dutch ] = "Document wordt geëxporteerd..." ;
+    Text [ spanish ] = "Exportando el documento..." ;
+    Text [ english_us ] = "Exporting document..." ;
+    Text[ chinese_simplified ] = "Êä³öÎÄµµ...";
+    Text[ russian ] = "İêñïîğò äîêóìåíòà...";
+    Text[ polish ] = "Eksportowanie dokumentu...";
+    Text[ japanese ] = "•¶‘‚Ì´¸½Îß°Ä...";
+    Text[ chinese_traditional ] = "¿é¥X¤å¥ó...";
+    Text[ arabic ] = "ÌÇÑí ÊÕÏíÑ ÇáãÓÊäÏ...";
+    Text[ dutch ] = "Document wordt geëxporteerd...";
+    Text[ chinese_simplified ] = "Êä³öÎÄµµ...";
+    Text[ greek ] = "ÅîáãùãŞ åããñÜöïõ...";
+    Text[ korean ] = "¹®¼­ º¸³»±â...";
+    Text[ turkish ] = "Belge dışa aktarılıyor...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_SWGREAD
+{
+    Text = "Dokument wird geladen..." ;
+    Text [ English ] = "Loading..." ;
+    Text [ norwegian ] = "Laster inn..." ;
+    Text [ italian ] = "Il documento viene caricato..." ;
+    Text [ portuguese_brazilian ] = "Carregando..." ;
+    Text [ portuguese ] = "A carregar documento..." ;
+    Text [ finnish ] = "Lataus..." ;
+    Text [ danish ] = "Indlæser dokument..." ;
+    Text [ french ] = "Document en cours de chargement..." ;
+    Text [ swedish ] = "Dokument laddas..." ;
+    Text [ dutch ] = "Document wordt gemaakt..." ;
+    Text [ spanish ] = "Cargando el documento..." ;
+    Text [ english_us ] = "Loading document..." ;
+    Text[ chinese_simplified ] = "×°ÔØÎÄµµ...";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Äîêóìåíò çàãğóæàåòñÿ...";
+    Text[ polish ] = "£adowanie dokumentu...";
+    Text[ japanese ] = "•¶‘‚Ì“Ç‚İ‚İ...";
+    Text[ chinese_traditional ] = "¸Ë¸ü¤å¥ó...";
+    Text[ arabic ] = "ÌÇÑí ÊÍãíá ÇáãÓÊäÏ...";
+    Text[ dutch ] = "Document wordt gemaakt...";
+    Text[ chinese_simplified ] = "×°ÔØÎÄµµ...";
+    Text[ greek ] = "Ôï İããñáöï öïñôşíåôáé...";
+    Text[ korean ] = "¹®¼­ ·Îµù...";
+    Text[ turkish ] = "Belge yükleniyor...";
+};
+
+String STR_STATSTR_SWGWRITE
+{
+    Text = "Dokument wird gespeichert..." ;
+    Text [ English ] = "Saving..." ;
+    Text [ norwegian ] = "Lagrer..." ;
+    Text [ italian ] = "Il documento viene salvato..." ;
+    Text [ portuguese_brazilian ] = "Gravando..." ;
+    Text [ portuguese ] = "A guardar documento..." ;
+    Text [ finnish ] = "Tallennus..." ;
+    Text [ danish ] = "Gemmer dokument..." ;
+    Text [ french ] = "Enreg. du document en cours..." ;
+    Text [ swedish ] = "Dokument sparas..." ;
+    Text [ dutch ] = "Document wordt opgeslagen..." ;
+    Text [ spanish ] = "Guardando el documento..." ;
+    Text [ english_us ] = "Saving document..." ;
+    Text = "Dokument wird gespeichert..." ;
+    Text[ chinese_simplified ] = "´æÅÌÎÄµµ...";
+    Text[ russian ] = "Äîêóìåíò ñîõğàíÿåòñÿ...";
+    Text[ polish ] = "Zapisywanie dokumentu...";
+    Text[ japanese ] = "•¶‘‚Ì•Û‘¶...";
+    Text[ chinese_traditional ] = "¥¿¦bÀx¦s¤å¥ó...";
+    Text[ arabic ] = "ÌÇÑí ÍİÙ ÇáãÓÊäÏ...";
+    Text[ dutch ] = "Document wordt opgeslagen...";
+    Text[ chinese_simplified ] = "´æÅÌÎÄµµ...";
+    Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ...";
+    Text[ korean ] = "¹®¼­ ÀúÀå...";
+    Text[ turkish ] = "Belge kaydediliyor...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_REFORMAT
+{
+    TEXT = "Neuformatierung des Dokumentes..." ;
+    TEXT [ English ] = "Repaginating..." ;
+    TEXT [ norwegian ] = "Gjør sidenummerering på nyttRepaginating..." ;
+    TEXT [ italian ] = "Riformattazione del documento..." ;
+    TEXT [ portuguese_brazilian ] = "Repaginando..." ;
+    TEXT [ portuguese ] = "Nova formatação do documento..." ;
+    TEXT [ finnish ] = "Sivutus..." ;
+    TEXT [ danish ] = "Genformatering af dokumentet..." ;
+    TEXT [ french ] = "Repagination du document..." ;
+    TEXT [ swedish ] = "Omformatering av dokumentet..." ;
+    TEXT [ dutch ] = "Bezig met nieuwe opmaak..." ;
+    TEXT [ spanish ] = "Reformateado del documento..." ;
+    TEXT [ english_us ] = "Repagination..." ;
+    TEXT[ chinese_simplified ] = "ÖØĞÂÖÆ×÷ÎÄµµ¸ñÊ½...";
+    TEXT[ language_user1 ] = " ";
+    TEXT[ russian ] = "Íîâîå ôîğìàòèğîâàíèå äîêóìåíòà...";
+    TEXT[ polish ] = "Ponowne formatowanie dokumentu...";
+    TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚ÌV‹K‘®İ’è...";
+    TEXT[ chinese_traditional ] = "­«·s¨î§@¤å¥ó®æ¦¡...";
+    TEXT[ arabic ] = "ÅÚÇÏÉ ÊäÓíŞ ÇáãÓÊäÏ...";
+    TEXT[ dutch ] = "Bezig met nieuwe opmaak...";
+    TEXT[ chinese_simplified ] = "ÖØĞÂÖÆ×÷ÎÄµµ¸ñÊ½...";
+    TEXT[ greek ] = "Ìïñöïğïßçóç åê íİïõ ôïõ åããñÜöïõ...";
+    TEXT[ korean ] = "ÆäÀÌÁö ¸Å±â±â...";
+    TEXT[ turkish ] = "Belge yeniden formatlanıyor...";
+};
+
+String STR_STATSTR_AUTOFORMAT
+{
+    TEXT = "Autoformatierung des Dokumentes..." ;
+    TEXT [ English ] = "Autoformatting..." ;
+    TEXT [ norwegian ] = "Autoformaterer..." ;
+    TEXT [ italian ] = "Formattazione automatica..." ;
+    TEXT [ portuguese_brazilian ] = "Formatação automática..." ;
+    TEXT [ portuguese ] = "A formatar documento automaticamente..." ;
+    TEXT [ finnish ] = "Automaattimuotoilu..." ;
+    TEXT [ danish ] = "Autoformatering af dokumentet..." ;
+    TEXT [ french ] = "Mise en forme automatique du document..." ;
+    TEXT [ swedish ] = "Autoformatering av dokumentet..." ;
+    TEXT [ dutch ] = "Bezig met automatisch opmaken..." ;
+    TEXT [ spanish ] = "AutoFormato del documento..." ;
+    TEXT [ english_us ] = "Formatting document automatically..." ;
+    TEXT[ chinese_simplified ] = "ÎÄµµ×Ô¶¯¸ñÊ½»¯...";
+    TEXT[ language_user1 ] = " ";
+    TEXT[ russian ] = "Àâòîôîğìàòèğîâàíèå äîêóìåíòà...";
+    TEXT[ polish ] = "Autoformatowanie dokumentu";
+    TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚Ìµ°ÄÌ«°Ï¯Ä...";
+    TEXT[ chinese_traditional ] = "ª«¥ó¦Û°Ê®æ¦¡¤Æ...";
+    TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí ááãÓÊäÏ...";
+    TEXT[ dutch ] = "Bezig met automatisch opmaken...";
+    TEXT[ chinese_simplified ] = "ÎÄµµ×Ô¶¯¸ñÊ½»¯...";
+    TEXT[ greek ] = "Áõôüìáôç ìïñöïğïßçóç ôïõ åããñÜöïõ...";
+    TEXT[ korean ] = "ÀÚµ¿ ¹®¼­ ¼­½Ä ¼³Á¤...";
+    TEXT[ turkish ] = "Otomatik belge formatlama...";
+};
+
+String STR_STATSTR_IMPGRF
+{
+    Text = "Grafik wird importiert..." ;
+    Text [ English ] = "Importing picture..." ;
+    Text [ norwegian ] = "Importerer bilde..." ;
+    Text [ italian ] = "L'immagine viene importata..." ;
+    Text [ portuguese_brazilian ] = "Importando figura..." ;
+    Text [ portuguese ] = "A importar imagem..." ;
+    Text [ finnish ] = "Kuvan tuonti..." ;
+    Text [ danish ] = "Importerer billede..." ;
+    Text [ french ] = "Import de l'image en cours..." ;
+    Text [ swedish ] = "Grafik importeras..." ;
+    Text [ dutch ] = "Afbeelding wordt geïmporteerd..." ;
+    Text [ spanish ] = "Importando imagen..." ;
+    Text [ english_us ] = "Importing graphics..." ;
+    Text[ chinese_simplified ] = "ÊäÈëÍ¼ĞÎ...";
+    Text[ russian ] = "Èìïîğò ãğàôèêè...";
+    Text[ polish ] = "Importowanie grafiki...";
+    Text[ japanese ] = "}‚Ì²İÎß°Ä’†...";
+    Text[ chinese_traditional ] = "¿é¤J¹Ï¤ù...";
+    Text[ arabic ] = "ÌÇÑí ÇÓÊíÑÇÏ ÇáÑÓã...";
+    Text[ dutch ] = "Afbeelding wordt geïmporteerd...";
+    Text[ chinese_simplified ] = "ÊäÈëÍ¼ĞÎ...";
+    Text[ greek ] = "ÅéóáãùãŞ ãñáöéêïı...";
+    Text[ korean ] = "±×·¡ÇÈ °¡Á®¿À±â...";
+    Text[ turkish ] = "Grafik içe aktarılıyor...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_SEARCH
+{
+    Text = "Suche..." ;
+    Text [ English ] = "search..." ;
+    Text [ norwegian ] = "Søker..." ;
+    Text [ italian ] = "Cerca..." ;
+    Text [ portuguese_brazilian ] = "buscar..." ;
+    Text [ portuguese ] = "A localizar..." ;
+    Text [ finnish ] = "Etsintä..." ;
+    Text [ danish ] = "Søger..." ;
+    Text [ french ] = "Recherche..." ;
+    Text [ swedish ] = "Söker..." ;
+    Text [ dutch ] = "Bezig met zoeken..." ;
+    Text [ spanish ] = "Búsqueda..." ;
+    Text [ english_us ] = "Search..." ;
+    Text[ chinese_simplified ] = "ËÑÑ°...";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Ïîèñê...";
+    Text[ polish ] = "Szukaj...";
+    Text[ japanese ] = "ŒŸõ...";
+    Text[ chinese_traditional ] = "´M§ä...";
+    Text[ arabic ] = "ÈÍË...";
+    Text[ dutch ] = "Bezig met zoeken...";
+    Text[ chinese_simplified ] = "ËÑÑ°...";
+    Text[ greek ] = "ÁíáæŞôçóç...";
+    Text[ korean ] = "Ã£±â...";
+    Text[ turkish ] = "Ara...";
+};
+
+String STR_STATSTR_FORMAT
+{
+    Text = "Formatiere..." ;
+    Text [ English ] = "Formatting..." ;
+    Text [ norwegian ] = "Formaterer..." ;
+    Text [ italian ] = "Formattazione..." ;
+    Text [ portuguese_brazilian ] = "Formatando..." ;
+    Text [ portuguese ] = "A formatar..." ;
+    Text [ finnish ] = "Muotoilu..." ;
+    Text [ danish ] = "Formaterer..." ;
+    Text [ french ] = "Formatage..." ;
+    Text [ swedish ] = "Formaterar..." ;
+    Text [ dutch ] = "Bezig met opmaken..." ;
+    Text [ spanish ] = "Formateando..." ;
+    Text [ english_us ] = "Formatting..." ;
+    Text[ chinese_simplified ] = "¸ñÊ½»¯...";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Ôîğìàò...";
+    Text[ polish ] = "Formatuj";
+    Text[ japanese ] = "‘®İ’è...";
+    Text[ chinese_traditional ] = "®æ¦¡¤Æ...";
+    Text[ arabic ] = "ÊäÓíŞ...";
+    Text[ dutch ] = "Bezig met opmaken...";
+    Text[ chinese_simplified ] = "¸ñÊ½»¯...";
+    Text[ greek ] = "Ìïñöïğïßçóç...";
+    Text[ korean ] = "¼­½Ä ¼³Á¤...";
+    Text[ turkish ] = "Formatlanıyor...";
+};
+
+String STR_STATSTR_PRINT
+{
+    Text = "Drucke..." ;
+    Text [ English ] = "Printing..." ;
+    Text [ norwegian ] = "Skriver ut..." ;
+    Text [ italian ] = "Stampa..." ;
+    Text [ portuguese_brazilian ] = "Imprimindo..." ;
+    Text [ portuguese ] = "A imprimir..." ;
+    Text [ finnish ] = "Tulostus..." ;
+    Text [ danish ] = "Udskriver..." ;
+    Text [ french ] = "Impression..." ;
+    Text [ swedish ] = "Skriver ut ..." ;
+    Text [ dutch ] = "Bezig met afdrukken..." ;
+    Text [ spanish ] = "Imprimiendo..." ;
+    Text [ english_us ] = "Printing..." ;
+    Text[ chinese_simplified ] = "´òÓ¡...";
+    Text[ russian ] = "Ïå÷àòü...";
+    Text[ polish ] = "Drukuj...";
+    Text[ japanese ] = "ˆóü...";
+    Text[ chinese_traditional ] = "¦C¦L...";
+    Text[ arabic ] = "ØÈÇÚÉ...";
+    Text[ dutch ] = "Bezig met afdrukken...";
+    Text[ chinese_simplified ] = "´òÓ¡...";
+    Text[ greek ] = "Åêôığùóç...";
+    Text[ korean ] = "ÀÎ¼â...";
+    Text[ turkish ] = "Yazdırılıyor...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_LAYOUTINIT
+{
+    Text = "Konvertiere..." ;
+    Text [ English ] = "Converting..." ;
+    Text [ norwegian ] = "Konverterer..." ;
+    Text [ italian ] = "Converti..." ;
+    Text [ portuguese_brazilian ] = "Convertendo..." ;
+    Text [ portuguese ] = "A converter..." ;
+    Text [ finnish ] = "Muunto..." ;
+    Text [ danish ] = "Konverterer..." ;
+    Text [ french ] = "Conversion..." ;
+    Text [ swedish ] = "Konverterar..." ;
+    Text [ dutch ] = "Bezig met converteren..." ;
+    Text [ spanish ] = "Convirtiendo..." ;
+    Text [ english_us ] = "Converting..." ;
+    Text[ chinese_simplified ] = "×ª»»...";
+    Text[ russian ] = "Ïğåîáğàçîâàíèå...";
+    Text[ polish ] = "Konwertuj...";
+    Text[ japanese ] = "•ÏŠ·...";
+    Text[ chinese_traditional ] = "Âà´«...";
+    Text[ arabic ] = "ÊÍæíá...";
+    Text[ dutch ] = "Bezig met converteren...";
+    Text[ chinese_simplified ] = "×ª»»...";
+    Text[ greek ] = "ÌåôáôñïğŞ...";
+    Text[ korean ] = "º¯È¯...";
+    Text[ turkish ] = "Dönüştürülüyor...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_LETTER
+{
+    Text = "Brief" ;
+    Text [ English ] = "Letter" ;
+    Text [ english_us ] = "Letter" ;
+    Text [ italian ] = "Lettera" ;
+    Text [ spanish ] = "Carta" ;
+    Text [ french ] = "Lettre" ;
+    Text [ dutch ] = "Brief" ;
+    Text [ swedish ] = "Brev" ;
+    Text [ danish ] = "Brev" ;
+    Text [ portuguese_brazilian ] = "Brief" ;
+    Text [ portuguese ] = "Carta" ;
+    Text[ chinese_simplified ] = "ĞÅº¯";
+    Text[ russian ] = "Ïèñüìî";
+    Text[ polish ] = "List";
+    Text[ japanese ] = "ÚÀ°";
+    Text[ chinese_traditional ] = "«H¨ç";
+    Text[ arabic ] = "ÎØÇÈ";
+    Text[ dutch ] = "Brief";
+    Text[ chinese_simplified ] = "ĞÅº¯";
+    Text[ greek ] = "ÅğéóôïëŞ";
+    Text[ korean ] = "ÆíÁö";
+    Text[ turkish ] = "Mektup";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_SPELL
+{
+    Text = "Rechtschreibprüfung..." ;
+    Text [ English ] = "Spelling..." ;
+    Text [ english_us ] = "Spellcheck..." ;
+    Text [ italian ] = "Controllo ortografico..." ;
+    Text [ spanish ] = "Revisión ortográfica..." ;
+    Text [ french ] = "Orthographe..." ;
+    Text [ dutch ] = "Bezig met spellingcontrole..." ;
+    Text [ swedish ] = "Rättstavningskontroll..." ;
+    Text [ danish ] = "Stavekontrol..." ;
+    Text [ portuguese_brazilian ] = "Rechtschreibprüfung..." ;
+    Text [ portuguese ] = "Verificação ortográfica..." ;
+    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é...";
+    Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè...";
+    Text[ polish ] = "Sprawdzanie pisowni...";
+    Text[ japanese ] = "•¶ÍZ³...";
+    Text[ chinese_traditional ] = "«÷¦r...";
+    Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí...";
+    Text[ dutch ] = "Bezig met spellingcontrole...";
+    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é...";
+    Text[ greek ] = "¸ëåã÷ïò ïñèïãñáößáò...";
+    Text[ korean ] = "¸ÂÃã¹ı °Ë»ç...";
+    Text[ turkish ] = "Yazım denetimi...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_HYPHEN
+{
+    Text = "Silbentrennung..." ;
+    Text [ English ] = "Hyphenating..." ;
+    Text [ english_us ] = "Hyphenation..." ;
+    Text [ dutch ] = "Woordafbreking..." ;
+    Text [ italian ] = "Sillabazione..." ;
+    Text [ spanish ] = "Separación silábica..." ;
+    Text [ french ] = "Coupure de mots..." ;
+    Text [ swedish ] = "Avstavning..." ;
+    Text [ danish ] = "Orddeling..." ;
+    Text [ portuguese_brazilian ] = "Silbentrennung..." ;
+    Text [ portuguese ] = "Divisão silábica..." ;
+    Text[ chinese_simplified ] = "Á¬×Ö·û...";
+    Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ...";
+    Text[ polish ] = "Dzielenie wyrazów";
+    Text[ japanese ] = "Ê²ÌÈ°¼®İ...";
+    Text[ chinese_traditional ] = "³s±µ²Å...";
+    Text[ arabic ] = "İÕá ÇáãŞÇØÚ...";
+    Text[ dutch ] = "Woordafbreking...";
+    Text[ chinese_simplified ] = "Á¬×Ö·û...";
+    Text[ greek ] = "Óõëëáâéóìüò...";
+    Text[ korean ] = "ÇÏÀÌÇÂ ...";
+    Text[ turkish ] = "Heceleme...";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_STATSTR_TOX_INSERT
+{
+    Text = "Verzeichnis wird eingefügt..." ;
+    Text [ English ] = "Inserting Index..." ;
+    Text [ english_us ] = "Inserting Index..." ;
+    Text [ italian ] = "L'indice viene inserito..." ;
+    Text [ spanish ] = "Insertando directorio..." ;
+    Text [ french ] = "Index en cours d'insertion..." ;
+    Text [ dutch ] = "Index wordt ingevoegd..." ;
+    Text [ swedish ] = "Förteckning infogas..." ;
+    Text [ danish ] = "Indsætter indeks..." ;
+    Text [ portuguese_brazilian ] = "Verzeichnis wird eingefügt..." ;
+    Text [ portuguese ] = "Inserindo índice..." ;
+    Text[ chinese_simplified ] = "²åÈëË÷Òı...";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Âñòàâêà óêàçàòåëÿ...";
+    Text[ polish ] = "Wstawianie indeksu...";
+    Text[ japanese ] = "õˆø‚Ì‘}“ü...";
+    Text[ chinese_traditional ] = "´¡¤J¥Ø¿ı...";
+    Text[ arabic ] = "ÌÇÑí ÅÏÑÇÌ ÇáİåÑÓ...";
+    Text[ dutch ] = "Index wordt ingevoegd...";
+    Text[ chinese_simplified ] = "²åÈëË÷Òı...";
+    Text[ greek ] = "ÅéóáãùãŞ êáôáëüãïõ...";
+    Text[ korean ] = "»öÀÎ »ğÀÔ...";
+    Text[ turkish ] = "Dizin ekleniyor...";
+};
+
+String STR_STATSTR_TOX_UPDATE
+{
+    Text = "Verzeichnis wird aktualisiert..." ;
+    Text [ English ] = "Updating Index..." ;
+    Text [ english_us ] = "Updating Index..." ;
+    Text [ italian ] = "L'indice viene aggiornato..." ;
+    Text [ spanish ] = "Actualizando directorio..." ;
+    Text [ french ] = "Index en cours d'actualisation..." ;
+    Text [ dutch ] = "Index wordt geactualiseerd..." ;
+    Text [ swedish ] = "Förteckning uppdateras..." ;
+    Text [ danish ] = "Opdaterer indeks..." ;
+    Text [ portuguese_brazilian ] = "Verzeichnis wird aktualisiert..." ;
+    Text [ portuguese ] = "Actualizando índice..." ;
+    Text[ chinese_simplified ] = "¸üĞÂË÷Òı...";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Îáíîâëåíèå óêàçàòåëÿ...";
+    Text[ polish ] = "Aktualizacja indeksu...";
+    Text[ japanese ] = "õˆø‚ÌXV...";
+    Text[ chinese_traditional ] = "§ó·s¥Ø¿ı...";
+    Text[ arabic ] = "ÌÇÑí ÊÍÏíË ÇáİåÑÓ...";
+    Text[ dutch ] = "Index wordt geactualiseerd...";
+    Text[ chinese_simplified ] = "¸üĞÂË÷Òı...";
+    Text[ greek ] = "Åíçìİñùóç êáôáëüãïõ...";
+    Text[ korean ] = "»öÀÎ ¾÷ µ¥ÀÌÆ®...";
+    Text[ turkish ] = "Dizin güncelleniyor...";
+};
+
+String STR_STATSTR_SUMMARY
+{
+    Text = "Abstrakt wird erstellt..." ;
+    Text [ English ] = "Creating summary..." ;
+    Text [ english_us ] = "Creating abstract..." ;
+    Text [ portuguese_brazilian ] = "Abstrakt wird erstellt..." ;
+    Text [ swedish ] = "Utdrag skapas..." ;
+    Text [ danish ] = "Opretter abstract..." ;
+    Text [ italian ] = "Il sunto viene creato..." ;
+    Text [ spanish ] = "Creando el extracto..." ;
+    Text [ french ] = "Synthèse en cours de création..." ;
+    Text [ dutch ] = "Overzicht wordt gemaakt..." ;
+    Text [ portuguese ] = "A criar Sumário..." ;
+    Text[ chinese_simplified ] = "ÖÆ×÷ÕªÒª...";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Èäåò ñîçäàíèå ïğîñìîòğà äîêóìåíòà...";
+    Text[ polish ] = "Tworzenie Abstraktu...";
+    Text[ japanese ] = "—v–ñ‚Ìì¬...";
+    Text[ chinese_traditional ] = "»s§@ºK­n...";
+    Text[ arabic ] = "ÌÇÑí ÅäÔÇÁ ÇáÊáÎíÕ...";
+    Text[ dutch ] = "Overzicht wordt gemaakt...";
+    Text[ chinese_simplified ] = "ÖÆ×÷ÕªÒª...";
+    Text[ greek ] = "Äçìéïõñãßá abstract...";
+    Text[ korean ] = "¿ä¾à ¸¸µé±â...";
+    Text[ turkish ] = "Özet oluşturuluyor...";
+};
+
+String STR_STATSTR_SWGPRTOLENOTIFY
+{
+    Text = "Objekte Anpassen..." ;
+    Text [ English ] = "Adjust Objects..." ;
+    Text[ english_us ] = "Adapt Objects...";
+    Text[ portuguese ] = "Ajustar objectos...";
+    Text[ russian ] = "Âûğîâíÿòü îáúåêòû...";
+    Text[ dutch ] = "Objecten aanpassen...";
+    Text[ french ] = "Adapter les objets...";
+    Text[ spanish ] = "Ajustar objetos...";
+    Text[ italian ] = "Adatta oggetti...";
+    Text[ danish ] = "Tilpas objekter...";
+    Text[ swedish ] = "Anpassa objekt...";
+    Text[ polish ] = "Dopasuj obiekty...";
+    Text[ portuguese_brazilian ] = "Adjust Objects...";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì’²®...";
+    Text[ chinese_simplified ] = "µ÷Õû¶ÔÏó...";
+    Text[ chinese_traditional ] = "½Õ¾ãª«¥ó...";
+    Text[ arabic ] = "ÖÈØ ßÇÆäÇÊ...";
+    Text[ dutch ] = "Objecten aanpassen...";
+    Text[ chinese_simplified ] = "µ÷Õû¶ÔÏó...";
+    Text[ greek ] = "ĞñïóáñìïãŞ áíôéêåéìİíùí...";
+    Text[ korean ] = "°³Ã¼ Á¶Á¤...";
+    Text[ turkish ] = "Nesneleri uyarla...";
+    Text[ language_user1 ] = " ";
+};
+
+
+QueryBox MSG_COMCORE_ASKSEARCH
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message = "Diese Aktion benötigt fürs Undo sehr viel Speicher.\nWollen Sie das Undo abschalten?" ;
+    Message [ English ] = "This action needs for undo many memory.\nWould you disable undo?" ;
+    Message [ norwegian ] = "Hvis du vil angre denne handlingen trenger du mye minne.\nVil du sperre angrefunksjonen?" ;
+    Message [ italian ] = "L'annullamento di questa azione occorre molta memoria.\nVolete disattivare la possibilità di annullare?" ;
+    Message [ portuguese_brazilian ] = "Esta ação requer muita memória para desfazer.\nDeseja desativar a função desfazer?" ;
+    Message [ portuguese ] = "Para poder anular esta acção é necessária muita memória.\nDeseja cancelar esta função?" ;
+    Message [ finnish ] = "Tämän toiminnon kumoamiseen tarvitaan paljon muistia.\nPoistetaanko kumoamismahdollisuus käytöstä?" ;
+    Message [ danish ] = "Denne handling kræver megen hukommelse til fortryd-funktionen\nVil du slå fortryd-funktionen fra?" ;
+    Message [ french ] = "Cette action nécessite beaucoup de mémoire pour l'annulation (Undo).\nVoulez-vous désactiver l'annulation ?" ;
+    Message [ swedish ] = "Denna åtgärd kräver alltför mycket minne för Ångra-funktionen.\nVill Du stänga av Ångra-funktionen?" ;
+    Message [ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?" ;
+    Message [ spanish ] = "Esta acción necesita mucha memoria para la operación de Deshacer.\n¿Desea desactivar la opción de deshacer?" ;
+    Message [ english_us ] = "A large amount of memory is required to undo this action.\nDo you want to cancel the undo?" ;
+    Message[ chinese_simplified ] = "³·ÏûÃüÁî¹¦ÄÜĞèÒªºÜ¶àµÄÄÚ´æ¡£\nÄúÒªÊ§»î³·ÏûÃüÁî¹¦ÄÜÂğ£¿";
+    Message[ russian ] = "İòîìó äåéñòâèş íåîáõîäèìî äëÿ îòìåíû ñëèøêîì ìíîãî ïàìÿòè.\nÂû õîòèòå îòêëş÷èòü îòìåíó?";
+    Message[ polish ] = "Cofniêcie tej akcji wymaga du¿ej iloœci pamiêci.\nCzy chcesz przerwaæ cofniêcie?";
+    Message[ japanese ] = "‚±‚Ìì‹Æ‚Í¤Œ³‚É–ß‚·‚½‚ß‚É”ñí‚É‘½‚­‚ÌÒÓØ‚ª•K—v‚Å‚·B\nŒ³‚É–ß‚·‚±‚Æ‚ğæ‚è‚â‚ß‚Ü‚·‚©?";
+    Message[ chinese_traditional ] = "´_­ì¥\\¯à»İ­n«Ü¦hªº°O¾ĞÅé¡C\n±z­n¥¢¬¡´_­ì¥\\¯à¡H";
+    Message[ arabic ] = "ÇáÊÑÇÌÚ Úä åĞÇ ÇáÅÌÑÇÁ íÊØáÈ ĞÇßÑÉ ßÈíÑÉ ÌÏÇğ.\nåá ÊÑíÏ ÅáÛÇÁ ÇáÊÑÇÌÚ¿";
+    Message[ dutch ] = "Het ongedaan maken van deze bewerking beslaat veel geheugen.\nWilt U \"Ongedaan maken\" opheffen ?";
+    Message[ chinese_simplified ] = "³·ÏûÃüÁî¹¦ÄÜĞèÒªºÜ¶àµÄÄÚ´æ¡£\nÄúÒªÊ§»î³·ÏûÃüÁî¹¦ÄÜÂğ£¿";
+    Message[ greek ] = "Ç åêôİëåóç áõôŞò ôçò åíİñãåéáò áğáéôåß ìåãÜëç ğïóüôçôá ìíŞìçò.\nÈİëåôå íá áêõñşóåôå ôçí áíáßñåóç;";
+    Message[ korean ] = "ÀÌ ÀÛµ¿À» Ãë¼Ò¸¦ À§ÇÏ¿© ´ë¿ë·®ÀÇ ¸Ş¸ğ¸®°¡ ¿ä±¸µË´Ï´Ù.\n½ÇÇàÃë¼Ò¸¦ Ãë¼ÒÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Bu işlemde geri alma için büyük miktarda bellek gerekiyor.\nGeri alma işlevini kapatmak istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+
+Bitmap RID_GRAPHIC_REPLACEBMP
+{
+    File = "grafikei.bmp" ;
+};
+
+Bitmap RID_GRAPHIC_ERRORBMP
+{
+    File = "grafikde.bmp" ;
+};
+
+String STR_TABLE_DEFNAME
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "Table" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Tabela" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Tabel" ;
+    Text [ french ] = "Tableau" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ dutch ] = "Tabel" ;
+    Text [ spanish ] = "Tabla" ;
+    Text [ english_us ] = "Table" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ polish ] = "Tabela";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏæá";
+    Text[ dutch ] = "Tabel";
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "Ç¥";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_GRAPHIC_DEFNAME
+{
+    TEXT = "Grafik" ;
+    TEXT [ English ] = "Graphic" ;
+    TEXT [ norwegian ] = "Graphic" ;
+    TEXT [ italian ] = "Immagine" ;
+    TEXT [ portuguese_brazilian ] = "Gráfico" ;
+    TEXT [ portuguese ] = "Imagem" ;
+    TEXT [ finnish ] = "Kuva" ;
+    TEXT [ danish ] = "Grafik" ;
+    TEXT [ french ] = "Image" ;
+    TEXT [ swedish ] = "Grafik" ;
+    TEXT [ dutch ] = "Afbeelding" ;
+    TEXT [ spanish ] = "Imagen" ;
+    TEXT [ english_us ] = "Graphic" ;
+    TEXT[ chinese_simplified ] = "Í¼ĞÎ";
+    TEXT[ russian ] = "Ğèñóíîê";
+    TEXT[ polish ] = "Grafika";
+    TEXT[ japanese ] = "}";
+    TEXT[ chinese_traditional ] = "¹Ï¤ù";
+    TEXT[ arabic ] = "ÕæÑÉ";
+    TEXT[ dutch ] = "Afbeelding";
+    TEXT[ chinese_simplified ] = "Í¼ĞÎ";
+    TEXT[ greek ] = "Ãñáöéêü";
+    TEXT[ korean ] = "±×·¡ÇÈ";
+    TEXT[ turkish ] = "Grafik";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_OBJECT_DEFNAME
+{
+    TEXT = "Objekt" ;
+    TEXT [ English ] = "Object" ;
+    TEXT [ norwegian ] = "Object" ;
+    TEXT [ italian ] = "Oggetto" ;
+    TEXT [ portuguese_brazilian ] = "Objeto" ;
+    TEXT [ portuguese ] = "Objecto" ;
+    TEXT [ finnish ] = "Objekti" ;
+    TEXT [ danish ] = "Objekt" ;
+    TEXT [ french ] = "Objet" ;
+    TEXT [ swedish ] = "Objekt" ;
+    TEXT [ dutch ] = "Object" ;
+    TEXT [ spanish ] = "Objeto" ;
+    TEXT [ english_us ] = "Object" ;
+    TEXT[ chinese_simplified ] = "¶ÔÏó";
+    TEXT[ russian ] = "Îáúåêò";
+    TEXT[ polish ] = "Obiekt";
+    TEXT[ japanese ] = "µÌŞ¼Şª¸Ä";
+    TEXT[ chinese_traditional ] = "ª«¥ó";
+    TEXT[ arabic ] = "ßÇÆä";
+    TEXT[ dutch ] = "Object";
+    TEXT[ chinese_simplified ] = "¶ÔÏó";
+    TEXT[ greek ] = "Áíôéêåßìåíï";
+    TEXT[ korean ] = "°³Ã¼";
+    TEXT[ turkish ] = "Nesne";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_FRAME_DEFNAME
+{
+    Text = "Rahmen" ;
+    Text [ English ] = "Frames" ;
+    Text [ norwegian ] = "Rammer" ;
+    Text [ italian ] = "Cornice" ;
+    Text [ portuguese_brazilian ] = "Molduras" ;
+    Text [ portuguese ] = "Moldura" ;
+    Text [ finnish ] = "Kehys" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ french ] = "Cadre" ;
+    Text [ swedish ] = "Ram" ;
+    Text [ dutch ] = "Kader" ;
+    Text [ spanish ] = "Marco" ;
+    Text [ english_us ] = "Frame" ;
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ russian ] = "Ğàìêà";
+    Text[ polish ] = "Ramka";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
+    Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+    Text[ arabic ] = "ÅØÇÑ";
+    Text[ dutch ] = "Kader";
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ korean ] = "ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Çerçeve";
+    Text[ language_user1 ] = " ";
+};
+String STR_REGION_DEFNAME
+{
+    Text = "Bereich" ;
+    Text [ English ] = "section" ;
+    Text [ norwegian ] = "section" ;
+    Text [ italian ] = "Sezione" ;
+    Text [ portuguese_brazilian ] = "seção" ;
+    Text [ portuguese ] = "Secção" ;
+    Text [ finnish ] = "osa" ;
+    Text [ danish ] = "Område" ;
+    Text [ french ] = "Section" ;
+    Text [ swedish ] = "Område" ;
+    Text [ dutch ] = "Bereik" ;
+    Text [ spanish ] = "Area" ;
+    Text [ english_us ] = "Section" ;
+    Text[ chinese_simplified ] = "ÇøÓò";
+    Text[ russian ] = "Îáëàñòü";
+    Text[ polish ] = "Obszar";
+    Text[ japanese ] = "”ÍˆÍ";
+    Text[ chinese_traditional ] = "°Ï°ì";
+    Text[ arabic ] = "äØÇŞ";
+    Text[ dutch ] = "Bereik";
+    Text[ chinese_simplified ] = "ÇøÓò";
+    Text[ greek ] = "Åíüôçôá";
+    Text[ korean ] = "±¸¿ª";
+    Text[ turkish ] = "Bölüm";
+    Text[ language_user1 ] = " ";
+};
+String STR_NUMRULE_DEFNAME
+{
+    Text = "Nummerierung" ;
+    Text [ English ] = "Numbering" ;
+    Text [ norwegian ] = "Numbering" ;
+    Text [ italian ] = "Numerazione" ;
+    Text [ portuguese_brazilian ] = "NumeraşÒo" ;
+    Text [ portuguese ] = "Numeração" ;
+    Text [ finnish ] = "Numerointi" ;
+    Text [ danish ] = "Nummerering" ;
+    Text [ french ] = "Numérotation" ;
+    Text [ swedish ] = "Numrering" ;
+    Text [ dutch ] = "Nummering" ;
+    Text [ spanish ] = "Numeración" ;
+    Text [ english_us ] = "Numbering" ;
+    Text[ chinese_simplified ] = "±àºÅ";
+    Text[ russian ] = "Íóìåğàöèÿ";
+    Text[ polish ] = "Numeracja";
+    Text[ japanese ] = "”Ô†•t‚¯";
+    Text[ chinese_traditional ] = "½s¸¹";
+    Text[ arabic ] = "ÇáÊÑŞíã";
+    Text[ dutch ] = "Nummering";
+    Text[ chinese_simplified ] = "±àºÅ";
+    Text[ greek ] = "Áñßèìçóç";
+    Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+    Text[ turkish ] = "Numaralama";
+    Text[ language_user1 ] = " ";
+};
+String STR_EMPTYPAGE
+{
+    Text = "leere Seite" ;
+    Text [ English ] = "empty page" ;
+    Text [ english_us ] = "blank page" ;
+    Text [ portuguese_brazilian ] = "leere Seite" ;
+    Text [ swedish ] = "tom sida" ;
+    Text [ danish ] = "tom side" ;
+    Text [ italian ] = "Pagina vuota" ;
+    Text [ spanish ] = "Página vacía" ;
+    Text [ french ] = "Page vide" ;
+    Text [ dutch ] = "Lege pagina" ;
+    Text [ portuguese ] = "página vazia" ;
+    Text[ chinese_simplified ] = "¿Õ°×Ò³Ãæ";
+    Text[ russian ] = "Ïóñòàÿ ñòğàíèöà";
+    Text[ polish ] = "Pusta strona";
+    Text[ japanese ] = "‹ó”’Íß°¼Ş";
+    Text[ chinese_traditional ] = "ªÅ¥Õ­¶­±";
+    Text[ arabic ] = "ÕİÍÉ İÇÑÛÉ";
+    Text[ dutch ] = "Lege pagina";
+    Text[ chinese_simplified ] = "¿Õ°×Ò³Ãæ";
+    Text[ greek ] = "êåíŞ óåëßäá";
+    Text[ korean ] = "ºó ÆäÀÌÁö";
+    Text[ turkish ] = "Boş sayfa";
+    Text[ language_user1 ] = " ";
+};
+
+QueryBox MSG_CLPBRD_CLEAR
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    MESSAGE = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?" ;
+    MESSAGE [ English ] = "Shall the Clipboard Content be available for other Applications?" ;
+    MESSAGE [ norwegian ] = "Vil du at Innholdet på Utklippstavlen skal være tilgjengelig til andre applikasjoner?" ;
+    MESSAGE [ italian ] = "Negli appunti ci sono molti dati.\nRendere il contenuto degli appunti disponibile per altre applicazioni?" ;
+    MESSAGE [ portuguese_brazilian ] = "O Conteúdo do Clipboard deve estar disponível para outros Aplicativos?" ;
+    MESSAGE [ portuguese ] = "Na área de transferência encontram-se grandes quantidades de dados.\nColocar o conteúdo da área de transferência à disposição de outras aplicações?" ;
+    MESSAGE [ english_us ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
+    MESSAGE [ finnish ] = "Pitääkö leikepöydän sisällön olla muiden sovellusten käytettävissä?" ;
+    MESSAGE [ danish ] = "Du har placeret en stor mængde data i udklipsholderen.\nSkal udklipholderens indhold være tilgængeligt for andre applikationer?" ;
+    MESSAGE [ french ] = "Vous avez déposé un grand nombre de données dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation ultérieure sous une autre application ?" ;
+    MESSAGE [ swedish ] = "Du har stora datamängder i urklippet.\nSkall innehållet i urklippet göras tillgängligt för andra applikationer?" ;
+    MESSAGE [ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?" ;
+    MESSAGE [ spanish ] = "Usted tiene muchos datos en el portapapeles.\n¿Desea mantener disponible el contenido del portapapeles para otras aplicaciones?" ;
+    MESSAGE[ chinese_simplified ] = "Äú½«Ò»¸ö½Ï´óµÄÊı¾İ¸´ÖÆµ½¼ôÌù°å¡£\nÄúÏëÒªÈÃÆäËûµÄÓ¦ÓÃ³ÌĞòÒ²ÄÜ¹»Ê¹ÓÃÕâ¸öÊı¾İÂğ£¿";
+    MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ russian ] = "Âû ñîõğàíèëè áîëüøåå êîëè÷åñòâî äàííûõ â áóôåğå îáìåíà.\nÄîëæíî ëè ñîäåğæèìîå áóôåğà îáìåíà áûòü äîñòóïíûì äëÿ äğóãèõ ïğèëîæåíèé?";
+    MESSAGE[ polish ] = "W schowku zosta³y umieszczone wiêksze iloœci danych.\nCzy treœæ tych danych ma zostaæ udostêpniona innym aplikacjom?";
+    MESSAGE[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚É‘å—Ê‚ÌÃŞ°À‚ª•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·B\n¸Ø¯ÌßÎŞ°ÄŞ‚Ì“à—e‚ğ‘¼‚Ì±ÌßØ¹°¼®İ‚Ég—p‚µ‚Ü‚·‚©?";
+    MESSAGE[ chinese_traditional ] = "±z¤w¸g±N¤@­Ó¸û¤jªº¸ê®Æ½Æ»s¨ì°Å¶KÃ¯¡C\n±z·Q­nÅı¨ä¥LªºÀ³¥Îµ{§Ç¤]¯à°÷¨Ï¥Î³o­Ó¸ê®Æ¡H";
+    MESSAGE[ arabic ] = "áŞÏ ŞãÊ ÈÍİÙ ßãíÇÊ ßÈíÑÉ ãä ÇáÈíÇäÇÊ İí ÇáÍÇİÙÉ.\nåá ÊÑíÏ æÖÚ ãÍÊæíÇÊ ÇáÍÇİÙÉ ÊÍÊ ÊÕÑİ ÊØÈíŞÇÊ ÃÎÑì¿";
+    MESSAGE[ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?";
+    MESSAGE[ chinese_simplified ] = "Äú½«Ò»¸ö½Ï´óµÄÊı¾İ¸´ÖÆµ½¼ôÌù°å¡£\nÄúÏëÒªÈÃÆäËûµÄÓ¦ÓÃ³ÌĞòÒ²ÄÜ¹»Ê¹ÓÃÕâ¸öÊı¾İÂğ£¿";
+    MESSAGE[ greek ] = "¸÷åôå áğïèçêåıóåé ìåãÜëï áñéèìü äåäïìİíùí óôï clipboard.\nÈİëåôå íá ğáñáìåßíåé äéáèİóéìï ôï ğåñéå÷üìåíï ôïõ clipboard ãéá Üëëåò åöáñìïãİò;";
+    MESSAGE[ korean ] = "Å¬¸³º¸µå¾È¿¡ ÀúÀåµÈ ´ë¿ë·®ÀÇ µ¥ÀÌÅÍ°¡ ÀÖ½À´Ï´Ù.\nÅ¬¸³º¸µåÀÇ ³»¿ëÀ» ´Ù¸¥ ÀÀ¿ëÇÁ·Î±×·¥¿¡¼­ À¯È¿ÇÏµµ·Ï ³²°ÜµÎ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ turkish ] = "Panoya büyük miktarda veri aktardınız.\nPano içeriğini başka uygulamalarda kullanmak istiyor musunuz?";
+};
+
+QueryBox MSG_SAVE_HTML_QUERY
+{
+    BUTTONS = WB_YES_NO_CANCEL ;
+    DEFBUTTON = WB_DEF_YES ;
+    MESSAGE = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nMöchten Sie das Dokument speichern?" ;
+    MESSAGE [ English ] = "Conversion into HTML \nmay cause information loss. \nWould you like to save the document?" ;
+    Message [ english_us ] = "Conversion into HTML format \nmay cause information loss. \nDo you want to save the document?" ;
+    Message = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nMöchten Sie das Dokument speichern?" ;
+    Message [ italian ] = "La conversione nel formato HTML \npuò causare perdita di informazioni \nSalvare il documento?" ;
+    Message [ spanish ] = "La transformación en el formato HTML \npuede causar la pérdida de información. \n¿Desea guardar el documento?" ;
+    Message [ french ] = "La conversion au format HTML\npeut engendrer une perte d'informations. \nSouhaitez-vous enregistrer le document ?" ;
+    Message [ dutch ] = "De convertering naar het HTML-formaat \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?" ;
+    Message [ swedish ] = "Omvandling till HTML-format \nkan förorsaka informationsförlust.\nSkall dokumentet sparas?" ;
+    Message [ danish ] = "Konvertering til HTML-format\nkan medføre informationstab.\nVil du gemme dokumentet?" ;
+    Message [ portuguese_brazilian ] = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nMöchten Sie das Dokument speichern?" ;
+    Message [ portuguese ] = "A conversão para o formato HTML pode \nprovocar perda de informação. \nGuardar o documento?" ;
+    Message[ chinese_simplified ] = "ÎÄ¼ş×ª»»³É HTML ¸ñÊ½\n¿ÉÄÜ»áÒıÆğ×ÊÁÏËğÊ§¡£\nÄúÒª´æÅÌÕâ¸öÎÄ¼şÂğ?";
+    Message[ russian ] = "Ïåğåõîä â ôîğìàò HTML \nìîæåò ïğèâåñòè ê ïîòåğå èíôîğìàöèè. \n Âû õîòèòå ñîõğàíèòü ıòîò äîêóìåíò?";
+    Message[ polish ] = "Konwersja na format HTML \nmo¿e spowodowaæ utratê informacji. \nCzy chcesz zapisaæ dokument?";
+    Message[ japanese ] = "HTMLŒ`®‚É•ÏŠ·‚·‚é‚Æ\nî•ñ‚ª¸‚í‚ê‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n‚±‚Ì•¶‘‚ğ•Û‘¶‚µ‚Ü‚·‚©?";
+    Message[ chinese_traditional ] = "ÀÉ®×Âà´«¦¨ HTML ®æ¦¡\n¥i¯à·|¤Ş°_¸ê®Æ·l¥¢¡C\n±z­nÀx¦s³o­ÓÀÉ®×¡H";
+    Message[ arabic ] = "ÇáÊÍæá Åáì ÊäÓíŞ HTML \níãßä Ãä íÄÏí Åáì İŞÏÇä ÈÚÖ ÇáãÚáæãÇÊ. \nåá ÊÑíÏ ÍİÙ ÇáãÓÊäÏ¿";
+    Message[ dutch ] = "De convertering naar het HTML-formaat \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?";
+    Message[ chinese_simplified ] = "ÎÄ¼ş×ª»»³É HTML ¸ñÊ½\n¿ÉÄÜ»áÒıÆğ×ÊÁÏËğÊ§¡£\nÄúÒª´æÅÌÕâ¸öÎÄ¼şÂğ?";
+    Message[ greek ] = "Ç ìåôáôñïğŞ óå ìïñöŞ HTML \nìğïñåß íá ğñïêáëİóåé áğşëåéåò ğëçñïöïñéşí. \nÈİëåôå íá áğïèçêåıóåôå ôï İããñáöï;";
+    Message[ korean ] = "HTML ¼­½ÄÀ¸·Î º¯È¯Àº \nÁ¤º¸ ¼Õ½ÇÀÇ ¿øÀÎÀÌ µË´Ï´Ù. \n¹®¼­¸¦ ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "HTML formatına \ndönüşüm sonucunda veri kaybı olabilir. \nBelgeyi kaydetmek istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+
+String STR_ABSTRACT_TITLE
+{
+    Text = "Abstrakt : " ;
+    Text [ English ] = "Summary : " ;
+    Text [ portuguese ] = "Abstracto : " ;
+    Text [ english_us ] = "Abstract: " ;
+    Text [ portuguese_brazilian ] = "Abstrakt : " ;
+    Text [ swedish ] = "Utdrag:  " ;
+    Text [ danish ] = "Abstract : " ;
+    Text [ italian ] = "Sunto: " ;
+    Text [ spanish ] = "Extracto:  " ;
+    Text [ french ] = "Synthèse :  " ;
+    Text [ dutch ] = "Extract :   " ;
+    Text[ chinese_simplified ] = "ÕªÒª£º ";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Ïğîñìîòğ :  ";
+    Text[ polish ] = "Abstrakt :   ";
+    Text[ japanese ] = "—v–ñ : ";
+    Text[ chinese_traditional ] = "ºK­n¡G ";
+    Text[ arabic ] = "ÇáÊáÎíÕ: ";
+    Text[ dutch ] = "Extract :   ";
+    Text[ chinese_simplified ] = "ÕªÒª£º ";
+    Text[ greek ] = "Abstract: ";
+    Text[ korean ] = "Ãß»ó: ";
+    Text[ turkish ] = "Özet: ";
+};
+
+String STR_FDLG_TEMPLATE_BUTTON
+{
+    Text = "Vorlage" ;
+    Text [ English ] = "Template" ;
+    Text [ english_us ] = "Style" ;
+    Text [ portuguese_brazilian ] = "Vorlage" ;
+    Text [ swedish ] = "Formatmall" ;
+    Text [ danish ] = "Skabelon" ;
+    Text [ italian ] = "Modello" ;
+    Text [ spanish ] = "Plantilla" ;
+    Text [ french ] = "Style" ;
+    Text [ dutch ] = "Sjabloon" ;
+    Text [ portuguese ] = "Estilo" ;
+    Text[ chinese_simplified ] = "ÑùÊ½";
+    Text[ russian ] = "Øàáëîí";
+    Text[ polish ] = "Szablon";
+    Text[ japanese ] = "ÃİÌßÚ°Ä";
+    Text[ chinese_traditional ] = "¼Ë¦¡";
+    Text[ arabic ] = "äãØ";
+    Text[ dutch ] = "Sjabloon";
+    Text[ chinese_simplified ] = "ÑùÊ½";
+    Text[ greek ] = "Ğñüôõğï";
+    Text[ korean ] = "À¯Çü";
+    Text[ turkish ] = "Biçim";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_FDLG_TEMPLATE_NAME
+{
+    Text = "Aktuelle Vorlage: " ;
+    Text [ English ] = "Current template: " ;
+    Text [ english_us ] = "Current Style: " ;
+    Text [ portuguese_brazilian ] = "Aktuelle Vorlage: " ;
+    Text [ swedish ] = "Aktuell formatmall:  " ;
+    Text [ danish ] = "Aktuel skabelon: " ;
+    Text [ italian ] = "Modello corrente: " ;
+    Text [ spanish ] = "Plantilla actual:  " ;
+    Text [ french ] = "Style actif : " ;
+    Text [ dutch ] = "Actuele sjabloon  " ;
+    Text [ portuguese ] = "Modelo actual: " ;
+    Text[ chinese_simplified ] = "µ±Ç°µÄÑùÊ½£º ";
+    Text[ russian ] = "Òåêóùèé øàáëîí:  ";
+    Text[ polish ] = "Aktualny szablon  ";
+    Text[ japanese ] = "ì‹Æ’†‚ÌÃİÌßÚ°ÄF ";
+    Text[ chinese_traditional ] = "·í«eªº¼Ë¦¡¡G ";
+    Text[ arabic ] = "ÇáäãØ ÇáÍÇáí: ";
+    Text[ dutch ] = "Actuele sjabloon  ";
+    Text[ chinese_simplified ] = "µ±Ç°µÄÑùÊ½£º ";
+    Text[ greek ] = "Ôñİ÷ùí ğñüôõğï:  ";
+    Text[ korean ] = "ÇöÀç ÅÛÇÃ¸®Æ®: ";
+    Text[ turkish ] = "Yürürlükteki biçim: ";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_PAGEOFFSET
+{
+    Text = "Seitennummer: " ;
+    Text [ English ] = "Page number: " ;
+    Text [ english_us ] = "Page number: " ;
+    Text [ portuguese_brazilian ] = "Seitennummer: " ;
+    Text [ swedish ] = "Sidnummer:  " ;
+    Text [ danish ] = "Sidetal: " ;
+    Text [ italian ] = "Numero di pagina: " ;
+    Text [ spanish ] = "Número de página:  " ;
+    Text [ french ] = "Numéro de page : " ;
+    Text [ dutch ] = "Paginanummer  " ;
+    Text [ portuguese ] = "Número de página: " ;
+    Text[ chinese_simplified ] = "Ò³Âë£º ";
+    Text[ russian ] = "Íîìåğ ñòğàíèöû:  ";
+    Text[ polish ] = "Numer strony:  ";
+    Text[ japanese ] = "Íß°¼Ş”Ô†: ";
+    Text[ chinese_traditional ] = "­¶½X¡G ";
+    Text[ arabic ] = "ÑŞã ÇáÕİÍÉ: ";
+    Text[ dutch ] = "Paginanummer  ";
+    Text[ chinese_simplified ] = "Ò³Âë£º ";
+    Text[ greek ] = "Áñéèìüò óåëßäáò: ";
+    Text[ korean ] = "ÆäÀÌÁö ¹øÈ£: ";
+    Text[ turkish ] = "Sayfa numarası: ";
+    Text[ language_user1 ] = " ";
+};
+String STR_PAGEBREAK
+{
+    Text = "Umbruch vor neuer Seite" ;
+    Text [ English ] = "Break before new page" ;
+    Text [ norwegian ] = "Skift før ny side" ;
+    Text [ italian ] = "Interrompi prima della pagina nuova" ;
+    Text [ portuguese_brazilian ] = "Interromper antes de nova página" ;
+    Text [ portuguese ] = "Quebra antes de nova página" ;
+    Text [ finnish ] = "Väli ennen uutta sivua" ;
+    Text [ danish ] = "Skift før ny side" ;
+    Text [ french ] = "Saut avant nouvelle page" ;
+    Text [ swedish ] = "Bryt före ny sida" ;
+    Text [ dutch ] = "Einde voor nieuwe pagina" ;
+    Text [ spanish ] = "Salto antes de página nueva" ;
+    Text [ english_us ] = "Break before new page" ;
+    Text[ chinese_simplified ] = "ÔÚĞÂÒ»Ò³Ö®Ç°»»Ò³";
+    Text[ russian ] = "Ğàçğûâ ïåğåä íîâîé ñòğàíèöåé";
+    Text[ polish ] = "Podzia³ przed now¹ stron¹";
+    Text[ japanese ] = "V‚µ‚¢Íß°¼Ş‚Ì‘O‚Å‹æØ‚é";
+    Text[ chinese_traditional ] = "¦b·s¤@­¶¤§«e´«­¶";
+    Text[ arabic ] = "İÇÕá ŞÈá ÇáÕİÍÉ ÇáÌÏíÏÉ";
+    Text[ dutch ] = "Einde voor nieuwe pagina";
+    Text[ chinese_simplified ] = "ÔÚĞÂÒ»Ò³Ö®Ç°»»Ò³";
+    Text[ greek ] = "ÁëëáãŞ ğñéí áğü íİá óåëßäá";
+    Text[ korean ] = "»õ ÆäÀÌÁö ¾Õ¿¡¼­ Áß´Ü";
+    Text[ turkish ] = "Yeni sayfa öncesi kesme";
+    Text[ language_user1 ] = " ";
+};
+

@@ -1,0 +1,298 @@
+/*************************************************************************
+ *
+ *  $RCSfile: olmenu.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+/* StarView ressource file */
+
+#include "olmenu.hrc"
+#include "helpid.h"
+#define SEPARATOR       MenuItem { Separator = TRUE; };
+Menu MN_SPELL_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_SPELLING ;
+            HelpID = HID_LINGU_SPELLING_DLG ;
+            Text = "~Rechtschreibung" ;
+            Text [ English ] = "~Spelling" ;
+            Text [ english_us ] = "~Spellcheck" ;
+            Text [ italian ] = "Controllo ~ortografico" ;
+            Text [ spanish ] = "Ortogra~fía" ;
+            Text [ french ] = "~Orthographe" ;
+            Text [ dutch ] = "~Spellingcontrole" ;
+            Text [ swedish ] = "~Rättstavning" ;
+            Text [ danish ] = "Stavekont~rol" ;
+            Text [ portuguese ] = "Or~tografia" ;
+            Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
+            Text[ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text[ russian ] = "Ïğàâ~îïèñàíèå";
+            Text[ polish ] = "~Pisownia";
+            Text[ japanese ] = "•¶ÍZ³(~S)";
+            Text[ chinese_traditional ] = "«÷¦r(~S)";
+            Text[ arabic ] = "~ÊÏŞíŞ ÅãáÇÆí";
+            Text[ dutch ] = "~Spellingcontrole";
+            Text[ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text[ greek ] = "Ïñèïã~ñáößá";
+            Text[ korean ] = "¸ÂÃã¹ı(~S)";
+            Text[ turkish ] = "~Yazım kılavuzu";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_INSERT ;
+            HelpID = HID_LINGU_ADD_WORD ;
+            Text = "~Aufnehmen" ;
+            Text [ English ] = "~Insert" ;
+            SubMenu = Menu
+            {
+            };
+            Text [ english_us ] = "~Add" ;
+            Text [ italian ] = "A~ggiungi" ;
+            Text [ spanish ] = "~Incluir" ;
+            Text [ french ] = "~Ajouter" ;
+            Text [ dutch ] = "~Toevoegen" ;
+            Text [ swedish ] = "~Lägg till" ;
+            Text [ danish ] = "Tilføj" ;
+            Text [ portuguese ] = "~Adicionar" ;
+            Text [ portuguese_brazilian ] = "~Aufnehmen" ;
+            Text[ chinese_simplified ] = "½ÓÊÜ(~A)";
+            Text[ russian ] = "Äîáàâèòü";
+            Text[ polish ] = "Dodaj";
+            Text[ japanese ] = "’Ç‰Á(~A)";
+            Text[ chinese_traditional ] = "¥[¤J(~A)";
+            Text[ arabic ] = "ÅÖÇİÉ";
+            Text[ dutch ] = "~Toevoegen";
+            Text[ chinese_simplified ] = "½ÓÊÜ(~A)";
+            Text[ greek ] = "Ğñ~ïóèŞêç";
+            Text[ korean ] = "Ãß°¡(~A)";
+            Text[ turkish ] = "Ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_IGNORE ;
+            HelpID = HID_LINGU_IGNORE_WORD ;
+            /* ### ACHTUNG: Neuer Text in Resource? Alle i~gnorieren : ~Ignorieren */
+            /* ### ACHTUNG: Neuer Text in Resource? Alle i~gnorieren : ~Ignorieren */
+            Text = "Alle i~gnorieren" ;
+            Text [ ENGLISH ] = "I~gnore all" ;
+            Text [ norwegian ] = "I~gnorer alle" ;
+            Text [ italian ] = "~Ignora tutto" ;
+            Text [ portuguese_brazilian ] = "I~gnorar tudo" ;
+            Text [ portuguese ] = "~Ignorar tudo" ;
+            Text [ finnish ] = "O~hita kaikki" ;
+            Text [ danish ] = "Ignorer alle" ;
+            Text [ french ] = "~Ignorer tout" ;
+            Text [ swedish ] = "~Ignorera alla" ;
+            Text [ dutch ] = "Alle ~negeren" ;
+            Text [ spanish ] = "~Ignorar todo" ;
+            Text [ english_us ] = "Ignore All" ;
+            Text[ chinese_simplified ] = "È«²¿ºöÂÔ(~I)";
+            Text[ russian ] = "Ïğîïóñêàòü âñå";
+            Text[ polish ] = "Zignoruj wszystkie";
+            Text[ japanese ] = "‚·‚×‚Ä–³‹‚·‚é";
+            Text[ language_user1 ] = " ";
+            Text[ chinese_traditional ] = "¥ş³¡©¿²¤(~I)";
+            Text[ arabic ] = "ÊÌÇåá Çáßá";
+            Text[ dutch ] = "Alle ~negeren";
+            Text[ chinese_simplified ] = "È«²¿ºöÂÔ(~I)";
+            Text[ greek ] = "ĞáñÜ~âëåøç üëùí";
+            Text[ korean ] = "¸ğµÎ ¹«½Ã";
+            Text[ turkish ] = "Tümünü yok say";
+        };
+        MenuItem
+        {
+            Identifier = MN_AUTOCORR ;
+            HelpID = HID_LINGU_AUTOCORR ;
+            Text = "Auto~Korrektur" ;
+            Text [ English ] = "~AutoCorrect" ;
+            SubMenu = Menu
+            {
+            };
+            Text [ english_us ] = "AutoCorrect" ;
+            Text [ portuguese_brazilian ] = "Auto~Korrektur" ;
+            Text [ swedish ] = "Auto~Korrigering" ;
+            Text [ danish ] = "AutoKorrektur" ;
+            Text [ italian ] = "Correzione automatica" ;
+            Text [ spanish ] = "Auto~Corrección" ;
+            Text [ french ] = "AutoCo~rrection" ;
+            Text [ dutch ] = "Auto~Correctie" ;
+            Text [ portuguese ] = "Auto~Correcção" ;
+            Text[ chinese_simplified ] = "×Ô¶¯¸üÕı(~K)";
+            Text[ russian ] = "Àâòîçàìåíà";
+            Text[ polish ] = "Autokorekta";
+            Text[ japanese ] = "µ°ÄºÚ¸Ä";
+            Text[ chinese_traditional ] = "¦Û°Ê®Õ¥¿(~K)";
+            Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
+            Text[ dutch ] = "Auto~Correctie";
+            Text[ chinese_simplified ] = "×Ô¶¯¸üÕı(~K)";
+            Text[ greek ] = "Áõôï~Äéüñèùóç";
+            Text[ korean ] = "ÀÚµ¿ ¸ÂÃã";
+            Text[ turkish ] = "Otomatik düzeltme";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+String STR_WORD
+{
+    Text = "Wort ist " ;
+    Text [ ENGLISH ] = "word in" ;
+    Text [ portuguese ] = "Palavra em " ;
+    Text [ english_us ] = "word is " ;
+    Text [ portuguese_brazilian ] = "Wort ist " ;
+    Text [ swedish ] = "ord är " ;
+    Text [ danish ] = "Ordet er " ;
+    Text [ italian ] = "Il termine è " ;
+    Text [ spanish ] = "La palabra es " ;
+    Text [ french ] = "Le mot est en " ;
+    Text [ dutch ] = "Woord is  " ;
+    Text[ chinese_simplified ] = "µ¥´ÊÊÇ ";
+    Text[ russian ] = "ßçûê ñëîâà: ";
+    Text[ polish ] = "S³owo jest   ";
+    Text[ japanese ] = "’PŒê‚Í ";
+    Text[ chinese_traditional ] = "¦r¬O ";
+    Text[ language_user1 ] = " ";
+    Text[ arabic ] = "áÛÉ ÇáßáãÉ: ";
+    Text[ dutch ] = "Woord is  ";
+    Text[ chinese_simplified ] = "µ¥´ÊÊÇ ";
+    Text[ greek ] = "Ç ëİîç åßíáé ";
+    Text[ korean ] = "´Ü¾î´Â ";
+    Text[ turkish ] = "Sözcük: ";
+};
+String STR_PARAGRAPH
+{
+    Text = "Absatz ist " ;
+    Text [ ENGLISH ] = "Paragraph in" ;
+    Text [ portuguese ] = "Parágrafo em " ;
+    Text [ english_us ] = "Paragraph is " ;
+    Text [ portuguese_brazilian ] = "Absatz ist " ;
+    Text [ swedish ] = "Stycket är " ;
+    Text [ danish ] = "Afsnittet er " ;
+    Text [ italian ] = "Il paragrafo è " ;
+    Text [ spanish ] = "El párrafo es  " ;
+    Text [ french ] = "Le paragraphe est en" ;
+    Text [ dutch ] = "Alinea is  " ;
+    Text[ chinese_simplified ] = "¶ÎÂäÊÇ ";
+    Text[ russian ] = "ßçûê àáçàöà: ";
+    Text[ polish ] = "Akapit jest   ";
+    Text[ japanese ] = "’i—‚Í ";
+    Text[ chinese_traditional ] = "¬q¸¨¬O ";
+    Text[ arabic ] = "áÛÉ ÇáİŞÑÉ: ";
+    Text[ language_user1 ] = " ";
+    Text[ dutch ] = "Alinea is  ";
+    Text[ chinese_simplified ] = "¶ÎÂäÊÇ ";
+    Text[ greek ] = "Ç ğáñÜãñáöïò åßíáé ";
+    Text[ korean ] = "´Ü¶ôÀº ";
+    Text[ turkish ] = "Paragraf: ";
+};
+String STR_SPELL_OK
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist abgeschlossen! : Die Rechtschreibpr³fung ist abgeschlossen! */
+    Text = "Die Rechtschreibprüfung ist abgeschlossen!" ;
+    Text [ ENGLISH ] = "Spell checking has finished." ;
+    Text [ portuguese ] = "A verificação ortográfica está concluída!" ;
+    Text [ english_us ] = "The spellcheck is complete." ;
+    Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung ist abgeschlossen!" ;
+    Text [ swedish ] = "Rättstavningskontrollen är avslutad!" ;
+    Text [ danish ] = "Stavekontrollen er afsluttet!" ;
+    Text [ italian ] = "Controllo ortografico terminato!" ;
+    Text [ spanish ] = "¡Ha finalizado la revisión ortográfica!" ;
+    Text [ french ] = "La vérification de l'orthographe est terminée !" ;
+    Text [ dutch ] = "De spellingcontrole is beëindigd!" ;
+    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²éÒÑ¾­½áÊø£¡";
+    Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ çàêîí÷åíà!";
+    Text[ polish ] = "Sprawdzanie pisowni zosta³o zakoñczone!";
+    Text[ japanese ] = "½ÍßÙÁª¯¸‚ªI—¹‚µ‚Ü‚µ‚½B";
+    Text[ chinese_traditional ] = "«÷¦rÀË¬d¤w¸gµ²§ô¡T";
+    Text[ arabic ] = ".Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí";
+    Text[ dutch ] = "De spellingcontrole is beëindigd!";
+    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²éÒÑ¾­½áÊø£¡";
+    Text[ greek ] = "Ï ïñèïãñáöéêüò İëåã÷ïò ïëïêëçñşèçêå!";
+    Text[ korean ] = "¸ÂÃã¹ı °Ë»ç°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.";
+    Text[ turkish ] = "Yazım denetimi tamamlandı!";
+    Text[ language_user1 ] = " ";
+};
+String STR_HYP_OK
+{
+    Text = "Die Silbentrennung ist abgeschlossen!" ;
+    Text [ ENGLISH ] = "Hyphenating has finished." ;
+    Text [ portuguese ] = "Separação silábica está completa!" ;
+    Text [ english_us ] = "Hyphenation completed" ;
+    Text [ portuguese_brazilian ] = "Die Silbentrennung ist abgeschlossen!" ;
+    Text [ swedish ] = "Avstavningen är avslutad!" ;
+    Text [ danish ] = "Orddelingen er afsluttet!" ;
+    Text [ italian ] = "La sillabazione è conclusa!" ;
+    Text [ spanish ] = "La separación silábica ha finalizado" ;
+    Text [ french ] = "La coupure des mots est terminée !" ;
+    Text [ dutch ] = "De verdeling in lettergrepen is beëindigd!" ;
+    Text[ chinese_simplified ] = "Á¬×Ö·û¼ì²éÒÑ¾­Íê³É£¡";
+    Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ çàêîí÷åíà!";
+    Text[ polish ] = "Dzielenie wyrazów zosta³o zakoñczone.";
+    Text[ japanese ] = "Ê²ÌÈ°¼®İ‚ªI—¹‚µ‚Ü‚µ‚½!";
+    Text[ chinese_traditional ] = "³s¦r²ÅÀË¬d¤w¸g§¹¦¨¡I";
+    Text[ arabic ] = "ÊãøóÊ ÚãáíÉ İÕá ÇáãŞÇØÚ!";
+    Text[ dutch ] = "De verdeling in lettergrepen is beëindigd!";
+    Text[ chinese_simplified ] = "Á¬×Ö·û¼ì²éÒÑ¾­Íê³É£¡";
+    Text[ greek ] = "Ï óõëëáâéóìüò İ÷åé ïëïêëçñùèåß!";
+    Text[ korean ] = "ÇÏÀÌÇÂÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.";
+    Text[ turkish ] = "Heceleme tamamlandı.";
+    Text[ language_user1 ] = " ";
+};

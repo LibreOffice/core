@@ -1,0 +1,308 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cnttab.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define CB_MARKS        4
+#define CB_OUTLN        5
+#define FT_LEVEL        6
+#define ED_LEVEL        7
+#define GB_CREATE       8
+#define ED_BSP         11
+#define GB_BSP         12
+#define BT_OUTLN       13
+#define GB_TITLE       14
+#define ED_TITLE       15
+#define BT_HELP        16
+#define ST_AUTHTYPE    17
+
+#define LB_ENTRY       20
+#define FT_NUM         21
+#define ED_ENTRY       22
+#define BT_ENTRY_NUMBER  23
+#define BT_ENTRY_TEXT  24
+#define BT_TAB         25
+#define BT_STD         26
+#define BT_PAGE        27
+#define GB_ENTRY       28
+//#define FT_LEVEL       28
+#define LB_LEVEL       29
+#define FT_TEMPLATE    30
+#define LB_PARALAY     31
+#define BT_ASSIGN      32
+#define GB_FORMAT      33
+#define BT_ENTRY        34
+//#define BT_EDIT        34
+#define BT_JUMP        35
+#define CB_RECALC_TABS      36
+#define CB_FIRST_TAB_POS    37
+#define MF_FIRST_TAB_POS    38
+#define CB_REL_TO_TEXT      39
+#define BT_EDIT_STYLE       40
+#define CB_SAME             41
+#define CB_FF               42
+#define CB_CASE             43
+#define CB_SEC              44
+#define CB_ALPHA            45
+#define GB_OPT              46
+#define CB_MAKRS            47
+#define DLB_TOD             48
+#define CB_TEMPL            49
+#define DLB_LAYOUT          50
+#define CB_OBJECT           51
+#define DLB_OBJECT          52
+#define GB_SOURCE           53
+#define CB_USER_MARKS       54
+#define BT_ALL_LEVEL        55
+#define FT_MAIN_ENTRY_STYLE 56
+#define LB_MAIN_ENTRY_STYLE 57
+
+//restart numbering
+#define FT_TYPE             1
+#define LB_TYPE             2
+#define CB_READONLY         3
+#define FT_TITLE            4
+//#define ED_TITLE          5
+#define GB_TYPETITLE        6
+#define LB_AREA             7
+//#define FT_LEVEL          8
+#define NF_LEVEL            9
+#define GB_AREA             10
+#define CB_FROMHEADINGS     11
+#define PB_CHAPTERDLG       12
+#define CB_ADDSTYLES        13
+#define PB_ADDSTYLES        14
+
+
+#define CB_FROMOLE          17
+#define CB_LEVELFROMCHAPTER 18
+#define RB_FROMCAPTIONS     19
+#define RB_FROMOBJECTNAMES  20
+#define CB_TOXMARKS         21
+#define GB_CREATEFROM       22
+#define CB_COLLECTSAME      23
+#define CB_USEFF            24
+#define CB_CASESENSITIVE    25
+#define CB_INITIALCAPS      26
+#define CB_KEYASENTRY       27
+#define CB_FROMFILE         28
+//#define PB_FILE               29
+#define MB_AUTOMARK         29
+#define GB_IDXOPTIONS       30
+//#define PB_CREATE_AUTOMARK    31
+//#define PB_EDIT_AUTOMARK    32
+
+#define CB_USE_DASH         33
+
+#define GB_LEVEL                34
+#define WIN_TOKEN               35
+#define PB_ENTRYNO              36
+#define PB_ENTRY                37
+#define PB_CHAPTERINFO          38
+#define PB_PAGENO               39
+#define PB_TAB                  40
+#define PB_HYPERLINK            41
+#define FT_CHARSTYLE            42
+#define LB_CHARSTYLE            43
+#define PB_EDITSTYLE            44
+#define FT_FILLCHAR             45
+#define CB_FILLCHAR             46
+#define FT_CHAPTERENTRY         47
+#define LB_CHAPTERENTRY         48
+#define FT_SORTING              49
+#define LB_SORTING              50
+#define FT_TABPOS               51
+#define MF_TABPOS               52
+#define CB_AUTORIGHT            53
+#define CB_RELTOSTYLE           54
+//#define GB_ENTRY              55
+#define CB_RECALCTAB            56
+#define CB_NUMSTYLEFROMPDESC    57
+#define CB_ALPHADELIM           58
+#define CB_COMMASEPARATED       59
+//#define GB_FORMAT             60
+
+#define STR_NO_CHAR_STYLE       61
+#define CLB_FROMOBJ             62
+#define GB_FROMOBJ              63
+#define RES_SRCTYPES            64
+#define WIN_LEFT_SCROLL         65
+#define WIN_CTRL_PARENT         66
+#define WIN_RIGHT_SCROLL        67
+#define PB_ALL_LEVELS           68
+
+
+#define STR_BUTTON_TEXT_START   70
+#define STR_TOKEN_ENTRY_NO      (STR_BUTTON_TEXT_START)
+#define STR_TOKEN_ENTRY_TEXT    (STR_BUTTON_TEXT_START + 1)
+#define STR_TOKEN_ENTRY         (STR_BUTTON_TEXT_START + 2)
+#define STR_TOKEN_TAB_STOP      (STR_BUTTON_TEXT_START + 3)
+#define STR_TOKEN_TEXT          (STR_BUTTON_TEXT_START + 4)
+#define STR_TOKEN_PAGE_NUMS     (STR_BUTTON_TEXT_START + 5)
+#define STR_TOKEN_CHAPTER_INFO  (STR_BUTTON_TEXT_START + 6)
+#define STR_TOKEN_LINK_START    (STR_BUTTON_TEXT_START + 7)
+#define STR_TOKEN_LINK_END      (STR_BUTTON_TEXT_START + 8)
+#define STR_TOKEN_AUTHORITY     (STR_BUTTON_TEXT_START + 9)
+
+#define STR_BUTTON_HELP_TEXT_START  (STR_TOKEN_AUTHORITY + 1)
+#define STR_TOKEN_HELP_ENTRY_NO      (STR_BUTTON_HELP_TEXT_START)
+#define STR_TOKEN_HELP_ENTRY_TEXT    (STR_BUTTON_HELP_TEXT_START + 1)
+#define STR_TOKEN_HELP_ENTRY         (STR_BUTTON_HELP_TEXT_START + 2)
+#define STR_TOKEN_HELP_TAB_STOP      (STR_BUTTON_HELP_TEXT_START + 3)
+#define STR_TOKEN_HELP_TEXT          (STR_BUTTON_HELP_TEXT_START + 4)
+#define STR_TOKEN_HELP_PAGE_NUMS     (STR_BUTTON_HELP_TEXT_START + 5)
+#define STR_TOKEN_HELP_CHAPTER_INFO  (STR_BUTTON_HELP_TEXT_START + 6)
+#define STR_TOKEN_HELP_LINK_START    (STR_BUTTON_HELP_TEXT_START + 7)
+#define STR_TOKEN_HELP_LINK_END      (STR_BUTTON_HELP_TEXT_START + 8)
+#define STR_TOKEN_HELP_AUTHORITY     (STR_BUTTON_HELP_TEXT_START + 9)
+
+#define STR_CHARSTYLE               (STR_TOKEN_HELP_AUTHORITY + 1)
+#define TLB_STYLES              100
+#define GB_STYLES               101
+#define PB_OK                   102
+#define PB_CANCEL               103
+#define PB_HELP                 104
+#define FT_CAPTIONSEQUENCE      105
+#define LB_CAPTIONSEQUENCE      106
+#define FT_DISPLAYTYPE          107
+#define LB_DISPLAYTYPE          108
+#define TR_HEADER               109
+#define PB_LEFT                 110
+#define PB_RIGHT                111
+#define HB_STYLES               112
+#define ST_HB_FIRST             113
+#define CB_FROMTABLES           114
+#define CB_FROMFRAMES           115
+#define CB_FROMGRAPHICS         116
+#define ST_USER_ADDSTYLE        117
+#define ST_AUTOMARK_TYPE        118
+#define LB_AUTHFIELD            119
+#define PB_AUTHINSERT           120
+#define PB_AUTHREMOVE           121
+#define CB_SEQUENCE             122
+#define FT_BRACKET              123
+#define LB_BRACKET              124
+#define GB_AUTHORITY            125
+#define RB_DOCPOS               126
+#define RB_SORTCONTENT          127
+#define FT_FIRSTKEY             128
+#define LB_FIRSTKEY             129
+#define FT_SECONDKEY            130
+#define LB_SECONDKEY            131
+#define FT_THIRDDKEY            132
+#define LB_THIRDKEY             133
+#define GB_SORTKEY              134
+#define GB_SORTING              135
+#define STR_NOSORTKEY           136
+#define RB_SORTUP1              137
+#define RB_SORTUP2              138
+#define RB_SORTUP3              139
+#define RB_SORTDOWN1            140
+#define RB_SORTDOWN2            141
+#define RB_SORTDOWN3            142
+
+#define STR_DELIM               143
+
+#define TO_CONTENT          1
+#define TO_INDEX            2
+#define TO_ILLUSTRATION     4
+#define TO_TABLE            8
+#define TO_USER             16
+#define TO_OBJECT           32
+#define TO_AUTHORITIES      64
+
+#define AREA_DOCUMENT       1
+#define AREA_CHAPTER        2
+
+//TabDialog
+#define WIN_EXAMPLE         1
+#define RES_EXAMPLE_TEXT    2
+#define ARR_TEXT            3
+#define ST_HEADING_1        4
+#define ST_TEXT_1           5
+#define ST_HEADING_1_1      6
+#define ST_TEXT_1_1         7
+#define ST_HEADING_1_2      8
+#define ST_TEXT_1_2         9
+#define ST_TABLE_LABEL      10
+#define ST_FRAME_LABEL      11
+#define ST_GRAPHIC_LABEL    12
+#define ST_USERDEFINEDINDEX 13
+#define CB_SHOWEXAMPLE      14
+
+
+// AutoMark dialog
+#define BB_ENTRIES          1
+#define GB_ENTRIES          2
+
+#define ST_SEARCH           10
+#define ST_ALTERNATIVE      11
+#define ST_PRIMKEY          12
+#define ST_SECKEY           13
+#define ST_COMMENT          14
+#define ST_CASESENSITIVE    15
+#define ST_WORDONLY         16
+#define ST_TRUE             17
+#define ST_FALSE            18
+
+
+//ButtonMenu
+#define MN_AUTOMARK_OPEN    1
+#define MN_AUTOMARK_NEW     2
+#define MN_AUTOMARK_EDIT    3
+

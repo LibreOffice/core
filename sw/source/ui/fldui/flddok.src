@@ -1,0 +1,367 @@
+/*************************************************************************
+ *
+ *  $RCSfile: flddok.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabPage TP_FLD_DOK
+{
+    HelpID = HID_FLD_DOK ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Dokument" ;
+    Text [ ENGLISH ] = "Document" ;
+    FixedText FT_DOKTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Feldtyp" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "~Tipo di campo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "~Tipo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Felttype" ;
+        Text [ french ] = "~Type de champ" ;
+        Text [ swedish ] = "~F‰lttyp" ;
+        Text [ dutch ] = "~Veldtype" ;
+        Text [ spanish ] = "~Tipo de campo" ;
+        Text [ english_us ] = "~Type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "◊÷∂Œ¿‡–Õ(~T)";
+        Text[ russian ] = "“ËÔ ÔÓÎˇ";
+        Text[ polish ] = "Typ pola";
+        Text[ japanese ] = "Ã®∞ŸƒﬁÇÃéÌóﬁ(~T)";
+        Text[ chinese_traditional ] = "√˛´¨(~T)";
+        Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
+        Text[ greek ] = "~‘˝ÔÚ Â‰ﬂÔı";
+        Text[ korean ] = "«¸≈¬(~T)";
+        Text[ turkish ] = "~Alan tipi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DOKTYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_DOKSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Auswahl" ;
+        Text [ ENGLISH ] = "Selection" ;
+        Text [ norwegian ] = "Selection" ;
+        Text [ italian ] = "Selezione" ;
+        Text [ portuguese_brazilian ] = "SeleÁ„o" ;
+        Text [ portuguese ] = "~SelecÁ„o" ;
+        Text [ finnish ] = "Valinta" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ french ] = "~SÈlection" ;
+        Text [ swedish ] = "Urv~al" ;
+        Text [ dutch ] = "~Selectie" ;
+        Text [ spanish ] = "Se~lecciÛn" ;
+        Text [ english_us ] = "S~elect" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "—°‘Ò(~E)";
+        Text[ russian ] = "¬˚·Ó";
+        Text[ polish ] = "WybÛr";
+        Text[ japanese ] = "ëIë(~E)";
+        Text[ chinese_traditional ] = "øÔ®˙(~E)";
+        Text[ arabic ] = "«· ÕœÌœ";
+        Text[ greek ] = "~≈ÈÎÔ„ﬁ";
+        Text[ korean ] = "º±≈√(~E)";
+        Text[ turkish ] = "~SeÁim";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DOKSELECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+         // Keine Sortierung auf Wunsch von MA (wg. Absender)
+         //        Sort = TRUE;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DOKFORMAT
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        TEXT = "F~ormat" ;
+        TEXT [ English ] = "Format" ;
+        Left = TRUE ;
+        Text [ english_us ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ swedish ] = "F~ormat" ;
+        Text [ danish ] = "Format" ;
+        Text [ italian ] = "F~ormato" ;
+        Text [ spanish ] = "F~ormato" ;
+        Text [ french ] = "F~ormat" ;
+        Text [ dutch ] = "~Notatie" ;
+        Text [ portuguese ] = "F~ormato" ;
+        Text[ chinese_simplified ] = "∏Ò Ω(~O)";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ(~O)";
+        Text[ chinese_traditional ] = "ÆÊ¶°(~O)";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
+        Text[ greek ] = "Ã~ÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ(~O)";
+        Text[ turkish ] = "F~ormat";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DOKFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+         //     Size = MAP_APPFONT ( 84 , 82 ) ;
+        Size = MAP_APPFONT ( 84 , 98 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+        Sort = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    ListBox LB_DOKNUMFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+         //     Size = MAP_APPFONT ( 84 , 82 ) ;
+        Size = MAP_APPFONT ( 84 , 98 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        Hide = TRUE ;
+    };
+    FixedText FT_DOKVALUE
+    {
+        Pos = MAP_APPFONT ( 170 , 105 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        TEXT = "Ko~rrektur" ;
+        TEXT [ English ] = "Offs~et" ;
+        TEXT [ norwegian ] = "Offset" ;
+        TEXT [ italian ] = "~Correzione" ;
+        TEXT [ portuguese_brazilian ] = "Deslocar" ;
+        TEXT [ portuguese ] = "~CorrecÁ„o" ;
+        TEXT [ finnish ] = "Siirroa" ;
+        TEXT [ danish ] = "Korrektion" ;
+        TEXT [ french ] = "C~orrecture" ;
+        TEXT [ swedish ] = "Ko~rrigering" ;
+        TEXT [ dutch ] = "~Correctie" ;
+        TEXT [ spanish ] = "~CorrecciÛn" ;
+        TEXT [ english_us ] = "O~ffset" ;
+        Left = TRUE ;
+        Hide = TRUE ;
+        TEXT[ chinese_simplified ] = "–ﬁ∏ƒ(~F)";
+        TEXT[ russian ] = " ÓÂÍÚËÓ‚Í‡";
+        TEXT[ polish ] = "Korekta";
+        TEXT[ japanese ] = "èCê≥(~F)";
+        TEXT[ chinese_traditional ] = "≠◊ßÔ(~F)";
+        TEXT[ arabic ] = "«· ’ÕÌÕ";
+        TEXT[ greek ] = "ƒÈ¸ÒË˘ÛÁ";
+        TEXT[ korean ] = "ºˆ¡§(~F)";
+        TEXT[ turkish ] = "D¸zeltme";
+        TEXT[ language_user1 ] = " ";
+    };
+    Edit ED_DOKVALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Hide = TRUE ;
+    };
+    NumericField ED_DOKLEVEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        Text = "1" ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Hide = TRUE ;
+        Minimum = 1 ;
+        Maximum = 10 ;
+        First = 1 ;
+        SpinSize = 1 ;
+    };
+    NumericField ED_DOKDATEOFF
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 117 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        Text = "0" ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Hide = TRUE ;
+        SpinSize = 1 ;
+    };
+    CheckBox CB_DOKFIXEDCONTENT
+    {
+        Pos = MAP_APPFONT ( 170 , 120 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
+        TEXT = "~Inhalt fixieren" ;
+        TEXT [ English ] = "Fixed content" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Fixed content" ;
+        Text [ portuguese_brazilian ] = "~Inhalt fixieren" ;
+        Text [ swedish ] = "Fixera ~innehÂll" ;
+        Text [ danish ] = "Fast indhold" ;
+        Text [ italian ] = "~Fissa il contenuto" ;
+        Text [ spanish ] = "~Fijar contenido" ;
+        Text [ french ] = "Contenu f~ixe" ;
+        Text [ dutch ] = "~Inhoud fixeren" ;
+        Text [ portuguese ] = "Conte˙do ~fixo" ;
+        Text[ chinese_simplified ] = "πÃ∂®ƒ⁄»›(~F)";
+        Text[ russian ] = "«‡ÙËÍÒËÓ‚‡Ú¸ ÒÓ‰ÂÊ‡ÌËÂ";
+        Text[ polish ] = "Sta≥a treúÊ";
+        Text[ japanese ] = "ì‡óeÇÃå≈íË(~F)";
+        Text[ chinese_traditional ] = "©T©w§∫Æe(~F)";
+        Text[ arabic ] = " À»Ì  «·„Õ ÊÌ« ";
+        Text[ greek ] = "–·„ﬂ˘ÛÁ ÂÒ~ÈÂ˜ÔÏ›Ì˘Ì";
+        Text[ korean ] = "≥ªøÎ ∞Ì¡§(~F)";
+        Text[ turkish ] = "›Áerii sabitle";
+        Text[ language_user1 ] = " ";
+    };
+    Bitmap BMP_DOKROOT_OPENED
+    {
+        File = "plus.bmp" ;
+    };
+    Bitmap BMP_DOKROOT_CLOSED
+    {
+        File = "minus.bmp" ;
+    };
+    String STR_DOKDATEOFF
+    {
+        TEXT = "Ko~rrektur in Tagen" ;
+        TEXT [ English ] = "Offs~et in days" ;
+        Text [ english_us ] = "Offs~et in days" ;
+        Text [ portuguese_brazilian ] = "Ko~rrektur in Tagen" ;
+        Text [ swedish ] = "Ko~rrigering i dagar" ;
+        Text [ danish ] = "Korrektion i dage" ;
+        Text [ italian ] = "Correzione in ~giorni" ;
+        Text [ spanish ] = "~CorrecciÛn en dÌas" ;
+        Text [ french ] = "Co~rrection en jours" ;
+        Text [ dutch ] = "Co~rrectie in dagen" ;
+        Text [ portuguese ] = "Co~rrecÁ„o em dias" ;
+        Text[ chinese_simplified ] = "–ﬁ∏ƒÃÏ ˝(~E)";
+        Text[ russian ] = " ÓÂÍÚËÓ‚Í‡ ‰ÌÂÈ";
+        Text[ polish ] = "Korekta dni";
+        Text[ japanese ] = "ì˙ÇÃèCê≥(~E)";
+        Text[ chinese_traditional ] = "≠◊ßÔ§È¥¡™∫§—º∆(~E)";
+        Text[ arabic ] = "«· ’ÕÌÕ »«·√Ì«„";
+        Text[ greek ] = "ƒÈ¸ÒË˘ÛÁ ÛÂ ÁÏ›ÒÂÚ";
+        Text[ korean ] = "∏Áƒ• æ»ø° ºˆ¡§(~E)";
+        Text[ turkish ] = "D¸zeltme (g¸n)";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DOKTIMEOFF
+    {
+        TEXT = "Ko~rrektur in Minuten" ;
+        TEXT [ English ] = "Offs~et in minutes" ;
+        Text [ english_us ] = "Offs~et in minutes" ;
+        Text [ portuguese_brazilian ] = "Ko~rrektur in Minuten" ;
+        Text [ swedish ] = "Ko~rrigering i minuter" ;
+        Text [ danish ] = "Korrektion i minutter" ;
+        Text [ italian ] = "Co~rrezione in minuti" ;
+        Text [ spanish ] = "~CorrecciÛn en minutos" ;
+        Text [ french ] = "Co~rrection en minutes" ;
+        Text [ dutch ] = "Co~rrectie in minuten" ;
+        Text [ portuguese ] = "Co~rrecÁ„o em minutos" ;
+        Text[ chinese_simplified ] = "–ﬁ∏ƒ∑÷÷”…Ë∂®(~E)";
+        Text[ russian ] = " ÓÂÍÚËÓ‚Í‡ ÏËÌÛÚ";
+        Text[ polish ] = "Korekta minut";
+        Text[ japanese ] = "ï™ÇÃèCê≥(~E)";
+        Text[ chinese_traditional ] = "≠◊ßÔ§¿ƒ¡≥]©w(~E)";
+        Text[ arabic ] = "«· ’ÕÌÕ »«·œﬁ«∆ﬁ";
+        Text[ greek ] = "ƒÈ¸ÒË˘ÛÁ ÛÂ ÎÂÙ‹";
+        Text[ korean ] = "∏Ó ∫–≥ª ºˆ¡§(~E)";
+        Text[ turkish ] = "D¸zeltme (dakika)";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Document" ;
+    Text [ portuguese_brazilian ] = "Dokument" ;
+    Text [ swedish ] = "Dokument" ;
+    Text [ danish ] = "Dokument" ;
+    Text [ italian ] = "Documento" ;
+    Text [ spanish ] = "Documento" ;
+    Text [ french ] = "Document" ;
+    Text [ dutch ] = "Document" ;
+    Text [ portuguese ] = "Documento" ;
+    Text[ chinese_simplified ] = "Œƒµµ";
+    Text[ russian ] = "ƒÓÍÛÏÂÌÚ";
+    Text[ polish ] = "Dokument";
+    Text[ japanese ] = "ï∂èë";
+    Text[ chinese_traditional ] = "§Â•Û";
+    Text[ arabic ] = "«·„” ‰œ";
+    Text[ greek ] = "∏„„Ò·ˆÔ";
+    Text[ korean ] = "πÆº≠";
+    Text[ turkish ] = "Belge";
+    Text[ language_user1 ] = " ";
+};

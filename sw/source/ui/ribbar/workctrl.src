@@ -1,0 +1,1936 @@
+/*************************************************************************
+ *
+ *  $RCSfile: workctrl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#include "workctrl.hrc"
+#include "workctrl.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+FloatingWindow RID_INSERT_CTRL
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_INSERT_CTRL ;
+    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
+    Text = "Einfügen" ;
+    Text [ English ] = "Insert" ;
+    ToolBox TBX_INSERT
+    {
+        MenuStrings = TRUE ;
+        SVLook = TRUE ;
+        HelpID = 1 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_FRAME_INTERACT_NOCOL ;
+                HelpID = FN_INSERT_FRAME_INTERACT_NOCOL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_FRAME_INTERACT ;
+                HelpID = FN_INSERT_FRAME_INTERACT ;
+                DropDown = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_GRAPHIC ;
+                HelpID = SID_INSERT_GRAPHIC ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_TABLE ;
+                HelpID = FN_INSERT_TABLE ;
+                DropDown = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERTDOC ;
+                HelpID = SID_INSERTDOC ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_FOOTNOTE ;
+                HelpID = FN_INSERT_FOOTNOTE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_ENDNOTE ;
+                HelpID = FN_INSERT_ENDNOTE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_SYMBOL ;
+                HelpID = FN_INSERT_SYMBOL ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_COLUMN_SECTION ;
+                HelpID = FN_INSERT_COLUMN_SECTION;
+                DropDown = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_IDX_ENTRY_DLG ;
+                HelpID = FN_INSERT_IDX_ENTRY_DLG ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_BOOKMARK ;
+                HelpID = FN_INSERT_BOOKMARK ;
+                RadioCheck = TRUE ;
+            };
+        };
+    };
+    Text [ english_us ] = "Insert" ;
+    Text [ italian ] = "Inserisci" ;
+    Text [ spanish ] = "Insertar" ;
+    Text [ french ] = "Insérer" ;
+    Text [ dutch ] = "Invoegen" ;
+    Text [ swedish ] = "Infoga" ;
+    Text [ danish ] = "Indsæt" ;
+    Text [ portuguese_brazilian ] = "Einfügen" ;
+    Text [ portuguese ] = "Inserir" ;
+    Text[ chinese_simplified ] = "²åÈë";
+    Text[ russian ] = "Âñòàâèòü";
+    Text[ polish ] = "Wstaw";
+    Text[ japanese ] = "‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ arabic ] = "ÅÏÑÇÌ";
+    Text[ greek ] = "ÅéóáãùãŞ";
+    Text[ korean ] = "»ğÀÔ";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_INSERT_OBJ_CTRL
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_INSERT_OBJ_CTRL ;
+    /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
+    Text = "Objekt einfügen" ;
+    Text [ English ] = "Insert object" ;
+    ToolBox TBX_OBJ_INSERT
+    {
+        MenuStrings = TRUE ;
+        SVLook = TRUE ;
+        HelpID = 1 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_DIAGRAM ;
+                HelpID = SID_INSERT_DIAGRAM ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_SIM ;
+                HelpID = FN_INSERT_SIM ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_INSERT_SMA ;
+                HelpID = FN_INSERT_SMA ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_FLOATINGFRAME ;
+                HelpID = SID_INSERT_FLOATINGFRAME ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_OBJECT ;
+                HelpID = SID_INSERT_OBJECT ;
+            };
+#ifdef SOLAR_PLUGIN
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_PLUGIN ;
+                HelpID = SID_INSERT_PLUGIN ;
+            };
+#endif
+#ifdef SOLAR_JAVA
+            ToolBoxItem
+            {
+                Identifier = SID_INSERT_APPLET ;
+                HelpID = SID_INSERT_APPLET ;
+            };
+#endif
+        };
+    };
+    Text [ dutch ] = "Object invoegen" ;
+    Text [ english_us ] = "Insert Object" ;
+    Text [ italian ] = "Inserisci oggetto" ;
+    Text [ spanish ] = "Insertar objeto" ;
+    Text [ french ] = "Insérer un objet" ;
+    Text [ swedish ] = "Infoga objekt" ;
+    Text [ danish ] = "Indsæt objekt" ;
+    Text [ portuguese ] = "Inserir objecto" ;
+    Text [ portuguese_brazilian ] = "Objekt einfügen" ;
+    Text[ chinese_simplified ] = "²åÈë¶ÔÏó";
+    Text[ russian ] = "Âñòàâèòü îáúåêò";
+    Text[ polish ] = "Wstaw obiekt";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤Jª«¥ó";
+    Text[ arabic ] = "ÅÏÎÇá ßÇÆä";
+    Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíïõ";
+    Text[ korean ] = "°³Ã¼ »ğÀÔ";
+    Text[ turkish ] = "Nesne ekle";
+    Text[ language_user1 ] = " ";
+};
+Menu RID_INSERT_FIELD_CTRL
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = FN_INSERT_FLD_DATE ;
+            HelpID = FN_INSERT_FLD_DATE ;
+            Text = "Datum" ;
+            Text [ English ] = "Date" ;
+            Text [ english_us ] = "Date" ;
+            Text [ italian ] = "Data" ;
+            Text [ spanish ] = "Fecha" ;
+            Text [ french ] = "Date" ;
+            Text [ dutch ] = "Datum" ;
+            Text [ swedish ] = "Datum" ;
+            Text [ danish ] = "Dato" ;
+            Text [ portuguese_brazilian ] = "Datum" ;
+            Text [ portuguese ] = "Data" ;
+            Text[ chinese_simplified ] = "ÈÕÆÚ";
+            Text[ russian ] = "Äàòà";
+            Text[ polish ] = "Data";
+            Text[ japanese ] = "“ú•t";
+            Text[ chinese_traditional ] = "¤é´Á";
+            Text[ arabic ] = "ÊÇÑíÎ";
+            Text[ greek ] = "Çìåñïìçíßá";
+            Text[ korean ] = "µ¥ÀÌÅÍ";
+            Text[ turkish ] = "Tarih";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FN_INSERT_FLD_TIME ;
+            HelpID = FN_INSERT_FLD_TIME ;
+            Text = "Uhrzeit" ;
+            Text [ English ] = "Time" ;
+            Text [ english_us ] = "Time" ;
+            Text [ italian ] = "Orario" ;
+            Text [ spanish ] = "Hora" ;
+            Text [ french ] = "Heure" ;
+            Text [ dutch ] = "Tijd" ;
+            Text [ swedish ] = "Klockslag" ;
+            Text [ danish ] = "Klokkeslæt" ;
+            Text [ portuguese_brazilian ] = "Uhrzeit" ;
+            Text [ portuguese ] = "Hora" ;
+            Text[ chinese_simplified ] = "Ê±¼ä";
+            Text[ russian ] = "Âğåìÿ";
+            Text[ polish ] = "Godzina";
+            Text[ japanese ] = "";
+            Text[ chinese_traditional ] = "®É¶¡";
+            Text[ arabic ] = "ÇáæŞÊ";
+            Text[ greek ] = "¿ñá";
+            Text[ korean ] = "½Ã°£";
+            Text[ turkish ] = "Saat";
+            Text[ language_user1 ] = " ";
+        };
+         //#ifndef MN_SW_WEB
+        MenuItem
+        {
+            Identifier = FN_INSERT_FLD_PGNUMBER ;
+            HelpID = FN_INSERT_FLD_PGNUMBER ;
+            Text = "Seitennummer" ;
+            Text [ English ] = "Pagenumber" ;
+            Text [ dutch ] = "Paginanummer" ;
+            Text [ english_us ] = "Page Numbers" ;
+            Text [ italian ] = "Numeri di pagina" ;
+            Text [ spanish ] = "Número de página" ;
+            Text [ french ] = "Numéro de page" ;
+            Text [ swedish ] = "Sidnummer" ;
+            Text [ danish ] = "Sidetal" ;
+            Text [ portuguese_brazilian ] = "Seitennummer" ;
+            Text [ portuguese ] = "Número de página" ;
+            Text[ chinese_simplified ] = "Ò³Âë";
+            Text[ russian ] = "Íîìåğ ñòğàíèöû";
+            Text[ polish ] = "Numer strony";
+            Text[ japanese ] = "Íß°¼Ş”Ô†";
+            Text[ chinese_traditional ] = "­¶½X";
+            Text[ arabic ] = "ÑŞã ÇáÕİÍÉ";
+            Text[ greek ] = "Áñéèìüò óåëßäáò";
+            Text[ korean ] = "ÆäÀÌÁö ¼ö";
+            Text[ turkish ] = "Sayfa numarası";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FN_INSERT_FLD_PGCOUNT ;
+            HelpID = FN_INSERT_FLD_PGCOUNT ;
+            Text = "Seitenanzahl" ;
+            Text [ English ] = "Pagecount" ;
+            Text [ dutch ] = "Aantal pagina´s" ;
+            Text [ english_us ] = "Page Count" ;
+            Text [ italian ] = "Numero di pagine" ;
+            Text [ spanish ] = "Contar páginas" ;
+            Text [ french ] = "Nombre de pages" ;
+            Text [ swedish ] = "Sidantal" ;
+            Text [ danish ] = "Sideantal" ;
+            Text [ portuguese_brazilian ] = "Seitenanzahl" ;
+            Text [ portuguese ] = "Total de páginas" ;
+            Text[ chinese_simplified ] = "Ò³Êı";
+            Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö";
+            Text[ polish ] = "Liczba stron";
+            Text[ japanese ] = "Íß°¼Ş‘”";
+            Text[ chinese_traditional ] = "­¶¼Æ";
+            Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ";
+            Text[ greek ] = "Óıíïëï óåëéäşí";
+            Text[ korean ] = "ÆäÀÌÁö Ä«¿îÆ®";
+            Text[ turkish ] = "Sayfa sayısı";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FN_INSERT_FLD_TOPIC ;
+            HelpID = FN_INSERT_FLD_TOPIC ;
+            Text = "Thema" ;
+            Text [ English ] = "Topic" ;
+            Text [ english_us ] = "Subject" ;
+            Text [ italian ] = "Argomento" ;
+            Text [ spanish ] = "Tema" ;
+            Text [ french ] = "Sujet" ;
+            Text [ dutch ] = "Onderwerp" ;
+            Text [ swedish ] = "Ämne" ;
+            Text [ danish ] = "Emne" ;
+            Text [ portuguese_brazilian ] = "Thema" ;
+            Text [ portuguese ] = "Assunto" ;
+            Text[ chinese_simplified ] = "Ö÷Ìâ";
+            Text[ russian ] = "Òåìà";
+            Text[ polish ] = "Temat";
+            Text[ japanese ] = "Ã°Ï";
+            Text[ chinese_traditional ] = "¥DÃD";
+            Text[ arabic ] = "ÇáãæÖæÚ";
+            Text[ greek ] = "Èİìá";
+            Text[ korean ] = "ÁÖÁ¦";
+            Text[ turkish ] = "Konu";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = FN_INSERT_FLD_TITLE ;
+            HelpID = FN_INSERT_FLD_TITLE ;
+            Text = "Titel" ;
+            Text [ English ] = "Title" ;
+            Text [ dutch ] = "Titel" ;
+            Text [ english_us ] = "Title" ;
+            Text [ italian ] = "Titolo" ;
+            Text [ spanish ] = "Título" ;
+            Text [ french ] = "Titre" ;
+            Text [ swedish ] = "Titel" ;
+            Text [ danish ] = "Titel" ;
+            Text [ portuguese_brazilian ] = "Titel" ;
+            Text [ portuguese ] = "Título" ;
+            Text[ chinese_simplified ] = "±êÌâ";
+            Text[ russian ] = "Çàãëàâèå";
+            Text[ polish ] = "Tytu³";
+            Text[ japanese ] = "À²ÄÙ";
+            Text[ chinese_traditional ] = "¼ĞÃD";
+            Text[ arabic ] = "ÇáÚäæÇä";
+            Text[ greek ] = "Ôßôëïò";
+            Text[ korean ] = "Á¦¸ñ";
+            Text[ turkish ] = "Başlık";
+            Text[ language_user1 ] = " ";
+        };
+         //#endif
+        MenuItem
+        {
+            Identifier = FN_INSERT_FLD_AUTHOR ;
+            HelpID = FN_INSERT_FLD_AUTHOR ;
+            Text = "Autor" ;
+            Text [ English ] = "Author" ;
+            Text [ dutch ] = "Auteur" ;
+            Text [ english_us ] = "Author" ;
+            Text [ italian ] = "Autore" ;
+            Text [ spanish ] = "Autor" ;
+            Text [ french ] = "Auteur" ;
+            Text [ swedish ] = "Författare" ;
+            Text [ danish ] = "Forfatter" ;
+            Text [ portuguese_brazilian ] = "Autor" ;
+            Text [ portuguese ] = "Autor" ;
+            Text[ chinese_simplified ] = "×÷Õß";
+            Text[ russian ] = "Àâòîğ";
+            Text[ polish ] = "Autor";
+            Text[ japanese ] = "ì¬Ò";
+            Text[ chinese_traditional ] = "§@ªÌ";
+            Text[ arabic ] = "ÇáãÄáİ";
+            Text[ greek ] = "ÓõíôÜêôçò";
+            Text[ korean ] = "ÀÛ¼ºÀÎ";
+            Text[ turkish ] = "Yazan";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = FN_INSERT_FIELD ;
+            HelpID = FN_INSERT_FIELD ;
+            Text = "Andere..." ;
+            Text [ English ] = "Other..." ;
+            Text [ english_us ] = "Other..." ;
+            Text [ italian ] = "Altro..." ;
+            Text [ spanish ] = "Otros..." ;
+            Text [ french ] = "Autres..." ;
+            Text [ dutch ] = "Andere..." ;
+            Text [ swedish ] = "Andra..." ;
+            Text [ danish ] = "Andre..." ;
+            Text [ portuguese ] = "Outros..." ;
+            Text [ portuguese_brazilian ] = "Andere..." ;
+            Text[ chinese_simplified ] = "ÆäËû...";
+            Text[ russian ] = "Äğóãèå...";
+            Text[ polish ] = "Inne...";
+            Text[ japanese ] = "‚»‚Ì‘¼...";
+            Text[ chinese_traditional ] = "¨ä¥L...";
+            Text[ arabic ] = "ÃÎÑì...";
+            Text[ greek ] = "¢ëëá...";
+            Text[ korean ] = "±âÅ¸...";
+            Text[ turkish ] = "Diğer...";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+FloatingWindow RID_SCROLL_NAVIGATION_WIN
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_INSERT_CTRL ;
+    Text = "Navigation" ;
+    Text [ English ] = "Navigation" ;
+    ImageList IL_VALUES
+    {
+        ImageBitmap = Bitmap { File = "srnavi.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        IdList =
+        {
+            NID_NEXT ;
+            NID_PREV ;
+            NID_TBL ;
+            NID_FRM ;
+            NID_PGE ;
+            NID_DRW ;
+            NID_CTRL ;
+            NID_REG ;
+            NID_BKM ;
+            NID_GRF ;
+            NID_OLE ;
+            NID_OUTL ;
+            NID_SEL ;
+            NID_FTN ;
+            NID_MARK ;
+            NID_POSTIT ;
+            NID_SRCH_REP ;
+            NID_INDEX_ENTRY;
+            NID_TABLE_FORMULA;
+            NID_TABLE_FORMULA_ERROR;
+        };
+        IdCount = { 20 ; };
+    };
+    String ST_TBL
+    {
+        Text = "Tabelle" ;
+        Text [ English ] = "Table" ;
+        Text [ english_us ] = "Table" ;
+        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ swedish ] = "Tabell" ;
+        Text [ danish ] = "Tabel" ;
+        Text [ italian ] = "Tabella" ;
+        Text [ spanish ] = "Tabla" ;
+        Text [ french ] = "Tableau" ;
+        Text [ dutch ] = "Tabel" ;
+        Text [ portuguese ] = "Tabela" ;
+        Text[ chinese_simplified ] = "±í¸ñ";
+        Text[ russian ] = "Òàáëèöà";
+        Text[ polish ] = "Tabela";
+        Text[ japanese ] = "•\\";
+        Text[ chinese_traditional ] = "ªí®æ";
+        Text[ arabic ] = "ÌÏæá";
+        Text[ greek ] = "Ğßíáêáò";
+        Text[ korean ] = "Ç¥";
+        Text[ turkish ] = "Tablo";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_FRM
+    {
+        Text = "Textrahmen" ;
+        Text [ English ] = "Frame" ;
+        Text [ english_us ] = "Text Frame" ;
+        Text [ portuguese_brazilian ] = "Textrahmen" ;
+        Text [ swedish ] = "Textram" ;
+        Text [ danish ] = "Tekstboks" ;
+        Text [ italian ] = "Cornice" ;
+        Text [ spanish ] = "Marco de texto" ;
+        Text [ french ] = "Cadre texte" ;
+        Text [ dutch ] = "Tekstkader" ;
+        Text [ portuguese ] = "Moldura de texto" ;
+        Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
+        Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
+        Text[ polish ] = "Ramka tekstu";
+        Text[ japanese ] = "Ã·½Ä˜g";
+        Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+        Text[ arabic ] = "ÅØÇÑ äÕ";
+        Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
+        Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ";
+        Text[ turkish ] = "Metin çerçevesi";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_PGE
+    {
+        Text = "Seite" ;
+        Text [ English ] = "Page" ;
+        Text [ english_us ] = "Page" ;
+        Text [ portuguese_brazilian ] = "Seite" ;
+        Text [ swedish ] = "Sida" ;
+        Text [ danish ] = "Side" ;
+        Text [ italian ] = "Pagina" ;
+        Text [ spanish ] = "Página" ;
+        Text [ french ] = "Page" ;
+        Text [ dutch ] = "Pagina" ;
+        Text [ portuguese ] = "Página" ;
+        Text[ chinese_simplified ] = "Ò³";
+        Text[ russian ] = "Ñòğàíèöà";
+        Text[ polish ] = "Strona";
+        Text[ japanese ] = "Íß°¼Ş";
+        Text[ chinese_traditional ] = "­¶";
+        Text[ arabic ] = "ÕİÍÉ";
+        Text[ greek ] = "Óåëßäá";
+        Text[ korean ] = "ÆäÀÌÁö";
+        Text[ turkish ] = "Sayfa";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_DRW
+    {
+        Text = "Zeichenobjekt" ;
+        Text [ English ] = "Drawing" ;
+        Text [ english_us ] = "Drawing" ;
+        Text [ portuguese_brazilian ] = "Zeichenobjekt" ;
+        Text [ swedish ] = "Ritobjekt" ;
+        Text [ danish ] = "Tegneobjekt" ;
+        Text [ italian ] = "Oggetto di disegno" ;
+        Text [ spanish ] = "Objeto de dibujo" ;
+        Text [ french ] = "Objet de dessin" ;
+        Text [ dutch ] = "Tekenobject" ;
+        Text [ portuguese ] = "Desenho" ;
+        Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+        Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
+        Text[ polish ] = "Obiekt rysunkowy";
+        Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+        Text[ english_us ] = "Drawing";
+    Text[ portuguese ] = "Desenho";
+    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
+    Text[ dutch ] = "Tekenobject";
+    Text[ french ] = "Objet de dessin";
+    Text[ spanish ] = "Objeto de dibujo";
+    Text[ italian ] = "Oggetto di disegno";
+    Text[ danish ] = "Tegneobjekt";
+    Text[ swedish ] = "Ritobjekt";
+    Text[ polish ] = "Obiekt rysunkowy";
+    Text[ portuguese_brazilian ] = "Zeichenobjekt";
+    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+    Text[ chinese_traditional ] = "¹Ï¤ùª«¥ó";
+        Text[ arabic ] = "ßÇÆä ÑÓæãí";
+        Text[ greek ] = "Áíôéêåßìåíï ó÷åäßáóçò";
+        Text[ korean ] = "±×¸®±â";
+        Text[ turkish ] = "Çizim";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_CTRL
+    {
+        Text = "Kontrollfeld" ;
+        Text [ English ] = "Control" ;
+        Text [ english_us ] = "Control" ;
+        Text [ portuguese_brazilian ] = "Kontrollfeld" ;
+        Text [ swedish ] = "Kontrollfält" ;
+        Text [ danish ] = "Kontrolelement" ;
+        Text [ italian ] = "Campo di controllo" ;
+        Text [ spanish ] = "Campo de control" ;
+        Text [ french ] = "Champ de contrôle" ;
+        Text [ dutch ] = "Controleveld" ;
+        Text [ portuguese ] = "Campo de controlo" ;
+        Text[ chinese_simplified ] = "¿ØÖÆ";
+        Text[ russian ] = "İëåìåíò óïğàâëåíèÿ";
+        Text[ polish ] = "Pole kontrolne";
+        Text[ japanese ] = "ºİÄÛ°Ù";
+        Text[ chinese_traditional ] = "±±¨î¶µ";
+        Text[ arabic ] = "ÚäÕÑ ÊÍßã";
+        Text[ greek ] = "Ğåäßï åëİã÷ïõ";
+        Text[ korean ] = "ÄÁÆ®·Ñ";
+        Text[ turkish ] = "Komut alanı";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_REG
+    {
+        Text = "Bereich" ;
+        Text [ English ] = "Region" ;
+        Text [ english_us ] = "Section" ;
+        Text [ portuguese_brazilian ] = "Bereich" ;
+        Text [ swedish ] = "Område" ;
+        Text [ danish ] = "Område" ;
+        Text [ italian ] = "Sezione" ;
+        Text [ spanish ] = "Area" ;
+        Text [ french ] = "Section" ;
+        Text [ dutch ] = "Bereik" ;
+        Text [ portuguese ] = "Secção" ;
+        Text[ chinese_simplified ] = "ÇøÓò";
+        Text[ russian ] = "Îáëàñòü";
+        Text[ polish ] = "Sekcja";
+        Text[ japanese ] = "”ÍˆÍ";
+        Text[ chinese_traditional ] = "°Ï°ì";
+        Text[ arabic ] = "äØÇŞ";
+        Text[ greek ] = "Åíüôçôá";
+        Text[ korean ] = "±¸¿ª";
+        Text[ turkish ] = "Bölüm";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_BKM
+    {
+        Text = "Textmarke" ;
+        Text [ English ] = "Bookmark" ;
+        Text [ english_us ] = "Bookmark" ;
+        Text [ portuguese_brazilian ] = "Textmarke" ;
+        Text [ swedish ] = "Bokmärke" ;
+        Text [ danish ] = "Tekstmarkering" ;
+        Text [ italian ] = "Segnalibro" ;
+        Text [ spanish ] = "Marca de texto" ;
+        Text [ french ] = "Repère de texte" ;
+        Text [ dutch ] = "Tekstmarkering" ;
+        Text [ portuguese ] = "Marcador de texto" ;
+        Text[ chinese_simplified ] = "ÊéÇ©";
+        Text[ russian ] = "Çàêëàäêè";
+        Text[ polish ] = "Zak³adka";
+        Text[ japanese ] = "Ã·½ÄÏ°¸";
+        Text[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
+        Text[ arabic ] = "ÅÔÇÑÉ ãÑÌÚíÉ";
+        Text[ greek ] = "Óåëéäïäåßêôçò";
+        Text[ korean ] = "Ã¥ °¥ÇÇ";
+        Text[ turkish ] = "Metin işareti";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_GRF
+    {
+        Text = "Grafik" ;
+        Text [ English ] = "Graphic" ;
+        Text [ english_us ] = "Graphics" ;
+        Text [ portuguese_brazilian ] = "Grafik" ;
+        Text [ swedish ] = "Grafik" ;
+        Text [ danish ] = "Billede" ;
+        Text [ italian ] = "Immagine" ;
+        Text [ spanish ] = "Imagen" ;
+        Text [ french ] = "Image" ;
+        Text [ dutch ] = "Afbeelding" ;
+        Text [ portuguese ] = "Imagem" ;
+        Text[ chinese_simplified ] = "Í¼ĞÎ";
+        Text[ russian ] = "Ğèñóíîê";
+        Text[ polish ] = "Grafika";
+        Text[ japanese ] = "¸Ş×Ì¨¯¸";
+        Text[ chinese_traditional ] = "¹Ï¤ù";
+        Text[ arabic ] = "ÕæÑÉ";
+        Text[ greek ] = "Ãñáöéêü";
+        Text[ korean ] = "±×·¡ÇÈ";
+        Text[ turkish ] = "Grafik";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_OLE
+    {
+        Text = "OLE-Objekt" ;
+        Text [ English ] = "OLE object" ;
+        Text [ english_us ] = "OLE object" ;
+        Text [ portuguese_brazilian ] = "OLE-Objekt" ;
+        Text [ swedish ] = "OLE-objekt" ;
+        Text [ danish ] = "OLE-objekt" ;
+        Text [ italian ] = "Oggetto OLE" ;
+        Text [ spanish ] = "Objeto OLE" ;
+        Text [ french ] = "Objet OLE" ;
+        Text [ dutch ] = "OLE-object" ;
+        Text [ portuguese ] = "Objecto OLE" ;
+        Text[ chinese_simplified ] = "OLE ¶ÔÏó";
+        Text[ russian ] = "Îáúåêò OLE";
+        Text[ polish ] = "Obiekt OLE";
+        Text[ japanese ] = "OLEµÌŞ¼Şª¸Ä";
+        Text[ chinese_traditional ] = "OLE - ª«¥ó";
+        Text[ arabic ] = "OLE ßÇÆä";
+        Text[ greek ] = "Áíôéêåßìåíï OLE";
+        Text[ korean ] = "OLE °³Ã¼";
+        Text[ turkish ] = "OLE nesnesi";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_OUTL
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
+        Text = "Überschrift" ;
+        Text [ English ] = "Outline" ;
+        Text [ english_us ] = "Headings" ;
+        Text [ portuguese_brazilian ] = "Überschrift" ;
+        Text [ swedish ] = "Överskrift" ;
+        Text [ danish ] = "Overskrift" ;
+        Text [ italian ] = "Intestazione" ;
+        Text [ spanish ] = "Encabezado" ;
+        Text [ french ] = "Titre" ;
+        Text [ dutch ] = "Kop" ;
+        Text [ portuguese ] = "Título" ;
+        Text[ chinese_simplified ] = "±êÌâ";
+        Text[ russian ] = "Çàãîëîâîê";
+        Text[ polish ] = "Tytu³";
+        Text[ japanese ] = "Œ©o‚µ";
+        Text[ chinese_traditional ] = "¼ĞÃD";
+        Text[ arabic ] = "ÚäæÇä";
+        Text[ greek ] = "Åğéêåöáëßäá";
+        Text[ korean ] = "Á¦¸ñ";
+        Text[ turkish ] = "Başlık";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_SEL
+    {
+        Text = "Markierung" ;
+        Text [ English ] = "Selection" ;
+        Text [ english_us ] = "Selection" ;
+        Text [ portuguese_brazilian ] = "Markierung" ;
+        Text [ swedish ] = "Markering" ;
+        Text [ danish ] = "Markering" ;
+        Text [ italian ] = "Selezione" ;
+        Text [ spanish ] = "Selección" ;
+        Text [ french ] = "Sélection" ;
+        Text [ dutch ] = "Markering" ;
+        Text [ portuguese ] = "Selecção" ;
+        Text[ chinese_simplified ] = "Ñ¡ÖĞ";
+        Text[ russian ] = "Âûäåëåíèå";
+        Text[ polish ] = "Zaznaczenie";
+        Text[ japanese ] = "‘I‘ğ";
+        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ arabic ] = "ÊÍÏíÏ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ turkish ] = "Seçim";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_FTN
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Fußnote : Fu˜note */
+        Text = "Fußnote" ;
+        Text [ English ] = "Footnote" ;
+        Text [ english_us ] = "Footnote" ;
+        Text [ portuguese_brazilian ] = "Fußnote" ;
+        Text [ swedish ] = "Fotnot" ;
+        Text [ danish ] = "Fodnote" ;
+        Text [ italian ] = "Nota a piè pagina" ;
+        Text [ spanish ] = "Nota al pie" ;
+        Text [ french ] = "Note de bas de page" ;
+        Text [ dutch ] = "Voetnoot" ;
+        Text [ portuguese ] = "Nota de rodapé" ;
+        Text[ chinese_simplified ] = "×¢½Å";
+        Text[ russian ] = "Ñíîñêè";
+        Text[ polish ] = "Przypis dolny";
+        Text[ japanese ] = "‹r’";
+        Text[ chinese_traditional ] = "µù¸}";
+        Text[ arabic ] = "ÍÇÔíÉ ÓİáíÉ";
+        Text[ greek ] = "Õğïóçìåßùóç";
+        Text[ korean ] = "°¢ ÁÖ";
+        Text[ turkish ] = "Dipnot";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_MARK
+    {
+        Text = "Merker" ;
+        Text [ English ] = "Reminder" ;
+        Text [ english_us ] = "Reminder" ;
+        Text [ portuguese_brazilian ] = "Merker" ;
+        Text [ swedish ] = "Temporärt bokmärke" ;
+        Text [ danish ] = "Påmindelse" ;
+        Text [ italian ] = "Contrassegno" ;
+        Text [ spanish ] = "Marca" ;
+        Text [ french ] = "Pense-bête" ;
+        Text [ dutch ] = "Merktekens" ;
+        Text [ portuguese ] = "Marca" ;
+        Text[ chinese_simplified ] = "±ê¼Ç";
+        Text[ russian ] = "Ïîìåòêà";
+        Text[ polish ] = "Znacznik";
+        Text[ japanese ] = "Šo‚¦~‚ß";
+        Text[ chinese_traditional ] = "´£¿ô";
+        Text[ arabic ] = "ÚáÇãÉ ÊĞßíÑ";
+        Text[ greek ] = "Õğåíèıìéóç";
+        Text[ korean ] = "³ª¸ÓÁö";
+        Text[ turkish ] = "Anımsatıcı";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_POSTIT
+    {
+        Text = "Notiz" ;
+        Text [ English ] = "Annotation" ;
+        Text [ english_us ] = "Note" ;
+        Text [ portuguese_brazilian ] = "Notiz" ;
+        Text [ swedish ] = "Anteckning" ;
+        Text [ danish ] = "Note" ;
+        Text [ italian ] = "Nota" ;
+        Text [ spanish ] = "Nota" ;
+        Text [ french ] = "Note" ;
+        Text [ dutch ] = "Aantekening" ;
+        Text [ portuguese ] = "Anotação" ;
+        Text[ chinese_simplified ] = "±¸×¢";
+        Text[ russian ] = "Ïğèìå÷àíèå";
+        Text[ polish ] = "Notatka";
+        Text[ japanese ] = "ÒÓ";
+        Text[ chinese_traditional ] = "³Æµù";
+        Text[ arabic ] = "ãáÇÍÙÉ";
+        Text[ greek ] = "Óçìåßùóç";
+        Text[ korean ] = "¸Ş¸ğ";
+        Text[ turkish ] = "Not";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_SRCH_REP
+    {
+        Text = "Suche wiederholen" ;
+        Text [ English ] = "Repeat search" ;
+        Text [ english_us ] = "Repeat search" ;
+        Text [ portuguese_brazilian ] = "Suche wiederholen" ;
+        Text [ swedish ] = "Upprepa sökning" ;
+        Text [ danish ] = "Gentag søgning" ;
+        Text [ italian ] = "Ripeti ricerca" ;
+        Text [ spanish ] = "Repetir búsqueda" ;
+        Text [ french ] = "Répéter la recherche" ;
+        Text [ dutch ] = "Zoeken herhalen" ;
+        Text [ portuguese ] = "Repetir procura" ;
+        Text[ chinese_simplified ] = "ÖØ¸´ËÑÑ°";
+        Text[ russian ] = "Ïîâòîğ ïîèñêà";
+        Text[ polish ] = "Powtórz wyszukiwanie";
+        Text[ japanese ] = "ÄŒŸõ";
+        Text[ chinese_traditional ] = "­«½Æ·j´M";
+        Text[ arabic ] = "ÊßÑÇÑ ÇáÈÍË";
+        Text[ greek ] = "ÅğáíÜëçøç áíáæŞôçóçò";
+        Text[ korean ] = "¹İº¹ °Ë»ö";
+        Text[ turkish ] = "Aramayı yinele";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_INDEX_ENTRY
+    {
+        Text = "Verzeichniseintrag" ;
+        Text [ English ] = "Index entry" ;
+        Text[ italian ] = "Voce di indice";
+        Text[ portuguese_brazilian ] = "Index entry";
+        Text[ portuguese ] = "Entrada do índice";
+        Text[ danish ] = "Indekselement";
+        Text[ french ] = "Entrée d'index";
+        Text[ swedish ] = "Förteckningspost";
+        Text[ dutch ] = "Index item";
+        Text[ spanish ] = "Entrada del índice";
+        Text[ english_us ] = "Index entry";
+        Text[ chinese_simplified ] = "Ä¿Â¼ÌõÄ¿";
+        Text[ russian ] = "İëåìåíò óêàçàòåëÿ";
+        Text[ polish ] = "Wpis do indeksu";
+        Text[ japanese ] = "õˆø€–Ú";
+        Text[ chinese_traditional ] = "¥Ø¿ı¶µ¥Ø";
+        Text[ arabic ] = "ÅÏÎÇá İåÑÓí";
+        Text[ greek ] = "Êáôá÷şñéóç åõñåôçñßïõ";
+        Text[ korean ] = "»öÀÎ Ç×¸ñ";
+        Text[ turkish ] = "Dizin girişi";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TABLE_FORMULA
+    {
+        Text = "Tabellenformel" ;
+        Text [ English ] = "Table formula" ;
+        Text[ english_us ] = "Table formula";
+        Text[ portuguese ] = "Fórmula de tabela";
+        Text[ russian ] = "Ôîğìóëà òàáëèöû";
+        Text[ dutch ] = "Tabellenformule";
+        Text[ french ] = "Formule de table";
+        Text[ spanish ] = "Fórmula de tabla";
+        Text[ italian ] = "Formula tabella";
+        Text[ danish ] = "Tabelformel";
+        Text[ swedish ] = "Tabellformel";
+        Text[ polish ] = "Formu³a tabeli";
+        Text[ portuguese_brazilian ] = "Table formula";
+        Text[ japanese ] = "•\\‚Ì”®";
+        Text[ chinese_simplified ] = "¹¤×÷±í¹«Ê½";
+        Text[ chinese_traditional ] = "¤u§@ªí¤½¦¡";
+        Text[ arabic ] = "ÕíÛÉ ÌÏæá";
+        Text[ greek ] = "Ôığïò ğßíáêá";
+        Text[ korean ] = "Ç¥ ¼ö½Ä";
+        Text[ turkish ] = "Tablo formülü";
+        Text[ language_user1 ] = " ";
+    };
+    String ST_TABLE_FORMULA_ERROR
+    {
+        Text = "Fehlerhafte Tabellenformel" ;
+        Text [ English ] = "Wrong table formula" ;
+        Text[ english_us ] = "Wrong table formula";
+        Text[ portuguese ] = "Fórmula de tabela errada";
+        Text[ russian ] = "Íåïğàâèëüíàÿ ôîğìóëà òàáëèöû";
+        Text[ dutch ] = "Foutieve tabellenformule";
+        Text[ french ] = "Formule de table erronée";
+        Text[ spanish ] = "Fórmula errónea de tabla";
+        Text[ italian ] = "Formula tabella errata";
+        Text[ danish ] = "Fejlagtig tabelformel";
+        Text[ swedish ] = "Felaktig tabellformel";
+        Text[ polish ] = "Nieprawid³owa formu³a tabeli";
+        Text[ portuguese_brazilian ] = "Wrong table formula";
+        Text[ japanese ] = "³‚µ‚­‚È‚¢•\\‚Ì”®";
+        Text[ chinese_simplified ] = "´íÎóµÄ¹¤×÷±í¹«Ê½";
+        Text[ chinese_traditional ] = "¿ù»~ªº¤u§@ªí¤½¦¡";
+        Text[ arabic ] = "ÕíÛÉ ÌÏæá ÎÇØÆÉ";
+        Text[ greek ] = "Ëáíèáóìİíïò ôığïò ğßíáêá";
+        Text[ korean ] = "Àß¸øµÈ Ç¥ ¼ö½Ä";
+        Text[ turkish ] = "Hatalı tablo formülü";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ portuguese ] = "Navegação" ;
+    Text [ english_us ] = "Navigation" ;
+    Text [ portuguese_brazilian ] = "Navigation" ;
+    Text [ swedish ] = "Navigation" ;
+    Text [ danish ] = "Navigation" ;
+    Text [ italian ] = "Navigazione" ;
+    Text [ spanish ] = "Navegación" ;
+    Text [ french ] = "Navigation" ;
+    Text [ dutch ] = "Navigatie" ;
+    Text[ chinese_simplified ] = "ä¯ÀÀ";
+    Text[ russian ] = "Íàâèãàöèÿ";
+    Text[ polish ] = "Nawigacja";
+    Text[ japanese ] = "ÅËŞ¹Ş°¼®İ";
+    Text[ chinese_traditional ] = "ÂsÄı";
+    Text[ arabic ] = "ÇáãáÇÍÉ";
+    Text[ greek ] = "Ìåôáêßíçóç";
+    Text[ korean ] = "³×ºñ°ÔÀÌ¼Ç";
+    Text[ turkish ] = "Dolaşma";
+    Text[ language_user1 ] = " ";
+};
+/*
+Noch ein paar Reserven
+            ToolBoxItem
+            {
+                                Identifier = NID_NEXT;
+                Text = "Vorwärts" ;
+                Text [ ENGLISH ] = "Forward" ;
+                        };
+            ToolBoxItem
+            {
+                                Identifier = NID_PREV;
+                Text = "Rückwärts" ;
+                Text [ ENGLISH ] = "Backward" ;
+                        };
+            ToolBoxItem
+            {
+                                Identifier = NID_CTRL;
+                Text = "Control" ;
+                        };
+            ToolBoxItem
+            {
+                                Identifier = NID_DRW;
+                Text = "Zeichenobjekt" ;
+                        };
+
+
+*/
+/***************************************************************
+    Strings fuer die Quickhelp der View-PgUp/Down-Buttons
+***************************************************************/
+String STR_IMGBTN_NEXT_DOWN
+{
+    Text = "" ;
+};
+String STR_IMGBTN_PREV_DOWN
+{
+    Text = "" ;
+};
+String STR_IMGBTN_TBL_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Tabelle : Nõchste Tabelle */
+    Text = "Nächste Tabelle" ;
+    Text [ English ] = "Next Table" ;
+    Text [ english_us ] = "Next table" ;
+    Text [ portuguese_brazilian ] = "Nächste Tabelle" ;
+    Text [ swedish ] = "Nästa tabell" ;
+    Text [ danish ] = "Næste tabel" ;
+    Text [ italian ] = "Tabella successiva" ;
+    Text [ spanish ] = "Tabla siguiente" ;
+    Text [ french ] = "Tableau suivant" ;
+    Text [ dutch ] = "Volgende tabel" ;
+    Text [ portuguese ] = "Tabela seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö±í¸ñ";
+    Text[ russian ] = "Ñëåäóşùàÿ òàáëèöà";
+    Text[ polish ] = "Nastêpna tabela";
+    Text[ japanese ] = "Ÿ‚Ì•\\";
+    Text[ chinese_traditional ] = "¤U¤@­Óªí®æ";
+    Text[ arabic ] = "ÇáÌÏæá ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíïò ğßíáêáò";
+    Text[ korean ] = "´ÙÀ½ Ç¥";
+    Text[ turkish ] = "Sonraki tablo";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_FRM_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächster Textrahmen : Nõchster Textrahmen */
+    Text = "Nächster Textrahmen" ;
+    Text [ English ] = "Next Frame" ;
+    Text [ english_us ] = "Next text frame" ;
+    Text [ portuguese_brazilian ] = "Nächster Textrahmen" ;
+    Text [ swedish ] = "Nästa textram" ;
+    Text [ danish ] = "Næste tekstboks" ;
+    Text [ italian ] = "Cornice successiva" ;
+    Text [ spanish ] = "Marco de texto siguiente" ;
+    Text [ french ] = "Cadre texte suivant" ;
+    Text [ dutch ] = "Volgend tekstkader" ;
+    Text [ portuguese ] = "Moldura de texto seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸öÎÄ±¾¿ò";
+    Text[ russian ] = "Ñëåäóşùàÿ òåêñòîâàÿ ğàìêà";
+    Text[ polish ] = "Nastêpna ramka tekstowa";
+    Text[ japanese ] = "Ÿ‚ÌÃ·½Ä˜g";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¤å¦r¤è®Ø";
+    Text[ arabic ] = "ÅØÇÑ ÇáäÕ ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíï ğëáßóéï êåéìİíïõ";
+    Text[ korean ] = "´ÙÀ½ ÅØ½ºÆ® ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Sonraki metin çerçevesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_PGE_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
+    Text = "Nächste Seite" ;
+    Text [ English ] = "Next Page" ;
+    Text [ english_us ] = "Next page" ;
+    Text [ portuguese_brazilian ] = "Nächste Seite" ;
+    Text [ swedish ] = "Nästa sida" ;
+    Text [ danish ] = "Næste side" ;
+    Text [ italian ] = "Pagina successiva" ;
+    Text [ spanish ] = "Página siguiente" ;
+    Text [ french ] = "Page suivante" ;
+    Text [ dutch ] = "Volgende pagina" ;
+    Text [ portuguese ] = "Página seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»Ò³";
+    Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
+    Text[ polish ] = "Nastêpna strona";
+    Text[ japanese ] = "Ÿ‚ÌÍß°¼Ş";
+    Text[ chinese_traditional ] = "¤U¤@­¶";
+    Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíç óåëßäá";
+    Text[ korean ] = "´ÙÀ½ ÆäÀÌÁö";
+    Text[ turkish ] = "Sonraki sayfa";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_DRW_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächstes Zeichenobjekt : Nõchstes Zeichenobjekt */
+    Text = "Nächstes Zeichenobjekt" ;
+    Text [ English ] = "Next drawing" ;
+    Text [ english_us ] = "Next drawing" ;
+    Text [ portuguese_brazilian ] = "Nächstes Zeichenobjekt" ;
+    Text [ swedish ] = "Nästa ritobjekt" ;
+    Text [ danish ] = "Næste tegneobjekt" ;
+    Text [ italian ] = "Oggetto di disegno successivo" ;
+    Text [ spanish ] = "Objeto de dibujo siguiente" ;
+    Text [ french ] = "Objet de dessin suivant" ;
+    Text [ dutch ] = "Volgend tekenobject" ;
+    Text [ portuguese ] = "Objecto de desenho seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö×Ö·û¶ÔÏó";
+    Text[ russian ] = "Ñëåäóşùèé ãğàôè÷åñêèé îáúåêò";
+    Text[ polish ] = "Nastêpny obiekt rysunkowy";
+    Text[ japanese ] = "Ÿ‚Ì•¶šµÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¦r¤¸ª«¥ó";
+    Text[ arabic ] = "ÇáßÇÆä ÇáÑÓæãí ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíï áíôéêåßìåíï ó÷åäßáóçò";
+    Text[ korean ] = "´ÙÀ½ ±×¸®±â";
+    Text[ turkish ] = "Sonraki çizim";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_CTRL_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächstes Kontrollfeld : Nõchstes Kontrollfeld */
+    Text = "Nächstes Kontrollfeld" ;
+    Text [ English ] = "Next control" ;
+    Text [ english_us ] = "Next control" ;
+    Text [ portuguese_brazilian ] = "Nächstes Kontrollfeld" ;
+    Text [ swedish ] = "Nästa kontrollfält" ;
+    Text [ danish ] = "Næste kontrolelement" ;
+    Text [ italian ] = "Campo di controllo successivo" ;
+    Text [ spanish ] = "Campo de control siguiente" ;
+    Text [ french ] = "Elément de contrôle suivant" ;
+    Text [ dutch ] = "Volgend controleveld" ;
+    Text [ portuguese ] = "Controlo seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö¿ØÖÆ";
+    Text[ russian ] = "Ñëåäóşùèé ıëåìåíò óïğàâëåíèÿ";
+    Text[ polish ] = "Nastêpne pole kontrolne";
+    Text[ japanese ] = "Ÿ‚ÌºİÄÛ°Ù";
+    Text[ chinese_traditional ] = "¤U¤@­Ó±±¨î¶µ";
+    Text[ arabic ] = "ÚäÕÑ ÇáÊÍßã ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíï ğåäßï åëİã÷ïõ";
+    Text[ korean ] = "´ÙÀ½ ÄÁÆ®·Ñ";
+    Text[ turkish ] = "Sonraki komut alanı";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_REG_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächster Bereich : Nõchster Bereich */
+    Text = "Nächster Bereich" ;
+    Text [ English ] = "Next region" ;
+    Text [ english_us ] = "Next section" ;
+    Text [ portuguese_brazilian ] = "Nächster Bereich" ;
+    Text [ swedish ] = "Nästa område" ;
+    Text [ danish ] = "Næste område" ;
+    Text [ italian ] = "Area successiva" ;
+    Text [ spanish ] = "Area siguiente" ;
+    Text [ french ] = "Section suivante" ;
+    Text [ dutch ] = "Volgend bereik" ;
+    Text [ portuguese ] = "Secção seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸öÇøÓò";
+    Text[ russian ] = "Ñëåäóşùàÿ îáëàñòü";
+    Text[ polish ] = "Nastêpna sekcja";
+    Text[ japanese ] = "Ÿ‚Ì”ÍˆÍ";
+    Text[ chinese_traditional ] = "¤U¤@­Ó°Ï°ì";
+    Text[ arabic ] = "ÇáäØÇŞ ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíç åíüôçôá";
+    Text[ korean ] = "´ÙÀ½ ±¸¿ª";
+    Text[ turkish ] = "Sonraki bölüm";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_BKM_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Textmarke : Nõchste Textmarke */
+    Text = "Nächste Textmarke" ;
+    Text [ English ] = "Next bookmark" ;
+    Text [ english_us ] = "Next bookmark" ;
+    Text [ portuguese_brazilian ] = "Nächste Textmarke" ;
+    Text [ swedish ] = "Nästa bokmärke" ;
+    Text [ danish ] = "Næste tekstmarkering" ;
+    Text [ italian ] = "Segnalibro successivo" ;
+    Text [ spanish ] = "Marcador siguiente" ;
+    Text [ french ] = "Repère de texte suivant" ;
+    Text [ dutch ] = "Volgende tekstmarkering" ;
+    Text [ portuguese ] = "Marcador de texto seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸öÊéÇ©";
+    Text[ russian ] = "Ñëåäóşùàÿ çàêëàäêà";
+    Text[ polish ] = "Nastêpna zak³adka";
+    Text[ japanese ] = "Ÿ‚ÌÃ·½ÄÏ°¸";
+    Text[ chinese_traditional ] = "¤U¤@­Ó®ÑÅÒ";
+    Text[ arabic ] = "ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíï óçìÜäé êåéìİíïõ";
+    Text[ korean ] = "´ÙÀ½ Ã¥ °¥ÇÇ";
+    Text[ turkish ] = "Sonraki metin işareti";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_GRF_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Grafik : Nõchste Grafik */
+    Text = "Nächste Grafik" ;
+    Text [ English ] = "Next graphic" ;
+    Text [ english_us ] = "Next picture" ;
+    Text [ portuguese_brazilian ] = "Nächste Grafik" ;
+    Text [ swedish ] = "Nästa grafik" ;
+    Text [ danish ] = "Næste billede" ;
+    Text [ italian ] = "Immagine successiva" ;
+    Text [ spanish ] = "Imagen siguiente" ;
+    Text [ french ] = "Image suivante" ;
+    Text [ dutch ] = "Volgende afbeelding" ;
+    Text [ portuguese ] = "Imagem seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸öÍ¼ĞÎ";
+    Text[ russian ] = "Ñëåäóşùèé ğèñóíîê";
+    Text[ polish ] = "Nastêpna grafika";
+    Text[ japanese ] = "Ÿ‚Ì¸Ş×Ì¨¯¸";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¹Ï¤ù";
+    Text[ arabic ] = "ÇáÕæÑÉ ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíï ãñáöéêü";
+    Text[ korean ] = "´ÙÀ½ ±×¸²";
+    Text[ turkish ] = "Sonraki grafik";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_OLE_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächstes OLE-Objekt : Nächstes OLE object */
+    /* ### ACHTUNG: Neuer Text in Resource? Nächstes OLE-Objekt : Nõchstes OLE-Objekt */
+    Text = "Nächstes OLE-Objekt" ;
+    Text [ English ] = "Next OLE object" ;
+    Text [ english_us ] = "Next OLE object" ;
+    Text [ portuguese_brazilian ] = "Nächstes OLE object" ;
+    Text [ swedish ] = "Nästa OLE-objekt" ;
+    Text [ danish ] = "Næste OLE-objekt" ;
+    Text [ italian ] = "Oggetto OLE successivo" ;
+    Text [ spanish ] = "Objeto OLE siguiente" ;
+    Text [ french ] = "Objet OLE suivant" ;
+    Text [ dutch ] = "Volgend OLE-object" ;
+    Text [ portuguese ] = "Objecto OLE seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö OLE-¶ÔÏó";
+    Text[ russian ] = "Ñëåäóşùèé îáúåêò OLE";
+    Text[ polish ] = "Nastêpny obiekt OLE";
+    Text[ japanese ] = "Ÿ‚ÌOLE-µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "¤U¤@­Ó OLE-ª«¥ó";
+    Text[ arabic ] = "ÇáÊÇáí OLE ÇáßÇÆä";
+    Text[ greek ] = "Åğüìåíï áíôéêåßìåíï OLE";
+    Text[ korean ] = "´ÙÀ½ OLE°³Ã¼";
+    Text[ turkish ] = "Sonraki OLE nesnesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_OUTL_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Überschrift : Nõchste šberschrift */
+    Text = "Nächste Überschrift" ;
+    Text [ English ] = "Next outline" ;
+    Text [ english_us ] = "Next heading" ;
+    Text [ portuguese_brazilian ] = "Nächste Überschrift" ;
+    Text [ swedish ] = "Nästa överskrift" ;
+    Text [ danish ] = "Næste overskrift" ;
+    Text [ italian ] = "Intestazione successiva" ;
+    Text [ spanish ] = "Encabezado siguiente" ;
+    Text [ french ] = "Titre suivant" ;
+    Text [ dutch ] = "Volgende kop" ;
+    Text [ portuguese ] = "Título seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö±êÌâ";
+    Text[ russian ] = "Ñëåäóşùèé çàãîëîâîê";
+    Text[ polish ] = "Nastêpny tytu³";
+    Text[ japanese ] = "Ÿ‚ÌŒ©o‚µ";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¼ĞÃD";
+    Text[ arabic ] = "ÇáÚäæÇä ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíç åğéêåöáëßäá";
+    Text[ korean ] = "´ÙÀ½ Á¦¸ñ";
+    Text[ turkish ] = "Sonraki başlık";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_SEL_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Markierung : Nõchste Markierung */
+    Text = "Nächste Markierung" ;
+    Text [ English ] = "Next selection" ;
+    Text [ english_us ] = "Next selection" ;
+    Text [ portuguese_brazilian ] = "Nächste Markierung" ;
+    Text [ swedish ] = "Nästa markering" ;
+    Text [ danish ] = "Næste markering" ;
+    Text [ italian ] = "Selezione successiva" ;
+    Text [ spanish ] = "Selección siguiente" ;
+    Text [ french ] = "Sélection suivante" ;
+    Text [ dutch ] = "Volgende markering" ;
+    Text [ portuguese ] = "Selecção seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸öÑ¡Ôñ";
+    Text[ russian ] = "Ñëåäóşùåå âûäåëåíèå";
+    Text[ polish ] = "Nastêpne zaznaczenie";
+    Text[ japanese ] = "Ÿ‚Ì‘I‘ğ";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¿ï¨ú";
+    Text[ arabic ] = "ÇáÊÍÏíÏ ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíç åğéëïãŞ";
+    Text[ korean ] = "´ÙÀ½ ¼±ÅÃ";
+    Text[ turkish ] = "Önceki seçim";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_FTN_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Fußnote : Nõchste Fu˜note */
+    Text = "Nächste Fußnote" ;
+    Text [ English ] = "Next Footnote" ;
+    Text [ english_us ] = "Next footnote" ;
+    Text [ portuguese_brazilian ] = "Nächste Fußnote" ;
+    Text [ swedish ] = "Nästa fotnot" ;
+    Text [ danish ] = "Næste fodnote" ;
+    Text [ italian ] = "Nota a piè pagina successiva" ;
+    Text [ spanish ] = "Nota al pie siguiente" ;
+    Text [ french ] = "Note de bas de page suivante" ;
+    Text [ dutch ] = "Volgende voetnoot" ;
+    Text [ portuguese ] = "Nota de rodapé seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö×¢½Å";
+    Text[ russian ] = "Ñëåäóşùàÿ ñíîñêà";
+    Text[ polish ] = "Nastêpny przypis dolny";
+    Text[ japanese ] = "Ÿ‚Ì‹r’";
+    Text[ chinese_traditional ] = "¤U¤@­Óµù¸}";
+    Text[ arabic ] = "ÇáÍÇÔíÉ ÇáÓİáíÉ ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíç õğïóçìåßùóç";
+    Text[ korean ] = "´ÙÀ½ °¢ÁÖ";
+    Text[ turkish ] = "Sonraki dipnot";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_MARK_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächster Merker : Nõchster Merker */
+    Text = "Nächster Merker" ;
+    Text [ English ] = "Next Reminder" ;
+    Text [ english_us ] = "Next Reminder" ;
+    Text [ portuguese_brazilian ] = "Nächster Merker" ;
+    Text [ swedish ] = "Nästa temporära bokmärke" ;
+    Text [ danish ] = "Næste påmindelse" ;
+    Text [ italian ] = "Contrassegno successivo" ;
+    Text [ spanish ] = "Marca siguiente" ;
+    Text [ french ] = "Pense-bête suivant" ;
+    Text [ dutch ] = "Volgend merkteken" ;
+    Text [ portuguese ] = "Marca seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö±ê¼Ç";
+    Text[ russian ] = "Ñëåäóşùàÿ ïîìåòêà";
+    Text[ polish ] = "Nastêpny znacznik";
+    Text[ japanese ] = "Ÿ‚ÌŠo‚¦~‚ß";
+    Text[ chinese_traditional ] = "¤U¤@­Ó´£¿ô";
+    Text[ arabic ] = "ÚáÇãÉ ÇáÊĞßíÑ ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíç õğåíèıìéóç";
+    Text[ korean ] = "´ÙÀ½ ³ª¸ÓÁö";
+    Text[ turkish ] = "Sonraki anımsatıcı";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_POSTIT_DOWN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Nächste Notiz : Nõchste Notiz */
+    Text = "Nächste Notiz" ;
+    Text [ English ] = "Next Annotation" ;
+    Text [ english_us ] = "Next Note" ;
+    Text [ portuguese_brazilian ] = "Nächste Notiz" ;
+    Text [ swedish ] = "Nästa anteckning" ;
+    Text [ danish ] = "Næste note" ;
+    Text [ italian ] = "Nota successiva" ;
+    Text [ spanish ] = "Nota siguiente" ;
+    Text [ french ] = "Note suivante" ;
+    Text [ dutch ] = "Volgende aantekening" ;
+    Text [ portuguese ] = "Anotação seguinte" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö±¸×¢";
+    Text[ russian ] = "Ñëåäóşùåå ïğèìå÷àíèå";
+    Text[ polish ] = "Nastêpna notatka";
+    Text[ japanese ] = "Ÿ‚ÌÒÓ";
+    Text[ chinese_traditional ] = "¤U¤@­Ó³Æµù";
+    Text[ arabic ] = "ÇáãáÇÍÙÉ ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíç óçìåßùóç";
+    Text[ korean ] = "´ÙÀ½ ¸Ş¸ğ";
+    Text[ turkish ] = "Sonraki not";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_SRCH_REP_DOWN
+{
+    Text = "Vorwärts weitersuchen" ;
+    Text [ English ] = "Repeat search " ;
+    Text [ english_us ] = "Continue search forward" ;
+    Text [ portuguese_brazilian ] = "Vorwärts weitersuchen" ;
+    Text [ swedish ] = "Sök vidare framåt" ;
+    Text [ danish ] = "Fortsæt søgning fremad" ;
+    Text [ italian ] = "Continua a cercare in avanti" ;
+    Text [ spanish ] = "Continuar búsqueda hacia delante" ;
+    Text [ french ] = "Continuer la recherche vers le bas" ;
+    Text [ dutch ] = "Voorwaarts verder zoeken" ;
+    Text [ portuguese ] = "Continuar a procura para a frente" ;
+    Text[ chinese_simplified ] = "ÏòÇ°ËÑÑ°";
+    Text[ russian ] = "Ïîèñê âïåğåä";
+    Text[ polish ] = "Szukaj dalej do przodu";
+    Text[ japanese ] = "•¶––•ûŒü‚ÉŒŸõ‘±s";
+    Text[ chinese_traditional ] = "¦V«e·j´M";
+    Text[ arabic ] = "ãÊÇÈÚÉ ÇáÈÍË ááÃãÇã";
+    Text[ greek ] = "Óõíİ÷éóç áíáæŞôçóçò ğñïò ôá åìğñüò";
+    Text[ korean ] = "°è¼Ó ¾ÕÀ¸·Î °Ë»ö";
+    Text[ turkish ] = "İleri dogru ara";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_INDEX_ENTRY_DOWN
+{
+    Text = "Nächster Verzeichniseintrag" ;
+    Text [ English ] = "Next index entry" ;
+    Text[ italian ] = "Voce d'indice successiva";
+    Text[ portuguese_brazilian ] = "Next index entry";
+    Text[ portuguese ] = "Entrada do índice seguinte";
+    Text[ danish ] = "Næste indekselement";
+    Text[ french ] = "Entrée d'index suivante";
+    Text[ swedish ] = "Nästa förteckningspost";
+    Text[ dutch ] = "Volgend index item";
+    Text[ spanish ] = "Entrada de índice siguiente";
+    Text[ english_us ] = "Next index entry";
+    Text[ chinese_simplified ] = "ÏÂÒ»¸öÄ¿Â¼ÌõÄ¿";
+    Text[ russian ] = "Ñëåäóşùèé ıëåìåíò óêàçàòåëÿ";
+    Text[ polish ] = "Nastêpny wpis do indeksu";
+    Text[ japanese ] = "Ÿ‚Ìõˆø€–Ú";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¥Ø¿ı¶µ¥Ø";
+    Text[ arabic ] = "ÇáÅÏÎÇá ÇáİåÑÓí ÇáÊÇáí";
+    Text[ greek ] = "Åğüìåíç åããñáöŞ åõñåôçñßïõ";
+    Text[ korean ] = "´ÙÀ½ »öÀÎ Ç×¸ñ";
+    Text[ turkish ] = "Sonraki dizin girişi";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_NEXT_UP
+{
+    Text = "" ;
+};
+String STR_IMGBTN_PREV_UP
+{
+    Text = "" ;
+};
+String STR_IMGBTN_TBL_UP
+{
+    Text = "Vorige Tabelle" ;
+    Text [ English ] = "Previous table" ;
+    Text [ english_us ] = "Previous table" ;
+    Text [ portuguese_brazilian ] = "Vorige Tabelle" ;
+    Text [ swedish ] = "Föregående tabell" ;
+    Text [ danish ] = "Forrige tabel" ;
+    Text [ italian ] = "Tabella precedente" ;
+    Text [ spanish ] = "Tabla anterior" ;
+    Text [ french ] = "Tableau précédent" ;
+    Text [ dutch ] = "Vorige tabel" ;
+    Text [ portuguese ] = "Tabela anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö±í¸ñ";
+    Text[ russian ] = "Ïğåäûäóùàÿ òàáëèöà";
+    Text[ polish ] = "Poprzednia tabela";
+    Text[ japanese ] = "‘O‚Ì•\\";
+    Text[ chinese_traditional ] = "¤W¤@­Óªí®æ";
+    Text[ arabic ] = "ÇáÌÏæá ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíïò ğßíáêáò";
+    Text[ korean ] = "ÀÌÀüÇ¥";
+    Text[ turkish ] = "Önceki tablo";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_FRM_UP
+{
+    Text = "Voriger Textrahmen" ;
+    Text [ English ] = "Previous frame" ;
+    Text [ english_us ] = "Previous text frame" ;
+    Text [ portuguese_brazilian ] = "Voriger Textrahmen" ;
+    Text [ swedish ] = "Föregående textram" ;
+    Text [ danish ] = "Forrige tekstboks" ;
+    Text [ italian ] = "Cornice di testo precedente" ;
+    Text [ spanish ] = "Marco de texto anterior" ;
+    Text [ french ] = "Cadre texte précédent" ;
+    Text [ dutch ] = "Vorig tekstkader" ;
+    Text [ portuguese ] = "Moldura de texto anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸öÎÄ±¾¿ò";
+    Text[ russian ] = "Ïğåäûäóùàÿ òåêñòîâàÿ ğàìêà";
+    Text[ polish ] = "Poprzednia ramka tekstowa";
+    Text[ japanese ] = "‘O‚ÌÃ·½Ä˜g";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¤å¦r¤è®Ø";
+    Text[ arabic ] = "ÅØÇÑ ÇáäÕ ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíï ğëáßóéï êåéìİíïõ";
+    Text[ korean ] = "ÀÌÀü ÅØ½ºÆ® ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Önceki metin çerçevesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_PGE_UP
+{
+    Text = "Vorige Seite" ;
+    Text [ English ] = "Previous page" ;
+    Text [ english_us ] = "Previous page" ;
+    Text [ portuguese_brazilian ] = "Vorige Seite" ;
+    Text [ swedish ] = "Föregående sida" ;
+    Text [ danish ] = "Forrige side" ;
+    Text [ italian ] = "Pagina precedente" ;
+    Text [ spanish ] = "Página anterior" ;
+    Text [ french ] = "Page précédente" ;
+    Text [ dutch ] = "Vorige pagina" ;
+    Text [ portuguese ] = "Página anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»Ò³";
+    Text[ russian ] = "Ïğåäûäóùàÿ ñòğàíèöà";
+    Text[ polish ] = "Poprzednia strona";
+    Text[ japanese ] = "‘O‚ÌÍß°¼Ş";
+    Text[ chinese_traditional ] = "¤W¤@­¶";
+    Text[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíç óåëßäá";
+    Text[ korean ] = "ÀÌÀü ÆäÀÌÁö";
+    Text[ turkish ] = "Önceki sayfa";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_DRW_UP
+{
+    Text = "Voriges Zeichenobjekt" ;
+    Text [ English ] = "Previous drawing" ;
+    Text [ english_us ] = "Previous drawing" ;
+    Text [ portuguese_brazilian ] = "Voriges Zeichenobjekt" ;
+    Text [ swedish ] = "Föregående ritobjekt" ;
+    Text [ danish ] = "Forrige tegneobjekt" ;
+    Text [ italian ] = "Oggetto di disegno precedente" ;
+    Text [ spanish ] = "Objeto de dibujo anterior" ;
+    Text [ french ] = "Objet de dessin précédent" ;
+    Text [ dutch ] = "Vorig tekenobject" ;
+    Text [ portuguese ] = "Objecto de desenho anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö×Ö·û¶ÔÏó";
+    Text[ russian ] = "Ïğåäûäóùèé ãğàôè÷åñêèé îáúåêò";
+    Text[ polish ] = "Poprzedni obiekt rysunkowy";
+    Text[ japanese ] = "‘O‚Ì•¶šµÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¦r¤¸ª«¥ó";
+    Text[ arabic ] = "ÇáßÇÆä ÇáÑÓæãí ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíï áíôéêåßìåíï ó÷åäßáóçò";
+    Text[ korean ] = "ÀÌÀü ±×¸®±â";
+    Text[ turkish ] = "Önceki çizim";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_CTRL_UP
+{
+    Text = "Voriges Kontrollfeld" ;
+    Text [ English ] = "Previous control" ;
+    Text [ english_us ] = "Previous control" ;
+    Text [ portuguese_brazilian ] = "Voriges Kontrollfeld" ;
+    Text [ swedish ] = "Föregående kontrollfält" ;
+    Text [ danish ] = "Forrige kontrolelement" ;
+    Text [ italian ] = "Campo di controllo precedente" ;
+    Text [ spanish ] = "Campo de control anterior" ;
+    Text [ french ] = "Elément de contrôle précédent" ;
+    Text [ dutch ] = "Vorig controleveld" ;
+    Text [ portuguese ] = "Controlo anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö¿ØÖÆ";
+    Text[ russian ] = "Ïğåäûäóùèé ıëåìåíò óïğàâëåíèÿ";
+    Text[ polish ] = "Poprzednie pole kontrolne";
+    Text[ japanese ] = "‘O‚ÌºİÄÛ°Ù";
+    Text[ chinese_traditional ] = "¤W¤@­Ó±±¨î¶µ";
+    Text[ arabic ] = "ÚäÕÑ ÇáÊÍßã ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíï ğåäßï åëİã÷ïõ";
+    Text[ korean ] = "ÀÌÀü ÄÁÆ®·Ñ";
+    Text[ turkish ] = "Önceki komut alanı";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_REG_UP
+{
+    Text = "Voriger Bereich" ;
+    Text [ English ] = "Previous region" ;
+    Text [ english_us ] = "Previous section" ;
+    Text [ portuguese_brazilian ] = "Voriger Bereich" ;
+    Text [ swedish ] = "Föregående område" ;
+    Text [ danish ] = "Forrige område" ;
+    Text [ italian ] = "Area precedente" ;
+    Text [ spanish ] = "Area anterior" ;
+    Text [ french ] = "Section précédente" ;
+    Text [ dutch ] = "Vorig bereik" ;
+    Text [ portuguese ] = "Secção anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸öÇøÓò";
+    Text[ russian ] = "Ïğåäûäóùàÿ îáëàñòü";
+    Text[ polish ] = "Poprzednia sekcja";
+    Text[ japanese ] = "‘O‚Ì”ÍˆÍ";
+    Text[ chinese_traditional ] = "¤W¤@­Ó°Ï°ì";
+    Text[ arabic ] = "ÇáäØÇŞ ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíç åíüôçôá";
+    Text[ korean ] = "ÀÌÀü ±¸¿ª";
+    Text[ turkish ] = "Önceki Bölüm";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_BKM_UP
+{
+    Text = "Vorige Textmarke" ;
+    Text [ English ] = "Previous bookmark" ;
+    Text [ english_us ] = "Previous bookmark" ;
+    Text [ portuguese_brazilian ] = "Vorige Textmarke" ;
+    Text [ swedish ] = "Föregående bokmärke" ;
+    Text [ danish ] = "Forrige tekstmarkering" ;
+    Text [ italian ] = "Segnalibro precedente" ;
+    Text [ spanish ] = "Marcador anterior" ;
+    Text [ french ] = "Repère de texte précédent" ;
+    Text [ dutch ] = "Vorige tekstmarkering" ;
+    Text [ portuguese ] = "Marcador de texto anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸öÊéÇ©";
+    Text[ russian ] = "Ïğåäûäóùàÿ çàêëàäêà";
+    Text[ polish ] = "Poprzednia zak³adka";
+    Text[ japanese ] = "‘O‚ÌÃ·½ÄÏ°¸";
+    Text[ chinese_traditional ] = "¤W¤@­Ó®ÑÅÒ";
+    Text[ arabic ] = "ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíï óçìÜäé êåéìİíïõ";
+    Text[ korean ] = "ÀÌÀü  Ã¥ °¥ÇÇ";
+    Text[ turkish ] = "Önceki metin işareti";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_GRF_UP
+{
+    Text = "Vorige Grafik" ;
+    Text [ English ] = "Previous graphic" ;
+    Text [ english_us ] = "Previous picture" ;
+    Text [ portuguese_brazilian ] = "Vorige Grafik" ;
+    Text [ swedish ] = "Föregående grafik" ;
+    Text [ danish ] = "Forrige billede" ;
+    Text [ italian ] = "Immagine precedente" ;
+    Text [ spanish ] = "Imagen anterior" ;
+    Text [ french ] = "Image précédente" ;
+    Text [ dutch ] = "Vorige afbeelding" ;
+    Text [ portuguese ] = "Imagem anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸öÍ¼ĞÎ";
+    Text[ russian ] = "Ïğåäûäóùèé ğèñóíîê";
+    Text[ polish ] = "Poprzednia grafika";
+    Text[ japanese ] = "‘O‚Ì}";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¹Ï¤ù";
+    Text[ arabic ] = "ÇáÕæÑÉ ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíï ãñáöéêü";
+    Text[ korean ] = "ÀÌÀü ±×¸²";
+    Text[ turkish ] = "Önceki grafik";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_OLE_UP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Voriges OLE-Objekt : Voriges OLE object */
+    Text = "Voriges OLE-Objekt" ;
+    Text [ English ] = "Previous OLE object" ;
+    Text [ english_us ] = "Previous OLE object" ;
+    Text [ portuguese_brazilian ] = "Voriges OLE object" ;
+    Text [ swedish ] = "Föregående OLE-objekt" ;
+    Text [ danish ] = "Forrige OLE-objekt" ;
+    Text [ italian ] = "Oggetto OLE precedente" ;
+    Text [ spanish ] = "Objeto OLE anterior" ;
+    Text [ french ] = "Objet OLE précédent" ;
+    Text [ dutch ] = "Vorig OLE-object" ;
+    Text [ portuguese ] = "Objecto OLE anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö OLE-¶ÔÏó";
+    Text[ russian ] = "Ïğåäûäóùèé îáúåêò OLE";
+    Text[ polish ] = "Poprzedni obiekt OLE";
+    Text[ japanese ] = "‘O‚ÌOLE-µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "¤W¤@­Ó OLE-ª«¥ó";
+    Text[ arabic ] = "ÇáÓÇÈŞ OLE ÇáßÇÆä";
+    Text[ greek ] = "Ğñïçãïıìåíï áíôéêåßìåíï OLE";
+    Text[ korean ] = "ÀÌÀü OLE°³Ã¼";
+    Text[ turkish ] = "Önceki OLE nesnesi";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_OUTL_UP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Vorige Überschrift : Vorige šberschrift */
+    Text = "Vorige Überschrift" ;
+    Text [ English ] = "Previous outline" ;
+    Text [ english_us ] = "Previous heading" ;
+    Text [ portuguese_brazilian ] = "Vorige Überschrift" ;
+    Text [ swedish ] = "Föregående överskrift" ;
+    Text [ danish ] = "Forrige overskrift" ;
+    Text [ italian ] = "Intestazione precedente" ;
+    Text [ spanish ] = "Encabezado anterior" ;
+    Text [ french ] = "Titre précédent" ;
+    Text [ dutch ] = "Vorige kop" ;
+    Text [ portuguese ] = "Título anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö±êÌâ";
+    Text[ russian ] = "Ïğåäûäóùèé çàãîëîâîê";
+    Text[ polish ] = "Poprzedni tytu³";
+    Text[ japanese ] = "‘O‚ÌŒ©o‚µ";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¼ĞÃD";
+    Text[ arabic ] = "ÇáÚäæÇä ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíç åğéêåöáëßäá";
+    Text[ korean ] = "ÀÌÀüÁ¦¸ñ";
+    Text[ turkish ] = "Önceki başlık";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_SEL_UP
+{
+    Text = "Vorige Markierung" ;
+    Text [ English ] = "Previous selection" ;
+    Text [ english_us ] = "Previous selection" ;
+    Text [ portuguese_brazilian ] = "Vorige Markierung" ;
+    Text [ swedish ] = "Föregående markering" ;
+    Text [ danish ] = "Forrige markering" ;
+    Text [ italian ] = "Selezione precedente" ;
+    Text [ spanish ] = "Selección anterior" ;
+    Text [ french ] = "Sélection précédente" ;
+    Text [ dutch ] = "Vorige markering" ;
+    Text [ portuguese ] = "Selecção anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸öÑ¡Ôñ";
+    Text[ russian ] = "Ïğåäûäóùåå âûäåëåíèå";
+    Text[ polish ] = "Poprzednie zaznaczenie";
+    Text[ japanese ] = "‘O‚Ì‘I‘ğ";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¿ï¨ú";
+    Text[ arabic ] = "ÇáÊÍÏíÏ ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíç åğéëïãŞ";
+    Text[ korean ] = "ÀÌÀü ¼±ÅÃ";
+    Text[ turkish ] = "Sonraki seçim";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_FTN_UP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Vorige Fußnote : Vorige Fu˜note */
+    Text = "Vorige Fußnote" ;
+    Text [ English ] = "Previous Footnote" ;
+    Text [ english_us ] = "Previous footnote" ;
+    Text [ portuguese_brazilian ] = "Vorige Fußnote" ;
+    Text [ swedish ] = "Föregående fotnot" ;
+    Text [ danish ] = "Forrige fodnote" ;
+    Text [ italian ] = "Nota a piè pagina precedente" ;
+    Text [ spanish ] = "Nota al pie anterior" ;
+    Text [ french ] = "Note de bas de page précédente" ;
+    Text [ dutch ] = "Vorige voetnoot" ;
+    Text [ portuguese ] = "Nota de rodapé anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö×¢½Å";
+    Text[ russian ] = "Ïğåäûäóùàÿ ñíîñêà";
+    Text[ polish ] = "Poprzedni przypis dolny";
+    Text[ japanese ] = "‘O‚Ì‹r’";
+    Text[ chinese_traditional ] = "¤W¤@­Óµù¸}";
+    Text[ arabic ] = "ÇáÍÇÔíÉ ÇáÓİáíÉ ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíç õğïóçìåßùóç";
+    Text[ korean ] = "ÀÌÀü °¢ÁÖ";
+    Text[ turkish ] = "Önceki dipnot";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_MARK_UP
+{
+    Text = "Voriger Merker" ;
+    Text [ English ] = "Previous Reminder" ;
+    Text [ english_us ] = "Previous Reminder" ;
+    Text [ portuguese_brazilian ] = "Voriger Merker" ;
+    Text [ swedish ] = "Föregående temporära bokmärke" ;
+    Text [ danish ] = "Forrige påmindelse" ;
+    Text [ italian ] = "Contrassegno precedente" ;
+    Text [ spanish ] = "Marca anterior" ;
+    Text [ french ] = "Pense-bête précédent" ;
+    Text [ dutch ] = "Vorig merkteken" ;
+    Text [ portuguese ] = "Marca anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö±ê¼Ç";
+    Text[ russian ] = "Ïğåäûäóùàÿ ïîìåòêà";
+    Text[ polish ] = "Poprzedni znacznik";
+    Text[ japanese ] = "‘O‚ÌŠo‚¦~‚ß";
+    Text[ chinese_traditional ] = "¤W¤@­Ó´£¿ô";
+    Text[ arabic ] = "ÚáÇãÉ ÇáÊĞßíÑ ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíç õğåíèıìéóç";
+    Text[ korean ] = "ÀÌÀü ³ª¸ÓÁö";
+    Text[ turkish ] = "Önceki anımsatıcı";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_POSTIT_UP
+{
+    Text = "Vorige Notiz" ;
+    Text [ English ] = "Previous Annotation" ;
+    Text [ english_us ] = "Previous Note" ;
+    Text [ portuguese_brazilian ] = "Vorige Notiz" ;
+    Text [ swedish ] = "Föregående anteckning" ;
+    Text [ danish ] = "Forrige note" ;
+    Text [ italian ] = "Nota precedente" ;
+    Text [ spanish ] = "Nota anterior" ;
+    Text [ french ] = "Note précédente" ;
+    Text [ dutch ] = "Vorige aantekening" ;
+    Text [ portuguese ] = "Anotação anterior" ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö±¸×¢";
+    Text[ russian ] = "Ïğåäûäóùåå ïğèìå÷àíèå";
+    Text[ polish ] = "Poprzednia notatka";
+    Text[ japanese ] = "‘O‚ÌÒÓ";
+    Text[ chinese_traditional ] = "¤W¤@­Ó³Æµù";
+    Text[ arabic ] = "ÇáãáÇÍÙÉ ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíç óçìåßùóç";
+    Text[ korean ] = "ÀÌÀü ¸Ş¸ğ";
+    Text[ turkish ] = "Önceki not";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_SRCH_REP_UP
+{
+    Text = "Rückwärts weitersuchen" ;
+    Text [ English ] = "Repeat search backwards" ;
+    Text [ english_us ] = "Continue search backwards" ;
+    Text [ portuguese_brazilian ] = "Rückwärts weitersuchen" ;
+    Text [ swedish ] = "Sök vidare bakåt" ;
+    Text [ danish ] = "Fortsæt søgning tilbage" ;
+    Text [ italian ] = "Cerca all'indietro" ;
+    Text [ spanish ] = "Continuar búsqueda en sentido inverso" ;
+    Text [ french ] = "Continuer la recherche vers le haut" ;
+    Text [ dutch ] = "Achterwaarts verder zoeken" ;
+    Text [ portuguese ] = "Continuar a procura para trás" ;
+    Text[ chinese_simplified ] = "¼ÌĞøÏòºóËÑÑ°";
+    Text[ russian ] = "Îáğàòíûé ïîèñê";
+    Text[ polish ] = "Szukaj dalej wstecz";
+    Text[ japanese ] = "•¶“ª•ûŒü‚ÉŒŸõ‘±s";
+    Text[ chinese_traditional ] = "Ä~Äò¦V«á·j´M";
+    Text[ arabic ] = "ãÊÇÈÚÉ ÇáÈÍË ááÎáİ";
+    Text[ greek ] = "Óõíİ÷éóç áíáæŞôçóçò ğßóù";
+    Text[ korean ] = "°è¼Ó µÚ·Î °Ë»ö";
+    Text[ turkish ] = "Geriye doğru ara";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_INDEX_ENTRY_UP
+{
+    Text = "Voriger Verzeichniseintrag" ;
+    Text [ English ] = "Previous index entry" ;
+    Text[ italian ] = "Voce d'indice precedente";
+    Text[ portuguese_brazilian ] = "Previous index entry";
+    Text[ portuguese ] = "Entrada do índice anterior";
+    Text[ danish ] = "Forrige indekselement";
+    Text[ french ] = "Entrée d'index précédente";
+    Text[ swedish ] = "Föregående förteckningspost";
+    Text[ dutch ] = "Vorig index item";
+    Text[ spanish ] = "Entrada de índice anterior";
+    Text[ english_us ] = "Previous index entry";
+    Text[ chinese_simplified ] = "ÉÏÒ»¸öÄ¿Â¼ÌõÄ¿";
+    Text[ russian ] = "Ïğåäûäóùèé ıëåìåíò óêàçàòåëÿ";
+    Text[ polish ] = "Poprzedni wpis do indeksu";
+    Text[ japanese ] = "‘O‚Ìõˆø€–Ú";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¥Ø¿ı¶µ¥Ø";
+    Text[ arabic ] = "ÇáÅÏÎÇá ÇáİåÑÓí ÇáÓÇÈŞ";
+    Text[ greek ] = "Ğñïçãïıìåíç åããñáöŞ åõñåôçñßïõ";
+    Text[ korean ] = "ÀÌÀü »öÀÎ Ç×¸ñ";
+    Text[ turkish ] = "Önceki dizin girişi";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_TBLFML_UP
+{
+    Text = "Vorige Tabellenformel" ;
+    Text [ English ] = "Previous table formula" ;
+    Text[ english_us ] = "Previous table formula";
+    Text[ portuguese ] = "Fórmula de tabela anterior";
+    Text[ russian ] = "Ïğåäûäóùàÿ ôîğìóëà òàáëèöû";
+    Text[ dutch ] = "Vorige tabellenformule";
+    Text[ french ] = "Formule de table précédente";
+    Text[ spanish ] = "Fórmula de tabla anterior";
+    Text[ italian ] = "Formula tabella precedente";
+    Text[ danish ] = "Forrige tabelformel";
+    Text[ swedish ] = "Föregående tabellformel";
+    Text[ polish ] = "Poprzednia formu³a tabeli";
+    Text[ portuguese_brazilian ] = "Previous table formula";
+    Text[ japanese ] = "‘O‚Ì•\\‚Ì”®";
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö¹¤×÷±í¹«Ê½";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¤u§@ªí¤½¦¡";
+    Text[ arabic ] = "ÕíÛÉ ÇáÌÏæá ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíïò ôığïò ğßíáêá";
+    Text[ korean ] = "ÀÌÀü Ç¥ ¼ö½Ä";
+    Text[ turkish ] = "Önceki tablo formülü";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_TBLFML_DOWN
+{
+    Text = "Nächste Tabellenformel" ;
+    Text [ English ] = "Next table formula" ;
+    Text[ english_us ] = "Next table formula";
+    Text[ portuguese ] = "Fórmula de tabela seguinte";
+    Text[ russian ] = "Ñëåäóşùàÿ ôîğìóëà òàáëèöû";
+    Text[ dutch ] = "Volgende tabellenformule";
+    Text[ french ] = "Formule de table suivante";
+    Text[ spanish ] = "Siguiente fórmula de tabla";
+    Text[ italian ] = "Formula tabella successiva";
+    Text[ danish ] = "Næste tabelformel";
+    Text[ swedish ] = "Nästa tabellformel";
+    Text[ polish ] = "Nastêpna formu³a tabeli";
+    Text[ portuguese_brazilian ] = "Next table formula";
+    Text[ japanese ] = "Ÿ‚Ì•\\‚Ì”®";
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö¹¤×÷±í¸ñÊ½";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¤u§@ªí®æ¦¡";
+    Text[ arabic ] = "ÕíÛÉ ÇáÌÏæá ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíïò ôığïò ğßíáêá";
+    Text[ korean ] = "´ÙÀ½ Ç¥ ¼ö½Ä";
+    Text[ turkish ] = "Sonraki tablo formülü";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_TBLFML_ERR_UP
+{
+    Text = "Vorige fehlerhafte Tabellenformel" ;
+    Text [ English ] = "Previous wrong table formula" ;
+    Text[ english_us ] = "Previous faulty table formula";
+    Text[ portuguese ] = "Fórmula de tabela anterior errada";
+    Text[ russian ] = "Íåïğàâèëüíàÿ ïğåäûäóùàÿ ôîğìóëà òàáëèöû";
+    Text[ dutch ] = "Vorige foutieve tabellenformule";
+    Text[ french ] = "Formule de table erronée précédente";
+    Text[ spanish ] = "Fórmula de tabla anterior errónea";
+    Text[ italian ] = "Formula tabella errata precedente";
+    Text[ danish ] = "Forrige fejlagtige tabelformel";
+    Text[ swedish ] = "Föregående felaktiga tabellformel";
+    Text[ polish ] = "Poprzednia b³êdna formu³a tabeli";
+    Text[ portuguese_brazilian ] = "Previous wrong table formula";
+    Text[ japanese ] = "‘O‚Ì³‚µ‚­‚È‚¢•\\‚Ì”®";
+    Text[ chinese_simplified ] = "ÉÏÒ»¸ö´íÎóµÄ¹¤×÷±í¹«Ê½";
+    Text[ chinese_traditional ] = "¤W¤@­Ó¿ù»~ªº¤u§@ªí®æ¦¡";
+    Text[ arabic ] = "ÕíÛÉ ÇáÌÏæá ÇáÎÇØÆÉ ÇáÓÇÈŞÉ";
+    Text[ greek ] = "Ğñïçãïıìåíïò ëáíèáóìİíïò ôığïò ğßíáêá";
+    Text[ korean ] = "Àß¸øµÈ ÀÌÀü Ç¥ ¼ö½Ä";
+    Text[ turkish ] = "Önceki hatalı tablo formülü";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMGBTN_TBLFML_ERR_DOWN
+{
+    Text = "Nächste fehlerhafte Tabellenformel" ;
+    Text [ English ] = "Next wrong table formula" ;
+    Text[ english_us ] = "Next faulty table formula";
+    Text[ portuguese ] = "Fórmula de tabela seguinte errada";
+    Text[ russian ] = "Íåïğàâèëüíàÿ ñëåäóşùàÿ ôîğìóëà òàáëèöû";
+    Text[ dutch ] = "Volgende foutieve tabellenformule";
+    Text[ french ] = "Formule de table erronée suivante";
+    Text[ spanish ] = "Siguiente fórmula errónea de tabla";
+    Text[ italian ] = "Formula tabella errata successiva";
+    Text[ danish ] = "Næste fejlagtige tabelformel";
+    Text[ swedish ] = "Nästa felaktiga tabellformel";
+    Text[ polish ] = "Nastêpna b³êdna formu³a tabeli";
+    Text[ portuguese_brazilian ] = "Next wrong table formula";
+    Text[ japanese ] = "Ÿ‚Ì³‚µ‚­‚È‚¢•\\‚Ì”®";
+    Text[ chinese_simplified ] = "ÏÂÒ»¸ö´íÎóµÄ¹¤×÷±í¸ñÊ½";
+    Text[ chinese_traditional ] = "¤U¤@­Ó¿ù»~ªº¤u§@ªí®æ¦¡";
+    Text[ arabic ] = "ÕíÛÉ ÇáÌÏæá ÇáÎÇØÆÉ ÇáÊÇáíÉ";
+    Text[ greek ] = "Åğüìåíïò ëáíèáóìİíïò ôığïò ğßíáêá";
+    Text[ korean ] = "Àß¸øµÈ ´ÙÀ½ Ç¥ ¼ö½Ä";
+    Text[ turkish ] = "Sonraki hatalı tablo formülü";
+    Text[ language_user1 ] = " ";
+};
+ImageButton BTN_NAVI
+{
+    HelpID = HID_NAVIGATION_IMGBTN ;
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    RectStyle = TRUE ;
+    SmallStyle = TRUE ;
+    Image IMG_BTN
+    {
+        ImageBitmap = Bitmap { File = "punkt.bmp" ; };
+    };
+    String ST_QUICK
+    {
+        Text [ english_us ] = "Navigation" ;
+        Text [ portuguese_brazilian ] = "Navigation" ;
+        Text [ swedish ] = "Navigation" ;
+        Text [ danish ] = "Navigation" ;
+        Text [ italian ] = "Navigazione" ;
+        Text [ spanish ] = "Navegación" ;
+        Text [ french ] = "Navigation" ;
+        Text [ dutch ] = "Navigatie" ;
+        Text [ portuguese ] = "Navegação" ;
+        Text = "Navigation" ;
+        Text[ chinese_simplified ] = "ä¯ÀÀ";
+        Text[ russian ] = "Íàâèãàöèÿ";
+        Text[ polish ] = "Nawigacja";
+        Text[ japanese ] = "ÅËŞ¹Ş°¼®İ";
+        Text[ chinese_traditional ] = "ÂsÄı";
+        Text[ arabic ] = "ÇáãáÇÍÉ";
+        Text[ greek ] = "Ìåôáêßíçóç";
+        Text[ korean ] = "³×ºñ°ÔÀÌ¼Ç";
+        Text[ turkish ] = "Dolaşma";
+        Text[ language_user1 ] = " ";
+    };
+};

@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ *  $RCSfile: misc.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _MISC_HRC
+#define _MISC_HRC
+
+#include "rcid.hrc"
+
+#define DLG_QUERY_DELETE            (RC_MISC_BEGIN + 2)
+
+#define DLG_MASTERDOC_PAGE          (RC_MISC_BEGIN + 3)
+#define DLG_QUERY_ADD               (RC_MISC_BEGIN + 4)
+
+#define STR_GLOSSARY_BIB_DLG        (RC_MISC_BEGIN + 5)
+#define STR_DOCUMENT_BIB_DLG        (RC_MISC_BEGIN + 6)
+
+#define WIN_GLOBAL_DOC              (RC_MISC_BEGIN + 7)
+#define DLG_GLOBAL_DOC_OPTION       (RC_MISC_BEGIN + 8)
+#define DLG_NUMBERING               (RC_MISC_BEGIN + 9)
+#define DLG_ZOOM                    (RC_MISC_BEGIN + 10)
+#define DLG_GLOSSARY                (RC_MISC_BEGIN + 11)
+#define DLG_INS_FOOTNOTE            (RC_MISC_BEGIN + 12)
+#define DLG_DOC_FOOTNOTE            (RC_MISC_BEGIN + 13)
+#define DLG_PG_FOOTNOTE             (RC_MISC_BEGIN + 14)
+#define DLG_NUMBERING_OUTLINE       (RC_MISC_BEGIN + 15)
+#define DLG_BIB_BASE                (RC_MISC_BEGIN + 16)
+#define DLG_INSERT_BOOKMARK         (RC_MISC_BEGIN + 17)
+#define DLG_NUM_NAMES               (RC_MISC_BEGIN + 18)
+#define DLG_SORTING                 (RC_MISC_BEGIN + 19)
+#define DLG_CHARMAP                 (RC_MISC_BEGIN + 20)
+#define DLG_AUTOCORR                (RC_MISC_BEGIN + 23)
+#define DLG_AUTOFMT_OPT             (RC_MISC_BEGIN + 24)
+#define DLG_RENAME_GLOS             (RC_MISC_BEGIN + 25)
+#define DLG_AUTOFMT_TAB             (RC_MISC_BEGIN + 26)
+#define DLG_PRCNT_SET               (RC_MISC_BEGIN + 27)
+#define DLG_INSERT_RULER            (RC_MISC_BEGIN + 28)
+#define DLG_REDLINE_ACCEPT          (RC_MISC_BEGIN + 29)
+#define DLG_SEL_TEMPLATE            (RC_MISC_BEGIN + 30)
+#define DLG_TAB_OUTLINE             (RC_MISC_BEGIN + 31)
+#define DLG_MOD_REDLINE_ACCEPT      (RC_MISC_BEGIN + 32)
+
+
+#define MSG_DOUBLE_SHORTNAME        (RC_MISC_BEGIN + 30)
+#define MSG_QUERY_DELETE            (RC_MISC_BEGIN + 31)
+#define STR_QUERY_DELETE_GROUP1     (RC_MISC_BEGIN + 32)
+#define STR_QUERY_DELETE_GROUP2     (RC_MISC_BEGIN + 33)
+#define MSG_NO_GLOSSARIES           (RC_MISC_BEGIN + 34)
+
+#define BMP_ROOT_CLOSED             (RC_MISC_BEGIN + 35)
+#define BMP_ROOT_OPENED             (RC_MISC_BEGIN + 36)
+
+#define MSG_BLOCK_CREATE_ERR        (RC_MISC_BEGIN + 40)
+#define MSG_BLOCK_DELETE_ERR        (RC_MISC_BEGIN + 41)
+#define MSG_SRTERR                  (RC_MISC_BEGIN + 42)
+
+#define STR_GLOSSARY                (RC_MISC_BEGIN + 43)
+#define STR_CHANGE_START            (RC_MISC_BEGIN + 44)
+#define STR_CHANGE_END              (RC_MISC_BEGIN + 45)
+#define STR_SAVE_GLOSSARY           (RC_MISC_BEGIN + 46)
+
+#define STR_FULLNUMS_START          (RC_MISC_BEGIN + 47)
+#define STR_FULLNUMS_1              (STR_FULLNUMS_START )
+#define STR_FULLNUMS_2              (STR_FULLNUMS_START + 1)
+#define STR_FULLNUMS_3              (STR_FULLNUMS_START + 2)
+#define STR_FULLNUMS_4              (STR_FULLNUMS_START + 3)
+#define STR_FULLNUMS_5              (STR_FULLNUMS_START + 4)
+#define STR_FULLNUMS_6              (STR_FULLNUMS_START + 5)
+#define STR_FULLNUMS_7              (STR_FULLNUMS_START + 6)
+#define STR_FULLNUMS_8              (STR_FULLNUMS_START + 7)
+
+#define STR_BULLET_THEME            (RC_MISC_BEGIN + 55)
+#define MSG_NO_BULLETS              (RC_MISC_BEGIN + 56)
+
+#define STR_NUMRULE_UNKNOWN         (RC_MISC_BEGIN + 60)
+#define MN_REDLINE_POPUP            (RC_MISC_BEGIN + 61)
+#define STR_REMOVE_WARNING          (RC_MISC_BEGIN + 62)
+
+#define MISC_ACT_END                STR_REMOVE_WARNING
+
+#if MISC_ACT_END > RC_MISC_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif  // _MISC_HRC

@@ -1,0 +1,83 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   frmsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/frmsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File FrameShell fuer Sw3
+
+    (c) Copyright 1995 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextFrame : BaseTextFrame
+[
+    uuid = "564CBAA0-111A-101D-9757-6E74207A7520"
+]
+{
+    import TextSelection;
+}
+
+ //=========================================================================
+
+shell SwFrameShell : SwBaseShell
+{
+    import TextFrame[Automation];
+
+    FN_FRAME_CHAIN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_UNCHAIN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.86  1998/11/12 16:29:08  MA
+    #58677# Disable Flag
+
+
+      Rev 1.85   12 Nov 1998 17:29:08   MA
+   #58677# Disable Flag
+
+      Rev 1.84   05 Nov 1997 11:49:44   MA
+   chain
+
+      Rev 1.83   28 Aug 1997 12:50:20   MBA
+   Neue Interface-Namen
+
+      Rev 1.82   13 Feb 1997 12:45:02   MA
+   unnoetige Texte entfernt
+
+      Rev 1.81   23 Jan 1997 14:30:30   OS
+   Ableitung von _Frame
+
+      Rev 1.80   07 Nov 1996 16:17:06   OS
+   Wrap-Methoden an die Baseshell
+
+      Rev 1.79   21 Sep 1996 17:35:42   OS
+   Sot-Umstellung beendet
+
+      Rev 1.78   18 Sep 1996 10:35:46   OM
+   Umlauf: Nur Anker
+
+      Rev 1.77   10 Sep 1996 16:39:16   OS
+   Slotvereinheitlichung zu, 1.
+
+      Rev 1.76   20 Aug 1996 17:27:28   HJS
+   eu...
+
+      Rev 1.75   17 Jul 1996 07:31:30   OS
+   ReadOnlyDoc - Flag
+
+------------------------------------------------------------------------*/
+

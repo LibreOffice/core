@@ -1,0 +1,330 @@
+/*************************************************************************
+ *
+ *  $RCSfile: unotools.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <unotools.hrc>
+#include <utlui.hrc>
+#include <globals.hrc>
+#include <helpid.h>
+
+ModalDialog DLG_RENAME_XNAMED
+{
+    HelpID = HID_RENAME_XNAMED ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 60 ) ;
+    Text = "Objekt umbenennen: " ;
+    Text [ ENGLISH ] = "Rename object: " ;
+    Moveable = TRUE ;
+    FixedText FT_NEW_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Neuer Name" ;
+        Text [ ENGLISH ] = "New name" ;
+        Text[ english_us ] = "New name";
+        Text[ portuguese ] = "Novo nome";
+        Text[ russian ] = "Ïğèñâîèòü èìÿ";
+        Text[ greek ] = "Íİï üíïìá";
+        Text[ dutch ] = "Nieuwe naam";
+        Text[ french ] = "Nouveau nom";
+        Text[ spanish ] = "Nuevo nombre";
+        Text[ italian ] = "Nome nuovo";
+        Text[ danish ] = "Nyt navn";
+        Text[ swedish ] = "Nytt namn";
+        Text[ polish ] = "Nowa nazwa";
+        Text[ portuguese_brazilian ] = "New name";
+        Text[ japanese ] = "V‚µ‚¢–¼‘O";
+        Text[ korean ] = "»õ ÀÌ¸§";
+        Text[ chinese_simplified ] = "ĞÂÃû³Æ";
+        Text[ chinese_traditional ] = "·s¦WºÙ";
+        Text[ arabic ] = "ÇáÇÓã ÇáÌÏíÏ";
+        Text[ turkish ] = "Yeni ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_NEW_NAME
+    {
+        Pos = MAP_APPFONT ( 65 , 13 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Border = TRUE;
+    };
+    GroupBox GB_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 115 , 54 ) ;
+        Text = "Name ändern";
+        Text [ ENGLISH ] = "Change name" ;
+        Text[ english_us ] = "Change name";
+        Text[ portuguese ] = "Mudar nome";
+        Text[ russian ] = "Èçìåíèòü èìÿ";
+        Text[ greek ] = "ÁëëáãŞ ïíüìáôïò";
+        Text[ dutch ] = "Naam wijzigen";
+        Text[ french ] = "Modifier le nom";
+        Text[ spanish ] = "Cambiar nombre";
+        Text[ italian ] = "Cambia nome";
+        Text[ danish ] = "Modificer navn";
+        Text[ swedish ] = "Ändra namn";
+        Text[ polish ] = "Zmieñ nazwê";
+        Text[ portuguese_brazilian ] = "Change name";
+        Text[ japanese ] = "–¼‘O‚Ì•ÏX";
+        Text[ korean ] = "ÀÌ¸§ º¯°æ";
+        Text[ chinese_simplified ] = "¸ü¸ÄÃû³Æ";
+        Text[ chinese_traditional ] = "ÅÜ§ó¦WºÙ";
+        Text[ arabic ] = "ÊÚÏíá ÇáÇÓã";
+        Text[ turkish ] = "Adı değiştir";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 124 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 124 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 124 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    Text[ english_us ] = "Rename object: ";
+    Text[ portuguese ] = "Mudar nome do objecto: ";
+    Text[ russian ] = "Ïåğåèìåíîâàòü îáúåêò:  ";
+    Text[ greek ] = "Ìåôïíïìáóßá áíôéêåéìİíïõ: ";
+    Text[ dutch ] = "Objectnaam wijzigen: ";
+    Text[ french ] = "Renommer l'objet :  ";
+    Text[ spanish ] = "Cambiar nombre de objeto: ";
+    Text[ italian ] = "Rinomina oggetto: ";
+    Text[ danish ] = "Omdøb objekt: ";
+    Text[ swedish ] = "Byt namn på objekt:  ";
+    Text[ polish ] = "Zmieñ nazwê obiektu: ";
+    Text[ portuguese_brazilian ] = "Rename object: ";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä–¼‚Ì•ÏX: ";
+    Text[ korean ] = "°³Ã¼ ÀÌ¸§ ¹Ù²Ù±â: ";
+    Text[ chinese_simplified ] = "ÖØÃüÃû¶ÔÏó£º ";
+    Text[ chinese_traditional ] = "­«·s©R¦Wª«¥ó¡G ";
+    Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáßÇÆä: ";
+    Text[ turkish ] = "Nesneyi yeniden adlandır: ";
+    Text[ language_user1 ] = " ";
+};
+String STR_SERVICE_UNAVAILABLE
+{
+    Text = "Der folgende Service ist nicht verfügbar: " ;
+    Text [ English ] = "The following service is not available: " ;
+    Text[ english_us ] = "The following service is not available: ";
+    Text[ portuguese ] = "O seguinte serviço não está disponível: ";
+    Text[ russian ] = "Ñëåäóşùàÿ ñëóæáà íå äîñòóïíà:  ";
+    Text[ greek ] = "Ç áêüëïõèç õğçñåóßá äåí åßíáé äéáèİóéìç: ";
+    Text[ dutch ] = "De volgende service is niet beschikbaar:  ";
+    Text[ french ] = "Le service suivant n'est pas disponible :  ";
+    Text[ spanish ] = "El siguiente servicio no está disponible: ";
+    Text[ italian ] = "Il seguente servizio non è disponibile. ";
+    Text[ danish ] = "Følgende service er ikke tilgængelig: ";
+    Text[ swedish ] = "Följande service är inte tillgänglig:  ";
+    Text[ polish ] = "Nastêpuj¹cy serwis jest niedostêpny: ";
+    Text[ portuguese_brazilian ] = "The following service is not available: ";
+    Text[ japanese ] = "Ÿ‚Ì»°ËŞ½‚Íg—p‚Å‚«‚Ü‚¹‚ñ: ";
+    Text[ korean ] = "´ÙÀ½ÀÇ ¼­ºñ½º´Â °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.: ";
+    Text[ chinese_simplified ] = "²»´æÔÚÏÂÁĞ·şÎñ¹¦ÄÜ£º ";
+    Text[ chinese_traditional ] = "³o­ÓªA°È¥\\¯à¤£¦s¦b¡G ";
+    Text[ arabic ] = "ÇáÎÏãÉ ÇáÊÇáíÉ ÛíÑ ãÊæİÑÉ: ";
+    Text[ turkish ] = "Aşağıdaki hizmet kullanılamıyor: ";
+    Text[ language_user1 ] = " ";
+};
+Resource RES_FRMEX_MENU
+{
+    StringArray 1
+    {
+        ItemList =
+        {
+            < "~Maßstab" ;      ST_MENU_ZOOM; > ;
+            < "Nach ~oben" ;    ST_MENU_UP;     > ;
+            < "Nach ~unten" ;   ST_MENU_DOWN; > ;
+        };
+        ItemList [English]=
+        {
+            < "~Zoom" ; ST_MENU_ZOOM; > ;
+            < "Go up" ; ST_MENU_UP; > ;
+            < "Go down" ; ST_MENU_DOWN; > ;
+        };
+    ItemList [ language_user1 ] =
+    {
+            < " " ;         ST_MENU_ZOOM; > ;
+        < "Nach ~oben" ;    ST_MENU_UP;     > ;
+        < "Nach ~unten" ;   ST_MENU_DOWN; > ;
+    };
+    ItemList [ english_us ] =
+    {
+            < "~Zoom" ;         ST_MENU_ZOOM; > ;
+        < "~Upwards" ;  ST_MENU_UP;     > ;
+        < "Do~wnwards" ;    ST_MENU_DOWN; > ;
+    };
+    ItemList [ portuguese ] =
+    {
+            < "~Escala" ;       ST_MENU_ZOOM; > ;
+        < "Para ~cima" ;    ST_MENU_UP;     > ;
+        < "Para ~baixo" ;   ST_MENU_DOWN; > ;
+    };
+    ItemList [ russian ] =
+    {
+            < "~Ìàñøòàá" ;      ST_MENU_ZOOM; > ;
+        < "Ââåğõ" ;     ST_MENU_UP;     > ;
+        < "Âíèç" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ greek ] =
+    {
+            < "Êëß~ìáêá" ;      ST_MENU_ZOOM; > ;
+        < "Ğñ~ïò ôá ğÜíù" ;     ST_MENU_UP;     > ;
+        < "Ğñïò ôá êÜôù" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ dutch ] =
+    {
+            < "~Maatstaf" ;         ST_MENU_ZOOM; > ;
+        < "Naar b~oven" ;   ST_MENU_UP;     > ;
+        < "Naar be~neden" ;     ST_MENU_DOWN; > ;
+    };
+    ItemList [ french ] =
+    {
+            < "~Échelle" ;      ST_MENU_ZOOM; > ;
+        < "Vers le ~haut" ;     ST_MENU_UP;     > ;
+        < "Vers le ~bas" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ spanish ] =
+    {
+            < "~Escala" ;       ST_MENU_ZOOM; > ;
+        < "Hacia ~arriba" ;     ST_MENU_UP;     > ;
+        < "Hacia a~bajo" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ italian ] =
+    {
+            < "~Zoom" ;         ST_MENU_ZOOM; > ;
+        < "In alt~o" ;  ST_MENU_UP;     > ;
+        < "In basso" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ danish ] =
+    {
+            < "~Målestok" ;         ST_MENU_ZOOM; > ;
+        < "Opad" ;  ST_MENU_UP;     > ;
+        < "Nedad" ;     ST_MENU_DOWN; > ;
+    };
+    ItemList [ swedish ] =
+    {
+            < "Skala" ;         ST_MENU_ZOOM; > ;
+        < "Uppåt" ;     ST_MENU_UP;     > ;
+        < "Nedåt" ;     ST_MENU_DOWN; > ;
+    };
+    ItemList [ polish ] =
+    {
+            < "~Skala" ;        ST_MENU_ZOOM; > ;
+        < "Do góry" ;   ST_MENU_UP;     > ;
+        < "Na dó³" ;    ST_MENU_DOWN; > ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+            < "~Maßstab" ;      ST_MENU_ZOOM; > ;
+        < "Nach ~oben" ;    ST_MENU_UP;     > ;
+        < "Nach ~unten" ;   ST_MENU_DOWN; > ;
+    };
+    ItemList [ japanese ] =
+    {
+            < "½Ş°Ñi~Zj" ;        ST_MENU_ZOOM; > ;
+        < "ã‚Ö(~U)" ;  ST_MENU_UP;     > ;
+        < "‰º‚Ö(~W)" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ korean ] =
+    {
+            < "Ãà¼Ò/È®´ë(~Z)" ;         ST_MENU_ZOOM; > ;
+        < "À§·Î(~U)" ;  ST_MENU_UP;     > ;
+        < "¾Æ·¡·Î(~W)" ;    ST_MENU_DOWN; > ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+            < "±ÈÀı" ;      ST_MENU_ZOOM; > ;
+        < "ÏòÉÏ" ;  ST_MENU_UP;     > ;
+        < "ÏòÏÂ" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+            < "Åã¥Ü¤ñ¨Ò" ;      ST_MENU_ZOOM; > ;
+        < "¦V¤W" ;  ST_MENU_UP;     > ;
+        < "¦V¤U" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ arabic ] =
+    {
+            < "ÊßÈíÑ/ÊÕÛíÑ" ;       ST_MENU_ZOOM; > ;
+        < "Åáì ÃÚáì" ;  ST_MENU_UP;     > ;
+        < "Åáì ÃÓİá" ;  ST_MENU_DOWN; > ;
+    };
+    ItemList [ turkish ] =
+    {
+            < "~Yakınlaştır" ;      ST_MENU_ZOOM; > ;
+        < "Y~ukarı" ;   ST_MENU_UP;     > ;
+        < "A~şağı" ;    ST_MENU_DOWN; > ;
+    };
+    };
+};

@@ -1,0 +1,201 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dialog.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "dialog.hrc"
+
+CheckBox CB_USE_PASSWD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ~Paßwort : ~Pa˜wort */
+    Text = "~Passwort" ;
+    Text [ ENGLISH ] = "~Password" ;
+    Text [ norwegian ] = "~Passord" ;
+    Text [ italian ] = "~Password" ;
+    Text [ portuguese_brazilian ] = "~Senha" ;
+    Text [ portuguese ] = "~Senha" ;
+    Text [ finnish ] = "~Salasana" ;
+    Text [ danish ] = "Adgangskode" ;
+    Text [ french ] = "~Mot de passe" ;
+    Text [ swedish ] = "~Lösenord" ;
+    Text [ dutch ] = "~Wachtwoord" ;
+    Text [ spanish ] = "~Contraseña" ;
+    Text [ english_us ] = "~Password" ;
+    Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+    Text[ russian ] = "Ïàğîëü";
+    Text[ polish ] = "Has³o";
+    Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
+    Text[ chinese_traditional ] = "±K½X(~P)";
+    Text[ arabic ] = "ßáãÉ ÇáÓÑ";
+    Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
+    Text[ korean ] = "ÆĞ½º¿öµå(~P)";
+    Text[ turkish ] = "Şifre";
+    Text[ language_user1 ] = " ";
+};
+CheckBox CB_READ_ONLY
+{
+    Text = "Nu~r lesen" ;
+    Text [ ENGLISH ] = "~Read only" ;
+    Text [ norwegian ] = "~Skrivebeskyttet" ;
+    Text [ italian ] = "~Sola lettura" ;
+    Text [ portuguese_brazilian ] = "~Só leitura" ;
+    Text [ portuguese ] = "~Só leitura" ;
+    Text [ finnish ] = "~Vain luku" ;
+    Text [ danish ] = "Skrivebeskyttet" ;
+    Text [ french ] = "En ~lecture seule" ;
+    Text [ swedish ] = "Sk~rivskyddad" ;
+    Text [ dutch ] = "~Alleen lezen" ;
+    Text [ spanish ] = "~Solo lectura" ;
+    Text [ english_us ] = "~Read only" ;
+    Text[ chinese_simplified ] = "Ö»¶Á(~R)";
+    Text[ russian ] = "Òîëüêî äëÿ ÷òåíèÿ";
+    Text[ polish ] = "Tylko do odczytu";
+    Text[ japanese ] = "“Ç‚İæ‚èê—p(~R)";
+    Text[ chinese_traditional ] = "°ßÅª(~R)";
+    Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
+    Text[ greek ] = "Ìüíï ãéá áíÜãíùóç";
+    Text[ korean ] = "ÀĞ±â Àü¿ë(~R)";
+    Text[ turkish ] = "~Salt okunur";
+    Text[ language_user1 ] = " ";
+};
+String STR_LINKEDIT_TEXT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Verknüpfungen bearbeiten : Verkn³pfungen bearbeiten */
+    Text = "Verknüpfungen bearbeiten" ;
+    Text [ ENGLISH ] = "Edit links" ;
+    Text [ norwegian ] = "Edit links" ;
+    Text [ italian ] = "Modifica collegamenti" ;
+    Text [ portuguese_brazilian ] = "Editar ligações" ;
+    Text [ portuguese ] = "Editar ligações" ;
+    Text [ finnish ] = "Muokkaa linkkejä" ;
+    Text [ danish ] = "Rediger kæder" ;
+    Text [ french ] = "Édition de liens" ;
+    Text [ swedish ] = "Redigera länkar" ;
+    Text [ dutch ] = "Koppelingen bewerken" ;
+    Text [ spanish ] = "Modificar vínculos" ;
+    Text [ english_us ] = "Edit links" ;
+    Text[ chinese_simplified ] = "±à¼­Á´½Ó";
+    Text[ russian ] = "Ïğàâêà ññûëîê";
+    Text[ polish ] = "Edytuj ³¹cza";
+    Text[ japanese ] = "Øİ¸‚Ì•ÒW";
+    Text[ chinese_traditional ] = "½s¿è±¶®|";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáÇÑÊÈÇØÇÊ";
+    Text[ greek ] = "Åğåîåñãáóßá óõíäİóåùí";
+    Text[ korean ] = "¿¬°á ÆíÁı";
+    Text[ turkish ] = "Bağlantıları düzenle";
+    Text[ language_user1 ] = " ";
+};
+String STR_PATH_NOT_FOUND1
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Das Verzeichnis ' : Das Verzeichnis '' */
+    Text = "Das Verzeichnis '" ;
+    Text [ English ] = "The directory '" ;
+    Text [ norwegian ] = "The directory '" ;
+    Text [ italian ] = "La cartella" ;
+    Text [ portuguese_brazilian ] = "O diretório" ;
+    Text [ portuguese ] = "O directório '" ;
+    Text [ finnish ] = "Hakemistoa '" ;
+    Text [ danish ] = "Biblioteket '" ;
+    Text [ french ] = "Le répertoire'" ;
+    Text [ swedish ] = "Mappen '" ;
+    Text [ dutch ] = "Map '" ;
+    Text [ spanish ] = "El directorio '" ;
+    Text [ english_us ] = "The directory '" ;
+    Text[ chinese_simplified ] = "Õâ¸öÄ¿Â¼ '";
+    Text[ russian ] = "Äèğåêòîğèÿ '";
+    Text[ polish ] = "Katalog";
+    Text[ japanese ] = "ÃŞ¨Ú¸ÄØ'";
+    Text[ language_user1 ] = " ";
+    Text[ chinese_traditional ] = "³o­Ó¥Ø¿ı '";
+    Text[ arabic ] = "ÇáÏáíá '";
+    Text[ greek ] = "Ï êáôÜëïãïò '";
+    Text[ korean ] = "µğ·ºÅä¸®'";
+    Text[ turkish ] = "Dizin '";
+};
+String STR_PATH_NOT_FOUND2
+{
+    /* ### ACHTUNG: Neuer Text in Resource? ' existiert nicht. : '' existiert nicht. */
+    /* ### ACHTUNG: Neuer Text in Resource? ' existiert nicht. : '' existiert nicht. */
+    Text = "' existiert nicht." ;
+    Text [ English ] = "' does not exist." ;
+    Text [ norwegian ] = "' does not exist." ;
+    Text [ italian ] = "' non esiste." ;
+    Text [ portuguese_brazilian ] = "' não existe." ;
+    Text [ portuguese ] = "' não existe." ;
+    Text [ finnish ] = "' ei ole." ;
+    Text [ danish ] = "' eksisterer ikke." ;
+    Text [ french ] = "' n'existe pas." ;
+    Text [ swedish ] = "' finns inte." ;
+    Text [ dutch ] = "' bestaat niet." ;
+    Text [ spanish ] = "' no existe." ;
+    Text [ english_us ] = "' does not exist." ;
+    Text[ chinese_simplified ] = "' ²»´æÔÚ¡£";
+    Text[ russian ] = "' íå ñóùåñòâóåò.";
+    Text[ polish ] = "nie istnieje.";
+    Text[ japanese ] = "'‚Í‘¶İ‚µ‚Ä‚¢‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "' ¤£¦s¦b¡C";
+    Text[ arabic ] = "' ÛíÑ ãæÌæÏ.";
+    Text[ greek ] = "' äåí õğÜñ÷åé.";
+    Text[ korean ] = "' °¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "' mevcut değil.";
+    Text[ language_user1 ] = " ";
+};
+String STR_FLT_SGV
+{
+    Text = "SGV - StarDraw 2.0,SGV" ;
+};

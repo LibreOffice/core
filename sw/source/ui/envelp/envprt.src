@@ -1,0 +1,372 @@
+/*************************************************************************
+ *
+ *  $RCSfile: envprt.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma *****************************************************************
+
+ // #include ****************************************************************
+#include "envprt.hrc"
+#include "helpid.h"
+ // TP_ENV_PRT ---------------------------------------------------------------
+TabPage TP_ENV_PRT
+{
+    HelpID = HID_ENV_PRT ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    ToolBox BOX_ALIGN
+    {
+        Pos = MAP_APPFONT ( 35 , 14 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = ITM_HOR_LEFT ;
+                HelpID = ITM_HOR_LEFT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ITM_HOR_CNTR ;
+                HelpID = ITM_HOR_CNTR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ITM_HOR_RGHT ;
+                HelpID = ITM_HOR_RGHT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ITM_VER_LEFT ;
+                HelpID = ITM_VER_LEFT ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ITM_VER_CNTR ;
+                HelpID = ITM_VER_CNTR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = ITM_VER_RGHT ;
+                HelpID = ITM_VER_RGHT ;
+            };
+        };
+    };
+    RadioButton BTN_TOP
+    {
+        Pos = MAP_APPFONT ( 12 , 39 ) ;
+        Size = MAP_APPFONT ( 166 , 10 ) ;
+        Text = "Von ~oben bedrucken" ;
+        Text [ ENGLISH ] = "Print upper side" ;
+        Text [ NORWEGIAN ] = "Print upper side" ;
+        Text [ DANISH ] = "Forsiden opad" ;
+        Text [ ENGLISH_US ] = "~Print from top" ;
+        Text [ SPANISH ] = "Imprimir r~everso" ;
+        Text [ FINNISH ] = "Tulosta ylıpuoli" ;
+        Text [ FRENCH ] = "Imprimer du ~haut" ;
+        Text [ ITALIAN ] = "Stampa da sopra" ;
+        Text [ DUTCH ] = "B~ovenkant bedrukken" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir parte superior" ;
+        Text [ SWEDISH ] = "Skriv ut u~ppifrÂn" ;
+        Text [ PORTUGUESE ] = "Imprimir a partir de cima" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "¥”…œ∑Ωø™ º¥Ú”°(~T)";
+        Text[ russian ] = "œÂ˜‡Ú‡Ú¸ Ò‚ÂıÛ";
+        Text[ polish ] = "Drukuj od gÛry";
+        Text[ japanese ] = "è„Ç©ÇÁàÛç¸(~T)";
+        Text[ chinese_traditional ] = "±q§W§Ë∂}©l¶C¶L(~T)";
+        Text[ arabic ] = "«·ÿ»«⁄… „‰ √⁄·Ï";
+        Text[ greek ] = "≈ÍÙ˝˘ÛÁ ·¸ ‹Ì˘";
+        Text[ korean ] = "¿ß∑Œ∫Œ≈Õ ¿Œº‚(~P)";
+        Text[ turkish ] = "‹stten yazd˝r";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_BOTTOM
+    {
+        Pos = MAP_APPFONT ( 12 , 52 ) ;
+        Size = MAP_APPFONT ( 166 , 10 ) ;
+        Text = "Von ~unten bedrucken" ;
+        Text [ ENGLISH ] = "Print lower side" ;
+        Text [ NORWEGIAN ] = "Print lower side" ;
+        Text [ DANISH ] = "Forsiden nedad" ;
+        Text [ ENGLISH_US ] = "Print from ~bottom" ;
+        Text [ SPANISH ] = "Imprimir ~anverso" ;
+        Text [ FINNISH ] = "Tulosta alapuoli" ;
+        Text [ FRENCH ] = "Imprimer du ~bas" ;
+        Text [ ITALIAN ] = "Stampa da sotto" ;
+        Text [ DUTCH ] = "~Onderkant bedrukken" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Imprimir parte inferior" ;
+        Text [ SWEDISH ] = "Skriv ~ut nedifrÂn" ;
+        Text [ PORTUGUESE ] = "Imprimir a partir de baixo" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¥”œ¬∑Ωø™ º¥Ú”°(~B)";
+        Text[ russian ] = "œÂ˜‡Ú‡Ú¸ ÒÌËÁÛ";
+        Text[ polish ] = "Drukuj od do≥u";
+        Text[ japanese ] = "â∫Ç©ÇÁàÛç¸(~B)";
+        Text[ chinese_traditional ] = "±q§U§Ë∂}©l¶C¶L(~B)";
+        Text[ arabic ] = "«·ÿ»«⁄… „‰ √”›·";
+        Text[ greek ] = "≈ÍÙ˝˘ÛÁ ·¸ Í‹Ù˘";
+        Text[ korean ] = "æ∆∑°∑Œ∫Œ≈Õ ¿Œº‚(~B)";
+        Text[ turkish ] = "Alttan yazd˝r";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText TXT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "Nach ~rechts" ;
+        Text [ ENGLISH ] = "Shift right" ;
+        Text [ NORWEGIAN ] = "Shift right" ;
+        Text [ DANISH ] = "Mod h¯jre" ;
+        Text [ ENGLISH_US ] = "~Shift right" ;
+        Text [ SPANISH ] = "Hacia la ~derecha" ;
+        Text [ FINNISH ] = "Siirrı oikealle" ;
+        Text [ FRENCH ] = "A ~droite" ;
+        Text [ ITALIAN ] = "Sposta a destra" ;
+        Text [ DUTCH ] = "Naar re~chts" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Trocar ” direita" ;
+        Text [ SWEDISH ] = "≈t hˆger" ;
+        Text [ PORTUGUESE ] = "¿ direita" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "œÚ”“(~S)";
+        Text[ russian ] = "¬Ô‡‚Ó";
+        Text[ polish ] = "Na prawo";
+        Text[ japanese ] = "âEÇ…(~S)";
+        Text[ chinese_traditional ] = "¶V•k(~S)";
+        Text[ arabic ] = "≈·Ï «·Ì„Ì‰";
+        Text[ greek ] = "–ÒÔÚ Ù· ‰ÂÓÈ‹";
+        Text[ korean ] = "ø¿∏•¬ ¿∏∑Œ π–±‚(~S)";
+        Text[ turkish ] = "S~aa";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_RIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 78 , 66 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_DOWN
+    {
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Nach unten" ;
+        Text [ ENGLISH ] = "Shift down" ;
+        Text [ NORWEGIAN ] = "Shift down" ;
+        Text [ DANISH ] = "Nedad" ;
+        Text [ ENGLISH_US ] = "Shift ~down" ;
+        Text [ SPANISH ] = "Hacia a~bajo" ;
+        Text [ FINNISH ] = "Siirrı alas" ;
+        Text [ FRENCH ] = "Vers le ~bas" ;
+        Text [ ITALIAN ] = "Sposta in basso" ;
+        Text [ DUTCH ] = "~Naar beneden" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Trocar abaixo" ;
+        Text [ SWEDISH ] = "~NedÂt" ;
+        Text [ PORTUGUESE ] = "Para baixo" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "œÚœ¬(~D)";
+        Text[ russian ] = "¬ÌËÁ";
+        Text[ polish ] = "W dÛ≥";
+        Text[ japanese ] = "â∫Ç…(~D)";
+        Text[ chinese_traditional ] = "¶V§U(~D)";
+        Text[ arabic ] = "≈·Ï √”›·";
+        Text[ greek ] = "–ÒÔÚ Ù· Í‹Ù˘";
+        Text[ korean ] = "æ∆∑°∑Œ π–±‚(~D)";
+        Text[ turkish ] = "~A˛a˝";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_DOWN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 78 , 81 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 0 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_PRINTER
+    {
+        Pos = MAP_APPFONT ( 12 , 111 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Text = "- Kein Drucker installiert -" ;
+        Text [ ENGLISH ] = "- No printer installed -" ;
+        Text [ NORWEGIAN ] = "- No printer installed -" ;
+        Text [ DANISH ] = "- Ingen printer installeret -" ;
+        Text [ ENGLISH_US ] = "- No printer installed -" ;
+        Text [ SPANISH ] = "- No hay instalada ninguna impresora -" ;
+        Text [ FINNISH ] = "- Kirjoitinta ei asennettu -" ;
+        Text [ FRENCH ] = "- Aucune imprimante installÈe -" ;
+        Text [ ITALIAN ] = "- Nessuna stampante installata -." ;
+        Text [ DUTCH ] = "- Geen printer geÔnstalleerd -" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "- Nenhuma impressora instalada -" ;
+        Text [ SWEDISH ] = "- Ingen skrivare installerad -" ;
+        Text [ PORTUGUESE ] = "- Nenhuma impressora instalada -" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "- √ª”–∞≤◊∞¥Ú”°ª˙ -";
+        Text[ russian ] = "- œËÌÚÂ ÌÂ ËÌÒÚ‡ÎÎËÓ‚‡Ì -";
+        Text[ polish ] = "- Drukarka nie jest zainstalowana -";
+        Text[ japanese ] = "- Ãﬂÿ›¿Ç™≤›Ωƒ∞ŸÇ≥ÇÍÇƒÇ¢Ç‹ÇπÇÒ -";
+        Text[ chinese_traditional ] = "- ®S¶≥¶w∏À¶L™Ìæ˜ -";
+        Text[ arabic ] = "- ·« ÌÊÃœ ÿ«»⁄… „À» … -";
+        Text[ greek ] = "- ƒÂÌ ›˜ÂÈ Â„Í·Ù·ÛÙ·ËÂﬂ ÂÍÙı˘ÙﬁÚ -";
+        Text[ korean ] = "- «¡∏∞≈Õ∞° º≥ƒ°µ«¡ˆ æ æ“Ω¿¥œ¥Ÿ. -";
+        Text[ turkish ] = "- Kurulu yaz˝c˝ yok -";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_NONAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 125 ) ;
+        Group = TRUE ;
+    };
+    PushButton BTN_PRTSETUP
+    {
+        Pos = MAP_APPFONT ( 201 , 109 ) ;
+        Size = MAP_APPFONT ( 48 , 14 ) ;
+        Text = "~Einrichten..." ;
+        Text [ ENGLISH ] = "Setup..." ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Setup..." ;
+        Text [ italian ] = "Imposta..." ;
+        Text [ spanish ] = "Configurar..." ;
+        Text [ french ] = "~ParamÈtrer..." ;
+        Text [ dutch ] = "~Configureren..." ;
+        Text [ swedish ] = "Inr‰~tta..." ;
+        Text [ danish ] = "Indstil..." ;
+        Text [ portuguese_brazilian ] = "Einrichten..." ;
+        Text [ portuguese ] = "~Configurar..." ;
+        Text[ chinese_simplified ] = "…Ë÷√(~S)...";
+        Text[ russian ] = "”ÒÚ‡ÌÓ‚ËÚ¸...";
+        Text[ polish ] = "Ustaw...";
+        Text[ japanese ] = "ê›íË...";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "≥]∏m...";
+        Text[ arabic ] = "...≈⁄œ«œ";
+        Text[ greek ] = "~≈„Í·Ù‹ÛÙ·ÛÁ...";
+        Text[ korean ] = "º≥¡§...";
+        Text[ turkish ] = "Ayarlar...";
+    };
+};
+ // Bitmaps ******************************************************************
+Bitmap BMP_HOR_LEFT_LOWER
+{
+    File = "envhl_l.bmp" ;
+};
+Bitmap BMP_HOR_LEFT_UPPER
+{
+    File = "envhl_u.bmp" ;
+};
+Bitmap BMP_HOR_CNTR_LOWER
+{
+    File = "envhc_l.bmp" ;
+};
+Bitmap BMP_HOR_CNTR_UPPER
+{
+    File = "envhc_u.bmp" ;
+};
+Bitmap BMP_HOR_RGHT_LOWER
+{
+    File = "envhr_l.bmp" ;
+};
+Bitmap BMP_HOR_RGHT_UPPER
+{
+    File = "envhr_u.bmp" ;
+};
+Bitmap BMP_VER_LEFT_LOWER
+{
+    File = "envvl_l.bmp" ;
+};
+Bitmap BMP_VER_LEFT_UPPER
+{
+    File = "envvl_u.bmp" ;
+};
+Bitmap BMP_VER_CNTR_LOWER
+{
+    File = "envvc_l.bmp" ;
+};
+Bitmap BMP_VER_CNTR_UPPER
+{
+    File = "envvc_u.bmp" ;
+};
+Bitmap BMP_VER_RGHT_LOWER
+{
+    File = "envvr_l.bmp" ;
+};
+Bitmap BMP_VER_RGHT_UPPER
+{
+    File = "envvr_u.bmp" ;
+};

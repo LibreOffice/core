@@ -1,0 +1,412 @@
+/*************************************************************************
+ *
+ *  $RCSfile: swbreak.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "chrdlg.hrc"
+#include "break.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ // #define DLG_BREAK 256
+ModalDialog DLG_BREAK
+{
+    HelpID = FN_INSERT_BREAK_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 161 , 114 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Umbruch einf¸gen : Umbruch einf≥gen */
+    Text = "Umbruch einf¸gen" ;
+    Text [ ENGLISH ] = "Insert Break" ;
+    Text [ norwegian ] = "Sett inn Skift" ;
+    Text [ italian ] = "Inserisci interruzione" ;
+    Text [ portuguese_brazilian ] = "Inserir InterrupÁ„o" ;
+    Text [ portuguese ] = "Inserir quebra" ;
+    Text [ finnish ] = "Lis‰‰ vaihto" ;
+    Text [ danish ] = "IndsÊt skift" ;
+    Text [ french ] = "InsÈrer un saut" ;
+    Text [ swedish ] = "Infoga brytning" ;
+    Text [ dutch ] = "Einde invoegen" ;
+    Text [ spanish ] = "Insertar salto" ;
+    Text [ english_us ] = "Insert Break" ;
+    Moveable = TRUE ;
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 105 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    RadioButton RB_LINE
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "~Zeilenumbruch" ;
+        Text [ ENGLISH ] = "~Line break" ;
+        Text [ norwegian ] = "~Linjeskift" ;
+        Text [ italian ] = "I~nterruzione riga" ;
+        Text [ portuguese_brazilian ] = "~Quebra de linha" ;
+        Text [ portuguese ] = "~Quebra de linha" ;
+        Text [ finnish ] = "~Rivinvaihto" ;
+        Text [ danish ] = "Linjeskift" ;
+        Text [ french ] = "R~envoi ‡ la ligne" ;
+        Text [ swedish ] = "~Radbrytning" ;
+        Text [ dutch ] = "~Regeleinde" ;
+        Text [ spanish ] = "Salto de ~lÌnea" ;
+        Text [ english_us ] = "~Line break" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "ªª––(~L)";
+        Text[ russian ] = "–‡Á˚‚ ÒÚÓÍË";
+        Text[ polish ] = "Podzia≥ ~wierszy";
+        Text[ japanese ] = "â¸çs(~L)";
+        Text[ chinese_traditional ] = "¥´¶Ê(~L)";
+        Text[ arabic ] = "›«’· √”ÿ—";
+        Text[ greek ] = "¡ÎÎ·„ﬁ „Ò·ÏÏﬁÚ";
+        Text[ korean ] = "º± ≥™¥©±‚(~L)";
+        Text[ turkish ] = "Sat˝r sonu";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_PAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 39 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Text = "~Seitenumbruch" ;
+        Text [ ENGLISH ] = "~Page break" ;
+        Text [ norwegian ] = "~Sideskift" ;
+        Text [ italian ] = "In~terruzione pagina" ;
+        Text [ portuguese_brazilian ] = "~Quebra de p·gina" ;
+        Text [ portuguese ] = "~Quebra de p·gina" ;
+        Text [ finnish ] = "~Sivunvaihto" ;
+        Text [ danish ] = "Sideskift" ;
+        Text [ french ] = "Saut de p~age" ;
+        Text [ swedish ] = "~Sidbrytning" ;
+        Text [ dutch ] = "~Pagina-einde" ;
+        Text [ spanish ] = "Salto de ~p·gina" ;
+        Text [ english_us ] = "~Page break" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "ªª“≥(~P)";
+        Text[ russian ] = "–‡Á˚‚ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "Podzia≥ stron";
+        Text[ japanese ] = "â¸Õﬂ∞ºﬁ(~P)";
+        Text[ chinese_traditional ] = "¥´≠∂(~P)";
+        Text[ arabic ] = "›«’· ’›Õ« ";
+        Text[ greek ] = "¡ÎÎ·„ﬁ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "∆‰¿Ã¡ˆ ≥™¥©±‚(~P)";
+        Text[ turkish ] = "~Sayfa sonu";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_COL
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Text = "S~paltenumbruch" ;
+        Text [ ENGLISH ] = "~Column break" ;
+        Text [ norwegian ] = "~Kolonneskift" ;
+        Text [ italian ] = "Interr~uzione colonna" ;
+        Text [ portuguese_brazilian ] = "~Quebra de coluna" ;
+        Text [ portuguese ] = "~Quebra de coluna" ;
+        Text [ finnish ] = "~Palstanvaihto" ;
+        Text [ danish ] = "Spalteskift" ;
+        Text [ french ] = "Saut de ~colonne" ;
+        Text [ swedish ] = "Kolumnbrytning" ;
+        Text [ dutch ] = "~Kolomeinde" ;
+        Text [ spanish ] = "Salto de colu~mna" ;
+        Text [ english_us ] = "~Column break" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ªª¿∏(~C)";
+        Text[ russian ] = "–‡Á˚‚ ÍÓÎÓÌÍË";
+        Text[ polish ] = "Podzia≥ kolumny";
+        Text[ japanese ] = "â¸íi(~C)";
+        Text[ chinese_traditional ] = "¥´ƒÊ(~C)";
+        Text[ arabic ] = "›«’· √⁄„œ…";
+        Text[ greek ] = "¡ÎÎ·„ﬁ ÛÙﬁÎÁÚ";
+        Text[ korean ] = "ø≠ ≥™¥©±‚(~C)";
+        Text[ turkish ] = "S¸tun sonu";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_BREAK
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93 , 105 ) ;
+        Text = "Art" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Type" ;
+        Text [ french ] = "Type" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ dutch ] = "Type" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ english_us ] = "Type" ;
+        Text[ chinese_simplified ] = "¿‡–Õ";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "éÌóﬁ";
+        Text[ chinese_traditional ] = "√˛´¨";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ greek ] = "‘˝ÔÚ";
+        Text[ korean ] = "«¸≈¬";
+        Text[ turkish ] = "T¸r";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_COLL
+    {
+        Pos = MAP_APPFONT ( 12 , 51 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text = "~Vorlage" ;
+        Text [ ENGLISH ] = "~Style" ;
+        Text [ norwegian ] = "~Style" ;
+        Text [ italian ] = "Modello" ;
+        Text [ portuguese_brazilian ] = "~Estilo" ;
+        Text [ portuguese ] = "~Estilo" ;
+        Text [ finnish ] = "~Tyyli" ;
+        Text [ danish ] = "Typografi" ;
+        Text [ french ] = "~Style" ;
+        Text [ swedish ] = "~Formatmall" ;
+        Text [ dutch ] = "~Profiel" ;
+        Text [ spanish ] = "~Estilo" ;
+        Text [ english_us ] = "~Style" ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "—˘ Ω(~S)";
+        Text[ russian ] = "ÿ‡·ÎÓÌ";
+        Text[ polish ] = "Szablon";
+        Text[ japanese ] = "Ω¿≤Ÿ(~S)";
+        Text[ chinese_traditional ] = "ºÀ¶°(~S)";
+        Text[ arabic ] = "‰„ÿ";
+        Text[ greek ] = "–Ò¸ÙıÔ";
+        Text[ korean ] = "¿Ø«¸(~S)";
+        Text[ turkish ] = "~BiÁim";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_COLL
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 75 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "[Ohne]" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "[Ohne]" ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "[Ohne]" ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "[Nessuno]" ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "[Nenhum]" ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "[sem]" ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "[Ohne]" ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "[Uden]" ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "[Aucun]" ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "[Utan]" ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "[Geen]" ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "[Sin]" ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "[None]" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+             < "[Œﬁ]" ; > ;
+    };
+    StringList [ russian ] =
+    {
+             < "[¡ÂÁ]" ; > ;
+    };
+    StringList [ polish ] =
+    {
+             < "[Brak]" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+             < "[Ç»Çµ]" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+             < "[µL]" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+             < "[»œÊ‰]" ; > ;
+    };
+    StringList [ greek ] =
+    {
+             < "[◊˘ÒﬂÚ]" ; > ;
+    };
+    StringList [ korean ] =
+    {
+             < "[æ¯¿Ω]" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+             < "[Yok]" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+             < " " ; > ;
+    };
+    };
+    CheckBox CB_PAGENUM
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Seitennummer ~‰ndern : Seitennummer ~ındern */
+        Text = "Seitennummer ~‰ndern" ;
+        Text [ English ] = "Change page number" ;
+        Text [ norwegian ] = "Endre sidenummer" ;
+        Text [ italian ] = "Cambia numero pagina" ;
+        Text [ portuguese_brazilian ] = "Mudar n˙mero de p·gina" ;
+        Text [ portuguese ] = "Alterar n˙mero de p·gina" ;
+        Text [ finnish ] = "Muuttaa sivunumeroa" ;
+        Text [ danish ] = "Modificer sidetal" ;
+        Text [ french ] = "Modifier ~no. de page" ;
+        Text [ swedish ] = "~ƒndra sidnummer" ;
+        Text [ dutch ] = "~Paginanummer wijzigen" ;
+        Text [ spanish ] = "Cam~biar n˙mero de p·gina" ;
+        Text [ english_us ] = "Change page ~number" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "∏¸∏ƒ“≥¬Î(~N)";
+        Text[ russian ] = "»ÁÏÂÌËÚ¸ ÌÓÏÂ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "ZmieÒ numer strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁî‘çÜÇÃïœçX(~N)";
+        Text[ chinese_traditional ] = "≈‹ßÛ≠∂ΩX(~N)";
+        Text[ arabic ] = " €ÌÌ— —ﬁ„ «·’›Õ…";
+        Text[ greek ] = "¡ÎÎ·„ﬁ ·ÒÈËÏÔ˝ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "∆‰¿Ã¡ˆ π¯»£ ∫Ø∞Ê(~N)";
+        Text[ turkish ] = "Sayfa numaras˝n˝ dei˛tir";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField ED_PAGENUM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 31 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 9999 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 9999 ;
+    };
+    Text[ chinese_simplified ] = "≤Â»Îªª––";
+    Text[ russian ] = "¬ÒÚ‡‚ËÚ¸ ‡Á˚‚";
+    Text[ polish ] = "Wstaw podzia≥";
+    Text[ japanese ] = "ãÊêÿÇËÇÃë}ì¸";
+    Text[ chinese_traditional ] = "¥°§J¥´¶Ê";
+    Text[ arabic ] = "≈œ—«Ã ›«’·";
+    Text[ greek ] = "≈ÈÛ·„˘„ﬁ ·ÎÎ·„ﬁÚ";
+    Text[ korean ] = "≥™¥©±‚ ª¿‘";
+    Text[ turkish ] = "Kesme ekle";
+    Text[ language_user1 ] = " ";
+};

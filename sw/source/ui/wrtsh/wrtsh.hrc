@@ -1,0 +1,206 @@
+/*************************************************************************
+ *
+ *  $RCSfile: wrtsh.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _WRTSH_HRC
+#define _WRTSH_HRC
+
+#include "rcid.hrc"
+
+#define DLG_GOTO                (RC_WRTSH_BEGIN +  1)
+
+
+#define STR_DDEERROR_APP1       (RC_WRTSH_BEGIN +  2)
+#define STR_DDEERROR_APP2       (RC_WRTSH_BEGIN +  3)
+#define STR_DDEERROR_DATA1      (RC_WRTSH_BEGIN +  4)
+#define STR_DDEERROR_DATA2      (RC_WRTSH_BEGIN +  5)
+#define STR_DDEERROR_LINK1      (RC_WRTSH_BEGIN +  6)
+#define STR_DDEERROR_LINK2      (RC_WRTSH_BEGIN +  7)
+
+
+// Undo
+#define UNDO_BASE               (RC_WRTSH_BEGIN +  8)
+#define STR_CANT_UNDO           (UNDO_BASE      +  0)
+
+// im enun folgen hier START & END fuer die Klammerungen,
+
+// Id's fuer die Undo/Redo/Repeat faehigen "Funktionen"
+#define STR_DELETE_UNDO         (UNDO_BASE      + 3)
+#define STR_INSERT_UNDO         (UNDO_BASE      + 4)
+#define STR_OVR_UNDO            (UNDO_BASE      + 5)
+#define STR_SPLITNODE_UNDO      (UNDO_BASE      + 6)
+#define STR_INSATTR_UNDO        (UNDO_BASE      + 7)
+#define STR_SETFMTCOLL_UNDO     (UNDO_BASE      + 8)
+#define STR_RESET_ATTR_UNDO     (UNDO_BASE      + 9)
+#define STR_APPLY_ATTR_UNDO     (UNDO_BASE      +10)
+#define STR_INSERT_DOC_UNDO     (UNDO_BASE      +11)
+#define STR_COPY_UNDO           (UNDO_BASE      +12)
+#define STR_INSTABLE_UNDO       (UNDO_BASE      +13)
+#define STR_TABLETOTEXT_UNDO    (UNDO_BASE      +14)
+#define STR_TEXTTOTABLE_UNDO    (UNDO_BASE      +15)
+#define STR_SORT_TXT            (UNDO_BASE      +16)
+#define STR_INSERTFLY           (UNDO_BASE      +17)
+#define STR_TABLEHEADLINE       (UNDO_BASE      +18)
+#define STR_INSERTSECTION       (UNDO_BASE      +19)
+#define STR_OUTLINE_LR          (UNDO_BASE      +20)
+#define STR_OUTLINE_UD          (UNDO_BASE      +21)
+#define STR_INSNUM              (UNDO_BASE      +22)
+#define STR_NUMUPDOWN           (UNDO_BASE      +23)
+#define STR_MOVENUM             (UNDO_BASE      +24)
+#define STR_INSERTDRAW          (UNDO_BASE      +25)
+#define STR_NUMORNONUM          (UNDO_BASE      +26)
+#define STR_INC_LEFTMARGIN      (UNDO_BASE      +27)
+#define STR_DEC_LEFTMARGIN      (UNDO_BASE      +28)
+#define STR_INSERTLABEL         (UNDO_BASE      +29)
+#define STR_SETNUMRULESTART     (UNDO_BASE      +30)
+#define STR_CHANGEFTN           (UNDO_BASE      +31)
+#define STR_REDLINE             (UNDO_BASE      +32)
+#define STR_ACCEPT_REDLINE      (UNDO_BASE      +33)
+#define STR_REJECT_REDLINE      (UNDO_BASE      +34)
+#define STR_SPLIT_TABLE         (UNDO_BASE      +35)
+#define STR_DONTEXPAND          (UNDO_BASE      +36)
+#define STR_AUTOCORRECT         (UNDO_BASE      +37)
+#define STR_MERGE_TABLE         (UNDO_BASE      +38)
+
+#define STR_REPEAT_DUMMY_3      (UNDO_BASE      +39)
+#define STR_REPEAT_DUMMY_4      (UNDO_BASE      +40)
+#define STR_REPEAT_DUMMY_5      (UNDO_BASE      +41)
+#define STR_REPEAT_DUMMY_6      (UNDO_BASE      +42)
+#define STR_REPEAT_DUMMY_7      (UNDO_BASE      +43)
+#define STR_REPEAT_DUMMY_8      (UNDO_BASE      +44)
+#define STR_REPEAT_DUMMY_9      (UNDO_BASE      +45)
+// !!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!
+#define CORE_REPEAT_END          STR_REPEAT_DUMMY_9// !!!! umsetzen !!!
+
+
+// Id's nur fuer die Undo/Redo faehigen "Funktionen"
+#define STR_MOVE_UNDO           (CORE_REPEAT_END      + 1)
+#define STR_INSERT_GLOSSARY     (CORE_REPEAT_END      + 2)
+#define STR_DELBOOKMARK         (CORE_REPEAT_END      + 3)
+#define STR_INSBOOKMARK         (CORE_REPEAT_END      + 4)
+#define STR_SORT_TBL            (CORE_REPEAT_END      + 5)
+#define STR_DELETEFLY           (CORE_REPEAT_END      + 6)
+#define STR_AUTOFORMAT          (CORE_REPEAT_END      + 7)
+#define STR_REPLACE             (CORE_REPEAT_END      + 8)
+#define STR_DELETESECTION       (CORE_REPEAT_END      + 9)
+#define STR_CHANGESECTION       (CORE_REPEAT_END      +10)
+#define STR_CHANGESECTPASSWD    (CORE_REPEAT_END      +11)
+#define STR_CHANGEDEFATTR       (CORE_REPEAT_END      +12)
+#define STR_DELNUM              (CORE_REPEAT_END      +13)
+#define STR_DRAWUNDO            (CORE_REPEAT_END      +14)
+#define STR_DRAWGROUP           (CORE_REPEAT_END      +15)
+#define STR_DRAWUNGROUP         (CORE_REPEAT_END      +16)
+#define STR_DRAWDELETE          (CORE_REPEAT_END      +17)
+#define STR_REREAD              (CORE_REPEAT_END      +18)
+#define STR_DELGRF              (CORE_REPEAT_END      +19)
+#define STR_DELOLE              (CORE_REPEAT_END      +20)
+#define STR_TABLE_ATTR          (CORE_REPEAT_END      +21)
+#define STR_TABLE_AUTOFMT       (CORE_REPEAT_END      +22)
+#define STR_TABLE_INSCOL        (CORE_REPEAT_END      +23)
+#define STR_TABLE_INSROW        (CORE_REPEAT_END      +24)
+#define STR_TABLE_DELBOX        (CORE_REPEAT_END      +25)
+#define STR_TABLE_SPLIT         (CORE_REPEAT_END      +26)
+#define STR_TABLE_MERGE         (CORE_REPEAT_END      +27)
+#define STR_TABLE_NUMFORMAT     (CORE_REPEAT_END      +28)
+#define STR_INSERT_TOX          (CORE_REPEAT_END      +29)
+#define STR_CLEAR_TOX_RANGE     (CORE_REPEAT_END      +30)
+#define STR_TABLE_TBLCPYTBL     (CORE_REPEAT_END      +31)
+#define STR_TABLE_CPYTBL        (CORE_REPEAT_END      +32)
+#define STR_INS_FROM_SHADOWCRSR (CORE_REPEAT_END      +33)
+#define STR_UNDO_CHAIN          (CORE_REPEAT_END      +34)
+#define STR_UNDO_UNCHAIN        (CORE_REPEAT_END      +35)
+#define STR_UNDO_FTNINFO        (CORE_REPEAT_END      +36)
+#define STR_UNDO_ENDNOTEINFO    (CORE_REPEAT_END      +37)
+#define STR_UNDO_COMPAREDOC     (CORE_REPEAT_END      +38)
+#define STR_UNDO_SETFLYFRMFMT   (CORE_REPEAT_END      +39)
+
+#define STR_UNDO_DUMMY_1        (CORE_REPEAT_END      +40)
+#define STR_UNDO_DUMMY_2        (CORE_REPEAT_END      +41)
+#define STR_UNDO_DUMMY_3        (CORE_REPEAT_END      +42)
+#define STR_UNDO_DUMMY_4        (CORE_REPEAT_END      +43)
+#define STR_UNDO_DUMMY_5        (CORE_REPEAT_END      +44)
+#define STR_UNDO_DUMMY_6        (CORE_REPEAT_END      +45)
+#define STR_UNDO_DUMMY_7        (CORE_REPEAT_END      +46)
+#define STR_UNDO_DUMMY_8        (CORE_REPEAT_END      +47)
+#define STR_UNDO_DUMMY_9        (CORE_REPEAT_END      +48)
+// !!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!!!!!!!! umsetzen !!!!
+#define CORE_UNDO_END           STR_UNDO_DUMMY_9// !!!! umsetzen !!!
+
+// UI-Undo Klammerungen
+#define UI_UNDO_BEGIN                   (CORE_UNDO_END + 1)
+#define STR_REPLACE_UNDO                (UI_UNDO_BEGIN)
+#define STR_INSERT_PAGE_BREAK_UNDO      (UI_UNDO_BEGIN + 1)
+#define STR_INSERT_COLUMN_BREAK_UNDO    (UI_UNDO_BEGIN + 2)
+#define STR_PLAY_MACRO_UNDO             (UI_UNDO_BEGIN + 3)
+#define STR_INSERT_ENV_UNDO             (UI_UNDO_BEGIN + 4)
+#define STR_DRAG_AND_COPY               (UI_UNDO_BEGIN + 5)
+#define STR_DRAG_AND_MOVE               (UI_UNDO_BEGIN + 6)
+#define STR_INSERT_RULER                (UI_UNDO_BEGIN + 7)
+#define STR_INSERT_CHART                (UI_UNDO_BEGIN + 8)
+#define STR_INSERT_FOOTNOTE             (UI_UNDO_BEGIN + 9)
+#define STR_INSERT_URLBTN               (UI_UNDO_BEGIN + 10)
+#define STR_INSERT_URLTXT               (UI_UNDO_BEGIN + 11)
+#define STR_DELETE_INVISIBLECNTNT       (UI_UNDO_BEGIN + 12)
+#define UNDO_ACT_END            STR_DELETE_INVISIBLECNTNT
+
+#if WRTSH_ACT_END > RC_WRTSH_END
+#error Resource-Id Ueberlauf
+#endif
+
+#endif

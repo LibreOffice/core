@@ -1,0 +1,223 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   wviewsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wviewsh.sdi,v 1.1.1.1 2000-09-18 17:14:31 hr Exp $
+
+    Beschreibung:   allgemeine interfaces fuer View
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface WebTextInTable : Selection
+[ uuid = "B47F0DE7-1E1F-11d1-89CA-008029E4B0B1" ]
+{
+    import WebText;
+        import WebTable;
+}
+
+interface WebListInTable : Selection
+[ uuid="B47F0DE8-1E1F-11d1-89CA-008029E4B0B1" ]
+{
+    import WebText;
+        import WebList;
+        import WebTable;
+}
+
+interface WebListInText : Selection
+[ uuid = "B47F0DE9-1E1F-11d1-89CA-008029E4B0B1"]
+{
+    import WebList;
+    import WebText;
+}
+
+interface WebEditView : BaseTextEditView
+[
+    uuid = "B47F0DEA-1E1F-11d1-89CA-008029E4B0B1"
+]
+{
+    SID_DRAW_TEXT_MARQUEE // status()
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_INSERT_HEADER
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+    ]
+    FN_INSERT_FOOTER
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+    ]
+}
+
+shell SwWebView : SfxViewShell
+{
+    import WebEditView [Automation];
+//  import SearchSettings;
+//  import TextPage "Page";
+//  import SearchAttributes;
+//  import ReplaceAttributes;
+
+}
+
+interface WebSourceView : View
+[ uuid = "95069CE0-69D8-101D-9757-C667E8298000"]
+{
+    SID_TABLE_CELL // status()
+    [
+        StateMethod = GetState ;
+    ]
+    SID_SAVEASDOC // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SAVEDOC // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOC // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOCDIRECT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_CHAR_FONT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_FONTHEIGHT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_SEARCH_OPTIONS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_SEARCH_ITEM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+    ]
+    FID_SEARCH_NOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_UNDO // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_REDO // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_REPEAT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CUT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Volatile;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_COPY   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Volatile;
+    ]
+
+    SID_PASTE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_SELECTALL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+}
+
+shell SwSrcView : SfxViewShell
+
+{
+        import WebSourceView [Automation];
+}
+
+
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.12  2000/05/26 07:06:20  os
+    old SW Basic API Slots removed
+
+    Revision 1.11  2000/05/10 12:00:11  os
+    Basic API removed
+
+    Revision 1.10  1999/03/23 11:16:34  MA
+    #63806# ConfigName und HelpText entfernt
+
+
+      Rev 1.9   23 Mar 1999 12:16:34   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.8   12 Nov 1998 17:29:12   MA
+   #58677# Disable Flag
+
+      Rev 1.7   11 Jul 1998 15:28:30   OS
+   HTML-Quelltext ins Medium der DocShell speichern #52379#
+
+      Rev 1.6   13 Mar 1998 08:32:26   OS
+   SID_NEWWINDOW nicht mehr ueberladen
+
+      Rev 1.5   28 Aug 1997 12:52:16   MBA
+   Neue Interface-Namen
+
+      Rev 1.4   14 Apr 1997 16:03:00   OS
+   neu: SearchAttributes und ReplaceAttributes
+
+      Rev 1.3   12 Feb 1997 12:19:16   OM
+   Kopf/Fusszeilen im Webmode
+
+      Rev 1.2   11 Feb 1997 14:04:06   OM
+   Lauftext im Webmode
+
+      Rev 1.1   10 Feb 1997 17:28:50   OM
+   Lauftext
+
+      Rev 1.0   23 Jan 1997 08:41:46   OS
+   Initial revision.
+
+------------------------------------------------------------------------*/
+

@@ -1,0 +1,168 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ribbar.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _RIBBAR_HRC
+#define _RIBBAR_HRC
+
+#include "rcid.hrc"
+
+#define MN_FORM1        1           // Defines fuer NumNames-Popup
+#define MN_FORMBASE     MN_FORM1
+#define MN_FORM2        2
+#define MN_FORM3        3
+#define MN_FORM4        4
+#define MN_FORM5        5
+
+#define WIN_RIBBAR          RC_RIBBAR_BEGIN
+
+#define CB_FORMAT           (RC_RIBBAR_BEGIN +1)
+#define CB_FONT             (RC_RIBBAR_BEGIN +2)
+#define CB_SIZE             (RC_RIBBAR_BEGIN +3)
+#define PB_FORMULA_OK       (RC_RIBBAR_BEGIN +4)
+#define PB_FORMULA_CANCEL   (RC_RIBBAR_BEGIN +5)
+#define BMP_OK              PB_FORMULA_OK
+#define BMP_CANCEL          PB_FORMULA_CANCEL
+#define RID_TBX_FORMULA     (RC_RIBBAR_BEGIN +6)
+#define FT_POS              (RC_RIBBAR_BEGIN +7)
+#define BT_FORMULA          (RC_RIBBAR_BEGIN +8)
+#define STR_FORMULA         (RC_RIBBAR_BEGIN +9)
+
+#define STR_BACKGROUND_PATTERN      (RC_RIBBAR_BEGIN + 10)
+#define STR_BACKGROUND_COLOR        (RC_RIBBAR_BEGIN + 11)
+#define STR_BORDER_COLOR            (RC_RIBBAR_BEGIN + 12)
+#define STR_BORDER_STYLE            (RC_RIBBAR_BEGIN + 13)
+#define STR_BORDER_LINE             (RC_RIBBAR_BEGIN + 14)
+#define STR_TEXT_COLOR              (RC_RIBBAR_BEGIN + 15)
+#define STR_NUMLIST                 (RC_RIBBAR_BEGIN + 16)
+
+#define STR_HELP_TOOLBOX_TOGGLE     (RC_RIBBAR_BEGIN + 17)
+
+#define RID_DRAW_WIN                (RC_RIBBAR_BEGIN + 18)
+#define RID_CNTRLR_WIN              (RC_RIBBAR_BEGIN + 19)
+#define RID_ALIGNMENT_WIN           (RC_RIBBAR_BEGIN + 20)
+
+//Resourcen fuer Inputwin (Rechenleiste)
+#define RID_WIN_FORMULA             (RC_RIBBAR_BEGIN + 21)
+#define MN_CALC_POPUP               (RC_RIBBAR_BEGIN + 22)
+
+#define MN_NUMNAMES_POPUP           (RC_RIBBAR_BEGIN + 23)
+#define RID_INSERT_CTRL             (RC_RIBBAR_BEGIN + 24)
+#define RID_INSERT_OBJ_CTRL         (RC_RIBBAR_BEGIN + 25)
+#define RID_INSERT_FIELD_CTRL       (RC_RIBBAR_BEGIN + 26)
+#define RID_TBL_OPT_CTRL            (RC_RIBBAR_BEGIN + 27)
+#define RID_BEZIER_WIN              (RC_RIBBAR_BEGIN + 28)
+#define RID_SCROLL_NAVI_TBX         (RC_RIBBAR_BEGIN + 29)
+#define RID_SCROLL_NAVIGATION_WIN   (RC_RIBBAR_BEGIN + 30)
+
+#define STR_IMGBTN_START            (RC_RIBBAR_BEGIN + 31)
+
+#define STR_IMGBTN_NEXT_DOWN        (STR_IMGBTN_START + 0)
+#define STR_IMGBTN_PREV_DOWN        (STR_IMGBTN_START + 1)
+#define STR_IMGBTN_TBL_DOWN         (STR_IMGBTN_START + 2)
+#define STR_IMGBTN_FRM_DOWN         (STR_IMGBTN_START + 3)
+#define STR_IMGBTN_PGE_DOWN         (STR_IMGBTN_START + 4)
+#define STR_IMGBTN_DRW_DOWN         (STR_IMGBTN_START + 5)
+#define STR_IMGBTN_CTRL_DOWN        (STR_IMGBTN_START + 6)
+#define STR_IMGBTN_REG_DOWN         (STR_IMGBTN_START + 7)
+#define STR_IMGBTN_BKM_DOWN         (STR_IMGBTN_START + 8)
+#define STR_IMGBTN_GRF_DOWN         (STR_IMGBTN_START + 9)
+#define STR_IMGBTN_OLE_DOWN         (STR_IMGBTN_START +10)
+#define STR_IMGBTN_OUTL_DOWN        (STR_IMGBTN_START +11)
+#define STR_IMGBTN_SEL_DOWN         (STR_IMGBTN_START +12)
+#define STR_IMGBTN_FTN_DOWN         (STR_IMGBTN_START +13)
+#define STR_IMGBTN_MARK_DOWN        (STR_IMGBTN_START +14)
+#define STR_IMGBTN_POSTIT_DOWN      (STR_IMGBTN_START +15)
+#define STR_IMGBTN_SRCH_REP_DOWN    (STR_IMGBTN_START +16)
+#define STR_IMGBTN_INDEX_ENTRY_DOWN (STR_IMGBTN_START +17)
+#define STR_IMGBTN_TBLFML_DOWN      (STR_IMGBTN_START +18)
+#define STR_IMGBTN_TBLFML_ERR_DOWN  (STR_IMGBTN_START +19)
+
+#define STR_IMGBTN_NEXT_UP          (STR_IMGBTN_START +20)
+#define STR_IMGBTN_PREV_UP      (STR_IMGBTN_START +21)
+#define STR_IMGBTN_TBL_UP           (STR_IMGBTN_START +22)
+#define STR_IMGBTN_FRM_UP           (STR_IMGBTN_START +23)
+#define STR_IMGBTN_PGE_UP           (STR_IMGBTN_START +24)
+#define STR_IMGBTN_DRW_UP           (STR_IMGBTN_START +25)
+#define STR_IMGBTN_CTRL_UP          (STR_IMGBTN_START +26)
+#define STR_IMGBTN_REG_UP           (STR_IMGBTN_START +27)
+#define STR_IMGBTN_BKM_UP           (STR_IMGBTN_START +28)
+#define STR_IMGBTN_GRF_UP           (STR_IMGBTN_START +29)
+#define STR_IMGBTN_OLE_UP           (STR_IMGBTN_START +30)
+#define STR_IMGBTN_OUTL_UP          (STR_IMGBTN_START +31)
+#define STR_IMGBTN_SEL_UP           (STR_IMGBTN_START +32)
+#define STR_IMGBTN_FTN_UP           (STR_IMGBTN_START +33)
+#define STR_IMGBTN_MARK_UP          (STR_IMGBTN_START +34)
+#define STR_IMGBTN_POSTIT_UP        (STR_IMGBTN_START +35)
+#define STR_IMGBTN_SRCH_REP_UP      (STR_IMGBTN_START +36)
+#define STR_IMGBTN_INDEX_ENTRY_UP   (STR_IMGBTN_START +37)
+#define STR_IMGBTN_TBLFML_UP        (STR_IMGBTN_START +38)
+#define STR_IMGBTN_TBLFML_ERR_UP    (STR_IMGBTN_START +39)
+
+#define BTN_NAVI                    (STR_IMGBTN_START +40)
+
+#define MN_ANCHOR_POPUP             (STR_IMGBTN_START +41)
+
+#define RC_RIBBAR_ACT_END           MN_ANCHOR_POPUP
+
+#if  RC_RIBBAR_ACT_END   >  RC_RIBBAR_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

@@ -1,0 +1,380 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fldfunc.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabPage TP_FLD_FUNC
+{
+    HelpID = HID_FLD_FUNC ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Funktionen" ;
+    Text [ ENGLISH ] = "Functions" ;
+    FixedText FT_FUNCTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Feldtyp" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "~Tipo di campo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo de ~campo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Felttype" ;
+        Text [ french ] = "~Type de champ" ;
+        Text [ swedish ] = "~F‰lttyp" ;
+        Text [ dutch ] = "~Veldtype" ;
+        Text [ spanish ] = "~Tipo de campo" ;
+        Text [ english_us ] = "~Type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "◊÷∂Œ¿‡–Õ(~T)";
+        Text[ russian ] = "“ËÔ ÔÓÎˇ";
+        Text[ polish ] = "Typ pola";
+        Text[ japanese ] = "Ã®∞ŸƒﬁÇÃéÌóﬁ(~T)";
+        Text[ chinese_traditional ] = "√˛´¨(~T)";
+        Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
+        Text[ greek ] = "~‘˝ÔÚ Â‰ﬂÔı";
+        Text[ korean ] = "«¸≈¬(~T)";
+        Text[ turkish ] = "~Alan tipi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_FUNCTYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+        Sort = FALSE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_FUNCSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Auswahl" ;
+        Text [ ENGLISH ] = "Selection" ;
+        Text [ norwegian ] = "Selection" ;
+        Text [ italian ] = "~Selezione" ;
+        Text [ portuguese_brazilian ] = "SeleÁ„o" ;
+        Text [ portuguese ] = "~SelecÁ„o" ;
+        Text [ finnish ] = "Valinta" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ french ] = "~SÈlection" ;
+        Text [ swedish ] = "~Urval" ;
+        Text [ dutch ] = "~Selectie" ;
+        Text [ spanish ] = "Se~lecciÛn" ;
+        Text [ english_us ] = "S~elect" ;
+        Hide = TRUE ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "—°‘Ò(~E)";
+        Text[ russian ] = "¬˚·Ó";
+        Text[ polish ] = "WybÛr";
+        Text[ japanese ] = "ëIë(~E)";
+        Text[ chinese_traditional ] = "øÔæ‹(~E)";
+        Text[ arabic ] = "«· ÕœÌœ";
+        Text[ greek ] = "~≈ÈÎÔ„ﬁ";
+        Text[ korean ] = "º±≈√(~E)";
+        Text[ turkish ] = "~SeÁim";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_FUNCSELECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Sort = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_FUNCFORMAT
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "F~ormat" ;
+        Text [ ENGLISH ] = "Format" ;
+        Left = TRUE ;
+        Text [ english_us ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ swedish ] = "F~ormat" ;
+        Text [ danish ] = "Format" ;
+        Text [ italian ] = "F~ormato" ;
+        Text [ spanish ] = "F~ormato" ;
+        Text [ french ] = "F~ormat" ;
+        Text [ dutch ] = "F~ormaat" ;
+        Text [ portuguese ] = "F~ormato" ;
+        Text[ chinese_simplified ] = "∏Ò Ω(~O)";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ(~O)";
+        Text[ chinese_traditional ] = "ÆÊ¶°(~O)";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
+        Text[ greek ] = "Ã~ÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ(~O)";
+        Text[ turkish ] = "F~ormat";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_FUNCFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_FUNCNAME
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text = "Na~me" ;
+        TEXT [ English ] = "Na~me" ;
+        Left = TRUE ;
+        Text [ english_us ] = "Na~me" ;
+        Text [ portuguese_brazilian ] = "Na~me" ;
+        Text [ swedish ] = "Na~mn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ italian ] = "No~me" ;
+        Text [ spanish ] = "No~mbre" ;
+        Text [ french ] = "~Nom" ;
+        Text [ dutch ] = "Naa~m" ;
+        Text [ portuguese ] = "No~me" ;
+        Text[ chinese_simplified ] = "√˚≥∆(~M)";
+        Text[ russian ] = "»Ïˇ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "ñºëO(~M)";
+        Text[ chinese_traditional ] = "¶W∫Ÿ(~M)";
+        Text[ arabic ] = "«·«”„";
+        Text[ greek ] = "ºÌÔÏ·";
+        Text[ korean ] = "¿Ã∏ß(~M)";
+        Text[ turkish ] = "~Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FUNCNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 15 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_FUNCVALUE
+    {
+        Pos = MAP_APPFONT ( 170 , 33 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text = "~Wert" ;
+        Text [ ENGLISH ] = "Value" ;
+        Text [ norwegian ] = "Verdi" ;
+        Text [ italian ] = "~Valore" ;
+        Text [ portuguese_brazilian ] = "Valor" ;
+        Text [ portuguese ] = "Valor" ;
+        Text [ finnish ] = "Arvo" ;
+        Text [ danish ] = "VÊrdi" ;
+        Text [ french ] = "~Valeur" ;
+        Text [ swedish ] = "~V‰rde" ;
+        Text [ dutch ] = "~Waarde" ;
+        Text [ spanish ] = "~Valor" ;
+        Text [ english_us ] = "~Value" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = " ˝÷µ(~V)";
+        Text[ russian ] = "«Ì‡˜ÂÌËÂ";
+        Text[ polish ] = "WartoúÊ";
+        Text[ japanese ] = "íl(~V)";
+        Text[ chinese_traditional ] = "º∆≠»(~V)";
+        Text[ arabic ] = "«·ﬁÌ„…";
+        Text[ greek ] = "‘ÈÏﬁ";
+        Text[ korean ] = "∞™(~V)";
+        Text[ turkish ] = "D~eer";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FUNCVALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 45 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_FUNCCOND1
+    {
+        Pos = MAP_APPFONT ( 170 , 33 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text = "~Dann" ;
+        Text [ ENGLISH ] = "Then" ;
+        Left = TRUE ;
+        Hide = TRUE ;
+        Text [ english_us ] = "Then" ;
+        Text [ portuguese_brazilian ] = "Dann" ;
+        Text [ swedish ] = "SÂ" ;
+        Text [ danish ] = "SÂ" ;
+        Text [ italian ] = "Poi" ;
+        Text [ spanish ] = "Entonces" ;
+        Text [ french ] = "~Alors" ;
+        Text [ dutch ] = "~Dan" ;
+        Text [ portuguese ] = "~Ent„o" ;
+        Text[ chinese_simplified ] = "æÕ";
+        Text[ russian ] = "ƒ‡ÎÂÂ";
+        Text[ polish ] = "Wtedy";
+        Text[ japanese ] = "èåèÇñûÇΩÇ∑Ç∆Ç´";
+        Text[ chinese_traditional ] = "¥N";
+        Text[ arabic ] = "›Ì Â–Â «·Õ«·…";
+        Text[ greek ] = "‘¸ÙÂ";
+        Text[ korean ] = "¥Ÿ¿Ω";
+        Text[ turkish ] = "O halde";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FUNCCOND1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 45 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Hide = TRUE ;
+    };
+    FixedText FT_FUNCCOND2
+    {
+        Pos = MAP_APPFONT ( 170 , 63 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text = "So~nst" ;
+        Text [ ENGLISH ] = "Else" ;
+        Left = TRUE ;
+        Hide = TRUE ;
+        Text [ english_us ] = "Else" ;
+        Text [ portuguese_brazilian ] = "Sonst" ;
+        Text [ swedish ] = "Annars" ;
+        Text [ danish ] = "Ellers" ;
+        Text [ italian ] = "Altrimenti" ;
+        Text [ spanish ] = "Si no" ;
+        Text [ french ] = "~Sinon" ;
+        Text [ dutch ] = "~Anders" ;
+        Text [ portuguese ] = "~Sen„o" ;
+        Text[ chinese_simplified ] = "∆‰À¸";
+        Text[ russian ] = "»Ì‡˜Â";
+        Text[ polish ] = "W przeciwnym wypadku";
+        Text[ japanese ] = "èåèÇñûÇΩÇ≥Ç»Ç¢Ç∆Ç´";
+        Text[ chinese_traditional ] = "ß_´h";
+        Text[ arabic ] = "›Ì„« ⁄œ« –·ﬂ";
+        Text[ greek ] = "¡ÎÎÈ˛Ú";
+        Text[ korean ] = "±‚≈∏";
+        Text[ turkish ] = "Yoksa";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FUNCCOND2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 75 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Hide = TRUE ;
+    };
+    PushButton BT_FUNCMACRO
+    {
+        Pos = MAP_APPFONT ( 204 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "M~akro..." ;
+        Text [ English ] = "M~acro..." ;
+        Text [ norwegian ] = "Macro..." ;
+        Text [ italian ] = "~Macro..." ;
+        Text [ portuguese_brazilian ] = "Macro..." ;
+        Text [ portuguese ] = "Macro..." ;
+        Text [ french ] = "~Macro..." ;
+        Text [ dutch ] = "~Macro..." ;
+        Text [ spanish ] = "M~acro..." ;
+        Text [ danish ] = "Makro..." ;
+        Text [ swedish ] = "M~akro..." ;
+        Text [ finnish ] = "Macro..." ;
+        Text [ english_us ] = "~Macro..." ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "∫Í(~M)...";
+        Text[ russian ] = "Ã‡ÍÓÒ...";
+        Text[ polish ] = "Makro...";
+        Text[ japanese ] = "œ∏€(~C)...";
+        Text[ chinese_traditional ] = "•®∂∞(~C)...";
+        Text[ arabic ] = "„«ﬂ—Ê...";
+        Text[ greek ] = "Ã·ÍÒÔÂÌÙÔÎﬁ...";
+        Text[ korean ] = "∏≈≈©∑Œ(~M)...";
+        Text[ turkish ] = "M~akro...";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Functions" ;
+    Text [ portuguese_brazilian ] = "Funktionen" ;
+    Text [ swedish ] = "Funktioner" ;
+    Text [ danish ] = "Funktioner" ;
+    Text [ italian ] = "Funzioni" ;
+    Text [ spanish ] = "Funciones" ;
+    Text [ french ] = "Fonctions" ;
+    Text [ dutch ] = "Functies" ;
+    Text [ portuguese ] = "FunÁıes" ;
+    Text[ chinese_simplified ] = "π¶ƒ‹";
+    Text[ russian ] = "‘ÛÌÍˆËË";
+    Text[ polish ] = "Funkcje";
+    Text[ japanese ] = "ã@î\\";
+    Text[ chinese_traditional ] = "•\\Ø‡";
+    Text[ arabic ] = "„Â«„";
+    Text[ greek ] = "ÀÂÈÙÔıÒ„ﬂÂÚ";
+    Text[ korean ] = "«‘ºˆ";
+    Text[ turkish ] = "Fonksiyon";
+    Text[ language_user1 ] = " ";
+};

@@ -1,0 +1,38 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   wbeziers.idl  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wbeziers.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File SwBezierShell fuer StarWriter/Web
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface Bezier : _Bezier
+[ uuid = "68EF7EA0-6876-11D0-A887-008029E86826" ]
+{
+}
+
+shell SwBezierShell: SwBaseShell
+{
+    import Bezier[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.2  2000/02/01 09:45:00  os
+    #72282# SwWebBaseShell removed
+
+    Revision 1.1  1997/01/23 13:48:58  OS
+    Initial revision.
+
+
+      Rev 1.0   23 Jan 1997 14:48:58   OS
+   Initial revision.
+
+
+------------------------------------------------------------------------*/
+

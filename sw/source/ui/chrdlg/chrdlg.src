@@ -1,0 +1,169 @@
+/*************************************************************************
+ *
+ *  $RCSfile: chrdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "chrdlg.hrc"
+String STR_TEXTCOLL_HEADER
+{
+    TEXT = " (Absatzvorlage: " ;
+    TEXT [ English ] = " (Paragraph Style: " ;
+    TEXT [ norwegian ] = " (Avsnittsmal: " ;
+    TEXT [ italian ] = "(Modello di paragrafo: " ;
+    TEXT [ portuguese_brazilian ] = "(Estilo de Parágrafo: " ;
+    TEXT [ portuguese ] = "(Estilo de parágrafo: " ;
+    TEXT [ finnish ] = " (Kappaletyyli: " ;
+    TEXT [ danish ] = "(Afsnitstypografi: " ;
+    TEXT [ french ] = "(Style de paragraphe : " ;
+    TEXT [ swedish ] = "(Styckeformatmall:  " ;
+    TEXT [ dutch ] = "(Alinea-opmaakprofiel:  " ;
+    TEXT [ spanish ] = "(Estilo de párrafo:  " ;
+    TEXT [ english_us ] = "(Paragraph Style: " ;
+    TEXT[ chinese_simplified ] = "(¶ÎÂäÑùÊ½£º ";
+    TEXT[ russian ] = "(Ñòèëü àáçàöà:  ";
+    TEXT[ polish ] = "(Styl akapitu:  ";
+    TEXT[ japanese ] = "(’i—½À²Ù: ";
+    TEXT[ chinese_traditional ] = "(¬q¸¨¼Ë¦¡¡G ";
+    TEXT[ arabic ] = "(äãØ İŞÑÉ: ";
+    TEXT[ greek ] = "(Ğñüôõğï ğáñáãñÜöïõ: ";
+    TEXT[ korean ] = "(´Ü¶ô À¯Çü: ";
+    TEXT[ turkish ] = "(Paragraf biçimi: ";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_PAGEFMT_HEADER
+{
+    TEXT = " (Seitenvorlage: " ;
+    TEXT [ English ] = " (Page Style: " ;
+    TEXT [ norwegian ] = " (Sidemal: " ;
+    TEXT [ italian ] = "(Modello di pagina: " ;
+    TEXT [ portuguese_brazilian ] = "(Estilo de Página: " ;
+    TEXT [ portuguese ] = "(Estilo de página: " ;
+    TEXT [ finnish ] = " (Sivutyyli: " ;
+    TEXT [ danish ] = "(Sidetypografi: " ;
+    TEXT [ french ] = "(Style de page : " ;
+    TEXT [ swedish ] = "(Sidformatmall:  " ;
+    TEXT [ dutch ] = "(Pagina-opmaakprofiel:  " ;
+    TEXT [ spanish ] = "(Estilo de página:  " ;
+    TEXT [ english_us ] = "(Page Style: " ;
+    TEXT[ chinese_simplified ] = "(Ò³ÃæÑùÊ½£º ";
+    TEXT[ russian ] = "(Ñòèëü ñòğàíèöû:  ";
+    TEXT[ polish ] = "(Styl strony:  ";
+    TEXT[ japanese ] = "(Íß°¼Ş½À²Ù: ";
+    TEXT[ chinese_traditional ] = "(­¶­±¼Ë¦¡¡G ";
+    TEXT[ arabic ] = "(ŞÇáÈ ÇáÕİÍÉ: ";
+    TEXT[ greek ] = "(Ğñüôõğï óåëßäáò: ";
+    TEXT[ korean ] = "(ÆäÀÌÁö À¯Çü: ";
+    TEXT[ turkish ] = "(Sayfa biçimi: ";
+    TEXT[ language_user1 ] = " ";
+};
+String SW_STR_NONE
+{
+    Text = "[Keine]" ;
+    Text [ English ] = "[None]" ;
+    Text [ norwegian ] = "[Ingen]" ;
+    Text [ italian ] = "[Nessuno]" ;
+    Text [ portuguese_brazilian ] = "[Nenhum]" ;
+    Text [ portuguese ] = "[Nenhum]" ;
+    Text [ finnish ] = "[Ei ole]" ;
+    Text [ danish ] = "[Ingen]" ;
+    Text [ french ] = "[Aucun(e)]" ;
+    Text [ swedish ] = "[Ingen]" ;
+    Text [ dutch ] = "[Geen]" ;
+    Text [ spanish ] = "[Ninguno]" ;
+    Text [ english_us ] = "[None]" ;
+    Text[ chinese_simplified ] = "[ÎŞ]";
+    Text[ russian ] = "[Áåç]";
+    Text[ polish ] = "[brak]";
+    Text[ japanese ] = "[‚È‚µ]";
+    Text[ language_user1 ] = "èë? áå";
+    Text[ chinese_traditional ] = "[µL]";
+    Text[ arabic ] = "[ÈÏæä]";
+    Text[ greek ] = "[Êáíİíá]";
+    Text[ korean ] = "[¾øÀ½]";
+    Text[ turkish ] = "[yok]";
+};
+InfoBox MSG_ILLEGAL_PAGENUM
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    /* ### ACHTUNG: Neuer Text in Resource? Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden. : Seitennummer kann nicht gesetzt werden. Auf linken Seiten d³rfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden. */
+    MESSAGE = "Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden." ;
+    MESSAGE [ English ] = "Page number can't be applied to the actual page.  Even numbers can be used on left pages, odd numbers on right pages." ;
+    MESSAGE [ norwegian ] = "Sidenummer kan ikke brukes på den aktuelle siden. Partall kan brukes på venstre sider, oddetall på høyre sider." ;
+    MESSAGE [ italian ] = "Impossibile usare il numero pagina alla pagina corrente. I numeri pari possono essere usati sulle pagine sinistre, i numeri dispari sulle pagine destre." ;
+    MESSAGE [ portuguese_brazilian ] = "Número de página não pode ser aplicado à página atual.  Números pares podem ser utilizados em páginas esquerdas, números ímpares em páginas direitas." ;
+    MESSAGE [ portuguese ] = "Número de página não pode ser atribuído à página actual. Nas páginas da esquerda podem apenas ser usados números pares e nas páginas da direita números ímpares." ;
+    MESSAGE [ finnish ] = "Sivunumeroa ei voi lisätä sivulle.  Parillista numeroa käytetään vasemmalla sivulla ja paritonta oikealla sivulla." ;
+    MESSAGE [ danish ] = "Sidetallet kan ikke indsættes. Der må kun bruges lige sidetal på venstre side og ulige sidetal på højre sider." ;
+    MESSAGE [ french ] = "Le numéro de page ne peut être assigné à cette page. Les nombres pairs ne peuvent être utilisés que sur des pages de gauche, les nombres impairs que sur celles de droite." ;
+    MESSAGE [ swedish ] = "Sidnumret kan inte sättas in på den här sidan. På vänstersidor får bara jämna nummer användas, på högersidor bara udda nummer." ;
+    MESSAGE [ dutch ] = "Dit paginanummer kan niet aan de actiuele pagina worden toegewezen. Linkerpagina's krijgen even nummers, rechterpagina's oneven nummers." ;
+    MESSAGE [ spanish ] = "El número de la página no se puede colocar. En páginas izquierdas se pueden utilizar solo números pares, en las derechas solo impares." ;
+    MESSAGE [ english_us ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
+    MESSAGE[ chinese_simplified ] = "ÎŞ·¨Éè¶¨Ò³Âë¡£ÔÚ×óÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÅ¼ÊıÒ³Âë£¬ÔÚÓÒÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÆæÊıÒ³Âë¡£";
+    MESSAGE[ russian ] = "Íîìåğà ñòğàíèö ïğîñòàâèòü íåâîçìîæíî. Ñ ëåâîé ñòîğîíû ìîãóò áûòü ïğîñòàâëåíû òîëüêî ÷åòíûå, ñ ïğàâîé - òîëüêî íå÷åòíûå öèôğû.";
+    MESSAGE[ polish ] = "Nie mo¿na nanieœæ numeru stron. Na lewych stronach mo¿na nanieœæ tylko parzyste numery stron, na prawych tylko nieparzyste numery stron.";
+    MESSAGE[ japanese ] = "Íß°¼Ş”Ô†‚ª“K—p‚Å‚«‚Ü‚¹‚ñB¶Íß°¼Ş‚É‚Í‹ô”¤‰EÍß°¼Ş‚É‚ÍŠï”‚ğg—p‚µ‚Ä‰º‚³‚¢B";
+    MESSAGE[ chinese_traditional ] = "µLªk³]©w­¶½X¡C¦b¥ª­¶¥u¯à°÷³]©w°¸¼Æ¡A¦b¥k­¶¥u¯à³]©w©_¼Æ¡C";
+    MESSAGE[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÃÑŞÇã ÇáÕİÍÇÊ İí ÇáÕİÍÉ ÇáÍÇáíÉ. Úáì ÇáÕİÍÇÊ ÇáíÓÑì¡ íÓãÍ ÈÇÓÊÎÏÇã ÃÑŞÇã ÒæÌíÉ İŞØ¡ æÚáì ÇáÕİÍÇÊ Çáíãäì¡ ÃÑŞÇã İÑÏíÉ İŞØ.";
+    MESSAGE[ greek ] = "Äåí åßíáé äõíáôüí íá ôïğïèåôçèåß ï áñéèìüò óåëßäáò. Óå áñéóôåñİò óåëßäåò åğéôñİğåôáé ç ôïğïèİôçóç ìüíï æõãşí áñéèìşí óåëßäáò, åíş óå äåîéİò óåëßäåò ìüíï áñôßùí áñéèìşí.";
+    MESSAGE[ korean ] = "ÆäÀÌÁö ¹øÈ£´Â ÇöÀç ÆäÀÌÁö¿¡ Àû¿ëµÇÁö ¾Ê½À´Ï´Ù. Â¦¼ö´Â ¿ŞÂÊ ÆäÀÌÁö¿¡ »ç¿ëµÇ°í,È¦¼ö´Â ¿À¸¥ÂÊ ÆäÀÌÁö¿¡ »ç¿ëµË´Ï´Ù.";
+    MESSAGE[ turkish ] = "Sayfa numarası verilemiyor. Sol sayfalarda yalnızca çift sayfa numaraları, sağ sayfalarda ise yalnızca tek sayfa numaraları kullanılabilir.";
+    MESSAGE[ language_user1 ] = " ";
+};

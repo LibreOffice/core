@@ -1,0 +1,292 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   _frmsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_frmsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   Basis-interface fuer Frame
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface BaseTextFrame : Selection
+[
+    Automation = FALSE;
+]
+{
+    FN_FRAME_TO_ANCHOR  // status()
+    [
+        /*OS: Datentypen unvertraeglich ?? */
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_FRAME_ALIGN_VERT_CENTER // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_BOTTOM  // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_TOP   // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_ROW_CENTER  // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_ROW_BOTTOM // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_ROW_TOP  // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_CHAR_CENTER // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_CHAR_BOTTOM  // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_VERT_CHAR_TOP  // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_HORZ_CENTER  // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_HORZ_RIGHT // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_ALIGN_HORZ_LEFT // status(play|final)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FRAME_TO_TOP // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FRAME_TO_BOTTOM  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    FN_FRAME_UP  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FRAME_DOWN // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_ULSPACE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LRSPACE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_FRAME;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_FRAME_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FRAME_LINESTYLE // status()
+    [
+        ExecMethod = ExecFrameStyle ;
+        StateMethod = GetLineStyleState ;
+        Export = FALSE; //#44439#
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FRAME_LINECOLOR // status(final|play)
+    [
+        ExecMethod = ExecFrameStyle ;
+        StateMethod = GetLineStyleState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    /*****************************************************
+
+ Abfragefunktionen fuer ImageMaps
+
+ ****************************************************/
+
+//
+// Slots ohne Export
+
+    FN_INSERT_FRAME
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateInsert ;
+        Export = False;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_BORDER // status()
+    [
+        ExecMethod = ExecFrameStyle ;
+        StateMethod = GetLineStyleState ;
+        GroupId = GID_FRAME;
+        Export = False;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_HYPERLINK_SETLINK  // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_HYPERLINK_GETLINK  // status()
+    [
+        StateMethod = GetState ;
+    ]
+
+    FN_FRAME_MIRROR_ON_EVEN_PAGES // status(final|play|rec)
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.21  2000/08/15 13:50:56  os
+    #77616# re-enable border in SwFrameShell
+
+    Revision 1.20  2000/05/26 07:06:15  os
+    old SW Basic API Slots removed
+
+    Revision 1.19  2000/05/10 12:00:08  os
+    Basic API removed
+
+    Revision 1.18  1999/03/23 11:16:28  MA
+    #63806# ConfigName und HelpText entfernt
+
+
+      Rev 1.17   23 Mar 1999 12:16:28   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.16   29 Jan 1999 17:15:22   JP
+   Task #58423#: Reports mit Bildern aus der Datenbank
+
+      Rev 1.15   12 Nov 1998 17:29:08   MA
+   #58677# Disable Flag
+
+      Rev 1.14   11 Jun 1998 13:02:54   OM
+   #49467# Rahmen in Inhalt-protecteten Parents nicht bearbeiten
+
+      Rev 1.13   15 May 1998 16:21:34   OM
+   #49467# GeschÅtzte Rahmen nicht bearbeiten
+
+      Rev 1.12   10 Feb 1998 15:06:06   OM
+   Spiegeln
+
+      Rev 1.11   22 Jan 1998 17:40:30   OS
+   SID_BACKGROUND_PATTERN entsorgt
+
+      Rev 1.10   08 Oct 1997 13:30:52   OS
+   SID_FRAME_LINESTYLE funktioniert nicht ueber die API #44439#
+
+      Rev 1.9   28 Aug 1997 12:38:24   MBA
+   Neue Interface-Namen
+
+      Rev 1.8   28 Jul 1997 16:46:42   OM
+   #42111#Neue Statusmethode fuer Hyperlinkleiste
+
+      Rev 1.7   23 Jul 1997 15:19:12   AMA
+   Opt: ConfigName etc. aufgeraeumt
+
+      Rev 1.6   26 May 1997 14:12:12   OS
+   StateMethod fuer SwFmtSurround
+
+      Rev 1.5   15 May 1997 12:31:22   OS
+   Printable und Opaque am Frame
+
+      Rev 1.4   22 Apr 1997 18:46:52   JP
+    neu: GetSelText/SetText
+
+      Rev 1.3   16 Apr 1997 16:22:28   OS
+   Kontur und erster Absatz per Basic
+
+      Rev 1.2   13 Feb 1997 09:54:08   MA
+   unnoetige und falsche Texte entfernt
+
+      Rev 1.1   23 Jan 1997 16:09:06   OS
+   interface _Frame mit Automation = FALSE
+
+      Rev 1.0   23 Jan 1997 14:46:02   OS
+   Initial revision.
+
+------------------------------------------------------------------------*/
+
+

@@ -1,0 +1,66 @@
+..\inc\sw.lst %_DEST%\inc%_EXT%\sw.lst
+..\inc\swinter.h %_DEST%\ODK\inc%_EXT%\swinter.h
+..\inc\orntenum.hxx %_DEST%\inc%_EXT%\sw\orntenum.hxx
+..\inc\horiornt.hxx %_DEST%\inc%_EXT%\sw\horiornt.hxx
+..\%__SRC%\inc\swinter.h %_DEST%\ODK\inc%_EXT%\swinter.h
+..\%__SRC%\misc\swinter.c %_DEST%\ODK\src%_EXT%\swinter.c
+..\%__SRC%\bin\sweb.res %_DEST%\bin%_EXT%\sweb.res
+..\%__SRC%\bin\*.ex$ %_DEST%\bin%_EXT%
+..\xml\*.xml %_DEST%\xml\*.xml
+touch: ..\%__SRC%\misc\sw.hid %_DEST%\bin%_EXT%\sw.hid
+..\%__SRC%\bin\soffice.pdb %_DEST%\bin%_EXT%\soffice.pdb
+..\%__SRC%\bin\swslots.tlb %_DEST%\bin%_EXT%\swslots.tlb
+..\%__SRC%\bin\wswslots.tlb %_DEST%\bin%_EXT%\wswslots.tlb
+..\%__SRC%\bin\sw%upd%*.dll %_DEST%\bin%_EXT%\sw%upd%*.dll
+..\%__SRC%\bin\sw%upd%*.res %_DEST%\bin%_EXT%\sw%upd%*.res
+..\%__SRC%\bin\sw%upd%*.res %_DEST%\bin%_EXT%\sw%upd%*.res
+..\%__SRC%\lib\swinter.lib %_DEST%\lib%_EXT%\swinter.lib
+..\%__SRC%\lib\swinter.lib %_DEST%\ODK\lib%_EXT%\swinter.lib
+..\%__SRC%\misc\sw.csv %_DEST%\inc%_EXT%\sw.csv
+..\%__SRC%\lib\swlib.lib %_DEST%\lib%_EXT%\swlib.lib
+..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\inc\swdll.hxx %_DEST%\inc%_EXT%\swdll.hxx
+..\%__SRC%\lib\swweblib.lib %_DEST%\lib%_EXT%\swweblib.lib
+mkdir: %_DEST%\idl\sw
+hedabu: ..\unoidl\sw\swmap.idl %_DEST%\idl%_EXT%\sw\swmap.idl
+hedabu: ..\unoidl\sw\swtxtdoc.idl %_DEST%\idl%_EXT%\sw\swtxtdoc.idl
+hedabu: ..\unoidl\sw\swdoccol.idl %_DEST%\idl%_EXT%\sw\swdoccol.idl
+hedabu: ..\unoidl\sw\swtxview.idl %_DEST%\idl%_EXT%\sw\swtxview.idl
+hedabu: ..\unoidl\sw\swtxtsel.idl %_DEST%\idl%_EXT%\sw\swtxtsel.idl
+hedabu: ..\unoidl\sw\swtxtbl.idl %_DEST%\idl%_EXT%\sw\swtxtbl.idl
+hedabu: ..\unoidl\sw\swobject.idl %_DEST%\idl%_EXT%\sw\swobject.idl
+hedabu: ..\unoidl\sw\swtxfld.idl %_DEST%\idl%_EXT%\sw\swtxfld.idl
+hedabu: ..\unoidl\sw\swtype.idl %_DEST%\idl%_EXT%\sw\swtype.idl
+hedabu: ..\unoidl\sw\swservc.idl %_DEST%\idl%_EXT%\sw\swservc.idl
+hedabu: ..\unoidl\sw\swmod.idl %_DEST%\idl%_EXT%\sw\swmod.idl
+mkdir: %_DEST%\inc\%_EXT%\sw
+mkdir: %_DEST%\inc\%_EXT%\uno
+mkdir: %_DEST%\inc\%_EXT%\uno\one
+hedabu: ..\inc\swwebdll.hxx %_DEST%\inc%_EXT%\sw\swwebdll.hxx
+hedabu: ..\inc\swdll.hxx %_DEST%\inc%_EXT%\sw\swdll.hxx
+hedabu: ..\inc\swinter.h %_DEST%\inc%_EXT%\sw\swinter.h
+hedabu: ..\%__SRC%\inc\sw\swobject.hxx %_DEST%\inc%_EXT%\sw\swobject.hxx
+hedabu: ..\%__SRC%\inc\sw\swtxtbl.hxx %_DEST%\inc%_EXT%\sw\swtxtbl.hxx
+hedabu: ..\%__SRC%\inc\sw\swtxfld.hxx %_DEST%\inc%_EXT%\sw\swtxfld.hxx
+hedabu: ..\%__SRC%\inc\sw\swdoccol.hxx %_DEST%\inc%_EXT%\sw\swdoccol.hxx
+hedabu: ..\%__SRC%\inc\sw\swtxtdoc.hxx %_DEST%\inc%_EXT%\sw\swtxtdoc.hxx
+hedabu: ..\%__SRC%\inc\sw\swtype.hxx %_DEST%\inc%_EXT%\sw\swtype.hxx
+hedabu: ..\%__SRC%\inc\sw\swtxtsel.hxx %_DEST%\inc%_EXT%\sw\swtxtsel.hxx
+hedabu: ..\%__SRC%\inc\sw\swtxview.hxx %_DEST%\inc%_EXT%\sw\swtxview.hxx
+hedabu: ..\%__SRC%\inc\sw\swservc.hxx %_DEST%\inc%_EXT%\sw\swservc.hxx
+hedabu: ..\%__SRC%\inc\sw\swmod.hxx %_DEST%\inc%_EXT%\sw\swmod.hxx
+hedabu: ..\%__SRC%\inc\sw\swobject.h %_DEST%\inc%_EXT%\uno\one\swobject.h
+hedabu: ..\%__SRC%\inc\sw\swtxtbl.h %_DEST%\inc%_EXT%\uno\one\swtxtbl.h
+hedabu: ..\%__SRC%\inc\sw\swtxfld.h %_DEST%\inc%_EXT%\uno\one\swtxfld.h
+hedabu: ..\%__SRC%\inc\sw\swdoccol.h %_DEST%\inc%_EXT%\uno\one\swdoccol.h
+hedabu: ..\%__SRC%\inc\sw\swtxtdoc.h %_DEST%\inc%_EXT%\uno\one\swtxtdoc.h
+hedabu: ..\%__SRC%\inc\sw\swtype.h %_DEST%\inc%_EXT%\uno\one\swtype.h
+hedabu: ..\%__SRC%\inc\sw\swtxtsel.h %_DEST%\inc%_EXT%\uno\one\swtxtsel.h
+hedabu: ..\%__SRC%\inc\sw\swtxview.h %_DEST%\inc%_EXT%\uno\one\swtxview.h
+hedabu: ..\%__SRC%\inc\sw\swservc.h %_DEST%\inc%_EXT%\uno\one\swservc.h
+hedabu: ..\%__SRC%\inc\sw\swmod.h %_DEST%\inc%_EXT%\uno\one\swmod.h
+
+mkdir: %_DEST%\ucr\sw
+..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\sw\*.ucr
+

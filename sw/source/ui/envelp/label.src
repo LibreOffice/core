@@ -1,0 +1,1606 @@
+/*************************************************************************
+ *
+ *  $RCSfile: label.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+ // #include *****************************************************************
+#include "label.hrc"
+#include "globals.hrc"
+#include "helpid.h"
+// ----- defined strings -----------------------------------------------------
+#define LABEL_STRING                                    \
+    Text = "Etiketten" ;                                \
+    Text [ ENGLISH ] = "Labels" ;                       \
+    Text [ norwegian ] = "Etiketter" ;                  \
+    Text [ italian ] = "Etichette" ;                    \
+    Text [ portuguese_brazilian ] = "Etiquetas" ;       \
+    Text [ portuguese ] = "Etiquetas" ;                 \
+    Text [ finnish ] = "Tarrat" ;                       \
+    Text [ danish ] = "Etiketter" ;                     \
+    Text [ french ] = "…tiquettes" ;                    \
+    Text [ swedish ] = "Etiketter" ;                    \
+    Text [ dutch ] = "Etiketten" ;                      \
+    Text [ spanish ] = "Etiquetas" ;                    \
+    Text [ english_us ] = "Labels" ;                    \
+    Text[ chinese_simplified ] = "±Í«©";                \
+    Text[ russian ] = "Õ‡ÍÎÂÈÍË";                       \
+    Text[ polish ] = "Etykiety";                        \
+    Text[ japanese ] = "◊ÕﬁŸ";                          \
+    Text[ chinese_traditional ] = "º–≈“";               \
+    Text[ arabic ] = "»ÿ«ﬁ«  ⁄‰Ê‰…";                    \
+    Text[ greek ] = "≈ÙÈÍ›ÙÂÚ";                         \
+    Text[ korean ] = "∂Û∫ß";    \
+    Text[ turkish ] = "Etiket";
+
+ #define BUSINESS_CARD_STRING \
+                Text = "Visitenkarten" ;                            \
+                Text [ ENGLISH ] = "Business cards" ;               \
+                Text[ english_us ] = "Business cards";              \
+                Text[ portuguese ] = "Cartıes de visita";           \
+                Text[ russian ] = "¬ËÁËÚÌ˚Â Í‡ÚÓ˜ÍË";              \
+                Text[ greek ] = "Visiting cards";                   \
+                Text[ dutch ] = "Visitekaartjes";                   \
+                Text[ french ] = "Cartes de visite";                \
+                Text[ spanish ] = "Tarjetas de visita";             \
+                Text[ italian ] = "Biglietti da visita";            \
+                Text[ danish ] = "Visitkort";                       \
+                Text[ swedish ] = "Visitkort";                      \
+                Text[ polish ] = "WizytÛwki";                       \
+                Text[ portuguese_brazilian ] = "Visiting cards";    \
+                Text[ japanese ] = "ñºéh";                          \
+                Text[ korean ] = "Visiting cards";                  \
+                Text[ chinese_simplified ] = "√˚∆¨";                \
+                Text[ chinese_traditional ] = "¶W§˘";               \
+                Text[ arabic ] = "»ÿ«ﬁ«  «·“Ì«—…";
+
+ // DLG_LAB ------------------------------------------------------------------
+TabDialog DLG_LAB
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    LABEL_STRING
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+/*          PageItem
+            {
+                Identifier = TP_LAB_LAB ;
+                Text = "Etiketten" ;
+                Text [ ENGLISH ] = "Labels" ;
+                Text [ norwegian ] = "Etiketter" ;
+                Text [ italian ] = "Etichette" ;
+                Text [ portuguese_brazilian ] = "Etiquetas" ;
+                Text [ portuguese ] = "Etiquetas" ;
+                Text [ finnish ] = "Tarrat" ;
+                Text [ danish ] = "Etiketter" ;
+                Text [ french ] = "Etiquettes" ;
+                Text [ swedish ] = "Etiketter" ;
+                Text [ dutch ] = "Etiketten" ;
+                Text [ spanish ] = "Etiquetas" ;
+                Text [ english_us ] = "Labels" ;
+                PageResID = TP_LAB_LAB ;
+                Text[ chinese_simplified ] = "±Í«©";
+                Text[ russian ] = "Õ‡ÍÎÂÈÍË";
+                Text[ polish ] = "Etykiety";
+                Text[ japanese ] = "◊ÕﬁŸ";
+                Text[ chinese_traditional ] = "º–≈“";
+                Text[ arabic ] = "»ÿ«ﬁ«  ⁄‰Ê‰…";
+                Text[ greek ] = "≈ÙÈÍ›ÙÂÚ";
+                Text[ korean ] = "Labels";
+            };*/
+            PageItem
+            {
+                Identifier = TP_VISITING_CARDS;
+                PageResID = TP_VISITING_CARDS;
+                BUSINESS_CARD_STRING
+            };
+            PageItem
+            {
+                Identifier = TP_PRIVATE_DATA;
+                PageResID = TP_PRIVATE_DATA;
+                Text = "Privat" ;
+                Text [ ENGLISH ] = "Private" ;
+                Text[ english_us ] = "Private";
+                Text[ portuguese ] = "Pessoal";
+                Text[ russian ] = "ÀË˜Ì˚Â";
+                Text[ greek ] = "œÈÍﬂ·";
+                Text[ dutch ] = "PrivÈ";
+                Text[ french ] = "PrivÈ";
+                Text[ spanish ] = "Privado";
+                Text[ italian ] = "Privato";
+                Text[ danish ] = "Privat";
+                Text[ swedish ] = "Privat";
+                Text[ polish ] = "Prywatne";
+                Text[ portuguese_brazilian ] = "Private";
+                Text[ japanese ] = "Ãﬂ◊≤Õﬁ∞ƒ";
+                Text[ korean ] = "∞≥¿Œ";
+                Text[ chinese_simplified ] = "ÀΩ»À";
+                Text[ chinese_traditional ] = "®p§H";
+                Text[ arabic ] = "‘Œ’Ì";
+                Text[ turkish ] = "÷zel";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BUSINESS_DATA;
+                PageResID = TP_BUSINESS_DATA;
+                Text = "Gesch‰ft" ;
+                Text [ ENGLISH ] = "Business" ;
+                Text[ english_us ] = "Business";
+                Text[ portuguese ] = "Emprego";
+                Text[ russian ] = "—ÎÛÊÂ·Ì˚Â";
+                Text[ greek ] = "≈Ò„·Ûﬂ·";
+                Text[ dutch ] = "Zaak";
+                Text[ french ] = "Bureau";
+                Text[ spanish ] = "Trabajo";
+                Text[ italian ] = "Lavoro";
+                Text[ danish ] = "Arbejdsrelateret";
+                Text[ swedish ] = "Aff‰rsm‰ssig";
+                Text[ polish ] = "Biznes";
+                Text[ portuguese_brazilian ] = "Business";
+                Text[ japanese ] = "é–óp";
+                Text[ korean ] = "æ˜π´";
+                Text[ chinese_simplified ] = "…ÃŒÒ";
+                Text[ chinese_traditional ] = "∞”∞»";
+                Text[ arabic ] = "⁄„·";
+                Text[ turkish ] = "›˛";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_LAB_FMT ;
+                Text = "Format" ;
+                Text [ ENGLISH ] = "Format" ;
+                PageResID = TP_LAB_FMT ;
+                Text [ english_us ] = "Format" ;
+                Text [ italian ] = "Formato" ;
+                Text [ spanish ] = "Formato" ;
+                Text [ french ] = "Format" ;
+                Text [ dutch ] = "Grootte" ;
+                Text [ swedish ] = "Format" ;
+                Text [ danish ] = "Format" ;
+                Text [ portuguese_brazilian ] = "Format" ;
+                Text [ portuguese ] = "Formato" ;
+                Text[ chinese_simplified ] = "∏Ò Ω";
+                Text[ russian ] = "‘ÓÏ‡Ú";
+                Text[ polish ] = "Format";
+                Text[ japanese ] = "èëéÆ";
+                Text[ chinese_traditional ] = "ÆÊ¶°";
+                Text[ arabic ] = "«· ‰”Ìﬁ";
+                Text[ greek ] = "ÃÔÒˆﬁ";
+                Text[ korean ] = "º≠Ωƒ";
+                Text[ turkish ] = "Format";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_LAB_PRT ;
+                Text = "Zus‰tze" ;
+                Text [ ENGLISH ] = "Options" ;
+                PageResID = TP_LAB_PRT ;
+                Text [ english_us ] = "Options" ;
+                Text [ portuguese_brazilian ] = "Drucker" ;
+                Text [ swedish ] = "Till‰gg" ;
+                Text [ danish ] = "Flere" ;
+                Text [ italian ] = "Extra" ;
+                Text [ spanish ] = "Opciones" ;
+                Text [ french ] = "Impression" ;
+                Text [ dutch ] = "Overige" ;
+                Text [ portuguese ] = "OpÁıes" ;
+                Text[ chinese_simplified ] = "∆‰À˚";
+                Text[ russian ] = "œ‡‡ÏÂÚ˚";
+                Text[ polish ] = "Dodatki";
+                Text[ japanese ] = "µÃﬂºÆ›";
+                Text[ chinese_traditional ] = "®‰•L";
+                Text[ arabic ] = "ŒÌ«—« ";
+                Text[ greek ] = "–Ò¸ÛËÂÙ·";
+                Text[ korean ] = "ø…º«";
+                Text[ language_user1 ] = " ";
+                Text[ turkish ] = "SeÁenekler";
+            };
+        };
+    };
+    String ST_BUSINESSCARDDLG
+    {
+        BUSINESS_CARD_STRING
+    };
+    String ST_FIRSTPAGE_LAB
+    {
+        LABEL_STRING
+    };
+    String ST_FIRSTPAGE_BC
+    {
+        Text = "Medium" ;
+        Text [ ENGLISH ] = "Media" ;
+        Text[ english_us ] = "Medium";
+        Text[ portuguese ] = "Media";
+        Text[ russian ] = "—Â‰ÒÚ‚Ó";
+        Text[ greek ] = "Ã›ÛÔÌ";
+        Text[ dutch ] = "Medium";
+        Text[ french ] = "MÈdia";
+        Text[ spanish ] = "Tipo";
+        Text[ italian ] = "Impostazioni";
+        Text[ danish ] = "Medium";
+        Text[ swedish ] = "Medium";
+        Text[ polish ] = "Noúnik danych";
+        Text[ portuguese_brazilian ] = "Media";
+        Text[ japanese ] = "î}ëÃ";
+        Text[ korean ] = "¡ﬂ∞£";
+        Text[ chinese_simplified ] = "÷Ω’≈";
+        Text[ chinese_traditional ] = "Ø»±i";
+        Text[ arabic ] = "Ê”«∆ÿ";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "Ka˝t";
+    };
+};
+ // TP_LAB_LAB ---------------------------------------------------------------
+TabPage TP_LAB_LAB
+{
+    HelpID = HID_LAB_LAB ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    FixedText TXT_WRITING
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "~Aufschrift" ;
+        Text [ English ] = "Writing" ;
+        Text [ norwegian ] = "Writing" ;
+        Text [ italian ] = "~Testo etichetta" ;
+        Text [ portuguese_brazilian ] = "Gravar" ;
+        Text [ portuguese ] = "~InscriÁ„o" ;
+        Text [ finnish ] = "Otsikko" ;
+        Text [ danish ] = "Etikettekst" ;
+        Text [ french ] = "~LibellÈ" ;
+        Text [ swedish ] = "~PÂskrift" ;
+        Text [ dutch ] = "~Tekst" ;
+        Text [ spanish ] = "Te~xto" ;
+        Text [ english_us ] = "Label text" ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = " ‰»ÎŒƒ◊÷";
+        Text[ russian ] = "œÓ‰ÔËÒ¸";
+        Text[ polish ] = "Oznaczenie";
+        Text[ japanese ] = "à∂êÊ";
+        Text[ chinese_traditional ] = "øÈ§J§Â¶r";
+        Text[ arabic ] = "‰’ «·»ÿ«ﬁ…";
+        Text[ greek ] = "≈È„Ò·ˆﬁ";
+        Text[ korean ] = "∂Û∫ß ≈ÿΩ∫∆Æ";
+        Text[ turkish ] = "Etiket metni";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BOX_ADDR
+    {
+        Pos = MAP_APPFONT ( 82 , 13 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Adre~sse" ;
+        Text [ English ] = "Address" ;
+        Text [ norwegian ] = "Adresse" ;
+        Text [ italian ] = "Indirizzo" ;
+        Text [ portuguese_brazilian ] = "EndereÁo" ;
+        Text [ portuguese ] = "EndereÁo" ;
+        Text [ finnish ] = "Valitse osoite" ;
+        Text [ danish ] = "Adresse" ;
+        Text [ french ] = "Adre~sse" ;
+        Text [ swedish ] = "Adre~ss" ;
+        Text [ dutch ] = "Adre~s" ;
+        Text [ spanish ] = "~DirecciÛn" ;
+        Text [ english_us ] = "Address" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "µÿ÷∑";
+        Text[ russian ] = "¿‰ÂÒ";
+        Text[ polish ] = "Adres";
+        Text[ japanese ] = "èZèä";
+        Text[ chinese_traditional ] = "¶aß}";
+        Text[ arabic ] = "«·⁄‰Ê«‰";
+        Text[ greek ] = "ƒÈÂ˝ËıÌÛÁ";
+        Text[ korean ] = "¡÷º“";
+        Text[ turkish ] = "Adres";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit EDT_WRITING
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 110 , 44 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        HScroll = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE;
+    };
+    FixedText FT_DATABASE
+    {
+        Pos = MAP_APPFONT ( 128 , 14 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "~Datenbank" ;
+        Text [ English ] = "Database" ;
+        Text [ norwegian ] = "Database" ;
+        Text [ italian ] = "Database" ;
+        Text [ portuguese_brazilian ] = "Base de Dados" ;
+        Text [ portuguese ] = "~Base de dados" ;
+        Text [ finnish ] = "Tietokanta" ;
+        Text [ danish ] = "Database" ;
+        Text [ french ] = "~Base de donnÈes" ;
+        Text [ swedish ] = "~Databas" ;
+        Text [ dutch ] = "~Database" ;
+        Text [ spanish ] = "Base de datos" ;
+        Text [ english_us ] = "Database" ;
+        Text[ chinese_simplified ] = " ˝æ›ø‚";
+        Text[ russian ] = "¡‡Á‡ ‰‡ÌÌ˚ı";
+        Text[ polish ] = "Baza danych";
+        Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω";
+        Text[ chinese_traditional ] = "∏ÍÆ∆Æw";
+        Text[ arabic ] = "ﬁ«⁄œ… «·»Ì«‰« ";
+        Text[ greek ] = "¬‹ÛÁ ~‰Â‰ÔÏ›Ì˘Ì";
+        Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫";
+        Text[ turkish ] = "Veritaban˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DATABASE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 128 , 25 ) ;
+        Size = MAP_APPFONT ( 57 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_TABLE
+    {
+        Pos = MAP_APPFONT ( 191 , 14 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "Tabe~lle" ;
+        Text [ ENGLISH ] = "Table" ;
+        Text [ english_us ] = "Table" ;
+        Text [ italian ] = "Tabella" ;
+        Text [ spanish ] = "Tabla" ;
+        Text [ french ] = "Tab~le" ;
+        Text [ dutch ] = "~Tabel" ;
+        Text [ swedish ] = "Tabe~ll" ;
+        Text [ danish ] = "Tabel" ;
+        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ portuguese ] = "~Tabela" ;
+        Text[ chinese_simplified ] = "±Ì∏Ò";
+        Text[ russian ] = "“‡·ÎËˆ‡";
+        Text[ polish ] = "Tabela";
+        Text[ japanese ] = "√∞ÃﬁŸ";
+        Text[ chinese_traditional ] = "™ÌÆÊ";
+        Text[ arabic ] = "«·ÃœÊ·";
+        Text[ greek ] = "–ﬂÌ·Í·Ú";
+        Text[ korean ] = "«•";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "Tablo";
+    };
+    ListBox LB_TABLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 191 , 25 ) ;
+        Size = MAP_APPFONT ( 57 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_INSERT
+    {
+        Pos = MAP_APPFONT ( 128 , 56 ) ;
+        Size = MAP_APPFONT ( 18 , 12 ) ;
+        SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DBFIELD
+    {
+        Pos = MAP_APPFONT ( 152 , 45 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "Datenbank~feld" ;
+        Text [ English ] = "Database field" ;
+        Text [ norwegian ] = "Database field" ;
+        Text [ italian ] = "Campo database" ;
+        Text [ portuguese_brazilian ] = "Campo base de dados" ;
+        Text [ portuguese ] = "Campo base de dados" ;
+        Text [ finnish ] = "Tietokantakentt‰" ;
+        Text [ danish ] = "Databasefelt" ;
+        Text [ french ] = "~Champ de B.D." ;
+        Text [ swedish ] = "Databas~f‰lt" ;
+        Text [ dutch ] = "~Databaseveld" ;
+        Text [ spanish ] = "~Campo base de datos" ;
+        Text [ english_us ] = "Database Field" ;
+        Text[ chinese_simplified ] = " ˝æ›ø‚◊÷∂Œ";
+        Text[ russian ] = "œÓÎÂ ·‡Á˚ ‰‡ÌÌ˚ı";
+        Text[ polish ] = "Pole bazy danych";
+        Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω Ã®∞Ÿƒﬁ";
+        Text[ chinese_traditional ] = "∏ÍÆ∆ÆwƒÊ¶Ï";
+        Text[ arabic ] = "Õﬁ· ﬁ«⁄œ… «·»Ì«‰« ";
+        Text[ greek ] = "–Â‰ﬂÔ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+        Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ « µÂ";
+        Text[ turkish ] = "Veritaban˝ alan˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DBFIELD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 152 , 56 ) ;
+        Size = MAP_APPFONT ( 96 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    GroupBox GRP_WRITING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 72 ) ;
+        Text = "Aufschrift" ;
+        Text [ English ] = "Writing" ;
+        Text [ norwegian ] = "Writing" ;
+        Text [ italian ] = "Testo etichetta" ;
+        Text [ portuguese_brazilian ] = "Gravar" ;
+        Text [ portuguese ] = "InscriÁ„o" ;
+        Text [ finnish ] = "Otsikko" ;
+        Text [ danish ] = "Etikettekst" ;
+        Text [ french ] = "LibellÈ" ;
+        Text [ swedish ] = "PÂskrift" ;
+        Text [ dutch ] = "Tekst" ;
+        Text [ spanish ] = "Etiqueta" ;
+        Text [ english_us ] = "Inscription" ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "ƒ⁄»›";
+        Text[ russian ] = "œÓ‰ÔËÒ¸";
+        Text[ polish ] = "Oznaczenie";
+        Text[ japanese ] = "à∂êÊ";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "§∫Æe";
+        Text[ arabic ] = "‰’ «·»ÿ«ﬁ…";
+        Text[ greek ] = "≈È„Ò·ˆﬁ";
+        Text[ korean ] = "«•¡¶";
+        Text[ turkish ] = "Etiket metni";
+    };
+    RadioButton BTN_CONT
+    {
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 43 , 10 ) ;
+        Text = "~Endlos" ;
+        Text [ English ] = "Continuous" ;
+        Text [ norwegian ] = "Continuous" ;
+        Text [ italian ] = "~Continuo" ;
+        Text [ portuguese_brazilian ] = "~ContÌnuo" ;
+        Text [ portuguese ] = "~ContÌnuo" ;
+        Text [ finnish ] = "Jatkuva" ;
+        Text [ danish ] = "Endel¯s" ;
+        Text [ french ] = "~Continu" ;
+        Text [ swedish ] = "~Kontinuerlig" ;
+        Text [ dutch ] = "~Eindeloos" ;
+        Text [ spanish ] = "Cont~inuo" ;
+        Text [ english_us ] = "~Continuous" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "¡¨–¯(~C)";
+        Text[ russian ] = "ÕÂÔÂ˚‚ÌÓ";
+        Text[ polish ] = "Bez koÒca";
+        Text[ japanese ] = "òAë±(~C)";
+        Text[ chinese_traditional ] = "§£∂°¬_(~C)";
+        Text[ arabic ] = "Ê—ﬁ €Ì— „ ﬁÿ⁄";
+        Text[ greek ] = "”ıÌÂ˜ﬁÚ";
+        Text[ korean ] = "∞Ëº”(~C)";
+        Text[ turkish ] = "Sonsuz form";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_SHEET
+    {
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 43 , 10 ) ;
+        Text = "~Bogen" ;
+        Text [ English ] = "Sheet" ;
+        Text [ norwegian ] = "Sheet" ;
+        Text [ italian ] = "Foglio" ;
+        Text [ portuguese_brazilian ] = "Folha" ;
+        Text [ portuguese ] = "~Folha" ;
+        Text [ finnish ] = "Arkki" ;
+        Text [ danish ] = "Ark" ;
+        Text [ french ] = "~Feuille" ;
+        Text [ swedish ] = "~Ark" ;
+        Text [ dutch ] = "~Blad" ;
+        Text [ spanish ] = "~Hoja" ;
+        Text [ english_us ] = "~Sheet" ;
+        Text[ chinese_simplified ] = "÷Ω’≈(~S)";
+        Text[ russian ] = "ŒÚ‰ÂÎ¸ÌÓ";
+        Text[ polish ] = "Arkusz";
+        Text[ japanese ] = "º∞ƒ(~S)";
+        Text[ chinese_traditional ] = "Ø»±i(~S)";
+        Text[ arabic ] = "›—Œ Ê—ﬁ";
+        Text[ greek ] = "~÷‹ÍÂÎÔÚ";
+        Text[ korean ] = "Ω√∆Æ(~S)";
+        Text[ turkish ] = "Fˆy";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText TXT_MAKE
+    {
+        Pos = MAP_APPFONT ( 58 , 91 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Text = "~Marke" ;
+        Text [ English ] = "Make" ;
+        Text [ norwegian ] = "Make" ;
+        Text [ italian ] = "Marca" ;
+        Text [ portuguese_brazilian ] = "Fazer" ;
+        Text [ portuguese ] = "Marca" ;
+        Text [ finnish ] = "Merkki" ;
+        Text [ danish ] = "MÊrke" ;
+        Text [ french ] = "~Marque" ;
+        Text [ swedish ] = "~M‰rke" ;
+        Text [ dutch ] = "~Merk" ;
+        Text [ spanish ] = "~Marca" ;
+        Text [ english_us ] = "Brand" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "…Ã±Í";
+        Text[ russian ] = "Ã‡Í‡";
+        Text[ polish ] = "Znacznik";
+        Text[ japanese ] = "êªë¢å≥";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "∞”º–";
+        Text[ arabic ] = "«·„«—ﬂ…";
+        Text[ greek ] = "~Ã‹ÒÍ·";
+        Text[ korean ] = "ªÛ«•";
+        Text[ turkish ] = "Markas˝";
+    };
+    ListBox BOX_MAKE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 92 , 89 ) ;
+        Size = MAP_APPFONT ( 119 , 91 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText TXT_TYPE
+    {
+        Pos = MAP_APPFONT ( 58 , 106 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Text = "~Typ" ;
+        Text [ English ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Type" ;
+        Text [ french ] = "~Type" ;
+        Text [ swedish ] = "~Typ" ;
+        Text [ dutch ] = "~Type" ;
+        Text [ spanish ] = "~Tipo" ;
+        Text [ english_us ] = "~Type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¿‡–Õ(~T)";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "éÌóﬁ(~T)";
+        Text[ chinese_traditional ] = "√˛´¨(~T)";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ greek ] = "~‘˝ÔÚ";
+        Text[ korean ] = "¿Ø«¸(~T)";
+        Text[ turkish ] = "Tipi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox BOX_TYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 92 , 104 ) ;
+        Size = MAP_APPFONT ( 119 , 61 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText INF_FORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 199 , 8 ) ;
+        Left = TRUE ;
+    };
+    GroupBox GRP_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 78 ) ;
+        Size = MAP_APPFONT ( 248 , 55 ) ;
+        Text = "Format" ;
+        Text [ English ] = "Format" ;
+        Text [ norwegian ] = "Format" ;
+        Text [ italian ] = "Formato" ;
+        Text [ portuguese_brazilian ] = "Formato" ;
+        Text [ portuguese ] = "Formato" ;
+        Text [ finnish ] = "Muotoile" ;
+        Text [ danish ] = "Format" ;
+        Text [ french ] = "Format" ;
+        Text [ swedish ] = "Format" ;
+        Text [ dutch ] = "Formaat" ;
+        Text [ spanish ] = "Formato" ;
+        Text [ english_us ] = "Format" ;
+        Text[ chinese_simplified ] = "∏Ò Ω";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ";
+        Text[ chinese_traditional ] = "ÆÊ¶°";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
+        Text[ greek ] = "ÃÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ";
+        Group = TRUE ;
+        Text[ turkish ] = "Format";
+        Text[ language_user1 ] = " ";
+    };
+};
+#define WIDTH  100
+#define HEIGHT 16
+FloatingWindow DLG_SYNC_BTN
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = FALSE ;
+    Zoomable = TRUE ;
+    HelpID = HID_SYNC_BTN ;
+    Hide = TRUE ;
+    PushButton BTN_SYNC
+    {
+        Pos = MAP_APPFONT ( 1 , 1 ) ;
+        Size = MAP_APPFONT ( WIDTH - 1 , HEIGHT - 1 ) ;
+        Text = "Etiketten synchronisieren" ;
+        Text [ ENGLISH ] = "Synchronize labels" ;
+        Text [ english_us ] = "Synchronize Labels" ;
+        Text [ portuguese_brazilian ] = "Etiketten synchronisieren" ;
+        Text [ swedish ] = "Synkronisera etiketter" ;
+        Text [ danish ] = "Synkroniser etiketter" ;
+        Text [ italian ] = "Sincronizza etichette" ;
+        Text [ spanish ] = "Sincronizar etiquetas" ;
+        Text [ french ] = "Synchroniser les Ètiquettes" ;
+        Text [ dutch ] = "Etiketten synchroniseren" ;
+        Text [ portuguese ] = "Sincronizar etiquetas" ;
+        Text[ chinese_simplified ] = "±Í«©Õ¨≤ΩªØ";
+        Text[ russian ] = "—ËÌıÓÌËÁËÓ‚‡Ú¸ Ì‡ÍÎÂÈÍË";
+        Text[ polish ] = "Synchronizuj etykiety";
+        Text[ japanese ] = "◊ÕﬁŸÇìØä˙Ç∑ÇÈ";
+        Text[ chinese_traditional ] = "∂Kº–¶P®B§∆";
+        Text[ arabic ] = " “«„‰ »ÿ«ﬁ«  «·⁄‰Ê‰…";
+        Text[ greek ] = "”ı„˜ÒÔÌÈÛÏ¸Ú ÂÙÈÍÂÙ˛Ì";
+        Text[ korean ] = "∂Û∫ß µø±‚»≠";
+        Text[ turkish ] = "Etiket iÁeriini Áoalt";
+        Text[ language_user1 ] = " ";
+    };
+};
+ // String *******************************************************************
+String STR_DOC_TITLE
+{
+    Text = "Etiketten" ;
+    Text [ English ] = "Labels" ;
+    Text [ norwegian ] = "Etiketter" ;
+    Text [ italian ] = "Busta" ;
+    Text [ portuguese_brazilian ] = "Etiquetas" ;
+    Text [ portuguese ] = "Etiquetas" ;
+    Text [ finnish ] = "Tarrat" ;
+    Text [ danish ] = "Etiketter" ;
+    Text [ french ] = "…tiquettes" ;
+    Text [ swedish ] = "Etiketter" ;
+    Text [ dutch ] = "Etiketten" ;
+    Text [ spanish ] = "Etiquetas" ;
+    Text [ english_us ] = "Labels" ;
+    Text[ chinese_simplified ] = "±Í«©";
+    Text[ russian ] = "Õ‡ÍÎÂÈÍË";
+    Text[ polish ] = "Etykiety";
+    Text[ japanese ] = "◊ÕﬁŸ";
+    Text[ chinese_traditional ] = "∂Kº–";
+    Text[ arabic ] = "»ÿ«ﬁ«  ⁄‰Ê‰…";
+    Text[ greek ] = "≈ÙÈÍ›ÙÂÚ";
+    Text[ korean ] = "∂Û∫ß";
+    Text[ turkish ] = "Etiket";
+    Text[ language_user1 ] = " ";
+};
+String STR_CUSTOM
+{
+    Text = "[Benutzer]" ;
+    Text [ English ] = "[Custom]" ;
+    Text [ norwegian ] = "[Custom]" ;
+    Text [ italian ] = "[Utente]" ;
+    Text [ portuguese_brazilian ] = "[Pessoal]" ;
+    Text [ portuguese ] = "[Utilizador]" ;
+    Text [ finnish ] = "[Oma]" ;
+    Text [ danish ] = "[Bruger]" ;
+    Text [ french ] = "[PersonnalisÈ]" ;
+    Text [ swedish ] = "[Anv‰ndare]" ;
+    Text [ dutch ] = "[Gebruiker] " ;
+    Text [ spanish ] = "[Usuario]" ;
+    Text [ english_us ] = "[User-defined]" ;
+    Text[ chinese_simplified ] = "[ π”√’ﬂ]";
+    Text[ russian ] = "[œÓÎ¸ÁÓ‚‡ÚÂÎ¸]";
+    Text[ polish ] = "[Uøytkownik]";
+    Text[ japanese ] = "[’∞ªﬁ∞]";
+    Text[ greek ] = "[◊ÒﬁÛÙÁÚ]";
+    Text[ korean ] = "[ªÁøÎ¿⁄]";
+    Text[ chinese_traditional ] = "[®œ•Œ™Ã]";
+    Text[ arabic ] = "[„” Œœ„]";
+    Text[ turkish ] = "[Kullan˝c˝ tan˝ml˝]";
+};
+/********************************************************************/
+TabPage TP_VISITING_CARDS
+{
+    HelpID = HID_TP_VISITING_CARDS ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+
+    Control LB_AUTO_TEXT
+    {
+        Pos = MAP_APPFONT ( 12 , 12 ) ;
+        Size = MAP_APPFONT ( 109 , 83 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_AUTO_TEXT_GROUP
+    {
+        Pos = MAP_APPFONT ( 12 ,  98) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "AutoText - ~Bereich" ;
+        Text [ English ] = "AutoText group" ;
+        Text[ english_us ] = "AutoText - Section";
+        Text[ portuguese ] = "AutoTexto - ~secÁ„o";
+        Text[ russian ] = "Œ·Î‡ÒÚ¸ ‡‚ÚÓÚÂÍÒÚ‡";
+        Text[ greek ] = "–ÂÒÈÔ˜ﬁ ¡ıÙÔ ÂÈÏ›ÌÔı";
+        Text[ dutch ] = "AutoTekst - ~bereik";
+        Text[ french ] = "AutoTexte - ~Section";
+        Text[ spanish ] = "¡rea AutoT~exto";
+        Text[ italian ] = "Testo automatico - Sezione";
+        Text[ danish ] = "AutoTekst - omrÂde";
+        Text[ swedish ] = "AutoText - omrÂde";
+        Text[ polish ] = "Obszar Autotekstu";
+        Text[ portuguese_brazilian ] = "AutoText group";
+        Text[ japanese ] = "ì¸óÕéxâá îÕàÕ(~S)";
+        Text[ korean ] = "¿⁄µø ≈ÿΩ∫∆Æ - ±∏ø™(~S)";
+        Text[ chinese_simplified ] = "◊‘∂ØÕºŒƒºØ∑÷¿‡(~S)";
+        Text[ chinese_traditional ] = "¶€∞ πœ§Â∂∞§¿√˛(~S)";
+        Text[ arabic ] = "‰ÿ«ﬁ «·‰’ «· ·ﬁ«∆Ì";
+        Text[ turkish ] = "Otomatik metin - alan˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_AUTO_TEXT_GROUP
+    {
+        Pos = MAP_APPFONT ( 12 , 111) ;
+        Size = MAP_APPFONT ( 109 , 40 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    GroupBox GB_CONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 129 ) ;
+        Text = "Inhalt" ;
+        Text [ English ] = "Content" ;
+        Text[ english_us ] = "Content";
+        Text[ portuguese ] = "Conte˙do";
+        Text[ russian ] = "—Ó‰ÂÊËÏÓÂ";
+        Text[ greek ] = "–ÂÒÈÂ˜¸ÏÂÌ·";
+        Text[ dutch ] = "Inhoud";
+        Text[ french ] = "Contenu";
+        Text[ spanish ] = "Contenido";
+        Text[ italian ] = "Contenuto";
+        Text[ danish ] = "Indhold";
+        Text[ swedish ] = "InnehÂll";
+        Text[ polish ] = "ZawartoúÊ";
+        Text[ portuguese_brazilian ] = "Content";
+        Text[ japanese ] = "ì‡óe";
+        Text[ korean ] = "≥ªøÎ";
+        Text[ chinese_simplified ] = "ƒ⁄»›";
+        Text[ chinese_traditional ] = "§∫Æe";
+        Text[ arabic ] = "«·„Õ ÊÌ« ";
+        Text[ turkish ] = "›Áerik";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 136, 12 ) ;
+        Size = MAP_APPFONT ( 115 , 117 ) ;
+    };
+    GroupBox GB_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 133 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 129 ) ;
+        Text = "Vorschau" ;
+        Text [ English ] = "Preview" ;
+        Text[ english_us ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "AperÁu";
+        Text[ spanish ] = "PrevisualizaciÛn";
+        Text[ italian ] = "Anteprima";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Fˆrhandsvisning";
+        Text[ polish ] = "Podglπd";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ korean ] = "πÃ∏Æ∫∏±‚";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "«·„⁄«Ì‰…";
+        Text[ turkish ] = "÷nizleme";
+    };
+    String ST_VISCARD_GROUP
+    {
+       Text = "Cards";
+    };
+};
+TabPage TP_PRIVATE_DATA
+{
+    HelpID = HID_TP_PRIVATE_DATA  ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    GroupBox GB_DATA
+    {
+        Pos = MAP_APPFONT ( 6 , 2 ) ;
+        Size = MAP_APPFONT ( 248 , 130 ) ;
+        Text = "Private Daten" ;
+        Text [ English ] = "Private data" ;
+        Text[ english_us ] = "Private data";
+        Text[ portuguese ] = "Dados pessoais";
+        Text[ russian ] = "ÀË˜Ì˚Â ‰‡ÌÌ˚Â";
+        Text[ greek ] = "–ÒÔÛ˘ÈÍ‹ ÛÙÔÈ˜Âﬂ·";
+        Text[ dutch ] = "PrivÈgegevens";
+        Text[ french ] = "CoordonnÈes privÈes";
+        Text[ spanish ] = "Datos privados";
+        Text[ italian ] = "Dati privati";
+        Text[ danish ] = "Private data";
+        Text[ swedish ] = "Privata data";
+        Text[ polish ] = "Dane prywatne";
+        Text[ portuguese_brazilian ] = "Private data";
+        Text[ japanese ] = "Ãﬂ◊≤Õﬁ∞ƒ√ﬁ∞¿";
+        Text[ korean ] = "∞≥¿Œ µ•¿Ã≈Õ";
+        Text[ chinese_simplified ] = "ÀΩ»À◊ ¡œ";
+        Text[ chinese_traditional ] = "®p§Hº∆’u";
+        Text[ arabic ] = "»Ì«‰«  ‘Œ’Ì…";
+        Text[ turkish ] = "÷zel bilgiler";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 ,  13) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Vor-/Name/K¸rzel" ;
+        Text [ English ] = "First/Last ~name" ;
+        Text[ english_us ] = "First/Last ~name/Initials";
+        Text[ portuguese ] = "~Nome prÛprio/Apelido/Iniciais";
+        Text[ russian ] = "‘‡ÏËÎËˇ/ËÏˇ/ËÌËˆË‡Î˚";
+        Text[ greek ] = "ºÌÔÏ·/≈˛ÌıÏÔ/¡Ò˜ÈÍ‹";
+        Text[ dutch ] = "~Voor-/achternaam/Initialen";
+        Text[ french ] = "~PrÈnom/Nom/Initiales";
+        Text[ spanish ] = "No~mbre/Apellidos/Iniciales";
+        Text[ italian ] = "Nome/Cognome/Iniziali";
+        Text[ danish ] = "For-/Efternavn/Initialer";
+        Text[ swedish ] = "~Fˆr-/efternamn/initialer";
+        Text[ polish ] = "ImiÍ/Nazwisko/Inicja≥y";
+        Text[ portuguese_brazilian ] = "First/Last ~name";
+        Text[ japanese ] = "ñº/ê©/≤∆º¨Ÿ(~N)";
+        Text[ korean ] = "¿Ã∏ß/º∫/¿Ã¥œº» 2(~N)";
+        Text[ chinese_simplified ] = "√˚◊÷/–’ œ/Àı–¥(~N)";
+        Text[ chinese_traditional ] = "¶W¶r/©m§Û/¡Yºg(~N)";
+        Text[ arabic ] = "«·«”„/«”„ «·⁄«∆·…/«·«Œ ’«—";
+        Text[ turkish ] = "Ad/Soyad/Ba˛harfler";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FIRSTNAME
+    {
+        Pos = MAP_APPFONT ( 105 , 12 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_NAME
+    {
+        Pos = MAP_APPFONT ( 163 , 12 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_SHORTCUT
+    {
+        Pos = MAP_APPFONT ( 221 , 12 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_NAME_2
+    {
+        Pos = MAP_APPFONT ( 12 ,  26) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Vor-/Name/K¸rzel 2" ;
+        Text [ English ] = "First/Last ~name 2" ;
+        Text[ english_us ] = "First / Last ~Name / Initials 2";
+        Text[ portuguese ] = "~Nome prÛprio/Apelido/Iniciais 2";
+        Text[ russian ] = "‘‡ÏËÎËˇ/ËÏˇ/ÒÓÍ‡˘ÂÌËÂ 2";
+        Text[ greek ] = "ºÌÔÏ·/≈ﬂËÂÙÔ/¡Ò˜ÈÍ‹ 2";
+        Text[ dutch ] = "Voor/achter ~naam 2";
+        Text[ french ] = "~PrÈnom/Nom/Initiales 2";
+        Text[ spanish ] = "Nombre/Apellidos/Iniciales 2";
+        Text[ italian ] = "Nome/Cognome/Iniziali 2";
+        Text[ danish ] = "For-/Efternavn/Initialer 2";
+        Text[ swedish ] = "Fˆr-/efter~namn/initialer 2";
+        Text[ polish ] = "ImiÍ/Nazwisko/Inicja≥y";
+        Text[ portuguese_brazilian ] = "First/Last ~name 2";
+        Text[ japanese ] = "ê©/ñº/≤∆º¨Ÿ 2Åi~NÅj";
+        Text[ korean ] = "¿Ã∏ß/º∫/¿Ã¥œº» 2(~N)";
+        Text[ chinese_simplified ] = "√˚◊÷/–’ œ/Àı–¥ 2";
+        Text[ chinese_traditional ] = "¶W¶r/©m§Û/¡Yºg 2";
+        Text[ arabic ] = "«·«”„/«”„ «·⁄«∆·…/«·«Œ ’«— 2";
+        Text[ turkish ] = "Ad/Soyad/Ba˛harfler 2";
+    };
+    Edit ED_FIRSTNAME_2
+    {
+        Pos = MAP_APPFONT ( 105 , 25 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_NAME_2
+    {
+        Pos = MAP_APPFONT ( 163 , 25 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_SHORTCUT_2
+    {
+        Pos = MAP_APPFONT ( 221 , 25 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_STREET
+    {
+        Pos = MAP_APPFONT ( 12 ,  39) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Straﬂe" ;
+        Text [ English ] = "Street" ;
+        Text[ english_us ] = "S~treet";
+        Text[ portuguese ] = "~Rua";
+        Text[ russian ] = "”ÎËˆ‡";
+        Text[ greek ] = "œ‰¸Ú";
+        Text[ dutch ] = "~Straat";
+        Text[ french ] = "~Rue";
+        Text[ spanish ] = "~Calle";
+        Text[ italian ] = "Via";
+        Text[ danish ] = "Gade";
+        Text[ swedish ] = "Gatuadres~s";
+        Text[ polish ] = "Ulica";
+        Text[ portuguese_brazilian ] = "Street";
+        Text[ japanese ] = "í¨ñº(~T)";
+        Text[ korean ] = "¡÷º“π¯¡ˆ(~T)";
+        Text[ chinese_simplified ] = "Ω÷µ¿(~T)";
+        Text[ chinese_traditional ] = "µÛπD(~T)";
+        Text[ arabic ] = "«·‘«—⁄";
+        Text[ turkish ] = "Sokak";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_STREET
+    {
+        Pos = MAP_APPFONT ( 105 , 38 ) ;
+        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_ZIPCITY
+    {
+        Pos = MAP_APPFONT ( 12 ,  52) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "PLZ/Or~t" ;
+        Text [ English ] = "Zip/City" ;
+        Text[ english_us ] = "Zip/Cit~y";
+        Text[ portuguese ] = "CP/~Localidade";
+        Text[ russian ] = "œÓ˜Ú.ËÌ‰ÂÍÒ/„ÓÓ‰";
+        Text[ greek ] = "‘. ./–¸ÎÁ";
+        Text[ dutch ] = "~Postcode/Plaats";
+        Text[ french ] = "C.P./~Ville";
+        Text[ spanish ] = "CP/Ciuda~d";
+        Text[ italian ] = "C.A.P./Localit‡";
+        Text[ danish ] = "Postnr./By";
+        Text[ swedish ] = "~Postnr/Ort";
+        Text[ polish ] = "Kod pocztowy/MiejscowoúÊ";
+        Text[ portuguese_brazilian ] = "Zip/City";
+        Text[ japanese ] = "óXï÷î‘çÜ/ìsìπï{åßñº(~Y)";
+        Text[ korean ] = "øÏ∆Ìπ¯»£/µµΩ√(~Y)";
+        Text[ chinese_simplified ] = "” ±‡/≥« –(~Y)";
+        Text[ chinese_traditional ] = "∂lªº∞œ∏π/´∞•´(~Y)";
+        Text[ arabic ] = "«·—„“ «·»—ÌœÌ/«·„œÌ‰…";
+        Text[ turkish ] = "Posta kodu/ﬁehir";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_ZIP
+    {
+        Pos = MAP_APPFONT ( 105 , 51 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_CITY
+    {
+        Pos = MAP_APPFONT ( 158 , 51 ) ;
+        Size = MAP_APPFONT ( 93 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_COUNTRYSTATE
+    {
+        Pos = MAP_APPFONT ( 12 ,  65) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Land/Bundesland" ;
+        Text [ English ] = "Country/State" ;
+        Text[ english_us ] = "Co~untry/State";
+        Text[ portuguese ] = "~PaÌs";
+        Text[ russian ] = "—Ú‡Ì‡/Ó·Î‡ÒÚ¸";
+        Text[ greek ] = "◊˛Ò·";
+        Text[ dutch ] = "~Land";
+        Text[ french ] = "~Pays/…tat (US)";
+        Text[ spanish ] = "~PaÌs/Provincia";
+        Text[ italian ] = "Provincia/Paese";
+        Text[ danish ] = "Land";
+        Text[ swedish ] = "~Land/Delstat";
+        Text[ polish ] = "Kraj/WojewÛdztwo";
+        Text[ portuguese_brazilian ] = "Country/State";
+        Text[ japanese ] = "çëñº/ìsìπï{åßñº(~U)";
+        Text[ korean ] = "±π∞°/¡÷(~U)";
+        Text[ chinese_simplified ] = "π˙º“/ ° –(~U)";
+        Text[ chinese_traditional ] = "∞ÍÆa/¨Ÿ(~U)";
+        Text[ arabic ] = "«·œÊ·…/«·Ê·«Ì…";
+        Text[ turkish ] = "‹lke/›l";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_COUNTRY
+    {
+        Pos = MAP_APPFONT ( 105 , 64 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_STATE
+    {
+        Pos = MAP_APPFONT ( 179 , 64 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_TITLEPROF
+    {
+        Pos = MAP_APPFONT ( 12 ,  78) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Titel/Beruf" ;
+        Text [ English ] = "Title/Profession" ;
+        Text[ english_us ] = "Title/~Profession";
+        Text[ portuguese ] = "~TÌtulo/Profiss„o";
+        Text[ russian ] = "“ËÚÛÎ/ÔÓÙÂÒÒËˇ";
+        Text[ greek ] = "~‘ﬂÙÎÔÚ/≈‹„„ÂÎÏ·";
+        Text[ dutch ] = "Titel/Beroep";
+        Text[ french ] = "~Titre/Profession";
+        Text[ spanish ] = "TÌtulo/Pro~fesiÛn";
+        Text[ italian ] = "Titolo/Professione";
+        Text[ danish ] = "Titel/Stilling";
+        Text[ swedish ] = "~Titel/Yrke";
+        Text[ polish ] = "Tytu≥/ZawÛd";
+        Text[ portuguese_brazilian ] = "Title/Profession";
+        Text[ japanese ] = "å®èëÇ´/êEã∆(~P)";
+        Text[ korean ] = "¡˜¿ß/¿¸πÆ∫–æﬂ(~P)";
+        Text[ chinese_simplified ] = "Õ∑œŒ/÷∞“µ(~P)";
+        Text[ chinese_traditional ] = "∫Ÿ©I/¬æ∑~";
+        Text[ arabic ] = "«··ﬁ» «·„Â‰Ì/«·ÊŸÌ›…";
+        Text[ turkish ] = "Unvan/Meslek";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TITLE
+    {
+        Pos = MAP_APPFONT ( 105 , 77 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_PROFESSION
+    {
+        Pos = MAP_APPFONT ( 179 , 77 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_PHONE
+    {
+        Pos = MAP_APPFONT ( 12 ,  91) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Telef~on/Mobil" ;
+        Text [ English ] = "Phone/mobile" ;
+        Text[ english_us ] = "Phone/cellphone";
+        Text[ portuguese ] = "Telefone/Tele~mÛvel";
+        Text[ russian ] = "“ÂÎÂÙÓÌ/ÏÓ·ËÎ¸Ì˚È";
+        Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ/ ÈÌÁÙ¸";
+        Text[ dutch ] = "Tele~foon/mobile";
+        Text[ french ] = "~Tel/Portable";
+        Text[ spanish ] = "T~elÈfono/MÛvil";
+        Text[ italian ] = "Tel./Cell.";
+        Text[ danish ] = "Telefon/Mobil";
+        Text[ swedish ] = "Telef~on/Mobil";
+        Text[ polish ] = "Telefon/KomÛrka";
+        Text[ portuguese_brazilian ] = "Phone/mobile";
+        Text[ japanese ] = "ìdòb/ågë—ìdòb";
+        Text[ korean ] = "¿¸»≠/ «⁄µÂ∆˘";
+        Text[ chinese_simplified ] = "µÁª∞/ ÷ª˙";
+        Text[ chinese_traditional ] = "πq∏‹/≤æ∞ πq∏‹";
+        Text[ arabic ] = "«·Â« ›/«·„Õ„Ê·";
+        Text[ turkish ] = "Telef~on/Cep telefonu";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_PHONE
+    {
+        Pos = MAP_APPFONT ( 105 , 90 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MOBILE
+    {
+        Pos = MAP_APPFONT ( 179 , 90 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_FAX
+    {
+        Pos = MAP_APPFONT ( 12 ,  104) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Fa~x" ;
+        Text [ English ] = "Fax" ;
+        Text[ english_us ] = "Fa~x";
+        Text[ portuguese ] = "Fa~x";
+        Text[ russian ] = "‘‡ÍÒ";
+        Text[ greek ] = "Fax";
+        Text[ dutch ] = "Fa~x";
+        Text[ french ] = "~Fax";
+        Text[ spanish ] = "Fa~x";
+        Text[ italian ] = "Fa~x";
+        Text[ danish ] = "Fax";
+        Text[ swedish ] = "Fa~x";
+        Text[ polish ] = "Faks";
+        Text[ portuguese_brazilian ] = "Fax";
+        Text[ japanese ] = "Fa~x";
+        Text[ korean ] = "∆—Ω∫(~X)";
+        Text[ chinese_simplified ] = "¥´’Ê(~X)";
+        Text[ chinese_traditional ] = "∂«Øu(~X)";
+        Text[ arabic ] = "«·›«ﬂ”";
+        Text[ turkish ] = "Faks";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FAX
+    {
+        Pos = MAP_APPFONT ( 105 , 103 ) ;
+        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_WWWMAIL
+    {
+        Pos = MAP_APPFONT ( 12 ,  117) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Homepage / E-Mail" ;
+        Text [ English ] = "Homepage / eMail" ;
+        Text[ english_us ] = "Homepage / e-mail";
+        Text[ portuguese ] = "Homepage / e-mail";
+        Text[ russian ] = "ƒÓÏ.ÒÚ‡ÌËˆ‡ / ˝Î.ÔÓ˜Ú‡";
+        Text[ greek ] = " ÂÌÙÒÈÍﬁ ÛÂÎﬂ‰· / E-Mail";
+        Text[ dutch ] = "Homepage / e-mail";
+        Text[ french ] = "Homepage / E-mail";
+        Text[ spanish ] = "P·gina principal / e-mail";
+        Text[ italian ] = "Homepage/eMail";
+        Text[ danish ] = "Hjemmeside/E-mail";
+        Text[ swedish ] = "Hemsida / e-post";
+        Text[ polish ] = "Strona macierzysta/e-mail";
+        Text[ portuguese_brazilian ] = "Homepage / eMail";
+        Text[ japanese ] = "Œ∞—Õﬂ∞ºﬁ/E-mail";
+        Text[ korean ] = "»®∆‰¿Ã¡ˆ / ¿¸¿⁄øÏ∆Ì";
+        Text[ chinese_simplified ] = "÷˜“≥/µÁ◊”” º˛";
+        Text[ chinese_traditional ] = "≠∫≠∂/πq§l∂l•Û";
+        Text[ arabic ] = "„Êﬁ⁄ «·≈‰ —‰  / «·»—Ìœ «·≈·ﬂ —Ê‰Ì";
+        Text[ turkish ] = "Web sayfas˝ / E-posta";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_WWW
+    {
+        Pos = MAP_APPFONT ( 105 , 116) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MAIL
+    {
+        Pos = MAP_APPFONT ( 179 , 116) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Border = TRUE ;
+    };
+};
+TabPage TP_BUSINESS_DATA
+{
+    HelpID = HID_TP_BUSINESS_DATA;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    GroupBox GB_DATA
+    {
+        Pos = MAP_APPFONT ( 6 , 2 ) ;
+        Size = MAP_APPFONT ( 248 , 130 ) ;
+        Text = "Gesch‰ftliche Daten" ;
+        Text [ English ] = "Business data" ;
+        Text[ english_us ] = "Business data";
+        Text[ portuguese ] = "Dados do emprego";
+        Text[ russian ] = "—ÎÛÊÂ·Ì˚Â ‰‡ÌÌ˚Â";
+        Text[ greek ] = "≈·„„ÂÎÏ·ÙÈÍ‹ ÛÙÔÈ˜Âﬂ·";
+        Text[ dutch ] = "Zakelijke gegevens";
+        Text[ french ] = "CoordonnÈes du bureau";
+        Text[ spanish ] = "Datos del trabajo";
+        Text[ italian ] = "Dati lavoro";
+        Text[ danish ] = "Forretningsdata";
+        Text[ swedish ] = "Aff‰rsdata";
+        Text[ polish ] = "Dane s≥uøbowe";
+        Text[ portuguese_brazilian ] = "Business data";
+        Text[ japanese ] = "é–óp√ﬁ∞¿";
+        Text[ korean ] = "æ˜π´ µ•¿Ã≈Õ";
+        Text[ chinese_simplified ] = "…ÃŒÒ◊ ¡œ";
+        Text[ chinese_traditional ] = "∞”∞»º∆’u";
+        Text[ arabic ] = "»Ì«‰«  «·⁄„·";
+        Text[ turkish ] = "›˛ Bilgileri";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_COMP
+    {
+        Pos = MAP_APPFONT ( 12 ,  13) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Firma" ;
+        Text [ English ] = "Company" ;
+        Text[ english_us ] = "Company";
+        Text[ portuguese ] = "~Firma";
+        Text[ russian ] = "œÂ‰ÔËˇÚËÂ";
+        Text[ greek ] = "≈~Ù·ÈÒﬂ·";
+        Text[ dutch ] = "~Firma";
+        Text[ french ] = "~SociÈtÈ";
+        Text[ spanish ] = "E~mpresa";
+        Text[ italian ] = "Ditta";
+        Text[ danish ] = "Firma";
+        Text[ swedish ] = "~Fˆretag";
+        Text[ polish ] = "Firma";
+        Text[ portuguese_brazilian ] = "Company";
+        Text[ japanese ] = "âÔé–ñº";
+        Text[ korean ] = "»∏ªÁ";
+        Text[ chinese_simplified ] = "π´Àæ";
+        Text[ chinese_traditional ] = "§Ω•q";
+        Text[ arabic ] = "«·‘—ﬂ…";
+        Text[ turkish ] = "~ﬁirket ad˝";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_COMP
+    {
+        Pos = MAP_APPFONT ( 105 , 12) ;
+        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_COMP_EXT
+    {
+        Pos = MAP_APPFONT ( 12 ,  26) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Firma ~2. Zeile" ;
+        Text [ English ] = "Company 2nd line" ;
+        Text[ english_us ] = "Company 2nd line";
+        Text[ portuguese ] = "Firma: ~2™ linha";
+        Text[ russian ] = "œÂ‰ÔËˇÚËÂ 2-ˇ ÒÚÓÍ‡";
+        Text[ greek ] = "≈Ù·ÈÒﬂ· 2Á „Ò·ÏÏﬁ";
+        Text[ dutch ] = "Firma ~2e regel";
+        Text[ french ] = "SociÈtÈ : ~2e ligne";
+        Text[ spanish ] = "Empresa ~2da lÌnea";
+        Text[ italian ] = "Ditta (2™ riga)";
+        Text[ danish ] = "Firma 2. linje";
+        Text[ swedish ] = "Fˆretag rad ~2";
+        Text[ polish ] = "Firma 2 wiersz";
+        Text[ portuguese_brazilian ] = "Company 2nd line";
+        Text[ japanese ] = "âÔé–ñº 2çsñ⁄";
+        Text[ korean ] = "»∏ªÁ 2π¯¬∞ º±";
+        Text[ chinese_simplified ] = "π´Àæ(µ⁄∂˛––)";
+        Text[ chinese_traditional ] = "§Ω•q(≤ƒ§G¶Ê)";
+        Text[ arabic ] = "«·‘—ﬂ… «·”ÿ— «·À«‰Ì";
+        Text[ turkish ] = "ﬁirket ad˝ ( 2'nci sat˝r)";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_COMP_EXT
+    {
+        Pos = MAP_APPFONT ( 105 , 25) ;
+        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_SLOGAN
+    {
+        Pos = MAP_APPFONT ( 12 ,  39) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Sl~ogan" ;
+        Text [ English ] = "Slogan" ;
+        Text[ english_us ] = "Slogan";
+        Text[ portuguese ] = "~Slogan";
+        Text[ russian ] = "ƒÂ‚ËÁ";
+        Text[ greek ] = "”Î¸„Í·Ì";
+        Text[ dutch ] = "Sl~ogan";
+        Text[ french ] = "~Devise";
+        Text[ spanish ] = "Esl~ogan";
+        Text[ italian ] = "Sl~ogan";
+        Text[ danish ] = "Slogan";
+        Text[ swedish ] = "Sl~ogan";
+        Text[ polish ] = "Slogan";
+        Text[ portuguese_brazilian ] = "Slogan";
+        Text[ japanese ] = "Ω€∞∂ﬁ›";
+        Text[ korean ] = "ΩΩ∑Œ∞«";
+        Text[ chinese_simplified ] = "π„∏Ê”√”Ô";
+        Text[ chinese_traditional ] = "¶W®•";
+        Text[ arabic ] = "«·‘⁄«—";
+        Text[ turkish ] = "Slogan";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_SLOGAN
+    {
+        Pos = MAP_APPFONT ( 105 , 38) ;
+        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_STREET
+    {
+        Pos = MAP_APPFONT ( 12 ,  52) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Straﬂe" ;
+        Text [ English ] = "Street" ;
+        Text[ english_us ] = "Street";
+        Text[ portuguese ] = "~Rua";
+        Text[ russian ] = "”ÎËˆ‡";
+        Text[ greek ] = "œ‰¸Ú";
+        Text[ dutch ] = "~Straat";
+        Text[ french ] = "~Rue";
+        Text[ spanish ] = "~Calle";
+        Text[ italian ] = "Via";
+        Text[ danish ] = "Gade";
+        Text[ swedish ] = "Besˆksadre~ss";
+        Text[ polish ] = "Ulica";
+        Text[ portuguese_brazilian ] = "Street";
+        Text[ japanese ] = "í¨ñº";
+        Text[ korean ] = "¡÷º“π¯¡ˆ";
+        Text[ chinese_simplified ] = "Ω÷µ¿";
+        Text[ chinese_traditional ] = "µÛπD";
+        Text[ arabic ] = "«·‘«—⁄";
+        Text[ turkish ] = "Sokak";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_STREET
+    {
+        Pos = MAP_APPFONT ( 105 , 51) ;
+        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_ZIPCITY
+    {
+        Pos = MAP_APPFONT ( 12 ,  65) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "PLZ/Or~t" ;
+        Text [ English ] = "ZIP/City" ;
+        Text[ english_us ] = "ZIP/City";
+        Text[ portuguese ] = "CP/~Localidade";
+        Text[ russian ] = "œÓ˜Ú.ËÌ‰ÂÍÒ/„ÓÓ‰";
+        Text[ greek ] = "‘. ./–¸ÎÁ";
+        Text[ dutch ] = "Pos~tcode/Plaats";
+        Text[ french ] = "C.P/~Ville";
+        Text[ spanish ] = "CP/Ciu~dad";
+        Text[ italian ] = "C.A.P./Localit‡";
+        Text[ danish ] = "Postnr./By";
+        Text[ swedish ] = "Postnr/Or~t";
+        Text[ polish ] = "Kod pocztowy/MiejscowoúÊ";
+        Text[ portuguese_brazilian ] = "ZIP/City";
+        Text[ japanese ] = "óXï÷î‘çÜ/ìsìπï{åßñº";
+        Text[ korean ] = "øÏ∆Ìπ¯»£/µµΩ√";
+        Text[ chinese_simplified ] = "” ±‡/≥« –";
+        Text[ chinese_traditional ] = "∂lªº∞œ∏π/´∞•´";
+        Text[ arabic ] = "«·—„“ «·»—ÌœÌ/«·„œÌ‰…";
+        Text[ turkish ] = "Posta kodu/ﬁehir";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_ZIP
+    {
+        Pos = MAP_APPFONT ( 105 , 64) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_CITY
+    {
+        Pos = MAP_APPFONT ( 158 , 64) ;
+        Size = MAP_APPFONT ( 93 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_COUNTRYSTATE
+    {
+        Pos = MAP_APPFONT ( 12 ,  78) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Land/Bundesland" ;
+        Text [ English ] = "Country/State" ;
+        Text[ english_us ] = "Country/State";
+        Text[ portuguese ] = "~PaÌs";
+        Text[ russian ] = "—Ú‡Ì‡/Ó·Î‡ÒÚ¸";
+        Text[ greek ] = "◊˛Ò·";
+        Text[ dutch ] = "~Land";
+        Text[ french ] = "~Pays/…tat (US)";
+        Text[ spanish ] = "PaÌs/Pro~vincia";
+        Text[ italian ] = "Provincia/Paese";
+        Text[ danish ] = "Land";
+        Text[ swedish ] = "~Land/Delstat";
+        Text[ polish ] = "Kraj/WojewÛdztwo";
+        Text[ portuguese_brazilian ] = "Country/State";
+        Text[ japanese ] = "çë/ìsìπï{åß";
+        Text[ korean ] = "±π∞°/¡÷";
+        Text[ chinese_simplified ] = "π˙º“/ ° –";
+        Text[ chinese_traditional ] = "∞ÍÆa/¨Ÿ";
+        Text[ arabic ] = "«·œÊ·…/«·Ê·«Ì…";
+        Text[ turkish ] = "‹lke/›l";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_COUNTRY
+    {
+        Pos = MAP_APPFONT ( 105 , 77) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_STATE
+    {
+        Pos = MAP_APPFONT ( 179 , 77) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_POSITION
+    {
+        Pos = MAP_APPFONT ( 12 ,  91) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "~Position" ;
+        Text [ English ] = "Position" ;
+        Text[ english_us ] = "Position";
+        Text[ portuguese ] = "~PosiÁ„o";
+        Text[ russian ] = "ƒÓÎÊÌÓÒÚ¸";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ dutch ] = "~Positie";
+        Text[ french ] = "~Fonction";
+        Text[ spanish ] = "~PosiciÛn";
+        Text[ italian ] = "~Posizione";
+        Text[ danish ] = "Stilling";
+        Text[ swedish ] = "~Befattning";
+        Text[ polish ] = "Pozycja";
+        Text[ portuguese_brazilian ] = "Position";
+        Text[ japanese ] = "ñêE";
+        Text[ korean ] = "¡˜¿ß";
+        Text[ chinese_simplified ] = "÷∞Œª";
+        Text[ chinese_traditional ] = "¶Ï∏m";
+        Text[ arabic ] = "«·„‰’» «·ÊŸÌ›Ì";
+        Text[ turkish ] = "Pozisyon";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_POSITION
+    {
+        Pos = MAP_APPFONT ( 105 , 90) ;
+        Size = MAP_APPFONT ( 146 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_PHONE
+    {
+        Pos = MAP_APPFONT ( 12 ,  104) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Telefo~n/Mobil/Fax" ;
+        Text [ English ] = "Phone/Mobile/Fax" ;
+        Text[ english_us ] = "Phone/Cellphone/Fax";
+        Text[ portuguese ] = "Telefo~ne/TelemÛvel/Fax";
+        Text[ russian ] = "“ÂÎÂÙÓÌ/ÃÓ·ËÎ¸Ì˚È/‘‡ÍÒ";
+        Text[ greek ] = "‘ÁÎ›ˆ˘ÌÔ/ ÈÌÁÙ¸/Fax";
+        Text[ dutch ] = "Telefoo~n/Mobile/Fax";
+        Text[ french ] = "~TÈlÈphone/Portable/Fax";
+        Text[ spanish ] = "~TelÈfono/MÛvil/Fax";
+        Text[ italian ] = "Tel./Cell./Fax";
+        Text[ danish ] = "Telefon/Mobil/Fax";
+        Text[ swedish ] = "Telefo~n/Mobil/Fax";
+        Text[ polish ] = "Telefon/KomÛrka/Faks";
+        Text[ portuguese_brazilian ] = "Phone/Mobile/Fax";
+        Text[ japanese ] = "ìdòb/ågë—ìdòb/Fax";
+        Text[ korean ] = "¿¸«œ/«⁄µÂ∆˘/∆—Ω∫";
+        Text[ chinese_simplified ] = "µÁª∞/ ÷ª˙/¥´’Ê";
+        Text[ chinese_traditional ] = "πq∏‹/≤æ∞ πq∏‹/∂«Øu";
+        Text[ arabic ] = "«·Â« ›/«·„Õ„Ê·/«·›«ﬂ”";
+        Text[ turkish ] = "Telefon/Cep telefonu/Faks";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_PHONE
+    {
+        Pos = MAP_APPFONT ( 105 , 103) ;
+        Size = MAP_APPFONT ( 47 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MOBILE
+    {
+        Pos = MAP_APPFONT ( 155 , 103) ;
+        Size = MAP_APPFONT ( 47 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_FAX
+    {
+        Pos = MAP_APPFONT ( 205 , 103) ;
+        Size = MAP_APPFONT ( 46 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_WWWMAIL
+    {
+        Pos = MAP_APPFONT ( 12 ,  117) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Ho~mepage / E-Mail" ;
+        Text [ English ] = "Homepage / eMail" ;
+        Text[ english_us ] = "Ho~mepage / e-mail";
+        Text[ portuguese ] = "Ho~mepage / e-mail";
+        Text[ russian ] = "ƒÓÏ.ÒÚ‡ÌËˆ‡ /˝Î.ÔÓ˜Ú‡";
+        Text[ greek ] = " ÂÌÙÒÈÍﬁ ÛÂÎﬂ‰· / E-Mail";
+        Text[ dutch ] = "Ho~mepage / e-mail";
+        Text[ french ] = "~Homepage / E-mail";
+        Text[ spanish ] = "P·gina principal / ~e-mail";
+        Text[ italian ] = "Ho~mepage/eMail";
+        Text[ danish ] = "Hjemmeside/E-mail";
+        Text[ swedish ] = "He~msida / e-post";
+        Text[ polish ] = "Strona macierzysta/e-mail";
+        Text[ portuguese_brazilian ] = "Homepage / eMail";
+        Text[ japanese ] = "Œ∞—Õﬂ∞ºﬁ/E-mail";
+        Text[ korean ] = "»®∆‰¿Ã¡ˆ / ¿¸¿⁄øÏ∆Ì(~M)";
+        Text[ chinese_simplified ] = "÷˜“≥/µÁ◊”” º˛";
+        Text[ chinese_traditional ] = "≠∫≠∂/πq§l∂l•Û";
+        Text[ arabic ] = "„Êﬁ⁄ «·≈‰ —‰  / «·»—Ìœ «·≈·ﬂ —Ê‰Ì";
+        Text[ turkish ] = "Web sayfas˝  / E-posta";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_WWW
+    {
+        Pos = MAP_APPFONT ( 105 , 116) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MAIL
+    {
+        Pos = MAP_APPFONT ( 179 , 116) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Border = TRUE ;
+    };
+};

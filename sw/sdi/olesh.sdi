@@ -1,0 +1,76 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   OLESH.IDL  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/olesh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File SwBaseShell fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextOLEObject : BaseTextOLEObject
+[
+    uuid = "B156B300-39FC-101D-9757-C667E8298000"
+]
+{
+    import TextFrame;
+}
+
+shell SwOleShell: SwFrameShell
+{
+    import TextOLEObject[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.16  1997/09/10 06:56:54  OS
+    OLE importiert Frame
+
+
+      Rev 1.15   10 Sep 1997 08:56:54   OS
+   OLE importiert Frame
+
+      Rev 1.14   28 Aug 1997 12:53:24   MBA
+   Neue Interface-Namen
+
+      Rev 1.13   13 Feb 1997 12:44:42   MA
+   unnoetige Texte entfernt
+
+      Rev 1.12   31 Jan 1997 13:25:46   OS
+   von _OleObject abgeleitet
+
+      Rev 1.11   21 Sep 1996 17:35:42   OS
+   Sot-Umstellung beendet
+
+      Rev 1.10   17 Jul 1996 07:31:32   OS
+   ReadOnlyDoc - Flag
+
+      Rev 1.9   08 Jul 1996 16:59:06   HJS
+   uebersetzung
+
+      Rev 1.8   22 Mar 1996 16:01:16   OS
+   status fuer neue Funktionen nachgetragen
+
+      Rev 1.7   08 Feb 1996 16:26:20   OM
+   OLE-Objekte wieder vertikal zentrieren
+
+      Rev 1.6   06 Feb 1996 15:16:06   OS
+   neu: Activate/Deactivate fuer Objekte
+
+      Rev 1.5   26 Jan 1996 10:56:30   OS
+   neu: Interface Object, um Ole-Object herauszureichen
+
+      Rev 1.4   28 Nov 1995 15:39:06   OS
+   dummy slot
+
+      Rev 1.3   11 Oct 1995 12:26:58   MA
+   Bestimme -> Setze
+
+      Rev 1.2   28 Aug 1995 15:43:36   MA
+   Renovierung: IDL, Shells, Textshell-Doktrin aufgegeben
+
+------------------------------------------------------------------------*/
+

@@ -1,0 +1,398 @@
+/*************************************************************************
+ *
+ *  $RCSfile: flddinf.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+TabPage TP_FLD_DOKINF
+{
+    HelpID = HID_FLD_DOKINF ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Dokumentinfo" ;
+    Text [ ENGLISH ] = "Document information" ;
+    FixedText FT_DOKINFTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Feldtyp" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "~Tipo di campo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo de ~campo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Felttype" ;
+        Text [ french ] = "~Type de champ" ;
+        Text [ swedish ] = "~F‰lttyp" ;
+        Text [ dutch ] = "~Veldtype" ;
+        Text [ spanish ] = "~Tipo de campo" ;
+        Text [ english_us ] = "~Type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "◊÷∂Œ¿‡–Õ(~T)";
+        Text[ russian ] = "“ËÔ ÔÓÎˇ";
+        Text[ polish ] = "Typ pola";
+        Text[ japanese ] = "Ã®∞ŸƒﬁÇÃéÌóﬁ(~T)";
+        Text[ chinese_traditional ] = "√˛´¨(~T)";
+        Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
+        Text[ greek ] = "~‘˝ÔÚ Â‰ﬂÔı";
+        Text[ korean ] = "«¸≈¬(~T)";
+        Text[ turkish ] = "A~lan tipi";
+        Text[ language_user1 ] = " ";
+    };
+    Control TLB_DOKINFTYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DOKINFSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Auswahl" ;
+        Text [ ENGLISH ] = "Selection" ;
+        Text [ norwegian ] = "Selection" ;
+        Text [ italian ] = "Selezione" ;
+        Text [ portuguese_brazilian ] = "SeleÁ„o" ;
+        Text [ portuguese ] = "~SelecÁ„o" ;
+        Text [ finnish ] = "Valinta" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ french ] = "~SÈlection" ;
+        Text [ swedish ] = "~Urval" ;
+        Text [ dutch ] = "~Selectie" ;
+        Text [ spanish ] = "Se~lecciÛn" ;
+        Text [ english_us ] = "S~elect" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "—°‘Ò(~E)";
+        Text[ russian ] = "¬˚·Ó";
+        Text[ polish ] = "WybÛr";
+        Text[ japanese ] = "ëIë(~E)";
+        Text[ chinese_traditional ] = "øÔæ‹(~E)";
+        Text[ arabic ] = "«· ÕœÌœ";
+        Text[ greek ] = "~≈ÈÎÔ„ﬁ";
+        Text[ korean ] = "º±≈√(~E)";
+        Text[ turkish ] = "S~eÁim";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DOKINFSELECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 113 ) ;
+        TabStop = TRUE ;
+        StringList =
+        {
+            < "Autor" ; > ;
+            < "Uhrzeit" ; > ;
+            < "Datum" ; > ;
+            < "Datum Zeit Autor" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Author" ; > ;
+            < "Time" ; > ;
+            < "Date" ; > ;
+            < "Date Time Author" ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Autor" ; > ;
+            < "Uhrzeit" ; > ;
+            < "Datum" ; > ;
+            < "Datum Zeit Autor" ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Fˆrfattare" ; > ;
+            < "Klockslag" ; > ;
+            < "Datum" ; > ;
+            < "Datum Tid Fˆrfattare" ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Forfatter" ; > ;
+            < "KlokkeslÊt" ; > ;
+            < "Dato" ; > ;
+            < "Dato Tid Forfatter" ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Autore" ; > ;
+            < "Orario" ; > ;
+            < "Data" ; > ;
+            < "Data orario autore" ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Autor" ; > ;
+            < "Hora" ; > ;
+            < "Fecha" ; > ;
+            < "Fecha Hora Autor" ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Auteur" ; > ;
+            < "Heure" ; > ;
+            < "Date" ; > ;
+            < "Date Heure Auteur" ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Auteur" ; > ;
+            < "Tijd" ; > ;
+            < "Datum" ; > ;
+            < "Datum Tijd Auteur" ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Autor" ; > ;
+            < "Horas" ; > ;
+            < "Data" ; > ;
+            < "Data Horas Autor" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "◊˜’ﬂ" ; > ;
+        < " ±º‰" ; > ;
+        < "»’∆⁄" ; > ;
+        < "»’∆⁄  ±º‰ ◊˜’ﬂ" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "¿‚ÚÓ" ; > ;
+        < "¬ÂÏˇ" ; > ;
+        < "ƒ‡Ú‡" ; > ;
+        < "ƒ‡Ú‡ ¬ÂÏˇ ¿‚ÚÓ" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Autor" ; > ;
+        < "Godzina" ; > ;
+        < "Data" ; > ;
+        < "Data Godzina Autor" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "çÏê¨é“" ; > ;
+        < "éûçè" ; > ;
+        < "ì˙ït" ; > ;
+        < "ì˙ïtÅ@éûçèÅ@çÏê¨é“" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "ß@™Ã" ; > ;
+        < "Æ…∂°" ; > ;
+        < "§È¥¡" ; > ;
+        < "§È¥¡ Æ…∂° ß@™Ã" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "«·„ƒ·›" ; > ;
+        < "«·Êﬁ " ; > ;
+        < "«· «—ÌŒ" ; > ;
+        < "«· «—ÌŒ «·Êﬁ  «·„ƒ·›" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "”ıÌÙ‹ÍÙÁÚ" ; > ;
+        < "øÒ·" ; > ;
+        < "«ÏÂÒÔÏÁÌﬂ·" ; > ;
+        < "«ÏÂÒÔÏÁÌﬂ· øÒ· ”ıÌÙ‹ÍÙÁÚ" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "¿€º∫¿Œ" ; > ;
+        < "Ω√∞£" ; > ;
+        < "¿œ¿⁄" ; > ;
+        < "¿œ¿⁄ Ω√∞£ ¿€º∫¿Œ" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Yazan" ; > ;
+        < "Saat" ; > ;
+        < "Tarih" ; > ;
+        < "Tarih Saat Yazan" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    FixedText FT_DOKINFFORMAT
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        TEXT = "F~ormat" ;
+        TEXT [ English ] = "Format" ;
+        Left = TRUE ;
+        Text [ english_us ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ swedish ] = "F~ormat" ;
+        Text [ danish ] = "Format" ;
+        Text [ italian ] = "F~ormato" ;
+        Text [ spanish ] = "F~ormato" ;
+        Text [ french ] = "F~ormat" ;
+        Text [ dutch ] = "F~ormaat" ;
+        Text [ portuguese ] = "F~ormato" ;
+        Text[ chinese_simplified ] = "∏Ò Ω(~O)";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ(~O)";
+        Text[ chinese_traditional ] = "ÆÊ¶°(~O)";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
+        Text[ greek ] = "Ã~ÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ(~O)";
+        Text[ turkish ] = "F~ormat";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DOKINFFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+        Size = MAP_APPFONT ( 84 , 98 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    CheckBox CB_DOKINFFIXEDCONTENT
+    {
+        Pos = MAP_APPFONT ( 170 , 120 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
+        TEXT = "~Inhalt fixieren" ;
+        TEXT [ English ] = "Fixed content" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Fi~xed content" ;
+        Text [ portuguese_brazilian ] = "~Inhalt fixieren" ;
+        Text [ swedish ] = "Fixera ~innehÂll" ;
+        Text [ danish ] = "Fast indhold" ;
+        Text [ italian ] = "~Fissa il contenuto" ;
+        Text [ spanish ] = "~Fijar contenido" ;
+        Text [ french ] = "Contenu f~ixe" ;
+        Text [ dutch ] = "~Inhoud fixeren" ;
+        Text [ portuguese ] = "~ContÈudo fixo" ;
+        Text[ chinese_simplified ] = "πÃ∂®ƒ⁄»›(~X)";
+        Text[ russian ] = "‘ËÍÒ. ÒÓ‰ÂÊËÏÓÂ";
+        Text[ polish ] = "Sta≥a treúÊ";
+        Text[ japanese ] = "ì‡óeÇÃå≈íË(~F)";
+        Text[ chinese_traditional ] = "©T©w§∫Æe(~F)";
+        Text[ arabic ] = " À»Ì  «·„Õ ÊÌ« ";
+        Text[ greek ] = "–·„ﬂ˘ÛÁ ÂÒ~ÈÂ˜ÔÏ›Ì˘Ì";
+        Text[ korean ] = "≥ªøÎ ∞Ì¡§(~X)";
+        Text[ turkish ] = "›Áerii sabitle";
+        Text[ language_user1 ] = " ";
+    };
+    Bitmap BMP_DOKINFROOT_OPENED
+    {
+        File = "plus.bmp" ;
+    };
+    Bitmap BMP_DOKINFROOT_CLOSED
+    {
+        File = "minus.bmp" ;
+    };
+    String STR_DOKINF_INFO
+    {
+        TEXT = "Info" ;
+        TEXT [ English ] = "Info" ;
+        Text [ english_us ] = "Info" ;
+        Text [ portuguese_brazilian ] = "Info" ;
+        Text [ swedish ] = "Info" ;
+        Text [ danish ] = "Info" ;
+        Text [ italian ] = "Info" ;
+        Text [ spanish ] = "InformaciÛn" ;
+        Text [ french ] = "Info" ;
+        Text [ dutch ] = "Info" ;
+        Text [ portuguese ] = "Info" ;
+        Text[ chinese_simplified ] = "”–πÿ";
+        Text[ russian ] = "»ÌÙÓÏ‡ˆËˇ";
+        Text[ polish ] = "Informacja";
+        Text[ japanese ] = "≤›Ã´“∞ºÆ›";
+        Text[ chinese_traditional ] = "√ˆ©Û";
+        Text[ arabic ] = "„⁄·Ê„« ";
+        Text[ greek ] = "–ÎÁÒÔˆÔÒﬂÂÚ";
+        Text[ korean ] = "¡§∫∏";
+        Text[ turkish ] = "Bilgi";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "DocInformation" ;
+    Text [ portuguese_brazilian ] = "Dokumentinfo" ;
+    Text [ swedish ] = "Dokumentinfo" ;
+    Text [ danish ] = "Dokumentinfo" ;
+    Text [ italian ] = "Info documento" ;
+    Text [ spanish ] = "InformaciÛn del documento" ;
+    Text [ french ] = "Info document" ;
+    Text [ dutch ] = "Documentinfo" ;
+    Text [ portuguese ] = "Info. sobre documento" ;
+    Text[ chinese_simplified ] = "Œƒµµ–≈œ¢";
+    Text[ russian ] = "—‚Â‰ÂÌËˇ Ó ‰ÓÍÛÏÂÌÚÂ";
+    Text[ polish ] = "Informacje o dokumencie";
+    Text[ japanese ] = "ƒﬁ∑≠“›ƒ ≤›Ã´“∞ºÆ›";
+    Text[ chinese_traditional ] = "§Â•Û∏Í∞T";
+    Text[ arabic ] = "„⁄·Ê„«  «·„” ‰œ";
+    Text[ greek ] = "–ÎÁÒÔˆÔÒﬂÂÚ Â„„Ò‹ˆÔı";
+    Text[ korean ] = "µÓ∑œ¡§∫∏";
+    Text[ turkish ] = "Belge bilgileri";
+    Text[ language_user1 ] = " ";
+};

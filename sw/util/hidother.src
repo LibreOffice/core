@@ -1,0 +1,335 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:15:01 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "..\inc\helpid.h"          // HID_FUNC_XXX
+//#include "shellid.hxx"            // HID_FUNC_XXX da kommen sie eigentlich her
+#include "hidother.hrc"
+
+//  Help-IDs fuer Dokument-Fenster
+hidspecial HID_EDIT_WIN         { HelpID = HID_EDIT_WIN; };
+
+// drei fuer den Formedtdialog
+hidspecial HID_FORMEDT_CONTENT  { HelpID = HID_FORMEDT_CONTENT; };
+hidspecial HID_FORMEDT_USER     { HelpID = HID_FORMEDT_USER; };
+hidspecial HID_FORMEDT_INDEX    { HelpID = HID_FORMEDT_INDEX; };
+
+// Wizards
+hidspecial HID_FAX_PAGE1        { HelpId = HID_FAX_PAGE1; };
+hidspecial HID_FAX_PAGE2        { HelpId = HID_FAX_PAGE2; };
+hidspecial HID_FAX_PAGE3        { HelpId = HID_FAX_PAGE3; };
+hidspecial HID_FAX_PAGE4        { HelpId = HID_FAX_PAGE4; };
+hidspecial HID_FAX_PAGE5        { HelpId = HID_FAX_PAGE5; };
+hidspecial HID_FAX_PAGE6        { HelpId = HID_FAX_PAGE6; };
+hidspecial HID_FAX_PAGE7        { HelpId = HID_FAX_PAGE7; };
+hidspecial HID_FAX_PAGE8        { HelpId = HID_FAX_PAGE8; };
+hidspecial HID_LETTER_PAGE1     { HelpId = HID_LETTER_PAGE1; };
+hidspecial HID_LETTER_PAGE2     { HelpId = HID_LETTER_PAGE2; };
+hidspecial HID_LETTER_PAGE3     { HelpId = HID_LETTER_PAGE3; };
+hidspecial HID_LETTER_PAGE4     { HelpId = HID_LETTER_PAGE4; };
+hidspecial HID_LETTER_PAGE5     { HelpId = HID_LETTER_PAGE5; };
+hidspecial HID_LETTER_PAGE6     { HelpId = HID_LETTER_PAGE6; };
+hidspecial HID_LETTER_PAGE7     { HelpId = HID_LETTER_PAGE7; };
+hidspecial HID_LETTER_PAGE8     { HelpId = HID_LETTER_PAGE8; };
+hidspecial HID_LETTER_PAGE9     { HelpId = HID_LETTER_PAGE9; };
+hidspecial HID_AGENDA_PAGE1     { HelpId = HID_AGENDA_PAGE1; };
+hidspecial HID_AGENDA_PAGE2     { HelpId = HID_AGENDA_PAGE2; };
+hidspecial HID_AGENDA_PAGE3     { HelpId = HID_AGENDA_PAGE3; };
+hidspecial HID_AGENDA_PAGE4     { HelpId = HID_AGENDA_PAGE4; };
+hidspecial HID_AGENDA_PAGE5     { HelpId = HID_AGENDA_PAGE5; };
+hidspecial HID_AGENDA_PAGE6     { HelpId = HID_AGENDA_PAGE6; };
+hidspecial HID_MEMO_PAGE1       { HelpId = HID_MEMO_PAGE1; };
+hidspecial HID_MEMO_PAGE2       { HelpId = HID_MEMO_PAGE2; };
+hidspecial HID_MEMO_PAGE3       { HelpId = HID_MEMO_PAGE3; };
+hidspecial HID_MEMO_PAGE4       { HelpId = HID_MEMO_PAGE4; };
+hidspecial HID_MEMO_PAGE5       { HelpId = HID_MEMO_PAGE5; };
+
+// Numerierungsdialog
+hidspecial HID_VS_SINGLENUM   { HelpId = HID_VS_SINGLENUM;};
+hidspecial HID_VS_NUM         { HelpId = HID_VS_NUM      ;};
+hidspecial HID_VS_BULLET      { HelpId = HID_VS_BULLET   ;};
+hidspecial HID_VS_NUMBMP      { HelpId = HID_VS_NUMBMP   ;};
+
+//Wegen Helferlein jetzt auch die ShellIds hier
+hidspecial SW_TEXTSHELL             { HelpId = SW_TEXTSHELL         ;};
+hidspecial SW_LISTSHELL             { HelpId = SW_LISTSHELL         ;};
+hidspecial SW_TABSHELL              { HelpId = SW_TABSHELL          ;};
+hidspecial SW_FRAMESHELL            { HelpId = SW_FRAMESHELL        ;};
+hidspecial SW_GRFSHELL              { HelpId = SW_GRFSHELL          ;};
+hidspecial SW_OLESHELL              { HelpId = SW_OLESHELL          ;};
+hidspecial SW_DRAWSHELL             { HelpId = SW_DRAWSHELL         ;};
+hidspecial SW_DRWTXTSHELL           { HelpId = SW_DRWTXTSHELL       ;};
+hidspecial SW_PAGEPREVIEW           { HelpId = SW_PAGEPREVIEW       ;};
+hidspecial SW_SRC_VIEWSHELL         { HelpId = SW_SRC_VIEWSHELL     ;};
+hidspecial SW_BEZIERSHELL           { HelpId = SW_BEZIERSHELL       ;};
+hidspecial SW_DRAWFORMSHELL         { HelpId = SW_DRAWFORMSHELL     ;};
+hidspecial SW_WEBTEXTSHELL          { HelpId = SW_WEBTEXTSHELL      ;};
+hidspecial SW_WEBFRAMESHELL         { HelpId = SW_WEBFRAMESHELL     ;};
+
+// Navigator
+hidspecial  HID_NAVIGATOR_TOOLBOX   { HelpId = HID_NAVIGATOR_TOOLBOX;};
+hidspecial  HID_NAVI_TBX16          { HelpId = HID_NAVI_TBX16;};
+hidspecial HID_NAVIGATOR_GLOBAL_TOOLBOX { HelpId = HID_NAVIGATOR_GLOBAL_TOOLBOX;};
+hidspecial HID_NAVIGATOR_LISTBOX    { HelpId = HID_NAVIGATOR_LISTBOX;};
+hidspecial HID_NAVIGATOR_GLOB_TREELIST  { HelpId = HID_NAVIGATOR_GLOB_TREELIST;};
+hidspecial HID_NAVIGATOR_TREELIST   { HelpId = HID_NAVIGATOR_TREELIST;};
+hidspecial HID_NAVI_DRAG_HYP        { HelpId = HID_NAVI_DRAG_HYP   ;};
+hidspecial HID_NAVI_DRAG_LINK       { HelpId = HID_NAVI_DRAG_LINK  ;};
+hidspecial HID_NAVI_DRAG_COPY       { HelpId = HID_NAVI_DRAG_COPY  ;};
+hidspecial HID_NAVI_OUTLINES        { HelpId = HID_NAVI_OUTLINES   ;};
+hidspecial HID_NAVI_TBX1            { HelpId = HID_NAVI_TBX1   ;};
+hidspecial HID_NAVI_TBX2            { HelpId = HID_NAVI_TBX2   ;};
+hidspecial HID_NAVI_TBX3            { HelpId = HID_NAVI_TBX3   ;};
+hidspecial HID_NAVI_TBX4            { HelpId = HID_NAVI_TBX4   ;};
+hidspecial HID_NAVI_TBX5            { HelpId = HID_NAVI_TBX5   ;};
+hidspecial HID_NAVI_TBX6            { HelpId = HID_NAVI_TBX6   ;};
+hidspecial HID_NAVI_TBX7            { HelpId = HID_NAVI_TBX7   ;};
+hidspecial HID_NAVI_TBX8            { HelpId = HID_NAVI_TBX8   ;};
+hidspecial HID_NAVI_TBX9            { HelpId = HID_NAVI_TBX9   ;};
+hidspecial HID_NAVI_TBX10           { HelpId = HID_NAVI_TBX10   ;};
+hidspecial HID_NAVI_TBX11           { HelpId = HID_NAVI_TBX11   ;};
+hidspecial HID_NAVI_TBX12           { HelpId = HID_NAVI_TBX12   ;};
+hidspecial HID_NAVI_TBX13           { HelpId = HID_NAVI_TBX13   ;};
+hidspecial HID_NAVI_TBX14           { HelpId = HID_NAVI_TBX14   ;};
+hidspecial HID_NAVI_TBX15           { HelpId = HID_NAVI_TBX15   ;};
+hidspecial HID_GLBLTREE_UPDATE      { HelpId = HID_GLBLTREE_UPDATE          ;};
+hidspecial HID_GLBLTREE_INSERT      { HelpId = HID_GLBLTREE_INSERT        ;};
+hidspecial HID_GLBLTREE_EDIT        { HelpId = HID_GLBLTREE_EDIT            ;};
+hidspecial HID_GLBLTREE_DEL         { HelpId = HID_GLBLTREE_DEL             ;};
+hidspecial HID_GLBLTREE_INS_IDX     { HelpId = HID_GLBLTREE_INS_IDX         ;};
+hidspecial HID_GLBLTREE_INS_CNTIDX    { HelpId = HID_GLBLTREE_INS_CNTIDX    ;};
+hidspecial HID_GLBLTREE_INS_USRIDX    { HelpId = HID_GLBLTREE_INS_USRIDX    ;};
+hidspecial HID_GLBLTREE_INS_FILE      { HelpId = HID_GLBLTREE_INS_FILE      ;};
+hidspecial HID_GLBLTREE_INS_NEW_FILE  { HelpId = HID_GLBLTREE_INS_NEW_FILE  ;};
+hidspecial HID_GLBLTREE_INS_TEXT      { HelpId = HID_GLBLTREE_INS_TEXT      ;};
+hidspecial HID_GLBLTREE_UPD_SEL       { HelpId = HID_GLBLTREE_UPD_SEL       ;};
+hidspecial HID_GLBLTREE_UPD_IDX       { HelpId = HID_GLBLTREE_UPD_IDX       ;};
+hidspecial HID_GLBLTREE_UPD_LINK      { HelpId = HID_GLBLTREE_UPD_LINK      ;};
+hidspecial HID_GLBLTREEUPD_ALL          { HelpId = HID_GLBLTREEUPD_ALL          ;};
+
+// Ruler einfuegen
+hidspecial  HID_VS_RULER            { HelpId = HID_VS_RULER;};
+
+// Briefumschlaege/Etiketten
+hidspecial  HID_ENVELOP_PRINT       { HelpId = HID_ENVELOP_PRINT;};
+hidspecial  HID_ENVELOP_INSERT      { HelpId = HID_ENVELOP_INSERT;};
+hidspecial  HID_LABEL_INSERT        { HelpId = HID_LABEL_INSERT;};
+
+// Vorlage laden
+hidspecial HID_LTEMPL_TEXT      { HelpId = HID_LTEMPL_TEXT     ; };
+hidspecial HID_LTEMPL_FRAME     { HelpId = HID_LTEMPL_FRAME    ; };
+hidspecial HID_LTEMPL_PAGE      { HelpId = HID_LTEMPL_PAGE     ; };
+hidspecial HID_LTEMPL_OVERRIDE  { HelpId = HID_LTEMPL_OVERRIDE ; };
+hidspecial HID_LTEMPL_NUMBERING  { HelpId = HID_LTEMPL_NUMBERING ;};
+
+// Numerierung/Optionen-Button
+hidspecial HID_NUM_FORMAT_BTN       { HelpId = HID_NUM_FORMAT_BTN;  };
+
+// AutoText Bereiche
+hidspecial HID_GLOS_GROUP_TREE  { HelpId = HID_GLOS_GROUP_TREE; };
+hidspecial HID_MD_GLOS_CATEGORY { HelpId = HID_MD_GLOS_CATEGORY;    };
+
+// AutoFormat
+hidspecial HID_AUTOFORMAT_CLB   { HelpId = HID_AUTOFORMAT_CLB; };
+
+//OnlineSpelling
+hidspecial HID_LINGU_REPLACE        { HelpId = HID_LINGU_REPLACE; };
+
+
+// Navigationsbutton im Scrollbar
+hidspecial HID_SCRL_NAVI        { HelpId = HID_SCRL_NAVI; };
+
+//PushButtons Autoformat
+hidspecial HID_AUTOFORMAT_EXEC  { HelpId =  HID_AUTOFORMAT_EXEC ; };
+hidspecial HID_AUTOFORMAT_CLOSE { HelpId =  HID_AUTOFORMAT_CLOSE; };
+
+// Bereiche
+hidspecial HID_REGION_TREE { HelpId =  HID_REGION_TREE; };
+hidspecial HID_DLG_PASSWD_SECTION { HelpId = HID_DLG_PASSWD_SECTION; };
+
+//Rechenleiste
+hidspecial HID_EDIT_FORMULA { HelpId =  HID_EDIT_FORMULA; };
+
+// bedingte Vorlagen
+hidspecial HID_COND_COLL_TABLIST { HelpId = HID_COND_COLL_TABLIST; };
+
+// Seitenvorschau
+hidspecial HID_PAGEPREVIEW      { HelpId = HID_PAGEPREVIEW ;};
+
+// Feldbefehl-Dlg
+hidspecial HID_DB_SELECTION_TLB { HelpId = HID_DB_SELECTION_TLB ;};
+hidspecial HID_FIELD_DINF_TYPE  { HelpId = HID_FIELD_DINF_TYPE  ;};
+hidspecial HID_FIELD_INSERT     { HelpId = HID_FIELD_INSERT ;};
+hidspecial HID_FIELD_CLOSE      { HelpId = HID_FIELD_CLOSE  ;};
+hidspecial HID_FLDEDT_ADDRESS   { HelpId = HID_FLDEDT_ADDRESS ;};
+hidspecial HID_EDIT_FLD_DB      { HelpId = HID_EDIT_FLD_DB  ;};
+hidspecial HID_EDIT_FLD_DOKINF  { HelpId = HID_EDIT_FLD_DOKINF  ;};
+hidspecial HID_EDIT_FLD_VAR     { HelpId = HID_EDIT_FLD_VAR ;};
+hidspecial HID_EDIT_FLD_DOK     { HelpId = HID_EDIT_FLD_DOK ;};
+hidspecial HID_EDIT_FLD_FUNC    { HelpId = HID_EDIT_FLD_FUNC;};
+hidspecial HID_EDIT_FLD_REF     { HelpId = HID_EDIT_FLD_REF ;};
+
+// HTML-Source-Editwin
+hidspecial HID_SOURCE_EDITWIN   { HelpId = HID_SOURCE_EDITWIN   ;};
+
+// Redlining
+hidspecial HID_REDLINE_CTRL     { HelpId = HID_REDLINE_CTRL ;};
+
+// File-Dialoge
+hidspecial HID_FILEDLG_CHARDLG  { HelpId = HID_FILEDLG_CHARDLG  ;};
+hidspecial HID_FILEDLG_LOADTEMPLATE { HelpId = HID_FILEDLG_LOADTEMPLATE ;};
+hidspecial HID_FILEDLG_MAILMRGE1    { HelpId = HID_FILEDLG_MAILMRGE1    ;};
+hidspecial HID_FILEDLG_MAILMRGE2    { HelpId = HID_FILEDLG_MAILMRGE2    ;};
+hidspecial HID_FILEDLG_FRMPAGE  { HelpId = HID_FILEDLG_FRMPAGE  ;};
+hidspecial HID_FILEDLG_SRCVIEW  { HelpId = HID_FILEDLG_SRCVIEW  ;};
+hidspecial HID_FILEDLG_WIZDOKU  { HelpId = HID_FILEDLG_WIZDOKU  ;};
+hidspecial HID_SELECT_TEMPLATE  { HelpId = HID_SELECT_TEMPLATE  ;};
+
+//Kapitelnumerierung - Form
+hidspecial HID_OUTLINE_FORM       { HelpId = HID_OUTLINE_FORM ;};
+
+//Numerierungsdialog - Numerierung entfernen
+hidspecial HID_NUM_RESET            { HelpId = HID_NUM_RESET    ;};
+
+//AutoFormat QueryBox Aenderungen akzeptieren/verwerfen/bearbeiten
+hidspecial HID_AUTOFORMAT_REJECT    { HelpId = HID_AUTOFORMAT_REJECT   ;};
+hidspecial HID_AUTOFORMAT_ACCEPT       { HelpId = HID_AUTOFORMAT_ACCEPT   ;};
+hidspecial HID_AUTOFORMAT_EDIT_CHG     { HelpId = HID_AUTOFORMAT_EDIT_CHG ;};
+
+hidspecial HID_NAVI_VS                  { HelpId = HID_NAVI_VS;};
+
+//index dialog
+hidspecial HID_ADD_STYLES_TLB           { HelpId = HID_ADD_STYLES_TLB;};
+hidspecial HID_OLE_CHECKLB          { HelpId = HID_OLE_CHECKLB;};
+
+//ScrollBar buttons
+hidspecial HID_SCRL_PAGEUP          { HelpId = HID_SCRL_PAGEUP   ;};
+hidspecial HID_SCRL_PAGEDOWN        { HelpId = HID_SCRL_PAGEDOWN;};
+
+//index dialog
+hidspecial HID_TOX_ENTRY_BUTTON     { HelpId = HID_TOX_ENTRY_BUTTON;};
+hidspecial HID_TOX_ENTRY_EDIT       { HelpId = HID_TOX_ENTRY_EDIT  ;};
+hidspecial HID_TOKEN_WINDOW         { HelpId = HID_TOKEN_WINDOW ;};
+hidspecial HID_INSERT_IDX_MRK_OK    { HelpId = HID_INSERT_IDX_MRK_OK     ;};
+hidspecial HID_INSERT_IDX_MRK_CLOSE { HelpId = HID_INSERT_IDX_MRK_CLOSE  ;};
+hidspecial HID_INSERT_AUTH_MRK_OK   { HelpId = HID_INSERT_AUTH_MRK_OK    ;};
+hidspecial HID_INSERT_AUTH_MRK_CLOSE{ HelpId = HID_INSERT_AUTH_MRK_CLOSE ;};
+hidspecial HID_INSERT_IDX_MRK_DELETE     { HelpId =  HID_INSERT_IDX_MRK_DELETE   ;};
+hidspecial HID_INSERT_IDX_MRK_NEW        { HelpId =  HID_INSERT_IDX_MRK_NEW      ;};
+hidspecial HID_INSERT_IDX_MRK_PREV       { HelpId =  HID_INSERT_IDX_MRK_PREV         ;};
+hidspecial HID_INSERT_IDX_MRK_PREV_SAME { HelpId =  HID_INSERT_IDX_MRK_PREV_SAME ;};
+hidspecial HID_INSERT_IDX_MRK_NEXT       { HelpId =  HID_INSERT_IDX_MRK_NEXT         ;};
+hidspecial HID_INSERT_IDX_MRK_NEXT_SAME { HelpId =  HID_INSERT_IDX_MRK_NEXT_SAME ;};
+hidspecial HID_INSERT_IDX_MRK_TYPE       { HelpId =  HID_INSERT_IDX_MRK_TYPE         ;};
+hidspecial HID_INSERT_IDX_MRK_ENTRY     { HelpId =  HID_INSERT_IDX_MRK_ENTRY        ;};
+hidspecial HID_INSERT_IDX_MRK_PRIM_KEY   { HelpId =  HID_INSERT_IDX_MRK_PRIM_KEY     ;};
+hidspecial HID_INSERT_IDX_MRK_SEC_KEY    { HelpId =  HID_INSERT_IDX_MRK_SEC_KEY  ;};
+hidspecial HID_INSERT_IDX_MRK_LEVEL     { HelpId =  HID_INSERT_IDX_MRK_LEVEL        ;};
+hidspecial HID_INSERT_IDX_MRK_MAIN_ENTRY { HelpId =  HID_INSERT_IDX_MRK_MAIN_ENTRY;};
+hidspecial HID_INSERT_IDX_MRK_APPLY_ALL { HelpId =  HID_INSERT_IDX_MRK_APPLY_ALL ;};
+
+hidspecial HID_INSERT_AUTH_MRK_ENTRY        { HelpId = HID_INSERT_AUTH_MRK_ENTRY            ;};
+hidspecial HID_INSERT_AUTH_MRK_CREATE_ENTRY { HelpId = HID_INSERT_AUTH_MRK_CREATE_ENTRY ;};
+hidspecial HID_INSERT_AUTH_MRK_EDIT_ENTRY   { HelpId = HID_INSERT_AUTH_MRK_EDIT_ENTRY ;};
+
+hidspecial HID_AUTH_FIELD_IDENTIFIER        { HelpId = HID_AUTH_FIELD_IDENTIFIER     ;};
+hidspecial HID_AUTH_FIELD_AUTHORITY_TYPE    { HelpId = HID_AUTH_FIELD_AUTHORITY_TYPE ;};
+hidspecial HID_AUTH_FIELD_ADDRESS           { HelpId = HID_AUTH_FIELD_ADDRESS        ;};
+hidspecial HID_AUTH_FIELD_ANNOTE            { HelpId = HID_AUTH_FIELD_ANNOTE         ;};
+hidspecial HID_AUTH_FIELD_AUTHOR            { HelpId = HID_AUTH_FIELD_AUTHOR         ;};
+hidspecial HID_AUTH_FIELD_BOOKTITLE         { HelpId = HID_AUTH_FIELD_BOOKTITLE      ;};
+hidspecial HID_AUTH_FIELD_CHAPTER           { HelpId = HID_AUTH_FIELD_CHAPTER        ;};
+hidspecial HID_AUTH_FIELD_EDITION           { HelpId = HID_AUTH_FIELD_EDITION        ;};
+hidspecial HID_AUTH_FIELD_EDITOR            { HelpId = HID_AUTH_FIELD_EDITOR         ;};
+hidspecial HID_AUTH_FIELD_HOWPUBLISHED      { HelpId = HID_AUTH_FIELD_HOWPUBLISHED   ;};
+hidspecial HID_AUTH_FIELD_INSTITUTION       { HelpId = HID_AUTH_FIELD_INSTITUTION    ;};
+hidspecial HID_AUTH_FIELD_JOURNAL           { HelpId = HID_AUTH_FIELD_JOURNAL        ;};
+hidspecial HID_AUTH_FIELD_MONTH             { HelpId = HID_AUTH_FIELD_MONTH          ;};
+hidspecial HID_AUTH_FIELD_NOTE              { HelpId = HID_AUTH_FIELD_NOTE           ;};
+hidspecial HID_AUTH_FIELD_NUMBER            { HelpId = HID_AUTH_FIELD_NUMBER         ;};
+hidspecial HID_AUTH_FIELD_ORGANIZATIONS     { HelpId = HID_AUTH_FIELD_ORGANIZATIONS  ;};
+hidspecial HID_AUTH_FIELD_PAGES             { HelpId = HID_AUTH_FIELD_PAGES          ;};
+hidspecial HID_AUTH_FIELD_PUBLISHER         { HelpId = HID_AUTH_FIELD_PUBLISHER      ;};
+hidspecial HID_AUTH_FIELD_SCHOOL            { HelpId = HID_AUTH_FIELD_SCHOOL         ;};
+hidspecial HID_AUTH_FIELD_SERIES            { HelpId = HID_AUTH_FIELD_SERIES         ;};
+hidspecial HID_AUTH_FIELD_TITLE             { HelpId = HID_AUTH_FIELD_TITLE          ;};
+hidspecial HID_AUTH_FIELD_REPORT_TYPE       { HelpId = HID_AUTH_FIELD_REPORT_TYPE    ;};
+hidspecial HID_AUTH_FIELD_VOLUME            { HelpId = HID_AUTH_FIELD_VOLUME         ;};
+hidspecial HID_AUTH_FIELD_YEAR              { HelpId = HID_AUTH_FIELD_YEAR           ;};
+hidspecial HID_AUTH_FIELD_URL               { HelpId = HID_AUTH_FIELD_URL            ;};
+hidspecial HID_AUTH_FIELD_CUSTOM1           { HelpId = HID_AUTH_FIELD_CUSTOM1        ;};
+hidspecial HID_AUTH_FIELD_CUSTOM2           { HelpId = HID_AUTH_FIELD_CUSTOM2        ;};
+hidspecial HID_AUTH_FIELD_CUSTOM3           { HelpId = HID_AUTH_FIELD_CUSTOM3        ;};
+hidspecial HID_AUTH_FIELD_CUSTOM4           { HelpId = HID_AUTH_FIELD_CUSTOM4        ;};
+hidspecial HID_AUTH_FIELD_CUSTOM5           { HelpId = HID_AUTH_FIELD_CUSTOM5        ;};
+hidspecial HID_AUTH_FIELD_ISBN              { HelpId = HID_AUTH_FIELD_ISBN           ;};
+
+hidspecial HID_AUTH_MARK_DLG_FROM_COMP_RB  { HelpId = HID_AUTH_MARK_DLG_FROM_COMP_RB ;};
+hidspecial HID_AUTH_MARK_DLG_FROM_DOC_RB   { HelpId = HID_AUTH_MARK_DLG_FROM_DOC_RB  ;};
+hidspecial HID_AUTH_MARK_DLG_ID_LISTBOX    { HelpId = HID_AUTH_MARK_DLG_ID_LISTBOX   ;};
+
+hidspecial HID_INSERT_INDEX_ENTRY_LEVEL_LB { HelpId = HID_INSERT_INDEX_ENTRY_LEVEL_LB ;};
+hidspecial HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE { HelpId = HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE ;};
+hidspecial HID_INSERT_IDX_MRK_SRCH_WORDONLY      { HelpId = HID_INSERT_IDX_MRK_SRCH_WORDONLY ;};
+
+hidspecial HID_LINGU_WORD_LANGUAGE { HelpId = HID_LINGU_WORD_LANGUAGE ;};
+hidspecial HID_LINGU_PARA_LANGUAGE { HelpId = HID_LINGU_PARA_LANGUAGE ;};
+hidspecial HID_BUSINESS_CARD_CONTENT { HelpId = HID_BUSINESS_CARD_CONTENT ;};
+
+hidspecial HID_OPTCAPTION_CLB { HelpId = HID_OPTCAPTION_CLB ;};

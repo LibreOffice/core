@@ -1,0 +1,1193 @@
+/*************************************************************************
+ *
+ *  $RCSfile: srtdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "misc.hrc"
+#include "srtdlg.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_SORTING
+{
+    HelpID = FN_SORTING_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 268 , 153 ) ;
+    Text = "Sortieren" ;
+    Text [ ENGLISH ] = "Sort" ;
+    Text [ norwegian ] = "Sorter" ;
+    Text [ italian ] = "Ordina" ;
+    Text [ portuguese_brazilian ] = "Ordenar" ;
+    Text [ portuguese ] = "Ordenar" ;
+    Text [ finnish ] = "Lajittelu" ;
+    Text [ danish ] = "Sorter" ;
+    Text [ french ] = "Trier" ;
+    Text [ swedish ] = "Sortera" ;
+    Text [ dutch ] = "Sorteren" ;
+    Text [ spanish ] = "Ordenar" ;
+    Text [ english_us ] = "Sort" ;
+    Moveable = TRUE ;
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 212 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 212 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 212 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_COL
+    {
+        Pos = MAP_APPFONT ( 68 , 12 ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text = "Spalte" ;
+        Text [ ENGLISH ] = "Column" ;
+        Text [ norwegian ] = "Column" ;
+        Text [ italian ] = "Colonna" ;
+        Text [ portuguese_brazilian ] = "Coluna" ;
+        Text [ portuguese ] = "Coluna" ;
+        Text [ finnish ] = "Sarake" ;
+        Text [ danish ] = "Kolonne" ;
+        Text [ french ] = "Colonne" ;
+        Text [ swedish ] = "Kolumn" ;
+        Text [ dutch ] = "Kolom" ;
+        Text [ spanish ] = "Columna" ;
+        Text [ english_us ] = "Column" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¡–";
+        Text[ russian ] = " ÓÎÓÌÍ‡";
+        Text[ polish ] = "Kolumna";
+        Text[ japanese ] = "óÒ";
+        Text[ chinese_traditional ] = "ƒÊ";
+        Text[ arabic ] = "⁄„Êœ";
+        Text[ greek ] = "”ÙﬁÎÁ";
+        Text[ korean ] = "ø≠";
+        Text[ turkish ] = "S¸tun";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_KEYTYP
+    {
+        Pos = MAP_APPFONT ( 101, 12 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Schl¸sseltyp : Schl≥sseltyp */
+        Text = "Schl¸sseltyp" ;
+        Text [ ENGLISH ] = "Key type" ;
+        Text [ norwegian ] = "Tasttype" ;
+        Text [ italian ] = "Tipo chiave" ;
+        Text [ portuguese_brazilian ] = "Tipo de tecla" ;
+        Text [ portuguese ] = "Tipo de chave" ;
+        Text [ finnish ] = "Avainlaji" ;
+        Text [ danish ] = "N¯gletype" ;
+        Text [ french ] = "Type de critËre" ;
+        Text [ swedish ] = "Kodtyp" ;
+        Text [ dutch ] = "Sleuteltype" ;
+        Text [ spanish ] = "Tipo de clave" ;
+        Text [ english_us ] = "Key type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "√‹¬Î¿‡–Õ";
+        Text[ russian ] = "“ËÔ ÍÎ˛˜‡";
+        Text[ polish ] = "Typ klucza";
+        Text[ japanese ] = "∑∞ÇÃéÌóﬁ";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "±KΩX√˛´¨";
+        Text[ arabic ] = "‰Ê⁄ «·„› «Õ";
+        Text[ greek ] = "‘˝ÔÚ ÍÎÂÈ‰ÈÔ˝";
+        Text[ korean ] = "≈∞ «¸≈¬";
+        Text[ turkish ] = "Anahtar tipi";
+    };
+    FixedText FT_DIR
+    {
+        Pos = MAP_APPFONT ( 155 , 12 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "Reihenfolge" ;
+        Text [ ENGLISH ] = "Order" ;
+        Text [ norwegian ] = "Rekkef¯lge" ;
+        Text [ italian ] = "Sequenza" ;
+        Text [ portuguese_brazilian ] = "Ordem" ;
+        Text [ portuguese ] = "Ordem" ;
+        Text [ finnish ] = "J‰rjestys" ;
+        Text [ danish ] = "RÊkkef¯lge" ;
+        Text [ french ] = "Ordre" ;
+        Text [ swedish ] = "Ordning" ;
+        Text [ dutch ] = "Volgorde" ;
+        Text [ spanish ] = "Orden" ;
+        Text [ english_us ] = "Order" ;
+        Text[ chinese_simplified ] = "À≥–Ú";
+        Text[ russian ] = "œÓˇ‰ÓÍ";
+        Text[ polish ] = "KolejnoúÊ";
+        Text[ japanese ] = "èáèò";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "∂∂ß«";
+        Text[ arabic ] = "«· — Ì»";
+        Text[ greek ] = "”ÂÈÒ‹";
+        Text[ korean ] = "º¯º≠";
+        Text[ turkish ] = "S˝ra";
+    };
+    CheckBox CB_KEY1
+    {
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 49 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Schl¸ssel ~1 : Schl≥ssel ~1 */
+        Text = "Schl¸ssel ~1" ;
+        Text [ ENGLISH ] = "Key ~1" ;
+        Text [ norwegian ] = "Tast ~1" ;
+        Text [ italian ] = "Chiave ~1" ;
+        Text [ portuguese_brazilian ] = "Tecla ~1" ;
+        Text [ portuguese ] = "Tecla ~1" ;
+        Text [ finnish ] = "Avain ~1" ;
+        Text [ danish ] = "N¯gle 1" ;
+        Text [ french ] = "CritËre ~1" ;
+        Text [ swedish ] = "Nyckel ~1" ;
+        Text [ dutch ] = "Sleutel ~1" ;
+        Text [ spanish ] = "Clave ~1" ;
+        Text [ english_us ] = "Key ~1" ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "√‹¬Î 1(~1)";
+        Text[ russian ] = " Î˛˜ ~1";
+        Text[ polish ] = "Klucz ~1";
+        Text[ japanese ] = "∑∞ 1";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "±KΩX ~1";
+        Text[ arabic ] = "„› «Õ 1";
+        Text[ greek ] = " ÎÂÈ‰ﬂ ~1";
+        Text[ korean ] = "≈∞ 1";
+        Text[ turkish ] = "Anahtar ~1";
+    };
+    NumericField ED_KEY1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 23 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Text = "10" ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 99 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+    };
+    ListBox DLB_KEY1
+    {
+        Pos = MAP_APPFONT ( 96 , 23 ) ;
+        Size = MAP_APPFONT ( 55 , 45 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "alfanumerica" ; > ;
+            < "numerica" ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "alfanumÈrico" ; > ;
+            < "numÈrico" ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "alfanumÈrico" ; > ;
+            < "numÈrico" ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "alfanumerisk" ; > ;
+            < "numerisk" ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "alphanumÈrique" ; > ;
+            < "numÈrique" ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "alfanumerisk" ; > ;
+            < "numerisk" ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "alfanumeriek" ; > ;
+            < "numeriek" ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "alfanumÈrica" ; > ;
+            < "numÈrica" ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "alphanumeric" ; > ;
+            < "numeric" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "◊÷ƒ∏" ; > ;
+        < " ˝◊÷" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "‡ÎÙ‡‚ËÚÌÓ-ˆËÙÓ‚ÓÈ" ; > ;
+        < "ˆËÙÓ‚ÓÈ" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "alfanumeryczny" ; > ;
+        < "numeryczny" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "±ŸÃßÕﬁØƒèá" ; > ;
+        < "êîéö" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶r•¿" ; > ;
+        < "º∆¶r" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ÂÃ«∆Ì ⁄œœÌ" ; > ;
+        < "⁄œœÌ" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "·Îˆ·ÒÈËÏÁÙÈÍ‹" ; > ;
+        < "·ÒÈËÏÁÙÈÍ‹" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "øµº˝¿⁄" ; > ;
+        < "π¯»£" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "alfan¸merik" ; > ;
+        < "n¸merik" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    RadioButton RB_UP
+    {
+        Pos = MAP_APPFONT ( 155 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Aufsteigend" ;
+        Text [ ENGLISH ] = "~Ascending" ;
+        Text [ norwegian ] = "St~igende" ;
+        Text [ italian ] = "~Crescente" ;
+        Text [ portuguese_brazilian ] = "~Ascendente" ;
+        Text [ portuguese ] = "~Ascendente" ;
+        Text [ finnish ] = "~Nouseva" ;
+        Text [ danish ] = "Stigende" ;
+        Text [ french ] = "~Croissant" ;
+        Text [ swedish ] = "Stig~ande" ;
+        Text [ dutch ] = "~Oplopend" ;
+        Text [ spanish ] = "~Ascendente" ;
+        Text [ english_us ] = "~Ascending" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "µ›‘ˆ(~A)";
+        Text[ russian ] = "œÓ ‚ÓÁ‡ÒÚ‡ÌË˛";
+        Text[ polish ] = "Rosnπco";
+        Text[ japanese ] = "è∏èá(~A)";
+        Text[ chinese_traditional ] = "ªººW(~A)";
+        Text[ arabic ] = " ’«⁄œÌ";
+        Text[ greek ] = "¡˝ÓÔıÛ·";
+        Text[ korean ] = "ø¿∏ß¬˜º¯(~A)";
+        Text[ turkish ] = "Ar~tan";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_DN
+    {
+        Pos = MAP_APPFONT ( 155 , 35 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "A~bsteigend" ;
+        Text [ ENGLISH ] = "~Descending" ;
+        Text [ norwegian ] = "~Synkende" ;
+        Text [ italian ] = "~Decrescente" ;
+        Text [ portuguese_brazilian ] = "~Descendente" ;
+        Text [ portuguese ] = "~Descendente" ;
+        Text [ finnish ] = "~Laskeva" ;
+        Text [ danish ] = "Faldende" ;
+        Text [ french ] = "~DÈcroissant" ;
+        Text [ swedish ] = "Fallan~de" ;
+        Text [ dutch ] = "~Aflopend" ;
+        Text [ spanish ] = "~Descendente" ;
+        Text [ english_us ] = "~Descending" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "µ›ºı(~D)";
+        Text[ russian ] = "œÓ Û·˚‚‡ÌË˛";
+        Text[ polish ] = "Malejπco";
+        Text[ japanese ] = "ç~èá";
+        Text[ chinese_traditional ] = "ªº¥Ó(~D)";
+        Text[ arabic ] = " ‰«“·Ì";
+        Text[ greek ] = "÷ËﬂÌÔıÛ·";
+        Text[ korean ] = "≥ª∏≤¬˜º¯(~D)";
+        Text[ turkish ] = "A~zalan";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_KEY2
+    {
+        Pos = MAP_APPFONT ( 12 , 52 ) ;
+        Size = MAP_APPFONT ( 49 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Schl¸ssel ~2 : Schl≥ssel ~2 */
+        Text = "Schl¸ssel ~2" ;
+        Text [ ENGLISH ] = "Key ~2" ;
+        Text [ norwegian ] = "Tast ~2" ;
+        Text [ italian ] = "Chiave ~2" ;
+        Text [ portuguese_brazilian ] = "Tecla ~2" ;
+        Text [ portuguese ] = "Tecla ~2" ;
+        Text [ finnish ] = "Avain ~2" ;
+        Text [ danish ] = "N¯gle 2" ;
+        Text [ french ] = "CritËre ~2" ;
+        Text [ swedish ] = "Nyckel ~2" ;
+        Text [ dutch ] = "Sleutel ~2" ;
+        Text [ spanish ] = "Clave ~2" ;
+        Text [ english_us ] = "Key ~2" ;
+        Text[ chinese_simplified ] = "√‹¬Î 2(~2)";
+        Text[ russian ] = " Î˛˜ ~2";
+        Text[ polish ] = "Klucz 2";
+        Text[ japanese ] = "∑∞ 2";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "±KΩX ~2";
+        Text[ arabic ] = "„› «Õ 2";
+        Text[ greek ] = " ÎÂÈ‰ﬂ ~2";
+        Text[ korean ] = "≈∞ 2";
+        Text[ turkish ] = "Anahtar ~2";
+    };
+    NumericField ED_KEY2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 50 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 99 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+    };
+    ListBox DLB_KEY2
+    {
+        Pos = MAP_APPFONT ( 96 , 50 ) ;
+        Size = MAP_APPFONT ( 55 , 45 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "alfanumerica" ; > ;
+            < "numerica" ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "alfanumÈrico" ; > ;
+            < "numÈrico" ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "alfanumÈrico" ; > ;
+            < "numÈrico" ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "alfanumerisk" ; > ;
+            < "numerisk" ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "alphanumÈrique" ; > ;
+            < "numÈrique" ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "alfanumerisk" ; > ;
+            < "numerisk" ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "alfanumeriek" ; > ;
+            < "numeriek" ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "alfanumÈrica" ; > ;
+            < "numÈrica" ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "alphanumeric" ; > ;
+            < "numeric" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "◊÷ƒ∏" ; > ;
+        < " ˝◊÷" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "‡ÎÙ‡‚ËÚÌÓ-ˆËÙÓ‚ÓÈ" ; > ;
+        < "ˆËÙÓ‚ÓÈ" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "alfanumeryczny" ; > ;
+        < "numeryczny" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "±ŸÃßÕﬁØƒèá" ; > ;
+        < "êîéö" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶r•¿" ; > ;
+        < "º∆¶r" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ÂÃ«∆Ì ⁄œœÌ" ; > ;
+        < "⁄œœÌ" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "·Îˆ·ÒÈËÏÁÙÈÍ‹" ; > ;
+        < "·ÒÈËÏÁÙÈÍ‹" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "øµº˝¿⁄" ; > ;
+        < "π¯»£" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "alfan¸merik" ; > ;
+        < "n¸merik" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    RadioButton RB_UP2
+    {
+        Pos = MAP_APPFONT ( 155 , 50 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "A~ufsteigend" ;
+        Text [ ENGLISH ] = "~Ascending" ;
+        Text [ norwegian ] = "St~igende" ;
+        Text [ italian ] = "~Crescente" ;
+        Text [ portuguese_brazilian ] = "~Ascendente" ;
+        Text [ portuguese ] = "~Ascendente" ;
+        Text [ finnish ] = "~Nouseva" ;
+        Text [ danish ] = "Stigende" ;
+        Text [ french ] = "~Croissant" ;
+        Text [ swedish ] = "Sti~gande" ;
+        Text [ dutch ] = "~Oplopend" ;
+        Text [ spanish ] = "A~scendente" ;
+        Text [ english_us ] = "Ascending" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "µ›‘ˆ";
+        Text[ russian ] = "œÓ ‚ÓÁ‡ÒÚ‡ÌË˛";
+        Text[ polish ] = "Rosnπco";
+        Text[ japanese ] = "è∏èá";
+        Text[ chinese_traditional ] = "ªººW";
+        Text[ arabic ] = " ’«⁄œÌ";
+        Text[ greek ] = "¡˝ÓÔıÛ·";
+        Text[ korean ] = "ø¿∏ß¬˜º¯";
+        Text[ turkish ] = "Arta~n";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_DN2
+    {
+        Pos = MAP_APPFONT ( 155 , 62 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Ab~steigend" ;
+        Text [ ENGLISH ] = "~Descending" ;
+        Text [ norwegian ] = "~Synkende" ;
+        Text [ italian ] = "~Decrescente" ;
+        Text [ portuguese_brazilian ] = "~Descendente" ;
+        Text [ portuguese ] = "~Descendente" ;
+        Text [ finnish ] = "~Laskeva" ;
+        Text [ danish ] = "Faldende" ;
+        Text [ french ] = "~DÈcroissant" ;
+        Text [ swedish ] = "Fa~llande" ;
+        Text [ dutch ] = "~Aflopend" ;
+        Text [ spanish ] = "Desc~endente" ;
+        Text [ english_us ] = "Descending" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "µ›ºı";
+        Text[ russian ] = "œÓ Û·˚‚‡ÌË˛";
+        Text[ polish ] = "Malejπco";
+        Text[ japanese ] = "ç~èá";
+        Text[ chinese_traditional ] = "ªº¥Ó";
+        Text[ arabic ] = " ‰«“·Ì";
+        Text[ greek ] = "÷ËﬂÌÔıÛ·";
+        Text[ korean ] = "≥ª∏≤¬˜º¯";
+        Text[ turkish ] = "A~rtan";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_KEY3
+    {
+        Pos = MAP_APPFONT ( 12 , 81 ) ;
+        Size = MAP_APPFONT ( 49 , 8 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Schl¸ssel ~3 : Schl≥ssel ~3 */
+        Text = "Schl¸ssel ~3" ;
+        Text [ ENGLISH ] = "Key ~3" ;
+        Text [ norwegian ] = "Tast ~3" ;
+        Text [ italian ] = "Chiave ~3" ;
+        Text [ portuguese_brazilian ] = "Tecla ~3" ;
+        Text [ portuguese ] = "Tecla ~3" ;
+        Text [ finnish ] = "Avain ~3" ;
+        Text [ danish ] = "N¯gle 3" ;
+        Text [ french ] = "CritËre ~3" ;
+        Text [ swedish ] = "Nyckel ~3" ;
+        Text [ dutch ] = "Sleutel ~3" ;
+        Text [ spanish ] = "Clave ~3" ;
+        Text [ english_us ] = "Key ~3" ;
+        Text[ chinese_simplified ] = "√‹¬Î 3(~3)";
+        Text[ russian ] = " Î˛˜ ~3";
+        Text[ polish ] = "Klucz 3";
+        Text[ japanese ] = "∑∞ 3";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "±KΩX ~3";
+        Text[ arabic ] = "„› «Õ 3";
+        Text[ greek ] = " ÎÂÈ‰ﬂ ~3";
+        Text[ korean ] = "≈∞ 3";
+        Text[ turkish ] = "Anahtar ~3";
+    };
+    NumericField ED_KEY3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 79 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 99 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+    };
+    ListBox DLB_KEY3
+    {
+        Pos = MAP_APPFONT ( 96 , 79 ) ;
+        Size = MAP_APPFONT ( 55 , 45 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "alfanumerica" ; > ;
+            < "numerica" ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "alfanumÈrico" ; > ;
+            < "numÈrico" ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "alfanumÈrico" ; > ;
+            < "numÈrico" ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "alphanumerisch" ; > ;
+            < "numerisch" ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "alfanumerisk" ; > ;
+            < "numerisk" ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "alphanumÈrique" ; > ;
+            < "numÈrique" ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "alfanumerisk" ; > ;
+            < "numerisk" ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "alfanumeriek" ; > ;
+            < "numeriek" ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "alfanumÈrica" ; > ;
+            < "numÈrica" ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "alphanumeric" ; > ;
+            < "numeric" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "◊÷ƒ∏" ; > ;
+        < " ˝◊÷" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "‡ÎÙ‡‚ËÚÌÓ-ˆËÙÓ‚ÓÈ" ; > ;
+        < "ˆËÙÓ‚ÓÈ" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "alfanumeryczny" ; > ;
+        < "numeryczny" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "±ŸÃßÕﬁØƒèá" ; > ;
+        < "êîéö" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶r•¿" ; > ;
+        < "º∆¶r" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ÂÃ«∆Ì ⁄œœÌ" ; > ;
+        < "⁄œœÌ" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "·Îˆ·ÒÈËÏÁÙÈÍ‹" ; > ;
+        < "·ÒÈËÏÁÙÈÍ‹" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "øµº˝¿⁄" ; > ;
+        < "π¯»£" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "alfan¸merik" ; > ;
+        < "n¸merik" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    RadioButton RB_UP3
+    {
+        Pos = MAP_APPFONT ( 155 , 79 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Aufstei~gend" ;
+        Text [ ENGLISH ] = "~Ascending" ;
+        Text [ norwegian ] = "St~igende" ;
+        Text [ italian ] = "~Crescente" ;
+        Text [ portuguese_brazilian ] = "~Ascendente" ;
+        Text [ portuguese ] = "~Ascendente" ;
+        Text [ finnish ] = "~Nouseva" ;
+        Text [ danish ] = "Stigende" ;
+        Text [ french ] = "~Croissant" ;
+        Text [ swedish ] = "Stiga~nde" ;
+        Text [ dutch ] = "~Oplopend" ;
+        Text [ spanish ] = "Ascende~nte" ;
+        Text [ english_us ] = "Ascending" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "µ›‘ˆ";
+        Text[ russian ] = "œÓ ‚ÓÁ‡ÒÚ‡ÌË˛";
+        Text[ polish ] = "Rosnπco";
+        Text[ japanese ] = "è∏èá";
+        Text[ chinese_traditional ] = "ªººW";
+        Text[ arabic ] = " ’«⁄œÌ";
+        Text[ greek ] = "¡˝ÓÔıÛ·";
+        Text[ korean ] = "ø¿∏ß¬˜º¯";
+        Text[ turkish ] = "Artan";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_DN3
+    {
+        Pos = MAP_APPFONT ( 155 , 91 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Absteigen~d" ;
+        Text [ ENGLISH ] = "~Descending" ;
+        Text [ norwegian ] = "~Synkende" ;
+        Text [ italian ] = "~Decrescente" ;
+        Text [ portuguese_brazilian ] = "~Descendente" ;
+        Text [ portuguese ] = "~Descendente" ;
+        Text [ finnish ] = "~Laskeva" ;
+        Text [ danish ] = "Faldende" ;
+        Text [ french ] = "~DÈcroissant" ;
+        Text [ swedish ] = "Falland~e" ;
+        Text [ dutch ] = "~Aflopend" ;
+        Text [ spanish ] = "Des~cendente" ;
+        Text [ english_us ] = "Descending" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "µ›ºı";
+        Text[ russian ] = "œÓ Û·˚‚‡ÌË˛";
+        Text[ polish ] = "Malejπco";
+        Text[ japanese ] = "ç~èá";
+        Text[ chinese_traditional ] = "ªº¥Ó";
+        Text[ arabic ] = " ‰«“·Ì";
+        Text[ greek ] = "÷ËﬂÌÔıÛ·";
+        Text[ korean ] = "≥ª∏≤¬˜º¯";
+        Text[ turkish ] = "Aza~lan";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_SORT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 200 , 102 ) ;
+        Text = "Regel" ;
+        Text [ ENGLISH ] = "Rule" ;
+        Text [ norwegian ] = "+++Rule" ;
+        Text [ italian ] = "Criteri" ;
+        Text [ portuguese_brazilian ] = "Regra" ;
+        Text [ portuguese ] = "Regra" ;
+        Text [ finnish ] = "S‰‰ntˆ" ;
+        Text [ danish ] = "Kriterier" ;
+        Text [ french ] = "RËgle" ;
+        Text [ swedish ] = "Regel" ;
+        Text [ dutch ] = "Rij" ;
+        Text [ spanish ] = "Regla" ;
+        Text [ english_us ] = "Sort criteria" ;
+        Text[ chinese_simplified ] = "≈≈–ÚπÊ‘Ú";
+        Text[ russian ] = "œÓˇ‰ÓÍ ÒÓÚËÓ‚ÍË";
+        Text[ polish ] = "Regu≥a";
+        Text[ japanese ] = "èåè";
+        Text[ language_user1 ] = " ";
+        Text[ chinese_traditional ] = "±∆ß«≥W´h";
+        Text[ arabic ] = "«·ﬁÊ«⁄œ";
+        Text[ greek ] = " ÒÈÙﬁÒÈÔ";
+        Text[ korean ] = "¡§∑ƒ ±‚¡ÿ";
+        Text[ turkish ] = "Kural";
+    };
+    RadioButton RB_COL
+    {
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "S~palten" ;
+        Text [ ENGLISH ] = "~Columns" ;
+        Text [ norwegian ] = "~Columns" ;
+        Text [ italian ] = "Colonne" ;
+        Text [ portuguese_brazilian ] = "~Colunas" ;
+        Text [ portuguese ] = "~Colunas" ;
+        Text [ finnish ] = "~Sarakkeet" ;
+        Text [ danish ] = "Kolonner" ;
+        Text [ french ] = "C~olonnes" ;
+        Text [ swedish ] = "Kolumner" ;
+        Text [ dutch ] = "~Kolommen" ;
+        Text [ spanish ] = "Co~lumnas" ;
+        Text [ english_us ] = "Col~umns" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¡–(~L)";
+        Text[ russian ] = " ÓÎÓÌÍË";
+        Text[ polish ] = "~Kolumny";
+        Text[ japanese ] = "íiëgÇ›(~L)";
+        Text[ chinese_traditional ] = "ƒÊ(~L)";
+        Text[ arabic ] = "√⁄„œ…";
+        Text[ greek ] = "”ÙﬁÎÂÚ";
+        Text[ korean ] = "ø≠(~U)";
+        Text[ turkish ] = "S~¸tun";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_ROW
+    {
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Size = MAP_APPFONT ( 34 , 10 ) ;
+        Text = "~Zeilen" ;
+        Text [ ENGLISH ] = "~Lines" ;
+        Text [ norwegian ] = "~Linjer" ;
+        Text [ italian ] = "R~ighe" ;
+        Text [ portuguese_brazilian ] = "~Linhas" ;
+        Text [ portuguese ] = "~Linhas" ;
+        Text [ finnish ] = "~Viivat" ;
+        Text [ danish ] = "RÊkker" ;
+        Text [ french ] = "~Lignes" ;
+        Text [ swedish ] = "~Rader" ;
+        Text [ dutch ] = "~Rijen" ;
+        Text [ spanish ] = "~Filas" ;
+        Text [ english_us ] = "~Rows" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "––(~R)";
+        Text[ russian ] = "—ÚÓÍË";
+        Text[ polish ] = "Wiersze";
+        Text[ japanese ] = "çs(~R)";
+        Text[ chinese_traditional ] = "¶Ê(~R)";
+        Text[ arabic ] = "’›Ê›";
+        Text[ greek ] = "√Ò·ÏÏ›Ú";
+        Text[ korean ] = "ø≠(~R)";
+        Text[ turkish ] = "~Sat˝r";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_DIR
+    {
+        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Size = MAP_APPFONT ( 98 , 42 ) ;
+        Text = "Richtung" ;
+        Text [ ENGLISH ] = "Direction" ;
+        Text [ norwegian ] = "Retning" ;
+        Text [ italian ] = "Direzione" ;
+        Text [ portuguese_brazilian ] = "DireÁ„o" ;
+        Text [ portuguese ] = "DirecÁ„o" ;
+        Text [ finnish ] = "Suunta" ;
+        Text [ danish ] = "Retning" ;
+        Text [ french ] = "Direction" ;
+        Text [ swedish ] = "Riktning" ;
+        Text [ dutch ] = "Richting" ;
+        Text [ spanish ] = "DirecciÛn" ;
+        Text [ english_us ] = "Direction" ;
+        Text[ chinese_simplified ] = "∑ΩœÚ";
+        Text[ russian ] = "Õ‡Ô‡‚ÎÂÌËÂ";
+        Text[ polish ] = "Kierunek";
+        Text[ japanese ] = "ï˚å¸";
+        Text[ chinese_traditional ] = "§Ë¶V";
+        Text[ arabic ] = "«·« Ã«Â";
+        Text[ greek ] = "–ÒÔÛ·Ì·ÙÔÎÈÛÏ¸Ú";
+        Text[ korean ] = "πÊ«‚";
+        Text[ turkish ] = "Yˆn";
+        Text[ language_user1 ] = " ";
+    };
+/*    GroupBox GB_ORDER
+    {
+        Pos = MAP_APPFONT ( 59 , 76 ) ;
+        Size = MAP_APPFONT ( 58 , 42 ) ;
+        Text = "Reihenfolge" ;
+        Text [ ENGLISH ] = "Order" ;
+        Text [ norwegian ] = "Rekkef¯lge" ;
+        Text [ italian ] = "Ordine" ;
+        Text [ portuguese_brazilian ] = "Ordem" ;
+        Text [ portuguese ] = "Ordem" ;
+        Text [ finnish ] = "J‰rjestys" ;
+        Text [ danish ] = "RÊkkef¯lge" ;
+        Text [ french ] = "Ordre" ;
+        Text [ swedish ] = "Ordning" ;
+        Text [ dutch ] = "Volgorde" ;
+        Text [ spanish ] = "Orden" ;
+        Text [ english_us ] = "Order" ;
+    };*/
+    RadioButton RB_TAB
+    {
+        Pos = MAP_APPFONT ( 113 , 120 ) ;
+        Size = MAP_APPFONT ( 44 , 9 ) ;
+        Text = "~Tabulator" ;
+        Text [ ENGLISH ] = "~Tab" ;
+        Text [ norwegian ] = "~Tab" ;
+        Text [ italian ] = "~Tabulazione" ;
+        Text [ portuguese_brazilian ] = "~TabulaÁ„o" ;
+        Text [ portuguese ] = "~TabulaÁıes" ;
+        Text [ finnish ] = "~Sarkain" ;
+        Text [ danish ] = "Tabulator" ;
+        Text [ french ] = "~Tabulation" ;
+        Text [ swedish ] = "~Tabulator" ;
+        Text [ dutch ] = "Ta~b" ;
+        Text [ spanish ] = "~TabulaciÛn" ;
+        Text [ english_us ] = "~Tabs" ;
+        TabStop = TRUE ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "÷∆±Ì∑˚(~T)";
+        Text[ russian ] = "“‡·ÛÎˇˆËˇ";
+        Text[ polish ] = "Tabulator";
+        Text[ japanese ] = "¿Ãﬁ(~T)";
+        Text[ chinese_traditional ] = "ªs™Ì≤≈(~T)";
+        Text[ arabic ] = "⁄·«„… ÃœÊ·…";
+        Text[ greek ] = "”ÙÁÎÔË›ÙÁÚ";
+        Text[ korean ] = "≈«(~T)";
+        Text[ turkish ] = "~Sekmeler";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_TABCH
+    {
+        Pos = MAP_APPFONT ( 113 , 133 ) ;
+        Size = MAP_APPFONT ( 38 , 10 ) ;
+        Text = "Z~eichen" ;
+        Text [ ENGLISH ] = "~Char." ;
+        Text [ norwegian ] = "~Kull." ;
+        Text [ italian ] = "Carattere" ;
+        Text [ portuguese_brazilian ] = "~Caracter" ;
+        Text [ portuguese ] = "~Caracteres" ;
+        Text [ finnish ] = "~Merkki" ;
+        Text [ danish ] = "Tegn" ;
+        Text [ french ] = "C~aractËre" ;
+        Text [ swedish ] = "Te~cken" ;
+        Text [ dutch ] = "~Teken" ;
+        Text [ spanish ] = "Ca~r·cter" ;
+        Text [ english_us ] = "~Character" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "◊÷∑˚(~H)";
+        Text[ russian ] = "«Ì‡Í";
+        Text[ polish ] = "Znak";
+        Text[ japanese ] = "ãLçÜ(~H)";
+        Text[ chinese_traditional ] = "¶r§∏(~H)";
+        Text[ arabic ] = "√Õ—›";
+        Text[ greek ] = "◊·Ò·ÍÙﬁÒÂÚ";
+        Text[ korean ] = "πÆ¿⁄(~C)";
+        Text[ turkish ] = "~Karakter";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TABCH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 195 , 133 ) ;
+        Size = MAP_APPFONT ( 8 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    GroupBox GB_DELIM
+    {
+        Pos = MAP_APPFONT ( 107 , 108 ) ;
+        Size = MAP_APPFONT ( 99 , 42 ) ;
+        Text = "Trenner" ;
+        Text [ ENGLISH ] = "Delimiter" ;
+        Text [ norwegian ] = "Skilletegn" ;
+        Text [ italian ] = "Separatore" ;
+        Text [ portuguese_brazilian ] = "Delimitador" ;
+        Text [ portuguese ] = "Separador" ;
+        Text [ finnish ] = "Erotin" ;
+        Text [ danish ] = "Separator" ;
+        Text [ french ] = "SÈparateur" ;
+        Text [ swedish ] = "Avgr‰nsare" ;
+        Text [ dutch ] = "Scheidingsteken" ;
+        Text [ spanish ] = "Separador" ;
+        Text [ english_us ] = "Separator" ;
+        Text[ chinese_simplified ] = "∑÷∏Ù∑˚";
+        Text[ russian ] = "–‡Á‰ÂÎËÚÂÎ¸";
+        Text[ polish ] = "Separator";
+        Text[ japanese ] = "ãÊêÿÇËãLçÜ";
+        Text[ chinese_traditional ] = "§¿πj≤≈";
+        Text[ arabic ] = "«·›«’·";
+        Text[ greek ] = "ƒÈ·˜˘ÒÈÛÙÈÍ¸";
+        Text[ korean ] = "±∏∫–¿⁄";
+        Text[ turkish ] = "Ay˝rma i˛areti";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_ROW
+    {
+        Text = "Zeile" ;
+        Text [ ENGLISH ] = "Row" ;
+        Text [ norwegian ] = "Row" ;
+        Text [ italian ] = "Riga" ;
+        Text [ portuguese_brazilian ] = "Fileira" ;
+        Text [ portuguese ] = "Linha" ;
+        Text [ finnish ] = "Rivi" ;
+        Text [ danish ] = "RÊkke" ;
+        Text [ french ] = "Ligne" ;
+        Text [ swedish ] = "Rad" ;
+        Text [ dutch ] = "Rij" ;
+        Text [ spanish ] = "Filas" ;
+        Text [ english_us ] = "Rows" ;
+        Text[ chinese_simplified ] = "––";
+        Text[ russian ] = "—ÚÓÍ‡";
+        Text[ polish ] = "Wiersz";
+        Text[ japanese ] = "çs";
+        Text[ chinese_traditional ] = "¶Ê";
+        Text[ arabic ] = "’›";
+        Text[ greek ] = "√Ò·ÏÏ›Ú";
+        Text[ korean ] = "«‡";
+        Text[ turkish ] = "Sat˝r";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_COL
+    {
+        Text = "Spalte" ;
+        Text [ ENGLISH ] = "Column" ;
+        Text [ norwegian ] = "Column" ;
+        Text [ italian ] = "Colonna" ;
+        Text [ portuguese_brazilian ] = "Coluna" ;
+        Text [ portuguese ] = "Coluna" ;
+        Text [ finnish ] = "Sarake" ;
+        Text [ danish ] = "Kolonne" ;
+        Text [ french ] = "Colonne" ;
+        Text [ swedish ] = "Kolumn" ;
+        Text [ dutch ] = "Kolom" ;
+        Text [ spanish ] = "Columna" ;
+        Text [ english_us ] = "Column" ;
+        Text[ chinese_simplified ] = "¡–";
+        Text[ russian ] = " ÓÎÓÌÍ‡";
+        Text[ polish ] = "Kolumna";
+        Text[ japanese ] = "óÒ";
+        Text[ chinese_traditional ] = "ƒÊ";
+        Text[ arabic ] = "⁄„Êœ";
+        Text[ greek ] = "”ÙﬁÎÁ";
+        Text[ korean ] = "ø≠";
+        Text[ turkish ] = "S¸tun";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "≈≈–Ú";
+    Text[ russian ] = "—ÓÚËÓ‚Í‡";
+    Text[ polish ] = "Sortuj";
+    Text[ japanese ] = "ï¿Ç◊ë÷Ç¶";
+    Text[ chinese_traditional ] = "±∆ß«";
+    Text[ arabic ] = "›—“";
+    Text[ greek ] = "‘·ÓÈÌ¸ÏÁÛÁ";
+    Text[ korean ] = "¡§∑ƒ";
+    Text[ turkish ] = "S˝rala";
+    Text[ language_user1 ] = " ";
+};
+InfoBox MSG_SRTERR
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    MESSAGE = "Selektion konnte nicht sortiert werden" ;
+    MESSAGE [ English ] = "Cannot sort selection" ;
+    MESSAGE [ norwegian ] = "Kan ikke sortere utvalget" ;
+    MESSAGE [ italian ] = "Impossibile ordinare la selezione" ;
+    MESSAGE [ portuguese_brazilian ] = "N„o posso ordenar seleÁ„o" ;
+    MESSAGE [ portuguese ] = "ImpossÌvel ordenar selecÁ„o" ;
+    MESSAGE [ finnish ] = "Valittuja tietoja ei voi lajitella" ;
+    MESSAGE [ danish ] = "Kan ikke sortere det markerede" ;
+    MESSAGE [ french ] = "Impossible de trier la sÈlection" ;
+    MESSAGE [ swedish ] = "Kan inte sortera markering" ;
+    MESSAGE [ dutch ] = "Selectie kan niet worden gesorteerd" ;
+    MESSAGE [ spanish ] = "No se pudo ordenar la selecciÛn" ;
+    MESSAGE [ english_us ] = "Cannot sort selection" ;
+    MESSAGE[ chinese_simplified ] = "Œﬁ∑®≈≈–Ú—°‘Òµƒƒ⁄»›°£";
+    MESSAGE[ russian ] = "—ÓÚËÓ‚Í‡ ÓÚ·Ó‡ ÌÂ‚ÓÁÏÓÊÌ‡";
+    MESSAGE[ polish ] = "Nie moøna sortowaÊ selekcji";
+    MESSAGE[ japanese ] = "ëIëîÕàÕÇÕï¿Ç◊ë÷Ç¶èoóàÇ‹ÇπÇÒÅB";
+    MESSAGE[ chinese_traditional ] = "µL™k±∆ß«øÔæ‹™∫§∫Æe°C";
+    MESSAGE[ arabic ] = " ⁄–— ›—“ «· ÕœÌœ";
+    MESSAGE[ greek ] = "« Ù·ÓÈÌ¸ÏÁÛÁ ÙÁÚ ÂÈÎÔ„ﬁÚ ‰ÂÌ ﬁÙ·Ì ‰ıÌ·Ùﬁ";
+    MESSAGE[ korean ] = "º±≈√¿ª ¡§∑ƒ«“ºˆ æ¯Ω¿¥œ¥Ÿ.";
+    MESSAGE[ turkish ] = "SeÁim s˝ralanamad˝";
+    MESSAGE[ language_user1 ] = " ";
+};

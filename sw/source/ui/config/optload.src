@@ -1,0 +1,413 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optload.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+
+#include "globals.hrc"
+#include "optload.hrc"
+#include "helpid.h"
+
+/**************************************************************************/
+/*                                                                        */
+/**************************************************************************/
+
+TabPage TP_OPTLOAD_PAGE
+{
+    HelpID = HID_OPTLOAD_PAGE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+/*  FixedText FT_UPDATE_LINKS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text = "Verknüpfungen beim Laden aktualisieren" ;
+        Text [ English ] = "Update links while loading" ;
+        Text[ italian ] = "Aggiorna collegamenti durante il caricamento";
+        Text[ portuguese_brazilian ] = "Refresh links";
+        Text[ portuguese ] = "Actualizar ligações ao carregar";
+        Text[ danish ] = "Refresh links";
+        Text[ french ] = "Actualiser les liens lors du chargement";
+        Text[ swedish ] = "Uppdatera länkar vid laddning";
+        Text[ dutch ] = "Verbindingen bij het laden actualiseren";
+        Text[ spanish ] = "Actualizar vínculos al cargar";
+        Text[ english_us ] = "Update links";
+        Text[ chinese_simplified ] = "ÔÚ×°ÔØÊ±¸üĞÂÁ´½Ó";
+        Text[ russian ] = "Îáíîâèòü ñâÿçè";
+        Text[ polish ] = "Aktualizuj ³¹cza";
+        Text[ japanese ] = "Verknüpfungen aktualisieren";
+    };*/
+    GroupBox GB_LINK
+    {
+        Pos = MAP_APPFONT ( 6 , 2 ) ;
+        Size = MAP_APPFONT ( 248 , 37 ) ;
+        Text = "Verknüpfungen aktualisieren" ;
+        Text [ English ] = "Update links" ;
+        Text[ english_us ] = "Update links";
+        Text[ portuguese ] = "Actualizar ligações";
+        Text[ russian ] = "Îáíîâèòü ññûëêè";
+        Text[ dutch ] = "Verbindingen actualiseren";
+        Text[ french ] = "Actualiser les liens";
+        Text[ spanish ] = "Actualizar vínculos";
+        Text[ italian ] = "Aggiorna collegamenti";
+        Text[ danish ] = "Opdater kæder";
+        Text[ swedish ] = "Uppdatera länkar";
+        Text[ polish ] = "Aktualizuj ³¹cza";
+        Text[ portuguese_brazilian ] = "Refresh links";
+        Text[ japanese ] = "Øİ¸‚ÌXV";
+        Text[ chinese_simplified ] = "¸üĞÂÁ´½Ó";
+        Text[ chinese_traditional ] = "§ó·s±¶®|";
+    Text[ arabic ] = "ÊÍÏíË ÇáÇÑÊÈÇØÇÊ";
+    Text[ greek ] = "Åíçìİñùóç óõíäİóåùí";
+    Text[ korean ] = "¿¬°á ¾÷ µ¥ÀÌÆ®";
+    Text[ turkish ] = "Bağlantıları güncelle";
+    Text[ language_user1 ] = " ";
+};
+    RadioButton RB_ALWAYS
+    {
+        Pos = MAP_APPFONT ( 12 , 13 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "~Immer" ;
+        Text [ ENGLISH ] = "~Always" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Sempre";
+        Text[ portuguese_brazilian ] = "~Always";
+        Text[ portuguese ] = "~Sempre";
+        Text[ danish ] = "Altid";
+        Text[ french ] = "Toujours";
+        Text[ swedish ] = "~Alltid";
+        Text[ dutch ] = "~Altijd";
+        Text[ spanish ] = "~Siempre";
+        Text[ english_us ] = "Always";
+        Text[ chinese_simplified ] = "×ÜÊÇ";
+        Text[ russian ] = "Âñåãäà";
+        Text[ polish ] = "Zawsze";
+        Text[ japanese ] = "í‚É";
+        Text[ chinese_traditional ] = "Á`¬O";
+    Text[ arabic ] = "ÏÇÆãÇğ";
+    Text[ greek ] = "ĞÜíôá";
+    Text[ korean ] = "Ç×»ó";
+    Text[ turkish ] = "Her zaman";
+    Text[ language_user1 ] = " ";
+};
+    RadioButton RB_REQUEST
+    {
+        Pos = MAP_APPFONT ( 90 , 13 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "Auf Nach~frage" ;
+        Text [ ENGLISH ] = "On request" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Su richiesta";
+        Text[ portuguese_brazilian ] = "On request";
+        Text[ portuguese ] = "A ~pedido";
+        Text[ danish ] = "På anmodning";
+        Text[ french ] = "Sur demande";
+        Text[ swedish ] = "På ~begäran";
+        Text[ dutch ] = "Op aan~vraag";
+        Text[ spanish ] = "A ~petición";
+        Text[ english_us ] = "On request";
+        Text[ chinese_simplified ] = "ÔÚÇëÇóÊ±";
+        Text[ russian ] = "Ïî òğåáîâàíèş";
+        Text[ polish ] = "Gdy jest wymagane";
+        Text[ japanese ] = "•K—v‚É‰‚¶‚Ä";
+        Text[ chinese_traditional ] = "¦b½Ğ¨D®É";
+    Text[ arabic ] = "ÈÚÏ ÇáÇÓÊİÓÇÑ";
+    Text[ greek ] = "Óå æŞôçóç";
+    Text[ korean ] = "¿äÃ»";
+    Text[ turkish ] = "İstek üzerine";
+    Text[ language_user1 ] = " ";
+};
+    RadioButton RB_NEVER
+    {
+        Pos = MAP_APPFONT ( 168 , 13 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "~Nie" ;
+        Text [ ENGLISH ] = "Never" ;
+        TabStop = TRUE ;
+        Text[ italian ] = "Mai";
+        Text[ portuguese_brazilian ] = "Never";
+        Text[ portuguese ] = "~Nunca";
+        Text[ danish ] = "Aldrig";
+        Text[ french ] = "Jamais";
+        Text[ swedish ] = "Al~drig";
+        Text[ dutch ] = "~Nooit";
+        Text[ spanish ] = "~Nunca";
+        Text[ english_us ] = "Never";
+        Text[ chinese_simplified ] = "ÓÀÔ¶²»";
+        Text[ russian ] = "Íèêîãäà";
+        Text[ polish ] = "Nigdy";
+        Text[ japanese ] = "•s•K—v";
+        Text[ chinese_traditional ] = "¥Ã»·¤£";
+    Text[ arabic ] = "ÈÊÇÊÇğ";
+    Text[ greek ] = "Ğïôİ";
+    Text[ korean ] = "ÀüÇô";
+    Text[ turkish ] = "Hiçbir zaman";
+    Text[ language_user1 ] = " ";
+};
+    CheckBox CB_LINK_DOCONLY
+    {
+        Pos = MAP_APPFONT ( 12 , 25) ;
+        Size = MAP_APPFONT ( 220 , 10 ) ;
+        Text = "Nur für das aktuelle ~Dokument" ;
+        Text [ English ] = "Actual document only" ;
+        Text [ dutch ] = "~Alleen in het actuele document" ;
+        Text [ english_us ] = "Current document only" ;
+        Text [ italian ] = "Solo per il documento corrente" ;
+        Text [ spanish ] = "Solo para el documento ~actual" ;
+        Text [ french ] = "Uniquement pour le document actif" ;
+        Text [ swedish ] = "~Endast för det aktuella dokumentet" ;
+        Text [ danish ] = "Kun for det aktuelle dokument" ;
+        Text [ portuguese ] = "~Apenas para documento activo" ;
+        Text[ portuguese_brazilian ] = "~Nur für das aktuelle Dokument";
+        Text[ chinese_simplified ] = "Ö»ÓÃÓÚµ±Ç°µÄÎÄµµ";
+        Text[ russian ] = "Òîëüêî äëÿ òåêóùåãî äîêóìåíòà";
+        Text[ polish ] = "Tylko dla aktualnego dokumentu";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚¾‚¯";
+        Text[ chinese_traditional ] = "¥u¥Î©ó·í«eªº¤å¥ó";
+    Text[ arabic ] = "ÇáãÓÊäÏ ÇáÍÇáí İŞØ";
+    Text[ greek ] = "Ìüíï ãéá ôï ğáñüí İããñáöï";
+    Text[ korean ] = "ÇöÀç ¹®¼­ ¸¸";
+    Text[ language_user1 ] = " ";
+    Text[ turkish ] = "Yalnızca açık belgede";
+};
+    GroupBox GB_FIELD
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 248 , 53 ) ;
+        Text = "Felder und Diagramme" ;
+        Text [ English ] = "Update" ;
+        Text[ english_us ] = "Fields and charts";
+        Text[ portuguese ] = "Campos e gráficos";
+        Text[ russian ] = "Ïîëÿ è äèàãğàììû";
+        Text[ dutch ] = "Velden en diagrammen";
+        Text[ french ] = "Champs et diagrammes";
+        Text[ spanish ] = "Campos y diagramas";
+        Text[ italian ] = "Campi e diagrammi";
+        Text[ danish ] = "Felter og diagrammer";
+        Text[ swedish ] = "Fält och diagram";
+        Text[ polish ] = "Pola i diagramy";
+        Text[ portuguese_brazilian ] = "Refresh links";
+        Text[ japanese ] = "Ì¨°ÙÄŞ‚Æ¸Ş×Ì";
+        Text[ chinese_simplified ] = "×Ö¶ÎºÍÍ¼±í";
+        Text[ chinese_traditional ] = "Äæ¦ì©M¹Ïªí";
+    Text[ arabic ] = "ÍŞæá æÑÓæã ÈíÇäíÉ";
+    Text[ greek ] = "Ğåäßá êáé äéáãñÜììáôá";
+    Text[ korean ] = "ÇÊµå¿Í Â÷Æ®";
+    Text[ turkish ] = "Alan ve şemalar";
+    Text[ language_user1 ] = " ";
+};
+    CheckBox CB_AUTO_UPDATE_FIELDS
+    {
+        Pos = MAP_APPFONT ( 12 , 55) ;
+        Size = MAP_APPFONT ( 213 , 10 ) ;
+        Text = "F~eldbefehle automatisch aktualisieren" ;
+        Text [ English ] = "Update fields automatically" ;
+        Text[ english_us ] = "Update ~fields automatically";
+        Text[ portuguese ] = "Actualizar ~campos automaticamente";
+        Text[ russian ] = "Îáíîâëÿòü àâòîìàòè÷åñêè ïîëÿ";
+        Text[ dutch ] = "V~eldopdrachten automatisch actualiseren";
+        Text[ french ] = "Actualiser automatiquement les ~instructions de champ";
+        Text[ spanish ] = "Actualizar ~campos automáticamente";
+        Text[ italian ] = "Aggiorna i comandi di campo automaticamente";
+        Text[ danish ] = "Opdater felter automatisk";
+        Text[ swedish ] = "Uppdatera ~fältkommandon automatiskt";
+        Text[ polish ] = "Aktualizuj pola automatycznie";
+        Text[ portuguese_brazilian ] = "Update fields automatically";
+        Text[ japanese ] = "Ì¨°ÙÄŞ‚ğ©“®“I‚ÉXV(~F)";
+        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂ×Ö¶ÎÃüÁî(~F)";
+        Text[ chinese_traditional ] = "¦Û°Ê§ó·sÄæ¦ì©R¥O(~F)";
+    Text[ arabic ] = "ÊÍÏíË ÇáÍŞæá ÊáŞÇÆíÇğ";
+    Text[ greek ] = "Áõôüìáôç åíçìİñùóç åíôïëşí ğåäßùí";
+    Text[ korean ] = "ÇÊµå ÀÚµ¿ ¾÷ µ¥ÀÌÆ®(~F)";
+    Text[ turkish ] = "Alan öğelerini otomatik olarak güncelle";
+    Text[ language_user1 ] = " ";
+};
+    CheckBox CB_AUTO_UPDATE_CHARTS
+    {
+        Pos = MAP_APPFONT ( 12 , 68) ;
+        Size = MAP_APPFONT ( 213 , 10 ) ;
+        Text = "Dia~gramme automatisch aktualisieren" ;
+        Text [ English ] = "Update charts automatically" ;
+        Text[ english_us ] = "Update ~charts automatically";
+        Text[ portuguese ] = "Actualizar ~gráficos automaticamente";
+        Text[ russian ] = "Îáíîâëÿòü àâòîìàòè÷åñêè äèàãğàììû";
+        Text[ dutch ] = "~Diagrammen automatisch actualiseren";
+        Text[ french ] = "Actualiser automatiquement les diagrammes";
+        Text[ spanish ] = "Actualizar ~diagramas automáticamente";
+        Text[ italian ] = "Aggiorna i diagrammi automaticamente";
+        Text[ danish ] = "Opdater diagrammer automatisk";
+        Text[ swedish ] = "Uppdatera ~diagram automatiskt";
+        Text[ polish ] = "Aktualizuj wykresy automatycznie";
+        Text[ portuguese_brazilian ] = "Update charts automatically";
+        Text[ japanese ] = "¸Ş×Ì‚ğ©“®“I‚ÉXV(~C)";
+        Text[ chinese_simplified ] = "×Ô¶¯¸üĞÂÍ¼±í(~C)";
+        Text[ chinese_traditional ] = "¦Û°Ê§ó·s¹Ïªí(~C)";
+    Text[ arabic ] = "ÊÍÏíË ÇáÑÓæã ÇáÈíÇäíÉ ÊáŞÇÆíÇğ";
+    Text[ greek ] = "Áõôüìáôç åíçìİñùóç äéáãñáììÜôùí";
+    Text[ korean ] = "Â÷Æ® ÀÚµ¿ ¾÷ µ¥ÀÌÆ®(~C)";
+    Text[ turkish ] = "Şemaları otomatik olarak güncelle";
+    Text[ language_user1 ] = " ";
+};
+    CheckBox CB_FLD_DOCONLY
+    {
+        Pos = MAP_APPFONT ( 12 , 83) ;
+        Size = MAP_APPFONT ( 213 , 10 ) ;
+        Text = "Nur für das aktuelle D~okument" ;
+        Text [ English ] = "Current document only" ;
+        Text [ dutch ] = "~Alleen in het actuele document" ;
+        Text [ english_us ] = "Current document only" ;
+        Text [ italian ] = "Solo per il documento corrente" ;
+        Text [ spanish ] = "Solo para el documento ~actual" ;
+        Text [ french ] = "Uniquement pour le document actif" ;
+        Text [ swedish ] = "~Endast för det aktuella dokumentet" ;
+        Text [ danish ] = "Kun for det aktuelle dokument" ;
+        Text [ portuguese ] = "~Apenas para documento actual" ;
+        Text[ portuguese_brazilian ] = "~Nur für das aktuelle Dokument";
+        Text[ chinese_simplified ] = "Ö»ÓÃÓÚµ±Ç°µÄÎÄµµ";
+        Text[ russian ] = "Òîëüêî äëÿ òåêóùåãî äîêóìåíòà";
+        Text[ polish ] = "Tylko dla aktualnego dokumentu";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚¾‚¯";
+        Text[ chinese_traditional ] = "¥u¥Î©ó·í«eªº¤å¥ó";
+    Text[ arabic ] = "ÇáãÓÊäÏ ÇáÍÇáí İŞØ";
+    Text[ greek ] = "Ìüíï ãéá ôï ğáñşí İããñáöï";
+    Text[ korean ] = "ÇöÀç ¹®¼­ ¸¸";
+    Text[ turkish ] = "Yalnızca açık belgede";
+    Text[ language_user1 ] = " ";
+};
+    GroupBox GB_COMPAT
+    {
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Size = MAP_APPFONT ( 248 , 33 ) ;
+        Text = "Kompatibilität" ;
+        Text [ English ] = "Compatibility" ;
+        Text[ english_us ] = "Compatibility";
+        Text[ portuguese ] = "Compatibilidade";
+        Text[ russian ] = "Ñîâìåñòèìîñòü";
+        Text[ dutch ] = "Compatibiliteit";
+        Text[ french ] = "Compatibilité";
+        Text[ spanish ] = "Compatibilidad";
+        Text[ italian ] = "Compatibilità";
+        Text[ danish ] = "Kompatibilitet";
+        Text[ swedish ] = "Kompatibilitet";
+        Text[ polish ] = "Zgodnoœæ";
+        Text[ portuguese_brazilian ] = "Compatibility";
+        Text[ japanese ] = "ŒİŠ·«";
+        Text[ chinese_simplified ] = "¼æÈİ";
+        Text[ chinese_traditional ] = "¬Û®e";
+    Text[ arabic ] = "ÊæÇİŞ";
+    Text[ greek ] = "Óõìâáôüôçôá";
+    Text[ korean ] = "È£È¯";
+    Text[ turkish ] = "Uyumluluk";
+    Text[ language_user1 ] = " ";
+};
+    CheckBox CB_MERGE_PARA_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 109) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text = "Im aktuellen Dokument alle Absatz- und Tabellen~abstände addieren";
+        Text [ English ] = "Add ~distances between paragraphs and tables" ;
+        Text[ english_us ] = "Add spacing between paragraphs and tables in the current document";
+        Text[ portuguese ] = "Somar ~espaçamento entre parágrafos e tabelas no documento activo";
+        Text[ russian ] = "Ñëîæèòü â òåêóùåì äîêóìåíòå âñå èíòåğâàëû àáçàöåâ è òàáëèö";
+        Text[ dutch ] = "In het actuele document alle ~afstanden tussen alinea's en tabellen optellen";
+        Text[ french ] = "Additionner les espaces entre paragraphes et tableaux dans le document actif";
+        Text[ spanish ] = "Sumar ~espacios de párrafos y tablas en el documento actual";
+        Text[ italian ] = "Aggiungi distanze tra i paragrafi e le tabelle nel documento attuale";
+        Text[ danish ] = "Tæl alle afsnits- og tabelafstande i det aktuelle dokument sammen";
+        Text[ swedish ] = "Addera alla stycke- och tabell~avstånd i det aktuella dokumentet";
+        Text[ polish ] = "Dodaj w aktualnym dokumencie wszystkie odstêpy akapitów i tabel";
+        Text[ portuguese_brazilian ] = "Add ~distances between paragraphs and tables";
+        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚É‚·‚×‚Ä‚Ì’i—‚¨‚æ‚Ñ•\\‚ÌŠÔŠu‚ğ•t‰Á‚·‚é";
+        Text[ chinese_simplified ] = "ÔÚµ±Ç°ÎÄµµÄÚÀ©´óËùÓĞ¶ÎÂäºÍ±í¸ñÖ®¼äµÄ¼ä¸ô(~S)";
+        Text[ chinese_traditional ] = "¦b·í«e¤å¥ó¤ºÂX¤j©Ò¦³¬q¸¨©Mªí®æ¤§¶¡ªº¶¡¹j(~S)";
+    Text[ arabic ] = "ÅÖÇİÉ ãÓÇİÉ ÇáÊÈÇÚÏ Åáì ßá İŞÑÇÊ æÌÏÇæá ÇáãÓÊäÏ ÇáÍÇáí";
+        Text[ greek ] = "¢èñïéóìá üëùí ôùí áğïóôÜóåùí ğáñáãñÜöùí êáé ğéíÜêùí óôï ôñİ÷ùí İããñáöï";
+    Text[ korean ] = "ÇöÀç ¹®¼­ÀÇ ´Ü¶ô°ú Ç¥ »çÀÌÀÇ °£°İ Ãß°¡";
+    Text[ turkish ] = "Açık belgedeki tüm paragraf ve tablo aralıklarını topla";
+    Text[ language_user1 ] = " ";
+};
+    CheckBox CB_MERGE_PARA_DIST_PAGESTART
+    {
+        Pos = MAP_APPFONT ( 12 , 121) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text = "A~bsatz- und Tabellenabstände an Seitenanfängen addieren";
+        Text [ English ] = "Add distances at the beginning of pages" ;
+        Text[ english_us ] = "Add paragraph and table spacing to start of pages";
+    Text[ portuguese ] = "A~dicionar espaços de parágrafos e tabelas no início das páginas";
+    Text[ russian ] = "Äîáàâèòü èíòåğâàëû àáçàöåâ è òàáëèö â íà÷àëå ñòğàíèöû";
+    Text[ greek ] = "¢èñïéóìá ôùí áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ğéíÜêùí óôçí áñ÷Ş ôçò óåëßäáò";
+    Text[ dutch ] = "~Alinea- en tabellenafstanden invoegen aan paginabegin.";
+    Text[ french ] = "Additionner les ~espaces entre paragraphes et tableaux en début de page";
+    Text[ spanish ] = "Su~mar espacios de tablas y párrafos a los comienzos de página";
+    Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina.";
+    Text[ danish ] = "Læg afsnits- og tabelafstande til ved sidebegyndelser";
+    Text[ swedish ] = "Lägg till stycke- och tabellavstånd vid början av sidor";
+    Text[ polish ] = "Dodaj a~kapity i odstêpy tabeli do pocz¹tków stron";
+    Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
+    Text[ japanese ] = "’i—‚¨‚æ‚Ñ•\\ŠÔŠu‚ğÍß°¼Ş‚Ìn‚ß‚É•t‰Á‚·‚é";
+    Text[ korean ] = "ÆäÀÌÁö ½ÃÀÛ¿¡ ´Ü¶ô°ú Ç¥ °£°İ Ãß°¡";
+    Text[ chinese_simplified ] = "ÔÚÒ³ÃæÆğÊ¼´¦Ôö¼Ó¶ÎÂäºÍ±í¸ñµÄ¼ä¸ô";
+    Text[ chinese_traditional ] = "­¶­±¶}ºİ³B¥[¤J¬q¸¨©Mªí®æ¶¡¹j";
+    Text[ arabic ] = "ÅÖÇİÉ ÇáİŞÑÉ æÊÈÇÚÏ ÇáÌÏÇæá Åáì ÈÏÇíÉ ÇáÕİÍÇÊ";
+    Text[ turkish ] = "Paragraf ve tablo aralıklarını sayfa başlarına ekle";
+    Text[ language_user1 ] = " ";
+};
+};
+

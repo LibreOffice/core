@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ *  $RCSfile: regionsw.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _REGIONSW_HRC
+#define _REGIONSW_HRC
+
+#include "dialog.hrc"
+
+
+#define CB_CONDITION         1
+#define CB_DDE               2
+#define CB_DISMISS           3
+#define CB_END_AT_TXTEND     4
+#define CB_END_NUM           5
+#define CB_FILE              6
+#define CB_FTN_AT_TXTEND     7
+#define CB_FTN_NUM           8
+#define CB_HIDE              9
+#define CB_PASSWD           10
+#define CB_PROTECT          11
+#define CB_FTN_NUM_FMT      12
+#define CB_END_NUM_FMT      13
+
+#define ED_CONDITION         1
+#define ED_END_PREFIX        2
+#define ED_END_SUFFIX        3
+#define ED_FILE              4
+#define ED_FTN_PREFIX        5
+#define ED_FTN_SUFFIX        6
+#define ED_RANAME            7
+#define ED_RNAME             8
+
+#define FLD_END_OFFSET       1
+#define FLD_FTN_OFFSET       2
+
+#define FT_DDE               1
+#define FT_END_OFFSET        2
+#define FT_END_PREFIX        3
+#define FT_END_SUFFIX        4
+#define FT_FILE              5
+#define FT_FTN_OFFSET        6
+#define FT_FTN_PREFIX        7
+#define FT_FTN_SUFFIX        8
+#define FT_RNAME             9
+#define FT_SUBREG           10
+
+#define GB_EDIT_OPTIONS      1
+#define GB_EDIT_SECTION      2
+#define GB_END               3
+#define GB_FTN               4
+#define GB_NEW_OPTIONS       5
+#define GB_NEW_SECTION       6
+
+#define LB_END_NUMVIEW       1
+#define LB_FTN_NUMVIEW       2
+#define LB_SUBREG            3
+
+#define PB_CANCEL            1
+#define PB_FILE              2
+#define PB_HELP              3
+#define PB_OK                4
+#define PB_OPTIONS           5
+#define PB_SAVED             6
+
+#define ST_INSERT            1
+#define TLB_SECTION          2
+
+
+
+/* Globale Resourcen */
+#define BMP_REG_NOPROT_NOHIDE   (RC_REGIONSW_BEGIN+0)
+#define BMP_REG_NOPROT_HIDE     (RC_REGIONSW_BEGIN+1)
+#define BMP_REG_PROT_NOHIDE     (RC_REGIONSW_BEGIN+2)
+#define BMP_REG_PROT_HIDE       (RC_REGIONSW_BEGIN+3)
+#define BMP_REG_EXPNODE         (RC_REGIONSW_BEGIN+4)
+#define BMP_REG_COLLNODE        (RC_REGIONSW_BEGIN+5)
+
+#define STR_REG_DUPLICATE       (RC_REGIONSW_BEGIN+6)
+#define STR_INFO_DUPLICATE      (RC_REGIONSW_BEGIN+7)
+
+#define MD_INS_REGION           (RC_REGIONSW_BEGIN+8)
+#define MD_EDIT_REGION          (RC_REGIONSW_BEGIN+9)
+#define QB_CONNECT              (RC_REGIONSW_BEGIN+10)
+#define REG_WRONG_PASSWORD      (RC_REGIONSW_BEGIN+11)
+#define REG_WRONG_PASSWD_REPEAT (RC_REGIONSW_BEGIN+12)
+
+#endif

@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tbxanchr.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "ribbar.hrc"
+#include "cmdid.h"
+Menu MN_ANCHOR_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            _MenuItemFlags = MIB_RADIOCHECK ;
+            RadioCheck = TRUE ;
+            Identifier = FN_TOOL_ANKER_PAGE ;
+            Text = "Seite" ;
+            Text [ ENGLISH ] = "Page" ;
+            Text [ portuguese ] = "Página" ;
+            Text [ english_us ] = "Page" ;
+            Text [ portuguese_brazilian ] = "Seite" ;
+            Text [ swedish ] = "Sida" ;
+            Text [ danish ] = "Side" ;
+            Text [ italian ] = "Pagina" ;
+            Text [ spanish ] = "Página" ;
+            Text [ french ] = "À la page" ;
+            Text [ dutch ] = "Pagina" ;
+            Text[ chinese_simplified ] = "Ò³";
+            Text[ russian ] = "Ñòðàíèöà";
+            Text[ polish ] = "Strona";
+            Text[ japanese ] = "Íß°¼Þ";
+            Text[ chinese_traditional ] = "­¶";
+            Text[ arabic ] = "ÕÝÍÉ";
+            Text[ greek ] = "Óåëßäá";
+            Text[ korean ] = "ÆäÀÌÁö";
+            Text[ turkish ] = "Sayfa";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            _MenuItemFlags = MIB_RADIOCHECK ;
+            RadioCheck = TRUE ;
+            Identifier = FN_TOOL_ANKER_PARAGRAPH ;
+            Text = "Absatz" ;
+            Text [ ENGLISH ] = "Paragraph" ;
+            Text [ portuguese ] = "Parágrafo" ;
+            Text [ english_us ] = "Paragraph" ;
+            Text [ portuguese_brazilian ] = "Absatz" ;
+            Text [ swedish ] = "Stycke" ;
+            Text [ danish ] = "Afsnit" ;
+            Text [ italian ] = "Paragrafo" ;
+            Text [ spanish ] = "Párrafo" ;
+            Text [ french ] = "Paragraphe" ;
+            Text [ dutch ] = "Alinea" ;
+            Text[ chinese_simplified ] = "¶ÎÂä";
+            Text[ russian ] = "Àáçàö";
+            Text[ polish ] = "Akapit";
+            Text[ japanese ] = "’i—Ž";
+            Text[ chinese_traditional ] = "¬q¸¨";
+            Text[ arabic ] = "ÝÞÑÉ";
+            Text[ greek ] = "ÐáñÜãñáöïò";
+            Text[ korean ] = "´Ü¶ô";
+            Text[ turkish ] = "Paragrafa";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            _MenuItemFlags = MIB_RADIOCHECK ;
+            RadioCheck = TRUE ;
+            Identifier = FN_TOOL_ANKER_AT_CHAR ;
+            Text = "Am Zeichen" ;
+            Text [ ENGLISH ] = "At character" ;
+            Text [ english_us ] = "At Character" ;
+            Text [ portuguese_brazilian ] = "Am Zeichen" ;
+            Text [ swedish ] = "Vid tecken" ;
+            Text [ danish ] = "Til tegn" ;
+            Text [ italian ] = "Al carattere" ;
+            Text [ spanish ] = "Al carácter" ;
+            Text [ french ] = "Au caractère" ;
+            Text [ dutch ] = "Aan teken" ;
+            Text [ portuguese ] = "No carácter" ;
+            Text[ chinese_simplified ] = "ÔÚ×Ö·ûÉÏ";
+            Text[ russian ] = "Ê çíàêó";
+            Text[ polish ] = "Przy znaku";
+            Text[ japanese ] = "•¶Žš‚É";
+            Text[ chinese_traditional ] = "¦b¦r¤¸¤W";
+            Text[ arabic ] = "Úáì ÇáÍÑÝ";
+            Text[ greek ] = "Ùò ÷áñáêôÞñáò";
+            Text[ korean ] = "¹®ÀÚ¿¡";
+            Text[ turkish ] = "Karaktere";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            _MenuItemFlags = MIB_RADIOCHECK ;
+            RadioCheck = TRUE ;
+            Identifier = FN_TOOL_ANKER_CHAR ;
+            Text = "Als Zeichen" ;
+            Text [ ENGLISH ] = "Like a character" ;
+            Text [ portuguese ] = "Como carácter" ;
+            Text [ english_us ] = "As Character" ;
+            Text [ portuguese_brazilian ] = "Zeichen" ;
+            Text [ swedish ] = "Som tecken" ;
+            Text [ danish ] = "Som tegn" ;
+            Text [ italian ] = "Quale carattere" ;
+            Text [ spanish ] = "Como carácter" ;
+            Text [ french ] = "Comme caractère" ;
+            Text [ dutch ] = "Als teken" ;
+            Text[ chinese_simplified ] = "µ±×÷×Ö·û";
+            Text[ russian ] = "Êàê çíàê";
+            Text[ polish ] = "Jako znak";
+            Text[ japanese ] = "•¶Žš‚Æ‚µ‚Ä";
+            Text[ chinese_traditional ] = "·í§@¦r¤¸";
+            Text[ arabic ] = "ßÍÑÝ";
+            Text[ greek ] = "Ùò ÷áñáêôÞñáò";
+            Text[ korean ] = "¹®ÀÚ·Î";
+            Text[ turkish ] = "Karakter olarak";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            _MenuItemFlags = MIB_RADIOCHECK ;
+            RadioCheck = TRUE ;
+            Identifier = FN_TOOL_ANKER_FRAME ;
+            Text = "Rahmen" ;
+            Text [ ENGLISH ] = "Frame" ;
+            Text [ portuguese ] = "Moldura" ;
+            Text [ english_us ] = "Frame" ;
+            Text [ portuguese_brazilian ] = "Rahmen" ;
+            Text [ swedish ] = "Ram" ;
+            Text [ danish ] = "Ramme" ;
+            Text [ italian ] = "Cornice" ;
+            Text [ spanish ] = "Marco" ;
+            Text [ french ] = "Cadre" ;
+            Text [ dutch ] = "Kader" ;
+            Text[ chinese_simplified ] = "¿ò";
+            Text[ russian ] = "Ðàìêà";
+            Text[ polish ] = "Ramka";
+            Text[ japanese ] = "˜g";
+            Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+            Text[ arabic ] = "ÅØÇÑ";
+            Text[ greek ] = "Ðåñßãñáììá";
+            Text[ korean ] = "ÇÁ·¹ÀÓ";
+            Text[ turkish ] = "Çerçeve";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};

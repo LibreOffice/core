@@ -1,0 +1,186 @@
+/*************************************************************************
+ *
+ *  $RCSfile: rowht.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "table.hrc"
+#include "rowht.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_ROW_HEIGHT
+{
+    HelpID = FN_TABLE_SET_ROW_HEIGHT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 157 , 60 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Zeilenhˆhe : Zellenhˆhe */
+    Text = "Zeilenhˆhe" ;
+    Text [ ENGLISH ] = "Row height" ;
+    Text [ norwegian ] = "Celleh¯yde" ;
+    Text [ italian ] = "Altezza riga" ;
+    Text [ portuguese_brazilian ] = "Altura da cÈlula" ;
+    Text [ portuguese ] = "Altura da linha" ;
+    Text [ finnish ] = "Solun korkeus" ;
+    Text [ danish ] = "RÊkkeh¯jde" ;
+    Text [ french ] = "Hauteur de ligne" ;
+    Text [ swedish ] = "Radhˆjd" ;
+    Text [ dutch ] = "Rijlhoogte" ;
+    Text [ spanish ] = "Altura de fila" ;
+    Text [ english_us ] = "Row Height" ;
+    Moveable = TRUE ;
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 101 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 101 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 101 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MetricField ED_HEIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 5 ;
+        Maximum = 990 ;
+        DecimalDigits = 1 ;
+        Value = 10 ;
+        Unit = FUNIT_CM ;
+        First = 100 ;
+        Last = 9999 ;
+    };
+    CheckBox CB_AUTOHEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 80 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~dynamisch anpassen : auto. H~ˆhe */
+        Text = "~dynamisch anpassen" ;
+        Text [ ENGLISH ] = "~dynamic adjustment" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Fit to size" ;
+        Text [ swedish ] = "anpassa ~dynamiskt" ;
+        Text [ danish ] = "tilpas dynamisk" ;
+        Text [ italian ] = "Altezza autom~atica" ;
+        Text [ spanish ] = "~ajuste din·mico" ;
+        Text [ french ] = "adaptation ~dynamique" ;
+        Text [ dutch ] = "~dynamisch aanpassen" ;
+        Text [ portuguese_brazilian ] = "~dynamisch anpassen" ;
+        Text [ portuguese ] = "Ajuste ~din‚mico" ;
+        Text[ chinese_simplified ] = "◊‘∂Øµ˜’˚(~F)";
+        Text[ russian ] = "œÓ‰·Ó ‡ÁÏÂ‡";
+        Text[ polish ] = "Dostosuj dynamicznie";
+        Text[ japanese ] = "é©ìÆí≤êÆ(~F)";
+        Text[ chinese_traditional ] = "¶€∞ Ω’æ„(~F)";
+        Text[ arabic ] = " Œ’Ì’ œÌ‰«„ÌﬂÌ";
+        Text[ greek ] = "ƒıÌ·ÏÈÍﬁ ÒÔÛ·ÒÏÔ„ﬁ";
+        Text[ korean ] = "≈©±‚ø° ∏¬√„(~F)";
+        Text[ turkish ] = "i~Áerik boyuna uydur";
+    };
+    GroupBox GB_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 89 , 51 ) ;
+        Text = "Hˆhe" ;
+        Text [ ENGLISH ] = "Height" ;
+        Text [ norwegian ] = "H¯yde " ;
+        Text [ italian ] = "Altezza" ;
+        Text [ portuguese_brazilian ] = "Altura" ;
+        Text [ portuguese ] = "Altura" ;
+        Text [ finnish ] = "Korkeus" ;
+        Text [ danish ] = "H¯jde" ;
+        Text [ french ] = "Hauteur" ;
+        Text [ swedish ] = "Hˆjd" ;
+        Text [ dutch ] = "Hoogte" ;
+        Text [ spanish ] = "Altura" ;
+        Text [ english_us ] = "Height" ;
+        Text[ chinese_simplified ] = "∏ﬂ";
+        Text[ russian ] = "¬˚ÒÓÚ‡";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "çÇÇ≥";
+        Text[ chinese_traditional ] = "∞™";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã";
+        Text[ turkish ] = "Y¸kseklik";
+    };
+    Text[ chinese_simplified ] = "––∏ﬂ";
+    Text[ russian ] = "¬˚ÒÓÚ‡ ÒÚÓÍË";
+    Text[ polish ] = "WysokoúÊ wierszy";
+    Text[ japanese ] = "çsÇÃçÇÇ≥";
+    Text[ chinese_traditional ] = "¶Ê∞™";
+    Text[ arabic ] = "«— ›«⁄ «·’›";
+    Text[ greek ] = "æ¯ÔÚ „Ò·ÏÏﬁÚ";
+    Text[ korean ] = "«‡ ≥Ù¿Ã";
+    Text[ turkish ] = "Sat˝r y¸kseklii";
+};

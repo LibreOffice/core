@@ -1,0 +1,317 @@
+interface TextDraw : TextDrawBase
+[
+    uuid = "626DE480-111A-101D-9757-6E74207A7520"
+]
+{
+    SID_ATTR_LINEEND_STYLE
+    [
+        SlotType = SfxBoolItem ;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = DisableState ;
+        Export = FALSE;
+    ]
+
+    SID_ATTR_LINE_STYLE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_DASH
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_WIDTH
+    [
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LINE_COLOR
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_STYLE
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_COLOR
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_GRADIENT
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_HATCH
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_FILL_BITMAP
+    [
+        Export = FALSE;
+        ExecMethod = ExecDrawAttrArgs ;
+        StateMethod = GetDrawAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTRIBUTES_LINE
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    SID_ATTRIBUTES_AREA
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    FN_DRAWTEXT_ATTR_DLG
+    [
+        ExecMethod = ExecDrawDlg ;
+        StateMethod = DisableState ;
+    ]
+
+    FN_TOOL_HMIRROR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_VMIRROR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_OBJECT_ROTATE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_EDIT
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FONTWORK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_OBJECT_HELL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_OBJECT_HEAVEN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_HIERARCHIE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+shell SwDrawShell : SwDrawBaseShell
+{
+        import TextDraw [Automation];
+
+     // no export
+
+    SID_FORMTEXT_STYLE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_ADJUST
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_DISTANCE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_START
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_MIRROR
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_FORMTEXT_HIDEFORM
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_OUTLINE
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWXVAL
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHADOW
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWCOLOR
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_SHDWYVAL
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FORMTEXT_STDFORM
+    [
+        ExecMethod = ExecFormText ;
+        StateMethod = GetFormTextState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.77  1999/05/07 12:57:58  JP
+    Bug #66007#: LineEndStyle wieder mit einer Execute-Methode
+
+
+      Rev 1.76   07 May 1999 14:57:58   JP
+   Bug #66007#: LineEndStyle wieder mit einer Execute-Methode
+
+      Rev 1.75   12 Nov 1998 17:28:38   MA
+   #58677# Disable Flag
+
+      Rev 1.74   10 Jun 1998 11:20:44   OM
+   Hell/Heaven nicht in FormShell
+
+      Rev 1.73   28 Aug 1997 12:39:08   MBA
+   Neue Interface-Namen
+
+      Rev 1.72   18 Jul 1997 09:37:22   OM
+   Fkts nicht exportieren
+
+      Rev 1.71   16 Jul 1997 16:47:26   OM
+   Einige Basic-Fkts nicht exportieren
+
+      Rev 1.70   13 Feb 1997 12:44:48   MA
+   unnoetige Texte entfernt
+
+      Rev 1.69   23 Jan 1997 10:49:22   OM
+   Neue Shells: Control- und DrawBaseShell
+
+      Rev 1.68   22 Jan 1997 11:18:24   OM
+   Neue Shells: DrawBaseShell und DrawControlShell
+
+      Rev 1.67   13 Jan 1997 16:01:42   OM
+   Bezier-Punkte loeschen
+
+      Rev 1.66   08 Jan 1997 12:40:30   OM
+   Slots in Bezier-Shell verschoben
+
+      Rev 1.65   13 Dec 1996 12:24:30   OM
+   Slots fuer Bezier-Fkts
+
+      Rev 1.64   11 Dec 1996 12:03:46   OM
+   Bezier-Controller
+
+      Rev 1.63   29 Nov 1996 15:55:34   OS
+   FN_TOOL_ANKER in der BaseShell
+
+      Rev 1.62   18 Nov 1996 13:39:20   MA
+   chg: State fuer align
+
+      Rev 1.61   14 Nov 1996 08:06:50   SWG
+   _TEMPLATE_ -> _STYLE_
+
+      Rev 1.60   07 Nov 1996 16:17:22   OS
+   Anker-Methoden an die BaseShell
+
+------------------------------------------------------------------------*/
+
+

@@ -1,0 +1,111 @@
+/*-----------------------------------------------------------------------
+
+    $Workfile:   BASESH.SDI  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/basesh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File SwBaseShell fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextSelection : BaseTextSelection
+[
+    uuid = "F23BA0A8-73A0-11d0-89CA-008029E4B0B1"
+]
+{
+    // hier sollen die Slots eingefuegt werden, die vom StarWriter/WEB
+    // nicht unterstuetzt werden
+
+    FN_TOOL_ANKER_PAGE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CONTOUR_DLG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CONTOUR_EXEC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+}  // end interface Base
+
+
+shell SwBaseShell
+{
+        import TextSelection[Automation];
+}
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.119  2000/05/10 12:00:09  os
+    Basic API removed
+
+    Revision 1.118  1999/01/19 13:58:20  OS
+    #60964# UniqueId fuer TextSelection - BaseShell kann eigenstaendig auftreten
+
+
+      Rev 1.117   19 Jan 1999 14:58:20   OS
+   #60964# UniqueId fuer TextSelection - BaseShell kann eigenstaendig auftreten
+
+      Rev 1.116   12 Nov 1998 17:29:06   MA
+   #58677# Disable Flag
+
+      Rev 1.115   28 Aug 1997 12:51:52   MBA
+   Neue Interface-Namen
+
+      Rev 1.114   13 Feb 1997 12:45:08   MA
+   unnoetige Texte entfernt
+
+      Rev 1.113   12 Feb 1997 12:09:02   MA
+   Kontur bearbeiten
+
+      Rev 1.112   27 Jan 1997 16:37:42   OS
+   Web-Slots aus den allg. interfaces raus
+
+      Rev 1.111   23 Jan 1997 08:35:44   OS
+   Ableitung von _Base
+
+      Rev 1.110   21 Jan 1997 08:22:16   OS
+   unpassende Slots aus interface Interior herausgeschoben
+
+      Rev 1.109   18 Dec 1996 12:15:28   OM
+   Slot fuer Konturumfluss im Draw-Menue
+
+      Rev 1.108   29 Nov 1996 15:55:32   OS
+   FN_TOOL_ANKER in der BaseShell
+
+      Rev 1.107   28 Nov 1996 18:36:24   OS
+   AccelConfig nachgetragen
+
+      Rev 1.106   14 Nov 1996 08:06:54   SWG
+   _TEMPLATE_ -> _STYLE_
+
+      Rev 1.105   07 Nov 1996 16:17:52   OS
+   Wrap- und Anker-Methoden an die BaseShell
+
+      Rev 1.104   26 Sep 1996 19:14:00   OS
+   Statusmethode fuer FNINSERT_REGION
+
+      Rev 1.103   21 Sep 1996 17:36:22   OS
+   Sot-Umstellung beendet
+
+      Rev 1.102   19 Sep 1996 11:29:48   OM
+   Kommentar geaendert
+
+      Rev 1.101   18 Sep 1996 19:06:10   OS
+   Para/Char/-Style wird wieder exportiert
+
+------------------------------------------------------------------------*/
+

@@ -1,0 +1,626 @@
+/*************************************************************************
+ *
+ *  $RCSfile: labfmt.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+ // #include *****************************************************************
+#include "labfmt.hrc"
+#include "helpid.h"
+ // TP_LAB_FMT ---------------------------------------------------------------
+TabPage TP_LAB_FMT
+{
+    HelpID = HID_LAB_FMT ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Hide = TRUE ;
+    Window WIN_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 108 , 6 ) ;
+        Size = MAP_APPFONT ( 146 , 123 ) ;
+    };
+    FixedText TXT_HDIST
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Horiz. Abstand" ;
+        Text [ English ] = "Horiz. distance" ;
+        Text [ norwegian ] = "Horiz. distance" ;
+        Text [ italian ] = "Distanza ~orizzont." ;
+        Text [ portuguese_brazilian ] = "Distância horizontal" ;
+        Text [ portuguese ] = "Espaçamento ~horiz." ;
+        Text [ finnish ] = "Vaakaetäisyys" ;
+        Text [ danish ] = "Vandret afstand" ;
+        Text [ french ] = "Écart ~horizontal" ;
+        Text [ swedish ] = "~Horis. avstånd" ;
+        Text [ dutch ] = "~Horiz. afstand" ;
+        Text [ spanish ] = "Distancia ~horiz." ;
+        Text [ english_us ] = "Hori~zontal pitch" ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "Ë®Æ½¼ä¸ô(~Z)";
+        Text[ russian ] = "Øàã ïî ãîğèçîíò.";
+        Text[ polish ] = "Odstêp poziomy";
+        Text[ japanese ] = "‰¡‚ÌŠÔŠu(~Z)";
+        Text[ chinese_traditional ] = "¤ô¥­¶¡¹j(~Z)";
+        Text[ arabic ] = "ÇáÎØæÉ ÇáÃİŞíÉ";
+        Text[ greek ] = "Ïñéæüíôéá áğüóôáóç";
+        Text[ korean ] = "°¡·Î °£°İ(~Z)";
+        Text[ turkish ] = "~Yatay boşluk";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_HDIST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 6 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_VDIST
+    {
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Vert. Abstand" ;
+        Text [ English ] = "Vert. distance" ;
+        Text [ norwegian ] = "Vert. distance" ;
+        Text [ italian ] = "Distanza verticale" ;
+        Text [ portuguese_brazilian ] = "Distância vertical" ;
+        Text [ portuguese ] = "Espaçamento vertical" ;
+        Text [ finnish ] = "Pystyetäisyys" ;
+        Text [ danish ] = "Lodret afstand" ;
+        Text [ french ] = "Écart ~vertical" ;
+        Text [ swedish ] = "~Vert. avstånd" ;
+        Text [ dutch ] = "V~ert. afstand" ;
+        Text [ spanish ] = "Distancia ~vert." ;
+        Text [ english_us ] = "~Vertical pitch" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "´¹Ö±¼ä¸ô(~V)";
+        Text[ russian ] = "Øàã ïî âåğòèê.";
+        Text[ polish ] = "Odstêp pionowy";
+        Text[ japanese ] = "c‚ÌŠÔŠu(~V)";
+        Text[ chinese_traditional ] = "««ª½¶¡¹j(~V)";
+        Text[ arabic ] = "ÇáÎØæÉ ÇáÑÃÓíÉ";
+        Text[ greek ] = "Êáôáêüñõöç áğüóôáóç";
+        Text[ korean ] = "¼¼·Î °£°İ(~V)";
+        Text[ turkish ] = "Dikey boşluk";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_VDIST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 21 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_WIDTH
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Breite" ;
+        Text [ English ] = "Width" ;
+        Text [ norwegian ] = "Bredde " ;
+        Text [ italian ] = "~Largh." ;
+        Text [ portuguese_brazilian ] = "Largura" ;
+        Text [ portuguese ] = "~Largura" ;
+        Text [ finnish ] = "Leveys" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ french ] = "~Largeur" ;
+        Text [ swedish ] = "~Bredd" ;
+        Text [ dutch ] = "B~reedte" ;
+        Text [ spanish ] = "A~ncho" ;
+        Text [ english_us ] = "~Width" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¿í(~W)";
+        Text[ russian ] = "Øèğèíà";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "•(~W)";
+        Text[ chinese_traditional ] = "¼e(~W)";
+        Text[ arabic ] = "ÇáÚÑÖ";
+        Text[ greek ] = "ĞëÜôïò";
+        Text[ korean ] = "³Êºñ(~W)";
+        Text[ turkish ] = "Ge~nişlik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_WIDTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 36 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "H~öhe" ;
+        Text [ English ] = "Height" ;
+        Text [ norwegian ] = "Høyde " ;
+        Text [ italian ] = "Altezza" ;
+        Text [ portuguese_brazilian ] = "Altura" ;
+        Text [ portuguese ] = "Altura" ;
+        Text [ finnish ] = "Korkeus" ;
+        Text [ danish ] = "Højde" ;
+        Text [ french ] = "~Hauteur" ;
+        Text [ swedish ] = "Höj~d" ;
+        Text [ dutch ] = "H~oogte" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ english_us ] = "~Height" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¸ß(~H)";
+        Text[ russian ] = "Âûñîòà";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "‚‚³(~H)";
+        Text[ chinese_traditional ] = "°ª(~H)";
+        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+        Text[ greek ] = "¾øïò";
+        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ turkish ] = "~Yükseklik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_HEIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 51 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_LEFT
+    {
+        Pos = MAP_APPFONT ( 6 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Rand ~links" ;
+        Text [ English ] = "Left margin" ;
+        Text [ norwegian ] = "Left margin" ;
+        Text [ italian ] = "Margine sinistro" ;
+        Text [ portuguese_brazilian ] = "Margem esquerda" ;
+        Text [ portuguese ] = "Margem esquerda" ;
+        Text [ finnish ] = "Vasen reunus" ;
+        Text [ danish ] = "Margen venstre" ;
+        Text [ french ] = "~Marge gauche" ;
+        Text [ swedish ] = "Vänster margina~l" ;
+        Text [ dutch ] = "~Marge links" ;
+        Text [ spanish ] = "Margen i~zquierdo" ;
+        Text [ english_us ] = "~Left margin" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "×ó·½Ò³±ß¾à(~L)";
+        Text[ russian ] = "Ëåâûé êğàé";
+        Text[ polish ] = "Lewy margines";
+        Text[ japanese ] = "¶—]”’(~L)";
+        Text[ chinese_traditional ] = "¥ª¦VÃä®Ø(~L)";
+        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
+        Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
+        Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
+        Text[ turkish ] = "S~ol kenar";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_LEFT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 66 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        Minimum = 0 ;
+        First = 0 ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_UPPER
+    {
+        Pos = MAP_APPFONT ( 6 , 83 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Rand ~oben" ;
+        Text [ English ] = "Upper margin" ;
+        Text [ norwegian ] = "Upper margin" ;
+        Text [ italian ] = "Margine superiore" ;
+        Text [ portuguese_brazilian ] = "Margem superior" ;
+        Text [ portuguese ] = "Margem superior" ;
+        Text [ finnish ] = "Oikea reunus" ;
+        Text [ danish ] = "Margen foroven" ;
+        Text [ french ] = "Marge ~supérieure" ;
+        Text [ swedish ] = "~Övre marginal" ;
+        Text [ dutch ] = "~Bovenmarge" ;
+        Text [ spanish ] = "M~argen superior" ;
+        Text [ english_us ] = "~Top margin" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "ÉÏ·½Ò³±ß¾à(~T)";
+        Text[ russian ] = "Âåğõíèé êğàé";
+        Text[ polish ] = "Margines górny";
+        Text[ japanese ] = "ã—]”’(~T)";
+        Text[ chinese_traditional ] = "¤WÃä®Ø(~T)";
+        Text[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
+        Text[ greek ] = "¢íù ğåñéèşñéï";
+        Text[ korean ] = "À§ ¿©¹é(~T)";
+        Text[ turkish ] = "Üst kenar";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField FLD_UPPER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 81 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        Minimum = 0 ;
+        First = 0 ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_COLUMNS
+    {
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Spalten" ;
+        Text [ English ] = "Columns" ;
+        Text [ norwegian ] = "Kolonner" ;
+        Text [ italian ] = "~Colonne" ;
+        Text [ portuguese_brazilian ] = "Colunas" ;
+        Text [ portuguese ] = "~Colunas" ;
+        Text [ finnish ] = "Sarakkeet" ;
+        Text [ danish ] = "Kolonner" ;
+        Text [ french ] = "~Colonnes" ;
+        Text [ swedish ] = "Kolumner" ;
+        Text [ dutch ] = "~Kolommen" ;
+        Text [ spanish ] = "Column~as" ;
+        Text [ english_us ] = "~Columns" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "ÁĞ(~C)";
+        Text[ russian ] = "Êîëîíêè";
+        Text[ polish ] = "Kolumny";
+        Text[ japanese ] = "’i‘g‚İ(~C)";
+        Text[ chinese_traditional ] = "Äæ(~C)";
+        Text[ arabic ] = "ÇáÃÚãÏÉ";
+        Text[ greek ] = "ÓôŞëåò";
+        Text[ korean ] = "¿­(~C)";
+        Text[ turkish ] = "~Sütun";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField FLD_COLUMNS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 96 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+    };
+    FixedText TXT_ROWS
+    {
+        Pos = MAP_APPFONT ( 6 , 113 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Zeilen" ;
+        Text [ English ] = "Rows" ;
+        Text [ norwegian ] = "Rows" ;
+        Text [ italian ] = "Righe" ;
+        Text [ portuguese_brazilian ] = "Fileiras" ;
+        Text [ portuguese ] = "Linhas" ;
+        Text [ finnish ] = "~Rivejä" ;
+        Text [ danish ] = "Rækker" ;
+        Text [ french ] = "~Lignes" ;
+        Text [ swedish ] = "~Rader" ;
+        Text [ dutch ] = "~Rijen" ;
+        Text [ spanish ] = "~Filas" ;
+        Text [ english_us ] = "R~ows" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "ĞĞ(~O)";
+        Text[ russian ] = "Ñòğîêè";
+        Text[ polish ] = "Wiersze";
+        Text[ japanese ] = "s(~Oj";
+        Text[ chinese_traditional ] = "¦æ(~O)";
+        Text[ arabic ] = "ÇáÕİæİ";
+        Text[ greek ] = "Ãñáììİò";
+        Text[ korean ] = "Çà(~O)";
+        Text[ turkish ] = "~Satır";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField FLD_ROWS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 111 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+    };
+};
+ // String *******************************************************************
+String STR_HDIST
+{
+    Text = "H. Abstand" ;
+    Text [ English ] = "H. distance" ;
+    Text [ norwegian ] = "H. distance" ;
+    Text [ italian ] = "Distanza orizzontale" ;
+    Text [ portuguese_brazilian ] = "Distância h." ;
+    Text [ portuguese ] = "Espaço H." ;
+    Text [ finnish ] = "Vaakaetäi." ;
+    Text [ danish ] = "V. afstand" ;
+    Text [ french ] = "Écart H." ;
+    Text [ swedish ] = "H. avstånd" ;
+    Text [ dutch ] = "H. afstand" ;
+    Text [ spanish ] = "Distancia h." ;
+    Text [ english_us ] = "H. Pitch" ;
+    Text[ chinese_simplified ] = "Ë®Æ½¼ä¸ô";
+    Text[ russian ] = "Øàã ïî ãîğèçîíò.";
+    Text[ polish ] = "Odstêp poziomy";
+    Text[ japanese ] = "‰¡ŠÔŠu";
+    Text[ chinese_traditional ] = "¤ô¥­¶¡¹j";
+    Text[ arabic ] = "ÇáÎØæÉ ÇáÃİŞíÉ";
+    Text[ greek ] = "Ïñéæüíôéá áğüóôáóç";
+    Text[ korean ] = "°¡·Î °£°İ";
+    Text[ turkish ] = "Y. boşluk";
+    Text[ language_user1 ] = " ";
+};
+String STR_VDIST
+{
+    Text = "V. Abstand" ;
+    Text [ English ] = "V. distance" ;
+    Text [ norwegian ] = "V. distance" ;
+    Text [ italian ] = "Distanza verticale" ;
+    Text [ portuguese_brazilian ] = "Distância v." ;
+    Text [ portuguese ] = "Espaço V." ;
+    Text [ finnish ] = "Pystyetäis." ;
+    Text [ danish ] = "L. afstand" ;
+    Text [ french ] = "Écart V." ;
+    Text [ swedish ] = "V. avstånd" ;
+    Text [ dutch ] = "V. afstand" ;
+    Text [ spanish ] = "Distancia v." ;
+    Text [ english_us ] = "V. Pitch" ;
+    Text[ chinese_simplified ] = "´¹Ö±¼ä¸ô";
+    Text[ russian ] = "Øàã ïî âåğòèê.";
+    Text[ polish ] = "Odstêp pionowy";
+    Text[ japanese ] = "cŠÔŠu";
+    Text[ chinese_traditional ] = "««ª½¶¡¹j";
+    Text[ arabic ] = "ÇáÎØæÉ ÇáÑÃÓíÉ";
+    Text[ greek ] = "Êáôáê. áğüóôáóç";
+    Text[ korean ] = "¼¼·Î °£°İ";
+    Text[ turkish ] = "D. boşluk";
+    Text[ language_user1 ] = " ";
+};
+String STR_WIDTH
+{
+    Text = "Breite" ;
+    Text [ English ] = "Width" ;
+    Text [ norwegian ] = "Bredde " ;
+    Text [ italian ] = "Larghezza" ;
+    Text [ portuguese_brazilian ] = "Largura" ;
+    Text [ portuguese ] = "Largura" ;
+    Text [ finnish ] = "Leveys" ;
+    Text [ danish ] = "Bredde" ;
+    Text [ french ] = "Largeur" ;
+    Text [ swedish ] = "Bredd" ;
+    Text [ dutch ] = "Breedte" ;
+    Text [ spanish ] = "Ancho" ;
+    Text [ english_us ] = "Width" ;
+    Text[ chinese_simplified ] = "¿í";
+    Text[ russian ] = "Øèğèíà";
+    Text[ polish ] = "Szerokoœæ";
+    Text[ japanese ] = "•";
+    Text[ chinese_traditional ] = "¼e";
+    Text[ arabic ] = "ÇáÚÑÖ";
+    Text[ greek ] = "ĞëÜôïò";
+    Text[ korean ] = "³Êºñ";
+    Text[ turkish ] = "Genişlik";
+    Text[ language_user1 ] = " ";
+};
+String STR_HEIGHT
+{
+    Text = "Höhe" ;
+    Text [ English ] = "Height" ;
+    Text [ norwegian ] = "Høyde " ;
+    Text [ italian ] = "Altezza" ;
+    Text [ portuguese_brazilian ] = "Altura" ;
+    Text [ portuguese ] = "Altura" ;
+    Text [ finnish ] = "Korkeus" ;
+    Text [ danish ] = "Højde" ;
+    Text [ french ] = "Hauteur" ;
+    Text [ swedish ] = "Höjd" ;
+    Text [ dutch ] = "Hoogte" ;
+    Text [ spanish ] = "Altura" ;
+    Text [ english_us ] = "Height" ;
+    Text[ chinese_simplified ] = "¸ß";
+    Text[ russian ] = "Âûñîòà";
+    Text[ polish ] = "Wysokoœæ";
+    Text[ japanese ] = "‚‚³";
+    Text[ chinese_traditional ] = "°ª";
+    Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+    Text[ greek ] = "¾øïò";
+    Text[ korean ] = "³ôÀÌ";
+    Text[ turkish ] = "Yükseklik";
+    Text[ language_user1 ] = " ";
+};
+String STR_LEFT
+{
+    Text = "Rand links" ;
+    Text [ English ] = "Left margin" ;
+    Text [ norwegian ] = "Left margin" ;
+    Text [ italian ] = "Margine sinistro" ;
+    Text [ portuguese_brazilian ] = "Margem esquerda" ;
+    Text [ portuguese ] = "Margem esquerda" ;
+    Text [ finnish ] = "Vasen reunus" ;
+    Text [ danish ] = "Margen venstre" ;
+    Text [ french ] = "Marge gauche" ;
+    Text [ swedish ] = "Vänster marginal" ;
+    Text [ dutch ] = "Linker marge" ;
+    Text [ spanish ] = "Margen izquierdo" ;
+    Text [ english_us ] = "Left margin" ;
+    Text[ chinese_simplified ] = "×ó·½Ò³±ß¾à";
+    Text[ russian ] = "Ëåâûé êğàé";
+    Text[ polish ] = "Lewy margines";
+    Text[ japanese ] = "¶—]”’";
+    Text[ chinese_traditional ] = "¥ª¦VÃä®Ø";
+    Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
+    Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
+    Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é";
+    Text[ turkish ] = "Sol kenar";
+    Text[ language_user1 ] = " ";
+};
+String STR_UPPER
+{
+    Text = "Rand oben" ;
+    Text [ English ] = "Upper margin" ;
+    Text [ norwegian ] = "Upper margin" ;
+    Text [ italian ] = "Margine superiore" ;
+    Text [ portuguese_brazilian ] = "Margem superior" ;
+    Text [ portuguese ] = "Margem superior" ;
+    Text [ finnish ] = "Oikea reunus" ;
+    Text [ danish ] = "Margen foroven" ;
+    Text [ french ] = "Marge supérieure" ;
+    Text [ swedish ] = "Övre marginal" ;
+    Text [ dutch ] = "Bovenmarge" ;
+    Text [ spanish ] = "Margen superior" ;
+    Text [ english_us ] = "Top margin" ;
+    Text[ chinese_simplified ] = "ÉÏ·½Ò³±ß¾à";
+    Text[ russian ] = "Âåğõíèé êğàé";
+    Text[ polish ] = "Górny margines";
+    Text[ japanese ] = "ã—]”’";
+    Text[ chinese_traditional ] = "¤WÃä®Ø";
+    Text[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
+    Text[ greek ] = "¢íù ğåñéèşñéï";
+    Text[ korean ] = "À§ ¿©¹é";
+    Text[ turkish ] = "Üst kenar";
+    Text[ language_user1 ] = " ";
+};
+String STR_COLS
+{
+    Text = "Spalten" ;
+    Text [ English ] = "Columns" ;
+    Text [ norwegian ] = "Kolonner" ;
+    Text [ italian ] = "Colonne" ;
+    Text [ portuguese_brazilian ] = "Colunas" ;
+    Text [ portuguese ] = "Colunas" ;
+    Text [ finnish ] = "Sarakkeet" ;
+    Text [ danish ] = "Kolonner" ;
+    Text [ french ] = "Colonnes" ;
+    Text [ swedish ] = "Kolumner" ;
+    Text [ dutch ] = "Kolommen" ;
+    Text [ spanish ] = "Columnas" ;
+    Text [ english_us ] = "Columns" ;
+    Text[ chinese_simplified ] = "À¸";
+    Text[ russian ] = "Êîëîíêè";
+    Text[ polish ] = "Kolumny";
+    Text[ japanese ] = "’i‘g‚İ";
+    Text[ chinese_traditional ] = "Äæ";
+    Text[ arabic ] = "ÇáÃÚãÏÉ";
+    Text[ greek ] = "ÓôŞëåò";
+    Text[ korean ] = "¿­";
+    Text[ turkish ] = "Sütun";
+    Text[ language_user1 ] = " ";
+};
+String STR_ROWS
+{
+    Text = "Zeilen" ;
+    Text [ English ] = "Rows" ;
+    Text [ norwegian ] = "Rows" ;
+    Text [ italian ] = "Righe" ;
+    Text [ portuguese_brazilian ] = "Fileiras" ;
+    Text [ portuguese ] = "Linhas" ;
+    Text [ finnish ] = "~Rivejä" ;
+    Text [ danish ] = "Rækker" ;
+    Text [ french ] = "Lignes" ;
+    Text [ swedish ] = "Rader" ;
+    Text [ dutch ] = "Rijen" ;
+    Text [ spanish ] = "Filas" ;
+    Text [ english_us ] = "Rows" ;
+    Text[ chinese_simplified ] = "ĞĞ";
+    Text[ russian ] = "Ñòğîêè";
+    Text[ polish ] = "Wiersze";
+    Text[ japanese ] = "s";
+    Text[ chinese_traditional ] = "¦æ";
+    Text[ arabic ] = "ÇáÕİæİ";
+    Text[ greek ] = "Ãñáììİò";
+    Text[ korean ] = "Çà";
+    Text[ turkish ] = "Satır";
+    Text[ language_user1 ] = " ";
+};

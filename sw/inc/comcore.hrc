@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ *  $RCSfile: comcore.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _COMCORE_HRC
+#define _COMCORE_HRC
+
+#include "rcid.hrc"
+
+// ---------------
+// die Strings
+// ---------------
+
+#define STR_COMCORE_READERROR       (RC_COMCORE_BEGIN + 0)
+#define MSG_COMCORE_ASKSEARCH       (RC_COMCORE_BEGIN + 1)
+#define STR_TABLE_DEFNAME           (RC_COMCORE_BEGIN + 2)
+#define STR_GRAPHIC_DEFNAME         (RC_COMCORE_BEGIN + 3)
+#define STR_OBJECT_DEFNAME          (RC_COMCORE_BEGIN + 4)
+#define STR_FRAME_DEFNAME           (RC_COMCORE_BEGIN + 5)
+#define STR_REGION_DEFNAME          (RC_COMCORE_BEGIN + 6)
+#define STR_COMCORE_CANT_SHOW       (RC_COMCORE_BEGIN + 7)
+#define RID_GRAPHIC_REPLACEBMP      (RC_COMCORE_BEGIN + 8)
+#define RID_GRAPHIC_ERRORBMP        (RC_COMCORE_BEGIN + 9)
+#define STR_NUMRULE_DEFNAME         (RC_COMCORE_BEGIN + 10)
+#define STR_EMPTYPAGE               (RC_COMCORE_BEGIN + 11)
+#define RID_SHELLRES_AUTOFMTSTRS    (RC_COMCORE_BEGIN + 12)
+#define STR_MULT_INTERACT_HYPH_WARN (RC_COMCORE_BEGIN + 13)
+#define STR_MULT_INTERACT_SPELL_WARN    (RC_COMCORE_BEGIN + 14)
+#define STR_SPELL_TITLE             (RC_COMCORE_BEGIN + 15)
+#define STR_HYPH_TITLE              (RC_COMCORE_BEGIN + 16)
+
+
+// defines fuer die Autoformat Redline Kommentare
+#define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0
+#define STR_AUTOFMTREDL_USE_REPLACE             1
+#define STR_AUTOFMTREDL_CPTL_STT_WORD           2
+#define STR_AUTOFMTREDL_CPTL_STT_SENT           3
+#define STR_AUTOFMTREDL_TYPO                    4
+#define STR_AUTOFMTREDL_USER_STYLE              5
+#define STR_AUTOFMTREDL_BULLET                  6
+#define STR_AUTOFMTREDL_UNDER                   7
+#define STR_AUTOFMTREDL_BOLD                    8
+#define STR_AUTOFMTREDL_FRACTION                9
+#define STR_AUTOFMTREDL_DETECT_URL              10
+#define STR_AUTOFMTREDL_DASH                    11
+#define STR_AUTOFMTREDL_ORDINAL                 12
+#define STR_AUTOFMTREDL_RIGHT_MARGIN            13
+#define STR_AUTOFMTREDL_SET_TMPL_TEXT           14
+#define STR_AUTOFMTREDL_SET_TMPL_INDENT         15
+#define STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT     16
+#define STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT    17
+#define STR_AUTOFMTREDL_SET_TMPL_HEADLINE       18
+#define STR_AUTOFMTREDL_SET_NUMBULET            19
+#define STR_AUTOFMTREDL_DEL_MORELINES           20
+// !!!!!!!!!!!!!!!!!!!!!!!!!!  das Ende immer richtig setzen !!!!!!!!!!!!
+#define STR_AUTOFMTREDL_END                     21
+
+
+#endif
+
+
+

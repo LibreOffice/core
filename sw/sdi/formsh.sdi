@@ -1,0 +1,25 @@
+interface TextDrawForm: BaseTextDrawForm
+[
+    uuid = "1D396B40-B8CC-11d1-AB80-006097B418C2"
+]
+{
+    import TextDrawBase;
+}
+
+shell SwDrawFormShell : SwDrawBaseShell
+{
+    import TextDrawForm[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.1  1998/03/11 16:14:00  OM
+    DB-FormShell
+
+
+      Rev 1.0   11 Mar 1998 17:14:00   OM
+   DB-FormShell
+
+------------------------------------------------------------------------*/
+

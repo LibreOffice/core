@@ -1,0 +1,563 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ascfldlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "dialog.hrc"
+#include "helpid.h"
+#include "ascfldlg.hrc"
+
+ModalDialog DLG_ASCII_FILTER
+{
+    HelpID = HID_ASCII_FILTER ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 239 , 84 ) ;
+    Text = "ASCII Filter Optionen" ;
+    Text [ English ] = "ASCII filter options" ;
+    Moveable = TRUE ;
+    GroupBox GB_1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 174 , 78 ) ;
+        Text = "Eigenschaften" ;
+        Text [ English ] = "Properties" ;
+        Text[ english_us ] = "Properties";
+        Text[ portuguese ] = "Propriedades";
+        Text[ russian ] = "—‚ÓÈÒÚ‚‡";
+        Text[ greek ] = "…‰È¸ÙÁÙÂÚ";
+        Text[ dutch ] = "Eigenschappen";
+        Text[ french ] = "PropriÈtÈs";
+        Text[ spanish ] = "Propiedades";
+        Text[ italian ] = "Propriet‡";
+        Text[ danish ] = "Egenskaber";
+        Text[ swedish ] = "Egenskaper";
+        Text[ polish ] = "W≥aúciwoúci";
+        Text[ portuguese_brazilian ] = "Properties";
+        Text[ japanese ] = "Ãﬂ€ ﬂ√®";
+        Text[ korean ] = "µÓ∑œ¡§∫∏";
+        Text[ chinese_simplified ] = " Ù–‘";
+        Text[ chinese_traditional ] = "ƒ›© ";
+        Text[ arabic ] = "Œ’«∆’";
+        Text[ turkish ] = "÷zellikler";
+    };
+    FixedText FT_CHARSET
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "Z~eichensatz" ;
+        Text [ English ] = "Character Set" ;
+        Text[ english_us ] = "~Font";
+        Text[ portuguese ] = "~Conjunto de caracteres";
+        Text[ russian ] = "Õ‡·Ó ÁÌ‡ÍÓ‚";
+        Text[ greek ] = "”~ÂÙ ˜·Ò·ÍÙﬁÒ˘Ì";
+        Text[ dutch ] = "~Tekenset";
+        Text[ french ] = "~Jeu de caractËres";
+        Text[ spanish ] = "~Caracteres";
+        Text[ italian ] = "Ti~po di carattere";
+        Text[ danish ] = "TegnsÊt";
+        Text[ swedish ] = "Teckenupps‰ttning";
+        Text[ polish ] = "ZbiÛr znakÛw";
+        Text[ portuguese_brazilian ] = "Charset";
+        Text[ japanese ] = "ï∂éöóÒ(~F)";
+        Text[ korean ] = "±€≤√(~F)";
+        Text[ chinese_simplified ] = "◊÷∑˚ºØ(~F)";
+        Text[ chinese_traditional ] = "¶r´¨(~F)";
+        Text[ turkish ] = "Karakter k¸mesi";
+        Text[ arabic ] = "„Ã„Ê⁄… √Õ—›";
+    };
+    ListBox LB_CHARSET
+    {
+        Pos = MAP_APPFONT ( 80 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 61 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_FONT
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "~Grundschrift" ;
+        Text [ English ] = "Standard font" ;
+        Text[ english_us ] = "Default fonts";
+        Text[ portuguese ] = "Tipo de letra ~padr„o";
+        Text[ russian ] = "—Ú‡Ì‰‡ÚÌ˚È ¯ËÙÚ";
+        Text[ greek ] = "¬·ÛÈÍ›Ú „Ò·ÏÏ·ÙÔÛÂÈÒ›Ú";
+        Text[ dutch ] = "~Standaardlettertype";
+        Text[ french ] = "Police de base";
+        Text[ spanish ] = "~Fuente est·ndar";
+        Text[ italian ] = "Carattere standard";
+        Text[ danish ] = "Standardskrifttyper";
+        Text[ swedish ] = "Standardteckensnitt";
+        Text[ polish ] = "Czcionka podstawowa";
+        Text[ portuguese_brazilian ] = "Standard fonts";
+        Text[ japanese ] = "ä˘íËÃ´›ƒ";
+        Text[ korean ] = "±‚∫ª ±€≤√";
+        Text[ chinese_simplified ] = "±Í◊º◊÷ÃÂ";
+        Text[ chinese_traditional ] = "¿qª{¶r´¨";
+        Text[ turkish ] = "Standart yaz˝tipi";
+        Text[ arabic ] = "«·Œÿ «·ﬁÌ«”Ì";
+    };
+    ListBox LB_FONT
+    {
+        Pos = MAP_APPFONT ( 80 , 30 ) ;
+        Size = MAP_APPFONT ( 86 , 61 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 47 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "~Sprache" ;
+        Text [ English ] = "Language" ;
+        Text[ english_us ] = "Lan~guage";
+        Text[ portuguese ] = "~LÌngua";
+        Text[ russian ] = "ﬂÁ˚Í";
+        Text[ greek ] = "√Î˛ÛÛ·";
+        Text[ dutch ] = "~Taal";
+        Text[ french ] = "~Langue";
+        Text[ spanish ] = "Idio~ma";
+        Text[ italian ] = "Lin~gua";
+        Text[ danish ] = "Sprog";
+        Text[ swedish ] = "SprÂk";
+        Text[ polish ] = "JÍzyk";
+        Text[ portuguese_brazilian ] = "Language";
+        Text[ japanese ] = "åæåÍ(~G)";
+        Text[ korean ] = "ææÓ(~G)";
+        Text[ chinese_simplified ] = "”Ô—‘(~G)";
+        Text[ chinese_traditional ] = "ªy®•(~G)";
+        Text[ arabic ] = "«··€…";
+        Text[ turkish ] = "~Dil";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 80 , 46 ) ;
+        Size = MAP_APPFONT ( 86 , 61 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_CRLF
+    {
+        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "~Absatzumbruch" ;
+        Text [ English ] = "Paragraphbreak" ;
+        Text[ english_us ] = "~Paragraph break";
+        Text[ portuguese ] = "~Quebra de par·grafo";
+        Text[ russian ] = "–‡Á˚‚ ‡·Á‡ˆ‡";
+        Text[ greek ] = "¡ÎÎ·„ﬁ ·Ò·„Ò‹ˆÔı";
+        Text[ dutch ] = "~Alinea-einde";
+        Text[ french ] = "Saut de ~paragraphe";
+        Text[ spanish ] = "Salt~o de p·rrafo";
+        Text[ italian ] = "~Interruzione di paragrafo";
+        Text[ danish ] = "Afsnitsskift";
+        Text[ swedish ] = "Styckebrytning";
+        Text[ polish ] = "Podzia≥ akapitu";
+        Text[ portuguese_brazilian ] = "Paragraphbreak";
+        Text[ japanese ] = "íióéãÊêÿÇË(~P)";
+        Text[ korean ] = "¥‹∂Ù ≥™¥©±‚(~P)";
+        Text[ chinese_simplified ] = "ªª∂Œ¬‰(~P)";
+        Text[ chinese_traditional ] = "¥´¨q∏®(~P)";
+        Text[ arabic ] = "›«’· ›ﬁ—« ";
+        Text[ turkish ] = "Paragraf sonu";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CRLF
+    {
+        Pos = MAP_APPFONT ( 80 , 62 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Check = TRUE;
+        Text = "~CR & LF" ;
+        Text [ ENGLISH ] = "CR & LF" ;
+        Text[ english_us ] = "~CR & LF";
+        Text[ portuguese ] = "~CR & LF";
+        Text[ russian ] = "CR & LF";
+        Text[ greek ] = "~CR & LF";
+        Text[ dutch ] = "~CR & LF";
+        Text[ french ] = "~CR & LF";
+        Text[ spanish ] = "CR & LF";
+        Text[ italian ] = "~CR & LF";
+        Text[ danish ] = "CR og LF";
+        Text[ swedish ] = "CR & LF";
+        Text[ polish ] = "~CR & LF";
+        Text[ portuguese_brazilian ] = "CR & LF";
+        Text[ japanese ] = "CR & LF(~C)";
+        Text[ korean ] = "CR & LF(~C)";
+        Text[ chinese_simplified ] = "ªÿ≥µ≤¢ªª––(~C)";
+        Text[ chinese_traditional ] = "~CR & LF";
+        Text[ arabic ] = "CR & LF";
+        Text[ turkish ] = "~CR & LF";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CR
+    {
+        Pos = MAP_APPFONT ( 123 , 62 ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+//        TabStop = TRUE ;
+        Text = "C~R" ;
+        Text [ ENGLISH ] = "CR" ;
+        Text[ english_us ] = "C~R";
+        Text[ portuguese ] = "C~R";
+        Text[ russian ] = "CR";
+        Text[ greek ] = "C~R";
+        Text[ dutch ] = "C~R";
+        Text[ french ] = "C~R";
+        Text[ spanish ] = "C~R";
+        Text[ italian ] = "C~R";
+        Text[ danish ] = "CR";
+        Text[ swedish ] = "CR";
+        Text[ polish ] = "C~R";
+        Text[ portuguese_brazilian ] = "CR";
+        Text[ japanese ] = "CR(~R)";
+        Text[ korean ] = "CR(~R)";
+        Text[ chinese_simplified ] = "ªÿ≥µ(~R)";
+        Text[ chinese_traditional ] = "C~R";
+        Text[ arabic ] = "CR";
+        Text[ turkish ] = "C~R";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_LF
+    {
+        Pos = MAP_APPFONT ( 146 , 62 ) ;
+        Size = MAP_APPFONT ( 20 , 12 ) ;
+//        TabStop = TRUE ;
+        Text = "~LF" ;
+        Text [ ENGLISH ] = "LF" ;
+        Text[ english_us ] = "~LF";
+        Text[ portuguese ] = "~LF";
+        Text[ russian ] = "LF";
+        Text[ greek ] = "~LF";
+        Text[ dutch ] = "~LF";
+        Text[ french ] = "~LF";
+        Text[ spanish ] = "~LF";
+        Text[ italian ] = "~LF";
+        Text[ danish ] = "LF";
+        Text[ swedish ] = "LF";
+        Text[ polish ] = "~LF";
+        Text[ portuguese_brazilian ] = "LF";
+        Text[ japanese ] = "LF(~L)";
+        Text[ korean ] = "LF(~L)";
+        Text[ chinese_simplified ] = "–¬––(~L)";
+        Text[ chinese_traditional ] = "~LF";
+        Text[ arabic ] = "LF";
+        Text[ turkish ] = "~LF";
+        Text[ language_user1 ] = " ";
+    };
+
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 186 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 186 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 186 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_NO_LANGUAGE
+    {
+        Text = "[Keine]" ;
+        Text [ ENGLISH ] = "[None]" ;
+        Text[ english_us ] = "[None]";
+        Text[ portuguese ] = "[Nenhum]";
+        Text[ russian ] = "[¡ÂÁ]";
+        Text[ greek ] = "[ ·Ïﬂ·]";
+        Text[ dutch ] = "[Geen]";
+        Text[ french ] = "[Aucune]";
+        Text[ spanish ] = "[Ninguno]";
+        Text[ italian ] = "[Nessuna]";
+        Text[ danish ] = "[Ingen]";
+        Text[ swedish ] = "[Inget]";
+        Text[ polish ] = "[Brak]";
+        Text[ portuguese_brazilian ] = "[None]";
+        Text[ japanese ] = "[Ç»Çµ]";
+        Text[ korean ] = "[æ¯¿Ω]";
+        Text[ chinese_simplified ] = "[Œﬁ]";
+        Text[ chinese_traditional ] = "[µL]";
+        Text[ arabic ] = "[»œÊ‰]";
+        Text[ turkish ] = "[Yok]";
+    };
+    String STR_SYS_CHARSET
+    {
+        Text = "System" ;
+        Text [ ENGLISH ] = "System" ;
+        Text[ english_us ] = "System";
+        Text[ portuguese ] = "Sistema";
+        Text[ russian ] = "»Á ÒËÒÚÂÏ˚";
+        Text[ greek ] = "”˝ÛÙÁÏ·";
+        Text[ dutch ] = "Systeem";
+        Text[ french ] = "SystËme";
+        Text[ spanish ] = "Sistema";
+        Text[ italian ] = "Sistema";
+        Text[ danish ] = "System";
+        Text[ swedish ] = "System";
+        Text[ polish ] = "System";
+        Text[ portuguese_brazilian ] = "System";
+        Text[ japanese ] = "ºΩ√—";
+        Text[ korean ] = "Ω√Ω∫≈€";
+        Text[ chinese_simplified ] = "œµÕ≥";
+        Text[ chinese_traditional ] = "®t≤Œ";
+        Text[ arabic ] = "«·‰Ÿ«„";
+        Text[ turkish ] = "Sistem";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_CHARSET
+    {
+        Text =  "Westeuropa (Window-1252/WinLatin 1);"
+                "Westeuropa (Apple Macintosh);"
+                "Westeuropa (DOS/OS2-850/International);"
+                "Westeuropa (DOS/OS2-437/US);"
+                "Westeuropa (DOS/OS2-860/Portugiesisch);"
+                "Westeuropa (DOS/OS2-861/Isl‰ndisch);"
+                "Westeuropa (DOS/OS2-863/Franzˆsisch (Kand.));"
+                "Westeuropa (DOS/OS2-865/Nordisch);"
+                "Westeuropa (ASCII/US);"
+                "Westeuropa (ISO-8859-1);"
+                "Osteuropa (ISO-8859-2);"
+                "Latin 3 (ISO-8859-3);"
+                "Baltisch (ISO-8859-4);"
+                "Kyrillisch (ISO-8859-5);"
+//      RTL_TEXTENCODING_ISO_8859_6,        // Arabic (ISO-8859-6)
+                "Griechisch (ISO-8859-7);"
+//      RTL_TEXTENCODING_ISO_8859_8,        // Hebrew (ISO-8859-8)
+                "T¸rkisch (ISO-8859-9);"
+                "Westeuropa (ISO-8859-14);"
+                "Westeuropa (ISO-8859-15/EURO);"
+                "Griechisch (DOS/OS2-737);"
+                "Baltisch (DOS/OS2-775);"
+                "Osteuropa (DOS/OS2-852);"
+                "Kyrillisch (DOS/OS2-855);"
+                "T¸rkisch (DOS/OS2-857);"
+//      RTL_TEXTENCODING_IBM_862,           // Hebrew (DOS/OS2-862)
+//      RTL_TEXTENCODING_IBM_864,           // Arabic (DOS/OS2-864)
+                "Kyrillisch (DOS/OS2-866/Russisch);"
+                "Griechisch (DOS/OS2-869/Modern);"
+//      RTL_TEXTENCODING_MS_874,            // Thai (Dos/Windows-874)
+                "Osteuropa (Windows-1250/WinLatin 2);"
+                "Kyrillisch (Windows-1251);"
+                "Griechisch (Windows-1253);"
+                "T¸rkisch (Windows-1254);"
+//      RTL_TEXTENCODING_MS_1255,           // Hebrew (Windows-1255)
+//      RTL_TEXTENCODING_MS_1256,           // Arabic (Windows-1256)
+                "Baltisch (Windows-1257);"
+//      RTL_TEXTENCODING_MS_1258,           // Vietnamese (Windows-1258)
+//      RTL_TEXTENCODING_APPLE_ARABIC,      // Arabic (Apple Macintosh)
+                "Osteuropa (Apple Macintosh);"
+                "Osteuropa (Apple Macintosh/Kroatisch);"
+                "Kyrillisch (Apple Macintosh);"
+//      RTL_TEXTENCODING_APPLE_DEVANAGARI,  // APPLE DEVANAGARI
+//      RTL_TEXTENCODING_APPLE_FARSI,       // APPLE FARSI
+                "Griechisch (Apple Macintosh);"
+//      RTL_TEXTENCODING_APPLE_GUJARATI,    // APPLE GUJARATI
+//      RTL_TEXTENCODING_APPLE_GURMUKHI,    // APPLE GURMUKHI
+//      RTL_TEXTENCODING_APPLE_HEBREW,      // Hebrew (Apple Macintosh)
+                "Westeuropa (Apple Macintosh/Isl‰ndisch);"
+                "Osteuropa (Apple Macintosh/Rum‰nisch);"
+//      RTL_TEXTENCODING_APPLE_THAI,        // Thai (Apple Macintosh)
+                "T¸rkisch (Apple Macintosh);"
+                "Kyrillisch (Apple Macintosh/Ukrainisch);"
+                "Chinesisch vereinfacht (Apple Macintosh);"
+                 "Chinesisch traditionell (Apple Macintosh);"
+                "Japanisch (Apple Macintosh);"
+                "Koreanisch (Apple Macintosh);"
+                "Japanisch (Windows-932);"
+                "Chinesisch vereinfacht (Windows-936);"
+                "Koreanisch (Windows-949);"
+                "Chinesisch traditionell (Windows-950);"
+                "Japanisch (Shift-JIS);"
+                "Chinesisch vereinfacht (GB-2312);"
+                "Chinesisch traditionell (GBT-12345);"
+                "Chinesisch vereinfacht (GBK/GB-2312-80);"
+                "Chinesisch traditionell (BIG5);"
+// "Japanisch (EUC-JP);"
+                "Chinesisch vereinfacht (EUC-CN);"
+// "Chinesisch traditionell (EUC-TW);"
+// "Japanisch (ISO-2022-JP);"
+// "Chinesisch vereinfacht (ISO-2022-CN);"
+                "Kyrillisch (KOI8-R);"
+                "Unicode (UTF-7);"
+                "Unicode (UTF-8);"
+                "Osteuropa (ISO-8859-10);"
+                "Osteuropa (ISO-8859-13);"
+                "Koreanisch (EUC-KR);"
+//              "Koreanisch (ISO-2022-KR);"
+                "Unicode;"
+                ;
+        Text[ English ] =
+                "Western (Window-1252/WinLatin 1);"
+                "Western (Apple Macintosh);"
+                "Western (DOS/OS2-850/International);"
+                "Western (DOS/OS2-437/US);"
+                "Western (DOS/OS2-860/Portugese);"
+                "Western (DOS/OS2-861/Icelandic);"
+                "Western (DOS/OS2-863/Canadian-French);"
+                "Western (DOS/OS2-865/Nordic);"
+                "Western (ASCII/US);"
+                "Western (ISO-8859-1);"
+                "Central European (ISO-8859-2);"
+                "Latin 3 (ISO-8859-3);"
+                "Baltic (ISO-8859-4);"
+                "Cyrillic (ISO-8859-5);"
+//      RTL_TEXTENCODING_ISO_8859_6,        // Arabic (ISO-8859-6)
+                "Greek (ISO-8859-7);"
+//      RTL_TEXTENCODING_ISO_8859_8,        // Hebrew (ISO-8859-8)
+                "Turkish (ISO-8859-9);"
+                "Western (ISO-8859-14);"
+                "Western (ISO-8859-15/EURO);"
+                "Greek (DOS/OS2-737);"
+                "Baltic (DOS/OS2-775);"
+                "Central European (DOS/OS2-852);"
+                "Cyrillic (DOS/OS2-855);"
+                "Turkish (DOS/OS2-857);"
+//      RTL_TEXTENCODING_IBM_862,           // Hebrew (DOS/OS2-862)
+//      RTL_TEXTENCODING_IBM_864,           // Arabic (DOS/OS2-864)
+                "Cyrillic (DOS/OS2-866/Russian);"
+                "Greek (DOS/OS2-869/Modern);"
+//      RTL_TEXTENCODING_MS_874,            // Thai (Dos/Windows-874)
+                "Central European (Windows-1250/WinLatin 2);"
+                "Cyrillic (Windows-1251);"
+                "Greek (Windows-1253);"
+                "Turkish (Windows-1254);"
+//      RTL_TEXTENCODING_MS_1255,           // Hebrew (Windows-1255)
+//      RTL_TEXTENCODING_MS_1256,           // Arabic (Windows-1256)
+                "Baltic (Windows-1257);"
+//      RTL_TEXTENCODING_MS_1258,           // Vietnamese (Windows-1258)
+//      RTL_TEXTENCODING_APPLE_ARABIC,      // Arabic (Apple Macintosh)
+                "Central European (Apple Macintosh);"
+                "Central European (Apple Macintosh/Croatian);"
+                "Cyrillic (Apple Macintosh);"
+//      RTL_TEXTENCODING_APPLE_DEVANAGARI,  // APPLE DEVANAGARI
+//      RTL_TEXTENCODING_APPLE_FARSI,       // APPLE FARSI
+                "Greek (Apple Macintosh);"
+//      RTL_TEXTENCODING_APPLE_GUJARATI,    // APPLE GUJARATI
+//      RTL_TEXTENCODING_APPLE_GURMUKHI,    // APPLE GURMUKHI
+//      RTL_TEXTENCODING_APPLE_HEBREW,      // Hebrew (Apple Macintosh)
+                "Western (Apple Macintosh/Icelandic);"
+                "Central European (Apple Macintosh/Romanian);"
+//      RTL_TEXTENCODING_APPLE_THAI,        // Thai (Apple Macintosh)
+                "Turkish (Apple Macintosh);"
+                "Cyrillic (Apple Macintosh/Ukrainian);"
+                "Chinese Simplified (Apple Macintosh);"
+                "Chinese Traditional (Apple Macintosh);"
+                "Japanese (Apple Macintosh);"
+                "Korean (Apple Macintosh);"
+                "Japanese (Windows-932);"
+                "Chinese Simplified (Windows-936);"
+                "Korean (Windows-949);"
+                "Chinese Traditional (Windows-950);"
+                "Japanese (Shift-JIS);"
+                "Chinese Simplified (GB-2312);"
+                "Chinese Traditional (GBT-12345);"
+                "Chinese Simplified (GBK/GB-2312-80);"
+                "Chinese Traditional (BIG5);"
+// "Japanese (EUC-JP);"
+                "Chinese Simplified (EUC-CN);"
+// "Chinese Traditional (EUC-TW);"
+// "Japanese (ISO-2022-JP);"
+// "Chinese Simplified (ISO-2022-CN);"
+                "Cyrillic (KOI8-R);"
+                "Unicode (UTF-7);"
+                "Unicode (UTF-8);"
+                "Central European (ISO-8859-10);"
+                "Central European (ISO-8859-13);"
+                "Korean (EUC-KR);"
+//              "Korean (ISO-2022-KR);"
+                "Unicode;"
+                ;
+    };
+    Text[ english_us ] = "ASCII Filter Options";
+    Text[ portuguese ] = "OpÁıes de filtro ASCII";
+    Text[ russian ] = "œ‡‡ÏÂÚ˚ ÙËÎ¸Ú‡ ASCII";
+    Text[ greek ] = "≈ÈÎÔ„›Ú ˆﬂÎÙÒ˘Ì ASCII";
+    Text[ dutch ] = "ASCII filteropties";
+    Text[ french ] = "Options de filtre ASCII";
+    Text[ spanish ] = "Opciones de filtro ASCII";
+    Text[ italian ] = "Opzioni filtro ASCII";
+    Text[ danish ] = "ASCII filterindstillinger";
+    Text[ swedish ] = "ASCII filteralternativ";
+    Text[ polish ] = "Opcje filtra ASCII";
+    Text[ portuguese_brazilian ] = "ASCII filter options";
+    Text[ japanese ] = "ASCIIÃ®Ÿ¿µÃﬂºÆ›";
+    Text[ korean ] = "æ∆Ω∫≈∞ « ≈Õ ø…º«";
+    Text[ chinese_simplified ] = "ASCII π˝¬À∆˜—°œÓ";
+    Text[ chinese_traditional ] = "ASCII πL¬oæπøÔ∂µ";
+    Text[ arabic ] = "Œ’«∆’ ›· — ASCII";
+    Text[ turkish ] = "ASCII filtre seÁenekleri";
+    Text[ language_user1 ] = " ";
+};
+
+
+
+
+

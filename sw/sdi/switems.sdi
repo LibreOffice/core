@@ -1,0 +1,205 @@
+enum SwHoriOrient
+{
+    HORI_NONE,
+    HORI_RIGHT,
+    HORI_CENTER,
+    HORI_LEFT,
+    HORI_INSIDE,
+    HORI_OUTSIDE,
+    HORI_FULL
+};
+enum SwRelationOrient
+{
+    FRAME,
+    PRTAREA
+};
+
+enum SwVertOrient
+{
+    VERT_NONE,
+    VERT_TOP,
+    VERT_CENTER,
+    VERT_BOTTOM,
+    VERT_LINE_TOP,
+    VERT_LINE_CENTER,
+    VERT_LINE_BOTTOM
+};
+
+enum SwSurround
+{
+    SURROUND_BEGIN,
+    SURROUND_THROUGHT,
+    SURROUND_PARALLEL,
+    SURROUND_DYNAMIC,
+    SURROUND_LEFT,
+    SURROUND_RIGHT,
+    SURROUND_END
+};
+
+struct FmtHoriOrient
+{
+    INT32               XPos            MID_1;
+    SwHoriOrient        HorzOrientation MID_2;
+    SwRelationOrient    HorzRelation    MID_3;
+};
+
+item FmtHoriOrient SwFmtHoriOrient;
+
+struct FmtVertOrient
+{
+    INT32               YPos            MID_1;
+    SwVertOrient        VertOrientation MID_2;
+    SwRelationOrient    VertRelation    MID_3;
+};
+item FmtVertOrient SwFmtVertOrient;
+
+struct FmtFrmSize
+{
+    UINT32  Width           MID_WIDTH;
+    UINT32  Height          MID_HEIGHT;
+    BYTE    WidthPercent    MID_1;
+    BYTE    HeightPercent   MID_2;
+};
+item FmtFrmSize SwFmtFrmSize;
+
+struct Drop
+{
+    BYTE    Lines       MID_LINES;
+    BYTE    Count       MID_CHARS;
+    UINT16  Distance    MID_DIST;
+};
+item Drop SwFmtDrop;
+
+struct SwDocDisplay
+{
+    BOOL    ParagraphEnd        MID_1;
+    BOOL    Tab                 MID_2;
+    BOOL    Space               MID_3;
+    BOOL    NonbreakingSpace    MID_4;
+    BOOL    SoftHyphen          MID_5;
+    BOOL    HiddenText          MID_6;
+    BOOL    ManualBreak         MID_7;
+    BOOL    IndexEntry          MID_8;
+    BOOL    FootnoteBackground  MID_9;
+    BOOL    Field               MID_A;
+    BOOL    Table               MID_B;
+    BOOL    Graphic             MID_C;
+    BOOL    Drawing             MID_D;
+    BOOL    FieldName           MID_E;
+    BOOL    Notes               MID_F;
+    BOOL    ShowHiddenPara      MID_10;
+}
+
+
+item SwDocDisplay SwDocDisplayItem;
+
+struct SwElem
+{
+    BOOL    HorzScrollbar   MID_1;
+    BOOL    VertScrollbar   MID_2;
+    BOOL    HorzRuler       MID_3;
+    BOOL    VertRuler       MID_4;
+    BOOL    TableBounds     MID_5;
+    BOOL    Crosshair       MID_6;
+    BOOL    Bounds          MID_7;
+    BOOL    StatusLine      MID_8;
+    BOOL    SolidHandles    MID_9;
+    BOOL    SmoothScroll    MID_A;
+}
+
+item SwElem SwElemItem;
+
+struct SwPrintOpt
+{
+        BOOL            PrintGraphic        MID_1;
+        BOOL            PrintTable          MID_2;
+        BOOL            PrintDrawing        MID_3;
+        BOOL            PrintLeftPage       MID_4;
+        BOOL            PrintRightPage      MID_5;
+        BOOL            PrintControl        MID_6;
+        BOOL            PrintReverse        MID_7;
+        BOOL            PaperFromSetup      MID_8;
+        String          FaxName             MID_9;
+        UINT16          PrintAnnotations    MID_A;
+        BOOL            PrintProspect       MID_B;
+        BOOL            PrintBackground     MID_C;
+        BOOL            PrintBlackFont      MID_D;
+
+}
+item SwPrintOpt SwAddPrinterItem;
+
+struct SwPageFtnInfo
+{
+
+    INT32   FtnHeight           MID_1;
+    INT32   FtnPenWidth         MID_2;
+    INT32   FtnTopDistance      MID_3;
+    INT32   FtnBottomDistance   MID_4;
+    INT16   FtnWidth            MID_5;   // in Prozent
+    INT16   FtnAdjust           MID_6;
+    INT16   FtnPenStyle         MID_7;
+};
+item SwPageFtnInfo SwPageFtnInfoItem;
+
+item String     SvxBoxInfoItem; //! Dummy
+
+
+//umdefiniert wg. doppelter Benutzung
+
+struct SwPageLRSpace
+{
+    UINT16      PageLeftMargin      MID_LEFT_MARGIN;        // % or direct
+    UINT16      PageRightMargin     MID_RIGHT_MARGIN;       // % or direct
+};
+item SwPageLRSpace SwPageLRSpaceItem;
+
+struct SwPageULSpace
+{
+    UINT16              PageTopMargin           MID_UPPER;  // % or direct
+    UINT16              PageBottomMargin        MID_LOWER;  // % or direct
+};
+item SwPageULSpace SwPageULSpaceItem
+
+
+struct SwGraphicSize
+{
+    UINT32  GraphicWidth        MID_WIDTH;
+    UINT32  GraphicHeight       MID_HEIGHT;
+};
+item SwGraphicSize SwGraphicSizeItem;
+
+struct CropGrf
+{
+    INT32   Left    MID_1;
+    INT32   Right   MID_2;
+    INT32   Top     MID_3;
+    INT32   Bottom  MID_4;
+};
+item CropGrf SwCropGrf;
+
+struct INetFmt
+{
+    String      URL             MID_1;
+    String      TargetFrame     MID_2;
+    String      VisitedFmt      MID_3;
+    String      UnvisitedFmt    MID_4;
+};
+item INetFmt SwFmtINetFmt;
+
+struct FmtSurround
+{
+    SwSurround      Surround    MID_1;
+    BOOL            AnchorOnly  MID_3;
+    BOOL            Contour     MID_4;
+    BOOL            Outside     MID_5
+};
+
+item FmtSurround    SwFmtSurround;
+
+struct SwShadowCursor
+{
+    BOOL            ShadowCursor        MID_1;
+    BYTE            ShadowCursorMode    MID_2;
+    INT32           ShadowCursorColor   MID_3;
+};
+item SwShadowCursor SwShadowCursorItem;

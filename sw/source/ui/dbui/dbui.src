@@ -1,0 +1,322 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbui.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+ // #include *****************************************************************
+#include "dbui.hrc"
+#include "helpid.h"
+ModalDialog DLG_DBSELECTION
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 168 , 132 ) ;
+    Text = "Datenbankauswahl" ;
+    Text [ ENGLISH ] = "Database Selection" ;
+    Moveable = TRUE ;
+    Control TLB_DBLIST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 120 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 112 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 112 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 112 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Database Selection" ;
+    Text [ italian ] = "Scelta database" ;
+    Text [ spanish ] = "Seleccionar base de datos" ;
+    Text [ french ] = "SÈlection d'une base de donnÈes" ;
+    Text [ dutch ] = "Selectie database" ;
+    Text [ swedish ] = "Databasurval" ;
+    Text [ danish ] = "Databaseudvalg" ;
+    Text [ portuguese_brazilian ] = "Datenbankauswahl" ;
+    Text [ portuguese ] = "Seleccionar base de dados" ;
+    Text[ chinese_simplified ] = "—°‘Ò ˝æ›ø‚";
+    Text[ russian ] = "¬˚·Ó ·‡Á˚ ‰‡ÌÌ˚ı";
+    Text[ polish ] = "Selekcja bazy danych";
+    Text[ japanese ] = "√ﬁ∞¿Õﬁ∞ΩÇÃëIë";
+    Text[ chinese_traditional ] = "øÔæ‹∏ÍÆ∆Æw";
+    Text[ arabic ] = "«Œ Ì«— ﬁ«⁄œ… «·»Ì«‰« ";
+    Text[ greek ] = "≈ÈÎÔ„ﬁ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ º±≈√";
+    Text[ turkish ] = "Veritaban˝ seÁimi";
+    Text[ language_user1 ] = " ";
+};
+ // DLG_PRINTMONITOR ------------------------------------------------------
+ModelessDialog DLG_PRINTMONITOR
+{
+    HelpID = HID_MERGE_PRINTMONITOR  ;
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    OUTPUTSIZE = TRUE ;
+    _WHMAPMODE = MAP_APPFONT ;
+    _WIDTH = 118 ;
+    _HEIGHT = 72 ;
+    MOVEABLE = TRUE ;
+    APP = FALSE ;
+    Text [ english ] = "Save Monitor" ;
+    Text = "Speichern-Monitor" ;
+    FixedText FT_DOCNAME
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 6 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 100 ;
+        _HEIGHT = 8 ;
+        TEXT = "" ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
+    };
+    FixedText FT_PRINTING
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 17 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 100 ;
+        _HEIGHT = 8 ;
+        TEXT = "wird ausgegeben als" ;
+        TEXT [ English ] = "is being printed as" ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
+        Text [ english_us ] = "is being printed on" ;
+        Text [ portuguese_brazilian ] = "est· sendo impresso na" ;
+        Text [ swedish ] = "skrivs ut pÂ" ;
+        Text [ danish ] = "udskrives som" ;
+        Text [ italian ] = "viene stampato su" ;
+        Text [ spanish ] = "se est· imprimiendo en" ;
+        Text [ french ] = "en cours d'impression sur" ;
+        Text [ dutch ] = "wordt afgedrukt als" ;
+        Text [ portuguese ] = "est· a ser impresso na" ;
+        Text[ chinese_simplified ] = " ‰≥ˆ÷¡";
+        Text[ russian ] = "¡Û‰ÂÚ Ì‡ÔÂ˜‡Ú‡ÌÓ Í‡Í";
+        Text[ polish ] = "zostanie wydrukowany jako";
+        Text[ japanese ] = "àÛç¸íÜ";
+        Text[ chinese_traditional ] = "øÈ•X¶‹";
+        Text[ arabic ] = "Ì „ ÿ»«⁄ Â ﬂ‹";
+        Text[ greek ] = "ÂÍÙı˛ÌÂÙ·È ˘Ú";
+        Text[ korean ] = "√‚∑¬ «¸Ωƒ";
+        Text[ turkish ] = "«˝kt˝ t¸r¸";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SENDING
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 17 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 100 ;
+        _HEIGHT = 8 ;
+        TEXT = "wird versandt an" ;
+        TEXT [ English ] = "is being send at" ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
+        TEXT[ italian ] = "viene inviato a";
+        TEXT[ portuguese_brazilian ] = "is being send at";
+        TEXT[ portuguese ] = "est· a ser enviado para";
+        TEXT[ danish ] = "bliver sendt til";
+        TEXT[ french ] = "est en cours d'envoi ‡";
+        TEXT[ swedish ] = "skickas till";
+        TEXT[ dutch ] = "wordt verzonden aan";
+        TEXT[ spanish ] = "se envÌa a";
+        TEXT[ english_us ] = "is being send to";
+        TEXT[ chinese_simplified ] = "ºƒ∑¢∏¯";
+        TEXT[ russian ] = "¡Û‰ÂÚ ÓÚÔ‡‚ÎÂÌÓ";
+        TEXT[ polish ] = "zostanie przes≥any do";
+        TEXT[ japanese ] = "à∂êÊÇ…ëóêMíÜ";
+        TEXT[ chinese_traditional ] = "±Hµoµπ";
+        TEXT[ arabic ] = "Ì „ ≈—”«·Â ≈·Ï";
+        TEXT[ greek ] = "·ÔÛÙ›ÎÎÂÙ·È ÒÔÚ";
+        TEXT[ korean ] = "¿¸º€ ¥ÎªÛ";
+        TEXT[ turkish ] = "Al˝c˝";
+        TEXT[ language_user1 ] = " ";
+    };
+    FixedText FT_PRINTER
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 28 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 100 ;
+        _HEIGHT = 8 ;
+        TEXT = "" ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
+    };
+    FixedText FT_PRINTINFO
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 39 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 100 ;
+        _HEIGHT = 8 ;
+        TEXT = "" ;
+        LEFT = FALSE ;
+        CENTER = TRUE ;
+        RIGHT = FALSE ;
+    };
+    CancelButton PB_CANCELPRNMON
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 31 ;
+        _Y = 52 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 50 ;
+        _HEIGHT = 14 ;
+        TABSTOP = TRUE ;
+    };
+    String STR_EMAILMON
+    {
+        Text [ english ] = "Send Monitor" ;
+        Text = "Versenden-Monitor" ;
+        Text[ italian ] = "Invia monitor";
+        Text[ portuguese_brazilian ] = "Send Monitor";
+        Text[ portuguese ] = "Enviar - Monitor";
+        Text[ danish ] = "Send-monitor";
+        Text[ french ] = "Moniteur d'envoi";
+        Text[ swedish ] = "Skicka monitor";
+        Text[ dutch ] = "Monitor verzenden";
+        Text[ spanish ] = "Enviar-Monitor";
+        Text[ english_us ] = "Send-Monitor";
+        Text[ chinese_simplified ] = "ºƒ∑¢-º‡ ”∆˜";
+        Text[ russian ] = "ŒÚÔ‡‚Í‡ ÚÂÍÛ˘Â„Ó ËÁÓ·‡ÊÂÌËˇ";
+        Text[ polish ] = "Pokaz stanu przesy≥ania";
+        Text[ japanese ] = "ëóêM”∆¿∞";
+        Text[ chinese_traditional ] = "±Hµo-∫ µ¯æπ";
+        Text[ arabic ] = "„—«ﬁ» «·≈—”«·";
+        Text[ greek ] = "¡ÔÛÙÔÎﬁ-œË¸ÌÁ";
+        Text[ korean ] = "¿¸º€ ∏¥œ≈Õ";
+        Text[ turkish ] = "Gˆnderme ekran˝";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ portuguese ] = "Monitor de impress„o" ;
+    Text [ english_us ] = "Print monitor" ;
+    Text [ portuguese_brazilian ] = "O monitor de impress„o" ;
+    Text [ swedish ] = "Skriv ut sk‰rmbild" ;
+    Text [ danish ] = "Gem-monitor" ;
+    Text [ italian ] = "Controllo stampa" ;
+    Text [ spanish ] = "Monitor de impresiÛn" ;
+    Text [ french ] = "Moniteur d'impression" ;
+    Text [ dutch ] = "Opslaan-monitor" ;
+    Text[ chinese_simplified ] = "¥Ú”°º‡ ”";
+    Text[ russian ] = "—Óı‡ÌÂÌËÂ ÚÂÍÛ˘Â„Ó ËÁÓ·‡ÊÂÌËˇ";
+    Text[ polish ] = "Pokaz stanu zapisu";
+    Text[ japanese ] = "“”ÿ ”∆¿∞";
+    Text[ chinese_traditional ] = "¶C¶L∫ µ¯";
+    Text[ arabic ] = "„—«ﬁ» «·Õ›Ÿ";
+    Text[ language_user1 ] = " ";
+    Text[ greek ] = "¡ÔËﬁÍÂıÛÁ-œË¸ÌÁ";
+    Text[ korean ] = "¿˙¿Â ∏¥œ≈Õ";
+    Text[ turkish ] = "Yazd˝rma ekran˝";
+};
+
+String STR_DB_EMAIL
+{
+    TEXT = "E-Mail" ;
+    TEXT [ English ] = "E-mail" ;
+    Text [ english_us ] = "E-mail" ;
+    Text[ italian ] = "eMail";
+    Text[ portuguese_brazilian ] = "E-mail";
+    Text[ portuguese ] = "E-mail";
+    Text[ danish ] = "E-mail";
+    Text[ french ] = "E-mail";
+    Text[ swedish ] = "E-post";
+    Text[ dutch ] = "E-mail";
+    Text[ spanish ] = "E-mail";
+    Text[ chinese_simplified ] = "µÁ◊”” º˛";
+    Text[ russian ] = "›ÎÂÍÚÓÌÌ‡ˇ ÔÓ˜Ú‡";
+    Text[ polish ] = "e-mail";
+    Text[ japanese ] = "E-mail";
+    Text[ chinese_traditional ] = "πq§l∂l•Û";
+    Text[ arabic ] = "»—Ìœ ≈·ﬂ —Ê‰Ì";
+    Text[ greek ] = "E-mail";
+    Text[ korean ] = "¿¸¿⁄øÏ∆Ì";
+    Text[ turkish ] = "E-posta";
+    Text[ language_user1 ] = " ";
+};

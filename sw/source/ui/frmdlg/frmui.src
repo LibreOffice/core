@@ -1,0 +1,1388 @@
+/*************************************************************************
+ *
+ *  $RCSfile: frmui.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "frmui.hrc"
+
+/*-----------------------------------------------------------------------
+    Beschreibung: V-Align
+ -----------------------------------------------------------------------*/
+String STR_TOP
+{
+    TEXT = "~Oben" ;
+    TEXT [ English ] = "Top" ;
+    TEXT [ norwegian ] = "Top" ;
+    TEXT [ italian ] = "Alto" ;
+    TEXT [ portuguese_brazilian ] = "Topo" ;
+    TEXT [ portuguese ] = "Em cima" ;
+    TEXT [ finnish ] = "Ylä" ;
+    TEXT [ danish ] = "Foroven" ;
+    TEXT [ french ] = "~En haut" ;
+    TEXT [ swedish ] = "~Överst" ;
+    TEXT [ dutch ] = "~Boven" ;
+    TEXT [ spanish ] = "~Arriba" ;
+    TEXT [ english_us ] = "~Top" ;
+    TEXT[ chinese_simplified ] = "ÉÏ(~T)";
+    TEXT[ russian ] = "Ââåğõó";
+    TEXT[ polish ] = "Na górze";
+    TEXT[ japanese ] = "ã(~T)";
+    TEXT[ chinese_traditional ] = "¤W(~T)";
+    TEXT[ arabic ] = "ÃÚáì";
+    TEXT[ greek ] = "ĞÜíù";
+    TEXT[ korean ] = "À§(~T)";
+    TEXT[ turkish ] = "~Üst";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_BOTTOM
+{
+    TEXT = "~Unten" ;
+    TEXT [ English ] = "Bottom" ;
+    TEXT [ norwegian ] = "Bottom" ;
+    TEXT [ italian ] = "Basso" ;
+    TEXT [ portuguese_brazilian ] = "Base" ;
+    TEXT [ portuguese ] = "~Base" ;
+    TEXT [ finnish ] = "Ala" ;
+    TEXT [ danish ] = "Forneden" ;
+    TEXT [ french ] = "En ~bas" ;
+    TEXT [ swedish ] = "Nederst" ;
+    TEXT [ dutch ] = "~Beneden" ;
+    TEXT [ spanish ] = "A~bajo" ;
+    TEXT [ english_us ] = "~Bottom" ;
+    TEXT[ chinese_simplified ] = "ÏÂ(~B)";
+    TEXT[ russian ] = "Âíèçó";
+    TEXT[ polish ] = "Na dole";
+    TEXT[ japanese ] = "‰º(~B)";
+    TEXT[ chinese_traditional ] = "¤U(~B)";
+    TEXT[ arabic ] = "ÃÓİá";
+    TEXT[ greek ] = "ÊÜôù";
+    TEXT[ korean ] = "¾Æ·¡(~B)";
+    TEXT[ turkish ] = "A~ltta";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_CENTER_HORI
+{
+    TEXT = "~Zentriert" ;
+    TEXT [ English ] = "Centered" ;
+    TEXT [ norwegian ] = "Centered" ;
+    TEXT [ italian ] = "Centrato" ;
+    TEXT [ portuguese_brazilian ] = "Centralizado" ;
+    TEXT [ portuguese ] = "Centrado" ;
+    TEXT [ finnish ] = "Keski" ;
+    TEXT [ danish ] = "Centreret" ;
+    TEXT [ french ] = "~Centré" ;
+    TEXT [ swedish ] = "~Centrerad" ;
+    TEXT [ dutch ] = "~Gecentreerd" ;
+    TEXT [ spanish ] = "~Centrado" ;
+    TEXT [ english_us ] = "~Centered" ;
+    TEXT[ chinese_simplified ] = "¾ÓÖĞ(~C)";
+    TEXT[ russian ] = "Ïî öåíòğó";
+    TEXT[ polish ] = "Wyœrodkuj";
+    TEXT[ japanese ] = "’†‰›(~C)";
+    TEXT[ chinese_traditional ] = "¸m¤¤(~C)";
+    TEXT[ arabic ] = "ÊæÓíØ";
+    TEXT[ greek ] = "Êåíôñáñéóìİíá";
+    TEXT[ korean ] = "°¡¿îµ¥(~C)";
+    TEXT[ turkish ] = "~Ortala";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_FROMTOP
+{
+    TEXT = "Von Oben" ;
+    TEXT [ English ] = "From top" ;
+    TEXT [ norwegian ] = "From top" ;
+    TEXT [ italian ] = "Dall'alto" ;
+    TEXT [ portuguese_brazilian ] = "Do topo" ;
+    TEXT [ portuguese ] = "De cima" ;
+    TEXT [ finnish ] = "Ylhäältä" ;
+    TEXT [ danish ] = "Ovenfra" ;
+    TEXT [ french ] = "Du haut" ;
+    TEXT [ swedish ] = "Uppifrån" ;
+    TEXT [ dutch ] = "Van boven" ;
+    TEXT [ spanish ] = "Desde arriba" ;
+    TEXT [ english_us ] = "From top" ;
+    TEXT[ chinese_simplified ] = "´ÓÉÏ";
+    TEXT[ russian ] = "Ñâåğõó";
+    TEXT[ polish ] = "Z góry";
+    TEXT[ japanese ] = "ã‚©‚ç";
+    TEXT[ chinese_traditional ] = "±q¤W";
+    TEXT[ arabic ] = "ãä ÃÚáì";
+    TEXT[ greek ] = "Ağü ğÜíù";
+    TEXT[ korean ] = "À§ºÎÅÍ";
+    TEXT[ turkish ] = "Üstten";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_FROMBOTTOM
+{
+    TEXT = "Von Unten" ;
+    TEXT [ English ] = "From bottom" ;
+    Text [ portuguese ] = "De baixo" ;
+    Text [ english_us ] = "From bottom" ;
+    Text [ portuguese_brazilian ] = "Von Unten" ;
+    Text [ swedish ] = "Nedifrån" ;
+    Text [ danish ] = "Nedefra" ;
+    Text [ italian ] = "Dal basso" ;
+    Text [ spanish ] = "Desde abajo" ;
+    Text [ french ] = "Du bas" ;
+    Text [ dutch ] = "Van beneden" ;
+    Text[ chinese_simplified ] = "´ÓÏÂ";
+    Text[ russian ] = "Ñíèçó";
+    Text[ polish ] = "Z do³u";
+    Text[ japanese ] = "‰º‚©‚ç";
+    Text[ chinese_traditional ] = "±q¤U";
+    Text[ arabic ] = "ãä ÃÓİá";
+    Text[ greek ] = "Áğü êÜôù";
+    Text[ korean ] = "¾Æ·¡ºÎÅÍ";
+    Text[ turkish ] = "Alttan";
+    Text[ language_user1 ] = " ";
+};
+String STR_BELOW
+{
+    TEXT = "Unterhalb" ;
+    TEXT [ English ] = "Below" ;
+    Text [ portuguese ] = "Abaixo" ;
+    Text [ english_us ] = "Below" ;
+    Text [ portuguese_brazilian ] = "Unterhalb" ;
+    Text [ swedish ] = "Nedanför" ;
+    Text [ danish ] = "Nedenfor" ;
+    Text [ italian ] = "Al di sotto" ;
+    Text [ spanish ] = "Debajo" ;
+    Text [ french ] = "Infra" ;
+    Text [ dutch ] = "Beneden" ;
+    Text[ chinese_simplified ] = "Ö®ÏÂ";
+    Text[ russian ] = "Ñíèçó";
+    Text[ polish ] = "Poni¿ej";
+    Text[ japanese ] = "‰º‚É";
+    Text[ chinese_traditional ] = "¤§¤U";
+    Text[ arabic ] = "ÃÓİá";
+    Text[ greek ] = "ÊÜôù áğü";
+    Text[ korean ] = "¾Æ·¡";
+    Text[ turkish ] = "Altta";
+    Text[ language_user1 ] = " ";
+};
+/*-----------------------------------------------------------------------
+    Beschreibung: H-Align
+ -----------------------------------------------------------------------*/
+String STR_LEFT
+{
+    TEXT = "Links" ;
+    TEXT [ English ] = "Left" ;
+    TEXT [ norwegian ] = "Left" ;
+    TEXT [ italian ] = "Sinistra" ;
+    TEXT [ portuguese_brazilian ] = "A Esquerda" ;
+    TEXT [ portuguese ] = "Esquerda" ;
+    TEXT [ finnish ] = "Vasen" ;
+    TEXT [ danish ] = "Venstre" ;
+    TEXT [ french ] = "À gauche" ;
+    TEXT [ swedish ] = "Vänster" ;
+    TEXT [ dutch ] = "Link" ;
+    TEXT [ spanish ] = "Izquierda" ;
+    TEXT [ english_us ] = "Left" ;
+    TEXT[ chinese_simplified ] = "×ó";
+    TEXT[ russian ] = "Ñëåâà";
+    TEXT[ polish ] = "Z lewej strony";
+    TEXT[ japanese ] = "¶";
+    TEXT[ chinese_traditional ] = "¥ª";
+    TEXT[ arabic ] = "Åáì ÇáíÓÇÑ";
+    TEXT[ greek ] = "ÁñéóôåñÜ";
+    TEXT[ korean ] = "¿ŞÂÊ";
+    TEXT[ turkish ] = "Sol";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_MIR_LEFT
+{
+    TEXT = "Innen" ;
+    TEXT [ English ] = "Inside" ;
+    Text [ portuguese ] = "Interior" ;
+    Text [ english_us ] = "Inside" ;
+    Text [ portuguese_brazilian ] = "Innen" ;
+    Text [ swedish ] = "Invändigt" ;
+    Text [ danish ] = "Indersiden" ;
+    Text [ italian ] = "Interno" ;
+    Text [ spanish ] = "Interior" ;
+    Text [ french ] = "Intérieur" ;
+    Text [ dutch ] = "Binnenin" ;
+    Text[ chinese_simplified ] = "ÄÚ";
+    Text[ russian ] = "Âíóòğè";
+    Text[ polish ] = "Wewn¹trz";
+    Text[ japanese ] = "“à‘¤";
+    Text[ chinese_traditional ] = "¤º";
+    Text[ arabic ] = "ÏÇÎá";
+    Text[ greek ] = "ÅóùôåñéêÜ";
+    Text[ korean ] = "³»ºÎ";
+    Text[ turkish ] = "İç";
+    Text[ language_user1 ] = " ";
+};
+String STR_RIGHT
+{
+    TEXT = "Rechts" ;
+    TEXT [ English ] = "Right" ;
+    TEXT [ norwegian ] = "Right" ;
+    TEXT [ italian ] = "Destra" ;
+    TEXT [ portuguese_brazilian ] = "A Direita" ;
+    TEXT [ portuguese ] = "Direita" ;
+    TEXT [ finnish ] = "Oikea" ;
+    TEXT [ danish ] = "Højre" ;
+    TEXT [ french ] = "À droite" ;
+    TEXT [ swedish ] = "Höger" ;
+    TEXT [ dutch ] = "Rechts" ;
+    TEXT [ spanish ] = "Derecha" ;
+    TEXT [ english_us ] = "Right" ;
+    TEXT[ chinese_simplified ] = "ÓÒ";
+    TEXT[ russian ] = "Ñïğàâà";
+    TEXT[ polish ] = "Z prawej";
+    TEXT[ japanese ] = "‰E";
+    TEXT[ chinese_traditional ] = "¥k";
+    TEXT[ arabic ] = "Åáì Çáíãíä";
+    TEXT[ greek ] = "ÄåîéÜ";
+    TEXT[ korean ] = "¿À¸¥ÂÊ";
+    TEXT[ turkish ] = "Sağ";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_MIR_RIGHT
+{
+    TEXT = "Außen" ;
+    TEXT [ English ] = "Outside" ;
+    TEXT [ norwegian ] = "Outside" ;
+    TEXT [ italian ] = "Esterno" ;
+    TEXT [ portuguese_brazilian ] = "Fora" ;
+    TEXT [ portuguese ] = "Exterior" ;
+    TEXT [ finnish ] = "Ulkopuoli" ;
+    TEXT [ danish ] = "Ydersiden" ;
+    TEXT [ french ] = "Extérieur" ;
+    TEXT [ swedish ] = "Utsida" ;
+    TEXT [ dutch ] = "Buiten" ;
+    TEXT [ spanish ] = "Exterior" ;
+    TEXT [ english_us ] = "Outside" ;
+    TEXT[ chinese_simplified ] = "Íâ²à";
+    TEXT[ russian ] = "Ñíàğóæè";
+    TEXT[ polish ] = "Na zewn¹trz";
+    TEXT[ japanese ] = "ŠO‘¤";
+    TEXT[ chinese_traditional ] = "¥~°¼";
+    TEXT[ arabic ] = "ÎÇÑÌ";
+    TEXT[ greek ] = "ÅîùôåñéêÜ";
+    TEXT[ korean ] = "¿ÜºÎ";
+    TEXT[ turkish ] = "Dış";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_CENTER_VERT
+{
+    TEXT = "~Mitte" ;
+    Text [ English ] = "~Middle" ;
+    Text [ portuguese ] = "~Centro" ;
+    Text [ english_us ] = "C~enter" ;
+    Text [ portuguese_brazilian ] = "~Mitte" ;
+    Text [ swedish ] = "~Mitten" ;
+    Text [ danish ] = "Centreret" ;
+    Text [ italian ] = "Centro" ;
+    Text [ spanish ] = "~Centro" ;
+    Text [ french ] = "~Milieu" ;
+    Text [ dutch ] = "~Midden" ;
+    Text[ chinese_simplified ] = "ÖĞ(~E)";
+    Text[ russian ] = "Ñåğåäèíà";
+    Text[ polish ] = "Wyœrodkuj";
+    Text[ japanese ] = "’†S(~E)";
+    Text[ chinese_traditional ] = "¸m¤¤(~E)";
+    Text[ arabic ] = "ÇáæÓØ";
+    Text[ greek ] = "Êİíôñï";
+    Text[ korean ] = "°¡¿îµ¥(~E)";
+    Text[ turkish ] = "O~rta";
+    Text[ language_user1 ] = " ";
+};
+String STR_FROMLEFT
+{
+    TEXT = "Von Links" ;
+    TEXT [ English ] = "From left" ;
+    TEXT [ norwegian ] = "From left" ;
+    TEXT [ italian ] = "Da sinistra" ;
+    TEXT [ portuguese_brazilian ] = "Da esquerda" ;
+    TEXT [ portuguese ] = "Esquerda" ;
+    TEXT [ finnish ] = "Vasemmalta" ;
+    TEXT [ danish ] = "Fra venstre" ;
+    TEXT [ french ] = "De gauche" ;
+    TEXT [ swedish ] = "Från vänster" ;
+    TEXT [ dutch ] = "Van links" ;
+    TEXT [ spanish ] = "De izquierda" ;
+    TEXT [ english_us ] = "From left" ;
+    TEXT[ chinese_simplified ] = "´Ó×ó";
+    TEXT[ russian ] = "Ñëåâà";
+    TEXT[ polish ] = "Z lewej";
+    TEXT[ japanese ] = "¶‚©‚ç";
+    TEXT[ chinese_traditional ] = "±q¥ª";
+    TEXT[ arabic ] = "ãä ÇáíÓÇÑ";
+    TEXT[ greek ] = "Ağü áñéóôåñÜ";
+    TEXT[ korean ] = "¿ŞÂÊ¿¡¼­ ºÎÅÍ";
+    TEXT[ turkish ] = "Soldan";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_MIR_FROMLEFT
+{
+    TEXT = "Von Innen" ;
+    TEXT [ English ] = "From inside" ;
+    Text [ portuguese ] = "Do interior" ;
+    Text [ english_us ] = "From inside" ;
+    Text [ portuguese_brazilian ] = "Von Innen" ;
+    Text [ swedish ] = "Inifrån" ;
+    Text [ danish ] = "Indefra" ;
+    Text [ italian ] = "Dall'interno" ;
+    Text [ spanish ] = "Desde el interior" ;
+    Text [ french ] = "De l'intérieur" ;
+    Text [ dutch ] = "Van binnen" ;
+    Text[ chinese_simplified ] = "´ÓÄÚ";
+    Text[ russian ] = "Âíóòğè";
+    Text[ polish ] = "Od œrodka";
+    Text[ japanese ] = "“à‘¤‚©‚ç";
+    Text[ chinese_traditional ] = "±q¤º";
+    Text[ arabic ] = "ãä ÇáÏÇÎá";
+    Text[ greek ] = "Áğü åóùôåñéêü";
+    Text[ korean ] = "¾È¿¡¼­ ºÎÅÍ";
+    Text[ turkish ] = "İçerden";
+    Text[ language_user1 ] = " ";
+};
+/*-----------------------------------------------------------------------
+    Beschreibung: V-Rel
+ -----------------------------------------------------------------------*/
+String STR_REL_BORDER
+{
+    TEXT = "Rand" ;
+    TEXT [ English ] = "Border" ;
+    Text [ portuguese ] = "Margem" ;
+    Text [ english_us ] = "Margin" ;
+    Text [ portuguese_brazilian ] = "Rand" ;
+    Text [ swedish ] = "Marginal" ;
+    Text [ danish ] = "Margen" ;
+    Text [ italian ] = "Margine" ;
+    Text [ spanish ] = "Margen" ;
+    Text [ french ] = "Marge" ;
+    Text [ dutch ] = "Marge" ;
+    Text[ chinese_simplified ] = "Ò³±ß¾à";
+    Text[ russian ] = "Ïîëå";
+    Text[ polish ] = "Margines";
+    Text[ japanese ] = "—]”’";
+    Text[ chinese_traditional ] = "Ãä¬É";
+    Text[ arabic ] = "ÇáåÇãÔ";
+    Text[ greek ] = "Ğåñéèşñéï";
+    Text[ korean ] = "¿©¹é";
+    Text[ turkish ] = "Kenar";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_PRTAREA
+{
+    TEXT = "Textbereich" ;
+    TEXT [ English ] = "Text area" ;
+    Text [ portuguese ] = "Área de texto" ;
+    Text [ english_us ] = "Text area" ;
+    Text [ portuguese_brazilian ] = "Textbereich" ;
+    Text [ swedish ] = "Textområde" ;
+    Text [ danish ] = "Tekstområde" ;
+    Text [ italian ] = "Area del testo" ;
+    Text [ spanish ] = "Área de texto " ;
+    Text [ french ] = "Zone de texte" ;
+    Text [ dutch ] = "Tekstbereik" ;
+    Text[ chinese_simplified ] = "ÎÄ×ÖÇøÓò";
+    Text[ russian ] = "Îáëàñòü òåêñòà";
+    Text[ polish ] = "Obszar tekstu";
+    Text[ japanese ] = "•¶‘”ÍˆÍ";
+    Text[ chinese_traditional ] = "¤å¦r°Ï°ì";
+    Text[ arabic ] = "äØÇŞ ÇáäÕ";
+    Text[ greek ] = "Ğåñéï÷Ş êåéìİíïõ";
+    Text[ korean ] = "ÅØ½ºÆ® ¿µ¿ª";
+    Text[ turkish ] = "Metin alanı";
+    Text[ language_user1 ] = " ";
+};
+String STR_TOPPRT
+{
+    TEXT = "Oberer Rand" ;
+    TEXT [ English ] = "Border Top" ;
+    TEXT [ norwegian ] = "Border Top" ;
+    TEXT [ italian ] = "Bordo superiore" ;
+    TEXT [ portuguese_brazilian ] = "Topo da margem" ;
+    TEXT [ portuguese ] = "Margem superior" ;
+    TEXT [ finnish ] = "Yläreunaviiva" ;
+    TEXT [ danish ] = "Topmargen" ;
+    TEXT [ french ] = "Marge supérieure" ;
+    TEXT [ swedish ] = "Övre marginal" ;
+    TEXT [ dutch ] = "Bovenrand" ;
+    TEXT [ spanish ] = "Margen superior" ;
+    TEXT [ english_us ] = "Upper Margin" ;
+    TEXT[ chinese_simplified ] = "ÉÏ·½Ò³±ß¾à";
+    TEXT[ russian ] = "Âåğõíèé êğàé";
+    TEXT[ polish ] = "Górny margines";
+    TEXT[ japanese ] = "ã—]”’";
+    TEXT[ chinese_traditional ] = "¤WÃä¬É";
+    TEXT[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
+    TEXT[ greek ] = "¢íù ğåñéèşñéï";
+    TEXT[ korean ] = "À§ÂÊ ¿©¹é";
+    TEXT[ turkish ] = "Üst kenar";
+    TEXT[ language_user1 ] = " ";
+};
+/*-----------------------------------------------------------------------
+    Beschreibung: H-Rel
+ -----------------------------------------------------------------------*/
+String STR_FLY_REL_PG_LEFT
+{
+    TEXT = "Rahmenrand links" ;
+    TEXT [ English ] = "Left frame border" ;
+    Text [ portuguese ] = "Contorno esquerdo da moldura" ;
+    Text [ english_us ] = "Left frame border" ;
+    Text [ portuguese_brazilian ] = "Rahmenrand links" ;
+    Text [ swedish ] = "Vänster rammarginal" ;
+    Text [ danish ] = "Venstre rammekant" ;
+    Text [ italian ] = "Margine cornice sinistro" ;
+    Text [ spanish ] = "Borde izquierdo del marco" ;
+    Text [ french ] = "Bordure de cadre gauche" ;
+    Text [ dutch ] = "Kaderrand links" ;
+    Text[ chinese_simplified ] = "×ó¿ò±ß";
+    Text[ russian ] = "Ëåâûé êğàé ğàìêè";
+    Text[ polish ] = "Lewa krawêdŸ ramki";
+    Text[ japanese ] = "¶—]”’";
+    Text[ chinese_traditional ] = "¥ª®ØÃä";
+    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÃíÓÑ";
+    Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - áñéóôåñÜ";
+    Text[ korean ] = "¿ŞÂÊ ÇÁ·¹ÀÓ ¿Ü°û¼±";
+    Text[ turkish ] = "Sol çerçeve kenarı";
+    Text[ language_user1 ] = " ";
+};
+String STR_FLY_MIR_REL_PG_LEFT
+{
+    TEXT = "Rahmenrand innen" ;
+    TEXT [ English ] = "Inner frame border" ;
+    Text [ portuguese ] = "Contorno interior da moldura" ;
+    Text [ english_us ] = "Inner frame border" ;
+    Text [ portuguese_brazilian ] = "Rahmenrand innen" ;
+    Text [ swedish ] = "Invändig rammarginal" ;
+    Text [ danish ] = "Indre rammekant" ;
+    Text [ italian ] = "Margine cornice interno" ;
+    Text [ spanish ] = "Borde interior del marco" ;
+    Text [ french ] = "Bordure de cadre intérieure" ;
+    Text [ dutch ] = "Binnenste kaderrand" ;
+    Text[ chinese_simplified ] = "¿ò±ßÄÚÔò";
+    Text[ russian ] = "Âíóòğåííèé êğàé ğàìêè";
+    Text[ polish ] = "Wewnêtrzna krawêdŸ ramki";
+    Text[ japanese ] = "—]”’ “à‘¤";
+    Text[ chinese_traditional ] = "®ØÃä¤º«h";
+    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÏÇÎáí";
+    Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - åóùôåñéêÜ";
+    Text[ korean ] = "³»ºÎ ÇÁ·¹ÀÓ ¿Ü°û¼±";
+    Text[ turkish ] = "İç çerçeve kenarı";
+    Text[ language_user1 ] = " ";
+};
+String STR_FLY_REL_PG_RIGHT
+{
+    TEXT = "Rahmenrand rechts" ;
+    TEXT [ English ] = "Right frame border" ;
+    Text [ portuguese ] = "Contorno direito da moldura" ;
+    Text [ english_us ] = "Right frame border" ;
+    Text [ portuguese_brazilian ] = "Rahmenrand rechts" ;
+    Text [ swedish ] = "Höger rammarginal" ;
+    Text [ danish ] = "Højre rammekant" ;
+    Text [ italian ] = "Margine cornice destro" ;
+    Text [ spanish ] = "Borde derecho del marco" ;
+    Text [ french ] = "Bordure de cadre droite" ;
+    Text [ dutch ] = "Kaderrand rechts" ;
+    Text[ chinese_simplified ] = "ÓÒ¿ò±ß";
+    Text[ russian ] = "Ïğàâûé êğàé ğàìêè";
+    Text[ polish ] = "Prawa krawêdŸ ramki";
+    Text[ japanese ] = "‰E—]”’";
+    Text[ chinese_traditional ] = "¥k®ØÃä";
+    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÃíãä";
+    Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - äåîéÜ";
+    Text[ korean ] = "¿À¸¥ÂÊ ÇÁ·¹ÀÓ ¿Ü°û¼±";
+    Text[ turkish ] = "Sağ çerçeve kenarı";
+    Text[ language_user1 ] = " ";
+};
+String STR_FLY_MIR_REL_PG_RIGHT
+{
+    TEXT = "Rahmenrand außen" ;
+    TEXT [ English ] = "Outer frame border" ;
+    Text [ portuguese ] = "Contorno exterior da moldura" ;
+    Text [ english_us ] = "Outer frame border" ;
+    Text [ portuguese_brazilian ] = "Rahmenrand außen" ;
+    Text [ swedish ] = "Utvändig rammarginal" ;
+    Text [ danish ] = "Ydre rammekant" ;
+    Text [ italian ] = "Margine cornice esterno" ;
+    Text [ spanish ] = "Borde exterior del marco" ;
+    Text [ french ] = "Bordure de cadre extérieure" ;
+    Text [ dutch ] = "Buitenste kaderrand" ;
+    Text[ chinese_simplified ] = "¿ò±ßÍâ²à";
+    Text[ russian ] = "Íàğóæíûé êğàé ğàìêè";
+    Text[ polish ] = "Zewnêtrzna krawêdŸ ramki";
+    Text[ japanese ] = "—]”’ ŠO‘¤";
+    Text[ chinese_traditional ] = "®ØÃä¥~°¼";
+    Text[ arabic ] = "åÇãÔ ÇáÅØÇÑ ÇáÎÇÑÌí";
+    Text[ greek ] = "Ğåñéèşñéï ğëáéóßïõ - åîùôåñéêÜ";
+    Text[ korean ] = "¿ÜºÎ ÇÁ·¹ÀÓ ¿Ü°û¼±";
+    Text[ turkish ] = "Dış çerçeve kenarı";
+    Text[ language_user1 ] = " ";
+};
+String STR_FLY_REL_PG_FRAME
+{
+    TEXT = "Gesamter Rahmen" ;
+    TEXT [ English ] = "Whole frame" ;
+    Text [ portuguese ] = "Moldura inteira" ;
+    Text [ english_us ] = "Entire frame" ;
+    Text [ portuguese_brazilian ] = "Gesamter Rahmen" ;
+    Text [ swedish ] = "Hela ramen" ;
+    Text [ danish ] = "Hele rammen" ;
+    Text [ italian ] = "Intera cornice" ;
+    Text [ spanish ] = "Marco entero" ;
+    Text [ french ] = "Cadre entier" ;
+    Text [ dutch ] = "Compleet kader" ;
+    Text[ chinese_simplified ] = "Õû¸ö¿ò";
+    Text[ russian ] = "Âñÿ ğàìêà";
+    Text[ polish ] = "Ca³a ramka";
+    Text[ japanese ] = "˜g‘S‘Ì";
+    Text[ chinese_traditional ] = "¾ã­Ó®Ø";
+    Text[ arabic ] = "ÇáÅØÇÑ ÈÃßãáå";
+    Text[ greek ] = "Ïëüêëçñï ğëáßóéï";
+    Text[ korean ] = "ÀüÃ¼ ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Çerçevenin tümü";
+    Text[ language_user1 ] = " ";
+};
+String STR_FLY_REL_PG_PRTAREA
+{
+    TEXT = "Rahmentextbereich" ;
+    TEXT [ English ] = "Frame text area" ;
+    Text [ portuguese ] = "Área da moldura para texto" ;
+    Text [ english_us ] = "Frame text area" ;
+    Text [ portuguese_brazilian ] = "Rahmentextbereich" ;
+    Text [ swedish ] = "Ramtextområde" ;
+    Text [ danish ] = "Rammetekstområde" ;
+    Text [ italian ] = "Area del testo della cornice" ;
+    Text [ spanish ] = "Área de texto del marco" ;
+    Text [ french ] = "Zone de texte de cadre" ;
+    Text [ dutch ] = "Kadertekstbereik" ;
+    Text[ chinese_simplified ] = "¿òÄÚÎÄ×ÖÇø";
+    Text[ russian ] = "Îáëàñòü òåêñòîâîé ğàìêè";
+    Text[ polish ] = "Obszar tekstu ramki";
+    Text[ japanese ] = "˜g•t‚¯”ÍˆÍ";
+    Text[ chinese_traditional ] = "®Ø¤º¤å¦r°Ï";
+    Text[ arabic ] = "äØÇŞ äÕ ÇáÅØÇÑ";
+    Text[ greek ] = "Ğåñéï÷Ş êåéìİíïõ ôïõ ğëáéóßïõ";
+    Text[ korean ] = "ÇÁ·¹ÀÓ ÅØ½ºÆ® ¿µ¿ª";
+    Text[ turkish ] = "Çerçeve metin alanı";
+    Text[ language_user1 ] = " ";
+};
+String STR_FRAME
+{
+    TEXT = "Absatzbereich" ;
+    TEXT [ English ] = "Paragraph area" ;
+    Text [ portuguese ] = "Área de parágrafo" ;
+    Text [ english_us ] = "Paragraph area" ;
+    Text [ portuguese_brazilian ] = "Absatzbereich" ;
+    Text [ swedish ] = "Styckeområde" ;
+    Text [ danish ] = "Afsnitsområde" ;
+    Text [ italian ] = "Area del paragrafo" ;
+    Text [ spanish ] = "Área de párrafo" ;
+    Text [ french ] = "Zone de paragraphe" ;
+    Text [ dutch ] = "Alineabereik" ;
+    Text[ chinese_simplified ] = "¶ÎÂäÇøÓò";
+    Text[ russian ] = "Îáëàñòü àáçàöà";
+    Text[ polish ] = "Obszar akapitu";
+    Text[ japanese ] = "’i—”ÍˆÍ";
+    Text[ chinese_traditional ] = "¬q¸¨°Ï°ì";
+    Text[ arabic ] = "äØÇŞ ÇáİŞÑÉ";
+    Text[ greek ] = "Ğåñéï÷Ş ğáñáãñÜöïõ";
+    Text[ korean ] = "´Ü¶ô ¿µ¿ª";
+    Text[ turkish ] = "Paragraf bölümü";
+    Text[ language_user1 ] = " ";
+};
+String STR_PRTAREA
+{
+    TEXT = "Absatztextbereich" ;
+    TEXT [ English ] = "Text area of paragraph" ;
+    Text [ portuguese ] = "Área de texto do parágrafo " ;
+    Text [ english_us ] = "Paragraph text area" ;
+    Text [ portuguese_brazilian ] = "Absatztextbereich" ;
+    Text [ swedish ] = "Textområde i stycke" ;
+    Text [ danish ] = "Afsnitstekstområde" ;
+    Text [ italian ] = "Area del testo del paragrafo" ;
+    Text [ spanish ] = "Área de texto del párrafo" ;
+    Text [ french ] = "Zone de texte de paragraphe" ;
+    Text [ dutch ] = "Alineatekstbereik" ;
+    Text[ chinese_simplified ] = "¶ÎÂäÎÄ×ÖÇøÓò";
+    Text[ russian ] = "Îáëàñòü òåêñòîâîãî àáçàöà";
+    Text[ polish ] = "Obszar tekstu w akapicie";
+    Text[ japanese ] = "’i—‚ÌÃ·½Ä”ÍˆÍ";
+    Text[ chinese_traditional ] = "¬q¸¨¤å¦r°Ï°ì";
+    Text[ arabic ] = "äØÇŞ äÕ ÇáİŞÑÉ";
+    Text[ greek ] = "Ğåñéï÷Ş êåéìİíïõ ğáñáãñÜöïõ";
+    Text[ korean ] = "´Ü¶ô ÅØ½ºÆ® ¿µ¿ª";
+    Text[ turkish ] = "Paragraf metin alanı";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_PG_LEFT
+{
+    TEXT = "Seitenrand links" ;
+    TEXT [ English ] = "Left page border" ;
+    Text [ portuguese ] = "Margem esquerda do parágrafo" ;
+    Text [ english_us ] = "Left page border" ;
+    Text [ portuguese_brazilian ] = "Seitenrand links" ;
+    Text [ swedish ] = "Vänster sidmarginal" ;
+    Text [ danish ] = "Venstre siderand" ;
+    Text [ italian ] = "Margine paragrafo sinistro" ;
+    Text [ spanish ] = "Margen izquierdo de la página" ;
+    Text [ french ] = "Marge à gauche" ;
+    Text [ dutch ] = "Paginarand links" ;
+    Text[ chinese_simplified ] = "×ó·½Ò³±ß¾à";
+    Text[ russian ] = "Ëåâûé êğàé ñòğàíèöû";
+    Text[ polish ] = "Lewy margines strony";
+    Text[ japanese ] = "Íß°¼Ş—]”’ ¶";
+    Text[ chinese_traditional ] = "¥ªÃä¬É";
+    Text[ arabic ] = "åÇãÔ ÇáÕİÍÉ ÇáÃíÓÑ";
+    Text[ greek ] = "Ğåñéèşñéï óåëßäáò - áñéóôåñÜ";
+    Text[ korean ] = "¿ŞÂÊ ÆäÀÌÁö ¿Ü°û¼±";
+    Text[ turkish ] = "Sol sayfa kenarı";
+    Text[ language_user1 ] = " ";
+};
+String STR_MIR_REL_PG_LEFT
+{
+    TEXT = "Seitenrand innen" ;
+    TEXT [ English ] = "Inner page border" ;
+    Text [ portuguese ] = "Margem interior da página" ;
+    Text [ english_us ] = "Inner page border" ;
+    Text [ portuguese_brazilian ] = "Seitenrand innen" ;
+    Text [ swedish ] = "Invändig sidmarginal" ;
+    Text [ danish ] = "Indre siderand" ;
+    Text [ italian ] = "Margine pagina interno" ;
+    Text [ spanish ] = "Margen interior de la página" ;
+    Text [ french ] = "Marge intérieure" ;
+    Text [ dutch ] = "Binnenste zijrand" ;
+    Text[ chinese_simplified ] = "ÄÚ²àÒ³±ß¾à";
+    Text[ russian ] = "Âíóòğåííèé êğàé ñòğàíèöû";
+    Text[ polish ] = "Wewnêrzny margines strony";
+    Text[ japanese ] = "Íß°¼Ş—]”’ “à‘¤";
+    Text[ chinese_traditional ] = "Ãä¬É¤º°¼";
+    Text[ arabic ] = "åÇãÔ ÇáÕİÍÉ ÇáÏÇÎáí";
+    Text[ greek ] = "Ğåñéèşñéï óåëßäáò - åóùôåñéêÜ";
+    Text[ korean ] = "³»ºÎ ÆäÀÌÁö ¿Ü°û¼±";
+    Text[ turkish ] = "Sayfa kenarı (iç)";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_PG_RIGHT
+{
+    TEXT = "Seitenrand rechts" ;
+    TEXT [ English ] = "Right page border" ;
+    Text [ portuguese ] = "Margem direita da página" ;
+    Text [ english_us ] = "Right page border" ;
+    Text [ portuguese_brazilian ] = "Seitenrand rechts" ;
+    Text [ swedish ] = "Höger sidmarginal" ;
+    Text [ danish ] = "Højre siderand" ;
+    Text [ italian ] = "Margine pagina destro" ;
+    Text [ spanish ] = "Margen derecho de la página" ;
+    Text [ french ] = "Marge à droite" ;
+    Text [ dutch ] = "Paginarand rechts" ;
+    Text[ chinese_simplified ] = "ÓÒÒ³Ãæ¿Õ°×";
+    Text[ russian ] = "Ïğàâûé êğàé ñòğàíèöû";
+    Text[ polish ] = "Prawy margines strony";
+    Text[ japanese ] = "Íß°¼Ş—]”’ ‰E";
+    Text[ chinese_traditional ] = "¥k­¶­±ªÅ¥Õ";
+    Text[ arabic ] = "åÇãÔ ÇáÕİÍÉ ÇáÃíãä";
+    Text[ greek ] = "Ğåñéèşñéï óåëßäáò - äåîéÜ";
+    Text[ korean ] = "¿À¸¥ÂÊ ÆäÀÌÁö ¿Ü°û¼±";
+    Text[ turkish ] = "Sağ sayfa kenarı";
+    Text[ language_user1 ] = " ";
+};
+String STR_MIR_REL_PG_RIGHT
+{
+    TEXT = "Seitenrand außen" ;
+    TEXT [ English ] = "Outer page border" ;
+    Text [ portuguese ] = "Margem exterior da página" ;
+    Text [ english_us ] = "Outer page border" ;
+    Text [ portuguese_brazilian ] = "Seitenrand außen" ;
+    Text [ swedish ] = "Utvändig sidmarginal" ;
+    Text [ danish ] = "Ydre siderand" ;
+    Text [ italian ] = "Margine pagina esterno" ;
+    Text [ spanish ] = "Margen exterior de la página" ;
+    Text [ french ] = "Marge extérieure" ;
+    Text [ dutch ] = "Buitenste zijrand" ;
+    Text[ chinese_simplified ] = "Íâ²àÒ³±ß¾à";
+    Text[ russian ] = "Íàğóæíûé êğàé ñòğàíèöû";
+    Text[ polish ] = "Zewnêtrzny margines strony";
+    Text[ japanese ] = "Íß°¼Ş—]”’ ŠO‘¤";
+    Text[ chinese_traditional ] = "Ãä¬É¥~°¼";
+    Text[ arabic ] = "åÇãÔ ÇáÕİÍÉ ÇáÎÇÑÌí";
+    Text[ greek ] = "Ğåñéèşñéï óåëßäáò - åîùôåñéêÜ";
+    Text[ korean ] = "¿ÜºÎ ÆäÀÌÁö ¿Ü°û¼±";
+    Text[ turkish ] = "Sayfa kenarı (dış)";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_FRM_LEFT
+{
+    TEXT = "Absatzrand links" ;
+    TEXT [ English ] = "Left paragraph border" ;
+    Text [ portuguese ] = "Margem esquerda do parágrafo" ;
+    Text [ english_us ] = "Left paragraph border" ;
+    Text [ portuguese_brazilian ] = "Absatzrand links" ;
+    Text [ swedish ] = "Vänster styckemarginal" ;
+    Text [ danish ] = "Venstre afsnitsrand" ;
+    Text [ italian ] = "Margine paragrafo sinistro" ;
+    Text [ spanish ] = "Margen izquierdo del párrafo" ;
+    Text [ french ] = "Marge de paragraphe gauche" ;
+    Text [ dutch ] = "Alinearand links" ;
+    Text[ chinese_simplified ] = "×ó¶ÎÂäÒ³±ß";
+    Text[ russian ] = "Ëåâûé êğàé àáçàöà";
+    Text[ polish ] = "Lewy margines akapitu";
+    Text[ japanese ] = "’i——]”’ ¶";
+    Text[ chinese_traditional ] = "¥ª¬q¸¨­¶Ãä";
+    Text[ arabic ] = "åÇãÔ ÇáİŞÑÉ ÇáÃíÓÑ";
+    Text[ greek ] = "Ğåñéèşñéï ğáñáãñÜöïõ - áñéóôåñÜ";
+    Text[ korean ] = "¿ŞÂÊ ´Ü¶ô ¿Ü°û¼±";
+    Text[ turkish ] = "Paragraf kenarı (sol)";
+    Text[ language_user1 ] = " ";
+};
+String STR_MIR_REL_FRM_LEFT
+{
+    TEXT = "Absatzrand innen" ;
+    TEXT [ English ] = "Inner paragraph border" ;
+    Text [ portuguese ] = "Margem interior do parágrafo" ;
+    Text [ english_us ] = "Inner paragraph border" ;
+    Text [ portuguese_brazilian ] = "Absatzrand innen" ;
+    Text [ swedish ] = "Inre styckemarginal" ;
+    Text [ danish ] = "Indre afsnitsrand" ;
+    Text [ italian ] = "Margine paragrafo interno" ;
+    Text [ spanish ] = "Margen interior del párrafo" ;
+    Text [ french ] = "Marge de paragraphe intérieure" ;
+    Text [ dutch ] = "Binnenste alinearand" ;
+    Text[ chinese_simplified ] = "¼ä¸ôÄÚ±ß";
+    Text[ russian ] = "Âíóòğåííèé êğàé àáçàöà";
+    Text[ polish ] = "Wewnêtrzny margines akapitu";
+    Text[ japanese ] = "’i——]”’ “à‘¤";
+    Text[ chinese_traditional ] = "¶¡¹j¤ºÃä";
+    Text[ arabic ] = "åÇãÔ ÇáİŞÑÉ ÇáÏÇÎáí";
+    Text[ greek ] = "Ğåñéèşñéï ğáñáãñÜöïõ - åóùôåñéêÜ";
+    Text[ korean ] = "³»ºÎ ´Ü¶ô °æ°è¼±";
+    Text[ turkish ] = "Paragraf kenarı (iç)";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_FRM_RIGHT
+{
+    TEXT = "Absatzrand rechts" ;
+    TEXT [ English ] = "Right paragraph border" ;
+    Text [ portuguese ] = "Margem direita do parágrafo" ;
+    Text [ english_us ] = "Right paragraph border" ;
+    Text [ portuguese_brazilian ] = "Absatzrand rechts" ;
+    Text [ swedish ] = "Höger styckemarginal" ;
+    Text [ danish ] = "Højre afsnitsrand" ;
+    Text [ italian ] = "Margine paragrafo destro" ;
+    Text [ spanish ] = "Margen derecho del párrafo" ;
+    Text [ french ] = "Marge de paragraphe droite" ;
+    Text [ dutch ] = "Alinearand rechts" ;
+    Text[ chinese_simplified ] = "ÓÒ¶ÎÂäÒ³±ß";
+    Text[ russian ] = "Ïğàâûé êğàé àáçàöà";
+    Text[ polish ] = "Prawy margines akapitu";
+    Text[ japanese ] = "’i——]”’ ‰E";
+    Text[ chinese_traditional ] = "¥k¬q¸¨­¶Ãä";
+    Text[ arabic ] = "åÇãÔ ÇáİŞÑÉ ÇáÃíãä";
+    Text[ greek ] = "Ğåñéèşñéï ğáñáãñÜöïõ - äåîéÜ";
+    Text[ korean ] = "¿À¸¥ÂÊ ´Ü¶ô ¿Ü°û¼±";
+    Text[ turkish ] = "Paragraf kenarı (sağ)";
+    Text[ language_user1 ] = " ";
+};
+String STR_MIR_REL_FRM_RIGHT
+{
+    TEXT = "Absatzrand außen" ;
+    TEXT [ English ] = "Outer paragraph border" ;
+    Text [ portuguese ] = "Margem exterior do parágrafo" ;
+    Text [ english_us ] = "Outer paragraph border" ;
+    Text [ portuguese_brazilian ] = "Absatzrand außen" ;
+    Text [ swedish ] = "Yttre styckemarginal" ;
+    Text [ danish ] = "Ydre afsnitsrand" ;
+    Text [ italian ] = "Margine paragrafo esterno" ;
+    Text [ spanish ] = "Margen exterior del párrafo" ;
+    Text [ french ] = "Marge de paragraphe extérieure " ;
+    Text [ dutch ] = "Buitenste alinearand" ;
+    Text[ chinese_simplified ] = "¶ÎÂä¼ä¸ôÍâ²à";
+    Text[ russian ] = "Íàğóæíûé êğàé àáçàöà";
+    Text[ polish ] = "Zewnêtrzny margines akapitu";
+    Text[ japanese ] = "’i——]”’ ŠO‘¤";
+    Text[ chinese_traditional ] = "¬q¸¨¶¡¹j¥~°¼";
+    Text[ arabic ] = "åÇãÔ ÇáİŞÑÉ ÇáÎÇÑÌí";
+    Text[ greek ] = "Ğåñéèşñéï ğáñáãñÜöïõ - åîùôåñéêÜ";
+    Text[ korean ] = "¿ÜºÎ ´Ü¶ô ¿Ü°û¼±";
+    Text[ turkish ] = "Paragraf kenarı (dış)";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_PG_FRAME
+{
+    TEXT = "Gesamte Seite" ;
+    TEXT [ English ] = "Whole page" ;
+    Text [ portuguese ] = "Página inteira" ;
+    Text [ english_us ] = "Entire page" ;
+    Text [ portuguese_brazilian ] = "Gesamte Seite" ;
+    Text [ swedish ] = "Hela sidan" ;
+    Text [ danish ] = "Hele siden" ;
+    Text [ italian ] = "Intera pagina" ;
+    Text [ spanish ] = "Página entera" ;
+    Text [ french ] = "Page entière" ;
+    Text [ dutch ] = "Gehele pagina" ;
+    Text[ chinese_simplified ] = "ÕûÒ³";
+    Text[ russian ] = "Âñÿ ñòğàíèöà";
+    Text[ polish ] = "Ca³a strona";
+    Text[ japanese ] = "Íß°¼Ş•";
+    Text[ chinese_traditional ] = "¾ã­¶";
+    Text[ arabic ] = "ÇáÕİÍÉ ÈÃßãáåÇ";
+    Text[ greek ] = "Ïëüêëçñç óåëßäá";
+    Text[ korean ] = "ÀüÃ¼ ÆäÀÌÁö";
+    Text[ turkish ] = "Sayfanın tümü";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_PG_PRTAREA
+{
+    TEXT = "Seitentextbereich" ;
+    TEXT [ English ] = "Page text area" ;
+    Text [ portuguese ] = "Área de texto da página" ;
+    Text [ english_us ] = "Page text area" ;
+    Text [ portuguese_brazilian ] = "Seitentextbereich" ;
+    Text [ swedish ] = "Sidtextområde" ;
+    Text [ danish ] = "Sidetekstområde" ;
+    Text [ italian ] = "Area del testo della pagina" ;
+    Text [ spanish ] = "Área de texto de la página" ;
+    Text [ french ] = "Zone de texte de page" ;
+    Text [ dutch ] = "Paginatekstbereik" ;
+    Text[ chinese_simplified ] = "Ò³ÃæÎÄ×ÖÇøÓò";
+    Text[ russian ] = "Îáëàñòü òåêñòîâîé ñòğàíèöû";
+    Text[ polish ] = "Obszar tekstu na stronie";
+    Text[ japanese ] = "Íß°¼Ş‚ÌÃ·½Ä”ÍˆÍ";
+    Text[ chinese_traditional ] = "­¶­±¤å¦r°Ï°ì";
+    Text[ arabic ] = "äØÇŞ äÕ ÇáÕİÍÉ";
+    Text[ greek ] = "Ğåñéï÷Ş êåéìİíïõ óåëßäáò";
+    Text[ korean ] = "ÆäÀÌÁö ÅØ½ºÆ® ¿µ¿ª";
+    Text[ turkish ] = "Sayfa metin alanı";
+    Text[ language_user1 ] = " ";
+};
+/*-----------------------------------------------------------------------
+    Beschreibung: V-Rel Zeichenausrichtungen
+ -----------------------------------------------------------------------*/
+String STR_REL_BASE
+{
+    TEXT = "Grundlinie" ;
+    TEXT [ English ] = "Baseline" ;
+    Text [ portuguese ] = "Linha de base" ;
+    Text [ english_us ] = "Base line" ;
+    Text [ portuguese_brazilian ] = "Grundlinie" ;
+    Text [ swedish ] = "Baslinje" ;
+    Text [ danish ] = "Basislinje" ;
+    Text [ italian ] = "Linea di base" ;
+    Text [ spanish ] = "Línea de base" ;
+    Text [ french ] = "Ligne de base" ;
+    Text [ dutch ] = "Basislijn" ;
+    Text[ chinese_simplified ] = "»ùÏß";
+    Text[ russian ] = "Îñíîâíàÿ ëèíèÿ";
+    Text[ polish ] = "Linia podstawowa";
+    Text[ japanese ] = "Šîü";
+    Text[ chinese_traditional ] = "°ò½u";
+    Text[ arabic ] = "ÇáÎØ ÇáÃÓÇÓí";
+    Text[ greek ] = "ÂáóéêŞ ãñáììŞ";
+    Text[ korean ] = "±âÁØ¼±";
+    Text[ turkish ] = "Taban çizgisi";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_CHAR
+{
+    TEXT = "Zeichen" ;
+    TEXT [ English ] = "Char" ;
+    Text [ portuguese ] = "Caracteres" ;
+    Text [ english_us ] = "Character" ;
+    Text [ portuguese_brazilian ] = "Zeichen" ;
+    Text [ swedish ] = "Tecken" ;
+    Text [ danish ] = "Tegn" ;
+    Text [ italian ] = "Carattere" ;
+    Text [ spanish ] = "Caracteres" ;
+    Text [ french ] = "Caractère" ;
+    Text [ dutch ] = "Teken" ;
+    Text[ chinese_simplified ] = "×Ö·û";
+    Text[ russian ] = "Çíàê";
+    Text[ polish ] = "Znak";
+    Text[ japanese ] = "•¶š";
+    Text[ chinese_traditional ] = "¦r¤¸";
+    Text[ arabic ] = "ÍÑİ";
+    Text[ greek ] = "×áñáêôŞñåò";
+    Text[ korean ] = "¹®ÀÚ";
+    Text[ turkish ] = "Karakter";
+    Text[ language_user1 ] = " ";
+};
+String STR_REL_ROW
+{
+    TEXT = "Zeile" ;
+    TEXT [ English ] = "Row" ;
+    Text [ portuguese ] = "Linha" ;
+    Text [ english_us ] = "Row" ;
+    Text [ portuguese_brazilian ] = "Zeile" ;
+    Text [ swedish ] = "Rad" ;
+    Text [ danish ] = "Række" ;
+    Text [ italian ] = "Riga" ;
+    Text [ spanish ] = "Fila" ;
+    Text [ french ] = "Ligne" ;
+    Text [ dutch ] = "Rij" ;
+    Text[ chinese_simplified ] = "ĞĞ";
+    Text[ russian ] = "Ñòğîêà";
+    Text[ polish ] = "Wiersz";
+    Text[ japanese ] = "s";
+    Text[ chinese_traditional ] = "¦æ";
+    Text[ arabic ] = "Õİ";
+    Text[ greek ] = "ÃñáììŞ";
+    Text[ korean ] = "Çà";
+    Text[ turkish ] = "Satır";
+    Text[ language_user1 ] = " ";
+};
+/*-----------------------------------------------------------------------
+    Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
+ -----------------------------------------------------------------------*/
+String STR_TOP_BASE
+{
+    TEXT = "Grundlinie ~oben" ;
+    TEXT [ English ] = "Top of baseline" ;
+    Text [ portuguese ] = "Linha de base em ~cima" ;
+    Text [ english_us ] = "Base line at ~top" ;
+    Text [ portuguese_brazilian ] = "Basis ~oben" ;
+    Text [ swedish ] = "Baslinje ~överst" ;
+    Text [ danish ] = "Basislinje øverst" ;
+    Text [ italian ] = "Linea di base in ~alto" ;
+    Text [ spanish ] = "Línea de base ~encima" ;
+    Text [ french ] = "Ligne de base en ~haut" ;
+    Text [ dutch ] = "Basis ~boven" ;
+    Text[ chinese_simplified ] = "»ùÏßÉÏ·½(~T)";
+    Text[ russian ] = "Îñíîâíàÿ ëèíèÿ ñâåğõó";
+    Text[ polish ] = "Linia podstawowa w górze";
+    Text[ japanese ] = "Šîü‚Ìã(~T)";
+    Text[ chinese_traditional ] = "°ò½u¤W¤è(~T)";
+    Text[ arabic ] = "ÃÚáì ÇáÎØ ÇáÃÓÇÓí";
+    Text[ greek ] = "ÂáóéêŞ ãñáììŞ - Üíù";
+    Text[ korean ] = "±âÁØ¼±ÀÇ À§(~T)";
+    Text[ turkish ] = "Taban çizgisi ~üstü";
+    Text[ language_user1 ] = " ";
+};
+String STR_BOTTOM_BASE
+{
+    TEXT = "Grundlinie ~unten" ;
+    TEXT [ English ] = "Bottom of base" ;
+    Text [ portuguese ] = "~Abaixo da base" ;
+    Text [ english_us ] = "~Base line at bottom" ;
+    Text [ portuguese_brazilian ] = "Basis ~unten" ;
+    Text [ swedish ] = "Baslinje ~nederst" ;
+    Text [ danish ] = "Basislinje nederst" ;
+    Text [ italian ] = "Base in ~basso" ;
+    Text [ spanish ] = "Base a~bajo" ;
+    Text [ french ] = "Ligne de base en ~bas" ;
+    Text [ dutch ] = "Basis ~beneden" ;
+    Text[ chinese_simplified ] = "»ùÏßÏÂ·½(~B)";
+    Text[ russian ] = "Îñíîâíàÿ ëèíèÿ ñíèçó";
+    Text[ polish ] = "Linia podstawowa w dole";
+    Text[ japanese ] = "Šîü‚Ì‰º(~B)";
+    Text[ chinese_traditional ] = "°ò½u¤U¤è(~B)";
+    Text[ arabic ] = "ÃÓİá ÇáÎØ ÇáÃÓÇÓí";
+    Text[ greek ] = "ÂáóéêŞ ãñáììŞ - êÜôù";
+    Text[ korean ] = "±âÁØ¼±ÀÇ ¾Æ·¡(~B)";
+    Text[ turkish ] = "Alt ~taban çizgisi";
+    Text[ language_user1 ] = " ";
+};
+String STR_CENTER_BASE
+{
+    TEXT = "Grundlinie ~zentriert" ;
+    TEXT [ English ] = "Center of baseline" ;
+    Text [ portuguese ] = "Linha de base ~centrada" ;
+    Text [ english_us ] = "Base line ~centered" ;
+    Text [ portuguese_brazilian ] = "Basis ~zentriert" ;
+    Text [ swedish ] = "Baslinje ~centrerad" ;
+    Text [ danish ] = "Basislinje centreret" ;
+    Text [ italian ] = "Linea di base ~centrata" ;
+    Text [ spanish ] = "Base ~centro" ;
+    Text [ french ] = "Ligne de base ~centrée" ;
+    Text [ dutch ] = "Basis ge~centreerd" ;
+    Text[ chinese_simplified ] = "»ùÏß¾ÓÖĞ(~C)";
+    Text[ russian ] = "Îñíîâíàÿ ëèíèÿ ïî öåíòğó";
+    Text[ polish ] = "Linia podstawowa, wyœrodkowana";
+    Text[ japanese ] = "Šîü‚Ì’†‰›(~C)";
+    Text[ chinese_traditional ] = "°ò½u¸m¤¤(~C)";
+    Text[ arabic ] = "æÓØ ÇáÎØ ÇáÃÓÇÓí";
+    Text[ greek ] = "ÂáóéêŞ ãñáììŞ - êåíôñáñéóìİíá";
+    Text[ korean ] = "±âÁØ¼±ÀÇ °¡¿îµ¥(~C)";
+    Text[ turkish ] = "Taban çizgisini ~ortala";
+    Text[ language_user1 ] = " ";
+};
+String STR_LINE_TOP
+{
+    TEXT = "Zeile oben" ;
+    TEXT [ English ] = "Line top" ;
+    Text [ dutch ] = "Bovenste regel" ;
+    Text [ english_us ] = "Top of line" ;
+    Text [ italian ] = "Riga in alto" ;
+    Text [ spanish ] = "Línea superior" ;
+    Text [ french ] = "Ligne supérieure" ;
+    Text [ swedish ] = "Översta raden" ;
+    Text [ danish ] = "Række øverst" ;
+    Text [ portuguese ] = "Linha superior" ;
+    Text [ portuguese_brazilian ] = "Zeile oben" ;
+    Text[ chinese_simplified ] = "ĞĞÏòÉÏ";
+    Text[ russian ] = "Ñòğîêà ñâåğõó";
+    Text[ polish ] = "Wiersz na górze";
+    Text[ japanese ] = "s‚Ìã";
+    Text[ chinese_traditional ] = "¦æ¦V¤W";
+    Text[ arabic ] = "ÃÚáì ÇáÓØÑ";
+    Text[ greek ] = "ÃñáììŞ - Üíù";
+    Text[ korean ] = "¼± À§";
+    Text[ turkish ] = "Satır üstü";
+    Text[ language_user1 ] = " ";
+};
+String STR_LINE_BOTTOM
+{
+    TEXT = "Zeile unten" ;
+    TEXT [ English ] = "Line bottom" ;
+    Text [ dutch ] = "Onderste regel" ;
+    Text [ english_us ] = "Bottom of line" ;
+    Text [ italian ] = "Riga in basso" ;
+    Text [ spanish ] = "Línea inferior" ;
+    Text [ french ] = "Ligne inférieure" ;
+    Text [ swedish ] = "Nedersta raden" ;
+    Text [ danish ] = "Række nederst" ;
+    Text [ portuguese ] = "Linha inferior" ;
+    Text [ portuguese_brazilian ] = "Zeile unten" ;
+    Text[ chinese_simplified ] = "ÏÂÒ»ĞĞ";
+    Text[ russian ] = "Ñòğîêà ñíèçó";
+    Text[ polish ] = "Wiersz na dole";
+    Text[ japanese ] = "s‚Ì‰º";
+    Text[ chinese_traditional ] = "¤U¤@¦æ";
+    Text[ arabic ] = "ÃÓİá ÇáÓØÑ";
+    Text[ greek ] = "ÃñáììŞ - êÜôù";
+    Text[ korean ] = "¼±ÀÇ ¾Æ·¡";
+    Text[ turkish ] = "Satır altı";
+    Text[ language_user1 ] = " ";
+};
+String STR_LINE_CENTER
+{
+    TEXT = "Zeile zentriert" ;
+    TEXT [ English ] = "Line centered" ;
+    Text [ english_us ] = "Center of line" ;
+    Text [ italian ] = "Riga centrata" ;
+    Text [ spanish ] = "Línea centrada" ;
+    Text [ french ] = "Ligne centrée" ;
+    Text [ dutch ] = "Regel gecentreerd" ;
+    Text [ swedish ] = "Rad centrerad" ;
+    Text [ danish ] = "Række centreret" ;
+    Text [ portuguese ] = "Linha centrada" ;
+    Text [ portuguese_brazilian ] = "Zeile zentriert" ;
+    Text[ chinese_simplified ] = "ĞĞ¾ÓÖĞ";
+    Text[ russian ] = "Ñòğîêà ïî öåíòğó";
+    Text[ polish ] = "Wiersz wyœrodkowany";
+    Text[ japanese ] = "s‚Ì’†‰›";
+    Text[ chinese_traditional ] = "¦æ¸m¤¤";
+    Text[ arabic ] = "æÓØ ÇáÓØÑ";
+    Text[ greek ] = "ÃñáììŞ êåíôñáñéóìİíç";
+    Text[ korean ] = "¼± °¡¿îµ¥";
+    Text[ turkish ] = "Satırı ortala";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAR_TOP
+{
+    TEXT = "Zeichen oben" ;
+    TEXT [ English ] = "Top of character" ;
+    Text [ dutch ] = "Teken boven" ;
+    Text [ english_us ] = "Top of character" ;
+    Text [ italian ] = "Carattere in alto" ;
+    Text [ spanish ] = "Carácter arriba" ;
+    Text [ french ] = "Décalage haut" ;
+    Text [ swedish ] = "Tecken överst" ;
+    Text [ danish ] = "Tegn øverst" ;
+    Text [ portuguese ] = "Carácter em cima" ;
+    Text [ portuguese_brazilian ] = "Zeichen oben" ;
+    Text[ chinese_simplified ] = "×Ö·ûÏòÉÏ";
+    Text[ russian ] = "Çíàê ñâåğõó";
+    Text[ polish ] = "Znaki w górze";
+    Text[ japanese ] = "•¶š‚Ìã";
+    Text[ chinese_traditional ] = "¦r¤¸¦V¤W";
+    Text[ arabic ] = "ÃÚáì ÇáÍÑİ";
+    Text[ greek ] = "×áñáêôŞñáò - Üíù";
+    Text[ korean ] = "¹®ÀÚÀÇ À§¿¡";
+    Text[ turkish ] = "Karakter üstü";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAR_BOTTOM
+{
+    TEXT = "Zeichen unten" ;
+    TEXT [ English ] = "Bottom of character" ;
+    Text [ dutch ] = "Teken beneden" ;
+    Text [ english_us ] = "Bottom of character" ;
+    Text [ italian ] = "Carattere in basso" ;
+    Text [ spanish ] = "Carácter abajo" ;
+    Text [ french ] = "Décalage bas" ;
+    Text [ swedish ] = "Tecken nederst" ;
+    Text [ danish ] = "Tegn nederst" ;
+    Text [ portuguese ] = "Carácter em baixo" ;
+    Text [ portuguese_brazilian ] = "Zeichen unten" ;
+    Text[ chinese_simplified ] = "×Ö·ûÏòÏÂ";
+    Text[ russian ] = "Çíàê ñíèçó";
+    Text[ polish ] = "Znaki na dole";
+    Text[ japanese ] = "•¶š‚Ì‰º";
+    Text[ chinese_traditional ] = "¦r¤¸¦V¤U";
+    Text[ arabic ] = "ÃÓİá ÇáÍÑİ";
+    Text[ greek ] = "×áñáêôŞñáò - êÜôù";
+    Text[ korean ] = "¹®ÀÚÀÇ ¾Æ·¡";
+    Text[ turkish ] = "Karakter altı";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAR_CENTER
+{
+    TEXT = "Zeichen zentriert" ;
+    TEXT [ English ] = "Middle of character" ;
+    Text [ english_us ] = "Center of character" ;
+    Text [ italian ] = "Carattere centrato" ;
+    Text [ spanish ] = "Carácter centrado" ;
+    Text [ french ] = "Caractère centré" ;
+    Text [ dutch ] = "Teken gecentreerd" ;
+    Text [ swedish ] = "Tecken centrerat" ;
+    Text [ danish ] = "Tegn centreret" ;
+    Text [ portuguese ] = "Carácter centrado" ;
+    Text [ portuguese_brazilian ] = "Zeichen zentriert" ;
+    Text[ chinese_simplified ] = "×Ö·û¾ÓÖĞ";
+    Text[ russian ] = "Çíàê ïî öåíòğó";
+    Text[ polish ] = "Znaki wyœrodkowane";
+    Text[ japanese ] = "•¶š‚Ì’†‰›";
+    Text[ chinese_traditional ] = "¦r¤¸¸m¤¤";
+    Text[ arabic ] = "æÓØ ÇáÍÑİ";
+    Text[ greek ] = "×áñáêôŞñáò - êåíôñáñéóìİíá";
+    Text[ korean ] = "¹®ÀÚÀÇ °¡¿îµ¥";
+    Text[ turkish ] = "Karakteri ortala";
+    Text[ language_user1 ] = " ";
+};
+String STR_OLE_INSERT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
+    TEXT = "Objekt einfügen" ;
+    TEXT [ English ] = "Insert object" ;
+    TEXT [ norwegian ] = "Insert object" ;
+    TEXT [ italian ] = "Inserisci oggetto" ;
+    TEXT [ portuguese_brazilian ] = "Inserir objeto" ;
+    TEXT [ portuguese ] = "Inserir objecto" ;
+    TEXT [ finnish ] = "Lisää objekti" ;
+    TEXT [ danish ] = "Indsæt objekt" ;
+    TEXT [ french ] = "Insérer un objet" ;
+    TEXT [ swedish ] = "Infoga objekt" ;
+    TEXT [ dutch ] = "Object invoegen" ;
+    TEXT [ spanish ] = "Insertar objeto" ;
+    TEXT [ english_us ] = "Insert object" ;
+    TEXT[ chinese_simplified ] = "²åÈë¶ÔÏó";
+    TEXT[ russian ] = "Âñòàâèòü îáúåêò";
+    TEXT[ polish ] = "Wstaw obiekt";
+    TEXT[ japanese ] = "µÌß¼Şª¸Ä‚Ì‘}“ü";
+    TEXT[ chinese_traditional ] = "´¡¤Jª«¥ó";
+    TEXT[ arabic ] = "ÅÏÑÇÌ ßÇÆä";
+    TEXT[ greek ] = "ĞñïóèŞêç áíôéêåéìİíïõ";
+    TEXT[ korean ] = "°³Ã¼ »ğÀÔ";
+    TEXT[ turkish ] = "Nesne ekle";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_OLE_EDIT
+{
+    TEXT = "Objekt bearbeiten" ;
+    TEXT [ English ] = "Edit object" ;
+    TEXT [ norwegian ] = "Edit object" ;
+    TEXT [ italian ] = "Modifica oggetto" ;
+    TEXT [ portuguese_brazilian ] = "Editar objeto" ;
+    TEXT [ portuguese ] = "Editar objecto" ;
+    TEXT [ finnish ] = "Muokkaa objektia" ;
+    TEXT [ danish ] = "Rediger objekt" ;
+    TEXT [ french ] = "Modifier l'objet" ;
+    TEXT [ swedish ] = "Redigera objekt" ;
+    TEXT [ dutch ] = "Een object bewerken" ;
+    TEXT [ spanish ] = "Editar objeto" ;
+    TEXT [ english_us ] = "Edit object" ;
+    TEXT[ chinese_simplified ] = "±à¼­¶ÔÏó";
+    TEXT[ russian ] = "Ïğàâêà îáúåêòà";
+    TEXT[ polish ] = "Edytuj obiekt";
+    TEXT[ japanese ] = "µÌß¼Şª¸Ä‚Ì•ÒW";
+    TEXT[ chinese_traditional ] = "½s¿èª«¥ó";
+    TEXT[ arabic ] = "ÊÍÑíÑ ÇáßÇÆä";
+    TEXT[ greek ] = "Åğåîåñãáóßá áíôéêåéìİíïõ";
+    TEXT[ korean ] = "°³Ã¼ ÆíÁı";
+    TEXT[ turkish ] = "Nesneyi düzenle";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_COLL_HEADER
+{
+    TEXT = " (Vorlage: " ;
+    TEXT [ English ] = " (Template: " ;
+    TEXT [ norwegian ] = " (Template: " ;
+    TEXT [ italian ] = "(Modello: " ;
+    TEXT [ portuguese_brazilian ] = "(Modelo: " ;
+    TEXT [ portuguese ] = "(Modelo: " ;
+    TEXT [ finnish ] = " (Malli: " ;
+    TEXT [ danish ] = "(Skabelon: " ;
+    TEXT [ french ] = "(modèle : " ;
+    TEXT [ swedish ] = "(Mall: " ;
+    TEXT [ dutch ] = "(Sjabloon: " ;
+    TEXT [ spanish ] = "(Plantilla:  " ;
+    TEXT [ english_us ] = " (Template: " ;
+    TEXT[ chinese_simplified ] = "(ÑùÊ½£º ";
+    TEXT[ russian ] = "(Øàáëîí:  ";
+    TEXT[ polish ] = "(Szablon:   ";
+    TEXT[ japanese ] = "(ÃİÌßÚ°Ä: ";
+    TEXT[ chinese_traditional ] = "(¼Ë¦¡¡G ";
+    TEXT[ arabic ] = "(ÇáŞÇáÈ: ";
+    TEXT[ greek ] = "(Ğñüôõğï: ";
+    TEXT[ korean ] = "(ÅÛÇÃ¸®Æ®: ";
+    TEXT[ turkish ] = "(Şablon: ";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_FRMUI_BORDER
+{
+    Text = "Umrandung" ;
+    Text [ English ] = "Border" ;
+    Text [ norwegian ] = "Border" ;
+    Text [ italian ] = "Bordo" ;
+    Text [ portuguese_brazilian ] = "Borda" ;
+    Text [ portuguese ] = "Contornos" ;
+    Text [ finnish ] = "Reunaviiva" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ french ] = "Bordure" ;
+    Text [ swedish ] = "Inramning" ;
+    Text [ dutch ] = "Omranding" ;
+    Text [ spanish ] = "Borde" ;
+    Text [ english_us ] = "Borders" ;
+    Text[ chinese_simplified ] = "±ß¿ò";
+    Text[ russian ] = "Îáğàìëåíèå";
+    Text[ polish ] = "Obramowanie";
+    Text[ japanese ] = "ŠO˜g";
+    Text[ chinese_traditional ] = "Ãä®Ø";
+    Text[ arabic ] = "ÇáÍÏæÏ";
+    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ korean ] = "¿Ü°û¼±";
+    Text[ turkish ] = "Kenarlık";
+    Text[ language_user1 ] = " ";
+};
+String STR_FRMUI_PATTERN
+{
+    Text = "Hintergrund" ;
+    Text [ English ] = "Background" ;
+    Text [ norwegian ] = "Background" ;
+    Text [ italian ] = "Sfondo" ;
+    Text [ portuguese_brazilian ] = "Fundo" ;
+    Text [ portuguese ] = "Plano de fundo" ;
+    Text [ finnish ] = "Tausta" ;
+    Text [ danish ] = "Baggrund" ;
+    Text [ french ] = "Arrière-plan" ;
+    Text [ swedish ] = "Bakgrund" ;
+    Text [ dutch ] = "Achtergrond" ;
+    Text [ spanish ] = "Fondo" ;
+    Text [ english_us ] = "Background" ;
+    Text[ chinese_simplified ] = "±³¾°";
+    Text[ russian ] = "Ôîí";
+    Text[ polish ] = "T³o";
+    Text[ japanese ] = "”wŒi";
+    Text[ chinese_traditional ] = "­I´º";
+    Text[ arabic ] = "ÇáÎáİíÉ";
+    Text[ greek ] = "Öüíôï";
+    Text[ korean ] = "¹è°æ";
+    Text[ turkish ] = "Artalan";
+    Text[ language_user1 ] = " ";
+};
+String STR_FRMUI_WRAP
+{
+    Text = "Umlauf" ;
+    Text [ ENGLISH ] = "Wrap" ;
+    Text [ norwegian ] = "Wrap" ;
+    Text [ italian ] = "Scorrimento" ;
+    Text [ portuguese_brazilian ] = "Circundamento" ;
+    Text [ portuguese ] = "Ajuste" ;
+    Text [ finnish ] = "Kierrätys" ;
+    Text [ danish ] = "Ombrydning" ;
+    Text [ french ] = "Adaptation du texte" ;
+    Text [ swedish ] = "Textanpassning" ;
+    Text [ dutch ] = "Om beeld" ;
+    Text [ spanish ] = "Ajuste" ;
+    Text [ english_us ] = "Wrap" ;
+    Text[ chinese_simplified ] = "»·ÈÆ";
+    Text[ russian ] = "Îáòåêàíèå";
+    Text[ polish ] = "Obieg tekstu";
+    Text[ japanese ] = "Ü‚è•Ô‚µ";
+    Text[ chinese_traditional ] = "´«¦æ";
+    Text[ arabic ] = "ÇáÊİÇİ";
+    Text[ greek ] = "Áíáäßğëùóç";
+    Text[ korean ] = "¼øÈ¯";
+    Text[ turkish ] = "Metin dağılımı";
+    Text[ language_user1 ] = " ";
+};
+InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    /* ### ACHTUNG: Neuer Text in Resource? Der Spaltenabstand ist zu groß für die Spaltenbreite. : Der Spaltenabstand ist zu gro˜ f³r die Spaltenbreite. */
+    MESSAGE = "Der Spaltenabstand ist zu groß für die Spaltenbreite." ;
+    MESSAGE [ English ] = "Gutter width exceeds column width." ;
+    MESSAGE [ norwegian ] = "Gutter width exceeds column width." ;
+    MESSAGE [ italian ] = "La distanza tra le colonne supera la larghezza delle colonne" ;
+    MESSAGE [ portuguese_brazilian ] = "Largura do guter excede largura da coluna." ;
+    MESSAGE [ portuguese ] = "O espaço entre as colunas é grande demais para a largura das colunas." ;
+    MESSAGE [ finnish ] = "Palstojen väli on palstojen leveyttä suurempi." ;
+    MESSAGE [ danish ] = "Kolonneafstanden er for stor til kolonnebredden." ;
+    MESSAGE [ french ] = "Largeur de gouttière excède largeur de colonne." ;
+    MESSAGE [ swedish ] = "Fästmarginalens bredd är för stor för kolumnbredden." ;
+    MESSAGE [ dutch ] = "De kolomafstand is te groot voor deze kolombreedte" ;
+    MESSAGE [ spanish ] = "La distancia entre columnas es demasiado grande para el ancho de las columnas." ;
+    MESSAGE [ english_us ] = "Column spacing exceeds the column width." ;
+    MESSAGE[ chinese_simplified ] = "ÁĞ¼ä¸ôÌ«´ó£¬³¬¹ıÁĞÇøÓò¡£";
+    MESSAGE[ russian ] = "Ğàññòîÿíèå ìåæäó êîëîíêàìè ñëèøêîì áîëüøîå äëÿ øèğèíû êîëîíîê.";
+    MESSAGE[ polish ] = "Odstêp miêdzy kolumnami jest za du¿y dla ich szerokoœci.";
+    MESSAGE[ japanese ] = "—ñ‚ÌŠÔŠu‚ª—ñ‚Ì•‚É‘Î‚µ‚ÄL‚·‚¬‚Ü‚·";
+    MESSAGE[ chinese_traditional ] = "Äæ¶¡¹j¤Ó¤j¡A¶W¹LÄæ°Ï°ì¡C";
+    MESSAGE[ arabic ] = "íİæŞ ÊÈÇÚÏ ÇáÃÚãÏÉ ÚÑÖåÇ.";
+    MESSAGE[ greek ] = "Ç áğüóôáóç óôçëşí õğåñâáßíåé ôï ğëÜôïò ôçò óôŞëçò.";
+    MESSAGE[ korean ] = "¿­ °£°İÀÌ ¿­ ³Êºñ¿¡ ºñÇØ ³Ê¹« ³Ğ½À´Ï´Ù.";
+    MESSAGE[ turkish ] = "Sütun aralığı, sütun genişliği için çok büyük.";
+    MESSAGE[ language_user1 ] = " ";
+};

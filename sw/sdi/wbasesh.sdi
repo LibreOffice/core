@@ -1,0 +1,48 @@
+/*-----------------------------------------------------------------------
+
+    $Workfile:   WBASESH.IDL  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wbasesh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File SwWebBaseShell fuer StarWriter/WEB
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface WebSelection : BaseTextSelection
+[
+    Automation = FALSE;
+]
+{
+    // hier kommt nur dann etwas hinein, wenn es im
+    // kompletten StarWriter nicht benoetigt wird
+}
+
+shell SwWebBaseShell
+{
+        import WebSelection[Automation];
+        import Interior "Interior";
+        import Shadow "Shadow";
+
+}
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.3  1997/08/28 10:52:44  MBA
+    Neue Interface-Namen
+
+
+      Rev 1.2   28 Aug 1997 12:52:44   MBA
+   Neue Interface-Namen
+
+      Rev 1.1   23 Jan 1997 14:41:16   OS
+   jetzt SwWebBaseShell
+
+      Rev 1.0   23 Jan 1997 08:41:06   OS
+   Initial revision.
+
+
+------------------------------------------------------------------------*/
+
+

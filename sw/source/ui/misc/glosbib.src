@@ -1,0 +1,280 @@
+/*************************************************************************
+ *
+ *  $RCSfile: glosbib.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "glosbib.hrc"
+#include "misc.hrc"
+#include "helpid.h"
+ModalDialog DLG_BIB_BASE
+{
+    HelpID = HID_BIB_BASE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 349 , 121 ) ;
+    Moveable = TRUE ;
+    Text = "Bereiche bearbeiten" ;
+    Text [ ENGLISH ] = "Edit groups" ;
+    Text [ dutch ] = "Bereiken bewerken" ;
+    Text [ english_us ] = "Edit Categories" ;
+    Text [ italian ] = "Modifica categorie" ;
+    Text [ spanish ] = "Modificar ·reas" ;
+    Text [ french ] = "…dition des catÈgories" ;
+    Text [ swedish ] = "Redigera omrÂden" ;
+    Text [ danish ] = "Rediger omrÂder" ;
+    Text [ portuguese ] = "Editar categorias" ;
+    Text [ portuguese_brazilian ] = "Bereiche bearbeiten" ;
+    PushButton PB_NEW
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 293 , 66 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Neu" ;
+        Text [ ENGLISH ] = "~New" ;
+        Text [ norwegian ] = "~New" ;
+        Text [ italian ] = "~Nuovo" ;
+        Text [ portuguese_brazilian ] = "~Novo" ;
+        Text [ portuguese ] = "~Novo" ;
+        Text [ finnish ] = "~Uusi" ;
+        Text [ danish ] = "Ny" ;
+        Text [ french ] = "~Nouvelle" ;
+        Text [ swedish ] = "~Nytt" ;
+        Text [ dutch ] = "~Nieuw" ;
+        Text [ spanish ] = "~Nuevo" ;
+        Text [ english_us ] = "~New" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "–¬Ω®(~N)";
+        Text[ russian ] = "—ÓÁ‰~‡Ú¸";
+        Text[ polish ] = "Nowy";
+        Text[ japanese ] = "êVãKçÏê¨(~N)";
+        Text[ chinese_traditional ] = "∂}±“∑s¿…(~N)";
+        Text[ arabic ] = "ÃœÌœ";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
+        Text[ korean ] = "ªı∑Œ(~N)";
+        Text[ turkish ] = "~Yeni";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_DELETE
+    {
+        Pos = MAP_APPFONT ( 293 , 83 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
+        Text = "~Lˆschen" ;
+        Text [ ENGLISH ] = "~Delete" ;
+        Text [ norwegian ] = "~Slett" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ portuguese_brazilian ] = "~Apagar" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+        Text[ chinese_simplified ] = "…æ≥˝(~D)";
+        Text[ russian ] = "”‰‡ÎËÚ¸";
+        Text[ polish ] = "UsuÒ";
+        Text[ japanese ] = "çÌèú(~D)";
+        Text[ chinese_traditional ] = "ßR∞£(~D)";
+        Text[ arabic ] = "Õ–›";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "ªË¡¶(~D)";
+        Text[ turkish ] = "~Sil";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_RENAME
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 293 , 100 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Umbenennen" ;
+        Text [ ENGLISH ] = "Ren~ame" ;
+        Text [ dutch ] = "~Naam wijzigen" ;
+        Text [ english_us ] = "~Rename" ;
+        Text [ italian ] = "~Rinomina" ;
+        Text [ spanish ] = "~Cambiar nombre" ;
+        Text [ french ] = "~Renommer" ;
+        Text [ swedish ] = "~Byt namn" ;
+        Text [ danish ] = "Omd¯b" ;
+        Text [ portuguese ] = "~Mudar nome" ;
+        TabStop = TRUE ;
+        Text[ portuguese_brazilian ] = "Ren~ame";
+        Text[ chinese_simplified ] = "÷ÿ√¸√˚(~R)";
+        Text[ russian ] = "œÂÂËÏÂÌÓ‚‡Ú¸";
+        Text[ polish ] = "ZmieÒ nazwÍ";
+        Text[ japanese ] = "ñºëOÇÃïœçX(~R)";
+        Text[ chinese_traditional ] = "≠´∑s©R¶W(~R)";
+        Text[ arabic ] = "≈⁄«œ… «· ”„Ì…";
+        Text[ greek ] = "ÃÂÙÔÌÔÏ·Ûﬂ·";
+        Text[ korean ] = "¿Ã∏ß πŸ≤Ÿ±‚(~R)";
+        Text[ turkish ] = "Y~eniden adland˝r";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_BIB
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 281 , 111 ) ;
+        Text = "Bereich" ;
+        Text [ ENGLISH ] = "Group" ;
+        Text [ norwegian ] = "Gruppe" ;
+        Text [ italian ] = "Sezione" ;
+        Text [ portuguese_brazilian ] = "Grupo" ;
+        Text [ portuguese ] = "Categoria" ;
+        Text [ finnish ] = "Ryhm‰" ;
+        Text [ danish ] = "OmrÂde" ;
+        Text [ french ] = "CatÈgorie" ;
+        Text [ swedish ] = "OmrÂde" ;
+        Text [ dutch ] = "Bereik" ;
+        Text [ spanish ] = "Area" ;
+        Text [ english_us ] = "Category" ;
+        Text[ chinese_simplified ] = "∑÷¿‡";
+        Text[ russian ] = " ‡ÚÂ„ÓËˇ";
+        Text[ polish ] = "Obszar";
+        Text[ japanese ] = "ï™óﬁ";
+        Text[ chinese_traditional ] = "∞œ∞Ï";
+        Text[ arabic ] = "›∆…";
+        Text[ greek ] = " ·ÙÁ„ÔÒﬂ·";
+        Text[ korean ] = "«◊∏Ò ∫–∑˘";
+        Text[ turkish ] = "Kategori";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 293 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 293 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 293 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Edit ED_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 159 , 12 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        MaxTextLength = 256 ;
+    };
+    ListBox LB_PATH
+    {
+        Pos = MAP_APPFONT ( 174 , 14 ) ;
+        Size = MAP_APPFONT ( 107 , 50 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    Control TLB_GROUPS
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 269 , 61 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    /*    ComboBox CO_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 89 , 76 ) ;
+        TabStop = TRUE ;
+#ifdef WIN
+        MaxTextLength = 8 ;
+#else
+        MaxTextLength = 32 ;
+#endif
+        Sort = TRUE ;
+    };*/
+    Text[ chinese_simplified ] = "±‡º≠«¯”Ú";
+    Text[ russian ] = "œ‡‚Í‡ Í‡ÚÂ„ÓËÈ";
+    Text[ polish ] = "Edytuj obszary";
+    Text[ japanese ] = "ï™óﬁÇÃï“èW";
+    Text[ chinese_traditional ] = "ΩsøË∞œ∞Ï";
+    Text[ arabic ] = " Õ—Ì— «·›∆« ";
+    Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ· Í·ÙÁ„ÔÒÈ˛Ì";
+    Text[ korean ] = "∫–∑˘ «◊∏Ò ∆Ì¡˝";
+    Text[ turkish ] = "Kategorileri d¸zenle";
+    Text[ language_user1 ] = " ";
+};
+/*
+String STR_GLOSSARY_BIB_DLG
+{
+    Text = "Bereiche bearbeiten" ;
+    Text [ ENGLISH ] = "Edit groups" ;
+    Text [ dutch ] = "Bereiken bewerken" ;
+    Text [ english_us ] = "Edit Categories" ;
+    Text [ italian ] = "Modifica aree" ;
+    Text [ spanish ] = "Editar secciones" ;
+    Text [ french ] = "Modifier sections" ;
+    Text [ swedish ] = "Redigera omrÂden" ;
+    Text [ danish ] = "Rediger omrÂde" ;
+    Text [ portuguese ] = "Editar secÁıes" ;
+    Text [ portuguese_brazilian ] = "Bereiche bearbeiten" ;
+};*/

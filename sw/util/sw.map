@@ -1,0 +1,13 @@
+SW_1_0 {
+    global:
+        CreateSwDocShellDll;
+        CreateSwWebDocShellDll;
+        CreateSwGlobalDocShellDll;
+        CreateObjSwDocShellDll;
+        CreateObjSwWebDocShellDll;
+        CreateObjSwGlobalDocShellDll;
+        InitSwDll;
+        DeInitSwDll;
+    local:
+        *;
+};

@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ *  $RCSfile: docvw.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DOCVW_HRC
+#define _DOCVW_HRC
+
+#include "rcid.hrc"
+
+#define MN_READONLY_POPUP               (RC_DOCVW_BEGIN + 1)
+#define MN_READONLY_OPENURL             (RC_DOCVW_BEGIN + 2)
+#define MN_READONLY_OPENURLNEW          (RC_DOCVW_BEGIN + 3)
+#define MN_READONLY_EDITDOC             (RC_DOCVW_BEGIN + 4)
+#define MN_READONLY_BROWSE_STOP         (RC_DOCVW_BEGIN + 5)
+#define MN_READONLY_BROWSE_BACKWARD     (RC_DOCVW_BEGIN + 6)
+#define MN_READONLY_BROWSE_FORWARD      (RC_DOCVW_BEGIN + 7)
+#define MN_READONLY_CREATELINK          (RC_DOCVW_BEGIN + 8)
+#define MN_READONLY_CREATEGRAPHIKLINK   (RC_DOCVW_BEGIN + 9)
+#define MN_READONLY_DOWNLOAD            (RC_DOCVW_BEGIN + 10)
+#define MN_READONLY_SAVEGRAPHIC         (RC_DOCVW_BEGIN + 11)
+#define MN_READONLY_SAVEBACKGROUND      (RC_DOCVW_BEGIN + 12)
+#define MN_READONLY_COPYLINK            (RC_DOCVW_BEGIN + 13)
+#define MN_READONLY_COPYGRAPHIC         (RC_DOCVW_BEGIN + 14)
+#define MN_READONLY_LOADGRAPHIC         (RC_DOCVW_BEGIN + 15)
+#define MN_READONLY_GRAPHICOFF          (RC_DOCVW_BEGIN + 16)
+#define MN_READONLY_PLUGINOFF           (RC_DOCVW_BEGIN + 17)
+#define MN_READONLY_TOGALLERYLINK       (RC_DOCVW_BEGIN + 18)
+#define MN_READONLY_TOGALLERYCOPY       (RC_DOCVW_BEGIN + 19)
+#define MN_READONLY_SOURCEVIEW          (RC_DOCVW_BEGIN + 20)
+#define MN_READONLY_RELOAD_FRAME        (RC_DOCVW_BEGIN + 21)
+#define MN_READONLY_RELOAD              (RC_DOCVW_BEGIN + 22)
+
+//Bei den folgenden brauchen wir Luft fuer die Gallery-Themen
+#define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 23)
+#define MN_READONLY_BACKGROUNDTOGALLERY (RC_DOCVW_BEGIN + 60)
+
+
+#define STR_EXPORT_GRAFIK_TITLE         (RC_DOCVW_BEGIN + 1)
+#define STR_CHAIN_OK                    (RC_DOCVW_BEGIN + 2)
+#define STR_CHAIN_NOT_EMPTY             (RC_DOCVW_BEGIN + 3)
+#define STR_CHAIN_IS_IN_CHAIN           (RC_DOCVW_BEGIN + 4)
+#define STR_CHAIN_WRONG_AREA            (RC_DOCVW_BEGIN + 5)
+#define STR_CHAIN_NOT_FOUND             (RC_DOCVW_BEGIN + 6)
+#define STR_CHAIN_SOURCE_CHAINED        (RC_DOCVW_BEGIN + 7)
+#define STR_CHAIN_SELF                  (RC_DOCVW_BEGIN + 8)
+#define STR_REDLINE_INSERT              (RC_DOCVW_BEGIN + 9)
+#define STR_REDLINE_DELETE              (RC_DOCVW_BEGIN + 10)
+#define STR_REDLINE_FORMAT              (RC_DOCVW_BEGIN + 11)
+#define STR_REDLINE_TABLE               (RC_DOCVW_BEGIN + 12)
+#define STR_REDLINE_FMTCOLL             (RC_DOCVW_BEGIN + 13)
+#define STR_ENDNOTE                     (RC_DOCVW_BEGIN + 14)
+#define STR_FTNNOTE                     (RC_DOCVW_BEGIN + 15)
+
+#define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
+
+#define DOCVW_ACT_END   MN_READONLY_BACKGROUNDTOGALLERY
+
+#if DOCVW_ACT_END > RC_DOCVW_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+
+#endif

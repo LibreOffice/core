@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ *  $RCSfile: splittbl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "table.hrc"
+#include "splittbl.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_SPLIT_TABLE
+{
+    HelpID = FN_TABLE_SPLIT_TABLE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 207 , 76 ) ;
+    Text = "Tabelle auftrennen" ;
+    Text [ ENGLISH ] = "Split table" ;
+    Moveable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 151 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 151 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 151 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_SPLIT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 139 , 70 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ swedish ] = "Läge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ russian ] = "Ğåæèì";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "Ó°ÄŞ";
+        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ arabic ] = "ÇáæÖÚ";
+        Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
+        Text[ korean ] = "¸ğµå";
+        Text[ turkish ] = "Kip";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CNTNT
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "~Überschrift kopieren" ;
+        Text [ ENGLISH ] = "~Copy Heading" ;
+        Check = TRUE ;
+        TabStop = TRUE ;
+        Text [ portuguese ] = "~Copiar título" ;
+        Text [ english_us ] = "~Copy heading" ;
+        Text [ portuguese_brazilian ] = "~Überschrift kopieren" ;
+        Text [ swedish ] = "Kopiera ~överskrift" ;
+        Text [ danish ] = "Kopier overskrift" ;
+        Text [ italian ] = "~Copia intestazione" ;
+        Text [ spanish ] = "~Copiar encabezado" ;
+        Text [ french ] = "~Copier titre" ;
+        Text [ dutch ] = "~Kop kopiëren" ;
+        Text[ chinese_simplified ] = "¸´ÖÆ±êÌâ(~C)";
+        Text[ russian ] = "Êîïèğîâàòü çàãîëîâîê";
+        Text[ polish ] = "Kopiuj tytu³";
+        Text[ japanese ] = "Œ©o‚µ‚ÌºËß°(~C)";
+        Text[ chinese_traditional ] = "½Æ»s¼ĞÃD(~C)";
+        Text[ arabic ] = "äÓÎ ÇáÚäæÇä";
+        Text[ greek ] = "ÁíôéãñáöŞ åğéêåöáëßäáò";
+        Text[ korean ] = "Á¦¸ñ º¹»ç(~C)";
+        Text[ turkish ] = "B~aşlığı kopyala";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_BOX_PARA
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "~Eigene Überschrift, mit Vorlage" ;
+        Text [ ENGLISH ] = "New heading ~with style" ;
+        Text [ portuguese ] = "Título ~personalizado (com modelo)" ;
+        Text [ english_us ] = "C~ustom heading (apply Style)" ;
+        Text [ portuguese_brazilian ] = "~Eigene Überschrift, mit Vorlage" ;
+        Text [ swedish ] = "~Egen överskrift, med mall" ;
+        Text [ danish ] = "Egen overskrift, med typografi" ;
+        Text [ italian ] = "~Propria intestazione con modello" ;
+        Text [ spanish ] = "~Encabezado propio, con estilos" ;
+        Text [ french ] = "Titre personnalisé, avec ~style" ;
+        Text [ dutch ] = "~Eigen kop, met opmaakprofiel" ;
+        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ£¬´øÑùÊ½(~S)";
+        Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ ñ øàáëîíîì";
+        Text[ polish ] = "Tytu³ u¿ytkownika, z szablonem";
+        Text[ japanese ] = "½À²Ù•t‚«Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~S)";
+        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD¡A±a¼Ë¦¡(~S)";
+        Text[ arabic ] = "ÚäæÇä ÎÇÕ (ÊØÈíŞ ÇáäãØ)";
+        Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá (ìå óôõë)";
+        Text[ korean ] = "»ç¿ëÀÚ Á¦¸ñ (À¯Çü Àû¿ë)(~U)";
+        Text[ turkish ] = "~Özel başlık (biçim uygula)";
+        Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    };
+    RadioButton RB_BOX_NOPARA
+    {
+        Pos = MAP_APPFONT ( 12 , 45 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "E~igene Überschrift" ;
+        Text [ ENGLISH ] = "~New heading" ;
+        Text [ portuguese ] = "Título ~personalizado" ;
+        Text [ english_us ] = "Cu~stom heading" ;
+        Text [ portuguese_brazilian ] = "E~igene Überschrift" ;
+        Text [ swedish ] = "E~gen överskrift" ;
+        Text [ danish ] = "Egen overskrift" ;
+        Text [ italian ] = "Propria ~intestazione" ;
+        Text [ spanish ] = "Encabezado ~propio" ;
+        Text [ french ] = "Titre ~personnalisé" ;
+        Text [ dutch ] = "E~igen kop" ;
+        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ(~H)";
+        Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ";
+        Text[ polish ] = "Tytu³ u¿ytkownika";
+        Text[ japanese ] = "Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~H)";
+        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD(~H)";
+        Text[ arabic ] = "ÚäæÇä ÎÇÕ";
+        Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá";
+        Text[ korean ] = "»ç¿ëÀÚ Á¦¸ñ(~S)";
+        Text[ turkish ] = "Ö~zel başlık";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_BORDER
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text = "~Keine Überschrift" ;
+        Text [ ENGLISH ] = "N~o heading" ;
+        Text [ portuguese ] = "~Sem título" ;
+        Text [ english_us ] = "~No heading" ;
+        Text [ portuguese_brazilian ] = "~Keine Überschrift" ;
+        Text [ swedish ] = "~Ingen överskrift" ;
+        Text [ danish ] = "Ingen overskrift" ;
+        Text [ italian ] = "~Senza intestazione" ;
+        Text [ spanish ] = "~Sin encabezado" ;
+        Text [ french ] = "~Pas de titre" ;
+        Text [ dutch ] = "~Geen kop" ;
+        Text[ chinese_simplified ] = "ÎŞ±êÌâ(~N)";
+        Text[ russian ] = "Áåç çàãîëîâêà";
+        Text[ polish ] = "Bez tytu³u";
+        Text[ japanese ] = "Œ©o‚µ‚È‚µ(~N)";
+        Text[ chinese_traditional ] = "µL¼ĞÃD(~N)";
+        Text[ arabic ] = "ÈÏæä ÚäæÇä";
+        Text[ greek ] = "×ùñßò åğéêåöáëßäá";
+        Text[ korean ] = "Á¦¸ñÀÌ ¾øÀ½(~N)";
+        Text[ turkish ] = "~Başlık yok";
+        Text[ language_user1 ] = " ";
+    };
+    Text [ english_us ] = "Split Table" ;
+    Text [ portuguese_brazilian ] = "Tabelle auftrennen" ;
+    Text [ swedish ] = "Dela tabell" ;
+    Text [ danish ] = "Opdel tabel" ;
+    Text [ italian ] = "Dividi tabella" ;
+    Text [ spanish ] = "Dividir tabla" ;
+    Text [ french ] = "Scinder le tableau" ;
+    Text [ dutch ] = "Tabel splitsen" ;
+    Text [ portuguese ] = "Dividir tabela" ;
+    Text[ chinese_simplified ] = "·Ö¸ô±í¸ñ";
+    Text[ russian ] = "Ğàçáèòü òàáëèöó";
+    Text[ polish ] = "Rozdziel tabelê";
+    Text[ japanese ] = "•\\‚Ì•ªŠ„";
+    Text[ chinese_traditional ] = "¤À¶}Àx¦s®æ";
+    Text[ arabic ] = "İÕá ÇáÌÏæá";
+    Text[ greek ] = "Äéáßñåóç ğßíáêá";
+    Text[ korean ] = "Ç¥ ³ª´©±â";
+    Text[ turkish ] = "Tabloyu böl";
+    Text[ language_user1 ] = " ";
+};

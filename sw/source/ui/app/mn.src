@@ -1,0 +1,599 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mn.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+
+#include "swmn.hrc"
+
+/*------------------------------------------------------------------------
+ Beschreibung: Menu Window
+------------------------------------------------------------------------*/
+
+
+/*--Popups---------------------------------------------------------------*/
+
+String MN_TEXT_POPUPMENU
+{
+    Text = "Text" ;
+    Text [ English ] = "Text" ;
+    Text [ norwegian ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ portuguese_brazilian ] = "Texto" ;
+    Text [ portuguese ] = "Texto" ;
+    Text [ finnish ] = "Teksti" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ french ] = "Texte" ;
+    Text [ swedish ] = "Text" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ english_us ] = "Text" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ russian ] = "Òåêñò";
+    Text[ polish ] = "tekst";
+    Text[ japanese ] = "Ã·½Ä";
+    Text[ chinese_traditional ] = "¤å¦r";
+    Text[ arabic ] = "äÕ";
+    Text[ greek ] = "Êåßìåíï";
+    Text[ korean ] = "ÅØ½ºÆ®";
+    Text[ turkish ] = "Metin";
+};
+
+
+String MN_TAB_POPUPMENU
+{
+    Text = "Tabelle" ;
+    Text [ English ] = "Table" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Tabela" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Tabel" ;
+    Text [ french ] = "Tableau" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ dutch ] = "Tabel" ;
+    Text [ spanish ] = "Tabla" ;
+    Text [ english_us ] = "Table" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ polish ] = "tabela";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏæá";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "Ç¥";
+    Text[ turkish ] = "Tablo";
+};
+
+Menu MN_TAB_POPUPMENU
+{
+    ItemList =
+    {
+        MN_RESET
+        SEPARATOR ;
+        MN_TEXT_ATTR
+        SEPARATOR ;
+        MenuItem
+        {
+            ITEM_FORMAT_CHAR_DLG
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_PARA_DLG
+        };
+         //     MN_BB
+        SEPARATOR ;
+        MN_TAB1
+        MN_TAB2
+        MN_FRM_CAPTION_ITEM
+         //     SEPARATOR;
+        MenuItem
+        {
+            Identifier = FN_VIEW_TABLEGRID ;
+            HelpID = FN_VIEW_TABLEGRID ;
+            Text = "Tabellenbegrenz~ung" ;
+            Text [ English ] = "Grid lines" ;
+            Text [ norwegian ] = "Rutenettlinjer" ;
+            Text [ italian ] = "Limte tabella" ;
+            Text [ portuguese_brazilian ] = "Linhas da Grade" ;
+            Text [ portuguese ] = "~Limites da tabela" ;
+            Text [ finnish ] = "Taustaruudukko" ;
+            Text [ danish ] = "Gitterlinjer" ;
+            Text [ french ] = "Délimitations de t~ableau" ;
+            Text [ swedish ] = "Tabellbegr~änsning" ;
+            Text [ dutch ] = "Tabelbegren~zing" ;
+            Text [ spanish ] = "~Límites de la tabla" ;
+            Text [ english_us ] = "Table Limits" ;
+            Text[ chinese_simplified ] = "±í¸ñ±ß½ç";
+            Text[ russian ] = "Ãğàíèöû òàáëèöû";
+            Text[ polish ] = "obramowanie tabeli";
+            Text[ japanese ] = "•\\‚Ì‹«ŠE";
+            Text[ chinese_traditional ] = "ªí®æÃä¬É";
+            Text[ arabic ] = "ÍÏæÏ ÇáÌÏæá";
+            Text[ greek ] = "¼~ñéá ğßíáêá";
+            Text[ korean ] = "Ç¥ °æ°è";
+            Text[ turkish ] = "Tablo sınırlamaları";
+        };
+        MenuItem
+        {
+            Identifier = FN_SET_MODOPT_TBLNUMFMT ;
+            HelpID = FN_SET_MODOPT_TBLNUMFMT ;
+            Text = "Zahlen~erkennung" ;
+            Text [ ENGLISH ] = "Number recognition" ;
+            Text[ english_us ] = "~Number recognition";
+            Text[ portuguese ] = "~Reconhecer números";
+            Text[ russian ] = "Ğàñïîçíàíèå ÷èñëà";
+            Text[ greek ] = "Áíáãíşñ~éóç áñéèìşí";
+            Text[ dutch ] = "Getal~herkenning";
+            Text[ french ] = "~Reconnaissance des nombres";
+            Text[ spanish ] = "~Reconocimiento de número";
+            Text[ italian ] = "Riconoscim~ento numeri";
+            Text[ danish ] = "Talgenkendelse";
+            Text[ swedish ] = "Talig~enkänning";
+            Text[ polish ] = "Rozpoznawanie liczb";
+            Text[ portuguese_brazilian ] = "Number recognition";
+            Text[ japanese ] = "”š‚Ì”F¯";
+            Text[ korean ] = "¼ıÀÚ ÀÎ½Ä(~N)";
+            Text[ chinese_simplified ] = "Êı×ÖÊ¶±ğ";
+            Text[ chinese_traditional ] = "ÃÑ§O¼Æ¦r";
+            Text[ arabic ] = "ÊÚÑíİ ÇáÃÑŞÇã";
+            Text[ turkish ] = "Sayı tanıma";
+        };
+    };
+};
+
+
+String MN_FRM_POPUPMENU
+{
+    Text = "Rahmen" ;
+    Text [ English ] = "Frame" ;
+    Text [ norwegian ] = "Ramme" ;
+    Text [ italian ] = "Cornice" ;
+    Text [ portuguese_brazilian ] = "Moldura" ;
+    Text [ portuguese ] = "Moldura" ;
+    Text [ finnish ] = "Kehys" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ french ] = "Cadre" ;
+    Text [ swedish ] = "Ram" ;
+    Text [ dutch ] = "Kader" ;
+    Text [ spanish ] = "Marco" ;
+    Text [ english_us ] = "Frame" ;
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ russian ] = "Ğàìêà";
+    Text[ polish ] = "ramka";
+    Text[ japanese ] = "Ã·½Ä ÎŞ¯¸½";
+    Text[ chinese_traditional ] = "¤å¥»¤è¶ô";
+    Text[ arabic ] = "ÅØÇÑ";
+    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ korean ] = "ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Çerçeve";
+};
+
+Menu MN_FRM_POPUPMENU
+{
+    ItemList =
+    {
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_BEGIN
+        MN_MOUSE_FRAME_END
+        SEPARATOR ;
+        MN_FRM
+        MN_FRM_CAPTION_ITEM
+    };
+};
+
+String MN_DRAW_POPUPMENU
+{
+    Text = "Grafik" ;
+    Text [ English ] = "Graphic" ;
+    Text [ norwegian ] = "Graphic" ;
+    Text [ italian ] = "Grafico" ;
+    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text [ finnish ] = "Kuva" ;
+    Text [ danish ] = "Billede" ;
+    Text [ french ] = "Image" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ english_us ] = "Graphic" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ polish ] = "Grafika";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ chinese_traditional ] = "¹Ï¤ù";
+    Text[ arabic ] = "ÑÓæã";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+};
+
+Menu MN_DRAW_POPUPMENU
+{
+    ItemList =
+    {
+        MN_DRAW1
+        MN_DRWTXTATTR
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_TRANSFORM
+        };
+        SEPARATOR ;
+        MN_DRAW5
+        MN_WRAP_DRAW
+        MN_ANCHOR
+        MN_FRM_CAPTION_ITEM
+        SEPARATOR ;
+        MN_DRAW3
+    };
+};
+
+String MN_DRAWFORM_POPUPMENU
+{
+    Text = "Kontrollfeld" ;
+    Text [ English ] = "Control field" ;
+    Text [ english_us ] = "Control" ;
+    Text [ portuguese_brazilian ] = "Kontrollfeld" ;
+    Text [ swedish ] = "Kontrollfält" ;
+    Text [ danish ] = "Kontrolelement" ;
+    Text [ italian ] = "Campo di controllo" ;
+    Text [ spanish ] = "Campo de control" ;
+    Text [ french ] = "Champ de contrôle" ;
+    Text [ dutch ] = "Controleveld" ;
+    Text [ portuguese ] = "Campo de controlo" ;
+    Text[ chinese_simplified ] = "¿ØÖÆ";
+    Text[ russian ] = "İëåìåíò óïğàâëåíèÿ";
+    Text[ polish ] = "Pole kontrolne";
+    Text[ japanese ] = "ºİÄÛ°Ù";
+    Text[ chinese_traditional ] = "±±¨î¶µ";
+    Text[ arabic ] = "ÚäÕÑ ÊÍßã";
+    Text[ greek ] = "Ğåäßï åëİã÷ïõ";
+    Text[ korean ] = "ÄÁÆ®·Ñ";
+    Text[ turkish ] = "Komut alanı";
+};
+
+Menu MN_DRAWFORM_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_TRANSFORM
+        };
+        MN_FORM
+        SEPARATOR ;
+        MN_DRAW6
+        MN_WRAP_DRAW
+        MN_ANCHOR
+        SEPARATOR ;
+        MN_DRAW3
+    };
+};
+
+String MN_DRWTXT_POPUPMENU
+{
+    Text = "Zeichenobjekt Text" ;
+    Text [ English ] = "Draw object text" ;
+    Text [ english_us ] = "Draw Object text" ;
+    Text [ italian ] = "Oggetto di disegno testo" ;
+    Text [ spanish ] = "Texto del objeto de dibujo" ;
+    Text [ french ] = "Texte objet de dessin" ;
+    Text [ dutch ] = "Tekenobject tekst" ;
+    Text [ swedish ] = "Ritobjekt text" ;
+    Text [ danish ] = "Tegneobjekt tekst" ;
+    Text [ portuguese ] = "Texto do objecto de desenho" ;
+    Text [ portuguese_brazilian ] = "Zeichenobjekt Text" ;
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó ÎÄ×Ö";
+    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò Òåêñò";
+    Text[ polish ] = "Tekst w obiekcie rysunkowym";
+    Text[ japanese ] = "}Œ`µÌŞ¼Şª¸Ä@Ã·½Ä";
+    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó ¤å¦r";
+    Text[ arabic ] = "äÕ ßÇÆä ÑÓæãí";
+    Text[ greek ] = "Êåßìåíï áíôéêåéìİíïõ ó÷åäßáóçò";
+    Text[ korean ] = "±×¸®±â °³Ã¼ ÅØ½ºÆ®";
+    Text[ turkish ] = "Çizim nesnesi metni";
+};
+
+Menu MN_DRWTXT_POPUPMENU
+{
+    ItemList =
+    {
+        MN_RESET
+        SEPARATOR ;
+        MN_TEXT_ATTR
+        SEPARATOR ;
+        MN_DRWTXT
+        MN_FRM_CAPTION_ITEM
+    };
+};
+
+String MN_GRF_POPUPMENU
+{
+    Text = "Grafik" ;
+    Text [ English ] = "Graphic" ;
+    Text [ norwegian ] = "Graphic" ;
+    Text [ italian ] = "Immagine" ;
+    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text [ finnish ] = "Kuva" ;
+    Text [ danish ] = "Billede" ;
+    Text [ french ] = "Image" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ english_us ] = "Graphic" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ğèñóíîê";
+    Text[ polish ] = "Grafika";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ chinese_traditional ] = "¹Ï¤ù";
+    Text[ arabic ] = "ÑÓæã";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+};
+
+Menu MN_GRF_POPUPMENU
+{
+    ItemList =
+    {
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_BEGIN
+        MN_WRAP_CONTOUR
+        MN_EDIT_CONTOUR
+        MN_MOUSE_FRAME_END
+        SEPARATOR ;
+        MN_GRAFIC
+        MN_FRM_CAPTION_ITEM
+        MenuItem
+        {
+            ITEM_EDIT_IMAP
+        };
+    };
+};
+
+String MN_OLE_POPUPMENU
+{
+    Text = "Objekt" ;
+    Text [ English ] = "Object" ;
+    Text [ norwegian ] = "Object" ;
+    Text [ italian ] = "Oggetto" ;
+    Text [ portuguese_brazilian ] = "Objeto" ;
+    Text [ portuguese ] = "Objecto" ;
+    Text [ finnish ] = "Objekti" ;
+    Text [ danish ] = "Objekt" ;
+    Text [ french ] = "Objet" ;
+    Text [ swedish ] = "Objekt" ;
+    Text [ dutch ] = "Object" ;
+    Text [ spanish ] = "Objeto" ;
+    Text [ english_us ] = "Object" ;
+    Text[ chinese_simplified ] = "¶ÔÏó";
+    Text[ russian ] = "Îáúåêò";
+    Text[ polish ] = "Obiekt";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "ª«¥ó";
+    Text[ arabic ] = "ßÇÆä";
+    Text[ greek ] = "Áíôéêåßìåíï";
+    Text[ korean ] = "°³Ã¼";
+    Text[ turkish ] = "Nesne";
+};
+
+
+Menu MN_OLE_POPUPMENU
+{
+    ItemList =
+    {
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_BEGIN
+        MN_WRAP_CONTOUR
+        MN_EDIT_CONTOUR
+        MN_MOUSE_FRAME_END
+        SEPARATOR ;
+        MN_OLE
+        MN_FRM_CAPTION_ITEM
+    };
+};
+
+String MN_PPREVIEW_POPUPMENU
+{
+    Text = "Zeichenobjekt Text" ;
+    Text [ English ] = "Draw object text" ;
+    Text [ english_us ] = "Draw Object text" ;
+    Text [ italian ] = "Oggetto di diesegno testo" ;
+    Text [ spanish ] = "Texto del objeto de dibujo" ;
+    Text [ french ] = "Texte objet de dessin" ;
+    Text [ dutch ] = "Tekenobject tekst" ;
+    Text [ swedish ] = "Ritobjekt text" ;
+    Text [ danish ] = "Tegneobjekt" ;
+    Text [ portuguese ] = "Texto do objecto de desenho" ;
+    Text [ portuguese_brazilian ] = "Zeichenobjekt Text" ;
+    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó ÎÄ×Ö";
+    Text[ russian ] = "Òåêñò ãğàôè÷åñêîãî îáúåêòà";
+    Text[ polish ] = "Tekst w obiekcie rysunkowym";
+    Text[ japanese ] = "}Œ`µÌŞ¼Şª¸Ä Ã·½Ä";
+    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó ¤å¦r";
+    Text[ arabic ] = "äÕ ßÇÆä ÑÓæãí";
+    Text[ greek ] = "Êåßìåíï áíôéêåéìİíïõ ó÷åäßáóçò";
+    Text[ korean ] = "±×¸®±â °´Ã¼ ÅØ½ºÆ®";
+    Text[ turkish ] = "Çizim nesnesi metni";
+};
+
+Menu MN_PPREVIEW_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = FN_PAGEUP ;
+            HelpID = FN_PAGEUP ;
+            Text = "Vorherige Seite" ;
+            Text [ ENGLISH ] = "Previous page" ;
+            Text [ dutch ] = "Vorige pagina" ;
+            Text [ english_us ] = "Previous Page" ;
+            Text [ italian ] = "Pagina precedente" ;
+            Text [ spanish ] = "Página anterior" ;
+            Text [ french ] = "Page précédente" ;
+            Text [ swedish ] = "Föregående sida" ;
+            Text [ danish ] = "Forrige side" ;
+            Text [ portuguese_brazilian ] = "Vorherige Seite" ;
+            Text [ portuguese ] = "Página anterior" ;
+            Text[ chinese_simplified ] = "ÉÏÒ»Ò³";
+            Text[ russian ] = "Ïğåäûäóùàÿ ñòğàíèöà";
+            Text[ polish ] = "Poprzednia strona";
+            Text[ japanese ] = "‘O‚ÌÍß°¼Ş";
+            Text[ chinese_traditional ] = "¤W¤@­¶";
+            Text[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
+            Text[ greek ] = "Ğñïçãïıìåíç óåëßäá";
+            Text[ korean ] = "ÀÌÀü ÆäÀÌÁö";
+            Text[ turkish ] = "Önceki sayfa";
+        };
+        MenuItem
+        {
+            Identifier = FN_PAGEDOWN ;
+            HelpID = FN_PAGEDOWN ;
+            /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
+            Text = "Nächste Seite" ;
+            Text [ ENGLISH ] = "Next page" ;
+            Text [ dutch ] = "Volgende pagina" ;
+            Text [ english_us ] = "Next Page" ;
+            Text [ italian ] = "Pagina successiva" ;
+            Text [ spanish ] = "Página siguiente" ;
+            Text [ french ] = "Page suivante" ;
+            Text [ swedish ] = "Nästa sida" ;
+            Text [ danish ] = "Næste side" ;
+            Text [ portuguese_brazilian ] = "Nächste Seite" ;
+            Text [ portuguese ] = "Página seguinte" ;
+            Text[ chinese_simplified ] = "ÏÂÒ»Ò³";
+            Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
+            Text[ polish ] = "Nastêpna strona";
+            Text[ japanese ] = "Ÿ‚ÌÍß°¼Ş";
+            Text[ chinese_traditional ] = "¤U¤@­¶";
+            Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
+            Text[ greek ] = "Óôçí åğüìåíç óåëßäá";
+            Text[ korean ] = "´ÙÀ½ ÆäÀÌÁö";
+            Text[ turkish ] = "Sonraki sayfa";
+        };
+        MenuItem
+        {
+            ITEM_VIEW_ATTR_ZOOM
+            /* ### ACHTUNG: Neuer Text in Resource? Schließt die Seitenvorschau : Schlie˜t die Seitenvorschau */
+        };
+        SEPARATOR ;
+        MenuItem
+        {
+            Identifier = FN_PRINT_PAGEPREVIEW ;
+            HelpID = FN_PRINT_PAGEPREVIEW ;
+            Text = "Drucken Seitenansicht" ;
+            Text [ ENGLISH ] = "Print page preview" ;
+            Text [ dutch ] = "Afdrukvoorbeeld afdrukken" ;
+            Text [ english_us ] = "Print" ;
+            Text [ italian ] = "Stampa anteprima pagina" ;
+            Text [ spanish ] = "Imprimir vista preliminar" ;
+            Text [ french ] = "Imprimer l'aperçu" ;
+            Text [ swedish ] = "Skriv ut förhandsgranskning" ;
+            Text [ danish ] = "Udskriv vist udskrift" ;
+            Text [ portuguese ] = "Imprimir Ver página" ;
+            Text [ portuguese_brazilian ] = "Drucken Seitenansicht" ;
+            Text[ chinese_simplified ] = "´òÓ¡Ò³ÃæÔ¤ÊÓ";
+            Text[ russian ] = "Ïå÷àòü âèäà ñòğàíèöû";
+            Text[ polish ] = "Drukuj widok strony";
+            Text[ japanese ] = "ˆóüÌßÚËŞ­°";
+            Text[ chinese_traditional ] = "¦C¦L­¶­±ÀËµø";
+            Text[ arabic ] = "ÇáØÈÇÚÉ ÍÓÈ ÇáãÚÇíäÉ";
+            Text[ language_user1 ] = "ßíİ ÓÊÚÑİ Ãíä ØÈÇÚÉ \\æÃíä ãÚÇíäÉ ÇáÕİÍÉ ŞÈá ØÈÇÚÊåÇ ¿¿¿¿";
+            Text[ greek ] = "Åêôığùóç ğñïåğéóêüğçóçò";
+            Text[ korean ] = "ÀÎ¼â";
+            Text[ turkish ] = "Yazdır";
+        };
+        MenuItem
+        {
+            Identifier = FN_PREVIEW_PRINT_OPTIONS;
+            HelpID = FN_PREVIEW_PRINT_OPTIONS;
+            Text = "Druckoptionen" ;
+            Text [ ENGLISH ] = "Print options" ;
+            Text[ italian ] = "Opzioni di stampa";
+            Text[ portuguese_brazilian ] = "Print options";
+            Text[ portuguese ] = "Opções de impressão";
+            Text[ danish ] = "Udskriftsindstillinger";
+            Text[ french ] = "Options d'impression";
+            Text[ swedish ] = "Skrivaralternativ";
+            Text[ dutch ] = "Afdrukopties";
+            Text[ spanish ] = "Opciones de impresión";
+            Text[ english_us ] = "Print Options";
+            Text[ chinese_simplified ] = "´òÓ¡Ñ¡Ïî";
+            Text[ russian ] = "Ïàğàìåòğû ïå÷àòè";
+            Text[ polish ] = "Opcje druku";
+            Text[ japanese ] = "ˆóüµÌß¼®İ";
+            Text[ chinese_traditional ] = "¦C¦L¿ï¶µ";
+            Text[ arabic ] = "ÎíÇÑÇÊ ÇáØÈÇÚÉ";
+            Text[ greek ] = "Åğéëïãİò åêôığùóçò";
+            Text[ korean ] = "ÀÎ¼â ¿É¼Ç";
+            Text[ turkish ] = "Yazdırma seçenekleri";
+        };
+        SEPARATOR ;
+        MenuItem
+        {
+            ITEM_WINDOW_CLOSEWIN
+            /* ### ACHTUNG: Neuer Text in Resource? Schließt die Seitenvorschau : Schlie˜t die Seitenvorschau */
+        };
+    };
+};
+

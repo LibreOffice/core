@@ -1,0 +1,105 @@
+/*************************************************************************
+ *
+ *  $RCSfile: paradlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define TAB_CONTROL 55
+#define INDENT_FRM 1
+#define LEFT_LABEL 2
+#define FLINE_LABEL 3
+#define RIGHT_LABEL 4
+#define LEFT_INDENT 5
+#define FLINE_INDENT 6
+#define RIGHT_INDENT 7
+#define DIST_FRM 8
+#define TOP_LABEL 9
+#define TOP_DIST 10
+#define BOTTOM_LABEL 11
+#define BOTTOM_DIST 12
+#define ALG_LEFT 13
+#define ALG_RIGHT 50
+#define ALG_CENTER 51
+#define ALG_JUSTIFY 52
+#define ALG_FRM 14
+#define LINEDIST_FRM 15
+#define LINEDIST_BOX 16
+#define LINEDIST_AT_LABEL 17
+#define LINEDIST_AT_PERCENTBOX 18
+#define LINEDIST_AT_METRICBOX 19
+#define HYPHEN_FRM 21
+#define HYPHEN_BOX_AFTER 44
+#define HYPHEN_BOX_BEFORE 22
+#define EXTHYPHEN_BOX_AFTER 42
+#define EXTHYPHEN_BOX_BEFORE 23
+#define HYPHEN_LABEL_AFTER 43
+#define HYPHEN_LABEL_BEFORE 24
+#define EXTEND_FRM 25
+#define PAGEBREAK_BOX 26
+#define PAGEBREAK_DAVOR 27
+#define PAGEBREAK_DAHINTER 28
+#define KEEP_TOGETHER_BOX 29
+#define WIDOW_BOX 31
+#define WIDOW_ROW_NO 32
+#define WIDOW_ROW_LABEL 33
+#define ORPHAN_BOX 34
+#define ORPHAN_ROW_NO 35
+#define ORPHAN_ROW_LABEL 36
+#define PAGE_COLL_BTN 40
+#define PAGE_COLL_BOX 41
+#define OK_BTN 50
+#define CANCEL_BTN 51

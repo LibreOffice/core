@@ -1,0 +1,100 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   tabsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/tabsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File fuer TabShell
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextTable : BaseTextTable
+[
+    uuid = "49CE7CA0-111A-101D-9757-6E74207A7520"
+]
+{
+    // hier sollen die Slots eingefuegt werden, die vom StarWriter/WEB
+    // nicht unterstuetzt werden
+
+    import TextSelection;
+
+   FN_TABLE_SET_READ_ONLY_CELLS // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+/*
+    SvxFmtSplitItem TableSplit SID_ATTR_PARA_SPLIT // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        GroupId = GID_TABLE ;
+    ]
+    SvxFmtKeepItem TableKeepTogether SID_ATTR_PARA_KEEP // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        GroupId = GID_TABLE ;
+    ]
+*/
+}
+
+ //=========================================================================
+
+shell SwTableShell : SwBaseShell
+
+{
+        import TextTable[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.98  1998/11/12 16:29:10  MA
+    #58677# Disable Flag
+
+
+      Rev 1.97   12 Nov 1998 17:29:10   MA
+   #58677# Disable Flag
+
+      Rev 1.96   28 Aug 1997 12:49:52   MBA
+   Neue Interface-Namen
+
+      Rev 1.95   13 Jun 1997 16:39:58   MA
+   fix: Kommentar statt if
+
+      Rev 1.94   04 Jun 1997 13:01:04   MA
+   chg: Keep und Split vorerst 'raus
+
+      Rev 1.93   11 Apr 1997 15:55:58   MA
+   new: Split+Keep
+
+      Rev 1.92   13 Feb 1997 12:44:46   MA
+   unnoetige Texte entfernt
+
+      Rev 1.91   27 Jan 1997 16:38:16   OS
+   Web-Slots aus den allg. interfaces raus
+
+      Rev 1.90   23 Jan 1997 14:30:12   OS
+   Ableitung von _Table
+
+      Rev 1.89   18 Jan 1997 15:32:34   OS
+   neu: CellName an Tabellen
+
+      Rev 1.88   15 Jan 1997 14:56:26   MA
+   chg: State fuer merge
+
+      Rev 1.87   09 Jan 1997 15:53:46   OS
+   neue Slots fuer Zellen/Spalten/Zeilen verschieben/einfuegen/loeschen
+
+      Rev 1.86   20 Dec 1996 14:34:20   OS
+   V-Alignment auch aus dem Basic
+
+      Rev 1.85   18 Dec 1996 14:53:20   OS
+   BoxAlign eingebaut
+
+------------------------------------------------------------------------*/
+

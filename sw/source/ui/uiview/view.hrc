@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ *  $RCSfile: view.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _VIEW_HRC
+#define _VIEW_HRC
+
+#include "rcid.hrc"
+
+// BTN -------------------------------------------------------------------
+
+#define BTN_PAGEDOWN        (RC_VIEW_BEGIN)
+#define BTN_PAGEUP          (RC_VIEW_BEGIN + 1)
+
+// STR -------------------------------------------------------------------
+
+#define STR_NOGLOS1                 (RC_VIEW_BEGIN + 1)
+#define STR_NOGLOS2                 (RC_VIEW_BEGIN + 2)
+#define STR_NUM_LEVEL               (RC_VIEW_BEGIN + 3)
+
+#define STR_ERROR_NOLANG            (RC_VIEW_BEGIN + 6)
+#define STR_VERB_FOR_GRF            (RC_VIEW_BEGIN + 7)
+
+#define STR_EDIT_FOOTNOTE           (RC_VIEW_BEGIN + 14)
+
+//#define RID_PVIEW_TOOLBOX         (RC_VIEW_BEGIN + 15)
+#define MSG_NOT_FOUND               (RC_VIEW_BEGIN + 16)
+#define MSG_SEARCH_START            (RC_VIEW_BEGIN + 17)
+#define MSG_SEARCH_END              (RC_VIEW_BEGIN + 18)
+#define MSG_INDEX_OVERFLOW          (RC_VIEW_BEGIN + 19)
+#define STR_NB_REPLACED             (RC_VIEW_BEGIN + 20)
+#define MSG_SCAN_NOSOURCE           (RC_VIEW_BEGIN + 21)
+
+#define STR_SRCVIEW_ROW             (RC_VIEW_BEGIN + 22)
+#define STR_SRCVIEW_COL             (RC_VIEW_BEGIN + 23)
+#define STR_SAVEAS_SRC              (RC_VIEW_BEGIN + 24)
+
+#define MSG_NO_MERGE_ENTRY          (RC_VIEW_BEGIN + 25)
+
+#define STR_PRINT_TITLE             (RC_VIEW_BEGIN + 26)
+#define STR_PRINT_MSG               (RC_VIEW_BEGIN + 27)
+#define STR_PRINT_ALL               (RC_VIEW_BEGIN + 28)
+#define STR_PRINT_SELECTION         (RC_VIEW_BEGIN + 29)
+#define STR_READONLY_SEL            (RC_VIEW_BEGIN + 30)
+
+#define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)
+// MSG -------------------------------------------------------------------
+
+#define MSG_ERR_INSERT_GLOS (RC_VIEW_BEGIN)
+
+#define MSG_ERR_NO_FAX      (RC_VIEW_BEGIN + 5)
+#define MSG_ERR_SRCSTREAM   (RC_VIEW_BEGIN + 6)
+
+// DLG -------------------------------------------------------------------
+
+#define DLG_SPECIAL_FORCED              (RC_VIEW_BEGIN)
+#define DLG_PAGEPREVIEW_ZOOM            (RC_VIEW_BEGIN + 1)
+#define DLG_PAGEPREVIEW_PRINTOPTIONS    (RC_VIEW_BEGIN + 2)
+
+// Ueberlaufpruefung -----------------------------------------------------
+
+#define VIEW_ACT_END        STR_EDIT_FOOTNOTE
+
+#if VIEW_ACT_END > RC_VIEW_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif
+

@@ -1,0 +1,142 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   docsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/docsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File DocShell fuer Sw3
+
+    (c) Copyright 1995 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextDocument : BaseTextDocument
+[
+    uuid = "0D960120-111C-101D-9757-6E74207A7520"
+]
+{
+    // Slots, die nicht in der WebDocShell gebraucht werden
+
+    FN_OUTLINE_TO_IMPRESS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    FN_OUTLINE_TO_CLIPBOARD
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_ABSTRACT_STARIMPRESS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_ABSTRACT_NEWDOC
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_NEW_GLOBAL_DOC
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_NEW_HTML_DOC
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    SID_BROWSER_MODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+}
+
+shell SwDocShell : SfxObjectShell
+{
+    import TextDocument[Automation];
+}
+
+shell SwGlosDocShell : SwDocShell
+{
+    import TextDocument[Automation];
+
+    SID_SAVEDOC  // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.87  1999/03/23 11:16:28  MA
+    #63806# ConfigName und HelpText entfernt
+
+
+      Rev 1.86   23 Mar 1999 12:16:28   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.85   24 Apr 1998 15:03:12   OM
+   Seitenvorschau auch im Html-Mode
+
+      Rev 1.84   17 Mar 1998 15:41:28   JP
+   neu: NewHTMLDoc - aequivalent zum NewGlobalDoc
+
+      Rev 1.83   28 Aug 1997 12:50:12   MBA
+   Neue Interface-Namen
+
+      Rev 1.82   25 Jul 1997 11:28:26   AMA
+   Opt: GroupId und ConfigName aufgeraeumt
+
+      Rev 1.81   27 Jun 1997 13:38:06   OM
+   Globaldokument erzeugen
+
+      Rev 1.80   16 Jun 1997 13:08:16   MA
+   #40731# falsches Exportverbot entfernt
+
+      Rev 1.79   09 Jun 1997 14:27:08   MA
+   chg: Browse-Flag nur noch am Doc
+
+      Rev 1.78   26 Mar 1997 11:32:04   OS
+   GlosDocShell muss Document importieren
+
+      Rev 1.77   22 Feb 1997 15:14:04   OS
+   Abstract erzeugen
+
+      Rev 1.76   16 Feb 1997 15:19:52   MA
+   new: OutlineToClipboard und OutlineToImpress
+
+      Rev 1.75   13 Feb 1997 12:45:04   MA
+   unnoetige Texte entfernt
+
+      Rev 1.74   23 Jan 1997 08:36:26   OS
+   Ableitung von __Document
+
+      Rev 1.73   10 Dec 1996 16:51:42   OS
+   neu: SID_GET_COLORTABLE
+
+      Rev 1.72   14 Nov 1996 19:11:10   OS
+   SID_TEMPLATE_LOAD wieder aktiviert
+
+      Rev 1.71   14 Nov 1996 08:06:48   SWG
+   _TEMPLATE_ -> _STYLE_
+
+      Rev 1.70   08 Oct 1996 16:45:04   OS
+   neu: Sourceview
+
+      Rev 1.69   01 Oct 1996 13:03:14   AMA
+   Fix: SID_TEMPLATE_DELETE wieder aktiviert.
+
+      Rev 1.68   21 Sep 1996 17:35:38   OS
+   Sot-Umstellung beendet
+
+      Rev 1.67   18 Sep 1996 17:36:56   OS
+   LoadStyles wieder vollstaendig
+
+------------------------------------------------------------------------*/
+

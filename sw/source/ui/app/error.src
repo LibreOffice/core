@@ -1,0 +1,1265 @@
+/*************************************************************************
+ *
+ *  $RCSfile: error.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define __RSC
+
+
+ //#include <tools/errcode.hxx>
+#include "globals.hrc"
+#include "app.hrc"
+#include "swerror.h"
+#include "comcore.hrc" // MS:   Warum gibst auf der Core-Seite
+ //         jetzt Resourcen
+
+/*--------------------------------------------------------------------
+    Beschreibung:   Strings
+ --------------------------------------------------------------------*/
+
+String STR_COMCORE_READERROR
+{
+    TEXT = "Lesefehler" ;
+    TEXT [ English ] = "Read Error" ;
+    TEXT [ norwegian ] = "Lesefeil" ;
+    TEXT [ italian ] = "Errore di lettura" ;
+    TEXT [ portuguese_brazilian ] = "Erro de Leitura" ;
+    TEXT [ portuguese ] = "Erro de leitura" ;
+    TEXT [ finnish ] = "Lukuvirhe" ;
+    TEXT [ danish ] = "Læsefejl" ;
+    TEXT [ french ] = "Erreur de lecture" ;
+    TEXT [ swedish ] = "Läsfel" ;
+    TEXT [ dutch ] = "Leesfout" ;
+    TEXT [ spanish ] = "Error de lectura" ;
+    TEXT [ english_us ] = "Read Error" ;
+    TEXT[ chinese_simplified ] = "¶ÁÎÄ¼şÊ±·¢Éú´íÎó";
+    TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè";
+    TEXT[ polish ] = "B³¹d odczytu";
+    TEXT[ japanese ] = "“Ç‚İæ‚è´×°";
+    TEXT[ chinese_traditional ] = "ÅªÀÉ®×®Éµo¥Í¿ù»~";
+    TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáŞÑÇÁÉ";
+    TEXT[ greek ] = "ÓöÜëìá áíÜãíùóçò";
+    TEXT[ korean ] = "ÀĞ±â ¿À·ù";
+    TEXT[ turkish ] = "Okuma hatası";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_COMCORE_CANT_SHOW
+{
+    TEXT = "Grafik nicht darstellbar." ;
+    TEXT [ English ] = "Graphic cannot be displayed." ;
+    TEXT [ norwegian ] = "Graphic cannot be displayed." ;
+    TEXT [ italian ] = "L'immagine non è visualizzabile" ;
+    TEXT [ portuguese_brazilian ] = "Graphic cannot be displayed." ;
+    TEXT [ portuguese ] = "Impossível apresentar imagem." ;
+    TEXT [ french ] = "Impossible d'afficher l'image !" ;
+    TEXT [ dutch ] = "Afbeelding kan niet worden weergegeven" ;
+    TEXT [ spanish ] = "No es posible presentar la imagen." ;
+    TEXT [ danish ] = "Grafik kan ikke vises." ;
+    TEXT [ swedish ] = "Grafik kan inte visas." ;
+    TEXT [ finnish ] = "Graphic cannot be displayed." ;
+    TEXT [ english_us ] = "Graphic cannot be displayed." ;
+    TEXT[ chinese_simplified ] = "ÎŞ·¨ÏÔÊ¾Í¼ĞÎ";
+    TEXT[ russian ] = "Ğèñóíîê ïğåäñòàâèòü íåâîçìîæíî";
+    TEXT[ polish ] = "Grafiki nie mo¿na wyœwietliæ.";
+    TEXT[ japanese ] = "¸Ş×Ì¨¯¸‚ğ•\\¦‚Å‚«‚Ü‚¹‚ñB";
+    TEXT[ chinese_traditional ] = "µLªkÅã¥Ü¹Ï¤ù";
+    TEXT[ arabic ] = "áÇ íãßä ÚÑÖ ÇáÑÓæãÇÊ.";
+    TEXT[ greek ] = "Äåí åßíáé äõíáôŞ ç ğáñïõóßáóç ôïõ ãñáöéêïı.";
+    TEXT[ korean ] = "±×·¡ÇÈÀÌ Ç¥½ÃµÉ ¼ö ¾ø½À´Ï´Ù.";
+    TEXT[ turkish ] = "Grafik görüntülenemiyor.";
+    TEXT[ language_user1 ] = " ";
+};
+/*--------------------------------------------------------------------
+    Beschreibung:   Boxes
+ --------------------------------------------------------------------*/
+InfoBox ERR_CLPBRD_WRITE
+{
+    MESSAGE = "Fehler beim Kopieren in die Zwischenablage." ;
+    MESSAGE [ English ] = "Error while copying into the clipboard." ;
+    MESSAGE [ norwegian ] = "Feil ved kopiering  til utklippstavlen." ;
+    MESSAGE [ italian ] = "Errore durante la copia negli appunti" ;
+    MESSAGE [ portuguese_brazilian ] = "Erro durante cópia para o clipboard." ;
+    MESSAGE [ portuguese ] = "Erro ao copiar para a Área de Transferência." ;
+    MESSAGE [ finnish ] = "Virhe kopioitaessa leikepöydälle." ;
+    MESSAGE [ danish ] = "Fejl under kopiering til udskriftsholderen." ;
+    MESSAGE [ french ] = "Erreur lors de la copie vers le presse-papiers." ;
+    MESSAGE [ swedish ] = "Fel vid kopiering till urklippet." ;
+    MESSAGE [ dutch ] = "Fout bij kopiëren naar Klembord." ;
+    MESSAGE [ spanish ] = "Error al copiar al portapapeles." ;
+    MESSAGE [ english_us ] = "Error while copying to the clipboard." ;
+    MESSAGE[ chinese_simplified ] = "ÔÚ¸´ÖÆÊı¾İµ½¼ôÌù°åÊ±·¢Éú´íÎó¡£";
+    MESSAGE[ russian ] = "Îøèáêà ïğè êîïèğîâàíèè â áóôåğ îáìåíà.";
+    MESSAGE[ polish ] = "B³¹d podczas kopiowania do schowka.";
+    MESSAGE[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚ÉºËß°’†‚É´×°”­¶";
+    MESSAGE[ chinese_traditional ] = "½Æ»s¸ê®Æ¨ì°Å¶KÃ¯®Éµo¥Í¿ù»~¡C";
+    MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáäÓÎ Åáì ÇáÍÇİÙÉ.";
+    MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíôéãñáöŞ óôï clipboard.";
+    MESSAGE[ korean ] = "Å¬¸³º¸µå¿¡ º¹»ç Áß ¿À·ù.";
+    MESSAGE[ turkish ] = "Panoya kopyalama hatası.";
+    MESSAGE[ language_user1 ] = " ";
+};
+InfoBox ERR_CLPBRD_READ
+{
+    MESSAGE = "Fehler beim Lesen aus der Zwischenablage." ;
+    MESSAGE [ English ] = "Error while reading from the clipboard." ;
+    MESSAGE [ norwegian ] = "Feil ved lesing fra utklippstavlen." ;
+    MESSAGE [ italian ] = "Errore durante la lettura dagli appunti" ;
+    MESSAGE [ portuguese_brazilian ] = "Erro durante leitura do clipboard." ;
+    MESSAGE [ portuguese ] = "Erro durante a leitura da Área de Transferência." ;
+    MESSAGE [ finnish ] = "Virhe luettaessa leikepöydältä." ;
+    MESSAGE [ danish ] = "Fejl under læsning fra udskriftsholderen." ;
+    MESSAGE [ french ] = "Erreur lors de la lecture du presse-papiers." ;
+    MESSAGE [ swedish ] = "Fel vid läsning ur urklippet." ;
+    MESSAGE [ dutch ] = "Fout bij lezen van Klembord." ;
+    MESSAGE [ spanish ] = "Error al leer del portapapeles." ;
+    MESSAGE [ english_us ] = "Error reading from the clipboard." ;
+    MESSAGE[ chinese_simplified ] = "ÔÚ¶ÁÈ¡¼ôÌù°åÊ±·¢Éú´íÎó¡£";
+    MESSAGE[ russian ] = "Îøèáêà ïğè ÷òåíèè èç áóôåğà îáìåíà.";
+    MESSAGE[ polish ] = "B³¹d odczytu ze schowka.";
+    MESSAGE[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚©‚ç‚Ì“Ç‚İæ‚è´×°";
+    MESSAGE[ chinese_traditional ] = "¦bÅª¨ú°Å¶KÃ¯®Éµo¥Í¿ù»~¡C";
+    MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáŞÑÇÁÉ ãä ÇáÍÇİÙÉ.";
+    MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç áğü ôï Clipboard.";
+    MESSAGE[ korean ] = "Å¬¸³º¸µå·ÎºÎÅÍ ÀĞ±â ¿À·ù.";
+    MESSAGE[ turkish ] = "Panodan okuma hatası.";
+};
+
+
+#define ERR_CODE( class, err )  (class | (err - ERROR_SW_BASE))
+#define WARN_CODE( class, err ) (class | ( err - WARN_SW_BASE))
+
+Resource RID_SW_ERRHDL
+{
+     // Import-Errors
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR )
+    {
+        TEXT = "Formatfehler in der Datei entdeckt" ;
+        TEXT [ English ] = "File format error" ;
+        TEXT [ norwegian ] = "Feil filformat format error" ;
+        TEXT [ italian ] = "Errore nel formato del file" ;
+        TEXT [ portuguese_brazilian ] = "Erro no formato do arquivo" ;
+        TEXT [ portuguese ] = "Encontrado erro de formato no ficheiro" ;
+        TEXT [ finnish ] = "Tiedostomuodon virhe" ;
+        TEXT [ danish ] = "Opdaget formatfejl i filen" ;
+        TEXT [ french ] = "Erreur de format de fichier" ;
+        TEXT [ swedish ] = "Formatfel upptäckt i filen" ;
+        TEXT [ dutch ] = "Formaatfout ontdekt in het bestand" ;
+        TEXT [ spanish ] = "Se ha descubierto un error de formato en el archivo" ;
+        TEXT [ english_us ] = "File format error found" ;
+        TEXT[ chinese_simplified ] = "·¢ÏÖÁËÎÄ¼ş¸ñÊ½´íÎó";
+        TEXT[ russian ] = "Îáíàğóæåíà îøèáêà â ôîğìàòå ôàéëà";
+        TEXT[ polish ] = "Znaleziono b³¹d formatu w pliku";
+        TEXT[ japanese ] = "Ì§²Ù‚É‘®´×°‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½B";
+        TEXT[ chinese_traditional ] = "µo²{¤FÀÉ®×®æ¦¡¿ù»~";
+        TEXT[ arabic ] = "Êã ÇßÊÔÇİ ÎØÃ ÊäÓíŞ İí Çáãáİ";
+        TEXT[ greek ] = "Âñİèçêå óöÜëìá äéáìüñöùóçò óôï áñ÷åßï";
+        TEXT[ korean ] = "ÆÄÀÏ ¼­½Ä ¿¡·¯°¡ ¹ß°ßµÇ¾ú½À´Ï´Ù.";
+        TEXT[ turkish ] = "Dosya format hatası bulundu";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
+    {
+        TEXT = "Fehler beim Lesen der Datei " ;
+        TEXT [ English ] = "Error in reading file " ;
+        TEXT [ norwegian ] = "Feil ved lesing av fil " ;
+        TEXT [ italian ] = "Errore durante la lettura del file " ;
+        TEXT [ portuguese_brazilian ] = "Erro na leitura de arquivo" ;
+        TEXT [ portuguese ] = "Erro na leitura do ficheiro " ;
+        TEXT [ finnish ] = "Virhe luettaessa tiedostoa " ;
+        TEXT [ danish ] = "Fejl under læsning af filen " ;
+        TEXT [ french ] = "Erreur de lecture du fichier " ;
+        TEXT [ swedish ] = "Fel vid läsning av fil " ;
+        TEXT [ dutch ] = "Fout bij lezen van het bestand  " ;
+        TEXT [ spanish ] = "Error al leer el archivo " ;
+        TEXT [ english_us ] = "Error reading file " ;
+        TEXT[ chinese_simplified ] = "ÔÚ¶ÁÎÄ¼şÊ±·¢Éú´íÎó ";
+        TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè ôàéëà   ";
+        TEXT[ polish ] = "B³¹d odczytu pliku ";
+        TEXT[ japanese ] = "Ì§²Ù‚Ì“Ç‚İæ‚è´×° ";
+        TEXT[ chinese_traditional ] = "ÅªÀÉ®×®Éµo¥Í¿ù»~ ";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ Çáãáİ ";
+        TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç ôïõ áñ÷åßïõ ";
+        TEXT[ korean ] = "ÆÄÀÏ ÀĞ±â ¿À·ù ";
+        TEXT[ turkish ] = "Dosya okuma hatası ";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
+    {
+        TEXT = "Fehler in der Eingabedatei" ;
+        TEXT [ English ] = "Input file error" ;
+        TEXT [ norwegian ] = "Feil i Innlesingsfil" ;
+        TEXT [ italian ] = "Errore nel file di input" ;
+        TEXT [ portuguese_brazilian ] = "Erro no arquivo de entrada" ;
+        TEXT [ portuguese ] = "Erro no ficheiro de entrada" ;
+        TEXT [ finnish ] = "Syöttötiedoston virhe" ;
+        TEXT [ danish ] = "Fejl i inputfilen" ;
+        TEXT [ french ] = "Erreur dans le fichier de saisie" ;
+        TEXT [ swedish ] = "Fel på inmatningsfilen" ;
+        TEXT [ dutch ] = "Fout in invoerbestand" ;
+        TEXT [ spanish ] = "Error en el archivo de entrada" ;
+        TEXT [ english_us ] = "Input file error" ;
+        TEXT[ chinese_simplified ] = "ÊäÈëµÄÎÄ¼şº¬ÓĞ´íÎó";
+        TEXT[ russian ] = "Îøèáêà â ôàéëå ââîäà";
+        TEXT[ polish ] = "B³¹d w pliku wejœciowym";
+        TEXT[ japanese ] = "“ü—ÍÌ§²Ù‚Ì’†‚É´×°";
+        TEXT[ chinese_traditional ] = "¿é¤JªºÀÉ®×§t¦³¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ İí ãáİ ÇáÅÏÎÇá";
+        TEXT[ greek ] = "ÓöÜëìá óôï áñ÷åßï åéóáãùãŞò";
+        TEXT[ korean ] = "ÆÄÀÏ »ğÀÔ ¿À·ù";
+        TEXT[ turkish ] = "Girdi dosyasında hata";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
+    {
+        TEXT = "Die Datei ist keine StarWriter-Datei" ;
+        TEXT [ English ] = "This isn't a StarWriter file" ;
+        TEXT [ norwegian ] = "Dette er ikke en Star Writer fil" ;
+        TEXT [ italian ] = "Questo non è un file di StarOffice Writer" ;
+        TEXT [ portuguese_brazilian ] = "Este não é um arquivo do StarOffice Writer" ;
+        TEXT [ portuguese ] = "Este não é um ficheiro do StarOffice Writer" ;
+        TEXT [ finnish ] = "Tämä ei ole StarWriter-tiedosto" ;
+        TEXT [ danish ] = "Filen er ingen StarOffice Writer-fil" ;
+        TEXT [ french ] = "Ceci n'est pas un fichier StarOffice Writer" ;
+        TEXT [ swedish ] = "Detta är inte en StarOffice Writer-fil" ;
+        TEXT [ dutch ] = "Dit bestand is geen StarOffice Writer-bestand" ;
+        TEXT [ spanish ] = "El archivo no es uno de StarOffice Writer" ;
+        TEXT [ english_us ] = "This is not a StarOffice Writer file" ;
+        TEXT[ chinese_simplified ] = "Õâ²»ÊÇÒ»¸ö StarOffice Writer ÎÄ¼ş";
+        TEXT[ russian ] = "İòîò ôàéë íå ÿâëÿåòñÿ ôàéëîì StarOffice Writer";
+        TEXT[ polish ] = "Ten plik nie jest plikiem StarOffice Writer";
+        TEXT[ japanese ] = "‚±‚ê‚ÍStarOffice Writer‚ÌÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "³o¤£¬O¤@­Ó StarOffice Writer ÀÉ®×";
+        TEXT[ arabic ] = "åĞÇ Çáãáİ áíÓ ãáİ StarOffice Writer";
+        TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé áñ÷åßï ôïõ StarOffice Writer";
+        TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  StarOffice Writer ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
+        TEXT[ turkish ] = "Bu dosya StarOffice Writer dosyası değil";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
+    {
+        TEXT = "Unerwartetes Dateiende" ;
+        TEXT [ English ] = "Unexpected end of file" ;
+        TEXT [ norwegian ] = "Uventet slutt på fil" ;
+        TEXT [ italian ] = "Fine inattesa del file" ;
+        TEXT [ portuguese_brazilian ] = "Fim de arquivo não esperado" ;
+        TEXT [ portuguese ] = "Fim de ficheiro inesperado" ;
+        TEXT [ finnish ] = "Tiedosto loppui kesken" ;
+        TEXT [ danish ] = "Uventet filafslutning" ;
+        TEXT [ french ] = "Fin de fichier imprévue" ;
+        TEXT [ swedish ] = "Oväntat filslut" ;
+        TEXT [ dutch ] = "Onverwacht bestandeinde" ;
+        TEXT [ spanish ] = "Fin inesperado de archivo" ;
+        TEXT [ english_us ] = "Unexpected end of file" ;
+        TEXT[ chinese_simplified ] = "ÒâÍâµÄÎÄ¼ş½áÎ²";
+        TEXT[ russian ] = "Íåîæèäàííûé êîíåö ôàéëà";
+        TEXT[ polish ] = "Nieoczekiwany koniec pliku";
+        TEXT[ japanese ] = "•s“K“–‚ÈÌ§²Ù––";
+        TEXT[ chinese_traditional ] = "·N¥~ªºÀÉ®×µ²§À";
+        TEXT[ arabic ] = "äåÇíÉ ÛíÑ ãÊæŞÚÉ ááãáİ";
+        TEXT[ greek ] = "Áğñïóäüêçôï ôİëïò áñ÷åßïõ";
+        TEXT[ korean ] = "ÆÄÀÏÀÇ ³¡ÀÌ Àß¸øµÇ¾ú½À´Ï´Ù.";
+        TEXT[ turkish ] = "Beklenmeyen dosya sonu";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Passworte werden nicht unterstützt : Passworte werden nicht unterst³tzt */
+        TEXT = "Passworte werden nicht unterstützt" ;
+        TEXT [ English ] = "Files with passwords are not supported" ;
+        TEXT [ norwegian ] = "Passordbeskyttet filer er ikke tilgjengelige" ;
+        TEXT [ italian ] = "Le password non sono supportate" ;
+        TEXT [ portuguese_brazilian ] = "Arquivos com senhas não s o comportados" ;
+        TEXT [ portuguese ] = "As senhas não têm suporte" ;
+        TEXT [ finnish ] = "Salasanalla suojattuja tiedostoja ei voi käsitellä" ;
+        TEXT [ danish ] = "Adgangskoder understøttes ikke" ;
+        TEXT [ french ] = "Les mots de passe ne sont pas supportés" ;
+        TEXT [ swedish ] = "Lösenord stöds ej" ;
+        TEXT [ dutch ] = "Wachtwoorden worden niet ondersteund" ;
+        TEXT [ spanish ] = "Las contraseñas no son soportadas" ;
+        TEXT [ english_us ] = "Passwords protected files are not supported" ;
+        TEXT[ chinese_simplified ] = "²»Ö§³Ö¿ÚÁî";
+        TEXT[ russian ] = "Ïàğîëè íå ïîääåğæèâàşòñÿ";
+        TEXT[ polish ] = "Has³a nie bêd¹ obs³ugiwane";
+        TEXT[ japanese ] = "Êß½Ü°ÄŞ‚ª»Îß°Ä‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ";
+        TEXT[ chinese_traditional ] = "¤£¤ä´©±K½X";
+        TEXT[ arabic ] = "ßáãÇÊ ÇáÓÑ ÛíÑ ãÚÊãÏÉ";
+        TEXT[ greek ] = "Äåí õğïóôçñßæåôáé ç ëåéôïõñãßá êùäéêïı ğñüóâáóçò";
+        TEXT[ korean ] = "ÆÄÀÏ º¸È£ ÆĞ½º¿öµå°¡ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
+        TEXT[ turkish ] = "Şifre kullanımı desteklenmiyor";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
+    {
+        TEXT = "Die Datei ist keine WinWord6-Datei" ;
+        TEXT [ English ] = "This isn't a WinWord6 file" ;
+        TEXT [ norwegian ] = "Dette er ikke en WinWord6 fil" ;
+        TEXT [ italian ] = "Questo non è un file di WinWord6" ;
+        TEXT [ portuguese_brazilian ] = "Este não é um arquivo do WinWord6" ;
+        TEXT [ portuguese ] = "Este não é um ficheiro do WinWord6" ;
+        TEXT [ finnish ] = "Tämä ei ole WinWord6-tiedosto" ;
+        TEXT [ danish ] = "Filen er ingen WinWord6-fil" ;
+        TEXT [ french ] = "Ceci n'est pas un fichier WinWord6" ;
+        TEXT [ swedish ] = "Detta är inte en WinWord6-fil" ;
+        TEXT [ dutch ] = "Dit bestand is geen WinWord6-bestand" ;
+        TEXT [ spanish ] = "El archivo no es uno de WinWord6" ;
+        TEXT [ english_us ] = "This is not a WinWord6 file" ;
+        TEXT[ chinese_simplified ] = "Õâ²»ÊÇÒ»¸ö WinWord6 ÎÄ¼ş";
+        TEXT[ russian ] = "İòîò ôàéë íå ÿâëÿåòñÿ ôàéëîì WinWord6";
+        TEXT[ polish ] = "Ten plik nie jest plikiem WinWord6";
+        TEXT[ japanese ] = "‚±‚ê‚Í WinWord6‚ÌÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñ";
+        TEXT[ chinese_traditional ] = "³o¤£¬O¤@­Ó WinWord6 ÀÉ®×";
+        TEXT[ arabic ] = "åĞÇ Çáãáİ áíÓ ãáİ WinWord6";
+        TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé áñ÷åßï ôïõ WinWord6";
+        TEXT[ korean ] = "WinWord6 ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
+        TEXT[ turkish ] = "Bu dosya WinWord6 dosyası değil";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        TEXT = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord" ;
+        TEXT [ English ] = "This file is stored with the WinWord-Option 'fastsave'. Please disable the WinWord option 'Allow Fast Saves' and use WinWord to save the file again" ;
+        TEXT [ norwegian ] = "Denne filen er lagret med alternativet til WinWord 'hurtiglagre'. Sperr WinWord alternativet ' Tillat Hurtige Lagringer' og bruk WinWord for å lagre filen igjen" ;
+        TEXT [ italian ] = "Questo file è stato salvato con l'opzione di Winword 'salvataggio veloce'. Disabilitate l'opzione di WinWord 'Salvataggio veloce' e utilizzate WinWord per salvare di nuovo il file." ;
+        TEXT [ portuguese_brazilian ] = "Este arquivo foi armazenado com a opção do  WinWord 'fastsave'. Por favor desative a opção do WinWord 'Allow Fast Saves' e utilize o WinWord para gravar novamente o arquivo" ;
+        TEXT [ portuguese ] = "Este ficheiro foi guardado com a opção do WinWord \"Guardar rápido\". Desactive a opção do WinWord \"Permitir Guardar rápido\" e guarde novamente o ficheiro em WinWord" ;
+        TEXT [ finnish ] = "Tämä tiedosto on tallennettu käyttäen WinWordin pikatallennusta. Poista pikatallennus käytöstä WinWordissa ja tallennatiedosto uudelleen" ;
+        TEXT [ danish ] = "Denne fil er blevet gemt med WinWord-indstillingen 'Gem hurtigt'. Deaktiver venligst indstillingen 'Gem hutigt' og gem filen igen med WinWord." ;
+        TEXT [ french ] = "Ce fichier a été enregistré à l'aide de l'option 'Enregistrement rapide' de WinWord. Veuillez désactiver cette option et utiliser WinWord pour enregistrer à nouveau le fichier." ;
+        TEXT [ swedish ] = "Denna fil är sparad med WinWord-alternativet 'snabbspara'. Stäng av WinWord-alternativet 'Tillåt snabbspara' och spara filen med WinWord igen" ;
+        TEXT [ dutch ] = "Dit bestand werd met de WinWord- optie \"Snel opslaan\" opgeslagen. Schakel a.u.b in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
+        TEXT [ spanish ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde el archivo de nuevo en WinWord." ;
+        TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please uncheck the option 'Allow Fast Saves' and save the file again." ;
+        TEXT[ chinese_simplified ] = "Õâ¸öÎÄ¼ş´æÅÌ²ÉÓÃµÄÊÇ WinWord Ñ¡Ïî '¿ìËÙ±£´æ'·½Ê½¡£ÇëÄúÊ§»îÕâ¸öÑ¡Ïî£¬È»ºóÔÚÖØĞÂ´æÅÌÕâ¸öÎÄ¼ş¡£";
+        TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí ïğè ïîìîùè ïàğàìåòğà WinWord 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë ñ ïîìîùüş WinWord";
+        TEXT[ polish ] = "Ten plik zosta³ zapisany za pomoc¹ opcji WinWord 'Szybkie zapisywanie'. Proszê w³³¹cz w WinWord opcjê 'Dopuœæ szybkie zapisywanie' i zapisz plik ponownie w WinWord";
+        TEXT[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍAWinWordµÌß¼®İ‚Ì'‚‘¬•Û‘¶'‚Å•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·BWinWord‚ÌµÌß¼®İ'‚‘¬•Û‘¶‚Ì'‚ğÁ‹‚µ‚Ä@Ì§²Ù‚ğV‚½‚ÉWinWord‚Å•Û‘¶‚µ‚Ä‰º‚³‚¢B";
+        TEXT[ chinese_traditional ] = "Àx¦sÀÉ®×±Ä¥Îªº¬O WinWord ¿ï¶µ '§Ö³tÀx¦s'¤è¦¡¡C½Ğ±z¥¢¬¡³o­Ó¿ï¶µ¡MµM«á¦b­«·sÀx¦s³o­Ó¤å¥ó¡C";
+        TEXT[ arabic ] = "Êã ÍİÙ åĞÇ Çáãáİ Úä ØÑíŞ ÎíÇÑ 'ÇáÍİÙ ÇáÓÑíÚ' İí WinWord. ÇáÑÌÇÁ ÅíŞÇİ ÎÇÕíÉ 'ÇáÓãÇÍ ÈÇáÍİÙ ÇáÓÑíÚ' İí WinWord¡ Ëã Şã ÈÍİÙ Çáãáİ ãä ÌÏíÏ ÈæÇÓØÉ WinWord.";
+        TEXT[ greek ] = "Ôï áñ÷åßï áõôü áğïèçêåıôçêå ìå ôçí åğéëïãŞ 'ÃñŞãïñç áğïèŞêåõóç' ôïõ WinWord. Ğáñáêáëş áğåíåñãïğïéŞóåôå ôçí åğéëïãŞ áõôŞ ôïõ WinWord êáé áğïèçêåıóôå ôï áñ÷åßï îáíÜ óôï WinWord.";
+        TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  WinWord ÀÇ  'ºü¸¥ ÀúÀå' ¸ğµå·Î ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù.  ¿É¼Ç 'ºü¸¥ ÀúÀå Çã¿ë' ¸¦ ÇØÁ¦ÇÏ°í, ÆÄÀÏÀ» ´Ù½Ã ÀúÀåÇÏ½Ê½Ã¿À .";
+        TEXT[ turkish ] = "Bu dosya WinWord seçeneği 'Hızlı kaydet' ile kaydedilmiş. WinWord'de 'Hızlı kaydetmeye olanak sağla' seçeneğini geçersiz kılıp dosyayı yeniden WinWord ile kaydedin";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
+    {
+        TEXT = "Fehler beim Schreiben der Temporärdatei" ;
+        TEXT [ English ] = "Error in writing temporary file " ;
+        TEXT [ norwegian ] = "Feil ved skriving av midlertidig fil " ;
+        TEXT [ italian ] = "Errore durante la scrittura del file temporaneo" ;
+        TEXT [ portuguese_brazilian ] = "Erro na gravação de arquivo temporário" ;
+        TEXT [ portuguese ] = "Erro ao gravar o ficheiro temporário" ;
+        TEXT [ finnish ] = "Virhe kirjoitettaessa tilapäistiedostoa " ;
+        TEXT [ danish ] = "Fejl under skrivning af midlertidig fil" ;
+        TEXT [ french ] = "Erreur d'écriture du fichier temporaire" ;
+        TEXT [ swedish ] = "Fel vid skrivning till temporär fil" ;
+        TEXT [ dutch ] = "Fout bij het schrijven van tijdelijk bestand" ;
+        TEXT [ spanish ] = "Error al escribir el archivo temporal" ;
+        TEXT [ english_us ] = "Error writing temporary file" ;
+        TEXT[ chinese_simplified ] = "ÔÚĞ´ÈëÔİÊ±ÎÄ¼şÊ±·¢Éú´íÎó";
+        TEXT[ russian ] = "Îøèáêà ïğè çàïèñè âğåìåííîãî ôàéëà";
+        TEXT[ polish ] = "B³¹d zapisu pliku tymczasowego";
+        TEXT[ japanese ] = "ÃİÎß×Ø Ì§²Ù“ü—Í’†‚Ì´×°";
+        TEXT[ chinese_traditional ] = "¦b¼g¤J¼È®ÉÀÉ®×®Éµo¥Í¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ Çáãáİ ÇáãÄŞÊ";
+        TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ ğñïóùñéíïı áñ÷åßïõ";
+        TEXT[ korean ] = "ÀÓ½ÃÆÄÀÏ¿¡ ¾²±â ¿À·ù";
+        TEXT[ turkish ] = "Geçici dosya yazma hatası";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
+    {
+        TEXT = "Einfügebereich in Ini-Datei zu groß" ;
+        TEXT [ English ] = "Import range from ini file to large" ;
+        TEXT [ norwegian ] = "Import range from ini file to large" ;
+        TEXT [ italian ] = "Area di inserimento del file ini troppo grande" ;
+        TEXT [ portuguese_brazilian ] = "Import range from ini file to large" ;
+        TEXT [ portuguese ] = "A área de inserção do ficheiro Ini é demasiado extensa" ;
+        TEXT [ french ] = "Zone d'insertion dans le fichier Ini trop grande" ;
+        TEXT [ dutch ] = "Invoegbereik in INI-bestand is te groot" ;
+        TEXT [ spanish ] = "El área de inserción en el archivo Ini es demasiado grande" ;
+        TEXT [ danish ] = "Importområdet i ini-filen er for stort" ;
+        TEXT [ swedish ] = "Importområdet i Ini-filen är för stort" ;
+        TEXT [ finnish ] = "Import range from ini file to large" ;
+        TEXT [ english_us ] = "Inserted section in ini file too large" ;
+        TEXT[ chinese_simplified ] = "Ini ÎÄ¼ş²åÈëÇøÓòÌ«´ó";
+        TEXT[ russian ] = "Îáëàñòü âñòàâêè â ôàéë Ini ñëèøêîì áîëüøàÿ";
+        TEXT[ polish ] = "Obszar wstawiania do pliku Ini jest za du¿y";
+        TEXT[ japanese ] = "IniÌ§²Ù‚Ì‘}“ü”ÍˆÍ‚ª’·‚·‚¬‚Ü‚·B";
+        TEXT[ chinese_traditional ] = "Ini ÀÉ®×´¡¤J°Ï°ì¤Ó¤j";
+        TEXT[ arabic ] = "äØÇŞ ÇáÅÏÎÇá İí Çáãáİ Ini ßÈíÑ ÌÏÇğ";
+        TEXT[ greek ] = "Ç ğåñéï÷Ş åéóáãùãŞò óôï áñ÷åßï ini åßíáé ğïëı ìåãÜëç";
+        TEXT[ korean ] = "ini ÆÄÀÏ¿¡ »ğÀÔµÈ ±¸¿ªÀÌ ³Ê¹« Å®´Ï´Ù.";
+        TEXT[ turkish ] = "Ini dosyası ekleme bölümü çok büyük";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
+    {
+        TEXT = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
+        TEXT [ English ] = "File format error at $(ARG1)(row,col)" ;
+        Text [ english_us ] = "File format error found at $(ARG1)(row,col)" ;
+        Text [ italian ] = "È stato trovato un errore di formato nel file alla posizione $(ARG1)(riga, colonna)" ;
+        Text [ spanish ] = "Se ha descubierto un error de formato en el archivo en la posición $(ARG1)(fila,columna)" ;
+        Text [ french ] = "Erreur de format à la position $(ARG1)(ligne,colonne) du fichier" ;
+        Text [ dutch ] = "Formaatfout ontdekt op positie $(ARG1)(cel,kolom) in het bestand" ;
+        Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) upptäckt i filen" ;
+        Text [ danish ] = "Der blev opdaget en formatfejl i filen på position $(ARG1)(række,spalte)" ;
+        Text [ portuguese ] = "Descoberto erro de formato na posição $(ARG1)(linha, coluna) do ficheiro" ;
+        Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
+        Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½´íÎó $(ARG1)(ĞĞ£¬ÁĞ)";
+        Text[ russian ] = "Â ìåñòå $(ARG1)(ñòğîêà,ñòîëáåö) îáíàğóæåíà îøèáêà ôîğìàòà ôàéëà";
+        Text[ polish ] = "Znaleziono w pliku b³¹d formatu przy pozycji $(ARG1)(Wiersz, kolumna)";
+        Text[ japanese ] = "Ì§²Ù‚Ì $(ARG1)(sA—ñ)‚É‘®´×°‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½B";
+        Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡¿ù»~ $(ARG1)(¦æ¡A¦C)";
+        Text[ arabic ] = "Êã ÇßÊÔÇİ ÎØÃ İí ÇáãæÖÚ $(ARG1)(ÓØÑ¡ÚãæÏ) İí Çáãáİ";
+        Text[ greek ] = "Âñİèçêå óöÜëìá ìïñöïğïßçóçò óôç èİóç $(ARG1)(ãñáììŞ,óôŞëç) ôïõ áñ÷åßï";
+        Text[ korean ] = "ÆÄÀÏ¼­½Ä ¿À·ù°¡ $(ARG1)(Çà,¿­)¿¡¼­ ¹ß°ß µË´Ï´Ù.";
+        Text[ turkish ] = "Dosya format hatası $(ARG1)(satır, sütun) bulundu";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
+    {
+        TEXT = "Datei wurde von einer neueren Version geschrieben" ;
+        TEXT [ English ] = "File has been written by a newer version" ;
+        Text [ english_us ] = "File has been written in a newer version" ;
+        Text [ italian ] = "Il file è stato creato da una versione più recente" ;
+        Text [ spanish ] = "El archivo se escribió en una versión más nueva" ;
+        Text [ french ] = "Ce fichier a été créé à l'aide d'une version plus récente" ;
+        Text [ dutch ] = "Bestand werd onder een nieuwere versie opgeslagen" ;
+        Text [ swedish ] = "Filen är skriven i en nyare version" ;
+        Text [ danish ] = "Filen er blevet skrevet af en nyere version" ;
+        Text [ portuguese ] = "O ficheiro foi escrito numa versão mais moderna" ;
+        Text [ portuguese_brazilian ] = "Datei wurde von einer neueren Version geschrieben" ;
+        Text[ chinese_simplified ] = "ÎÄ¼şÒÑ¾­ÓÉÒ»¸öĞÂ°æ±¾¸üĞÂ";
+        Text[ russian ] = "Ôàéë íàïèñàí â íîâîé âåğñèè";
+        Text[ polish ] = "Plik zosta³ zapisany w nowszej wersji";
+        Text[ japanese ] = "Ì§²Ù‚ÍV‚µ‚¢ÊŞ°¼Ş®İ‚Å‘‚©‚ê‚Ä‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "ÀÉ®×¤w¸g³Q¤@­Ó·sª©¥»§ó·s";
+        Text[ arabic ] = "Êã ßÊÇÈÉ Çáãáİ İí ÅÕÏÇÑ ÃÍÏË";
+        Text[ greek ] = "Ôï áñ÷åßï ãñÜöôçêå ìå íåüôåñç İêäïóç";
+        Text[ korean ] = "ÆÄÀÏÀÌ ÃÖ½Å ¹öÁ¯¿¡ ÀÇÇØ ¾²¿©Á³½À´Ï´Ù.";
+        Text[ turkish ] = "Dosya daha yeni bir sürüm ile yazılmış";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
+    {
+        TEXT = "Die Datei ist keine WinWord97-Datei" ;
+        TEXT [ English ] = "This isn't a WinWord97 file" ;
+        TEXT[ english_us ] = "This is not a WinWord97 file";
+        TEXT[ portuguese ] = "Não é um ficheiro WinWord97";
+        TEXT[ russian ] = "This isn't a WinWord97 file";
+        TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé ôığïõ WinWord97";
+        TEXT[ dutch ] = "Dit is geen WinWord97 bestand";
+        TEXT[ french ] = "Il ne s'agit pas d'un fichier WinWord97 !";
+        TEXT[ spanish ] = "This isn't a WinWord97 file";
+        TEXT[ italian ] = "This isn't a WinWord97 file";
+        TEXT[ danish ] = "Filen er ingen WinWord97-fil";
+        TEXT[ swedish ] = "Filen är inte en WinWord97-fil";
+        TEXT[ polish ] = "To nie jest plik WinWord97";
+        TEXT[ portuguese_brazilian ] = "This isn't a WinWord97 file";
+        TEXT[ japanese ] = "‚±‚ê‚Í WinWord97 Ì§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñ";
+        TEXT[ korean ] = "This isn't a WinWord97 file";
+        TEXT[ chinese_simplified ] = "Õâ¸öÎÄ¼ş²»ÊÇÒ»¸ö WinWord97 ÎÄ¼ş";
+        TEXT[ chinese_traditional ] = "³o¤£¬O WinWord97 ÀÉ®×";
+        TEXT[ turkish ] = "This isn't a WinWord97 file";
+        TEXT[ arabic ] = "åĞÇ Çáãáİ áíÓ ãáİ WinWord97";
+    };
+     // Export-Errors
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
+    {
+        TEXT = "Fehler beim Schreiben der Datei " ;
+        TEXT [ English ] = "Error in writing file " ;
+        TEXT [ norwegian ] = "Feil ved skriving av fil " ;
+        TEXT [ italian ] = "Errore durante la scrittura del file " ;
+        TEXT [ portuguese_brazilian ] = "Erro na gravação de arquivo" ;
+        TEXT [ portuguese ] = "Erro ao gravar o ficheiro " ;
+        TEXT [ finnish ] = "Virhe kirjoitettaessa tiedostoa " ;
+        TEXT [ danish ] = "Fejl under skrivning af filen " ;
+        TEXT [ french ] = "Erreur d'écriture du fichier " ;
+        TEXT [ swedish ] = "Fel vid skrivning till fil " ;
+        TEXT [ dutch ] = "Fout bij het schrijven van het bestand  " ;
+        TEXT [ spanish ] = "Error al escribir el archivo " ;
+        TEXT [ english_us ] = "Error writing file " ;
+        TEXT[ chinese_simplified ] = "Ğ´ÈëÎÄ¼şÊ±·¢Éú´íÎó ";
+        TEXT[ russian ] = "Îøèáêà çàïèñè ôàéëà  ";
+        TEXT[ polish ] = "B³¹d zapisu pliku  ";
+        TEXT[ japanese ] = "Ì§²Ù“ü—Í’†‚Ì´×° ";
+        TEXT[ chinese_traditional ] = "¼g¤JÀÉ®×®Éµo¥Í¿ù»~ ";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ Çáãáİ ";
+        TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ áñ÷åßïõ ";
+        TEXT[ korean ] = "ÆÄÀÏ ¾²±â ¿À·ù ";
+        TEXT[ turkish ] = "Dosya yazma hatası ";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
+    {
+        TEXT = "Das Autotextdokument hat falsche Version" ;
+        TEXT [ English ] = "The glossary document has wrong version" ;
+        Text [ dutch ] = "Het AutoTekst-document heeft de verkeerde versie" ;
+        Text [ english_us ] = "Wrong AutoText document version" ;
+        Text [ italian ] = "Il documento di testo automatico presenta una versione errata" ;
+        Text [ spanish ] = "Versión errónea del documento de AutoTexto" ;
+        Text [ french ] = "La version de l' AutoTexte utilisée est incorrecte" ;
+        Text [ swedish ] = "AutoTextdokumentet har fel version" ;
+        Text [ danish ] = "Forkert AutoTekst dokumentversion" ;
+        Text [ portuguese ] = "O documento do AutoTexto tem a versão errada" ;
+        Text [ portuguese_brazilian ] = "Das Autotextdokument hat falsche Version" ;
+        Text[ chinese_simplified ] = "Õâ¸ö×Ô¶¯Í¼ÎÄ¼¯µÄÎÄµµ°æ±¾ÎŞĞ§";
+        Text[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ äîêóìåíòà àâòîòåêñòà";
+        Text[ polish ] = "Dokument autotekstu ma z³¹ wersjê";
+        Text[ japanese ] = "“ü—Íx‰‡ÄŞ·­ÒİÄ‚ÌÊŞ°¼Ş®İ‚ªˆá‚¢‚Ü‚·";
+        Text[ chinese_traditional ] = "³o­Ó¦Û°Ê¹Ï¤å¶°¤å¥óª©¥»µL®Ä";
+        Text[ arabic ] = "ÅÕÏÇÑ ÎÇØÆ áãÓÊäÏ ÇáäÕ ÇáÊáŞÇÆí";
+        Text[ greek ] = "ËÜèïò İêäïóç ôïõ åããñÜöïõ ÁõôïÊåéìİíïõ";
+        Text[ korean ] = "Àß¸øµÈ ÀÚµ¿ ÅØ½ºÆ® ¹®¼­ ¹öÁ¯";
+        Text[ turkish ] = "Otomatik metin belgesi sürümü yanlış";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_CANNOT_WRITE )
+    {
+        TEXT = "Das Dokument kann nicht angelegt werden" ;
+        TEXT [ English ] = "The document cannot be created" ;
+        Text [ dutch ] = "Het document kan niet worden gemaakt" ;
+        Text [ english_us ] = "The document cannot be created" ;
+        Text [ italian ] = "Non è possibile creare il documento" ;
+        Text [ spanish ] = "No se puede crear el documento" ;
+        Text [ french ] = "Impossible de créer le document" ;
+        Text [ swedish ] = "Dokumentet kan inte skapas" ;
+        Text [ danish ] = "Dokumentet kan ikke oprettes" ;
+        Text [ portuguese ] = "É impossível criar o documento" ;
+        Text [ portuguese_brazilian ] = "Das Dokument kann nicht angelegt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÕâ¸öÎÄµµ¡£";
+        Text[ russian ] = "Äîêóìåíò ñîçäàòü íåâîçìîæíî";
+        Text[ polish ] = "Dokumentu nie mo¿na utworzyæ";
+        Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Íì¬‚Å‚«‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "µLªk¥Í¦¨³o­Ó¤å¥ó";
+        Text[ arabic ] = "áÇ íãßä ÅäÔÇÁ ÇáãÓÊäÏ";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç äçìéïõñãßá ôïõ åããñÜöïõ";
+        Text[ korean ] = "¹®¼­°¡ ¸¸µé¾îÁú¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Belge oluşturulamıyor";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
+    {
+        TEXT = "Fehler beim Lesen der Temporärdatei" ;
+        TEXT [ English ] = "Error in reading temporary file " ;
+        TEXT [ norwegian ] = "eil ved lesing av midkertidig fil " ;
+        TEXT [ italian ] = "Errore durante la lettura del file temporaneo" ;
+        TEXT [ portuguese_brazilian ] = "Erro na leitura de arquivo temporário" ;
+        TEXT [ portuguese ] = "Erro na leitura do ficheiro temporário" ;
+        TEXT [ finnish ] = "Virhe luettaessa tilapäistiedostoa " ;
+        TEXT [ danish ] = "Fejl under læsning af midlertidig fil" ;
+        TEXT [ french ] = "Erreur de lecture du fichier temporaire" ;
+        TEXT [ swedish ] = "Fel vid läsning av temporär fil" ;
+        TEXT [ dutch ] = "Fout bij het lezen van tijdelijke bestanden" ;
+        TEXT [ spanish ] = "Error al leer el archivo temporal" ;
+        TEXT [ english_us ] = "Error reading temporary file" ;
+        TEXT[ chinese_simplified ] = "ÔÚ¶ÁÈ¡ÔİÊ±ÎÄ¼şÊ±·¢Éú´íÎó";
+        TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè âğåìåííîãî ôàéëà";
+        TEXT[ polish ] = "B³¹d odczytu pliku tymczasowego";
+        TEXT[ japanese ] = "ÃİÎß×ØÌ§²Ù“Ç‚İæ‚è‚ÌÛ‚Ì´×°";
+        TEXT[ chinese_traditional ] = "Åª¨ú¼È®ÉÀÉ®×®Éµo¥Í¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ Çáãáİ ÇáãÄŞÊ";
+        TEXT[ greek ] = "ÓöÜëìá êáôÜ ôï äéÜâáóìá ğñïóùñéíïı áñ÷åßïõ";
+        TEXT[ korean ] = "ÀÓ½ÃÆÄÀÏ ÀĞ±â ¿À·ù";
+        TEXT[ turkish ] = "Geçici dosya okuma hatası";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
+    {
+        TEXT = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe" ;
+        TEXT [ English ] = "The document's size exceeds the possible 3.1/4.0 document size" ;
+        Text [ portuguese ] = "O documento ultrapassa o tamanho possível para um documento 3.1/4.0" ;
+        Text [ english_us ] = "The document exceeds the allowed 3.1/4.0 text document size" ;
+        Text [ portuguese_brazilian ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe" ;
+        Text [ swedish ] = "Dokumentet överskrider den möjliga 3.1/4.0-textdokumentstorleken" ;
+        Text [ danish ] = "Dokumentet overskrider den mulige 3.1/4.0-tekstdokumentstørrelse" ;
+        Text [ italian ] = "Il documento supera le dimensioni del testo possibili in 3.1/4.0" ;
+        Text [ spanish ] = "El documento sobrepasa el tamaño posible 3.1/4.0 de documento" ;
+        Text [ french ] = "Le document dépasse la taille maximum autorisée pour un document texte 3.1/4.0" ;
+        Text [ dutch ] = "Het document overschrijdt de mogelijke 3.1/4.0-tekstdocumentgrootte" ;
+        Text[ chinese_simplified ] = "Õâ¸öÎÄµµ¿ÉÄÜ³¬¹ı 3.1/4.0 °æ±¾ÎÄµµµÄ´óĞ¡¡£";
+        Text[ russian ] = "Äîêóìåíò ïğåâûøàåò âîçìîæíûé îáúåì 3.1/4.0, óñòàíîâëåííûé äëÿ òåêñòîâîãî äîêóìåíòà";
+        Text[ polish ] = "Dokument przekracza dopuszczalny rozmiar dokumentu tekstowego 3.1/4.0";
+        Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚ÍA3.1/4.0‚É‚¨‚¢‚Ä‰Â”\\‚ÈÃ·½ÄÄŞ·­ÒİÄ‚Ì»²½Ş‚ğ’´‚¦‚Ä‚¢‚Ü‚·B";
+        Text[ chinese_traditional ] = "³o­Ó¤å¥ó¥i¯à¶W¹L 3.1/4.0 ª©¥»¤å¥óªº¤j¤p¡C";
+        Text[ arabic ] = "íÊÌÇæÒ ÇáãÓÊäÏ ÍÌã ãÓÊäÏ ÇáäÕ 3.1/4.0";
+        Text[ greek ] = "Ôï İããñáöï õğåñâáßíåé ôï åğéôñåğüìåíï üñéï ìåãİèïõò åããñÜöïõ êåéìİíïõ ãéá ôçí İêäïóç 3.1/4.0";
+        Text[ korean ] = "¹®¼­°¡ Çô¿ëµÈ 3.1/4.0 ÅØ½ºÆ® ¹®ÀÚ Å©±â¸¦ ÃÊ°ú Çß½À´Ï´Ù.";
+        Text[ turkish ] = "Belge izin verilen 3.1/4.0 metin belgesi büyüklüğünü aşıyor";
+        Text[ language_user1 ] = " ";
+    };
+     // Import-/Export-Errors
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
+    {
+        TEXT = "Interner Fehler im StarWriter Dateiformat" ;
+        TEXT [ English ] = "Internal Error in StarWriter file" ;
+        TEXT [ norwegian ] = "Intern feil i StarWriter fil" ;
+        TEXT [ italian ] = "Errore interno nel formato di file di StarOffice Writer" ;
+        TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do StarOffice Writer" ;
+        TEXT [ portuguese ] = "Erro interno no formato de ficheiro do StarOffice Writer" ;
+        TEXT [ finnish ] = "Sisäinen virhe StarWriter-tiedostossa" ;
+        TEXT [ danish ] = "Intern fejl i StarOffice Writer-filformatet" ;
+        TEXT [ french ] = "Erreur interne dans le format de fichier StarOffice Writer" ;
+        TEXT [ swedish ] = "Internt fel i StarOffice Writer-filformatet" ;
+        TEXT [ dutch ] = "Interne fout in StarOffice Writer bestandsformaat" ;
+        TEXT [ spanish ] = "Error interno en el formato de archivo de StarOffice Writer" ;
+        TEXT [ english_us ] = "Internal error in StarOffice Writer file format" ;
+        TEXT[ chinese_simplified ] = "ÄÚ²¿µÄ StarOffice Writer ÎÄ¼ş¸ñÊ½´íÎó";
+        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà StarOffice Writer";
+        TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku StarOffice Writer";
+        TEXT[ japanese ] = "StarOffice Writer Ì§²Ù‘®‚Ì“à•”´×°";
+        TEXT[ chinese_traditional ] = "¤º³¡ªº StarOffice Writer ÀÉ®×®æ¦¡¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ StarOffice Writer";
+        TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ StarOffice Writer";
+        TEXT[ korean ] = "StarOffice WriterÆÄÀÏ¼­½Ä ÀÇ ³»ºÎ ¿À·ù";
+        TEXT[ turkish ] = "Dahili StarOffice Writer dosyası format hatası";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
+    {
+        TEXT = "Interner Fehler im StarWriter Dateiformat" ;
+        TEXT [ English ] = "Internal Error in StarWriter file" ;
+        TEXT [ norwegian ] = "Intern feil i StarWriter fil" ;
+        TEXT [ italian ] = "Errore interno nel formato di file di StarOffice Writer" ;
+        TEXT [ portuguese_brazilian ] = "Erro interno em arquivo do StarOffice Writer" ;
+        TEXT [ portuguese ] = "Erro interno no formato de ficheiro do StarOffice Writer" ;
+        TEXT [ finnish ] = "Sisäinen virhe StarWriter-tiedostossa" ;
+        TEXT [ danish ] = "Intern fejl i StarOffice Writer-filformatet" ;
+        TEXT [ french ] = "Erreur interne dans le format de fichier StarOffice Writer" ;
+        TEXT [ swedish ] = "Internt fel i StarOffice Writer-filformatet" ;
+        TEXT [ dutch ] = "Interne fout in StarOffice Writer bestandsformaat" ;
+        TEXT [ spanish ] = "Error interno en el formato de archivo de StarOffice Writer" ;
+        TEXT [ english_us ] = "Internal Error in StarOffice Writer file format" ;
+        TEXT[ chinese_simplified ] = "ÄÚ²¿µÄ StarOffice Writer ÎÄ¼ş¸ñÊ½´íÎó";
+        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà StarOffice Writer";
+        TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku StarOffice Writer";
+        TEXT[ japanese ] = "StarOffice Writer Ì§²Ù‘®‚Ì“à•”´×°";
+        TEXT[ chinese_traditional ] = "¤º³¡ªº StarOffice Writer ÀÉ®×®æ¦¡¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ StarOffice Writer";
+        TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ StarOffice Writer";
+        TEXT[ korean ] = "StarOffice Writer ÆÄÀÏ¼­½ÄÀÇ ³»ºÎ ¿À·ù";
+        TEXT[ turkish ] = "Dahili StarOffice Writer dosyası format hatası";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
+    {
+        TEXT = "Nicht genügend Speicher vorhanden" ;
+        TEXT [ English ] = "Out of memory" ;
+        TEXT [ norwegian ] = "Ute av minne" ;
+        TEXT [ italian ] = "Memoria disponibile insufficiente" ;
+        TEXT [ portuguese_brazilian ] = "Sem memória" ;
+        TEXT [ portuguese ] = "Memória insuficiente" ;
+        TEXT [ finnish ] = "Muisti on lopussa" ;
+        TEXT [ danish ] = "Ikke nok hukommelse" ;
+        TEXT [ french ] = "Mémoire saturée" ;
+        TEXT [ swedish ] = "Inte tillräckligt med minne" ;
+        TEXT [ dutch ] = "Onvoldoende geheugen beschikbaar" ;
+        TEXT [ spanish ] = "Memoria insuficiente" ;
+        TEXT [ english_us ] = "Insufficient memory" ;
+        TEXT[ chinese_simplified ] = "ÄÚ´æ²»×ã";
+        TEXT[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè";
+        TEXT[ polish ] = "Za ma³o pamiêci";
+        TEXT[ japanese ] = "\\•ª‚È‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñ";
+        TEXT[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬";
+        TEXT[ arabic ] = "ÇáĞÇßÑÉ ÛíÑ ßÇİíÉ";
+        TEXT[ greek ] = "Ç ìíŞìç äåí åğáñêåß.";
+        TEXT[ korean ] = "¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+        TEXT[ turkish ] = "Yetersiz bellek";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
+    {
+        TEXT = "Nicht genügend Speicher vorhanden" ;
+        TEXT [ English ] = "Out of memory" ;
+        TEXT [ norwegian ] = "Ute av minne" ;
+        TEXT [ italian ] = "Memoria disponibile insufficiente" ;
+        TEXT [ portuguese_brazilian ] = "Sem memória" ;
+        TEXT [ portuguese ] = "Memória insuficiente" ;
+        TEXT [ finnish ] = "Muisti on lopussa" ;
+        TEXT [ danish ] = "Ikke nok hukommelse" ;
+        TEXT [ french ] = "Mémoire saturée" ;
+        TEXT [ swedish ] = "Inte tillräckligt med minne" ;
+        TEXT [ dutch ] = "Onvoldoende geheugen beschikbaar" ;
+        TEXT [ spanish ] = "Memoria insuficiente" ;
+        TEXT [ english_us ] = "Insufficient memory" ;
+        TEXT[ chinese_simplified ] = "ÄÚ´æ²»×ã";
+        TEXT[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè";
+        TEXT[ polish ] = "Za ma³o pamiêci";
+        TEXT[ japanese ] = "\\•ª‚È‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬";
+        TEXT[ arabic ] = "ÇáĞÇßÑÉ ÛíÑ ßÇİíÉ";
+        TEXT[ greek ] = "Ç ìíŞìç äåí åğáñêåß.";
+        TEXT[ korean ] = "¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+        TEXT[ turkish ] = "Yetersiz bellek";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
+    {
+        TEXT = "Nicht genügend Platz auf dem Speichermedium" ;
+        TEXT [ English ] = "Not enough space on disk" ;
+        TEXT [ norwegian ] = "Ikke nok plass på disketten" ;
+        TEXT [ italian ] = "Spazio su disco insufficiente" ;
+        TEXT [ portuguese_brazilian ] = "Não há espaço suficiente em disco" ;
+        TEXT [ portuguese ] = "Espaço do disco insuficiente" ;
+        TEXT [ finnish ] = "Levytila ei riitä" ;
+        TEXT [ danish ] = "Ikke tilstrækkelig diskplads" ;
+        TEXT [ french ] = "Espace insuffisant sur le disque" ;
+        TEXT [ swedish ] = "Inte tillräckligt med diskutrymme" ;
+        TEXT [ dutch ] = "Onvoldoende vrije ruimte op opslagmedium" ;
+        TEXT [ spanish ] = "No hay suficiente espacio en el disco" ;
+        TEXT [ english_us ] = "Not enough disk space" ;
+        TEXT[ chinese_simplified ] = "¿ÉÓÃ¿Õ¼ä²»×ã";
+        TEXT[ russian ] = "Íåäîñòàòî÷íî ìåñòà íà äèñêå";
+        TEXT[ polish ] = "Brak miejsca na dysku";
+        TEXT[ japanese ] = "ÒÓØ”}‘Ì‚É\\•ª‚È‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "¥i¥ÎªÅ¶¡¤£¨¬";
+        TEXT[ arabic ] = "áÇ íæÌÏ ãÓÇÍÉ ßÇİíÉ Úáì ãÍÑß ÇáÃŞÑÇÕ";
+        TEXT[ greek ] = "Äåí õğÜñ÷åé áñêåôüò äéáèİóéìïò ÷şñïò óôï ìİóï áğïèŞêåõóçò";
+        TEXT[ korean ] = "µğ½ºÅ© °ø°£ÀÌ ºÎÁ·ÇÕ´Ï´Ù.";
+        TEXT[ turkish ] = "Yeterli disk alanı yok";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
+    {
+        TEXT = "Nicht genügend Platz auf dem Speichermedium" ;
+        TEXT [ English ] = "Not enough space on disk" ;
+        TEXT [ norwegian ] = "Ikke nok plass på disketten" ;
+        TEXT [ italian ] = "Spazio su disco insufficiente" ;
+        TEXT [ portuguese_brazilian ] = "Não há espaço suficiente em disco" ;
+        TEXT [ portuguese ] = "Espaço do disco insuficiente" ;
+        TEXT [ finnish ] = "Levytila ei riitä" ;
+        TEXT [ danish ] = "Ikke tilstrækkelig diskplads" ;
+        TEXT [ french ] = "Espace insuffisant sur le disque" ;
+        TEXT [ swedish ] = "Inte tillräckligt med diskutrymme" ;
+        TEXT [ dutch ] = "Onvoldoende vrije ruimte op opslagmedium" ;
+        TEXT [ spanish ] = "No hay suficiente espacio en el disco" ;
+        TEXT [ english_us ] = "Not enough disk space" ;
+        TEXT[ chinese_simplified ] = "¿ÉÓÃ¿Õ¼ä²»×ã";
+        TEXT[ russian ] = "Íåäîñòàòî÷íî ìåñòà íà äèñêå";
+        TEXT[ polish ] = "Brak miejsca na dysku";
+        TEXT[ japanese ] = "ÒÓØ”}‘Ì‚É\\•ª‚È‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "¥i¥ÎªÅ¶¡¤£¨¬";
+        TEXT[ arabic ] = "áÇ íæÌÏ ãÓÇÍÉ ßÇİíÉ Úáì ãÍÑß ÇáÃŞÑÇÕ";
+        TEXT[ greek ] = "Äåí õğÜñ÷åé áñêåôüò äéáèİóéìïò ÷şñïò óôï ìİóï áğïèŞêåõóçò";
+        TEXT[ korean ] = "µğ½ºÅ© °ø°£ÀÌ ÃæºĞÇÏÁö ¾Ê½À´Ï´Ù.";
+        TEXT[ turkish ] = "Yeterli disk alanı yok";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_INTERNAL_ERROR )
+    {
+        TEXT = "Unbekannter Fehler im W4W-Filter" ;
+        TEXT [ English ] = "Internal Error in W4W filter" ;
+        TEXT [ norwegian ] = "Intern feil I W4W filter" ;
+        TEXT [ italian ] = "Errore sconosciuto nel filtro W4W" ;
+        TEXT [ portuguese_brazilian ] = "Erro interno no filtro W4W" ;
+        TEXT [ portuguese ] = "Erro desconhecido no filtro W4W" ;
+        TEXT [ finnish ] = "Sisäinen virhe W4W-suotimessa" ;
+        TEXT [ danish ] = "Intern fejl i W4W-filtret" ;
+        TEXT [ french ] = "Erreur inconnue du filtre W4W" ;
+        TEXT [ swedish ] = "Obekant fel i W4W-filter" ;
+        TEXT [ dutch ] = "Onbekende fout in W4W-filter" ;
+        TEXT [ spanish ] = "Error desconocido en el filtro W4W" ;
+        TEXT [ english_us ] = "Unknown error in W4W filter" ;
+        TEXT[ chinese_simplified ] = "W4W ¹ıÂËÆ÷·¢Éú²»Ã÷´íÎó¡£";
+        TEXT[ russian ] = "Íåèçâåñòíàÿ îøèáêà â ôèëüòğå W4W";
+        TEXT[ polish ] = "Nieznany b³¹d w filtrze W4W";
+        TEXT[ japanese ] = "W4WÌ¨ÙÀ‚É‚ ‚é•s–¾‚Ì´×°";
+        TEXT[ chinese_traditional ] = "W4W ¹LÂo¾¹µo¥Í¤£©ú¿ù»~¡C";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
+        TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
+        TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁöÁö ¾ÊÀº ¿À·ù";
+        TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_INTERNAL_ERROR )
+    {
+        TEXT = "Unbekannter Fehler im W4W-Filter" ;
+        TEXT [ English ] = "Internal Error in W4W filter" ;
+        TEXT [ norwegian ] = "Intern feil I W4W filter" ;
+        TEXT [ italian ] = "Errore sconosciuto nel filtro W4W" ;
+        TEXT [ portuguese_brazilian ] = "Erro interno no filtro W4W" ;
+        TEXT [ portuguese ] = "Erro desconhecido no filtro W4W" ;
+        TEXT [ finnish ] = "Sisäinen virhe W4W-suotimessa" ;
+        TEXT [ danish ] = "Intern fejl i W4W-filtret" ;
+        TEXT [ french ] = "Erreur inconnue dans le filtre W4W" ;
+        TEXT [ swedish ] = "Obekant fel i W4W-filter" ;
+        TEXT [ dutch ] = "Onbekende fout in W4W-filter" ;
+        TEXT [ spanish ] = "Error desconocido en el filtro W4W" ;
+        TEXT [ english_us ] = "Unknown error in W4W filter" ;
+        TEXT[ chinese_simplified ] = "W4W ¹ıÂËÆ÷·¢Éú²»Ã÷´íÎó¡£";
+        TEXT[ russian ] = "Íåèçâåñòíàÿ îøèáêà â ôèëüòğå W4W";
+        TEXT[ polish ] = "Nieznany b³¹d w filtrze W4W";
+        TEXT[ japanese ] = "W4WÌ¨ÙÀ‚É‚ ‚é•s–¾‚Ì´×°";
+        TEXT[ chinese_traditional ] = "W4W ¹LÂo¾¹µo¥Í¤£©ú¿ù»~¡C";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
+        TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
+        TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁöÁö ¾ÊÀº ¿À·ù";
+        TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_DLL_ERROR )
+    {
+        TEXT = "Fehler beim Laden des Konverters" ;
+        TEXT [ English ] = "Error in loading converter " ;
+        TEXT [ norwegian ] = "Feil ved innlasting av omformer " ;
+        TEXT [ italian ] = "Errore nel caricamento del convertitore" ;
+        TEXT [ portuguese_brazilian ] = "Erro em carregar conversão" ;
+        TEXT [ portuguese ] = "Erro ao carregar o conversor" ;
+        TEXT [ finnish ] = "Virhe ladattaessa suodinta " ;
+        TEXT [ danish ] = "Fejl under indlæsning af konverteren" ;
+        TEXT [ french ] = "Erreur de chargement du convertisseur" ;
+        TEXT [ swedish ] = "Fel vid laddning av konverteraren" ;
+        TEXT [ dutch ] = "Fout bij het laden van de converter" ;
+        TEXT [ spanish ] = "Error al cargar el convertidor" ;
+        TEXT [ english_us ] = "Error loading converter" ;
+        TEXT[ chinese_simplified ] = "ÔÚ×ª»»Ê±·¢Éú´íÎó";
+        TEXT[ russian ] = "Îøèáêà ïğè çàãğóçêå êîíâåğòîğà";
+        TEXT[ polish ] = "B³¹d podczas ³adowania konwertera";
+        TEXT[ japanese ] = "ºİÊŞ°À“Ç‚İ‚İ’†‚Ì´×°";
+        TEXT[ chinese_traditional ] = "Âà´«®Éµo¥Í¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãÍæá";
+        TEXT[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôïõ ìåôáôñïğİá";
+        TEXT[ korean ] = "º¯È¯ ·Îµå ¿À·ù";
+        TEXT[ turkish ] = "Dönüştürücü yükleme hatası";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_DLL_ERROR )
+    {
+        TEXT = "Fehler beim Laden des Konverters" ;
+        TEXT [ English ] = "Error in loading converter " ;
+        TEXT [ norwegian ] = "Feil ved innlasting av omformer " ;
+        TEXT [ italian ] = "Errore nel caricamento del convertitore" ;
+        TEXT [ portuguese_brazilian ] = "Erro em carregar conversão" ;
+        TEXT [ portuguese ] = "Erro ao carregar o conversor" ;
+        TEXT [ finnish ] = "Virhe ladattaessa suodinta " ;
+        TEXT [ danish ] = "Fejl under indlæsning af konverteren" ;
+        TEXT [ french ] = "Erreur de chargement du convertisseur" ;
+        TEXT [ swedish ] = "Fel vid laddning av konverteraren" ;
+        TEXT [ dutch ] = "Fout bij het laden van de converter" ;
+        TEXT [ spanish ] = "Error al cargar el convertidor" ;
+        TEXT [ english_us ] = "Error loading converter" ;
+        TEXT[ chinese_simplified ] = "×ª»»Ê±·¢Éú´íÎó";
+        TEXT[ russian ] = "Îøèáêà ïğè çàãğóçêå êîíâåğòîğà";
+        TEXT[ polish ] = "B³¹d podczas ³adowania konwertera";
+        TEXT[ japanese ] = "ºİÊŞ°À“Ç‚İ‚İ’†‚Ì´×°";
+        TEXT[ chinese_traditional ] = "Âà´«®Éµo¥Í¿ù»~";
+        TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÇáãÍæá";
+        TEXT[ greek ] = "ÓöÜëìá êáôÜ ôç öüñôùóç ôïõ ìåôáôñïğİá";
+        TEXT[ korean ] = "º¯È¯ ·Îµå ¿À·ù";
+        TEXT[ turkish ] = "Dönüştürücü yükleme hatası";
+        TEXT[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
+    {
+        TEXT = "$(ARG1) hat sich geändert" ;
+        TEXT [ English ] = "$(ARG1) has changed" ;
+        Text [ dutch ] = "$(ARG1) is veranderd" ;
+        Text [ english_us ] = "$(ARG1) has changed" ;
+        Text [ italian ] = "$(ARG1) è cambiato" ;
+        Text [ spanish ] = "$(ARG1) se ha modificado" ;
+        Text [ french ] = "$(ARG1) a été modifié" ;
+        Text [ swedish ] = "$(ARG1) har ändrats" ;
+        Text [ danish ] = "$(ARG1) er ændret" ;
+        Text [ portuguese ] = "$(ARG1) foi modificado" ;
+        Text [ portuguese_brazilian ] = "$(ARG1) hat sich geändert" ;
+        Text[ chinese_simplified ] = "$(ARG1) ÒÑ¾­¸ü¸Ä¡£";
+        Text[ russian ] = "$(ARG1) èçìåíèëñÿ";
+        Text[ polish ] = "$(ARG1) uleg³ zmianie";
+        Text[ japanese ] = "$(ARG1)‚Í•ÏX‚³‚ê‚Ü‚µ‚½";
+        Text[ chinese_traditional ] = "$(ARG1) ¤w¸gÅÜ§ó¡C";
+        Text[ arabic ] = "ÊÛíÑ $(ARG1)";
+        Text[ greek ] = "$(ARG1) İ÷åé áëëÜîåé";
+        Text[ korean ] = "$(ARG1) ÀÌ º¯°æµÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "$(ARG1) değişti";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
+    {
+        TEXT = "$(ARG1) existiert nicht" ;
+        TEXT [ English ] = "$(ARG1) does not exist" ;
+        Text [ dutch ] = "$(ARG1) bestaat niet" ;
+        Text [ english_us ] = "$(ARG1) does not exist" ;
+        Text [ italian ] = "$(ARG1) non esiste" ;
+        Text [ spanish ] = "$(ARG1) no existe" ;
+        Text [ french ] = "$(ARG1) n'existe pas" ;
+        Text [ swedish ] = "$(ARG1) existerar inte" ;
+        Text [ danish ] = "$(ARG1) eksisterer ikke" ;
+        Text [ portuguese ] = "$(ARG1) não existe" ;
+        Text [ portuguese_brazilian ] = "$(ARG1) existiert nicht" ;
+        Text[ chinese_simplified ] = "$(ARG1) ²»´æÔÚ";
+        Text[ russian ] = "$(ARG1) íå ñóùåñòâóåò";
+        Text[ polish ] = "$(ARG1) nie istnieje";
+        Text[ japanese ] = "$(ARG1)‚Í‚ ‚è‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "$(ARG1) ¤£¦s¦b";
+        Text[ arabic ] = "$(ARG1) ÛíÑ ãæÌæÏ";
+        Text[ greek ] = "$(ARG1) äåí õğÜñ÷åé";
+        Text[ korean ] = "$(ARG1) ÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "$(ARG1) mevcut değil";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Zellen können nicht mehr geteilt werden : Zellen k÷nnen nicht mehr geteilt werden */
+        TEXT = "Zellen können nicht mehr geteilt werden" ;
+        TEXT [ English ] = "Cells can not be split" ;
+        Text [ dutch ] = "Cellen kunnen niet meer worden gesplitst" ;
+        Text [ english_us ] = "Cells cannot be further split" ;
+        Text [ italian ] = "Non è più possibile dividere le celle" ;
+        Text [ spanish ] = "Las celdas no se pueden dividir más" ;
+        Text [ french ] = "Impossible de scinder (davantage) les cellules" ;
+        Text [ swedish ] = "Cellerna kan inte delas mer" ;
+        Text [ danish ] = "Cellerne kan ikke deles mere" ;
+        Text [ portuguese ] = "É impossível dividir mais as células" ;
+        Text [ portuguese_brazilian ] = "Zellen können nicht mehr geteilt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨·Ö¸ôµ¥Ôª¸ñ";
+        Text[ russian ] = "Ğàçáèòü ÿ÷åéêè áîëüøå íåâîçìîæíî";
+        Text[ polish ] = "Komórek nie mo¿na podzieliæ";
+        Text[ japanese ] = "‚±‚êˆÈã¾Ù‚ğ•ªŠ„‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "µLªk¤À¶}Àx¦s®æ";
+        Text[ arabic ] = "áÇ íãßä ÊŞÓíã ÇáÎáÇíÇ ÃßËÑ ãä Ğáß";
+        Text[ greek ] = "Ç åğéğëİïí äéáßñåóç ôùí êåëéşí åßíáé áäıíáôç";
+        Text[ korean ] = "¼¿ÀÌ ´õÀÌ»ó ³ª´©¾îÁöÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "Hücreler daha fazla bölünemiyor";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? weitere Spalten können nicht eingefügt werden : weitere Spalten k÷nnen nicht eingef³gt werden */
+        TEXT = "weitere Spalten können nicht eingefügt werden" ;
+        TEXT [ English ] = "more Columns cannot be insertet" ;
+        Text [ dutch ] = "Meer kolommen kunnen niet worden ingevoegd" ;
+        Text [ english_us ] = "Additional columns cannot be inserted" ;
+        Text [ italian ] = "Impossibile inserire altre colonne." ;
+        Text [ spanish ] = "No se pueden insertar columnas adicionales" ;
+        Text [ french ] = "Impossible d'insérer des colonnes supplémentaires" ;
+        Text [ swedish ] = "Ytterligare kolumner kan inte infogas" ;
+        Text [ danish ] = "Det er ikke muligt at indsætte flere kolonner" ;
+        Text [ portuguese ] = "Impossível inserir colunas adicionais" ;
+        Text [ portuguese_brazilian ] = "weitere Spalten können nicht eingefügt werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨²åÈëÆäËüµÄÁĞ";
+        Text[ russian ] = "Äîïîëíèòåëüíûå ñòîëáöû âñòàâèòü íåâîçìîæíî";
+        Text[ polish ] = "dodatkowych kolumn nie mo¿na wstawiæ";
+        Text[ japanese ] = "’Ç‰Á‚Ì—ñ‚ğ‘}“ü‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "µLªk´¡¤J¨ä¥¦Äæ";
+        Text[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÇáãÒíÏ ãä ÇáÃÚãÏÉ";
+        Text[ greek ] = "äåí ìğïñïıí íá åéóá÷èïıí ğåñéóóüôåñåò óôŞëåò";
+        Text[ korean ] = "ºÎ°¡ÀûÀÎ ¿­ÀÌ »ğÀÔµÉ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Daha fazla sütun eklenemiyor";
+        Text[ language_user1 ] = " ";
+    };
+    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
+    {
+        TEXT = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden" ;
+        TEXT [ English ] = "The linked table could not be changed the structure" ;
+        Text [ portuguese ] = "É impossível modificar a estrutura de uma tabela ligada" ;
+        Text [ english_us ] = "The structure of a linked table cannot be modified" ;
+        Text [ portuguese_brazilian ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden" ;
+        Text [ swedish ] = "Strukturen på en länkad tabell får inte ändras" ;
+        Text [ danish ] = "En kædet tabels struktur må ikke ændres" ;
+        Text [ italian ] = "In una tabella collegata non sono ammesse modifiche alla struttura." ;
+        Text [ spanish ] = "No se puede modificar la estructura de una tabla vinculada" ;
+        Text [ french ] = "La structure d'un tableau ne peut pas être modifiée s'il a fait l'objet d'un lien" ;
+        Text [ dutch ] = "Bij een gekoppelde tabel mag de structuur niet worden veranderd." ;
+        Text[ chinese_simplified ] = "²»ÄÜ¸ü¸ÄÒ»¸öÁ´½ÓµÄ±í¸ñ½á¹¹";
+        Text[ russian ] = "Èçìåíÿòü ñòğóêòóğó ñâÿçàííîé òàáëèöû íåëüçÿ";
+        Text[ polish ] = "Przy po³¹czonej tabeli nie wolno zmieniaæ jej struktury";
+        Text[ japanese ] = "Øİ¸‚³‚ê‚½•\\‚Ì\\‘¢‚Í•ÏX‚Å‚«‚Ü‚¹‚ñ";
+        Text[ chinese_traditional ] = "¤£¯àÅÜ§ó¤@­Ó³sµ²ªºªí®æµ²ºc";
+        Text[ arabic ] = "áÇ íãßä ÊÚÏíá ÈäíÉ ÌÏæá ãÑÊÈØ";
+        Text[ greek ] = "Äåí åßíáé äõíáôŞ ç áëëáãŞ äïìŞò åíüò óõíäåäåìİíïõ ğßíáêá";
+        Text[ korean ] = "¿¬°áµÈ Å×ÀÌºíÀÇ ±¸Á¶°¡ ¼öÁ¤µÇ¾ú½À´Ï´Ù.";
+        Text[ turkish ] = "Bağlantılı bir tablonun yapısı değiştirilmez";
+        Text[ language_user1 ] = " ";
+    };
+     // -------------------- Warnings -----------------------------------
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
+    {
+        TEXT = "Es konnten keine Zeichnungen geladen werden" ;
+        TEXT [ English ] = "No drawings could be read" ;
+        Text [ english_us ] = "No drawings could be read" ;
+        Text [ italian ] = "Non è stato possibile caricare alcun disegno" ;
+        Text [ spanish ] = "No se pudo cargar ningún dibujo" ;
+        Text [ french ] = "Impossible de charger des dessins" ;
+        Text [ dutch ] = "Er konden geen tekeningen worden geladen" ;
+        Text [ swedish ] = "Inga teckningar kunde laddas" ;
+        Text [ danish ] = "Det var ikke muligt at indlæse nogen tegninger" ;
+        Text [ portuguese ] = "Foi impossível carregar desenhos" ;
+        Text [ portuguese_brazilian ] = "Es konnten keine Zeichnungen geladen werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨×°ÔØÍ¼Ïñ";
+        Text[ russian ] = "Çàãğóçêà ğèñóíêîâ íåâîçìîæíà";
+        Text[ polish ] = "¯adne rysunki nie mog³y zostaæ za³adowane";
+        Text[ japanese ] = "}Œ`•`‰æ‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk¸Ë¸ü¼v¹³";
+        Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÃíÉ ÑÓæãÇÊ";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç öüñôùóç ó÷åäßùí";
+        Text[ korean ] = "±×¸®±â°¡ ÀĞÇôÁú ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Çizim yüklenemedi";
+        Text[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        /* ### ACHTUNG: Neuer Text in Resource? Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord : Diese Datei wurde mit der WinWord-Option ''Schnellspeichern'' gespeichert. Bitte schalten Sie in WinWord die Option ''Schnellspeichern zulassen'' aus und speichern sie die Datei erneut mit WinWord */
+        TEXT = "Diese Datei wurde mit der WinWord-Option 'Schnellspeichern' gespeichert. Bitte schalten Sie in WinWord die Option 'Schnellspeichern zulassen' aus und speichern sie die Datei erneut mit WinWord" ;
+        TEXT [ English ] = "This file is stored with the WinWord-Option 'fastsave'. Please disable the WinWord option 'Allow Fast Saves' and use WinWord to save the file again" ;
+        TEXT [ norwegian ] = "Denne filen er lagret med alternativet til WinWord 'hurtiglagre'. Sperr WinWord alternativet ' Tillat Hurtige Lagringer' og bruk WinWord for å lagre filen igjen" ;
+        TEXT [ italian ] = "Questo file è stato salvato con l'opzione di Winword 'salvataggio veloce'. Disabilitate l'opzione di WinWord 'Salvataggio veloce' ed utilizzate WinWord per salvare di nuovo il file." ;
+        TEXT [ portuguese_brazilian ] = "Este arquivo foi armazenado com a opção do  WinWord 'fastsave'. Por favor desative a opção do WinWord 'Allow Fast Saves' e utilize o WinWord para gravar novamente o arquivo" ;
+        TEXT [ portuguese ] = "Este ficheiro foi guardado com a opção do WinWord \"Guardar rápido\". Desactive a opção do WinWord \"Permitir Guardar rápido\" e guarde novamente o ficheiro em WinWord" ;
+        TEXT [ finnish ] = "Tämä tiedosto on tallennettu käyttäen WinWordin pikatallennusta. Poista pikatallennus käytöstä WinWordissa ja tallennatiedosto uudelleen" ;
+        TEXT [ danish ] = "Denne fil er blevet gemt med WinWord-indstillingen 'Gem hurtigt'. Deaktiver venligst indstillingen 'Gem hutigt' og gem filen igen med WinWord." ;
+        TEXT [ french ] = "Ce fichier a été enregistré à l'aide de l'option 'Enregistrement rapide' de WinWord. Veuillez désactiver cette option et utiliser WinWord pour enregistrer à nouveau le fichier." ;
+        TEXT [ swedish ] = "Denna fil är sparad med WinWord-alternativet 'snabbspara'. Stäng av WinWord-alternativet 'Tillåt snabbspara' och spara filen med WinWord igen" ;
+        TEXT [ dutch ] = "Dit bestand werd met de WinWord optie \"Snel opslaan\" opgeslagen. Schakel a.u.b in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
+        TEXT [ spanish ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde nuevamente el archivo con WinWord" ;
+        TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please uncheck the option 'Allow Fast Saves' and save the file again." ;
+        TEXT[ chinese_simplified ] = "Õâ¸öÎÄ¼ş´æÅÌ²ÉÓÃµÄÊÇ WinWord Ñ¡Ïî '¿ìËÙ±£´æ'·½Ê½¡£ÇëÄúÊ§»îÕâ¸öÑ¡Ïî£¬È»ºóÔÚÖØĞÂ´æÅÌÕâ¸öÎÄ¼ş¡£";
+        TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí ïğè ïîìîùè ïàğàìåòğà WinWord 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë ñ ïîìîùüş WinWord";
+        TEXT[ polish ] = "Ten plik zosta³ zapisany za pomoc¹ opcji WinWord 'Szybkie zapisywanie'. Proszê wy³¹cz w WinWord opcjê 'Dopuœæ szybkie zapisywanie' i zapisz plik ponownie w WinWord.";
+        TEXT[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍAWinWordµÌß¼®İ‚Ì'‚‘¬•Û‘¶'‚Å•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·BWinWord‚ÌµÌß¼®İ '‚‘¬•Û‘¶' ‚ğµÌ‚É‚µ‚ÄAÌ§²Ù‚ğV‚½‚ÉWinWord‚Å•Û‘¶‚µ‚Ä‰º‚³‚¢B";
+        TEXT[ chinese_traditional ] = "Àx¦sÀÉ®×±Ä¥Îªº¬O WinWord ¿ï¶µ '§Ö³tÀx¦s'¤è¦¡¡C½Ğ±z¥¢¬¡³o­Ó¿ï¶µ¡MµM«á¦b­«·sÀx¦s³o­ÓÀÉ®×¡C";
+        TEXT[ arabic ] = "Êã ÍİÙ åĞÇ Çáãáİ Úä ØÑíŞ ÎíÇıÑ 'ÇáÍİÙ ÇáÓÑíÚ' İí WinWord. ÇáÑÌÇÁ ÅíŞÇİ ÎÇÕíÉ 'ÇáÓãÇÍ ÈÇáÍİÙ ÇáÓÑíÚ' İí WinWord¡ Ëã  Şã ÈÍİÙ Çáãáİ ãä ÌÏíÏ ÈæÇÓØÉ WinWord.";
+        TEXT[ greek ] = "Ôï áñ÷åßï áõôü áğïèçêåıôçêå ìå ôçí åğéëïãŞ 'ÃñŞãïñç áğïèŞêåõóç' ôïõ WinWord. Ğáñáêáëş áğåíåñãïğïéŞóåôå ôçí åğéëïãŞ áõôŞ ôïõ WinWord êáé áğïèçêåıóôå ôï áñ÷åßï îáíÜ óôï WinWord.";
+        TEXT[ korean ] = "ÀÌ ÆÄÀÏÀº  WinWordÀÇ  'ºü¸¥ ÀúÀå' ¸ğµå·Î ÀúÀåµÇ¾î ÀÖ½À´Ï´Ù. ¿É¼Ç 'ºü¸¥ ÀúÀå Çã¿ë'À» ÇØÁ¦ÇÏ½Ã°í ÆÄÀÏÀ» ´Ù½Ã ÀúÀåÇÏ½Ê½Ã¿À.";
+        TEXT[ turkish ] = "Bu dosya WinWord seçeneği 'Hızlı kaydet' ile kaydedilmiş. WinWord'de 'Hızlı kaydetmeye olanak sağla' seçeneğini geçersiz kılıp dosyayı yeniden WinWord ile kaydedin";
+        TEXT[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
+    {
+        TEXT = "Es konnten nicht alle Attribute gelesen werden" ;
+        TEXT [ English ] = "Not all attributes could be read" ;
+        Text [ dutch ] = "Niet alle attributen konden worden ingelezen" ;
+        Text [ english_us ] = "Not all attributes could be read" ;
+        Text [ italian ] = "Non è stato possibile leggere tutti gli attributi" ;
+        Text [ spanish ] = "No se pudieron leer todos los atributos" ;
+        Text [ french ] = "Impossible de lire tous les attributs" ;
+        Text [ swedish ] = "Alla attribut kunde inte läsas" ;
+        Text [ danish ] = "Det var ikke muligt at læse alle attributter" ;
+        Text [ portuguese ] = "Foi impossível ler todos os atributos" ;
+        Text [ portuguese_brazilian ] = "Es konnten nicht alle Attribute gelesen werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡ËùÓĞµÄÊôĞÔ";
+        Text[ russian ] = "Âñå àòğèáóòû ïğî÷èòàòü íåâîçìîæíî";
+        Text[ polish ] = "Nie wszystkie atrybuty mog³y zostaæ odczytane";
+        Text[ japanese ] = "‚·‚×‚Ä‚Ì‘®«‚ğ“Ç‚İæ‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªkÅª¨ú©Ò¦³ªºÄİ©Ê";
+        Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ßá ÇáÓãÇÊ";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç áíÜãíùóç üëùí ôùí ÷áñáêôçñéóôéêşí";
+        Text[ korean ] = "¸ğµç ¼Ó¼ºÀÌ ÀĞÇô Áú¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Tüm öznitelikler okunamadı";
+        Text[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
+    {
+        TEXT = "Es konnten nicht alle Attribute geschrieben werden" ;
+        TEXT [ English ] = "Not all attributes could be written" ;
+        Text [ english_us ] = "Not all attributes could be recorded" ;
+        Text [ italian ] = "Non è stato possibile scrivere tutti gli attributi" ;
+        Text [ spanish ] = "No se pudieron grabar todos los atributos" ;
+        Text [ french ] = "Impossible d'écrire tous les attributs" ;
+        Text [ dutch ] = "Niet alle attributen konden worden geschreven" ;
+        Text [ swedish ] = "Alla attribut kunde inte skrivas" ;
+        Text [ danish ] = "Det var ikke muligt at skrive alle attributter" ;
+        Text [ portuguese ] = "Foi impossível gravar todos os atributos" ;
+        Text [ portuguese_brazilian ] = "Es konnten nicht alle Attribute geschrieben werden" ;
+        Text[ chinese_simplified ] = "²»ÄÜĞ´ÈëËùÓĞµÄÊôĞÔ";
+        Text[ russian ] = "Âñå àòğèáóòû çàïèñàòü íåâîçìîæíî";
+        Text[ polish ] = "Nie wszystkie atrybuty mog³y zostaæ zapisane";
+        Text[ japanese ] = "‚·‚×‚Ä‚Ì‘®«‚ğ‹L˜^‚·‚é‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "¤£¯à¼g¤J©Ò¦³ªºÄİ©Ê";
+        Text[ arabic ] = "ÊÚĞÑ ßÊÇÈÉ ßá ÇáÓãÇÊ";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç êáôáãñáöŞ üëùí ôùí ÷áñáêôçñéóôéêşí";
+        Text[ korean ] = "¸ğµç ¼Ó¼ºÀÌ ±â·ÏµÉ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Tüm öznitelikler yazılamadı";
+        Text[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken übernommen werden : Einige OLE-Objekte konnten nur als Grafiken ³bernommen werden */
+        TEXT = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        TEXT [ English ] = "Some OLE Objects could only be loaded as graphics" ;
+        Text [ dutch ] = "Enkele OLE-objecten konden alleen als grafische objecten worden overgenomen" ;
+        Text [ english_us ] = "Some OLE objects could only be loaded as graphics" ;
+        Text [ italian ] = "Alcuni oggetti OLE sono stati prelevati solo come immagini" ;
+        Text [ spanish ] = "Algunos objetos OLE se pudieron incluir solo como imágenes" ;
+        Text [ french ] = "Certains objets OLE ont pu être chargés uniquement sous forme d'images" ;
+        Text [ swedish ] = "Några OLE-objekt kunde bara övertas som grafiker" ;
+        Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
+        Text [ portuguese ] = "Alguns dos objectos OLE puderam ser apenas carregados como imagens" ;
+        Text [ portuguese_brazilian ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        Text[ chinese_simplified ] = "Ò»Ğ© OLE ¶ÔÏóÖ»ÄÜÒÔÍ¼Ïñ·½Ê½×°ÔØ";
+        Text[ russian ] = "Çàãğóçêà íåêîòîğûõ îáúåêòîâ OLE âîçìîæíà òîëüêî â êà÷åñòâå ğèñóíêîâ";
+        Text[ polish ] = "Niektóre obiekty OLE mog¹ zostaæ za³adowane tylko jako grafiki";
+        Text[ japanese ] = "‚¢‚­‚Â‚©‚ÌOLEµÌŞ¼Şª¸Ä‚Í¸Ş×¯Ì¨¯¸½‚Æ‚µ‚Ä‚Ì‚İ“Ç‚İ‚Ş‚±‚Æ‚ª‚Å‚«‚Ü‚·";
+        Text[ chinese_traditional ] = "¤@¨Ç OLE-ª«¥ó¥u¯à¥H¹Ï¤ù¤è¦¡¸Ë¸ü";
+        Text[ arabic ] = "áã íßä ãä Çáããßä ÊØÈíŞ ÈÚÖ ßÇÆäÇÊ OLE ÅáÇ ßÑÓæãÇÊ";
+        Text[ greek ] = "ÌåñéêÜ áíôéêåßìåíá OLE ìğüñåóáí íá öïñôùèïıí ìüíï ùò ãñáöéêÜ";
+        Text[ korean ] = "¾à°£ÀÇ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¸¸ ·Îµå µÉ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ turkish ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
+        Text[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken übernommen werden : Einige OLE-Objekte konnten nur als Grafiken ³bernommen werden */
+        TEXT = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        TEXT [ English ] = "Some OLE Objects could only be saved as graphics" ;
+        Text [ english_us ] = "Some OLE objects could only be saved as graphics" ;
+        Text [ italian ] = "Alcuni oggetti OLE sono stati prelevati solo come immagini" ;
+        Text [ spanish ] = "Algunos objetos OLE se pudieron incluir solo como imágenes" ;
+        Text [ french ] = "Certains objets OLE ont pu être chargés uniquement sous forme d'images" ;
+        Text [ dutch ] = "Enkele OLE-objecten konden alleen als grafische objecten worden overgenomen" ;
+        Text [ swedish ] = "Några OLE-objekt kunde bara övertas som grafiker" ;
+        Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
+        Text [ portuguese ] = "Alguns dos objectos OLE foram carregados apenas como imagens" ;
+        Text [ portuguese_brazilian ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        Text[ chinese_simplified ] = "Ò»Ğ© OLE ¶ÔÏóÎŞ·¨±»´æÅÌÎªÍ¼ĞÎ";
+        Text[ russian ] = "Çàãğóçêà íåêîòîğûõ îáúåêòîâ OLE âîçìîæíà òîëüêî â êà÷åñòâå ğèñóíêîâ";
+        Text[ polish ] = "Niektóre obiekty OLE mog³y zostaæ za³adowane tylko jako grafiki";
+        Text[ japanese ] = "‚¢‚­‚Â‚©‚ÌOLEµÌŞ¼Şª¸Ä‚Í¸Ş×Ì¨¯¸½‚Æ‚µ‚Ä‚Ì‚İ•Û‘¶‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·";
+        Text[ chinese_traditional ] = "¤@¨Ç OLE-ª«¥óµLªk³QÀx¦s¬°¹Ï¤ù";
+        Text[ arabic ] = "áã íßä ãä Çáããßä ÊØÈíŞ ÈÚÖ ßÇÆäÇÊ OLE ÅáÇ ßÑÓæãÇÊ";
+        Text[ greek ] = "ÌåñéêÜ áíôéêåßìåíá OLE ìğüñåóáí íá öïñôùèïıí ìüíï ùò ãñáöéêÜ";
+        Text[ korean ] = "¾à°£ÀÇ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¸¸ ÀúÀå µÉ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ turkish ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
+        Text[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollständig geladen werden : Dokument konnte nicht vollstõndig geladen werden */
+        TEXT = "Dokument konnte nicht vollständig geladen werden" ;
+        TEXT [ English ] = "Document could not be loaded completely" ;
+        Text [ dutch ] = "Document kon niet volledig worden geladen" ;
+        Text [ english_us ] = "Document could not be completely loaded" ;
+        Text [ italian ] = "Non è stato possibile caricare il file completamente" ;
+        Text [ spanish ] = "No se pudo cargar completamente el documento" ;
+        Text [ french ] = "Le document n'a pas pu être chargé dans son intégralité" ;
+        Text [ swedish ] = "Dokumentet kunde inte laddas fullständigt" ;
+        Text [ danish ] = "Det var ikke muligt at indlæse dokumentet helt" ;
+        Text [ portuguese ] = "Foi impossível carregar o documento completamente" ;
+        Text [ portuguese_brazilian ] = "Dokument konnte nicht vollständig geladen werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ÍêÈ«×°ÔØÎÄµµ";
+        Text[ russian ] = "Ïîëíîñòüş çàãğóçèòü äîêóìåíò íåâîçìîæíî";
+        Text[ polish ] = "Dokument nie móg³ zostaæ ca³kowicie za³adowany";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğŠ®‘S‚É“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk§¹¥ş¸Ë¸ü¤å¥ó";
+        Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÇáãÓÊäÏ ÈÔßá ÊÇã";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç öüñôùóç ïëüêëçñïõ ôïõ åããñÜöïõ";
+        Text[ korean ] = "¹®¼­°¡ ¿ÏÀüÈ÷ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Belge tümüyle yüklenemedi";
+        Text[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollständig gespeichert werden : Dokument konnte nicht vollstõndig gespeichert werden */
+        TEXT = "Dokument konnte nicht vollständig gespeichert werden" ;
+        TEXT [ English ] = "Document could not be saved completely" ;
+        Text [ english_us ] = "Document could not be completely saved" ;
+        Text [ italian ] = "Non è stato possibile salvare il file completamente" ;
+        Text [ spanish ] = "No se pudo guardar completamente el documento" ;
+        Text [ french ] = "Le document n'a pas pu être enregistré dans son intégralité" ;
+        Text [ dutch ] = "Document kon niet volledig worden opgeslagen" ;
+        Text [ swedish ] = "Dokumentet kunde inte sparas fullständigt" ;
+        Text [ danish ] = "Det var ikke muligt at gemme dokumentet helt" ;
+        Text [ portuguese ] = "Foi impossível guardar o documento completamente" ;
+        Text [ portuguese_brazilian ] = "Dokument konnte nicht vollständig gespeichert werden" ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ÍêÕûµØ´æÅÌÎÄµµ";
+        Text[ russian ] = "Ïîëíîñòüş ñîõğàíèòü äîêóìåíò íåâîçìîæíî";
+        Text[ polish ] = "Dokument nie móg³ zostaæ ca³kowicie zapisany";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğŠ®‘S‚É•Û‘¶‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+        Text[ chinese_traditional ] = "µLªk§¹¾ãÀx¦s¤å¥ó";
+        Text[ arabic ] = "ÊÚĞÑ ÍİÙ ÇáãÓÊäÏ ÈÔßá ÊÇã";
+        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç áğïèŞêåõóç ïëüêëçñïõ ôïõ åããñÜöïõ";
+        Text[ korean ] = "¹®¼­°¡ ¿ÏÀüÈ÷ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ turkish ] = "Belge tümüyle kaydedilemedi";
+        Text[ language_user1 ] = " ";
+    };
+    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
+    {
+        Text = "Das HTML-Dokument enthält StarBasic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert." ;
+        Text [ English ] = "This HTML document contains StarBasic macros.\nThey were not saved because of the current export options." ;
+        Text[ english_us ] = "This HTML document contains StarOffice Basic macros.\nThey were not saved with the current export settings.";
+        Text[ portuguese ] = "Este documento HTML contém macros StarOffice Basic.\nEstas não foram guardadas com as predefinições de exportação activas.";
+        Text[ russian ] = "İòîò äîêóìåíò HTML ñîäåğæèò ìàêğîñû StarOffice Basic.\nÎíè íå ñîõğàíèëèñü ñ òåêóùèìè íàñòğîéêàìè ıêñïîğòà.";
+        Text[ greek ] = "Ôï áñ÷åßï HTML ğåñéİ÷åé ìáêñïåíôïëİò ôïõ StarOffice Basic.\nÁõôİò äåí áğïèçêåıôçêáí ìå ôéò ôñİ÷ïõóåò ñõèìßóåéò åéóáãùãŞò.";
+        Text[ dutch ] = "Dit HTML document bevat StarOffice Basic-macro's.\nDeze konden niet worden opgeslagen met de actuele exportinstellingen.";
+        Text[ french ] = "Le document HTML contient des macros StarOffice Basic.\nCelles-ci n'ont pas été enregistrées avec les paramètres d'export actifs.";
+        Text[ spanish ] = "El documento HTML contiene macros StarOffice Basic.\nNo se guardaron con la configuración actual de exportación.";
+        Text[ italian ] = "Il documento HTML contiene macro StarOffice Basic che\nnon sono state salvate con le impostazioni attuali di esportazione.";
+        Text[ danish ] = "Dette HTML-dokument indeholder StarOffice Basic-makroer.\nDe blev ikke gemt med de aktuelle eksportindstillinger.";
+        Text[ swedish ] = "HTML-dokumentet innehåller StarOffice Basic-makron.\nDe sparades inte med de aktuella exportinställningarna.";
+        Text[ polish ] = "Dokument HTML zawiera Makra StarOffice Basic.\nNie zosta³y one zapisane razem z aktualnymi ustawieniami ekspotru.";
+        Text[ portuguese_brazilian ] = "This HTML document contains StarOffice Basic macros.\nThey were not saved because of the current export options.";
+        Text[ japanese ] = "‚±‚ÌHTMLÄŞ·­ÒİÄ‚ÍStarOffice Basic Ï¸Û‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·B\n‚»‚ê‚ç‚ÍŒ»İ‚Ì´¸½Îß°Äİ’è‚Å‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        Text[ korean ] = "ÀÌ HTML ¹®¼­´Â StarOffice Basic ¸ÅÅ©·Î¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÇöÀçÀÇ º¸³»±â ¼³Á¤À¸·Î´Â ¸ÅÅ©·Î°¡ ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "Õâ¸öHTMLÎÄµµº¬ÓĞStarOffice Basicºê¡£\nÓÉÓÚµ±Ç°µÄÊä³öÉè¶¨¶ø²»ÄÜ´æÅÌÕâĞ©ºê¡£";
+        Text[ chinese_traditional ] = "HTML ¤å¥ó§t¦³ StarOffice Basic ¥¨¶°¡C\n¦]·í«eªº¿é¥X³]©w¦Ó¤£¯àÀx¦s¤å¥ó¡C";
+        Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ HTML Úáì æÍÏÇÊ ãÇßÑæ StarOffice Basic.\náã íÊã ÍİÙåÇ ÈÅÚÏÇÏÇÊ ÇáÊÕÏíÑ ÇáÍÇáíÉ.";
+        Text[ turkish ] = "HTML belgesinde StarBasic makroları var.\nBu makrolar, yürürlükteki verme ayarları ile kaydedilmemiş.";
+        Text[ language_user1 ] = " ";
+    };
+};
+
+
+
+

@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ *  $RCSfile: web.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _WEB_HRC
+#define _WEB_HRC
+
+#include "rcid.hrc"
+
+#define RC_WEB_ICON                             (RC_WEB_BEGIN + 1)
+#define RID_WEBTOOLS_TOOLBOX                    (RC_WEB_BEGIN + 2)
+#define RID_WEBTEXT_TOOLBOX                     (RC_WEB_BEGIN + 3)
+#define STR_HUMAN_SWWEBDOC_NAME                 (RC_WEB_BEGIN + 4)
+#define STR_WRITER_WEBDOC_FULLTYPE_40           (RC_WEB_BEGIN + 5)
+#define STR_SHELLNAME_WEBTEXT                   (RC_WEB_BEGIN + 6)
+#define STR_SHELLNAME_WEBFRAME                  (RC_WEB_BEGIN + 7)
+#define RID_WEBFRAME_TOOLBOX                    (RC_WEB_BEGIN + 8)
+#define STR_WRITER_WEBDOC_FULLTYPE              (RC_WEB_BEGIN + 9)
+#define RID_WEBGRAPHIC_TOOLBOX                  (RC_WEB_BEGIN + 10)
+#define RID_WEBOLE_TOOLBOX                      (RC_WEB_BEGIN + 11)
+
+
+#define MN_WEBFILE                              (RC_WEB_BEGIN + 30)
+#define MN_WEBEDIT                              (RC_WEB_BEGIN + 31)
+#define MN_WEBVIEW                              (RC_WEB_BEGIN + 32)
+#define MN_WEBINS                               (RC_WEB_BEGIN + 33)
+#define MN_WEBFORMAT                            (RC_WEB_BEGIN + 34)
+#define MN_WEBEXTRA                             (RC_WEB_BEGIN + 35)
+#define MN_WEBWIN                               (RC_WEB_BEGIN + 36)
+
+#define MN_OBJECTMENU_WEBTEXT               (RC_WEB_BEGIN + 37)
+#define MN_OBJECTMENU_WEBLIST               (RC_WEB_BEGIN + 38)
+#define MN_OBJECTMENU_WEBTABLE              (RC_WEB_BEGIN + 39)
+#define MN_OBJECTMENU_WEBFRAME              (RC_WEB_BEGIN + 40)
+#define MN_OBJECTMENU_WEBGRAFIK             (RC_WEB_BEGIN + 41)
+#define MN_OBJECTMENU_WEBDRAW               (RC_WEB_BEGIN + 42)
+#define MN_OBJECTMENU_WEBDRWTXT             (RC_WEB_BEGIN + 43)
+#define MN_OBJECTMENU_WEBOLE                (RC_WEB_BEGIN + 44)
+#define MN_OBJECTMENU_WEBDRAWCONTROL        (RC_WEB_BEGIN + 45)
+
+#define MN_WEB_TEXT_POPUPMENU               (RC_WEB_BEGIN + 46)
+
+#define MN_WEBFILE_PORT                         (RC_WEB_BEGIN + 47)
+#define MN_WEBEDIT_PORT                         (RC_WEB_BEGIN + 48)
+#define MN_WEBVIEW_PORT                         (RC_WEB_BEGIN + 49)
+#define MN_WEBINS_PORT                          (RC_WEB_BEGIN + 50)
+#define MN_WEBFORMAT_PORT                       (RC_WEB_BEGIN + 51)
+#define MN_WEBEXTRA_PORT                        (RC_WEB_BEGIN + 52)
+#define MN_WEBWIN_PORT                          (RC_WEB_BEGIN + 53)
+
+// ------------------------------------------------------------------------
+
+#define WEB_ACT_END                 MN_OBJECTMENU_WEBDRAWCONTROL
+
+
+#if WEB_ACT_END > RC_WEB_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

@@ -1,0 +1,1615 @@
+/*************************************************************************
+ *
+ *  $RCSfile: navipi.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "cmdid.h"
+#include "utlui.hrc"
+#include "navipi.hrc"
+#include "helpid.h"
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+Window DLG_NAVIGATION_PI
+{
+    HelpID = HID_NAVIGATION_PI ;
+    OutputSize = TRUE ;
+    DialogControl = TRUE ;
+    SVLook = TRUE ;
+     // Size = MAP_PIXEL( 235, 195 );
+     // ZoomInOutputSize = MAP_PIXEL(235, 56);
+    Size = MAP_PIXEL ( 282 , 59 ) ;
+     //    Closeable = TRUE ;
+     //    Zoomable = TRUE ;
+     //    Moveable = TRUE ;
+     // ZoomIn = FALSE;
+    Hide = TRUE ;
+     //    HideWhenDeactivate = TRUE ;
+     //    Sizeable = TRUE ;
+     //    EnableResizing = TRUE ;
+     //    Dockable = TRUE ;
+     //    Sizeable = TRUE ;
+    Text = "Navigator" ;
+    Text [ English ] = "Navigator" ;
+    Text [ norwegian ] = "Navigator" ;
+    Text [ italian ] = "Navigatore" ;
+    Text [ portuguese_brazilian ] = "Navegador" ;
+    Text [ portuguese ] = "Navegador" ;
+    Text [ finnish ] = "Navigaattori" ;
+    Text [ danish ] = "Navigator" ;
+    Text [ french ] = "Navigateur" ;
+    Text [ swedish ] = "Navigator" ;
+    Text [ dutch ] = "Navigator" ;
+    Text [ spanish ] = "Navegador" ;
+    Text [ english_us ] = "Navigator" ;
+    ExtraData =
+    {
+        198;
+    };
+    /************************************************************************************
+    Toolbox ab 323 x
+************************************************************************************/
+    ImageList IL_CONTENT
+    {
+        ImageBitmap = Bitmap { File = "scnacon.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        IdList =
+        {
+            FN_UP ;  // sc20186.bmp
+            FN_DOWN ;  // sc20175.bmp
+            FN_SELECT_HEADER ;  // sc20179.bmp
+            FN_SELECT_FOOTER ;  // sc20177.bmp
+            FN_SELECT_FOOTNOTE ;  // sc20182.bmp
+            FN_SHOW_CONTENT_BOX ;  // 20233.bmp
+            FN_SHOW_ROOT ;  // 20234.bmp
+            FN_ITEM_UP ;  // sc20174.bmp
+            FN_ITEM_DOWN ;  // sc20171.bmp
+            FN_ITEM_LEFT ;  // sc20172.bmp
+            FN_ITEM_RIGHT ;  // sc20173.bmp
+            FN_DROP_REGION ;  // sc20235.bmp
+            FN_OUTLINE_LEVEL ;  // sc20236.bmp
+            FN_SELECT_SET_AUTO_BOOKMARK ;  // sc20183.bmp
+            FN_DROP_REGION_LINK ;  // 20238
+            FN_DROP_REGION_COPY ;  // 20239
+            FN_GLOBAL_SWITCH ;  //20244
+            FN_GLOBAL_EDIT ;  //20245
+            FN_GLOBAL_UPDATE ;  //20246
+            FN_GLOBAL_OPEN ;  //20247
+            FN_GLOBAL_SAVE_CONTENT ;  //20248
+            FN_CREATE_NAVIGATION ;  //20249
+        };
+        IdCount = { 21 ; };
+    };
+    Toolbox TB_CONTENT
+    {
+        Pos = MAP_PIXEL ( 5 , 5 ) ;
+        Size = MAP_PIXEL ( 300 , 47 ) ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_SWITCH ;
+                HelpID = HID_NAVI_TBX17 ;
+                Text = "Umschalten" ;
+                Text [ English ] = "Switch" ;
+                Text [ english_us ] = "Toggle" ;
+                Text [ portuguese_brazilian ] = "Umschalten" ;
+                Text [ swedish ] = "Växla" ;
+                Text [ danish ] = "Skift" ;
+                Text [ italian ] = "Commuta" ;
+                Text [ spanish ] = "Conmutar" ;
+                Text [ french ] = "Basculer" ;
+                Text [ dutch ] = "Omschakelen" ;
+                Text [ portuguese ] = "Comutar" ;
+                Text[ chinese_simplified ] = "ÇĞ»»";
+                Text[ russian ] = "Ïåğåêëş÷èòü";
+                Text[ polish ] = "Prze³¹cz";
+                Text[ japanese ] = "Ø‚è‘Ö‚¦";
+                Text[ chinese_traditional ] = "Âà´«";
+                Text[ arabic ] = "ÇáÊÈÏíá";
+                Text[ greek ] = "ÅíáëëáãŞ";
+                Text[ korean ] = "Åä±Û";
+                Text[ turkish ] = "Değiştir";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_CREATE_NAVIGATION ;
+                HelpID = HID_NAVI_TBX24 ;
+                Text = "Navigation" ;
+                Text [ English ] = "Navigation" ;
+                Text [ english_us ] = "Navigation" ;
+                Text [ portuguese_brazilian ] = "Navigation" ;
+                Text [ swedish ] = "Navigation" ;
+                Text [ danish ] = "Navigation" ;
+                Text [ italian ] = "Navigazione" ;
+                Text [ spanish ] = "Navegación" ;
+                Text [ french ] = "Navigation" ;
+                Text [ dutch ] = "Navigatie" ;
+                Text [ portuguese ] = "Navegação" ;
+                Text[ chinese_simplified ] = "ä¯ÀÀ";
+                Text[ russian ] = "Íàâèãàöèÿ";
+                Text[ polish ] = "Nawigacja";
+                Text[ japanese ] = "ÅËŞ¹Ş°¼®İ";
+                Text[ chinese_traditional ] = "ÂsÄı";
+                Text[ arabic ] = "ÇáãáÇÍÉ";
+                Text[ greek ] = "Ìåôáêßíçóç";
+                Text[ korean ] = "³×ºñ°ÔÀÌ¼Ç";
+                Text[ turkish ] = "Dolaşma";
+            };
+            /*            ToolBoxItem
+            {
+                Identifier = FN_CONTENT_LB ;
+                HelpID = HID_NAVI_TBX1 ;
+                Text = "Inhaltstyp" ;
+                Text [ English ] = "Content type" ;
+                 // Listbox mit Inhaltsauswahl
+                Text [ dutch ] = "Inhoudstype" ;
+                Text [ english_us ] = "Content Type" ;
+                Text [ italian ] = "Tipo di contenuto" ;
+                Text [ spanish ] = "Tipo de contenido" ;
+                Text [ french ] = "Type de contenu" ;
+                Text [ swedish ] = "Innehållstyp" ;
+                Text [ danish ] = "Indholdstype" ;
+                Text [ portuguese_brazilian ] = "Inhaltstyp" ;
+                Text [ portuguese ] = "Tipo de conteúdo" ;
+            };*/
+            ToolBoxItem
+            {
+                Identifier = FN_UP ;
+                 //                 ItemBitmap = Bitmap { File = "navup.bmp"; };
+                HelpID = HID_NAVI_TBX2 ;
+                /* ### ACHTUNG: Neuer Text in Resource? Rückwärts : R³ckwõrts */
+                Text = "Rückwärts" ;
+                Text [ English ] = "Backward" ;
+                Text [ norwegian ] = "Bakover" ;
+                Text [ italian ] = "Indietro" ;
+                Text [ portuguese_brazilian ] = "Para trás" ;
+                Text [ portuguese ] = "Anterior" ;
+                Text [ finnish ] = "Taaaksepäin" ;
+                Text [ danish ] = "Tilbage" ;
+                Text [ french ] = "Précédent" ;
+                Text [ swedish ] = "Bakåt" ;
+                Text [ dutch ] = "Achteruit" ;
+                Text [ spanish ] = "Retroceder" ;
+                Text [ english_us ] = "Back" ;
+                Text[ chinese_simplified ] = "·µ»Ø";
+                Text[ russian ] = "Íàçàä";
+                Text[ polish ] = "Wstecz";
+                Text[ japanese ] = "–ß‚é";
+                Text[ chinese_traditional ] = "ªğ¦^";
+                Text[ arabic ] = "Åáì ÇáÎáİ";
+                Text[ greek ] = "Ğßóù";
+                Text[ korean ] = "µÚ·Î";
+                Text[ turkish ] = "Geri";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_DOWN ;
+                 //                 ItemBitmap = Bitmap { File = "navdn.bmp"; };
+                HelpID = HID_NAVI_TBX3 ;
+                /* ### ACHTUNG: Neuer Text in Resource? Vorwärts : Vorwõrts */
+                Text = "Vorwärts" ;
+                Text [ English ] = "Forward" ;
+                Text [ norwegian ] = "Fram" ;
+                Text [ italian ] = "Avanti" ;
+                Text [ portuguese_brazilian ] = "Para Frente" ;
+                Text [ portuguese ] = "Seguinte" ;
+                Text [ finnish ] = "Seuraava" ;
+                Text [ danish ] = "Fremad" ;
+                Text [ french ] = "Suivant" ;
+                Text [ swedish ] = "Framåt" ;
+                Text [ dutch ] = "Voorwaarts" ;
+                Text [ spanish ] = "Avanzar" ;
+                Text [ english_us ] = "Forward" ;
+                Text[ chinese_simplified ] = "ÏòÇ°";
+                Text[ russian ] = "Âïåğåä";
+                Text[ polish ] = "Do przodu";
+                Text[ japanese ] = "i‚Ş";
+                Text[ chinese_traditional ] = "¦V«e";
+                Text[ arabic ] = "Åáì ÇáÃãÇã";
+                Text[ greek ] = "Åìğñüò";
+                Text[ korean ] = "¾ÕÀ¸·Î";
+                Text[ turkish ] = "İleri";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_DROP_REGION ;
+                HelpID = HID_NAVI_TBX4 ;
+                Text = "Dragmodus" ;
+                Text [ English ] = "Drag Mode" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Modus für Drag & Drop auswählen : Modus f³r Drag & Drop auswõhlen */
+                DropDown = TRUE ;
+                Text [ english_us ] = "Drag Mode" ;
+                Text [ italian ] = "Modo drag" ;
+                Text [ spanish ] = "Modo Arrastrar" ;
+                Text [ french ] = "Mode Glisser" ;
+                Text [ dutch ] = "Modus Slepen" ;
+                Text [ swedish ] = "Draläge" ;
+                Text [ danish ] = "Trækmodus" ;
+                Text [ portuguese_brazilian ] = "Dragmodus" ;
+                Text [ portuguese ] = "Modo Arrastar" ;
+                Text[ chinese_simplified ] = "ÍÏ¶¯Ä£Ê½";
+                Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
+                Text[ polish ] = "Tryb przeci¹gania";
+                Text[ japanese ] = "ÄŞ×¯¸ŞÓ°ÄŞ";
+                Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
+                Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
+                Text[ greek ] = "ÊáôÜóôáóç óõñìïı";
+                Text[ korean ] = "µå·¡±× ¸ğµå";
+                Text[ turkish ] = "Sürükleme kipi";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_UP ;
+                 //                 ItemBitmap = Bitmap { File = "navchup.bmp"; };
+                HelpID = HID_NAVI_TBX5 ;
+                Text = "Kapitel hoch" ;
+                Text [ English ] = "Chapter up" ;
+                Text [ norwegian ] = "Kapittel opp" ;
+                Text [ italian ] = "Capitolo superiore" ;
+                Text [ portuguese_brazilian ] = "Capítulo acima" ;
+                Text [ portuguese ] = "Subir um capítulo" ;
+                Text [ finnish ] = "Edellinen luku" ;
+                Text [ danish ] = "Kapitel op" ;
+                Text [ french ] = "Chapitre vers le haut" ;
+                Text [ swedish ] = "Kapitel uppåt" ;
+                Text [ dutch ] = "Hoofdstuk hoger" ;
+                Text [ spanish ] = "Un capítulo hacia arriba" ;
+                Text [ english_us ] = "Promote Chapter" ;
+                 //HelpText[english_us-wrong] = "Move chapter down";//"Move chapter up"
+                Text[ chinese_simplified ] = "ÕÂÉı¼¶";
+                Text[ russian ] = "Ãëàâà ñâåğõó";
+                Text[ polish ] = "Rozdzia³ do góry";
+                Text[ japanese ] = "Í‚ÌÚÍŞÙ‚ğã‚°‚é";
+                Text[ chinese_traditional ] = "³¹¤É¯Å";
+                Text[ arabic ] = "İÕá áÃÚáì";
+                Text[ greek ] = "Ğñïâéâáóìüò êåöáëáßïõ";
+                Text[ korean ] = "Àå ½Â°İ";
+                Text[ turkish ] = "Bölümü yukarı al";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_DOWN ;
+                 //                 ItemBitmap = Bitmap { File = "navchdn.bmp"; };
+                HelpID = HID_NAVI_TBX6 ;
+                Text = "Kapitel hinunter" ;
+                Text [ English ] = "Chapter down" ;
+                Text [ norwegian ] = "Kapittel ned" ;
+                Text [ italian ] = "Capitolo inferiore" ;
+                Text [ portuguese_brazilian ] = "Capítulo abaixo" ;
+                Text [ portuguese ] = "Descer um capítulo" ;
+                Text [ finnish ] = "Seuraava luku" ;
+                Text [ danish ] = "Kapitel ned" ;
+                Text [ french ] = "Chapitre vers le bas" ;
+                Text [ swedish ] = "Kapitel nedåt" ;
+                Text [ dutch ] = "Hoofdstuk lager" ;
+                Text [ spanish ] = "Un capítulo hacia abajo" ;
+                Text [ english_us ] = "Demote Chapter" ;
+                Text[ chinese_simplified ] = "ÕÂ½µ¼¶";
+                Text[ russian ] = "Ãëàâà ñíèçó";
+                Text[ polish ] = "Rozdzia³ w dó³";
+                Text[ japanese ] = "Í‚ÌÚÍŞÙ‚ğ‰º‚°‚é";
+                Text[ chinese_traditional ] = "³¹­°¯Å";
+                Text[ arabic ] = "İÕá áÃÓİá";
+                Text[ greek ] = "Õğïâéâáóìüò êåöáëáßïõ";
+                Text[ korean ] = "Àå ³·Ãß±â";
+                Text[ turkish ] = "Bölümü aşağı çek";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_BREAK ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SHOW_CONTENT_BOX ;
+                HelpID = HID_NAVI_TBX7 ;
+                Text = "Auswahlbox an-/ausschalten" ;
+                Text [ English ] = "Toggle Listbox" ;
+                Text [ english_us ] = "List Box On/Off" ;
+                Text [ italian ] = "Mostra/nascondi la casella di selezione" ;
+                Text [ spanish ] = "Mostrar/ocultar cuadro de selección" ;
+                Text [ french ] = "Afficher/masquer la boîte de sélection" ;
+                Text [ dutch ] = "Keuzebox in-/uitschakelen" ;
+                Text [ swedish ] = "Urvalsbox på/av" ;
+                Text [ danish ] = "Vis/skjul liste" ;
+                Text [ portuguese_brazilian ] = "Auswahlbox an-/ausschalten" ;
+                Text [ portuguese ] = "Act./Desactivar caixa de selecção" ;
+                Text[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈëÁĞ±í¿ò";
+                Text[ russian ] = "Âêë./âûêë. îêíî ñïèñêà";
+                Text[ polish ] = "W³¹cz/Wy³¹cz pole listy";
+                Text[ japanese ] = "Ø½ÄÎŞ¯¸½ µİ/µÌ";
+                Text[ chinese_traditional ] = "Åã¥Ü/Áô¤J²M³æ¤è¶ô";
+                Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÕäÏæŞ ÇáÇÎÊíÇÑ";
+                Text[ greek ] = "Ğëáßóéï åğéëïãŞò Íáé/¼÷é";
+                Text[ korean ] = "¸®½ºÆ® ¹Ú½º ½ÃÀÛ/Á¾·á";
+                Text[ turkish ] = "Liste kutusu açık/kapalı";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SHOW_ROOT ;
+                HelpID = HID_NAVI_TBX8 ;
+                Text = "Inhaltsansicht umschalten" ;
+                Text [ English ] = "Toggle content view" ;
+                Text [ english_us ] = "Content View" ;
+                Text [ italian ] = "Commuta la vista del contenuto" ;
+                Text [ spanish ] = "Conmutar visualización del contenido" ;
+                Text [ french ] = "Basculer l'affichage du contenu" ;
+                Text [ dutch ] = "Inhoudsopgave in-/uitschakelen" ;
+                Text [ swedish ] = "Växla innehållsvisning" ;
+                Text [ danish ] = "Skift til/fra indholdsvisning" ;
+                Text [ portuguese_brazilian ] = "Inhaltsansicht umschalten" ;
+                Text [ portuguese ] = "Comutar vista do conteúdo" ;
+                Text[ chinese_simplified ] = "ÇĞ»»ÄÚÈİÊÓÍ¼";
+                Text[ russian ] = "Ïåğåêëş÷èòü âèä ñîäåğæàíèÿ";
+                Text[ polish ] = "Prze³¹cz widok treœci";
+                Text[ japanese ] = "“à—e‚ÌËŞ­°‚ğØ‚èŠ·‚¦";
+                Text[ chinese_traditional ] = "¤Á´«¤º®eÀËµø";
+                Text[ arabic ] = "ÊÈÏíá ØÑíŞÉ ÚÑÖ ÇáãÍÊæíÇÊ";
+                Text[ greek ] = "ĞñïâïëŞ ğåñéå÷ïìİíùí Íáé/¼÷é";
+                Text[ korean ] = "³»¿ë º¸±â";
+                Text[ turkish ] = "İçerik görünümü";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_SET_AUTO_BOOKMARK ;
+                HelpID = HID_NAVI_TBX9 ;
+                 //                 ItemBitmap = Bitmap { File = "navstmp.bmp"; };
+                Text = "Merker setzen" ;
+                Text [ English ] = "Set Bookmarks" ;
+                Text [ norwegian ] = "Sett inn Bokmerker" ;
+                Text [ italian ] = "Imposta contrassegno" ;
+                Text [ portuguese_brazilian ] = "Definir Marcas" ;
+                Text [ portuguese ] = "Definir marca" ;
+                Text [ finnish ] = "Aseta kirjanmerkit" ;
+                Text [ danish ] = "Sæt påmindelse" ;
+                Text [ french ] = "Définir un pense-bête" ;
+                Text [ swedish ] = "Sätt temporärt bokmärke" ;
+                Text [ dutch ] = "Merktekens plaatsen" ;
+                Text [ spanish ] = "Insertar marca" ;
+                Text [ english_us ] = "Set Reminder" ;
+                Text[ chinese_simplified ] = "ÉèÖÃ±ê¼Ç";
+                Text[ russian ] = "Óñòàíîâèòü ïîìåòêó";
+                Text[ polish ] = "OsadŸ znaczniki";
+                Text[ japanese ] = "Šo‚¦~‚ß‚ğ•t‚¯‚é";
+                Text[ chinese_traditional ] = "³]©w´£¿ô";
+                Text[ arabic ] = "æÖÚ ÚáÇãÉ ÊĞßíÑ";
+                Text[ greek ] = "Ïñéóìüò õğåíèıìéóçò";
+                Text[ korean ] = "¹Ì¸®¾Ë¸² ¼³Á¤";
+                Text[ turkish ] = "Anımsatıcı yerleştir";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_HEADER ;
+                 //                 ItemBitmap = Bitmap { File = "navhead.bmp"; };
+                HelpID = HID_NAVI_TBX10 ;
+                Text = "Kopfzeile" ;
+                Text [ English ] = "Header" ;
+                Text [ norwegian ] = "Header" ;
+                Text [ italian ] = "Intestazione" ;
+                Text [ portuguese_brazilian ] = "Cabeçalho" ;
+                Text [ portuguese ] = "Cabeçalho" ;
+                Text [ finnish ] = "Yläteksti" ;
+                Text [ danish ] = "Sidehoved" ;
+                Text [ french ] = "En-tête " ;
+                Text [ swedish ] = "Sidhuvud" ;
+                Text [ dutch ] = "Koptekst" ;
+                Text [ spanish ] = "Encabezamiento" ;
+                Text [ english_us ] = "Header" ;
+                Text[ chinese_simplified ] = "Ò³Ã¼";
+                Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
+                Text[ polish ] = "Nag³ówek";
+                Text[ japanese ] = "Í¯ÀŞ";
+                Text[ chinese_traditional ] = "­¶­º";
+                Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
+                Text[ greek ] = "Êåöáëßäá";
+                Text[ korean ] = "¸Ó¸®±Û";
+                Text[ turkish ] = "Üstbilgi";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_FOOTER ;
+                 //                 ItemBitmap = Bitmap { File = "navfoot.bmp"; };
+                HelpID = HID_NAVI_TBX11 ;
+                /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
+                Text = "Fußzeile" ;
+                Text [ English ] = "Footer" ;
+                Text [ norwegian ] = "Footer" ;
+                Text [ italian ] = "Piè di pagina" ;
+                Text [ portuguese_brazilian ] = "Rodapé" ;
+                Text [ portuguese ] = "Rodapé" ;
+                Text [ finnish ] = "Alateksti" ;
+                Text [ danish ] = "Sidefod" ;
+                Text [ french ] = "Pied de page" ;
+                Text [ swedish ] = "Sidfot" ;
+                Text [ dutch ] = "Voettekst" ;
+                Text [ spanish ] = "Pie de página" ;
+                Text [ english_us ] = "Footer" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Springen zur Fußzeile : Springen zur Fu˜zeile */
+                Text[ chinese_simplified ] = "Ò³½Å";
+                Text[ russian ] = "Íèæíèé êîëîíòèòóë";
+                Text[ polish ] = "Stopka";
+                Text[ japanese ] = "Ì¯À";
+                Text[ chinese_traditional ] = "­¶§À";
+                Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
+                Text[ greek ] = "Õğïóİëéäï";
+                Text[ korean ] = "¹Ù´Ú±Û";
+                Text[ turkish ] = "Altbilgi";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_SELECT_FOOTNOTE ;
+                 //                 ItemBitmap = Bitmap { File = "navnote.bmp"; };
+                HelpID = HID_NAVI_TBX12 ;
+                Text = "Anker<->Text" ;
+                Text [ English ] = "Anchor<->Text" ;
+                Text [ norwegian ] = "Anker<->Tekst" ;
+                Text [ italian ] = "Ancoraggio<->Testo" ;
+                Text [ portuguese_brazilian ] = "Âncora<->Texto" ;
+                Text [ portuguese ] = "Âncora<->Texto" ;
+                Text [ finnish ] = "Ankkuri<->Teksti" ;
+                Text [ danish ] = "Anker<->Tekst" ;
+                Text [ french ] = "Ancre <-> texte" ;
+                Text [ swedish ] = "Ankare<->Text" ;
+                Text [ dutch ] = "Anker<->Tekst" ;
+                Text [ spanish ] = "Ancla <->Texto" ;
+                Text [ english_us ] = "Anchor<->Text" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Springen zwischen Fußnotenankern und dem Fußnotentext : Springen zwischen Fu˜notenankern und dem Fu˜notentext */
+                Text[ chinese_simplified ] = "±ê¼Ç<->ÕıÎÄ";
+                Text[ russian ] = "Ïğèâÿçêà<->Òåêñò";
+                Text[ polish ] = "Kotwica<->Tekst";
+                Text[ japanese ] = "‹r’";
+                Text[ chinese_traditional ] = "¼Ğ¸¹<->¤º¤å";
+                Text[ arabic ] = "ãÑÓÇÉ<->äÕ";
+                Text[ greek ] = "Áãêıñùóç<->Êåßìåíï";
+                Text[ korean ] = "°íÁ¤<->ÅØ½ºÆ®";
+                Text[ turkish ] = "Sabitleyici<->Metin";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_OUTLINE_LEVEL ;
+                HelpID = HID_NAVI_TBX13 ;
+                /* ### ACHTUNG: Neuer Text in Resource? Angezeigte Überschriftenebenen : Angezeigte šberschriftenebenen */
+                Text = "Angezeigte Überschriftenebenen" ;
+                Text [ English ] = "Number of outline level" ;
+                DropDown = TRUE ;
+                Text [ dutch ] = "Weergegeven kopregelniveaus" ;
+                Text [ english_us ] = "Heading Levels Shown" ;
+                Text [ italian ] = "Livelli di intestazioni visualizzati" ;
+                Text [ spanish ] = "Niveles de encabezados mostrados" ;
+                Text [ french ] = "Niveaux de titres affichés" ;
+                Text [ swedish ] = "Visade överskriftsnivåer" ;
+                Text [ danish ] = "Viste overskriftsniveauer" ;
+                Text [ portuguese_brazilian ] = "Angezeigte Überschriftenebenen" ;
+                Text [ portuguese ] = "Níveis de títulos mostrados" ;
+                Text[ chinese_simplified ] = "ÏÔÊ¾µÄ´ó¸Ù¼¶";
+                Text[ russian ] = "Ïîêàçàííûå óğîâíè ñòğóêòóğû";
+                Text[ polish ] = "Wyœwietlone poziomy konspektu";
+                Text[ japanese ] = "±³Ä×²İ ÚÍŞÙ";
+                Text[ chinese_traditional ] = "Åã¥Üªº¤jºõ¯Å";
+                Text[ arabic ] = "ãÓÊæíÇÊ ÇáÚäÇæíä ÇáÙÇåÑÉ";
+                Text[ greek ] = "Åìöáíéæüìåíá åğßğåäá åğéêåöáëßäùí";
+                Text[ korean ] = "¿Ü°û¼± ¼öÁØ";
+                Text[ turkish ] = "Görüntülenen başlık düzeyleri";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_LEFT ;
+                HelpID = HID_NAVI_TBX14 ;
+                 //                 ItemBitmap = Bitmap { File = "navchlf.bmp"; };
+                Text = "Ebene hoch" ;
+                Text [ English ] = "Increase Level" ;
+                Text [ norwegian ] = "+++Increase Level" ;
+                Text [ italian ] = "Livello superiore" ;
+                Text [ portuguese_brazilian ] = "Aumentar Nível" ;
+                Text [ portuguese ] = "Subir um nível" ;
+                Text [ finnish ] = "Korota tasoa" ;
+                Text [ danish ] = "Niveau op" ;
+                Text [ french ] = "Hausser d'un niveau" ;
+                Text [ swedish ] = "Höj nivån" ;
+                Text [ dutch ] = "Hoger niveau" ;
+                Text [ spanish ] = "Subir un nivel" ;
+                Text [ english_us ] = "Promote Level" ;
+                Text[ chinese_simplified ] = "Éı¼¶";
+                Text[ russian ] = "Íà îäèí óğîâåíü ââåğõ";
+                Text[ polish ] = "Podnieœ poziom";
+                Text[ japanese ] = "ÚÍŞÙ‚ğã‚°‚é";
+                Text[ chinese_traditional ] = "¤É¯Å";
+                Text[ arabic ] = "ãÓÊæì áÃÚáì";
+                Text[ greek ] = "Ğñïâéâáóìüò åğéğİäïõ";
+                Text[ korean ] = "¼öÁØ ¿Ã¸®±â";
+                Text[ turkish ] = "Düzeyi yukarı al";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_RIGHT ;
+                 //                 ItemBitmap = Bitmap { File = "navchrg.bmp"; };
+                HelpID = HID_NAVI_TBX15 ;
+                Text = "Ebene senken" ;
+                Text [ English ] = "Decrease Level" ;
+                Text [ norwegian ] = "+++Decrease Level" ;
+                Text [ italian ] = "Livello inferiore" ;
+                Text [ portuguese_brazilian ] = "Diminuir Nível" ;
+                Text [ portuguese ] = "Descer um nível" ;
+                Text [ finnish ] = "Laske tasoa" ;
+                Text [ danish ] = "Niveau ned" ;
+                Text [ french ] = "Abaisser d'un niveau" ;
+                Text [ swedish ] = "Sänk nivån" ;
+                Text [ dutch ] = "Lager niveau" ;
+                Text [ spanish ] = "Bajar un nivel" ;
+                Text [ english_us ] = "Demote Level" ;
+                Text[ chinese_simplified ] = "½µ¼¶";
+                Text[ russian ] = "Íà îäèí óğîâåíü âíèç";
+                Text[ polish ] = "Obni¿ poziom";
+                Text[ japanese ] = "ÚÍŞÙ‚ğ‰º‚°‚é";
+                Text[ chinese_traditional ] = "­°¯Å";
+                Text[ arabic ] = "ãÓÊæì áÃÓİá";
+                Text[ greek ] = "Õğïâéâáóìüò åğéğİäïõ";
+                Text[ korean ] = "¼öÁØ ³·Ãß±â";
+                Text[ turkish ] = "Düzeyi aşağı çek";
+            };
+        };
+    };
+    ToolBox TB_GLOBAL
+    {
+        Pos = MAP_PIXEL ( 5 , 5 ) ;
+        Size = MAP_PIXEL ( 300 , 47 ) ;
+        LineCount = 1 ;
+        Hide = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_SWITCH ;
+                HelpID = HID_NAVI_TBX17 ;
+                Text = "Umschalten" ;
+                Text [ English ] = "Switch" ;
+                Text [ english_us ] = "Toggle" ;
+                Text [ portuguese_brazilian ] = "Umschalten" ;
+                Text [ swedish ] = "Växla" ;
+                Text [ danish ] = "Skift" ;
+                Text [ italian ] = "Commuta" ;
+                Text [ spanish ] = "Conmutar" ;
+                Text [ french ] = "Basculer" ;
+                Text [ dutch ] = "Omschakelen" ;
+                Text [ portuguese ] = "Comutar" ;
+                Text[ chinese_simplified ] = "ÇĞ»»";
+                Text[ russian ] = "Ïåğåêëş÷èòü";
+                Text[ polish ] = "Prze³¹cz";
+                Text[ japanese ] = "Ø‚è‘Ö‚¦";
+                Text[ chinese_traditional ] = "Âà´«";
+                Text[ arabic ] = "ÇáÊÈÏíá";
+                Text[ greek ] = "ÅíáëëáãŞ";
+                Text[ korean ] = "Åä±Û";
+                Text[ turkish ] = "Toggle";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_EDIT ;
+                HelpID = HID_NAVI_TBX18 ;
+                Text = "Bearbeiten" ;
+                Text [ English ] = "Edit" ;
+                Text [ english_us ] = "Edit" ;
+                Text [ portuguese_brazilian ] = "Bearbeiten" ;
+                Text [ swedish ] = "Redigera" ;
+                Text [ danish ] = "Rediger" ;
+                Text [ italian ] = "Modifica" ;
+                Text [ spanish ] = "Editar" ;
+                Text [ french ] = "Éditer" ;
+                Text [ dutch ] = "Bewerken" ;
+                Text [ portuguese ] = "Editar" ;
+                Text[ chinese_simplified ] = "±à¼­";
+                Text[ russian ] = "Ïğàâêà";
+                Text[ polish ] = "Edytuj";
+                Text[ japanese ] = "•ÒW";
+                Text[ chinese_traditional ] = "½s¿è";
+                Text[ arabic ] = "ÊÍÑíÑ";
+                Text[ greek ] = "Åğåîåñãáóßá";
+                Text[ korean ] = "ÆíÁı";
+                Text[ turkish ] = "Düzenle";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_UPDATE ;
+                HelpID = HID_NAVI_TBX19 ;
+                Text = "Aktualisieren" ;
+                Text [ English ] = "Update" ;
+                Text [ english_us ] = "Update" ;
+                Text [ portuguese_brazilian ] = "Aktualisieren" ;
+                Text [ swedish ] = "Uppdatera" ;
+                Text [ danish ] = "Opdater" ;
+                Text [ italian ] = "Aggiorna" ;
+                Text [ spanish ] = "Actualizar" ;
+                Text [ french ] = "Actualiser" ;
+                Text [ dutch ] = "Actualiseren" ;
+                Text [ portuguese ] = "Actualizar" ;
+                Text[ chinese_simplified ] = "¸üĞÂ";
+                Text[ russian ] = "Îáíîâèòü";
+                Text[ polish ] = "Aktualizuj";
+                Text[ japanese ] = "XV‚·‚é";
+                Text[ chinese_traditional ] = "§ó·s";
+                Text[ arabic ] = "ÊÍÏíË";
+                Text[ greek ] = "Åíçìİñùóç";
+                Text[ korean ] = "¾÷ µ¥ÀÌÆ®";
+                Text[ turkish ] = "Güncelle";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_OPEN ;
+                HelpID = HID_NAVI_TBX20 ;
+                /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
+                Text = "Einfügen" ;
+                Text [ English ] = "Insert" ;
+                Text [ english_us ] = "Insert" ;
+                Text [ portuguese_brazilian ] = "Einfügen" ;
+                Text [ swedish ] = "Infoga" ;
+                Text [ danish ] = "Sæt ind" ;
+                Text [ italian ] = "Inserisci" ;
+                Text [ spanish ] = "Insertar" ;
+                Text [ french ] = "Insertion" ;
+                Text [ dutch ] = "Invoegen" ;
+                Text [ portuguese ] = "Inserir" ;
+                Text[ chinese_simplified ] = "²åÈë";
+                Text[ russian ] = "Âñòàâêà";
+                Text[ polish ] = "Wstaw";
+                Text[ japanese ] = "‘}“ü";
+                Text[ chinese_traditional ] = "´¡¤J";
+                Text[ arabic ] = "ÅÏÑÇÌ";
+                Text[ greek ] = "ÅéóáãùãŞ";
+                Text[ korean ] = "»ğÀÔ";
+                Text[ turkish ] = "Ekle";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_GLOBAL_SAVE_CONTENT ;
+                HelpID = HID_NAVI_TBX21 ;
+                Text = "Inhalte mitspeichern" ;
+                Text [ English ] = "Save content" ;
+                Text [ english_us ] = "Save Contents as well" ;
+                Text [ portuguese_brazilian ] = "Inhalte mitspeichern" ;
+                Text [ swedish ] = "Spara med innehåll" ;
+                Text [ danish ] = "Gem med indhold" ;
+                Text [ italian ] = "Salva anche i contenuti" ;
+                Text [ spanish ] = "Guardar contenidos" ;
+                Text [ french ] = "Enregistrer le contenu" ;
+                Text [ dutch ] = "Inhoud opslaan" ;
+                Text [ portuguese ] = "Guardar também conteúdos" ;
+                Text[ russian ] = "Ñîõğàíèòü ñîäåğæèìîå";
+                Text[ polish ] = "Zapisz zawartoœæ";
+                Text[ japanese ] = "“à—e‚ğ•Û‘¶‚·‚é";
+                Text[ chinese_simplified ] = "´æÅÌÄÚÈİ";
+                Text[ chinese_traditional ] = "Àx¦s¤º®e";
+                Text[ arabic ] = "ÍİÙ ÇáãÍÊæíÇÊ";
+                Text[ greek ] = "ÁğïèŞêåõóç êáé ôùí ğåñéå÷ïìİíùí";
+                Text[ korean ] = "³»¿ë ÀúÀå";
+                Text[ turkish ] = "İçeriği de kaydet";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_UP ;
+                HelpID = HID_NAVI_TBX22 ;
+                /* ### ACHTUNG: Neuer Text in Resource? Nach oben verschieben : Nach unten verschieben */
+                Text = "Nach oben verschieben" ;
+                Text [ English ] = "Move up" ;
+                Text [ english_us ] = "Move Up" ;
+                Text [ portuguese_brazilian ] = "Nach unten verschieben" ;
+                Text [ swedish ] = "Flytta uppåt" ;
+                Text [ danish ] = "Flyt opad" ;
+                Text [ italian ] = "Sposta verso l'alto" ;
+                Text [ spanish ] = "Desplazar hacia arriba" ;
+                Text [ french ] = "Déplacer vers le haut" ;
+                Text [ dutch ] = "Naar boven verplaatsen" ;
+                Text [ portuguese ] = "Mover para cima" ;
+                Text[ chinese_simplified ] = "ÏòÉÏÒÆ¶¯";
+                Text[ russian ] = "Ïåğåìåñòèòü ââåğõ";
+                Text[ polish ] = "Przenieœ w górê";
+                Text[ japanese ] = "ã•û‚ÖˆÚ“®";
+                Text[ chinese_traditional ] = "¦V¤W²¾°Ê";
+                Text[ arabic ] = "ÅÒÇÍÉ Åáì ÃÚáì";
+                Text[ greek ] = "ÌåôáöïñÜ ğñïò ôá ğÜíù";
+                Text[ korean ] = "À§·Î ÀÌµ¿";
+                Text[ turkish ] = "Yukarı taşı";
+            };
+            ToolBoxItem
+            {
+                Identifier = FN_ITEM_DOWN ;
+                HelpID = HID_NAVI_TBX23 ;
+                /* ### ACHTUNG: Neuer Text in Resource? Nach unten verschieben : Nach oben verschieben */
+                Text = "Nach unten verschieben" ;
+                Text [ English ] = "Move down" ;
+                Text [ english_us ] = "Move Down" ;
+                Text [ portuguese_brazilian ] = "Nach oben verschieben" ;
+                Text [ swedish ] = "Flytta nedåt" ;
+                Text [ danish ] = "Flyt nedad" ;
+                Text [ italian ] = "Sposta verso il basso" ;
+                Text [ spanish ] = "Desplazar hacia abajo" ;
+                Text [ french ] = "Déplacer vers le bas" ;
+                Text [ dutch ] = "Naar beneden verplaatsen" ;
+                Text [ portuguese ] = "Mover para baixo" ;
+                Text[ chinese_simplified ] = "ÏòÏÂÒÆ¶¯";
+                Text[ russian ] = "Ïåğåìåñòèòü âíèç";
+                Text[ polish ] = "Przenieœ w dó³";
+                Text[ japanese ] = "‰º•û‚ÖˆÚ“®";
+                Text[ chinese_traditional ] = "¦V¤U²¾°Ê";
+                Text[ arabic ] = "ÅÒÇÍÉ Åáì ÃÓİá";
+                Text[ greek ] = "ÌåôáöïñÜ ğñïò ôá êÜôù";
+                Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿";
+                Text[ turkish ] = "Aşağı taşı";
+            };
+        };
+    };
+    /* TreeListBox */
+    Control TL_CONTENT
+    {
+        HelpID = HID_NAVI_CONTENT ;
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 5 , 62 ) ;
+        Size = MAP_PIXEL ( 274 , 112 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Hide = TRUE ;
+    };
+    Control TL_GLOBAL
+    {
+        HelpID = HID_NAVI_GLOBAL ;
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 5 , 34 ) ;
+        Size = MAP_PIXEL ( 274 , 112 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Hide = TRUE ;
+    };
+    ListBox LB_DOCS
+    {
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 5 , 115 ) ;
+        Size = MAP_APPFONT ( 150 , 50 ) ;
+        DropDown = TRUE ;
+    };
+    NumericField NF_PAGE
+    {
+        Border = TRUE ;
+        Pos = MAP_PIXEL ( 50 , 29 ) ;
+        Size = MAP_PIXEL ( 44 , 20 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+         // Outline als Default
+        Maximum = 5 ;
+        Last = 5 ;
+        Value = 5 ;
+    };
+    String ST_OUTLINE_LEVEL
+    {
+        Text = "Gliederungsebenen" ;
+        Text [ English ] = "Outline level" ;
+        Text [ dutch ] = "Overzichtsniveaus" ;
+        Text [ english_us ] = "Outline Level" ;
+        Text [ italian ] = "Livelli di struttura" ;
+        Text [ spanish ] = "Niveles del esquema" ;
+        Text [ french ] = "Niveaux de plan" ;
+        Text [ swedish ] = "Dispositionsnivåer" ;
+        Text [ danish ] = "Dispositionsniveauer" ;
+        Text [ portuguese_brazilian ] = "Gliederungsebenen" ;
+        Text [ portuguese ] = "Níveis de esquema" ;
+        Text[ chinese_simplified ] = "´ó¸Ù¼¶";
+        Text[ russian ] = "Óğîâíè ñòğóêòóğû";
+        Text[ polish ] = "Poziomy konspektu";
+        Text[ japanese ] = "±³Ä×²İ ÚÍŞÙ";
+        Text[ chinese_traditional ] = "¤jºõ¯Å";
+        Text[ arabic ] = "ãÓÊæíÇÊ ÇáÊŞÓíã";
+        Text[ greek ] = "Åğßğåäá äéÜñèñùóçò";
+        Text[ korean ] = "¿Ü°û¼± ¼öÁØ";
+        Text[ turkish ] = "Anahat düzeyleri";
+    };
+    String ST_DRAGMODE
+    {
+        Text = "Dragmodus" ;
+        Text [ English ] = "Drag mode" ;
+        Text [ dutch ] = "Dragmodus" ;
+        Text [ english_us ] = "Drag Mode" ;
+        Text [ italian ] = "Modo trascina" ;
+        Text [ spanish ] = "Modo Arrastrar" ;
+        Text [ french ] = "Mode Glisser" ;
+        Text [ swedish ] = "Draläge" ;
+        Text [ danish ] = "Trækmodus" ;
+        Text [ portuguese_brazilian ] = "Dragmodus" ;
+        Text [ portuguese ] = "Modo Arrastar" ;
+        Text[ chinese_simplified ] = "ÍÏ¶¯Ä£Ê½";
+        Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
+        Text[ polish ] = "Tryb przeci¹gania";
+        Text[ japanese ] = "ÄŞ×¯¸Ş Ó°ÄŞ";
+        Text[ chinese_traditional ] = "©ì¦²¼Ò¦¡";
+        Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
+        Text[ greek ] = "ÊáôÜóôáóç óõñìïı";
+        Text[ korean ] = "µå·¡±× ¸ğµå";
+        Text[ turkish ] = "Sürükleme kipi";
+    };
+    String ST_HYPERLINK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Als Hyperlink einfügen : Als Hyperlink einf³gen */
+        Text = "Als Hyperlink einfügen" ;
+        Text [ English ] = "Insert as hyperlink" ;
+        Text [ english_us ] = "Insert as Hyperlink" ;
+        Text [ portuguese_brazilian ] = "Hyperlink" ;
+        Text [ swedish ] = "Infoga som hyperlänk" ;
+        Text [ danish ] = "Indsæt som hyperlink" ;
+        Text [ italian ] = "Inserisci come hyperlink" ;
+        Text [ spanish ] = "Insertar como hiperenlace" ;
+        Text [ french ] = "Insérer comme hyperlien" ;
+        Text [ dutch ] = "Als Hyperlink invoegen" ;
+        Text [ portuguese ] = "Inserir como hiperligação" ;
+        Text[ chinese_simplified ] = "µ±×÷³¬Á´½Ó²åÈë";
+        Text[ russian ] = "Âñòàâèòü êàê ãèïåğññûëêó";
+        Text[ polish ] = "Wstaw jako hiper³¹cze";
+        Text[ japanese ] = "Ê²Êß°Øİ¸‚Æ‚µ‚Ä‘}“ü";
+        Text[ chinese_traditional ] = "·í§@¶W³sµ²´¡¤J";
+        Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ ÊÔÚÈí";
+        Text[ greek ] = "ĞñïóèŞêç ùò õğåñ-óıíäåóç";
+        Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©·Î »ğÀÔ";
+        Text[ turkish ] = "Hyperlink olarak ekle";
+    };
+    String ST_LINK_REGION
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Als Verknüpfung einfügen : Als Verkn³pfung einf³gen */
+        Text = "Als Verknüpfung einfügen" ;
+        Text [ English ] = "Insert as link" ;
+        Text [ english_us ] = "Insert as Link" ;
+        Text [ portuguese_brazilian ] = "Verknüpfung" ;
+        Text [ swedish ] = "Infoga som länk" ;
+        Text [ danish ] = "Indsæt som kæde" ;
+        Text [ italian ] = "Inserisci come collegamento" ;
+        Text [ spanish ] = "Insertar como vínculo" ;
+        Text [ french ] = "Insérer comme lien" ;
+        Text [ dutch ] = "Als koppeling invoegen" ;
+        Text [ portuguese ] = "Inserir como ligação" ;
+        Text[ chinese_simplified ] = "µ±×÷Á´½Ó²åÈë";
+        Text[ russian ] = "Âñòàâèòü êàê ññûëêó";
+        Text[ polish ] = "Wstaw jako ³¹cze";
+        Text[ japanese ] = "Øİ¸‚Æ‚µ‚Ä‘}“ü";
+        Text[ chinese_traditional ] = "·í§@³sµ²´¡¤J";
+        Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ";
+        Text[ greek ] = "ĞñïóèŞêç ùò óıíäåóç";
+        Text[ korean ] = "¿¬°á·Î »ğÀÔ";
+        Text[ turkish ] = "Bağlantı olarak ekle";
+    };
+    String ST_COPY_REGION
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Als Kopie einfügen : Als Kopie einf³gen */
+        Text = "Als Kopie einfügen" ;
+        Text [ English ] = "Insert as copy" ;
+        Text [ english_us ] = "Insert as Copy" ;
+        Text [ portuguese_brazilian ] = "Kopie" ;
+        Text [ swedish ] = "Infoga som kopia" ;
+        Text [ danish ] = "Indsæt som kopi" ;
+        Text [ italian ] = "Inserisci come copia" ;
+        Text [ spanish ] = "Insertar como copia" ;
+        Text [ french ] = "Insérer comme copie" ;
+        Text [ dutch ] = "Als kopie invoegen" ;
+        Text [ portuguese ] = "Inserir com cópia" ;
+        Text[ chinese_simplified ] = "µ±×÷¸´¼ş²åÈë";
+        Text[ russian ] = "Âñòàâèòü êàê êîïèş";
+        Text[ polish ] = "Wstaw jako kopiê";
+        Text[ japanese ] = "ºËß°‚Æ‚µ‚Ä‘}“ü";
+        Text[ chinese_traditional ] = "·í§@´_¥ó´¡¤J";
+        Text[ arabic ] = "ÅÏÑÇÌ ßäÓÎÉ";
+        Text[ greek ] = "ĞñïóèŞêç ùò áíôßãñáöï";
+        Text[ korean ] = "º¹»ç·Î »ğÀÔ";
+        Text[ turkish ] = "Kopya olarak ekle";
+    };
+    String ST_DISPLAY
+    {
+        Text = "Anzeige" ;
+        Text [ English ] = "Display" ;
+        Text [ english_us ] = "Display" ;
+        Text [ italian ] = "Visualizzazione" ;
+        Text [ spanish ] = "Visualización" ;
+        Text [ french ] = "Affichage" ;
+        Text [ dutch ] = "Weergave" ;
+        Text [ swedish ] = "Visa" ;
+        Text [ danish ] = "Visning" ;
+        Text [ portuguese_brazilian ] = "Anzeige" ;
+        Text [ portuguese ] = "Mostrar" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾";
+        Text[ russian ] = "Ïîêàçàòü";
+        Text[ polish ] = "Wyœwietlenie";
+        Text[ japanese ] = "•\\¦";
+        Text[ chinese_traditional ] = "Åã¥Ü";
+        Text[ arabic ] = "ÇáÚÑÖ";
+        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ korean ] = "Ç¥½Ã";
+        Text[ turkish ] = "Görüntü";
+    };
+    String ST_ACTIVE_VIEW
+    {
+        Text = "Aktives Fenster" ;
+        Text [ English ] = "Active Window" ;
+        Text [ dutch ] = "Actief venster" ;
+        Text [ english_us ] = "Active Window" ;
+        Text [ italian ] = "Finestra attiva" ;
+        Text [ spanish ] = "Ventana activa" ;
+        Text [ french ] = "Fenêtre active" ;
+        Text [ swedish ] = "Aktivt fönster" ;
+        Text [ danish ] = "Aktivt vindue" ;
+        Text [ portuguese_brazilian ] = "Aktives Fenster" ;
+        Text [ portuguese ] = "Janela activa" ;
+        Text[ chinese_simplified ] = "µ±Ç°µÄÊÓ´°";
+        Text[ russian ] = "Àêòèâíîå îêíî";
+        Text[ polish ] = "Aktywne okno";
+        Text[ japanese ] = "±¸Ã¨ÌŞ‚È³¨İÄŞ³";
+        Text[ language_user1 ] = "èë? Îòêğûòîå - - - èëè: Îòêğûòîå - èëè: Îòêğûòîå";
+        Text[ chinese_traditional ] = "·í«eªºµøµ¡";
+        Text[ arabic ] = "ÇáäÇİĞÉ ÇáäÔØÉ";
+        Text[ greek ] = "Åíåñãü ğáñÜèõñï";
+        Text[ korean ] = "È°¼º Ã¢";
+        Text[ turkish ] = "Etkin pencere";
+    };
+    String ST_HIDDEN
+    {
+        Text = "versteckt" ;
+        Text [ English ] = "hidden" ;
+        Text [ english_us ] = "hidden" ;
+        Text [ italian ] = "nascosto" ;
+        Text [ spanish ] = "oculto" ;
+        Text [ french ] = "caché" ;
+        Text [ dutch ] = "verborgen" ;
+        Text [ swedish ] = "gömd" ;
+        Text [ danish ] = "skjult" ;
+        Text [ portuguese_brazilian ] = "versteckt" ;
+        Text [ portuguese ] = "oculto" ;
+        Text[ chinese_simplified ] = "ÒşÈë";
+        Text[ russian ] = "ñêğûòûé";
+        Text[ polish ] = "ukryty";
+        Text[ japanese ] = "‰B‚µ";
+        Text[ chinese_traditional ] = "Áô¤J";
+        Text[ arabic ] = "ãÎİí";
+        Text[ greek ] = "êñõöü";
+        Text[ korean ] = "¼û±â±â";
+        Text[ turkish ] = "gizli";
+    };
+    String ST_ACTIVE
+    {
+        Text = "aktiv" ;
+        Text [ English ] = "active" ;
+        Text [ dutch ] = "actief" ;
+        Text [ english_us ] = "active" ;
+        Text [ italian ] = "attivo" ;
+        Text [ spanish ] = "activo" ;
+        Text [ french ] = "actif" ;
+        Text [ swedish ] = "aktiv" ;
+        Text [ danish ] = "aktiv" ;
+        Text [ portuguese_brazilian ] = "aktiv" ;
+        Text [ portuguese ] = "activo" ;
+        Text[ chinese_simplified ] = "¼¤»îµÄ";
+        Text[ russian ] = "àêòèâíûé";
+        Text[ polish ] = "aktywny";
+        Text[ japanese ] = "±¸Ã¨ÌŞ";
+        Text[ chinese_traditional ] = "¿E¬¡ªº";
+        Text[ arabic ] = "äÔØ";
+        Text[ greek ] = "åíåñãü";
+        Text[ korean ] = "È°¼º";
+        Text[ turkish ] = "etkin";
+    };
+    String ST_INACTIVE
+    {
+        Text = "inaktiv" ;
+        Text [ English ] = "inactive" ;
+        Text [ english_us ] = "inactive" ;
+        Text [ italian ] = "inattivo" ;
+        Text [ spanish ] = "inactivo" ;
+        Text [ french ] = "inactif" ;
+        Text [ dutch ] = "inactief" ;
+        Text [ swedish ] = "inaktiv" ;
+        Text [ danish ] = "inaktiv" ;
+        Text [ portuguese_brazilian ] = "inaktiv" ;
+        Text [ portuguese ] = "inactivo" ;
+        Text[ chinese_simplified ] = "Ê§»îµÄ";
+        Text[ russian ] = "íåàêòèâíûé";
+        Text[ polish ] = "nieaktywny";
+        Text[ japanese ] = "±¸Ã¨ÌŞ‚Å‚È‚¢";
+        Text[ chinese_traditional ] = "¥¢¬¡ªº";
+        Text[ arabic ] = "ÛíÑ äÔØ";
+        Text[ greek ] = "ìç åíåñãü";
+        Text[ korean ] = "ºñ È°¼º";
+        Text[ turkish ] = "etkin değil";
+    };
+    String ST_EDIT_ENTRY
+    {
+        Text = "~Bearbeiten..." ;
+        Text [ English ] = "~Edit..." ;
+        Text [ english_us ] = "Edit..." ;
+        Text [ swedish ] = "Redigera..." ;
+        Text [ danish ] = "Rediger..." ;
+        Text [ italian ] = "~Modifica..." ;
+        Text [ spanish ] = "Edi~tar..." ;
+        Text [ french ] = "~Modifier..." ;
+        Text [ dutch ] = "~Bewerken..." ;
+        Text [ portuguese_brazilian ] = "Bearbeiten..." ;
+        Text [ portuguese ] = "~Editar..." ;
+        Text[ chinese_simplified ] = "±à¼­...";
+        Text[ russian ] = "Ïğàâêà...";
+        Text[ polish ] = "Edytuj...";
+        Text[ japanese ] = "•ÒW...";
+        Text[ chinese_traditional ] = "½s¿è...";
+        Text[ arabic ] = "ÊÍÑíÑ...";
+        Text[ greek ] = "Åğåîåñãáóßá...";
+        Text[ korean ] = "ÆíÁı...";
+        Text[ turkish ] = "~Düzenle...";
+    };
+    String ST_UPDATE
+    {
+        Text = "~Aktualisieren" ;
+        Text [ English ] = "Update" ;
+        Text [ dutch ] = "~Actualiseren" ;
+        Text [ english_us ] = "~Update" ;
+        Text [ italian ] = "~Aggiorna" ;
+        Text [ spanish ] = "Actuali~zar" ;
+        Text [ french ] = "~Actualiser" ;
+        Text [ swedish ] = "Uppd~atera" ;
+        Text [ danish ] = "Opdater" ;
+        Text [ portuguese ] = "~Actualizar" ;
+        Text [ portuguese_brazilian ] = "Aktualisieren" ;
+        Text[ chinese_simplified ] = "¸üĞÂ(~U)";
+        Text[ russian ] = "Îáíîâèòü";
+        Text[ polish ] = "Aktualizuj";
+        Text[ japanese ] = "XV(~U)";
+        Text[ chinese_traditional ] = "§ó·s(~U)";
+        Text[ arabic ] = "ÊÍÏíË";
+        Text[ greek ] = "~Åíçìİñùóç";
+        Text[ korean ] = "¾÷ µ¥ÀÌÆ®(~U)";
+        Text[ turkish ] = "~Güncelle";
+    };
+    String ST_EDIT_CONTENT
+    {
+        Text = "Bearbeiten" ;
+        Text [ English ] = "Edit" ;
+        Text [ english_us ] = "Edit" ;
+        Text [ swedish ] = "Redigera" ;
+        Text [ danish ] = "Rediger" ;
+        Text [ italian ] = "Modifica" ;
+        Text [ spanish ] = "Editar" ;
+        Text [ french ] = "Edition" ;
+        Text [ dutch ] = "Bewerken" ;
+        Text [ portuguese_brazilian ] = "Bearbeiten" ;
+        Text [ portuguese ] = "Editar" ;
+        Text[ chinese_simplified ] = "±à¼­";
+        Text[ russian ] = "Ïğàâêà";
+        Text[ polish ] = "Edytuj";
+        Text[ japanese ] = "•ÒW";
+        Text[ chinese_traditional ] = "½s¿è";
+        Text[ arabic ] = "ÊÍÑíÑ";
+        Text[ greek ] = "Åğåîåñãáóßá";
+        Text[ korean ] = "ÆíÁı";
+        Text[ turkish ] = "Düzenle";
+    };
+    String ST_INSERT
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
+        Text = "Einfügen" ;
+        Text [ English ] = "Insert" ;
+        Text [ norwegian ] = "Sette inn" ;
+        Text [ italian ] = "Inserisci" ;
+        Text [ portuguese_brazilian ] = "Inserir" ;
+        Text [ portuguese ] = "Inserir" ;
+        Text [ finnish ] = "Lisää" ;
+        Text [ danish ] = "Indsæt" ;
+        Text [ french ] = "Insérer" ;
+        Text [ swedish ] = "Infoga" ;
+        Text [ dutch ] = "Invoegen" ;
+        Text [ spanish ] = "Insertar" ;
+        Text [ english_us ] = "Insert" ;
+        Text[ chinese_simplified ] = "²åÈë";
+        Text[ russian ] = "Âñòàâêà";
+        Text[ polish ] = "Wstaw";
+        Text[ japanese ] = "‘}“ü";
+        Text[ chinese_traditional ] = "´¡¤J";
+        Text[ arabic ] = "ÅÏÑÇÌ";
+        Text[ greek ] = "ÅéóáãùãŞ";
+        Text[ korean ] = "»ğÀÔ";
+        Text[ turkish ] = "Ekle";
+    };
+    String ST_INDEX
+    {
+        Text = "~Verzeichnis" ;
+        Text [ English ] = "Inde~x" ;
+        Text[ english_us ] = "~Index";
+        Text[ portuguese ] = "~Índice";
+        Text[ russian ] = "Óêàçàòåëü";
+        Text[ greek ] = "Å~õñåôŞñéï";
+        Text[ dutch ] = "~Index";
+        Text[ french ] = "~Index";
+        Text[ spanish ] = "Í~ndice";
+        Text[ italian ] = "Indice";
+        Text[ danish ] = "Indeks";
+        Text[ swedish ] = "~Förteckning";
+        Text[ polish ] = "Indeks";
+        Text[ portuguese_brazilian ] = "Ín~ice";
+        Text[ japanese ] = "õˆø(~I)";
+        Text[ korean ] = "»öÀÎ(~I)";
+        Text[ chinese_simplified ] = "Ä¿Â¼(~I)";
+        Text[ chinese_traditional ] = "¯Á¤Ş(~I)";
+        Text[ arabic ] = "İåÑÓ";
+        Text[ turkish ] = "~Dizin";
+    };
+    String ST_FILE
+    {
+        Text = "Datei" ;
+        Text [ English ] = "File" ;
+        Text [ english_us ] = "File" ;
+        Text [ portuguese_brazilian ] = "Datei" ;
+        Text [ swedish ] = "Fil" ;
+        Text [ danish ] = "Fil" ;
+        Text [ italian ] = "File" ;
+        Text [ spanish ] = "Archivo" ;
+        Text [ french ] = "Fichier" ;
+        Text [ dutch ] = "Bestand" ;
+        Text [ portuguese ] = "Ficheiro" ;
+        Text[ chinese_simplified ] = "ÎÄ¼ş";
+        Text[ russian ] = "Ôàéë";
+        Text[ polish ] = "Plik";
+        Text[ japanese ] = "Ì§²Ù";
+        Text[ chinese_traditional ] = "ÀÉ®×";
+        Text[ arabic ] = "Çáãáİ";
+        Text[ greek ] = "Áñ÷åßï";
+        Text[ korean ] = "ÆÄÀÏ";
+        Text[ turkish ] = "Dosya";
+    };
+    String ST_NEW_FILE
+    {
+        Text = "Neues Dokument" ;
+        Text [ English ] = "New document" ;
+        Text [ english_us ] = "New Document" ;
+        Text [ portuguese_brazilian ] = "Neues Dokument" ;
+        Text [ swedish ] = "Nytt dokument" ;
+        Text [ danish ] = "Nyt dokument" ;
+        Text [ italian ] = "Nuovo documento" ;
+        Text [ spanish ] = "Nuevo documento" ;
+        Text [ french ] = "Nouveau document" ;
+        Text [ dutch ] = "Nieuw document" ;
+        Text [ portuguese ] = "Novo documento" ;
+        Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ";
+        Text[ russian ] = "Íîâûé äîêóìåíò";
+        Text[ polish ] = "Nowy dokument";
+        Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
+        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ";
+        Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
+        Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
+        Text[ korean ] = "»õ ¹®¼­";
+        Text[ turkish ] = "Yeni belge";
+    };
+    String ST_TEXT
+    {
+        Text = "Text" ;
+        Text [ English ] = "Text" ;
+        Text [ english_us ] = "Text" ;
+        Text [ portuguese_brazilian ] = "Text" ;
+        Text [ swedish ] = "Text" ;
+        Text [ danish ] = "Tekst" ;
+        Text [ italian ] = "Testo" ;
+        Text [ spanish ] = "Texto" ;
+        Text [ french ] = "Texte" ;
+        Text [ dutch ] = "Tekst" ;
+        Text [ portuguese ] = "Texto" ;
+        Text[ chinese_simplified ] = "ÎÄ±¾";
+        Text[ russian ] = "Òåêñò";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "Ã·½Ä";
+        Text[ chinese_traditional ] = "¤å¦r";
+        Text[ arabic ] = "ÇáäÕ";
+        Text[ greek ] = "Êåßìåíï";
+        Text[ korean ] = "ÅØ½ºÆ®";
+        Text[ turkish ] = "Metin";
+    };
+    String ST_DELETE
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
+        Text = "Löschen" ;
+        Text [ English ] = "Delete" ;
+        Text [ norwegian ] = "Slett" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ portuguese_brazilian ] = "Apagar" ;
+        Text [ portuguese ] = "Eliminar" ;
+        Text [ finnish ] = "Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "Supprimer" ;
+        Text [ swedish ] = "Radera" ;
+        Text [ dutch ] = "Wissen" ;
+        Text [ spanish ] = "Eliminar" ;
+        Text [ english_us ] = "Delete" ;
+        Text[ chinese_simplified ] = "É¾³ı";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ";
+        Text[ chinese_traditional ] = "§R°£";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦";
+        Text[ turkish ] = "Sil";
+    };
+    String ST_DELETE_ENTRY
+    {
+        Text = "~Löschen" ;
+        Text [ English ] = "~Delete" ;
+        Text [ norwegian ] = "Slett" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ portuguese_brazilian ] = "Apagar" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text [ finnish ] = "Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ dutch ] = "Wis~sen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "~Sil";
+    };
+    String ST_UPDATE_SEL
+    {
+        Text = "Selektion" ;
+        Text [ English ] = "Selection" ;
+        Text [ english_us ] = "Selection" ;
+        Text [ portuguese_brazilian ] = "Selektion" ;
+        Text [ swedish ] = "Markering" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ italian ] = "Selezione" ;
+        Text [ spanish ] = "Selección" ;
+        Text [ french ] = "Sélection" ;
+        Text [ dutch ] = "Selectie" ;
+        Text [ portuguese ] = "Selecção" ;
+        Text[ chinese_simplified ] = "Ñ¡ÖĞ";
+        Text[ russian ] = "Âûäåëåíèå";
+        Text[ polish ] = "Selekcja";
+        Text[ japanese ] = "‘I‘ğ”ÍˆÍ";
+        Text[ chinese_traditional ] = "¿ï¤¤";
+        Text[ arabic ] = "ÇáÊÍÏíÏ";
+        Text[ greek ] = "ÅğéëïãŞ";
+        Text[ korean ] = "¼±ÅÃ";
+        Text[ turkish ] = "Seçim";
+    };
+    String ST_UPDATE_INDEX
+    {
+        Text = "Verzeichnisse" ;
+        Text [ English ] = "Indexes" ;
+        Text [ english_us ] = "Indexes" ;
+        Text [ portuguese_brazilian ] = "Verzeichnisse" ;
+        Text [ swedish ] = "Förteckningar" ;
+        Text [ danish ] = "Indeks" ;
+        Text [ italian ] = "Indici" ;
+        Text [ spanish ] = "Índices" ;
+        Text [ french ] = "Index" ;
+        Text [ dutch ] = "Indices" ;
+        Text [ portuguese ] = "Índices" ;
+        Text[ chinese_simplified ] = "Ë÷Òı";
+        Text[ russian ] = "Óêàçàòåëè";
+        Text[ polish ] = "Indeksy";
+        Text[ japanese ] = "–ÚŸ‚Æõˆø";
+        Text[ chinese_traditional ] = "¥Ø¿ı";
+        Text[ arabic ] = "İåÇÑÓ";
+        Text[ greek ] = "ÅõñåôŞñéá";
+        Text[ korean ] = "»öÀÎ";
+        Text[ turkish ] = "Dizin";
+    };
+    String ST_UPDATE_LINK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Verknüpfungen : Verkn³pfungen */
+        Text = "Verknüpfungen" ;
+        Text [ English ] = "Links" ;
+        Text [ english_us ] = "Links" ;
+        Text [ portuguese_brazilian ] = "Verknüpfungen" ;
+        Text [ swedish ] = "Länkar" ;
+        Text [ danish ] = "Kæder" ;
+        Text [ italian ] = "Collegamenti" ;
+        Text [ spanish ] = "Vínculos" ;
+        Text [ french ] = "Liens" ;
+        Text [ dutch ] = "Koppelingen" ;
+        Text [ portuguese ] = "Ligações" ;
+        Text[ chinese_simplified ] = "Á´½Ó";
+        Text[ russian ] = "Ññûëêè";
+        Text[ polish ] = "£¹cza";
+        Text[ japanese ] = "Øİ¸";
+        Text[ chinese_traditional ] = "±¶®|";
+        Text[ arabic ] = "ÇÑÊÈÇØÇÊ";
+        Text[ greek ] = "Óõíäİóåéò";
+        Text[ korean ] = "¿¬°á";
+        Text[ turkish ] = "Bağlantı";
+    };
+    String ST_UPDATE_ALL
+    {
+        Text = "Alles" ;
+        Text [ English ] = "All" ;
+        Text [ english_us ] = "All" ;
+        Text [ portuguese_brazilian ] = "Alles" ;
+        Text [ swedish ] = "Allt" ;
+        Text [ danish ] = "Alt" ;
+        Text [ italian ] = "Tutto" ;
+        Text [ spanish ] = "Todo" ;
+        Text [ french ] = "Tout" ;
+        Text [ dutch ] = "Alles" ;
+        Text [ portuguese ] = "Tudo" ;
+        Text[ chinese_simplified ] = "È«²¿";
+        Text[ russian ] = "Âñå";
+        Text[ polish ] = "Wszystko";
+        Text[ japanese ] = "‚·‚×‚Ä";
+        Text[ chinese_traditional ] = "¥ş³¡";
+        Text[ arabic ] = "Çáßá";
+        Text[ greek ] = "¼ëá";
+        Text[ korean ] = "ÀüÃ¼";
+        Text[ turkish ] = "Tümü";
+    };
+    String ST_REMOVE_INDEX
+    {
+        Text = "~Verzeichnis aufheben" ;
+        Text [ English ] = "Dismiss index" ;
+        Text [ english_us ] = "~Remove Index" ;
+        Text [ portuguese_brazilian ] = "Verzeichnis aufheben" ;
+        Text [ swedish ] = "Upphä~v förteckning" ;
+        Text [ danish ] = "Ophæv indeks" ;
+        Text [ italian ] = "Rimuovi indice" ;
+        Text [ spanish ] = "Eliminar dire~ctorio" ;
+        Text [ french ] = "~Supprimer l'index" ;
+        Text [ dutch ] = "~Index opheffen" ;
+        Text [ portuguese ] = "~Remover índice" ;
+        Text[ chinese_simplified ] = "É¾³ıÄ¿Â¼(~R)";
+        Text[ russian ] = "Óáğàòü óêàçàòåëü";
+        Text[ polish ] = "Usuñ indeks";
+        Text[ japanese ] = "õˆø‚Ì‰ğœ(~R)";
+        Text[ chinese_traditional ] = "¨ú®ø¥Ø¿ı(~R)";
+        Text[ arabic ] = "ÅÒÇáÉ ÇáİåÑÓ";
+        Text[ greek ] = "ÊáôÜñãçóç åõñåôçñßïõ";
+        Text[ korean ] = "»öÀÎ »èÁ¦(~R)";
+        Text[ turkish ] = "D~izini kaldır";
+    };
+    String ST_REMOVE_TBL_PROTECTION
+    {
+        Text = "Schutz ~aufheben" ;
+        Text [ English ] = "~Unprotect" ;
+        Text [ norwegian ] = "~Ubeskytte" ;
+        Text [ italian ] = "Disattiva~ protezione" ;
+        Text [ portuguese_brazilian ] = "~Desproteger" ;
+        Text [ portuguese ] = "D~esproteger" ;
+        Text [ finnish ] = "~Unprotect" ;
+        Text [ danish ] = "Ophæv beskyttelse" ;
+        Text [ french ] = "Enlever la protection" ;
+        Text [ swedish ] = "~Upphäv skydd" ;
+        Text [ dutch ] = "Beveiliging ~opheffen" ;
+        Text [ spanish ] = "~Desproteger" ;
+        Text [ english_us ] = "~Unprotect" ;
+        Text[ chinese_simplified ] = "È¡Ïû±£»¤(~U)";
+        Text[ russian ] = "Ñíÿòü çàùèòó";
+        Text[ polish ] = "Usuñ ochronê";
+        Text[ japanese ] = "•ÛŒì‚Ì‰ğœ(~U)";
+        Text[ chinese_traditional ] = "¨ú®ø«OÅ@(~U)";
+        Text[ arabic ] = "ÅáÛÇÁ ÇáÍãÇíÉ";
+        Text[ greek ] = "¢ñóç ğñïóôáóßáò";
+        Text[ korean ] = "º¸È£ ÇØÁ¦(~U)";
+        Text[ turkish ] = "Korumayı ~kaldır";
+    };
+    String ST_INVISIBLE
+    {
+        Text = "versteckt";
+        Text[English] = "hidden";
+        Text[ english_us ] = "hidden";
+        Text[ portuguese ] = "oculto";
+        Text[ russian ] = "ñïğÿòàí";
+        Text[ greek ] = "êñõöÜ";
+        Text[ dutch ] = "verborgen";
+        Text[ french ] = "caché";
+        Text[ spanish ] = "oculto";
+        Text[ italian ] = "Nascosto";
+        Text[ danish ] = "skjult";
+        Text[ swedish ] = "gömd";
+        Text[ polish ] = "schowany";
+        Text[ portuguese_brazilian ] = "hidden";
+        Text[ japanese ] = "‰B‚µ";
+        Text[ korean ] = "¼û±â±â";
+        Text[ chinese_simplified ] = "ÒşÈëµÄ";
+        Text[ chinese_traditional ] = "Áô¤J";
+        Text[ arabic ] = "ãÎİí";
+        Text[ turkish ] = "gizli";
+    };
+    String ST_BROKEN_LINK
+    {
+        Text = "Datei nicht gefunden: ";
+        Text[English] = "File not found: ";
+        Text[ italian ] = "File non trovato: ";
+        Text[ portuguese_brazilian ] = "File not found: ";
+        Text[ portuguese ] = "Ficheiro não encontrado: ";
+        Text[ danish ] = "Fil blev ikke fundet: ";
+        Text[ french ] = "Fichier introuvable : ";
+        Text[ swedish ] = "Filen har ej hittats: ";
+        Text[ dutch ] = "Bestand niet gevonden: ";
+        Text[ spanish ] = "Archivo no encontrado: ";
+        Text[ english_us ] = "File not found: ";
+        Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÎÄ¼ş£º ";
+        Text[ russian ] = "Ôàéë íå íàéäåí:  ";
+        Text[ polish ] = "Pliku nie znaleziono:  ";
+        Text[ japanese ] = "Ì§²Ù‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: ";
+        Text[ chinese_traditional ] = "¨S¦³§ä¨ìÀÉ®×¡G ";
+        Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì Çáãáİ: ";
+        Text[ greek ] = "Äåí âñİèçêå ôï áñ÷åßï: ";
+        Text[ korean ] = "ÆÄÀÏÀÌ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù: ";
+        Text[ turkish ] = "Dosya bulunamadı: ";
+    };
+    String ST_RENAME
+    {
+        Text = "~Umbenennen";
+        Text[English] = "Rename";
+        Text[ english_us ] = "~Rename";
+        Text[ portuguese ] = "~Mudar nome";
+        Text[ russian ] = "Ïåğåèìåíîâàòü";
+        Text[ greek ] = "Ìåôïíïìáóßá";
+        Text[ dutch ] = "~Naam wijzigen";
+        Text[ french ] = "~Renommer";
+        Text[ spanish ] = "Ca~mbiar nombre";
+        Text[ italian ] = "Rinomina";
+        Text[ danish ] = "Omdøb";
+        Text[ swedish ] = "~Byt namn";
+        Text[ polish ] = "Zmieñ nazwê";
+        Text[ portuguese_brazilian ] = "Rename";
+        Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)";
+        Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)";
+        Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
+        Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
+        Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
+        Text[ turkish ] = "~Yeniden adlandır";
+    };
+    String ST_READONLY_IDX
+    {
+        Text = "~Schreibgeschützt";
+        Text[English] = "Readonly";
+        Text[ english_us ] = "Read ~only";
+        Text[ portuguese ] = "Só ~leitura";
+        Text[ russian ] = "Òîëüêî äëÿ ÷òåíèÿ";
+        Text[ greek ] = "Müíï ãéá áíÜãíùóç";
+        Text[ dutch ] = "~Schrijfbeveiligd";
+        Text[ french ] = "en ~lecture seule";
+        Text[ spanish ] = "Solo le~ctura";
+        Text[ italian ] = "A sola lettura";
+        Text[ danish ] = "Skrivebeskyttet";
+        Text[ swedish ] = "~Skrivskyddad";
+        Text[ polish ] = "Tylko do odczytu";
+        Text[ portuguese_brazilian ] = "Readonly";
+        Text[ japanese ] = "“Ç‚İæ‚èê—p(~O)";
+        Text[ korean ] = "ÀĞ±âÀü¿ë(~O)";
+        Text[ chinese_simplified ] = "·À¸²Ğ´(~O)";
+        Text[ chinese_traditional ] = "¨¾ÂĞ¼g(~O)";
+        Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
+        Text[ turkish ] = "Sa~lt okunur";
+    };
+    Text[ chinese_simplified ] = "ÖúÊÖ";
+    Text[ russian ] = "Íàâèãàòîğ";
+    Text[ polish ] = "Nawigator";
+    Text[ japanese ] = "ÅËŞ¹Ş°À";
+    Text[ chinese_traditional ] = "§U¤â";
+    Text[ arabic ] = "ÇáäÇİíÌíÊæÑ";
+    Text[ greek ] = "Navigator";
+    Text[ korean ] = "³×ºñ°ÔÀÌÅÍ";
+    Text[ turkish ] = "Navigatör";
+};
+ImageList IMG_NAVI_ENTRYBMP
+{
+    ImageBitmap = Bitmap { File = "nccntnt.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IdList =
+    {
+        20000 ;
+        20001 ;
+        20002 ;
+        20003 ;
+        20004 ;
+        20005 ;
+        20006 ;
+        20007 ;
+        20008 ;
+        20009 ;
+        20010 ;
+        20102 ;
+    };
+    IdCount = { 12 ; };
+};
+

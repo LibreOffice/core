@@ -1,0 +1,1283 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tmpdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+#include "fmtui.hrc"
+#include "globals.hrc"
+#include "svx/dialogs.hrc"
+TabDialog DLG_TEMPLATE_1
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Zeichenvorlage" ;
+    Text [ ENGLISH ] = "Character Style" ;
+    Text [ norwegian ] = "Character Style" ;
+    Text [ italian ] = "Modello di carattere" ;
+    Text [ portuguese_brazilian ] = "Estilo de caracter" ;
+    Text [ portuguese ] = "Estilos de caracteres" ;
+    Text [ finnish ] = "Merkkityyli" ;
+    Text [ danish ] = "Tegntypografi" ;
+    Text [ french ] = "Style de caractères" ;
+    Text [ swedish ] = "Teckenformatmall" ;
+    Text [ dutch ] = "Tekenopmaakprofiel" ;
+    Text [ spanish ] = "Estilo de carácter" ;
+    Text [ english_us ] = "Character Style" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_CHAR_STD ;
+                Text = "Schrift" ;
+                Text [ ENGLISH ] = "Font" ;
+                Text [ norwegian ] = "Skrift" ;
+                Text [ italian ] = "Carattere" ;
+                Text [ portuguese_brazilian ] = "Fonte" ;
+                Text [ portuguese ] = "Tipo de letra" ;
+                Text [ finnish ] = "Fontti" ;
+                Text [ danish ] = "Skrifttype" ;
+                Text [ french ] = "Police" ;
+                Text [ swedish ] = "Teckensnitt" ;
+                Text [ dutch ] = "Lettertype" ;
+                Text [ spanish ] = "Fuente" ;
+                Text [ english_us ] = "Font" ;
+                PageResID = TP_CHAR_STD ;
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ russian ] = "Øğèôò";
+                Text[ polish ] = "Czcionka";
+                Text[ japanese ] = "Ì«İÄ";
+                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ arabic ] = "ÇáÎØ";
+                Text[ greek ] = "ÃñáììáôïóåéñÜ";
+                Text[ korean ] = "±Û²Ã";
+                Text[ turkish ] = "Yazıtipi";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CHAR_EXT ;
+                Text = "Schrifteffekt" ;
+                Text [ ENGLISH ] = "Font Effects" ;
+                Text [ norwegian ] = "Font Effects" ;
+                Text [ italian ] = "Effetto carattere" ;
+                Text [ portuguese_brazilian ] = "Efeitos de fonte" ;
+                Text [ portuguese ] = "Efeitos do tipo de letra" ;
+                Text [ finnish ] = "Fontin tehosteet" ;
+                Text [ danish ] = "Skrifteffekt" ;
+                Text [ french ] = "Effet de caractère" ;
+                Text [ swedish ] = "Teckensnittseffekt" ;
+                Text [ dutch ] = "Schrifteffect" ;
+                Text [ spanish ] = "Efectos de fuente" ;
+                Text [ english_us ] = "Font Effects" ;
+                PageResID = TP_CHAR_EXT ;
+                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ russian ] = "İôôåêòû øğèôòà";
+                Text[ polish ] = "Efekty czcionki";
+                Text[ japanese ] = "Ì«İÄŒø‰Ê";
+                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
+                Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
+                Text[ korean ] = "±Û²Ã È¿°ú";
+                Text[ turkish ] = "Yazıtipi seçenekleri";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text = "Hintergrund" ;
+                Text [ ENGLISH ] = "Background" ;
+                Text [ norwegian ] = "Background" ;
+                Text [ italian ] = "Sfondo" ;
+                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese ] = "Plano de fundo" ;
+                Text [ finnish ] = "Tausta" ;
+                Text [ danish ] = "Baggrund" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Bakgrund" ;
+                Text [ dutch ] = "Achtergrond" ;
+                Text [ spanish ] = "Fondo" ;
+                Text [ english_us ] = "Background" ;
+                PageResID = TP_BACKGROUND ;
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ russian ] = "Ôîí";
+                Text[ polish ] = "T³o";
+                Text[ japanese ] = "”wŒi";
+                Text[ chinese_traditional ] = "­I´º";
+                Text[ arabic ] = "ÇáÎáİíÉ";
+                Text[ greek ] = "Öüíôï";
+                Text[ korean ] = "¹è°æ";
+                Text[ turkish ] = "Artalan";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
+    Text[ russian ] = "Ñòèëü çíàêîâ";
+    Text[ polish ] = "Styl znaku";
+    Text[ japanese ] = "•¶š½À²Ù";
+    Text[ chinese_traditional ] = "¦r«¬¼Ë¦¡";
+    Text[ arabic ] = "äãØ ÇáÃÍÑİ";
+    Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
+    Text[ korean ] = "ÅØ½ºÆ® À¯Çü";
+    Text[ turkish ] = "Karakter biçimi";
+    Text[ language_user1 ] = " ";
+};
+TabDialog DLG_TEMPLATE_2
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Absatzvorlage" ;
+    Text [ ENGLISH ] = "Paragraph Style" ;
+    Text [ norwegian ] = "Paragraph Style" ;
+    Text [ italian ] = "Modello paragrafo" ;
+    Text [ portuguese_brazilian ] = "Estilo de parágrafo" ;
+    Text [ portuguese ] = "Estilo de parágrafo" ;
+    Text [ finnish ] = "Kappaletyyli" ;
+    Text [ danish ] = "Afsnitstypografi" ;
+    Text [ french ] = "Style de paragraphe" ;
+    Text [ swedish ] = "Styckeformatmall" ;
+    Text [ dutch ] = "Alinea-opmaakprofiel" ;
+    Text [ spanish ] = "Estilo de párrafo" ;
+    Text [ english_us ] = "Paragraph Style" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_PARA_STD ;
+                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
+                Text = "Einzüge und Abstände" ;
+                Text [ ENGLISH ] = "Indent and Spacing" ;
+                Text [ norwegian ] = "Indent and Spacing" ;
+                Text [ italian ] = "Rientro e spaziatura" ;
+                Text [ portuguese_brazilian ] = "Indentar e Espaçar" ;
+                Text [ portuguese ] = "Avanços e espaçamento" ;
+                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ french ] = "Retraits et écarts" ;
+                Text [ swedish ] = "Indrag och avstånd" ;
+                Text [ dutch ] = "Inspringen en afstanden" ;
+                Text [ spanish ] = "Sangrías y espacios" ;
+                Text [ english_us ] = "Indents & Spacing" ;
+                PageResID = TP_PARA_STD ;
+                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
+                Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
+                Text[ polish ] = "Wciêcia i odstêpy";
+                Text[ japanese ] = "²İÃŞİÄ‚ÆŠÔŠu";
+                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
+                Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
+                Text[ korean ] = "µé¿©¾²±â¿Í °£°İ";
+                Text[ turkish ] = "Girinti ve aralıklar";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_PARA_ALIGN ;
+                Text = "Ausrichtung" ;
+                Text [ ENGLISH ] = "Alignment" ;
+                PageResID = TP_PARA_ALIGN ;
+                Text [ english_us ] = "Alignment" ;
+                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text [ swedish ] = "Justering" ;
+                Text [ danish ] = "Justering" ;
+                Text [ italian ] = "Allineamento" ;
+                Text [ spanish ] = "Alineación" ;
+                Text [ french ] = "Alignement" ;
+                Text [ dutch ] = "Uitlijning" ;
+                Text [ portuguese ] = "Alinhamento" ;
+                Text[ chinese_simplified ] = "¶ÔÆë";
+                Text[ russian ] = "Âûğàâíèâàíèå";
+                Text[ polish ] = "Wyrównanie";
+                Text[ japanese ] = "”z’u";
+                Text[ chinese_traditional ] = "¹ï»ô";
+                Text[ arabic ] = "ÇáãÍÇĞÇÉ";
+                Text[ greek ] = "Óôïß÷éóç";
+                Text[ korean ] = "¸ÂÃã";
+                Text[ turkish ] = "Hizalama";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_PARA_EXT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Textfluß : Textflu˜ */
+                Text = "Textfluss" ;
+                Text [ ENGLISH ] = "Text Flow" ;
+                Text [ norwegian ] = "Text Flow" ;
+                Text [ italian ] = "Flusso di testo" ;
+                Text [ portuguese_brazilian ] = "Fluxo do Texto" ;
+                Text [ portuguese ] = "Fluxo de texto" ;
+                Text [ finnish ] = "Tekstin juoksutus" ;
+                Text [ danish ] = "Tekstretning" ;
+                Text [ french ] = "Enchaînements" ;
+                Text [ swedish ] = "Textflöde" ;
+                Text [ dutch ] = "Tekstverloop" ;
+                Text [ spanish ] = "Flujo del texto" ;
+                Text [ english_us ] = "Text Flow" ;
+                PageResID = TP_PARA_EXT ;
+                Text[ chinese_simplified ] = "»»ĞĞºÍ·ÖÒ³";
+                Text[ russian ] = "Ïîëîæåíèå íà ñòğàíèöå";
+                Text[ polish ] = "Tekst";
+                Text[ japanese ] = "‘ÌÙ";
+                Text[ chinese_traditional ] = "´«¦æ©M¤À­¶";
+                Text[ arabic ] = "ÇäÓíÇÈ ÇáäÕ";
+                Text[ greek ] = "ÑïŞ êåéìİíïõ";
+                Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
+                Text[ turkish ] = "Metin akışı";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CHAR_STD ;
+                Text = "Schrift" ;
+                Text [ ENGLISH ] = "Font" ;
+                Text [ norwegian ] = "Skrift" ;
+                Text [ italian ] = "Carattere" ;
+                Text [ portuguese_brazilian ] = "Fonte" ;
+                Text [ portuguese ] = "Tipo de letra" ;
+                Text [ finnish ] = "Fontti" ;
+                Text [ danish ] = "Skrifttype" ;
+                Text [ french ] = "Police" ;
+                Text [ swedish ] = "Teckensnitt" ;
+                Text [ dutch ] = "Lettertype" ;
+                Text [ spanish ] = "Fuente" ;
+                Text [ english_us ] = "Font" ;
+                PageResID = TP_CHAR_STD ;
+                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ russian ] = "Øğèôò";
+                Text[ polish ] = "Czcionka";
+                Text[ japanese ] = "Ì«İÄ";
+                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ arabic ] = "ÇáÎØ";
+                Text[ greek ] = "ÃñáììáôïóåéñÜ";
+                Text[ korean ] = "±Û²Ã";
+                Text[ turkish ] = "Yazıtipi";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CHAR_EXT ;
+                Text = "Schrifteffekte" ;
+                Text [ ENGLISH ] = "Font Effects" ;
+                Text [ norwegian ] = "Font Effects" ;
+                Text [ italian ] = "Effetto carattere" ;
+                Text [ portuguese_brazilian ] = "Efeitos de fonte" ;
+                Text [ portuguese ] = "Efeitos do tipo de letra" ;
+                Text [ finnish ] = "Fontin tehosteet" ;
+                Text [ danish ] = "Skrifteffekter" ;
+                Text [ french ] = "Effets de caractère" ;
+                Text [ swedish ] = "Teckensnittseffekter" ;
+                Text [ dutch ] = "Schrifteffecten" ;
+                Text [ spanish ] = "Efectos de fuente" ;
+                Text [ english_us ] = "Font Effects" ;
+                PageResID = TP_CHAR_EXT ;
+                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ russian ] = "İôôåêòû øğèôòà";
+                Text[ polish ] = "Efekty czcionki";
+                Text[ japanese ] = "Ì«İÄŒø‰Ê";
+                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
+                Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text[ greek ] = "Åöİ ãñáììáôïóåéñÜò";
+                Text[ korean ] = "±Û²Ã È¿°ú";
+                Text[ turkish ] = "Yazıtipi seçenekleri";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_NUMPARA ;
+                Text = "Nummerierung" ;
+                Text [ ENGLISH ] = "Numbering" ;
+                Text [ english_us ] = "Numbering" ;
+                Text [ portuguese_brazilian ] = "Numerierung" ;
+                Text [ swedish ] = "Numrering" ;
+                Text [ danish ] = "Nummerering" ;
+                Text [ italian ] = "Numerazione" ;
+                Text [ spanish ] = "Numeración" ;
+                Text [ french ] = "Numérotation" ;
+                Text [ dutch ] = "Nummering" ;
+                Text [ portuguese ] = "Numeração" ;
+                Text[ chinese_simplified ] = "±àºÅ";
+                Text[ russian ] = "Íóìåğàöèÿ";
+                Text[ polish ] = "Numeracja";
+                Text[ japanese ] = "”Ô†•t‚¯";
+                Text[ chinese_traditional ] = "½s¸¹";
+                Text[ arabic ] = "ÇáÊÑŞíã";
+                Text[ greek ] = "Áñßèìçóç";
+                Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+                Text[ turkish ] = "Numaralama";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_TABULATOR ;
+                Text = "Tabulatoren" ;
+                Text [ ENGLISH ] = "Tabs" ;
+                Text [ norwegian ] = "Tabulatorer" ;
+                Text [ italian ] = "Tabulazioni" ;
+                Text [ portuguese_brazilian ] = "Tabulações" ;
+                Text [ portuguese ] = "Tabulações" ;
+                Text [ finnish ] = "Sarkaimet" ;
+                Text [ danish ] = "Tabulatorer" ;
+                Text [ french ] = "Tabulations" ;
+                Text [ swedish ] = "Tabulatorer" ;
+                Text [ dutch ] = "Tabs" ;
+                Text [ spanish ] = "Tabulaciones" ;
+                Text [ english_us ] = "Tabs" ;
+                PageResID = TP_TABULATOR ;
+                Text[ chinese_simplified ] = "ÖÆ±í·û";
+                Text[ russian ] = "Òàáóëÿòîğû";
+                Text[ polish ] = "Tabulatory";
+                Text[ japanese ] = "ÀÌŞ";
+                Text[ chinese_traditional ] = "»sªí²Å";
+                Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
+                Text[ greek ] = "Óôçëïèİôåò";
+                Text[ korean ] = "ÅÇ";
+                Text[ turkish ] = "Sekmeler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_DROPCAPS ;
+                Text = "Initialen" ;
+                Text [ ENGLISH ] = "Drop Caps" ;
+                Text [ norwegian ] = "Drop Caps" ;
+                Text [ italian ] = "Capolettera" ;
+                Text [ portuguese_brazilian ] = "Capitulares descidas" ;
+                Text [ portuguese ] = "Iniciais" ;
+                Text [ finnish ] = "Anfangit" ;
+                Text [ danish ] = "Initialer" ;
+                Text [ french ] = "Lettrines" ;
+                Text [ swedish ] = "Anfangsbokstäver" ;
+                Text [ dutch ] = "Initialen" ;
+                Text [ spanish ] = "Iniciales" ;
+                Text [ english_us ] = "Drop Caps" ;
+                PageResID = TP_DROPCAPS ;
+                Text[ chinese_simplified ] = "×ÖÊ×´óĞ´";
+                Text[ russian ] = "Èíèöèàëû";
+                Text[ polish ] = "Inicja³y";
+                Text[ japanese ] = "ÄŞÛ¯Ìß·¬¯Ìß";
+                Text[ chinese_traditional ] = "¦r­º¤j¼g";
+                Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
+                Text[ greek ] = "Áñ÷éãñÜììáôá";
+                Text[ korean ] = "´Ü¶ô Ã¹¹®ÀÚ Àå½Ä";
+                Text[ turkish ] = "Başharfler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text = "Hintergrund" ;
+                Text [ ENGLISH ] = "Background" ;
+                Text [ norwegian ] = "Background" ;
+                Text [ italian ] = "Sfondo" ;
+                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese ] = "Plano de fundo" ;
+                Text [ finnish ] = "Tausta" ;
+                Text [ danish ] = "Baggrund" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Bakgrund" ;
+                Text [ dutch ] = "Achtergrond" ;
+                Text [ spanish ] = "Fondo" ;
+                Text [ english_us ] = "Background" ;
+                PageResID = TP_BACKGROUND ;
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ russian ] = "Ôîí";
+                Text[ polish ] = "T³o";
+                Text[ japanese ] = "”wŒi";
+                Text[ chinese_traditional ] = "­I´º";
+                Text[ arabic ] = "ÇáÎáİíÉ";
+                Text[ greek ] = "Öüíôï";
+                Text[ korean ] = "¹è°æ";
+                Text[ turkish ] = "Artalan";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text = "Umrandung" ;
+                Text [ ENGLISH ] = "Border" ;
+                Text [ norwegian ] = "Border" ;
+                Text [ italian ] = "Bordo" ;
+                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese ] = "Contornos" ;
+                Text [ finnish ] = "Reunaviiva" ;
+                Text [ danish ] = "Ramme" ;
+                Text [ french ] = "Bordure" ;
+                Text [ swedish ] = "Inramning" ;
+                Text [ dutch ] = "Omranding" ;
+                Text [ spanish ] = "Borde" ;
+                Text [ english_us ] = "Borders" ;
+                PageResID = TP_BORDER ;
+                Text[ chinese_simplified ] = "±ß¿ò";
+                Text[ russian ] = "Îáğàìëåíèå";
+                Text[ polish ] = "Obramowanie";
+                Text[ japanese ] = "ŠO˜g";
+                Text[ chinese_traditional ] = "Ãä®Ø";
+                Text[ arabic ] = "ÇáÍÏæÏ";
+                Text[ greek ] = "Ğåñßãñáììá";
+                Text[ korean ] = "¿Ü°û¼±";
+                Text[ turkish ] = "Kenarlık";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CONDCOLL ;
+                PageResID = TP_CONDCOLL ;
+                Text = "Bedingung" ;
+                Text [ English ] = "Condition" ;
+                Text [ english_us ] = "Condition" ;
+                Text [ italian ] = "Condizione" ;
+                Text [ spanish ] = "Condición" ;
+                Text [ french ] = "Condition" ;
+                Text [ dutch ] = "Voorwaarde" ;
+                Text [ swedish ] = "Villkor" ;
+                Text [ danish ] = "Betingelse" ;
+                Text [ portuguese_brazilian ] = "Bedingung" ;
+                Text [ portuguese ] = "Condição" ;
+                Text[ chinese_simplified ] = "Ìõ¼ş";
+                Text[ russian ] = "Óñëîâèå";
+                Text[ polish ] = "Warunek";
+                Text[ japanese ] = "ğŒ";
+                Text[ chinese_traditional ] = "±ø¥ó";
+                Text[ arabic ] = "ÇáÔÑØ";
+                Text[ greek ] = "ÓõíèŞêç";
+                Text[ korean ] = "Á¶°Ç";
+                Text[ turkish ] = "Koşul";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "¶ÎÂäÑùÊ½";
+    Text[ russian ] = "Ñòèëü àáçàöà";
+    Text[ polish ] = "Styl akapitu";
+    Text[ japanese ] = "’i—½À²Ù";
+    Text[ chinese_traditional ] = "¬q¸¨¼Ë¦¡";
+    Text[ arabic ] = "äãØ İŞÑÉ";
+    Text[ greek ] = "Ğñüôõğï ğáñáãñÜöïõ";
+    Text[ korean ] = "´Ü¶ô À¯Çü";
+    Text[ turkish ] = "Paragraf biçimi";
+    Text[ language_user1 ] = " ";
+};
+TabDialog DLG_TEMPLATE_4
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Seitenvorlage" ;
+    Text [ ENGLISH ] = "Page Style" ;
+     // Text[norwegian_wrong] = "Sidetyper";
+     // Text[italian_wrong] = "Stili pagina";
+     // Text[portuguese_brazilian_wrong] = "Estilos da Página ";
+     // Text[portuguese_wrong] = "Estilos da Página ";
+     // Text[finnish_wrong] = "Sivutyylit";
+     // Text[danish_wrong] = "Sidelayout";
+     // Text[french_wrong] = "Styles de page";
+     // Text[swedish_wrong] = "Sidformat";
+     // Text[dutch_wrong] = "Pagina-opmaakprofielen";
+     // Text[spanish_wrong] = "Estilos de página";
+    Text [ english_us ] = "Page Style" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            /*            PageItem
+            {
+                Identifier = TP_PAGE_STD ;
+                Text = "Seite" ;
+                Text [ ENGLISH ] = "Page" ;
+                Text [ norwegian ] = "Page" ;
+                Text [ italian ] = "Pagina" ;
+                Text [ portuguese_brazilian ] = "Página" ;
+                Text [ portuguese ] = "Página" ;
+                Text [ finnish ] = "Sivu" ;
+                Text [ danish ] = "Side" ;
+                Text [ french ] = "Page" ;
+                Text [ swedish ] = "Sida" ;
+                Text [ dutch ] = "Pagina" ;
+                Text [ spanish ] = "Página" ;
+                Text [ english_us ] = "Page" ;
+                PageResID = TP_PAGE_STD ;
+            };*/
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text = "Hintergrund" ;
+                Text [ ENGLISH ] = "Background" ;
+                Text [ norwegian ] = "Background" ;
+                Text [ italian ] = "Sfondo" ;
+                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese ] = "Plano de fundo" ;
+                Text [ finnish ] = "Tausta" ;
+                Text [ danish ] = "Baggrund" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Bakgrund" ;
+                Text [ dutch ] = "Achtergrond" ;
+                Text [ spanish ] = "Fondo" ;
+                Text [ english_us ] = "Background" ;
+                PageResID = TP_BACKGROUND ;
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ russian ] = "Ôîí";
+                Text[ polish ] = "T³o";
+                Text[ japanese ] = "”wŒi";
+                Text[ chinese_traditional ] = "­I´º";
+                Text[ arabic ] = "ÇáÎáİíÉ";
+                Text[ greek ] = "Öüíôï";
+                Text[ korean ] = "¹è°æ";
+                Text[ turkish ] = "Artalan";
+                Text[ language_user1 ] = " ";
+            };
+            /*            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text = "Umrandung" ;
+                Text [ ENGLISH ] = "Border" ;
+                Text [ norwegian ] = "Border" ;
+                Text [ italian ] = "Bordo" ;
+                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese ] = "Contorno" ;
+                Text [ finnish ] = "Reunaviiva" ;
+                Text [ danish ] = "Rækkefølge" ;
+                Text [ french ] = "Bordure" ;
+                Text [ swedish ] = "Kantlinje" ;
+                Text [ dutch ] = "Kader" ;
+                Text [ spanish ] = "Borde" ;
+                Text [ english_us ] = "Borders" ;
+                PageResID = TP_BORDER ;
+            };
+            PageItem
+            {
+                Identifier = TP_HEADER_PAGE ;
+                Text = "Kopfzeile" ;
+                Text [ ENGLISH ] = "Header" ;
+                Text [ norwegian ] = "Header" ;
+                Text [ italian ] = "Intestazione" ;
+                Text [ portuguese_brazilian ] = "Cabeçalho" ;
+                Text [ portuguese ] = "Cabeçalho" ;
+                Text [ finnish ] = "Yläteksti" ;
+                Text [ danish ] = "Toptekst" ;
+                Text [ french ] = "En-tête page" ;
+                Text [ swedish ] = "Sidhuvud" ;
+                Text [ dutch ] = "Koptekst" ;
+                Text [ spanish ] = "Línea de encabezamiento" ;
+                Text [ english_us ] = "Header" ;
+                PageResID = TP_HEADER_PAGE ;
+            };
+            PageItem
+            {
+                Identifier = TP_FOOTER_PAGE ;
+                Text = "Fußzeile" ;
+                Text [ ENGLISH ] = "Footer" ;
+                Text [ norwegian ] = "Footer" ;
+                Text [ italian ] = "Piè di pagina" ;
+                Text [ portuguese_brazilian ] = "Rodapé" ;
+                Text [ portuguese ] = "Rodapé" ;
+                Text [ finnish ] = "Alateksti" ;
+                Text [ danish ] = "Bundtekst" ;
+                Text [ french ] = "Pied de page" ;
+                Text [ swedish ] = "Sidfot" ;
+                Text [ dutch ] = "Voettekst" ;
+                Text [ spanish ] = "Pie de página" ;
+                Text [ english_us ] = "Footer" ;
+                PageResID = TP_FOOTER_PAGE ;
+            };
+            PageItem
+            {
+                Identifier = TP_COLUMN ;
+                Text = "Spalten" ;
+                Text [ ENGLISH ] = "Columns" ;
+                Text [ norwegian ] = "Kolonner" ;
+                Text [ italian ] = "Colonne" ;
+                Text [ portuguese_brazilian ] = "Colunas" ;
+                Text [ portuguese ] = "Colunas" ;
+                Text [ finnish ] = "Sarakkeet" ;
+                Text [ danish ] = "Spalter" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Kolumner" ;
+                Text [ dutch ] = "Kolommen" ;
+                Text [ spanish ] = "Columnas" ;
+                Text [ english_us ] = "Columns" ;
+                PageResID = TP_COLUMN ;
+            };
+            PageItem
+            {
+                Identifier = TP_FOOTNOTE_PAGE ;
+                Text = "Fußnote" ;
+                Text [ ENGLISH ] = "Footnote" ;
+                Text [ norwegian ] = "Footnote" ;
+                Text [ italian ] = "Nota a piè di pagina" ;
+                Text [ portuguese_brazilian ] = "Nota de pé de página" ;
+                Text [ portuguese ] = "Nota de rodapé" ;
+                Text [ finnish ] = "Alaviite" ;
+                Text [ danish ] = "Fodnote" ;
+                Text [ french ] = "Note de bas de page" ;
+                Text [ swedish ] = "Fotnot" ;
+                Text [ dutch ] = "Voetnoot" ;
+                Text [ spanish ] = "Nota al pie de página" ;
+                Text [ english_us ] = "Footnote" ;
+                PageResID = TP_FOOTNOTE_PAGE ;
+            };*/
+        };
+    };
+    Text [ dutch ] = "Pagina-opmaakprofiel" ;
+    Text [ italian ] = "Modello di pagina" ;
+    Text [ spanish ] = "Estilo de página" ;
+    Text [ french ] = "Style de page" ;
+    Text [ swedish ] = "Sidformatmall" ;
+    Text [ danish ] = "Sidetypografi" ;
+    Text [ portuguese ] = "Estilo de página" ;
+    Text [ portuguese_brazilian ] = "Seitenvorlage" ;
+    Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
+    Text[ russian ] = "Ñòèëü ñòğàíèöû";
+    Text[ polish ] = "Styl strony";
+    Text[ japanese ] = "Íß°¼Ş½À²Ù";
+    Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
+    Text[ arabic ] = "äãØ ÕİÍÉ";
+    Text[ greek ] = "Ğñüôõğï óåëßäáò";
+    Text[ korean ] = "ÆäÀÌÁö À¯Çü";
+    Text[ turkish ] = "Sayfa biçimi";
+    Text[ language_user1 ] = " ";
+};
+String STR_PAGE_STD
+{
+    Text = "Seite" ;
+    Text [ ENGLISH ] = "Page" ;
+    Text [ norwegian ] = "Page" ;
+    Text [ italian ] = "Pagina" ;
+    Text [ portuguese_brazilian ] = "Página" ;
+    Text [ portuguese ] = "Página" ;
+    Text [ finnish ] = "Sivu" ;
+    Text [ danish ] = "Side" ;
+    Text [ french ] = "Page" ;
+    Text [ swedish ] = "Sida" ;
+    Text [ dutch ] = "Pagina" ;
+    Text [ spanish ] = "Página" ;
+    Text [ english_us ] = "Page" ;
+    Text[ chinese_simplified ] = "Ò³";
+    Text[ russian ] = "Ñòğàíèöà";
+    Text[ polish ] = "Strona";
+    Text[ japanese ] = "Íß°¼Ş";
+    Text[ chinese_traditional ] = "­¶";
+    Text[ arabic ] = "ÕİÍÉ";
+    Text[ greek ] = "Óåëßäá";
+    Text[ korean ] = "ÆäÀÌÁö";
+    Text[ turkish ] = "Sayfa";
+    Text[ language_user1 ] = " ";
+};
+String STR_PAGE_BORDER
+{
+    Text = "Umrandung" ;
+    Text [ ENGLISH ] = "Border" ;
+    Text [ norwegian ] = "Border" ;
+    Text [ italian ] = "Bordo" ;
+    Text [ portuguese_brazilian ] = "Borda" ;
+    Text [ portuguese ] = "Contornos" ;
+    Text [ finnish ] = "Reunaviiva" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ french ] = "Bordure" ;
+    Text [ swedish ] = "Inramning" ;
+    Text [ dutch ] = "Omranding" ;
+    Text [ spanish ] = "Borde" ;
+    Text [ english_us ] = "Borders" ;
+    Text[ chinese_simplified ] = "±ß¿ò";
+    Text[ russian ] = "Îáğàìëåíèå";
+    Text[ polish ] = "Obramowanie";
+    Text[ japanese ] = "ŠO˜g";
+    Text[ chinese_traditional ] = "Ãä®Ø";
+    Text[ arabic ] = "ÇáÍÏæÏ";
+    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ korean ] = "Å×µÎ¸®";
+    Text[ turkish ] = "Kenarlık";
+    Text[ language_user1 ] = " ";
+};
+String STR_PAGE_HEADER
+{
+    Text = "Kopfzeile" ;
+    Text [ ENGLISH ] = "Header" ;
+    Text [ norwegian ] = "Header" ;
+    Text [ italian ] = "Riga d'intestazione" ;
+    Text [ portuguese_brazilian ] = "Cabeçalho" ;
+    Text [ portuguese ] = "Cabeçalho" ;
+    Text [ finnish ] = "Yläteksti" ;
+    Text [ danish ] = "Sidehoved" ;
+    Text [ french ] = "En-tête" ;
+    Text [ swedish ] = "Sidhuvud" ;
+    Text [ dutch ] = "Koptekst" ;
+    Text [ spanish ] = "Encabezamiento" ;
+    Text [ english_us ] = "Header" ;
+    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
+    Text[ polish ] = "Nag³ówek";
+    Text[ japanese ] = "Í¯ÀŞ";
+    Text[ chinese_traditional ] = "­¶­º";
+    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
+    Text[ greek ] = "Êåöáëßäá";
+    Text[ korean ] = "¸Ó¸®±Û";
+    Text[ turkish ] = "Üstbilgi";
+    Text[ language_user1 ] = " ";
+};
+String STR_PAGE_FOOTER
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
+    Text = "Fußzeile" ;
+    Text [ ENGLISH ] = "Footer" ;
+    Text [ norwegian ] = "Footer" ;
+    Text [ italian ] = "Piè di pagina" ;
+    Text [ portuguese_brazilian ] = "Rodapé" ;
+    Text [ portuguese ] = "Rodapé" ;
+    Text [ finnish ] = "Alateksti" ;
+    Text [ danish ] = "Sidefod" ;
+    Text [ french ] = "Pied de page" ;
+    Text [ swedish ] = "Sidfot" ;
+    Text [ dutch ] = "Voettekst" ;
+    Text [ spanish ] = "Pie de página" ;
+    Text [ english_us ] = "Footer" ;
+    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ russian ] = "Íèæíèé êîëîíòèòóë";
+    Text[ polish ] = "Stopka";
+    Text[ japanese ] = "Ì¯À";
+    Text[ chinese_traditional ] = "­¶¸}";
+    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
+    Text[ greek ] = "Õğïóİëéäï";
+    Text[ korean ] = "¹Ù´Ú±Û";
+    Text[ turkish ] = "Altbilgi";
+    Text[ language_user1 ] = " ";
+};
+String STR_PAGE_COLUMN
+{
+    Text = "Spalten" ;
+    Text [ ENGLISH ] = "Columns" ;
+    Text [ norwegian ] = "Kolonner" ;
+    Text [ italian ] = "Colonne" ;
+    Text [ portuguese_brazilian ] = "Colunas" ;
+    Text [ portuguese ] = "Colunas" ;
+    Text [ finnish ] = "Sarakkeet" ;
+    Text [ danish ] = "Kolonner" ;
+    Text [ french ] = "Colonnes" ;
+    Text [ swedish ] = "Kolumner" ;
+    Text [ dutch ] = "Kolommen" ;
+    Text [ spanish ] = "Columnas" ;
+    Text [ english_us ] = "Columns" ;
+    Text[ chinese_simplified ] = "À¸";
+    Text[ russian ] = "Êîëîíêè";
+    Text[ polish ] = "Kolumny";
+    Text[ japanese ] = "’i‘g‚İ";
+    Text[ chinese_traditional ] = "Äæ";
+    Text[ arabic ] = "ÇáÃÚãÏÉ";
+    Text[ greek ] = "ÓôŞëåò";
+    Text[ korean ] = "¿­";
+    Text[ turkish ] = "Sütun";
+    Text[ language_user1 ] = " ";
+};
+String STR_PAGE_FOOTNOTE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Fußnote : Fu˜note */
+    Text = "Fußnote" ;
+    Text [ ENGLISH ] = "Footnote" ;
+    Text [ norwegian ] = "Footnote" ;
+    Text [ italian ] = "Nota a piè pagina" ;
+    Text [ portuguese_brazilian ] = "Nota de pé de página" ;
+    Text [ portuguese ] = "Nota de rodapé" ;
+    Text [ finnish ] = "Alaviite" ;
+    Text [ danish ] = "Fodnote" ;
+    Text [ french ] = "Note de bas de page" ;
+    Text [ swedish ] = "Fotnot" ;
+    Text [ dutch ] = "Voetnoot" ;
+    Text [ spanish ] = "Nota al pie" ;
+    Text [ english_us ] = "Footnote" ;
+    Text[ chinese_simplified ] = "×¢½Å";
+    Text[ russian ] = "Ñíîñêà";
+    Text[ polish ] = "Przypis dolny";
+    Text[ japanese ] = "‹r’";
+    Text[ chinese_traditional ] = "µù¸}";
+    Text[ arabic ] = "ÍÇÔíÉ ÓİáíÉ";
+    Text[ greek ] = "Õğïóçìåßùóç";
+    Text[ korean ] = "°¢ÁÖ";
+    Text[ turkish ] = "Dipnot";
+    Text[ language_user1 ] = " ";
+};
+TabDialog DLG_TEMPLATE_3
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Rahmenvorlage" ;
+    Text [ ENGLISH ] = "Frame Style" ;
+     // Text[norwegian_wrong] = "Rammemaler";
+     // Text[italian_wrong] = "Stili cornice";
+     // Text[portuguese_brazilian_wrong] = "Estilos de Moldura";
+     // Text[portuguese_wrong] = "Estilos de Moldura";
+     // Text[finnish_wrong] = "Kehystyylit";
+     // Text[danish_wrong] = "Rammelayout";
+     // Text[french_wrong] = "Styles d'encadrement";
+     // Text[swedish_wrong] = "Ramformat";
+     // Text[dutch_wrong] = "Kaderopmaakprofielen";
+     // Text[spanish_wrong] = "Estilos de marco";
+    Text [ english_us ] = "Frame Style" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_FRM_STD ;
+                Text = "Typ" ;
+                Text [ ENGLISH ] = "Type" ;
+                Text [ norwegian ] = "Type" ;
+                Text [ italian ] = "Tipo" ;
+                Text [ portuguese_brazilian ] = "Tipo" ;
+                Text [ portuguese ] = "Tipo" ;
+                Text [ finnish ] = "Laji" ;
+                Text [ danish ] = "Type" ;
+                Text [ french ] = "Type" ;
+                Text [ swedish ] = "Typ" ;
+                Text [ dutch ] = "Type" ;
+                Text [ spanish ] = "Tipo" ;
+                Text [ english_us ] = "Type" ;
+                PageResID = TP_FRM_STD ;
+                Text[ chinese_simplified ] = "ÀàĞÍ";
+                Text[ russian ] = "Òèï";
+                Text[ polish ] = "Typ";
+                Text[ japanese ] = "í—Ş";
+                Text[ chinese_traditional ] = "Ãş«¬";
+                Text[ arabic ] = "ÇáäæÚ";
+                Text[ greek ] = "Ôığïò";
+                Text[ korean ] = "ÇüÅÂ";
+                Text[ turkish ] = "Tip";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FRM_ADD ;
+                PageResID = TP_FRM_ADD ;
+                /* ### ACHTUNG: Neuer Text in Resource? Zusätze : Zusõtze */
+                Text = "Zusätze" ;
+                Text [ ENGLISH ] = "Additions" ;
+                Text [ english_us ] = "Options" ;
+                Text [ italian ] = "Extra" ;
+                Text [ spanish ] = "Opciones" ;
+                Text [ french ] = "Options" ;
+                Text [ dutch ] = "Overige" ;
+                Text [ swedish ] = "Tillägg" ;
+                Text [ danish ] = "Flere" ;
+                Text [ portuguese_brazilian ] = "Zusätze" ;
+                Text [ portuguese ] = "Opções" ;
+                Text[ chinese_simplified ] = "ÆäËü";
+                Text[ russian ] = "Ïàğàìåòğû";
+                Text[ polish ] = "Dodatki";
+                Text[ japanese ] = "µÌß¼®İ";
+                Text[ chinese_traditional ] = "¨ä¥¦";
+                Text[ arabic ] = "ÎíÇÑÇÊ";
+                Text[ greek ] = "Ğñüóèåôá";
+                Text[ korean ] = "¿É¼Ç";
+                Text[ turkish ] = "Seçenekler";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_FRM_WRAP ;
+                Text = "Umlauf" ;
+                Text [ ENGLISH ] = "Wrap" ;
+                Text [ norwegian ] = "Wrap" ;
+                Text [ italian ] = "Scorrimento" ;
+                Text [ portuguese_brazilian ] = "Circundamento" ;
+                Text [ portuguese ] = "Ajuste" ;
+                Text [ finnish ] = "Kierrätys" ;
+                Text [ danish ] = "Ombrydning" ;
+                Text [ french ] = "Adaptation du texte" ;
+                Text [ swedish ] = "Textanpassning" ;
+                Text [ dutch ] = "Om beeld" ;
+                Text [ spanish ] = "Ajuste" ;
+                Text [ english_us ] = "Wrap" ;
+                PageResID = TP_FRM_WRAP ;
+                Text[ chinese_simplified ] = "»·ÈÆ";
+                Text[ russian ] = "Îáòåêàíèå";
+                Text[ polish ] = "Obieg tekstu";
+                Text[ japanese ] = "Ü‚è•Ô‚µ";
+                Text[ chinese_traditional ] = "´«¦æ";
+                Text[ arabic ] = "ÇáÊİÇİ";
+                Text[ greek ] = "Áíáäßğëùóç";
+                Text[ korean ] = "¼øÈ¯";
+                Text[ turkish ] = "Metin dağılımı";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text = "Hintergrund" ;
+                Text [ ENGLISH ] = "Background" ;
+                Text [ norwegian ] = "Background" ;
+                Text [ italian ] = "Sfondo" ;
+                Text [ portuguese_brazilian ] = "Fundo" ;
+                Text [ portuguese ] = "Plano de fundo" ;
+                Text [ finnish ] = "Tausta" ;
+                Text [ danish ] = "Baggrund" ;
+                Text [ french ] = "Arrière-plan" ;
+                Text [ swedish ] = "Bakgrund" ;
+                Text [ dutch ] = "Achtergrond" ;
+                Text [ spanish ] = "Fondo" ;
+                Text [ english_us ] = "Background" ;
+                PageResID = TP_BACKGROUND ;
+                Text[ chinese_simplified ] = "±³¾°";
+                Text[ russian ] = "Ôîí";
+                Text[ polish ] = "T³o";
+                Text[ japanese ] = "”wŒi";
+                Text[ chinese_traditional ] = "­I´º";
+                Text[ arabic ] = "ÇáÎáİíÉ";
+                Text[ greek ] = "Öüíôï";
+                Text[ korean ] = "¹è°æ";
+                Text[ turkish ] = "Artalan";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text = "Umrandung" ;
+                Text [ ENGLISH ] = "Border" ;
+                Text [ norwegian ] = "Border" ;
+                Text [ italian ] = "Bordo" ;
+                Text [ portuguese_brazilian ] = "Borda" ;
+                Text [ portuguese ] = "Contornos" ;
+                Text [ finnish ] = "Reunaviiva" ;
+                Text [ danish ] = "Ramme" ;
+                Text [ french ] = "Bordure" ;
+                Text [ swedish ] = "Inramning" ;
+                Text [ dutch ] = "Omranding" ;
+                Text [ spanish ] = "Borde" ;
+                Text [ english_us ] = "Borders" ;
+                PageResID = TP_BORDER ;
+                Text[ chinese_simplified ] = "±ß¿ò";
+                Text[ russian ] = "Îáğàìëåíèå";
+                Text[ polish ] = "Obramowanie";
+                Text[ japanese ] = "ŠO˜g";
+                Text[ chinese_traditional ] = "Ãä®Ø";
+                Text[ arabic ] = "ÇáÍÏæÏ";
+                Text[ greek ] = "Ğåñßãñáììá";
+                Text[ korean ] = "Å×µÎ¸®";
+                Text[ turkish ] = "Kenarlık";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_COLUMN ;
+                Text = "Spalten" ;
+                Text [ ENGLISH ] = "Columns" ;
+                Text [ norwegian ] = "Kolonner" ;
+                Text [ italian ] = "Colonne" ;
+                Text [ portuguese_brazilian ] = "Colunas" ;
+                Text [ portuguese ] = "Colunas" ;
+                Text [ finnish ] = "Sarakkeet" ;
+                Text [ danish ] = "Kolonner" ;
+                Text [ french ] = "Colonnes" ;
+                Text [ swedish ] = "Kolumner" ;
+                Text [ dutch ] = "Kolommen" ;
+                Text [ spanish ] = "Columnas" ;
+                Text [ english_us ] = "Columns" ;
+                PageResID = TP_COLUMN ;
+                Text[ chinese_simplified ] = "À¸";
+                Text[ russian ] = "Êîëîíêè";
+                Text[ polish ] = "Kolumny";
+                Text[ japanese ] = "’i‘g‚İ";
+                Text[ chinese_traditional ] = "Äæ";
+                Text[ arabic ] = "ÇáÃÚãÏÉ";
+                Text[ greek ] = "ÓôŞëåò";
+                Text[ korean ] = "¿­";
+                Text[ turkish ] = "Sütun";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_MACRO_ASSIGN ;
+                Text = "Makro" ;
+                Text [ ENGLISH ] = "Macro" ;
+                Text [ english_us ] = "Macro" ;
+                Text [ italian ] = "Macro" ;
+                Text [ spanish ] = "Macro" ;
+                Text [ french ] = "Macro" ;
+                Text [ dutch ] = "Macro" ;
+                Text [ swedish ] = "Makro" ;
+                Text [ danish ] = "Makro" ;
+                Text [ portuguese_brazilian ] = "Makro" ;
+                Text [ portuguese ] = "Macro" ;
+                Text[ chinese_simplified ] = "ºê";
+                Text[ russian ] = "Ìàêğîñ";
+                Text[ polish ] = "Makro";
+                Text[ japanese ] = "Ï¸Û";
+                Text[ chinese_traditional ] = "¥¨¶°";
+                Text[ arabic ] = "ãÇßÑæ";
+                Text[ greek ] = "ÌáêñïåíôïëŞ";
+                Text[ korean ] = "¸ÅÅ©·Î";
+                Text[ turkish ] = "Makro";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text [ italian ] = "Modello di cornice" ;
+    Text [ spanish ] = "Estilo de marcos" ;
+    Text [ french ] = "Style de cadre" ;
+    Text [ dutch ] = "Kaderopmaakprofiel" ;
+    Text [ swedish ] = "Ramformatmall" ;
+    Text [ danish ] = "Rammetypografi" ;
+    Text [ portuguese ] = "Estilo de moldura" ;
+    Text [ portuguese_brazilian ] = "Rahmenvorlage" ;
+    Text[ chinese_simplified ] = "¿òÑùÊ½";
+    Text[ russian ] = "Ñòèëü ğàìêè";
+    Text[ polish ] = "Styl ramki";
+    Text[ japanese ] = "˜g½À²Ù";
+    Text[ chinese_traditional ] = "®Ø¼Ë¦¡";
+    Text[ arabic ] = "äãØ ÅØÇÑ";
+    Text[ greek ] = "Óôõë ğëáéóßïõ";
+    Text[ korean ] = "ÇÁ·¹ÀÓ À¯Çü";
+    Text[ turkish ] = "Çerçeve biçimi";
+    Text[ language_user1 ] = " ";
+};
+TabDialog DLG_TEMPLATE_5
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Nummerierungsvorlage" ;
+    Text [ ENGLISH ] = "Number Style" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_BULLET ;
+                Text = "Bullets" ;
+                Text [ ENGLISH ] = "Bullets" ;
+                Text [ english_us ] = "Bullets" ;
+                Text [ portuguese_brazilian ] = "Bullets" ;
+                Text [ swedish ] = "Bullets" ;
+                Text [ danish ] = "Punkttegn" ;
+                Text [ italian ] = "Punti" ;
+                Text [ spanish ] = "Viñetas" ;
+                Text [ french ] = "Puces" ;
+                Text [ dutch ] = "Opsommingstekens" ;
+                Text [ portuguese ] = "Marcas" ;
+                Text[ chinese_simplified ] = "ÏîÄ¿±àºÅ";
+                Text[ russian ] = "Ìàğêåğû";
+                Text[ polish ] = "Wypunktowanie";
+                Text[ japanese ] = "‰Óğ‘‚«";
+                Text[ chinese_traditional ] = "¶µ¥Ø½s¸¹";
+                Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
+                Text[ greek ] = "Êïõêßäåò";
+                Text[ korean ] = "±Û¸Ó¸® ±âÈ£";
+                Text[ turkish ] = "Madde işareti";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_SINGLE_NUM;
+                Text = "Nummerierungsart" ;
+                Text [ ENGLISH ] = "Digits" ;
+                Text [ english_us ] = "Numbering Style" ;
+                Text [ portuguese_brazilian ] = "Numerierungsart" ;
+                Text [ swedish ] = "Numreringstyp" ;
+                Text [ danish ] = "Nummereringstype" ;
+                Text [ italian ] = "Tipo numerazione" ;
+                Text [ spanish ] = "Tipo de numeración" ;
+                Text [ french ] = "Type de numérotation" ;
+                Text [ dutch ] = "Nummeringstijl" ;
+                Text [ portuguese ] = "Tipo de numeração" ;
+                Text[ chinese_simplified ] = "±àºÅÀàĞÍ";
+                Text[ russian ] = "Òèï íóìåğàöèè";
+                Text[ polish ] = "Rodzaj numeracji";
+                Text[ japanese ] = "”Ô†•t‚¯‚Ìí—Ş";
+                Text[ chinese_traditional ] = "½s¸¹Ãş«¬";
+                Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
+                Text[ language_user1 ] = "MS Word, KeyID23136";
+                Text[ greek ] = "Óôõë áñßèìçóçò";
+                Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
+                Text[ turkish ] = "Numaralama türü";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_NUM ;
+                Text = "Gliederung" ;
+                Text [ ENGLISH ] = "Outline" ;
+                Text [ english_us ] = "Outline" ;
+                Text [ portuguese_brazilian ] = "Gliederung" ;
+                Text [ swedish ] = "Disposition" ;
+                Text [ danish ] = "Disposition" ;
+                Text [ italian ] = "Struttura" ;
+                Text [ spanish ] = "Esquema" ;
+                Text [ french ] = "Plan" ;
+                Text [ dutch ] = "Overzicht" ;
+                Text [ portuguese ] = "Esquema" ;
+                Text[ chinese_simplified ] = "´ó¸Ù";
+                Text[ russian ] = "Ñòğóêòóğà";
+                Text[ polish ] = "Konspekt";
+                Text[ japanese ] = "±³Ä×²İ";
+                Text[ chinese_traditional ] = "¤jºõ";
+                Text[ arabic ] = "ÊŞÓíã";
+                Text[ greek ] = "ÄéÜñèñùóç";
+                Text[ korean ] = "°³¿ä";
+                Text[ turkish ] = "Anahat";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PICK_BMP;
+                Text = "Grafiken" ;
+                Text [ ENGLISH ] = "Images" ;
+                Text [ english_us ] = "Graphics" ;
+                Text [ portuguese_brazilian ] = "Grafiken" ;
+                Text [ swedish ] = "Grafiker" ;
+                Text [ danish ] = "Billeder" ;
+                Text [ italian ] = "Immagini" ;
+                Text [ spanish ] = "Imágenes" ;
+                Text [ french ] = "Images" ;
+                Text [ dutch ] = "Afbeeldingen" ;
+                Text [ portuguese ] = "Imagens" ;
+                Text[ chinese_simplified ] = "Í¼ĞÎ";
+                Text[ russian ] = "Ğèñóíêè";
+                Text[ polish ] = "Grafiki";
+                Text[ japanese ] = "}";
+                Text[ chinese_traditional ] = "¹Ï¤ù";
+                Text[ arabic ] = "ÕæÑ";
+                Text[ greek ] = "ÃñáöéêÜ";
+                Text[ korean ] = "±×·¡ÇÈ";
+                Text[ turkish ] = "Grafik";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_NUM_POSITION ;
+                Text = "Position" ;
+                Text [ ENGLISH ] = "Position" ;
+                Text [ english_us ] = "Position" ;
+                Text [ portuguese_brazilian ] = "Position" ;
+                Text [ swedish ] = "Position" ;
+                Text [ danish ] = "Placering" ;
+                Text [ italian ] = "Posizione" ;
+                Text [ spanish ] = "Posición" ;
+                Text [ french ] = "Position" ;
+                Text [ dutch ] = "Positie" ;
+                Text [ portuguese ] = "Posição" ;
+                Text[ chinese_simplified ] = "Î»ÖÃ";
+                Text[ russian ] = "Ïîçèöèÿ";
+                Text[ polish ] = "Pozycja";
+                Text[ japanese ] = "ˆÊ’u";
+                Text[ chinese_traditional ] = "¦ì¸m";
+                Text[ arabic ] = "ÇáãæÖÚ";
+                Text[ greek ] = "Èİóç";
+                Text[ korean ] = "À§Ä¡";
+                Text[ turkish ] = "Konum";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_NUM_OPTIONS;
+                Text = "~Optionen" ;
+                Text [ ENGLISH ] = "Customize" ;
+                Text [ portuguese ] = "~Opções" ;
+                Text [ english_us ] = "Options" ;
+                Text [ portuguese_brazilian ] = "~Optionen" ;
+                Text [ swedish ] = "Alternativ" ;
+                Text [ danish ] = "Indstillinger" ;
+                Text [ italian ] = "Opzioni" ;
+                Text [ spanish ] = "~Opciones" ;
+                Text [ french ] = "~Options" ;
+                Text [ dutch ] = "~Opties" ;
+                Text[ chinese_simplified ] = "Ñ¡Ïî";
+                Text[ russian ] = "Ïàğàìåòğû";
+                Text[ polish ] = "Opcje";
+                Text[ japanese ] = "µÌß¼®İ";
+                Text[ language_user1 ] = "KW:Tilde entfernen falls noch vorhanden";
+                Text[ chinese_traditional ] = "¿ï¶µ";
+                Text[ arabic ] = "ÎíÇÑÇÊ";
+                Text[ greek ] = "Åğéëïãİò";
+                Text[ korean ] = "¿É¼Ç";
+                Text[ turkish ] = "Seçenekler";
+            };
+        };
+    };
+    Text [ portuguese ] = "Estilo de numeração" ;
+    Text [ english_us ] = "Numbering Style" ;
+    Text [ portuguese_brazilian ] = "Numerierungsvorlage" ;
+    Text [ swedish ] = "Numreringsformatmall" ;
+    Text [ danish ] = "Nummereringstypografi" ;
+    Text [ italian ] = "Modello di numerazione" ;
+    Text [ spanish ] = "Estilo de numeración" ;
+    Text [ french ] = "Style de numérotation" ;
+    Text [ dutch ] = "Opmaakprofiel voor nummering" ;
+    Text[ chinese_simplified ] = "±àºÅÑùÊ½";
+    Text[ russian ] = "Ñòèëü íóìåğàöèè";
+    Text[ polish ] = "Styl numeracji";
+    Text[ japanese ] = "”Ô†•t‚¯½À²Ù";
+    Text[ chinese_traditional ] = "½s¸¹¼Ë¦¡";
+    Text[ arabic ] = "äãØ ÊÑŞíã";
+    Text[ greek ] = "Ğñüôõğï áñßèìçóçò";
+    Text[ korean ] = "¹øÈ£ ¸Å±â±â";
+    Text[ turkish ] = "Numaralama biçimi";
+    Text[ language_user1 ] = " ";
+};

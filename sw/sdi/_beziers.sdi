@@ -1,0 +1,141 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   _beziers.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_beziers.sdi,v 1.1.1.1 2000-09-18 17:14:29 hr Exp $
+
+    Beschreibung:   Basis-interface fuer Bezier
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface _Bezier : Base
+[ Automation = FALSE; ]
+{
+    SID_DELETE
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_BACKSPACE
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_ESCAPE // api:
+    [
+        ExecMethod = Execute;
+    ]
+
+    SID_BEZIER_MOVE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_INSERT
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_DELETE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_CUTLINE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_CONVERT
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_EDGE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_SMOOTH
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_SYMMTR
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_CLOSE
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BEZIER_ELIMINATE_POINTS
+    [
+        Export = FALSE;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.5  1998/11/12 16:28:52  MA
+    #58677# Disable Flag
+
+
+      Rev 1.4   12 Nov 1998 17:28:52   MA
+   #58677# Disable Flag
+
+      Rev 1.3   16 Jul 1997 16:47:26   OM
+   Einige Basic-Fkts nicht exportieren
+
+      Rev 1.2   16 Jun 1997 15:29:08   OM
+   GPF behoben: Backspace wie Delete behandeln
+
+      Rev 1.1   13 Feb 1997 09:54:08   MA
+   unnoetige und falsche Texte entfernt
+
+      Rev 1.0   23 Jan 1997 14:45:12   OS
+   Initial revision.
+
+
+------------------------------------------------------------------------*/
+
+
+
+

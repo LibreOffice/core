@@ -1,0 +1,1236 @@
+/*************************************************************************
+ *
+ *  $RCSfile: idxmrk.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "index.hrc"
+#include "idxmrk.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+
+#define IDX_DIALOG_WINDOW \
+    Window WIN_DLG                                                  \
+    {                                                               \
+        Pos = MAP_APPFONT ( 0 , 0 ) ;                               \
+        Size = MAP_APPFONT ( 218 , WINDOW_HEIGHT ) ;                          \
+        OKButton BT_OK                                              \
+        {                                                           \
+            Pos = MAP_APPFONT ( 162 , 6 ) ;                         \
+            Size = MAP_APPFONT ( 50 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            DefButton = TRUE ;                                      \
+            Text = "Einfügen";                                      \
+            Text[English] = "Insert";                               \
+            Text[ english_us ] = "Insert";\
+            Text[ portuguese ] = "Inserir";\
+            Text[ russian ] = "Âñòàâèòü";\
+            Text[ greek ] = "ĞñïóèŞêç";\
+            Text[ dutch ] = "Invoegen";\
+            Text[ french ] = "Insérer";\
+            Text[ spanish ] = "Insertar";\
+            Text[ italian ] = "Inserisci";\
+            Text[ danish ] = "Indsæt";\
+            Text[ swedish ] = "Infoga";\
+            Text[ polish ] = "Wstaw";\
+            Text[ portuguese_brazilian ] = "Insert";\
+            Text[ japanese ] = "‘}“ü";\
+            Text[ korean ] = "»ğÀÔ";\
+            Text[ chinese_simplified ] = "²åÈë";\
+            Text[ chinese_traditional ] = "´¡¤J";\
+            Text[ arabic ] = "ÅÏÑÇÌ";\
+            Text[ turkish ] = "Ekle";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        CancelButton BT_CANCEL                                      \
+        {                                                           \
+            Pos = MAP_APPFONT ( 162 , 23 ) ;                        \
+            Size = MAP_APPFONT ( 50 , 14 ) ;                        \
+            Text = "Schließen";                                     \
+            Text[English] = "Close";                                \
+            Text[ english_us ] = "Close";\
+            Text[ portuguese ] = "Fechar";\
+            Text[ russian ] = "Çàêğûòü";\
+            Text[ greek ] = "Êëåßóéìï";\
+            Text[ dutch ] = "Sluiten";\
+            Text[ french ] = "Fermer";\
+            Text[ spanish ] = "Cerrar";\
+            Text[ italian ] = "Chiudi";\
+            Text[ danish ] = "Luk";\
+            Text[ swedish ] = "Stäng";\
+            Text[ polish ] = "Zamknij";\
+            Text[ portuguese_brazilian ] = "Close";\
+            Text[ japanese ] = "•Â‚¶‚é";\
+            Text[ korean ] = "´İ±â";\
+            Text[ chinese_simplified ] = "¹Ø±Õ";\
+            Text[ chinese_traditional ] = "Ãö³¬";\
+            Text[ arabic ] = "ÅÛáÇŞ";\
+            Text[ turkish ] = "Kapat";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        HelpButton BT_HELP                                          \
+        {                                                           \
+            Pos = MAP_APPFONT ( 162 , 43 ) ;                        \
+            Size = MAP_APPFONT ( 50 , 14 ) ;                        \
+        };                                                          \
+        PushButton BT_DEL                                           \
+        {                                                           \
+            Pos = MAP_APPFONT ( 162 , 63 ) ;                        \
+            Size = MAP_APPFONT ( 50 , 14 ) ;                        \
+            Text = "L~öschen" ;                                     \
+            Text [ ENGLISH ] = "~Delete" ;                          \
+            Text [ norwegian ] = "~Slett" ;                         \
+            Text [ italian ] = "~Elimina" ;                         \
+            Text [ portuguese_brazilian ] = "~Apagar" ;             \
+            Text [ portuguese ] = "E~liminar" ;                     \
+            Text [ finnish ] = "~Poista" ;                          \
+            Text [ danish ] = "Slet" ;                              \
+            Text [ french ] = "~Supprimer" ;                        \
+            Text [ swedish ] = "~Radera" ;                         \
+            Text [ dutch ] = "~Wissen" ;                            \
+            Text [ spanish ] = "~Eliminar" ;                        \
+            Text [ english_us ] = "~Delete" ;                       \
+            TabStop = TRUE ;                                        \
+            Text[ chinese_simplified ] = "É¾³ı(~D)";               \
+            Text[ russian ] = "Óäàëèòü";                            \
+            Text[ polish ] = "Usuñ";                                \
+            Text[ japanese ] = "íœ(~D)";                         \
+            Text[ chinese_traditional ] = "§R°£(~D)";              \
+            Text[ arabic ] = "ÍĞİ";                                 \
+            Text[ greek ] = "ÄéáãñáöŞ";\
+            Text[ korean ] = "»èÁ¦(~D)";\
+            Text[ turkish ] = "~Sil";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        ListBox DCB_INDEX                                           \
+        {                                                           \
+            Pos = MAP_APPFONT ( 56 , 14) ;                          \
+            Size = MAP_APPFONT ( DCB_INDEX_WIDTH , 56 ) ;           \
+            TabStop = TRUE ;                                        \
+            DropDown = TRUE ;                                       \
+        };                                                          \
+        ImageButton BT_NEW                                          \
+        {                                                           \
+            Pos = MAP_APPFONT ( 137 , 14 ) ;                        \
+            Size = MAP_APPFONT ( 12 , 12 ) ;                        \
+            QuickHelpText = "Neues benutzerdefiniertes Verzeichnis";            \
+            QuickHelpText[English] = "New user defined index";      \
+            QuickHelpText[ english_us ] = "New user-defined index";\
+            QuickHelpText[ portuguese ] = "New user defined index";\
+            QuickHelpText[ russian ] = "Íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";\
+            QuickHelpText[ greek ] = "Äçìéïõñãßá åõñåôçñßïõ ïñéóìİíï áğü ôïí ÷ñŞóôç";\
+            QuickHelpText[ dutch ] = "Nieuwe gebruikergedefinieerde index";\
+            QuickHelpText[ french ] = "Definir un nouvel index personnalisé";\
+            QuickHelpText[ spanish ] = "New user defined index";\
+            QuickHelpText[ italian ] = "Nuovo indice personalizzato";\
+            QuickHelpText[ danish ] = "Nyt brugerdefineret indeks";\
+            QuickHelpText[ swedish ] = "Ny användardefinierad förteckning";\
+            QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika";\
+            QuickHelpText[ portuguese_brazilian ] = "New user defined index";\
+            QuickHelpText[ japanese ] = "V‚µ‚¢Õ°»Ş°İ’è‚Ìõˆø";\
+            QuickHelpText[ korean ] = "New user defined index";\
+            QuickHelpText[ chinese_simplified ] = "New user defined index";\
+            QuickHelpText[ chinese_traditional ] = "·s¼W¦Û­q¥Ø¿ı";\
+            QuickHelpText[ arabic ] = "İåÑÓ ÌÏíÏ ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";\
+        };                                                          \
+        ImageButton BT_PREVSAME                                     \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( 162 , 80 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_FIRST ;                            \
+        };                                                          \
+        ImageButton BT_PREV                                         \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( 162 , 97 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_PREV ;                             \
+        };                                                          \
+        ImageButton BT_NXT                                          \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( 188 , 97 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_NEXT ;                             \
+        };                                                          \
+        ImageButton BT_NXTSAME                                      \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( 188 , 80 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_LAST ;                             \
+        };                                                          \
+        GroupBox GB_INDEX                                           \
+        {                                                           \
+            Pos = MAP_APPFONT ( 6 , 3 ) ;                           \
+            Size = MAP_APPFONT ( 151 , GB_HEIGHT ) ;                      \
+            Text = "Markierung" ;                                   \
+            Text [ ENGLISH ] = "Mark" ;                             \
+            Text [ norwegian ] = "Merk" ;                           \
+            Text [ italian ] = "Contrassegna" ;                     \
+            Text [ portuguese_brazilian ] = "Marca" ;               \
+            Text [ portuguese ] = "Selecção" ;                        \
+            Text [ finnish ] = "Merkintä" ;                         \
+            Text [ danish ] = "Markering" ;                             \
+            Text [ french ] = "Marque" ;                            \
+            Text [ swedish ] = "Markering" ;                        \
+            Text [ dutch ] = "Markering" ;                          \
+            Text [ spanish ] = "Marca" ;                            \
+            Text [ english_us ] = "Selection" ;                    \
+            Text[ chinese_simplified ] = "±ê¼Ç";                    \
+            Text[ russian ] = "Âûäåëåíèå";                          \
+            Text[ polish ] = "Zaznaczenie";                         \
+            Text[ japanese ] = "‘I‘ğ";                           \
+            Text[ chinese_traditional ] = "¼Ğ°O";                   \
+            Text[ arabic ] = "ÇáÊÍÏíÏ";                      \
+            Text[ greek ] = "ÓŞìáíóç";\
+            Text[ korean ] = "¼±ÅÃ";\
+            Text[ turkish ] = "Seçim";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        FixedText LBL_INDEX                                         \
+        {                                                           \
+            Pos = MAP_APPFONT ( 12 , 16 ) ;                         \
+            Size = MAP_APPFONT ( 40 , 10 ) ;                        \
+            Text = "~Verzeichnis" ;                                 \
+            Text [ ENGLISH ] = "~Index" ;                           \
+            Text [ norwegian ] = "~Index" ;                         \
+            Text [ italian ] = "Indice" ;                          \
+            Text [ portuguese_brazilian ] = "~Índice" ;             \
+            Text [ portuguese ] = "~Índice" ;                       \
+            Text [ finnish ] = "~Hakemisto" ;                       \
+            Text [ danish ] = "Indeks" ;                           \
+            Text [ french ] = "~Type" ;                             \
+            Text [ swedish ] = "Fö~rteckning" ;                     \
+            Text [ dutch ] = "~Index" ;                             \
+            Text [ spanish ] = "Ín~dice" ;                          \
+            Text [ english_us ] = "~Index" ;                        \
+            Left = TRUE ;                                           \
+            Text[ chinese_simplified ] = "Ä¿Â¼(~I)";               \
+            Text[ russian ] = "Óêàçàòåëü";                          \
+            Text[ polish ] = "Indeks";                              \
+            Text[ japanese ] = "õˆø(~I)";                         \
+            Text[ chinese_traditional ] = "¥Ø¿ı(~I)";              \
+            Text[ arabic ] = "İåÑÓ";                                \
+            Text[ greek ] = "ÅõñåôŞñéï";\
+            Text[ korean ] = "»öÀÎ(~I)";\
+            Text[ language_user1 ] = " ";\
+            Text[ turkish ] = "~Dizin";\
+        };                                                          \
+        Edit SL_ENTRY                                               \
+        {                                                           \
+            Border = TRUE ;                                         \
+            Pos = MAP_APPFONT ( 56 , 29 ) ;                         \
+            Size = MAP_APPFONT ( 94 , 12 ) ;                        \
+            TabStop = TRUE ;                                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        FixedText LBL_ENTRY                                         \
+        {                                                           \
+            Pos = MAP_APPFONT ( 12 , 31 ) ;                         \
+            Size = MAP_APPFONT ( 27 , 8 ) ;                         \
+            Text = "~Eintrag" ;                                     \
+            Text [ ENGLISH ] = "~Entry" ;                           \
+            Text [ norwegian ] = "~Inngang" ;                       \
+            Text [ italian ] = "Voc~e" ;                            \
+            Text [ portuguese_brazilian ] = "~Entrada" ;            \
+            Text [ portuguese ] = "E~ntrada" ;                      \
+            Text [ finnish ] = "~Hakusana" ;                        \
+            Text [ danish ] = "Element" ;                           \
+            Text [ french ] = "~Entrée" ;                           \
+            Text [ swedish ] = "~Post" ;                       \
+            Text [ dutch ] = "~Item" ;                              \
+            Text [ spanish ] = "~Entrada" ;                         \
+            Text [ english_us ] = "~Entry" ;                        \
+            Left = TRUE ;                                           \
+            Text[ chinese_simplified ] = "ÌõÄ¿(~E)";               \
+            Text[ russian ] = "İëåìåíò";                            \
+            Text[ polish ] = "Wpis";                                \
+            Text[ japanese ] = "€–Ú(~E)";                         \
+            Text[ chinese_traditional ] = "¶µ¥Ø(~E)";              \
+            Text[ arabic ] = "ÇáÅÏÎÇá";                               \
+            Text[ greek ] = "ÅããñáöŞ";\
+            Text[ korean ] = "Ç×¸ñ(~E)";\
+            Text[ turkish ] = "~Giriş";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        FixedText LBL_KEY                                           \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( 12 , 46 ) ;                         \
+            Size = MAP_APPFONT ( 42 , 8 ) ;                         \
+            Text = "~1. Schlüssel" ;                                \
+            Text [ ENGLISH ] = "~1. Key" ;                          \
+            Text [ norwegian ] = "~1. Nøkkel" ;                     \
+            Text [ italian ] = "Chiave ~1" ;                        \
+            Text [ portuguese_brazilian ] = "~1. Tecla" ;           \
+            Text [ portuguese ] = "~1ª chave" ;                    \
+            Text [ finnish ] = "~1. avain" ;                        \
+            Text [ danish ] = "1. nøgle" ;                         \
+            Text [ french ] = "~1re clé" ;                      \
+            Text [ swedish ] = "Sorteringskod ~1" ;                  \
+            Text [ dutch ] = "~1e sleutel" ;                        \
+            Text [ spanish ] = "~1ra clave" ;                      \
+            Text [ english_us ] = "~1st key" ;                      \
+            Left = TRUE ;                                           \
+            Text[ chinese_simplified ] = "µÚÒ»¸ö¹Ø¼ü×Ö";            \
+            Text[ russian ] = "1-ûé êëş÷";                          \
+            Text[ polish ] = "Pierwszy klucz";                      \
+            Text[ japanese ] = "·° 1";                         \
+            Text[ chinese_traditional ] = "²Ä¤@­ÓÃöÁä¦r(~K)";       \
+            Text[ arabic ] = "ÇáãİÊÇÍ ÇáÃæá";                       \
+            Text[ greek ] = "~1ï êëåéäß";\
+            Text[ korean ] = "1¹øÂ° Å°";\
+            Text[ turkish ] = "~1. Anahtar";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        ComboBox DCB_KEY                                            \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( 56 , 44 ) ;                         \
+            Size = MAP_APPFONT ( 94 , 56 ) ;                        \
+            TabStop = TRUE ;                                        \
+            DropDown = TRUE ;                                       \
+        };                                                          \
+        FixedText LBL_KEY2                                          \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( 12 , 62 ) ;                         \
+            Size = MAP_APPFONT ( 42 , 8 ) ;                         \
+            Text = "~2. Schlüssel" ;                                \
+            Text [ ENGLISH ] = "~2. Key" ;                          \
+            Text [ norwegian ] = "~2. Nøkkel" ;                     \
+            Text [ italian ] = "Chiave ~2" ;                        \
+            Text [ portuguese_brazilian ] = "~2. Tecla" ;           \
+            Text [ portuguese ] = "~2ª chave" ;                    \
+            Text [ finnish ] = "~2. avain" ;                        \
+            Text [ danish ] = "2. nøgle" ;                         \
+            Text [ french ] = "~2ème clé" ;                     \
+            Text [ swedish ] = "Sorteringskod ~2" ;                  \
+            Text [ dutch ] = "~2e sleutel" ;                        \
+            Text [ spanish ] = "~2da clave" ;                      \
+            Text [ english_us ] = "~2nd key" ;                      \
+            Left = TRUE ;                                           \
+            Text[ chinese_simplified ] = "µÚ¶ş¸ö¹Ø¼ü×Ö";            \
+            Text[ russian ] = "2-îé êëş÷";                          \
+            Text[ polish ] = "Drugi klucz";                         \
+            Text[ japanese ] = "·° 2";                         \
+            Text[ chinese_traditional ] = "²Ä¤G­ÓÃöÁä¦r(~E)";       \
+            Text[ arabic ] = "ÇáãİÊÇÍ ÇáËÇäí";                      \
+            Text[ greek ] = "~2ï Êëåéäß";\
+            Text[ korean ] = "2¹øÂ° Å°";\
+            Text[ turkish ] = "~2. Anahtar";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        ComboBox DCB_KEY2                                           \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( 56 , 59 ) ;                         \
+            Size = MAP_APPFONT ( 94 , 56 ) ;                        \
+            TabStop = TRUE ;                                        \
+            DropDown = TRUE ;                                       \
+        };                                                          \
+        FixedText LBL_LEVEL                                         \
+        {                                                           \
+            Pos = MAP_APPFONT ( 12 , 76 ) ;                         \
+            Size = MAP_APPFONT ( 21 , 8 ) ;                         \
+            Text = "St~ufe" ;                                       \
+            Text [ ENGLISH ] = "~Level" ;                           \
+            Text [ norwegian ] = "~Nivå" ;                          \
+            Text [ italian ] = "Livello" ;                         \
+            Text [ portuguese_brazilian ] = "~Nível" ;              \
+            Text [ portuguese ] = "~Nível" ;                        \
+            Text [ finnish ] = "~Taso" ;                            \
+            Text [ danish ] = "Niveau" ;                             \
+            Text [ french ] = "~Niveau" ;                           \
+            Text [ swedish ] = "Ni~vå" ;                            \
+            Text [ dutch ] = "~Niveau" ;                            \
+            Text [ spanish ] = "~Nivel" ;                           \
+            Text [ english_us ] = "~Level" ;                        \
+            Left = TRUE ;                                           \
+            Text[ chinese_simplified ] = "¼¶(~L)";                 \
+            Text[ russian ] = "Óğîâåíü";                            \
+            Text[ polish ] = "Poziom";                              \
+            Text[ japanese ] = "ÚÍŞÙ(~L)";                         \
+            Text[ chinese_traditional ] = "¯Å(~L)";                \
+            Text[ arabic ] = "ÇáãÓÊæì";                             \
+            Text[ greek ] = "Åğßğåäï";\
+            Text[ korean ] = "¼öÁØ(~L)";\
+            Text[ turkish ] = "D~üzey";\
+            Text[ language_user1 ] = " ";\
+        };                                                          \
+        NumericField SL_LEVEL                                       \
+        {                                                           \
+            Border = TRUE ;                                         \
+            Pos = MAP_APPFONT ( 56 , 74 ) ;                         \
+            Size = MAP_APPFONT ( 18 , 12 ) ;                        \
+            TabStop = TRUE ;                                        \
+            Left = TRUE ;                                           \
+            Repeat = TRUE ;                                         \
+            Spin = TRUE ;                                           \
+            Minimum = 1 ;                                           \
+            Maximum = 5 ;                                           \
+            Value = 1 ;                                             \
+            Last = 4 ;                                              \
+            SpinSize = 1 ;                                          \
+        };                                                          \
+        CheckBox CB_MAIN_ENTRY                                      \
+        {                                                                       \
+            Pos = MAP_APPFONT ( 12 , 76 ) ;                                     \
+            Size = MAP_APPFONT ( 100 , 8 ) ;                                    \
+            Text = "Ha~upteintrag" ;                                            \
+            Text [ ENGLISH ] = "~Main entry" ;                                  \
+            Text[ english_us ] = "~Main entry";\
+            Text[ portuguese ] = "~Entrada principal";\
+            Text[ russian ] = "Îñíîâíîé ıëåìåíò";\
+            Text[ greek ] = "Êıñéá åããñáöŞ";\
+            Text[ dutch ] = "~Hoofditem";\
+            Text[ french ] = "~Entrée principale";\
+            Text[ spanish ] = "~Entrada principal";\
+            Text[ italian ] = "Voce principale";\
+            Text[ danish ] = "Hovedelement";\
+            Text[ swedish ] = "H~uvudpost";\
+            Text[ polish ] = "Wpis g³ówny";\
+            Text[ portuguese_brazilian ] = "~Main entry";\
+            Text[ japanese ] = "å€–Ú(~M)";\
+            Text[ korean ] = "ÁÖ Ç×¸ñ(~M)";\
+            Text[ chinese_simplified ] = "Ö÷ÌõÄ¿(~M)";\
+            Text[ chinese_traditional ] = "¥D¶µ¥Ø(~M)";\
+            Text[ arabic ] = "ÅÏÎÇá ÑÆíÓí";\
+            Text[ turkish ] = "A~na giriş";\
+            Text[ language_user1 ] = " ";\
+        };                                                                      \
+        CheckBox CB_APPLY_TO_ALL                                                \
+        {                                                                       \
+            Pos = MAP_APPFONT ( 12 , 90 ) ;                                     \
+            Size = MAP_APPFONT ( 140 , 12 ) ;                                   \
+            Text = "~Auf alle gleichen Texte anwenden." ;                       \
+            Text [ ENGLISH ] = "~Apply to all similar texts." ;                 \
+            Hide = TRUE;                                                        \
+            Text[ english_us ] = "~Apply to all similar texts.";                \
+            Text[ portuguese ] = "~Aplicar em todos os textos semelhantes";     \
+            Text[ russian ] = "Ïğèìåíèòü êî âñåì îäèíàêîâûì òåêñòàì";           \
+            Text[ dutch ] = "~Voor alle dezelfde tekst gebruiken";              \
+            Text[ french ] = "~Appliquer à tous les textes similaires.";         \
+            Text[ spanish ] = "~Aplicar a todos los textos iguales.";           \
+            Text[ italian ] = "~Applica a tutti i testi simili";                 \
+            Text[ danish ] = "Anvend på alle lignende tekster.";                    \
+            Text[ swedish ] = "~Använd på alla liknande texter.";               \
+            Text[ polish ] = "Zastosuj w podobnych tekstach.";                  \
+            Text[ portuguese_brazilian ] = "~Apply to all similar texts.";      \
+            Text[ japanese ] = "‚·‚×‚Ä‚Ì—‚Ä‚¢‚é•¶š—ñ‚É“K—p(~A)";               \
+            Text[ chinese_simplified ] = "ÊÊÓÃÓÚÏàÍ¬µÄÕıÎÄ(~A)";           \
+            Text[ chinese_traditional ] = "¥Î©ó©Ò¦³¬Û¦Pªº¤º¤å(~A)";            \
+            Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáããÇËáÉ.";                   \
+            Text[ greek ] = "ÅöáñìïãŞ óå üëá ôá ğáñüìïéá êåßìåíá.";\
+            Text[ korean ] = "ÀüÃ¼ À¯»ç ÅØ½ºÆ® Àû¿ë(~A)";\
+            Text[ turkish ] = "~Tüm eş metinlere uygula.";\
+            Text[ language_user1 ] = " ";\
+        };                                                                      \
+        CheckBox CB_CASESENSITIVE                                                \
+        {                                                                       \
+            Pos = MAP_APPFONT ( 18 , 104 ) ;                                     \
+            Size = MAP_APPFONT ( 134 , 12 ) ;                                   \
+            Text = "E~xakte Suche" ;                       \
+            Text [ ENGLISH ] = "Match case" ;                 \
+            Hide = TRUE;\
+            Text[ english_us ] = "Ma~tch case";\
+            Text[ portuguese ] = "Procura e~xacta";\
+            Text[ russian ] = "Òî÷íûé ïîèñê";\
+            Text[ greek ] = "ÁêñéâŞò áíáæŞôçóç";\
+            Text[ dutch ] = "~Exact dezelfde tekens zoeken";\
+            Text[ french ] = "Respecter la ~casse";\
+            Text[ spanish ] = "Búsqueda e~xacta";\
+            Text[ italian ] = "Ricerca esatta";\
+            Text[ danish ] = "Søg eksakt";\
+            Text[ swedish ] = "E~xakt sökning";\
+            Text[ polish ] = "Dok³adne wyszukiwanie";\
+            Text[ portuguese_brazilian ] = "Match case";\
+            Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È’PŒê‚ÌŒŸõ";\
+            Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~T)";\
+            Text[ chinese_simplified ] = "¾«È·ËÑÑ°";\
+            Text[ chinese_traditional ] = "ºëÚÌ´M§ä";\
+            Text[ arabic ] = "ÈÍË ÏŞíŞ";\
+            Text[ turkish ] = "BÜYÜK/küçük ~harf duyarlı";\
+        };                                                                      \
+        CheckBox CB_WORDONLY                                                \
+        {                                                                       \
+            Pos = MAP_APPFONT ( 18 , 118 ) ;                                     \
+            Size = MAP_APPFONT ( 134 , 12 ) ;                                   \
+            Text = "Nur ganze ~Wörter" ;                       \
+            Text [ ENGLISH ] = "Whole words only" ;                 \
+            Hide = TRUE;\
+            Text[ english_us ] = "~Whole words only";\
+            Text[ portuguese ] = "Só ~palavras inteiras";\
+            Text[ russian ] = "Òîëüêî ïîëíûå ñëîâà";\
+            Text[ greek ] = "Ìüíï ïëüêëçñåò ëİîåéò";\
+            Text[ dutch ] = "Alleen hele ~woorden";\
+            Text[ french ] = "~Mots entiers";\
+            Text[ spanish ] = "Solo palabras e~nteras";\
+            Text[ italian ] = "Solo parole intere";\
+            Text[ danish ] = "Kun hele ord";\
+            Text[ swedish ] = "Bara hela ~ord";\
+            Text[ polish ] = "Tylko ca³e wyrazy";\
+            Text[ portuguese_brazilian ] = "Whole words only";\
+            Text[ japanese ] = "’PŒê’PˆÊ‚Å‚Ì‚İ";\
+            Text[ korean ] = "ÀüÃ¼ ´Ü¾î¸¸(~W)";\
+            Text[ chinese_simplified ] = "Ö»ÔÊĞíÕû¸ö´Ê";\
+            Text[ chinese_traditional ] = "¥u¬O¾ã­Ó¦r";\
+            Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";\
+            Text[ turkish ] = "Yalnızca ~tam sözcükler bul";\
+        };                                                                      \
+    };
+
+ModalDialog DLG_EDIT_IDXMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+    HelpID = FN_EDIT_IDX_ENTRY_DLG;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 218 , 118 ) ;
+    #define GB_HEIGHT 109
+    #define DCB_INDEX_WIDTH 94
+    #define WINDOW_HEIGHT   118
+    IDX_DIALOG_WINDOW
+};
+ModelessDialog DLG_INSIDXMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+//  Zoomable = TRUE ;
+    HelpID = FN_INSERT_IDX_ENTRY_DLG;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 218 , 138) ;
+//  Moveable = TRUE ;
+    #define GB_HEIGHT 129
+    #define DCB_INDEX_WIDTH 79
+    #define WINDOW_HEIGHT   138
+    IDX_DIALOG_WINDOW
+};
+ModalDialog DLG_NEW_USER_IDX
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+    HelpID = HID_DLG_NEW_USER_IDX;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 194 , 60 ) ;
+    Text = "Neues benutzerdefiniertes  Verzeichnis anlegen" ;
+    Text [ ENGLISH ] = "Create new user-defined index" ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 141 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 141 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 141 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    GroupBox GB_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 132 , 54 ) ;
+        Text = "Neues Benutzerverzeichnis" ;
+        Text [ ENGLISH ] = "New user index name" ;
+
+        Text[ english_us ] = "New user index";
+        Text[ portuguese ] = "Novo índice personalizado";
+        Text[ russian ] = "Íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";
+        Text[ greek ] = "Äçìéïõñãßá åõñåôçñßïõ ÷ñŞóôç";
+        Text[ dutch ] = "Nieuwe gebruikersindex";
+        Text[ french ] = "Nouvel index personnalisé";
+        Text[ spanish ] = "Nuevo índice de usuario";
+        Text[ italian ] = "Nuovo indice personalizzato";
+        Text[ danish ] = "Nyt brugerindeks";
+        Text[ swedish ] = "Ny användarförteckning";
+        Text[ polish ] = "Nowy indeks u¿ytkownika";
+        Text[ portuguese_brazilian ] = "New user index name";
+        Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø";
+        Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ »öÀÎ";
+        Text[ chinese_simplified ] = "ĞÂ½¨ÓÃ»§Ä¿Â¼";
+        Text[ chinese_traditional ] = "·s«Ø¦Û­q¥Ø¿ı";
+        Text[ arabic ] = "İåÑÓ ãÓÊÎÏã ÌÏíÏ";
+        Text[ turkish ] = "Yeni kullanıcı dizini";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Name" ;
+        Text [ ENGLISH ] = "Name" ;
+
+        Text[ english_us ] = "~Name";
+        Text[ portuguese ] = "~Nome";
+        Text[ russian ] = "Èìÿ";
+        Text[ greek ] = "¼íïìá";
+        Text[ dutch ] = "~Naam";
+        Text[ french ] = "~Nom";
+        Text[ spanish ] = "~Nombre";
+        Text[ italian ] = "~Nome";
+        Text[ danish ] = "Navn";
+        Text[ swedish ] = "~Namn";
+        Text[ polish ] = "Nazwa";
+        Text[ portuguese_brazilian ] = "Name";
+        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ arabic ] = "ÇÓã";
+        Text[ turkish ] = "~Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 15 ) ;
+        Size = MAP_APPFONT ( 80 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    Text[ english_us ] = "Create New User-defined Index";
+    Text[ portuguese ] = "Definir novo índice personalizado";
+    Text[ russian ] = "Ñîçäàòü íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";
+    Text[ greek ] = "Äçìéïõñãßá íİïõ åõñåôçñßïõ ÷ñŞóôç";
+    Text[ dutch ] = "Nieuwe gebruikersindex definiëren";
+    Text[ french ] = "Création d'un nouvel index personnalisé";
+    Text[ spanish ] = "Crear nuevo índice de usuario";
+    Text[ italian ] = "Definisci nuovo indice personalizzato";
+    Text[ danish ] = "Opret nyt brugerdefineret indeks";
+    Text[ swedish ] = "Skapa ny användardefinierad förteckning";
+    Text[ polish ] = "Utwórz nowy indeks zdeiniowany przez u¿ytkownika";
+    Text[ portuguese_brazilian ] = "Define new user index";
+    Text[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø‚Ìì¬";
+    Text[ korean ] = "»õ·Î¿î »ç¿ëÀÚ Á¤ÀÇ »öÀÎ ¸¸µé±â";
+    Text[ chinese_simplified ] = "ĞÂ½¨ÓÃ»§×Ô¶¨Ä¿Â¼";
+    Text[ chinese_traditional ] = "·s¼W¦Û­qªº¥Ø¿ı";
+    Text[ arabic ] = "ÅäÔÇÁ İåÑÓ ÌÏíÏ ãõÚóÑøóİ ãä ŞÈá ÇáãÓÊÎÏã";
+    Text[ turkish ] = "Yeni kullanıcı tanımlı dizin oluştur";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_IDXMRK_EDIT
+{
+    Text = "Verzeichniseintrag bearbeiten" ;
+    Text [ ENGLISH ] = "Edit index entry" ;
+    Text [ norwegian ] = "Rediger stikkordregisterinngang" ;
+    Text [ italian ] = "Modifica voce di indice" ;
+    Text [ portuguese_brazilian ] = "Editar entrada de índice" ;
+    Text [ portuguese ] = "Editar entrada de índice" ;
+    Text [ finnish ] = "Muokkaa hakusanaa" ;
+    Text [ danish ] = "Rediger indekselement" ;
+    Text [ french ] = "Édition d'une entrée d'index" ;
+    Text [ swedish ] = "Redigera förteckningspost" ;
+    Text [ dutch ] = "Indexgegeven bewerken" ;
+    Text [ spanish ] = "Editar entrada de índice" ;
+    Text [ english_us ] = "Edit Index Entry" ;
+    Text[ chinese_simplified ] = "±à¼­Ä¿Â¼ÌõÄ¿";
+    Text[ russian ] = "Ïğàâêà ıëåìåíòà óêàçàòåëÿ";
+    Text[ polish ] = "Edytuj wpis do indeksu";
+    Text[ japanese ] = "õˆø€–Ú‚Ì•ÒW";
+    Text[ chinese_traditional ] = "½s¿è¥Ø¿ı¶µ¥Ø";
+    Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İåÑÓí";
+    Text[ greek ] = "Åğåîåñãáóßá åããñáöŞò åõñåôçñßïõ";
+    Text[ korean ] = "»öÀÎ Ç×¸ñ ÆíÁı";
+    Text[ turkish ] = "Dizin girişini düzenle";
+    Text[ language_user1 ] = " ";
+};
+String STR_IDXMRK_INSERT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Verzeichniseintrag einfügen : Verzeichniseintrag einf³gen */
+    Text = "Verzeichniseintrag einfügen" ;
+    Text [ ENGLISH ] = "Insert index entry" ;
+    Text [ norwegian ] = "Sett inn oppføring i stikkkordregister" ;
+    Text [ italian ] = "Inserisci voce di indice" ;
+    Text [ portuguese_brazilian ] = "Inserir entrada de índice" ;
+    Text [ portuguese ] = "Inserir entrada no índice remissivo" ;
+    Text [ finnish ] = "Lisää hakemistotekstin" ;
+    Text [ danish ] = "Indsæt indekselement" ;
+    Text [ french ] = "Insertion d'une entrée d'index" ;
+    Text [ swedish ] = "Infoga förteckningspost" ;
+    Text [ dutch ] = "Indexgegeven invoegen" ;
+    Text [ spanish ] = "Insertar una entrada de índice" ;
+    Text [ english_us ] = "Insert Index Entry" ;
+    Text[ chinese_simplified ] = "²åÈëË÷ÒıÌõÄ¿";
+    Text[ russian ] = "Âñòàâèòü ıëåìåíò óêàçàòåëÿ";
+    Text[ polish ] = "Wstaw wpis do indeksu";
+    Text[ japanese ] = "–ÚŸ‚Æõˆø€–Ú‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J¥Ø¿ı±ø¥Ø";
+    Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İåÑÓí";
+    Text[ greek ] = "ĞñïóèŞêç åããñáöŞò åõñåôçñßïõ";
+    Text[ korean ] = "»öÀÎ Ç×¸ñ »ğÀÔ";
+    Text[ turkish ] = "Dizin girişi ekle";
+    Text[ language_user1 ] = " ";
+};
+
+#define     AUTH_DIALOG_WINDOW  \
+    Window  WIN_DLG                                 \
+    {                                                   \
+        Pos = MAP_APPFONT ( 0 , 0 ) ;                   \
+        Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;     \
+        RadioButton RB_FROMCOMPONENT                                \
+        {                                                           \
+            Pos = MAP_APPFONT ( 12 , 14 ) ;                         \
+            Size = MAP_APPFONT ( 147 , 12 ) ;                       \
+            Text = "Aus Literatur~datenbank" ;                      \
+            Text [ ENGLISH ] = "Form bibliography database" ;       \
+            Text[ english_us ] = "From bibliography ~database";\
+            Text[ portuguese ] = "A partir da ~base de dados bibliográfica";\
+            Text[ russian ] = "Èç áàçû äàííûõ áèáëèîãğàôèè";\
+            Text[ greek ] = "Áğü ôç âÜóç ~äåäïìİíùí âéâëéïãñáößáò";\
+            Text[ dutch ] = "Uit ~literatuur-database";\
+            Text[ french ] = "À partir de la ~base de données bibliographique";\
+            Text[ spanish ] = "De la base de datos ~bibliográfica";\
+            Text[ italian ] = "Dal ~database bibliografico";\
+            Text[ danish ] = "fra litteraturdatabasen";\
+            Text[ swedish ] = "Från litteratur~databas";\
+            Text[ polish ] = "Z bibliograficznej bazy danych";\
+            Text[ portuguese_brazilian ] = "Form bibliography database";\
+            Text[ japanese ] = "‘ ‘ŠÇ—ÃŞ°ÀÍŞ°½‚©‚ç(~D)";\
+            Text[ korean ] = "Âü°í¹®Çå µ¥ÀÌÅÍº£ÀÌ½º·Î ºÎÅÍ(~D)";\
+            Text[ chinese_simplified ] = "²ÉÓÃÎÄÏ×Êı¾İ¿â";\
+            Text[ chinese_traditional ] = "±q¤åÄm¸ê®Æ®w";\
+            Text[ arabic ] = "ãä ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";\
+            Text[ turkish ] = "Kaynakça veritabanından";\
+        };                                                          \
+        RadioButton RB_FROMDOCCONTENT                               \
+        {                                                           \
+            Pos = MAP_APPFONT ( 12,  29 ) ;                         \
+            Size = MAP_APPFONT ( 147 , 12 ) ;                       \
+            Text = "~Aus Dokumentinhalt" ;                          \
+            Text [ ENGLISH ] = "From document content" ;            \
+            Text[ english_us ] = "~From document content";\
+            Text[ portuguese ] = "A partir do ~conteúdo do documento";\
+            Text[ russian ] = "Èç ñîäåğæèìîãî äîêóìåíòà";\
+            Text[ greek ] = "~Áğü ôï ğåñéå÷üìåíï ôïõ åããñÜöïõ";\
+            Text[ dutch ] = "Uit ~documentinhoud";\
+            Text[ french ] = "À partir du contenu du ~document";\
+            Text[ spanish ] = "~Del contenido del documento";\
+            Text[ italian ] = "Dal contenuto del documento";\
+            Text[ danish ] = "fra dokumentindholdet";\
+            Text[ swedish ] = "~Från dokumentinnehåll";\
+            Text[ polish ] = "Z zawartoœci dokumentu";\
+            Text[ portuguese_brazilian ] = "From document content";\
+            Text[ japanese ] = "•¶‘“à—e‚©‚ç(~F)";\
+            Text[ korean ] = "¹®¼­ ³»¿ë¿¡¼­ ºÎÅÍ(~F)";\
+            Text[ chinese_simplified ] = "²ÉÓÃÎÄµµÄÚÈİ";\
+            Text[ chinese_traditional ] = "±q¤å¥ó¤º®e";\
+            Text[ arabic ] = "ãä ãÍÊæíÇÊ ÇáãÓÊäÏ";\
+            Text[ turkish ] = "~Belge içeriğinden";\
+        };                                                          \
+        FixedText FT_ENTRY                              \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 15 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text = "~Kurzbezeichnung" ;                 \
+            Text [ ENGLISH ] = "Short name" ;           \
+            Text[ english_us ] = "Short ~name";\
+            Text[ portuguese ] = "~Abreviatura";\
+            Text[ russian ] = "Ñîêğàùåííîå íàçâàíèå";\
+            Text[ greek ] = "Óõíôïìïãñáößá";\
+            Text[ dutch ] = "Beknopte aand~uiding";\
+            Text[ french ] = "~Abrégé";\
+            Text[ spanish ] = "Abre~viatura";\
+            Text[ italian ] = "Abbreviazione";\
+            Text[ danish ] = "Kort betegnelse";\
+            Text[ swedish ] = "~Kort beteckning";\
+            Text[ polish ] = "Skrót";\
+            Text[ portuguese_brazilian ] = "Short name";\
+            Text[ japanese ] = "—ªÌ(~N)";\
+            Text[ korean ] = "ÂªÀº ÀÌ¸§(~N)";\
+            Text[ chinese_simplified ] = "¼ò³Æ(~N)";\
+            Text[ chinese_traditional ] = "Â²µu´y­z(~N)";\
+            Text[ arabic ] = "ÇÓã ãÎÊÕÑ";\
+            Text[ turkish ] = "K~ısaltma";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+        Edit ED_ENTRY                                   \
+        {                                               \
+            Border = TRUE ;                             \
+            Pos = MAP_APPFONT ( 75 , 14 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 74 , 12 ) ;            \
+            TabStop = TRUE ;                            \
+            Left = TRUE ;                               \
+        };                                              \
+        ListBox LB_ENTRY                                   \
+        {                                               \
+            Border = TRUE ;                             \
+            Pos = MAP_APPFONT ( 75 , 14 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 74 , 50 ) ;            \
+            TabStop = TRUE ;                            \
+            DropDown = TRUE ;                           \
+        };                                              \
+        FixedText FT_AUTHOR                             \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 28 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text = "Autor" ;                            \
+            Text [ ENGLISH ] = "Author" ;               \
+            Text[ english_us ] = "Author";\
+            Text[ portuguese ] = "Autor";\
+            Text[ russian ] = "Àâòîğ";\
+            Text[ greek ] = "ÓõíôÜêôçò";\
+            Text[ dutch ] = "Auteur";\
+            Text[ french ] = "Auteur";\
+            Text[ spanish ] = "Autor";\
+            Text[ italian ] = "Autore";\
+            Text[ danish ] = "Forfatter";\
+            Text[ swedish ] = "Författare";\
+            Text[ polish ] = "Autor";\
+            Text[ portuguese_brazilian ] = "Author";\
+            Text[ japanese ] = "’˜Ò";\
+            Text[ korean ] = "ÀÛ¼ºÀÚ";\
+            Text[ chinese_simplified ] = "×÷Õß";\
+            Text[ chinese_traditional ] = "§@ªÌ";\
+            Text[ arabic ] = "ÇáãÄáİ";\
+            Text[ turkish ] = "Yazan";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+        FixedText   FI_AUTHOR                           \
+        {                                               \
+            Pos = MAP_APPFONT ( 75 , 28 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 74 , 20 ) ;            \
+            WordBreak = TRUE;                           \
+        };                                              \
+        FixedText FT_TITLE                              \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 54 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text = "Titel" ;                            \
+            Text [ ENGLISH ] = "Title" ;                \
+            Text[ english_us ] = "Title";\
+            Text[ portuguese ] = "Título";\
+            Text[ russian ] = "Çàãîëîâîê";\
+            Text[ greek ] = "Ôßôëïò";\
+            Text[ dutch ] = "Titel";\
+            Text[ french ] = "Titre";\
+            Text[ spanish ] = "Título";\
+            Text[ italian ] = "Titolo";\
+            Text[ danish ] = "Titel";\
+            Text[ swedish ] = "Titel";\
+            Text[ polish ] = "Tytu³";\
+            Text[ portuguese_brazilian ] = "Title";\
+            Text[ japanese ] = "À²ÄÙ";\
+            Text[ korean ] = "Á¦¸ñ";\
+            Text[ chinese_simplified ] = "±êÌâ";\
+            Text[ chinese_traditional ] = "¼ĞÃD";\
+            Text[ arabic ] = "ÇáÚäæÇä";\
+            Text[ turkish ] = "Başlık";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+        FixedText   FI_TITLE                            \
+        {                                               \
+            Pos = MAP_APPFONT ( 75 , 54  + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 74 , 20 ) ;            \
+            WordBreak = TRUE;                           \
+        };                                              \
+        GroupBox GB_ENTRY                               \
+        {                                               \
+            Pos = MAP_APPFONT ( 6 , 3 ) ;               \
+            Size = MAP_APPFONT ( 146 , 112  + RADIO_BUTTON_HEIGHT) ; \
+            Text = "Eintrag" ;                          \
+            Text [ ENGLISH ] = "Entry" ;                \
+            Text[ english_us ] = "Entry";\
+            Text[ portuguese ] = "Entrada";\
+            Text[ russian ] = "İëåìåíò";\
+            Text[ greek ] = "Êáôá÷şñéóç";\
+            Text[ dutch ] = "Item";\
+            Text[ french ] = "Entrée";\
+            Text[ spanish ] = "Entrada";\
+            Text[ italian ] = "Voce";\
+            Text[ danish ] = "Element";\
+            Text[ swedish ] = "Post";\
+            Text[ polish ] = "Wpis";\
+            Text[ portuguese_brazilian ] = "Entry";\
+            Text[ japanese ] = "€–Ú";\
+            Text[ korean ] = "Ç×¸ñ";\
+            Text[ chinese_simplified ] = "ÌõÄ¿";\
+            Text[ chinese_traditional ] = "¶µ¥Ø";\
+            Text[ arabic ] = "ÅÏÎÇá";\
+            Text[ turkish ] = "Giriş";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+        OKButton PB_OK                                  \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 6 ) ;             \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            TabStop = TRUE ;                            \
+            DefButton = TRUE ;                          \
+            Text = "Einfügen";                          \
+            Text[English] = "Insert";                   \
+            Text[ english_us ] = "Insert";\
+            Text[ portuguese ] = "Inserir";\
+            Text[ russian ] = "Âñòàâèòü";\
+            Text[ greek ] = "ĞñïóèŞêç";\
+            Text[ dutch ] = "Invoegen";\
+            Text[ french ] = "Insérer";\
+            Text[ spanish ] = "Insertar";\
+            Text[ italian ] = "Inserisci";\
+            Text[ danish ] = "Indsæt";\
+            Text[ swedish ] = "Infoga";\
+            Text[ polish ] = "Wstaw";\
+            Text[ portuguese_brazilian ] = "Insert";\
+            Text[ japanese ] = "‘}“ü";\
+            Text[ korean ] = "»ğÀÔ";\
+            Text[ chinese_simplified ] = "²åÈë";\
+            Text[ chinese_traditional ] = "´¡¤J";\
+            Text[ arabic ] = "ÅÏÑÇÌ";\
+            Text[ turkish ] = "Ekle";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+        CancelButton PB_CANCEL                          \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 23 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            Text = "Schließen";                         \
+            Text[English] = "Close";                    \
+            Text[ english_us ] = "Close";\
+            Text[ portuguese ] = "Fechar";\
+            Text[ russian ] = "Çàêğûòü";\
+            Text[ greek ] = "Êëåßóéìï";\
+            Text[ dutch ] = "Sluiten";\
+            Text[ french ] = "Fermer";\
+            Text[ spanish ] = "Cerrar";\
+            Text[ italian ] = "Chiudi";\
+            Text[ danish ] = "Luk";\
+            Text[ swedish ] = "Stäng";\
+            Text[ polish ] = "Zamknij";\
+            Text[ portuguese_brazilian ] = "Close";\
+            Text[ japanese ] = "•Â‚¶‚é";\
+            Text[ korean ] = "´İ±â";\
+            Text[ chinese_simplified ] = "¹Ø±Õ";\
+            Text[ chinese_traditional ] = "Ãö³¬";\
+            Text[ arabic ] = "ÅÛáÇŞ";\
+            Text[ turkish ] = "Kapat";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+        HelpButton PB_HELP                              \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 43 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+        };                                              \
+        PushButton PB_CREATEENTRY                       \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 60 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            Text = "Ne~u";                  \
+            Text[English] = "New";             \
+            Text[ english_us ] = "~New";\
+            Text[ portuguese ] = "~Novo";\
+            Text[ russian ] = "Ñîçäàòü";\
+            Text[ greek ] = "Äçìéïõñãßá";\
+            Text[ dutch ] = "Nie~uw";\
+            Text[ french ] = "~Nouvelle entrée";\
+            Text[ spanish ] = "N~uevo";\
+            Text[ italian ] = "Nuovo";\
+            Text[ danish ] = "Ny";\
+            Text[ swedish ] = "N~y";\
+            Text[ polish ] = "Nowy";\
+            Text[ portuguese_brazilian ] = "Create entry";\
+            Text[ japanese ] = "V‹Kì¬";\
+            Text[ korean ] = "»õ·Î(~N)";\
+            Text[ chinese_simplified ] = "ĞÂ½¨";\
+            Text[ chinese_traditional ] = "·s«Ø";\
+            Text[ arabic ] = "ÌÏíÏ";\
+            Text[ turkish ] = "~Yeni";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+        PushButton PB_EDITENTRY                       \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 77 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            Text = "~Bearbeiten";                  \
+            Text[English] = "Edit";             \
+            Text[ english_us ] = "Edit";\
+            Text[ portuguese ] = "~Editar";\
+            Text[ russian ] = "Ïğàâêà";\
+            Text[ greek ] = "Åğåîåñãáóßá";\
+            Text[ dutch ] = "~Bewerken";\
+            Text[ french ] = "É~diter";\
+            Text[ spanish ] = "~Editar";\
+            Text[ italian ] = "~Modifica";\
+            Text[ danish ] = "Rediger";\
+            Text[ swedish ] = "Redigera";\
+            Text[ polish ] = "~Edytuj";\
+            Text[ portuguese_brazilian ] = "Edit";\
+            Text[ japanese ] = "•ÒW(~Ej";\
+            Text[ korean ] = "ÆíÁı";\
+            Text[ chinese_simplified ] = "±à¼­";\
+            Text[ chinese_traditional ] = "½s¿è";\
+            Text[ arabic ] = "ÊÍÑíÑ";\
+            Text[ turkish ] = "D~üzenle";\
+        };                                              \
+        String ST_CHANGE                                \
+        {                                               \
+            Text = "Ändern";                            \
+            Text[English] = "Apply";                    \
+            Text[ english_us ] = "Modify";\
+            Text[ portuguese ] = "Modificar";\
+            Text[ russian ] = "Èçìåíèòü";\
+            Text[ greek ] = "ÁëëáãŞ";\
+            Text[ dutch ] = "Wijzigen";\
+            Text[ french ] = "Modifier";\
+            Text[ spanish ] = "Modificar";\
+            Text[ italian ] = "Cambia";\
+            Text[ danish ] = "Modificer";\
+            Text[ swedish ] = "Ändra";\
+            Text[ polish ] = "Modyfikuj";\
+            Text[ portuguese_brazilian ] = "Apply";\
+            Text[ japanese ] = "•ÏX";\
+            Text[ korean ] = "¼öÁ¤";\
+            Text[ chinese_simplified ] = "¸ü¸Ä";\
+            Text[ chinese_traditional ] = "ÅÜ§ó";\
+            Text[ arabic ] = "ÊØÈíŞ";\
+            Text[ turkish ] = "Değiştir";\
+            Text[ language_user1 ] = " ";\
+        };                                              \
+    };
+
+ModalDialog DLG_EDIT_AUTHMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = FALSE ;
+    HelpID = FN_EDIT_AUTH_ENTRY_DLG;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 218 , 118 ) ;
+    #define RADIO_BUTTON_HEIGHT 0
+    AUTH_DIALOG_WINDOW
+};
+ModelessDialog DLG_INSAUTHMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = FALSE ;
+//  Zoomable = TRUE ;
+    HelpID = FN_INSERT_AUTH_ENTRY_DLG;
+    SVLook = TRUE ;
+    #define RADIO_BUTTON_HEIGHT 30
+    Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;
+//  Moveable = TRUE ;
+    AUTH_DIALOG_WINDOW
+};
+ModalDialog DLG_CREATE_AUTH_ENTRY
+{
+    HelpId = HID_DLG_CREATE_AUTH_ENTRY;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 365 , 203 ) ;
+    Text = "Literatureintrag definieren" ;
+    Text [ ENGLISH ] = "Define authority entry" ;
+    Moveable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 312 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 312 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 312 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    GroupBox GB_ENTRIES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 300 , 197 ) ;
+        Text = "Eintragsdaten" ;
+        Text [ ENGLISH ] = "Entry data" ;
+        Text[ english_us ] = "Entry data";
+        Text[ portuguese ] = "Dados da entrada";
+        Text[ russian ] = "Äàííûå ıëåìåíòà";
+        Text[ greek ] = "Äåäïìİíá åããñáöŞò";
+        Text[ dutch ] = "Itemgegevens";
+        Text[ french ] = "Données de l'entrée";
+        Text[ spanish ] = "Datos de la entrada";
+        Text[ italian ] = "Dati voce";
+        Text[ danish ] = "Elementdata";
+        Text[ swedish ] = "Postdata";
+        Text[ polish ] = "Dane wpisu";
+        Text[ portuguese_brazilian ] = "Entry data";
+        Text[ japanese ] = "“ü—Í“ú";
+        Text[ korean ] = "Ç×¸ñ µ¥ÀÌÅÍ";
+        Text[ chinese_simplified ] = "ÌõÄ¿Êı¾İ";
+        Text[ chinese_traditional ] = "±ø¥Ø¼ÆÕu";
+        Text[ arabic ] = "ÈíÇäÇÊ ÇáÅÏÎÇá";
+        Text[ turkish ] = "Giriş verileri";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ english_us ] = "Define Bibliography Entry";
+    Text[ portuguese ] = "Definir entrada bibliográfica";
+    Text[ russian ] = "Çàäàòü ıëåìåíò ñïèñêà ëèòåğàòóğû";
+    Text[ greek ] = "Ïñéóìüò åããñáöŞò âéâëéïãñáößáò";
+    Text[ dutch ] = "Als Item voor literatuurlijst definiëren";
+    Text[ french ] = "Définir une entrée de bibliographie";
+    Text[ spanish ] = "Definir entrada de bibliografía";
+    Text[ italian ] = "Definisci voce bibliografica";
+    Text[ danish ] = "Definer litteraturlisteelement";
+    Text[ swedish ] = "Definiera litteraturpost";
+    Text[ polish ] = "Zdefiniuj wpis bibliograficzny";
+    Text[ portuguese_brazilian ] = "Define authority entry";
+    Text[ japanese ] = "Ql•¶Œ£€–Ú‚Ì’è‹`";
+    Text[ korean ] = "Âü°í¹®Çå Ç×¸ñ Á¤ÀÇ";
+    Text[ chinese_simplified ] = "¶¨ÒåÎÄÏ×ÌõÄ¿";
+    Text[ chinese_traditional ] = "©w¸q°Ñ¦Ò¤åÄm±ø¥Ø";
+    Text[ arabic ] = "ÊÚÑíİ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
+    Text[ turkish ] = "Kaynakça girişini tanımla";
+};
+String STR_AUTHMRK_EDIT
+{
+    Text = "Literaturverzeichniseintrag bearbeiten" ;
+    Text [ ENGLISH ] = "Edit authority entry" ;
+
+    Text[ english_us ] = "Edit bibliography entry";
+    Text[ portuguese ] = "Editar entrada bibliográfica";
+    Text[ russian ] = "Ïğàâêà ıëåìåíòà ñïèñêà ëèòåğàòóğû";
+    Text[ greek ] = "Åğåîåñãáóßá åããñáöŞò âéâëéïãñáößáò";
+    Text[ dutch ] = "Item voor literatuurlijst bewerken";
+    Text[ french ] = "Éditer une entrée de bibliographie";
+    Text[ spanish ] = "Editar entrada de bibliografía";
+    Text[ italian ] = "Modifica voce bibliografica";
+    Text[ danish ] = "Rediger litteraturlisteelement";
+    Text[ swedish ] = "Redigera post i litteraturförteckning";
+    Text[ polish ] = "Edytuj wpis bibliograficzny";
+    Text[ portuguese_brazilian ] = "Edit authority entry";
+    Text[ japanese ] = "Ql•¶Œ£•\\‚Ì•ÒW";
+    Text[ korean ] = "Âü°í¹®Çå Ç×¸ñ ÆíÁı";
+    Text[ chinese_simplified ] = "±à¼­ÎÄÏ×Ä¿Â¼ÌõÄ¿";
+    Text[ chinese_traditional ] = "½s¿è°Ñ¦Ò¤åÄm±ø¥Ø";
+    Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
+    Text[ turkish ] = "Kaynakça dizini girişini düzenle";
+    Text[ language_user1 ] = " ";
+};
+String STR_AUTHMRK_INSERT
+{
+    Text = "Literaturverzeichniseintrag einfügen" ;
+    Text [ ENGLISH ] = "Insert authority entry" ;
+
+    Text[ english_us ] = "Insert bibliography entry";
+    Text[ portuguese ] = "Inserir entrada bibliográfica";
+    Text[ russian ] = "Âñòàâèòü ıëåìåíò ñïèñêà ëèòåğàòóğû";
+    Text[ greek ] = "ĞñïóèŞêç åããñáöŞò âéâëéïãñáößáò";
+    Text[ dutch ] = "Item invoegen in literatuurlijst";
+    Text[ french ] = "Insérer une entrée de bibliographie";
+    Text[ spanish ] = "Insertar entrada de bibliografía";
+    Text[ italian ] = "Inserisci voce bibliografica";
+    Text[ danish ] = "Indsæt litteraturlisteelement";
+    Text[ swedish ] = "Infoga post i litteraturförteckning";
+    Text[ polish ] = "Wstaw wpis bibliograficzny";
+    Text[ portuguese_brazilian ] = "Insert authority entry";
+    Text[ japanese ] = "Ql•¶Œ£‚Ì‘}“ü";
+    Text[ korean ] = "Âüº¸¹®Çå Ç×¸ñ Á¤ÀÇ";
+    Text[ chinese_simplified ] = "²åÈëÎÄÏ×Ä¿Â¼ÌõÄ¿";
+    Text[ chinese_traditional ] = "´¡¤J°Ñ¦Ò¤åÄm±ø¥Ø";
+    Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
+    Text[ turkish ] = "Kaynakça dizini girişi ekle";
+    Text[ language_user1 ] = " ";
+};
+QueryBox DLG_CHANGE_AUTH_ENTRY
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    MESSAGE = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. "\
+    "Möchten sie die bereits enthaltenen Einträge anpassen?" ;
+    MESSAGE [ English ] = "The bibliography entry is already contained in the document with different data."\
+    "Do you want to adjust the existing bibliography entries?" ;
+    MESSAGE[ english_us ] = "The bibliography entry is already contained in the document with different data. ";
+    MESSAGE[ portuguese ] = "A entrada bibliográfica já existe no documento com dados diferentes. ";
+    MESSAGE[ russian ] = "İòîò ıëåìåíò áèáëèîãğàôèè ñ íåêîòîğûìè îòëè÷íûìè äàííûìè óæå ñîäåğæèòñÿ â äîêóìåíòå. ";
+    MESSAGE[ greek ] = "Ç åããñáöŞ âéâëéïèŞêçò ğåñéİ÷åôáé ìå Şäç ìç óõìğßğôïíôá äåäïìİíá óôï İããñáöï. ";
+    MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. ";
+    MESSAGE[ french ] = "L'entrée de bibliographie existe déjà en relation avec des données différentes dans le document.  ";
+    MESSAGE[ spanish ] = "La entrada de bibliografía existe ya con datos diferentes en el documento. ";
+    MESSAGE[ italian ] = "La voce bibliografica è già presente nel documento con dati diversi. ";
+    MESSAGE[ danish ] = "Litteraturlisteelementet er allerede indeholdt i dokumentet med afvigende data. ";
+    MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. ";
+    MESSAGE[ polish ] = "Wpis bibliograficzny zawarty jest w dokumencie ³¹cznie z innymi danymi.";
+    MESSAGE[ portuguese_brazilian ] = "The bibliography entry is already contained in the document with different data.";
+    MESSAGE[ japanese ] = "‚±‚ÌQl•¶Œ£‚Í‚±‚Ì•¶‘‚Ì•Ê‚ÌŒÂŠ‚É‚·‚Å‚Éo‚Ä‚«‚Ä‚¢‚Ü‚·B ";
+    MESSAGE[ korean ] = "Âü°í¹®Çå Ç×¸ñÀº ÀÌ¹Ì ´Ù¸¥ µ¥ÀÌÅÍ¿Í ÇÔ²² ¹®¼­¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ";
+    MESSAGE[ chinese_simplified ] = "ÎÄµµÄÚÒÑ¾­º¬ÓĞ¸½´ø²»Í¬Êı¾İµÄÄ¿Â¼ÌõÄ¿¡£ ";
+    MESSAGE[ chinese_traditional ] = "¦b¤å¥ó¤º¤w¸g§t¦³¤£¦P¼ÆÕuªº¥Ø¿ı¶µ¥Ø¡C ";
+    MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. ";
+    MESSAGE[ turkish ] = "Kaynakça girişi, farklı veriler ile belgede mevcut.";
+};
+

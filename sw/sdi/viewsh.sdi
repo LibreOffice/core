@@ -1,0 +1,305 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   viewsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/viewsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   IDL - File ViewShell fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface TextInTable : Selection
+[ uuid = "63C33940-69D8-101D-9757-C667E8298000" ]
+{
+    import Text;
+        import TextTable;
+}
+
+interface ListInTable : Selection
+[ uuid="7F1A6E20-69D8-101D-9757-C667E8298000" ]
+{
+    import Text;
+        import TextList;
+        import TextTable;
+}
+
+interface ListInText : Selection
+[ uuid = "8A4C07E0-69D8-101D-9757-C667E8298000"]
+{
+    import TextList;
+    import Text;
+}
+
+interface TextEditView : BaseTextEditView
+[
+    uuid = "09782660-111A-101D-9757-6E74207A7520"
+]
+{
+     // Slots, die nicht in der WebDocShell gebraucht werden
+    FN_INSERT_OBJ_CTRL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_INSERT_CAPTION // status()
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_EDIT_FOOTNOTE // status(final|play)
+    [
+        ExecMethod = ExecDlgExt ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_HYPHENATE_OPT_DLG // status(final|play)
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_CHANGE_PAGENUM // status(final)
+    [
+        ExecMethod = ExecDlg ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SvxDrawToolItem DrawSelect SID_INSERT_DRAW // status()
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SfxBoolItem CreateControl SID_FM_CREATE_CONTROL // status()
+    [
+        ExecMethod = ExecDraw ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+ //=========================================================================
+
+shell SwView : SfxViewShell
+
+{
+    import TextEditView [Automation];
+//  import TextPage "Page";
+//  import SearchSettings;
+//  import SearchAttributes;
+//  import ReplaceAttributes;
+}
+
+interface TextPrintPreview : View
+[ uuid = "1622A480-111A-101D-9757-6E74207A7520" ]
+{
+    FN_REFRESH_VIEW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_CHAR_LEFT // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_CHAR_RIGHT // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_LINE_UP // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_LINE_DOWN // status(final|play)
+    [
+        ExecMethod = Execute;
+        StateMethod = NoState ;
+    ]
+    FN_PAGEUP // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PAGEDOWN // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_START_OF_DOCUMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_END_OF_DOCUMENT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_TWO_PAGES // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_SHOW_FOUR_PAGES // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PREVIEW_PRINT_OPTIONS //status()
+    [
+        ExecMethod = Execute ;
+    ]
+    FN_PRINT_PAGEPREVIEW // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOC // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOCDIRECT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTPREVIEW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PREVIEW_ZOOM
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_UNDO // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+    SID_REDO // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+    SID_REPEAT // status()
+    [
+        StateMethod = StateUndo ;
+    ]
+     //---------------------------------------------------------------------
+     //Ab hier Statusleiste
+    FN_STAT_ZOOM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_ZOOM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_STAT_PAGE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+     //----------------------------------------------
+     //End mit Statusleiste
+}
+
+ //=========================================================================
+
+shell SwPagePreView : SfxViewShell
+{
+    import TextPrintPreview[Automation];
+}
+
+
+
+/*
+
+9D84FD80-69D8-101D-9757-C667E8298000
+
+A53B7A40-69D8-101D-9757-C667E8298000
+
+AA3EBDE0-69D8-101D-9757-C667E8298000
+
+
+
+  */
+
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.245  2000/08/07 11:49:25  jp
+    PagePreView replace the current view
+
+    Revision 1.244  2000/05/26 07:06:19  os
+    old SW Basic API Slots removed
+
+    Revision 1.243  2000/05/10 12:00:10  os
+    Basic API removed
+
+    Revision 1.242  1998/11/12 16:28:58  MA
+    #58677# Disable Flag
+
+
+      Rev 1.241   12 Nov 1998 17:28:58   MA
+   #58677# Disable Flag
+
+      Rev 1.240   29 Sep 1998 14:35:18   OS
+   #57281#, #57264# Zoom der Preview mit Controller, Preview-Close ueber eigenen Slot
+
+      Rev 1.239   21 Aug 1998 15:44:10   OS
+   Seitendruck PagePreview #55252#
+
+      Rev 1.238   10 Mar 1998 14:22:38   OM
+   Konstruktionsmodul fuer Forms
+
+      Rev 1.237   30 Oct 1997 15:16:46   JP
+   neu: LineUp/-Down und CharLeft/CharRight fuer PagePreView
+
+      Rev 1.236   28 Aug 1997 12:37:34   MBA
+   Neue Interface-Namen
+
+      Rev 1.235   14 Apr 1997 16:02:58   OS
+   neu: SearchAttributes und ReplaceAttributes
+
+      Rev 1.234   24 Feb 1997 16:56:32   OM
+   Silbentrennung in Draw-Objekten
+
+      Rev 1.233   13 Feb 1997 12:44:50   MA
+   unnoetige Texte entfernt
+
+      Rev 1.232   04 Feb 1997 13:42:20   HJS
+   merge 04.02.97
+
+      Rev 1.231   30 Jan 1997 12:40:46   HJS
+   quickmerge 30.01.97
+
+      Rev 1.230   28 Jan 1997 16:37:02   OS
+   DrawSelect nicht im WebWriter
+
+      Rev 1.229   27 Jan 1997 16:37:34   OS
+   Web-Slots aus den allg. interfaces raus
+
+      Rev 1.228   23 Jan 1997 08:35:04   OS
+   Ableitung von __View
+
+      Rev 1.227   21 Jan 1997 12:31:42   HJS
+   merge 21.01.97
+
+      Rev 1.226   17 Jan 1997 13:08:24   OS
+   alte Slot-defines entfernt, xxxConfig fuer FN_UPDATE_TOX
+
+      Rev 1.225   14 Jan 1997 12:12:26   HJS
+   merge 14.01.97
+
+
+------------------------------------------------------------------------*/
+

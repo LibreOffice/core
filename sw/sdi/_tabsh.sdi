@@ -1,0 +1,409 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   _tabsh.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_tabsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   Basis-interface _Table
+
+    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+interface BaseTextTable : Selection
+[
+    Automation = FALSE;
+]
+{
+
+    FN_FORMAT_TABLE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_NUM_FORMAT_TABLE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_CALC_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_AUTOSUM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+
+    FN_TABLE_VERT_NONE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_VERT_CENTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_VERT_BOTTOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_SET_COL_WIDTH // status( final|play )
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_ULSPACE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LRSPACE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_TABLE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_DELETE_COL  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_DELETE_ROW  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_END_TABLE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_START_TABLE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_INSERT_COL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_INSERT_COL_DLG  // status(final|play)
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_INSERT_ROW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_INSERT_ROW_DLG  // status(final|play)
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_MERGE_CELLS  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_OPTIMIZE_TABLE
+    [
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_ADJUST_CELLS  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_BALANCE_CELLS  // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_BALANCE_ROWS  // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_SELECT_ALL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_SELECT_COL   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_SELECT_ROW  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+
+    FN_TABLE_SET_ROW_HEIGHT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_OPTIMAL_HEIGHT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_SPLIT_CELLS // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_SPLIT_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_MERGE_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_UNSET_READ_ONLY_CELLS // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    SID_AUTOFORMAT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SvxBoxItem BorderStyle SID_ATTR_BORDER // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetFrmBorderState ;
+        GroupId = GID_TABLE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FRAME_LINESTYLE // status()
+    [
+        ExecMethod = ExecTableStyle ;
+        StateMethod = GetLineStyleState ;
+        Export = FALSE; //#44439#
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FRAME_LINECOLOR // status(play)
+    [
+        ExecMethod = ExecTableStyle ;
+        StateMethod = GetLineStyleState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_MODE_FIX
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    FN_TABLE_MODE_FIX_PROP
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    FN_TABLE_MODE_VARIABLE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    FN_NUMBER_FORMAT
+    [
+        ExecMethod = ExecNumberFormat;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_NUMBER_STANDARD
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_TWODEC
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_SCIENTIFIC
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_DATE
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_TIME
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_CURRENCY
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_PERCENT
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+// Slots ohne Export
+
+    FN_INSERT_TABLE
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+}
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.20  2000/07/03 20:00:41  jp
+    Bug #70403#: dont delete protected cells
+
+    Revision 1.19  2000/05/26 07:06:15  os
+    old SW Basic API Slots removed
+
+    Revision 1.18  1999/03/23 11:15:24  MA
+    #63806# ConfigName und HelpText entfernt
+
+
+      Rev 1.17   23 Mar 1999 12:15:24   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.16   17 Feb 1999 21:11:06   JP
+   Task #61764#: neu: Tabellen zusammenfassen
+
+      Rev 1.15   12 Nov 1998 17:29:12   MA
+   #58677# Disable Flag
+
+      Rev 1.14   18 Mar 1998 19:43:52   MA
+   State fuer Split
+
+      Rev 1.13   25 Feb 1998 12:52:10   MA
+   new: SplitTable
+
+      Rev 1.12   08 Oct 1997 13:30:52   OS
+   SID_FRAME_LINESTYLE funktioniert nicht ueber die API #44439#
+
+      Rev 1.11   28 Aug 1997 12:50:02   MBA
+   Neue Interface-Namen
+
+      Rev 1.10   25 Jul 1997 11:29:00   AMA
+   Opt: GroupId und ConfigName aufgeraeumt
+
+      Rev 1.9   16 Jun 1997 17:38:24   MA
+   fix: State fuer InsertRowDialog
+
+      Rev 1.8   16 Jun 1997 09:25:22   MA
+   #40610# State fuer InsertRow
+
+      Rev 1.7   20 May 1997 21:30:22   JP
+   neu: Tabellenformel uebers Basic setzen
+
+      Rev 1.6   14 May 1997 10:56:52   JP
+   neue Slots fuer die TabShell
+
+      Rev 1.5   15 Mar 1997 21:04:56   JP
+   neuer Slot fuer DB-Reports
+
+      Rev 1.4   18 Feb 1997 16:57:16   OS
+   AutoSum
+
+      Rev 1.3   14 Feb 1997 18:10:00   OM
+   Zahlenformat-Dlg
+
+      Rev 1.2   13 Feb 1997 09:54:08   MA
+   unnoetige und falsche Texte entfernt
+
+      Rev 1.1   27 Jan 1997 16:38:18   OS
+   Web-Slots aus den allg. interfaces raus
+
+      Rev 1.0   23 Jan 1997 14:44:06   OS
+   Initial revision.
+
+------------------------------------------------------------------------*/
+

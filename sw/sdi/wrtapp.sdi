@@ -1,0 +1,367 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   wrtapp.sdi  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/wrtapp.sdi,v 1.1.1.1 2000-09-18 17:14:31 hr Exp $
+
+    Beschreibung:   IDL - File SwWriterApp - Shell fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+
+interface StarWriter : Module
+[
+    uuid ( "4BF0AA20-E6B9-101C-8A0E-040224007802" )
+]
+{
+    FN_ENVELOP  // status(final|play)
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+
+    FN_LABEL  // status(final|play)
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_BUSINESS_CARD // status()
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+
+    SID_SW_DOCMAN_PATH // status()
+    [
+         //     nur fuer Autopilot
+        ExecMethod = ExecOther ;
+        StateMethod = NoState ;
+    ]
+
+    SID_ATTR_METRIC // status(final|play)
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+    ]
+    SID_SW_AGENDA_WIZZARD
+    [
+        ExecMethod = ExecWizzard ;
+        StateMethod = NoState ;
+    ]
+    SID_SW_FAX_WIZZARD
+    [
+        ExecMethod = ExecWizzard ;
+        StateMethod = NoState ;
+    ]
+    SID_SW_LETTER_WIZZARD
+    [
+        ExecMethod = ExecWizzard ;
+        StateMethod = NoState ;
+    ]
+    SID_SW_MEMO_WIZZARD
+    [
+        ExecMethod = ExecWizzard ;
+        StateMethod = NoState ;
+    ]
+
+/*  SID_SW_EDITOPTIONS
+    [
+        ExecMethod = ExecOptionsDialog ;
+        StateMethod = NoState ;
+    ]
+
+    SID_SW_ONLINEOPTIONS
+    [
+        ExecMethod = ExecOptionsDialog ;
+        StateMethod = NoState ;
+    ]*/
+
+    FN_QRY   // status()
+    [
+        ExecMethod = ExecDB ;
+        StateMethod = StateIsView ;
+    ]
+
+    FN_QRY_MERGE  // status()
+    [
+        ExecMethod = ExecDB ;
+        StateMethod = StateIsView ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+
+    SID_ATTR_UNDO_COUNT // ole(no) api(final/play)
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+    ]
+
+    SID_AUTOSPELL_CHECK
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
+    SID_AUTOSPELL_MARKOFF
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
+    FN_SET_MODOPT_TBLNUMFMT // status()
+    [
+        ExecMethod = ExecOther ;
+        StateMethod = StateOther ;
+    ]
+        //Extra/Optionen/Ansicht
+        //Wird zusammen zum Property ViewSettings
+    FN_VIEW_HIDDEN_PARA
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_PRINT_LAYOUT
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+     // alles ab hier kann weg (Export = FALSE;), wenn die vorangehenden funktionieren
+    SfxBoolItem Ruler FN_RULER // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        Cachable;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_VIEW_BOUNDS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        Cachable;
+    ]
+
+    FN_VIEW_GRAPHIC // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE ;
+    ]
+
+    FN_VIEW_FIELDS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_FIELDNAME // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Cachable ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_MARKS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Cachable ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_META_CHARS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Cachable ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_TABLEGRID // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
+    SID_GRID_VISIBLE
+    [
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions ;
+    ]
+    SID_GRID_USE
+    [
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions ;
+    ]
+    SID_HELPLINES_MOVE
+    [
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions ;
+    ]
+
+    FN_VLINEAL // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_HSCROLLBAR // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_VSCROLLBAR // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_SHADOWCURSOR // status(final|play)
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}  //end interface Application
+
+shell SwModule
+{
+    import StarWriter[Automation];
+}
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.136  2000/05/26 07:06:20  os
+    old SW Basic API Slots removed
+
+    Revision 1.135  2000/05/10 12:00:10  os
+    Basic API removed
+
+    Revision 1.134  1999/11/30 10:19:58  jp
+    Task #70259#: more entries into to the popup menus
+
+    Revision 1.133  1999/09/28 13:17:11  os
+    #67382# separate dialog for business cards
+
+    Revision 1.132  1999/06/22 15:36:04  JP
+    Bug #43028#: disableflag for edit in mailbody
+
+
+      Rev 1.131   22 Jun 1999 17:36:04   JP
+   Bug #43028#: disableflag for edit in mailbody
+
+      Rev 1.130   23 Mar 1999 12:15:22   MA
+   #63806# ConfigName und HelpText entfernt
+
+      Rev 1.129   17 Feb 1999 15:06:42   OS
+   #61890# Methoden fuer alte Optionsdialoge geloescht
+
+      Rev 1.128   26 Nov 1998 15:19:08   MA
+   #59896# Raster usw jetzt an der Application
+
+      Rev 1.127   12 Nov 1998 17:29:00   MA
+   #58677# Disable Flag
+
+      Rev 1.126   26 Jan 1998 09:12:10   OS
+   neu: WebViewSettings
+
+      Rev 1.125   22 Dec 1997 17:18:54   MA
+   ShadowCursor
+
+      Rev 1.124   03 Nov 1997 16:09:42   JP
+   neu: Optionen/-Page/Basic-Schnittst. fuer ShadowCursor
+
+      Rev 1.123   28 Aug 1997 12:52:34   MBA
+   Neue Interface-Namen
+
+      Rev 1.122   11 Jun 1997 14:57:44   OS
+   SpellOnline und HideSpell nicht mehr mit Exportverbot #40529#
+
+      Rev 1.121   09 Jun 1997 14:27:20   MA
+   chg: Browse-Flag nur noch am Doc
+
+      Rev 1.120   06 Jun 1997 12:42:38   MA
+   chg: versteckte Absaetze ausblenden
+
+      Rev 1.119   30 May 1997 15:36:46   OS
+   FN_CONFIG_DLG raus
+
+      Rev 1.118   28 May 1997 08:13:48   OS
+   SID_ATTR_METRIC am SwModule ausfuehren fr #40192#
+
+      Rev 1.117   16 Feb 1997 15:23:38   OM
+   DB-Manager an Ofa verschoben
+
+      Rev 1.116   30 Jan 1997 11:01:00   OS
+   neu: PRINT_LAYOUT
+
+      Rev 1.115   27 Jan 1997 16:38:38   OS
+   HtmlMode entfernt
+
+      Rev 1.114   04 Dec 1996 14:01:32   OS
+   neue Ids fuer Optionendialoge
+
+      Rev 1.113   26 Nov 1996 19:43:42   OS
+   GetDocManPath mit SID_SW_DOCMAN_PATH
+
+      Rev 1.112   22 Nov 1996 13:03:46   OS
+   neue Ids fuer Wizards
+
+      Rev 1.111   01 Nov 1996 17:59:38   MA
+   Umstellung zum Module
+
+      Rev 1.110   27 Sep 1996 13:58:28   OS
+   +StateMethod fuer FN_LABEL
+
+      Rev 1.109   21 Sep 1996 17:36:42   OS
+   Sot-Umstellung beendet
+
+      Rev 1.108   18 Sep 1996 10:37:14   OM
+   Slots entfernt
+
+      Rev 1.107   17 Sep 1996 18:17:48   OS
+   EditOptionsDialog noch nicht in swriter.idl
+
+      Rev 1.106   16 Sep 1996 10:26:50   MBA
+   Erste Anpassungen an swriter.idl
+
+      Rev 1.105   10 Sep 1996 16:39:44   OS
+   Slotvereinheitlichung zu, 1.
+
+      Rev 1.104   31 Aug 1996 17:13:02   OS
+   neue Optionendialoge
+
+      Rev 1.103   20 Aug 1996 17:28:38   HJS
+   eu...
+
+      Rev 1.102   13 Aug 1996 12:35:16   OS
+   neu: InternetDialog
+
+      Rev 1.101   06 Aug 1996 11:09:56   OM
+   Hyperlinkleiste auf bei Readonly-Doks
+
+      Rev 1.100   29 Jul 1996 11:09:18   OS
+   FN_SET_HTMLMODE -> SID_HTML_MODE
+
+      Rev 1.99   25 Jul 1996 15:26:28   OS
+   neu: FN_SET_HTMLMODE
+
+------------------------------------------------------------------------*/
+

@@ -1,0 +1,166 @@
+/*------------------------------------------------------------------------
+
+    $Workfile:   SWSLOTS.SDI  $
+
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/swslots.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+
+    Beschreibung:   Main - IDL - File fuer Sw3
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+
+------------------------------------------------------------------------*/
+
+import "ofa.ilb"
+
+module
+"9F76B581-23DD-101C-80B6-000024021835"
+"A1810F00-23DE-101C-80B6-000024021835"
+StarWriter
+[
+HelpText( "StarWriter Application" )
+SlotIdFile( "swslots.hrc" )
+TypeLibFile( "swslots.tlb" )
+ModulePrefix( "Sw" )
+]
+{
+    item String SfxTemplateItem;
+    item String SvxColumnItem;
+    item String SvxLineItem;
+    item String SfxSetItem;
+
+    item String TbxDummyItem;
+
+    item String SvxBoxItem;
+
+    item String XFillAttrSetItem;
+    item String XFillBitmapItem;
+    item String XFillColorItem;
+    item String XFillGradientItem;
+    item String XFillHatchItem;
+    item String XFillStyleItem;
+    item String XLineAttrSetItem;
+    item String XLineColorItem;
+    item String XLineDashItem;
+    item String XLineEndItem;
+    item String XLineEndWidthItem;
+    item String XLineEndCenterItem;
+    item String XLineStartItem;
+    item String XLineStartWidthItem;
+    item String XLineStartCenterItem;
+    item String XLineStyleItem;
+    item String XLineWidthItem;
+
+    enum Language
+    {
+        LANGUAGE_DONTKNOW,
+        LANGUAGE_SYSTEM
+    };
+    item Language SvxLanguageItem;
+
+    include "switems.sdi"
+    include "swnew.sdi"
+    include "swriter.sdi"
+
+    include "_docsh.sdi"
+    include "docsh.sdi"
+    include "wdocsh.sdi"
+
+    include "wrtapp.sdi"
+
+    include "_basesh.sdi"
+    include "basesh.sdi"
+
+    include "_textsh.sdi"
+    include "textsh.sdi"
+    include "wtextsh.sdi"
+
+    include "_drwbase.sdi"
+    include "drwbassh.sdi"
+    include "wdrwbase.sdi"
+
+    include "_formsh.sdi"
+    include "formsh.sdi"
+    include "wformsh.sdi"
+
+    include "drawsh.sdi"
+    include "drwtxtsh.sdi"
+
+    include "_listsh.sdi"
+    include "listsh.sdi"
+    include "wlistsh.sdi"
+
+    include "_frmsh.sdi"
+    include "frmsh.sdi"
+    include "wfrmsh.sdi"
+
+    include "_tabsh.sdi"
+    include "tabsh.sdi"
+    include "wtabsh.sdi"
+
+    include "_grfsh.sdi"
+    include "grfsh.sdi"
+    include "wgrfsh.sdi"
+
+    include "_olesh.sdi"
+    include "olesh.sdi"
+    include "wolesh.sdi"
+
+    include "beziersh.sdi"
+
+    include "_viewsh.sdi"
+    include "viewsh.sdi"
+    include "wviewsh.sdi"
+}
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.38  2000/02/01 09:45:00  os
+    #72282# SwWebBaseShell removed
+
+    Revision 1.37  1998/06/09 13:37:10  OM
+    VC-Controls entfernt
+
+
+      Rev 1.36   09 Jun 1998 15:37:10   OM
+   VC-Controls entfernt
+
+      Rev 1.35   08 Jun 1998 18:08:30   OM
+   Forms im HTML-Mode
+
+      Rev 1.34   11 Mar 1998 17:14:00   OM
+   DB-FormShell
+
+      Rev 1.33   07 Mar 1998 11:31:22   OS
+   idl->sdi - funktioniert aber nicht!
+
+      Rev 1.32   28 Aug 1997 12:37:00   MBA
+   Text+HTML in eine IDL
+
+      Rev 1.31   13 Feb 1997 12:45:06   MA
+   unnoetige Texte entfernt
+
+      Rev 1.30   31 Jan 1997 13:24:10   OS
+   neu: _/wgrfsh _/wolesh
+
+      Rev 1.29   23 Jan 1997 15:41:42   OS
+   +_textsh.idl
+
+      Rev 1.28   23 Jan 1997 14:39:50   OS
+   Umstellung fuer StarWriter/Web
+
+      Rev 1.27   23 Jan 1997 08:37:16   OS
+   neue files fuer Basis-interfaces
+
+      Rev 1.26   22 Jan 1997 11:18:24   OM
+   Neue Shells: DrawBaseShell und DrawControlShell
+
+      Rev 1.25   08 Jan 1997 12:39:46   OM
+   Neu: Bezier-Shell
+
+      Rev 1.24   27 Sep 1996 09:44:56   OS
+   swnew.idl vor swriter.idl
+
+      Rev 1.23   19 Sep 1996 10:53:52   OS
+   neuese File: swnew.idl fuer neue Slots
+
+------------------------------------------------------------------------*/

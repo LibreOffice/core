@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ *  $RCSfile: wrap.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define RB_NO_WRAP          2
+#define RB_WRAP_LEFT        3
+#define RB_WRAP_RIGHT       4
+#define RB_WRAP_PARALLEL    5
+#define RB_WRAP_THROUGH     6
+#define RB_WRAP_IDEAL       7
+#define CB_ANCHOR_ONLY      8
+#define FT_LEFT_MARGIN      13
+#define ED_LEFT_MARGIN      14
+#define FT_RIGHT_MARGIN     15
+#define ED_RIGHT_MARGIN     16
+#define FT_TOP_MARGIN       17
+#define ED_TOP_MARGIN       18
+#define ED_BOTTOM_MARGIN    19
+#define FT_BOTTOM_MARGIN    20
+#define GB_MARGIN           21
+#define CB_TRANSPARENT      22
+#define CB_OUTLINE          23
+#define GB_OPTION           24
+#define CB_ONLYOUTSIDE      25
+#define C_WRAP_BOX          31
+
+#define IL_WRAP             32
+// nur fuer die ImageList
+#define IMG_BEGIN       1
+#define IMG_NONE        (IMG_BEGIN)
+#define IMG_LEFT        (IMG_BEGIN + 1)
+#define IMG_RIGHT               (IMG_BEGIN + 2)
+#define IMG_PARALLEL            (IMG_BEGIN + 3)
+#define IMG_THROUGH             (IMG_BEGIN + 4)
+#define IMG_IDEAL       (IMG_BEGIN + 5)
+#define IMG_KON_NONE        (IMG_BEGIN + 6)
+#define IMG_KON_LEFT            (IMG_BEGIN + 7)
+#define IMG_KON_RIGHT           (IMG_BEGIN + 8)
+#define IMG_KON_PARALLEL        (IMG_BEGIN + 9)
+#define IMG_KON_IDEAL           (IMG_BEGIN + 10)
+
+

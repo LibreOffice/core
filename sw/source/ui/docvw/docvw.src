@@ -1,0 +1,1216 @@
+/*************************************************************************
+ *
+ *  $RCSfile: docvw.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "docvw.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+#define SEPARATOR MenuItem { Separator = TRUE; };
+Menu MN_READONLY_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_READONLY_OPENURL ;
+            HelpID = SID_OPENDOC ;
+            Text = "~Öffnen" ;
+            Text [ English ] = "~Open" ;
+            Text [ english_us ] = "~Open" ;
+            Text [ italian ] = "~Apri" ;
+            Text [ spanish ] = "~Abrir" ;
+            Text [ french ] = "~Ouvrir" ;
+            Text [ dutch ] = "Ope~nen" ;
+            Text [ swedish ] = "~Öppna" ;
+            Text [ danish ] = "~Åbn" ;
+            Text [ portuguese ] = "~Abrir" ;
+            Text [ portuguese_brazilian ] = "~Öffnen" ;
+            Text[ chinese_simplified ] = "´ò¿ª(~O)";
+            Text[ russian ] = "Îòêğûòü";
+            Text[ polish ] = "Otwórz";
+            Text[ japanese ] = "ŠJ‚­(~O)";
+            Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ(~O)";
+            Text[ arabic ] = "İÊÍ";
+            Text[ dutch ] = "Ope~nen";
+            Text[ chinese_simplified ] = "´ò¿ª(~O)";
+            Text[ greek ] = "¢í~ïéãìá";
+            Text[ korean ] = "¿­±â(~O)";
+            Text[ turkish ] = "Aç";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_OPENURLNEW ;
+            HelpID = SID_OPENDOC ;
+            Text = "Öffnen in neuem ~Fenster" ;
+            Text [ English ] = "Open in new ~Window" ;
+            Text [ dutch ] = "Openen in n~ieuw venster" ;
+            Text [ english_us ] = "Open in New Window" ;
+            Text [ italian ] = "Apri in una nuova fines~tra" ;
+            Text [ spanish ] = "Abrir en nueva ~ventana" ;
+            Text [ french ] = "Ouvrir dans une nouvelle ~fenêtre" ;
+            Text [ swedish ] = "Öppna i nytt ~fönster" ;
+            Text [ danish ] = "Åbn i nyt vindue" ;
+            Text [ portuguese ] = "Nova ~janela" ;
+            Text [ portuguese_brazilian ] = "Öffnen in neuem ~Fenster" ;
+            Text[ chinese_simplified ] = "Ê¹ÓÃĞÂÊÓ´°´ò¿ª(~W)";
+            Text[ russian ] = "Îòêğûòü â íîâîì îêíå";
+            Text[ polish ] = "Otwórz w nowym oknie";
+            Text[ japanese ] = "V‚µ‚¢³¨İÄŞ³‚ÉŠJ‚­";
+            Text[ chinese_traditional ] = "¥Î·sµøµ¡¶}±Ò(~W)";
+            Text[ arabic ] = "İÊÍ İí äÇİĞÉ ÌÏíÏÉ";
+            Text[ dutch ] = "Openen in n~ieuw venster";
+            Text[ chinese_simplified ] = "Ê¹ÓÃĞÂÊÓ´°´ò¿ª(~W)";
+            Text[ greek ] = "¢íïéãìá óå íİï ~ğáñÜèõñï";
+            Text[ korean ] = "»õÃ¢¿¡¼­ ¿­±â";
+            Text[ turkish ] = "Yeni bir pencerede aç";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_DOWNLOAD ;
+            HelpID = HID_MN_READONLY_DOWNLOAD ;
+            Text = "~Download..." ;
+            Text [ English ] = "~Download..." ;
+            Text [ english_us ] = "Download..." ;
+            Text [ italian ] = "Download..." ;
+            Text [ spanish ] = "~Descargar..." ;
+            Text [ french ] = "~Téléchargement..." ;
+            Text [ dutch ] = "~Download..." ;
+            Text [ swedish ] = "La~dda ned..." ;
+            Text [ danish ] = "~Overfør..." ;
+            Text [ portuguese ] = "Do~wnload..." ;
+            Text [ portuguese_brazilian ] = "~Download..." ;
+            Text[ chinese_simplified ] = "ÏÂÔØ(~D)...";
+            Text[ russian ] = "Çàãğóçêà...";
+            Text[ polish ] = "Pobieranie...";
+            Text[ japanese ] = "ÀŞ³İÛ°ÄŞ...";
+            Text[ chinese_traditional ] = "¤U¸ü(~D)...";
+            Text[ arabic ] = "ÊäÒíá...";
+            Text[ dutch ] = "~Download...";
+            Text[ chinese_simplified ] = "ÏÂÔØ(~D)...";
+            Text[ greek ] = "~ËŞøç áñ÷åßùí...";
+            Text[ korean ] = "´Ù¿î·Îµå...";
+            Text[ turkish ] = "İndir...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_EDITDOC ;
+            HelpID = SID_EDITDOC ;
+            Text = "~Bearbeiten" ;
+            Text [ English ] = "~Edit" ;
+            Text [ english_us ] = "~Edit" ;
+            Text [ italian ] = "~Modifica" ;
+            Text [ spanish ] = "~Editar" ;
+            Text [ french ] = "~Edition" ;
+            Text [ dutch ] = "Be~werken" ;
+            Text [ swedish ] = "~Redigera" ;
+            Text [ danish ] = "~Rediger" ;
+            Text [ portuguese ] = "E~ditar" ;
+            Text [ portuguese_brazilian ] = "~Bearbeiten" ;
+            Text[ chinese_simplified ] = "±à¼­(~E)";
+            Text[ russian ] = "~Ïğàâêà";
+            Text[ polish ] = "~Edytuj";
+            Text[ japanese ] = "•ÒW(~‚d)";
+            Text[ chinese_traditional ] = "½s¿è(~E)";
+            Text[ arabic ] = "~ÊÍÑíÑ";
+            Text[ dutch ] = "Be~werken";
+            Text[ chinese_simplified ] = "±à¼­(~E)";
+            Text[ greek ] = "~Åğåîåñãáóßá";
+            Text[ korean ] = "ÆíÁı(~E)";
+            Text[ turkish ] = "D~üzenle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_RELOAD;
+            HelpID = SID_RELOAD;
+            Text = "~Neu laden" ;
+            Text [ English ] = "~Reload" ;
+            Text[ italian ] = "~Ricarica";
+            Text[ portuguese_brazilian ] = "~Reload";
+            Text[ portuguese ] = "~Recarregar";
+            Text[ danish ] = "Indlæs igen";
+            Text[ french ] = "~Recharger";
+            Text[ swedish ] = "~Ladda på nytt";
+            Text[ dutch ] = "~Opnieuw laden";
+            Text[ spanish ] = "~Recargar";
+            Text[ english_us ] = "Re~load";
+            Text[ chinese_simplified ] = "ÖØĞÂ×°ÔØ(~L)";
+            Text[ russian ] = "Ïåğåçàãğóçèòü";
+            Text[ polish ] = "Za³aduj ponownie";
+            Text[ japanese ] = "Ä“Ç‚İ‚İ(~L)";
+            Text[ chinese_traditional ] = "­«·s¸Ë¸ü(~L)";
+            Text[ arabic ] = "ÅÚÇÏÉ ÊÍãíá";
+            Text[ dutch ] = "~Opnieuw laden";
+            Text[ chinese_simplified ] = "ÖØĞÂ×°ÔØ(~L)";
+            Text[ greek ] = "Åğá~íáöüñôùóç";
+            Text[ korean ] = "Àç ·Îµå(~L)";
+            Text[ turkish ] = "Yeniden yükle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_RELOAD_FRAME;
+            HelpID = SID_RELOAD;
+            Text = "~Frame neu laden" ;
+            Text [ English ] = "~Reload frame" ;
+            Text[ italian ] = "Ricarica ~frame";
+            Text[ portuguese_brazilian ] = "~Reload frame";
+            Text[ portuguese ] = "~Recarregar frame";
+            Text[ danish ] = "Indlæs frame igen";
+            Text[ french ] = "~Recharger le frame";
+            Text[ swedish ] = "~Ladda ram på nytt";
+            Text[ dutch ] = "~Frame opnieuw laden";
+            Text[ spanish ] = "~Recargar frame";
+            Text[ english_us ] = "Reload Frame";
+            Text[ chinese_simplified ] = "ÖØĞÂ×°ÔØ¿ò¶ÔÏó";
+            Text[ russian ] = "Ïåğåçàãğóçèòü ğàìêó";
+            Text[ polish ] = "Za³aduj ponownie ramkê";
+            Text[ japanese ] = "ÌÚ°Ñ‚ğV‚½‚É“Ç‚İ‚Ş";
+            Text[ chinese_traditional ] = "­«·s¸Ë¸ü°T®Ø";
+            Text[ arabic ] = "ÅÚÇÏÉ ÊÍãíá ÇáÜ Frame";
+            Text[ dutch ] = "~Frame opnieuw laden";
+            Text[ chinese_simplified ] = "ÖØĞÂ×°ÔØ¿ò¶ÔÏó";
+            Text[ greek ] = "Åğáíáöüñôùóç ~ğëáéóßïõ";
+            Text[ korean ] = "ÇÁ·¹ÀÓ ´Ù½Ã ·Îµå";
+            Text[ turkish ] = "Frame'i yeniden yükle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_SOURCEVIEW ;
+            HelpID = HID_SOURCEVIEW ;
+            Text = "HTM~L - Quelltext" ;
+            Text [ English ] = "~HTML ~source" ;
+            Text [ dutch ] = "~HTML - brontekst" ;
+            Text [ english_us ] = "HT~ML Source" ;
+            Text [ italian ] = "Testo sorgente HTML" ;
+            Text [ spanish ] = "Texto fuente ~HTML" ;
+            Text [ french ] = "Texte source HTM~L" ;
+            Text [ swedish ] = "HTM~L-källtext" ;
+            Text [ danish ] = "~HTML-kildetekst" ;
+            Text [ portuguese ] = "Texto ~fonte HTML" ;
+            Text [ portuguese_brazilian ] = "HTM~L - Quelltext" ;
+            Text[ chinese_simplified ] = "~HTML Ô´ÎÄ±¾";
+            Text[ russian ] = "Èñòî÷íèê HTM~L";
+            Text[ polish ] = "Tekst Ÿród³owy HTML";
+            Text[ japanese ] = "HTML¿°½(~M)";
+            Text[ chinese_traditional ] = "~HTML ­ì©lÀÉ";
+            Text[ arabic ] = "HTML ãÕÏÑ";
+            Text[ dutch ] = "~HTML - brontekst";
+            Text[ chinese_simplified ] = "~HTML Ô´ÎÄ±¾";
+            Text[ greek ] = "Êåßìåíï ğñïİëåõóçò HTM~L";
+            Text[ korean ] = "HTML ¼Ò½º(~M)";
+            Text[ turkish ] = "HTM~L  kaynak kodu";
+            Text[ language_user1 ] = " ";
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_READONLY_BROWSE_STOP ;
+            HelpID = SID_BROWSE_STOP ;
+            Text = "~Stopp" ;
+            Text [ English ] = "~Stop" ;
+            Text [ english_us ] = "~Stop" ;
+            Text [ italian ] = "~Stop" ;
+            Text [ spanish ] = "~Stop" ;
+            Text [ french ] = "~Stop" ;
+            Text [ dutch ] = "~Stop" ;
+            Text [ swedish ] = "S~topp" ;
+            Text [ danish ] = "~Stop" ;
+            Text [ portuguese ] = "S~top" ;
+            Text [ portuguese_brazilian ] = "~Stop" ;
+            Text[ chinese_simplified ] = "ÔİÍ£";
+            Text[ russian ] = "Ñòîï";
+            Text[ polish ] = "Zatrzymaj";
+            Text[ japanese ] = "’†~(~S)";
+            Text[ chinese_traditional ] = "¼È°±(~T)";
+            Text[ arabic ] = "ÅíŞÇİ";
+            Text[ dutch ] = "~Stop";
+            Text[ chinese_simplified ] = "ÔİÍ£";
+            Text[ greek ] = "~ÄéáêïğŞ";
+            Text[ korean ] = "ÁßÁö(~S)";
+            Text[ turkish ] = "Dur";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_BROWSE_BACKWARD ;
+            HelpID = SID_BROWSE_BACKWARD ;
+            Text = "~Rückwärts" ;
+            Text [ English ] = "Bac~kward" ;
+            Text [ english_us ] = "Backward" ;
+            Text [ italian ] = "~Indietro" ;
+            Text [ spanish ] = "~Retroceder" ;
+            Text [ french ] = "~Précédent" ;
+            Text [ dutch ] = "~Achteruit" ;
+            Text [ swedish ] = "~Bakåt" ;
+            Text [ danish ] = "~Tilbage" ;
+            Text [ portuguese ] = "~Anterior" ;
+            Text [ portuguese_brazilian ] = "~Rückwärts" ;
+            Text[ chinese_simplified ] = "Ïòºó(~B)";
+            Text[ russian ] = "Íàçàä";
+            Text[ polish ] = "Wstecz";
+            Text[ japanese ] = "Œã•û‚Ö";
+            Text[ chinese_traditional ] = "¦V«á(~B)";
+            Text[ arabic ] = "ááÎáİ";
+            Text[ language_user1 ] = "Áíôßóôñïöá ;";
+            Text[ dutch ] = "~Achteruit";
+            Text[ chinese_simplified ] = "Ïòºó(~B)";
+            Text[ greek ] = "~Ğßóù";
+            Text[ korean ] = "µÚ·Î";
+            Text[ turkish ] = "Geri";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_BROWSE_FORWARD ;
+            HelpID = SID_BROWSE_FORWARD ;
+            Text = "~Vorwärts" ;
+            Text [ English ] = "Forward" ;
+            Text [ english_us ] = "~Forward" ;
+            Text [ italian ] = "A~vanti" ;
+            Text [ spanish ] = "~Avanzar" ;
+            Text [ french ] = "~Suivant" ;
+            Text [ dutch ] = "~Vooruit" ;
+            Text [ swedish ] = "~Framåt" ;
+            Text [ danish ] = "~Næste" ;
+            Text [ portuguese ] = "~Seguinte" ;
+            Text [ portuguese_brazilian ] = "~Vorwärts" ;
+            Text[ chinese_simplified ] = "ÏòÇ°(~F)";
+            Text[ russian ] = "Âïåğåä";
+            Text[ polish ] = "Do przodu";
+            Text[ japanese ] = "i‚Ş(~F)";
+            Text[ chinese_traditional ] = "¦V«e(~F)";
+            Text[ arabic ] = "ááÃãÇã";
+            Text[ language_user1 ] = " ";
+            Text[ dutch ] = "~Vooruit";
+            Text[ chinese_simplified ] = "ÏòÇ°(~F)";
+            Text[ greek ] = "Åìğñü~ò";
+            Text[ korean ] = "¾ÕÀ¸·Î(~F)";
+            Text[ turkish ] = "İleri";
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_READONLY_CREATELINK ;
+            HelpID = SID_CREATELINK ;
+            /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung ~hinzufügen : Bookmark ~hinzufügen */
+            /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung ~hinzufügen : Bookmark ~hinzufügen */
+            Text = "Verknüpfung ~hinzufügen" ;
+            Text [ English ] = "~Add Link" ;
+            Text [ dutch ] = "Koppeling ~toevoegen" ;
+            Text [ english_us ] = "~Add Link" ;
+            Text [ swedish ] = "Lägg till ~länk" ;
+            Text [ danish ] = "Tilføj kæde" ;
+            Text [ italian ] = "Aggiungi collegamento" ;
+            Text [ spanish ] = "Añadir ~vínculo" ;
+            Text [ french ] = "Ajouter un l~ien" ;
+            Text [ portuguese ] = "Adicionar ~ligação" ;
+            Text [ portuguese_brazilian ] = "Verknüpfung ~hinzufügen" ;
+            Text[ chinese_simplified ] = "ĞÂÔöÁ´½Ó(~A)";
+            Text[ russian ] = "Äîáàâèòü ññûëêó";
+            Text[ polish ] = "Dodaj ³¹cze";
+            Text[ japanese ] = "Øİ¸‚Ì’Ç‰Á(~A)";
+            Text[ chinese_traditional ] = "·s¼W±¶®|(~A)";
+            Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ";
+            Text[ dutch ] = "Koppeling ~toevoegen";
+            Text[ chinese_simplified ] = "ĞÂÔöÁ´½Ó(~A)";
+            Text[ greek ] = "ĞñïóèŞê~ç óıíäåóçò";
+            Text[ korean ] = "¿¬°á Ãß°¡(~A)";
+            Text[ turkish ] = "Bağlantı ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_CREATEGRAPHIKLINK ;
+            HelpID = HID_MN_READONLY_CREATEGRAPHIKLINK ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfung auf Grafik hinzufügen : B~ookmark auf Grafik hinzufügen */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfung auf Grafik hinzufügen : B~ookmark auf Grafik hinzufügen */
+            Text = "~Verknüpfung auf Grafik hinzufügen" ;
+            Text [ English ] = "Add ~Link to Image" ;
+            Text [ dutch ] = "~Koppeling aan afbeelding toevoegen" ;
+            Text [ english_us ] = "~Add Link to Picture" ;
+            Text [ swedish ] = "~Lägga till länk på grafik" ;
+            Text [ danish ] = "Tilføj kæde til billede" ;
+            Text [ italian ] = "Aggiungi collegamento al grafico" ;
+            Text [ spanish ] = "Añadir ~vínculo a imagen" ;
+            Text [ french ] = "Ajouter un l~ien à l'image" ;
+            Text [ portuguese ] = "Adicionar ~ligação à imagem" ;
+            Text [ portuguese_brazilian ] = "~Verknüpfung auf Grafik hinzufügen" ;
+            Text[ chinese_simplified ] = "ĞÂÔöÍ¼ĞÎµÄÁ´½Ó(~A)";
+            Text[ russian ] = "Äîáàâèòü ññûëêó íà ğèñóíîê";
+            Text[ polish ] = "Dodaj ³¹cze do grafiki";
+            Text[ japanese ] = "}‚ÉØİ¸‚ğ’Ç‰Á‚·‚é(~A)";
+            Text[ chinese_traditional ] = "·s¼W¹Ï¤ùªº±¶®|(~A)";
+            Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ áÕæÑÉ";
+            Text[ dutch ] = "~Koppeling aan afbeelding toevoegen";
+            Text[ chinese_simplified ] = "ĞÂÔöÍ¼ĞÎµÄÁ´½Ó(~A)";
+            Text[ greek ] = "ĞñïóèŞêç óıíäåóçò óå ãñá~öéêü";
+            Text[ korean ] = "±×¸²¿¡ ¿¬°á Ãß°¡(~A)";
+            Text[ turkish ] = "Bağlantıyı grafiğe ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_SAVEGRAPHIC ;
+            HelpID = HID_MN_READONLY_SAVEGRAPHIC ;
+            Text = "~Grafik speichern..." ;
+            Text [ English ] = "Save ~Image..." ;
+            Text [ dutch ] = "Afbeelding ops~laan..." ;
+            Text [ italian ] = "~Salva immagine..." ;
+            Text [ spanish ] = "Guardar ~imagen..." ;
+            Text [ french ] = "Enregistrer l'~image..." ;
+            Text [ english_us ] = "Save Graphics..." ;
+            Text [ swedish ] = "~Spara grafik..." ;
+            Text [ danish ] = "~Gem billede..." ;
+            Text [ portuguese ] = "~Guardar imagem..." ;
+            Text [ portuguese_brazilian ] = "~Grafik speichern..." ;
+            Text[ chinese_simplified ] = "´æÅÌÍ¼ĞÎ(~S)...";
+            Text[ russian ] = "Ñîõğàíèòü ğèñóíîê...";
+            Text[ polish ] = "Zapisz grafikê...";
+            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì•Û‘¶...";
+            Text[ chinese_traditional ] = "Àx¦s¹Ï¤ù(~S)...";
+            Text[ arabic ] = "...ÍİÙ ÇáÕæÑÉ";
+            Text[ dutch ] = "Afbeelding ops~laan...";
+            Text[ chinese_simplified ] = "´æÅÌÍ¼ĞÎ(~S)...";
+            Text[ greek ] = "ÁğïèŞêåõóç ~ãñáöéêïı...";
+            Text[ korean ] = "±×·¡ÇÈ ÀúÀå...";
+            Text[ turkish ] = "Grafiği kaydet...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_GRAPHICTOGALLERY ;
+            HelpID = HID_MN_READONLY_GRAPHICTOGALLERY ;
+            Text = "Grafik hinzuf~ügen" ;
+            Text [ English ] = "A~dd Image" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_READONLY_TOGALLERYLINK ;
+                        HelpID = HID_MN_READONLY_TOGALLERYLINK ;
+                        Text = "Als Link" ;
+                        Text [ english ] = "as link" ;
+                        Text [ english_us ] = "As Link" ;
+                        Text [ portuguese_brazilian ] = "Als Link" ;
+                        Text [ swedish ] = "Som länk" ;
+                        Text [ danish ] = "Som kæde" ;
+                        Text [ italian ] = "Come link" ;
+                        Text [ spanish ] = "Como vínculo" ;
+                        Text [ french ] = "Comme lien" ;
+                        Text [ dutch ] = "Als koppeling" ;
+                        Text [ portuguese ] = "Como ligação" ;
+                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ language_user1 ] = " ";
+                        Text[ russian ] = "Êàê ññûëêó";
+                        Text[ polish ] = "Jako ³¹cze";
+                        Text[ japanese ] = "Øİ¸‚Æ‚µ‚Ä";
+                        Text[ chinese_traditional ] = "±¶®|";
+                        Text[ arabic ] = "ßÇÑÊÈÇØ";
+                        Text[ dutch ] = "Als koppeling";
+                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ greek ] = "Ùò óıíäåóç";
+                        Text[ korean ] = "¿¬°á·Î";
+                        Text[ turkish ] = "Bağlantı olarak";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_READONLY_TOGALLERYCOPY ;
+                        HelpID = HID_MN_READONLY_TOGALLERYCOPY ;
+                        Text = "Kopieren" ;
+                        Text [ english ] = "copy" ;
+                        Text [ english_us ] = "Copy" ;
+                        Text [ portuguese_brazilian ] = "Kopieren" ;
+                        Text [ swedish ] = "Kopiera" ;
+                        Text [ danish ] = "Kopier" ;
+                        Text [ italian ] = "Copia" ;
+                        Text [ spanish ] = "Copiar" ;
+                        Text [ french ] = "Copier" ;
+                        Text [ dutch ] = "Kopiëren" ;
+                        Text [ portuguese ] = "Copiar" ;
+                        Text[ chinese_simplified ] = "¸´ÖÆ";
+                        Text[ russian ] = "Êîïèğîâàòü";
+                        Text[ polish ] = "Kopiuj";
+                        Text[ japanese ] = "ºËß°";
+                        Text[ chinese_traditional ] = "½Æ»s";
+                        Text[ arabic ] = "äÓÎ";
+                        Text[ dutch ] = "Kopiëren";
+                        Text[ chinese_simplified ] = "¸´ÖÆ";
+                        Text[ greek ] = "ÁíôéãñáöŞ";
+                        Text[ korean ] = "º¹»ç";
+                        Text[ turkish ] = "Kopyala";
+                        Text[ language_user1 ] = " ";
+                    };
+                    SEPARATOR
+                };
+            };
+            Text [ portuguese ] = "~Adicionar imagem" ;
+            Text [ english_us ] = "Add Graphics" ;
+            Text [ portuguese_brazilian ] = "Grafik hinzuf~ügen" ;
+            Text [ swedish ] = "Lägg till ~grafik" ;
+            Text [ danish ] = "Tilføj billede" ;
+            Text [ italian ] = "Aggi~ungi immagine" ;
+            Text [ spanish ] = "~Añadir imagen" ;
+            Text [ french ] = "~Ajouter une image" ;
+            Text [ dutch ] = "Afbeelding t~oevoegen" ;
+            Text[ chinese_simplified ] = "ĞÂÔöÍ¼ĞÎ(~D)";
+            Text[ russian ] = "Äîáàâèòü ğèñóíîê";
+            Text[ polish ] = "Dodaj grafikê";
+            Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì’Ç‰Á";
+            Text[ chinese_traditional ] = "·s¼W¹Ï¤ù(~D)";
+            Text[ arabic ] = "ÅÖÇİÉ ÑÓæã";
+            Text[ dutch ] = "Afbeelding t~oevoegen";
+            Text[ chinese_simplified ] = "ĞÂÔöÍ¼ĞÎ(~D)";
+            Text[ greek ] = "Ğñïó~èŞêç ãñáöéêşí";
+            Text[ korean ] = "±×·¡ÇÈ Ãß°¡";
+            Text[ turkish ] = "Grafik ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_SAVEBACKGROUND ;
+            HelpID = HID_MN_READONLY_SAVEBACKGROUND ;
+            Text = "H~intergrund speichern..." ;
+            Text [ English ] = "Save ~Background..." ;
+            Text [ dutch ] = "Achte~rgrond opslaan..." ;
+            Text [ english_us ] = "Save Background..." ;
+            Text [ swedish ] = "Spara ~bakgrund..." ;
+            Text [ danish ] = "Gem baggrunden..." ;
+            Text [ italian ] = "Salva sfondo..." ;
+            Text [ spanish ] = "Guardar ~fondo..." ;
+            Text [ french ] = "Enregistrer l'~arrière-plan..." ;
+            Text [ portuguese ] = "Guardar plano de f~undo..." ;
+            Text [ portuguese_brazilian ] = "H~intergrund speichern..." ;
+            Text[ chinese_simplified ] = "´æÅÌ±³¾°(~B)...";
+            Text[ russian ] = "Ñîõğàíèòü ôîí";
+            Text[ polish ] = "Zapisz t³o";
+            Text[ japanese ] = "”wŒi‚Ì•Û‘¶...";
+            Text[ chinese_traditional ] = "Àx¦s­I´º(~B)...";
+            Text[ arabic ] = "ÍİÙ ÇáÎáİíÉ...";
+            Text[ dutch ] = "Achte~rgrond opslaan...";
+            Text[ chinese_simplified ] = "´æÅÌ±³¾°(~B)...";
+            Text[ greek ] = "ÁğïèŞêåõó~ç öüíôïõ...";
+            Text[ korean ] = "¹è°æ ÀúÀå...";
+            Text[ turkish ] = "Artalanı kaydet";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_BACKGROUNDTOGALLERY ;
+            HelpID = HID_MN_READONLY_BACKGROUNDTOGALLERY ;
+            Text = "H~intergrund hinzufügen" ;
+            Text [ English ] = "Add ~Background" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_READONLY_TOGALLERYLINK ;
+                        HelpID = HID_MN_READONLY_TOGALLERYLINK ;
+                        Text = "Als Link" ;
+                        Text [ english ] = "as link" ;
+                        Text [ english_us ] = "As Link" ;
+                        Text [ portuguese_brazilian ] = "Als Link" ;
+                        Text [ swedish ] = "Som länk" ;
+                        Text [ danish ] = "Som kæde" ;
+                        Text [ italian ] = "Come link" ;
+                        Text [ spanish ] = "Como vínculo" ;
+                        Text [ french ] = "Comme lien" ;
+                        Text [ dutch ] = "Als koppeling" ;
+                        Text [ portuguese ] = "Como ligação" ;
+                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ russian ] = "Êàê ññûëêó";
+                        Text[ polish ] = "Jako ³¹cze";
+                        Text[ japanese ] = "Øİ¸‚Æ‚µ‚Ä";
+                        Text[ chinese_traditional ] = "±¶®|";
+                        Text[ arabic ] = "ßÇÑÊÈÇØ";
+                        Text[ dutch ] = "Als koppeling";
+                        Text[ chinese_simplified ] = "Á´½Ó";
+                        Text[ greek ] = "Ùò óıíäåóç";
+                        Text[ korean ] = "¿¬°á·Î";
+                        Text[ turkish ] = "Bağlantı olarak";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_READONLY_TOGALLERYCOPY ;
+                        HelpID = HID_MN_READONLY_TOGALLERYCOPY ;
+                        Text = "Kopieren" ;
+                        Text [ english ] = "copy" ;
+                        Text [ english_us ] = "Copy" ;
+                        Text [ portuguese_brazilian ] = "Kopieren" ;
+                        Text [ swedish ] = "Kopiera" ;
+                        Text [ danish ] = "Kopier" ;
+                        Text [ italian ] = "Copia" ;
+                        Text [ spanish ] = "Copiar" ;
+                        Text [ french ] = "Copier" ;
+                        Text [ dutch ] = "Kopiëren" ;
+                        Text [ portuguese ] = "Copiar" ;
+                        Text[ chinese_simplified ] = "¸´ÖÆ";
+                        Text[ russian ] = "Êîïèğîâàòü";
+                        Text[ polish ] = "Kopiuj";
+                        Text[ japanese ] = "ºËß°";
+                        Text[ chinese_traditional ] = "½Æ»s";
+                        Text[ arabic ] = "äÓÎ";
+                        Text[ dutch ] = "Kopiëren";
+                        Text[ chinese_simplified ] = "¸´ÖÆ";
+                        Text[ greek ] = "ÁíôéãñáöŞ";
+                        Text[ korean ] = "º¹»ç";
+                        Text[ turkish ] = "Kopyala";
+                        Text[ language_user1 ] = " ";
+                    };
+                    SEPARATOR
+                };
+            };
+            Text [ english_us ] = "Add Background" ;
+            Text [ portuguese_brazilian ] = "H~intergrund hinzufügen" ;
+            Text [ swedish ] = "Lägg till ~bakgrund" ;
+            Text [ danish ] = "Tilføj baggrund" ;
+            Text [ italian ] = "Aggiungi sfon~do" ;
+            Text [ spanish ] = "Añadir ~fondo" ;
+            Text [ french ] = "Aj~outer un arrière-plan" ;
+            Text [ dutch ] = "A~chtergrond toevoegen" ;
+            Text [ portuguese ] = "Adicionar plano de ~fundo" ;
+            Text[ chinese_simplified ] = "ĞÂÔö±³¾°(~B)";
+            Text[ russian ] = "Âñòàâèòü ôîí";
+            Text[ polish ] = "Dodaj t³o";
+            Text[ japanese ] = "”wŒi‚Ì’Ç‰Á";
+            Text[ chinese_traditional ] = "·s¼W­I´º(~B)";
+            Text[ arabic ] = "ÅÖÇİÉ ÎáİíÉ";
+            Text[ dutch ] = "A~chtergrond toevoegen";
+            Text[ chinese_simplified ] = "ĞÂÔö±³¾°(~B)";
+            Text[ greek ] = "ĞñïóèŞê~ç öüíôïõ";
+            Text[ korean ] = "¹è°æ Ãß°¡";
+            Text[ turkish ] = "Artalanı ekle";
+            Text[ language_user1 ] = " ";
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_READONLY_COPYLINK ;
+            HelpID = HID_MN_READONLY_COPYLINK ;
+            Text = "~Link kopieren" ;
+            Text [ English ] = "~Copy Link" ;
+            Text [ dutch ] = "~Koppeling kopiëren" ;
+            Text [ english_us ] = "Copy ~Link" ;
+            Text [ italian ] = "Copia link" ;
+            Text [ spanish ] = "~Copiar vínculo" ;
+            Text [ french ] = "Copier le ~lien" ;
+            Text [ swedish ] = "Kopiera l~änk" ;
+            Text [ danish ] = "Kopier kæde" ;
+            Text [ portuguese ] = "Copiar ~ligação" ;
+            Text [ portuguese_brazilian ] = "~Link kopieren" ;
+            Text[ chinese_simplified ] = "¸´ÖÆÁ´½Ó(~L)";
+            Text[ russian ] = "Êîïèğîâàòü ññûëêó";
+            Text[ polish ] = "Kopiuj ³¹cze";
+            Text[ japanese ] = "Øİ¸‚ÌºËß°(~L)";
+            Text[ chinese_traditional ] = "½Æ»s±¶®|(~L)";
+            Text[ arabic ] = "äÓÎ ÇáÇÑÊÈÇØ";
+            Text[ dutch ] = "~Koppeling kopiëren";
+            Text[ chinese_simplified ] = "¸´ÖÆÁ´½Ó(~L)";
+            Text[ greek ] = "ÁíôéãñáöŞ ~óıíäåóçò";
+            Text[ korean ] = "¿¬°á º¹»ç(~L)";
+            Text[ turkish ] = "Bağlantıyı kopyala";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_COPYGRAPHIC ;
+            HelpID = HID_MN_READONLY_COPYGRAPHIC ;
+            /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
+            /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
+            /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
+            Text = "Grafik ~kopieren" ;
+            Text [ English ] = "C~opy ™mage" ;
+            Text [ dutch ] = "Afbeelding ko~piëren" ;
+            Text [ italian ] = "~Copia immagine" ;
+            Text [ spanish ] = "~Copiar imagen" ;
+            Text [ french ] = "~Copier une image" ;
+            Text [ english_us ] = "Copy ~Graphics" ;
+            Text [ swedish ] = "Kopiera ~grafik" ;
+            Text [ danish ] = "Kopier billede" ;
+            Text [ portuguese ] = "Co~piar imagem" ;
+            Text [ portuguese_brazilian ] = "Grafik ~kopieren" ;
+            Text[ chinese_simplified ] = "¸´ÖÆÍ¼ĞÎ(~G)";
+            Text[ russian ] = "Êîïèğîâàòü ğèñóíîê";
+            Text[ polish ] = "Kopiuj grafikê";
+            Text[ japanese ] = "¸Ş×Ì¨¯¸‚ÌºËß°(~G)";
+            Text[ chinese_traditional ] = "½Æ»s¹Ï¤ù(~G)";
+            Text[ arabic ] = "äÓÎ ÇáÕæÑÉ";
+            Text[ dutch ] = "Afbeelding ko~piëren";
+            Text[ chinese_simplified ] = "¸´ÖÆÍ¼ĞÎ(~G)";
+            Text[ greek ] = "ÁíôéãñáöŞ ãñáöé~êşí";
+            Text[ korean ] = "±×·¡ÇÈ º¹»ç(~G)";
+            Text[ turkish ] = "Grafiği kopyala";
+            Text[ language_user1 ] = " ";
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_READONLY_LOADGRAPHIC ;
+            HelpID = HID_MN_READONLY_LOADGRAPHIC ;
+            Text = "G~rafiken laden" ;
+            Text [ English ] = "Load Images" ;
+            Text [ dutch ] = "A~fbeeldingen laden" ;
+            Text [ english_us ] = "Load Graphics" ;
+            Text [ swedish ] = "Ladda g~rafik" ;
+            Text [ danish ] = "Indlæs grafik" ;
+            Text [ italian ] = "Ca~rica immagine" ;
+            Text [ spanish ] = "Cargar ~imágenes" ;
+            Text [ french ] = "Charger des i~mages" ;
+            Text [ portuguese ] = "~Carregar imagens" ;
+            Text [ portuguese_brazilian ] = "G~rafiken laden" ;
+            Text[ chinese_simplified ] = "×°ÔØÍ¼ĞÎ";
+            Text[ russian ] = "Çàãğóçèòü ğèñóíêè";
+            Text[ polish ] = "Za³aduj grafiki";
+            Text[ japanese ] = "¸Ş×Ì¨¯¸½‚Ì“Ç‚İ‚İ";
+            Text[ chinese_traditional ] = "¸Ë¸ü¹Ï¤ù";
+            Text[ arabic ] = "ÊÍãíá ÇáÕæÑ";
+            Text[ dutch ] = "A~fbeeldingen laden";
+            Text[ chinese_simplified ] = "×°ÔØÍ¼ĞÎ";
+            Text[ greek ] = "Öü~ñôùóç ãñáöéêşí";
+            Text[ korean ] = "±×·¡ÇÈ ·Îµå";
+            Text[ turkish ] = "Grafikleri yükle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_READONLY_GRAPHICOFF ;
+            HelpID = HID_MN_READONLY_GRAPHICOFF ;
+            Text = "Grafiken ~ausschalten" ;
+            Text [ English ] = "Images ~off" ;
+            Text [ italian ] = "~Nascondi le immagini" ;
+            Text [ spanish ] = "Desactivar ~imágenes" ;
+            Text [ french ] = "~Désactiver des images" ;
+            Text [ dutch ] = "~Afbeeldingen uitschakelen" ;
+            Text [ english_us ] = "Graphics Off" ;
+            Text [ swedish ] = "~Stäng av grafiker" ;
+            Text [ danish ] = "~Sluk billeder" ;
+            Text [ portuguese ] = "~Ocultar imagens" ;
+            Text [ portuguese_brazilian ] = "Grafiken ~ausschalten" ;
+            Text[ chinese_simplified ] = "ÒşÈëÍ¼ĞÎ";
+            Text[ russian ] = "Îòêëş÷èòü ğèñóíêè";
+            Text[ polish ] = "Wy³¹cz grafiki";
+            Text[ japanese ] = "¸Ş×Ì¨¯¸½‚Ì”ñ•\\¦";
+            Text[ chinese_traditional ] = "Áô¤J¹Ï¤ù";
+            Text[ arabic ] = "ÅÎİÇÁ ÇáÕæÑ";
+            Text[ dutch ] = "~Afbeeldingen uitschakelen";
+            Text[ chinese_simplified ] = "ÒşÈëÍ¼ĞÎ";
+            Text[ greek ] = "~Áğåíåñãïğïßçóç ãñáöéêşí";
+            Text[ korean ] = "±×·¡ÇÈ ´İ±â";
+            Text[ turkish ] = "Grafikleri kapat";
+            Text[ language_user1 ] = " ";
+        };
+#ifdef WNT
+        MenuItem
+        {
+            Identifier = MN_READONLY_PLUGINOFF ;
+            HelpID = HID_MN_READONLY_PLUGINOFF ;
+            Text = "~PlugIns ausschalten" ;
+            Text [ English ] = "~PlugIns off" ;
+            Text [ english_us ] = "Plug-Ins Off" ;
+            Text [ italian ] = "Disattiva i PlugIn" ;
+            Text [ spanish ] = "Desactivar ~Plug-ins" ;
+            Text [ french ] = "Désactiver les ~Plug-Ins" ;
+            Text [ dutch ] = "~PlugIns uitschakelen" ;
+            Text [ swedish ] = "Stäng av ~PlugIns" ;
+            Text [ danish ] = "Sluk ~PlugIns" ;
+            Text [ portuguese ] = "Desactivar ~PlugIns" ;
+            Text [ portuguese_brazilian ] = "~PlugIns ausschalten" ;
+            Text[ chinese_simplified ] = "Ê§»î ~Plug-In";
+            Text[ russian ] = "Îòêëş÷èòü Plug-Ins";
+            Text[ polish ] = "Wy³¹cz dodatki PlugIn";
+            Text[ japanese ] = "Ìß×¸Ş²İ µÌ";
+            Text[ chinese_traditional ] = "¥¢¬¡ ~PlugIn";
+            Text[ arabic ] = "ÅíŞÇİ Plug-Ins";
+            Text[ dutch ] = "~PlugIns uitschakelen";
+            Text[ chinese_simplified ] = "Ê§»î ~Plug-In";
+            Text[ greek ] = "Áğåíåñãïğïßçóç ~Plug-Ins";
+            Text[ korean ] = "ÇÃ·¯±×ÀÎ Á¾·á";
+            Text[ turkish ] = "Plug-in'leri kapat";
+            Text[ language_user1 ] = " ";
+        };
+#endif
+    };
+};
+String STR_EXPORT_GRAFIK_TITLE
+{
+    Text = "Grafik-Export" ;
+    Text [ English ] = "Image export" ;
+    Text [ dutch ] = "Afbeelding exporteren" ;
+    Text [ italian ] = "Esporta immagine" ;
+    Text [ spanish ] = "Exportar imagen" ;
+    Text [ french ] = "Export d'image" ;
+    Text [ english_us ] = "Graphics Export" ;
+    Text [ swedish ] = "Grafik-export" ;
+    Text [ danish ] = "Billedeksport" ;
+    Text [ portuguese ] = "Exportar imagem" ;
+    Text [ portuguese_brazilian ] = "Grafik-Export" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ-Êä³ö";
+    Text[ russian ] = "İêñïîğò ğèñóíêà";
+    Text[ polish ] = "Eksport grafiki";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸ ´¸½Îß°Ä";
+    Text[ chinese_traditional ] = "¹Ï¤ù-¿é¥X";
+    Text[ arabic ] = "ÊÕÏíÑ ÕæÑ";
+    Text[ dutch ] = "Afbeelding exporteren";
+    Text[ chinese_simplified ] = "Í¼ĞÎ-Êä³ö";
+    Text[ greek ] = "ÅîáãùãŞ ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ º¸³»±â";
+    Text[ turkish ] = "Grafik ver";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAIN_OK
+{
+    Text = "Betätigen Sie die linke Maustaste um die Rahmen zu verketten." ;
+    Text [ english ] = "Klick the left mouse button to chain the Frames." ;
+    Text [ portuguese ] = "Clique no botão esquerdo do rato para ligar as molduras." ;
+    Text [ english_us ] = "Click the left mouse button to link the frames." ;
+    Text [ portuguese_brazilian ] = "Betätigen Sie die linke Maustaste um die Rahmen zu verketten." ;
+    Text [ swedish ] = "Klicka på den vänstra musknappen för att länka samman ramen." ;
+    Text [ danish ] = "Klik på venstre museknap for at kæde rammerne." ;
+    Text [ italian ] = "Per collegare la cornice cliccate con il tasto sinistro del mouse." ;
+    Text [ spanish ] = "Pulse el botón izquierdo del ratón para vincular las marcos." ;
+    Text [ french ] = "Cliquez sur le bouton gauche de la souris pour lier les cadres." ;
+    Text [ dutch ] = "Gebruik de linker muistoets om het kader te koppelen." ;
+    Text[ chinese_simplified ] = "ÇëÄúÍ¨¹ı°´»÷Êó±ê×ó¼üÀ´Á¬½Ó¿ò¡£";
+    Text[ russian ] = "Íàæìèòå ëåâóş êëàâèøó ìûøè äëÿ ñâÿçè ğàìêè.";
+    Text[ polish ] = "Kliknij lewy przycisk myszy, by po³¹czyæ ramki.";
+    Text[ japanese ] = "˜g‚ğ‚Â‚È‚®‚½‚ß‚É¶‚ÌÏ³½ÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ä‰º‚³‚¢";
+    Text[ chinese_traditional ] = "½Ğ±z«ö¥H¤U·Æ¹«ªº¥ªÁä¡M³sµ²°T®Ø¡C";
+    Text[ arabic ] = ".ÇäŞÑ ÇáÒÑ ÇáÃíÓÑ ááãÇæÓ áÑÈØ ÇáÃØÑ";
+    Text[ dutch ] = "Gebruik de linker muistoets om het kader te koppelen.";
+    Text[ chinese_simplified ] = "ÇëÄúÍ¨¹ı°´»÷Êó±ê×ó¼üÀ´Á¬½Ó¿ò¡£";
+    Text[ greek ] = "ĞáôŞóôå ôï áñéóôåñü ğëŞêôñï ôïõ ğïíôéêéïı ãéá íá óõíäåèïıí ôá ğåñéãñÜììáôá.";
+    Text[ korean ] = "ÇÁ·¹ÀÓ¿¡ ¿¬°áÇÏ±â À§ÇØ¼­ ¿ŞÂÊ ¸¶¿ì½º ¹öÆ°À» Å¬¸¯ÇÏ¼¼¿ä.";
+    Text[ turkish ] = "Çerçeveler arası bağlantı oluşturmak için sol fare tuşunu kullanın.";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAIN_NOT_EMPTY
+{
+    Text = "Der Zielrahmen ist nicht leer." ;
+    Text [ english ] = "The target is not empty." ;
+    Text [ portuguese ] = "A moldura de destino não está vazia." ;
+    Text [ english_us ] = "Target frame not empty." ;
+    Text [ portuguese_brazilian ] = "Der Zielrahmen ist nicht leer." ;
+    Text [ swedish ] = "Målramen är inte tom." ;
+    Text [ danish ] = "Målrammen er ikke tom." ;
+    Text [ italian ] = "La cornice di destinazione non è vuota." ;
+    Text [ spanish ] = "El marco destino no está vacío." ;
+    Text [ french ] = "Le cadre cible n'est pas vide." ;
+    Text [ dutch ] = "Het doelkader is niet leeg." ;
+    Text[ chinese_simplified ] = "Ä¿±ê¿ò²»ÊÇ¿ÕµÄ¡£";
+    Text[ russian ] = "Öåëåâàÿ ğàìêà íå ÿâëÿåòñÿ ïóñòîé.";
+    Text[ polish ] = "Ramka docelowa nie jest pusta.";
+    Text[ japanese ] = "–Ú•W‚Ì˜g‚Í‹ó‚Å‚·";
+    Text[ chinese_traditional ] = "¥Ø¼Ğ¤è¶ô¤£¬OªÅªº¡C";
+    Text[ arabic ] = ".ÇáÅØÇÑ ÇáåÏİ ÛíÑ İÇÑÛ";
+    Text[ dutch ] = "Het doelkader is niet leeg.";
+    Text[ chinese_simplified ] = "Ä¿±ê¿ò²»ÊÇ¿ÕµÄ¡£";
+    Text[ greek ] = "Ôï ğëáßóéï ğñïïñéóìïı äåí åßíáé êåíü.";
+    Text[ korean ] = "¸ñÇ¥ ÇÁ·¹ÀÓÀÌ ºñ¾îÀÖÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Hedef çerçeve boş değil.";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAIN_IS_IN_CHAIN
+{
+    Text = "Der Zielrahmen ist bereits verkettet." ;
+    Text [ english ] = "The target is already target of a chain." ;
+    Text [ portuguese ] = "A moldura de destino já está ligada." ;
+    Text [ english_us ] = "Target frame is already linked." ;
+    Text [ portuguese_brazilian ] = "Der Zielrahmen ist bereits verkettet." ;
+    Text [ swedish ] = "Målramen är redan länkad. " ;
+    Text [ danish ] = "Målrammen er allerede sammenkædet." ;
+    Text [ italian ] = "La cornice di destinazione è già collegata." ;
+    Text [ spanish ] = "El marco destino ya está vinculado." ;
+    Text [ french ] = "Le cadre cible est déjà lié." ;
+    Text [ dutch ] = "Het doelkader is reeds gekoppeld." ;
+    Text[ chinese_simplified ] = "ÒÑ¾­Á´½ÓÄ¿±ê¿ò¡£";
+    Text[ russian ] = "Öåëåàâÿ ğàìêà óæå ñâÿçàíà.";
+    Text[ polish ] = "Ramka docelowa jest ju¿ po³¹czona.";
+    Text[ japanese ] = "–Ú•W‚Ì˜g‚Í‚·‚Å‚É‚Â‚È‚ª‚ê‚Ä‚¢‚Ü‚·";
+    Text[ chinese_traditional ] = "¤w¸g³sµ²¥Ø¼Ğ¤è¶ô¡C";
+    Text[ arabic ] = ".ÇáÅØÇÑ ÇáåÏİ ãÑÊÈØ ÈÇáİÚá";
+    Text[ dutch ] = "Het doelkader is reeds gekoppeld.";
+    Text[ chinese_simplified ] = "ÒÑ¾­Á´½ÓÄ¿±ê¿ò¡£";
+    Text[ greek ] = "Ôï ğëáßóéï ğñïïñéóìïı åßíáé Şäç óõíäåäåìİíï.";
+    Text[ korean ] = "¸ñÇ¥ ÇÁ·¹ÀÓÀÌ ÀÌ¹Ì ¿¬°á µÇ¾î ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Hedef çerçeve bağlantısı oluşturulmuş durumda.";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAIN_WRONG_AREA
+{
+    Text = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung möglich ist." ;
+    Text [ english ] = "The target is in an invalid area." ;
+    Text [ portuguese ] = "A moldura de destino encontra-se numa área que não permite a ligação." ;
+    Text [ english_us ] = "The target frame for the link is in an invalid area." ;
+    Text [ portuguese_brazilian ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung möglich ist." ;
+    Text [ swedish ] = "Målramen finns i ett område där ingen länkning är möjlig. " ;
+    Text [ danish ] = "Målrammen befinder sig i et område hvor sammenkædning ikke er mulig." ;
+    Text [ italian ] = "La cornice di destinazione si trova in un'area nella quale non sono possibili collegamenti." ;
+    Text [ spanish ] = "El marco destino se encuentra en un área en la que los vínculos no son posibles." ;
+    Text [ french ] = "Le cadre-cible se trouve dans une section ne pouvant pas faire l'objet d'un lien." ;
+    Text [ dutch ] = "Het bronkader staat in een bereik waarin geen koppeling mogelijk is." ;
+    Text[ chinese_simplified ] = "Ä¿±ê¿ò´¦ÓÚÒ»¸öÎŞ·¨Á´½ÓµÄÇøÓò¡£";
+    Text[ russian ] = "Öåëåâàÿ ğàìêà íàõîäèòñÿ â îáëàñòè, â êîòîğîé ñâÿçü íåâîçìîæíà.";
+    Text[ polish ] = "Ramka docelowa znajduje siê w obszarze, w którym niemo¿liwe jest po³¹czenie.";
+    Text[ japanese ] = "–Ú•W‚Ì˜g‚Í‚Â‚È‚®‚±‚Æ‚Ì‚Å‚«‚È‚¢”ÍˆÍ‚É‚ ‚è‚Ü‚·";
+    Text[ chinese_traditional ] = "¥Ø¼Ğ°T®Ø³B©ó¤@­ÓµLªk°T®Øªº°Ï°ì¡C";
+    Text[ arabic ] = ".íÊæÇÌÏ ÇáÅØÇÑ ÇáåÏİ İí ãäØŞÉ áÇ íãßä Úãá ÊÓáÓá İíåÇ";
+    Text[ dutch ] = "Het bronkader staat in een bereik waarin geen koppeling mogelijk is.";
+    Text[ chinese_simplified ] = "Ä¿±ê¿ò´¦ÓÚÒ»¸öÎŞ·¨Á´½ÓµÄÇøÓò¡£";
+    Text[ greek ] = "Ôï ğëáßóéï ğñïïñéóìïı âñßóêåôáé óå ìéá ğåñéï÷Ş óôçí ïğïßá åßíáé áäıíáôïí íá äçìéïõñãçèåß ìßá óıíäåóç.";
+    Text[ korean ] = "¿¬°áÀ»  À§ÇÑ ¸ñÇ¥ ÇÁ·¹ÀÓÀÌ À¯È¿ÇÏÁö ¾ÊÀº ¿µ¿ª¿¡ ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Hedef çerçeve bağlantı oluşturulamayacak bir alanda bulunuyor.";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAIN_NOT_FOUND
+{
+    Text = "An der aktuellen Position kann kein Zielrahmen gefunden werden." ;
+    Text [ english ] = "No target found at this position." ;
+    Text [ portuguese ] = "Impossível encontrar moldura de destino na posição actual." ;
+    Text [ english_us ] = "Target frame not found at current position." ;
+    Text [ portuguese_brazilian ] = "An der aktuellen Position kann kein Zielrahmen gefunden werden." ;
+    Text [ swedish ] = "Vid den aktuella positionen kan ingen målram hittas." ;
+    Text [ danish ] = "Der blev ikke fundet en målramme på den aktuelle position." ;
+    Text [ italian ] = "Impossibile trovare una cornice di destinazione nella posizione corrente." ;
+    Text [ spanish ] = "En la posición actual no se puede encontrar ningún marco destino." ;
+    Text [ french ] = "Aucun cadre cible ne peut être trouvé à la position courante." ;
+    Text [ dutch ] = "Op de actuele positie kan geen doelkader worden gevonden." ;
+    Text[ chinese_simplified ] = "ÔÚµ±Ç°µÄÎ»ÖÃÃ»ÓĞÕÒµ½Ä¿±ê¿ò¡£";
+    Text[ russian ] = "Â òåêóùåé ïîçèöèè öåëåâàÿ ğàìêà íåîáíàğóæåíà.";
+    Text[ polish ] = "Przy aktualnej pozycji nie znaleziono ramki docelowej.";
+    Text[ japanese ] = "Œ»ˆÊ’u‚É–Ú•W‚Ì˜g‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "¦b·í«eªº¦ì¸m¨S¦³§ä¨ì¥Ø¼Ğ¤è¶ô¡C";
+    Text[ arabic ] = ".áÇ íæÌÏ ÅØÇÑ åÏİ İí ÇáãæŞÚ ÇáÍÇáí";
+    Text[ dutch ] = "Op de actuele positie kan geen doelkader worden gevonden.";
+    Text[ chinese_simplified ] = "ÔÚµ±Ç°µÄÎ»ÖÃÃ»ÓĞÕÒµ½Ä¿±ê¿ò¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá âñåèåß ğëáßóéï ğñïïñéóìïı óôçí ôñİ÷ïõóá èİóç.";
+    Text[ korean ] = "ÇöÀçÀÇ À§Ä¡¿¡¼­ ¸ñÇ¥ ÇÁ·¹ÀÓÀÌ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "Yürürlükteki konumda hedef çerçeve bulunamıyor.";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAIN_SOURCE_CHAINED
+{
+    Text = "Der Quellrahmen ist bereits Quelle einer Verkettung." ;
+    Text [ english ] = "The source is already source of a chain." ;
+    Text [ portuguese ] = "A moldura-fonte já é a fonte de uma ligação." ;
+    Text [ english_us ] = "The source frame is already the source of a link." ;
+    Text [ portuguese_brazilian ] = "Der Quellrahmen ist bereits Quelle einer Verkettung." ;
+    Text [ swedish ] = "Källramen är redan källa till en länk." ;
+    Text [ danish ] = "Kilderammen er allerede kilde til en sammenkædning." ;
+    Text [ italian ] = "La cornice sorgente è già sorgente di un collegamento." ;
+    Text [ spanish ] = "El marco origen ya es la fuente de un vínculo." ;
+    Text [ french ] = "Le cadre source est déjà la source d'un lien." ;
+    Text [ dutch ] = "Het bronkader is reeds basis van een koppeling." ;
+    Text[ chinese_simplified ] = "Õâ¸öÀ´Ô´¿òÒÑ¾­ÊÇÒ»¸öÁ´½ÓµÄÀ´Ô´¿ò¡£";
+    Text[ russian ] = "Èñõîäíàÿ ğàìêà óæå ÿâëÿåòñÿ èñòî÷íèêîì ñâÿçè.";
+    Text[ polish ] = "Ramka Ÿród³owa jest ju¿ Ÿród³em po³¹czenia.";
+    Text[ japanese ] = "Œ³‚Ì˜g‚Í‚·‚Å‚É‚Â‚È‚¬‚ÌŒ³‚Å‚·";
+    Text[ chinese_traditional ] = "³o­Ó¨Ó·½°T®Ø¤w¸g¬O¤@­Ó³sµ²ªº·½°T®Ø¡C";
+    Text[ arabic ] = ".ÅØÇÑ ÇáãÕÏÑ åæ ãÓÈŞÇğ ãÕÏÑ ÇáÊÓáÓá";
+    Text[ dutch ] = "Het bronkader is reeds basis van een koppeling.";
+    Text[ chinese_simplified ] = "Õâ¸öÀ´Ô´¿òÒÑ¾­ÊÇÒ»¸öÁ´½ÓµÄÀ´Ô´¿ò¡£";
+    Text[ greek ] = "Ôï ğëáßóéï ğñïİëåõóçò åßíáé Şäç ç ğñïİëåõóç ìéáò óıíäåóçò.";
+    Text[ korean ] = "¼Ò½º ÇÁ·¹ÀÓÀº ÀÌ¹Ì¿¬°á ÀÇ ¼Ò½ºÀÔ´Ï´Ù.";
+    Text[ turkish ] = "Kaynak çerçeve zaten bir bağlantı zincirinin kaynağı.";
+    Text[ language_user1 ] = " ";
+};
+String STR_CHAIN_SELF
+{
+    Text = "Eine geschlossene Kette ist nicht möglich." ;
+    Text [ english ] = "a chain connot be closed." ;
+    Text [ portuguese ] = "Impossível uma sequência fechada." ;
+    Text [ english_us ] = "A closed link is not possible." ;
+    Text [ portuguese_brazilian ] = "Eine geschlossene Kette ist nicht möglich." ;
+    Text [ swedish ] = "Det är inte möjligt med en sluten kedja." ;
+    Text [ danish ] = "En lukket kæde er ikke mulig." ;
+    Text [ italian ] = "Un collegamento chiuso non è possibile." ;
+    Text [ spanish ] = "No es posible una secuencia cerrada." ;
+    Text [ french ] = "Une chaine fermée n'est pas possible." ;
+    Text [ dutch ] = "Een gesloten koppeling is niet mogelijk." ;
+    Text[ chinese_simplified ] = "Ò»¸ö·â±ÕÊ½µÄÁ´½ÓÊÇ²»¿ÉÄÜµÄ¡£";
+    Text[ russian ] = "Çàìêíóòàÿ öåïü íåâîçìîæíà.";
+    Text[ polish ] = "Zamkniête ³¹cze nie jest mo¿liwe.";
+    Text[ japanese ] = "•Â‚¶‚½‚Â‚È‚ª‚è‚Í•s‰Â”\\‚Å‚·";
+    Text[ chinese_traditional ] = "¤@­Ó«Ê³¬¦¡ªº³sµ²¬O¤£¥i¯àªº¡C";
+    Text[ arabic ] = "ÇáÓáÓáÉ ÇáãÛáŞÉ ÃãÑ ÛíÑ ããßä";
+    Text[ dutch ] = "Een gesloten koppeling is niet mogelijk.";
+    Text[ chinese_simplified ] = "Ò»¸ö·â±ÕÊ½µÄÁ´½ÓÊÇ²»¿ÉÄÜµÄ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá äçìéïõñãçèåß áëõóßäá ğïõ êëåßíåé.";
+    Text[ korean ] = "´İÈù ¿¬°áÀº ºÒ°¡´ÉÇÕ´Ï´Ù.";
+    Text[ turkish ] = "Kapalı bir zincir oluşturulamaz.";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_INSERT
+{
+    Text = "Eingefügt" ;
+    Text [ english ] = "Inserted" ;
+    Text [ portuguese ] = "Inserido" ;
+    Text [ english_us ] = "Inserted" ;
+    Text [ portuguese_brazilian ] = "Eingefügt" ;
+    Text [ swedish ] = "Infogad" ;
+    Text [ danish ] = "Indsat" ;
+    Text [ italian ] = "Inserito" ;
+    Text [ spanish ] = "Insertado" ;
+    Text [ french ] = "Inséré" ;
+    Text [ dutch ] = "Ingevoegd" ;
+    Text[ chinese_simplified ] = "ÒÑ¾­²åÈë";
+    Text[ russian ] = "Âñòàâëåí";
+    Text[ polish ] = "Wstawiony";
+    Text[ japanese ] = "‘}“üÏ‚İ";
+    Text[ chinese_traditional ] = "¤w¸g´¡¤J";
+    Text[ arabic ] = "ãÏÑÌ";
+    Text[ language_user1 ] = " ";
+    Text[ dutch ] = "Ingevoegd";
+    Text[ chinese_simplified ] = "ÒÑ¾­²åÈë";
+    Text[ greek ] = "Åéóáãüìåíá";
+    Text[ korean ] = "»ğÀÔµÊ";
+    Text[ turkish ] = "Eklendi";
+};
+String STR_REDLINE_DELETE
+{
+    Text = "Gelöscht" ;
+    Text [ english ] = "Deleted" ;
+    Text [ portuguese ] = "Eliminado" ;
+    Text [ english_us ] = "Deleted" ;
+    Text [ portuguese_brazilian ] = "Gelöscht" ;
+    Text [ swedish ] = "Raderat" ;
+    Text [ danish ] = "Slettet" ;
+    Text [ italian ] = "Cancellato" ;
+    Text [ spanish ] = "Eliminado" ;
+    Text [ french ] = "Supprimé" ;
+    Text [ dutch ] = "Gewist" ;
+    Text[ chinese_simplified ] = "ÒÑ¾­É¾³ı";
+    Text[ russian ] = "Óäàëåí";
+    Text[ polish ] = "Usuniêty";
+    Text[ japanese ] = "íœÏ‚İ";
+    Text[ chinese_traditional ] = "¤w¸g§R°£";
+    Text[ arabic ] = "ãÍĞæİ";
+    Text[ dutch ] = "Gewist";
+    Text[ chinese_simplified ] = "ÒÑ¾­É¾³ı";
+    Text[ greek ] = "Äéáãñáììİíï";
+    Text[ korean ] = "»èÁ¦µÊ";
+    Text[ turkish ] = "Silindi";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_FORMAT
+{
+    Text = "Attributiert" ;
+    Text [ english ] = "Formatted" ;
+    Text [ portuguese ] = "Formatado" ;
+    Text [ english_us ] = "Formatted" ;
+    Text [ portuguese_brazilian ] = "Attributiert" ;
+    Text [ swedish ] = "Attributerat" ;
+    Text [ danish ] = "Formateret" ;
+    Text [ italian ] = "Fomattato" ;
+    Text [ spanish ] = "Formateado" ;
+    Text [ french ] = "Mis en forme" ;
+    Text [ dutch ] = "Opgemaakt" ;
+    Text[ chinese_simplified ] = "ÒÑ¾­¸ñÊ½»¯";
+    Text[ russian ] = "Îòôîğìàòèğîâàí";
+    Text[ polish ] = "sformatowany";
+    Text[ japanese ] = "‘®«";
+    Text[ chinese_traditional ] = "¤w¸g®æ¦¡¤Æ";
+    Text[ arabic ] = "ãäÓŞ";
+    Text[ language_user1 ] = " ";
+    Text[ dutch ] = "Opgemaakt";
+    Text[ chinese_simplified ] = "ÒÑ¾­¸ñÊ½»¯";
+    Text[ greek ] = "Ìïñöïğïéçìİíï";
+    Text[ korean ] = "¼­½Ä Àû¿ë";
+    Text[ turkish ] = "Faormatlandı";
+};
+String STR_REDLINE_TABLE
+{
+    Text = "Tabelle verändert" ;
+    Text [ english ] = "Table changed" ;
+    Text [ portuguese ] = "Tabela modificada" ;
+    Text [ english_us ] = "Table changed" ;
+    Text [ portuguese_brazilian ] = "Tabelle verändert" ;
+    Text [ swedish ] = "Tabell ändrad" ;
+    Text [ danish ] = "Tabel ændret" ;
+    Text [ italian ] = "Tabella modificata" ;
+    Text [ spanish ] = "Tabla modificada" ;
+    Text [ french ] = "Tableau modifié" ;
+    Text [ dutch ] = "Tabel veranderd" ;
+    Text[ chinese_simplified ] = "±í¸ñÒÑ±»¸ü¸Ä";
+    Text[ russian ] = "Òàáëèöà èçìåíåíà";
+    Text[ polish ] = "Tabela zmieniona";
+    Text[ japanese ] = "•\\‚Í•ÏX‚³‚ê‚Ä‚¢‚Ü‚·";
+    Text[ chinese_traditional ] = "ªí®æ¤w³QÅÜ§ó";
+    Text[ arabic ] = "ÊÛííÑ ÇáÌÏæá";
+    Text[ dutch ] = "Tabel veranderd";
+    Text[ chinese_simplified ] = "±í¸ñÒÑ±»¸ü¸Ä";
+    Text[ greek ] = "¸÷ïõí ãßíåé áëëáãİò óôïí ğßíáêá";
+    Text[ korean ] = "Ç¥°¡ ¹Ù²î¾ú½À´Ï´Ù.";
+    Text[ turkish ] = "Tablo değiştirildi";
+    Text[ language_user1 ] = " ";
+};
+String STR_REDLINE_FMTCOLL
+{
+    Text = "Absatzvorlage gesetzt" ;
+    Text [ english ] = "Paragraph Styles set" ;
+    Text[ italian ] = "Modello di paragrafo impostato";
+    Text[ portuguese_brazilian ] = "Paragraph Styles set";
+    Text[ portuguese ] = "Estilo de parágrafo definido";
+    Text[ danish ] = "Afsnitstypografi defineret";
+    Text[ french ] = "Le style de paragraphe a été défini";
+    Text[ swedish ] = "Styckeformatmall definierad";
+    Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
+    Text[ spanish ] = "Aplicado estilo de párrafo";
+    Text[ english_us ] = "Applied Paragraph Styles";
+    Text[ chinese_simplified ] = "Éè¶¨¶ÎÂäÑùÊ½";
+    Text[ russian ] = "Óñòàíîâëåíû ñòèëè àáçàöåâ";
+    Text[ polish ] = "Ustaw styl akapitu";
+    Text[ japanese ] = "’i—½À²Ù‚Ìİ’è";
+    Text[ chinese_traditional ] = "³]©w¬q¸¨¼Ë¦¡";
+    Text[ arabic ] = "ÊÚííä äãØ ÇáİŞÑÉ";
+    Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
+    Text[ chinese_simplified ] = "Éè¶¨¶ÎÂäÑùÊ½";
+    Text[ greek ] = "Êáèïñßóôçêå ğñüôõğï ğáñáãñÜöïõ";
+    Text[ korean ] = "´Ü¶ô À¯Çü ÁıÇÕ";
+    Text[ turkish ] = "Paragraf şablonu belirlendi";
+    Text[ language_user1 ] = " ";
+};
+String STR_ENDNOTE
+{
+    Text = "Endnote: " ;
+    Text [ ENGLISH ] = "Endnote: " ;
+    Text [ portuguese ] = "Nota final: " ;
+    Text [ english_us ] = "Endnote: " ;
+    Text [ portuguese_brazilian ] = "Endnote: " ;
+    Text [ swedish ] = "Slutnot:  " ;
+    Text [ danish ] = "Slutnote: " ;
+    Text [ italian ] = "Nota di chiusura: " ;
+    Text [ spanish ] = "Nota final:  " ;
+    Text [ french ] = "Note de fin : " ;
+    Text [ dutch ] = "Eindnoot:   " ;
+    Text[ chinese_simplified ] = "Î²×¢: ";
+    Text[ russian ] = "Êîíöåâàÿ ñíîñêà:  ";
+    Text[ polish ] = "Przypis koñcowy:  ";
+    Text[ japanese ] = "•¶––‹r’: ";
+    Text[ chinese_traditional ] = "§Àª`: ";
+    Text[ arabic ] = "ÊÚáíŞÇÊ ÎÊÇãíÉ: ";
+    Text[ dutch ] = "Eindnoot:   ";
+    Text[ chinese_simplified ] = "Î²×¢: ";
+    Text[ greek ] = "Óçìåßùóç ôİëïõò: ";
+    Text[ korean ] = "¹ÌÁÖ: ";
+    Text[ turkish ] = "Son not: ";
+    Text[ language_user1 ] = " ";
+};
+String STR_FTNNOTE
+{
+    Text = "Fußnote: " ;
+    Text [ ENGLISH ] = "Footnote: " ;
+    Text [ portuguese ] = "Nota de rodapé: " ;
+    Text [ english_us ] = "Footnote: " ;
+    Text [ portuguese_brazilian ] = "Fußnote: " ;
+    Text [ swedish ] = "Fotnot:  " ;
+    Text [ danish ] = "Fodnote: " ;
+    Text [ italian ] = "Nota a piè pagina: " ;
+    Text [ spanish ] = "Nota al pie:  " ;
+    Text [ french ] = "Note de bas de page : " ;
+    Text [ dutch ] = "Voetnoot:  " ;
+    Text[ chinese_simplified ] = "×¢½Å: ";
+    Text[ russian ] = "Ñíîñêà:  ";
+    Text[ polish ] = "Przypis dolny:   ";
+    Text[ japanese ] = "‹r’: ";
+    Text[ chinese_traditional ] = "µù¸}: ";
+    Text[ arabic ] = "ÍæÇÔí ÓİáíÉ: ";
+    Text[ dutch ] = "Voetnoot:  ";
+    Text[ chinese_simplified ] = "×¢½Å: ";
+    Text[ greek ] = "Õğïóçìåßùóç: ";
+    Text[ korean ] = "°¢ÁÖ: ";
+    Text[ turkish ] = "Dipnot: ";
+    Text[ language_user1 ] = " ";
+};
+
+InfoBox MSG_READONLY_CONTENT
+{
+    MESSAGE = "Die Schreibmarke oder Selektion befindet sich an einer geschützten Position.\nEine Änderung kann deshalb nicht akzeptiert werden.";
+    MESSAGE [ English ] = "Readonly content may not be changed." ;
+    MESSAGE[ english_us ] = "Readonly content cannot be changed.\nNo modifications will be accepted";
+    MESSAGE[ portuguese ] = "A selecção encontra-se numa posição protegida.\nImpossível qualquer modificação.";
+    MESSAGE[ russian ] = "Ìåòêà çàïèñè èëè âûäàëåíèå íàõîäèòñÿ â çàùèùåííîé ïîçèöèè.\nÏîıòîìó èçìåíåíèÿ íå ïğèíèìàşòñÿ.";
+    MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
+    MESSAGE[ french ] = "Le contenu du signet ou de la sélection est en lecture seule.\nAucune modification permise.";
+    MESSAGE[ spanish ] = "La marca o selección se encuentra en una posición protegida.\nPor ello no se puede aceptar una modificación.";
+    MESSAGE[ italian ] = "La selezione si trova in una posizione protetta. \nPertanto non è possibile accettare nessuna modifica.";
+    MESSAGE[ danish ] = "Markøren befinder sig på en skrivebeskyttet position.\nÆndringer kan derfor ikke accepteres.";
+    MESSAGE[ swedish ] = "Markören eller markering befinner sig i en skrivskyddad position.\nEn ändring kan därför ej accepteras.";
+    MESSAGE[ polish ] = "Znacznik zapisu lub selekcji znajduje siê na chronionej pozycji.\nZmiany nie mo¿na zaakceptowaæ.";
+    MESSAGE[ portuguese_brazilian ] = "Readonly content may not be changed.";
+    MESSAGE[ japanese ] = "‚±‚Ì”ÍˆÍ‚Í“Ç‚İæ‚èê—p‚Å‚·B“à—e‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñB";
+    MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÈÄÚÈİÊÇÒ»¸öÊÜ±£»¤µÄ¡£\nÎŞ·¨¸ü¸Ä·À¸²Ğ´µÄÄÚÈİ¡£";
+    MESSAGE[ chinese_traditional ] = "¿é¤J¥ú¼Ğ©Î¿ï¨úªº¦ì¸m¬O¨ü«OÅ@ªº¡C\nµLªk­×§ï¨¾ÂĞ¼gªº¤º®e¡C";
+    MESSAGE[ arabic ] = "ÊŞÚ ÚáÇãÉ ÇáßÊÇÈÉ Ãæ ÇáÊÍÏíÏ İí ãæÖÚ ãÍãí ÖÏ ÇáßÊÇÈÉ.\náåĞÇ áÇ íãßä ŞÈæá ÃíÉ ÊÛííÑÇÊ.";
+    MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
+    MESSAGE[ chinese_simplified ] = "ÊäÈë¹â±ê»òÑ¡ÖĞµÈÄÚÈİÊÇÒ»¸öÊÜ±£»¤µÄ¡£\nÎŞ·¨¸ü¸Ä·À¸²Ğ´µÄÄÚÈİ¡£";
+    MESSAGE[ greek ] = "Ç óŞìáíóç åããñáöŞò Ş ç åğéëïãŞ âñßóêåôáé óå ìßá ğñïóôáôåõüìåíç èİóç.\nÃé áõôü ôï ëüãï äåí ìğïñïıí íá ãßíïõí äåêôİò ïğïéåóäŞğïôå ôñïğïğïéŞóåéò.";
+    MESSAGE[ korean ] = "ÀĞ±â Àü¿ë ³»¿ëÀº º¯°æµÉ ¼ö ¾ø½À´Ï´Ù.\n¼öÁ¤Àº Çã¿ëµÉ ¼ö ¾ø½À´Ï´Ù.";
+    MESSAGE[ turkish ] = "Salt okunur bir içerik değiştirilemez.\nYapılan değişiklikler nu nedenle kabul edilmeyecek.";
+    MESSAGE[ language_user1 ] = " ";
+};
+

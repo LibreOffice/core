@@ -1,0 +1,560 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fldvar.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+TabPage TP_FLD_VAR
+{
+    HelpID = HID_FLD_VAR ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Variablen" ;
+    Text [ ENGLISH ] = "Variables" ;
+    FixedText FT_VARTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Feldtyp" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "~Tipo di campo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo de ~campo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Felttype" ;
+        Text [ french ] = "~Type de champ" ;
+        Text [ swedish ] = "~F‰lttyp" ;
+        Text [ dutch ] = "~Veldtype" ;
+        Text [ spanish ] = "~Tipo de campo" ;
+        Text [ english_us ] = "~Type" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "◊÷∂Œ¿‡–Õ(~T)";
+        Text[ russian ] = "“ËÔ ÔÓÎˇ";
+        Text[ polish ] = "Typ pola";
+        Text[ japanese ] = "Ã®∞ŸƒﬁÇÃéÌóﬁ(~T)";
+        Text[ chinese_traditional ] = "√˛´¨(~T)";
+        Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
+        Text[ greek ] = "~‘˝ÔÚ Â‰ﬂÔı";
+        Text[ korean ] = "«¸≈¬(~T)";
+        Text[ turkish ] = "A~lan tipi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_VARTYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 83 ) ;
+        TabStop = TRUE ;
+        Sort = FALSE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_VARSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text = "~Auswahl" ;
+        Text [ ENGLISH ] = "S~election" ;
+        Left = TRUE ;
+        Text [ english_us ] = "S~election" ;
+        Text [ portuguese_brazilian ] = "~Auswahl" ;
+        Text [ swedish ] = "Urv~al" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ italian ] = "~Selezione" ;
+        Text [ spanish ] = "~SelecciÛn" ;
+        Text [ french ] = "~SÈlection" ;
+        Text [ dutch ] = "~Selectie" ;
+        Text [ portuguese ] = "~SelecÁ„o" ;
+        Text[ chinese_simplified ] = "—°‘Ò(~E)";
+        Text[ russian ] = "¬˚·Ó";
+        Text[ polish ] = "~WybÛr";
+        Text[ japanese ] = "ëIë(~E)";
+        Text[ chinese_traditional ] = "øÔ®˙(~E)";
+        Text[ arabic ] = "«· ÕœÌœ";
+        Text[ greek ] = "~≈ÈÎÔ„ﬁ";
+        Text[ korean ] = "º±≈√(~E)";
+        Text[ turkish ] = "~SeÁim";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_VARSELECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 16 ) ;
+        Size = MAP_APPFONT ( 76 , 83 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_VARFORMAT
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        TEXT = "F~ormat" ;
+        TEXT [ English ] = "Format" ;
+        Left = TRUE ;
+        Text [ english_us ] = "Format" ;
+        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ swedish ] = "F~ormat" ;
+        Text [ danish ] = "Format" ;
+        Text [ italian ] = "F~ormato" ;
+        Text [ spanish ] = "F~ormato" ;
+        Text [ french ] = "F~ormat" ;
+        Text [ dutch ] = "~Formaat" ;
+        Text [ portuguese ] = "F~ormato" ;
+        Text[ chinese_simplified ] = "∏Ò Ω(~O)";
+        Text[ russian ] = "‘ÓÏ‡Ú";
+        Text[ polish ] = "Format";
+        Text[ japanese ] = "èëéÆ";
+        Text[ chinese_traditional ] = "ÆÊ¶°(~F)";
+        Text[ arabic ] = "«· ‰”Ìﬁ";
+        Text[ greek ] = "Ã~ÔÒˆﬁ";
+        Text[ korean ] = "º≠Ωƒ";
+        Text[ turkish ] = "F~ormat";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_VARFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+        Size = MAP_APPFONT ( 84 , 71 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+    };
+    ListBox LB_VARNUMFORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
+        Size = MAP_APPFONT ( 84 , 71 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+    };
+    CheckBox CB_VARINVISIBLE
+    {
+        Pos = MAP_APPFONT ( 170 , 91 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        TEXT = "~Unsichtbar" ;
+        TEXT [ English ] = "Invisible" ;
+        TEXT [ norwegian ] = "Usynlig" ;
+        TEXT [ italian ] = "Nascosto" ;
+        TEXT [ portuguese_brazilian ] = "InvisÌvel" ;
+        TEXT [ portuguese ] = "~InvisÌvel" ;
+        TEXT [ finnish ] = "N‰kym‰tˆn" ;
+        TEXT [ danish ] = "Usynlig" ;
+        TEXT [ french ] = "Invisible" ;
+        TEXT [ swedish ] = "Os~ynlig" ;
+        TEXT [ dutch ] = "~Onzichtbaar" ;
+        TEXT [ spanish ] = "Invisi~ble" ;
+        TEXT [ english_us ] = "Invisi~ble" ;
+        TabStop = TRUE ;
+        TEXT[ chinese_simplified ] = "“˛»Îµƒ";
+        TEXT[ russian ] = "ÕÂ‚Ë‰ËÏ˚È";
+        TEXT[ polish ] = "Niewid~oczny";
+        TEXT[ japanese ] = "îÒï\\é¶";
+        TEXT[ chinese_traditional ] = "¡Ù§J™∫";
+        TEXT[ arabic ] = "€Ì— „—∆Ì";
+        TEXT[ greek ] = "ÃÁ ÔÒ·Ù‹";
+        TEXT[ korean ] = "æ»∫∏¿”(~B)";
+        TEXT[ turkish ] = "Gˆr¸nmez";
+        TEXT[ language_user1 ] = " ";
+    };
+    FixedText FT_VARCHAPTERHEADER
+    {
+        Pos = MAP_APPFONT ( 170 , 62 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Hide = TRUE ;
+        TEXT = "Kapitelweise Nummerierung" ;
+        TEXT [ English ] = "Chapter numbering" ;
+        Text [ english_us ] = "Numbering by chapter" ;
+        Text [ portuguese_brazilian ] = "Kapitelweise Numerierung" ;
+        Text [ swedish ] = "Numrering kapitelvis" ;
+        Text [ danish ] = "Kapitelvis nummerering" ;
+        Text [ italian ] = "Numerazione a capitoli" ;
+        Text [ spanish ] = "NumeraciÛn de capÌtulos" ;
+        Text [ french ] = "NumÈrotation par chapitre" ;
+        Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
+        Text [ portuguese ] = "NumeraÁ„o por capÌtulos" ;
+        Text[ chinese_simplified ] = "∞¥’¬±‡∫≈";
+        Text[ russian ] = "ÕÛÏÂ‡ˆËˇ ÔÓ „Î‡‚‡Ï";
+        Text[ polish ] = "Numeracja wed≥ug rozdzia≥Ûw ";
+        Text[ japanese ] = "èÕÇÃî‘çÜïtÇØ";
+        Text[ chinese_traditional ] = "´ˆ≥πΩs∏π";
+        Text[ arabic ] = " —ﬁÌ„ ›’Ê·";
+        Text[ greek ] = "¡ÒﬂËÏÁÛÁ Í·Ù‹ ÍÂˆ‹Î·È·";
+        Text[ korean ] = "¿Â¿∏∑Œ π¯»£∏≈±‚±‚";
+        Text[ turkish ] = "Bˆl¸me gˆre numaralama";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_VARCHAPTERLEVEL
+    {
+        Pos = MAP_APPFONT ( 175 , 76 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Hide = TRUE ;
+        TEXT = "E~bene" ;
+        TEXT [ English ] = "Level" ;
+        Text [ english_us ] = "~Level" ;
+        Text [ portuguese_brazilian ] = "E~bene" ;
+        Text [ swedish ] = "~NivÂ" ;
+        Text [ danish ] = "Niveau" ;
+        Text [ italian ] = "Li~vello" ;
+        Text [ spanish ] = "~Nivel" ;
+        Text [ french ] = "Ni~veau" ;
+        Text [ dutch ] = "N~iveau" ;
+        Text [ portuguese ] = "~NÌvel" ;
+        Text[ chinese_simplified ] = "º∂(~L)";
+        Text[ russian ] = "”Ó‚ÂÌ¸";
+        Text[ polish ] = "Poziom";
+        Text[ japanese ] = "⁄ÕﬁŸ(~L)";
+        Text[ chinese_traditional ] = "Ø≈(~L)";
+        Text[ arabic ] = "«·„” ÊÏ";
+        Text[ greek ] = "≈ﬂÂ‰Ô";
+        Text[ korean ] = "ºˆ¡ÿ(~L)";
+        Text[ turkish ] = "D~¸zey";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_VARCHAPTERLEVEL
+    {
+        Border = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 208 , 75 ) ;
+        Size = MAP_APPFONT ( 46 , 76 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Keine" ; > ;
+        };
+        stringlist [ english ] =
+        {
+            < "Keine" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "None" ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Keine" ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Inga" ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Ingen" ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Senza" ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Ninguno" ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Aucun(e)" ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Geen" ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Nenhum" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+             < "Œﬁ" ; > ;
+    };
+    StringList [ russian ] =
+    {
+             < "¡ÂÁ" ; > ;
+    };
+    StringList [ polish ] =
+    {
+             < "Brak" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+             < "Ç»Çµ" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+             < " " ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+             < "µL" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+             < "»œÊ‰" ; > ;
+    };
+    StringList [ greek ] =
+    {
+             < " ·Ì›Ì·" ; > ;
+    };
+    StringList [ korean ] =
+    {
+             < "æ¯¿Ω" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+             < "Yok" ; > ;
+    };
+    };
+    FixedText FT_VARSEPARATOR
+    {
+        Pos = MAP_APPFONT ( 175 , 91 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Hide = TRUE ;
+        TEXT = "~Trenner" ;
+        TEXT [ English ] = "Separator" ;
+        Text [ english_us ] = "~Separator" ;
+        Text [ portuguese_brazilian ] = "~Trenner" ;
+        Text [ swedish ] = "A~vdelare" ;
+        Text [ danish ] = "Separator" ;
+        Text [ italian ] = "~Separatore" ;
+        Text [ spanish ] = "~Separador" ;
+        Text [ french ] = "~SÈparateur" ;
+        Text [ dutch ] = "~Scheidingsteken" ;
+        Text [ portuguese ] = "~Separador" ;
+        Text[ chinese_simplified ] = "∑÷∏Ù∑˚(~S)";
+        Text[ russian ] = "–‡Á‰ÂÎËÚÂÎ¸";
+        Text[ polish ] = "Separator";
+        Text[ japanese ] = "ãÊêÿÇËãLçÜ(~S)";
+        Text[ chinese_traditional ] = "≥s±µ≤≈(~S)";
+        Text[ arabic ] = "›«’·";
+        Text[ greek ] = "ƒÈ·˜˘ÒÈÛÙÈÍ¸";
+        Text[ korean ] = "±∏∫–¿⁄(~S)";
+        Text[ turkish ] = "A~y˝rma i˛areti";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_VARSEPARATOR
+    {
+        Pos = MAP_APPFONT ( 208 , 90 ) ;
+        Size = MAP_APPFONT ( 46 , 12 ) ;
+        Border = TRUE ;
+        Hide = TRUE ;
+        MaxTextLength = 1 ;
+        TEXT = "." ;
+    };
+    FixedText FT_VARNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 105 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "Na~me" ;
+        TEXT [ English ] = "Na~me" ;
+        Left = TRUE ;
+        Text [ english_us ] = "Na~me" ;
+        Text [ portuguese_brazilian ] = "Na~me" ;
+        Text [ swedish ] = "Na~mn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ italian ] = "No~me" ;
+        Text [ spanish ] = "~Nombre" ;
+        Text [ french ] = "~Nom" ;
+        Text [ dutch ] = "Na~am" ;
+        Text [ portuguese ] = "No~me" ;
+        Text[ chinese_simplified ] = "√˚≥∆(~M)";
+        Text[ russian ] = "»Ïˇ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "ñºëO(~M)";
+        Text[ chinese_traditional ] = "¶W∫Ÿ(~M)";
+        Text[ arabic ] = "«·«”„";
+        Text[ greek ] = "ºÌÔÏ·";
+        Text[ korean ] = "¿Ã∏ß(~M)";
+        Text[ turkish ] = "~Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_VARNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 117 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_VARVALUE
+    {
+        Pos = MAP_APPFONT ( 88 , 105 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Wert" ;
+        Text [ ENGLISH ] = "Value" ;
+        Text [ norwegian ] = "Verdi" ;
+        Text [ italian ] = "~Valore" ;
+        Text [ portuguese_brazilian ] = "Valor" ;
+        Text [ portuguese ] = "~Valor" ;
+        Text [ finnish ] = "Arvo" ;
+        Text [ danish ] = "VÊrdi" ;
+        Text [ french ] = "~Valeur" ;
+        Text [ swedish ] = "~V‰rde" ;
+        Text [ dutch ] = "~Waarde" ;
+        Text [ spanish ] = "~Valor" ;
+        Text [ english_us ] = "~Value" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = " ˝÷µ(~V)";
+        Text[ russian ] = "«Ì‡˜ÂÌËÂ";
+        Text[ polish ] = "WartoúÊ";
+        Text[ japanese ] = "íl(~V)";
+        Text[ chinese_traditional ] = "º∆≠»(~V)";
+        Text[ arabic ] = "ﬁÌ„…";
+        Text[ greek ] = "‘ÈÏﬁ";
+        Text[ korean ] = "∞™(~V)";
+        Text[ turkish ] = "De~er";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_VARVALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 117 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    ToolBox TBX_VARNEWDEL
+    {
+        Pos = MAP_APPFONT ( 167 , 117 ) ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = BT_VARAPPLY ;
+                HelpID = HID_FLDVAR_APPLY ;
+                ItemBitmap = Bitmap { File = "sc20558.bmp" ; };
+                Text = "‹bernehmen" ;
+                Text [ English ] = "Apply" ;
+                Text [ norwegian ] = "Benytt" ;
+                Text [ italian ] = "Applica" ;
+                Text [ portuguese_brazilian ] = "Aplicar" ;
+                Text [ portuguese ] = "Aplicar" ;
+                Text [ finnish ] = "K‰yt‰" ;
+                Text [ danish ] = "Anvend" ;
+                Text [ french ] = "Appliquer" ;
+                Text [ swedish ] = "÷verta" ;
+                Text [ dutch ] = "Overnemen" ;
+                Text [ spanish ] = "Aplicar" ;
+                Text [ english_us ] = "Apply" ;
+                Text[ chinese_simplified ] = "”¶”√";
+                Text[ russian ] = "¬˚ÔÓÎÌËÚ¸";
+                Text[ polish ] = "Zastosuj";
+                Text[ japanese ] = "ìKóp";
+                Text[ chinese_traditional ] = "®œ•Œ";
+                Text[ arabic ] = " ÿ»Ìﬁ";
+                Text[ greek ] = "≈ˆ·ÒÏÔ„ﬁ";
+                Text[ korean ] = "¿˚øÎ";
+                Text[ turkish ] = "Kullan";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = BT_VARDELETE ;
+                HelpID = HID_FLDVAR_DELETE ;
+                ItemBitmap = Bitmap { File = "sc20557.bmp" ; };
+                Text = "Lˆschen" ;
+                Text [ ENGLISH ] = "Delete" ;
+                Text [ norwegian ] = "Slett" ;
+                Text [ italian ] = "Elimina" ;
+                Text [ portuguese_brazilian ] = "Apagar" ;
+                Text [ portuguese ] = "Eliminar" ;
+                Text [ finnish ] = "Poista" ;
+                Text [ danish ] = "Slet" ;
+                Text [ french ] = "Supprimer" ;
+                Text [ swedish ] = "Radera" ;
+                Text [ dutch ] = "Wissen" ;
+                Text [ spanish ] = "Eliminar" ;
+                Text [ english_us ] = "Delete" ;
+                Text[ chinese_simplified ] = "…æ≥˝";
+                Text[ russian ] = "”‰‡ÎËÚ¸";
+                Text[ polish ] = "UsuÒ";
+                Text[ japanese ] = "çÌèú";
+                Text[ chinese_traditional ] = "ßR∞£";
+                Text[ arabic ] = "Õ–›";
+                Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+                Text[ korean ] = "ªË¡¶";
+                Text[ turkish ] = "Sil";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text [ english_us ] = "Variables" ;
+    Text [ portuguese_brazilian ] = "Variablen" ;
+    Text [ swedish ] = "Variabler" ;
+    Text [ danish ] = "Variabler" ;
+    Text [ italian ] = "Variabili" ;
+    Text [ spanish ] = "Variables" ;
+    Text [ french ] = "Variables" ;
+    Text [ dutch ] = "Variabelen" ;
+    Text [ portuguese ] = "Vari·veis" ;
+    Text[ chinese_simplified ] = "±‰¡ø";
+    Text[ russian ] = "œÂÂÏÂÌÌ˚Â";
+    Text[ polish ] = "Zmienne";
+    Text[ japanese ] = "ïœêî";
+    Text[ chinese_traditional ] = "≈‹∂q";
+    Text[ arabic ] = "„ €Ì—« ";
+    Text[ greek ] = "ÃÂÙ·‚ÎÁÙ›Ú";
+    Text[ korean ] = "∫Øºˆ";
+    Text[ turkish ] = "Dei˛kenler";
+    Text[ language_user1 ] = " ";
+};
