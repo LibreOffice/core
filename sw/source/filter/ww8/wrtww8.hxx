@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WRTWW8_HXX
@@ -449,6 +448,9 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     void OutListTab();
     void OutOverrideListTab();
     void OutListNamesTab();
+
+    void RestoreMacroCmds();
+
     void InitFontTable();
 public:
     SwPosFlyFrms maFlyPos;      // Pointer auf die aktuelle "FlyFrmTabelle"
@@ -958,3 +960,5 @@ Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
 
 
 #endif  //  _WRTWW8_HXX
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

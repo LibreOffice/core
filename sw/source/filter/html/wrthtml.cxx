@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:33:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,7 +1096,9 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
     ByteString sOut( sHTML_doctype );
-    (sOut += ' ') += sHTML_doctype32;
+    (sOut += ' ') +=
+        (HTML_CFG_HTML32==nExportMode ? sHTML_doctype32
+                                       : sHTML_doctype40);
     HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.GetBuffer() );
 
     // baue den Vorspann

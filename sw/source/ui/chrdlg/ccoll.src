@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-01-10 14:17:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,18 +85,19 @@ TabPage TP_CONDCOLL
         Text[ french ] = "Options";
         Text[ spanish ] = "Opciones";
         Text[ italian ] = "Opzioni";
-        Text[ danish ] = "Settings";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
         Text[ korean ] = "ì˜µì…˜";
         Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ chinese_traditional ] = "é¸é …";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÎíÇÑÇÊ";
-        Text[ catalan ] = "Opciones";
-        Text[ finnish ] = "Mukauta";
+        Text[ catalan ] = "Opcions";
+        Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     CheckBox CB_CONDITION
     {
@@ -108,7 +109,7 @@ TabPage TP_CONDCOLL
         Disable = TRUE ;
         Text [ english_us ] = "~Conditional Style" ;
         Text [ italian ] = "Come modello condizionato" ;
-        Text [ spanish ] = "C~omo estilo condicional" ;
+        Text [ spanish ] = "~Estilo condicional" ;
         Text [ french ] = "Co~mme style conditionnel" ;
         Text [ dutch ] = "~Als conditioneel opmaakprofiel" ;
         Text [ swedish ] = "som villkorlig m~all" ;
@@ -116,17 +117,18 @@ TabPage TP_CONDCOLL
         Text [ portuguese_brazilian ] = "~Als bedingte Vorlage" ;
         Text [ portuguese ] = "~Estilo condicional" ;
         Text[ chinese_simplified ] = "å½“ä½œæœ‰æ¡ä»¶çš„æ ·å¼(~C)";
-        Text[ russian ] = "Êàê óñëîâíûé ñòèëü";
+        Text[ russian ] = "Óñëîâíûé ñòèëü";
         Text[ polish ] = "Jako warunkowy szablon";
-        Text[ japanese ] = "æ¡ä»¶ä»˜ãï½½ï¾€ï½²ï¾™ã¨ã—ã¦(~C)";
+        Text[ japanese ] = "æ¡ä»¶ä»˜ãã‚¹ã‚¿ã‚¤ãƒ«ã¨ã—ã¦(~C)";
         Text[ chinese_traditional ] = "ç•¶ä½œæœ‰æ¢ä»¶çš„æ¨£å¼(~C)";
         Text[ arabic ] = "ßäãØ ãÔÑæØ";
         Text[ greek ] = "Ùò åîáñôşìåíï ğñüôõğï";
-        Text[ korean ] = "ì¡°ê±´ì  ìœ í˜•(~C)";
+        Text[ korean ] = "ì¡°ê±´ë¶€ ìŠ¤íƒ€ì¼(~C)";
         Text[ turkish ] = "~Koşullu biçim olarak";
-        Text[ language_user1 ] = "\"Vorlagen\" Styles are capitalized. EM15.5.00";
-        Text[ catalan ] = "C~omo estilo condicional";
+        Text[ language_user1 ] = "\"Vor; \"Vorlagen\" Styles are capitalized. EM15.5.00";
+        Text[ catalan ] = "~Estil condicional";
         Text[ finnish ] = "~Ehdollinen Tyyli";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¹€~à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚";
     };
     FixedText FT_CONTEXT
     {
@@ -147,15 +149,16 @@ TabPage TP_CONDCOLL
         Text[ chinese_simplified ] = "ä¸Šä¸‹æ–‡(~X)";
         Text[ russian ] = "~Êîíòåêñò";
         Text[ polish ] = "Kontekst";
-        Text[ japanese ] = "ï½ºï¾ï¾ƒï½·ï½½ï¾„(~X)";
+        Text[ japanese ] = "ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ(~X)";
         Text[ chinese_traditional ] = "ä¸Šä¸‹æ–‡(~X)";
         Text[ arabic ] = "ÇáÓíÇŞ";
         Text[ greek ] = "ĞåñéâÜëëïí";
         Text[ korean ] = "ë‚´ìš©(~X)";
         Text[ turkish ] = "Bağlam";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Contexto";
+        Text[ catalan ] = "Conte~xt";
         Text[ finnish ] = "~Konteksti";
+        Text[ thai ] = "à¸šà¸£à¸´à¸š~à¸—";
     };
     FixedText FT_USED
     {
@@ -174,17 +177,18 @@ TabPage TP_CONDCOLL
         Text [ portuguese ] = "Estilos em uso" ;
         Text [ portuguese_brazilian ] = "Verwendete Vorlage" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨çš„æ ·å¼";
-        Text[ russian ] = "Ïğèìåíåííûå ñòèëè";
+        Text[ russian ] = "Èñïîëüçóåìûå ñòèëè";
         Text[ polish ] = "U¿yte style";
-        Text[ japanese ] = "ä½¿ç”¨ã™ã‚‹ï½½ï¾€ï½²ï¾™";
+        Text[ japanese ] = "ä½¿ç”¨ã™ã‚‹ã‚¹ã‚¿ã‚¤ãƒ«";
         Text[ chinese_traditional ] = "ä½¿ç”¨çš„æ¨£å¼";
         Text[ arabic ] = "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã";
         Text[ greek ] = "Åöáñìïóìİíá ğñüôõğá";
-        Text[ korean ] = "ìœ í˜•ì´ ì ìš©ë˜ì—ˆìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "ì‚¬ìš©ëœ ìŠ¤íƒ€ì¼";
         Text[ turkish ] = "Uygulanan biçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Estilos utilizados";
-        Text[ finnish ] = "K?ytetyt tyylit";
+        Text[ catalan ] = "Estils aplicats";
+        Text[ finnish ] = "Käytetyt tyylit";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œ";
     };
     Control TB_CONDCOLLS
     {
@@ -203,27 +207,28 @@ TabPage TP_CONDCOLL
         Text = "A~bsatzvorlagen" ;
         Text [ English ] = "Styles" ;
         Disable = TRUE ;
-        Text [ dutch ] = "~Alineaprofielen" ;
+        Text [ dutch ] = "~Alinea-opmaakprofielen" ;
         Text [ english_us ] = "~Paragraph Styles" ;
         Text [ italian ] = "Modelli di paragrafo" ;
         Text [ spanish ] = "Es~tilos de párrafo" ;
-        Text [ french ] = "Styles de ~paragraphe" ;
+        Text [ french ] = "Styles de paragraphe" ;
         Text [ swedish ] = "St~yckeformatmallar" ;
-        Text [ danish ] = "Afsnitstypografier" ;
+        Text [ danish ] = "A~fsnitstypografier" ;
         Text [ portuguese ] = "E~stilos de parágrafo" ;
         Text [ portuguese_brazilian ] = "Absatzvorlagen" ;
         Text[ chinese_simplified ] = "æ®µè½æ ·å¼(~P)";
         Text[ russian ] = "Ñòèëè àáçàöà";
         Text[ polish ] = "Style akapitu";
-        Text[ japanese ] = "æ®µè½ï½½ï¾€ï½²ï¾™(~P)";
+        Text[ japanese ] = "æ®µè½ã‚¹ã‚¿ã‚¤ãƒ«(~P)";
         Text[ chinese_traditional ] = "æ®µè½æ¨£å¼(~P)";
         Text[ arabic ] = "ÃäãÇØ İŞÑÉ";
         Text[ greek ] = "Ğñüôõğá ğáñáãñÜöïõ";
-        Text[ korean ] = "ë‹¨ë½ ì„œì‹(~P)";
+        Text[ korean ] = "ë‹¨ë½ ìŠ¤íƒ€ì¼(~P)";
         Text[ turkish ] = "Paragraf biçimi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Es~tilos de párrafo";
-        Text[ finnish ] = "Paragraph Styles";
+        Text[ catalan ] = "Es~tils de paràgraf";
+        Text[ finnish ] = "Kappale~tyylit";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°~à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
     };
     ListBox LB_STYLE
     {
@@ -255,9 +260,9 @@ TabPage TP_CONDCOLL
         Disable = TRUE ;
         Text [ dutch ] = "~Verwijderen" ;
         Text [ english_us ] = "Re~move" ;
-        Text [ italian ] = "~Rimuovi" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ italian ] = "Ri~muovi" ;
+        Text [ spanish ] = "~Borrar" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ta ~bort" ;
         Text [ danish ] = "Fjern" ;
         Text [ portuguese ] = "~Remover" ;
@@ -272,8 +277,9 @@ TabPage TP_CONDCOLL
         Text[ korean ] = "ì œê±°(~M)";
         Text[ turkish ] = "~Kaldır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "Ex~treu";
         Text[ finnish ] = "~Poista";
+        Text[ thai ] = "à¹€à¸­à¸²à¸­à¸­~à¸";
     };
     PushButton PB_ASSIGN
     {
@@ -286,24 +292,25 @@ TabPage TP_CONDCOLL
         Text [ dutch ] = "~Toewijzen" ;
         Text [ english_us ] = "~Apply" ;
         Text [ italian ] = "~Assegna" ;
-        Text [ spanish ] = "~Asignar" ;
+        Text [ spanish ] = "~Aplicar" ;
         Text [ french ] = "~Assigner" ;
         Text [ swedish ] = "Till~dela" ;
         Text [ danish ] = "Tildel" ;
         Text [ portuguese ] = "~Atribuir" ;
         Text [ portuguese_brazilian ] = "~Zuweisen" ;
         Text[ chinese_simplified ] = "æŒ‡å®š(~A)";
-        Text[ russian ] = "~Íàçíà÷èòü";
+        Text[ russian ] = "~Ïğèìåíèòü";
         Text[ polish ] = "P~rzypisz";
         Text[ japanese ] = "å‰²ã‚Šå½“ã¦(~A)";
         Text[ chinese_traditional ] = "æŒ‡å®š(~A)";
         Text[ arabic ] = "ÊÚííä";
         Text[ greek ] = "Áíôéóôïß÷éóç";
-        Text[ korean ] = "ì§€ì •(~A)";
+        Text[ korean ] = "ì ìš©(~A)";
         Text[ turkish ] = "~Ata";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Asignar";
-        Text[ finnish ] = "~K?yt?";
+        Text[ catalan ] = "~Aplica";
+        Text[ finnish ] = "Kä~ytä";
+        Text[ thai ] = "à¹ƒ~à¸Šà¹‰";
     };
     StringArray STR_REGIONS
     {
@@ -561,9 +568,9 @@ TabPage TP_CONDCOLL
             < "Encabezamiento de la hoja" ; > ;
             < "Tabla" ; > ;
             < "Marco" ; > ;
-            < "Área" ; > ;
+            < "Sección" ; > ;
             < "Nota al pie" ; > ;
-            < "Nota al final" ; > ;
+            < "Nota final" ; > ;
             < "Encabezamiento" ; > ;
             < "Pie de página" ; > ;
             < "1° nivel del esquema" ; > ;
@@ -576,16 +583,16 @@ TabPage TP_CONDCOLL
             < "8° nivel del esquema" ; > ;
             < "9° nivel del esquema" ; > ;
             < "10° nivel del esquema" ; > ;
-            < "1° nivel de la numeración" ; > ;
+            < "1er nivel de la numeración" ; > ;
             < "2° nivel de la numeración" ; > ;
-            < "3° nivel de la numeración" ; > ;
+            < "3er nivel de la numeración" ; > ;
             < "4° nivel de la numeración" ; > ;
             < "5° nivel de la numeración" ; > ;
             < "6° nivel de la numeración" ; > ;
             < "7° nivel de la numeración" ; > ;
             < "8° nivel de la numeración" ; > ;
-            < "9° nivel de la numeración" ; > ;
-            < "10° nivel de numeración" ; > ;
+            < "9° nivel de numeración" ; > ;
+            < "10° nivel de la numeración" ; > ;
         };
         itemlist [ french ] =
         {
@@ -628,26 +635,26 @@ TabPage TP_CONDCOLL
             < "Eindnoot" ; > ;
             < "Koptekst" ; > ;
             < "Voettekst" ; > ;
-            < "1. niveau overzicht" ; > ;
-            < "2. niveau overzicht" ; > ;
-            < "3. niveau overzicht" ; > ;
-            < "4. niveau overzicht" ; > ;
-            < "5. niveau nummering" ; > ;
-            < "6. niveau overzicht" ; > ;
-            < "7. niveau overzicht" ; > ;
-            < "8. niveau overzicht" ; > ;
-            < "9. niveau overzicht" ; > ;
-            < "10. niveau overzicht" ; > ;
-            < "1. niveau nummering" ; > ;
-            < "2.niveau nummering" ; > ;
-            < "3.niveau nummering" ; > ;
-            < "4. niveau nummering" ; > ;
-            < "5. niveau nummering" ; > ;
-            < "6. niveau nummering" ; > ;
-            < "7. niveau nummering" ; > ;
-            < "8. niveau nummering" ; > ;
-            < "9. niveau nummering" ; > ;
-            < "10. niveau nummering" ; > ;
+            < "1e niveau overzicht" ; > ;
+            < "2e niveau overzicht" ; > ;
+            < "3e niveau overzicht" ; > ;
+            < "4e niveau overzicht" ; > ;
+            < "5e niveau nummering" ; > ;
+            < "6e niveau overzicht" ; > ;
+            < "7e niveau overzicht" ; > ;
+            < "8e niveau overzicht" ; > ;
+            < "9e niveau overzicht" ; > ;
+            < "10e niveau overzicht" ; > ;
+            < "1e niveau nummering" ; > ;
+            < "2e niveau nummering" ; > ;
+            < "3e niveau nummering" ; > ;
+            < "4e niveau nummering" ; > ;
+            < "5e niveau nummering" ; > ;
+            < "6e niveau nummering" ; > ;
+            < "7e niveau nummering" ; > ;
+            < "8e niveau nummering" ; > ;
+            < "9e niveau nummering" ; > ;
+            < "10e niveau nummering" ; > ;
         };
     ItemList [ chinese_simplified ] =
     {
@@ -685,31 +692,31 @@ TabPage TP_CONDCOLL
             < "Âåğõíèé êîëîíòèòóë òàáëèöû" ; > ;
         < "Òàáëèöà" ; > ;
         < "Ğàìêà" ; > ;
-        < "Îáëàñòü" ; > ;
+        < "Ğàçäåë" ; > ;
         < "Ñíîñêà" ; > ;
         < "Êîíöåâàÿ ñíîñêà" ; > ;
         < "Âåğõíèé êîëîíòèòóë" ; > ;
         < "Íèæíèé êîëîíòèòóë" ; > ;
-        < "1-ûé óğîâåíü ñòğóêòóğû" ; > ;
-        < "2-îé óğîâåíü ñòğóêòóğû" ; > ;
-        < "3-èé óğîâåíü ñòğóêòóğû" ; > ;
-        < "4-ûé óğîâåíü ñòğóêòóğû" ; > ;
-        < "5-ûé óğîâåíü ñòğóêòóğû" ; > ;
-        < "6-îé óğîâåíü ñòğóêòóğû" ; > ;
-        < "7-îé óğîâåíü ñòğóêòóğû" ; > ;
-        < "8-îé óğîâåíü ñòğóêòóğû" ; > ;
-        < "9-ûé óğîâåíü ñòğóêòóğû" ; > ;
-        < "10-ûé óğîâåíü ñòğóêòóğû" ; > ;
-        < "1-ûé óğîâåíü íóìåğàöèè" ; > ;
-        < "2-îé óğîâåíü íóìåğàöèè" ; > ;
-        < "3-èé óğîâåíü íóìåğàöèè" ; > ;
-        < "4-ûé óğîâåíü íóìåğàöèè" ; > ;
-        < "5-ûé óğîâåíü íóìåğàöèè" ; > ;
-        < "6-îé óğîâåíü íóìåğàöèè" ; > ;
-        < "7-îé óğîâåíü íóìåğàöèè" ; > ;
-        < "8-îé óğîâåíü íóìåğàöèè" ; > ;
-        < "9-ûé óğîâåíü íóìåğàöèè" ; > ;
-        < "10-ûé óğîâåíü íóìåğàöèè" ; > ;
+        < "1-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "2-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "3-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "4-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "5-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "6-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "7-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "8-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "9-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "10-é óğîâåíü ñòğóêòóğû" ; > ;
+        < "1-é óğîâåíü íóìåğàöèè" ; > ;
+        < "2-é óğîâåíü íóìåğàöèè" ; > ;
+        < "3-é óğîâåíü íóìåğàöèè" ; > ;
+        < "4-é óğîâåíü íóìåğàöèè" ; > ;
+        < "5-é óğîâåíü íóìåğàöèè" ; > ;
+        < "6-é óğîâåíü íóìåğàöèè" ; > ;
+        < "7-é óğîâåíü íóìåğàöèè" ; > ;
+        < "8-é óğîâåíü íóìåğàöèè" ; > ;
+        < "9-é óğîâåíü íóìåğàöèè" ; > ;
+        < "10-é óğîâåíü íóìåğàöèè" ; > ;
     };
     ItemList [ polish ] =
     {
@@ -744,34 +751,34 @@ TabPage TP_CONDCOLL
     };
     ItemList [ japanese ] =
     {
-            < "è¡¨ã®ï¾ï½¯ï¾€ï¾" ; > ;
+            < "è¡¨ã®ãƒ˜ãƒƒãƒ€" ; > ;
         < "è¡¨" ; > ;
         < "æ " ; > ;
         < "ç¯„å›²" ; > ;
         < "è„šæ³¨" ; > ;
         < "æ–‡æœ«è„šæ³¨" ; > ;
-        < "ï¾ï½¯ï¾€ï¾" ; > ;
-        < "ï¾Œï½¯ï¾€" ; > ;
-        < "1ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "2ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "3ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "4ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "5ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "6ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "7ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "8ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "9ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "10ï¾šï¾ï¾ï¾™ç›®ã®ï½±ï½³ï¾„ï¾—ï½²ï¾" ; > ;
-        < "1ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "2ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "3ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "4ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "5ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "6ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "7ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "8ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "9ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
-        < "10ï¾šï¾ï¾ï¾™ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "ãƒ˜ãƒƒãƒ€" ; > ;
+        < "ãƒ•ãƒƒã‚¿" ; > ;
+        < "1ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "2ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "3ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "4ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "5ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "6ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "7ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "8ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "9ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "10ãƒ¬ãƒ™ãƒ«ç›®ã®ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³" ; > ;
+        < "1ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "2ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "3ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "4ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "5ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "6ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "7ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "8ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "9ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
+        < "10ãƒ¬ãƒ™ãƒ«ç›®ã®ç•ªå·ä»˜ã‘" ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
@@ -868,34 +875,34 @@ TabPage TP_CONDCOLL
     };
     ItemList [ korean ] =
     {
-            < "ì‹œíŠ¸ ë¨¸ë¦¬ë§" ; > ;
+            < "í‘œ ë¨¸ë¦¬ë§" ; > ;
         < "í‘œ" ; > ;
-        < "í…Œë‘ë¦¬" ; > ;
+        < "í”„ë ˆì„" ; > ;
         < "êµ¬ì—­" ; > ;
-        < "ë°”ë‹¥ê¸€" ; > ;
+        < "ê°ì£¼" ; > ;
         < "ë¯¸ì£¼" ; > ;
         < "ë¨¸ë¦¬ê¸€" ; > ;
         < "ë°”ë‹¥ê¸€" ; > ;
-        < " 1ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 2ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 3ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 4ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 5ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 6ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 7ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 8ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 9ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < "10ë²ˆì§¸ ë‹¤ë‹¨ê³„" ; > ;
-        < " 1ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 2ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 3ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 4ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 5ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 6ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 7ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 8ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < " 9ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
-        < "10ë²ˆì§¸ ë‹¨ê³„ ë²ˆí˜¸ ë§¤ê¸°ê¸°" ; > ;
+        < "1. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "2. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "3. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "4. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "5. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "6. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "7. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "8. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "9. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "10. ê°œìš” ìˆ˜ì¤€" ; > ;
+        < "1ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "2ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "3ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "4ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "5ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "6ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "7ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "8ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "9ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
+        < "10ë²ˆì§¸ ë²ˆí˜¸ ë§¤ê¸°ê¸° ìˆ˜ì¤€" ; > ;
     };
     ItemList [ turkish ] =
     {
@@ -961,65 +968,96 @@ TabPage TP_CONDCOLL
     };
     ItemList [ catalan ] =
     {
-            < "Encabezamiento de la hoja" ; > ;
-        < "Tabla" ; > ;
-        < "Marco" ; > ;
-        < "Area" ; > ;
-        < "Nota al pie" ; > ;
-        < "Nota al final" ; > ;
-        < "Encabezamiento" ; > ;
-        < "Pie de página" ; > ;
-        < "1° nivel del esquema" ; > ;
-        < "2° nivel del esquema" ; > ;
-        < "3° nivel del esquema" ; > ;
-        < "4° nivel del esquema" ; > ;
-        < "5° nivel del esquema" ; > ;
-        < "6° nivel del esquema" ; > ;
-        < "7° nivel del esquema" ; > ;
-        < "8° nivel del esquema" ; > ;
-        < "9° nivel del esquema" ; > ;
-        < "10° nivel del esquema" ; > ;
-        < "1° nivel de la numeración" ; > ;
-        < "2° nivel de la numeración" ; > ;
-        < "3° nivel de la numeración" ; > ;
-        < "4° nivel de la numeración" ; > ;
-        < "5° nivel de la numeración" ; > ;
-        < "6° nivel de la numeración" ; > ;
-        < "7° nivel de la numeración" ; > ;
-        < "8° nivel de la numeración" ; > ;
-        < "9° nivel de la numeración" ; > ;
-        < "10° nivel de numeración" ; > ;
+            < "Encapçalament de la fulla" ; > ;
+        < "Taula" ; > ;
+        < "Marc" ; > ;
+        < "Àrea" ; > ;
+        < "Nota al peu" ; > ;
+        < "Nota final" ; > ;
+        < "Encapçalament" ; > ;
+        < "Peu de pàgina" ; > ;
+        < "1r nivell de contorn" ; > ;
+        < "2n nivell de contorn" ; > ;
+        < "3r nivell de contorn" ; > ;
+        < "4t nivell de contorn" ; > ;
+        < "5è nivell de contorn" ; > ;
+        < "6è nivell de contorn" ; > ;
+        < "7è nivell de contorn" ; > ;
+        < "8è nivell de contorn" ; > ;
+        < "9è nivell de contorn" ; > ;
+        < "10è  nivel del esquema" ; > ;
+        < "1r nivell de la numeració" ; > ;
+        < "2n nivell de la numeració" ; > ;
+        < "3r nivell de la numeració" ; > ;
+        < "4t nivell de la numeració" ; > ;
+        < "5è nivell de la numeració" ; > ;
+        < "6è nivell de la numeració" ; > ;
+        < "7è nivell de la numeració" ; > ;
+        < "8è nivell de la numeració" ; > ;
+        < "9è nivell de la numeració" ; > ;
+        < "10è nivell de la numeració" ; > ;
     };
     ItemList [ finnish ] =
     {
-            < "Taulukon yl?otsikko" ; > ;
+            < "Taulukon ylätunniste" ; > ;
         < "Taulukko" ; > ;
         < "Kehys" ; > ;
-        < "Osio" ; > ;
+        < "Osa" ; > ;
         < "Alaviite" ; > ;
-        < "Loppuhuomautus" ; > ;
-        < "Yl?otsikko" ; > ;
-        < "Alaselite" ; > ;
-        < " 1. j?sennystaso" ; > ;
-        < " 2. j?sennystaso" ; > ;
-        < " 3. j?sennystaso" ; > ;
-        < " 4. j?sennystaso" ; > ;
-        < " 5. j?sennystaso" ; > ;
-        < " 6. j?sennystaso" ; > ;
-        < " 7. j?sennystaso" ; > ;
-        < " 8. j?sennystaso" ; > ;
-        < " 9. j?sennystaso" ; > ;
-        < "10. j?sennystaso" ; > ;
+        < "Loppuviite" ; > ;
+        < "Ylätunniste" ; > ;
+        < "Alatunniste" ; > ;
+        < " 1. jäsennystaso" ; > ;
+        < " 2. jäsennystaso" ; > ;
+        < " 3. jäsennystaso" ; > ;
+        < " 4. jäsennystaso" ; > ;
+        < " 5. jäsennystaso" ; > ;
+        < " 6. jäsennystaso" ; > ;
+        < " 7. jäsennystaso" ; > ;
+        < " 8. jäsennystaso" ; > ;
+        < " 9. jäsennystaso" ; > ;
+        < "10. jäsennystaso" ; > ;
         < " 1. numerointitaso" ; > ;
         < " 2. numerointitaso" ; > ;
         < " 3. numerointitaso" ; > ;
         < " 4. numerointitaso" ; > ;
         < " 5. numerointitaso" ; > ;
         < " 6. numerointitaso" ; > ;
-        < " 7. j?sennystaso" ; > ;
-        < " 8. j?sennystaso" ; > ;
-        < " 9. j?sennystaso" ; > ;
+        < " 7. numerointitaso" ; > ;
+        < " 8. numerointitaso" ; > ;
+        < " 9. numerointitaso" ; > ;
         < "10. numerointitaso" ; > ;
+    };
+    ItemList [ thai ] =
+    {
+         < "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸•à¸²à¸£à¸²à¸‡" ; > ;
+        < "à¸•à¸²à¸£à¸²à¸‡" ; > ;
+        < "à¸à¸£à¸­à¸š" ; > ;
+        < "à¸ªà¹ˆà¸§à¸™" ; > ;
+        < "à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–" ; > ;
+        < "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡" ; > ;
+        < "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§" ; > ;
+        < "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ 1" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ 2" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ  3" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ  4" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ  5" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ  6" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ  7" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ  8" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ  9" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆ 10" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 1" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 2" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 3" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 4" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 5" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 6" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 7" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 8" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 9" ; > ;
+        < "à¸£à¸°à¸”à¸±à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆ 10" ; > ;
     };
     };
     String STR_NOTEMPL
@@ -1045,11 +1083,21 @@ TabPage TP_CONDCOLL
         Text[ greek ] = "<êáíİíá>";
         Text[ korean ] = "<ì—†ìŒ>";
         Text[ turkish ] = "<yok>";
-        Text[ catalan ] = "<ninguno>";
-        Text[ finnish ] = "<ei mit??n>";
+        Text[ catalan ] = "<cap>";
+        Text[ finnish ] = "<ei mitään>";
+        Text[ thai ] = "<à¹„à¸¡à¹ˆà¸¡à¸µ>";
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 

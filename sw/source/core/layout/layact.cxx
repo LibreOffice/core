@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: od $ $Date: 2002-11-15 10:46:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,13 +1536,21 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         if ( !bNoPaint && IsPaint() && bAddRect && (pLay->IsCompletePaint() || bChanged) )
         {
             SwRect aPaint( pLay->Frm() );
-            // OD 11.11.2002 #104414# - not necessary to enlarge paint area
-            /*
-            aPaint.Pos().Y() -= 1;
-            aPaint.Pos().X() -= 1;
-            aPaint.SSize().Height() += 2;
-            aPaint.SSize().Width()  += 2;
-            */
+            // OD 13.02.2003 #i9719#, #105645# - consider border and shadow for
+            // page frames -> enlarge paint rectangle correspondingly.
+            if ( pLay->IsPageFrm() )
+            {
+                SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
+                const nBorderWidth =
+                        pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->BorderPxWidth(), 0 ) ).Width();
+                const nShadowWidth =
+                        pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->ShadowPxWidth(), 0 ) ).Width();
+                aPaint.Left( aPaint.Left() - nBorderWidth );
+                aPaint.Top( aPaint.Top() - nBorderWidth );
+                aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth );
+                aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth );
+            }
+
             if ( pLay->IsPageFrm() &&
                  pLay->GetFmt()->GetDoc()->IsBrowseMode() )
             {
@@ -1567,22 +1575,6 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                         pImp->GetShell()->AddPaintRect( aRegion[i] );
                 }
 
-                //ggf. die Zwischenraeume mit invalidieren.
-                if ( pLay->GetPrev() )
-                {
-                    SwRect aTmp( aPaint );
-                    long nTmp = aTmp.Top() - DOCUMENTBORDER/2;
-                    if ( nTmp >= 0 )
-                        aTmp.Top( nTmp );
-                    aTmp.Bottom( pLay->Frm().Top() );
-                    pImp->GetShell()->AddPaintRect( aTmp );
-                }
-                if ( pLay->GetNext() )
-                {
-                    aPaint.Bottom( aPaint.Bottom() + DOCUMENTBORDER/2 );
-                    aPaint.Top( pLay->Frm().Bottom() );
-                    pImp->GetShell()->AddPaintRect( aPaint );
-                }
             }
             else
             {
@@ -1591,6 +1583,29 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                 // OD 11.11.2002 #104414# - remember frame at complete paint
                 aFrmAtCompletePaint = pLay->Frm();
             }
+
+            // OD 13.02.2003 #i9719#, #105645# - provide paint of spacing
+            // between pages (not only for in online mode).
+            if ( pLay->IsPageFrm() )
+            {
+                if ( pLay->GetPrev() )
+                {
+                    SwRect aSpaceToPrevPage( pLay->Frm() );
+                    SwTwips nTop = aSpaceToPrevPage.Top() - DOCUMENTBORDER/2;
+                    if ( nTop >= 0 )
+                        aSpaceToPrevPage.Top( nTop );
+                    aSpaceToPrevPage.Bottom( pLay->Frm().Top() );
+                    pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
+                }
+                if ( pLay->GetNext() )
+                {
+                    SwRect aSpaceToNextPage( pLay->Frm() );
+                    aSpaceToNextPage.Bottom( aSpaceToNextPage.Bottom() + DOCUMENTBORDER/2 );
+                    aSpaceToNextPage.Top( pLay->Frm().Bottom() );
+                    pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
+                }
+            }
+
         }
         pLay->ResetCompletePaint();
     }

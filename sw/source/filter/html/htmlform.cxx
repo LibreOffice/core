@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: od $ $Date: 2002-09-03 15:02:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
     }
 }
 
-void SwHTMLImageWatcher::disposing(const lang::EventObject& evt)
+void SwHTMLImageWatcher::disposing(const lang::EventObject& evt) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference< awt::XImageConsumer > xTmp;
 

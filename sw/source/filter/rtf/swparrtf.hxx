@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-12-10 14:30:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,20 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #ifndef _SWPARRTF_HXX
 #define _SWPARRTF_HXX
 
 #ifndef __SGI_STL_MAP
 #include <map>
+#endif
+#ifndef __SGI_STL_DEQUE
+#include <deque>
+#endif
+#ifndef __SGI_STL_VECTOR
+#include <vector>
 #endif
 
 #ifndef _SVSTDARR_HXX
@@ -71,6 +80,9 @@
 #endif
 #ifndef _SVXRTF_HXX //autogen
 #include <svx/svxrtf.hxx>
+#endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
 #endif
 
 #ifndef _NDINDEX_HXX
@@ -162,10 +174,124 @@ typedef SwFlySave* SwFlySavePtr;
 SV_DECL_PTRARR_DEL( SwFlySaveArr, SwFlySavePtr, 0, 20 )
 SV_DECL_VARARR( SwListArr, SwListEntry, 0, 20 )
 
+struct DocPageInformation
+{
+    long mnPaperw;
+    long mnPaperh;
+    long mnMargl;
+    long mnMargr;
+    long mnMargt;
+    long mnMargb;
+    long mnGutter;
+    long mnPgnStart;
+    bool mbFacingp;
+    bool mbLandscape;
+    bool mbRTLdoc;
+    DocPageInformation();
+};
+
+struct SectPageInformation
+{
+    std::vector<long> maColumns;
+    SvxNumberType maNumType;
+    SwPageDesc *mpTitlePageHdFt;
+    SwPageDesc *mpPageHdFt;
+    long mnPgwsxn;
+    long mnPghsxn;
+    long mnMarglsxn;
+    long mnMargrsxn;
+    long mnMargtsxn;
+    long mnMargbsxn;
+    long mnGutterxsn;
+    long mnHeadery;
+    long mnFootery;
+    long mnPgnStarts;
+    long mnCols;
+    long mnColsx;
+    long mnStextflow;
+    int mnBkc;
+    bool mbLndscpsxn;
+    bool mbTitlepg;
+    bool mbFacpgsxn;
+    bool mbRTLsection;
+    bool mbPgnrestart;
+    SectPageInformation(const DocPageInformation &rDoc);
+    SectPageInformation(const SectPageInformation &rSect);
+};
+
+class rtfSection
+{
+public:
+    rtfSection(const SwPosition &rPos,
+        const SectPageInformation &rPageInfo);
+    SwNodeIndex maStart;
+    SectPageInformation maPageInfo;
+    SwSection *mpSection;
+    SwPageDesc *mpTitlePage;
+    SwPageDesc *mpPage;
+
+    bool IsContinous() const { return maPageInfo.mnBkc == 0; }
+    long NoCols() const { return maPageInfo.mnCols; }
+    long StandardColSeperation() const { return maPageInfo.mnColsx; }
+    bool HasTitlePage() const { return maPageInfo.mbTitlepg; }
+    long PageStartAt() const { return maPageInfo.mnPgnStarts; }
+    bool PageRestartNo() const { return maPageInfo.mbPgnrestart; }
+    bool IsBiDi() const { return maPageInfo.mbRTLsection; }
+    sal_uInt16 GetPageWidth() const { return maPageInfo.mnPgwsxn; }
+    sal_uInt16 GetPageHeight() const { return maPageInfo.mnPghsxn; }
+    sal_uInt16 GetPageLeft() const { return maPageInfo.mnMarglsxn; }
+    sal_uInt16 GetPageRight() const { return maPageInfo.mnMargrsxn; }
+    bool IsLandScape() const { return maPageInfo.mbLndscpsxn; }
+};
+
+class rtfSections
+{
+private:
+    SwRTFParser &mrReader;
+    std::deque<rtfSection> maSegments;
+    typedef std::deque<rtfSection>::iterator mySegIter;
+    typedef std::deque<rtfSection>::reverse_iterator mySegrIter;
+
+    struct wwULSpaceData
+    {
+        bool bHasHeader, bHasFooter;
+        short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
+        wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
+    };
+
+    void SetSegmentToPageDesc(const rtfSection &rSection, bool bTitlePage,
+        bool bIgnoreCols);
+    SwSectionFmt *InsertSection(SwPaM& rMyPaM, rtfSection &rSection);
+    void SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
+        const rtfSection &rSection, bool bIgnoreCols);
+    void GetPageULData(const rtfSection &rSection, bool bFirst,
+        wwULSpaceData& rData);
+    void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData);
+    bool SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
+        USHORT nNettoWidth);
+    void SetHdFt(rtfSection &rSection);
+    void CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest);
+public:
+    bool empty() const { return maSegments.empty(); }
+    int size() const { return maSegments.size(); }
+    void push_back(const rtfSection &rSect);
+    rtfSection& back() { return maSegments.back(); }
+    const rtfSection& back() const { return maSegments.back(); }
+    void InsertSegments(bool bIsNewDoc);
+    rtfSections(SwRTFParser &rReader) : mrReader(rReader) {}
+    std::vector<sal_uInt16> maDummyPageNos;
+    typedef std::vector<sal_uInt16>::iterator myDummyIter;
+    void PrependedInlineNode(const SwPosition &rPos,
+        const SwNode &rNode);
+};
 
 class SwRTFParser : public SvxRTFParser
 {
-    ::std::map<SwTableNode *, SwNodeIndex *> maTables;
+    friend class rtfSections;
+    DocPageInformation maPageDefaults;
+    rtfSections maSegments;
+
+    std::map<SwTableNode *, SwNodeIndex *> maTables;
     SwRTFStyleTbl aTxtCollTbl;
     SwRTFCharStyleTbl aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
@@ -196,7 +322,6 @@ class SwRTFParser : public SvxRTFParser
     bool bInPgDscTbl;       // beim PageDescTbl lesen
     bool bNewNumList;       // Word 7.0 NumList gelesen, 6.0 ueberspringen
     bool bFirstContinue;    // 1.Call ins Continue
-    bool bFirstDocControl;  // 1.Call of ReadDocControl
 
     /*
      #i9243#
@@ -220,7 +345,7 @@ class SwRTFParser : public SvxRTFParser
     void ReadListLevel( SwNumRule& rRule, BYTE nLvl );
     void ReadListTable();
     void ReadListOverrideTable();
-    void ReadNumSecLevel( int nToken );
+    SwNumRule *ReadNumSecLevel( int nToken );
     SwNumRule* GetNumRuleOfListNo( long nListNo,
                                     BOOL bRemoveFromList = FALSE );
     void RemoveUnusedNumRule( SwNumRule* );
@@ -281,7 +406,9 @@ protected:
     void ReadField();
     void ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc = 0 );
     void ReadDocControls( int nToken );
+    void SetPageInformationAsDefault(const DocPageInformation &rInfo);
     void ReadSectControls( int nToken );
+    void DoHairyWriterPageDesc(int nToken);
     void ReadFly( int nToken, SfxItemSet* pFillSet = 0 );
     void ReadTable( int nToken );
     void ReadPageDescTbl();
@@ -303,5 +430,5 @@ public:
 
 
 #endif
-    //_SWPARRTF_HXX
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

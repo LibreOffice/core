@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 14:19:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,8 @@ TabDialog DLG_DROPCAPS
                 Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹";
                 Text[ turkish ] = "Başharfler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Iniciales";
+                Text[ catalan ] = "Caplletres";
+                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
             };
         };
     };
@@ -129,7 +130,8 @@ TabDialog DLG_DROPCAPS
     Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹";
     Text[ turkish ] = "Başharfler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Iniciales";
+    Text[ catalan ] = "Caplletres";
+    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
 };
  // TabPage ******************************************************************
 TabPage TP_DROPCAPS
@@ -162,8 +164,9 @@ TabPage TP_DROPCAPS
         Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹ í‘œì‹œ";
         Text[ turkish ] = "Baş harfleri vurgula";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mostrar iniciales";
+        Text[ catalan ] = "Visualitza les caplletres";
         Text[ finnish ] = "Näytä anfangit";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸œà¸¥à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
     };
     CheckBox CB_WORD
     {
@@ -175,7 +178,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese_brazilian ] = "Ganzes ~Wort" ;
         Text [ swedish ] = "Helt ~ord" ;
         Text [ danish ] = "Helt ord" ;
-        Text [ italian ] = "~Parola intera" ;
+        Text [ italian ] = "Parola intera" ;
         Text [ spanish ] = "Toda la pala~bra" ;
         Text [ french ] = "~Mot entier" ;
         Text [ dutch ] = "Heel ~woord" ;
@@ -187,11 +190,12 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "æ•´å€‹å­—(~W)";
         Text[ arabic ] = "ßáãÉ ßÇãáÉ";
         Text[ greek ] = "Ïëüêëçñç ëİîç";
-        Text[ korean ] = "ì „ì²´ ë‹¨ì–´(~W)";
+        Text[ korean ] = "ë‹¨ì–´(~W)";
         Text[ turkish ] = "Tam sözcük";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Toda la pala~bra";
+        Text[ catalan ] = "~Tota la paraula";
         Text[ finnish ] = "~Koko sana";
+        Text[ thai ] = "à¸„à¸³~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     FixedText FT_DROPCAPS
     {
@@ -209,7 +213,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese_brazilian ] = "Anzahl der Ze~ichen" ;
         Text [ portuguese ] = "Número de ~caracteres" ;
         Text[ chinese_simplified ] = "å­—ç¬¦æ•°ç›®(~C)";
-        Text[ russian ] = "Êîëè÷åñòâî çíàêîâ";
+        Text[ russian ] = "Êîëè÷åñòâî ñèìâîëîâ";
         Text[ polish ] = "Liczba znaków";
         Text[ japanese ] = "æ–‡å­—æ•°(~C)";
         Text[ chinese_traditional ] = "å­—å…ƒæ•¸ç›®(~C)";
@@ -218,8 +222,9 @@ TabPage TP_DROPCAPS
         Text[ korean ] = "ë¬¸ì ìˆ˜(~C):";
         Text[ turkish ] = "Karakter sayısı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Número de caracteres";
-        Text[ finnish ] = "~Merkkien m??r?";
+        Text[ catalan ] = "~Nombre caràcters";
+        Text[ finnish ] = "~Merkkien määrä";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°:";
     };
     NumericField FLD_DROPCAPS
     {
@@ -246,7 +251,7 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "Righe" ;
         Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "~Linhas" ;
-        Text [ finnish ] = "~Viivat" ;
+        Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "Rækker" ;
         Text [ french ] = "~Hauteur (en lignes)" ;
         Text [ swedish ] = "~Rader" ;
@@ -254,7 +259,7 @@ TabPage TP_DROPCAPS
         Text [ spanish ] = "~Líneas" ;
         Text [ english_us ] = "~Lines" ;
         Text[ chinese_simplified ] = "è¡Œ(~L)";
-        Text[ russian ] = "Ñòğîêè";
+        Text[ russian ] = "Ñòğî~êè";
         Text[ polish ] = "Wiersze";
         Text[ japanese ] = "è¡Œ(~L)";
         Text[ chinese_traditional ] = "è¡Œ(~L)";
@@ -263,7 +268,8 @@ TabPage TP_DROPCAPS
         Text[ korean ] = "ì„ (~L)";
         Text[ turkish ] = "Satır adedi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Líneas";
+        Text[ catalan ] = "~Línies";
+        Text[ thai ] = "~à¸šà¸£à¸£à¸—à¸±à¸”";
     };
     NumericField FLD_LINES
     {
@@ -290,7 +296,7 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "D~istanza dal testo" ;
         Text [ portuguese_brazilian ] = "D~ist?ncia" ;
         Text [ portuguese ] = "~Distância do texto" ;
-        Text [ finnish ] = "Et?isyys tekstiin" ;
+        Text [ finnish ] = "Etäisyys tekstistä" ;
         Text [ danish ] = "Afstand til tekst" ;
         Text [ french ] = "~Écart du texte" ;
         Text [ swedish ] = "A~vstånd till text" ;
@@ -298,16 +304,17 @@ TabPage TP_DROPCAPS
         Text [ spanish ] = "~Distancia hasta el texto" ;
         Text [ english_us ] = "Space to text" ;
         Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»";
-        Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
+        Text[ russian ] = "Ğàññòîÿíèå äî òåêñòà";
         Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã¾ã§ã®é–“éš”";
         Text[ chinese_traditional ] = "è‡³æ–‡å­—çš„è·ç¦»";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
         Text[ greek ] = "Á~ğüóôáóç áğü ôï êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ì— ëŒ€í•œ ê°„ê²©";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ì™€ì˜ ê°„ê²©";
         Text[ turkish ] = "Metne uzaklık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Distancia hasta el texto";
+        Text[ catalan ] = "Espai per al text";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     MetricField FLD_DISTANCE
     {
@@ -353,7 +360,8 @@ TabPage TP_DROPCAPS
         Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Configuración";
+        Text[ catalan ] = "Configuració";
+        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
     };
     Control CNT_PICT
     {
@@ -374,7 +382,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese ] = "~Texto" ;
         Text [ finnish ] = "~Teksti" ;
         Text [ danish ] = "Initialtekst" ;
-        Text [ french ] = "~Autre caractère" ;
+        Text [ french ] = "~Texte" ;
         Text [ swedish ] = "Anfangs~text" ;
         Text [ dutch ] = "~Initialentekst" ;
         Text [ spanish ] = "Te~xto" ;
@@ -386,10 +394,11 @@ TabPage TP_DROPCAPS
         Text[ chinese_traditional ] = "å¤§å¯«å­—(~T)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
+        Text[ korean ] = "ë‹¨ë½ ì²« ë¬¸ì ì¥ì‹ì˜ í…ìŠ¤íŠ¸(~T)";
         Text[ turkish ] = "Başharf metni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Te~xto";
+        Text[ catalan ] = "~Text";
+        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     Edit EDT_TEXT
     {
@@ -411,24 +420,25 @@ TabPage TP_DROPCAPS
         Text [ italian ] = "Modello di carattere" ;
         Text [ portuguese_brazilian ] = "Es~tilo" ;
         Text [ portuguese ] = "Es~tilo de caracteres" ;
-        Text [ finnish ] = "~Merkist? tyyli" ;
+        Text [ finnish ] = "~Merkkityyli" ;
         Text [ danish ] = "Tegntypografi" ;
-        Text [ french ] = "~Style de caractères" ;
+        Text [ french ] = "Style de caractères" ;
         Text [ swedish ] = "Tecken~formatmall" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
         Text [ spanish ] = "E~stilo de carácter" ;
         Text [ english_us ] = "Character St~yle" ;
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼(~Y)";
-        Text[ russian ] = "~Ñòèëü çíàêîâ";
+        Text[ russian ] = "~Ñòèëü ñèìâîëà";
         Text[ polish ] = "Styl znaku";
         Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«(~Y)";
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼(~Y)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "ë¬¸ì í…œí”Œë¦¿(~Y)";
+        Text[ korean ] = "ë¬¸ì ìŠ¤íƒ€ì¼(~Y)";
         Text[ turkish ] = "Karakter ~biçimi";
-        Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
-        Text[ catalan ] = "E~stilo de carácter";
+        Text[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ catalan ] = "E~stil de caràcter";
+        Text[ thai ] = "à¸¥à¸±à¸~à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
     };
     ListBox BOX_TEMPLATE
     {
@@ -463,10 +473,30 @@ TabPage TP_DROPCAPS
         Text[ korean ] = "ë‚´ìš©";
         Text[ turkish ] = "İçerik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contenido";
+        Text[ catalan ] = "Contingut";
         Text[ finnish ] = "Sisältö";
+        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

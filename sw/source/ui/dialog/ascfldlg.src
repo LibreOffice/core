@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 14:14:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@ ModalDialog DLG_ASCII_FILTER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 239 , 80 ) ;
-    Text = "Encoded Text Filter Optionen" ;
-    Text [ English ] = "Encoded text filter options" ;
+    Text = "ASCII Filter Optionen" ;
+    Text [ English ] = "ASCII filter options" ;
     Moveable = TRUE ;
     FixedLine FL_1
     {
@@ -90,14 +90,15 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Properties";
-        Text[ japanese ] = "‘®«";
-        Text[ korean ] = "µî·ÏÁ¤º¸";
-        Text[ chinese_simplified ] = "ÊôĞÔ";
-        Text[ chinese_traditional ] = "Äİ©Ê";
+        Text[ japanese ] = "å±æ€§";
+        Text[ korean ] = "ë“±ë¡ ì •ë³´";
+        Text[ chinese_simplified ] = "å±æ€§";
+        Text[ chinese_traditional ] = "å±¬æ€§";
         Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ turkish ] = "Özellikler";
-        Text[ catalan ] = "Propiedades";
+        Text[ catalan ] = "Propietats";
         Text[ finnish ] = "Ominaisuudet";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
     };
     FixedText FT_CHARSET
     {
@@ -105,9 +106,9 @@ ModalDialog DLG_ASCII_FILTER
         Size = MAP_APPFONT ( 53 , 10 ) ;
         Text = "Z~eichensatz" ;
         Text [ English ] = "Character Set" ;
-        Text[ english_us ] = "~Font";
+        Text[ english_us ] = "~Character set";
         Text[ portuguese ] = "~Conjunto de caracteres";
-        Text[ russian ] = "Íàáîğ çíàêîâ";
+        Text[ russian ] = "Êîäèğîâêà";
         Text[ greek ] = "Ó~åô ÷áñáêôŞñùí";
         Text[ dutch ] = "~Tekenset";
         Text[ french ] = "~Jeu de caractères";
@@ -117,14 +118,15 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "Teckenuppsättning";
         Text[ polish ] = "Zbiór znaków";
         Text[ portuguese_brazilian ] = "Charset";
-        Text[ japanese ] = "•¶š—ñ(~F)";
-        Text[ korean ] = "¹®ÀÚÁıÇÕ(~F)";
-        Text[ chinese_simplified ] = "×Ö·û¼¯(~F)";
-        Text[ chinese_traditional ] = "¦r«¬(~F)";
+        Text[ japanese ] = "æ–‡å­—åˆ—(~F)";
+        Text[ korean ] = "ë¬¸ìì§‘í•©(~F)";
+        Text[ chinese_simplified ] = "å­—ç¬¦é›†(~F)";
+        Text[ chinese_traditional ] = "å­—å‹(~F)";
         Text[ turkish ] = "Karakter kümesi";
         Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
-        Text[ catalan ] = "~Caracteres";
-        Text[ finnish ] = "~Fontti";
+        Text[ catalan ] = "~Lletra";
+        Text[ finnish ] = "~Merkistö";
+        Text[ thai ] = "~à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
     };
     ListBox LB_CHARSET
     {
@@ -146,20 +148,21 @@ ModalDialog DLG_ASCII_FILTER
         Text[ greek ] = "Âáóéêİò ãñáììáôïóåéñİò";
         Text[ dutch ] = "~Standaardlettertype";
         Text[ french ] = "Police de base";
-        Text[ spanish ] = "~Fuente estándar";
+        Text[ spanish ] = "~Fuente predeterminada";
         Text[ italian ] = "Carattere standard";
         Text[ danish ] = "Standardskrifttyper";
         Text[ swedish ] = "Standardteckensnitt";
         Text[ polish ] = "Czcionka podstawowa";
         Text[ portuguese_brazilian ] = "Standard fonts";
-        Text[ japanese ] = "Šù’èÌ«İÄ";
-        Text[ korean ] = "±âº» ±Û²Ã";
-        Text[ chinese_simplified ] = "±ê×¼×ÖÌå";
-        Text[ chinese_traditional ] = "¼Ğ·Ç¦r«¬";
+        Text[ japanese ] = "æ—¢å®šãƒ•ã‚©ãƒ³ãƒˆ";
+        Text[ korean ] = "ê¸°ë³¸ ê¸€ê¼´";
+        Text[ chinese_simplified ] = "æ ‡å‡†å­—ä½“";
+        Text[ chinese_traditional ] = "æ¨™æº–å­—å‹";
         Text[ turkish ] = "Standart yazıtipi";
         Text[ arabic ] = "ÇáÎØ ÇáŞíÇÓí";
-        Text[ catalan ] = "~Fuente estándar";
+        Text[ catalan ] = "Tipus de lletra per defecte";
         Text[ finnish ] = "Oletusfontit";
+        Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
     };
     ListBox LB_FONT
     {
@@ -187,15 +190,16 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "Språk";
         Text[ polish ] = "Jêzyk";
         Text[ portuguese_brazilian ] = "Language";
-        Text[ japanese ] = "Œ¾Œê(~G)";
-        Text[ korean ] = "¾ğ¾î(~G)";
-        Text[ chinese_simplified ] = "ÓïÑÔ(~G)";
-        Text[ chinese_traditional ] = "»y¨¥(~G)";
+        Text[ japanese ] = "è¨€èª(~G)";
+        Text[ korean ] = "ì–¸ì–´(~G)";
+        Text[ chinese_simplified ] = "è¯­è¨€(~G)";
+        Text[ chinese_traditional ] = "èªè¨€(~G)";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ turkish ] = "~Dil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Idio~ma";
+        Text[ catalan ] = "Llen~guatge";
         Text[ finnish ] = "K~ieli";
+        Text[ thai ] = "à¸ à¸²~à¸©à¸²";
     };
     ListBox LB_LANGUAGE
     {
@@ -218,20 +222,21 @@ ModalDialog DLG_ASCII_FILTER
         Text[ dutch ] = "~Alinea-einde";
         Text[ french ] = "Saut de ~paragraphe";
         Text[ spanish ] = "Salt~o de párrafo";
-        Text[ italian ] = "~Interruzione di paragrafo";
+        Text[ italian ] = "~Interruzione paragrafo";
         Text[ danish ] = "Afsnitsskift";
         Text[ swedish ] = "Styckebrytning";
         Text[ polish ] = "Podzia³ akapitu";
         Text[ portuguese_brazilian ] = "Paragraphbreak";
-        Text[ japanese ] = "’i—‹æØ‚è(~P)";
-        Text[ korean ] = "´Ü¶ô ³ª´©±â(~P)";
-        Text[ chinese_simplified ] = "»»¶ÎÂä(~P)";
-        Text[ chinese_traditional ] = "´«¬q¸¨(~P)";
+        Text[ japanese ] = "æ®µè½åŒºåˆ‡ã‚Š(~P)";
+        Text[ korean ] = "ë‹¨ë½ ë‚˜ëˆ„ê¸°(~P)";
+        Text[ chinese_simplified ] = "æ¢æ®µè½(~P)";
+        Text[ chinese_traditional ] = "æ›æ®µè½(~P)";
         Text[ arabic ] = "İÇÕá İŞÑÇÊ";
         Text[ turkish ] = "Paragraf sonu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Salt~o de párrafo";
+        Text[ catalan ] = "~Salt de paràgaf";
         Text[ finnish ] = "~Kappalevaihto";
+        Text[ thai ] = "à¹à¸šà¹ˆà¸‡~à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
     };
     RadioButton RB_CRLF
     {
@@ -255,13 +260,14 @@ ModalDialog DLG_ASCII_FILTER
         Text[ portuguese_brazilian ] = "CR & LF";
         Text[ japanese ] = "~CR & LF";
         Text[ korean ] = "~CR & LF";
-        Text[ chinese_simplified ] = "»Ø³µ²¢»»ĞĞ(~C)";
+        Text[ chinese_simplified ] = "å›è½¦å¹¶æ¢è¡Œ(~C)";
         Text[ chinese_traditional ] = "~CR & LF";
         Text[ arabic ] = "CR & LF";
         Text[ turkish ] = "~CR & LF";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CR & LF";
+        Text[ catalan ] = "~CR i LF";
         Text[ finnish ] = "~CR & LF";
+        Text[ thai ] = "~CR & LF";
     };
     RadioButton RB_CR
     {
@@ -284,13 +290,14 @@ ModalDialog DLG_ASCII_FILTER
         Text[ portuguese_brazilian ] = "CR";
         Text[ japanese ] = "C~R";
         Text[ korean ] = "C~R";
-        Text[ chinese_simplified ] = "»Ø³µ(~R)";
+        Text[ chinese_simplified ] = "å›è½¦(~R)";
         Text[ chinese_traditional ] = "C~R";
         Text[ arabic ] = "CR";
         Text[ turkish ] = "C~R";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~R";
         Text[ finnish ] = "C~R";
+        Text[ thai ] = "C~R";
     };
     RadioButton RB_LF
     {
@@ -313,13 +320,14 @@ ModalDialog DLG_ASCII_FILTER
         Text[ portuguese_brazilian ] = "LF";
         Text[ japanese ] = "~LF";
         Text[ korean ] = "~LF";
-        Text[ chinese_simplified ] = "ĞÂĞĞ(~L)";
+        Text[ chinese_simplified ] = "æ–°è¡Œ(~L)";
         Text[ chinese_traditional ] = "~LF";
         Text[ arabic ] = "LF";
         Text[ turkish ] = "~LF";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~LF";
         Text[ finnish ] = "~LF";
+        Text[ thai ] = "~LF";
     };
 
     OKButton PB_OK
@@ -357,15 +365,16 @@ ModalDialog DLG_ASCII_FILTER
         Text[ swedish ] = "System";
         Text[ polish ] = "System";
         Text[ portuguese_brazilian ] = "System";
-        Text[ japanese ] = "¼½ÃÑ";
-        Text[ korean ] = "½Ã½ºÅÛ";
-        Text[ chinese_simplified ] = "ÏµÍ³";
-        Text[ chinese_traditional ] = "¨t²Î";
+        Text[ japanese ] = "ã‚·ã‚¹ãƒ†ãƒ ";
+        Text[ korean ] = "ì‹œìŠ¤í…œ";
+        Text[ chinese_simplified ] = "ç³»ç»Ÿ";
+        Text[ chinese_traditional ] = "ç³»çµ±";
         Text[ arabic ] = "ÇáäÙÇã";
         Text[ turkish ] = "Sistem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sistema";
         Text[ finnish ] = "Järjestelmä";
+        Text[ thai ] = "à¸£à¸°à¸šà¸š";
     };
     Text[ english_us ] = "ASCII Filter Options";
     Text[ portuguese ] = "Opções de filtro ASCII";
@@ -379,16 +388,29 @@ ModalDialog DLG_ASCII_FILTER
     Text[ swedish ] = "ASCII filteralternativ";
     Text[ polish ] = "Opcje filtra ASCII";
     Text[ portuguese_brazilian ] = "ASCII filter options";
-    Text[ japanese ] = "ASCIIÌ¨ÙÀµÌß¼®İ";
-    Text[ korean ] = "¾Æ½ºÅ° ÇÊÅÍ ¿É¼Ç";
-    Text[ chinese_simplified ] = "ASCII ¹ıÂËÆ÷Ñ¡Ïî";
-    Text[ chinese_traditional ] = "ASCII Âà´«¾¹¿ï¶µ";
+    Text[ japanese ] = "ASCIIãƒ•ã‚£ãƒ«ã‚¿ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+    Text[ korean ] = "ì•„ìŠ¤í‚¤ í•„í„° ì˜µì…˜";
+    Text[ chinese_simplified ] = "ASCII è½¬æ¢å™¨é€‰é¡¹";
+    Text[ chinese_traditional ] = "ASCII è½‰æ›å™¨é¸é …";
     Text[ arabic ] = "ÎÕÇÆÕ İáÊÑ ASCII";
     Text[ turkish ] = "ASCII filtre seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones de filtro ASCII";
+    Text[ catalan ] = "Opcions del filtre ASCII";
     Text[ finnish ] = "ASCII-suodatusasetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸•à¸±à¸§à¸à¸£à¸­à¸‡ ASCII ";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

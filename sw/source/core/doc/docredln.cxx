@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-28 17:45:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,14 @@
         for( USHORT i = 0; i < rTbl.Count(); ++i )
             lcl_CheckPam( rTbl[ i ] );
 
+        for( USHORT j = 0; j < rTbl.Count(); ++j )
+        {
+            // check for empty redlines
+            ASSERT( ( *(rTbl[j]->GetPoint()) != *(rTbl[j]->GetMark()) ) ||
+                    ( rTbl[j]->GetContentIdx() != NULL ),
+                    "redline table corrupted: empty redline" );
+         }
+
         // verify proper redline sorting
         for( USHORT n = 1; n < rTbl.Count(); ++n )
         {
@@ -291,10 +299,23 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
 
         for( ; pNewRedl && n < pRedlineTbl->Count(); ++n )
         {
+
+#ifdef DVO_TEST
+            _CHECK_REDLINE( this )
+#endif
+
             SwRedline* pRedl = (*pRedlineTbl)[ n ];
             SwPosition* pRStt = pRedl->Start(),
                       * pREnd = pRStt == pRedl->GetPoint() ? pRedl->GetMark()
                                                            : pRedl->GetPoint();
+
+            // #i8518# remove empty redlines while we're at it
+            if( ( *pRStt == *pREnd ) &&
+                ( pRedl->GetContentIdx() == NULL ) )
+            {
+                pRedlineTbl->DeleteAndDestroy(n);
+                continue;
+            }
 
             SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
 
@@ -336,6 +357,14 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             pRedlineTbl->Remove( n );
                             pRedlineTbl->Insert( pRedl );
                         }
+                        else if ( POS_OUTSIDE == eCmpPos )
+                        {
+                            // #107164# own insert-over-insert
+                            // redlines: just scrap the inside ones
+                            pRedlineTbl->Remove( n );
+                            n--;
+                            break;
+                        }
                         else if( POS_INSIDE != eCmpPos && POS_EQUAL != eCmpPos)
                             break;
 
@@ -371,6 +400,18 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         pSplit->SetEnd( *pRStt );
                         pNewRedl->SetStart( *pREnd );
                         pRedlineTbl->Insert( pSplit );
+                    }
+                    else if ( POS_OVERLAP_BEHIND == eCmpPos )
+                    {
+                        // #107164# handle overlapping redlines in broken
+                        // documents
+                        pNewRedl->SetStart( *pREnd );
+                    }
+                    else if ( POS_OVERLAP_BEFORE == eCmpPos )
+                    {
+                        // #107164# handle overlapping redlines in broken
+                        // documents
+                        pNewRedl->SetEnd( *pRStt );
                     }
                     break;
                 case REDLINE_DELETE:
@@ -518,7 +559,27 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 pNewRedl->SetStart( *pRStt, pStt );
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
-                            pRedlineTbl->DeleteAndDestroy( n-- );
+
+                            // delete current (below), and restart process with
+                            // previous
+                            USHORT nToBeDeleted = n;
+                            n--;
+
+                            // #107359# Do it again, Sam!
+                            // If you can do it for them, you can do it for me.
+                            if( *(pNewRedl->Start()) <= *pREnd )
+                            {
+                                // Whoooah, we just extended the new 'redline'
+                                // beyond previous redlines, so better start
+                                // again. Of course this is not supposed to
+                                // happen, and in an ideal world it doesn't,
+                                // but unfortunately this code is buggy and
+                                // totally rotten so it does happen and we
+                                // better fix it.
+                                n = -1;
+                            }
+
+                            pRedlineTbl->DeleteAndDestroy( nToBeDeleted );
                         }
                         break;
                     }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2001-02-09 07:41:30 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:43:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,6 +116,11 @@ SLOFILES =  \
         $(SLO)$/pattern.obj \
         $(SLO)$/uiborder.obj \
         $(SLO)$/wrap.obj
+
+.IF "$(OS)"=="SOLARIS"
+NOOPTFILES = \
+        $(SLO)$/frmex.obj
+.ENDIF          # "$(OS)"=="SOLARIS"
 
 # --- Tagets -------------------------------------------------------
 

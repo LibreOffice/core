@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2002-10-29 14:05:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,6 @@ protected:
 private:
 
     ::rtl::OUString sName;  // immutable outside constructor
-    ::cppu::OInterfaceContainerHelper aAccessibleEventListeners;
 
     // The parent if it has been retrieved. This is always an
     // SwAccessibleContext. (protected by Mutex)
@@ -149,6 +148,7 @@ private:
 
     SwAccessibleMap *pMap;  // must be protected by solar mutex
 
+    sal_uInt32 nClientId;   // client id in the AccessibleEventNotifier queue
     sal_Int16 nRole;        // immutable outside constructor
 
     // The current states (protected by mutex)

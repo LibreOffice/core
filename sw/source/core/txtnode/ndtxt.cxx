@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: od $ $Date: 2002-11-11 09:37:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2603,7 +2603,8 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx, const xub_StrLen nLen,
 }
 
 BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
-                        xub_StrLen nIdx, xub_StrLen nLen, BOOL bWithNum ) const
+                        xub_StrLen nIdx, xub_StrLen nLen, BOOL bWithNum,
+                        BOOL bWithFtn ) const
 {
     if( &rDestNd == this )
         return FALSE;
@@ -2669,26 +2670,29 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
 
                 case RES_TXTATR_FTN:
                     {
-                        const SwFmtFtn& rFtn = pHt->GetFtn();
-                        XubString sExpand;
-                        if( rFtn.GetNumStr().Len() )
-                            sExpand = rFtn.GetNumStr();
-                        else if( rFtn.IsEndNote() )
-                            sExpand = GetDoc()->GetEndNoteInfo().aFmt.
-                                            GetNumStr( rFtn.GetNumber() );
-                        else
-                            sExpand = GetDoc()->GetFtnInfo().aFmt.
-                                            GetNumStr( rFtn.GetNumber() );
-                        if( sExpand.Len() )
+                        if ( bWithFtn )
                         {
-                            aDestIdx++;     // dahinter einfuegen;
-                            rDestNd.Insert( SvxEscapementItem(
-                                    SVX_ESCAPEMENT_SUPERSCRIPT ),
-                                    aDestIdx.GetIndex(),
-                                    aDestIdx.GetIndex() );
-                            rDestNd.Insert( sExpand, aDestIdx, INS_EMPTYEXPAND );
-                            aDestIdx = nInsPos + nAttrStartIdx;
-                            nInsPos += sExpand.Len();
+                            const SwFmtFtn& rFtn = pHt->GetFtn();
+                            XubString sExpand;
+                            if( rFtn.GetNumStr().Len() )
+                                sExpand = rFtn.GetNumStr();
+                            else if( rFtn.IsEndNote() )
+                                sExpand = GetDoc()->GetEndNoteInfo().aFmt.
+                                                GetNumStr( rFtn.GetNumber() );
+                            else
+                                sExpand = GetDoc()->GetFtnInfo().aFmt.
+                                                GetNumStr( rFtn.GetNumber() );
+                            if( sExpand.Len() )
+                            {
+                                aDestIdx++;     // dahinter einfuegen;
+                                rDestNd.Insert( SvxEscapementItem(
+                                        SVX_ESCAPEMENT_SUPERSCRIPT ),
+                                        aDestIdx.GetIndex(),
+                                        aDestIdx.GetIndex() );
+                                rDestNd.Insert( sExpand, aDestIdx, INS_EMPTYEXPAND );
+                                aDestIdx = nInsPos + nAttrStartIdx;
+                                nInsPos += sExpand.Len();
+                            }
                         }
                         rDestNd.Erase( aDestIdx, 1 );
                         --nInsPos;

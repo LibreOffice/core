@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-06 10:04:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,22 @@ public:
     void AddAccessibleShell() { ++nAccessibleShells; }
     void RemoveAccessibleShell() { --nAccessibleShells; }
 #endif
+
+    /** get page frame by phyiscal page number
+
+        OD 14.01.2003 #103492#
+        looping through the lowers, which are page frame, in order to find the
+        page frame with the given physical page number.
+        if no page frame is found, 0 is returned.
+        Note: Empty page frames are also returned.
+
+        @param _nPageNum
+        input parameter - physical page number of page frame to be searched and
+        returned.
+
+        @return pointer to the page frame with the given physical page number
+    */
+    SwPageFrm* GetPageByPageNum( sal_uInt16 _nPageNum ) const;
 };
 
 inline long SwRootFrm::GetBrowseWidth() const

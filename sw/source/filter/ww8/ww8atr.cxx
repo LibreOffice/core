@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 /*
@@ -2921,6 +2920,8 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
     {
         // then write as normal char
         WriteChar(nChar);
+        pPiece->SetParaBreak();
+        pPapPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
 #ifdef PRODUCT
@@ -4451,5 +4452,4 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_UNKNOWNATR_CONTAINER */      0
 };
 
-
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

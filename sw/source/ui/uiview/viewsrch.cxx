@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-12-10 14:26:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
 #endif
 #ifndef _SVX_PAGEITEM_HXX //autogen
 #include <svx/pageitem.hxx>
@@ -453,7 +456,8 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             aArr.Insert(    aNormalAttr,
                             sizeof( aNormalAttr ) / sizeof( aNormalAttr[0] ),
                             0 );
-            if( /*CTL*/ FALSE )
+            SvtCTLOptions aCTLOpt;
+            if( aCTLOpt.IsCTLFontEnabled() )
                 aArr.Insert(    aCTLAttr,
                                 sizeof( aCTLAttr ) / sizeof( aCTLAttr[0] ),
                                 14 );
@@ -629,7 +633,7 @@ BOOL SwView::SearchAll(USHORT* pFound)
             pWrtShell->SttDoc();
     }
     bExtra = FALSE;
-    USHORT nFound = FUNC_Search( aOpts );
+    USHORT nFound = (USHORT)FUNC_Search( aOpts );
     if(pFound)
         *pFound = nFound;
     bFound = 0 != nFound;
@@ -735,7 +739,7 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     // build SearchOptions to be used
     //
     SearchOptions aSearchOpt( pSrchItem->GetSearchOptions() );
-    aSearchOpt.Locale = CreateLocale( GetAppLanguage() );
+    aSearchOpt.Locale = CreateLocale( (USHORT)GetAppLanguage() );
     if( !bDoReplace )
         aSearchOpt.replaceString = aEmptyStr;
 

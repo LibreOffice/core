@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scroll.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-17 09:40:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include "swrect.hxx"
 #include "scroll.hxx"
 
+#define SCROLL_LINE_SIZE 250
+
 
 SwScrollbar::SwScrollbar( Window *pWin, int bHoriz ) :
     ScrollBar( pWin,
@@ -92,13 +94,13 @@ SwScrollbar::SwScrollbar( Window *pWin, int bHoriz ) :
                 Range des Scrollbars neu einzustellen.
 ------------------------------------------------------------------------*/
 
-
 void SwScrollbar::DocSzChgd( const Size &rSize )
 {
     aDocSz = rSize;
     SetRange( Range( 0, bHori ? rSize.Width() : rSize.Height()) );
     const ULONG nVisSize = GetVisibleSize();
-    SetLineSize( nVisSize * 10 / 100 );
+    SetLineSize( SCROLL_LINE_SIZE );
+//    SetLineSize( nVisSize * 10 / 100 );
     SetPageSize( nVisSize * 77 / 100 );
 }
 
@@ -148,7 +150,7 @@ void SwScrollbar::EnableThumbPos( BOOL bEnable, const SwRect &rVisArea )
 void SwScrollbar::Show( BOOL bSet )
 {
     bVisible = bSet;
-    if( (!bSet || bSizeSet || !bAuto) && IsUpdateMode() )
+    if( (!bSet ||  !bAuto) && IsUpdateMode() && bSizeSet)
         ScrollBar::Show(bSet);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-01-10 14:09:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,25 +95,26 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ portuguese ] = "~Tabulação" ;
         TEXT [ finnish ] = "~Sarkaimet" ;
         TEXT [ danish ] = "Tabulator" ;
-        TEXT [ french ] = "~Tabulation" ;
+        TEXT [ french ] = "Tabulation" ;
         TEXT [ swedish ] = "~Tabulator" ;
         TEXT [ dutch ] = "~Tab" ;
-        TEXT [ spanish ] = "Tabu~lación" ;
+        TEXT [ spanish ] = "Tabulador" ;
         TEXT [ english_us ] = "~Tabs" ;
         TABSTOP = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        TEXT[ chinese_simplified ] = "ÖÆ±í·û(~T)";
-        TEXT[ russian ] = "Òàáóëÿòîğ";
+        TEXT[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦(~T)";
+        TEXT[ russian ] = "Òàáóëÿöèÿ";
         TEXT[ polish ] = "Tabulator";
-        TEXT[ japanese ] = "ÀÌŞ(~T)";
-        TEXT[ chinese_traditional ] = "»sªí²Å(~T)";
+        TEXT[ japanese ] = "ã‚¿ãƒ–(~T)";
+        TEXT[ chinese_traditional ] = "å®šä½éµ(~T)";
         TEXT[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
         TEXT[ greek ] = "Ó~ôçëïèİôçò";
-        TEXT[ korean ] = "ÅÇ(~T)";
+        TEXT[ korean ] = "íƒ­(~T)";
         TEXT[ turkish ] = "~Sekme";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Tabu~lación";
+        TEXT[ catalan ] = "~Tabulacions";
+        TEXT[ thai ] = "~à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™";
     };
     RadioButton CB_SEMI
     {
@@ -122,28 +123,29 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT = "~Semikolon" ;
         TEXT [ ENGLISH ] = "~Semicolon" ;
         TEXT [ norwegian ] = "~Semikolon" ;
-        TEXT [ italian ] = "~Punto e virgola" ;
+        TEXT [ italian ] = "Punto e virgola" ;
         TEXT [ portuguese_brazilian ] = "~Ponto e v?rgula" ;
         TEXT [ portuguese ] = "Ponto e vír~gula" ;
         TEXT [ finnish ] = "~Puolipisteet" ;
         TEXT [ danish ] = "Semikolon" ;
-        TEXT [ french ] = "~Point virgule" ;
+        TEXT [ french ] = "Point-virgule" ;
         TEXT [ swedish ] = "~Semikolon" ;
         TEXT [ dutch ] = "~Puntkomma" ;
         TEXT [ spanish ] = "Punto y co~ma" ;
         TEXT [ english_us ] = "~Semicolons" ;
         TABSTOP = TRUE ;
-        TEXT[ chinese_simplified ] = "·ÖºÅ(~S)";
+        TEXT[ chinese_simplified ] = "åˆ†å·(~S)";
         TEXT[ russian ] = "Òî÷êà ñ çàïÿòîé";
         TEXT[ polish ] = "Œrednik";
-        TEXT[ japanese ] = "¾ĞºÛİ(~S)";
-        TEXT[ chinese_traditional ] = "¤À¸¹(~S)";
+        TEXT[ japanese ] = "ã‚»ãƒŸã‚³ãƒ­ãƒ³(~S)";
+        TEXT[ chinese_traditional ] = "åˆ†è™Ÿ(~S)";
         TEXT[ arabic ] = "ÇáİÇÕáÉ ÇáãäŞæØÉ";
         TEXT[ greek ] = "¢íù ôå~ëåßá";
-        TEXT[ korean ] = "¼¼¹ÌÄİ·Ğ(~S)";
+        TEXT[ korean ] = "ì„¸ë¯¸ì½œë¡ (~S)";
         TEXT[ turkish ] = "N~oktalı virgül";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Punto y co~ma";
+        TEXT[ catalan ] = "~Punts i coma";
+        TEXT[ thai ] = "~à¸­à¸±à¸’à¸ à¸²à¸„";
     };
     RadioButton CB_PARA
     {
@@ -152,28 +154,29 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT = "~Absatz" ;
         TEXT [ ENGLISH ] = "~Paragraph" ;
         TEXT [ norwegian ] = "~Paragraf" ;
-        TEXT [ italian ] = "~Paragrafo" ;
+        TEXT [ italian ] = "Paragrafo" ;
         TEXT [ portuguese_brazilian ] = "~Par?grafo" ;
         TEXT [ portuguese ] = "~Parágrafo" ;
         TEXT [ finnish ] = "~Kappale" ;
         TEXT [ danish ] = "Afsnit" ;
-        TEXT [ french ] = "~Paragraphe" ;
+        TEXT [ french ] = "Paragraphe" ;
         TEXT [ swedish ] = "Styc~ke" ;
         TEXT [ dutch ] = "~Alinea" ;
         TEXT [ spanish ] = "~Párrafo" ;
         TEXT [ english_us ] = "~Paragraph" ;
         TABSTOP = TRUE ;
-        TEXT[ chinese_simplified ] = "¶ÎÂä(~P)";
+        TEXT[ chinese_simplified ] = "æ®µè½(~P)";
         TEXT[ russian ] = "Àáçàö";
         TEXT[ polish ] = "Akapit";
-        TEXT[ japanese ] = "’i—(~P)";
-        TEXT[ chinese_traditional ] = "¬q¸¨(~P)";
+        TEXT[ japanese ] = "æ®µè½(~P)";
+        TEXT[ chinese_traditional ] = "æ®µè½(~P)";
         TEXT[ arabic ] = "ÇáİŞÑÉ";
         TEXT[ greek ] = "Ğ~áñÜãñáöïò";
-        TEXT[ korean ] = "´Ü¶ô(~P)";
+        TEXT[ korean ] = "ë‹¨ë½(~P)";
         TEXT[ turkish ] = "~Paragraf";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Párrafo";
+        TEXT[ catalan ] = "~Paràgraf";
+        TEXT[ thai ] = "~à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
     };
     RadioButton RB_OTHER
     {
@@ -188,20 +191,21 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ danish ] = "Andre: " ;
         Text [ italian ] = "~Altri: " ;
         Text [ spanish ] = "~Otros:  " ;
-        Text [ french ] = "~Autre(s):[_]" ;
-        Text [ dutch ] = "An~dere:  " ;
-        Text[ chinese_simplified ] = "ÆäËû(~O)";
+        Text [ french ] = "~Autres : " ;
+        Text [ dutch ] = "An~dere:" ;
+        Text[ chinese_simplified ] = "å…¶ä»–(~O)";
         Text[ russian ] = "Äğóãèå:  ";
         Text[ polish ] = "Inne:   ";
-        Text[ japanese ] = "‚»‚Ì‘¼(~O)";
-        Text[ chinese_traditional ] = "¨ä¥L(~O)";
+        Text[ japanese ] = "ãã®ä»–(~O)";
+        Text[ chinese_traditional ] = "å…¶ä»–(~O)";
         Text[ arabic ] = "ÛíÑ Ğáß: ";
         Text[ greek ] = "¢ëëá: ";
-        Text[ korean ] = "±âÅ¸(~O)";
+        Text[ korean ] = "ê¸°íƒ€(~O)";
         Text[ turkish ] = "Di~ğer: ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Otros:  ";
+        Text[ catalan ] = "~Altres:";
         Text[ finnish ] = "~Muu: ";
+        Text[ thai ] = "~à¸­à¸·à¹ˆà¸™ à¹†: ";
     };
     Edit ED_OTHER
     {
@@ -228,18 +232,19 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ french ] = "~Largeur identique pour toutes les colonnes" ;
         Text [ dutch ] = "~Alle kolommen dezelfde breedte" ;
         Text [ portuguese ] = "~Largura igual para todas as colunas" ;
-        Text[ chinese_simplified ] = "ËùÓĞÁĞµÄ¿í¶ÈÏàÍ¬";
-        Text[ russian ] = "Îäèíàêîâàÿ øèğèíà âñåõ êîëîíîê";
+        Text[ chinese_simplified ] = "æ‰€æœ‰åˆ—çš„å®½åº¦ç›¸åŒ";
+        Text[ russian ] = "Îäèíàêîâàÿ øèğèíà âñåõ ñòîëáöîâ";
         Text[ polish ] = "~Jednakowa szerokoœæ wszystk. kolumn";
-        Text[ japanese ] = "‚·‚×‚Ä‚Ì—ñ•‚ğ“¯‚¶‚É";
-        Text[ chinese_traditional ] = "©Ò¦³Äæ¼e«×¬Û¦P";
+        Text[ japanese ] = "åˆ—å¹…ã‚’å‡ç­‰ã«ã™ã‚‹";
+        Text[ chinese_traditional ] = "æ‰€æœ‰æ¬„å¯¬åº¦ç›¸åŒ";
         Text[ arabic ] = "äİÓ ÇáÚÑÖ áßá ÇáÃÚãÏÉ";
         Text[ greek ] = "ºäéï ~ğëÜôïò ãéá üëåò ôéò óôŞëåò";
-        Text[ korean ] = "¸ğµç ¿­ ³Êºñ °°°Ô";
+        Text[ korean ] = "ëª¨ë“  ì—´ ë„ˆë¹„ ê°™ê²Œ";
         Text[ turkish ] = "Tüm sütunlar a~ynı genişlikte";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mismo an~cho para todas las columnas";
-        Text[ finnish ] = "Yhtäsuuret sarakkeiden leveydet";
+        Text[ catalan ] = "Amplada igual per a totes les columnes";
+        Text[ finnish ] = "Yhtä suuret sarakeleveydet";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¹€à¸—à¹ˆà¸²à¸à¸±à¸™à¸ªà¸³à¸«à¸£à¸±à¸šà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     FixedLine FL_DELIM
     {
@@ -251,25 +256,26 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ italian ] = "Separatore nel testo" ;
         TEXT [ portuguese_brazilian ] = "Delimitador" ;
         TEXT [ portuguese ] = "Separador" ;
-        TEXT [ finnish ] = "Erota teksti kohdasta" ;
-        TEXT [ danish ] = "Separatorer i tekst" ;
+        TEXT [ finnish ] = "Tekstin erottelu" ;
+        TEXT [ danish ] = "Skilletegn i tekst" ;
         TEXT [ french ] = "Séparateur dans le texte" ;
         TEXT [ swedish ] = "Skiljetecken i text" ;
         TEXT [ dutch ] = "Scheidingsteken in tekst" ;
-        TEXT [ spanish ] = "Delimitador en texto" ;
+        TEXT [ spanish ] = "Separador en el texto" ;
         TEXT [ english_us ] = "Separate text at" ;
         Group = TRUE ;
-        TEXT[ chinese_simplified ] = "ÕıÎÄÄÚµÄ·Ö¸ô·û";
+        TEXT[ chinese_simplified ] = "æ­£æ–‡å†…çš„åˆ†éš”ç¬¦";
         TEXT[ russian ] = "Ğàçäåëèòåëü òåêñòà";
         TEXT[ polish ] = "Separator w tekœcie";
-        TEXT[ japanese ] = "Ã·½Ä“à‚Ì‹æØ‚è‹L†";
-        TEXT[ chinese_traditional ] = "¤º¤åªº¤À¹j²Å";
+        TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆå†…ã®åŒºåˆ‡ã‚Šè¨˜å·";
+        TEXT[ chinese_traditional ] = "å…§æ–‡çš„åˆ†éš”ç¬¦";
         TEXT[ arabic ] = "ÚáÇãÇÊ ÇáİÕá İí ÇáäÕ";
         TEXT[ greek ] = "Åíùôéêü ìİóá óôï êåßìåíï";
-        TEXT[ korean ] = "ÅØ½ºÆ® ±¸ºĞ ±âÈ£";
+        TEXT[ korean ] = "í…ìŠ¤íŠ¸ êµ¬ë¶„ ê¸°í˜¸";
         TEXT[ turkish ] = "Metin ayırma işareti";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Delimitador en texto";
+        TEXT[ catalan ] = "Delimitador en text";
+        TEXT[ thai ] = "à¹à¸¢à¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸—à¸µà¹ˆ";
     };
     CheckBox CB_HEADER
     {
@@ -282,23 +288,24 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ portuguese_brazilian ] = "Header";
         Text[ portuguese ] = "~Título";
         Text[ danish ] = "Overskrift";
-        Text[ french ] = "T~itre";
+        Text[ french ] = "Titre";
         Text[ swedish ] = "Öve~rskrift";
         Text[ dutch ] = "~Kop";
         Text[ spanish ] = "~Encabezado";
         Text[ english_us ] = "Header";
-        Text[ chinese_simplified ] = "±êÌâ";
+        Text[ chinese_simplified ] = "æ ‡é¢˜";
         Text[ russian ] = "Çàãîëîâîê";
         Text[ polish ] = "Tytu³";
-        Text[ japanese ] = "Œ©o‚µ";
-        Text[ chinese_traditional ] = "¼ĞÃD";
+        Text[ japanese ] = "è¦‹å‡ºã—";
+        Text[ chinese_traditional ] = "æ¨™é¡Œ";
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ greek ] = "Åğéêå~öáëßäá";
-        Text[ korean ] = "Ç¥Á¦";
+        Text[ korean ] = "í‘œì œ";
         Text[ turkish ] = "Baş~lık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Encabezado";
-        Text[ finnish ] = "Yläotsikko";
+        Text[ catalan ] = "~Encapçalament";
+        Text[ finnish ] = "Ylätunniste";
+        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -311,23 +318,24 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ portuguese_brazilian ] = "Repeat Header";
         Text[ portuguese ] = "~Repetir em todas as páginas";
         Text[ danish ] = "Gentag på hver side";
-        Text[ french ] = "~Répéter sur chaque page";
+        Text[ french ] = "Répéter sur chaque page";
         Text[ swedish ] = "~Upprepa på varje sida";
         Text[ dutch ] = "Op iedere pagina ~herhalen";
-        Text[ spanish ] = "~Repetir en cada página";
+        Text[ spanish ] = "Repetir en cada página";
         Text[ english_us ] = "Re~peat header";
-        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾(~P)";
-        Text[ russian ] = "Ïîâòîğ íà êàæäîé ñòğàíèöå";
+        Text[ chinese_simplified ] = "åœ¨æ¯é¡µä¸Šé‡å¤æ˜¾ç¤º(~P)";
+        Text[ russian ] = "Ïîâòîğÿòü çàãîëîâîê";
         Text[ polish ] = "Powtórz na ~ka¿dej stronie";
-        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ(~P)";
-        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü(~P)";
+        Text[ japanese ] = "å„ãƒšãƒ¼ã‚¸ã«ç¹°ã‚Šè¿”ã—(~P)";
+        Text[ chinese_traditional ] = "åœ¨æ¯é ä¸Šé‡è¤‡é¡¯ç¤º(~P)";
         Text[ arabic ] = "ÊßÑÇÑ İí ßá ÕİÍÉ";
         Text[ greek ] = "Åì~öÜíéóç óå êÜèå óåëßäá";
-        Text[ korean ] = "¸ğµç ÂÊ¿¡¼­ ¹İº¹(~P)";
+        Text[ korean ] = "ëª¨ë“  í˜ì´ì§€ì—ì„œ ë°˜ë³µ(~P)";
         Text[ turkish ] = "İlk satırı her sayfada yi~nele";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Repetir en cada página";
-        Text[ finnish ] = "~Toista yläotsikko";
+        Text[ catalan ] = "~Repeteix a cada pàgina";
+        Text[ finnish ] = "~Toista ylätunniste";
+        Text[ thai ] = "à¸—à¸³à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§~à¸‹à¹‰à¸³";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -340,23 +348,24 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ portuguese_brazilian ] = "Don't split table";
         Text[ portuguese ] = "Não ~dividir tabela";
         Text[ danish ] = "Opdel tabel ikke";
-        Text[ french ] = "Ne pas ~diviser le tableau";
+        Text[ french ] = "Ne pas ~scinder le tableau";
         Text[ swedish ] = "Dela i~nte tabell";
         Text[ dutch ] = "Tabel niet ~splitsen";
         Text[ spanish ] = "~No dividir tabla";
         Text[ english_us ] = "Don't split table";
-        Text[ chinese_simplified ] = "²»·Ö¸ô±í¸ñ";
+        Text[ chinese_simplified ] = "ä¸åˆ†éš”è¡¨æ ¼";
         Text[ russian ] = "Íå ğàçáèâàòü òàáëèöó";
         Text[ polish ] = "Nie dziel tabeli";
-        Text[ japanese ] = "•\\‚ğ•ªŠ„‚µ‚È‚¢";
-        Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ";
+        Text[ japanese ] = "è¡¨ã‚’åˆ†å‰²ã—ãªã„";
+        Text[ chinese_traditional ] = "ä¸åˆ†é–‹è¡¨æ ¼";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "¼÷é äéáßñåóç ôïõ ğß~íáêá";
-        Text[ korean ] = "Å×ÀÌºí ºĞ¸®ÇÏÁö ¾Ê±â.";
+        Text[ korean ] = "í‘œ ë‚˜ëˆ„ì§€ ì•ŠìŒ";
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sığdır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~No dividir tabla";
+        Text[ catalan ] = "No parteixis la taula";
         Text[ finnish ] = "Älä jaa taulukkoa";
+        Text[ thai ] = "à¹„à¸¡à¹ˆà¹à¸¢à¸à¸•à¸²à¸£à¸²à¸‡";
     };
     CheckBox CB_BORDER
     {
@@ -374,18 +383,19 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ dutch ] = "~Omranding";
         Text[ spanish ] = "~Borde";
         Text[ english_us ] = "Border";
-        Text[ chinese_simplified ] = "±ß¿ò";
+        Text[ chinese_simplified ] = "è¾¹æ¡†";
         Text[ russian ] = "Îáğàìëåíèå";
         Text[ polish ] = "Obramowanie";
-        Text[ japanese ] = "ŠO˜g";
-        Text[ chinese_traditional ] = "Ãä®Ø";
+        Text[ japanese ] = "æ ";
+        Text[ chinese_traditional ] = "é‚Šæ¡†";
         Text[ arabic ] = "ÇáÍÏæÏ";
         Text[ greek ] = "Ğåñßãñá~ììá";
-        Text[ korean ] = "¿Ü°û¼±";
+        Text[ korean ] = "í…Œë‘ë¦¬";
         Text[ turkish ] = "~Kenarlık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Borde";
+        Text[ catalan ] = "Vora";
         Text[ finnish ] = "Reuna";
+        Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
     };
     FixedLine FL_OPTIONS
     {
@@ -402,18 +412,19 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ dutch ] = "Opties";
         Text[ spanish ] = "Opciones";
         Text[ english_us ] = "Options";
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
         Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "¿É¼Ç";
+        Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     String STR_CONVERT_TEXT_TABLE
     {
@@ -430,17 +441,18 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ dutch ] = "Tekst naar tabel converteren" ;
         TEXT [ spanish ] = "Convertir texto en tabla" ;
         TEXT [ english_us ] = "Convert Text to Table" ;
-        TEXT[ chinese_simplified ] = "ÎÄ×Ö×ª»»³É±í¸ñ";
+        TEXT[ chinese_simplified ] = "æ–‡å­—è½¬æ¢æˆè¡¨æ ¼";
         TEXT[ russian ] = "Ïğåîáğàçîâàòü òåêñò â òàáëèöó";
         TEXT[ polish ] = "Konwertuj tekst na tabelê";
-        TEXT[ japanese ] = "Ã·½Ä‚ğ•\\‚É‚·‚é";
-        TEXT[ chinese_traditional ] = "¤å¦rÂà´«¦¨ªí®æ";
+        TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã‚’è¡¨ã«å¤‰æ›ã™ã‚‹";
+        TEXT[ chinese_traditional ] = "æ–‡å­—è½‰æ›æˆè¡¨æ ¼";
         TEXT[ arabic ] = "ÊÍæíá ÇáäÕ Åáì ÌÏæá";
         TEXT[ greek ] = "ÌåôáôñïğŞ êåéìİíïõ óå ğßíáêá";
-        TEXT[ korean ] = "ÅØ½ºÆ®¸¦ Ç¥·Î º¯È¯";
+        TEXT[ korean ] = "í…ìŠ¤íŠ¸ë¥¼ í‘œë¡œ ë³€í™˜";
         TEXT[ turkish ] = "Metni tabloya dönüştür";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Convertir texto en tabla";
+        TEXT[ catalan ] = "Converteix el text en una taula";
+        TEXT[ thai ] = "à¹à¸›à¸¥à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹€à¸›à¹‡à¸™à¸•à¸²à¸£à¸²à¸‡";
     };
     OkButton BT_OK
     {
@@ -473,37 +485,57 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ italian ] = "~Formattazione automatica..." ;
         Text [ portuguese_brazilian ] = "Formata??o Autom?tica..." ;
         Text [ portuguese ] = "Auto~Formato..." ;
-        Text [ finnish ] = "~Automaattinen muotoilu" ;
+        Text [ finnish ] = "~Automaattinen muotoilu..." ;
         Text [ danish ] = "AutoFormat..." ;
         Text [ french ] = "AutoFormat..." ;
         Text [ swedish ] = "AutoFormat..." ;
         Text [ dutch ] = "Auto~Opmaak..." ;
-        Text [ spanish ] = "Auto~Formato..." ;
+        Text [ spanish ] = "~Formateado automático..." ;
         Text [ english_us ] = "Auto~Format..." ;
-        Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½(~F)...";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼(~F)...";
         Text[ russian ] = "Àâòîôîğìàò...";
         Text[ polish ] = "Autoformat...";
-        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä(~F)...";
-        Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡(~F)...";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ(~F)...";
+        Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼(~F)...";
         Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí...";
         Text[ greek ] = "ÁõôïÌïñ~öŞ...";
-        Text[ korean ] = "ÀÚµ¿¼­½Ä(~F)...";
+        Text[ korean ] = "ìë™ ì„œì‹(~F)...";
         Text[ turkish ] = "Otomatik ~formatlama...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Auto~Formato...";
+        Text[ catalan ] = "Auto~format...";
+        Text[ thai ] = "~à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´...";
     };
-    TEXT[ chinese_simplified ] = "×ª»»±í¸ñ³ÉÎÄ×Ö";
+    TEXT[ chinese_simplified ] = "è½¬æ¢è¡¨æ ¼æˆæ–‡å­—";
     TEXT[ russian ] = "Ïğåîáğàçîâàòü òàáëèöó â òåêñò";
     TEXT[ polish ] = "Konwertuj tabelê na tekst";
-    TEXT[ japanese ] = "•\\‚ğÃ·½Ä‚É‚·‚é";
-    TEXT[ chinese_traditional ] = "ªí®æÂà´«¦¨¤å¦r";
+    TEXT[ japanese ] = "è¡¨ã‚’ãƒ†ã‚­ã‚¹ãƒˆã«å¤‰æ›ã™ã‚‹";
+    TEXT[ chinese_traditional ] = "è¡¨æ ¼è½‰æ›æˆæ–‡å­—";
     TEXT[ arabic ] = "ÊÍæíá ÇáÌÏæá Åáì äÕ";
     TEXT[ greek ] = "ÌåôáôñïğŞ ğßíáêá óå êåßìåíï";
-    TEXT[ korean ] = "Ç¥¸¦ ÅØ½ºÆ®·Î º¯È¯";
+    TEXT[ korean ] = "í‘œë¥¼ í…ìŠ¤íŠ¸ë¡œ ë³€í™˜";
     TEXT[ turkish ] = "Tabloyu metne dönüştür";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Convertir tabla en texto";
+    TEXT[ catalan ] = "Converteix la taula en un text";
+    TEXT[ thai ] = "à¹à¸›à¸¥à¸‡à¸•à¸²à¸£à¸²à¸‡à¹€à¸›à¹‡à¸™à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

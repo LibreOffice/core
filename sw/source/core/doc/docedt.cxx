@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-10 16:29:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2181,13 +2181,19 @@ sal_Bool SwDoc::DelFullPara( SwPaM& rPam )
                         pNd->StartOfSectionIndex();
     sal_uInt32 nNodeDiff = rEnd.nNode.GetIndex() - rStt.nNode.GetIndex();
 
-    if( nSectDiff-2 <= nNodeDiff || IsRedlineOn() )
+    if ( nSectDiff-2 <= nNodeDiff || IsRedlineOn() ||
+         /* #i9185# Prevent getting the node after the end node (see below) */
+        rEnd.nNode.GetIndex() + 1 == aNodes.Count() )
         return sal_False;
 
     // harte SeitenUmbrueche am nachfolgenden Node verschieben
     sal_Bool bSavePageBreak = sal_False, bSavePageDesc = sal_False;
+
+    /* #i9185# This whould lead to a segmentation fault if not catched
+       above. */
     sal_uInt32 nNextNd = rEnd.nNode.GetIndex() + 1;
-    SwTableNode* pTblNd = GetNodes()[ nNextNd ]->GetTableNode();
+    SwTableNode* pTblNd = aNodes[ nNextNd ]->GetTableNode();
+
     if( pTblNd && pNd->IsCntntNode() )
     {
         SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
@@ -2277,6 +2283,7 @@ sal_Bool SwDoc::DelFullPara( SwPaM& rPam )
     }
     rPam.DeleteMark();
     SetModified();
+
     return sal_True;
 }
 

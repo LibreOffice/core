@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-09 10:05:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_FLD_DB
         Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "í•„ë“œìœ í˜•(~T)";
+        Text[ korean ] = "ìœ í˜•(~T)";
         Text[ turkish ] = "Alan tipi";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
@@ -169,7 +169,7 @@ TabPage TP_FLD_DB
         TEXT [ danish ] = "Datapostnummer" ;
         TEXT [ french ] = "~Numéro de l'enregistrement" ;
         TEXT [ swedish ] = "~Datapostnummer" ;
-        TEXT [ dutch ] = "~Record-nummer" ;
+        TEXT [ dutch ] = "~Recordnummer" ;
         TEXT [ spanish ] = "Número de registro" ;
         TEXT [ english_us ] = "Record number" ;
         Left = TRUE ;
@@ -180,7 +180,7 @@ TabPage TP_FLD_DB
         TEXT[ chinese_traditional ] = "æ¢ç›®è™Ÿç¢¼";
         TEXT[ arabic ] = "ÑŞã ÇáÓÌá";
         TEXT[ greek ] = "Áñéèìüò åããñáöŞò";
-        TEXT[ korean ] = "ë°ì´í„° ë ˆì½”ë“œ  ë²ˆí˜¸";
+        TEXT[ korean ] = "ë ˆì½”ë“œ ë²ˆí˜¸";
         TEXT[ turkish ] = "Veri kümesi numarası";
         TEXT[ catalan ] = "Número de registre";
         TEXT[ thai ] = "à¹€à¸¥à¸‚à¸£à¸°à¹€à¸šà¸µà¸¢à¸™";
@@ -267,14 +267,14 @@ TabPage TP_FLD_DB
         Text [ english_us ] = "User-defined" ;
         Text [ portuguese_brazilian ] = "Selbstdefiniert" ;
         Text [ swedish ] = "An~vändardefinierat" ;
-        Text [ danish ] = "Brugerdefineret" ;
+        Text [ danish ] = "~Brugerdefineret" ;
         Text [ italian ] = "Personalizzato" ;
         Text [ spanish ] = "Definido por el usuario" ;
         Text [ french ] = "Défini par l'utilisateur" ;
         Text [ dutch ] = "~Zelf gedefinieerd" ;
         Text [ portuguese ] = "D~efinido pelo utilizador" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªå®š";
-        Text[ russian ] = "Íàñòğîéêè ïîëüçîâàòåëÿ";
+        Text[ russian ] = "Ïîëüçîâàòåëüñêèé";
         Text[ polish ] = "Zdefiniowane przez u¿ytkownika";
         Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©";
         Text[ chinese_traditional ] = "è‡ªè¨‚";
@@ -331,7 +331,7 @@ TabPage TP_FLD_DB
         Text[ korean ] = "ì„œì‹";
         Text[ turkish ] = "Format";
         Text[ catalan ] = "Format";
-        Text[ finnish ] = "Muoto";
+        Text[ finnish ] = "Muotoilu";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     FixedLine FL_DBFORMAT_VERT
@@ -362,6 +362,8 @@ TabPage TP_FLD_DB
     Text[ finnish ] = "Tietokanta";
     Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
 
 
 

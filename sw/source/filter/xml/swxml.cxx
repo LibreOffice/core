@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-20 14:33:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
 #include <svtools/svstdarr.hxx>
 
@@ -345,6 +348,15 @@ sal_Int32 ReadThroughComponent(
         DBG_ERROR( aError.GetBuffer() );
 #endif
         return ERR_SWG_READ_ERROR;
+    }
+    catch( packages::zip::ZipIOException& r )
+    {
+#ifdef DEBUG
+        ByteString aError( "Zip exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return ERRCODE_IO_BROKENPACKAGE;
     }
     catch( io::IOException& r )
     {

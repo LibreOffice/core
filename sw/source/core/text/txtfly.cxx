@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-30 15:13:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,8 +1227,6 @@ void SwTxtFly::DrawFlyRect( OutputDevice *pOut, const SwRect &rRect,
     if( bOn && ( 0 != ( nCount = GetFlyList()->Count() ) ) )
     {
         MSHORT nHellId = pPage->GetShell()->GetDoc()->GetHellId();
-        Size aPixelSz = Size( 1, 1 );
-        aPixelSz = pOut->PixelToLogic( aPixelSz );
         for( MSHORT i = 0; i < nCount; ++i )
         {
             const SdrObject *pTmp = (*pFlyList)[ i ];
@@ -1238,12 +1236,20 @@ void SwTxtFly::DrawFlyRect( OutputDevice *pOut, const SwRect &rRect,
                     ((SwContact*)GetUserCall(pTmp))->GetFmt();
                 const SwFmtSurround &rSur = pFmt->GetSurround();
 
-                if( ( SURROUND_THROUGHT == rSur.GetSurround() ) ?
-                    pTmp->GetLayer() != nHellId : !rSur.IsContour() )
+                // OD 24.01.2003 #106593# - correct clipping of fly frame area.
+                // Consider that fly frame background/shadow can be transparent
+                // and <SwAlignRect(..)> fly frame area
+                const SwFlyFrm *pFly = static_cast<const SwVirtFlyDrawObj*>(pTmp)->GetFlyFrm();
+                bool bClipFlyArea =
+                        ( (SURROUND_THROUGHT == rSur.GetSurround()) ?
+                          (pTmp->GetLayer() != nHellId) : !rSur.IsContour() ) &&
+                        !pFly->IsBackgroundTransparent() &&
+                        !pFly->IsShadowTransparent();
+                if ( bClipFlyArea )
                 {
                     SwRect aFly( pTmp->GetBoundRect() );
-                    aFly.Left( aFly.Left() - aPixelSz.Width() );
-                    aFly.Top( aFly.Top() - aPixelSz.Height() );
+                    // OD 24.01.2003 #106593#
+                    ::SwAlignRect( aFly, pPage->GetShell() );
                     if( aFly.Width() > 0 && aFly.Height() > 0 )
                         aRegion -= aFly;
                 }

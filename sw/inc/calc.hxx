@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 20:31:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,9 +159,10 @@ public:
     SwSbxValue( const SwSbxValue& rVal ) : SbxValue( rVal ) {}
     virtual ~SwSbxValue();
 
+
     // Strings sonderbehandeln
     BOOL GetBool() const;
-    // Strings sonderbehandeln
+    // Strings sonderbehandeln BOOLs sonderbehandeln
     double GetDouble() const;
     SwSbxValue& MakeDouble();
 };

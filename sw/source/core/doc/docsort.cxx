@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:12:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
@@ -213,14 +213,14 @@ double SwSortElement::StrToDouble( const String& rStr ) const
         pLclData = new LocaleDataWrapper(
                     ::comphelper::getProcessServiceFactory(), *pLocale );
 
-    const xub_Unicode *pEnd;
-    int nErrno;
-    double nRet = SolarMath::StringToDouble( rStr.GetBuffer(),
-                                    pLclData->getNumThousandSep().GetChar(0),
+    rtl_math_ConversionStatus eStatus;
+    sal_Int32 nEnd;
+    double nRet = ::rtl::math::stringToDouble( rStr,
                                     pLclData->getNumDecimalSep().GetChar(0),
-                                    nErrno, &pEnd );
+                                    pLclData->getNumThousandSep().GetChar(0),
+                                    &eStatus, &nEnd );
 
-    if( 0 != nErrno || pEnd == rStr.GetBuffer() )
+    if( rtl_math_ConversionStatus_Ok != eStatus || nEnd == 0 )
         nRet = 0.0;
     return nRet;
 }
@@ -587,7 +587,12 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // Auf gehts sortieren
     // suche alle Boxen / Lines
-    _FndBox aFndBox( rBoxes );
+    _FndBox aFndBox( 0, 0 );
+    {
+        _FndPara aPara( rBoxes, &aFndBox );
+        pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );;
+    }
+
     if(!aFndBox.GetLines().Count())
         return FALSE;
 

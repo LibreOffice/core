@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 14:04:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ class SwGrfNode: public SwNoTxtNode
     BOOL bInSwapIn              :1;
     BOOL bGrafikArrived         :1;
     BOOL bChgTwipSize           :1;
+    BOOL bChgTwipSizeFromPixel  :1;
     BOOL bLoadLowResGrf         :1;
     BOOL bFrameInPaint          :1; //Um Start-/EndActions im Paint (ueber
                                     //SwapIn zu verhindern.
@@ -144,7 +145,8 @@ public:
     inline BOOL IsAnimated() const              { return aGrfObj.IsAnimated(); }
 
     inline BOOL IsChgTwipSize() const           { return bChgTwipSize; }
-    inline void SetChgTwipSize( BOOL b )        { bChgTwipSize = b; }
+    inline BOOL IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
+    inline void SetChgTwipSize( BOOL b, BOOL bFromPx=FALSE )        { bChgTwipSize = b; bChgTwipSizeFromPixel = bFromPx; }
 
     inline BOOL IsGrafikArrived() const         { return bGrafikArrived; }
     inline void SetGrafikArrived( BOOL b )      { bGrafikArrived = b; }

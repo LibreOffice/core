@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-25 15:14:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,11 +380,14 @@ Sequence< Type > SAL_CALL SwAccessibleCell::getTypes() throw(RuntimeException)
 Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
         throw(RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
-                        0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-10-29 14:37:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,7 +1493,15 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTxtNode* pOwnChapterNode,
             rTxtNode.GetNodes().IsDocNodes() /*&&
             (!IsFromChapter() || pChapterCompareNode == pOwnChapterNode) */)
         {
-            SwTOXAuthority* pNew = new SwTOXAuthority( rTxtNode, *pFmtFld, rIntl );
+            //#106485# the body node has to be used!
+            SwCntntFrm *pFrm = rTxtNode.GetFrm();
+            SwPosition aFldPos(rTxtNode);
+            const SwTxtNode* pTxtNode = 0;
+            if(pFrm && !pFrm->IsInDocBody())
+                pTxtNode = GetBodyTxtNode( *pDoc, aFldPos, *pFrm );
+            if(!pTxtNode)
+                pTxtNode = &rTxtNode;
+            SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode, *pFmtFld, rIntl );
 
             InsertSorted(pNew);
         }

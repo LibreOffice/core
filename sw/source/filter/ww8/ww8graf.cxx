@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-12 13:50:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #pragma hdrstop
@@ -311,9 +310,8 @@ void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const String &rFixed)
 {
     if (mbIsDisabled || !rFixed.Len())
         return;
-    mnImportedGraphicsCount++;
     String aName(msSeed);
-    aName += String::CreateFromInt32(mnImportedGraphicsCount);
+    aName += String::CreateFromInt32(++mnImportedGraphicsCount);
     aName.APPEND_CONST_ASC( ": " );
     aName += rFixed;
     pFrmFmt->SetName( aName );
@@ -346,7 +344,7 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     if( eAnchor == FLY_AT_CNTNT )
     {
         if( SVBT8ToByte( pDo->bx ) == 1 )       // Pos: echt links
-            nDrawXOfs2 -= nPgLeft;
+            nDrawXOfs2 -= maSectionManager.GetPageLeft();
         if( nInTable )                          // Obj in Table
             nDrawXOfs2 -= GetTableLeft();       // -> siehe Kommentar
                                                 // bei GetTableLeft()
@@ -354,9 +352,11 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     else
     {
         if( SVBT8ToByte( pDo->bx ) != 1 )
-            nDrawXOfs2 += nPgLeft;
+            nDrawXOfs2 += maSectionManager.GetPageLeft();
+#if 0
         if( SVBT8ToByte( pDo->by ) == 0 )
-            nDrawYOfs2 += nPgTop;
+            nDrawYOfs2 += maSectionManager.GetPageTop();
+#endif
     }
 
     return true;
@@ -2168,9 +2168,9 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
             //gamma
             if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA, SdrGrafGamma100Item))
             {
-                SwGammaGrf aGamma(WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA,
-                    SdrGrafGamma100Item));
-                pGrfNd->SetAttr( aGamma );
+                double fVal = WW8ITEMVALUE(rOldSet, SDRATTR_GRAFGAMMA,
+                    SdrGrafGamma100Item);
+                pGrfNd->SetAttr(SwGammaGrf(fVal/100.));
             }
 
             //drawmode
@@ -2380,8 +2380,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
                 if (rParentHori.GetRelationOrient() == REL_PG_FRAME)
                 {
-                    pFSPA->nXaLeft -= nPgLeft;
-                    pFSPA->nXaRight -= nPgLeft;
+                    pFSPA->nXaLeft -= maSectionManager.GetPageLeft();
+                    pFSPA->nXaRight -= maSectionManager.GetPageLeft();
                 }
             }
         }
@@ -2686,7 +2686,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                     pRecord = aData.GetRecord(nTxbx);
                     if (pRecord && pRecord->pObj && pRecord->aTextId.nTxBxS)
                     {
-                        MungeTextIntoDrawBox(pRecord->pObj, pRecord,
+                        pRetFrmFmt = MungeTextIntoDrawBox(pRecord->pObj, pRecord,
                             nGrafAnchorCp, pRetFrmFmt);
                     }
                 }
@@ -2718,14 +2718,13 @@ void SwWW8ImplReader::RemoveAutoAnchor(const SwFrmFmt *pFmt)
         pAnchorStck->RemoveAnchor(pFmt);
 }
 
-void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
+SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
     SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrmFmt* pRetFrmFmt)
 {
     SdrTextObj* pSdrTextObj;
 
     // Pruefen, ob Gruppenobjekt (z.B. zwei Klammern) vorliegt
-    SdrObjGroup* pThisGroup = PTR_CAST(SdrObjGroup, pRecord->pObj);
-    if( pThisGroup )
+    if (SdrObjGroup* pThisGroup = PTR_CAST(SdrObjGroup, pRecord->pObj))
     {
         // Gruppenobjekte haben keinen Text. Fuege ein Textobjekt in die
         // Gruppe ein, um den Text zu halten.
@@ -2751,23 +2750,7 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
         pThisGroup->GetSubList()->NbcInsertObject(pSdrTextObj);
     }
     else
-    {
         pSdrTextObj = PTR_CAST(SdrTextObj, pRecord->pObj);
-        /*
-            Die Frage: was tun, wenn hier false hereuskommt, z.B. bei
-            3D-Objekten (nicht von SdrTextObj abgeleitet)
-
-            Wunsch: neues SdrTextObj hinzufuegen, das mit dem alten in einer
-            neu zu schaffenden Gruppe geklammert wird.
-
-            Implementierung: nicht zur 5.1 (jp und khz am 11.02.1999)
-
-            if( !pSdrTextObj )
-            {
-                ...
-            }
-        */
-    }
 
     if( pSdrTextObj )
     {
@@ -2785,7 +2768,7 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
             bEraseThisObject, 0, 0, 0, 0, pRecord);
 
         // wurde dieses Objekt ersetzt ??
-        if( bEraseThisObject )
+        if (bEraseThisObject)
         {
             if( pGroupObject || (pSdrTextObj != pTrueObject) )
             {
@@ -2814,6 +2797,7 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
                 // und FrameFormat entfernen, da durch Grafik ersetzt (dies
                 // loescht auch das Objekt)
                 rDoc.DelFrmFmt( pRetFrmFmt );
+                pRetFrmFmt = 0;
                 // auch den Objektmerker loeschen
                 pRecord->pObj = 0;
             }
@@ -2830,6 +2814,7 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
             pSdrTextObj->SetItemSetAndBroadcast(aItemSet);
         }
     }
+    return pRetFrmFmt;
 }
 
 SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
@@ -2903,10 +2888,9 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             contact object, while a raw rpOutNewObject stored here becomes
             deleted and useless.
             */
-            pMSDffManager->StoreShapeOrder( pF->nSpId,
+            pMSDffManager->StoreShapeOrder(pF->nSpId,
                 (((ULONG)pRecord->aTextId.nTxBxS) << 16) +
-                pRecord->aTextId.nSequence, 0, pRetFrmFmt,
-                nActSectionNo + bIsHeader ? 1 : 0 + bIsFooter ? 2 : 0 );
+                pRecord->aTextId.nSequence, 0, pRetFrmFmt);
 
             // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit
             // in SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden
@@ -3015,7 +2999,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
                 SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
         }
         // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-        aGrfNameGenerator.SetUniqueGraphName(pRetFrmFmt, aObjectName);
+        maGrfNameGenerator.SetUniqueGraphName(pRetFrmFmt, aObjectName);
     }
     //falls alles Ok, Zeiger auf neues Objekt ermitteln und Z-Order-Liste
     //entsprechend korrigieren (oder Eintrag loeschen)
@@ -3135,3 +3119,5 @@ void SwWW8FltAnchorStack::Flush()
         --nCnt;
     }
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:14:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@
 #define STR_REDLINE_UNKNOWN_AUTHOR  (RC_APP_BEGIN + 76)
 #define STR_WESTERN_FONT            (RC_APP_BEGIN + 77)
 #define STR_CJK_FONT                (RC_APP_BEGIN + 78)
-#define MSG_INS_MERGE_FIELDS        (RC_APP_BEGIN + 79)
+//#define MSG_INS_MERGE_FIELDS        (RC_APP_BEGIN + 79)
 #define MSG_PRINT_AS_MERGE          (RC_APP_BEGIN + 80)
 #define MSG_MERGE_SOURCE_UNAVAILABLE (RC_APP_BEGIN + 81)
 #define MSG_DATA_SOURCES_UNAVAILABLE (RC_APP_BEGIN + 82)

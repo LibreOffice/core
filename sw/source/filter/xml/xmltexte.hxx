@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 10:19:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,6 @@ public:
          SvXMLAutoStylePoolP& rAutoStylePool );
     ~SwXMLTextParagraphExport();
 
-    virtual void getTextEmbeddedObjectProperties(
-        const ::com::sun::star::uno::Reference <
-                ::com::sun::star::beans::XPropertySet >& rPropSet,
-        ::rtl::OUString& rStreamName,
-        sal_Bool& rExtern ) const;
     virtual void setTextEmbeddedGraphicURL(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,

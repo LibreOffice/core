@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-04-19 09:51:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,22 +71,23 @@ String STR_HUMAN_SWGLOBDOC_NAME
     Text [ italian ] = "Documento master" ;
     Text [ spanish ] = "Documento maestro" ;
     Text [ french ] = "Document maître" ;
-    Text [ dutch ] = "Master-document" ;
+    Text [ dutch ] = "Masterdocument" ;
     Text [ portuguese ] = "Documento-mestre" ;
-    Text[ chinese_simplified ] = "Ö÷¿ØÎÄµµ";
-    Text[ russian ] = "Ãëàâíûé äîêóìåíò";
+    Text[ chinese_simplified ] = "ä¸»æ§æ–‡æ¡£";
+    Text[ russian ] = "Ñîñòàâíîé äîêóìåíò";
     Text[ polish ] = "Dokument g³ówny";
-    Text[ japanese ] = "Ï½À°ÄŞ·­ÒİÄ";
-    Text[ chinese_traditional ] = "¥D±±¤å¥ó";
+    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
+    Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶";
     Text[ arabic ] = "ãÓÊäÏ ÔÇãá";
-    Text[ dutch ] = "Master-document";
-    Text[ chinese_simplified ] = "Ö÷¿ØÎÄµµ";
+    Text[ dutch ] = "Masterdocument";
+    Text[ chinese_simplified ] = "ä¸»æ§æ–‡æ¡£";
     Text[ greek ] = "Kıñéï İããñáöï";
-    Text[ korean ] = "¸¶½ºÅÍ ¹®¼­";
+    Text[ korean ] = "ë§ˆìŠ¤í„° ë¬¸ì„œ";
     Text[ turkish ] = "Ana belge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Documento maestro";
-    Text[ finnish ] = "Pääasiakirja";
+    Text[ catalan ] = "Document mestre";
+    Text[ finnish ] = "Perusasiakirja";
+    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
@@ -102,29 +103,35 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT [ English ] = "%PRODUCTNAME 6.0 Master Document" ;
     TEXT[ english_us ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ portuguese ] = "%PRODUCTNAME 6.0 Documento-mestre";
-    TEXT[ russian ] = "Ãëàâíûé äîêóìåíò (%PRODUCTNAME 6.0)";
+    TEXT[ russian ] = "Ñîñòàâíîé äîêóìåíò (%PRODUCTNAME 6.0)";
     TEXT[ greek ] = "%PRODUCTNAME 6.0 - Êıñéï İããñáöï";
-    TEXT[ dutch ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ dutch ] = "%PRODUCTNAME 6.0 Masterdocument";
     TEXT[ french ] = "%PRODUCTNAME 6.0 Document maître";
-    TEXT[ spanish ] = "%PRODUCTNAME 6.0 Documento maestro";
+    TEXT[ spanish ] = "%PRODUCTNAME 6.0 - Documento maestro";
     TEXT[ italian ] = "Documento master %PRODUCTNAME 6.0";
-    TEXT[ danish ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ danish ] = "%PRODUCTNAME 6.0 Hoveddokument";
     TEXT[ swedish ] = "Samlingsdokument %PRODUCTNAME 6.0";
     TEXT[ polish ] = "%PRODUCTNAME 6.0 - Dokument g³ówny";
     TEXT[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Master Document";
-    TEXT[ japanese ] = "%PRODUCTNAME 6.0 Ï½À°ÄŞ·­ÒİÄ";
-    TEXT[ korean ] = "%PRODUCTNAME 6.0 ¸¶½ºÅÍ ¹®¼­";
-    TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 Ö÷¿ØÎÄµµ";
-    TEXT[ chinese_traditional ] = "%PRODUCTNAME 6.0 ¥D±±¤å¥ó";
+    TEXT[ japanese ] = "%PRODUCTNAME 6.0 ãƒã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
+    TEXT[ korean ] = "%PRODUCTNAME 6.0 ë§ˆìŠ¤í„° ë¬¸ì„œ";
+    TEXT[ chinese_simplified ] = "%PRODUCTNAME 6.0 ä¸»æ§æ–‡æ¡£";
+    TEXT[ chinese_traditional ] = "%PRODUCTNAME 6.0 ä¸»æ§æ–‡ä»¶";
     TEXT[ turkish ] = "%PRODUCTNAME 6.0 Master Document";
     TEXT[ arabic ] = "%PRODUCTNAME 6.0 Master Document";
-    TEXT[ catalan ] = "%PRODUCTNAME 6.0 Master Document";
-    TEXT[ finnish ] = "%PRODUCTNAME 6.0 Global Dokument";
+    TEXT[ catalan ] = "%PRODUCTNAME 6.0 Document mestre";
+    TEXT[ finnish ] = "%PRODUCTNAME 6.0 -perusasiakirja";
+    TEXT[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š %PRODUCTNAME 6.0 ";
 };
 
 #define MN_SW_GLOBAL
 #include "swmn.hrc"
 #define MN_SW_PORTAL
 #include "swmn.hrc"
+
+
+
+
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 14:14:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,12 +345,13 @@ Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(::com::sun::star:
  ---------------------------------------------------------------------------*/
 Sequence< sal_Int8 > SAL_CALL SwXTextView::getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }
@@ -531,6 +532,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
            const SwUnoCrsr* pUnoCrsr = pRange->GetTblCrsr();
            if(pUnoCrsr)
            {
+                UnoActionRemoveContext aContext(pDoc);
                 rSh.EnterStdMode();
                 rSh.SetSelection(*pUnoCrsr);
                 return sal_True;
@@ -1324,12 +1326,25 @@ void SwXTextViewCursor::gotoRange(
                                                 FindSttNodeByType(eSearchNodeType);
 
         const SwNode* pSrcNode = 0;
+        if(pCursor && pCursor->GetCrsr())
+        {
+            pSrcNode = pCursor->GetCrsr()->GetNode();
+        }
+        else if(pRange && pRange->GetBookmark())
+        {
+            SwBookmark* pBkm = pRange->GetBookmark();
+            pSrcNode = &pBkm->GetPos().nNode.GetNode();
+        }
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
         //SectionNodes ueberspringen
         while(pTmp && pTmp->IsSectionNode())
         {
             pTmp = pTmp->FindStartNode();
+        }
+        while(pOwnStartNode && pOwnStartNode->IsSectionNode())
+        {
+            pOwnStartNode = pOwnStartNode->FindStartNode();
         }
         //ohne Expand darf mit dem ViewCursor ueberall hingesprungen werden
         //mit Expand nur in der gleichen Umgebung

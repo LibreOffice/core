@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-28 10:55:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,7 @@ const Font* SwRTFParser::FindFontOfItem( const SvxFontItem& rItem ) const
 }
 
 
-void SwRTFParser::ReadNumSecLevel( int nToken )
+SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
 {
     // lese die \pnseclvl - Gruppe
     // nTokenValue gibt schon den richtigen Level vor 1 - 9!
@@ -835,7 +835,7 @@ void SwRTFParser::ReadNumSecLevel( int nToken )
 
         default:
             SkipGroup();
-            return ;
+            return 0;
         }
     }
 
@@ -1102,6 +1102,7 @@ NUMATTR_SETUNDERLINE:
     }
 
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    return pCurRule;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-06-05 12:24:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
+
+#ifndef _SVX_FRMDIR_HXX
+#include <svx/frmdir.hxx>
 #endif
 
 // POOLCOLL-IDs:
@@ -459,6 +463,8 @@ RES_POOLCOLL_HTML_END
 //              USHRT_MAX   -> kein Parent
 //              sonst       -> den Parent
 USHORT GetPoolParent( USHORT nId );
+
+SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage);
 
 inline BOOL IsConditionalByPoolId(USHORT nId)
     {

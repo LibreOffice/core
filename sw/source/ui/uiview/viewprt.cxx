@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:14:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,9 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
         }
         else
         {
+            const BOOL bLockedView = pSh->IsViewLocked();
+            pSh->LockView( TRUE );
+
             //BrowseView abschalten und die View gegen alle Paints locken.
             FASTBOOL bBrowse = pSh->IsBrowseMode();
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
@@ -327,7 +330,6 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
                 if ( pSh->GetWin() )
                     pSh->GetWin()->Update();
                 pSh->LockPaint();
-                pSh->LockView( TRUE );
                 aSet.Put( aBrowse, aBrowse.Which() );
                 SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
                 GetDocShell()->Execute( aReq );
@@ -372,9 +374,10 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
                 aSet.Put( aBrowse, aBrowse.Which() );
                 SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
                 GetDocShell()->Execute( aReq );
-                pSh->LockView( FALSE );
                 pSh->UnlockPaint();
             }
+
+            pSh->LockView( bLockedView );
         }
     }
 
@@ -486,6 +489,8 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, FALSE);
             BOOL bSilent = pSilentItem ? pSilentItem->GetValue() : FALSE;
             SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, FALSE);
+            if(pPrintFromMergeItem)
+                rReq.RemoveItem(FN_QRY_MERGE);
             BOOL bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : FALSE;
             if(!bSilent && !bFromMerge && pSh->IsAnyDatabaseFieldInDoc())
             {

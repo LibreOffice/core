@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-23 14:54:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,8 +420,9 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != STRING_LEN )
     {
         // case B1
-        if( aGuess.HyphWord().is() && ( aGuess.BreakPos() > rInf.GetIdx() ||
-            ( rInf.GetLast() && ! rInf.GetLast()->IsFlyPortion() ) ) )
+        if( aGuess.HyphWord().is() && aGuess.BreakPos() > rInf.GetLineStart()
+            && ( aGuess.BreakPos() > rInf.GetIdx() ||
+               ( rInf.GetLast() && ! rInf.GetLast()->IsFlyPortion() ) ) )
         {
             CreateHyphen( rInf, aGuess );
             if ( rInf.GetFly() )
@@ -667,6 +668,7 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
             nCnt += lcl_AddSpace( rInf, &aStr, *this );
+            nPos = aStr.Len();
         }
     }
     else if( !IsDropPortion() )

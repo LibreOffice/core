@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-02 10:29:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
@@ -68,8 +67,8 @@
 
 #pragma hdrstop
 
-#ifndef _TOOLS_SOLMATH_H
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #ifndef _FILTER_HXX //autogen
@@ -436,7 +435,10 @@ void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
                     GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
                 nHeight-=nFontHeight/20;
 
-                Set_UInt16( pArr, 0x4845 );
+                if (bWrtWW8)
+                    Set_UInt16( pArr, 0x4845 );
+                else
+                    Set_UInt8( pArr, 101 );
                 Set_UInt16( pArr, -((INT16)nHeight));
             }
         }
@@ -651,7 +653,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
     if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
     {
         double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd);
-        Set_UInt16( pArr, (USHORT)SolarMath::Round(fVal) );
+        Set_UInt16( pArr, (USHORT)::rtl::math::round(fVal) );
     }
     else
         pArr += 2;
@@ -659,7 +661,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
     if( aGrTwipSz.Height() + nYSizeAdd )            // set my
     {
         double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
-        Set_UInt16( pArr, (USHORT)SolarMath::Round(fVal) );
+        Set_UInt16( pArr, (USHORT)::rtl::math::round(fVal) );
     }
     else
         pArr += 2;
@@ -854,3 +856,5 @@ void SwWW8WrGrf::Write()
         }
     }
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

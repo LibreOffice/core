@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edsect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-08 08:58:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,140 +371,149 @@ USHORT SwEditShell::GetFullSelectedSectionCount() const
     return nRet;
 }
 
-// is the cursor at the last contentposition of any section and is the
-// insertposition not readonly?
-// The return have 3 values:
-//  0 - not at start or end of Section
-//  1 - at start of Section
-//  2 - at End of Section
-int SwEditShell::CanInsertNodeAtEndOfSection() const
+
+/**
+ * Find the suitable node for a special insert (alt-enter).
+ * This should enable inserting text before/after sections and tables.
+ *
+ * A node is found if:
+ * 1) the innermost table/section is not in a write-protected area
+ * 2) pCurrentPos is at or just before an end node
+ *    (or at or just after a start node)
+ * 3) there are only start/end nodes between pCurrentPos and the innermost
+ *    table/section
+ *
+ * If a suitable node is found, an SwNode* is returned; else it is NULL.
+ */
+const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
 {
-    int nRet = 0;
-    if( !IsTableMode() )
+    const SwNode* pReturn = NULL;
+
+    // the current position
+    //    const SwPosition* pCurrentPos = GetCrsr()->GetPoint();
+    DBG_ASSERT( pCurrentPos != NULL, "Strange, we have no position!" );
+    const SwNode& rCurrentNode = pCurrentPos->nNode.GetNode();
+
+
+    // find innermost section or table.  At the end of this scope,
+    // pInntermostNode contain the section/table before/after which we should
+    // insert our empty paragraph, or it will be NULL if none is found.
+    const SwNode* pInnermostNode = NULL;
     {
-        const SwPosition& rPos = *GetCrsr()->GetPoint();
-        const SwSectionNode* pSectNd = rPos.nNode.GetNode().FindSectionNode();
-        if( pSectNd )
+        const SwNode* pTableNode = rCurrentNode.FindTableNode();
+        const SwNode* pSectionNode = rCurrentNode.FindSectionNode();
+
+        // find the table/section which is close
+        if( pTableNode == NULL )
+            pInnermostNode = pSectionNode;
+        else if ( pSectionNode == NULL )
+            pInnermostNode = pTableNode;
+        else
         {
-            BOOL bEnd = FALSE, bStart = FALSE;
-            const SwCntntNode* pCntNd = rPos.nNode.GetNode().GetCntntNode();
-
-            SwNodeIndex aEnd( rPos.nNode, 1 );
-            while( aEnd.GetNode().IsEndNode() &&
-                    (const SwNode*)&aEnd.GetNode() !=
-                    pSectNd->EndOfSectionNode() )
-                aEnd++;
-
-            if( aEnd.GetNode().IsEndNode() &&
-                ( !pCntNd || pCntNd->Len() == rPos.nContent.GetIndex() ))
-                bEnd = TRUE;
-            else
-            {
-                aEnd = rPos.nNode;
-                aEnd--;
-                while( aEnd.GetNode().IsStartNode() &&
-                        (const SwNode*)&aEnd.GetNode() != pSectNd )
-                    aEnd--;
-
-                if( (const SwNode*)&aEnd.GetNode() == pSectNd &&
-                    ( !pCntNd || !rPos.nContent.GetIndex() ))
-                    bStart = TRUE;
-            }
-
-            if( bEnd || bStart )
-            {
-                // is the insertposition readonly?
-                if( bEnd )
-                {
-                    aEnd = *pSectNd->EndOfSectionNode();
-                    aEnd++;
-                }
-                else
-                {
-                    aEnd = *pSectNd;
-                    aEnd--;
-                    // the IsProtect-Method of SwNode test by sectionnode
-                    // his parent!
-                    if( aEnd.GetNode().IsSectionNode() )
-                        aEnd = *pSectNd;
-                }
-
-                do {
-                    if( !aEnd.GetNode().IsProtect() )
-                    {
-                        nRet = bStart ? 1 : 2;
-                        break;
-                    }
-                    else
-                    {
-                        // skip protected sections without any content at
-                        // start or end
-                        if( bStart )
-                        {
-                            if( !aEnd.GetNode().IsSectionNode() ||
-                                !aEnd.GetNode().StartOfSectionIndex() )
-                                break;
-                            aEnd--;
-                        }
-                        else
-                        {
-                            if( !aEnd.GetNode().IsEndNode() ||
-                                !aEnd.GetNode().StartOfSectionNode()->
-                                            IsSectionNode() )
-                                break;
-                               aEnd++;
-                        }
-                    }
-                } while( TRUE );
-            }
+            // compare and choose the larger one
+            pInnermostNode =
+                ( pSectionNode->GetIndex() > pTableNode->GetIndex() )
+                ? pSectionNode : pTableNode;
         }
     }
-    return nRet;
+
+    // The previous version had a check to skip empty read-only sections. Those
+    // shouldn't occur, so we only need to check whether our pInnermostNode is
+    // inside a protected area.
+
+    // Now, pInnermostNode is NULL or the innermost section or table node.
+    if( (pInnermostNode != NULL) && !pInnermostNode->IsProtect() )
+    {
+        DBG_ASSERT( pInnermostNode->IsTableNode() ||
+                    pInnermostNode->IsSectionNode(), "wrong node found" );
+        DBG_ASSERT( ( pInnermostNode->GetIndex() <= rCurrentNode.GetIndex() )&&
+                    ( pInnermostNode->EndOfSectionNode()->GetIndex() >=
+                      rCurrentNode.GetIndex() ), "wrong node found" );
+
+        // we now need to find the possible start/end positions
+
+        // we found a start if
+        // - we're at or just before a start node
+        // - there are only start nodes between the current and pInnermostNode
+        SwNodeIndex aBegin( pCurrentPos->nNode );
+        if( rCurrentNode.IsCntntNode() &&
+            (pCurrentPos->nContent.GetIndex() == 0))
+            aBegin--;
+        while( (aBegin != pInnermostNode->GetIndex()) &&
+               aBegin.GetNode().IsStartNode() )
+            aBegin--;
+        bool bStart = ( aBegin == pInnermostNode->GetIndex() );
+
+        // we found an end if
+        // - we're at or just before an end node
+        // - there are only end nodes between the current node and
+        //   pInnermostNode's end node
+        SwNodeIndex aEnd( pCurrentPos->nNode );
+        if( rCurrentNode.IsCntntNode() &&
+            ( pCurrentPos->nContent.GetIndex() ==
+              rCurrentNode.GetCntntNode()->Len() ) )
+            aEnd++;
+        while( (aEnd != pInnermostNode->EndOfSectionNode()->GetIndex()) &&
+               aEnd.GetNode().IsEndNode() )
+            aEnd++;
+        bool bEnd = ( aEnd == pInnermostNode->EndOfSectionNode()->GetIndex() );
+
+        // evalutate result: if both start + end, end is preferred
+        if( bEnd )
+            pReturn = pInnermostNode->EndOfSectionNode();
+        else if ( bStart )
+            pReturn = pInnermostNode;
+        // else pReturn = NULL;
+    }
+    // else: pReturn = NULL
+
+
+    DBG_ASSERT( ( pReturn == NULL ) || pReturn->IsStartNode() ||
+                                       pReturn->IsEndNode(),
+                "SpecialInsertNode failed" );
+    return pReturn;
 }
 
-BOOL SwEditShell::AppendNodeInSection()
+
+/** a node can be special-inserted (alt-Enter) whenever lcl_SpecialInsertNode
+    finds a suitable position
+*/
+bool SwEditShell::CanSpecialInsert() const
 {
-    int nRet = CanInsertNodeAtEndOfSection();
-    if( nRet )
+    return NULL != lcl_SpecialInsertNode( GetCrsr()->GetPoint() );
+}
+
+
+/** check whether a node cen be special-inserted (alt-Enter), and do so. Return
+    whether insertion was possible.
+ */
+bool SwEditShell::DoSpecialInsert()
+{
+    bool bRet = false;
+
+    // get current node
+    SwPosition* pCursorPos = GetCrsr()->GetPoint();
+    const SwNode* pInsertNode = lcl_SpecialInsertNode( pCursorPos );
+    if( pInsertNode != NULL )
     {
         StartAllAction();
 
-        SwPosition& rPos = *GetCrsr()->GetPoint();
-        const SwSectionNode* pSectNd = rPos.nNode.GetNode().FindSectionNode();
-        SwPosition aPos( *pSectNd );
-        if( 1 == nRet )
-        {
-            do {
-                const SwNode* pPrvNd = &aPos.nNode.GetNode();
-                aPos.nNode--;
-                if( !aPos.nNode.GetNode().IsSectionNode() ||
-                    !pPrvNd->IsProtect() )
-                    break;
-            } while( TRUE );
-        }
-        else
-        {
-            SwNodeIndex aIdx( *pSectNd->EndOfSectionNode(), 1 );
-            do {
-                if( !aIdx.GetNode().IsEndNode() ||
-                    !aIdx.GetNode().FindStartNode()->IsSectionNode() ||
-                    !aIdx.GetNode().IsProtect() )
-                    break;
-                aIdx++;
-            } while( TRUE );
-            aIdx--;
-            aPos.nNode = aIdx;
-        }
+        // adjust insert position to insert before start nodes and after end
+        // nodes
+        SwNodeIndex aInsertIndex( *pInsertNode,
+                                  pInsertNode->IsStartNode() ? -1 : 0 );
+        SwPosition aInsertPos( aInsertIndex );
 
-        GetDoc()->AppendTxtNode( aPos );
-        rPos = aPos;
+        // insert a new text node, and set the cursor
+        bRet = GetDoc()->AppendTxtNode( aInsertPos );
+        *pCursorPos = aInsertPos;
 
-        // rufe das AttrChangeNotify auf der UI-Seite.
+        // call AttrChangeNotify for the UI
         CallChgLnk();
+
         EndAllAction();
     }
-    return 0 != nRet;
+
+    return bRet;
 }
-
-
 

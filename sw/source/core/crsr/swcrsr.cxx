@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-03 12:58:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,35 +420,32 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
     if( pNd->IsCntntNode() && 0 == (SwUnoCrsr*)*this )
     {
         const SwCntntFrm* pFrm = ((SwCntntNode*)pNd)->GetFrm();
-        if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() )
+        if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
+            0 != ( SELOVER_CHANGEPOS & eFlags ) )
         {
-            if( 0 != ( SELOVER_CHANGEPOS & eFlags ) )
+            // skip to the next / prev valida paragraph with a layout
+            SwNodeIndex& rPtIdx = GetPoint()->nNode;
+            int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
+            while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
+                                          : pFrm->GetPrevCntntFrm() )) &&
+                    0 == pFrm->Frm().Height() )
+                ;
+
+            SwCntntNode* pCNd;
+            if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
             {
-                // skip to the next / prev valida paragraph with a layout
-                SwNodeIndex& rPtIdx = GetPoint()->nNode;
-                int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
-                while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
-                                              : pFrm->GetPrevCntntFrm() )) &&
-                        0 == pFrm->Frm().Height() )
-                    ;
+                // set this cntntNode as new position
+                rPtIdx = *pCNd;
+                pNd = pCNd;
 
-                SwCntntNode* pCNd;
-                if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
-                {
-                    // set this cntntNode as new position
-                    rPtIdx = *pCNd;
-                    pNd = pCNd;
+                // ContentIndex noch anmelden:
+                xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
+                GetPoint()->nContent.Assign( pCNd, nTmpPos );
 
-                    // ContentIndex noch anmelden:
-                    xub_StrLen nTmpPos = bGoNxt ? 0 : pCNd->Len();
-                    GetPoint()->nContent.Assign( pCNd, nTmpPos );
-                        // sollten wir in einer Tabelle gelandet sein?
-                    if( IsInProtectTable( TRUE ) )
-                        pFrm = 0;
-                }
+                    // sollten wir in einer Tabelle gelandet sein?
+                if( IsInProtectTable( TRUE ) )
+                    pFrm = 0;
             }
-            else
-                pFrm = 0;
         }
 
         if( !pFrm )
@@ -1097,7 +1094,7 @@ ULONG SwCursor::FindAll( SwFindParas& rParas,
             *GetMark() = aMarkPos;
     }
 
-    if( nFound && SwCursor::IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ) )
+    if( nFound && SwCursor::IsSelOvr( SELOVER_TOGGLE ) )
         nFound = 0;
     return nFound;
 }
@@ -1289,10 +1286,12 @@ FASTBOOL SwCursor::GoPrevWord()
     {
         SwCrsrSaveState aSave( *this );
         xub_StrLen nPtPos = GetPoint()->nContent.GetIndex();
+        const xub_StrLen nPtStart = nPtPos;
+
         if( nPtPos )
             --nPtPos;
         nPtPos = (xub_StrLen)pBreakIt->xBreak->previousWord(
-                                pTxtNd->GetTxt(), nPtPos,
+                                pTxtNd->GetTxt(), nPtStart,
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
                     WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
 
@@ -1391,53 +1390,56 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
 
 
 FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
-                              BOOL bVisualAllowed )
+                              BOOL bVisualAllowed, BOOL bInsertCrsr )
 {
     SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
     if( pTblCrsr )
         return bLeft ? pTblCrsr->GoPrevCell( nCnt )
                      : pTblCrsr->GoNextCell( nCnt );
 
-
+    // calculate cursor bidi level
+    const SwCntntFrm* pSttFrm = NULL;
     SwNode& rNode = GetPoint()->nNode.GetNode();
-    const BOOL bIsUnoCrsr = 0 != (SwUnoCrsr*)*this;
+    const BOOL bDoNotSetBidiLevel = 0 != (SwUnoCrsr*)*this;
 
-    // The visual cursor travelling requires a layout. Therefore we do not
-    // want this for an UnoCursor.
-    if ( ! bIsUnoCrsr && rNode.IsTxtNode() )
+    if ( ! bDoNotSetBidiLevel )
     {
-        const SwTxtNode& rTNd = *rNode.GetTxtNode();
-        SwIndex& rIdx = GetPoint()->nContent;
-        xub_StrLen nPos = rIdx.GetIndex();
+        if( rNode.IsTxtNode() )
+        {
+            const SwTxtNode& rTNd = *rNode.GetTxtNode();
+            SwIndex& rIdx = GetPoint()->nContent;
+            xub_StrLen nPos = rIdx.GetIndex();
 
-        SvtCTLOptions aCTLOptions;
-        if ( bVisualAllowed && aCTLOptions.IsCTLFontEnabled() &&
-             SvtCTLOptions::MOVEMENT_VISUAL ==
-             aCTLOptions.GetCTLCursorMovement() )
-        {
-            // for visual cursor travelling (used in bidi layout)
-            // we first have to convert the logic to a visual position
-            Point aPt;
-            SwCntntFrm* pFrm = rTNd.GetFrm( &aPt, GetPoint() );
-            if( pFrm )
+            SvtCTLOptions aCTLOptions;
+            if ( bVisualAllowed && aCTLOptions.IsCTLFontEnabled() &&
+                 SvtCTLOptions::MOVEMENT_VISUAL ==
+                 aCTLOptions.GetCTLCursorMovement() )
             {
-                BYTE nCrsrLevel = GetCrsrBidiLevel();
-                sal_Bool bForward = ! bLeft;
-                ((SwTxtFrm*)pFrm)->PrepareVisualMove( nPos, nCrsrLevel, bForward );
-                rIdx = nPos;
-                SetCrsrBidiLevel( nCrsrLevel );
-                bLeft = ! bForward;
+                // for visual cursor travelling (used in bidi layout)
+                // we first have to convert the logic to a visual position
+                Point aPt;
+                pSttFrm = rTNd.GetFrm( &aPt, GetPoint() );
+                if( pSttFrm )
+                {
+                    BYTE nCrsrLevel = GetCrsrBidiLevel();
+                    sal_Bool bForward = ! bLeft;
+                    ((SwTxtFrm*)pSttFrm)->PrepareVisualMove( nPos, nCrsrLevel,
+                                                             bForward, bInsertCrsr );
+                    rIdx = nPos;
+                    SetCrsrBidiLevel( nCrsrLevel );
+                    bLeft = ! bForward;
+                }
             }
-        }
-        else
-        {
-            const SwScriptInfo* pScriptInfo = SwScriptInfo::GetScriptInfo( rTNd );
-            if ( pScriptInfo )
+            else
             {
-                const xub_StrLen nMoveOverPos = bLeft ?
-                                               ( nPos ? nPos - 1 : 0 ) :
-                                                nPos;
-                SetCrsrBidiLevel( pScriptInfo->DirType( nMoveOverPos ) );
+                const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
+                if ( pSI )
+                {
+                    const xub_StrLen nMoveOverPos = bLeft ?
+                                                   ( nPos ? nPos - 1 : 0 ) :
+                                                    nPos;
+                    SetCrsrBidiLevel( pSI->DirType( nMoveOverPos ) );
+                }
             }
         }
     }
@@ -1448,6 +1450,27 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     SwGoInDoc fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
     while( nCnt && Move( fnMove, fnGo ) )
         --nCnt;
+
+    // here come some special rules for visual cursor travelling
+    if ( pSttFrm )
+    {
+        SwNode& rTmpNode = GetPoint()->nNode.GetNode();
+        if ( &rTmpNode != &rNode && rTmpNode.IsTxtNode() )
+        {
+            Point aPt;
+            const SwCntntFrm* pEndFrm = ((SwTxtNode&)rTmpNode).GetFrm( &aPt, GetPoint() );
+            if ( pEndFrm )
+            {
+                if ( ! pEndFrm->IsRightToLeft() != ! pSttFrm->IsRightToLeft() )
+                {
+                    if ( ! bLeft )
+                        pEndFrm->RightMargin( this );
+                    else
+                        pEndFrm->LeftMargin( this );
+                }
+            }
+        }
+    }
 
     return 0 == nCnt && !IsInProtectTable( TRUE ) &&
             !IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS );
@@ -1540,6 +1563,37 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
         }
         else
             *GetPoint() = aOldPos;
+
+        // calculate cursor bidi level
+        const BOOL bDoNotSetBidiLevel = 0 != (SwUnoCrsr*)*this;
+
+        if ( ! bDoNotSetBidiLevel )
+        {
+            SwNode& rNode = GetPoint()->nNode.GetNode();
+            if ( rNode.IsTxtNode() )
+            {
+                const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( (SwTxtNode&)rNode );
+                if ( pSI )
+                {
+                    SwIndex& rIdx = GetPoint()->nContent;
+                    xub_StrLen nPos = rIdx.GetIndex();
+
+                    if( nPos && nPos < ((SwTxtNode&)rNode).GetTxt().Len() )
+                    {
+                        const BYTE nCurrLevel = pSI->DirType( nPos );
+                        const BYTE nPrevLevel = pSI->DirType( nPos - 1 );
+
+                        if ( nCurrLevel % 2 != nPrevLevel % 2 )
+                        {
+                            // set cursor level to the lower of the two levels
+                            SetCrsrBidiLevel( Min( nCurrLevel, nPrevLevel ) );
+                        }
+                        else
+                            SetCrsrBidiLevel( nCurrLevel );
+                    }
+                }
+            }
+        }
     }
     return bRet;
 }
@@ -1548,6 +1602,11 @@ FASTBOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
 {
     Point aPt;
     SwCntntFrm * pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
+
+    // calculate cursor bidi level
+    if ( pFrm )
+        SetCrsrBidiLevel( pFrm->IsRightToLeft() ? 1 : 0 );
+
     return pFrm && (bLeft ? pFrm->LeftMargin( this )
                           : pFrm->RightMargin( this, bAPI ));
 }

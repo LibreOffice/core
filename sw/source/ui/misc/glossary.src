@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 10:05:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModalDialog DLG_GLOSSARY
     Text [ french ] = "AutoTexte" ;
     Text [ swedish ] = "AutoText" ;
     Text [ dutch ] = "AutoTekst" ;
-    Text [ spanish ] = "AutoTexto" ;
+    Text [ spanish ] = "Texto automático" ;
     Text [ english_us ] = "AutoText" ;
     Moveable = TRUE ;
     CheckBox CB_INSERT_TIP
@@ -101,17 +101,18 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese_brazilian ] = "~Rest des Namens bei der Eingabe als Tip anzeigen" ;
         Text [ portuguese ] = "Mostrar ~resto do nome como sugestão durante a digitação" ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨æ˜¾ç¤ºè¾“å…¥æ–‡æç¤º(~D)";
-        Text[ russian ] = "Ïğè ââîäå ïîêàçûâàòü âåñü àâòîòåêñò êàê ïîäñêàçêó";
+        Text[ russian ] = "Ïğåäëàãàòü çàìåíó ïğè íàáîğå";
         Text[ polish ] = "Wyœwietl w trakcie pisania pozosta³¹ czêœæ s³owa";
         Text[ japanese ] = "å…¥åŠ›ä¸­ã«ãƒ†ã‚­ã‚¹ãƒˆãƒ–ãƒ­ãƒƒã‚¯åã‚’ãƒ’ãƒ³ãƒˆè¡¨ç¤ºã™ã‚‹(~D)";
         Text[ chinese_traditional ] = "è‡ªå‹•å®Œæˆé¡¯ç¤º(~D)";
         Text[ arabic ] = "ÚÑÖ ÈŞíÉ ÅÏÎÇá ÇáäÕ ÇáÊáŞÇÆí ÃËäÇÁ ÇáßÊÇÈÉ Úáì Ôßá ÊáãíÍ";
         Text[ greek ] = "ÅìöÜíéóç ôïõ õğüëïéğïõ ôìŞìáôïò ôïõ ïíüìáôïò ùò óõìâïõëŞ êáôÜ ôçí åéóáãùãŞ";
-        Text[ korean ] = "ì…ë ¥ì‹œ ì¡°ì–¸ìœ¼ë¡œì„œ ë‚˜ë¨¸ì§€ ì´ë¦„ í‘œì‹œ(~D)";
+        Text[ korean ] = "ì…ë ¥ì‹œ ë‚˜ë¨¸ì§€ ì´ë¦„ì„ ì œì•ˆ ì´ë¦„ìœ¼ë¡œ í‘œì‹œ(~D)";
         Text[ turkish ] = "Giriş sırasında adın tamamını öneri olarak görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Muestra el resto del nombre como sugerencia durante la entrada";
+        Text[ catalan ] = "~Mostra la resta del nom com a suggerència durant l'entrada";
         Text[ finnish ] = "~Ehdota nimeä kirjoitettaessa";
+        Text[ thai ] = "à¹~à¸ªà¸”à¸‡à¸œà¸¥à¸Šà¸·à¹ˆà¸­à¸ªà¹ˆà¸§à¸™à¸—à¸µà¹ˆà¹€à¸«à¸¥à¸·à¸­à¹€à¸›à¹‡à¸™à¸„à¸³à¹à¸™à¸°à¸™à¸³à¸‚à¸“à¸°à¸à¸´à¸¡à¸à¹Œ";
     };
     FixedText FT_NAME
     {
@@ -125,7 +126,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese ] = "~Nome" ;
         Text [ finnish ] = "~Nimi" ;
         Text [ danish ] = "Navn" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "~Naam" ;
         Text [ spanish ] = "N~ombre" ;
@@ -141,7 +142,8 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ì´ë¦„(~N)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N~ombre";
+        Text[ catalan ] = "~Nom";
+        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
     };
     Edit ED_NAME
     {
@@ -177,10 +179,11 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_traditional ] = "ç¸®å¯«(~S)";
         Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
         Text[ greek ] = "Áñ÷é~êÜ";
-        Text[ korean ] = "ë°”ë¡œê°€ê¸°(~S)";
+        Text[ korean ] = "ë°”ë¡œ ê°€ê¸°(~S)";
         Text[ turkish ] = "Kısaltma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Abrev.";
+        Text[ catalan ] = "~Drecera";
+        Text[ thai ] = "~à¸—à¸²à¸‡à¸¥à¸±à¸”";
     };
     Edit ED_SHORTNAME
     {
@@ -207,7 +210,7 @@ ModalDialog DLG_GLOSSARY
             Text[ portuguese ] = "só leitura";
             Text[ russian ] = "òîëüêî äëÿ ÷òåíèÿ";
             Text[ greek ] = "ìüíï ãéá áíÜãíùóç";
-            Text[ dutch ] = "schrijfbeveiligd";
+            Text[ dutch ] = "Alleen-lezen";
             Text[ french ] = "en lecture seule";
             Text[ spanish ] = "solo lectura";
             Text[ italian ] = "di sola lettura";
@@ -216,13 +219,14 @@ ModalDialog DLG_GLOSSARY
             Text[ polish ] = "tylko do odczytu";
             Text[ portuguese_brazilian ] = "readonly";
             Text[ japanese ] = "æ›¸ãè¾¼ã¿ä¿è­·";
-            Text[ korean ] = "ì½ê¸°ì „ìš©";
+            Text[ korean ] = "ì½ê¸° ì „ìš©";
             Text[ chinese_simplified ] = "é˜²æ”¹å†™";
             Text[ chinese_traditional ] = "å”¯è®€";
             Text[ turkish ] = "readonly";
             Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
-            Text[ catalan ] = "solo lectura";
+            Text[ catalan ] = "només lectura";
             Text[ finnish ] = "Vain luku";
+            Text[ thai ] = "à¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
         };
     };
     FixedLine FL_RELATIVE
@@ -233,7 +237,7 @@ ModalDialog DLG_GLOSSARY
         Text[ italian ] = "Salvare i collegamenti in modo relativo";
         Text[ portuguese_brazilian ] = "Verknüpfungen relativ speichern";
         Text[ portuguese ] = "Guardar ligações em modo relativo";
-        Text[ danish ] = "Gem kæderne relativt";
+        Text[ danish ] = "Gem kæder relativt";
         Text[ french ] = "Enregistrement relatif des liens";
         Text[ swedish ] = "Spara länkar relativt";
         Text[ dutch ] = "Koppelingen relatief opslaan";
@@ -242,16 +246,17 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "å­˜ç›˜ç›¸å¯¹çš„é“¾æ¥";
         Text = "Verknüpfungen relativ speichern" ;
         Text[ chinese_traditional ] = "å„²å­˜ç›¸å°çš„æ·å¾‘";
-        Text[ russian ] = "Ñîõğàíèòü ññûëêè îòíîñ.";
+        Text[ russian ] = "Ñîõğàíèòü ññûëêè îòíîñèòåëüíî";
         Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç óõíäİóåùí";
         Text[ polish ] = "Zapisz ³¹cza wzglêdnie";
         Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®ç›¸å¯¾ä¿å­˜";
-        Text[ korean ] = "ì— ê´€í•œ ìƒëŒ€ì  ì—°ê²° ì €ì¥";
+        Text[ korean ] = "ë§í¬ë¥¼ ë‹¤ìŒ ê¸°ì¤€ìœ¼ë¡œ ì €ì¥";
         Text[ arabic ] = "ÍİÙ ÇáÇÑÊÈÇØÇÊ ÍİÙÇğ äÓÈíÇğ";
         Text[ turkish ] = "Bağlantıları göreceli kaydet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Guardar vínculos relativamente";
+        Text[ catalan ] = "Desa els enllaços relativament";
         Text[ finnish ] = "Linkkien tallennussuhde";
+        Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸ªà¸±à¸¡à¸à¸±à¸—à¸˜à¹Œà¸à¸±à¸š";
     };
     CheckBox CB_FILE_REL
     {
@@ -262,7 +267,7 @@ ModalDialog DLG_GLOSSARY
         TabStop = TRUE ;
         Text [ english_us ] = "~File system" ;
         Text [ italian ] = "Al file system" ;
-        Text [ spanish ] = "En el ~sistema de archivos" ;
+        Text [ spanish ] = "~Sistema de archivos" ;
         Text [ french ] = "Dans le système de ~fichiers" ;
         Text [ dutch ] = "In b~estandsysteem" ;
         Text [ swedish ] = "I ~filsystemet" ;
@@ -270,7 +275,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese_brazilian ] = "Im ~Dateisystem" ;
         Text [ portuguese ] = "~No sistema de ficheiros" ;
         Text[ chinese_simplified ] = "åœ¨æ–‡ä»¶ç³»ç»Ÿå†…(~F)";
-        Text[ russian ] = "Â ñèñòåìå ôàéëîâ";
+        Text[ russian ] = "Ôàéëîâîé ñèñòåìû";
         Text[ polish ] = "W systemie plików";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‚·ã‚¹ãƒ†ãƒ å†…(~F)";
         Text[ chinese_traditional ] = "æª”æ¡ˆç³»çµ±(~F)";
@@ -279,8 +284,9 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "íŒŒì¼ ì‹œìŠ¤í…œ(~F)";
         Text[ turkish ] = "Dosya sistemi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "En el ~sistema de archivos";
+        Text[ catalan ] = "Sistema de ~fitxers";
         Text[ finnish ] = "~Tiedostojärjestelmä";
+        Text[ thai ] = "à¸£à¸°à¸šà¸°à¹~à¸Ÿà¹‰à¸¡";
     };
     CheckBox CB_NET_REL
     {
@@ -291,14 +297,14 @@ ModalDialog DLG_GLOSSARY
         Text [ english_us ] = "Inte~rnet" ;
         Text [ italian ] = "In ~Internet" ;
         Text [ spanish ] = "En I~nternet" ;
-        Text [ french ] = "Sur l'~Internet" ;
-        Text [ dutch ] = "In Interne~t" ;
+        Text [ french ] = "Sur ~Internet" ;
+        Text [ dutch ] = "Op het interne~t" ;
         Text [ swedish ] = "På ~Internet" ;
         Text [ danish ] = "på ~Internettet" ;
         Text [ portuguese_brazilian ] = "Im ~Internet" ;
         Text [ portuguese ] = "Na ~Internet" ;
         Text[ chinese_simplified ] = "åœ¨å›½é™…äº’è”ç½‘å†…(~R)";
-        Text[ russian ] = "Â Èíòåğíåòå";
+        Text[ russian ] = "Èíòåğíåò";
         Text[ polish ] = "W Int~ernecie";
         Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆå†…(~R)";
         Text[ chinese_traditional ] = "Inte~rnet";
@@ -307,8 +313,9 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ì¸í„°ë„·(~R)";
         Text[ turkish ] = "Internet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "En I~nternet";
+        Text[ catalan ] = "Inte~rnet";
         Text[ finnish ] = "~Internet";
+        Text[ thai ] = "à¸­à¸´à¸™à¹€à¸—à¸­~à¸£à¹Œà¹€à¸™à¹‡à¸•";
     };
     Window WIN_EXAMPLE
     {
@@ -329,12 +336,12 @@ ModalDialog DLG_GLOSSARY
         Text [ ENGLISH ] = "Show ~preview" ;
         Text[ english_us ] = "Sho~w preview";
         Text[ portuguese ] = "~Mostrar Previsualizar";
-        Text[ russian ] = "Âêëş÷èòü ïğîñìîòğ";
+        Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
         Text[ greek ] = "ÅìöÜíéóç ğñïåğéóêüğçóçò";
         Text[ dutch ] = "~Voorbeeld weergeven";
-        Text[ french ] = "Afficher l'~aperçu";
+        Text[ french ] = "Afficher l'aperçu";
         Text[ spanish ] = "Mostrar pre~visualización";
-        Text[ italian ] = "Mostra ~anteprima";
+        Text[ italian ] = "Mostra anteprima";
         Text[ danish ] = "Vis eksempel";
         Text[ swedish ] = "Visa förhandsvisning";
         Text[ polish ] = "Wyœwietl podgl¹d";
@@ -346,8 +353,9 @@ ModalDialog DLG_GLOSSARY
         Text[ arabic ] = "ÅÙåÇÑ ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizlemeyi görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mostrar pre~visualización";
+        Text[ catalan ] = "Mostra pre~visualització";
         Text[ finnish ] = "Näytä ~esikatselu";
+        Text[ thai ] = "à¹à¸ªà¸”~à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
     };
     OKButton PB_INSERT
     {
@@ -362,7 +370,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese ] = "~Inserir" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "~Indsæt" ;
-        Text [ french ] = "~Insérer" ;
+        Text [ french ] = "Insérer" ;
         Text [ swedish ] = "Infog~a" ;
         Text [ dutch ] = "~Invoegen" ;
         Text [ spanish ] = "~Insertar" ;
@@ -384,7 +392,8 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ì‚½ì…(~I)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Insertar";
+        Text[ catalan ] = "~Insereix";
+        Text[ thai ] = "à¹~à¸—à¸£à¸";
     };
     CancelButton PB_CLOSE
     {
@@ -399,7 +408,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese ] = "~Fechar" ;
         Text [ finnish ] = "~Sulje" ;
         Text [ danish ] = "~Luk" ;
-        Text [ french ] = "~Fermer" ;
+        Text [ french ] = "Fermer" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ spanish ] = "~Cerrar" ;
@@ -415,7 +424,8 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     HelpButton PB_HELP
     {
@@ -432,12 +442,12 @@ ModalDialog DLG_GLOSSARY
         Text [ italian ] = "Testo auto." ;
         Text [ portuguese_brazilian ] = "Texto autom?tico" ;
         Text [ portuguese ] = "AutoTe~xto" ;
-        Text [ finnish ] = "~Automaattinen teksti" ;
+        Text [ finnish ] = "Autom. ~teksti" ;
         Text [ danish ] = "AutoTekst" ;
         Text [ french ] = "~AutoTexte" ;
         Text [ swedish ] = "AutoTe~xt" ;
         Text [ dutch ] = "~AutoTekst" ;
-        Text [ spanish ] = "AutoTe~xto" ;
+        Text [ spanish ] = "~Texto automático" ;
         Text [ english_us ] = "AutoTe~xt" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†(~X)";
@@ -447,10 +457,11 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†(~X)";
         Text[ arabic ] = "äÕ ÊáŞÇÆí";
         Text[ greek ] = "Áõôï~Êåßìåíï";
-        Text[ korean ] = "ìë™í…ìŠ¤íŠ¸(~X)";
+        Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸(~X)";
         Text[ turkish ] = "Otomatik metin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "AutoTe~xto";
+        Text[ catalan ] = "AutoTe~xt";
+        Text[ thai ] = "à¸‚à¹‰à¸­~à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     PushButton PB_BIB
     {
@@ -474,13 +485,14 @@ ModalDialog DLG_GLOSSARY
         Text[ russian ] = "Êàòåãîğèè...";
         Text[ polish ] = "Obszary...";
         Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—(~A)...";
-        Text[ chinese_traditional ] = "å€åŸŸ(~A)...";
+        Text[ chinese_traditional ] = "åˆ†é¡(~A)...";
         Text[ arabic ] = "İÆÇÊ...";
         Text[ greek ] = "Êáôçãïñßåò...";
-        Text[ korean ] = "ì˜ì—­(~A)...";
+        Text[ korean ] = "ë¶„ë¥˜(~A)...";
         Text[ turkish ] = "Bölümler...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Areas...";
+        Text[ catalan ] = "C~ategories...";
+        Text[ thai ] = "à¸›~à¸£à¸°à¹€à¸ à¸—...";
     };
     PushButton PB_PATH
     {
@@ -508,8 +520,9 @@ ModalDialog DLG_GLOSSARY
         Text[ korean ] = "ê²½ë¡œ(~P)...";
         Text[ turkish ] = "Veri yolu...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ruta...";
+        Text[ catalan ] = "~Camí...";
         Text[ finnish ] = "~Polku...";
+        Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¸—à¸²à¸‡...";
     };
     String ST_READONLY_PATH
     {
@@ -517,24 +530,25 @@ ModalDialog DLG_GLOSSARY
         Text [ ENGLISH ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?" ;
         Text[ english_us ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
         Text[ portuguese ] = "Os directórios de 'AutoTexto' são só de leitura. Abrir a caixa de diálogo dos atalhos?";
-        Text[ russian ] = "Êàòàëîã 'AutoText' ïğåäíàçíà÷åí òîëüêî äëÿ ÷òåíèÿ. Âû õîòèòå âûçâàòü äèàëîã çàäàíèÿ ïóòè?";
+        Text[ russian ] = "Êàòàëîã 'AutoText' ïğåäíàçíà÷åí òîëüêî äëÿ ÷òåíèÿ. Âûçâàòü äèàëîã çàäàíèÿ ïóòè?";
         Text[ greek ] = "Äåí õğÜñ÷ïõí äéêáéşìáôá åğåîåñãáóßáò ãéá ôïõò êáôáëüãïõò ôïõ 'ÁõôïÊåßìåíï'. Èİëåôå íá êáëİóåôå ôïí äéÜëïãï äéáäñïìŞò;";
-        Text[ dutch ] = "Voor de directory's van 'AutoTekst' bestaan geen schrijfrechten. Wilt u de dialoog voor het definiëren van het pad oproepen?";
+        Text[ dutch ] = "Voor de directory's van 'AutoTekst' bestaan geen schrijfrechten. Wilt u het dialoogvenster voor het definiëren van het pad oproepen?";
         Text[ french ] = "Aucun droit d'écriture n'existe pour les répertoires 'AutoText'. Voulez-vous appeler la boîte de dialogue des chemins ?";
-        Text[ spanish ] = "No existen derechos de escritura para los directorios 'AutoTexto'. ¿Desea abrir el diálogo de rutas?";
+        Text[ spanish ] = "No existen derechos de escritura para los directorios de 'Texto automático'. ¿Desea abrir el diálogo de rutas?";
         Text[ italian ] = "La cartella 'AutoText' è di sola lettura. Volete richiamare il dialogo del percorso?";
         Text[ danish ] = "Der findes ingen skriverettigheder til 'AutoTekst'-bibliotekerne. Vil du åbne stidialogen?";
-        Text[ swedish ] = "Det saknas skrivrättigheter för katalogerna för 'AutoText'. Vill Du öppna sökvägsdialogen?";
+        Text[ swedish ] = "Det saknas skrivrättigheter för katalogerna för 'AutoText'. Vill du öppna sökvägsdialogen?";
         Text[ polish ] = "Katalogi 'Autotekst' s¹ tylko do odczytu. Czy wywo³aæ dialog œcie¿ki?";
         Text[ portuguese_brazilian ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
         Text[ japanese ] = "ã€Œå…¥åŠ›æ”¯æ´ã€ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯æ›¸ãè¾¼ã¿ä¿è­·ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ãƒ‘ã‚¹è¨­å®šã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãƒœãƒƒã‚¯ã‚¹ã‚’å‘¼ã³å‡ºã—ã¾ã™ã‹ã€‚";
-        Text[ korean ] = "'AutoText' ë””ë ‰í† ë¦¬ëŠ” ì½ê¸° ì „ìš©ì…ë‹ˆë‹¤. ê²½ë¡œ ì„¤ì • ëŒ€í™”ìƒìë¥¼ í˜¸ì¶œí•˜ê² ìŠµë‹ˆê¹Œ?";
+        Text[ korean ] = "'AutoText' ë””ë ‰í† ë¦¬ëŠ” ì½ê¸° ì „ìš©ì…ë‹ˆë‹¤. ê²½ë¡œ ì„¤ì • ëŒ€í™”ìƒìë¥¼ í˜¸ì¶œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
         Text[ chinese_simplified ] = "\"è‡ªåŠ¨å›¾æ–‡é›†\"çš„ç›®å½•ä¸å¯ä»¥æ”¹å†™ã€‚è¦æ‰“å¼€è·¯å¾„å¯¹è¯æ ï¼Ÿ";
         Text[ chinese_traditional ] = "<AutoText>ç›®éŒ„æ˜¯å”¯è®€çš„ã€‚è¦æ‰“é–‹ä¸€å€‹è·¯å¾‘å°è©±æ–¹ï¼Ÿ";
         Text[ turkish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
         Text[ arabic ] = "áÇ ÊÊæİÑ ÍŞæŞ ßÊÇÈÉ áÏáÇÆá 'ÇáäÕ ÇáÊáŞÇÆí'. åá ÊÑíÏ İÊÍ ãÑÈÚ ÇáÍæÇÑ  ÇáÎÇÕ ÈÅÚÏÇÏÇÊ ÇáãÓÇÑ¿";
-        Text[ catalan ] = "No existen derechos de escritura para los directorios 'AutoTexto'. ¿Desea abrir el diálogo de rutas?";
+        Text[ catalan ] = "No existeixen drets d'escriptura pels directoris 'AutoText'. Voleu obrir el quadre de camins?";
         Text[ finnish ] = "Automaattisen tekstin hakemistot ovat vain luku -hakemistoja. Haluatko avata hakemistopolun määritysvalintaikkunan?";
+        Text[ thai ] = "à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ 'à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´' à¹à¸šà¸šà¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§ à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸£à¸µà¸¢à¸à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
     };
     Menu MNU_EDIT
     {
@@ -564,10 +578,11 @@ ModalDialog DLG_GLOSSARY
                 Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";
                 Text[ arabic ] = "~ÌÏíÏ";
                 Text[ greek ] = "~Äçìéïõñãßá";
-                Text[ korean ] = "ìƒˆë¡œ(~N)";
+                Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
                 Text[ turkish ] = "~Yeni";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "~Nuevo";
+                Text[ catalan ] = "~Nou";
+                Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
             };
             MenuItem
             {
@@ -594,8 +609,9 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "ìƒˆë¡œ (í…ìŠ¤íŠ¸ ë§Œ)";
                 Text[ turkish ] = "Yeni (yalnızca metin)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Nuevo (solo ~texto)";
+                Text[ catalan ] = "Nou (només ~text)";
                 Text[ finnish ] = "Uusi (vain teksti)";
+                Text[ thai ] = "à¹ƒà¸«à¸¡à¹ˆ (à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§)";
             };
             MenuItem
             {
@@ -622,8 +638,9 @@ ModalDialog DLG_GLOSSARY
                 Text[ arabic ] = "äÓÎ";
                 Text[ turkish ] = "Kopyala";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "~Copiar";
-                Text[ finnish ] = "~Kopioi";
+                Text[ catalan ] = "~Copia";
+                Text[ finnish ] = "K~opioi";
+                Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸";
             };
             MenuItem
             {
@@ -652,7 +669,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "ë°”ê¾¸ê¸°";
                 Text[ turkish ] = "Değiştir";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Ree~mplazar";
+                Text[ catalan ] = "Ree~mplaça";
+                Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ";
             };
             MenuItem
             {
@@ -663,7 +681,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ english_us ] = "Rep~lace (text only)" ;
                 Text [ portuguese_brazilian ] = "Substituir (nur Text)" ;
                 Text [ swedish ] = "E~rsätt (bara text)" ;
-                Text [ danish ] = "Erstat (kun tekst)" ;
+                Text [ danish ] = "E~rstat (kun tekst)" ;
                 Text [ italian ] = "Sostituisci (solo testo)" ;
                 Text [ spanish ] = "Reemplazar (sólo texto)" ;
                 Text [ french ] = "~Remplacer (texte seulement)" ;
@@ -676,11 +694,12 @@ ModalDialog DLG_GLOSSARY
                 Text[ chinese_traditional ] = "ä»£æ›¿(ç´”æ–‡å­—)(~L)";
                 Text[ arabic ] = "ÇÓÊÈÏÇá (äÕ İŞØ)";
                 Text[ greek ] = "ÁíôéêáôÜóôáóç (ìüíï êåßìåíï)";
-                Text[ korean ] = "¹Ù²Ù±â (ÅØ½ºÆ®¸¸)(~L)";
+                Text[ korean ] = "ë°”ê¾¸ê¸° (í…ìŠ¤íŠ¸ë§Œ)(~L)";
                 Text[ turkish ] = "Değiştir (yalnızca metin)";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Reemplazar (sólo texto)";
+                Text[ catalan ] = "Reemplaça (només text)";
                 Text[ finnish ] = "Kor~vaa (vain teksti)";
+                Text[ thai ] = "à¹à¸—~à¸™à¸—à¸µà¹ˆ (à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§)";
             };
             MenuItem
             {
@@ -707,8 +726,9 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°...";
                 Text[ turkish ] = "Yeniden adlandır...";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "~Cambiar nombre...";
+                Text[ catalan ] = "Reanomena...";
                 Text[ finnish ] = "Nimeä uudelleen...";
+                Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­...";
             };
             MenuItem
             {
@@ -726,7 +746,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ french ] = "~Supprimer" ;
                 Text [ swedish ] = "~Radera" ;
                 Text [ dutch ] = "~Verwijderen" ;
-                Text [ spanish ] = "~Eliminar" ;
+                Text [ spanish ] = "~Borrar" ;
                 Text [ english_us ] = "~Delete" ;
                 Text[ chinese_simplified ] = "åˆ é™¤(~D)";
                 Text[ russian ] = "Óäàëèòü";
@@ -738,7 +758,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "ì‚­ì œ(~D)";
                 Text[ turkish ] = "Sil";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "~Eliminar";
+                Text[ catalan ] = "~Suprimeix";
+                Text[ thai ] = "~à¸¥à¸š";
             };
             MenuItem
             {
@@ -771,7 +792,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ korean ] = "í¸ì§‘(~E)";
                 Text[ turkish ] = "Düzenle";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "~Editar";
+                Text[ catalan ] = "~Edita";
+                Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
             };
             MenuItem
             {
@@ -805,6 +827,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ turkish ] = "Makro...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "~Macro...";
+                Text[ thai ] = "~à¸¡à¸²à¹‚à¸„à¸£...";
             };
             MenuItem
             {
@@ -823,7 +846,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ dutch ] = "~Importeren...";
                 Text[ french ] = "~Importer...";
                 Text[ spanish ] = "~Importar...";
-                Text[ italian ] = "~Importa...";
+                Text[ italian ] = "Importa...";
                 Text[ danish ] = "~Importer...";
                 Text[ swedish ] = "~Importera...";
                 Text[ polish ] = "~Importuj...";
@@ -834,8 +857,9 @@ ModalDialog DLG_GLOSSARY
                 Text[ chinese_traditional ] = "åŒ¯å…¥(~I)...";
                 Text[ arabic ] = "ÇÓÊíÑÇÏ...";
                 Text[ turkish ] = "~İçe aktar...";
-                Text[ catalan ] = "~Importar...";
-                Text[ finnish ] = "~Tuo";
+                Text[ catalan ] = "~Importa...";
+                Text[ finnish ] = "~Tuo...";
+                Text[ thai ] = "~à¸™à¸³à¹€à¸‚à¹‰à¸²...";
             };
         };
     };
@@ -849,7 +873,8 @@ ModalDialog DLG_GLOSSARY
     Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸";
     Text[ turkish ] = "Otomatik metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoTexto";
+    Text[ catalan ] = "AutoText";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 InfoBox MSG_DOUBLE_SHORTNAME
 {
@@ -868,16 +893,17 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE [ spanish ] = "Esta abreviatura ya está en uso. ¡Elija otro nombre por favor!" ;
     MESSAGE [ english_us ] = "Shortcut name already exists. Please choose another name." ;
     MESSAGE[ chinese_simplified ] = "å·²ç»å­˜åœ¨è¿™ä¸ªç¼©å†™ã€‚è¯·è¾“å…¥å¦å¤–ä¸€ä¸ªç¼©å†™åç§°ï¼";
-    MESSAGE[ russian ] = "İòî ñîêğàùåíèå óæå ñóùåñòâóåò. Ïîæàëóéñòà, âûáåğèòå äğóãîå èìÿ!";
+    MESSAGE[ russian ] = "İòî ñîêğàùåíèå óæå ñóùåñòâóåò. Âûáåğèòå äğóãîå èìÿ.";
     MESSAGE[ polish ] = "Te inicja³y ju¿ zosta³y u¿yte. Proszê podaæ inn¹ nazwê!";
     MESSAGE[ japanese ] = "ã“ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã¯ã™ã§ã«ä½¿ç”¨ã•ã‚Œã¦ã„ã¾ã™ã€‚åˆ¥ã®åå‰ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
     MESSAGE[ chinese_traditional ] = "å·²ç¶“ä½¿ç”¨äº†é€™å€‹ç¸®å¯«ã€‚è«‹æ‚¨è¼¸å…¥ä¸€å€‹ä¸åŒçš„åç¨±ï¹—";
     MESSAGE[ arabic ] = "åĞÇ ÇáÇÎÊÕÇÑ ãæÌæÏ ÈÇáİÚá. ÇáÑÌÇÁ ÇÓÊÎÏÇã ÇÓã ÌÏíÏ!";
     MESSAGE[ greek ] = "Ôá áñ÷éêÜ õğÜñ÷ïõí Şäç. Ğáñáêáëş åéóÜãåôå êÜğïéï Üëëï üíïìá!";
-    MESSAGE[ korean ] = "ë°”ë¡œê°€ê¸° ì´ë¦„ì´ ì´ë¯¸ ì‚¬ìš©ì¤‘ì…ë‹ˆë‹¤. ë‹¤ë¥¸ ì´ë¦„ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤";
+    MESSAGE[ korean ] = "ë°”ë¡œ ê°€ê¸° ì´ë¦„ì´ ì´ë¯¸ ì‚¬ìš©ì¤‘ì…ë‹ˆë‹¤. ë‹¤ë¥¸ ì´ë¦„ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤";
     MESSAGE[ turkish ] = "Bu kısaltma mevcut durumda. Başka bir ad seçin!";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "Esta abreviatura ya está en uso. ¡Elija otro nombre por favor!";
+    MESSAGE[ catalan ] = "La drecera del nom ja existeix. Si us plau, escolliu un altre nom.";
+    MESSAGE[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸—à¸²à¸‡à¸¥à¸±à¸”à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§ à¸à¸£à¸¸à¸“à¸²à¹€à¸¥à¸·à¸­à¸à¸Šà¸·à¹ˆà¸­à¸­à¸·à¹ˆà¸™";
 };
 QueryBox MSG_QUERY_DELETE
 {
@@ -895,7 +921,7 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE [ french ] = "Supprimer l'AutoTexte ?" ;
     MESSAGE [ swedish ] = "Skall AutoText raderas?" ;
     MESSAGE [ dutch ] = "AutoTekst wissen?" ;
-    MESSAGE [ spanish ] = "¿Desea eliminar el AutoTexto?" ;
+    MESSAGE [ spanish ] = "¿Desea borrar el Texto automático?" ;
     MESSAGE [ english_us ] = "Delete AutoText?" ;
     MESSAGE[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤è‡ªåŠ¨å›¾æ–‡é›†?";
     MESSAGE[ russian ] = "Óäàëèòü àâòîòåêñò?";
@@ -904,26 +930,27 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE[ chinese_traditional ] = "è¦åˆªé™¤è‡ªå‹•åœ–æ–‡é›†?";
     MESSAGE[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáäÕ ÇáÊáŞÇÆí¿";
     MESSAGE[ greek ] = "ÄéáãñáöŞ ÁõôïÊåéìİíïõ;";
-    MESSAGE[ korean ] = "ìë™ í…ìŠ¤íŠ¸ë¥¼ ì‚­ì œí•˜ê² ìŠµë‹ˆê¹Œ?";
+    MESSAGE[ korean ] = "ìë™ í…ìŠ¤íŠ¸ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     MESSAGE[ turkish ] = "Otomatik metin silinsin mi?";
     MESSAGE[ language_user1 ] = " ";
-    MESSAGE[ catalan ] = "¿Desea eliminar el AutoTexto?";
+    MESSAGE[ catalan ] = "Voleu eliminar l'AutoText?";
+    MESSAGE[ thai ] = "à¸¥à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_QUERY_DELETE_GROUP1
 {
     TEXT = "Soll der Bereich " ;
     TEXT [ English ] = "Delete Group " ;
     TEXT [ english_us ] = "Delete the category " ;
-    Text [ dutch ] = "Wilt u het bereik  " ;
+    Text [ dutch ] = "Wilt u het bereik" ;
     Text [ italian ] = "Cancellare la categoria  " ;
-    Text [ spanish ] = "¿Desea usted eliminar  " ;
+    Text [ spanish ] = "Borrar la categoría" ;
     Text [ french ] = "Supprimer la catégorie " ;
     Text [ swedish ] = "Ska kategorin " ;
     Text [ danish ] = "Skal området " ;
     Text [ portuguese ] = "Deseja eliminar " ;
     Text [ portuguese_brazilian ] = "Soll der Bereich " ;
     Text[ chinese_simplified ] = "è¦åˆ é™¤è¿™ä¸ªåŒºåŸŸ ";
-    Text[ russian ] = "Óäàëèòü  ";
+    Text[ russian ] = "Óäàëèòü êàòåãîğèş ";
     Text[ polish ] = "Czy ten obszar  ";
     Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ— ";
     Text[ chinese_traditional ] = "è¦åˆªé™¤é€™å€‹å€åŸŸ ";
@@ -932,8 +959,9 @@ String STR_QUERY_DELETE_GROUP1
     Text[ korean ] = "ì˜ì—­ì„";
     Text[ turkish ] = "Bölüm ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "¿Desea usted eliminar  ";
+    Text[ catalan ] = "Suprimeix la categoria ";
     Text[ finnish ] = "Poistetaan luokka ";
+    Text[ thai ] = "à¸¥à¸šà¸›à¸£à¸°à¹€à¸ à¸— ";
 };
 String STR_QUERY_DELETE_GROUP2
 {
@@ -943,14 +971,14 @@ String STR_QUERY_DELETE_GROUP2
     TEXT [ english_us ] = "?" ;
     Text [ dutch ] = "wissen?" ;
     Text [ italian ] = "?" ;
-    Text [ spanish ] = "la categoría?" ;
+    Text [ spanish ] = "?" ;
     Text [ french ] = "?" ;
     Text [ swedish ] = "raderas?" ;
     Text [ danish ] = "slettes?" ;
     Text [ portuguese ] = "a secção?" ;
     Text [ portuguese_brazilian ] = "gel?cht werden?" ;
     Text[ chinese_simplified ] = "ï¼Ÿ";
-    Text[ russian ] = "îáëàñòü?";
+    Text[ russian ] = "?";
     Text[ polish ] = "ma zostaæ usuniêty?";
     Text[ japanese ] = " ã‚’å‰Šé™¤ã—ã¾ã™ã‹ï¼Ÿ";
     Text[ chinese_traditional ] = "?";
@@ -959,8 +987,9 @@ String STR_QUERY_DELETE_GROUP2
     Text[ greek ] = "íá äéáãñáöåß;";
     Text[ korean ] = " ì‚­ì œí•˜ê² ìŠµë‹ˆê¹Œï¼Ÿ";
     Text[ turkish ] = "silinsin mi?";
-    Text[ catalan ] = "la categoría?";
+    Text[ catalan ] = "?";
     Text[ finnish ] = "?";
+    Text[ thai ] = "?";
 };
 String STR_GLOSSARY
 {
@@ -971,7 +1000,7 @@ String STR_GLOSSARY
     Text [ portuguese_brazilian ] = "Textblock : " ;
     Text [ portuguese ] = "Módulo de texto : " ;
     Text [ french ] = "Module de texte :  " ;
-    Text [ dutch ] = "Tekstbouwsteen :  " ;
+    Text [ dutch ] = "Tekstbouwsteen:" ;
     Text [ spanish ] = "Módulo de texto :  " ;
     Text [ danish ] = "Tekstelement : " ;
     Text [ swedish ] = "Textblock :  " ;
@@ -984,10 +1013,11 @@ String STR_GLOSSARY
     Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†æ¢ç›®ï¼š";
     Text[ arabic ] = "ÚäÕÑ ÇáäÕ : ";
     Text[ greek ] = "ÔìŞìá êåéìİíïõ : ";
-    Text[ korean ] = "í…ìŠ¤íŠ¸ ë¸”ë¡ : ";
+    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ : ";
     Text[ turkish ] = "Metin öğesi: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Módulo de texto :  ";
+    Text[ catalan ] = "Mòdul de text :  ";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´ : ";
 };
 ModalDialog DLG_RENAME_GLOS
 {
@@ -1022,7 +1052,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ english_us ] = "Na~me" ;
         Text [ italian ] = "Nome" ;
         Text [ spanish ] = "N~ombre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ swedish ] = "Na~mn" ;
         Text [ danish ] = "Navn" ;
         Text [ portuguese_brazilian ] = "Na~me" ;
@@ -1037,8 +1067,9 @@ ModalDialog DLG_RENAME_GLOS
         Text[ korean ] = "ì´ë¦„(~M)";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N~ombre";
-        Text[ finnish ] = "Ni~mi";
+        Text[ catalan ] = "No~m";
+        Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
     };
     Edit ED_ON
     {
@@ -1070,11 +1101,12 @@ ModalDialog DLG_RENAME_GLOS
         Text[ chinese_traditional ] = "ç¸®å¯«(~C)";
         Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
         Text[ greek ] = "Óõíôüìåõóç";
-        Text[ korean ] = "ë°”ë¡œê°€ê¸°(~C)";
+        Text[ korean ] = "ë°”ë¡œ ê°€ê¸°(~C)";
         Text[ turkish ] = "Kısaltma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Abrev.";
+        Text[ catalan ] = "Dre~cera";
         Text[ finnish ] = "~Pikavalinta";
+        Text[ thai ] = "à¸—à¸²à¸‡~à¸¥à¸±à¸”";
     };
     Edit ED_OS
     {
@@ -1095,22 +1127,23 @@ ModalDialog DLG_RENAME_GLOS
         Text [ italian ] = "~Nuovo" ;
         Text [ spanish ] = "~Nuevo" ;
         Text [ french ] = "Nou~veau" ;
-        Text [ swedish ] = "~Ny" ;
+        Text [ swedish ] = "~Nytt" ;
         Text [ danish ] = "Ny" ;
         Text [ portuguese ] = "~Novo" ;
         Text [ portuguese_brazilian ] = "~Neu" ;
         Text[ chinese_simplified ] = "æ–°å»º(~N)";
-        Text[ russian ] = "Ñîçä~àòü";
+        Text[ russian ] = "Íîâûé";
         Text[ polish ] = "Nowy";
         Text[ japanese ] = "æ–°è¦(~N)";
         Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";
         Text[ arabic ] = "ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ìƒˆë¡œ(~N)";
+        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nuevo";
+        Text[ catalan ] = "~Nou";
         Text[ finnish ] = "~Uusi";
+        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
     };
     Edit ED_NN
     {
@@ -1131,7 +1164,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ spanish ] = "~Abreviatura" ;
         Text [ french ] = "~Abr." ;
         Text [ dutch ] = "~Afkorting" ;
-        Text [ swedish ] = "~Ersätt" ;
+        Text [ swedish ] = "För~kortning" ;
         Text [ danish ] = "Erstat" ;
         Text [ portuguese_brazilian ] = "~K?zel" ;
         Text [ portuguese ] = "S~ubstituir" ;
@@ -1142,11 +1175,12 @@ ModalDialog DLG_RENAME_GLOS
         Text[ chinese_traditional ] = "ç¸®å¯«(~S)";
         Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
         Text[ greek ] = "Áñ÷é~êÜ";
-        Text[ korean ] = "ë°”ë¡œê°€ê¸°(~S)";
+        Text[ korean ] = "ë°”ë¡œ ê°€ê¸°(~S)";
         Text[ turkish ] = "Kısaltma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Abreviatura";
+        Text[ catalan ] = "~Drecera";
         Text[ finnish ] = "~Pikavalinta";
+        Text[ thai ] = "~à¸—à¸²à¸‡à¸¥à¸±à¸”";
     };
     Edit ED_NS
     {
@@ -1177,11 +1211,12 @@ ModalDialog DLG_RENAME_GLOS
     Text[ chinese_traditional ] = "é‡æ–°å‘½åè‡ªå‹•åœ–æ–‡é›†æ¢ç›®";
     Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÃÍÏ ãßæäÇÊ ÇáäÕ";
     Text[ greek ] = "Ìåôïíïìáóßá ôìŞìáôïò êåéìİíïõ";
-    Text[ korean ] = "í…ìŠ¤íŠ¸ ë¸”ë¡ ì´ë¦„ ë°”ê¾¸ê¸°";
+    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ì´ë¦„ ë°”ê¾¸ê¸°";
     Text[ turkish ] = "Metin öğesini yeniden adlandır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cambiar nombre al módulo de texto";
+    Text[ catalan ] = "Cambia en nom al mòdul de text";
     Text[ finnish ] = "Nimeä automaattinen teksti uudelleen";
+    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 String STR_SAVE_GLOSSARY
 {
@@ -1203,11 +1238,12 @@ String STR_SAVE_GLOSSARY
     Text[ arabic ] = "ÍİÙ ÚäÕÑ ÇáäÕ";
     Text [ English ] = "Save textblock" ;
     Text[ greek ] = "ÁğïèŞêåõóç ôìŞìáôïò êåéìİíïõ";
-    Text[ korean ] = "í…ìŠ¤íŠ¸ ë¸”ë¡ ì €ì¥";
+    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ì €ì¥";
     Text[ turkish ] = "Metin öğesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Guardar módulo de texto";
+    Text[ catalan ] = "Desa el mòdul de text";
     Text[ finnish ] = "Tallenna automaattinen teksti";
+    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 InfoBox MSG_NO_GLOSSARIES
 {
@@ -1225,13 +1261,35 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ swedish ] = "Den här filen innehåller inga textblock.";
     MESSAGE[ polish ] = "Plik ten nie zawiera ¿adnych bloków tekstu.";
     MESSAGE[ portuguese_brazilian ] = "There are no textblocks in this file.";
-    MESSAGE[ japanese ] = "‚±‚ÌÌ§²Ù‚É‚ÍÃ·½ÄÌŞÛ¯¸‚ª‚ ‚è‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "ÀÌ ÆÄÀÏ¿¡´Â ÅØ½ºÆ® ¸ğµãÀÌ ¾ø½À´Ï´Ù. .";
-    MESSAGE[ chinese_simplified ] = "Õâ¸öÎÄ¼şÄÚ²»°üº¬×Ô¶¯Í¼ÎÄ¼¯ÌõÄ¿¡£";
-    MESSAGE[ chinese_traditional ] = "¦b³o­ÓÀÉ®×¤º¤£¦s¦b¦Û°Ê¹Ï¤å¶°±ø¥Ø¡C";
+    MESSAGE[ japanese ] = "ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ã¯ãƒ†ã‚­ã‚¹ãƒˆãƒ–ãƒ­ãƒƒã‚¯ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
+    MESSAGE[ korean ] = "ì´ íŒŒì¼ì—ëŠ” ìë™ í…ìŠ¤íŠ¸ê°€ ì—†ìŠµë‹ˆë‹¤.";
+    MESSAGE[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å†…ä¸åŒ…å«è‡ªåŠ¨å›¾æ–‡é›†æ¡ç›®ã€‚";
+    MESSAGE[ chinese_traditional ] = "åœ¨é€™å€‹æª”æ¡ˆå…§ä¸å­˜åœ¨è‡ªå‹•åœ–æ–‡é›†æ¢ç›®ã€‚";
     MESSAGE[ arabic ] = "áÇ íÍÊæí åĞÇ Çáãáİ Úáì ßÊá äÕíÉ.";
     MESSAGE[ turkish ] = "Bu dosya metin bileşenleri içermiyor";
-    MESSAGE[ catalan ] = "Este archivo no contiene módulos de texto.";
+    MESSAGE[ catalan ] = "Aquest fitxer no conté mòduls de text.";
     MESSAGE[ finnish ] = "Tiedostossa ei ole automaattista tekstiä.";
+    MESSAGE[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¹ƒà¸™à¹à¸Ÿà¹‰à¸¡à¸™à¸µà¹‰";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

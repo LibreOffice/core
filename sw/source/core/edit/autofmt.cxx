@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-28 12:12:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -961,9 +961,14 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
             // Numerierung mit c oder d anfangen will, werden diese erstmal
             // zu chars und spaeter ggfs. zu romischen Zeichen!
 //          if( strchr( "mdclxvi", cLow ))
+#ifdef WITH_ALPHANUM_AS_NUMFMT
+            //detection of 'c' and 'd' a ROMAN numbering should not be done here
             if( 256 > cLow  &&( (eScan & (LOWER_ROMAN|UPPER_ROMAN))
                                     ? strchr( "mdclxvi", cLow )
                                     : strchr( "mlxvi", cLow ) ))
+#else
+            if( 256 > cLow  && ( strchr( "mdclxvi", cLow ) ))
+#endif
             {
                 if( bIsUpper )
                     cNumTyp = '0' + SVX_NUM_ROMAN_UPPER, eTmpScan = UPPER_ROMAN;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-27 13:40:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,7 +679,9 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
                 aDiff = Point( -aDiff.Y(), aDiff.X() );
             }
 
-            pSdrObj->ImpSetAnchorPos( aAnchorBase );
+            // There used to be a ImpSetAnchorPos here. Very dangerous
+            // for group object.
+            pSdrObj->NbcSetAnchorPos( aAnchorBase );
 
             // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
             pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: aidan $ $Date: 2002-12-10 15:51:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR_HXX
@@ -74,6 +73,9 @@
 #endif
 #ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
+#endif
+#ifndef _SVX_FRMDIR_HXX
+#include <svx/frmdir.hxx>
 #endif
 
 #ifndef _FLTSHELL_HXX
@@ -163,12 +165,9 @@ class GDIMetaFile;
 struct ESelection;
 class SfxItemSet;
 struct WW8PLCFxDesc;
-
-class SdrAttrObj;
-struct WW8ULSpaceData;
 class _ReadFieldParams;
+class SdrAttrObj;
 class wwZOrderer;
-
 namespace com{namespace sun {namespace star{
     namespace beans{ class XPropertySet;}
     namespace form { class XFormComponent;}
@@ -421,6 +420,7 @@ class WW8ReaderSave
 private:
     WW8PLCFxSaveAll maPLCFxSave;
     SwPosition maTmpPos;
+    std::deque<bool> maOldApos;
     SwWW8FltControlStack* mpOldStck;
     SwWW8FltAnchorStack* mpOldAnchorStck;
     wwRedlineStack *mpOldRedlines;
@@ -432,14 +432,12 @@ private:
     USHORT mnAktColl;
     sal_Unicode mcSymbol;
     bool mbIgnoreText;
-    bool mbDontCreateSep;
     bool mbSymbol;
     bool mbHdFtFtnEdn;
     bool mbTxbxFlySection;
     bool mbAnl;
     bool mbInHyperlink;
     bool mbPgSecBreak;
-    bool mbVerticalEnviron;
     bool mbWasParaEnd;
     bool mbHasBorder;
 public:
@@ -583,6 +581,97 @@ public:
     void EnableFallbackStream();
 };
 
+class wwSection
+{
+public:
+    wwSection(const SwPosition &rPos);
+    SEPr maSep;
+    WW8_BRC brc[4];
+    SwNodeIndex maStart;
+    SwSection *mpSection;
+    SwPageDesc *mpTitlePage;
+    SwPageDesc *mpPage;
+    SvxFrameDirection meDir;
+
+    short nPgWidth;
+    short nPgLeft;
+    short nPgRight;
+
+    BYTE mnBorders;
+    bool mbHasFootnote;
+    void SetDirection();
+    bool DoesContainFootnote() const { return mbHasFootnote; }
+    bool IsContinous() const { return maSep.bkc == 0; }
+    bool IsVertical() const;
+    long NoCols() const { return maSep.ccolM1 + 1; }
+    long StandardColSeperation() const { return maSep.dxaColumns; }
+    bool HasTitlePage() const { return maSep.fTitlePage ? true : false; }
+    long PageStartAt() const { return maSep.pgnStart; }
+    bool PageRestartNo() const { return maSep.fPgnRestart ? true : false; }
+    bool IsBiDi() const { return maSep.fBiDi ? true : false; }
+    sal_uInt16 GetPageWidth() const { return nPgWidth; }
+    sal_uInt16 GetPageHeight() const { return maSep.yaPage; }
+    sal_uInt16 GetPageLeft() const { return nPgLeft; }
+    sal_uInt16 GetPageRight() const { return nPgRight; }
+    bool IsLandScape() const { return maSep.dmOrientPage ? true : false; }
+};
+
+class wwSectionManager
+{
+private:
+    /*
+    A queue of the ms sections in the document
+    */
+    SwWW8ImplReader& mrReader;
+    std::deque<wwSection> maSegments;
+    typedef ::std::deque<wwSection>::iterator mySegIter;
+    typedef ::std::deque<wwSection>::reverse_iterator mySegrIter;
+
+    struct wwULSpaceData
+    {
+        bool bHasHeader, bHasFooter;
+        short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
+        wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
+    };
+
+    void SetSegmentToPageDesc(const wwSection &rSection, bool bTitlePage,
+        bool bIgnoreCols);
+
+    void GetPageULData(const wwSection &rNewSection, bool bFirst,
+        wwULSpaceData& rData);
+    void SetPageULSpaceItems(SwFrmFmt &rFmt, wwULSpaceData& rData);
+
+    void SetPage(SwPageDesc &rPageDesc, SwFrmFmt &rFmt,
+        const wwSection &rSection, bool bIgnoreCols);
+
+    void SetNumberingType(const wwSection &rNewSection, SwPageDesc &rPageDesc);
+
+    void SetUseOn(wwSection &rSection);
+    void SetHdFt(wwSection &rSection, int nSect, const wwSection *pPrevious);
+
+    SwSectionFmt *InsertSection(SwPaM& rMyPaM, wwSection &rSection);
+    bool SetCols(SwFrmFmt &rFmt, const wwSection &rSection, USHORT nNettoWidth);
+    void SetLeftRight(wwSection &rSection);
+
+    //No copying
+    wwSectionManager(const wwSectionManager&);
+    wwSectionManager& operator=(const wwSectionManager&);
+public:
+    wwSectionManager(SwWW8ImplReader &rReader) : mrReader(rReader)
+        {};
+    void SetCurrentSectionHasFootnote();
+    bool CurrentSectionIsVertical() const;
+    void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);
+    USHORT CurrentSectionColCount() const;
+    bool WillHavePageDescHere(SwNodeIndex aIdx) const;
+    void CreateSep(const long nTxtPos, bool bMustHaveBreak);
+    void InsertSegments(bool bIsNewDoc);
+    void JoinNode(const SwPosition &rPos, const SwNode &rNode);
+    short GetPageLeft() const;
+    short GetPageRight() const;
+    short GetPageWidth() const;
+};
+
 class wwFrameNamer
 {
 private:
@@ -596,6 +685,22 @@ public:
     void SetUniqueGraphName(SwFrmFmt *pFrmFmt,const String &rFixedPart);
     wwFrameNamer(bool bIsDisabled, const String &rSeed)
         : msSeed(rSeed), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
+        { }
+};
+
+class wwSectionNamer
+{
+private:
+    const SwDoc &mrDoc;
+    String msFileLinkSeed;
+    int mnFileSectionNo;
+    //No copying
+    wwSectionNamer(const wwSectionNamer&);
+    wwSectionNamer& operator=(const wwSectionNamer&);
+public:
+    String UniqueName();
+    wwSectionNamer(const SwDoc &rDoc, const String &rSeed)
+        : mrDoc(rDoc), msFileLinkSeed(rSeed), mnFileSectionNo(0)
         { }
 };
 
@@ -614,6 +719,7 @@ friend class WW8FlySet;
 friend class SwMSDffManager;
 friend class SwWW8FltControlStack;
 friend class WW8FormulaControl;
+friend class wwSectionManager;
 
     SvStorage* pStg;                // Input-Storage
     SvStream* pStrm;                // Input-(Storage)Stream
@@ -661,6 +767,16 @@ friend class WW8FormulaControl;
     typedef std::deque<USHORT>::const_iterator mycFieldIter;
 
     /*
+    A queue of the ms sections in the document
+    */
+    wwSectionManager maSectionManager;
+
+    /*
+    Creates unique names to give to (file link) sections (WW1/WW2/...)
+    */
+    wwSectionNamer maSectionNameGenerator;
+
+    /*
     Knows how to split a series of bytes into sprms and their arguments
     */
     wwSprmParser *mpSprmParser;
@@ -668,7 +784,7 @@ friend class WW8FormulaControl;
     /*
     Creates unique names to give to graphics
     */
-    wwFrameNamer aGrfNameGenerator;
+    wwFrameNamer maGrfNameGenerator;
 
     /*
      Stack of textencoding being used as we progress through the document text
@@ -705,7 +821,6 @@ friend class WW8FormulaControl;
     const SwTxtFmtColl* pDfltTxtFmtColl;    // Default
     SwFmt* pStandardFmtColl;// "Standard"
 
-    SwPageDesc* pPageDesc;      // fuer uebernommene KF-Zeilen
     WW8PLCF_HdFt* pHdFt;        // Pointer auf Header / Footer - Scannerklasse
 
     WW8FlyPara* pWFlyPara;      // WW-Parameter
@@ -717,8 +832,6 @@ friend class WW8FormulaControl;
 
     SwNumRule* pNumRule;        // fuer Nummerierung / Aufzaehlungen im Text
     WW8_OLST* pNumOlst;         // Gliederung im Text
-    SwNodeIndex* pAfterSection;
-    SwSection*   pLastInsertedSection;  // last Section that was inserted into the doc
 
     SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
 
@@ -745,9 +858,6 @@ friend class WW8FormulaControl;
     SwNodeIndex *pTabNode;
     xub_StrLen nTabCntnt;
 
-    SwNodeIndex* pLastPgDeskIdx;// for inserting a section when Ft-/End-Note
-                                // with flag 'on end of section' set
-
                                 // Ini-Flags:
     ULONG nIniFlags;            // Flags aus der writer.ini
     ULONG nIniFlags1;           // dito ( zusaetzliche Flags )
@@ -772,18 +882,12 @@ friend class WW8FormulaControl;
     USHORT nProgress;           // %-Angabe fuer Progressbar
     USHORT nColls;              // Groesse des Arrays
     USHORT nAktColl;            // gemaess WW-Zaehlung
-    USHORT nPageDescOffset;     // fuer UpdatePageDescs
     USHORT nDrawTxbx;           // Nummer der Textbox ( noetig ?? )
     USHORT nFldNum;             // laufende Nummer dafuer
     USHORT nLFOPosition;
 
-    short nActSectionNo;        // aktuelle Abschnitts-Nummer (in CreateSep() gesetzt)
     short nCharFmt;             // gemaess WW-Zaehlung, <0 fuer keine
     short nAlign2;
-    short nPgWidth;
-    short nPgTop;               // fuer APOs
-    short nPgLeft;              // Seitenraender, z.B. fuer APOs, Tabellen
-    short nPgRight;             // dito
 
     short nLeftParaMgn;         // Absatz L-Space
     short nTxtFirstLineOfst;    // Absatz 1st line ofset
@@ -803,13 +907,8 @@ friend class WW8FormulaControl;
     sal_Int8 nDrawHeaven, nDrawHell;
     BYTE nListLevel;
 
-    BYTE nNfcPgn;               // Formatting of PageNum
-    bool mbRTLPgn;              // Direction of page
     BYTE nPgChpDelim;           // ChapterDelim from PageNum
     BYTE nPgChpLevel;           // ChapterLevel of Heading from PageNum
-
-    BYTE nCorrIhdt;             // used in CreateSep()
-    bool bSectionHasATitlePage; // used in CreateSep()
 
     bool mbNewDoc;          // Neues Dokument ?
     bool bReadNoTbl;        // Keine Tabellen
@@ -820,7 +919,6 @@ friend class WW8FormulaControl;
     bool bHasBorder;        // fuer Buendelung der Border
     bool bSymbol;           // z.B. Symbol statt Times
     bool bIgnoreText;       // z.B. fuer FieldVanish
-    bool bDontCreateSep;    // e.g. when skipping result of multi-column index-field
      int  nInTable;         // wird gerade eine Tabelle eingelesen
     bool bWasTabRowEnd;     // Tabelle : Row End Mark
 
@@ -843,7 +941,6 @@ friend class WW8FormulaControl;
     bool bNoAttrImport;     // Attribute ignorieren zum Ignorieren v. Styles
     bool bInHyperlink;      // Sonderfall zum einlesen eines 0x01
                                    // siehe: SwWW8ImplReader::Read_F_Hyperlink()
-    bool bVerticalEnviron;
     bool bWasParaEnd;
 
     // praktische Hilfsvariablen:
@@ -859,8 +956,6 @@ friend class WW8FormulaControl;
 
     bool bNoLnNumYet;       // no Line Numbering has been activated yet (we import
                             //     the very 1st Line Numbering and ignore the rest)
-    bool bRestartLnNumPerSection;
-
 
 
 
@@ -869,32 +964,17 @@ friend class WW8FormulaControl;
     void AppendTxtNode(SwPosition& rPos);
     void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
         std::vector<const xub_StrLen*> &rPositions);
-    void SetLastPgDeskIdx();
 
-    SwPageDesc* CreatePageDesc( SwPageDesc* pFirstPageDesc,
-                                SwPaM** ppPaMWanted = 0 );
-    void RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol );
-    bool SetCols(SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep, USHORT nNettoWidth,
-        bool bTestOnly = false);
-    void SetPage1(SwPageDesc* pPageDesc, SwFrmFmt &rFmt,
-        const WW8PLCFx_SEPX* pSep, USHORT nLIdx, bool bIgnoreCols);
-    void SetHdFt(SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1, BYTE nIPara);
-    void GetPageULData(const  WW8PLCFx_SEPX* pSep, USHORT nLIdx, bool bFirst,
-        WW8ULSpaceData& rData);
-    void SetPageULSpaceItems(SwFrmFmt &rFmt, WW8ULSpaceData& rData);
-    void SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep);
+    void Read_HdFt(BYTE nWhichItems, int nSect, SwPageDesc* pPD,
+        const SwPageDesc *pPrev);
+    void Read_HdFtText(long nStartCp, long nLen, SwFrmFmt* pHdFtFmt);
 
-    void SetPageBorder( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
-                        const WW8PLCFx_SEPX* pSep, USHORT nLIdx );
-    void SetUseOn(SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1, BYTE nHdFt);
-    void InsertSectionWithWithoutCols( SwPaM& rMyPaM, const SwFmtCol* pCol );
-    void CreateSep(const long nTxtPos, bool bMustHaveBreak);
+    void HandleLineNumbering(const wwSection &rSection);
+
     bool MustCloseSection(long nTxtPos);
 
     void CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
                            SwPageDesc* pNewPageDesc, BYTE nCode );
-
-    void UpdatePageDescs( USHORT nPageDescOffset );
 
     void DeleteStk(SwFltControlStack* prStck);
     void DeleteCtrlStk()    { DeleteStk( pCtrlStck  ); pCtrlStck   = 0; }
@@ -905,6 +985,7 @@ friend class WW8FormulaControl;
     bool ReadPlainChars(long& rPos, long nEnd, long nCpOfs);
     bool ReadChars(long& rPos, long nNextAttr, long nTextEnd, long nCpOfs);
 
+    void SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection);
 
     void ReadPlainText( long nStartCp, long nTextLen );
     void ProcessAktCollChange(WW8PLCFManResult& rRes, bool* pStartAttr,
@@ -919,9 +1000,6 @@ friend class WW8FormulaControl;
 
     void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
                            long nLen, short nType );
-    void Read_HdFt1( BYTE nPara, BYTE nWhichItems, SwPageDesc* pPD );
-    void Read_HdFtText(long nStartCp, long nLen, SwPageDesc* pPD,
-            bool bUseLeft, bool bFooter);
 
     BYTE* ReadUntilToken( USHORT& rStrLen, USHORT nMaxLen, BYTE nToken );
     void ImportTox( int nFldId, String aStr );
@@ -948,7 +1026,7 @@ friend class WW8FormulaControl;
     bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
         BYTE nSetBorders=0xFF, bool bChkBtwn = false);
 
-    void GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist );
+    void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist);
 
     bool SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
         const WW8_BRC pbrc[4]);
@@ -981,7 +1059,8 @@ friend class WW8FormulaControl;
         WW8FlyPara* &pbNowStyleApo, int nCellLevel, bool bTableRowEnd,
         WW8_TablePos *pTabPos);
 
-    bool ProcessSpecial(bool bAllEnd, bool* pbReSync, WW8_CP nStartCp );
+    void EndSpecial();
+    bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);
     USHORT TabRowSprm(int nLevel) const;
 
     ULONG ReadWmfHeader( WmfFileHd* pHd, long nPos );
@@ -1099,7 +1178,7 @@ friend class WW8FormulaControl;
     SwFlyFrmFmt *ConvertDrawTextToFly( SdrObject* &rpObject,
         SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord,
         RndStdIds eAnchor, WW8_FSPA *pF, SfxItemSet &rFlySet );
-    void MungeTextIntoDrawBox(SdrObject* pTrueObject,
+    SwFrmFmt* MungeTextIntoDrawBox(SdrObject* pTrueObject,
         SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrmFmt *pRetFrmFmt);
 
     void GrafikCtor();
@@ -1158,6 +1237,8 @@ friend class WW8FormulaControl;
         bool bTableJoin = true);
 
     void SetOutLineStyles();
+
+    void StoreMacroCmds();
 
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
@@ -1302,6 +1383,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_SubF_Ruby( _ReadFieldParams& rReadParam);
     void Read_SubF_Combined( _ReadFieldParams& rReadParam);
     eF_ResT Read_F_IncludePicture( WW8FieldDesc*, String& rStr );
+    String CreateNextFileLinkName();
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );
 
@@ -1341,3 +1423,5 @@ public:     // eigentlich private, geht aber leider nur public
 };
 
 #endif
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

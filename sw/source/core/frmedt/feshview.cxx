@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: od $ $Date: 2002-12-10 14:12:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1262,6 +1262,44 @@ int SwFEShell::IsObjSelectable( const Point& rPt )
 #endif
 }
 
+// #107513#
+// Test if there is a draw object at that position and if it should be selected.
+// The 'should' is aimed at Writer text fly frames which may be in front of
+// the draw object.
+sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
+{
+    SET_CURR_SHELL(this);
+    SwDrawView *pDrawView = Imp()->GetDrawView();
+    sal_Bool bRet(sal_False);
+
+    if(pDrawView)
+    {
+        SdrObject* pObj;
+        SdrPageView* pPV;
+        sal_uInt16 nOld(pDrawView->GetHitTolerancePixel());
+
+        pDrawView->SetHitTolerancePixel(pDrawView->GetMarkHdlSizePixel()/2);
+        bRet = pDrawView->PickObj(rPt, pObj, pPV, SDRSEARCH_PICKMARKABLE);
+        pDrawView->SetHitTolerancePixel(nOld);
+
+        if(bRet && pObj)
+        {
+            SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage(0);
+
+            for(sal_uInt32 a(pObj->GetOrdNumDirect() + 1); bRet && a < pPage->GetObjCount(); a++)
+            {
+                SdrObject *pCandidate = pPage->GetObj(a);
+
+                if(pCandidate->IsWriterFlyFrame() && ((SwVirtFlyDrawObj*)pCandidate)->GetBoundRect().IsInside(rPt))
+                {
+                    bRet = sal_False;
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
 
 /*************************************************************************
 |*
@@ -1464,6 +1502,10 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
 
         if( pBest )
         {
+            // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
+            bool bSavedFlagValue = IsMacroExecAllowed();
+            SetMacroExecAllowed( false );
+
             BOOL bFlyFrm = pBest->IsWriterFlyFrame();
             if( bFlyFrm )
             {
@@ -1479,6 +1521,10 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                 if( !ActionPend() )
                     MakeVisible( pBest->GetBoundRect() );
             }
+
+            // OD 11.02.2003 #100556# - reset flag value
+            SetMacroExecAllowed( bSavedFlagValue );
+
             CallChgLnk();
             bRet = TRUE;
         }
@@ -2566,10 +2612,8 @@ BOOL SwFEShell::IsAlignPossible() const
         {
             SdrObject *pO = Imp()->GetDrawView()->GetMarkList().GetMark(0)->GetObj();
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pO);
-            if (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AT_CNTNT)
-                bRet = FALSE;
-            else
-                bRet = pC->GetAnchor() ? pC->GetAnchor()->IsInDocBody() : FALSE;
+            //only as character bound drawings can be aligned
+            bRet = pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_IN_CNTNT;
         }
         if ( bRet )
             return Imp()->GetDrawView()->IsAlignPossible();
@@ -2947,8 +2991,6 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
                 pObj->SetItemSet(aSet);
             }
 
-            String aText = SW_RESSTR(STR_POOLCOLL_LABEL_FRAME);
-            ((SdrCaptionObj*)pObj)->SetText(aText);
             ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
             ((SdrCaptionObj*)pObj)->SetTailPos(
                 aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: os $ $Date: 2002-12-10 15:31:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,8 @@ void SwView::SelectShell()
 //
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
+    if(bInDtor)
+        return;
     // Entscheidung, ob UpdateTable gerufen werden muss
     sal_Bool bUpdateTable = sal_False;
     const SwFrmFmt* pCurTableFmt = pWrtShell->GetTableFmt();
@@ -830,8 +831,17 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nFormSfxId( USHRT_MAX ),
     nSelectionType( INT_MAX ),
     nLastPasteDestination( 0xFFFF ),
-    nNewPage(USHRT_MAX)
+    nNewPage(USHRT_MAX),
+    bInMailMerge(FALSE),
+    bInDtor(FALSE)
 {
+    // OD 18.12.2002 #103492# - According to discussion with MBA and further
+    // investigations, no old SfxViewShell will be set as parameter <pOldSh>,
+    // if function "New Window" is performed to open an additional view beside
+    // an already existing one.
+    // If the view is switch from one to another, the 'old' view is given by
+    // parameter <pOldSh>.
+
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwView::SwView" );
 
     _CreateScrollbar( TRUE );
@@ -868,29 +878,38 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     sal_Bool bOldShellWasPagePreView = FALSE,
              bOldShellWasSrcView = FALSE;
-    if( !pOldSh )
+
+    // OD 18.12.2002 #103492# - determine, if there is an existing view for
+    // document
+    SfxViewShell* pExistingSh = 0;
+    if ( pOldSh )
+        pExistingSh = pOldSh;
+    else
     {
-        //Gibt es schon eine Sicht auf das Dokument?
         SfxViewFrame *pF = SfxViewFrame::GetFirst( pDocSh );
         if( pF == pFrame )
             pF = SfxViewFrame::GetNext( *pF, pDocSh );
         if( pF )
-            pOldSh = pF->GetViewShell();
+            pExistingSh = pF->GetViewShell();
     }
-    else if( pOldSh->IsA( TYPE( SwPagePreView ) ) )
+
+    // determine type of existing view
+    if( pExistingSh &&
+        pExistingSh->IsA( TYPE( SwPagePreView ) ) )
     {
-        sSwViewData = ((SwPagePreView*)pOldSh)->GetPrevSwViewData();
-        sNewCrsrPos = ((SwPagePreView*)pOldSh)->GetNewCrsrPos();
-        nNewPage = ((SwPagePreView*)pOldSh)->GetNewPage();
+        sSwViewData = ((SwPagePreView*)pExistingSh)->GetPrevSwViewData();
+        sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
+        nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
         bOldShellWasPagePreView = TRUE;
     }
-    else if( pOldSh->IsA( TYPE( SwSrcView ) ) )
+    else if( pExistingSh &&
+             pExistingSh->IsA( TYPE( SwSrcView ) ) )
         bOldShellWasSrcView = TRUE;
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
-    if(PTR_CAST( SwView, pOldSh))
+    if(PTR_CAST( SwView, pExistingSh))
     {
-        pWrtShell = new SwWrtShell( *((SwView*)pOldSh)->pWrtShell,
+        pWrtShell = new SwWrtShell( *((SwView*)pExistingSh)->pWrtShell,
                                     pEditWin, *this);
 //MA: Das kann doch nur zu einem GPF fuehren!
 //      nSelectionType = ((SwView*)pOldSh)->nSelectionType;
@@ -915,7 +934,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         // add the ViewShell to the ring of the other ViewShell(s)
         if(bOldShellWasPagePreView)
         {
-            ViewShell& rPreviewViewShell = *((SwPagePreView*)pOldSh)->GetViewShell();
+            ViewShell& rPreviewViewShell = *((SwPagePreView*)pExistingSh)->GetViewShell();
             pWrtShell->MoveTo(&rPreviewViewShell);
             //#95521# to update the field command et.al. if necessary
             const SwViewOption* pPreViewOpt = rPreviewViewShell.GetViewOptions();
@@ -923,6 +942,14 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
                     pPreViewOpt->IsHidden() != aUsrPref.IsHidden() ||
                     pPreViewOpt->IsShowHiddenPara() != aUsrPref.IsShowHiddenPara() )
                 rPreviewViewShell.ApplyViewOptions(aUsrPref);
+            // OD 09.01.2003 #106334# - reset design mode at draw view for form
+            // shell, if needed.
+            if ( ((SwPagePreView*)pExistingSh)->ResetFormDesignMode() &&
+                 pWrtShell->HasDrawView() )
+            {
+                SdrView* pDrawView = pWrtShell->GetDrawView();
+                pDrawView->SetDesignMode( ((SwPagePreView*)pExistingSh)->FormDesignModeToReset() );
+            }
         }
     }
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create WrtShell" );
@@ -1090,6 +1117,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
 SwView::~SwView()
 {
+    bInDtor = TRUE;
     pEditWin->Hide(); // damit kein Paint Aerger machen kann!
     // An der SwDocShell den Pointer auf die View ruecksetzen
     SwDocShell* pDocSh = GetDocShell();
@@ -1221,11 +1249,30 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             sal_Bool bSelectObj = (0 != rUserData.GetToken( nOff, ';', nPos ).ToInt32())
                                 && pWrtShell->IsObjSelectable( aCrsrPos );
 
+            // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
+            bool bSavedFlagValue = pWrtShell->IsMacroExecAllowed();
+            pWrtShell->SetMacroExecAllowed( false );
             pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
             if( bSelectObj )
             {
                 pWrtShell->SelectObj( aCrsrPos );
                 pWrtShell->EnterSelFrmMode( &aCrsrPos );
+            }
+            // OD 11.02.2003 #100556# - reset flag value
+            pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
+
+            //apply information from page preview - if available
+            if( sNewCrsrPos.Len() )
+            {
+                long nX = sNewCrsrPos.GetToken( 0, ';' ).ToInt32(),
+                      nY = sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
+                pWrtShell->SwCrsrShell::SetCrsr( Point( nX, nY ), FALSE );
+                sNewCrsrPos.Erase();
+            }
+            else if(USHRT_MAX != nNewPage)
+            {
+                pWrtShell->GotoPage(nNewPage);
+                nNewPage = USHRT_MAX;
             }
 
             SelectShell();
@@ -1346,12 +1393,17 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                     sal_Bool bSelectObj = (sal_False != bSelectedFrame )
                                         && pWrtShell->IsObjSelectable( aCrsrPos );
 
+                    // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
+                    bool bSavedFlagValue = pWrtShell->IsMacroExecAllowed();
+                    pWrtShell->SetMacroExecAllowed( false );
                     pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
                     if( bSelectObj )
                     {
                         pWrtShell->SelectObj( aCrsrPos );
                         pWrtShell->EnterSelFrmMode( &aCrsrPos );
                     }
+                    // OD 11.02.2003 #100556# - reset flag value
+                    pWrtShell->SetMacroExecAllowed( bSavedFlagValue );
                 }
                 SelectShell();
 

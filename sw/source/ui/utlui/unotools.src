@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:24:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,25 +80,26 @@ ModalDialog DLG_RENAME_XNAMED
         Text [ ENGLISH ] = "New name" ;
         Text[ english_us ] = "New name";
         Text[ portuguese ] = "Novo nome";
-        Text[ russian ] = "Ïğèñâîèòü èìÿ";
+        Text[ russian ] = "Íîâîå èìÿ";
         Text[ greek ] = "Íİï üíïìá";
         Text[ dutch ] = "Nieuwe naam";
         Text[ french ] = "Nouveau nom";
-        Text[ spanish ] = "Nuevo nombre";
+        Text[ spanish ] = "Nombre nuevo";
         Text[ italian ] = "Nome nuovo";
         Text[ danish ] = "Nyt navn";
         Text[ swedish ] = "Nytt namn";
         Text[ polish ] = "Nowa nazwa";
         Text[ portuguese_brazilian ] = "New name";
-        Text[ japanese ] = "V‚µ‚¢–¼‘O";
-        Text[ korean ] = "»õ ÀÌ¸§";
-        Text[ chinese_simplified ] = "ĞÂÃû³Æ";
-        Text[ chinese_traditional ] = "·s¦WºÙ";
+        Text[ japanese ] = "æ–°ã—ã„åå‰";
+        Text[ korean ] = "ìƒˆ ì´ë¦„";
+        Text[ chinese_simplified ] = "æ–°åç§°";
+        Text[ chinese_traditional ] = "æ–°åç¨±";
         Text[ arabic ] = "ÇáÇÓã ÇáÌÏíÏ";
         Text[ turkish ] = "Yeni ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nuevo nombre";
+        Text[ catalan ] = "Nom nou";
         Text[ finnish ] = "Uusi nimi";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹ƒà¸«à¸¡à¹ˆ";
     };
     Edit ED_NEW_NAME
     {
@@ -120,19 +121,20 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ french ] = "Modifier le nom";
         Text[ spanish ] = "Cambiar nombre";
         Text[ italian ] = "Cambia nome";
-        Text[ danish ] = "Modificer navn";
+        Text[ danish ] = "Rediger navn";
         Text[ swedish ] = "Ändra namn";
         Text[ polish ] = "Zmieñ nazwê";
         Text[ portuguese_brazilian ] = "Change name";
-        Text[ japanese ] = "–¼‘O‚Ì•ÏX";
-        Text[ korean ] = "ÀÌ¸§ º¯°æ";
-        Text[ chinese_simplified ] = "¸ü¸ÄÃû³Æ";
-        Text[ chinese_traditional ] = "ÅÜ§ó¦WºÙ";
+        Text[ japanese ] = "åå‰ã®å¤‰æ›´";
+        Text[ korean ] = "ì´ë¦„ ë³€ê²½";
+        Text[ chinese_simplified ] = "æ›´æ”¹åç§°";
+        Text[ chinese_traditional ] = "è®Šæ›´åç¨±";
         Text[ arabic ] = "ÊÚÏíá ÇáÇÓã";
         Text[ turkish ] = "Adı değiştir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cambiar nombre";
+        Text[ catalan ] = "Canvia el nom";
         Text[ finnish ] = "Muuta nimi";
+        Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
     };
     OKButton PB_OK
     {
@@ -168,15 +170,16 @@ ModalDialog DLG_RENAME_XNAMED
     Text[ swedish ] = "Byt namn på objekt:  ";
     Text[ polish ] = "Zmieñ nazwê obiektu: ";
     Text[ portuguese_brazilian ] = "Rename object: ";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä–¼‚Ì•ÏX: ";
-    Text[ korean ] = "°³Ã¼ ÀÌ¸§ ¹Ù²Ù±â: ";
-    Text[ chinese_simplified ] = "ÖØÃüÃû¶ÔÏó£º ";
-    Text[ chinese_traditional ] = "­«·s©R¦Wª«¥ó¡G ";
+    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆåã®å¤‰æ›´: ";
+    Text[ korean ] = "ê°œì²´ ì´ë¦„ ë°”ê¾¸ê¸°: ";
+    Text[ chinese_simplified ] = "é‡å‘½åå¯¹è±¡ï¼š ";
+    Text[ chinese_traditional ] = "é‡æ–°å‘½åç‰©ä»¶ï¼š ";
     Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáßÇÆä: ";
     Text[ turkish ] = "Nesneyi yeniden adlandır: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cambiar nombre de objeto: ";
+    Text[ catalan ] = "Reanomena l'objecte: ";
     Text[ finnish ] = "Nimeä objekti uudelleen: ";
+    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¸§à¸±à¸•à¸–à¸¸: ";
 };
 String STR_SERVICE_UNAVAILABLE
 {
@@ -184,9 +187,9 @@ String STR_SERVICE_UNAVAILABLE
     Text [ English ] = "The following service is not available: " ;
     Text[ english_us ] = "The following service is not available: ";
     Text[ portuguese ] = "O seguinte serviço não está disponível: ";
-    Text[ russian ] = "Ñëåäóşùàÿ ñëóæáà íå äîñòóïíà:  ";
+    Text[ russian ] = "Íåäîñòóïíà ñëåäóşùàÿ ñëóæáà:  ";
     Text[ greek ] = "Ç áêüëïõèç õğçñåóßá äåí åßíáé äéáèİóéìç: ";
-    Text[ dutch ] = "De volgende service is niet beschikbaar:  ";
+    Text[ dutch ] = "De volgende service is niet beschikbaar:";
     Text[ french ] = "Le service suivant n'est pas disponible :  ";
     Text[ spanish ] = "El siguiente servicio no está disponible: ";
     Text[ italian ] = "Il seguente servizio non è disponibile. ";
@@ -194,15 +197,16 @@ String STR_SERVICE_UNAVAILABLE
     Text[ swedish ] = "Följande service är inte tillgänglig:  ";
     Text[ polish ] = "Nastêpuj¹cy serwis jest niedostêpny: ";
     Text[ portuguese_brazilian ] = "The following service is not available: ";
-    Text[ japanese ] = "Ÿ‚Ì»°ËŞ½‚Íg—p‚Å‚«‚Ü‚¹‚ñ: ";
-    Text[ korean ] = "´ÙÀ½°ú °°Àº ¼­ºñ½º´Â °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù: ";
-    Text[ chinese_simplified ] = "²»´æÔÚÏÂÁĞ·şÎñ¹¦ÄÜ£º ";
-    Text[ chinese_traditional ] = "³o­ÓªA°È¥\\¯à¤£¦s¦b¡G ";
+    Text[ japanese ] = "æ¬¡ã®ã‚µãƒ¼ãƒ“ã‚¹ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“: ";
+    Text[ korean ] = "ë‹¤ìŒê³¼ ê°™ì€ ì„œë¹„ìŠ¤ëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤: ";
+    Text[ chinese_simplified ] = "ä¸å­˜åœ¨ä¸‹åˆ—æœåŠ¡åŠŸèƒ½ï¼š ";
+    Text[ chinese_traditional ] = "é€™å€‹æœå‹™åŠŸèƒ½ä¸å­˜åœ¨ï¼š ";
     Text[ arabic ] = "ÇáÎÏãÉ ÇáÊÇáíÉ ÛíÑ ãÊæİÑÉ: ";
     Text[ turkish ] = "Aşağıdaki hizmet kullanılamıyor: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El siguiente servicio no está disponible: ";
+    Text[ catalan ] = "El següent servei no està disponible: ";
     Text[ finnish ] = "Seuraava palvelu ei ole käytettävissä: ";
+    Text[ thai ] = "à¸šà¸£à¸´à¸à¸²à¸£à¸™à¸µà¹‰à¹ƒà¸Šà¹‰à¹„à¸¡à¹ˆà¹„à¸”à¹‰: ";
 };
 Resource RES_FRMEX_MENU
 {
@@ -260,7 +264,7 @@ Resource RES_FRMEX_MENU
     {
             < "~Échelle" ;      ST_MENU_ZOOM; > ;
         < "Vers le ~haut" ;     ST_MENU_UP;     > ;
-        < "Vers le ~bas" ;  ST_MENU_DOWN; > ;
+        < "Vers le bas" ;   ST_MENU_DOWN; > ;
     };
     ItemList [ spanish ] =
     {
@@ -300,27 +304,27 @@ Resource RES_FRMEX_MENU
     };
     ItemList [ japanese ] =
     {
-            < "½Ş°Ñ(~Z)" ;      ST_MENU_ZOOM; > ;
-        < "ã‚Ö(~U)" ;  ST_MENU_UP;     > ;
-        < "‰º‚Ö(~W)" ;  ST_MENU_DOWN; > ;
+            < "ã‚ºãƒ¼ãƒ (~Z)" ;         ST_MENU_ZOOM; > ;
+        < "ä¸Šã¸(~U)" ;    ST_MENU_UP;     > ;
+        < "ä¸‹ã¸(~W)" ;    ST_MENU_DOWN; > ;
     };
     ItemList [ korean ] =
     {
-            < "Ãà¼Ò/È®´ë(~Z)" ;         ST_MENU_ZOOM; > ;
-        < "À§·Î(~U)" ;  ST_MENU_UP;     > ;
-        < "¾Æ·¡·Î(~W)" ;    ST_MENU_DOWN; > ;
+            < "ì¶•ì†Œ/í™•ëŒ€(~Z)" ;         ST_MENU_ZOOM; > ;
+        < "ìœ„ë¡œ(~U)" ;    ST_MENU_UP;     > ;
+        < "ì•„ë˜ë¡œ(~W)" ;     ST_MENU_DOWN; > ;
     };
     ItemList [ chinese_simplified ] =
     {
-            < "±ÈÀı(~Z)" ;      ST_MENU_ZOOM; > ;
-        < "ÏòÉÏ(~U)" ;  ST_MENU_UP;     > ;
-        < "ÏòÏÂ(~W)" ;  ST_MENU_DOWN; > ;
+            < "æ˜¾ç¤ºæ¯”ä¾‹(~Z)" ;      ST_MENU_ZOOM; > ;
+        < "å‘ä¸Š(~U)" ;    ST_MENU_UP;     > ;
+        < "å‘ä¸‹(~W)" ;    ST_MENU_DOWN; > ;
     };
     ItemList [ chinese_traditional ] =
     {
-            < "Åã¥Ü¤ñ¨Ò(~Z)" ;      ST_MENU_ZOOM; > ;
-        < "¦V¤W(~U)" ;  ST_MENU_UP;     > ;
-        < "¦V¤U(~W)" ;  ST_MENU_DOWN; > ;
+            < "é¡¯ç¤ºæ¯”ä¾‹(~Z)" ;      ST_MENU_ZOOM; > ;
+        < "å‘ä¸Š(~U)" ;    ST_MENU_UP;     > ;
+        < "å‘ä¸‹(~W)" ;    ST_MENU_DOWN; > ;
     };
     ItemList [ arabic ] =
     {
@@ -336,18 +340,39 @@ Resource RES_FRMEX_MENU
     };
     ItemList [ catalan ] =
     {
-            < "~Escala" ;       ST_MENU_ZOOM; > ;
-        < "Hacia ~arriba" ;     ST_MENU_UP;     > ;
-        < "Hacia a~bajo" ;  ST_MENU_DOWN; > ;
+            < "~Zoom" ;         ST_MENU_ZOOM; > ;
+        < "~Cap amunt" ;    ST_MENU_UP;     > ;
+        < "Cap ~avall" ;    ST_MENU_DOWN; > ;
     };
     ItemList [ finnish ] =
     {
-            < "~Zoomaa" ;       ST_MENU_ZOOM; > ;
+            < "~Zoomaus" ;      ST_MENU_ZOOM; > ;
         < "~Ylös" ;     ST_MENU_UP;     > ;
-        < "A~las" ;     ST_MENU_DOWN; > ;
+        < "Al~as" ;     ST_MENU_DOWN; > ;
+    };
+    ItemList [ thai ] =
+    {
+         < "~Maà¸¿stab" ;       ST_MENU_ZOOM; > ;
+        < "Nach ~oben" ;    ST_MENU_UP;     > ;
+        < "Nach ~unten" ;   ST_MENU_DOWN; > ;
     };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: od $ $Date: 2002-12-06 16:12:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ struct SwPrintData;
 class SvtAccessibilityOptions;
 class Fraction;
 class SvEmbeddedObjectRef;
+// OD 12.12.2002 #103492#
+class SwPagePreviewLayout;
 
 struct SwAccessibilityOptions;
 
@@ -127,6 +129,9 @@ class ViewShell : public Ring
 
     friend class SwViewImp;
     friend class SwLayIdle;
+
+    // OD 12.12.2002 #103492# - for setting visible area for page preview paint
+    friend class SwPagePreviewLayout;
 
     //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
     //werden kann.
@@ -195,14 +200,6 @@ class ViewShell : public Ring
     void PrepareForPrint( const SwPrtOptions &rOptions );
 
     void ImplApplyViewOptions( const SwViewOption &rOpt );
-
-    /** calculate visible pages and further needed data for current preview settings
-
-        OD 04.12.2002 #103492#
-
-        @author OD
-    */
-    void _CalcVisiblePagesForPreview();
 
 protected:
     static ShellResource*   pShellRes;      // Resourcen fuer die Shell
@@ -321,7 +318,7 @@ public:
     sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
                   OutputDevice *pPDFOut = NULL );
     //"Drucken" fuer OLE 2.0
-    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt,
+    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
     // creates temporary doc with selected text for PDF export
@@ -374,210 +371,26 @@ public:
     // Selektion der Draw ::com::sun::star::script::Engine geaendert
     virtual void DrawSelChanged(SdrView*);
 
-    // SS fuer Seitenvorschau anzeigen
-    void PreViewPage( const Rectangle& rRect, sal_uInt16 nRowCol,
-                      sal_uInt16 nSttPage, const Size& rPageSize,
-                      sal_uInt16 nSelectedPage );
-    void RepaintCoreRect( const SwRect& rRect, sal_uInt16 nRowCol,
-                            sal_uInt16 nSttPage, const Size& rPageSize );
-    // und jetzt mal auf den Drucker
+    // OD 12.12.2002 #103492#
+    SwPagePreviewLayout* PagePreviewLayout();
+
+    /** adjust view options for page preview
+
+        OD 09.01.2003 #i6467#
+        Because page preview should show the document as it is printed -
+        page preview is print preview -, the view options are adjusted to the
+        same as for printing.
+
+        @param _rPrintOptions
+        input parameter - constant reference to print options, to which the
+        view option will be adjusted.
+    */
+    void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
+
+    // print page/print preview
     void PrintPreViewPage( SwPrtOptions& rOptions, sal_uInt16 nRowCol,
                            SfxProgress& rProgress,
                            const SwPagePreViewPrtData* = 0 );
-     Size GetPagePreViewPrtMaxSize() const;
-    //  errechnen & MapMode setzen
-    sal_uInt16 CalcPreViewPage( const Size& rWinWidth, sal_uInt16& nRowCol,
-                            sal_uInt16 nSttPage, Size& rPageSize,
-                            sal_uInt16& rVirtPageNo, sal_uInt16 nAccSelPage );
-    sal_Bool IsPreViewDocPos( Point& rDocPt, sal_uInt16 nRowCol, sal_uInt16 nSttPage,
-                            const Size& rMaxSize );
-    /** init page preview layout - new method, replacing <CalcPreViewPage>
-
-        OD 27.11.2002 #103492#
-        initialize the page preview settings for a given layout.
-        side effects:
-        (1) data struture for current preview settings are initialized and set.
-        (2) if parameter <_bCalcScale> is true, mapping mode with calculated
-        scaling is set at the output device and the zoom at the view options is
-        set with the calculated scaling.
-
-        @author OD
-
-        @param _nCols
-        input parameter - initial number of page columns in the preview.
-
-        @param _nRows
-        input parameter - initial number of page rows in the preview.
-
-        @param _orMaxPageSize
-        output parameter - maximal size in width and height of all pages
-
-        @param _orPreviewDocSize
-        output parameter - size of the document in the proposed preview layout
-        included the spacing between the pages.
-
-        @param _bCalcScale
-        input parameter - control, if method should calculate the needed
-        scaling for the proposed preview layout for the given window size
-        and sets the scaling at the output device and the view options.
-
-        @param _pPxWinSize
-        input parameter - window size in which the preview will be displayed and
-        for which the scaling will be calculated.
-
-        @return boolean, indicating, if preview layout is successful initialized.
-    */
-    bool InitPreviewLayout( const sal_uInt16 _nCols,
-                            const sal_uInt16 _nRows,
-                            Size&            _orMaxPageSize,
-                            Size&            _orPreviewDocSize,
-                            const bool       _bCalcScale,
-                            const Size*      _pPxWinSize = NULL
-                          );
-
-    /** prepare paint of page preview
-
-        OD 28.11.2002 #103492#
-        With the valid preview layout settings - calculated and set by method
-        <InitPreviewLayout> - the paint of a specific part of the virtual
-        preview document is prepared. The corresponding part is given by either
-        a start page (parameter <_nProposedStartPageNum>) or a absolute position
-        (parameter <_aProposedStartPoint>).
-        The accessibility preview will also be updated via a corresponding
-        method call.
-
-        @author OD
-
-        @param _nProposedStartPageNum [0..<number of document pages>]
-        input parameter - proposed number of page, which should be painted in
-        the left-top-corner in the current output device.
-
-        @param _nProposedStartPos [(0,0)..<PreviewDocumentSize>]
-        input parameter - proposed absolute position in the virtual preview
-        document, which should be painted in the left-top-corner in the current
-        output device.
-
-        @param _pPxWinSize
-        input parameter - pixel size of window the preview will be painted in.
-
-        @param _onStartPageNum
-        output parameter - physical number of page, which will be painted in the
-        left-top-corner in the current output device.
-
-        @param _onStartPageVirtNum
-        output parameter - virtual number of page, which will be painted in the
-        left-top-corner in the current output device.
-
-        @param _orDocPreviewPaintRect
-        output parameter - rectangle of preview document, which will be painted.
-
-        @param _bPaintPageAtFirstCol
-        input parameter with default value "true" - controls, if start page
-        is set to page in first column the proposed start page is located.
-
-        @return boolean, indicating, if prepare of preview paint was successful.
-    */
-    bool PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
-                              const Point      _aProposedStartPos,
-                              const Size*      _pPxWinSize,
-                              sal_uInt16&      _onStartPageNum,
-                              sal_uInt16&      _onStartPageVirtNum,
-                              Rectangle&       _orDocPreviewPaintRect,
-                              const bool       _bPaintPageAtFirstCol = true
-                            );
-
-    /** paint prepared preview
-
-        OD 28.11.2002 #103492#
-
-        @author OD
-
-        @param _nSelectedPageNum
-        input parameter - physical number of page, which should be painted as
-        selected by am extra border in color COL_LIGHTBLUE.
-
-        @param _aOutRect
-        input parameter - Twip rectangle of window, which should be painted.
-
-        @return boolean, indicating, if paint of preview was performed
-    */
-    bool PaintPreview( const sal_uInt16 _nSelectedPageNum,
-                       const Rectangle  _aOutRect
-                     );
-
-    /** property <DoesPreviewLayoutRowsFitIntoWin> of current preview layout
-
-        OD 03.12.2002 #103492#
-
-        @author OD
-
-        @return boolean, indicating that the rows of the current preview layout
-        fit into the current window size.
-    */
-    bool DoesPreviewLayoutRowsFitIntoWindow();
-
-    /** property <DoesPreviewLayoutColsFitIntoWin> of current preview layout
-
-        OD 03.12.2002 #103492#
-
-        @author OD
-
-        @return boolean, indicating that the columns of the current preview layout
-        fit into the current window size.
-    */
-    bool DoesPreviewLayoutColsFitIntoWindow();
-
-    /** calculate start position for new scaling
-
-        OD 04.12.2002 #103492#
-
-        @author OD
-
-        @return Point, start position for new scale
-    */
-    Point GetPreviewStartPosForNewScale( const Fraction& _aNewScale,
-                                         const Fraction& _aOldScale,
-                                         const Size&     _aNewWinSize );
-
-    /** determines, if page with given page number is visible in preview
-
-        OD 05.12.2002 #103492#
-
-        @author OD
-
-        @return boolean, indicating, if page with given page number is visible
-        in preview
-    */
-    bool IsPageVisibleInCurrPreview( const sal_uInt16 _nPageNum );
-
-    /** prepares re-paint of preview to bring new selected page into view.
-
-        OD 06.12.2002 #103492#
-
-        @author OD
-
-        @param _nCurrSelectedPage
-        input parameter - number of current selected page.
-
-        @param _nHoriMove
-        input parameter - positive/negative number of columns the current
-        selected page have to be moved.
-
-        @param _nVertMove
-        input parameter - positive/negative number of rows the current
-        selected page have to be moved.
-
-        @param _orNewSelectedPage
-        output parameter - number of new selected page
-
-        @return boolean - indicating, that move was sucessful.
-    */
-    bool MovePreviewSelectedPage( const sal_uInt16 _nCurrSelectedPage,
-                                  const sal_Int16  _nHoriMove,
-                                  const sal_Int16  _nVertMove,
-                                  sal_uInt16&      _orNewSelectedPage,
-                                  sal_uInt16&      _orNewStartPage,
-                                  Point&           _orNewStartPos );
 
     // Prospekt-Format drucken
     void PrintProspect( SwPrtOptions&, SfxProgress& );
@@ -629,24 +442,16 @@ public:
     const Size& GetBrowseBorder() const{ return aBrowseBorder; }
     void SetBrowseBorder( const Size& rNew );
 
-#ifdef ACCESSIBLE_LAYOUT
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
+    // OD 15.01.2003 #103492# - change method signature due to new page preview
+    // functionality.
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible >
-            CreateAccessiblePreview( sal_uInt8 nRow,
-                                     sal_uInt8 nColumn,
-                                     sal_uInt16 nStartPage,
-                                     const Size& rPageSize,
-                                     const Point& rFreePoint,
-                                     const Fraction& rScale,
-                                       sal_uInt16 nSelectedPage );
-
-    Point GetPreviewFreePix() const;
+            CreateAccessiblePreview();
 
     void ShowPreViewSelection( sal_uInt16 nSelPage );
     void InvalidateAccessibleFocus();
-#endif
 
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-08 13:30:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,22 +171,26 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 
 BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 {
-    BOOL bRet = FALSE;
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
-    if( pTblNd )
+    if( !pTblNd )
+        return FALSE;
+
+    _FndBox aFndBox( 0, 0 );
+
+    // suche alle Boxen / Lines
     {
         SwSelBoxes aSelBoxes;
         ::GetTblSel( rSh, aSelBoxes );
-        _FndBox aFndBox( aSelBoxes );
-
-        rX = aFndBox.GetLines().Count();
-        if( rX )
-        {
-            rY = aFndBox.GetLines()[0]->GetBoxes().Count();
-            bRet = TRUE;
-        }
+        _FndPara aPara( aSelBoxes, &aFndBox );
+        const SwTable& rTbl = pTblNd->GetTable();
+        ((SwTableLines&)rTbl.GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
     }
-    return bRet;
+    rX = aFndBox.GetLines().Count();
+    if( !rX )
+        return FALSE;
+
+    rY = aFndBox.GetLines()[0]->GetBoxes().Count();
+    return TRUE;
 }
 
 /*--------------------------------------------------------------------
@@ -526,4 +530,9 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     }
     return 0;
 }
+
+
+
+
+
 

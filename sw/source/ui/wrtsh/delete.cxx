@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:42:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,15 +179,19 @@ long SwWrtShell::DelLeft()
 
     // JP 29.06.95: nie eine davor stehende Tabelle loeschen.
     BOOL bSwap = FALSE;
-    if( SwCrsrShell::IsSttPara() && !SwCrsrShell::IsCrsrInTbl() )
+    const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
+    if( SwCrsrShell::IsSttPara())
     {
+        /* If the cursor is at the beginning of a paragraph, try to step
+           backwards. On failure we are done. */
         if( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
             return 0;
-        if( SwCrsrShell::IsCrsrInTbl() )
-        {
-            SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
+
+        /* If the cursor entered or left a table (or both) we are done. No step
+           back. */
+        if( SwCrsrShell::IsCrsrInTbl() != pWasInTblNd )
             return 0;
-        }
+
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
         SwCrsrShell::SwapPam();
@@ -205,8 +209,6 @@ long SwWrtShell::DelLeft()
     return nRet;
 }
 
-
-
 long SwWrtShell::DelRight(BOOL bDelFrm)
 {
         // werden verodert, wenn Tabellenselektion vorliegt;
@@ -217,6 +219,9 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
         nSelection = SwWrtShell::SEL_TBL;
     if(nSelection & SwWrtShell::SEL_TXT)
         nSelection = SwWrtShell::SEL_TXT;
+
+    const SwTableNode * pWasInTblNd = NULL;
+
     switch( nSelection & ~(SEL_BEZ) )
     {
     case SEL_TXT:
@@ -238,6 +243,8 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
             break;
         }
 
+        pWasInTblNd = IsCrsrInTbl();
+
         if( SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
             SwCrsrShell::IsEndPara() && !IsCrsrInTbl() &&
             SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
@@ -251,6 +258,14 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
                 UpdateAttr();
                 break;
             }
+        }
+        else if (SwCrsrShell::IsEndPara() &&
+                 SwCrsrShell::Right(1, CRSR_SKIP_CHARS))
+        {
+            if (IsCrsrInTbl() || (pWasInTblNd != IsCrsrInTbl()))
+                break;
+
+            SwCrsrShell::Left(1, CRSR_SKIP_CHARS);
         }
 
         OpenMark();

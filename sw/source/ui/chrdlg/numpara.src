@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-11-06 10:14:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "ç·¨è™Ÿæ¨£å¼";
         Text[ arabic ] = "äãØ ÇáÊÑŞíã";
         Text[ greek ] = "Óôõë áñßèìçóçò";
-        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° í…œí”Œë¦¿";
+        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìŠ¤íƒ€ì¼";
         Text[ turkish ] = "Numaralama biçimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estil de numeració";
@@ -196,7 +196,7 @@ TabPage TP_NUMPARA
         };
         StringList [ finnish ] =
         {
-             < "Ei mit??n" ; > ;
+             < "Ei mitään" ; > ;
         };
     StringList [ thai ] =
     {
@@ -261,7 +261,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Bu paragraf ile yeniden başla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Torna a començar en aquest paràgraf";
-        Text[ finnish ] = "~Aloita alusta tämän kappaleen kohdalla";
+        Text[ finnish ] = "A~loita alusta tämän kappaleen kohdalla";
         Text[ thai ] = "à¹€à¸£à¸´à¹ˆ~à¸¡à¸—à¸µà¹ˆà¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸™à¸µà¹‰à¹ƒà¸«à¸¡à¹ˆ";
     };
     TriStateBox CB_NUMBER_NEW_START
@@ -276,8 +276,8 @@ TabPage TP_NUMPARA
         Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
         Text [ swedish ] = "~Börja med" ;
         Text [ danish ] = "~Begynd med" ;
-        Text [ italian ] = "Inizia con..." ;
-        Text [ spanish ] = "Empezar con" ;
+        Text [ italian ] = "Ini~zia con" ;
+        Text [ spanish ] = "~Empezar con" ;
         Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Beginnen met" ;
         Text[ chinese_simplified ] = "å¼€å§‹ä»(~S)";
@@ -333,7 +333,7 @@ TabPage TP_NUMPARA
         Text[ chinese_traditional ] = "è¡Œç·¨è™Ÿ";
         Text[ arabic ] = "ÊÑŞíã ÇáÃÓØÑ";
         Text[ greek ] = "Áñßèìçóç ãñáììşí";
-        Text[ korean ] = "í–‰ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
+        Text[ korean ] = "ì¤„ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
         Text[ turkish ] = "Satır numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeració de línies";
@@ -357,7 +357,7 @@ TabPage TP_NUMPARA
         Text [ dutch ] = "~De regels van deze alinea meetellen." ;
         Text [ portuguese ] = "~Incluir as linhas deste parágrafo" ;
         Text[ chinese_simplified ] = "åŒ…æ‹¬è¿™ä¸ªæ®µè½çš„è¡Œ(~I)";
-        Text[ russian ] = "Ñ÷èòàòü, âêëş÷àÿ ñòğîêè ıòîãî àáçàöà";
+        Text[ russian ] = "Íóìåğîâàòü ñòğîêè";
         Text[ polish ] = "£¹cznie z wierszami tego akapitu";
         Text[ japanese ] = "ã“ã®æ®µè½ã®è¡Œæ•°ã‚’å«ã‚ã‚‹(~I)";
         Text[ chinese_traditional ] = "åŒ…æ‹¬é€™å€‹æ®µè½çš„è¡Œ(~I)";
@@ -387,7 +387,7 @@ TabPage TP_NUMPARA
         Text [ french ] = "Recommencer avec ce paragraphe" ;
         Text [ dutch ] = "~Bij deze alinea opnieuw beginnen" ;
         Text[ chinese_simplified ] = "åœ¨è¿™ä¸ªæ®µè½å¤„é‡æ–°å¼€å§‹(~A)";
-        Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà";
+        Text[ russian ] = "Íà÷àòü ñ ıòîãî àáçàöà ñíîâà";
         Text[ polish ] = "Zacznij p~onownie od tego akapitu";
         Text[ japanese ] = "ã“ã®æ®µè½ã§æ–°ã—ãé–‹å§‹(~A)";
         Text[ chinese_traditional ] = "å¾é€™å€‹æ®µè½é‡æ–°é–‹å§‹(~A)";
@@ -397,7 +397,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "Bu paragraf ile yeniden başla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Torna a començar en ~aquest paràgraf";
-        Text[ finnish ] = "~Aloita tässä kappaleessa uudestaan";
+        Text[ finnish ] = "Aloi~ta alusta tämän kappaleen kohdalla";
         Text[ thai ] = "à¹€à¸£à¸´à¹ˆ~à¸¡à¸—à¸µà¹ˆà¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸™à¸µà¹‰";
     };
     FixedText FT_RESTART_NO
@@ -427,7 +427,7 @@ TabPage TP_NUMPARA
         Text[ turkish ] = "~Başlangıç değeri:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comença ~amb:";
-        Text[ finnish ] = "~Aloitus:";
+        Text[ finnish ] = "Alo~itus:";
         Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡à¸”à¹‰à¸§à¸¢";
     };
     NumericField NF_RESTART_PARA
@@ -448,6 +448,22 @@ TabPage TP_NUMPARA
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

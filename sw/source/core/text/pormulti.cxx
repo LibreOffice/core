@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 14:44:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2306,6 +2306,25 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         {
             if ( ! rMulti.GetLen() )
                 lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
+
+            // If there is a HolePortion at the end of the bidi portion,
+            // it has to be moved behind the bidi portion. Otherwise
+            // the visual cursor travelling gets into trouble.
+            SwLineLayout& aRoot = rMulti.GetRoot();
+            SwLinePortion* pPor = aRoot.GetFirstPortion();
+            while ( pPor )
+            {
+                if ( pPor->GetPortion() && pPor->GetPortion()->IsHolePortion() )
+                {
+                    SwLinePortion* pHolePor = pPor->GetPortion();
+                    pPor->SetPortion( NULL );
+                    aRoot.SetLen( aRoot.GetLen() - pHolePor->GetLen() );
+                    rMulti.SetLen( rMulti.GetLen() - pHolePor->GetLen() );
+                    rMulti.SetPortion( pHolePor );
+                    break;
+                }
+                pPor = pPor->GetPortion();
+            }
 
             pTmp = new SwBidiPortion( nMultiLen + rInf.GetIdx(),
                                     ((SwBidiPortion&)rMulti).GetLevel() );

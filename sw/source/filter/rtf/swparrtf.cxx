@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-06 16:21:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
@@ -114,6 +113,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVX_HYZNITEM_HXX
+#include <svx/hyznitem.hxx>
 #endif
 
 #ifndef _FMTPDSC_HXX //autogen
@@ -227,6 +229,13 @@
 #ifndef _SHELLRES_HXX   // for the pagedescname from the ShellRes
 #include <shellres.hxx>
 #endif
+#ifndef _SW_HF_EAT_SPACINGITEM_HXX
+#include <hfspacingitem.hxx>
+#endif
+
+#ifndef _FLTSHELL_HXX
+#include <fltshell.hxx>
+#endif
 
 #ifndef _SWSWERROR_H
 #include <swerror.h>
@@ -287,8 +296,9 @@ ULONG RtfReader::Read( SwDoc &rDoc,SwPaM &rPam, const String &)
 }
 
 SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-                        int bReadNewDoc )
+    int bReadNewDoc )
     : SvxRTFParser( pD->GetAttrPool(), rIn, bReadNewDoc ),
+    maSegments(*this),
     pDoc( pD ),
     pTableNode( 0 ), pOldTblNd( 0 ), nAktBox( 0 ), nNewNumSectDef( USHRT_MAX ),
     nAktPageDesc( 0 ), nAktFirstPageDesc( 0 ),
@@ -302,7 +312,7 @@ SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
-    bFirstContinue = bFirstDocControl = true;
+    bFirstContinue = true;
 
     pPam = new SwPaM( *rCrsr.GetPoint() );
     SetInsPos( SwxPosition( pPam ) );
@@ -331,6 +341,18 @@ SvParserState SwRTFParser::CallParser()
     return SvxRTFParser::CallParser();
 }
 
+bool lcl_UsedPara(SwPaM &rPam)
+{
+    const SwCntntNode* pCNd;
+    const SwAttrSet* pSet;
+    if( rPam.GetPoint()->nContent.GetIndex() ||
+        ( 0 != ( pCNd = rPam.GetCntntNode()) &&
+          0 != ( pSet = pCNd->GetpSwAttrSet()) &&
+         ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE ) ||
+           SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, FALSE ))))
+        return true;
+    return false;
+}
 
 void SwRTFParser::Continue( int nToken )
 {
@@ -381,17 +403,11 @@ void SwRTFParser::Continue( int nToken )
     if( SVPAR_PENDING == GetStatus() )
         return ;                // weiter gehts beim naechsten mal
 
-    // Laufbalken bei asynchronen Call nicht einschalten !!!
-    ::EndProgress( pDoc->GetDocShell() );
-
+    // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
+    for( USHORT n = aTblFmts.Count(); n; )
     {
-        // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
-        for( USHORT n = aTblFmts.Count(); n; )
-        {
-            SwTable* pTbl = SwTable::FindTable( (SwFrmFmt*)aTblFmts[ --n ] );
-            if( pTbl )
-                pTbl->GCBorderLines();
-        }
+        if (SwTable* pTbl = SwTable::FindTable( (SwFrmFmt*)aTblFmts[ --n ] ))
+            pTbl->GCBorderLines();
     }
 
     pRelNumRule->SetNumRelSpaces( *pDoc );
@@ -472,6 +488,10 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
             delete pRegionEndIdx, pRegionEndIdx = 0;
         }
 
+        sal_uInt16 nPageDescOffset = pDoc->GetPageDescCnt();
+        maSegments.InsertSegments(IsNewDoc());
+        UpdatePageDescs(*pDoc, nPageDescOffset);
+
         if( aFlyArr.Count() )
             SetFlysInDoc();
 
@@ -487,7 +507,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 if( pTmp->IsCntntNode() && !pTmp->FindTableNode() )
                     DelLastNode();
             }
-            else if( 0 != ( pAktNd = pDoc->GetNodes()[ nNodeIdx ]->GetTxtNode()) )
+            else if (0 != (pAktNd = pDoc->GetNodes()[nNodeIdx]->GetTxtNode()))
             {
                 if( pAktNd->CanJoinNext( &pPos->nNode ))
                 {
@@ -507,7 +527,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                 }
             }
         }
-
         // nun noch das SplitNode vom Ende aufheben
         else if( !IsNewDoc() )
         {
@@ -547,6 +566,479 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
     delete pSttNdIdx, pSttNdIdx = 0;
     delete pRegionEndIdx, pRegionEndIdx = 0;
     RemoveUnusedNumRules();
+
+    // Laufbalken bei asynchronen Call nicht einschalten !!!
+    ::EndProgress( pDoc->GetDocShell() );
+}
+
+bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
+    USHORT nNettoWidth)
+{
+    //sprmSCcolumns - Anzahl der Spalten - 1
+    USHORT nCols = rSection.NoCols();
+
+    if (nCols < 2)
+        return false;                   // keine oder bloedsinnige Spalten
+
+    SwFmtCol aCol;                      // Erzeuge SwFmtCol
+
+    //sprmSDxaColumns   - Default-Abstand 1.25 cm
+    USHORT nColSpace = rSection.StandardColSeperation();
+
+#if 0
+    // sprmSLBetween
+    if (rSection.maSep.fLBetween)
+    {
+        aCol.SetLineAdj( COLADJ_TOP );      // Line
+        aCol.SetLineHeight( 100 );
+        aCol.SetLineColor( Color( COL_BLACK ));
+        aCol.SetLineWidth( 1 );
+    }
+#endif
+    aCol.Init( nCols, nColSpace, nNettoWidth );
+
+    // not SFEvenlySpaced
+    if (rSection.maPageInfo.maColumns.size())
+    {
+        aCol._SetOrtho(false);
+        USHORT nWishWidth = 0, nHalfPrev = 0;
+        for (USHORT n = 0, i = 0; n < rSection.maPageInfo.maColumns.size(); n += 2, ++i )
+        {
+            SwColumn* pCol = aCol.GetColumns()[ i ];
+            pCol->SetLeft( nHalfPrev );
+            USHORT nSp = rSection.maPageInfo.maColumns[ n+1 ];
+            nHalfPrev = nSp / 2;
+            pCol->SetRight( nSp - nHalfPrev );
+            pCol->SetWishWidth(rSection.maPageInfo.maColumns[ n ] +
+                pCol->GetLeft() + pCol->GetRight());
+            nWishWidth += pCol->GetWishWidth();
+        }
+        aCol.SetWishWidth( nWishWidth );
+    }
+
+    rFmt.SetAttr(aCol);
+    return true;
+}
+
+void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
+    const rtfSection &rSection, bool bIgnoreCols)
+{
+    // 1. Orientierung
+    rInPageDesc.SetLandscape(rSection.IsLandScape());
+
+    // 2. Papiergroesse
+    SwFmtFrmSize aSz(rFmt.GetFrmSize());
+    aSz.SetWidth(rSection.GetPageWidth());
+    aSz.SetHeight(rSection.GetPageHeight());
+    rFmt.SetAttr(aSz);
+
+    rFmt.SetAttr(
+        SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight()));
+
+    if (!bIgnoreCols)
+    {
+        SetCols(rFmt, rSection, rSection.GetPageWidth() -
+            rSection.GetPageLeft() - rSection.GetPageRight());
+    }
+}
+
+void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
+    rtfSections::wwULSpaceData& rData)
+{
+    short nWWUp = rSection.maPageInfo.mnMargtsxn;
+    short nWWLo = rSection.maPageInfo.mnMargbsxn;
+    short nWWHTop = rSection.maPageInfo.mnHeadery;
+    short nWWFBot = rSection.maPageInfo.mnFootery;
+
+#if 0
+    /*
+    If there is gutter in 97+ and the dop says put it on top then get the
+    gutter distance and set it to the top margin. When we are "two pages
+    in one" the gutter is put at the top of odd pages, and bottom of
+    even pages, something we cannot do. So we will put it on top of all
+    pages, that way the pages are at least the right size.
+    */
+    if ( mrReader.pWDop->doptypography.f2on1 ||
+        (!mrReader.bVer67 && mrReader.pWDop->iGutterPos &&
+         rSection.maSep.fRTLGutter)
+       )
+    {
+        nWWUp += rSection.maSep.dzaGutter;
+    }
+#endif
+
+    if (bFirst)
+    {
+        if (
+            rSection.mpTitlePage &&
+            SFX_ITEM_SET == rSection.mpTitlePage->GetMaster().GetItemState(RES_HEADER)
+            )
+        {
+            rData.bHasHeader = true;
+        }
+    }
+    else
+    {
+        if (rSection.mpPage &&
+           (
+           SFX_ITEM_SET == rSection.mpPage->GetMaster().GetItemState(RES_HEADER)
+           || rSection.mpPage->GetLeft().GetItemState(RES_HEADER)
+           )
+           )
+        {
+            rData.bHasHeader = true;
+        }
+    }
+
+    if( rData.bHasHeader )
+    {
+        rData.nSwUp  = nWWHTop;             // Header -> umrechnen
+        rData.nSwHLo = nWWUp - nWWHTop;
+
+        if (rData.nSwHLo < MM50)
+            rData.nSwHLo = MM50;
+    }
+    else // kein Header -> Up einfach uebernehmen
+        rData.nSwUp = nWWUp;
+
+    if (bFirst)
+    {
+        if (
+            rSection.mpTitlePage &&
+            SFX_ITEM_SET == rSection.mpTitlePage->GetMaster().GetItemState(RES_FOOTER)
+            )
+        {
+            rData.bHasFooter = true;
+        }
+    }
+    else
+    {
+        if (rSection.mpPage &&
+           (
+           SFX_ITEM_SET == rSection.mpPage->GetMaster().GetItemState(RES_FOOTER)
+           || rSection.mpPage->GetLeft().GetItemState(RES_FOOTER)
+           )
+           )
+        {
+            rData.bHasFooter = true;
+        }
+    }
+
+    if( rData.bHasFooter )
+    {
+        rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
+        rData.nSwFUp = nWWLo - nWWFBot;
+
+        if (rData.nSwFUp < MM50)
+            rData.nSwFUp = MM50;
+    }
+    else // kein Footer -> Lo einfach uebernehmen
+        rData.nSwLo = nWWLo;
+}
+
+void rtfSections::SetPageULSpaceItems(SwFrmFmt &rFmt,
+    rtfSections::wwULSpaceData& rData)
+{
+    if (rData.bHasHeader)               // ... und Header-Lower setzen
+    {
+        //Kopfzeilenhoehe minimal sezten
+        if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
+        {
+            pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
+            SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
+            aHdUL.SetLower(rData.nSwHLo - MM50);
+            pHdFmt->SetAttr(aHdUL);
+            pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                RES_HEADER_FOOTER_EAT_SPACING, true));
+        }
+    }
+
+    if (rData.bHasFooter)               // ... und Footer-Upper setzen
+    {
+        if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
+        {
+            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
+            SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
+            aFtUL.SetUpper(rData.nSwFUp - MM50);
+            pFtFmt->SetAttr(aFtUL);
+            pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                RES_HEADER_FOOTER_EAT_SPACING, true));
+        }
+    }
+
+    SvxULSpaceItem aUL(rData.nSwUp, rData.nSwLo); // Page-UL setzen
+    rFmt.SetAttr(aUL);
+}
+
+void rtfSections::SetSegmentToPageDesc(const rtfSection &rSection,
+    bool bTitlePage, bool bIgnoreCols)
+{
+    SwPageDesc &rPage = bTitlePage ? *rSection.mpTitlePage : *rSection.mpPage;
+
+//    SetNumberingType(rSection, rPage);
+
+    SwFrmFmt &rFmt = rPage.GetMaster();
+//    mrReader.SetDocumentGrid(rFmt, rSection);
+
+    wwULSpaceData aULData;
+    GetPageULData(rSection, bTitlePage, aULData);
+    SetPageULSpaceItems(rFmt, aULData);
+
+    SetPage(rPage, rFmt, rSection, bIgnoreCols);
+}
+
+void rtfSections::CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest)
+{
+    UseOnPage ePage = rFrom.ReadUseOn();
+    rDest.WriteUseOn(ePage);
+    mrReader.pDoc->CopyHeader(rFrom.GetMaster(), rDest.GetMaster());
+    mrReader.pDoc->CopyHeader(rFrom.GetLeft(), rDest.GetLeft());
+    mrReader.pDoc->CopyFooter(rFrom.GetMaster(), rDest.GetMaster());
+    mrReader.pDoc->CopyFooter(rFrom.GetLeft(), rDest.GetLeft());
+}
+
+void rtfSections::SetHdFt(rtfSection &rSection)
+{
+    ASSERT(rSection.mpPage, "makes no sense to call without a main page");
+    if (rSection.mpPage && rSection.maPageInfo.mpPageHdFt)
+        CopyFrom(*rSection.maPageInfo.mpPageHdFt, *rSection.mpPage);
+
+    if (rSection.mpTitlePage && rSection.maPageInfo.mpTitlePageHdFt)
+        CopyFrom(*rSection.maPageInfo.mpTitlePageHdFt, *rSection.mpTitlePage);
+}
+
+SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
+{
+    SwSection aSection(CONTENT_SECTION, mrReader.pDoc->GetUniqueSectionName());
+
+    SfxItemSet aSet( mrReader.pDoc->GetAttrPool(), aFrmFmtSetRange );
+
+    sal_uInt8 nRTLPgn = maSegments.empty() ? 0 : maSegments.back().IsBiDi();
+    aSet.Put(SvxFrameDirectionItem(
+        nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP));
+
+#if 0
+    if (2 == mrReader.pWDop->fpc)
+        aSet.Put( SwFmtFtnAtTxtEnd(FTNEND_ATTXTEND));
+    if (0 == mrReader.pWDop->epc)
+        aSet.Put( SwFmtEndAtTxtEnd(FTNEND_ATTXTEND));
+#endif
+
+    rSection.mpSection = mrReader.pDoc->Insert( rMyPaM, aSection, &aSet );
+    ASSERT(rSection.mpSection, "section not inserted!");
+    if (!rSection.mpSection)
+        return 0;
+
+    SwPageDesc *pPage = 0;
+    mySegrIter aEnd = maSegments.rend();
+    for (mySegrIter aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
+    {
+        if (pPage = aIter->mpPage)
+            break;
+    }
+
+    ASSERT(pPage, "no page outside this section!");
+
+    if (!pPage)
+        pPage = &mrReader.pDoc->_GetPageDesc(0);
+
+    if (!pPage)
+        return 0;
+
+    SwFrmFmt& rFmt = pPage->GetMaster();
+    const SwFmtFrmSize&   rSz = rFmt.GetFrmSize();
+    const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
+    SwTwips nWidth = rSz.GetWidth();
+    long nLeft  = rLR.GetTxtLeft();
+    long nRight = rLR.GetRight();
+
+    SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
+    ASSERT(pFmt, "impossible");
+    if (!pFmt)
+        return 0;
+    SetCols(*pFmt, rSection, (USHORT)(nWidth - nLeft - nRight) );
+
+#if 0
+    //Set the columns to be UnBalanced if compatability option is set
+    if (mrReader.pWDop->fNoColumnBalance  )
+    {
+        SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
+        pFmt->SetAttr(SwFmtNoBalancedColumns(true));
+    }
+#endif
+
+    return pFmt;
+}
+
+void rtfSections::InsertSegments(bool bNewDoc)
+{
+    sal_uInt16 nDesc(0);
+    mySegIter aEnd = maSegments.end();
+    mySegIter aStart = maSegments.begin();
+    for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
+    {
+        mySegIter aNext = aIter+1;
+
+        bool bInsertSection = aIter != aStart ? aIter->IsContinous() : false;
+
+        if (!bInsertSection)
+        {
+            /*
+             If a cont section follow this section then we won't be
+             creating a page desc with 2+ cols as we cannot host a one
+             col section in a 2+ col pagedesc and make it look like
+             word. But if the current section actually has columns then
+             we are forced to insert a section here as well as a page
+             descriptor.
+            */
+
+            /*
+             Note for the future:
+             If we want to import "protected sections" the here is
+             where we would also test for that and force a section
+             insertion if that was true.
+            */
+            bool bIgnoreCols = false;
+            if (aNext != aEnd && aNext->IsContinous())
+            {
+                bIgnoreCols = true;
+                if (aIter->NoCols() > 1)
+                    bInsertSection = true;
+            }
+
+            if (aIter->HasTitlePage())
+            {
+                if (bNewDoc && aIter == aStart)
+                {
+                    aIter->mpTitlePage =
+                        mrReader.pDoc->GetPageDescFromPool(RES_POOLPAGE_FIRST);
+                }
+                else
+                {
+                    USHORT nPos = mrReader.pDoc->MakePageDesc(
+                        ViewShell::GetShellRes()->GetPageDescName(nDesc)
+                        , 0, false);
+                    aIter->mpTitlePage = &mrReader.pDoc->_GetPageDesc(nPos);
+                }
+                ASSERT(aIter->mpTitlePage, "no page!");
+                if (!aIter->mpTitlePage)
+                    continue;
+
+                SetSegmentToPageDesc(*aIter, true, bIgnoreCols);
+            }
+
+            if (bNewDoc && aIter == aStart)
+            {
+                aIter->mpPage =
+                    mrReader.pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+            }
+            else
+            {
+                USHORT nPos = mrReader.pDoc->MakePageDesc(
+                    ViewShell::GetShellRes()->GetPageDescName(nDesc,
+                        false, aIter->HasTitlePage()),
+                        aIter->mpTitlePage, false);
+                aIter->mpPage = &mrReader.pDoc->_GetPageDesc(nPos);
+            }
+            ASSERT(aIter->mpPage, "no page!");
+            if (!aIter->mpPage)
+                continue;
+
+            SetHdFt(*aIter);
+
+            if (aIter->mpTitlePage)
+                SetSegmentToPageDesc(*aIter, true, bIgnoreCols);
+            SetSegmentToPageDesc(*aIter, false, bIgnoreCols);
+
+            SwFmtPageDesc aPgDesc(aIter->HasTitlePage() ?
+                    aIter->mpTitlePage : aIter->mpPage);
+
+            if (aIter->mpTitlePage)
+                aIter->mpTitlePage->SetFollow(aIter->mpPage);
+
+            if (aIter->PageRestartNo())
+                aPgDesc.SetNumOffset(aIter->PageStartAt());
+
+            /*
+            If its a table here, apply the pagebreak to the table
+            properties, otherwise we add it to the para at this
+            position
+            */
+            if (aIter->maStart.GetNode().IsTableNode())
+            {
+                SwTable& rTable =
+                    aIter->maStart.GetNode().GetTableNode()->GetTable();
+                SwFrmFmt* pApply = rTable.GetFrmFmt();
+                ASSERT(pApply, "impossible");
+                if (pApply)
+                    pApply->SetAttr(aPgDesc);
+            }
+            else
+            {
+                SwPosition aPamStart(aIter->maStart);
+                aPamStart.nContent.Assign(
+                    aIter->maStart.GetNode().GetCntntNode(), 0);
+                SwPaM aPage(aPamStart);
+
+                mrReader.pDoc->Insert(aPage, aPgDesc);
+            }
+            ++nDesc;
+        }
+
+        SwTxtNode* pTxtNd = 0;
+        if (bInsertSection)
+        {
+            SwPaM aSectPaM(*mrReader.pPam);
+            SwNodeIndex aAnchor(aSectPaM.GetPoint()->nNode);
+            if (aNext != aEnd)
+            {
+                aAnchor = aNext->maStart;
+                aSectPaM.GetPoint()->nNode = aAnchor;
+                aSectPaM.GetPoint()->nContent.Assign(
+                    aNext->maStart.GetNode().GetCntntNode(), 0);
+                aSectPaM.Move(fnMoveBackward);
+            }
+
+            const SwPosition* pPos  = aSectPaM.GetPoint();
+            const SwTxtNode* pSttNd =
+                mrReader.pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
+            const SwTableNode* pTableNd = pSttNd ? pSttNd->FindTableNode() : 0;
+            if (pTableNd)
+            {
+                pTxtNd =
+                    mrReader.pDoc->GetNodes().MakeTxtNode(aAnchor,
+                    mrReader.pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
+
+                aSectPaM.GetPoint()->nNode = SwNodeIndex(*pTxtNd);
+                aSectPaM.GetPoint()->nContent.Assign(
+                    aSectPaM.GetCntntNode(), 0);
+            }
+
+            aSectPaM.SetMark();
+
+            aSectPaM.GetPoint()->nNode = aIter->maStart;
+            aSectPaM.GetPoint()->nContent.Assign(
+                aSectPaM.GetCntntNode(), 0);
+
+            SwSectionFmt *pRet = InsertSection(aSectPaM, *aIter);
+            //The last section if continous is always unbalanced
+            if (aNext == aEnd && pRet)
+                pRet->SetAttr(SwFmtNoBalancedColumns(true));
+        }
+
+        if (pTxtNd)
+        {
+            SwNodeIndex aIdx(*pTxtNd);
+            SwPosition aPos(aIdx);
+            SwPaM aTest(aPos);
+            mrReader.pDoc->DelFullPara(aTest);
+            pTxtNd = 0;
+        }
+    }
+
+    myDummyIter aDEnd = maDummyPageNos.end();
+    for (myDummyIter aDummy = maDummyPageNos.begin(); aDummy != aDEnd; ++aDummy)
+        mrReader.pDoc->DelPageDesc(*aDummy);
 }
 
 SwRTFParser::~SwRTFParser()
@@ -605,6 +1097,21 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_PN:
+        if( bNewNumList )
+            SkipGroup();
+        else
+        {
+            bStyleTabValid = TRUE;
+            if (SwNumRule* pRule = ReadNumSecLevel( nToken ))
+            {
+                GetAttrSet().Put( SwNumRuleItem( pRule->GetName() ));
+
+                if( SFX_ITEM_SET != GetAttrSet().GetItemState( FN_PARAM_NUM_LEVEL, FALSE ))
+                    GetAttrSet().Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, 0 ));
+            }
+        }
+        break;
+
     case RTF_PNSECLVL:
         if( bNewNumList )
             SkipGroup();
@@ -634,18 +1141,10 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_PAGE:
-        {
-            const SwCntntNode* pCNd;
-            const SwAttrSet* pSet;
-            if( pPam->GetPoint()->nContent.GetIndex() ||
-                ( 0 != ( pCNd = pPam->GetCntntNode()) &&
-                  0 != ( pSet = pCNd->GetpSwAttrSet()) &&
-                 ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE ) ||
-                   SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, FALSE ))))
-                InsertPara();
-            CheckInsNewTblLine();
-            pDoc->Insert( *pPam, SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ) );
-        }
+        if (lcl_UsedPara(*pPam))
+            InsertPara();
+        CheckInsNewTblLine();
+        pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
         break;
 
     case RTF_SECT:
@@ -982,29 +1481,6 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         // dann setze ueber diesen Bereich die Attrbiute
         SetSwgValues( rSet.GetAttrSet() );
 
-
-#if 0
-///!!!!!!!!!!!!!!!!!!!!!
-        if( !rSet.GetAttrSet().GetParent() )
-        {
-            const SfxItemPool& rPool = pDoc->GetAttrPool();
-            SfxItemSet &rAttrSet = rSet.GetAttrSet();
-            SfxItemIter aIter( rAttrSet );
-            USHORT nWhich = aIter.GetCurItem()->Which();
-            while( TRUE )
-            {
-                if( SFX_WHICH_MAX < nWhich ||
-                    rPool.GetDefaultItem( nWhich ) == *aIter.GetCurItem() )
-                    rAttrSet.ClearItem( nWhich );       // loeschen
-
-                if( aIter.IsAtEnd() )
-                    break;
-                nWhich = aIter.NextItem()->Which();
-            }
-        }
-        if( rSet.GetAttrSet().Count() )
-#endif
-
         pDoc->Insert( aPam, rSet.GetAttrSet(), SETATTR_DONTCHGNUMRULE );
     }
 
@@ -1050,48 +1526,112 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     }
 }
 
+DocPageInformation::DocPageInformation()
+    : mnPaperw(12240), mnPaperh(15840), mnMargl(1800), mnMargr(1800),
+    mnMargt(1440), mnMargb(1440), mnGutter(0), mnPgnStart(1), mbFacingp(false),
+    mbLandscape(false), mbRTLdoc(false)
+{
+}
+
+SectPageInformation::SectPageInformation(const DocPageInformation &rDoc)
+    :
+    mpTitlePageHdFt(0), mpPageHdFt(0),
+    mnPgwsxn(rDoc.mnPaperw), mnPghsxn(rDoc.mnPaperh),
+    mnMarglsxn(rDoc.mnMargl), mnMargrsxn(rDoc.mnMargr),
+    mnMargtsxn(rDoc.mnMargt), mnMargbsxn(rDoc.mnMargb),
+    mnGutterxsn(rDoc.mnGutter), mnHeadery(720), mnFootery(720), mnPgnStarts(1),
+    mnCols(1), mnColsx(720), mnStextflow(rDoc.mbRTLdoc ? 3 : 0), mnBkc(2),
+    mbLndscpsxn(rDoc.mbLandscape), mbTitlepg(false), mbFacpgsxn(rDoc.mbFacingp),
+    mbRTLsection(rDoc.mbRTLdoc), mbPgnrestart(false)
+{
+};
+
+SectPageInformation::SectPageInformation(const SectPageInformation &rSect)
+    : maColumns(rSect.maColumns), maNumType(rSect.maNumType),
+    mpTitlePageHdFt(rSect.mpTitlePageHdFt), mpPageHdFt(rSect.mpPageHdFt),
+    mnPgwsxn(rSect.mnPgwsxn), mnPghsxn(rSect.mnPghsxn),
+    mnMarglsxn(rSect.mnMarglsxn), mnMargrsxn(rSect.mnMargrsxn),
+    mnMargtsxn(rSect.mnMargtsxn), mnMargbsxn(rSect.mnMargbsxn),
+    mnGutterxsn(rSect.mnGutterxsn), mnHeadery(rSect.mnHeadery),
+    mnFootery(rSect.mnFootery), mnPgnStarts(rSect.mnPgnStarts),
+    mnCols(rSect.mnCols), mnColsx(rSect.mnColsx),
+    mnStextflow(rSect.mnStextflow), mnBkc(rSect.mnBkc),
+    mbLndscpsxn(rSect.mbLndscpsxn), mbTitlepg(rSect.mbTitlepg),
+    mbFacpgsxn(rSect.mbFacpgsxn), mbRTLsection(rSect.mbRTLsection),
+    mbPgnrestart(rSect.mbPgnrestart)
+{
+};
+
+rtfSection::rtfSection(const SwPosition &rPos,
+    const SectPageInformation &rPageInfo)
+    : maStart(rPos.nNode), maPageInfo(rPageInfo), mpSection(0), mpTitlePage(0),
+    mpPage(0)
+{
+}
+
+void rtfSections::push_back(const rtfSection &rSect)
+{
+    if (!maSegments.empty() && (maSegments.back().maStart == rSect.maStart))
+        maSegments.pop_back();
+    maSegments.push_back(rSect);
+}
+
+// lese alle Dokument-Controls ein
+void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
+{
+    maSegments.push_back(rtfSection(*pPam->GetPoint(),
+        SectPageInformation(rInfo)));
+
+    if (!bSwPageDesc && IsNewDoc())
+    {
+        SwFmtFrmSize aFrmSize(ATT_FIX_SIZE, rInfo.mnPaperw, rInfo.mnPaperh);
+
+        SvxLRSpaceItem aLR(rInfo.mnMargl, rInfo.mnMargr);
+        SvxULSpaceItem aUL(rInfo.mnMargt, rInfo.mnMargb);
+
+        UseOnPage eUseOn;
+        if (rInfo.mbFacingp)
+            eUseOn = UseOnPage(PD_MIRROR | PD_HEADERSHARE | PD_FOOTERSHARE);
+        else
+            eUseOn = UseOnPage(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE);
+
+        USHORT nPgStart(rInfo.mnPgnStart);
+
+        SvxFrameDirectionItem aFrmDir(rInfo.mbRTLdoc ?
+            FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP);
+
+        // direkt an der Standartseite drehen
+        SwPageDesc& rPg = pDoc->_GetPageDesc( 0 );
+        rPg.WriteUseOn( eUseOn );
+
+        if (rInfo.mbLandscape)
+            rPg.SetLandscape(true);
+
+        SwFrmFmt &rFmt1 = rPg.GetMaster(), &rFmt2 = rPg.GetLeft();
+
+        rFmt1.SetAttr( aFrmSize );  rFmt2.SetAttr( aFrmSize );
+        rFmt1.SetAttr( aLR );       rFmt2.SetAttr( aLR );
+        rFmt1.SetAttr( aUL );       rFmt2.SetAttr( aUL );
+        rFmt1.SetAttr( aFrmDir );   rFmt2.SetAttr( aFrmDir );
+
+        // StartNummer der Seiten setzen
+        if (nPgStart  != 1)
+        {
+            SwFmtPageDesc aPgDsc( &rPg );
+            aPgDsc.SetNumOffset( nPgStart );
+            pDoc->Insert( *pPam, aPgDsc );
+        }
+    }
+}
 
 // lese alle Dokument-Controls ein
 void SwRTFParser::ReadDocControls( int nToken )
 {
-    int bWeiter = TRUE;
+    int bWeiter = true;
 
-    SwFmtFrmSize aFrmSize(ATT_FIX_SIZE, 12240, 15840 );
-    SvxULSpaceItem aUL;
-    SvxLRSpaceItem aLR;
     SwFtnInfo aFtnInfo;
     SwEndNoteInfo aEndInfo;
-    UseOnPage eUseOn;
-    USHORT nPgStart = USHRT_MAX;
-
-    SvxFrameDirectionItem aFrmDir;
-    if( bFirstDocControl )
-    {
-        // RTF-Defaults setzen
-        SwFmtFrmSize aFrmSize(ATT_FIX_SIZE, 12240, 15840 );
-
-        aUL.SetUpper( 1440 ); aUL.SetLower( 1440 );
-        aLR.SetRight( 1800 ); aLR.SetLeft(  1800 );
-        eUseOn = UseOnPage(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE);
-        aFtnInfo.ePos = FTNPOS_CHAPTER; aFtnInfo.eNum = FTNNUM_DOC;
-        bFirstDocControl = FALSE;
-
-        aFrmDir.SetValue(FRMDIR_HORI_LEFT_TOP);
-    }
-    else
-    {
-        const SwPageDesc& rStdPgDsc = pDoc->GetPageDesc( 0 );
-        aFrmSize = rStdPgDsc.GetMaster().GetFrmSize();
-        aUL = rStdPgDsc.GetMaster().GetULSpace();
-        aLR = rStdPgDsc.GetMaster().GetLRSpace();
-
-        eUseOn = rStdPgDsc.ReadUseOn();
-
-        aEndInfo = pDoc->GetEndNoteInfo();
-        aFtnInfo = pDoc->GetFtnInfo();
-
-        aFrmDir = rStdPgDsc.GetMaster().GetFrmDir();
-    }
+    bool bSetHyph = false;
 
     BOOL bEndInfoChgd = FALSE, bFtnInfoChgd = FALSE;
 
@@ -1099,46 +1639,45 @@ void SwRTFParser::ReadDocControls( int nToken )
         USHORT nValue = USHORT( nTokenValue );
         switch( nToken )
         {
-/*      case '}':       --nOpenBrakets; nToken = RTF_DOCFMT; break;
-        case '{':       ++nOpenBrakets; nToken = RTF_DOCFMT; break;
-        case RTF_IGNOREFLAG:            nToken = RTF_DOCFMT; break;
-*/
-
         case RTF_RTLDOC:
-            aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
+            maPageDefaults.mbRTLdoc = true;
             break;
         case RTF_LTRDOC:
-            aFrmDir.SetValue(FRMDIR_HORI_LEFT_TOP);
+            maPageDefaults.mbRTLdoc = false;
+            break;
+        case RTF_LANDSCAPE:
+            maPageDefaults.mbLandscape = true;
             break;
         case RTF_PAPERW:
             if( 0 < nTokenValue )
-                aFrmSize.SetWidth( nTokenValue );
+                maPageDefaults.mnPaperw = nTokenValue;
             break;
         case RTF_PAPERH:
             if( 0 < nTokenValue )
-                aFrmSize.SetHeight( nTokenValue );
+                maPageDefaults.mnPaperh = nTokenValue;
             break;
         case RTF_MARGL:
             if( 0 <= nTokenValue )
-                aLR.SetLeft( nValue );
+                maPageDefaults.mnMargl = nTokenValue;
             break;
         case RTF_MARGR:
             if( 0 <= nTokenValue )
-                aLR.SetRight( nValue );
+                maPageDefaults.mnMargr = nTokenValue;
             break;
         case RTF_MARGT:
             if( 0 <= nTokenValue )
-                aUL.SetUpper( nValue );
+                maPageDefaults.mnMargt = nTokenValue;
             break;
         case RTF_MARGB:
             if( 0 <= nTokenValue )
-                aUL.SetLower( nValue );
+                maPageDefaults.mnMargb = nTokenValue;
             break;
-
-        case RTF_FACINGP:   eUseOn = UseOnPage(PD_MIRROR | PD_HEADERSHARE | PD_FOOTERSHARE);
-                            break;
-        case RTF_PGNSTART:  nPgStart = nValue;      break;
-
+        case RTF_FACINGP:
+            maPageDefaults.mbFacingp = true;
+            break;
+        case RTF_PGNSTART:
+            maPageDefaults.mnPgnStart = nTokenValue;
+            break;
         case RTF_ENDDOC:
         case RTF_ENDNOTES:
             aFtnInfo.ePos = FTNPOS_CHAPTER; bFtnInfoChgd = TRUE;
@@ -1196,16 +1735,30 @@ void SwRTFParser::ReadDocControls( int nToken )
         case RTF_AFTNNAR:
             aEndInfo.aFmt.SetNumberingType(SVX_NUM_ARABIC); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNALC:
-            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N);
+            bEndInfoChgd = TRUE;
+            break;
         case RTF_AFTNNAUC:
-            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N);
+            bEndInfoChgd = TRUE;
+            break;
         case RTF_AFTNNRLC:
-            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER); bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);
+            bEndInfoChgd = TRUE;
+            break;
         case RTF_AFTNNRUC:
-            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER); bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);
+            bEndInfoChgd = TRUE;
+            break;
         case RTF_AFTNNCHI:
-            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL); bEndInfoChgd = TRUE; break;
-
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+            bEndInfoChgd = TRUE;
+            break;
+        case RTF_HYPHAUTO:
+            if (nTokenValue)
+                bSetHyph = true;
+            //FOO//
+            break;
         case '{':
             {
                 short nSkip = 0;
@@ -1240,7 +1793,7 @@ void SwRTFParser::ReadDocControls( int nToken )
             nToken = GetNextToken();
     } while( bWeiter && IsParserWorking() );
 
-    if( IsNewDoc() )
+    if (IsNewDoc())
     {
         if( bEndInfoChgd )
             pDoc->SetEndNoteInfo( aEndInfo );
@@ -1248,45 +1801,32 @@ void SwRTFParser::ReadDocControls( int nToken )
             pDoc->SetFtnInfo( aFtnInfo );
     }
 
-    if( !bSwPageDesc )
+    if (!bSwPageDesc)
     {
-        if( IsNewDoc() )
-        {
-            // direkt an der Standartseite drehen
-            SwPageDesc& rPg = pDoc->_GetPageDesc( 0 );
-            rPg.WriteUseOn( eUseOn );
-            SwFrmFmt &rFmt1 = rPg.GetMaster(), &rFmt2 = rPg.GetLeft();
-
-            rFmt1.SetAttr( aFrmSize );  rFmt2.SetAttr( aFrmSize );
-            rFmt1.SetAttr( aLR );       rFmt2.SetAttr( aLR );
-            rFmt1.SetAttr( aUL );       rFmt2.SetAttr( aUL );
-            rFmt1.SetAttr( aFrmDir );   rFmt2.SetAttr( aFrmDir );
-
-            // StartNummer der Seiten setzen
-            if( USHRT_MAX != nPgStart )
-            {
-                SwFmtPageDesc* pCurPgDsc = GetCurrentPageDesc(pPam);
-                if(pCurPgDsc)
-                {
-                    pCurPgDsc->SetNumOffset( nPgStart );
-                }
-                else
-                {
-                    SwFmtPageDesc aPgDsc( &rPg );
-                    aPgDsc.SetNumOffset( nPgStart );
-                    pDoc->Insert( *pPam, aPgDsc );
-                }
-            }
-        }
+        SetPageInformationAsDefault(maPageDefaults);
 
         MakeStyleTab();
-        // das default-Style schon gleich am ersten Node setzen
-//          if( IsNewDoc() )
+
+        SwTxtFmtColl* pColl = aTxtCollTbl.Get(0);
+        if (!pColl)
         {
-            SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
-            if( !pColl )
-                pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD,
-                                                        FALSE );
+            pColl = pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,
+                FALSE );
+        }
+
+        ASSERT(pColl, "impossible to have no standard style");
+
+        if (pColl)
+        {
+            if (
+                IsNewDoc() && bSetHyph &&
+                SFX_ITEM_SET != pColl->GetItemState(RES_PARATR_HYPHENZONE,
+                false)
+               )
+            {
+                pColl->SetAttr(SvxHyphenZoneItem(true));
+            }
+
             pDoc->SetTxtFmtColl( *pPam, pColl );
         }
     }
@@ -1450,892 +1990,301 @@ SwFmtPageDesc* SwRTFParser::GetCurrentPageDesc(SwPaM *pPam)
     return aFmtPageDsc;
 }
 
-// lese alle Section-Controls ein
-void SwRTFParser::ReadSectControls( int nToken )
+void SwRTFParser::DoHairyWriterPageDesc(int nToken)
 {
     int bWeiter = TRUE;
-
-    // werden die eigenen PageDesc - Informationen gelesen, dann alles
-    // ueberlesen
-    // Wird in ein bestehendes Doc eingelesen oder wurden eigene PageDesc
-    // gelesen, dann sind nur die Bereiche von interresse
-    BOOL bInsPageDesc = IsNewDoc() && !bSwPageDesc;
-
-    if( bInPgDscTbl )
-    {
-        do {
-            if( '{' == nToken )
+    do {
+        if( '{' == nToken )
+        {
+            switch( nToken = GetNextToken() )
             {
-                switch( nToken = GetNextToken() )
+            case RTF_IGNOREFLAG:
+                if( RTF_SECTFMT != (( nToken = GetNextToken() )
+                    & ~(0xff | RTF_SWGDEFS)) )
                 {
-                case RTF_IGNOREFLAG:
-                    if( RTF_SECTFMT != (( nToken = GetNextToken() )
-                        & ~(0xff | RTF_SWGDEFS)) )
-                    {
-                        SkipToken( -2 );    // Ignore und Token wieder zurueck
-                        bWeiter = FALSE;
-                        break;
-                    }
-                    // kein break, Gruppe ueberspringen
-
-                case RTF_FOOTER:
-                case RTF_HEADER:
-                case RTF_FOOTERR:
-                case RTF_HEADERR:
-                case RTF_FOOTERL:
-                case RTF_HEADERL:
-                case RTF_FOOTERF:
-                case RTF_HEADERF:
-                    SkipGroup();        // erstmal komplett ueberlesen
-                    // ueberlese noch die schliessende Klammer
-                    GetNextToken();
-                    break;
-
-                default:
-                    SkipToken( -1 );            // Ignore wieder zurueck
+                    SkipToken( -2 );    // Ignore und Token wieder zurueck
                     bWeiter = FALSE;
                     break;
                 }
-            }
-            else if( RTF_SECTFMT == (nToken & ~(0xff | RTF_SWGDEFS)) ||
-                RTF_UNKNOWNCONTROL == nToken )
-                SvxRTFParser::NextToken( nToken );
-            else
+                // kein break, Gruppe ueberspringen
+
+            case RTF_FOOTER:
+            case RTF_HEADER:
+            case RTF_FOOTERR:
+            case RTF_HEADERR:
+            case RTF_FOOTERL:
+            case RTF_HEADERL:
+            case RTF_FOOTERF:
+            case RTF_HEADERF:
+                SkipGroup();        // erstmal komplett ueberlesen
+                // ueberlese noch die schliessende Klammer
+                GetNextToken();
+                break;
+
+            default:
+                SkipToken( -1 );            // Ignore wieder zurueck
                 bWeiter = FALSE;
-            if( bWeiter )
-                nToken = GetNextToken();
-        } while( bWeiter && IsParserWorking() );
-        SkipToken( -1 );                    // letztes Token wieder zurueck
+                break;
+            }
+        }
+        else if( RTF_SECTFMT == (nToken & ~(0xff | RTF_SWGDEFS)) ||
+            RTF_UNKNOWNCONTROL == nToken )
+            SvxRTFParser::NextToken( nToken );
+        else
+            bWeiter = FALSE;
+        if( bWeiter )
+            nToken = GetNextToken();
+    } while( bWeiter && IsParserWorking() );
+    SkipToken( -1 );                    // letztes Token wieder zurueck
+    return;
+}
+
+void SwRTFParser::ReadSectControls( int nToken )
+{
+    AttrGroupEnd(); //#106493#
+
+    //this is some hairy stuff to try and retain writer style page descriptors
+    //in rtf, almost certainy a bad idea, but we've inherited it, so here it
+    //stays
+    if (bInPgDscTbl)
+    {
+        DoHairyWriterPageDesc(nToken);
         return;
     }
 
-    // RTF-Defaults setzen
-    BOOL bFirstCall = 1 == pDoc->GetPageDescCnt();
-    BOOL bHeaderUL = FALSE, bHeaderLR = FALSE,
-        bFooterUL = FALSE, bFooterLR = FALSE;
-    bool bIsRTL=false;
-
-    USHORT nLastPageDesc = nAktPageDesc,
-            nLastFirstPageDesc = nAktFirstPageDesc;
-
-    BOOL bMakeNewPageDesc = RTF_SECT == nToken;
-    BOOL bInsNewPageDesc = bMakeNewPageDesc || bFirstCall || bSwPageDesc;
-    SwPageDesc* pAkt, *pFirst = 0;
-    if( bInsNewPageDesc )
+    ASSERT(!maSegments.empty(), "suspicious to have a section with no "
+        "page info, though probably legal");
+    if (maSegments.empty())
     {
-        pAkt = _MakeNewPageDesc( FALSE );
-        if( bMakeNewPageDesc )
-        {
-            nToken = GetNextToken();
-            // some export filter write the RTF_SECT in brakets -> skip over
-            while( '}' == nToken )
-            {
-                NextToken( nToken );
-                nToken = GetNextToken();
-            }
-        }
-    }
-    else
-    {
-        pAkt = &pDoc->_GetPageDesc( nAktPageDesc );
-        if( nAktFirstPageDesc )
-            pFirst = &pDoc->_GetPageDesc( nAktFirstPageDesc );
+        maSegments.push_back(rtfSection(*pPam->GetPoint(),
+            SectPageInformation(maPageDefaults)));
     }
 
-    SwFmtFrmSize aSz( pAkt->GetMaster().GetFrmSize() ), aHSz( ATT_MIN_SIZE );
-    SvxULSpaceItem aUL( pAkt->GetMaster().GetULSpace() ), aHUL, aFUL;
-    SvxLRSpaceItem aLR( pAkt->GetMaster().GetLRSpace() ), aHLR, aFLR;
-    BOOL    bPgWiChgd = FALSE, bPgHeChgd = FALSE,
-            bPgUpChgd = FALSE, bPgLoChgd = FALSE,
-            bPgLeChgd = FALSE, bPgRiChgd = FALSE,
-            bPgFcChgd = FALSE,
-            bNoBalancedCols = FALSE;
+    SectPageInformation aNewSection(maSegments.back().maPageInfo);
 
-
-    USHORT nRestoreUpper = USHRT_MAX, nRestoreLower = USHRT_MAX;
-    SwFrmFmt* pFmt = (SwFrmFmt*)pAkt->GetMaster().GetHeader().GetHeaderFmt();
-    if( pFmt )
-    {
-        aHUL = pFmt->GetULSpace();
-        aHLR = pFmt->GetLRSpace();
-        aHSz = pFmt->GetFrmSize();
-        if( aHSz.GetHeight() )
-        {
-            nRestoreUpper = (USHORT)aHSz.GetHeight();
-            aUL.SetUpper( aUL.GetUpper() + nRestoreUpper );
-            aHSz.SetHeight( 0 );
-        }
-    }
-
-    if( 0 != (pFmt = (SwFrmFmt*)pAkt->GetMaster().GetFooter().GetFooterFmt()) )
-    {
-        aFUL = pFmt->GetULSpace();
-        aFLR = pFmt->GetLRSpace();
-        if( aFUL.GetUpper() )
-        {
-            nRestoreLower = aFUL.GetUpper();
-            aUL.SetLower( aUL.GetLower() + nRestoreLower  );
-            aFUL.SetUpper( 0 );
-        }
-    }
-
-    BOOL bCheckEqualPgDesc = TRUE, bPgDescChgd = FALSE;
-    SvxBreak eBreak = SVX_BREAK_PAGE_BEFORE;
-
-    USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
-    SvUShorts aColumns;
-
-    USHORT nPgStart = USHRT_MAX;
-    SvxNumberType aNumType;
-
-    SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP);
-
+    int bWeiter = true;
     do {
-        BOOL bIsSectToken = FALSE;
+        bool bIsSectToken = false;
         USHORT nValue = USHORT( nTokenValue );
         switch( nToken )
         {
-        case RTF_SECT:
-            bWeiter = FALSE;
-            break;
-
-        case RTF_SECTD:
-            {
-                // Wert von der StandardPage holen !
-                const SwFrmFmt& rFmt = pDoc->GetPageDesc(0).GetMaster();
-                aSz = rFmt.GetFrmSize();
-                aUL = rFmt.GetULSpace();
-                aLR = rFmt.GetLRSpace();
-
-                nRestoreUpper = USHRT_MAX, nRestoreLower = USHRT_MAX;
-                aHUL.SetUpper( 720 );   aHUL.SetLower( 0 );
-                aFUL.SetUpper( 0 );     aFUL.SetLower( 720 );
-                aHLR.SetLeft( 0 );      aHLR.SetRight( 0 );
-                aFLR.SetLeft( 0 );      aFLR.SetRight( 0 );
-                pAkt->WriteUseOn( UseOnPage(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE) );
-                pAkt->SetLandscape( FALSE );
-                aFrmDir.SetValue( FRMDIR_HORI_LEFT_TOP );
-
-                // remove Columns/Header/Footer
-                pAkt->GetMaster().ResetAttr( RES_COL );
-                if( pFirst )
-                    pFirst->GetMaster().ResetAttr( RES_COL );
-
-                nPgStart = USHRT_MAX;
-
-                SwFmtPageDesc* pCurPgDsc = GetCurrentPageDesc(pPam);
-                if(pCurPgDsc)
+            case RTF_SECT:
+//                bWeiter = false;
+                break;
+            case RTF_SECTD:
+                //Reset to page defaults
+                aNewSection = SectPageInformation(maPageDefaults);
+                break;
+            case RTF_PGWSXN:
+                if (0 < nTokenValue)
+                    aNewSection.mnPgwsxn = nTokenValue;
+                break;
+            case RTF_PGHSXN:
+                if (0 < nTokenValue)
+                    aNewSection.mnPghsxn = nTokenValue;
+                break;
+            case RTF_MARGLSXN:
+                if (0 <= nTokenValue)
+                    aNewSection.mnMarglsxn = nTokenValue;
+                break;
+            case RTF_MARGRSXN:
+                if (0 <= nTokenValue)
+                    aNewSection.mnMargrsxn = nTokenValue;
+                break;
+            case RTF_MARGTSXN:
+                if (0 <= nTokenValue)
+                    aNewSection.mnMargtsxn = nTokenValue;
+                break;
+            case RTF_MARGBSXN:
+                if (0 <= nTokenValue)
+                    aNewSection.mnMargbsxn = nTokenValue;
+                break;
+            case RTF_FACPGSXN:
+                aNewSection.mbFacpgsxn = true;
+                break;
+            case RTF_HEADERY:
+                aNewSection.mnHeadery = nTokenValue;
+                break;
+            case RTF_FOOTERY:
+                aNewSection.mnFootery = nTokenValue;
+                break;
+            case RTF_LNDSCPSXN:
+                aNewSection.mbLndscpsxn = true;
+                break;
+            case RTF_PGNSTARTS:
+                aNewSection.mnPgnStarts = nTokenValue;
+                break;
+            case RTF_PGNDEC:
+                aNewSection.maNumType.SetNumberingType(SVX_NUM_ARABIC);
+                break;
+            case RTF_PGNUCRM:
+                aNewSection.maNumType.SetNumberingType(SVX_NUM_ROMAN_UPPER);
+                break;
+            case RTF_PGNLCRM:
+                aNewSection.maNumType.SetNumberingType(SVX_NUM_ROMAN_LOWER);
+                break;
+            case RTF_PGNUCLTR:
+                aNewSection.maNumType.SetNumberingType(
+                    SVX_NUM_CHARS_UPPER_LETTER_N);
+                break;
+            case RTF_PGNLCLTR:
+                aNewSection.maNumType.SetNumberingType(
+                    SVX_NUM_CHARS_LOWER_LETTER_N);
+                break;
+            case RTF_SBKNONE:
+                aNewSection.mnBkc = 0;
+                break;
+            case RTF_SBKCOL:
+                aNewSection.mnBkc = 1;
+                break;
+            case RTF_ENDNHERE:
+            case RTF_BINFSXN:
+            case RTF_BINSXN:
+            case RTF_SBKPAGE:
+            case RTF_SBKEVEN:
+            case RTF_SBKODD:
+            case RTF_LINEBETCOL:
+            case RTF_LINEMOD:
+            case RTF_LINEX:
+            case RTF_LINESTARTS:
+            case RTF_LINERESTART:
+            case RTF_LINEPAGE:
+            case RTF_LINECONT:
+            case RTF_GUTTERSXN:
+            case RTF_PGNCONT:
+            case RTF_PGNRESTART:
+            case RTF_PGNX:
+            case RTF_PGNY:
+            case RTF_VERTALT:
+            case RTF_VERTALB:
+            case RTF_VERTALC:
+            case RTF_VERTALJ:
+                break;
+            case RTF_TITLEPG:
+                aNewSection.mbTitlepg = true;
+                break;
+            case RTF_HEADER:
+            case RTF_HEADERL:
+            case RTF_HEADERR:
+            case RTF_FOOTER:
+            case RTF_FOOTERL:
+            case RTF_FOOTERR:
+                if (!aNewSection.mpPageHdFt)
                 {
-                    nPgStart = pCurPgDsc->GetNumOffset();
+                    String aName(RTL_CONSTASCII_STRINGPARAM("rtfHdFt"));
+                    aName += String::CreateFromInt32(maSegments.size());
+                    sal_uInt16 nPageNo = pDoc->MakePageDesc(aName);
+                    aNewSection.mpPageHdFt = &pDoc->_GetPageDesc(nPageNo);
+                    maSegments.maDummyPageNos.push_back(nPageNo);
                 }
-
-                nCols = USHRT_MAX;
-                nColSpace = USHRT_MAX;
-                aNumType.SetNumberingType(SVX_NUM_ARABIC);
-                bHeaderUL = bHeaderLR = bFooterUL = bFooterLR = TRUE;
-                eBreak = SVX_BREAK_PAGE_BEFORE;
-                nNewNumSectDef = USHRT_MAX;
-
-                bPgWiChgd = bPgHeChgd = bPgUpChgd = bPgLoChgd = bPgLeChgd =
-                    bPgRiChgd = bPgFcChgd = TRUE;
-                bPgDescChgd = TRUE;
-            }
-            break;
-
-        case RTF_PGWSXN:
-            if( 0 < nTokenValue )
-            {
-                aSz.SetWidth( nTokenValue );
-                bPgWiChgd = TRUE;
-                bPgDescChgd = TRUE;
-            }
-            break;
-
-        case RTF_PGHSXN:
-            if( 0 < nTokenValue )
-            {
-                aSz.SetHeight( nTokenValue );
-                bPgHeChgd = TRUE;
-                bPgDescChgd = TRUE;
-            }
-            break;
-        case RTF_MARGLSXN:
-            if( 0 <= nTokenValue )
-            {
-                aLR.SetLeft( nValue );
-                bPgLeChgd =TRUE;
-                bPgDescChgd = TRUE;
-            }
-            break;
-        case RTF_MARGRSXN:
-            if( 0 <= nTokenValue )
-            {
-                aLR.SetRight( nValue );
-                bPgRiChgd = TRUE;
-                bPgDescChgd = TRUE;
-            }
-            break;
-
-        case RTF_MARGTSXN:
-            if( 0 <= nTokenValue )
-            {
-                nRestoreUpper = USHRT_MAX;
-                aUL.SetUpper( nValue );
-                bPgUpChgd = TRUE;
-                bPgDescChgd = TRUE;
-            }
-            break;
-
-        case RTF_MARGBSXN:
-            if( 0 <= nTokenValue )
-            {
-                nRestoreLower = USHRT_MAX;
-                aUL.SetLower( nValue );
-                bPgLoChgd = TRUE;
-                bPgDescChgd = TRUE;
-            }
-            break;
-
-        case RTF_FACPGSXN:
-            pAkt->SetUseOn( UseOnPage(PD_MIRROR | ( pAkt->GetUseOn() &
-                                ~(PD_HEADERSHARE | PD_FOOTERSHARE) )));
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_HEADERY:
-            aHUL.SetUpper( nValue );
-            bHeaderUL = TRUE;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_FOOTERY:
-            aFUL.SetLower( nValue );
-            bFooterUL = TRUE;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_LNDSCPSXN:
-            pAkt->SetLandscape( TRUE );
-            bPgFcChgd = TRUE;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_PGNSTARTS:
-            nPgStart = nValue;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_PGNDEC:
-            aNumType.SetNumberingType(SVX_NUM_ARABIC);
-            bPgDescChgd = TRUE;
-            break;
-        case RTF_PGNUCRM:
-            aNumType.SetNumberingType(SVX_NUM_ROMAN_UPPER);
-            bPgDescChgd = TRUE;
-            break;
-        case RTF_PGNLCRM:
-            aNumType.SetNumberingType(SVX_NUM_ROMAN_LOWER);
-            bPgDescChgd = TRUE;
-            break;
-        case RTF_PGNUCLTR:
-            aNumType.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N);
-            bPgDescChgd = TRUE;
-            break;
-        case RTF_PGNLCLTR:
-            aNumType.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N);
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_SBKNONE:
-            bIsSectToken = TRUE;
-            eBreak = SVX_BREAK_NONE;
-            bPgDescChgd = !bFirstCall;
-            break;
-
-        case RTF_SBKCOL:
-            eBreak = SVX_BREAK_COLUMN_BEFORE;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_ENDNHERE:
-        case RTF_BINFSXN:
-        case RTF_BINSXN:
-        case RTF_SBKPAGE:
-        case RTF_SBKEVEN:
-        case RTF_SBKODD:
-        case RTF_LINEBETCOL:
-        case RTF_LINEMOD:
-        case RTF_LINEX:
-        case RTF_LINESTARTS:
-        case RTF_LINERESTART:
-        case RTF_LINEPAGE:
-        case RTF_LINECONT:
-        case RTF_GUTTERSXN:
-        case RTF_PGNCONT:
-        case RTF_PGNRESTART:
-        case RTF_PGNX:
-        case RTF_PGNY:
-        case RTF_VERTALT:
-        case RTF_VERTALB:
-        case RTF_VERTALC:
-        case RTF_VERTALJ:
-            break;
-
-        case RTF_TITLEPG:
-            if( bInsPageDesc && !pFirst )
-                pFirst = _MakeNewPageDesc( TRUE );
-            bCheckEqualPgDesc = FALSE;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_HEADER:
-        case RTF_HEADERL:
-        case RTF_HEADERR:
-        case RTF_FOOTER:
-        case RTF_FOOTERL:
-        case RTF_FOOTERR:
-            if( bInsPageDesc )
-                ReadHeaderFooter( nToken, pAkt );
-            else
-                SkipGroup(), GetNextToken();    //Gruppe mit schl. Klammer lesen
-            bCheckEqualPgDesc = FALSE;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_FOOTERF:
-        case RTF_HEADERF:
-            if( bInsPageDesc )
-            {
-                if( !pFirst )
-                    pFirst = _MakeNewPageDesc( TRUE );
-                ReadHeaderFooter( nToken, pFirst );
-            }
-            else
-                SkipGroup(), GetNextToken();    //Gruppe mit schl. Klammer lesen
-            bCheckEqualPgDesc = FALSE;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_COLS:
-            bIsSectToken = TRUE;
-            nCols = nValue;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_COLSX:
-            bIsSectToken = TRUE;
-            nColSpace = nValue;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_COLNO:
-            bIsSectToken = TRUE;
-            nAktCol = nValue;
-            if( RTF_COLW == GetNextToken() )
-            {
-                USHORT nWidth = USHORT( nTokenValue ), nSpace = 0;
-                if( RTF_COLSR == GetNextToken() )
-                    nSpace = USHORT( nTokenValue );
-                else
-                    SkipToken( -1 );        // wieder zurueck
-
-                if( --nAktCol == ( aColumns.Count() / 2 ) )
+                ReadHeaderFooter(nToken, aNewSection.mpPageHdFt);
+                break;
+            case RTF_FOOTERF:
+            case RTF_HEADERF:
+                if (!aNewSection.mpTitlePageHdFt)
                 {
-                    aColumns.Insert( nWidth, aColumns.Count() );
-                    aColumns.Insert( nSpace, aColumns.Count() );
+                    String aTitle(RTL_CONSTASCII_STRINGPARAM("rtfTitleHdFt"));
+                    aTitle += String::CreateFromInt32(maSegments.size());
+                    sal_uInt16 nPageNo = pDoc->MakePageDesc(aTitle);
+                    aNewSection.mpTitlePageHdFt = &pDoc->_GetPageDesc(nPageNo);
+                    maSegments.maDummyPageNos.push_back(nPageNo);
                 }
-            }
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_STEXTFLOW:
-            switch( nValue )
-            {
-            case 0:     // Text flows left to right and top to bottom
-                aFrmDir.SetValue( FRMDIR_HORI_LEFT_TOP );
-                bPgDescChgd = TRUE;
+                ReadHeaderFooter(nToken, aNewSection.mpTitlePageHdFt);
                 break;
-            case 1:     // Text flows top to bottom and right to left, vertical
-            case 5:     // Text flows vertically, non-vertical font
-                aFrmDir.SetValue( FRMDIR_VERT_TOP_RIGHT );
-                bPgDescChgd = TRUE;
+            case RTF_COLS:
+                aNewSection.mnCols = nTokenValue;
                 break;
-//          case 2:     // Text flows left to right and bottom to top
-//              aFrmDir.SetValue( ?? ); break;
-            case 3:     // Text flows right to left and top to bottom
-                aFrmDir.SetValue( FRMDIR_HORI_RIGHT_TOP );
-                bPgDescChgd = TRUE;
+            case RTF_COLSX:
+                aNewSection.mnColsx = nTokenValue;
                 break;
-            case 4:     // Text flows left to right and top to bottom, vertical
-                aFrmDir.SetValue( FRMDIR_VERT_TOP_LEFT );
-                bPgDescChgd = TRUE;
-                break;
-            }
-            break;
-
-        case RTF_RTLSECT:
-            bIsRTL=true;
-            bPgDescChgd = TRUE;
-            break;
-
-        case RTF_LTRSECT:
-            bIsRTL=false;
-            bPgDescChgd = TRUE;
-            break;
-
-        case '{':
-            {
-                short nSkip = 0;
-                if( RTF_IGNOREFLAG != ( nToken = GetNextToken() ))
-                    nSkip = -1;
-                else if( RTF_SECTFMT != (( nToken = GetNextToken() )
-                         & ~(0xff | RTF_SWGDEFS)) &&
-                        ( RTF_DOCFMT != ( nToken & ~(0xff | RTF_SWGDEFS))) )
-                    nSkip = -2;
-                else
+            case RTF_COLNO:
                 {
-                    bPgDescChgd = TRUE;
-                    switch( nToken )
+                    long nAktCol = nValue;
+                    if (RTF_COLW == GetNextToken())
                     {
-                    case RTF_HEADER_YB:
-                        aHUL.SetLower( USHORT(nTokenValue) );
-                        bHeaderUL = TRUE;
-                        if( RTF_HEADER_XL == GetNextToken() &&
-                            RTF_HEADER_XR == GetNextToken() )
-                        {
-                            bHeaderLR = TRUE;
-                            aHLR.SetLeft( USHORT(GetStackPtr( -1 )->nTokenValue) );
-                            aHLR.SetRight( USHORT(nTokenValue));
-                        }
+                        long nWidth = nTokenValue, nSpace = 0;
+                        if( RTF_COLSR == GetNextToken() )
+                            nSpace = nTokenValue;
                         else
-                            SkipGroup();
-                        break;
+                            SkipToken( -1 );        // wieder zurueck
 
-                    case RTF_FOOTER_YT:
-                        aFUL.SetUpper( USHORT(nTokenValue));
-                        bFooterUL = TRUE;
-                        if( RTF_FOOTER_XL == GetNextToken() &&
-                            RTF_FOOTER_XR == GetNextToken() )
+                        if (--nAktCol == (aNewSection.maColumns.size() / 2 ))
                         {
-                            bFooterLR = TRUE;
-                            aFLR.SetLeft( USHORT(GetStackPtr( -1 )->nTokenValue) );
-                            aFLR.SetRight( USHORT(nTokenValue));
+                            aNewSection.maColumns.push_back(nWidth);
+                            aNewSection.maColumns.push_back(nSpace);
                         }
-                        else
-                            SkipGroup();
-                        break;
-
-                    case RTF_BALANCED_COLUMN:
-                        bIsSectToken = TRUE;
-                        bPgDescChgd = TRUE;
-                        bNoBalancedCols = TRUE;
-                        break;
-
-                    default:
-                        SkipGroup();        // erstmal komplett ueberlesen
-                        break;
                     }
-
-                    // ueberlese noch die schliessende Klammer
-                    GetNextToken();
                 }
-                if( nSkip )
+                break;
+            case RTF_STEXTFLOW:
+                aNewSection.mnStextflow = nTokenValue;
+                break;
+            case RTF_RTLSECT:
+                aNewSection.mbRTLsection = true;
+                break;
+            case RTF_LTRSECT:
+                aNewSection.mbRTLsection = false;
+                break;
+            case '{':
                 {
-                    bWeiter = -1 == nSkip && (
-                            RTF_FOOTER == nToken || RTF_HEADER == nToken ||
-                            RTF_FOOTERR == nToken || RTF_HEADERR == nToken ||
-                            RTF_FOOTERL == nToken || RTF_HEADERL == nToken ||
-                            RTF_FOOTERF == nToken || RTF_HEADERF == nToken );
-                    SkipToken( nSkip );     // Ignore wieder zurueck
+                    short nSkip = 0;
+                    if( RTF_IGNOREFLAG != ( nToken = GetNextToken() ))
+                        nSkip = -1;
+                    else if( RTF_SECTFMT != (( nToken = GetNextToken() )
+                             & ~(0xff | RTF_SWGDEFS)) &&
+                            ( RTF_DOCFMT != ( nToken & ~(0xff | RTF_SWGDEFS))) )
+                        nSkip = -2;
+                    else
+                    {
+                        // erstmal komplett ueberlesen
+                        SkipGroup();
+                        // ueberlese noch die schliessende Klammer
+                        GetNextToken();
+                    }
+                    if (nSkip)
+                    {
+                        bWeiter = ((-1 == nSkip) &&
+                            (
+                              RTF_FOOTER == nToken || RTF_HEADER == nToken ||
+                              RTF_FOOTERR == nToken || RTF_HEADERR == nToken ||
+                              RTF_FOOTERL == nToken || RTF_HEADERL == nToken ||
+                              RTF_FOOTERF == nToken || RTF_HEADERF == nToken
+                            ));
+                        SkipToken (nSkip);      // Ignore wieder zurueck
+                    }
                 }
-            }
-            break;
-
-        case RTF_PAPERW:
-        case RTF_PAPERH:
-        case RTF_MARGL:
-        case RTF_MARGR:
-        case RTF_MARGT:
-        case RTF_MARGB:
-        case RTF_FACINGP:
-            {
+                break;
+            case RTF_PAPERW:
+            case RTF_PAPERH:
+            case RTF_MARGL:
+            case RTF_MARGR:
+            case RTF_MARGT:
+            case RTF_MARGB:
+            case RTF_FACINGP:
+                ASSERT(!this, "why are these tokens found in this section?");
                 ReadDocControls( nToken );
-
-                // set the new Values
-                const SwPageDesc& rStdPgDsc = pDoc->GetPageDesc( 0 );
-                const SwFmtFrmSize& rSz = rStdPgDsc.GetMaster().GetFrmSize();
-                const SvxULSpaceItem rUL = rStdPgDsc.GetMaster().GetULSpace();
-                const SvxLRSpaceItem rLR = rStdPgDsc.GetMaster().GetLRSpace();
-
-                if( !bPgWiChgd ) aSz.SetWidth( rSz.GetWidth() );
-                if( !bPgHeChgd ) aSz.SetHeight( rSz.GetHeight() );
-                if( !bPgUpChgd ) aUL.SetUpper( rUL.GetUpper() );
-                if( !bPgLoChgd ) aUL.SetLower( rUL.GetLower() );
-                if( !bPgLeChgd ) aLR.SetLeft( rLR.GetLeft() );
-                if( !bPgRiChgd ) aLR.SetRight( rLR.GetRight() );
-                if( !bPgFcChgd ) pAkt->SetLandscape( rStdPgDsc.GetLandscape() );
-            }
-            break;
-        default:
-            if( RTF_DOCFMT == (nToken & ~(0xff | RTF_SWGDEFS)) )
-                ReadDocControls( nToken );
-            else if( RTF_SECTFMT == (nToken & ~(0xff | RTF_SWGDEFS)) ||
-                     RTF_UNKNOWNCONTROL == nToken )
-                SvxRTFParser::NextToken( nToken );
-            else
-                bWeiter = FALSE;
-            break;
+                break;
+            default:
+                if (RTF_DOCFMT == (nToken & ~(0xff | RTF_SWGDEFS)))
+                    ReadDocControls( nToken );
+                else if (RTF_SECTFMT == (nToken & ~(0xff | RTF_SWGDEFS)) ||
+                         RTF_UNKNOWNCONTROL == nToken)
+                {
+                    SvxRTFParser::NextToken(nToken);
+                }
+                else
+                    bWeiter = false;
+                break;
         }
 
-
-        if( bWeiter )
-        {
-            // kein eigener Bereich und kein Section Attribut?
-            if( !bInsPageDesc && !bIsSectToken )
-                bCheckEqualPgDesc = FALSE;
+        if (bWeiter)
             nToken = GetNextToken();
-        }
-    } while( bWeiter && IsParserWorking() );
+    } while (bWeiter && IsParserWorking());
 
+    maSegments.push_back(rtfSection(*pPam->GetPoint(), aNewSection));
 
-    if( !bPgDescChgd )
-    {
-        // der aktuelle muss wieder entnfernt werden
-        if( bInsNewPageDesc )
-        {
-            pDoc->DelPageDesc( nAktPageDesc );
-            if( pFirst )
-                pDoc->DelPageDesc( nAktFirstPageDesc );
-            nAktPageDesc = nLastPageDesc;
-            nAktFirstPageDesc = nLastFirstPageDesc;
-        }
-        SkipToken( -1 );
-        return ;
-    }
-
-
-    // den letzen Bereich wieder zumachen
-    if( pRegionEndIdx )
-    {
-        DelLastNode();
-        pPam->GetPoint()->nNode = *pRegionEndIdx;
-        pPam->Move( fnMoveForward, fnGoNode );
-        delete pRegionEndIdx, pRegionEndIdx = 0;
-    }
-
-
-    pFmt = &pAkt->GetMaster();
-
-    if (bInsPageDesc)
-    {
-        if( bHeaderUL )
-        {
-            if( aUL.GetUpper() > aHUL.GetUpper() )
-            {
-                aHSz.SetHeight( aUL.GetUpper() - aHUL.GetUpper() );
-                aHUL.SetUpper( 0 );
-                aUL.SetUpper( USHORT(aUL.GetUpper() - aHSz.GetHeight()) );
-
-                if( !pFmt->GetHeader().GetHeaderFmt() )
-                    pFmt->SetAttr( SwFmtHeader( (BOOL)TRUE ));
-                if( pFirst && !pFirst->GetMaster().GetHeader().GetHeaderFmt() )
-                    pFirst->GetMaster().SetAttr( SwFmtHeader( (BOOL)TRUE ));
-            }
-        }
-        else if( USHRT_MAX != nRestoreUpper )
-            aUL.SetUpper( aUL.GetUpper() - nRestoreUpper );
-
-        if( bFooterUL  )
-        {
-            if( aUL.GetLower() > aFUL.GetLower() )
-            {
-                aFUL.SetUpper( aUL.GetLower() - aFUL.GetLower() );
-                aUL.SetLower( aFUL.GetLower() );
-                aFUL.SetLower( 0 );
-                if( !pFmt->GetFooter().GetFooterFmt() )
-                    pFmt->SetAttr( SwFmtFooter( (BOOL)TRUE ));
-                if( pFirst && !pFirst->GetMaster().GetFooter().GetFooterFmt() )
-                    pFirst->GetMaster().SetAttr( SwFmtFooter( (BOOL)TRUE ));
-            }
-            else
-            {
-                aUL.SetLower( aFUL.GetLower() );
-                aFUL.SetLower( 0 );
-            }
-        }
-        else if( USHRT_MAX != nRestoreLower )
-            aUL.SetLower( aUL.GetLower() - nRestoreLower );
-
-        pFmt->SetAttr( aSz );
-        pFmt->SetAttr( aLR );
-        pFmt->SetAttr( aUL );
-
-        if (bIsRTL && aFrmDir.GetValue() == FRMDIR_HORI_LEFT_TOP)
-            aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
-
-        pFmt->SetAttr( aFrmDir );
-
-        pAkt->SetNumType( aNumType );
-        if( pFirst )
-            pFirst->SetNumType( aNumType );
-
-        if( ( bHeaderUL || bHeaderLR ) &&
-            0 != (pFmt = (SwFrmFmt*)pAkt->GetMaster().GetHeader().GetHeaderFmt()) )
-        {
-            if( bHeaderUL && aHSz.GetHeight() ) pFmt->SetAttr( aHSz );
-            if( bHeaderLR ) pFmt->SetAttr( aHLR );
-        }
-
-        if( ( bFooterUL || bFooterLR ) &&
-            0 != ( pFmt = (SwFrmFmt*)pAkt->GetMaster().GetFooter().GetFooterFmt()) )
-        {
-            if( bFooterUL ) pFmt->SetAttr( aFUL );
-            if( bFooterLR ) pFmt->SetAttr( aFLR );
-        }
-    }
-
-
-    if( nCols && USHRT_MAX != nCols )
-    {
-        if( ::lcl_SetFmtCol( pAkt->GetMaster(), nCols, nColSpace, aColumns )
-            && pFirst )
-            pFirst->GetMaster().SetAttr( pAkt->GetMaster().GetAttr( RES_COL ));
-
-        //JP 19.03.99 - Spaltigkeit NIE an der Seite setzen - dieses
-        //              ist immer ein Kennzeichen fuer einen Bereich, weil
-        //              die Seitenspalten NIE vom Layout aufgebrochen werden.
-        //JP 24.02.00 - but dont insert column section into a column page
-        //              Bug 73480
-        if( bSwPageDesc )
-        {
-            const SwPageDesc& rOld = pDoc->GetPageDesc( nLastPageDesc );
-            if( rOld.GetMaster().GetAttr( RES_COL ) !=
-                pAkt->GetMaster().GetAttr( RES_COL ) )
-            {
-                bCheckEqualPgDesc = TRUE;
-                bInsPageDesc = FALSE;
-                eBreak = SVX_BREAK_NONE;
-
-// !! ???? muss das hier passieren ??
-                // fuer den Absatz dahinter sorgen
-                pDoc->AppendTxtNode(*pPam->GetPoint());
-                pPam->Move( fnMoveBackward );
-                pPam->SetMark();
-            }
-        }
-    }
-    else if( bInsNewPageDesc )
-    {
-        pAkt->GetMaster().ResetAttr( RES_COL );
-        if( pFirst )
-            pFirst->GetMaster().ResetAttr( RES_COL );
-    }
-
-    if( pFirst )
-    {
-        // setze am ersten den richtigen Follow
-        pFirst->SetFollow( pAkt );
-
-        // und setze noch die die Werte aus PageDesc:
-        pFirst->SetLandscape( pAkt->GetLandscape() );
-
-        pFmt = &pFirst->GetMaster();
-
-        pFmt->SetAttr( aSz );
-        pFmt->SetAttr( aLR );
-        pFmt->SetAttr( aUL );
-        if( !( aFrmDir == pFmt->GetAttr( RES_FRAMEDIR )) )
-            pFmt->SetAttr( aFrmDir );
-
-        if( ( bHeaderUL || bHeaderLR ) &&
-            0 != (pFmt = (SwFrmFmt*)pFirst->GetMaster().GetHeader().GetHeaderFmt()) )
-        {
-            if( bHeaderUL && aHSz.GetHeight() ) pFmt->SetAttr( aHSz );
-            if( bHeaderLR ) pFmt->SetAttr( aHLR );
-        }
-
-        if( ( bFooterUL || bFooterLR ) &&
-            0 != ( pFmt = (SwFrmFmt*)pFirst->GetMaster().GetFooter().GetFooterFmt()) )
-        {
-            if( bFooterUL ) pFmt->SetAttr( aFUL );
-            if( bFooterLR ) pFmt->SetAttr( aFLR );
-        }
-    }
-
-    const SwPageDesc& rOld = pDoc->GetPageDesc( nLastPageDesc );
-    if( bInsNewPageDesc && pFirst &&
-        pDoc->GetPageDesc( nLastFirstPageDesc ).GetFollow() != &rOld )
-    {
-        bCheckEqualPgDesc = FALSE;
-    }
-
-    if( bInsPageDesc && ( !bCheckEqualPgDesc || !bInsNewPageDesc ||
-        // dann pruefe ob die Attribute beider PageDesc gleich sind
-        !::lcl_CompareRTFPageDesc(pDoc->GetPageDesc( nLastPageDesc ), *pAkt ))
-        || ( bMakeNewPageDesc && SVX_BREAK_NONE != eBreak ) )
-    {
-        // Pagedescriptoren am Dokument updaten (nur so werden auch die
-        // linken Seiten usw. eingestellt).
-
-        // Spaltigkeit in den Set uebernehmen
-        SfxItemSet* pSet = 0;
-        const SfxPoolItem* pItem;
-        SfxItemSet aSet( pDoc->GetAttrPool(), RES_COL, RES_FRAMEDIR );
-        if( SFX_ITEM_SET == pAkt->GetMaster().GetItemState(
-                                            RES_COL, FALSE, &pItem )
-            && 1 < ((SwFmtCol*)pItem)->GetColumns().Count() )
-        {
-            aSet.Put( *pItem );
-            pSet = &aSet;
-            pAkt->GetMaster().ResetAttr( RES_COL );
-            if( pFirst )
-                pFirst->GetMaster().ResetAttr( RES_COL );
-        }
-
-        if (bIsRTL && aFrmDir.GetValue() == FRMDIR_HORI_LEFT_TOP)
-            aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
-        aSet.Put(aFrmDir);
-
-        pDoc->ChgPageDesc( nAktPageDesc, *pAkt );
-
-        if( pSet )
-        {
-            SwSection aSect( CONTENT_SECTION, pDoc->GetUniqueSectionName() );
-            SwSection* pSect = pDoc->Insert( *pPam, aSect, &aSet);
-            pPam->DeleteMark();
-
-            SwSectionNode* pSectNd = pSect->GetFmt()->GetSectionNode( TRUE );
-            if( pRegionEndIdx )
-                *pRegionEndIdx = *pSectNd->EndOfSectionNode();
-            else
-                pRegionEndIdx = new SwNodeIndex( *pSectNd->EndOfSectionNode());
-
-            pPam->GetPoint()->nNode = *pSectNd;
-            pPam->Move( fnMoveForward, fnGoNode );
-
-            // Attribut Enden ggfs. anpassen!!!!
-            if( GetAttrStack().Count() )
-            {
-                // Attribut Stack-Eintraege, muessen ans Ende des vorherigen
-                // Nodes verschoben werden.
-                for( USHORT n = GetAttrStack().Count(); n; )
-                {
-                    SvxRTFItemStackType* pStkEntry = (SvxRTFItemStackType*)
-                                                    GetAttrStack()[ --n ];
-                    if( pRegionEndIdx->GetIndex() == pStkEntry->GetSttNode().GetIdx() )
-                        pStkEntry->SetStartPos( SwxPosition( pPam ) );
-                }
-            }
-        }
-
-        if( bInsNewPageDesc )
-        {
-            SwFmtPageDesc aPgDsc( pAkt );
-
-            if( pFirst )
-            {
-                // Pagedescriptoren am Dokument updaten (nur so werden auch die
-                // linken Seiten usw. eingestellt).
-                pDoc->ChgPageDesc( nAktFirstPageDesc, *pFirst );
-                pFirst->Add( &aPgDsc );
-            }
-
-            if( USHRT_MAX != nPgStart )
-                aPgDsc.SetNumOffset( nPgStart );
-            pDoc->Insert( *pPam, aPgDsc );
-        }
-    }
-    else
-    {
-        // sollte es ein BereichsWechsel sein?
-        if( bCheckEqualPgDesc && SVX_BREAK_NONE == eBreak
-            /*&& (!bInsPageDesc || neuen Bereich aufsetzen
-             rOld.GetMaster().GetCol() != pAkt->GetMaster().GetCol() )*/ )
-        {
-            // Spaltigkeit in den Set uebernehmen
-            SfxItemSet* pSet = 0;
-            const SfxPoolItem* pItem;
-            SfxItemSet aSet( pDoc->GetAttrPool(), RES_COL, RES_FRAMEDIR);
-            if( SFX_ITEM_SET == pAkt->GetMaster().GetItemState(
-                                                RES_COL, FALSE, &pItem )
-                && 1 < ((SwFmtCol*)pItem)->GetColumns().Count() )
-            {
-                aSet.Put( *pItem );
-                pSet = &aSet;
-            }
-
-            if( bNoBalancedCols )
-            {
-                aSet.Put( SwFmtNoBalancedColumns( TRUE ) );
-                pSet = &aSet;
-            }
-
-            if (bIsRTL && aFrmDir.GetValue() == FRMDIR_HORI_LEFT_TOP)
-                aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
-            aSet.Put(aFrmDir);
-
-            if( !bFirstCall || pSet )
-            {
-                SwSection aSect( CONTENT_SECTION, pDoc->GetUniqueSectionName() );
-                SwSection* pSect = pDoc->Insert( *pPam, aSect, &aSet );
-                pPam->DeleteMark();
-
-                SwSectionNode* pSectNd = pSect->GetFmt()->GetSectionNode( TRUE );
-                if( pRegionEndIdx )
-                    *pRegionEndIdx = *pSectNd->EndOfSectionNode();
-                else
-                    pRegionEndIdx = new SwNodeIndex( *pSectNd->EndOfSectionNode());
-
-                pPam->GetPoint()->nNode = *pSectNd;
-                pPam->Move( fnMoveForward, fnGoNode );
-
-                // Attribut Enden ggfs. anpassen!!!!
-                if( GetAttrStack().Count() )
-                {
-                    // Attribut Stack-Eintraege, muessen ans Ende des vorherigen
-                    // Nodes verschoben werden.
-                    for( USHORT n = GetAttrStack().Count(); n; )
-                    {
-                        SvxRTFItemStackType* pStkEntry = (SvxRTFItemStackType*)
-                                                        GetAttrStack()[ --n ];
-                        if( pRegionEndIdx->GetIndex() == pStkEntry->GetSttNode().GetIdx() )
-                            pStkEntry->SetStartPos( SwxPosition( pPam ) );
-                    }
-                }
-            }
-        }
-        else if( bInsPageDesc )
-        {
-            if(SVX_BREAK_COLUMN_BEFORE == eBreak )
-                pDoc->Insert( *pPam, SvxFmtBreakItem( eBreak ));
-            else if( SVX_BREAK_NONE != eBreak )
-            {
-                SwFmtPageDesc aPgDsc( ( pFirst && &rOld ==
-                            pDoc->GetPageDesc( nLastFirstPageDesc ).GetFollow() )
-                                ? &pDoc->_GetPageDesc( nLastFirstPageDesc )
-                                : &rOld );
-
-                if( USHRT_MAX != nPgStart )
-                    aPgDsc.SetNumOffset( nPgStart );
-                pDoc->Insert( *pPam, aPgDsc );
-            }
-        }
-
-        // der aktuelle muss wieder entnfernt werden
-        if( bInsNewPageDesc )
-        {
-            pDoc->DelPageDesc( nAktPageDesc );
-            if( pFirst )
-                pDoc->DelPageDesc( nAktFirstPageDesc );
-            nAktPageDesc = nLastPageDesc;
-            nAktFirstPageDesc = nLastFirstPageDesc;
-        }
-    }
-
-    SkipToken( -1 );
+    SkipToken(-1);
 }
-
-
 
 void SwRTFParser::ReadPageDescTbl()
 {
@@ -2359,7 +2308,7 @@ void SwRTFParser::ReadPageDescTbl()
 
     SetChkStyleAttr(FALSE);     // Attribute nicht gegen die Styles checken
 
-    bInPgDscTbl = TRUE;
+    bInPgDscTbl = true;
     USHORT nPos = 0;
     SwPageDesc* pPg;
     SwFrmFmt* pPgFmt;
@@ -2410,11 +2359,14 @@ void SwRTFParser::ReadPageDescTbl()
             break;
 
         case RTF_PGDSC:
-            if( nPos)   // kein && wg MAC
-              if (nPos != pDoc->MakePageDesc(
-                                      String::CreateFromInt32( nTokenValue ),
-                                    FALSE ) )
-                ASSERT( FALSE, "PageDesc an falscher Position" );
+            if (nPos)   // kein && wg MAC
+            {
+                if (nPos != pDoc->MakePageDesc(
+                    String::CreateFromInt32(nTokenValue)))
+                {
+                    ASSERT( FALSE, "PageDesc an falscher Position" );
+                }
+            }
 
             pPg = &pDoc->_GetPageDesc( nPos );
             pPg->SetLandscape( FALSE );
@@ -2630,10 +2582,10 @@ void SwRTFParser::ReadPageDescTbl()
 
     SetChkStyleAttr( bSaveChkStyleAttr );
 
-    bInPgDscTbl = FALSE;
+    bInPgDscTbl = false;
     nAktPageDesc = 0;
     nAktFirstPageDesc = 0;
-    bSwPageDesc = TRUE;
+    bSwPageDesc = true;
     SkipToken( -1 );
 }
 
@@ -2862,6 +2814,11 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
         // immer ans Ende der Section einfuegen !!
         pPam->GetPoint()->nNode = *pNode->EndOfSectionNode();
         pPam->Move( fnMoveBackward );
+
+        SwTxtFmtColl* pColl = aTxtCollTbl.Get( 0 );
+        if( !pColl )
+            pColl = pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
+        pDoc->SetTxtFmtColl( *pPam, pColl );
 
         SetNewGroup( TRUE );
 
@@ -3560,3 +3517,5 @@ xub_StrLen SwxPosition::GetCntIdx() const
 {
     return pPam->GetPoint()->nContent.GetIndex();
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:10:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,17 +75,26 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE [ dutch ] = "De geselecteerde tabelcellen zijn te complex voor samenvoeging." ;
     MESSAGE [ spanish ] = "Las celdas seleccionadas de la tabla son demasiado complejas para enlazarlas." ;
     MESSAGE [ english_us ] = "Selected table cells are too complex to merge." ;
-    MESSAGE[ chinese_simplified ] = "ΛωΡ΅ΤρµΔ±νΈρµ¥ΤªΈρΜ«ΧΫΊΟ¶ψΞή·¨ΊΟ²Ά΅£";
-    MESSAGE[ russian ] = "Βϋδελεννϋε ÿχεικθ ςΰαλθφϋ ρλθψκξμ ρλξζνϋε δλÿ θυ ξαϊεδθνενθÿ .";
+    MESSAGE[ chinese_simplified ] = "ζ‰€ι€‰ζ‹©η„θ΅¨ζ Όε•ε…ƒζ Όε¤ªη»Όεθ€ζ— ζ³•εεΉ¶γ€‚";
+    MESSAGE[ russian ] = "Βϋδελεννϋε ÿχεικθ ςΰαλθφϋ ρλθψκξμ ρλξζνϋ δλÿ ξαϊεδθνενθÿ.";
     MESSAGE[ polish ] = "Zaznaczone komσrki tabeli sΉ zbyt komplekowe, aby je sprzκgaζ.";
-    MESSAGE[ japanese ] = "‘I‘π‚³‚κ‚½•\\‚ΜΎΩ‚ΝA‹‡‚·‚ι‚Ι‚Ν•΅G‰ί‚¬‚ά‚·B";
-    MESSAGE[ chinese_traditional ] = "©ÒΏοΎάªΊªν®ζΐx¦s®ζ¤ΣΊξ¦X¦ΣµLªk¦X¨Φ΅C";
+    MESSAGE[ japanese ] = "ιΈζγ•γ‚γθ΅¨γ®γ‚»γƒ«γ―γ€ηµεγ™γ‚‹γ«γ―θ¤‡ι›‘ιγγΎγ™γ€‚";
+    MESSAGE[ chinese_traditional ] = "ζ‰€ιΈζ“‡η„θ΅¨ζ Όε„²ε­ζ Όε¤ªη¶εθ€η„΅ζ³•εδ½µγ€‚";
     MESSAGE[ arabic ] = "ΞαΗνΗ ΗαΜΟζα ΗαγΝΟΟΙ γΪήΟΙ αΟΡΜΙ νΣΚΝνα γΪεΗ ΗαΡΘΨ.";
     MESSAGE[ greek ] = "Τα επιλεγμένα κελιά του πίνακα είναι  υπερβολικά περίπλοκα για να γίνει η σύνδεση.";
-    MESSAGE[ korean ] = "Ό±ΕΓµΘ Η¥ ΌΏΐΊ Ί΄ΗΥΗΟ±βΏ΅ ³ΚΉ« ΊΉΐβΗΥ΄Ο΄Ω.";
+    MESSAGE[ korean ] = "ν‘μ μ„ νƒλ μ…€μ€ λ³‘ν•©ν•κΈ°μ— λ„λ¬΄ λ³µμ΅ν•©λ‹λ‹¤.";
     MESSAGE[ turkish ] = "Seηilen tablo hόcreleri birleώtirilmek iηin fazla karmaώύk.";
-    MESSAGE[ catalan ] = "Las celdas seleccionadas de la tabla son demasiado complejas para enlazarlas.";
+    MESSAGE[ catalan ] = "Les cel.les seleccionades de la taula sσn massa complexes per poder-les enllaηar.";
+    MESSAGE[ thai ] = "ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΉ€ΰΈ‹ΰΈ¥ΰΈ¥ΰΉΰΈ‹ΰΈ±ΰΈΰΈ‹ΰΉ‰ΰΈ­ΰΈ™ΰΉ€ΰΈΰΈ΄ΰΈ™ΰΉ„ΰΈ›ΰΉƒΰΈ™ΰΈΰΈ²ΰΈ£ΰΈΰΈªΰΈ²ΰΈ™";
 };
+
+
+
+
+
+
+
+
 
 
 

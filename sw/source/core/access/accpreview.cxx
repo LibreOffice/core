@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpreview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -131,10 +135,13 @@ Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
         throw(RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
-                        0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }

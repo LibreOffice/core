@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-12-12 16:10:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,46 @@ void SwFldDlgWrapper::ShowPage(USHORT nPage)
     ((SwFldDlg*)GetWindow())->ShowPage(nPage ? nPage : TP_FLD_REF);
 }
 
+SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
+
+/* -----------------04.02.2003 14:17-----------------
+ *
+ * --------------------------------------------------*/
+SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
+{
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+// prevent instatiation of dialog other than by calling
+// the mail merge dialog
+    aInfo.bVisible = FALSE;
+    return aInfo;
+}
+/* -----------------04.02.2003 14:17-----------------
+ *
+ * --------------------------------------------------*/
+SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
+                                    SfxBindings* pB,
+                                    SfxChildWinInfo* pInfo )
+    : SwChildWinWrapper( pParent, nId )
+{
+    SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
+    pWindow = pDlg;
+    pDlg->ActivateDatabasePage();
+    pDlg->Start();
+    pDlg->Initialize( pInfo );
+    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
+}
+/* -----------------04.02.2003 14:17-----------------
+ * re-init after doc activation
+ * --------------------------------------------------*/
+BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
+{
+    BOOL bRet;
+    if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
+        ((SwFldDlg*)GetWindow())->ReInitDlg();
+
+    return bRet;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
@@ -240,7 +280,8 @@ void SwFldDlgWrapper::ShowPage(USHORT nPage)
 
 SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     : SfxTabDialog( pParent, SW_RES( DLG_FLD_INSERT )),
-    pChildWin(pCW)
+    pChildWin(pCW),
+    bDataBaseMode(FALSE)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
     bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
@@ -292,7 +333,8 @@ SwFldDlg::~SwFldDlg()
 BOOL SwFldDlg::Close()
 {
     SfxViewFrame::Current()->GetDispatcher()->
-        Execute(FN_INSERT_FIELD, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
+        Execute(bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
+        SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
     return TRUE;
 }
 
@@ -473,10 +515,17 @@ void SwFldDlg::InsertHdl()
  * --------------------------------------------------*/
 void SwFldDlg::ActivateDatabasePage()
 {
+    bDataBaseMode = TRUE;
     ShowPage( TP_FLD_DB );
     SfxTabPage* pDBPage =  GetTabPage( TP_FLD_DB );
     if( pDBPage )
     {
         ((SwFldDBPage*)pDBPage)->ActivateMailMergeAddress();
     }
+    //remove all other pages
+    RemoveTabPage(TP_FLD_DOK);
+    RemoveTabPage(TP_FLD_VAR);
+    RemoveTabPage(TP_FLD_DOKINF);
+    RemoveTabPage(TP_FLD_REF);
+    RemoveTabPage(TP_FLD_FUNC);
 }

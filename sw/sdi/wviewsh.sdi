@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wviewsh.sdi,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:22:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,26 @@ interface WebSourceView : View
     [
         ExecMethod = Execute ;
         StateMethod = NoState ;
+    ]
+    SID_MAIL_SENDDOC
+    [
+        StateMethod = GetState ;
+    ]
+    SID_MAIL_SENDDOCASPDF
+    [
+        StateMethod = GetState ;
+    ]
+    SID_EXPORTDOC
+    [
+        StateMethod = GetState ;
+    ]
+    SID_EXPORTDOCASPDF
+    [
+        StateMethod = GetState ;
+    ]
+    SID_DIRECTEXPORTDOCASPDF
+    [
+        StateMethod = GetState ;
     ]
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-09 10:37:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,6 +916,15 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
                  GetPrev()->Prt().Height() + GetPrev()->Prt().Top() )
                 //Umrandung zu beruecksichtigen?
                 GetPrev()->_InvalidatePrt();
+            // OD 18.02.2003 #104989# - force complete paint of previous frame,
+            // if frame is inserted at the end of a section frame, in order to
+            // get subsidiary lines repainted for the section.
+            if ( pParent->IsSctFrm() && !GetNext() )
+            {
+                // force complete paint of previous frame, if new inserted frame
+                // in the section is the last one.
+                GetPrev()->SetCompletePaint();
+            }
             GetPrev()->InvalidatePage( pPage );
         }
     }
@@ -3287,19 +3296,21 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 SwTwips nWidth = rCol.CalcColWidth( i, nPrtWidth );
                 if ( i == (nNumCols - 1) ) //Dem Letzten geben wir wie
                     nWidth = nAvail;       //immer den Rest.
-                nWidth -= (pCol->Frm().*fnRect->fnGetWidth)();
-                if( nWidth )
+
+                SwTwips nWidthDiff = nWidth - (pCol->Frm().*fnRect->fnGetWidth)();
+                if( nWidthDiff )
                 {
-                    (pCol->Frm().*fnRect->fnAddBottom)( nWidth );
+                    (pCol->Frm().*fnRect->fnAddRight)( nWidthDiff );
                     pCol->_InvalidatePrt();
                     if ( pCol->GetNext() )
                         pCol->GetNext()->_InvalidatePos();
                 }
-                nWidth = (Prt().*fnRect->fnGetHeight)() -
-                         (pCol->Frm().*fnRect->fnGetHeight)();
-                if( nWidth )
+
+                SwTwips nHeightDiff = (Prt().*fnRect->fnGetHeight)() -
+                                      (pCol->Frm().*fnRect->fnGetHeight)();
+                if( nHeightDiff )
                 {
-                    (pCol->Frm().*fnRect->fnAddBottom)( nWidth );
+                    (pCol->Frm().*fnRect->fnAddBottom)( nHeightDiff );
                     pCol->_InvalidatePrt();
                 }
                 pCol->Calc();
@@ -3348,8 +3359,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     pLay = (SwLayoutFrm*)pLay->GetNext();
                     ASSERT( pLay->IsFtnContFrm(),"FtnContainer exspected" );
                     nInnerHeight += pLay->InnerHeight();
-                    nInnerHeight = (pLay->Frm().*fnRect->fnGetHeight)() -
-                                   (pLay->Prt().*fnRect->fnGetHeight)();
+                    nInnerHeight += (pLay->Frm().*fnRect->fnGetHeight)() -
+                                    (pLay->Prt().*fnRect->fnGetHeight)();
                 }
                 nInnerHeight -= (pCol->Prt().*fnRect->fnGetHeight)();
                 if( nInnerHeight > nDiff )

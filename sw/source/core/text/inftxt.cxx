@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 09:35:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,8 @@ using namespace ::com::sun::star::beans;
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
 
-extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
+// OD 24.01.2003 #106593# - no longer needed, included in <frmtool.hxx>
+//extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
 
 #ifndef PRODUCT
 // Test2: WYSIWYG++
@@ -1650,6 +1651,7 @@ sal_Bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
         {
             bRet = sal_True;
             SetLineHeight( nHeight );
+            SetLineNettoHeight( pCurr->Height() );
             break;
         }
         pPor = pPor->GetPortion();
@@ -1664,14 +1666,17 @@ sal_Bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
  *                 SwTxtFormatInfo::ScanPortionEnd()
  *************************************************************************/
 xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
-                                            const xub_StrLen nEnd,
-                                            sal_Bool bSkip )
+                                            const xub_StrLen nEnd )
 {
     cHookChar = 0;
     const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     xub_StrLen i = nStart;
-    if ( bSkip && i < nEnd )
-        ++i;
+
+    // Removed for i7288. bSkip used to be passed from SwFldPortion::Format
+    // as IsFollow(). Therefore more than one special character was not
+    // handled correctly at the beginning of follow fields.
+//    if ( bSkip && i < nEnd )
+//       ++i;
 
     for( ; i < nEnd; ++i )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:06:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ portuguese_brazilian ] = "Datenbank austauschen" ;
         Text [ portuguese ] = "Substituir base de dados" ;
         Text[ chinese_simplified ] = "ζ›΄ζΆζ•°ζ®εΊ“";
-        Text[ russian ] = "Ηΰμενθςό αΰησ δΰννϋυ";
+        Text[ russian ] = "Θρςξχνθκθ δΰννϋυ";
         Text[ polish ] = "Wymieρ bazκ danych";
         Text[ japanese ] = "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγ®δΊ¤ζ›";
         Text[ chinese_traditional ] = "ζ›Ώζ›θ³‡ζ–™εΊ«";
@@ -130,7 +130,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ portuguese_brazilian ] = "Verwendete Datenbanken" ;
         Text [ portuguese ] = "Bases de dados utilizadas" ;
         Text[ chinese_simplified ] = "δ½Ώη”¨η„ζ•°ζ®εΊ“";
-        Text[ russian ] = "Θροξλόησεμϋε αΰηϋ δΰννϋυ";
+        Text[ russian ] = "Θροξλόησεμϋε θρςξχν. δΰννϋυ";
         Text[ polish ] = "UΏyte bazy danych";
         Text[ japanese ] = "δ½Ώη”¨γ•γ‚γ¦γ„γ‚‹γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ή";
         Text[ chinese_traditional ] = "ζ‰€δ½Ώη”¨η„θ³‡ζ–™εΊ«";
@@ -138,7 +138,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ dutch ] = "Gebruikte databases";
         Text[ chinese_simplified ] = "δ½Ώη”¨η„ζ•°ζ®εΊ“";
         Text[ greek ] = "Χρησιμοποιούμενες βάσεις δεδομένων";
-        Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤κ°€ μ‚¬μ©μ¤‘ μ…λ‹λ‹¤.";
+        Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤κ°€ μ‚¬μ© μ¤‘μ…λ‹λ‹¤.";
         Text[ turkish ] = "Kullanύlan veritabanlarύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Bases de dades utilitzades";
@@ -163,7 +163,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ portuguese_brazilian ] = "Verf?bare Datenbanken" ;
         Text [ portuguese ] = "Bases de dados disponνveis" ;
         Text[ chinese_simplified ] = "ε―δ½Ώη”¨η„ζ•°ζ®εΊ“";
-        Text[ russian ] = "Δξρςσονϋε αΰηϋ δΰννϋυ";
+        Text[ russian ] = "Δξρςσονϋε θρςξχνθκθ δΰννϋυ";
         Text[ polish ] = "Dostκpne bazy danych";
         Text[ japanese ] = "δ½Ώη”¨γ§γγ‚‹γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ή";
         Text[ chinese_traditional ] = "ηΎε­η„θ³‡ζ–™εΊ«";
@@ -205,21 +205,21 @@ ModalDialog DLG_CHANGE_DB
         Text [ italian ] = "In questo dialogo si possono scambiare database ai quali si accede tramite campi di database. Si puς effettuare una modifica per volta. Nell'elenco di sinistra θ possibile una selezione multipla." ;
         Text [ spanish ] = "En este diαlogo puede intercambiar por otras las bases de datos a las que acceda a travιs de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selecciσn mϊltiple." ;
         Text [ french ] = "Utilisez cette boξte de dialogue pour ιchanger les bases de donnιes auxquelles vous accιdez dans vos documents via des champs de formulaire. Vous ne pouvez exιcuter qu'une seule modification ΰ la fois. La liste de gauche permet une sιlection multiple." ;
-        Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. U kunt slechts ιιn wijziging tegelijk aanbrengen. In de linker lijst is ook een meervoudige keuze mogelijk." ;
+        Text [ dutch ] = "In dit dialoogvenster kunt u een database waarop de databasevelden in uw document betrekking hebben, vervangen door een andere database. U kunt slechts ιιn wijziging tegelijk aanbrengen. In de linkerlijst is ook een meervoudige keuze mogelijk." ;
         Text [ swedish ] = "I den hδr dialogrutan kan du byta ut databaser, som du kan nε via databasfδlt i ditt dokument, mot andra databaser. Du kan bara gφra en δndring εt gεngen. I den vδnstra listan gεr det att gφra multimarkering." ;
         Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til i et dokument via databasefelter, med andre databaser. Du kan kun foretage ιn ζndring pr. arbejdsdag. Pε venstre liste er det muligt at foretage multimarkeringer." ;
         Text [ portuguese_brazilian ] = "In diesem Dialog k?nen Sie Datenbanken, auf die Sie in Ihrem Dokument ?er Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k?nen nur eine ?nderung pro Arbeitsgang durchf?ren. In der linken Liste ist Mehrfachselektion m?lich." ;
         Text [ portuguese ] = "Nesta caixa de diαlogo poderα substituir bases de dados por outras, tendo acesso a elas no seu documento atravιs dos campos da base de dados. Ι apenas possνvel uma alteraηγo por cada operaηγo. Na lista da esquerda poderα seleccionar vαrias opηυes." ;
         Text[ chinese_simplified ] = "ε¨θΏ™δΈªε―Ήθ―ζ΅†ε†…ζ‚¨θƒ½ε¤δ½Ώη”¨ε¦δΈ€δΈªζ•°ζ®εΊ“ζ¥δ»£ζ›Ώε½“ε‰ηΌ–θΎ‘η„ζ–‡ζ΅£θ―»ε–η„ζ•°ζ®εΊ“γ€‚ζ―ζ¬΅ηΌ–θΎ‘ζ–‡ζ΅£ζ—¶εªθƒ½δΈ€ζ¬΅ζ›ΏζΆζ•°ζ®εΊ“γ€‚ε¨ε·¦ζ–Ήη„ε—ε•ε†…ε―δ»¥ζ‰§θ΅ε¤ι‡ι€‰ζ‹©η„εθƒ½γ€‚";
-        Text[ russian ] = "Β ύςξμ δθΰλξγε Βϋ μξζεςε ηΰμενθςό αΰηϋ δΰννϋυ, δξρςσο κ κξςξπϋμ βξημξζεν οπθ οξμξωθ οξλει αΰηϋ δΰννϋυ, δπσγθμθ αΰηΰμθ δΰννϋυ. Ηΰ ξδνσ ξοεπΰφθώ μξζνξ οπξθηβερςθ ξδνξ θημενενθε. Β ροθρκε ρλεβΰ δξρςσονξ γπσοοξβξε βϋδελενθε.";
+        Text[ russian ] = "Β ύςξμ δθΰλξγε βϋ μξζεςε βϋαπΰςό θρςξχνθκθ δΰννϋυ, δξρςσο κ κξςξπϋμ βξημξζεν οπθ οξμξωθ πΰημεωεννϋυ νΰ τξπμε ύλεμενςξβ σοπΰβλενθÿ. Ηΰ ξδνσ ξοεπΰφθώ μξζνξ οπξθηβερςθ ξδνξ θημενενθε. Β ροθρκε ρλεβΰ δξρςσονξ γπσοοξβξε βϋδελενθε.";
         Text[ polish ] = "Tutaj moΏna zamieniζ bazy danych, dostκpne w dokumencie poprzez pola baz danych, na inne. Zmieniζ moΏna tylko jednΉ bazκ danych na raz. Wielokrotnej selekcji dokonaζ moΏna na licie po lewej.";
         Text[ japanese ] = "γ“γ®γƒ€γ‚¤γ‚Άγƒ­γ‚°γ§γ―γ€γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγƒ•γ‚£γƒΌγƒ«γƒ‰γ‹γ‚‰γ‚Άγ‚―γ‚»γ‚Ήγ™γ‚‹γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚ΉγδΊ¤ζ›γ§γγΎγ™γ€‚δΈ€εΊ¦γ®ζ“δ½γ§γ²γ¨γ¤γ®ε¤‰ζ›΄γ®γΏγε®θ΅γ•γ‚γΎγ™γ€‚ε·¦γ®γƒªγ‚Ήγƒγ§γ―θ¤‡ζ•°ιΈζγε―θƒ½γ§γ™γ€‚";
         Text[ chinese_traditional ] = "ε¨ι€™ε€‹ε°θ©±ζ–Ήε΅ε…§ζ‚¨ε―δ»¥δ½Ώη”¨ε¦δΈ€ε€‹θ³‡ζ–™εΊ«δΎ†δ»£ζ›Ώε·²η¶“ι–‹ε•“η„ζ–‡δ»¶ζ‰€δ½Ώη”¨η„θ³‡ζ–™εΊ«γ€‚ζ―ζ¬΅η·¨θΌ―ζ–‡δ»¶ζ™‚εªθƒ½εδΈ€ζ¬΅θ®ζ›΄γ€‚ε¨ε·¦ζ¬„ε…§ε―δ»¥ε·θ΅ε¤ι‡ιΈε–η„εθƒ½γ€‚";
         Text[ arabic ] = "έν γΡΘΪ ΗαΝζΗΡ εΠΗ΅ νγίδί ΗΣΚΘΟΗα ήζΗΪΟ ΗαΘνΗδΗΚ΅ ΗαΚν ΚΥα ΕανεΗ έν γΣΚδΟί ΘζΗΣΨΙ Νήζα ήζΗΪΟ ΗαΘνΗδΗΚ΅ ΘΓΞΡμ. αΗΝΩ Γδε νγίδί Ϊγα ΚΫννΡ ζΗΝΟ";
-        Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. U kunt slechts ιιn wijziging tegelijk aanbrengen. In de linker lijst is ook een meervoudige keuze mogelijk.";
+        Text[ dutch ] = "In dit dialoogvenster kunt u een database waarop de databasevelden in uw document betrekking hebben, vervangen door een andere database. U kunt slechts ιιn wijziging tegelijk aanbrengen. In de linkerlijst is ook een meervoudige keuze mogelijk.";
         Text[ chinese_simplified ] = "ε¨θΏ™δΈªε―Ήθ―ζ΅†ε†…ζ‚¨θƒ½ε¤δ½Ώη”¨ε¦δΈ€δΈªζ•°ζ®εΊ“ζ¥δ»£ζ›Ώε½“ε‰ηΌ–θΎ‘η„ζ–‡ζ΅£θ―»ε–η„ζ•°ζ®εΊ“γ€‚ζ―ζ¬΅ηΌ–θΎ‘ζ–‡ζ΅£ζ—¶εªθƒ½δΈ€ζ¬΅ζ›ΏζΆζ•°ζ®εΊ“γ€‚ε¨ε·¦ζ–Ήη„ε—ε•ε†…ε―δ»¥ζ‰§θ΅ε¤ι‡ι€‰ζ‹©η„εθƒ½γ€‚";
         Text[ greek ] = "Σε αυτόν τον διάλογο μπορείτε να αλλάξετε τις βάσεις δεδομένων, τις οποίες χρησιμοποιείτε στο έγγραφό σας μέσω των πεδίων βάσεων δεδομένων. Επιτρέπεται μόνο μια αλλαγή κάθε φορά. Στο αριστερό τμήμα μπορούν να γίνουν πολλαλές επιλογές.";
-        Text[ korean ] = "μ΄ λ€ν™”μƒμμ—μ„λ” λ¬Έμ„μ—μ„ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“λ¥Ό ν†µν•΄ λ°μ΄ν„°λ² μ΄μ¤λ¥Ό μ•΅μ„Έμ¤ν•κ±°λ‚ κµν™ν•λ” λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“λ¥Ό μ‚¬μ©ν•  μ μμµλ‹λ‹¤.ν•λ‚μ μ‘μ—… κ³Όμ •μ—μ„ λ³€κ²½ μ‘μ—…μ΄ ν• λ² μν–‰λ©λ‹λ‹¤. μ™Όμª½μ λª©λ΅μ—μ„λ” μ—¬λ¬ ν•­λª©μ„ μ„ νƒν•  μ μμµλ‹λ‹¤.";
+        Text[ korean ] = "μ΄ λ€ν™”μƒμμ—μ„λ” λ¬Έμ„μ—μ„ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“λ¥Ό ν†µν•΄ λ°μ΄ν„°λ² μ΄μ¤λ¥Ό μ•΅μ„Έμ¤ν•κ±°λ‚ λ°”κΎΈλ” λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“λ¥Ό μ‚¬μ©ν•  μ μμµλ‹λ‹¤.ν•λ‚μ μ‘μ—… κ³Όμ •μ—μ„ λ³€κ²½ μ‘μ—…μ΄ ν• λ² μν–‰λ©λ‹λ‹¤. μ™Όμª½μ λª©λ΅μ—μ„λ” μ—¬λ¬ ν•­λª©μ„ μ„ νƒν•  μ μμµλ‹λ‹¤.";
         Text[ turkish ] = "Bu pencerede, belgenizdeki veritabanύ alanlarύ yoluyla eriώtiπiniz veritabanlarύnύ baώkalarύ ile deπiώtirebilirsiniz. Her iώlemde yalnύzca tek bir deπiώiklik yapύlabilir. Soldaki listede birden fazla seηim yapύlabilir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En aquest quadre de diΰleg podeu intercanviar per altres bases de dades a les que accediu a travιs de camps. Es pot realitzar nomιs un canvi per fase de treball. A la llista de l'esquerra ιs possible fer una selecciσ mϊltiple.";
@@ -258,7 +258,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ portuguese_brazilian ] = "Am Dokument gesetzte Datenbank:" ;
         Text [ portuguese ] = "Base de dados aplicada ao documento:" ;
         Text[ chinese_simplified ] = "ζ–‡ζ΅£δ½Ώη”¨η„ζ•°ζ®εΊ“οΌ";
-        Text[ russian ] = "Αΰηΰ δΰννϋυ, σρςΰνξβλεννΰÿ β δξκσμενςε:";
+        Text[ russian ] = "Θροξλόησεμϋι θρςξχνθκ δΰννϋυ:";
         Text[ polish ] = "Baza danych ustawiona przy dok.:";
         Text[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ«ι©η”¨γ•γ‚γγƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ή:";
         Text[ chinese_traditional ] = "ζ–‡δ»¶δ½Ώη”¨η„θ³‡ζ–™εΊ«οΌ";
@@ -352,7 +352,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ portuguese ] = "Definir" ;
         Text [ portuguese_brazilian ] = "Festlegen" ;
         Text[ chinese_simplified ] = "ε®δΉ‰";
-        Text[ russian ] = "Ηΰδΰςό";
+        Text[ russian ] = "Δΰ";
         Text[ polish ] = "Zdefiniuj";
         Text[ japanese ] = "ζ‡ε®";
         Text[ chinese_traditional ] = "ε®ηΎ©";
@@ -360,7 +360,7 @@ ModalDialog DLG_CHANGE_DB
         Text[ dutch ] = "Definiλren";
         Text[ chinese_simplified ] = "ε®δΉ‰";
         Text[ greek ] = "Καθορισμός";
-        Text[ korean ] = "μ •μ";
+        Text[ korean ] = "μ§€μ •";
         Text[ turkish ] = "Tanύmla";
         Text[ catalan ] = "Defineix";
         Text[ finnish ] = "Mδδritδ";
@@ -403,7 +403,7 @@ ModalDialog DLG_CHANGE_DB
         TabStop = TRUE ;
     };
     Text[ chinese_simplified ] = "ζ›΄ζΆζ•°ζ®εΊ“";
-    Text[ russian ] = "Ηΰμενθςό αΰησ δΰννϋυ";
+    Text[ russian ] = "Βϋαξπ ΰκςθβνξγξ θρςξχνθκΰ δΰννϋυ";
     Text[ polish ] = "Wymieρ bazκ danych";
     Text[ japanese ] = "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγ®δΊ¤ζ›";
     Text[ chinese_traditional ] = "ζ›Ώζ›θ³‡ζ–™εΊ«";
@@ -418,4 +418,21 @@ ModalDialog DLG_CHANGE_DB
     Text[ finnish ] = "Vaihda tietokannat";
     Text[ thai ] = "ΰΉΰΈ¥ΰΈΰΉ€ΰΈ›ΰΈ¥ΰΈµΰΉΰΈΆΰΈ™ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

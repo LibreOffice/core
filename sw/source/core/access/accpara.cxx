@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mib $ $Date: 2002-12-05 14:10:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,11 +1099,14 @@ Sequence< Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(RuntimeExcepti
 Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
         throw(RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
-                        0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }
 
@@ -1263,8 +1266,8 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
 
     Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
-    Point aFrmLogPos( GetBounds().Pos() ); // twip rel to doc root
-    Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogPos ) );
+    SwRect aFrmLogBounds( GetBounds() ); // twip rel to doc root
+    Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogBounds.SVRect() ).TopLeft() );
     aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
 
     // convert into AWT Rectangle
@@ -1288,6 +1291,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+
     CHECK_FOR_DEFUNC( XAccessibleText );
 
     // construct SwPosition (where GetCrsrOfst() will put the result into)
@@ -1300,7 +1304,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
     Point aPoint( rPoint.X, rPoint.Y );
     SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
-    Point aPixPos( GetMap()->CoreToPixel( aLogBounds.Pos() ) );
+    Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
     aPoint.X() += aPixPos.X();
     aPoint.Y() += aPixPos.Y();
     MapMode aMapMode = pWin->GetMapMode();

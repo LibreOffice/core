@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:59:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "í•„ë“œ ìœ í˜•(~T)";
+        Text[ korean ] = "ìœ í˜•(~T)";
         Text[ turkish ] = "A~lan tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipus";
@@ -176,7 +176,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formata";
-        Text[ finnish ] = "Muoto";
+        Text[ finnish ] = "Muotoilu";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     ListBox LB_VARFORMAT
@@ -220,7 +220,7 @@ TabPage TP_FLD_VAR
         TEXT[ chinese_traditional ] = "éš±å…¥çš„(~B)";
         TEXT[ arabic ] = "ÛíÑ ãÑÆí";
         TEXT[ greek ] = "Ìç ïñáôÜ";
-        TEXT[ korean ] = "ì•ˆë³´ì„(~B)";
+        TEXT[ korean ] = "ìˆ¨ê¹€(~B)";
         TEXT[ turkish ] = "Görünmez";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "invisi~ble";
@@ -238,7 +238,7 @@ TabPage TP_FLD_VAR
         Text [ swedish ] = "Numrering kapitelvis" ;
         Text [ danish ] = "Kapitelvis nummerering" ;
         Text [ italian ] = "Numerazione a capitoli" ;
-        Text [ spanish ] = "Numeración de capítulos" ;
+        Text [ spanish ] = "Numeración por capítulos" ;
         Text [ french ] = "Numérotation par chapitre" ;
         Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
         Text [ portuguese ] = "Numeração por capítulos" ;
@@ -344,7 +344,7 @@ TabPage TP_FLD_VAR
     };
     StringList [ russian ] =
     {
-             < "Áåç" ; > ;
+             < "Íåò" ; > ;
     };
     StringList [ polish ] =
     {
@@ -408,7 +408,7 @@ TabPage TP_FLD_VAR
         Text [ dutch ] = "~Scheidingsteken" ;
         Text [ portuguese ] = "~Separador" ;
         Text[ chinese_simplified ] = "åˆ†éš”ç¬¦(~S)";
-        Text[ russian ] = "Ğàçäåëèòåëü";
+        Text[ russian ] = "Ğàçäåëèò.";
         Text[ polish ] = "Separator";
         Text[ japanese ] = "åŒºåˆ‡ã‚Šè¨˜å·(~S)";
         Text[ chinese_traditional ] = "é€£æ¥ç¬¦(~S)";
@@ -457,7 +457,7 @@ TabPage TP_FLD_VAR
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No~m";
-        Text[ finnish ] = "Ni~mi";
+        Text[ finnish ] = "~Nimi";
         Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
     };
     Edit ED_VARNAME
@@ -569,7 +569,7 @@ TabPage TP_FLD_VAR
                 Text [ french ] = "Supprimer" ;
                 Text [ swedish ] = "Radera" ;
                 Text [ dutch ] = "Wissen" ;
-                Text [ spanish ] = "Eliminar" ;
+                Text [ spanish ] = "Borrar" ;
                 Text [ english_us ] = "Delete" ;
                 Text[ chinese_simplified ] = "åˆ é™¤";
                 Text[ russian ] = "Óäàëèòü";
@@ -591,7 +591,7 @@ TabPage TP_FLD_VAR
     Text [ swedish ] = "Variabler" ;
     Text [ danish ] = "Variabler" ;
     Text [ italian ] = "Variabili" ;
-    Text [ spanish ] = "Predeterminaciones" ;
+    Text [ spanish ] = "Variables" ;
     Text [ french ] = "Variables" ;
     Text [ dutch ] = "Variabelen" ;
     Text [ portuguese ] = "Variáveis" ;
@@ -609,3 +609,20 @@ TabPage TP_FLD_VAR
     Text[ finnish ] = "Muuttujat";
     Text[ thai ] = "à¸•à¸±à¸§à¹à¸›à¸£";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

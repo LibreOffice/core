@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: dvo $ $Date: 2002-12-02 11:42:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,6 +364,7 @@ public:
 
 SwTransferable::SwTransferable( SwWrtShell& rSh )
     : pWrtShell( &rSh ),
+      pCreatorView( 0 ),
     eBufferType( TRNSFR_NONE ),
     pClpDocFac( 0 ),
     pClpGraphic( 0 ),
@@ -847,7 +848,9 @@ int SwTransferable::Copy( BOOL bIsCut )
         pClpDocFac = new SwDocFac;
         pWrtShell->Copy( pClpDocFac->GetDoc() );
 
-        AddFormat( SOT_FORMATSTR_ID_SVXB );
+        if (! pOrigGrf->GetBitmap().IsEmpty())
+          AddFormat( SOT_FORMATSTR_ID_SVXB );
+
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         const Graphic &rGrf = pWrtShell->GetGraphic();
         if( rGrf.IsSupportedGraphic() )
@@ -1098,18 +1101,28 @@ static inline Reference < XTransferable > * lcl_getTransferPointer ( Reference <
 BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                               const TransferableDataHelper& rData )
 {
-    ULONG nFormat;
-    Reference<XTransferable> xTransferable( rData.GetXTransferable() );
-    USHORT nEventAction,
-           nDestination = SwTransferable::GetSotDestination( rSh ),
-           nSourceOptions =
+    // Check the common case first: We can always paste our own data!
+    // #106503#: If _only_ the internal format can be pasted, this check will
+    // yield 'true', while the one below would give a (wrong) result 'false'.
+    bool bIsPaste = ( SW_MOD()->pClipboard != NULL );
+
+    // if it's not our own data, we need to have a closer look:
+    if( ! bIsPaste )
+    {
+        // determine the proper paste action, and return true if we find one
+        Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+        USHORT nDestination = SwTransferable::GetSotDestination( rSh );
+        USHORT nSourceOptions =
                     (( EXCHG_DEST_DOC_TEXTFRAME == nDestination ||
                        EXCHG_DEST_SWDOC_FREE_AREA == nDestination ||
                        EXCHG_DEST_DOC_TEXTFRAME_WEB == nDestination ||
                        EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
                                     ? EXCHG_IN_ACTION_COPY
-                                    : EXCHG_IN_ACTION_MOVE),
-            nAction = SotExchange::GetExchangeAction(
+                     : EXCHG_IN_ACTION_MOVE);
+
+        ULONG nFormat;          // output param for GetExchangeAction
+        USHORT nEventAction;    // output param for GetExchangeAction
+        USHORT nAction = SotExchange::GetExchangeAction(
                                 rData.GetDataFlavorExVector(),
                                 nDestination,
                                 nSourceOptions,             /* ?? */
@@ -1117,7 +1130,11 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
                                 nFormat, nEventAction, 0,
                                 lcl_getTransferPointer ( xTransferable ) );
 
-    return EXCHG_INOUT_ACTION_NONE != nAction;
+        // if we find a suitable action, we can paste!
+        bIsPaste = (EXCHG_INOUT_ACTION_NONE != nAction);
+    }
+
+    return bIsPaste;
 }
 
 // -----------------------------------------------------------------------
@@ -2648,14 +2665,13 @@ ASSERT( !&rFileName, "how do we read today .URL - Files?" );
 
 // -----------------------------------------------------------------------
 
-/*  */
-
 BOOL SwTransferable::IsPasteSpecial( const SwWrtShell& rWrtShell,
                                      const TransferableDataHelper& rData )
 {
-    return rData.GetXTransferable().is() &&
-        1 < rData.GetTransferable()->getTransferDataFlavors().getLength() &&
-        IsPaste( rWrtShell, rData );
+    // we can paste-special if there's an entry in the paste-special-format list
+    SvxClipboardFmtItem aClipboardFmtItem(0);
+    FillClipFmtItem( rWrtShell, rData, aClipboardFmtItem);
+    return aClipboardFmtItem.Count() > 0;
 }
 
 // -----------------------------------------------------------------------
@@ -2820,7 +2836,7 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
 }
 
 
-void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
+void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
                                 const TransferableDataHelper& rData,
                                 SvxClipboardFmtItem & rToFill )
 {
@@ -3373,20 +3389,28 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 }
 
 // Interfaces for Selection
-void SwTransferable::CreateSelection( SwWrtShell& rSh )
+void SwTransferable::CreateSelection( SwWrtShell& rSh,
+                                      const ViewShell * _pCreatorView )
 {
     SwModule *pMod = SW_MOD();
     SwTransferable* pNew = new SwTransferable( rSh );
+
+    /* #96392#*/
+     pNew->pCreatorView = _pCreatorView;
+
     ::com::sun::star::uno::Reference<
             ::com::sun::star::datatransfer::XTransferable > xRef( pNew );
     pMod->pXSelection = pNew;
     pNew->CopyToSelection( rSh.GetWin() );
 }
 
-void SwTransferable::ClearSelection( SwWrtShell& rSh )
+void SwTransferable::ClearSelection( SwWrtShell& rSh,
+                                     const ViewShell * _pCreatorView)
 {
     SwModule *pMod = SW_MOD();
-    if( pMod->pXSelection && pMod->pXSelection->pWrtShell == &rSh )
+    if( pMod->pXSelection && pMod->pXSelection->pWrtShell == &rSh &&
+        /* #96392# */
+        pMod->pXSelection->pCreatorView == _pCreatorView )
     {
         TransferableHelper::ClearSelection( rSh.GetWin() );
     }

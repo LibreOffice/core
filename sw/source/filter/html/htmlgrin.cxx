@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SVX_FHGTITEM_HXX //autogen
+#include <svx/fhgtitem.hxx>
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
@@ -703,7 +706,6 @@ IMAGE_SETEVENT:
     Size aGrfSz( 0, 0 );
     BOOL bSetTwipSize = TRUE;       // Twip-Size am Node setzen?
     BOOL bChangeFrmSize = FALSE;    // Frame-Format nachtraeglich anpassen?
-    BOOL bGrfSzValid = FALSE;       // aGrfSz enthaelt die Grafik-Groesse
     BOOL bRequestGrfNow = FALSE;
     BOOL bSetScaleImageMap = FALSE;
     BYTE nPrcWidth = 0, nPrcHeight = 0;
@@ -711,104 +713,46 @@ IMAGE_SETEVENT:
     if( !nWidth || !nHeight )
     {
         // Es fehlt die Breite oder die Hoehe
-
-        // JP 28.05.96: dann suche doch mal in unserem QuickDraw-Cache, ob
-        //              die Groesse dieser Grafik schon vorhanden ist.
-        bGrfSzValid =
-#ifdef NEW_GRFOBJ
-            FindGrfSizeFromCache( sGrfNm, aGrfSz )
-#else
-                FALSE;
-#endif
-            ;
-
         // Wenn die Grfik in einer Tabelle steht, wird sie gleich
         // angefordert, damit sie eventuell schon da ist, bevor die
         // Tabelle layoutet wird.
-        if( !bGrfSzValid && pTable!=0 && !nWidth )
+        if( pTable!=0 && !nWidth )
         {
             bRequestGrfNow = TRUE;
             IncGrfsThatResizeTable();
         }
 
-        if( bGrfSzValid && aGrfSz.Width() && aGrfSz.Height() )
+        // Die Groesse des Rahmens wird nachtraeglich gesetzt
+        bChangeFrmSize = TRUE;
+        aGrfSz = aTwipSz;
+        if( !nWidth && !nHeight )
         {
-            // wir haben eine Groesse und koenen sie setzen
-            if( !nWidth && !nHeight )
-            {
-                // Hoehe und Breite fehlen
-                aTwipSz = aGrfSz;
-            }
-            else if( nWidth )
-            {
-                // nur die Breite fehlt
-                if( bPrcWidth )
-                {
-                    // %-Breite uebernehmen und Hoehe skalieren
-                    nPrcWidth = (BYTE)nWidth;
-                    nPrcHeight = 255;
-                }
-                else
-                {
-                    // Breite uebernehmen und Hoehe berechnen
-                    aTwipSz.Height() = (aGrfSz.Height() * aTwipSz.Width())
-                                        / aGrfSz.Width();
-                }
-            }
-            else if( nHeight )
-            {
-                // nur die Hoehe fehlt
-                if( bPrcHeight )
-                {
-                    // %-Hoehe lassen und Breite skalieren
-                    nPrcHeight = (BYTE)nHeight;
-                    nPrcWidth = 255;
-                }
-                else
-                {
-                    // Hoehe uebernehmen und Breite berechnen
-                    aTwipSz.Width() = (aGrfSz.Width() * aTwipSz.Height())
-                                        / aGrfSz.Height();
-                }
-            }
+            aTwipSz.Width() = HTML_DFLT_IMG_WIDTH;
+            aTwipSz.Height() = HTML_DFLT_IMG_HEIGHT;
         }
-        else
+        else if( nWidth )
         {
-            // wir haben keine Groesse gefunden (und sind in keiner
-            // Tabelle oder haben zumindest die Breite der Grafik)
-
-            // Die Groesse des Rahmens wird nachtraeglich gesetzt
-            bChangeFrmSize = TRUE;
-            aGrfSz = aTwipSz;
-            if( !nWidth && !nHeight )
+            // eine %-Angabe
+            if( bPrcWidth )
             {
-                aTwipSz.Width() = HTML_DFLT_IMG_WIDTH;
+                nPrcWidth = (BYTE)nWidth;
+                nPrcHeight = 255;
+            }
+            else
+            {
                 aTwipSz.Height() = HTML_DFLT_IMG_HEIGHT;
             }
-            else if( nWidth )
+        }
+        else if( nHeight )
+        {
+            if( bPrcHeight )
             {
-                // eine %-Angabe
-                if( bPrcWidth )
-                {
-                    nPrcWidth = (BYTE)nWidth;
-                    nPrcHeight = 255;
-                }
-                else
-                {
-                    aTwipSz.Height() = HTML_DFLT_IMG_HEIGHT;
-                }
+                nPrcHeight = (BYTE)nHeight;
+                nPrcWidth = 255;
             }
-            else if( nHeight )
+            else
             {
-                if( bPrcHeight )
-                {
-                    nPrcHeight = (BYTE)nHeight;
-                    nPrcWidth = 255;
-                }
-                else
-                {
-                    aTwipSz.Width() = HTML_DFLT_IMG_WIDTH;
-                }
+                aTwipSz.Width() = HTML_DFLT_IMG_WIDTH;
             }
         }
     }
@@ -816,14 +760,6 @@ IMAGE_SETEVENT:
     {
         // Breite und Hoehe wurden angegeben und brauchen nicht gesetzt
         // zu werden
-        bGrfSzValid =
-#ifdef NEW_GRFOBJ
-        FindGrfSizeFromCache( sGrfNm, aGrfSz )
-#else
-            FALSE;
-#endif
-        ;
-
         bSetTwipSize = FALSE;
 
         if( bPrcWidth )
@@ -850,31 +786,8 @@ IMAGE_SETEVENT:
         if( pImgMap )
         {
             SwFmtURL aURL; aURL.SetMap( pImgMap );//wird kopieiert
-            if( bGrfSzValid )
-            {
-                BOOL bScale = FALSE;
 
-                Fraction aScaleX( 1, 1 ), aScaleY( 1, 1);
-
-                if( !nPrcWidth && aGrfSz.Width() && aTwipSz.Width() &&
-                    aGrfSz.Width() != aTwipSz.Width() )
-                {
-                    aScaleX = Fraction( aGrfSz.Width(), aTwipSz.Width() );
-                    bScale = TRUE;
-                }
-
-                if( !nPrcHeight && aGrfSz.Height() && aTwipSz.Height() &&
-                    aGrfSz.Height() != aTwipSz.Height() )
-                {
-                    aScaleY = Fraction( aGrfSz.Height(), aTwipSz.Height() );
-                    bScale = TRUE;
-                }
-
-                if( bScale )
-                    aURL.GetMap()->Scale( aScaleX, aScaleY );
-            }
-            else
-                bSetScaleImageMap = !nPrcWidth || !nPrcHeight;
+            bSetScaleImageMap = !nPrcWidth || !nPrcHeight;
             aFrmSet.Put( aURL );
         }
         else
@@ -887,8 +800,7 @@ IMAGE_SETEVENT:
             // die Grafik muss beim SetTwipSize skaliert werden, wenn
             // wir keine Groesse am Node gesetzt haben oder die Groesse
             // nicht der Grafikgroesse entsprach.
-            bSetScaleImageMap = !bSetTwipSize || !bGrfSzValid ||
-                                !nPrcWidth || !nPrcHeight;
+            bSetScaleImageMap = sal_True;
         }
     }
 
@@ -950,7 +862,7 @@ IMAGE_SETEVENT:
     if( bSetTwipSize )
         pGrfNd->SetTwipSize( aGrfSz );
 
-    pGrfNd->SetChgTwipSize( bChangeFrmSize );
+    pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
 
     if( bSetScaleImageMap )
         pGrfNd->SetScaleImageMap( TRUE );
@@ -1175,12 +1087,30 @@ void SwHTMLParser::InsertBodyOptions()
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
         String aDummy;
-        ParseStyleOptions( aDummy, aDummy, aStyle, aItemSet, aPropInfo, 0, &aDir );
+        ParseStyleOptions( aStyle, aDummy, aDummy, aItemSet, aPropInfo, 0, &aDir );
 
         // Ein par Attribute muessen an der Seitenvorlage gesetzt werden,
         // und zwar die, die nicht vererbit werden
         pCSS1Parser->SetPageDescAttrs( bSetBrush ? &aBrushItem : 0,
                                        &aItemSet );
+
+        const SfxPoolItem *pItem;
+        static USHORT aWhichIds[3] = { RES_CHRATR_FONTSIZE,
+                                       RES_CHRATR_CJK_FONTSIZE,
+                                       RES_CHRATR_CTL_FONTSIZE };
+        for( USHORT i=0; i<3; i++ )
+        {
+            if( SFX_ITEM_SET == aItemSet.GetItemState( aWhichIds[i], FALSE,
+                                                       &pItem ) &&
+                static_cast <const SvxFontHeightItem * >(pItem)->GetProp() != 100)
+            {
+                sal_uInt32 nHeight =
+                    ( aFontHeights[2] *
+                     static_cast <const SvxFontHeightItem * >(pItem)->GetProp() ) / 100;
+                SvxFontHeightItem aNewItem( nHeight, 100, aWhichIds[i] );
+                aItemSet.Put( aNewItem );
+            }
+        }
 
         // alle noch uebrigen Optionen koennen an der Standard-Vorlage
         // gesetzt werden und gelten dann automatisch als defaults

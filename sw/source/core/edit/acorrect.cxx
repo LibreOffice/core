@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 12:00:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
 
             pDoc->DontExpandFmt( *aPam.GetPoint() );
             pDoc->Insert( aPam, pCorr->Correct() );
+            pDoc->AppendTmpCorr(sKurz, pCorr->Correct());
             bRet = TRUE;
         }
     }

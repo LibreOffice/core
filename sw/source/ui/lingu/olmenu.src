@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 13:45:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@ Menu MN_SPELL_POPUP
             Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
             Text [ english_us ] = "~Spellcheck..." ;
             Text [ italian ] = "Controllo ~ortografico..." ;
-            Text [ spanish ] = "Ortogra~fía..." ;
-            Text [ french ] = "~Orthographe..." ;
+            Text [ spanish ] = "~Revisión ortográfica..." ;
+            Text [ french ] = "Vérification ~orthographique..." ;
             Text [ dutch ] = "~Spellingcontrole..." ;
             Text [ swedish ] = "~Rättstavning..." ;
             Text [ danish ] = "~Stavekontrol…" ;
@@ -86,13 +86,13 @@ Menu MN_SPELL_POPUP
             Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
             Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè...";
             Text[ polish ] = "~Pisownia...";
-            Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)...";
+            Text[ japanese ] = "æ–‡æ›¸æ ¡æ­£(~S)...";
             Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)...";
             Text[ arabic ] = "~ÊÏŞíŞ ÅãáÇÆí";
             Text[ dutch ] = "~Spellingcontrole...";
             Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
             Text[ greek ] = "Ïñèïã~ñáößá";
-            Text[ korean ] = "ë§ì¶¤ë²•(~S)";
+            Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬...";
             Text[ turkish ] = "~Yazım kılavuzu";
             Text[ catalan ] = "Ortogra~fia";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus...";
@@ -180,7 +180,7 @@ Menu MN_SPELL_POPUP
             Text [ swedish ] = "Auto~Korrigering" ;
             Text [ danish ] = "AutoKorrektur" ;
             Text [ italian ] = "Correzione automatica" ;
-            Text [ spanish ] = "Auto~Corrección" ;
+            Text [ spanish ] = "~Corrección automática" ;
             Text [ french ] = "AutoCo~rrection" ;
             Text [ dutch ] = "Auto~Correctie" ;
             Text [ portuguese ] = "Auto~Correcção" ;
@@ -193,7 +193,7 @@ Menu MN_SPELL_POPUP
             Text[ dutch ] = "Auto~Correctie";
             Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
             Text[ greek ] = "Áõôï~Äéüñèùóç";
-            Text[ korean ] = "ìë™ê³ ì¹¨";
+            Text[ korean ] = "ìë™ ìˆ˜ì •";
             Text[ turkish ] = "Otomatik düzeltme";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Auto~correcció";
@@ -319,6 +319,7 @@ String STR_HYP_OK
     Text[ finnish ] = "Tavutus valmis";
     Text[ thai ] = "à¹ƒà¸Šà¹‰à¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ";
 };
+
 
 
 

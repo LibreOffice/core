@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:47:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #ifdef PRECOMPILED
-#include "ui_pch.hxx"
+#include "core_pch.hxx"
 #endif
 #pragma hdrstop
 #ifndef _SW_XPRINTPREVIEWSETTINGS_HXX_
@@ -124,7 +124,7 @@ static ChainablePropertySetInfo * lcl_createPrintPreviewSettingsInfo()
     return new ChainablePropertySetInfo ( aPrintPreviewSettingsMap_Impl );
 }
 SwXPrintPreviewSettings::SwXPrintPreviewSettings( SwDoc *pDoc)
-: ChainableHelperNoState( lcl_createPrintPreviewSettingsInfo (), &Application::GetSolarMutex() )
+: ChainablePropertySet ( lcl_createPrintPreviewSettingsInfo (), &Application::GetSolarMutex() )
 , mbPreviewDataChanged( sal_False )
 , mpDoc( pDoc)
 {
@@ -135,6 +135,29 @@ SwXPrintPreviewSettings::SwXPrintPreviewSettings( SwDoc *pDoc)
 SwXPrintPreviewSettings::~SwXPrintPreviewSettings()
     throw()
 {
+}
+
+Any SAL_CALL SwXPrintPreviewSettings::queryInterface( const Type& rType )
+    throw(RuntimeException)
+{
+        return ::cppu::queryInterface ( rType                                       ,
+                                        // OWeakObject interfaces
+                                        reinterpret_cast< XInterface*       > ( this )  ,
+                                        static_cast< XWeak*         > ( this )  ,
+                                        // my own interfaces
+                                        static_cast< XServiceInfo*      > ( this )  ,
+                                        static_cast< XPropertySet*      > ( this )  ,
+                                        static_cast< XMultiPropertySet*     > ( this ) );
+}
+void SwXPrintPreviewSettings::acquire ()
+    throw ()
+{
+    OWeakObject::acquire();
+}
+void SwXPrintPreviewSettings::release ()
+    throw ()
+{
+    OWeakObject::release();
 }
 
 void SwXPrintPreviewSettings::_preSetValues ()

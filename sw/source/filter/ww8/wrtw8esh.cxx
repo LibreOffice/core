@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -159,6 +161,9 @@
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
+#endif
+#ifndef _SVDXCGV_HXX
+#include <svx/svdxcgv.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -1377,29 +1382,9 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
 #endif
         OpenContainer(ESCHER_SpContainer);
 
-        AddShape(ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId);
         EscherPropertyContainer aPropOpt;
+        WritePicture(aPropOpt, aGraphic, *pSdrObj, nShapeId);
 
-        GraphicObject aGraphicObject(aGraphic);
-        ByteString aId = aGraphicObject.GetUniqueID();
-        if (aId.Len())
-        {
-            Size aSz(rOLENd.GetTwipSize());
-            aSz.Width() = DrawModelToEmu(aSz.Width());
-            aSz.Height() = DrawModelToEmu(aSz.Height());
-            Rectangle aRect(Point(0,0), aSz);
-
-            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, 0);
-            if (nBlibId)
-            {
-                aPropOpt.AddOpt(ESCHER_Prop_fillType, ESCHER_FillPicture);
-                aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
-            }
-        }
-
-        SetPicId(*pSdrObj, nShapeId, aPropOpt);
-
-        aPropOpt.AddOpt(ESCHER_Prop_pictureActive, 0x10000);
         nBorderThick = WriteFlyFrameAttr(rFmt, mso_sptPictureFrame, aPropOpt);
         WriteGrfAttr(rOLENd, aPropOpt);
         aPropOpt.Commit(GetStream());
@@ -1768,21 +1753,6 @@ void SwEscherEx::FinishEscher()
     pEscherStrm->Seek(0);
     *rWrt.pTableStrm << *pEscherStrm;
     delete pEscherStrm, pEscherStrm = 0;
-
-    /*#82587# Everytime MS 2000 creates an escher stream there is always an
-     ObjectPool dir (even if empty). It turns out that if a copy of MS 2000 is
-     used to open a document that contains escher graphics exported from
-     StarOffice without this empty dir then *if* that copy of MS Office has
-     never been used to open a MSOffice document that has escher graphics (and
-     an ObjectPool dir of course) and that copy of office has not been used to
-     draw escher graphics then our exported graphics do not appear. Once you
-     do open a ms document with escher graphics or draw an escher graphic with
-     that copy of word, then all documents from staroffice that contain escher
-     work from then on. Tricky to track down, some sort of late binding
-     trickery in MS where solely for first time initialization the existence
-     of an ObjectPool dir is necessary for triggering some magic. cmc*/
-    rWrt.GetStorage().OpenStorage(CREATE_CONST_ASC(SL::aObjectPool),
-        STREAM_READWRITE | STREAM_SHARE_DENYALL);
 }
 
 extern "C"
@@ -2402,22 +2372,47 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
     return nBorderThick;
 }
 
+void SwBasicEscherEx::WritePicture(EscherPropertyContainer &rPropOpt,
+    const Graphic &rGraphic, const SdrObject &rObj, sal_uInt32 nShapeId)
+{
+    AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
+
+    GraphicObject aGraphicObject(rGraphic);
+    ByteString aId = aGraphicObject.GetUniqueID();
+    if (aId.Len())
+    {
+        Rectangle aRect = rObj.GetLogicRect();
+        aRect.SetPos(Point(0,0));
+        aRect.Right() = DrawModelToEmu(aRect.Right());
+        aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
+        sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, 0);
+        if (nBlibId)
+        {
+            rPropOpt.AddOpt(ESCHER_Prop_fillType, ESCHER_FillPicture);
+            rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
+        }
+    }
+
+    SetPicId(rObj, nShapeId, rPropOpt);
+    rPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
+}
+
 void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 {
     if (const SdrObject* pSdrObj = rFmt.FindRealSdrObject())
     {
         OpenContainer( ESCHER_SpContainer );
 
-        AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
+        SdrModel *pModel = rWrt.pDoc->GetDrawModel();
+        OutputDevice *pDevice = Application::GetDefaultDevice();
+        ASSERT(pModel && pDevice, "no model or device");
+        SdrExchangeView aExchange(pModel, pDevice);
+        Graphic aGraphic(aExchange.GetObjGraphic(pModel,
+            const_cast<SdrObject*>(pSdrObj)));
 
         EscherPropertyContainer aPropOpt;
-        Size aSz( pSdrObj->GetLogicRect().GetSize() );
-        aSz.Width() = DrawModelToEmu( aSz.Width() );
-        aSz.Height() = DrawModelToEmu( aSz.Height() );
+        WritePicture(aPropOpt, aGraphic, *pSdrObj, nShapeId);
 
-        SetPicId(*pSdrObj, nShapeId, aPropOpt);
-
-        aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
         WriteFlyFrameAttr( rFmt, mso_sptPictureFrame , aPropOpt );
         aPropOpt.Commit( GetStream() );
 
@@ -2554,10 +2549,11 @@ bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     //I think I painted myself into a little bit of a
     //corner by trying to use the uno interface for
     //controls export
-    Size aTempSize=pFormObj->GetLogicRect().GetSize();
+    Rectangle aRect = pFormObj->GetLogicRect();
+    aRect.SetPos(Point(0,0));
     awt::Size aSize;
-    aSize.Width = TWIPS_TO_MM(aTempSize.A());
-    aSize.Height = TWIPS_TO_MM(aTempSize.B());
+    aSize.Width = TWIPS_TO_MM(aRect.Right());
+    aSize.Height = TWIPS_TO_MM(aRect.Bottom());
 
     //Open the ObjectPool
     SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenStorage(
@@ -2600,3 +2596,5 @@ bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     rWW8Wrt.OutField( 0, 87, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE );
     return true;
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

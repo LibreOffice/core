@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:20:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ class SwCursor : public SwPaM
     friend class SwCrsrSaveState;
 
     _SwCursor_SavePos* pSavePos;
-    BYTE nCursorBidiLevel;
+    BYTE nCursorBidiLevel;              // bidi level of the cursor
 
     ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, BOOL& bCancel );
 
@@ -186,7 +186,8 @@ public:
     FASTBOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
     FASTBOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
 
-    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual );
+    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual,
+                        BOOL bInsertCrsr );
     FASTBOOL UpDown( BOOL bUp, USHORT nCnt = 1,
                     Point* pPt = 0, long nUpDownX = 0 );
     FASTBOOL LeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE );
@@ -195,9 +196,9 @@ public:
     FASTBOOL GoPrevNextCell( BOOL bNext, USHORT nCnt );
 
     FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
-                                    { return LeftRight( TRUE, nCnt, nMode, bAllowVisual ); }
+                                    { return LeftRight( TRUE, nCnt, nMode, bAllowVisual, FALSE ); }
     FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
-                                    { return LeftRight( FALSE, nCnt, nMode, bAllowVisual ); }
+                                    { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, FALSE ); }
     FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
     FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
     FASTBOOL LeftMargin()               { return LeftRightMargin( TRUE ); }

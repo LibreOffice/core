@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:56:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <uiparam.hxx>
 #endif
 
+#include <svtools/globalnameitem.hxx>
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
@@ -427,8 +428,20 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case SID_INSERT_PLUGIN:
     case SID_INSERT_APPLET:
     case SID_INSERT_FLOATINGFRAME:
-        rSh.Insert( (SvInPlaceObjectRef*)0, 0, TRUE, nSlot);
+    {
+        SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+        SvGlobalName *pName = NULL;
+        SvGlobalName aName;
+        if ( pNameItem )
+        {
+            aName = pNameItem->GetValue();
+            pName = &aName;
+        }
+
+        DBG_ASSERT( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
+        rSh.Insert( (SvInPlaceObjectRef*)0, pName, TRUE, nSlot);
         break;
+    }
 
     case SID_INSERT_DIAGRAM:
         {

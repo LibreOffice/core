@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-26 11:37:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,26 +288,6 @@ SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
 {
 }
 
-void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
-    const Reference < XPropertySet >& rPropSet,
-    OUString& rURL,
-    sal_Bool& rExtern ) const
-{
-    SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
-    SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
-
-    rURL = sEmbeddedObjectProtocol;
-    rURL += rOLEObj.GetName();
-    SvInfoObject *pInfo =
-        pOLENd->GetDoc()->GetPersist()->Find( rOLEObj.GetName() );
-    DBG_ASSERT( pInfo, "no info object for OLE object found" );
-    if( pInfo )
-    {
-        SvGlobalName aClassName( pInfo->GetClassName() );
-        rExtern = aOutplaceClassId == aClassName;
-    }
-}
-
 void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     const Reference < XPropertySet >& rPropSet,
     OUString& rURL) const
@@ -360,29 +340,32 @@ void lcl_addOutplaceProperties(
     if( pEmbed )
     {
         const Rectangle& rVisArea = pEmbed->GetVisArea();
-        Any aAny;
+        if( !rVisArea.IsEmpty() )
+        {
+            Any aAny;
 
-        aAny <<= (sal_Int32)rVisArea.Left();
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), aAny );
-        pStates++;
+            aAny <<= (sal_Int32)rVisArea.Left();
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), aAny );
+            pStates++;
 
-        aAny <<= (sal_Int32)rVisArea.Top();
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), aAny );
-        pStates++;
+            aAny <<= (sal_Int32)rVisArea.Top();
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), aAny );
+            pStates++;
 
-        aAny <<= (sal_Int32)rVisArea.GetWidth();
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
-        pStates++;
+            aAny <<= (sal_Int32)rVisArea.GetWidth();
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
+            pStates++;
 
-        aAny <<= (sal_Int32)rVisArea.GetHeight();
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
-        pStates++;
+            aAny <<= (sal_Int32)rVisArea.GetHeight();
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
+            pStates++;
 
-        aAny <<= (sal_Int32)pEmbed->GetViewAspect();
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), aAny );
-        pStates++;
+            aAny <<= (sal_Int32)pEmbed->GetViewAspect();
+            *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), aAny );
+            pStates++;
 
-        // TODO: aspect
+            // TODO: aspect
+        }
     }
 }
 
@@ -551,7 +534,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         if( (rExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
         {
             OUString sURL( sEmbeddedObjectProtocol );
-            sURL += rOLEObj.GetName();
+            sURL += pInfo->GetStorageName();
             sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rExport, sURL, sal_False );
         }

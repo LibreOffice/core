@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:00:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ class SwNavigationConfig;
 class SwTransferable;
 class SwToolbarConfigItem;
 class SwAttrPool;
-namespace svx{ class ColorConfig;}
+namespace svtools{ class ColorConfig;}
 class SvtAccessibilityOptions;
 
 struct SwDBData;
@@ -135,7 +135,7 @@ class SwModule: public SwModuleDummy , public SfxListener
     SwToolbarConfigItem*pToolbarConfig;     //fuer gestackte Toolbars, welche
     SwToolbarConfigItem*pWebToolbarConfig;  //war sichtbar?
     SwDBConfig*         pDBConfig;
-    svx::ColorConfig*   pColorConfig;
+    svtools::ColorConfig*   pColorConfig;
     SvtAccessibilityOptions* pAccessibilityOptions;
 
     SfxErrorHandler*    pErrorHdl;
@@ -164,8 +164,6 @@ class SwModule: public SwModuleDummy , public SfxListener
 
     // Hint abfangen fuer DocInfo
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    // form letter execution
-    void    GenerateFormLetter(BOOL bUseCurrentDocument);
 
 protected:
     // Briefumschlaege, Etiketten
@@ -205,7 +203,6 @@ public:
     void                ExecOther(SfxRequest &);    // Felder, Formel ..
     void                ExecViewOptions(SfxRequest &);
     void                ExecWizzard(SfxRequest &);
-    void                ExecDB(SfxRequest &);       // DBManager
 
     // Benutzereinstellungen modifizieren
     const SwMasterUsrPref *GetUsrPref(sal_Bool bWeb) const;
@@ -226,7 +223,7 @@ public:
     SwToolbarConfigItem*GetToolbarConfig()      { return pToolbarConfig;    }
     SwToolbarConfigItem*GetWebToolbarConfig()   { return pWebToolbarConfig; }
     SwDBConfig*         GetDBConfig();
-    svx::ColorConfig&   GetColorConfig();
+    svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions&    GetAccessibilityOptions();
 
     // Ueber Sichten iterieren

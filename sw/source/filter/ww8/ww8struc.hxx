@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8STRUC_HXX
@@ -543,7 +542,6 @@ struct WW8_ANLD
     BYTE  rgchAnld[32]; // 0x14 characters displayed before/after autonumber
 };
 
-
 struct WW8_OLST
 {
     WW8_ANLV rganlv[9]; // 0    an array of 9 ANLV structures (heading levels)
@@ -554,6 +552,55 @@ struct WW8_OLST
     BYTE rgch[64];      // 0x94 array of 64 chars       text before/after number
 };
 // cbOLST is 212(decimal), D4(hex).
+
+#if 0
+struct ANLV
+{
+    ALNV();
+    void ReadFromMem(const sal_uInt8 *&pData);
+    sal_uInt8 nfc;
+    sal_uInt8 cbTextBefore;
+    sal_uInt8 cbTextAfter;
+    sal_uInt8 jc : 2;
+    sal_uInt8 fPrev : 1;
+    sal_uInt8 fHang : 1;
+    sal_uInt8 fSetBold : 1;
+    sal_uInt8 fSetItalic : 1;
+    sal_uInt8 fSetSmallCaps : 1;
+    sal_uInt8 fSetCaps : 1;
+    sal_uInt8 fSetStrike : 1;
+    sal_uInt8 fSetKul : 1;
+    sal_uInt8 fPrevSpace : 1;
+    sal_uInt8 fBold : 1;
+    sal_uInt8 fItalic : 1;
+    sal_uInt8 fSmallCaps : 1;
+    sal_uInt8 fCaps : 1;
+    sal_uInt8 fStrike : 1;
+    sal_uInt8 kul : 3;
+    sal_uInt8 ico : 5;
+    sal_uInt16 ftc;
+    sal_uInt16 hps;
+    sal_uInt16 iStartAt;
+    sal_uInt16 dxaIndent;
+    sal_uInt16 dxaSpace;
+};
+
+struct OLST
+{
+    OLST();
+    void ReadFromMem(const sal_uInt8 *&pData, bool bVer67)
+    ANLV rganlv[9];         // 0 an array of 9 ANLV structures (heading levels)
+    sal_uInt8 fRestartHdr;  // when ==1, restart heading on section break
+    sal_uInt8 fSpareOlst2;  // reserved
+    sal_uInt8 fSpareOlst3;  // reserved
+    sal_uInt8 fSpareOlst4;  // reserved
+    sal_uInt16 rgxch[64];   // array of 64 chars text before/after number
+#if 0
+    sal_uInt16 rgxch[32];   // array of 32 chars text before/after number
+    sal_uInt8 rgch[64];     // array of 64 chars text before/after number
+#endif
+};
+#endif
 
 struct WW8_FDOA
 {
@@ -853,6 +900,83 @@ struct WW8_TXBXS
 #   pragma pack()
 #endif
 
+struct SEPr
+{
+    SEPr();
+    sal_uInt8 bkc;
+    sal_uInt8 fTitlePage;
+    sal_Int8 fAutoPgn;
+    sal_uInt8 nfcPgn;
+    sal_uInt8 fUnlocked;
+    sal_uInt8 cnsPgn;
+    sal_uInt8 fPgnRestart;
+    sal_uInt8 fEndNote;
+    sal_Int8 lnc;
+    sal_Int8 grpfIhdt;
+    sal_uInt16 nLnnMod;
+    sal_Int32 dxaLnn;
+    sal_Int16 dxaPgn;
+    sal_Int16 dyaPgn;
+    sal_Int8 fLBetween;
+    sal_Int8 vjc;
+    sal_uInt16 dmBinFirst;
+    sal_uInt16 dmBinOther;
+    sal_uInt16 dmPaperReq;
+#if 0
+    28  1C  brcTop                    BRC                   top page border
+
+    32  20  brcLeft                   BRC                   left page border
+
+    36  24  brcBottom                 BRC                   bottom page border
+
+    40  28  brcRight                  BRC                   right page border
+#endif
+    sal_Int16 fPropRMark;
+    sal_Int16 ibstPropRMark;
+    sal_Int32 dttmPropRMark;        //DTTM
+    sal_Int32 dxtCharSpace;
+    sal_Int32 dyaLinePitch;
+    sal_uInt16 clm;
+    sal_Int16 reserved1;
+    sal_uInt8 dmOrientPage;
+    sal_uInt8 iHeadingPgn;
+    sal_uInt16 pgnStart;
+    sal_Int16 lnnMin;
+    sal_uInt16 wTextFlow;
+    sal_Int16 reserved2;
+    sal_uInt16 pgbApplyTo:3;
+    sal_uInt16 pgbPageDepth:2;
+    sal_Int16 pgbOffsetFrom:3;
+    sal_Int16 :8;
+    sal_uInt32 xaPage;
+    sal_uInt32 yaPage;
+    sal_uInt32 xaPageNUp;
+    sal_uInt32 yaPageNUp;
+    sal_uInt32 dxaLeft;
+    sal_uInt32 dxaRight;
+    sal_Int32 dyaTop;
+    sal_Int32 dyaBottom;
+    sal_uInt32 dzaGutter;
+    sal_uInt32 dyaHdrTop;
+    sal_uInt32 dyaHdrBottom;
+    sal_Int16 ccolM1;
+    sal_Int8 fEvenlySpaced;
+    sal_Int8 reserved3;
+    sal_uInt8 fBiDi;
+    sal_uInt8 fFacingCol;
+    sal_uInt8 fRTLGutter;
+    sal_uInt8 fRTLAlignment;
+    sal_Int32 dxaColumns;
+    sal_Int32 rgdxaColumnWidthSpacing[89];
+    sal_Int32 dxaColumnWidth;
+    sal_uInt8 dmOrientFirst;
+    sal_uInt8 fLayout;
+    sal_Int16 reserved4;
+#if 0
+    OLST olstAnm;       //currently unused
+#endif
+};
+
 namespace wwUtility
 {
     sal_uInt32 BGRToRGB(sal_uInt32 nColour);
@@ -860,3 +984,5 @@ namespace wwUtility
 };
 
 #endif
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

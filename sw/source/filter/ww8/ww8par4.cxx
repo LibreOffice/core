@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -594,7 +593,10 @@ private:
 void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
 {
     SwPaM aRegion(pEntry->nMkNode);
-    if (pEntry->MakeRegion(&mrDoc, aRegion, true))
+    if (
+         pEntry->MakeRegion(&mrDoc, aRegion, true) &&
+         (*aRegion.GetPoint() != *aRegion.GetMark())
+       )
     {
         mrDoc.SetRedlineMode(REDLINE_ON | REDLINE_SHOW_INSERT |
             REDLINE_SHOW_DELETE);
@@ -681,7 +683,7 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
     // pointing to the very same char position as our SprmCFRMark[Del]
-    if (!pPlcxMan)
+    if (!pPlcxMan || bIgnoreText)
         return;
     const BYTE* pSprmCIbstRMark;
     const BYTE* pSprmCDttmRMark;
@@ -716,8 +718,10 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
         }
     }
 
+#if 0
     ASSERT(nLen < 0 || (pSprmCIbstRMark || pSprmCDttmRMark),
         "The wheels have fallen off revision mark import");
+#endif
 
     if (nLen < 0)
         mpRedlineStack->close(*pPaM->GetPoint(), eType);
@@ -732,7 +736,9 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
             if (const WW8AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
             {
                 UINT32 nWWDate = pSprmCDttmRMark ? SVBT32ToLong(pSprmCDttmRMark): 0;
+#if 0
                 ASSERT(nWWDate, "Date is 0, this will cause trouble!");
+#endif
 
                 DateTime aStamp(WW8ScannerBase::WW8DTTM2DateTime(nWWDate));
                 USHORT nAutorNo = pAuthor->nOurId;
@@ -765,3 +771,5 @@ void SwWW8ImplReader::Read_CPropRMark(USHORT , const BYTE* pData, short nLen)
     // 4 bytes - chp.dttmPropRMark;
     Read_CRevisionMark( REDLINE_FORMAT, pData, nLen );
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

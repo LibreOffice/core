@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:17:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,9 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
         COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
         COMMON_HYPERLINK_PROPERTIES \
-        { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
+        { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},\
+        { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  CPPU_E2T(CPPUTYPE_OUSTRINGS),     PropertyAttribute::MAYBEVOID,     0},
+
 
 #define COMMON_CRSR_PARA_PROPERTIES_2 \
         COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
@@ -667,6 +669,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_AUTO_UPDATE), FN_UNO_IS_AUTO_UPDATE, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_DISPLAY_NAME), FN_UNO_DISPLAY_NAME, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_CATEGORY), FN_UNO_CATEGORY, CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE , 0 },
+                    { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParaStyleMap;
@@ -679,6 +682,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },
                     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},
                     { SW_PROP_NMID(UNO_NAME_BACK_COLOR), RES_BACKGROUND,            CPPU_E2T(CPPUTYPE_INT32),           PROPERTY_NONE ,MID_BACK_COLOR        },
+                    { SW_PROP_NMID(UNO_NAME_BACK_COLOR_R_G_B), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE ,MID_BACK_COLOR_R_G_B},    \
+                    { SW_PROP_NMID(UNO_NAME_BACK_COLOR_TRANSPARENCY), RES_BACKGROUND,      CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE ,MID_BACK_COLOR_TRANSPARENCY},    \
                 //  { SW_PROP_NMID(UNO_NAME_CHAIN_NEXT_NAME), RES_CHAIN,                CPPU_E2T(CPPUTYPE_OUSTRING),            PROPERTY_NONE ,MID_CHAIN_NEXTNAME},
                 //  { SW_PROP_NMID(UNO_NAME_CHAIN_PREV_NAME), RES_CHAIN,                CPPU_E2T(CPPUTYPE_OUSTRING),            PROPERTY_NONE ,MID_CHAIN_PREVNAME},
                 /*not impl*/    { SW_PROP_NMID(UNO_NAME_CLIENT_MAP), RES_URL,               CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE ,MID_URL_CLIENTMAP         },
@@ -1180,6 +1185,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aEmbeddedPropertyMap_Impl[] =
                 {
                     COMMON_FRAME_PROPERTIES
+                    { SW_PROP_NMID(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_SURROUND_CONTOUR },
+                    { SW_PROP_NMID(UNO_NAME_CONTOUR_OUTSIDE), RES_SURROUND, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE},
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, CPPU_E2T(CPPUTYPE_PNTSEQSEQ), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
@@ -2317,14 +2324,42 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             }
             break;
             case PROPERTY_MAP_TEXT :
+            {
                 static SfxItemPropertyMap aTextMap[] =
                 {
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextMap;
-
+            }
             break;
+            case PROPERTY_MAP_MAILMERGE :
+            {
+                static SfxItemPropertyMap aMailMergeMap[] =
+                {
+                    { SW_PROP_NMID(UNO_NAME_SELECTION),             WID_SELECTION,              CPPU_E2T(CPPUTYPE_SEQANY),      PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_RESULT_SET),            WID_RESULT_SET,             CPPU_E2T(CPPUTYPE_REFRESULTSET), PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_CONNECTION),            WID_CONNECTION,             CPPU_E2T(CPPUTYPE_REFCONNECTION), PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_MODEL),                 WID_MODEL,                  CPPU_E2T(CPPUTYPE_REFMODEL),    PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID(UNO_NAME_DATA_SOURCE_NAME),      WID_DATA_SOURCE_NAME,       CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_DATA_COMMAND),          WID_DATA_COMMAND,           CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_FILTER),                WID_FILTER,                 CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_DOCUMENT_URL),          WID_DOCUMENT_URL,           CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_OUTPUT_URL),            WID_OUTPUT_URL,             CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_DATA_COMMAND_TYPE),     WID_DATA_COMMAND_TYPE,      CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_OUTPUT_TYPE),           WID_OUTPUT_TYPE,            CPPU_E2T(CPPUTYPE_INT16),       PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_ESCAPE_PROCESSING),     WID_ESCAPE_PROCESSING,      CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SINGLE_PRINT_JOBS),     WID_SINGLE_PRINT_JOBS,      CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_FILE_NAME_FROM_COLUMN), WID_FILE_NAME_FROM_COLUMN,  CPPU_E2T(CPPUTYPE_BOOLEAN),     PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_FILE_NAME_PREFIX),      WID_FILE_NAME_PREFIX,       CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aMailMergeMap;
+            }
+            break;
+
+            default:
+                DBG_ERROR( "unexpected property map ID" );
         }
         Sort(nPropertyId);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ void SwHTMLParser::EndScript()
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
-    if( bInsSrcIntoFld )
+    if( bInsSrcIntoFld && !bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
             (SwScriptFieldType*)pDoc->GetSysFldType( RES_SCRIPTFLD );

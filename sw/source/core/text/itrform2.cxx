@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 14:44:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,9 +675,10 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // offset:
         // 1. Underlined portions due to special underline feature
         // 2. Right Tab
-        // 3. Multiportions
-        // 4. DropCaps
-        // 5. Grid Mode
+        // 3. BidiPortions
+        // 4. other Multiportions
+        // 5. DropCaps
+        // 6. Grid Mode
         else if ( ( ! rInf.GetPaintOfst() || nUnderLineStart < rInf.GetPaintOfst() ) &&
                   // 1. Underlined portions
                   nUnderLineStart &&
@@ -694,11 +695,13 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         else if (  ! rInf.GetPaintOfst() &&
                    // 2. Right Tab
                    ( ( pPor->InTabGrp() && !pPor->IsTabLeftPortion() ) ||
-                   // 3. Multi Portion and 4. Drop Caps
-                     ( ( pPor->IsDropPortion() || pPor->IsMultiPortion() )&&
+                   // 3. BidiPortions
+                     ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() ) ||
+                   // 4. Multi Portion and 5. Drop Caps
+                     ( ( pPor->IsDropPortion() || pPor->IsMultiPortion() ) &&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
                        rInf.GetReformatStart() <= rInf.GetIdx() + pPor->GetLen() )
-                   // 5. Grid Mode
+                   // 6. Grid Mode
                      || ( bHasGrid && SW_CJK != pFnt->GetActual() )
                    )
                 )

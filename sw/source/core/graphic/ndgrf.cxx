@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: od $ $Date: 2002-09-17 13:47:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
-    bInSwapIn = bChgTwipSize = bLoadLowResGrf = bFrameInPaint =
-        bScaleImageMap = FALSE;
+    bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
+        bFrameInPaint = bScaleImageMap = FALSE;
     bGrafikArrived = TRUE;
     ReRead( rGrfName, rFltName, pGraphic, 0, FALSE );
 }
@@ -179,8 +179,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
     if( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
         aGrfObj.SetSwapState();
-    bInSwapIn = bChgTwipSize = bLoadLowResGrf = bFrameInPaint =
-        bScaleImageMap = FALSE;
+    bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel= bLoadLowResGrf =
+        bFrameInPaint = bScaleImageMap = FALSE;
     bGrafikArrived = TRUE;
 }
 
@@ -199,8 +199,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     Graphic aGrf; aGrf.SetDefaultType();
     aGrfObj.SetGraphic( aGrf, rGrfName );
 
-    bInSwapIn = bChgTwipSize = bLoadLowResGrf = bFrameInPaint =
-        bScaleImageMap = FALSE;
+    bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
+        bFrameInPaint = bScaleImageMap = FALSE;
     bGrafikArrived = TRUE;
 
     InsertLink( rGrfName, rFltName );

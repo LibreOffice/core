@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 08:16:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ TabDialog DLG_FRM_STD
                 Text[ chinese_traditional ] = "æ›è¡Œ";
                 Text[ arabic ] = "ÇáÊİÇİ";
                 Text[ greek ] = "Áíáäßğëùóç";
-                Text[ korean ] = "ìˆœí™˜";
+                Text[ korean ] = "ë¬¸ì¥ ë°°ì¹˜";
                 Text[ turkish ] = "Metin dağılımı";
                 Text[ catalan ] = "Ajusta";
                 Text[ thai ] = "à¸•à¸±à¸”";
@@ -212,7 +212,7 @@ TabDialog DLG_FRM_STD
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ spanish ] = "Borde" ;
+                Text [ spanish ] = "Bordes" ;
                 Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
@@ -433,7 +433,7 @@ TabDialog DLG_FRM_GRF
                 Text[ chinese_traditional ] = "æ›è¡Œ";
                 Text[ arabic ] = "ÇáÊİÇİ";
                 Text[ greek ] = "Áíáäßğëùóç";
-                Text[ korean ] = "ìˆœí™˜";
+                Text[ korean ] = "ë¬¸ì¥ ë°°ì¹˜";
                 Text[ turkish ] = "Metin dağılımı";
                 Text[ catalan ] = "Ajusta";
                 Text[ thai ] = "à¸•à¸±à¸”";
@@ -490,7 +490,7 @@ TabDialog DLG_FRM_GRF
                 Text[ chinese_traditional ] = "åœ–å½¢";
                 Text[ arabic ] = "ÕæÑÉ";
                 Text[ greek ] = "Ãñáöéêü";
-                Text[ korean ] = "ê·¸ë˜í”½";
+                Text[ korean ] = "ê·¸ë¦¼";
                 Text[ turkish ] = "Grafik";
                 Text[ catalan ] = "Imatge";
                 Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
@@ -533,7 +533,7 @@ TabDialog DLG_FRM_GRF
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ spanish ] = "Borde" ;
+                Text [ spanish ] = "Bordes" ;
                 Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
@@ -617,7 +617,7 @@ TabDialog DLG_FRM_GRF
     Text[ chinese_traditional ] = "åœ–å½¢";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ greek ] = "Ãñáöéêü";
-    Text[ korean ] = "ê·¸ë˜í”½";
+    Text[ korean ] = "ê·¸ë¦¼";
     Text[ turkish ] = "Grafik";
     Text[ catalan ] = "Imatge";
     Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
@@ -736,7 +736,7 @@ TabDialog DLG_FRM_OLE
                 Text[ chinese_traditional ] = "æ›è¡Œ";
                 Text[ arabic ] = "ÇáÊİÇİ";
                 Text[ greek ] = "Áíáäßğëùóç";
-                Text[ korean ] = "ìˆœí™˜";
+                Text[ korean ] = "ë¬¸ì¥ ë°°ì¹˜";
                 Text[ turkish ] = "Metin dağılımı";
                 Text[ catalan ] = "Ajusta";
                 Text[ thai ] = "à¸•à¸±à¸”";
@@ -779,7 +779,7 @@ TabDialog DLG_FRM_OLE
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ spanish ] = "Borde" ;
+                Text [ spanish ] = "Bordes" ;
                 Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
@@ -955,7 +955,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "ç›¸å°çš„(~I)";
         Text[ arabic ] = "äÓÈí";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "ìƒëŒ€(~I)";
+        Text[ korean ] = "ë¹„ë¡€í•˜ì—¬(~I)";
         Text[ turkish ] = "~Göreceli";
         Text[ catalan ] = "Relat~iu";
         Text[ finnish ] = "Suhteellinen";
@@ -980,7 +980,7 @@ TabPage TP_FRM_STD
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "H~eight" ;
         Text[ chinese_simplified ] = "é«˜åº¦(~E)";
-        Text[ russian ] = "Âûñîòà";
+        Text[ russian ] = "Â~ûñîòà";
         Text[ polish ] = "Wys.";
         Text[ japanese ] = "é«˜ã•(~E)";
         Text[ chinese_traditional ] = "é«˜åº¦(~E)";
@@ -1031,7 +1031,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "ç›¸å°çš„(~L)";
         Text[ arabic ] = "äÓÈí";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "ìƒëŒ€(~L)";
+        Text[ korean ] = "ë¹„ë¡€í•˜ì—¬(~L)";
         Text[ turkish ] = "G~öreceli";
         Text[ catalan ] = "Re~latiu";
         Text[ finnish ] = "Suhteellinen";
@@ -1044,12 +1044,12 @@ TabPage TP_FRM_STD
         TabStop = TRUE ;
         Text = "~Abgleich" ;
         Text [ ENGLISH ] = "~Match" ;
-        Text [ english_us ] = "~Keep proportional" ;
+        Text [ english_us ] = "~Keep ratio" ;
         Text [ italian ] = "Proporzionale" ;
-        Text [ spanish ] = "Igualar proporciones" ;
+        Text [ spanish ] = "Proporcional" ;
         Text [ french ] = "Proportionnel" ;
         Text [ dutch ] = "~Proporties synchroniseren" ;
-        Text [ swedish ] = "Anpassa ~proportioner" ;
+        Text [ swedish ] = "Anpassa ~proportionellt" ;
         Text [ danish ] = "Bevar ~proportioner" ;
         Text [ portuguese_brazilian ] = "Abgle~ich" ;
         Text [ portuguese ] = "Pr~oporcional" ;
@@ -1057,10 +1057,10 @@ TabPage TP_FRM_STD
         Text[ russian ] = "Ïğîïîğöèîíàëüíî";
         Text[ polish ] = "Prporcjonalnie";
         Text[ japanese ] = "æ¯”ç‡ã‚’ä¿ã¤(~K)";
-        Text[ chinese_traditional ] = "ä¿æŒæ¯”åˆ—(~K)";
+        Text[ chinese_traditional ] = "åŒæ­¥åŒ–(~K)";
         Text[ arabic ] = "ÊÒÇãä";
         Text[ greek ] = "ĞñïóáñìïãŞ áíáëïãéêÜ";
-        Text[ korean ] = "ë¹„ìœ¨ ì¡°ì •(~K)";
+        Text[ korean ] = "ë¹„ìœ¨ì„ ê· ë“±í•˜ê²Œ ì¡°ì •(~K)";
         Text[ turkish ] = "Orant~ı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Prop~orcional";
@@ -1076,15 +1076,15 @@ TabPage TP_FRM_STD
         Text[ english_us ] = "AutoSize";
         Text[ swedish ] = "Au~tomatisk storlek";
         Text[ japanese ] = "ã‚µã‚¤ã‚ºè‡ªå‹•èª¿æ•´";
-        Text[ korean ] = "ìë™ í¬ê¸° ì¡°ì ˆ";
+        Text[ korean ] = "í¬ê¸° ìë™ ì¡°ì ˆ";
         Text[ chinese_simplified ] = "è‡ªåŠ¨è°ƒæ•´å¤§å°(~G)";
         Text[ chinese_traditional ] = "è‡ªå‹•èª¿æ•´å¤§å°";
         Text[ portuguese ] = "Alt~ura automática";
-        Text[ russian ] = "Àâòîì. âûñîòà";
+        Text[ russian ] = "Àâòîïîäáîğ";
         Text[ greek ] = "Áõôüìáôï ıøïò";
         Text[ dutch ] = "Automatische h~oogte";
         Text[ french ] = "Hauteur automatique";
-        Text[ spanish ] = "Altura automática";
+        Text[ spanish ] = "~Tamaño automático";
         Text[ finnish ] = "Automaattinen korkeus";
         Text[ italian ] = "Altezza. ~auto";
         Text[ danish ] = "Automatisk h~øjde";
@@ -1317,7 +1317,7 @@ TabPage TP_FRM_STD
         Text [ french ] = "Ancrage" ;
         Text [ swedish ] = "Förankring" ;
         Text [ dutch ] = "Verankering" ;
-        Text [ spanish ] = "Anclaje" ;
+        Text [ spanish ] = "Ancla" ;
         Text [ english_us ] = "Anchor" ;
         Text[ chinese_simplified ] = "é”å®š";
         Text[ russian ] = "ßêîğü";
@@ -1326,7 +1326,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "é–å®š";
         Text[ arabic ] = "ÅÑÓÇÁ";
         Text[ greek ] = "Áãêıñùóç";
-        Text[ korean ] = "ê³ ì •";
+        Text[ korean ] = "ê¸°ì¤€ ìœ„ì¹˜";
         Text[ turkish ] = "Sabitleme";
         Text[ catalan ] = "Ancoratge";
         Text[ thai ] = "à¸ªà¸¡à¸­";
@@ -1355,7 +1355,7 @@ TabPage TP_FRM_STD
         Text [ spanish ] = "Hori~zontal" ;
         Text [ english_us ] = "Hori~zontal" ;
         Text[ chinese_simplified ] = "æ°´å¹³æ–¹å‘(~Z)";
-        Text[ russian ] = "Ïî ãîğèçîíò.";
+        Text[ russian ] = "Ãîğèçîíòàëüíî";
         Text[ polish ] = "W poziomie";
         Text[ japanese ] = "æ¨ª(~Z)";
         Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘(~Z)";
@@ -1505,7 +1505,7 @@ TabPage TP_FRM_STD
         Text [ spanish ] = "~Vertical" ;
         Text [ english_us ] = "~Vertical" ;
         Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘(~V)";
-        Text[ russian ] = "Ïî âåğòèêàëè";
+        Text[ russian ] = "Âåğòèêàëüíî";
         Text[ polish ] = "W pionie";
         Text[ japanese ] = "ç¸¦(~V)";
         Text[ chinese_traditional ] = "å‚ç›´æ–¹å‘(~V)";
@@ -1672,7 +1672,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "æ·å¾‘";
         Text[ arabic ] = "ÇÑÊÈÇØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "ì—°ê²°";
+        Text[ korean ] = "ë§í¬";
         Text[ turkish ] = "Bağlantı";
         Text[ catalan ] = "Enllaç";
         Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
@@ -1785,7 +1785,7 @@ TabPage TP_GRF_EXT
         Text [ french ] = "À la verticale" ;
         Text [ swedish ] = "~vertikalt" ;
         Text [ dutch ] = "verti~caal" ;
-        Text [ spanish ] = "~Vertical" ;
+        Text [ spanish ] = "~Verticalmente" ;
         Text [ english_us ] = "~Vertically" ;
         Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘(~V)";
         Text[ russian ] = "âåğòèêàëüíî";
@@ -1812,7 +1812,7 @@ TabPage TP_GRF_EXT
         Text[ greek ] = "ïñé~æüíôéá";
         Text[ dutch ] = "~horizontaal";
         Text[ french ] = "À l'horizontale";
-        Text[ spanish ] = "~Horizontal";
+        Text[ spanish ] = "~Horizontalmente";
         Text[ italian ] = "~In orizzontale su";
         Text[ danish ] = "vandret";
         Text[ swedish ] = "h~orisontalt";
@@ -1848,7 +1848,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "na wszystkich stronach";
         Text[ portuguese_brazilian ] = "on all pages";
         Text[ japanese ] = "ã™ã¹ã¦ã®ãƒšãƒ¼ã‚¸";
-        Text[ korean ] = "ëª¨ë“  í˜ì´ì œì—";
+        Text[ korean ] = "ëª¨ë“  í˜ì´ì§€ì—";
         Text[ chinese_simplified ] = "å…¨éƒ¨é¡µé¢";
         Text[ chinese_traditional ] = "åœ¨æ‰€æœ‰é é¢ä¸Š";
         Text[ turkish ] = "on all pages";
@@ -1877,7 +1877,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "na parzystych stronach";
         Text[ portuguese_brazilian ] = "on even pages";
         Text[ japanese ] = "å·¦ãƒšãƒ¼ã‚¸";
-        Text[ korean ] = "ì™¼ìª½ì—";
+        Text[ korean ] = "ì™¼ìª½ í˜ì´ì§€";
         Text[ chinese_simplified ] = "åœ¨å·¦æ–¹é¡µé¢";
         Text[ chinese_traditional ] = "åœ¨å·¦é ä¸Š";
         Text[ turkish ] = "on even pages";
@@ -1906,7 +1906,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "na prawych stronach";
         Text[ portuguese_brazilian ] = "on odd pages";
         Text[ japanese ] = "å³ãƒšãƒ¼ã‚¸";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½ì—";
+        Text[ korean ] = "ì˜¤ë¥¸ìª½ í˜ì´ì§€";
         Text[ chinese_simplified ] = "åœ¨å³æ–¹é¡µé¢";
         Text[ chinese_traditional ] = "åœ¨å³é ä¸Š";
         Text[ turkish ] = "on odd pages";
@@ -2066,14 +2066,14 @@ TabPage TP_FRM_URL
         Text [ dutch ] = "~Frame" ;
         Text [ english_us ] = "Frame" ;
         Text [ italian ] = "~Frame" ;
-        Text [ spanish ] = "Frame" ;
+        Text [ spanish ] = "~Marco" ;
         Text [ french ] = "~Frame" ;
         Text [ swedish ] = "R~am" ;
         Text [ danish ] = "Frame" ;
         Text [ portuguese_brazilian ] = "~Frame" ;
         Text [ portuguese ] = "~Frame" ;
         Text[ chinese_simplified ] = "æ¡†å¯¹è±¡";
-        Text[ russian ] = "Âğåçêà";
+        Text[ russian ] = "Ôğåéì";
         Text[ polish ] = "Frame";
         Text[ japanese ] = "ãƒ•ãƒ¬ãƒ¼ãƒ ";
         Text[ chinese_traditional ] = "è¨Šæ¡†";
@@ -2105,7 +2105,7 @@ TabPage TP_FRM_URL
         Text [ swedish ] = "~Välj ut..." ;
         Text [ danish ] = "~Gennemse..." ;
         Text [ italian ] = "~Sfoglia..." ;
-        Text [ spanish ] = "Selecc~ionar..." ;
+        Text [ spanish ] = "~Buscar..." ;
         Text [ french ] = "Sélectionner..." ;
         Text [ dutch ] = "Selec~teren..." ;
         Text [ portuguese ] = "~Seleccionar..." ;
@@ -2170,7 +2170,7 @@ TabPage TP_FRM_URL
         Text[ polish ] = "~Server Site Image Map";
         Text[ portuguese_brazilian ] = "~Server";
         Text[ japanese ] = "ã‚µãƒ¼ãƒãƒ¼ã‚µã‚¤ãƒˆ ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒãƒƒãƒ—(~S)";
-        Text[ korean ] = "ì„œë²„ ì‹¸ì´íŠ¸ ì´ë¯¸ì§€ë§µ(~S)";
+        Text[ korean ] = "ì„œë²„ ì‚¬ì´ë“œ ì´ë¯¸ì§€ë§µ(~S)";
         Text[ chinese_simplified ] = "æœåŠ¡å™¨ç«¯é¡µé¢å›¾åƒæ˜ å°„(~S)";
         Text[ chinese_traditional ] = "ä¼ºæœå™¨é é¢å½±åƒæ˜ å°„(~S)";
         Text[ turkish ] = "~Sunucu";
@@ -2334,7 +2334,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "ä¸Šä¸€å€‹æ·å¾‘(~P)";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "Ğñïçãïıìåíï";
-        Text[ korean ] = "ì„ ë¡€(~P)";
+        Text[ korean ] = "ì´ì „ ì—°ê²°(~P)";
         Text[ turkish ] = "~Önceki";
         Text[ catalan ] = "~Anterior";
         Text[ finnish ] = "~Edellinen linkki";
@@ -2462,7 +2462,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹æ·å¾‘(~N)";
         Text[ arabic ] = "ÇááÇÍŞ";
         Text[ greek ] = "Åğüìåíï";
-        Text[ korean ] = "í›„ì„(~N)";
+        Text[ korean ] = "ë‹¤ìŒ ë§í¬(~N)";
         Text[ turkish ] = "S~onraki";
         Text[ catalan ] = "~Enllaç següent";
         Text[ finnish ] = "Seuraava linkki";
@@ -2671,7 +2671,7 @@ TabPage TP_FRM_ADD
         Text [ dutch ] = "~Grootte" ;
         Text [ portuguese ] = "~Tamanho" ;
         Text[ chinese_simplified ] = "å¤§å°(~S)";
-        Text[ russian ] = "Ğàçìåğ";
+        Text[ russian ] = "Ğàç~ìåğ";
         Text[ polish ] = "Rozmiar";
         Text[ japanese ] = "ã‚µã‚¤ã‚º(~S)";
         Text[ chinese_traditional ] = "å¤§å°(~S)";
@@ -2734,7 +2734,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "å¯ç·¨è¼¯å”¯è®€æ–‡ä»¶(~E)";
         Text[ arabic ] = "ŞÇÈá ááÊÍÑíÑ İí ãÓÊäÏ ááŞÑÇÁÉ İŞØ";
         Text[ greek ] = "Äõíáôüôçôá ~åğåîåñãáóßáò óå İããñáöï ôığïõ \"Ìüíï ãéá áíÜãíùóç\"";
-        Text[ korean ] = "ì½ê¸° ì „ìš© ë¬¸ì„œì—ì„œ í¸ì§‘ê°€ëŠ¥(~E)";
+        Text[ korean ] = "ì½ê¸° ì „ìš© ë¬¸ì„œì—ì„œ í¸ì§‘ ê°€ëŠ¥(~E)";
         Text[ turkish ] = "Salt okunur belge içinde düzenlenebilir";
         Text[ catalan ] = "Es pot editar en documents de només lectura";
         Text[ finnish ] = "~Muokattavissa vain luku -asiakirjassa";
@@ -2790,7 +2790,7 @@ TabPage TP_FRM_ADD
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Additional Setting";
         Text[ japanese ] = "å±æ€§";
-        Text[ korean ] = "ì¶”ê°€ ì„¤ì •";
+        Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
         Text[ turkish ] = "Additional Setting";
@@ -2812,8 +2812,8 @@ TabPage TP_FRM_ADD
         Text[ russian ] = "~Text flow";
         Text[ greek ] = "~Text flow";
         Text[ dutch ] = "~Text flow";
-        Text[ french ] = "Enchaînements";
-        Text[ spanish ] = "Flujo del texto";
+        Text[ french ] = "Orientation du texte";
+        Text[ spanish ] = "~Dirección de escritura";
         Text[ finnish ] = "~Text flow";
         Text[ italian ] = "Testo";
         Text[ danish ] = "~Text flow";
@@ -2892,12 +2892,12 @@ TabPage TP_FRM_ADD
          < "Vänster-till-höger (horisontellt)" ; 0; > ;
         < "Höger-till-vänster (horisontellt)" ; 1; > ;
         < "Höger-till-vänster (vertikalt)" ; 2; > ;
-        < "Använd det överordnade objektets inställning" ; 4; > ;
+        < "Använd det överordnade objektets inställningar" ; 4; > ;
     };
     StringList [ japanese ] =
     {
          < "å·¦ã‹ã‚‰å³ã¸ (æ¨ªæ›¸ã)" ; 0; > ;
-        < "å³ã‹ã‚‰å·¦ã¸ (ç¸¦æ›¸ã)" ; 1; > ;
+        < "å³ã‹ã‚‰å·¦ã¸ (æ¨ªæ›¸ã)" ; 1; > ;
         < "å³ã‹ã‚‰å·¦ã¸ (ç¸¦æ›¸ã)" ; 2; > ;
         < "å‘¨ã‚Šã®ãƒ†ã‚­ã‚¹ãƒˆã®æ–‡å­—æ–¹å‘ã«åˆã‚ã›ã‚‹" ; 4; > ;
     };
@@ -2906,7 +2906,7 @@ TabPage TP_FRM_ADD
          < "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ(ê°€ë¡œ)" ; 0; > ;
         < "ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ (ê°€ë¡œ)" ; 1; > ;
         < "ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ (ì„¸ë¡œ)" ; 2; > ;
-        < "ìƒìœ„ ê°œì²´ì˜ ì„¤ì • ì ìš©" ; 4; > ;
+        < "í˜„ì¬ ë¬¸ì ë°©í–¥ì˜ ì„¤ì •ì„ ì ìš©" ; 4; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -2931,4 +2931,19 @@ TabPage TP_FRM_ADD
     };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

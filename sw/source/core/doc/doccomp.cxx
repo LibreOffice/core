@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-11 15:24:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,6 @@
 #endif
 #ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
-#endif
-
-#ifdef JP_DUMP
-#include <stdio.h>
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
-#endif
 #endif
 
 #ifndef _DOC_HXX
@@ -200,11 +193,6 @@ public:
             { return aLines.GetObject( nLine ); }
     void InsertLine( CompareLine* pLine )
         { aLines.Insert( pLine, LIST_APPEND ); }
-
-#ifdef JP_DUMP
-    // zum Debuggen!
-    virtual void Dump();
-#endif
 };
 
 class Hash
@@ -305,12 +293,6 @@ void CompareData::SetIndex( ULONG nLine, ULONG nIndex )
     if( nLine < aLines.Count() )
         pIndex[ nLine ] = nIndex;
 }
-
-#ifdef JP_DUMP
-void CompareData::Dump()
-{
-}
-#endif
 
 void CompareData::SetChanged( ULONG nLine, BOOL bFlag )
 {
@@ -719,9 +701,6 @@ Compare::CompareSequence::CompareSequence(
     pFDiag = pMemory + ( rMD2.GetCount() + 1 );
     pBDiag = pMemory + ( nSize + rMD2.GetCount() + 1 );
 
-#ifdef JP_DUMP
-    rD1.Dump(), rD2.Dump();
-#endif
     Compare( 0, rMD1.GetCount(), 0, rMD2.GetCount() );
 }
 
@@ -977,11 +956,6 @@ public:
     virtual ~SwCompareData();
 
     void SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc );
-
-#ifdef JP_DUMP
-    // zum Debuggen!
-    virtual void Dump();
-#endif
 };
 
 // ----------------------------------------------------------------
@@ -1576,34 +1550,6 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
     }
 }
 
-#ifdef JP_DUMP
-void SwCompareData::Dump()
-{
-    static int nFirst = 1;
-    SvFileStream aStrm( "d:\\tmp\\compare.dmp", nFirst
-                            ? STREAM_WRITE | STREAM_TRUNC
-                            : STREAM_WRITE | STREAM_NOCREATE );
-    if( !nFirst )
-        aStrm.Seek( STREAM_SEEK_TO_END );
-
-    nFirst = 0;
-
-    aStrm << "\n";
-    ULONG nLCount = aLines.Count();
-    for( ULONG n = 0; n < nLCount; ++n )
-    {
-        SwCompareLine* pLine = (SwCompareLine*)GetLine( n );
-        String sTxt( pLine->GetText() );
-        char sBuffer[ 20 ];
-        sprintf( sBuffer, "[%4ld][%3ld][%1d]",
-                                pLine->GetNode().GetIndex(),
-                                GetIndex(  n ), GetChanged(  n ) );
-        ( aStrm << sBuffer ).WriteByteString( sTxt ) << '\n';
-    }
-}
-
-#endif
-
 /*  */
 
 
@@ -1638,10 +1584,6 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
         aD1.SetRedlinesToDoc( !bDocWasModified, rSrcDoc );
         SetModified();
     }
-
-#ifdef JP_DUMP
-    aD0.Dump(), aD1.Dump();
-#endif
 
     rSrcDoc.SetRedlineMode( eSrcRedlMode );
     SetRedlineMode( REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE );

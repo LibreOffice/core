@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-09 10:37:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1630,7 +1630,7 @@ SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) 
 
     //Muessen alle einmal berechnet werden:
     bTopLine = bBottomLine = bLeftLine = bRightLine =
-    bTop     = bBottom     = bRight     = bLine  = TRUE;
+    bTop     = bBottom     = bLine   = TRUE;
 
     bCacheGetLine = bCachedGetTopLine = bCachedGetBottomLine = FALSE;
 
@@ -1668,55 +1668,48 @@ void SwBorderAttrs::_CalcBottom()
     bBottom = FALSE;
 }
 
-void SwBorderAttrs::_CalcRight()
+long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
 {
-    nRight = CalcRightLine() + rLR.GetRight();
-    bRight = FALSE;
-}
+    long nRight;
 
+    // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
+    // and right border are painted on the right respectively left.
+    if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
+        nRight = CalcLeftLine();
+    else
+        nRight = CalcRightLine();
 
-#ifdef BIDI
-
-long SwBorderAttrs::CalcRight( const SwFrm* pCaller )
-{
     // for paragraphs, "left" is "before text" and "right" is "after text"
-    nRight = CalcRightLine() +
-             ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() ?
-               rLR.GetLeft() :
-               rLR.GetRight() );
+    if ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() )
+        nRight += rLR.GetLeft();
+    else
+        nRight += rLR.GetRight();
 
     return nRight;
 }
 
 long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
 {
+    long nLeft;
+
+    // OD 23.01.2003 #106895# - for cell frame in R2L text direction the left
+    // and right border are painted on the right respectively left.
+    if ( pCaller->IsCellFrm() && pCaller->IsRightToLeft() )
+        nLeft = CalcRightLine();
+    else
+        nLeft = CalcLeftLine();
+
     // for paragraphs, "left" is "before text" and "right" is "after text"
-    long nLeft = CalcLeftLine() +
-                 ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() ?
-                   rLR.GetRight() :
-                   rLR.GetLeft() );
+    if ( pCaller->IsTxtFrm() && pCaller->IsRightToLeft() )
+        nLeft += rLR.GetRight();
+    else
+        nLeft += rLR.GetLeft();
 
-#ifdef NUM_RELSPACE
     if ( pCaller->IsTxtFrm() )
         nLeft += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
-#endif
+
     return nLeft;
 }
-
-#else
-
-long SwBorderAttrs::CalcLeft( const SwFrm *pCaller ) const
-{
-    long nLeft = rLR.GetLeft() + CalcLeftLine();
-#ifdef NUM_RELSPACE
-    if ( pCaller->IsTxtFrm() )
-        nLeft += ((SwTxtFrm*)pCaller)->GetTxtNode()->GetLeftMarginWithNum();
-#endif
-    return nLeft;
-}
-
-#endif
-
 
 /*************************************************************************
 |*

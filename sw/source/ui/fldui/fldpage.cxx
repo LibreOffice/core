@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,22 +288,12 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         case TYP_DBNUMSETFLD:
         case TYP_DBSETNUMBERFLD:
             {
-                USHORT nPos, nTablePos, nExpPos;
+                xub_StrLen nPos = 0;
                 SwDBData aData;
 
-                // DBName aus rPar1 extrahieren. Format: DBName.TableName.ExpStrg
-                if ((nTablePos = rPar1.Search(DB_DELIM)) != STRING_NOTFOUND)
-                    aData.sDataSource = rPar1.Copy(0, nTablePos++);
-                if ((nExpPos = rPar1.Search(DB_DELIM, nTablePos)) != STRING_NOTFOUND)
-                {
-                    aData.sCommand = rPar1.Copy(nTablePos, nExpPos++ - nTablePos);
-                }
-                if (nExpPos != STRING_NOTFOUND)
-                    nPos = nExpPos;
-                else if (nTablePos != STRING_NOTFOUND)
-                    nPos = nTablePos;
-                else
-                    nPos = 0;
+                aData.sDataSource = rPar1.GetToken(0, DB_DELIM, nPos);
+                aData.sCommand = rPar1.GetToken(0, DB_DELIM, nPos);
+                aData.nCommandType = rPar1.GetToken(0, DB_DELIM, nPos).ToInt32();
                 sPar1 = rPar1.Copy(nPos);
 
                 ((SwDBNameInfField*)pCurFld)->SetDBData(aData);

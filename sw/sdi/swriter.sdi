@@ -9561,4 +9561,30 @@ SfxBoolItem JumpToPrevCell FN_GOTO_PREV_CELL
     GroupId = GID_NAVIGATOR;
 ]
 
+//--------------------------------------------------------------------------
+SfxBoolItem InsertFieldDataOnly FN_INSERT_FIELD_DATA_ONLY()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    ImageRotation = TRUE;
+    ImageReflection = TRUE;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_INSERT;
+]
 

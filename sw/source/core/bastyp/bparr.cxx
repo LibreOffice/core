@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bparr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-28 13:47:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,11 +117,11 @@ BigPtrArray::~BigPtrArray()
         BlockInfo** pp = ppInf;
         for( USHORT n = 0; n < nBlock; ++n, ++pp )
         {
-            __DELETE( (*pp)->nElem ) (*pp)->pData;
-            delete *pp;
+            delete[] (*pp)->pData;
+            delete    *pp;
         }
     }
-    __DELETE( nMaxBlock ) ppInf;
+    delete[] ppInf;
 }
 
 // Einfachst-Implementation, evtl. spaeter mal komplexer
@@ -278,7 +278,7 @@ BlockInfo* BigPtrArray::InsBlock( USHORT pos )
         // dann sollte wir mal das Array erweitern
         BlockInfo** ppNew = new BlockInfo* [ nMaxBlock + nBlockGrowSize ];
         memcpy( ppNew, ppInf, nMaxBlock * sizeof( BlockInfo* ));
-        __DELETE( nMaxBlock ) ppInf;
+        delete[] ppInf;
         nMaxBlock += nBlockGrowSize;
         ppInf = ppNew;
     }
@@ -309,7 +309,7 @@ void BigPtrArray::BlockDel( USHORT nDel )
         nDel = (( nBlock / nBlockGrowSize ) + 1 ) * nBlockGrowSize;
         BlockInfo** ppNew = new BlockInfo* [ nDel ];
         memcpy( ppNew, ppInf, nBlock * sizeof( BlockInfo* ));
-        __DELETE( nMaxBlock ) ppInf;
+        delete[] ppInf;
         ppInf = ppNew;
         nMaxBlock = nDel;
     }
@@ -449,7 +449,7 @@ void BigPtrArray::Remove( ULONG pos, ULONG n )
         if( !p->nElem )
         {
             // eventuell Block ganz entfernen
-            delete p->pData;
+            delete[] p->pData;
             nBlkdel++;
             if( USHRT_MAX == nBlk1del )
                 nBlk1del = cur;
@@ -588,8 +588,8 @@ USHORT BigPtrArray::Compress( short nMax )
             if( !p->nElem )
             {
                 // dann kann der entfernt werden
-                delete p->pData;
-                delete p, p = 0;
+                delete[] p->pData;
+                delete   p, p = 0;
                 ++nBlkdel;
             }
             else

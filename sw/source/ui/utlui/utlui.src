@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:53:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ swedish ] = "Ta bort tomma stycken" ;
         Text [ danish ] = "Fjern tomme afsnit" ;
         Text [ italian ] = "Elimina paragrafi vuoti" ;
-        Text [ spanish ] = "Eliminar pαrrafos vacνos" ;
+        Text [ spanish ] = "Borrar pαrrafos vacνos" ;
         Text [ french ] = "Supprimer les paragraphes vides" ;
         Text [ dutch ] = "Lege alinea's verwijderen" ;
         Text [ portuguese_brazilian ] = "Leere Abs?tze entfernen" ;
@@ -114,7 +114,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "δ½Ώη”¨ζ›Ώδ»£ζΈ…ε–®";
         Text[ arabic ] = "ΗΣΚΞΟΗγ ήΗΖγΙ ΗαΗΣΚΘΟΗα";
         Text[ greek ] = "Εφαρμογή του πίνακα αντικατάστασης";
-        Text[ korean ] = "λ€μ²΄ ν‘ μ μ©";
+        Text[ korean ] = "λ€μ²΄ ν…μ΄λΈ” μ‚¬μ©";
         Text[ turkish ] = "Deπiώtirme tablosunu kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilitza la taula de reemplaηament";
@@ -144,7 +144,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "ζ ΅ζ­£ε­—ι¦–ι›™ε¤§ε―«ε­—ζ―";
         Text[ arabic ] = "ΚΥΝνΝ ΝΡένδ ΗΣΚεαΗαννδ έν ΘΟΗνΙ ΗαίαγΙ";
         Text[ greek ] = "Διόρθωση ΔΥο κεφαλαίων γραμμάτων στην ΑΡχή της λέξης";
-        Text[ korean ] = "λ‹¨μ–΄ μ‹μ‘λ¶€λ¶„μ—μ„ λ‘ λ€λ¬Έμ μμ •";
+        Text[ korean ] = "λ‹¨μ–΄ μ–΄λ‘μ— λ€λ¬Έμκ°€ λ‘κ°μΈ κ²½μ° μμ •";
         Text[ turkish ] = "SΦzcόk baώύndaki έKi bόyόk harfi dόzelt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Corregeix DUes MAjϊscules al COmenηament de PAraula";
@@ -201,7 +201,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "η›΄ε‹εΌ•θ™η”±%1ε­—ε‹εΌ•θ™%2 ζ›Ώδ»£";
         Text[ arabic ] = "ΗΣΚΘΟΗα ΪαΗγΗΚ ΚδΥνΥ \"ΪΗΟνΙ\" ΘάΪαΗγΗΚ ΚδΥνΥ%1ΨΘζΫΡΗένψΙ%2";
         Text[ greek ] = "Αντικατάσταση \"ίσων\" εισαγωγικών με %1τυπογραφικά%2";
-        Text[ korean ] = "\"μ§μ„ \" μΈμ© λ¶€νΈλ¥Ό %1μΈμ‡„μ²΄%2 μΈμ© λ¶€νΈλ΅ λ°”κΎΈκΈ°";
+        Text[ korean ] = "\"ν‘μ¤€\" μΈμ© λ¶€νΈλ¥Ό %1μΈμ‡„μ²΄%2 μΈμ© λ¶€νΈλ΅ λ°”κΎΈκΈ°";
         Text[ turkish ] = "\"Dόz\" tύrnak iώaretlerini %1tipografik iώaretler ile%2 deπiώtir";
         Text[ catalan ] = "Reemplaηa les cometes \"estΰndard\" per cometes %1personalitzades%2";
         Text[ thai ] = "ΰΉΰΈ—ΰΈ™ΰΈ—ΰΈµΰΉ \"ΰΈ΅ΰΈ²ΰΈ•ΰΈ£ΰΈΰΈ²ΰΈ™\" ΰΈ­ΰΉ‰ΰΈ²ΰΈ‡ΰΈ„ΰΈ³ΰΈΰΈΉΰΈ”ΰΈ”ΰΉ‰ΰΈ§ΰΈΆ %1ΰΈ„ΰΈ³ΰΈΰΈΉΰΈ”%2 ΰΈ—ΰΈµΰΉΰΈΰΈ³ΰΈ«ΰΈ™ΰΈ”ΰΉ€ΰΈ­ΰΈ‡";
@@ -227,7 +227,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "ζ›Ώδ»£θ‡ªθ¨‚ζ¨£εΌ";
         Text[ arabic ] = "ΗΣΚΘΟΗα ΗαΓδγΗΨ ΗαγΞΥΥΙ";
         Text[ greek ] = "Αντικατάσταση προσαρμοσμένων προτύπων";
-        Text[ korean ] = "μ‚¬μ©μ ν…ν”λ¦Ώ λ°”κΎΈκΈ°";
+        Text[ korean ] = "μ‚¬μ©μ μ •μ μ¤νƒ€μΌ λ°”κΎΈκΈ°";
         Text[ turkish ] = "Kullanύcύ biηimini deπiώtir";
         Text[ catalan ] = "Reemplaηa els estils personalitzats";
         Text[ finnish ] = "Korvaa mukautetut tyylit";
@@ -280,7 +280,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "θ‡ªε‹•ε εΊ•η·";
         Text[ arabic ] = "_ΞΨ ΚΝΚν_ ΚαήΗΖνΗπ";
         Text[ greek ] = "Αυτόματη _υπογράμμιση_";
-        Text[ korean ] = "μλ™ _λ°‘μ¤„_";
+        Text[ korean ] = "μλ™μΌλ΅  _λ°‘μ¤„_";
         Text[ turkish ] = "Altύnύ_otomatik_ηiz_";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "_Subratllat_ automΰtic";
@@ -328,7 +328,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ french ] = "Remplacer 1/2 ... par ½ ..." ;
         Text [ portuguese ] = "Substituir 1/2 ... por ½ ..." ;
         Text[ chinese_simplified ] = "η”¨ Β½ ... ζ›ΏζΆ 1/2 ...";
-        Text[ russian ] = "Ηΰμενÿςό 1/2 ... νΰ ? ...";
+        Text[ russian ] = "Ηΰμενÿςό 1/2 ... νΰ δπξαό ...";
         Text[ polish ] = "Zamieρ 1/2 ... na ? ... ";
         Text[ japanese ] = "1/2 ...γ‚’ Β½ ...γ«η½®ζ›";
         Text[ chinese_traditional ] = "η”¨ Β½ ... δ»£ζ›Ώ 1/2 ...";
@@ -409,7 +409,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ portuguese_brazilian ] = "1st ... gegen 1^st ... ersetzen" ;
         Text [ portuguese ] = "Substituir 1o... por 1Ί..." ;
         Text[ chinese_simplified ] = "η”¨ 1^st... ζ›ΏζΆ 1st...";
-        Text[ russian ] = "Ηΰμενθςό 1st ... νΰ 1^st ...";
+        Text[ russian ] = "Ηΰμενθςό ΰνγλθιρκθε οξπÿδκξβϋε (1st) ... νΰ βεπυνθι θνδεκρ (1^st)...";
         Text[ polish ] = "Zamieρ 1st ... na 1^st ... ";
         Text[ japanese ] = "1st ...γ‚’ 1^st ... γ«η½®γζ›γγ‚‹";
         Text[ chinese_traditional ] = "η”¨ 1^st... δ»£ζ›Ώ 1st...";
@@ -442,7 +442,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "εδ½µε–®θ΅ζ®µθ½";
         Text[ arabic ] = "ΟγΜ ΗαέήΡΗΚ ΓΝΗΟνΙ ΗαΓΣΨΡ";
         Text[ greek ] = "Ένωση μονόγραμμων παραγράφων";
-        Text[ korean ] = "ν•μ¤„ λ‹¨λ½ ν•©μΉκΈ°";
+        Text[ korean ] = "ν•μ¤„ λ‹¨λ½μ„ κ²°ν•©";
         Text[ turkish ] = "Tek satύrlύ paragraflarύ birleώtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Combina els parΰgrafs de lνnia ϊnica";
@@ -470,7 +470,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "θ¨­ε®ζ¨£εΌ<ε…§ζ–‡>";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΜΣγ ΗαδΥ\"";
         Text[ greek ] = "Ορισμός προτύπου \"Σώμα κειμένου\"";
-        Text[ korean ] = "ν…ν”λ¦Ώ \"λ³Έλ¬Έ\" μ„¤μ •";
+        Text[ korean ] = "\"λ³Έλ¬Έ\" μ¤νƒ€μΌ μ„¤μ •";
         Text[ turkish ] = "\"Metin gφvdesi\" biηimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Defineix l'estil del \"cos de text\"";
@@ -497,7 +497,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "θ¨­ε®ζ¨£εΌ<ε…§ζ–‡ηΈ®ζ’>";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΕÒΗΝΙ ΜΣγ ΗαδΥ\"";
         Text[ greek ] = "Ορισμός προτύπου \"Εσοχή πρώτης γραμμής\"";
-        Text[ korean ] = "ν…ν”λ¦Ώ \"μ²« μ¤„ λ“¤μ—¬μ“°κΈ°\" μ„¤μ •";
+        Text[ korean ] = "[λ³Έλ¬Έ λ“¤μ—¬μ“°κΈ°] μ¤νƒ€μΌ μ„¤μ •";
         Text[ turkish ] = "\"Metin gφvdesi - girinti\" biηimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Defineix l'estil del \"sagnat del cos de text\"";
@@ -524,7 +524,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "θ¨­ε®ζ¨£εΌ<ε…§ζ–‡θ² ηΈ®ζ’>";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΕÒΗΝΙ ΜΣγ δΥ ΣαΘνΙ\"";
         Text[ greek ] = "Ορισμός προτύπου \"Αρνητική εσοχή σώματος κειμένου\"";
-        Text[ korean ] = "ν…ν”λ¦Ώ \"μ²« μ¤„μ„ κΈ°μ¤€μΌλ΅ λ‚λ¨Έμ§€ λ³Έλ¬Έ λ“¤μ—¬μ“°κΈ°\" μ„¤μ •";
+        Text[ korean ] = "[λ³Έλ¬Έ λ‚΄μ–΄μ“°κΈ°] μ¤νƒ€μΌ μ„¤μ •";
         Text[ turkish ] = "\"Asύlύ girinti\" biηimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Defineix l'estil del \"sagnat negatiu\"";
@@ -551,7 +551,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "θ¨­ε®ζ¨£εΌ<ε…§ζ–‡ηΈ®ζ’>";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΕÒΗΝΙ ΜΣγ ΗαδΥ (ΗαΣΨΡ ΗαΓζα)\"";
         Text[ greek ] = "Ορισμός προτύπου \"Εσοχή σώματος κειμένου\"";
-        Text[ korean ] = "ν…ν”λ¦Ώ \"λ³Έλ¬Έ λ“¤μ—¬μ“°κΈ°\" μ„¤μ •";
+        Text[ korean ] = "[λ³Έλ¬Έ λ“¤μ—¬μ“°κΈ°] μ¤νƒ€μΌ μ„¤μ •";
         Text[ turkish ] = "\"Metin gφvdesi - satύrbaώύ\" biηimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Defineix l'estil del \"sagnat del cos de text\"";
@@ -578,7 +578,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "θ¨­ε®ζ¨£εΌ<ζ¨™ι΅ $(ARG1)>";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΪδζΗδ $(ARG1)\"";
         Text[ greek ] = "Ορισμός προτύπου \"Επικεφαλίδα $(ARG1)\"";
-        Text[ korean ] = "ν…ν”λ¦Ώ \"μ λª© $(ARG1)\" μ„¤μ •";
+        Text[ korean ] = "\"μ λª© $(ARG1)\" μ¤νƒ€μΌ μ„¤μ •";
         Text[ turkish ] = "\"Baώlύk $(ARG1)\" biηimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Defineix l'estil \"Encapηalament $(ARG1)\"";
@@ -605,7 +605,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "θ¨­ε®ζ¨£εΌ<ι …η›®η¬¦θ™>ε’<η·¨θ™>";
         Text[ arabic ] = "ΚΪννδ ΗαδγΨ \"ΚΪΟΗΟ\" Γζ \"ΚΡήνγ\"";
         Text[ greek ] = "Ορισμός στυλ \"Κουκίδα\" ή \"Αρίθμηση\"";
-        Text[ korean ] = "ν…ν”λ¦Ώ \"κΈ€λ¨Έλ¦¬ κΈ°νΈ\" λλ” \"λ²νΈ λ§¤κΈ°κΈ°\" μ„¤μ •";
+        Text[ korean ] = "\"κΈ€λ¨Έλ¦¬ κΈ°νΈ\" λλ” \"λ²νΈ λ§¤κΈ°κΈ°\" μ¤νƒ€μΌ μ„¤μ •";
         Text[ turkish ] = "\"Madde\" ya da \"numaralama\" biηimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Defineix l'estil \"pics\" o \"numeraciσ\"";
@@ -624,7 +624,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ french ] = "Fusionner des paragraphes";
         Text[ swedish ] = "Sammanfoga stycken";
         Text[ dutch ] = "Alinea's samenvoegen";
-        Text[ spanish ] = "Unir pαrrafos";
+        Text[ spanish ] = "Combinar pαrrafos";
         Text[ english_us ] = "Combine paragraphs";
         Text[ chinese_simplified ] = "εεΉ¶ζ®µθ½";
         Text[ russian ] = "Ξαϊεδθνενθε ΰαηΰφεβ";
@@ -633,7 +633,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "εδ½µζ®µθ½";
         Text[ arabic ] = "Φγ ΗαέήΡΗΚ";
         Text[ greek ] = "Ένωση παραγράφων";
-        Text[ korean ] = "λ‹¨λ½ ν•©μΉκΈ°";
+        Text[ korean ] = "λ‹¨λ½ κ²°ν•©";
         Text[ turkish ] = "Paragraflarύ birleώtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Combina els parΰgrafs";
@@ -666,7 +666,7 @@ String STR_EVENT_OBJECT_SELECT
     Text[ chinese_traditional ] = "ζ‰δΈ€δΈ‹η‰©δ»¶";
     Text[ arabic ] = "ΗαδήΡ έζή ΗαίΗΖδ";
     Text[ greek ] = "Επιλογή αντικειμένου";
-    Text[ korean ] = "κ°μ²΄ μ„ νƒ";
+    Text[ korean ] = "κ°μ²΄ ν΄λ¦­";
     Text[ turkish ] = "Nesneye tύkla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Feu clic a l'objecte";
@@ -684,14 +684,14 @@ String STR_EVENT_START_INS_GLOSSARY
     TEXT[ greek ] = "Πριν από την προσθήκη του ΑυτοΚείμενο";
     TEXT[ dutch ] = "Voor het invoegen van AutoTekst";
     TEXT[ french ] = "Avant insertion de l'AutoTexte";
-    TEXT[ spanish ] = "Antes de insertar el AutoTexto";
+    TEXT[ spanish ] = "Antes de insertar el Texto automαtico";
     TEXT[ italian ] = "Prima d'inserire il testo automatico";
     TEXT[ danish ] = "Inden input af AutoTekst";
     TEXT[ swedish ] = "Innan AutoText infogas";
     TEXT[ polish ] = "Wstaw przed autotekstem";
     TEXT[ portuguese_brazilian ] = "Vor AutoText einf?en";
     TEXT[ japanese ] = "ε…¥ε›ζ”―ζ΄γ‚’ζΏε…¥γ™γ‚‹ε‰";
-    TEXT[ korean ] = "μλ™ν…μ¤νΈ μ‚½μ… μ „";
+    TEXT[ korean ] = "μλ™ ν…μ¤νΈ μ‚½μ… μ „";
     TEXT[ chinese_simplified ] = "ε¨ζ’ε…¥θ‡ªε¨ε›Ύζ–‡ι›†δΉ‹ε‰";
     TEXT[ chinese_traditional ] = "ε¨ζ’ε…¥θ‡ªε‹•ε–ζ–‡ι›†δΉ‹ε‰";
     TEXT[ arabic ] = "ήΘα ΕΟΡΗΜ ΗαδΥ ΗαΚαήΗΖν";
@@ -712,14 +712,14 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ greek ] = "Μετά την προσθήκη του ΑυτοΚείμενο";
     TEXT[ dutch ] = "Na invoegen van AutoTekst";
     TEXT[ french ] = "Aprθs insertion de l'AutoTexte";
-    TEXT[ spanish ] = "Tras insertar el AutoTexto";
+    TEXT[ spanish ] = "Tras insertar el Texto automαtico";
     TEXT[ italian ] = "Dopo aver inserito il testo automatico";
     TEXT[ danish ] = "Efter input af AutoTekst";
     TEXT[ swedish ] = "Nδr AutoText har infogats";
     TEXT[ polish ] = "Wstaw za autotekstem";
     TEXT[ portuguese_brazilian ] = "Nach AutoText einf?en";
     TEXT[ japanese ] = "ε…¥ε›ζ”―ζ΄γ‚’ζΏε…¥γ—γεΎ";
-    TEXT[ korean ] = "μλ™ν…μ¤νΈ μ‚½μ… ν›„";
+    TEXT[ korean ] = "μλ™ ν…μ¤νΈ μ‚½μ… ν›„";
     TEXT[ chinese_simplified ] = "ε¨ζ’ε…¥θ‡ªε¨ε›Ύζ–‡ι›†δΉ‹ε";
     TEXT[ chinese_traditional ] = "ε¨θ‡ªε‹•ε–ζ–‡ι›†ζ’ε…¥δΉ‹εΎ";
     TEXT[ arabic ] = "ΘΪΟ ΕΟΡΗΜ ΗαδΥ ΗαΚαήΗΖν";
@@ -833,7 +833,7 @@ String STR_EVENT_IMAGE_LOAD
     Text[ chinese_traditional ] = "θΌ‰ε…¥ε–ε½Άζε";
     Text[ arabic ] = "ΚΝγνα ΗαΥζΡΙ ΘδΜΗΝ";
     Text[ greek ] = "Η φόρτωση των γραφικών πέτυχε";
-    Text[ korean ] = "κ·Έλν”½μ„ μ„±κ³µμ μΌλ΅ λ΅λ“ν•¨";
+    Text[ korean ] = "κ·Έλ¦Ό λ΅λ“λ¥Ό μ„±κ³µμ μΌλ΅ μ™„λ£ ";
     Text[ turkish ] = "Grafik baώarύyla yόklendi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Els grΰfics s'han carregat amb θxit";
@@ -860,7 +860,7 @@ String STR_EVENT_IMAGE_ABORT
     Text[ chinese_traditional ] = "δΈ­ζ–·θΌ‰ε…¥ε–ε½Ά";
     Text[ arabic ] = "ΗδήΨΗΪ ΪγανΙ ΚΝγνα ΗαΥζΡΙ";
     Text[ greek ] = "Διακοπή φόρτωσης γραφικού";
-    Text[ korean ] = "κ·Έλν”½ λ΅λ“ μ¤‘λ‹¨λ¨";
+    Text[ korean ] = "κ·Έλ¦Ό λ΅λ“ μ¤‘λ‹¨λ¨";
     Text[ turkish ] = "Grafik yόklemesi kesildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'ha interromput la cΰrrega dels grΰfics";
@@ -887,7 +887,7 @@ String STR_EVENT_IMAGE_ERROR
     Text[ chinese_traditional ] = "θΌ‰ε…¥ε–ε½ΆδΈε®ζ•΄";
     Text[ arabic ] = "ΞΨΓ έν ΪγανΙ ΚΝγνα ΗαΥζΡΙ";
     Text[ greek ] = "Σφάλμα κατά τη φόρτωση γραφικού";
-    Text[ korean ] = "κ·Έλν”½ λ΅λ“ μ¤λ¥";
+    Text[ korean ] = "κ·Έλ¦Ό λ΅λ“ μ¤λ¥";
     Text[ turkish ] = "Grafik yόklemede hata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Els grΰfics s'han carregat de manera defectuosa";
@@ -908,7 +908,7 @@ String STR_EVENT_FRM_KEYINPUT_A
     Text [ french ] = "Saisie de caractθres alphanumιriques" ;
     Text [ dutch ] = "Invoer van alfanumerieke tekens" ;
     Text[ chinese_simplified ] = "θΎ“ε…¥εΈθ…θ―­ε­—ζ―ιΏε°”ζ³•";
-    Text[ russian ] = "Ββξδ ΰλτΰβθςνξ-φθτπξβϋυ ρθμβξλξβ";
+    Text[ russian ] = "Ββξδ ΰλτ.-φθτπ. ρθμβξλξβ";
     Text[ polish ] = "Wpisz znaki alfanumeryczne";
     Text[ japanese ] = "γ‚Άγƒ«γƒ•γ‚΅γƒ™γƒƒγƒζ–‡ε­—γ®ε…¥ε›";
     Text[ chinese_traditional ] = "θΌΈε…¥εΈθ‡θªη¬¬δΈ€ε€‹ε­—ζ―";
@@ -935,7 +935,7 @@ String STR_EVENT_FRM_KEYINPUT_NOA
     Text [ portuguese_brazilian ] = "Eingabe von nicht Alphazeichen" ;
     Text [ danish ] = "Input af ikke-alfategn" ;
     Text[ chinese_simplified ] = "θΎ“ε…¥η„δΈζ―εΈθ…θ―­ε­—ζ―ιΏε°”ζ³•";
-    Text[ russian ] = "Ββξδ νε ΰλτΰβθςνξ-φθτπξβϋυ ρθμβξλξβ";
+    Text[ russian ] = "Ββξδ νε ΰλτ.-φθτπ. ρθμβξλξβ";
     Text[ polish ] = "Wpisz znaki nie bκdΉce znakami alfanumerycznymi";
     Text[ japanese ] = "γ‚Άγƒ«γƒ•γ‚΅γƒ™γƒƒγƒγ§γªγ„ζ–‡ε­—γ®ε…¥ε›";
     Text[ chinese_traditional ] = "θΌΈε…¥η„δΈζ―εΈθ‡θªη¬¬δΈ€ε€‹ε­—ζ―";
@@ -1078,7 +1078,7 @@ String STR_CONTENT_TYPE_FRAME
     Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅";
     Text[ arabic ] = "ίζΗΟΡ δΥ";
     Text[ greek ] = "Πλαίσιο κειμένου";
-    Text[ korean ] = "ν…μ¤νΈ ν‹€";
+    Text[ korean ] = "ν…μ¤νΈ ν”„λ μ„";
     Text[ turkish ] = "Metin kutusu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marc de text";
@@ -1105,7 +1105,7 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text[ chinese_traditional ] = "ε–ε½Ά";
     Text[ arabic ] = "ΥζΡ";
     Text[ greek ] = "Γραφικά";
-    Text[ korean ] = "κ·Έλν”½";
+    Text[ korean ] = "κ·Έλ¦Ό";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Grΰfics";
@@ -1172,7 +1172,7 @@ String STR_CONTENT_TYPE_REGION
     TEXT [ English ] = "Regions" ;
     Text [ english_us ] = "Sections" ;
     Text [ italian ] = "Sezioni" ;
-    Text [ spanish ] = "Categorνas" ;
+    Text [ spanish ] = "Secciones" ;
     Text [ french ] = "Sections" ;
     Text [ dutch ] = "Bereiken" ;
     Text [ swedish ] = "Kategorier" ;
@@ -1186,7 +1186,7 @@ String STR_CONTENT_TYPE_REGION
     Text[ chinese_traditional ] = "ε€ε";
     Text[ arabic ] = "δΨΗήΗΚ";
     Text[ greek ] = "Κατηγορίες";
-    Text[ korean ] = "μμ—­";
+    Text[ korean ] = "κµ¬μ—­";
     Text[ turkish ] = "Bφlόm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seccions";
@@ -1349,7 +1349,7 @@ String STR_CONTENT_TYPE_SINGLE_OUTLINE
     Text[ chinese_traditional ] = "ζ¨™ι΅";
     Text[ arabic ] = "ΪδζΗδ";
     Text[ greek ] = "Επικεφαλίδα";
-    Text[ korean ] = "ν‘μ ";
+    Text[ korean ] = "μ λª©";
     Text[ turkish ] = "Baώlύk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encapηalament";
@@ -1376,7 +1376,7 @@ String STR_CONTENT_TYPE_SINGLE_TABLE
     Text[ chinese_traditional ] = "θ΅¨ζ Ό";
     Text[ arabic ] = "ΜΟζα";
     Text[ greek ] = "Πίνακας";
-    Text[ korean ] = "μ‹νΈ";
+    Text[ korean ] = "ν‘";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taula";
@@ -1403,7 +1403,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅";
     Text[ arabic ] = "ίΗΟΡ δΥ";
     Text[ greek ] = "Πλαίσιο κειμένου";
-    Text[ korean ] = "ν…μ¤νΈ ν‹€";
+    Text[ korean ] = "ν…μ¤νΈ ν”„λ μ„";
     Text[ turkish ] = "Metin kutusu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marc de text";
@@ -1430,7 +1430,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text[ chinese_traditional ] = "ε–ε½Ά";
     Text[ arabic ] = "ΥζΡΙ";
     Text[ greek ] = "Γραφικό";
-    Text[ korean ] = "κ·Έλν”½";
+    Text[ korean ] = "κ·Έλ¦Ό";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Grΰfics";
@@ -1497,7 +1497,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     TEXT [ English ] = "Region" ;
     Text [ english_us ] = "Section" ;
     Text [ italian ] = "Area" ;
-    Text [ spanish ] = "Αrea" ;
+    Text [ spanish ] = "Secciσn" ;
     Text [ french ] = "Section" ;
     Text [ dutch ] = "Bereik" ;
     Text [ swedish ] = "Kategori" ;
@@ -1511,7 +1511,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     Text[ chinese_traditional ] = "ε€ε";
     Text[ arabic ] = "δΨΗή";
     Text[ greek ] = "Ενότητα";
-    Text[ korean ] = "μμ—­";
+    Text[ korean ] = "κµ¬μ—­";
     Text[ turkish ] = "Bφlόm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Secciσ";
@@ -1673,7 +1673,7 @@ String STR_DEFINE_NUMBERFORMAT
     Text[ chinese_traditional ] = "ε…¶ε®ƒζ ΌεΌ...";
     Text[ arabic ] = "...ΚδΣνήΗΚ ΕΦΗένΙ";
     Text[ greek ] = "Επιπρόσθετες μορφές...";
-    Text[ korean ] = "λ¶€κ°€μ μΈ μ„μ‹...";
+    Text[ korean ] = "μ¶”κ°€ μ„μ‹...";
     Text[ turkish ] = "Diπer formatlar...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formats addicionals...";
@@ -1921,4 +1921,9 @@ String STR_HYPERCTRL_HYP
     Text[ catalan ] = "HYP";
     Text[ thai ] = "HYP";
 };
+
+
+
+
+
 

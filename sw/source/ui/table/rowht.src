@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 20:24:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,22 +132,23 @@ ModalDialog DLG_ROW_HEIGHT
         Text [ swedish ] = "anpassa ~dynamiskt" ;
         Text [ danish ] = "tilpas dynamisk" ;
         Text [ italian ] = "Altezza autom~atica" ;
-        Text [ spanish ] = "~ajuste dinámico" ;
-        Text [ french ] = "adaptation ~dynamique" ;
+        Text [ spanish ] = "~Ajuste dinámico" ;
+        Text [ french ] = "Adaptation dynamique" ;
         Text [ dutch ] = "~dynamisch aanpassen" ;
         Text [ portuguese_brazilian ] = "~dynamisch anpassen" ;
         Text [ portuguese ] = "Ajuste ~dinâmico" ;
-        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû(~F)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨è°ƒæ•´(~F)";
         Text[ russian ] = "Ïîäáîğ ğàçìåğà";
         Text[ polish ] = "Dostosuj dynamicznie";
-        Text[ japanese ] = "‘‰Á‚ğ”F‚ß‚é(~F)";
-        Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã(~F)";
+        Text[ japanese ] = "å¢—åŠ ã‚’èªã‚ã‚‹(~F)";
+        Text[ chinese_traditional ] = "è‡ªå‹•æœ€é©èª¿æ•´(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÊáŞÇÆíÉ ááÍÌã";
         Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ";
-        Text[ korean ] = "Å©±â¿¡ ¸ÂÃã(~F)";
+        Text[ korean ] = "í¬ê¸°ì— ë§ì¶¤(~F)";
         Text[ turkish ] = "i~çerik boyuna uydur";
-        Text[ catalan ] = "~ajuste dinámico";
+        Text[ catalan ] = "~Ajusta a la mida";
         Text[ finnish ] = "~Sovita kokoon";
+        Text[ thai ] = "~à¸ˆà¸±à¸”à¸à¸­à¸”à¸µà¸‚à¸™à¸²à¸”";
     };
     FixedLine FL_HEIGHT
     {
@@ -166,28 +167,41 @@ ModalDialog DLG_ROW_HEIGHT
         Text [ dutch ] = "Hoogte" ;
         Text [ spanish ] = "Altura" ;
         Text [ english_us ] = "Height" ;
-        Text[ chinese_simplified ] = "¸ß";
+        Text[ chinese_simplified ] = "é«˜åº¦";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wysokoœæ";
-        Text[ japanese ] = "‚‚³";
-        Text[ chinese_traditional ] = "°ª";
+        Text[ japanese ] = "é«˜ã•";
+        Text[ chinese_traditional ] = "é«˜åº¦";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "ë†’ì´";
         Text[ turkish ] = "Yükseklik";
-        Text[ catalan ] = "Altura";
+        Text[ catalan ] = "Alçada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡";
     };
-    Text[ chinese_simplified ] = "ĞĞ¸ß";
+    Text[ chinese_simplified ] = "è¡Œé«˜";
     Text[ russian ] = "Âûñîòà ñòğîêè";
     Text[ polish ] = "Wysokoœæ wierszy";
-    Text[ japanese ] = "s‚Ì‚‚³";
-    Text[ chinese_traditional ] = "¦æ°ª";
+    Text[ japanese ] = "è¡Œã®é«˜ã•";
+    Text[ chinese_traditional ] = "è¡Œé«˜";
     Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
     Text[ greek ] = "¾øïò ãñáììŞò";
-    Text[ korean ] = "Çà ³ôÀÌ";
+    Text[ korean ] = "í–‰ ë†’ì´";
     Text[ turkish ] = "Satır yüksekliği";
-    Text[ catalan ] = "Altura de fila";
+    Text[ catalan ] = "Alçada de fila";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸‚à¸­à¸‡à¹à¸–à¸§";
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 

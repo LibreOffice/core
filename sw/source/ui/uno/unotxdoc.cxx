@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 12:19:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2451,7 +2451,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if (!pDoc)
         throw RuntimeException();
     SwWrtShell *pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->CalcLayout();
+    if(pWrtShell)
+        pWrtShell->CalcLayout();
 
     return pDoc->GetPageCount();
 }

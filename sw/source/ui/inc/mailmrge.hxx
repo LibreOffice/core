@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:14:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #endif
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
+#endif
+
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
 #endif
 
 #ifndef _LSTBOX_HXX //autogen
@@ -206,5 +210,26 @@ public:
 
     BOOL    IsThisDocument() const {return aThisDocRB.IsChecked();}
 };
+/* -----------------04.02.2003 13:41-----------------
+ *
+ * --------------------------------------------------*/
+class SwMailMergeFieldConnectionsDlg : public ModalDialog
+{
+    FixedLine       aConnectionsFL;
+    RadioButton     aUseExistingRB;
+    RadioButton     aCreateNewRB;
+
+    FixedInfo       aInfoFI;
+
+    OKButton        aOK;
+    CancelButton    aCancel;
+    HelpButton      aHelp;
+public:
+    SwMailMergeFieldConnectionsDlg(Window* pParent);
+    ~SwMailMergeFieldConnectionsDlg();
+
+    BOOL    IsUseExistingConnections() const {return aUseExistingRB.IsChecked();}
+};
+
 #endif
 

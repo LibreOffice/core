@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:28:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ String MN_TAB_POPUPMENU
     Text[ chinese_traditional ] = "θ΅¨ζ Ό";
     Text[ arabic ] = "ΜΟζα";
     Text[ greek ] = "Πίνακας";
-    Text[ korean ] = "μ‹νΈ";
+    Text[ korean ] = "ν‘";
     Text[ turkish ] = "Tablo";
     Text[ catalan ] = "Taula";
     Text[ thai ] = "ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
@@ -185,7 +185,7 @@ Menu MN_TAB_POPUPMENU
             HelpID = FN_SET_MODOPT_TBLNUMFMT ;
             Text = "Zahlen~erkennung" ;
             Text [ ENGLISH ] = "Number recognition" ;
-            Text[ english_us ] = "~Number recognition";
+            Text[ english_us ] = "~Number Recognition";
             Text[ portuguese ] = "~Reconhecer nϊmeros";
             Text[ russian ] = "Πΰροξηνΰβΰνθε χθρελ";
             Text[ greek ] = "Αναγνώρ~ιση αριθμών";
@@ -599,7 +599,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ arabic ] = "ΗαΨΘΗΪΙ ΝΣΘ ΗαγΪΗνδΙ";
             Text[ language_user1 ] = "ίν; ίν?ΣΚΪΡ?Γν?ΨΘΗΪ?\\ζΓνδ γΪΗνδΙ ΗαΥέΝΙ ήΘ?ΨΘΗΪΚε?ΏΏΏΏ";
             Text[ greek ] = "Εκτύπωση προεπισκόπησης";
-            Text[ korean ] = "νμ΄μ§€λ―Έλ¦¬λ³΄κΈ°γ€€μΈμ‡„";
+            Text[ korean ] = "μΈμ‡„";
             Text[ turkish ] = "Yazdύr";
             Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulosta";
@@ -644,18 +644,18 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ russian ] = "Close Preview";
             Text[ greek ] = "Close Preview";
             Text[ dutch ] = "Close Preview";
-            Text[ french ] = "Close Preview";
-            Text[ spanish ] = "Close Preview";
+            Text[ french ] = "Fermer l'aperηu";
+            Text[ spanish ] = "Cerrar Vista preliminar";
             Text[ finnish ] = "Close Preview";
-            Text[ italian ] = "Close Preview";
+            Text[ italian ] = "Chiudi anteprima";
             Text[ danish ] = "Close Preview";
-            Text[ swedish ] = "Close Preview";
+            Text[ swedish ] = "Stδng fφrhandsgranskning";
             Text[ polish ] = "Close Preview";
             Text[ portuguese_brazilian ] = "Close Preview";
-            Text[ japanese ] = "Close Preview";
+            Text[ japanese ] = "γƒ—γƒ¬γƒ“γƒ¥γƒΌγ‚’ι–‰γγ‚‹";
             Text[ korean ] = "λ―Έλ¦¬ λ³΄κΈ° λ‹«κΈ°";
-            Text[ chinese_simplified ] = "Close Preview";
-            Text[ chinese_traditional ] = "Close Preview";
+            Text[ chinese_simplified ] = "ε…³ι—­ι΅µιΆιΆ„θ§";
+            Text[ chinese_traditional ] = "ι—ι–‰ι θ¦½";
             Text[ turkish ] = "Close Preview";
             Text[ arabic ] = "Close Preview";
             Text[ catalan ] = "Close Preview";
@@ -663,5 +663,7 @@ Menu MN_PPREVIEW_POPUPMENU
         };
     };
 };
+
+
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ enum SwHTMLFrmType
 
 
 const USHORT MAX_FRMTYPES = HTML_FRMTYPE_END;
-const USHORT MAX_BROWSERS = 5;
+const USHORT MAX_BROWSERS = 4;
 
 extern BYTE aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS];
 extern BYTE aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS];

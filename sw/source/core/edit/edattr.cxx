@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:26:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,11 +149,15 @@ using namespace ::com::sun::star::i18n;
 
 // wenn Selektion groesser Max Nodes oder mehr als Max Selektionen
 // => keine Attribute
-static const USHORT nMaxLookup = 255;
+const USHORT& getMaxLookup()
+{
+    static const USHORT nMaxLookup = 1000;
+    return nMaxLookup;
+}
 
 BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
 {
-    if( GetCrsrCnt() > nMaxLookup )
+    if( GetCrsrCnt() > getMaxLookup() )
     {
         rSet.InvalidateAllItems();
         return FALSE;
@@ -175,7 +179,7 @@ BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
             nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
         }
 
-        if( nEndNd - nSttNd >= nMaxLookup )
+        if( nEndNd - nSttNd >= getMaxLookup() )
         {
             rSet.ClearItem();
             rSet.InvalidateAllItems();
@@ -246,7 +250,7 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
 {
     SwTxtFmtColl *pFmt = 0;
 
-    if ( GetCrsrCnt() > nMaxLookup )
+    if ( GetCrsrCnt() > getMaxLookup() )
         return 0;
 
     FOREACHPAM_START(this)
@@ -262,7 +266,7 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
             nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
         }
 
-        if( nEndNd - nSttNd >= nMaxLookup )
+        if( nEndNd - nSttNd >= getMaxLookup() )
         {
             pFmt = 0;
             break;
@@ -480,10 +484,41 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
 }
 
 BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
-                            USHORT &rScrpt, BOOL bInSelection )
+                            USHORT &rScrpt, BOOL bInSelection, BOOL bNum )
 {
     BOOL bRet = FALSE;
     const String& rTxt = rTNd.GetTxt();
+    String sExp;
+
+    // consider numbering
+    if ( bNum )
+    {
+        bRet = FALSE;
+
+        const SwNumRule* pNumRule = rTNd.GetNumRule();
+        const SwNodeNum* pNum = rTNd.GetNum();
+
+        if( !pNumRule )     // oder sollte OutlineNum an sein?
+        {
+            pNum = rTNd.GetOutlineNum();
+            if( pNum )
+                pNumRule = rTNd.GetDoc()->GetOutlineNumRule();
+        }
+
+        if( pNumRule && pNum && MAXLEVEL > pNum->GetLevel() )
+        {
+            const SwNumFmt &rNumFmt = pNumRule->Get( pNum->GetLevel() );
+
+            if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
+            {
+                sExp = ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() ?
+                         rNumFmt.GetBulletChar() :
+                         pNumRule->MakeNumString( *pNum ) );
+            }
+        }
+    }
+
+    // and fields
     const SwTxtAttr* pTFld;
     if( CH_TXTATR_BREAKWORD == rTxt.GetChar( nPos ) &&
         0 != ( pTFld = rTNd.GetTxtAttr( nPos ) ) )
@@ -491,27 +526,32 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         bRet = TRUE;                    // all other then fields can be
                                         // defined as weak-script ?
         const SwField* pFld;
-        String sExp;
         if( RES_TXTATR_FIELD == pTFld->Which() &&
-            0 != (pFld = pTFld->GetFld().GetFld() ) &&
-            (sExp = pFld->Expand()).Len() )
+            0 != (pFld = pTFld->GetFld().GetFld() ) )
         {
-            xub_StrLen n, nEnd = sExp.Len();
-            if( bInSelection )
-            {
-                USHORT nScript;
-                for( n = 0; n < nEnd; n = (xub_StrLen)
-                        pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
-                {
-                    nScript = pBreakIt->xBreak->getScriptType( sExp, n );
-                    rScrpt |= nScript;
-                }
-            }
-            else
-                rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
-                                            getScriptType( sExp, nEnd-1 ));
+            sExp += pFld->Expand();
         }
     }
+
+    xub_StrLen nEnd = sExp.Len();
+    if ( nEnd )
+    {
+        xub_StrLen n;
+        if( bInSelection )
+        {
+            USHORT nScript;
+            for( n = 0; n < nEnd; n = (xub_StrLen)
+                    pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
+            {
+                nScript = pBreakIt->xBreak->getScriptType( sExp, n );
+                rScrpt |= lcl_SetScriptFlags( nScript );
+            }
+        }
+        else
+            rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
+                                        getScriptType( sExp, nEnd-1 ));
+    }
+
     return bRet;
 }
 
@@ -557,7 +597,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                     else
                         nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 
-                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, FALSE ))
+                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, FALSE, FALSE ))
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
@@ -581,6 +621,7 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                                                 ? pEnd->nContent.GetIndex()
                                                 : rTxt.Len(),
                                     nSttPos = nChg;
+
                         ASSERT( nEndPos <= rTxt.Len(), "Index outside the range - endless loop!" );
                         if( nEndPos > rTxt.Len() )
                             nEndPos = rTxt.Len();
@@ -593,7 +634,8 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                                       pBreakIt->xBreak->getScriptType(
                                                                 rTxt, nChg );
 
-                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE ) )
+                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE,
+                                                          0 == nChg && rTxt.Len() == nEndPos ) )
                                 nRet |= lcl_SetScriptFlags( nScript );
 
                             if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |

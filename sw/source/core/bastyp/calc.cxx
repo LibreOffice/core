@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 09:43:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include <tools/svwin.h>
 #endif
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
@@ -143,6 +143,9 @@
 #endif
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
 #endif
 
 // tippt sich schneller
@@ -556,13 +559,11 @@ String SwCalc::GetStrResult( double nValue, BOOL bRound )
         }
 
     USHORT  nDec = 15; //pLclData->getNumDigits();
-    String  aRetStr;
-
-    SolarMath::DoubleToString( aRetStr, nValue,
-                                'A',                        /// 'F'  'E'  'G'  'A'
-                                nDec,                       /// Nachkommastellen
-                                pLclData->getNumDecimalSep().GetChar(0),    /// Dezimalseparator
-                                TRUE );
+    String  aRetStr( ::rtl::math::doubleToUString( nValue,
+                rtl_math_StringFormat_Automatic,
+                nDec,
+                pLclData->getNumDecimalSep().GetChar(0),
+                true ));
 
     return aRetStr;
 }
@@ -1628,18 +1629,20 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     if( !pLclD )
         pLclD = &GetAppLocaleData();
 
-    const xub_Unicode *pEnd, nCurrCmdPos = rCommandPos;
-    int nErrno;
-    rVal = SolarMath::StringToDouble( rCommand.GetBuffer() + rCommandPos,
-                                        pLclD->getNumThousandSep().GetChar(0),
-                                        pLclD->getNumDecimalSep().GetChar(0),
-                                        nErrno, &pEnd );
+    const xub_Unicode nCurrCmdPos = rCommandPos;
+    rtl_math_ConversionStatus eStatus;
+    const sal_Unicode* pEnd;
+    rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
+            rCommand.GetBuffer() + rCommand.Len(),
+            pLclD->getNumDecimalSep().GetChar(0),
+            pLclD->getNumThousandSep().GetChar(0),
+            &eStatus, &pEnd );
     rCommandPos = pEnd - rCommand.GetBuffer();
 
     if( !pLclData && pLclD != &GetAppLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
 
-    return 0 == nErrno && nCurrCmdPos != rCommandPos;
+    return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
 }
 
 FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
@@ -1656,18 +1659,20 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             SvxCreateLocale( eLang ) );
     }
 
-    const xub_Unicode *pEnd, nCurrCmdPos = rCommandPos;
-    int nErrno;
-    rVal = SolarMath::StringToDouble( rCommand.GetBuffer() + rCommandPos,
-                                        pLclD->getNumThousandSep().GetChar(0),
-                                        pLclD->getNumDecimalSep().GetChar(0),
-                                        nErrno, &pEnd );
+    const xub_Unicode nCurrCmdPos = rCommandPos;
+    rtl_math_ConversionStatus eStatus;
+    const sal_Unicode* pEnd;
+    rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
+            rCommand.GetBuffer() + rCommand.Len(),
+            pLclD->getNumDecimalSep().GetChar(0),
+            pLclD->getNumThousandSep().GetChar(0),
+            &eStatus, &pEnd );
     rCommandPos = pEnd - rCommand.GetBuffer();
 
     if( pLclD != &GetAppLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
 
-    return 0 == nErrno && nCurrCmdPos != rCommandPos;
+    return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
 }
 
 //------------------------------------------------------------------------------
@@ -1740,7 +1745,6 @@ SwSbxValue::~SwSbxValue()
 {
 }
 
-
 BOOL SwSbxValue::GetBool() const
 {
     return SbxSTRING == GetType() ? 0 != GetString().Len()
@@ -1754,6 +1758,10 @@ double SwSbxValue::GetDouble() const
     {
         xub_StrLen nStt = 0;
         SwCalc::Str2Double( GetString(), nStt, nRet );
+    }
+    else if (IsBool())
+    {
+        nRet = 0 != GetBool() ? 1.0 : 0.0;
     }
     else
         nRet = SbxValue::GetDouble();

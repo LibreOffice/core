@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:41:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,8 @@ CXXFILES = \
     viewsh.cxx \
         viewpg.cxx \
         vnew.cxx \
-    vprint.cxx
+        vprint.cxx \
+        pagepreviewlayout.cxx
 
 
 
@@ -103,7 +104,8 @@ SLOFILES =  \
     $(SLO)$/viewsh.obj \
         $(SLO)$/viewpg.obj \
         $(SLO)$/vnew.obj \
-    $(SLO)$/vprint.obj
+        $(SLO)$/vprint.obj \
+        $(SLO)$/pagepreviewlayout.obj
 
 # --- Targets -------------------------------------------------------
 

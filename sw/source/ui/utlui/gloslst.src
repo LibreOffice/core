@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:19:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,22 +85,23 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         Text [ swedish ] = "AutoText - grupp" ;
         Text [ danish ] = "AutoTekst - gruppe" ;
         Text [ italian ] = "Testo automatico - Gruppo" ;
-        Text [ spanish ] = "Grupo AutoTexto" ;
+        Text [ spanish ] = "Texto automático - Grupo" ;
         Text [ french ] = "AutoTexte - Groupe" ;
-        Text [ dutch ] = "AutoTekst-groep" ;
+        Text [ dutch ] = "AutoTekst - groep" ;
         Text [ portuguese ] = "AutoTexto - Grupo" ;
-        Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯Ğ¡×é";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†å°ç»„";
         Text[ russian ] = "Àâòîòåêñò - Ãğóïïà";
         Text[ polish ] = "Autotekst - Grupa";
-        Text[ japanese ] = "“ü—Íx‰‡ ¸ŞÙ°Ìß";
-        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°¸s²Õ";
+        Text[ japanese ] = "å…¥åŠ›æ”¯æ´ ã‚°ãƒ«ãƒ¼ãƒ—";
+        Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†ç¾¤çµ„";
         Text[ arabic ] = "ãÌãæÚÉ äÕ ÊáŞÇÆí";
         Text[ greek ] = "ÏìÜäá ÁõôïÊåéìİíïõ";
-        Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®£­±×·ì";
+        Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ê·¸ë£¹";
         Text[ turkish ] = "Otomatik metin - Grup";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Grupo AutoTexto";
+        Text[ catalan ] = "Grup AutoText";
         Text[ finnish ] = "Automaattinen teksti - ryhmä";
+        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´ - à¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡";
     };
     OKButton PB_OK
     {
@@ -138,21 +139,33 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text [ italian ] = "Seleziona modulo di testo:  " ;
     Text [ spanish ] = "Seleccionar módulo de texto:  " ;
     Text [ french ] = "Sélection du module de texte : " ;
-    Text [ dutch ] = "Tekstbouwsteen selecteren:  " ;
+    Text [ dutch ] = "Tekstbouwsteen selecteren:" ;
     Text [ portuguese ] = "Seleccionar módulo de texto:  " ;
-    Text[ chinese_simplified ] = "Ñ¡Ôñ×Ô¶¯Í¼ÎÄ¼¯ÌõÄ¿£º ";
+    Text[ chinese_simplified ] = "é€‰æ‹©è‡ªåŠ¨å›¾æ–‡é›†æ¡ç›®ï¼š ";
     Text[ russian ] = "Âûáğàòü àâòîòåêñò: ";
     Text[ polish ] = "Zaznacz blok tekstu:  ";
-    Text[ japanese ] = "Ã·½ÄÌŞÛ¯¸‚Ì‘I‘ğ: ";
-    Text[ chinese_traditional ] = "¿ï¾Ü¦Û°Ê¹Ï¤å¶°¡G ";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒ–ãƒ­ãƒƒã‚¯ã®é¸æŠ: ";
+    Text[ chinese_traditional ] = "é¸æ“‡è‡ªå‹•åœ–æ–‡é›†ï¼š ";
     Text[ arabic ] = "ÇÎÊíÇÑ ÚäÕÑ ÇáäÕ: ";
     Text[ greek ] = "ÅğéëïãŞ ôìŞìáôïò êåéìİíïõ: ";
-    Text[ korean ] = "ÅØ½ºÆ® ¸ğµã ¼±ÅÃ: ";
+    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ì„ íƒ: ";
     Text[ turkish ] = "Metin bileşeni seç: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccionar módulo de texto:  ";
+    Text[ catalan ] = "Selecciona el módulo de text:  ";
     Text[ finnish ] = "Valitse automaattinen teksti: ";
+    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´: ";
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-04 18:13:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,13 @@
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 
 #include <hintids.hxx>
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
 
 #ifndef _LNKBASE_HXX //autogen
 #include <so3/lnkbase.hxx>
@@ -146,7 +153,7 @@
 #include <htmltbl.hxx>
 #endif
 
-BOOL SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd );
+BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
 
 TYPEINIT1( SwBaseLink, ::so3::SvBaseLink );
 
@@ -228,7 +235,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
     FASTBOOL bGraphicArrived = FALSE;
     FASTBOOL bGraphicPieceArrived = FALSE;
     FASTBOOL bDontNotify = FALSE;
-    Size aGrfSz;
+    Size aGrfSz, aFrmFmtSz;
 
     if( pCntntNode->IsGrfNode() )
     {
@@ -246,6 +253,18 @@ void SwBaseLink::DataChanged( const String& rMimeType,
               GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
         {
             aGrfSz = ::GetGraphicSizeTwip( aGrf, 0 );
+            if( static_cast< const SwGrfNode * >( pCntntNode )->IsChgTwipSizeFromPixel() )
+            {
+                const MapMode aMapTwip( MAP_TWIP );
+                aFrmFmtSz =
+                    Application::GetDefaultDevice()->PixelToLogic(
+                        aGrf.GetSizePixel(), aMapTwip );
+
+            }
+            else
+            {
+                aFrmFmtSz = aGrfSz;
+            }
             Size aSz( ((SwGrfNode*)pCntntNode)->GetTwipSize() );
 
             if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
@@ -341,11 +360,11 @@ void SwBaseLink::DataChanged( const String& rMimeType,
                                                     IsGrafikArrived() );
 
                         // Fly der Grafik anpassen !
-                        if( !::SetGrfFlySize( aGrfSz, pGrfNd ) )
+                        if( !::SetGrfFlySize( aGrfSz, aFrmFmtSz, pGrfNd ) )
                             ::lcl_CallModify( *pGrfNd, aMsgHint );
                     }
                     else if( pBLink == this &&
-                            !::SetGrfFlySize( aGrfSz, pGrfNd ) )
+                            !::SetGrfFlySize( aGrfSz, aFrmFmtSz, pGrfNd ) )
                         // Fly der Grafik anpassen !
                         ::lcl_CallModify( *pGrfNd, aMsgHint );
                 }
@@ -387,7 +406,7 @@ FASTBOOL SwBaseLink::IsShowQuickDrawBmp() const
 }
 
 
-BOOL SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd )
+BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 {
     BOOL bRet = FALSE;
     ViewShell *pSh;
@@ -406,15 +425,15 @@ BOOL SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd )
             Size aCalcSz( aSz );
             if ( !aSz.Height() && aSz.Width() )
                 //passende Hoehe ausrechnen.
-                aCalcSz.Height() = rGrfSz.Height() *
-                        aSz.Width() / rGrfSz.Width();
+                aCalcSz.Height() = rFrmSz.Height() *
+                        aSz.Width() / rFrmSz.Width();
             else if ( !aSz.Width() && aSz.Height() )
                 //passende Breite ausrechnen
-                aCalcSz.Width() = rGrfSz.Width() *
-                        aSz.Height() / rGrfSz.Height();
+                aCalcSz.Width() = rFrmSz.Width() *
+                        aSz.Height() / rFrmSz.Height();
             else
                 //Hoehe und Breite uebernehmen
-                aCalcSz = rGrfSz;
+                aCalcSz = rFrmSz;
 
             const SvxBoxItem     &rBox = pFmt->GetBox();
             aCalcSz.Width() += rBox.CalcLineSpace(BOX_LINE_LEFT) +

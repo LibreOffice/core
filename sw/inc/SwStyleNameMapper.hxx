@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-16 12:07:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,14 @@ public:
     static sal_uInt16 GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName );
     // Get the Pool ID from the programmatic name
     static sal_uInt16 GetPoolIdFromProgName( const String& rName, SwGetPoolIdFromName );
+
+    // used to convert the 4 special ExtraProg/UINames for
+    // RES_POOLCOLL_LABEL_DRAWING,  RES_POOLCOLL_LABEL_ABB,
+    // RES_POOLCOLL_LABEL_TABLE, RES_POOLCOLL_LABEL_FRAME
+    // forth and back.
+    // Non-matching names remain unchanged.
+    static const String GetSpecialExtraProgName( const String& rExtraUIName );
+    static const String GetSpecialExtraUIName( const String& rExtraProgName );
 
     static const SvStringsDtor& GetTextUINameArray();
     static const SvStringsDtor& GetListsUINameArray();

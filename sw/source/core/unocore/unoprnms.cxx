@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:10:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,7 +717,22 @@ const SwPropNameTab aPropNameTab = {
 /* 0635 UNO_NAME_HEADER_DYNAMIC_SPACING */ {MAP_CHAR_LEN("HeaderDynamicSpacing")},
 /* 0636 UNO_NAME_FOOTER_DYNAMIC_SPACING */ {MAP_CHAR_LEN("FooterDynamicSpacing")},
 /* 0637 UNO_NAME_BASIC_LIBRARIES */ {MAP_CHAR_LEN("BasicLibraries")},
-/* 0638 UNO_NAME_IS_FIXED_LANGUAGE */ {MAP_CHAR_LEN("IsFixedLanguage")}
+/* 0638 UNO_NAME_IS_FIXED_LANGUAGE */ {MAP_CHAR_LEN("IsFixedLanguage")},
+/* 0639 UNO_NAME_SELECTION */  {MAP_CHAR_LEN("Selection")},
+/* 0640 UNO_NAME_RESULT_SET */  {MAP_CHAR_LEN("ResultSet")},
+/* 0641 UNO_NAME_CONNECTION */  {MAP_CHAR_LEN("Connection")},
+/* 0642 UNO_NAME_MODEL */  {MAP_CHAR_LEN("Model")},
+/* 0643 UNO_NAME_DATA_SOURCE_NAME */  {MAP_CHAR_LEN("DataSourceName")},
+/* 0644 UNO_NAME_DATA_COMMAND */  {MAP_CHAR_LEN("DataCommand")},
+/* 0645 UNO_NAME_FILTER */  {MAP_CHAR_LEN("Filter")},
+/* 0646 UNO_NAME_DOCUMENT_URL */  {MAP_CHAR_LEN("DocumentURL")},
+/* 0647 UNO_NAME_OUTPUT_URL */  {MAP_CHAR_LEN("OutputURL")},
+/* 0648 UNO_NAME_OUTPUT_TYPE */  {MAP_CHAR_LEN("OutputType")},
+/* 0649 UNO_NAME_ESCAPE_PROCESSING */  {MAP_CHAR_LEN("EscapeProcessing")},
+/* 0650 UNO_NAME_SINGLE_PRINT_JOBS */  {MAP_CHAR_LEN("SinglePrintJobs")},
+/* 0651 UNO_NAME_FILE_NAME_FROM_COLUMN */  {MAP_CHAR_LEN("FileNameFromColumn")},
+/* 0652 UNO_NAME_FILE_NAME_PREFIX */  {MAP_CHAR_LEN("FileNamePrefix")},
+/* 0653 UNO_NAME_CHAR_STYLE_NAMES */  {MAP_CHAR_LEN("CharStyleNames")}
 };
 
 #ifndef PRODUCT

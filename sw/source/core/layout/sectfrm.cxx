@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: od $ $Date: 2002-11-15 11:00:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1214,6 +1214,13 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         //Inhalt selbst verantwortlich.
         BOOL bMaximize = ToMaximize( FALSE );
 
+        // Column widths have to be adjusted before calling _CheckClipping.
+        // _CheckClipping can cause the formatting of the lower frames
+        // which still have a width of 0.
+        const sal_Bool bHasColumns = Lower() && Lower()->IsColumnFrm();
+        if ( bHasColumns && Lower()->GetNext() )
+            AdjustColumns( 0, FALSE );
+
         if( GetUpper() )
         {
             long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
@@ -1228,13 +1235,8 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         }
 
         //Breite der Spalten pruefen und ggf. einstellen.
-        if ( Lower() && Lower()->IsColumnFrm() )
-        {
-            if( Lower()->GetNext() )
-                AdjustColumns( 0, FALSE );
-            else if( bMaximize )
-                ((SwColumnFrm*)Lower())->Lower()->Calc();
-        }
+        if ( bHasColumns && ! Lower()->GetNext() && bMaximize )
+            ((SwColumnFrm*)Lower())->Lower()->Calc();
 
         if ( !bMaximize )
         {
@@ -1674,7 +1676,12 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType eMakeFtn )
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();
         else if ( bBody && pLayLeaf->IsInDocBody() )
         {
-            if ( pLayLeaf->Lower() )
+            // If there is a pLayLeaf has a lower pLayLeaf is the frame we are looking for.
+            // Exception: pLayLeaf->Lower() is a zombie section frame
+            const SwFrm* pTmp = pLayLeaf->Lower();
+            if ( pTmp &&
+                    ( ! pTmp->IsSctFrm() ||
+                    ((SwSectionFrm*)pTmp)->GetSection() ) )
                 break;
             pPrevLeaf = pLayLeaf;
             pLayLeaf = pLayLeaf->GetPrevLayoutLeaf();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-06 16:36:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2193,3 +2193,17 @@ void SwFltShell::NextStyle(USHORT nWhich, USHORT nNext)
                  *pColls[nNext]->GetColl() );
 }
 
+// UpdatePageDescs muss am Ende des Einlesevorganges aufgerufen werden, damit
+// der Writer den Inhalt der Pagedescs wirklich akzeptiert
+void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset)
+{
+    // Pagedescriptoren am Dokument updaten (nur so werden auch die
+    // linken Seiten usw. eingestellt).
+
+    // PageDesc "Standard"
+    rDoc.ChgPageDesc(0, rDoc.GetPageDesc(0));
+
+    // PageDescs "Konvert..."
+    for (sal_uInt16 i = nInPageDescOffset; i < rDoc.GetPageDescCnt(); ++i)
+        rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
+}

@@ -2,10 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-21 14:39:17 $
- *
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,19 +76,20 @@ String STR_CANT_UNDO
     TEXT [ dutch ] = "Onmogelijk" ;
     TEXT [ spanish ] = "imposible" ;
     TEXT [ english_us ] = "not possible" ;
-    TEXT[ chinese_simplified ] = "²»¿ÉÄÜ";
+    TEXT[ chinese_simplified ] = "ä¸å¯èƒ½";
     TEXT[ russian ] = "íåâîçìîæíî";
     TEXT[ polish ] = "niemo¿liwy";
-    TEXT[ japanese ] = "•s‰Â”\\";
-    TEXT[ chinese_traditional ] = "¤£¥i¯à";
+    TEXT[ japanese ] = "ä¸å¯èƒ½";
+    TEXT[ chinese_traditional ] = "ä¸å¯èƒ½";
     TEXT[ arabic ] = "ÛíÑ ããßä";
     TEXT[ dutch ] = "Onmogelijk";
-    TEXT[ chinese_simplified ] = "²»¿ÉÄÜ";
+    TEXT[ chinese_simplified ] = "ä¸å¯èƒ½";
     TEXT[ greek ] = "áäıíáôïí";
-    TEXT[ korean ] = "ºÒ°¡´É.";
+    TEXT[ korean ] = "ë¶ˆê°€ëŠ¥";
     TEXT[ turkish ] = "olanaksız";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "imposible";
+    TEXT[ catalan ] = "impossible";
+    TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸”à¹‰";
 };
 String STR_DELETE_UNDO
 {
@@ -104,21 +104,22 @@ String STR_DELETE_UNDO
     TEXT [ french ] = "Supprimer" ;
     TEXT [ swedish ] = "Radera" ;
     TEXT [ dutch ] = "Wissen" ;
-    TEXT [ spanish ] = "Eliminar" ;
+    TEXT [ spanish ] = "Borrar" ;
     TEXT [ english_us ] = "Delete" ;
-    TEXT[ chinese_simplified ] = "É¾³ı";
+    TEXT[ chinese_simplified ] = "åˆ é™¤";
     TEXT[ russian ] = "Óäàëèòü";
     TEXT[ polish ] = "Usuñ";
-    TEXT[ japanese ] = "íœ";
-    TEXT[ chinese_traditional ] = "§R°£";
+    TEXT[ japanese ] = "å‰Šé™¤";
+    TEXT[ chinese_traditional ] = "åˆªé™¤";
     TEXT[ arabic ] = "ÍĞİ";
     TEXT[ dutch ] = "Wissen";
-    TEXT[ chinese_simplified ] = "É¾³ı";
+    TEXT[ chinese_simplified ] = "åˆ é™¤";
     TEXT[ greek ] = "ÄéáãñáöŞ";
-    TEXT[ korean ] = "»èÁ¦";
+    TEXT[ korean ] = "ì‚­ì œ";
     TEXT[ turkish ] = "Sil";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Eliminar";
+    TEXT[ catalan ] = "Suprimeix";
+    TEXT[ thai ] = "à¸¥à¸š";
 };
 String STR_INSERT_UNDO
 {
@@ -135,19 +136,20 @@ String STR_INSERT_UNDO
     TEXT [ dutch ] = "Invoegen" ;
     TEXT [ spanish ] = "Insertar" ;
     TEXT [ english_us ] = "Insert" ;
-    TEXT[ chinese_simplified ] = "²åÈë";
-    TEXT[ russian ] = "Âñòàâêà";
+    TEXT[ chinese_simplified ] = "æ’å…¥";
+    TEXT[ russian ] = "Âñòàâèòü";
     TEXT[ polish ] = "Wstaw";
-    TEXT[ japanese ] = "‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J";
+    TEXT[ japanese ] = "æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥";
     TEXT[ arabic ] = "ÅÏÑÇÌ";
     TEXT[ dutch ] = "Invoegen";
-    TEXT[ chinese_simplified ] = "²åÈë";
+    TEXT[ chinese_simplified ] = "æ’å…¥";
     TEXT[ greek ] = "ÅéóáãùãŞ";
-    TEXT[ korean ] = "»ğÀÔ";
+    TEXT[ korean ] = "ì‚½ì…";
     TEXT[ turkish ] = "Ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar";
+    TEXT[ catalan ] = "Insereix";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸";
 };
 String STR_OVR_UNDO
 {
@@ -164,19 +166,20 @@ String STR_OVR_UNDO
     TEXT [ dutch ] = "Overschrijven" ;
     TEXT [ spanish ] = "Sobrescribir" ;
     TEXT [ english_us ] = "Overwrite" ;
-    TEXT[ chinese_simplified ] = "¸²Ğ´";
+    TEXT[ chinese_simplified ] = "æ”¹å†™";
     TEXT[ russian ] = "Çàìåíèòü";
     TEXT[ polish ] = "Skasuj przez zapisanie";
-    TEXT[ japanese ] = "ã‘‚«";
-    TEXT[ chinese_traditional ] = "ÂĞ¼g";
+    TEXT[ japanese ] = "ä¸Šæ›¸ã";
+    TEXT[ chinese_traditional ] = "è¦†å¯«";
     TEXT[ arabic ] = "ÇáßÊÇÈÉ İæŞ";
     TEXT[ dutch ] = "Overschrijven";
-    TEXT[ chinese_simplified ] = "¸²Ğ´";
+    TEXT[ chinese_simplified ] = "æ”¹å†™";
     TEXT[ greek ] = "ÁíôéêáôÜóôáóç";
-    TEXT[ korean ] = "µ¤¾î¾º¿ì±â";
+    TEXT[ korean ] = "ê²¹ì³ì“°ê¸°";
     TEXT[ turkish ] = "Üzerine yaz";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Sobrescribir";
+    TEXT[ catalan ] = "Sobreescriu";
+    TEXT[ thai ] = "à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸š";
 };
 String STR_SPLITNODE_UNDO
 {
@@ -193,19 +196,20 @@ String STR_SPLITNODE_UNDO
     TEXT [ dutch ] = "Nieuwe alinea" ;
     TEXT [ spanish ] = "Párrafo nuevo" ;
     TEXT [ english_us ] = "New Paragraph" ;
-    TEXT[ chinese_simplified ] = "ĞÂ½¨¶ÎÂä";
-    TEXT[ russian ] = "Íîâûé àáçàö";
+    TEXT[ chinese_simplified ] = "æ–°å»ºæ®µè½";
+    TEXT[ russian ] = "ñîçäàíèå àáçàöà";
     TEXT[ polish ] = "Nowy akapit";
-    TEXT[ japanese ] = "V‚µ‚¢’i—";
-    TEXT[ chinese_traditional ] = "·s«Ø¬q¸¨";
+    TEXT[ japanese ] = "æ–°ã—ã„æ®µè½";
+    TEXT[ chinese_traditional ] = "æ–°å»ºæ®µè½";
     TEXT[ arabic ] = "İŞÑÉ ÌÏíÏÉ";
     TEXT[ dutch ] = "Nieuwe alinea";
-    TEXT[ chinese_simplified ] = "ĞÂ½¨¶ÎÂä";
+    TEXT[ chinese_simplified ] = "æ–°å»ºæ®µè½";
     TEXT[ greek ] = "Äçìéïõñãßá ğáñáãñÜöïõ";
-    TEXT[ korean ] = "»õ ´Ü¶ô";
+    TEXT[ korean ] = "ìƒˆ ë‹¨ë½";
     TEXT[ turkish ] = "Yeni paragraf";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Párrafo nuevo";
+    TEXT[ catalan ] = "Paràgraf nou";
+    TEXT[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¹ƒà¸«à¸¡à¹ˆ";
 };
 String STR_MOVE_UNDO
 {
@@ -222,19 +226,20 @@ String STR_MOVE_UNDO
     TEXT [ dutch ] = "Verplaatsen" ;
     TEXT [ spanish ] = "Desplazar" ;
     TEXT [ english_us ] = "Move" ;
-    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
     TEXT[ russian ] = "Ïåğåìåñòèòü";
     TEXT[ polish ] = "Przesuñ";
-    TEXT[ japanese ] = "ˆÚ“®";
-    TEXT[ chinese_traditional ] = "²¾°Ê";
+    TEXT[ japanese ] = "ç§»å‹•";
+    TEXT[ chinese_traditional ] = "ç§»å‹•";
     TEXT[ arabic ] = "ÅÒÇÍÉ";
     TEXT[ dutch ] = "Verplaatsen";
-    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
     TEXT[ greek ] = "Ìåôáêßíçóç";
-    TEXT[ korean ] = "ÀÌµ¿";
+    TEXT[ korean ] = "ì´ë™";
     TEXT[ turkish ] = "Taşı";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Desplazar";
+    TEXT[ catalan ] = "Mou";
+    TEXT[ thai ] = "à¸¢à¹‰à¸²à¸¢";
 };
 String STR_INSATTR_UNDO
 {
@@ -251,19 +256,20 @@ String STR_INSATTR_UNDO
     TEXT [ dutch ] = "Attributen toepassen" ;
     TEXT [ spanish ] = "Aplicar atributos" ;
     TEXT [ english_us ] = "Apply attributes" ;
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
     TEXT[ russian ] = "Ïğèìåíèòü àòğèáóòû";
     TEXT[ polish ] = "Zastosuj atrybuty";
-    TEXT[ japanese ] = "‘®«‚Ì“K—p";
-    TEXT[ chinese_traditional ] = "¨Ï¥ÎÄİ©Ê";
+    TEXT[ japanese ] = "å±æ€§ã®é©ç”¨";
+    TEXT[ chinese_traditional ] = "ä½¿ç”¨å±¬æ€§";
     TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáÓãÇÊ";
     TEXT[ dutch ] = "Attributen toepassen";
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
     TEXT[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí";
-    TEXT[ korean ] = "¼Ó¼º Àû¿ë";
+    TEXT[ korean ] = "ì†ì„± ì ìš©";
     TEXT[ turkish ] = "Öznitelikleri değiştir";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Aplicar atributos";
+    TEXT[ catalan ] = "Aplica els atributs";
+    TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°";
 };
 String STR_SETFMTCOLL_UNDO
 {
@@ -280,19 +286,20 @@ String STR_SETFMTCOLL_UNDO
     TEXT [ dutch ] = "Opmaakprofielen toepassen" ;
     TEXT [ spanish ] = "Aplicar estilos" ;
     TEXT [ english_us ] = "Apply Styles" ;
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
     TEXT[ russian ] = "Ïğèìåíèòü ñòèëè";
     TEXT[ polish ] = "Zastosuj style";
-    TEXT[ japanese ] = "½À²Ù‚Ì“K—p";
-    TEXT[ chinese_traditional ] = "¨Ï¥Î¼Ë¦¡";
+    TEXT[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®é©ç”¨";
+    TEXT[ chinese_traditional ] = "ä½¿ç”¨æ¨£å¼";
     TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáäãÇĞÌ";
     TEXT[ dutch ] = "Opmaakprofielen toepassen";
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
     TEXT[ greek ] = "ÅöáñìïãŞ ğñïôığùí";
-    TEXT[ korean ] = "À¯Çü Àû¿ë";
+    TEXT[ korean ] = "ìŠ¤íƒ€ì¼ ì ìš©";
     TEXT[ turkish ] = "Biçim uygula";
-    TEXT[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
-    TEXT[ catalan ] = "Aplicar estilos";
+    TEXT[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+    TEXT[ catalan ] = "Aplica els estils";
+    TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸¥à¸±à¸à¸©à¸“à¸°";
 };
 String STR_RESET_ATTR_UNDO
 {
@@ -306,22 +313,23 @@ String STR_RESET_ATTR_UNDO
     TEXT [ danish ] = "Nulstil attributter" ;
     TEXT [ french ] = "Restaurer les attributs" ;
     TEXT [ swedish ] = "Återställ attribut" ;
-    TEXT [ dutch ] = "Attributen terugzetten" ;
+    TEXT [ dutch ] = "Attributen herstellen" ;
     TEXT [ spanish ] = "Restablecer atributos" ;
     TEXT [ english_us ] = "Reset attributes" ;
-    TEXT[ chinese_simplified ] = "ÖØÉèÊôĞÔ";
+    TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
     TEXT[ russian ] = "Âîññòàíîâèòü àòğèáóòû";
     TEXT[ polish ] = "Zresetuj atrybuty";
-    TEXT[ japanese ] = "‘®«‚ÌØ¾¯Ä";
-    TEXT[ chinese_traditional ] = "­«³]Äİ©Ê";
+    TEXT[ japanese ] = "å±æ€§ã®ãƒªã‚»ãƒƒãƒˆ";
+    TEXT[ chinese_traditional ] = "é‡è¨­å±¬æ€§";
     TEXT[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÇáÓãÇÊ";
-    TEXT[ dutch ] = "Attributen terugzetten";
-    TEXT[ chinese_simplified ] = "ÖØÉèÊôĞÔ";
+    TEXT[ dutch ] = "Attributen herstellen";
+    TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
     TEXT[ greek ] = "ÅğáíáöïñÜ éäéïôŞôùí";
-    TEXT[ korean ] = "¼Ó¼º ¿ø·¡´ë·Î";
+    TEXT[ korean ] = "ì†ì„± ì›ë˜ëŒ€ë¡œ";
     TEXT[ turkish ] = "Öznitelikleri başa al";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Restablecer atributos";
+    TEXT[ catalan ] = "Reinicia els atributs";
+    TEXT[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°à¹ƒà¸«à¸¡à¹ˆ";
 };
 String STR_APPLY_ATTR_UNDO
 {
@@ -338,19 +346,20 @@ String STR_APPLY_ATTR_UNDO
     TEXT [ dutch ] = "Attributen toepassen" ;
     TEXT [ spanish ] = "Aplicar atributos" ;
     TEXT [ english_us ] = "Apply attributes" ;
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
     TEXT[ russian ] = "Ïğèìåíèòü àòğèáóòû";
     TEXT[ polish ] = "Zastosuj atrybuty";
-    TEXT[ japanese ] = "‘®«‚Ì“K—p";
-    TEXT[ chinese_traditional ] = "¨Ï¥ÎÄİ©Ê";
+    TEXT[ japanese ] = "å±æ€§ã®é©ç”¨";
+    TEXT[ chinese_traditional ] = "ä½¿ç”¨å±¬æ€§";
     TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáÓãÇÊ";
     TEXT[ dutch ] = "Attributen toepassen";
-    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
     TEXT[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí";
-    TEXT[ korean ] = "¼Ó¼º Àû¿ë";
+    TEXT[ korean ] = "ì†ì„± ì ìš©";
     TEXT[ turkish ] = "Öznitelikleri kullan";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Aplicar atributos";
+    TEXT[ catalan ] = "Aplica els atributs";
+    TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°";
 };
 String STR_INSERT_DOC_UNDO
 {
@@ -367,19 +376,20 @@ String STR_INSERT_DOC_UNDO
     TEXT [ dutch ] = "Document invoegen" ;
     TEXT [ spanish ] = "Insertar documento" ;
     TEXT [ english_us ] = "Insert Document" ;
-    TEXT[ chinese_simplified ] = "²åÈëÎÄµµ";
+    TEXT[ chinese_simplified ] = "æ’å…¥æ–‡æ¡£";
     TEXT[ russian ] = "Âñòàâèòü äîêóìåíò";
     TEXT[ polish ] = "Wstaw dokument";
-    TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J¤å¥ó";
+    TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥æ–‡ä»¶";
     TEXT[ arabic ] = "ÅÏÑÇÌ ãÓÊäÏ";
     TEXT[ dutch ] = "Document invoegen";
-    TEXT[ chinese_simplified ] = "²åÈëÎÄµµ";
+    TEXT[ chinese_simplified ] = "æ’å…¥æ–‡æ¡£";
     TEXT[ greek ] = "ĞñïóèŞêç åããñÜöïõ";
-    TEXT[ korean ] = "¹®¼­ »ğÀÔ";
+    TEXT[ korean ] = "ë¬¸ì„œ ì‚½ì…";
     TEXT[ turkish ] = "Belge ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar documento";
+    TEXT[ catalan ] = "Insereix el document";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¹€à¸­à¸à¸ªà¸²à¸£";
 };
 String STR_INSERT_GLOSSARY
 {
@@ -394,21 +404,22 @@ String STR_INSERT_GLOSSARY
     TEXT [ french ] = "Insérer un AutoTexte" ;
     TEXT [ swedish ] = "Infoga AutoText" ;
     TEXT [ dutch ] = "AutoTekst invoegen" ;
-    TEXT [ spanish ] = "Insertar AutoTexto" ;
+    TEXT [ spanish ] = "Insertar Texto automático" ;
     TEXT [ english_us ] = "Insert AutoText" ;
-    TEXT[ chinese_simplified ] = "²åÈë×Ô¶¯Í¼ÎÄ¼¯";
+    TEXT[ chinese_simplified ] = "æ’å…¥è‡ªåŠ¨å›¾æ–‡é›†";
     TEXT[ russian ] = "Âñòàâèòü àâòîòåêñò";
     TEXT[ polish ] = "Wstaw Autotekst";
-    TEXT[ japanese ] = "“ü—Íx‰‡‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J¦Û°Ê¹Ï¤å¶°";
+    TEXT[ japanese ] = "å…¥åŠ›æ”¯æ´ã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥è‡ªå‹•åœ–æ–‡é›†";
     TEXT[ arabic ] = "ÅÏÑÇÌ äÕ ÊáŞÇÆí";
     TEXT[ dutch ] = "AutoTekst invoegen";
-    TEXT[ chinese_simplified ] = "²åÈë×Ô¶¯Í¼ÎÄ¼¯";
+    TEXT[ chinese_simplified ] = "æ’å…¥è‡ªåŠ¨å›¾æ–‡é›†";
     TEXT[ greek ] = "ĞñïóèŞêç ÁõôïÊåéìİíïõ";
-    TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ";
+    TEXT[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ì‚½ì…";
     TEXT[ turkish ] = "Otomatik metin ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar AutoTexto";
+    TEXT[ catalan ] = "Insereix el text automàtic";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 String STR_DELBOOKMARK
 {
@@ -423,21 +434,22 @@ String STR_DELBOOKMARK
     TEXT [ french ] = "Supprimer le repère de texte" ;
     TEXT [ swedish ] = "Radera bokmärke" ;
     TEXT [ dutch ] = "Tekstmarkering verwijderen" ;
-    TEXT [ spanish ] = "Eliminar marca de texto" ;
+    TEXT [ spanish ] = "Borrar marca de texto" ;
     TEXT [ english_us ] = "Delete bookmark" ;
-    TEXT[ chinese_simplified ] = "É¾³ıÊéÇ©";
-    TEXT[ russian ] = "Óäàëèòü òåêñòîâóş ïîìåòêó";
+    TEXT[ chinese_simplified ] = "åˆ é™¤ä¹¦ç­¾";
+    TEXT[ russian ] = "Óäàëèòü çàêëàäêó";
     TEXT[ polish ] = "Usuñ zak³adkê";
-    TEXT[ japanese ] = "Ã·½ÄÏ°¸‚Ìíœ";
-    TEXT[ chinese_traditional ] = "§R°£¤º¤å¼ĞÅÒ";
+    TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯ã®å‰Šé™¤";
+    TEXT[ chinese_traditional ] = "åˆªé™¤å…§æ–‡æ¨™ç±¤";
     TEXT[ arabic ] = "ÍĞİ ÅÔÇÑÉ ãÑÌÚíÉ";
     TEXT[ dutch ] = "Tekstmarkering verwijderen";
-    TEXT[ chinese_simplified ] = "É¾³ıÊéÇ©";
+    TEXT[ chinese_simplified ] = "åˆ é™¤ä¹¦ç­¾";
     TEXT[ greek ] = "ÄéáãñáöŞ óçìáäéïı êåéìİíïõ";
-    TEXT[ korean ] = "Ã¥°¥ÇÇ »èÁ¦";
+    TEXT[ korean ] = "ì±…ê°ˆí”¼ ì‚­ì œ";
     TEXT[ turkish ] = "Metin işaretini sil";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Eliminar marca de texto";
+    TEXT[ catalan ] = "Suprimeix l'adreça d'interès";
+    TEXT[ thai ] = "à¸¥à¸šà¸•à¸±à¸§à¸„à¸±à¹ˆà¸™";
 };
 String STR_INSBOOKMARK
 {
@@ -454,19 +466,20 @@ String STR_INSBOOKMARK
     TEXT [ dutch ] = "Tekstmarkering invoegen" ;
     TEXT [ spanish ] = "Insertar marca" ;
     TEXT [ english_us ] = "Insert bookmark" ;
-    TEXT[ chinese_simplified ] = "²åÈëÊéÇ©";
-    TEXT[ russian ] = "Âñòàâèòü òåêñòîâóş ïîìåòêó";
+    TEXT[ chinese_simplified ] = "æ’å…¥ä¹¦ç­¾";
+    TEXT[ russian ] = "Âñòàâèòü çàêëàäêó";
     TEXT[ polish ] = "Wstaw zak³adkê";
-    TEXT[ japanese ] = "Ã·½ÄÏ°¸‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J¤º¤å¼ĞÅÒ";
+    TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯ã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥å…§æ–‡æ¨™ç±¤";
     TEXT[ arabic ] = "ÅÏÑÇÌ ÅÔÇÑÉ ãÑÌÚíÉ";
     TEXT[ dutch ] = "Tekstmarkering invoegen";
-    TEXT[ chinese_simplified ] = "²åÈëÊéÇ©";
+    TEXT[ chinese_simplified ] = "æ’å…¥ä¹¦ç­¾";
     TEXT[ greek ] = "ÅéóáãùãŞ óçìáäéïı êåéìİíïõ";
-    TEXT[ korean ] = "Ã¥°¥ÇÇ »ğÀÔ";
+    TEXT[ korean ] = "ì±…ê°ˆí”¼ ì‚½ì…";
     TEXT[ turkish ] = "Metin işareti ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar marca";
+    TEXT[ catalan ] = "Insereix una adreça d'interès";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™";
 };
 String STR_SORT_TBL
 {
@@ -483,19 +496,20 @@ String STR_SORT_TBL
     TEXT [ dutch ] = "Tabel sorteren" ;
     TEXT [ spanish ] = "Ordenar tabla" ;
     TEXT [ english_us ] = "Sort table" ;
-    TEXT[ chinese_simplified ] = "ÅÅĞò±í¸ñ";
+    TEXT[ chinese_simplified ] = "æ’åºè¡¨æ ¼";
     TEXT[ russian ] = "Ñîğòèğîâêà òàáëèöû";
     TEXT[ polish ] = "Sortuj tabelê";
-    TEXT[ japanese ] = "•\\‚Ì•À‚×‘Ö‚¦";
-    TEXT[ chinese_traditional ] = "±Æ§Çªí®æ";
+    TEXT[ japanese ] = "è¡¨ã®ä¸¦ã¹æ›¿ãˆ";
+    TEXT[ chinese_traditional ] = "æ’åºè¡¨æ ¼";
     TEXT[ arabic ] = "İÑÒ ÇáÌÏæá";
     TEXT[ dutch ] = "Tabel sorteren";
-    TEXT[ chinese_simplified ] = "ÅÅĞò±í¸ñ";
+    TEXT[ chinese_simplified ] = "æ’åºè¡¨æ ¼";
     TEXT[ greek ] = "Ôáîéíüìçóç ğßíáêá";
-    TEXT[ korean ] = "Å×ÀÌºí Á¤·Ä";
+    TEXT[ korean ] = "í‘œ ì •ë ¬";
     TEXT[ turkish ] = "Tabloyu sırala";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ordenar tabla";
+    TEXT[ catalan ] = "Ordena la taula";
+    TEXT[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_SORT_TXT
 {
@@ -512,19 +526,20 @@ String STR_SORT_TXT
     TEXT [ dutch ] = "Tekst sorteren" ;
     TEXT [ spanish ] = "Ordenar texto" ;
     TEXT [ english_us ] = "Sort text" ;
-    TEXT[ chinese_simplified ] = "ÅÅĞòÎÄ×Ö";
+    TEXT[ chinese_simplified ] = "æ’åºæ–‡å­—";
     TEXT[ russian ] = "Ñîğòèğîâêà òåêñòà";
     TEXT[ polish ] = "Sortuj tekst";
-    TEXT[ japanese ] = "Ã·½Ä‚Ì•À‚×‘Ö‚¦";
-    TEXT[ chinese_traditional ] = "±Æ§Ç¤å¦r";
+    TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ä¸¦ã¹æ›¿ãˆ";
+    TEXT[ chinese_traditional ] = "æ’åºæ–‡å­—";
     TEXT[ arabic ] = "İÑÒ ÇáäÕ";
     TEXT[ dutch ] = "Tekst sorteren";
-    TEXT[ chinese_simplified ] = "ÅÅĞòÎÄ×Ö";
+    TEXT[ chinese_simplified ] = "æ’åºæ–‡å­—";
     TEXT[ greek ] = "Ôáîéíüìçóç êåéìİíïõ";
-    TEXT[ korean ] = "ÅØ½ºÆ® Á¤·Ä";
+    TEXT[ korean ] = "í…ìŠ¤íŠ¸ ì •ë ¬";
     TEXT[ turkish ] = "Metni sırala";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Ordenar texto";
+    TEXT[ catalan ] = "Ordena el text";
+    TEXT[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
 String STR_INSTABLE_UNDO
 {
@@ -541,19 +556,20 @@ String STR_INSTABLE_UNDO
     TEXT [ dutch ] = "Tabel invoegen" ;
     TEXT [ spanish ] = "Insertar tabla" ;
     TEXT [ english_us ] = "Insert Table" ;
-    TEXT[ chinese_simplified ] = "²åÈë±í¸ñ";
+    TEXT[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼";
     TEXT[ russian ] = "Âñòàâèòü òàáëèöó";
     TEXT[ polish ] = "Wstaw tabelê";
-    TEXT[ japanese ] = "•\\‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤Jªí®æ";
+    TEXT[ japanese ] = "è¡¨ã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥è¡¨æ ¼";
     TEXT[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
     TEXT[ dutch ] = "Tabel invoegen";
-    TEXT[ chinese_simplified ] = "²åÈë±í¸ñ";
+    TEXT[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼";
     TEXT[ greek ] = "ÅéóáãùãŞ ğßíáêá";
-    TEXT[ korean ] = "Å×ÀÌºí »ğÀÔ";
+    TEXT[ korean ] = "í‘œ ì‚½ì…";
     TEXT[ turkish ] = "Tablo ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar tabla";
+    TEXT[ catalan ] = "Insereix una taula";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_TEXTTOTABLE_UNDO
 {
@@ -570,19 +586,20 @@ String STR_TEXTTOTABLE_UNDO
     TEXT [ dutch ] = "Tekst naar tabel converteren" ;
     TEXT [ spanish ] = "Convertir texto en tabla" ;
     TEXT [ english_us ] = "Convert text -> table" ;
-    TEXT[ chinese_simplified ] = "ÎÄ×Ö×ª»»³É±í¸ñ";
-    TEXT[ russian ] = "Ïğåîáğàçîâàòü Òåêñò -> Òàáëèöà";
+    TEXT[ chinese_simplified ] = "æ–‡å­—è½¬æ¢æˆè¡¨æ ¼";
+    TEXT[ russian ] = "Ïğåîáğàçîâàòü òåêñò â òàáëèöó";
     TEXT[ polish ] = "Konwertuj tekst na tabelê";
-    TEXT[ japanese ] = "•¶‘‚ğ•\\‚É•ÏŠ·";
-    TEXT[ chinese_traditional ] = "¤å¦rÂà´«¦¨ªí®æ";
+    TEXT[ japanese ] = "æ–‡æ›¸ã‚’è¡¨ã«å¤‰æ›";
+    TEXT[ chinese_traditional ] = "æ–‡å­—è½‰æ›æˆè¡¨æ ¼";
     TEXT[ arabic ] = "ÊÍæíá äÕ -> ÌÏæá";
     TEXT[ dutch ] = "Tekst naar tabel converteren";
-    TEXT[ chinese_simplified ] = "ÎÄ×Ö×ª»»³É±í¸ñ";
+    TEXT[ chinese_simplified ] = "æ–‡å­—è½¬æ¢æˆè¡¨æ ¼";
     TEXT[ greek ] = "ÌåôáôñïğŞ Êåßìåíï -> Ğßíáêáò";
-    TEXT[ korean ] = "º¯È¯£¬ ÅØ½ºÆ® -> Ç¥";
+    TEXT[ korean ] = "í…ìŠ¤íŠ¸ë¥¼ í‘œë¡œ ë³€í™˜";
     TEXT[ turkish ] = "Metni tabloya dönüştür";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Convertir texto en tabla";
+    TEXT[ catalan ] = "Converteix text -> taula";
+    TEXT[ thai ] = "à¹à¸›à¸¥à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡ -> à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_TABLETOTEXT_UNDO
 {
@@ -594,24 +611,25 @@ String STR_TABLETOTEXT_UNDO
     TEXT [ portuguese ] = "Converter tabela -> texto" ;
     TEXT [ finnish ] = "Muunna taulukko tekstiksi" ;
     TEXT [ danish ] = "Konverter tabel til tekst" ;
-    TEXT [ french ] = "Convertir tableau en texte" ;
+    TEXT [ french ] = "Convertir le tableau en texte" ;
     TEXT [ swedish ] = "Konvertera tabell till text" ;
     TEXT [ dutch ] = "Tabel naar tekst converteren" ;
     TEXT [ spanish ] = "Convertir tabla en texto" ;
     TEXT [ english_us ] = "Convert table to text" ;
-    TEXT[ chinese_simplified ] = "±í¸ñ×ª»»³ÉÎÄ×Ö";
-    TEXT[ russian ] = "Ïğåîáğàçîâàòü Òàáëèöà -> Òåêñò";
+    TEXT[ chinese_simplified ] = "è¡¨æ ¼è½¬æ¢æˆæ–‡å­—";
+    TEXT[ russian ] = "Ïğåîáğàçîâàòü òàáëèöó â òåêñò";
     TEXT[ polish ] = "Konwertuj tabelê na tekst";
-    TEXT[ japanese ] = "•\\‚ğ•¶‘‚É•ÏŠ·";
-    TEXT[ chinese_traditional ] = "ªí®æÂà´«¦¨¤å¦r";
+    TEXT[ japanese ] = "è¡¨ã‚’æ–‡æ›¸ã«å¤‰æ›";
+    TEXT[ chinese_traditional ] = "è¡¨æ ¼è½‰æ›æˆæ–‡å­—";
     TEXT[ arabic ] = "ÊÍæíá ÇáÌÏæá Åáì äÕ";
     TEXT[ dutch ] = "Tabel naar tekst converteren";
-    TEXT[ chinese_simplified ] = "±í¸ñ×ª»»³ÉÎÄ×Ö";
+    TEXT[ chinese_simplified ] = "è¡¨æ ¼è½¬æ¢æˆæ–‡å­—";
     TEXT[ greek ] = "ÌåôáôñïğŞ Ğßíáêáò -> Êåßìåíï";
-    TEXT[ korean ] = "Å×ÀÌºí -> ÅØ½ºÆ® º¯È¯";
+    TEXT[ korean ] = "í‘œë¥¼ í…ìŠ¤íŠ¸ë¡œ ë³€í™˜";
     TEXT[ turkish ] = "Tabloyu metne dönüştür";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Convertir tabla en texto";
+    TEXT[ catalan ] = "Converteix la taula en text";
+    TEXT[ thai ] = "à¹à¸›à¸¥à¸‡à¸•à¸²à¸£à¸²à¸‡à¹€à¸›à¹‡à¸™à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
 String STR_COPY_UNDO
 {
@@ -628,19 +646,20 @@ String STR_COPY_UNDO
     TEXT [ dutch ] = "Kopiëren" ;
     TEXT [ spanish ] = "Copiar" ;
     TEXT [ english_us ] = "Copy" ;
-    TEXT[ chinese_simplified ] = "¸´ÖÆ";
+    TEXT[ chinese_simplified ] = "å¤åˆ¶";
     TEXT[ russian ] = "Êîïèğîâàòü";
     TEXT[ polish ] = "Kopiuj";
-    TEXT[ japanese ] = "ºËß°";
-    TEXT[ chinese_traditional ] = "½Æ»s";
+    TEXT[ japanese ] = "ã‚³ãƒ”ãƒ¼";
+    TEXT[ chinese_traditional ] = "è¤‡è£½";
     TEXT[ arabic ] = "äÓÎ";
     TEXT[ dutch ] = "Kopiëren";
-    TEXT[ chinese_simplified ] = "¸´ÖÆ";
+    TEXT[ chinese_simplified ] = "å¤åˆ¶";
     TEXT[ greek ] = "ÁíôéãñáöŞ";
-    TEXT[ korean ] = "º¹»ç";
+    TEXT[ korean ] = "ë³µì‚¬";
     TEXT[ turkish ] = "Kopyala";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Copiar";
+    TEXT[ catalan ] = "Copia";
+    TEXT[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸";
 };
 String STR_REPLACE_UNDO
 {
@@ -657,19 +676,20 @@ String STR_REPLACE_UNDO
     TEXT [ dutch ] = "Vervangen" ;
     TEXT [ spanish ] = "Reemplazar" ;
     TEXT [ english_us ] = "Replace" ;
-    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ chinese_simplified ] = "æ›¿æ¢";
     TEXT[ russian ] = "Çàìåíèòü";
     TEXT[ polish ] = "Zamieñ";
-    TEXT[ japanese ] = "’uŠ·";
-    TEXT[ chinese_traditional ] = "¥N´À";
+    TEXT[ japanese ] = "ç½®æ›";
+    TEXT[ chinese_traditional ] = "ä»£æ›¿";
     TEXT[ arabic ] = "ÇÓÊÈÏÇá";
     TEXT[ dutch ] = "Vervangen";
-    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ chinese_simplified ] = "æ›¿æ¢";
     TEXT[ greek ] = "ÁíôéêáôÜóôáóç";
-    TEXT[ korean ] = "¹Ù²Ù±â";
+    TEXT[ korean ] = "ë°”ê¾¸ê¸°";
     TEXT[ turkish ] = "Değiştir";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Reemplazar";
+    TEXT[ catalan ] = "Reemplaça";
+    TEXT[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ";
 };
 String STR_INSERT_PAGE_BREAK_UNDO
 {
@@ -681,24 +701,25 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT [ portuguese ] = "Quebra de página fixa" ;
     TEXT [ finnish ] = "Suora sivunvaihto" ;
     TEXT [ danish ] = "Hårdt sideskift" ;
-    TEXT [ french ] = "Saut de page forcé" ;
+    TEXT [ french ] = "Saut de page direct" ;
     TEXT [ swedish ] = "Hård sidbrytning" ;
     TEXT [ dutch ] = "Vast pagina-einde" ;
     TEXT [ spanish ] = "Salto fijo de página" ;
     TEXT [ english_us ] = "Direct page break" ;
-    TEXT[ chinese_simplified ] = "ÊÖ¹¤»»Ò³";
+    TEXT[ chinese_simplified ] = "æ‰‹å·¥æ¢é¡µ";
     TEXT[ russian ] = "Æåñòêèé ğàçğûâ ñòğàíèö";
     TEXT[ polish ] = "Twarde ³amanie strony";
-    TEXT[ japanese ] = "”CˆÓw’è‚Ì‰üÍß°¼Ş";
-    TEXT[ chinese_traditional ] = "¤â°Ê´«­¶";
+    TEXT[ japanese ] = "ä»»æ„æŒ‡å®šã®æ”¹ãƒšãƒ¼ã‚¸";
+    TEXT[ chinese_traditional ] = "æ‰‹å‹•æ›é ";
     TEXT[ arabic ] = "İÇÕá ÕİÍÇÊ íÏæí";
     TEXT[ dutch ] = "Vast pagina-einde";
-    TEXT[ chinese_simplified ] = "ÊÖ¹¤»»Ò³";
+    TEXT[ chinese_simplified ] = "æ‰‹å·¥æ¢é¡µ";
     TEXT[ greek ] = "¸íôïíç áëëáãŞ óåëßäáò";
-    TEXT[ korean ] = "°íÁ¤ ÂÊ ³ª´©±â";
+    TEXT[ korean ] = "ìˆ˜ë™ í˜ì´ì§€ ë‚˜ëˆ„ê¸°";
     TEXT[ turkish ] = "Sabit sayfa sonu";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Salto fijo de página";
+    TEXT[ catalan ] = "Salt de pàgina directe";
+    TEXT[ thai ] = "à¹à¸šà¹ˆà¸‡à¸«à¸™à¹‰à¸²à¹‚à¸”à¸¢à¸•à¸£à¸‡";
 };
 String STR_INSERT_COLUMN_BREAK_UNDO
 {
@@ -708,26 +729,27 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT [ italian ] = "Interruzione di colonna fissa" ;
     TEXT [ portuguese_brazilian ] = "Quebra for?ada de coluna" ;
     TEXT [ portuguese ] = "Quebra de coluna fixa" ;
-    TEXT [ finnish ] = "Suora sarakevaihto" ;
+    TEXT [ finnish ] = "Suora sarakkeenvaihto" ;
     TEXT [ danish ] = "Hårdt spalteskift" ;
-    TEXT [ french ] = "Saut de colonne forcé" ;
+    TEXT [ french ] = "Saut de colonne direct" ;
     TEXT [ swedish ] = "Hård kolumnbrytning" ;
     TEXT [ dutch ] = "Vast kolomeinde" ;
-    TEXT [ spanish ] = "Salto de columna fijo" ;
+    TEXT [ spanish ] = "Salto de columna directo" ;
     TEXT [ english_us ] = "Direct column break" ;
-    TEXT[ chinese_simplified ] = "ÊÖ¹¤»»ÁĞ";
+    TEXT[ chinese_simplified ] = "æ‰‹å·¥æ¢åˆ—";
     TEXT[ russian ] = "Æåñòêèé ğàçğûâ êîëîíîê";
     TEXT[ polish ] = "Twardy podzia³ kolumny";
-    TEXT[ japanese ] = "”CˆÓw’è‚Ì‰ü—ñ";
-    TEXT[ chinese_traditional ] = "¤â°Ê´«Äæ";
+    TEXT[ japanese ] = "ä»»æ„æŒ‡å®šã®æ”¹åˆ—";
+    TEXT[ chinese_traditional ] = "æ‰‹å‹•æ›æ¬„";
     TEXT[ arabic ] = "İÇÕá ÃÚãÏÉ íÏæí";
     TEXT[ dutch ] = "Vast kolomeinde";
-    TEXT[ chinese_simplified ] = "ÊÖ¹¤»»ÁĞ";
+    TEXT[ chinese_simplified ] = "æ‰‹å·¥æ¢åˆ—";
     TEXT[ greek ] = "¸íôïíç áëëáãŞ óôŞëçò";
-    TEXT[ korean ] = "°íÁ¤ ¿­¹Ù²Ù±â";
+    TEXT[ korean ] = "ìˆ˜ë™ ì—´ ë‚˜ëˆ„ê¸°";
     TEXT[ turkish ] = "Sabit sütun sonu";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Salto de columna fijo";
+    TEXT[ catalan ] = "Salt de columna directe";
+    TEXT[ thai ] = "à¹à¸šà¹ˆà¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹‚à¸”à¸¢à¸•à¸£à¸‡";
 };
 String STR_PLAY_MACRO_UNDO
 {
@@ -744,19 +766,20 @@ String STR_PLAY_MACRO_UNDO
     TEXT [ dutch ] = "Macro starten" ;
     TEXT [ spanish ] = "Reproducir macro" ;
     TEXT [ english_us ] = "Run macro" ;
-    TEXT[ chinese_simplified ] = "Ö´ĞĞºê";
-    TEXT[ russian ] = "Ïğîãîí ìàêğîñà";
+    TEXT[ chinese_simplified ] = "æ‰§è¡Œå®";
+    TEXT[ russian ] = "Âûïîëíèòü ìàêğîñ";
     TEXT[ polish ] = "Wykonaj makro";
-    TEXT[ japanese ] = "Ï¸Û‚ÌÀs";
-    TEXT[ chinese_traditional ] = "°õ¦æ¥¨¶°";
+    TEXT[ japanese ] = "ãƒã‚¯ãƒ­ã®å®Ÿè¡Œ";
+    TEXT[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
     TEXT[ arabic ] = "ÊäİíĞ ÇáãÇßÑæ";
     TEXT[ dutch ] = "Macro starten";
-    TEXT[ chinese_simplified ] = "Ö´ĞĞºê";
+    TEXT[ chinese_simplified ] = "æ‰§è¡Œå®";
     TEXT[ greek ] = "Åêôİëåóç ìáêñïåíôïëŞò";
-    TEXT[ korean ] = "¸ÅÅ©·Î ½ÇÇà";
+    TEXT[ korean ] = "ë§¤í¬ë¡œ ì‹¤í–‰";
     TEXT[ turkish ] = "Makroyu çalıştır";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Reproducir macro";
+    TEXT[ catalan ] = "Executa la macro";
+    TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸¡à¸²à¹‚à¸„à¸£";
 };
 String STR_INSERT_ENV_UNDO
 {
@@ -773,19 +796,20 @@ String STR_INSERT_ENV_UNDO
     Text [ dutch ] = "Envelop invoegen" ;
     Text [ spanish ] = "Insertar sobre" ;
     Text [ english_us ] = "Insert Envelope" ;
-    Text[ chinese_simplified ] = "²åÈëĞÅ·â";
+    Text[ chinese_simplified ] = "æ’å…¥ä¿¡å°";
     Text[ russian ] = "Âñòàâèòü êîíâåğò";
     Text[ polish ] = "Wstaw kopertê";
-    Text[ japanese ] = "••“›‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J«H«Ê";
+    Text[ japanese ] = "å°ç­’ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥ä¿¡å°";
     Text[ arabic ] = "ÅÏÑÇÌ ÙÑİ";
     Text[ dutch ] = "Envelop invoegen";
-    Text[ chinese_simplified ] = "²åÈëĞÅ·â";
+    Text[ chinese_simplified ] = "æ’å…¥ä¿¡å°";
     Text[ greek ] = "ĞñïóèŞêç öáêİëïõ åğéóôïëŞò";
-    Text[ korean ] = "ÆíÁöºÀÅõ »ğÀÔ";
+    Text[ korean ] = "í¸ì§€ë´‰íˆ¬ ì‚½ì…";
     Text[ turkish ] = "Zarf ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar sobre";
+    Text[ catalan ] = "Insereix el sobre";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸‹à¸­à¸‡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
 };
 String STR_DRAG_AND_COPY
 {
@@ -800,20 +824,21 @@ String STR_DRAG_AND_COPY
     Text [ danish ] = "Kopier" ;
     Text [ portuguese ] = "Copiar" ;
     Text [ portuguese_brazilian ] = "Kopieren" ;
-    Text[ chinese_simplified ] = "¸´ÖÆ";
+    Text[ chinese_simplified ] = "å¤åˆ¶";
     Text[ russian ] = "Êîïèğîâàòü";
     Text[ polish ] = "Kopiuj";
-    Text[ japanese ] = "ºËß°‚·‚é";
-    Text[ chinese_traditional ] = "½Æ»s";
+    Text[ japanese ] = "ã‚³ãƒ”ãƒ¼ã™ã‚‹";
+    Text[ chinese_traditional ] = "è¤‡è£½";
     Text[ arabic ] = "äÓÎ";
     Text[ dutch ] = "Kopiëren";
-    Text[ chinese_simplified ] = "¸´ÖÆ";
+    Text[ chinese_simplified ] = "å¤åˆ¶";
     Text[ greek ] = "ÁíôéãñáöŞ";
-    Text[ korean ] = "º¹»ç";
+    Text[ korean ] = "ë³µì‚¬";
     Text[ turkish ] = "Kopyala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Copiar";
+    Text[ catalan ] = "Copia";
     Text[ finnish ] = "Kopioi";
+    Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸";
 };
 String STR_DRAG_AND_MOVE
 {
@@ -828,20 +853,21 @@ String STR_DRAG_AND_MOVE
     Text [ danish ] = "Flyt" ;
     Text [ portuguese ] = "Mover" ;
     Text [ portuguese_brazilian ] = "Verschieben" ;
-    Text[ chinese_simplified ] = "ÒÆ¶¯";
+    Text[ chinese_simplified ] = "ç§»åŠ¨";
     Text[ russian ] = "Ïåğåìåñòèòü";
     Text[ polish ] = "Przesuñ";
-    Text[ japanese ] = "ˆÚ“®‚·‚é";
-    Text[ chinese_traditional ] = "²¾°Ê";
+    Text[ japanese ] = "ç§»å‹•ã™ã‚‹";
+    Text[ chinese_traditional ] = "ç§»å‹•";
     Text[ arabic ] = "ÅÒÇÍÉ";
     Text[ dutch ] = "Verplaatsen";
-    Text[ chinese_simplified ] = "ÒÆ¶¯";
+    Text[ chinese_simplified ] = "ç§»åŠ¨";
     Text[ greek ] = "Ìåôáêßíçóç";
-    Text[ korean ] = "ÀÌµ¿";
+    Text[ korean ] = "ì´ë™";
     Text[ turkish ] = "Taşı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desplazar";
+    Text[ catalan ] = "Mou";
     Text[ finnish ] = "Siirrä";
+    Text[ thai ] = "à¸¢à¹‰à¸²à¸¢";
 };
 String STR_INSERT_RULER
 {
@@ -855,21 +881,22 @@ String STR_INSERT_RULER
     Text [ italian ] = "Inserisci ruler" ;
     Text [ spanish ] = "Insertar regla" ;
     Text [ french ] = "Insérer une règle" ;
-    Text [ dutch ] = "Ruler invoegen" ;
-    Text[ chinese_simplified ] = "²åÈë±ê³ß";
+    Text [ dutch ] = "Liniaal invoegen" ;
+    Text[ chinese_simplified ] = "æ’å…¥æ ‡å°º";
     Text[ russian ] = "Âñòàâèòü ëèíåéêó ğàçìåòêè";
     Text[ polish ] = "Wstaw linijkê";
-    Text[ japanese ] = "Ù°×‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J¼Ğ¤Ø";
+    Text[ japanese ] = "ãƒ«ãƒ¼ãƒ©ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥æ¨™å°º";
     Text[ arabic ] = "ÅÏÑÇÌ ãÓØÑÉ";
-    Text[ dutch ] = "Ruler invoegen";
-    Text[ chinese_simplified ] = "²åÈë±ê³ß";
+    Text[ dutch ] = "Liniaal invoegen";
+    Text[ chinese_simplified ] = "æ’å…¥æ ‡å°º";
     Text[ greek ] = "ÅéóáãùãŞ ÷Üñáêá";
-    Text[ korean ] = "´«±İÀÚ »ğÀÔ";
+    Text[ korean ] = "ëˆˆê¸ˆì ì‚½ì…";
     Text[ turkish ] = "Cetvel ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar regla";
-    Text[ finnish ] = "Lisää kohdistin";
+    Text[ catalan ] = "Insereix el regle";
+    Text[ finnish ] = "Lisää viivain";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹„à¸¡à¹‰à¸šà¸£à¸£à¸—à¸±à¸”";
 };
 String STR_INSERT_CHART
 {
@@ -881,23 +908,24 @@ String STR_INSERT_CHART
     Text [ swedish ] = "Infoga %PRODUCTNAME Chart" ;
     Text [ danish ] = "Indsæt %PRODUCTNAME Chart" ;
     Text [ italian ] = "Inserisci %PRODUCTNAME Chart" ;
-    Text [ spanish ] = "Insertar %PRODUCTNAME Chart" ;
+    Text [ spanish ] = "Insertar diagrama de %PRODUCTNAME Chart" ;
     Text [ french ] = "Insérer un diagramme %PRODUCTNAME Chart" ;
     Text [ dutch ] = "%PRODUCTNAME Chart invoegen" ;
-    Text[ chinese_simplified ] = "²åÈë %PRODUCTNAME Í¼±í";
+    Text[ chinese_simplified ] = "æ’å…¥ %PRODUCTNAME å›¾è¡¨";
     Text[ russian ] = "Âñòàâèòü %PRODUCTNAME Chart";
     Text[ polish ] = "Wstaw %PRODUCTNAME Chart";
-    Text[ japanese ] = "%PRODUCTNAME Chart ‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J %PRODUCTNAME ¹Ïªí";
+    Text[ japanese ] = "%PRODUCTNAME Chart ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥ %PRODUCTNAME åœ–è¡¨";
     Text[ arabic ] = "ÅÏÑÇÌ %PRODUCTNAME Chart";
     Text[ dutch ] = "%PRODUCTNAME Chart invoegen";
-    Text[ chinese_simplified ] = "²åÈë %PRODUCTNAME Í¼±í";
+    Text[ chinese_simplified ] = "æ’å…¥ %PRODUCTNAME å›¾è¡¨";
     Text[ greek ] = "ĞñïóèŞêç %PRODUCTNAME Chart";
-    Text[ korean ] = "%PRODUCTNAMEChart »ğÀÔ";
+    Text[ korean ] = "%PRODUCTNAME Chart ì‚½ì…";
     Text[ turkish ] = "%PRODUCTNAME Chart ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar %PRODUCTNAME Chart";
-    Text[ finnish ] = "Lisää tuotteen %PRODUCTNAME kaavio";
+    Text[ catalan ] = "Insereix el %PRODUCTNAME Chart";
+    Text[ finnish ] = "Lisää %PRODUCTNAME-kaavio";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸œà¸™à¸ à¸¹à¸¡à¸´ %PRODUCTNAME ";
 };
 String STR_INSERTFLY
 {
@@ -914,19 +942,20 @@ String STR_INSERTFLY
     TEXT [ dutch ] = "Kader invoegen" ;
     TEXT [ spanish ] = "Insertar marco" ;
     TEXT [ english_us ] = "Insert frame" ;
-    TEXT[ chinese_simplified ] = "²åÈë¿ò¶ÔÏó";
+    TEXT[ chinese_simplified ] = "æ’å…¥æ¡†å¯¹è±¡";
     TEXT[ russian ] = "Âñòàâèòü ğàìêó";
     TEXT[ polish ] = "Wstaw ramkê";
-    TEXT[ japanese ] = "˜g‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J®Øª«¥ó";
+    TEXT[ japanese ] = "æ ã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥æ¡†ç‰©ä»¶";
     TEXT[ arabic ] = "ÅÏÑÇÌ ßÇÏÑ";
     TEXT[ dutch ] = "Kader invoegen";
-    TEXT[ chinese_simplified ] = "²åÈë¿ò¶ÔÏó";
+    TEXT[ chinese_simplified ] = "æ’å…¥æ¡†å¯¹è±¡";
     TEXT[ greek ] = "ĞñïóèŞêç ğëáéóßïõ";
-    TEXT[ korean ] = "ÇÁ·¹ÀÓ »ğÀÔ";
+    TEXT[ korean ] = "í”„ë ˆì„ ì‚½ì…";
     TEXT[ turkish ] = "Çerçeve ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar marco";
+    TEXT[ catalan ] = "Insereix un marc";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸à¸£à¸­à¸š";
 };
 String STR_DELETEFLY
 {
@@ -941,21 +970,22 @@ String STR_DELETEFLY
     TEXT [ french ] = "Supprimer le cadre" ;
     TEXT [ swedish ] = "Radera ram" ;
     TEXT [ dutch ] = "Kader wissen" ;
-    TEXT [ spanish ] = "Eliminar marco" ;
+    TEXT [ spanish ] = "Borrar el marco" ;
     TEXT [ english_us ] = "Delete frame" ;
-    TEXT[ chinese_simplified ] = "É¾³ı¿ò¶ÔÏó";
+    TEXT[ chinese_simplified ] = "åˆ é™¤æ¡†å¯¹è±¡";
     TEXT[ russian ] = "Óäàëèòü ğàìêó";
     TEXT[ polish ] = "Usuñ ramkê";
-    TEXT[ japanese ] = "˜g‚Ìíœ";
-    TEXT[ chinese_traditional ] = "§R°£®Øª«¥ó";
+    TEXT[ japanese ] = "æ ã®å‰Šé™¤";
+    TEXT[ chinese_traditional ] = "åˆªé™¤æ¡†ç‰©ä»¶";
     TEXT[ arabic ] = "ÍĞİ ßÇÏÑ";
     TEXT[ dutch ] = "Kader wissen";
-    TEXT[ chinese_simplified ] = "É¾³ı¿ò¶ÔÏó";
+    TEXT[ chinese_simplified ] = "åˆ é™¤æ¡†å¯¹è±¡";
     TEXT[ greek ] = "ÄéáãñáöŞ ğëáéóßïõ";
-    TEXT[ korean ] = "ÇÁ·¹ÀÓ »èÁ¦";
+    TEXT[ korean ] = "í”„ë ˆì„ ì‚­ì œ";
     TEXT[ turkish ] = "Çerçeveyi düzelt";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Eliminar marco";
+    TEXT[ catalan ] = "Suprimeix el marc";
+    TEXT[ thai ] = "à¸¥à¸šà¸à¸£à¸­à¸š";
 };
 String STR_AUTOFORMAT
 {
@@ -970,21 +1000,22 @@ String STR_AUTOFORMAT
     TEXT [ french ] = "AutoFormat" ;
     TEXT [ swedish ] = "Autoformat" ;
     TEXT [ dutch ] = "AutoOpmaak" ;
-    TEXT [ spanish ] = "AutoFormato" ;
+    TEXT [ spanish ] = "Formateado automático" ;
     TEXT [ english_us ] = "AutoFormat" ;
-    TEXT[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    TEXT[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
     TEXT[ russian ] = "Àâòîôîğìàò";
     TEXT[ polish ] = "Autoformat";
-    TEXT[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
-    TEXT[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
+    TEXT[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ";
+    TEXT[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼";
     TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
     TEXT[ dutch ] = "AutoOpmaak";
-    TEXT[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    TEXT[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
     TEXT[ greek ] = "ÁõôïÌïñöŞ";
-    TEXT[ korean ] = "ÀÚµ¿¼­½Ä";
+    TEXT[ korean ] = "ìë™ ì„œì‹";
     TEXT[ turkish ] = "Otomatik formatlama";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "AutoFormato";
+    TEXT[ catalan ] = "Formatatge automàtic";
+    TEXT[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 String STR_TABLEHEADLINE
 {
@@ -1001,19 +1032,20 @@ String STR_TABLEHEADLINE
     TEXT [ dutch ] = "Tabelkop" ;
     TEXT [ spanish ] = "Encabezado de la tabla" ;
     TEXT [ english_us ] = "Table heading" ;
-    TEXT[ chinese_simplified ] = "±í¸ñ±êÌâ";
+    TEXT[ chinese_simplified ] = "è¡¨æ ¼æ ‡é¢˜";
     TEXT[ russian ] = "Çàãîëîâîê òàáëèöû";
     TEXT[ polish ] = "Nag³ówek tabeli";
-    TEXT[ japanese ] = "•\\‚ÌŒ©o‚µ";
-    TEXT[ chinese_traditional ] = "ªí®æ¼ĞÃD";
+    TEXT[ japanese ] = "è¡¨ã®è¦‹å‡ºã—";
+    TEXT[ chinese_traditional ] = "è¡¨æ ¼æ¨™é¡Œ";
     TEXT[ arabic ] = "ÚäæÇä ÇáÌÏæá";
     TEXT[ dutch ] = "Tabelkop";
-    TEXT[ chinese_simplified ] = "±í¸ñ±êÌâ";
+    TEXT[ chinese_simplified ] = "è¡¨æ ¼æ ‡é¢˜";
     TEXT[ greek ] = "Åğéêåöáëßäá ğßíáêá";
-    TEXT[ korean ] = "Ç¥ Á¦¸ñ";
+    TEXT[ korean ] = "í‘œ ì œëª©";
     TEXT[ turkish ] = "Tablo başlığı";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Encabezado de la tabla";
+    TEXT[ catalan ] = "Encapçalament de la taula";
+    TEXT[ thai ] = "à¸«à¸±à¸§à¸‚à¹‰à¸­à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_REPLACE
 {
@@ -1030,19 +1062,20 @@ String STR_REPLACE
     TEXT [ dutch ] = "Vervangen" ;
     TEXT [ spanish ] = "Reemplazar" ;
     TEXT [ english_us ] = "Replace" ;
-    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ chinese_simplified ] = "æ›¿æ¢";
     TEXT[ russian ] = "Çàìåíèòü";
     TEXT[ polish ] = "Zamieñ";
-    TEXT[ japanese ] = "’uŠ·";
-    TEXT[ chinese_traditional ] = "¥N´À";
+    TEXT[ japanese ] = "ç½®æ›";
+    TEXT[ chinese_traditional ] = "ä»£æ›¿";
     TEXT[ arabic ] = "ÇÓÊÈÏÇá";
     TEXT[ dutch ] = "Vervangen";
-    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ chinese_simplified ] = "æ›¿æ¢";
     TEXT[ greek ] = "ÁíôéêáôÜóôáóç";
-    TEXT[ korean ] = "¹Ù²Ù±â";
+    TEXT[ korean ] = "ë°”ê¾¸ê¸°";
     TEXT[ turkish ] = "Değiştir";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Reemplazar";
+    TEXT[ catalan ] = "Reemplaça";
+    TEXT[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ";
 };
 String STR_INSERTSECTION
 {
@@ -1052,26 +1085,27 @@ String STR_INSERTSECTION
     TEXT [ italian ] = "Inserisci area" ;
     TEXT [ portuguese_brazilian ] = "Inserir se??o" ;
     TEXT [ portuguese ] = "Inserir secção" ;
-    TEXT [ finnish ] = "Lisää osio" ;
+    TEXT [ finnish ] = "Lisää osa" ;
     TEXT [ danish ] = "Indsæt område" ;
     TEXT [ french ] = "Insérer une section" ;
     TEXT [ swedish ] = "Infoga område" ;
     TEXT [ dutch ] = "Bereik invoegen" ;
-    TEXT [ spanish ] = "Insertar área" ;
+    TEXT [ spanish ] = "Insertar una sección" ;
     TEXT [ english_us ] = "Insert section" ;
-    TEXT[ chinese_simplified ] = "²åÈëÇøÓò";
-    TEXT[ russian ] = "Âñòàâèòü îáëàñòü";
+    TEXT[ chinese_simplified ] = "æ’å…¥åŒºåŸŸ";
+    TEXT[ russian ] = "Âñòàâèòü ğàçäåë";
     TEXT[ polish ] = "Wstaw obszar";
-    TEXT[ japanese ] = "”ÍˆÍ‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J°Ï°ì";
+    TEXT[ japanese ] = "ç¯„å›²ã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥å€åŸŸ";
     TEXT[ arabic ] = "ÅÏÑÇÌ äØÇŞ";
     TEXT[ dutch ] = "Bereik invoegen";
-    TEXT[ chinese_simplified ] = "²åÈëÇøÓò";
+    TEXT[ chinese_simplified ] = "æ’å…¥åŒºåŸŸ";
     TEXT[ greek ] = "ĞñïóèŞêç ğåñéï÷Şò";
-    TEXT[ korean ] = "±¸¿ª »ğÀÔ";
+    TEXT[ korean ] = "êµ¬ì—­ ì‚½ì…";
     TEXT[ turkish ] = "Bölüm ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar área";
+    TEXT[ catalan ] = "Insereix una secció";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸ªà¹ˆà¸§à¸™";
 };
 String STR_DELETESECTION
 {
@@ -1081,26 +1115,27 @@ String STR_DELETESECTION
     TEXT [ italian ] = "Elimina area" ;
     TEXT [ portuguese_brazilian ] = "Apagar se??o" ;
     TEXT [ portuguese ] = "Eliminar categoria" ;
-    TEXT [ finnish ] = "Poista osio" ;
+    TEXT [ finnish ] = "Poista osa" ;
     TEXT [ danish ] = "Slet område" ;
     TEXT [ french ] = "Supprimer la section" ;
     TEXT [ swedish ] = "Radera kategori" ;
     TEXT [ dutch ] = "Bereik wissen" ;
-    TEXT [ spanish ] = "Eliminar área" ;
+    TEXT [ spanish ] = "Borrar sección" ;
     TEXT [ english_us ] = "Delete section" ;
-    TEXT[ chinese_simplified ] = "É¾³ıÇøÓò";
-    TEXT[ russian ] = "Óäàëèòü êàòåãîğèş";
+    TEXT[ chinese_simplified ] = "åˆ é™¤åŒºåŸŸ";
+    TEXT[ russian ] = "Óäàëèòü ğàçäåë";
     TEXT[ polish ] = "Usuñ obszar";
-    TEXT[ japanese ] = "”ÍˆÍ‚Ìíœ";
-    TEXT[ chinese_traditional ] = "§R°£°Ï°ì";
+    TEXT[ japanese ] = "ç¯„å›²ã®å‰Šé™¤";
+    TEXT[ chinese_traditional ] = "åˆªé™¤å€åŸŸ";
     TEXT[ arabic ] = "ÍĞİ ÇáİÆÉ";
     TEXT[ dutch ] = "Bereik wissen";
-    TEXT[ chinese_simplified ] = "É¾³ıÇøÓò";
+    TEXT[ chinese_simplified ] = "åˆ é™¤åŒºåŸŸ";
     TEXT[ greek ] = "ÄéáãñáöŞ êáôçãïñßáò";
-    TEXT[ korean ] = "±¸¿ª »èÁ¦";
+    TEXT[ korean ] = "êµ¬ì—­ ì‚­ì œ";
     TEXT[ turkish ] = "Bölümü sil";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Eliminar área";
+    TEXT[ catalan ] = "Suprimeix una secció";
+    TEXT[ thai ] = "à¸¥à¸šà¸ªà¹ˆà¸§à¸™";
 };
 String STR_CHANGESECTION
 {
@@ -1110,26 +1145,27 @@ String STR_CHANGESECTION
     TEXT [ italian ] = "Cambia area" ;
     TEXT [ portuguese_brazilian ] = "Mudar se??o" ;
     TEXT [ portuguese ] = "Alterar secção" ;
-    TEXT [ finnish ] = "Muokkaa osiota" ;
+    TEXT [ finnish ] = "Muokkaa osaa" ;
     TEXT [ danish ] = "Modificer område" ;
-    TEXT [ french ] = "Modifier section" ;
+    TEXT [ french ] = "Éditer la section" ;
     TEXT [ swedish ] = "Ändra område" ;
     TEXT [ dutch ] = "Bereik wijzigen" ;
-    TEXT [ spanish ] = "Modificar área" ;
+    TEXT [ spanish ] = "Modificar la sección" ;
     TEXT [ english_us ] = "Modify section" ;
-    TEXT[ chinese_simplified ] = "¸ü¸ÄÇøÓò";
-    TEXT[ russian ] = "Èçìåíèòü îáëàñòü";
+    TEXT[ chinese_simplified ] = "æ›´æ”¹åŒºåŸŸ";
+    TEXT[ russian ] = "Èçìåíèòü ğàçäåë";
     TEXT[ polish ] = "Zmodyfikuj sekcjê";
-    TEXT[ japanese ] = "”ÍˆÍ‚Ì•ÏX";
-    TEXT[ chinese_traditional ] = "ÅÜ§ó°Ï°ì";
+    TEXT[ japanese ] = "ç¯„å›²ã®å¤‰æ›´";
+    TEXT[ chinese_traditional ] = "è®Šæ›´å€åŸŸ";
     TEXT[ arabic ] = "ÊÚÏíá ÇáäØÇŞ";
     TEXT[ dutch ] = "Bereik wijzigen";
-    TEXT[ chinese_simplified ] = "¸ü¸ÄÇøÓò";
+    TEXT[ chinese_simplified ] = "æ›´æ”¹åŒºåŸŸ";
     TEXT[ greek ] = "Ôñïğïğïßçóç ğåñéï÷Şò";
-    TEXT[ korean ] = "±¸¿ª ¼öÁ¤";
+    TEXT[ korean ] = "êµ¬ì—­ ë³€ê²½";
     TEXT[ turkish ] = "Bölümü değiştir";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Modificar área";
+    TEXT[ catalan ] = "Modifica la secció";
+    TEXT[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸ªà¹ˆà¸§à¸™";
 };
 String STR_CHANGESECTPASSWD
 {
@@ -1137,27 +1173,28 @@ String STR_CHANGESECTPASSWD
     TEXT [ English ] = "password protected change" ;
     Text [ english_us ] = "Change password protection" ;
     Text [ italian ] = "Cambia protezione password" ;
-    Text [ spanish ] = "Modificar contraseña" ;
+    Text [ spanish ] = "Cambiar contraseña" ;
     Text [ french ] = "Modification du mot de passe" ;
     Text [ dutch ] = "Wachtwoordbeveiliging wijzigen" ;
     Text [ swedish ] = "Ändra lösenordsskydd" ;
     Text [ danish ] = "Modificer adgangskodebeskyttelse" ;
     Text [ portuguese ] = "Alterar protecção da senha" ;
     Text [ portuguese_brazilian ] = "Pa?wortschutz ?ndern" ;
-    Text[ chinese_simplified ] = "¸ü¸Ä±£»¤ÃÜÂë";
+    Text[ chinese_simplified ] = "æ›´æ”¹ä¿æŠ¤å¯†ç ";
     Text[ russian ] = "Èçìåíèòü çàùèòó ïàğîëåì";
     Text[ polish ] = "Zmieñ ochronê has³a";
-    Text[ japanese ] = "Êß½Ü°ÄŞ•ÛŒì‚Ì•ÏX";
-    Text[ chinese_traditional ] = "ÅÜ§ó«OÅ@±K½X";
+    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¿è­·ã®å¤‰æ›´";
+    Text[ chinese_traditional ] = "è®Šæ›´ä¿è­·å¯†ç¢¼";
     Text[ arabic ] = "ÊÛííÑ ÍãÇíÉ ßáãÉ ÇáÓÑ";
     Text[ dutch ] = "Wachtwoordbeveiliging wijzigen";
-    Text[ chinese_simplified ] = "¸ü¸Ä±£»¤ÃÜÂë";
+    Text[ chinese_simplified ] = "æ›´æ”¹ä¿æŠ¤å¯†ç ";
     Text[ greek ] = "ÁëëáãŞ ğñïóôáóßáò êùäéêïı ğñüóâáóçò";
-    Text[ korean ] = "ÆĞ½º¿öµå º¸È£ º¯°æ";
+    Text[ korean ] = "ì•”í˜¸ ë³´ì•ˆ ë³€ê²½";
     Text[ turkish ] = "Şifre korumasını değiştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificar contraseña";
+    Text[ catalan ] = "Canvia la contrasenya";
     Text[ finnish ] = "Muuta salasanasuojausta";
+    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸à¸²à¸£à¸›à¹‰à¸­à¸‡à¸à¸±à¸™à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
 };
 String STR_CHANGEDEFATTR
 {
@@ -1172,21 +1209,22 @@ String STR_CHANGEDEFATTR
     TEXT [ french ] = "Changement des valeurs standard" ;
     TEXT [ swedish ] = "Ändra standardvärden" ;
     TEXT [ dutch ] = "Standaardwaarden wijzigen" ;
-    TEXT [ spanish ] = "Modificar valores estándar" ;
+    TEXT [ spanish ] = "Modificar valores predeterminados" ;
     TEXT [ english_us ] = "Modify default values" ;
-    TEXT[ chinese_simplified ] = "¸ü¸Ä±ê×¼Öµ";
+    TEXT[ chinese_simplified ] = "æ›´æ”¹æ ‡å‡†å€¼";
     TEXT[ russian ] = "Èçìåíèòü ñòàíäàğòíûå çíà÷åíèÿ";
     TEXT[ polish ] = "Zmieñ wartoœci domyœlne";
-    TEXT[ japanese ] = "•W€’l‚Ì•ÏX";
-    TEXT[ chinese_traditional ] = "ÅÜ§ó¼Ğ·Ç­È";
+    TEXT[ japanese ] = "æ¨™æº–å€¤ã®å¤‰æ›´";
+    TEXT[ chinese_traditional ] = "è®Šæ›´æ¨™æº–å€¼";
     TEXT[ arabic ] = "ÊÚÏíá ÇáŞíã ÇáÇİÊÑÇÖíÉ";
     TEXT[ dutch ] = "Standaardwaarden wijzigen";
-    TEXT[ chinese_simplified ] = "¸ü¸Ä±ê×¼Öµ";
+    TEXT[ chinese_simplified ] = "æ›´æ”¹æ ‡å‡†å€¼";
     TEXT[ greek ] = "Ôñïğïğïßçóç ğñïåğéëåãìİíùí ôéìşí";
-    TEXT[ korean ] = "±âº»°ª ¼öÁ¤";
+    TEXT[ korean ] = "ê¸°ë³¸ê°’ ë³€ê²½";
     TEXT[ turkish ] = "Standart değerleri değiştir";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Modificar valores estándar";
+    TEXT[ catalan ] = "Modifica els valors per defecte";
+    TEXT[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
 };
 String STR_OUTLINE_LR
 {
@@ -1196,26 +1234,27 @@ String STR_OUTLINE_LR
     TEXT [ italian ] = "Graduare struttura" ;
     TEXT [ portuguese_brazilian ] = "Promover vazado" ;
     TEXT [ portuguese ] = "Escalonar esquema" ;
-    TEXT [ finnish ] = "Pienennä jäsennyksen sisennystä" ;
+    TEXT [ finnish ] = "Korota jäsennystasoa" ;
     TEXT [ danish ] = "Inddel disposition" ;
     TEXT [ french ] = "Échelonner la structure" ;
     TEXT [ swedish ] = "Dela in disposition" ;
     TEXT [ dutch ] = "Overzichtsniveaus bepalen" ;
-    TEXT [ spanish ] = "Escalonar Esquema" ;
+    TEXT [ spanish ] = "Escalonar el esquema" ;
     TEXT [ english_us ] = "Promote Outline" ;
-    TEXT[ chinese_simplified ] = "·Ö¼¶´ó¸Ù";
+    TEXT[ chinese_simplified ] = "åˆ†çº§å¤§çº²";
     TEXT[ russian ] = "Óğîâíè ñòğóêòóğû";
     TEXT[ polish ] = "Poziomy konspektu";
-    TEXT[ japanese ] = "±³Ä×²İ‚ÌÚÍŞÙ";
-    TEXT[ chinese_traditional ] = "¤À¯Å¤jºõ";
+    TEXT[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã®ãƒ¬ãƒ™ãƒ«";
+    TEXT[ chinese_traditional ] = "åˆ†ç´šå¤§ç¶±";
     TEXT[ arabic ] = "ÊÏÑíÌ ÇáÊŞÓíã";
     TEXT[ dutch ] = "Overzichtsniveaus bepalen";
-    TEXT[ chinese_simplified ] = "·Ö¼¶´ó¸Ù";
+    TEXT[ chinese_simplified ] = "åˆ†çº§å¤§çº²";
     TEXT[ greek ] = "ÄéÜñèñùóç ìå åóï÷İò";
-    TEXT[ korean ] = "´Ù´Ü°è ¼öÁØ";
+    TEXT[ korean ] = "ê°œìš” ìˆ˜ì¤€ ì˜¬ë¦¬ê¸°";
     TEXT[ turkish ] = "Anahatı değiştir";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Escalonar Esquema";
+    TEXT[ catalan ] = "Promou el contorn";
+    TEXT[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
 };
 String STR_OUTLINE_UD
 {
@@ -1232,19 +1271,20 @@ String STR_OUTLINE_UD
     TEXT [ dutch ] = "Overzicht verplaatsen" ;
     TEXT [ spanish ] = "Desplazar esquema" ;
     TEXT [ english_us ] = "Move outline" ;
-    TEXT[ chinese_simplified ] = "ÒÆ¶¯´ó¸Ù";
+    TEXT[ chinese_simplified ] = "ç§»åŠ¨å¤§çº²";
     TEXT[ russian ] = "Ïåğåìåñòèòü ñòğóêòóğó";
     TEXT[ polish ] = "Przesuñ konspekt";
-    TEXT[ japanese ] = "±³Ä×²İ‚ÌˆÚ“®";
-    TEXT[ chinese_traditional ] = "²¾°Ê¤jºõ";
+    TEXT[ japanese ] = "ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³ã®ç§»å‹•";
+    TEXT[ chinese_traditional ] = "ç§»å‹•å¤§ç¶±";
     TEXT[ arabic ] = "äŞá ÇáÊŞÓíã";
     TEXT[ dutch ] = "Overzicht verplaatsen";
-    TEXT[ chinese_simplified ] = "ÒÆ¶¯´ó¸Ù";
+    TEXT[ chinese_simplified ] = "ç§»åŠ¨å¤§çº²";
     TEXT[ greek ] = "Ìåôáêßíçóç äéÜñèñùóçò";
-    TEXT[ korean ] = "´Ù´Ü°è ÀÌµ¿";
+    TEXT[ korean ] = "ê°œìš” ì´ë™";
     TEXT[ turkish ] = "Anahatı taşı";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Desplazar esquema";
+    TEXT[ catalan ] = "Mou el contorn";
+    TEXT[ thai ] = "à¸¢à¹‰à¸²à¸¢à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
 };
 String STR_INSNUM
 {
@@ -1261,19 +1301,20 @@ String STR_INSNUM
     TEXT [ dutch ] = "Nummering invoegen" ;
     TEXT [ spanish ] = "Insertar numeración" ;
     TEXT [ english_us ] = "Insert numbering" ;
-    TEXT[ chinese_simplified ] = "²åÈë±àºÅ";
+    TEXT[ chinese_simplified ] = "æ’å…¥ç¼–å·";
     TEXT[ russian ] = "Âñòàâèòü íóìåğàöèş";
     TEXT[ polish ] = "Wstaw numeracjê";
-    TEXT[ japanese ] = "”Ô†•t‚¯‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J½s¸¹";
+    TEXT[ japanese ] = "ç•ªå·ä»˜ã‘ã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥ç·¨è™Ÿ";
     TEXT[ arabic ] = "ÅÏÑÇÌ ÊÑŞíã";
     TEXT[ dutch ] = "Nummering invoegen";
-    TEXT[ chinese_simplified ] = "²åÈë±àºÅ";
+    TEXT[ chinese_simplified ] = "æ’å…¥ç¼–å·";
     TEXT[ greek ] = "ĞñïóèŞêç áñßèìçóçò";
-    TEXT[ korean ] = "¹øÈ£¸Å±â±â »ğÀÔ";
+    TEXT[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ì‚½ì…";
     TEXT[ turkish ] = "Numaralama ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar numeración";
+    TEXT[ catalan ] = "Insereix la numeració";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
 String STR_NUMUPDOWN
 {
@@ -1290,19 +1331,20 @@ String STR_NUMUPDOWN
     TEXT [ dutch ] = "Nummering indelen" ;
     TEXT [ spanish ] = "Graduar numeración" ;
     TEXT [ english_us ] = "Shift numbering" ;
-    TEXT[ chinese_simplified ] = "·Ö¼¶±àºÅ";
+    TEXT[ chinese_simplified ] = "åˆ†çº§ç¼–å·";
     TEXT[ russian ] = "Óğîâíè íóìåğàöèè";
     TEXT[ polish ] = "Poziomy numeracji";
-    TEXT[ japanese ] = "”Ô†•t‚¯‚Ì’iŠK•t‚¯";
+    TEXT[ japanese ] = "ç•ªå·ä»˜ã‘ã®æ®µéšä»˜ã‘";
     TEXT[ language_user1 ] = " ";
-    TEXT[ chinese_traditional ] = "¤À¯Å½s¸¹";
+    TEXT[ chinese_traditional ] = "åˆ†ç´šç·¨è™Ÿ";
     TEXT[ arabic ] = "ÊÏÑíÌ ÇáÊÑŞíã";
     TEXT[ dutch ] = "Nummering indelen";
-    TEXT[ chinese_simplified ] = "·Ö¼¶±àºÅ";
+    TEXT[ chinese_simplified ] = "åˆ†çº§ç¼–å·";
     TEXT[ greek ] = "Áñßèìçóç ìå åóï÷İò";
-    TEXT[ korean ] = "¹øÈ£¸Å±â±â ´Ü°è";
+    TEXT[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ë‹¨ê³„";
     TEXT[ turkish ] = "Numaralamayı değiştir";
-    TEXT[ catalan ] = "Graduar numeración";
+    TEXT[ catalan ] = "Desplaça la numeració";
+    TEXT[ thai ] = "à¹€à¸¥à¸·à¹ˆà¸­à¸™à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
 String STR_MOVENUM
 {
@@ -1316,21 +1358,22 @@ String STR_MOVENUM
     Text [ italian ] = "Sposta paragrafi" ;
     Text [ spanish ] = "Desplazar párrafos" ;
     Text [ french ] = "Déplacer paragraphes" ;
-    Text [ dutch ] = "Alinea´s verplaatsen" ;
-    Text[ chinese_simplified ] = "ÒÆ¶¯¶ÎÂä";
+    Text [ dutch ] = "Alinea's verplaatsen" ;
+    Text[ chinese_simplified ] = "ç§»åŠ¨æ®µè½";
     Text[ russian ] = "Ïåğåìåñòèòü àáçàöû";
     Text[ polish ] = "Przesuñ akapity";
-    Text[ japanese ] = "’i—‚ÌˆÚ“®";
-    Text[ chinese_traditional ] = "²¾°Ê¬q¸¨";
+    Text[ japanese ] = "æ®µè½ã®ç§»å‹•";
+    Text[ chinese_traditional ] = "ç§»å‹•æ®µè½";
     Text[ arabic ] = "ÅÒÇÍÉ ÇáİŞÑÇÊ";
-    Text[ dutch ] = "Alinea´s verplaatsen";
-    Text[ chinese_simplified ] = "ÒÆ¶¯¶ÎÂä";
+    Text[ dutch ] = "Alinea's verplaatsen";
+    Text[ chinese_simplified ] = "ç§»åŠ¨æ®µè½";
     Text[ greek ] = "ÌåôáöïñÜ ğáñáãñÜöùí";
-    Text[ korean ] = "´Ü¶ô ÀÌµ¿";
+    Text[ korean ] = "ë‹¨ë½ ì´ë™";
     Text[ turkish ] = "Paragrafları taşı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desplazar párrafos";
+    Text[ catalan ] = "Mou els paràgrafs";
     Text[ finnish ] = "Siirrä kappaleita";
+    Text[ thai ] = "à¸¢à¹‰à¸²à¸¢à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
 };
 String STR_INSERTDRAW
 {
@@ -1345,20 +1388,21 @@ String STR_INSERTDRAW
     Text [ danish ] = "Indsæt tegneobjekt" ;
     Text [ portuguese ] = "Inserir objecto de desenho" ;
     Text [ portuguese_brazilian ] = "Zeichenobjekt einf?en" ;
-    Text[ chinese_simplified ] = "²åÈë»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "æ’å…¥ç»˜å›¾å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Wstaw obiekty graficzne";
-    Text[ japanese ] = "•`‰æµÌŞ¼Şª¸Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤JÃ¸¹Ïª«¥ó";
+    Text[ japanese ] = "æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥ç¹ªåœ–ç‰©ä»¶";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÆä ÑÓæãí";
     Text[ dutch ] = "Tekenobject invoegen";
-    Text[ chinese_simplified ] = "²åÈë»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "æ’å…¥ç»˜å›¾å¯¹è±¡";
     Text[ greek ] = "ĞñïóèŞêç áíôéêåéìİíïõ ó÷åäßáóçò";
-    Text[ korean ] = "±×¸®±â °³Ã¼ »ğÀÔ";
+    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ ì‚½ì…";
     Text[ turkish ] = "Çizim nesnesi ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar objeto de dibujo";
+    Text[ catalan ] = "Insereix l'objecte de dibuix";
     Text[ finnish ] = "Lisää piirrosobjekti";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
 };
 String STR_NUMORNONUM
 {
@@ -1373,20 +1417,21 @@ String STR_NUMORNONUM
     Text [ danish ] = "Aktiver/deaktiver nummer" ;
     Text [ portuguese ] = "Número activado/des." ;
     Text [ portuguese_brazilian ] = "Nummer an/aus" ;
-    Text[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë±àºÅ";
-    Text[ russian ] = "Âêë./Îòêë. íîìåğà";
+    Text[ chinese_simplified ] = "æ˜¾ç¤º/éšå…¥ç¼–å·";
+    Text[ russian ] = "Íîìåğ";
     Text[ polish ] = "W³¹cz/Wy³¹cz numer";
-    Text[ japanese ] = "”Ô† µİ/µÌ";
-    Text[ chinese_traditional ] = "Åã¥Ü/Áô¤J½s¸¹";
+    Text[ japanese ] = "ç•ªå· ã‚ªãƒ³/ã‚ªãƒ•";
+    Text[ chinese_traditional ] = "é¡¯ç¤º/éš±å…¥ç·¨è™Ÿ";
     Text[ arabic ] = "ÅÙåÇÑ/ÅÎİÇÁ ÇáÑŞã";
     Text[ dutch ] = "Nummer aan/uit";
-    Text[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë±àºÅ";
+    Text[ chinese_simplified ] = "æ˜¾ç¤º/éšå…¥ç¼–å·";
     Text[ greek ] = "Áñéèìüò Íáé/¼÷é";
-    Text[ korean ] = "¹øÈ£ Àû¿ë/ÇØÁ¦";
+    Text[ korean ] = "ë²ˆí˜¸ ì ìš©/í•´ì œ";
     Text[ turkish ] = "Numara açık/kapalı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Número activado/desactivado";
-    Text[ finnish ] = "Numerot On/Off";
+    Text[ catalan ] = "Número activat/desactivat";
+    Text[ finnish ] = "Numerot Käytössä/poissa käytöstä";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚ à¸¡à¸µ/à¹„à¸¡à¹ˆà¸¡à¸µ";
 };
 String STR_INC_LEFTMARGIN
 {
@@ -1401,20 +1446,21 @@ String STR_INC_LEFTMARGIN
     Text [ french ] = "Augmenter le retrait" ;
     Text [ portuguese ] = "Aumentar avanço" ;
     Text [ portuguese_brazilian ] = "Einzug vergr?ern" ;
-    Text[ chinese_simplified ] = "Ôö´óËõ½ø";
+    Text[ chinese_simplified ] = "å¢å¤§ç¼©è¿›";
     Text[ russian ] = "Óâåëè÷èòü îòñòóï";
     Text[ polish ] = "Zwiêksz wciêcie";
-    Text[ japanese ] = "²İÃŞİÄ‚ÌŠÔŠu‚ÌŠg‘å";
-    Text[ chinese_traditional ] = "¼W¤jÁY±Æ";
+    Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã®é–“éš”ã®æ‹¡å¤§";
+    Text[ chinese_traditional ] = "å¢å¤§ç¸®æ’";
     Text[ arabic ] = "ÒíÇÏÉ ÇáÅÒÇÍÉ";
     Text[ dutch ] = "Inspringing vergroten";
-    Text[ chinese_simplified ] = "Ôö´óËõ½ø";
+    Text[ chinese_simplified ] = "å¢å¤§ç¼©è¿›";
     Text[ greek ] = "Áıîçóç åóï÷Şò";
-    Text[ korean ] = "µé¿©¾²±â ´ÃÀÓ";
+    Text[ korean ] = "ë“¤ì—¬ì“°ê¸°";
     Text[ turkish ] = "Girintiyi büyüt";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aumentar sangría";
+    Text[ catalan ] = "Augmenta el sagnat";
     Text[ finnish ] = "Lisää sisennystä";
+    Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡";
 };
 String STR_DEC_LEFTMARGIN
 {
@@ -1425,24 +1471,25 @@ String STR_DEC_LEFTMARGIN
     Text [ swedish ] = "Minska indrag" ;
     Text [ danish ] = "Formindsk indrykning" ;
     Text [ italian ] = "Riduci rientro" ;
-    Text [ spanish ] = "Disminuir sangría" ;
-    Text [ french ] = "Diminuer le retrait" ;
+    Text [ spanish ] = "Reducir la sangría" ;
+    Text [ french ] = "Réduire le retrait" ;
     Text [ portuguese ] = "Reduzir avanço de parágrafo" ;
     Text [ portuguese_brazilian ] = "Einzug verringern" ;
-    Text[ chinese_simplified ] = "¼õÉÙËõ½ø";
+    Text[ chinese_simplified ] = "å‡å°‘ç¼©è¿›";
     Text[ russian ] = "Óìåíüøèòü îòñòóï";
     Text[ polish ] = "Zmiejsz wciêcie";
-    Text[ japanese ] = "²İÃŞİÄŠÔŠu‚Ìk¬";
-    Text[ chinese_traditional ] = "´î¤ÖÁY±Æ";
+    Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆé–“éš”ã®ç¸®å°";
+    Text[ chinese_traditional ] = "æ¸›å°‘ç¸®æ’";
     Text[ arabic ] = "ÅäŞÇÕ ÇáÅÒÇÍÉ";
     Text[ dutch ] = "Inspringing verkleinen";
-    Text[ chinese_simplified ] = "¼õÉÙËõ½ø";
+    Text[ chinese_simplified ] = "å‡å°‘ç¼©è¿›";
     Text[ greek ] = "Ìåßùóç åóï÷Şò";
-    Text[ korean ] = "µé¿©¾²±â ÁÙÀÓ";
+    Text[ korean ] = "ë‚´ì–´ì“°ê¸°";
     Text[ turkish ] = "Girintiyi küçült";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Disminuir sangría";
+    Text[ catalan ] = "Redueix el sagnat";
     Text[ finnish ] = "Vähennä sisennystä";
+    Text[ thai ] = "à¸¥à¸”à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡";
 };
 String STR_INSERTLABEL
 {
@@ -1457,20 +1504,21 @@ String STR_INSERTLABEL
     Text [ french ] = "Insérer une légende" ;
     Text [ dutch ] = "Bijschrift invoegen" ;
     Text [ portuguese ] = "Inserir legenda" ;
-    Text[ chinese_simplified ] = "²åÈë±êÇ©";
+    Text[ chinese_simplified ] = "æ’å…¥æ ‡ç­¾";
     Text[ russian ] = "Âñòàâèòü íàçâàíèå";
     Text[ polish ] = "Wstaw legendê";
-    Text[ japanese ] = "}•\\”Ô†‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J¼ĞÅÒ";
+    Text[ japanese ] = "å›³è¡¨ç•ªå·ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥æ¨™ç±¤";
     Text[ arabic ] = "ÅÏÑÇÌ ÊÓãíÉ ÊæÖíÍíÉ";
     Text[ dutch ] = "Bijschrift invoegen";
-    Text[ chinese_simplified ] = "²åÈë±êÇ©";
+    Text[ chinese_simplified ] = "æ’å…¥æ ‡ç­¾";
     Text[ greek ] = "ĞñïóèŞêç åğéãñáöŞò";
-    Text[ korean ] = "Ä¸¼Ç »ğÀÔ";
+    Text[ korean ] = "ìº¡ì…˜ ì‚½ì…";
     Text[ turkish ] = "Etiket ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar etiqueta";
-    Text[ finnish ] = "Lisää kuvaotsikko";
+    Text[ catalan ] = "Insereix una llegenda";
+    Text[ finnish ] = "Lisää otsikko";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢à¸ à¸²à¸";
 };
 String STR_SETNUMRULESTART
 {
@@ -1485,20 +1533,21 @@ String STR_SETNUMRULESTART
     Text [ spanish ] = "Reiniciar numeración" ;
     Text [ french ] = "Reprendre la numérotation" ;
     Text [ dutch ] = "Nieuwe nummering" ;
-    Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ";
-    Text[ russian ] = "Íà÷àëî íóìåğàöèè";
+    Text[ chinese_simplified ] = "é‡æ–°å¼€å§‹ç¼–å·";
+    Text[ russian ] = "Íà÷àòü íóìåğàöèş çàíîâî";
     Text[ polish ] = "W³¹cz ponownie numeracjê";
-    Text[ japanese ] = "”Ô†•t‚¯‚ğV‚µ‚­ŠJn";
-    Text[ chinese_traditional ] = "­«·s½s¸¹";
+    Text[ japanese ] = "ç•ªå·ä»˜ã‘ã‚’æ–°ã—ãé–‹å§‹";
+    Text[ chinese_traditional ] = "é‡æ–°ç·¨è™Ÿ";
     Text[ arabic ] = "ÅÚÇÏÉ ÈÏÁ ÇáÊÑŞíã";
     Text[ dutch ] = "Nieuwe nummering";
-    Text[ chinese_simplified ] = "ÖØĞÂ¿ªÊ¼±àºÅ";
+    Text[ chinese_simplified ] = "é‡æ–°å¼€å§‹ç¼–å·";
     Text[ greek ] = "Åğáíåêêßíçóç áñßèìçóçò";
-    Text[ korean ] = "¹øÈ£¸Å±â±â ´Ù½Ã ½ÃÀÛ";
+    Text[ korean ] = "ë²ˆí˜¸ ë‹¤ì‹œ ë§¤ê¸°ê¸°";
     Text[ turkish ] = "Numaralamayı yeniden başlat";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reiniciar numeración";
+    Text[ catalan ] = "Reinicia la numeració";
     Text[ finnish ] = "Aloita numerointi uudestaan";
+    Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¹ƒà¸«à¸¡à¹ˆ";
 };
 String STR_CHANGEFTN
 {
@@ -1511,22 +1560,23 @@ String STR_CHANGEFTN
     Text [ danish ] = "Modificer fodnote" ;
     Text [ italian ] = "Modifica nota a piè pagina" ;
     Text [ spanish ] = "Modificar nota al pie" ;
-    Text [ french ] = "Modifier note de bas de page" ;
-    Text [ dutch ] = "Voetnoot wijzigingen" ;
-    Text[ chinese_simplified ] = "¸ü¸Ä×¢½Å";
+    Text [ french ] = "Modifier la note de bas de page" ;
+    Text [ dutch ] = "Voetnoot wijzigen" ;
+    Text[ chinese_simplified ] = "æ›´æ”¹æ³¨è„š";
     Text[ russian ] = "Èçìåíèòü ñíîñêó";
     Text[ polish ] = "Zmodyfikuj przypis dolny";
-    Text[ japanese ] = "‹r’‚Ì•ÏX";
-    Text[ chinese_traditional ] = "ÅÜ§óµù¸}";
+    Text[ japanese ] = "è„šæ³¨ã®å¤‰æ›´";
+    Text[ chinese_traditional ] = "è®Šæ›´è¨»è…³";
     Text[ arabic ] = "ÊÚÏíá ÇáÍÇÔíÉ ÇáÓİáíÉ";
-    Text[ dutch ] = "Voetnoot wijzigingen";
-    Text[ chinese_simplified ] = "¸ü¸Ä×¢½Å";
+    Text[ dutch ] = "Voetnoot wijzigen";
+    Text[ chinese_simplified ] = "æ›´æ”¹æ³¨è„š";
     Text[ greek ] = "Ôñïğïğïßçóç õğïóçìåßùóçò";
-    Text[ korean ] = "°¢ÁÖ ¼öÁ¤";
+    Text[ korean ] = "ê°ì£¼ ë³€ê²½";
     Text[ turkish ] = "Dipnotu değiştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificar nota al pie";
+    Text[ catalan ] = "Modifica la nota al peu";
     Text[ finnish ] = "Muokkaa alaviitettä";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
 };
 String STR_REDLINE
 {
@@ -1542,24 +1592,25 @@ String STR_ACCEPT_REDLINE
     Text [ swedish ] = "Acceptera ändring" ;
     Text [ danish ] = "Accepter ændring" ;
     Text [ italian ] = "Accetta le modifiche" ;
-    Text [ spanish ] = "Aceptar modificación" ;
+    Text [ spanish ] = "Aceptar modificaciones" ;
     Text [ french ] = "Accepter la modification" ;
     Text [ dutch ] = "Wijziging accepteren" ;
     Text [ portuguese ] = "Aceitar modificações" ;
-    Text[ chinese_simplified ] = "½ÓÊÜ¸ü¸Ä";
+    Text[ chinese_simplified ] = "æ¥å—æ›´æ”¹";
     Text[ russian ] = "Ïğèíÿòü èçìåíåíèÿ";
     Text[ polish ] = "Zaakceptuj zmiany";
-    Text[ japanese ] = "•ÏX‚ğó‚¯“ü‚ê‚é";
-    Text[ chinese_traditional ] = "±µ¨üÅÜ§ó";
+    Text[ japanese ] = "å¤‰æ›´ã‚’å—ã‘å…¥ã‚Œã‚‹";
+    Text[ chinese_traditional ] = "æ¥å—è®Šæ›´";
     Text[ arabic ] = "ŞÈæá ÇáÊÛííÑÇÊ";
     Text[ dutch ] = "Wijziging accepteren";
-    Text[ chinese_simplified ] = "½ÓÊÜ¸ü¸Ä";
+    Text[ chinese_simplified ] = "æ¥å—æ›´æ”¹";
     Text[ greek ] = "Áğïäï÷Ş áëëáãşí";
-    Text[ korean ] = "º¯°æ ¼ö¶ô";
+    Text[ korean ] = "ë³€ê²½ ë™ì˜";
     Text[ turkish ] = "Değişiklikleri kaydet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aceptar modificación";
+    Text[ catalan ] = "Accepta els canvis";
     Text[ finnish ] = "Hyväksy muutokset";
+    Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
 };
 String STR_REJECT_REDLINE
 {
@@ -1574,20 +1625,21 @@ String STR_REJECT_REDLINE
     Text [ spanish ] = "Rechazar modificación" ;
     Text [ french ] = "Rejeter la modification" ;
     Text [ dutch ] = "Wijziging verwerpen" ;
-    Text[ chinese_simplified ] = "¾Ü¾ø¸ü¸Ä";
+    Text[ chinese_simplified ] = "æ‹’ç»æ›´æ”¹";
     Text[ russian ] = "Îòêëîíèòü èçìåíåíèÿ";
     Text[ polish ] = "Odrzuæ zmiany";
-    Text[ japanese ] = "•ÏX‚ğó‚¯“ü‚ê‚È‚¢";
-    Text[ chinese_traditional ] = "©Úµ´ÅÜ§ó";
+    Text[ japanese ] = "å¤‰æ›´ã‚’å—ã‘å…¥ã‚Œãªã„";
+    Text[ chinese_traditional ] = "æ‹’çµ•è®Šæ›´";
     Text[ arabic ] = "ÑİÖ ÇáÊÛííÑ";
     Text[ dutch ] = "Wijziging verwerpen";
-    Text[ chinese_simplified ] = "¾Ü¾ø¸ü¸Ä";
+    Text[ chinese_simplified ] = "æ‹’ç»æ›´æ”¹";
     Text[ greek ] = "Áğüññéøç áëëáãşí";
-    Text[ korean ] = "º¯°æ °ÅºÎ";
+    Text[ korean ] = "ë³€ê²½ ê±°ë¶€";
     Text[ turkish ] = "Değişikliği reddet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rechazar modificación";
+    Text[ catalan ] = "Rebutja el canvi";
     Text[ finnish ] = "Hylkää muutos";
+    Text[ thai ] = "à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
 };
 String STR_SPLIT_TABLE
 {
@@ -1601,21 +1653,22 @@ String STR_SPLIT_TABLE
     Text [ italian ] = "Dividi tabella" ;
     Text [ spanish ] = "Dividir tabla" ;
     Text [ french ] = "Scinder le tableau" ;
-    Text [ dutch ] = "Tabel splitsen" ;
-    Text[ chinese_simplified ] = "·Ö¸ô±í¸ñ";
+    Text [ dutch ] = "Tabel opsplitsen" ;
+    Text[ chinese_simplified ] = "åˆ†éš”è¡¨æ ¼";
     Text[ russian ] = "Ğàçáèòü òàáëèöó";
     Text[ polish ] = "Rozdziel tabelê";
-    Text[ japanese ] = "•\\‚Ì•ªŠ„";
-    Text[ chinese_traditional ] = "¤À¶}ªí®æ";
+    Text[ japanese ] = "è¡¨ã®åˆ†å‰²";
+    Text[ chinese_traditional ] = "åˆ†é–‹è¡¨æ ¼";
     Text[ arabic ] = "İÕá ÇáÌÏæá";
-    Text[ dutch ] = "Tabel splitsen";
-    Text[ chinese_simplified ] = "·Ö¸ô±í¸ñ";
+    Text[ dutch ] = "Tabel opsplitsen";
+    Text[ chinese_simplified ] = "åˆ†éš”è¡¨æ ¼";
     Text[ greek ] = "Äéáßñåóç ğßíáêá";
-    Text[ korean ] = "Ç¥ ³ª´©±â";
+    Text[ korean ] = "í‘œ ë‚˜ëˆ„ê¸°";
     Text[ turkish ] = "Tabloyu böl";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dividir tabla";
+    Text[ catalan ] = "Divideix la taula";
     Text[ finnish ] = "Jaa taulukko";
+    Text[ thai ] = "à¹à¸¢à¸à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_DONTEXPAND
 {
@@ -1630,20 +1683,21 @@ String STR_DONTEXPAND
     Text [ spanish ] = "Detener atributo" ;
     Text [ french ] = "Arrêter" ;
     Text [ dutch ] = "Attribuut stoppen" ;
-    Text[ chinese_simplified ] = "Í£Ö¹ÏÔÊ¾ÊôĞÔ";
+    Text[ chinese_simplified ] = "åœæ­¢æ˜¾ç¤ºå±æ€§";
     Text[ russian ] = "Îñòàíîâèòü àòğèáóò";
     Text[ polish ] = "Zatrzymaj atrybuty";
-    Text[ japanese ] = "‘®«‚Ì’†~";
-    Text[ chinese_traditional ] = "°±¤îÅã¥ÜÄİ©Ê";
+    Text[ japanese ] = "å±æ€§ã®ä¸­æ­¢";
+    Text[ chinese_traditional ] = "åœæ­¢é¡¯ç¤ºå±¬æ€§";
     Text[ arabic ] = "æŞİ ÇáÓãÇÊ";
     Text[ dutch ] = "Attribuut stoppen";
-    Text[ chinese_simplified ] = "Í£Ö¹ÏÔÊ¾ÊôĞÔ";
+    Text[ chinese_simplified ] = "åœæ­¢æ˜¾ç¤ºå±æ€§";
     Text[ greek ] = "ÄéáêïğŞ éäéüôçôáò";
-    Text[ korean ] = "¼Ó¼º Á¤Áö";
+    Text[ korean ] = "ì†ì„± ì¤‘ì§€";
     Text[ turkish ] = "Özniteliği durdur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Detener atributo";
+    Text[ catalan ] = "Atura l'atribut";
     Text[ finnish ] = "Pysäytä ominaisuus";
+    Text[ thai ] = "à¸«à¸¢à¸¸à¸”à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°";
 };
 String STR_AUTOCORRECT
 {
@@ -1655,23 +1709,24 @@ String STR_AUTOCORRECT
     Text [ swedish ] = "AutoKorrigering" ;
     Text [ danish ] = "AutoKorrektur" ;
     Text [ italian ] = "Correzione automatica" ;
-    Text [ spanish ] = "AutoCorrección" ;
+    Text [ spanish ] = "Corrección automática" ;
     Text [ french ] = "AutoCorrection" ;
     Text [ dutch ] = "AutoCorrectie" ;
-    Text[ chinese_simplified ] = "×Ô¶¯¸üÕı";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
     Text[ russian ] = "Àâòîçàìåíà";
     Text[ polish ] = "Autokorekta";
-    Text[ japanese ] = "µ°ÄºÚ¸Ä";
-    Text[ chinese_traditional ] = "¦Û°Ê®Õ¥¿";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ¬ã‚¯ãƒˆ";
+    Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£";
     Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
     Text[ dutch ] = "AutoCorrectie";
-    Text[ chinese_simplified ] = "×Ô¶¯¸üÕı";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
     Text[ greek ] = "ÁõôïÄéüñèùóç";
-    Text[ korean ] = "ÀÚµ¿°íÄ§";
+    Text[ korean ] = "ìë™ ìˆ˜ì •/ìë™ ì„œì‹";
     Text[ turkish ] = "Otomatik düzeltme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoCorrección";
-    Text[ finnish ] = "Automaattinen korjaus";
+    Text[ catalan ] = "Correcció automàtica";
+    Text[ finnish ] = "Autom. korjaus";
+    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¹‰à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 String STR_MERGE_TABLE
 {
@@ -1685,21 +1740,22 @@ String STR_MERGE_TABLE
     Text[ spanish ] = "unir tablas";
     Text[ italian ] = "Collega tabella";
     Text[ danish ] = "Flet tabeller";
-    Text[ swedish ] = "Förbind tabeller";
+    Text[ swedish ] = "Sammanfoga tabeller";
     Text[ polish ] = "Po³¹cz tabele";
     Text[ portuguese_brazilian ] = "Merge table";
-    Text[ japanese ] = "•\\‚ÌŒ‹‡";
-    Text[ chinese_simplified ] = "ºÏ²¢±í¸ñ";
-    Text[ chinese_traditional ] = "¦X¨Öªí®æ";
+    Text[ japanese ] = "è¡¨ã®çµåˆ";
+    Text[ chinese_simplified ] = "åˆå¹¶è¡¨æ ¼";
+    Text[ chinese_traditional ] = "åˆä½µè¡¨æ ¼";
     Text[ arabic ] = "æÕá ÇáÌÏæá";
     Text[ dutch ] = "Tabel verbinden";
-    Text[ chinese_simplified ] = "ºÏ²¢±í¸ñ";
+    Text[ chinese_simplified ] = "åˆå¹¶è¡¨æ ¼";
     Text[ greek ] = "Óıíäåóç ğéíÜêùí";
-    Text[ korean ] = "Å×ÀÌºí ¿¬°á";
+    Text[ korean ] = "í‘œ í•©ì¹˜ê¸°";
     Text[ turkish ] = "Tabloyu birleştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "unir tablas";
+    Text[ catalan ] = "Fusiona la taula";
     Text[ finnish ] = "Yhdistä taulukko";
+    Text[ thai ] = "à¸œà¸ªà¸²à¸™à¸•à¸²à¸£à¸²à¸‡";
 };
 
 String STR_TRANSLITERATE
@@ -1708,24 +1764,25 @@ String STR_TRANSLITERATE
     TEXT [ English ] = "Change case" ;
     TEXT[ english_us ] = "Case/Characters";
     TEXT[ portuguese ] = "Caixa/Caracteres";
-    TEXT[ russian ] = "Çàãëàâíûå/ñòğî÷íûå áóêâû";
+    TEXT[ russian ] = "ğåãèñòğ";
     TEXT[ greek ] = "Êåöáëáßá/ĞåæÜ";
-    TEXT[ dutch ] = "Hoofd-/kleine letters";
+    TEXT[ dutch ] = "Hoofdletters/kleine letters";
     TEXT[ french ] = "Casse/Caractères";
     TEXT[ spanish ] = "Mayúsculas/minúsculas";
     TEXT[ italian ] = "Maiuscole/minuscole";
-    TEXT[ danish ] = "Change case";
-    TEXT[ swedish ] = "Versalkänslig";
+    TEXT[ danish ] = "Store og små bogstaver";
+    TEXT[ swedish ] = "Bokstäver/tecken";
     TEXT[ polish ] = "Wielkie i ma³e litery";
     TEXT[ portuguese_brazilian ] = "Change case";
-    TEXT[ japanese ] = "‘å•¶š/¬•¶š";
-    TEXT[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
-    TEXT[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
-    TEXT[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
+    TEXT[ japanese ] = "æ–‡å­—ç¨®ã®å¤‰æ›";
+    TEXT[ korean ] = "ë¬¸ì ë°”ê¾¸ê¸°";
+    TEXT[ chinese_simplified ] = "å­—æ¯å¤§å°å†™";
+    TEXT[ chinese_traditional ] = "å­—æ¯å¤§å°å¯«";
     TEXT[ turkish ] = "Change case";
     TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
-    TEXT[ catalan ] = "Mayúsculas/minúsculas";
-    TEXT[ finnish ] = "Groß-/Kleinschreibung";
+    TEXT[ catalan ] = "Majúscules/minúscules";
+    TEXT[ finnish ] = "Muuta kirjainkoko";
+    TEXT[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œ/à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
 };
 
 String STR_DELNUM
@@ -1741,21 +1798,22 @@ String STR_DELNUM
     TEXT [ french ] = "Supprimer la numérotation" ;
     TEXT [ swedish ] = "Radera numrering" ;
     TEXT [ dutch ] = "Nummering wissen" ;
-    TEXT [ spanish ] = "Eliminar numeración" ;
+    TEXT [ spanish ] = "Borrar numeración" ;
     TEXT [ english_us ] = "Delete numbering" ;
-    TEXT[ chinese_simplified ] = "É¾³ı±àºÅ";
+    TEXT[ chinese_simplified ] = "åˆ é™¤ç¼–å·";
     TEXT[ russian ] = "Óäàëèòü íóìåğàöèş";
     TEXT[ polish ] = "Usuñ numeracjê";
-    TEXT[ japanese ] = "”Ô†•t‚¯‚Ìíœ";
-    TEXT[ chinese_traditional ] = "§R°£½s¸¹";
+    TEXT[ japanese ] = "ç•ªå·ä»˜ã‘ã®å‰Šé™¤";
+    TEXT[ chinese_traditional ] = "åˆªé™¤ç·¨è™Ÿ";
     TEXT[ arabic ] = "ÍĞİ ÇáÊÑŞíã";
     TEXT[ dutch ] = "Nummering wissen";
-    TEXT[ chinese_simplified ] = "É¾³ı±àºÅ";
+    TEXT[ chinese_simplified ] = "åˆ é™¤ç¼–å·";
     TEXT[ greek ] = "ÄéáãñáöŞ áñßèìçóçò";
-    TEXT[ korean ] = "¹øÈ£¸Å±â±â Á¦°Å";
+    TEXT[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ì‚­ì œ";
     TEXT[ turkish ] = "Numaralamayı sil";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Eliminar numeración";
+    TEXT[ catalan ] = "Suprimeix la numeració";
+    TEXT[ thai ] = "à¸¥à¸šà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
 String STR_DRAWUNDO
 {
@@ -1770,20 +1828,21 @@ String STR_DRAWUNDO
     Text [ danish ] = "Tegneobjekter" ;
     Text [ portuguese ] = "Objectos de desenho" ;
     Text [ portuguese_brazilian ] = "Zeichenobjekte" ;
-    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
     Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Obiekty graficzne";
-    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó";
+    Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
+    Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶";
     Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
     Text[ dutch ] = "Tekenobjecten";
-    Text[ chinese_simplified ] = "»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
     Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
-    Text[ korean ] = "¹®ÀÚ °³Ã¼";
+    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´";
     Text[ turkish ] = "Çizim nesneleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objetos de dibujo";
+    Text[ catalan ] = "Objectes de dibuix";
     Text[ finnish ] = "Piirrosobjektit";
+    Text[ thai ] = "à¸§à¸²à¸”à¸§à¸±à¸•à¸–à¸¸";
 };
 String STR_DRAWGROUP
 {
@@ -1798,20 +1857,21 @@ String STR_DRAWGROUP
     Text [ danish ] = "Grupper tegneobjekter" ;
     Text [ portuguese ] = "Agrupar objectos de desenho" ;
     Text [ portuguese_brazilian ] = "Zeichenobjekte gruppieren" ;
-    Text[ chinese_simplified ] = "·Ö×é»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "åˆ†ç»„ç»˜å›¾å¯¹è±¡";
     Text[ russian ] = "Ãğóïïèğîâàòü ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Grupuj obiekty graficzne";
-    Text[ japanese ] = "}Œ`•`‰æ‚ğ¸ŞÙ°Ìß‰»‚·‚é";
-    Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó¸s²Õ";
+    Text[ japanese ] = "å›³å½¢æç”»ã‚’ã‚°ãƒ«ãƒ¼ãƒ—åŒ–ã™ã‚‹";
+    Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶ç¾¤çµ„";
     Text[ arabic ] = "ÊÌãíÚ ßÇÆäÇÊ ÑÓæãíÉ";
     Text[ dutch ] = "Tekenobjecten groeperen";
-    Text[ chinese_simplified ] = "·Ö×é»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "åˆ†ç»„ç»˜å›¾å¯¹è±¡";
     Text[ greek ] = "Ïìáäïğïßçóç áíôéêåéìİíùí ó÷åäßáóçò";
-    Text[ korean ] = "±×¸®±â °³Ã¼ ±×·ì";
+    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ ê·¸ë£¹";
     Text[ turkish ] = "Çizim nesnelerini grupla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Agrupar objetos de dibujo";
+    Text[ catalan ] = "Agrupa els objectes de dibuix";
     Text[ finnish ] = "Ryhmittele piirrosobjektit";
+    Text[ thai ] = "à¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡à¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
 };
 String STR_DRAWUNGROUP
 {
@@ -1822,24 +1882,25 @@ String STR_DRAWUNGROUP
     Text [ spanish ] = "Resolver objeto de grupo" ;
     Text [ french ] = "Dissocier les objets" ;
     Text [ dutch ] = "Groepsobject opheffen" ;
-    Text [ swedish ] = "Upplös gruppobjekt" ;
+    Text [ swedish ] = "Lös upp gruppobjekt" ;
     Text [ danish ] = "Ophæv gruppeobjekter" ;
     Text [ portuguese ] = "Desagrupar objectos" ;
     Text [ portuguese_brazilian ] = "Gruppenobjekt aufl?en" ;
-    Text[ chinese_simplified ] = "È¡Ïû·Ö×é¶ÔÏó";
+    Text[ chinese_simplified ] = "å–æ¶ˆåˆ†ç»„å¯¹è±¡";
     Text[ russian ] = "Ğàçãğóïïèğîâàòü ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Rozgrupuj obiekty rysunkowe";
-    Text[ japanese ] = "¸ŞÙ°Ìß‰»‚³‚ê‚½µÌŞ¼Ş­¸Ä‚Ì‰ğœ";
-    Text[ chinese_traditional ] = "¨ú®ø¸s²Õª«¥ó";
+    Text[ japanese ] = "ã‚°ãƒ«ãƒ¼ãƒ—åŒ–ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ãƒ¥ã‚¯ãƒˆã®è§£é™¤";
+    Text[ chinese_traditional ] = "å–æ¶ˆç¾¤çµ„ç‰©ä»¶";
     Text[ arabic ] = "İß ÊÌãíÚ ÇáßÇÆäÇÊ";
     Text[ dutch ] = "Groepsobject opheffen";
-    Text[ chinese_simplified ] = "È¡Ïû·Ö×é¶ÔÏó";
+    Text[ chinese_simplified ] = "å–æ¶ˆåˆ†ç»„å¯¹è±¡";
     Text[ greek ] = "ÊáôÜñãçóç ïìáäïğïßçóçò áíôéêåéìİíùí";
-    Text[ korean ] = "±×·ì °³Ã¼ ÇØÃ¼";
+    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ ê·¸ë£¹ í•´ì œ";
     Text[ turkish ] = "Nesne grubunu çöz";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Resolver objeto de grupo";
+    Text[ catalan ] = "Desagrupa els objectes de dibuix";
     Text[ finnish ] = "Pura piirrosobjektien ryhmitys";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡à¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
 };
 String STR_DRAWDELETE
 {
@@ -1848,26 +1909,27 @@ String STR_DRAWDELETE
     Text [ dutch ] = "Tekenobjecten wissen" ;
     Text [ english_us ] = "Delete drawing objects" ;
     Text [ italian ] = "Elimina oggetti di disegno" ;
-    Text [ spanish ] = "Eliminar objetos de dibujo" ;
+    Text [ spanish ] = "Borrar objetos de dibujo" ;
     Text [ french ] = "Supprimer des objets de dessin" ;
     Text [ swedish ] = "Radera ritobjekt" ;
     Text [ danish ] = "Slet tegneobjekter" ;
     Text [ portuguese ] = "Eliminar objectos de desenho" ;
     Text [ portuguese_brazilian ] = "Zeichenobjekte l?chen" ;
-    Text[ chinese_simplified ] = "É¾³ı»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "åˆ é™¤ç»˜å›¾å¯¹è±¡";
     Text[ russian ] = "Óäàëèòü ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Usuñ obiekty graficzne";
-    Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸Ä‚ğ‰ğœ";
-    Text[ chinese_traditional ] = "§R°£Ã¸¹Ïª«¥ó";
+    Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è§£é™¤";
+    Text[ chinese_traditional ] = "åˆªé™¤ç¹ªåœ–ç‰©ä»¶";
     Text[ arabic ] = "ÍĞİ ßÇÆäÇÊ ÑÓæãíÉ";
     Text[ dutch ] = "Tekenobjecten wissen";
-    Text[ chinese_simplified ] = "É¾³ı»æÍ¼¶ÔÏó";
+    Text[ chinese_simplified ] = "åˆ é™¤ç»˜å›¾å¯¹è±¡";
     Text[ greek ] = "ÄéáãñáöŞ áíôéêåéìİíùí ó÷åäßáóçò";
-    Text[ korean ] = "±×¸®±â °³Ã¼ »èÁ¦";
+    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ ì‚­ì œ";
     Text[ turkish ] = "Çizim nesnelerini sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar objetos de dibujo";
+    Text[ catalan ] = "Suprimeix els objectes de dibuix";
     Text[ finnish ] = "Poista piirrosobjektit";
+    Text[ thai ] = "à¸¥à¸šà¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
 };
 String STR_REREAD
 {
@@ -1882,20 +1944,21 @@ String STR_REREAD
     Text [ danish ] = "Erstat grafik" ;
     Text [ portuguese ] = "Substituir imagem" ;
     Text [ portuguese_brazilian ] = "Grafik ersetzen" ;
-    Text[ chinese_simplified ] = "¸üÌæÍ¼ĞÎ";
+    Text[ chinese_simplified ] = "æ›¿æ¢å›¾å½¢";
     Text[ russian ] = "Çàìåíèòü ãğàôèêó";
     Text[ polish ] = "Zamieñ grafikê";
-    Text[ japanese ] = "}‚Ì’uŠ·";
-    Text[ chinese_traditional ] = "¥N´À¹Ï§Î";
+    Text[ japanese ] = "å›³ã®ç½®æ›";
+    Text[ chinese_traditional ] = "ä»£æ›¿åœ–å½¢";
     Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Afbeelding vervangen";
-    Text[ chinese_simplified ] = "¸üÌæÍ¼ĞÎ";
+    Text[ chinese_simplified ] = "æ›¿æ¢å›¾å½¢";
     Text[ greek ] = "ÁíôéêáôÜóôáóç ãñáöéêşí";
-    Text[ korean ] = "±×·¡ÇÈ ¹Ù²Ù±â";
+    Text[ korean ] = "ê·¸ë¦¼ ë°”ê¾¸ê¸°";
     Text[ turkish ] = "Grafiği değiştirmek";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reemplazar imagen";
+    Text[ catalan ] = "Reemplaça la imatge";
     Text[ finnish ] = "Korvaa grafiikka";
+    Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String STR_DELGRF
 {
@@ -1904,26 +1967,27 @@ String STR_DELGRF
     Text [ dutch ] = "Afbeelding wissen" ;
     Text [ english_us ] = "Delete graphics" ;
     Text [ italian ] = "Elimina immagine" ;
-    Text [ spanish ] = "Eliminar imagen" ;
+    Text [ spanish ] = "Borrar imagen" ;
     Text [ french ] = "Supprimer l'image" ;
     Text [ swedish ] = "Radera grafik" ;
     Text [ danish ] = "Slet grafik" ;
     Text [ portuguese ] = "Eliminar imagem" ;
     Text [ portuguese_brazilian ] = "Grafik l?chen" ;
-    Text[ chinese_simplified ] = "É¾³ıÍ¼ĞÎ";
-    Text[ russian ] = "Óäàëèòü";
+    Text[ chinese_simplified ] = "åˆ é™¤å›¾å½¢";
+    Text[ russian ] = "Óäàëèòü ãğàôèêó";
     Text[ polish ] = "Usuñ grafikê";
-    Text[ japanese ] = "}‚Ìíœ";
-    Text[ chinese_traditional ] = "§R°£¹Ï§Î";
+    Text[ japanese ] = "å›³ã®å‰Šé™¤";
+    Text[ chinese_traditional ] = "åˆªé™¤åœ–å½¢";
     Text[ arabic ] = "ÍĞİ ÕæÑÉ";
     Text[ dutch ] = "Afbeelding wissen";
-    Text[ chinese_simplified ] = "É¾³ıÍ¼ĞÎ";
+    Text[ chinese_simplified ] = "åˆ é™¤å›¾å½¢";
     Text[ greek ] = "ÄéáãñáöŞ ãñáöéêïı";
-    Text[ korean ] = "±×·¡ÇÈ »èÁ¦";
+    Text[ korean ] = "ê·¸ë¦¼ ì‚­ì œ";
     Text[ turkish ] = "Grafiği sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar imagen";
-    Text[ finnish ] = "Poista kuvat";
+    Text[ catalan ] = "Suprimeix la imatge";
+    Text[ finnish ] = "Poista grafiikka";
+    Text[ thai ] = "à¸¥à¸šà¸à¸£à¸²à¸Ÿà¸´à¸„";
 };
 String STR_DELOLE
 {
@@ -1931,27 +1995,28 @@ String STR_DELOLE
     TEXT [ English ] = "Delete Object" ;
     Text [ english_us ] = "Delete object" ;
     Text [ italian ] = "Elimina oggetto" ;
-    Text [ spanish ] = "Eliminar objeto" ;
+    Text [ spanish ] = "Borrar objeto" ;
     Text [ french ] = "Supprimer l'objet" ;
     Text [ dutch ] = "Object wissen" ;
     Text [ swedish ] = "Radera objekt" ;
     Text [ danish ] = "Slet objekt" ;
     Text [ portuguese ] = "Eliminar objecto" ;
     Text [ portuguese_brazilian ] = "Objekt l?chen" ;
-    Text[ chinese_simplified ] = "É¾³ı¶ÔÏó";
+    Text[ chinese_simplified ] = "åˆ é™¤å¯¹è±¡";
     Text[ russian ] = "Óäàëèòü îáúåêò";
     Text[ polish ] = "Usuñ obiekt";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ìíœ";
-    Text[ chinese_traditional ] = "§R°£ª«¥ó";
+    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‰Šé™¤";
+    Text[ chinese_traditional ] = "åˆªé™¤ç‰©ä»¶";
     Text[ arabic ] = "ÍĞİ ßÇÆä";
     Text[ dutch ] = "Object wissen";
-    Text[ chinese_simplified ] = "É¾³ı¶ÔÏó";
+    Text[ chinese_simplified ] = "åˆ é™¤å¯¹è±¡";
     Text[ greek ] = "ÄéáãñáöŞ áíôéêåéìİíïõ";
-    Text[ korean ] = "°³Ã¼ »èÁ¦";
+    Text[ korean ] = "ê°œì²´ ì‚­ì œ";
     Text[ turkish ] = "Nesneyi sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar objeto";
+    Text[ catalan ] = "Suprimeix l'objecte";
     Text[ finnish ] = "Poista objekti";
+    Text[ thai ] = "à¸¥à¸šà¸§à¸±à¸•à¸–à¸¸";
 };
 String STR_TABLE_ATTR
 {
@@ -1966,20 +2031,21 @@ String STR_TABLE_ATTR
     Text [ danish ] = "Anvend tabelattributter" ;
     Text [ portuguese ] = "Aplicar atributos da tabela" ;
     Text [ portuguese_brazilian ] = "Tabellenattribute anwenden" ;
-    Text[ chinese_simplified ] = "Ê¹ÓÃ±í¸ñÊôĞÔ";
+    Text[ chinese_simplified ] = "ä½¿ç”¨è¡¨æ ¼å±æ€§";
     Text[ russian ] = "Ïğèìåíèòü àòğèáóòû òàáëèöû";
     Text[ polish ] = "Zastosuj atrybuty tabeli";
-    Text[ japanese ] = "•\\‚Ì‘®«‚Ì“K—p";
-    Text[ chinese_traditional ] = "¨Ï¥Îªí®æÄİ©Ê";
+    Text[ japanese ] = "è¡¨ã®å±æ€§ã®é©ç”¨";
+    Text[ chinese_traditional ] = "ä½¿ç”¨è¡¨æ ¼å±¬æ€§";
     Text[ arabic ] = "ÇÓÊÎÏÇã ÓãÇÊ ÇáÌÏæá";
     Text[ dutch ] = "Tabelattributen toepassen";
-    Text[ chinese_simplified ] = "Ê¹ÓÃ±í¸ñÊôĞÔ";
+    Text[ chinese_simplified ] = "ä½¿ç”¨è¡¨æ ¼å±æ€§";
     Text[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí ğßíáêá";
-    Text[ korean ] = "Ç¥ ¼Ó¼º Àû¿ë";
+    Text[ korean ] = "í‘œì˜ ì†ì„± ì ìš©";
     Text[ turkish ] = "Tablo özniteliklerini kullan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aplicar atributos de la tabla";
+    Text[ catalan ] = "Aplica els atributs de la taula";
     Text[ finnish ] = "Käytä taulukkomääritteitä";
+    Text[ thai ] = "à¹ƒà¸Šà¹‰à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_TABLE_AUTOFMT
 {
@@ -1987,27 +2053,28 @@ String STR_TABLE_AUTOFMT
     TEXT [ English ] = "Autoformat Table" ;
     Text [ english_us ] = "AutoFormat Table" ;
     Text [ italian ] = "Formattazione automatica tabella" ;
-    Text [ spanish ] = "AutoFormato tabla" ;
+    Text [ spanish ] = "Formateado automático tabla" ;
     Text [ french ] = "AutoFormat de tableau" ;
     Text [ dutch ] = "AutoOpmaak tabel" ;
     Text [ swedish ] = "Autoformat Tabell" ;
     Text [ danish ] = "AutoFormat tabel" ;
     Text [ portuguese ] = "AutoFormato tabela" ;
     Text [ portuguese_brazilian ] = "Autoformat Tabelle" ;
-    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½ ±í¸ñ";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼ è¡¨æ ¼";
     Text[ russian ] = "Àâòîôîğìàò òàáëèöû";
     Text[ polish ] = "Autoformat tabeli";
-    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä •\\";
-    Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡ ªí®æ";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ è¡¨";
+    Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼ è¡¨æ ¼";
     Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí ááÌÏæá";
     Text[ dutch ] = "AutoOpmaak tabel";
-    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½ ±í¸ñ";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼ è¡¨æ ¼";
     Text[ greek ] = "ÁõôïÌïñöŞ Ğßíáêáò";
-    Text[ korean ] = "ÀÚµ¿¼­½Ä Å×ÀÌºí";
+    Text[ korean ] = "í‘œ ìë™ ì„œì‹";
     Text[ turkish ] = "Otomatik formatlama Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoFormato tabla";
+    Text[ catalan ] = "Taula de formatatge automàtic";
     Text[ finnish ] = "Automaattinen taulukon muotoilu";
+    Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 String STR_TABLE_INSCOL
 {
@@ -2024,19 +2091,20 @@ String STR_TABLE_INSCOL
     Text [ dutch ] = "Kolom invoegen" ;
     Text [ spanish ] = "Insertar columna" ;
     Text [ english_us ] = "Insert Column" ;
-    Text[ chinese_simplified ] = "²åÈëÁĞ";
-    Text[ russian ] = "Âñòàâèòü êîëîíêó";
+    Text[ chinese_simplified ] = "æ’å…¥åˆ—";
+    Text[ russian ] = "Âñòàâèòü ñòîëáåö";
     Text[ polish ] = "Wstaw kolumnê";
-    Text[ japanese ] = "—ñ‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤JÄæ";
+    Text[ japanese ] = "åˆ—ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥æ¬„";
     Text[ arabic ] = "ÅÏÑÇÌ ÚãæÏ";
     Text[ dutch ] = "Kolom invoegen";
-    Text[ chinese_simplified ] = "²åÈëÁĞ";
+    Text[ chinese_simplified ] = "æ’å…¥åˆ—";
     Text[ greek ] = "ÅéóáãùãŞ óôŞëçò";
-    Text[ korean ] = "¿­ »ğÀÔ";
+    Text[ korean ] = "ì—´ ì‚½ì…";
     Text[ turkish ] = "Sütunu ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar columna";
+    Text[ catalan ] = "Insereix una columna";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String STR_TABLE_INSROW
 {
@@ -2053,19 +2121,20 @@ String STR_TABLE_INSROW
     Text [ dutch ] = "Rij invoegen" ;
     Text [ spanish ] = "Insertar fila" ;
     Text [ english_us ] = "Insert Row" ;
-    Text[ chinese_simplified ] = "²åÈëĞĞ";
+    Text[ chinese_simplified ] = "æ’å…¥è¡Œ";
     Text[ russian ] = "Âñòàâèòü ñòğîêó";
     Text[ polish ] = "Wstaw wiersz";
-    Text[ japanese ] = "s‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J¦æ";
+    Text[ japanese ] = "è¡Œã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥è¡Œ";
     Text[ arabic ] = "ÅÏÑÇÌ Õİ";
     Text[ dutch ] = "Rij invoegen";
-    Text[ chinese_simplified ] = "²åÈëĞĞ";
+    Text[ chinese_simplified ] = "æ’å…¥è¡Œ";
     Text[ greek ] = "ÅéóáãùãŞ ãñáììŞò";
-    Text[ korean ] = "Çà »ğÀÔ";
+    Text[ korean ] = "í–‰ ì‚½ì…";
     Text[ turkish ] = "Satır ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar fila";
+    Text[ catalan ] = "Insereix una fila";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹à¸–à¸§";
 };
 String STR_TABLE_DELBOX
 {
@@ -2080,21 +2149,22 @@ String STR_TABLE_DELBOX
     Text [ french ] = "Supprimer la ligne/colonne" ;
     Text [ swedish ] = "Radera rad/kolumn" ;
     Text [ dutch ] = "Rij/Kolom wissen" ;
-    Text [ spanish ] = "Eliminar fila/columna" ;
+    Text [ spanish ] = "Borrar fila/columna" ;
     Text [ english_us ] = "Delete row/column" ;
-    Text[ chinese_simplified ] = "É¾³ıĞĞ/ÁĞ";
+    Text[ chinese_simplified ] = "åˆ é™¤è¡Œ/åˆ—";
     Text[ russian ] = "Óäàëèòü ñòğîêó/ñòîëáåö";
     Text[ polish ] = "Usuñ wiersz/kolumnê";
-    Text[ japanese ] = "s/—ñ‚Ìíœ";
-    Text[ chinese_traditional ] = "§R°£¦C/Äæ";
+    Text[ japanese ] = "è¡Œ/åˆ—ã®å‰Šé™¤";
+    Text[ chinese_traditional ] = "åˆªé™¤åˆ—/æ¬„";
     Text[ arabic ] = "ÍĞİ Õİ/ÚãæÏ";
     Text[ dutch ] = "Rij/Kolom wissen";
-    Text[ chinese_simplified ] = "É¾³ıĞĞ/ÁĞ";
+    Text[ chinese_simplified ] = "åˆ é™¤è¡Œ/åˆ—";
     Text[ greek ] = "ÄéáãñáöŞ ãñáììŞò/óôŞëçò";
-    Text[ korean ] = "Çà/¿­ »èÁ¦";
+    Text[ korean ] = "í–‰/ì—´ ì‚­ì œ";
     Text[ turkish ] = "Satırı/sütunu sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar fila/columna";
+    Text[ catalan ] = "Suprimeix la fila/columna";
+    Text[ thai ] = "à¸¥à¸šà¹à¸–à¸§/à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String STR_TABLE_SPLIT
 {
@@ -2111,19 +2181,20 @@ String STR_TABLE_SPLIT
     Text [ dutch ] = "Cellen splitsen" ;
     Text [ spanish ] = "Dividir celdas" ;
     Text [ english_us ] = "Split Cells" ;
-    Text[ chinese_simplified ] = "·Ö¸ôµ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "åˆ†éš”å•å…ƒæ ¼";
     Text[ russian ] = "Ğàçáèòü ÿ÷åéêè";
     Text[ polish ] = "Podziel komórki";
-    Text[ japanese ] = "¾Ù‚Ì•ªŠ„";
-    Text[ chinese_traditional ] = "¤À¶}Àx¦s®æ";
+    Text[ japanese ] = "ã‚»ãƒ«ã®åˆ†å‰²";
+    Text[ chinese_traditional ] = "åˆ†é–‹å„²å­˜æ ¼";
     Text[ arabic ] = "ÊŞÓíã ÇáÎáÇíÇ";
     Text[ dutch ] = "Cellen splitsen";
-    Text[ chinese_simplified ] = "·Ö¸ôµ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "åˆ†éš”å•å…ƒæ ¼";
     Text[ greek ] = "Äéáßñåóç êåëéşí";
-    Text[ korean ] = "¼¿ ³ª´©±â";
+    Text[ korean ] = "ì…€ ë‚˜ëˆ„ê¸°";
     Text[ turkish ] = "Hücreyi ayır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dividir celdas";
+    Text[ catalan ] = "Divideix les cel.les";
+    Text[ thai ] = "à¹à¸¢à¸à¹€à¸‹à¸¥à¸¥à¹Œ";
 };
 String STR_TABLE_MERGE
 {
@@ -2134,24 +2205,25 @@ String STR_TABLE_MERGE
     Text [ spanish ] = "Unir celdas" ;
     Text [ french ] = "Fusionner la cellule" ;
     Text [ dutch ] = "Cel koppelen" ;
-    Text [ swedish ] = "Förbind cell" ;
+    Text [ swedish ] = "Sammanfoga celler" ;
     Text [ danish ] = "Flet celler" ;
     Text [ portuguese ] = "Unir células" ;
     Text [ portuguese_brazilian ] = "Zelle verbinden" ;
-    Text[ chinese_simplified ] = "ºÏ²¢µ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "åˆå¹¶å•å…ƒæ ¼";
     Text[ russian ] = "Îáúåäèíèòü ÿ÷åéêè";
     Text[ polish ] = "Scal komórki";
-    Text[ japanese ] = "¾Ù‚ÌŒ‹‡";
-    Text[ chinese_traditional ] = "¦X¨ÖÀx¦s®æ";
+    Text[ japanese ] = "ã‚»ãƒ«ã®çµåˆ";
+    Text[ chinese_traditional ] = "åˆä½µå„²å­˜æ ¼";
     Text[ arabic ] = "æÕá ÇáÎáíÉ";
     Text[ dutch ] = "Cel koppelen";
-    Text[ chinese_simplified ] = "ºÏ²¢µ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "åˆå¹¶å•å…ƒæ ¼";
     Text[ greek ] = "¸íùóç êåëéşí";
-    Text[ korean ] = "¼¿ º´ÇÕ";
+    Text[ korean ] = "ì…€ í•©ì¹˜ê¸°";
     Text[ turkish ] = "Hücreyi birleştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Unir celdas";
+    Text[ catalan ] = "Fusiona les cel.les";
     Text[ finnish ] = "Yhdistä solut";
+    Text[ thai ] = "à¸œà¸ªà¸²à¸™à¹€à¸‹à¸¥à¸¥à¹Œ";
 };
 String STR_TABLE_NUMFORMAT
 {
@@ -2166,20 +2238,21 @@ String STR_TABLE_NUMFORMAT
     Text [ spanish ] = "Formatear celda" ;
     Text [ french ] = "Formater la cellule" ;
     Text [ dutch ] = "Cel opmaken" ;
-    Text[ chinese_simplified ] = "¸ñÊ½»¯µ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "æ ¼å¼åŒ–å•å…ƒæ ¼";
     Text[ russian ] = "Ôîğìàò ÿ÷ååê";
     Text[ polish ] = "Formatuj komórkê";
-    Text[ japanese ] = "¾Ù‚Ì‘®İ’è";
-    Text[ chinese_traditional ] = "®æ¦¡¤ÆÀx¦s®æ";
+    Text[ japanese ] = "ã‚»ãƒ«ã®æ›¸å¼è¨­å®š";
+    Text[ chinese_traditional ] = "æ ¼å¼åŒ–å„²å­˜æ ¼";
     Text[ arabic ] = "ÊäÓíŞ ÇáÎáíÉ";
     Text[ dutch ] = "Cel opmaken";
-    Text[ chinese_simplified ] = "¸ñÊ½»¯µ¥Ôª¸ñ";
+    Text[ chinese_simplified ] = "æ ¼å¼åŒ–å•å…ƒæ ¼";
     Text[ greek ] = "Ìïñöïğïßçóç êåëéïı";
-    Text[ korean ] = "¼¿ Æ÷¸ËÆÃ";
+    Text[ korean ] = "ì…€ ì„œì‹ ì„¤ì •";
     Text[ turkish ] = "Hücreyi formatla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formatear celda";
+    Text[ catalan ] = "Formata la cel.la";
     Text[ finnish ] = "Muotoile solu";
+    Text[ thai ] = "à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸šà¹€à¸‹à¸¥à¸¥à¹Œ";
 };
 String STR_INSERT_TOX
 {
@@ -2194,20 +2267,21 @@ String STR_INSERT_TOX
     Text [ spanish ] = "Insertar índice" ;
     Text [ french ] = "Insérer un index" ;
     Text [ dutch ] = "Index invoegen" ;
-    Text[ chinese_simplified ] = "²åÈëË÷Òı";
-    Text[ russian ] = "Âñòàâèòü óêàçàòåëü";
+    Text[ chinese_simplified ] = "æ’å…¥ç›®å½•";
+    Text[ russian ] = "Âñòàâêà óêàçàòåëü";
     Text[ polish ] = "Wstaw indeks";
-    Text[ japanese ] = "–ÚŸ‚Æõˆø‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J¥Ø¿ı";
+    Text[ japanese ] = "ç›®æ¬¡ã¨ç´¢å¼•ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥ç›®éŒ„";
     Text[ arabic ] = "ÅÏÑÇÌ İåÑÓ";
     Text[ dutch ] = "Index invoegen";
-    Text[ chinese_simplified ] = "²åÈëË÷Òı";
+    Text[ chinese_simplified ] = "æ’å…¥ç›®å½•";
     Text[ greek ] = "ÅéóáãùãŞ åõñåôçñßïõ";
-    Text[ korean ] = "»öÀÎ »ğÀÔ";
+    Text[ korean ] = "ìƒ‰ì¸ ë° ëª©ì°¨ ì‚½ì…";
     Text[ turkish ] = "Dizin ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar índice";
+    Text[ catalan ] = "Insereix l'índex";
     Text[ finnish ] = "Lisää hakemisto";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸”à¸±à¸Šà¸™à¸µ";
 };
 String STR_CLEAR_TOX_RANGE
 {
@@ -2219,23 +2293,24 @@ String STR_CLEAR_TOX_RANGE
     Text [ swedish ] = "Upphäv förteckning" ;
     Text [ danish ] = "Ophæv indeks" ;
     Text [ italian ] = "Rimuovi indice" ;
-    Text [ spanish ] = "Eliminar directorio" ;
+    Text [ spanish ] = "Borrar el directorio" ;
     Text [ french ] = "Supprimer l'index" ;
     Text [ dutch ] = "Index verwijderen" ;
-    Text[ chinese_simplified ] = "È¡ÏûË÷Òı";
-    Text[ russian ] = "Óáğàòü óêàçàòåëü";
+    Text[ chinese_simplified ] = "å–æ¶ˆç›®å½•";
+    Text[ russian ] = "Óäàëèòü óêàçàòåëü";
     Text[ polish ] = "Usuñ indeks";
-    Text[ japanese ] = "–ÚŸ‚Æõˆø‚Ì‰ğœ";
-    Text[ chinese_traditional ] = "¨ú®ø¥Ø¿ı";
+    Text[ japanese ] = "ç›®æ¬¡ã¨ç´¢å¼•ã®è§£é™¤";
+    Text[ chinese_traditional ] = "å–æ¶ˆç›®éŒ„";
     Text[ arabic ] = "ÅÒÇáÉ ÇáİåÑÓ";
     Text[ dutch ] = "Index verwijderen";
-    Text[ chinese_simplified ] = "È¡ÏûË÷Òı";
+    Text[ chinese_simplified ] = "å–æ¶ˆç›®å½•";
     Text[ greek ] = "ÊáôÜñãçóç åõñåôçñßïõ";
-    Text[ korean ] = "»öÀÎ Á¦°Å";
+    Text[ korean ] = "ìƒ‰ì¸ ë° ëª©ì°¨ ì œê±°";
     Text[ turkish ] = "Dizini kaldır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar directorio";
+    Text[ catalan ] = "Elimina l'índex";
     Text[ finnish ] = "Poista hakemisto";
+    Text[ thai ] = "à¹€à¸­à¸²à¸”à¸±à¸Šà¸™à¸µà¸­à¸­à¸";
 };
 String STR_TABLE_TBLCPYTBL
 {
@@ -2250,20 +2325,21 @@ String STR_TABLE_TBLCPYTBL
     Text [ spanish ] = "Copiar tabla" ;
     Text [ french ] = "Copier le tableau" ;
     Text [ dutch ] = "Tabel kopiëren" ;
-    Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ";
+    Text[ chinese_simplified ] = "å¤åˆ¶è¡¨æ ¼";
     Text[ russian ] = "Êîïèğîâàòü òàáëèöó";
     Text[ polish ] = "Kopiuj tabelê";
-    Text[ japanese ] = "•\\‚ÌºËß°";
-    Text[ chinese_traditional ] = "½Æ»sªí®æ";
+    Text[ japanese ] = "è¡¨ã®ã‚³ãƒ”ãƒ¼";
+    Text[ chinese_traditional ] = "è¤‡è£½è¡¨æ ¼";
     Text[ arabic ] = "äÓÎ ÇáÌÏæá";
     Text[ dutch ] = "Tabel kopiëren";
-    Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ";
+    Text[ chinese_simplified ] = "å¤åˆ¶è¡¨æ ¼";
     Text[ greek ] = "ÁíôéãñáöŞ ğßíáêá";
-    Text[ korean ] = "Å×ÀÌºí º¹»ç";
+    Text[ korean ] = "í‘œ ë³µì‚¬";
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Copiar tabla";
+    Text[ catalan ] = "Copia la taula";
     Text[ finnish ] = "Kopioi taulukko";
+    Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_TABLE_CPYTBL
 {
@@ -2278,20 +2354,21 @@ String STR_TABLE_CPYTBL
     Text [ spanish ] = "Copiar tabla" ;
     Text [ french ] = "Copier le tableau" ;
     Text [ dutch ] = "Tabel kopiëren" ;
-    Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ";
+    Text[ chinese_simplified ] = "å¤åˆ¶è¡¨æ ¼";
     Text[ russian ] = "Êîïèğîâàòü òàáëèöó";
     Text[ polish ] = "Kopiuj tabelê";
-    Text[ japanese ] = "•\\‚ÌºËß°";
-    Text[ chinese_traditional ] = "½Æ»sªí®æ";
+    Text[ japanese ] = "è¡¨ã®ã‚³ãƒ”ãƒ¼";
+    Text[ chinese_traditional ] = "è¤‡è£½è¡¨æ ¼";
     Text[ arabic ] = "äÓÎ ÇáÌÏæá";
     Text[ dutch ] = "Tabel kopiëren";
-    Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ";
+    Text[ chinese_simplified ] = "å¤åˆ¶è¡¨æ ¼";
     Text[ greek ] = "ÁíôéãñáöŞ ğßíáêá";
-    Text[ korean ] = "Ç¥ º¹»ç";
+    Text[ korean ] = "í‘œ ë³µì‚¬";
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Copiar tabla";
+    Text[ catalan ] = "Copia la taula";
     Text[ finnish ] = "Kopioi taulukko";
+    Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸à¸•à¸²à¸£à¸²à¸‡";
 };
 String STR_INS_FROM_SHADOWCRSR
 {
@@ -2304,22 +2381,23 @@ String STR_INS_FROM_SHADOWCRSR
     Text [ danish ] = "Konfigurer markør" ;
     Text [ italian ] = "Imposta cursore" ;
     Text [ spanish ] = "Poner cursor" ;
-    Text [ french ] = "Mettre le curseur" ;
+    Text [ french ] = "Définir le curseur" ;
     Text [ dutch ] = "Cursor configureren" ;
-    Text[ chinese_simplified ] = "¶¨Î»¹â±ê";
+    Text[ chinese_simplified ] = "å®šä½å…‰æ ‡";
     Text[ russian ] = "Óñòàíîâèòü êóğñîğ";
     Text[ polish ] = "Ustaw kursor";
-    Text[ japanese ] = "¶°¿Ù‚Ìİ’è";
-    Text[ chinese_traditional ] = "©w¦ì¥ú¼Ğ";
+    Text[ japanese ] = "ã‚«ãƒ¼ã‚½ãƒ«ã®è¨­å®š";
+    Text[ chinese_traditional ] = "å®šä½æ¸¸æ¨™";
     Text[ arabic ] = "ÊÚííä ÇáãÄÔÑ";
     Text[ dutch ] = "Cursor configureren";
-    Text[ chinese_simplified ] = "¶¨Î»¹â±ê";
+    Text[ chinese_simplified ] = "å®šä½å…‰æ ‡";
     Text[ greek ] = "Ïñéóìüò äåßêôç";
-    Text[ korean ] = "Ä¿¼­ ¼³Á¤";
+    Text[ korean ] = "ì»¤ì„œ ì„¤ì •";
     Text[ turkish ] = "İmleci ayarla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Poner cursor";
-    Text[ finnish ] = "Määritä osoitin";
+    Text[ catalan ] = "Defineix el cursor";
+    Text[ finnish ] = "Määritä kohdistin";
+    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸„à¸­à¸£à¹Œà¹€à¸‹à¸­à¸£à¹Œ";
 };
 String STR_UNDO_CHAIN
 {
@@ -2334,20 +2412,21 @@ String STR_UNDO_CHAIN
     Text [ spanish ] = "Conectar marcos de texto" ;
     Text [ french ] = "Enchaîner les cadres texte" ;
     Text [ dutch ] = "Tekstkader verbinden" ;
-    Text[ chinese_simplified ] = "Á´½ÓÎÄ±¾¿ò";
+    Text[ chinese_simplified ] = "é“¾æ¥æ–‡æœ¬æ¡†";
     Text[ russian ] = "Îáúåäèíèòü òåêñòîâûå ğàìêè";
     Text[ polish ] = "Po³¹cz ramkê tekstow¹";
-    Text[ japanese ] = "Ã·½Ä˜g‚Ì˜AŒ‹";
-    Text[ chinese_traditional ] = "³sµ²¤å¦r¤è¶ô";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆæ ã®é€£çµ";
+    Text[ chinese_traditional ] = "é€£çµæ–‡å­—æ–¹å¡Š";
     Text[ arabic ] = "ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkader verbinden";
-    Text[ chinese_simplified ] = "Á´½ÓÎÄ±¾¿ò";
+    Text[ chinese_simplified ] = "é“¾æ¥æ–‡æœ¬æ¡†";
     Text[ greek ] = "Óıíäåóç ğëáéóßïõ êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ ¿¬°á";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ í”„ë ˆì„ ì—°ê²°";
     Text[ turkish ] = "Metin kutularını bağla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Conectar marcos de texto";
+    Text[ catalan ] = "Enllaça els marcs de text";
     Text[ finnish ] = "Linkitä tekstikehykset";
+    Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸à¸£à¸­à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
 String STR_UNDO_UNCHAIN
 {
@@ -2362,20 +2441,21 @@ String STR_UNDO_UNCHAIN
     Text [ spanish ] = "Deshacer el vínculo de los marcos de texto." ;
     Text [ french ] = "Détacher les cadres texte" ;
     Text [ dutch ] = "Tekstkaderverbinding verwijderen" ;
-    Text[ chinese_simplified ] = "È¡ÏûÎÄ±¾¿òµÄÁ´½Ó";
+    Text[ chinese_simplified ] = "å–æ¶ˆæ–‡æœ¬æ¡†çš„é“¾æ¥";
     Text[ russian ] = "Ğàçúåäèíèòü òåêñòîâóş ğàìêó";
     Text[ polish ] = "Roz³¹cz ramki tekstu";
-    Text[ japanese ] = "Ã·½Ä˜g‚Ì˜AŒ‹‰ğœ";
-    Text[ chinese_traditional ] = "¨ú®ø¤å¦r¤è¶ôªº³sµ²";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆæ ã®é€£çµè§£é™¤";
+    Text[ chinese_traditional ] = "å–æ¶ˆæ–‡å­—æ–¹å¡Šçš„é€£çµ";
     Text[ arabic ] = "İß ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkaderverbinding verwijderen";
-    Text[ chinese_simplified ] = "È¡ÏûÎÄ±¾¿òµÄÁ´½Ó";
+    Text[ chinese_simplified ] = "å–æ¶ˆæ–‡æœ¬æ¡†çš„é“¾æ¥";
     Text[ greek ] = "Áğïóıíäåóç ğëáßóéá êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ ¿¬°á Á¦°Å";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ í”„ë ˆì„ ì—°ê²° ì‚­ì œ";
     Text[ turkish ] = "Metin kutusu bağlantılarını çöz";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Deshacer el vínculo de los marcos de texto.";
+    Text[ catalan ] = "Desenllaça els marcs de text.";
     Text[ finnish ] = "Poista tekstikehysten linkki";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸à¸£à¸­à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
 String STR_UNDO_FTNINFO
 {
@@ -2390,20 +2470,21 @@ String STR_UNDO_FTNINFO
     Text [ spanish ] = "Modificar opciones de nota al pie" ;
     Text [ french ] = "Modifier les paramètres des notes de bas de page" ;
     Text [ dutch ] = "Voetnoteninstellingen wijzigen" ;
-    Text[ chinese_simplified ] = "¸ü¸Ä×¢½ÅÉè¶¨";
+    Text[ chinese_simplified ] = "æ›´æ”¹æ³¨è„šè®¾å®š";
     Text[ russian ] = "Èçìåíèòü íàñòğîéêè ñíîñîê";
     Text[ polish ] = "Zmodyfikuj ustawienia przypisów dolnych";
-    Text[ japanese ] = "‹r’‚Ìİ’è•ÏX";
-    Text[ chinese_traditional ] = "ÅÜ§óµù¸}³]©w";
+    Text[ japanese ] = "è„šæ³¨ã®è¨­å®šå¤‰æ›´";
+    Text[ chinese_traditional ] = "è®Šæ›´è¨»è…³è¨­å®š";
     Text[ arabic ] = "ÊÚÏíá ÎíÇÑÇÊ ÇáÍÇÔíÉ ÇáÓİáíÉ";
     Text[ dutch ] = "Voetnoteninstellingen wijzigen";
-    Text[ chinese_simplified ] = "¸ü¸Ä×¢½ÅÉè¶¨";
+    Text[ chinese_simplified ] = "æ›´æ”¹æ³¨è„šè®¾å®š";
     Text[ greek ] = "Ôñïğïğïßçóç åğéëïãşí õğïóçìåéşóåùí";
-    Text[ korean ] = "°¢ÁÖ ¼³Á¤¡¡¼öÁ¤";
+    Text[ korean ] = "ê°ì£¼ ì„¤ì • ë³€ê²½";
     Text[ turkish ] = "Dipnot ayarlarını değiştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificar opciones de nota al pie";
+    Text[ catalan ] = "Modifica les opcions de notes al peu";
     Text[ finnish ] = "Muokkaa alaviiteasetuksia";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
 };
 String STR_UNDO_ENDNOTEINFO
 {
@@ -2415,23 +2496,24 @@ String STR_UNDO_ENDNOTEINFO
     Text [ swedish ] = "Ändra slutnotsinställningar" ;
     Text [ danish ] = "Modificer slutnoteindstillinger" ;
     Text [ italian ] = "Modifica impostazione note di chiusura" ;
-    Text [ spanish ] = "Modificar configuración de notas finales" ;
+    Text [ spanish ] = "Modificar la configuración de las notas finales" ;
     Text [ french ] = "Modifier les paramètres des notes de fin" ;
     Text [ dutch ] = "Eindnootinstellingen wijzigen" ;
-    Text[ chinese_simplified ] = "¸ü¸ÄÎ²×¢Éè¶¨";
+    Text[ chinese_simplified ] = "æ›´æ”¹å°¾æ³¨è®¾å®š";
     Text[ russian ] = "Èçìåíèòü óñòàíîâêè êîíöåâûõ ñíîñîê";
     Text[ polish ] = "Zmodyfikuj ustawienia przypisów dolnych";
-    Text[ japanese ] = "•¶––‹r’‚Ìİ’è•ÏX";
-    Text[ chinese_traditional ] = "ÅÜ§ó§Àµù³]©w";
+    Text[ japanese ] = "æ–‡æœ«è„šæ³¨ã®è¨­å®šå¤‰æ›´";
+    Text[ chinese_traditional ] = "è®Šæ›´å°¾è¨»è¨­å®š";
     Text[ arabic ] = "ÊÚÏíá ÅÚÏÇÏÇÊ ÇáÊÚáíŞÇÊ ÇáÎÊÇãíÉ";
     Text[ dutch ] = "Eindnootinstellingen wijzigen";
-    Text[ chinese_simplified ] = "¸ü¸ÄÎ²×¢Éè¶¨";
+    Text[ chinese_simplified ] = "æ›´æ”¹å°¾æ³¨è®¾å®š";
     Text[ greek ] = "Ôñïğïğïßçóç åğéëïãşí óçìåéşóåùí ôİëïõò";
-    Text[ korean ] = "¹ÌÁÖ¡¡¼³Á¤ ¼öÁ¤";
+    Text[ korean ] = "ë¯¸ì£¼ ì„¤ì • ë³€ê²½";
     Text[ turkish ] = "Sonnot ayarlarını değiştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificar configuración de notas finales";
-    Text[ finnish ] = "Muokkaa loppuhuomautuksen asetuksia";
+    Text[ catalan ] = "Modifica la configuració de notes finals";
+    Text[ finnish ] = "Muokkaa loppuviiteasetuksia";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸à¸²à¸£à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
 };
 String STR_UNDO_COMPAREDOC
 {
@@ -2445,21 +2527,22 @@ String STR_UNDO_COMPAREDOC
     Text [ italian ] = "Confronto documento" ;
     Text [ spanish ] = "Comparar documento" ;
     Text [ french ] = "Comparaison de documents" ;
-    Text [ dutch ] = "Vergelijking van documenten" ;
-    Text[ chinese_simplified ] = "±È½ÏÎÄµµ";
+    Text [ dutch ] = "Documentvergelijking" ;
+    Text[ chinese_simplified ] = "æ¯”è¾ƒæ–‡æ¡£";
     Text[ russian ] = "Ñğàâíèòü âåğñèè äîêóìåíòà";
     Text[ polish ] = "Porównaj dokument";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì”äŠr";
-    Text[ chinese_traditional ] = "¤ñ¸û¤å¥ó";
+    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®æ¯”è¼ƒ";
+    Text[ chinese_traditional ] = "æ¯”è¼ƒæ–‡ä»¶";
     Text[ arabic ] = "ãŞÇÑäÉ ÇáãÓÊäÏ";
-    Text[ dutch ] = "Vergelijking van documenten";
-    Text[ chinese_simplified ] = "±È½ÏÎÄµµ";
+    Text[ dutch ] = "Documentvergelijking";
+    Text[ chinese_simplified ] = "æ¯”è¾ƒæ–‡æ¡£";
     Text[ greek ] = "Óıãêñéóç åããñÜöïõ";
-    Text[ korean ] = "¹®¼­ºñ±³";
+    Text[ korean ] = "ë¬¸ì„œ ë¹„êµ";
     Text[ turkish ] = "Belgeyi karşılaştır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Comparar documento";
+    Text[ catalan ] = "Compara el document";
     Text[ finnish ] = "Vertaa asiakirjaa";
+    Text[ thai ] = "à¹€à¸›à¸£à¸µà¸¢à¸šà¹€à¸—à¸µà¸¢à¸šà¹€à¸­à¸à¸ªà¸²à¸£";
 };
 String STR_UNDO_SETFLYFRMFMT
 {
@@ -2474,20 +2557,21 @@ String STR_UNDO_SETFLYFRMFMT
     Text [ spanish ] = "Aplicar estilo de marco" ;
     Text [ french ] = "Utiliser un style de cadre" ;
     Text [ dutch ] = "Kaderopmaakprofiel toepassen" ;
-    Text[ chinese_simplified ] = "Ê¹ÓÃ¿òÑùÊ½";
+    Text[ chinese_simplified ] = "ä½¿ç”¨æ¡†æ ·å¼";
     Text[ russian ] = "Ïğèìåíèòü ñòèëü ğàìîê";
     Text[ polish ] = "Zastosuj styl ramki";
-    Text[ japanese ] = "˜g½À²Ù‚Ì“K—p";
-    Text[ chinese_traditional ] = "¨Ï¥Î¤è¶ô¼Ë¦¡";
+    Text[ japanese ] = "æ ã‚¹ã‚¿ã‚¤ãƒ«ã®é©ç”¨";
+    Text[ chinese_traditional ] = "ä½¿ç”¨æ–¹å¡Šæ¨£å¼";
     Text[ arabic ] = "ÇÓÊÎÏÇã äãØ ßÇÏÑ";
     Text[ dutch ] = "Kaderopmaakprofiel toepassen";
-    Text[ chinese_simplified ] = "Ê¹ÓÃ¿òÑùÊ½";
+    Text[ chinese_simplified ] = "ä½¿ç”¨æ¡†æ ·å¼";
     Text[ greek ] = "ÅöáñìïãŞ óôõë ğëáéóßïõ";
-    Text[ korean ] = "ÇÁ·¹ÀÓ ½ºÅ¸ÀÏ Àû¿ë";
+    Text[ korean ] = "í”„ë ˆì„ ìŠ¤íƒ€ì¼ ì ìš©";
     Text[ turkish ] = "Çerçeve biçimi uygula";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aplicar estilo de marco";
+    Text[ catalan ] = "Aplica l'estil del marc";
     Text[ finnish ] = "Käytä kehystyyliä";
+    Text[ thai ] = "à¹ƒà¸Šà¹‰à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸£à¸­à¸š";
 };
 String STR_UNDO_SETRUBYATTR
 {
@@ -2495,24 +2579,25 @@ String STR_UNDO_SETRUBYATTR
     Text [ ENGLISH ] = "Set phonetic Symbols" ;
     Text[ english_us ] = "Ruby Setting";
     Text[ portuguese ] = "Atributo Ruby";
-    Text[ russian ] = "Ïîìåñòèòü äèàêğèòè÷åñêèå çíàêè";
+    Text[ russian ] = "Íàñòğîéêè òğàíñêğèïöèè";
     Text[ greek ] = "Ïñéóìüò öùíçôéêşí óõìâüëùí";
     Text[ dutch ] = "Fonetische symbolen invoegen";
     Text[ french ] = "Attribut Ruby";
     Text[ spanish ] = "Aplicar símbolos fonéticos";
     Text[ italian ] = "Applica testo Ruby";
-    Text[ danish ] = "Set phonetic Symbols";
+    Text[ danish ] = "Sæt fonetiske symboler";
     Text[ swedish ] = "Sätt fonetiska symboler";
     Text[ polish ] = "OsadŸ znaki diakrytyczne";
     Text[ portuguese_brazilian ] = "Set phonetic Symbols";
-    Text[ japanese ] = "ÙËŞİ’è";
-    Text[ korean ] = "ÀÚÀ½ ±âÈ£ ÁöÁ¤";
-    Text[ chinese_simplified ] = "¼ÓÉÏÆ´Òô»ò×¢Òô·ûºÅ";
-    Text[ chinese_traditional ] = "¥[¤Wµù­µ²Å¸¹";
+    Text[ japanese ] = "ãƒ«ãƒ“è¨­å®š";
+    Text[ korean ] = "ë§ë§ ë„£ê¸° ì„¤ì •";
+    Text[ chinese_simplified ] = "åŠ ä¸Šæ‹¼éŸ³æˆ–æ³¨éŸ³ç¬¦å·";
+    Text[ chinese_traditional ] = "åŠ ä¸Šæ³¨éŸ³æ¨™ç¤º";
     Text[ turkish ] = "Set phonetic Symbols";
     Text[ arabic ] = "ÊÚííä ÑãæÒ ÕæÊíÉ";
-    Text[ catalan ] = "Aplicar símbolos fonéticos";
-    Text[ finnish ] = "Phonetische Symbole setzen";
+    Text[ catalan ] = "Aplica els símbols fonètics";
+    Text[ finnish ] = "Ruby-tekstin asetukset";
+    Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¸‚à¸™à¸²à¸”à¹€à¸¥à¹‡à¸";
 };
 #102505#
 String STR_UNDO_TMPAUTOCORR
@@ -2521,11 +2606,11 @@ String STR_UNDO_TMPAUTOCORR
     Text [ English ] = "AutoCorrect" ;
     Text [ portuguese ] = "AutoCorrecção" ;
     Text [ english_us ] = "AutoCorrect" ;
-    Text [ portuguese_brazilian ] = "AutoKorrektur" ;
+    Text [ portuguese_brazilian ] = "AutoCorreção" ;
     Text [ swedish ] = "AutoKorrigering" ;
     Text [ danish ] = "AutoKorrektur" ;
     Text [ italian ] = "Correzione automatica" ;
-    Text [ spanish ] = "AutoCorrección" ;
+    Text [ spanish ] = "Corrección automática" ;
     Text [ french ] = "AutoCorrection" ;
     Text [ dutch ] = "AutoCorrectie" ;
     Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
@@ -2537,7 +2622,7 @@ String STR_UNDO_TMPAUTOCORR
     Text[ dutch ] = "AutoCorrectie";
     Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
     Text[ greek ] = "ÁõôïÄéüñèùóç";
-    Text[ korean ] = "ìë™ê³ ì¹¨";
+    Text[ korean ] = "ìë™ ìˆ˜ì •";
     Text[ turkish ] = "Otomatik düzeltme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Correcció automàtica";
@@ -2557,20 +2642,21 @@ String STR_INSERT_FOOTNOTE
     Text [ french ] = "Insérer une note de bas de page" ;
     Text [ dutch ] = "Voetnoot invoegen" ;
     Text [ portuguese ] = "Inserir nota de rodapé" ;
-    Text[ chinese_simplified ] = "²åÈë×¢½Å";
+    Text[ chinese_simplified ] = "æ’å…¥æ³¨è„š";
     Text[ russian ] = "Âñòàâèòü ñíîñêó";
     Text[ polish ] = "Wstaw przypis dolny";
-    Text[ japanese ] = "‹r’‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤Jµù¸}";
+    Text[ japanese ] = "è„šæ³¨ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥è¨»è…³";
     Text[ arabic ] = "ÅÏÑÇÌ ÍÇÔíÉ ÓİáíÉ";
     Text[ dutch ] = "Voetnoot invoegen";
-    Text[ chinese_simplified ] = "²åÈë×¢½Å";
+    Text[ chinese_simplified ] = "æ’å…¥æ³¨è„š";
     Text[ greek ] = "ĞñïóèŞêç õğïóçìåßùóçò";
-    Text[ korean ] = "°¢ÁÖ »ğÀÔ";
+    Text[ korean ] = "ê°ì£¼ ì‚½ì…";
     Text[ turkish ] = "Dipnot ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar nota al pie";
+    Text[ catalan ] = "Insereix una nota al peu";
     Text[ finnish ] = "Lisää alaviite";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
 };
 String STR_INSERT_URLBTN
 {
@@ -2579,7 +2665,7 @@ String STR_INSERT_URLBTN
     Text[ english_us ] = "insert URL button";
     Text[ portuguese ] = "Inserir botão URL";
     Text[ russian ] = "Âñòàâèòü êíîïêó URL";
-    Text[ dutch ] = "URL button invoegen";
+    Text[ dutch ] = "URL-knop invoegen";
     Text[ french ] = "Insérer un bouton d'URL";
     Text[ spanish ] = "Insertar botón URL";
     Text[ italian ] = "Inserisci pulsante URL";
@@ -2587,18 +2673,19 @@ String STR_INSERT_URLBTN
     Text[ swedish ] = "Infoga URL-knapp";
     Text[ polish ] = "Wstaw przycisk URL";
     Text[ portuguese_brazilian ] = "insert URL button";
-    Text[ japanese ] = "URLÎŞÀİ‚Ì‘}“ü";
-    Text[ chinese_simplified ] = "²åÈë URL °´Å¥";
-    Text[ chinese_traditional ] = "´¡¤J URL «ö¶s";
+    Text[ japanese ] = "URLãƒœã‚¿ãƒ³ã®æŒ¿å…¥";
+    Text[ chinese_simplified ] = "æ’å…¥ URL æŒ‰é’®";
+    Text[ chinese_traditional ] = "æ’å…¥ URL æŒ‰éˆ•";
     Text[ arabic ] = "ÅÏÑÇÌ ãİÊÇÍ URL";
-    Text[ dutch ] = "URL button invoegen";
-    Text[ chinese_simplified ] = "²åÈë URL °´Å¥";
+    Text[ dutch ] = "URL-knop invoegen";
+    Text[ chinese_simplified ] = "æ’å…¥ URL æŒ‰é’®";
     Text[ greek ] = "ĞñïóèŞêç ğåäßïõ åğéëïãŞò URL";
-    Text[ korean ] = "URL ¹öÆ° »ğÀÔ";
+    Text[ korean ] = "URL ë²„íŠ¼ ì‚½ì…";
     Text[ turkish ] = "URL düğmesi ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar botón URL";
+    Text[ catalan ] = "Insereix un botó URL";
     Text[ finnish ] = "Lisää URL-painike";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸›à¸¸à¹ˆà¸¡ URL ";
 };
 String STR_INSERT_URLTXT
 {
@@ -2615,18 +2702,19 @@ String STR_INSERT_URLTXT
     Text[ swedish ] = "Infoga hyperlänk";
     Text[ polish ] = "Wstaw hiper³¹cze";
     Text[ portuguese_brazilian ] = "insert Hyperlink";
-    Text[ japanese ] = "Ê²Êß°Øİ¸‚Ì‘}“ü";
-    Text[ chinese_simplified ] = "²åÈë³¬Á´½Ó";
-    Text[ chinese_traditional ] = "´¡¤J¶W³sµ²";
+    Text[ japanese ] = "ãƒã‚¤ãƒ‘ãƒ¼ãƒªãƒ³ã‚¯ã®æŒ¿å…¥";
+    Text[ chinese_simplified ] = "æ’å…¥è¶…é“¾æ¥";
+    Text[ chinese_traditional ] = "æ’å…¥è¶…é€£çµ";
     Text[ arabic ] = "ÅÏÑÇÌ ÇÑÊÈÇØ ÊÔÚÈí";
     Text[ dutch ] = "Hyperlink invoegen";
-    Text[ chinese_simplified ] = "²åÈë³¬Á´½Ó";
+    Text[ chinese_simplified ] = "æ’å…¥è¶…é“¾æ¥";
     Text[ greek ] = "ĞñïóèŞêç õğåñ-óıíäåóçò";
-    Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ© »ğÀÔ";
+    Text[ korean ] = "í•˜ì´í¼ë§í¬ ì‚½ì…";
     Text[ turkish ] = "Hyperlink ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar hiperenlace";
+    Text[ catalan ] = "Insereix un hiperenllaç";
     Text[ finnish ] = "Lisää hyperlinkki";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
 };
 String STR_DELETE_INVISIBLECNTNT
 {
@@ -2635,24 +2723,25 @@ String STR_DELETE_INVISIBLECNTNT
     Text[ english_us ] = "remove invisible content";
     Text[ portuguese ] = "eliminar conteúdo invisível";
     Text[ greek ] = "êáôÜñãçóç ìç ïñáôşí ğåñéå÷ïìİíùí";
-    Text[ dutch ] = "Ônzichtbare inhoud verwijderen";
+    Text[ dutch ] = "Onzichtbare inhoud verwijderen";
     Text[ french ] = "supprimer le contenu invisible";
-    Text[ spanish ] = "eliminar contenido invisible";
+    Text[ spanish ] = "borrar el contenido invisible";
     Text[ swedish ] = "ta bort osynligt innehåll";
     Text[ russian ] = "óäàëèòü íåâèäèìîå ñîäåğæèìîå";
     Text[ italian ] = "Rimuovi contenuto nascosto";
     Text[ danish ] = "fjern usynlige indhold";
     Text[ polish ] = "usuñ niewidoczn¹ zawartoœæ";
     Text[ portuguese_brazilian ] = "remove invisible content";
-    Text[ japanese ] = "•\\¦‚Å‚«‚È‚¢“à—e‚ğíœ‚·‚é";
-    Text[ korean ] = "º¸ÀÌÁö ¾Ê´Â ³»¿ë Á¦°Å";
-    Text[ chinese_simplified ] = "É¾³ıÒşÈëµÄÄÚÈİ";
-    Text[ chinese_traditional ] = "²M°£Áô¤Jªº¤º®e";
+    Text[ japanese ] = "è¡¨ç¤ºã§ããªã„å†…å®¹ã‚’å‰Šé™¤ã™ã‚‹";
+    Text[ korean ] = "ìˆ¨ê¸´ ë‚´ìš© ì œê±°";
+    Text[ chinese_simplified ] = "åˆ é™¤éšå…¥çš„å†…å®¹";
+    Text[ chinese_traditional ] = "æ¸…é™¤éš±å…¥çš„å…§å®¹";
     Text[ arabic ] = "ÅÒÇáÉ ÇáãÍÊæíÇÊ ÇáÛíÑ ãÑÆíÉ";
     Text[ turkish ] = "Görünmez içeriği kaldır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "eliminar contenido invisible";
+    Text[ catalan ] = "elimina el contingut invisible";
     Text[ finnish ] = "poista näkymätön sisältö";
+    Text[ thai ] = "à¹€à¸­à¸²à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¸—à¸µà¹ˆà¸¡à¸­à¸‡à¹„à¸¡à¹ˆà¹€à¸«à¹‡à¸™à¸­à¸­à¸";
 };
 
 String STR_DDEERROR_APP1
@@ -2667,19 +2756,20 @@ String STR_DDEERROR_APP1
     TEXT [ danish ] = "Applikationen [" ;
     TEXT [ french ] = "L'application [" ;
     TEXT [ swedish ] = "Programmet [" ;
-    TEXT [ dutch ] = "Applicatie [" ;
+    TEXT [ dutch ] = "Toepassing [" ;
     TEXT [ spanish ] = "La aplicación [" ;
     TEXT [ english_us ] = "Application [" ;
-    TEXT[ chinese_simplified ] = "Ó¦ÓÃ³ÌĞò [";
-    TEXT[ russian ] = "Ê ïğèëîæåíèş [";
+    TEXT[ chinese_simplified ] = "åº”ç”¨ç¨‹åº [";
+    TEXT[ russian ] = "Ïğèëîæåíèş [";
     TEXT[ polish ] = "Aplikacja [";
-    TEXT[ japanese ] = "±ÌßØ¹°¼®İ [";
+    TEXT[ japanese ] = "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ [";
     TEXT[ greek ] = "Ç åöáñìïãŞ [";
-    TEXT[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ [";
-    TEXT[ chinese_traditional ] = "µ{¦¡ [";
+    TEXT[ korean ] = "ì‘ìš© í”„ë¡œê·¸ë¨ [";
+    TEXT[ chinese_traditional ] = "ç¨‹å¼ [";
     TEXT[ arabic ] = "ÇáÊØÈíŞ  ]";
     TEXT[ turkish ] = "Uygulama [";
-    TEXT[ catalan ] = "La aplicación [";
+    TEXT[ catalan ] = "L'aplicació [";
+    TEXT[ thai ] = "à¹‚à¸›à¸£à¹à¸à¸£à¸¡à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œ [";
 };
 String STR_DDEERROR_APP2
 {
@@ -2696,19 +2786,20 @@ String STR_DDEERROR_APP2
     TEXT [ dutch ] = "] reageert niet" ;
     TEXT [ spanish ] = "] no responde" ;
     TEXT [ english_us ] = "] is not responding." ;
-    TEXT[ chinese_simplified ] = "] Ã»ÓĞ»ØÓ¦¡£";
-    TEXT[ russian ] = "] îáğàòèòüñÿ íåâîçìîæíî";
+    TEXT[ chinese_simplified ] = "] æ²¡æœ‰å›åº”ã€‚";
+    TEXT[ russian ] = "] íå îòâå÷àåò";
     TEXT[ polish ] = "] nie reaguje";
-    TEXT[ japanese ] = "] ‚©‚ç‚Ì‰“š‚ª‚ ‚è‚Ü‚¹‚ñ";
-    TEXT[ chinese_traditional ] = "] ¨S¦³¦^À³¡C";
+    TEXT[ japanese ] = "] ã‹ã‚‰ã®å¿œç­”ãŒã‚ã‚Šã¾ã›ã‚“";
+    TEXT[ chinese_traditional ] = "] æ²’æœ‰å›æ‡‰ã€‚";
     TEXT[ arabic ] = "[ áÇ íÓÊÌíÈ";
     TEXT[ dutch ] = "] reageert niet";
-    TEXT[ chinese_simplified ] = "] Ã»ÓĞ»ØÓ¦¡£";
+    TEXT[ chinese_simplified ] = "] æ²¡æœ‰å›åº”ã€‚";
     TEXT[ greek ] = "] äåí áíôáğïêñßíåôáé.";
-    TEXT[ korean ] = "] ÀÀ´äÇÏÁö ¾ÊÀ½.";
+    TEXT[ korean ] = "] ìœ¼ë¡œë¶€í„° ì‘ë‹µì´ ì—†ìŠµë‹ˆë‹¤.";
     TEXT[ turkish ] = "] cevap vermiyor";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "] no responde";
+    TEXT[ catalan ] = "] no respon";
+    TEXT[ thai ] = "] à¹„à¸¡à¹ˆà¸•à¸­à¸šà¸ªà¸™à¸­à¸‡";
 };
 String STR_DDEERROR_DATA1
 {
@@ -2718,23 +2809,24 @@ String STR_DDEERROR_DATA1
     TEXT [ italian ] = "Dati per [" ;
     TEXT [ portuguese_brazilian ] = "Dados para [" ;
     TEXT [ portuguese ] = "Os dados para [" ;
-    TEXT [ finnish ] = "Tiedot [" ;
+    TEXT [ finnish ] = "Tietoja [" ;
     TEXT [ danish ] = "Dataene til [" ;
     TEXT [ french ] = "Les données pour [" ;
     TEXT [ swedish ] = "Data till [" ;
     TEXT [ dutch ] = "Gegevens voor [" ;
     TEXT [ spanish ] = "Los datos para [" ;
     TEXT [ english_us ] = "Data for [" ;
-    TEXT[ chinese_simplified ] = "ÓÃÓÚ [";
+    TEXT[ chinese_simplified ] = "ç”¨äº [";
     TEXT[ russian ] = "Äàííûå äëÿ [";
     TEXT[ polish ] = "Danych dla [";
     TEXT[ japanese ] = "[";
     TEXT[ greek ] = "Ôá äåäïìİíá ãéá [";
-    TEXT[ korean ] = "µ¥ÀÌÅÍ [";
-    TEXT[ chinese_traditional ] = "¥Î©ó[";
+    TEXT[ korean ] = "[";
+    TEXT[ chinese_traditional ] = "ç”¨æ–¼[";
     TEXT[ arabic ] = "ÈíÇäÇÊ  ] ";
     TEXT[ turkish ] = "[";
-    TEXT[ catalan ] = "Los datos para [";
+    TEXT[ catalan ] = "Les dades per a [";
+    TEXT[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ªà¸³à¸«à¸£à¸±à¸š [";
 };
 String STR_DDEERROR_DATA2
 {
@@ -2744,26 +2836,27 @@ String STR_DDEERROR_DATA2
     TEXT [ italian ] = "]" ;
     TEXT [ portuguese_brazilian ] = "] n?o podem ser obtidos" ;
     TEXT [ portuguese ] = "] não podem ser determinados." ;
-    TEXT [ finnish ] = "] ei ole saatavilla" ;
+    TEXT [ finnish ] = "] eivät ole saatavilla" ;
     TEXT [ danish ] = "] kan ikke bestemmes" ;
     TEXT [ french ] = "] ne peuvent pas être obtenues" ;
     TEXT [ swedish ] = "] kan inte bestämmas" ;
     TEXT [ dutch ] = "] onmogelijk" ;
     TEXT [ spanish ] = "] no pueden ser determinados" ;
     TEXT [ english_us ] = "] cannot be obtained" ;
-    TEXT[ chinese_simplified ] = "] µÄÊı¾İÎŞ·¨±»¶ÁÈ¡¡£";
-    TEXT[ russian ] = "] îïğåäåëèòü íåâîçìîæíî";
+    TEXT[ chinese_simplified ] = "] çš„æ•°æ®æ— æ³•è¢«è¯»å–ã€‚";
+    TEXT[ russian ] = "] ïîëó÷èòü íåâîçìîæíî";
     TEXT[ polish ] = "] nie mo¿na uzyskaæ";
-    TEXT[ japanese ] = "] ‚ÌÃŞ°À‚ÍŠm”F‚Å‚«‚Ü‚¹‚ñ";
-    TEXT[ chinese_traditional ] = "] ªº¸ê®ÆµLªk³QÅª¨ú¡C";
+    TEXT[ japanese ] = "] ã®ãƒ‡ãƒ¼ã‚¿ã¯ç¢ºèªã§ãã¾ã›ã‚“";
+    TEXT[ chinese_traditional ] = "] çš„è³‡æ–™ç„¡æ³•è¢«è®€å–ã€‚";
     TEXT[ arabic ] = "[ ÛíÑ ãÊæİÑÉ";
     TEXT[ dutch ] = "] onmogelijk";
-    TEXT[ chinese_simplified ] = "] µÄÊı¾İÎŞ·¨±»¶ÁÈ¡¡£";
+    TEXT[ chinese_simplified ] = "] çš„æ•°æ®æ— æ³•è¢«è¯»å–ã€‚";
     TEXT[ greek ] = "] äåí åßíáé äõíáôüí íá åîáêñéâùèïıí.";
-    TEXT[ korean ] = "] Á¶»çÇÒ ¼ö ¾øÀ½";
+    TEXT[ korean ] = "] ì˜ ë°ì´í„°ë¥¼ í™•ì¸í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
     TEXT[ turkish ] = "] ile ilgili veriler alınamıyor";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "] no pueden ser determinados";
+    TEXT[ catalan ] = "] no es poden obtenir";
+    TEXT[ thai ] = "] à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹„à¸”à¹‰à¸£à¸±à¸š";
 };
 String STR_DDEERROR_LINK1
 {
@@ -2780,16 +2873,17 @@ String STR_DDEERROR_LINK1
     TEXT [ dutch ] = "Koppeling naar [" ;
     TEXT [ spanish ] = "El vínculo con [" ;
     TEXT [ english_us ] = "Link to [" ;
-    TEXT[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Óë [";
+    TEXT[ chinese_simplified ] = "æ— æ³•å»ºç«‹ä¸ [";
     TEXT[ russian ] = "Ññûëêó íà [";
     TEXT[ polish ] = "£¹cza do [";
     TEXT[ japanese ] = "[";
     TEXT[ greek ] = "Ç óıíäåóç ìå [";
-    TEXT[ korean ] = "¿¬°á ´ë»ó [";
-    TEXT[ chinese_traditional ] = "³sµ² [";
+    TEXT[ korean ] = "[";
+    TEXT[ chinese_traditional ] = "é€£çµ [";
     TEXT[ arabic ] = "ÇáÇÑÊÈÇØ Åáì  ]";
     TEXT[ turkish ] = "[";
-    TEXT[ catalan ] = "El vínculo con [";
+    TEXT[ catalan ] = "L'enllaç amb [";
+    TEXT[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸›à¸¢à¸±à¸‡ [";
 };
 String STR_DDEERROR_LINK2
 {
@@ -2806,20 +2900,39 @@ String STR_DDEERROR_LINK2
     TEXT [ dutch ] = "] onmogelijk" ;
     TEXT [ spanish ] = "] no se puede establecer" ;
     TEXT [ english_us ] = "] cannot be established" ;
-    TEXT[ chinese_simplified ] = "]µÄÁ´½Ó";
-    TEXT[ russian ] = "] ñîçäàòü íåâîçìîæíî";
+    TEXT[ chinese_simplified ] = "]çš„é“¾æ¥";
+    TEXT[ russian ] = "] óñòàíîâèòü íåâîçìîæíî";
     TEXT[ polish ] = "] nie mo¿na ustanowiæ";
-    TEXT[ japanese ] = "] ‚Ö‚ÌØİ¸‚Í‚Â‚­‚ê‚Ü‚¹‚ñ";
-    TEXT[ chinese_traditional ] = "] µLªk«Ø¥ß¡C";
+    TEXT[ japanese ] = "] ã¸ã®ãƒªãƒ³ã‚¯ã¯ã¤ãã‚Œã¾ã›ã‚“";
+    TEXT[ chinese_traditional ] = "] ç„¡æ³•å»ºç«‹ã€‚";
     TEXT[ arabic ] = "[ ÛíÑ ŞÇÈá ááÅÚÏÇÏ";
     TEXT[ dutch ] = "] onmogelijk";
-    TEXT[ chinese_simplified ] = "]µÄÁ´½Ó";
+    TEXT[ chinese_simplified ] = "]çš„é“¾æ¥";
     TEXT[ greek ] = "] äåí åßíáé äõíáôüí íá ğñáãìáôïğïéçèåß.";
-    TEXT[ korean ] = "] ¼³Ä¡ÇÒ¡¡¼ö¡¡¾øÀ½.";
+    TEXT[ korean ] = "] ë¡œì˜ ë§í¬ëŠ” ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
     TEXT[ turkish ] = "] ile ilgili bağlantı oluşturulamıyor";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "] no se puede establecer";
+    TEXT[ catalan ] = "] no es pot establir";
+    TEXT[ thai ] = "] à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸–à¸¹à¸à¸ªà¸£à¹‰à¸²à¸‡à¹„à¸”à¹‰";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

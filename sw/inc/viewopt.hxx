@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-05 10:02:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ class Window;
 class OutputDevice;
 class ViewShell;
 class SwDocShell;
-namespace svx{ class ColorConfig;}
+namespace svtools{ class ColorConfig;}
 
 #define VIEWOPT_1_IDLE          0x00000001L
 #define VIEWOPT_1_TAB           0x00000002L
@@ -608,7 +608,7 @@ public:
 
     void    SetDocBoundaries(BOOL bSet)   {SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bSet);}
 
-    static void     ApplyColorConfigValues(const svx::ColorConfig& rConfig);
+    static void     ApplyColorConfigValues(const svtools::ColorConfig& rConfig);
 };
 
 

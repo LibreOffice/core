@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: od $ $Date: 2002-11-01 11:10:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,11 @@ SwPageFrm::~SwPageFrm()
                 pImp->SetFirstVisPageInvalid();
                 if ( pImp->IsAction() )
                     pImp->GetLayAction().SetAgain();
+                // OD 12.02.2003 #i9719#, #105645# - retouche area of page
+                // including border and shadow area.
+                SwRect aRetoucheRect;
+                GetBorderAndShadowBoundRect( Frm(), pSh, aRetoucheRect );
+                pSh->AddPaintRect( aRetoucheRect );
             }
         }
     }
@@ -636,7 +641,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             /* kein break hier */
         case RES_FRM_SIZE:
         {
-            const SwRect aOldRect( Frm() );
+            const SwRect aOldPageFrmRect( Frm() );
             if ( GetFmt()->GetDoc()->IsBrowseMode() )
             {
                 bValidSize = FALSE;
@@ -659,14 +664,20 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
 
                 Frm().Height( Max( rSz.GetHeight(), long(MINLAY) ) );
                 Frm().Width ( Max( rSz.GetWidth(),  long(MINLAY) ) );
-                AdjustRootSize( CHG_CHGPAGE, &aOldRect );
+                AdjustRootSize( CHG_CHGPAGE, &aOldPageFrmRect );
             }
             //Window aufraeumen.
             ViewShell *pSh;
-            if ( 0 != (pSh = GetShell()) && pSh->GetWin() && aOldRect.HasArea() )
-                pSh->InvalidateWindows( aOldRect );
+            if ( 0 != (pSh = GetShell()) && pSh->GetWin() && aOldPageFrmRect.HasArea() )
+            {
+                // OD 12.02.2003 #i9719#, #105645# - consider border and shadow of
+                // page frame for determine 'old' rectangle - it's used for invalidating.
+                SwRect aOldRectWithBorderAndShadow;
+                GetBorderAndShadowBoundRect( aOldPageFrmRect, pSh, aOldRectWithBorderAndShadow );
+                pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
+            }
             rInvFlags |= 0x03;
-            if ( aOldRect.Height() != Frm().Height() )
+            if ( aOldPageFrmRect.Height() != Frm().Height() )
                 rInvFlags |= 0x04;
         }
         break;
@@ -1886,7 +1897,8 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 switch ( rHori.GetHoriOrient() )
                 {
                     case HORI_NONE:
-                        nWidth += rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight();
+                        // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
+                        nWidth += rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight( pFrm );
                         break;
                     case HORI_LEFT_AND_WIDTH:
                         nWidth += rAttrs.CalcLeft( pFrm );

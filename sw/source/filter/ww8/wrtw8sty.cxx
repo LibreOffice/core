@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -1284,7 +1286,8 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 
                 rWrt.pISet = pOldI;
 
-                bOutPgDscSet = false;
+                if (nBreakCode == 0)
+                    bOutPgDscSet = false;
             }
         }
 
@@ -1448,36 +1451,39 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
                                         ? &pPd->GetFollow()->GetMaster()
                                         : &pPd->GetLeft();
 
-        SetHeaderFlag( nHeadFootFlags, *pPdFmt, WW8_HEADER_ODD );
-        SetFooterFlag( nHeadFootFlags, *pPdFmt, WW8_FOOTER_ODD );
-        if( !pPd->IsHeaderShared() || bLeftRightPgChain )
-            SetHeaderFlag( nHeadFootFlags, *pPdLeftFmt, WW8_HEADER_EVEN );
-        if( !pPd->IsFooterShared() || bLeftRightPgChain )
-            SetFooterFlag( nHeadFootFlags, *pPdLeftFmt, WW8_FOOTER_EVEN );
-        if( pPdFmt != pPdFirstPgFmt )
+        if (nBreakCode != 0)
         {
-            // es gibt eine ErsteSeite:
-            SetHeaderFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_HEADER_FIRST );
-            SetFooterFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_FOOTER_FIRST );
-        }
-
-        if( nHeadFootFlags && !rWrt.bWrtWW8 )
-        {
-            BYTE nTmpFlags = nHeadFootFlags;
-            if( rWrt.pDop->fFacingPages )
+            SetHeaderFlag( nHeadFootFlags, *pPdFmt, WW8_HEADER_ODD );
+            SetFooterFlag( nHeadFootFlags, *pPdFmt, WW8_FOOTER_ODD );
+            if( !pPd->IsHeaderShared() || bLeftRightPgChain )
+                SetHeaderFlag( nHeadFootFlags, *pPdLeftFmt, WW8_HEADER_EVEN );
+            if( !pPd->IsFooterShared() || bLeftRightPgChain )
+                SetFooterFlag( nHeadFootFlags, *pPdLeftFmt, WW8_FOOTER_EVEN );
+            if( pPdFmt != pPdFirstPgFmt )
             {
-                if( !(nTmpFlags & WW8_FOOTER_EVEN) &&
-                    (nTmpFlags & WW8_FOOTER_ODD ) )
-                    nTmpFlags |= WW8_FOOTER_EVEN;
-
-                if( !(nTmpFlags & WW8_HEADER_EVEN) &&
-                    (nTmpFlags & WW8_HEADER_ODD ) )
-                    nTmpFlags |= WW8_HEADER_EVEN;
+                // es gibt eine ErsteSeite:
+                SetHeaderFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_HEADER_FIRST );
+                SetFooterFlag( nHeadFootFlags, *pPdFirstPgFmt, WW8_FOOTER_FIRST );
             }
 
-            // sprmSGprfIhdt, wird nur noch im WW95 benoetigt
-            pO->Insert( 153, pO->Count() );
-            pO->Insert( nTmpFlags, pO->Count() );
+            if( nHeadFootFlags && !rWrt.bWrtWW8 )
+            {
+                BYTE nTmpFlags = nHeadFootFlags;
+                if( rWrt.pDop->fFacingPages )
+                {
+                    if( !(nTmpFlags & WW8_FOOTER_EVEN) &&
+                        (nTmpFlags & WW8_FOOTER_ODD ) )
+                        nTmpFlags |= WW8_FOOTER_EVEN;
+
+                    if( !(nTmpFlags & WW8_HEADER_EVEN) &&
+                        (nTmpFlags & WW8_HEADER_ODD ) )
+                        nTmpFlags |= WW8_HEADER_EVEN;
+                }
+
+                // sprmSGprfIhdt, wird nur noch im WW95 benoetigt
+                pO->Insert( 153, pO->Count() );
+                pO->Insert( nTmpFlags, pO->Count() );
+            }
         }
 
         if( pO->Count() )
@@ -1976,3 +1982,4 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
     return 0;
 }
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

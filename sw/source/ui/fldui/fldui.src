@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 09:57:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ String STR_FLD_EDIT_DLG
     Text[ chinese_traditional ] = "η·¨θΌ―ζ¬„δ½ζ‡δ»¤";
     Text[ arabic ] = "ΚΝΡνΡ ΗαΝήα";
     Text[ greek ] = "Επεξεργασία εντολής πεδίου";
-    Text[ korean ] = "νμΌ νΈμ§‘";
+    Text[ korean ] = "ν•„λ“ νΈμ§‘";
     Text[ turkish ] = "Alan φπesi dόzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Edita els camps";
@@ -277,7 +277,7 @@ String STR_DOCSTATFLD
     TEXT [ portuguese ] = "Estatνstica" ;
     TEXT [ finnish ] = "Tilastotiedot" ;
     TEXT [ danish ] = "Statistik" ;
-    TEXT [ french ] = "Statistique" ;
+    TEXT [ french ] = "Statistiques" ;
     TEXT [ swedish ] = "Statistik" ;
     TEXT [ dutch ] = "Statistiek" ;
     TEXT [ spanish ] = "Estadνstica" ;
@@ -305,7 +305,7 @@ String STR_AUTHORFLD
     Text [ swedish ] = "Anvδndare" ;
     Text [ danish ] = "Bruger" ;
     Text [ italian ] = "Autore" ;
-    Text [ spanish ] = "Usuario" ;
+    Text [ spanish ] = "Autor" ;
     Text [ french ] = "Utilisateur" ;
     Text [ dutch ] = "Gebruiker" ;
     Text[ chinese_simplified ] = "δ½Ώη”¨θ€…";
@@ -335,7 +335,7 @@ String STR_TEMPLNAMEFLD
     TEXT [ french ] = "Modθle de document" ;
     TEXT [ swedish ] = "Dokumentmall" ;
     TEXT [ dutch ] = "Sjabloon" ;
-    TEXT [ spanish ] = "Plantilla" ;
+    TEXT [ spanish ] = "Plantillas" ;
     TEXT [ english_us ] = "Templates" ;
     TEXT[ chinese_simplified ] = "ζ–‡ζ΅£ζ ·εΌ";
     TEXT[ russian ] = "Ψΰαλξνϋ";
@@ -344,7 +344,7 @@ String STR_TEMPLNAMEFLD
     TEXT[ chinese_traditional ] = "ζ–‡δ»¶ζ¨£εΌ";
     TEXT[ arabic ] = "ήΗαΘ γΣΚδΟ";
     TEXT[ greek ] = "Πρότυπο εγγράφου";
-    TEXT[ korean ] = "λ¬Έμ„ μ„μ‹ νμΌ";
+    TEXT[ korean ] = "μ„μ‹ νμΌ";
     TEXT[ turkish ] = "Belge ώablonu";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Plantilles";
@@ -539,13 +539,13 @@ String STR_USRINPUTFLD
     Text [ portuguese ] = "Campo de entrada (utilizador)" ;
     Text [ portuguese_brazilian ] = "Eingabefeld (Benutzer)" ;
     Text[ chinese_simplified ] = "θΎ“ε…¥ε­—ζ®µ(δ½Ώη”¨θ€…)";
-    Text[ russian ] = "Οξλε ββξδΰ (οξλόηξβΰςελό)";
+    Text[ russian ] = "Οξλε ββξδΰ (οξλόηξβΰςελόρκξε)";
     Text[ polish ] = "Pole wprowadzania (UΏytkownik)";
     Text[ japanese ] = "ε…¥ε›γƒ•γ‚£γƒΌγƒ«γƒ‰ (γƒ¦γƒΌγ‚¶γƒΌ)";
     Text[ chinese_traditional ] = "θΌΈε…¥ζ¬„δ½(δ½Ώη”¨θ€…)";
     Text[ arabic ] = "Νήα ΕΟΞΗα (ΗαγΣΚΞΟγ)";
     Text[ greek ] = "Πεδίο εισαγωγής (Χρήστης)";
-    Text[ korean ] = "μ…λ ¥ ν•„λ“ (μ‚¬μ©μ)";
+    Text[ korean ] = "μ…λ ¥ ν•„λ“(μ‚¬μ©μ)";
     Text[ turkish ] = "Giriώ alanύ (Kullanύcύ)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Camp d'entrada (usuari)";
@@ -565,7 +565,7 @@ String STR_CONDTXTFLD
     TEXT [ french ] = "Texte conditionnel" ;
     TEXT [ swedish ] = "Villkorlig text" ;
     TEXT [ dutch ] = "Conditionele tekst" ;
-    TEXT [ spanish ] = "Texto condicionado" ;
+    TEXT [ spanish ] = "Texto condicional" ;
     TEXT [ english_us ] = "Conditional text" ;
     TEXT[ chinese_simplified ] = "ζ‰ζ΅δ»¶η„ζ–‡ε­—";
     TEXT[ russian ] = "Òεκρς ρ σρλξβθεμ";
@@ -574,7 +574,7 @@ String STR_CONDTXTFLD
     TEXT[ chinese_traditional ] = "ζ‰ζΆδ»¶η„ζ–‡ε­—";
     TEXT[ arabic ] = "δΥ γΤΡζΨ";
     TEXT[ greek ] = "Κείμενο υπό συνθήκες";
-    TEXT[ korean ] = "μ΅°κ±΄μ  ν…μ¤νΈ";
+    TEXT[ korean ] = "μ΅°κ±΄λ¶€ ν…μ¤νΈ";
     TEXT[ turkish ] = "Koώullu metin";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Text condicional";
@@ -658,7 +658,7 @@ String STR_SEQFLD
     TEXT[ chinese_traditional ] = "η·¨θ™ι †εΊ";
     TEXT[ arabic ] = "ΚΡήνγ γΚΣαΣα";
     TEXT[ greek ] = "Επίπεδα αρίθμησης";
-    TEXT[ korean ] = "μ«μ λ²”μ„";
+    TEXT[ korean ] = "λ²νΈ λ²”μ„";
     TEXT[ turkish ] = "Numara aralύπύ";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Seqόθncia";
@@ -870,10 +870,10 @@ String STR_DBFLD
     TEXT [ portuguese ] = "Campo para cartas em sιrie" ;
     TEXT [ finnish ] = "Joukkokirjeen kenttδ" ;
     TEXT [ danish ] = "Brevfletningsfelt" ;
-    TEXT [ french ] = "Champ de mailing" ;
+    TEXT [ french ] = "Champs de mailing" ;
     TEXT [ swedish ] = "Standardbrevfδlt" ;
     TEXT [ dutch ] = "Standaardbriefveld" ;
-    TEXT [ spanish ] = "Campo de carta en serie" ;
+    TEXT [ spanish ] = "Campos de la impresiσn en serie" ;
     TEXT [ english_us ] = "Mail merge fields" ;
     TEXT[ chinese_simplified ] = "ι‚®δ»¶εεΉ¶ε­—ζ®µ";
     TEXT[ russian ] = "Οξλÿ αΰη δΰννϋυ";
@@ -882,7 +882,7 @@ String STR_DBFLD
     TEXT[ chinese_traditional ] = "εδ½µε—ε°ζ¬„δ½";
     TEXT[ arabic ] = "Νήα ΞΨΗΘ γΣαΣα";
     TEXT[ greek ] = "Πεδίο εγκυκλίου επιστολής";
-    TEXT[ korean ] = "νΈμ§€μ§€ μ–‘μ‹ ν•„λ“";
+    TEXT[ korean ] = "νΈμ§€ λ³‘ν•© ν•„λ“";
     TEXT[ turkish ] = "Standart mektup";
     TEXT[ language_user1 ] = "German should be Seriendruck-Felder";
     TEXT[ catalan ] = "Camp de carta formulari";
@@ -1280,7 +1280,7 @@ String FLD_DATE_FIX
     TEXT[ chinese_traditional ] = "ζ—¥ζ(ε›Ίε®)";
     TEXT[ arabic ] = "ΚΗΡνΞ (ΛΗΘΚ)";
     TEXT[ greek ] = "Ημερομηνία (Σταθερά)";
-    TEXT[ korean ] = "λ‚ μ§(κ³ μ •λ¨)";
+    TEXT[ korean ] = "λ‚ μ§(κ³ μ •μ )";
     TEXT[ turkish ] = "Tarih (sabit)";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Data (fixa)";
@@ -1478,7 +1478,7 @@ String FLD_STAT_GRF
     TEXT[ chinese_traditional ] = "ε–ε½Ά";
     TEXT[ arabic ] = "ΥζΡ";
     TEXT[ greek ] = "Γραφικά";
-    TEXT[ korean ] = "κ·Έλν”½";
+    TEXT[ korean ] = "κ·Έλ¦Ό";
     TEXT[ turkish ] = "Grafik";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Imatges";
@@ -1681,7 +1681,7 @@ String FLD_EU_NAME
     Text[ chinese_traditional ] = "ε§“ζ°";
     Text[ arabic ] = "ΗΣγ ΗαΪΗΖαΙ";
     Text[ greek ] = "Επώνυμο";
-    Text[ korean ] = "μ΄λ¦„";
+    Text[ korean ] = "μ„±";
     Text[ turkish ] = "Soyad";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cognom";
@@ -1710,7 +1710,7 @@ String FLD_EU_ABK
     TEXT[ chinese_traditional ] = "ηΈ®ε―«";
     TEXT[ arabic ] = "ΗαΗΞΚΥΗΡ";
     TEXT[ greek ] = "Αρχικά";
-    TEXT[ korean ] = "λ¨Έλ¦¬κΈ€μ";
+    TEXT[ korean ] = "μ΄λ‹μ…";
     TEXT[ turkish ] = "Baώharfler";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Inicials";
@@ -1738,7 +1738,7 @@ String FLD_EU_STRASSE
     TEXT[ chinese_traditional ] = "θ΅—ι“";
     TEXT[ arabic ] = "ΗαΤΗΡΪ";
     TEXT[ greek ] = "Οδός";
-    TEXT[ korean ] = "μ£Όμ†λ²μ§€";
+    TEXT[ korean ] = "μ£Όμ†";
     TEXT[ turkish ] = "Sokak";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Carrer";
@@ -1766,7 +1766,7 @@ String FLD_EU_LAND
     TEXT[ chinese_traditional ] = "ε‹ε®¶";
     TEXT[ arabic ] = "ΗαΘαΟ";
     TEXT[ greek ] = "Χώρα";
-    TEXT[ korean ] = "κµ­κ°€";
+    TEXT[ korean ] = "κµ­λª…";
     TEXT[ turkish ] = "άlke";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Paνs";
@@ -1785,7 +1785,7 @@ String FLD_EU_PLZ
     TEXT [ french ] = "C.P." ;
     TEXT [ swedish ] = "Postnummer" ;
     TEXT [ dutch ] = "Postcode" ;
-    TEXT [ spanish ] = "CP" ;
+    TEXT [ spanish ] = "C.P." ;
     TEXT [ english_us ] = "Zip code" ;
     TEXT[ chinese_simplified ] = "ι‚®ηΌ–";
     TEXT[ russian ] = "Οξχςξβϋι θνδεκρ";
@@ -1822,7 +1822,7 @@ String FLD_EU_ORT
     TEXT[ chinese_traditional ] = "δ½η½®";
     TEXT[ arabic ] = "ΗαγΟνδΙ";
     TEXT[ greek ] = "Πόλη";
-    TEXT[ korean ] = "μ‹";
+    TEXT[ korean ] = "κµ¬/κµ°/μ‹";
     TEXT[ turkish ] = "ήehir";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Ciutat";
@@ -1850,7 +1850,7 @@ String FLD_EU_TITEL
     TEXT[ chinese_traditional ] = "ι ­ι";
     TEXT[ arabic ] = "ΗαγΣγμ ΗαζΩνέν";
     TEXT[ greek ] = "Τίτλος";
-    TEXT[ korean ] = "μ§ν•¨";
+    TEXT[ korean ] = "λ¶€μ„";
     TEXT[ turkish ] = "Unvan";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Tνtol";
@@ -1878,7 +1878,7 @@ String FLD_EU_POS
     TEXT[ chinese_traditional ] = "δ½η½®";
     TEXT[ arabic ] = "ΗαγΡίÒ";
     TEXT[ greek ] = "Θέση";
-    TEXT[ korean ] = "μ§μ„";
+    TEXT[ korean ] = "λ¶€μ„";
     TEXT[ turkish ] = "Pozisyon";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Posiciσ";
@@ -1897,10 +1897,10 @@ String FLD_EU_TELPRIV
     TEXT [ french ] = "Tιl. (domicile)" ;
     TEXT [ swedish ] = "Tfn (privat)" ;
     TEXT [ dutch ] = "Tel. (privι)" ;
-    TEXT [ spanish ] = "Tel. (Priv.)" ;
+    TEXT [ spanish ] = "Tfno. (particular)" ;
     TEXT [ english_us ] = "Tel. (Home)" ;
     TEXT[ chinese_simplified ] = "η”µθ―(η§δΊΊ)";
-    TEXT[ russian ] = "Òελ. (δξμΰψνθι)";
+    TEXT[ russian ] = "Òελ. δξμΰψνθι";
     TEXT[ polish ] = "Tel. (prywatny)";
     TEXT[ japanese ] = "Tel.(θ‡ªε®…)";
     TEXT[ chinese_traditional ] = "ι›»θ©±(η§δΊΊ)";
@@ -1925,10 +1925,10 @@ String FLD_EU_TELFIRMA
     TEXT [ french ] = "Tιl. (bureau)" ;
     TEXT [ swedish ] = "Tfn (arbete)" ;
     TEXT [ dutch ] = "Tel. (Bedrijf)" ;
-    TEXT [ spanish ] = "Tel. (Emp.)" ;
+    TEXT [ spanish ] = "Tfno. (trabajo)" ;
     TEXT [ english_us ] = "Tel. (Work)" ;
     TEXT[ chinese_simplified ] = "η”µθ―(εε…¬ε®¤)";
-    TEXT[ russian ] = "Òελ. (πΰαξχθι)";
+    TEXT[ russian ] = "Òελ. πΰαξχθι";
     TEXT[ polish ] = "Tel. (firmowy)";
     TEXT[ japanese ] = "Tel.(ε‹¤ε‹™ε…)";
     TEXT[ chinese_traditional ] = "ι›»θ©±(θΎ¦ε…¬ε®¤)";
@@ -1954,17 +1954,17 @@ String FLD_EU_EMAIL
     Text [ swedish ] = "E-post" ;
     Text [ danish ] = "E-mail" ;
     Text [ italian ] = "eMail" ;
-    Text [ spanish ] = "E-mail" ;
+    Text [ spanish ] = "Correo-e" ;
     Text [ french ] = "E-Mail" ;
     Text [ dutch ] = "E-mail" ;
     Text[ chinese_simplified ] = "η”µε­ι‚®δ»¶";
-    Text[ russian ] = "έλ. Οξχςΰ";
+    Text[ russian ] = "έλ. οξχςΰ";
     Text[ polish ] = "e-mail";
     Text[ japanese ] = "E-mail";
     Text[ chinese_traditional ] = "ι›»ε­ιƒµδ»¶";
     Text[ arabic ] = "ΘΡνΟ ΕαίΚΡζδν";
     Text[ greek ] = "E-mail";
-    Text[ korean ] = "e-mail";
+    Text[ korean ] = "μ „μ λ©”μΌ";
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "correu electrςnic";
@@ -1977,7 +1977,7 @@ String FLD_EU_STATE
     Text [ English ] = "State" ;
     Text [ english_us ] = "State" ;
     Text [ italian ] = "Stato" ;
-    Text [ spanish ] = "Estado" ;
+    Text [ spanish ] = "Provincia" ;
     Text [ french ] = "Rιgion" ;
     Text [ dutch ] = "Land" ;
     Text [ danish ] = "Stat" ;
@@ -1991,7 +1991,7 @@ String FLD_EU_STATE
     Text[ chinese_traditional ] = "ηεΈ‚";
     Text[ arabic ] = "ΗαζαΗνΙ";
     Text[ greek ] = "Χώρα";
-    Text[ korean ] = "μ£Ό";
+    Text[ korean ] = "μ£Ό/λ„λª…";
     Text[ turkish ] = "έl";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Comarca";
@@ -2045,7 +2045,7 @@ String FLD_PAGEREF_ON
     Text[ chinese_traditional ] = "ζ”¶δ»¶θ€…";
     Text[ arabic ] = "ΚΤΫνα";
     Text[ greek ] = "ενεργοποίηση";
-    Text[ korean ] = "μ‘λ™";
+    Text[ korean ] = "μ μ©";
     Text[ turkish ] = "Aηύk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "on";
@@ -2176,7 +2176,7 @@ String FMT_FF_UI_NAME
     Text [ swedish ] = "Mall" ;
     Text [ danish ] = "Skabelon" ;
     Text [ italian ] = "Modello" ;
-    Text [ spanish ] = "Plantilla" ;
+    Text [ spanish ] = "Estilo" ;
     Text [ french ] = "Modθle" ;
     Text [ dutch ] = "Sjabloon" ;
     Text[ chinese_simplified ] = "ζ ·εΌ";
@@ -2186,7 +2186,7 @@ String FMT_FF_UI_NAME
     Text[ chinese_traditional ] = "ζ¨£εΌ";
     Text[ arabic ] = "ήΗαΘ";
     Text[ greek ] = "Πρότυπο";
-    Text[ korean ] = "μ„μ‹";
+    Text[ korean ] = "μ¤νƒ€μΌ";
     Text[ turkish ] = "ήablon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estil";
@@ -2203,7 +2203,7 @@ String FMT_FF_UI_RANGE
     Text [ swedish ] = "Omrεde" ;
     Text [ danish ] = "Omrεde" ;
     Text [ italian ] = "Sezione" ;
-    Text [ spanish ] = "Αrea" ;
+    Text [ spanish ] = "Categorνa" ;
     Text [ french ] = "Catιgorie" ;
     Text [ dutch ] = "Bereik" ;
     Text[ chinese_simplified ] = "εΊε";
@@ -2261,7 +2261,7 @@ String FMT_CHAPTER_NO
     Text [ swedish ] = "Kapitelnummer" ;
     Text [ danish ] = "Kapitelnummer" ;
     Text [ italian ] = "Numero capitolo" ;
-    Text [ spanish ] = "Nϊmero del capνtulo" ;
+    Text [ spanish ] = "Nϊmero de capνtulo" ;
     Text [ french ] = "Numιro de chapitre" ;
     Text [ dutch ] = "Hoofdstuknummer" ;
     Text[ chinese_simplified ] = "η« θ‚ηΌ–ε·";
@@ -2298,7 +2298,7 @@ String FMT_CHAPTER_NO_NOSEPARATOR
     Text[ chinese_traditional ] = "η« η―€η·¨θ™δΈεΈ¶ε†ι”η¬¦";
     Text[ arabic ] = "Ρήγ ΗαέΥα ΘΟζδ έΗΥα";
     Text[ greek ] = "Αριθμός κεφαλαίου χωρίς ενωτικό";
-    Text[ korean ] = "κµ¬λ¶„ κΈ°νΈ μ—†λ” μ¥ λ²νΈ";
+    Text[ korean ] = "κµ¬λ¶„ κΈ°νΈμ—†λ” μ¥ λ²νΈ";
     Text[ turkish ] = "Ayύrma iώareti iηermeyen bφlόm numarasύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nϊmero de capνtol sense separador";
@@ -2326,7 +2326,7 @@ String FMT_CHAPTER_NAMENO
     Text[ chinese_traditional ] = "η« η―€η·¨θ™ε’εη¨±";
     Text[ arabic ] = "Ρήγ ζΗΣγ ΗαέΥα";
     Text[ greek ] = "Αριθμός κεφαλαίου και όνομα";
-    Text[ korean ] = "μ¥ λ²νΈμ™€ μ΄λ¦„";
+    Text[ korean ] = "μ¥ λ²νΈ λ° μ΄λ¦„";
     Text[ turkish ] = "Bφlόm numarasύ ve adύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nϊmero i nom";
@@ -2458,7 +2458,7 @@ String FMT_NUM_PAGEDESC
     TEXT[ chinese_traditional ] = "ε’ι ιΆζ¨£εΌη›Έε";
     TEXT[ arabic ] = "γΛα δγΨ ΗαΥέΝΙ";
     TEXT[ greek ] = "Όπως το πρότυπο σελίδας";
-    TEXT[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌλ΅ μ„¤μ •";
+    TEXT[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ μ„¤μ •";
     TEXT[ turkish ] = "Sayfa biηimi gibi";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Com estil de pΰgina";
@@ -2544,7 +2544,7 @@ String FMT_AUTHOR_SCUT
     TEXT[ chinese_traditional ] = "ηΈ®ε―«";
     TEXT[ arabic ] = "ΗαΗΞΚΥΗΡ";
     TEXT[ greek ] = "Αρχικά";
-    TEXT[ korean ] = "λ¨Έλ¦¬κΈ€μ";
+    TEXT[ korean ] = "μ΄λ‹μ…";
     TEXT[ turkish ] = "Baώharfler";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Inicials";
@@ -2850,7 +2850,7 @@ String FMT_REG_DATE
     TEXT[ chinese_traditional ] = "ζ—¥ζ";
     TEXT[ arabic ] = "ΗαΚΗΡνΞ";
     TEXT[ greek ] = "Ημερομηνία";
-    TEXT[ korean ] = "μΌμ";
+    TEXT[ korean ] = "λ‚ μ§";
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Data";
@@ -2992,7 +2992,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT[ chinese_traditional ] = "ε’ι ιΆζ¨£εΌη›Έε";
     TEXT[ arabic ] = "γΛα δγΨ ΗαΥέΝΙ";
     TEXT[ greek ] = "Όπως το πρότυπο σελίδας";
-    TEXT[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌλ΅ μ„¤μ •";
+    TEXT[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ μ„¤μ •";
     TEXT[ turkish ] = "Sayfa biηimi gibi";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Com estil de pΰgina";
@@ -3131,7 +3131,7 @@ String FMT_MARK_TABLE
     Text[ chinese_traditional ] = "θ΅¨ζ Ό";
     Text[ arabic ] = "ΜΟζα";
     Text[ greek ] = "Πίνακας";
-    Text[ korean ] = "μ‹νΈ";
+    Text[ korean ] = "ν‘";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taula";
@@ -3159,7 +3159,7 @@ String FMT_MARK_FRAME
     Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε΅";
     Text[ arabic ] = "ίΗΟΡ";
     Text[ greek ] = "Περίγραμμα";
-    Text[ korean ] = "ν…μ¤νΈ μƒμ";
+    Text[ korean ] = "ν”„λ μ„";
     Text[ turkish ] = "Ηerηeve";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marc";
@@ -3187,7 +3187,7 @@ String FMT_MARK_GRAFIC
     Text[ chinese_traditional ] = "ε–ε½Ά";
     Text[ arabic ] = "ΥζΡΙ";
     Text[ greek ] = "Γραφικό";
-    Text[ korean ] = "κ·Έλν”½";
+    Text[ korean ] = "κ·Έλ¦Ό";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imatge";
@@ -3253,7 +3253,7 @@ String STR_ALL
     Text[ chinese_traditional ] = "ε…¨ιƒ¨";
     Text[ arabic ] = "Ηαία";
     Text[ greek ] = "Όλα";
-    Text[ korean ] = "μ „μ²΄";
+    Text[ korean ] = "λª¨λ‘";
     Text[ turkish ] = "Tόmό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tot";
@@ -3340,7 +3340,7 @@ String STR_TEXT
     TEXT[ chinese_traditional ] = "ι‚£ιΊΌε°±οΌε¦ε‰‡";
     TEXT[ arabic ] = "Λγ΅ ΫνΡ Παί";
     TEXT[ greek ] = "Τότε, Αλλιώς";
-    TEXT[ korean ] = "λ‹¤μ, κΈ°νƒ€";
+    TEXT[ korean ] = "μ΅°κ±΄μ„ μ¶©μ΅±ν•  κ²½μ°, κ·Έλ ‡μ§€ μ•μ„ κ²½μ°";
     TEXT[ turkish ] = "O halde, Yoksa";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Aleshores, si no";
@@ -3362,7 +3362,7 @@ String STR_DDE_CMD
     TEXT [ spanish ] = "Instrucciσn DDE" ;
     TEXT [ english_us ] = "DDE Statement" ;
     TEXT[ chinese_simplified ] = "DDE ζ‡δ»¤";
-    TEXT[ russian ] = "Σκΰηΰνθε DDE";
+    TEXT[ russian ] = "Ξαϊÿβλενθε DDE";
     TEXT[ polish ] = "Instrukcja DDE";
     TEXT[ japanese ] = "DDEζ‡η¤Ί";
     TEXT[ chinese_traditional ] = "DDE ζ‡δ»¤";
@@ -3444,7 +3444,7 @@ String STR_PROMPT
     TEXT [ spanish ] = "I~ndicaciσn" ;
     TEXT [ english_us ] = "~Reference" ;
     TEXT[ chinese_simplified ] = "ζη¤Ί(~R)";
-    TEXT[ russian ] = "Ρρϋλκΰ";
+    TEXT[ russian ] = "Οξδρκΰηκΰ";
     TEXT[ polish ] = "Wskazσwka";
     TEXT[ japanese ] = "γƒ’γƒ³γƒ(~R)";
     TEXT[ chinese_traditional ] = "ζη¤Ί(~R)";
@@ -3615,7 +3615,7 @@ String STR_LEVEL
     TEXT[ chinese_traditional ] = "η΄";
     TEXT[ arabic ] = "ΗαγΣΚζμ ";
     TEXT[ greek ] = "Επίπεδο";
-    TEXT[ korean ] = "κ³„μΈµ";
+    TEXT[ korean ] = "κ³„μΈµ ";
     TEXT[ turkish ] = "Dόzey";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Capa";
@@ -3722,6 +3722,11 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ finnish ] = "Muokkaa";
     Text[ thai ] = "ΰΉΰΈΰΉ‰ΰΉ„ΰΈ‚";
 };
+
+
+
+
+
 
 
 

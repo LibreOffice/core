@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -87,6 +86,16 @@
 
 #ifndef _LINKMGR_HXX //autogen
 #include <so3/linkmgr.hxx>
+#endif
+
+#ifndef _UCBHELPER_CONTENT_HXX_
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENTBROKER_HXX_
+#include <ucbhelper/contentbroker.hxx>
+#endif
+#ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
+#include <ucbhelper/commandenvironment.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
@@ -632,18 +641,39 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
 
     rParams.EraseAllChars('\'');
 
-    rbForceJapanese = false;
-    static const char aJapanese[] =
+    //#102782# & #102815# have to work at the same time :-)
+    bool bForceNatNum(false);
+    static const char aJapaneseNatNum[] =
     {
-        'E', 'O', 'A', 'e', 'a', 'o', 'g', 'G'
+        'O', 'A', 'o'
     };
 
-    for (size_t i = 0; i < sizeof(aJapanese); ++i)
+    for (size_t i = 0; i < sizeof(aJapaneseNatNum); ++i)
     {
-        if (STRING_NOTFOUND != rParams.Search(aJapanese[i]))
+        if (STRING_NOTFOUND != rParams.Search(aJapaneseNatNum[i]))
         {
-            rbForceJapanese = true;
+            bForceNatNum = true;
             break;
+        }
+    }
+
+    if (bForceNatNum)
+        rbForceJapanese = true;
+    else
+    {
+        rbForceJapanese = false;
+        static const char aJapaneseLang[] =
+        {
+            'E', 'e', 'g', 'G', 'a'
+        };
+
+        for (size_t i = 0; i < sizeof(aJapaneseLang); ++i)
+        {
+            if (STRING_NOTFOUND != rParams.Search(aJapaneseLang[i]))
+            {
+                rbForceJapanese = true;
+                break;
+            }
         }
     }
 
@@ -655,11 +685,8 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
         CREATE_CONST_ASC("yyyy"));
     rParams.SearchAndReplaceAll('o', 'm');
 
-    if (rbForceJapanese)
-    {
+    if (bForceNatNum)
         rParams.Insert(CREATE_CONST_ASC("[NatNum1][$-411]"),0);
-//        rParams.Insert(CREATE_CONST_ASC("[~gengou]"),0);
-    }
 
     pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, nLang);
 
@@ -1407,8 +1434,10 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
                         SwSetExpFieldType( &rDoc, aSequenceName, GSE_SEQ ) );
     SwSetExpField aFld( pFT, aEmptyStr, eNumFormat );
 
-    if( sStart.Len() )
+    if (sStart.Len())
         aFld.SetFormula( ( aSequenceName += '=' ) += sStart );
+    else if (!bCountOn)
+        aFld.SetFormula(aSequenceName);
 
     if( sLevel.Len() )
     {
@@ -2131,7 +2160,27 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         }
     }
 
-    if( !bEmbedded )
+    if (!bEmbedded)
+    {
+        try
+        {
+            ::ucb::Content aCnt(aGrfName,
+                ::com::sun::star::uno::Reference<
+                ::com::sun::star::ucb::XCommandEnvironment >() );
+            rtl::OUString   aTitle;
+
+            aCnt.getPropertyValue(rtl::OUString::createFromAscii("Title" ))
+                >>= aTitle;
+            bEmbedded = (aTitle.getLength() <= 0);
+        }
+        catch( ... )
+        {
+            // this file did not exist, so we will not set this as graphiclink
+            bEmbedded = true;
+        }
+    }
+
+    if (!bEmbedded)
     {
         /*
             Besonderheit:
@@ -2153,10 +2202,18 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
                                                     0,          // Graphic*
                                                     &aFlySet,
                                                     0);         // SwFrmFmt*
-        aGrfNameGenerator.SetUniqueGraphName(pFlyFmtOfJustInsertedGraphic,
+        maGrfNameGenerator.SetUniqueGraphName(pFlyFmtOfJustInsertedGraphic,
             INetURLObject(aGrfName).GetBase());
     }
     return FLD_READ_FSPA;
+}
+
+
+String wwSectionNamer::UniqueName()
+{
+    String aName(msFileLinkSeed);
+    aName += String::CreateFromInt32(++mnFileSectionNo);
+    return mrDoc.GetUniqueSectionName(&aName);
 }
 
 // "EINFUEGENTEXT"
@@ -2192,7 +2249,6 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
         aPara += so3::cTokenSeperator;
         aPara += aBook;
     }
-    String aStr(CREATE_CONST_ASC( "WW" ));
 
     /*
     ##509##
@@ -2202,27 +2258,33 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     */
     WW8ReaderSave aSave( this );
 
-    SwSection aSection( FILE_LINK_SECTION, rDoc.GetUniqueSectionName( &aStr ) );
+    SwSection aSection(FILE_LINK_SECTION, maSectionNameGenerator.UniqueName());
     aSection.SetLinkFileName( aPara );
     aSection.SetProtect(true);
 
-    pLastInsertedSection = rDoc.Insert(*pPaM, aSection, 0 ,false);
-
-    const SwSectionNode* pSectionNode = pLastInsertedSection->GetFmt()->GetSectionNode();
-    ASSERT(!pAfterSection, "recursive sections!");
-    pAfterSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
+    SwSection* pSection = rDoc.Insert(*pPaM, aSection, 0 ,false);
+    ASSERT(pSection, "no section inserted");
+    if (!pSection)
+        return FLD_OK;
+    const SwSectionNode* pSectionNode = pSection->GetFmt()->GetSectionNode();
+    ASSERT(pSectionNode, "no section node!");
+    if (!pSectionNode)
+        return FLD_OK;
 
     pPaM->GetPoint()->nNode = pSectionNode->GetIndex()+1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0 );
 
+    //we have inserted a section before this point, so adjust pos
+    //for future page/section segment insertion
+    maSectionManager.PrependedInlineNode(aSave.GetStartPos(), *pPaM->GetNode());
+
     bTxbxFlySection = true;
     ReadText(pF->nSRes, pF->nLRes, pPlcxMan->GetManType());
 
-    //SwWW8ImplReader::MustCloseSection(long nTxtPos) ??
-    delete pAfterSection, pAfterSection=0;
-
     aSave.Restore( this );
 
+    if (!maApos.back()) //a para end in apo doesn't count
+        bWasParaEnd = true;
     return FLD_OK;
 }
 
@@ -2587,6 +2649,30 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
     }
 }
 
+USHORT wwSectionManager::CurrentSectionColCount() const
+{
+    USHORT nIndexCols = 1;
+    if (!maSegments.empty())
+        nIndexCols = maSegments.back().maSep.ccolM1 + 1;
+    return nIndexCols;
+}
+
+//Will there be a new pagebreak at this position (don't know what type
+//until later)
+bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
+{
+    bool bRet = false;
+    if (!maSegments.empty())
+    {
+        if (!maSegments.back().IsContinous() &&
+            maSegments.back().maStart == aIdx)
+        {
+            bRet = true;
+        }
+    }
+    return bRet;
+}
+
 eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
     if( nIniFlags & WW8FL_NO_TOX )
@@ -2610,16 +2696,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
     USHORT nCreateOf = (eTox == TOX_CONTENT) ? TOX_OUTLINELEVEL : TOX_MARK;
 
-    USHORT nIndexCols = 0;
-    SwSection *pTest = rDoc.GetCurrSection(*pPaM->GetPoint());
-    if (pTest)  //section is open, set to its no of section cols
-    {
-        const SwSectionFmt *pFmt = pTest->GetFmt();
-        if (pFmt)
-            nIndexCols = pFmt->GetCol().GetNumCols();
-    }
-    else if (pPageDesc)  //set to current number of page cols
-        nIndexCols = pPageDesc->GetMaster().GetCol().GetNumCols();
+    USHORT nIndexCols = maSectionManager.CurrentSectionColCount();
 
     const SwTOXType* pType = rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
@@ -3001,13 +3078,17 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     // Update fuer TOX anstossen
     rDoc.SetUpdateTOX(true);
 
+    //#i10028# inserting a toc implicltly acts like a parabreak
+    //in word and writer
+    if (pPaM->GetPoint()->nContent.GetIndex())
+        AppendTxtNode(*pPaM->GetPoint());
+
     const SwPosition* pPos = pPaM->GetPoint();
 
     SwFltTOX aFltTOX( pBase, nIndexCols );
 
     // test if there is already a break item on this node
-    SwCntntNode* pNd = pPos->nNode.GetNode().GetCntntNode();
-    if( pNd )
+    if(SwCntntNode* pNd = pPos->nNode.GetNode().GetCntntNode())
     {
         const SfxItemSet* pSet = pNd->GetpSwAttrSet();
         if( pSet )
@@ -3019,16 +3100,32 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
         }
     }
 
+    //Will there be a new pagebreak at this position (don't know what type
+    //until later)
+    if (maSectionManager.WillHavePageDescHere(pPos->nNode))
+        aFltTOX.SetHadPageDescItem(true);
+
     // Setze Anfang in Stack
     pRefStck->NewAttr( *pPos, aFltTOX );
-    if( 1 < nIndexCols )
-        bDontCreateSep = true;
 
     rDoc.InsertTableOf(*pPaM->GetPoint(), *aFltTOX.GetBase());
+
+    //inserting a toc inserts a section before this point, so adjust pos
+    //for future page/section segment insertion
+    SwPaM aRegion(*pPaM);
+    aRegion.Move(fnMoveBackward);
+    ASSERT(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
+    if(rDoc.GetCurTOX(*aRegion.GetPoint()))
+    {
+        maSectionManager.PrependedInlineNode(*pPaM->GetPoint(),
+            *aRegion.GetNode());
+    }
 
     // Setze Ende in Stack
     pRefStck->SetAttr( *pPos, RES_FLTR_TOX );
 
+    if (!maApos.back()) //a para end in apo doesn't count
+        bWasParaEnd = true;
     return FLD_OK;
 }
 
@@ -3299,3 +3396,5 @@ void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE*, short nLen )
         InsertTagField( n, aTag );
     }
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

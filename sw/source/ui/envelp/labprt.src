@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:48:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage TP_LAB_PRT
         Text [ SWEDISH ] = "H~ela sidan" ;
         Text [ PORTUGUESE ] = "Página ~inteira" ;
         Text[ chinese_simplified ] = "æ•´é¡µ(~E)";
-        Text[ russian ] = "Âñÿ ñòğàíèöà";
+        Text[ russian ] = "Âñ~ÿ ñòğàíèöà";
         Text[ polish ] = "Ca³a strona";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸å…¨ä½“(~E)";
         Text[ chinese_traditional ] = "æ•´é (~E)";
@@ -124,7 +124,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "å–®å€‹è²¼æ¨™(~S)";
         Text[ arabic ] = "ÈØÇŞÉ ÚäæäÉ ãİÑÏÉ";
         Text[ greek ] = "Ìåìïíùìİíç åôéêİôá";
-        Text[ korean ] = "ê° ë¼ë²¨(~S)";
+        Text[ korean ] = "ê°œë³„ ë ˆì´ë¸”(~S)";
         Text[ turkish ] = "Tek Eti~ket";
         Text[ catalan ] = "~Una etiqueta";
         Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¹€~à¸”à¸µà¸¢à¸§";
@@ -262,7 +262,7 @@ TabPage TP_LAB_PRT
         Text[ polish ] = "Dystrybuj";
         Text[ portuguese_brazilian ] = "Divide";
         Text[ japanese ] = "å‰²ã‚Šå½“ã¦";
-        Text[ korean ] = "ë¶„í• ";
+        Text[ korean ] = "ë¶„ë°°";
         Text[ chinese_simplified ] = "åˆ†å¸ƒ";
         Text[ chinese_traditional ] = "åˆ†å¸ƒ";
         Text[ turkish ] = "Divide";
@@ -358,6 +358,11 @@ TabPage TP_LAB_PRT
     };
 };
  // **************************************************************************
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-09-09 12:21:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #endif
 
 #pragma hdrstop
+
+#include <so3/outplace.hxx>
 
 #if STLPORT_VERSION>=321
 #include <math.h>   // prevent conflict between exception and std::exception
@@ -509,9 +511,19 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bAc
         BOOL bDoVerb = TRUE;
         if ( pName )
         {
-            SvStorageRef aStor = new SvStorage( aEmptyStr );
-            xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit(
-                                                                *pName,aStor );
+            const SotFactory* pFact = SvFactory::Find( *pName );
+            if ( pFact )
+            {
+                SvStorageRef aStor = new SvStorage( aEmptyStr );
+                xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( *pName,aStor );
+            }
+            else
+            {
+                SvStorageRef aStor = new SvStorage( FALSE, aEmptyStr );
+                String aFileName;
+                BOOL bOk;
+                xIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, *pName, aFileName );
+            }
         }
         else
         {
@@ -530,6 +542,7 @@ void SwWrtShell::Insert( SvInPlaceObjectRef *pRef, SvGlobalName *pName, BOOL bAc
                     aServerList.Remove( *SwDocShell::ClassFactory() );
 
                     xIPObj = aDlg.Execute( GetWin(), aStor, &aServerList);
+
                     bDoVerb = aDlg.IsCreateNew();
                 }
                 break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:44:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ TabPage TP_ENV_PRT
         Group = TRUE ;
         Check = TRUE ;
         Text[ chinese_simplified ] = "д»ЋдёЉж–№ејЂе§‹ж‰“еЌ°(~P)";
-        Text[ russian ] = "Печатать сверху";
+        Text[ russian ] = "Пе~чатать сверху";
         Text[ polish ] = "Drukuj od gуry";
         Text[ japanese ] = "е°Ѓз­’гЃ®иЎЁг‚’дёЉгЃ«гЃ™г‚‹(~P)";
         Text[ chinese_traditional ] = "еѕћдёЉж–№й–‹е§‹е€—еЌ°(~P)";
@@ -217,7 +217,7 @@ TabPage TP_ENV_PRT
         Text [ PORTUGUESE ] = "А direita" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "еђ‘еЏі(~S)";
-        Text[ russian ] = "Сдвиг вправо";
+        Text[ russian ] = "С~двиг вправо";
         Text[ polish ] = "Na prawo";
         Text[ japanese ] = "еЏігЃ«(~S)";
         Text[ chinese_traditional ] = "еђ‘еЏі(~S)";
@@ -265,13 +265,13 @@ TabPage TP_ENV_PRT
         Text [ PORTUGUESE ] = "Para baixo" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "еђ‘дё‹(~D)";
-        Text[ russian ] = "Сдвиг вниз";
+        Text[ russian ] = "Сдвиг вни~з";
         Text[ polish ] = "W dуі";
         Text[ japanese ] = "дё‹гЃ«(~D)";
         Text[ chinese_traditional ] = "еђ‘дё‹(~D)";
         Text[ arabic ] = "Ебм ГУЭб";
         Text[ greek ] = "Рспт фб кЬфщ";
-        Text[ korean ] = "м•„лћлЎњ мќґлЏ™(~D)";
+        Text[ korean ] = "м•„лћлЎњ(~D)";
         Text[ turkish ] = "~Aюaрэ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cap a a~vall";
@@ -482,6 +482,11 @@ Bitmap BMP_VER_RGHT_UPPER_H
 {
     File = "envvr_u_h.bmp" ;
 };
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
+#endif
+#ifndef _OFA_HTMLCFG_HXX //autogen
+#include <offmgr/htmlcfg.hxx>
 #endif
 
 #ifndef _XOUTBMP_HXX //autogen
@@ -403,6 +406,9 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
 
 void SwHTMLWriter::CollectFlyFrms()
 {
+    ASSERT( HTML_CFG_MAX+1 == MAX_BROWSERS,
+            "number of browser configurations has changed" );
+
     BYTE nSz = (BYTE)Min( pDoc->GetSpzFrmFmts()->Count(), USHORT(255) );
     SwPosFlyFrms aFlyPos( nSz, nSz );
     pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pCurPam, TRUE );

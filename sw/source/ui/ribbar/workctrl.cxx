@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 08:38:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,6 +707,7 @@ SwZoomBox_Impl::SwZoomBox_Impl( Window* pParent, USHORT nSlot, SfxBindings& rBin
     rBindings(rBind),
     bRelease(TRUE)
 {
+    EnableAutocomplete( FALSE );
     USHORT aZoomValues[] =
     {   25, 50, 75, 100, 150, 200 };
     for(USHORT i = 0; i < sizeof(aZoomValues)/sizeof(USHORT); i++)
@@ -731,13 +732,14 @@ void    SwZoomBox_Impl::Select()
         String sEntry(GetText());
         sEntry.EraseAllChars( '%' );
         USHORT nZoom = (USHORT)sEntry.ToInt32();
-        if(nZoom > MINZOOM && nZoom < MAXZOOM)
-        {
-            SfxUInt16Item aItem( nSlotId, nZoom );
-            rBindings.GetDispatcher()->Execute(
-                nSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-            ReleaseFocus();
-        }
+        if(nZoom < MINZOOM)
+            nZoom = MINZOOM;
+        if(nZoom > MAXZOOM)
+            nZoom = MAXZOOM;
+        SfxUInt16Item aItem( nSlotId, nZoom );
+        rBindings.GetDispatcher()->Execute(
+            nSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        ReleaseFocus();
     }
 }
 /* -----------------02.12.2002 07:49-----------------

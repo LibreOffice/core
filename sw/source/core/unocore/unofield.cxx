@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-21 15:31:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,6 +1309,8 @@ void SwXTextField::attachTextFieldMaster(const uno::Reference< XPropertySet > & 
     if(!m_bIsDescriptor)
         throw uno::RuntimeException();
     uno::Reference< XUnoTunnel > xMasterTunnel(xFieldMaster, uno::UNO_QUERY);
+    if (!xMasterTunnel.is())
+        throw IllegalArgumentException();
     SwXFieldMaster* pMaster = (SwXFieldMaster*)xMasterTunnel->getSomething(
                 SwXFieldMaster::getUnoTunnelId());
 

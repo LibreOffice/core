@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-11-11 10:56:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,12 @@ String STR_NOGLOS1
     TEXT [ italian ] = "Testo automatico per la sigla '" ;
     TEXT [ portuguese_brazilian ] = "Texto Autom?tico para Abrevia??o" ;
     TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
-    TEXT [ finnish ] = "Automaattinen teksti pikavalinnalle '" ;
+    TEXT [ finnish ] = "Automaattista tekstiä pikavalinnalle" ;
     TEXT [ danish ] = "AutoTekst til genvej '" ;
     TEXT [ french ] = "AutoTexte pour raccourci '" ;
     TEXT [ swedish ] = "AutoText till genvägen '" ;
     TEXT [ dutch ] = "AutoTekst voor afkortingen'" ;
-    TEXT [ spanish ] = "AutoTexto para la abreviatura '" ;
+    TEXT [ spanish ] = "Texto automático para la abreviatura '" ;
     TEXT [ english_us ] = "AutoText for Shortcut '" ;
     TEXT[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ '";
     TEXT[ russian ] = "Àâòîòåêñò ê ñîêğàùåíèş '";
@@ -91,7 +91,7 @@ String STR_NOGLOS1
     TEXT[ dutch ] = "AutoTekst voor afkortingen'";
     TEXT[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ '";
     TEXT[ greek ] = "ÁõôïÊåßìåíï ãéá ôá áñ÷éêÜ '";
-    TEXT[ korean ] = "ìë™í… ìŠ¤íŠ¸ ë°”ë¡œê°€ê¸° '";
+    TEXT[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ë°”ë¡œ ê°€ê¸° '";
     TEXT[ turkish ] = "Otomatik metin kısaltması '";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "AutoText per al nom curt '";
@@ -109,7 +109,7 @@ String STR_NOGLOS2
     TEXT [ italian ] = "' non trovato." ;
     TEXT [ portuguese_brazilian ] = "' n?o encontrado." ;
     TEXT [ portuguese ] = "' não localizado." ;
-    TEXT [ finnish ] = "Kohdetta ' ei löydy." ;
+    TEXT [ finnish ] = "ei löydy." ;
     TEXT [ danish ] = "' blev ikke fundet." ;
     TEXT [ french ] = "' introuvable." ;
     TEXT [ swedish ] = "' hittades inte." ;
@@ -137,25 +137,25 @@ String STR_NO_TABLE
     Text = "Eine Tabelle kann nicht in eine andere Tabelle eingefügt werden. Sie können die Daten jedoch einfügen, wenn sich der Cursor nicht in einer Tabelle befindet." ;
     Text [ english_us ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
     Text [ norwegian ] = "Inserting a table is impossible now." ;
-    Text [ italian ] = "Adesso è impossibile inserire una tabella." ;
+    Text [ italian ] = "Impossibile inserire una tabella in un'altra tabella. Tuttavia potete inserire i dati nel documento quando il cursore non è posizionato in una tabella." ;
     Text [ portuguese_brazilian ] = "Inserir a tabela ? agora imposs?vel." ;
     Text [ portuguese ] = "De momento não é possível inserir a tabela." ;
     Text [ finnish ] = "Tällä hetkellä taulukkoa ei voi lisätä" ;
     Text [ danish ] = "Det er for tiden ikke muligt at indsætte en tabel" ;
-    Text [ french ] = "Impossible d'insérer un tableau maintenant." ;
-    Text [ swedish ] = "En tabell kan inte infogas vid denna tidpunkt." ;
+    Text [ french ] = "Impossible d'insérer un tableau dans un autre tableau ! Vous pouvez toutefois insérer les données tant que le curseur ne se trouve pas dans un tableau." ;
+    Text [ swedish ] = "En tabell kan inte infogas i en annan tabell. Men du kan klistra in data i dokumentet om markören inte är placerad i en tabell." ;
     Text [ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd." ;
-    Text [ spanish ] = "Actualmente no se puede insertar ninguna tabla." ;
-    Text[ chinese_simplified ] = "å½“å‰æ— æ³•æ’å…¥ä»»ä½•è¡¨æ ¼ã€‚";
-    Text[ russian ] = "Â íàñòîÿùåå âğåìÿ âñòàâèòü òàáëèöó íåâîçìîæíî.";
+    Text [ spanish ] = "No se puede insertar una tabla dentro de otra. Sin embargo, puede pegar los datos en el documento cuando el cursor no esté en la tabla." ;
+    Text[ chinese_simplified ] = "åœ¨ä¸€ä¸ªè¡¨æ ¼ä¹‹å†…æ— æ³•æ’å…¥è¡¨æ ¼ã€‚å¦‚æœé¼ æ ‡ä¸æ˜¯ä½äºä¸€ä¸ªè¡¨æ ¼ä¹‹å†…ï¼Œæ‚¨ä¹Ÿè¿˜æ˜¯èƒ½å¤Ÿæ’å…¥æ•°æ®ã€‚";
+    Text[ russian ] = "Ñåé÷àñ íåâîçìîæíî âñòàâèòü òàáëèöó";
     Text[ polish ] = "W tym momencie nie mo¿e byæ wstawiona tabela.";
-    Text[ japanese ] = "ç¾åœ¨ã€è¡¨ã®æŒ¿å…¥ã¯ã§ãã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = "ç›®å‰ç„¡æ³•æ’å…¥ä»»ä½•è¡¨æ ¼ã€‚";
+    Text[ japanese ] = "è¡¨ã‚’åˆ¥ã®è¡¨ã«æŒ¿å…¥ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã€‚ãŸã ã—ã€è¡¨ä»¥å¤–ã®å ´æ‰€ã«ã‚«ãƒ¼ã‚½ãƒ«ã‚’ç½®ã‘ã°ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«è¡¨ã®ãƒ‡ãƒ¼ã‚¿ã‚’è²¼ã‚Šä»˜ã‘ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "è¡¨æ ¼ç„¡æ³•æ’å…¥å…¶ä»–è¡¨æ ¼ä¸­ã€‚ä½†æ˜¯ç•¶æ¸¸æ¨™ä¸åœ¨è¡¨æ ¼ä¸­æ™‚ï¼Œæ‚¨å¯ä»¥å°‡è³‡æ–™è²¼åˆ°æ–‡ä»¶ä¸­ã€‚";
     Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá ÛíÑ ããßä ÍÇáíÇğ.";
     Text[ dutch ] = "Tabel kan op dit ogenblik niet worden ingevoegd.";
-    Text[ chinese_simplified ] = "å½“å‰æ— æ³•æ’å…¥ä»»ä½•è¡¨æ ¼ã€‚";
+    Text[ chinese_simplified ] = "åœ¨ä¸€ä¸ªè¡¨æ ¼ä¹‹å†…æ— æ³•æ’å…¥è¡¨æ ¼ã€‚å¦‚æœé¼ æ ‡ä¸æ˜¯ä½äºä¸€ä¸ªè¡¨æ ¼ä¹‹å†…ï¼Œæ‚¨ä¹Ÿè¿˜æ˜¯èƒ½å¤Ÿæ’å…¥æ•°æ®ã€‚";
     Text[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá åéóá÷èåß ğßíáêáò.";
-    Text[ korean ] = "í‘œë¥¼ ì‚½ì…í•˜ëŠ”ê²ƒì´ í˜„ì¬ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤.";
+    Text[ korean ] = "í‘œ ì•ˆì— ë˜ ë‹¤ë¥¸ í‘œë¥¼ ì‚½ì…í•  ìˆ˜ëŠ” ì—†ìœ¼ë‚˜ ì»¤ì„œê°€ í‘œ ì•ˆì— ë†“ì—¬ìˆì§€ ì•Šì€ í•œ ë°ì´í„°ëŠ” í‘œë¬¸ì„œ ì•ˆìœ¼ë¡œ ì‚½ì…í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Şu an tablo eklenemiyor.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ara no es pot inserir cap taula.";
@@ -175,19 +175,19 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTeksten." ;
     MESSAGE [ french ] = "Impossible de créer l'AutoTexte." ;
     MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
-    MESSAGE [ dutch ] = "AutoTekst kon niet worden gemaakt" ;
-    MESSAGE [ spanish ] = "No se pudo crear el AutoTexto." ;
+    MESSAGE [ dutch ] = "AutoTekst kan niet worden gemaakt" ;
+    MESSAGE [ spanish ] = "No se pudo crear el Texto automático." ;
     MESSAGE [ english_us ] = "AutoText could not be created." ;
     MESSAGE[ chinese_simplified ] = "æ— æ³•å»ºç«‹è‡ªåŠ¨å›¾æ–‡é›†ã€‚";
-    MESSAGE[ russian ] = "Ñîçäàòü àâòîòåêñò íåâîçìîæíî.";
+    MESSAGE[ russian ] = "Íåâîçìîæíî ñîçäàòü àâòîòåêñò.";
     MESSAGE[ polish ] = "Autotekst nie móg³ zostaæ utworzony.";
     MESSAGE[ japanese ] = "å…¥åŠ›æ”¯æ´ã§ãã¾ã›ã‚“";
     MESSAGE[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹è‡ªå‹•åœ–æ–‡é›†ã€‚";
     MESSAGE[ arabic ] = "ÊÚĞÑ Úãá äÕ ÊáŞÇÆí.";
-    MESSAGE[ dutch ] = "AutoTekst kon niet worden gemaakt";
+    MESSAGE[ dutch ] = "AutoTekst kan niet worden gemaakt";
     MESSAGE[ chinese_simplified ] = "æ— æ³•å»ºç«‹è‡ªåŠ¨å›¾æ–‡é›†ã€‚";
     MESSAGE[ greek ] = "Äåí Şôáí äõíáôŞ ç åéóáãùãŞ ÁõôïÊåßìåíï.";
-    MESSAGE[ korean ] = "ìë™ í…ìŠ¤íŠ¸ë¥¼ ë§Œë“¤ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+    MESSAGE[ korean ] = "ìë™ í…ìŠ¤íŠ¸ë¥¼ ë§Œë“¤ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
     MESSAGE[ turkish ] = "Otomatik metin oluşturulamadı.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "No s'ha pogut crear l'autotext.";
@@ -199,26 +199,26 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE = "Gewünschtes Zwischenablagen-Format steht nicht zur Verfügung." ;
     MESSAGE [ English ] = "Requested clipboard format is not available." ;
     MESSAGE [ norwegian ] = "Requested clipboard format is not available." ;
-    MESSAGE [ italian ] = "Il formato appunti richiesto non è disponibile." ;
+    MESSAGE [ italian ] = "Il formato Appunti richiesto non è disponibile." ;
     MESSAGE [ portuguese_brazilian ] = "Formato solicitado de clipboard n?o est? dispon?vel." ;
     MESSAGE [ portuguese ] = "Formato da área de transferência solicitado não se encontra disponível." ;
     MESSAGE [ finnish ] = "Pyydetty leikepöydän muoto ei ole käytettävissä." ;
     MESSAGE [ danish ] = "Det anmodede udskriftsholderformat er ikke tilgængeligt." ;
     MESSAGE [ french ] = "Le format de presse-papiers souhaité n'est pas disponible." ;
     MESSAGE [ swedish ] = "Önskat urklippsformat är inte tillgängligt." ;
-    MESSAGE [ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar." ;
-    MESSAGE [ spanish ] = "El formato deseado del portapapeles no está disponible." ;
+    MESSAGE [ dutch ] = "Gevraagde clipboardindeling is niet beschikbaar." ;
+    MESSAGE [ spanish ] = "El formato requerido, del portapapeles, no está disponible." ;
     MESSAGE [ english_us ] = "Requested clipboard format is not available." ;
     MESSAGE[ chinese_simplified ] = "æ‰€éœ€è¦çš„è£å‰ªæ¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
-    MESSAGE[ russian ] = "Æåëàåìûé ôîğìàò áóôåğà îáìåíà íåäîñòóïåí.";
+    MESSAGE[ russian ] = "Íåäîñòóïåí æåëàåìûé ôîğìàò áóôåğà îáìåíà.";
     MESSAGE[ polish ] = "Szukany format schowka jest niedostêpny.";
     MESSAGE[ japanese ] = "æŒ‡å®šã®ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰æ›¸å¼ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚";
-    MESSAGE[ chinese_traditional ] = "æ‰€éœ€è¦çš„è£å‰ªç°¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
+    MESSAGE[ chinese_traditional ] = "è«‹æ±‚çš„å‰ªè²¼ç°¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ arabic ] = "ÊäÓíŞ ÇáÍÇİÙÉ ÇáãØáæÈ ÛíÑ ãÊæİÑ.";
-    MESSAGE[ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar.";
+    MESSAGE[ dutch ] = "Gevraagde clipboardindeling is niet beschikbaar.";
     MESSAGE[ chinese_simplified ] = "æ‰€éœ€è¦çš„è£å‰ªæ¿æ ¼å¼ä¸å­˜åœ¨ã€‚";
     MESSAGE[ greek ] = "Ç æçôïıìåíç ìïñöŞ ôïõ ğñü÷åéñïõ äåí åßíáé äéáèİóéìç.";
-    MESSAGE[ korean ] = "ìš”ì²­ëœ í´ë¦½ë³´ë“œ ì„œì‹ì€ ê°€ëŠ¥í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
+    MESSAGE[ korean ] = "ìš”ì²­í•œ í´ë¦½ë³´ë“œ ì„œì‹ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     MESSAGE[ turkish ] = "İstenen pano formatı mevcut değil.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "El format desitjat del porta-retalls no està disponible.";
@@ -235,25 +235,25 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     MESSAGE [ italian ] = "Il formato dell'area è vecchio.\nÈ necessario convertirlo per poter\nsalvare le modifiche apportate\nVolete convertirlo?" ;
     MESSAGE [ portuguese_brazilian ] = "O formato de arquivo da regiao est? desatualizado.\nDeve ser convertido para que se possa gravar modifica??s.\nDeseja convert?-lo?" ;
     MESSAGE [ portuguese ] = "O formato do ficheiro está desactualizado.\nDeve ser convertido para que se possam\n guardar as respectivas alterações.\nDeseja convertê-lo?" ;
-    MESSAGE [ finnish ] = "Osion muoto on vanhentunut.\nSe on muunnettava, jotta\nsitä voisi muuttaa.\nMuunnetaanko osio nyt?" ;
+    MESSAGE [ finnish ] = "Osan muoto on vanhentunut.\nOsa on muunnettava, jotta\nmuutokset voisi tallentaa.\nMuunnetaanko osa nyt?" ;
     MESSAGE [ danish ] = "Områdets filformat er forældet.\nDet skal konverteres, for at ændringerne kan gemmes.\nVil du konvertere det?" ;
     MESSAGE [ french ] = "La section se trouve dans un format périmé.\nVous ne pourrrez enregistrer aucune modification \n à moins de le convertir.\nVoulez-vous procéder à la conversion sans plus attendre ?" ;
     MESSAGE [ swedish ] = "Området har ett gammalt format.\nDet måste konverteras för att\nändringar skall kunna sparas.\nVill du konvertera det?" ;
-    MESSAGE [ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?" ;
-    MESSAGE [ spanish ] = "El formato del área no es actual.\nHay que convertirlo\npara poder guardar las modificaciones.\n¿Desea usted convertirlo?" ;
+    MESSAGE [ dutch ] = "Het bereik heeft een verouderde indeling.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?" ;
+    MESSAGE [ spanish ] = "El formato de la sección no está actualizado.\nHay que convertirlo\npara poder guardar las modificaciones.\n¿Desea convertirlo?" ;
     MESSAGE [ english_us ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
     /* ### ACHTUNG: Neuer Text in Resource? Der Bereich liegt in einem alten Format vor.\nEr muß konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden? : Der Bereich liegt in einem alten Format vor.\nEr mu˜ konvertiert werden, um nderungen\nspeichern zu k÷nnen.\nSoll er konvertiert werden? */
     Message = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?" ;
     Message[ chinese_simplified ] = "è¿™ä¸ªåŒºåŸŸå…·æœ‰çš„æ ¼å¼æ˜¯æ—§çš„ã€‚\nè¦å­˜ç›˜æ›´æ”¹å°±å¿…é¡»è¿›è¡Œæ ¼å¼è½¬æ¢ã€‚\nè¦è½¬æ¢æ ¼å¼å—ï¼Ÿ";
-    Message[ russian ] = "Ğàçäåë ïğåäñòàâëåí â ñòàğîì ôîğìàòå.\nÅãî íåîáõîäèìî ïğåîáğàçîâàòü, ñ òåì ÷òîáû ìîæíî \náûëî ñîõğàíèòü èçìåíåíèÿ\n.Ïğåîáğàçîâàòü?";
+    Message[ russian ] = "Ğàçäåë ïğåäñòàâëåí â ñòàğîì ôîğìàòå.\nÅãî íåîáõîäèìî ïğåîáğàçîâàòü, ÷òîáû \nñîõğàíèòü èçìåíåíèÿ\n.Ïğåîáğàçîâàòü?";
     Message[ polish ] = "Format obszaru nie jest aktualny.\nObszar musi byæ skonwertowany, by mo¿na by³o zapisaæ zmiany\n. Skonwertowaæ go?";
     Message[ japanese ] = "ã“ã®ç¯„å›²ã¯æ—§æ›¸å¼ã«ã‚ã‚Šã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã™ã‚‹ã«ã¯\næ›¸å¼ã‚’å¤‰æ›ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚\næ›¸å¼å¤‰æ›ã—ã¾ã™ã‹?";
     Message[ chinese_traditional ] = "é€™å€‹å€åŸŸçš„æ ¼å¼æ˜¯èˆŠçš„ã€‚\nè¦å„²å­˜è®Šæ›´å°±å¿…é ˆè½‰æ›å®ƒæ ¼å¼ã€‚\næ‚¨è¦è½‰æ›å®ƒçš„æ ¼å¼ï¼Ÿ";
     Message[ arabic ] = "ÊäÓíŞ ÇáäØÇŞ ŞÏíã.\níÌÈ ÊÍæíáå¡ ÍÊì íãßä \nÍİÙ ÇáÊÛííÑÇÊ.\nåá ÊÑíÏ ÊÍæíáå¿";
-    Message[ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
+    Message[ dutch ] = "Het bereik heeft een verouderde indeling.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
     Message[ chinese_simplified ] = "è¿™ä¸ªåŒºåŸŸå…·æœ‰çš„æ ¼å¼æ˜¯æ—§çš„ã€‚\nè¦å­˜ç›˜æ›´æ”¹å°±å¿…é¡»è¿›è¡Œæ ¼å¼è½¬æ¢ã€‚\nè¦è½¬æ¢æ ¼å¼å—ï¼Ÿ";
     Message[ greek ] = "Ç ğåñéï÷Ş õğÜñ÷åé óå êÜğïéá ğñïãåíİóôåñç ìïñöŞ.\nĞñİğåé íá ìåôáôñáğåß ãéá íá åßíáé äõíáôŞ\nç áğïèŞêåõóç ôùí áëëáãşí.\nÈİëåôå íá ãßíåé ç ìåôáô ";
-    Message[ korean ] = "ì˜ì—­ ì„œì‹ì€ ì˜¤ë˜ëœ ê²ƒì…ë‹ˆë‹¤.\n ì´ê²ƒì„ ë³€í™˜í•˜ì—¬ì•¼ ë³€ê²½ ì‚¬í•­ì„\nì €ì¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n ì§€ê¸ˆ ë³€í™˜ í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Message[ korean ] = "êµ¬ì—­ì˜ ì„œì‹ì´ ì˜¤ë˜ë˜ì—ˆìŠµë‹ˆë‹¤.\n ì´ê²ƒì„ ë³€í™˜í•˜ì—¬ì•¼ ë³€ê²½ ì‚¬í•­ì„ ì €ì¥í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n ì§€ê¸ˆ ë³€í™˜í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "Bölümün formatı eski.\nDeğişikliklerin kaydedilebilmesi n\niçin değiştirilmesi gerekiyor.\nFormat değiştirilsin mi?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El format de l'àrea no és actual.\nS'ha de convertir\nper poder desar les modificacions.\nVoleu convertir-lo?";
@@ -303,11 +303,11 @@ String STR_PRIVATEGRAPHIC
     Text [ spanish ] = "Imagen [%PRODUCTNAME Writer]" ;
     Text [ english_us ] = "Graphics [%PRODUCTNAME Writer]" ;
     Text[ chinese_simplified ] = "å›¾å½¢ [%PRODUCTNAME Writer]";
-    Text[ russian ] = "Ğèñóíîê [%PRODUCTNAME Writer]";
+    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò [%PRODUCTNAME Writer]";
     Text[ polish ] = "Grafika [%PRODUCTNAME Writer]";
     Text[ japanese ] = "å›³ [%PRODUCTNAME Writer]";
     Text[ greek ] = "Ãñáöéêü [%PRODUCTNAME Writer]";
-    Text[ korean ] = "ê·¸ë˜í”½ [%PRODUCTNAME Writer]";
+    Text[ korean ] = "ê·¸ë¦¼ [%PRODUCTNAME Writer]";
     Text[ chinese_traditional ] = "åœ–å½¢ [%PRODUCTNAME Writer]";
     Text[ arabic ] = "[%PRODUCTNAME Writer] ÑÓæãÇÊ";
     Text[ turkish ] = "Grafik [%PRODUCTNAME Writer]";
@@ -357,7 +357,7 @@ String STR_DDEFORMAT
     Text [ spanish ] = "Vínculo DDE" ;
     Text [ english_us ] = "DDE link" ;
     Text[ chinese_simplified ] = "DDE é“¾æ¥";
-    Text[ russian ] = "Ñâÿçü DDE";
+    Text[ russian ] = "Ñâÿçü ïî DDE";
     Text[ polish ] = "£¹cza DDE ";
     Text[ japanese ] = "DDE ãƒªãƒ³ã‚¯";
     Text[ chinese_traditional ] = "DDE æ·å¾‘";
@@ -380,6 +380,10 @@ String STR_SW_TEAM_NAMES
 {
     TEXT = "Back row: Juergen Pingel, Caolan McNamara, Andreas Martens, Daniel Vogelheim, Thomas Lange, Michael Brauer, Frank Meies, Oliver Specht, Ulf Stroehler (QA). \nFront row: Stefan Baltzer (QA), Eric Savary (QA), Hasan Ilter (QA), Martin Gallwey, Michael Ruess (QA)";
 };
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: gt $ $Date: 2002-11-18 15:29:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,11 +1252,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
         case SID_MAIL_PREPAREEXPORT:
             {
-                pWrtShell->StartAllAction();
+                //pWrtShell is not set in page preview
+                if(pWrtShell)
+                    pWrtShell->StartAllAction();
                 pDoc->UpdateFlds( 0 );
                 pDoc->EmbedAllLinks();
                 pDoc->RemoveInvisibleContent();
-                pWrtShell->EndAllAction();
+                if(pWrtShell)
+                    pWrtShell->EndAllAction();
             }
             break;
 
@@ -1358,6 +1361,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if(!sStartTemplate.getLength() && pAny)
                         sStartTemplate = pAny->GetName();
+
                     aListBoxEntries.realloc(nIdx);
 
                     try
@@ -1664,7 +1668,8 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     }
     sal_Bool bWasBrowseMode = pDoc->IsBrowseMode();
     RemoveLink();
-
+    delete pIo;
+    pIo = 0;
     //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();

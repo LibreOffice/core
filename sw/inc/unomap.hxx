@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-08 14:34:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #define PROPERTY_MAP_EMBEDDED_OBJECT        38
 #define PROPERTY_MAP_REDLINE                39
 #define PROPERTY_MAP_TEXT_DEFAULT           40
+
 #define PROPERTY_MAP_FLDTYP_DATETIME                    41
 #define PROPERTY_MAP_FLDTYP_USER                        42
 #define PROPERTY_MAP_FLDTYP_SET_EXP                     43
@@ -152,9 +153,10 @@
 #define PROPERTY_MAP_FLDMSTR_DUMMY0                     84
 #define PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY                85
 #define PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY               86
-#define PROPERTY_MAP_REDLINE_PORTION                    87
-#define PROPERTY_MAP_TEXT                               88
-#define PROPERTY_MAP_END                                89
+#define PROPERTY_MAP_TEXT                               87
+#define PROPERTY_MAP_REDLINE_PORTION                    88
+#define PROPERTY_MAP_MAILMERGE                          89
+#define PROPERTY_MAP_END                                90
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
@@ -251,6 +253,7 @@
 #define WID_IDX_LOCALE                          1055
 #define WID_IDX_SORT_ALGORITHM                  1056
 #define WID_IDX_NAME                            1057
+
 #define WID_TEXT_READING                        1058
 #define WID_PRIMARY_KEY_READING                 1059
 #define WID_SECONDARY_KEY_READING               1060
@@ -272,6 +275,22 @@
 #define WID_DOC_APPLY_FORM_DESIGN_MODE          1013
 #define WID_DOC_BASIC_LIBRARIES                 1014
 
+//MailMerge
+#define WID_SELECTION                           1071
+#define WID_RESULT_SET                          1072
+#define WID_CONNECTION                          1073
+#define WID_MODEL                               1074
+#define WID_DATA_SOURCE_NAME                    1075
+#define WID_DATA_COMMAND                        1076
+#define WID_FILTER                              1077
+#define WID_DOCUMENT_URL                        1078
+#define WID_OUTPUT_URL                          1079
+#define WID_DATA_COMMAND_TYPE                   1080
+#define WID_OUTPUT_TYPE                         1081
+#define WID_ESCAPE_PROCESSING                   1082
+#define WID_SINGLE_PRINT_JOBS                   1083
+#define WID_FILE_NAME_FROM_COLUMN               1084
+#define WID_FILE_NAME_PREFIX                    1085
 
 //AutoText
 #define WID_GROUP_PATH                          0

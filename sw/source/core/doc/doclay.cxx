@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-24 13:12:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,11 +1135,43 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 |*
 |*************************************************************************/
 
+/* #i6447# changed behaviour if lcl_CpyAttr:
+
+   If the old item set contains the item to set (no inheritance) copy the item
+   into the new set.
+
+   If the old item set contains the item by inheritance and the new set
+   contains the item, too:
+      If the two items differ copy the item from the old set to the new set.
+
+   Otherwise the new set will not be changed.
+*/
+
 void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWhich )
 {
-    const SfxPoolItem *pItem;
-    if ( SFX_ITEM_SET == (rOldSet.GetItemState( nWhich, sal_False, &pItem)))
-        rNewSet.Put( *pItem );
+    const SfxPoolItem *pOldItem = NULL, *pNewItem = NULL;
+
+    rOldSet.GetItemState( nWhich, sal_False, &pOldItem);
+    if (pOldItem != NULL)
+        rNewSet.Put( *pOldItem );
+    else
+    {
+        pOldItem = rOldSet.GetItem( nWhich, sal_True);
+        if (pOldItem != NULL)
+        {
+            pNewItem = rNewSet.GetItem( nWhich, sal_True);
+            if (pNewItem != NULL)
+            {
+                if (*pOldItem != *pNewItem)
+                    rNewSet.Put( *pOldItem );
+            }
+            else
+                ASSERT(0, "What am I doing here?");
+        }
+        else
+            ASSERT(0, "What am I doing here?");
+    }
+
 }
 
 
@@ -1229,10 +1261,13 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
                 ASSERT( pOldFmt, "Format des Fly nicht gefunden." );
                 pOldFmt->DelFrms();
 
-                SfxItemSet* pNewSet = pOldFmt->GetAttrSet().Clone( sal_False );
-
                 pNewFmt = MakeFlyFrmFmt( GetUniqueFrameName(),
                                     GetFrmFmtFromPool( RES_POOLFRM_FRAME ));
+
+                /* #i6447#: Only the selected items are copied from the old
+                   format. */
+                SfxItemSet* pNewSet = pNewFmt->GetAttrSet().Clone( sal_True );
+
 
                 //Diejenigen Attribute uebertragen die auch gesetzt sind,
                 //andere sollen weiterhin aus den Vorlagen gueltig werden.
@@ -1244,6 +1279,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
                 lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_HORI_ORIENT );
                 lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_LR_SPACE );
                 lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_UL_SPACE );
+                lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_BACKGROUND );
                 if( bCpyBrd )
                 {
                     // JP 07.07.99: Bug 67029 - if at Grafik no BoxItem but
@@ -1322,6 +1358,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt,
                 pNewSet->ClearItem();
 
                 pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
+                pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, sal_True ) );
                 pNewSet->Put( SwFmtVertOrient( VERT_TOP ) );
                 pNewSet->Put( SwFmtHoriOrient( HORI_CENTER ) );
 

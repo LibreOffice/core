@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 09:42:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,14 +1080,15 @@ BOOL SwTableOptionsTabPage::FillItemSet( SfxItemSet& rSet )
         if(pWrtShell && SwWrtShell::SEL_TBL & pWrtShell->GetSelectionType())
         {
             pWrtShell->SetTblChgMode(eMode);
+            static USHORT __READONLY_DATA aInva[] =
+                                {   FN_TABLE_MODE_FIX,
+                                    FN_TABLE_MODE_FIX_PROP,
+                                    FN_TABLE_MODE_VARIABLE,
+                                    0
+                                };
+            pWrtShell->GetView().GetViewFrame()->GetBindings().Invalidate( aInva );
         }
-        static USHORT __READONLY_DATA aInva[] =
-                            {   FN_TABLE_MODE_FIX,
-                                FN_TABLE_MODE_FIX_PROP,
-                                FN_TABLE_MODE_VARIABLE,
-                                0
-                            };
-        pWrtShell->GetView().GetViewFrame()->GetBindings().Invalidate( aInva );
+
         bRet = TRUE;
     }
 

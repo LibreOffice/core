@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-22 15:58:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2332,6 +2332,11 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     } while( nRepeat );
 
     ChgThisLines();
+
+    // the PrepMustFit should not survive a Format operation
+    SwParaPortion *pPara = GetPara();
+    if ( pPara )
+           pPara->SetPrepMustFit( sal_False );
 
 #ifdef DEBUG
     // Hier ein Instrumentarium, um ungewoehnlichen Master/Follow-Kombinationen,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: od $ $Date: 2002-11-20 13:14:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,11 @@ class SwPageFrm: public SwFtnBossFrm
 #ifdef VERTICAL_LAYOUT
     BOOL bHasGrid           :1; // Grid for Asian layout
 #endif
+
+    // OD 12.02.2003 #i9719#, #105645#
+    static const sal_Int8 mnBorderPxWidth;
+    static const sal_Int8 mnShadowPxWidth;
+
     //Anpassung der RootSize und Benachrichtigungen beim Einsetzen,
     //Entfernen und Groessenaenderungen der Seite.
     void AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld );
@@ -130,6 +135,75 @@ class SwPageFrm: public SwFtnBossFrm
 
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
     void SetColMaxFtnHeight();
+
+    /** determine rectangle for page border
+
+        OD 12.02.2003 for #i9719# and #105645#
+
+        @author OD
+
+        @param _rPageRect
+        input parameter - constant instance reference of the page rectangle.
+        Generally, it's the frame area of the page, but for empty pages in print
+        preview, this parameter is useful.
+
+        @param _pViewShell
+        input parameter - instance of the view shell, for which the rectangle
+        has to be generated.
+
+        @param _orBorderRect
+        output parameter - instance reference of the border rectangle for
+        the given page rectangle
+    */
+    void GetBorderRect( const SwRect& _rPageRect,
+                        ViewShell*    _pViewShell,
+                        SwRect& _orBorderRect ) const;
+
+    /** determine rectangle for right page shadow
+
+        OD 12.02.2003 for #i9719# and #105645#
+
+        @author OD
+
+        @param _rPageRect
+        input parameter - constant instance reference of the page rectangle.
+        Generally, it's the frame area of the page, but for empty pages in print
+        preview, this parameter is useful.
+
+        @param _pViewShell
+        input parameter - instance of the view shell, for which the rectangle
+        has to be generated.
+
+        @param _orRightShadowRect
+        output parameter - instance reference of the right shadow rectangle for
+        the given page rectangle
+    */
+    void GetRightShadowRect( const SwRect& _rPageRect,
+                             ViewShell*    _pViewShell,
+                             SwRect&       _orRightShadowRect ) const;
+
+    /** determine rectangle for bottom page shadow
+
+        OD 12.02.2003 for #i9719# and #105645#
+
+        @author OD
+
+        @param _rPageRect
+        input parameter - constant instance reference of the page rectangle.
+        Generally, it's the frame area of the page, but for empty pages in print
+        preview, this parameter is useful.
+
+        @param _pViewShell
+        input parameter - instance of the view shell, for which the rectangle
+        has to be generated.
+
+        @param _orBottomShadowRect
+        output parameter - instance reference of the bottom shadow rectangle for
+        the given page rectangle
+    */
+    void GetBottomShadowRect( const SwRect& _rPageRect,
+                              ViewShell*    _pViewShell,
+                              SwRect&       _orBottomShadowRect ) const;
 
 protected:
     virtual void MakeAll();
@@ -271,6 +345,58 @@ public:
     */
     void PaintMarginArea( const SwRect& _rOutputRect,
                           ViewShell* _pViewShell ) const;
+
+    /** paint page border and shadow
+
+        OD 12.02.2003 for #i9719# and #105645#
+        implement paint of page border and shadow
+
+        @author OD
+
+        @param _rPageRect
+        input parameter - constant instance reference of the page rectangle.
+        Generally, it's the frame area of the page, but for empty pages in print
+        preview, this parameter is useful.
+
+        @param _pViewShell
+        input parameter - instance of the view shell, on which the output
+        has to be generated.
+    */
+    void PaintBorderAndShadow( const SwRect& _rPageRect,
+                               ViewShell*    _pViewShell ) const;
+
+    /** get bound rectangle of border and shadow for repaints
+
+        OD 12.02.2003 for #i9719# and #105645#
+
+        author OD
+
+        @param _rPageRect
+        input parameter - constant instance reference of the page rectangle.
+        Generally, it's the frame area of the page, but for empty pages in print
+        preview, this parameter is useful.
+
+        @param _pViewShell
+        input parameter - instance of the view shell, for which the rectangle
+        has to be generated.
+
+        @param _orBorderAndShadowBoundRect
+        output parameter - instance reference of the bounded border and shadow
+        rectangle for the given page rectangle
+    */
+    void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
+                                      ViewShell*    _pViewShell,
+                                      SwRect& _orBorderAndShadowBoundRect ) const;
+
+    // OD 12.02.2003 #i9719#, #105645#
+    inline sal_Int8 BorderPxWidth() const
+    {
+        return mnBorderPxWidth;
+    }
+    inline sal_Int8 ShadowPxWidth() const
+    {
+        return mnShadowPxWidth;
+    }
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()

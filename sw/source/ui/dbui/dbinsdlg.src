@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:27:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Gegevens invoegen als";
         Text[ chinese_simplified ] = "æ’å…¥æ•°æ®çš„æ–¹å¼ï¼š";
         Text[ greek ] = "ÅéóáãùãŞ äåäïìİíùí ùò:";
-        Text[ korean ] = "ë¡œ ë°ì´í„° ì‚½ì…:";
+        Text[ korean ] = "ë°ì´í„° ì‚½ì…:";
         Text[ turkish ] = "Eklenecek verilerin türü:";
         Text[ catalan ] = "Insereix la data com:";
         Text[ finnish ] = "Lisää tiedot muodossa:";
@@ -130,7 +130,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "T~abel";
         Text[ chinese_simplified ] = "è¡¨æ ¼(~A)";
         Text[ greek ] = "Ğßíáêáò";
-        Text[ korean ] = "ì‹œíŠ¸(~A)";
+        Text[ korean ] = "í‘œ(~A)";
         Text[ turkish ] = "T~ablo";
         Text[ catalan ] = "T~aula";
         Text[ finnish ] = "~Taulukko";
@@ -482,21 +482,21 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ ENGLISH ] = "Tab~le column(s)" ;
         Text [ english_us ] = "Tab~le column(s)" ;
         Text [ portuguese_brazilian ] = "Tabe~lle" ;
-        Text [ swedish ] = "Tabe~ll" ;
+        Text [ swedish ] = "Tabe~llkolumn(er)" ;
         Text [ danish ] = "Tabel" ;
-        Text [ italian ] = "Tabe~lla" ;
-        Text [ spanish ] = "Tab~la" ;
-        Text [ french ] = "Tab~le" ;
+        Text [ italian ] = "Colonna/e tabe~lla" ;
+        Text [ spanish ] = "Columnas de tab~la" ;
+        Text [ french ] = "Colonnes de table" ;
         Text [ dutch ] = "Tabe~l" ;
         Text [ portuguese ] = "Ta~bela" ;
-        Text[ chinese_simplified ] = "è¡¨æ ¼(~L)";
+        Text[ chinese_simplified ] = "è¡¨æ ¼åˆ—(~L)";
         Text[ russian ] = "Òàáëèöà";
         Text[ polish ] = "Tabela";
-        Text[ japanese ] = "è¡¨(~L)";
-        Text[ chinese_traditional ] = "è¡¨æ ¼(~L)";
+        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®åˆ—(~L)";
+        Text[ chinese_traditional ] = "è¡¨æ ¼æ¬„(~L)";
         Text[ arabic ] = "ÇáÌÏæá";
         Text[ dutch ] = "Tabe~l";
-        Text[ chinese_simplified ] = "è¡¨æ ¼(~L)";
+        Text[ chinese_simplified ] = "è¡¨æ ¼åˆ—(~L)";
         Text[ greek ] = "Ğßíáêáò";
         Text[ korean ] = "í‘œì˜ ì—´(~L)";
         Text[ turkish ] = "~Tablo";
@@ -631,7 +631,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "~Eigenschappen...";
         Text[ chinese_simplified ] = "å±æ€§(~O)...";
         Text[ greek ] = "Éäéüôçôåò...";
-        Text[ korean ] = "ë“±ë¡ì •ë³´(~O)...";
+        Text[ korean ] = "ë“±ë¡ ì •ë³´(~O)...";
         Text[ turkish ] = "Ö~zelikler...";
         Text[ catalan ] = "Pr~opietats...";
         Text[ finnish ] = "~Ominaisuudet...";
@@ -650,7 +650,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ swedish ] = "Aut~oFormat..." ;
         Text [ danish ] = "AutoFormat..." ;
         Text [ italian ] = "Formatt. auto..." ;
-        Text [ spanish ] = "~Autoformato..." ;
+        Text [ spanish ] = "~Formateado automático..." ;
         Text [ french ] = "Aut~oFormat..." ;
         Text [ dutch ] = "Aut~oOpmaak..." ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼(~O)...";
@@ -720,6 +720,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ finnish ] = "Lisää tietokantasarakkeet";
     Text[ thai ] = "à¹à¸—à¸£à¸à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‚à¸­à¸‡à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
 
 
 

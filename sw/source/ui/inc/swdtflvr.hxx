@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 13:03:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class SwTextBlocks;
 class SwWrtShell;
 class Reader;
 class SvxClipboardFmtItem;
+class ViewShell;
 
 enum TransferBufferType
 {
@@ -110,6 +111,9 @@ class SwTransferable : public TransferableHelper
     ::so3::SvBaseLinkRef            refDdeLink;
 
     SwWrtShell      *pWrtShell;
+    /* #96392# Added pCreatorView to distinguish SwFrameShell from
+       SwWrtShell. */
+    const ViewShell       *pCreatorView;
     SwDocFac        *pClpDocFac;
     Graphic         *pClpGraphic, *pClpBitmap, *pOrigGrf;
     INetBookmark    *pBkmk;     // URL und Beschreibung!
@@ -224,7 +228,7 @@ public:
     static int PasteFormat( SwWrtShell& rSh, TransferableDataHelper& rData,
                              ULONG nFormat );
 
-    static void FillClipFmtItem( SwWrtShell& rSh,
+    static void FillClipFmtItem( const SwWrtShell& rSh,
                                 const TransferableDataHelper& rData,
                                 SvxClipboardFmtItem & rToFill );
 
@@ -234,8 +238,11 @@ public:
     void SetCleanUp( BOOL bFlag )       { bCleanUp = bFlag; }
 
     // Interfaces for Selection
-    static void CreateSelection( SwWrtShell& rSh );
-    static void ClearSelection( SwWrtShell& rSh );
+    /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */
+    static void CreateSelection( SwWrtShell & rSh,
+                                 const ViewShell * pCreator = NULL );
+    static void ClearSelection( SwWrtShell& rSh,
+                                const ViewShell * pCreator = NULL );
 
 };
 

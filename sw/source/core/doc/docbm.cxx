@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-11-07 18:39:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,17 +480,16 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
     for( nCnt = 0; nCnt < rTbl.Count(); ++nCnt )
     {
         // liegt auf der Position ??
+        int eType = BKMK_POS_NONE;
         SwRedline* pRedl = rTbl[ nCnt ];
 
-        // get start/end positions
-        SwPosition *pRStt = pRedl->GetPoint(),
-                   *pREnd = pRedl->GetMark();
+        SwPosition *pRStt = &pRedl->GetBound(TRUE),
+                   *pREnd = &pRedl->GetBound(FALSE);
         if( *pRStt > *pREnd )
         {
-            SwPosition *pTmp = pRStt; pRStt = pREnd; pREnd = pTmp;
+            SwPosition *pTmp = pRStt; pRStt = pREnd, pREnd = pTmp;
         }
 
-        // treat start position
         if( Greater( *pRStt, rStt, pSttIdx ) && Lower( *pRStt, rEnd, pEndIdx ))
         {
             pRStt->nNode = rEnd;
@@ -514,10 +513,7 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                 pRStt->nContent.Assign( pCNd, nTmp );
             }
         }
-
-        // treat end position (unless start == end, i.e. no mark)
-        if( ( pRStt != pREnd ) &&
-            Greater( *pREnd, rStt, pSttIdx ) && Lower( *pREnd, rEnd, pEndIdx ))
+        if( Greater( *pREnd, rStt, pSttIdx ) && Lower( *pREnd, rEnd, pEndIdx ))
         {
             pREnd->nNode = rStt;
             if( pSttIdx )

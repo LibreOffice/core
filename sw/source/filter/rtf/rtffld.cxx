@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mmaher $ $Date: 2002-12-02 17:26:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
@@ -176,19 +178,19 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 {
     // Strings sind PascalStrings; Laenge steht an 1. Stellen, dadurch wird
     // sich der Aufruf von strlen erspart!!!
-    sal_Char __READONLY_DATA sTOC[]=        "\3toc";
-    sal_Char __READONLY_DATA sIMPORT[]=     "\6import";
-    sal_Char __READONLY_DATA sINDEX[]=      "\5index";
-    sal_Char __READONLY_DATA sSYMBOL[]=     "\6symbol";
-    sal_Char __READONLY_DATA sPAGE[]=       "\4page";
-    sal_Char __READONLY_DATA sNUMPAGES[]=   "\x8numpages";
-    sal_Char __READONLY_DATA sDATE[]=       "\4date";
-    sal_Char __READONLY_DATA sTIME[]=       "\4time";
-    sal_Char __READONLY_DATA sDATA[]=       "\4data";
-    sal_Char __READONLY_DATA sMERGEFLD[]=   "\10mergefield";
-    sal_Char __READONLY_DATA sIMPORT2[]=    "\16includepicture";
-    sal_Char __READONLY_DATA sHYPERLINK[]=  "\x9hyperlink";
-    sal_Char __READONLY_DATA sEQ[]=         "\2eq";
+    sal_Char __READONLY_DATA sTOC[]=        "\x03""toc";
+    sal_Char __READONLY_DATA sIMPORT[]=     "\x06""import";
+    sal_Char __READONLY_DATA sINDEX[]=      "\x05""index";
+    sal_Char __READONLY_DATA sSYMBOL[]=     "\x06""symbol";
+    sal_Char __READONLY_DATA sPAGE[]=       "\x04""page";
+    sal_Char __READONLY_DATA sNUMPAGES[]=   "\x08""numpages";
+    sal_Char __READONLY_DATA sDATE[]=       "\x04""date";
+    sal_Char __READONLY_DATA sTIME[]=       "\x04""time";
+    sal_Char __READONLY_DATA sDATA[]=       "\x04""data";
+    sal_Char __READONLY_DATA sMERGEFLD[]=   "\x0A""mergefield";
+    sal_Char __READONLY_DATA sIMPORT2[]=    "\x0E""includepicture";
+    sal_Char __READONLY_DATA sHYPERLINK[]=  "\x09""hyperlink";
+    sal_Char __READONLY_DATA sEQ[]=         "\x02""eq";
 
     struct _Dummy_RTF_FLD_TYPES
     {
@@ -247,27 +249,24 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 
 static USHORT CheckNumberFmtStr( const String& rNStr )
 {
-    // zur Kontrolle, falls jemand meint, neue Werte zufuegen zu muessen
-#define NUMBERTAB_SZ 8
-    sal_Char __READONLY_DATA
-        sNType0[] = "\10ALPHABETIC",       /* CHARS_UPPER_LETTER*/
-        sNType1[] = "\10alphabetic",       /* CHARS_LOWER_LETTER*/
-        sNType2[] = "\5ROMAN",            /* ROMAN_UPPER       */
-        sNType3[] = "\5roman",            /* ROMAN_LOWER       */
-        sNType4[] = "\6ARABIC",           /* ARABIC            */
-        sNType5[] = "\4NONE",             /* NUMBER_NONE       */
-        sNType6[] = "\4CHAR",             /* CHAR_SPECIAL      */
-        sNType7[] = "\4PAGE";             /* PAGEDESC          */
-    static const sal_Char* __READONLY_DATA aNumberTypeTab[ NUMBERTAB_SZ ] =
+    const static sal_Char* aNumberTypeTab[] =
     {
-        sNType0, sNType1, sNType2, sNType3, sNType4,
-        sNType5, sNType6, sNType7
+        "\x0A""ALPHABETIC",       /* CHARS_UPPER_LETTER*/
+        "\x0A""alphabetic",       /* CHARS_LOWER_LETTER*/
+        "\x05""ROMAN",            /* ROMAN_UPPER       */
+        "\x05""roman",            /* ROMAN_LOWER       */
+        "\x06""ARABIC",           /* ARABIC            */
+        "\x04""NONE",             /* NUMBER_NONE       */
+        "\x04""CHAR",             /* CHAR_SPECIAL      */
+        "\x04""PAGE"              /* PAGEDESC          */
     };
 
+    ASSERT(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
+           >= SVX_NUM_PAGEDESC - SVX_NUM_CHARS_UPPER_LETTER, "impossible");
 
-    for( USHORT n = SVX_NUM_CHARS_UPPER_LETTER;  n <= SVX_NUM_PAGEDESC; n++ )
+    for (USHORT n = SVX_NUM_CHARS_UPPER_LETTER;  n <= SVX_NUM_PAGEDESC; ++n)
     {
-        const sal_Char* pCmp = aNumberTypeTab[ n ];
+        const sal_Char* pCmp = aNumberTypeTab[n - SVX_NUM_CHARS_UPPER_LETTER];
         int nLen = *pCmp++;
         if( rNStr.EqualsAscii( pCmp, 0, nLen ))
             return 2 <= n ? n : (n + SVX_NUM_CHARS_UPPER_LETTER_N);
@@ -365,7 +364,7 @@ xub_StrLen lcl_FindEndBracket( const String& rStr )
 void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
                             sal_Unicode nSttKey )
 {
-    int nSubSupFlag;
+    int nSubSupFlag(0);
     RtfFieldSwitch aRFS( rStr );
     while( !aRFS.IsAtEnd() )
     {
@@ -936,8 +935,10 @@ void SwRTFParser::ReadField()
     String sFieldStr, sFieldNm;
     BYTE cCh;
 
-    while( nOpenBrakets && IsParserWorking() )
-        switch( GetNextToken() )
+    int nToken;
+    while (nOpenBrakets && IsParserWorking())
+    {
+        switch (nToken = GetNextToken())
         {
         case '}':
             {
@@ -965,13 +966,9 @@ void SwRTFParser::ReadField()
                     }
                     sFieldStr.Erase();
                 }
-                else if( RTFFLD_UNKNOWN == nRet ) // FieldResult wurde eingelesen
+                else if (RTFFLD_UNKNOWN == nRet)
                 {
-                    // der String ist der Wert vom Feld
-//                  sFieldStr.Insert( '"', 0 );
-//                  sFieldStr.Insert( '"' );
-
-                    // besorge mal das Feld:
+                    // FieldResult wurde eingelesen
                     SwTxtNode* pTxtNd = pPam->GetPoint()->nNode.GetNode().GetTxtNode();
                     SwTxtAttr* pFldAttr = pTxtNd->GetTxtAttr(
                             pPam->GetPoint()->nContent.GetIndex()-1 );
@@ -1109,14 +1106,17 @@ INSINGLECHAR:
                 sFieldStr.Insert( sTmp, 3 );
             }
             break;
+        default:
+            SvxRTFParser::NextToken( nToken );
+            break;
+        }
     }
 
-    if( RTFFLD_IMPORT == nRet && sFieldNm.Len() )
-    {
-        // Grafik einfuegen
+    // Grafik einfuegen
+    if (RTFFLD_IMPORT == nRet && sFieldNm.Len())
         InsPicture( sFieldNm );
-    }
 
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 14:06:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,16 @@ interface BaseTextEditView : View
     SID_IMAGE_ORIENTATION
     [
         StateMethod = GetState ;
+    ]
+    FN_INSERT_FIELD_DATA_ONLY // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_QRY_MERGE  // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
     ]
 }
 

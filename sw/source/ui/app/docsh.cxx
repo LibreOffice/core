@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 14:24:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
+#ifndef _SVX_ADJITEM_HXX //autogen
+#include <svx/adjitem.hxx>
+#endif
+
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
@@ -184,12 +188,17 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-
+#ifndef _SWPRTOPT_HXX
+#include <swprtopt.hxx>
+#endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>         // fuer die aktuelle Sicht
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
 #endif
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>        // Verbindung zur Core
@@ -216,7 +225,10 @@
 #include <usrpref.hxx>
 #endif
 #ifndef _SHELLIO_HXX
-#include <shellio.hxx>
+#include <shellio.hxx>      // I/O
+#endif
+#ifndef _SW3IO_HXX
+#include <sw3io.hxx>        // I/O, Hausformat
 #endif
 #ifndef _DOCSTYLE_HXX
 #include <docstyle.hxx>
@@ -244,9 +256,6 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
-#endif
-#ifndef _NDGRF_HXX
-#include <ndgrf.hxx>
 #endif
 
 #ifndef _SWSWERROR_H
@@ -418,6 +427,9 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
             aStor->SetVersion( (long)pFlt->GetVersion() );
     }
+    // beim Sw3-Reader noch den pIo-Pointer setzen
+    if( pRead == ReadSw3 )
+        ((Sw3Reader*)pRead)->SetSw3Io( pIo );
 
     if( pFlt->GetDefaultTemplate().Len() )
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
@@ -467,6 +479,9 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
         RemoveLink();
     pDoc = pRdr->GetDoc();
 
+    /* #106748# Restore the pool default if reading a saved document. */
+    pDoc->GetAttrPool().ResetPoolDefaultItem(RES_PARATR_ADJUST);
+
     // die DocInfo vom Doc am DocShell-Medium setzen
     if( GetMedium()->GetFilter() &&
         GetMedium()->GetFilter()->UsesStorage() )
@@ -507,8 +522,10 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 BOOL SwDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Save" );
-    sal_Bool bXML = GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
-
+    sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
+    //#i3370# remove quick help to prevent saving of autocorrection suggestions
+    if(pView)
+        pView->GetEditWin().StopQuickHelp();
     SwWait aWait( *this, TRUE );
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxInPlaceObject::Save() )
@@ -520,17 +537,17 @@ BOOL SwDocShell::Save()
             break;
 
         case SFX_CREATE_MODE_ORGANIZER:
+            if( bXML )
             {
                 WriterRef xWrt;
-                if( bXML )
-                    ::GetXMLWriter( aEmptyStr, xWrt );
-                else
-                    ::GetSw3Writer( aEmptyStr, xWrt );
+                ::GetXMLWriter( aEmptyStr, xWrt );
                 xWrt->SetOrganizerMode( TRUE );
-                SwWriter aWrt( *GetStorage(), *pDoc );
+                SwWriter aWrt( *pIo->GetStorage(), *pDoc );
                 nErr = aWrt.Write( xWrt );
                 xWrt->SetOrganizerMode( FALSE );
             }
+            else
+                nErr = pIo->SaveStyles();
             break;
 
         case SFX_CREATE_MODE_EMBEDDED:
@@ -544,7 +561,7 @@ BOOL SwDocShell::Save()
             {
                 if( pDoc->ContainsMSVBasic() )
                 {
-                    SvxImportMSVBasic aTmp( *this, *GetStorage() );
+                    SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
                     aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage() )
                         nVBWarning = SvxImportMSVBasic::
@@ -555,7 +572,7 @@ BOOL SwDocShell::Save()
                 if( !bXML &&
                     !ISA( SwGlobalDocShell ) && !ISA( SwWebDocShell ) &&
                     SFX_CREATE_MODE_EMBEDDED != GetCreateMode() )
-                    AddXMLAsZipToTheStorage( *GetStorage() );
+                    AddXMLAsZipToTheStorage( *pIo->GetStorage() );
 
                 // TabellenBox Edit beenden!
                 if( pWrtShell )
@@ -563,12 +580,27 @@ BOOL SwDocShell::Save()
 
                 WriterRef xWrt;
                 if( bXML )
+                {
                     ::GetXMLWriter( aEmptyStr, xWrt );
+                }
                 else
+                {
                     ::GetSw3Writer( aEmptyStr, xWrt );
+                    ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, FALSE );
+                }
 
-                SwWriter aWrt( *GetStorage(), *pDoc );
+                BOOL bLockedView;
+                if ( pWrtShell )
+                {
+                    bLockedView = pWrtShell->IsViewLocked();
+                    pWrtShell->LockView( TRUE );    //lock visible section
+                }
+
+                SwWriter aWrt( *pIo->GetStorage(), *pDoc );
                 nErr = aWrt.Write( xWrt );
+
+                if ( pWrtShell )
+                    pWrtShell->LockView( bLockedView );
             }
             break;
         }
@@ -595,6 +627,9 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
     sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
+    //#i3370# remove quick help to prevent saving of autocorrection suggestions
+    if(pView)
+        pView->GetEditWin().StopQuickHelp();
 
     if( pDoc->IsGlobalDoc() && !pDoc->IsGlblDocSaveLinks() )
         RemoveOLEObjects();
@@ -644,7 +679,7 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
 
         if( pDoc->ContainsMSVBasic() )
         {
-            SvxImportMSVBasic aTmp( *this, *GetStorage() );
+            SvxImportMSVBasic aTmp( *this, *pIo->GetStorage() );
             aTmp.SaveOrDelMSVBAStorage( FALSE, aEmptyStr );
                     if( OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage() )
                         nVBWarning = SvxImportMSVBasic::
@@ -672,12 +707,27 @@ BOOL SwDocShell::SaveAs( SvStorage * pStor )
 
         WriterRef xWrt;
         if( bXML )
+        {
             ::GetXMLWriter( aEmptyStr, xWrt );
+        }
         else
+        {
             ::GetSw3Writer( aEmptyStr, xWrt );
+            ((Sw3Writer*)&xWrt)->SetSw3Io( pIo, TRUE );
+        }
+
+        BOOL bLockedView;
+        if ( pWrtShell )
+        {
+            bLockedView = pWrtShell->IsViewLocked();
+            pWrtShell->LockView( TRUE );    //lock visible section
+        }
 
         SwWriter aWrt( *pStor, *pDoc );
         nErr = aWrt.Write( xWrt );
+
+        if ( pWrtShell )
+            pWrtShell->LockView( bLockedView );
 
         if( bIsModified )
             pDoc->SetModified();
@@ -716,14 +766,20 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
                  SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
         return FALSE;
     }
-
+    //#i3370# remove quick help to prevent saving of autocorrection suggestions
+    if(pView)
+        pView->GetEditWin().StopQuickHelp();
     ULONG nVBWarning = 0;
-    if( pDoc->ContainsMSVBasic() && xWriter->IsStgWriter() )
+    if( pDoc->ContainsMSVBasic() )
     {
         BOOL bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
              && OFF_APP()->GetFilterOptions()->IsLoadWordBasicStorage();
 
-        SvStorage* pStg = rMedium.GetStorage();
+        SvStorage* pStg;
+        if( xWriter->IsStgWriter() )
+            pStg = rMedium.GetStorage();
+        else
+            pStg = pIo->GetStorage();
         SvxImportMSVBasic aTmp( *this, *pStg );
         nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave,
                                 String::CreateFromAscii("Macros") );
@@ -907,13 +963,24 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 }
 
 /*--------------------------------------------------------------------
+    Beschreibung:   Haende weg
+ --------------------------------------------------------------------*/
+
+
+void SwDocShell::HandsOff()
+{
+    pIo->HandsOff();
+    SfxInPlaceObject::HandsOff();
+}
+
+/*--------------------------------------------------------------------
     Beschreibung: ??? noch nicht zu aktivieren, muss TRUE liefern
  --------------------------------------------------------------------*/
+
 
 BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveCompleted" );
-    BOOL bClearNm = !pStor || !IsHandsOff();
     BOOL bRet = SfxInPlaceObject::SaveCompleted( pStor );
     if( bRet )
     {
@@ -923,18 +990,7 @@ BOOL SwDocShell::SaveCompleted( SvStorage * pStor )
         else
             pDoc->ResetModified();
 
-
-        // Hier muss noch ueber die Grafiknodes iteriert werden, um
-        // ihnen zu sagen, wie ihr neuer Streamname lautet!
-        // Da Grafiken Flys sind, liegen die Nodes im Autotext-Bereich
-        SwNodes& rNds = pDoc->GetNodes();
-        ULONG nEnd = rNds.GetEndOfAutotext().GetIndex();
-        for( ULONG nIdx = rNds.GetEndOfInserts().GetIndex() + 1; nIdx < nEnd; ++nIdx)
-        {
-            SwGrfNode* pNd = rNds[ nIdx ]->GetGrfNode();
-            if( pNd )
-                pNd->SaveCompleted( bClearNm );
-        }
+        bRet = pIo->SaveCompleted( pStor );
     }
 
     if( xOLEChildList.Is() )
@@ -992,7 +1048,8 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetLineColor();
     pDev->SetBackground();
     BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), pDev, aRect );
+    SwPrtOptions aOpts( aEmptyStr );
+    ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 
     if( pOrig )

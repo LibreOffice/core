@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:23:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,18 +91,19 @@ TabDialog DLG_FLD_INSERT
                 Text [ french ] = "Document" ;
                 Text [ dutch ] = "Document" ;
                 Text [ portuguese ] = "Documento" ;
-                Text[ chinese_simplified ] = "ÎÄµµ";
+                Text[ chinese_simplified ] = "æ–‡æ¡£";
                 Text[ russian ] = "Äîêóìåíò";
                 Text[ polish ] = "Dokument";
-                Text[ japanese ] = "ÄŞ·­ÒİÄ";
-                Text[ chinese_traditional ] = "¤å¥ó";
+                Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
+                Text[ chinese_traditional ] = "æ–‡ä»¶";
                 Text[ arabic ] = "ÇáãÓÊäÏ";
                 Text[ greek ] = "¸ããñáöï";
-                Text[ korean ] = "¹®¼­";
+                Text[ korean ] = "ë¬¸ì„œ";
                 Text[ turkish ] = "Belge";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Documento";
+                Text[ catalan ] = "Document";
                 Text[ finnish ] = "Asiakirja";
+                Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£";
             };
             PageItem
             {
@@ -119,18 +120,19 @@ TabDialog DLG_FLD_INSERT
                 Text [ french ] = "Références" ;
                 Text [ dutch ] = "Verwijzingen" ;
                 Text [ portuguese ] = "Referências" ;
-                Text[ chinese_simplified ] = "ÒıÓÃ";
+                Text[ chinese_simplified ] = "å¼•ç”¨";
                 Text[ russian ] = "Ññûëêè";
                 Text[ polish ] = "Odwo³ania";
-                Text[ japanese ] = "QÆ";
-                Text[ chinese_traditional ] = "°Ñ·Ó";
+                Text[ japanese ] = "å‚ç…§";
+                Text[ chinese_traditional ] = "åƒç…§";
                 Text[ arabic ] = "ãÑÇÌÚ";
                 Text[ greek ] = "Áíáöïñİò";
-                Text[ korean ] = "ÂüÁ¶";
+                Text[ korean ] = "ì°¸ì¡°";
                 Text[ turkish ] = "Referanslar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Referencias";
+                Text[ catalan ] = "Referències";
                 Text[ finnish ] = "Viitteet";
+                Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡";
             };
             PageItem
             {
@@ -147,18 +149,19 @@ TabDialog DLG_FLD_INSERT
                 Text [ french ] = "Fonctions" ;
                 Text [ dutch ] = "Functies" ;
                 Text [ portuguese ] = "Funções" ;
-                Text[ chinese_simplified ] = "¹¦ÄÜ";
+                Text[ chinese_simplified ] = "åŠŸèƒ½";
                 Text[ russian ] = "Ôóíêöèè";
                 Text[ polish ] = "Funkcje";
-                Text[ japanese ] = "‹@”\\";
-                Text[ chinese_traditional ] = "¥\\¯à";
+                Text[ japanese ] = "æ©Ÿèƒ½";
+                Text[ chinese_traditional ] = "åŠŸèƒ½";
                 Text[ arabic ] = "ãåÇã";
                 Text[ greek ] = "Ëåéôïõñãßåò";
-                Text[ korean ] = "±â´É";
+                Text[ korean ] = "ê¸°ëŠ¥";
                 Text[ turkish ] = "İşlevler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Funciones";
+                Text[ catalan ] = "Funcions";
                 Text[ finnish ] = "Toiminnot";
+                Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
             };
             PageItem
             {
@@ -175,18 +178,19 @@ TabDialog DLG_FLD_INSERT
                 Text [ french ] = "Info document" ;
                 Text [ dutch ] = "Documentinfo" ;
                 Text [ portuguese ] = "Info. sobre documento" ;
-                Text[ chinese_simplified ] = "ÎÄµµĞÅÏ¢";
+                Text[ chinese_simplified ] = "æ–‡æ¡£ä¿¡æ¯";
                 Text[ russian ] = "Ñâåäåíèÿ î äîêóìåíòå";
                 Text[ polish ] = "Informacje o dokumencie";
-                Text[ japanese ] = "ÄŞ·­ÒİÄî•ñ";
-                Text[ chinese_traditional ] = "¤å¥ó¸ê°T";
+                Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆæƒ…å ±";
+                Text[ chinese_traditional ] = "æ–‡ä»¶è³‡è¨Š";
                 Text[ arabic ] = "ãÚáæãÇÊ ÇáãÓÊäÏ";
                 Text[ greek ] = "Ğëçñïöïñßåò åããñÜöïõ";
-                Text[ korean ] = "¹®¼­Á¤º¸";
+                Text[ korean ] = "ë¬¸ì„œ ì •ë³´";
                 Text[ turkish ] = "Belge bilgileri";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Información del documento";
+                Text[ catalan ] = "Informació del document";
                 Text[ finnish ] = "Asiakirjatiedot";
+                Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸­à¸à¸ªà¸²à¸£";
             };
             PageItem
             {
@@ -203,18 +207,19 @@ TabDialog DLG_FLD_INSERT
                 Text [ french ] = "Variables" ;
                 Text [ dutch ] = "Variabelen" ;
                 Text [ portuguese ] = "Variáveis" ;
-                Text[ chinese_simplified ] = "±äÁ¿";
+                Text[ chinese_simplified ] = "å˜é‡";
                 Text[ russian ] = "Ïåğåìåííûå";
                 Text[ polish ] = "Zmienne";
-                Text[ japanese ] = "•Ï”";
-                Text[ chinese_traditional ] = "ÅÜ¶q";
+                Text[ japanese ] = "å¤‰æ•°";
+                Text[ chinese_traditional ] = "è®Šé‡";
                 Text[ arabic ] = "ãÊÛíÑÇÊ";
                 Text[ greek ] = "Ìåôáâëçôİò";
-                Text[ korean ] = "º¯¼ö";
+                Text[ korean ] = "ë³€ìˆ˜";
                 Text[ turkish ] = "Değişkenler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Variables";
                 Text[ finnish ] = "Muuttujat";
+                Text[ thai ] = "à¸•à¸±à¸§à¹à¸›à¸£";
             };
             PageItem
             {
@@ -231,18 +236,19 @@ TabDialog DLG_FLD_INSERT
                 Text [ french ] = "Base de données" ;
                 Text [ dutch ] = "Database" ;
                 Text [ portuguese ] = "Base de dados" ;
-                Text[ chinese_simplified ] = "Êı¾İ¿â";
+                Text[ chinese_simplified ] = "æ•°æ®åº“";
                 Text[ russian ] = "Áàçà äàííûõ";
                 Text[ polish ] = "Baza danych";
-                Text[ japanese ] = "ÃŞ°ÀÍŞ°½";
-                Text[ chinese_traditional ] = "¸ê®Æ®w";
+                Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
+                Text[ chinese_traditional ] = "è³‡æ–™åº«";
                 Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ";
                 Text[ greek ] = "ÂÜóç äåäïìİíùí";
-                Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
+                Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤";
                 Text[ turkish ] = "Veritabanı";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Base de datos";
+                Text[ catalan ] = "Base de dades";
                 Text[ finnish ] = "Tietokanta";
+                Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
             };
         };
     };
@@ -251,27 +257,28 @@ TabDialog DLG_FLD_INSERT
         Text = "~Einfügen" ;
         Text [ ENGLISH ] = "~Insert" ;
         Text [ norwegian ] = "~Insert" ;
-        Text [ italian ] = "~Inserisci" ;
+        Text [ italian ] = "Inserisci" ;
         Text [ portuguese_brazilian ] = "~Inserir" ;
         Text [ portuguese ] = "~Inserir" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "~Indsæt" ;
-        Text [ french ] = "~Insérer" ;
+        Text [ french ] = "Insérer" ;
         Text [ swedish ] = "~Infoga" ;
         Text [ dutch ] = "~Invoegen" ;
         Text [ spanish ] = "~Insertar" ;
         Text [ english_us ] = "~Insert" ;
-        Text[ chinese_simplified ] = "²åÈë(~I)";
-        Text[ russian ] = "Âñòàâêà";
+        Text[ chinese_simplified ] = "æ’å…¥(~I)";
+        Text[ russian ] = "Âñòàâèòü";
         Text[ polish ] = "Wstaw";
-        Text[ japanese ] = "‘}“ü(~I)";
-        Text[ chinese_traditional ] = "´¡¤J(~I)";
+        Text[ japanese ] = "æŒ¿å…¥(~I)";
+        Text[ chinese_traditional ] = "æ’å…¥(~I)";
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ greek ] = "~ÅéóáãùãŞ";
-        Text[ korean ] = "»ğÀÔ(~I)";
+        Text[ korean ] = "ì‚½ì…(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Insertar";
+        Text[ catalan ] = "~Insereix";
+        Text[ thai ] = "à¹~à¸—à¸£à¸";
     };
     String STR_FLD_CLOSE
     {
@@ -280,24 +287,25 @@ TabDialog DLG_FLD_INSERT
         Text [ english_us ] = "~Close" ;
         Text [ italian ] = "~Chiudi" ;
         Text [ spanish ] = "~Cerrar" ;
-        Text [ french ] = "~Fermer" ;
+        Text [ french ] = "Fermer" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ danish ] = "Luk" ;
         Text [ portuguese_brazilian ] = "~Schlie?en" ;
         Text [ portuguese ] = "~Fechar" ;
-        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ russian ] = "Çàêğûòü";
         Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
+        Text[ chinese_traditional ] = "é—œé–‰(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ greek ] = "Êëåßóéìï";
-        Text[ korean ] = "´İ±â(~C)";
+        Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "~Çıkış";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     Text [ english_us ] = "Fields" ;
     Text [ portuguese_brazilian ] = "Feldbefehle" ;
@@ -308,19 +316,29 @@ TabDialog DLG_FLD_INSERT
     Text [ french ] = "Champs" ;
     Text [ dutch ] = "Veldopdracht" ;
     Text [ portuguese ] = "Campos" ;
-    Text[ chinese_simplified ] = "×Ö¶ÎÖ¸Áî";
-    Text[ russian ] = "Ïîëå";
+    Text[ chinese_simplified ] = "å­—æ®µæŒ‡ä»¤";
+    Text[ russian ] = "Ïîëÿ";
     Text[ polish ] = "Pola";
-    Text[ japanese ] = "Ì¨°ÙÄŞ";
-    Text[ chinese_traditional ] = "Äæ¦ì«ü¥O";
+    Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
+    Text[ chinese_traditional ] = "æ¬„ä½æŒ‡ä»¤";
     Text[ arabic ] = "ÍŞæá";
     Text[ greek ] = "Åíôïëİò ğåäßùí";
-    Text[ korean ] = "ÇÊµå";
+    Text[ korean ] = "í•„ë“œ";
     Text[ turkish ] = "Alan öğeleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Campos";
-    Text[ finnish ] = "Kentät";
+    Text[ catalan ] = "Camps";
+    Text[ finnish ] = "Kenttä";
+    Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 14:39:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
+#endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
@@ -217,6 +220,57 @@ void SwEditShell::Insert(const String &rStr)
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
 
     FOREACHPAM_END()
+
+    // calculate cursor bidi level
+    SwCursor* pTmpCrsr = _GetCrsr();
+    const BOOL bDoNotSetBidiLevel = ! pTmpCrsr ||
+                                    ( 0 != (SwUnoCrsr*)*pTmpCrsr );
+
+    if ( ! bDoNotSetBidiLevel )
+    {
+        SwNode& rNode = pTmpCrsr->GetPoint()->nNode.GetNode();
+        if ( rNode.IsTxtNode() )
+        {
+            SwIndex& rIdx = pTmpCrsr->GetPoint()->nContent;
+            xub_StrLen nPos = rIdx.GetIndex();
+            xub_StrLen nPrevPos = nPos;
+            if ( nPrevPos )
+                --nPrevPos;
+
+            // If some day the font fallback works, we should do this here:
+            // 1. get script info
+            // 2. call InitScriptInfo( rNode, bRTL )
+            // This would avoid calling UpdateBidiInfo here, instead it would
+            // be called within InitScriptInfo and only if there are complex
+            // characters in the string.
+
+            SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( ((SwTxtNode&)rNode),
+                                                              sal_True );
+
+            BYTE nLevel = 0;
+            if ( ! pSI )
+            {
+                // seems to be an empty paragraph.
+                Point aPt;
+                SwCntntFrm* pFrm =
+                        ((SwTxtNode&)rNode).GetFrm( &aPt, pTmpCrsr->GetPoint(),
+                                                    sal_False );
+
+                SwScriptInfo aScriptInfo;
+                aScriptInfo.SetDefaultDir( pFrm->IsRightToLeft() );
+                aScriptInfo.UpdateBidiInfo( ((SwTxtNode&)rNode).GetTxt() );
+                nLevel = aScriptInfo.DirType( nPrevPos );
+            }
+            else
+            {
+                pSI->UpdateBidiInfo( ((SwTxtNode&)rNode).GetTxt() );
+                nLevel = pSI->DirType( nPrevPos );
+            }
+
+            pTmpCrsr->SetCrsrBidiLevel( nLevel );
+        }
+    }
+
     EndAllAction();
 }
 
@@ -1071,7 +1125,14 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
         StartAllAction();
         pDel->SetInsText( bInsText );
         SetOverwriteCrsr( pDel->IsOverwriteCursor() );
+        const SwPosition aPos( *pDel->GetPoint() );
         GetDoc()->DeleteExtTextInput( pDel );
+
+        // In this case, the "replace" function did not set the cursor
+        // to the original position. Therefore we have to do this manually.
+        if ( ! bInsText && IsOverwriteCrsr() )
+            *GetCrsr()->GetPoint() = aPos;
+
         EndAllAction();
     }
     return sRet;

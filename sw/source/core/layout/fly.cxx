@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-05 12:30:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1461,6 +1461,7 @@ void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl )
                 if ( ((SwTabFrm*)pFrm)->IsFollow() )
                     ((SwTabFrm*)pFrm)->bLockBackMove = FALSE;
             }
+
             pFrm = pFrm->FindNext();
             if( pFrm && pFrm->IsSctFrm() && pSect )
             {
@@ -2180,12 +2181,15 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
                 {
                     // change anchor position
                     pO->SetAnchorPos( GetAnchorPos() );
-                    SwPageFrm* pPage = FindPageFrm();
-                    if ( pPage )
+                    if ( GetValidPosFlag() )
                     {
-                        // check if the new position
-                        // would not exceed the margins of the page
-                        CaptureDrawObj( *pO, pPage->Frm() );
+                        SwPageFrm* pPage = FindPageFrm();
+                        if ( pPage && ! pPage->IsInvalidLayout() )
+                        {
+                            // check if the new position
+                            // would not exceed the margins of the page
+                            CaptureDrawObj( *pO, pPage->Frm() );
+                        }
                     }
 
                     ((SwDrawContact*)GetUserCall(pO))->ChkPage();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 12:24:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,6 @@ BOOL _FindLine( const _FndLine*& rpLine, void* pPara )
     return TRUE;
 }
 
-
 void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor )
 {
     //Zuerst die selektierten Boxen einsammeln.
@@ -296,11 +295,15 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor )
         return ;
 
     //Die selektierte Struktur kopieren.
-    _FndBox aFndBox( aBoxes );
-
-    //Diejenigen Lines einsammeln, die nur selektierte Boxen enthalten.
     const SwTable &rTable = aBoxes[0]->GetSttNd()->FindTableNode()->GetTable();
     LinesAndTable aPara( rArr, rTable );
+    _FndBox aFndBox( 0, 0 );
+    {
+        _FndPara aPara( aBoxes, &aFndBox );
+        ((SwTableLines&)rTable.GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
+    }
+
+    //Diejenigen Lines einsammeln, die nur selektierte Boxen enthalten.
     const _FndBox *pTmp = &aFndBox;
     ::_FindBox( pTmp, &aPara );
 
@@ -1427,6 +1430,9 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
     SwTabCols aTabCols;
     GetTabCols( aTabCols, 0, (SwCellFrm*)pBoxFrm );
 
+    if ( ! aTabCols.Count() )
+        return;
+
     const BYTE nTmp = (BYTE)Max( USHORT(255), USHORT(aTabCols.Count() + 1) );
     SvUShorts aWish( nTmp, nTmp ),
               aMins( nTmp, nTmp );
@@ -1501,13 +1507,13 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
                 else
                     nDiff -= aTabCols[i] - aTabCols[i-1];
 
-                USHORT nTabRight = aTabCols.GetRight() + nDiff;
+                long nTabRight = aTabCols.GetRight() + nDiff;
 
                 //Wenn die Tabelle zu breit wuerde begrenzen wir die Anpassung
                 //auf das erlaubte Maximum.
                 if ( !bBalance && nTabRight > aTabCols.GetRightMax() )
                 {
-                    const USHORT nTmp = nTabRight - aTabCols.GetRightMax();
+                    const long nTmp = nTabRight - aTabCols.GetRightMax();
                     nDiff     -= nTmp;
                     nTabRight -= nTmp;
                 }

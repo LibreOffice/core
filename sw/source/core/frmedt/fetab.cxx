@@ -1,10 +1,18 @@
-/*************************************************************************
+ /*************************************************************************
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.11 $
+<<<<<<< fetab.cxx
+ *  $Revision: 1.12 $
+=======
+ *  $Revision: 1.12 $
+>>>>>>> 1.4.2.6.2.1.20.2
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:54:42 $
+<<<<<<< fetab.cxx
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:03 $
+=======
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:03 $
+>>>>>>> 1.4.2.6.2.1.20.2
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +174,6 @@
 #include <swerror.h>
 #endif
 
-
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
 
@@ -200,6 +207,89 @@ inline const SwCursor& GetShellCursor( const SwCrsrShell& rShell )
     if( !pCrsr )
         pCrsr = (SwShellCrsr*)*rShell.GetSwCrsr( FALSE );
     return *pCrsr;
+}
+
+void SwFEShell::ParkCursorInTab()
+{
+    SwCursor * pSwCrsr = GetSwCrsr();
+
+    ASSERT(pSwCrsr, "no SwCursor");
+
+    SwPosition aStartPos = *pSwCrsr->GetPoint(), aEndPos = aStartPos;
+
+    SwCursor * pTmpCrsr = (SwCursor *) pSwCrsr;
+
+    /* Search least and greatest position in current cursor ring.
+     */
+    do
+    {
+        const SwPosition * pPt = pTmpCrsr->GetPoint(),
+            * pMk = pTmpCrsr->GetMark();
+
+        if (*pPt < aStartPos)
+            aStartPos = *pPt;
+
+        if (*pPt > aEndPos)
+            aEndPos = *pPt;
+
+        if (*pMk < aStartPos)
+            aStartPos = *pMk;
+
+        if (*pMk > aEndPos)
+            aEndPos = *pMk;
+
+        pTmpCrsr = (SwCursor *) pTmpCrsr->GetNext();
+    }
+    while (pTmpCrsr != pSwCrsr);
+
+    KillPams();
+
+    /* Set cursor to end of selection to ensure IsLastCellInRow works
+       properly. */
+    {
+        SwCursor aTmpCrsr(aEndPos);
+        *pSwCrsr = aTmpCrsr;
+    }
+
+    /* Move the cursor out of the columns to delete and stay in the
+       same row. If the table has only one column the cursor will
+       stay in the row and the shell will take care of it. */
+    if (IsLastCellInRow())
+    {
+        /* If the cursor is in the last row of the table, first
+           try to move it to the previous cell. If that fails move
+           it to the next cell. */
+
+        {
+            SwCursor aTmpCrsr(aStartPos);
+            *pSwCrsr = aTmpCrsr;
+        }
+
+        if (! pSwCrsr->GoPrevCell())
+        {
+            SwCursor aTmpCrsr(aEndPos);
+            *pSwCrsr = aTmpCrsr;
+            pSwCrsr->GoNextCell();
+        }
+    }
+    else
+    {
+        /* If the cursor is not in the last row of the table, first
+           try to move it to the next cell. If that fails move it
+           to the previous cell. */
+
+        {
+            SwCursor aTmpCrsr(aEndPos);
+            *pSwCrsr = aTmpCrsr;
+        }
+
+        if (! pSwCrsr->GoNextCell())
+        {
+            SwCursor aTmpCrsr(aStartPos);
+            *pSwCrsr = aTmpCrsr;
+            pSwCrsr->GoPrevCell();
+        }
+    }
 }
 
 /***********************************************************************
@@ -301,6 +391,26 @@ BOOL SwFEShell::InsertCol( USHORT nCnt, BOOL bBehind )
 #*  Datum      :  MA 03. May. 93
 #*  Update     :  MA 19. Apr. 95
 #***********************************************************************/
+
+/**
+   Determines if the current cursor is in the last row of the table.
+*/
+BOOL SwFEShell::IsLastCellInRow() const
+{
+    SwTabCols aTabCols;
+    GetTabCols( aTabCols );
+    BOOL bResult = FALSE;
+
+    if (IsTableRightToLeft())
+        /* If the table is right-to-left the last row is the most left one. */
+        bResult = 0 == GetCurTabColNum();
+    else
+        /* If the table is left-to-right the last row is the most right one. */
+        bResult = aTabCols.Count() == GetCurTabColNum();
+
+    return bResult;
+}
+
 BOOL SwFEShell::DeleteCol()
 {
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
@@ -331,13 +441,16 @@ BOOL SwFEShell::DeleteCol()
         // Dokument-Position werden sie dann immer an die alte Position gesetzt.
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
-        ParkCrsr( SwNodeIndex( *((SwCellFrm*)pFrm)->GetTabBox()->GetSttNd() ));
+
+        ParkCursorInTab();
 
         // dann loesche doch die Spalten
         bRet = GetDoc()->DeleteRowCol( aBoxes );
+
     }
     else
         bRet = FALSE;
+
     EndAllActionAndCall();
     return bRet;
 }
@@ -377,7 +490,12 @@ BOOL SwFEShell::DeleteRow()
             SwTableNode* pTblNd = ((SwCntntFrm*)pFrm)->GetNode()->FindTableNode();
 
             // suche alle Boxen / Lines
-            _FndBox aFndBox( aBoxes );
+            _FndBox aFndBox( 0, 0 );
+            {
+                _FndPara aPara( aBoxes, &aFndBox );
+                pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+            }
+
             if( !aFndBox.GetLines().Count() )
             {
                 EndAllActionAndCall();
@@ -553,20 +671,30 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
         if ( pLastTable == pTab->GetTable() )
         {
             bDel = FALSE;
-#ifdef VERTICAL_LAYOUT
             SWRECTFN( pTab )
-#endif
+
+            const SwPageFrm* pPage = pTab->FindPageFrm();
+            const ULONG nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
+                                   (pPage->Frm().*fnRect->fnGetLeft)() +
+                                   DOCUMENTBORDER;
+            const ULONG nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
+                                    (pPage->Frm().*fnRect->fnGetLeft)() +
+                                   DOCUMENTBORDER;
+
             if ( pLastTabFrm != pTab )
             {
                 //Wenn der TabFrm gewechselt hat, brauchen wir bei gleicher
                 //Breite nur ein wenig shiften.
-#ifdef VERTICAL_LAYOUT
                 SWRECTFNX( pLastTabFrm )
                 if( (pLastTabFrm->Frm().*fnRect->fnGetWidth)() ==
                     (pTab->Frm().*fnRect->fnGetWidth)() )
                 {
-                    pLastCols->SetLeftMin( (USHORT)
-                                        (pTab->Frm().*fnRect->fnGetLeft)() );
+                    pLastCols->SetLeftMin( nLeftMin );
+
+                    ASSERT( bVert ||
+                            pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
+                            "GetTabCols: wrong result" )
+
                     pLastTabFrm = pTab;
                 }
                 else
@@ -574,28 +702,10 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
             }
 
             if ( !bDel &&
-                 pLastCols->GetLeftMin () == (USHORT)(pTab->Frm().*fnRect->fnGetLeft)() &&
+                 pLastCols->GetLeftMin () == (USHORT)nLeftMin &&
                  pLastCols->GetLeft    () == (USHORT)(pTab->Prt().*fnRect->fnGetLeft)() &&
                  pLastCols->GetRight   () == (USHORT)(pTab->Prt().*fnRect->fnGetRight)()&&
-                 pLastCols->GetRightMax() ==
-                        (USHORT)(pTab->Frm().*fnRect->fnGetRight)() - pLastCols->GetLeftMin() )
-#else
-                if ( pLastTabFrm->Frm().Width() == pTab->Frm().Width() )
-                {
-                    pLastCols->SetLeftMin( (USHORT)pTab->Frm().Left() );
-                    pLastTabFrm = pTab;
-                }
-                else
-                    bDel = TRUE;
-            }
-
-            if ( !bDel &&
-                 pLastCols->GetLeftMin () == (USHORT)pTab->Frm().Left() &&
-                 pLastCols->GetLeft    () == (USHORT)pTab->Prt().Left() &&
-                 pLastCols->GetRight   () == (USHORT)pTab->Prt().Right()&&
-                 pLastCols->GetRightMax() ==
-                        (USHORT)pTab->Frm().Right() - pLastCols->GetLeftMin() )
-#endif
+                 pLastCols->GetRightMax() == (USHORT)nRightMax - pLastCols->GetLeftMin() )
             {
                 if ( pLastCellFrm != pBox )
                 {
@@ -894,7 +1004,7 @@ void SwFEShell::ProtectCells()
     {
         if( IsTableMode() )
             ClearMark();
-        ParkCrsr( GetCrsr()->GetPoint()->nNode );
+        ParkCursorInTab();
     }
     EndAllActionAndCall();
 }
@@ -1240,27 +1350,43 @@ USHORT SwFEShell::GetCurTabColNum() const
                         //              dem CellFrame vergleichen????
             pFrm = pFrm->GetUpper();
         } while ( !pFrm->IsCellFrm() );
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( pFrm )
         const long nX = (pFrm->Frm().*fnRect->fnGetLeft)();
-#else
-        const long nX = pFrm->Frm().Left();
-#endif
 
         //TabCols besorgen, den nur ueber diese erreichen wir die Position.
         SwTabCols aTabCols;
         GetTabCols( aTabCols );
 
-        const long nLeft = aTabCols.GetLeftMin();
-
-        if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
+        if( pFrm->FindTabFrm()->IsRightToLeft() )
         {
-            for ( USHORT i = 0; i < aTabCols.Count(); ++i )
-                if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
-                {
-                    nRet = i + 1;
-                    break;
-                }
+            long nX = (pFrm->Frm().*fnRect->fnGetRight)();
+            const long nRight = aTabCols.GetLeftMin() + aTabCols.GetRight();;
+
+            if ( !::IsSame( nX, nRight ) )
+            {
+                nX = nRight - nX + aTabCols.GetLeft();
+                for ( USHORT i = 0; i < aTabCols.Count(); ++i )
+                    if ( ::IsSame( nX, aTabCols[i] ) )
+                    {
+                        nRet = i + 1;
+                        break;
+                    }
+            }
+        }
+        else
+        {
+            const long nX = (pFrm->Frm().*fnRect->fnGetLeft)();
+            const long nLeft = aTabCols.GetLeftMin();
+
+            if ( !::IsSame( nX, nLeft + aTabCols.GetLeft() ) )
+            {
+                for ( USHORT i = 0; i < aTabCols.Count(); ++i )
+                    if ( ::IsSame( nX, nLeft + aTabCols[i] ) )
+                    {
+                        nRet = i + 1;
+                        break;
+                    }
+            }
         }
     }
     return nRet;
@@ -1327,7 +1453,6 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFu
                 pFrm = pFrm->GetUpper();
             if ( pFrm )
             {
-#ifdef VERTICAL_LAYOUT
                 if( pFrm->IsVertical() )
                 {
                     if ( ::IsSame(pFrm->Frm().Top(), rPt.Y()) ||
@@ -1340,13 +1465,6 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFu
                          ::IsSame(pFrm->Frm().Right(),rPt.X()) )
                         return pFrm;
                 }
-#else
-                if ( ::IsSame(pFrm->Frm().Left(), rPt.X()) ||
-                     ::IsSame(pFrm->Frm().Right(),rPt.X()) )
-                {
-                    return pFrm;
-                }
-#endif
                 pFrm = pFrm->GetUpper();
             }
         } while ( pFrm );
@@ -1558,12 +1676,8 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
     // sollte die Tabelle noch auf relativen Werten (USHRT_MAX) stehen
     // dann muss es jetzt auf absolute umgerechnet werden.
     const SwFmtFrmSize& rTblFrmSz = pTab->GetFmt()->GetFrmSize();
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pTab )
     long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
-#else
-    long nPrtWidth = pTab->Prt().Width();
-#endif
     if( TBLVAR_CHGABS == pTab->GetTable()->GetTblChgMode() &&
         ( eType & WH_COL_LEFT || eType & WH_COL_RIGHT ) &&
         HORI_NONE == pTab->GetFmt()->GetHoriOrient().GetHoriOrient() &&
@@ -1576,11 +1690,7 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
 
     if( (eType & (WH_FLAG_BIGGER | WH_FLAG_INSDEL)) ==
         (WH_FLAG_BIGGER | WH_FLAG_INSDEL) )
-#ifdef VERTICAL_LAYOUT
         nDiff = USHORT((pFrm->Frm().*fnRect->fnGetWidth)());
-#else
-        nDiff = USHORT(pFrm->Frm().Width());
-#endif
 
     SwTwips nLogDiff = nDiff;
     nLogDiff *= pTab->GetFmt()->GetFrmSize().GetWidth();
@@ -1762,7 +1872,7 @@ BOOL SwFEShell::GetAutoSum( String& rFml ) const
 
     return TRUE;
 }
-/* -----------------------------22.08.2002 12:37------------------------------
+/* -----------------------------22.08.2002 12:50------------------------------
 
  ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsTableRightToLeft() const
@@ -1783,3 +1893,4 @@ BOOL SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
     ASSERT( pTabFrm, "Table not found" );
     return pTabFrm ? pTabFrm->IsRightToLeft() : FALSE;
 }
+

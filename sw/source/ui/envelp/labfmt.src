@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:20:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,24 +97,25 @@ TabPage TP_LAB_FMT
         Text [ portuguese ] = "Espaçamento ~horiz." ;
         Text [ finnish ] = "~Vaakaetäisyys" ;
         Text [ danish ] = "Vandret afstand" ;
-        Text [ french ] = "Écart ~horizontal" ;
+        Text [ french ] = "Écart horizontal" ;
         Text [ swedish ] = "~Horis. avstånd" ;
         Text [ dutch ] = "~Horiz. afstand" ;
         Text [ spanish ] = "Distancia ~horiz." ;
         Text [ english_us ] = "Hori~zontal pitch" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Ë®Æ½¼ä¸ô(~Z)";
+        Text[ chinese_simplified ] = "æ°´å¹³é—´éš”(~Z)";
         Text[ russian ] = "Øàã ïî ãîğèçîíò.";
         Text[ polish ] = "Odstêp poziomy";
-        Text[ japanese ] = "‰¡‚ÌŠÔŠu(~Z)";
-        Text[ chinese_traditional ] = "¤ô¥­¶¡¹j(~Z)";
+        Text[ japanese ] = "æ¨ªã®é–“éš”(~Z)";
+        Text[ chinese_traditional ] = "æ°´å¹³é–“éš”(~Z)";
         Text[ arabic ] = "ÇáÎØæÉ ÇáÃİŞíÉ";
         Text[ greek ] = "Ïñéæüíôéá áğüóôáóç";
-        Text[ korean ] = "°¡·Î °£°İ(~Z)";
+        Text[ korean ] = "ìˆ˜í‰ ê°„ê²©(~Z)";
         Text[ turkish ] = "~Yatay boşluk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Distancia ~horiz.";
+        Text[ catalan ] = "Distància ~horit.";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¹à¸™à¸§à¸™~à¸­à¸™";
     };
     MetricField FLD_HDIST
     {
@@ -144,20 +145,21 @@ TabPage TP_LAB_FMT
         Text [ french ] = "Écart ~vertical" ;
         Text [ swedish ] = "~Vert. avstånd" ;
         Text [ dutch ] = "V~ert. afstand" ;
-        Text [ spanish ] = "Distancia ~vert." ;
+        Text [ spanish ] = "Distancia ~vertical" ;
         Text [ english_us ] = "~Vertical pitch" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "´¹Ö±¼ä¸ô(~V)";
+        Text[ chinese_simplified ] = "å‚ç›´é—´éš”(~V)";
         Text[ russian ] = "Øàã ïî âåğòèê.";
         Text[ polish ] = "Odstêp pionowy";
-        Text[ japanese ] = "c‚ÌŠÔŠu(~V)";
-        Text[ chinese_traditional ] = "««ª½¶¡¹j(~V)";
+        Text[ japanese ] = "ç¸¦ã®é–“éš”(~V)";
+        Text[ chinese_traditional ] = "å‚ç›´é–“éš”(~V)";
         Text[ arabic ] = "ÇáÎØæÉ ÇáÑÃÓíÉ";
         Text[ greek ] = "Êáôáêüñõöç áğüóôáóç";
-        Text[ korean ] = "¼¼·Î °£°İ(~V)";
+        Text[ korean ] = "ìˆ˜ì§ ê°„ê²©(~V)";
         Text[ turkish ] = "Dikey boşluk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Distancia ~vert.";
+        Text[ catalan ] = "Distància ~vert.";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¹à¸™à¸§~à¸•à¸±à¹‰à¸‡";
     };
     MetricField FLD_VDIST
     {
@@ -179,28 +181,29 @@ TabPage TP_LAB_FMT
         Text = "~Breite" ;
         Text [ English ] = "Width" ;
         Text [ norwegian ] = "Bredde " ;
-        Text [ italian ] = "~Largh." ;
+        Text [ italian ] = "Larghezza" ;
         Text [ portuguese_brazilian ] = "Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "Bredde" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
-        Text [ spanish ] = "A~ncho" ;
+        Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "~Width" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¿í(~W)";
+        Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "•(~W)";
-        Text[ chinese_traditional ] = "¼e(~W)";
+        Text[ japanese ] = "å¹…(~W)";
+        Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "ë„ˆë¹„(~W)";
         Text[ turkish ] = "Ge~nişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ncho";
+        Text[ catalan ] = "~Amplada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
     };
     MetricField FLD_WIDTH
     {
@@ -227,23 +230,24 @@ TabPage TP_LAB_FMT
         Text [ portuguese ] = "Altura" ;
         Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "Højde" ;
-        Text [ french ] = "~Hauteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "Höj~d" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "~Height" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¸ß(~H)";
-        Text[ russian ] = "Âûñîòà";
+        Text[ chinese_simplified ] = "é«˜åº¦(~H)";
+        Text[ russian ] = "Â~ûñîòà";
         Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³(~H)";
-        Text[ chinese_traditional ] = "°ª(~H)";
+        Text[ japanese ] = "é«˜ã•(~H)";
+        Text[ chinese_traditional ] = "é«˜åº¦(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ korean ] = "ë†’ì´(~H)";
         Text[ turkish ] = "~Yükseklik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ltura";
+        Text[ catalan ] = "A~lçada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡";
     };
     MetricField FLD_HEIGHT
     {
@@ -268,25 +272,26 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "Margine sinistro" ;
         Text [ portuguese_brazilian ] = "Margem esquerda" ;
         Text [ portuguese ] = "Margem esquerda" ;
-        Text [ finnish ] = "~Vasen marginaali" ;
+        Text [ finnish ] = "~Vasen reunus" ;
         Text [ danish ] = "Margen venstre" ;
-        Text [ french ] = "~Marge gauche" ;
+        Text [ french ] = "Marge gauche" ;
         Text [ swedish ] = "Vänster margina~l" ;
-        Text [ dutch ] = "~Marge links" ;
+        Text [ dutch ] = "Linker~marge" ;
         Text [ spanish ] = "Margen i~zquierdo" ;
         Text [ english_us ] = "~Left margin" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "×ó·½Ò³±ß¾à(~L)";
+        Text[ chinese_simplified ] = "å·¦æ–¹é¡µè¾¹è·(~L)";
         Text[ russian ] = "Ëåâûé êğàé";
         Text[ polish ] = "Lewy margines";
-        Text[ japanese ] = "¶—]”’(~L)";
-        Text[ chinese_traditional ] = "¥ªÃä®Ø(~L)";
+        Text[ japanese ] = "å·¦ä½™ç™½(~L)";
+        Text[ chinese_traditional ] = "å·¦é‚Šæ¡†(~L)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
         Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
-        Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
+        Text[ korean ] = "ì™¼ìª½ ì—¬ë°±(~L)";
         Text[ turkish ] = "S~ol kenar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Margen i~zquierdo";
+        Text[ catalan ] = "~Marge esquerre";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸‚à¸­à¸š~à¸‹à¹‰à¸²à¸¢";
     };
     MetricField FLD_LEFT
     {
@@ -318,20 +323,21 @@ TabPage TP_LAB_FMT
         Text [ french ] = "Marge ~supérieure" ;
         Text [ swedish ] = "~Övre marginal" ;
         Text [ dutch ] = "~Bovenmarge" ;
-        Text [ spanish ] = "M~argen superior" ;
+        Text [ spanish ] = "Margen superior" ;
         Text [ english_us ] = "~Top margin" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÉÏ·½Ò³±ß¾à(~T)";
+        Text[ chinese_simplified ] = "ä¸Šæ–¹é¡µè¾¹è·(~T)";
         Text[ russian ] = "Âåğõíèé êğàé";
         Text[ polish ] = "Margines górny";
-        Text[ japanese ] = "ã—]”’(~T)";
-        Text[ chinese_traditional ] = "¤WÃä®Ø(~T)";
+        Text[ japanese ] = "ä¸Šä½™ç™½(~T)";
+        Text[ chinese_traditional ] = "ä¸Šé‚Šæ¡†(~T)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
         Text[ greek ] = "¢íù ğåñéèşñéï";
-        Text[ korean ] = "À§ ¿©¹é(~T)";
+        Text[ korean ] = "ìœ„ ì—¬ë°±(~T)";
         Text[ turkish ] = "Üst kenar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M~argen superior";
+        Text[ catalan ] = "~Marge superior";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸‚à¸­à¸š~à¸šà¸™";
     };
     MetricField FLD_UPPER
     {
@@ -358,7 +364,7 @@ TabPage TP_LAB_FMT
         Text [ italian ] = "~Colonne" ;
         Text [ portuguese_brazilian ] = "Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
-        Text [ finnish ] = "~Sarakkeet" ;
+        Text [ finnish ] = "Pal~stat" ;
         Text [ danish ] = "Kolonner" ;
         Text [ french ] = "~Colonnes" ;
         Text [ swedish ] = "Kolumner" ;
@@ -366,17 +372,18 @@ TabPage TP_LAB_FMT
         Text [ spanish ] = "Column~as" ;
         Text [ english_us ] = "~Columns" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÁĞ(~C)";
-        Text[ russian ] = "Êîëîíêè";
+        Text[ chinese_simplified ] = "åˆ—(~C)";
+        Text[ russian ] = "Ñòîëáöû";
         Text[ polish ] = "Kolumny";
-        Text[ japanese ] = "—ñ(~C)";
-        Text[ chinese_traditional ] = "Äæ(~C)";
+        Text[ japanese ] = "åˆ—(~C)";
+        Text[ chinese_traditional ] = "æ¬„(~C)";
         Text[ arabic ] = "ÇáÃÚãÏÉ";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "¿­(~C)";
+        Text[ korean ] = "ì—´(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Column~as";
+        Text[ catalan ] = "~Columnes";
+        Text[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     NumericField FLD_COLUMNS
     {
@@ -402,23 +409,24 @@ TabPage TP_LAB_FMT
         Text [ portuguese ] = "Linhas" ;
         Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "Rækker" ;
-        Text [ french ] = "~Lignes" ;
+        Text [ french ] = "Lignes" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Rijen" ;
         Text [ spanish ] = "~Filas" ;
         Text [ english_us ] = "R~ows" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ĞĞ(~O)";
+        Text[ chinese_simplified ] = "è¡Œ(~O)";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "s(~O)";
-        Text[ chinese_traditional ] = "¦æ(~O)";
+        Text[ japanese ] = "è¡Œ(~O)";
+        Text[ chinese_traditional ] = "è¡Œ(~O)";
         Text[ arabic ] = "ÇáÕİæİ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "Çà(~O)";
+        Text[ korean ] = "í–‰(~O)";
         Text[ turkish ] = "~Satır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Filas";
+        Text[ catalan ] = "F~iles";
+        Text[ thai ] = "à¹à¸–~à¸§";
     };
     NumericField FLD_ROWS
     {
@@ -446,18 +454,19 @@ TabPage TP_LAB_FMT
         Text[ french ] = "~Enregistrer...";
         Text[ spanish ] = "~Guardar...";
         Text[ italian ] = "~Salva...";
-        Text[ danish ] = "Save...";
+        Text[ danish ] = "~Gem...";
         Text[ swedish ] = "~Spara...";
         Text[ polish ] = "Zapisz...";
         Text[ portuguese_brazilian ] = "Save...";
-        Text[ japanese ] = "•Û‘¶(~S)...";
-        Text[ korean ] = "ÀúÀå(~S)...";
-        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
-        Text[ chinese_traditional ] = "Àx¦s(~S)...";
+        Text[ japanese ] = "ä¿å­˜(~S)...";
+        Text[ korean ] = "ì €ì¥(~S)...";
+        Text[ chinese_simplified ] = "å­˜ç›˜(~S)...";
+        Text[ chinese_traditional ] = "å„²å­˜(~S)...";
         Text[ turkish ] = "Save...";
         Text[ arabic ] = "ÍİÙ...";
-        Text[ catalan ] = "~Guardar...";
-        Text[ finnish ] = "~Tallenna";
+        Text[ catalan ] = "~Desa...";
+        Text[ finnish ] = "~Tallenna...";
+        Text[ thai ] = "~à¸šà¸±à¸™à¸—à¸¶à¸...";
     };
 };
  // String *******************************************************************
@@ -476,17 +485,18 @@ String STR_HDIST
     Text [ dutch ] = "H. afstand" ;
     Text [ spanish ] = "Distancia h." ;
     Text [ english_us ] = "H. Pitch" ;
-    Text[ chinese_simplified ] = "Ë®Æ½¼ä¸ô";
+    Text[ chinese_simplified ] = "æ°´å¹³é—´éš”";
     Text[ russian ] = "Øàã ïî ãîğèçîíò.";
     Text[ polish ] = "Odstêp poziomy";
-    Text[ japanese ] = "‰¡‚ÌŠÔŠu";
-    Text[ chinese_traditional ] = "¤ô¥­¶¡¹j";
+    Text[ japanese ] = "æ¨ªã®é–“éš”";
+    Text[ chinese_traditional ] = "æ°´å¹³é–“éš”";
     Text[ arabic ] = "ÇáÎØæÉ ÇáÃİŞíÉ";
     Text[ greek ] = "Ïñéæüíôéá áğüóôáóç";
-    Text[ korean ] = "°¡·Î °£°İ";
+    Text[ korean ] = "ìˆ˜í‰ ê°„ê²©";
     Text[ turkish ] = "Y. boşluk";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Distancia h.";
+    Text[ catalan ] = "Distància h.";
+    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¹à¸™à¸§à¸™à¸­à¸™";
 };
 String STR_VDIST
 {
@@ -503,17 +513,18 @@ String STR_VDIST
     Text [ dutch ] = "V. afstand" ;
     Text [ spanish ] = "Distancia v." ;
     Text [ english_us ] = "V. Pitch" ;
-    Text[ chinese_simplified ] = "´¹Ö±¼ä¸ô";
+    Text[ chinese_simplified ] = "å‚ç›´é—´éš”";
     Text[ russian ] = "Øàã ïî âåğòèê.";
     Text[ polish ] = "Odstêp pionowy";
-    Text[ japanese ] = "c‚ÌŠÔŠu";
-    Text[ chinese_traditional ] = "««ª½¶¡¹j";
+    Text[ japanese ] = "ç¸¦ã®é–“éš”";
+    Text[ chinese_traditional ] = "å‚ç›´é–“éš”";
     Text[ arabic ] = "ÇáÎØæÉ ÇáÑÃÓíÉ";
     Text[ greek ] = "Êáôáê. áğüóôáóç";
-    Text[ korean ] = "¼¼·Î °£°İ";
+    Text[ korean ] = "ìˆ˜ì§ ê°„ê²©";
     Text[ turkish ] = "D. boşluk";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Distancia v.";
+    Text[ catalan ] = "Distància v.";
+    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¹à¸™à¸§à¸•à¸±à¹‰à¸‡";
 };
 String STR_WIDTH
 {
@@ -530,17 +541,18 @@ String STR_WIDTH
     Text [ dutch ] = "Breedte" ;
     Text [ spanish ] = "Ancho" ;
     Text [ english_us ] = "Width" ;
-    Text[ chinese_simplified ] = "¿í";
+    Text[ chinese_simplified ] = "å®½åº¦";
     Text[ russian ] = "Øèğèíà";
     Text[ polish ] = "Szerokoœæ";
-    Text[ japanese ] = "•";
-    Text[ chinese_traditional ] = "¼e";
+    Text[ japanese ] = "å¹…";
+    Text[ chinese_traditional ] = "å¯¬åº¦";
     Text[ arabic ] = "ÇáÚÑÖ";
     Text[ greek ] = "ĞëÜôïò";
-    Text[ korean ] = "³Êºñ";
+    Text[ korean ] = "ë„ˆë¹„";
     Text[ turkish ] = "Genişlik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ancho";
+    Text[ catalan ] = "Amplada";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡";
 };
 String STR_HEIGHT
 {
@@ -551,23 +563,24 @@ String STR_HEIGHT
     Text [ portuguese_brazilian ] = "Altura" ;
     Text [ portuguese ] = "Altura" ;
     Text [ finnish ] = "Korkeus" ;
-    Text [ danish ] = "Højde" ;
+    Text [ danish ] = "Hø~jde" ;
     Text [ french ] = "Hauteur" ;
     Text [ swedish ] = "Höjd" ;
     Text [ dutch ] = "Hoogte" ;
     Text [ spanish ] = "Altura" ;
     Text [ english_us ] = "Height" ;
-    Text[ chinese_simplified ] = "¸ß";
+    Text[ chinese_simplified ] = "é«˜åº¦";
     Text[ russian ] = "Âûñîòà";
     Text[ polish ] = "Wysokoœæ";
-    Text[ japanese ] = "‚‚³";
-    Text[ chinese_traditional ] = "°ª";
+    Text[ japanese ] = "é«˜ã•";
+    Text[ chinese_traditional ] = "é«˜åº¦";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ";
     Text[ greek ] = "¾øïò";
-    Text[ korean ] = "³ôÀÌ";
+    Text[ korean ] = "ë†’ì´";
     Text[ turkish ] = "Yükseklik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Altura";
+    Text[ catalan ] = "Alçada";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡";
 };
 String STR_LEFT
 {
@@ -577,24 +590,25 @@ String STR_LEFT
     Text [ italian ] = "Margine sinistro" ;
     Text [ portuguese_brazilian ] = "Margem esquerda" ;
     Text [ portuguese ] = "Margem esquerda" ;
-    Text [ finnish ] = "Vasen marginaali" ;
+    Text [ finnish ] = "Vasen reunus" ;
     Text [ danish ] = "Margen venstre" ;
     Text [ french ] = "Marge gauche" ;
     Text [ swedish ] = "Vänster marginal" ;
-    Text [ dutch ] = "Linker marge" ;
+    Text [ dutch ] = "Linkermarge" ;
     Text [ spanish ] = "Margen izquierdo" ;
     Text [ english_us ] = "Left margin" ;
-    Text[ chinese_simplified ] = "×ó·½Ò³±ß¾à";
+    Text[ chinese_simplified ] = "å·¦æ–¹é¡µè¾¹è·";
     Text[ russian ] = "Ëåâûé êğàé";
     Text[ polish ] = "Lewy margines";
-    Text[ japanese ] = "¶—]”’";
-    Text[ chinese_traditional ] = "¥ªÃä®Ø";
+    Text[ japanese ] = "å·¦ä½™ç™½";
+    Text[ chinese_traditional ] = "å·¦é‚Šæ¡†";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
     Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
-    Text[ korean ] = "¿ŞÂÊ ¿©¹é";
+    Text[ korean ] = "ì™¼ìª½ ì—¬ë°±";
     Text[ turkish ] = "Sol kenar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Margen izquierdo";
+    Text[ catalan ] = "Marge esquerre";
+    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸‚à¸­à¸šà¸‹à¹‰à¸²à¸¢";
 };
 String STR_UPPER
 {
@@ -604,24 +618,25 @@ String STR_UPPER
     Text [ italian ] = "Margine superiore" ;
     Text [ portuguese_brazilian ] = "Margem superior" ;
     Text [ portuguese ] = "Margem superior" ;
-    Text [ finnish ] = "Ylämarginaali" ;
+    Text [ finnish ] = "Yläreunus" ;
     Text [ danish ] = "Margen foroven" ;
     Text [ french ] = "Marge supérieure" ;
     Text [ swedish ] = "Övre marginal" ;
     Text [ dutch ] = "Bovenmarge" ;
     Text [ spanish ] = "Margen superior" ;
     Text [ english_us ] = "Top margin" ;
-    Text[ chinese_simplified ] = "ÉÏ·½Ò³±ß¾à";
+    Text[ chinese_simplified ] = "ä¸Šæ–¹é¡µè¾¹è·";
     Text[ russian ] = "Âåğõíèé êğàé";
     Text[ polish ] = "Górny margines";
-    Text[ japanese ] = "ã—]”’";
-    Text[ chinese_traditional ] = "¤WÃä®Ø";
+    Text[ japanese ] = "ä¸Šä½™ç™½";
+    Text[ chinese_traditional ] = "ä¸Šé‚Šæ¡†";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
     Text[ greek ] = "¢íù ğåñéèşñéï";
-    Text[ korean ] = "À§ ¿©¹é";
+    Text[ korean ] = "ìœ„ ì—¬ë°±";
     Text[ turkish ] = "Üst kenar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Margen superior";
+    Text[ catalan ] = "Marge superior";
+    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸‚à¸­à¸šà¸šà¸™";
 };
 String STR_COLS
 {
@@ -631,24 +646,25 @@ String STR_COLS
     Text [ italian ] = "Colonne" ;
     Text [ portuguese_brazilian ] = "Colunas" ;
     Text [ portuguese ] = "Colunas" ;
-    Text [ finnish ] = "Sarakkeet" ;
+    Text [ finnish ] = "Palstat" ;
     Text [ danish ] = "Kolonner" ;
     Text [ french ] = "Colonnes" ;
     Text [ swedish ] = "Kolumner" ;
     Text [ dutch ] = "Kolommen" ;
     Text [ spanish ] = "Columnas" ;
     Text [ english_us ] = "Columns" ;
-    Text[ chinese_simplified ] = "À¸";
-    Text[ russian ] = "Êîëîíêè";
+    Text[ chinese_simplified ] = "æ ";
+    Text[ russian ] = "Ñòîëáöû";
     Text[ polish ] = "Kolumny";
-    Text[ japanese ] = "—ñ";
-    Text[ chinese_traditional ] = "Äæ";
+    Text[ japanese ] = "åˆ—";
+    Text[ chinese_traditional ] = "æ¬„";
     Text[ arabic ] = "ÇáÃÚãÏÉ";
     Text[ greek ] = "ÓôŞëåò";
-    Text[ korean ] = "¿­";
+    Text[ korean ] = "ë‹¨";
     Text[ turkish ] = "Sütun";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Columnas";
+    Text[ catalan ] = "Columnes";
+    Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String STR_ROWS
 {
@@ -665,17 +681,18 @@ String STR_ROWS
     Text [ dutch ] = "Rijen" ;
     Text [ spanish ] = "Filas" ;
     Text [ english_us ] = "Rows" ;
-    Text[ chinese_simplified ] = "ĞĞ";
+    Text[ chinese_simplified ] = "è¡Œ";
     Text[ russian ] = "Ñòğîêè";
     Text[ polish ] = "Wiersze";
-    Text[ japanese ] = "s";
-    Text[ chinese_traditional ] = "¦æ";
+    Text[ japanese ] = "è¡Œ";
+    Text[ chinese_traditional ] = "è¡Œ";
     Text[ arabic ] = "ÇáÕİæİ";
     Text[ greek ] = "Ãñáììİò";
-    Text[ korean ] = "Çà";
+    Text[ korean ] = "í–‰";
     Text[ turkish ] = "Satır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filas";
+    Text[ catalan ] = "Files";
+    Text[ thai ] = "à¹à¸–à¸§";
 };
 ModalDialog DLG_SAVE_LABEL
 {
@@ -695,24 +712,25 @@ ModalDialog DLG_SAVE_LABEL
         Text [ portuguese_brazilian ] = "Fazer" ;
         Text [ portuguese ] = "~Marca" ;
         Text [ finnish ] = "Tuotemerkki" ;
-        Text [ danish ] = "Mærke" ;
+        Text [ danish ] = "~Mærke" ;
         Text [ french ] = "~Marque" ;
         Text [ swedish ] = "~Märke" ;
         Text [ dutch ] = "~Merk" ;
         Text [ spanish ] = "~Marca" ;
         Text [ english_us ] = "Brand" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÉÌ±ê";
+        Text[ chinese_simplified ] = "å•†æ ‡";
         Text[ russian ] = "Ìàğêà";
         Text[ polish ] = "Marka";
-        Text[ japanese ] = "»‘¢Œ³";
+        Text[ japanese ] = "è£½é€ å…ƒ";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "°Ó¼Ğ";
+        Text[ chinese_traditional ] = "å•†æ¨™";
         Text[ arabic ] = "ÇáãÇÑßÉ";
         Text[ greek ] = "~ÌÜñêá";
-        Text[ korean ] = "»óÇ¥";
+        Text[ korean ] = "ìƒí‘œ";
         Text[ turkish ] = "Markası";
-        Text[ catalan ] = "~Marca";
+        Text[ catalan ] = "Marca";
+        Text[ thai ] = "à¸¢à¸µà¹ˆà¸«à¹‰à¸­";
     };
     ComboBox CB_MAKE
     {
@@ -732,24 +750,25 @@ ModalDialog DLG_SAVE_LABEL
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "~Tipo" ;
         Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "Type" ;
-        Text [ french ] = "~Type" ;
+        Text [ danish ] = "Typ~e" ;
+        Text [ french ] = "Type" ;
         Text [ swedish ] = "~Typ" ;
         Text [ dutch ] = "~Type" ;
         Text [ spanish ] = "~Tipo" ;
         Text [ english_us ] = "T~ype" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÀàĞÍ(~Y)";
+        Text[ chinese_simplified ] = "ç±»å‹(~Y)";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş(~Y)";
-        Text[ chinese_traditional ] = "Ãş«¬(~Y)";
+        Text[ japanese ] = "ç¨®é¡(~Y)";
+        Text[ chinese_traditional ] = "é¡å‹(~Y)";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "~Ôığïò";
-        Text[ korean ] = "À¯Çü(~Y)";
+        Text[ korean ] = "ìœ í˜•(~Y)";
         Text[ turkish ] = "Tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipo";
+        Text[ catalan ] = "T~ipus";
+        Text[ thai ] = "à¸Š~à¸™à¸´à¸”";
     };
     Edit ED_TYPE
     {
@@ -771,18 +790,19 @@ ModalDialog DLG_SAVE_LABEL
         Text[ french ] = "Options";
         Text[ spanish ] = "Opciones";
         Text[ italian ] = "Opzioni";
-        Text[ danish ] = "Options";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Options";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ korean ] = "¿É¼Ç";
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ korean ] = "ì˜µì…˜";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ turkish ] = "Options";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
-        Text[ catalan ] = "Opciones";
-        Text[ finnish ] = "Mukauta";
+        Text[ catalan ] = "Opcions";
+        Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     OKButton PB_OK
     {
@@ -814,46 +834,62 @@ ModalDialog DLG_SAVE_LABEL
         Message [ English ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?" ;
         Message[ english_us ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
         Message[ portuguese ] = "A etiqueta \"%1 / %2\" já existe.\nSubstitui-la?";
-        Message[ russian ] = "Íàêëåéêà \"%1 / %2\" óæå ñóùåñòâóåò.\nÇàìåíèòü ıòè äàííûå?";
+        Message[ russian ] = "Ïîäïèñü \"%1 / %2\" óæå ñóùåñòâóåò.\nÏåğåçàïèñàòü?";
         Message[ greek ] = "Ç åôéêİôá \"%1 / %2\" õğÜñ÷åé Şäç.\nÈİëåôå íá áíôéêáôáóôáèåß;";
         Message[ dutch ] = "Etiket \"%1 / %2\" bestaat reeds.\nOverschrijven?";
         Message[ french ] = "L'étiquette \"%1 / %2\" existe déjà.\nVoulez-vous écraser les données ?";
         Message[ spanish ] = "La etiqueta \"%1 / %2\" existe ya.\n¿Desea sobrescribila?";
         Message[ italian ] = "L'etichetta \"%1 / %2\" esiste già.\nVolete sovrascriverla?";
-        Message[ danish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ danish ] = "Etiketten \"%1 / %2\" findes allerede.\nVil du overskrive dataene?";
         Message[ swedish ] = "Etiketten \"%1 / %2\" finns redan.\nVill du skriva över den?";
         Message[ polish ] = "Etykieta \"%1 / %2\" ju¿ istnieje.\nSkasowaæ dane przez zapisanie?";
         Message[ portuguese_brazilian ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
-        Message[ japanese ] = "×ÍŞÙu%1 / %2v‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\nã‘‚«‚µ‚Ü‚·‚©B";
-        Message[ korean ] = "\"%1 / %2\"¶óº§Àº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù.\nµ¥ÀÌÅÍ¸¦ µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
-        Message[ chinese_simplified ] = "Õâ¸öÌù±ê \"%1 / %2\" ÒÑ¾­´æÔÚ¡£\nÒª¸²Ğ´£¿";
-        Message[ chinese_traditional ] = "³o­Ó¶K¼Ğ¡u%1 / %2¡v¤w¸g¦s¦b¡C\n­nÂĞ¼g¡H";
+        Message[ japanese ] = "ãƒ©ãƒ™ãƒ«æ›¸ãã€Œ%1 / %2ã€ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\nä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
+        Message[ korean ] = "\"%1 / %2\" ë ˆì´ë¸”ì€ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.\në°ì´í„°ë¥¼ ë®ì–´ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
+        Message[ chinese_simplified ] = "è¿™ä¸ªè´´æ ‡ \"%1 / %2\" å·²ç»å­˜åœ¨ã€‚\nè¦æ”¹å†™ï¼Ÿ";
+        Message[ chinese_traditional ] = "é€™å€‹è²¼æ¨™<%1 / %2>å·²ç¶“å­˜åœ¨ã€‚\nè¦è¦†å¯«ï¼Ÿ";
         Message[ turkish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
         Message[ arabic ] = "ÈØÇŞÉ ÇáÚäæäÉ \"%1 / %2\" ãæÌæÏÉ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞ ÇáÈíÇäÇÊ¿";
-        Message[ catalan ] = "La etiqueta \"%1 / %2\" existe ya.\n¿Desea sobrescribila?";
-        Message[ finnish ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?";
+        Message[ catalan ] = "L'etiqueta \"%1 / %2\" ja existeix.\nLa voleu sobreescriure?";
+        Message[ finnish ] = "Selite \"%1 / %2\" on jo käytössä.\nHaluatko korvata sen?";
+        Message[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­ \"%1 / %2\" à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸šà¸¡à¸±à¸™à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
     };
     Text[ english_us ] = "Save Label Format";
     Text[ portuguese ] = "Guardar formato de etiqueta";
-    Text[ russian ] = "Ñîõğàíèòü ôîğìàò íàêëåéêè";
+    Text[ russian ] = "Ñîõğàíèòü ôîğìàò ïîäïèñè";
     Text[ greek ] = "ÁğïèŞêåõóç ôïõ ìåãİèïõò ôçò åôéêİôáò";
     Text[ dutch ] = "Etiketformaat opslaan";
-    Text[ french ] = "Enregistrer le format d'étiquette";
+    Text[ french ] = "Enregistrement du format d'étiquette";
     Text[ spanish ] = "Guardar formato de etiqueta";
     Text[ italian ] = "Salva il formato etichetta";
-    Text[ danish ] = "Save label format";
+    Text[ danish ] = "Gem etiketformat";
     Text[ swedish ] = "Spara etikettformat";
     Text[ polish ] = "Zapisz format etykiety";
     Text[ portuguese_brazilian ] = "Save label format";
-    Text[ japanese ] = "×ÍŞÙ‚Ì‘®‚ğ•Û‘¶‚·‚é";
-    Text[ korean ] = "¶óº§ Æ÷¸Ë ÀúÀå";
-    Text[ chinese_simplified ] = "´æÅÌÌù±ê¸ñÊ½";
-    Text[ chinese_traditional ] = "Àx¦s¶K¼Ğ®æ¦¡";
+    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«æ›¸ãã®æ›¸å¼ã‚’ä¿å­˜";
+    Text[ korean ] = "ë ˆì´ë¸” ì„œì‹ ì €ì¥";
+    Text[ chinese_simplified ] = "å­˜ç›˜è´´æ ‡æ ¼å¼";
+    Text[ chinese_traditional ] = "å„²å­˜è²¼æ¨™æ ¼å¼";
     Text[ turkish ] = "Save label format";
     Text[ arabic ] = "ÍİÙ ÊäÓíŞ ÈØÇŞÇÊ ÇáÚäæäÉ";
-    Text[ catalan ] = "Guardar formato de etiqueta";
-    Text[ finnish ] = "Etikettenformat speichern";
+    Text[ catalan ] = "Desa el format de l'etiqueta";
+    Text[ finnish ] = "Tallenna tarramuoto";
+    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸£à¸¹à¸›à¹à¸šà¸šà¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

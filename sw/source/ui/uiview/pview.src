@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 14:13:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Verdeling";
         TEXT[ chinese_simplified ] = "åˆ†å¸ƒ";
         TEXT[ greek ] = "ÊáôáíïìŞ";
-        TEXT[ korean ] = "ë¶„í• ";
+        TEXT[ korean ] = "ë°°ë¶„";
         TEXT[ turkish ] = "Dağılım";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Distribució";
@@ -514,10 +514,10 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese_brazilian ] = "~Vertikal";
         TEXT[ portuguese ] = "~Vertical";
         TEXT[ danish ] = "Lodret";
-        TEXT[ french ] = "~Vertical";
+        TEXT[ french ] = "À la verticale";
         TEXT[ swedish ] = "~Vertikalt";
         TEXT[ dutch ] = "~Verticaal";
-        TEXT[ spanish ] = "~Vertical";
+        TEXT[ spanish ] = "~Verticalmente";
         TEXT[ english_us ] = "~Vertically";
         TEXT[ chinese_simplified ] = "çºµå‘(~V)";
         TEXT[ russian ] = "Âåğòèêàëüíî";
@@ -698,7 +698,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ dutch ] = "Standaar~d";
         TEXT[ chinese_simplified ] = "é»˜è®¤(~D)";
         TEXT[ greek ] = "ĞñïåğéëïãŞ";
-        TEXT[ korean ] = "ê¸°ë³¸ ê°’(~D)";
+        TEXT[ korean ] = "ê¸°ë³¸ê°’(~D)";
         TEXT[ turkish ] = "Standar~t";
         TEXT[ catalan ] = "~Per defecte";
         TEXT[ finnish ] = "~Oletus";
@@ -736,7 +736,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 141 , 69 ) ;
     Text = "Mehrere Seiten" ;
-    Text [ english_us ] = "Multiple pages" ;
+    Text [ english_us ] = "Multiple Pages" ;
     Moveable = TRUE ;
     FixedText FT_COL
     {
@@ -853,20 +853,27 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
+    Text[ chinese_simplified ] = "å¤šé¡µ";
     Text[ russian ] = "Ìàñøòàá";
     Text[ polish ] = "Skala";
-    Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ã‚ºãƒ¼ãƒ ";
-    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
+    Text[ japanese ] = "è¤‡æ•°ãƒšãƒ¼ã‚¸";
+    Text[ chinese_traditional ] = "å››é ";
     Text[ arabic ] = "ÊßÈíÑ æÊÕÛíÑ";
     Text[ dutch ] = "Maatstaf";
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
+    Text[ chinese_simplified ] = "å¤šé¡µ";
     Text[ greek ] = "Êëßìáêá";
-    Text[ korean ] = "í™•ëŒ€/ì¶•ì†Œ";
+    Text[ korean ] = "ë‹¤ì¤‘ í˜ì´ì§€";
     Text[ turkish ] = "Yakınlaştır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Zoom";
     Text[ thai ] = "à¸¢à¹ˆà¸­/à¸‚à¸¢à¸²à¸¢";
+    Text[ portuguese ] = "Zoom";
+    Text[ french ] = "Plusieurs pages";
+    Text[ spanish ] = "Varias páginas";
+    Text[ finnish ] = "Zoomaus";
+    Text[ italian ] = "Più pagine";
+    Text[ danish ] = "Målestok";
+    Text[ swedish ] = "Flera sidor";
 };
 String RID_PVIEW_TOOLBOX
 {
@@ -890,7 +897,7 @@ String RID_PVIEW_TOOLBOX
     Text[ dutch ] = "Afdrukvoorbeeld";
     Text[ chinese_simplified ] = "é¡µé¢è§†å›¾";
     Text[ greek ] = "Ğñïåğéóêüğçóç åêôığùóçò";
-    Text[ korean ] = "ì¸ì‡„ ë¯¸ë¦¬ë³´ê¸°";
+    Text[ korean ] = "ì¸ì‡„ ë¯¸ë¦¬ ë³´ê¸°";
     Text[ turkish ] = "Sayfa önizleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Visualització prèvia de la pàgina";
@@ -942,7 +949,9 @@ ToolBox RID_PVIEW_TOOLBOX
         {
             Identifier = FN_SHOW_MULTIPLE_PAGES ;
             HelpID = FN_SHOW_MULTIPLE_PAGES ;
+            DropDown = TRUE;
         };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
         {
             Identifier = SID_ZOOM_OUT;
@@ -983,6 +992,11 @@ ToolBox RID_PVIEW_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
@@ -150,8 +149,8 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 }
 
 bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
-    bool bSaveRelFile, const ::std::vector<String>& rStrings,
-    const ::std::vector<String>& rExtra)
+    bool bSaveRelFile, const std::vector<String>& rStrings,
+    const std::vector<String>& rExtra)
 {
     // this code will be called after reading all text into the
     // empty sections
@@ -254,8 +253,8 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     if( pGlossary->IsGlossaryFib() && rBlocks.StartPutMuchBlockEntries() )
     {
         //read the names of the autotext entries
-        ::std::vector<String> aStrings;
-        ::std::vector<String> aExtra;
+        std::vector<String> aStrings;
+        std::vector<String> aExtra;
 
         rtl_TextEncoding eStructCharSet =
             WW8Fib::GetFIBCharset(pGlossary->chseTables);
@@ -388,3 +387,4 @@ UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream &rTableStrm,
     return nEndLastPage;
 }
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

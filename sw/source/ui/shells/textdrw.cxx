@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdrw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 14:16:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #include <poolfmt.hrc>
 #endif
 
+#ifndef _SV_SOUND_HXX
+#include <vcl/sound.hxx>
+#endif
+
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -169,9 +173,12 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             aTmp.setValue( &eButtonType, ::getCppuType((const form::FormButtonType*)0));
             xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
 
-            // #105638# OJ
-            aTmp <<= sal_True;
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
+            if ( Sound::IsSoundFile( rURL ) )
+            {
+                // #105638# OJ
+                aTmp <<= sal_True;
+                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
+            }
         }
 
         if (rSh.IsObjSelected())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:46:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,22 +73,42 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP
 #include <com/sun/star/text/XTextDocument.hpp>
 #endif
-#ifndef _COMPHELPER_SETTINGSHELPER_HXX_
-#include <comphelper/SettingsHelper.hxx>
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include  <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include  <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
+#endif
+
 
 class SwXTextDocument;
 class SwDocShell;
 class SwDoc;
+class SfxPrinter;
 
-
-class SwXDocumentSettings : public comphelper::MasterHelperNoState
+class SwXDocumentSettings :
+        public comphelper::MasterPropertySet,
+        public com::sun::star::lang::XServiceInfo,
+        public com::sun::star::lang::XTypeProvider,
+        public cppu::OWeakObject
 {
 protected:
     com::sun::star::uno::Reference< com::sun::star::text::XTextDocument >       mxModel;
     SwXTextDocument*        mpModel;
     SwDocShell*             mpDocSh;
     SwDoc*                  mpDoc;
+
+    /** the printer should be set only once; since there are several
+     * printer-related properties, remember the last printer and set it in
+     * _postSetValues */
+    SfxPrinter*             mpPrinter;
+
 
     virtual void _preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
@@ -109,6 +129,14 @@ public:
     virtual ~SwXDocumentSettings()
         throw();
 
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  )
+        throw ();
+    virtual void SAL_CALL release(  )
+        throw ();
+
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw(com::sun::star::uno::RuntimeException);
@@ -116,5 +144,9 @@ public:
         throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
         throw(com::sun::star::uno::RuntimeException);
+
+    // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 #endif

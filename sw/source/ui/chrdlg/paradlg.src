@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-16 23:10:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,25 +97,26 @@ TabDialog DLG_PARA
                 Text [ italian ] = "Paragrafo" ;
                 Text [ portuguese_brazilian ] = "Par?grafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennykset ja v?lit" ;
+                Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
-                Text [ dutch ] = "Inspringen en afstanden" ;
+                Text [ dutch ] = "Inspringing en afstanden" ;
                 Text [ spanish ] = "Sangrías y espacios" ;
                 Text [ english_us ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
                 Text[ chinese_simplified ] = "ç¼©è¿›å’Œé—´éš”";
                 Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
                 Text[ polish ] = "Wciêcia i odstêpy";
-                Text[ japanese ] = "ï½²ï¾ï¾ƒï¾ï¾ï¾„ã¨è¡Œé–“éš”";
+                Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã¨è¡Œé–“éš”";
                 Text[ chinese_traditional ] = "ç¸®æ’å’Œé–“éš”";
                 Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
                 Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
-                Text[ korean ] = "ë“¤ì—¬ì“°ê¸°ì™€ ê°„ê²©";
+                Text[ korean ] = "ë“¤ì—¬ì“°ê¸° ë° ê°„ê²©";
                 Text[ turkish ] = "Girinti ve aralıklar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sangrías y espacios";
+                Text[ catalan ] = "Sagnats & Espaiat";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
             };
             PageItem
             {
@@ -139,11 +140,12 @@ TabDialog DLG_PARA
                 Text[ chinese_traditional ] = "å°é½Š";
                 Text[ arabic ] = "ÇáãÍÇĞÇÉ";
                 Text[ greek ] = "Óôïß÷éóç";
-                Text[ korean ] = "ì •ë ¬";
+                Text[ korean ] = "ë§ì¶¤";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alineación";
+                Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
+                Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
             };
             PageItem
             {
@@ -164,7 +166,7 @@ TabDialog DLG_PARA
                 Text [ english_us ] = "Text Flow" ;
                 PageResID = TP_PARA_EXT ;
                 Text[ chinese_simplified ] = "æ¢è¡Œå’Œåˆ†é¡µ";
-                Text[ russian ] = "Ïîëîæåíèå íà ñòğàíèöå";
+                Text[ russian ] = "Íà ñòğàíèöå";
                 Text[ polish ] = "Tekst";
                 Text[ japanese ] = "ä½“è£";
                 Text[ chinese_traditional ] = "æ›è¡Œå’Œåˆ†é ";
@@ -173,7 +175,8 @@ TabDialog DLG_PARA
                 Text[ greek ] = "ÑïŞ êåéìİíïõ";
                 Text[ korean ] = "í…ìŠ¤íŠ¸ íë¦„";
                 Text[ turkish ] = "Metin akışı";
-                Text[ catalan ] = "Flujo del texto";
+                Text[ catalan ] = "Flux del text";
+                Text[ thai ] = "à¸à¸²à¸£à¹„à¸«à¸¥à¸‚à¸­à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
             };
             PageItem
             {
@@ -182,24 +185,25 @@ TabDialog DLG_PARA
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiática";
-                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ russian ] = "Àçèàòñêîå îôîğìëåíèå";
                 Text[ greek ] = "ÁóéÜôéêç ôõğïãñáößá";
                 Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografía asiática";
                 Text[ italian ] = "Tipografia asiatica";
-                Text[ danish ] = "Asian typography";
+                Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "æ—¥æœ¬èªæ–‡ã®ä½“è£";
-                Text[ korean ] = "ì•„ì‹œì•„  íƒ€ì´í¬ê·¸ë˜í”¼";
+                Text[ korean ] = "í•œê¸€ ì…ë ¥ ì²´ê³„";
                 Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©æ–‡å­—";
                 Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“æ–‡å­—";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
-                Text[ catalan ] = "Tipografía asiática";
+                Text[ catalan ] = "Tipografia asiàtica";
                 Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¹à¸šà¸šà¹€à¸­à¹€à¸Šà¸µà¸¢";
             };
             PageItem
             {
@@ -222,11 +226,12 @@ TabDialog DLG_PARA
                 Text[ chinese_traditional ] = "ç·¨è™Ÿ";
                 Text[ arabic ] = "ÇáÊÑŞíã";
                 Text[ greek ] = "Áñßèìçóç";
-                Text[ korean ] = "ë²ˆí˜¸ë§¤ê¸°ê¸°";
+                Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°";
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Numeración";
+                Text[ catalan ] = "Numeració";
                 Text[ finnish ] = "Numerointi";
+                Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
             };
             PageItem
             {
@@ -248,14 +253,15 @@ TabDialog DLG_PARA
                 Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
                 Text[ russian ] = "Òàáóëÿöèÿ";
                 Text[ polish ] = "Tabulator";
-                Text[ japanese ] = "ï¾€ï¾Œï¾";
-                Text[ chinese_traditional ] = "è£½è¡¨ç¬¦";
+                Text[ japanese ] = "ã‚¿ãƒ–";
+                Text[ chinese_traditional ] = "å®šä½éµ";
                 Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
                 Text[ greek ] = "Óôçëïèİôçò";
                 Text[ korean ] = "íƒ­";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tabulaciones";
+                Text[ catalan ] = "Pestanyes";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™";
             };
             PageItem
             {
@@ -277,14 +283,15 @@ TabDialog DLG_PARA
                 Text[ chinese_simplified ] = "å­—é¦–å¤§å†™";
                 Text[ russian ] = "Áóêâèöà";
                 Text[ polish ] = "Inicja³y";
-                Text[ japanese ] = "ï¾„ï¾ï¾›ï½¯ï¾Œï¾Ÿï½·ï½¬ï½¯ï¾Œï¾Ÿ";
+                Text[ japanese ] = "ãƒ‰ãƒ­ãƒƒãƒ—ã‚­ãƒ£ãƒƒãƒ—";
                 Text[ chinese_traditional ] = "å­—é¦–å¤§å¯«";
                 Text[ arabic ] = "ÇáÃÍÑİ ÇáÇÓÊåáÇáíÉ";
                 Text[ greek ] = "Áñ÷éãñÜììáôá";
                 Text[ korean ] = "ë‹¨ë½ ì²«ë¬¸ì ì¥ì‹";
                 Text[ turkish ] = "Başharfler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Iniciales";
+                Text[ catalan ] = "Caplletres";
+                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
             };
             PageItem
             {
@@ -300,7 +307,7 @@ TabDialog DLG_PARA
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
                 Text [ dutch ] = "Omranding" ;
-                Text [ spanish ] = "Borde" ;
+                Text [ spanish ] = "Bordes" ;
                 Text [ english_us ] = "Borders" ;
                 PageResID = TP_BORDER ;
                 Text[ chinese_simplified ] = "è¾¹æ¡†";
@@ -313,7 +320,8 @@ TabDialog DLG_PARA
                 Text[ korean ] = "í…Œë‘ë¦¬";
                 Text[ turkish ] = "Kenarlık";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Borde";
+                Text[ catalan ] = "Vores";
+                Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
             };
             PageItem
             {
@@ -342,7 +350,8 @@ TabDialog DLG_PARA
                 Text[ korean ] = "ë°°ê²½";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fondo";
+                Text[ catalan ] = "Fons";
+                Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
             };
         };
     };
@@ -356,7 +365,8 @@ TabDialog DLG_PARA
     Text[ korean ] = "ë‹¨ë½";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Párrafo";
+    Text[ catalan ] = "Paràgraf";
+    Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
 };
 TabDialog DLG_DRAWPARA
 {
@@ -391,7 +401,7 @@ TabDialog DLG_DRAWPARA
                 Text [ italian ] = "Rientri e spaziature" ;
                 Text [ portuguese_brazilian ] = "Par?grafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennykset ja v?lit" ;
+                Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
@@ -402,14 +412,15 @@ TabDialog DLG_DRAWPARA
                 Text[ chinese_simplified ] = "ç¼©è¿›å’Œé—´éš”";
                 Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
                 Text[ polish ] = "Wciêcia i odstêpy";
-                Text[ japanese ] = "ï½²ï¾ï¾ƒï¾ï¾ï¾„ã¨è¡Œé–“éš”";
+                Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã¨è¡Œé–“éš”";
                 Text[ chinese_traditional ] = "ç¸®æ’å’Œé–“éš”";
                 Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
                 Text[ language_user1 ] = " ";
                 Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
-                Text[ korean ] = "ë“¤ì—¬ì“°ê¸°ì™€ ê°„ê²©";
+                Text[ korean ] = "ë“¤ì—¬ì“°ê¸° ë° ê°„ê²©";
                 Text[ turkish ] = "Girinti ve aralıklar";
-                Text[ catalan ] = "Sangrías y espacios";
+                Text[ catalan ] = "Sagnats & Espaiat";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
             };
 #if SUPD>352
             PageItem
@@ -437,8 +448,9 @@ TabDialog DLG_DRAWPARA
                 Text[ korean ] = "ë§ì¶¤";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alineación";
+                Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
+                Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
             };
 #endif
             PageItem
@@ -448,24 +460,25 @@ TabDialog DLG_DRAWPARA
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiática";
-                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ russian ] = "Àçèàòñêîå îôîğìëåíèå";
                 Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
                 Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografía asiática";
                 Text[ italian ] = "Tipografia asiatica";
-                Text[ danish ] = "Asian typography";
+                Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "æ—¥æœ¬èªæ–‡ã®ä½“è£";
-                Text[ korean ] = "ì•„ì‹œì•„ íƒ€ì´í¬ê·¸ë˜í”¼";
+                Text[ korean ] = "í•œê¸€ ì…ë ¥ ì²´ê³„";
                 Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©æ–‡å­—";
                 Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“æ–‡å­—";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
-                Text[ catalan ] = "Tipografía asiática";
+                Text[ catalan ] = "Tipografia asiàtica";
                 Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¹à¸šà¸šà¹€à¸­à¹€à¸Šà¸µà¸¢";
             };
             PageItem
             {
@@ -487,14 +500,15 @@ TabDialog DLG_DRAWPARA
                 Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
                 Text[ russian ] = "Òàáóëÿöèÿ";
                 Text[ polish ] = "Tabulator";
-                Text[ japanese ] = "ï¾€ï¾Œï¾";
-                Text[ chinese_traditional ] = "è£½è¡¨ç¬¦";
+                Text[ japanese ] = "ã‚¿ãƒ–";
+                Text[ chinese_traditional ] = "å®šä½éµ";
                 Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
                 Text[ greek ] = "Óôçëïèİôçò";
                 Text[ korean ] = "íƒ­";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tabulaciones";
+                Text[ catalan ] = "Pestanyes";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™";
             };
         };
     };
@@ -508,8 +522,12 @@ TabDialog DLG_DRAWPARA
     Text[ korean ] = "ë‹¨ë½";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Párrafo";
+    Text[ catalan ] = "Paràgraf";
+    Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
 };
+
+
+
 
 
 

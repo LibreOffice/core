@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-10 08:45:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,16 +301,22 @@ SdrObject* __EXPORT SwVirtFlyDrawObj::CheckHit( const Point& rPnt, USHORT nTol,
                 && !rURL.GetURL().Len() && !rURL.GetMap()
                 */ )
             {
-                //Vor dem Return noch 3a (siehe oben) pruefen.
-                SdrPage *pPg = GetPage();
-                for ( UINT32 i = GetOrdNumDirect()+1; i < pPg->GetObjCount(); ++i )
-                {
-                    SdrObject *pObj = pPg->GetObj( i );
-                    if ( pObj->IsWriterFlyFrame() &&
-                         ((SwVirtFlyDrawObj*)pObj)->GetBoundRect().IsInside( rPnt ) )
-                        return 0;
-                }
+                // #107513#
+                // This test needs to be done outside, since also drawing layer HitTest
+                // methods are called. Not all drawing objects are derived and the
+                // CheckHit() overloaded. That's an conceptual error here.
                 return (SdrObject*)this;
+
+                //Vor dem Return noch 3a (siehe oben) pruefen.
+                //SdrPage *pPg = GetPage();
+                //for ( UINT32 i = GetOrdNumDirect()+1; i < pPg->GetObjCount(); ++i )
+                //{
+                //  SdrObject *pObj = pPg->GetObj( i );
+                //  if ( pObj->IsWriterFlyFrame() &&
+                //       ((SwVirtFlyDrawObj*)pObj)->GetBoundRect().IsInside( rPnt ) )
+                //      return 0;
+                //}
+                //return (SdrObject*)this;
             }
             else
             {

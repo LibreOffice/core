@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: fme $ $Date: 2002-06-10 09:00:58 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:45:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..
 PRJNAME=sw
 TARGET=sw
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 .IF "$(CPU)"=="i386"
 USE_LDUMP2=TRUE
 .ENDIF
@@ -251,7 +252,6 @@ do_build+= \
 .IF "$(depend)"==""
 ALL:\
     $(do_build) \
-    $(SRS)$/hidother.hid\
     $(INC)$/sw.lst	\
     ALLTAR
 .ENDIF
@@ -291,22 +291,6 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
     @echo   component_writeInfo @51									>>$@
     @echo   component_getFactory @52								>>$@
 
-.ENDIF
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)" =="WNT"
-.IF "$(BUILD_SOSL)"==""
-    @+echo
-    @+echo 	NO HIDS!
-    @+echo
-    +copy ..\inc\helpid.h .
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-    +del helpid.h
-.ENDIF
-.ELSE
-    @echo wnt only
 .ENDIF
 
 $(INC)$/sw.lst:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 15:27:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,13 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
                 aForm.SetCommaSeparated(lcl_AnyToBool(aValue));
             break;
             case WID_LABEL_CATEGORY                    :
-                pTOXBase->SetSequenceName(lcl_AnyToString(aValue));
+            {
+                // convert file-format/API/external programmatic english name
+                // to internal UI name before usage
+                String aName( SwStyleNameMapper::GetSpecialExtraUIName(
+                                    lcl_AnyToString(aValue) ) );
+                pTOXBase->SetSequenceName( aName );
+            }
             break;
             case WID_LABEL_DISPLAY_TYPE                :
             {
@@ -888,8 +894,15 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 bRet = rForm.IsCommaSeparated();
             break;
             case WID_LABEL_CATEGORY                    :
-                aRet <<= OUString(pTOXBase->GetSequenceName());
+            {
+                // convert internal UI name to
+                // file-format/API/external programmatic english name
+                // before usage
+                String aName( SwStyleNameMapper::GetSpecialExtraProgName(
+                                    pTOXBase->GetSequenceName() ) );
+                aRet <<= OUString( aName );
                 bBOOL = sal_False;
+            }
             break;
             case WID_LABEL_DISPLAY_TYPE                :
             {
@@ -1587,6 +1600,7 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
                     aMark.SetPrimaryKeyReading(sPrimaryKeyReading);
                 if(sSecondaryKeyReading.Len())
                     aMark.SetSecondaryKeyReading(sSecondaryKeyReading);
+                aMark.SetMainEntry(bMainEntry);
             break;
             case TOX_USER:
             case TOX_CONTENT:

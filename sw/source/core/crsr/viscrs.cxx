@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-17 14:34:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
+#endif
 
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>           // GetSearchDialog
@@ -134,7 +137,8 @@
 #endif
 
 
-extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
+// OD 24.01.2003 #106593# - no longer needed, included in <frmtool.hxx>
+//extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
 
@@ -528,6 +532,30 @@ void SwVisCrsr::_SetPosAndShow()
            Size( pCrsrShell->aCharRect.Width(), nTmpY ) );
         aRect.Pos().Y() += pCrsrShell->aCrsrHeight.X();
     }
+
+    // check if cursor should show the current cursor bidi level
+    aTxtCrsr.SetDirection( CURSOR_DIRECTION_NONE );
+    const SwCursor* pTmpCrsr = pCrsrShell->_GetCrsr();
+
+    if ( pTmpCrsr && !pCrsrShell->IsOverwriteCrsr() )
+    {
+        SwNode& rNode = pTmpCrsr->GetPoint()->nNode.GetNode();
+        if( rNode.IsTxtNode() )
+        {
+            const SwTxtNode& rTNd = *rNode.GetTxtNode();
+            const SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( rTNd );
+
+             // cursor level has to be shown
+            if ( pSI && pSI->CountDirChg() > 1 )
+            {
+                aTxtCrsr.SetDirection(
+                    ( pTmpCrsr->GetCrsrBidiLevel() % 2 ) ?
+                      CURSOR_DIRECTION_RTL :
+                      CURSOR_DIRECTION_LTR );
+            }
+        }
+    }
+
     if( aRect.Height() )
     {
         ::SwCalcPixStatics( pCrsrShell->GetOut() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:46:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #endif
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
+#endif
+#ifndef _SVDOGRP_HXX
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _XOUTBMP_HXX
 #include <svx/xoutbmp.hxx>
@@ -389,9 +392,10 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
                 aSet.Put( aAnchor );
 
                 SdrObject* pNew = pClpDoc->CloneSdrObj( *pObj, FALSE, TRUE );
+
 //JP 07.01.00: why move??
 //              pNew->NbcMove( aSiz );
-                pClpDoc->Insert( SwPaM( aPos ), *pNew, &aSet );
+                   pClpDoc->Insert( SwPaM( aPos ), *pNew, &aSet );
             }
             else
             {
@@ -953,7 +957,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
             if( !Imp()->GetDrawView() )
                 MakeDrawView();
 
-            Size aSiz( 0, GetCharRect().Top() );
+            // FME: removed for #105977#
+            // Size aSiz( 0, GetCharRect().Top() );
             for ( USHORT i = 0; i < pClpDoc->GetSpzFrmFmts()->Count(); ++i )
             {
                 BOOL bInsWithFmt = TRUE;
@@ -968,9 +973,40 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
                     {
                         SdrObject* pNew = GetDoc()->CloneSdrObj( *pSdrObj,
                                                             FALSE, FALSE );
-                        pNew->NbcMove( aSiz );
+
+                        // FME: removed for #105977#
+                        // pNew->NbcMove( aSiz );
+
+                        // Insert object sets any anchor position to 0.
+                        // Therefore we calculate the absolute position here
+                        // and after the insert the anchor of the object
+                        // is set to the anchor of the group object.
+                        Rectangle aSnapRect = pNew->GetSnapRect();
+                        if( pNew->GetAnchorPos().X() || pNew->GetAnchorPos().Y() )
+                        {
+                            const Point aPoint( 0, 0 );
+                            pNew->NbcSetAnchorPos( aPoint );
+                            pNew->NbcSetSnapRect( aSnapRect );
+                        }
+
                         Imp()->GetDrawView()->InsertObject( pNew,
                                                         *Imp()->GetPageView() );
+
+                        Point aGrpAnchor( 0, 0 );
+                        SdrObjList* pList = pNew->GetObjList();
+                        if ( pList )
+                        {
+                            SdrObject* pOwner = pList->GetOwnerObj();
+                            if ( pOwner )
+                            {
+                                SdrObjGroup* pThisGroup = PTR_CAST(SdrObjGroup, pOwner);
+                                aGrpAnchor = pThisGroup->GetAnchorPos();
+                            }
+                        }
+
+                        pNew->NbcSetAnchorPos( aGrpAnchor );
+                        pNew->NbcSetSnapRect( aSnapRect );
+
                         bInsWithFmt = FALSE;
                     }
                 }

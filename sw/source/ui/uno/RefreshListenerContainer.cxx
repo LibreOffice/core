@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RefreshListenerContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:45:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifdef PRECOMPILED
-#include "ui_pch.hxx"
+#include "core_pch.hxx"
 #endif
 
 #pragma hdrstop

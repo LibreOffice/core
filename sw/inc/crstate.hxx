@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:20:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ struct Sw2LinesPos
 {
     SwRect aLine;           // Position and size of the line
     SwRect aPortion;        // Position and size of the multi portion
+    SwRect aPortion2;       // needed for nested multi portions
     BYTE nMultiType;        // Multiportion type
 };
 

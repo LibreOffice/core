@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-06 09:31:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,8 @@
 #include <accmap.hxx>
 #endif
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
@@ -180,6 +180,10 @@
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
+#endif
+// OD 14.01.2003 #103492#
+#ifndef _PAGEPREVIEWLAYOUT_HXX
+#include <pagepreviewlayout.hxx>
 #endif
 
 BOOL ViewShell::bLstAct = FALSE;
@@ -1057,16 +1061,22 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
             const SwTwips nRight  = aBoth.Right();
             SwTwips nMinLeft = LONG_MAX;
             SwTwips nMaxRight= 0;
-            const nShadow = GetOut()->PixelToLogic( Size( 2, 0 ) ).Width();
             while ( pPage &&
                     !((pPage->Frm().Top()  > nBottom) ||
                         (pPage->Frm().Left() > nRight)))
             {
                 if ( pPage->Frm().IsOver( aBoth ) )
                 {
-                    if( pPage->Frm().Left() < nMinLeft )
-                        nMinLeft = pPage->Frm().Left();
-                    long nPageRight = pPage->Frm().Right() + nShadow;
+                    // OD 12.02.2003 #i9719#, #105645# - consider new border
+                    // and shadow width
+                    const nBorderWidth =
+                            GetOut()->PixelToLogic( Size( pPage->BorderPxWidth(), 0 ) ).Width();
+                    const nShadowWidth =
+                            GetOut()->PixelToLogic( Size( pPage->ShadowPxWidth(), 0 ) ).Width();
+                    sal_Int16 nPageLeft = pPage->Frm().Left() - nBorderWidth;
+                    if( nPageLeft < nMinLeft )
+                        nMinLeft = nPageLeft;
+                    sal_Int16 nPageRight = pPage->Frm().Right() + nBorderWidth + nShadowWidth;
                     if( nPageRight > nMaxRight )
                         nMaxRight = nPageRight;
                     //Zus. auf die Zeichenobjekte abgleichen.
@@ -1406,8 +1416,12 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
 void ViewShell::_PaintDesktop( const SwRegionRects &rRegion )
 {
     GetOut()->Push( PUSH_FILLCOLOR );
+    // OD 14.02.2003 #107424# - no longer needed, because color configuration
+    // is loaded in constructor of <SwModule>.
+    /*
     //make sure the color configuration has been loaded
     SW_MOD()->GetColorConfig();
+    */
     GetOut()->SetFillColor( SwViewOption::GetAppBackgroundColor());
     for ( USHORT i = 0; i < rRegion.Count(); ++i )
         GetOut()->DrawRect( rRegion[i].SVRect() );
@@ -2124,10 +2138,8 @@ void ViewShell::SetReadonlyOption(BOOL bSet)
         }
         else if ( GetWin() )
             GetWin()->Invalidate();
-#ifdef ACCESSIBLE_LAYOUT
         if( Imp()->IsAccessible() )
             Imp()->InvalidateAccessibleEditableState( sal_False );
-#endif
     }
 }
 /* -----------------------------2002/07/31 17:06------------------------------
@@ -2197,7 +2209,6 @@ BOOL ViewShell::IsNewLayout() const
     return GetLayout()->IsNewLayout();
 }
 
-#ifdef ACCESSIBLE_LAYOUT
 ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible > ViewShell::CreateAccessible()
 {
@@ -2219,13 +2230,7 @@ BOOL ViewShell::IsNewLayout() const
 
 ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible >
-ViewShell::CreateAccessiblePreview( sal_uInt8 nRow,
-                                    sal_uInt8 nColumn,
-                                    sal_uInt16 nStartPage,
-                                    const Size& rPageSize,
-                                    const Point& rFreePoint,
-                                    const Fraction& rScale,
-                                    sal_uInt16 nSelectedPage )
+ViewShell::CreateAccessiblePreview()
 {
     using ::com::sun::star::uno::Reference;
     using ::drafts::com::sun::star::accessibility::XAccessible;
@@ -2237,10 +2242,16 @@ ViewShell::CreateAccessiblePreview( sal_uInt8 nRow,
     ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
     ASSERT( GetWin(), "no window, no access" );
 
-    if( pDoc->GetRootFrm() && GetWin() )
+    // OD 15.01.2003 #103492# - add condition <IsPreView()>
+    if ( IsPreView() && pDoc->GetRootFrm() && GetWin() )
+    {
+        // OD 14.01.2003 #103492# - adjustment for new method signature
         return Imp()->GetAccessibleMap().GetDocumentPreview(
-                    nRow, nColumn, nStartPage, rPageSize, rFreePoint, rScale,
-                    nSelectedPage );
+                    PagePreviewLayout()->maPrevwPages,
+                    GetWin()->GetMapMode().GetScaleX(),
+                    pDoc->GetRootFrm()->GetPageByPageNum( PagePreviewLayout()->mnSelectedPageNum ),
+                    PagePreviewLayout()->maWinSize );
+    }
     return NULL;
 }
 
@@ -2249,7 +2260,6 @@ void ViewShell::InvalidateAccessibleFocus()
     if( Imp()->IsAccessible() )
         Imp()->GetAccessibleMap().InvalidateFocus();
 }
-#endif
 
 /* -----------------------------06.05.2002 13:23------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-08-30 08:57:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,12 +867,17 @@ SwFrameShell::SwFrameShell(SwView &rView) :
 {
     SetName(String::CreateFromAscii("Frame"));
     SetHelpId(SW_FRAMESHELL);
-    SwTransferable::CreateSelection( rView.GetWrtShell() );
+
+    /* #96392# Use this to announce it is the frame shell who creates the
+       selection. */
+    SwTransferable::CreateSelection( rView.GetWrtShell(), (ViewShell *) this );
 }
 
 SwFrameShell::~SwFrameShell()
 {
-    SwTransferable::ClearSelection( GetShell() );
+    /* #96392# Only clear the selection if it was this frame shell who created
+       it. */
+    SwTransferable::ClearSelection( GetShell(), (ViewShell *) this );
 }
 
 /*--------------------------------------------------------------------

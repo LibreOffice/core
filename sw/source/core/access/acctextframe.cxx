@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,11 +206,14 @@ Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
 Sequence< sal_Int8 > SAL_CALL SwAccessibleTextFrame::getImplementationId()
         throw(RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
-                        0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }
 

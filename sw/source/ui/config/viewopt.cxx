@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-05 10:06:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@
 #ifndef _CRSTATE_HXX
 #include <crstate.hxx>
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
@@ -776,66 +776,66 @@ Color&   SwViewOption::GetScriptIndicatorColor()
 /* -----------------------------23.04.2002 17:41------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwViewOption::ApplyColorConfigValues(const svx::ColorConfig& rConfig )
+void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 {
-    aDocColor.SetColor(rConfig.GetColorValue(svx::DOCCOLOR).nColor);
+    aDocColor.SetColor(rConfig.GetColorValue(svtools::DOCCOLOR).nColor);
 
-    svx::ColorConfigValue aValue = rConfig.GetColorValue(svx::DOCBOUNDARIES);
+    svtools::ColorConfigValue aValue = rConfig.GetColorValue(svtools::DOCBOUNDARIES);
     aDocBoundColor.SetColor(aValue.nColor);
     nAppearanceFlags = 0;
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_DOC_BOUNDARIES;
 
-    aAppBackgroundColor.SetColor(rConfig.GetColorValue(svx::APPBACKGROUND).nColor);
+    aAppBackgroundColor.SetColor(rConfig.GetColorValue(svtools::APPBACKGROUND).nColor);
 
-    aValue = rConfig.GetColorValue(svx::OBJECTBOUNDARIES);
+    aValue = rConfig.GetColorValue(svtools::OBJECTBOUNDARIES);
     aObjectBoundColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_OBJECT_BOUNDARIES;
 
-    aValue = rConfig.GetColorValue(svx::TABLEBOUNDARIES);
+    aValue = rConfig.GetColorValue(svtools::TABLEBOUNDARIES);
     aTableBoundColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_TABLE_BOUNDARIES;
 
-    aValue = rConfig.GetColorValue(svx::WRITERIDXSHADINGS);
+    aValue = rConfig.GetColorValue(svtools::WRITERIDXSHADINGS);
     aIndexShadingsColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_INDEX_SHADINGS;
 
-    aValue = rConfig.GetColorValue(svx::LINKS);
+    aValue = rConfig.GetColorValue(svtools::LINKS);
     aLinksColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_LINKS;
 
-    aValue = rConfig.GetColorValue(svx::LINKSVISITED);
+    aValue = rConfig.GetColorValue(svtools::LINKSVISITED);
     aVisitedLinksColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_VISITED_LINKS;
 
-    aDirectCursorColor.SetColor(rConfig.GetColorValue(svx::WRITERDIRECTCURSOR).nColor);
+    aDirectCursorColor.SetColor(rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor);
 
-    aTextGridColor.SetColor(rConfig.GetColorValue(svx::WRITERTEXTGRID).nColor);
+    aTextGridColor.SetColor(rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor);
 
-    aSpellColor.SetColor(rConfig.GetColorValue(svx::SPELL).nColor);
+    aSpellColor.SetColor(rConfig.GetColorValue(svtools::SPELL).nColor);
 
-    aFontColor.SetColor(rConfig.GetColorValue(svx::FONTCOLOR).nColor);
+    aFontColor.SetColor(rConfig.GetColorValue(svtools::FONTCOLOR).nColor);
 
-    aValue = rConfig.GetColorValue(svx::WRITERFIELDSHADINGS);
+    aValue = rConfig.GetColorValue(svtools::WRITERFIELDSHADINGS);
     aFieldShadingsColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_FIELD_SHADINGS;
 
-    aValue = rConfig.GetColorValue(svx::WRITERSECTIONBOUNDARIES);
+    aValue = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES);
     aSectionBoundColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
         nAppearanceFlags |= VIEWOPT_SECTION_BOUNDARIES;
 
-    aValue = rConfig.GetColorValue(svx::WRITERPAGEBREAKS);
+    aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
     aPageBreakColor.SetColor(aValue.nColor);
 
-    aNotesIndicatorColor.SetColor(rConfig.GetColorValue(svx::WRITERNOTESINDICATOR).nColor);
-    aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svx::WRITERSCRIPTINDICATOR).nColor);
+    aNotesIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERNOTESINDICATOR).nColor);
+    aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }
 /* -----------------------------23.04.2002 17:48------------------------------
 
@@ -848,31 +848,31 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInCon
         nAppearanceFlags &= ~nFlag;
     if(bSaveInConfig)
     {
-        //create an editable svx::ColorConfig and store the change
-        svx::EditableColorConfig aEditableConfig;
+        //create an editable svtools::ColorConfig and store the change
+        svtools::EditableColorConfig aEditableConfig;
         struct FlagToConfig_Impl
         {
             sal_Int32               nFlag;
-            svx::ColorConfigEntry   eEntry;
+            svtools::ColorConfigEntry   eEntry;
         };
         static const FlagToConfig_Impl aFlags[] =
         {
-            VIEWOPT_DOC_BOUNDARIES     ,   svx::DOCBOUNDARIES     ,
-            VIEWOPT_OBJECT_BOUNDARIES  ,   svx::OBJECTBOUNDARIES  ,
-            VIEWOPT_TABLE_BOUNDARIES   ,   svx::TABLEBOUNDARIES   ,
-            VIEWOPT_INDEX_SHADINGS     ,   svx::WRITERIDXSHADINGS     ,
-            VIEWOPT_LINKS              ,   svx::LINKS              ,
-            VIEWOPT_VISITED_LINKS      ,   svx::LINKSVISITED      ,
-            VIEWOPT_FIELD_SHADINGS     ,   svx::WRITERFIELDSHADINGS     ,
-            VIEWOPT_SECTION_BOUNDARIES ,   svx::WRITERSECTIONBOUNDARIES ,
-            0                          ,   svx::ColorConfigEntryCount
+            VIEWOPT_DOC_BOUNDARIES     ,   svtools::DOCBOUNDARIES     ,
+            VIEWOPT_OBJECT_BOUNDARIES  ,   svtools::OBJECTBOUNDARIES  ,
+            VIEWOPT_TABLE_BOUNDARIES   ,   svtools::TABLEBOUNDARIES   ,
+            VIEWOPT_INDEX_SHADINGS     ,   svtools::WRITERIDXSHADINGS     ,
+            VIEWOPT_LINKS              ,   svtools::LINKS              ,
+            VIEWOPT_VISITED_LINKS      ,   svtools::LINKSVISITED      ,
+            VIEWOPT_FIELD_SHADINGS     ,   svtools::WRITERFIELDSHADINGS     ,
+            VIEWOPT_SECTION_BOUNDARIES ,   svtools::WRITERSECTIONBOUNDARIES ,
+            0                          ,   svtools::ColorConfigEntryCount
         };
         sal_uInt16 nPos = 0;
         while(aFlags[nPos].nFlag)
         {
             if(0 != (nFlag&aFlags[nPos].nFlag))
             {
-                svx::ColorConfigValue aValue = aEditableConfig.GetColorValue(aFlags[nPos].eEntry);
+                svtools::ColorConfigValue aValue = aEditableConfig.GetColorValue(aFlags[nPos].eEntry);
                 aValue.bIsVisible = bSet;
                 aEditableConfig.SetColorValue(aFlags[nPos].eEntry, aValue);
             }

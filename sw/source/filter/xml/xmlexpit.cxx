@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-19 13:07:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,6 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
                                  sal_uInt16 nFlags,
                                  const SfxItemSet *pSet ) const
 {
-    OUString sCDATA( GetXMLToken(XML_CDATA) );
-
     if( 0 != (rEntry.nMemberId & MID_FLAG_SPECIAL_ITEM_EXPORT) )
     {
         if( rItem.ISA( SvXMLAttrContainerItem ) )
@@ -281,7 +279,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
                         sName.append( GetXMLToken(XML_XMLNS) );
                         sName.append( sal_Unicode(':') );
                         sName.append( sPrefix );
-                        rAttrList.AddAttribute( sName.makeStringAndClear(), sCDATA,
+                        rAttrList.AddAttribute( sName.makeStringAndClear(),
                                                 sNamespace );
                     }
 
@@ -290,7 +288,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
                 }
 
                 sName.append( pUnknown->GetAttrLName( i ) );
-                rAttrList.AddAttribute( sName.makeStringAndClear(), sCDATA,
+                rAttrList.AddAttribute( sName.makeStringAndClear(),
                                         pUnknown->GetAttrValue(i) );
             }
 
@@ -311,7 +309,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
             OUString sName(
                 rNamespaceMap.GetQNameByKey( rEntry.nNameSpace,
                                              GetXMLToken(rEntry.eLocalName)));
-            rAttrList.AddAttribute( sName, sCDATA, aValue );
+            rAttrList.AddAttribute( sName, aValue );
         }
     }
 }

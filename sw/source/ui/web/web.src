@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 09:58:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_40
     Text [ swedish ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ italian ] = "HTML %PRODUCTNAME 4.0" ;
-    Text [ spanish ] = "%PRODUCTNAME 4.0 HTML" ;
+    Text [ spanish ] = "%PRODUCTNAME 4.0 - HTML" ;
     Text [ french ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ dutch ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ portuguese ] = "HTML (%PRODUCTNAME 4.0)" ;
@@ -146,7 +146,7 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
     Text [ swedish ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ danish ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ italian ] = "HTML %PRODUCTNAME 5.0" ;
-    Text [ spanish ] = "%PRODUCTNAME 5.0 HTML" ;
+    Text [ spanish ] = "%PRODUCTNAME 5.0 - HTML" ;
     Text [ french ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ portuguese ] = "%PRODUCTNAME 5.0 HTML" ;
@@ -172,11 +172,11 @@ String STR_WRITER_WEBDOC_FULLTYPE
     Text [ English ] = "%PRODUCTNAME 6.0 HTML Document" ;
     Text[ english_us ] = "%PRODUCTNAME 6.0 HTML Document";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Documento HTML";
-    Text[ russian ] = "HTML-δξκσμενς (%PRODUCTNAME 6.0) ";
+    Text[ russian ] = "Βεα-ρςπΰνθφΰ (%PRODUCTNAME 6.0) ";
     Text[ greek ] = "%PRODUCTNAME 6.0 HTML - Έγγραφο";
     Text[ dutch ] = "%PRODUCTNAME 6.0 HTML Document";
     Text[ french ] = "%PRODUCTNAME 6.0 Document HTML";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Documento HTML";
+    Text[ spanish ] = "%PRODUCTNAME 6.0 - Documento HTML";
     Text[ italian ] = "%PRODUCTNAME 6.0 Documento HTML";
     Text[ danish ] = "%PRODUCTNAME 6,0 HTML-dokument";
     Text[ swedish ] = "HTML-dokument %PRODUCTNAME 6.0";
@@ -272,7 +272,7 @@ String RID_WEBTOOLS_TOOLBOX
     Text[ dutch ] = "Werktuigbalk/Web";
     Text[ chinese_simplified ] = "δΈ»ε·¥ε…·ζ /δΈ‡η»΄η½‘";
     Text[ greek ] = "Γραμμή εργαλειών/Web";
-    Text[ korean ] = "μ£Ό λ„κµ¬ λª¨μ/μ›Ή";
+    Text[ korean ] = "μ£Ό λ„κµ¬λª¨μ/μ›Ή";
     Text[ turkish ] = "Ana araη ηubuπu/Web";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'eines principal/Web";
@@ -449,6 +449,29 @@ ToolBox RID_WEBTEXT_TOOLBOX
         MN_TEMPLATE
         MN_FONT
         MN_TEXT1(TRUE)
+        MN_TEXT_LTR_RTL
+        MN_TEXT_LINESPACE
+        MN_TEXT2
+        MN_TEXT_BACKGROUND
+        MN_TEXT_DIALOGS(TRUE)
+    };
+    ItemList[arabic] =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        MN_TEXT1_RTL(TRUE)
+        MN_TEXT_RTL_LTR
+        MN_TEXT_LINESPACE
+        MN_TEXT2
+        MN_TEXT_BACKGROUND
+        MN_TEXT_DIALOGS(TRUE)
+    };
+    ItemList[hebrew] =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        MN_TEXT1_RTL(TRUE)
+        MN_TEXT_RTL_LTR
         MN_TEXT_LINESPACE
         MN_TEXT2
         MN_TEXT_BACKGROUND
@@ -548,7 +571,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text[ dutch ] = "Objectbalk afbeeldingen/Web";
     Text[ chinese_simplified ] = "ε›Ύε½Άε―Ήθ±΅ζ /Web";
     Text[ greek ] = "Γραμμή αντικειμένων σχεδιασμού/Web";
-    Text[ korean ] = "κ·Έλν”½ κ°μ²΄ λª¨μ/μ›Ή";
+    Text[ korean ] = "κ·Έλ¦Ό κ°μ²΄ λª¨μ/μ›Ή";
     Text[ turkish ] = "Grafik nesne ηubuπu/Web";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de objectes grΰfics/Web";
@@ -593,24 +616,24 @@ String RID_WEBOLE_TOOLBOX
     Text = "Objekt/Web" ;
     Text [ English ] = "Object/Web" ;
     Text [ norwegian ] = "Object" ;
-    Text [ italian ] = "Oggetto" ;
+    Text [ italian ] = "Oggetto/Web" ;
     Text [ portuguese_brazilian ] = "Objeto" ;
     Text [ portuguese ] = "Objecto" ;
     Text [ finnish ] = "Objekti" ;
     Text [ danish ] = "Objekt" ;
-    Text [ french ] = "Objet" ;
-    Text [ swedish ] = "Objekt" ;
+    Text [ french ] = "Objet/Web" ;
+    Text [ swedish ] = "Objekt/Webb" ;
     Text [ dutch ] = "Object" ;
-    Text [ spanish ] = "Objeto" ;
+    Text [ spanish ] = "Objeto/Web" ;
     Text [ english_us ] = "Object/Web" ;
-    Text[ chinese_simplified ] = "ε―Ήθ±΅";
+    Text[ chinese_simplified ] = "ε―Ήθ±΅/δΈ‡η»΄η½‘";
     Text[ russian ] = "Ξαϊεκς";
     Text[ polish ] = "Obiekt";
-    Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
-    Text[ chinese_traditional ] = "η‰©δ»¶";
+    Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ/Web";
+    Text[ chinese_traditional ] = "η‰©δ»¶/Web";
     Text[ arabic ] = "ίΗΖδ";
     Text[ dutch ] = "Object";
-    Text[ chinese_simplified ] = "ε―Ήθ±΅";
+    Text[ chinese_simplified ] = "ε―Ήθ±΅/δΈ‡η»΄η½‘";
     Text[ greek ] = "Αντικείμενο";
     Text[ korean ] = "κ°μ²΄/μ›Ή";
     Text[ turkish ] = "Nesne";
@@ -655,3 +678,8 @@ ToolBox RID_WEBOLE_TOOLBOX
 /*************************************************************************
 
 *************************************************************************/
+
+
+
+
+

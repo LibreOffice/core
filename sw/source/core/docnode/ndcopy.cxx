@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-05 12:37:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,6 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
-
 
 // Struktur fuer das Mappen von alten und neuen Frame-Formaten an den
 // Boxen und Lines einer Tabelle
@@ -902,6 +901,23 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
 
+                const SfxPoolItem * pItem = NULL;
+                SwAttrSet * pAttrSet = pDestNd->GetpSwAttrSet();
+
+                /* #107213#: Safe numrule item at destination. */
+                int aState = SFX_ITEM_UNKNOWN;
+                SwNumRuleItem aNumRuleItem;
+
+                if (pAttrSet != NULL)
+                {
+                    aState = pAttrSet->GetItemState
+                        (RES_PARATR_NUMRULE, FALSE, &pItem);
+
+                    if (SFX_ITEM_SET == aState)
+                        aNumRuleItem = *((SwNumRuleItem *) pItem);
+                }
+                /* #107213# */
+
                 if( !bCopyOk )
                 {
                     xub_StrLen nCpyLen = ( bOneNode ? pEnd->nContent.GetIndex()
@@ -918,11 +934,21 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     if( bCopyCollFmt )
                     {
                         pSttNd->CopyCollFmt( *pDestNd );
-                        if( pSttNd->GetNum() )
-                            pDestNd->UpdateNum( *pSttNd->GetNum() );
+
+                        if (pSttNd->GetNum())
+                              pDestNd->UpdateNum(*pSttNd->GetNum());
+
+                        /* #107213# If only a part of one paragraph is copied
+                           restore the numrule at the destination. */
+                        if (SFX_ITEM_SET == aState)
+                            pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
+                        else
+                            pDestNd->ResetAttr(RES_PARATR_NUMRULE);
                     }
+
                     break;
                 }
+
                 aRg.aStart++;
             }
         }
@@ -983,6 +1009,23 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 aInsPos--;
             }
 
+            const SfxPoolItem * pItem = NULL;
+            SwAttrSet * pAttrSet = pDestNd->GetpSwAttrSet();
+
+            /* #107213# Save numrule at destination */
+            int aState = SFX_ITEM_UNKNOWN;
+            SwNumRuleItem aNumRuleItem;
+
+            if (pAttrSet != NULL)
+            {
+                aState = pAttrSet->GetItemState
+                    (RES_PARATR_NUMRULE, FALSE, &pItem);
+
+                if (SFX_ITEM_SET == aState)
+                    aNumRuleItem = *((SwNumRuleItem *) pItem);
+            }
+            /* #107213# */
+
             BOOL bEmptyDestNd = 0 == pDestNd->GetTxt().Len();
             pEndNd->Copy( pDestNd, aDestIdx, SwIndex( pEndNd ),
                             pEnd->nContent.GetIndex() );
@@ -991,8 +1034,19 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             if( bCopyCollFmt && ( bOneNode || bEmptyDestNd ))
             {
                 pEndNd->CopyCollFmt( *pDestNd );
-                if( pEndNd->GetNum() )
+
+                if (pEndNd->GetNum())
                     pDestNd->UpdateNum( *pEndNd->GetNum() );
+
+                if (bOneNode)
+                {
+                    /* #107213# If only a part of one paragraph is copied
+                       restore the numrule at the destination. */
+                    if (SFX_ITEM_SET == aState)
+                        pDestNd->SwCntntNode::SetAttr(aNumRuleItem);
+                    else
+                        pDestNd->ResetAttr(RES_PARATR_NUMRULE);
+                }
             }
         }
 
@@ -1065,6 +1119,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     }
     pDoc->SetRedlineMode_intern( eOld );
     pDoc->SetModified();
+
     return TRUE;
 }
 

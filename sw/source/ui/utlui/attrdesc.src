@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-26 09:36:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@ String STR_DROP_OVER
     Text[ dutch ] = "Initialen over";
     Text[ chinese_simplified ] = "å­—é¦–å¤§å†™ï¼Œé«˜åº¦ç­‰äº";
     Text[ greek ] = "Êåöáëáßá ğÜíù";
-    Text[ korean ] = "ë‹¨ë½ì˜ ì²« ë¬¸ì ì¥ì‹ ìœ„ì¹˜";
+    Text[ korean ] = "ë‹¨ë½ ì²« ë¬¸ì ì¥ì‹";
     Text[ turkish ] = "Başharfi/leri büyüt";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Líneas para iniciales";
+    Text[ catalan ] = "Caplletres sobre";
     Text[ finnish ] = "Anfangikoko";
+    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆà¸šà¸™";
 };
 String STR_DROP_LINES
 {
@@ -107,7 +108,7 @@ String STR_DROP_LINES
     Text [ portuguese ] = "Linhas" ;
     Text [ portuguese_brazilian ] = "Zeilen" ;
     Text[ chinese_simplified ] = "è¡Œ";
-    Text[ russian ] = "Ñòğîêè";
+    Text[ russian ] = "ñòğîêè";
     Text[ polish ] = "Wiersze";
     Text[ japanese ] = "è¡Œ";
     Text[ chinese_traditional ] = "è¡Œ";
@@ -115,11 +116,12 @@ String STR_DROP_LINES
     Text[ dutch ] = "Regels";
     Text[ chinese_simplified ] = "è¡Œ";
     Text[ greek ] = "Ãñáììİò";
-    Text[ korean ] = "í–‰";
+    Text[ korean ] = "ì¤„";
     Text[ turkish ] = "Satır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filas";
+    Text[ catalan ] = "files";
     Text[ finnish ] = "rivit";
+    Text[ thai ] = "à¹à¸–à¸§";
 };
 String STR_NO_DROP_LINES
 {
@@ -146,8 +148,9 @@ String STR_NO_DROP_LINES
     Text[ korean ] = "ë‹¨ë½ ì²« ë¬¸ì ì¥ì‹ ì—†ìŒ";
     Text[ turkish ] = "Başharf yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin iniciales";
+    Text[ catalan ] = "Sense caplletra";
     Text[ finnish ] = "Ei anfangeja";
+    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¸™à¸²à¸”à¹ƒà¸«à¸à¹ˆ";
 };
 String STR_NO_PAGEDESC
 {
@@ -163,7 +166,7 @@ String STR_NO_PAGEDESC
     Text [ portuguese ] = "Sem quebra de página" ;
     Text [ portuguese_brazilian ] = "kein Seitenumbruch" ;
     Text[ chinese_simplified ] = "ä¸æ¢é¡µ";
-    Text[ russian ] = "áåç ğàçğûâà ñòğàíèö";
+    Text[ russian ] = "Áåç ğàçğûâà ñòğàíèö";
     Text[ polish ] = "Bez ³amania strony";
     Text[ japanese ] = "æ”¹ãƒšãƒ¼ã‚¸ãªã—";
     Text[ chinese_traditional ] = "ä¸æ›é ";
@@ -174,8 +177,9 @@ String STR_NO_PAGEDESC
     Text[ korean ] = "í˜ì´ì§€ ë‚˜ëˆ„ê¸° ì—†ìŒ";
     Text[ turkish ] = "Sayfa sonu yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "sin salto de página";
-    Text[ finnish ] = "Ei rivinvaihtoa";
+    Text[ catalan ] = "sense salt de pàgina";
+    Text[ finnish ] = "Ei sivunvaihtoa";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¹à¸šà¹ˆà¸‡à¸«à¸™à¹‰à¸²";
 };
 String STR_NO_MIRROR
 {
@@ -191,7 +195,7 @@ String STR_NO_MIRROR
     Text [ portuguese ] = "Não reflectir" ;
     Text [ portuguese_brazilian ] = "nicht Spiegeln" ;
     Text[ chinese_simplified ] = "ä¸ç¿»è½¬";
-    Text[ russian ] = "íå îòğàæàòü";
+    Text[ russian ] = "Íå îòğàæàòü";
     Text[ polish ] = "Nie odbijaj";
     Text[ japanese ] = "åè»¢ã—ãªã„";
     Text[ chinese_traditional ] = "ä¸ç¿»è½‰";
@@ -199,11 +203,12 @@ String STR_NO_MIRROR
     Text[ dutch ] = "niet spiegelen";
     Text[ chinese_simplified ] = "ä¸ç¿»è½¬";
     Text[ greek ] = "Íá ìçí ãßíåé áíôáíÜêëáóç";
-    Text[ korean ] = "ëŒ€ì¹­ ì•ŠìŒ";
+    Text[ korean ] = "ëŒ€ì¹­ ì•ˆí•¨";
     Text[ turkish ] = "Yansıtma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No reflejar";
+    Text[ catalan ] = "No reflexis";
     Text[ finnish ] = "Älä peilaa";
+    Text[ thai ] = "à¸­à¸¢à¹ˆà¸²à¸ªà¹ˆà¸­à¸‡à¸à¸£à¸°à¸ˆà¸";
 };
 String STR_VERT_MIRROR
 {
@@ -212,7 +217,7 @@ String STR_VERT_MIRROR
     Text [ dutch ] = "verticaal spiegelen" ;
     Text [ english_us ] = "Flip vertically" ;
     Text [ italian ] = "Rispecchia in verticale" ;
-    Text [ spanish ] = "Reflejar vertical" ;
+    Text [ spanish ] = "Reflejar verticalmente" ;
     Text [ french ] = "Refléter verticalement" ;
     Text [ swedish ] = "spegelvänd vertikalt" ;
     Text [ danish ] = "spejlvend lodret" ;
@@ -227,11 +232,12 @@ String STR_VERT_MIRROR
     Text[ dutch ] = "verticaal spiegelen";
     Text[ chinese_simplified ] = "å‚ç›´ç¿»è½¬";
     Text[ greek ] = "ïñéæüíôéá áíáóôñïöŞ";
-    Text[ korean ] = "ìˆ˜ì§ ëŒ€ì¹­";
+    Text[ korean ] = "ìƒí•˜ ë°˜ì „";
     Text[ turkish ] = "Dikey yansıt";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reflejar vertical";
+    Text[ catalan ] = "Inverteix verticalment";
     Text[ finnish ] = "Käännä pystysuunta";
+    Text[ thai ] = "à¸à¸¥à¸´à¸à¸•à¸²à¸¡à¹à¸™à¸§à¸•à¸±à¹‰à¸‡";
 };
 String STR_HORI_MIRROR
 {
@@ -240,7 +246,7 @@ String STR_HORI_MIRROR
     Text [ dutch ] = "horizontaal spiegelen" ;
     Text [ english_us ] = "Flip horizontal" ;
     Text [ italian ] = "Rispecchia in orizzontale" ;
-    Text [ spanish ] = "Reflejar horizontal" ;
+    Text [ spanish ] = "Reflejar horizontalmente" ;
     Text [ french ] = "Refléter horizontalement" ;
     Text [ swedish ] = "Spegelvänd horisontellt" ;
     Text [ danish ] = "spejlvend vandret" ;
@@ -255,11 +261,12 @@ String STR_HORI_MIRROR
     Text[ dutch ] = "horizontaal spiegelen";
     Text[ chinese_simplified ] = "æ°´å¹³ç¿»è½¬";
     Text[ greek ] = "ïñéæüíôéá áíáóôñïöŞ";
-    Text[ korean ] = "ìˆ˜í‰ ëŒ€ì¹­";
+    Text[ korean ] = "ì¢Œìš° ë°˜ì „";
     Text[ turkish ] = "Yatay yansıt";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reflejar horizontal";
-    Text[ finnish ] = "Käännä vaakasuunta";
+    Text[ catalan ] = "Inverteix horitzontalment";
+    Text[ finnish ] = "Käännä vaakasuunnassa";
+    Text[ thai ] = "à¸à¸¥à¸´à¸à¸•à¸²à¸¡à¹à¸™à¸§à¸™à¸­à¸™";
 };
 String STR_BOTH_MIRROR
 {
@@ -269,7 +276,7 @@ String STR_BOTH_MIRROR
     Text [ italian ] = "Rispecchiare in orizzontale e verticale" ;
     Text [ spanish ] = "Reflejar vertical y horizontalmente" ;
     Text [ french ] = "Refléter verticalement et horizontalement" ;
-    Text [ dutch ] = "Hoizontaal en verticaal spiegelen" ;
+    Text [ dutch ] = "Horizontaal en verticaal spiegelen" ;
     Text [ swedish ] = "spegelvänd vert. o. hori." ;
     Text [ danish ] = "spejlvend lodret og vandret" ;
     Text [ portuguese_brazilian ] = "vert. und horizontal Spiegeln" ;
@@ -280,14 +287,15 @@ String STR_BOTH_MIRROR
     Text[ japanese ] = "ä¸Šä¸‹ã¨å·¦å³ã«åè»¢";
     Text[ chinese_traditional ] = "å‚ç›´å’Œæ°´å¹³ç¿»è½‰";
     Text[ arabic ] = "ÇäÚßÇÓ ÑÃÓí æÃİŞí";
-    Text[ dutch ] = "Hoizontaal en verticaal spiegelen";
+    Text[ dutch ] = "Horizontaal en verticaal spiegelen";
     Text[ chinese_simplified ] = "å‚ç›´å’Œæ°´å¹³ç¿»è½¬";
     Text[ greek ] = "ïñéæüíôéá êáé êáôáêüñõöç áíáóôñïöŞ";
-    Text[ korean ] = "ìˆ˜í‰ê³¼ ìˆ˜ì§ ëŒ€ì¹­";
+    Text[ korean ] = "ìƒí•˜ ë°˜ì „ ë° ì¢Œìš° ë°˜ì „";
     Text[ turkish ] = "Dikey ve yatay yansıt";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Reflejar vertical y horizontalmente";
+    Text[ catalan ] = "Inverteix horitzontalment i verticalment";
     Text[ finnish ] = "Vaaka- ja pystysuuntainen käännös";
+    Text[ thai ] = "à¸à¸¥à¸´à¸à¸•à¸²à¸¡à¹à¸™à¸§à¸™à¸­à¸™à¹à¸¥à¸°à¹à¸™à¸§à¸•à¸±à¹‰à¸‡";
 };
 String STR_MIRROR_TOGGLE
 {
@@ -303,7 +311,7 @@ String STR_MIRROR_TOGGLE
     Text [ french ] = "+ refléter horizontalement sur les pages paires" ;
     Text [ dutch ] = "+ op even pagina's horizontaal spiegelen" ;
     Text[ chinese_simplified ] = "+ æ°´å¹³ç¿»è½¬åˆ°å¶æ•°é¡µé¢";
-    Text[ russian ] = " +îòğàçèòü ïî ãîğèçîíòàëè íà ÷åòíûõ ñòğàíèöàõ";
+    Text[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè íà ÷åòíûõ ñòğàíèöàõ";
     Text[ polish ] = "+ odbij w poziomie na stronach parzystych";
     Text[ japanese ] = "+ å¶æ•°ãƒšãƒ¼ã‚¸ã«ä¸Šä¸‹åè»¢";
     Text[ chinese_traditional ] = "+ æ°´å¹³ç¿»è½‰åˆ°å¶æ•¸é é¢";
@@ -311,11 +319,12 @@ String STR_MIRROR_TOGGLE
     Text[ dutch ] = "+ op even pagina's horizontaal spiegelen";
     Text[ chinese_simplified ] = "+ æ°´å¹³ç¿»è½¬åˆ°å¶æ•°é¡µé¢";
     Text[ greek ] = "+ ïñéæüíôéá áíôáíÜêëáóç óå ìïíİò óåëßäåò";
-    Text[ korean ] = " + ì§ìˆ˜ í˜ì´ì§€ì—ì„œ ìˆ˜í‰ìœ¼ë¡œ ëŒ€ì¹­";
+    Text[ korean ] = "+ ì§ìˆ˜ í˜ì´ì§€ì—ì„œ ì¢Œìš° ë°˜ì „";
     Text[ turkish ] = "+ çift numaralı sayfalarda yatay yansıt";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "+ reflejar horizontalmente en las páginas pares";
+    Text[ catalan ] = "+ reflexa horitzontalment a les pàgines parells";
     Text[ finnish ] = "+ peilaa vaakasuunnassa parillisilla sivuilla";
+    Text[ thai ] = "+ à¸ªà¹ˆà¸­à¸‡à¸•à¸²à¸¡à¹à¸™à¸§à¸™à¸­à¸™à¸šà¸™à¸«à¸™à¹‰à¸²à¸—à¸µà¹ˆà¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
 };
 String STR_CHARFMT
 {
@@ -331,7 +340,7 @@ String STR_CHARFMT
     Text [ portuguese ] = "Estilos de caracteres" ;
     Text [ portuguese_brazilian ] = "Zeichenvorlage" ;
     Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼";
-    Text[ russian ] = "Ñòèëü çíàêîâ";
+    Text[ russian ] = "Ñòèëü ñèìâîëà";
     Text[ polish ] = "Styl znaku";
     Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
     Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼";
@@ -339,11 +348,12 @@ String STR_CHARFMT
     Text[ dutch ] = "Tekenopmaakprofiel";
     Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼";
     Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-    Text[ korean ] = "ë¬¸ì í…œí”Œë¦¿";
+    Text[ korean ] = "ë¬¸ì ìŠ¤íƒ€ì¼";
     Text[ turkish ] = "Karakter biçimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilo de caracteres";
-    Text[ finnish ] = "Merkistön tyyli";
+    Text[ catalan ] = "Estil de caràcters";
+    Text[ finnish ] = "Merkkityyli";
+    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
 };
 String STR_NO_CHARFMT
 {
@@ -359,7 +369,7 @@ String STR_NO_CHARFMT
     Text [ portuguese ] = "Estilo de caracteres inexistente" ;
     Text [ portuguese_brazilian ] = "keine Zeichenvorlage" ;
     Text[ chinese_simplified ] = "æ— å­—ç¬¦æ ·å¼";
-    Text[ russian ] = "Áåç ñòèëÿ çíàêîâ";
+    Text[ russian ] = "Áåç ñòèëÿ ñèìâîëà";
     Text[ polish ] = "Brak stylu znaków";
     Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«ãªã—";
     Text[ chinese_traditional ] = "ç„¡å­—å…ƒæ¨£å¼";
@@ -367,11 +377,12 @@ String STR_NO_CHARFMT
     Text[ dutch ] = "geen opmaakprofiel";
     Text[ chinese_simplified ] = "æ— å­—ç¬¦æ ·å¼";
     Text[ greek ] = "÷ùñßò óôõë ÷áñáêôŞñùí";
-    Text[ korean ] = "ë¬¸ì í…œí”Œë¦¿ ì—†ìŒ.";
+    Text[ korean ] = "ë¬¸ì ìŠ¤íƒ€ì¼ ì—†ìŒ";
     Text[ turkish ] = "Karakter biçimi yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El estilo de carácter no existe";
-    Text[ finnish ] = "Ei merkistön tyyliä";
+    Text[ catalan ] = "L'estil de caràcter no existeix";
+    Text[ finnish ] = "Ei merkkityyliä";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
 };
 String STR_FOOTER
 {
@@ -399,8 +410,9 @@ String STR_FOOTER
     Text[ korean ] = "ë°”ë‹¥ê¸€";
     Text[ turkish ] = "Altbilgi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pie de página";
-    Text[ finnish ] = "Alaselite";
+    Text[ catalan ] = "Peu de pàgina";
+    Text[ finnish ] = "Alatunniste";
+    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
 };
 String STR_NO_FOOTER
 {
@@ -417,7 +429,7 @@ String STR_NO_FOOTER
     Text [ portuguese ] = "Sem rodapé" ;
     Text [ portuguese_brazilian ] = "keine Fu?zeile" ;
     Text[ chinese_simplified ] = "æ— é¡µè„š";
-    Text[ russian ] = "áåç íèæíåãî êîëîíòèòóëà";
+    Text[ russian ] = "Áåç íèæíåãî êîëîíòèòóëà";
     Text[ polish ] = "Bez stopki";
     Text[ japanese ] = "ãƒ•ãƒƒã‚¿ãªã—";
     Text[ chinese_traditional ] = "ç„¡é å°¾";
@@ -425,11 +437,12 @@ String STR_NO_FOOTER
     Text[ dutch ] = "geen voettekst";
     Text[ chinese_simplified ] = "æ— é¡µè„š";
     Text[ greek ] = "÷ùñßò õğïóİëéäï";
-    Text[ korean ] = "ë°”ë‹¥ê¸€ ì—†ìŒ.";
+    Text[ korean ] = "ë°”ë‹¥ê¸€ ì—†ìŒ";
     Text[ turkish ] = "Altbilgi yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin pie de página";
-    Text[ finnish ] = "Ei alaselitettä";
+    Text[ catalan ] = "Sense peu de pàgina";
+    Text[ finnish ] = "Ei alatunnistetta";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
 };
 String STR_HEADER
 {
@@ -456,8 +469,9 @@ String STR_HEADER
     Text[ korean ] = "ë¨¸ë¦¬ê¸€";
     Text[ turkish ] = "Üstbilgi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Encabezamiento";
-    Text[ finnish ] = "Yläotsikko";
+    Text[ catalan ] = "Encapçalament";
+    Text[ finnish ] = "Ylätunniste";
+    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
 };
 String STR_NO_HEADER
 {
@@ -473,7 +487,7 @@ String STR_NO_HEADER
     Text [ portuguese ] = "Sem cabeçalho" ;
     Text [ portuguese_brazilian ] = "keine Kopfzeile" ;
     Text[ chinese_simplified ] = "æ— é¡µçœ‰";
-    Text[ russian ] = "áåç âåğõíåãî êîëîíòèòóëà";
+    Text[ russian ] = "Áåç âåğõíåãî êîëîíòèòóëà";
     Text[ polish ] = "Bez nag³ówka";
     Text[ japanese ] = "ãƒ˜ãƒƒãƒ€ãªã—";
     Text[ chinese_traditional ] = "ç„¡é é¦–";
@@ -481,11 +495,12 @@ String STR_NO_HEADER
     Text[ dutch ] = "geen koptekst";
     Text[ chinese_simplified ] = "æ— é¡µçœ‰";
     Text[ greek ] = "÷ùñßò êåöáëßäá";
-    Text[ korean ] = "ë¨¸ë¦¬ê¸€ ì—†ìŒ.";
+    Text[ korean ] = "ë¨¸ë¦¬ê¸€ ì—†ìŒ";
     Text[ turkish ] = "Üstbilgi yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin encabezamiento";
-    Text[ finnish ] = "Ei yläotsikkoa";
+    Text[ catalan ] = "Sense encapçalament";
+    Text[ finnish ] = "Ei ylätunnistetta";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
 };
 String STR_SURROUND_IDEAL
 {
@@ -501,7 +516,7 @@ String STR_SURROUND_IDEAL
     Text [ portuguese ] = "Ajuste ideal" ;
     Text [ portuguese_brazilian ] = "idealer Umlauf" ;
     Text[ chinese_simplified ] = "æœ€ä½³æ–‡å­—ç¯ç»•";
-    Text[ russian ] = "îïòèìàëüíîå îáòåêàíèå";
+    Text[ russian ] = "Îïòèìàëüíîå îáòåêàíèå";
     Text[ polish ] = "Obieg idealny";
     Text[ japanese ] = "æœ€é©ãªæŠ˜ã‚Šè¿”ã—";
     Text[ chinese_traditional ] = "æœ€é©åˆæ–‡å­—ç’°ç¹";
@@ -509,11 +524,12 @@ String STR_SURROUND_IDEAL
     Text[ dutch ] = "ideale omloop";
     Text[ chinese_simplified ] = "æœ€ä½³æ–‡å­—ç¯ç»•";
     Text[ greek ] = "âİëôéóôç áíáäßğëùóç";
-    Text[ korean ] = "ìµœì  ë¬¸ìì—´ ë°°ì¹˜";
+    Text[ korean ] = "ìµœì ìœ¼ë¡œ ë¬¸ì¥ ë°°ì¹˜";
     Text[ turkish ] = "Optimum metin dağılımı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste ideal";
+    Text[ catalan ] = "Ajustament ideal";
     Text[ finnish ] = "Optimaalinen rivitys";
+    Text[ thai ] = "à¸•à¸±à¸”à¹€à¸«à¸¡à¸²à¸°à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
 };
 String STR_SURROUND_NONE
 {
@@ -529,7 +545,7 @@ String STR_SURROUND_NONE
     Text [ portuguese ] = "Sem ajuste" ;
     Text [ portuguese_brazilian ] = "kein Umlauf" ;
     Text[ chinese_simplified ] = "ä¸ç¯ç»•";
-    Text[ russian ] = "áåç îáòåêàíèÿ";
+    Text[ russian ] = "Áåç îáòåêàíèÿ";
     Text[ polish ] = "Brak obiegu";
     Text[ japanese ] = "ä¸Šä¸‹æŠ˜ã‚Šè¿”ã—";
     Text[ chinese_traditional ] = "ä¸ç’°ç¹";
@@ -537,11 +553,12 @@ String STR_SURROUND_NONE
     Text[ dutch ] = "geen omloop";
     Text[ chinese_simplified ] = "ä¸ç¯ç»•";
     Text[ greek ] = "×ùñßò áíáäßğëùóç";
-    Text[ korean ] = "ë¬¸ìì—´ ë°°ì¹˜ ì—†ìŒ";
+    Text[ korean ] = "ë¬¸ì¥ ë°°ì¹˜ ì—†ìŒ";
     Text[ turkish ] = "Metin dağılımı yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin ajuste";
+    Text[ catalan ] = "Sense ajustament";
     Text[ finnish ] = "Ei rivitystä";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸•à¸±à¸”";
 };
 String STR_SURROUND_THROUGHT
 {
@@ -565,11 +582,12 @@ String STR_SURROUND_THROUGHT
     Text[ dutch ] = "doorloop";
     Text[ chinese_simplified ] = "è´¯ç©¿";
     Text[ greek ] = "Äéá ìİóïõ";
-    Text[ korean ] = "ë¬¸ì¥íë¥´ê¸°";
+    Text[ korean ] = "ë°°ì¹˜ ì—†ìŒ";
     Text[ turkish ] = "Metin arkasına gönder";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Continuo";
+    Text[ catalan ] = "Continu";
     Text[ finnish ] = "Kautta";
+    Text[ thai ] = "à¸œà¹ˆà¸²à¸™";
 };
 String STR_SURROUND_PARALLEL
 {
@@ -585,7 +603,7 @@ String STR_SURROUND_PARALLEL
     Text [ portuguese ] = "Ajuste paralelo" ;
     Text [ portuguese_brazilian ] = "paralleler Umlauf" ;
     Text[ chinese_simplified ] = "å¹³è¡Œç¯ç»•";
-    Text[ russian ] = "ïàğàëëåëüíîå îáòåêàíèå";
+    Text[ russian ] = "Îáòåêàíèå ïî êîíòóğó";
     Text[ polish ] = "Obieg równoleg³y";
     Text[ japanese ] = "ä¸Šä¸‹æŠ˜ã‚Šè¿”ã—";
     Text[ chinese_traditional ] = "å¹³è¡Œç’°ç¹";
@@ -593,11 +611,12 @@ String STR_SURROUND_PARALLEL
     Text[ dutch ] = "omloop parallel";
     Text[ chinese_simplified ] = "å¹³è¡Œç¯ç»•";
     Text[ greek ] = "ğáñÜëëçëç áíáäßğëùóç";
-    Text[ korean ] = "ë¬¸ìì—´ ë°°ì¹˜ï¼Œí‰í–‰";
+    Text[ korean ] = "í‰í–‰ìœ¼ë¡œ ë¬¸ì¥ ë°°ì¹˜";
     Text[ turkish ] = "Paralel metin dağılımı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste paralelo";
+    Text[ catalan ] = "Ajustament paral.lel";
     Text[ finnish ] = "Samansuuntainen rivitys";
+    Text[ thai ] = "à¸•à¸±à¸”à¹à¸šà¸šà¸‚à¸™à¸²à¸™";
 };
 String STR_SURROUND_COLUMN
 {
@@ -613,7 +632,7 @@ String STR_SURROUND_COLUMN
     Text [ portuguese ] = "Ajustar colunas" ;
     Text [ portuguese_brazilian ] = "spaltiger Umlauf" ;
     Text[ chinese_simplified ] = "åˆ—å†…æ–‡å­—ç¯ç»•";
-    Text[ russian ] = "Îáòåêàíèå ââèäå êîëîíîê";
+    Text[ russian ] = "Îáòåêàíèå â âèäå êîëîíîê";
     Text[ polish ] = "Obieg kolumnowy";
     Text[ japanese ] = "åˆ—ã®æŠ˜ã‚Šè¿”ã—";
     Text[ chinese_traditional ] = "åˆ—å…§æ–‡å­—ç’°ç¹";
@@ -621,11 +640,12 @@ String STR_SURROUND_COLUMN
     Text[ dutch ] = "omloop kolom";
     Text[ chinese_simplified ] = "åˆ—å†…æ–‡å­—ç¯ç»•";
     Text[ greek ] = "Áíáäßğëùóç óôŞëçò";
-    Text[ korean ] = "ë¬¸ìì—´ ë°°ì¹˜ï¼Œë‹¨ì—ì„œ";
+    Text[ korean ] = "ì—´ ë¬¸ì¥ ë°°ì¹˜";
     Text[ turkish ] = "-";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste en columnas";
-    Text[ finnish ] = "Sarakkeen rivitys";
+    Text[ catalan ] = "Ajustament de columnes";
+    Text[ finnish ] = "Palstan rivitys";
+    Text[ thai ] = "à¸•à¸±à¸”à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String STR_SURROUND_LEFT
 {
@@ -649,11 +669,12 @@ String STR_SURROUND_LEFT
     Text[ dutch ] = "omloop linkerkant";
     Text[ chinese_simplified ] = "å·¦ç¯ç»•";
     Text[ greek ] = "áíáäßğëùóç áñéóôåñÜ";
-    Text[ korean ] = "ë¬¸ìì—´ ë°°ì¹˜ï¼Œì™¼ìª½";
+    Text[ korean ] = "ë¬¸ì¥ ë°°ì¹˜ ì™¼ìª½";
     Text[ turkish ] = "Sol metin dağılımı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste a la izquierda";
+    Text[ catalan ] = "Ajustament esquerre";
     Text[ finnish ] = "Rivitys vasemmalle";
+    Text[ thai ] = "à¸•à¸±à¸”à¸”à¹‰à¸²à¸™à¸‹à¹‰à¸²à¸¢";
 };
 String STR_SURROUND_RIGHT
 {
@@ -677,11 +698,12 @@ String STR_SURROUND_RIGHT
     Text[ dutch ] = "omloop rechterkant";
     Text[ chinese_simplified ] = "å³ç¯ç»•";
     Text[ greek ] = "áíáäßğëùóç äåîéÜ";
-    Text[ korean ] = "ë¬¸ìì—´ ë°°ì¹˜ï¼Œì˜¤ë¥¸ìª½";
+    Text[ korean ] = "ë³¸ë¬¸ì˜ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ë°°ì¹˜";
     Text[ turkish ] = "Sağ metin dağılımı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste a la derecha";
+    Text[ catalan ] = "Ajustament dret";
     Text[ finnish ] = "Rivitä oikealle";
+    Text[ thai ] = "à¸•à¸±à¸”à¸”à¹‰à¸²à¸™à¸‚à¸§à¸²";
 };
 String STR_SURROUND_INSIDE
 {
@@ -705,11 +727,12 @@ String STR_SURROUND_INSIDE
     Text[ dutch ] = "omloop binnenkant";
     Text[ chinese_simplified ] = "å†…éƒ¨ç¯ç»•";
     Text[ greek ] = "Áíáäßğëùóç - åóùôåñéêÜ";
-    Text[ korean ] = "ë¬¸ìì—´ ë°°ì¹˜ï¼Œì•ˆìª½";
+    Text[ korean ] = "ë¬¸ì¥ ë°°ì¹˜ ì•ˆìœ¼ë¡œ";
     Text[ turkish ] = "İç metin dağılımı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste interno";
+    Text[ catalan ] = "Ajustament intern";
     Text[ finnish ] = "Sisempi rivitys";
+    Text[ thai ] = "à¸•à¸±à¸”à¸”à¹‰à¸²à¸™à¹ƒà¸™";
 };
 String STR_SURROUND_OUTSIDE
 {
@@ -734,11 +757,12 @@ String STR_SURROUND_OUTSIDE
     Text[ dutch ] = "omloop buitenkant";
     Text[ chinese_simplified ] = "å¤–ç¯ç»•";
     Text[ greek ] = "Áíáäßğëùóç - åîùôåñéêÜ";
-    Text[ korean ] = "ë¬¸ìì—´ ë°°ì¹˜ï¼Œë°”ê¹¥ìª½";
+    Text[ korean ] = "ë¬¸ì¥ ë°°ì¹˜ ë°”ê¹¥ìª½ìœ¼ë¡œ";
     Text[ turkish ] = "Dış metin dağılımı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ajuste externo";
+    Text[ catalan ] = "Ajustament exterior";
     Text[ finnish ] = "Ulompi rivitys";
+    Text[ thai ] = "à¸•à¸±à¸”à¸”à¹‰à¸²à¸™à¸™à¸­à¸";
 };
 String STR_SURROUND_ANCHORONLY
 {
@@ -754,7 +778,7 @@ String STR_SURROUND_ANCHORONLY
     Text [ portuguese ] = "(só âncora)" ;
     Text [ portuguese_brazilian ] = "(nur Anker)" ;
     Text[ chinese_simplified ] = "(åªæ˜¯æ ‡è®°)";
-    Text[ russian ] = "(òîëüêî ïğèâÿçêà)";
+    Text[ russian ] = "(òîëüêî ÿêîğü)";
     Text[ polish ] = "(tylko kotwica)";
     Text[ japanese ] = "(ã‚¢ãƒ³ã‚«ãƒ¼ã®ã¿)";
     Text[ chinese_traditional ] = "(åªæ˜¯æ¨™è™Ÿ)";
@@ -762,11 +786,12 @@ String STR_SURROUND_ANCHORONLY
     Text[ dutch ] = "(alleen anker)";
     Text[ chinese_simplified ] = "(åªæ˜¯æ ‡è®°)";
     Text[ greek ] = "(ìüíï áãêıñùóç)";
-    Text[ korean ] = "(ê³ ì • ê¸°ì¤€ë§Œ)";
+    Text[ korean ] = "(ê¸°ì¤€ ìœ„ì¹˜ë§Œ)";
     Text[ turkish ] = "(yalnızca sabitleyici)";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "(solo ancla)";
+    Text[ catalan ] = "(només ancla)";
     Text[ finnish ] = "(Vain ankkuri)";
+    Text[ thai ] = "(à¸ªà¸¡à¸­à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§)";
 };
 String STR_FRM_WIDTH
 {
@@ -793,8 +818,9 @@ String STR_FRM_WIDTH
     Text[ korean ] = "ë„ˆë¹„:";
     Text[ turkish ] = "Genişlik:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ancho:";
+    Text[ catalan ] = "Amplada";
     Text[ finnish ] = "Leveys:";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡:";
 };
 String STR_FRM_FIXEDHEIGHT
 {
@@ -811,7 +837,7 @@ String STR_FRM_FIXEDHEIGHT
     Text [ portuguese ] = "Altura fixa:" ;
     Text [ portuguese_brazilian ] = "feste H?e:" ;
     Text[ chinese_simplified ] = "å›ºå®šé«˜åº¦ï¼š";
-    Text[ russian ] = "ôèêñèğîâàííàÿ âûñîòà:";
+    Text[ russian ] = "Ôèêñèğîâàííàÿ âûñîòà:";
     Text[ polish ] = "Sta³a wysokoœæ:";
     Text[ japanese ] = "è¦å®šã®é«˜ã•:";
     Text[ chinese_traditional ] = "å›ºå®šé«˜åº¦ï¼š";
@@ -822,8 +848,9 @@ String STR_FRM_FIXEDHEIGHT
     Text[ korean ] = "ê³ ì •ëœ ë†’ì´:";
     Text[ turkish ] = "Sabit yükseklik:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Altura fija:";
+    Text[ catalan ] = "Alçada fixa";
     Text[ finnish ] = "Kiinteä korkeus:";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸„à¸‡à¸—à¸µà¹ˆ:";
 };
 String STR_FRM_MINHEIGHT
 {
@@ -840,7 +867,7 @@ String STR_FRM_MINHEIGHT
     Text [ portuguese ] = "Altura min.:" ;
     Text [ portuguese_brazilian ] = "min. H?e:" ;
     Text[ chinese_simplified ] = "æœ€å°é«˜åº¦ï¼š";
-    Text[ russian ] = "ìèí. âûñîòà:";
+    Text[ russian ] = "Ìèí. âûñîòà:";
     Text[ polish ] = "Min. wysokoœæ:";
     Text[ japanese ] = "æœ€ä½ã®é«˜ã•:";
     Text[ chinese_traditional ] = "æœ€å°é«˜åº¦ï¼š";
@@ -851,36 +878,38 @@ String STR_FRM_MINHEIGHT
     Text[ korean ] = "ìµœì†Œ ë†’ì´:";
     Text[ turkish ] = "Asg.yükseklik:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Altura mínima:";
+    Text[ catalan ] = "Alçada mínima:";
     Text[ finnish ] = "Korkeus väh.";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸¹à¸‡à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”:";
 };
 String STR_FLY_AT_CNTNT
 {
     TEXT = "absatzgebunden" ;
     TEXT [ English ] = "at paragraph" ;
-    Text [ dutch ] = "alinea-gebonden" ;
+    Text [ dutch ] = "alineagebonden" ;
     Text [ english_us ] = "to paragraph" ;
     Text [ italian ] = "al paragrafo" ;
-    Text [ spanish ] = "según párrafo" ;
+    Text [ spanish ] = "al párrafo" ;
     Text [ french ] = "lié au paragraphe" ;
     Text [ swedish ] = "bunden till stycke" ;
     Text [ danish ] = "bundet til afsnit" ;
     Text [ portuguese ] = "ligado ao parágrafo" ;
     Text [ portuguese_brazilian ] = "absatzgebunden" ;
     Text[ chinese_simplified ] = "å’Œæ®µè½è¿åœ¨ä¸€èµ·";
-    Text[ russian ] = "ïğèâÿçêà ê àáçàöó";
+    Text[ russian ] = "ê àáçàöó";
     Text[ polish ] = "zwi¹zany z akapitem";
     Text[ japanese ] = "æ®µè½ã«çµåˆ";
     Text[ chinese_traditional ] = "å’Œæ®µè½é€£åœ¨ä¸€èµ·";
     Text[ arabic ] = "ãÑÊÈØ ÈÇáİŞÑÉ";
-    Text[ dutch ] = "alinea-gebonden";
+    Text[ dutch ] = "alineagebonden";
     Text[ chinese_simplified ] = "å’Œæ®µè½è¿åœ¨ä¸€èµ·";
     Text[ greek ] = "ğñïò ğáñÜãñáöï";
-    Text[ korean ] = "ë‹¨ë½ì—";
+    Text[ korean ] = "ë‹¨ë½ì— ê²°í•©";
     Text[ turkish ] = "Paragrafa bağlı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "según párrafo";
+    Text[ catalan ] = "segons paràgraf";
     Text[ finnish ] = "kappaleeseen";
+    Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
 };
 String STR_FLY_IN_CNTNT
 {
@@ -888,27 +917,28 @@ String STR_FLY_IN_CNTNT
     TEXT [ English ] = "at character" ;
     Text [ english_us ] = "to character" ;
     Text [ italian ] = "al carattere" ;
-    Text [ spanish ] = "según carácter" ;
+    Text [ spanish ] = "al carácter" ;
     Text [ french ] = "au caractère" ;
-    Text [ dutch ] = "schriftteken-gebonden" ;
+    Text [ dutch ] = "Tekengebonden" ;
     Text [ swedish ] = "bunden till tecken" ;
     Text [ danish ] = "bundet til tegn" ;
     Text [ portuguese ] = "conforme carácter" ;
     Text [ portuguese_brazilian ] = "zeichengebunden" ;
     Text[ chinese_simplified ] = "å’Œæ–‡å­—è¿åœ¨ä¸€èµ·";
-    Text[ russian ] = "ïğèâÿçêà ê çíàêó";
+    Text[ russian ] = "ê ñèìâîëó";
     Text[ polish ] = "zwi¹zany ze znakiem";
     Text[ japanese ] = "æ–‡å­—ã«çµåˆ";
     Text[ chinese_traditional ] = "å’Œæ–‡å­—é€£åœ¨ä¸€èµ·";
     Text[ arabic ] = "ãÑÊÈØ ÈÇáÃÍÑİ";
-    Text[ dutch ] = "schriftteken-gebonden";
+    Text[ dutch ] = "Tekengebonden";
     Text[ chinese_simplified ] = "å’Œæ–‡å­—è¿åœ¨ä¸€èµ·";
     Text[ greek ] = "ğñïò ÷áñáêôŞñá";
-    Text[ korean ] = "ë¬¸ìì—";
+    Text[ korean ] = "ë¬¸ìì— ê²°í•©";
     Text[ turkish ] = "Karaktere bağlı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "según carácter";
+    Text[ catalan ] = "segons caràcter";
     Text[ finnish ] = "merkkiin";
+    Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
 };
 String STR_FLY_PAGE
 {
@@ -918,25 +948,26 @@ String STR_FLY_PAGE
     Text [ italian ] = "alla pagina" ;
     Text [ spanish ] = "a la página" ;
     Text [ french ] = "à la page" ;
-    Text [ dutch ] = "pagina-gebonden" ;
+    Text [ dutch ] = "paginagebonden" ;
     Text [ swedish ] = "bunden till sida" ;
     Text [ danish ] = "bundet til side" ;
     Text [ portuguese ] = "conforme página" ;
     Text [ portuguese_brazilian ] = "seitengebunden" ;
     Text[ chinese_simplified ] = "å’Œé¡µè¿åœ¨ä¸€èµ·";
-    Text[ russian ] = "ïğèâÿçêà ê ñòğàíèöå";
+    Text[ russian ] = "ê ñòğàíèöå";
     Text[ polish ] = "zwi¹zany ze stron¹";
     Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã«çµåˆ";
     Text[ chinese_traditional ] = "å’Œé é€£åœ¨ä¸€èµ·";
     Text[ arabic ] = "ãÑÊÈØ ÈÇáÕİÍÉ";
-    Text[ dutch ] = "pagina-gebonden";
+    Text[ dutch ] = "paginagebonden";
     Text[ chinese_simplified ] = "å’Œé¡µè¿åœ¨ä¸€èµ·";
     Text[ greek ] = "ğñïò óåëßäá";
-    Text[ korean ] = "í˜ì´ì§€ ê´€ë ¨";
+    Text[ korean ] = "í˜ì´ì§€ì— ê²°í•©";
     Text[ turkish ] = "Sayfaya bağlı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "a la página";
+    Text[ catalan ] = "a la pàgina";
     Text[ finnish ] = "sivulle";
+    Text[ thai ] = "à¹„à¸›à¸¢à¸±à¸‡à¸«à¸™à¹‰à¸²";
 };
 String STR_POS_X
 {
@@ -963,8 +994,9 @@ String STR_POS_X
     Text[ korean ] = "X ì¢Œí‘œ:";
     Text[ turkish ] = "X koord.:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Coord. X:";
+    Text[ catalan ] = "Coordenada X";
     Text[ finnish ] = "X-koordinaatti:";
+    Text[ thai ] = "à¸à¸´à¸à¸±à¸” X :";
 };
 String STR_POS_Y
 {
@@ -991,8 +1023,9 @@ String STR_POS_Y
     Text[ korean ] = "Y ì¢Œí‘œ:";
     Text[ turkish ] = "Y koord.:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Coord. Y:";
+    Text[ catalan ] = "Coordenada Y";
     Text[ finnish ] = "Y-koordinaatti:";
+    Text[ thai ] = "à¸à¸´à¸à¸±à¸” Y :";
 };
 String STR_VERT_TOP
 {
@@ -1016,11 +1049,12 @@ String STR_VERT_TOP
     Text[ dutch ] = "boven";
     Text[ chinese_simplified ] = "ä¸Š";
     Text[ greek ] = "ğÜíù";
-    Text[ korean ] = "ìœ„ì—";
+    Text[ korean ] = "ìœ„";
     Text[ turkish ] = "üstte";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "arriba";
+    Text[ catalan ] = "a la part superior";
     Text[ finnish ] = "ylhäällä";
+    Text[ thai ] = "à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™à¸šà¸™";
 };
 String STR_VERT_CENTER
 {
@@ -1029,7 +1063,7 @@ String STR_VERT_CENTER
     Text [ dutch ] = "verticaal gecentreerd" ;
     Text [ english_us ] = "Centered vertically" ;
     Text [ italian ] = "Centrato in verticale" ;
-    Text [ spanish ] = "centrado vertical" ;
+    Text [ spanish ] = "Centrado verticalmente" ;
     Text [ french ] = "Centré verticalement" ;
     Text [ swedish ] = "vertikalt centrerad" ;
     Text [ danish ] = "lodret centreret" ;
@@ -1047,8 +1081,9 @@ String STR_VERT_CENTER
     Text[ korean ] = "ìˆ˜ì§ìœ¼ë¡œ ê°€ìš´ë°";
     Text[ turkish ] = "Dikey ortala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "centrado vertical";
+    Text[ catalan ] = "Centrat verticalment";
     Text[ finnish ] = "Keskitetty pystytasossa";
+    Text[ thai ] = "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡à¸•à¸²à¸¡à¹à¸™à¸§à¸•à¸±à¹‰à¸‡";
 };
 String STR_VERT_BOTTOM
 {
@@ -1075,8 +1110,9 @@ String STR_VERT_BOTTOM
     Text[ korean ] = "ì•„ë˜ì—";
     Text[ turkish ] = "altta";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "abajo";
+    Text[ catalan ] = "a la part inferior";
     Text[ finnish ] = "pohjalla";
+    Text[ thai ] = "à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™à¸¥à¹ˆà¸²à¸‡";
 };
 String STR_LINE_TOP
 {
@@ -1085,8 +1121,8 @@ String STR_LINE_TOP
     Text [ dutch ] = "bovenste regel" ;
     Text [ english_us ] = "Top of line" ;
     Text [ italian ] = "Riga in alto" ;
-    Text [ spanish ] = "Línea superior" ;
-    Text [ french ] = "Ligne supérieure" ;
+    Text [ spanish ] = "Línea arriba" ;
+    Text [ french ] = "Ligne en haut" ;
     Text [ swedish ] = "Översta raden" ;
     Text [ danish ] = "række øverst" ;
     Text [ portuguese ] = "Linha superior" ;
@@ -1100,11 +1136,12 @@ String STR_LINE_TOP
     Text[ dutch ] = "bovenste regel";
     Text[ chinese_simplified ] = "è¡Œä¸Šæ–¹";
     Text[ greek ] = "ÃñáììŞ ğÜíù";
-    Text[ korean ] = "ì„  ìœ„";
+    Text[ korean ] = "ì¤„ ìœ„";
     Text[ turkish ] = "Satır üstü";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Línea superior";
-    Text[ finnish ] = "Viivan yläosa";
+    Text[ catalan ] = "Línia superior";
+    Text[ finnish ] = "Viivan yläreuna";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸šà¸™";
 };
 String STR_LINE_CENTER
 {
@@ -1120,7 +1157,7 @@ String STR_LINE_CENTER
     Text [ portuguese ] = "Centrado sobre a linha na vertical" ;
     Text [ portuguese_brazilian ] = "vertikal zur Zeile zentriert" ;
     Text[ chinese_simplified ] = "å’Œè¡Œå‚ç›´å±…ä¸­";
-    Text[ russian ] = "Âåğòèêàëüíîå öåíòğèğîâàíèå ïî îòíîøåíèş ê ñòğîêå";
+    Text[ russian ] = "Âåğòèêàëüíîå öåíòğèğîâàíèå ïî îòíîøåíèş ê ëèíèè";
     Text[ polish ] = "Wyœrodkowany pionowo do wiersza";
     Text[ japanese ] = "ã‚»ãƒ«ã«å‚ç›´ã«ä¸­å¤®æƒãˆ";
     Text[ chinese_traditional ] = "å’Œè¡Œå‚ç›´ç½®ä¸­";
@@ -1128,11 +1165,12 @@ String STR_LINE_CENTER
     Text[ dutch ] = "verticaal op de regel gecentreerd";
     Text[ chinese_simplified ] = "å’Œè¡Œå‚ç›´å±…ä¸­";
     Text[ greek ] = "êáôáêüñõöá êåíôñáñéóìİíá ùò ğñïò ôç ãñáììŞ";
-    Text[ korean ] = "ì¤„ì— ëŒ€í•´ ìˆ˜ì§ìœ¼ë¡œ ê°€ìš´ë°";
+    Text[ korean ] = "ì¤„ì„ ê°€ìš´ë°ë¡œ";
     Text[ turkish ] = "Satıra göre dikey ortala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Centrado verticalmente a la línea";
+    Text[ catalan ] = "Centrat verticalment a la línia";
     Text[ finnish ] = "Keskitetty rivi";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡";
 };
 String STR_LINE_BOTTOM
 {
@@ -1141,8 +1179,8 @@ String STR_LINE_BOTTOM
     Text [ dutch ] = "onderste regel" ;
     Text [ english_us ] = "Bottom of line" ;
     Text [ italian ] = "Riga in basso" ;
-    Text [ spanish ] = "Línea inferior" ;
-    Text [ french ] = "Ligne inférieure" ;
+    Text [ spanish ] = "Línea abajo" ;
+    Text [ french ] = "Ligne en bas" ;
     Text [ swedish ] = "Nedersta raden" ;
     Text [ danish ] = "række nederst" ;
     Text [ portuguese ] = "Linha inferior" ;
@@ -1156,11 +1194,12 @@ String STR_LINE_BOTTOM
     Text[ dutch ] = "onderste regel";
     Text[ chinese_simplified ] = "è¡Œä¸‹æ–¹";
     Text[ greek ] = "ÃñáììŞ êÜôù";
-    Text[ korean ] = "ì„  ì•„ë˜";
+    Text[ korean ] = "ì¤„ ì•„ë˜";
     Text[ turkish ] = "Satır altı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Línea inferior";
-    Text[ finnish ] = "Viivan alaosa";
+    Text[ catalan ] = "Línia inferior";
+    Text[ finnish ] = "Viivan alareuna";
+    Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸¥à¹ˆà¸²à¸‡";
 };
 String STR_REGISTER_ON
 {
@@ -1170,7 +1209,7 @@ String STR_REGISTER_ON
     Text [ italian ] = "Conformità registro" ;
     Text [ spanish ] = "Conformidad registro" ;
     Text [ french ] = "Contrôle de repérage" ;
-    Text [ dutch ] = "registeren" ;
+    Text [ dutch ] = "registreren" ;
     Text [ swedish ] = "Register" ;
     Text [ danish ] = "hold register" ;
     Text [ portuguese ] = "Registo" ;
@@ -1181,23 +1220,24 @@ String STR_REGISTER_ON
     Text[ japanese ] = "å°åˆ·è¦‹å½“ã‚’åˆã‚ã›ã‚‹";
     Text[ chinese_traditional ] = "æ­£åé çš„è¡Œè·ç›¸ç­‰";
     Text[ arabic ] = "ÇáÇäÊÙÇã";
-    Text[ dutch ] = "registeren";
+    Text[ dutch ] = "registreren";
     Text[ chinese_simplified ] = "æ­£åé¡µçš„è¡Œè·ç›¸ç­‰";
     Text[ greek ] = "Åğéâåâáßùóç åããñáöŞò";
-    Text[ korean ] = "ë ˆì§€ìŠ¤í„° ë³´ìœ ";
+    Text[ korean ] = "ì¸ì‡„í•  ë•Œ ê°€ëŠ  ë§ì¶¤ ";
     Text[ turkish ] = "Eşit satır yüksekliği";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Conformidad registro";
-    Text[ finnish ] = "Rekisteri-tosi";
+    Text[ catalan ] = "Conforme al registre";
+    Text[ finnish ] = "Rivirekisteri";
+    Text[ thai ] = "à¸¥à¸‡à¸—à¸°à¹€à¸šà¸µà¸¢à¸™-à¸ˆà¸£à¸´à¸‡";
 };
 String STR_REGISTER_OFF
 {
     TEXT = "keine Registerhaltigkeit" ;
     TEXT [ English ] = "no register" ;
-    Text [ dutch ] = "niet registeren" ;
+    Text [ dutch ] = "niet registreren" ;
     Text [ english_us ] = "Not register-true" ;
     Text [ italian ] = "Senza conformità registro" ;
-    Text [ spanish ] = "Sin conformidad registro" ;
+    Text [ spanish ] = "Sin conformidad de registro" ;
     Text [ french ] = "Pas de contrôle de repérage" ;
     Text [ swedish ] = "inget register" ;
     Text [ danish ] = "hold ikke register" ;
@@ -1209,14 +1249,15 @@ String STR_REGISTER_OFF
     Text[ japanese ] = "å°åˆ·è¦‹å½“ã‚’åˆã‚ã›ãªã„";
     Text[ chinese_traditional ] = "æ­£åé çš„è¡Œè·ä¸ç›¸ç­‰";
     Text[ arabic ] = "ÈÏæä ÇäÊÙÇã";
-    Text[ dutch ] = "niet registeren";
+    Text[ dutch ] = "niet registreren";
     Text[ chinese_simplified ] = "æ­£åé¡µçš„è¡Œè·ä¸ç›¸ç­‰";
     Text[ greek ] = "×ùñßò åğéâåâáßùóç åããñáöŞò";
-    Text[ korean ] = "ë ˆì§€ìŠ¤í„° ë³´ìœ  ì—†ìŒ";
+    Text[ korean ] = "ê°€ëŠ  ë§ì¶¤ ì—†ìŒ";
     Text[ turkish ] = "Eşit satır yüksekliği mevcut değil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin conformidad registro";
-    Text[ finnish ] = "Ei rekisteröity-tosi";
+    Text[ catalan ] = "No conforme al registre";
+    Text[ finnish ] = "Ei rivirekisteriä";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¥à¸‡à¸—à¸°à¹€à¸šà¸µà¸¢à¸™-à¸ˆà¸£à¸´à¸‡";
 };
 String STR_HORI_RIGHT
 {
@@ -1225,7 +1266,7 @@ String STR_HORI_RIGHT
     Text [ dutch ] = "rechts" ;
     Text [ english_us ] = "at the right" ;
     Text [ italian ] = "Destra" ;
-    Text [ spanish ] = "derecha" ;
+    Text [ spanish ] = "a la derecha" ;
     Text [ french ] = "À droite" ;
     Text [ swedish ] = "höger" ;
     Text [ danish ] = "højre" ;
@@ -1243,8 +1284,9 @@ String STR_HORI_RIGHT
     Text[ korean ] = "ì˜¤ë¥¸ìª½";
     Text[ turkish ] = "sağ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "derecha";
+    Text[ catalan ] = "a la dreta";
     Text[ finnish ] = "oikealla";
+    Text[ thai ] = "à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™à¸‚à¸§à¸²";
 };
 String STR_HORI_CENTER
 {
@@ -1253,7 +1295,7 @@ String STR_HORI_CENTER
     Text [ dutch ] = "horizontaal gecentreerd" ;
     Text [ english_us ] = "Centered horizontally" ;
     Text [ italian ] = "Centrato in orizzontale" ;
-    Text [ spanish ] = "Centrado horizontal" ;
+    Text [ spanish ] = "Centrado horizontalmente" ;
     Text [ french ] = "Centré horizontalement" ;
     Text [ swedish ] = "Horisontellt centrerad" ;
     Text [ danish ] = "vandret centreret" ;
@@ -1268,11 +1310,12 @@ String STR_HORI_CENTER
     Text[ dutch ] = "horizontaal gecentreerd";
     Text[ chinese_simplified ] = "æ°´å¹³å±…ä¸­";
     Text[ greek ] = "ïñéæïíôßùò êåíôñáñéóìİíá";
-    Text[ korean ] = "ìˆ˜í‰ìœ¼ë¡œ ê°€ìš´ë°";
+    Text[ korean ] = "ìˆ˜í‰ìœ¼ë¡œ ê°€ìš´ë°ì—";
     Text[ turkish ] = "Yatay ortala";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Centrado horizontal";
+    Text[ catalan ] = "Centrat horitzontalment";
     Text[ finnish ] = "Keskitetty vaakataso";
+    Text[ thai ] = "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡à¸•à¸²à¸¡à¹à¸™à¸§à¸™à¸­à¸™";
 };
 String STR_HORI_LEFT
 {
@@ -1280,7 +1323,7 @@ String STR_HORI_LEFT
     TEXT [ English ] = "at the left" ;
     Text [ english_us ] = "at the left" ;
     Text [ italian ] = "sinistra" ;
-    Text [ spanish ] = "Izquierda" ;
+    Text [ spanish ] = "a la izquierda" ;
     Text [ french ] = "À gauche" ;
     Text [ dutch ] = "links" ;
     Text [ swedish ] = "vänster" ;
@@ -1299,8 +1342,9 @@ String STR_HORI_LEFT
     Text[ korean ] = "ì™¼ìª½";
     Text[ turkish ] = "sol";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Izquierda";
+    Text[ catalan ] = "a l'esquerra";
     Text[ finnish ] = "vasemmalla";
+    Text[ thai ] = "à¸—à¸µà¹ˆà¸”à¹‰à¸²à¸™à¸‹à¹‰à¸²à¸¢";
 };
 String STR_HORI_INSIDE
 {
@@ -1327,8 +1371,9 @@ String STR_HORI_INSIDE
     Text[ korean ] = "ë‚´ë¶€";
     Text[ turkish ] = "iç";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "interior";
+    Text[ catalan ] = "dins";
     Text[ finnish ] = "sisällä";
+    Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¹ƒà¸™";
 };
 String STR_HORI_OUTSIDE
 {
@@ -1356,8 +1401,9 @@ String STR_HORI_OUTSIDE
     Text[ korean ] = "ì™¸ë¶€";
     Text[ turkish ] = "dış";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "exterior";
+    Text[ catalan ] = "fora";
     Text[ finnish ] = "ulkopuolella";
+    Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸™à¸­à¸";
 };
 String STR_HORI_FULL
 {
@@ -1381,11 +1427,12 @@ String STR_HORI_FULL
     Text[ dutch ] = "volle breedte";
     Text[ chinese_simplified ] = "æ•´ä¸ªå®½åº¦";
     Text[ greek ] = "ïëüêëçñï ğëÜôïò";
-    Text[ korean ] = "ì „ì²´ ë„ˆë¹„";
+    Text[ korean ] = "ìµœëŒ€ ë„ˆë¹„";
     Text[ turkish ] = "Tam genişlik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ancho total";
+    Text[ catalan ] = "Amplada completa";
     Text[ finnish ] = "Täysi leveys";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¹€à¸•à¹‡à¸¡";
 };
 String STR_COLUMNS
 {
@@ -1401,7 +1448,7 @@ String STR_COLUMNS
     Text [ portuguese ] = "Colunas" ;
     Text [ portuguese_brazilian ] = "Spalten" ;
     Text[ chinese_simplified ] = "åˆ—";
-    Text[ russian ] = "Êîëîíêè";
+    Text[ russian ] = "Ñòîëáöû";
     Text[ polish ] = "Kolumny";
     Text[ japanese ] = "æ®µçµ„ã¿";
     Text[ chinese_traditional ] = "æ¬„";
@@ -1412,8 +1459,9 @@ String STR_COLUMNS
     Text[ korean ] = "ë‹¨";
     Text[ turkish ] = "Sütun";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Columnas";
-    Text[ finnish ] = "Sarakkeet";
+    Text[ catalan ] = "Columnes";
+    Text[ finnish ] = "Palstat";
+    Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
 String STR_LINE_WIDTH
 {
@@ -1437,11 +1485,12 @@ String STR_LINE_WIDTH
     Text[ dutch ] = "breedte scheidingslijn:";
     Text[ chinese_simplified ] = "åˆ†éš”çº¿ç²—ï¼š";
     Text[ greek ] = "ĞëÜôïò äéá÷ùñéóôéêŞò ãñáììŞò:";
-    Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸ ë„ˆë¹„:";
+    Text[ korean ] = "êµ¬ë¶„ì„  ë„ˆë¹„:";
     Text[ turkish ] = "Ayırma çizgisi genişliği:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ancho de la línea de separación:";
+    Text[ catalan ] = "Amplada del separador:";
     Text[ finnish ] = "Erottimen leveys:";
+    Text[ thai ] = "à¸•à¸±à¸§à¹à¸¢à¸à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡:";
 };
 String STR_MAX_FTN_HEIGHT
 {
@@ -1469,8 +1518,9 @@ String STR_MAX_FTN_HEIGHT
     Text[ korean ] = "ìµœëŒ€ ê°ì£¼ ì˜ì—­:";
     Text[ turkish ] = "azm. dipnot alanı:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Área máx. de la nota al pie:";
+    Text[ catalan ] = "Àrea màx. de la nota al peu:";
     Text[ finnish ] = "Suurin alaviiteala:";
+    Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–à¸—à¸µà¹ˆà¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”:";
 };
 String STR_EDIT_IN_READONLY
 {
@@ -1490,21 +1540,22 @@ String STR_EDIT_IN_READONLY
     Text [ italian ] = "modificabile nel documento a sola lettura" ;
     Text [ spanish ] = "Se puede editar en documentos de sólo lectura" ;
     Text [ french ] = "À éditer dans le document en mode Lecture seule" ;
-    Text [ dutch ] = "editeerbaar in schrijfbeveiligd document" ;
+    Text [ dutch ] = "bewerkbaar in alleen-lezen document" ;
     Text[ chinese_simplified ] = "èƒ½å¤Ÿç¼–è¾‘å—ä¿æŠ¤çš„æ–‡æ¡£";
-    Text[ russian ] = "Âîçìîæíîñòü ïğàâêè òîëüêî â çàùèùåííîì îò çàïèñè äîêóìåíòå";
+    Text[ russian ] = "Âîçìîæíîñòü ïğàâêè â äîêóìåíòå òîëüêî äëÿ ÷òåíèÿ";
     Text[ polish ] = "Mo¿liwy do edycji tylko w dokumencie do odczytu";
     Text[ japanese ] = "èª­ã¿å–ã‚Šå°‚ç”¨ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå†…ã§ç·¨é›†å¯èƒ½";
     Text[ chinese_traditional ] = "èƒ½å¤ ç·¨è¼¯å—ä¿è­·çš„æ–‡ä»¶";
     Text[ arabic ] = "ŞÇÈá ááÊÍÑíÑ İí ãÓÊäÏ ááŞÑÇÁÉ İŞØ";
-    Text[ dutch ] = "editeerbaar in schrijfbeveiligd document";
+    Text[ dutch ] = "bewerkbaar in alleen-lezen document";
     Text[ chinese_simplified ] = "èƒ½å¤Ÿç¼–è¾‘å—ä¿æŠ¤çš„æ–‡æ¡£";
     Text[ greek ] = "äõíáôüôçôá åğåîåñãáóßáò óå İããñáöï 'ìüíï ãéá áíÜãíùóç'";
     Text[ korean ] = "ì½ê¸° ì „ìš© ë¬¸ì„œì—ì„œ  í¸ì§‘ ê°€ëŠ¥";
     Text[ turkish ] = "Salt okunur belgede düzenlenebilir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se puede editar en documentos de solo lectura";
+    Text[ catalan ] = "Es pot editar en documents de només lectura";
     Text[ finnish ] = "Muokattavissa ainoastaan vain luku -asiakirjoissa";
+    Text[ thai ] = "à¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸à¹‰à¹„à¸‚à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¹à¸šà¸šà¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
 };
 String STR_LAYOUT_SPLIT
 {
@@ -1520,7 +1571,7 @@ String STR_LAYOUT_SPLIT
     Text [ french ] = "Scinder" ;
     Text [ dutch ] = "splitsen" ;
     Text[ chinese_simplified ] = "åˆ†éš”";
-    Text[ russian ] = "Ğàçäåëèòü";
+    Text[ russian ] = "Ğàçáèòü";
     Text[ polish ] = "Podziel";
     Text[ japanese ] = "åˆ†å‰²";
     Text[ chinese_traditional ] = "åˆ†é–‹";
@@ -1531,8 +1582,9 @@ String STR_LAYOUT_SPLIT
     Text[ korean ] = "ë‚˜ëˆ„ê¸°";
     Text[ turkish ] = "Böl";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dividir";
+    Text[ catalan ] = "Divideix";
     Text[ finnish ] = "Jaa";
+    Text[ thai ] = "à¹à¸¢à¸";
 };
 String STR_NUMRULE_ON
 {
@@ -1559,8 +1611,9 @@ String STR_NUMRULE_ON
     Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°";
     Text[ turkish ] = "Numaralama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Numeración";
+    Text[ catalan ] = "Numeració";
     Text[ finnish ] = "Numerointi";
+    Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
 String STR_NUMRULE_OFF
 {
@@ -1576,7 +1629,7 @@ String STR_NUMRULE_OFF
     Text [ french ] = "pas de numérotation" ;
     Text [ dutch ] = "geen nummering" ;
     Text[ chinese_simplified ] = "æ— ç¼–å·";
-    Text[ russian ] = "áåç íóìåğàöèè";
+    Text[ russian ] = "Áåç íóìåğàöèè";
     Text[ polish ] = "Bez numeracji";
     Text[ japanese ] = "ç•ªå·ä»˜ã‘ãªã—";
     Text[ chinese_traditional ] = "ä¸ç·¨è™Ÿ";
@@ -1587,8 +1640,9 @@ String STR_NUMRULE_OFF
     Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ì—†ìŒ";
     Text[ turkish ] = "Numaralama yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sin numeración";
+    Text[ catalan ] = "Sense numeració";
     Text[ finnish ] = "ei numerointia";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
 String STR_CONNECT1
 {
@@ -1601,22 +1655,23 @@ String STR_CONNECT1
     Text [ danish ] = "forbundet med " ;
     Text [ italian ] = "Collegato con " ;
     Text [ spanish ] = "Vinculado a  " ;
-    Text [ french ] = "Lié à[_] " ;
-    Text [ dutch ] = "Verbonden met  " ;
+    Text [ french ] = "Lié à " ;
+    Text [ dutch ] = "Verbonden met" ;
     Text[ chinese_simplified ] = "è¿æ¥åˆ° ";
     Text[ russian ] = "Ñâÿçàòü ñ ";
     Text[ polish ] = "Po³¹czony z   ";
     Text[ japanese ] = "çµåˆå…ˆ ";
     Text[ chinese_traditional ] = "é€£çµåˆ° ";
     Text[ arabic ] = "ãÑÊÈØ ãÚ ";
-    Text[ dutch ] = "Verbonden met  ";
+    Text[ dutch ] = "Verbonden met";
     Text[ chinese_simplified ] = "è¿æ¥åˆ° ";
     Text[ greek ] = "Óõíäåäåìİíï ìå ";
-    Text[ korean ] = "ì—°ê²° ";
+    Text[ korean ] = "ì—°ê²° ëŒ€ìƒ";
     Text[ turkish ] = "Bağlanılan ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Vinculado a  ";
+    Text[ catalan ] = "Enllaçat a  ";
     Text[ finnish ] = "linkitetty kohteeseen ";
+    Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸›à¸¢à¸±à¸‡ ";
 };
 String STR_CONNECT2
 {
@@ -1630,21 +1685,22 @@ String STR_CONNECT2
     Text [ italian ] = "e " ;
     Text [ spanish ] = "y  " ;
     Text [ french ] = "et " ;
-    Text [ dutch ] = "en  " ;
+    Text [ dutch ] = "en" ;
     Text[ chinese_simplified ] = "å’Œ ";
     Text[ russian ] = "è  ";
     Text[ polish ] = "i ";
     Text[ japanese ] = "ãŠã‚ˆã³ ";
     Text[ chinese_traditional ] = "å’Œ ";
     Text[ arabic ] = "æ ";
-    Text[ dutch ] = "en  ";
+    Text[ dutch ] = "en";
     Text[ chinese_simplified ] = "å’Œ ";
     Text[ greek ] = "êáé ";
-    Text[ korean ] = "ì™€ ";
+    Text[ korean ] = "ì™€(ê³¼)";
     Text[ turkish ] = "ve ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "y  ";
-    Text[ finnish ] = "ja";
+    Text[ catalan ] = "i";
+    Text[ finnish ] = "ja ";
+    Text[ thai ] = "à¹à¸¥à¸° ";
 };
 String STR_LINECOUNT
 {
@@ -1671,8 +1727,9 @@ String STR_LINECOUNT
     Text[ korean ] = "ì¤„ ì„¸ê¸°";
     Text[ turkish ] = "Satır say";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Contar líneas";
+    Text[ catalan ] = "Compte línies";
     Text[ finnish ] = "Laske rivit";
+    Text[ thai ] = "à¸™à¸±à¸šà¸šà¸£à¸£à¸—à¸±à¸”";
 };
 String STR_DONTLINECOUNT
 {
@@ -1696,11 +1753,12 @@ String STR_DONTLINECOUNT
     Text[ dutch ] = "Regels niet tellen";
     Text[ chinese_simplified ] = "ä¸è®¡æ•°è¡Œ";
     Text[ greek ] = "¼÷é êáôáìİôñçóç ãñáììşí";
-    Text[ korean ] = "ì„  ì„¸ì§€ ì•ŠìŒ";
+    Text[ korean ] = "ì¤„ ì„¸ì§€ ì•ŠìŒ";
     Text[ turkish ] = "Satırları sayma";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No contar las líneas";
+    Text[ catalan ] = "No comptis les línies";
     Text[ finnish ] = "ei rivien laskemista";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸™à¸±à¸šà¸šà¸£à¸£à¸—à¸±à¸”";
 };
 String STR_LINCOUNT_START
 {
@@ -1714,21 +1772,22 @@ String STR_LINCOUNT_START
     Text [ italian ] = "Iniziare a contare le righe con: " ;
     Text [ spanish ] = "Iniciar recuento de líneas con:  " ;
     Text [ french ] = "Commencer le compte des lignes à : " ;
-    Text [ dutch ] = "regels telllen starten bij:  " ;
+    Text [ dutch ] = "regels tellen starten bij:" ;
     Text[ chinese_simplified ] = "è®¡æ•°è¡Œä»ï¼š ";
     Text[ russian ] = "Íà÷àòü ïîäñ÷åò ñòğîê ñ:  ";
     Text[ polish ] = "Rozpocznij liczenie wierszy od:  ";
     Text[ japanese ] = "è¡Œæ•°ãˆã®é–‹å§‹: ";
     Text[ chinese_traditional ] = "è¨ˆæ•¸è¡Œå¾ï¼š ";
     Text[ arabic ] = "ÈÏÁ ÊÑŞíã ÇáÃÓØÑ ÈÜ: ";
-    Text[ dutch ] = "regels telllen starten bij:  ";
+    Text[ dutch ] = "regels tellen starten bij:";
     Text[ chinese_simplified ] = "è®¡æ•°è¡Œä»ï¼š ";
     Text[ greek ] = "Åêêßíçóç êáôáìİôñçóçò ãñáììşí áğü: ";
-    Text[ korean ] = "ì¤„ ì„¸ê¸° ì‹œì‘ ìœ„ì¹˜: ";
+    Text[ korean ] = "ì¤„ ì„¸ê¸° ì‹œì‘: ";
     Text[ turkish ] = "Satır sayma başlangıcı: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Iniciar recuento de líneas con:  ";
+    Text[ catalan ] = "Inicia el recompte de línies amb:  ";
     Text[ finnish ] = "aloita rivilaskenta uudelleen määrityksellä: ";
+    Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸™à¸±à¸šà¸šà¸£à¸£à¸—à¸±à¸”à¹ƒà¸«à¸¡à¹ˆà¸”à¹‰à¸§à¸¢: ";
 };
 
 String STR_LUMINANCE
@@ -1739,7 +1798,7 @@ String STR_LUMINANCE
     Text[ portuguese ] = "Brilho:  ";
     Text[ russian ] = "ßğêîñòü: ";
     Text[ greek ] = "Öùôåéíüôçôá: ";
-    Text[ dutch ] = "Helderheid:  ";
+    Text[ dutch ] = "Helderheid:";
     Text[ french ] = "Luminosité : ";
     Text[ spanish ] = "Brillo:  ";
     Text[ italian ] = "Luminosità: ";
@@ -1753,8 +1812,9 @@ String STR_LUMINANCE
     Text[ chinese_traditional ] = "äº®åº¦ï¼š ";
     Text[ turkish ] = "Luminance: ";
     Text[ arabic ] = "ÇáÅÖÇÁÉ:";
-    Text[ catalan ] = "Brillo:  ";
+    Text[ catalan ] = "Lluminositat:";
     Text[ finnish ] = "Kirkkaus: ";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸§à¹ˆà¸²à¸‡: ";
 };
 
 String STR_CHANNELR
@@ -1765,7 +1825,7 @@ String STR_CHANNELR
     Text[ portuguese ] = "Proporção de vermelho:  ";
     Text[ russian ] = "Êîëè÷åñòâî êğàñíîãî: ";
     Text[ greek ] = "Áíáëïãßá êüêêéíïõ: ";
-    Text[ dutch ] = "Rood:  ";
+    Text[ dutch ] = "Rood:";
     Text[ french ] = "Proportion de rouge : ";
     Text[ spanish ] = "Proporción de rojo: ";
     Text[ italian ] = "Percentuale di rosso:  ";
@@ -1779,8 +1839,9 @@ String STR_CHANNELR
     Text[ chinese_traditional ] = "ç´…è‰²æ¯”ä¾‹ï¼š ";
     Text[ turkish ] = "Red portion: ";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ:";
-    Text[ catalan ] = "Proporción de rojo: ";
+    Text[ catalan ] = "Vermell:";
     Text[ finnish ] = "Punainen: ";
+    Text[ thai ] = "à¹à¸”à¸‡: ";
 };
 
 String STR_CHANNELG
@@ -1791,7 +1852,7 @@ String STR_CHANNELG
     Text[ portuguese ] = "Proporção de verde:  ";
     Text[ russian ] = "Êîëè÷åñòâî çåëåíîãî: ";
     Text[ greek ] = "Áíáëïãßá ğñáóßíïõ: ";
-    Text[ dutch ] = "Green:  ";
+    Text[ dutch ] = "Groen:";
     Text[ french ] = "Proportion de vert : ";
     Text[ spanish ] = "Proporción verde: ";
     Text[ italian ] = "Percentuale di verde: ";
@@ -1805,8 +1866,9 @@ String STR_CHANNELG
     Text[ chinese_traditional ] = "ç¶ è‰²æ¯”ä¾‹ï¼š ";
     Text[ turkish ] = "Green portion: ";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ:";
-    Text[ catalan ] = "Proporción verde: ";
+    Text[ catalan ] = "Verd:";
     Text[ finnish ] = "Vihreä: ";
+    Text[ thai ] = "à¹€à¸‚à¸µà¸¢à¸§: ";
 };
 
 String STR_CHANNELB
@@ -1817,7 +1879,7 @@ String STR_CHANNELB
     Text[ portuguese ] = "Proporção de azul:  ";
     Text[ russian ] = "Êîëè÷åñòâî ñèíåãî: ";
     Text[ greek ] = "Áíáëïãßá ìğëå: ";
-    Text[ dutch ] = "Blauw:  ";
+    Text[ dutch ] = "Blauw:";
     Text[ french ] = "Proportion de bleu : ";
     Text[ spanish ] = "Proporción de azul: ";
     Text[ italian ] = "Percentuale di blu: ";
@@ -1831,8 +1893,9 @@ String STR_CHANNELB
     Text[ chinese_traditional ] = "è—è‰²æ¯”ä¾‹ï¼š ";
     Text[ turkish ] = "Blue portion: ";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ:";
-    Text[ catalan ] = "Proporción de azul: ";
+    Text[ catalan ] = "Blau:";
     Text[ finnish ] = "Sininen: ";
+    Text[ thai ] = "à¸™à¹‰à¸³à¹€à¸‡à¸´à¸™: ";
 };
 
 String STR_CONTRAST
@@ -1843,7 +1906,7 @@ String STR_CONTRAST
     Text[ portuguese ] = "Contraste:  ";
     Text[ russian ] = "Êîíòğàñò: ";
     Text[ greek ] = "ÊïíôñÜóô: ";
-    Text[ dutch ] = "Contrast:  ";
+    Text[ dutch ] = "Contrast:";
     Text[ french ] = "Contraste : ";
     Text[ spanish ] = "Contraste: ";
     Text[ italian ] = "Contrasto:  ";
@@ -1852,13 +1915,14 @@ String STR_CONTRAST
     Text[ polish ] = "Kontrast: ";
     Text[ portuguese_brazilian ] = "Contrast: ";
     Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ©ã‚¹ãƒˆ: ";
-    Text[ korean ] = "ëŒ€ì¡°: ";
+    Text[ korean ] = "ëŒ€ë¹„: ";
     Text[ chinese_simplified ] = "å¯¹æ¯”åº¦ï¼š ";
     Text[ chinese_traditional ] = "å°æ¯”åº¦ï¼š ";
     Text[ turkish ] = "Contrast: ";
     Text[ arabic ] = "ÇáÊÈÇíä:";
-    Text[ catalan ] = "Contraste: ";
+    Text[ catalan ] = "Contrast:";
     Text[ finnish ] = "Kontrasti: ";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸„à¸¡à¸Šà¸±à¸”: ";
 };
 
 String STR_GAMMA
@@ -1869,7 +1933,7 @@ String STR_GAMMA
     Text[ portuguese ] = "Gamma:  ";
     Text[ russian ] = "Ãàììà: ";
     Text[ greek ] = "ÃÜììá: ";
-    Text[ dutch ] = "Gamma:  ";
+    Text[ dutch ] = "Gamma:";
     Text[ french ] = "Gamma : ";
     Text[ spanish ] = "Gamma:  ";
     Text[ italian ] = "Gamma:  ";
@@ -1883,8 +1947,9 @@ String STR_GAMMA
     Text[ chinese_traditional ] = "ç°è‰²ç³»æ•¸ï¼š ";
     Text[ turkish ] = "Gamma: ";
     Text[ arabic ] = "ÛÇãÇ:";
-    Text[ catalan ] = "Gamma:  ";
+    Text[ catalan ] = "Gamma:";
     Text[ finnish ] = "Gamma: ";
+    Text[ thai ] = "à¹à¸à¸¡à¸¡à¹ˆà¸²: ";
 };
 
 String STR_TRANSPARENCY
@@ -1895,7 +1960,7 @@ String STR_TRANSPARENCY
     Text[ portuguese ] = "Transparência:  ";
     Text[ russian ] = "Ïğîçğà÷íîñòü: ";
     Text[ greek ] = "ÄéáöÜíåéá: ";
-    Text[ dutch ] = "Transparantie:  ";
+    Text[ dutch ] = "Transparantie:";
     Text[ french ] = "Transparence: ";
     Text[ spanish ] = "Transparencia:  ";
     Text[ italian ] = "Trasparenza: ";
@@ -1904,13 +1969,14 @@ String STR_TRANSPARENCY
     Text[ polish ] = "Przezroczystoœæ: ";
     Text[ portuguese_brazilian ] = "Transparency: ";
     Text[ japanese ] = "é€éæ€§: ";
-    Text[ korean ] = "íˆ¬ëª…: ";
+    Text[ korean ] = "íˆ¬ëª…ë„: ";
     Text[ chinese_simplified ] = "é€æ˜ ";
     Text[ chinese_traditional ] = "é€æ˜ ";
     Text[ turkish ] = "Transparency: ";
     Text[ arabic ] = "ÇáÔİÇİíÉ:";
-    Text[ catalan ] = "Transparencia:  ";
-    Text[ finnish ] = "Läpikuultavuus: ";
+    Text[ catalan ] = "Transparència:  ";
+    Text[ finnish ] = "Läpinäkyvyys: ";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡: ";
 };
 
 String STR_INVERT
@@ -1925,7 +1991,7 @@ String STR_INVERT
     Text[ french ] = "Invertir";
     Text[ spanish ] = "Invertir";
     Text[ italian ] = "Inverti";
-    Text[ danish ] = "Invert";
+    Text[ danish ] = "Inverter";
     Text[ swedish ] = "Invertera";
     Text[ polish ] = "Odwróæ";
     Text[ portuguese_brazilian ] = "Invert";
@@ -1935,8 +2001,9 @@ String STR_INVERT
     Text[ chinese_traditional ] = "äº’è£œè‰²è½‰æ›";
     Text[ turkish ] = "Invert";
     Text[ arabic ] = "ÚßÓ";
-    Text[ catalan ] = "Invertir";
+    Text[ catalan ] = "Inverteix";
     Text[ finnish ] = "Käännä";
+    Text[ thai ] = "à¸ªà¸¥à¸±à¸š";
 };
 String STR_INVERT_NOT
 {
@@ -1955,13 +2022,14 @@ String STR_INVERT_NOT
     Text[ polish ] = "nie odwracaj";
     Text[ portuguese_brazilian ] = "not invert";
     Text[ japanese ] = "é€†è»¢ãªã—";
-    Text[ korean ] = "ë°˜ì „ ì•ŠìŒ";
+    Text[ korean ] = "ë°˜ì „í•˜ì§€ ì•ŠìŒ";
     Text[ chinese_simplified ] = "ä¸è½¬æ¢äº’è¡¥è‰²";
     Text[ chinese_traditional ] = "ä¸è½‰æ›äº’è£œè‰²";
     Text[ turkish ] = "not invert";
     Text[ arabic ] = "ÚÏã ÇáÚßÓ";
-    Text[ catalan ] = "no invertir";
+    Text[ catalan ] = "no inverteixis";
     Text[ finnish ] = "älä käännä";
+    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸¥à¸±à¸š";
 };
 
 String STR_DRAWMODE
@@ -1970,9 +2038,9 @@ String STR_DRAWMODE
     Text[ english ] = "Graphics mode: ";
     Text[ english_us ] = "Graphics mode: ";
     Text[ portuguese ] = "Modo Gráfico:  ";
-    Text[ russian ] = "Ğåæèì ğèñóíêà: ";
+    Text[ russian ] = "Ğåæèì ãğàôè÷åñêîãî îáúåêòà ";
     Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò ãñáöéêşí: ";
-    Text[ dutch ] = "Afbeeldingenmodus:  ";
+    Text[ dutch ] = "Afbeeldingenmodus:";
     Text[ french ] = "Mode Graphique : ";
     Text[ spanish ] = "Modo gráfico: ";
     Text[ italian ] = "Modo immagine: ";
@@ -1981,13 +2049,14 @@ String STR_DRAWMODE
     Text[ polish ] = "Tryb grafiki: ";
     Text[ portuguese_brazilian ] = "Graphics mode: ";
     Text[ japanese ] = "å›³ãƒ¢ãƒ¼ãƒ‰: ";
-    Text[ korean ] = "ê·¸ë˜í”½ ëª¨ë“œ: ";
+    Text[ korean ] = "ê·¸ë¦¼ ëª¨ë“œ: ";
     Text[ chinese_simplified ] = "å›¾å½¢æ¨¡å¼ï¼š ";
     Text[ chinese_traditional ] = "åœ–å½¢æ¨¡å¼ï¼š ";
     Text[ turkish ] = "Graphics mode: ";
     Text[ arabic ] = "æÖÚ ÇáÕæÑ:";
-    Text[ catalan ] = "Modo gráfico: ";
+    Text[ catalan ] = "Mode gràfic: ";
     Text[ finnish ] = "Grafiikkatila: ";
+    Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸à¸£à¸²à¸Ÿà¸´à¸„: ";
 };
 
 String STR_DRAWMODE_STD
@@ -1996,7 +2065,7 @@ String STR_DRAWMODE_STD
     Text[ english ] = "Standard";
     Text[ english_us ] = "Standard";
     Text[ portuguese ] = "Padrão";
-    Text[ russian ] = "Ñòàíäàğò";
+    Text[ russian ] = "Ïî óìîë÷àíèş";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ dutch ] = "Standaard";
     Text[ french ] = "Standard";
@@ -2012,8 +2081,9 @@ String STR_DRAWMODE_STD
     Text[ chinese_traditional ] = "æ¨™æº–";
     Text[ turkish ] = "Standart";
     Text[ arabic ] = "ŞíÇÓí";
-    Text[ catalan ] = "Estándar";
+    Text[ catalan ] = "Estàndard";
     Text[ finnish ] = "Vakio";
+    Text[ thai ] = "à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
 };
 String STR_DRAWMODE_GREY
 {
@@ -2032,13 +2102,14 @@ String STR_DRAWMODE_GREY
     Text[ polish ] = "Odcienie szaroœci";
     Text[ portuguese_brazilian ] = "Greys";
     Text[ japanese ] = "ã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«";
-    Text[ korean ] = "íšŒìƒ‰ë„";
+    Text[ korean ] = "íšŒìƒ‰ì¡°";
     Text[ chinese_simplified ] = "ç°åº¦";
     Text[ chinese_traditional ] = "ç°éš";
     Text[ turkish ] = "Greys";
     Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
-    Text[ catalan ] = "Escala de grises";
+    Text[ catalan ] = "Escales de grisos";
     Text[ finnish ] = "Harmaasävyt";
+    Text[ thai ] = "à¸ªà¹€à¸à¸¥à¸ªà¸µà¹€à¸—à¸²";
 };
 String STR_DRAWMODE_BLACKWHITE
 {
@@ -2050,20 +2121,21 @@ String STR_DRAWMODE_BLACKWHITE
     Text[ greek ] = "Ìáıñï/¢óğñï";
     Text[ dutch ] = "Zwart-wit";
     Text[ french ] = "Noir/Blanc";
-    Text[ spanish ] = "Negro/Blanco";
+    Text[ spanish ] = "Blanco y Negro";
     Text[ italian ] = "Bianco/nero";
     Text[ danish ] = "Sort-hvid";
     Text[ swedish ] = "Svartvitt";
     Text[ polish ] = "Czarno-bia³y";
     Text[ portuguese_brazilian ] = "Black/White";
     Text[ japanese ] = "ç™½é»’";
-    Text[ korean ] = "í‘/ë°±";
+    Text[ korean ] = "í‘ë°±";
     Text[ chinese_simplified ] = "é»‘ç™½";
     Text[ chinese_traditional ] = "é»‘ç™½";
     Text[ turkish ] = "Black/White";
     Text[ arabic ] = "ÃÓæÏ/ÃÈíÖ";
-    Text[ catalan ] = "Negro/Blanco";
+    Text[ catalan ] = "Blanc i negre";
     Text[ finnish ] = "Mustavalkoinen";
+    Text[ thai ] = "à¸”à¸³à¹à¸¥à¸°à¸‚à¸²à¸§";
 };
 String STR_DRAWMODE_WATERMARK
 {
@@ -2075,20 +2147,21 @@ String STR_DRAWMODE_WATERMARK
     Text[ greek ] = "Õäáôüóçìï";
     Text[ dutch ] = "Watermerk";
     Text[ french ] = "Filigrane";
-    Text[ spanish ] = "Marca de agua";
+    Text[ spanish ] = "Filigrana";
     Text[ italian ] = "Filigrana";
     Text[ danish ] = "Vandmærke";
     Text[ swedish ] = "Vattenmärke";
     Text[ polish ] = "Znak wodny";
     Text[ portuguese_brazilian ] = "Watermark";
     Text[ japanese ] = "é€ã‹ã—";
-    Text[ korean ] = "ë¶ˆë¹›ì— ë¹„ì¶°ë´ì•¼ ë³´ì´ëŠ” ë¬´ëŠ¬(ì˜ˆ: ì§€í)";
+    Text[ korean ] = "ì›Œí„°ë§ˆí¬";
     Text[ chinese_simplified ] = "æ°´å°";
     Text[ chinese_traditional ] = "æ°´å°";
     Text[ turkish ] = "Watermark";
     Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
-    Text[ catalan ] = "Marca de agua";
+    Text[ catalan ] = "Marca d'aigua";
     Text[ finnish ] = "Vesileima";
+    Text[ thai ] = "à¸¥à¸²à¸¢à¸™à¹‰à¸³";
 };
 String STR_ROTATION
 {
@@ -2112,8 +2185,9 @@ String STR_ROTATION
     Text[ chinese_traditional ] = "æ—‹è½‰";
     Text[ turkish ] = "Rotation";
     Text[ arabic ] = "ÇáÇÓÊÏÇÑÉ";
-    Text[ catalan ] = "Rotación";
+    Text[ catalan ] = "Gir";
     Text[ finnish ] = "Kierto";
+    Text[ thai ] = "à¸«à¸¡à¸¸à¸™";
 };
 
 String STR_GRID_NONE
@@ -2133,13 +2207,14 @@ String STR_GRID_NONE
     Text[ swedish ] = "Inget raster";
     Text[ polish ] = "No grid";
     Text[ portuguese_brazilian ] = "No grid";
-    Text[ japanese ] = "ã‚°ãƒªãƒƒãƒ‰ç·šãªã—";
-    Text[ korean ] = "ë¬¸ì ìˆ˜/ì—´ ìˆ˜ ì™¸ê³½ì„  ì—†ìŒ";
+    Text[ japanese ] = "ãªã—";
+    Text[ korean ] = "ê·¸ë¦¬ë“œ ì—†ìŒ";
     Text[ chinese_simplified ] = "ä¸ä½¿ç”¨æ ¼å­çº¿";
     Text[ chinese_traditional ] = "ä¸ä½¿ç”¨æ ¼å­ç·š";
     Text[ turkish ] = "No grid";
     Text[ arabic ] = "No grid";
     Text[ catalan ] = "No grid";
+    Text[ thai ] = "No grid";
 };
 
 String STR_GRID_LINES_ONLY
@@ -2159,13 +2234,14 @@ String STR_GRID_LINES_ONLY
     Text[ swedish ] = "Raster (bara linjer)";
     Text[ polish ] = "Line grid";
     Text[ portuguese_brazilian ] = "Line grid";
-    Text[ japanese ] = "ã‚°ãƒªãƒƒãƒ‰ç·š (è¡Œã‚°ãƒªãƒƒãƒ‰ç·šã®ã¿)";
-    Text[ korean ] = "ë¬¸ì ìˆ˜/ì—´ ìˆ˜ ì™¸ê³½ì„ (ì¤„ ë§Œ)";
+    Text[ japanese ] = "ç½«ç·š";
+    Text[ korean ] = "ê·¸ë¦¬ë“œ (ì¤„ ë§Œ)";
     Text[ chinese_simplified ] = "æ ¼å­çº¿(ä»…çº¿æ¡)";
     Text[ chinese_traditional ] = "æ ¼å­ç·š(åƒ…ç·šæ¢)";
     Text[ turkish ] = "Line grid";
     Text[ arabic ] = "Line grid";
     Text[ catalan ] = "Line grid";
+    Text[ thai ] = "Line grid";
 };
 
 String STR_GRID_LINES_CHARS
@@ -2185,12 +2261,18 @@ String STR_GRID_LINES_CHARS
     Text[ swedish ] = "Raster (linjer och tecken)";
     Text[ polish ] = "Line and character grid";
     Text[ portuguese_brazilian ] = "Line and character grid";
-    Text[ japanese ] = "ã‚°ãƒªãƒƒãƒ‰ç·š (è¡Œã‚°ãƒªãƒƒãƒ‰ç·šã¨æ–‡å­—ã‚°ãƒªãƒƒãƒ‰ç·š)";
-    Text[ korean ] = "ë¬¸ì ìˆ˜/ì—´ ìˆ˜ ì™¸ê³½ì„ (ì¤„ê³¼ ë¬¸ì)";
+    Text[ japanese ] = "åŸç¨¿ç”¨ç´™";
+    Text[ korean ] = "ê·¸ë¦¬ë“œ (ì¤„ê³¼ ë¬¸ì)";
     Text[ chinese_simplified ] = "æ ¼å­çº¿(çº¿æ¡å’Œå­—ç¬¦)";
     Text[ chinese_traditional ] = "æ ¼å­ç·š(ç·šæ¢å’Œå­—å…ƒ)";
     Text[ turkish ] = "Line and character grid";
     Text[ arabic ] = "Line and character grid";
     Text[ catalan ] = "Line and character grid";
+    Text[ thai ] = "Line and character grid";
 };
+
+
+
+
+
 

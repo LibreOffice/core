@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-19 08:38:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 // So kann man die Layoutstruktur ausgeben lassen
 // #define AMA_LAYOUT
 #ifdef AMA_LAYOUT
-#include <stdio.h>          // sprintf
+#include <stdio.h>
 #include <stdlib.h>         // getenv()
 #include <flowfrm.hxx>
 #include <pagefrm.hxx>
@@ -290,9 +290,9 @@ void LayOutPut( const SwFrm* pFrm )
             // fuer dieses new wird es kein delete geben.
             pOutName = new char[nLen + strlen(pName) + 3];
             if(nLen && (pPath[nLen-1] == '\\') || (pPath[nLen-1] == '/'))
-                sprintf( pOutName, "%s%s", pPath, pName );
+                snprintf( pOutName, sizeof(pOutName), "%s%s", pPath, pName );
             else
-                sprintf( pOutName, "%s/%s", pPath, pName );
+                snprintf( pOutName, sizeof(pOutName), "%s/%s", pPath, pName );
         }
     }
     SvFileStream aStream( pOutName, (bFirstOpen

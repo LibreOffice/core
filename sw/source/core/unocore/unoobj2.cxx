@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-26 14:25:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,9 +904,11 @@ SwDoc* SwXTextCursor::GetDoc()
 /*-- 09.12.98 14:19:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, sal_Bool bTableMode)
+void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAttrMode)
 {
     sal_uInt16 nFlags = SETATTR_APICALL;
+    if(nAttrMode & CRSR_ATTR_MODE_DONTREPLACE)
+        nFlags |= SETATTR_DONTREPLACE;
     SwDoc* pDoc = rPam.GetDoc();
     //StartEndAction
     UnoActionContext aAction(pDoc);
@@ -918,7 +920,7 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, sal_Bool bT
         SwPaM *_pStartCrsr = &rPam;
         do
         {
-            if( _pStartCrsr->HasMark() && ( bTableMode ||
+            if( _pStartCrsr->HasMark() && ( (CRSR_ATTR_MODE_TABLE & nAttrMode) ||
                 *_pStartCrsr->GetPoint() != *_pStartCrsr->GetMark() ))
                 pDoc->Insert(*_pStartCrsr, rSet, nFlags );
         } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != &rPam );
@@ -937,7 +939,7 @@ void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, sal_Bool bT
   -----------------------------------------------------------------------*/
 void SwXTextCursor::GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttrOnly)
 {
-static const sal_uInt16 nMaxLookup = 255;
+    static const sal_uInt16 nMaxLookup = 1000;
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet *pSet = &rSet;
     SwPaM *_pStartCrsr = &rPam;

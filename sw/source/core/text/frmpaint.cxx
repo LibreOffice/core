@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 11:05:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
+#endif
+#ifndef _SVX_LRSPITEM_HXX //autogen
+#include <svx/lrspitem.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
@@ -566,7 +569,8 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
         SwRect aRect;
         if( bCheck && aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
             return sal_False;
-        else if( OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
+        else if( OUTDEV_PRINTER != pSh->GetOut()->GetOutDevType() &&
+                 ! pSh->GetViewOptions()->IsPDFExport() )
         {
             SwFont *pFnt;
             const SwTxtNode& rTxtNode = *GetTxtNode();
@@ -617,6 +621,13 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 pFnt->Invalidate();
                 pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
                 Point aPos = Frm().Pos() + Prt().Pos();
+
+                const SvxLRSpaceItem &rSpace =
+                    GetTxtNode()->GetSwAttrSet().GetLRSpace();
+
+                if ( rSpace.GetTxtFirstLineOfst() > 0 )
+                    aPos.X() += rSpace.GetTxtFirstLineOfst();
+
                 SwSaveClip *pClip;
                 if( IsUndersized() )
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:28:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,6 +516,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         SwTwips nX = 0;
         SwTwips nFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
+        SwBidiPortion* pLastBidiPor = 0;
         SvShorts* pSpaceAdd = pCurr->GetpSpaceAdd();
         SvUShorts* pKanaComp = pCurr->GetpKanaComp();
         MSHORT nSpaceIdx = 0;
@@ -605,8 +606,16 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     nPorHeight = pPor->Height();
                     nPorAscent = pPor->GetAscent();
                 }
-                if ( aInf.GetIdx() + pPor->GetLen() < nOfst +
-                     ( pPor->IsMultiPortion() && !bWidth ? 0 : 1 ) )
+
+                // If we are behind the portion, we add the portion width to
+                // nX. Special case: nOfst = aInf.GetIdx() + pPor->GetLen().
+                // For common portions (including BidiPortions) we want to add
+                // the portion width to nX. For MultiPortions, nExtra = 0,
+                // therefore we go to the 'else' branch and start a recursion.
+                const BYTE nExtra = pPor->IsMultiPortion() &&
+                                    ! ((SwMultiPortion*)pPor)->IsBidi() &&
+                                    ! bWidth ? 0 : 1;
+                if ( aInf.GetIdx() + pPor->GetLen() < nOfst + nExtra )
                 {
                     if ( pPor->InSpaceGrp() && nSpaceAdd )
                         nX += pPor->PrtWidth() +
@@ -633,19 +642,29 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 !pPor->GetPortion()->IsMarginPortion() ) )
                             nX += pPor->PrtWidth();
                     }
-                    if( pPor->IsMultiPortion() &&
-                        ((SwMultiPortion*)pPor)->HasTabulator() )
+                    if( pPor->IsMultiPortion() )
                     {
-                        if ( pSpaceAdd )
+                        if ( ((SwMultiPortion*)pPor)->HasTabulator() )
                         {
-                            if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                                nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                            else
-                                nSpaceAdd = 0;
+                            if ( pSpaceAdd )
+                            {
+                                if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                                else
+                                    nSpaceAdd = 0;
+                            }
+
+                            if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                                ++nKanaIdx;
                         }
 
-                        if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
-                            ++nKanaIdx;
+                        // if we are right behind a BidiPortion, we have to
+                        // hold a pointer to the BidiPortion in order to
+                        // find the correct cursor position, depending on the
+                        // cursor level
+                        if ( ((SwMultiPortion*)pPor)->IsBidi() &&
+                             aInf.GetIdx() + pPor->GetLen() == nOfst )
+                             pLastBidiPor = (SwBidiPortion*)pPor;
                     }
 
                     aInf.SetIdx( aInf.GetIdx() + pPor->GetLen() );
@@ -666,8 +685,14 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
                         if( pCMS && pCMS->b2Lines )
                         {
-                            pCMS->p2Lines = new Sw2LinesPos();
-                            pCMS->p2Lines->aLine = SwRect(aCharPos, aCharSize);
+                            sal_Bool bRecursion = sal_True;
+                            if ( ! pCMS->p2Lines )
+                            {
+                                pCMS->p2Lines = new Sw2LinesPos;
+                                pCMS->p2Lines->aLine = SwRect(aCharPos, aCharSize);
+                                bRecursion = sal_False;
+                            }
+
                             if( ((SwMultiPortion*)pPor)->HasRotation() )
                             {
                                 if( ((SwMultiPortion*)pPor)->IsRevers() )
@@ -677,18 +702,22 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             }
                             else if( ((SwMultiPortion*)pPor)->IsDouble() )
                                 pCMS->p2Lines->nMultiType = MT_TWOLINE;
-#ifdef BIDI
                             else if( ((SwMultiPortion*)pPor)->IsBidi() )
                                 pCMS->p2Lines->nMultiType = MT_BIDI;
-#endif
                             else
                                 pCMS->p2Lines->nMultiType = MT_RUBY;
+
                             SwTwips nTmpWidth = pPor->Width();
                             if( nSpaceAdd )
                                 nTmpWidth += pPor->CalcSpacing(nSpaceAdd, aInf);
-                            pCMS->p2Lines->aPortion =
-                                SwRect( Point(aCharPos.X() + nX, pOrig->Top()),
-                                        Size( nTmpWidth, pPor->Height() ) );
+
+                            SwRect aRect( Point(aCharPos.X() + nX, pOrig->Top() ),
+                                          Size( nTmpWidth, pPor->Height() ) );
+
+                            if ( ! bRecursion )
+                                pCMS->p2Lines->aPortion = aRect;
+                            else
+                                pCMS->p2Lines->aPortion2 = aRect;
                         }
 
                         // In a multi-portion we use GetCharRect()-function
@@ -859,22 +888,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 const SwTwips nInsideOfst = pOrig->Pos().X();
                                 pOrig->Pos().X() = nX + nPorWidth -
                                                    nInsideOfst - pOrig->Width();
-                                if ( nInsideOfst == nPorWidth )
-                                {
-                                    // logical position is behind multi portion
-                                    USHORT nDefaultDir = GetTxtFrm()->IsRightToLeft() ?
-                                                         1 : 0;
-                                    if ( pCMS &&
-                                         pCMS->nCursorBidiLevel == nDefaultDir )
-                                        pOrig->Pos().X() += nPorWidth;
-
-                                    // actually we are not in a bidi portion
-                                    if ( pCMS && pCMS->p2Lines )
-                                    {
-                                        delete pCMS->p2Lines;
-                                        pCMS->p2Lines = 0;
-                                    }
-                                }
                             }
                             else
                                 pOrig->Pos().X() += nX;
@@ -1080,19 +1093,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     pOrig->Width( nTmp );
                 }
 
-                if ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
-                {
-                    // logical position is at beginning of bidi portion
-                    // we determine if the cursor has to blink before or behind
-                    // the bidi portion
-                    USHORT nDefaultDir = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
-                    if ( pCMS->nCursorBidiLevel != nDefaultDir )
-                    {
-                        pOrig->Pos().X() += pPor->Width() +
-                                            pPor->CalcSpacing( nSpaceAdd, aInf );
-                    }
-                }
-
                 // travel inside field portion?
                 if ( pCMS->pSpecialPos )
                 {
@@ -1102,6 +1102,59 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 }
             }
         }
+
+        // special case: We are at the beginning of a BidiPortion or
+        // directly behind a BidiPortion
+        if ( pCMS &&
+                ( pLastBidiPor ||
+                ( pPor &&
+                  pPor->IsMultiPortion() &&
+                  ((SwMultiPortion*)pPor)->IsBidi() ) ) )
+        {
+            // we determine if the cursor has to blink before or behind
+            // the bidi portion
+            if ( pLastBidiPor )
+            {
+                const BYTE nPortionLevel = pLastBidiPor->GetLevel();
+
+                if ( pCMS->nCursorBidiLevel >= nPortionLevel )
+                {
+                    // we came from inside the bidi portion, we want to blink
+                    // behind the portion
+                    pOrig->Pos().X() -= pLastBidiPor->Width() +
+                                        pLastBidiPor->CalcSpacing( nSpaceAdd, aInf );
+
+                    // Again, there is a special case: logically behind
+                    // the portion can actually mean that the cursor is inside
+                    // the portion. This can happen is the last portion
+                    // inside the bidi portion is a nested bidi portion
+                    SwLineLayout& rLineLayout =
+                            ((SwMultiPortion*)pLastBidiPor)->GetRoot();
+
+                    const SwLinePortion *pLast = rLineLayout.FindLastPortion();
+                    if ( pLast->IsMultiPortion() )
+                    {
+                        ASSERT( ((SwMultiPortion*)pLast)->IsBidi(),
+                                 "Non-BidiPortion inside BidiPortion" )
+                        pOrig->Pos().X() += pLast->Width() +
+                                            pLast->CalcSpacing( nSpaceAdd, aInf );
+                    }
+                }
+            }
+            else
+            {
+                const BYTE nPortionLevel = ((SwBidiPortion*)pPor)->GetLevel();
+
+                if ( pCMS->nCursorBidiLevel >= nPortionLevel )
+                {
+                    // we came from inside the bidi portion, we want to blink
+                    // behind the portion
+                    pOrig->Pos().X() += pPor->Width() +
+                                        pPor->CalcSpacing( nSpaceAdd, aInf );
+                }
+            }
+        }
+
         pOrig->Pos().X() += nX;
 
         if ( pCMS && pCMS->bRealHeight )
@@ -1431,7 +1484,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             // Sonst kommen wir nicht mehr in zeichengeb. Rahmen hinein...
             if( !( nChgNode && pPos && pPor->IsFlyCntPortion() ) )
             {
-                if ( pPor->InFldGrp() )
+                if ( pPor->InFldGrp() ||
+                     ( pPor->IsMultiPortion() &&
+                       ((SwMultiPortion*)pPor)->IsBidi()  ) )
                 {
                     KSHORT nHeight = 0;
                     if( !bFieldInfo )
@@ -1440,8 +1495,9 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                         if ( !nHeight || nHeight > nWidth )
                             nHeight = nWidth;
                     }
-                    if( !((SwFldPortion*)pPor)->HasFollow() &&
-                        nWidth - nHeight/2 <= nX )
+                    if( nWidth - nHeight/2 <= nX &&
+                        ( ! pPor->InFldGrp() ||
+                          !((SwFldPortion*)pPor)->HasFollow() ) )
                         ++nCurrStart;
                 }
                 else if ( ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
@@ -1505,12 +1561,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             {
                 const BYTE nBidiLevel = ((SwBidiPortion*)pPor)->GetLevel();
                 aLayoutModeModifier.Modify( nBidiLevel % 2 );
-                if ( pCMS )
-                    ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel = nBidiLevel;
             }
-            else if ( pCMS )
-                ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel =
-                        GetTxtFrm()->IsRightToLeft() ? 1 : 0;
 #else
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                 nTmpY,  nCurrStart, nSpaceAdd );
@@ -1578,6 +1629,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     aDrawInf.SetKanaComp( nKanaComp );
 
                 nLength = aSizeInf.GetFont()->_GetCrsrOfst( aDrawInf );
+
+                if ( pCMS )
+                    ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel =
+                        aDrawInf.GetCursorBidiLevel();
 
                 if( bFieldInfo && nLength == pPor->GetLen() &&
                     ( ! pPor->GetPortion() ||

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:37:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,23 +114,24 @@ ModalDialog DLG_INS_ROW_COL
         Text [ portuguese ] = "à ~frente" ;
         Text [ finnish ] = "~Ennen" ;
         Text [ danish ] = "foran" ;
-        Text [ french ] = "A~vant" ;
+        Text [ french ] = "Avant" ;
         Text [ swedish ] = "~framför" ;
         Text [ dutch ] = "~ervoor" ;
         Text [ spanish ] = "De~lante" ;
         Text [ english_us ] = "~Before" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ö®Ç°(~B)";
-        Text[ russian ] = "ïåğåä";
+        Text[ chinese_simplified ] = "ä¹‹å‰(~B)";
+        Text[ russian ] = "äî";
         Text[ polish ] = "prze~d";
-        Text[ japanese ] = "‘O(~B)";
-        Text[ chinese_traditional ] = "¤§«e(~B)";
+        Text[ japanese ] = "å‰(~B)";
+        Text[ chinese_traditional ] = "ä¹‹å‰(~B)";
         Text[ arabic ] = "ŞÈá";
         Text[ greek ] = "Ğñéí áğü";
-        Text[ korean ] = "ÀÌÀü(~B)";
+        Text[ korean ] = "ì•(~B)";
         Text[ turkish ] = "ön~üne";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "De~lante";
+        Text[ catalan ] = "A~bans de";
+        Text[ thai ] = "~à¸à¹ˆà¸­à¸™";
     };
     RadioButton CB_POS_AFTER
     {
@@ -144,24 +145,25 @@ ModalDialog DLG_INS_ROW_COL
         Text [ portuguese ] = "~atrás" ;
         Text [ finnish ] = "~Jälkeen" ;
         Text [ danish ] = "efter" ;
-        Text [ french ] = "~Après" ;
+        Text [ french ] = "Après" ;
         Text [ swedish ] = "~bakom" ;
         Text [ dutch ] = "e~rachter" ;
-        Text [ spanish ] = "de~trás" ;
+        Text [ spanish ] = "De~trás" ;
         Text [ english_us ] = "A~fter" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "Ö®ºó(~F)";
+        Text[ chinese_simplified ] = "ä¹‹å(~F)";
         Text[ russian ] = "ïîñëå";
         Text[ polish ] = "za";
-        Text[ japanese ] = "Œã(~F)";
-        Text[ chinese_traditional ] = "¤§«á(~F)";
+        Text[ japanese ] = "å¾Œ(~F)";
+        Text[ chinese_traditional ] = "ä¹‹å¾Œ(~F)";
         Text[ arabic ] = "ÈÚÏ";
         Text[ greek ] = "ìåôÜ áğü";
-        Text[ korean ] = "ÀÌÈÄ(~F)";
+        Text[ korean ] = "ë’¤(~F)";
         Text[ turkish ] = "ar~kasına";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "de~trás";
+        Text[ catalan ] = "da~rrera";
+        Text[ thai ] = "à¸«~à¸¥à¸±à¸‡à¸ˆà¸²à¸";
     };
     NumericField ED_COUNT
     {
@@ -190,23 +192,24 @@ ModalDialog DLG_INS_ROW_COL
         Text [ portuguese_brazilian ] = "Inserir" ;
         Text [ portuguese ] = "Inserir" ;
         Text [ finnish ] = "Lisää" ;
-        Text [ danish ] = "Indsæt" ;
+        Text [ danish ] = "Sæt ind" ;
         Text [ french ] = "Insérer" ;
         Text [ swedish ] = "Infoga" ;
         Text [ dutch ] = "Invoegen" ;
         Text [ spanish ] = "Insertar" ;
         Text [ english_us ] = "Insert" ;
-        Text[ chinese_simplified ] = "²åÈë";
+        Text[ chinese_simplified ] = "æ’å…¥";
         Text[ russian ] = "Âñòàâèòü";
         Text[ polish ] = "Wstaw";
-        Text[ japanese ] = "‘}“ü";
-        Text[ chinese_traditional ] = "´¡¤J";
+        Text[ japanese ] = "æŒ¿å…¥";
+        Text[ chinese_traditional ] = "æ’å…¥";
         Text[ arabic ] = "ÅÏÑÇÌ";
         Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ korean ] = "»ğÀÔ";
+        Text[ korean ] = "ì‚½ì…";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Insertar";
+        Text[ catalan ] = "Insereix";
+        Text[ thai ] = "à¹à¸—à¸£à¸";
     };
     FixedLine FL_POS
     {
@@ -218,22 +221,23 @@ ModalDialog DLG_INS_ROW_COL
         Text[ portuguese ] = "Posição";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ greek ] = "start_num";
-        Text[ dutch ] = "Functie";
-        Text[ french ] = "Fonction";
+        Text[ dutch ] = "Positie";
+        Text[ french ] = "Position";
         Text[ spanish ] = "Posición";
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "Stilling";
+        Text[ danish ] = "Placering";
         Text[ swedish ] = "Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Position";
-        Text[ japanese ] = "ˆÊ’u";
-        Text[ korean ] = "Á÷À§";
-        Text[ chinese_simplified ] = "start_num";
-        Text[ chinese_traditional ] = "start_num";
+        Text[ japanese ] = "ä½ç½®";
+        Text[ korean ] = "ìœ„ì¹˜";
+        Text[ chinese_simplified ] = "ä½ç½®";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ turkish ] = "İş unvanı";
         Text[ arabic ] = "Start_num";
-        Text[ catalan ] = "Position";
+        Text[ catalan ] = "Posició";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     FixedText FT_COUNT
     {
@@ -253,17 +257,18 @@ ModalDialog DLG_INS_ROW_COL
         Text [ spanish ] = "~Cantidad" ;
         Text [ english_us ] = "~Amount" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÊıÄ¿(~A)";
-        Text[ russian ] = "×èñëî";
+        Text[ chinese_simplified ] = "æ•°ç›®(~A)";
+        Text[ russian ] = "êîë-âî";
         Text[ polish ] = "Liczba";
-        Text[ japanese ] = "”(~A)";
-        Text[ chinese_traditional ] = "¼Æ¥Ø(~A)";
+        Text[ japanese ] = "æ•°(~A)";
+        Text[ chinese_traditional ] = "æ•¸ç›®(~A)";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "~Áñéèìüò";
-        Text[ korean ] = "°³¼ö(~A)";
+        Text[ korean ] = "ìˆ˜(~A)";
         Text[ turkish ] = "~Adet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cantidad";
+        Text[ catalan ] = "~Quantitat";
+        Text[ thai ] = "~à¸ˆà¸³à¸™à¸§à¸™";
     };
     String STR_ROW
     {
@@ -280,17 +285,18 @@ ModalDialog DLG_INS_ROW_COL
         Text [ dutch ] = " rijen" ;
         Text [ spanish ] = "Filas" ;
         Text [ english_us ] = " Rows" ;
-        Text[ chinese_simplified ] = "ĞĞ";
+        Text[ chinese_simplified ] = "è¡Œ";
         Text[ russian ] = " ñòğîêè";
         Text[ polish ] = " Wiersze";
-        Text[ japanese ] = "s";
-        Text[ chinese_traditional ] = "¦æ";
+        Text[ japanese ] = "è¡Œ";
+        Text[ chinese_traditional ] = "è¡Œ";
         Text[ arabic ] = " Õİæİ";
         Text[ greek ] = " Ãñáììİò";
-        Text[ korean ] = "Çà";
+        Text[ korean ] = "í–‰";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Filas";
+        Text[ catalan ] = " Files";
+        Text[ thai ] = " à¹à¸–à¸§";
     };
     String STR_COL
     {
@@ -307,30 +313,47 @@ ModalDialog DLG_INS_ROW_COL
         Text [ dutch ] = " kolommen" ;
         Text [ spanish ] = "Columnas" ;
         Text [ english_us ] = " Columns" ;
-        Text[ chinese_simplified ] = "À¸";
-        Text[ russian ] = " êîëîíêè";
+        Text[ chinese_simplified ] = "æ ";
+        Text[ russian ] = " ñòîëáöû";
         Text[ polish ] = " Kolumny";
-        Text[ japanese ] = "—ñ";
-        Text[ chinese_traditional ] = "Äæ";
+        Text[ japanese ] = "åˆ—";
+        Text[ chinese_traditional ] = "æ¬„";
         Text[ arabic ] = " ÃÚãÏÉ";
         Text[ greek ] = " ÓôŞëåò";
-        Text[ korean ] = "¿­";
+        Text[ korean ] = " ë‹¨";
         Text[ turkish ] = "Sütun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Columnas";
+        Text[ catalan ] = " Columnes";
+        Text[ thai ] = " à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
-    Text[ chinese_simplified ] = "²åÈë";
-    Text[ russian ] = "Âñòàâèòü";
+    Text[ chinese_simplified ] = "æ’å…¥";
+    Text[ russian ] = "Âñòàâêà";
     Text[ polish ] = "Wstaw";
-    Text[ japanese ] = "‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ japanese ] = "æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥";
     Text[ arabic ] = "ÅÏÑÇÌ";
     Text[ greek ] = "ÅéóáãùãŞ";
-    Text[ korean ] = "»ğÀÔ";
+    Text[ korean ] = "ì‚½ì…";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar";
+    Text[ catalan ] = "Insereix";
+    Text[ thai ] = "à¹à¸—à¸£à¸";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

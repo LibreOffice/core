@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-30 13:03:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,7 +1048,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     if(!bDone)
                         throw IllegalArgumentException();
                 }
-                else if(RES_OPAQUE == pMap->nWID)
+                 else if(RES_OPAQUE == pMap->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
                     DBG_ASSERT(pSvxShape, "No SvxShape found!")
@@ -1177,7 +1177,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         aRet.setValue(&bOpaque, ::getBooleanCppuType());
                     }
                 }
-                if(FN_ANCHOR_POSITION == pMap->nWID)
+                else if(FN_ANCHOR_POSITION == pMap->nWID)
                 {
                     SvxShape* pSvxShape = GetSvxShape();
                     DBG_ASSERT(pSvxShape, "No SvxShape found!")

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-12-05 14:32:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,11 +213,14 @@ Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
 Sequence< sal_Int8 > SAL_CALL SwAccessibleFootnote::getImplementationId()
         throw(RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     static Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( reinterpret_cast< sal_uInt8 * >(aId.getArray() ),
-                        0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }
 

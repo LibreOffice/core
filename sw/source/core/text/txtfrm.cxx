@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: od $ $Date: 2002-12-10 14:02:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,6 +786,11 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             Prepare( PREP_CLEAR );
             _InvalidatePrt();
             SET_WRONG( 0, STRING_LEN, Invalidate );
+            SetDerivedR2L( sal_False );
+            CheckDirChange();
+            // OD 09.12.2002 #105576# - Force complete paint due to existing
+            // indents.
+            SetCompletePaint();
             InvalidateLineNum();
         }
         return;
@@ -1750,7 +1755,8 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
                   (pFrm->Prt().*fnRect->fnGetTop)() - nLower ) );
     (pFrm->Prt().*fnRect->fnSetWidth)(
         (pFrm->Frm().*fnRect->fnGetWidth)() -
-        ( rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight() ) );
+        // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
+        ( rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight( pFrm ) ) );
     pOldPara = pFrm->HasPara() ? pFrm->GetPara() : NULL;
     pFrm->SetPara( new SwParaPortion(), sal_False );
 

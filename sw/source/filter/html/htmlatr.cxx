@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:25:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,14 @@ void SwHTMLWriter::OutAndSetDefList( USHORT nNewLvl )
     // eventuell muss erst mal eine Liste aufgemacht werden
     if( nDefListLvl < nNewLvl )
     {
+        // output </pre> for the previous(!) pararagraph, if required.
+        // Preferable, the <pre> is exported by OutHTML_SwFmtOff for the
+           // previous  paragraph already, but that's not possible, because a very
+        // deep look at the next paragraph (this one) is required to figure
+        // out that a def list starts here.
+
+        ChangeParaToken( 0 );
+
         // entsprechend dem Level-Unterschied schreiben!
         for( USHORT i=nDefListLvl; i<nNewLvl; i++ )
         {

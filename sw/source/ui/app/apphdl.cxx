@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:09:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -318,10 +318,15 @@ using namespace ::com::sun::star;
 #include <cfgid.h>
 #endif
 
+#include <shells.hrc>
+
 SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxHyperlinkDlgWrapper::GetChildWindowId());
     SFX_STATUSBAR_REGISTRATION(SW_RES(CFG_STATUSBAR));
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION |
+            SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER,
+            SW_RES(RID_MODULE_TOOLBOX) );
 }
 
 /*------------------------------------------------------------------------
@@ -795,7 +800,13 @@ void SwModule::ExecViewOptions(SfxRequest &rReq)
         nDest = VIEWOPT_DEST_TEXT;
     ApplyUsrPref( *pOpt, pApplyView, nDest );
     if ( pApplyView )
+    {
+        SwWrtShell &rSh = pApplyView->GetWrtShell();
+        const BOOL bLockedView = rSh.IsViewLocked();
+        rSh.LockView( TRUE );    //lock visible section
         pApplyView->GetWrtShell().EndAction();
+        rSh.LockView( bLockedView );
+    }
 
     delete pOpt;
     Invalidate(rReq.GetSlot());
@@ -1131,11 +1142,11 @@ SwDBConfig* SwModule::GetDBConfig()
 /* -----------------------------11.04.2002 15:27------------------------------
 
  ---------------------------------------------------------------------------*/
-svx::ColorConfig& SwModule::GetColorConfig()
+svtools::ColorConfig& SwModule::GetColorConfig()
 {
     if(!pColorConfig)
     {
-        pColorConfig = new svx::ColorConfig;
+        pColorConfig = new svtools::ColorConfig;
         SwViewOption::ApplyColorConfigValues(*pColorConfig);
         StartListening(*pColorConfig);
     }

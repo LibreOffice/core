@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: od $ $Date: 2002-11-11 09:40:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
+#ifndef _FMTCLBL_HXX
+#include <fmtclbl.hxx>
+#endif
+
 #include "tabfrm.hxx"
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
@@ -979,7 +983,18 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
             //4. Der Abstand fuer TextFrms entspricht mindestens dem Durchschuss
 
             nUpper = CalcUpperSpace( &rAttrs, NULL );
-            SwTwips nLower = rAttrs.GetBottomLine( this );
+            // in balanced columned section frames we do not want the
+            // common border
+            sal_Bool bCommonBorder = sal_True;
+            if ( IsInSct() && GetUpper()->IsColBodyFrm() )
+            {
+                const SwSectionFrm* pSct = FindSctFrm();
+                bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
+            }
+            SwTwips nLower = bCommonBorder ?
+                             rAttrs.GetBottomLine( this ) :
+                             rAttrs.CalcBottomLine();
+
             (Prt().*fnRect->fnSetPosY)( (!bVert || bReverse) ? nUpper : nLower);
             nUpper += nLower;
             nUpper -= (Frm().*fnRect->fnGetHeight)() -
@@ -1453,10 +1468,25 @@ void SwCntntFrm::MakeAll()
             ((SwSectionFrm*)pOldUp->GetUpper()->GetUpper())->MoveAllowed(this) )
             bMovedFwd = FALSE;
 
+        const sal_Bool bCheckForGrownBody = pOldUp->IsBodyFrm();
+        const long nOldBodyHeight = (pOldUp->Frm().*fnRect->fnGetHeight)();
+
         if ( !bMovedFwd && !MoveFwd( bMakePage, FALSE ) )
             bMakePage = FALSE;
         SWREFRESHFN( this )
-        bMovedFwd = TRUE;
+
+        // If MoveFwd moves the paragraph to the next page, a following
+        // paragraph, which contains footnotes can can cause the old upper
+        // frame to grow. In this case we explicitely allow a new check
+        // for MoveBwd. Robust: We also check the bMovedBwd flag again.
+        // If pOldUp was a footnote frame, it has been deleted inside MoveFwd.
+        // Therefore we only check for growing body frames.
+        if ( bCheckForGrownBody && ! bMovedBwd && pOldUp != GetUpper() &&
+             (pOldUp->Frm().*fnRect->fnGetHeight)() > nOldBodyHeight )
+            bMovedFwd = FALSE;
+        else
+            bMovedFwd = TRUE;
+
         bFormatted = FALSE;
         if ( bMoveOrFit && GetUpper() == pOldUp )
         {
@@ -1649,7 +1679,17 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                 nUpper = CalcUpperSpace( NULL, pPrev );
                 SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
-                nUpper += rAttrs.GetBottomLine( pFrm );
+                // in balanced columned section frames we do not want the
+                // common border
+                sal_Bool bCommonBorder = sal_True;
+                if ( pFrm->IsInSct() && pFrm->GetUpper()->IsColBodyFrm() )
+                {
+                    const SwSectionFrm* pSct = pFrm->FindSctFrm();
+                    bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
+                }
+                nUpper += bCommonBorder ?
+                          rAttrs.GetBottomLine( pFrm ) :
+                          rAttrs.CalcBottomLine();
             }
             else
             {

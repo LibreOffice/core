@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: od $ $Date: 2002-11-11 09:36:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,13 @@ SwFrm *SwFrm::_FindNext()
     {
         if( ((SwCntntFrm*)this)->GetFollow() )
             return ((SwCntntFrm*)this)->GetFollow();
+    }
+    else if ( IsRowFrm() )
+    {
+        SwFrm* pUpper = GetUpper();
+        if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->GetFollow() )
+            return ((SwTabFrm*)pUpper)->GetFollow()->GetLower();
+        else return NULL;
     }
     else
         return NULL;

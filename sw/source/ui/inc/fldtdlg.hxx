@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:11:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class SwFldDlg: public SfxTabDialog
 {
     SwChildWinWrapper*  pChildWin;
     BOOL                bHtmlMode;
+    BOOL                bDataBaseMode;
 
     virtual BOOL        Close();
     virtual SfxItemSet* CreateInputItemSet( USHORT nId );

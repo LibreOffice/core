@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-09-26 13:38:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
+#ifndef _SVX_ADJITEM_HXX //autogen
+#include <svx/adjitem.hxx>
+#endif
 
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
@@ -204,6 +207,12 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
+#ifndef _SW3IO_HXX
+#include <sw3io.hxx>        // I/O, Hausformat
+#endif
+#ifndef _SHELLIO_HXX
+#include <shellio.hxx>
+#endif
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
@@ -277,7 +286,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
-        AddLink();      // pDoc ggf. anlegen
+        AddLink();      // pDoc / pIo ggf. anlegen
 
         sal_Bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
@@ -342,6 +351,12 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             DEFAULTFONT_CJK_TEXT,
             DEFAULTFONT_CTL_TEXT
         };
+        USHORT aLangTypes[] =
+        {
+            RES_CHRATR_LANGUAGE,
+            RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_CTL_LANGUAGE
+        };
 
         for(USHORT i = 0; i < 3; i++)
         {
@@ -369,7 +384,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             }
             else
             {
-                const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault( nFontWhich );
+                const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault( aLangTypes[i] );
 
                 Font aLangDefFont = OutputDevice::GetDefaultFont(
                     nFontTypes[i],
@@ -445,6 +460,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
 
 SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     pDoc(0),
+    pIo(0),
     pBasePool(0),
     pFontList(0),
     SfxObjectShell ( eMode ),
@@ -463,6 +479,7 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
 
 SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     pDoc(pD),
+    pIo(0),
     pBasePool(0),
     pFontList(0),
     SfxObjectShell ( eMode ),
@@ -482,6 +499,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
  SwDocShell::~SwDocShell()
 {
     RemoveLink();
+    delete pIo;
     delete pFontList;
 
     // wir als BroadCaster werden auch unser eigener Listener
@@ -513,7 +531,6 @@ void  SwDocShell::Init_Impl()
 
     // set map unit to twip
     SetMapUnit( MAP_TWIP );
-
 }
 /*--------------------------------------------------------------------
     Beschreibung: AddLink
@@ -534,6 +551,11 @@ void SwDocShell::AddLink()
     pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
+
+    if( !pIo )
+        pIo = new Sw3Io( *pDoc );
+    else
+        pIo->SetDoc( *pDoc );
 
     SetPool(&pDoc->GetAttrPool());
 
@@ -641,16 +663,18 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 //          break;
 
         case SFX_CREATE_MODE_ORGANIZER:
+            if( bXML )
             {
-                Reader *pReader = bXML ? ReadXML : ReadSw3;
-                if( pReader )
+                if( ReadXML )
                 {
-                    pReader->SetOrganizerMode( TRUE );
+                    ReadXML->SetOrganizerMode( TRUE );
                     SwReader aRdr( *pStor, aEmptyStr, pDoc );
-                    nErr = aRdr.Read( *pReader );
-                    pReader->SetOrganizerMode( FALSE );
+                    nErr = aRdr.Read( *ReadXML );
+                    ReadXML->SetOrganizerMode( FALSE );
                 }
             }
+            else
+                nErr = pIo->LoadStyles( pStor );
             break;
 
         case SFX_CREATE_MODE_INTERNAL:
@@ -808,21 +832,22 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
         if( pStor->IsStream( aStreamName ) )
         {
             // Das Laden
-            Reader *pReader = bXML ? ReadXML : ReadSw3;
-            if( pReader )
+            SwWait aWait( *this, sal_True );
+            if( bXML )
             {
-                SwWait aWait( *this, sal_True );
-                if( bXML )
+                ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
+                pBasePool = new SwDocStyleSheetPool( *pDoc,
+                                SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+                if( ReadXML )
                 {
-                    ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-                    pBasePool = new SwDocStyleSheetPool( *pDoc,
-                                    SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+                    ReadXML->SetOrganizerMode( TRUE );
+                    SwReader aRdr( *pStor, aEmptyStr, pDoc );
+                    nErr = aRdr.Read( *ReadXML );
+                    ReadXML->SetOrganizerMode( FALSE );
                 }
-                pReader->SetOrganizerMode( TRUE );
-                SwReader aRdr( *pStor, aEmptyStr, pDoc );
-                nErr = aRdr.Read( *pReader );
-                pReader->SetOrganizerMode( FALSE );
             }
+            else
+                nErr = pIo->LoadStyles( pStor );
         }
         else
         {
@@ -875,11 +900,12 @@ void SwDocShell::SubInitNew()
     sal_Bool bWeb = ISA(SwWebDocShell);
 
     sal_uInt16 nRange[] =   {
-                            RES_CHRATR_COLOR, RES_CHRATR_COLOR,
-                            RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
-                            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
-                            RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
-                            0, 0, 0  };
+        RES_PARATR_ADJUST, RES_PARATR_ADJUST,
+        RES_CHRATR_COLOR, RES_CHRATR_COLOR,
+        RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
+        RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+        RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+        0, 0, 0  };
     if(!bWeb)
     {
         nRange[ (sizeof(nRange)/sizeof(nRange[0])) - 3 ] = RES_PARATR_TABSTOP;
@@ -910,9 +936,15 @@ void SwDocShell::SubInitNew()
         sal_uInt16 nNewPos = SW_MOD()->GetUsrPref(FALSE)->GetDefTab();
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
-                                            SVX_TAB_ADJUST_DEFAULT ) );
+                                          SVX_TAB_ADJUST_DEFAULT ) );
     }
     aDfltSet.Put( SvxColorItem( Color( COL_AUTO ), RES_CHRATR_COLOR ) );
+
+    /* #106748# If the default frame direction of a document is RTL
+        the default adjusment is to the right. */
+    if (FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()))
+        aDfltSet.Put(SvxAdjustItem(SVX_ADJUST_RIGHT));
+
     pDoc->SetDefault( aDfltSet );
     pDoc->ResetModified();
 }

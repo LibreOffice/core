@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-06-03 12:26:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_AUTOFMT_TABLE
     Text [ french ] = "AutoFormat" ;
     Text [ swedish ] = "Autoformat" ;
     Text [ dutch ] = "AutoOpmaak" ;
-    Text [ spanish ] = "AutoFormato" ;
+    Text [ spanish ] = "Formateado automático" ;
     Text [ english_us ] = "AutoFormat" ;
     Moveable = TRUE ;
     FixedLine FL_FORMAT
@@ -87,7 +87,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Size = MAP_APPFONT ( 243 , 8 ) ;
         Text = "Format" ;
         Text [ english_us ] = "Format" ;
-        Text[ portuguese ] = "Formatar";
+        Text[ portuguese ] = "Formato";
         Text[ russian ] = "Ôîğìàò";
         Text[ greek ] = "Ìïñöïğïßçóç";
         Text[ dutch ] = "Opmaak";
@@ -95,17 +95,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ spanish ] = "Formato";
         Text[ finnish ] = "Muotoilu";
         Text[ italian ] = "Formattazione";
-        Text[ danish ] = "Formatering";
+        Text[ danish ] = "Format";
         Text[ swedish ] = "Format";
         Text[ polish ] = "Format";
         Text[ portuguese_brazilian ] = "Formatos";
-        Text[ japanese ] = "‘®";
-        Text[ korean ] = "Æ÷¸ËÆÃ";
-        Text[ chinese_simplified ] = "¸ñÊ½»¯";
-        Text[ chinese_traditional ] = "®æ¦¡¤Æ";
+        Text[ japanese ] = "æ›¸å¼";
+        Text[ korean ] = "ì„œì‹";
+        Text[ chinese_simplified ] = "æ ¼å¼";
+        Text[ chinese_traditional ] = "æ ¼å¼";
         Text[ turkish ] = "Formatlama";
         Text[ arabic ] = "ÊäÓíŞ";
         Text[ catalan ] = "Formato";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     ListBox LB_FORMAT
     {
@@ -131,7 +132,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ italian ] = "Formato ~numero" ;
         Text [ portuguese_brazilian ] = "~Formatodon?ero" ;
         Text [ portuguese ] = "~Formato numérico" ;
-        Text [ finnish ] = "~Numeromuoto" ;
+        Text [ finnish ] = "Lukumuoto" ;
         Text [ danish ] = "Talformat" ;
         Text [ french ] = "~Format numérique" ;
         Text [ swedish ] = "Talf~ormat" ;
@@ -139,17 +140,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ spanish ] = "Formato nu~mérico" ;
         Text [ english_us ] = "~Number format" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Êı×Ö¸ñÊ½(~N)";
+        Text[ chinese_simplified ] = "æ•°å­—æ ¼å¼(~N)";
         Text[ russian ] = "×èñëîâîé ôîğìàò";
         Text[ polish ] = "Format liczb";
-        Text[ japanese ] = "”‚Ì‘®(~N)";
-        Text[ chinese_traditional ] = "¼Æ¦r®æ¦¡(~N)";
+        Text[ japanese ] = "æ•°ã®æ›¸å¼(~N)";
+        Text[ chinese_traditional ] = "æ•¸å­—æ ¼å¼(~N)";
         Text[ arabic ] = "ÊäÓíŞ ÇáÃÑŞÇã";
         Text[ greek ] = "ÌïñöŞ áñéèìşí";
-        Text[ korean ] = "¼ıÀÚ Çü½Ä(~N)";
+        Text[ korean ] = "ìˆ«ì í‘œê¸° í˜•ì‹(~N)";
         Text[ turkish ] = "Sayı f~ormatı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato nu~mérico";
+        Text[ catalan ] = "Format nu~mèric";
+        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š~à¸•à¸±à¸§à¹€à¸¥à¸‚";
     };
     CheckBox BTN_BORDER
     {
@@ -167,20 +169,21 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ french ] = "~Bordure" ;
         Text [ swedish ] = "~Inramning" ;
         Text [ dutch ] = "~Omranding" ;
-        Text [ spanish ] = "~Borde" ;
+        Text [ spanish ] = "~Bordes" ;
         Text [ english_us ] = "~Borders" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "±ß¿ò(~B)";
+        Text[ chinese_simplified ] = "è¾¹æ¡†(~B)";
         Text[ russian ] = "Îáğàìëåíèå";
         Text[ polish ] = "Obramowanie";
-        Text[ japanese ] = "ŠO˜g(~B)";
-        Text[ chinese_traditional ] = "Ãä®Ø(~B)";
+        Text[ japanese ] = "å¤–æ (~B)";
+        Text[ chinese_traditional ] = "é‚Šæ¡†(~B)";
         Text[ arabic ] = "ÇáÍÏæÏ";
         Text[ greek ] = "Ğåñßãñáììá";
-        Text[ korean ] = "Å×µÎ¸®(~B)";
+        Text[ korean ] = "í…Œë‘ë¦¬(~B)";
         Text[ turkish ] = "~Kenarlık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Borde";
+        Text[ catalan ] = "~Vores";
+        Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¸‚à¸­à¸š";
     };
     CheckBox BTN_FONT
     {
@@ -195,23 +198,24 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "~Tipo de letra" ;
         Text [ finnish ] = "~Fontti" ;
         Text [ danish ] = "Skrifttype" ;
-        Text [ french ] = "~Police" ;
+        Text [ french ] = "Police" ;
         Text [ swedish ] = "~Teckensnitt" ;
         Text [ dutch ] = "~Lettertype" ;
         Text [ spanish ] = "Fuen~te" ;
         Text [ english_us ] = "F~ont" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "×ÖÌå(~O)";
+        Text[ chinese_simplified ] = "å­—ä½“(~O)";
         Text[ russian ] = "Øğèôò";
         Text[ polish ] = "Czcionka";
-        Text[ japanese ] = "Ì«İÄ‚Ìí—Ş(~O)";
-        Text[ chinese_traditional ] = "¦r«¬(~O)";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ç¨®é¡(~O)";
+        Text[ chinese_traditional ] = "å­—å‹(~O)";
         Text[ arabic ] = "äæÚ ÇáÎØ";
         Text[ greek ] = "ÃñáììáôïóåéñÜ";
-        Text[ korean ] = "±Û²Ã(~O)";
+        Text[ korean ] = "ê¸€ê¼´(~O)";
         Text[ turkish ] = "Yazıti~pi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fuen~te";
+        Text[ catalan ] = "Tipus de ~lletra";
+        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±~à¸à¸©à¸£";
     };
     CheckBox BTN_PATTERN
     {
@@ -232,17 +236,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ spanish ] = "Mo~delo" ;
         Text [ english_us ] = "~Pattern" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Í¼°¸(~P)";
-        Text[ russian ] = "~Óçîğ";
+        Text[ chinese_simplified ] = "å›¾æ¡ˆ(~P)";
+        Text[ russian ] = "~Îğíàìåíò";
         Text[ polish ] = "De~señ";
-        Text[ japanese ] = "ÊßÀ°İ(~P)";
-        Text[ chinese_traditional ] = "¹Ï®×(~P)";
+        Text[ japanese ] = "èƒŒæ™¯(~P)";
+        Text[ chinese_traditional ] = "åœ–æ¡ˆ(~P)";
         Text[ arabic ] = "äãæĞÌ";
         Text[ greek ] = "Ìïôßâï";
-        Text[ korean ] = "ÆĞÅÏ(~P)";
+        Text[ korean ] = "íŒ¨í„´(~P)";
         Text[ turkish ] = "~Desen";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mo~delo";
+        Text[ catalan ] = "~Patró";
+        Text[ thai ] = "~à¸¥à¸§à¸”à¸¥à¸²à¸¢";
     };
     CheckBox BTN_ALIGNMENT
     {
@@ -252,28 +257,29 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text = "~Ausrichtung" ;
         Text [ ENGLISH ] = "Orien~tation" ;
         Text [ norwegian ] = "Orien~tation" ;
-        Text [ italian ] = "~Allineamento" ;
+        Text [ italian ] = "Allineamento" ;
         Text [ portuguese_brazilian ] = "Orien~ta??o" ;
         Text [ portuguese ] = "~Alinhamento" ;
         Text [ finnish ] = "~Tasaus" ;
         Text [ danish ] = "Justering" ;
-        Text [ french ] = "~Alignement" ;
+        Text [ french ] = "Alignement" ;
         Text [ swedish ] = "~Justering" ;
         Text [ dutch ] = "~Uitlijning" ;
-        Text [ spanish ] = "Orienta~ción" ;
+        Text [ spanish ] = "Alineación" ;
         Text [ english_us ] = "Alignmen~t" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¶ÔÆë(~T)";
+        Text[ chinese_simplified ] = "å¯¹é½(~T)";
         Text[ russian ] = "Âûğàâíèâàíèå";
         Text[ polish ] = "Wyrównanie";
-        Text[ japanese ] = "”z’u(~T)";
-        Text[ chinese_traditional ] = "¹ï»ô(~T)";
+        Text[ japanese ] = "é…ç½®(~T)";
+        Text[ chinese_traditional ] = "å°é½Š(~T)";
         Text[ arabic ] = "ÇáãÍÇĞÇÉ";
         Text[ greek ] = "~Óôïß÷éóç";
-        Text[ korean ] = "¸ÂÃã(~T)";
+        Text[ korean ] = "ë§ì¶¤(~T)";
         Text[ turkish ] = "~Hizalama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Orienta~ción";
+        Text[ catalan ] = "Alineamen~t";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆ~à¸‡";
     };
     FixedLine FL_FORMATS
     {
@@ -293,17 +299,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Opmaak" ;
         Text [ spanish ] = "Formato" ;
         Text [ english_us ] = "Formatting" ;
-        Text[ chinese_simplified ] = "¸ñÊ½»¯";
+        Text[ chinese_simplified ] = "æ ¼å¼åŒ–";
         Text[ russian ] = "Ôîğìàòèğîâàíèå";
         Text[ polish ] = "Formatowanie";
-        Text[ japanese ] = "‘®İ’è";
-        Text[ chinese_traditional ] = "®æ¦¡¤Æ";
+        Text[ japanese ] = "æ›¸å¼è¨­å®š";
+        Text[ chinese_traditional ] = "æ ¼å¼åŒ–";
         Text[ arabic ] = "ÊäÓíŞ";
         Text[ greek ] = "Ìïñöïğïßçóç";
-        Text[ korean ] = "Æ÷¸ËÆÃ";
+        Text[ korean ] = "ì„œì‹ ì„¤ì •";
         Text[ turkish ] = "Formatlama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato";
+        Text[ catalan ] = "Formatatge";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸š";
     };
     OKButton BTN_OK
     {
@@ -338,17 +345,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
         Delta = 48 ;
-        Text[ chinese_simplified ] = "ÆäËû(~M)";
-        Text[ russian ] = "Áîëüøå";
+        Text[ chinese_simplified ] = "å…¶ä»–(~M)";
+        Text[ russian ] = "Äåòàëè";
         Text[ polish ] = "Dod~atki";
-        Text[ japanese ] = "µÌß¼®İ(~M)";
-        Text[ chinese_traditional ] = "¨ä¥L(~M)";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³(~M)";
+        Text[ chinese_traditional ] = "å…¶ä»–(~M)";
         Text[ arabic ] = "ÅÖÇİÇÊ";
         Text[ greek ] = "Ğñüóèåôá";
-        Text[ korean ] = "µ¡ºÙÀÓ(~M)";
+        Text[ korean ] = "ì˜µì…˜(~M)";
         Text[ turkish ] = "Ay~rıntılar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opciones";
+        Text[ catalan ] = "~Més";
+        Text[ thai ] = "~à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”";
     };
     PushButton BTN_ADD
     {
@@ -362,23 +370,24 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "Lä~gg till" ;
         Text [ dutch ] = "~Toevoegen" ;
         Text [ spanish ] = "~Añadir" ;
         Text [ english_us ] = "~Add" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "²åÈë(~A)";
+        Text[ chinese_simplified ] = "æ–°å¢(~A)";
         Text[ russian ] = "Äîáàâèòü";
         Text[ polish ] = "~Dodaj";
-        Text[ japanese ] = "‘}“ü(~A)";
-        Text[ chinese_traditional ] = "¥[¤J(~A)";
+        Text[ japanese ] = "æŒ¿å…¥(~A)";
+        Text[ chinese_traditional ] = "åŠ å…¥(~A)";
         Text[ arabic ] = "ÅÖÇİÉ";
         Text[ greek ] = "ĞñïóèŞêç";
-        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Añadir";
+        Text[ catalan ] = "~Afegeix";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
     };
     PushButton BTN_REMOVE
     {
@@ -392,23 +401,24 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     PushButton BTN_RENAME
     {
@@ -426,18 +436,19 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ spanish ] = "Cambiar ~nombre" ;
         Text [ french ] = "Re~nommer" ;
         Text [ dutch ] = "~Naam wijzigen" ;
-        Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
+        Text[ chinese_simplified ] = "é‡å‘½å(~R)";
         Text[ russian ] = "Ïåğåèìåíîâàòü";
         Text[ polish ] = "Zmieñ nazwê";
-        Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)";
-        Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
+        Text[ japanese ] = "åå‰ã®å¤‰æ›´(~R)";
+        Text[ chinese_traditional ] = "é‡æ–°å‘½å(~R)";
         Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
         Text[ greek ] = "Ìåôïíïìáóßá";
-        Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)";
+        Text[ korean ] = "ì´ë¦„ ë°”ê¾¸ê¸°(~R)";
         Text[ turkish ] = "Yeniden~adlandır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cambiar ~nombre";
+        Text[ catalan ] = "~Reanomena";
         Text[ finnish ] = "~Nimeä uudelleen";
+        Text[ thai ] = "à¹€~à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­";
     };
     HelpButton BTN_HELP
     {
@@ -455,22 +466,23 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "Adicionar AutoFormato" ;
         Text [ finnish ] = "Lisää automaattinen muotoilu" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
-        Text [ french ] = "Ajouter AutoFormat" ;
+        Text [ french ] = "Ajouter un AutoFormat" ;
         Text [ swedish ] = "Lägg till autoformat" ;
-        Text [ dutch ] = "AutoOpmaak toepassen" ;
-        Text [ spanish ] = "Añadir AutoFormato" ;
+        Text [ dutch ] = "AutoOpmaak toevoegen" ;
+        Text [ spanish ] = "Añadir Formateado automático" ;
         Text [ english_us ] = "Add AutoFormat" ;
-        Text[ chinese_simplified ] = "ĞÂÔö×Ô¶¯¸ñÊ½";
+        Text[ chinese_simplified ] = "æ–°å¢è‡ªåŠ¨æ ¼å¼";
         Text[ russian ] = "Âñòàâèòü àâòîôîğìàò";
         Text[ polish ] = "Dodaj Autoformat";
-        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì’Ç‰Á";
-        Text[ chinese_traditional ] = "·s¼W¦Û°Ê®æ¦¡";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®è¿½åŠ ";
+        Text[ chinese_traditional ] = "æ–°å¢è‡ªå‹•æ ¼å¼";
         Text[ arabic ] = "ÅÖÇİÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
         Text[ greek ] = "ĞñïóèŞêç ÁõôïÌïñöŞò";
-        Text[ korean ] = "ÀÚµ¿¼­½Ä Ãß°¡";
+        Text[ korean ] = "ìë™ ì„œì‹ ì¶”ê°€";
         Text[ turkish ] = "Otomatik formatlamayı ekle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Añadir AutoFormato";
+        Text[ catalan ] = "Afegeix formatatge automàtic";
+        Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     String STR_ADD_LABEL
     {
@@ -487,17 +499,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Naam" ;
         Text [ spanish ] = "Nombre" ;
         Text [ english_us ] = "Name" ;
-        Text[ chinese_simplified ] = "Ãû³Æ";
+        Text[ chinese_simplified ] = "åç§°";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O";
-        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ japanese ] = "åå‰";
+        Text[ chinese_traditional ] = "åç¨±";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ì´ë¦„";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre";
+        Text[ catalan ] = "Nom";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
     };
     String STR_DEL_TITLE
     {
@@ -512,19 +525,20 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ french ] = "Supprimer l'AutoFormat" ;
         Text [ swedish ] = "Radera Autoformat" ;
         Text [ dutch ] = "AutoOpmaak wissen" ;
-        Text [ spanish ] = "Eliminar AutoFormato" ;
+        Text [ spanish ] = "Borrar Formateado automático" ;
         Text [ english_us ] = "Delete AutoFormat" ;
-        Text[ chinese_simplified ] = "É¾³ı×Ô¶¯¸ñÊ½";
+        Text[ chinese_simplified ] = "åˆ é™¤è‡ªåŠ¨æ ¼å¼";
         Text[ russian ] = "Óäàëèòü àâòîôîğìàò";
         Text[ polish ] = "Usuñ Autoformat";
-        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ìíœ";
-        Text[ chinese_traditional ] = "§R°£¦Û°Ê®æ¦¡";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®å‰Šé™¤";
+        Text[ chinese_traditional ] = "åˆªé™¤è‡ªå‹•æ ¼å¼";
         Text[ arabic ] = "ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
         Text[ greek ] = "ÄéáãñáöŞ ÁõôïÌïñöŞò";
-        Text[ korean ] = "ÀÚµ¿¼­½Ä »èÁ¦";
+        Text[ korean ] = "ìë™ ì„œì‹ ì‚­ì œ";
         Text[ turkish ] = "Otomatik formatlamayı sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eliminar AutoFormato";
+        Text[ catalan ] = "Suprimeix el formatatge automàtic";
+        Text[ thai ] = "à¸¥à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     String STR_DEL_MSG
     {
@@ -539,19 +553,20 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ french ] = "L'AutoFormat suivant va être supprimé :" ;
         Text [ swedish ] = "Följande autoformat raderas:" ;
         Text [ dutch ] = "Het volgende AutoOpmaak-item wordt gewist." ;
-        Text [ spanish ] = "El siguiente AutoFormato se eliminará:" ;
+        Text [ spanish ] = "El Formateado automático siguiente se borrará:" ;
         Text [ english_us ] = "The following AutoFormat entry will be deleted:" ;
-        Text[ chinese_simplified ] = "É¾³ıÒÔÏÂµÄ×Ô¶¯¸ñÊ½£º";
+        Text[ chinese_simplified ] = "åˆ é™¤ä»¥ä¸‹çš„è‡ªåŠ¨æ ¼å¼ï¼š";
         Text[ russian ] = "Ñëåäóşùèé àâòîôîğìàò áóäåò óäàëåí:";
         Text[ polish ] = "Usuniêty zostanie nastêpuj¹cy Autoformat:";
-        Text[ japanese ] = "ˆÈ‰º‚Ìµ°ÄÌ«°Ï¯Ä‚Ííœ‚³‚ê‚Ü‚·:";
-        Text[ chinese_traditional ] = "§R°£¥H¤Uªº¦Û°Ê®æ¦¡¡G";
+        Text[ japanese ] = "ä»¥ä¸‹ã®ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã¯å‰Šé™¤ã•ã‚Œã¾ã™:";
+        Text[ chinese_traditional ] = "åˆªé™¤ä»¥ä¸‹çš„è‡ªå‹•æ ¼å¼ï¼š";
         Text[ arabic ] = "Óæİ íÊã ÍĞİ ÇáÊäÓíŞ ÇáÊáŞÇÆí ÇáÊÇáí:";
         Text[ greek ] = "Ç åîŞò ÁõôïÌïñöŞ èá äéáãñáöåß:";
-        Text[ korean ] = "´ÙÀ½°ú °°Àº ÀÚµ¿¼­½ÄÀº »èÁ¦µË´Ï´Ù:";
+        Text[ korean ] = "ë‹¤ìŒê³¼ ê°™ì€ ìë™ ì„œì‹ì€ ì‚­ì œë©ë‹ˆë‹¤:";
         Text[ turkish ] = "Aşağıdaki otomatik formatlama silinecek:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "El siguiente AutoFormato se eliminará:";
+        Text[ catalan ] = "L'entrada de formatatge automàtic següent se suprimirà:";
+        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸¥à¸š:";
     };
     String STR_RENAME_TITLE
     {
@@ -563,21 +578,22 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ swedish ] = "Byt namn på autoformat" ;
         Text [ danish ] = "Omdøb AutoFormat" ;
         Text [ italian ] = "Rinomina formattazione automatica" ;
-        Text [ spanish ] = "Cambiar nombre del AutoFormato" ;
+        Text [ spanish ] = "Cambiar nombre del Formateado automático" ;
         Text [ french ] = "Renommer l'AutoFormat" ;
         Text [ dutch ] = "AutoOpmaak nieuwe naam geven" ;
-        Text[ chinese_simplified ] = "ÖØÃüÃû×Ô¶¯¸ñÊ½";
+        Text[ chinese_simplified ] = "é‡å‘½åè‡ªåŠ¨æ ¼å¼";
         Text[ russian ] = "Ïåğåèìåíîâàòü àâòîôîğìàò";
         Text[ polish ] = "Zmieñ nazwê Autoformatu";
-        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚Ì–¼‘O‚Ì•ÏX";
-        Text[ chinese_traditional ] = "­«·s©R¦W¦Û°Ê®æ¦¡";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã®åå‰ã®å¤‰æ›´";
+        Text[ chinese_traditional ] = "é‡æ–°å‘½åè‡ªå‹•æ ¼å¼";
         Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
         Text[ greek ] = "Ìåôïíïìáóßá ÁõôïÌïñöŞò";
-        Text[ korean ] = "ÀÚµ¿¼­½Ä ÀÌ¸§ ¹Ù²Ù±â";
+        Text[ korean ] = "ìë™ ì„œì‹ ì´ë¦„ ë°”ê¾¸ê¸°";
         Text[ turkish ] = "Otomatik formatlamayı yeniden adlandır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cambiar nombre del AutoFormato";
+        Text[ catalan ] = "Reanomena el formatatge automàtic";
         Text[ finnish ] = "Nimeä automaattinen muotoilu uudelleen";
+        Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     String STR_BTN_CLOSE
     {
@@ -589,22 +605,23 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "~Fechar" ;
         Text [ finnish ] = "~Sulje" ;
         Text [ danish ] = "Luk" ;
-        Text [ french ] = "~Fermer" ;
+        Text [ french ] = "Fermer" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ spanish ] = "~Cerrar" ;
         Text [ english_us ] = "~Close" ;
-        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ russian ] = "Çàêğûòü";
         Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
+        Text[ chinese_traditional ] = "é—œé–‰(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ greek ] = "Êëåßóéìï";
-        Text[ korean ] = "´İ±â(~C)";
+        Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "~Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     String STR_JAN
     {
@@ -621,17 +638,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Jan" ;
         Text [ spanish ] = "Ene" ;
         Text [ english_us ] = "Jan" ;
-        Text[ chinese_simplified ] = "Ò»ÔÂ";
+        Text[ chinese_simplified ] = "ä¸€æœˆ";
         Text[ russian ] = "ßíâ";
         Text[ polish ] = "Styczeñ";
-        Text[ japanese ] = "1Œ";
-        Text[ chinese_traditional ] = "¤@¤ë";
+        Text[ japanese ] = "1æœˆ";
+        Text[ chinese_traditional ] = "ä¸€æœˆ";
         Text[ arabic ] = "íäÇíÑ";
         Text[ greek ] = "Éáí";
-        Text[ korean ] = "1¿ù";
+        Text[ korean ] = "1ì›”";
         Text[ turkish ] = "Ock";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ene";
+        Text[ catalan ] = "Gen.";
+        Text[ thai ] = "à¸¡.à¸„.";
     };
     String STR_FEB
     {
@@ -648,17 +666,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Feb" ;
         Text [ spanish ] = "Feb" ;
         Text [ english_us ] = "Feb" ;
-        Text[ chinese_simplified ] = "¶şÔÂ";
+        Text[ chinese_simplified ] = "äºŒæœˆ";
         Text[ russian ] = "Ôåâ";
         Text[ polish ] = "Luty";
-        Text[ japanese ] = "2Œ";
-        Text[ chinese_traditional ] = "¤G¤ë";
+        Text[ japanese ] = "2æœˆ";
+        Text[ chinese_traditional ] = "äºŒæœˆ";
         Text[ arabic ] = "İÈÑÇíÑ";
         Text[ greek ] = "Öåâ";
-        Text[ korean ] = "2¿ù";
+        Text[ korean ] = "2ì›”";
         Text[ turkish ] = "Şub";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Feb";
+        Text[ catalan ] = "Feb.";
+        Text[ thai ] = "à¸.à¸.";
     };
     String STR_MAR
     {
@@ -675,17 +694,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Mrt" ;
         Text [ spanish ] = "Mar" ;
         Text [ english_us ] = "Mar" ;
-        Text[ chinese_simplified ] = "ÈıÔÂ";
+        Text[ chinese_simplified ] = "ä¸‰æœˆ";
         Text[ russian ] = "Ìàğ";
         Text[ polish ] = "Marzec";
-        Text[ japanese ] = "3Œ";
-        Text[ chinese_traditional ] = "¤T¤ë";
+        Text[ japanese ] = "3æœˆ";
+        Text[ chinese_traditional ] = "ä¸‰æœˆ";
         Text[ arabic ] = "ãÇÑÓ";
         Text[ greek ] = "Máñ";
-        Text[ korean ] = "3¿ù";
+        Text[ korean ] = "3ì›”";
         Text[ turkish ] = "Mar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mar";
+        Text[ catalan ] = "Març";
+        Text[ thai ] = "à¸¡à¸µ.à¸„.";
     };
     String STR_NORTH
     {
@@ -702,17 +722,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Noorden" ;
         Text [ spanish ] = "Norte" ;
         Text [ english_us ] = "North" ;
-        Text[ chinese_simplified ] = "±±";
+        Text[ chinese_simplified ] = "åŒ—";
         Text[ russian ] = "Ñåâåğ";
         Text[ polish ] = "Pó³noc";
-        Text[ japanese ] = "–k";
-        Text[ chinese_traditional ] = "¥_";
+        Text[ japanese ] = "åŒ—";
+        Text[ chinese_traditional ] = "åŒ—";
         Text[ arabic ] = "ÇáÔãÇá";
         Text[ greek ] = "ÂïññÜò";
-        Text[ korean ] = "ºÏÂÊ";
+        Text[ korean ] = "ë¶ìª½";
         Text[ turkish ] = "Kuzey";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Norte";
+        Text[ catalan ] = "Nord";
+        Text[ thai ] = "à¹€à¸«à¸™à¸·à¸­";
     };
     String STR_MID
     {
@@ -724,22 +745,23 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ portuguese ] = "Centro" ;
         Text [ finnish ] = "Keski" ;
         Text [ danish ] = "Midte" ;
-        Text [ french ] = "Milieu" ;
+        Text [ french ] = "Centre" ;
         Text [ swedish ] = "Mitten" ;
         Text [ dutch ] = "Midden" ;
-        Text [ spanish ] = "Centro" ;
+        Text [ spanish ] = "Centrado" ;
         Text [ english_us ] = "Mid" ;
-        Text[ chinese_simplified ] = "ÖĞ";
+        Text[ chinese_simplified ] = "ä¸­";
         Text[ russian ] = "Ñåğåäèíà";
         Text[ polish ] = "Poœrodku";
-        Text[ japanese ] = "’†‰›";
-        Text[ chinese_traditional ] = "¤¤";
+        Text[ japanese ] = "ä¸­å¤®";
+        Text[ chinese_traditional ] = "ä¸­";
         Text[ arabic ] = "ÇáæÓØ";
         Text[ greek ] = "Êİíôñï";
-        Text[ korean ] = "°¡¿îµ¥";
+        Text[ korean ] = "ê°€ìš´ë°";
         Text[ turkish ] = "Orta";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Centro";
+        Text[ catalan ] = "Mig";
+        Text[ thai ] = "à¸à¸¥à¸²à¸‡";
     };
     String STR_SOUTH
     {
@@ -756,17 +778,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Zuiden" ;
         Text [ spanish ] = "Sur" ;
         Text [ english_us ] = "South" ;
-        Text[ chinese_simplified ] = "ÄÏ";
+        Text[ chinese_simplified ] = "å—";
         Text[ russian ] = "Şã";
         Text[ polish ] = "Po³udnie";
-        Text[ japanese ] = "“ì";
-        Text[ chinese_traditional ] = "«n";
+        Text[ japanese ] = "å—";
+        Text[ chinese_traditional ] = "å—";
         Text[ arabic ] = "ÇáÌäæÈ";
         Text[ greek ] = "Íüôïò";
-        Text[ korean ] = "³²ÂÊ";
+        Text[ korean ] = "ë‚¨ìª½";
         Text[ turkish ] = "Güney";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sur";
+        Text[ catalan ] = "Sud";
+        Text[ thai ] = "à¹ƒà¸•à¹‰";
     };
     String STR_SUM
     {
@@ -783,17 +806,18 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ dutch ] = "Totaal" ;
         Text [ spanish ] = "Suma" ;
         Text [ english_us ] = "Sum" ;
-        Text[ chinese_simplified ] = "×Ü¼Æ";
+        Text[ chinese_simplified ] = "æ€»è®¡";
         Text[ russian ] = "Ñóììà";
         Text[ polish ] = "Suma";
-        Text[ japanese ] = "‡Œv";
-        Text[ chinese_traditional ] = "¤p­p";
+        Text[ japanese ] = "åˆè¨ˆ";
+        Text[ chinese_traditional ] = "å°è¨ˆ";
         Text[ arabic ] = "ÇáãÌãæÚ";
         Text[ greek ] = "¢èñïéóìá";
-        Text[ korean ] = "ÇÕ°è";
+        Text[ korean ] = "í•©ê³„";
         Text[ turkish ] = "Toplam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Suma";
+        Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡";
     };
     String STR_INVALID_AFNAME
     {
@@ -809,32 +833,34 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ danish ] = "Du har indtastet et ugyldigt navn.\nDet var ikke muligt at oprette AutoFormatet.\nVælg venligst et andet navn." ;
         Text [ french ] = "Vous avez saisi un nom non valide.\nL'AutoFormat n'a pas ou être éffectué.\nIndiquez un autre nom." ;
         Text [ swedish ] = "Du har angett ett ogiltigt namn.\nDet gick inte att skapa autoformatet.\nVälj ett annat namn." ;
-        Text [ dutch ] = "U heeft een ongeldige naam vermeld.\nDe gewenste AutoOpmaak kon niet worden uitgevoerd.\nKies een andere naam." ;
-        Text [ spanish ] = "Ha indicado un nombre no válido, \npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre." ;
+        Text [ dutch ] = "U heeft een ongeldige naam vermeld.\nDe gewenste AutoOpmaak kan niet worden uitgevoerd.\nKies een andere naam." ;
+        Text [ spanish ] = "Ha indicado un nombre no válido.\nEl Formateado automático no se ha podido efectuar.\nSeleccione otro nombre." ;
         Text [ ENGLISH_US ] = "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name." ;
-        Text[ chinese_simplified ] = "Äú¸ø¶¨ÁËÒ»¸öÎŞĞ§µÄÃû³Æ¡£\nÒò´ËÎŞ·¨½¨Á¢×Ô¶¯¸ñÊ½¡£\nÇëÄúÊäÈëÒ»¸öÓĞĞ§Ãû³Æ¡£";
-        Text[ russian ] = "Âû ïğèñâîèëè íåïğàâèëüíîå èìÿ.\nÀâòîôîğìàò ñîçäàòü íåâîçìîæíî.\nÂûáåğèòå äğóãîå èìÿ.";
+        Text[ chinese_simplified ] = "æ‚¨ç»™å®šäº†ä¸€ä¸ªæ— æ•ˆçš„åç§°ã€‚\nå› æ­¤æ— æ³•å»ºç«‹è‡ªåŠ¨æ ¼å¼ã€‚\nè¯·æ‚¨è¾“å…¥ä¸€ä¸ªæœ‰æ•ˆåç§°ã€‚";
+        Text[ russian ] = "Ââåäåíî íåïğàâèëüíîå èìÿ.\nÍåâîçìîæíî ñîçäàòü æåëàåìûé àâòîôîğìàò.\nÈñïîëüçóéòå äğóãîå èìÿ.";
         Text[ polish ] = "Podano nieprawid³ow¹ nazwê.\nUtworzenie Autoformatu nie by³o mo¿liwe.\nWybierz inn¹ nazwê.";
-        Text[ japanese ] = "“ü—Í‚µ‚½–¼‘O‚Í–³Œø‚Å‚·B\n‚±‚Ìµ°ÄÌ«°Ï¯Ä‚Å‚Íì¬‚Å‚«‚Ü‚¹‚ñB\n•Ê‚Ì–¼‘O‚ğg‚Á‚Ä‚­‚¾‚³‚¢B";
-        Text[ chinese_traditional ] = "±z¿é¤J¤F¤@­ÓµL®Äªº¦WºÙ¡C\nµLªk«Ø¥ß¦Û°Ê®æ¦¡¡C\n½Ğ¿é¤J¤@­Ó¦³®Ä¦WºÙ¡C";
+        Text[ japanese ] = "å…¥åŠ›ã—ãŸåå‰ã¯ç„¡åŠ¹ã§ã™ã€‚\nã“ã®ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§ã¯ä½œæˆã§ãã¾ã›ã‚“ã€‚\nåˆ¥ã®åå‰ã‚’ä½¿ã£ã¦ãã ã•ã„ã€‚";
+        Text[ chinese_traditional ] = "æ‚¨è¼¸å…¥äº†ä¸€å€‹ç„¡æ•ˆçš„åç¨±ã€‚\nç„¡æ³•å»ºç«‹è‡ªå‹•æ ¼å¼ã€‚\nè«‹è¼¸å…¥ä¸€å€‹æœ‰æ•ˆåç¨±ã€‚";
         Text[ arabic ] = "áŞÏ ŞãÊ ÈÅÏÎÇá ÇÓã ÛíÑ ÕÇáÍ.\náåĞÇ ÊÚĞÑ ÅäÔÇÁ ÇáÊäÓíŞ ÇáÊáŞÇÆí.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÃÎÑ.";
         Text[ greek ] = "¸÷åôå åéóÜãåé İíá ìç İãêõñï üíïìá.\nÇ ÁõôïÌïñöŞ äåí Şôáí äõíáôüí íá äçìéïõñãçèåß.\nÅğéëİîôå êÜğïéï Üëëï üíïìá.";
-        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÀÌ¸§À» ÀÔ·ÂÇß½À´Ï´Ù.\n¿ä±¸µÈ ÀÚµ¿¼­½ÄÀº¡¡¸¸µé ¼ö ¾ø½À´Ï´Ù.\n´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = "ì˜ëª»ëœ ì´ë¦„ì„ ì…ë ¥í•˜ì…¨ìŠµë‹ˆë‹¤.\nìš”êµ¬ë˜ëŠ” ìë™ ì„œì‹ì„ ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\në‹¤ë¥¸ ì´ë¦„ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "Geçersiz bir ad girdiniz.\nOtomatik formatlama oluşturulamadı.\nBaşka bir ad seçiniz.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ha indicado un nombre no válido, \npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre.";
+        Text[ catalan ] = "Heu introduït un nom incorrecte.\nNo s'ha pogut crear el formatatge automàtic desitjat.\nTorneu-ho a provar amb un altre nom.";
+        Text[ thai ] = "à¸„à¸¸à¸“à¹„à¸”à¹‰à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡\nà¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹„à¸”à¹‰ \nà¸¥à¸­à¸‡à¹ƒà¸Šà¹‰à¸Šà¸·à¹ˆà¸­à¸—à¸µà¹ˆà¸•à¹ˆà¸²à¸‡à¸à¸±à¸™à¸”à¸¹à¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡";
     };
-    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
     Text[ russian ] = "Àâòîôîğìàò";
     Text[ polish ] = "Autoformat";
-    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
-    Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ";
+    Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼";
     Text[ arabic ] = "ÇáÊäÓíŞ ÇáÊáŞÇÆí";
     Text[ greek ] = "ÁõôïÌïñöŞ";
-    Text[ korean ] = "ÀÚµ¿¼­½Ä";
+    Text[ korean ] = "ìë™ ì„œì‹";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoFormato";
+    Text[ catalan ] = "Formatatge automàtic";
+    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 ModalDialog DLG_SWDLG_STRINPUT
 {
@@ -871,6 +897,22 @@ ModalDialog DLG_SWDLG_STRINPUT
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

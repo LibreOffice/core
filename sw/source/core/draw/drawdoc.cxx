@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-02 16:05:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,8 @@ SwDrawDocument::SwDrawDocument( SfxItemPool *pPool, SwDocShell *pDocSh )
 
 SwDrawDocument::~SwDrawDocument()
 {
+    Broadcast(SdrHint(HINT_MODELCLEARED));
+
     Clear();
 }
 

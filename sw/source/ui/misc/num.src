@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:59:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ TabPage TP_NUM_POSITION
         Text[ chinese_traditional ] = "ä½ç½®å’Œé–“éš”";
         Text[ arabic ] = "ÇáãæŞÚ æÇáãÓÇİÉ";
         Text[ greek ] = "Èİóç êáé áğüóôáóç";
-        Text[ korean ] = "ìœ„ì¹˜ì™€ ê°„ê²©";
+        Text[ korean ] = "ìœ„ì¹˜ ë° ê°„ê²©";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Konum ve aralık";
         Text[ catalan ] = "Posició i espai";
@@ -200,7 +200,7 @@ TabPage TP_NUM_POSITION
         Text[ arabic ] = "äÓÈí";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "ë¹„ë¡€(~V)";
+        Text[ korean ] = "ë¹„ë¡€í•˜ì—¬(~V)";
         Text[ turkish ] = "Orantılı";
         Text[ catalan ] = "Relati~u";
         Text[ finnish ] = "~Suhteellinen";
@@ -240,7 +240,7 @@ TabPage TP_NUM_POSITION
         Text [ portuguese_brazilian ] = "Einr~?kung" ;
         Text [ portuguese ] = "~Distância do texto" ;
         Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»(~X)";
-        Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
+        Text[ russian ] = "Ğàññòî~ÿíèå îò òåêñòà";
         Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã¾ã§ã®é–“éš”(~X)";
         Text[ chinese_traditional ] = "è‡³æ–‡å­—çš„è·ç¦»(~X)";
@@ -293,7 +293,7 @@ TabPage TP_NUM_POSITION
         Text[ chinese_traditional ] = "ç·¨è™Ÿå’Œå…§æ–‡ä¹‹é–“çš„æœ€å°‘é–“éš”(~M)";
         Text[ arabic ] = "ÃŞá ãÓÇİÉ Èíä ÇáÑŞã <-> ÇáäÕ";
         Text[ greek ] = "ÅëÜ÷éóôç áğüóôáóç Áñéè~ìüò <-> Êåßìåíï";
-        Text[ korean ] = "ìµœì†Œê°„ê²© ë²ˆí˜¸ <-> í…ìŠ¤íŠ¸(~M)";
+        Text[ korean ] = "ë²ˆí˜¸ì™€ í…ìŠ¤íŠ¸ ì‚¬ì´ì˜ ìµœì†Œ ê°„ê²©(~M)";
         Text[ turkish ] = "Asgari numara <-> metin aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distància mínima Número <-> Text";
@@ -334,7 +334,7 @@ TabPage TP_NUM_POSITION
         Text [ portuguese_brazilian ] = "Ausri~chtung der Numerierung" ;
         Text [ portuguese ] = "A~linhamento da numeração" ;
         Text[ chinese_simplified ] = "ç¼–å·å¯¹é½(~A)";
-        Text[ russian ] = "Âûğàâíèâàíèå íóìåğàöèè";
+        Text[ russian ] = "Â~ûğàâíèâàíèå íóìåğàöèè";
         Text[ polish ] = "Wyrównanie numeracji";
         Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®é…ç½®(~A)";
         Text[ language_user1 ] = " ";
@@ -521,7 +521,7 @@ TabPage TP_NUM_POSITION
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ıŞíÇÓí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
+        Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ catalan ] = "~Valor per defecte";
         Text[ finnish ] = "~Oletus";
@@ -656,7 +656,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ chinese_traditional ] = "åœ–å½¢";
                 Text[ arabic ] = "ÕæÑ";
                 Text[ greek ] = "ÃñáöéêÜ";
-                Text[ korean ] = "ê·¸ë˜í”½";
+                Text[ korean ] = "ê·¸ë¦¼";
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Imatges";
@@ -748,7 +748,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "T~a bort" ;
         Text [ dutch ] = "Ve~rwijderen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Remove" ;
         Text[ chinese_simplified ] = "åˆ é™¤(~R)";
         Text[ russian ] = "Óäàëèòü";
@@ -757,7 +757,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text[ chinese_traditional ] = "åˆªé™¤(~R)";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~R)";
+        Text[ korean ] = "ì œê±°(~R)";
         Text[ turkish ] = "Kaldır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix";
@@ -786,4 +786,9 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ finnish ] = "Luettelomerkit ja numerointi";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚/à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
 };
+
+
+
+
+
 

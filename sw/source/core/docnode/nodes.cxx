@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: od $ $Date: 2003-02-28 12:41:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

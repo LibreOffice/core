@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 14:38:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVX_EMPHITEM_HXX
+#include <svx/emphitem.hxx>
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -435,7 +438,7 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
 // Ist der String-Pointer definiert, dann erfrage nur die
 // Beschreibung der Attribute, !! es legt keine Vorlage an !!
 
-SvxFrameDirection lcl_GetFrameDirection(ULONG nLanguage)
+SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage)
 {
     SvxFrameDirection eResult = FRMDIR_HORI_LEFT_TOP;
 
@@ -555,7 +558,8 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool
     // allgemeine Inhaltsformen
     case RES_POOLCOLL_STANDARD:
         if (bRegardLanguage &&
-            lcl_GetFrameDirection(GetAppLanguage()) == FRMDIR_HORI_RIGHT_TOP)
+            GetDefaultFrameDirection(GetAppLanguage()) ==
+            FRMDIR_HORI_RIGHT_TOP)
         {
             SvxAdjustItem aAdjust(SVX_ADJUST_RIGHT);
             aSet.Put(aAdjust);
@@ -1432,6 +1436,8 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
             long nH = ((SvxFontHeightItem*)GetDfltAttr(
                                 RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
             SetAllScriptItem( aSet, SvxFontHeightItem( nH ));
+            aSet.Put(SvxUnderlineItem( UNDERLINE_NONE ));
+            aSet.Put(SvxEmphasisMarkItem( EMPHASISMARK_NONE) );
         }
         break;
 

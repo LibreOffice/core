@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:00:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,8 +844,13 @@ public:
     // if more than one in the selection return the count
     USHORT GetFullSelectedSectionCount() const;
 
-    BOOL AppendNodeInSection();
-    int CanInsertNodeAtEndOfSection() const;
+    // special insert: Insert a new text node just before or after a section or
+    // table, if the cursor is positioned at the start/end of said
+    // section/table. The purpose of the method is to allow users to inert text
+    // at certain 'impossible' position, e.g. before a table at the document
+    // start or between to sections.
+    bool DoSpecialInsert();
+    bool CanSpecialInsert() const;
 
     // Optimierung UI
     void SetNewDoc(BOOL bNew = TRUE);

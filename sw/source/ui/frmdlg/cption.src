@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 10:37:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,12 +116,12 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "~Opzioni" ;
         Text [ portuguese_brazilian ] = "~Op??s" ;
         Text [ portuguese ] = "~Opções" ;
-        Text [ finnish ] = "~Asetukset" ;
+        Text [ finnish ] = "A~setukset" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ french ] = "~Options" ;
         Text [ swedish ] = "~Alternativ" ;
         Text [ dutch ] = "~Opties" ;
-        Text [ spanish ] = "~Opciones" ;
+        Text [ spanish ] = "Opciones" ;
         Text [ english_us ] = "~Options" ;
         Text[ chinese_simplified ] = "é€‰é¡¹(~O)";
         Text[ russian ] = "Ïàğàìåòğû";
@@ -133,7 +133,8 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ì˜µì…˜(~O)";
         Text[ turkish ] = "~Seçenekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opciones";
+        Text[ catalan ] = "~Opcions";
+        Text[ thai ] = "~à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     FixedText TXT_SAMPLE
     {
@@ -169,7 +170,8 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ë²”ì£¼(~T)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Categoría";
+        Text[ catalan ] = "Ca~tegoria";
+        Text[ thai ] = "à¸›à¸£à¸°à¹€~à¸ à¸—";
     };
     ComboBox BOX_CATEGORY
     {
@@ -186,12 +188,12 @@ ModalDialog DLG_CAPTION
         Text = "~Nummerierung" ;
         Text [ English ] = "~Numbering" ;
         Text [ norwegian ] = "~Numbering" ;
-        Text [ italian ] = "~Numerazione" ;
+        Text [ italian ] = "Numerazione" ;
         Text [ portuguese_brazilian ] = "~Numera??o" ;
         Text [ portuguese ] = "~Numeração" ;
         Text [ finnish ] = "~Numerointi" ;
         Text [ danish ] = "Nummerering" ;
-        Text [ french ] = "~Numérotation" ;
+        Text [ french ] = "Numérotation" ;
         Text [ swedish ] = "~Numrering" ;
         Text [ dutch ] = "~Nummering" ;
         Text [ spanish ] = "Nu~meración" ;
@@ -207,7 +209,8 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°(~N)";
         Text[ turkish ] = "~Numaralama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nu~meración";
+        Text[ catalan ] = "Nu~meració";
+        Text[ thai ] = "~à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
     };
     ListBox BOX_FORMAT
     {
@@ -227,16 +230,16 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "~Dicitura" ;
         Text [ portuguese_brazilian ] = "~Legenda" ;
         Text [ portuguese ] = "~Texto para etiqueta" ;
-        Text [ finnish ] = "Kuva~otsikko" ;
+        Text [ finnish ] = "Kuvaotsikko" ;
         Text [ danish ] = "Billedtekst" ;
         Text [ french ] = "~Texte de légende" ;
         Text [ swedish ] = "~Bildtext" ;
         Text [ dutch ] = "~Opschrift" ;
-        Text [ spanish ] = "~Texto de etiqueta" ;
+        Text [ spanish ] = "~Texto de la etiqueta" ;
         Text [ english_us ] = "~Caption" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "æ ‡ç­¾æ–‡(~C)";
-        Text[ russian ] = "Òåêñò ïîäïèñè";
+        Text[ russian ] = "Íàçâàíèå";
         Text[ polish ] = "Tekst etykiety";
         Text[ japanese ] = "å›³è¡¨ç•ªå·ãƒ†ã‚­ã‚¹ãƒˆ(~C)";
         Text[ chinese_traditional ] = "æ¨™ç±¤æ–‡(~C)";
@@ -245,7 +248,8 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ìº¡ì…˜(~C)";
         Text[ turkish ] = "R~esim yazısı metni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Texto de etiqueta";
+        Text[ catalan ] = "~Llegenda";
+        Text[ thai ] = "~à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢à¸ à¸²à¸";
     };
     Edit EDT_TEXT
     {
@@ -263,12 +267,12 @@ ModalDialog DLG_CAPTION
         Text = "~Position" ;
         Text [ English ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
-        Text [ italian ] = "~Posizione" ;
+        Text [ italian ] = "Posizione" ;
         Text [ portuguese_brazilian ] = "~Posi??o" ;
         Text [ portuguese ] = "~Posição" ;
-        Text [ finnish ] = "~Sijainti" ;
+        Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
-        Text [ french ] = "~Position" ;
+        Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ dutch ] = "~Positie" ;
         Text [ spanish ] = "~Posición" ;
@@ -283,7 +287,8 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ìœ„ì¹˜(~P)";
         Text[ turkish ] = "K~onum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Posición";
+        Text[ catalan ] = "~Posició";
+        Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     ListBox BOX_POS
     {
@@ -305,23 +310,24 @@ ModalDialog DLG_CAPTION
         Text[ portuguese ] = "~Aplicar contornos e sombreado";
         Text[ russian ] = "Ïğèìåíèòü îáğàìëåíèå è òåíü";
         Text[ greek ] = "ÅöáñìïãŞ ğåñéãñÜììáôïò êáé óêéÜò";
-        Text[ dutch ] = "~Omranding en schadow overnemen";
+        Text[ dutch ] = "~Omranding en schaduw overnemen";
         Text[ french ] = "~Appliquer bordure et ombre";
-        Text[ spanish ] = "Aceptar ~borde y sombra";
+        Text[ spanish ] = "~Aplicar borde y sombra";
         Text[ italian ] = "~Applica bordo e ombra";
         Text[ danish ] = "Overtag ramme og skygge";
         Text[ swedish ] = "Ö~verta inramning och skugga";
         Text[ polish ] = "Przejmij obramowanie i cieñ";
         Text[ portuguese_brazilian ] = "~Copy border and shadow";
         Text[ japanese ] = "å¤–æ ã¨å½±ã®é©ç”¨(~A)";
-        Text[ korean ] = "ì™¸ê³½ì„ ê³¼ ê·¸ë¦¼ì ì ìš©(~A)";
+        Text[ korean ] = "í…Œë‘ë¦¬ ë° ê·¸ë¦¼ì ì ìš©(~A)";
         Text[ chinese_simplified ] = "é‡‡ç”¨è¾¹æ¡†å’Œé˜´å½±(~A)";
         Text[ chinese_traditional ] = "æ¡ç”¨é‚Šæ¡†å’Œé™°å½±(~A)";
         Text[ arabic ] = "ÊØÈíŞ ÇáÍÏæÏ æÇáÙá";
         Text[ turkish ] = "~Kenarlık ve gölgeyi kullan";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Aceptar ~borde y sombra";
+        Text[ catalan ] = "~Aplica la vora i l'ombra";
         Text[ finnish ] = "~Lisää reuna ja varjostus";
+        Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸šà¹à¸¥à¸°à¹€à¸‡à¸²";
     };
     FixedText FT_OBJECT_NAME
     {
@@ -334,9 +340,9 @@ ModalDialog DLG_CAPTION
         Text[ russian ] = "~Èìÿ îáúåêòà";
         Text[ greek ] = "¼íïìá áíôéêåéìİíïõ";
         Text[ dutch ] = "~Objectnaam";
-        Text[ french ] = "~Nom de l'objet";
+        Text[ french ] = "Nom de l'objet";
         Text[ spanish ] = "~Nombre del objeto";
-        Text[ italian ] = "~Nome oggetto";
+        Text[ italian ] = "Nome oggetto";
         Text[ danish ] = "Objektnavn";
         Text[ swedish ] = "~Objektnamn";
         Text[ polish ] = "Nazwa obiektu";
@@ -348,8 +354,9 @@ ModalDialog DLG_CAPTION
         Text[ arabic ] = "ÇÓã ÇáßÇÆä";
         Text[ turkish ] = "N~esne adı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre del objeto";
+        Text[ catalan ] = "Nom de l'o~bjecte";
         Text[ finnish ] = "O~bjektin nimi";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸§à¸±~à¸•à¸–à¸¸";
     };
     Edit ED_OBJECT_NAME
     {
@@ -374,17 +381,18 @@ ModalDialog DLG_CAPTION
         Text[ spanish ] = "Propiedades";
         Text[ finnish ] = "Ominaisuudet";
         Text[ italian ] = "Proprietà";
-        Text[ danish ] = "Settings";
+        Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "å±æ€§";
-        Text[ korean ] = "ì„¤ì •";
+        Text[ korean ] = "ë“±ë¡ ì •ë³´";
         Text[ chinese_simplified ] = "å±æ€§";
         Text[ chinese_traditional ] = "å±¬æ€§";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "Settings";
-        Text[ catalan ] = "Settings";
+        Text[ catalan ] = "Propietats";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
     };
     String STR_BEGINNING
     {
@@ -394,24 +402,25 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "All'inizio" ;
         Text [ portuguese_brazilian ] = "No in?cio" ;
         Text [ portuguese ] = "No início" ;
-        Text [ finnish ] = "Ylhäällä" ;
+        Text [ finnish ] = "Yläpuolella" ;
         Text [ danish ] = "Ved begyndelsen" ;
         Text [ french ] = "Au début" ;
         Text [ swedish ] = "I början" ;
-        Text [ dutch ] = "Aan het begin" ;
+        Text [ dutch ] = "Aan begin" ;
         Text [ spanish ] = "Al principio" ;
         Text [ english_us ] = "Above" ;
         Text[ chinese_simplified ] = "åœ¨èµ·å§‹ä½ç½®";
-        Text[ russian ] = "Â íà÷àëå";
+        Text[ russian ] = "Ñâåğõó";
         Text[ polish ] = "Na pocz¹tku";
         Text[ japanese ] = "æœ€åˆã«";
         Text[ chinese_traditional ] = "åœ¨èµ·å§‹ä½ç½®";
         Text[ arabic ] = "İí ÇáÈÏÇíÉ";
         Text[ greek ] = "Óôçí áñ÷Ş";
-        Text[ korean ] = "ì‹œì‘";
+        Text[ korean ] = "ì‹œì‘ì—ì„œ";
         Text[ turkish ] = "Başta";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Al principio";
+        Text[ catalan ] = "A sobre";
+        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸šà¸™";
     };
     String STR_END
     {
@@ -421,15 +430,15 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "Alla fine" ;
         Text [ portuguese_brazilian ] = "Ao final" ;
         Text [ portuguese ] = "No fim" ;
-        Text [ finnish ] = "Alhaalla" ;
+        Text [ finnish ] = "Alapuolella" ;
         Text [ danish ] = "Ved slutningen" ;
         Text [ french ] = "À la fin" ;
         Text [ swedish ] = "I slutet" ;
-        Text [ dutch ] = "Aan het einde" ;
+        Text [ dutch ] = "Aan einde" ;
         Text [ spanish ] = "Al final" ;
         Text [ english_us ] = "Below" ;
         Text[ chinese_simplified ] = "åœ¨ç»“æŸä½ç½®";
-        Text[ russian ] = "Â êîíöå";
+        Text[ russian ] = "Ñíèçó";
         Text[ polish ] = "Na koñcu";
         Text[ japanese ] = "æœ€å¾Œã«";
         Text[ chinese_traditional ] = "åœ¨çµæŸä½ç½®";
@@ -438,7 +447,8 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ë";
         Text[ turkish ] = "Sonda";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Al final";
+        Text[ catalan ] = "Sota";
+        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸¥à¹ˆà¸²à¸‡";
     };
     String STR_ABOVE
     {
@@ -448,7 +458,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "Al di sopra" ;
         Text [ portuguese_brazilian ] = "Acima" ;
         Text [ portuguese ] = "Acima" ;
-        Text [ finnish ] = "Ylhäällä" ;
+        Text [ finnish ] = "Yläpuolella" ;
         Text [ danish ] = "Over" ;
         Text [ french ] = "Supra" ;
         Text [ swedish ] = "Ovanför" ;
@@ -465,7 +475,8 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ìœ„";
         Text[ turkish ] = "Üstte";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Encima";
+        Text[ catalan ] = "A sobre";
+        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸šà¸™";
     };
     String STR_CP_BELOW
     {
@@ -475,7 +486,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "Al di sotto" ;
         Text [ portuguese_brazilian ] = "Abaixo" ;
         Text [ portuguese ] = "Abaixo" ;
-        Text [ finnish ] = "Alhaalla" ;
+        Text [ finnish ] = "Alapuolella" ;
         Text [ danish ] = "Under" ;
         Text [ french ] = "Infra" ;
         Text [ swedish ] = "Nedanför" ;
@@ -492,10 +503,11 @@ ModalDialog DLG_CAPTION
         Text[ korean ] = "ì•„ë˜";
         Text[ turkish ] = "Altta";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Debajo";
+        Text[ catalan ] = "Sota";
+        Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¸¥à¹ˆà¸²à¸‡";
     };
     Text[ chinese_simplified ] = "æ ‡ç­¾";
-    Text[ russian ] = "Ïîäïèñü";
+    Text[ russian ] = "Íàçâàíèå";
     Text[ polish ] = "Etykieta";
     Text[ japanese ] = "å›³è¡¨ç•ªå·";
     Text[ chinese_traditional ] = "æ¨™ç±¤";
@@ -504,7 +516,8 @@ ModalDialog DLG_CAPTION
     Text[ korean ] = "ìº¡ì…˜";
     Text[ turkish ] = "Resim yazısı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Etiqueta";
+    Text[ catalan ] = "Llegenda";
+    Text[ thai ] = "à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢à¸ à¸²à¸";
 };
 ModalDialog DLG_SEQUENCE_OPTION
 {
@@ -545,7 +558,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text [ swedish ] = "Numrering kapitelvis" ;
         Text [ danish ] = "Kapitelvis nummerering" ;
         Text [ italian ] = "Numerazione a capitoli" ;
-        Text [ spanish ] = "Numeración de capítulos" ;
+        Text [ spanish ] = "Numeración por capítulos" ;
         Text [ french ] = "Numérotation par chapitre" ;
         Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
         Text [ portuguese ] = "Numeração por capítulos" ;
@@ -559,8 +572,9 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ korean ] = "ì¥ë³„ë¡œ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeración de capítulos";
+        Text[ catalan ] = "Numeració de capítols";
         Text[ finnish ] = "Numerointi luvuittain";
+        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¹‚à¸”à¸¢à¸šà¸—";
     };
     FixedText FT_LEVEL
     {
@@ -587,8 +601,9 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ korean ] = "ìˆ˜ì¤€(~L)";
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nivel";
+        Text[ catalan ] = "~Nivell";
         Text[ finnish ] = "~Taso";
+        Text[ thai ] = "~à¸£à¸°à¸”à¸±à¸š";
     };
     ListBox LB_LEVEL
     {
@@ -647,7 +662,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     };
     StringList [ russian ] =
     {
-             < "Áåç" ; > ;
+             < "Íåò" ; > ;
     };
     StringList [ polish ] =
     {
@@ -683,11 +698,15 @@ ModalDialog DLG_SEQUENCE_OPTION
     };
     StringList [ catalan ] =
     {
-             < "Ninguna" ; > ;
+             < "Cap" ; > ;
     };
     StringList [ finnish ] =
     {
              < "Ei mitään" ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¹„à¸¡à¹ˆà¸¡à¸µ" ; > ;
     };
     };
     FixedText FT_SEPARATOR
@@ -717,6 +736,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
         Text[ finnish ] = "~Erotin";
+        Text[ thai ] = "~à¸•à¸±à¸§à¹à¸¢à¸";
     };
     Edit ED_SEPARATOR
     {
@@ -733,20 +753,42 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text [ italian ] = "Opzioni sequenza" ;
     Text [ spanish ] = "Opciones de secuencias" ;
     Text [ french ] = "Options de séquence" ;
-    Text [ dutch ] = "Nummerreeks-opties" ;
+    Text [ dutch ] = "Nummerreeksopties" ;
     Text [ portuguese ] = "Opções de sequências" ;
     Text[ chinese_simplified ] = "å·ç åºåˆ—é€‰é¡¹";
-    Text[ russian ] = "Ïàğàìåòğû ïîğÿäêîâîãî íîìåğà";
+    Text[ russian ] = "Ïàğàìåòğû äèàïàçîíà íîìåğîâ";
     Text[ polish ] = "Opcje sekwencji";
     Text[ japanese ] = "é€£ç•ªã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "ç·¨è™Ÿåºåˆ—é¸é …";
     Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÑŞíã ÇáãÊÓáÓá";
     Text[ greek ] = "Åğéëïãİò êıêëïõ áñéèìşí";
-    Text[ korean ] = "ìˆ«ì ë²”ìœ„ ì˜µì…˜";
+    Text[ korean ] = "ë²ˆí˜¸ ë²”ìœ„ ì˜µì…˜";
     Text[ turkish ] = "Numara aralığı seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opciones de secuencias";
+    Text[ catalan ] = "Opcions de seqüències";
     Text[ finnish ] = "Numeroalueen asetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸Šà¹ˆà¸§à¸‡à¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-11-13 09:20:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             case FN_INSERT_FIELD:
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                if (pVFrame->KnowsChildWindow(FN_INSERT_FIELD))
+                if(pVFrame->KnowsChildWindow(FN_INSERT_FIELD) && !pVFrame->HasChildWindow(FN_INSERT_FIELD_DATA_ONLY) )
                     rSet.Put(SfxBoolItem( FN_INSERT_FIELD, pVFrame->HasChildWindow(nWhich)));
                 else
                     rSet.DisableItem(FN_INSERT_FIELD);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 09:44:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
     #include <stdlib.h>         // getenv()
     #include <time.h>           // clock()
     #include "viewsh.hxx"       // ViewShell::GetHyphenator
+    #include <tools/stream.hxx>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -561,8 +562,30 @@ BOOL SwScanner::NextWord()
     else
         bStart = FALSE;
 
-    nBegin = (xub_StrLen)aBound.startPos;
-    nLen = aBound.endPos - nBegin;
+    // restrict boundaries to script boundaries and nEndPos
+    const USHORT nCurrScript =
+            pBreakIt->xBreak->getScriptType( rText, nBegin );
+
+    // restrict word end to next script change position
+    ASSERT( aBound.endPos >= nBegin, "SwScanner is getting into trouble" )
+    XubString aTmpWord = rText.Copy( nBegin, aBound.endPos - nBegin );
+    long nScriptEnd = nBegin +
+                      pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
+    long nEnd = Min( aBound.endPos, nScriptEnd );
+
+    // restrict word start to last script change position
+    long nScriptBegin = aBound.startPos;
+    if ( aBound.startPos < nBegin )
+    {
+        // search from nBegin backwards until the next script change
+        aTmpWord = rText.Copy( aBound.startPos, nBegin - aBound.startPos + 1 );
+        nScriptBegin = aBound.startPos +
+            pBreakIt->xBreak->beginOfScript( aTmpWord, nBegin - aBound.startPos,
+                                             nCurrScript );
+    }
+
+    nBegin = Max( aBound.startPos, nScriptBegin );
+    nLen = nEnd - nBegin;
 
     if( ! nLen )
         return FALSE;
@@ -1304,12 +1327,12 @@ void SwLinguStatistik::Flush()
             // fuer dieses new wird es kein delete geben.
             pLogName = new char[nLen + strlen(pName) + 3];
             if(nLen && (pPath[nLen-1] == '\\') || (pPath[nLen-1] == '/'))
-                sprintf( pLogName, "%s%s", pPath, pName );
+                snprintf( pLogName, sizeof(pLogName), "%s%s", pPath, pName );
             else
-                sprintf( pLogName, "%s/%s", pPath, pName );
+                snprintf( pLogName, sizeof(pLogName), "%s/%s", pPath, pName );
         }
     }
-    SvFileStream aStream( pLogName, (bFirstOpen
+    SvFileStream aStream( String::CreateFromAscii(pLogName), (bFirstOpen
                                         ? STREAM_WRITE | STREAM_TRUNC
                                         : STREAM_WRITE ));
 
@@ -1347,7 +1370,7 @@ void SwLinguStatistik::Flush()
     nWords = nWrong = nAlter = nSynonym = nNoSynonym =
     nHyphens = nNoHyph = nHyphErr = nSpellTime = nTheTime =
     nHyphTime = 0;
-    pThes = NULL;
+    //pThes = NULL;
 #endif
 }
 

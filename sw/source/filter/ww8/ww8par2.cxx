@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PRECOMPILED
@@ -345,12 +344,41 @@ public:
     void SetNumRuleName( const String& rName );
 };
 
+void wwSectionManager::SetCurrentSectionHasFootnote()
+{
+    ASSERT(!maSegments.empty(),
+        "should not be possible, must be at least one segment");
+    if (!maSegments.empty())
+        maSegments.back().mbHasFootnote = true;
+}
+
+bool wwSectionManager::CurrentSectionIsVertical() const
+{
+    ASSERT(!maSegments.empty(),
+        "should not be possible, must be at least one segment");
+    if (!maSegments.empty())
+        return maSegments.back().IsVertical();
+    return false;
+}
+
+short wwSectionManager::GetPageLeft() const
+{
+    return !maSegments.empty() ? maSegments.back().nPgLeft : 0;
+}
+
+short wwSectionManager::GetPageRight() const
+{
+    return !maSegments.empty() ? maSegments.back().nPgRight : 0;
+}
+
+short wwSectionManager::GetPageWidth() const
+{
+    return !maSegments.empty() ? maSegments.back().nPgWidth : 0;
+}
+
 long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
 {
     bool bFtEdOk = false;
-
-    if( nIniFlags & WW8FL_NO_FTN )
-        return 0;
 
     /*
     #84095#
@@ -438,30 +466,8 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
         bSymbol = false;
     }
 
-    // insert Section to get this Ft-/End-Note at the end of the section,
-    // when there is no open section at the moment
-       if( bFtEdOk && pLastPgDeskIdx && !pAfterSection)
-    {
-        const SwNodeIndex aOrgLastPgDeskIdx( *pLastPgDeskIdx );
-
-        (*pLastPgDeskIdx)++;
-        SwPosition aSectStart(*pLastPgDeskIdx);
-        aSectStart.nContent.Assign(pLastPgDeskIdx->GetNode().GetCntntNode(), 0);
-
-        SwPosition *pTemp = pPaM->GetPoint();
-        if (pTableDesc)
-            pTemp = pTableDesc->GetPos();
-
-        SwPaM aSectPaM(aSectStart, *pTemp);
-        InsertSectionWithWithoutCols( aSectPaM, 0 );
-
-        if (pTableDesc)
-            (*pAfterSection)--;
-        pPaM->Move( fnMoveBackward );
-        DELETEZ( pLastPgDeskIdx );
-        // set attributes to correct position
-        pCtrlStck->MoveAttrsToNextNode( aOrgLastPgDeskIdx );
-    }
+       if (bFtEdOk)
+        maSectionManager.SetCurrentSectionHasFootnote();
 
     return 1;       // das Fussnotenzeichen ueberlesen!
 }
@@ -2052,6 +2058,15 @@ void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
     }
 }
 
+void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
+    const SwNode &rNode)
+{
+    ASSERT(!maSegments.empty(),
+        "should not be possible, must be at least one segment");
+    if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
+        maSegments.back().maStart = SwNodeIndex(rNode);
+}
+
 void WW8TabDesc::CreateSwTable()
 {
     ::SetProgressState( pIo->nProgress, pIo->rDoc.GetDocShell() );   // Update
@@ -2108,6 +2123,18 @@ void WW8TabDesc::CreateSwTable()
     // da sich die (identischen) Zeilen eines Bandes prima duplizieren lassen
     pTable = pIo->rDoc.InsertTable( *pTmpPos, nBands, nDefaultSwCols, eOri );
 
+    ASSERT(pTable, "insert table failed");
+    if (!pTable)
+        return;
+
+    SwTableNode* pTableNode = pTable->GetTableNode();
+    ASSERT(pTableNode, "no table node!");
+    if (pTableNode)
+    {
+        pIo->maSectionManager.PrependedInlineNode(*pIo->pPaM->GetPoint(),
+            *pTableNode);
+    }
+
     // Abfrage, ob im Node, in dem die Tabelle eingefuegt werden soll, bereits
     // ein Pagedesc steht. Dann wuerde der PageDesc in die naechste Zeile
     // hinter der Tabelle rutschen, wo er nichts zu suchen hat.  -> loeschen
@@ -2118,16 +2145,8 @@ void WW8TabDesc::CreateSwTable()
         {
             SfxPoolItem *pSetAttr = 0;
             const SfxPoolItem* pItem;
-            if (SFX_ITEM_SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem))
+            if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false, &pItem))
             {
-                pSetAttr = new SwFmtPageDesc( *(SwFmtPageDesc*)pItem );
-                pNd->ResetAttr( RES_PAGEDESC );
-                pSet = pNd->GetpSwAttrSet();
-            }
-            if (pSet &&
-                SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false, &pItem))
-            {
-                delete pSetAttr;
                 pSetAttr = new SvxFmtBreakItem( *(SvxFmtBreakItem*)pItem );
                 pNd->ResetAttr( RES_BREAK );
             }
@@ -3869,5 +3888,4 @@ void SwWW8ImplReader::ReadDocInfo()
     }
 }
 
-
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

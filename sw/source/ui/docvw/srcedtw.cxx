@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-11-08 14:54:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@
 #ifndef _SVTOOLS_SOURCEVIEWCONFIG_HXX
 #include <svtools/sourceviewconfig.hxx>
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef _SVX_FLSTITEM_HXX
 #include <svx/flstitem.hxx>
@@ -131,10 +131,10 @@
 
 
 enum SwHtmlTextType {
-    TT_SGML     = svx::HTMLSGML   ,
-    TT_COMMENT  = svx::HTMLCOMMENT,
-    TT_KEYWORD  = svx::HTMLKEYWORD,
-    TT_UNKNOWN  = svx::HTMLUNKNOWN
+    TT_SGML     = svtools::HTMLSGML   ,
+    TT_COMMENT  = svtools::HTMLCOMMENT,
+    TT_KEYWORD  = svtools::HTMLKEYWORD,
+    TT_UNKNOWN  = svtools::HTMLUNKNOWN
 };
 
 
@@ -579,10 +579,12 @@ void SwSrcEditWindow::CreateTextEngine()
 
     //Scrollbars anlegen
     pHScrollbar = new ScrollBar(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
+        pHScrollbar->EnableRTL( false ); // #107300# --- RTL --- no mirroring for scrollbars
     pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->Show();
 
     pVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
+        pVScrollbar->EnableRTL( false ); // #107300# --- RTL --- no mirroring for scrollbars
     pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->EnableDrag();
     pVScrollbar->Show();
@@ -860,12 +862,12 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
         USHORT nCol = r.eType;
-        if(r.eType !=  svx::HTMLSGML    &&
-            r.eType != svx::HTMLCOMMENT &&
-            r.eType != svx::HTMLKEYWORD &&
-            r.eType != svx::HTMLUNKNOWN)
-                r.eType = (SwHtmlTextType)svx::HTMLUNKNOWN;
-        Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svx::ColorConfigEntry)r.eType).nColor);
+        if(r.eType !=  svtools::HTMLSGML    &&
+            r.eType != svtools::HTMLCOMMENT &&
+            r.eType != svtools::HTMLKEYWORD &&
+            r.eType != svtools::HTMLUNKNOWN)
+                r.eType = (SwHtmlTextType)svtools::HTMLUNKNOWN;
+        Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
         USHORT nLine = nLineOff+r.nLine; //
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1 );
     }
@@ -1061,7 +1063,10 @@ BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages
             aLanguages[0] = LANGUAGE_RUSSIAN;
         break;
 
-        case RTL_TEXTENCODING_APPLE_UKRAINIAN  :aLanguages[0] = LANGUAGE_UKRAINIAN; break;
+        case RTL_TEXTENCODING_APPLE_UKRAINIAN:
+        case RTL_TEXTENCODING_KOI8_U:
+            aLanguages[0] = LANGUAGE_UKRAINIAN;
+            break;
 
         case RTL_TEXTENCODING_IBM_864     :
         case RTL_TEXTENCODING_MS_1256          :

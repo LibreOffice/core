@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-26 07:30:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,6 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo(vo
             xRedlPorRef = SfxItemPropertySet( aSwMapProvider.GetPropertyMap(
                     PROPERTY_MAP_REDLINE_PORTION) ).getPropertySetInfo();
 
-
     return (PORTION_REDLINE_START == ePortionType ||
             PORTION_REDLINE_END   == ePortionType) ? xRedlPorRef : xTxtPorExtRef;
 }
@@ -531,7 +530,7 @@ void SwXTextPortion::setPropertyValues(
             if (!pMap)
                 throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
 
             SwXTextCursor::SetPropertyValue( *pUnoCrsr, aPropSet, sTmp, pValues[nProp], pMap);
         }

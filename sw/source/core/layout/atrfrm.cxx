@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: od $ $Date: 2002-10-11 11:39:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             sal_Int16 nSet;
             rVal >>= nSet;
-            if(nSet >= 0 && nSet <= 100)
+            if(nSet >= 0 && nSet <= 0xfe)
                 SetHeightPercent((BYTE)nSet);
             else
                 bRet = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 08:58:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text [ portuguese_brazilian ] = "Seitennummer" ;
             Text [ portuguese ] = "Número de página" ;
             Text[ chinese_simplified ] = "é¡µç ";
-            Text[ russian ] = "Íîìåğ ñòğàíèöû";
+            Text[ russian ] = "Íîìåğà ñòğàíèö";
             Text[ polish ] = "Numer strony";
             Text[ japanese ] = "ãƒšãƒ¼ã‚¸ç•ªå·";
             Text[ chinese_traditional ] = "é ç¢¼";
@@ -333,7 +333,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ turkish ] = "Sayfa numarası";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Números de pàgina";
-            Text[ finnish ] = "Sivunumerot";
+            Text[ finnish ] = "Sivunumero";
             Text[ thai ] = "à¹€à¸¥à¸‚à¸«à¸™à¹‰à¸²";
         };
         MenuItem
@@ -342,7 +342,7 @@ Menu RID_INSERT_FIELD_CTRL
             HelpID = FN_INSERT_FLD_PGCOUNT ;
             Text = "Seitenanzahl" ;
             Text [ English ] = "Pagecount" ;
-            Text [ dutch ] = "Aantal pagina´s" ;
+            Text [ dutch ] = "Aantal pagina's" ;
             Text [ english_us ] = "Page Count" ;
             Text [ italian ] = "Numero di pagine" ;
             Text [ spanish ] = "Contar páginas" ;
@@ -373,7 +373,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text [ English ] = "Topic" ;
             Text [ english_us ] = "Subject" ;
             Text [ italian ] = "Argomento" ;
-            Text [ spanish ] = "Tema" ;
+            Text [ spanish ] = "Asunto" ;
             Text [ french ] = "Sujet" ;
             Text [ dutch ] = "Onderwerp" ;
             Text [ swedish ] = "Ämne" ;
@@ -410,7 +410,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text [ portuguese_brazilian ] = "Titel" ;
             Text [ portuguese ] = "Título" ;
             Text[ chinese_simplified ] = "æ ‡é¢˜";
-            Text[ russian ] = "Çàãëàâèå";
+            Text[ russian ] = "Çàãîëîâîê";
             Text[ polish ] = "Tytu³";
             Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";
             Text[ chinese_traditional ] = "æ¨™é¡Œ";
@@ -450,7 +450,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ turkish ] = "Yazan";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Autor";
-            Text[ finnish ] = "Laatija";
+            Text[ finnish ] = "Tekijä";
             Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
         };
         MenuItem
@@ -566,7 +566,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "è¡¨æ ¼";
         Text[ arabic ] = "ÌÏæá";
         Text[ greek ] = "Ğßíáêáò";
-        Text[ korean ] = "ì‹œíŠ¸";
+        Text[ korean ] = "í‘œ";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Taula";
@@ -587,7 +587,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Tekstkader" ;
         Text [ portuguese ] = "Moldura de texto" ;
         Text[ chinese_simplified ] = "æ–‡æœ¬æ¡†";
-        Text[ russian ] = "Òåêñòîâàÿ ğàìêà";
+        Text[ russian ] = "Âğåçêà";
         Text[ polish ] = "Ramka tekstu";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆæ ";
         Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
@@ -624,7 +624,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ turkish ] = "Sayfa";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pàgina";
-        Text[ finnish ] = "Sivu ";
+        Text[ finnish ] = "Sivu";
         Text[ thai ] = "à¸«à¸™à¹‰à¸²";
     };
     String ST_DRW
@@ -641,12 +641,12 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Tekenobject" ;
         Text [ portuguese ] = "Desenho" ;
         Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡";
-        Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
+        Text[ russian ] = "Ğèñóíîê";
         Text[ polish ] = "Obiekt graficzny";
         Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
         Text[ english_us ] = "Drawing";
     Text[ portuguese ] = "Desenho";
-    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
+    Text[ russian ] = "Ğèñóíîê";
     Text[ dutch ] = "Tekenobject";
     Text[ french ] = "Objet de dessin";
     Text[ spanish ] = "Objeto de dibujo";
@@ -691,7 +691,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ turkish ] = "Komut alanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Control";
-        Text[ finnish ] = "Ohjain";
+        Text[ finnish ] = "Ohjausobjekti";
         Text[ thai ] = "à¸„à¸§à¸šà¸„à¸¸à¸¡";
     };
     String ST_REG
@@ -703,22 +703,22 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ swedish ] = "Område" ;
         Text [ danish ] = "Område" ;
         Text [ italian ] = "Sezione" ;
-        Text [ spanish ] = "Área" ;
+        Text [ spanish ] = "Sección" ;
         Text [ french ] = "Section" ;
         Text [ dutch ] = "Bereik" ;
         Text [ portuguese ] = "Secção" ;
         Text[ chinese_simplified ] = "åŒºåŸŸ";
-        Text[ russian ] = "Îáëàñòü";
+        Text[ russian ] = "Ğàçäåë";
         Text[ polish ] = "Sekcja";
         Text[ japanese ] = "ç¯„å›²";
         Text[ chinese_traditional ] = "å€åŸŸ";
         Text[ arabic ] = "äØÇŞ";
         Text[ greek ] = "Åíüôçôá";
-        Text[ korean ] = "ì˜ì—­";
+        Text[ korean ] = "êµ¬ì—­";
         Text[ turkish ] = "Bölüm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Secció";
-        Text[ finnish ] = "Osio";
+        Text[ finnish ] = "Osa";
         Text[ thai ] = "à¸ªà¹ˆà¸§à¸™";
     };
     String ST_BKM
@@ -735,7 +735,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Tekstmarkering" ;
         Text [ portuguese ] = "Marcador de texto" ;
         Text[ chinese_simplified ] = "ä¹¦ç­¾";
-        Text[ russian ] = "Òåêñòîâàÿ ïîìåòêà";
+        Text[ russian ] = "Çàêëàäêà";
         Text[ polish ] = "Zak³adka";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
         Text[ chinese_traditional ] = "å…§æ–‡æ¨™ç±¤";
@@ -745,7 +745,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ turkish ] = "Metin işareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Adreça d'interès";
-        Text[ finnish ] = "Kirjanmerkit";
+        Text[ finnish ] = "Kirjanmerkki";
         Text[ thai ] = "à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
     };
     String ST_GRF
@@ -762,17 +762,17 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Afbeelding" ;
         Text [ portuguese ] = "Imagem" ;
         Text[ chinese_simplified ] = "å›¾å½¢";
-        Text[ russian ] = "Ğèñóíîê";
+        Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
         Text[ polish ] = "Grafika";
         Text[ japanese ] = "å›³";
         Text[ chinese_traditional ] = "åœ–å½¢";
         Text[ arabic ] = "ÕæÑÉ";
         Text[ greek ] = "Ãñáöéêü";
-        Text[ korean ] = "ê·¸ë˜í”½";
+        Text[ korean ] = "ê·¸ë¦¼";
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Gràfics";
-        Text[ finnish ] = "Kuvat";
+        Text[ finnish ] = "Grafiikka";
         Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
     };
     String ST_OLE
@@ -789,7 +789,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "OLE-object" ;
         Text [ portuguese ] = "Objecto OLE" ;
         Text[ chinese_simplified ] = "OLE å¯¹è±¡";
-        Text[ russian ] = "Îáúåêò OLE";
+        Text[ russian ] = "OLE îáúåêò";
         Text[ polish ] = "Obiekt OLE";
         Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
         Text[ chinese_traditional ] = "OLE - ç‰©ä»¶";
@@ -817,7 +817,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Kop" ;
         Text [ portuguese ] = "Título" ;
         Text[ chinese_simplified ] = "æ ‡é¢˜";
-        Text[ russian ] = "Çàãîëîâîê";
+        Text[ russian ] = "Çàãîëîâêè";
         Text[ polish ] = "Tytu³";
         Text[ japanese ] = "è¦‹å‡ºã—";
         Text[ chinese_traditional ] = "æ¨™é¡Œ";
@@ -872,7 +872,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Voetnoot" ;
         Text [ portuguese ] = "Nota de rodapé" ;
         Text[ chinese_simplified ] = "æ³¨è„š";
-        Text[ russian ] = "Ñíîñêè";
+        Text[ russian ] = "Ñíîñêà";
         Text[ polish ] = "Przypis dolny";
         Text[ japanese ] = "è„šæ³¨";
         Text[ chinese_traditional ] = "è¨»è…³";
@@ -899,13 +899,13 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Merktekens" ;
         Text [ portuguese ] = "Marca" ;
         Text[ chinese_simplified ] = "æ ‡è®°";
-        Text[ russian ] = "Ïîìåòêà";
+        Text[ russian ] = "Íàïîìèíàíèå";
         Text[ polish ] = "Znacznik";
         Text[ japanese ] = "è¦šãˆæ­¢ã‚";
         Text[ chinese_traditional ] = "æé†’";
         Text[ arabic ] = "ÚáÇãÉ ÊĞßíÑ";
         Text[ greek ] = "Õğåíèıìéóç";
-        Text[ korean ] = "í‘œì‹œì";
+        Text[ korean ] = "ë¯¸ë¦¬ ì•Œë¦¼";
         Text[ turkish ] = "Anımsatıcı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Recordatori";
@@ -936,7 +936,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nota";
-        Text[ finnish ] = "Huomautus:";
+        Text[ finnish ] = "Huomautus";
         Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
     };
     String ST_SRCH_REP
@@ -953,13 +953,13 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text [ dutch ] = "Zoeken herhalen" ;
         Text [ portuguese ] = "Repetir procura" ;
         Text[ chinese_simplified ] = "é‡å¤æœå¯»";
-        Text[ russian ] = "Ïîâòîğ ïîèñêà";
+        Text[ russian ] = "Ïîâòîğèòü ïîèñê";
         Text[ polish ] = "Powtórz wyszukiwanie";
         Text[ japanese ] = "å†æ¤œç´¢";
         Text[ chinese_traditional ] = "é‡è¤‡æœå°‹";
         Text[ arabic ] = "ÊßÑÇÑ ÇáÈÍË";
         Text[ greek ] = "ÅğáíÜëçøç áíáæŞôçóçò";
-        Text[ korean ] = "ì°¾ê¸° ë°˜ë³µ";
+        Text[ korean ] = "ë‹¤ì‹œ ê²€ìƒ‰";
         Text[ turkish ] = "Aramayı yinele";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Repeteix la cerca";
@@ -1207,7 +1207,7 @@ String STR_IMGBTN_DRW_DOWN
     Text [ dutch ] = "Volgend tekenobject" ;
     Text [ portuguese ] = "Objecto de desenho seguinte" ;
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªç»˜å›¾å¯¹è±¡";
-    Text[ russian ] = "Ñëåäóşùèé ãğàôè÷åñêèé îáúåêò";
+    Text[ russian ] = "Ñëåäóşùèé ğèñóíîê";
     Text[ polish ] = "Nastêpny obiekt graficzny";
     Text[ japanese ] = "æ¬¡ã®æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹ç¹ªåœ–ç‰©ä»¶";
@@ -1245,7 +1245,7 @@ String STR_IMGBTN_CTRL_DOWN
     Text[ turkish ] = "Sonraki komut alanı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Control següent";
-    Text[ finnish ] = "Seuraava ohjain";
+    Text[ finnish ] = "Seuraava ohjausobjekti";
     Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡à¸–à¸±à¸”à¹„à¸›";
 };
 String STR_IMGBTN_REG_DOWN
@@ -1258,22 +1258,22 @@ String STR_IMGBTN_REG_DOWN
     Text [ swedish ] = "Nästa område" ;
     Text [ danish ] = "Næste område" ;
     Text [ italian ] = "Area successiva" ;
-    Text [ spanish ] = "Área siguiente" ;
+    Text [ spanish ] = "Sección siguiente" ;
     Text [ french ] = "Section suivante" ;
     Text [ dutch ] = "Volgend bereik" ;
     Text [ portuguese ] = "Secção seguinte" ;
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªåŒºåŸŸ";
-    Text[ russian ] = "Ñëåäóşùàÿ îáëàñòü";
+    Text[ russian ] = "Ñëåäóşùèé ğàçäåë";
     Text[ polish ] = "Nastêpna sekcja";
     Text[ japanese ] = "æ¬¡ã®ç¯„å›²";
     Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹å€åŸŸ";
     Text[ arabic ] = "ÇáäØÇŞ ÇáÊÇáí";
     Text[ greek ] = "Åğüìåíç åíüôçôá";
-    Text[ korean ] = "ë‹¤ìŒ ì˜ì—­";
+    Text[ korean ] = "ë‹¤ìŒ êµ¬ì—­";
     Text[ turkish ] = "Sonraki bölüm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Secció següent";
-    Text[ finnish ] = "Seuraava osio";
+    Text[ finnish ] = "Seuraava osa";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸–à¸±à¸”à¹„à¸›";
 };
 String STR_IMGBTN_BKM_DOWN
@@ -1291,7 +1291,7 @@ String STR_IMGBTN_BKM_DOWN
     Text [ dutch ] = "Volgende tekstmarkering" ;
     Text [ portuguese ] = "Marcador de texto seguinte" ;
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªä¹¦ç­¾";
-    Text[ russian ] = "Ñëåäóşùàÿ òåêñòîâàÿ ïîìåòêà";
+    Text[ russian ] = "Ñëåäóşùàÿ çàêëàäêà";
     Text[ polish ] = "Nastêpna zak³adka";
     Text[ japanese ] = "æ¬¡ã®ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
     Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹æ›¸ç±¤";
@@ -1319,7 +1319,7 @@ String STR_IMGBTN_GRF_DOWN
     Text [ dutch ] = "Volgende afbeelding" ;
     Text [ portuguese ] = "Imagem seguinte" ;
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªå›¾å½¢";
-    Text[ russian ] = "Ñëåäóşùèé ğèñóíîê";
+    Text[ russian ] = "Ñëåäóşùèé ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Nastêpna grafika";
     Text[ japanese ] = "æ¬¡ã®å›³";
     Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹åœ–å½¢";
@@ -1348,7 +1348,7 @@ String STR_IMGBTN_OLE_DOWN
     Text [ dutch ] = "Volgend OLE-object" ;
     Text [ portuguese ] = "Objecto OLE seguinte" ;
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ª OLE-å¯¹è±¡";
-    Text[ russian ] = "Ñëåäóşùèé îáúåêò OLE";
+    Text[ russian ] = "Ñëåäóşùèé OLE îáúåêò";
     Text[ polish ] = "Nastêpny obiekt OLE";
     Text[ japanese ] = "æ¬¡ã® OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹ OLE-ç‰©ä»¶";
@@ -1401,7 +1401,7 @@ String STR_IMGBTN_SEL_DOWN
     Text [ italian ] = "Selezione successiva" ;
     Text [ spanish ] = "Selección siguiente" ;
     Text [ french ] = "Sélection suivante" ;
-    Text [ dutch ] = "Volgende markering" ;
+    Text [ dutch ] = "Volgend merkteken" ;
     Text [ portuguese ] = "Selecção seguinte" ;
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªé€‰æ‹©";
     Text[ russian ] = "Ñëåäóşùåå âûäåëåíèå";
@@ -1460,13 +1460,13 @@ String STR_IMGBTN_MARK_DOWN
     Text [ dutch ] = "Volgend merkteken" ;
     Text [ portuguese ] = "Marca seguinte" ;
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªæ ‡è®°";
-    Text[ russian ] = "Ñëåäóşùàÿ ïîìåòêà";
+    Text[ russian ] = "Ñëåäóşùåå íàïîìèíàíèå";
     Text[ polish ] = "Nastêpny znacznik";
     Text[ japanese ] = "æ¬¡ã®è¦šãˆæ­¢ã‚";
     Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹æé†’";
     Text[ arabic ] = "ÚáÇãÉ ÇáÊĞßíÑ ÇáÊÇáíÉ";
     Text[ greek ] = "Åğüìåíç õğåíèıìéóç";
-    Text[ korean ] = "ë‹¤ìŒ í‘œì‹œì";
+    Text[ korean ] = "ë‹¤ìŒ ë¯¸ë¦¬ ì•Œë¦¼";
     Text[ turkish ] = "Sonraki anımsatıcı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Recordatori següent";
@@ -1538,7 +1538,7 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ danish ] = "Næste indekselement";
     Text[ french ] = "Entrée d'index suivante";
     Text[ swedish ] = "Nästa förteckningspost";
-    Text[ dutch ] = "Volgend index item";
+    Text[ dutch ] = "Volgend indexitem";
     Text[ spanish ] = "Entrada de índice siguiente";
     Text[ english_us ] = "Next index entry";
     Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ªç›®å½•æ¡ç›®";
@@ -1583,7 +1583,7 @@ String STR_IMGBTN_TBL_UP
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹è¡¨æ ¼";
     Text[ arabic ] = "ÇáÌÏæá ÇáÓÇÈŞ";
     Text[ greek ] = "Ğñïçãïıìåíïò ğßíáêáò";
-    Text[ korean ] = "ì´ì „ ì‹œíŠ¸";
+    Text[ korean ] = "ì´ì „ í‘œ";
     Text[ turkish ] = "Önceki tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taula anterior";
@@ -1658,7 +1658,7 @@ String STR_IMGBTN_DRW_UP
     Text [ dutch ] = "Vorig tekenobject" ;
     Text [ portuguese ] = "Objecto de desenho anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªç»˜å›¾å¯¹è±¡";
-    Text[ russian ] = "Ïğåäûäóùèé ãğàôè÷åñêèé îáúåêò";
+    Text[ russian ] = "Ïğåäûäóùèé ğèñóíîê";
     Text[ polish ] = "Poprzedni obiekt graficzny";
     Text[ japanese ] = "å‰ã®æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹ç¹ªåœ–ç‰©ä»¶";
@@ -1681,7 +1681,7 @@ String STR_IMGBTN_CTRL_UP
     Text [ danish ] = "Forrige kontrolelement" ;
     Text [ italian ] = "Campo di controllo precedente" ;
     Text [ spanish ] = "Campo de control anterior" ;
-    Text [ french ] = "Elément de contrôle précédent" ;
+    Text [ french ] = "Élément de contrôle précédent" ;
     Text [ dutch ] = "Vorig controleveld" ;
     Text [ portuguese ] = "Controlo anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªæ§åˆ¶";
@@ -1695,7 +1695,7 @@ String STR_IMGBTN_CTRL_UP
     Text[ turkish ] = "Önceki komut alanı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Control anterior";
-    Text[ finnish ] = "Edellinen ohjain";
+    Text[ finnish ] = "Edellinen ohjausobjekti";
     Text[ thai ] = "à¸•à¸±à¸§à¸„à¸§à¸šà¸„à¸¸à¸¡à¸­à¸±à¸™à¸à¹ˆà¸­à¸™";
 };
 String STR_IMGBTN_REG_UP
@@ -1707,22 +1707,22 @@ String STR_IMGBTN_REG_UP
     Text [ swedish ] = "Föregående område" ;
     Text [ danish ] = "Forrige område" ;
     Text [ italian ] = "Area precedente" ;
-    Text [ spanish ] = "Área anterior" ;
+    Text [ spanish ] = "Sección anterior" ;
     Text [ french ] = "Section précédente" ;
     Text [ dutch ] = "Vorig bereik" ;
     Text [ portuguese ] = "Secção anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªåŒºåŸŸ";
-    Text[ russian ] = "Ïğåäûäóùàÿ îáëàñòü";
+    Text[ russian ] = "Ïğåäûäóùèé ğàçäåë";
     Text[ polish ] = "Poprzednia sekcja";
     Text[ japanese ] = "å‰ã®ç¯„å›²";
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹å€åŸŸ";
     Text[ arabic ] = "ÇáäØÇŞ ÇáÓÇÈŞ";
     Text[ greek ] = "Ğñïçãïıìåíç åíüôçôá";
-    Text[ korean ] = "ì´ì „ ì˜ì—­";
+    Text[ korean ] = "ì´ì „ êµ¬ì—­";
     Text[ turkish ] = "Önceki Bölüm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Secció anterior";
-    Text[ finnish ] = "Edellinen osio";
+    Text[ finnish ] = "Edellinen osa";
     Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸à¹ˆà¸­à¸™";
 };
 String STR_IMGBTN_BKM_UP
@@ -1739,7 +1739,7 @@ String STR_IMGBTN_BKM_UP
     Text [ dutch ] = "Vorige tekstmarkering" ;
     Text [ portuguese ] = "Marcador de texto anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªä¹¦ç­¾";
-    Text[ russian ] = "Ïğåäûäóùàÿ òåêñòîâàÿ ïîìåòêà";
+    Text[ russian ] = "Ïğåäûäóùàÿ çàêëàäêà";
     Text[ polish ] = "Poprzednia zak³adka";
     Text[ japanese ] = "å‰ã®ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹æ›¸ç±¤";
@@ -1766,7 +1766,7 @@ String STR_IMGBTN_GRF_UP
     Text [ dutch ] = "Vorige afbeelding" ;
     Text [ portuguese ] = "Imagem anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªå›¾å½¢";
-    Text[ russian ] = "Ïğåäûäóùèé ğèñóíîê";
+    Text[ russian ] = "Ïğåäûäóùèé ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Poprzednia grafika";
     Text[ japanese ] = "å‰ã®å›³";
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹åœ–å½¢";
@@ -1794,7 +1794,7 @@ String STR_IMGBTN_OLE_UP
     Text [ dutch ] = "Vorig OLE-object" ;
     Text [ portuguese ] = "Objecto OLE anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ª OLE-å¯¹è±¡";
-    Text[ russian ] = "Ïğåäûäóùèé îáúåêò OLE";
+    Text[ russian ] = "Ïğåäûäóùèé OLE îáúåêò";
     Text[ polish ] = "Poprzedni obiekt OLE";
     Text[ japanese ] = "å‰ã® OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹ OLE-ç‰©ä»¶";
@@ -1846,7 +1846,7 @@ String STR_IMGBTN_SEL_UP
     Text [ italian ] = "Selezione precedente" ;
     Text [ spanish ] = "Selección anterior" ;
     Text [ french ] = "Sélection précédente" ;
-    Text [ dutch ] = "Vorige markering" ;
+    Text [ dutch ] = "Vorig merkteken" ;
     Text [ portuguese ] = "Selecção anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªé€‰æ‹©";
     Text[ russian ] = "Ïğåäûäóùåå âûäåëåíèå";
@@ -1904,13 +1904,13 @@ String STR_IMGBTN_MARK_UP
     Text [ dutch ] = "Vorig merkteken" ;
     Text [ portuguese ] = "Marca anterior" ;
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªæ ‡è®°";
-    Text[ russian ] = "Ïğåäûäóùàÿ ïîìåòêà";
+    Text[ russian ] = "Ïğåäûäóùåå íàïîìèíàíèå";
     Text[ polish ] = "Poprzedni znacznik";
     Text[ japanese ] = "å‰ã®è¦šãˆæ­¢ã‚";
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹æé†’";
     Text[ arabic ] = "ÚáÇãÉ ÇáÊĞßíÑ ÇáÓÇÈŞÉ";
     Text[ greek ] = "Ğñïçãïıìåíç õğåíèıìéóç";
-    Text[ korean ] = "ì´ì „ í‘œì‹œì";
+    Text[ korean ] = "ì´ì „ ë¯¸ë¦¬ ì•Œë¦¼";
     Text[ turkish ] = "Önceki anımsatıcı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Recordatori anterior";
@@ -1964,7 +1964,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text[ chinese_traditional ] = "ç¹¼çºŒå‘å¾Œæœå°‹";
     Text[ arabic ] = "ãÊÇÈÚÉ ÇáÈÍË ááÎáİ";
     Text[ greek ] = "Óõíİ÷éóç áíáæŞôçóçò ğßóù";
-    Text[ korean ] = "ê³„ì† ë’¤ë¡œ ê²€ìƒ‰";
+    Text[ korean ] = "ë’¤ë¡œ ê³„ì† ê²€ìƒ‰";
     Text[ turkish ] = "Geriye doğru ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Continua la cerca cap enrere";
@@ -1981,7 +1981,7 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ danish ] = "Forrige indekselement";
     Text[ french ] = "Entrée d'index précédente";
     Text[ swedish ] = "Föregående förteckningspost";
-    Text[ dutch ] = "Vorig index item";
+    Text[ dutch ] = "Vorig indexitem";
     Text[ spanish ] = "Entrada de índice anterior";
     Text[ english_us ] = "Previous index entry";
     Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªç›®å½•æ¡ç›®";
@@ -2058,7 +2058,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text [ English ] = "Previous wrong table formula" ;
     Text[ english_us ] = "Previous faulty table formula";
     Text[ portuguese ] = "Fórmula de tabela anterior errada";
-    Text[ russian ] = "Íåïğàâèëüíàÿ ïğåäûäóùàÿ ôîğìóëà òàáëèöû";
+    Text[ russian ] = "Ïğåäûäóùàÿ íåïğàâèëüíàÿ ôîğìóëà òàáëèöû";
     Text[ dutch ] = "Vorige foutieve tabellenformule";
     Text[ french ] = "Formule de table erronée précédente";
     Text[ spanish ] = "Fórmula de tabla anterior errónea";
@@ -2072,7 +2072,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ chinese_traditional ] = "ä¸Šä¸€å€‹éŒ¯èª¤çš„å·¥ä½œè¡¨å…¬å¼";
     Text[ arabic ] = "ÕíÛÉ ÇáÌÏæá ÇáÎÇØÆÉ ÇáÓÇÈŞÉ";
     Text[ greek ] = "Ğñïçãïıìåíïò ëáíèáóìİíïò ôığïò ğßíáêá";
-    Text[ korean ] = "í‹€ë¦° ì´ì „ í‘œ ìˆ˜ì‹";
+    Text[ korean ] = "ì˜ëª»ëœ ì´ì „ í‘œ ìˆ˜ì‹";
     Text[ turkish ] = "Önceki hatalı tablo formülü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fórmula de taula defectuosa anterior";
@@ -2085,7 +2085,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text [ English ] = "Next wrong table formula" ;
     Text[ english_us ] = "Next faulty table formula";
     Text[ portuguese ] = "Fórmula de tabela seguinte errada";
-    Text[ russian ] = "Íåïğàâèëüíàÿ ñëåäóşùàÿ ôîğìóëà òàáëèöû";
+    Text[ russian ] = "Ñëåäóşùàÿ íåïğàâèëüíàÿ ôîğìóëà òàáëèöû";
     Text[ dutch ] = "Volgende foutieve tabellenformule";
     Text[ french ] = "Formule de table erronée suivante";
     Text[ spanish ] = "Siguiente fórmula errónea de tabla";
@@ -2099,7 +2099,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹éŒ¯èª¤çš„å·¥ä½œè¡¨å…¬å¼";
     Text[ arabic ] = "ÕíÛÉ ÇáÌÏæá ÇáÎÇØÆÉ ÇáÊÇáíÉ";
     Text[ greek ] = "Åğüìåíïò ëáíèáóìİíïò ôığïò ğßíáêá";
-    Text[ korean ] = "í‹€ë¦° ë‹¤ìŒ í‘œ ìˆ˜ì‹";
+    Text[ korean ] = "ì˜ëª»ëœ ë‹¤ìŒ í‘œ ìˆ˜ì‹";
     Text[ turkish ] = "Sonraki hatalı tablo formülü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fórmula de taula defectuosa següent";
@@ -2142,7 +2142,7 @@ ImageButton BTN_NAVI
         Text[ chinese_traditional ] = "ç€è¦½";
         Text[ arabic ] = "ÇáãáÇÍÉ";
         Text[ greek ] = "Ìåôáêßíçóç";
-        Text[ korean ] = "ë„¤ë¹„ê²Œì´ì…˜";
+        Text[ korean ] = "íƒìƒ‰";
         Text[ turkish ] = "Dolaşma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Navegació";
@@ -2160,4 +2160,9 @@ ComboBox RID_PVIEW_ZOOM_LB
     Border = TRUE ;
     Hide = TRUE ;
 };
+
+
+
+
+
 

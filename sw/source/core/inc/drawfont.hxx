@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:27:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,19 +153,27 @@ private:
     SvXub_StrLens aCompLen;
     SvBytes aCompType;
     xub_StrLen nInvalidityPos;
+    BYTE nDefaultDir;
+    sal_Bool bBidiInfoValid;
 
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
 
-    inline SwScriptInfo() : nInvalidityPos( 0 ) {};
+    inline SwScriptInfo() : nInvalidityPos( 0 ), nDefaultDir( 0 ),
+                            bBidiInfoValid( sal_False ) {};
 
     // determines script changes
     void InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                          const OutputDevice& rOut );
+    void UpdateBidiInfo( const String& rTxt );
 
     // set/get position from which data is invalid
     inline void SetInvalidity( const xub_StrLen nPos );
     inline xub_StrLen GetInvalidity() const { return nInvalidityPos; };
+
+    // get default direction for paragraph
+    inline BYTE GetDefaultDir() const { return nDefaultDir; };
+    inline void SetDefaultDir( BYTE nNew )  { nDefaultDir = nNew; };
 
     // array operations, nCnt refers to array position
     inline USHORT CountScriptChg() const;
@@ -263,13 +271,15 @@ public:
                                long* pScrArray, xub_StrLen nIdx,
                                xub_StrLen nLen, USHORT nSpace = 0 );
 
-    static const SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode );
+    static SwScriptInfo* GetScriptInfo( const SwTxtNode& rNode,
+                                        sal_Bool bAllowInvalid = sal_False );
 };
 
 inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
 {
     if ( nPos < nInvalidityPos )
         nInvalidityPos = nPos;
+    bBidiInfoValid = sal_False;
 };
 inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
 inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
@@ -356,6 +366,7 @@ class SwDrawTextInfo
     short nSperren;
     short nKern;
     short nSpace;
+    BYTE nCursorBidiLevel;
     BOOL bBullet : 1;
     BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
     BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
@@ -396,239 +407,384 @@ public:
     BOOL bOfst  : 1;
     BOOL bHyph  : 1;
 #endif
+
     SwDrawTextInfo( ViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const XubString &rSt, xub_StrLen nI, xub_StrLen nL,
-                    USHORT nW = 0, BOOL bB = FALSE)
-    {   pSh = pS; pOut = &rO; pScriptInfo = pSI; pText = &rSt; nIdx = nI;
-        nLen = nL; nKern = 0; nCompress = 0; nWidth = nW;
-        bBullet = bB; pUnderFnt = 0; bGreyWave = bSpaceStop =
-#ifdef BIDI
-        bSnapToGrid = bIgnoreFrmRTL = FALSE;
-#else
+                    USHORT nW = 0, BOOL bB = FALSE )
+    {
+        pFrm = NULL;
+        pSh = pS;
+        pOut = &rO;
+        pScriptInfo = pSI;
+        pText = &rSt;
+        nIdx = nI;
+        nLen = nL;
+        nKern = 0;
+        nCompress = 0;
+        nWidth = nW;
+        nCursorBidiLevel = 0;
+        bBullet = bB;
+        pUnderFnt = 0;
+        bGreyWave = FALSE;
+        bSpaceStop = FALSE;
         bSnapToGrid = FALSE;
+#ifdef BIDI
+        bIgnoreFrmRTL = FALSE;
 #endif
-        pFrm = 0;
 
 #ifndef PRODUCT
         bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec =
-            bGreyWv = TRUE;
+        bGreyWv = TRUE;
+
         bPos = bWrong = bSize = bFnt = bAscent = bSpace = bUppr =
-            bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = FALSE;
+        bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = FALSE;
 #endif
     }
 
-    const SwTxtFrm* GetFrm() const { return pFrm; }
-    void SetFrm( const SwTxtFrm* pNewFrm ) { pFrm = pNewFrm; }
+    const SwTxtFrm* GetFrm() const
+    {
+        return pFrm;
+    }
 
-    ViewShell *GetShell() const { return pSh; }
-    OutputDevice& GetOut() const {
+    void SetFrm( const SwTxtFrm* pNewFrm )
+    {
+        pFrm = pNewFrm;
+    }
+
+    ViewShell *GetShell() const
+    {
+        return pSh;
+    }
+
+    OutputDevice& GetOut() const
+    {
         ASSERT( bOut, "DrawTextInfo: Undefined Outputdevice" );
         return *pOut;
     }
-    OutputDevice *GetpOut() const {
+
+    OutputDevice *GetpOut() const
+    {
         ASSERT( bOut, "DrawTextInfo: Undefined Outputdevice" );
         return pOut;
     }
-    const SwScriptInfo* GetScriptInfo() const {
+
+    const SwScriptInfo* GetScriptInfo() const
+    {
         return pScriptInfo;
     }
-    const Point &GetPos() const {
+
+    const Point &GetPos() const
+    {
         ASSERT( bPos, "DrawTextInfo: Undefined Position" );
         return *pPos;
     }
-    xub_StrLen *GetHyphPos() const {
+
+    xub_StrLen *GetHyphPos() const
+    {
         ASSERT( bHyph, "DrawTextInfo: Undefined Hyph Position" );
         return pHyphPos;
     }
 
-    const Fraction &GetZoom() const { return aZoom; }
-    Fraction &GetZoom() { return aZoom; }
+    const Fraction &GetZoom() const
+    {
+        return aZoom;
+    }
 
-    const XubString &GetText() const {
+    Fraction &GetZoom()
+    {
+        return aZoom;
+    }
+
+    const XubString &GetText() const
+    {
         ASSERT( bText, "DrawTextInfo: Undefined String" );
         return *pText;
     }
-    const SwWrongList* GetWrong() const {
+
+    const SwWrongList* GetWrong() const
+    {
         ASSERT( bWrong, "DrawTextInfo: Undefined WrongList" );
         return pWrong;
     }
-    const Size &GetSize() const {
+
+    const Size &GetSize() const
+    {
         ASSERT( bSize, "DrawTextInfo: Undefined Size" );
         return *pSize;
     }
-    SwFont* GetFont() const {
+
+    SwFont* GetFont() const
+    {
         ASSERT( bFnt, "DrawTextInfo: Undefined Font" );
         return pFnt;
     }
-    SwUnderlineFont* GetUnderFnt() const {
+
+    SwUnderlineFont* GetUnderFnt() const
+    {
         ASSERT( bSpec, "DrawTextInfo: Undefined Underlinefont" );
         return pUnderFnt;
     }
-    xub_StrLen GetIdx() const {
+
+    xub_StrLen GetIdx() const
+    {
         ASSERT( bIdx, "DrawTextInfo: Undefined Index" );
         return nIdx;
     }
-    xub_StrLen GetLen() const {
+
+    xub_StrLen GetLen() const
+    {
         ASSERT( bLen, "DrawTextInfo: Undefined Length" );
         return nLen;
     }
-    xub_StrLen GetOfst() const {
+
+    xub_StrLen GetOfst() const
+    {
         ASSERT( bOfst, "DrawTextInfo: Undefined Offset" );
         return nOfst;
     }
-    xub_StrLen GetEnd() const {
+
+    xub_StrLen GetEnd() const
+    {
         ASSERT( bIdx, "DrawTextInfo: Undefined Index" );
         ASSERT( bLen, "DrawTextInfo: Undefined Length" );
         return nIdx + nLen;
     }
-    long GetLeft() const {
+
+    long GetLeft() const
+    {
         ASSERT( bLeft, "DrawTextInfo: Undefined left range" );
         return nLeft;
     }
-    long GetRight() const {
+
+    long GetRight() const
+    {
         ASSERT( bRight, "DrawTextInfo: Undefined right range" );
         return nRight;
     }
-    long GetKanaDiff() const {
+
+    long GetKanaDiff() const
+    {
         ASSERT( bKana, "DrawTextInfo: Undefined kana difference" );
         return nKanaDiff;
     }
-    USHORT GetWidth() const {
+
+    USHORT GetWidth() const
+    {
         ASSERT( bWidth, "DrawTextInfo: Undefined Width" );
         return nWidth;
     }
-    USHORT GetAscent() const {
+
+    USHORT GetAscent() const
+    {
         ASSERT( bAscent, "DrawTextInfo: Undefined Ascent" );
         return nAscent;
     }
-    USHORT GetKanaComp() const {
+
+    USHORT GetKanaComp() const
+    {
         return nCompress;
     }
-    short GetSperren() const {
+
+    short GetSperren() const
+    {
         ASSERT( bSperr, "DrawTextInfo: Undefined >Sperren<" );
         return nSperren;
     }
-    short GetKern() const {
+
+    short GetKern() const
+    {
         ASSERT( bKern, "DrawTextInfo: Undefined Kerning" );
         return nKern;
     }
-    short GetSpace() const {
+
+    short GetSpace() const
+    {
         ASSERT( bSpace, "DrawTextInfo: Undefined Spacing" );
         return nSpace;
     }
-    BOOL GetBullet() const {
+
+    BYTE GetCursorBidiLevel() const
+    {
+        return nCursorBidiLevel;
+    }
+
+    BOOL GetBullet() const
+    {
         ASSERT( bBull, "DrawTextInfo: Undefined Bulletflag" );
         return bBullet;
     }
-    BOOL GetUpper() const {
+
+    BOOL GetUpper() const
+    {
         ASSERT( bUppr, "DrawTextInfo: Undefined Upperflag" );
         return bUpper;
     }
-    BOOL GetDrawSpace() const {
+
+    BOOL GetDrawSpace() const
+    {
         ASSERT( bDrawSp, "DrawTextInfo: Undefined DrawSpaceflag" );
         return bDrawSpace;
     }
-    BOOL GetGreyWave() const {
+
+    BOOL GetGreyWave() const
+    {
         ASSERT( bGreyWv, "DrawTextInfo: Undefined GreyWave" );
         return bGreyWave;
     }
-    BOOL IsSpaceStop() const {
+
+    BOOL IsSpaceStop() const
+    {
         return bSpaceStop;
     }
-    BOOL SnapToGrid() const {
+
+    BOOL SnapToGrid() const
+    {
         return bSnapToGrid;
     }
 
-    BOOL IsIgnoreFrmRTL() const {
+    BOOL IsIgnoreFrmRTL() const
+    {
         return bIgnoreFrmRTL;
     }
 
-    void SetOut( OutputDevice &rNew ){ pOut = &rNew;
+    void SetOut( OutputDevice &rNew )
+    {
+        pOut = &rNew;
 #ifndef PRODUCT
         bOut = TRUE;
 #endif
     }
-    void SetPos( const Point &rNew ){ pPos = &rNew;
+
+    void SetPos( const Point &rNew )
+    {
+        pPos = &rNew;
 #ifndef PRODUCT
         bPos = TRUE;
 #endif
     }
-    void SetHyphPos( xub_StrLen *pNew ){ pHyphPos = pNew;
+
+    void SetHyphPos( xub_StrLen *pNew )
+    {
+        pHyphPos = pNew;
 #ifndef PRODUCT
         bHyph = TRUE;
 #endif
     }
-    void SetText( const XubString &rNew ){ pText = &rNew;
+
+    void SetText( const XubString &rNew )
+    {
+        pText = &rNew;
 #ifndef PRODUCT
         bText = TRUE;
 #endif
     }
-    void SetWrong( const SwWrongList* pNew ){ pWrong = pNew;
+
+    void SetWrong( const SwWrongList* pNew )
+    {
+        pWrong = pNew;
 #ifndef PRODUCT
         bWrong = TRUE;
 #endif
     }
-    void SetSize( const Size &rNew ){ pSize = &rNew;
+
+    void SetSize( const Size &rNew )
+    {
+        pSize = &rNew;
 #ifndef PRODUCT
         bSize = TRUE;
 #endif
     }
-    void SetFont( SwFont* pNew ){ pFnt = pNew;
+
+    void SetFont( SwFont* pNew )
+    {
+        pFnt = pNew;
 #ifndef PRODUCT
         bFnt = TRUE;
 #endif
     }
-    void SetIdx( xub_StrLen nNew ){ nIdx = nNew;
+
+    void SetIdx( xub_StrLen nNew )
+    {
+        nIdx = nNew;
 #ifndef PRODUCT
         bIdx = TRUE;
 #endif
     }
-    void SetLen( xub_StrLen nNew ){ nLen = nNew;
+
+    void SetLen( xub_StrLen nNew )
+    {
+        nLen = nNew;
 #ifndef PRODUCT
         bLen = TRUE;
 #endif
     }
-    void SetOfst( xub_StrLen nNew ){ nOfst = nNew;
+
+    void SetOfst( xub_StrLen nNew )
+    {
+        nOfst = nNew;
 #ifndef PRODUCT
         bOfst = TRUE;
 #endif
     }
-    void SetLeft( long nNew ){ nLeft = nNew;
+
+    void SetLeft( long nNew )
+    {
+        nLeft = nNew;
 #ifndef PRODUCT
         bLeft = TRUE;
 #endif
     }
-    void SetRight( long nNew ){ nRight = nNew;
+
+    void SetRight( long nNew )
+    {
+        nRight = nNew;
 #ifndef PRODUCT
         bRight = TRUE;
 #endif
     }
-    void SetKanaDiff( long nNew ){ nKanaDiff = nNew;
+
+    void SetKanaDiff( long nNew )
+    {
+        nKanaDiff = nNew;
 #ifndef PRODUCT
         bKana = TRUE;
 #endif
     }
-    void SetWidth( USHORT nNew ){ nWidth = nNew;
+
+    void SetWidth( USHORT nNew )
+    {
+        nWidth = nNew;
 #ifndef PRODUCT
         bWidth = TRUE;
 #endif
     }
-    void SetAscent( USHORT nNew ){ nAscent = nNew;
+
+    void SetAscent( USHORT nNew )
+    {
+        nAscent = nNew;
 #ifndef PRODUCT
         bAscent = TRUE;
 #endif
     }
-    void SetKern( short nNew ){ nKern = nNew;
+
+    void SetKern( short nNew )
+    {
+        nKern = nNew;
 #ifndef PRODUCT
         bKern = TRUE;
 #endif
     }
-    void SetSperren( short nNew ){ nSperren = nNew;
+
+    void SetSperren( short nNew )
+    {
+        nSperren = nNew;
 #ifndef PRODUCT
         bSperr = TRUE;
 #endif
     }
-    void SetSpace( short nNew ){
+
+    void SetSpace( short nNew )
+    {
         if( nNew < 0 )
         {
             SetSperren( -nNew );
@@ -643,40 +799,72 @@ public:
         bSpace = TRUE;
 #endif
     }
-    void SetKanaComp( short nNew ){
+
+    void SetCursorBidiLevel( BYTE nNew )
+    {
+        nCursorBidiLevel = nNew;
+    }
+
+    void SetKanaComp( short nNew )
+    {
         nCompress = nNew;
     }
-    void SetBullet( BOOL bNew ){ bBullet = bNew;
+
+    void SetBullet( BOOL bNew )
+    {
+        bBullet = bNew;
 #ifndef PRODUCT
         bBull = TRUE;
 #endif
     }
-    void SetUnderFnt( SwUnderlineFont* pFnt ){ pUnderFnt = pFnt;
+
+    void SetUnderFnt( SwUnderlineFont* pFnt )
+    {
+        pUnderFnt = pFnt;
 #ifndef PRODUCT
         bSpec = TRUE;
 #endif
     }
-    void SetUpper( BOOL bNew ){ bUpper = bNew;
+
+    void SetUpper( BOOL bNew )
+    {
+        bUpper = bNew;
 #ifndef PRODUCT
         bUppr = TRUE;
 #endif
     }
-    void SetDrawSpace( BOOL bNew ){ bDrawSpace = bNew;
+
+    void SetDrawSpace( BOOL bNew )
+    {
+        bDrawSpace = bNew;
 #ifndef PRODUCT
         bDrawSp = TRUE;
 #endif
     }
-    void SetGreyWave( BOOL bNew ){ bGreyWave = bNew;
+
+    void SetGreyWave( BOOL bNew )
+    {
+        bGreyWave = bNew;
 #ifndef PRODUCT
         bGreyWv = TRUE;
 #endif
     }
 
-    void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew; }
-    void SetSnapToGrid( BOOL bNew ) { bSnapToGrid = bNew; }
+    void SetSpaceStop( BOOL bNew )
+    {
+        bSpaceStop = bNew;
+    }
+
+    void SetSnapToGrid( BOOL bNew )
+    {
+        bSnapToGrid = bNew;
+    }
 
 #ifdef BIDI
-    void SetIgnoreFrmRTL( BOOL bNew ) { bIgnoreFrmRTL = bNew; }
+    void SetIgnoreFrmRTL( BOOL bNew )
+    {
+        bIgnoreFrmRTL = bNew;
+    }
 #endif
 
     void Shift( USHORT nDir );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: od $ $Date: 2002-10-10 09:14:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,6 +1279,10 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
                 if( !aNew.Len() )               // nichts gefunden, dann ist
                     aNew = pSFld->GetFormula(); // die Formel der neue Wert
 
+                // OD 11.02.2003 #i3141# - update expression of field as in
+                // method <SwDoc::UpdateExpFlds(..)> for string/text fields
+                pSFld->ChgExpStr( aNew );
+
                 // suche den Namen vom Feld
                 aNew = ((SwSetExpFieldType*)pSFld->GetTyp())->GetSetRefName();
                 // Eintrag vorhanden ?
@@ -2150,6 +2154,8 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
     String  sFormel(rFormel);
     String  sNewName( rNewName );
     sNewName.SearchAndReplace( DB_DELIM, '.');
+    //the command type is not part of the condition
+    sNewName = sNewName.GetToken(0, DB_DELIM);
     String sUpperNewNm( sNewName );
 
 
@@ -2158,7 +2164,9 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
         String  sDBName( *rUsedDBNames.GetObject( i ) );
 
         sDBName.SearchAndReplace( DB_DELIM, '.');
-        if( sDBName.Equals( sUpperNewNm ))
+        //cut off command type
+        sDBName = sDBName.GetToken(0, DB_DELIM);
+        if( !sDBName.Equals( sUpperNewNm ))
         {
             xub_StrLen nPos = 0;
 
@@ -2169,6 +2177,10 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
                 {
                     rFormel.Erase( nPos, sDBName.Len() );
                     rFormel.Insert( sNewName, nPos );
+                    //prevent re-searching - this is useless and provokes
+                    //endless loops when names containing each other and numbers are exchanged
+                    //e.g.: old ´12345.12345  new: i12345.12345
+                    nPos += sNewName.Len();
                     sFormel = rFormel;
                 }
             }
@@ -2643,7 +2655,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
     Point aPt;
     const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, FALSE );
 
-    _SetGetExpFld* pNew;
+    _SetGetExpFld* pNew = NULL;
     BOOL bIsInBody = FALSE;
 
     if( !pFrm || pFrm->IsInDocBody() )
@@ -2651,7 +2663,13 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
         // einen Index fuers bestimmen vom TextNode anlegen
         SwNodeIndex aIdx( rTxtNd );
         bIsInBody = rDoc.GetNodes().GetEndOfExtras().GetIndex() < aIdx.GetIndex();
-        pNew = new _SetGetExpFld( aIdx, &rTFld );
+
+        // #104291# dvo: We don't want to update fields in redlines, or those
+        // in frames whose anchor is in redline. However, we do want to update
+        // fields in hidden sections. So: In order to be updated, a field 1)
+        // must have a frame, or 2) it must be in the document body.
+        if( (pFrm != NULL) || bIsInBody )
+            pNew = new _SetGetExpFld( aIdx, &rTFld );
     }
     else
     {
@@ -2677,8 +2695,9 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
         pDBFld->ChgBodyTxtFlag( bIsInBody );
     }
 
-    if( !pFldSortLst->Insert( pNew ))
-        delete pNew;
+    if( pNew != NULL )
+        if( !pFldSortLst->Insert( pNew ))
+            delete pNew;
 }
 
 void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:32:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,3 +804,26 @@ SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent) :
 SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
 {
 }
+/* -----------------04.02.2003 13:45-----------------
+ *
+ * --------------------------------------------------*/
+SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) :
+    ModalDialog(pParent, SW_RES(DLG_MERGE_FIELD_CONNECTIONS)),
+    aConnectionsFL( this, ResId( FL_CONNECTIONS  )),
+    aUseExistingRB( this, ResId( RB_USEEXISTING )),
+    aCreateNewRB(   this, ResId( RB_CREATENEW    )),
+    aInfoFI(        this, ResId( FT_INFO        )),
+    aOK(            this, ResId( BT_OK          )),
+    aCancel(        this, ResId( BT_CANCEL      )),
+    aHelp(          this, ResId( BT_HELP        ))
+{
+    FreeResource();
+}
+/* -----------------04.02.2003 13:45-----------------
+ *
+ * --------------------------------------------------*/
+SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
+{
+}
+
+

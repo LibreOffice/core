@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: od $ $Date: 2002-11-29 15:09:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,11 +213,12 @@
 
 #define DEFTEXTSIZE  12
 
-/// OD 25.09.2002 #99739# - insert declaration of global methods <SwAlignRect>
-///     and <SwAlignGrtRect>.
-///     Methods are implemented in /core/layout/paintfrm.cxx
-extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
-extern void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
+// OD 25.09.2002 #99739# - insert declaration of global methods <SwAlignRect>
+//     and <SwAlignGrtRect>.
+//     Methods are implemented in /core/layout/paintfrm.cxx
+// OD 24.01.2003 #106593# - no longer needed, included in <frmtool.hxx>
+//extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
+//extern void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
 //Zum asynchronen (erstmaligem) anfordern von Grafiken
 class SwRequestGraphic : public SwClient
@@ -485,7 +486,8 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
-        if ( pSh->GetWin() )
+        // OD 10.01.2003 #i6467# - no paint of placeholder for page preview
+        if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
             String aTxt( pNd->GetAlternateText() );

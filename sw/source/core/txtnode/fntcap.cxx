@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-19 07:43:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>       // SwTxtFrm
 #endif
 
 using namespace ::com::sun::star::i18n;
@@ -293,11 +296,25 @@ void SwDoDrawCapital::Do()
 void SwDoDrawCapital::DrawSpace( Point &rPos )
 {
     static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
-    const USHORT nDiff = (USHORT)( rInf.GetPos().X() - rPos.X() );
+
+    long nDiff = rInf.GetPos().X() - rPos.X();
+
+    Point aPos( rPos );
+#ifdef BIDI
+    if ( rInf.GetFrm()->IsRightToLeft() )
+    {
+       rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+       nDiff = -nDiff;
+    }
+#endif
+
+    if ( rInf.GetFrm()->IsVertical() )
+        rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
     if ( nDiff )
     {
         rInf.ApplyAutoColor();
-        GetOut()->DrawStretchText( rPos, nDiff,
+        GetOut()->DrawStretchText( aPos, nDiff,
             XubString( sDoubleSpace, RTL_TEXTENCODING_MS_1252 ), 0, 2 );
     }
     rPos.X() = rInf.GetPos().X() + rInf.GetWidth();

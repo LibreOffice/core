@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -123,6 +122,7 @@ namespace SL
     IMPLCONSTSTRINGARRAY(CheckBox);
     IMPLCONSTSTRINGARRAY(TextBox);
     IMPLCONSTSTRINGARRAY(TextField);
+    IMPLCONSTSTRINGARRAY(MSMacroCmds);
 }
 
 template<class C> bool wwString<C>::TestBeltAndBraces(const SvStream& rStrm)
@@ -3425,125 +3425,7 @@ const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
     return 0;   // Sprm nicht gefunden
 }
 
-const wwSprmSequence* WW8PLCFx_SEPX::GetWW6IgnoredSprms()
-{
-    static sal_uInt16 aSprmIds[] =
-    {
-        136, 137, 138, 139, 142, 144, 145, 147, 152, 154, 155,
-        158, 160
-    };
-
-    static wwSprmSequence aWWSprmIds(aSprmIds,
-        sizeof(aSprmIds) / sizeof(aSprmIds[0]));
-    return &aWWSprmIds;
-}
-
-const wwSprmSequence* WW8PLCFx_SEPX::GetWW8IgnoredSprms()
-{
-    //0x3014 -> #i4813#
-    static sal_uInt16 aSprmIds[] =
-    {
-        0x3005, 0x3006, 0x3009, 0x300E, 0x3013, 0x3014, 0x3019,
-        0x301A, 0x3228, 0x3229, 0x500B, 0x5015, 0x501B, 0x5026,
-        0x703A, 0x900C, 0x9016, 0x9023, 0x9024, 0xB017, 0xB018,
-        0xF203, 0xF204
-    };
-
-    static wwSprmSequence aWWSprmIds(aSprmIds,
-        sizeof(aSprmIds) / sizeof(aSprmIds[0]));
-    return &aWWSprmIds;
-}
-
-bool WW8PLCFx_SEPX::SprmsAreEquivalent(const BYTE*  pOtherSprms,
-    long nOtherSprmSiz) const
-{
-    bool bRes = false;
-    const BYTE* pSp   = pSprms;
-
-    /*
-        zu 'sprmSBkc':
-        Wir sehen zwei WW-Abschnitte auch dann als gleich an,
-        wenn sie sich lediglich im break code unterscheiden.
-        Natuerlich muessen die Kopf/Fuss-Bereiche identisch sein.
-
-        Ignoriert werden auch die folgenden,
-        spaltenbezogene Flags:
-        SCcolumns, SDxaColumns, SDxaColWidth,
-        SDxaColSpacing, SFEvenlySpaced, SLBetween
-        und: SFFacingCol (nur bei Ver8)
-
-        We will also ignore a different formatting of the page
-        number here.
-
-        We will also ignore different line numbering settings here
-        since only the very 1st line numbering settings are taken
-        into account anyway, see: bNoLnNum
-    */
-    const wwSprmSequence *pIgnore;
-    if (GetVersion() < 8)
-        pIgnore = GetWW6IgnoredSprms();
-    else
-        pIgnore = GetWW8IgnoredSprms();
-
-    ASSERT(pIgnore, "Impossible");
-
-    if ( maSprmParser.CountSprms(pSp, nSprmSiz, pIgnore) ==
-        maSprmParser.CountSprms(pOtherSprms, nOtherSprmSiz, pIgnore) )
-    {
-        bRes = true;
-        USHORT i=0;
-        while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
-        {
-            USHORT nSpId = maSprmParser.GetSprmId(pSp);
-
-            if( !nSpId )
-                break;
-
-            USHORT nSpLen = maSprmParser.GetSprmSize(nSpId, pSp);
-
-            if (!pIgnore->search(nSpId))
-            {
-                const BYTE* pOtherSp =
-                    HasSprm( nSpId, pOtherSprms, nOtherSprmSiz );
-
-                if (!pOtherSp)
-                    bRes = false;
-                else
-                {
-                    const BYTE *pTst = pSp + maSprmParser.DistanceToData(nSpId);
-                    //Allow a one twip fuzziness for the margins, word is
-                    //doing something very small but intriguing with its
-                    //rounding of these margins
-                    if (nSpId == 0xB021 || nSpId == 0xB022 ||
-                        nSpId == 0x9023 || nSpId == 0x9024 ||
-                        nSpId == 0xB017 || nSpId == 0xB018 )
-                    {
-                        short nOne = SVBT16ToShort(pTst);
-                        short nTwo = SVBT16ToShort(pOtherSp);
-                        if (abs(nOne-nTwo) > 1) //(perhaps ww8par2#nToleranz)
-                            bRes = false;
-                    }
-                    else if (memcmp(pTst, pOtherSp,
-                        maSprmParser.GetSprmTailLen(nSpId, pSp)))
-                    {
-                        bRes = false;
-                    }
-                }
-
-                if (!bRes)
-                    break;
-            }
-            // increase pointers, so it points to next sprm
-            i += nSpLen;
-            pSp += nSpLen;
-        }
-    }
-    return bRes;    // different Sprms
-}
-
 //-----------------------------------------
-//-----------------------------------------
-
 WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, BYTE nVersion,
     WW8_CP nStartCp, long nFcRef, long nLenRef, long nFcTxt, long nLenTxt,
     long nStruct)
@@ -4200,7 +4082,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     }
 }
 
-void WW8PLCFxDesc::ReduceByOffset(void)
+void WW8PLCFxDesc::ReduceByOffset()
 {
     ASSERT((LONG_MAX == nStartPos) || (nStartPos <= nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
@@ -6817,3 +6699,91 @@ USHORT wwSprmParser::DistanceToData(USHORT nId) const
 {
     return 1 + mnDelta + SprmDataOfs(nId);
 }
+
+#if 0
+ALNV::ANLV()
+    : nfc(0), cbTextBefore(0), cbTextAfter(0), jc(0), fPrev(0), fHang(0),
+    fSetBold(0), fSetItalic(0), fSetSmallCaps(0), fSetCaps(0), fSetStrike(0),
+    fSetKul(0), fPrevSpace(0), fBold(0), fItalic(0), fSmallCaps(0), fCaps(0),
+    fStrike(0), kul(0), ico(0), ftc(0), hps(0), iStartAt(0), dxaIndent(0),
+    dxaSpace(0)
+{}
+
+void ANLV::ReadFromMem(const sal_uInt8 *&pData)
+{
+    nfc = Get_Byte(pData);
+    cbTextBefore = Get_Byte(pData);
+    cbTextAfter = Get_Byte(pData);
+    sal_uInt8 nTemp = Get_Byte(pData);
+    jc = nTemp & 0x03;
+    fPrev = (nTemp & 0x04) >> 2;
+    fHang = (nTemp & 0x08) >> 3;
+    fSetBold = (nTemp & 0x10) >> 4;
+    fSetItalic = (nTemp & 0x20) >> 5;
+    fSetSmallCaps = (nTemp & 0x40) >> 6;
+    fSetCaps = (nTemp & 0x80) >> 7;
+    nTemp = Get_Byte(pData);
+    fSetStrike = nTemp & 0x01;
+    fSetKul = (nTemp & 0x02) >> 1;
+    fPrevSpace = (nTemp & 0x04) >> 2;
+    fBold = (nTemp & 0x08) >> 3;
+    fItalic = (nTemp & 0x10) >> 4;
+    fSmallCaps = (nTemp & 0x20) >> 5;
+    fCaps = (nTemp & 0x40) >> 6;
+    fStrike = (nTemp & 0x80) >> 7;
+    nTemp = Get_Byte(pData);
+    kul = nTemp & 0x07;
+    ico = (nTemp & 0xF1) >> 3;
+    ftc = Get_Short(pData);
+    hps = Get_Short(pData);
+    iStartAt = Get_Short(pData);
+    dxaIndent = Get_Short(pData);
+    dxaSpace = Get_Short(pData);
+}
+
+OLST::OLST() :
+    fRestartHdr(0), fSpareOlst2(0), fSpareOlst3(0), fSpareOlst4(0),
+{
+    memset(rgxch, 0, sizeof(rgxch));
+}
+
+void OLST::ReadFromMem(const sal_uInt8 *&pData, bool bVer67)
+{
+    for (int i = 0;i < 9; ++i)
+        rganlv[i].ReadFromMem(pData);
+    fRestartHdr = Get_Byte(pData);
+    fSpareOlst2 = Get_Byte(pData);
+    fSpareOlst3 = Get_Byte(pData);
+    fSpareOlst4 = Get_Byte(pData);
+    if (bVer67)
+    {
+        for (int j = 0; j < 64; ++j)
+            rgxch[j] = Get_Byte(pData);
+    }
+    else
+    {
+        for (int j = 0; j < 32; ++j)
+            rgxch[j] = Get_Short(pData);
+    }
+}
+#endif
+
+SEPr::SEPr() :
+    bkc(2), fTitlePage(0), fAutoPgn(0), nfcPgn(0), fUnlocked(0), cnsPgn(0),
+    fPgnRestart(0), fEndNote(1), lnc(0), grpfIhdt(0), nLnnMod(0), dxaLnn(0),
+    dxaPgn(720), dyaPgn(720), fLBetween(0), vjc(0), dmBinFirst(0),
+    dmBinOther(0), dmPaperReq(0), fPropRMark(0), ibstPropRMark(0),
+    dttmPropRMark(0), dxtCharSpace(0), dyaLinePitch(0), clm(0), reserved1(0),
+    dmOrientPage(0), iHeadingPgn(0), pgnStart(1), lnnMin(0), wTextFlow(0),
+    reserved2(0), pgbApplyTo(0), pgbPageDepth(0), pgbOffsetFrom(0),
+    xaPage(12240), yaPage(15840), xaPageNUp(12240), yaPageNUp(15840),
+    dxaLeft(1800), dxaRight(1800), dyaTop(1440), dyaBottom(1440), dzaGutter(0),
+    dyaHdrTop(720), dyaHdrBottom(720), ccolM1(0), fEvenlySpaced(1),
+    reserved3(0), fBiDi(0), fFacingCol(0), fRTLGutter(0), fRTLAlignment(0),
+    dxaColumns(720), dxaColumnWidth(0), dmOrientFirst(0), fLayout(0),
+    reserved4(0)
+{
+    memset(rgdxaColumnWidthSpacing, 0, sizeof(rgdxaColumnWidthSpacing));
+}
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

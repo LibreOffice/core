@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -280,7 +282,8 @@ class WW8_WrtBookmarks
 private:
     SvULongs aSttCps, aEndCps;      // Array of Start- and End CPs
     SvBools aFieldBookmarks;       // If the bookmark is in a field result
-    ::std::vector<String> maSwBkmkNms;  // Array of Sw - Bookmarknames
+    std::vector<String> maSwBkmkNms;    // Array of Sw - Bookmarknames
+    typedef std::vector<String>::iterator myIter;
 
     USHORT GetPos( const String& rNm );
 
@@ -301,7 +304,7 @@ public:
 class WW8_WrtRedlineAuthor
 {
 private:
-    ::std::vector<String> maAuthors;            // Array of Sw - Bookmarknames
+    std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
 
     USHORT GetPos( const String& rNm );
 
@@ -1323,15 +1326,19 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm )
     {
         // new -> insert as start position
         nPos = aSttCps.Count();
+        myIter aIter = maSwBkmkNms.end();
         // sort by startposition
         //      theory: write continuous -> then the new position is at end
         while( nPos && aSttCps[ nPos - 1 ] > ULONG( nStartCp ))
+        {
             --nPos;
+            --aIter;
+        }
 
         aSttCps.Insert(nStartCp, nPos);
         aEndCps.Insert(nStartCp, nPos);
         aFieldBookmarks.Insert(BOOL(false), nPos);
-        maSwBkmkNms.push_back(rNm);
+        maSwBkmkNms.insert(aIter, rNm);
     }
     else
     {
@@ -1375,7 +1382,7 @@ void WW8_WrtBookmarks::Write( SwWW8Writer& rWrt )
         rWrt.pFib->fcPlcfbkf = rStrm.Tell();
         for( i = 0; i < nCount; ++i )
             SwWW8Writer::WriteLong( rStrm, aSttCps[ i ] );
-        SwWW8Writer::WriteLong( rStrm, rWrt.pFib->ccpText );
+        SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
         for( i = 0; i < nCount; ++i )
         {
             ULONG nEndCP = aEndCps[ i ];
@@ -1397,7 +1404,7 @@ void WW8_WrtBookmarks::Write( SwWW8Writer& rWrt )
         rWrt.pFib->fcPlcfbkl = rStrm.Tell();
         for( i = 0; i < nCount; ++i )
             SwWW8Writer::WriteLong( rStrm, aEndSortTab[ i ] );
-        SwWW8Writer::WriteLong( rStrm, rWrt.pFib->ccpText );
+        SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
         rWrt.pFib->lcbPlcfbkl = rStrm.Tell() - rWrt.pFib->fcPlcfbkl;
     }
 }
@@ -1487,8 +1494,8 @@ void SwWW8Writer::AppendBookmark( const String& rName, USHORT nOffset )
 USHORT WW8_WrtRedlineAuthor::AddName( const String& rNm )
 {
     USHORT nRet;
-    typedef ::std::vector<String>::iterator myiter;
-    myiter aIter = ::std::find(maAuthors.begin(), maAuthors.end(), rNm);
+    typedef std::vector<String>::iterator myiter;
+    myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
     if (aIter != maAuthors.end())
         nRet = aIter - maAuthors.begin();
     else
@@ -1518,7 +1525,7 @@ USHORT SwWW8Writer::AddRedlineAuthor( USHORT nId )
 //--------------------------------------------------------------------------
 /*  */
 
-void SwWW8Writer::WriteAsStringTable(const ::std::vector<String>& rStrings,
+void SwWW8Writer::WriteAsStringTable(const std::vector<String>& rStrings,
     INT32& rfcSttbf, INT32& rlcbSttbf, USHORT nExtraLen)
 {
     USHORT n, nCount = rStrings.size();
@@ -1997,6 +2004,32 @@ void SwWW8Writer::WriteFkpPlcUsw()
         pFldTxtBxs->Write( *this );             // Fields ( Textboxes )
         pFldHFTxtBxs->Write( *this );           // Fields ( Head/Foot-Textboxes )
 
+        if (pEscher || pDoc->ContainsMSVBasic())
+        {
+            /*
+             #82587# Everytime MS 2000 creates an escher stream there is always
+             an ObjectPool dir (even if empty). It turns out that if a copy of
+             MS 2000 is used to open a document that contains escher graphics
+             exported from StarOffice without this empty dir then *if* that
+             copy of MS Office has never been used to open a MSOffice document
+             that has escher graphics (and an ObjectPool dir of course) and
+             that copy of office has not been used to draw escher graphics then
+             our exported graphics do not appear. Once you do open a ms
+             document with escher graphics or draw an escher graphic with that
+             copy of word, then all documents from staroffice that contain
+             escher work from then on. Tricky to track down, some sort of late
+             binding trickery in MS where solely for first time initialization
+             the existence of an ObjectPool dir is necessary for triggering
+             some magic. cmc
+            */
+            /*
+            #10570# Similiarly having msvbasic storage seems to also trigger
+            creating this stream
+            */
+            GetStorage().OpenStorage(CREATE_CONST_ASC(SL::aObjectPool),
+                STREAM_READWRITE | STREAM_SHARE_DENYALL);
+        }
+
         // dggInfo - escher stream
         WriteEscher();
 
@@ -2011,6 +2044,9 @@ void SwWW8Writer::WriteFkpPlcUsw()
         OutListTab();                           // listformats  - LSTF
         OutOverrideListTab();                   //   - "" -     - LFO
         OutListNamesTab();                      //   - "" -     - ListNames
+
+        RestoreMacroCmds();
+
         pMagicTable->Write( *this );
 
         pPiece->WritePc( *this );               // Piece-Table
@@ -2500,3 +2536,32 @@ void WW8_WrPlcTxtBoxes::WritePlc( SwWW8Writer& rWrt ) const
             rWrt.pFib->lcbPlcfHdrtxbxTxt );
     }
 }
+
+void SwWW8Writer::RestoreMacroCmds()
+{
+    pFib->fcCmds = pTableStrm->Tell();
+
+    SvStorageRef xSrcRoot(pDoc->GetDocShell()->GetStorage());
+    SvStorageStreamRef xSrcStream =
+            xSrcRoot->OpenStream(CREATE_CONST_ASC(SL::aMSMacroCmds),
+            STREAM_STD_READ | STREAM_NOCREATE );
+
+    if (xSrcStream.Is() && SVSTREAM_OK == xSrcStream->GetError())
+    {
+        xSrcStream->Seek(STREAM_SEEK_TO_END);
+        pFib->lcbCmds = xSrcStream->Tell();
+        xSrcStream->Seek(0);
+
+        sal_uInt8 *pBuffer = new sal_uInt8[pFib->lcbCmds];
+        xSrcStream->Read(pBuffer, pFib->lcbCmds);
+        pTableStrm->Write(pBuffer, pFib->lcbCmds);
+        delete[] pBuffer;
+
+    }
+
+    // set len to FIB
+    pFib->lcbCmds = pTableStrm->Tell() - pFib->fcCmds;
+}
+
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

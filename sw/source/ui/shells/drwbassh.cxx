@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-06 09:45:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,7 +683,17 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    rSet.Put(SfxAllEnumItem(nWhich, USHRT_MAX));
+                    SfxAllEnumItem aEnumItem(nWhich, USHRT_MAX);
+                    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                    //if only one object is selected it can only be vertically
+                    // aligned because it is character bound
+                    if( rMarkList.GetMarkCount() == 1 )
+                    {
+                        aEnumItem.DisableValue(SID_OBJECT_ALIGN_LEFT);
+                        aEnumItem.DisableValue(SID_OBJECT_ALIGN_CENTER);
+                        aEnumItem.DisableValue(SID_OBJECT_ALIGN_RIGHT);
+                    }
+                    rSet.Put(aEnumItem);
                 }
                 break;
             case FN_NAME_GROUP :

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 20:26:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,18 +106,19 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ french ] = "Mode" ;
         Text [ dutch ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
-        Text[ chinese_simplified ] = "Ä£Ê½";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
         Text[ russian ] = "Ğåæèì";
         Text[ polish ] = "Tryb";
-        Text[ japanese ] = "Ó°ÄŞ";
-        Text[ chinese_traditional ] = "¼Ò¦¡";
+        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
+        Text[ chinese_traditional ] = "æ¨¡å¼";
         Text[ arabic ] = "ÇáæÖÚ";
         Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
-        Text[ korean ] = "¸ğµå";
+        Text[ korean ] = "ëª¨ë“œ";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Modo";
+        Text[ catalan ] = "Mode";
         Text[ finnish ] = "Tila";
+        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
     };
     RadioButton RB_CNTNT
     {
@@ -134,20 +135,21 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ danish ] = "Kopier overskrift" ;
         Text [ italian ] = "~Copia intestazione" ;
         Text [ spanish ] = "~Copiar encabezado" ;
-        Text [ french ] = "~Copier titre" ;
+        Text [ french ] = "~Copier le titre" ;
         Text [ dutch ] = "~Kop kopiëren" ;
-        Text[ chinese_simplified ] = "¸´ÖÆ±êÌâ(~C)";
+        Text[ chinese_simplified ] = "å¤åˆ¶æ ‡é¢˜(~C)";
         Text[ russian ] = "Êîïèğîâàòü çàãîëîâîê";
         Text[ polish ] = "Kopiuj tytu³";
-        Text[ japanese ] = "Œ©o‚µ‚ÌºËß°(~C)";
-        Text[ chinese_traditional ] = "½Æ»s¼ĞÃD(~C)";
+        Text[ japanese ] = "è¦‹å‡ºã—ã®ã‚³ãƒ”ãƒ¼(~C)";
+        Text[ chinese_traditional ] = "è¤‡è£½æ¨™é¡Œ(~C)";
         Text[ arabic ] = "äÓÎ ÇáÚäæÇä";
         Text[ greek ] = "ÁíôéãñáöŞ åğéêåöáëßäáò";
-        Text[ korean ] = "Á¦¸ñ º¹»ç(~C)";
+        Text[ korean ] = "ì œëª© ë³µì‚¬(~C)";
         Text[ turkish ] = "B~aşlığı kopyala";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Copiar encabezado";
+        Text[ catalan ] = "~Copia encapçalament";
         Text[ finnish ] = "~Kopioi otsikko";
+        Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸à¸«à¸±à¸§à¸‚à¹‰à¸­";
     };
     RadioButton RB_BOX_PARA
     {
@@ -161,21 +163,22 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ swedish ] = "~Egen överskrift, med formatmall" ;
         Text [ danish ] = "Egen overskrift, med typografi" ;
         Text [ italian ] = "~Propria intestazione con modello" ;
-        Text [ spanish ] = "~Encabezado propio, con estilos" ;
+        Text [ spanish ] = "~Encabezado propio (aplicar estilo)" ;
         Text [ french ] = "Titre personnalisé, avec ~style" ;
         Text [ dutch ] = "~Eigen kop, met opmaakprofiel" ;
-        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ£¬´øÑùÊ½(~U)";
-        Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ ñî ñòèëåì";
+        Text[ chinese_simplified ] = "è‡ªå®šæ ‡é¢˜ï¼Œå¸¦æ ·å¼(~U)";
+        Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ (ïğèìåíèòü ñòèëü)";
         Text[ polish ] = "Tytu³ u¿ytkownika, z szablonem";
-        Text[ japanese ] = "½À²Ù•t‚«Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~U)";
-        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD¡A±a¼Ë¦¡(~U)";
+        Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ä»˜ããƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®è¦‹å‡ºã—(~U)";
+        Text[ chinese_traditional ] = "è‡ªè¨‚æ¨™é¡Œï¼Œå¸¶æ¨£å¼(~U)";
         Text[ arabic ] = "ÚäæÇä ÎÇÕ (ÊØÈíŞ ÇáäãØ)";
         Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá (ìå óôõë)";
-        Text[ korean ] = "°íÀ¯ Á¦¸ñ£¨¼­½Ä ÆÄÀÏ Àû¿ë£©(~U)";
+        Text[ korean ] = "ìŠ¤íƒ€ì¼ì´ í‘œí•¨ëœ ì‚¬ìš©ì ì •ì˜ ì œëª©(~U)";
         Text[ turkish ] = "~Özel başlık (biçim uygula)";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
-        Text[ catalan ] = "~Encabezado propio, con estilos";
+        Text[ catalan ] = "~Encapçalament propi, amb estils";
         Text[ finnish ] = "~Mukautettu otsikko (käytä tyyliä)";
+        Text[ thai ] = "à¸à¸³~à¸«à¸™à¸”à¸«à¸±à¸§à¸‚à¹‰à¸­à¹€à¸­à¸‡ (à¹ƒà¸Šà¹‰à¸¥à¸±à¸à¸©à¸“à¸°)";
     };
     RadioButton RB_BOX_NOPARA
     {
@@ -190,20 +193,21 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ danish ] = "Egen overskrift" ;
         Text [ italian ] = "Propria ~intestazione" ;
         Text [ spanish ] = "Encabezado ~propio" ;
-        Text [ french ] = "Titre ~personnalisé" ;
+        Text [ french ] = "Titre personnalisé" ;
         Text [ dutch ] = "E~igen kop" ;
-        Text[ chinese_simplified ] = "×Ô¶¨±êÌâ(~S)";
+        Text[ chinese_simplified ] = "è‡ªå®šæ ‡é¢˜(~S)";
         Text[ russian ] = "Çàãîëîâîê ïîëüçîâàòåëÿ";
         Text[ polish ] = "Tytu³ u¿ytkownika";
-        Text[ japanese ] = "Õ°»Ş°’è‹`‚ÌŒ©o‚µ(~S)";
-        Text[ chinese_traditional ] = "¦Û­q¼ĞÃD(~S)";
+        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®è¦‹å‡ºã—(~S)";
+        Text[ chinese_traditional ] = "è‡ªè¨‚æ¨™é¡Œ(~S)";
         Text[ arabic ] = "ÚäæÇä ÎÇÕ";
         Text[ greek ] = "Ğñïóáñìïóìİíç åğéêåöáëßäá";
-        Text[ korean ] = "»ç¿ëÀÚ Á¦¸ñ(~S)";
+        Text[ korean ] = "ì‚¬ìš©ì ì œëª©(~S)";
         Text[ turkish ] = "Ö~zel başlık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Encabezado ~propio";
-        Text[ finnish ] = "~Mukautettu otsikko";
+        Text[ catalan ] = "Encapçalament ~propi";
+        Text[ finnish ] = "Mukautettu otsikko";
+        Text[ thai ] = "à¸à¸³à¸«à¸™~à¸”à¸«à¸±à¸§à¸‚à¹‰à¸­à¹€à¸­à¸‡";
     };
     RadioButton RB_BORDER
     {
@@ -218,20 +222,21 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ danish ] = "Ingen overskrift" ;
         Text [ italian ] = "~Senza intestazione" ;
         Text [ spanish ] = "~Sin encabezado" ;
-        Text [ french ] = "~Pas de titre" ;
+        Text [ french ] = "Aucun titre" ;
         Text [ dutch ] = "~Geen kop" ;
-        Text[ chinese_simplified ] = "ÎŞ±êÌâ(~N)";
+        Text[ chinese_simplified ] = "æ— æ ‡é¢˜(~N)";
         Text[ russian ] = "Áåç çàãîëîâêà";
         Text[ polish ] = "Bez tytu³u";
-        Text[ japanese ] = "Œ©o‚µ‚È‚µ(~N)";
-        Text[ chinese_traditional ] = "µL¼ĞÃD(~N)";
+        Text[ japanese ] = "è¦‹å‡ºã—ãªã—(~N)";
+        Text[ chinese_traditional ] = "ç„¡æ¨™é¡Œ(~N)";
         Text[ arabic ] = "ÈÏæä ÚäæÇä";
         Text[ greek ] = "×ùñßò åğéêåöáëßäá";
-        Text[ korean ] = "Á¦¸ñ ¾øÀ½(~N)";
+        Text[ korean ] = "ì œëª© ì—†ìŒ(~N)";
         Text[ turkish ] = "~Başlık yok";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Sin encabezado";
+        Text[ catalan ] = "~Sense encapçalement";
         Text[ finnish ] = "~Ei otsikkoa";
+        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µà¸«à¸±à¸§à¸‚à¹‰à¸­";
     };
     Text [ english_us ] = "Split Table" ;
     Text [ portuguese_brazilian ] = "Tabelle auftrennen" ;
@@ -239,22 +244,34 @@ ModalDialog DLG_SPLIT_TABLE
     Text [ danish ] = "Opdel tabel" ;
     Text [ italian ] = "Dividi tabella" ;
     Text [ spanish ] = "Dividir tabla" ;
-    Text [ french ] = "Scinder le tableau" ;
-    Text [ dutch ] = "Tabel splitsen" ;
+    Text [ french ] = "Scission de tableau" ;
+    Text [ dutch ] = "Tabel opsplitsen" ;
     Text [ portuguese ] = "Dividir tabela" ;
-    Text[ chinese_simplified ] = "·Ö¸ô±í¸ñ";
+    Text[ chinese_simplified ] = "åˆ†éš”è¡¨æ ¼";
     Text[ russian ] = "Ğàçáèòü òàáëèöó";
     Text[ polish ] = "Rozdziel tabelê";
-    Text[ japanese ] = "•\\‚Ì•ªŠ„";
-    Text[ chinese_traditional ] = "¤À¶}ªí®æ";
+    Text[ japanese ] = "è¡¨ã®åˆ†å‰²";
+    Text[ chinese_traditional ] = "åˆ†é–‹è¡¨æ ¼";
     Text[ arabic ] = "İÕá ÇáÌÏæá";
     Text[ greek ] = "Äéáßñåóç ğßíáêá";
-    Text[ korean ] = "Ç¥ ³ª´©±â";
+    Text[ korean ] = "í‘œ ë‚˜ëˆ„ê¸°";
     Text[ turkish ] = "Tabloyu böl";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dividir tabla";
+    Text[ catalan ] = "Divideix la taula";
     Text[ finnish ] = "Jaa taulukko";
+    Text[ thai ] = "à¹à¸¢à¸à¸•à¸²à¸£à¸²à¸‡";
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-11 15:14:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,12 +861,13 @@ Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  ) throw(::com::sun::star::uno
  ---------------------------------------------------------------------------*/
 Sequence< sal_Int8 > SAL_CALL SwXCell::getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }
@@ -1847,7 +1848,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                         0L);
                     SwXTextCursor::GetCrsrAttr(pTblCrsr->GetSelRing(), rSet);
                     aPropSet.setPropertyValue(*pMap, aValue, rSet);
-                    SwXTextCursor::SetCrsrAttr(pTblCrsr->GetSelRing(), rSet, sal_True);
+                    SwXTextCursor::SetCrsrAttr(pTblCrsr->GetSelRing(), rSet, CRSR_ATTR_MODE_TABLE);
                 }
             }
         }
@@ -4952,7 +4953,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 SwTableLines& rLines = pTable->GetTabLines();
                 SwTableLine* pLine = rLines.GetObject(0);
                 SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-                pTLBox = rBoxes.GetObject(0);
+                pTLBox = rBoxes.GetObject(rBoxes.Count() - 1);
             }
             if(pTLBox)
             {
@@ -4961,6 +4962,12 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 UnoActionContext aAction(pFrmFmt->GetDoc());
                 SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
+
+                {
+                    // hier muessen die Actions aufgehoben werden
+                    UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
+                }
+
                 pFrmFmt->GetDoc()->InsertCol(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
                 delete pUnoCrsr;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 13:47:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,5 +671,6 @@ public:
     BOOL GetCaseVersalien();
 };
 
+void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);
 
 #endif

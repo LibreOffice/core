@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:14:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,11 @@ ULONG SwReader::Read( const Reader& rOptions )
     ULONG nError = 0L;
 
     GetDoc();
+
+    // am Sw3-Reader noch den pIo-Pointer "loeschen"
+    if( po == ReadSw3 && pDoc->GetDocShell() &&
+        ((Sw3Reader*)po)->GetSw3Io() != pDoc->GetDocShell()->GetIoSystem() )
+            ((Sw3Reader*)po)->SetSw3Io( pDoc->GetDocShell()->GetIoSystem() );
 
     // waehrend des einlesens kein OLE-Modified rufen
     Link aOLELink( pDoc->GetOle2Link() );
@@ -465,15 +470,18 @@ ULONG SwReader::Read( const Reader& rOptions )
             }
             if(bUpdate)
             {
+                SfxMedium* pMedium = pDoc->GetDocShell()->GetMedium();
+                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
+                Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
                 if( pDoc->GetRootFrm() && !pDoc->GetEditShell( &pVSh ) && !pVSh )
                 {
                     ViewShell aVSh( *pDoc, 0, 0 );
 
                     SET_CURR_SHELL( &aVSh );
-                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate , TRUE, FALSE );
+                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate , TRUE, FALSE, pDlgParent );
                 }
                 else
-                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate, TRUE, FALSE );
+                    pDoc->GetLinkManager().UpdateAllLinks( bAskUpdate, TRUE, FALSE, pDlgParent );
             }
         }
 
@@ -487,6 +495,9 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     if( pCrsr )                 // das Doc ist jetzt modifiziert
         pDoc->SetModified();
+
+    if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
+        ((Sw3Reader*)po)->SetSw3Io( 0 );
 
     po->SetReadUTF8( FALSE );
     po->SetBlockMode( FALSE );

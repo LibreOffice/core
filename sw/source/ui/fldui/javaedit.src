@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 11:05:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,9 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "스크립트 유형";
         Text[ turkish ] = "Script tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo de script";
+        Text[ catalan ] = "Tipus d'script";
         Text[ finnish ] = "Komentosarjatyyppi";
+        Text[ thai ] = "ชนิดสคริปต์";
     };
     Edit ED_TYPE
     {
@@ -124,7 +125,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ danish ] = "URL" ;
         Text [ italian ] = "URL" ;
         Text [ spanish ] = "URL" ;
-        Text [ french ] = "~URL" ;
+        Text [ french ] = "URL" ;
         Text [ dutch ] = "~URL" ;
         Text[ chinese_simplified ] = "URL";
         Text[ russian ] = "URL";
@@ -138,6 +139,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL";
         Text[ finnish ] = "URL-osoite";
+        Text[ thai ] = "URL";
     };
     Edit ED_URL
     {
@@ -165,7 +167,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ portuguese ] = "~Texto" ;
         Text [ finnish ] = "~Teksti" ;
         Text [ danish ] = "Tekst" ;
-        Text [ french ] = "~Texte" ;
+        Text [ french ] = "Texte" ;
         Text [ swedish ] = "~Text" ;
         Text [ dutch ] = "~Tekst" ;
         Text [ spanish ] = "~Texto" ;
@@ -182,7 +184,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "텍스트(~T)";
         Text[ turkish ] = "~Metin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Texto";
+        Text[ catalan ] = "~Text";
+        Text[ thai ] = "~ข้อความ";
     };
     MultiLineEdit ED_EDIT
     {
@@ -222,7 +225,8 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "내용";
         Text[ turkish ] = "��erik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contenido";
+        Text[ catalan ] = "Contingut";
+        Text[ thai ] = "เนื้อหา";
     };
     OKButton BTN_POST_OK
     {
@@ -276,8 +280,9 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "스크립트 편집";
         Text[ turkish ] = "Script bearbeiten";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Editar script";
+        Text[ catalan ] = "Edita script";
         Text[ finnish ] = "Muokkaa komentosarjaa";
+        Text[ thai ] = "แก้ไขสคริปต์";
     };
     String STR_JAVA_INSERT
     {
@@ -303,8 +308,9 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "스크립트 삽입";
         Text[ turkish ] = "Script einf�gen";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Insertar script";
+        Text[ catalan ] = "Insereix script";
         Text[ finnish ] = "Lis�� komentosarja";
+        Text[ thai ] = "แทรกสคริปต์";
     };
     Text [ english_us ] = "Edit Script" ;
     Text [ portuguese_brazilian ] = "Script bearbeiten" ;
@@ -325,7 +331,24 @@ ModalDialog DLG_JAVAEDIT
     Text[ korean ] = "스크립트 편집";
     Text[ turkish ] = "Script'i d�zenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar script";
+    Text[ catalan ] = "Edita script";
     Text[ finnish ] = "Muokkaa komentosarjaa";
+    Text[ thai ] = "แก้ไขสคริปต์";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

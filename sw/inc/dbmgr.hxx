@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-12-09 13:58:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ class Button;
 class SvNumberFormatter;
 class SwMailMergeDlg;
 class SwDbtoolsClient;
+class SwXMailMerge;
 
 // -----------------------------------------------------------------------
 
@@ -207,8 +208,10 @@ friend class SwConnectionDisposedListener_Impl;
     BOOL                bCancel : 1;        // Serienbrief-Save abgebrochen
 
     BOOL                bInMerge    : 1;    //merge process active
+    BOOL                bMergeSilent : 1;   // suppress display of dialogs/boxes (used when called over API)
     SwDSParamArr        aDataSourceParams;
     SwNewDBMgr_Impl*    pImpl;
+    const SwXMailMerge* pMergeEvtSrc;   // != 0 if mail merge events are to be send
 
     SwDSParam*          pMergeData;
     SwMailMergeDlg*     pMergeDialog;
@@ -238,6 +241,13 @@ public:
     // Art des aktellen Mergens. Siehe DBMgrOptions-enum
     inline USHORT   GetMergeType() const            { return nMergeType; }
     inline void     SetMergeType( USHORT nTyp )     { nMergeType = nTyp; }
+
+    // MailMergeEvent source
+    const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
+    void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { pMergeEvtSrc = pSrc; }
+
+    inline BOOL     IsMergeSilent() const           { return bMergeSilent != 0; }
+    inline void     SetMergeSilent( BOOL bVal )     { bMergeSilent = bVal; }
 
     // Mischen von Datensaetzen in Felder
     BOOL            MergeNew(USHORT nOpt, SwWrtShell& rSh,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:23:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,20 +95,21 @@ TabPage TP_LINENUMBERING
         Text [ italian ] = "Att~iva numerazione" ;
         Text [ spanish ] = "Mostrar ~numeración" ;
         Text [ french ] = "Activer la ~numérotation" ;
-        Text [ dutch ] = "~Nummering inschakelen" ;
+        Text [ dutch ] = "~Nummering activeren" ;
         Text [ portuguese ] = "Activar ~numeração" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ(~S)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºç¼–å·(~S)";
         Text[ russian ] = "Âêëş÷èòü íóìåğàöèş";
         Text[ polish ] = "W³¹cz numeracjê";
-        Text[ japanese ] = "”Ô†•t‚¯‚ğµİ‚É‚·‚é(~S)";
-        Text[ chinese_traditional ] = "Åã¥Ü½s¸¹(~S)";
+        Text[ japanese ] = "ç•ªå·ä»˜ã‘ã‚’ã‚ªãƒ³ã«ã™ã‚‹(~S)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºç·¨è™Ÿ(~S)";
         Text[ arabic ] = "ÅÙåÇÑ ÇáÊÑŞíã";
         Text[ greek ] = "Åíåñãïğïßçóç áñßèìçóçò";
-        Text[ korean ] = "¹øÈ£¸Å±â±â Àû¿ë(~S)";
+        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° í‘œì‹œ(~S)";
         Text[ turkish ] = "~Numaralamayı etkinleştir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mostrar ~numeración";
+        Text[ catalan ] = "Mostra ~numeració";
         Text[ finnish ] = "~Näytä numerointi";
+        Text[ thai ] = "à¹~à¸ªà¸”à¸‡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
     };
     FixedText FT_CHAR_STYLE
     {
@@ -122,21 +123,22 @@ TabPage TP_LINENUMBERING
         Text [ danish ] = "Tegntypografi" ;
         Text [ italian ] = "~Modello di carattere" ;
         Text [ spanish ] = "Est~ilo de caracteres" ;
-        Text [ french ] = "Style de ~caractères" ;
+        Text [ french ] = "Style de caractères" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
         Text [ portuguese ] = "~Estilos de caracteres" ;
-        Text[ chinese_simplified ] = "×Ö·ûÑùÊ½(~C)";
-        Text[ russian ] = "Ñòèëü çíàêîâ";
+        Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼(~C)";
+        Text[ russian ] = "Ñòèëü ñèìâîëà";
         Text[ polish ] = "Styl znaku";
-        Text[ japanese ] = "•¶š½À²Ù(~C)";
-        Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡(~C)";
+        Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«(~C)";
+        Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼(~C)";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ À¯Çü(~C)";
+        Text[ korean ] = "ë¬¸ì ìŠ¤íƒ€ì¼(~C)";
         Text[ turkish ] = "~Karakter biçimi";
         Text[ language_user1 ] = "All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
-        Text[ catalan ] = "Est~ilo de caracteres";
-        Text[ finnish ] = "~Merkistön tyyli";
+        Text[ catalan ] = "Est~il de caràcters";
+        Text[ finnish ] = "~Merkkityyli";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -161,18 +163,19 @@ TabPage TP_LINENUMBERING
         Text [ french ] = "~Format" ;
         Text [ dutch ] = "~Opmaak" ;
         Text [ portuguese ] = "~Formato" ;
-        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
         Text[ russian ] = "Ôîğìàò";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "‘®(~O)";
-        Text[ chinese_traditional ] = "®æ¦¡(~O)";
+        Text[ japanese ] = "æ›¸å¼(~O)";
+        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ìïñ~öŞ";
-        Text[ korean ] = "¼­½Ä(~O)";
+        Text[ korean ] = "ì„œì‹(~O)";
         Text[ turkish ] = "~Format";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Formato";
-        Text[ finnish ] = "~Muotoile";
+        Text[ catalan ] = "F~ormat";
+        Text[ finnish ] = "M~uotoilu";
+        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
     };
     ListBox LB_FORMAT
     {
@@ -191,23 +194,24 @@ TabPage TP_LINENUMBERING
         Text [ portuguese_brazilian ] = "Position" ;
         Text [ swedish ] = "~Position" ;
         Text [ danish ] = "Placering" ;
-        Text [ italian ] = "~Posizione" ;
+        Text [ italian ] = "Posizione" ;
         Text [ spanish ] = "~Posición" ;
-        Text [ french ] = "~Position" ;
+        Text [ french ] = "Position" ;
         Text [ dutch ] = "~Positie" ;
         Text [ portuguese ] = "~Posição" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ";
-        Text[ russian ] = "Ïîçèöèÿ";
+        Text[ chinese_simplified ] = "ä½ç½®";
+        Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ˆÊ’u";
-        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ japanese ] = "ä½ç½®";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Posición";
+        Text[ catalan ] = "~Posició";
         Text[ finnish ] = "Sijainti";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     ListBox LB_POS
     {
@@ -247,8 +251,8 @@ TabPage TP_LINENUMBERING
         {
             < "Till vänster" ; > ;
             < "Till höger" ; > ;
-            < "Innanför" ; > ;
-            < "Utanför" ; > ;
+            < "Inre" ; > ;
+            < "Yttre" ; > ;
         };
         stringlist [ danish ] =
         {
@@ -275,8 +279,8 @@ TabPage TP_LINENUMBERING
         {
             < "À gauche" ; > ;
             < "À droite" ; > ;
-            < "A l'intérieur" ; > ;
-            < "A l'extérieur" ; > ;
+            < "À l'intérieur" ; > ;
+            < "À l'extérieur" ; > ;
         };
         stringlist [ dutch ] =
         {
@@ -294,10 +298,10 @@ TabPage TP_LINENUMBERING
         };
     StringList [ chinese_simplified ] =
     {
-            < "×ó" ; > ;
-        < "ÓÒ" ; > ;
-        < "ÄÚ" ; > ;
-        < "Íâ" ; > ;
+            < "å·¦" ; > ;
+        < "å³" ; > ;
+        < "å†…" ; > ;
+        < "å¤–" ; > ;
     };
     StringList [ russian ] =
     {
@@ -315,17 +319,17 @@ TabPage TP_LINENUMBERING
     };
     StringList [ japanese ] =
     {
-            < "¶" ; > ;
-        < "‰E" ; > ;
-        < "“à‘¤" ; > ;
-        < "ŠO‘¤" ; > ;
+            < "å·¦" ; > ;
+        < "å³" ; > ;
+        < "å†…å´" ; > ;
+        < "å¤–å´" ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¥ª" ; > ;
-        < "¥k" ; > ;
-        < "¤º" ; > ;
-        < "¥~" ; > ;
+            < "å·¦" ; > ;
+        < "å³" ; > ;
+        < "å…§" ; > ;
+        < "å¤–" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -343,10 +347,10 @@ TabPage TP_LINENUMBERING
     };
     StringList [ korean ] =
     {
-            < "¿ŞÂÊ" ; > ;
-        < "¿À¸¥ÂÊ" ; > ;
-        < "³»ºÎ" ; > ;
-        < "¿ÜºÎ" ; > ;
+            < "ì™¼ìª½" ; > ;
+        < "ì˜¤ë¥¸ìª½" ; > ;
+        < "ë‚´ë¶€" ; > ;
+        < "ì™¸ë¶€" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -364,8 +368,8 @@ TabPage TP_LINENUMBERING
     };
     StringList [ catalan ] =
     {
-            < "Izquierda" ; > ;
-        < "Derecha" ; > ;
+            < "Esquerra" ; > ;
+        < "Dreta" ; > ;
         < "Interior" ; > ;
         < "Exterior" ; > ;
     };
@@ -375,6 +379,13 @@ TabPage TP_LINENUMBERING
         < "Oikea" ; > ;
         < "Sisempi" ; > ;
         < "ulompi" ; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "à¸‹à¹‰à¸²à¸¢" ; > ;
+        < "à¸‚à¸§à¸²" ; > ;
+        < "à¸”à¹‰à¸²à¸™à¹ƒà¸™" ; > ;
+        < "à¸”à¹‰à¸²à¸™à¸™à¸­à¸" ; > ;
     };
     };
     FixedText FT_OFFSET
@@ -389,21 +400,22 @@ TabPage TP_LINENUMBERING
         Text [ danish ] = "Afstand" ;
         Text [ italian ] = "Distan~za" ;
         Text [ spanish ] = "E~spacio" ;
-        Text [ french ] = "~Écart" ;
+        Text [ french ] = "Écart" ;
         Text [ dutch ] = "~Afstand" ;
         Text [ portuguese ] = "Es~paçamento" ;
-        Text[ chinese_simplified ] = "¼ä¸ô";
-        Text[ russian ] = "Ğàññòîÿíèå";
+        Text[ chinese_simplified ] = "é—´éš”";
+        Text[ russian ] = "Ğàññòî~ÿíèå";
         Text[ polish ] = "Odstêp";
-        Text[ japanese ] = "ŠÔŠu";
+        Text[ japanese ] = "ä½™ç™½";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "¶¡¹j";
+        Text[ chinese_traditional ] = "é–“éš”";
         Text[ arabic ] = "ÇáÊÈÇÚÏ";
         Text[ greek ] = "~Áğüóôáóç";
-        Text[ korean ] = "°£°İ";
+        Text[ korean ] = "ê°„ê²©";
         Text[ turkish ] = "~Uzaklık";
-        Text[ catalan ] = "E~spacio";
-        Text[ finnish ] = "Objektivälit";
+        Text[ catalan ] = "Espaiat";
+        Text[ finnish ] = "Välit";
+        Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
     };
     MetricField MF_OFFSET
     {
@@ -433,22 +445,23 @@ TabPage TP_LINENUMBERING
         Text [ swedish ] = "~Intervall" ;
         Text [ danish ] = "Interval" ;
         Text [ italian ] = "I~ntervallo" ;
-        Text [ spanish ] = "~Intervalo" ;
+        Text [ spanish ] = "Intervalo" ;
         Text [ french ] = "~Intervalle" ;
         Text [ dutch ] = "~Interval" ;
         Text [ portuguese ] = "~Intervalo" ;
-        Text[ chinese_simplified ] = "Çø¼ä";
+        Text[ chinese_simplified ] = "åŒºé—´";
         Text[ russian ] = "Èíòåğâàë";
         Text[ polish ] = "Przedzia³";
-        Text[ japanese ] = "”Ô†•t‚¯‚ÌŠÔŠu";
-        Text[ chinese_traditional ] = "°Ï¶¡";
+        Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®é–“éš”";
+        Text[ chinese_traditional ] = "å€é–“";
         Text[ arabic ] = "ÇáİÇÕá";
         Text[ greek ] = "ÄéÜóôçìá";
-        Text[ korean ] = "±¸°£";
+        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ê°„ê²©";
         Text[ turkish ] = "~Aralık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Intervalo";
+        Text[ catalan ] = "Interval";
         Text[ finnish ] = "Väli";
+        Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡";
     };
     NumericField NF_NUM_INVERVAL
     {
@@ -480,18 +493,19 @@ TabPage TP_LINENUMBERING
         Text [ french ] = "lignes" ;
         Text [ dutch ] = "Regels" ;
         Text [ portuguese ] = "Linhas" ;
-        Text[ chinese_simplified ] = "ĞĞ";
+        Text[ chinese_simplified ] = "è¡Œ";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "s";
-        Text[ chinese_traditional ] = "¦æ";
+        Text[ japanese ] = "è¡Œ";
+        Text[ chinese_traditional ] = "è¡Œ";
         Text[ arabic ] = "ÃÓØÑ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "Çà";
+        Text[ korean ] = "í–‰";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Líneas";
-        Text[ finnish ] = "viivat";
+        Text[ catalan ] = "Línies";
+        Text[ finnish ] = "rivit";
+        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
     };
     FixedLine FL_DISPLAY
     {
@@ -502,24 +516,25 @@ TabPage TP_LINENUMBERING
         Text [ english_us ] = "View" ;
         Text [ portuguese_brazilian ] = "Anzeige" ;
         Text [ swedish ] = "Visa" ;
-        Text [ danish ] = "Vis" ;
+        Text [ danish ] = "Visning" ;
         Text [ italian ] = "Visualizzazione" ;
         Text [ spanish ] = "Visualización" ;
         Text [ french ] = "Affichage" ;
         Text [ dutch ] = "Weergave" ;
-        Text [ portuguese ] = "Vista" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾";
+        Text [ portuguese ] = "Visualização" ;
+        Text[ chinese_simplified ] = "æ˜¾ç¤º";
         Text[ russian ] = "Ïîêàç";
         Text[ polish ] = "Wyœwietlenie";
-        Text[ japanese ] = "•\\¦";
-        Text[ chinese_traditional ] = "Åã¥Ü";
+        Text[ japanese ] = "è¡¨ç¤º";
+        Text[ chinese_traditional ] = "é¡¯ç¤º";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞñïâïëŞ";
-        Text[ korean ] = "º¸±â";
+        Text[ korean ] = "ë³´ê¸°";
         Text[ turkish ] = "Görünüm";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Visualización";
+        Text[ catalan ] = "Visualització";
         Text[ finnish ] = "Näytä";
+        Text[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡";
     };
     FixedText FT_DIVISOR
     {
@@ -534,20 +549,21 @@ TabPage TP_LINENUMBERING
         Text [ danish ] = "Tekst" ;
         Text [ italian ] = "T~esto" ;
         Text [ spanish ] = "Te~xto" ;
-        Text [ french ] = "~Texte" ;
+        Text [ french ] = "Texte" ;
         Text [ dutch ] = "~Tekst" ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö";
+        Text[ chinese_simplified ] = "æ–‡å­—";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "Ã·½Ä";
-        Text[ chinese_traditional ] = "¤å¦r";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ";
+        Text[ chinese_traditional ] = "æ–‡å­—";
         Text[ arabic ] = "ÇáäÕ";
         Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®";
+        Text[ korean ] = "í…ìŠ¤íŠ¸";
         Text[ turkish ] = "M~etin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Te~xto";
+        Text[ catalan ] = "Text";
         Text[ finnish ] = "Teksti";
+        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     Edit ED_DIVISOR
     {
@@ -569,21 +585,22 @@ TabPage TP_LINENUMBERING
         Text [ danish ] = "Alle" ;
         Text [ italian ] = "~Ogni" ;
         Text [ spanish ] = "Ca~da" ;
-        Text [ french ] = "~Toutes les" ;
+        Text [ french ] = "Toutes les" ;
         Text [ dutch ] = "~Alle" ;
         Text [ portuguese ] = "Tu~do" ;
-        Text[ chinese_simplified ] = "Ã¿";
+        Text[ chinese_simplified ] = "æ¯";
         Text[ russian ] = "Âñå";
         Text[ polish ] = "Co";
-        Text[ japanese ] = "ŠÔŠu";
-        Text[ chinese_traditional ] = "¨C";
+        Text[ japanese ] = "é–“éš”";
+        Text[ chinese_traditional ] = "æ¯";
         Text[ arabic ] = "ßá";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "ÊÜèå";
-        Text[ korean ] = "¸ğµç";
+        Text[ korean ] = "ê°„ê²©";
         Text[ turkish ] = "~Tümü";
-        Text[ catalan ] = "Ca~da";
+        Text[ catalan ] = "Cada";
         Text[ finnish ] = "Toistoväli";
+        Text[ thai ] = "à¸—à¸¸à¸ à¹†";
     };
     NumericField NF_DIV_INTERVAL
     {
@@ -616,18 +633,19 @@ TabPage TP_LINENUMBERING
         Text [ french ] = "lignes" ;
         Text [ dutch ] = "Regels" ;
         Text [ portuguese ] = "Linhas" ;
-        Text[ chinese_simplified ] = "ĞĞ";
+        Text[ chinese_simplified ] = "è¡Œ";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "s";
-        Text[ chinese_traditional ] = "¦æ";
+        Text[ japanese ] = "è¡Œ";
+        Text[ chinese_traditional ] = "è¡Œ";
         Text[ arabic ] = "ÃÓØÑ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "Çà";
+        Text[ korean ] = "í–‰";
         Text[ turkish ] = "Satır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Líneas";
-        Text[ finnish ] = "Viivat";
+        Text[ catalan ] = "Línies";
+        Text[ finnish ] = "Rivit";
+        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
     };
     FixedLine FL_DIVISOR
     {
@@ -642,20 +660,21 @@ TabPage TP_LINENUMBERING
         Text [ italian ] = "Separatore" ;
         Text [ spanish ] = "Separador" ;
         Text [ french ] = "Séparateur" ;
-        Text [ dutch ] = "Deelteken" ;
+        Text [ dutch ] = "Scheidingsteken" ;
         Text [ portuguese ] = "Separador" ;
-        Text[ chinese_simplified ] = "·Ö¸ô·û";
+        Text[ chinese_simplified ] = "åˆ†éš”ç¬¦";
         Text[ russian ] = "Ğàçäåëèòåëü";
         Text[ polish ] = "Separator";
-        Text[ japanese ] = "dØ‚è";
-        Text[ chinese_traditional ] = "¤À¹j²Å";
+        Text[ japanese ] = "åŒºåˆ‡ã‚Š";
+        Text[ chinese_traditional ] = "åˆ†éš”ç¬¦";
         Text[ arabic ] = "ÇáİÇÕá";
         Text[ greek ] = "Äéáéñİôçò";
-        Text[ korean ] = "±¸ºĞÀÚ";
+        Text[ korean ] = "êµ¬ë¶„ ê¸°í˜¸";
         Text[ turkish ] = "Ayırma işareti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Separador";
         Text[ finnish ] = "Erotin";
+        Text[ thai ] = "à¸•à¸±à¸§à¹à¸¢à¸";
     };
     CheckBox CB_COUNT_EMPTYLINES
     {
@@ -668,23 +687,24 @@ TabPage TP_LINENUMBERING
         Text [ portuguese_brazilian ] = "Leerzeilen" ;
         Text [ swedish ] = "T~omma rader" ;
         Text [ danish ] = "Tomme rækker" ;
-        Text [ italian ] = "~Righe vuote" ;
+        Text [ italian ] = "Righe vuote" ;
         Text [ spanish ] = "Líneas en ~blanco" ;
         Text [ french ] = "~Lignes inutilisées" ;
         Text [ dutch ] = "~Tussenregels" ;
         Text [ portuguese ] = "Linhas em ~branco" ;
-        Text[ chinese_simplified ] = "¿ÕĞĞ";
+        Text[ chinese_simplified ] = "ç©ºè¡Œ";
         Text[ russian ] = "Ïóñòûå ñòğîêè";
         Text[ polish ] = "Spacje";
-        Text[ japanese ] = "‹ó”’‚Ìs";
-        Text[ chinese_traditional ] = "ªÅ¦æ";
+        Text[ japanese ] = "ç©ºç™½ã®è¡Œ";
+        Text[ chinese_traditional ] = "ç©ºè¡Œ";
         Text[ arabic ] = "ÇáÃÓØÑ ÇáİÇÑÛÉ";
         Text[ greek ] = "Êåíİò ãñáììİò";
-        Text[ korean ] = "ºó ÁÙ";
+        Text[ korean ] = "ë¹ˆ ì¤„";
         Text[ turkish ] = "B~oş satırlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Líneas en ~blanco";
+        Text[ catalan ] = "Línies en ~blanc";
         Text[ finnish ] = "Tyhjät rivit";
+        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¸§à¹ˆà¸²à¸‡";
     };
     CheckBox CB_COUNT_FRAMELINES
     {
@@ -698,22 +718,23 @@ TabPage TP_LINENUMBERING
         Text [ swedish ] = "Rader i te~xtram" ;
         Text [ danish ] = "Rækker i tekstboks" ;
         Text [ italian ] = "Rig~he nella cornice di testo" ;
-        Text [ spanish ] = "Líneas en ma~rco de texto" ;
+        Text [ spanish ] = "Líneas en marco de texto" ;
         Text [ french ] = "Lignes dans le cadre texte" ;
         Text [ dutch ] = "~Regels in tekstkaders" ;
         Text [ portuguese ] = "Linhas na ~moldura do texto" ;
-        Text[ chinese_simplified ] = "ÎÄ±¾¿òÄÚµÄĞĞ";
-        Text[ russian ] = "Ñòğîêè â òåêñòîâîé ğàìêå";
+        Text[ chinese_simplified ] = "æ–‡æœ¬æ¡†å†…çš„è¡Œ";
+        Text[ russian ] = "Ñòğîêè âî âğåçêå";
         Text[ polish ] = "Wi~ersze w ramce tekstowej";
-        Text[ japanese ] = "Ã·½Ä˜g“à‚Ìs";
-        Text[ chinese_traditional ] = "¤å¦r¤è¶ô¤ºªº¦æ";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆæ å†…ã®è¡Œ";
+        Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Šå…§çš„è¡Œ";
         Text[ arabic ] = "ÃÓØÑ İí ßÇÏÑ ÇáäÕ";
         Text[ greek ] = "Ãñáììİò óå ğëáßóéï êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓÀÇ Çà";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ í”„ë ˆì„ì˜ ì¤„";
         Text[ turkish ] = "Metin kutusu içindeki sa~tırlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Líneas en ma~rco de texto";
+        Text[ catalan ] = "Línies en ma~rc de text";
         Text[ finnish ] = "Tekstikehikko";
+        Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”à¹ƒà¸™à¸à¸£à¸­à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     CheckBox CB_RESTART_PAGE
     {
@@ -724,24 +745,25 @@ TabPage TP_LINENUMBERING
         TabStop = TRUE;
         Text[ english_us ] = "~Restart every new page";
         Text[ portuguese ] = "~Reiniciar no início de página";
-        Text[ russian ] = "~Ïåğåçàïóñê ñ íà÷àëà ñòğàíèöû";
+        Text[ russian ] = "~Ïåğåçàïóñê ñ êàæäîé íîâîé ñòğàíèöû";
         Text[ greek ] = "Åğáíåêêß~íçóç óôçí áñ÷Ş ôçò óåëßäáò";
         Text[ dutch ] = "~Opnieuw starten bij paginabegin";
         Text[ french ] = "~Reprendre au début des pages";
         Text[ spanish ] = "~Reiniciar al comienzo de página";
-        Text[ italian ] = "~Riavvia a inizio pagina";
+        Text[ italian ] = "Riavvia a inizio pagina";
         Text[ danish ] = "Genstart på hver ny side";
         Text[ swedish ] = "~Börja om på varje ny sida";
         Text[ polish ] = "Ponowne uruchomienie na pocz¹tku strony";
         Text[ portuguese_brazilian ] = "~Restart each new page";
-        Text[ japanese ] = "Íß°¼Ş‚²‚Æ‚É‚P‚©‚ç(~R)";
-        Text[ korean ] = "ÂÊ Ã¹ ºÎºĞ¿¡¼­ ´Ù½Ã ½ÃÀÛ(~R)";
-        Text[ chinese_simplified ] = "ÔÚÒ³Ê×ÖØĞÂ¿ªÊ¼(~R)";
-        Text[ chinese_traditional ] = "±q­¶­º­«·s¶}©l(~R)";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã”ã¨ã«ï¼‘ã‹ã‚‰(~R)";
+        Text[ korean ] = "í˜ì´ì§€ ì²« ë¶€ë¶„ì—ì„œ ë‹¤ì‹œ ì‹œì‘(~R)";
+        Text[ chinese_simplified ] = "åœ¨é¡µçš„èµ·å§‹ä½ç½®é‡æ–°å¼€å§‹(~R)";
+        Text[ chinese_traditional ] = "å¾é çš„èµ·å§‹ä½ç½®é‡æ–°é–‹å§‹(~R)";
         Text[ turkish ] = "~Restart each new page";
         Text[ arabic ] = "ÅÚÇÏÉ ÇáÈÏÁ ÚäÏ ßá ÕİÍÉ ÌÏíÏÉ";
-        Text[ catalan ] = "~Reiniciar al comienzo de página";
+        Text[ catalan ] = "~Reinicia a l'inici de pàgina";
         Text[ finnish ] = "~Aloita jokainen uusi sivu uudelleen";
+        Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡à¸—à¸¸à¸ à¹† à¸«à¸™à¹‰à¸²à¹ƒà¸«à¸¡à¹ˆà¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡";
     };
     FixedLine FL_COUNT
     {
@@ -758,18 +780,19 @@ TabPage TP_LINENUMBERING
         Text [ french ] = "Compter" ;
         Text [ dutch ] = "Tellen" ;
         Text [ portuguese ] = "Contar" ;
-        Text[ chinese_simplified ] = "¼ÆÊı";
-        Text[ russian ] = "Ó÷èòûâàòü";
+        Text[ chinese_simplified ] = "è®¡æ•°";
+        Text[ russian ] = "Ñ÷èòàòü";
         Text[ polish ] = "Policz";
-        Text[ japanese ] = "”‚¦‚é";
-        Text[ chinese_traditional ] = "­p¼Æ";
+        Text[ japanese ] = "æ•°ãˆã‚‹";
+        Text[ chinese_traditional ] = "è¨ˆæ•¸";
         Text[ arabic ] = "ÚÏ";
         Text[ greek ] = "Êáôáìİôñçóç";
-        Text[ korean ] = "¼ö¸¦ ¼¼±â";
+        Text[ korean ] = "ìˆ˜ë¥¼ ì„¸ê¸°";
         Text[ turkish ] = "Say";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contar";
-        Text[ finnish ] = "Laske";
+        Text[ catalan ] = "Compte";
+        Text[ finnish ] = "Lukumäärä";
+        Text[ thai ] = "à¸™à¸±à¸š";
     };
     Text [ english_us ] = "Line Numbering" ;
     Text [ portuguese_brazilian ] = "Zeilennumerierung" ;
@@ -780,19 +803,35 @@ TabPage TP_LINENUMBERING
     Text [ french ] = "Numérotation des lignes" ;
     Text [ dutch ] = "Regelnummering" ;
     Text [ portuguese ] = "Numeração de linhas" ;
-    Text[ chinese_simplified ] = "ĞĞ±àºÅ";
+    Text[ chinese_simplified ] = "è¡Œç¼–å·";
     Text[ russian ] = "Íóìåğàöèÿ ñòğîê";
     Text[ polish ] = "Numeracja wierszy";
-    Text[ japanese ] = "s”Ô†•t‚¯";
-    Text[ chinese_traditional ] = "¦æ½s¸¹";
+    Text[ japanese ] = "è¡Œç•ªå·ä»˜ã‘";
+    Text[ chinese_traditional ] = "è¡Œç·¨è™Ÿ";
     Text[ arabic ] = "ÊÑŞíã ÇáÃÓØÑ";
     Text[ greek ] = "Áñßèìçóç ãñáììşí";
-    Text[ korean ] = "Çà ¹øÈ£¸Å±â±â";
+    Text[ korean ] = "ì¤„ ë²ˆí˜¸ ë§¤ê¸°ê¸°";
     Text[ turkish ] = "Satır numaralaması";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Numeración de líneas";
+    Text[ catalan ] = "Numeració de línies";
     Text[ finnish ] = "Rivien numerointi";
+    Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸šà¸£à¸£à¸—à¸±à¸”";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

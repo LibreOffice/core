@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-12-12 16:37:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,12 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                 if ( nId == SID_CUT )
                     pTransfer->Cut();
                 else
+                {
+                    const BOOL bLockedView = rSh.IsViewLocked();
+                    rSh.LockView( TRUE );    //lock visible section
                     pTransfer->Copy();
+                    rSh.LockView( bLockedView );
+                }
                 break;
             }
             return;
@@ -568,6 +573,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             DBG_ERROR("falscher Dispatcher");
             return;
     }
+    rReq.Done();
 }
 
 /*--------------------------------------------------------------------

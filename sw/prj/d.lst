@@ -1,16 +1,13 @@
 ..\inc\sw.lst %_DEST%\inc%_EXT%\sw.lst
-mkdir: %_DEST%\inc\%_EXT%\sw
-mkdir: %_DEST%\inc\%_EXT%\uno
-mkdir: %_DEST%\inc\%_EXT%\uno\one
-mkdir: %_DEST%\ucr\sw
+mkdir: %_DEST%\inc%_EXT%\sw
+mkdir: %_DEST%\inc%_EXT%\uno
+mkdir: %_DEST%\inc%_EXT%\uno\one
 ..\inc\swinter.h %_DEST%\ODK\inc%_EXT%\swinter.h
 ..\inc\orntenum.hxx %_DEST%\inc%_EXT%\sw\orntenum.hxx
 ..\inc\horiornt.hxx %_DEST%\inc%_EXT%\sw\horiornt.hxx
-..\%__SRC%\inc\swinter.h %_DEST%\ODK\inc%_EXT%\swinter.h
-..\%__SRC%\misc\swinter.c %_DEST%\ODK\src%_EXT%\swinter.c
 ..\%__SRC%\bin\sweb.res %_DEST%\bin%_EXT%\sweb.res
 ..\%__SRC%\bin\*.ex$ %_DEST%\bin%_EXT%
-..\xml\*.xml %_DEST%\xml\*.xml
+..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 touch: ..\%__SRC%\misc\sw.hid %_DEST%\bin%_EXT%\sw.hid
 ..\%__SRC%\bin\soffice.pdb %_DEST%\bin%_EXT%\soffice.pdb
 ..\%__SRC%\bin\swslots.tlb %_DEST%\bin%_EXT%\swslots.tlb
@@ -19,7 +16,6 @@ touch: ..\%__SRC%\misc\sw.hid %_DEST%\bin%_EXT%\sw.hid
 ..\%__SRC%\bin\sw?????.res %_DEST%\bin%_EXT%\sw?????.res
 ..\%__SRC%\bin\sw?????.res %_DEST%\bin%_EXT%\sw?????.res
 ..\%__SRC%\lib\swinter.lib %_DEST%\lib%_EXT%\swinter.lib
-..\%__SRC%\lib\swinter.lib %_DEST%\ODK\lib%_EXT%\swinter.lib
 ..\%__SRC%\misc\sw.csv %_DEST%\inc%_EXT%\sw.csv
 ..\%__SRC%\lib\swlib.lib %_DEST%\lib%_EXT%\swlib.lib
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
@@ -49,8 +45,6 @@ hedabu: ..\%__SRC%\inc\sw\swtxtsel.h %_DEST%\inc%_EXT%\uno\one\swtxtsel.h
 hedabu: ..\%__SRC%\inc\sw\swtxview.h %_DEST%\inc%_EXT%\uno\one\swtxview.h
 hedabu: ..\%__SRC%\inc\sw\swservc.h %_DEST%\inc%_EXT%\uno\one\swservc.h
 hedabu: ..\%__SRC%\inc\sw\swmod.h %_DEST%\inc%_EXT%\uno\one\swmod.h
-
-..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\sw\*.ucr
 
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mib $ $Date: 2002-12-05 14:10:33 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include <svx/AccessibleShape.hxx>
+#endif
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
 #endif
 
 #if defined DEBUG && defined TEST_MIB
@@ -532,31 +535,8 @@ void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
         rEvent.Source = xThis;
     }
 
-    ::cppu::OInterfaceIteratorHelper aIter( aAccessibleEventListeners );
-    while( aIter.hasMoreElements() )
-    {
-        Reference < XAccessibleEventListener > xListener( aIter.next(),
-                                                         UNO_QUERY );
-        if( xListener.is() ) // TODO: test is unneccessary soon
-        {
-            try
-            {
-                xListener->notifyEvent( rEvent );
-            }
-            catch( ::com::sun::star::uno::RuntimeException& r )
-            {
-#ifdef DEBUG
-                ByteString aError( "Runtime exception caught for event" );
-                aError += ByteString::CreateFromInt32( rEvent.EventId );
-                aError += ".:\n";
-                aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-                DBG_ERROR( aError.GetBuffer() );
-#endif
-//              aIter.remove();
-            }
-        }
-    }
-
+    if (nClientId)
+        comphelper::AccessibleEventNotifier::addEvent( nClientId, rEvent );
 }
 
 void SwAccessibleContext::FireVisibleDataEvent()
@@ -615,10 +595,10 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
                                           const SwFrm *pF ) :
     SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
                        pM->GetShell()->IsPreView() ),
-    aAccessibleEventListeners( aListenerMutex ),
     pMap( pM ),
     nRole( nR ),
-    bDisposing( sal_False )
+    bDisposing( sal_False ),
+    nClientId(0)
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
@@ -631,10 +611,10 @@ SwAccessibleContext::SwAccessibleContext( SwAccessibleMap *pM,
     SwAccessibleFrame( pM->GetVisArea().SVRect(), pF,
                        pM->GetShell()->IsPreView() ),
     sName( rName ),
-    aAccessibleEventListeners( aListenerMutex ),
     pMap( pM ),
     nRole( nR ),
-    bDisposing( sal_False )
+    bDisposing( sal_False ),
+    nClientId(0)
 {
     InitStates();
     DBG_MSG_CD( "constructed" )
@@ -816,7 +796,14 @@ void SAL_CALL SwAccessibleContext::addEventListener(
         throw (::com::sun::star::uno::RuntimeException)
 {
     DBG_MSG( "accessible event listener added" )
-    aAccessibleEventListeners.addInterface( xListener );
+
+    if (xListener.is())
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        if (!nClientId)
+            nClientId = comphelper::AccessibleEventNotifier::registerClient( );
+        comphelper::AccessibleEventNotifier::addEventListener( nClientId, xListener );
+    }
 }
 
 void SAL_CALL SwAccessibleContext::removeEventListener(
@@ -824,7 +811,21 @@ void SAL_CALL SwAccessibleContext::removeEventListener(
         throw (::com::sun::star::uno::RuntimeException)
 {
     DBG_MSG( "accessible event listener removed" )
-    aAccessibleEventListeners.removeInterface( xListener );
+
+    if (xListener.is())
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            comphelper::AccessibleEventNotifier::revokeClient( nClientId );
+            nClientId = 0;
+        }
+    }
 }
 
 static sal_Bool lcl_PointInRectangle(const awt::Point & aPoint,
@@ -866,8 +867,8 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
     Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
     if( !GetFrm()->IsRootFrm() )
     {
-        Point aLogPos( GetBounds( GetFrm() ).Pos() ); // twip rel to doc root
-        Point aPixPos( GetMap()->CoreToPixel( aLogPos ) );
+        SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
+        Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
         aPixPoint.X() += aPixPos.X();
         aPixPoint.Y() += aPixPos.Y();
     }
@@ -924,15 +925,20 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
     {
         ASSERT( GetShell()->IsPreView(), "empty page accessible?" );
         if( GetShell()->IsPreView() )
-            aLogBounds.SSize( GetMap()->GetPreViewPageSize() );
+        {
+            // OD 15.01.2003 #103492# - adjust method call <GetMap()->GetPreViewPageSize()>
+            sal_uInt16 nPageNum =
+                static_cast < const SwPageFrm * >( GetFrm() )->GetPhyPageNum();
+            aLogBounds.SSize( GetMap()->GetPreViewPageSize( nPageNum ) );
+        }
     }
     if( !aLogBounds.IsEmpty() )
     {
         aPixBounds = GetMap()->CoreToPixel( aLogBounds.SVRect() );
         if( !pParent->IsRootFrm() && bRelative)
         {
-            Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
+            SwRect aParentLogBounds( GetBounds( pParent ) ); // twip rel to doc root
+            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogBounds.SVRect() ).TopLeft() );
             aPixBounds.Move( -aParentPixPos.X(), -aParentPixPos.Y() );
         }
     }
@@ -1150,10 +1156,10 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     }
 
     // broadcast dispose event
+    if ( nClientId )
     {
-        EventObject aEvent;
-        aEvent.Source = xThis;
-        aAccessibleEventListeners.disposeAndClear( aEvent );
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
+        nClientId =  0;
         DBG_MSG_CD( "dispose" )
     }
 

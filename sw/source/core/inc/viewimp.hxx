@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: od $ $Date: 2002-12-10 14:16:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,6 @@
 #endif
 #include "swtypes.hxx"
 #include "swrect.hxx"
-// OD 04.12.2002 #103492#
-#include "previewdata.hxx"
 
 class ViewShell;
 class SwFlyFrm;
@@ -94,6 +92,14 @@ class SwAccessibleMap;
 class SdrObject;
 class Fraction;
 #endif
+// OD 12.12.2002 #103492#
+class SwPagePreviewLayout;
+// OD 15.01.2003 #103492#
+#ifndef _PREVWPAGE_HXX
+#include <prevwpage.hxx>
+#endif
+// OD 15.01.2003 #103492#
+#include <vector>
 
 class SwViewImp
 {
@@ -101,6 +107,9 @@ class SwViewImp
 
     friend class SwLayAction;   //Lay- und IdleAction tragen sich ein und aus.
     friend class SwLayIdle;
+
+    // OD 12.12.2002 #103492# - for paint of page preview
+    friend class SwPagePreviewLayout;
 
     ViewShell *pSh;             //Falls jemand einen Imp durchreicht und doch
                                 //mal eine ViewShell braucht hier die
@@ -143,8 +152,8 @@ class SwViewImp
     USHORT nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
 
-    // OD 27.11.2002 #103492#
-    CurrentPreviewData* mpCurrPreviewData;
+    // OD 12.12.2002 #103492#
+    SwPagePreviewLayout* mpPgPrevwLayout;
 
     /**
         Signal whether to stop printing.
@@ -284,16 +293,13 @@ public:
     void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
     USHORT  GetRestoreActions() const{return nRestoreActions;}
 
-    // OD 04.12.2002 #103492#
-    inline void InitPreviewData()
-    {
-        mpCurrPreviewData = new CurrentPreviewData;
-    }
+    // OD 12.12.2002 #103492#
+    void InitPagePreviewLayout();
 
-    // OD 04.12.2002 #103492#
-    inline CurrentPreviewData* CurrPrevwData()
+    // OD 12.12.2002 #103492#
+    inline SwPagePreviewLayout* PagePreviewLayout()
     {
-        return mpCurrPreviewData;
+        return mpPgPrevwLayout;
     }
 
 #ifdef ACCESSIBLE_LAYOUT
@@ -340,12 +346,12 @@ public:
                                           const SwFlyFrm *pFollow );
 
     // update data for accessible preview
-    void UpdateAccessiblePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
-                                  sal_Int16 nStartPage,
-                                  const Size& rPageSize,
-                                  const Point& rFreePoint,
-                                  const Fraction& rScale,
-                                     USHORT nSelectedPage );
+    // OD 15.01.2003 #103492# - change method signature due to new page preview
+    // functionality
+    void UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
+                                  const Fraction&  _rScale,
+                                  const SwPageFrm* _pSelectedPageFrm,
+                                  const Size&      _rPrevwWinSize );
 
     void InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage );
 

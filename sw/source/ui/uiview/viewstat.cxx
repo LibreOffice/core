@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 11:10:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _SVT_IMAGEITM_HXX
 #include <svtools/imageitm.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
@@ -444,6 +447,10 @@ void SwView::GetState(SfxItemSet &rSet)
                 rSet.Put(aImageItem);
             }
             break;
+            case FN_INSERT_FIELD_DATA_ONLY :
+                if(!bInMailMerge && !GetViewFrame()->HasChildWindow(nWhich))
+                    rSet.DisableItem(nWhich);
+            break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -469,6 +476,11 @@ void SwView::GetDrawState(SfxItemSet &rSet)
             else
             {
                 SfxAllEnumItem aEnum(SID_INSERT_DRAW, nDrawSfxId);
+                if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
+                {
+                    aEnum.DisableValue( SID_DRAW_CAPTION_VERTICAL );
+                    aEnum.DisableValue( SID_DRAW_TEXT_VERTICAL );
+                }
                 rSet.Put(aEnum);
             }
             break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: od $ $Date: 2002-12-06 16:25:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include "swregion.hxx"
 #include "dflyobj.hxx"
 #include "dview.hxx"
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
@@ -95,6 +95,11 @@
 #ifndef _ACCMAP_HXX
 #include <accmap.hxx>
 #endif
+#endif
+
+// OD 12.12.2002 #103492#
+#ifndef _PAGEPREVIEWLAYOUT_HXX
+#include <pagepreviewlayout.hxx>
 #endif
 
 /*************************************************************************
@@ -173,8 +178,8 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     pSdrPageView( 0 ),
     pDrawView( 0 ),
     nRestoreActions( 0 ),
-    // OD 04.12.2002 #103492#
-    mpCurrPreviewData( 0 )
+    // OD 12.12.2002 #103492#
+    mpPgPrevwLayout( 0 )
 #ifdef ACCESSIBLE_LAYOUT
     ,pAccMap( 0 )
 #endif
@@ -204,8 +209,8 @@ SwViewImp::~SwViewImp()
     delete pAccMap;
 #endif
 
-    // OD 04.12.2002 #103492#
-    delete mpCurrPreviewData;
+    // OD 12.12.2002 #103492#
+    delete mpPgPrevwLayout;
 
     //JP 29.03.96: nach ShowPage muss auch HidePage gemacht werden!!!
     if( pDrawView )
@@ -395,6 +400,19 @@ Color SwViewImp::GetRetoucheColor() const
     return aRet;
 }
 
+/** create page preview layout
+
+    OD 12.12.2002 #103492#
+
+    @author OD
+*/
+void SwViewImp::InitPagePreviewLayout()
+{
+    ASSERT( pSh->GetLayout(), "no layout - page preview layout can not be created.");
+    if ( pSh->GetLayout() )
+        mpPgPrevwLayout = new SwPagePreviewLayout( *pSh, *(pSh->GetLayout()) );
+}
+
 #ifdef ACCESSIBLE_LAYOUT
 void SwViewImp::UpdateAccessible()
 {
@@ -503,17 +521,15 @@ void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
     } while ( pTmp != pVSh );
 }
 
-void SwViewImp::UpdateAccessiblePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
-                                         sal_Int16 nStartPage,
-                                         const Size& rPageSize,
-                                         const Point& rFreePoint,
-                                         const Fraction& rScale,
-                                           sal_uInt16 nSelectedPage )
+// OD 15.01.2003 #103492# - method signature change due to new page preview functionality
+void SwViewImp::UpdateAccessiblePreview( const std::vector<PrevwPage*>& _rPrevwPages,
+                                         const Fraction&  _rScale,
+                                         const SwPageFrm* _pSelectedPageFrm,
+                                         const Size&      _rPrevwWinSize )
 {
     if( IsAccessible() )
-        GetAccessibleMap().UpdatePreview( nRow, nColumn, nStartPage,
-                                          rPageSize, rFreePoint, rScale,
-                                             nSelectedPage );
+        GetAccessibleMap().UpdatePreview( _rPrevwPages, _rScale,
+                                          _pSelectedPageFrm, _rPrevwWinSize );
 }
 
 void SwViewImp::InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage )

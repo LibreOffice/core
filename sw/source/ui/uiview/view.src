@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:37:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ QueryBox DLG_WRAP
     MESSAGE [ portuguese ] = "Deseja continuar com a verificação no início do documento?" ;
     MESSAGE [ finnish ] = "Haluatko jatkaa tarkistusta asiakirjan alusta?" ;
     MESSAGE [ danish ] = "Vil du fortsætte kontrollen fra dokumentets start?" ;
-    MESSAGE [ french ] = "Voulez-vous continuer la vérification depuis le début du document?" ;
+    MESSAGE [ french ] = "Continuer la vérification au début du document ?" ;
     MESSAGE [ swedish ] = "Vill du fortsätta kontrollen i början på dokumentet?" ;
     MESSAGE [ dutch ] = "Wilt u dat de spellingcontrole wordt voortgezet bij het begin van het document?" ;
     MESSAGE [ spanish ] = "¿Desea continuar la revisión desde el comienzo del documento?" ;
@@ -123,7 +123,7 @@ QueryBox DLG_BODY
     MESSAGE [ italian ] = "Controllare il testo principale?" ;
     MESSAGE [ portuguese_brazilian ] = "Deseja verificar o corpo do documento?" ;
     MESSAGE [ portuguese ] = "Deseja verificar o texto principal?" ;
-    MESSAGE [ finnish ] = "Haluatko tarkistaa p??tekstin?" ;
+    MESSAGE [ finnish ] = "Haluatko tarkistaa päätekstin?" ;
     MESSAGE [ danish ] = "Vil du kontrollere brødteksten?" ;
     MESSAGE [ french ] = "Voulez-vous vérifier le texte principal?" ;
     MESSAGE [ swedish ] = "Vill du kontrollera huvudtexten?" ;
@@ -131,7 +131,7 @@ QueryBox DLG_BODY
     MESSAGE [ spanish ] = "¿Desea verificar el texto principal?" ;
     MESSAGE [ english_us ] = "Do you want to check the main text?" ;
     MESSAGE[ chinese_simplified ] = "æ‚¨è¦æ£€æŸ¥æ­£æ–‡å—ï¼Ÿ";
-    MESSAGE[ russian ] = "Âû õîòèòå ïğîâåğèòü ãëàâíûé òåêñò?";
+    MESSAGE[ russian ] = "Ïğîâåğèòü ãëàâíûé òåêñò?";
     MESSAGE[ polish ] = "Czy chcesz sprawdzaæ tekst g³ówny?";
     MESSAGE[ japanese ] = "æœ¬æ–‡ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¾ã™ã‹ã€‚";
     MESSAGE[ chinese_traditional ] = "æ‚¨è¦æª¢æŸ¥å…§æ–‡ï¹–";
@@ -154,20 +154,20 @@ QueryBox DLG_PRT_FIELDNAME
     MESSAGE [ portuguese_brazilian ] = "Option Show fieldname is checked.\nDo you want to print the document with fieldnames?" ;
     MESSAGE [ portuguese ] = "A opção 'Mostrar nome do campo' está activada.\nImprimir o documento com os nomes do campo?" ;
     MESSAGE [ french ] = "L'option Afficher le nom de champ est activée.\nVoulez-vous imprimer le document avec le nom de champ ?" ;
-    MESSAGE [ dutch ] = "Optie Veldnaam weergeven is actief.\nWilt u het document met de veldnaam afdrukken?" ;
+    MESSAGE [ dutch ] = "Optie 'Veldnaam weergeven' is actief.\nWilt u het document met de veldnaam afdrukken?" ;
     MESSAGE [ spanish ] = "La opción nombre de campo está activada. \n¿Desea imprimir el archivo con nombres de campo?" ;
     MESSAGE [ danish ] = "Vis feltnavn er aktiveret\nVil du udskrive dokumentet med feltnavn?" ;
     MESSAGE [ swedish ] = "Alternativet Visa fältnamn är aktiverat.\nVill du skriva ut dokumentet med fältnamn?" ;
     MESSAGE [ finnish ] = "Näytä kenttäkomennot -asetus on valittuna.\nHaluatko tulostaa asiakirjan niin, että kenttänimet näkyvät?" ;
     MESSAGE [ english_us ] = "Show field commands option is checked.\nDo you want to print the document with field names?" ;
     MESSAGE[ chinese_simplified ] = "å­—æ®µåç§°é€‰é¡¹è¿˜å¤„äºä½¿ç”¨çš„çŠ¶æ€ã€‚\næ‚¨è¦è¿åŒå­—æ®µåç§°ä¸€èµ·æ‰“å°è¿™ä¸ªæ–‡ä»¶å—ï¼Ÿ";
-    MESSAGE[ russian ] = "Ïàğàìåòğ 'Ïîêàçàòü èìÿ ïîëÿ' îòìå÷åí.\nÂû õîòèòå íàïå÷àòàòü äîêóìåíò ñ èìåíàìè ïîëÿ?";
+    MESSAGE[ russian ] = "Ïàğàìåòğ 'Ïîêàçàòü èìÿ ïîëÿ' óñòàíîâëåí.\nÍàïå÷àòàòü äîêóìåíò ñ èìåíàìè ïîëÿ?";
     MESSAGE[ polish ] = "Opcja Poka¿ nazwê pola jest uaktywiona.\nCzy chcesz wydrukowaæ ten dokument z nazw¹ pola?";
     MESSAGE[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ãªã£ã¦ã„ã¾ã™ã€‚\næ–‡æ›¸ã«ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã‚’å°åˆ·ã—ã¾ã™ã‹ã€‚";
     MESSAGE[ chinese_traditional ] = "æ¬„ä½åç¨±é¸é …é‚„è™•æ–¼ä½¿ç”¨ç‹€æ…‹ã€‚\næ‚¨è¦é€£åŒæ¬„ä½åç¨±ä¸€èµ·åˆ—å°é€™å€‹æª”æ¡ˆï¹–";
     MESSAGE[ arabic ] = "ÇáÎíÇÑ \"ÅÙåÇÑ ÇÓã ÇáÍŞá\" äÔØ.\nåá ÊÑíÏ ØÈÇÚÉ ÇáãÓÊäÏ ÈÃÓãÇÁ ÇáÍŞæá¿";
     MESSAGE[ greek ] = "Ç åğéëïãŞ üíïìá ğåäßïõ åßíáé åíåñãïğïéçìİíç.\nÈİëåôå íá åêôõğùèåß ôï İããñáöï ìáæß ìå ôá ïíüìáôá ôùí ğåäßùí;";
-    MESSAGE[ korean ] = "ì˜µì…˜ í•„ë“œ ì´ë¦„ í‘œì‹œê°€ í™œì„±í™”ë˜ì–´ ìˆìŠµë‹ˆë‹¤.\ní•„ë“œ ì´ë¦„ê³¼ í•¨ê»˜ ë¬¸ì„œë¥¼ ì¸ì‡„í•˜ê² ìŠµë‹ˆê¹Œ?";
+    MESSAGE[ korean ] = "ì˜µì…˜ í•„ë“œì˜ ì´ë¦„ í‘œì‹œê°€ í™œì„±í™”ë˜ì–´ ìˆìŠµë‹ˆë‹¤.\ní•„ë“œ ì´ë¦„ì„ ê°™ì´ ë¬¸ì„œì— ì¸ì‡„í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     MESSAGE[ turkish ] = "\"Alan adını görüntüle\" seçeneği etkin.\nBelgeyi alan adlarıyla yazdırmak istiyor musunuz?";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "L'opció Mostra les ordres de camp està activada. \nVoleu imprimir el document amb els noms de camp?";
@@ -197,7 +197,7 @@ QueryBox DLG_SPECIAL
     MESSAGE[ chinese_traditional ] = "æ‚¨è¦æª¢æŸ¥ç‰¹æ®Šå€åŸŸï¹–";
     MESSAGE[ arabic ] = "åá ÊÑíÏ ÇáÊÏŞíŞ İí ÇáãäÇØŞ ÇáÎÇÕÉ¿";
     MESSAGE[ greek ] = "Íá ãßíåé İëåã÷ïò ôùí åéäéêşí ğåñéï÷şí;";
-    MESSAGE[ korean ] = "íŠ¹ì •í•œ ì˜ì—­ì„ ê²€ì‚¬í•˜ê² ìŠµë‹ˆê¹Œ?";
+    MESSAGE[ korean ] = "íŠ¹ìˆ˜ ì˜ì—­ì„ ê²€ì‚¬í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     MESSAGE[ turkish ] = "Özel bölümler denetlensin mi?";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "Voleu revisar les regions especials?";
@@ -213,15 +213,15 @@ QueryBox DLG_THESAURUS
     MESSAGE [ italian ] = "Tale temine andrebbe evitato. Avviare il dizionario dei sinonimi?" ;
     MESSAGE [ portuguese_brazilian ] = "Por favor evite esta palavra!Iniciar thesaurus?" ;
     MESSAGE [ portuguese ] = "Evite esta palavra! Iniciar o dicionário de sinónimos?" ;
-    MESSAGE [ finnish ] = "T?m? sana esiintyy v?ltett?vien sanojen luettelossa! Avataanko synonyymisanasto?" ;
+    MESSAGE [ finnish ] = "Tämä sana esiintyy vältettävien sanojen luettelossa. Avataanko synonyymisanasto?" ;
     MESSAGE [ danish ] = "Undgå venligst dette ord! Vil du bruge synonymordbogen?" ;
     MESSAGE [ french ] = "Il vaudrait mieux éviter d'employer ce mot ! Souhaitez-vous consulter le dictionnaire des synonymes ?" ;
     MESSAGE [ swedish ] = "Undvik det här ordet! Starta synonymordlista?" ;
     MESSAGE [ dutch ] = "Dit woord niet gebruiken! Thesaurus starten?" ;
-    MESSAGE [ spanish ] = "¡Debería evitar esta palabra! ¿Iniciar búsqueda de sinónimos?" ;
+    MESSAGE [ spanish ] = "¡Evite esta palabra! ¿Iniciar búsqueda de sinónimos?" ;
     MESSAGE [ english_us ] = "This word appears in the list of words you want to avoid! Start thesaurus?" ;
     MESSAGE[ chinese_simplified ] = "æ‚¨åº”è¯¥é¿å…ä½¿ç”¨è¿™ä¸ªå­—ï¼æ‚¨è¦å¯åŠ¨åŒä¹‰è¯è¯å…¸å—ï¼Ÿ";
-    MESSAGE[ russian ] = "Óïîòğåáëåíèå ıòîãî ñëîâà Âû äîëæíû èçáåãàòü! Çàïóñòèòü òåçàóğóñ?";
+    MESSAGE[ russian ] = "Óïîòğåáëåíèå ıòîãî ñëîâà ñëåäóåò èçáåãàòü! Çàïóñòèòü òåçàóğóñ?";
     MESSAGE[ polish ] = "Unikaj tego s³owa! W³¹czyæ Tezaurus?";
     MESSAGE[ japanese ] = "ã“ã®å˜èªã®ä½¿ç”¨ã¯é¿ã‘ã¦ãã ã•ã„ã€‚é¡ç¾©èªè¾å…¸ã‚’é–‹å§‹ã—ã¾ã™ã‹ã€‚";
     MESSAGE[ chinese_traditional ] = "æ‚¨æ‡‰è©²é¿å…ä½¿ç”¨é€™å€‹å­—ï¹—æ‚¨è¦å•Ÿå‹•åŒç¾©è©è©å…¸å—ï¹–";
@@ -243,7 +243,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE [ italian ] = "Il controllo delle aree speciali non è attivo, controllare lo stesso?" ;
     MESSAGE [ portuguese_brazilian ] = "Verifica??o de Regi?s especiais est? desativada, Verificar assim mesmo?" ;
     MESSAGE [ portuguese ] = "A verificação de zonas especiais está desactivada, mesmo assim prosseguir?" ;
-    MESSAGE [ finnish ] = "Tarkista erityisalueet -toiminto on poistettu k?yt?t?. Tarkistetaanko kuitenkin?" ;
+    MESSAGE [ finnish ] = "Tarkista erityisalueet -toiminto on poistettu käytöstä. Tarkistetaanko kuitenkin?" ;
     MESSAGE [ danish ] = "Stavekontrol af særområder er slået fra, skal der kontrolleres alligevel?" ;
     MESSAGE [ french ] = "La vérification dans les zones spéciales est désactivée. Vérifier tout de même ?" ;
     MESSAGE [ swedish ] = "Kontroll av specialområden är avstängd. Kontrollera ändå?" ;
@@ -251,7 +251,7 @@ QueryBox DLG_SPECIAL_FORCED
     MESSAGE [ spanish ] = "La verificación de las áreas especiales está desactivada, ¿Desea de todas maneras verificar?" ;
     MESSAGE [ english_us ] = "Check special regions is deactivated. Check anyway?" ;
     MESSAGE[ chinese_simplified ] = "ç‰¹æ®ŠåŒºåŸŸçš„æ£€æŸ¥å·²ç»å…³é—­ï¼Œæ‚¨è¿˜æ˜¯è¦æ‰§è¡Œè¿™é¡¹æ£€æŸ¥ï¼Ÿ";
-    MESSAGE[ russian ] = "Ïğîâåğêà ñïåöèàëüíûõ îáëàñòåé îòêëş÷åíà, Âñå ğàâíî ïğîâåğèòü?";
+    MESSAGE[ russian ] = "Ïğîâåğêà ñïåöèàëüíûõ îáëàñòåé îòêëş÷åíà. Ïğîâåğèòü, íå ñìîòğÿ íà ıòî?";
     MESSAGE[ polish ] = "Sprawdzanie obszarów specjalnych jest wy³¹czone, mimo to sprawdzaæ?";
     MESSAGE[ japanese ] = "ç‰¹åˆ¥ç¯„å›²ã¯ã‚ªãƒ•ã«ãªã£ã¦ã„ã¾ã™ã€‚ãã‚Œã§ã‚‚ãƒã‚§ãƒƒã‚¯ã—ã¾ã™ã‹ã€‚";
     MESSAGE[ chinese_traditional ] = "å·²ç¶“é—œé–‰ç‰¹æ®Šå€åŸŸçš„æª¢æŸ¥ï¹é‚„æ˜¯è¦åŸ·è¡Œé€™å€‹æŒ‡ä»¤ï¹–";
@@ -281,7 +281,7 @@ QueryBox MSG_SEARCH_END
     Message [ spanish ] = "%PRODUCTNAME Writer ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio?" ;
     Message [ english_us ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
     Message[ chinese_simplified ] = "%PRODUCTNAME Writer å·²ç»æœå¯»è‡³æ–‡æ¡£çš„ç»“æŸä½ç½®ã€‚è¦ç»§ç»­ä»æ–‡æ¡£çš„èµ·å§‹ä½ç½®å¼€å§‹æœå¯»ï¼Ÿ";
-    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê â êîíöå äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê ñ íà÷àëà äîêóìåíòà?";
+    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê ê êîíöó äîêóìåíòà. Ïğîäîëæèòü ïîèñê ñ íà÷àëà äîêóìåíòà?";
     Message[ polish ] = "%PRODUCTNAME Writer przeszuka³ dokument do koñca. Czy kontynuowaæ wyszukiwanie od pocz¹tku dokumentu?";
     Message[ japanese ] = "%PRODUCTNAME Writer ã¯ã€æ–‡æ›¸æœ«ã¾ã§æ¤œç´¢ã—ã¾ã—ãŸã€‚æ–‡æ›¸ã®å§‹ã‚ã«æˆ»ã£ã¦ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer å·²ç¶“æœå°‹è‡³æ–‡ä»¶çš„çµæŸä½ç½®ã€‚è¦å¾æ–‡ä»¶çš„èµ·å§‹ä½ç½®ç¹¼çºŒæœå°‹ï¼Ÿ";
@@ -311,13 +311,13 @@ QueryBox MSG_SEARCH_START
     Message [ spanish ] = "%PRODUCTNAME Writer ha buscado hasta el principio del documento. ¿Desea continuar desde el final?" ;
     Message [ english_us ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
     Message[ chinese_simplified ] = "%PRODUCTNAME Writer å·²ç»æœå¯»è‡³æ–‡æ¡£çš„èµ·å§‹ä½ç½®ã€‚è¦ç»§ç»­ä»æ–‡ä»¶çš„ç»“æŸä½ç½®å¼€å§‹æœå¯»ï¼Ÿ";
-    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê â íà÷àëå äîêóìåíòà. Âû õîòèòå ïğîäîëæèòü ïîèñê â êîíöå äîêóìåíòà?";
+    Message[ russian ] = "%PRODUCTNAME Writer îñóùåñòâèë ïîèñê ê íà÷àëó äîêóìåíòà. Ïğîäîëæèòü ïîèñê ñ êîíöà äîêóìåíòà?";
     Message[ polish ] = "%PRODUCTNAME Writer przeszuka³ dokument do pocz¹tku. Czy kontynuowaæ wyszukiwanie od koñca dokumentu?";
     Message[ japanese ] = "%PRODUCTNAME Writer ã¯ã€æ–‡æ›¸ã®å§‹ã‚ã¾ã§æ¤œç´¢ã—ã¾ã—ãŸã€‚æ–‡æ›¸æœ«ã«æˆ»ã£ã¦æ¤œç´¢ã‚’ç¶šã‘ã¾ã™ã‹ã€‚";
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer å·²ç¶“æœå°‹è‡³æ–‡ä»¶çš„èµ·å§‹ä½ç½®ã€‚è¦å¾æ–‡ä»¶çš„çµæŸä½ç½®ç¹¼çºŒæœå°‹ï¹–";
     Message[ arabic ] = "ŞÇã %PRODUCTNAME Writer ÈÇáÈÍË ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
     Message[ greek ] = "Ôï %PRODUCTNAME Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôï ôİëïò ôïõ åããñÜöïõ;";
-    Message[ korean ] = "%PRODUCTNAME Writerê°€ ë¬¸ì„œì˜ ì‹œì‘ë¶€ë¶„ê¹Œì§€ ê²€ìƒ‰í–ˆìŠµë‹ˆë‹¤. ë¬¸ì„œì˜ ëë¶€ë¶„ì—ì„œ ê²€ìƒ‰ì„ ê³„ì†í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Message[ korean ] = "%PRODUCTNAME Writerê°€ ë¬¸ì„œì˜ ì‹œì‘ê¹Œì§€ ê²€ìƒ‰í–ˆìŠµë‹ˆë‹¤. ë¬¸ì„œì˜ ëì—ì„œ ê²€ìƒ‰ì„ ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "%PRODUCTNAME Writer belgenin başına kadar aramayı tamamladı. Belgenin sonundan aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "%PRODUCTNAME Writer ha buscado hasta el principio del documento. ¿Desea continuar desde el final?";
@@ -334,10 +334,10 @@ InfoBox MSG_NO_MERGE_ENTRY
     Message [ italian ] = "Non è stato possibile unire alcunché." ;
     Message [ spanish ] = "No se pudieron fusionar los documentos." ;
     Message [ french ] = "Impossible de fusionner les documents." ;
-    Message [ dutch ] = "Er was geen merge van documenten mogelijk." ;
+    Message [ dutch ] = "Er is geen samenvoeging van documenten mogelijk." ;
     Message [ portuguese ] = "Foi impossível intercalar os documentos." ;
     Message[ chinese_simplified ] = "æ— æ³•åˆå¹¶æ–‡æ¡£ã€‚";
-    Message[ russian ] = "Îáúåäèíèòü ÷òî-ëèáî íå óäàåòñÿ.";
+    Message[ russian ] = "Íåâîçìîæíî îáúåäèíèòü äîêóìåíòû.";
     Message[ polish ] = "Nie mo¿na by³o scaliæ dokumentów.";
     Message[ japanese ] = "ãªã«ã‚‚çµåˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
     Message[ chinese_traditional ] = "ç„¡æ³•åˆä½µæ–‡ä»¶ã€‚";
@@ -358,21 +358,21 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
     MESSAGE [ portuguese_brazilian ] = "N?o pude inserir Texto Autom?tico." ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
-    MESSAGE [ finnish ] = "Automaattista teksti? ei voitu luoda." ;
+    MESSAGE [ finnish ] = "Automaattista tekstiä ei voitu luoda." ;
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTekst." ;
     MESSAGE [ french ] = "Impossible de créer l'AutoTexte." ;
     MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
-    MESSAGE [ dutch ] = "AutoTekst kon niet worden toegepast." ;
-    MESSAGE [ spanish ] = "No se pudo crear el AutoTexto." ;
+    MESSAGE [ dutch ] = "AutoTekst kan niet worden toegepast." ;
+    MESSAGE [ spanish ] = "No se pudo crear el Texto automático." ;
     MESSAGE [ english_us ] = "AutoText could not be created." ;
     MESSAGE[ chinese_simplified ] = "æ— æ³•å»ºç«‹è‡ªåŠ¨å›¾æ–‡é›†ã€‚";
-    MESSAGE[ russian ] = "Ñîçäàòü àâòîòåêñò íåâîçìîæíî.";
+    MESSAGE[ russian ] = "Íåâîçìîæíî ñîçäàòü àâòîòåêñò.";
     MESSAGE[ polish ] = "Autotekst nie móg³ zostaæ utworzony.";
     MESSAGE[ japanese ] = "å…¥åŠ›æ”¯æ´ãŒä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
     MESSAGE[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹è‡ªå‹•åœ–æ–‡é›†ã€‚";
     MESSAGE[ arabic ] = ".ÊÚĞÑ ÅÖÇİÉ ÇáäÕ ÇáÊáŞÇÆí";
     MESSAGE[ greek ] = "Äåí Şôáí äõíáôüí íá ğñïóôåèåß ôï ÁõôïÊåßìåíï.";
-    MESSAGE[ korean ] = "ìë™ í…ìŠ¤íŠ¸ë¥¼ ë§Œë“¤ ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤.";
+    MESSAGE[ korean ] = "ìë™ í…ìŠ¤íŠ¸ë¥¼ ë§Œë“¤ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
     MESSAGE[ turkish ] = "Otomatik metin yaratılamadı.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "No s'ha pogut crear el text automàtic.";
@@ -392,13 +392,13 @@ InfoBox MSG_ERR_SRCSTREAM
     Message [ dutch ] = "De brontekst kan niet worden geladen." ;
     Message [ portuguese ] = "É impossível carregar o texto-fonte." ;
     Message[ chinese_simplified ] = "æ— æ³•è£…å…¥æºæ–‡æœ¬ã€‚";
-    Message[ russian ] = "Çàãğóçêà èñõîäíîãî òåêñòà íåâîçìîæíà.";
+    Message[ russian ] = "Íåâîçìîæíî çàãğóçèòü èñõîäíûé òåêñò.";
     Message[ polish ] = "Nie mo¿na by³o za³adowaæ tekstu Ÿród³owego.";
     Message[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ†ã‚­ã‚¹ãƒˆã‚’èª­ã¿è¾¼ã¿ã§ãã¾ã›ã‚“ã€‚";
     Message[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥åŸå§‹æª”ã€‚";
     Message[ arabic ] = ".áÇ íãßä ÊÍãíá äÕ ÇáãÕÏÑ";
     Message[ greek ] = "Äåí åßíáé äõíáôüí íá öïñôùèåß ôï êİéìåíï ğñïİëåõóçò.";
-    Message[ korean ] = "ì†ŒìŠ¤ í…ìŠ¤íŠ¸ë¥¼ ë¡œë“œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ì›ë³¸ì„ ë¡œë“œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
     Message[ turkish ] = "Kaynak kod yüklenemiyor.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No es pot carregar el text font";
@@ -421,10 +421,10 @@ InfoBox MSG_ERR_NO_FAX
     Message[ polish ] = "W sekwencji Narzêdzia/Opcje/%1/Drukuj nie ustawiono drukarki faksu.";
     Message[ turkish ] = "Araçlar/Seçenekler/Yazdırma altında faks konfigürasyonu yapılmadı.";
     Message[ language_user1 ] = " ";
-    Message[ russian ] = "Â Ñåğâèñ/Ïàğàìåòğû/%1/Ïå÷àòü ôàêñ-ïğèíòåğ íå óñòàíîâëåí.";
+    Message[ russian ] = "Â Ñåğâèñ/Ïàğàìåòğû/%1/Ôàêñ-ïğèíòåğ íå óñòàíîâëåí.";
     Message[ greek ] = "Äåí İ÷åé ïñéóôåß åêôõğùôŞò ãéá Fax óôç äéáäñïìŞ Åñãáëåßá/Åğéëïãİò/%1/Åêôığùóç.";
     Message[ japanese ] = "ãƒ„ãƒ¼ãƒ« â†’ ã‚ªãƒ—ã‚·ãƒ§ãƒ³ â†’ %1 â†’ å°åˆ·ã§ Fax ãƒ—ãƒªãƒ³ã‚¿ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-    Message[ korean ] = "ë„êµ¬/ì˜µì…˜/%1/ì¸ì‡„í•˜ì—ì„œ  íŒ©ìŠ¤ í”„ë¦°í„°ê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ë„êµ¬ -> ì˜µì…˜ -> %1 -> ì¸ì‡„ì—ì„œ íŒ©ìŠ¤ í”„ë¦°í„°ê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
     Message[ chinese_simplified ] = "åœ¨å·¥å…·/é€‰é¡¹/%1/æ‰“å°æœºå¤„æ²¡æœ‰è®¾å®šä¼ çœŸæ‰“å°æœºã€‚";
     Message[ chinese_traditional ] = "åœ¨å·¥å…·/é¸é …/%1/æ©Ÿå°è¡¨æ©Ÿè™•æ²’æœ‰è¨­å®šåˆ—å°å‚³çœŸçš„é©…å‹•ç¨‹å¼ã€‚";
     Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ İÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/%1/ØÈÇÚÉ\".";
@@ -438,7 +438,7 @@ String STR_WEBOPTIONS
     TEXT [ English ] = "HTML document" ;
     TEXT[ english_us ] = "HTML document";
     TEXT[ portuguese ] = "Documento HTML";
-    TEXT[ russian ] = "Äîêóìåíò HTML";
+    TEXT[ russian ] = "Âåá-ñòğàíèöà";
     TEXT[ greek ] = "¸ããñáöï HTML";
     TEXT[ dutch ] = "HTML-document";
     TEXT[ french ] = "Document HTML";
@@ -492,7 +492,7 @@ InfoBox MSG_NOT_FOUND
     Message [ italian ] = "Termine non trovato" ;
     Message [ portuguese_brazilian ] = "Padrao de busca n?o encontrado." ;
     Message [ portuguese ] = "Impossível encontrar expressão procurada." ;
-    Message [ finnish ] = "Hakuavainta ei l?tynyt." ;
+    Message [ finnish ] = "Etsittävää ei löytynyt." ;
     Message [ danish ] = "Søgningen gav intet resultat." ;
     Message [ french ] = "Terme recherché introuvable !" ;
     Message [ swedish ] = "Sökord hittades inte." ;
@@ -506,7 +506,7 @@ InfoBox MSG_NOT_FOUND
     Message[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°æ‰€è¦æœå°‹çš„æ¢ç›®ã€‚";
     Message[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÈíÇäÇÊ ÇáÊí ÊÈÍË ÚäåÇ.";
     Message[ greek ] = "Äåí âñİèçêáí ôá äåäïìİíá ğïõ áíáæçôÜôå.";
-    Message[ korean ] = "ê²€ìƒ‰ìš©ì–´ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ê²€ìƒ‰ í‚¤ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
     Message[ turkish ] = "Arama terimi bulunamadı.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No s'ha trobat la clau de cerca.";
@@ -520,7 +520,7 @@ InfoBox MSG_INDEX_OVERFLOW
     Message [ italian ] = "Termine non trovato" ;
     Message [ portuguese_brazilian ] = "Padrao de busca n?o encontrado." ;
     Message [ portuguese ] = "localizado." ;
-    Message [ finnish ] = "l?tynyt." ;
+    Message [ finnish ] = "löytynyt." ;
     Message [ danish ] = "fundet." ;
     Message [ french ] = "trouvé(e/s)." ;
     Message [ swedish ] = "funnet." ;
@@ -550,7 +550,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message [ italian ] = "Sorgente non specificata." ;
     Message [ spanish ] = "No se especificó la fuente." ;
     Message [ french ] = "Source non définie." ;
-    Message [ dutch ] = "Bron niet aangegeven." ;
+    Message [ dutch ] = "Bron niet gedefinieerd." ;
     Message [ portuguese_brazilian ] = "Quelle nicht gesetzt." ;
     Message [ portuguese ] = "Fonte não especificada." ;
     Message[ chinese_simplified ] = "æ²¡æœ‰æŒ‡å®šæºã€‚";
@@ -560,7 +560,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message[ chinese_traditional ] = "æ²’æœ‰å®šç¾©ä¾†æºã€‚";
     Message[ arabic ] = ".áã íÊã ÊÍÏíÏ ÇáãÕÏÑ";
     Message[ greek ] = "Äåí ïñßóôçêå ç ğñïİëåõóç.";
-    Message[ korean ] = "ì†ŒìŠ¤ê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
+    Message[ korean ] = "ì›ë³¸ì´ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
     Message[ turkish ] = "Kaynak belirlenmedi.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No s'ha indicat la font.";
@@ -575,12 +575,12 @@ String STR_NOGLOS1
     TEXT [ italian ] = "Testo automatico per la sigla '" ;
     TEXT [ portuguese_brazilian ] = "Texto Autom?tico para Abrevia??o" ;
     TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
-    TEXT [ finnish ] = "Automaattinen teksti pikavalinnalle '" ;
+    TEXT [ finnish ] = "Automaattista tekstiä pikavalinnalle" ;
     TEXT [ danish ] = "AutoTekst til genvej '" ;
     TEXT [ french ] = "AutoTexte pour raccourci ' " ;
     TEXT [ swedish ] = "AutoText för genväg '" ;
     TEXT [ dutch ] = "AutoTekst voor afkortingen '" ;
-    TEXT [ spanish ] = "AutoTexto para la abreviatura '" ;
+    TEXT [ spanish ] = "Texto automático para la abreviatura '" ;
     TEXT [ english_us ] = "AutoText for Shortcut '" ;
     TEXT[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†ç¼©å†™ '";
     TEXT[ russian ] = "Àâòîòåêñò ê ñîêğàùåíèş '";
@@ -589,7 +589,7 @@ String STR_NOGLOS1
     TEXT[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†ç¸®å¯«<";
     TEXT[ arabic ] = "äÕ ÇáÊáŞÇÆí ááÇÎÊÕÇÑ '";
     TEXT[ greek ] = "ÁõôïÊåßìåíï ãéá ôá áñ÷éêÜ '";
-    TEXT[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ë°”ë¡œê°€ê¸° '";
+    TEXT[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ë°”ë¡œ ê°€ê¸° '";
     TEXT[ turkish ] = "Otomatik metin kısaltması '";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "El text automàtic per a la drecera '";
@@ -607,7 +607,7 @@ String STR_NOGLOS2
     TEXT [ italian ] = "' non trovato." ;
     TEXT [ portuguese_brazilian ] = "' n?o encontrado." ;
     TEXT [ portuguese ] = "' não encontrado." ;
-    TEXT [ finnish ] = "Kohdetta ' ei l?dy." ;
+    TEXT [ finnish ] = "ei löydy." ;
     TEXT [ danish ] = "'blev ikke fundet." ;
     TEXT [ french ] = "' est introuvable." ;
     TEXT [ swedish ] = "' hittades inte." ;
@@ -615,13 +615,13 @@ String STR_NOGLOS2
     TEXT [ spanish ] = "' no se encontró." ;
     TEXT [ english_us ] = "' not found." ;
     TEXT[ chinese_simplified ] = "' æ²¡æœ‰è¢«æ‰¾åˆ°ã€‚";
-    TEXT[ russian ] = "' íåíàéäåí.";
+    TEXT[ russian ] = " íå íàéäåí.";
     TEXT[ polish ] = "' nie znaleziono.";
     TEXT[ japanese ] = "ã€ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
     TEXT[ chinese_traditional ] = ">æ²’æœ‰æ‰¾åˆ°ã€‚";
     TEXT[ arabic ] = "áã íõÚËÑ Úáíå '";
     TEXT[ greek ] = "' äåí âñİèçêå.";
-    TEXT[ korean ] = "' ì°¾ì§€ ëª»í–ˆìŒ.";
+    TEXT[ korean ] = "' ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
     TEXT[ turkish ] = "' bulunamadı.";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "' no s'ha trobat.";
@@ -631,7 +631,7 @@ String STR_NUM_LEVEL
 {
     TEXT = "Ebene " ;
     TEXT [ English ] = "Level " ;
-    Text [ dutch ] = "Niveau  " ;
+    Text [ dutch ] = "Niveau" ;
     Text [ english_us ] = "Level " ;
     Text [ italian ] = "Livello " ;
     Text [ spanish ] = "Nivel  " ;
@@ -662,21 +662,21 @@ String STR_ERROR_NOLANG
     TEXT [ italian ] = "Nell'area verificata non è stata impostata nessuna lingua." ;
     TEXT [ portuguese_brazilian ] = "No language choosed in checked region." ;
     TEXT [ portuguese ] = "Na secção verificada não existe nenhuma língua definida." ;
-    TEXT [ finnish ] = "Tarkistettavassa alueessa ei ole valittu kielt?." ;
+    TEXT [ finnish ] = "Tarkistettavassa osassa ei ole valittu kieltä." ;
     TEXT [ danish ] = "Der er ikke angivet et sprog i det kontrollerede område." ;
     TEXT [ french ] = "Aucune langue choisie pour région définie." ;
     TEXT [ swedish ] = "Inget språk är inställt i det kontrollerade området." ;
-    TEXT [ dutch ] = "In gecontroleerd bereik geen taal vastgelegd." ;
-    TEXT [ spanish ] = "No se ha seleccionado ningún idioma en el área revisada." ;
+    TEXT [ dutch ] = "In gecontroleerd bereik is geen taal vastgelegd." ;
+    TEXT [ spanish ] = "No se ha seleccionado ningún idioma para la sección controlada." ;
     TEXT [ english_us ] = "No language is selected in the proofed section." ;
     TEXT[ chinese_simplified ] = "åœ¨æ£€æŸ¥çš„åŒºåŸŸå†…æ²¡æœ‰é€‰ä¸­ä»»ä½•è¯­è¨€ã€‚";
-    TEXT[ russian ] = "Â ïğîâåğåííîé ñåêöèè ÿçûê íå óñòàíîâëåí.";
+    TEXT[ russian ] = "Â ïğîâåğåííîì ğàçäåëå ÿçûê íå óñòàíîâëåí.";
     TEXT[ polish ] = "W sprawdzanym obszarze nie ustawiono jêzyka.";
     TEXT[ japanese ] = "ãƒã‚§ãƒƒã‚¯ã—ãŸç¯„å›²ã«ã¯è¨€èªãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
     TEXT[ chinese_traditional ] = "åœ¨å·²ç¶“æª¢æŸ¥çš„å€åŸŸå…§æ²’æœ‰è¨­å®šä»»ä½•ä¸€å€‹èªè¨€ã€‚";
     TEXT[ arabic ] = ".áã íÊã ÊÍÏíÏ ÃíÉ áÛÉ İí ÇáäØÇŞ ÇáãÏŞŞ İíå";
     TEXT[ greek ] = "Äåí ïñßóôçêå ãëşóóá ãéá ôçí åëåã÷üìåíç ğåñéï÷Ş.";
-    TEXT[ korean ] = "ê²€ìƒ‰ëœ ì˜ì—­ì—ëŠ” ì„¤ì •ëœ ì–¸ì–´ê°€ ì—†ìŠµë‹ˆë‹¤.";
+    TEXT[ korean ] = "ê²€ìƒ‰ëœ êµ¬ì—­ì—ëŠ” ì„¤ì •ëœ ì–¸ì–´ê°€ ì—†ìŠµë‹ˆë‹¤.";
     TEXT[ turkish ] = "Denetlenen bölümde dil seçilmedi.";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "No s'ha seleccionat cap idioma en l'àrea revisada.";
@@ -690,7 +690,7 @@ String STR_EDIT_FOOTNOTE
     TEXT [ italian ] = "Modifica nota a piè pagina" ;
     TEXT [ portuguese_brazilian ] = "Editar nota de rodap?" ;
     TEXT [ portuguese ] = "Editar nota de rodapé" ;
-    TEXT [ finnish ] = "Muokkaa alaviitett?" ;
+    TEXT [ finnish ] = "Muokkaa alaviitettä" ;
     TEXT [ danish ] = "Rediger fodnote" ;
     TEXT [ french ] = "Édition de note de bas de page" ;
     TEXT [ swedish ] = "Redigera fotnot" ;
@@ -718,21 +718,21 @@ String STR_NB_REPLACED
     Text [ italian ] = "Testo sostituito XX volte" ;
     Text [ portuguese_brazilian ] = "Padrao de busca substitu?do XX vezes." ;
     Text [ portuguese ] = "Expressão procurada substituída XX vezes." ;
-    Text [ finnish ] = "Hakuavain korvattu XX kertaa." ;
+    Text [ finnish ] = "Etsittävä korvattu XX kertaa." ;
     Text [ danish ] = "Søgeord erstattet XX gange." ;
     Text [ french ] = "Le terme recherché a été remplacé XX fois." ;
     Text [ swedish ] = "Sökord ersatt XX gånger." ;
-    Text [ dutch ] = "Het gezochte item is XX keer vervangen." ;
+    Text [ dutch ] = "Zoekbegrip XX keer vervangen." ;
     Text [ spanish ] = "La expresión buscada ha sido reemplazada XX veces." ;
     Text [ english_us ] = "Search key replaced XX times." ;
     Text[ chinese_simplified ] = "æœå¯»æ¡ç›®è¢« XX æ¬¡æ›¿æ¢ã€‚";
-    Text[ russian ] = "Èñêîìîå ñëîâî çàìåíåíî XXğàç.";
+    Text[ russian ] = "Èñêîìîå ñëîâî çàìåíåíî XX ğàç.";
     Text[ polish ] = "Szukane has³o zosta³o XX razy zast¹pione.";
     Text[ japanese ] = "XX å€‹ã®æ¤œç´¢ã‚­ãƒ¼ãŒç½®æ›ã•ã‚Œã¾ã—ãŸã€‚";
     Text[ chinese_traditional ] = "æœå°‹é …ç›®è¢« XX æ¬¡ä»£æ›¿ã€‚";
     Text[ arabic ] = "Êã ÇÓÊÈÏÇá ÈíÇäÇÊ ÇáÈÍË ××× ãÑÉ.";
     Text[ greek ] = "Æçôïıìåíï óôïé÷åßï áíôéêáôáóôÜèçêå XX öïñİò.";
-    Text[ korean ] = "ê²€ìƒ‰ ìš©ì–´ê°€ XXë²ˆ ëŒ€ì²´ë¨.";
+    Text[ korean ] = "ê²€ìƒ‰ í‚¤ê°€ XXë²ˆ ë°”ë€Œì—ˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Arama terimi XX kez değiştirildi.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La clau de cerca ha estat reemplaçada XX vegades.";
@@ -773,11 +773,11 @@ String STR_SRCVIEW_ROW
     Text [ italian ] = "Riga " ;
     Text [ portuguese_brazilian ] = "Fileira " ;
     Text [ portuguese ] = "Linha " ;
-    Text [ finnish ] = "Rivi" ;
+    Text [ finnish ] = "Rivi " ;
     Text [ danish ] = "Række " ;
     Text [ french ] = "Ligne " ;
     Text [ swedish ] = "Rad  " ;
-    Text [ dutch ] = "Rij  " ;
+    Text [ dutch ] = "Rij" ;
     Text [ spanish ] = "Fila  " ;
     Text [ english_us ] = "Row " ;
     Text[ chinese_simplified ] = "è¡Œ ";
@@ -801,15 +801,15 @@ String STR_SRCVIEW_COL
     Text [ italian ] = "Colonna " ;
     Text [ portuguese_brazilian ] = "Coluna " ;
     Text [ portuguese ] = "Coluna " ;
-    Text [ finnish ] = "Sarake" ;
+    Text [ finnish ] = "Palsta " ;
     Text [ danish ] = "Kolonne " ;
     Text [ french ] = "Colonne " ;
     Text [ swedish ] = "Kolumn  " ;
-    Text [ dutch ] = "Kolom  " ;
+    Text [ dutch ] = "Kolom" ;
     Text [ spanish ] = "Columna  " ;
     Text [ english_us ] = "Column " ;
     Text[ chinese_simplified ] = "åˆ— ";
-    Text[ russian ] = "Êîëîíêà ";
+    Text[ russian ] = "Ñòîëáåö";
     Text[ polish ] = "Kolumna  ";
     Text[ japanese ] = "åˆ— ";
     Text[ chinese_traditional ] = "æ¬„ ";
@@ -831,7 +831,7 @@ String STR_PRINT_TITLE
     Text[ danish ] = "Udskriv det markerede";
     Text[ french ] = "Imprimer la sélection";
     Text[ swedish ] = "Skriv ut det markerade";
-    Text[ dutch ] = "Afdrukken van de selectie";
+    Text[ dutch ] = "Selectie afdrukken";
     Text[ spanish ] = "Imprimir la selección";
     Text[ english_us ] = "Printing selection";
     Text[ chinese_simplified ] = "æ‰“å°é€‰ä¸­çš„éƒ¨åˆ†";
@@ -841,7 +841,7 @@ String STR_PRINT_TITLE
     Text[ chinese_traditional ] = "åˆ—å°é¸å–éƒ¨ä»½";
     Text[ arabic ] = "ØÈÇÚÉ ÇáÊÍÏíÏ";
     Text[ greek ] = "Åêôığùóç åğéëïãŞò";
-    Text[ korean ] = "ì„ íƒ ì¸ì‡„";
+    Text[ korean ] = "ì„ íƒí•œ ë²”ìœ„ ì¸ì‡„";
     Text[ turkish ] = "Seçimi yazdır";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Impressió de la selecció";
@@ -862,13 +862,13 @@ String STR_PRINT_MSG
     Text[ spanish ] = "¿Desea imprimir solo la selección o todo el documento?";
     Text[ english_us ] = "Do you want to print the selection or the entire document?";
     Text[ chinese_simplified ] = "è¦æ‰“å°é€‰ä¸­çš„éƒ¨åˆ†è¿˜æ˜¯è¦æ‰“å°æ•´ä¸ªæ–‡æ¡£ï¼Ÿ";
-    Text[ russian ] = "Âû õîòèòå íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåíèå?";
+    Text[ russian ] = "Íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåííîå?";
     Text[ polish ] = "Czy chcesz wydrukowaæ selekcjê czy te¿ ca³y dokument?";
     Text[ japanese ] = "é¸æŠç¯„å›²ã‹æ–‡æ›¸å…¨ä½“ã®ã©ã¡ã‚‰ã‚’å°åˆ·ã—ã¾ã™ã‹ï¼Ÿ";
     Text[ chinese_traditional ] = "æ‚¨è¦åˆ—å°é¸å–çš„éƒ¨ä»½é‚„æ˜¯è¦åˆ—å°æ•´å€‹æ–‡ä»¶ï¹–";
     Text[ arabic ] = "åá ÊÑíÏ ØÈÇÚÉ ÇáÊÍÏíÏ Ãã ÇáãÓÊäÏ ÈÃßãáå¿";
     Text[ greek ] = "Èİëåôå íá åêôõğşóåôå ôçí åğéëåãìİíç ğåñéï÷Ş Ş ïëüêëçñï ôï İããñáöï;";
-    Text[ korean ] = "ì„ íƒëœ ë¬¸ì„œë‚˜ ì „ì²´ ë¬¸ì„œë¥¼ ì¸ì‡„í•˜ê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "ì„ íƒ ë²”ìœ„ë§Œ ì¸ì‡„í•˜ì‹œê² ìŠµë‹ˆê¹Œ, ì•„ë‹ˆë©´ ì „ì²´ ë¬¸ì„œë¥¼ ì¸ì‡„í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Seçimi ya da tüm belgeyi yazdırmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Voleu imprimir la selecció o bé tot el document?";
@@ -936,7 +936,7 @@ String STR_READONLY_SEL
     TEXT[ english_us ] = "read-only";
     TEXT[ portuguese ] = "só leitura";
     TEXT[ russian ] = "òîëüêî äëÿ ÷òåíèÿ";
-    TEXT[ dutch ] = "schrijfbeveiligd";
+    TEXT[ dutch ] = "Alleen-lezen";
     TEXT[ french ] = "en lecture seule";
     TEXT[ spanish ] = "sólo lectura";
     TEXT[ italian ] = "a sola lettura";
@@ -976,11 +976,11 @@ String STR_SAVEAS_SRC
     Text[ chinese_traditional ] = "åŒ¯å‡ºåŸå§‹æª”(~E)...";
     Text[ arabic ] = "ÊÕÏíÑ äÕ ÇáãÕÏÑ...";
     Text[ greek ] = "ÅîáãùãŞ êåéìİíïõ ğñïİëåõóçò...";
-    Text[ korean ] = "ì†ŒìŠ¤í…ìŠ¤íŠ¸ ë‚´ë³´ë‚´ê¸°(~E)...";
+    Text[ korean ] = "ì›ë³¸ ë‚´ë³´ë‚´ê¸°(~E)...";
     Text[ turkish ] = "Kaynak kodu dışa aktar...";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Exporta la font...";
-    Text[ finnish ] = "~Vie lähde";
+    Text[ finnish ] = "~Vie lähde...";
     Text[ thai ] = "~à¸ªà¹ˆà¸‡à¸­à¸­à¸à¸—à¸µà¹ˆà¸¡à¸²...";
 };
 String MN_SRCVIEW_POPUPMENU
@@ -995,7 +995,7 @@ String MN_SRCVIEW_POPUPMENU
     Text [ italian ] = "Testo sorgente HTML" ;
     Text [ spanish ] = "Texto fuente HTML" ;
     Text [ french ] = "Texte source HTML" ;
-    Text [ dutch ] = "HTML - brontekst" ;
+    Text [ dutch ] = "HTML-brontekst" ;
     Text[ chinese_simplified ] = "HTML æºæ–‡æœ¬";
     Text[ russian ] = "Èñõîäíûé òåêñò â ôîğìàòå HTML";
     Text[ polish ] = "Tekst Ÿród³owy HTML";
@@ -1003,7 +1003,7 @@ String MN_SRCVIEW_POPUPMENU
     Text[ chinese_traditional ] = "HTML åŸå§‹æª”";
     Text[ arabic ] = "äÕ ãÕÏÑ HTML";
     Text[ greek ] = "Áñ÷åßï ğñïİëåõóçò HTML";
-    Text[ korean ] = "HTML ì†ŒìŠ¤í…ìŠ¤íŠ¸";
+    Text[ korean ] = "HTML ì›ë³¸";
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Font HTML";
@@ -1203,7 +1203,7 @@ Menu MN_SRCVIEW_POPUPMENU
             Text[ chinese_traditional ] = "HTML åŸå§‹æª”";
             Text[ arabic ] = "äÕ ãÕÏÑ HTML";
             Text[ greek ] = "Êåßìåíï ğñïİëåõóçò HTML";
-            Text[ korean ] = "HTML ì†ŒìŠ¤í…ìŠ¤íŠ¸";
+            Text[ korean ] = "HTML ì›ë³¸";
             Text[ turkish ] = "HTML kaynak kodu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Font HTML";
@@ -1212,6 +1212,21 @@ Menu MN_SRCVIEW_POPUPMENU
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

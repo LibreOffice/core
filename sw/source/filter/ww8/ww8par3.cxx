@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -2134,3 +2133,4 @@ sal_Bool SwMSConvertControls::InsertControl(
     return sal_True;
 }
 
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

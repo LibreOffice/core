@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,6 +713,28 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             case RES_TXTATR_CHARFMT:
                 lcl_setCharStyle(rPam.GetDoc(), aValue, rSet.GetItemSet() );
             break;
+            case FN_UNO_CHARFMT_SEQUENCE:
+            {
+                Sequence<OUString> aCharStyles;
+                if(aValue >>= aCharStyles)
+                {
+                    for(sal_Int32 nStyle = 0; nStyle < aCharStyles.getLength(); nStyle++)
+                    {
+                        Any aStyle;
+                        rPam.GetDoc()->StartUndo( UNDO_START );
+                        aStyle <<= aCharStyles.getConstArray()[nStyle];
+                        //create a local set and apply each format directly
+                        SfxItemSet aSet(rPam.GetDoc()->GetAttrPool(), RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT );
+                        lcl_setCharStyle(rPam.GetDoc(), aStyle, aSet );
+                        //the first style should replace the current attributes, all other have to be added
+                        SwXTextCursor::SetCrsrAttr(rPam, aSet, nStyle ? CRSR_ATTR_MODE_DONTREPLACE : 0);
+                        rPam.GetDoc()->EndUndo( UNDO_START );
+                    }
+                }
+                else
+                    bRet = sal_False;
+            }
+            break;
             case FN_UNO_PARA_STYLE :
                 lcl_SetTxtFmtColl(aValue, rPam);
             break;
@@ -855,7 +877,7 @@ return bRet;
  * --------------------------------------------------*/
 SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
 {
-    static const sal_uInt16 nMaxLookup = 255;
+    static const sal_uInt16 nMaxLookup = 1000;
     SwFmtColl *pFmt = 0;
 
 //  if ( GetCrsrCnt() > nMaxLookup )
@@ -1619,10 +1641,21 @@ sal_Bool SwXTextCursor::gotoNextSentence(sal_Bool Expand) throw( uno::RuntimeExc
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
+        BOOL bWasEOS = isEndOfSentence();
         SwXTextCursor::SelectPam(*pUnoCrsr, Expand);
         bRet = pUnoCrsr->GoSentence(SwCursor::NEXT_SENT);
         if(!bRet)
             bRet = pUnoCrsr->MovePara(fnParaNext, fnParaStart);
+
+        // if at the end of the sentence (i.e. at the space after the '.')
+        // advance to next word in order for GoSentence to work properly
+        // next time and have isStartOfSentence return true after this call
+        if (!pUnoCrsr->IsStartWord())
+        {
+            BOOL bNextWord = pUnoCrsr->GoNextWord();
+            if (bWasEOS && !bNextWord)
+                bRet = sal_False;
+        }
     }
     else
         throw uno::RuntimeException();
@@ -1943,7 +1976,7 @@ void SwXTextCursor::SetPropertyValue(
         if(!lcl_setCrsrPropertyValue( pMap, rPaM, aSet, aValue ))
             rPropSet.setPropertyValue(*pMap, aValue, aSet.GetItemSet( &rPaM ) );
         if( aSet.GetItemSetPtr() )
-            SwXTextCursor::SetCrsrAttr(rPaM, aSet.GetItemSet() );
+            SwXTextCursor::SetCrsrAttr(rPaM, aSet.GetItemSet(), 0 );
     }
     else
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( 0 ) );

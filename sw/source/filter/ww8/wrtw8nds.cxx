@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -447,7 +446,7 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
         }
     }
 
-    ::std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortswflys());
+    std::sort(maFlyFrms.begin(), maFlyFrms.end(), sortswflys());
 
     maFlyIter = maFlyFrms.begin();
 
@@ -1095,7 +1094,7 @@ void WW8_SwAttrIter::FieldVanish( const String& rTxt )
 void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr, bool bStart)
 {
     // its a field; so get the Text form the Node and build the field
-    ASSERT( !bStart, "calls only with the endposition!" );
+    ASSERT( bStart, "calls only with the startposition!" );
     String sTxt;
 
     const SwTxtTOXMark& rTxtTOXMark = *rAttr.GetTxtTOXMark();
@@ -1162,7 +1161,7 @@ bool WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
                         OutSwFmtINetFmt((SwFmtINetFmt&)*pItem, true);
                         bRet = true;
                     }
-                    else if (nPos == *pHt->GetEnd())
+                    if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
                         OutSwFmtINetFmt((SwFmtINetFmt&)*pItem, false);
                 }
                 break;
@@ -1176,10 +1175,11 @@ bool WW8_SwAttrIter::OutAttrWithRange( xub_StrLen nPos )
                     OutSwFmtRefMark((SwFmtRefMark&)*pItem, false);
                 break;
             case RES_TXTATR_TOXMARK:
-                if( nPos == *pHt->GetStart() )
+                if (nPos == *pHt->GetStart())
+                {
+                    OutSwTOXMark((SwTOXMark&)*pItem, true);
                     bRet = true;
-                if( 0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd )
-                    OutSwTOXMark((SwTOXMark&)*pItem, false);
+                }
                 break;
             case RES_TXTATR_CJK_RUBY:
                 if( nPos == *pHt->GetStart() )
@@ -1454,10 +1454,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if( nNextAttr > nEnd )
             nNextAttr = nEnd;
 
-        //Append bookmarks in this range, exclusive of final position
-        //of this range
-        rWW8Wrt.AppendBookmarks( *pNd, nAktPos, nNextAttr - nAktPos );
         aAttrIter.OutFlys(nAktPos);
+        //Append bookmarks in this range after flys, exclusive of final
+        //position of this range
+        rWW8Wrt.AppendBookmarks( *pNd, nAktPos, nNextAttr - nAktPos );
         bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
         bool bAttrWithRange = aAttrIter.OutAttrWithRange( nAktPos );
 
@@ -1475,10 +1475,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     bRedlineAtEnd = true;
                 else
                 {
-                    //insert final bookmarks if any before CR
-                    rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
                     //insert final graphic anchors if any before CR
                     aAttrIter.OutFlys(nEnd);
+                    //insert final bookmarks if any before CR and after flys
+                    rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
                     if( pTOXSect )
                         rWW8Wrt.EndTOX( *pTOXSect );
                     rWW8Wrt.WriteCR();              // CR danach
@@ -1494,7 +1494,8 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     // Ausnahme: Fussnoten am Zeilenende
         if( nNextAttr == nEnd )
         {
-            aAttrIter.OutAttrWithRange( nEnd );
+            if (nAktPos != nEnd)
+                aAttrIter.OutAttrWithRange(nEnd);
             if( pO->Count() )
             {
                 rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
@@ -1504,10 +1505,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             if( bTxtAtr || bAttrWithRange || bRedlineAtEnd )
             {
-                //insert final bookmarks if any before CR
-                rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
                 //insert final graphic anchors if any before CR
                 aAttrIter.OutFlys(nEnd);
+                //insert final bookmarks if any before CR and after flys
+                rWW8Wrt.AppendBookmarks( *pNd, nEnd, 1 );
 
                 if( pTOXSect )
                     rWW8Wrt.EndTOX( *pTOXSect );
@@ -2498,4 +2499,4 @@ SwNodeFnTab aWW8NodeFnTab = {
 /* RES_OLENODE  */                   OutWW8_SwOleNode,
 };
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

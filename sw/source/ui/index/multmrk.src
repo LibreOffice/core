@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 20:17:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,27 +92,28 @@ ModalDialog DLG_MULTMRK
         Text [ norwegian ] = "Choice" ;
         Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Escolha" ;
-        Text [ portuguese ] = "Opções" ;
-        Text [ finnish ] = "Määritykset" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ portuguese ] = "Selecção" ;
+        Text [ finnish ] = "Valinta" ;
+        Text [ danish ] = "Vælg" ;
         Text [ french ] = "Sélection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
         Text [ spanish ] = "Selección" ;
         Text [ english_us ] = "Selection" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûáîğ";
         Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ japanese ] = "é¸æŠ";
+        Text[ chinese_traditional ] = "é¸å–";
         Text[ arabic ] = "ÊÍÏíÏ";
         Text[ dutch ] = "Selectie";
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
+        Text[ korean ] = "ì„ íƒ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opción";
+        Text[ catalan ] = "Opció";
+        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
     };
     FixedText FT_ENTRY
     {
@@ -132,19 +133,20 @@ ModalDialog DLG_MULTMRK
         Text [ spanish ] = "Índice" ;
         Text [ english_us ] = "Index" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Ä¿Â¼";
+        Text[ chinese_simplified ] = "ç›®å½•";
         Text[ russian ] = "Óêàçàòåëü";
         Text[ polish ] = "Indeks";
-        Text[ japanese ] = "õˆø";
-        Text[ chinese_traditional ] = "¥Ø¿ı";
+        Text[ japanese ] = "ç´¢å¼•";
+        Text[ chinese_traditional ] = "ç›®éŒ„";
         Text[ arabic ] = "ÇáİåÑÓ";
         Text[ dutch ] = "Index";
-        Text[ chinese_simplified ] = "Ä¿Â¼";
+        Text[ chinese_simplified ] = "ç›®å½•";
         Text[ greek ] = "ÅõñåôŞñéï";
-        Text[ korean ] = "»öÀÎ";
+        Text[ korean ] = "ìƒ‰ì¸";
         Text[ turkish ] = "Dizin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Índice";
+        Text[ catalan ] = "Índex";
+        Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ";
     };
     FixedText FT_TEXT
     {
@@ -170,19 +172,20 @@ ModalDialog DLG_MULTMRK
         Text [ spanish ] = "Entrada" ;
         Text [ english_us ] = "Entry" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÌõÄ¿";
+        Text[ chinese_simplified ] = "æ¡ç›®";
         Text[ russian ] = "İëåìåíò";
         Text[ polish ] = "Wpis";
-        Text[ japanese ] = "€–Ú";
-        Text[ chinese_traditional ] = "±ø¥Ø";
+        Text[ japanese ] = "é …ç›®";
+        Text[ chinese_traditional ] = "æ¢ç›®";
         Text[ arabic ] = "ÇáÅÏÎÇá";
         Text[ dutch ] = "Item";
-        Text[ chinese_simplified ] = "ÌõÄ¿";
+        Text[ chinese_simplified ] = "æ¡ç›®";
         Text[ greek ] = "Êáôá÷şñéóç";
-        Text[ korean ] = "Ç×¸ñ";
+        Text[ korean ] = "í•­ëª©";
         Text[ turkish ] = "Giriş";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Entrada";
+        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";
     };
     ListBox LB_TOX
     {
@@ -205,19 +208,34 @@ ModalDialog DLG_MULTMRK
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç";
-    Text[ russian ] = "Âûäåëåíèÿ óêàçàòåëÿ";
+    Text[ chinese_simplified ] = "ç›®å½•æ ‡è®°";
+    Text[ russian ] = "Îòìåòêè óêàçàòåëÿ";
     Text[ polish ] = "Znaczniki indeksu";
-    Text[ japanese ] = "“o˜^€–Ú";
-    Text[ chinese_traditional ] = "¥Ø¿ı¼Ğ°O";
+    Text[ japanese ] = "ç™»éŒ²é …ç›®";
+    Text[ chinese_traditional ] = "ç›®éŒ„æ¨™è¨˜";
     Text[ arabic ] = "ÊÍÏíÏÇÊ ÇáİåÑÓ";
     Text[ dutch ] = "Indexmarkeringen";
-    Text[ chinese_simplified ] = "Ä¿Â¼±ê¼Ç";
+    Text[ chinese_simplified ] = "ç›®å½•æ ‡è®°";
     Text[ greek ] = "ÓçìÜíóåéò åõñåôçñßïõ";
-    Text[ korean ] = "»öÀÎ ¸¶Å©Ç¥½Ã";
+    Text[ korean ] = "ìƒ‰ì¸ í‘œì‹œ";
     Text[ turkish ] = "Dizin için işaretlenen girişler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marcas del índice";
+    Text[ catalan ] = "Marques de l'índex";
+    Text[ thai ] = "à¸—à¸³à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¸”à¸±à¸Šà¸™à¸µ";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

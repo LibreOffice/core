@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-12-10 14:14:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,8 @@ struct ResIdPair_Impl
     USHORT nVert;
 };
 
-#define MAX_PERCENT_WIDTH 254L
+#define MAX_PERCENT_WIDTH   254L
+#define MAX_PERCENT_HEIGHT  254L
 
 #define LB_FRAME                0x00000001L // Textbereich des Absatzes
 #define LB_PRTAREA              0x00000002L // Textbereich des Absatzes + Einzuege
@@ -551,14 +552,14 @@ void lcl_InsertVectors(ListBox& rBox,
     const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
 {
     ::std::vector< const String >::iterator aIt;
+    USHORT nEntry = 0;
     for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
-        rBox.InsertEntry(*aIt);
+        nEntry = rBox.InsertEntry(*aIt);
     for(aIt = rThis.begin(); aIt != rThis.end(); aIt++)
-        rBox.InsertEntry(*aIt);
+        nEntry = rBox.InsertEntry(*aIt);
     for(aIt = rNext.begin(); aIt != rNext.end(); aIt++)
-        rBox.InsertEntry(*aIt);
-    rBox.SetEntryData(
-        rBox.InsertEntry(String::CreateFromAscii("-------------")), (void*)(ULONG)1);
+        nEntry = rBox.InsertEntry(*aIt);
+    rBox.SetSeparatorPos(nEntry);
     //now insert all strings sorted
     USHORT nStartPos = rBox.GetEntryCount();
 
@@ -1042,7 +1043,7 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
         else
             aSz.SetWidthPercent(0);
         if (aRelHeightCB.IsChecked())
-            aSz.SetHeightPercent((BYTE)Min(100L, aHeightED.Convert(aHeightED.Normalize(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetHeightPercent((BYTE)Min(MAX_PERCENT_HEIGHT, aHeightED.Convert(aHeightED.Normalize(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM)));
         else
             aSz.SetHeightPercent(0);
 
@@ -1562,15 +1563,18 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
         aWidthED.ShowPercent(pBtn->IsChecked());
         aWidthED.MetricField::SetMax(MAX_PERCENT_WIDTH);
     }
-    else
+    else // pBtn == &aRelHeightCB
+    {
         aHeightED.ShowPercent(pBtn->IsChecked());
+        aHeightED.MetricField::SetMax(MAX_PERCENT_HEIGHT);
+    }
 
     if (pBtn)   // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
         RangeModifyHdl(&aWidthED);  // Werte wieder korrigieren
 
     if (pBtn == &aRelWidthCB)
         ModifyHdl(&aWidthED);
-    else
+    else // pBtn == &aRelHeightCB
         ModifyHdl(&aHeightED);
 
     return 0;
@@ -2075,6 +2079,9 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
                     break;
                 }
             }
+            //disable "original size" button if necessary
+            if(0 != (pSh->GetOLEObj()->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE))
+                aRealSizeBT.Disable();
         }
     }
 
@@ -3132,41 +3139,34 @@ void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
 {
-    //prevent the selection of the separator
-    if(pBox->GetEntryData(pBox->GetSelectEntryPos()))
-        pBox->SelectEntryPos(0);
-    else
+    String sCurrentPrevChain, sCurrentNextChain;
+    if(aPrevLB.GetSelectEntryPos())
+        sCurrentPrevChain = aPrevLB.GetSelectEntry();
+    if(aNextLB.GetSelectEntryPos())
+        sCurrentNextChain = aNextLB.GetSelectEntry();
+    SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
+    if (pFmt)
     {
-        String sCurrentPrevChain, sCurrentNextChain;
-        if(aPrevLB.GetSelectEntryPos())
-            sCurrentPrevChain = aPrevLB.GetSelectEntry();
-        if(aNextLB.GetSelectEntryPos())
-            sCurrentNextChain = aNextLB.GetSelectEntry();
-        SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
-        if (pFmt)
-        {
-            BOOL bNextBox = &aNextLB == pBox;
-            ListBox& rChangeLB = bNextBox ? aPrevLB : aNextLB;
-            for(USHORT nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
-                rChangeLB.RemoveEntry(nEntry - 1);
-            //determine chainable frames
-            ::std::vector< String > aPrevPageFrames;
-            ::std::vector< String > aThisPageFrames;
-            ::std::vector< String > aNextPageFrames;
-            ::std::vector< String > aRemainFrames;
-            pWrtSh->GetConnectableFrmFmts(*pFmt, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
-                            aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
-            lcl_InsertVectors(rChangeLB,
-                    aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
-            String sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
-            if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
-                rChangeLB.SelectEntry(sToSelect);
-            else
-                rChangeLB.SelectEntryPos(0);
+        BOOL bNextBox = &aNextLB == pBox;
+        ListBox& rChangeLB = bNextBox ? aPrevLB : aNextLB;
+        for(USHORT nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
+            rChangeLB.RemoveEntry(nEntry - 1);
+        //determine chainable frames
+        ::std::vector< String > aPrevPageFrames;
+        ::std::vector< String > aThisPageFrames;
+        ::std::vector< String > aNextPageFrames;
+        ::std::vector< String > aRemainFrames;
+        pWrtSh->GetConnectableFrmFmts(*pFmt, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
+                        aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
+        lcl_InsertVectors(rChangeLB,
+                aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
+        String sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
+        if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
+            rChangeLB.SelectEntry(sToSelect);
+        else
+            rChangeLB.SelectEntryPos(0);
 
-        }
     }
-
     return 0;
 }
 

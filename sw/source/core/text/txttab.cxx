@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-22 12:30:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,10 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
         konvertiert (vgl. rInf.GetTabPos).
        */
         const SwTwips nTabLeft = pFrm->Frm().Left() +
-                     pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft();
-                //    + KSHORT(pFrm->GetTxtNode()->GetLeftMarginWithNum( sal_True ));
+                                 ( pFrm->IsRightToLeft() ?
+                                   pFrm->GetAttrSet()->GetLRSpace().GetRight() :
+                                   pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft() );
+
         const SwTwips nLinePos = GetLeftMargin();
         const SwTwips nLineTab = nLinePos + nTabPos;
         SwTwips nRight = Right();
@@ -197,14 +199,11 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
             }
             SwTwips nCount = nLineTab;
             nCount -= nTabLeft;
-
             // Bei negativen Werten rundet "/" auf, "%" liefert negative Reste,
             // bei positiven Werten rundet "/" ab, "%" liefert positvie Reste!
-            if ( nCount < 0 )
-                nCount = 0;
-
+            KSHORT nPlus = nCount < 0 ? 0 : 1;
             nCount /= nDefTabDist;
-            nNextPos = ( nCount + 1 ) * nDefTabDist ;
+            nNextPos = ( nCount + nPlus ) * nDefTabDist ;
             if( nNextPos + nTabLeft <= nLineTab + 50 )
                 nNextPos += nDefTabDist;
             cFill = 0;
@@ -458,8 +457,8 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 #ifndef PRODUCT
     // Wir wollen uns die Fixbreite anzeigen
     if( rInf.OnWin() && OPTDBG( rInf ) &&
-        !rInf.GetOpt().IsPagePreview() &&
-        !rInf.GetOpt().IsReadonly() &&
+        !rInf.GetOpt().IsPagePreview() && \
+        !rInf.GetOpt().IsReadonly() && \
         SwViewOption::IsFieldShadings()    )
     {
         const KSHORT nWidth = PrtWidth();

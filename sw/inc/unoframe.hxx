@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-26 12:35:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,14 +371,12 @@ class SwXOLEListener : public cppu::WeakImplHelper1
 >,
     public SwClient
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLEModel;
-//    SfxObjectShell* GetObjShell( const SwFmt& rFmt,
-//                                    SwOLENode** ppNd = 0 ) const;
-    SwFmt*       GetFmt() const    {  return (SwFmt*)GetRegisteredIn(); }
+    SvPtrarr aFmts;
+     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel( const SwFmt& rFmt, SwOLENode** ppNd = 0 ) const;
+    SfxObjectShell* GetObjShell( const SwFmt& rFmt,
+                                    SwOLENode** ppNd = 0 ) const;
+    sal_uInt16 FindEntry( const ::com::sun::star::lang::EventObject& Source, SwOLENode** ppNd = 0 );
 public:
-    SwXOLEListener(SwFmt& rOLEFmt, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
-    ~SwXOLEListener();
-    TYPEINFO();
 
 // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -386,6 +384,7 @@ public:
 // ::com::sun::star::util::XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 
+    sal_Bool AddOLEFmt( SwFrmFmt& rFmt );
     void Modify( SfxPoolItem*, SfxPoolItem* );
 };
 

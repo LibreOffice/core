@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: od $ $Date: 2002-11-15 11:07:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,8 +412,8 @@ USHORT SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
         const SwCntntNode* pCNd = pEnd->nNode.GetNode().GetCntntNode();
         const SwNode* pNd = &pStt->nNode.GetNode();
         const SwSectionNode* pSectNd = pNd->FindSectionNode();
-        const SwSectionNode* pEndSectNd = pCNd->FindSectionNode();
-        if( pSectNd && pEndSectNd && pSectNd != pCNd->FindSectionNode() )
+        const SwSectionNode* pEndSectNd = pCNd ? pCNd->FindSectionNode() : 0;
+        if( pSectNd && pEndSectNd && pSectNd != pEndSectNd )
         {
             // versuche eine umschliessende Section zu erzeugen
             // Aber, nur wenn der Start am Sectionanfang und das Ende am

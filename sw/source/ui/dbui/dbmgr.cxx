@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: os $ $Date: 2002-12-09 13:58:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_MAILMERGEEVENT_
+#include <com/sun/star/text/MailMergeEvent.hpp>
 #endif
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -223,9 +226,6 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -280,8 +280,9 @@
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
-#include "mailmrge.hxx"
 
+#include "mailmrge.hxx"
+#include <unomailmerge.hxx>
 
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
@@ -301,6 +302,7 @@
 
 using namespace svx;
 using namespace ::com::sun::star;
+using namespace com::sun::star::text;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::frame;
@@ -417,6 +419,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
 BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
                         const ODataAccessDescriptor& _rDescriptor)
 {
+    SetMergeType( nOpt );
 
     DBG_ASSERT(!bInMerge && !pImpl->pMergeData, "merge already activated!")
 
@@ -432,10 +435,10 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
 
     if ( _rDescriptor.has(daCursor) )
         _rDescriptor[daCursor] >>= xResSet;
-    if ( _rDescriptor.has(daSelection) )
+     if ( _rDescriptor.has(daSelection) )
         _rDescriptor[daSelection] >>= aSelection;
-    if ( _rDescriptor.has(daConnection) )
-        _rDescriptor[daConnection] >>= xConnection;
+      if ( _rDescriptor.has(daConnection) )
+         _rDescriptor[daConnection] >>= xConnection;
 
     if(!aData.sDataSource.getLength() || !aData.sCommand.getLength() || !xResSet.is())
     {
@@ -554,8 +557,16 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         {
             SfxDispatcher *pDis = rSh.GetView().GetViewFrame()->GetDispatcher();
             SfxBoolItem aMerge(FN_QRY_MERGE, TRUE);
+
+            // !! Currently (Jan-2003) silent is defined by supplying *any*
+            // !! item!!  (Thus according to OS it would be silent even when
+            // !! other items then SID_SILENT would be supplied!)
+            // !! Therefore it has to be the 0 pointer when not silent.
+            SfxBoolItem aMergeSilent(SID_SILENT, TRUE);
+            SfxBoolItem *pMergeSilent = IsMergeSilent() ? &aMergeSilent : 0;
+
             pDis->Execute(SID_PRINTDOC,
-                    SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMerge, 0L);
+                    SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMerge, pMergeSilent, 0L);
         }
         break;
 
@@ -859,7 +870,9 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 
 SwNewDBMgr::SwNewDBMgr() :
             pImpl(new SwNewDBMgr_Impl(*this)),
+            pMergeEvtSrc(NULL),
             bInMerge(FALSE),
+            bMergeSilent(FALSE),
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE)
 {
@@ -918,6 +931,16 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
         {
             pSh->ViewShell::UpdateFlds();
             ++rOpt.nMergeAct;
+
+            // launch MailMergeEvent if required
+            const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
+            if (pEvtSrc)
+            {
+                Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
+                text::MailMergeEvent aEvt( xRef, rView.GetDocShell()->GetModel() );
+                pEvtSrc->LaunchMailMergeEvent( aEvt );
+            }
+
             rView.SfxViewShell::Print( rProgress ); // ggf Basic-Macro ausfuehren
 
             if( rOpt.IsPrintSingleJobs() && bRet )
@@ -1035,7 +1058,8 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             PrintMonitor aPrtMonDlg(&pSh->GetView().GetEditWin(), TRUE);
             aPrtMonDlg.aDocName.SetText(pSh->GetView().GetDocShell()->GetTitle(22));
             aPrtMonDlg.aCancel.SetClickHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
-            aPrtMonDlg.Show();
+            if (!IsMergeSilent())
+                aPrtMonDlg.Show();
 
             OfficeApplication* pOffApp = OFF_APP();
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, pOffApp->GetPool() );
@@ -1161,7 +1185,8 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
             aPrtMonDlg.aDocName.SetText(pSh->GetView().GetDocShell()->GetTitle(22));
 
             aPrtMonDlg.aCancel.SetClickHdl(LINK(this, SwNewDBMgr, PrtCancelHdl));
-            aPrtMonDlg.Show();
+            if (!IsMergeSilent())
+                aPrtMonDlg.Show();
 
             SwDocShell *pDocSh = pSh->GetView().GetDocShell();
             // Progress, um KeyInputs zu unterbinden
@@ -1232,6 +1257,15 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
 
                             // alle versteckten Felder/Bereiche entfernen
                             pDoc->RemoveInvisibleContent();
+
+                            // launch MailMergeEvent if required
+                            const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
+                            if (pEvtSrc)
+                            {
+                                Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
+                                text::MailMergeEvent aEvt( xRef, xDocSh->GetModel() );
+                                pEvtSrc->LaunchMailMergeEvent( aEvt );
+                            }
 
                             SfxMedium* pDstMed = new SfxMedium(
                                 aTempFile.GetMainURL( INetURLObject::NO_DECODE ),
@@ -2153,7 +2187,6 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
     if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
-        SetMergeType(  pImpl->pMergeDialog->GetMergeType() );
         aDescriptor[daSelection] <<= pImpl->pMergeDialog->GetSelection();
 
         Reference<XResultSet> xResSet = pImpl->pMergeDialog->GetResultSet();
@@ -2161,7 +2194,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             aDescriptor[daCursor] <<= xResSet;
 
         OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
-        MergeNew(GetMergeType(),
+        MergeNew(pImpl->pMergeDialog->GetMergeType() ,
                             rSh,
                             aDescriptor);
         // reset the cursor inside

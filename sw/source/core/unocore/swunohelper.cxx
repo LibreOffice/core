@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swunohelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 11:42:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,33 @@ BOOL UCB_IsReadOnlyFileName( const String& rURL )
     return bIsReadOnly;
 }
 
+BOOL UCB_IsFile( const String& rURL )
+{
+    BOOL bExists = FALSE;
+    try
+    {
+        ::ucb::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
+        bExists = aContent.isDocument();
+    }
+    catch (UNO_NMSPC::Exception &)
+    {
+    }
+    return bExists;
+}
+
+BOOL UCB_IsDirectory( const String& rURL )
+{
+    BOOL bExists = FALSE;
+    try
+    {
+        ::ucb::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
+        bExists = aContent.isFolder();
+    }
+    catch (UNO_NMSPC::Exception &)
+    {
+    }
+    return bExists;
+}
 
     // get a list of files from the folder of the URL
     // options: pExtension = 0 -> all, else this specific extension

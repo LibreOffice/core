@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 13:59:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,10 @@
 #ifndef _SVX_RUBYDLG_HXX_
 #include <svx/rubydialog.hxx>
 #endif
+// OD 14.02.2003 #107424#
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
+#endif
 
 #include <svtools/moduleoptions.hxx>
 
@@ -444,6 +448,11 @@ SwModule::SwModule( SvFactory* pFact,
 //                                      OWeakObject* ( new ScannerEventListener( this ) ), UNO_QUERY );
 //      }
     }
+
+    // OD 14.02.2003 #107424# - init color configuration
+    // member <pColorConfig> is created and the color configuration is applied
+    // at the view options.
+    GetColorConfig();
 }
 
 //************************************************************************
@@ -586,6 +595,7 @@ void SwDLL::RegisterControls()
     SvxHyperlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SvxFontWorkChildWindow::RegisterChildWindow( sal_False, pMod );
     SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
+    SwFldDataOnlyDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SvxContourDlgChildWindow::RegisterChildWindow( sal_False, pMod );
     SwInsertChartChild::RegisterChildWindow( sal_False, pMod );
     SwNavigationChild::RegisterChildWindowContext( pMod );

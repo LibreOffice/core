@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:58:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,23 +119,24 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT [ portuguese ] = "E~liminar" ;
         TEXT [ finnish ] = "~Poista" ;
         TEXT [ danish ] = "Slet" ;
-        TEXT [ french ] = "~Supprimer" ;
+        TEXT [ french ] = "Supprimer" ;
         TEXT [ swedish ] = "~Radera" ;
         TEXT [ dutch ] = "~Wissen" ;
-        TEXT [ spanish ] = "~Eliminar" ;
+        TEXT [ spanish ] = "~Borrar" ;
         TEXT [ english_us ] = "~Delete" ;
         TABSTOP = TRUE ;
         DISABLE = TRUE ;
-        TEXT[ chinese_simplified ] = "É¾³ı(~D)";
+        TEXT[ chinese_simplified ] = "åˆ é™¤(~D)";
         TEXT[ russian ] = "Óäàëèòü";
         TEXT[ polish ] = "~Usuñ";
-        TEXT[ japanese ] = "íœ(~D)";
-        TEXT[ chinese_traditional ] = "§R°£(~D)";
+        TEXT[ japanese ] = "å‰Šé™¤(~D)";
+        TEXT[ chinese_traditional ] = "åˆªé™¤(~D)";
         TEXT[ greek ] = "ÄéáãñáöŞ";
-        TEXT[ korean ] = "»èÁ¦(~D)";
+        TEXT[ korean ] = "ì‚­ì œ(~D)";
         TEXT[ arabic ] = "ÍĞİ";
         TEXT[ turkish ] = "~Sil";
-        TEXT[ catalan ] = "~Eliminar";
+        TEXT[ catalan ] = "~Suprimeix";
+        TEXT[ thai ] = "~à¸¥à¸š";
     };
     FixedLine FL_BOOKMARK
     {
@@ -154,27 +155,29 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT [ dutch ] = "Tekstmarkeringen" ;
         TEXT [ spanish ] = "Marcas de texto" ;
         TEXT [ english_us ] = "Bookmarks" ;
-        TEXT[ chinese_simplified ] = "ÊéÇ©";
-        TEXT[ russian ] = "Òåêñòîâûå ïîìåòêè";
+        TEXT[ chinese_simplified ] = "ä¹¦ç­¾";
+        TEXT[ russian ] = "Çàêëàäêè";
         TEXT[ polish ] = "Zak³adki";
-        TEXT[ japanese ] = "Ã·½ÄÏ°¸";
-        TEXT[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
+        TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
+        TEXT[ chinese_traditional ] = "å…§æ–‡æ¨™ç±¤";
         TEXT[ greek ] = "ÓçìÜäéá êåéìİíïõ";
-        TEXT[ korean ] = "Ã¥°¥ÇÇ";
+        TEXT[ korean ] = "ì±…ê°ˆí”¼";
         TEXT[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
         TEXT[ turkish ] = "Metin işareti";
-        TEXT[ catalan ] = "Marcas de texto";
+        TEXT[ catalan ] = "Marques de text";
+        TEXT[ thai ] = "à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
     };
-    TEXT[ chinese_simplified ] = "²åÈëÊéÇ©";
-    TEXT[ russian ] = "Âñòàâêà òåêñòîâîé ïîìåòêè";
+    TEXT[ chinese_simplified ] = "æ’å…¥ä¹¦ç­¾";
+    TEXT[ russian ] = "Âñòàâêà çàêëàäêè";
     TEXT[ polish ] = "Wstaw zak³adkê";
-    TEXT[ japanese ] = "Ã·½ÄÏ°¸‚Ì‘}“ü";
-    TEXT[ chinese_traditional ] = "´¡¤J¤º¤å¼ĞÅÒ";
+    TEXT[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯ã®æŒ¿å…¥";
+    TEXT[ chinese_traditional ] = "æ’å…¥å…§æ–‡æ¨™ç±¤";
     TEXT[ greek ] = "ÅéóáãùãŞ óçìáäéïı êåéìİíïõ";
-    TEXT[ korean ] = "Ã¥°¥ÇÇ »ğÀÔ";
+    TEXT[ korean ] = "ì±…ê°ˆí”¼ ì‚½ì…";
     TEXT[ arabic ] = "ÅÏÑÇÌ ÅÔÇÑÉ ãÑÌÚíÉ";
     TEXT[ turkish ] = "Metin işareti ekle";
-    TEXT[ catalan ] = "Insertar marca";
+    TEXT[ catalan ] = "Insereix marca";
+    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
 };
 String STR_REMOVE_WARNING
 {
@@ -182,25 +185,40 @@ String STR_REMOVE_WARNING
     Text [English] = "The following characters are not valid and have been removed: ";
     Text[ english_us ] = "The following characters are not valid and have been removed: ";
     Text[ portuguese ] = "Os seguintes caracteres foram eliminados porque não são válidos: ";
-    Text[ russian ] = "Ñëåäóşùèå çíàêè íå äîïóñêàşòñÿ è ïîıòîìó áóäóò óäàëåíû: ";
+    Text[ russian ] = "Ñëåäóşùèå  ñèìâîëû íåäîïóñòèìû è áóäóò óäàëåíû: ";
     Text[ greek ] = "Ïé áêüëïõèïé ÷áñáêôŞñåò İ÷ïõí äéáãñáöåß åğåéäŞ äåí åßíáé İãêõñïé. ";
-    Text[ dutch ] = "De volgende tekens zijn niet toegestaan en werden daarom verwijderd. ";
+    Text[ dutch ] = "De volgende tekens zijn niet toegestaan en zijn daarom verwijderd. ";
     Text[ french ] = "Les caractères suivants ont été supprimés car ils ne sont pas permis :  ";
-    Text[ spanish ] = "Los siguientes caracteres han sido eliminados porque no se permiten:  ";
+    Text[ spanish ] = "Los siguientes caracteres se han borrado por no ser válidos:  ";
     Text[ italian ] = "I caratteri seguenti non sono ammessi e per questo eliminati. ";
     Text[ danish ] = "De følgende tegn er ikke tilladte og er derfor blevet fjernet: ";
     Text[ swedish ] = "Följande tecken är inte tillåtna och har därför tagits bort:  ";
     Text[ polish ] = "Nastêpuj¹cy znak jest niedozwolony i zosta³ dlatego usuniêty: ";
     Text[ portuguese_brazilian ] = "The following characters are not valid and have been removed: ";
-    Text[ japanese ] = "Ÿ‚Ì•¶š‚Í‹–‰Â‚³‚ê‚Ä‚¢‚È‚¢‚½‚ßœ‹‚³‚ê‚Ü‚µ‚½B ";
-    Text[ korean ] = "´ÙÀ½°ú °°Àº ¹®ÀÚµéÀº À¯È¿ÇÏÁö ¾Ê¾Æ¼­ Á¦°ÅµÇ¾ú½À´Ï´Ù: ";
-    Text[ chinese_simplified ] = "ÏÂÁĞ×Ö·ûÎŞĞ§ÇÒÒÑ¾­±»É¾³ı£º ";
-    Text[ chinese_traditional ] = "¤U¦Cªº¦r«¬µL®Ä¦Ó³Q§R°£¡G ";
+    Text[ japanese ] = "æ¬¡ã®æ–‡å­—ã¯è¨±å¯ã•ã‚Œã¦ã„ãªã„ãŸã‚é™¤å»ã•ã‚Œã¾ã—ãŸã€‚ ";
+    Text[ korean ] = "ë‹¤ìŒê³¼ ê°™ì€ ë¬¸ìëŠ” í—ˆìš©ë˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤: ";
+    Text[ chinese_simplified ] = "ä¸‹åˆ—å­—ç¬¦æ— æ•ˆä¸”å·²ç»è¢«åˆ é™¤ï¼š ";
+    Text[ chinese_traditional ] = "ä¸‹åˆ—çš„å­—å‹ç„¡æ•ˆè€Œè¢«åˆªé™¤ï¼š ";
     Text[ arabic ] = "ÇáÃÍÑİ ÇáÊÇáíÉ ÛíÑ ÕÇáÍÉ¡ áåĞÇ Êã ÍĞİåÇ: ";
     Text[ turkish ] = "Aşağıdaki karakterler geçerli değiller ve bu nedenle çıkartıldılar: ";
-    Text[ catalan ] = "Los siguientes caracteres han sido eliminados porque no se permiten:  ";
+    Text[ catalan ] = "Els següents caràcters s'han eliminat perquè no es permeten:  ";
     Text[ finnish ] = "Seuraavat merkit eivät ole kelvollisia ja ne poistettiin: ";
+    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸•à¸²à¸¡à¸™à¸µà¹‰à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¹à¸¥à¸°à¸–à¸¹à¸à¹€à¸­à¸²à¸­à¸­à¸à¹à¸¥à¹‰à¸§: ";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8SCAN_HXX
@@ -113,6 +112,7 @@ namespace SL
     DEFCONSTSTRINGARRAY(CheckBox);
     DEFCONSTSTRINGARRAY(TextBox);
     DEFCONSTSTRINGARRAY(TextField);
+    DEFCONSTSTRINGARRAY(MSMacroCmds);
 }
 
 /*
@@ -668,9 +668,6 @@ private:
     USHORT nArrMax;
     UINT16 nSprmSiz;
 
-    static const wwSprmSequence* GetWW8IgnoredSprms();
-    static const wwSprmSequence* GetWW6IgnoredSprms();
-
     //no copying
     WW8PLCFx_SEPX(const WW8PLCFx_SEPX&);
     WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&);
@@ -691,7 +688,6 @@ public:
         long nOtherSprmSiz ) const;
     bool Find4Sprms(USHORT nId1, USHORT nId2, USHORT nId3, USHORT nId4,
                     BYTE*& p1,   BYTE*& p2,   BYTE*& p3,   BYTE*& p4 ) const;
-    bool SprmsAreEquivalent(const BYTE* pOtherSprms, long nOtherSprmSiz) const;
 };
 
 // Iterator fuer Fuss-/Endnoten und Anmerkungen
@@ -1682,3 +1678,5 @@ public:
 };
 
 #endif
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-05 10:06:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -746,9 +746,6 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
-
-
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     BOOL bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType();
     Font* pTmpFont = bPrt ? pPrtFont : GetScrFont();
 
@@ -1038,9 +1035,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     // handelt, muessen wir zwei ausgeben:
                     if( 1 == rInf.GetLen() )
                     {
-                        pKernArray[0] = nSpaceAdd;
-                        rInf.GetOut().DrawTextArray( aPos, XubString( sDoubleSpace,
-                            RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
+                           pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
+
+                        rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                                                     pKernArray, rInf.GetIdx(), 1 );
                     }
                     else
                     {
@@ -1248,16 +1246,6 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             xub_Unicode cBulletChar = CH_BULLET;
 
-            if ( rInf.GetFont() )
-            {
-                // Some Asian fonts do not have the middot (0xB7),
-                // others do not have the Asian middot (0xFF65).
-                // Until we find a better solution we do not paint
-                // middots with Asian fonts.
-                if ( SW_CJK == rInf.GetFont()->GetActual() )
-                    cBulletChar = CH_BLANK; // 0xFF65;
-            }
-
             for( xub_StrLen i = 0; i < aStr.Len(); ++i )
                 if( CH_BLANK == aStr.GetChar( i ) )
                     aStr.SetChar( i, cBulletChar );
@@ -1284,7 +1272,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         // im Blocksatz handelt, muessen wir zwei ausgeben:
         if ( ( nCnt == 1 ) && rInf.GetSpace() && ( cChPrev == CH_BLANK ) )
         {
-            pKernArray[0] = rInf.GetSpace() + rInf.GetKern();
+            pKernArray[0] = rInf.GetWidth() + rInf.GetSpace() + rInf.GetKern();
 
 #ifdef BIDI
             if ( bSwitchL2R )
@@ -1294,8 +1282,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             if ( bSwitchH2V )
                 rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 
-            rInf.GetOut().DrawTextArray( aPos, XubString( sDoubleSpace,
-                RTL_TEXTENCODING_MS_1252 ), pKernArray, 0, 2 );
+            rInf.GetOut().DrawTextArray( aPos, rInf.GetText(),
+                                         pKernArray, rInf.GetIdx(), 1 );
             if( bBullet )
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray,
                                              rInf.GetIdx() ? 1 : 0, 1 );
@@ -1829,10 +1817,10 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         rInf.GetpOut()->GetTextArray( rInf.GetText(), pKernArray,
                             rInf.GetIdx(), rInf.GetLen() );
 
+    const SwScriptInfo* pSI = rInf.GetScriptInfo();
     if ( rInf.GetFont() && rInf.GetLen() )
     {
         const BYTE nActual = rInf.GetFont()->GetActual();
-        const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
         // Kana Compression
         if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
@@ -1968,9 +1956,12 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     // step back if position is before the middle of the character
     if ( nIdx > rInf.GetIdx() && ( nRight > long( rInf.GetOfst() ) ) &&
                  ( nRight - rInf.GetOfst() > rInf.GetOfst() - nLeft ) )
-        nCnt = nLastIdx - rInf.GetIdx();
+        nCnt = nLastIdx - rInf.GetIdx(); // first half
     else
-        nCnt = nIdx - rInf.GetIdx();
+        nCnt = nIdx - rInf.GetIdx(); // second half
+
+    if ( pSI )
+        rInf.SetCursorBidiLevel( pSI->DirType( nLastIdx ) );
 
     delete[] pKernArray;
     return nCnt;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 12:16:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,6 +763,7 @@ sal_Bool SwXAutoTextGroup::hasElements(void) throw( uno::RuntimeException )
         nCount = pGlosGroup->GetCount();
     else
         throw uno::RuntimeException();
+    delete pGlosGroup;
     return nCount > 0;
 
 }
@@ -890,7 +891,7 @@ void SwXAutoTextGroup::setPropertyValue(
         throw beans::UnknownPropertyException();
 
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(sGroupName, sal_False) : 0;
-    if(!pGlosGroup && !pGlosGroup->GetError())
+    if(!pGlosGroup || pGlosGroup->GetError())
         throw uno::RuntimeException();
     switch(pMap->nWID)
     {
@@ -1233,6 +1234,7 @@ void SwXAutoTextEntry::applyTo(const Reference< text::XTextRange > & xTextRange)
     SwTextBlocks* pBlock = pGlossaries->GetGroupDoc(sGroupName);
     sal_Bool bResult = pBlock && !pBlock->GetError() &&
                 pDoc->InsertGlossary( *pBlock, sEntryName, *pInsertPaM);
+    delete pBlock;
     delete pInsertPaM;
 
     if(!bResult)
@@ -1342,6 +1344,8 @@ void SwAutoTextEventDescriptor::replaceByName(
                 pBlocks->SetMacroTable( nIndex, aMacroTable );
             }
         }
+
+        delete pBlocks;
     }
     // else: ignore
 }
@@ -1385,6 +1389,8 @@ void SwAutoTextEventDescriptor::getByName(
                     rMacro = *pMacro;
             }
         }
+
+        delete pBlocks;
     }
 }
 

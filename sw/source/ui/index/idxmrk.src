@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-08 14:10:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,27 @@
 #define     IDX_PHONETIC_LISTBOX_DESCRIPTION \
 Text = "Phonetische Lesart"; \
 Text[English] = "Phonetic reading"; \
-Text[ english_us ] = "Phonetic reading";
+Text[ english_us ] = "Phonetic reading";    \
+    Text[ portuguese ] = "Phonetic reading";    \
+    Text[ russian ] = "Phonetic reading";   \
+    Text[ greek ] = "Phonetic reading"; \
+    Text[ dutch ] = "Phonetic reading"; \
+    Text[ french ] = "Lecture phonétique";  \
+    Text[ spanish ] = "Lectura fonética";   \
+    Text[ finnish ] = "Phonetic reading";   \
+    Text[ italian ] = "Lettura fonetica";   \
+    Text[ danish ] = "Phonetic reading";    \
+    Text[ swedish ] = "Fonetisk läsning";   \
+    Text[ polish ] = "Phonetic reading";    \
+    Text[ portuguese_brazilian ] = "Phonetic reading";  \
+    Text[ japanese ] = "èª­ã¿";    \
+    Text[ korean ] = "ë°œìŒ í‘œê¸°";   \
+    Text[ chinese_simplified ] = "è¯­éŸ³æè¿°";    \
+    Text[ chinese_traditional ] = "èªéŸ³æè¿°";   \
+    Text[ turkish ] = "Phonetic reading";   \
+    Text[ arabic ] = "Phonetic reading";    \
+    Text[ catalan ] = "Phonetic reading";   \
+    Text[ thai ] = "Phonetic reading";
 
 #define IDX_DIALOG_WINDOW \
     Window WIN_DLG                                                  \
@@ -155,7 +175,7 @@ Text[ english_us ] = "Phonetic reading";
             Text [ french ] = "Supprimer" ;                        \
             Text [ swedish ] = "~Radera" ;                         \
             Text [ dutch ] = "~Wissen" ;                            \
-            Text [ spanish ] = "~Eliminar" ;                        \
+            Text [ spanish ] = "~Borrar" ;                        \
             Text [ english_us ] = "~Delete" ;                       \
             TabStop = TRUE ;                                        \
             Text[ chinese_simplified ] = "åˆ é™¤(~D)";               \
@@ -197,7 +217,7 @@ Text[ english_us ] = "Phonetic reading";
             QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika";\
             QuickHelpText[ portuguese_brazilian ] = "New user defined index";\
             QuickHelpText[ japanese ] = "æ–°ã—ã„ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼•";\
-            QuickHelpText[ korean ] = "ìƒˆ ì‚¬ìš©ìì •ì˜ ìƒ‰ì¸";\
+            QuickHelpText[ korean ] = "ìƒˆ ì‚¬ìš©ì ì •ì˜ ìƒ‰ì¸";\
             QuickHelpText[ chinese_simplified ] = "æ–°å»ºä½¿ç”¨è€…è‡ªå®šç›®å½•";\
             QuickHelpText[ chinese_traditional ] = "æ–°å¢ä½¿ç”¨è€…è‡ªè¨‚ç›®éŒ„";\
             QuickHelpText[ arabic ] = "İåÑÓ ÌÏíÏ ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";\
@@ -262,7 +282,7 @@ Text[ english_us ] = "Phonetic reading";
             Text[ chinese_traditional ] = "æ¨™è¨˜";                   \
             Text[ arabic ] = "ÇáÊÍÏíÏ";                      \
             Text[ greek ] = "ÓŞìáíóç";\
-            Text[ korean ] = "ì„ íƒ í‘œì‹œ";\
+            Text[ korean ] = "ì„ íƒ";\
             Text[ turkish ] = "Seçim";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Marca";\
@@ -349,7 +369,7 @@ Text[ english_us ] = "Phonetic reading";
             Text [ italian ] = "Chiave ~1" ;                        \
             Text [ portuguese_brazilian ] = "~1. Tecla" ;           \
             Text [ portuguese ] = "~1ª chave" ;                    \
-            Text [ finnish ] = "Ensimmäinen avain" ;                        \
+            Text [ finnish ] = "~1. avain" ;                        \
             Text [ danish ] = "~1. nøgle" ;                         \
             Text [ french ] = "Clé 1" ;                      \
             Text [ swedish ] = "Sorteringskod ~1" ;                  \
@@ -364,7 +384,7 @@ Text[ english_us ] = "Phonetic reading";
             Text[ chinese_traditional ] = "ç¬¬ä¸€å€‹é—œéµå­—";       \
             Text[ arabic ] = "ÇáãİÊÇÍ ÇáÃæá";                       \
             Text[ greek ] = "~1ï êëåéäß";\
-            Text[ korean ] = "1ë²ˆì§¸ í‚¤";\
+            Text[ korean ] = "1. í‚¤";\
             Text[ turkish ] = "~1. Anahtar";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Clau ~1a";\
@@ -389,12 +409,12 @@ Text[ english_us ] = "Phonetic reading";
             Text [ italian ] = "Chiave ~2" ;                        \
             Text [ portuguese_brazilian ] = "~2. Tecla" ;           \
             Text [ portuguese ] = "~2ª chave" ;                    \
-            Text [ finnish ] = "~Toinen avain" ;                        \
+            Text [ finnish ] = "~2. avain" ;                        \
             Text [ danish ] = "~2. nøgle" ;                         \
             Text [ french ] = "Clé 2" ;                     \
             Text [ swedish ] = "Sorteringskod ~2" ;                  \
             Text [ dutch ] = "~2e sleutel" ;                        \
-            Text [ spanish ] = "~2da clave" ;                      \
+            Text [ spanish ] = "~2a clave" ;                      \
             Text [ english_us ] = "~2nd key" ;                      \
             Left = TRUE ;                                           \
             Text[ chinese_simplified ] = "ç¬¬äºŒä¸ªå…³é”®å­—";            \
@@ -404,7 +424,7 @@ Text[ english_us ] = "Phonetic reading";
             Text[ chinese_traditional ] = "ç¬¬äºŒå€‹é—œéµå­—";       \
             Text[ arabic ] = "ÇáãİÊÇÍ ÇáËÇäí";                      \
             Text[ greek ] = "~2ï Êëåéäß";\
-            Text[ korean ] = "2ë²ˆì§¸ í‚¤";\
+            Text[ korean ] = "~2. í‚¤";\
             Text[ turkish ] = "~2. Anahtar";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Clau ~2a";\
@@ -550,10 +570,10 @@ Text[ english_us ] = "Phonetic reading";
             Hide = TRUE;                                                        \
             Text[ english_us ] = "~Apply to all similar texts.";                \
             Text[ portuguese ] = "~Aplicar a todos os textos semelhantes.";     \
-            Text[ russian ] = "Ïğèìåíèòü êî âñåì îäèíàêîâûì òåêñòàì";           \
+            Text[ russian ] = "Ïğèìåíèòü êî âñåì âõîæäåíèÿì";           \
             Text[ dutch ] = "~Alle gelijkluidende teksten";              \
             Text[ french ] = "~Appliquer à tous les textes similaires.";         \
-            Text[ spanish ] = "~Aplicar a todos los textos iguales.";           \
+            Text[ spanish ] = "~Aplicar a todos los textos similares";           \
             Text[ italian ] = "~Applica a tutti i testi simili";                 \
             Text[ danish ] = "~Anvend på alle lignende tekster.";                    \
             Text[ swedish ] = "~Använd på alla liknande texter.";               \
@@ -564,7 +584,7 @@ Text[ english_us ] = "Phonetic reading";
             Text[ chinese_traditional ] = "ç”¨æ–¼æ‰€æœ‰ç›¸åŒçš„å…§æ–‡(~A)";            \
             Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
             Text[ greek ] = "ÅöáñìïãŞ óå üëá ôá ğáñüìïéá êåßìåíá.";\
-            Text[ korean ] = "ëª¨ë“  ê°™ì€ í…ìŠ¤íŠ¸ì— ì ìš©(~A)";\
+            Text[ korean ] = "ë¬¸ì„œ ë‚´ì—ì„œ ê°™ì€ ë¬¸ìì—´ì— ëŒ€í•´ ì ìš©(~A)";\
             Text[ turkish ] = "~Tüm eş metinlere uygula.";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "~Aplica-ho a tots els textos semblants.";\
@@ -580,7 +600,7 @@ Text[ english_us ] = "Phonetic reading";
             Hide = TRUE;\
             Text[ english_us ] = "Ma~tch case";\
             Text[ portuguese ] = "Procura e~xacta";\
-            Text[ russian ] = "Òî÷íûé ïîèñê";\
+            Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";\
             Text[ greek ] = "ÁêñéâŞò áíáæŞôçóç";\
             Text[ dutch ] = "~Exact dezelfde tekens";\
             Text[ french ] = "Respecter la casse";\
@@ -591,13 +611,13 @@ Text[ english_us ] = "Phonetic reading";
             Text[ polish ] = "Dok³adne wyszukiwanie";\
             Text[ portuguese_brazilian ] = "Match case";\
             Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~T)";\
-            Text[ korean ] = "ëŒ€/ì†Œë¬¸ì êµ¬ë¶„(~T)";\
+            Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ìë¥¼ êµ¬ë¶„(~T)";\
             Text[ chinese_simplified ] = "ç²¾ç¡®æœå¯»(~T)";\
             Text[ chinese_traditional ] = "ç²¾ç¢ºæœå°‹(~T)";\
             Text[ arabic ] = "ÈÍË ÏŞíŞ";\
             Text[ turkish ] = "BÜYÜK/küçük ~harf duyarlı";\
             Text[ catalan ] = "Coincidència e~xacta";\
-            Text[ finnish ] = "Sa~ma kirjainkoko";\
+            Text[ finnish ] = "Sama kirjainkoko";\
             Text[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¸—à¸µà¹ˆà¸•à¸£~à¸‡à¸à¸±à¸™";\
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
@@ -609,18 +629,18 @@ Text[ english_us ] = "Phonetic reading";
             Hide = TRUE;\
             Text[ english_us ] = "~Whole words only";\
             Text[ portuguese ] = "Só ~palavras inteiras";\
-            Text[ russian ] = "Òîëüêî âñå ñëîâî";\
+            Text[ russian ] = "Òîëüêî ñëîâî öåëèêîì";\
             Text[ greek ] = "Ìüíï ïëüêëçñåò ëİîåéò";\
             Text[ dutch ] = "Alleen hele ~woorden";\
             Text[ french ] = "Uniquement les mots entiers";\
-            Text[ spanish ] = "Solo palabras e~nteras";\
+            Text[ spanish ] = "~Sólo palabras completas";\
             Text[ italian ] = "Solo parole intere";\
             Text[ danish ] = "~Kun hele ord";\
             Text[ swedish ] = "Bara hela ~ord";\
             Text[ polish ] = "Tylko ca³e wyrazy";\
             Text[ portuguese_brazilian ] = "Whole words only";\
             Text[ japanese ] = "å˜èªã¨ã—ã¦(~W)";\
-            Text[ korean ] = "ì•ˆë²½í•œ ë‹¨ì–´ë§Œ(~W)";\
+            Text[ korean ] = "ë‹¨ì–´ ë‹¨ìœ„ë¡œ(~W)";\
             Text[ chinese_simplified ] = "åªå…è®¸å•è¯(~W)";\
             Text[ chinese_traditional ] = "åƒ…æ˜¯å–®è©(~W)";\
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";\
@@ -809,7 +829,7 @@ ModalDialog DLG_NEW_USER_IDX
     };
     Text[ english_us ] = "Create New User-defined Index";
     Text[ portuguese ] = "Criar novo índice personalizado";
-    Text[ russian ] = "Ñîçäàòü óêàçàòåëü ïîëüçîâàòåëÿ";
+    Text[ russian ] = "Ñîçäàòü íîâûé óêàçàòåëü";
     Text[ greek ] = "Äçìéïõñãßá íİïõ åõñåôçñßïõ ÷ñŞóôç";
     Text[ dutch ] = "Nieuwe gebruikersindex definiëren";
     Text[ french ] = "Création d'un nouvel index personnalisé";
@@ -882,7 +902,7 @@ String STR_IDXMRK_INSERT
     Text[ chinese_traditional ] = "æ’å…¥ç›®éŒ„æ¢ç›®";
     Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İåÑÓí";
     Text[ greek ] = "ÅéóáãùãŞ êáôá÷şñéóçò åõñåôçñßïõ";
-    Text[ korean ] = "ìƒ‰ì¸ í•­ëª© ì‚½ì…";
+    Text[ korean ] = "ìƒ‰ì¸ ë° ëª©ì°¨ í•­ëª© ì‚½ì…";
     Text[ turkish ] = "Dizin girişi ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix una entrada d'índex";
@@ -919,7 +939,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ãä ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";\
             Text[ turkish ] = "Kaynakça veritabanından";\
             Text[ catalan ] = "Des de la base de ~dades de la bibliografia";\
-            Text[ finnish ] = "Bibliografia~tietokannasta";\
+            Text[ finnish ] = "Lähdeluettelo~tietokannasta";\
             Text[ thai ] = "à¸ˆà¸²à¸~à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
@@ -969,14 +989,14 @@ String STR_IDXMRK_INSERT
             Text[ polish ] = "Autor";\
             Text[ portuguese_brazilian ] = "Author";\
             Text[ japanese ] = "è‘—è€…";\
-            Text[ korean ] = "ì‘ì„±ì";\
+            Text[ korean ] = "ì €ì";\
             Text[ chinese_simplified ] = "ä½œè€…";\
             Text[ chinese_traditional ] = "ä½œè€…";\
             Text[ arabic ] = "ÇáãÄáİ";\
             Text[ turkish ] = "Yazan";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Autor";\
-            Text[ finnish ] = "Laatija";\
+            Text[ finnish ] = "Tekijä";\
             Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";\
         };                                              \
         FixedText   FI_AUTHOR                           \
@@ -1039,7 +1059,7 @@ String STR_IDXMRK_INSERT
             Text[ polish ] = "Skrót";\
             Text[ portuguese_brazilian ] = "Short name";\
             Text[ japanese ] = "ç•¥ç§°(~N)";\
-            Text[ korean ] = "ì§§ì€ ì´ë¦„(~N)";\
+            Text[ korean ] = "ì•½ì¹­(~N)";\
             Text[ chinese_simplified ] = "ç®€ç§°(~N)";\
             Text[ chinese_traditional ] = "ç°¡çŸ­æè¿°æ–‡(~N)";\
             Text[ arabic ] = "ÇáÇÓã ÇáãÎÊÕÑ";\
@@ -1173,7 +1193,7 @@ String STR_IDXMRK_INSERT
             Text[ french ] = "~Nouveau";\
             Text[ spanish ] = "N~uevo";\
             Text[ italian ] = "Nuovo";\
-            Text[ danish ] = "Ny";\
+            Text[ danish ] = "~Ny";\
             Text[ swedish ] = "N~y";\
             Text[ polish ] = "Nowy";\
             Text[ portuguese_brazilian ] = "Create entry";\
@@ -1198,11 +1218,11 @@ String STR_IDXMRK_INSERT
             Text[ portuguese ] = "~Editar";\
             Text[ russian ] = "Ïğàâêà";\
             Text[ greek ] = "Åğåîåñãáóßá";\
-            Text[ dutch ] = "~Bewerken";\
+            Text[ dutch ] = "B~ewerken";\
             Text[ french ] = "Éditer";\
             Text[ spanish ] = "Editar";\
             Text[ italian ] = "~Modifica";\
-            Text[ danish ] = "Rediger";\
+            Text[ danish ] = "~Rediger";\
             Text[ swedish ] = "~Redigera";\
             Text[ polish ] = "~Edytuj";\
             Text[ portuguese_brazilian ] = "Edit";\
@@ -1233,14 +1253,14 @@ String STR_IDXMRK_INSERT
             Text[ polish ] = "Modyfikuj";\
             Text[ portuguese_brazilian ] = "Apply";\
             Text[ japanese ] = "å¤‰æ›´";\
-            Text[ korean ] = "ìˆ˜ì •";\
+            Text[ korean ] = "ë³€ê²½";\
             Text[ chinese_simplified ] = "æ›´æ”¹";\
             Text[ chinese_traditional ] = "è®Šæ›´";\
             Text[ arabic ] = "ÊØÈíŞ";\
             Text[ turkish ] = "Değiştir";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Modifica";\
-            Text[ finnish ] = "Muokkaa";\
+            Text[ finnish ] = "Muuta";\
             Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚";\
         };                                              \
     };
@@ -1316,7 +1336,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ polish ] = "Dane wpisu";
         Text[ portuguese_brazilian ] = "Entry data";
         Text[ japanese ] = "å…¥åŠ›ãƒ‡ãƒ¼ã‚¿";
-        Text[ korean ] = "ì…ë ¥ ë°ì´í„°";
+        Text[ korean ] = "í•­ëª© ë°ì´í„°";
         Text[ chinese_simplified ] = "æ¡ç›®æ•°æ®";
         Text[ chinese_traditional ] = "æ¢ç›®è³‡æ–™";
         Text[ arabic ] = "ÈíÇäÇÊ ÇáÅÏÎÇá";
@@ -1328,7 +1348,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     };
     Text[ english_us ] = "Define Bibliography Entry";
     Text[ portuguese ] = "Definir entrada bibliográfica";
-    Text[ russian ] = "Çàäàòü ıëåìåíò ñïèñêà ëèòåğàòóğû";
+    Text[ russian ] = "Çàäàòü áèáëèîãğàôè÷åñêóş ññûëêó";
     Text[ greek ] = "Ïñéóìüò êáôá÷şñéóçò âéâëéïãñáößáò";
     Text[ dutch ] = "Item voor literatuurlijst definiëren";
     Text[ french ] = "Définir une entrée de bibliographie";
@@ -1345,7 +1365,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ arabic ] = "ÊÚÑíİ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça girişini tanımla";
     Text[ catalan ] = "Defineix entrada de bibliografia";
-    Text[ finnish ] = "Määritä bibliografiamerkintä";
+    Text[ finnish ] = "Määritä lähdeluettelomerkintä";
     Text[ thai ] = "à¸£à¸°à¸šà¸¸à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
 };
 String STR_AUTHMRK_EDIT
@@ -1355,7 +1375,7 @@ String STR_AUTHMRK_EDIT
 
     Text[ english_us ] = "Edit Bibliography Entry";
     Text[ portuguese ] = "Editar entrada bibliográfica";
-    Text[ russian ] = "Ïğàâêà ıëåìåíòà ñïèñêà ëèòåğàòóğû";
+    Text[ russian ] = "Ïğàâêà áèáëèîãğàôè÷åñêîé ññûëêè";
     Text[ greek ] = "Åğåîåñãáóßá êáôá÷şñéóçò âéâëéïãñáößáò";
     Text[ dutch ] = "Item voor literatuurlijst bewerken";
     Text[ french ] = "Éditer une entrée de bibliographie";
@@ -1371,9 +1391,9 @@ String STR_AUTHMRK_EDIT
     Text[ chinese_traditional ] = "ç·¨è¼¯åƒè€ƒæ–‡ç»ç›®éŒ„æ¢ç›®";
     Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişini düzenle";
-    Text[ language_user1 ] = "EM28.9.01: MODALDIALOG title";
+    Text[ language_user1 ] = "EM28; EM28.9.01: MODALDIALOG title";
     Text[ catalan ] = "Edita entrada de bibliografia";
-    Text[ finnish ] = "Muokkaa bibliografiamerkintää";
+    Text[ finnish ] = "Muokkaa lähdeluettelomerkintää";
     Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
 };
 String STR_AUTHMRK_INSERT
@@ -1383,7 +1403,7 @@ String STR_AUTHMRK_INSERT
 
     Text[ english_us ] = "Insert Bibliography Entry";
     Text[ portuguese ] = "Inserir entrada bibliográfica";
-    Text[ russian ] = "Âñòàâèòü ıëåìåíò ñïèñêà ëèòåğàòóğû";
+    Text[ russian ] = "Âñòàâèòü áèáëèîãğàôè÷åñêóş ññûëêó";
     Text[ greek ] = "ÅéóáãùãŞ êáôá÷şñéóçò âéâëéïãñáößáò";
     Text[ dutch ] = "Item invoegen in literatuurlijst";
     Text[ french ] = "Insertion d'une entrée de bibliographie";
@@ -1399,9 +1419,9 @@ String STR_AUTHMRK_INSERT
     Text[ chinese_traditional ] = "æ’å…¥åƒè€ƒæ–‡ç»ç›®éŒ„æ¢ç›®";
     Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça dizini girişi ekle";
-    Text[ language_user1 ] = "EM28.9.01: MODALDIALOG title";
+    Text[ language_user1 ] = "EM28; EM28.9.01: MODALDIALOG title";
     Text[ catalan ] = "Insereix entrada de bibliografia";
-    Text[ finnish ] = "Lisää bibliografiamerkintä";
+    Text[ finnish ] = "Lisää lähdeluettelomerkintä";
     Text[ thai ] = "à¹à¸—à¸£à¸à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
@@ -1412,7 +1432,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE [ English ] = "The bibliography entry is already contained in the document with different data. Do you want to adjust the existing bibliography entries?" ;
     MESSAGE[ english_us ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
     MESSAGE[ portuguese ] = "A entrada bibliográfica já existe no documento com dados diferentes. Ajustar as entradas existentes?";
-    MESSAGE[ russian ] = "İòà çàïèñü áèáëèîãğàôèè ñ íåêîòîğûìè îòëè÷íûìè äàííûìè óæå ñîäåğæèòñÿ â äîêóìåíòå. Âû õîòèòå ñîãëàñîâàòü ñîäåğæàùèåñÿ çàïèñè?";
+    MESSAGE[ russian ] = "İòà äîêóìåíò óæå ñîäåğæèò áèáëèîãğàôèş, íî ñ äğóãèìè äàííûìè. Ñîãëàñîâàòü ñóùåñòâóşùèå ññûëêè?";
     MESSAGE[ greek ] = "Ç êáôá÷şñéóç âéâëéïèŞêçò õğÜñ÷åé Şäç óôï İããñáöï ìå äéáöïñåôéêÜ äåäïìİíá. Èİëåôå íá åöáñìïóôïıí ôá íİá äåäïìİíá;";
     MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. Wilt u de bestaande items aanpassen?";
     MESSAGE[ french ] = "L'entrée de bibliographie existe déjà en relation avec des données différentes dans le document. Voulez-vous ajuster les entrées existantes ?";
@@ -1429,6 +1449,29 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. åá ÊÑíÏ ãáÇÁãÉ ÇáÅÏÎÇáÇÊ ÇáãæÌæÏÉ¿";
     MESSAGE[ turkish ] = "Kaynakça girişi, farklı veriler ile belgede mevcut.";
     MESSAGE[ catalan ] = "L'entrada bibliogràfica ja existeix amb dades diferents en el document. Voleu ajustar les dades ja existents?";
-    MESSAGE[ finnish ] = "Asiakirja sisältää jo bibliografiamerkinnän, mutta siinä on eri tiedot. Haluatko muokata olemassa olevia merkintöjä?";
+    MESSAGE[ finnish ] = "Asiakirja sisältää jo lähdeluettelomerkinnän, mutta siinä on eri tiedot. Haluatko muokata olemassa olevia merkintöjä?";
     MESSAGE[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸¡à¸µà¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§à¹à¸•à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸•à¹ˆà¸²à¸‡à¸à¸±à¸™ à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸›à¸£à¸±à¸šà¸£à¸²à¸¢à¸à¸²à¸£à¸—à¸µà¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

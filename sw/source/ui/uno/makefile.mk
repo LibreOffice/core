@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: os $ $Date: 2002-06-21 14:21:42 $
+#   last change: $Author: hr $ $Date: 2003-03-27 15:44:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES =  \
         $(SLO)$/unodispatch.obj\
         $(SLO)$/unotxdoc.obj\
         $(SLO)$/unoatxt.obj \
+        $(SLO)$/unomailmerge.obj \
         $(SLO)$/unomod.obj \
         $(SLO)$/unotxvw.obj \
         $(SLO)$/dlelstnr.obj \
@@ -98,6 +99,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/dlelstnr.obj \
         $(SLO)$/unotxdoc.obj \
         $(SLO)$/unoatxt.obj \
+        $(SLO)$/unomailmerge.obj \
         $(SLO)$/unomod.obj \
         $(SLO)$/unotxvw.obj \
         $(SLO)$/unofreg.obj \

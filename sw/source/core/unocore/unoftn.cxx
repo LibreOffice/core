@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-13 12:45:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,12 +227,13 @@ uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SwXFootnote::getTypes(  ) 
  ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXFootnote::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }
@@ -319,7 +320,7 @@ void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xText
             aFootNote.SetNumStr(m_sLabel);
         SfxItemSet  aSet(pDoc->GetAttrPool(), RES_TXTATR_FTN, RES_TXTATR_FTN, 0L);
         aSet.Put(aFootNote);
-        SwXTextCursor::SetCrsrAttr(aPam, aSet);
+        SwXTextCursor::SetCrsrAttr(aPam, aSet, 0);
 
         pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
                     aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN );
@@ -460,11 +461,13 @@ uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursorByRange(
     if(pFmt && SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-#ifdef DEBUG
-        const SwStartNode* p1 = aPam.GetNode()->FindFootnoteStartNode();
-        const SwNode& rStNode = pTxtFtn->GetStartNode()->GetNode();
-#endif
-        if(aPam.GetNode()->FindStartNode() == &pTxtFtn->GetStartNode()->GetNode())
+
+        // skip section nodes to find 'true' start node
+        const SwNode* pStart = aPam.GetNode()->FindFootnoteStartNode();
+        while( pStart->IsSectionNode() )
+            pStart = pStart->FindStartNode();
+
+        if( pStart == &pTxtFtn->GetStartNode()->GetNode())
             aRef =  (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_FOOTNOTE, GetDoc(), aPam.GetMark());
     }
     else

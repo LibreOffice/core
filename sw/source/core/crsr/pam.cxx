@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,8 @@ SwPaM &SwPaM::operator=( SwPaM &rPam )
         SetMark();
         *pMark = *( rPam.pMark );
     }
+    else
+        DeleteMark();
     return *this;
 }
 

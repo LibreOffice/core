@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-12-12 16:37:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _SFX_PASSWD_HXX
 #include <sfx2/passwd.hxx>
+#endif
+#ifndef _SFX_HELP_HXX
+#include <sfx2/sfxhelp.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
@@ -285,16 +288,41 @@
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
+#ifndef _APP_HRC
+#include <app.hrc>
+#endif
 #ifndef _FMTCLDS_HXX //autogen
 #include <fmtclds.hxx>
 #endif
 #include <helpid.h>
+#ifndef _SVTOOLS_TEMPLDLG_HXX
+#include <svtools/templdlg.hxx>
+#endif
+#ifndef _DBCONFIG_HXX
+#include <dbconfig.hxx>
+#endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
+#ifndef _MAILMRGE_HXX
+#include "mailmrge.hxx"
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 
 //Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
 static String sLstPg;
 static USHORT nPageCnt = 0;
 const char __FAR_DATA sStatusDelim[] = " : ";
 
+using namespace ::rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::util;
@@ -302,6 +330,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+#define C2U(char) rtl::OUString::createFromAscii(char)
 
 /*---------------------------------------------------------------------------
     Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
@@ -753,6 +784,63 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case FN_INSERT_FIELD_DATA_ONLY :
+        {
+            BOOL bShow = FALSE;
+            if( pArgs &&
+                SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ))
+                bShow = ((const SfxBoolItem*)pItem)->GetValue();
+            //GetViewFrame()->ShowChildWindow(nSlot, bShow && bInMailMerge);
+            if((bShow && bInMailMerge) != GetViewFrame()->HasChildWindow(nSlot))
+                GetViewFrame()->ToggleChildWindow(nSlot);
+            //if fields have been succesfully inserted call the "real"
+            //mail merge dialog
+            SwWrtShell &rSh = GetWrtShell();
+            if(bInMailMerge && rSh.IsAnyDatabaseFieldInDoc())
+            {
+                SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
+                if (pNewDBMgr)
+                {
+                    SwDBData aData;
+                    aData = rSh.GetDBData();
+                    rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
+                                        // das Mischen von DB-Feldern notwendig.
+                    AttrChangedNotify( &rSh );
+                    pNewDBMgr->SetMergeType( DBMGR_MERGE );
+
+                    Sequence<PropertyValue> aProperties(3);
+                    PropertyValue* pValues = aProperties.getArray();
+                    pValues[0].Name = C2U("DataSourceName");
+                    pValues[1].Name = C2U("Command");
+                    pValues[2].Name = C2U("CommandType");
+                    pValues[0].Value <<= aData.sDataSource;
+                    pValues[1].Value <<= aData.sCommand;
+                    pValues[2].Value <<= aData.nCommandType;
+                    pNewDBMgr->ExecuteFormLetter(rSh, aProperties, TRUE);
+                }
+            }
+            bInMailMerge &= bShow;
+            GetViewFrame()->GetBindings().Invalidate(FN_INSERT_FIELD);
+        }
+        break;
+        case FN_QRY_MERGE:
+        {
+            BOOL bUseCurrentDocument = TRUE;
+            BOOL bQuery = !pArgs||SFX_ITEM_SET != pArgs->GetItemState(nSlot);
+            if(bQuery)
+            {
+                SfxViewFrame* pFrame = GetViewFrame();
+                SfxHelp::OpenHelpAgent( pFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
+                SwMailMergeCreateFromDlg* pDlg = new SwMailMergeCreateFromDlg(
+                        &pFrame->GetWindow());
+                if(RET_OK == pDlg->Execute())
+                    bUseCurrentDocument = pDlg->IsThisDocument();
+                else
+                    break;
+            }
+            GenerateFormLetter(bUseCurrentDocument);
+        }
+        break;
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
@@ -930,10 +1018,15 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             rShell.GetAttr(aSet);
                             const SfxPoolItem* pItem;
                             if(SFX_ITEM_AVAILABLE <=
-                                aSet.GetItemState(RES_PARATR_NUMRULE, TRUE, &pItem))
+                               aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
+                                                 /*, &pItem */ ))
                             {
                                 const String& rNumStyle =
-                                    ((const SfxStringItem*)pItem)->GetValue();
+                                    ((const SfxStringItem &)
+                                     aSet.Get(RES_PARATR_NUMRULE)).GetValue();
+                                /* #i5116# GetItemState does not necessarily
+                                   change pItem */
+                                // ((const SfxStringItem*)pItem)->GetValue();
                                 if(rNumStyle.Len())
                                 {
                                     sStr.AppendAscii(sStatusDelim);
@@ -1485,4 +1578,149 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     delete pMed;
     return nFound;
 }
+/* -----------------05.02.2003 12:06-----------------
+ *
+ * --------------------------------------------------*/
+void SwView::EnableMailMerge(BOOL bEnable )
+{
+    bInMailMerge = bEnable;
+    SfxBindings& rBind = GetViewFrame()->GetBindings();
+    rBind.Invalidate(FN_INSERT_FIELD_DATA_ONLY);
+    rBind.Update(FN_INSERT_FIELD_DATA_ONLY);
+}
+/* -----------------05.02.2003 16:33-----------------
+ *
+ * --------------------------------------------------*/
+/* -----------------27.11.2002 12:12-----------------
+ *
+ * --------------------------------------------------*/
+void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
+{
+    if(bUseCurrentDocument)
+    {
+        if(!GetWrtShell().IsAnyDatabaseFieldInDoc())
+        {
+            //check availability of data sources (except biblio source)
+            Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+            Reference<XNameAccess>  xDBContext;
+            if( xMgr.is() )
+            {
+                Reference<XInterface> xInstance = xMgr->createInstance(
+                    OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
+                xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+            }
+            if(!xDBContext.is())
+                return ;
+            Sequence < OUString > aNames = xDBContext->getElementNames();
+            BOOL bCallAddressPilot = FALSE;
+            if(!aNames.getLength() ||
+                (1 == aNames.getLength() &&
+                    aNames.getConstArray()[0] == SW_MOD()->GetDBConfig()->GetBibliographySource().sDataSource))
+            {
+                // no data sources are available - create a new one
+                WarningBox aWarning(
+                            &GetViewFrame()->GetWindow(),
+                            SW_RES(MSG_DATA_SOURCES_UNAVAILABLE));
+                // no cancel allowed
+                aWarning.Execute();
+                bCallAddressPilot = TRUE;
+            }
+            else
+            {
+                //take an existing data source or create a new one?
+                    SwMailMergeFieldConnectionsDlg* pConnectionsDlg = new SwMailMergeFieldConnectionsDlg(
+                                                                    &GetViewFrame()->GetWindow());
+                    if(RET_OK == pConnectionsDlg->Execute())
+                        bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
+                    else
+                        return;
+
+            }
+            if(bCallAddressPilot)
+            {
+                GetViewFrame()->GetDispatcher()->Execute(
+                                SID_ADDRESS_DATA_SOURCE, SFX_CALLMODE_SYNCHRON);
+            }
+
+            //call insert fields with database field page available, only
+            SfxViewFrame* pVFrame = GetViewFrame();
+            //at first hide the default field dialog if currently visible
+            pVFrame->SetChildWindow(FN_INSERT_FIELD, FALSE);
+            //enable the status of the db field dialog - it is disabled in the status method
+            //to prevent creation of the dialog without mail merge active
+            EnableMailMerge();
+            //then show the "Data base only" field dialog
+            SfxBoolItem aOn(FN_INSERT_FIELD_DATA_ONLY, TRUE);
+            pVFrame->GetDispatcher()->Execute(FN_INSERT_FIELD_DATA_ONLY,
+                                                SFX_CALLMODE_SYNCHRON, &aOn, 0);
+            return;
+        }
+        else
+        {
+            // check whether the
+            String sSource;
+            if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
+            {
+                WarningBox aWarning( &GetViewFrame()->GetWindow(),
+                            SW_RES(MSG_MERGE_SOURCE_UNAVAILABLE));
+                String sTmp(aWarning.GetMessText());
+                sTmp.SearchAndReplaceAscii("%1", sSource);
+                aWarning.SetMessText(sTmp);
+                aWarning.Execute();
+                return ;
+            }
+        }
+        SwNewDBMgr* pNewDBMgr = GetWrtShell().GetNewDBMgr();
+
+        SwDBData aData;
+        SwWrtShell &rSh = GetWrtShell();
+        aData = rSh.GetDBData();
+        rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
+                            // das Mischen von DB-Feldern notwendig.
+        AttrChangedNotify( &rSh );
+        pNewDBMgr->SetMergeType( DBMGR_MERGE );
+
+        if (pNewDBMgr)
+        {
+            Sequence<PropertyValue> aProperties(3);
+            PropertyValue* pValues = aProperties.getArray();
+            pValues[0].Name = C2U("DataSourceName");
+            pValues[1].Name = C2U("Command");
+            pValues[2].Name = C2U("CommandType");
+            pValues[0].Value <<= aData.sDataSource;
+            pValues[1].Value <<= aData.sCommand;
+            pValues[2].Value <<= aData.nCommandType;
+            pNewDBMgr->ExecuteFormLetter(GetWrtShell(), aProperties, TRUE);
+        }
+    }
+    else
+    {
+        //call documents and template dialog
+        SfxApplication* pSfxApp = SFX_APP();
+        Window* pTopWin = pSfxApp->GetTopWindow();
+        SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( pTopWin );
+        pDocTemplDlg->SelectTemplateFolder();
+
+        int nRet = pDocTemplDlg->Execute();
+        sal_Bool bNewWin = sal_False;
+        if ( nRet == RET_OK )
+        {
+            if ( pTopWin != pSfxApp->GetTopWindow() )
+            {
+                // the dialogue opens a document -> a new TopWindow appears
+                pTopWin = pSfxApp->GetTopWindow();
+                bNewWin = sal_True;
+            }
+        }
+
+        delete pDocTemplDlg;
+        if ( bNewWin )
+            // after the destruction of the dialogue its parent comes to top,
+            // but we want that the new document is on top
+            pTopWin->ToTop();
+
+//        return;
+    }
+}
+
 

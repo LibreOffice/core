@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 14:51:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -135,409 +137,6 @@
 
 #define ASC_BUFFLEN 4096
 
-
-#ifdef ASYNCHRON
-
-class _SvLockBytes
-{
-    AutoTimer aTimer;
-    SvStream& rIn;
-
-    ULONG nDataRead;
-    Link aCallDataRead;
-
-    DECL_STATIC_LINK( _SvLockBytes, DataRead, Timer* );
-
-public:
-    _SvLockBytes( SvStream& rInput, const Link& rCallBack );
-    ~_SvLockBytes();
-
-    ErrCode ReadAt( ULONG nPos, void* pArr, ULONG nCount, ULONG* pReadCnt );
-
-    SvStream& GetStream() const         { return rIn; }
-};
-
-
-// client vom Standard SwPageDesc. Wird dieser geloescht, dann
-// der Reader auch beendet werden!!
-class SwAsynchLoader : public SvRefBase, public SwClient
-{
-protected:
-
-    SwDoc* pDoc;
-    SwPaM* pPam;
-
-    BOOL bInCall;
-    _SvLockBytes* pLoader;
-
-    DECL_STATIC_LINK( SwAsynchLoader, NewData, _SvLockBytes* );
-
-protected:
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
-    virtual ~SwAsynchLoader();
-
-    virtual ULONG NextData() = 0;
-
-public:
-    SwAsynchLoader( SvStream& rIn, const SwPaM& rCrsr );
-
-    ULONG CallParser();
-};
-
-SV_DECL_REF(SwAsynchLoader)
-SV_IMPL_REF(SwAsynchLoader)
-
-
-class SwASCIIParser : public SwAsynchLoader
-{
-    char* pArr, *pStt, *pEnd, *pLastStt;
-
-    long nLineLen;
-    ULONG nError, nReadCnt, nFileSize;
-
-    const SwAsciiOptions& rOpt;
-    char cLastCRLF;
-
-    virtual ULONG NextData();
-
-protected:
-    virtual ~SwASCIIParser();
-
-public:
-    SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-                                int bReadNewDoc, const SwAsciiOptions& rOpts);
-};
-
-SV_DECL_REF(SwASCIIParser)
-SV_IMPL_REF(SwASCIIParser)
-
-
-// Aufruf fuer die allg. Reader-Schnittstelle
-ULONG AsciiReader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
-{
-    if( !pStrm )
-    {
-        ASSERT( !this, "ASCII-Read ohne Stream" );
-        return ERR_SWG_READ_ERROR;
-    }
-
-    //JP 18.01.96: Alle Ueberschriften sind normalerweise ohne
-    //              Kapitelnummer. Darum hier explizit abschalten
-    //              weil das Default jetzt wieder auf AN ist.
-    if( !bInsertMode )
-        Reader::SetNoOutlineNum( rDoc );
-
-    SwASCIIParserRef xParser( new SwASCIIParser( &rDoc, rPam, *pStrm,
-                            !bInsertMode, eCodeSet ));
-    ULONG nRet = xParser->CallParser();
-    // nach dem Lesen sofort wieder defaulten
-    eCodeSet = GetSystemCharSet();
-    return ERRCODE_IO_PENDING == nRet ? 0 : nRet;
-}
-
-
-/**/
-
-SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
-                                int bReadNewDoc, CharSet eSrc )
-    : SwAsynchLoader( rIn, rCrsr ),
-     eCodeSet( eSrc )
-{
-    pArr = new char [ ASC_BUFFLEN + 1 ];
-
-    pStt = pEnd = pLastStt = pArr;
-
-    cLastCRLF = 0;
-    nLineLen = 0;
-    nError = 0;
-    nReadCnt = 0;
-
-    rIn.Seek(STREAM_SEEK_TO_END);
-    rIn.ResetError();
-
-    nFileSize = rIn.Tell();
-    rIn.Seek(STREAM_SEEK_TO_BEGIN);
-    rIn.ResetError();
-
-}
-
-SwASCIIParser::~SwASCIIParser()
-{
-    delete pArr;
-}
-
-
-ULONG SwASCIIParser::NextData()
-{
-    SvStream& rInput = pLoader->GetStream();
-    do {
-        if( pStt >= pEnd )
-        {
-            if( pLastStt != pStt )
-            {
-                pDoc->Insert( *pPam, pLastStt, eCodeSet );
-                pLastStt = pStt;
-            }
-
-            // lese einen neuen Block ein
-            ULONG lGCount;
-
-            if (SVSTREAM_OK != rInput.GetError() || 0 != ( nError = pLoader->
-                ReadAt( nReadCnt, pArr, ASC_BUFFLEN, &lGCount )) ||
-                ( rInput.IsEof() && !lGCount ))
-            {
-                if( ERRCODE_IO_PENDING != nError || !lGCount )
-                    break;      // aus der WHILE-Schleife heraus
-            }
-
-            pEnd = pArr + lGCount;
-            nReadCnt += lGCount;
-            *pEnd = 0;
-            pStt = pLastStt = pArr;
-
-            ::SetProgressState( nReadCnt, pDoc->GetDocShell() );
-
-            if( cLastCRLF )
-            {
-                if( ( 0x0a == *pStt && 0x0d == cLastCRLF ) ||
-                    ( 0x0d == *pStt && 0x0a == cLastCRLF ))
-                    pLastStt = ++pStt;
-                cLastCRLF = 0;
-                nLineLen = 0;
-                // JP 03.04.96: das letze am Ende nehmen wir nicht
-                if( !rInput.IsEof() || !(pEnd == pStt ||
-                    ( !*pEnd && pEnd == pStt+1 ) ) )
-                    pDoc->SplitNode( *pPam->GetPoint() );
-            }
-        }
-
-        BOOL bIns = TRUE, bSplitNode = FALSE;
-        switch( *pStt )
-        {
-        case 0:
-                    pEnd = pStt;
-                    bIns = FALSE;
-                    break;
-
-        case 0x0a:
-                    bIns = FALSE;
-                    *pStt = 0;
-                    if( ++pStt == pEnd )
-                        cLastCRLF = 0x0a;
-                    else
-                    {
-                        if( 0x0d == *pStt )
-                            pStt++;
-                        // JP 03.04.96: das letze am Ende nehmen wir nicht
-                        if( !rInput.IsEof() || !(pEnd == pStt ||
-                            ( !*pEnd && pEnd == pStt+1 ) ) )
-                            bSplitNode = TRUE;
-                    }
-                    break;
-
-        case 0x0d:
-                    bIns = FALSE;
-                    *pStt = 0;
-                    if( ++pStt == pEnd )
-                        cLastCRLF = 0x0d;
-                    else
-                    {
-                        if( 0x0a == *pStt )
-                            pStt++;
-                        // JP 03.04.96: das letze am Ende nehmen wir nicht
-                        if( !rInput.IsEof() || !(pEnd == pStt ||
-                            ( !*pEnd && pEnd == pStt+1 ) ) )
-                            bSplitNode = TRUE;
-                    }
-                    break;
-
-        case '\t':  break;
-
-        case 0x0c:
-                    {
-                        // dann mal einen harten Seitenumbruch einfuegen
-                        *pStt++ = 0;
-                        if( nLineLen )
-                            pDoc->Insert( *pPam, pLastStt, eCodeSet );
-                        pDoc->SplitNode( *pPam->GetPoint() );
-                        pDoc->Insert( *pPam, SvxFmtBreakItem(
-                                    SVX_BREAK_PAGE_BEFORE ));
-                        pLastStt = pStt;
-                        nLineLen = 0;
-                        bIns = FALSE;
-                    }
-                    break;
-
-        case 0x1a:
-                    if( nReadCnt == nFileSize && pStt+1 == pEnd )
-                        *pStt = 0;
-                    else
-                        *pStt = '#';        // Ersatzdarstellung
-                    break;
-
-        default:
-
-            if( (BYTE)' ' > (BYTE)*pStt )
-                    // Ctrl-Zchn gefunden ersetze durch '#'
-                *pStt = '#';
-        }
-
-        if( bIns )
-        {
-            if( ( nLineLen >= MAX_ASCII_PARA - 100 ) &&
-                ( ( *pStt == ' ' ) || ( nLineLen >= MAX_ASCII_PARA - 1 ) ) )
-            {
-                char c = *pStt;
-                *pStt = 0;
-                pDoc->Insert( *pPam, pLastStt, eCodeSet );
-                pDoc->SplitNode( *pPam->GetPoint() );
-                pLastStt = pStt;
-                nLineLen = 0;
-                *pStt = c;
-            }
-            ++pStt;
-            ++nLineLen;
-        }
-        else if( bSplitNode )
-        {
-            // es wurde ein CR/LF erkannt, also speichere den Text
-            pDoc->Insert( *pPam, pLastStt, eCodeSet );
-            pDoc->SplitNode( *pPam->GetPoint() );
-            pLastStt = pStt;
-            nLineLen = 0;
-        }
-    } while( TRUE );
-
-    return nError;
-}
-
-
-/**/
-
-SwAsynchLoader::SwAsynchLoader( SvStream& rIn, const SwPaM& rCrsr )
-    : SwClient( 0 )
-{
-    bInCall = FALSE;
-    pDoc = (SwDoc*)rCrsr.GetDoc();
-    pPam = new SwPaM( pDoc, *rCrsr.GetPoint() );
-
-    SwPageDesc& rDesc = pDoc->_GetPageDesc( 0 );
-    rDesc.Add( this );
-
-    pLoader = new _SvLockBytes( rIn,
-            STATIC_LINK( this, SwAsynchLoader, NewData ) );
-}
-
-SwAsynchLoader::~SwAsynchLoader()
-{
-    delete pPam;
-    delete pLoader;
-}
-
-void SwAsynchLoader::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
-{
-    switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
-    {
-    case RES_OBJECTDYING:
-        if( ((SwPtrMsgPoolItem *)pOld)->pObject == pRegisteredIn )
-        {
-            // dann uns selbst beenden
-            pRegisteredIn->Remove( this );
-            ReleaseRef();                   // ansonsten sind wir fertig!
-        }
-        break;
-    }
-}
-
-IMPL_STATIC_LINK( SwAsynchLoader, NewData, _SvLockBytes*, p )
-{
-    ULONG nRet = 0;
-    if( !pThis->bInCall )               // kein mehrfaches Aufrufen
-    {
-        pThis->bInCall = TRUE;
-
-        BOOL bModify = pThis->pDoc->IsModified();
-        nRet = pThis->NextData();
-        if( !bModify )
-            pThis->pDoc->ResetModified();
-
-        if( ERRCODE_IO_PENDING != nRet )
-            pThis->ReleaseRef();                    // ansonsten sind wir fertig!
-
-        pThis->bInCall = FALSE;
-    }
-
-    return nRet;
-}
-
-
-ULONG SwAsynchLoader::CallParser()
-{
-    bInCall = TRUE;
-    AddRef();
-    ULONG nRet = NextData();
-    if( ERRCODE_IO_PENDING != nRet )
-        ReleaseRef();                   // ansonsten sind wir fertig!
-
-    // Sind wir im Pending-Status, wird ueber den Callback "geidelt" bis
-    // alles gelesen ist oder ein Fehler aufgetreten ist!
-
-    // Was passiert dann ???
-
-    bInCall = FALSE;
-    return nRet;
-}
-
-/**/
-
-_SvLockBytes::_SvLockBytes( SvStream& rInput, const Link& rCallback )
-    : rIn( rInput ), aCallDataRead( rCallback )
-{
-    nDataRead = 0;
-
-    aTimer.SetTimeout( 1000 );      // jede Sekunde 100 Zeichen lesen
-    aTimer.SetTimeoutHdl( STATIC_LINK( this, _SvLockBytes, DataRead ));
-    aTimer.Start();
-}
-
-_SvLockBytes::~_SvLockBytes()
-{
-    aTimer.Stop();
-}
-
-ErrCode _SvLockBytes::ReadAt( ULONG nPos, void* pArr, ULONG nCount,
-                                ULONG* pReadCnt )
-{
-    ErrCode nRet = 0;
-    if( nPos + nCount > nDataRead )
-    {
-        nCount = nDataRead - nPos;
-        nRet = ERRCODE_IO_PENDING;
-    }
-
-    if( nCount )
-    {
-        rIn.Seek( nPos );
-        *pReadCnt = rIn.Read( pArr, nCount );
-    }
-    else
-        *pReadCnt = 0;
-    return rIn.GetError() ? rIn.GetError()
-                          : ( rIn.IsEof() ? 0 : nRet );
-}
-
-IMPL_STATIC_LINK( _SvLockBytes, DataRead, Timer*, pTimer )
-{
-    pThis->nDataRead += 100;
-    pThis->aCallDataRead.Call( pThis );
-
-    return 0;
-}
-
-/**/
-
-#else
-
 class SwASCIIParser
 {
     SwDoc* pDoc;
@@ -548,7 +147,7 @@ class SwASCIIParser
     SfxItemSet* pItemSet;
     long nFileSize;
     USHORT nScript;
-    BOOL bNewDoc;
+    bool bNewDoc;
 
     ULONG ReadChars();
     void InsertText( const String& rStr );
@@ -612,7 +211,7 @@ SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     }
     if( rOpt.GetFontName().Len() )
     {
-        BOOL bDelete = FALSE;
+        bool bDelete = false;
         const SfxFont* pFnt = 0;
         if( pDoc->GetPrt() )
             pFnt = pDoc->GetPrt()->GetFontByName( rOpt.GetFontName() );
@@ -620,7 +219,7 @@ SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
         if( !pFnt )
         {
             pFnt = new SfxFont( FAMILY_DONTKNOW, rOpt.GetFontName() );
-            bDelete = TRUE;
+            bDelete = true;
         }
         SvxFontItem aFont( pFnt->GetFamily(), pFnt->GetName(),
                         aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet() );
@@ -662,6 +261,17 @@ ULONG SwASCIIParser::CallParser()
         nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
     }
 
+    SwTxtFmtColl *pColl = 0;
+
+    if (bNewDoc)
+    {
+        pColl = pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_HTML_PRE, false);
+        if (!pColl)
+            pColl = pDoc->GetTxtCollFromPoolSimple(RES_POOLCOLL_STANDARD,false);
+        if (pColl)
+            pDoc->SetTxtFmtColl(*pPam, pColl);
+    }
+
     ULONG nError = ReadChars();
 
     if( pItemSet )
@@ -686,40 +296,39 @@ ULONG SwASCIIParser::CallParser()
         {
             if( bNewDoc )
             {
-                // Using the pool defaults for the font causes significant
-                // trouble for the HTML filter, because it is not able
-                // to export the pool defaults (or to be more precice:
-                // the HTML filter is not able to detect whether a pool
-                // default has changed or not. Even a comparison with the
-                // HTMLi template does not work, because the defaults are
-                // not copied when a new doc is created. The result of
-                // comparing pool defaults therfor would be that the
-                // defaults are exported always if the have changed for
-                // text documents in general. That's not sensible, as well
-                // as it is not sensible to export them always.
-                SwTxtFmtColl *pColl = 0;
-                sal_uInt16 aWhichIds[4] = { RES_CHRATR_FONT,
-                                            RES_CHRATR_CJK_FONT,
-                                            RES_CHRATR_CTL_FONT,
-                                               0 };
-                sal_uInt16 *pWhichIds = aWhichIds;
-                const SfxPoolItem *pItem;
-                while( *pWhichIds )
+                if (pColl)
                 {
-                    if( SFX_ITEM_SET == pItemSet->GetItemState( *pWhichIds,
-                                                                sal_False,
-                                                                &pItem ) )
+                    // Using the pool defaults for the font causes significant
+                    // trouble for the HTML filter, because it is not able
+                    // to export the pool defaults (or to be more precice:
+                    // the HTML filter is not able to detect whether a pool
+                    // default has changed or not. Even a comparison with the
+                    // HTMLi template does not work, because the defaults are
+                    // not copied when a new doc is created. The result of
+                    // comparing pool defaults therfor would be that the
+                    // defaults are exported always if the have changed for
+                    // text documents in general. That's not sensible, as well
+                    // as it is not sensible to export them always.
+                    sal_uInt16 aWhichIds[4] =
                     {
-                        if( !pColl )
-                            pColl = pDoc->GetTxtCollFromPoolSimple
-                                ( RES_POOLCOLL_STANDARD, FALSE );
-                        pColl->SetAttr( *pItem );
-                        pItemSet->ClearItem( *pWhichIds );
+                        RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+                        RES_CHRATR_CTL_FONT, 0
+                    };
+                    sal_uInt16 *pWhichIds = aWhichIds;
+                    while (*pWhichIds)
+                    {
+                        const SfxPoolItem *pItem;
+                        if (SFX_ITEM_SET == pItemSet->GetItemState(*pWhichIds,
+                            false, &pItem))
+                        {
+                            pColl->SetAttr( *pItem );
+                            pItemSet->ClearItem( *pWhichIds );
+                        }
+                        ++pWhichIds;
                     }
-                    ++pWhichIds;
                 }
-                if( pItemSet->Count() )
-                    pDoc->SetDefault( *pItemSet );
+                if (pItemSet->Count())
+                    pDoc->SetDefault(*pItemSet);
             }
             else if( pInsPam )
             {
@@ -829,7 +438,8 @@ ULONG SwASCIIParser::ReadChars()
                                 (
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT
+                                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT |
+                                RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE
                                 ),
                                 &nInfo,
                                 &nCntBytes );
@@ -875,35 +485,35 @@ ULONG SwASCIIParser::ReadChars()
             }
         }
 
-        BOOL bIns = TRUE, bSplitNode = FALSE;
+        bool bIns = true, bSplitNode = false;
         switch( *pStt )
         {
 //JP 12.11.2001: task 94636 - don't ignore all behind the zero character,
 //                            change it to the default "control character"
 //      case 0:
 //                  pEnd = pStt;
-//                  bIns = FALSE;
+//                  bIns = false ;
 //                  break;
 
         case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
                     {
-                        bIns = FALSE;
+                        bIns = false;
                         *pStt = 0;
                         ++pStt;
 
                         // JP 03.04.96: das letze am Ende nehmen wir nicht
                         if( !rInput.IsEof() || pEnd != pStt )
-                            bSplitNode = TRUE;
+                            bSplitNode = true;
                     }
                     break;
 
         case 0x0d:  if( LINEEND_LF != pUseMe->GetParaFlags() )
                     {
-                        bIns = FALSE;
+                        bIns = false;
                         *pStt = 0;
                         ++pStt;
 
-                        BOOL bChkSplit = FALSE;
+                        bool bChkSplit = false;
                         if( LINEEND_CRLF == pUseMe->GetParaFlags() )
                         {
                             if( pStt == pEnd )
@@ -911,15 +521,15 @@ ULONG SwASCIIParser::ReadChars()
                             else if( 0x0a == *pStt )
                             {
                                 ++pStt;
-                                bChkSplit = TRUE;
+                                bChkSplit = true;
                             }
                         }
                         else
-                            bChkSplit = TRUE;
+                            bChkSplit = true;
 
                             // JP 03.04.96: das letze am Ende nehmen wir nicht
                         if( bChkSplit && ( !rInput.IsEof() || pEnd != pStt ))
-                            bSplitNode = TRUE;
+                            bSplitNode = true;
                     }
                     break;
 
@@ -938,7 +548,7 @@ ULONG SwASCIIParser::ReadChars()
                                     SVX_BREAK_PAGE_BEFORE ));
                         pLastStt = pStt;
                         nLineLen = 0;
-                        bIns = FALSE;
+                        bIns = false;
                     }
                     break;
 
@@ -983,7 +593,7 @@ ULONG SwASCIIParser::ReadChars()
             pLastStt = pStt;
             nLineLen = 0;
         }
-    } while( TRUE );
+    } while(true);
 
     if( hConverter )
     {
@@ -1002,6 +612,4 @@ void SwASCIIParser::InsertText( const String& rStr )
         nScript |= pBreakIt->GetAllScriptsOfText( rStr );
 }
 
-
-#endif
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

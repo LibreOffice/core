@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:29:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ void SwXReferenceMark::InsertRefMark(SwPaM& rPam, SwDoc* pDoc)
     SfxItemSet  aSet(pDoc->GetAttrPool(), RES_TXTATR_REFMARK, RES_TXTATR_REFMARK, 0L);
     aSet.Put(aRefMark);
     sal_Bool bMark = *rPam.GetPoint() != *rPam.GetMark();
-    SwXTextCursor::SetCrsrAttr(rPam, aSet);
+    SwXTextCursor::SetCrsrAttr(rPam, aSet, 0);
 
     if( bMark && *rPam.GetPoint() > *rPam.GetMark())
         rPam.Exchange();

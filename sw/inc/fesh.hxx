@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: od $ $Date: 2002-12-10 14:07:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,12 @@ public:
     // includen von SVDRAW.HXX zu ersparen als int deklariert.
     int IsObjSelectable( const Point& rPt );
     int IsInsideSelectedObj( const Point& rPt );
+
+    // #107513#
+    // Test if there is a draw object at that position and if it should be selected.
+    // The 'should' is aimed at Writer text fly frames which may be in front of
+    // the draw object.
+    sal_Bool ShouldObjectBeSelected(const Point& rPt);
 
     sal_Bool MoveAnchor( USHORT nDir );
 
@@ -672,6 +678,7 @@ public:
     USHORT GetCurMouseTabColNum( const Point &rPt ) const;
     USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  // aktuelle aeussere Spalte
     BOOL IsTableRightToLeft()const;
+    BOOL IsLastCellInRow() const;
     BOOL IsMouseTableRightToLeft(const Point &rPt) const;
     // Die Breite des aktuellen Bereichs fuer Spaltendialog
     long GetSectionWidth( SwFmt& rFmt ) const;
@@ -711,6 +718,8 @@ public:
         page, the selected drawing object is on, is right-to-left.
     */
     const bool IsShapeDefaultHoriTextDirR2L() const;
+
+    void ParkCursorInTab();
 };
 
 #endif

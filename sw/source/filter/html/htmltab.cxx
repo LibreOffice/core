@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,9 +968,24 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
 {
     ASSERT( nCells < pCells->Count(), "Anzahl Zellen falsch" );
 
-#ifdef DEBUG
+    // The colspan of empty cells at the end has to be fixed to the new
+    // number of cells.
+    sal_uInt16 i=nCells;
     sal_uInt16 nEnd = pCells->Count();
-    for( sal_uInt16 i=nCells; i<nEnd; i++ )
+    while( i )
+    {
+        HTMLTableCell *pCell = (*pCells)[--i];
+        if( !pCell->GetContents() )
+        {
+            ASSERT( pCell->GetColSpan() == nEnd - i,
+                    "invalid col span for empty cell at row end" );
+            pCell->SetColSpan( nCells-i);
+        }
+        else
+            break;
+    }
+#ifdef DEBUG
+    for( i=nCells; i<nEnd; i++ )
     {
         HTMLTableCell *pCell = (*pCells)[i];
         ASSERT( pCell->GetRowSpan() == 1,

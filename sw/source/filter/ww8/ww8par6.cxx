@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdlib.h>
@@ -401,67 +400,55 @@ static SwTwips AdjustSize( USHORT nPara )
     return nSi;
 }
 
-void SwWW8ImplReader::RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol )
+void wwSection::SetDirection()
 {
-    SwFrmFmt &rFmt0 = rPageDesc.GetMaster();
-    const SwFmtCol rCol = rFmt0.GetCol();
-    if( rCol.GetNumCols() )
+    //sprmSTextFlow
+    switch (maSep.wTextFlow)
     {
-        rpCol = new SwFmtCol( rCol );
-        SwFmtCol aCol;
-        rFmt0.SetAttr( aCol );
-        rPageDesc.GetLeft().SetAttr( aCol );
+        default:
+            ASSERT(!this, "Unknown layout type");
+        case 0:
+            meDir=FRMDIR_HORI_LEFT_TOP;
+            break;
+        case 1:
+            meDir=FRMDIR_VERT_TOP_RIGHT;
+            break;
+        case 2:
+            //asian letters are not rotated, western are. We can't import
+            //bottom to top going left to right, we can't do this in
+            //pages, (in drawboxes we could partly hack it with a rotated
+            //drawing box, though not frame)
+            meDir=FRMDIR_VERT_TOP_RIGHT;
+            break;
+        case 3:
+            //asian letters are not rotated, western are. We can't import
+            meDir=FRMDIR_VERT_TOP_RIGHT;
+            break;
+        case 4:
+            //asian letters are rotated, western not. We can't import
+            meDir=FRMDIR_HORI_LEFT_TOP;
+            break;
     }
-    else
-        rpCol = 0;
+
+    sal_uInt8 nRTLPgn = maSep.fBiDi;
+    if ((meDir == FRMDIR_HORI_LEFT_TOP) && nRTLPgn)
+        meDir = FRMDIR_HORI_RIGHT_TOP;
 }
 
-void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
+bool wwSection::IsVertical() const
+{
+    if (meDir == FRMDIR_VERT_TOP_RIGHT || meDir == FRMDIR_VERT_TOP_LEFT)
+        return true;
+    return false;
+}
+
+void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,
+    const wwSection &rSection)
 {
     if (bVer67)
         return;
 
-    SvxFrameDirection eDir=FRMDIR_HORI_LEFT_TOP;
-
-    //sprmSTextFlow
-    if (short nGridType = ReadULSprm(pSep, 0x5033, 0))
-    {
-        switch(nGridType)
-        {
-            default:
-                ASSERT(!this, "Unknown layout type");
-            case 0:
-                eDir=FRMDIR_HORI_LEFT_TOP;
-                break;
-            case 1:
-                eDir=FRMDIR_VERT_TOP_RIGHT;
-                break;
-            case 2:
-                //asian letters are not rotated, western are. We can't import
-                //bottom to top going left to right, we can't do this in
-                //pages, (in drawboxes we could partly hack it with a rotated
-                //drawing box, though not frame)
-                eDir=FRMDIR_VERT_TOP_RIGHT;
-                break;
-            case 3:
-                //asian letters are not rotated, western are. We can't import
-                eDir=FRMDIR_VERT_TOP_RIGHT;
-                break;
-            case 4:
-                //asian letters are rotated, western not. We can't import
-                eDir=FRMDIR_HORI_LEFT_TOP;
-                break;
-        }
-    }
-    if ((eDir == FRMDIR_HORI_LEFT_TOP) && mbRTLPgn)
-        eDir = FRMDIR_HORI_RIGHT_TOP;
-
-    rFmt.SetAttr(SvxFrameDirectionItem(eDir));
-
-    if (eDir == FRMDIR_VERT_TOP_RIGHT || eDir == FRMDIR_VERT_TOP_LEFT)
-        bVerticalEnviron = true;
-    else
-        bVerticalEnviron = false;
+    rFmt.SetAttr(SvxFrameDirectionItem(rSection.meDir));
 
     SwTwips nTextareaHeight = rFmt.GetFrmSize().GetHeight();
     const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)
@@ -475,7 +462,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     nTextareaWidth -= rLR.GetLeft();
     nTextareaWidth -= rLR.GetRight();
 
-    if (bVerticalEnviron)
+    if (rSection.IsVertical())
     {
         SwTwips nSwap = nTextareaHeight;
         nTextareaHeight = nTextareaWidth;
@@ -486,32 +473,31 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     aGrid.SetDisplayGrid(false);
     aGrid.SetPrintGrid(false);
     SwTextGrid eType=GRID_NONE;
-    if (short nGridType = ReadULSprm( pSep, 0x5032, 0 ))
+
+    switch (rSection.maSep.clm)
     {
-        switch (nGridType)
-        {
-            case 0:
-                eType = GRID_NONE;
-                break;
-            default:
-                ASSERT(!this, "Unknown grid type");
-            case 3:
-                //Text snaps to char grid, this doesn't make a lot of sense to
-                //me. This is closer than LINES_CHARS
-                eType = GRID_LINES_ONLY;
-                break;
-            case 1:
-                eType = GRID_LINES_CHARS;
-                break;
-            case 2:
-                eType = GRID_LINES_ONLY;
-                break;
-        }
+        case 0:
+            eType = GRID_NONE;
+            break;
+        default:
+            ASSERT(!this, "Unknown grid type");
+        case 3:
+            //Text snaps to char grid, this doesn't make a lot of sense to
+            //me. This is closer than LINES_CHARS
+            eType = GRID_LINES_ONLY;
+            break;
+        case 1:
+            eType = GRID_LINES_CHARS;
+            break;
+        case 2:
+            eType = GRID_LINES_ONLY;
+            break;
     }
+
     aGrid.SetGridType(eType);
 
     //sep.dyaLinePitch
-    short nLinePitch = ReadULSprm(pSep, 0x9031, 360);
+    short nLinePitch = rSection.maSep.dyaLinePitch;
 
     aGrid.SetLines(nTextareaHeight/nLinePitch);
 
@@ -541,9 +527,9 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     }
 
     //dxtCharSpace
-    if (const BYTE* pS = pSep->HasSprm(0x7030))
+    if (rSection.maSep.dxtCharSpace)
     {
-        UINT32 nCharSpace = SVBT32ToLong(pS);
+        UINT32 nCharSpace = rSection.maSep.dxtCharSpace;
         //main lives in top 20 bits, and is signed.
         INT32 nMain = (nCharSpace & 0xFFFFF000);
         nMain/=0x1000;
@@ -572,35 +558,22 @@ void SwWW8ImplReader::Read_ParaBiDi(USHORT, const BYTE* pData, short nLen)
     }
 }
 
-bool SwWW8ImplReader::SetCols(SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
-    USHORT nNettoWidth, bool bTestOnly)
+bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
+    USHORT nNettoWidth)
 {
-     if( nIniFlags & WW8FL_NO_COLS )            // ausgeschaltet
-        return false;
-
     //sprmSCcolumns - Anzahl der Spalten - 1
-    USHORT nCols = ReadSprm( pSep, (bVer67 ? 144 : 0x500B), 0 );
+    USHORT nCols = rSection.NoCols();
 
-    nCols ++;                           // Zahl der SW-Spalten
-    if( nCols < 2 )
+    if (nCols < 2)
         return false;                   // keine oder bloedsinnige Spalten
-
-    if( bTestOnly )
-        return true;
-
-    if( !pFmt )
-    {
-        ASSERT( !this, "code error:  pFmt hat Zero value!" );
-        return false;
-    }
 
     SwFmtCol aCol;                      // Erzeuge SwFmtCol
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
-    USHORT nColSpace = ReadUSprm( pSep, (bVer67 ? 145 : 0x900C), 708 );
+    USHORT nColSpace = rSection.StandardColSeperation();
 
     // sprmSLBetween
-    if( ReadBSprm( pSep, (bVer67 ? 158 : 0x3019), 0 ) )
+    if (rSection.maSep.fLBetween)
     {
         aCol.SetLineAdj( COLADJ_TOP );      // Line
         aCol.SetLineHeight( 100 );
@@ -608,23 +581,411 @@ bool SwWW8ImplReader::SetCols(SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
         aCol.SetLineWidth( 1 );
     }
 
+    aCol.Init( nCols, nColSpace, nNettoWidth );
     // sprmSFEvenlySpaced
-    bool bEven = ReadBSprm(pSep, (bVer67 ? 138 : 0x3005), 1) ? true : false;
-
-    if( bEven )                         // alle Spalten sind gleich
-        aCol.Init( nCols, nColSpace, nNettoWidth );
-    else
+    if (!rSection.maSep.fEvenlySpaced)
     {
-        aCol.Init( nCols, nColSpace, USHRT_MAX );
-        // Spalten unterschiedlich breit: fein, das kann der Writer inzwischen!
-        USHORT nWishWidth = 0, nLeftDist = 0, nRightDist = 0;
-        USHORT i;
-        for( i = 0; i < nCols; i++ )
+        aCol._SetOrtho(false);
+        int nIdx = 1;
+        for (USHORT i = 0; i < nCols; i++ )
         {
             SwColumn* pCol = aCol.GetColumns()[ i ];
-            pCol->SetLeft( nLeftDist );
+            USHORT nLeft = rSection.maSep.rgdxaColumnWidthSpacing[nIdx - 1]/2;
+            USHORT nRight = rSection.maSep.rgdxaColumnWidthSpacing[nIdx + 1]/2;
+            USHORT nWishWidth = rSection.maSep.rgdxaColumnWidthSpacing[nIdx]
+                + nLeft + nRight;
+            pCol->SetWishWidth(nWishWidth);
+            pCol->SetLeft(nLeft);
+            pCol->SetRight(nRight);
+            nIdx += 2;
+        }
+        aCol.SetWishWidth(nNettoWidth);
+    }
+    rFmt.SetAttr(aCol);
+    return true;
+}
 
-            if( i < nCols-1 )
+void wwSectionManager::SetLeftRight(wwSection &rSection)
+{
+    // 3. LR-Raender
+    short nWWLe = MSRoundTweak(rSection.maSep.dxaLeft);
+    short nWWRi = MSRoundTweak(rSection.maSep.dxaRight);
+    short nWWGu = rSection.maSep.dzaGutter;
+
+    /*
+    fRTLGutter is set if the gutter is on the right, the gutter is otherwise
+    placed on the left unless the global dop options are to put it on top, that
+    case is handled in GetPageULData, unfortunately when we are "2 pages in 1"
+    then the gutter is alternated between the top of odd pages and bottom of
+    even pages, which we can't do, so ignore it in that case
+    */
+    if (!mrReader.pWDop->doptypography.f2on1)
+    {
+        if (rSection.maSep.fRTLGutter)
+            nWWRi += nWWGu;
+        else if (!mrReader.pWDop->iGutterPos)
+            nWWLe += nWWGu;
+    }
+
+    // Left / Right
+    if ((rSection.nPgWidth - nWWLe - nWWRi) < MINLAY)
+    {
+        /*
+        There are some label templates which are "broken", they specify
+        margins which make no sense e.g. Left 16.10cm, Right 16.10cm. So the
+        space left between the margins is less than 0 In word the left margin
+        is honoured and if the right margin would be past the left margin is
+        left at the left margin position.
+
+        Now this will work fine for importing, layout and exporting, *but* the
+        page layout dialog has a hardcoded minimum page width of 0.5cm so it
+        will report a different value than what is actually being used. i.e.
+        it will add up the values to give a wider page than is actually being
+        used.
+        */
+        nWWRi = rSection.nPgWidth - nWWLe - MINLAY;
+    }
+
+    rSection.nPgLeft = nWWLe;
+    rSection.nPgRight = nWWRi;
+}
+
+void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
+    const wwSection &rSection, bool bIgnoreCols)
+{
+    // 1. Orientierung
+    rInPageDesc.SetLandscape(rSection.IsLandScape());
+
+    // 2. Papiergroesse
+    SwFmtFrmSize aSz( rFmt.GetFrmSize() );
+    aSz.SetWidth(rSection.GetPageWidth());
+    aSz.SetHeight(AdjustSize(rSection.GetPageHeight()));
+    rFmt.SetAttr(aSz);
+
+    rFmt.SetAttr(
+        SvxLRSpaceItem(rSection.GetPageLeft(), rSection.GetPageRight()));
+
+    if (!bIgnoreCols)
+    {
+        SetCols(rFmt, rSection, rSection.GetPageWidth() -
+            rSection.GetPageLeft() - rSection.GetPageRight());
+    }
+}
+
+void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
+    wwSectionManager::wwULSpaceData& rData)
+{
+    short nWWUp = rSection.maSep.dyaTop;
+    short nWWLo = rSection.maSep.dyaBottom;
+    short nWWHTop = rSection.maSep.dyaHdrTop;
+    short nWWFBot = rSection.maSep.dyaHdrBottom;
+
+    /*
+    If there is gutter in 97+ and the dop says put it on top then get the
+    gutter distance and set it to the top margin. When we are "two pages
+    in one" the gutter is put at the top of odd pages, and bottom of
+    even pages, something we cannot do. So we will put it on top of all
+    pages, that way the pages are at least the right size.
+    */
+    if ( mrReader.pWDop->doptypography.f2on1 ||
+        (!mrReader.bVer67 && mrReader.pWDop->iGutterPos &&
+         rSection.maSep.fRTLGutter)
+       )
+    {
+        nWWUp += rSection.maSep.dzaGutter;
+    }
+
+    if( bFirst )
+        rData.bHasHeader = (rSection.maSep.grpfIhdt & WW8_HEADER_FIRST) !=0;
+    else
+    {
+        rData.bHasHeader = (rSection.maSep.grpfIhdt &
+            (WW8_HEADER_EVEN | WW8_HEADER_ODD)) != 0;
+    }
+
+    if( rData.bHasHeader )
+    {
+        rData.nSwUp  = nWWHTop;             // Header -> umrechnen
+        rData.nSwHLo = nWWUp - nWWHTop;
+
+        if (rData.nSwHLo < MM50)
+            rData.nSwHLo = MM50;
+    }
+    else // kein Header -> Up einfach uebernehmen
+        rData.nSwUp = nWWUp;
+
+    if( bFirst )
+        rData.bHasFooter = (rSection.maSep.grpfIhdt &  WW8_FOOTER_FIRST) !=0;
+    else
+    {
+        rData.bHasFooter = (rSection.maSep.grpfIhdt &
+            (WW8_FOOTER_EVEN | WW8_FOOTER_ODD)) != 0;
+    }
+
+    if( rData.bHasFooter )
+    {
+        rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
+        rData.nSwFUp = nWWLo - nWWFBot;
+
+        if (rData.nSwFUp < MM50)
+            rData.nSwFUp = MM50;
+    }
+    else // kein Footer -> Lo einfach uebernehmen
+        rData.nSwLo = nWWLo;
+}
+
+void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
+    wwSectionManager::wwULSpaceData& rData)
+{
+    if (rData.bHasHeader)               // ... und Header-Lower setzen
+    {
+        //Kopfzeilenhoehe minimal sezten
+        if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
+        {
+            pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
+            SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
+            aHdUL.SetLower(rData.nSwHLo - MM50);
+            pHdFmt->SetAttr(aHdUL);
+            pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                RES_HEADER_FOOTER_EAT_SPACING, true));
+        }
+    }
+
+    if (rData.bHasFooter)               // ... und Footer-Upper setzen
+    {
+        if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
+        {
+            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
+            SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
+            aFtUL.SetUpper(rData.nSwFUp - MM50);
+            pFtFmt->SetAttr(aFtUL);
+            pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
+                RES_HEADER_FOOTER_EAT_SPACING, true));
+        }
+    }
+
+    SvxULSpaceItem aUL(rData.nSwUp, rData.nSwLo); // Page-UL setzen
+    rFmt.SetAttr(aUL);
+}
+
+SwSectionFmt *wwSectionManager::InsertSection(
+    SwPaM& rMyPaM, wwSection &rSection)
+{
+    SwSection aSection( CONTENT_SECTION, mrReader.rDoc.GetUniqueSectionName() );
+
+    SfxItemSet aSet( mrReader.rDoc.GetAttrPool(), aFrmFmtSetRange );
+
+    sal_uInt8 nRTLPgn = maSegments.empty() ? 0 : maSegments.back().IsBiDi();
+    aSet.Put(SvxFrameDirectionItem(
+        nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP));
+
+    if (2 == mrReader.pWDop->fpc)
+        aSet.Put( SwFmtFtnAtTxtEnd(FTNEND_ATTXTEND));
+    if (0 == mrReader.pWDop->epc)
+        aSet.Put( SwFmtEndAtTxtEnd(FTNEND_ATTXTEND));
+
+    rSection.mpSection = mrReader.rDoc.Insert( rMyPaM, aSection, &aSet );
+    ASSERT(rSection.mpSection, "section not inserted!");
+    if (!rSection.mpSection)
+        return 0;
+
+    SwPageDesc *pPage = 0;
+    mySegrIter aEnd = maSegments.rend();
+    for (mySegrIter aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
+    {
+        if (pPage = aIter->mpPage)
+            break;
+    }
+
+    ASSERT(pPage, "no page outside this section!");
+
+    if (!pPage)
+        pPage = &mrReader.rDoc._GetPageDesc(0);
+
+    if (!pPage)
+        return 0;
+
+    SwFrmFmt& rFmt = pPage->GetMaster();
+    const SwFmtFrmSize&   rSz = rFmt.GetFrmSize();
+    const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
+    SwTwips nWidth = rSz.GetWidth();
+    long nLeft  = rLR.GetTxtLeft();
+    long nRight = rLR.GetRight();
+
+    SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
+    ASSERT(pFmt, "impossible");
+    if (!pFmt)
+        return 0;
+
+    SetCols(*pFmt, rSection, (USHORT)(nWidth - nLeft - nRight) );
+
+    //Set the columns to be UnBalanced if compatability option is set
+    if (mrReader.pWDop->fNoColumnBalance  )
+    {
+        SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
+        pFmt->SetAttr(SwFmtNoBalancedColumns(true));
+    }
+
+    return pFmt;
+}
+
+void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
+{
+    // check if Line Numbering must be activated or resetted
+    if (mbNewDoc && rSection.maSep.nLnnMod)
+    {
+        // restart-numbering-mode: 0 per page, 1 per section, 2 never restart
+        bool bRestartLnNumPerSection = (1 == rSection.maSep.lnc);
+
+        if (bNoLnNumYet)
+        {
+            SwLineNumberInfo aInfo( rDoc.GetLineNumberInfo() );
+
+            aInfo.SetPaintLineNumbers(true);
+
+            aInfo.SetRestartEachPage(!bRestartLnNumPerSection);
+
+            aInfo.SetPosFromLeft( rSection.maSep.dxaLnn);
+
+            //Paint only for every n line
+            aInfo.SetCountBy(rSection.maSep.nLnnMod);
+
+            // to be defaulted features ( HARDCODED in MS Word 6,7,8,9 )
+            aInfo.SetCountBlankLines(true);
+            aInfo.SetCountInFlys(false);
+            aInfo.SetPos( LINENUMBER_POS_LEFT );
+            SvxNumberType aNumType; // this sets SVX_NUM_ARABIC per default
+            aInfo.SetNumType( aNumType );
+
+            rDoc.SetLineNumberInfo( aInfo );
+            bNoLnNumYet = false;
+        }
+
+        if (
+            (0 < rSection.maSep.lnnMin) ||
+            (bRestartLnNumPerSection && !bNoLnNumYet)
+           )
+        {
+            SwFmtLineNumber aLN;
+            aLN.SetStartValue(1 + rSection.maSep.lnnMin);
+            NewAttr(aLN);
+            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LINENUMBER);
+        }
+        bNoLnNumYet = false;
+    }
+}
+
+wwSection::wwSection(const SwPosition &rPos) : maStart(rPos.nNode),
+    mpSection(0), mpTitlePage(0), mpPage(0), meDir(FRMDIR_HORI_LEFT_TOP),
+    nPgWidth(lA4Width), nPgLeft(MM_250), nPgRight(MM_250), mnBorders(0),
+    mbHasFootnote(false)
+{
+}
+
+void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
+    SwPageDesc &rPageDesc)
+{
+    // Seitennummernformat speichern
+    static const SvxExtNumType aNumTyp[5] =
+    {
+        SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
+        SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N
+    };
+
+    SvxNumberType aType;
+    aType.SetNumberingType(aNumTyp[rNewSection.maSep.nfcPgn]);
+    rPageDesc.SetNumType(aType);
+}
+
+// Bei jedem Abschnittswechsel ( auch am Anfang eines Dokuments ) wird
+// CreateSep gerufen, dass dann den / die Pagedesc(s) erzeugt und
+// mit Attributen un KF-Texten fuellt.
+// Dieses Vorgehen ist noetig geworden, da die UEbersetzung der verschiedenen
+// Seiten-Attribute zu stark verflochten ist.
+void wwSectionManager::CreateSep(const long nTxtPos, bool bMustHaveBreak)
+{
+    /*
+    #i1909# #100688# section/page breaks should not occur in tables or subpage
+    elements like frames. Word itself ignores them in this case. The bug is
+    more likely that this filter created such documents in the past!
+    */
+    if (mrReader.nInTable || mrReader.bTxbxFlySection)
+        return;
+
+    WW8PLCFx_SEPX* pSep = mrReader.pPlcxMan->GetSepPLCF();
+    ASSERT(pSep, "impossible!");
+    if (!pSep)
+        return;
+
+    bool bVer67(mrReader.bVer67);
+
+    wwSection aLastSection(*mrReader.pPaM->GetPoint());
+    if (!maSegments.empty())
+        aLastSection = maSegments.back();
+
+    //Here
+    USHORT nLIdx = ( ( mrReader.pWwFib->lid & 0xff ) == 0x9 ) ? 1 : 0;
+
+    //BEGIN read section values
+    wwSection aNewSection(*mrReader.pPaM->GetPoint());
+
+    if (!maSegments.empty())
+    {
+        // Type of break: break codes are:
+        // 0 No break
+        // 1 New column
+        // 2 New page
+        // 3 Even page
+        // 4 Odd page
+        if (const BYTE* pSprmBkc = pSep->HasSprm(bVer67 ? 142 : 0x3009))
+            aNewSection.maSep.bkc = *pSprmBkc;
+    }
+
+    // Has a table page
+    aNewSection.maSep.fTitlePage =
+        (0 != ReadBSprm( pSep, bVer67 ? 143 : 0x300A, 0 ));
+
+    // sprmSNfcPgn
+    aNewSection.maSep.nfcPgn = ReadBSprm( pSep, (bVer67 ? 147 : 0x300E), 0 );
+    if (aNewSection.maSep.nfcPgn > 4)
+        aNewSection.maSep.nfcPgn = 0;
+
+    // sprmSFBiDi
+    if (!bVer67)
+        aNewSection.maSep.fBiDi = ReadBSprm(pSep, 0x3228, 0);
+
+    aNewSection.maSep.ccolM1 = ReadSprm(pSep, (bVer67 ? 144 : 0x500B), 0 );
+
+    //sprmSDxaColumns   - Default-Abstand 1.25 cm
+    aNewSection.maSep.dxaColumns =
+        ReadUSprm( pSep, (bVer67 ? 145 : 0x900C), 708 );
+
+    // sprmSLBetween
+    aNewSection.maSep.fLBetween = ReadBSprm(pSep, (bVer67 ? 158 : 0x3019), 0 );
+
+    // sprmSFEvenlySpaced
+    aNewSection.maSep.fEvenlySpaced =
+        ReadBSprm(pSep, (bVer67 ? 138 : 0x3005), 1) ? true : false;
+
+    if (aNewSection.maSep.ccolM1 > 0 && !aNewSection.maSep.fEvenlySpaced)
+    {
+        aNewSection.maSep.rgdxaColumnWidthSpacing[0] = 0;
+        USHORT nWidth;
+        int nCols = aNewSection.maSep.ccolM1 + 1;
+        int nIdx = 0;
+        for (int i = 0; i < nCols; ++i)
+        {
+            //sprmSDxaColWidth
+            const BYTE* pSW =
+                pSep->HasSprm( (bVer67 ? 136 : 0xF203), BYTE( i ) );
+
+            ASSERT( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
+            if (pSW)
+                nWidth = SVBT16ToShort(pSW + 1);
+
+            aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
+
+            if (i < nCols-1)
             {
                 //sprmSDxaColSpacing
                 const BYTE* pSD =
@@ -633,59 +994,12 @@ bool SwWW8ImplReader::SetCols(SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
                 ASSERT( pSD, "+Sprm 137 (bzw. 0xF204) (Colspacing) fehlt" );
                 if( pSD )
                 {
-                    USHORT nSp = SVBT16ToShort( pSD + 1 );
-                    nRightDist = nSp / 2;
-
-                    pCol->SetRight( nSp - nRightDist );
+                    nWidth = SVBT16ToShort(pSD + 1);
+                    aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
                 }
             }
-            else
-                nRightDist = 0; // letzte Spalte hat keinen Zwischenraum mehr
-
-            //sprmSDxaColWidth
-            const BYTE* pSW =
-                pSep->HasSprm( (bVer67 ? 136 : 0xF203), BYTE( i ) );
-
-            ASSERT( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
-            if( pSW )
-                pCol->SetWishWidth(   SVBT16ToShort( pSW + 1 )
-                                    + nLeftDist
-                                    + pCol->GetRight() );
-            // aufsummierte Spaltenbreiten ergeben Gesamtbreite
-            nWishWidth += pCol->GetWishWidth();
-            // Halber Abstand ist an naechster Spalte noch zu setzen
-            nLeftDist = nRightDist;
         }
-        aCol.SetWishWidth( nWishWidth );
-
-#ifdef niemalsdef
-        // beim RTF-Import:
-        aCol._SetOrtho(false);
-        USHORT nWishWidth = 0, nHalfPrev = 0;
-        for( USHORT n = 0, i = 0; n < aColumns.Count(); n += 2, ++i )
-        {
-            SwColumn* pCol = aCol.GetColumns()[ i ];
-            pCol->SetLeft( nHalfPrev );
-            USHORT nSp = aColumns[ n+1 ];
-            nHalfPrev = nSp / 2;
-            pCol->SetRight( nSp - nHalfPrev );
-            pCol->SetWishWidth( aColumns[ n ] +
-                                pCol->GetLeft() + pCol->GetRight() );
-            nWishWidth += pCol->GetWishWidth();
-        }
-        aCol.SetWishWidth( nWishWidth );
-#endif
     }
-    pFmt->SetAttr( aCol );
-    return true;
-}
-
-// SetPage1() setzt Orientierung, Papiergroesse, LRRaender, Spalten
-void SwWW8ImplReader::SetPage1(SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
-    const WW8PLCFx_SEPX* pSep, USHORT nLIdx, bool bIgnoreCols)
-{
-    if( nIniFlags & WW8FL_NO_LRUL )             // Abgeschaltet
-        return;
 
     static const USHORT aVer67Ids[] =
     {
@@ -710,1049 +1024,35 @@ void SwWW8ImplReader::SetPage1(SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
     const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
 
                                             // 1. Orientierung
-    pInPageDesc->SetLandscape( 0 != ReadBSprm( pSep, pIds[0], 0 ) );
+    aNewSection.maSep.dmOrientPage = ReadBSprm(pSep, pIds[0], 0);
 
-                                                // 2. Papiergroesse
-    SwFmtFrmSize aSz( rFmt.GetFrmSize() );
-    aSz.SetWidth(AdjustSize(ReadUSprm(pSep, pIds[1], (USHORT)lLetterWidth)));
+    // 2. Papiergroesse
+    aNewSection.maSep.xaPage = ReadUSprm(pSep, pIds[1], (USHORT)lLetterWidth);
 
-    nPgWidth = (short)aSz.GetWidth();       // Merken fuer Tabellen u. ae.
-    aSz.SetHeight(AdjustSize(ReadUSprm(pSep, pIds[2], (USHORT)lLetterHeight)));
+    aNewSection.nPgWidth = AdjustSize(aNewSection.maSep.xaPage);
 
-    rFmt.SetAttr( aSz );
+    aNewSection.maSep.yaPage = ReadUSprm(pSep, pIds[2], (USHORT)lLetterHeight);
 
     // 3. LR-Raender
-    // Default-Raender fuer verschiedene nationale Versionen
     static const USHORT nLef[] = { MM_250, 1800 };
     static const USHORT nRig[] = { MM_250, 1800 };
 
-    short nWWLe = MSRoundTweak(ReadULSprm( pSep, pIds[3], nLef[nLIdx]));
-    short nWWRi = MSRoundTweak(ReadULSprm( pSep, pIds[4], nRig[nLIdx]));
-    short nWWGu = ReadULSprm( pSep, pIds[5], 0);
-
-    /*
-    0x322A is set if the gutter is on the right, the gutter is otherwise
-    placed on the left unless the global dop options are to put it on top,
-    that case is handled in GetPageULData, unfortunately when we are "2 pages
-    in 1" then the gutter is alternated between the top of odd pages and bottom
-    of even pages, which we can't do, so ignore it in that case
-    */
-    if (!pWDop->doptypography.f2on1)
-    {
-        if ((!bVer67) && ReadULSprm( pSep, 0x322A, 0 ))
-            nWWRi += nWWGu;
-        else if (!pWDop->iGutterPos)
-            nWWLe += nWWGu;
-    }
-
-    // Left / Right
-    if ((aSz.GetWidth() - nWWLe - nWWRi) < MINLAY)
-    {
-        /*
-        There are some label templates which are "broken", they specify
-        margins which make no sense e.g. Left 16.10cm, Right 16.10cm. So the
-        space left between the margins is less than 0 In word the left margin
-        is honoured and if the right margin would be past the left margin is
-        left at the left margin position.
-
-        Now this will work fine for importing, layout and exporting, *but* the
-        page layout dialog has a hardcoded minimum page width of 0.5cm so it
-        will report a different value than what is actually being used. i.e.
-        it will add up the values to give a wider page than is actually being
-        used.
-        */
-        nWWRi = aSz.GetWidth()-nWWLe-MINLAY;
-    }
-
-    SvxLRSpaceItem aTemp( nWWLe, nWWRi );
-    rFmt.SetAttr( aTemp );
-
-    nPgLeft = nWWLe;
-    nPgRight = nWWRi;
-
-    if( !bIgnoreCols )
-    {
-        // 4. Spalten
-        SetCols( &rFmt, pSep, (USHORT)(aSz.GetWidth() - nWWLe - nWWRi) );
-    }
-}
-
-struct WW8ULSpaceData
-{
-    bool bHasHeader, bHasFooter;
-    short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
-    WW8ULSpaceData() : bHasHeader(false), bHasFooter(false) {}
-};
-
-void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
-    bool bFirst, WW8ULSpaceData& rData )
-{
-    if( nIniFlags & WW8FL_NO_LRUL )         // abgeschaltet
-        return;
-
-            // Default-Raender fuer verschiedene nationale Versionen
-    static const USHORT nTop[] = { MM_250, 1440 };
-    static const USHORT nBot[] = { MM_200, 1440 };
-
-    // Einlesen der WW-Einstellungen
-
-    static const USHORT aVer67Ids[] =
-    {
-        /*sprmSDyaTop*/         168,
-        /*sprmSDyaBottom*/      169,
-        /*sprmSDyaHdrTop*/      156,
-        /*sprmSDyaHdrBottom*/   157
-    };
-    static const USHORT aVer8Ids[] =
-    {
-        /*sprmSDyaTop*/         0x9023,
-        /*sprmSDyaBottom*/      0x9024,
-        /*sprmSDyaHdrTop*/      0xB017,
-        /*sprmSDyaHdrBottom*/   0xB018
-    };
-
-    const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
-
-    short nWWUp = ReadULSprm( pSep, pIds[0], nTop[nLIdx] );
-    short nWWLo = ReadULSprm( pSep, pIds[1], nBot[nLIdx] );
-    short nWWHTop = ReadULSprm( pSep, pIds[2], MM_125 );
-    short nWWFBot = ReadULSprm( pSep, pIds[3], MM_125 );
-
-    /*
-    If there is gutter in 97+ and the dop says put it on top then get the
-    gutter distance and set it to the top margin. When we are "two pages
-    in one" the gutter is put at the top of odd pages, and bottom of
-    even pages, something we cannot do. So we will put it on top of all
-    pages, that way the pages are at least the right size.
-    */
-    if ( pWDop->doptypography.f2on1 ||
-        (!bVer67 && pWDop->iGutterPos && !ReadULSprm( pSep, 0x322A, 0 )))
-    {
-        nWWUp += ReadULSprm( pSep, 0xB025, 0 );
-    }
-
-    if( bFirst )
-        rData.bHasHeader = (nCorrIhdt &   WW8_HEADER_FIRST                )!=0;
-    else
-        rData.bHasHeader = (nCorrIhdt & (WW8_HEADER_EVEN | WW8_HEADER_ODD))!=0;
-
-    if( rData.bHasHeader )
-    {
-        rData.nSwUp  = nWWHTop;             // Header -> umrechnen
-        rData.nSwHLo = nWWUp - nWWHTop;
-
-        if (rData.nSwHLo < MM50)
-            rData.nSwHLo = MM50;
-    }
-    else // kein Header -> Up einfach uebernehmen
-        rData.nSwUp = nWWUp;
-
-    if( bFirst )
-        rData.bHasFooter = (nCorrIhdt &  WW8_FOOTER_FIRST                 )!=0;
-    else
-        rData.bHasFooter = (nCorrIhdt & (WW8_FOOTER_EVEN | WW8_FOOTER_ODD))!=0;
-
-    if( rData.bHasFooter )
-    {
-        rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
-        rData.nSwFUp = nWWLo - nWWFBot;
-
-        if (rData.nSwFUp < MM50)
-            rData.nSwFUp = MM50;
-    }
-    else // kein Footer -> Lo einfach uebernehmen
-        rData.nSwLo = nWWLo;
-
-    nPgTop = rData.nSwUp;
-}
-
-void SwWW8ImplReader::SetPageULSpaceItems(SwFrmFmt &rFmt, WW8ULSpaceData& rData)
-{
-    if( nIniFlags & WW8FL_NO_LRUL )         // deactivated ?
-        return;
-
-    if( rData.bHasHeader )              // ... und Header-Lower setzen
-    {
-        //Kopfzeilenhoehe minimal sezten
-        if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
-        {
-            pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
-            SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
-            aHdUL.SetLower(rData.nSwHLo - MM50);
-            pHdFmt->SetAttr(aHdUL);
-            pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
-                RES_HEADER_FOOTER_EAT_SPACING, true));
-        }
-    }
-
-    if( rData.bHasFooter )              // ... und Footer-Upper setzen
-    {
-        if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
-        {
-            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
-            SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
-            aFtUL.SetUpper(rData.nSwFUp - MM50);
-            pFtFmt->SetAttr(aFtUL);
-            pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
-                RES_HEADER_FOOTER_EAT_SPACING, true));
-        }
-    }
-
-    SvxULSpaceItem aUL( rData.nSwUp, rData.nSwLo ); // Page-UL setzen
-    rFmt.SetAttr( aUL );
-}
-
-void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
-    SwPageDesc *pPageDesc1, const WW8PLCFx_SEPX* pSep, USHORT nLIdx )
-{
-    WW8_BRC brc[4];
-    if( !bVer67 && ::lcl_ReadBorders( bVer67, brc, 0, 0, pSep ) &&
-        IsBorder( brc ))
-    {
-        short nPgbProp = ReadSprm( pSep, 0x522F, 0 );   //sprmSPgbProp
-
-        // ogbProp - pgbApplyTo
-        //  0 all Pages in this Section
-        //  1 first Page in this Section
-        //  2 all Pages in this Section but first
-        //  3 whole document (all Sections)
-        if( !pPageDesc0 && pPageDesc1 &&
-            ( 2 == (nPgbProp & 0x7 ) || 1 == (nPgbProp & 0x7 )) )
-        {
-            // dann muss aber einer angelegt werden
-            SwPaM* pPageDeskPaM = 0;
-            pPageDesc0 = CreatePageDesc( 0, &pPageDeskPaM );
-
-            // if PageDesc was inserted check for cols
-            // and insert section instead
-            if( pPageDeskPaM )
-            {
-                SwFrmFmt &rFmt = pPageDesc0->GetMaster();
-                SetPage1(pPageDesc0, rFmt, pSep, nLIdx, false);
-                const SwFmtCol& rCol = rFmt.GetCol();
-                // if PageDesc has been inserted and has cols
-                // insert a *section* with cols instead
-                if( rCol.GetNumCols() )
-                {
-                    InsertSectionWithWithoutCols( *pPaM, &rCol );
-                    // remove columns from PageDesc
-                    SwFmtCol aCol;
-                    rFmt.SetAttr( aCol );
-                }
-                delete pPageDeskPaM;
-            }
-
-            rDoc.CopyPageDesc(*pPageDesc1, *pPageDesc0, false);
-            pPageDesc0->SetFollow( pPageDesc1 );
-            pPageDesc1->SetFollow( pPageDesc1 );
-        }
-
-        SwFrmFmt* pFmt0 = 0, *pFmt1 = 0;
-        if( 2 != (nPgbProp & 0x7 ) && pPageDesc0 )
-            pFmt0 = &pPageDesc0->GetMaster();
-
-        if( 1 != (nPgbProp & 0x7 ) && pPageDesc1 )
-            pFmt1 = &pPageDesc1->GetMaster();
-
-        SvxBoxItem aBox;
-        SetBorder( aBox, brc );
-
-        Rectangle aInnerDist;
-        GetBorderDistance( brc, aInnerDist );
-
-        if(    aInnerDist.Left()  || aInnerDist.Top()
-            || aInnerDist.Right() || aInnerDist.Bottom() )
-        {
-            // das muss natuerlich von den Raendern abgezogen werden!
-            SwFrmFmt* pFmt = pFmt0;
-            for( int i = 0; i < 2; ++i, pFmt = pFmt1 )
-                if( pFmt )
-                {
-                    SvxLRSpaceItem aLR( pFmt->GetLRSpace() );
-                    SvxULSpaceItem aUL( pFmt->GetULSpace() );
-
-                    if( 0x20 == ( nPgbProp & 0xe0 ))        // distance from pageborder
-                    {
-                        // Left
-                        if( aInnerDist.Left() < aLR.GetLeft() )
-                        {
-                            aLR.SetLeft(aLR.GetLeft() - aInnerDist.Left());
-                            aBox.SetDistance( (USHORT)aInnerDist.Left(),
-                                                BOX_LINE_LEFT );
-                        }
-                        else
-                        {
-                            aBox.SetDistance( (USHORT)aLR.GetLeft(),
-                                BOX_LINE_LEFT );
-                            aLR.SetLeft( 0 );
-                        }
-                        // Right
-                        if( aInnerDist.Right() < aLR.GetRight() )
-                        {
-                            aLR.SetRight(aLR.GetRight() - aInnerDist.Right());
-                            aBox.SetDistance( (USHORT)aInnerDist.Right(),
-                                                BOX_LINE_RIGHT );
-                        }
-                        else
-                        {
-                            aBox.SetDistance( (USHORT)aLR.GetRight(),
-                                BOX_LINE_RIGHT );
-                            aLR.SetRight( 0 );
-                        }
-                        // Top
-                        if( aInnerDist.Top() < aUL.GetUpper() )
-                        {
-                            aUL.SetUpper( (USHORT)(aUL.GetUpper()
-                                            - aInnerDist.Top() ) );
-                            aBox.SetDistance( (USHORT)aInnerDist.Top(),
-                                                BOX_LINE_TOP );
-                        }
-                        else
-                        {
-                            aBox.SetDistance( aUL.GetUpper(), BOX_LINE_TOP );
-                            aUL.SetUpper( 0 );
-                        }
-                        // Bottom
-                        if( aInnerDist.Bottom() < aUL.GetLower() )
-                        {
-                            aUL.SetLower( (USHORT)(aUL.GetLower()
-                                            - aInnerDist.Bottom() ) );
-                            aBox.SetDistance( (USHORT)aInnerDist.Bottom(),
-                                                BOX_LINE_BOTTOM );
-                        }
-                        else
-                        {
-                            aBox.SetDistance( aUL.GetLower(), BOX_LINE_BOTTOM );
-                            aUL.SetLower( 0 );
-                        }
-
-                        pFmt->SetAttr( aLR );
-                        pFmt->SetAttr( aUL );
-                        pFmt->SetAttr( aBox );
-                    }
-                    else    // distance from text
-                    {
-                        // Left
-                        aBox.SetDistance( (USHORT)aInnerDist.Left(),
-                                            BOX_LINE_LEFT );
-                        aLR.SetLeft( Max((long)0, aLR.GetLeft()
-                            - aInnerDist.Left() ));
-                        // Right
-                        aBox.SetDistance( (USHORT)aInnerDist.Right(),
-                                            BOX_LINE_RIGHT );
-                        aLR.SetRight(Max((long)0, aLR.GetRight()
-                            - aInnerDist.Right() ));
-                        // Top
-                        aBox.SetDistance( (USHORT)aInnerDist.Top(),
-                                            BOX_LINE_TOP );
-                        aUL.SetUpper(Max(0, aUL.GetUpper()
-                                            - (USHORT)aInnerDist.Top() ));
-                        // Bottom
-                        aBox.SetDistance( (USHORT)aInnerDist.Bottom(),
-                                            BOX_LINE_BOTTOM );
-                        aUL.SetLower(Max(0, aUL.GetLower()
-                                            - (USHORT)aInnerDist.Bottom() ));
-
-                        pFmt->SetAttr( aLR );
-                        pFmt->SetAttr( aUL );
-                        pFmt->SetAttr( aBox );
-                    }
-                }
-
-        }
-        else
-        {
-            if( pFmt0 ) pFmt0->SetAttr( aBox );
-            if( pFmt1 ) pFmt1->SetAttr( aBox );
-        }
-
-
-        SvxShadowItem aS;
-        if( SetShadow( aS, aBox, brc))
-        {
-            if( pFmt0 ) pFmt0->SetAttr( aS );
-            if( pFmt1 ) pFmt1->SetAttr( aS );
-        }
-    }
-}
-
-void SwWW8ImplReader::SetUseOn( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
-    BYTE nIhdt )
-{
-    bool bEven = (nIhdt & ( WW8_HEADER_EVEN | WW8_FOOTER_EVEN )) ? true : false;
-
-    UseOnPage eUseBase = pWDop->fMirrorMargins ? PD_MIRROR : PD_ALL;
-    UseOnPage eUse = eUseBase;
-    if( !bEven )
-        eUse = (UseOnPage)( eUse | PD_HEADERSHARE | PD_FOOTERSHARE );
-
-    if( !pPageDesc1 )   // 1 Pagedesc reicht
-        pPageDesc0->WriteUseOn(eUse);       // alle Seiten
-    else                // 2 Pagedescs noetig
-    {
-        // 1. Seite
-        pPageDesc0->WriteUseOn( (UseOnPage)
-            ( eUseBase | PD_HEADERSHARE | PD_FOOTERSHARE ) );
-        pPageDesc1->WriteUseOn( eUse );     // Folgeseiten
-    }
-}
-
-void SwWW8ImplReader::InsertSectionWithWithoutCols(SwPaM& rMyPaM,
-    const SwFmtCol* pCol)
-{
-    // if this Node is not empty create a new Node befor inserting the Section
-    const SwPosition* pPos  = rMyPaM.GetPoint();
-    const SwTxtNode* pSttNd = pPos->nNode.GetNode().GetTxtNode();
-    USHORT nCntPos          = pPos->nContent.GetIndex();
-    if( nCntPos && pSttNd->GetTxt().Len() )
-    {
-        if( rMyPaM.HasMark() ) // do we have a SELECTION ?
-        {
-            SwNodeIndex aMarkNd( rMyPaM.GetMark()->nNode, -1 );
-            xub_StrLen nMarkCnt = rMyPaM.GetMark()->nContent.GetIndex();
-            rDoc.SplitNode( *pPos );
-
-            rMyPaM.Move( fnMoveBackward );
-            aMarkNd++;
-            rMyPaM.GetMark()->nNode = aMarkNd;
-            rMyPaM.GetMark()->nContent.Assign(aMarkNd.GetNode().GetCntntNode(),
-                nMarkCnt );
-        }
-        else
-            rDoc.SplitNode( *pPos );
-    }
-
-    SwSection aSection( CONTENT_SECTION, rDoc.GetUniqueSectionName() );
-
-    SfxItemSet aSet( rDoc.GetAttrPool(), aFrmFmtSetRange );
-
-    if( pCol )
-        aSet.Put( *pCol );
-
-    aSet.Put(SvxFrameDirectionItem(
-        mbRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP));
-
-    if( 2 == pWDop->fpc )
-        aSet.Put( SwFmtFtnAtTxtEnd( FTNEND_ATTXTEND ));
-    if( 0 == pWDop->epc )
-        aSet.Put( SwFmtEndAtTxtEnd( FTNEND_ATTXTEND ));
-
-    pLastInsertedSection = rDoc.Insert( rMyPaM, aSection, &aSet );
-    //Set the columns to be UnBalanced if compatability option is set
-    if (pWDop->fNoColumnBalance  )
-    {
-        SwSectionFmt *pFmt = pLastInsertedSection->GetFmt();
-        pFmt->SetAttr(SwFmtNoBalancedColumns(true));
-    }
-    // set PaM into first Node of the new Section
-    const SwSectionNode* pSectionNode = pLastInsertedSection->GetFmt()->GetSectionNode();
-    ASSERT( pSectionNode, "Kein Inhalt vorbereitet." );
-
-    ASSERT( !pAfterSection, "pAfterSection not Null! why Recursion?");
-    pAfterSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
-
-    rMyPaM.GetPoint()->nNode = pSectionNode->GetIndex()+1;
-    rMyPaM.GetPoint()->nContent.Assign(rMyPaM.GetCntntNode(), 0);
-}
-
-bool SwWW8ImplReader::MustCloseSection(long nTxtPos)
-{
-    // Might we have to close a section first?
-    bool bSectionWasJustClosed = pAfterSection && nTxtPos;
-    if( bSectionWasJustClosed )
-    {
-        /*
-        #96598#
-        When a section is created it is created with an empty para inside it.
-        We should never want this para.
-        */
-        rDoc.DelFullPara(*pPaM);
-
-        // set PaM behind section
-        pPaM->GetPoint()->nNode = *pAfterSection;
-        pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
-
-        ASSERT(!pPaM->GetNode()->IsEndNode(),
-            "WW8: I want to see an example of this to ease my mind");
-        if (pPaM->GetNode()->IsEndNode())
-            rDoc.AppendTxtNode(*pPaM->GetPoint());
-
-        delete pAfterSection, pAfterSection=0;
-        delete pLastPgDeskIdx, pLastPgDeskIdx=0;
-    }
-    return bSectionWasJustClosed;
-}
-
-
-// Bei jedem Abschnittswechsel ( auch am Anfang eines Dokuments ) wird
-// CreateSep gerufen, dass dann den / die Pagedesc(s) erzeugt und
-// mit Attributen un KF-Texten fuellt.
-// Dieses Vorgehen ist noetig geworden, da die UEbersetzung der verschiedenen
-// Seiten-Attribute zu stark verflochten ist.
-void SwWW8ImplReader::CreateSep(const long nTxtPos, bool bMustHaveBreak)
-{
-    /*
-    #i1909# #100688# section/page breaks should not occur in tables, word
-    itself ignores them in this case. The bug is truly that this filter
-    created such documents in the past!
-    */
-    if (nInTable)
-        return;
-
-    if (bTxbxFlySection || bDontCreateSep)
-        return;
-
-    BYTE nLastSectionCorrIhdt      = nCorrIhdt;
-    bool bLastSectionHadATitlePage = bSectionHasATitlePage;
-
-    bool bSectionWasJustClosed = MustCloseSection(nTxtPos);
-
-    SwPageDesc* pOldPageDesc = pPageDesc;
-    SwPageDesc* pPageDesc1   = 0;
-    WW8PLCFx_SEPX* pSep = pPlcxMan->GetSepPLCF();
-
-
-    // check if Line Numbering must be activated or resetted
-    const BYTE* pSprmSNLnnMod = mbNewDoc ?
-        pSep->HasSprm( bVer67 ? 154 : 0x5015 ) : 0;
-    if( pSprmSNLnnMod && *pSprmSNLnnMod )
-    {
-        // restart-numbering-mode: 0 per page, 1 per section, 2 never restart
-        const BYTE* pSprmSLnc = pSep->HasSprm( bVer67 ? 152 : 0x3013 );
-        bRestartLnNumPerSection =  pSprmSLnc && 1 == *pSprmSLnc;
-
-        if( bNoLnNumYet )
-        {
-            SwLineNumberInfo aInfo( rDoc.GetLineNumberInfo() );
-
-            aInfo.SetPaintLineNumbers(true);
-
-            aInfo.SetRestartEachPage( !pSprmSLnc || 0 == *pSprmSLnc );
-
-            const BYTE* pSprmSDxaLnn = pSep->HasSprm( bVer67 ? 155:0x9016 );
-            if( pSprmSDxaLnn )
-            {
-                INT16 nSDxaLnn = SVBT16ToShort( pSprmSDxaLnn );
-                aInfo.SetPosFromLeft( nSDxaLnn );
-            }
-
-            aInfo.SetCountBy( *pSprmSNLnnMod ); //Paint only for every n line
-
-
-            // to be defaulted features ( HARDCODED in MS Word 6,7,8,9 )
-            aInfo.SetCountBlankLines(true);
-            aInfo.SetCountInFlys(false);
-            aInfo.SetPos( LINENUMBER_POS_LEFT );
-            SvxNumberType aNumType; // this sets SVX_NUM_ARABIC per default
-            aInfo.SetNumType( aNumType );
-
-            rDoc.SetLineNumberInfo( aInfo );
-            bNoLnNumYet = false;
-        }
-
-        const BYTE* pSprmSLnnMin = pSep->HasSprm( bVer67 ? 160:0x501B );
-        if(    (    pSprmSLnnMin
-                 && 0 < *pSprmSLnnMin )
-            || (    bRestartLnNumPerSection
-                 && !bNoLnNumYet ) )
-        {
-            SwFmtLineNumber aLN;
-            if( pSprmSLnnMin )
-                aLN.SetStartValue( 1 + *pSprmSLnnMin );
-            else
-                aLN.SetStartValue( 1 );
-
-            NewAttr( aLN );
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_LINENUMBER );
-        }
-        bNoLnNumYet = false;
-    }
-
-
-    // pruefen, ob und wie umzubrechen ist          break code: 0 No break
-                                                            //  1 New column
-    const BYTE* pSprmBkc = pSep->HasSprm( bVer67 ? 142 : 0x3009 );//    2 New page
-    BYTE nBreakCode = pSprmBkc ? *pSprmBkc : 2; //              3 Even page
-    bool bContinuousBreak=(0 == nBreakCode); //                 4 Odd page
-
-    // im wievielten Abschnitt stehen wir denn eigentlich?
-    nActSectionNo = (short)( pSep->GetIdx() & 0x00007fff );
-
-
-
-    /*
-        Welche Kopf-/Fuss-Bereiche sind
-        identisch mit dem Vorgaenger-Abschnitt?
-    */                                                // sprmSFTitlePage
-    bSectionHasATitlePage = (0 != ReadBSprm( pSep, bVer67 ? 143 : 0x300A, 0 ));
-
-    BYTE nIPara;
-
-    BYTE nJustCopyHdFt = 0; // HdFt that are stored in previous WW section prop
-                            //           and were NOT USED but may be copied now
-    BYTE nSameHdFt     = 0; // HdFt that WERE the same in previous WW section
-
-    short aOldSectionNo[ 6 ];
-    memset( &aOldSectionNo, 0, sizeof( aOldSectionNo ) );
-
-    if( bVer67 )
-    {
-        // sprmSGprfIhdt
-        bool bSameHdFt = ( !ReadBSprmRet( nIPara, pSep, 153, 0 ) );
-
-        // Leere Hd/Ft will ich nicht
-        nCorrIhdt = pHdFt ? HdFtCorrectPara( nIPara ) : 0;
-        if( bSameHdFt )
-        {
-            nSameHdFt = 0xff;
-            nJustCopyHdFt = nSameHdFt;
-        }
-    }
-    else
-    {
-        if( !pHdFt )
-            nCorrIhdt = 0;
-        else
-        {
-            // nCorrIhdt ermitteln: WELCHE Hd/Ft sind ueberhaupt zu aktivieren?
-            //
-            nCorrIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD;
-
-            if( bSectionHasATitlePage )
-                nCorrIhdt |=  WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
-
-            if( pWDop->fFacingPages )
-                nCorrIhdt |= WW8_HEADER_EVEN   | WW8_FOOTER_EVEN;
-
-            // den PLCF analysieren:
-            //
-            // Hd/Ft ist gleich, wenn die Laenge des Eintrags NULL ist
-            //                   oder die Ziel-Offsets identisch sind.
-            //
-            WW8_CP nStart;
-            WW8_CP nOldStart=0;
-            long nLen;
-            long nOldLen=0;
-            BYTE nHdFtInfosStored=0;
-
-            for( BYTE nI = 0, nMask = 1; nI < 6; nI++, nMask <<= 1 )
-            {
-                // 1st find ALL Hd/Ft infos that are stored in this WW section
-                //     -- or in the sections before this one --
-                //     regardless whether they are used in this section or not
-                pHdFt->GetTextPosExact( nI+ (nActSectionNo+1)*6, nStart, nLen );
-                if( nLen <=2 && nActSectionNo )
-                {
-                    short nOldSectionNo = nActSectionNo;
-                    do
-                    {
-                        --nOldSectionNo;
-                        pHdFt->GetTextPosExact( nI + (nOldSectionNo+1)*6,
-                            nOldStart, nOldLen);
-
-                        if( nOldLen )
-                            aOldSectionNo[ nI ] = nOldSectionNo;
-                    }
-                    while( nOldSectionNo && !nOldLen );
-                }
-                if( nLen >= 2 || nOldLen )
-                    nHdFtInfosStored |= nMask;
-
-
-                if( nCorrIhdt & nMask )
-                {
-                    if( nActSectionNo )
-                    {
-                        if( nLen < 2 ||
-                            ((nOldStart == nStart) && (nOldLen == nLen)) )
-                        {
-                            // same Hd/Ft as in previous Section or NO Hd/Ft
-                            if( nHdFtInfosStored & nMask )
-                            {
-                                // prev. sect. really DID have and USE the Hd/Ft
-                                if( nLastSectionCorrIhdt & nMask )
-                                    nJustCopyHdFt |= nMask;
-                                // Hd/Ft may be found in one of prev. sections
-                                nSameHdFt |= nMask;
-                            }
-                            else
-                                nCorrIhdt &= ~nMask;// NO prev. Hd/Ft at all
-                        }
-                    }
-                    else if (nLen < 2)
-                        nCorrIhdt &= ~nMask;// 0 in 1.Sect.: Hd/Ft undefined
-                }
-            }
-        }
-        // Einlese-Flag auf Use-On-Flag setzen
-        nIPara = nCorrIhdt;
-    }
-
-
-    USHORT nLIdx = ( ( pWwFib->lid & 0xff ) == 0x9 ) ? 1 : 0;
-
-    // sprmSNfcPgn
-    BYTE nLastNfcPgn = nNfcPgn;
-    nNfcPgn = ReadBSprm( pSep, (bVer67 ? 147 : 0x300E), 0 );
-    if (nNfcPgn > 4)
-        nNfcPgn = 0;
-
-    // sprmSFBiDi
-    bool bLastRTLPgn = mbRTLPgn;
-    if (!bVer67)
-        mbRTLPgn = ReadBSprm(pSep, 0x3228, 0) ? true : false;
-
-    /*
-        Pruefen, ob wir uns den neuen Abschnitt schenken koennen, da kein
-        Umbruch erforderlich ist.
-    */
-    if( pSep->GetIMax() > 1 )
-    {
-        if( nActSectionNo )
-        {
-            // Index eins zurueck setzen
-            pSep->SetIdx( nActSectionNo-1 );
-            // Attribute von vorigem Abschnitt einlesen
-            WW8PLCFxDesc aOther;
-            pSep->GetSprms( &aOther );
-            long nOtherSprmsLen = aOther.nSprmsLen;
-            // Kopie der vorigen Attr. anlegen, da sie gleich ueberschrieben werden
-            BYTE* pOtherMem = new BYTE[ nOtherSprmsLen ];
-            memcpy( pOtherMem, aOther.pMemPos, nOtherSprmsLen );
-            // Index wieder richtig setzen
-            pSep->SetIdx( nActSectionNo );
-            // aktuelle Attribute einlesen
-            WW8PLCFxDesc aCur;
-            pSep->GetSprms( &aCur );
-
-            // zu ignorierende Attribute sammeln
-            bool bEqual = false;
-            if (bContinuousBreak)
-                bEqual = true;
-            else
-            {
-                bEqual = (bSectionHasATitlePage == bLastSectionHadATitlePage)
-                          && (nCorrIhdt == nLastSectionCorrIhdt)
-                          && (nCorrIhdt == (nCorrIhdt & nJustCopyHdFt))
-                          && (nNfcPgn   == nLastNfcPgn) && (mbRTLPgn == bLastRTLPgn);
-            }
-
-            if (bEqual) //Give continious breaks leniency.
-            {
-                /*
-                #95903#
-                If we are a continious section, word will report the same
-                headers and footers as the current (pOldPageDesc) page
-                descriptor, but we would really like to use the next style,
-                because thats what the user will probably expect on what to
-                them is the next page, so we'll pretend that our current style
-                is the follow style, and we'll disable any flags that claim we
-                want to use special first page headers/footers. None of this
-                dancing around widdershins to the sun would be required if our
-                sections could have margins independant of the host page, like
-                tables or graphics.
-                */
-                pOldPageDesc = pOldPageDesc ? pOldPageDesc->GetFollow() : 0;
-                if (bSectionHasATitlePage)
-                {
-                    bSectionHasATitlePage = 0;
-                    nSameHdFt ^= (WW8_HEADER_FIRST | WW8_FOOTER_FIRST);
-                }
-                /*
-                If we are a continous section then are we equal to the host
-                (previous) section. Relevent because margins cannot be
-                different in a section than from its host page in writer but
-                they can in word, if that is the case then we must make a new
-                page anyway :-(
-                */
-                bEqual = pSep->SprmsAreEquivalent(pOtherMem,nOtherSprmsLen);
-            }
-
-            // Copy of vorigen Attr. here freed.
-            delete[] pOtherMem;
-
-            if( bEqual )
-            {
-                switch( nBreakCode )
-                {
-                case 0:
-                    InsertSectionWithWithoutCols( *pPaM, 0 );
-                    if( pPageDesc )
-                    {
-                        SwFrmFmt& rFmt = pPageDesc->GetMaster();
-                        const SwFmtFrmSize&   rSz = rFmt.GetFrmSize();
-                        const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
-                        SwTwips nWidth = rSz.GetWidth();
-                        long nLeft  = rLR.GetTxtLeft();
-                        long nRight = rLR.GetRight();
-                        SetCols( pLastInsertedSection->GetFmt(), pSep,
-                            (USHORT)(nWidth - nLeft - nRight) );
-                    }
-                    break;
-                case 1:
-                    if (mbNewDoc)
-                    {
-                        rDoc.Insert(*pPaM, SvxFmtBreakItem(
-                            SVX_BREAK_COLUMN_BEFORE ));
-                    }
-                    break;
-                //case 2:
-                //case 3:   // alle drei Faelle -> PgDesc-Format-Einfuegung
-                //case 4:
-                default:
-                    /*
-                        Wir koennen den aktuellen PgDesk einsetzen, da dies
-                        immer der 1st-Page Deskriptor ist, nie der Follow!
-
-                        So geht es, auch wenn der Break auf Seite 7 kommt,
-                        wieder mit einer ERSTEN Seite weiter.
-                    */
-                    if (mbNewDoc)
-                    {
-                        if( pPageDesc )
-                            rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
-                        else
-                            // kein voriger PgDesc vorhanden?
-                            rDoc.Insert(*pPaM,
-                                SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ));
-                        SetLastPgDeskIdx();
-                    }
-                    break;
-                }
-                return;
-            // ========  Das war's Freunde, jetzt nichts wie weg hier!
-            }
-        }
-        if (mbNewDoc &&
-            ( bSectionWasJustClosed || (pPageDesc != &rDoc._GetPageDesc(0)) ))
-        {
-            if ((nBreakCode > 1) && bMustHaveBreak)
-            {
-                if( pPageDesc )
-                    rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
-            }
-            // Create and *insert* PageDesc
-            SwPaM* pPageDeskPaM = 0;
-            pPageDesc = CreatePageDesc( 0, &pPageDeskPaM );
-            SwFrmFmt &rFmt = pPageDesc->GetMaster();
-            SetPage1(pPageDesc, rFmt, pSep, nLIdx, false);
-            // if PageDesc has been inserted and has cols
-            // insert a *section* with cols instead
-            if( pPageDeskPaM )
-            {
-                const SwFmtCol& rCol = rFmt.GetCol();
-                if( rCol.GetNumCols() )
-                {
-                    InsertSectionWithWithoutCols( *pPaM, &rCol );
-                    // remove columns from PageDesc
-                    SwFmtCol aCol;
-                    rFmt.SetAttr( aCol );
-                }
-                delete pPageDeskPaM;
-            }
-        }
-    }
-    else if (mbNewDoc)
-        pPageDesc = &rDoc._GetPageDesc( 0 );    // Standard
-
-    if (!mbNewDoc)
-        return;
-
-    // Seitennummernformat speichern
-    {
-        static const SvxExtNumType aNumTyp[5] =
-        {
-            SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
-            SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N
-        };
-
-        SvxNumberType aType; aType.SetNumberingType(aNumTyp[ nNfcPgn ]);
-        pPageDesc->SetNumType( aType );
-    }
+    aNewSection.maSep.dxaLeft = ReadULSprm( pSep, pIds[3], nLef[nLIdx]);
+    aNewSection.maSep.dxaRight = ReadULSprm( pSep, pIds[4], nRig[nLIdx]);
+    aNewSection.maSep.dzaGutter = ReadULSprm( pSep, pIds[5], 0);
+
+    aNewSection.maSep.fRTLGutter = !bVer67 ? ReadULSprm( pSep, 0x322A, 0 ) : 0;
 
     // Page Number Restarts - sprmSFPgnRestart
-    BYTE nfPgnRestart = ReadBSprm( pSep, (bVer67 ? 150 : 0x3011), 0 );
+    aNewSection.maSep.fPgnRestart = ReadBSprm(pSep, (bVer67 ? 150 : 0x3011), 0);
 
-    if( nfPgnRestart )
-    {
-        const SfxPoolItem* pItem;
-        const SfxItemSet* pSet;
-        if(     ( 0 != (pSet = pPaM->GetCntntNode()->GetpSwAttrSet()) )
-             && ( SFX_ITEM_SET ==
-                  pSet->GetItemState(RES_PAGEDESC, false, &pItem) ) )
-        {
-            // read Pagination Start attribute - sprmSPgnStart
-            BYTE nPgnStart = ReadBSprm( pSep, (bVer67 ? 161 : 0x501C), 0 );
-            ((SwFmtPageDesc*)pItem)->SetNumOffset( nPgnStart );
-        }
-        else if( pPageDesc == &rDoc.GetPageDesc( 0 ) )
-        {
-            // read Pagination Start attribute - sprmSPgnStart
-            BYTE nPgnStart = ReadBSprm( pSep, (bVer67 ? 161 : 0x501C), 0 );
-            SwFmtPageDesc aPgDesc( pPageDesc );
-            aPgDesc.SetNumOffset( nPgnStart );
-            rDoc.Insert( *pPaM, aPgDesc );
-            SetLastPgDeskIdx();
-        }
+    aNewSection.maSep.pgnStart = ReadBSprm( pSep, (bVer67 ? 161 : 0x501C), 0 );
 
-        // Chapterlevel und Chapterdelimiter ? (sprmScnsPgn & sprmSiHeadingPgn)
-        const BYTE* p = pSep->HasSprm( bVer67 ? 132 : 0x3001 );
-        if( p && *p )
-        {
-            bPgChpLevel = true;
-            nPgChpLevel = *p - 1;
-            if( MAXLEVEL <= nPgChpLevel )
-                nPgChpLevel = MAXLEVEL - 1;
+    if (const BYTE* p = pSep->HasSprm( bVer67 ? 132 : 0x3001 ))
+        aNewSection.maSep.iHeadingPgn = *p;
 
-            if( 0 != (p = pSep->HasSprm( bVer67 ? 131 : 0x3000 )) )
-                nPgChpDelim = *p;
-            else
-                nPgChpDelim = 0;
-        }
-        else
-            bPgChpLevel = false;
-    }
-
-    // Vorsicht: gibt es ueberhaupt einen vorigen Page Descriptor?
-    if (!pOldPageDesc)
-    {
-        nSameHdFt = 0;
-        SetLastPgDeskIdx();
-    }
-
-    SwFrmFmt &rFmt0 = pPageDesc->GetMaster();
-
-    if( !bSectionHasATitlePage )
-    {
-        // Gegebenenfalls Einstellungen des vorigen PgDesc uebernehmen
-        // und das Einlese-Flag entsprechend korrigieren,
-        // damit nur noch die Eintraege gelesen werden, die NICHT
-        // vom vorigen PgDesc zu uebernehmen sind.
-        //
-        if( 0 < nSameHdFt )
-        {
-            CopyPageDescHdFt( pOldPageDesc, pPageDesc, nSameHdFt );
-            if( bVer67 )
-                nIPara  =  0;
-            else
-                nIPara &= ~nSameHdFt;
-        }
-
-        WW8ULSpaceData aULData;
-        GetPageULData(pSep, nLIdx, false, aULData);
-
-        // und uebrige Einstellungen updaten
-        // Orientierung, Hoehe, Breite, Vertikale Formatierung
-        SetPage1(pPageDesc, rFmt0, pSep, nLIdx, true);
-
-        // dann Header / Footer lesen, falls noch noetig
-        if( nIPara )
-            SetHdFt( pPageDesc, 0, nIPara );
-
-        SetPageULSpaceItems( rFmt0, aULData );
-        SetDocumentGrid(rFmt0, pSep);
-        SetPageBorder( 0, pPageDesc, pSep, nLIdx );
-    }
-    else
-    {
-        // Hier beachten:
-        // ==============
-        //
-        //      pPageDesc  = erste Seite
-        //      pPageDesc1 = Folge-Seiten
-        //
-
-
-        // erst folgende PageDesc-Werte einstellen:
-        //
-        // Orientierung, Hoehe, Breite, Vertikale Formatierung
-        SetPage1(pPageDesc, rFmt0, pSep, nLIdx, true);
-
-        // dann den PageDesc1 anlegen fuer Folge-Seiten
-        //
-        pPageDesc1 = CreatePageDesc( pPageDesc );
-
-        // Gegebenenfalls Einstellungen des/der vorigen PgDesc uebernehmen
-        //
-        if( 0 < nSameHdFt )
-        {
-            // ggfs. erst den alten 1st-Seite-PgDesc suchen und dessen
-            // Einstellungen uebernehmen
-            //
-            if( nSameHdFt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST) )
-            {
-                if( pOldPageDesc == pOldPageDesc->GetFollow() )
-                {
-                    // hoppla, die vorige Section hatte keine 1st Page?
-                    //
-                    // also: auslesen der in WW8 fuer die nicht vorhandene
-                    //       1st Page gespeicherten Hd/Ft-Einstellungen...
-                    //
-                    // Beachte: pPageDesc1 MUSS hier mit uebergeben werden,
-                    //          obwohl wir dessen Werte ja eigentlich hier
-                    //          gar nicht einlesen wollen!
-                    //          Das macht aber nichts, denn wir stellen den
-                    //          "SetHdFt( nIPara )"-Parameter so ein, dass
-                    //          nur der 1.-Seite-PgDesc eingelesen wird.
-                    //
-                    short nSaveSectionNo = nActSectionNo;
-                    if( bVer67 )
-                        --nActSectionNo;
-                    else
-                        nActSectionNo =   aOldSectionNo[ 4 ]
-                                        ? aOldSectionNo[ 4 ]    // Hd 1st
-                                        : aOldSectionNo[ 5 ];   // Ft 1st
-                    SetHdFt(pPageDesc, pPageDesc1,
-                        nSameHdFt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST));
-                    nActSectionNo = nSaveSectionNo;
-                }
-                else
-                    CopyPageDescHdFt( pOldPageDesc, pPageDesc,
-                        nSameHdFt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST) );
-            }
-
-            // ggfs. Werte des vorigen PgDesc fuer Folge-Seiten uebernehmen
-            //
-            if( nSameHdFt & (   WW8_HEADER_EVEN  | WW8_HEADER_ODD
-                              | WW8_FOOTER_EVEN  | WW8_FOOTER_ODD ) )
-            {
-                CopyPageDescHdFt( pOldPageDesc, pPageDesc1,
-                    nSameHdFt & (   WW8_HEADER_EVEN  | WW8_HEADER_ODD
-                                  | WW8_FOOTER_EVEN  | WW8_FOOTER_ODD ) );
-            }
-            // das Einlese-Flag entsprechend korrigieren,
-            // damit nur noch die Eintraege gelesen werden, die NICHT
-            // von vorigem/n PgDesc(s) zu uebernehmen sind.
-            //
-            if( bVer67 )
-                nIPara  =  0;
-            else
-                nIPara &= ~nSameHdFt;
-        }
-
-        SwFrmFmt &rFmt1 = pPageDesc1->GetMaster();
-
-        WW8ULSpaceData aULData0, aULData1;
-        // Vertikale Formatierung
-        GetPageULData(pSep, nLIdx, true,  aULData0);
-        // einzeln, da KF evtl. verschieden
-        GetPageULData(pSep, nLIdx, false, aULData1);
-
-        // dann Header / Footer lesen, falls noch noetig
-        if( nIPara )
-            SetHdFt( pPageDesc, pPageDesc1, nIPara );
-
-        // und uebrige Einstellungen updaten
-        // Vertikale Formatierung
-        SetPageULSpaceItems( rFmt0, aULData0 );
-        SetDocumentGrid(rFmt0, pSep);
-        // einzeln, da KF evtl. verschieden
-        SetPageULSpaceItems( rFmt1, aULData1 );
-        SetDocumentGrid(rFmt1, pSep);
-        SetPageBorder( pPageDesc, pPageDesc1, pSep, nLIdx );
-    }
-
-    SetUseOn(pPageDesc, pPageDesc1, nCorrIhdt);
+    if (const BYTE* p = pSep->HasSprm( bVer67 ? 131 : 0x3000 ))
+        aNewSection.maSep.cnsPgn = *p;
 
     static const BYTE aPaperBinIds[17] = {5,2,4,0,3,0,0,0,0,0,0,0,0,0,0,0,1};
         // WW                          SW
@@ -1764,33 +1064,124 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, bool bMustHaveBreak)
         // 15 == Automatically select   0
         // 16 == First tray available   1
 
-    const BYTE* pSprmSDmBinFirst = pSep->HasSprm( bVer67 ? 140 : 0x5007 );
-    const BYTE* pSprmSDmBinOther = pSep->HasSprm( bVer67 ? 141 : 0x5008  );
-    if( pSprmSDmBinFirst && (17 > *pSprmSDmBinFirst) )
+    if(const BYTE* pSprmSDmBinFirst = pSep->HasSprm( bVer67 ? 140 : 0x5007 ))
+        aNewSection.maSep.dmBinFirst = *pSprmSDmBinFirst;
+
+    if (const BYTE* pSprmSDmBinOther = pSep->HasSprm( bVer67 ? 141 : 0x5008))
+        aNewSection.maSep.dmBinOther = *pSprmSDmBinOther;
+
+    static const USHORT nTop[] = { MM_250, 1440 };
+    static const USHORT nBot[] = { MM_200, 1440 };
+
+    static const USHORT aVer67Ids2[] =
     {
-        SvxPaperBinItem aItem(ITEMID_PAPERBIN, aPaperBinIds[*pSprmSDmBinFirst]);
-        pPageDesc->GetMaster().SetAttr( aItem );
-    }
-    if( pSprmSDmBinOther && (17 > *pSprmSDmBinOther) )
+        /*sprmSDyaTop*/         168,
+        /*sprmSDyaBottom*/      169,
+        /*sprmSDyaHdrTop*/      156,
+        /*sprmSDyaHdrBottom*/   157
+    };
+    static const USHORT aVer8Ids2[] =
     {
-        SvxPaperBinItem aItem(ITEMID_PAPERBIN, aPaperBinIds[*pSprmSDmBinOther]);
-        SwFrmFmt &rFmtOther = pPageDesc1 ? pPageDesc1->GetMaster() :
-            pPageDesc->GetLeft();
-        rFmtOther.SetAttr( aItem );
+        /*sprmSDyaTop*/         0x9023,
+        /*sprmSDyaBottom*/      0x9024,
+        /*sprmSDyaHdrTop*/      0xB017,
+        /*sprmSDyaHdrBottom*/   0xB018
+    };
+
+    pIds = bVer67 ? aVer67Ids2 : aVer8Ids2;
+
+    aNewSection.maSep.dyaTop = ReadULSprm( pSep, pIds[0], nTop[nLIdx] );
+    aNewSection.maSep.dyaBottom = ReadULSprm( pSep, pIds[1], nBot[nLIdx] );
+    aNewSection.maSep.dyaHdrTop = ReadULSprm( pSep, pIds[2], 720 );
+    aNewSection.maSep.dyaHdrBottom = ReadULSprm( pSep, pIds[3], 720 );
+
+    if (!bVer67)
+    {
+        aNewSection.maSep.wTextFlow = ReadULSprm(pSep, 0x5033, 0);
+        aNewSection.maSep.clm = ReadULSprm( pSep, 0x5032, 0 );
+        aNewSection.maSep.dyaLinePitch = ReadULSprm(pSep, 0x9031, 360);
+        if (const BYTE* pS = pSep->HasSprm(0x7030))
+            aNewSection.maSep.dxtCharSpace = SVBT32ToLong(pS);
+
+        //sprmSPgbProp
+        sal_uInt16 pgbProp = ReadSprm( pSep, 0x522F, 0 );
+        aNewSection.maSep.pgbApplyTo = pgbProp & 0x0007;
+        aNewSection.maSep.pgbPageDepth = (pgbProp & 0x0018) >> 3;
+        aNewSection.maSep.pgbOffsetFrom = (pgbProp & 0x00E0) >> 5;
+
+        aNewSection.mnBorders =
+            ::lcl_ReadBorders(bVer67, aNewSection.brc, 0, 0, pSep);
     }
+
+    // check if Line Numbering must be activated or resetted
+    if (const BYTE* pSprmSNLnnMod = pSep->HasSprm( bVer67 ? 154 : 0x5015 ))
+        aNewSection.maSep.nLnnMod = *pSprmSNLnnMod;
+
+    if (const BYTE* pSprmSLnc = pSep->HasSprm( bVer67 ? 152 : 0x3013 ))
+        aNewSection.maSep.lnc = *pSprmSLnc;
+
+    if (const BYTE* pSprmSDxaLnn = pSep->HasSprm( bVer67 ? 155:0x9016 ))
+        aNewSection.maSep.dxaLnn = SVBT16ToShort( pSprmSDxaLnn );
+
+    if (const BYTE* pSprmSLnnMin = pSep->HasSprm( bVer67 ? 160:0x501B ))
+        aNewSection.maSep.lnnMin = *pSprmSLnnMin;
+
+    if (bVer67)
+        aNewSection.maSep.grpfIhdt = ReadBSprm(pSep, 153, 0);
+    else if (mrReader.pHdFt)
+    {
+        aNewSection.maSep.grpfIhdt = WW8_HEADER_ODD | WW8_FOOTER_ODD;
+
+        if (aNewSection.maSep.fTitlePage)
+            aNewSection.maSep.grpfIhdt |= WW8_HEADER_FIRST | WW8_FOOTER_FIRST;
+
+        if (mrReader.pWDop->fFacingPages)
+            aNewSection.maSep.grpfIhdt |= WW8_HEADER_EVEN | WW8_FOOTER_EVEN;
+
+        //See if we have a header or footer for each enabled possibility
+        //if we do not then we inherit the previous sections header/footer,
+        for (int nI = 0, nMask = 1; nI < 6; ++nI, nMask <<= 1)
+        {
+            if (aNewSection.maSep.grpfIhdt & nMask)
+            {
+                WW8_CP nStart;
+                long nLen;
+                mrReader.pHdFt->GetTextPosExact(nI + ( maSegments.size() + 1) * 6, nStart, nLen);
+                //No header or footer, inherit pervious one, or set to zero
+                //if no previous one
+                if (!nLen)
+                {
+                    if (
+                        maSegments.empty() ||
+                        !(maSegments.back().maSep.grpfIhdt & nMask)
+                       )
+                    {
+                        aNewSection.maSep.grpfIhdt &= ~nMask;
+                    }
+                }
+            }
+        }
+    }
+
+    SetLeftRight(aNewSection);
+    //END read section values
+
+    if (!bVer67)
+        aNewSection.SetDirection();
+
+    maSegments.push_back(aNewSection);
 
     // Kopf / Fuss - Index Updaten
     // Damit der Index auch spaeter noch stimmt
-    if( pHdFt )
-        pHdFt->UpdateIndex( nCorrIhdt );
+    if (mrReader.pHdFt)
+        mrReader.pHdFt->UpdateIndex(aNewSection.maSep.grpfIhdt);
 }
 
-
-void SwWW8ImplReader::CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
-                                        SwPageDesc* pNewPageDesc, BYTE nCode )
+void SwWW8ImplReader::CopyPageDescHdFt(const SwPageDesc* pOrgPageDesc,
+    SwPageDesc* pNewPageDesc, BYTE nCode )
 {
     // copy first header content section
-    if( nCode & WW8_HEADER_FIRST )
+    if (nCode & WW8_HEADER_FIRST)
         rDoc.CopyHeader(pOrgPageDesc->GetMaster(), pNewPageDesc->GetMaster());
 
     // copy first footer content section
@@ -1800,30 +1191,28 @@ void SwWW8ImplReader::CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
     if( nCode & (   WW8_HEADER_ODD  | WW8_FOOTER_ODD
                   | WW8_HEADER_EVEN | WW8_FOOTER_EVEN ) )
     {
-        // determine PageDesc of follow pages
-        const SwPageDesc* pOrgFollowPageDesc = pOrgPageDesc->GetFollow();
         // copy odd header content section
         if( nCode & WW8_HEADER_ODD )
         {
-            rDoc.CopyHeader(pOrgFollowPageDesc->GetMaster(),
+            rDoc.CopyHeader(pOrgPageDesc->GetMaster(),
                             pNewPageDesc->GetMaster() );
         }
         // copy odd footer content section
         if( nCode & WW8_FOOTER_ODD )
         {
-            rDoc.CopyFooter(pOrgFollowPageDesc->GetMaster(),
+            rDoc.CopyFooter(pOrgPageDesc->GetMaster(),
                             pNewPageDesc->GetMaster());
         }
         // copy even header content section
         if( nCode & WW8_HEADER_EVEN )
         {
-            rDoc.CopyHeader(pOrgFollowPageDesc->GetLeft(),
+            rDoc.CopyHeader(pOrgPageDesc->GetLeft(),
                             pNewPageDesc->GetLeft());
         }
         // copy even footer content section
         if( nCode & WW8_FOOTER_EVEN )
         {
-            rDoc.CopyFooter(pOrgFollowPageDesc->GetLeft(),
+            rDoc.CopyFooter(pOrgPageDesc->GetLeft(),
                             pNewPageDesc->GetLeft());
         }
     }
@@ -2197,19 +1586,24 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const SvxBoxItem& rBox,
     return bRet;
 }
 
-void SwWW8ImplReader::GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist )
+void SwWW8ImplReader::GetBorderDistance(const WW8_BRC* pbrc,
+    Rectangle& rInnerDist)
 {
     // 'dptSpace' is stored in 3 bits of 'Border Code (BRC)'
-    if( bVer67 )
+    if (bVer67)
+    {
         rInnerDist = Rectangle(((pbrc[ 1 ].aBits1[1] >> 3) & 0x1f) * 20,
                                ((pbrc[ 0 ].aBits1[1] >> 3) & 0x1f) * 20,
                                ((pbrc[ 3 ].aBits1[1] >> 3) & 0x1f) * 20,
                                ((pbrc[ 2 ].aBits1[1] >> 3) & 0x1f) * 20 );
+    }
     else
+    {
         rInnerDist = Rectangle( (pbrc[ 1 ].aBits2[1]       & 0x1f) * 20,
                                 (pbrc[ 0 ].aBits2[1]       & 0x1f) * 20,
                                 (pbrc[ 3 ].aBits2[1]       & 0x1f) * 20,
                                 (pbrc[ 2 ].aBits2[1]       & 0x1f) * 20 );
+    }
 }
 
 
@@ -2298,37 +1692,37 @@ WW8FlyPara::WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc /* = 0 */)
     bVer67 = bIsVer67;
 }
 
-
-// WW8FlyPara::operator == vergleicht alles, was in der Definition vor
-// den Borders steht!
-// dieses wird u.a. fuer TestSameApo benoetigt.
 bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
 {
-    ASSERT( ( (BYTE*)rSrc.brc - (BYTE*)&rSrc < sizeof( WW8FlyPara ) ),
-            "WW8FlyPara::operator == geht schief" );
-    return memcmp(this, &rSrc, (BYTE*)rSrc.brc - (BYTE*)&rSrc) ? false : true;
-            // memcmp ist moeglich, da die gesamte Struktur beim Initialisieren
-            // incl. Luecken mit 0 gefuellt wird und sich damit durch die
-            // Luecken keine falschen Unterschiede ergeben koennen.
-            // Ausserdem sind alle Elemente aligned, so dass keine Luecken
-            // existieren
+    //Compare the parts that word seems to compare for equivalence
+    return
+       (
+         (nSp26 == rSrc.nSp26) &&
+         (nSp27 == rSrc.nSp27) &&
+         (nSp45 == rSrc.nSp45) &&
+         (nSp28 == rSrc.nSp28) &&
+         (nLeMgn == rSrc.nLeMgn) &&
+         (nRiMgn == rSrc.nRiMgn) &&
+         (nUpMgn == rSrc.nUpMgn) &&
+         (nLoMgn == rSrc.nLoMgn) &&
+         (nSp29 == rSrc.nSp29) &&
+         (nSp37 == rSrc.nSp37)
+       );
 }
 
-
 // Read fuer normalen Text
-
 void WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
 {
     sal_uInt8 nOrigSp29 = nSp29;
     if (pSprm29)
         nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
 
-    bool bVertSet=false;
     const BYTE* pS = 0;
     if( bVer67 )
     {
         SetValSprm( &nSp26, pPap, 26 ); // X-Position   //sprmPDxaAbs
-        bVertSet = SetValSprm( &nSp27, pPap, 27 );  // Y-Position   //sprmPDyaAbs
+        //set in me or in parent style
+        mbVertSet |= SetValSprm( &nSp27, pPap, 27 );    // Y-Position   //sprmPDyaAbs
         SetValSprm( &nSp45, pPap, 45 ); // Hoehe        //sprmPWHeightAbs
         SetValSprm( &nSp28, pPap, 28 ); // Breite       //sprmPDxaWidth
         SetValSprm( &nLeMgn, pPap, 49 ); // L-Raender   //sprmPDxaFromText
@@ -2343,7 +1737,8 @@ void WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
     else
     {
         SetValSprm( &nSp26, pPap, 0x8418 ); // X-Position
-        bVertSet = SetValSprm( &nSp27, pPap, 0x8419 );  // Y-Position
+        //set in me or in parent style
+        mbVertSet |= SetValSprm( &nSp27, pPap, 0x8419 );    // Y-Position
         SetValSprm( &nSp45, pPap, 0x442B ); // Hoehe
         SetValSprm( &nSp28, pPap, 0x841A ); // Breite
         SetValSprm( &nLeMgn, pPap, 0x842F );    // L-Raender
@@ -2366,7 +1761,7 @@ void WW8FlyPara::Read(const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap)
      from para anchor, so we update the frame to have explicitly this type of
      anchoring
     */
-    if (!bVertSet)
+    if (!mbVertSet)
         nSp29 = (nOrigSp29 & 0xCF) | 0x20;
     else
         nSp29 = nOrigSp29;
@@ -2440,12 +1835,12 @@ void WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
     if (pSprm29)
         nOrigSp29 = *pSprm29;                           // PPC ( Bindung )
 
-    bool bVertSet=false;
     const BYTE* pS = 0;
     if (bVer67)
     {
         SetValSprm( &nSp26, pStyle, 26 );   // X-Position
-        bVertSet = SetValSprm(&nSp27, pStyle, 27);  // Y-Position
+        //set in me or in parent style
+        mbVertSet |= SetValSprm(&nSp27, pStyle, 27);    // Y-Position
         SetValSprm( &nSp45, pStyle, 45 );   // Hoehe
         SetValSprm( &nSp28, pStyle, 28 );   // Breite
         SetValSprm( &nLeMgn,    pStyle, 49 );   // L-Raender
@@ -2460,7 +1855,8 @@ void WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
     else
     {
         SetValSprm( &nSp26, pStyle, 0x8418 );   // X-Position
-        bVertSet = SetValSprm(&nSp27, pStyle, 0x8419);  // Y-Position
+        //set in me or in parent style
+        mbVertSet |= SetValSprm(&nSp27, pStyle, 0x8419);    // Y-Position
         SetValSprm( &nSp45, pStyle, 0x442B );   // Hoehe
         SetValSprm( &nSp28, pStyle, 0x841A );   // Breite
         SetValSprm( &nLeMgn, pStyle, 0x842F );  // L-Raender
@@ -2483,7 +1879,7 @@ void WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
      from para anchor, so we update the frame to have explicitly this type of
      anchoring
     */
-    if (!bVertSet)
+    if (!mbVertSet)
         nSp29 = (nOrigSp29 & 0xCF) | 0x20;
     else
         nSp29 = nOrigSp29;
@@ -2492,6 +1888,14 @@ void WW8FlyPara::Read(const BYTE* pSprm29, WW8RStyle* pStyle)
 bool WW8FlyPara::IsEmpty() const
 {
     WW8FlyPara aEmpty(bVer67);
+    /*
+     wr of 0 like 2 appears to me to be equivalent for checking here. See
+     #107103# if wrong, so given that the empty is 2, if we are 0 then set
+     empty to 0 to make 0 equiv to 2 for empty checking
+    */
+    ASSERT(aEmpty.nSp37 == 2, "this is not what we expect for nSp37");
+    if (this->nSp37 == 0)
+        aEmpty.nSp37 = 0;
     if (aEmpty == *this)
         return true;
     return false;
@@ -2775,7 +2179,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
 
     //The horizontal default is on the baseline, the vertical is centered
     //around the character center it appears
-    if (rReader.bVerticalEnviron)
+    if (rReader.maSectionManager.CurrentSectionIsVertical())
         Put(SwFmtVertOrient(0, VERT_CHAR_CENTER,REL_CHAR));
     else
         Put(SwFmtVertOrient(0, VERT_TOP, FRAME));
@@ -2935,8 +2339,10 @@ bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
         return false;
     }
 
-    pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara, nPgLeft,
-        (nPgWidth - nPgRight - nPgLeft), nIniFlyDx, nIniFlyDy );
+    pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara,
+        maSectionManager.GetPageLeft(),
+        (maSectionManager.GetPageWidth() - maSectionManager.GetPageRight() -
+         maSectionManager.GetPageLeft()), nIniFlyDx, nIniFlyDy );
 
     if( !pWFlyPara->bGrafApo )
     {
@@ -2992,6 +2398,12 @@ bool SwWW8ImplReader::StartApo(const BYTE* pSprm29,
     return true;
 }
 
+void wwSectionManager::JoinNode(const SwPosition &rPos, const SwNode &rNode)
+{
+    if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
+        maSegments.back().maStart = SwNodeIndex(rNode);
+}
+
 bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 {
     bool bRet = false;
@@ -2999,9 +2411,9 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 
     SwNodeIndex aPref(rPam.GetPoint()->nNode, -1);
 
-    SwTxtNode* pNode = aPref.GetNode().GetTxtNode();
-    if (pNode)
+    if (SwTxtNode* pNode = aPref.GetNode().GetTxtNode())
     {
+        maSectionManager.JoinNode(*rPam.GetPoint(), aPref.GetNode());
         rPam.GetPoint()->nNode = aPref;
         rPam.GetPoint()->nContent.Assign(pNode, pNode->GetTxt().Len());
         if (bStealAttr)
@@ -4491,7 +3903,7 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
     NewAttr( aLSpc );
     if( pSFlyPara )
         pSFlyPara->nLineSpace = nSpaceTw;   // LineSpace fuer Graf-Apos
-
+#if 0
     if( ( nWwPre > nSwPre || nWwPost > nSwPost )
             && !( nIniFlags & WW8FL_NO_IMPLPASP ) )
     {
@@ -4507,6 +3919,7 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
             aUL.SetLower( nDL );
         NewAttr( aUL );
     }
+#endif
 }
 
 void SwWW8ImplReader::Read_ParaAutoBefore(USHORT, const BYTE *pData, short nLen)
@@ -6238,3 +5651,5 @@ short SwWW8ImplReader::ImportSprm(const BYTE* pPos,USHORT nId)
 
     return nL;
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

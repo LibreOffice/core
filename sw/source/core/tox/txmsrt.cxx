@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-10-30 10:38:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,7 +754,8 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
             ++nStt;
 */
         pSrc->GetExpandTxt( rNd, &rInsPos, nStt,
-                nEndIndex == STRING_LEN ? STRING_LEN : nEndIndex - nStt );
+                nEndIndex == STRING_LEN ? STRING_LEN : nEndIndex - nStt,
+                FALSE, FALSE );
     }
     else
     {
@@ -797,12 +798,14 @@ String SwTOXPara::GetURL() const
                 {
                     // dann noch die rel. Nummer davor setzen
                     const SwNumRule& rRule = *pNd->GetDoc()->GetOutlineNumRule();
-                    for( int n = 0; n <= pNum->GetLevel(); ++n )
-                    {
-                        int nNum = pNum->GetLevelVal()[ n ];
-                        nNum -= ( rRule.Get( n ).GetStart() - 1 );
-                        ( aTxt += String::CreateFromInt32( nNum )) += '.';
-                    }
+                    const USHORT nCurrLevel = pNum->GetLevel();
+                    if(nCurrLevel <= MAXLEVEL)
+                        for( int n = 0; n <= nCurrLevel; ++n )
+                        {
+                            int nNum = pNum->GetLevelVal()[ n ];
+                            nNum -= ( rRule.Get( n ).GetStart() - 1 );
+                            ( aTxt += String::CreateFromInt32( nNum )) += '.';
+                        }
                 }
                 aTxt += ((SwTxtNode*)pNd)->GetExpandTxt();
                 ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );

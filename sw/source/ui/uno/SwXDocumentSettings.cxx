@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 13:27:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,16 @@
  *
  ************************************************************************/
 #ifdef PRECOMPILED
-#include "ui_pch.hxx"
+#include "core_pch.hxx"
 #endif
 #pragma hdrstop
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SFX_SFXBASECONTROLLER_HXX_
+#include <sfx2/sfxbasecontroller.hxx>
+#endif
 
 #ifndef _SW_XDOCUMENT_SETTINGS_HXX
 #include <SwXDocumentSettings.hxx>
@@ -122,6 +129,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
+
 using namespace rtl;
 using namespace comphelper;
 using namespace com::sun::star;
@@ -178,7 +186,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    CPPUTYPE_OUSTRING,          0,   0},
         { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        CPPUTYPE_OUSTRING,          0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   CPPUTYPE_INT32,              0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   CPPUTYPE_INT32,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           CPPUTYPE_BOOLEAN,           0,   0},
         { RTL_CONSTASCII_STRINGPARAM("UpdateFromTemplate"),         HANDLE_UPDATE_FROM_TEMPLATE,            CPPUTYPE_BOOLEAN,           0,   0},
 /*
@@ -213,11 +221,13 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
 }
 
 SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
-: MasterHelperNoState ( lcl_createSettingsInfo (), &Application::GetSolarMutex () )
+: MasterPropertySet ( lcl_createSettingsInfo (),
+                      &Application::GetSolarMutex () )
 , mxModel ( pModel )
 , mpModel ( pModel )
 , mpDocSh ( NULL )
 , mpDoc ( NULL )
+, mpPrinter( NULL )
 {
     registerSlave ( new SwXPrintSettings ( PRINT_SETTINGS_DOCUMENT, mpModel->GetDocShell()->GetDoc() ) );
     registerSlave ( new SwXPrintPreviewSettings ( mpModel->GetDocShell()->GetDoc() ) );
@@ -227,6 +237,65 @@ SwXDocumentSettings::~SwXDocumentSettings()
     throw()
 {
 }
+
+Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
+    throw(RuntimeException)
+{
+        return ::cppu::queryInterface ( rType,
+                                        // OWeakObject interfaces
+                                        reinterpret_cast< XInterface* > ( this ),
+                                        static_cast< XWeak* > ( this ),
+                                        // my own interfaces
+                                        static_cast< XPropertySet*  > ( this ),
+                                        static_cast< XPropertyState* > ( this ),
+                                        static_cast< XMultiPropertySet* > ( this ),
+                                        static_cast< XServiceInfo* > ( this ),
+                                        static_cast< XTypeProvider* > ( this ) );
+}
+void SwXDocumentSettings::acquire ()
+    throw ()
+{
+    OWeakObject::acquire();
+}
+void SwXDocumentSettings::release ()
+    throw ()
+{
+    OWeakObject::release();
+}
+
+uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    uno::Sequence< uno::Type > aBaseTypes( 5 );
+    uno::Type* pBaseTypes = aBaseTypes.getArray();
+
+    // from MasterPropertySet
+    pBaseTypes[0] = ::getCppuType((Reference< XPropertySet >*)0);
+    pBaseTypes[1] = ::getCppuType((Reference< XPropertyState >*)0);
+    pBaseTypes[2] = ::getCppuType((Reference< XMultiPropertySet >*)0);
+    //
+    pBaseTypes[3] = ::getCppuType((Reference< XServiceInfo >*)0);
+    pBaseTypes[4] = ::getCppuType((Reference< XTypeProvider >*)0);
+
+    return aBaseTypes;
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
+    throw (RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
+    if(!bInit)
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
+    return aId;
+}
+
 void SwXDocumentSettings::_preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
@@ -313,7 +382,11 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     {
                         SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
                         if (pNewPrinter->IsKnown())
-                            mpDoc->SetPrt ( pNewPrinter, sal_False );
+                        {
+                            // set printer only once; in _postSetValues
+                            delete mpPrinter;
+                            mpPrinter = pNewPrinter;
+                        }
                         else
                             delete pNewPrinter;
                     }
@@ -345,7 +418,9 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
                     SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
-                    mpDoc->SetPrt( pPrinter, sal_False );
+                    // set printer only once; in _postSetValues
+                    delete mpPrinter;
+                    mpPrinter = pPrinter;
 
                     if ( !pPrinter->IsOriginal() )
                     {
@@ -441,6 +516,10 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
 void SwXDocumentSettings::_postSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
+    // set printer only once, namely here!
+    if( mpPrinter != NULL )
+        mpDoc->SetPrt( mpPrinter, true );
+
     mpDocSh = 0;
     mpDoc = 0;
 }
@@ -625,3 +704,5 @@ Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
     aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.Settings") );
     return aSeq;
 }
+
+

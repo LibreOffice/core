@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-13 07:15:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di pagine:" ;
         Text [ portuguese_brazilian ] = "N?ero de p?ginas:" ;
         Text [ portuguese ] = "Número de páginas:" ;
-        Text [ finnish ] = "Sivujen m??r?:" ;
+        Text [ finnish ] = "Sivujen määrä:" ;
         Text [ danish ] = "Antal sider:" ;
         Text [ french ] = "Nombre de pages :" ;
         Text [ swedish ] = "Antal sidor:" ;
@@ -89,14 +89,15 @@ TabPage TP_DOC_STAT
         Text[ chinese_simplified ] = "é¡µæ•°ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö:";
         Text[ polish ] = "Liczba stron:";
-        Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç·æ•°:";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ç·æ•°:";
         Text[ chinese_traditional ] = "é æ•¸ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ:";
         Text[ greek ] = "Áñéèìüò óåëßäùí:";
-        Text[ korean ] = "ìª½ ìˆ˜:";
+        Text[ korean ] = "í˜ì´ì§€ ìˆ˜:";
         Text[ turkish ] = "Sayfa:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de páginas:";
+        Text[ catalan ] = "Nombre de pàgines:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸«à¸™à¹‰à¸²:";
     };
     FixedText FT_TABLE
     {
@@ -108,7 +109,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di tabelle:" ;
         Text [ portuguese_brazilian ] = "N?ero de tabelas:" ;
         Text [ portuguese ] = "Número de tabelas:" ;
-        Text [ finnish ] = "Taulukoiden m??r?:" ;
+        Text [ finnish ] = "Taulukoiden määrä:" ;
         Text [ danish ] = "Antal tabeller:" ;
         Text [ french ] = "Nombre de tableaux :" ;
         Text [ swedish ] = "Antal tabeller:" ;
@@ -123,10 +124,11 @@ TabPage TP_DOC_STAT
         Text[ chinese_traditional ] = "è¡¨æ ¼æ•¸ç›®ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÌÏÇæá:";
         Text[ greek ] = "Áñéèìüò ğéíÜêùí:";
-        Text[ korean ] = "í‘œ ê°œìˆ˜:";
+        Text[ korean ] = "í‘œ ìˆ˜:";
         Text[ turkish ] = "Tablo:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de tablas:";
+        Text[ catalan ] = "Nombre de taules:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸•à¸²à¸£à¸²à¸‡:";
     };
     FixedText FT_GRF
     {
@@ -138,7 +140,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di immagini:" ;
         Text [ portuguese_brazilian ] = "N?ero de gr?ficos:" ;
         Text [ portuguese ] = "Número de imagens:" ;
-        Text [ finnish ] = "Kuvien m??r?:" ;
+        Text [ finnish ] = "Kuvien määrä:" ;
         Text [ danish ] = "Antal billeder:" ;
         Text [ french ] = "Nombre d'images :" ;
         Text [ swedish ] = "Antal grafikobjekt:" ;
@@ -147,16 +149,17 @@ TabPage TP_DOC_STAT
         Text [ english_us ] = "Number of Graphics:" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "å›¾å½¢æ•°ç›®ï¼š";
-        Text[ russian ] = "Êîëè÷åñòâî ğèñóíêîâ:";
+        Text[ russian ] = "Êîëè÷åñòâî ãğàôè÷åñêèõ îáúåêòîâ:";
         Text[ polish ] = "Liczba grafik:";
         Text[ japanese ] = "å›³ã®æ•°:";
         Text[ chinese_traditional ] = "æ•¸ç›® åœ–å½¢ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÑÓæãÇÊ:";
         Text[ greek ] = "Áñéèìüò ãñáöéêşí:";
-        Text[ korean ] = "ê·¸ë˜í”½ ê°œìˆ˜:";
+        Text[ korean ] = "ê·¸ë¦¼ ìˆ˜:";
         Text[ turkish ] = "Grafik:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de imágenes:";
+        Text[ catalan ] = "Nombre d'imatges:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸à¸£à¸²à¸Ÿà¸´à¸„:";
     };
     FixedText FT_OLE
     {
@@ -168,7 +171,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di oggetti OLE:" ;
         Text [ portuguese_brazilian ] = "N?ero de objetos OLE:" ;
         Text [ portuguese ] = "Número de objectos OLE:" ;
-        Text [ finnish ] = "OLE-objektien m??r?:" ;
+        Text [ finnish ] = "OLE-objektien määrä:" ;
         Text [ danish ] = "Antal OLE-objekter:" ;
         Text [ french ] = "Nombre d'objets OLE :" ;
         Text [ swedish ] = "Antal OLE-objekt:" ;
@@ -179,14 +182,15 @@ TabPage TP_DOC_STAT
         Text[ chinese_simplified ] = "OLE å¯¹è±¡æ•°ç›®ï¼š";
         Text[ russian ] = "Êîëè÷åñòâî îáúåêòîâ OLÅ:";
         Text[ polish ] = "Liczba obiektów OLE:";
-        Text[ japanese ] = "OLE ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æ•°:";
+        Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ•°:";
         Text[ chinese_traditional ] = "æ•¸ç›® OLE-ç‰©ä»¶ï¼š";
         Text[ arabic ] = "ÚÏÏ ßÇÆäÇÊ OLE:";
         Text[ greek ] = "Áñéèìüò áíôéêåéìİíùí OLE:";
-        Text[ korean ] = "OLE ê°œì²´ ê°œìˆ˜:";
+        Text[ korean ] = "OLE ê°œì²´ ìˆ˜:";
         Text[ turkish ] = "OLE nesneleri:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de objetos OLE:";
+        Text[ catalan ] = "Nombre d'objectes OLE:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸§à¸±à¸•à¸–à¸¸ OLE :";
     };
     FixedText FT_PARA
     {
@@ -198,7 +202,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di paragrafi:" ;
         Text [ portuguese_brazilian ] = "N?ero de par?grafos:" ;
         Text [ portuguese ] = "Número de parágrafos:" ;
-        Text [ finnish ] = "Kappaleiden m??r?:" ;
+        Text [ finnish ] = "Kappaleiden määrä:" ;
         Text [ danish ] = "Antal afsnit:" ;
         Text [ french ] = "Nombre de paragraphes :" ;
         Text [ swedish ] = "Antal stycken:" ;
@@ -213,10 +217,11 @@ TabPage TP_DOC_STAT
         Text[ chinese_traditional ] = "æ•¸ç›® æ®µè½ï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáİŞÑÇÊ:";
         Text[ greek ] = "Áñéèìüò ğáñáãñÜöùí:";
-        Text[ korean ] = "ë‹¨ë½ ê°œìˆ˜:";
+        Text[ korean ] = "ë‹¨ë½ ìˆ˜:";
         Text[ turkish ] = "Paragraf:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de párrafos:";
+        Text[ catalan ] = "Nombre de paràgrafs:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²:";
     };
     FixedText FT_WORD
     {
@@ -228,7 +233,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di parole:" ;
         Text [ portuguese_brazilian ] = "N?ero de palavras:" ;
         Text [ portuguese ] = "Número de palavras:" ;
-        Text [ finnish ] = "Sanam??r?:" ;
+        Text [ finnish ] = "Sanamäärä:" ;
         Text [ danish ] = "Antal ord:" ;
         Text [ french ] = "Nombre de mots :" ;
         Text [ swedish ] = "Antal ord:" ;
@@ -246,7 +251,8 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "ë‹¨ì–´ ìˆ˜:";
         Text[ turkish ] = "Sözcük:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de palabras:";
+        Text[ catalan ] = "Nombre de paraules:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸„à¸³:";
     };
     FixedText FT_CHAR
     {
@@ -258,7 +264,7 @@ TabPage TP_DOC_STAT
         Text [ italian ] = "Numero di caratteri:" ;
         Text [ portuguese_brazilian ] = "N?ero de caracteres:" ;
         Text [ portuguese ] = "Número de caracteres:" ;
-        Text [ finnish ] = "Merkkien m??r?:" ;
+        Text [ finnish ] = "Merkkien määrä:" ;
         Text [ danish ] = "Antal tegn:" ;
         Text [ french ] = "Nombre de caractères :" ;
         Text [ swedish ] = "Antal tecken:" ;
@@ -267,7 +273,7 @@ TabPage TP_DOC_STAT
         Text [ english_us ] = "Number of Characters:" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "å­—ç¬¦æ•°ç›®ï¼š";
-        Text[ russian ] = "Êîëè÷åñòâî çíàêîâ:";
+        Text[ russian ] = "Êîëè÷åñòâî ñèìâîëîâ:";
         Text[ polish ] = "Liczba znaków:";
         Text[ japanese ] = "æ–‡å­—æ•°:";
         Text[ chinese_traditional ] = "æ•¸ç›® å­—å…ƒï¼š";
@@ -276,7 +282,8 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "ë¬¸ì ìˆ˜:";
         Text[ turkish ] = "Karakter:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de caracteres:";
+        Text[ catalan ] = "Nombre de caràcters:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°:";
     };
     FixedText FT_LINE
     {
@@ -300,11 +307,12 @@ TabPage TP_DOC_STAT
         Text[ chinese_traditional ] = "æ•¸ç›® è¡Œï¼š";
         Text[ arabic ] = "ÚÏÏ ÇáÃÓØÑ:";
         Text[ greek ] = "Áñéèìüò ãñáììşí:";
-        Text[ korean ] = "í–‰ ê°œìˆ˜:";
+        Text[ korean ] = "ì¤„ ìˆ˜:";
         Text[ turkish ] = "Satır:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de líneas:";
-        Text[ finnish ] = "Rivien m??r?:";
+        Text[ catalan ] = "Nombre de línies:";
+        Text[ finnish ] = "Rivien määrä:";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸šà¸£à¸£à¸—à¸±à¸”:";
     };
     FixedText FT_PAGE_COUNT
     {
@@ -367,9 +375,9 @@ TabPage TP_DOC_STAT
         Text [ swedish ] = "Uppd~atera" ;
         Text [ danish ] = "Opdater" ;
         Text [ italian ] = "Aggiorna" ;
-        Text [ spanish ] = "~Actualizar" ;
+        Text [ spanish ] = "Actualizar" ;
         Text [ french ] = "~Actualiser" ;
-        Text [ dutch ] = "~Actualiseren" ;
+        Text [ dutch ] = "~Bijwerken" ;
         Text[ chinese_simplified ] = "æ›´æ–°(~U)";
         Text[ russian ] = "Îáíîâèòü";
         Text[ polish ] = "Aktualizuj";
@@ -380,10 +388,18 @@ TabPage TP_DOC_STAT
         Text[ korean ] = "ì—…ë°ì´íŠ¸(~U)";
         Text[ turkish ] = "~Güncelle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Actualizar";
-        Text[ finnish ] = "~P?ivit?";
+        Text[ catalan ] = "~Actualitza";
+        Text[ finnish ] = "~Päivitä";
+        Text[ thai ] = "~à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡";
     };
 };
+
+
+
+
+
+
+
 
 
 

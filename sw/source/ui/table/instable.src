@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-07-03 13:41:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_INSERT_TABLE
     Text [ portuguese ] = "Inserir tabela" ;
     Text [ finnish ] = "Lisää taulukko" ;
     Text [ danish ] = "Indsæt tabel" ;
-    Text [ french ] = "Insérer un tableau" ;
+    Text [ french ] = "Insertion de tableau" ;
     Text [ swedish ] = "Infoga tabell" ;
     Text [ dutch ] = "Tabel invoegen" ;
     Text [ spanish ] = "Insertar tabla" ;
@@ -106,18 +106,19 @@ ModalDialog DLG_INSERT_TABLE
         Text[ dutch ] = "Naam";
         Text[ spanish ] = "Nombre";
         Text[ english_us ] = "Name";
-        Text[ chinese_simplified ] = "Ãû³Æ";
+        Text[ chinese_simplified ] = "åç§°";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "•\\‚Ì–¼‘O";
-        Text[ chinese_traditional ] = "¦WºÙ";
+        Text[ japanese ] = "è¡¨ã®åå‰";
+        Text[ chinese_traditional ] = "åç¨±";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ì´ë¦„";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre";
+        Text[ catalan ] = "Nom";
         Text[ finnish ] = "Nimi";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
     };
     FixedText FT_COL
     {
@@ -137,17 +138,18 @@ ModalDialog DLG_INSERT_TABLE
         Text [ spanish ] = "~Columnas" ;
         Text [ english_us ] = "~Columns" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÁĞ(~C)";
-        Text[ russian ] = "Êîëîíêè";
+        Text[ chinese_simplified ] = "åˆ—(~C)";
+        Text[ russian ] = "Ñòîëáöû";
         Text[ polish ] = "Kolumny";
-        Text[ japanese ] = "—ñ(~C)";
-        Text[ chinese_traditional ] = "Äæ(~C)";
+        Text[ japanese ] = "åˆ—(~C)";
+        Text[ chinese_traditional ] = "æ¬„(~C)";
         Text[ arabic ] = "ÃÚãÏÉ";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "¿­(~C)";
+        Text[ korean ] = "ì—´(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Columnas";
+        Text[ catalan ] = "~Columnes";
+        Text[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     NumericField ED_COL
     {
@@ -171,28 +173,29 @@ ModalDialog DLG_INSERT_TABLE
         Text = "~Zeilen" ;
         Text [ ENGLISH ] = "~Rows" ;
         Text [ norwegian ] = "~Rows" ;
-        Text [ italian ] = "~Righe" ;
+        Text [ italian ] = "Righe" ;
         Text [ portuguese_brazilian ] = "Filei~ras" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "Rækker" ;
-        Text [ french ] = "~Lignes" ;
+        Text [ french ] = "Lignes" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Rijen" ;
         Text [ spanish ] = "~Filas" ;
         Text [ english_us ] = "~Rows" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ĞĞ(~R)";
+        Text[ chinese_simplified ] = "è¡Œ(~R)";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "s(~R)";
-        Text[ chinese_traditional ] = "¦C(~R)";
+        Text[ japanese ] = "è¡Œ(~R)";
+        Text[ chinese_traditional ] = "åˆ—(~R)";
         Text[ arabic ] = "Õİæİ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "Çà(~R)";
+        Text[ korean ] = "í–‰(~R)";
         Text[ turkish ] = "Sa~tır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Filas";
+        Text[ catalan ] = "~Files";
+        Text[ thai ] = "à¹~à¸–à¸§";
     };
     NumericField ED_ROW
     {
@@ -216,25 +219,26 @@ ModalDialog DLG_INSERT_TABLE
         Text = "Tabellengröße" ;
         Text [ ENGLISH ] = "Size" ;
         Text[ english_us ] = "Size";
-        Text[ portuguese ] = "Size";
+        Text[ portuguese ] = "Tamanho da tabela";
         Text[ russian ] = "Ğàçìåğ òàáëèöû";
         Text[ greek ] = "Size";
-        Text[ dutch ] = "Size";
+        Text[ dutch ] = "Tabelgrootte";
         Text[ french ] = "Taille";
         Text[ spanish ] = "Tamaño de tabla";
-        Text[ finnish ] = "Size";
+        Text[ finnish ] = "Koko";
         Text[ italian ] = "Dimensioni tabella";
-        Text[ danish ] = "Size";
+        Text[ danish ] = "Tabelstørrelse";
         Text[ swedish ] = "Tabellstorlek";
         Text[ polish ] = "Rozmiar tabeli";
         Text[ portuguese_brazilian ] = "Size";
-        Text[ japanese ] = "•\\‚Ì»²½Ş";
-        Text[ korean ] = "Å©±â";
-        Text[ chinese_simplified ] = "±í¸ñµÄ´óĞ¡";
-        Text[ chinese_traditional ] = "ªí®æ¤j¤p";
+        Text[ japanese ] = "è¡¨ã®ã‚µã‚¤ã‚º";
+        Text[ korean ] = "í¬ê¸°";
+        Text[ chinese_simplified ] = "è¡¨æ ¼çš„å¤§å°";
+        Text[ chinese_traditional ] = "è¡¨æ ¼å¤§å°";
         Text[ turkish ] = "Size";
         Text[ arabic ] = "Size";
-        Text[ catalan ] = "Size";
+        Text[ catalan ] = "Mida";
+        Text[ thai ] = "à¸‚à¸™à¸²à¸”";
     };
     CheckBox CB_HEADER
     {
@@ -247,23 +251,24 @@ ModalDialog DLG_INSERT_TABLE
         Text[ portuguese_brazilian ] = "Header";
         Text[ portuguese ] = "~Título";
         Text[ danish ] = "Overskrift";
-        Text[ french ] = "T~itre";
+        Text[ french ] = "Titre";
         Text[ swedish ] = "~Överskrift";
         Text[ dutch ] = "~Kop";
         Text[ spanish ] = "~Encabezado";
         Text[ english_us ] = "Header";
-        Text[ chinese_simplified ] = "±êÌâ";
+        Text[ chinese_simplified ] = "æ ‡é¢˜";
         Text[ russian ] = "Çàãîëîâîê";
         Text[ polish ] = "Tytu³";
-        Text[ japanese ] = "Œ©o‚µ";
-        Text[ chinese_traditional ] = "¼ĞÃD";
+        Text[ japanese ] = "è¦‹å‡ºã—";
+        Text[ chinese_traditional ] = "æ¨™é¡Œ";
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ greek ] = "Åğéêåöáëßäá";
-        Text[ korean ] = "Ç¥Á¦";
+        Text[ korean ] = "ì œëª©";
         Text[ turkish ] = "Başlık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Encabezado";
-        Text[ finnish ] = "Yläotsikko";
+        Text[ catalan ] = "~Encapçalament";
+        Text[ finnish ] = "Ylätunniste";
+        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -279,20 +284,21 @@ ModalDialog DLG_INSERT_TABLE
         Text[ french ] = "R~épéter sur chaque page";
         Text[ swedish ] = "~Upprepa på varje sida";
         Text[ dutch ] = "Op iedere pagina ~herhalen";
-        Text[ spanish ] = "~Repetir en cada página";
+        Text[ spanish ] = "Repetir en cada página";
         Text[ english_us ] = "Re~peat header";
-        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾(~P)";
-        Text[ russian ] = "Ïîâòîğ íà êàæäîé ñòğàíèöå";
+        Text[ chinese_simplified ] = "åœ¨æ¯é¡µä¸Šé‡å¤æ˜¾ç¤º(~P)";
+        Text[ russian ] = "Ïîâòîğÿòü çàãîëîâîê";
         Text[ polish ] = "Powtórz na ~ka¿dej stronie";
-        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ(~P)";
-        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü(~P)";
+        Text[ japanese ] = "å„ãƒšãƒ¼ã‚¸ã«ç¹°ã‚Šè¿”ã—(~P)";
+        Text[ chinese_traditional ] = "åœ¨æ¯é ä¸Šé‡è¤‡é¡¯ç¤º(~P)";
         Text[ arabic ] = "ÊßÑÇÑ İí ßá ÕİÍÉ";
         Text[ greek ] = "ÅğáíÜëç~øç óå êÜèå óåëßäá";
-        Text[ korean ] = "¸ğµç ÂÊ¿¡¼­ ¹İº¹(~P)";
+        Text[ korean ] = "ëª¨ë“  í˜ì´ì§€ì—ì„œ ë°˜ë³µ(~P)";
         Text[ turkish ] = "İlk satırı her sayfada yi~nele";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Repetir en cada página";
-        Text[ finnish ] = "~Toista yläotsikko";
+        Text[ catalan ] = "~Repeteix a cada pàgina";
+        Text[ finnish ] = "~Toista ylätunniste";
+        Text[ thai ] = "à¸—à¸³à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§~à¸‹à¹‰à¸³";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -305,23 +311,24 @@ ModalDialog DLG_INSERT_TABLE
         Text[ portuguese_brazilian ] = "Don't split table";
         Text[ portuguese ] = "Não ~dividir tabela";
         Text[ danish ] = "Opdel tabel ikke";
-        Text[ french ] = "Ne pas ~diviser le tableau";
+        Text[ french ] = "Ne pas ~scinder le tableau";
         Text[ swedish ] = "Dela i~nte tabell";
         Text[ dutch ] = "Tabel niet ~splitsen";
         Text[ spanish ] = "~No dividir tabla";
         Text[ english_us ] = "Don't split table";
-        Text[ chinese_simplified ] = "²»·Ö¸ô±í¸ñ";
+        Text[ chinese_simplified ] = "ä¸åˆ†éš”è¡¨æ ¼";
         Text[ russian ] = "Íå ğàçáèâàòü òàáëèöó";
         Text[ polish ] = "Nie dziel tabeli";
-        Text[ japanese ] = "•\\‚ğ•ªŠ„‚µ‚È‚¢";
-        Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ";
+        Text[ japanese ] = "è¡¨ã‚’åˆ†å‰²ã—ãªã„";
+        Text[ chinese_traditional ] = "ä¸åˆ†é–‹è¡¨æ ¼";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "Íá ìç äéáéñåèåß ï ğßíáêáò";
-        Text[ korean ] = "Å×ÀÌºí ºĞ¸®ÇÏÁö¡¡¾Ê±â";
+        Text[ korean ] = "í‘œ ë‚˜ëˆ„ì§€ ì•ŠìŒ";
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sığdır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~No dividir tabla";
+        Text[ catalan ] = "No parteixis la taula";
         Text[ finnish ] = "Älä jaa taulukkoa";
+        Text[ thai ] = "à¹„à¸¡à¹ˆà¹à¸¢à¸à¸•à¸²à¸£à¸²à¸‡";
     };
     CheckBox CB_BORDER
     {
@@ -339,18 +346,50 @@ ModalDialog DLG_INSERT_TABLE
         Text[ dutch ] = "~Omranding";
         Text[ spanish ] = "~Borde";
         Text[ english_us ] = "Border";
-        Text[ chinese_simplified ] = "±ß¿ò";
+        Text[ chinese_simplified ] = "è¾¹æ¡†";
         Text[ russian ] = "Îáğàìëåíèå";
         Text[ polish ] = "Obramowanie";
-        Text[ japanese ] = "˜g";
-        Text[ chinese_traditional ] = "Ãä®Ø";
+        Text[ japanese ] = "æ ";
+        Text[ chinese_traditional ] = "é‚Šæ¡†";
         Text[ arabic ] = "ÇáÍÏæÏ";
         Text[ greek ] = "Ğåñßãñáììá";
-        Text[ korean ] = "¿Ü°û¼±";
+        Text[ korean ] = "í…Œë‘ë¦¬";
         Text[ turkish ] = "~Kenarlık";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Borde";
+        Text[ catalan ] = "Vora";
         Text[ finnish ] = "Reuna";
+        Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
+    };
+    PushButton BT_AUTOFORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 130 ) ;
+        Size = MAP_APPFONT ( 66 , 14 ) ;
+        TabStop = TRUE ;
+        Text = "~Autoformat..." ;
+        Text [ ENGLISH ] = "Autoformat..." ;
+        Text [ norwegian ] = "Autoformat..." ;
+        Text [ italian ] = "~Formatt. auto..." ;
+        Text [ portuguese_brazilian ] = "Formata??o Autom?tica..." ;
+        Text [ portuguese ] = "~AutoFormato..." ;
+        Text [ finnish ] = "Autom. ~muotoilu..." ;
+        Text [ danish ] = "AutoFormat..." ;
+        Text [ french ] = "~AutoFormat..." ;
+        Text [ swedish ] = "~Autoformat..." ;
+        Text [ dutch ] = "~AutoOpmaak..." ;
+        Text [ spanish ] = "~Formateado automático..." ;
+        Text [ english_us ] = "Auto~Format..." ;
+        Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼(~F)...";
+        Text[ russian ] = "Àâòîôîğìàò...";
+        Text[ polish ] = "Autoformat...";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ(~F)...";
+        Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼(~F)...";
+        Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí...";
+        Text[ greek ] = "~ÁõôïÌïñöŞ...";
+        Text[ korean ] = "ìë™ ì„œì‹(~F)...";
+        Text[ turkish ] = "~Otom. formatlama...";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Auto~format...";
+        Text[ thai ] = "~à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´...";
     };
     FixedLine FL_OPTIONS
     {
@@ -367,18 +406,19 @@ ModalDialog DLG_INSERT_TABLE
         Text[ dutch ] = "Opties";
         Text[ spanish ] = "Opciones";
         Text[ english_us ] = "Options";
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû";
         Text[ polish ] = "Opcje";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "¿É¼Ç";
+        Text[ korean ] = "ì˜µì…˜";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones";
+        Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     OKButton BT_OK
     {
@@ -399,48 +439,33 @@ ModalDialog DLG_INSERT_TABLE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    PushButton BT_AUTOFORMAT
-    {
-        Pos = MAP_APPFONT ( 12 , 130 ) ;
-        Size = MAP_APPFONT ( 66 , 14 ) ;
-        TabStop = TRUE ;
-        Text = "~Autoformat..." ;
-        Text [ ENGLISH ] = "Autoformat..." ;
-        Text [ norwegian ] = "Autoformat..." ;
-        Text [ italian ] = "~Formatt. auto..." ;
-        Text [ portuguese_brazilian ] = "Formata??o Autom?tica..." ;
-        Text [ portuguese ] = "~AutoFormato..." ;
-        Text [ finnish ] = "~Automaattinen muotoilu" ;
-        Text [ danish ] = "AutoFormat..." ;
-        Text [ french ] = "~AutoFormat..." ;
-        Text [ swedish ] = "~Autoformat..." ;
-        Text [ dutch ] = "~AutoOpmaak..." ;
-        Text [ spanish ] = "Auto~Formato..." ;
-        Text [ english_us ] = "Auto~Format..." ;
-        Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½(~F)...";
-        Text[ russian ] = "Àâòîôîğìàò...";
-        Text[ polish ] = "Autoformat...";
-        Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä(~F)...";
-        Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡(~F)...";
-        Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí...";
-        Text[ greek ] = "~ÁõôïÌïñöŞ...";
-        Text[ korean ] = "ÀÚµ¿¼­½Ä(~F)...";
-        Text[ turkish ] = "~Otom. formatlama...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Auto~Formato...";
-    };
-    Text[ chinese_simplified ] = "²åÈë±í¸ñ";
-    Text[ russian ] = "Âñòàâèòü òàáëèöó";
+    Text[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼";
+    Text[ russian ] = "Âñòàâêà òàáëèöû";
     Text[ polish ] = "Wstaw tabelê";
-    Text[ japanese ] = "•\\‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤Jªí®æ";
+    Text[ japanese ] = "è¡¨ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥è¡¨æ ¼";
     Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
     Text[ greek ] = "ÅéóáãùãŞ ğßíáêá";
-    Text[ korean ] = "Å×ÀÌºí »ğÀÔ";
+    Text[ korean ] = "í‘œ ì‚½ì…";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar tabla";
+    Text[ catalan ] = "Insereix una taula";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸•à¸²à¸£à¸²à¸‡";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

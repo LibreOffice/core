@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:28:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
 
+#include <unicode/ubidi.h>
 
 #include "frmsh.hxx"
 #include "txtcfg.hxx"
@@ -604,12 +605,6 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
             while( aLine.GetLineNr() > 1 )
                 aLine.Prev();
 
-        // Set the cursor bidi level to the default level. If the cursor is
-        // inside a bidi portion, the level is set again inside the
-        // GetCrsrOfst function.
-        if ( pCMS )
-            ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel = IsRightToLeft() ? 1 : 0;
-
         xub_StrLen nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
 
         if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
@@ -954,8 +949,153 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 // nPos: the new visual position
 // bLeft: whether the break iterator has to add or subtract from the
 //          current position
+void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
+                              xub_StrLen& nPos, sal_Bool& bRight,
+                              BYTE& nCrsrLevel, BYTE nDefaultDir )
+{
+    const SwLinePortion* pPor = rCurrLine.GetFirstPortion();
+    const SwLinePortion* pLast = 0;
+
+    // what's the current portion
+    while ( pPor && nIdx + pPor->GetLen() <= nPos )
+    {
+        nIdx += pPor->GetLen();
+        pLast = pPor;
+        pPor = pPor->GetPortion();
+    }
+
+    if ( bRight )
+    {
+        sal_Bool bRecurse = pPor && pPor->IsMultiPortion() &&
+                           ((SwMultiPortion*)pPor)->IsBidi();
+
+        // 1. special case: at beginning of bidi portion
+        if ( bRecurse && nIdx == nPos )
+        {
+            nPos += pPor->GetLen();
+
+            // leave bidi portion
+            if ( nCrsrLevel != nDefaultDir )
+            {
+                bRecurse = sal_False;
+            }
+            else
+                // special case:
+                // buffer: abcXYZ123 in LTR paragraph
+                // view:   abc123ZYX
+                // cursor is between c and X in the buffer and cursor level = 0
+                nCrsrLevel++;
+        }
+
+        // 2. special case: at beginning of portion after bidi portion
+        else if ( pLast && pLast->IsMultiPortion() &&
+                 ((SwMultiPortion*)pLast)->IsBidi() && nIdx == nPos )
+        {
+            // enter bidi portion
+            if ( nCrsrLevel != nDefaultDir )
+            {
+                bRecurse = sal_True;
+                nIdx -= pLast->GetLen();
+                pPor = pLast;
+            }
+        }
+
+        // Recursion
+        if ( bRecurse )
+        {
+            const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
+            xub_StrLen nTmpPos = nPos - nIdx;
+            sal_Bool bTmpForward = ! bRight;
+            BYTE nTmpCrsrLevel = nCrsrLevel;
+            lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
+                                     nTmpCrsrLevel, nDefaultDir + 1 );
+
+            nPos = nTmpPos + nIdx;
+            bRight = bTmpForward;
+            nCrsrLevel = nTmpCrsrLevel;
+        }
+
+        // go forward
+        else
+        {
+            bRight = sal_True;
+            nCrsrLevel = nDefaultDir;
+        }
+
+    }
+    else
+    {
+        sal_Bool bRecurse = pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi();
+
+        // 1. special case: at beginning of bidi portion
+        if ( bRecurse && nIdx == nPos )
+        {
+            // leave bidi portion
+            if ( nCrsrLevel == nDefaultDir )
+            {
+                bRecurse = sal_False;
+            }
+        }
+
+        // 2. special case: at beginning of portion after bidi portion
+        else if ( pLast && pLast->IsMultiPortion() &&
+                 ((SwMultiPortion*)pLast)->IsBidi() && nIdx == nPos )
+        {
+            nPos -= pLast->GetLen();
+
+            // enter bidi portion
+            if ( nCrsrLevel % 2 == nDefaultDir % 2 )
+            {
+                bRecurse = sal_True;
+                nIdx -= pLast->GetLen();
+                pPor = pLast;
+
+                // special case:
+                // buffer: abcXYZ123 in LTR paragraph
+                // view:   abc123ZYX
+                // cursor is behind 3 in the buffer and cursor level = 2
+                if ( nDefaultDir + 2 == nCrsrLevel )
+                    nPos += pLast->GetLen();
+            }
+        }
+
+        // go forward
+        if ( bRecurse )
+        {
+            const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
+            xub_StrLen nTmpPos = nPos - nIdx;
+            sal_Bool bTmpForward = ! bRight;
+            BYTE nTmpCrsrLevel = nCrsrLevel;
+            lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
+                                     nTmpCrsrLevel, nDefaultDir + 1 );
+
+            // special case:
+            // buffer: abcXYZ123 in LTR paragraph
+            // view:   abc123ZYX
+            // cursor is between Z and 1 in the buffer and cursor level = 2
+            if ( nTmpPos == pPor->GetLen() && nTmpCrsrLevel == nDefaultDir + 1 )
+            {
+                nTmpPos -= pPor->GetLen();
+                nTmpCrsrLevel = nDefaultDir;
+                bTmpForward = ! bTmpForward;
+            }
+
+            nPos = nTmpPos + nIdx;
+            bRight = bTmpForward;
+            nCrsrLevel = nTmpCrsrLevel;
+        }
+
+        // go backward
+        else
+        {
+            bRight = sal_False;
+            nCrsrLevel = nDefaultDir;
+        }
+    }
+}
+
 void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
-                                  sal_Bool& bRight )
+                                  sal_Bool& bForward, sal_Bool bInsertCrsr )
 {
     if( IsEmpty() || IsHiddenNow() )
         return;
@@ -970,149 +1110,94 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
     else
         aLine.Top();
 
-    const SwLineLayout* pCurrLine = aLine.GetCurr();
-    const SwLinePortion* pPor = pCurrLine->GetFirstPortion();
-    const SwLinePortion* pLast = 0;
-    const BYTE nDefaultDir = IsRightToLeft() ? 1 : 0;
-    USHORT nIdx = aLine.GetStart();
+    const SwLineLayout* pLine = aLine.GetCurr();
+    const xub_StrLen nStt = aLine.GetStart();
+    const xub_StrLen nLen = pLine->GetLen();
 
-    // what's the current portion
-    while ( pPor && nIdx + pPor->GetLen() <= nPos )
+    // We have to distinguish between an insert and overwrite cursor:
+    // The insert cursor position depends on the cursor level:
+    // buffer:  abcXYZdef in LTR paragraph
+    // display: abcZYXdef
+    // If cursor is between c and X in the buffer and cursor level is 0,
+    // the cursor blinks between c and Z and -> sets the cursor between Z and Y.
+    // If the cursor level is 1, the cursor blinks between X and d and
+    // -> sets the cursor between d and e.
+    // The overwrite cursor simply travels to the next visual character.
+    if ( bInsertCrsr )
     {
-        nIdx += pPor->GetLen();
-        pLast = pPor;
-        pPor = pPor->GetPortion();
+        lcl_VisualMoveRecursion( *pLine, nStt, nPos, bForward,
+                                 nCrsrLevel, IsRightToLeft() ? 1 : 0 );
+        return;
     }
 
-    xub_StrLen nNewPos = 0;
-    BYTE nNewCrsrLevel = nCrsrLevel;
-    sal_Bool bForward = bRight;
+    const BYTE nDefaultDir = IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR;
+    const sal_Bool bVisualRight = ( nDefaultDir == UBIDI_LTR && bForward ) ||
+                                  ( nDefaultDir == UBIDI_RTL && ! bForward );
 
-    if ( bRight )
+    //
+    // Bidi functions from icu 2.0
+    //
+    const sal_Unicode* pLineString = GetTxtNode()->GetTxt().GetBuffer();
+    pLine += nStt;
+
+    UErrorCode nError = U_ZERO_ERROR;
+    UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
+    ubidi_setPara( pBidi, pLineString, nLen, nDefaultDir, NULL, &nError );
+
+    xub_StrLen nTmpPos;
+    sal_Bool bOutOfBounds = sal_False;
+
+    if ( nPos < nStt + nLen )
     {
-        // 1. jump case, at beginning of bidi portion
-        if ( pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() &&
-                nIdx == nPos )
-        {
-            nNewPos = nPos + pPor->GetLen();
+        nTmpPos = (xub_StrLen)ubidi_getVisualIndex( pBidi, nPos, &nError );
 
-            // enter bidi portion
-            if ( nCrsrLevel == nDefaultDir )
-            {
-                bForward = sal_False;
-                nNewCrsrLevel = ((SwBidiPortion*)pPor)->GetLevel();
-            }
-            // leave bidi portion
+        // visual indices are always LTR aligned
+        if ( bVisualRight )
+        {
+            if ( nTmpPos + 1 < nStt + nLen )
+                ++nTmpPos;
             else
             {
-                bForward = sal_True;
-                nNewCrsrLevel = nDefaultDir;
+                nPos = nDefaultDir == UBIDI_RTL ? 0 : nStt + nLen;
+                bOutOfBounds = sal_True;
             }
         }
-
-        // 2. jump case, at beginning of portion after bidi portion
-        else if ( pLast && pLast->IsMultiPortion() && ((SwMultiPortion*)pLast)->IsBidi() &&
-                nIdx == nPos )
+        else
         {
-            nNewPos = nPos;
-
-            // enter bidi portion
-            if ( nCrsrLevel != nDefaultDir )
-            {
-                bForward = sal_False;
-                nNewCrsrLevel = ((SwBidiPortion*)pLast)->GetLevel();
-            }
+            if ( nTmpPos )
+                --nTmpPos;
             else
             {
-                bForward = sal_True;
-                nNewCrsrLevel = nDefaultDir;
+                nPos = nDefaultDir == UBIDI_RTL ? nStt + nLen : 0;
+                bOutOfBounds = sal_True;
             }
         }
-
-        // go backward
-        else if ( pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
-        {
-            nNewPos = nPos;
-            bForward = sal_False;
-            nNewCrsrLevel = ((SwBidiPortion*)pPor)->GetLevel();
-        }
-
-
-        // go forward
-        else //if ( pPor && ( ! pPor->IsMultiPortion() || ! ((SwMultiPortion*)pPor)->IsBidi() ) )
-        {
-            nNewPos = nPos;
-            bForward = sal_True;
-            nNewCrsrLevel = nDefaultDir;
-        }
-
     }
     else
     {
-        // 1. jump case, at beginning of bidi portion
-        if ( pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() &&
-                nIdx == nPos )
-        {
-            nNewPos = nPos;
-
-            // leave bidi portion
-            if ( nCrsrLevel == nDefaultDir )
-            {
-                bForward = sal_False;
-                nNewCrsrLevel = nDefaultDir;
-            }
-            // enter bidi portion
-            else
-            {
-                bForward = sal_True;
-                nNewCrsrLevel = ((SwBidiPortion*)pPor)->GetLevel();
-            }
-        }
-
-        // 2. jump case, at beginning of portion after bidi portion
-        else if ( pLast && pLast->IsMultiPortion() && ((SwMultiPortion*)pLast)->IsBidi() &&
-                nIdx == nPos )
-        {
-            nNewPos = nPos - pLast->GetLen();
-
-            // enter bidi portion
-            if ( nCrsrLevel != nDefaultDir )
-            {
-                bForward = sal_False;
-                nNewCrsrLevel = nDefaultDir;
-            }
-            else
-            {
-                bForward = sal_True;
-                nNewCrsrLevel = ((SwBidiPortion*)pLast)->GetLevel();
-            }
-        }
-
-        // go backward
-        else if ( pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
-        {
-            nNewPos = nPos;
-            bForward = sal_True;
-            nNewCrsrLevel = ((SwBidiPortion*)pPor)->GetLevel();
-        }
-
-        // bo forward
-        else //if ( pPor && ( ! pPor->IsMultiPortion() || ! ((SwMultiPortion*)pPor)->IsBidi() ) )
-        {
-            nNewPos = nPos;
-            bForward = sal_False;
-            nNewCrsrLevel = nDefaultDir;
-        }
+        nTmpPos = nDefaultDir == UBIDI_LTR ? nPos - 1 : 0;
     }
 
-    ASSERT( 0 <= nNewPos && ( nNewPos <= GetTxtNode()->GetTxt().Len() || ! bForward ),
-            "ConvertLogic2Visual failed" )
+    if ( ! bOutOfBounds )
+    {
+        nPos = (xub_StrLen)ubidi_getLogicalIndex( pBidi, nTmpPos, &nError );
 
-    nPos = nNewPos;
-    nCrsrLevel = nNewCrsrLevel;
-    bRight = bForward;
+        if ( bForward )
+        {
+            if ( nPos )
+                --nPos;
+            else
+            {
+                ++nPos;
+                bForward = ! bForward;
+            }
+        }
+        else
+            ++nPos;
+    }
+
+    ubidi_close( pBidi );
 }
-
 
 /*************************************************************************
  *                      SwTxtFrm::_UnitDown()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:48:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,17 @@
 #endif
 #pragma hdrstop
 
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP
-#include <com/sun/star/text/XTextDocument.hpp>
-#endif
 #ifndef _COMPHELPER_CHAINABLEPROPERTYSET_HXX_
 #include <comphelper/ChainablePropertySet.hxx>
 #endif
-#ifndef _COMPHELPER_SETTINGSHELPER_HXX_
-#include <comphelper/SettingsHelper.hxx>
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 class SwXTextDocument;
@@ -82,7 +85,9 @@ class SwDocShell;
 class SwDoc;
 class SwPagePreViewPrtData;
 
-class SwXPrintPreviewSettings : public comphelper::ChainableHelperNoState
+class SwXPrintPreviewSettings :public comphelper::ChainablePropertySet,
+                        public cppu::OWeakObject,
+                        public com::sun::star::lang::XServiceInfo
 {
     friend class SwXDocumentSettings;
 protected:
@@ -108,6 +113,14 @@ public:
     SwXPrintPreviewSettings(SwDoc *pDoc);
     virtual ~SwXPrintPreviewSettings()
         throw();
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  )
+        throw ();
+    virtual void SAL_CALL release(  )
+        throw ();
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:27:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,17 +113,18 @@ ModalDialog DLG_FLD_INPUT
         Text [ spanish ] = "Entrada" ;
         Text [ english_us ] = "Input" ;
         Readonly = TRUE ;
-        Text[ chinese_simplified ] = "ÊäÈë";
+        Text[ chinese_simplified ] = "è¾“å…¥";
         Text[ russian ] = "Ââîä";
         Text[ polish ] = "Wejœcie";
-        Text[ japanese ] = "“ü—Í";
-        Text[ chinese_traditional ] = "¿é¤J";
+        Text[ japanese ] = "å…¥åŠ›";
+        Text[ chinese_traditional ] = "è¼¸å…¥";
         Text[ arabic ] = "ÅÏÎÇá";
         Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ korean ] = "ÀÔ·Â";
+        Text[ korean ] = "ì…ë ¥";
         Text[ turkish ] = "Giriş";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Entrada";
+        Text[ thai ] = "à¸›à¹‰à¸­à¸™à¹€à¸‚à¹‰à¸²";
     };
     MultiLineEdit ED_EDIT
     {
@@ -147,20 +148,21 @@ ModalDialog DLG_FLD_INPUT
         Text [ danish ] = "Rediger" ;
         Text [ french ] = "Éditer" ;
         Text [ swedish ] = "Redigera" ;
-        Text [ dutch ] = "Be~werken" ;
+        Text [ dutch ] = "Bewerken" ;
         Text [ spanish ] = "Editar" ;
         Text [ english_us ] = "Edit" ;
-        Text[ chinese_simplified ] = "±à¼­";
+        Text[ chinese_simplified ] = "ç¼–è¾‘";
         Text[ russian ] = "Ïğàâêà";
         Text[ polish ] = "Edytuj";
-        Text[ japanese ] = "•ÒW";
-        Text[ chinese_traditional ] = "½s¿è";
+        Text[ japanese ] = "ç·¨é›†";
+        Text[ chinese_traditional ] = "ç·¨è¼¯";
         Text[ arabic ] = "ÊÍÑíÑ";
         Text[ greek ] = "Åğåîåñãáóßá";
-        Text[ korean ] = "ÆíÁı";
+        Text[ korean ] = "í¸ì§‘";
         Text[ turkish ] = "Düzenle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Editar";
+        Text[ catalan ] = "Edita";
+        Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";
     };
     OKButton BT_OK
     {
@@ -186,24 +188,25 @@ ModalDialog DLG_FLD_INPUT
         Text [ dutch ] = "~Volgende" ;
         Text [ english_us ] = "~Next" ;
         Text [ italian ] = "~Avanti" ;
-        Text [ spanish ] = "~Avanzar" ;
-        Text [ french ] = "~Suivant" ;
+        Text [ spanish ] = "Continuar" ;
+        Text [ french ] = "Suivant" ;
         Text [ swedish ] = "~Nästa" ;
         Text [ danish ] = "Næste" ;
         Text [ portuguese ] = "~Seguinte" ;
         Text [ portuguese_brazilian ] = "~Weiter" ;
-        Text[ chinese_simplified ] = "¼ÌĞø(~N)";
+        Text[ chinese_simplified ] = "ç»§ç»­(~N)";
         Text[ russian ] = "Äàëåå";
         Text[ polish ] = "~Dalej";
-        Text[ japanese ] = "Ÿ‚Ö(~N)";
-        Text[ chinese_traditional ] = "Ä~Äò(~N)";
+        Text[ japanese ] = "æ¬¡ã¸(~N)";
+        Text[ chinese_traditional ] = "ç¹¼çºŒ(~N)";
         Text[ arabic ] = "ÇáÊÇáí";
         Text[ greek ] = "Åğüìåíï";
-        Text[ korean ] = "´ÙÀ½(~N)";
+        Text[ korean ] = "ë‹¤ìŒ(~N)";
         Text[ turkish ] = "İ~leri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Siguiente";
+        Text[ catalan ] = "~Següent";
         Text[ finnish ] = "~Seuraava";
+        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸›";
     };
     HelpButton PB_HELP
     {
@@ -219,19 +222,34 @@ ModalDialog DLG_FLD_INPUT
     Text [ french ] = "Champ de saisie" ;
     Text [ dutch ] = "Invoerveld" ;
     Text [ portuguese ] = "Campo de entrada" ;
-    Text[ chinese_simplified ] = "ÊäÈëÀ¸";
+    Text[ chinese_simplified ] = "è¾“å…¥å­—æ®µ";
     Text[ russian ] = "Ïîëå ââîäà";
     Text[ polish ] = "Pole wprowadzania";
-    Text[ japanese ] = "“ü—ÍÌ¨°ÙÄŞ";
-    Text[ chinese_traditional ] = "¿é¤JÄæ¦ì";
+    Text[ japanese ] = "å…¥åŠ›ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
+    Text[ chinese_traditional ] = "è¼¸å…¥æ¬„ä½";
     Text[ arabic ] = "ÍŞá ÅÏÎÇá";
     Text[ greek ] = "Ğåäßï åéóáãùãŞò";
-    Text[ korean ] = "ÀÔ·ÂÇÊµå";
+    Text[ korean ] = "ì…ë ¥ í•„ë“œ";
     Text[ turkish ] = "Giriş alanı";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Campo de entrada";
+    Text[ catalan ] = "Camp d'entrada";
     Text[ finnish ] = "Syöttökenttä";
+    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

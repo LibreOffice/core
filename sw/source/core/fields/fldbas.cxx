@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:43:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #endif
 #include <float.h>
 
-#ifndef _TOOLS_SOLMATH_HXX
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
@@ -800,9 +800,8 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
         nLng = LANGUAGE_SYSTEM;
 
     pFormatter->ChangeIntl( nLng ); // Separator in der richtigen Sprache besorgen
-    rValue.Erase();
-    SolarMath::DoubleToString( rValue, rVal, 'F', 12,
-                                    pFormatter->GetDecSep(), TRUE );
+    rValue = ::rtl::math::doubleToUString( rVal, rtl_math_StringFormat_F, 12,
+                                    pFormatter->GetDecSep(), true );
 }
 
 /*--------------------------------------------------------------------

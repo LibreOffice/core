@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 12:41:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _ESCHER_HXX
@@ -95,6 +94,8 @@ protected:
 
     virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);
+    void WritePicture(EscherPropertyContainer &rPropOpt,
+        const Graphic &rGraphic, const SdrObject &rObj, sal_uInt32 nShapeId);
     void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
 
     INT32 DrawModelToEmu(INT32 nVal) const
@@ -160,3 +161,5 @@ private:
 };
 
 #endif
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

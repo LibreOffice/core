@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-03 14:17:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,8 @@ private:
     BOOL bBasicHideCrsr : 1;    // TRUE -> HideCrsr vom Basic
     BOOL bSetCrsrInReadOnly : 1;// TRUE -> Cursor darf in ReadOnly-Bereiche
     BOOL bOverwriteCrsr : 1;    // TRUE -> show Overwrite Crsr
+    // OD 11.02.2003 #100556# - flag to allow/avoid execution of marcos (default: true)
+    bool mbMacroExecAllowed : 1;
 
     void UpdateCrsr( USHORT eFlags
                             =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
@@ -835,6 +837,16 @@ public:
 
     // remove all invalid cursors
     void ClearUpCrsrs();
+
+    // OD 11.02.2003 #100556# - set/get flag to allow/avoid execution of macros
+    inline void SetMacroExecAllowed( const bool _bMacroExecAllowed )
+    {
+        mbMacroExecAllowed = _bMacroExecAllowed;
+    }
+    inline bool IsMacroExecAllowed()
+    {
+        return mbMacroExecAllowed;
+    }
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:44:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,7 +941,8 @@ SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrm, SwWrtShell *pSh)
     pWrtShell( pSh ),
     pCurGrp( 0 ),
     aCurGrp( rStatGlossaries.GetDefName() )
-{}
+{
+}
 
 
 SwGlossaryHdl::~SwGlossaryHdl()
@@ -988,13 +989,17 @@ BOOL SwGlossaryHdl::Rename(const String& rOldShort, const String& rNewShortName,
 
 BOOL SwGlossaryHdl::IsReadOnly( const String* pGrpNm ) const
 {
-    SwTextBlocks *pGlossary = pGrpNm ? rStatGlossaries.GetGroupDoc( *pGrpNm )
-                                     : pCurGrp
-                                        ? pCurGrp
-                                       : rStatGlossaries.GetGroupDoc(aCurGrp);
+    SwTextBlocks *pGlossary = 0;
+
+    if (pGrpNm)
+        pGlossary = rStatGlossaries.GetGroupDoc( *pGrpNm );
+    else if (pCurGrp)
+        pGlossary = pCurGrp;
+    else
+        pGlossary = rStatGlossaries.GetGroupDoc(aCurGrp);
 
     BOOL bRet = pGlossary ? pGlossary->IsReadOnly() : TRUE;
-    if( !pCurGrp )
+    if( pGrpNm || !pCurGrp )
         delete pGlossary;
     return bRet;
 }

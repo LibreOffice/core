@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-18 09:41:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,9 @@
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
 #endif
+#ifndef __SGI_STL_VECTOR
+#include <vector>
+#endif
 
 
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
@@ -333,7 +336,7 @@ void SwRTFParser::SetFlysInDoc()
 {
     // !! von Oben abarbeiten, CntntPos ist kein Index !
     SwNodes & rNds = pDoc->GetNodes();
-    SvPtrarr aPrevFmts( 255 < aFlyArr.Count() ? aFlyArr.Count() : 255 );
+    ::std::vector <SwFlyFrmFmt*> aPrevFmts;
     SwFrmFmt* pParent = pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME );
     for( USHORT n = 0; n < aFlyArr.Count(); ++n )
     {
@@ -564,8 +567,8 @@ void SwRTFParser::SetFlysInDoc()
             // the prev position
             {
                 ULONG nSttNd = pSttNd->GetIndex(),
-                      nEndNd = pSttNd->EndOfSectionIndex();
-                for( USHORT nPrevFmts = aPrevFmts.Count(); nPrevFmts; )
+                nEndNd = pSttNd->EndOfSectionIndex();
+                for( USHORT nPrevFmts = aPrevFmts.size(); nPrevFmts; )
                 {
                     SwFmt* pTmpFmt = (SwFmt*)aPrevFmts[ --nPrevFmts ];
                     const SwFmtAnchor& rAn = pTmpFmt->GetAnchor();
@@ -577,12 +580,11 @@ void SwRTFParser::SetFlysInDoc()
                         pTmpFmt->SetAttr( aAnchor );
                     }
                     else
-                        // then forget it
-                        aPrevFmts.Remove( nPrevFmts, 1 );
+                    // then forget it
+                        aPrevFmts.erase( aPrevFmts.begin()+nPrevFmts, aPrevFmts.begin()+nPrevFmts+1);
                 }
-
                 void* p = (void*)pFmt;
-                aPrevFmts.Insert( p, aPrevFmts.Count() );
+                aPrevFmts.push_back(pFmt);
             }
         }
         delete pFlySave;
@@ -1062,6 +1064,13 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 pFlySave->nDropAnchor = nDropCapAnchor;
                 pFlySave->nDropLines = nDropCapLines;
             }
+            if (nFlyArrCnt >0){
+                SwFlySave* pFlySavePrev = aFlyArr[nFlyArrCnt-1];
+                if (pFlySave->nSttNd.GetIndex() < pFlySavePrev->nEndNd.GetIndex())
+                {
+                     pFlySavePrev->nEndNd=pFlySave->nSttNd;
+                }
+            }
             aFlyArr.Insert(  pFlySave, nFlyArrCnt++ );
         }
     }
@@ -1465,20 +1474,18 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
 
 void SwRTFParser::GetPageSize( Size& rSize )
 {
-    const SwFrmFmt& rPgFmt = pDoc->GetPageDesc(nAktPageDesc).GetMaster();
+    ASSERT(!maSegments.empty(), "not possible");
 
-    const SwFmtFrmSize& rSz   = rPgFmt.GetFrmSize();
-    const SvxLRSpaceItem& rLR = rPgFmt.GetLRSpace();
-    const SvxULSpaceItem& rUL = rPgFmt.GetULSpace();
-    const SwFmtCol& rCol = rPgFmt.GetCol();
+    const rtfSection &rSect = maSegments.back();
 
-    rSize.Width() = rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight();
-    rSize.Height() = rSz.GetHeight() - rUL.GetUpper() - rUL.GetLower();
+    rSize.Width() = rSect.maPageInfo.mnPgwsxn - rSect.maPageInfo.mnMarglsxn - rSect.maPageInfo.mnMargrsxn;
+    rSize.Height() = rSect.maPageInfo.mnPghsxn - rSect.maPageInfo.mnMargtsxn - rSect.maPageInfo.mnMargbsxn;
 
-    if( 1 < rCol.GetNumCols() )
+    long nCols = rSect.NoCols();
+    if (1 < nCols)
     {
-        rSize.Width() /= rCol.GetNumCols();
-        rSize.Height() /= rCol.GetNumCols();
+        rSize.Width() /= nCols;
+        rSize.Height() /= nCols;
     }
 }
 

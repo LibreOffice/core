@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-18 12:17:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         else
         {
             nFullLen = rInf.ScanPortionEnd( rInf.GetIdx(),
-                    rInf.GetIdx() + nOldFullLen, IsFollow() ) - rInf.GetIdx();
+                    rInf.GetIdx() + nOldFullLen ) - rInf.GetIdx();
             if( nFullLen && CH_BREAK == aExpand.GetChar( nFullLen - 1 ) )
                 --nFullLen;
 
@@ -681,8 +681,33 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             return;
     }
 
-    // Dies ist eine freizuegige Auslegung der Hintergrundbelegung ...
-    rInf.DrawViewOpt( *this, POR_NUMBER );
+    // calculate the width of the number portion, including follows
+    const KSHORT nOldWidth = Width();
+    USHORT nSumWidth = 0;
+    USHORT nOffset = 0;
+
+    const SwLinePortion* pTmp = this;
+    while ( pTmp && pTmp->InNumberGrp() )
+    {
+        nSumWidth += pTmp->Width();
+        if ( ((SwNumberPortion*)pTmp)->HasFollow() )
+            pTmp = pTmp->GetPortion();
+        else
+        {
+            nOffset = pTmp->Width() - ((SwNumberPortion*)pTmp)->nFixWidth;
+            break;
+        }
+    }
+
+    // The master portion takes care for painting the background of the
+    // follow field portions
+    if ( ! IsFollow() )
+    {
+        SwLinePortion *pThis = (SwLinePortion*)this;
+        pThis->Width( nSumWidth );
+        rInf.DrawViewOpt( *this, POR_NUMBER );
+        pThis->Width( nOldWidth );
+    }
 
     if( aExpand.Len() )
     {
@@ -697,13 +722,12 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
         SwFontSave aSave( rInf, pFnt );
 
-        if( nFixWidth == Width() )
+        if( nFixWidth == Width() && ! HasFollow() )
             SwExpandPortion::Paint( rInf );
         else
         {
             // logisches const: Width wird wieder zurueckgesetzt
             SwLinePortion *pThis = (SwLinePortion*)this;
-            const KSHORT nOldWidth = Width();
             bPaintSpace = bPaintSpace && nFixWidth < nOldWidth;
             KSHORT nSpaceOffs = nFixWidth;
             pThis->Width( nFixWidth );
@@ -714,7 +738,6 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             else
             {
                 SwTxtPaintInfo aInf( rInf );
-                KSHORT nOffset = nOldWidth - nFixWidth;
                 if( nOffset < nMinDist )
                     nOffset = 0;
                 else
@@ -723,7 +746,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
                     {
                         nOffset /= 2;
                         if( nOffset < nMinDist )
-                            nOffset = nOldWidth - nFixWidth - nMinDist;
+                            nOffset = 2 * nOffset - nMinDist;
                     }
                     else
                         nOffset -= nMinDist;

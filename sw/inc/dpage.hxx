@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 07:48:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@ public:
     SwDPage(SwDrawDocument& rNewModel, BOOL bMasterPage=FALSE);
     ~SwDPage();
 
-    virtual Point GetOffset() const;
+    // #i3694#
+    // This GetOffset() method is not needed anymore, it even leads to errors.
+    // virtual Point GetOffset() const;
     virtual SdrObject* ReplaceObject( SdrObject* pNewObj, ULONG nObjNum );
 
     virtual void    RequestBasic();

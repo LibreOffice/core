@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:56:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #include "uiitems.hxx"
 #include "uiparam.hxx"
 #include "cmdid.h"
+
+#include <svtools/globalnameitem.hxx>
+
 
 #ifndef _SVT_IMAGEITM_HXX
 #include <svtools/imageitm.hxx>

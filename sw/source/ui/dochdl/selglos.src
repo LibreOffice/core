@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 09:24:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,12 @@ ModalDialog DLG_SEL_GLOS
     Text [ italian ] = "Inserisci testo automatico" ;
     Text [ portuguese_brazilian ] = "Inserir Texto Autom?tico" ;
     Text [ portuguese ] = "Inserir AutoTexto" ;
-    Text [ finnish ] = "Lis?? automaattinen teksti" ;
+    Text [ finnish ] = "Lisää automaattinen teksti" ;
     Text [ danish ] = "Indsæt AutoTekst" ;
-    Text [ french ] = "Insérer AutoTexte" ;
+    Text [ french ] = "Insérer un AutoTexte" ;
     Text [ swedish ] = "Infoga AutoText" ;
     Text [ dutch ] = "AutoTekst invoegen" ;
-    Text [ spanish ] = "Insertar AutoTexto" ;
+    Text [ spanish ] = "Insertar Texto automático" ;
     Text [ english_us ] = "Insert AutoText" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -116,24 +116,25 @@ ModalDialog DLG_SEL_GLOS
         Text [ italian ] = "Testo automatico per la sigla " ;
         Text [ portuguese_brazilian ] = "Entadas para Abrevia??s " ;
         Text [ portuguese ] = "AutoTexto para abreviatura" ;
-        Text [ finnish ] = "Automaattiset tekstit pikavalinnalle " ;
-        Text [ danish ] = "AutoTekst til genvej " ;
+        Text [ finnish ] = "Pikavalikoiden automaattiset tekstit " ;
+        Text [ danish ] = "AutoTekst til forkortelse " ;
         Text [ french ] = "AutoTextes pour raccourci " ;
         Text [ swedish ] = "AutoText till genvägen " ;
-        Text [ dutch ] = "AutoTekst voor afkortingen  " ;
-        Text [ spanish ] = "AutoTexto para abreviatura " ;
+        Text [ dutch ] = "AutoTekst voor afkortingen" ;
+        Text [ spanish ] = "Texto automático para la abreviatura " ;
         Text [ english_us ] = "AutoTexts for shortcut " ;
         Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ ";
         Text[ russian ] = "Àâòîòåêñò äëÿ ñîêğàùåíèÿ";
         Text[ polish ] = "Autotekst skrótu";
-        Text[ japanese ] = "ï½¼ï½®ï½°ï¾„ï½¶ï½¯ï¾„å…¥åŠ›æ”¯æ´ ";
+        Text[ japanese ] = "ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆå…¥åŠ›æ”¯æ´ ";
         Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†çš„ç¸®å¯« ";
         Text[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ ";
         Text[ greek ] = "ÁõôïÊåßìåíá ãéá áñ÷éêÜ";
-        Text[ korean ] = "ìë™í…ìŠ¤íŠ¸ ë°”ë¡œê°€ê¸° ";
+        Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ë°”ë¡œ ê°€ê¸° ";
         Text[ turkish ] = "Otomatik metin kısaltması ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "AutoTexto para abreviatura  ";
+        Text[ catalan ] = "AutoText per nom curt  ";
+        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸›à¹‡à¸™à¸—à¸²à¸‡à¸¥à¸±à¸” ";
     };
     ListBox LB_GLOS
     {
@@ -144,17 +145,28 @@ ModalDialog DLG_SEL_GLOS
         AutoHScroll = TRUE ;
     };
     Text[ chinese_simplified ] = "æ’å…¥è‡ªåŠ¨å›¾æ–‡é›†";
-    Text[ russian ] = "Âñòàâêà àâòîòåêñòà";
+    Text[ russian ] = "Âñòàâèòü àâòîòåêñò";
     Text[ polish ] = "Wstaw autotekst";
     Text[ japanese ] = "å…¥åŠ›æ”¯æ´ã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥è‡ªå‹•åœ–æ–‡é›†";
     Text[ arabic ] = "ÅÏÑÇÌ äÕ ÊáŞÇÆí";
     Text[ greek ] = "ĞñïóèŞêç ÁõôïÊåéìİíïõ";
-    Text[ korean ] = "ìë™í…ìŠ¤íŠ¸ ì‚½ì…";
+    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ì‚½ì…";
     Text[ turkish ] = "Otomatik metin ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar AutoTexto";
+    Text[ catalan ] = "Insereix AutoText";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 

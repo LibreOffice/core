@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblcpy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:12:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,12 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     USHORT nLn, nBx;
     _FndLine *pFLine, *pInsFLine = 0;
-    _FndBox aFndBox( rSelBoxes );
+    _FndBox aFndBox( 0, 0 );
+    // suche alle Boxen / Lines
+    {
+        _FndPara aPara( rSelBoxes, &aFndBox );
+        ((SwTableLines&)GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
+    }
 
     // JP 06.09.96: Sonderfall - eine Box in der Tabelle -> in alle
     //              selektierten Boxen kopieren!

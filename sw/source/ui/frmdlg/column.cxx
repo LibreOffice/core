@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 09:44:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     USHORT nFullSectCnt = rWrtShell.GetFullSelectedSectionCount();
     if( pCurrSection && ( !rWrtShell.HasSelection() || 0 != nFullSectCnt ))
     {
+        nSelectionWidth = rSh.GetSectionWidth(*pCurrSection->GetFmt());
+        if ( !nSelectionWidth )
+            nSelectionWidth = USHRT_MAX;
         pSectionSet = new SfxItemSet( rWrtShell.GetAttrPool(), aSectIds );
         pSectionSet->Put( pCurrSection->GetFmt()->GetAttrSet() );
         pColPgSet = pSectionSet;
@@ -796,8 +799,7 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, pField )
 
     //Maximalwerte setzen
     aCLNrEdt.SetMax(Max(1L,
-        Min(long(nMaxCols), long( pColMgr->GetActualSize()  /
-                                    ((nGutterWidth + MINLAY)) ))));
+        Min(long(nMaxCols), long( pColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
     aCLNrEdt.SetLast(aCLNrEdt.GetMax());
     aCLNrEdt.Reformat();
 
@@ -877,8 +879,7 @@ void SwColumnPage::Init()
         // Maximale Spaltenzahl setzen
         // Werte kleiner als 1 sind nicht erlaubt
     aCLNrEdt.SetMax(Max(1L,
-            Min(long(nMaxCols), long(pColMgr->GetActualSize() / nMinWidth))));
-
+        Min(long(nMaxCols), long( pColMgr->GetActualSize() / nMinWidth) )));
 }
 
 /*------------------------------------------------------------------------

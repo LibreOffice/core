@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: od $ $Date: 2002-11-11 09:43:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _TXTFTN_HXX //autogen
 #include <txtftn.hxx>
 #endif
+#ifndef _FLYFRM_HXX
+#include <flyfrm.hxx>
+#endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
 #endif
@@ -86,11 +89,17 @@
 #ifndef _CHARFMT_HXX //autogen
 #include <charfmt.hxx>
 #endif
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
+#endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVDOBJ_HXX //autogen
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
@@ -973,9 +982,43 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         nLower += nAdd;
 #endif
 
-        //6995: Wir frischen nur auf. Das Connect tut fuer diesen Fall nix
-        //Brauchbares, sondern wuerde stattdessen fuer diesen Fall meist die
-        //Ftn wegwerfen und neu erzeugen.
+    // #i10770#: If there are fly frames anchored at previous paragraphs,
+    // the deadline should consider their lower borders.
+    SwFrm* pStartFrm = pFrm->GetUpper()->GetLower();
+    ASSERT( pStartFrm, "Upper has no lower" )
+    SwTwips nFlyLower = bVert ? LONG_MAX : 0;
+    while ( pStartFrm != pFrm )
+    {
+        ASSERT( pStartFrm, "Frame chain is broken" )
+        if ( pStartFrm->GetDrawObjs() )
+        {
+            const SwDrawObjs &rObjs = *pStartFrm->GetDrawObjs();
+            for ( USHORT i = 0; i < rObjs.Count(); ++i )
+            {
+                SdrObject *pO = rObjs[i];
+                SwRect aRect( pO->GetBoundRect() );
+
+                if ( ! pO->IsWriterFlyFrame() ||
+                     ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->IsValid() )
+                {
+                    const SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
+                    if ( (*fnRect->fnYDiff)( nBottom, nFlyLower ) > 0 )
+                        nFlyLower = nBottom;
+                }
+            }
+        }
+
+        pStartFrm = pStartFrm->GetNext();
+    }
+
+    if ( bVert )
+        nLower = Min( nLower, nFlyLower );
+    else
+        nLower = Max( nLower, nFlyLower );
+
+    //6995: Wir frischen nur auf. Das Connect tut fuer diesen Fall nix
+    //Brauchbares, sondern wuerde stattdessen fuer diesen Fall meist die
+    //Ftn wegwerfen und neu erzeugen.
 
     if( !rInf.IsQuick() )
         pFrm->ConnectFtn( pFtn, nLower );

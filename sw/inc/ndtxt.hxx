@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 14:20:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ public:
                          const BOOL bWithNum = FALSE ) const;
     BOOL GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
                         xub_StrLen nIdx = 0, xub_StrLen nLen = STRING_LEN,
-                       BOOL bWithNum = FALSE ) const;
+                       BOOL bWithNum = FALSE, BOOL bWithFtn = TRUE ) const;
     XubString GetRedlineTxt( xub_StrLen nIdx = 0,
                           xub_StrLen nLen = STRING_LEN,
                           BOOL bExpandFlds = FALSE,

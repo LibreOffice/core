@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-13 14:29:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,9 @@ class SwView: public SfxViewShell
                     bInInnerResizePixel : 1,
                     bIsApi : 1,
                     bPasteState : 1,
-                    bPasteSpecialState : 1
+                    bPasteSpecialState : 1,
+                    bInMailMerge : 1,
+                    bInDtor : 1 //detect destructor to prevent creating of sub shells while closing
                     ;
 
     // Methoden fuers Suchen
@@ -404,6 +406,9 @@ protected:
 
     const SwFrmFmt* GetLastTblFrmFmt() const {return pLastTableFormat;}
     void            SetLastTblFrmFmt(const SwFrmFmt* pSet) {pLastTableFormat = pSet;}
+
+    // form letter execution
+    void    GenerateFormLetter(BOOL bUseCurrentDocument);
 
 public:
 
@@ -600,6 +605,8 @@ public:
     BOOL IsPasteAllowed();
     BOOL IsPasteSpecialAllowed();
 
+    // Enable mail merge - mail merge field dialog enabled
+    void EnableMailMerge(BOOL bEnable = TRUE);
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 

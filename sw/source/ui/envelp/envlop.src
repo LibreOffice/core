@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:50:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ TabDialog DLG_ENV
         Text[ dutch ] = "~Wijzigen";
         Text[ chinese_simplified ] = "ζ›΄ζ”Ή(~M)";
         Text[ greek ] = "Τροποποίηση";
-        Text[ korean ] = "μμ •(~M)";
+        Text[ korean ] = "λ³€κ²½(~M)";
         Text[ turkish ] = "D~eπiώtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modifica";
@@ -244,7 +244,7 @@ TabDialog DLG_ENV
     Text[ chinese_traditional ] = "δΏ΅ε°";
     Text[ arabic ] = "ΩΡέ";
     Text[ greek ] = "Φάκελος";
-    Text[ korean ] = "λ΄‰ν¬";
+    Text[ korean ] = "νΈμ§€λ΄‰ν¬";
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
@@ -282,7 +282,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "ζ”¶δ»¶θ€…(~E)";
         Text[ arabic ] = "ΗαγΣΚαγ";
         Text[ greek ] = "Παραλήπτης";
-        Text[ korean ] = "λ°›λ” μ‚¬λ(~E)";
+        Text[ korean ] = "μμ‹ μΈ(~E)";
         Text[ turkish ] = "Alύcύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Destinat~ari";
@@ -359,7 +359,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "θ΅¨ζ Ό";
         Text[ arabic ] = "ΗαΜΟζα";
         Text[ greek ] = "Πίνακας";
-        Text[ korean ] = "μ‹νΈ";
+        Text[ korean ] = "ν…μ΄λΈ”";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Taula";
@@ -444,7 +444,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_traditional ] = "ε―„δ»¶θ€…(~S)";
         Text[ arabic ] = "ΗαγΡΣα";
         Text[ greek ] = "Αποστολέας";
-        Text[ korean ] = "λ³΄λ‚Έ μ‚¬λ(~S)";
+        Text[ korean ] = "λ°μ‹ μΈ(~S)";
         Text[ turkish ] = "Gφnderen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Remitent";
@@ -491,12 +491,17 @@ String STR_DOC_TITLE
     Text[ chinese_traditional ] = "δΏ΅ε°";
     Text[ arabic ] = "ΩΡέ";
     Text[ greek ] = "Φάκελος";
-    Text[ korean ] = "λ΄‰ν¬";
+    Text[ korean ] = "νΈμ§€λ΄‰ν¬";
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
     Text[ thai ] = "ΰΈ‹ΰΈ­ΰΈ‡ΰΈΰΈ”ΰΈ«ΰΈ΅ΰΈ²ΰΈΆ";
 };
+
+
+
+
+
 
 
 

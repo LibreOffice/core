@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-10 09:42:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,9 +290,9 @@ void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
     if( nDir != aSub[0].GetOrientation() )
     {
         bFntChg = TRUE;
-        aSub[0].SetVertical( nDir );
-        aSub[1].SetVertical( nDir );
-        aSub[2].SetVertical( nDir );
+        aSub[0].SetVertical( nDir, bVertFormat );
+        aSub[1].SetVertical( nDir, bVertFormat || nDir > 1000 );
+        aSub[2].SetVertical( nDir, bVertFormat );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-09-21 08:45:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,10 +273,10 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #ifndef PRODUCT
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
-                ByteString sTmp;
-                sprintf( sTmp.AllocBuffer( 30 ), "%E",
-                    ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue() );
-                sTxt = UniString(sTmp.GetBuffer(), gsl_getSystemTextEncoding());
+                sTxt = UniString(
+                            ByteString::CreateFromDouble(
+                                ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()  )
+                            , gsl_getSystemTextEncoding());
             }
             break;
             case SwContentAtPos::SW_CURR_ATTRS:

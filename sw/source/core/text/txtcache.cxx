@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-25 17:18:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #pragma hdrstop
 
 #include "errhdl.hxx"
+#include "segmentc.hxx"
 
 #include "txtcache.hxx"
 #include "txtfrm.hxx"

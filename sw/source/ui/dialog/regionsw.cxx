@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 13:20:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1605,7 +1605,13 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
         case SOT_FORMATSTR_ID_STARWRITER_30:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
-            ReadSw3->GetSectionList( rMedium, (SvStrings&) aArr );
+            {
+                Sw3Reader* pRdr = (Sw3Reader*)ReadSw3;
+                Sw3Io* pOldIo = pRdr->GetSw3Io();
+                  pRdr->SetSw3Io( rSh.GetView().GetDocShell()->GetIoSystem() );
+                pRdr->GetSectionList( rMedium, (SvStrings&) aArr );
+                  pRdr->SetSw3Io( pOldIo );
+            }
             break;
         case SOT_FORMATSTR_ID_STARWRITER_60:
         case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
@@ -1710,7 +1716,6 @@ short   SwInsertSectionTabDialog::Ok()
         aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.GetToken( 2, so3::cTokenSeperator )));
         aRequest.Done();
     }
-
     return nRet;
 }
 

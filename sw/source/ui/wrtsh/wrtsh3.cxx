@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:42:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,11 @@ FASTBOOL SwWrtShell::GoPrevBookmark()
 
 void SwWrtShell::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 {
-    GetDoc()->ExecMacro( rMacro, pRet, pArgs );
+    // OD 11.02.2003 #100556# - execute macro, if it is allowed.
+    if ( IsMacroExecAllowed() )
+    {
+        GetDoc()->ExecMacro( rMacro, pRet, pArgs );
+    }
 }
 
 

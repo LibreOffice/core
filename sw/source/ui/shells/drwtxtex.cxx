@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-12-12 17:13:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,9 @@
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -666,43 +669,59 @@ ASK_ESCAPE:
 
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-            if( pOutliner )
-                bFlag = pOutliner->IsVertical() ==
-                        (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
+            if ( !SvtLanguageOptions().IsVerticalTextEnabled() )
+            {
+                rSet.DisableItem( nSlotId );
+                nSlotId = 0;
+            }
             else
             {
-                com::sun::star::text::WritingMode eMode = (com::sun::star::text::WritingMode)
-                                ( (const SvxWritingModeItem&) aEditAttr.Get( SDRATTR_TEXTDIRECTION ) ).GetValue();
-
-                if( nSlotId == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
-                {
-                    bFlag = eMode == com::sun::star::text::WritingMode_LR_TB;
-                }
+                if( pOutliner )
+                    bFlag = pOutliner->IsVertical() ==
+                            (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
                 else
                 {
-                    bFlag = eMode != com::sun::star::text::WritingMode_TB_RL;
+                    com::sun::star::text::WritingMode eMode = (com::sun::star::text::WritingMode)
+                                    ( (const SvxWritingModeItem&) aEditAttr.Get( SDRATTR_TEXTDIRECTION ) ).GetValue();
+
+                    if( nSlotId == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
+                    {
+                        bFlag = eMode == com::sun::star::text::WritingMode_LR_TB;
+                    }
+                    else
+                    {
+                        bFlag = eMode != com::sun::star::text::WritingMode_TB_RL;
+                    }
                 }
             }
             break;
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {
-            if(pOutliner && pOutliner->IsVertical())
+            if ( !SvtLanguageOptions().IsCTLFontEnabled() )
             {
                 rSet.DisableItem( nWhich );
                 nSlotId = 0;
             }
             else
             {
-                switch( ( ( (SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+                if(pOutliner && pOutliner->IsVertical())
                 {
-                    case FRMDIR_HORI_LEFT_TOP:
-                        bFlag = nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT;
-                    break;
+                    rSet.DisableItem( nWhich );
+                    nSlotId = 0;
+                }
+                else
+                {
+                    switch( ( ( (SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+                    {
+                        case FRMDIR_HORI_LEFT_TOP:
+                            bFlag = nWhich == SID_ATTR_PARA_LEFT_TO_RIGHT;
+                        break;
 
-                    case FRMDIR_HORI_RIGHT_TOP:
-                        bFlag = nWhich != SID_ATTR_PARA_LEFT_TO_RIGHT;
-                    break;
+                        case FRMDIR_HORI_RIGHT_TOP:
+                            bFlag = nWhich != SID_ATTR_PARA_LEFT_TO_RIGHT;
+                        break;
+                    }
                 }
             }
         }

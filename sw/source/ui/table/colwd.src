@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-14 20:18:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,28 +110,29 @@ ModalDialog DLG_COL_WIDTH
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ norwegian ] = "~Bredde" ;
-        Text [ italian ] = "~Largh." ;
+        Text [ italian ] = "Larghezza" ;
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "Bredde" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
-        Text [ spanish ] = "A~ncho" ;
+        Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "~Width" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¿í(~W)";
+        Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "•(~W)";
-        Text[ chinese_traditional ] = "¼e(~W)";
+        Text[ japanese ] = "å¹…(~W)";
+        Text[ chinese_traditional ] = "å¯¬åº¦(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "ë„ˆë¹„(~W)";
         Text[ turkish ] = "~Genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ncho";
+        Text[ catalan ] = "~Amplada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
     };
     MetricField ED_WIDTH
     {
@@ -168,17 +169,18 @@ ModalDialog DLG_COL_WIDTH
         Text [ dutch ] = "Breedte" ;
         Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "Width" ;
-        Text[ chinese_simplified ] = "¿í";
+        Text[ chinese_simplified ] = "å®½åº¦";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szerokoœæ";
-        Text[ japanese ] = "•";
-        Text[ chinese_traditional ] = "¼e";
+        Text[ japanese ] = "å¹…";
+        Text[ chinese_traditional ] = "å¯¬åº¦";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "ë„ˆë¹„";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ancho";
+        Text[ catalan ] = "Llargada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡";
     };
     FixedText FT_COL
     {
@@ -192,23 +194,24 @@ ModalDialog DLG_COL_WIDTH
         Text [ portuguese ] = "~Coluna" ;
         Text [ finnish ] = "~Sarake" ;
         Text [ danish ] = "Kolonne" ;
-        Text [ french ] = "~Colonne" ;
+        Text [ french ] = "Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
         Text [ dutch ] = "~Kolom" ;
         Text [ spanish ] = "Colu~mna" ;
         Text [ english_us ] = "~Column" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "À¸(~C)";
-        Text[ russian ] = "Êîëîíêà";
+        Text[ chinese_simplified ] = "æ (~C)";
+        Text[ russian ] = "Ñòîëáåö";
         Text[ polish ] = "Kolumna";
-        Text[ japanese ] = "—ñ(~C)";
-        Text[ chinese_traditional ] = "Äæ(~C)";
+        Text[ japanese ] = "åˆ—(~C)";
+        Text[ chinese_traditional ] = "æ¬„(~C)";
         Text[ arabic ] = "ÇáÚãæÏ";
         Text[ greek ] = "ÓôŞëç";
-        Text[ korean ] = "¿­(~C)";
+        Text[ korean ] = "ì—´(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colu~mna";
+        Text[ catalan ] = "~Columna";
+        Text[ thai ] = "~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
     };
     NumericField ED_COL
     {
@@ -222,18 +225,31 @@ ModalDialog DLG_COL_WIDTH
         Maximum = 99 ;
         Repeat = TRUE ;
     };
-    Text[ chinese_simplified ] = "À¸¿í";
-    Text[ russian ] = "Øèğèíà êîëîíêè";
+    Text[ chinese_simplified ] = "æ å®½";
+    Text[ russian ] = "Øèğèíà ñòîëáöà";
     Text[ polish ] = "Szerokoœæ kolumny";
-    Text[ japanese ] = "—ñ•";
-    Text[ chinese_traditional ] = "Äæ¼e";
+    Text[ japanese ] = "åˆ—å¹…";
+    Text[ chinese_traditional ] = "æ¬„å¯¬";
     Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
     Text[ greek ] = "ĞëÜôïò óôŞëçò";
-    Text[ korean ] = "¿­ ³Êºñ";
+    Text[ korean ] = "ì—´ ë„ˆë¹„";
     Text[ turkish ] = "Sütun genişliği";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Ancho de columna";
+    Text[ catalan ] = "Amplada de la columna";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸§à¹‰à¸²à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-31 12:39:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,28 +376,24 @@ ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
 ULONG Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
 {
     ULONG nRet;
-    if( pStg )
+    if( pStg && pIO )
     {
-        Sw3Io aSw3Io( rDoc );
-        if( bOrganizerMode )
-            nRet = aSw3Io.LoadStyles( pStg );
-        else
+        // TRUE: Vorlagen ueberschreiben
+        pIO->SetReadOptions( aOpt,TRUE );
+        if( !bInsertMode )
         {
-            // TRUE: Vorlagen ueberschreiben
-            aSw3Io.SetReadOptions( aOpt,TRUE );
-            if( !bInsertMode )
-            {
-                // Im Laden-Modus darf der PaM-Content-Teil nicht
-                // in den Textbereich zeigen (Nodes koennen geloescht werden)
-                rPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
-                rPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
-            }
-            nRet = aSw3Io.Load( pStg, bInsertMode ? &rPam : 0 );
+            // Im Laden-Modus darf der PaM-Content-Teil nicht
+            // in den Textbereich zeigen (Nodes koennen geloescht werden)
+            rPam.GetBound( TRUE ).nContent.Assign( 0, 0 );
+            rPam.GetBound( FALSE ).nContent.Assign( 0, 0 );
         }
+        nRet = pIO->Load( pStg, bInsertMode ? &rPam : 0 );
+        aOpt.ResetAllFmtsOnly();
+        pIO->SetReadOptions( aOpt, TRUE );
     }
     else
     {
-        ASSERT( !this, "Sw3-Read ohne Storage" );
+        ASSERT( !this, "Sw3-Read ohne Storage und/oder IO-System" );
         nRet = ERR_SWG_READ_ERROR;
     }
     return nRet;
@@ -415,10 +411,8 @@ USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
     if( pFlt && pFlt->GetVersion() )
         aStg->SetVersion( (long)pFlt->GetVersion() );
 
-    {
-        Sw3Io aSw3Io;
-        aSw3Io.GetSectionList( &aStg, rStrings );
-    }
+    if( pIO )
+        pIO->GetSectionList( &aStg, rStrings );
     return rStrings.Count();
 }
 
@@ -426,13 +420,21 @@ USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
 ULONG Sw3Writer::WriteStorage()
 {
     ULONG nRet;
+    if( pIO )
+    {
+        // der gleiche Storage -> Save, sonst SaveAs aufrufen
+        if( !bSaveAs )
+            nRet = pIO->Save( pOrigPam, bWriteAll );
+        else
+            nRet = pIO->SaveAs( pStg, pOrigPam, bWriteAll );
 
-    // der gleiche Storage -> Save, sonst SaveAs aufrufen
-    Sw3Io aSw3Io( *pDoc );
-    if( bOrganizerMode )
-        nRet = aSw3Io.SaveStyles( pStg );
+        pIO = 0;        // nach dem Schreiben ist der Pointer ungueltig !!
+    }
     else
-        nRet = aSw3Io.SaveAs( pStg, pOrigPam, bWriteAll );
+    {
+        ASSERT( !this, "Sw3-Writer ohne IO-System" )
+        nRet = ERR_SWG_WRITE_ERROR;
+    }
     return nRet;
 }
 
@@ -916,7 +918,6 @@ void CalculateFlySize( SfxItemSet& rFlySet, SwNodeIndex& rAnchor,
 }
 
 /*  */
-
 struct CharSetNameMap
 {
     rtl_TextEncoding eCode;
@@ -1002,6 +1003,7 @@ const CharSetNameMap *GetCharSetNameMap()
         IMPLENTRY(ISO_2022_JP),
         IMPLENTRY(ISO_2022_CN),
         IMPLENTRY(KOI8_R),
+        IMPLENTRY(KOI8_U),
         IMPLENTRY(UTF7),
         IMPLENTRY(UTF8),
         IMPLENTRY(ISO_8859_10),
@@ -1306,6 +1308,7 @@ static String NameFromLanguage(LanguageType nLang)
 
     return String::CreateFromAscii(pRet);
 }
+
 
 // for the automatic conversion (mail/news/...)
 // The user data contains the options for the ascii import/export filter.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-26 12:35:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,10 @@
 #include <svx/frmdiritem.hxx>
 #endif
 
+#include <so3/outplace.hxx>
+
+// from fefly1.cxx
+extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1203,9 +1207,28 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             SwFrmFmt *pFrmFmt = lcl_GetFrmFmt( aValue, pFmt->GetDoc() );
             if( pFrmFmt )
             {
-//              pSh->SetFrmFmt( pStyle->GetFrmFmt() );
                 UnoActionContext aAction(pFmt->GetDoc());
-                pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt );
+
+                // see SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocPos )
+                SwFlyFrm *pFly = 0;
+                const SwFrmFmt* pFmtXX = pFmt;
+                if (PTR_CAST(SwFlyFrmFmt, pFmtXX))
+                    pFly = ((SwFlyFrmFmt*)pFmtXX)->GetFrm();
+                SfxItemSet* pSet = 0;
+                if (pFly)
+                {
+                    const SfxPoolItem* pItem;
+                    if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_ANCHOR, sal_False, &pItem ))
+                    {
+                        pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrmFmtSetRange );
+                        pSet->Put( *pItem );
+                        if( !::lcl_ChkAndSetNewAnchor( *pFly, *pSet ))
+                            delete pSet, pSet = 0;
+                    }
+                }
+
+                pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt, pSet, FALSE );
+                delete pSet;
             }
             else
                 throw IllegalArgumentException();
@@ -1440,7 +1463,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     }
     else if(pFmt)
     {
-        if(eType == FLYCNTTYPE_GRF &&
+        if( ((eType == FLYCNTTYPE_GRF) || (eType == FLYCNTTYPE_OLE)) &&
                 pCur &&
                 ((pCur->nWID >=  RES_GRFATR_BEGIN &&
                     pCur->nWID < RES_GRFATR_END )||
@@ -2239,10 +2262,14 @@ uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SwXTextFrame::getTypes(  )
  ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  ) throw(RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }
 /*-- 11.12.98 15:23:03---------------------------------------------------
@@ -2579,10 +2606,14 @@ uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
  ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextGraphicObject::getImplementationId(  ) throw(RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }
 /*-- 11.12.98 16:02:27---------------------------------------------------
@@ -2755,10 +2786,14 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextEmbeddedObject::getTypes(  ) throw(Ru
  ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXTextEmbeddedObject::getImplementationId(  ) throw(RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    {
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
+    }
     return aId;
 }
 /*-- 11.12.98 16:16:54---------------------------------------------------
@@ -2802,6 +2837,8 @@ void SwXTextEmbeddedObject::removeEventListener(const uno::Reference< XEventList
 
   -----------------------------------------------------------------------*/
 
+static uno::Reference< util::XModifyListener >  xSwXOLEListener;
+
 uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) throw( RuntimeException )
 {
     uno::Reference< XComponent >  xRet;
@@ -2831,17 +2868,20 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
                     uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);
                     if( xBrdcst.is() )
                     {
-                        SwClientIter aIter( *pFmt );
-                        SwXOLEListener* pListener = (SwXOLEListener*)aIter.
-                                                First( TYPE( SwXOLEListener ));
-                        //create a new one if the OLE object doesn't have one already
-                        if( !pListener )
-                        {
-                            uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
-                            xBrdcst->addModifyListener( xOLEListener );
-                        }
+                        SwXOLEListener* pSwOLEListener = (SwXOLEListener*)
+                                                        xSwXOLEListener.get();
+                        if( !pSwOLEListener )
+                            xSwXOLEListener = pSwOLEListener = new SwXOLEListener;
+                        if( pSwOLEListener->AddOLEFmt( *pFmt ) )
+                            xBrdcst->addModifyListener( xSwXOLEListener );
                     }
                 }
+            }
+            else
+            {
+                SvOutPlaceObjectRef xOut( pOleNode->GetOLEObj().GetOleRef() );
+                if ( xOut.Is() )
+                    xRet = xOut->GetUnoComponent();
             }
         }
     }
@@ -2903,41 +2943,16 @@ uno::Reference<container::XNameReplace> SAL_CALL
 /******************************************************************
  *
  ******************************************************************/
-TYPEINIT1(SwXOLEListener, SwClient);
-/* -----------------------------18.01.2002 09:59------------------------------
-
- ---------------------------------------------------------------------------*/
-SwXOLEListener::SwXOLEListener( SwFmt& rOLEFmt, uno::Reference< XModel > xOLE) :
-    SwClient(&rOLEFmt),
-    xOLEModel(xOLE)
-{
-}
-/* -----------------------------18.01.2002 09:59------------------------------
-
- ---------------------------------------------------------------------------*/
-SwXOLEListener::~SwXOLEListener()
-{}
 
 void SwXOLEListener::modified( const EventObject& rEvent )
                                         throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    SwOLENode* pNd = 0;
-    SwFmt* pFmt = GetFmt();
-    if(pFmt)
-    {const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-        if(pIdx)
-        {
-            SwNodeIndex aIdx(*pIdx, 1);
-            SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-            pNd = pNoTxt->GetOLENode();
-        }
-    }
-    if(!pNd)
-        throw RuntimeException();
-    if( !pNd->GetOLEObj().IsOleRef() ||
-            !pNd->GetOLEObj().GetOleRef()->GetProtocol().IsInPlaceActive() )
+    SwOLENode* pNd;
+    sal_uInt16 nFndPos = FindEntry( rEvent, &pNd );
+    if( USHRT_MAX != nFndPos && ( !pNd->GetOLEObj().IsOleRef() ||
+            !pNd->GetOLEObj().GetOleRef()->GetProtocol().IsInPlaceActive() ))
     {
         // if the OLE-Node is UI-Active do nothing
         pNd->SetOLESizeInvalid( sal_True );
@@ -2954,27 +2969,156 @@ void SwXOLEListener::disposing( const EventObject& rEvent )
 
     uno::Reference< util::XModifyListener >  xListener( this );
 
-
-    uno::Reference< frame::XModel >  xModel( rEvent.Source, uno::UNO_QUERY );
-    uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);
-
-    try
+    SwOLENode* pNd;
+    sal_uInt16 nFndPos = FindEntry( rEvent, &pNd );
+    if( USHRT_MAX != nFndPos )
     {
+        SwDepend* pDepend = (SwDepend*)aFmts[ nFndPos ];
+        aFmts.Remove( nFndPos, 1 );
+
+        uno::Reference< frame::XModel >  xModel( rEvent.Source, uno::UNO_QUERY );
+        uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);
+
         if( xBrdcst.is() )
             xBrdcst->removeModifyListener( xListener );
+
+        delete pDepend;
+        if( !aFmts.Count() )
+        {
+            // we are the last?
+            // then can we delete us
+            xSwXOLEListener = 0;
+        }
     }
-    catch(Exception& rEx)
-    {
-        DBG_ERROR("OLE Listener couldn't be removed")
-    }
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXOLEListener::AddOLEFmt( SwFrmFmt& rFmt )
+{
+    for( sal_uInt16 n = 0, nCnt = aFmts.Count(); n < nCnt; ++n )
+        if( &rFmt == ((SwDepend*)aFmts[ n ])->GetRegisteredIn() )
+            return sal_False;       // is in the array
+
+    SwDepend* pNew = new SwDepend( this, &rFmt );
+    aFmts.Insert( pNew, aFmts.Count() );
+    return sal_True;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwXOLEListener::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
-        xOLEModel = 0;
+    const SwClient* pClient = 0;
+
+    switch( pOld ? pOld->Which() : 0 )
+    {
+    case RES_REMOVE_UNO_OBJECT:
+    case RES_OBJECTDYING:
+        pClient = (SwClient*)((SwPtrMsgPoolItem *)pOld)->pObject;
+        break;
+
+    case RES_FMT_CHG:
+        // wurden wir an das neue umgehaengt und wird das alte geloscht?
+        if( ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
+        {
+            pClient = ((SwFmtChg*)pNew)->pChangedFmt;
+        }
+        break;
+    }
+
+    if( pClient )
+    {
+        uno::Reference< util::XModifyListener >  xListener( this );
+
+        SwDepend* pDepend;
+        for( sal_uInt16 n = 0, nCnt = aFmts.Count(); n < nCnt; ++n )
+        {
+            if( pClient == (pDepend = (SwDepend*)aFmts[ n ])->GetRegisteredIn() )
+            {
+                aFmts.Remove( n, 1 );
+
+                 uno::Reference<frame::XModel> xModel = GetModel( *(SwFmt*)pClient );
+                if( xModel.is() )
+                {
+                    uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);
+                    if( xBrdcst.is() )
+                        xBrdcst->removeModifyListener( xListener );
+                }
+
+                delete pDepend;
+                if( !aFmts.Count() )
+                {
+                    // we are the last?
+                    // then can we delete us
+                    xSwXOLEListener = 0;
+                }
+                break;
+            }
+        }
+    }
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Reference< frame::XModel > SwXOLEListener::GetModel( const SwFmt& rFmt, SwOLENode** ppNd ) const
+{
+    SfxObjectShell* pObjSh = GetObjShell( rFmt, ppNd );
+    return pObjSh ? pObjSh->GetBaseModel() : (uno::Reference< frame::XModel >)0;
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
+SfxObjectShell* SwXOLEListener::GetObjShell( const SwFmt& rFmt,
+                                            SwOLENode** ppNd ) const
+{
+    SfxObjectShell* pShell = 0;
+    const SwFmtCntnt& rCnt = rFmt.GetCntnt();
+    if( rCnt.GetCntntIdx() )
+    {
+        SwNodeIndex aIdx( *rCnt.GetCntntIdx(), 1 );
+        SwOLENode* pOleNode = aIdx.GetNode().GetOLENode();
+        if( pOleNode && pOleNode->GetOLEObj().IsOleRef() )
+        {
+            SfxInPlaceObjectRef xIP( pOleNode->GetOLEObj().GetOleRef() );
+            if( xIP.Is() )
+                pShell = xIP->GetObjectShell();
+        }
+        if( ppNd )
+            *ppNd = pOleNode;
+    }
+    return pShell;
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_uInt16 SwXOLEListener::FindEntry( const EventObject& rEvent,SwOLENode** ppNd)
+{
+    sal_uInt16 nRet = USHRT_MAX;
+    uno::Reference< frame::XModel >  xSrch( rEvent.Source, uno::UNO_QUERY );
+
+    for( sal_uInt16 n = 0, nCnt = aFmts.Count(); n < nCnt; ++n )
+    {
+        SwDepend* pDepend = (SwDepend*)aFmts[ n ];
+        SwFrmFmt* pFmt = (SwFrmFmt*)pDepend->GetRegisteredIn();
+        if( !pFmt )
+        {
+            ASSERT( pFmt, "wo ist das Format geblieben?" );
+            aFmts.Remove( n, 1 );
+            delete pDepend;
+            --n;
+            --nCnt;
+        }
+        else
+        {
+            uno::Reference< frame::XModel >  xFmt( GetModel( *pFmt, ppNd ), uno::UNO_QUERY);
+            if( xFmt == xSrch )
+            {
+                nRet = n;
+                break;
+            }
+        }
+    }
+    return nRet;
 }
 

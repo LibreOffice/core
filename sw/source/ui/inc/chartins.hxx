@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-12-10 14:27:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include <sfx2/basedlgs.hxx>
 #endif
 
-#ifndef _FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
 #endif
 
 #ifndef _BUTTON_HXX //autogen
@@ -99,7 +99,7 @@ class SwInsertChartDlg : public SfxModelessDialog
     FixedText       aRangeFt;
     AutoEdit        aRangeEd;
 
-    FixedText       aTextFt;
+    FixedInfo       aTextFt;
 
     HelpButton      aHelp;
     CancelButton    aCancel;
@@ -117,6 +117,7 @@ class SwInsertChartDlg : public SfxModelessDialog
     String          aAktTableName;
     BOOL            bUpdateChartData;
     BOOL            bChartInserted;
+    BOOL            bChildOpen;
 
     void UpdateData();
     virtual BOOL        Close();
@@ -132,6 +133,8 @@ public:
     DECL_LINK( FinishHdl, Button* );
     DECL_LINK( CloseHdl, Button* );
     DECL_LINK( ClickHdl, CheckBox* );
+
+    virtual void    Activate();
 };
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-13 09:40:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1070,7 +1070,7 @@ BOOL SwFlowFrm::IsPrevObjMove() const
                 pPreUp = pPreUp->GetUpper();
             else if( pPreUp->IsColBodyFrm() &&
                      pPreUp->GetUpper()->GetUpper()->IsSctFrm() )
-                pPreUp = pPreUp->GetUpper()->GetUpper();
+                pPreUp = pPreUp->GetUpper()->GetUpper()->GetUpper();
         }
         const long nBottom = pPreUp->Frm().Bottom();
         const long nRight  = pPreUp->Frm().Right();

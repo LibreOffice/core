@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldwrap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,20 @@ public:
 
     virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
     void            ShowPage(USHORT nPage = 0);
+};
+/* -----------------04.02.2003 14:14-----------------
+ * field dialog only showing database page to support
+ * mail merge
+ * --------------------------------------------------*/
+class SwFldDataOnlyDlgWrapper : public SwChildWinWrapper
+{
+public:
+    SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
+                        SfxBindings* pBindings, SfxChildWinInfo* pInfo );
+
+    SFX_DECL_CHILDWINDOW(SwFldDataOnlyDlgWrapper);
+
+    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
 };
 
 

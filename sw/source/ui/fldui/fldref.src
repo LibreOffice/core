@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:06:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,17 +88,18 @@ TabPage TP_FLD_REF
         Text [ spanish ] = "~Tipo de campo" ;
         Text [ english_us ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ(~T)";
+        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
-        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
+        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "À¯Çü(~T)";
+        Text[ korean ] = "ìœ í˜•(~T)";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipo de campo";
+        Text[ catalan ] = "~Tipus";
+        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
     };
     ListBox LB_REFTYPE
     {
@@ -126,17 +127,18 @@ TabPage TP_FLD_REF
         Text [ spanish ] = "Se~lección" ;
         Text [ english_us ] = "S~election" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ(~E)";
+        Text[ chinese_simplified ] = "é€‰æ‹©(~E)";
         Text[ russian ] = "Âûáîğ";
         Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ğ(~E)";
-        Text[ chinese_traditional ] = "¿ï¨ú(~E)";
+        Text[ japanese ] = "é¸æŠ(~E)";
+        Text[ chinese_traditional ] = "é¸å–(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ(~E)";
+        Text[ korean ] = "ì„ íƒ(~E)";
         Text[ turkish ] = "S~eçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Se~lección";
+        Text[ catalan ] = "Se~lecció";
+        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸";
     };
     ListBox LB_REFSELECTION
     {
@@ -162,18 +164,19 @@ TabPage TP_FLD_REF
         Text [ french ] = "F~ormat" ;
         Text [ dutch ] = "F~ormaat" ;
         Text [ portuguese ] = "F~ormato" ;
-        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
         Text[ russian ] = "Ôîğìàò";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "‘®(~O)";
-        Text[ chinese_traditional ] = "®æ¦¡(~O)";
+        Text[ japanese ] = "æ›¸å¼(~O)";
+        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "¼­½Ä(~O)";
+        Text[ korean ] = "ì„œì‹(~O)";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormato";
-        Text[ finnish ] = "~Muotoile";
+        Text[ catalan ] = "F~ormata";
+        Text[ finnish ] = "M~uotoilu";
+        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
     };
     ListBox LB_REFFORMAT
     {
@@ -197,21 +200,22 @@ TabPage TP_FLD_REF
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "No~me" ;
         Text [ spanish ] = "No~mbre" ;
-        Text [ french ] = "~Nom" ;
+        Text [ french ] = "Nom" ;
         Text [ dutch ] = "Naa~m" ;
         Text [ portuguese ] = "No~me" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~M)";
+        Text[ chinese_simplified ] = "åç§°(~M)";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O(~M)";
-        Text[ chinese_traditional ] = "¦WºÙ(~M)";
+        Text[ japanese ] = "åå‰(~M)";
+        Text[ chinese_traditional ] = "åç¨±(~M)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~M)";
+        Text[ korean ] = "ì´ë¦„(~M)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No~mbre";
+        Text[ catalan ] = "No~m";
         Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
     };
     Edit ED_REFNAME
     {
@@ -240,17 +244,18 @@ TabPage TP_FLD_REF
         Text [ english_us ] = "~Value" ;
         Disable = TRUE ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÊıÖµ(~V)";
+        Text[ chinese_simplified ] = "æ•°å€¼(~V)";
         Text[ russian ] = "Çíà÷åíèå";
         Text[ polish ] = "Wartoœæ";
-        Text[ japanese ] = "’l(~V)";
-        Text[ chinese_traditional ] = "¼Æ­È(~V)";
+        Text[ japanese ] = "å€¤(~V)";
+        Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
         Text[ arabic ] = "ÇáŞíãÉ";
         Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "°ª(V)(~V)";
+        Text[ korean ] = "ê°’(~V)";
         Text[ turkish ] = "~Değer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor";
+        Text[ thai ] = "~à¸„à¹ˆà¸²";
     };
     Edit ED_REFVALUE
     {
@@ -274,18 +279,19 @@ TabPage TP_FLD_REF
         Text [ danish ] = "Tekstmarkeringer" ;
         Text [ portuguese ] = "Marcadores de texto" ;
         Text [ portuguese_brazilian ] = "Textmarken" ;
-        Text[ chinese_simplified ] = "ÊéÇ©";
-        Text[ russian ] = "Òåêñòîâûå ïîìåòêè";
+        Text[ chinese_simplified ] = "ä¹¦ç­¾";
+        Text[ russian ] = "Çàêëàäêè";
         Text[ polish ] = "Zak³adki";
-        Text[ japanese ] = "Ã·½ÄÏ°¸";
-        Text[ chinese_traditional ] = "¤º¤å¼ĞÅÒ";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯";
+        Text[ chinese_traditional ] = "å…§æ–‡æ¨™ç±¤";
         Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ";
         Text[ greek ] = "ÓçìÜäéá êåéìİíïõ";
-        Text[ korean ] = "Ã¥°¥ÇÇ";
+        Text[ korean ] = "ì±…ê°ˆí”¼";
         Text[ turkish ] = "Metin işareti";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Marcas de texto";
+        Text[ catalan ] = "Marques de text";
         Text[ finnish ] = "Kirjanmerkit";
+        Text[ thai ] = "à¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™";
     };
     String STR_REFFOOTNOTE
     {
@@ -302,17 +308,18 @@ TabPage TP_FLD_REF
         Text [ dutch ] = "Voetnoten" ;
         Text [ spanish ] = "Notas al pie" ;
         Text [ english_us ] = "Footnotes" ;
-        Text[ chinese_simplified ] = "×¢½Å";
+        Text[ chinese_simplified ] = "æ³¨è„š";
         Text[ russian ] = "Ñíîñêè";
         Text[ polish ] = "Przypisy dolne";
-        Text[ japanese ] = "‹r’";
-        Text[ chinese_traditional ] = "µù¸}";
+        Text[ japanese ] = "è„šæ³¨";
+        Text[ chinese_traditional ] = "è¨»è…³";
         Text[ arabic ] = "ÍæÇÔí ÓİáíÉ";
         Text[ greek ] = "Õğïóçìåéşóåéò";
-        Text[ korean ] = "°¢ÁÖ";
+        Text[ korean ] = "ê°ì£¼";
         Text[ turkish ] = "Dipnotlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Notas al pie";
+        Text[ catalan ] = "Notes al peu";
+        Text[ thai ] = "à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
     };
     String STR_REFENDNOTE
     {
@@ -327,18 +334,19 @@ TabPage TP_FLD_REF
         Text [ french ] = "Notes de fin" ;
         Text [ dutch ] = "Eindnoten" ;
         Text [ portuguese ] = "Notas finais" ;
-        Text[ chinese_simplified ] = "Î²×¢";
+        Text[ chinese_simplified ] = "å°¾æ³¨";
         Text[ russian ] = "Êîíöåâàÿ ñíîñêà";
         Text[ polish ] = "Przypisy koñcowe";
-        Text[ japanese ] = "•¶––‹r’";
-        Text[ chinese_traditional ] = "§Àµù";
+        Text[ japanese ] = "æ–‡æœ«è„šæ³¨";
+        Text[ chinese_traditional ] = "å°¾è¨»";
         Text[ arabic ] = "ÊÚáíŞÇÊ ÎÊÇãíÉ";
         Text[ greek ] = "Óçìåéşóåéò ôİëïõò";
-        Text[ korean ] = "¹ÌÁÖ";
+        Text[ korean ] = "ë¯¸ì£¼";
         Text[ turkish ] = "Son notlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Notas finales";
-        Text[ finnish ] = "Loppuhuomautukset";
+        Text[ catalan ] = "Notes finals";
+        Text[ finnish ] = "Loppuviitteet";
+        Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
     };
     Text [ english_us ] = "References" ;
     Text [ portuguese_brazilian ] = "Referenzen" ;
@@ -349,19 +357,29 @@ TabPage TP_FLD_REF
     Text [ french ] = "Références" ;
     Text [ dutch ] = "Verwijzingen" ;
     Text [ portuguese ] = "Referências" ;
-    Text[ chinese_simplified ] = "ËµÃ÷ÎÄ";
+    Text[ chinese_simplified ] = "è¯´æ˜æ–‡";
     Text[ russian ] = "Ññûëêè";
     Text[ polish ] = "Odwo³ania";
-    Text[ japanese ] = "QÆ";
-    Text[ chinese_traditional ] = "°Ñ·Ó";
+    Text[ japanese ] = "å‚ç…§";
+    Text[ chinese_traditional ] = "åƒç…§";
     Text[ arabic ] = "ÇáãÑÇÌÚ";
     Text[ greek ] = "Áíáöïñİò";
-    Text[ korean ] = "ÂüÁ¶";
+    Text[ korean ] = "ì°¸ì¡°";
     Text[ turkish ] = "Referans";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Referencias";
+    Text[ catalan ] = "Referències";
     Text[ finnish ] = "Viitteet";
+    Text[ thai ] = "à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡";
 };
+
+
+
+
+
+
+
+
+
 
 
 

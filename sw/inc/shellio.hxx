@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-12-02 11:51:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,9 +360,14 @@ public:
 
 class Sw3Reader : public StgReader
 {
+    Sw3Io* pIO;
     virtual ULONG Read( SwDoc &,SwPaM &,const String &);
 public:
-    Sw3Reader() {}
+    Sw3Reader() : pIO( 0 ) {}
+
+          Sw3Io* GetSw3Io()                 { return pIO; }
+    const Sw3Io* GetSw3Io() const           { return pIO; }
+          void   SetSw3Io( Sw3Io* pIo )     { pIO = pIo; }
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
@@ -594,10 +599,19 @@ public:
 
 class Sw3Writer : public StgWriter
 {
+    Sw3Io* pIO;
+    BOOL bSaveAs : 1;
+
     virtual ULONG WriteStorage();
 
 public:
-    Sw3Writer() {}
+    Sw3Writer() : pIO( 0 ), bSaveAs( FALSE ) {}
+
+          Sw3Io* GetSw3Io()                 { return pIO; }
+    const Sw3Io* GetSw3Io() const           { return pIO; }
+    void SetSw3Io( Sw3Io* pIo, BOOL bSvAs = FALSE )
+        { pIO = pIo; bSaveAs = bSvAs; }
+
     virtual BOOL IsSw3Writer() const;
 };
 
@@ -672,11 +686,11 @@ public:
 
     static FASTBOOL IsValidStgFilter( SvStorage& , const SfxFilter& );
 
-    static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
+        static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
         CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
+    static bool IsDetectableW4W(const String& rFileName);
 
     static const SfxFilter* GetTextFilter(const sal_Char* pBuf, ULONG nLen);
-
     // gebe einen bestimmten Reader zurueck
     static Reader* GetReader( const String& rFltName );
     // gebe einen bestimmten Writer zurueck

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2002-11-27 09:12:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
             }
             else
             {
+                // dvo: IsObjSelectable() eventually calls SdrView::PickObj, so
+                // apparently this is used to determine whether this is a
+                // drawling layer object or not.
                 if ( rSh.IsObjSelectable( rLPt ) )
                 {
                     if (pSdrView->IsTextEdit())
@@ -580,16 +583,16 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                         }
                         else
                         {
-                            eStyle = POINTER_MOVE;
+                            // if we're over a selected object, we show an
+                            // ARROW by default. We only show a MOVE if 1) the
+                            // object is selected, and 2) it may be moved
+                            // (i.e., position is not protected).
+                            bool bMovable =
+                                (!bNotInSelObj) &&
+                                (rSh.IsObjSelected() || rSh.IsFrmSelected()) &&
+                                (!rSh.IsSelObjProtected(FLYPROTECT_POS));
 
-                            if (!bNotInSelObj)
-                            {
-                                if (rSh.IsObjSelected() || rSh.IsFrmSelected())
-                                {
-                                    if (rSh.IsSelObjProtected(FLYPROTECT_POS))
-                                        eStyle = POINTER_NOTALLOWED;
-                                }
-                            }
+                            eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
                             aActHitType = SDRHIT_OBJECT;
                         }
                     }
@@ -598,6 +601,14 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                 {
                     if ( rSh.IsFrmSelected() && !bNotInSelObj )
                     {
+                        // dvo: this branch appears to be dead and should be
+                        // removed in a future version. Reason: The condition
+                        // !bNotInSelObj means that this branch will only be
+                        // executed in the cursor points inside a selected
+                        // object. However, if this is the case, the previous
+                        // if( rSh.IsObjSelectable(rLPt) ) must always be true:
+                        // rLPt is inside a selected object, then obviously
+                        // rLPt is over a selectable object.
                         if (rSh.IsSelObjProtected(FLYPROTECT_SIZE))
                             eStyle = POINTER_NOTALLOWED;
                         else
@@ -1030,6 +1041,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
         SdrView *pSdrView = rSh.GetDrawView();
         const SdrHdlList& rHdlList = pSdrView->GetHdlList();
         SdrHdl* pHdl = rHdlList.GetFocusHdl();
+        rSh.StartAllAction();
         if(0L == pHdl)
         {
             // now move the selected draw objects
@@ -1087,6 +1099,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
                 }
             }
         }
+        rSh.EndAllAction();
     }
 }
 
@@ -1158,7 +1171,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
                 else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
             }
-            else if ( rSh.IsInRightToLeftText() )
+            if ( rSh.IsInRightToLeftText() )
             {
                 if( KEY_LEFT == nKey ) nKey = KEY_RIGHT;
                 else if( KEY_RIGHT == nKey ) nKey = KEY_LEFT;
@@ -1287,7 +1300,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_TblColCellInsDel,
 
                     KS_Fly_Change, KS_Draw_Change,
-                    KS_AppendNodeInSection,
+                    KS_SpecialInsert,
                     KS_EnterCharCell,
                     KS_Ende };
 
@@ -1575,8 +1588,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_RETURN | KEY_MOD2:     // ALT-Return
                     if( !rSh.HasReadonlySel() && rSh.GetCurNumRule() )
                         eKeyState = KS_NoNum;
-                    else if( rSh.CanInsertNodeAtEndOfSection() )
-                        eKeyState = KS_AppendNodeInSection;
+                    else if( rSh.CanSpecialInsert() )
+                        eKeyState = KS_SpecialInsert;
                     break;
 
                 case KEY_BACKSPACE:
@@ -1842,7 +1855,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 //              Statusupdate enabled wurden, muss copy ggf. von uns
 //              'gewaltsam' gerufen werden.
                     if( rKeyCode.GetFunction() == KEYFUNC_COPY )
-                        GetView().GetViewFrame()->GetDispatcher()->Execute(SID_COPY);
+                        GetView().GetViewFrame()->GetBindings().Execute(SID_COPY);
 
 
                     if( !bIsDocReadOnly && bNormalChar )
@@ -1984,8 +1997,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
 //???               FlushInBuffer( &rSh );
             switch( eKeyState )
             {
-            case KS_AppendNodeInSection:
-                rSh.AppendNodeInSection();
+            case KS_SpecialInsert:
+                rSh.DoSpecialInsert();
                 break;
 
             case KS_NoNum:
@@ -2399,44 +2412,51 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             !SFX_APP()->IsDispatcherLocked() &&
                             !bExecDrawTextLink)
                         {
-                            rView.NoRotate();
-                            rSh.HideCrsr();
+                            // #107513#
+                            // Test if there is a draw object at that position and if it should be selected.
+                            sal_Bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
 
-                            BOOL bUnLockView = !rSh.IsViewLocked();
-                            rSh.LockView( TRUE );
-                            BOOL bSelObj = rSh.SelectObj( aDocPos,
-                                           rMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
-                            if( bUnLockView )
-                                rSh.LockView( FALSE );
-
-                            if( bSelObj )
+                            if(bShould)
                             {
-                                // falls im Macro der Rahmen deselektiert
-                                // wurde, muss nur noch der Cursor
-                                // wieder angezeigt werden.
-                                if( FRMTYPE_NONE == rSh.GetSelFrmType() )
-                                    rSh.ShowCrsr();
-                                else
+                                rView.NoRotate();
+                                rSh.HideCrsr();
+
+                                BOOL bUnLockView = !rSh.IsViewLocked();
+                                rSh.LockView( TRUE );
+                                BOOL bSelObj = rSh.SelectObj( aDocPos,
+                                               rMEvt.IsMod1() ? SW_ENTER_GROUP : 0);
+                                if( bUnLockView )
+                                    rSh.LockView( FALSE );
+
+                                if( bSelObj )
                                 {
-                                    if (rSh.IsFrmSelected() && rView.GetDrawFuncPtr())
+                                    // falls im Macro der Rahmen deselektiert
+                                    // wurde, muss nur noch der Cursor
+                                    // wieder angezeigt werden.
+                                    if( FRMTYPE_NONE == rSh.GetSelFrmType() )
+                                        rSh.ShowCrsr();
+                                    else
                                     {
-                                        rView.GetDrawFuncPtr()->Deactivate();
-                                        rView.SetDrawFuncPtr(NULL);
-                                        rView.LeaveDrawCreate();
-                                        rView.AttrChangedNotify( &rSh );
+                                        if (rSh.IsFrmSelected() && rView.GetDrawFuncPtr())
+                                        {
+                                            rView.GetDrawFuncPtr()->Deactivate();
+                                            rView.SetDrawFuncPtr(NULL);
+                                            rView.LeaveDrawCreate();
+                                            rView.AttrChangedNotify( &rSh );
+                                        }
+
+                                        rSh.EnterSelFrmMode( &aDocPos );
+                                        bFrmDrag = TRUE;
+                                        UpdatePointer( aDocPos, rMEvt.GetModifier() );
                                     }
-
-                                    rSh.EnterSelFrmMode( &aDocPos );
-                                    bFrmDrag = TRUE;
-                                    UpdatePointer( aDocPos, rMEvt.GetModifier() );
+                                    return;
                                 }
-                                return;
-                            }
-                            else
-                                bOnlyText = rSh.IsObjSelectable( aDocPos );
+                                else
+                                    bOnlyText = rSh.IsObjSelectable( aDocPos );
 
-                            if (!rView.GetDrawFuncPtr())
-                                rSh.ShowCrsr();
+                                if (!rView.GetDrawFuncPtr())
+                                    rSh.ShowCrsr();
+                            }
                         }
                         else if ( rSh.IsSelFrmMode() &&
                                   (aActHitType == SDRHIT_NONE ||
@@ -2460,6 +2480,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                                 BYTE nFlag = rMEvt.IsShift() ? SW_ADD_SELECT :0;
                                 if( rMEvt.IsMod1() )
                                     nFlag = nFlag | SW_ENTER_GROUP;
+
+                                if ( rSh.IsSelFrmMode() )
+                                {
+                                    rSh.UnSelectFrm();
+                                    rSh.LeaveSelFrmMode();
+                                    rView.AttrChangedNotify(&rSh);
+                                }
+
                                 BOOL bSelObj = rSh.SelectObj( aDocPos, nFlag );
                                 if( bUnLockView )
                                     rSh.LockView( FALSE );
@@ -2505,8 +2533,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             case SwWrtShell::SEL_GRF:
                                 RstMBDownFlags();
-                                GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                    FN_FORMAT_GRAFIC_DLG, SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
+                                GetView().GetViewFrame()->GetBindings().Execute(
+                                    FN_FORMAT_GRAFIC_DLG, 0, 0,
+                                    SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
                                 return;
 
                                 // Doppelklick auf OLE-Objekt --> OLE-InPlace
@@ -2520,8 +2549,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
 
                             case SwWrtShell::SEL_FRM:
                                 RstMBDownFlags();
-                                GetView().GetViewFrame()->GetDispatcher()->Execute(
-                                    FN_FORMAT_FRAME_DLG, SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
+                                GetView().GetViewFrame()->GetBindings().Execute(
+                                    FN_FORMAT_FRAME_DLG, 0, 0, SFX_CALLMODE_RECORD|SFX_CALLMODE_SLOT);
                                 return;
 
                             case SwWrtShell::SEL_DRW:
@@ -2548,7 +2577,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             RstMBDownFlags();
                             if( bFtn )
-                                GetView().GetViewFrame()->GetDispatcher()->Execute( FN_EDIT_FOOTNOTE );
+                                GetView().GetViewFrame()->GetBindings().Execute( FN_EDIT_FOOTNOTE );
                             else
                             {
                                 USHORT nTypeId = pFld->GetTypeId();
@@ -2563,11 +2592,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                                     USHORT nSlot = TYP_POSTITFLD == nTypeId ? FN_POSTIT : FN_JAVAEDIT;
                                     SfxBoolItem aItem(nSlot, TRUE);
                                     pVFrame->GetBindings().SetState(aItem);
-                                    pVFrame->GetDispatcher()->Execute(nSlot);
+                                    pVFrame->GetBindings().Execute(nSlot);
                                     break;
                                 }
                                 case TYP_AUTHORITY :
-                                    pVFrame->GetDispatcher()->Execute(FN_EDIT_AUTH_ENTRY_DLG);
+                                    pVFrame->GetBindings().Execute(FN_EDIT_AUTH_ENTRY_DLG);
                                 break;
                                 default:
                                     pVFrame->GetBindings().Execute(FN_EDIT_FIELD);
@@ -4095,12 +4124,15 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     bCallBase = FALSE;
                     if ( pItem )
                     {
-                        //Eigentumsuebergang des Items
-                        GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId, SFX_CALLMODE_STANDARD,
-                                                  pItem, 0 );
+                        const SfxPoolItem* aArgs[2];
+                        aArgs[0] = pItem;
+                        aArgs[1] = 0;
+                        GetView().GetViewFrame()->GetBindings().Execute(
+                                    nSlotId, aArgs, 0, SFX_CALLMODE_STANDARD );
+                        delete pItem;
                     }
                     else
-                        GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId );
+                        GetView().GetViewFrame()->GetBindings().Execute( nSlotId );
                 }
             }
             break;
@@ -4291,6 +4323,15 @@ void SwEditWin::_InitStaticData()
 void SwEditWin::_FinitStaticData()
 {
     delete pQuickHlpData;
+}
+/* -----------------23.01.2003 12:15-----------------
+ * #i3370# remove quick help to prevent saving
+ * of autocorrection suggestions
+ * --------------------------------------------------*/
+void SwEditWin::StopQuickHelp()
+{
+    if( HasFocus() && pQuickHlpData && pQuickHlpData->bClear  )
+        pQuickHlpData->Stop( rView.GetWrtShell() );
 }
 
 /*-----------------23.02.97 18:39-------------------

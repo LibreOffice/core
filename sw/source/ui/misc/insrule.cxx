@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrule.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-09-16 13:15:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
 String SwInsertGrfRulerDlg::GetGraphicName()
 {
     String sRet;
-    nSelPos -=2; //align selection position with ValueSet index
-    if(nSelPos < aGrfNames.Count())
-        sRet = URIHelper::SmartRelToAbs(*(String*) aGrfNames.GetObject(nSelPos));
+    USHORT nSel = nSelPos - 2; //align selection position with ValueSet index
+    if(nSel < aGrfNames.Count())
+        sRet = URIHelper::SmartRelToAbs(*(String*) aGrfNames.GetObject(nSel));
     return sRet;
 }
 

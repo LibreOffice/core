@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:14:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,10 @@
 #define BT_OK           4
 #define BT_CANCEL       5
 #define BT_HELP         6
-
-
+#define FL_CONNECTIONS  7
+#define RB_USEEXISTING  8
+#define RB_CREATENEW    9
+#define FT_INFO         10
 
 
 #endif

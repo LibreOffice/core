@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:09:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 using namespace utl;
 using namespace rtl;
@@ -116,11 +119,14 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
     nFldUpdateFlags(0),
     nLinkUpdateMode(0),
-    eHScrollMetric(FUNIT_CM),
-    eVScrollMetric(FUNIT_CM),
     bIsHScrollMetricSet(sal_False),
     bIsVScrollMetricSet(sal_False)
 {
+    MeasurementSystem eSystem = GetAppLocaleData().getMeasurementSystemEnum();
+    eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
+    eHScrollMetric = eUserMetric;
+    eVScrollMetric = eUserMetric;
+
     aContentConfig.Load();
     aLayoutConfig.Load();
     aGridConfig.Load();
@@ -411,7 +417,7 @@ void SwLayoutViewConfig::Load()
                     case 11:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rParent.SetZoom(nVal);
+                        rParent.SetZoom((USHORT)nVal);
                     }
                     break;// "Zoom/Value",
                     case 12:
@@ -534,8 +540,8 @@ void SwGridConfig::Load()
                     case  2: rParent.SetSynchronize(bSet); break;//  "Option/Synchronize",
                     case  3: aSnap.Width() = MM100_TO_TWIP(nSet); break;//      "Resolution/XAxis",
                     case  4: aSnap.Height() = MM100_TO_TWIP(nSet); break;//      "Resolution/YAxis",
-                    case  5: rParent.SetDivisionX(nSet); break;//   "Subdivision/XAxis",
-                    case  6: rParent.SetDivisionY(nSet); break;//   "Subdivision/YAxis"
+                    case  5: rParent.SetDivisionX((short)nSet); break;//   "Subdivision/XAxis",
+                    case  6: rParent.SetDivisionY((short)nSet); break;//   "Subdivision/YAxis"
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: od $ $Date: 2002-12-06 16:23:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,9 +224,11 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     bEndActionByVirDev = FALSE;
     bPaintWorks = bEnableSmooth = TRUE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
-    // OD 04.12.2002 #103492#
     if ( bPreView )
-        pImp->InitPreviewData();
+    {
+        // OD 12.12.2002 #103492# - init page preview layout
+        pImp->InitPagePreviewLayout();
+    }
 
     pDoc->AddLink();
     pOutput = pOut;
@@ -279,9 +281,9 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
-    // OD 04.12.2002 #103492#
+    // OD 12.12.2002 #103492#
     if ( bPreView )
-        pImp->InitPreviewData();
+        pImp->InitPagePreviewLayout();
 
     SET_CURR_SHELL( this );
 

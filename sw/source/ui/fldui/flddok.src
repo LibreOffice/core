@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:19:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,17 +88,18 @@ TabPage TP_FLD_DOK
         Text [ spanish ] = "~Tipo de campo" ;
         Text [ english_us ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ(~T)";
-        Text[ russian ] = "Òèï ïîëÿ";
+        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
+        Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
-        Text[ chinese_traditional ] = "Äæ¦ìÃş«¬(~T)";
+        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
+        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇÊµåÀ¯Çü(~T)";
+        Text[ korean ] = "ìœ í˜•(~T)";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipo de campo";
+        Text[ catalan ] = "~Tipus";
+        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
     };
     ListBox LB_DOKTYPE
     {
@@ -127,17 +128,18 @@ TabPage TP_FLD_DOK
         Text [ spanish ] = "Se~lección" ;
         Text [ english_us ] = "S~elect" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ(~E)";
-        Text[ russian ] = "Âûáîğ";
+        Text[ chinese_simplified ] = "é€‰æ‹©(~E)";
+        Text[ russian ] = "Âûáğàòü";
         Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ğ(~E)";
-        Text[ chinese_traditional ] = "¿ï¨ú(~E)";
+        Text[ japanese ] = "é¸æŠ(~E)";
+        Text[ chinese_traditional ] = "é¸å–(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ(~E)";
+        Text[ korean ] = "ì„ íƒ(~E)";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Se~lección";
+        Text[ catalan ] = "S~elecciona";
+        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸";
     };
     ListBox LB_DOKSELECTION
     {
@@ -162,18 +164,19 @@ TabPage TP_FLD_DOK
         Text [ french ] = "F~ormat" ;
         Text [ dutch ] = "~Notatie" ;
         Text [ portuguese ] = "F~ormato" ;
-        Text[ chinese_simplified ] = "¸ñÊ½(~O)";
+        Text[ chinese_simplified ] = "æ ¼å¼(~O)";
         Text[ russian ] = "Ôîğìàò";
         Text[ polish ] = "Format";
-        Text[ japanese ] = "‘®(~O)";
-        Text[ chinese_traditional ] = "®æ¦¡(~O)";
+        Text[ japanese ] = "æ›¸å¼(~O)";
+        Text[ chinese_traditional ] = "æ ¼å¼(~O)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "¼­½Ä(~O)";
+        Text[ korean ] = "ì„œì‹(~O)";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormato";
-        Text[ finnish ] = "~Muotoile";
+        Text[ catalan ] = "F~ormata";
+        Text[ finnish ] = "M~uotoilu";
+        Text[ thai ] = "à¸£à¸¹~à¸›à¹à¸šà¸š";
     };
     ListBox LB_DOKFORMAT
     {
@@ -206,24 +209,25 @@ TabPage TP_FLD_DOK
         TEXT [ portuguese ] = "~Correcção" ;
         TEXT [ finnish ] = "~Siirtymä" ;
         TEXT [ danish ] = "Korrektion" ;
-        TEXT [ french ] = "C~orrecture" ;
+        TEXT [ french ] = "C~orrection" ;
         TEXT [ swedish ] = "Ko~rrigering" ;
         TEXT [ dutch ] = "~Correctie" ;
         TEXT [ spanish ] = "~Corrección" ;
         TEXT [ english_us ] = "O~ffset" ;
         Left = TRUE ;
         Hide = TRUE ;
-        TEXT[ chinese_simplified ] = "ĞŞ¸Ä(~F)";
-        TEXT[ russian ] = "Êîğğåêòèğîâêà";
+        TEXT[ chinese_simplified ] = "ä¿®æ”¹(~F)";
+        TEXT[ russian ] = "Ñìåùåíèå";
         TEXT[ polish ] = "Korekta";
-        TEXT[ japanese ] = "C³(~F)";
-        TEXT[ chinese_traditional ] = "­×§ï(~F)";
+        TEXT[ japanese ] = "ä¿®æ­£(~F)";
+        TEXT[ chinese_traditional ] = "ä¿®æ”¹(~F)";
         TEXT[ arabic ] = "ÇáÊÕÍíÍ";
         TEXT[ greek ] = "Äéüñèùóç";
-        TEXT[ korean ] = "¼öÁ¤(~F)";
+        TEXT[ korean ] = "ìˆ˜ì •(~F)";
         TEXT[ turkish ] = "Düzeltme";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Corrección";
+        TEXT[ catalan ] = "~Correcció";
+        TEXT[ thai ] = "à¸­à¸­~à¸Ÿà¹€à¸‹à¸•";
     };
     Edit ED_DOKVALUE
     {
@@ -272,25 +276,26 @@ TabPage TP_FLD_DOK
         TabStop = TRUE ;
         Text [ english_us ] = "~Fixed content" ;
         Text [ portuguese_brazilian ] = "~Inhalt fixieren" ;
-        Text [ swedish ] = "Fixera ~innehåll" ;
-        Text [ danish ] = "Fast indhold" ;
+        Text [ swedish ] = "Fi~xera innehåll" ;
+        Text [ danish ] = "Fast in~dhold" ;
         Text [ italian ] = "~Fissa il contenuto" ;
-        Text [ spanish ] = "~Fijar contenido" ;
-        Text [ french ] = "Contenu f~ixe" ;
+        Text [ spanish ] = "~Contenido fijo" ;
+        Text [ french ] = "Contenu fixe" ;
         Text [ dutch ] = "~Inhoud fixeren" ;
         Text [ portuguese ] = "Conteúdo ~fixo" ;
-        Text[ chinese_simplified ] = "¹Ì¶¨ÄÚÈİ(~F)";
+        Text[ chinese_simplified ] = "å›ºå®šå†…å®¹(~F)";
         Text[ russian ] = "Ôèêñ. ñîäåğæèìîå";
         Text[ polish ] = "Sta³a treœæ";
-        Text[ japanese ] = "“à—e‚ÌŒÅ’è(~F)";
-        Text[ chinese_traditional ] = "©T©w¤º®e(~F)";
+        Text[ japanese ] = "å†…å®¹ã®å›ºå®š(~F)";
+        Text[ chinese_traditional ] = "å›ºå®šå…§å®¹(~F)";
         Text[ arabic ] = "ÊËÈíÊ ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğáãßùóç ğåñ~éå÷ïìİíùí";
-        Text[ korean ] = "³»¿ë °íÁ¤(~F)";
+        Text[ korean ] = "ë‚´ìš© ê³ ì •(~F)";
         Text[ turkish ] = "İçeriği sabitle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fijar contenido";
+        Text[ catalan ] = "Contingut ~fix";
         Text[ finnish ] = "~Kiinteä sisältö";
+        Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²~à¸„à¸‡à¸—à¸µà¹ˆ";
     };
     Bitmap BMP_DOKROOT_OPENED
     {
@@ -313,18 +318,19 @@ TabPage TP_FLD_DOK
         Text [ french ] = "Co~rrection en jours" ;
         Text [ dutch ] = "Co~rrectie in dagen" ;
         Text [ portuguese ] = "Co~rrecção em dias" ;
-        Text[ chinese_simplified ] = "ĞŞ¸ÄÌìÊı(~E)";
-        Text[ russian ] = "Êîğğåêòèğîâêà äíåé";
+        Text[ chinese_simplified ] = "ä¿®æ”¹å¤©æ•°(~E)";
+        Text[ russian ] = "Ñìåùåíèå â äíÿõ";
         Text[ polish ] = "Korekta dni";
-        Text[ japanese ] = "“ú‚ÌC³(~E)";
-        Text[ chinese_traditional ] = "­×§ï¤é´Áªº¤Ñ¼Æ(~E)";
+        Text[ japanese ] = "æ—¥ã®ä¿®æ­£(~E)";
+        Text[ chinese_traditional ] = "ä¿®æ”¹æ—¥æœŸçš„å¤©æ•¸(~E)";
         Text[ arabic ] = "ÇáÊÕÍíÍ ÈÇáÃíÇã";
         Text[ greek ] = "Äéüñèùóç óå çìİñåò";
-        Text[ korean ] = "¸çÄ¥ ¾È¿¡ ¼öÁ¤(~E)";
+        Text[ korean ] = "ë‚ ì§œ ìˆ˜ì •(~E)";
         Text[ turkish ] = "Düzeltme (gün)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Corrección en días";
+        Text[ catalan ] = "~Correcció en dies";
         Text[ finnish ] = "~Siirtymä päivinä";
+        Text[ thai ] = "à¸­à¸­à¸Ÿà¹€~à¸‹à¸•à¹ƒà¸™à¸§à¸±à¸™";
     };
     String STR_DOKTIMEOFF
     {
@@ -339,18 +345,19 @@ TabPage TP_FLD_DOK
         Text [ french ] = "Co~rrection en minutes" ;
         Text [ dutch ] = "Co~rrectie in minuten" ;
         Text [ portuguese ] = "Co~rrecção em minutos" ;
-        Text[ chinese_simplified ] = "ĞŞ¸Ä·ÖÖÓÉè¶¨(~E)";
-        Text[ russian ] = "Êîğğåêòèğîâêà ìèíóò";
+        Text[ chinese_simplified ] = "ä¿®æ”¹åˆ†é’Ÿè®¾å®š(~E)";
+        Text[ russian ] = "Ñìåùåíèå â ìèíóòàõ";
         Text[ polish ] = "Korekta minut";
-        Text[ japanese ] = "•ª‚ÌC³(~E)";
-        Text[ chinese_traditional ] = "­×§ï¤ÀÄÁ³]©w(~E)";
+        Text[ japanese ] = "åˆ†ã®ä¿®æ­£(~E)";
+        Text[ chinese_traditional ] = "ä¿®æ”¹åˆ†é˜è¨­å®š(~E)";
         Text[ arabic ] = "ÇáÊÕÍíÍ ÈÇáÏŞÇÆŞ";
         Text[ greek ] = "Äéüñèùóç óå ëåğôÜ";
-        Text[ korean ] = "¸î ºĞ ¾È¿¡ ¼öÁ¤(~E)";
+        Text[ korean ] = "ë¶„ ìˆ˜ì •(~E)";
         Text[ turkish ] = "Düzeltme (dakika)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Corrección en minutos";
+        Text[ catalan ] = "~Correcció en minuts";
         Text[ finnish ] = "~Siirtymä minuutteina";
+        Text[ thai ] = "à¸­à¸­à¸Ÿà¹€~à¸‹à¸•à¹ƒà¸™à¸™à¸²à¸—à¸µ";
     };
     Text [ english_us ] = "Document" ;
     Text [ portuguese_brazilian ] = "Dokument" ;
@@ -361,19 +368,33 @@ TabPage TP_FLD_DOK
     Text [ french ] = "Document" ;
     Text [ dutch ] = "Document" ;
     Text [ portuguese ] = "Documento" ;
-    Text[ chinese_simplified ] = "ÎÄµµ";
+    Text[ chinese_simplified ] = "æ–‡æ¡£";
     Text[ russian ] = "Äîêóìåíò";
     Text[ polish ] = "Dokument";
-    Text[ japanese ] = "ÄŞ·­ÒİÄ";
-    Text[ chinese_traditional ] = "¤å¥ó";
+    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
+    Text[ chinese_traditional ] = "æ–‡ä»¶";
     Text[ arabic ] = "ÇáãÓÊäÏ";
     Text[ greek ] = "¸ããñáöï";
-    Text[ korean ] = "¹®¼­";
+    Text[ korean ] = "ë¬¸ì„œ";
     Text[ turkish ] = "Belge";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Documento";
+    Text[ catalan ] = "Document";
     Text[ finnish ] = "Asiakirja";
+    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

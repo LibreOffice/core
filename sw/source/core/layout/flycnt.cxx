@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-30 15:04:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,11 +1100,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     const SwRect aOld( AddSpacesToFrm() );
     Point aNew( rNew );
 
-#ifdef BIDI
     if( GetAnchor()->IsVertical() || GetAnchor()->IsRightToLeft() )
-#else
-    if( GetAnchor()->IsVertical() )
-#endif
 
         aNew.X() += Frm().Width();
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchor(), aNew );
@@ -1113,7 +1109,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwPageFrm *pPage = 0;
     SWRECTFN( pCnt )
-#ifdef BIDI
     const sal_Bool bRTL = pCnt->IsRightToLeft();
 
     if( ( bVert != GetAnchor()->IsVertical() ) ||
@@ -1124,15 +1119,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         else
             aNew.X() -= Frm().Width();
     }
-#else
-    if( ( bVert != GetAnchor()->IsVertical() )
-    {
-        if( bVert )
-            aNew.X() += Frm().Width();
-        else
-            aNew.X() -= Frm().Width();
-    }
-#endif
 
     if ( pCnt->IsInDocBody() )
     {
@@ -1214,20 +1200,16 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     {
         if( !pFrm )
         {
-#ifdef BIDI
             if ( pCnt->IsRightToLeft() )
                 nX += pCnt->Frm().Right() - rNew.X() - Frm().Width();
             else
-#endif
                 nX += rNew.X() - pCnt->Frm().Left();
         }
         else
         {
-#ifdef BIDI
             if ( pFrm->IsRightToLeft() )
                 nX += pFrm->Frm().Right() - rNew.X() - Frm().Width();
             else
-#endif
                 nX = rNew.X() - pFrm->Frm().Left();
         }
     }
@@ -1479,6 +1461,22 @@ void SwFlyAtCntFrm::AssertPage()
             if ( Frm().Top() < pNewPage->Frm().Top() && pNewPage->GetPrev() )
             {
                 pNewPage = (SwPageFrm*)pNewPage->GetPrev();
+                // OD 19.02.2003 #105643# - skip empty page and consider empty
+                // page at the beginning of the document.
+                // Assumption about document layout:
+                //      No two empty pages following each other.
+                if ( pNewPage->IsEmptyPage() )
+                {
+                    if ( pNewPage->GetPrev() )
+                    {
+                        pNewPage = static_cast<SwPageFrm*>(pNewPage->GetPrev());
+                    }
+                    else
+                    {
+                        bFound = TRUE;
+                        pNewPage = static_cast<SwPageFrm*>(pNewPage->GetNext());
+                    }
+                }
                 if ( nDir == 2 )
                 {
                     bFound = TRUE;
@@ -2127,12 +2125,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
                     nRelPosX += aHori.GetPos();
             }
             else if( bToggle || ( !aHori.IsPosToggle() && bR2L ) )
-#ifdef BIDI
                 nRelPosX = nWidth - aFrm.Width() - aHori.GetPos() +
                             ( bR2L ? nAdd : 0 );
-#else
-                nRelPosX = nWidth - aFrm.Width() - aHori.GetPos();
-#endif
             else
                 nRelPosX += aHori.GetPos();
             //Da die relative Position immer zum Anker relativ ist,

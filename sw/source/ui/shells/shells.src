@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 14:00:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ InfoBox MSG_NO_RULER
     Message [ french ] = "Il n'existe pas d'image pour le thθme 'Rulers' dans la Gallery." ;
     Message [ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor." ;
     Message[ chinese_simplified ] = "ε¨η”»ε»δΈ»ιΆ'ι•Ώζ΅ε½Ά'ε†…ζ— δ»»δ½•ε›Ύε½Άγ€‚";
-    Message[ russian ] = "Β ςεμε γΰλεπεθ 'Λθνεικθ' γπΰτθχερκθυ ξαϊεκςξβ νε ρσωερςβσες.";
+    Message[ russian ] = "Β ςεμε γΰλεπεθ 'Γπΰνθχνϋε λθνθθ' γπΰτθχερκθυ ξαϊεκςξβ νε ρσωερςβσες.";
     Message[ polish ] = "Nie ma Ώadnych grafik w temacie galerii \"Obramowania\"";
     Message[ japanese ] = "γ‚®γƒ£γƒ©γƒªγƒ†γƒΌγƒγ®γ€γƒ«γƒΌγƒ©γƒΌγ€γ«γ€ε›³γ―γ‚γ‚γΎγ›γ‚“γ€‚";
     Message[ chinese_traditional ] = "η•«ε»δΈ»ι΅[ι•·ζΆε½Ά]ε…§η„΅δ»»δ½•ε–ε½Άγ€‚";
@@ -87,7 +87,7 @@ InfoBox MSG_NO_RULER
     Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
     Message[ chinese_simplified ] = "ε¨η”»ε»δΈ»ιΆ'ι•Ώζ΅ε½Ά'ε†…ζ— δ»»δ½•ε›Ύε½Άγ€‚";
     Message[ greek ] = "Δεν υπάρχουν γραφικά στη συλλογή με θέμα 'Rulers'.";
-    Message[ korean ] = "κ°¤λ¬λ¦¬- μ£Όμ  'λκΈμ'μ— κ·Έλν”½μ΄ μ—†μµλ‹λ‹¤.";
+    Message[ korean ] = "κ°¤λ¬λ¦¬ μ£Όμ  'λκΈμ'μ— κ·Έλ¦Όμ΄ μ—†μµλ‹λ‹¤.";
     Message[ turkish ] = "'Rulers' galeri konusunda bit eώlem grafik mevcut deπil.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "No hi ha cap mapa de bits en la galeria de temes 'Rulers'.";
@@ -104,7 +104,7 @@ String STR_GRFILTER_OPENERROR
     Text [ portuguese ] = "Impossνvel abrir ficheiro grαfico." ;
     Text [ finnish ] = "Grafiikkatiedostoa ei voi avata." ;
     Text [ danish ] = "Det er ikke muligt at εbne grafikfilen" ;
-    Text [ french ] = "Ouverture du fichier graphique impossible" ;
+    Text [ french ] = "Impossible d'ouvrir le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte φppnas" ;
     Text [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
     Text [ spanish ] = "No es posible abrir el archivo grαfico" ;
@@ -118,7 +118,7 @@ String STR_GRFILTER_OPENERROR
     Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
     Text[ chinese_simplified ] = "ζ— ζ³•ζ‰“εΌ€ε›Ύε½Άζ–‡δ»¶";
     Text[ greek ] = "Δεν είναι δυνατό το άνοιγμα του αρχείου γραφικών";
-    Text[ korean ] = "κ·Έλν”½ νμΌμ„ μ—΄ μ μ—†μµλ‹λ‹¤.";
+    Text[ korean ] = "κ·Έλ¦Ό νμΌμ„ μ—΄ μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Grafik dosyasύ aηύlamύyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es pot obrir el fitxer de grΰfics";
@@ -134,7 +134,7 @@ String STR_GRFILTER_IOERROR
     Text [ portuguese ] = "Impossνvel ler o ficheiro grαfico." ;
     Text [ finnish ] = "Grafiikkatiedostoa ei voi lukea." ;
     Text [ danish ] = "Det er ikke muligt at lζse grafikfilen" ;
-    Text [ french ] = "Lecture du fichier graphique impossible" ;
+    Text [ french ] = "Impossible de lire le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte lδsas" ;
     Text [ dutch ] = "Grafisch bestand is onleesbaar" ;
     Text [ spanish ] = "No es posible leer el archivo grαfico" ;
@@ -148,7 +148,7 @@ String STR_GRFILTER_IOERROR
     Text[ dutch ] = "Grafisch bestand is onleesbaar";
     Text[ chinese_simplified ] = "ζ— ζ³•θ―»ε–ε›Ύε½Άζ–‡δ»¶";
     Text[ greek ] = "Δεν είναι δυνατή η ανάγνωση του αρχείου γραφικών";
-    Text[ korean ] = "κ·Έλν”½ νμΌμ„ μ½μ„ μ μ—†μµλ‹λ‹¤.";
+    Text[ korean ] = "κ·Έλ¦Ό νμΌμ„ μ½μ„ μ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Grafik dosyasύ okunamύyor";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No es pot llegir el fitxer de grΰfics";
@@ -178,7 +178,7 @@ String STR_GRFILTER_FORMATERROR
     Text[ dutch ] = "Onbekende grafische-bestandsindeling";
     Text[ chinese_simplified ] = "δΈζη„ε›Ύε½Άζ ΌεΌ";
     Text[ greek ] = "Άγνωστη μορφή γραφικών";
-    Text[ korean ] = "μ•λ ¤μ Έγ€€μμ§€γ€€μ•μ€ κ·Έλν”½ μ„μ‹";
+    Text[ korean ] = "μ• μ μ—†λ” κ·Έλ¦Ό μ„μ‹";
     Text[ turkish ] = "Bilinmeyen grafik formatύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Format d'imatge desconegut";
@@ -298,7 +298,7 @@ String STR_INSERT_GRAPHIC
     Text[ dutch ] = "Afbeelding invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥ε›Ύε½Ά";
     Text[ greek ] = "Προσθήκη γραφικού";
-    Text[ korean ] = "κ·Έλν”½ μ‚½μ…";
+    Text[ korean ] = "κ·Έλ¦Ό μ‚½μ…";
     Text[ turkish ] = "Grafik ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insereix un grΰfic";
@@ -430,7 +430,7 @@ String STR_REDLINE_DELETED
     Text [ swedish ] = "Radering" ;
     Text [ danish ] = "Sletning" ;
     Text [ italian ] = "Elimina" ;
-    Text [ spanish ] = "Eliminaciσn" ;
+    Text [ spanish ] = "Borrar" ;
     Text [ french ] = "Suppression" ;
     Text [ dutch ] = "Gewist" ;
     Text [ portuguese ] = "Eliminado" ;
@@ -461,7 +461,7 @@ String STR_REDLINE_AUTOFMT
     TEXT[ french ] = "AutoFormat";
     TEXT[ swedish ] = "Autoformat";
     TEXT[ dutch ] = "AutoOpmaak";
-    TEXT[ spanish ] = "AutoFormato";
+    TEXT[ spanish ] = "Formateado automαtico";
     TEXT[ english_us ] = "AutoFormat";
     TEXT[ chinese_simplified ] = "θ‡ªε¨ζ ΌεΌ";
     TEXT[ russian ] = "ΐβςξτξπμΰς";
@@ -489,7 +489,7 @@ String STR_REDLINE_FORMATED
     Text [ danish ] = "Formateret" ;
     Text [ italian ] = "Attribuzione" ;
     Text [ spanish ] = "Formateado" ;
-    Text [ french ] = "Mise en forme" ;
+    Text [ french ] = "Formatage" ;
     Text [ dutch ] = "Opmaak" ;
     Text [ portuguese ] = "Formatado" ;
     Text[ chinese_simplified ] = "ε±ζ€§";
@@ -522,7 +522,7 @@ String STR_REDLINE_TABLECHG
     Text [ dutch ] = "Tabelwijziging" ;
     Text [ portuguese ] = "Tabela modificada" ;
     Text[ chinese_simplified ] = "δΏ®ζ”Ήθ΅¨ζ Ό";
-    Text[ russian ] = "Θημενενθÿ ςΰαλθφϋ";
+    Text[ russian ] = "Πεδΰκςθπξβΰνθε ςΰαλθφϋ";
     Text[ polish ] = "Zmiany w tabelach";
     Text[ japanese ] = "γƒ†γƒΌγƒ–γƒ«γ®ε¤‰ζ›΄";
     Text[ chinese_traditional ] = "δΏ®ζ”Ήθ΅¨ζ Ό";
@@ -530,7 +530,7 @@ String STR_REDLINE_TABLECHG
     Text[ dutch ] = "Tabelwijziging";
     Text[ chinese_simplified ] = "δΏ®ζ”Ήθ΅¨ζ Ό";
     Text[ greek ] = "Τροποποίηση πίνακα";
-    Text[ korean ] = "ν‘κ°€ λ³€κ²½λμ—μµλ‹λ‹¤.";
+    Text[ korean ] = "ν‘ λ³€κ²½ μ‚¬ν•­";
     Text[ turkish ] = "Tablo deπiώikliπi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Canvis a la taula";
@@ -577,7 +577,7 @@ String STR_REDLINE_TITLE
     Text[ french ] = "AutoFormat";
     Text[ swedish ] = "Autoformat";
     Text[ dutch ] = "AutoOpmaak";
-    Text[ spanish ] = "AutoFormato";
+    Text[ spanish ] = "Formateado automαtico";
     Text[ english_us ] = "AutoFormat";
     Text[ chinese_simplified ] = "θ‡ªε¨ζ ΌεΌ";
     Text[ russian ] = "ΐβςξτξπμΰς";
@@ -606,7 +606,7 @@ String STR_REDLINE_MSG
     Text[ french ] = "L'AutoFormat a terminι.\nVous pouvez choisir d'en accepter ou rejeter en une seule fois toutes les modifications, ou\n de vous faire afficher toutes les modifications pour les revoir.";
     Text[ swedish ] = "Autoformatet δr fδrdigt.\nDu kan acceptera eller avbφja alla δndringar\neller acceptera eller avbφja δndringar en och en.";
     Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
-    Text[ spanish ] = "El AutoFormato ha concluido.\nAhora puede aceptar o rechazar todos los cambios\na la vez o uno por uno.";
+    Text[ spanish ] = "El Formateado automαtico ha concluido.\nAhora puede aceptar o rechazar todas las modificaciones,\na la vez o una por una.";
     Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
     Text[ chinese_simplified ] = "ε·²η»ε®ζθ‡ªε¨ζ ΌεΌγ€‚\nζ‚¨η°ε¨θƒ½ε¤ζ¥ε—ζ–ζ‹’η»ζ‰€ζ‰η„ζ›΄ζ”ΉοΌζ–θ€…\nζ¥ε—ζ–ζ‹’η»ε•δΈªζ›΄ζ”Ήγ€‚";
     Text[ russian ] = "ΐβςξτξπμΰςθπξβΰνθε ηΰκξνχενξ.\nΡειχΰρ βϋ μξζεςε οπθνÿςό θλθ ξςκλξνθςό ρπΰησ βρε θημενενθÿ, θλθ κΰζδξε οξ ξςδελόνξρςθ.";
@@ -646,7 +646,7 @@ String STR_REDLINE_ACCEPT_ALL
     Text[ dutch ] = "~Alles accepteren";
     Text[ chinese_simplified ] = "ε…¨ιƒ¨ζ¥ε—";
     Text[ greek ] = "Αποδοχή όλων";
-    Text[ korean ] = "λª¨λ‘ μ μ©";
+    Text[ korean ] = "λª¨λ‘ λ™μ";
     Text[ turkish ] = "Tόmόnό kabul et";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Accepta-ho tot";
@@ -675,7 +675,7 @@ String STR_REDLINE_REJECT_ALL
     Text[ dutch ] = "~Alles verwerpen";
     Text[ chinese_simplified ] = "ε…¨ιƒ¨ζ‹’η»";
     Text[ greek ] = "Απόρριψη όλων";
-    Text[ korean ] = "λª¨λ‘ μ·¨μ†";
+    Text[ korean ] = "λª¨λ‘ κ±°λ¶€";
     Text[ turkish ] = "Tόmόnό reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rebutja'ls tots";
@@ -690,7 +690,7 @@ String STR_REDLINE_EDIT
     Text[ portuguese_brazilian ] = "Review ~Changes";
     Text[ portuguese ] = "Editar ~modificaηυes";
     Text[ danish ] = "Rediger ζndringer";
-    Text[ french ] = "~Revoir les modifications";
+    Text[ french ] = "Ι~diter les modifications";
     Text[ swedish ] = "Redigera ~δndringar";
     Text[ dutch ] = "Wijzigingen ~bewerken";
     Text[ spanish ] = "Editar ~modificaciones";
@@ -735,7 +735,7 @@ QueryBox DLG_IMPORT_DBNAME
     Message[ dutch ] = "Moet de databasenaam als standaarddatabase voor het document worden overgenomen?";
     Message[ chinese_simplified ] = "θ¦θ®©ζ–‡δ»¶ι‡‡η”¨ι»θ®¤η„ζ•°ζ®εΊ“εη§°οΌ";
     Message[ greek ] = "Θέλετε να χρησιμοποιηθεί το όνομα της βάσης δεδομένων ως βάση δεδομένων προεπιλογής για το έγγραφο;";
-    Message[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ μ΄λ¦„μ„ λ¬Έμ„μ κΈ°λ³Έ λ°μ΄ν„°λ² μ΄μ¤λ΅ μ‚¬μ©ν•κ² μµλ‹κΉ?";
+    Message[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ μ΄λ¦„μ„ λ¬Έμ„μ κΈ°λ³Έ λ°μ΄ν„°λ² μ΄μ¤λ΅ μ‚¬μ©ν•μ‹κ² μµλ‹κΉ?";
     Message[ turkish ] = "Veritabanύ adύ, belge iηin standart veritabanύ olarak kullanύlsύn mύ?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Voleu utilitzar el nom de la base de dades com a base de dades per defecte per al document?";
@@ -824,6 +824,30 @@ ToolBox RID_TEXT_TOOLBOX
         MN_TEXT1(TRUE)
         MN_TEXT1_BLOCK
         MN_TEXT_LTR_RTL
+        MN_TEXT_LINESPACE
+        MN_TEXT2
+        MN_TEXT_BACKGROUND
+        MN_TEXT_DIALOGS(TRUE)
+    };
+    ItemList[arabic] =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        MN_TEXT1_RTL(TRUE)
+        MN_TEXT1_BLOCK
+        MN_TEXT_RTL_LTR
+        MN_TEXT_LINESPACE
+        MN_TEXT2
+        MN_TEXT_BACKGROUND
+        MN_TEXT_DIALOGS(TRUE)
+    };
+    ItemList[hebrew] =
+    {
+        MN_TEMPLATE
+        MN_FONT
+        MN_TEXT1_RTL(TRUE)
+        MN_TEXT1_BLOCK
+        MN_TEXT_RTL_LTR
         MN_TEXT_LINESPACE
         MN_TEXT2
         MN_TEXT_BACKGROUND
@@ -1124,7 +1148,7 @@ String RID_GRAFIK_TOOLBOX
     Text[ dutch ] = "Objectbalk afbeeldingen";
     Text[ chinese_simplified ] = "ε›Ύε½Άε―Ήθ±΅ζ ";
     Text[ greek ] = "Γραμμή γραφικών αντικειμένων";
-    Text[ korean ] = "κ·Έλν”½ κ°μ²΄ λª¨μ";
+    Text[ korean ] = "κ·Έλ¦Ό κ°μ²΄ λª¨μ";
     Text[ turkish ] = "Grafik nesne ηubuπu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes grΰfics";
@@ -1740,26 +1764,26 @@ String RID_DRAW_TEXT_TOOLBOX
 {
     Text = "Textobjektleiste/Grafik" ;
     Text [ norwegian ] = "Tegne tekstmodus" ;
-    Text [ italian ] = "Barra degli oggetti di testo" ;
+    Text [ italian ] = "Barra degli oggetti di testo/immagini" ;
     Text [ portuguese_brazilian ] = "Modo desenhar texto" ;
     Text [ portuguese ] = "Barra de objectos de texto" ;
     Text [ finnish ] = "Tekstin muotoilurivi" ;
     Text [ danish ] = "Tekstobjektlinje" ;
-    Text [ french ] = "Barre d'objets de texte" ;
-    Text [ swedish ] = "Textobjektlist" ;
+    Text [ french ] = "Barre d'objets de texte/Image" ;
+    Text [ swedish ] = "Textobjektlist/grafik" ;
     Text [ dutch ] = "Tekstobjectbalk" ;
-    Text [ spanish ] = "Barra de objetos de texto" ;
+    Text [ spanish ] = "Barra de objetos de texto/imαgenes" ;
     Text [ english_us ] = "Text Object Bar/Graphics" ;
-    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ ";
+    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ /ε›Ύε½Ά";
     Text[ russian ] = "Κξνςεκρςνΰÿ οΰνελό ςεκρςΰ";
     Text[ polish ] = "Pasek obiektσw tekstowych";
-    Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ";
-    Text[ chinese_traditional ] = "ζ–‡ε­—η‰©δ»¶ε—";
+    Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ/ε›³";
+    Text[ chinese_traditional ] = "ζ–‡ε­—η‰©δ»¶ε—/ε–ε½Ά";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ ΗαδΥ";
     Text[ dutch ] = "Tekstobjectbalk";
-    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ ";
+    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ /ε›Ύε½Ά";
     Text[ greek ] = "Γραμμή αντικειμένων κειμένου";
-    Text[ korean ] = "ν…μ¤νΈ κ°μ²΄ λª¨μ";
+    Text[ korean ] = "ν…μ¤νΈ κ°μ²΄ λª¨μ/κ·Έλ¦Ό";
     Text[ turkish ] = "Metin nesne ηubuπu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra d'objectes de text";
@@ -1796,6 +1820,72 @@ ToolBox RID_DRAW_TEXT_TOOLBOX
             Hide = TRUE;
         };
         MN_TEXT_LTR_RTL
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+
+        MN_TEXT_DIALOGS(FALSE)
+    };
+    ItemList[arabic] =
+    {
+        MN_FONT
+        MN_TEXT1_RTL(FALSE)
+        MN_TEXT1_BLOCK
+        MN_TEXT_LINESPACE
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+            Hide = TRUE;
+        };
+        MN_TEXT_RTL_LTR
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+            HelpID = SID_TEXTDIRECTION_LEFT_TO_RIGHT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+            HelpID = SID_TEXTDIRECTION_TOP_TO_BOTTOM ;
+        };
+
+        MN_TEXT_DIALOGS(FALSE)
+    };
+    ItemList[hebrew] =
+    {
+        MN_FONT
+        MN_TEXT1_RTL(FALSE)
+        MN_TEXT1_BLOCK
+        MN_TEXT_LINESPACE
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_CHAR_COLOR
+            Hide = TRUE;
+        };
+        MN_TEXT_RTL_LTR
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
@@ -1993,7 +2083,7 @@ String STR_SHELLNAME_TABLE
     Text[ dutch ] = "Tabel";
     Text[ chinese_simplified ] = "θ΅¨ζ Ό";
     Text[ greek ] = "Πίνακας";
-    Text[ korean ] = "μ‹νΈ";
+    Text[ korean ] = "ν‘";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taula";
@@ -2051,7 +2141,7 @@ String STR_SHELLNAME_GRAPHIC
     Text[ dutch ] = "Afbeelding";
     Text[ chinese_simplified ] = "ε›Ύε½Ά";
     Text[ greek ] = "Γραφικό";
-    Text[ korean ] = "κ·Έλν”½";
+    Text[ korean ] = "κ·Έλ¦Ό";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Grΰfic";
@@ -2209,7 +2299,7 @@ String STR_SHELLNAME_DRAW_TEXT
     Text [ ENGLISH ] = "Draw text" ;
     Text [ english_us ] = "Draw text" ;
     Text [ italian ] = "Testo di disegno" ;
-    Text [ spanish ] = "Texto de diseρo" ;
+    Text [ spanish ] = "Texto de dibujo" ;
     Text [ french ] = "Texte dessinι" ;
     Text [ dutch ] = "Tekentekst" ;
     Text [ swedish ] = "Teckningstext" ;
@@ -2284,7 +2374,7 @@ String STR_SWBG_GRAPHIC
     Text[ dutch ] = "Afbeelding";
     Text[ chinese_simplified ] = "ε›Ύε½Ά";
     Text[ greek ] = "Γραφικό";
-    Text[ korean ] = "κ·Έλν”½";
+    Text[ korean ] = "κ·Έλ¦Ό";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Grΰfics";
@@ -2371,7 +2461,7 @@ String STR_SWBG_TABLE
     Text[ dutch ] = "Tabel";
     Text[ chinese_simplified ] = "θ΅¨ζ Ό";
     Text[ greek ] = "Πίνακας";
-    Text[ korean ] = "μ‹νΈ";
+    Text[ korean ] = "ν‘";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Taula";
@@ -2574,6 +2664,11 @@ String STR_NAME_GROUP_DIALOG
     Text[ catalan ] = "Anomena l'objecte";
     Text[ thai ] = "ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈΰΈΰΈ·ΰΉΰΈ­";
 };
+
+
+
+
+
 
 
 

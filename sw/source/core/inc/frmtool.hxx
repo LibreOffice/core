@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: od $ $Date: 2002-10-11 11:05:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,19 @@ class SwCrsrShell;
 #define GRFNUM_REPLACE 2
 
 //Painten des Hintergrunds. Mit Brush oder Graphic.
-/// OD 05.08.2002 #99657# - add 6th parameter to indicate that method should
-///     consider background transparency, saved in the color of the brush item
+// OD 05.08.2002 #99657# - add 6th parameter to indicate that method should
+//     consider background transparency, saved in the color of the brush item
 void MA_FASTCALL DrawGraphic( const SvxBrushItem *, OutputDevice *,
       const SwRect &rOrg, const SwRect &rOut, const BYTE nGrfNum = GRFNUM_NO,
       const sal_Bool bConsiderBackgroundTransparency = sal_False );
+
+// OD 24.01.2003 #106593# - method to align rectangle
+// Created declaration here to avoid <extern> declarations
+void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
+
+// OD 24.01.2003 #106593# - method to align graphic rectangle
+// Created declaration here to avoid <extern> declarations
+void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
 //Fly besorgen, wenn keine List hineingereicht wird, wir die der aktuellen
 //Shell benutzt.
@@ -239,6 +247,8 @@ public:
 //!!!Achtung: Wenn weitere Attribute gecached werden muss unbedingt die
 //Methode Modify::Modify mitgepflegt werden!!!
 
+// OD 23.01.2003 #106895# - delete old method <SwBorderAttrs::CalcRight()> and
+// the stuff that belongs to it.
 class SwBorderAttrs : public SwCacheObj
 {
     const SwAttrSet      &rAttrSet;
@@ -247,7 +257,6 @@ class SwBorderAttrs : public SwCacheObj
     const SvxBoxItem     &rBox;
     const SvxShadowItem  &rShadow;
     const Size            aFrmSize;     //Die FrmSize
-    long nRight;
 
     BOOL bBorderDist    :1;             //Ist's ein Frm der auch ohne Linie
                                         //einen Abstand haben kann?
@@ -260,7 +269,6 @@ class SwBorderAttrs : public SwCacheObj
     BOOL bRightLine     :1;
     BOOL bTop           :1;
     BOOL bBottom        :1;
-    BOOL bRight         :1;
     BOOL bLine          :1;
 
     BOOL bIsLine        :1; //Umrandung an mind. einer Kante?
@@ -288,7 +296,6 @@ class SwBorderAttrs : public SwCacheObj
     //Lines + Shadow + Abstaende
     void _CalcTop();
     void _CalcBottom();
-    void _CalcRight();
 
     void _IsLine();
 
@@ -318,10 +325,7 @@ public:
     inline USHORT CalcTop() const;
     inline USHORT CalcBottom() const;
            long CalcLeft( const SwFrm *pCaller ) const;
-#ifdef BIDI
-           long CalcRight( const SwFrm *pCaller );
-#endif
-    inline long CalcRight() const;
+           long CalcRight( const SwFrm *pCaller ) const;
 
     inline BOOL IsLine() const;
 
@@ -446,12 +450,6 @@ inline USHORT SwBorderAttrs::CalcBottom() const
     if ( bBottom )
         ((SwBorderAttrs*)this)->_CalcBottom();
     return nBottom;
-}
-inline long SwBorderAttrs::CalcRight() const
-{
-    if ( bRight )
-        ((SwBorderAttrs*)this)->_CalcRight();
-    return nRight;
 }
 inline BOOL SwBorderAttrs::IsLine() const
 {

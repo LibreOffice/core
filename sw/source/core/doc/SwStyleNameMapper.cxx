@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-06-05 14:48:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,3 +1116,57 @@ const SvStringsDtor& SwStyleNameMapper::GetNumRuleProgNameArray()
            *NewProgNameArray( pNumRuleProgNameArray, NumRuleProgNameTable,
             sizeof ( NumRuleProgNameTable ) / sizeof ( SwTableEntry ) );
 }
+
+
+const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIName )
+{
+    String aRes = rExtraUIName;
+    BOOL bChgName = FALSE;
+    const SvStringsDtor& rExtraArr = GetExtraUINameArray();
+    static sal_uInt16 nIds[] =
+    {
+        RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
+        RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
+        RES_POOLCOLL_LABEL_TABLE - RES_POOLCOLL_EXTRA_BEGIN,
+        RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
+        0
+    };
+    for (const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
+    {
+        if (aRes == *rExtraArr[ *pIds ])
+        {
+            bChgName = TRUE;
+            break;
+        }
+    }
+    if (bChgName)
+        aRes = *GetExtraProgNameArray()[*pIds];
+    return aRes;
+}
+
+const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgName )
+{
+    String aRes = rExtraProgName;
+    BOOL bChgName = FALSE;
+    const SvStringsDtor& rExtraArr = GetExtraProgNameArray();
+    static sal_uInt16 nIds[] =
+    {
+        RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
+        RES_POOLCOLL_LABEL_ABB - RES_POOLCOLL_EXTRA_BEGIN,
+        RES_POOLCOLL_LABEL_TABLE - RES_POOLCOLL_EXTRA_BEGIN,
+        RES_POOLCOLL_LABEL_FRAME- RES_POOLCOLL_EXTRA_BEGIN,
+        0
+    };
+    for (const sal_uInt16 * pIds = nIds; *pIds; ++pIds)
+    {
+        if (aRes == *rExtraArr[ *pIds ])
+        {
+            bChgName = TRUE;
+            break;
+        }
+    }
+    if (bChgName)
+        aRes = *GetExtraUINameArray()[*pIds];
+    return aRes;
+}
+

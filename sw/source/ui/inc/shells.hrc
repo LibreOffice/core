@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:33:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,9 @@
 #define STR_NAME_GROUP_LABEL        (RC_SHELLS_BEGIN + 58)
 #define STR_NAME_GROUP_DIALOG       (RC_SHELLS_BEGIN + 59)
 
-#define SHELLS_ACT_END              STR_NAME_GROUP_DIALOG
+#define RID_MODULE_TOOLBOX          (RC_SHELLS_BEGIN + 60)
+
+#define SHELLS_ACT_END              RID_MODULE_TOOLBOX
 
 #if SHELLS_ACT_END > RC_SHELLS_END
 #error Resource-Id Ueberlauf in #file, #line

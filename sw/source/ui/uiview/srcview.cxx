@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 10:08:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,11 +587,11 @@ void SwSrcView::Execute(SfxRequest& rReq)
             }
             if(pMed)
             {
-                SvStream* pInStream = pMed->GetInStream();
-                pInStream->Seek(0);
-                pInStream->SetStreamSize(0);
-                aEditWin.Write( *pInStream );
-                pMed->CloseInStream();
+                SvStream* pOutStream = pMed->GetOutStream();
+                pOutStream->Seek(0);
+                pOutStream->SetStreamSize(0);
+                aEditWin.Write( *pOutStream );
+                pMed->CloseOutStream();
                 pMed->Commit();
                 pDocShell->GetDoc()->ResetModified();
                 SourceSaved();
@@ -739,6 +739,11 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 }
             }
             break;
+            case SID_MAIL_SENDDOCASPDF:
+            case SID_MAIL_SENDDOC :
+            case SID_EXPORTDOCASPDF:
+            case SID_DIRECTEXPORTDOCASPDF:
+            case SID_EXPORTDOC:
             case SID_REPEAT:
                 rSet.DisableItem(nWhich);
             break;
@@ -762,7 +767,6 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     rSet.DisableItem(nWhich);
             }
             break;
-
         }
         nWhich = aIter.NextWhich();
     }
@@ -1041,14 +1045,8 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         rtl_getBestMimeCharsetFromTextEncoding( pHtmlOptions->GetTextEncoding() );
     rtl_TextEncoding eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
-    rtl_TextEncoding eHeaderEnc = SfxHTMLParser::GetEncodingByHttpHeader(
-                                            pDocShell->GetHeaderAttributes() );
-    if( RTL_TEXTENCODING_DONTKNOW != eHeaderEnc )
-        eDestEnc = eHeaderEnc;
-    eLoadEncoding = eDestEnc;
-
     aEditWin.SetReadonly(pDocShell->IsReadOnly());
-    aEditWin.SetTextEncoding(eLoadEncoding);
+    aEditWin.SetTextEncoding(eDestEnc);
     SfxMedium* pMedium = pDocShell->GetMedium();
 
     const SfxFilter* pFilter = pMedium->GetFilter();
@@ -1059,6 +1057,15 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         SvStream* pStream = pMedium->GetInStream();
         if(pStream && 0 == pStream->GetError() )
         {
+            rtl_TextEncoding eHeaderEnc =
+                SfxHTMLParser::GetEncodingByHttpHeader(
+                                            pDocShell->GetHeaderAttributes() );
+            if( RTL_TEXTENCODING_DONTKNOW != eHeaderEnc &&
+                 eDestEnc != eHeaderEnc )
+            {
+                eDestEnc = eHeaderEnc;
+                aEditWin.SetTextEncoding(eDestEnc);
+            }
             pStream->SetStreamCharSet( eDestEnc );
             pStream->Seek(0);
             TextEngine* pTextEngine = aEditWin.GetTextEngine();
@@ -1111,6 +1118,8 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         }
     }
     aEditWin.ClearModifyFlag();
+
+    eLoadEncoding = eDestEnc;
 
     if(bDocModified)
         pDocShell->SetModified();// das Flag wird zwischendurch zurueckgesetzt

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mib $ $Date: 2002-09-27 11:44:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,10 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-
+// OD 15.01.2003 #103492#
+#ifndef _PAGEPREVIEWLAYOUT_HXX
+#include <pagepreviewlayout.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -1084,26 +1087,22 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView( )
     return _GetDocumentView( sal_False );
 }
 
+// OD 14.01.2003 #103492# - complete re-factoring of method due to new page/print
+// preview functionality.
 Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
-    sal_uInt8 nRow,
-    sal_uInt8 nColumn,
-    sal_Int16 nStartPage,
-    const Size& rPageSize,
-    const Point& rFreePoint,
-    const Fraction& rScale,
-    sal_uInt16 nSelectedPage )
+                                    const std::vector<PrevwPage*>& _rPrevwPages,
+                                    const Fraction&  _rScale,
+                                    const SwPageFrm* _pSelectedPageFrm,
+                                    const Size&      _rPrevwWinSize )
 {
     // create & update preview data object
     if( mpPreview == NULL )
         mpPreview = new SwAccPreviewData();
-    mpPreview->Update( nRow, nColumn, nStartPage,
-                       rPageSize, rFreePoint, rScale, GetShell(),
-                       nSelectedPage );
+    mpPreview->Update( _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
 
     Reference<XAccessible> xAcc = _GetDocumentView( sal_True );
     return xAcc;
 }
-
 
 Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                                                      sal_Bool bCreate )
@@ -1836,19 +1835,18 @@ void SwAccessibleMap::InvalidateRelationSet( const SwFrm* pMaster,
     _InvalidateRelationSet( pFollow, sal_True );
 }
 
-void SwAccessibleMap::UpdatePreview( sal_uInt8 nRow, sal_uInt8 nColumn,
-                                     sal_Int16 nStartPage,
-                                     const Size& rPageSize,
-                                     const Point& rFreePoint,
-                                     const Fraction& rScale,
-                                       sal_uInt16 nSelectedPage )
+// OD 15.01.2003 #103492# - complete re-factoring of method due to new page/print
+// preview functionality.
+void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages,
+                                     const Fraction&  _rScale,
+                                     const SwPageFrm* _pSelectedPageFrm,
+                                     const Size&      _rPrevwWinSize )
 {
     DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
     DBG_ASSERT( mpPreview != NULL, "no preview data?" );
 
-    mpPreview->Update( nRow, nColumn, nStartPage,
-                       rPageSize, rFreePoint, rScale, GetShell(),
-                       nSelectedPage );
+    // OD 15.01.2003 #103492# - adjustments for changed method signature
+    mpPreview->Update( _rPrevwPages, _rScale, _pSelectedPageFrm, _rPrevwWinSize );
 
     // propagate change of VisArea through the document's
     // accessibility tree; this will also send appropriate scroll
@@ -1885,7 +1883,8 @@ void SwAccessibleMap::InvalidatePreViewSelection( sal_uInt16 nSelPage )
     DBG_ASSERT( GetShell()->IsPreView(), "no preview?" );
     DBG_ASSERT( mpPreview != NULL, "no preview data?" );
 
-    mpPreview->InvalidateSelection( nSelPage );
+    // OD 16.01.2003 #103492# - changed metthod call due to method signature change.
+    mpPreview->InvalidateSelection( GetShell()->GetLayout()->GetPageByPageNum( nSelPage ) );
 
     Reference < XAccessible > xOldAcc;
     Reference < XAccessible > xAcc;
@@ -1974,7 +1973,10 @@ Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
     Window *pWin = GetShell()->GetWin();
     if( pWin )
     {
-        aPoint = pWin->LogicToPixel( aPoint );
+        // OD 16.01.2003 #103492# - get mapping mode for LogicToPixel conversion
+        MapMode aMapMode;
+        GetMapMode( aPoint, aMapMode );
+        aPoint = pWin->LogicToPixel( aPoint, aMapMode );
         aPoint = pWin->OutputToAbsoluteScreenPixel( aPoint );
     }
 
@@ -1988,7 +1990,10 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
     Size aSize( OutputDevice::LogicToLogic( rSize, aSrc, aDest ) );
     if( GetShell()->GetWin() )
     {
-        aSize = GetShell()->GetWin()->LogicToPixel( aSize );
+        // OD 16.01.2003 #103492# - get mapping mode for LogicToPixel conversion
+        MapMode aMapMode;
+        GetMapMode( Point(0,0), aMapMode );
+        aSize = GetShell()->GetWin()->LogicToPixel( aSize, aMapMode );
     }
 
     return aSize;
@@ -2001,7 +2006,10 @@ Point SwAccessibleMap::PixelToLogic( const Point& rPoint ) const
     if( pWin )
     {
         aPoint = pWin->ScreenToOutputPixel( rPoint );
-        aPoint = pWin->PixelToLogic( aPoint );
+        // OD 16.01.2003 #103492# - get mapping mode for PixelToLogic conversion
+        MapMode aMapMode;
+        GetMapMode( aPoint, aMapMode );
+        aPoint = pWin->PixelToLogic( aPoint, aMapMode );
         MapMode aSrc( MAP_TWIP );
         MapMode aDest( MAP_100TH_MM );
         aPoint = OutputDevice::LogicToLogic( aPoint, aSrc, aDest );
@@ -2015,7 +2023,10 @@ Size SwAccessibleMap::PixelToLogic( const Size& rSize ) const
     Size aSize;
     if( GetShell()->GetWin() )
     {
-        aSize = GetShell()->GetWin()->PixelToLogic( rSize );
+        // OD 16.01.2003 #103492# - get mapping mode for PixelToLogic conversion
+        MapMode aMapMode;
+        GetMapMode( Point(0,0), aMapMode );
+        aSize = GetShell()->GetWin()->PixelToLogic( rSize, aMapMode );
         MapMode aSrc( MAP_TWIP );
         MapMode aDest( MAP_100TH_MM );
         aSize = OutputDevice::LogicToLogic( aSize, aSrc, aDest );
@@ -2102,24 +2113,15 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     return sal_True;
 }
 
-Point SwAccessibleMap::CoreToPixel( const Point& rPoint ) const
-{
-    Point aPoint;
-    if( GetShell()->GetWin() )
-    {
-        PreviewAdjust( rPoint, sal_False );
-        aPoint = GetShell()->GetWin()->LogicToPixel( rPoint );
-    }
-    return aPoint;
-}
-
 Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
 {
     Point aPoint;
     if( GetShell()->GetWin() )
     {
-        PreviewAdjust( rPoint, sal_True );
-        aPoint = GetShell()->GetWin()->PixelToLogic( rPoint );
+        // OD 15.01.2003 #103492# - replace <PreviewAdjust(..)> by <GetMapMode(..)>
+        MapMode aMapMode;
+        GetMapMode( rPoint, aMapMode );
+        aPoint = GetShell()->GetWin()->PixelToLogic( rPoint, aMapMode );
     }
     return aPoint;
 }
@@ -2162,10 +2164,12 @@ Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
     Rectangle aRect;
     if( GetShell()->GetWin() )
     {
-        PreviewAdjust( rRect.TopLeft(), sal_False );
-        aRect = GetShell()->GetWin()->LogicToPixel( rRect );
+        // OD 15.01.2003 #103492# - replace <PreviewAdjust(..)> by <GetMapMode(..)>
+        MapMode aMapMode;
+        GetMapMode( rRect.TopLeft(), aMapMode );
+        aRect = GetShell()->GetWin()->LogicToPixel( rRect, aMapMode );
 
-        Rectangle aTmpRect = GetShell()->GetWin()->PixelToLogic( aRect );
+        Rectangle aTmpRect = GetShell()->GetWin()->PixelToLogic( aRect, aMapMode );
         lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
 
@@ -2177,38 +2181,69 @@ Rectangle SwAccessibleMap::PixelToCore( const Rectangle& rRect ) const
     Rectangle aRect;
     if( GetShell()->GetWin() )
     {
-        PreviewAdjust( rRect.TopLeft(), sal_True );
-        aRect = GetShell()->GetWin()->PixelToLogic( rRect );
+        // OD 15.01.2003 #103492# - replace <PreviewAdjust(..)> by <GetMapMode(..)>
+        MapMode aMapMode;
+        GetMapMode( rRect.TopLeft(), aMapMode );
+        aRect = GetShell()->GetWin()->PixelToLogic( rRect, aMapMode );
 
-        Rectangle aTmpRect = GetShell()->GetWin()->LogicToPixel( aRect );
+        Rectangle aTmpRect = GetShell()->GetWin()->LogicToPixel( aRect, aMapMode );
         lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
     return aRect;
 }
 
-inline void SwAccessibleMap::PreviewAdjust( const Point& rPoint,
-                                            sal_Bool bFromPreview ) const
+/** get mapping mode for LogicToPixel and PixelToLogic conversions
+
+    OD 15.01.2003 #103492#
+    Replacement method <PreviewAdjust(..)> by new method <GetMapMode>.
+    Method returns mapping mode of current output device and adjusts it,
+    if the shell is in page/print preview.
+    Necessary, because <PreviewAdjust(..)> changes mapping mode at current
+    output device for mapping logic document positions to page preview window
+    positions and vice versa and doesn't take care to recover its changes.
+
+    @author OD
+*/
+void SwAccessibleMap::GetMapMode( const Point& _rPoint,
+                                  MapMode&     _orMapMode ) const
 {
+    MapMode aMapMode = GetShell()->GetWin()->GetMapMode();
     if( GetShell()->IsPreView() )
     {
         DBG_ASSERT( mpPreview != NULL, "need preview data" );
 
-        Window* pWin = GetShell()->GetWin();
-        MapMode aMode = pWin->GetMapMode();
-        mpPreview->AdjustMapMode( aMode, rPoint, sal_True );
-        pWin->SetMapMode( aMode );
+        mpPreview->AdjustMapMode( aMapMode, _rPoint );
     }
+    _orMapMode = aMapMode;
 }
 
+/** get size of a dedicated preview page
+
+    OD 15.01.2003 #103492#
+
+    @author OD
+*/
+Size SwAccessibleMap::GetPreViewPageSize( sal_uInt16 _nPrevwPageNum ) const
+{
+    DBG_ASSERT( mpVSh->IsPreView(), "no page preview accessible." );
+    DBG_ASSERT( mpVSh->IsPreView() && ( mpPreview != NULL ),
+                "missing accessible preview data at page preview" );
+    if ( mpVSh->IsPreView() && ( mpPreview != NULL ) )
+    {
+        return mpVSh->PagePreviewLayout()->GetPrevwPageSizeByPageNum( _nPrevwPageNum );
+    }
+    else
+    {
+        return Size( 0, 0 );
+    }
+}
 
 //
 // SwAccPreviewData
 //
 
 SwAccPreviewData::SwAccPreviewData() :
-    mpStartPage( 0 ),
-    mpSelPage( 0 ),
-    mnStartPage( 0 )
+    mpSelPage( 0 )
 {
 }
 
@@ -2216,139 +2251,61 @@ SwAccPreviewData::~SwAccPreviewData()
 {
 }
 
-void SwAccPreviewData::Update( sal_uInt8 nRow,
-                               sal_uInt8 nColumn,
-                               sal_uInt16 nStartPage,
-                               const Size& rPageSize,
-                               const Point& rFreePixel,
-                               const Fraction& rScale,
-                               ViewShell* pShell,
-                               sal_uInt16 nSelPage )
+// OD 13.01.2003 #103492# - complete re-factoring of method due to new page/print
+// preview functionality.
+void SwAccPreviewData::Update( const std::vector<PrevwPage*>& _rPrevwPages,
+                               const Fraction&  _rScale,
+                               const SwPageFrm* _pSelectedPageFrm,
+                               const Size&      _rPrevwWinSize )
 {
-    DBG_ASSERT( nRow > 0, "invalid row value" );
-    DBG_ASSERT( nColumn > 0, "invalid column value" );
-    DBG_ASSERT( nStartPage >= 0, "invalid start page" );
-    DBG_ASSERT( pShell != NULL, "need view shell" );
-    DBG_ASSERT( pShell->IsPreView(), "not inpreview?" );
+    // store preview scaling, maximal preview page size and selected page
+    maScale = _rScale;
+    mpSelPage = _pSelectedPageFrm;
 
-    // store the rScale (for AdjustMapMode; will be called from here, too)
-    maScale = rScale;
-    maPageSize = rPageSize;
+    // prepare loop on preview pages
+    maPreviewRects.clear();
+    maLogicRects.clear();
+    SwFrmOrObj aPage;
+    maVisArea.Clear();
 
-    // get first page frame from layout, and iterate to page nSttPage
-    SwRootFrm* pRoot = pShell->GetLayout();
-    DBG_ASSERT( pRoot != NULL, "No layout?" );
-
-    SwPageFrm* pPage = static_cast<SwPageFrm*>( pRoot->Lower() );
-    DBG_ASSERT( pPage != NULL, "No page?" );
-
-    // adjust for the first page (which is always a right page) if
-    // there is more than one column
-    sal_Bool bSkipFirstPage = (nStartPage == 0) && (nColumn != 1);
-
-    // get offset of selected page
-    mnStartPage = nStartPage;
-    nSelPage -= nStartPage;
-
-    // we'll count on nStartPage, so it should be zero-based
-    if( nStartPage > 0 )
-        nStartPage--;
-
-    // iterate until nStartPage is found
-    sal_Int32 nPage = 0;
-    while( (nStartPage > 0) && (pPage != NULL) )
+    // loop on preview pages to calculate <maPreviewRects>, <maLogicRects> and
+    // <maVisArea>
+    for ( std::vector<PrevwPage*>::const_iterator aPageIter = _rPrevwPages.begin();
+          aPageIter != _rPrevwPages.end();
+          ++aPageIter )
     {
-        pPage = static_cast<SwPageFrm*>( pPage->GetNext() );
-        nStartPage--;
+        aPage = (*aPageIter)->pPage;
 
-        // if pPage isn't valid, thethe parameter checking allowed an
-        // invalid index
-        DBG_ASSERT( pPage != NULL, "non-existing start page" );
-    }
+        // add preview page rectangle to <maPreviewRects>
+        Rectangle aPrevwPgRect( (*aPageIter)->aPrevwWinPos, (*aPageIter)->aPageSize );
+        maPreviewRects.push_back( aPrevwPgRect );
 
-    // iterate over pages and collect data
-    // 1) VisArea as union of visible pages
-    // 2) areas of visible pages for preview/logic mapping
-    mpStartPage = pPage;
-    mpSelPage = 0;
-    if( pPage != NULL )
-    {
-        // first page: use to initialize VisArea
-        SwFrmOrObj aPage( pPage );
-        maVisArea = aPage.GetBox();
-        maPreviewRects.clear();
-        maLogicRects.clear();
-
-        // compute free point
-        MapMode aMapMode( MAP_TWIP );
-        AdjustMapMode( aMapMode );
-        Point aFreePoint = pShell->GetWin()->PixelToLogic( rFreePixel,
-                                                           aMapMode );
-
-        // loop over col*row pages, and advance aCurrentPoint to start
-        // of this page's previeww
-        Point aCurrentPoint = aFreePoint;
-        for( sal_uInt8 nR = 0; (pPage != NULL) && (nR < nRow); nR++ )
+        // add logic page rectangle to <maLogicRects>
+        SwRect aLogicPgSwRect( aPage.GetBox() );
+        Rectangle aLogicPgRect( aLogicPgSwRect.SVRect() );
+        maLogicRects.push_back( aLogicPgRect );
+        // union visible area with visible part of logic page rectangle
+        if ( (*aPageIter)->bVisible )
         {
-            aCurrentPoint.X() = aFreePoint.X();
-
-            for( sal_uInt8 nC = 0; (pPage != NULL) && (nC < nColumn); nC++ )
+            if ( !(*aPageIter)->pPage->IsEmptyPage() )
             {
-                if( bSkipFirstPage )
-                {
-                    aCurrentPoint.X() += rPageSize.Width();
-                    bSkipFirstPage = sal_False;
-                    // DON'T proceed to next page!
-                }
-                else
-                {
-                    // collect data
-                    aPage = pPage;
-                    SwRect aSwRect = aPage.GetBox();
-                    maVisArea.Union( aSwRect );
-
-                    Rectangle aRect = aSwRect.SVRect();
-                    maLogicRects.push_back( aRect );
-                    aRect.SetPos( aCurrentPoint );
-                    maPreviewRects.push_back( aRect );
-
-                    aCurrentPoint.X() += pPage->IsEmptyPage()
-                                            ? rPageSize.Width()
-                                            : aSwRect.Width();
-                    if( 0 == nSelPage )
-                        mpSelPage = pPage;
-
-                    pPage = static_cast<SwPageFrm*>( pPage->GetNext() );
-                }
-                aCurrentPoint.X() += aFreePoint.X() +1;
-                nSelPage--;
+                AdjustLogicPgRectToVisibleArea( aLogicPgSwRect,
+                                                SwRect( aPrevwPgRect ),
+                                                _rPrevwWinSize );
             }
-            aCurrentPoint.Y() += rPageSize.Height() + 1 + aFreePoint.Y();
+            if ( maVisArea.IsEmpty() )
+                maVisArea = aLogicPgSwRect;
+            else
+                maVisArea.Union( aLogicPgSwRect );
         }
     }
 }
 
-void SwAccPreviewData::InvalidateSelection( sal_uInt16 nSelPage )
+// OD 16.01.2003 #103492# - complete re-factoring of method due to new page/print
+// preview functionality.
+void SwAccPreviewData::InvalidateSelection( const SwPageFrm* _pSelectedPageFrm )
 {
-    mpSelPage = 0;
-    nSelPage -= mnStartPage;
-    ASSERT( nSelPage >= 0, "invalid selected page" );
-    ASSERT( mpStartPage, "no start page" );
-    if( mpStartPage != NULL )
-    {
-        const SwPageFrm *pPage = mpStartPage;
-
-        // loop over col*row pages, and advance aCurrentPoint to start
-        // of this page's preview
-        while( mpSelPage == 0 && pPage != 0 )
-        {
-            if( 0 == nSelPage )
-                mpSelPage = pPage;
-
-            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-            nSelPage--;
-        }
-    }
+    mpSelPage = _pSelectedPageFrm;
     ASSERT( mpSelPage, "selected page not found" );
 }
 
@@ -2367,67 +2324,16 @@ const SwRect& SwAccPreviewData::GetVisArea() const
     return maVisArea;
 }
 
-Point SwAccPreviewData::PreviewToLogic(const Point& rPoint) const
-{
-    Rectangles::const_iterator aIter = find_if( maPreviewRects.begin(),
-                                                maPreviewRects.end(),
-                                                ContainsPredicate( rPoint ) );
-    if( aIter != maPreviewRects.end() )
-    {
-        Point aPoint = rPoint;
-        aPoint -= aIter->TopLeft();
-        aPoint += (maLogicRects.begin() + ( aIter - maPreviewRects.begin() ))
-                      ->TopLeft();
-        return aPoint;
-    }
-    else
-        return Point(0,0);
-}
-
-Point SwAccPreviewData::LogicToPreview(const Point& rPoint) const
-{
-    Rectangles::const_iterator aIter = find_if( maLogicRects.begin(),
-                                                maLogicRects.end(),
-                                                ContainsPredicate( rPoint ) );
-    if( aIter != maLogicRects.end() )
-    {
-        Point aPoint = rPoint;
-        aPoint -= aIter->TopLeft();
-        aPoint += (maPreviewRects.begin() + ( aIter - maLogicRects.begin() ))
-                      ->TopLeft();
-        return aPoint;
-    }
-    else
-        return Point(0,0);
-}
-
-void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode ) const
+void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
+                                      const Point& rPoint ) const
 {
     // adjust scale
     rMapMode.SetScaleX( maScale );
     rMapMode.SetScaleY( maScale );
-}
-
-void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
-{
-    if( mpStartPage == pPageFrm )
-        mpStartPage = 0;
-    if( mpSelPage == pPageFrm )
-        mpSelPage = 0;
-}
-
-
-void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
-                                      const Point& rPoint,
-                                      sal_Bool bFromPreview ) const
-{
-    // adjust scale
-    AdjustMapMode( rMapMode );
 
     // find proper rectangle
-    const Rectangles& rRects = bFromPreview ? maLogicRects : maPreviewRects;
-    Rectangles::const_iterator aBegin = rRects.begin();
-    Rectangles::const_iterator aEnd = rRects.end();
+    Rectangles::const_iterator aBegin = maLogicRects.begin();
+    Rectangles::const_iterator aEnd = maLogicRects.end();
     Rectangles::const_iterator aFound = find_if( aBegin, aEnd,
                                                  ContainsPredicate( rPoint ) );
 
@@ -2439,4 +2345,46 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
         rMapMode.SetOrigin( aPoint );
     }
     // else: don't adjust MapMode
+}
+
+void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
+{
+    if( mpSelPage == pPageFrm )
+        mpSelPage = 0;
+}
+
+/** adjust logic page retangle to its visible part
+
+    OD 17.01.2003 #103492#
+
+    @author OD
+*/
+void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
+                            SwRect&         _iorLogicPgSwRect,
+                            const SwRect&   _rPrevwPgSwRect,
+                            const Size&     _rPrevwWinSize )
+{
+    // determine preview window rectangle
+    const SwRect aPrevwWinSwRect( Point( 0, 0 ), _rPrevwWinSize );
+    // calculate visible preview page rectangle
+    SwRect aVisPrevwPgSwRect( _rPrevwPgSwRect );
+    aVisPrevwPgSwRect.Intersection( aPrevwWinSwRect );
+    // adjust logic page rectangle
+    SwTwips nTmpDiff;
+    // left
+    nTmpDiff = aVisPrevwPgSwRect.Left() - _rPrevwPgSwRect.Left();
+    if ( nTmpDiff > 0 )
+        _iorLogicPgSwRect.Left( _iorLogicPgSwRect.Left() + nTmpDiff );
+    // top
+    nTmpDiff = aVisPrevwPgSwRect.Top() - _rPrevwPgSwRect.Top();
+    if ( nTmpDiff > 0 )
+        _iorLogicPgSwRect.Top( _iorLogicPgSwRect.Top() + nTmpDiff );
+    // right
+    nTmpDiff = _rPrevwPgSwRect.Right() - aVisPrevwPgSwRect.Right();
+    if ( nTmpDiff > 0 )
+        _iorLogicPgSwRect.Right( _iorLogicPgSwRect.Right() - nTmpDiff );
+    // bottom
+    nTmpDiff = _rPrevwPgSwRect.Bottom() - aVisPrevwPgSwRect.Bottom();
+    if ( nTmpDiff > 0 )
+        _iorLogicPgSwRect.Bottom( _iorLogicPgSwRect.Bottom() - nTmpDiff );
 }

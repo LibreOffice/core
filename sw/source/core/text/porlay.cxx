@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:28:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,16 +566,20 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         return;
 
     xub_StrLen nChg = nInvalidityPos;
+
     // STRING_LEN means the data structure is up to date
     nInvalidityPos = STRING_LEN;
+
+    // this is the default direction
+    nDefaultDir = TEXT_LAYOUT_BIDI_STRONG != rOut.GetLayoutMode() ?
+                  UBIDI_RTL :
+                  UBIDI_LTR;
 
     // counter for script info arrays
     USHORT nCnt = 0;
     // counter for compression information arrays
     USHORT nCntComp = 0;
 #ifdef BIDI
-    // counter for direction information arrays
-    USHORT nCntDir = 0;
     // counter for kashida array
     USHORT nCntKash = 0;
 #endif
@@ -694,15 +698,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     aCompType.Remove( nCntComp, nCompRemove );
 
 #ifdef BIDI
-    // remove invalid entries from direction information arrays
-    const USHORT nDirRemove = aDirChg.Count();
-    aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
-
     // get the start of the last kashida group
-    USHORT nLastKashida = 0;
-    if( nCntKash )
-        nLastKashida = GetKashida( nCntKash - 1 );
+    USHORT nLastKashida = nChg;
+    if( nCntKash && i18n::ScriptType::COMPLEX == nScript )
+    {
+        --nCntKash;
+        nLastKashida = GetKashida( nCntKash );
+    }
 
     // remove invalid entries from kashida array
     aKashida.Remove( nCntKash, aKashida.Count() - nCntKash );
@@ -802,7 +804,6 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                   (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nEnd ) :
                   (BYTE)WEAK;
     }
-
 
     //
     // UPDATE THE SCRIPT INFO ARRAYS:
@@ -913,6 +914,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
             while ( aScanner.NextWord() )
             {
                 const XubString& rWord = aScanner.GetWord();
+
                 xub_StrLen nIdx = 0;
                 xub_StrLen nKashidaPos = STRING_LEN;
                 xub_Unicode cCh;
@@ -1019,40 +1021,70 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 
     } while ( TRUE );
 
-#ifdef BIDI
-    // Perform Unicode Bidi Algorithm for text direction information
-    nCnt = 0;
-    sal_Bool bLatin = sal_False;
-    sal_Bool bAsian = sal_False;
-    sal_Bool bComplex = sal_False;
-
-    while( nCnt < CountScriptChg() )
+#ifndef PRODUCT
+    // check kashida data
+    long nTmpKashidaPos = -1;
+    sal_Bool bWrongKash = sal_False;
+    for ( USHORT i = 0; i < aKashida.Count(); ++i )
     {
-        nScript = GetScriptType( nCnt++ );
-        switch ( nScript )
+        long nCurrKashidaPos = GetKashida( i );
+        if ( nCurrKashidaPos <= nTmpKashidaPos )
         {
-        case i18n::ScriptType::LATIN:
-            bLatin = sal_True;
+            bWrongKash = sal_True;
             break;
-        case i18n::ScriptType::ASIAN:
-            bAsian = sal_True;
-            break;
-        case i18n::ScriptType::COMPLEX:
-            bComplex = sal_True;
-            break;
-        default:
-            ASSERT( ! rTxt.Len(), "Wrong script found" )
         }
+        nTmpKashidaPos = nCurrKashidaPos;
     }
+    ASSERT( ! bWrongKash, "Kashida array contains wrong data" )
+#endif
 
-    // this is the default direction
-    const BYTE nDefaultDir = TEXT_LAYOUT_BIDI_STRONG != rOut.GetLayoutMode() ?
-                             UBIDI_RTL :
-                             UBIDI_LTR;
+    // remove invalid entries from direction information arrays
+    if ( ! bBidiInfoValid )
+    {
+        const USHORT nDirRemove = aDirChg.Count();
+        aDirChg.Remove( 0, nDirRemove );
+        aDirType.Remove( 0, nDirRemove );
 
-    // do not call the unicode bidi algorithm if not required
-    if ( UBIDI_LTR == nDefaultDir && ! bComplex )
+        // Perform Unicode Bidi Algorithm for text direction information
+        nCnt = 0;
+        sal_Bool bLatin = sal_False;
+        sal_Bool bAsian = sal_False;
+        sal_Bool bComplex = sal_False;
+
+        while( nCnt < CountScriptChg() )
+        {
+            nScript = GetScriptType( nCnt++ );
+            switch ( nScript )
+            {
+            case i18n::ScriptType::LATIN:
+                bLatin = sal_True;
+                break;
+            case i18n::ScriptType::ASIAN:
+                bAsian = sal_True;
+                break;
+            case i18n::ScriptType::COMPLEX:
+                bComplex = sal_True;
+                break;
+            default:
+                ASSERT( ! rTxt.Len(), "Wrong script found" )
+            }
+        }
+
+        // do not call the unicode bidi algorithm if not required
+        if ( UBIDI_LTR != nDefaultDir || bComplex )
+            UpdateBidiInfo( rTxt );
+    }
+}
+
+void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
+{
+    if ( bBidiInfoValid )
         return;
+
+    // remove invalid entries from direction information arrays
+    const USHORT nDirRemove = aDirChg.Count();
+    aDirChg.Remove( 0, nDirRemove );
+    aDirType.Remove( 0, nDirRemove );
 
     //
     // Bidi functions from icu 2.0
@@ -1068,6 +1100,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     UTextOffset nStart = 0;
     UTextOffset nEnd;
     UBiDiLevel nCurrDir;
+    // counter for direction information arrays
+    USHORT nCntDir = 0;
 
     for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
     {
@@ -1078,9 +1112,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     }
 
     ubidi_close( pBidi );
-#endif
-
+    bBidiInfoValid = sal_True;
 }
+
 
 /*************************************************************************
  *                        SwScriptInfo::NextScriptChg(..)
@@ -1442,20 +1476,21 @@ USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
  *                      SwScriptInfo::GetScriptInfo()
  *************************************************************************/
 
-const SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd )
+SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
+                                           sal_Bool bAllowInvalid )
 {
     SwClientIter aClientIter( (SwTxtNode&)rTNd );
     SwClient* pLast = aClientIter.GoStart();
-    const SwScriptInfo* pScriptInfo = 0;
+    SwScriptInfo* pScriptInfo = 0;
 
     while( pLast )
     {
         if ( pLast->ISA( SwTxtFrm ) )
         {
-            pScriptInfo = ((SwTxtFrm*)pLast)->GetScriptInfo();
+            pScriptInfo = (SwScriptInfo*)((SwTxtFrm*)pLast)->GetScriptInfo();
             if ( pScriptInfo )
             {
-                if ( STRING_LEN != pScriptInfo->GetInvalidity() )
+                if ( ! bAllowInvalid && STRING_LEN != pScriptInfo->GetInvalidity() )
                     pScriptInfo = 0;
                 else break;
             }

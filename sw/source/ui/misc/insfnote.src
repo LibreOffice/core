@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:21:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_INS_FOOTNOTE
     Text [ portuguese ] = "Inserir nota de rodapé" ;
     Text [ finnish ] = "Lisää alaviite" ;
     Text [ danish ] = "Indsæt fodnote" ;
-    Text [ french ] = "Insérer une note de bas de page" ;
+    Text [ french ] = "Insertion d'une note de bas de page" ;
     Text [ swedish ] = "Infoga fotnot" ;
     Text [ dutch ] = "Voetnoot invoegen" ;
     Text [ spanish ] = "Insertar nota al pie" ;
@@ -138,12 +138,12 @@ ModalDialog DLG_INS_FOOTNOTE
         Text = "~Automatisch" ;
         Text [ ENGLISH ] = "~Auto" ;
         Text [ norwegian ] = "~Auto" ;
-        Text [ italian ] = "~Automatico" ;
+        Text [ italian ] = "Automatico" ;
         Text [ portuguese_brazilian ] = "~Auto" ;
         Text [ portuguese ] = "~Automático" ;
         Text [ finnish ] = "~Automaattinen" ;
         Text [ danish ] = "Automatisk" ;
-        Text [ french ] = "~Automatique" ;
+        Text [ french ] = "Automatique" ;
         Text [ swedish ] = "~Automatisk" ;
         Text [ dutch ] = "~Automatisch" ;
         Text [ spanish ] = "~Automático" ;
@@ -151,17 +151,18 @@ ModalDialog DLG_INS_FOOTNOTE
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "×Ô¶¯(~A)";
-        Text[ russian ] = "Àâòî";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨(~A)";
+        Text[ russian ] = "Àâòîìàòè÷åñêè";
         Text[ polish ] = "~Automatycznie";
-        Text[ japanese ] = "©“®(~A)";
-        Text[ chinese_traditional ] = "¦Û°Ê(~A)";
+        Text[ japanese ] = "è‡ªå‹•(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿(~A)";
+        Text[ korean ] = "ìë™ìœ¼ë¡œ(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Automático";
+        Text[ catalan ] = "~Automàtic";
+        Text[ thai ] = "~à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     RadioButton RB_NUMBER_CHAR
     {
@@ -175,22 +176,23 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ portuguese ] = "~Caracteres" ;
         Text [ finnish ] = "~Merkki" ;
         Text [ danish ] = "Tegn" ;
-        Text [ french ] = "~Caractère" ;
+        Text [ french ] = "Caractères" ;
         Text [ swedish ] = "~Tecken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "~Caracteres" ;
         Text [ english_us ] = "~Character" ;
-        Text[ chinese_simplified ] = "×Ö·û(~C)";
-        Text[ russian ] = "Çíàê";
+        Text[ chinese_simplified ] = "å­—ç¬¦(~C)";
+        Text[ russian ] = "Ñè~ìâîë";
         Text[ polish ] = "Znak";
-        Text[ japanese ] = "•¶š(~C)";
-        Text[ chinese_traditional ] = "¦r¤¸(~C)";
+        Text[ japanese ] = "æ–‡å­—(~C)";
+        Text[ chinese_traditional ] = "å­—å…ƒ(~C)";
         Text[ arabic ] = "ÃÍÑİ";
         Text[ greek ] = "×áñáêôŞñåò";
-        Text[ korean ] = "¹®ÀÚ(~C)";
+        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜(~C)";
         Text[ turkish ] = "~Karakter";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Caracteres";
+        Text[ catalan ] = "~Caràcters";
+        Text[ thai ] = "~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
     };
     FixedLine FL_NUMBER
     {
@@ -209,17 +211,18 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ dutch ] = "Nummering" ;
         Text [ spanish ] = "Numeración" ;
         Text [ english_us ] = "Numbering" ;
-        Text[ chinese_simplified ] = "±àºÅ";
+        Text[ chinese_simplified ] = "ç¼–å·";
         Text[ russian ] = "Íóìåğàöèÿ";
         Text[ polish ] = "Numeracja";
-        Text[ japanese ] = "”Ô†•t‚¯";
-        Text[ chinese_traditional ] = "½s¸¹";
+        Text[ japanese ] = "ç•ªå·ä»˜ã‘";
+        Text[ chinese_traditional ] = "ç·¨è™Ÿ";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ greek ] = "Áñßèìçóç";
-        Text[ korean ] = "¹øÈ£¸Å±â±â";
+        Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Numeración";
+        Text[ catalan ] = "Numeració";
+        Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
     };
     PushButton BT_NUMBER_CHAR
     {
@@ -241,22 +244,23 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ portuguese_brazilian ] = "~Fu?note" ;
         Text [ swedish ] = "~Fotnot" ;
         Text [ danish ] = "Fodnote" ;
-        Text [ italian ] = "~Nota a piè pagina" ;
+        Text [ italian ] = "Nota a piè pagina" ;
         Text [ spanish ] = "N~ota al pie" ;
-        Text [ french ] = "Note de bas de pa~ge..." ;
+        Text [ french ] = "Note de bas de page" ;
         Text [ dutch ] = "~Voetnoot" ;
-        Text[ chinese_simplified ] = "×¢½Å(~F)";
-        Text[ russian ] = "Îáû÷íàÿ";
+        Text[ chinese_simplified ] = "æ³¨è„š(~F)";
+        Text[ russian ] = "Cíîñêà";
         Text[ polish ] = "Przypis ~dolny";
-        Text[ japanese ] = "‹r’(~F)";
-        Text[ chinese_traditional ] = "µù¸}(~F)";
+        Text[ japanese ] = "è„šæ³¨(~F)";
+        Text[ chinese_traditional ] = "è¨»è…³(~F)";
         Text[ arabic ] = "ÍÇÔíÉ ÓİáíÉ";
         Text[ greek ] = "Õğïóçìåßùóç";
-        Text[ korean ] = "°¢ÁÖ(~F)";
+        Text[ korean ] = "ê°ì£¼(~F)";
         Text[ turkish ] = "~Dipnot";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N~ota al pie";
-        Text[ finnish ] = "~Alaviite";
+        Text[ catalan ] = "~Nota al peu";
+        Text[ finnish ] = "Alaviite";
+        Text[ thai ] = "à¹€~à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
@@ -269,22 +273,23 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ portuguese_brazilian ] = "~Endnote" ;
         Text [ swedish ] = "~Slutnot" ;
         Text [ danish ] = "Slutnote" ;
-        Text [ italian ] = "~Nota di chiusura" ;
-        Text [ spanish ] = "Nota al ~final" ;
+        Text [ italian ] = "Nota di chiusura" ;
+        Text [ spanish ] = "Nota ~final" ;
         Text [ french ] = "~Note de fin" ;
         Text [ dutch ] = "~Eindnoot" ;
-        Text[ chinese_simplified ] = "Î²×¢(~E)";
-        Text[ russian ] = "Êîíöåâàÿ";
+        Text[ chinese_simplified ] = "å°¾æ³¨(~E)";
+        Text[ russian ] = "Êîíöåâàÿ ñíîñêà";
         Text[ polish ] = "P~rzypis koñcowy";
-        Text[ japanese ] = "•¶––‹r’(~E)";
-        Text[ chinese_traditional ] = "§Àµù(~E)";
+        Text[ japanese ] = "æ–‡æœ«è„šæ³¨(~E)";
+        Text[ chinese_traditional ] = "å°¾è¨»(~E)";
         Text[ arabic ] = "ÊÚáíŞ ÎÊÇãí";
         Text[ greek ] = "Óçìåßùóç ôİëïõò";
-        Text[ korean ] = "¹ÌÁÖ(~E)";
+        Text[ korean ] = "ë¯¸ì£¼(~E)";
         Text[ turkish ] = "~Sonnot";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nota al ~final";
-        Text[ finnish ] = "~Loppuhuomautus";
+        Text[ catalan ] = "Nota ~final";
+        Text[ finnish ] = "~Loppuviite";
+        Text[ thai ] = "~à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡à¸—à¹‰à¸²à¸¢à¹€à¸£à¸·à¹ˆà¸­à¸‡";
     };
     FixedLine FL_TYPE
     {
@@ -301,31 +306,46 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ french ] = "Type" ;
         Text [ dutch ] = "Type" ;
         Text [ portuguese ] = "Tipo" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
-        Text[ japanese ] = "í—Ş";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "Á¾·ù";
+        Text[ korean ] = "ì¢…ë¥˜";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo";
+        Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
+        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
     };
-    Text[ chinese_simplified ] = "²åÈë×¢½Å";
+    Text[ chinese_simplified ] = "æ’å…¥æ³¨è„š";
     Text[ russian ] = "Âñòàâèòü ñíîñêó";
     Text[ polish ] = "Wstaw przypis dolny";
-    Text[ japanese ] = "‹r’‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤Jµù¸}";
+    Text[ japanese ] = "è„šæ³¨ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥è¨»è…³";
     Text[ arabic ] = "ÅÏÑÇÌ ÍÇÔíÉ ÓİáíÉ";
     Text[ greek ] = "ĞñïóèŞêç õğïóçìåßùóçò";
-    Text[ korean ] = "°¢ÁÖ »ğÀÔ";
+    Text[ korean ] = "ê°ì£¼ ì‚½ì…";
     Text[ turkish ] = "Dipnot ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar nota al pie";
+    Text[ catalan ] = "Insereix una nota al peu";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

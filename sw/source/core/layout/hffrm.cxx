@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-23 11:16:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,8 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
             nUL = pAttrs->CalcBottom() + nSpace;
 
         /* set print area */
-        SwTwips nLR = pAttrs->CalcLeft(this) + pAttrs->CalcRight();
+        // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
+        SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
 
         aPrt.Left(pAttrs->CalcLeft(this));
 
@@ -266,7 +267,8 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
 
         //Sizes einstellen; die Groesse gibt der umgebende Frm vor, die
         //die Raender werden einfach abgezogen.
-        SwTwips nLR = pAttrs->CalcLeft(this) + pAttrs->CalcRight();
+        // OD 23.01.2003 #106895# - add first parameter to <SwBorderAttrs::CalcRight(..)>
+        SwTwips nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight( this );
         aPrt.Width ( aFrm.Width() - nLR );
         aPrt.Height( aFrm.Height()- nUL );
 
@@ -313,6 +315,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 }
                 nRemaining = 0;
                 pFrm = Lower();
+
                 while ( pFrm )
                 {
                     nRemaining += pFrm->Frm().Height();
@@ -366,6 +369,18 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                                 if( pFrm->IsTxtFrm())
                                 {
                                     SwTxtFrm * pTmpFrm = (SwTxtFrm*) pFrm;
+                                    if (pTmpFrm->IsUndersized() )
+                                    {
+                                        pTmpFrm->InvalidateSize();
+                                        pTmpFrm->Prepare(PREP_ADJUST_FRM);
+                                    }
+                                }
+                                /* #i3568# Undersized sections need to be
+                                   invalidated too. */
+                                else if (pFrm->IsSctFrm())
+                                {
+                                    SwSectionFrm * pTmpFrm =
+                                        (SwSectionFrm*) pFrm;
                                     if (pTmpFrm->IsUndersized() )
                                     {
                                         pTmpFrm->InvalidateSize();

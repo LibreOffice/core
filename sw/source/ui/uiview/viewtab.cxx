@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-09-26 13:21:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,7 +1101,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             nBorder = nPageWidth - aTabCols.GetLeftMin() +
                               DOCUMENTBORDER - aColItem.GetRight();
 
-            aTabCols.SetRight( nBorder );
+            if ( nPageWidth >= aTabCols.GetLeftMin() + aTabCols.GetRight() )
+                aTabCols.SetRight( nBorder );
 
             // Tabcols der Reihe nach
             // Die letzte Col wird durch den Rand definiert
@@ -1493,8 +1494,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_RULER_BORDERS_VERTICAL:
         case SID_RULER_BORDERS:
         {
-            BOOL bRTL;
-            BOOL bFrameHasVerticalColumns =  bFrmSelection && rSh.IsFrmVertical(FALSE, bRTL);
+            BOOL bFrameRTL;
+            BOOL bFrameHasVerticalColumns =  rSh.IsFrmVertical(FALSE, bFrameRTL) && bFrmSelection;
 
             if((SID_RULER_BORDERS_VERTICAL == nWhich) &&
                     ((!bVerticalWriting && !bFrmSelection) || (bFrmSelection && !bFrameHasVerticalColumns)) ||
@@ -1516,6 +1517,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {
                     rSh.GetTabCols( aTabCols );
                     nNum = rSh.GetCurTabColNum();
+                    if(rSh.IsTableRightToLeft())
+                        nNum = aTabCols.Count() - nNum;
                 }
 
                 ASSERT(nNum <= aTabCols.Count(), "TabCol not found");
@@ -1589,7 +1592,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 if(
                     //eigentlich sollte FRMTYPE_COLSECT nicht enthalten sein, wenn der Rahmen selektiert ist!
                     !bFrmSelection &&
-                    nFrmType & FRMTYPE_COLSECT )
+                     nFrmType & FRMTYPE_COLSECT )
                 {
                     const SwSection *pSect = rSh.GetAnySection(FALSE, pPt);
                     ASSERT( pSect, "Welcher Bereich?");
@@ -1597,7 +1600,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     {
                         SwSectionFmt *pFmt = pSect->GetFmt();
                         const SwFmtCol& rCol = pFmt->GetCol();
-                        SvxColumnItem aColItem(--nNum);
+                        if(rSh.IsInRightToLeftText())
+                            nNum = rCol.GetColumns().Count() - nNum;
+                        else
+                            --nNum;
+                        SvxColumnItem aColItem(nNum);
                         const SwRect &rRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
 
                         ::lcl_FillSvxColumn(rCol, USHORT(bVerticalWriting ? rRect.Height() : rRect.Width()), aColItem, 0);
@@ -1625,10 +1632,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     // Spalten in Rahmen
                     if ( nNum  )
                     {
-                        nNum--;
                         const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt() ;
 
                         const SwFmtCol& rCol = pFmt->GetCol();
+                        if(rSh.IsInRightToLeftText())
+                            nNum = rCol.GetColumns().Count() - nNum;
+                        else
+                            nNum--;
                         SvxColumnItem aColItem(nNum);
                         const SwRect &rSizeRect = rSh.GetAnyCurRect(RECT_FLY_PRT_EMBEDDED, pPt);
 
@@ -1664,9 +1674,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 else
                 {   // Spalten auf der Seite
-                    nNum--;
                     const SwFrmFmt& rMaster = rDesc.GetMaster();
                     SwFmtCol aCol(rMaster.GetCol());
+                    if(rFrameDir.GetValue() == FRMDIR_HORI_RIGHT_TOP)
+                        nNum = aCol.GetColumns().Count() - nNum;
+                    else
+                        nNum--;
+
                     SvxColumnItem aColItem(nNum);
                     const SwRect aPrtRect = rSh.GetAnyCurRect(RECT_PAGE_PRT, pPt);
                     const SvxBoxItem& rBox = (const SvxBoxItem&)rMaster.GetAttr(RES_BOX);

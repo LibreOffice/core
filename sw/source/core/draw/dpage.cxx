@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 07:50:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,10 +168,12 @@ SwDPage::~SwDPage()
 }
 
 
-Point  SwDPage::GetOffset() const
-{
-    return Point( DOCUMENTBORDER, DOCUMENTBORDER );
-}
+// #i3694#
+// This GetOffset() method is not needed anymore, it even leads to errors.
+//Point  SwDPage::GetOffset() const
+//{
+//  return Point( DOCUMENTBORDER, DOCUMENTBORDER );
+//}
 
 /*************************************************************************
 |*

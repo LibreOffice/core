@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, SwHoriOrient eAlign,
     sOut += sHTML_table;
 
     sal_uInt16 nOldDirection = rWrt.nDirection;
-    rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
+    if( pFrmFmt )
+        rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
     if( rWrt.bOutFlyFrame || nOldDirection != rWrt.nDirection )
     {
         rWrt.Strm() << sOut.GetBuffer();

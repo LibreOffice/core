@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-12-10 14:30:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
 #ifdef PRECOMPILED
 #include "filt_pch.hxx"
 #endif
@@ -138,6 +141,67 @@ class SwShareBoxFmts;
 extern void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* = 0,
                     BOOL = TRUE, const BOOL = TRUE, SwShareBoxFmts* = 0 );
 
+struct Row
+{
+    bool mbUseLeftRowPad, mbUseRightRowPad, mbUseTopRowPad, mbUseBottomRowPad;
+    long mnLeftRowPad, mnRightRowPad, mnTopRowPad, mnBottomRowPad;
+    USHORT mnBrdDist;
+    Row() :
+        mbUseLeftRowPad(false), mbUseRightRowPad(false),
+        mbUseTopRowPad(false), mbUseBottomRowPad(false),
+        mnLeftRowPad(0), mnRightRowPad(0), mnTopRowPad(0), mnBottomRowPad(0),
+        mnBrdDist(MIN_BORDER_DIST)
+    {}
+};
+
+static void SetRowBorder(SfxItemSet& rSet, const Row &rRow)
+{
+#if 1
+    SvxBoxItem aBox((const SvxBoxItem&)rSet.Get(RES_BOX, false));
+    aBox.SetDistance(rRow.mbUseLeftRowPad ? rRow.mnLeftRowPad : rRow.mnBrdDist,
+            BOX_LINE_LEFT);
+
+    aBox.SetDistance(rRow.mbUseRightRowPad ? rRow.mnRightRowPad : rRow.mnBrdDist,
+            BOX_LINE_RIGHT);
+
+    aBox.SetDistance(rRow.mbUseTopRowPad ? rRow.mnTopRowPad : 0,
+            BOX_LINE_TOP);
+
+    aBox.SetDistance(rRow.mbUseBottomRowPad ? rRow.mnBottomRowPad : 0,
+            BOX_LINE_BOTTOM);
+
+    rSet.Put(aBox);
+#else
+    const SfxPoolItem* pItem;
+    if (SFX_ITEM_SET == rSet.GetItemState(RES_BOX, FALSE, &pItem))
+    {
+        SvxBoxItem aBox( *(SvxBoxItem*)pItem );
+        aBox.SetDistance(rRow.mbUseLeftRowPad ? rRow.mnLeftRowPad : rRow.mnBrdDist,
+                BOX_LINE_LEFT);
+
+        aBox.SetDistance(rRow.mbUseRightRowPad ? rRow.mnRightRowPad : rRow.mnBrdDist,
+                BOX_LINE_RIGHT);
+
+        aBox.SetDistance(rRow.mbUseTopRowPad ? rRow.mnTopRowPad : 0,
+                BOX_LINE_TOP);
+
+        aBox.SetDistance(rRow.mbUseBottomRowPad ? rRow.mnBottomRowPad : 0,
+                BOX_LINE_BOTTOM);
+
+        rSet.Put(aBox);
+    }
+#endif
+}
+
+void rtfSections::PrependedInlineNode(const SwPosition &rPos,
+    const SwNode &rNode)
+{
+    ASSERT(!maSegments.empty(),
+        "should not be possible, must be at least one segment");
+    if ((!maSegments.empty()) && (maSegments.back().maStart == rPos.nNode))
+        maSegments.back().maStart = SwNodeIndex(rNode);
+}
+
 void SwRTFParser::ReadTable( int nToken )
 {
     nInsTblRow = USHRT_MAX;
@@ -191,10 +255,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     SwHoriOrient eAdjust = HORI_LEFT;       // default fuer Tabellen
     SwTwips nLSpace = 0;
-    USHORT nBrdDist = MIN_BORDER_DIST;
-    bool bUseLeftRowPad = false, bUseRightRowPad = false,
-        bUseTopRowPad = false, bUseBottomRowPad = false;
-    long nLeftRowPad = 0, nRightRowPad = 0, nTopRowPad = 0, nBottomRowPad = 0;
+    Row aRow;
 
     bool bUseLeftCellPad = false, bUseRightCellPad = false,
         bUseTopCellPad = false, bUseBottomCellPad = false;
@@ -209,37 +270,33 @@ void SwRTFParser::ReadTable( int nToken )
     BOOL bHeadlineRepeat = FALSE;
     SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
 
-#ifdef SET_TRGAPH
-    SvxLRSpaceItem aLR;
-#endif
-
     int bWeiter = TRUE;
     do {
         switch( nToken )
         {
         case RTF_TRPADDFL:
-            bUseLeftRowPad = (nTokenValue == 3) ? true : false;
+            aRow.mbUseLeftRowPad = (nTokenValue == 3) ? true : false;
             break;
         case RTF_TRPADDFT:
-            bUseTopRowPad = (nTokenValue == 3) ? true : false;
+            aRow.mbUseTopRowPad = (nTokenValue == 3) ? true : false;
             break;
         case RTF_TRPADDFR:
-            bUseRightRowPad = (nTokenValue == 3) ? true : false;
+            aRow.mbUseRightRowPad = (nTokenValue == 3) ? true : false;
             break;
         case RTF_TRPADDFB:
-            bUseBottomRowPad = (nTokenValue == 3) ? true : false;
+            aRow.mbUseBottomRowPad = (nTokenValue == 3) ? true : false;
             break;
         case RTF_TRPADDL:
-            nLeftRowPad = nTokenValue;
+            aRow.mnLeftRowPad = nTokenValue;
             break;
         case RTF_TRPADDT:
-            nTopRowPad = nTokenValue;
+            aRow.mnTopRowPad = nTokenValue;
             break;
         case RTF_TRPADDR:
-            nRightRowPad = nTokenValue;
+            aRow.mnRightRowPad = nTokenValue;
             break;
         case RTF_TRPADDB:
-            nBottomRowPad = nTokenValue;
+            aRow.mnBottomRowPad = nTokenValue;
             break;
 
         case RTF_CLPADFL:
@@ -298,13 +355,7 @@ void SwRTFParser::ReadTable( int nToken )
                 }
                 else
                 {
-                    // Platz zwischen den Spalten angeben und ist
-                    // diese auch kleiner als die Breite der Box
-#ifdef SET_TRGAPH
-                    if( aLR.GetLeft() && 2L * aLR.GetLeft() < nSize )
-                        pBoxFmt->SetAttr( aLR );
-                    aLR.SetLeft( 0 ); aLR.SetRight( 0 );
-#endif
+                    SetRowBorder((SfxItemSet&)pBoxFmt->GetAttrSet(), aRow);
                     aBoxFmts.Insert( pBoxFmt, aBoxFmts.Count() );
                     pBoxFmt = pDoc->MakeTableBoxFmt();
                 }
@@ -327,6 +378,65 @@ void SwRTFParser::ReadTable( int nToken )
                 if (bUseTopCellPad)
                     aBox.SetDistance(nTopCellPad, BOX_LINE_LEFT);
 
+
+                /*#106415# The Cell Borders are now balanced on import to
+                improve the layout of tables.
+                */
+
+                if ( aBoxFmts.Count()>1)
+                {
+
+                    SwTableBoxFmt* prevpFmt = aBoxFmts[ aBoxFmts.Count()-2 ];
+                    SvxBoxItem prevaBox(prevpFmt->GetBox());
+                    USHORT prevWidthRight=0;
+                    USHORT currWidthLeft=0;
+                    const SvxBorderLine*   brdrline ;
+                    if(prevaBox.GetRight())
+                    {
+                        brdrline=prevaBox.GetRight();
+                        prevWidthRight = brdrline->GetOutWidth();
+                    }
+                    if(aBox.GetLeft())
+                    {
+                        brdrline=aBox.GetLeft();
+                        currWidthLeft = brdrline->GetOutWidth();
+
+                    }
+                    if(currWidthLeft >0 || prevWidthRight >0 )
+                    {
+                        USHORT newBorderWidth=(currWidthLeft+prevWidthRight)/2 ;
+                        if(newBorderWidth /2 ==DEF_LINE_WIDTH_0 )
+                        {
+                            newBorderWidth =DEF_LINE_WIDTH_0;
+                        }
+                        else if(newBorderWidth /2 >=(DEF_LINE_WIDTH_4-DEF_LINE_WIDTH_3))
+                        {
+                            newBorderWidth =DEF_LINE_WIDTH_4;
+                        }
+                        else if(newBorderWidth /2 >=(DEF_LINE_WIDTH_3-DEF_LINE_WIDTH_2))
+                        {
+                            newBorderWidth =DEF_LINE_WIDTH_3;
+                        }
+                        else if(newBorderWidth /2>=(DEF_LINE_WIDTH_2-DEF_LINE_WIDTH_1))
+                        {
+                            newBorderWidth =DEF_LINE_WIDTH_2;
+                        }
+                        else if(newBorderWidth /2>=(DEF_LINE_WIDTH_1 - DEF_LINE_WIDTH_0)  )
+                        {
+                            newBorderWidth =DEF_LINE_WIDTH_1;
+                        }
+                        else
+                        {
+                            newBorderWidth =DEF_LINE_WIDTH_0;
+                        }
+                        const SvxBorderLine  newbrdrline(0, newBorderWidth,0,0);
+                        aBox.SetLine(&newbrdrline,BOX_LINE_LEFT);
+                        prevaBox.SetLine(&newbrdrline,BOX_LINE_RIGHT);
+                        prevpFmt->SetAttr(prevaBox);
+                    }
+
+                }
+
                 pFmt->SetAttr(aBox);
 
                 bUseLeftCellPad = false;
@@ -337,13 +447,7 @@ void SwRTFParser::ReadTable( int nToken )
             break;
 
         case RTF_TRGAPH:
-            {
-                nBrdDist = (USHORT)nTokenValue;
-#ifdef SET_TRGAPH
-                aLR.SetLeft( USHORT( nTokenValue ));
-                aLR.SetRight( USHORT( nTokenValue ));
-#endif
-            }
+                aRow.mnBrdDist = (USHORT)nTokenValue;
             break;
 
         case RTF_TRQL:          eAdjust = HORI_LEFT;    break;
@@ -403,40 +507,11 @@ void SwRTFParser::ReadTable( int nToken )
                 if( aMergeBoxes[ nBoxCnt ] )
                     break;
 
-                const SfxPoolItem* pItem;
                 SfxItemSet& rSet = (SfxItemSet&)pBoxFmt->GetAttrSet();
                 ReadBorderAttr( nToken, rSet, TRUE );
-                if (SFX_ITEM_SET == rSet.GetItemState(RES_BOX, FALSE, &pItem))
-                {
-                    SvxBoxItem aBox( *(SvxBoxItem*)pItem );
-#if 1
-                    aBox.SetDistance(bUseLeftRowPad ? nLeftRowPad : nBrdDist,
-                            BOX_LINE_LEFT);
-
-                    aBox.SetDistance(bUseRightRowPad ? nRightRowPad : nBrdDist,
-                            BOX_LINE_RIGHT);
-
-                    aBox.SetDistance(bUseTopRowPad ? nTopRowPad : 0,
-                            BOX_LINE_TOP);
-
-                    aBox.SetDistance(bUseBottomRowPad ? nBottomRowPad : 0,
-                            BOX_LINE_BOTTOM);
-
-                    rSet.Put(aBox);
-#else
-                    BOOL bChg = FALSE;
-                    for (int nLn = 0; nLn < 4; ++nLn)
-                    {
-                        if( aBox.GetLine( nLn ) && !aBox.GetDistance( nLn ) )
-                        {
-                            aBox.SetDistance( 2 > nLn ? 18 : nBrdDist, nLn );
-                            bChg = TRUE;
-                        }
-                    }
-                    if (bChg)
-                        rSet.Put( aBox );
+#if 0
+                SetRowBorder(aRow);
 #endif
-                }
             }
             else if( RTF_TABLEDEF != (nToken & ~(0xff | RTF_SWGDEFS)) )
             {
@@ -637,6 +712,12 @@ void SwRTFParser::ReadTable( int nToken )
             pTableNode = pDoc->GetNodes()[ pPam->GetPoint()->nNode.
                             GetIndex() - 5 ]->GetTableNode();
             ASSERT( pTableNode, "Wo ist mein TabellenNode?" );
+
+            if (pTableNode)
+            {
+                maSegments.PrependedInlineNode(*pPam->GetPoint(),
+                    *pTableNode);
+            }
 
             SwTableLines& rLns = pTableNode->GetTable().GetTabLines();
             pNewLine = rLns[ rLns.Count()-1 ];
@@ -882,5 +963,4 @@ void SwRTFParser::CheckInsNewTblLine()
     }
 }
 
-
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

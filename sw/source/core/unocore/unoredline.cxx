@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-02 10:36:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,12 +194,12 @@ Sequence<sal_Int8> SwXRedlineText::getImplementationId()
     throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = FALSE;
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }
@@ -435,12 +435,13 @@ void SwXRedlinePortion::Validate() throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }
@@ -709,11 +710,6 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
         }
     }
-    else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
-            rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
-    {
-        //this will always be empty - redlines at the start or end of a redlined text cannot occur
-    }
     else
         aRet = SwXRedlinePortion::GetPropertyValue(rPropertyName, *pRedline);
     return aRet;
@@ -881,12 +877,12 @@ Sequence<sal_Int8> SwXRedline::getImplementationId()
     throw(RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static sal_Bool bInit = FALSE;
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }

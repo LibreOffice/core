@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:08:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,8 +716,23 @@ enum SwPropNameIds
 /* 0636 */  UNO_NAME_FOOTER_DYNAMIC_SPACING,
 /* 0637 */  UNO_NAME_BASIC_LIBRARIES,
 /* 0638 */  UNO_NAME_IS_FIXED_LANGUAGE,
+/* 0639 */  UNO_NAME_SELECTION,
+/* 0640 */  UNO_NAME_RESULT_SET,
+/* 0641 */  UNO_NAME_CONNECTION,
+/* 0642 */  UNO_NAME_MODEL,
+/* 0643 */  UNO_NAME_DATA_SOURCE_NAME,
+/* 0644 */  UNO_NAME_DATA_COMMAND,
+/* 0645 */  UNO_NAME_FILTER,
+/* 0646 */  UNO_NAME_DOCUMENT_URL,
+/* 0647 */  UNO_NAME_OUTPUT_URL,
+/* 0648 */  UNO_NAME_OUTPUT_TYPE,
+/* 0649 */  UNO_NAME_ESCAPE_PROCESSING,
+/* 0650 */  UNO_NAME_SINGLE_PRINT_JOBS,
+/* 0651 */  UNO_NAME_FILE_NAME_FROM_COLUMN,
+/* 0652 */  UNO_NAME_FILE_NAME_PREFIX,
+/* 0653 */  UNO_NAME_CHAR_STYLE_NAMES,
+/* 0654 */  SW_PROPNAME_END
 
-/* 0639 */  SW_PROPNAME_END
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:51:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _CELLFRM_HXX //autogen
 #include <cellfrm.hxx>
+#endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
 #endif
 #ifndef _TABCOL_HXX //autogen
 #include <tabcol.hxx>
@@ -249,17 +252,17 @@ class lcl_DelRedlines
     SwDoc* pDoc;
 public:
     lcl_DelRedlines( const SwTableNode& rNd, BOOL bCheckForOwnRedline );
-    lcl_DelRedlines( SwPaM& rPam )
-        : pDoc( rPam.GetDoc() )
-    {
-        pDoc->StartUndo();
-        if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
-            pDoc->DeleteRedline( rPam );
-    }
+    lcl_DelRedlines( SwPaM& rPam );
 
     ~lcl_DelRedlines() { pDoc->EndUndo(); }
 };
 
+lcl_DelRedlines::lcl_DelRedlines( SwPaM & rPam) : pDoc( rPam.GetDoc() )
+{
+    pDoc->StartUndo();
+    if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
+        pDoc->AcceptRedline( rPam );
+}
 
 void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, BYTE nId )
 {
@@ -514,12 +517,29 @@ const SwTable* SwDoc::InsertTable( const SwPosition& rPos, USHORT nRows,
     if( (nInsTblFlags & HEADLINE) && (1 != nRows || !bDfltBorders) )
         pHeadColl = GetTxtCollFromPool( RES_POOLCOLL_TABLE_HDLN );
 
+    /* #106283# Save content node to extract FRAMEDIR from. */
+    const SwCntntNode * pCntntNd = rPos.nNode.GetNode().GetCntntNode();
+
     SwTableNode *pTblNd = GetNodes().InsertTable( rPos.nNode, nCols,
                                                 pBodyColl, nRows, pHeadColl );
 
     // dann erstelle die Box/Line/Table-Struktur
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
     SwTableFmt* pTableFmt = MakeTblFrmFmt( GetUniqueTblName(), GetDfltFrmFmt() );
+
+    /* #106283# If the node to insert the table at is a context node and has a
+       non-default FRAMEDIR propagate it to the table. */
+    if (pCntntNd)
+    {
+        const SwAttrSet & aNdSet = pCntntNd->GetSwAttrSet();
+        const SfxPoolItem *pItem = NULL;
+
+        if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem )
+            && pItem != NULL)
+        {
+            pTableFmt->SetAttr( *pItem );
+        }
+    }
 
     //Orientation am Fmt der Table setzen
     pTableFmt->SetAttr( SwFmtHoriOrient( 0, eAdjust ) );
@@ -716,6 +736,9 @@ const SwTable* SwDoc::TextToTable( const SwPaM& rRange, sal_Unicode cCh,
                 return 0;
     }
 
+    /* #106283# Save first node in the selection if it is a context node. */
+    SwCntntNode * pSttCntntNd = pStt->nNode.GetNode().GetCntntNode();
+
     SwPaM aOriginal( *pStt, *pEnd );
     pStt = aOriginal.GetMark();
     pEnd = aOriginal.GetPoint();
@@ -785,6 +808,21 @@ const SwTable* SwDoc::TextToTable( const SwPaM& rRange, sal_Unicode cCh,
     pTableFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
     if( !(nInsTblFlags & SPLIT_LAYOUT) )
         pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
+
+    /* #106283# If the first node in the selection is a context node and if it
+       has an item FRAMEDIR set (no default) propagate the item to the
+       replacing table. */
+    if (pSttCntntNd)
+    {
+        const SwAttrSet & aNdSet = pSttCntntNd->GetSwAttrSet();
+        const SfxPoolItem *pItem = NULL;
+
+        if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem )
+            && pItem != NULL)
+        {
+            pTableFmt->SetAttr( *pItem );
+        }
+    }
 
     SwTableNode* pTblNd = GetNodes().TextToTable( aRg, cCh, pTableFmt,
                                     pLineFmt, pBoxFmt,
@@ -1526,7 +1564,12 @@ BOOL SwDoc::DeleteRow( const SwCursor& rCursor )
             return FALSE;
 
         // suche alle Boxen / Lines
-        _FndBox aFndBox( aBoxes );
+        _FndBox aFndBox( 0, 0 );
+        {
+            _FndPara aPara( aBoxes, &aFndBox );
+            pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+        }
+
         if( !aFndBox.GetLines().Count() )
             return FALSE;
 
@@ -2133,18 +2176,19 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
     }
 
     //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pTab )
-    rFill.SetLeftMin ( (USHORT)(pTab->Frm().*fnRect->fnGetLeft)() );
+    const SwPageFrm* pPage = pTab->FindPageFrm();
+    const ULONG nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
+                           (pPage->Frm().*fnRect->fnGetLeft)() +
+                           DOCUMENTBORDER;
+    const ULONG nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
+                            (pPage->Frm().*fnRect->fnGetLeft)() +
+                            DOCUMENTBORDER;
+
+    rFill.SetLeftMin ( nLeftMin );
     rFill.SetLeft    ( (pTab->Prt().*fnRect->fnGetLeft)() );
     rFill.SetRight   ( (pTab->Prt().*fnRect->fnGetRight)());
-    rFill.SetRightMax( (USHORT)(pTab->Frm().*fnRect->fnGetRight)() - rFill.GetLeftMin() );
-#else
-    rFill.SetLeftMin ( (USHORT)pTab->Frm().Left() );
-    rFill.SetLeft    ( pTab->Prt().Left() );
-    rFill.SetRight   ( pTab->Prt().Right());
-    rFill.SetRightMax( (USHORT)pTab->Frm().Right() - rFill.GetLeftMin() );
-#endif
+    rFill.SetRightMax( nRightMax - nLeftMin );
 
     pTab->GetTable()->GetTabCols( rFill, pBox );
 }
@@ -2205,18 +2249,19 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
 
     SwTabCols aOld( rNew.Count() );
 
+    const SwPageFrm* pPage = pTab->FindPageFrm();
+    const ULONG nLeftMin = (pTab->Frm().*fnRect->fnGetLeft)() -
+                           (pPage->Frm().*fnRect->fnGetLeft)() +
+                           DOCUMENTBORDER;
+    const ULONG nRightMax = (pTab->Frm().*fnRect->fnGetRight)() -
+                            (pPage->Frm().*fnRect->fnGetLeft)() +
+                            DOCUMENTBORDER;
+
     //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
-#ifdef VERTICAL_LAYOUT
-    aOld.SetLeftMin ( (USHORT)(pTab->Frm().*fnRect->fnGetLeft)() );
+    aOld.SetLeftMin ( nLeftMin );
     aOld.SetLeft    ( (pTab->Prt().*fnRect->fnGetLeft)() );
     aOld.SetRight   ( (pTab->Prt().*fnRect->fnGetRight)());
-    aOld.SetRightMax( (USHORT)(pTab->Frm().*fnRect->fnGetRight)() - aOld.GetLeftMin() );
-#else
-    aOld.SetLeftMin ( (USHORT)pTab->Frm().Left() );
-    aOld.SetLeft    ( pTab->Prt().Left() );
-    aOld.SetRight   ( pTab->Prt().Right());
-    aOld.SetRightMax( (USHORT)pTab->Frm().Right() - aOld.GetLeftMin() );
-#endif
+    aOld.SetRightMax( nRightMax - nLeftMin );
 
 /*  if( DoesUndo() )
     {
@@ -3018,7 +3063,11 @@ BOOL SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNe
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( rBoxes );
+    _FndBox aFndBox( 0, 0 );
+    {
+        _FndPara aPara( rBoxes, &aFndBox );
+        pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+    }
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -3089,7 +3138,11 @@ BOOL SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
         return FALSE;
 
     // suche alle Boxen / Lines
-    _FndBox aFndBox( rBoxes );
+    _FndBox aFndBox( 0, 0 );
+    {
+        _FndPara aPara( rBoxes, &aFndBox );
+        pTblNd->GetTable().GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+    }
     if( !aFndBox.GetLines().Count() )
         return FALSE;
 
@@ -3890,7 +3943,10 @@ lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
             }
         }
         if( bDelete )
-           pDoc->DeleteRedline( rNd );
+        {
+            SwPaM aPam(*rNd.EndOfSectionNode(), rNd);
+            pDoc->AcceptRedline( aPam );
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-12 10:16:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
@@ -269,6 +268,7 @@ void wwZOrderer::InsertDrawingObject(SdrObject* pObj, short nWwHeight)
 
 void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 {
+    pObject->SetLayer(mnHeaven);
     if (maIndexes.empty())
     {
         InsertObject(pObject, mnNoInitialObjects + mnInlines);
@@ -319,7 +319,7 @@ ULONG wwZOrderer::GetDrawingObjectPos(short nWwHeight)
 
 bool wwZOrderer::InsertObject(SdrObject* pObject, ULONG nPos)
 {
-    if (!mpDrawPg->IsInserted())
+    if (!pObject->IsInserted())
     {
         mpDrawPg->InsertObject(pObject, nPos);
         return true;
@@ -876,9 +876,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     pRet = InsertOle(*((SdrOle2Obj*)pObject),aAttrSet);
                 else
                 {
-                    SdrGrafObj* pGraphObject = 0;
-                    pGraphObject = PTR_CAST(SdrGrafObj, pObject);
-                    if( pGraphObject )
+                    if (SdrGrafObj* pGraphObject = PTR_CAST(SdrGrafObj, pObject))
                     {
                         // Nun den Link bzw. die Grafik ins Doc stopfen
                         const Graphic& rGraph = pGraphObject->GetGraphic();
@@ -925,6 +923,8 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                             }
                         }
                     }
+                    else
+                        pRet = rDoc.Insert(*pPaM, *pObject, &aAttrSet);
                 }
                 // also nur, wenn wir ein *Insert* gemacht haben
                 if (pRet)
@@ -935,21 +935,23 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     if (pObject->HasSetName())
                         pRet->SetName(pObject->GetName());
                     else
-                        aGrfNameGenerator.SetUniqueGraphName(pRet,aObjectName);
+                        maGrfNameGenerator.SetUniqueGraphName(pRet,aObjectName);
 
                     // Zeiger auf neues Objekt ermitteln und Z-Order-Liste
                     // entsprechend korrigieren (oder Eintrag loeschen)
-                    SdrObject* pOurNewObject = CreateContactObject(pRet);
-                    if (pOurNewObject)
+                    if (SdrObject* pOurNewObject = CreateContactObject(pRet))
                     {
-                        pMSDffManager->ExchangeInShapeOrder( pObject, 0, 0,
-                            pOurNewObject );
+                        if (pOurNewObject != pObject)
+                        {
+                            pMSDffManager->ExchangeInShapeOrder( pObject, 0, 0,
+                                pOurNewObject );
 
-                        // altes SdrGrafObj aus der Page loeschen und
-                        // zerstoeren
-                        if (pObject->GetPage())
-                            pDrawPg->RemoveObject(pObject->GetOrdNum());
-                        delete pObject;
+                            // altes SdrGrafObj aus der Page loeschen und
+                            // zerstoeren
+                            if (pObject->GetPage())
+                                pDrawPg->RemoveObject(pObject->GetOrdNum());
+                            delete pObject;
+                        }
                     }
                     else
                         pMSDffManager->RemoveFromShapeOrder( pObject );
@@ -961,7 +963,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 if (pTextObj && !bTextObjWasGrouped && pTextObj->GetPage())
                     pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
             }
-        pMSDffManager->EnableFallbackStream();
+            pMSDffManager->EnableFallbackStream();
         }
         else if (aPic.lcb >= 58)
             pRet = ImportGraf1(aPic, pDataStream, nPicLocFc);
@@ -1041,3 +1043,5 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
     pFSPA->nTxbx = SVBT32ToLong( pFSPAS->nTxbx );
 }
 #endif // defined __WW8_NEEDS_COPY
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

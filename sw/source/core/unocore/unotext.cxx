@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-05-30 14:46:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
             {
                 //hier wird ein PaM angelegt, der vor dem Parameter-PaM liegt, damit der
                 //Text davor eingefuegt wird
+                UnoActionContext aContext(GetDoc());
                 const SwPosition* pPos = pCursor ? pCursor->GetCrsr()->Start() : &pRange->GetBookmark()->GetPos();
                 SwPaM aInsertPam(*pPos);
                 sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
@@ -1455,12 +1456,13 @@ uno::Sequence< uno::Type > SwXBodyText::getTypes(  ) throw(uno::RuntimeException
  ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SwXBodyText::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }
@@ -1693,12 +1695,13 @@ uno::Sequence< ::com::sun::star::uno::Type > SwXHeadFootText::getTypes(  ) throw
  ---------------------------------------------------------------------------*/
 uno::Sequence< sal_Int8 > SwXHeadFootText::getImplementationId(  ) throw(uno::RuntimeException)
 {
-    static uno::Sequence< sal_Int8 > aId( 16 );
-    static BOOL bInit = FALSE;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    static Sequence< sal_Int8 > aId( 16 );
+    static sal_Bool bInit = sal_False;
     if(!bInit)
     {
-        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
-        bInit = TRUE;
+        rtl_createUuid( (sal_uInt8 *)(aId.getArray() ), 0, sal_True );
+        bInit = sal_True;
     }
     return aId;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:19:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,18 +81,19 @@ Menu MN_ANCHOR_POPUP
             Text [ spanish ] = "Página" ;
             Text [ french ] = "À la page" ;
             Text [ dutch ] = "Pagina" ;
-            Text[ chinese_simplified ] = "Ò³";
+            Text[ chinese_simplified ] = "é¡µ";
             Text[ russian ] = "Ñòğàíèöà";
             Text[ polish ] = "Strona";
-            Text[ japanese ] = "Íß°¼Ş";
-            Text[ chinese_traditional ] = "­¶";
+            Text[ japanese ] = "ãƒšãƒ¼ã‚¸";
+            Text[ chinese_traditional ] = "é ";
             Text[ arabic ] = "ÕİÍÉ";
             Text[ greek ] = "Óåëßäá";
-            Text[ korean ] = "ÆäÀÌÁö";
+            Text[ korean ] = "í˜ì´ì§€";
             Text[ turkish ] = "Sayfa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Página";
+            Text[ catalan ] = "Pàgina";
             Text[ finnish ] = "Sivu";
+            Text[ thai ] = "à¸«à¸™à¹‰à¸²";
         };
         MenuItem
         {
@@ -110,18 +111,19 @@ Menu MN_ANCHOR_POPUP
             Text [ spanish ] = "Párrafo" ;
             Text [ french ] = "Paragraphe" ;
             Text [ dutch ] = "Alinea" ;
-            Text[ chinese_simplified ] = "¶ÎÂä";
+            Text[ chinese_simplified ] = "æ®µè½";
             Text[ russian ] = "Àáçàö";
             Text[ polish ] = "Akapit";
-            Text[ japanese ] = "’i—";
-            Text[ chinese_traditional ] = "¬q¸¨";
+            Text[ japanese ] = "æ®µè½";
+            Text[ chinese_traditional ] = "æ®µè½";
             Text[ arabic ] = "İŞÑÉ";
             Text[ greek ] = "ĞáñÜãñáöïò";
-            Text[ korean ] = "´Ü¶ô";
+            Text[ korean ] = "ë‹¨ë½";
             Text[ turkish ] = "Paragrafa";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Párrafo";
+            Text[ catalan ] = "Paràgraf";
             Text[ finnish ] = "Kappale";
+            Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
         };
         MenuItem
         {
@@ -130,7 +132,7 @@ Menu MN_ANCHOR_POPUP
             Identifier = FN_TOOL_ANKER_AT_CHAR ;
             Text = "Am Zeichen" ;
             Text [ ENGLISH ] = "At character" ;
-            Text [ english_us ] = "At Character" ;
+            Text [ english_us ] = "To Character" ;
             Text [ portuguese_brazilian ] = "Am Zeichen" ;
             Text [ swedish ] = "Vid tecken" ;
             Text [ danish ] = "Til tegn" ;
@@ -139,18 +141,19 @@ Menu MN_ANCHOR_POPUP
             Text [ french ] = "Au caractère" ;
             Text [ dutch ] = "Aan teken" ;
             Text [ portuguese ] = "No carácter" ;
-            Text[ chinese_simplified ] = "ÔÚ×Ö·ûÉÏ";
-            Text[ russian ] = "Ê çíàêó";
+            Text[ chinese_simplified ] = "åœ¨å­—ç¬¦ä¸Š";
+            Text[ russian ] = "Ê ñèìâîëó";
             Text[ polish ] = "Przy znaku";
-            Text[ japanese ] = "•¶š‚É";
-            Text[ chinese_traditional ] = "¦b¦r¤¸¤W";
+            Text[ japanese ] = "æ–‡å­—ã«";
+            Text[ chinese_traditional ] = "åœ¨å­—å…ƒä¸Š";
             Text[ arabic ] = "Úáì ÇáÍÑİ";
             Text[ greek ] = "Óôïí ÷áñáêôŞñá";
-            Text[ korean ] = "¹®ÀÚ¿¡";
+            Text[ korean ] = "ë¬¸ìì—";
             Text[ turkish ] = "Karaktere";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Al carácter";
-            Text[ finnish ] = "Ät-merkki";
+            Text[ catalan ] = "Al caràcter";
+            Text[ finnish ] = "Merkkiin";
+            Text[ thai ] = "à¸—à¸µà¹ˆà¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
         };
         MenuItem
         {
@@ -168,18 +171,19 @@ Menu MN_ANCHOR_POPUP
             Text [ spanish ] = "Como carácter" ;
             Text [ french ] = "Comme caractère" ;
             Text [ dutch ] = "Als teken" ;
-            Text[ chinese_simplified ] = "µ±×÷×Ö·û";
-            Text[ russian ] = "Êàê çíàê";
+            Text[ chinese_simplified ] = "å½“ä½œå­—ç¬¦";
+            Text[ russian ] = "Êàê ñèìâîë";
             Text[ polish ] = "Jako znak";
-            Text[ japanese ] = "•¶š‚Æ‚µ‚Ä";
-            Text[ chinese_traditional ] = "·í§@¦r¤¸";
+            Text[ japanese ] = "æ–‡å­—ã¨ã—ã¦";
+            Text[ chinese_traditional ] = "ç•¶ä½œå­—å…ƒ";
             Text[ arabic ] = "ßÍÑİ";
             Text[ greek ] = "Ùò ÷áñáêôŞñáò";
-            Text[ korean ] = "¹®ÀÚ·Î";
+            Text[ korean ] = "ë¬¸ìë¡œ";
             Text[ turkish ] = "Karakter olarak";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Como carácter";
+            Text[ catalan ] = "Com a caràcter";
             Text[ finnish ] = "Merkkinä";
+            Text[ thai ] = "à¹€à¸›à¹‡à¸™à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
         };
         MenuItem
         {
@@ -197,21 +201,32 @@ Menu MN_ANCHOR_POPUP
             Text [ spanish ] = "Marco" ;
             Text [ french ] = "Cadre" ;
             Text [ dutch ] = "Kader" ;
-            Text[ chinese_simplified ] = "¿ò";
+            Text[ chinese_simplified ] = "æ¡†";
             Text[ russian ] = "Ğàìêà";
             Text[ polish ] = "Ramka";
-            Text[ japanese ] = "˜g";
-            Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+            Text[ japanese ] = "æ ";
+            Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
             Text[ arabic ] = "ßÇÏÑ";
             Text[ greek ] = "Ğåñßãñáììá";
-            Text[ korean ] = "ÇÁ·¹ÀÓ";
+            Text[ korean ] = "í”„ë ˆì„";
             Text[ turkish ] = "Çerçeve";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Marco";
+            Text[ catalan ] = "Marc";
             Text[ finnish ] = "Kehys";
+            Text[ thai ] = "à¸à¸£à¸­à¸š";
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
 
 
 

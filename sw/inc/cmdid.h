@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2002-12-06 13:57:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INSERT_INDEX         (FN_INSERT + 16)    /* Stichworteintrag */
 #define FN_INSERT_INDEX_DLG     (FN_INSERT + 17)    /* Stichworteintrag */
 #define FN_INSERT_LINEBREAK     (FN_INSERT + 18)    /* Zeilenumbruch */
-
+#define FN_INSERT_FIELD_DATA_ONLY (FN_INSERT + 19)  /* field dialog for mail merge*/
 #define FN_INSERT_OBJECT        (FN_INSERT + 21)    /* Object */
 #define FN_INSERT_OBJECT_DLG    (FN_INSERT + 22)    /* Object */
 #define FN_INSERT_PAGEBREAK     (FN_INSERT + 23)    /* Seitenumbruch */
@@ -886,6 +886,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_UNO_HEADER_EAT_SPACING           (FN_EXTRA2 + 92)
 #define FN_UNO_FOOTER_EAT_SPACING           (FN_EXTRA2 + 93)
+#define FN_UNO_CHARFMT_SEQUENCE             (FN_EXTRA2 + 94)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-04 12:07:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 /*
  * Dieses File enthaelt alle Ausgabe-Funktionen des RTF-Writers;
@@ -941,6 +943,9 @@ RTFEndPosLst::~RTFEndPosLst()
 int RTFEndPosLst::Insert( const SfxPoolItem& rAttr, xub_StrLen nStt,
                             xub_StrLen nEnd )
 {
+    if (rAttr.Which() == RES_TXTATR_INETFMT)
+        return false;
+
     if( nStt == nEnd )
         return FALSE;
 
@@ -1082,12 +1087,14 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
         for( USHORT nAttr = rAttrs.Count(); nAttr; )
             switch( rAttrs[ --nAttr ]->Which() )
             {
+#if 0
             case RES_TXTATR_INETFMT:
                 // Hyperlinks werden als Felder geschrieben, aber der
                 // "FieldResult" steht als Text im TextNode. Also muss
                 // bei diesen Attributen am Ende 2 Klammern stehen!
                 rWrt.Strm() << "}}";
                 break;
+#endif
 
             case RES_TXTATR_CJK_RUBY:
                 rWrt.Strm() << ")}{" << sRTF_FLDRSLT << " }}";
@@ -1294,6 +1301,82 @@ void OutRTF_SwRTL(SwRTFWriter& rWrt, const SwTxtNode *pNd)
     OutSvxFrmDir(rWrt, SvxFrameDirectionItem(eDir));
 }
 
+static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    const SwFmtINetFmt& rURL = (const SwFmtINetFmt&)rHt;
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    if( rURL.GetValue().Len() )
+    {
+        rWrt.Strm() << '{' << sRTF_FIELD << '{' << sRTF_IGNORE
+                    << sRTF_FLDINST << " HYPERLINK ";
+
+        String sURL( rURL.GetValue() );
+        if( INET_MARK_TOKEN != sURL.GetChar(0) )
+        {
+            INetURLObject aTmp( INetURLObject::AbsToRel( sURL ) );
+            sURL = aTmp.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS);
+/*          if( INET_PROT_FILE == aTmp.GetProtocol() )
+            {
+                // WW97 wollen keine FILE-URL haben, sondern einen normalen
+                // Dateinamen. Aber ab WW2000 kennen sie FileURLs.
+                sURL = aTmp.GetFull();
+            }
+*/          rWrt.Strm() << '\"';
+            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, DEF_ENCODING,
+                                    rRTFWrt.bWriteHelpFmt ) << "\" ";
+            sURL = aTmp.GetMark();
+        }
+
+        if( sURL.Len() )
+        {
+            rWrt.Strm() << "\\\\l \"";
+            sURL.Erase( 0, 1 );
+            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, DEF_ENCODING,
+                                    rRTFWrt.bWriteHelpFmt ) << "\" ";
+        }
+
+        if( rURL.GetTargetFrame().Len() )
+        {
+            rWrt.Strm() << "\\\\t \"";
+            RTFOutFuncs::Out_String( rWrt.Strm(), rURL.GetTargetFrame(),
+                        DEF_ENCODING, rRTFWrt.bWriteHelpFmt ) << "\" ";
+        }
+
+        rWrt.Strm() << "}{" << sRTF_FLDRSLT << ' ';
+        rRTFWrt.bOutFmtAttr = FALSE;
+
+        // und dann noch die Attributierung ausgeben
+        const SwCharFmt* pFmt;
+        const SwTxtINetFmt* pTxtAtr = rURL.GetTxtINetFmt();
+        if( pTxtAtr && 0 != ( pFmt = pTxtAtr->GetCharFmt() ))
+            OutRTF_SwFmt( rWrt, *pFmt );
+    }
+    return rWrt;
+}
+
+void HandleHyperlinks(Writer& rWrt, const SwpHints* pTxtAttrs, xub_StrLen nPos)
+{
+    USHORT nCount = pTxtAttrs ? pTxtAttrs->Count() : 0;
+    for(USHORT i = 0; i < nCount; ++i )
+    {
+        const SwTxtAttr* pHt = (*pTxtAttrs)[i];
+        const SfxPoolItem &rItem = pHt->GetAttr();
+        if (rItem.Which() == RES_TXTATR_INETFMT)
+        {
+            const xub_StrLen* pEnd;
+            if (nPos == *pHt->GetStart())
+                OutRTF_SwTxtINetFmt(rWrt, rItem);
+            if (0 != ( pEnd = pHt->GetEnd() ) && nPos == *pEnd)
+            {
+                // Hyperlinks werden als Felder geschrieben, aber der
+                // "FieldResult" // steht als Text im TextNode. Also muss bei
+                // diesen Attributen am // Ende 2 Klammern stehen!
+                rWrt.Strm() << "}}";
+            }
+        }
+    }
+}
+
 static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
     SwTxtNode * pNd = &((SwTxtNode&)rNode);
@@ -1487,6 +1570,8 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
         rRTFWrt.bTxtAttr = TRUE;
         rRTFWrt.bOutFmtAttr = FALSE;
+
+        HandleHyperlinks(rWrt, pNd->GetpSwpHints(), nStrPos);
 
         if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
             && nStrPos != nEnde )
@@ -2764,59 +2849,6 @@ static Writer& OutRTF_SwNoLinebreakHere( Writer& rWrt, const SfxPoolItem& )
 }
 #endif
 
-static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
-{
-    const SwFmtINetFmt& rURL = (const SwFmtINetFmt&)rHt;
-    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
-    if( rURL.GetValue().Len() )
-    {
-        rWrt.Strm() << '{' << sRTF_FIELD << '{' << sRTF_IGNORE
-                    << sRTF_FLDINST << " HYPERLINK ";
-
-        String sURL( rURL.GetValue() );
-        if( INET_MARK_TOKEN != sURL.GetChar(0) )
-        {
-            INetURLObject aTmp( INetURLObject::AbsToRel( sURL ) );
-            sURL = aTmp.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS);
-/*          if( INET_PROT_FILE == aTmp.GetProtocol() )
-            {
-                // WW97 wollen keine FILE-URL haben, sondern einen normalen
-                // Dateinamen. Aber ab WW2000 kennen sie FileURLs.
-                sURL = aTmp.GetFull();
-            }
-*/          rWrt.Strm() << '\"';
-            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, DEF_ENCODING,
-                                    rRTFWrt.bWriteHelpFmt ) << "\" ";
-            sURL = aTmp.GetMark();
-        }
-
-        if( sURL.Len() )
-        {
-            rWrt.Strm() << "\\\\l \"";
-            sURL.Erase( 0, 1 );
-            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, DEF_ENCODING,
-                                    rRTFWrt.bWriteHelpFmt ) << "\" ";
-        }
-
-        if( rURL.GetTargetFrame().Len() )
-        {
-            rWrt.Strm() << "\\\\t \"";
-            RTFOutFuncs::Out_String( rWrt.Strm(), rURL.GetTargetFrame(),
-                        DEF_ENCODING, rRTFWrt.bWriteHelpFmt ) << "\" ";
-        }
-
-        rWrt.Strm() << "}{" << sRTF_FLDRSLT << ' ';
-        rRTFWrt.bOutFmtAttr = FALSE;
-
-        // und dann noch die Attributierung ausgeben
-        const SwCharFmt* pFmt;
-        const SwTxtINetFmt* pTxtAtr = rURL.GetTxtINetFmt();
-        if( pTxtAtr && 0 != ( pFmt = pTxtAtr->GetCharFmt() ))
-            OutRTF_SwFmt( rWrt, *pFmt );
-    }
-    return rWrt;
-}
-
 static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rHt;
@@ -3016,6 +3048,9 @@ static Writer& OutRTF_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
             rRTFWrt.bOutFmtAttr = TRUE;
             rWrt.Strm() << sRTF_LI;
             rWrt.OutLong( rLR.GetTxtLeft() ) << sRTF_RI;
+            rWrt.OutLong( rLR.GetRight() );
+            rWrt.Strm() << sRTF_LIN;
+            rWrt.OutLong( rLR.GetTxtLeft() ) << sRTF_RIN;
             rWrt.OutLong( rLR.GetRight() );
             rWrt.Strm() << sRTF_FI;
             rWrt.OutLong( rLR.GetTxtFirstLineOfst() );
@@ -4123,4 +4158,4 @@ SwNodeFnTab aRTFNodeFnTab = {
 /* RES_OLENODE  */                   OutRTF_SwOLENode
 };
 
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

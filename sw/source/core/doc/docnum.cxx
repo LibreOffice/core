@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: od $ $Date: 2002-12-10 16:03:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,8 +505,10 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         sName.Erase( 0, nPos );
         nPos = 0;
         sNum = sName.GetToken( 0, '.', nPos );
+        // #i4533# without this check all parts delimited by a dot are treated as outline numbers
+        if(!ByteString(sNum, gsl_getSystemTextEncoding()).IsNumericAscii())
+            nPos = STRING_NOTFOUND;
     }
-
     rName = sName;      // das ist der nachfolgende Text.
 
     // alle Levels gelesen, dann suche mal im Document nach dieser
@@ -591,7 +593,21 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
-            if( !pNd->GetExpandTxt().Equals( sName ) )
+            String sExpandedText = pNd->GetExpandTxt();
+            //#i4533# leading numbers followed by a dot have been remove while
+            //searching for the outline position
+            //to compensate this they must be removed from the paragraphs text content, too
+            USHORT nPos = 0;
+            String sTempNum;
+            while(sExpandedText.Len() && (sTempNum = sExpandedText.GetToken(0, '.', nPos)).Len() &&
+                    STRING_NOTFOUND != nPos &&
+                    ByteString(sTempNum, gsl_getSystemTextEncoding()).IsNumericAscii())
+            {
+                sExpandedText.Erase(0, nPos);
+                nPos = 0;
+            }
+
+            if( !sExpandedText.Equals( sName ) )
             {
                 USHORT nTmp = ::lcl_FindOutlineName( GetNodes(), sName, TRUE );
                 if( USHRT_MAX != nTmp )             // ueber den Namen gefunden

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:24:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,10 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
+#endif
+
+#ifndef _NDTXT_HXX
+#include "ndtxt.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1738,7 +1742,8 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
             {
                 const SwXMLTableCell_Impl *pSrcCell =
                     GetCell( nCurRow-1, nCurCol );
-                InsertCell( pSrcCell->GetStyleName(), 1U, pSrcCell->GetColSpan(),
+                InsertCell( pSrcCell->GetStyleName(), 1U,
+                            pSrcCell->GetColSpan(),
                             InsertTableSection(), 0, pSrcCell->IsProtected(),
                             &pSrcCell->GetFormula(),
                             pSrcCell->HasValue(), pSrcCell->GetValue() );
@@ -2067,19 +2072,76 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
 
     if( pCell->GetStartNode() )
     {
-        const OUString& rFormula = pCell->GetFormula();
-        if (rFormula.getLength() > 0)
+
+        // #104801# try to rescue broken documents with a certain pattern
+        // if: 1) the cell has a default number format (number 0)
+        //     2) the call has no formula
+        //     3) the value is 0.0
+        //     4) the text doesn't look anything like 0.0
+        //        [read: length > 10, or length smaller 10 and no 0 in it]
+        // then make it a text cell!
+        bool bSuppressNumericContent = false;
+        if( pCell->HasValue() && (pCell->GetValue() == 0.0) &&
+            (pCell->GetFormula().getLength() == 0) &&
+            (sStyleName.getLength() != 0) )
         {
-            // formula cell: insert formula if valid
-            SwTblBoxFormula aFormulaItem( rFormula );
-            pBoxFmt->SetAttr( aFormulaItem );
+            // default num format?
+            const SfxPoolItem* pItem = NULL;
+            if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem )
+                            == SFX_ITEM_SET )
+            {
+                const SwTblBoxNumFormat* pNumFormat =
+                    static_cast<const SwTblBoxNumFormat*>( pItem );
+                if( ( pNumFormat != NULL ) && ( pNumFormat->GetValue() == 0 ) )
+                {
+                    // only one text node?
+                    SwNodeIndex aNodeIndex( *(pCell->GetStartNode()), 1 );
+                    if( ( aNodeIndex.GetNode().EndOfSectionIndex() -
+                          aNodeIndex.GetNode().StartOfSectionIndex() ) == 2 )
+                    {
+                        SwTxtNode* pTxtNode= aNodeIndex.GetNode().GetTxtNode();
+                        if( pTxtNode != NULL )
+                        {
+                            // check text: does it look like some form of 0.0?
+                            const String& rText = pTxtNode->GetTxt();
+                            if( ( rText.Len() > 10 ) ||
+                                ( rText.Search( '0' ) == STRING_NOTFOUND ) )
+                            {
+                                bSuppressNumericContent = true;
+                            }
+                        }
+                    }
+                    else
+                        bSuppressNumericContent = true; // several nodes
+                }
+            }
         }
 
-        // always insert value, even if default
-        if( pCell->HasValue() )
+        if( bSuppressNumericContent )
         {
-            SwTblBoxValue aValueItem( pCell->GetValue() );
-            pBoxFmt->SetAttr( aValueItem );
+            // suppress numeric content? Then reset number format!
+            pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
+            pBoxFmt->ResetAttr( RES_BOXATR_FORMAT );
+            pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
+        }
+        else
+        {
+            // the normal case: set formula and value (if available)
+
+            const OUString& rFormula = pCell->GetFormula();
+            if (rFormula.getLength() > 0)
+            {
+                // formula cell: insert formula if valid
+                SwTblBoxFormula aFormulaItem( rFormula );
+                pBoxFmt->SetAttr( aFormulaItem );
+            }
+
+            // always insert value, even if default
+            if( pCell->HasValue() )
+            {
+                SwTblBoxValue aValueItem( pCell->GetValue() );
+                pBoxFmt->SetAttr( aValueItem );
+            }
         }
 
         // update cell content depend on the default language
@@ -2759,11 +2821,16 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         if( !pPrevSttNd )
         {
             pBox1->pSttNd = pStNd;
-            SwTable& rTable = pTableNode->GetTable();
-            SwFrmFmt *pTblFmt = rTable.GetFrmFmt();
-            Reference < XCell > xCell( SwXCell::CreateXCell( pTblFmt, pBox1, 0, &rTable ) );
-            Reference < XText > xText( xCell, UNO_QUERY );
-            Reference < XTextCursor > xTextCursor = xText->createTextCursor();
+            SwCntntNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
+                                                            ->GetCntntNode();
+            SwPosition aPos( *pCNd );
+            aPos.nContent.Assign( pCNd, 0U );
+
+            Reference < XTextRange > xTextRange =
+                SwXTextRange::CreateTextRangeFromPosition( pDoc, aPos, 0 );
+            Reference < XText > xText = xTextRange->getText();
+            Reference < XTextCursor > xTextCursor =
+                xText->createTextCursorByRange( xTextRange );
             GetImport().GetTextImport()->SetCursor( xTextCursor );
         }
     }

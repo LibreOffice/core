@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-10-22 07:16:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_DASH,                    0 != (nIdxOptions&TOI_DASH             ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_UPPER_CASE,              0 != (nIdxOptions&TOI_INITIAL_CAPS     ));
 
-            lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY,          rDesc.GetSequenceName());
+            String aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
+            lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY, aTmpName );
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,  !rDesc.IsCreateFromObjectNames());
 
             sal_Int16 nSet = text::ChapterFormat::NAME_NUMBER;

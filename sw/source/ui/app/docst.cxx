@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 10:50:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,12 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                 if(rParent.Len())
                 {
                     SwTxtFmtColl* pColl = pWrtShell->FindTxtFmtCollByName( rParent );
+                    if(!pColl)
+                    {
+                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, GET_POOLID_TXTCOLL);
+                        if(USHRT_MAX != nId)
+                            pColl =  pWrtShell->GetTxtCollFromPool( nId );
+                    }
                     pDStyle->GetCollection()->SetDerivedFrom( pColl );
                     pDStyle->PresetParent( rParent );
                 }
@@ -563,6 +569,12 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                 if(rParent.Len())
                 {
                     SwCharFmt* pCFmt = pWrtShell->FindCharFmtByName( rParent );
+                    if(!pCFmt)
+                    {
+                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, GET_POOLID_CHRFMT);
+                        if(USHRT_MAX != nId)
+                            pCFmt =  pWrtShell->GetCharFmtFromPool( nId );
+                    }
 
                     pDStyle->GetCharFmt()->SetDerivedFrom( pCFmt );
                     pDStyle->PresetParent( rParent );
@@ -581,6 +593,12 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                 if(rParent.Len())
                 {
                     SwFrmFmt* pFFmt = pWrtShell->GetDoc()->FindFrmFmtByName( rParent );
+                    if(!pFFmt)
+                    {
+                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, GET_POOLID_FRMFMT);
+                        if(USHRT_MAX != nId)
+                            pFFmt =  pWrtShell->GetFrmFmtFromPool( nId );
+                    }
                     pDStyle->GetFrmFmt()->SetDerivedFrom( pFFmt );
                     pDStyle->PresetParent( rParent );
                 }

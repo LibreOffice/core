@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-10-10 06:06:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ String STR_COMCORE_READERROR
     TEXT [ spanish ] = "Error de lectura" ;
     TEXT [ english_us ] = "Read-Error" ;
     TEXT[ chinese_simplified ] = "è¯»æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯";
-    TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè";
+    TEXT[ russian ] = "Îøèáêà ÷òåíèÿ";
     TEXT[ polish ] = "B³¹d odczytu";
     TEXT[ japanese ] = "èª­ã¿å–ã‚Šã‚¨ãƒ©ãƒ¼";
     TEXT[ chinese_traditional ] = "è®€æª”æ¡ˆæ™‚ç™¼ç”ŸéŒ¯èª¤";
@@ -116,7 +116,7 @@ String STR_COMCORE_CANT_SHOW
     TEXT [ finnish ] = "Kuvaa ei voida näyttää." ;
     TEXT [ english_us ] = "Graphic cannot be displayed." ;
     TEXT[ chinese_simplified ] = "æ— æ³•æ˜¾ç¤ºå›¾å½¢";
-    TEXT[ russian ] = "Ğèñóíîê ïğåäñòàâèòü íåâîçìîæíî";
+    TEXT[ russian ] = "Íåâîçìîæíî ïîêàçàòü ãğàôè÷åñêèé îáúåêò.";
     TEXT[ polish ] = "Grafiki nie mo¿na wyœwietliæ.";
     TEXT[ japanese ] = "å›³ã‚’è¡¨ç¤ºã§ãã¾ã›ã‚“ã€‚";
     TEXT[ chinese_traditional ] = "ç„¡æ³•é¡¯ç¤ºåœ–å½¢";
@@ -147,13 +147,13 @@ InfoBox ERR_CLPBRD_WRITE
     MESSAGE [ spanish ] = "Error al copiar al portapapeles." ;
     MESSAGE [ english_us ] = "Error while copying to the clipboard." ;
     MESSAGE[ chinese_simplified ] = "åœ¨å¤åˆ¶æ•°æ®åˆ°å‰ªè´´æ¿æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
-    MESSAGE[ russian ] = "Îøèáêà ïğè êîïèğîâàíèè â áóôåğ îáìåíà.";
+    MESSAGE[ russian ] = "Îøèáêà êîïèğîâàíèÿ â áóôåğ îáìåíà.";
     MESSAGE[ polish ] = "B³¹d podczas kopiowania do schowka.";
     MESSAGE[ japanese ] = "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ã‚³ãƒ”ãƒ¼ã™ã‚‹éš›ã®ã‚¨ãƒ©ãƒ¼ã€‚";
     MESSAGE[ chinese_traditional ] = "è¤‡è£½è³‡æ–™åˆ°å‰ªè²¼ç°¿æ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
     MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáäÓÎ Åáì ÇáÍÇİÙÉ.";
     MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíôéãñáöŞ óôï ğñü÷åéñï.";
-    MESSAGE[ korean ] = "í´ë¦½ë³´ë“œì— ë³µì‚¬ ì¤‘ ì˜¤ë¥˜.";
+    MESSAGE[ korean ] = "í´ë¦½ë³´ë“œì— ë³µì‚¬ ì¤‘ ì˜¤ë¥˜";
     MESSAGE[ turkish ] = "Panoya kopyalama hatası.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "S'ha produït un error en copiar al porta-retalls.";
@@ -175,14 +175,14 @@ InfoBox ERR_CLPBRD_READ
     MESSAGE [ spanish ] = "Error al leer del portapapeles." ;
     MESSAGE [ english_us ] = "Error reading from the clipboard." ;
     MESSAGE[ chinese_simplified ] = "åœ¨è¯»å–å‰ªè´´æ¿æ—¶å‘ç”Ÿé”™è¯¯ã€‚";
-    MESSAGE[ russian ] = "Îøèáêà ïğè ÷òåíèè èç áóôåğà îáìåíà.";
+    MESSAGE[ russian ] = "Îøèáêà ÷òåíèÿ èç áóôåğà îáìåíà.";
     MESSAGE[ polish ] = "B³¹d odczytu ze schowka.";
     MESSAGE[ japanese ] = "ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‹ã‚‰èª­ã¿å–ã‚‹éš›ã®ã‚¨ãƒ©ãƒ¼ã€‚";
     MESSAGE[ chinese_traditional ] = "åœ¨è®€å–å‰ªè²¼ç°¿æ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
     MESSAGE[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáŞÑÇÁÉ ãä ÇáÍÇİÙÉ.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç áğü ôï ğñü÷åéñï.";
-    MESSAGE[ korean ] = "í´ë¦½ë³´ë“œë¡œë¶€í„° ì½ê¸° ì˜¤ë¥˜.";
+    MESSAGE[ korean ] = "í´ë¦½ë³´ë“œë¡œë¶€í„° ì½ê¸° ì˜¤ë¥˜";
     MESSAGE[ turkish ] = "Panodan okuma hatası.";
     MESSAGE[ catalan ] = "S'ha produït un error en llegir el porta-retalls.";
     MESSAGE[ thai ] = "à¸­à¹ˆà¸²à¸™à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸ˆà¸²à¸à¸„à¸¥à¸´à¸›à¸šà¸­à¸£à¹Œà¸”";
@@ -203,15 +203,15 @@ Resource RID_SW_ERRHDL
         TEXT [ italian ] = "Errore nel formato del file" ;
         TEXT [ portuguese_brazilian ] = "Erro no formato do arquivo" ;
         TEXT [ portuguese ] = "Encontrado erro de formato no ficheiro" ;
-        TEXT [ finnish ] = "Tiedostomuotovirhe ilmeni" ;
+        TEXT [ finnish ] = "Tiedostomuotovirhe ilmeni." ;
         TEXT [ danish ] = "Opdaget formatfejl i filen" ;
         TEXT [ french ] = "Erreur de format de fichier" ;
         TEXT [ swedish ] = "Formatfel upptäckt i filen" ;
-        TEXT [ dutch ] = "Formaatfout ontdekt in het bestand" ;
+        TEXT [ dutch ] = "Indelingsfout ontdekt in het bestand" ;
         TEXT [ spanish ] = "Se ha descubierto un error de formato en el archivo" ;
         TEXT [ english_us ] = "File format error found" ;
         TEXT[ chinese_simplified ] = "å‘ç°äº†æ–‡ä»¶æ ¼å¼é”™è¯¯";
-        TEXT[ russian ] = "Îáíàğóæåíà îøèáêà â ôîğìàòå ôàéëà";
+        TEXT[ russian ] = "Îøèáêà ôîğìàòà ôàéëà";
         TEXT[ polish ] = "Znaleziono b³¹d formatu w pliku";
         TEXT[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸å¼ã‚¨ãƒ©ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
         TEXT[ chinese_traditional ] = "ç™¼ç¾äº†æª”æ¡ˆæ ¼å¼éŒ¯èª¤";
@@ -235,11 +235,11 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Fejl under læsning af filen " ;
         TEXT [ french ] = "Erreur de lecture du fichier " ;
         TEXT [ swedish ] = "Fel vid läsning av fil " ;
-        TEXT [ dutch ] = "Fout bij lezen van het bestand  " ;
+        TEXT [ dutch ] = "Fout bij lezen van het bestand" ;
         TEXT [ spanish ] = "Error al leer el archivo " ;
         TEXT [ english_us ] = "Error reading file " ;
         TEXT[ chinese_simplified ] = "åœ¨è¯»æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ ";
-        TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè ôàéëà   ";
+        TEXT[ russian ] = "Îøèáêà ÷òåíèÿ ôàéëà   ";
         TEXT[ polish ] = "B³¹d w odczytywaniu pliku ";
         TEXT[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿å–ã‚Šã‚¨ãƒ©ãƒ¼ ";
         TEXT[ chinese_traditional ] = "è®€æª”æ¡ˆæ™‚ç™¼ç”ŸéŒ¯èª¤ ";
@@ -267,7 +267,7 @@ Resource RID_SW_ERRHDL
         TEXT [ spanish ] = "Error en el archivo de entrada" ;
         TEXT [ english_us ] = "Input file error" ;
         TEXT[ chinese_simplified ] = "è¾“å…¥çš„æ–‡ä»¶å«æœ‰é”™è¯¯";
-        TEXT[ russian ] = "Îøèáêà â ôàéëå ââîäà";
+        TEXT[ russian ] = "Îøèáêà ââîäà ôàéëà";
         TEXT[ polish ] = "B³¹d w pliku wejœciowym";
         TEXT[ japanese ] = "å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®ä¸­ã«ã‚¨ãƒ©ãƒ¼";
         TEXT[ chinese_traditional ] = "è¼¸å…¥çš„æª”æ¡ˆå«æœ‰éŒ¯èª¤";
@@ -287,7 +287,7 @@ Resource RID_SW_ERRHDL
         TEXT [ italian ] = "Questo non è un file di %PRODUCTNAME Writer" ;
         TEXT [ portuguese_brazilian ] = "Este n?o ? um arquivo do %PRODUCTNAME Writer" ;
         TEXT [ portuguese ] = "Este não é um ficheiro do %PRODUCTNAME Writer." ;
-        TEXT [ finnish ] = "Tämä ei ole %PRODUCTNAME Writer -tiedosto" ;
+        TEXT [ finnish ] = "Tämä ei ole %PRODUCTNAME Writer -tiedosto." ;
         TEXT [ danish ] = "Filen er ikke en %PRODUCTNAME Writer-fil" ;
         TEXT [ french ] = "Ceci n'est pas un fichier %PRODUCTNAME Writer" ;
         TEXT [ swedish ] = "Detta är inte en %PRODUCTNAME Writer-fil" ;
@@ -319,7 +319,7 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Uventet filafslutning" ;
         TEXT [ french ] = "Fin de fichier imprévue" ;
         TEXT [ swedish ] = "Oväntat filslut" ;
-        TEXT [ dutch ] = "Onverwacht bestandeinde" ;
+        TEXT [ dutch ] = "Onverwacht bestandseinde" ;
         TEXT [ spanish ] = "Fin inesperado de archivo" ;
         TEXT [ english_us ] = "Unexpected end of file" ;
         TEXT[ chinese_simplified ] = "æ„å¤–çš„æ–‡ä»¶ç»“å°¾";
@@ -340,24 +340,24 @@ Resource RID_SW_ERRHDL
         TEXT = "Dateien, die mit Kennwort geschützt sind, können nicht geöffnet werden." ;
         TEXT [ English ] = "Files with passwords are not supported" ;
         TEXT [ norwegian ] = "Passordbeskyttet filer er ikke tilgjengelige" ;
-        TEXT [ italian ] = "Le password non sono supportate" ;
+        TEXT [ italian ] = "Impossibile aprire i file protetti da password." ;
         TEXT [ portuguese_brazilian ] = "Arquivos com senhas n?o s o comportados" ;
         TEXT [ portuguese ] = "As senhas não têm suporte" ;
-        TEXT [ finnish ] = "Salasanoilla suojattuja tiedostoja ei tueta" ;
+        TEXT [ finnish ] = "Salasanoilla suojattuja tiedostoja ei tueta." ;
         TEXT [ danish ] = "Adgangskoder understøttes ikke" ;
-        TEXT [ french ] = "Les mots de passe ne sont pas supportés." ;
-        TEXT [ swedish ] = "Lösenord stöds ej" ;
+        TEXT [ french ] = "Impossible d'ouvrir les fichiers protégés par des mots de passe !" ;
+        TEXT [ swedish ] = "Det går inte att öppna filer som är skyddade med lösenord" ;
         TEXT [ dutch ] = "Wachtwoorden worden niet ondersteund" ;
-        TEXT [ spanish ] = "Las contraseñas no se apoyan" ;
-        TEXT [ english_us ] = "Passwords are not supported." ;
-        TEXT[ chinese_simplified ] = "ä¸æ”¯æŒå¯†ç ";
-        TEXT[ russian ] = "Ïàğîëè íå ïîääåğæèâàşòñÿ";
+        TEXT [ spanish ] = "Los archivos protegidos por contraseñas no se pueden abrir." ;
+        TEXT [ english_us ] = "Password-protected files cannot be opened." ;
+        TEXT[ chinese_simplified ] = "æ— æ³•æ‰“å¼€ç”¨å¯†ç ä¿æŠ¤çš„æ–‡ä»¶ã€‚";
+        TEXT[ russian ] = "Íå ïîääåğæèâàşòñÿ ôàéëû, çàùèùåííûå ïàğîëÿìè";
         TEXT[ polish ] = "Has³a nie bêd¹ obs³ugiwane";
         TEXT[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯æ”¯æ´ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-        TEXT[ chinese_traditional ] = "ä¸æ”¯æ´å¯†ç¢¼";
+        TEXT[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿå—åˆ°å¯†ç¢¼ä¿è­·çš„æª”æ¡ˆã€‚";
         TEXT[ arabic ] = "ßáãÇÊ ÇáÓÑ ÛíÑ ãÚÊãÏÉ";
         TEXT[ greek ] = "Äåí õğïóôçñßæåôáé ç ëåéôïõñãßá êùäéêïı ğñüóâáóçò";
-        TEXT[ korean ] = "ì•”í˜¸ê°€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
+        TEXT[ korean ] = "ì•”í˜¸ë¡œ ë³´ì•ˆëœ íŒŒì¼ì€ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
         TEXT[ turkish ] = "Şifre kullanımı desteklenmiyor";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No estan permesos els fitxers protegits amb contrasenyes";
@@ -379,7 +379,7 @@ Resource RID_SW_ERRHDL
         TEXT [ spanish ] = "El archivo no es uno de WinWord6" ;
         TEXT [ english_us ] = "This is not a WinWord6 file" ;
         TEXT[ chinese_simplified ] = "è¿™ä¸æ˜¯ä¸€ä¸ª WinWord6 æ–‡ä»¶";
-        TEXT[ russian ] = "İòîò ôàéë íå ÿâëÿåòñÿ ôàéëîì WinWord6";
+        TEXT[ russian ] = "İòîò ôàéë íå ÿâëÿåòñÿ ôàéëîì WinWor";
         TEXT[ polish ] = "Ten plik nie jest plikiem WinWord6";
         TEXT[ japanese ] = "ã“ã‚Œã¯ WinWord6 ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
         TEXT[ chinese_traditional ] = "é€™ä¸æ˜¯ä¸€å€‹ WinWord6 æª”æ¡ˆ";
@@ -407,11 +407,11 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Denne fil er blevet gemt med WinWord-indstillingen 'Gem hurtigt'. Deaktiver venligst indstillingen 'Gem hutigt' og gem filen igen med WinWord." ;
         TEXT [ french ] = "Ce fichier a été enregistré à l'aide de l'option 'Enregistrement rapide' de WinWord. Veuillez désactiver cette option et utiliser WinWord pour enregistrer à nouveau le fichier." ;
         TEXT [ swedish ] = "Denna fil är sparad med WinWord-alternativet 'snabbspara'. Stäng av WinWord-alternativet 'Tillåt snabbspara' och spara filen med WinWord igen" ;
-        TEXT [ dutch ] = "Dit bestand werd met de WinWord- optie \"Snel opslaan\" opgeslagen. Schakel a.u.b in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
+        TEXT [ dutch ] = "Dit bestand is met de WinWord-optie \"Snel opslaan\" opgeslagen. Schakel a.u.b. in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
         TEXT [ spanish ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde el archivo de nuevo en WinWord." ;
-        TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please uncheck the option 'Allow Fast Saves' and save the file again." ;
+        TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
         TEXT[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å­˜ç›˜é‡‡ç”¨çš„æ˜¯ WinWord é€‰é¡¹ 'å¿«é€Ÿä¿å­˜'æ–¹å¼ã€‚è¯·å…³é—­è¿™ä¸ªé€‰é¡¹ï¼Œç„¶åå†é‡æ–°å­˜ç›˜è¿™ä¸ªæ–‡ä»¶ã€‚";
-        TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí â WinWord ïğè ïîìîùè ïàğàìåòğà 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë â WinWord.";
+        TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí èç WinWord â ğåæèìå 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë èç WinWord.";
         TEXT[ polish ] = "Ten plik zosta³ zapisany za pomoc¹ opcji WinWord 'Szybkie zapisywanie'. Proszê w³³¹cz w WinWord opcjê 'Dopuœæ szybkie zapisywanie' i zapisz plik ponownie w WinWord";
         TEXT[ japanese ] = "ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ WinWord ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ã€Œé«˜é€Ÿä¿å­˜ã€ã§ä¿å­˜ã•ã‚Œã¦ã„ã¾ã™ã€‚WinWord ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã€Œé«˜é€Ÿä¿å­˜ã™ã‚‹ã€ã‚’ã‚ªãƒ•ã«ã—ã¦ WinWord ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã—ãªãŠã—ã¦ãã ã•ã„ã€‚";
         TEXT[ chinese_traditional ] = "å„²å­˜æª”æ¡ˆæ¡ç”¨çš„æ˜¯ WinWord é¸é …<å¿«é€Ÿå„²å­˜>æ–¹å¼ã€‚è«‹é—œé–‰é€™å€‹é¸é …ï¹ç„¶å¾Œå†é‡æ–°å„²å­˜é€™å€‹æ–‡ä»¶ã€‚";
@@ -435,11 +435,11 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Fejl under skrivning af midlertidig fil" ;
         TEXT [ french ] = "Erreur d'écriture du fichier temporaire" ;
         TEXT [ swedish ] = "Fel vid skrivning av temporär fil" ;
-        TEXT [ dutch ] = "Fout bij het schrijven van tijdelijk bestand" ;
+        TEXT [ dutch ] = "Fout bij schrijven van tijdelijk bestand" ;
         TEXT [ spanish ] = "Error al escribir el archivo temporal" ;
         TEXT [ english_us ] = "Error writing temporary file" ;
         TEXT[ chinese_simplified ] = "åœ¨å†™å…¥æš‚æ—¶æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯";
-        TEXT[ russian ] = "Îøèáêà ïğè çàïèñè âğåìåííîãî ôàéëà";
+        TEXT[ russian ] = "Îøèáêà çàïèñè âğåìåííîãî ôàéëà";
         TEXT[ polish ] = "B³¹d zapisu pliku tymczasowego";
         TEXT[ japanese ] = "ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸ãè¾¼ã¿ä¸­ã®ã‚¨ãƒ©ãƒ¼";
         TEXT[ chinese_traditional ] = "åœ¨å¯«å…¥æš«æ™‚æª”æ¡ˆæ™‚ç™¼ç”ŸéŒ¯èª¤";
@@ -461,19 +461,19 @@ Resource RID_SW_ERRHDL
         TEXT [ portuguese ] = "A área de inserção do ficheiro Ini é demasiado extensa" ;
         TEXT [ french ] = "Zone d'insertion dans le fichier Ini trop grande" ;
         TEXT [ dutch ] = "Invoegbereik in INI-bestand is te groot" ;
-        TEXT [ spanish ] = "El área de inserción en el archivo Ini es demasiado grande" ;
+        TEXT [ spanish ] = "La sección insertada en el archivo Ini es demasiado grande" ;
         TEXT [ danish ] = "Importområdet i ini-filen er for stort" ;
         TEXT [ swedish ] = "Importområdet i ini-filen är för stort" ;
-        TEXT [ finnish ] = "Ini-tiedostoon lisätty osio on liian suuri" ;
+        TEXT [ finnish ] = "Ini-tiedostoon lisätty osa on liian suuri." ;
         TEXT [ english_us ] = "Inserted section in ini file too large" ;
         TEXT[ chinese_simplified ] = "Ini æ–‡ä»¶æ’å…¥åŒºåŸŸå¤ªå¤§";
-        TEXT[ russian ] = "Îáëàñòü âñòàâêè â ôàéë Ini ñëèøêîì áîëüøàÿ";
+        TEXT[ russian ] = "Âñòàâëåííàÿ â ini ôàéë ñåêöèÿ ñëèøêîì âåëèêà";
         TEXT[ polish ] = "Obszar wstawiania do pliku Ini jest za du¿y";
         TEXT[ japanese ] = "Ini ãƒ•ã‚¡ã‚¤ãƒ«ã®æŒ¿å…¥ç¯„å›²ãŒå¤§ãã™ãã¾ã™ã€‚";
         TEXT[ chinese_traditional ] = "Ini æª”æ¡ˆæ’å…¥å€åŸŸå¤ªå¤§";
         TEXT[ arabic ] = "äØÇŞ ÇáÅÏÎÇá İí Çáãáİ Ini ßÈíÑ ÌÏÇğ";
         TEXT[ greek ] = "Ç ğåñéï÷Ş åéóáãùãŞò óôï áñ÷åßï ini åßíáé ğïëı ìåãÜëç";
-        TEXT[ korean ] = "ini íŒŒì¼ì— ì‚½ì…ëœ ì˜ì—­ì´ ë„ˆë¬´ í½ë‹ˆë‹¤.";
+        TEXT[ korean ] = "ini íŒŒì¼ì— ì‚½ì…ëœ êµ¬ì—­ì´ ë„ˆë¬´ í½ë‹ˆë‹¤.";
         TEXT[ turkish ] = "Ini dosyası ekleme bölümü çok büyük";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "L'àrea d'inserció del fitxer ini és massa gran";
@@ -486,14 +486,14 @@ Resource RID_SW_ERRHDL
         Text [ english_us ] = "File format error found at $(ARG1)(row,col)" ;
         Text [ italian ] = "È stato trovato un errore di formato nel file alla posizione $(ARG1)(riga, colonna)" ;
         Text [ spanish ] = "Se ha descubierto un error de formato en el archivo en la posición $(ARG1)(fila,columna)" ;
-        Text [ french ] = "Erreur de format à la position $(ARG1)(ligne,colonne) du fichier" ;
-        Text [ dutch ] = "Formaatfout ontdekt op positie $(ARG1)(cel,kolom) in het bestand" ;
+        Text [ french ] = "Erreur de format dans le fichier, position $(ARG1)(ligne, colonne)." ;
+        Text [ dutch ] = "Indelingsfout ontdekt op positie $(ARG1)(cel,kolom) in het bestand" ;
         Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) upptäckt i filen" ;
         Text [ danish ] = "Der blev opdaget en formatfejl i filen på position $(ARG1)(række,spalte)" ;
         Text [ portuguese ] = "Descoberto erro de formato na posição $(ARG1)(linha, coluna) do ficheiro" ;
         Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
         Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼é”™è¯¯ $(ARG1)(è¡Œï¼Œåˆ—)";
-        Text[ russian ] = "Â ìåñòå $(ARG1)(ñòğîêà,ñòîëáåö) îáíàğóæåíà îøèáêà ôîğìàòà ôàéëà";
+        Text[ russian ] = "Îøèáêà ôîğìàòà ôàéëà â ìåñòå $(ARG1)(ñòğîêà,ñòîëáåö)";
         Text[ polish ] = "Znaleziono w pliku b³¹d formatu przy pozycji $(ARG1)(Wiersz, kolumna)";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã® $(ARG1)(è¡Œã€åˆ—)ã«æ›¸å¼ã‚¨ãƒ©ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
         Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼éŒ¯èª¤ $(ARG1)(è¡Œï¼Œåˆ—)";
@@ -503,7 +503,7 @@ Resource RID_SW_ERRHDL
         Text[ turkish ] = "Dosya format hatası $(ARG1)(satır, sütun) bulundu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S'ha trobat un error en el format de l'arxiu a $(ARG1)(fila, col.)";
-        Text[ finnish ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake)";
+        Text[ finnish ] = "Tiedostomuotovirhe ilmeni kohteessa $(ARG1)(rivi,sarake).";
         Text[ thai ] = "à¸à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆ $(ARG1)(à¹à¸–à¸§,à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ)";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
@@ -514,13 +514,13 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Il file è stato creato da una versione più recente" ;
         Text [ spanish ] = "El archivo se escribió en una versión más nueva" ;
         Text [ french ] = "Ce fichier a été créé à l'aide d'une version plus récente" ;
-        Text [ dutch ] = "Bestand werd onder een nieuwere versie opgeslagen" ;
+        Text [ dutch ] = "Bestand is onder een nieuwere versie opgeslagen" ;
         Text [ swedish ] = "Filen har skrivits i en nyare version" ;
         Text [ danish ] = "Filen er blevet skrevet af en nyere version" ;
         Text [ portuguese ] = "O ficheiro foi escrito numa versão mais moderna" ;
         Text [ portuguese_brazilian ] = "Datei wurde von einer neueren Version geschrieben" ;
         Text[ chinese_simplified ] = "æ–‡ä»¶å·²ç»ç”±ä¸€ä¸ªæ–°ç‰ˆæœ¬æ›´æ–°";
-        Text[ russian ] = "Ôàéë íàïèñàí â íîâîé âåğñèè";
+        Text[ russian ] = "Ôàéë çàïèñàí â áîëåå íîâîé âåğñèè";
         Text[ polish ] = "Plik zosta³ zapisany w nowszej wersji";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ–°ã—ã„ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§æ›¸ã‹ã‚Œã¦ã„ã¾ã™";
         Text[ chinese_traditional ] = "æª”æ¡ˆå·²ç¶“è¢«ä¸€å€‹æ–°ç‰ˆæœ¬æ›´æ–°";
@@ -539,9 +539,9 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "This isn't a WinWord97 file" ;
         TEXT[ english_us ] = "This is not a WinWord97 file";
         TEXT[ portuguese ] = "Não é um ficheiro WinWord97";
-        TEXT[ russian ] = "Äàííûé ôàéë íå ÿâëÿåòñÿ ôàéëîì WinWord97";
+        TEXT[ russian ] = "Äàííûé ôàéë íå ÿâëÿåòñÿ ôàéëîì WinWor";
         TEXT[ greek ] = "Ôï áñ÷åßï áõôü äåí åßíáé ôığïõ WinWord97";
-        TEXT[ dutch ] = "Dit is geen WinWord97 bestand";
+        TEXT[ dutch ] = "Dit is geen WinWord97-bestand";
         TEXT[ french ] = "Il ne s'agit pas d'un fichier WinWord97 !";
         TEXT[ spanish ] = "El archivo no es de WinWord97";
         TEXT[ italian ] = "Il file non è nel formato WinWord97";
@@ -550,7 +550,7 @@ Resource RID_SW_ERRHDL
         TEXT[ polish ] = "To nie jest plik WinWord97";
         TEXT[ portuguese_brazilian ] = "This isn't a WinWord97 file";
         TEXT[ japanese ] = "ã“ã‚Œã¯ WinWord97 ãƒ•ã‚¡ã‚¤ãƒ«ã§ã¯ã‚ã‚Šã¾ã›ã‚“";
-        TEXT[ korean ] = "ì´ íŒŒì¼ì€ WinWord97íŒŒì¼ì´ ì•„ë‹™ë‹ˆë‹¤";
+        TEXT[ korean ] = "ì´ íŒŒì¼ì€ WinWord97 íŒŒì¼ì´ ì•„ë‹™ë‹ˆë‹¤";
         TEXT[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ä¸æ˜¯ä¸€ä¸ª WinWord97 æ–‡ä»¶";
         TEXT[ chinese_traditional ] = "é€™ä¸æ˜¯ WinWord97 æª”æ¡ˆ";
         TEXT[ turkish ] = "This isn't a WinWord97 file";
@@ -565,9 +565,9 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição $(ARG2)(linha,coluna)";
-        TEXT[ russian ] = "Â ÷àñòè äîêóìåíòà $(ARG1) â ïîçèöèè $(ARG2)(ñòğîêà, êîëîíêà)îáíàğóæåíà îøèáêà ôîğìàòà.";
+        TEXT[ russian ] = "Îøèáêà ôîğìàòà ôàéëà â ïîääîêóìåíòå $(ARG1) â ïîçèöèè $(ARG2)(ñòğîêà, ñòîëáåö).";
         TEXT[ greek ] = "Åíôïğßóôçêå İíá óöÜëìá ìïñöïğïßçóçò ôïõ áñ÷åßïõ óôï ôìŞìá êåéìİíïõ $(ARG1) óôç èİóç $(ARG2)(ãñáììŞ, óôŞëç)";
-        TEXT[ dutch ] = "Fout in formaat in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
+        TEXT[ dutch ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
         TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
@@ -576,13 +576,13 @@ Resource RID_SW_ERRHDL
         TEXT[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã® $(ARG2)(è¡Œã€åˆ—)ã«ã‚ã‚‹éƒ¨åˆ†ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ $(ARG1) ã«æ›¸å¼ã‚¨ãƒ©ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
-        TEXT[ korean ] = "íŒŒì¼ì˜ $(ARG2)(í–‰, ì—´)ìœ„ì¹˜ì— ìˆëŠ” ë¶€ë¶„ ë¬¸ì„œ $(ARG1)ì˜ í˜•ì‹ ì˜¤ë¥˜ ë°œê²¬";
+        TEXT[ korean ] = "íŒŒì¼ì˜ $(ARG2)(í–‰, ì—´)ìœ„ì¹˜ì— ìˆëŠ” ë¶€ë¶„ ë¬¸ì„œ $(ARG1)ì˜ ì„œì‹ ì˜¤ë¥˜ë¥¼ ë°œê²¬í–ˆìŠµë‹ˆë‹¤.";
         TEXT[ chinese_simplified ] = "å‘ç°æ–‡ä»¶çš„å­æ–‡æ¡£$(ARG1)å†…å«é”™è¯¯ï¼Œä½ç½®åœ¨ $(ARG2)(è¡Œ,åˆ—)";
         TEXT[ chinese_traditional ] = "ç™¼ç¾æª”æ¡ˆçš„å­æ–‡ä»¶$(ARG1)å…§å«éŒ¯èª¤ï¼Œä½ç½®åœ¨ $(ARG2)(è¡Œ,æ¬„)";
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "S'ha descobert un error de format en el fitxer en el subdocument $(ARG1) fins al $(ARG2)(fila, col.)";
-        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe";
+        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
         TEXT[ thai ] = "à¸„à¹‰à¸™à¸à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¹à¸Ÿà¹‰à¸¡à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¹ˆà¸­à¸¢ $(ARG1) à¸—à¸µà¹ˆ $(ARG2)(à¹à¸–à¸§,à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ)";
     };
      // Export-Errors
@@ -598,7 +598,7 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Fejl under skrivning af filen " ;
         TEXT [ french ] = "Erreur d'écriture du fichier " ;
         TEXT [ swedish ] = "Fel vid skrivning av fil " ;
-        TEXT [ dutch ] = "Fout bij het schrijven van het bestand  " ;
+        TEXT [ dutch ] = "Fout bij schrijven van bestand" ;
         TEXT [ spanish ] = "Error al escribir el archivo " ;
         TEXT [ english_us ] = "Error writing file " ;
         TEXT[ chinese_simplified ] = "å†™å…¥æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ ";
@@ -621,7 +621,7 @@ Resource RID_SW_ERRHDL
         Text [ dutch ] = "Het AutoTekst-document heeft de verkeerde versie" ;
         Text [ english_us ] = "Wrong AutoText document version" ;
         Text [ italian ] = "Il documento di testo automatico presenta una versione errata" ;
-        Text [ spanish ] = "Versión errónea del documento de AutoTexto" ;
+        Text [ spanish ] = "Versión del documento de texto automático errónea" ;
         Text [ french ] = "La version de l' AutoTexte utilisée est incorrecte" ;
         Text [ swedish ] = "AutoTextdokumentet har fel version" ;
         Text [ danish ] = "Forkert AutoTekst dokumentversion" ;
@@ -634,7 +634,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "é€™å€‹è‡ªå‹•åœ–æ–‡é›†æ–‡ä»¶ç‰ˆæœ¬ç„¡æ•ˆ";
         Text[ arabic ] = "ÅÕÏÇÑ ÎÇØÆ áãÓÊäÏ ÇáäÕ ÇáÊáŞÇÆí";
         Text[ greek ] = "ËÜèïò İêäïóç ôïõ åããñÜöïõ ÁõôïÊåéìİíïõ";
-        Text[ korean ] = "í‹€ë¦° ìë™í…ìŠ¤íŠ¸ ë¬¸ì„œ ë²„ì „";
+        Text[ korean ] = "ì˜ëª»ëœ ìë™ í…ìŠ¤íŠ¸ ë¬¸ì„œ ë²„ì „";
         Text[ turkish ] = "Otomatik metin belgesi sürümü yanlış";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Versió incorrecta del document d'Autotext";
@@ -655,7 +655,7 @@ Resource RID_SW_ERRHDL
         Text [ portuguese ] = "É impossível criar o documento" ;
         Text [ portuguese_brazilian ] = "Das Dokument kann nicht angelegt werden" ;
         Text[ chinese_simplified ] = "æ— æ³•ç”Ÿæˆè¿™ä¸ªæ–‡æ¡£ã€‚";
-        Text[ russian ] = "Äîêóìåíò ñîçäàòü íåâîçìîæíî";
+        Text[ russian ] = "Íåâîçìîæíî ñîçäàòü äîêóìåíò";
         Text[ polish ] = "Dokumentu nie mo¿na utworzyæ";
         Text[ japanese ] = "ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯ä½œæˆã§ãã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹é€™å€‹æ–‡ä»¶";
@@ -680,11 +680,11 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Fejl under læsning af midlertidig fil" ;
         TEXT [ french ] = "Erreur de lecture du fichier temporaire" ;
         TEXT [ swedish ] = "Fel vid läsning av temporär fil" ;
-        TEXT [ dutch ] = "Fout bij het lezen van tijdelijke bestanden" ;
+        TEXT [ dutch ] = "Fout bij lezen tijdelijke bestanden" ;
         TEXT [ spanish ] = "Error al leer el archivo temporal" ;
         TEXT [ english_us ] = "Error reading temporary file" ;
         TEXT[ chinese_simplified ] = "åœ¨è¯»å–æš‚æ—¶æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯";
-        TEXT[ russian ] = "Îøèáêà ïğè ÷òåíèè âğåìåííîãî ôàéëà";
+        TEXT[ russian ] = "Îøèáêà ÷òåíèÿ âğåìåííîãî ôàéëà";
         TEXT[ polish ] = "B³¹d w odczytywaniu pliku tymczasowego";
         TEXT[ japanese ] = "ãƒ†ãƒ³ãƒãƒ©ãƒªãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿å–ã‚Šã®éš›ã®ã‚¨ãƒ©ãƒ¼";
         TEXT[ chinese_traditional ] = "è®€å–æš«æ™‚æª”æ¡ˆæ™‚ç™¼ç”ŸéŒ¯èª¤";
@@ -729,7 +729,7 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "Error in writing sub-document $(ARG1)" ;
         TEXT[ english_us ] = "Error in writing sub-document $(ARG1)";
         TEXT[ portuguese ] = "Erro ao escrever o sub-documento $(ARG1)";
-        TEXT[ russian ] = "Îøèáêà ïğè íàïèñàíèè ÷àñòè äîêóìåíòà $(ARG1)";
+        TEXT[ russian ] = "Îøèáêà çàïèñè ïîääîêóìåíòà $(ARG1)";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ ôïõ ôìŞìáôïò ôïõ åããñÜöïõ $(ARG1)";
         TEXT[ dutch ] = "Fout bij schrijven van subdocument $(ARG1)";
         TEXT[ french ] = "Erreur d'écriture dans le sous-document $(ARG1)";
@@ -746,7 +746,7 @@ Resource RID_SW_ERRHDL
         TEXT[ turkish ] = "Error in writing sub-document $(ARG1)";
         TEXT[ arabic ] = "Error in writing sub-document $(ARG1)";
         TEXT[ catalan ] = "S'ha produït un error en escriure el subdocument $(ARG1)";
-        TEXT[ finnish ] = "Aliasiakirjaan $(ARG1) kirjoitettaessa on ilmennyt virhe";
+        TEXT[ finnish ] = "Aliasiakirjaan $(ARG1) kirjoitettaessa on ilmennyt virhe.";
         TEXT[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¸à¸²à¸£à¹€à¸‚à¸µà¸¢à¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¹ˆà¸­à¸¢ $(ARG1)";
     };
      // Import-/Export-Errors
@@ -762,17 +762,17 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Intern fejl i %PRODUCTNAME Writer-filformatet" ;
         TEXT [ french ] = "Erreur interne dans le format de fichier %PRODUCTNAME Writer" ;
         TEXT [ swedish ] = "Internt fel i %PRODUCTNAME Writer-filformatet" ;
-        TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer bestandsformaat" ;
+        TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer-bestandsindeling" ;
         TEXT [ spanish ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer" ;
         TEXT [ english_us ] = "Internal error in %PRODUCTNAME Writer file format" ;
         TEXT[ chinese_simplified ] = "%PRODUCTNAME Writer æ–‡ä»¶æ ¼å¼å«æœ‰å†…éƒ¨é”™è¯¯";
-        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà %PRODUCTNAME Writer";
+        TEXT[ russian ] = "Âíóòğåííÿÿ îøèáêà ôîğìàòà ôàéëà %PRODUCTNAME Writer";
         TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku %PRODUCTNAME Writer";
         TEXT[ japanese ] = "%PRODUCTNAME Writer ãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼ã®å†…éƒ¨ã‚¨ãƒ©ãƒ¼";
         TEXT[ chinese_traditional ] = "%PRODUCTNAME Writer æª”æ¡ˆæ ¼å¼å«æœ‰å…§éƒ¨éŒ¯èª¤";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ %PRODUCTNAME Writer";
         TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ %PRODUCTNAME Writer";
-        TEXT[ korean ] = "%PRODUCTNAME Writer íŒŒì¼ì„œì‹ì˜ ë‚´ë¶€ ì˜¤ë¥˜";
+        TEXT[ korean ] = "%PRODUCTNAME Writer íŒŒì¼ ì„œì‹ì˜ ë‚´ë¶€ ì˜¤ë¥˜";
         TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyası format hatası";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "S'ha produït un error intern en el format del  %PRODUCTNAME Writer";
@@ -790,17 +790,17 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Intern fejl i %PRODUCTNAME Writer-filformatet" ;
         TEXT [ french ] = "Erreur interne dans le format de fichier %PRODUCTNAME Writer" ;
         TEXT [ swedish ] = "Internt fel i %PRODUCTNAME Writer-filformatet" ;
-        TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer bestandsformaat" ;
+        TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer-bestandsindeling" ;
         TEXT [ spanish ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer" ;
         TEXT [ english_us ] = "Internal error in %PRODUCTNAME Writer file format" ;
         TEXT[ chinese_simplified ] = "%PRODUCTNAME Writer æ–‡ä»¶æ ¼å¼å«æœ‰å†…éƒ¨é”™è¯¯";
-        TEXT[ russian ] = "Îøèáêà âíóòğè ôîğìàòà ôàéëà %PRODUCTNAME Writer";
+        TEXT[ russian ] = "Âíóòğåííÿÿ îøèáêà ôîğìàòà ôàéëà %PRODUCTNAME Writer";
         TEXT[ polish ] = "Wewnêtrzny b³¹d w formacie pliku %PRODUCTNAME Writer";
         TEXT[ japanese ] = "%PRODUCTNAME Writer ãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼ã®å†…éƒ¨ã‚¨ãƒ©ãƒ¼";
         TEXT[ chinese_traditional ] = "%PRODUCTNAME Writer æª”æ¡ˆæ ¼å¼å«æœ‰å…§éƒ¨éŒ¯èª¤";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ %PRODUCTNAME Writer";
         TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ %PRODUCTNAME Writer";
-        TEXT[ korean ] = "%PRODUCTNAME Writer íŒŒì¼ì„œì‹ì˜ ë‚´ë¶€ ì˜¤ë¥˜";
+        TEXT[ korean ] = "%PRODUCTNAME Writer íŒŒì¼ ì„œì‹ì˜ ë‚´ë¶€ ì˜¤ë¥˜";
         TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyası format hatası";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "S'ha produït un error intern en el format del fitxer %PRODUCTNAME Writer";
@@ -898,7 +898,7 @@ Resource RID_SW_ERRHDL
         TEXT [ italian ] = "Spazio su disco insufficiente" ;
         TEXT [ portuguese_brazilian ] = "N?o h? espa?o suficiente em disco" ;
         TEXT [ portuguese ] = "Espaço do disco insuficiente" ;
-        TEXT [ finnish ] = "Levytila ei riitä" ;
+        TEXT [ finnish ] = "Levytila ei riitä." ;
         TEXT [ danish ] = "Ikke tilstrækkelig diskplads" ;
         TEXT [ french ] = "Espace insuffisant sur le disque" ;
         TEXT [ swedish ] = "Inte tillräckligt med diskutrymme" ;
@@ -940,7 +940,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "W4W è½‰æ›å™¨ç™¼ç”Ÿä¸æ˜éŒ¯èª¤ã€‚";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
         TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
-        TEXT[ korean ] = "W4W í•„í„°ì— ì•Œë ¤ì ¸ ìˆì§€ ì•Šì€ ì˜¤ë¥˜";
+        TEXT[ korean ] = "W4W í•„í„°ì— ì•Œ ìˆ˜ ì—†ëŠ” ì˜¤ë¥˜";
         TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error desconegut al filtre W4W";
@@ -968,7 +968,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "W4W è½‰æ›å™¨ç™¼ç”Ÿä¸æ˜éŒ¯èª¤ã€‚";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
         TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
-        TEXT[ korean ] = "W4W í•„í„°ì— ì•Œë ¤ì ¸ ìˆì§€ ì•Šì€ ì˜¤ë¥˜";
+        TEXT[ korean ] = "W4W í•„í„°ì— ì•Œ ìˆ˜ ì—†ëŠ” ì˜¤ë¥˜";
         TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error desconegut al filtre W4W";
@@ -986,11 +986,11 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Fejl under indlæsning af konverteren" ;
         TEXT [ french ] = "Erreur de chargement du convertisseur" ;
         TEXT [ swedish ] = "Fel vid laddning av konverteraren" ;
-        TEXT [ dutch ] = "Fout bij het laden van de converter" ;
+        TEXT [ dutch ] = "Fout bij laden van converter" ;
         TEXT [ spanish ] = "Error al cargar el convertidor" ;
         TEXT [ english_us ] = "Error loading converter" ;
         TEXT[ chinese_simplified ] = "åœ¨è½¬æ¢æ—¶å‘ç”Ÿé”™è¯¯";
-        TEXT[ russian ] = "Îøèáêà ïğè çàãğóçêå êîíâåğòîğà";
+        TEXT[ russian ] = "Îøèáêà çàãğóçêè êîíâåğòîğà";
         TEXT[ polish ] = "B³¹d podczas ³adowania konwertera";
         TEXT[ japanese ] = "ã‚³ãƒ³ãƒãƒ¼ã‚¿èª­ã¿è¾¼ã¿ä¸­ã®ã‚¨ãƒ©ãƒ¼";
         TEXT[ chinese_traditional ] = "è¼‰å…¥è½‰æ›å™¨æ™‚ç™¼ç”ŸéŒ¯èª¤";
@@ -1014,11 +1014,11 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Fejl under indlæsning af konverteren" ;
         TEXT [ french ] = "Erreur de chargement du convertisseur" ;
         TEXT [ swedish ] = "Fel vid laddning av konverteraren" ;
-        TEXT [ dutch ] = "Fout bij het laden van de converter" ;
+        TEXT [ dutch ] = "Fout bij laden van converter" ;
         TEXT [ spanish ] = "Error al cargar el convertidor" ;
         TEXT [ english_us ] = "Error loading converter" ;
         TEXT[ chinese_simplified ] = "è½¬æ¢æ—¶å‘ç”Ÿé”™è¯¯";
-        TEXT[ russian ] = "Îøèáêà ïğè çàãğóçêå êîíâåğòîğà";
+        TEXT[ russian ] = "Îøèáêà çàãğóçêè êîíâåğòîğà";
         TEXT[ polish ] = "B³¹d podczas ³adowania konwertera";
         TEXT[ japanese ] = "ã‚³ãƒ³ãƒãƒ¼ã‚¿èª­ã¿è¾¼ã¿ä¸­ã®ã‚¨ãƒ©ãƒ¼";
         TEXT[ chinese_traditional ] = "è¼‰å…¥è½‰æ›å™¨æ™‚ç™¼ç”ŸéŒ¯èª¤";
@@ -1034,7 +1034,7 @@ Resource RID_SW_ERRHDL
     {
         TEXT = "$(ARG1) hat sich geändert" ;
         TEXT [ English ] = "$(ARG1) has changed" ;
-        Text [ dutch ] = "$(ARG1) is veranderd" ;
+        Text [ dutch ] = "$(ARG1) is gewijzigd" ;
         Text [ english_us ] = "$(ARG1) has changed" ;
         Text [ italian ] = "$(ARG1) è cambiato" ;
         Text [ spanish ] = "$(ARG1) se ha modificado" ;
@@ -1054,7 +1054,7 @@ Resource RID_SW_ERRHDL
         Text[ turkish ] = "$(ARG1) değişti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ARG1) ha canviat";
-        Text[ finnish ] = "Kohde $(ARG1) on muuttunut";
+        Text[ finnish ] = "Kohde $(ARG1) on muuttunut.";
         Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™ $(ARG1) ";
     };
     String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
@@ -1077,11 +1077,11 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "$(ARG1) ä¸å­˜åœ¨";
         Text[ arabic ] = "$(ARG1) ÛíÑ ãæÌæÏ";
         Text[ greek ] = "$(ARG1) äåí õğÜñ÷åé";
-        Text[ korean ] = "$(ARG1)ì´(ê°€) ì—†ìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "$(ARG1)ì´(ê°€) ì—†ìŠµë‹ˆë‹¤";
         Text[ turkish ] = "$(ARG1) mevcut değil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ARG1) no existeix";
-        Text[ finnish ] = "Kohdetta $(ARG1) ei ole";
+        Text[ finnish ] = "Kohdetta $(ARG1) ei ole olemassa.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µ $(ARG1) à¸­à¸¢à¸¹à¹ˆ";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
@@ -1099,7 +1099,7 @@ Resource RID_SW_ERRHDL
         Text [ portuguese ] = "É impossível dividir mais as células" ;
         Text [ portuguese_brazilian ] = "Zellen k?nen nicht mehr geteilt werden" ;
         Text[ chinese_simplified ] = "æ— æ³•åˆ†éš”å•å…ƒæ ¼";
-        Text[ russian ] = "Ğàçáèòü ÿ÷åéêè áîëüøå íåâîçìîæíî";
+        Text[ russian ] = "Íåâîçìîæíî äàëåå ğàçáèâàòü ÿ÷åéêè";
         Text[ polish ] = "Komórek nie mo¿na podzieliæ";
         Text[ japanese ] = "ã“ã‚Œä»¥ä¸Šã‚»ãƒ«ã‚’åˆ†å‰²ã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ç„¡æ³•åˆ†é–‹å„²å­˜æ ¼";
@@ -1109,7 +1109,7 @@ Resource RID_SW_ERRHDL
         Text[ turkish ] = "Hücreler daha fazla bölünemiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Les cel.les no es poden dividir més";
-        Text[ finnish ] = "Soluja ei voi jakaa enempää";
+        Text[ finnish ] = "Soluja ei voi jakaa enempää.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸¢à¸à¹€à¸‹à¸¥à¸¥à¹Œà¹€à¸à¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡à¹„à¸”à¹‰";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
@@ -1127,7 +1127,7 @@ Resource RID_SW_ERRHDL
         Text [ portuguese ] = "Impossível inserir colunas adicionais" ;
         Text [ portuguese_brazilian ] = "weitere Spalten k?nen nicht eingef?t werden" ;
         Text[ chinese_simplified ] = "æ— æ³•æ’å…¥å…¶å®ƒçš„åˆ—";
-        Text[ russian ] = "Äîïîëíèòåëüíûå ñòîëáöû âñòàâèòü íåâîçìîæíî";
+        Text[ russian ] = "Íåâîçìîæíî âñòàâèòü äîïîëíèòåëüíûå ñòîëáöû";
         Text[ polish ] = "dodatkowych kolumn nie mo¿na wstawiæ";
         Text[ japanese ] = "è¿½åŠ ã®åˆ—ã‚’æŒ¿å…¥ã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ç„¡æ³•æ’å…¥å…¶å®ƒæ¬„";
@@ -1137,7 +1137,7 @@ Resource RID_SW_ERRHDL
         Text[ turkish ] = "Daha fazla sütun eklenemiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No es poden inserir columnes addicionals";
-        Text[ finnish ] = "Sarakkeita ei voi lisätä enempää";
+        Text[ finnish ] = "Sarakkeita ei voi lisätä enempää.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸—à¸£à¸à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹€à¸à¸´à¹ˆà¸¡à¹€à¸•à¸´à¸¡à¹„à¸”à¹‰";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
@@ -1152,9 +1152,9 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "In una tabella collegata non sono ammesse modifiche alla struttura." ;
         Text [ spanish ] = "No se puede modificar la estructura de una tabla vinculada" ;
         Text [ french ] = "La structure d'un tableau ne peut pas être modifiée s'il a fait l'objet d'un lien" ;
-        Text [ dutch ] = "Bij een gekoppelde tabel mag de structuur niet worden veranderd." ;
+        Text [ dutch ] = "Bij een gekoppelde tabel mag de structuur niet worden gewijzigd." ;
         Text[ chinese_simplified ] = "ä¸èƒ½æ›´æ”¹ä¸€ä¸ªé“¾æ¥çš„è¡¨æ ¼ç»“æ„";
-        Text[ russian ] = "Èçìåíÿòü ñòğóêòóğó ñâÿçàííîé òàáëèöû íåëüçÿ";
+        Text[ russian ] = "Íåâîçìîæíî èçìåíèòü ñòğóêòóğó ñâÿçàííîé òàáëèöû";
         Text[ polish ] = "Przy po³¹czonej tabeli nie wolno zmieniaæ jej struktury";
         Text[ japanese ] = "ãƒªãƒ³ã‚¯ã•ã‚ŒãŸè¡¨ã®æ§‹é€ ã¯å¤‰æ›´ã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ä¸èƒ½è®Šæ›´ä¸€å€‹é€£çµçš„è¡¨æ ¼çµæ§‹";
@@ -1164,7 +1164,7 @@ Resource RID_SW_ERRHDL
         Text[ turkish ] = "Bağlantılı bir tablonun yapısı değiştirilmez";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No es pot modificar l'estructura d'una taula enllaçada";
-        Text[ finnish ] = "Linkitetyn taulukon rakennetta ei voi muokata";
+        Text[ finnish ] = "Linkitetyn taulukon rakennetta ei voi muokata.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¹‚à¸„à¸£à¸‡à¸ªà¸£à¹‰à¸²à¸‡à¸‚à¸­à¸‡à¸•à¸²à¸£à¸²à¸‡à¸—à¸µà¹ˆà¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸”à¹‰";
     };
      // -------------------- Warnings -----------------------------------
@@ -1176,23 +1176,23 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Non è stato possibile caricare alcun disegno" ;
         Text [ spanish ] = "No se pudo cargar ningún dibujo" ;
         Text [ french ] = "Impossible de charger des dessins" ;
-        Text [ dutch ] = "Er konden geen tekeningen worden geladen" ;
+        Text [ dutch ] = "Er kunnen geen tekeningen worden geladen" ;
         Text [ swedish ] = "Det gick inte att ladda några teckningar" ;
         Text [ danish ] = "Det var ikke muligt at indlæse nogen tegninger" ;
         Text [ portuguese ] = "Foi impossível carregar desenhos" ;
         Text [ portuguese_brazilian ] = "Es konnten keine Zeichnungen geladen werden" ;
         Text[ chinese_simplified ] = "æ— æ³•è£…å…¥å›¾åƒ";
-        Text[ russian ] = "Çàãğóçêà ğèñóíêîâ íåâîçìîæíà";
+        Text[ russian ] = "Íåâîçìîæíî ïğî÷åñòü ğèñóíêè";
         Text[ polish ] = "¯adne rysunki nie mog³y zostaæ za³adowane";
         Text[ japanese ] = "å›³å½¢æç”»ã¯èª­ã¿è¾¼ã¿ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥å½±åƒ";
         Text[ arabic ] = "ÊÚĞÑ ÊÍãíá ÃíÉ ÑÓæãÇÊ";
         Text[ greek ] = "Äåí Şôáí äõíáôŞ ç öüñôùóç ó÷åäßùí";
-        Text[ korean ] = "ê·¸ë¦¼ì„ ë¡œë“œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "ê·¸ë¦¬ê¸°ë¥¼ ë¡œë“œí•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Çizim yüklenemedi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No es poden llegir els dibuixos ";
-        Text[ finnish ] = "Piirustuksia ei voitu lukea";
+        Text[ finnish ] = "Piiroksia ei voitu lukea";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¹ˆà¸²à¸™à¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›à¹„à¸”à¹‰";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
@@ -1211,11 +1211,11 @@ Resource RID_SW_ERRHDL
         TEXT [ danish ] = "Denne fil er blevet gemt med WinWord-indstillingen 'Gem hurtigt'. Deaktiver venligst indstillingen 'Gem hutigt' og gem filen igen med WinWord." ;
         TEXT [ french ] = "Ce fichier a été enregistré à l'aide de l'option 'Enregistrement rapide' de WinWord. Veuillez désactiver cette option et utiliser WinWord pour enregistrer à nouveau le fichier." ;
         TEXT [ swedish ] = "Denna fil är sparad med WinWord-alternativet 'snabbspara'. Stäng av WinWord-alternativet 'Tillåt snabbspara' och spara filen med WinWord igen" ;
-        TEXT [ dutch ] = "Dit bestand werd met de WinWord optie \"Snel opslaan\" opgeslagen. Schakel a.u.b in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
+        TEXT [ dutch ] = "Dit bestand is met de WinWord optie \"Snel opslaan\" opgeslagen. Schakel a.u.b. in WinWord de optie \"Snel opslaan toestaan\" uit en sla het bestand opnieuw op met WinWord." ;
         TEXT [ spanish ] = "Este archivo ha sido guardado con la opción de WinWord 'guardar rápidamente' . Por favor desactive en WinWord la opción 'permitir guardar rápidamente' y guarde nuevamente el archivo con WinWord" ;
-        TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please uncheck the option 'Allow Fast Saves' and save the file again." ;
+        TEXT [ english_us ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
         TEXT[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å­˜ç›˜é‡‡ç”¨çš„æ˜¯ WinWord é€‰é¡¹ 'å¿«é€Ÿä¿å­˜'æ–¹å¼ã€‚è¯·è®¾å®šä¸ä½¿ç”¨è¿™ä¸ªé€‰é¡¹ï¼Œç„¶åå†é‡æ–°å­˜ç›˜è¿™ä¸ªæ–‡ä»¶ã€‚";
-        TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí ïğè ïîìîùè ïàğàìåòğà WinWord 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë â WinWord.";
+        TEXT[ russian ] = "İòîò ôàéë ñîõğàíåí èç WinWord â ğåæèìå 'Áûñòğîå ñîõğàíåíèå'. Ïîæàëóéñòà, îòêëş÷èòå ïàğàìåòğ 'Ğàçğåøèòü áûñòğîå ñîõğàíåíèå' è çàíîâî ñîõğàíèòå ıòîò ôàéë èç WinWord.";
         TEXT[ polish ] = "Ten plik zosta³ zapisany za pomoc¹ opcji WinWord 'Szybkie zapisywanie'. Proszê wy³¹cz w WinWord opcjê 'Dopuœæ szybkie zapisywanie' i zapisz plik ponownie w WinWord.";
         TEXT[ japanese ] = "ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã€WinWord ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã€Œé«˜é€Ÿä¿å­˜ã€ã§ä¿å­˜ã•ã‚Œã¦ã„ã¾ã™ã€‚WinWord ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã€Œé«˜é€Ÿä¿å­˜ã€ã‚’ã‚ªãƒ•ã«ã—ã¦ã‹ã‚‰ã€ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ WinWord ã§ä¿å­˜ã—ãªãŠã—ã¦ãã ã•ã„ã€‚";
         TEXT[ chinese_traditional ] = "å„²å­˜æª”æ¡ˆæ¡ç”¨çš„æ˜¯ WinWord é¸é …<å¿«é€Ÿå„²å­˜>æ–¹å¼ã€‚è«‹é—œé–‰é€™å€‹é¸é …ï¼Œç„¶å¾Œå†é‡æ–°å„²å­˜é€™å€‹æª”æ¡ˆã€‚";
@@ -1231,7 +1231,7 @@ Resource RID_SW_ERRHDL
     {
         TEXT = "Es konnten nicht alle Attribute gelesen werden" ;
         TEXT [ English ] = "Not all attributes could be read" ;
-        Text [ dutch ] = "Niet alle attributen konden worden ingelezen" ;
+        Text [ dutch ] = "Niet alle attributen kunnen worden ingelezen" ;
         Text [ english_us ] = "Not all attributes could be read" ;
         Text [ italian ] = "Non è stato possibile leggere tutti gli attributi" ;
         Text [ spanish ] = "No se pudieron leer todos los atributos" ;
@@ -1241,7 +1241,7 @@ Resource RID_SW_ERRHDL
         Text [ portuguese ] = "Foi impossível ler todos os atributos" ;
         Text [ portuguese_brazilian ] = "Es konnten nicht alle Attribute gelesen werden" ;
         Text[ chinese_simplified ] = "æ— æ³•è¯»å–æ‰€æœ‰çš„å±æ€§";
-        Text[ russian ] = "Âñå àòğèáóòû ïğî÷èòàòü íåâîçìîæíî";
+        Text[ russian ] = "Íåâîçìîæíî ïğî÷åñòü âñå àòğèáóòû";
         Text[ polish ] = "Nie wszystkie atrybuty mog³y zostaæ odczytane";
         Text[ japanese ] = "ã™ã¹ã¦ã®å±æ€§ã‚’èª­ã¿å–ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•è®€å–æ‰€æœ‰çš„å±¬æ€§";
@@ -1262,13 +1262,13 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Non è stato possibile scrivere tutti gli attributi" ;
         Text [ spanish ] = "No se pudieron grabar todos los atributos" ;
         Text [ french ] = "Impossible d'écrire tous les attributs" ;
-        Text [ dutch ] = "Niet alle attributen konden worden geschreven" ;
+        Text [ dutch ] = "Niet alle attributen kunnen worden geschreven" ;
         Text [ swedish ] = "Det gick inte att skriva alla attribut" ;
         Text [ danish ] = "Det var ikke muligt at skrive alle attributter" ;
         Text [ portuguese ] = "Foi impossível gravar todos os atributos" ;
         Text [ portuguese_brazilian ] = "Es konnten nicht alle Attribute geschrieben werden" ;
         Text[ chinese_simplified ] = "ä¸èƒ½å†™å…¥æ‰€æœ‰çš„å±æ€§";
-        Text[ russian ] = "Âñå àòğèáóòû çàïèñàòü íåâîçìîæíî";
+        Text[ russian ] = "Íåâîçìîæíî çàïèñàòü âñå àòğèáóòû";
         Text[ polish ] = "Nie wszystkie atrybuty mog³y zostaæ zapisane";
         Text[ japanese ] = "ã™ã¹ã¦ã®å±æ€§ã‚’è¨˜éŒ²ã™ã‚‹ã“ã¨ã¯ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ä¸èƒ½å¯«å…¥æ‰€æœ‰çš„å±¬æ€§";
@@ -1286,7 +1286,7 @@ Resource RID_SW_ERRHDL
         /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken übernommen werden : Einige OLE-Objekte konnten nur als Grafiken ³bernommen werden */
         TEXT = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
         TEXT [ English ] = "Some OLE Objects could only be loaded as graphics" ;
-        Text [ dutch ] = "Enkele OLE-objecten konden alleen als grafische objecten worden overgenomen" ;
+        Text [ dutch ] = "Enkele OLE-objecten kunnen alleen als grafische objecten worden overgenomen" ;
         Text [ english_us ] = "Some OLE objects could only be loaded as graphics" ;
         Text [ italian ] = "Alcuni oggetti OLE sono stati prelevati solo come immagini" ;
         Text [ spanish ] = "Algunos objetos OLE se pudieron incluir sólo como imágenes" ;
@@ -1296,13 +1296,13 @@ Resource RID_SW_ERRHDL
         Text [ portuguese ] = "Alguns dos objectos OLE puderam ser apenas carregados como imagens" ;
         Text [ portuguese_brazilian ] = "Einige OLE-Objekte konnten nur als Grafiken ?ernommen werden" ;
         Text[ chinese_simplified ] = "ä¸€äº› OLE å¯¹è±¡åªèƒ½ä»¥å›¾åƒæ–¹å¼è£…å…¥";
-        Text[ russian ] = "Çàãğóçêà íåêîòîğûõ îáúåêòîâ OLE âîçìîæíà òîëüêî â êà÷åñòâå ğèñóíêîâ";
+        Text[ russian ] = "Çàãğóçêà íåêîòîğûõ OLE îáúåêòîâ âîçìîæíà òîëüêî â âèäå ğèñóíêîâ";
         Text[ polish ] = "Niektóre obiekty OLE mog¹ zostaæ za³adowane tylko jako grafiki";
         Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã„ãã¤ã‹ã¯å›³ã¨ã—ã¦ã—ã‹èª­ã¿è¾¼ã‚ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "ä¸€äº› OLE ç‰©ä»¶åªèƒ½ä»¥åœ–å½¢æ–¹å¼è£è¼‰";
         Text[ arabic ] = "áã íßä ãä Çáããßä ÊØÈíŞ ÈÚÖ ßÇÆäÇÊ OLE ÅáÇ ßÑÓæãÇÊ";
         Text[ greek ] = "ÌåñéêÜ áíôéêåßìåíá OLE ìğüñåóáí íá öïñôùèïıí ìüíï ùò ãñáöéêÜ";
-        Text[ korean ] = "ì¼ë¶€ OLE ê°œì²´ë“¤ì€ ê·¸ë˜í”½ìœ¼ë¡œì„œë§Œ ì ìš©ë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "ì¼ë¶€ OLE ê°œì²´ë“¤ì€ ê·¸ë¦¼ìœ¼ë¡œì„œë§Œ ì ìš©ë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alguns objectes OLE només s'han pogut incloure com a imatges";
@@ -1318,19 +1318,19 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Alcuni oggetti OLE sono stati prelevati solo come immagini" ;
         Text [ spanish ] = "Algunos objetos OLE se pudieron incluir sólo como imágenes" ;
         Text [ french ] = "Certains objets OLE ont pu être chargés uniquement sous forme d'images" ;
-        Text [ dutch ] = "Enkele OLE-objecten konden alleen als grafische objecten worden overgenomen" ;
+        Text [ dutch ] = "Enkele OLE-objecten kunnen alleen als grafische objecten worden overgenomen" ;
         Text [ swedish ] = "Några OLE-objekt kunde bara övertas som grafik" ;
         Text [ danish ] = "Nogle OLE-objekter kunne kun overtages som grafik" ;
         Text [ portuguese ] = "Alguns dos objectos OLE foram carregados apenas como imagens" ;
         Text [ portuguese_brazilian ] = "Einige OLE-Objekte konnten nur als Grafiken ?ernommen werden" ;
         Text[ chinese_simplified ] = "ä¸€äº› OLE å¯¹è±¡æ— æ³•è¢«å­˜ç›˜ä¸ºå›¾å½¢";
-        Text[ russian ] = "Çàãğóçêà íåêîòîğûõ îáúåêòîâ OLE âîçìîæíà òîëüêî â êà÷åñòâå ğèñóíêîâ";
+        Text[ russian ] = "Çàãğóçêà íåêîòîğûõ OLE îáúåêòîâ âîçìîæíà òîëüêî â âèäå ğèñóíêîâ";
         Text[ polish ] = "Niektóre obiekty OLE mog³y zostaæ za³adowane tylko jako grafiki";
         Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã„ãã¤ã‹ã¯ã€å›³ã¨ã—ã¦ã—ã‹ä¿å­˜ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ä¸€äº› OLE ç‰©ä»¶ç„¡æ³•å„²å­˜ç‚ºåœ–å½¢";
         Text[ arabic ] = "áã íßä ãä Çáããßä ÊØÈíŞ ÈÚÖ ßÇÆäÇÊ OLE ÅáÇ ßÑÓæãÇÊ";
         Text[ greek ] = "ÌåñéêÜ áíôéêåßìåíá OLE ìğüñåóáí íá öïñôùèïıí ìüíï ùò ãñáöéêÜ";
-        Text[ korean ] = "ì¼ë¶€ OLE ê°œì²´ë“¤ì€ ê·¸ë˜í”½ìœ¼ë¡œì„œë§Œ ì ìš©ë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "ì¼ë¶€ OLE ê°œì²´ë“¤ì€ ê·¸ë¦¼ìœ¼ë¡œì„œë§Œ ì ìš©ë  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alguns objectes OLE només s'han pogut incloure com a imatges";
@@ -1342,7 +1342,7 @@ Resource RID_SW_ERRHDL
         /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollständig geladen werden : Dokument konnte nicht vollstõndig geladen werden */
         TEXT = "Dokument konnte nicht vollständig geladen werden" ;
         TEXT [ English ] = "Document could not be loaded completely" ;
-        Text [ dutch ] = "Document kon niet volledig worden geladen" ;
+        Text [ dutch ] = "Document kan niet volledig worden geladen" ;
         Text [ english_us ] = "Document could not be completely loaded" ;
         Text [ italian ] = "Non è stato possibile caricare il file completamente" ;
         Text [ spanish ] = "No se pudo cargar completamente el documento" ;
@@ -1352,7 +1352,7 @@ Resource RID_SW_ERRHDL
         Text [ portuguese ] = "Foi impossível carregar o documento completamente" ;
         Text [ portuguese_brazilian ] = "Dokument konnte nicht vollst?ndig geladen werden" ;
         Text[ chinese_simplified ] = "æ— æ³•å®Œå…¨è£…å…¥æ–‡æ¡£";
-        Text[ russian ] = "Ïîëíîñòüş çàãğóçèòü äîêóìåíò íåâîçìîæíî";
+        Text[ russian ] = "Íåâîçìîæíî ïîëíîñòüş çàãğóçèòü äîêóìåíò";
         Text[ polish ] = "Dokument nie móg³ zostaæ ca³kowicie za³adowany";
         Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’å®Œå…¨ã«èª­ã¿è¾¼ã¿ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•å®Œå…¨è¼‰å…¥æ–‡ä»¶";
@@ -1374,13 +1374,13 @@ Resource RID_SW_ERRHDL
         Text [ italian ] = "Non è stato possibile salvare il file completamente" ;
         Text [ spanish ] = "No se pudo guardar completamente el documento" ;
         Text [ french ] = "Le document n'a pas pu être enregistré dans son intégralité" ;
-        Text [ dutch ] = "Document kon niet volledig worden opgeslagen" ;
+        Text [ dutch ] = "Document kan niet volledig worden opgeslagen" ;
         Text [ swedish ] = "Det gick inte att spara dokumentet fullständigt" ;
         Text [ danish ] = "Det var ikke muligt at gemme dokumentet helt" ;
         Text [ portuguese ] = "Foi impossível guardar o documento completamente" ;
         Text [ portuguese_brazilian ] = "Dokument konnte nicht vollst?ndig gespeichert werden" ;
         Text[ chinese_simplified ] = "æ— æ³•å®Œæ•´åœ°å­˜ç›˜æ–‡æ¡£";
-        Text[ russian ] = "Ïîëíîñòüş ñîõğàíèòü äîêóìåíò íåâîçìîæíî";
+        Text[ russian ] = "Íåâîçìîæíî ïîëíîñòüş ñîõğàíèòü äîêóìåíò";
         Text[ polish ] = "Dokument nie móg³ zostaæ ca³kowicie zapisany";
         Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’å®Œå…¨ã«ä¿å­˜ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•å®Œæ•´å„²å­˜æ–‡ä»¶";
@@ -1399,9 +1399,9 @@ Resource RID_SW_ERRHDL
         Text [ English ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved because of the current export options." ;
         Text[ english_us ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
         Text[ portuguese ] = "O documento HTML contém macros %PRODUCTNAME Basic.\nEstas não foram guardadas com as definições de exportação activas.";
-        Text[ russian ] = "İòîò äîêóìåíò HTML ñîäåğæèò ìàêğîñû %PRODUCTNAME Basic.\nÎíè íå ñîõğàíèëèñü ñ òåêóùèìè íàñòğîéêàìè ıêñïîğòà.";
+        Text[ russian ] = "İòà âåá-ñòğàíèöà ñîäåğæèò ìàêğîñû %PRODUCTNAME Basic.\nÎíè íå áûëè ñîõğàíåíû èç-çà íàñòğîåê óêàçàííûõ äëÿ ıêñïîğòà äîêóìåíòîâ.";
         Text[ greek ] = "Ôï İããñáöï HTML ğåñéİ÷åé ìáêñïåíôïëİò ôïõ %PRODUCTNAME Basic.\nÁõôİò äåí áğïèçêåıôçêáí ìå ôéò ôñİ÷ïõóåò ñõèìßóåéò åéóáãùãŞò.";
-        Text[ dutch ] = "Dit HTML document bevat %PRODUCTNAME Basic-macro's.\nDeze konden niet worden opgeslagen met de actuele exportinstellingen.";
+        Text[ dutch ] = "Dit HTML-document bevat %PRODUCTNAME Basic-macro's.\nDeze kunnen niet worden opgeslagen met de huidige exportinstellingen.";
         Text[ french ] = "Le document HTML contient des macros %PRODUCTNAME Basic.\nCelles-ci n'ont pas été enregistrées avec les paramètres d'export actifs.";
         Text[ spanish ] = "El documento HTML contiene macros %PRODUCTNAME Basic.\nNo se guardaron con la configuración actual de exportación.";
         Text[ italian ] = "Il documento HTML contiene macro %PRODUCTNAME Basic che\nnon sono state salvate con le impostazioni attuali di esportazione.";
@@ -1426,7 +1426,7 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "Error in writing sub-document $(ARG1)" ;
         TEXT[ english_us ] = "Error in writing sub-document $(ARG1)";
         TEXT[ portuguese ] = "Erro ao escrever o sub-documento $(ARG1)";
-        TEXT[ russian ] = "Îøèáêà ïğè íàïèñàíèè ÷àñòè äîêóìåíòà $(ARG1)";
+        TEXT[ russian ] = "Îøèáêà çàïèñè ïîääîêóìåíòà $(ARG1)";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí êáôáãñáööŞ ôïõ ôìŞìáôïò ôïõ êåéìİíïõ $(ARG1)";
         TEXT[ dutch ] = "Fout bij schrijven van subdocument $(ARG1)";
         TEXT[ french ] = "Erreur d'écriture dans le sous-document $(ARG1)";
@@ -1443,7 +1443,7 @@ Resource RID_SW_ERRHDL
         TEXT[ turkish ] = "Error in writing sub-document $(ARG1)";
         TEXT[ arabic ] = "Error in writing sub-document $(ARG1)";
         TEXT[ catalan ] = "S'ha produït un error en escriure el subdocument $(ARG1)";
-        TEXT[ finnish ] = "Aliasiakirjaan $(ARG1) kirjoitettaessa on ilmennyt virhe";
+        TEXT[ finnish ] = "Aliasiakirjaan $(ARG1) kirjoitettaessa on ilmennyt virhe.";
         TEXT[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¸à¸²à¸£à¹€à¸‚à¸µà¸¢à¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¹ˆà¸­à¸¢ $(ARG1)";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
@@ -1452,9 +1452,9 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
         TEXT[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição(ARG2)(linha,coluna)";
-        TEXT[ russian ] = "Â ÷àñòè äîêóìåíòà $(ARG1) â ïîçèöèè $(ARG2)(ñòğîêà,êîëîíêà)îáíàğóæåíà îøèáêà ôîğìàòà.";
+        TEXT[ russian ] = "Îøèáêà ôîğìàòà ôàéëà â ïîääîêóìåíòå $(ARG1) â ïîçèöèè $(ARG2)(ñòğîêà,ïîçèöèÿ).";
         TEXT[ greek ] = "Åíôïğßóôçêå óöÜëìá ìïñöïğïßçóçò óôï áñ÷åßï óôï ôìŞìá êåéìİíïõ $(ARG1) óôç èİóç $(ARG2)(ãñáììŞ,óôŞëç)";
-        TEXT[ dutch ] = "Fout in formaat in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
+        TEXT[ dutch ] = "Indelingsfout in subdocument $(ARG1) op positie $(ARG2)(rij,kolom)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
         TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
@@ -1463,13 +1463,13 @@ Resource RID_SW_ERRHDL
         TEXT[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã® $(ARG2)(è¡Œã€åˆ—) ã«ã‚ã‚‹éƒ¨åˆ†ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ $(ARG1) ã«æ›¸å¼ã‚¨ãƒ©ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
-        TEXT[ korean ] = "íŒŒì¼ì˜ $(ARG2)(í–‰,ì—´) ìœ„ì¹˜ì— ìˆëŠ” ë¶€ë¶„ ë¬¸ì„œ $(ARG1)ì˜ í˜•ì‹ ì˜¤ë¥˜ ë°œê²¬";
+        TEXT[ korean ] = "íŒŒì¼ì˜ $(ARG2)(í–‰,ì—´) ìœ„ì¹˜ì— ìˆëŠ” ë¶€ë¶„ ë¬¸ì„œ $(ARG1)ì˜ ì„œì‹ ì˜¤ë¥˜ë¥¼ ë°œê²¬í–ˆìŠµë‹ˆë‹¤.";
         TEXT[ chinese_simplified ] = "å‘ç°æ–‡ä»¶çš„å­æ–‡æ¡£$(ARG1)å†…å«é”™è¯¯ï¼Œä½ç½®åœ¨ $(ARG2)(è¡Œ,åˆ—)";
         TEXT[ chinese_traditional ] = "ç™¼ç¾æª”æ¡ˆçš„å­æ–‡ä»¶$(ARG1)å…§å«éŒ¯èª¤ï¼Œä½ç½®åœ¨ $(ARG2)(è¡Œ,æ¬„)";
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ arabic ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ catalan ] = "S'ha descobert un error de format en el arxiu en el subdocument $(ARG1) fins al $(ARG2)(fila,col.)";
-        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe";
+        TEXT[ finnish ] = "Tiedoston aliasiakirjan $(ARG1) kohdassa $(ARG2)(rivi,sarake) havaittiin muotoiluvirhe.";
         TEXT[ thai ] = "à¸„à¹‰à¸™à¸à¸šà¸£à¸¹à¸›à¹à¸šà¸šà¸œà¸´à¸”à¸à¸¥à¸²à¸”à¹ƒà¸™à¹à¸Ÿà¹‰à¸¡à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸¢à¹ˆà¸­à¸¢ $(ARG1) à¸—à¸µà¹ˆ $(ARG2)(à¹à¸–à¸§,à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ)";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_UNCONVERTABLE_CHARS )
@@ -1478,12 +1478,12 @@ Resource RID_SW_ERRHDL
         TEXT [ English ] = "These characters could not be exported using the chosen character encoding: $(ARG1)" ;
         TEXT[ english_us ] = "The following characters could not be displayed in the selected character set: $(ARG1)";
         TEXT[ portuguese ] = "Foi impossível representar os seguintes caracteres no conjunto seleccionado: $(ARG1)";
-        TEXT[ russian ] = "Ïğåäñòàâèòü ñëåäóşùèå çíàêè â âûáğàííîì íàáîğå íåâîçìîæíî: $(ARG1)";
+        TEXT[ russian ] = "Íåâîçìîæíî ïîêàçàòü ñëåäóşùèå ñèìâîëû â âûáğàííîì íàáîğå: $(ARG1)";
         TEXT[ greek ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
-        TEXT[ dutch ] = "De volgende tekens konden niet in de gekozen tekenset worden weergegeven: $(ARG1)";
+        TEXT[ dutch ] = "De volgende tekens kunnen niet in de gekozen tekenset worden weergegeven: $(ARG1)";
         TEXT[ french ] = "Impossible de représenter les caractères suivants dans le jeu de caractères sélectionné : $(ARG1)";
         TEXT[ spanish ] = "Los siguientes caracteres no se pudieron representar en el juego de caracteres seleccionado: $(ARG1)";
-        TEXT[ finnish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ finnish ] = "Seuraavia merkkejä ei voida näyttää valitussa merkistössä: $(ARG1)";
         TEXT[ italian ] = "Impossibile rappresentare i caratteri seguenti con il set di caratteri selezionato: $(ARG1)";
         TEXT[ danish ] = "Følgende tegn kunne ikke vises i det valgte tegnsæt: ($Arg1)";
         TEXT[ swedish ] = "Följande tecken gick inte att visa i den valda teckenuppsättningen: $(ARG1)";
@@ -1499,6 +1499,30 @@ Resource RID_SW_ERRHDL
         TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸ªà¸”à¸‡à¸œà¸¥à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸™à¸µà¹‰à¹ƒà¸™à¸Šà¸¸à¸”à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸à¹„à¸”à¹‰: $(ARG1)";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

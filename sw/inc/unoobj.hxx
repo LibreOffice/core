@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-03-19 16:05:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,8 @@ enum SwGetPropertyStatesCaller
     SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION,
     SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY
 };
+#define CRSR_ATTR_MODE_TABLE        1   //attributes should be applied to a table selection
+#define CRSR_ATTR_MODE_DONTREPLACE  2   //attributes should be added, not replaced
 
 class SwXTextCursor : public cppu::WeakImplHelper12
 <
@@ -539,7 +541,7 @@ public:
     SwUnoCrsr*          GetCrsr(){return (SwUnoCrsr*)GetRegisteredIn();}
     const SwUnoCrsr*    GetCrsr()const{return (SwUnoCrsr*)GetRegisteredIn();}
 
-    static void         SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, BOOL bTableMode = sal_False);
+    static void         SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAttrMode );
     static void         GetCrsrAttr(SwPaM& rPam, SfxItemSet& rSet, BOOL bCurrentAttrOnly = FALSE);
     static void         getTextFromPam(SwPaM& aCrsr, rtl::OUString& rBuffer);
     static SwFmtColl*   GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional);

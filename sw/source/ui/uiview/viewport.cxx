@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-12-11 09:33:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,41 +1100,54 @@ void SwView::ShowAtResize()
 void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 {
     bInInnerResizePixel = TRUE;
-    SvBorder aBorder;
-    CalcAndSetBorderPixel( aBorder, TRUE );
-    Size aSz( rSize );
-    aSz.Height() += aBorder.Top()  + aBorder.Bottom();
-    aSz.Width()  += aBorder.Left() + aBorder.Right();
-    Size aEditSz( GetEditWin().GetOutputSizePixel() );
-    const BOOL bBrowse = pWrtShell->IsBrowseMode();
-    ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, TRUE, *pVScrollbar,
+    const BOOL bHScrollVisible = pHScrollbar->IsVisible(TRUE);
+    const BOOL bVScrollVisible = pVScrollbar->IsVisible(TRUE);
+    BOOL bRepeat = FALSE;
+    do
+    {
+        SvBorder aBorder;
+        CalcAndSetBorderPixel( aBorder, TRUE );
+        Size aSz( rSize );
+        aSz.Height() += aBorder.Top()  + aBorder.Bottom();
+        aSz.Width()  += aBorder.Left() + aBorder.Right();
+        Size aEditSz( GetEditWin().GetOutputSizePixel() );
+        const BOOL bBrowse = pWrtShell->IsBrowseMode();
+        ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, TRUE, *pVScrollbar,
                             *pHScrollbar, pPageUpBtn, pPageDownBtn,
                             pNaviBtn,
                             *pScrollFill, pVRuler, pHRuler,
                             0 != PTR_CAST(SwWebView, this),
                             pWrtShell->GetViewOptions()->IsVRulerRight());
-    if ( bShowAtResize )
-        ShowAtResize();
+        if ( bShowAtResize )
+            ShowAtResize();
 
-    if( pHRuler->IsVisible() || pVRuler->IsVisible() )
-    {
-        const Fraction& rFrac = GetEditWin().GetMapMode().GetScaleX();
-        USHORT nZoom = USHORT(rFrac.GetNumerator() * 100L / rFrac.GetDenominator());
+        if( pHRuler->IsVisible() || pVRuler->IsVisible() )
+        {
+            const Fraction& rFrac = GetEditWin().GetMapMode().GetScaleX();
+            USHORT nZoom = USHORT(rFrac.GetNumerator() * 100L / rFrac.GetDenominator());
 
-        const Fraction aFrac( nZoom, 100 );
-        pVRuler->SetZoom( aFrac );
-        pHRuler->SetZoom( aFrac );
-        InvalidateRulerPos();   //Inhalt invalidieren.
-    }
-    //CursorStack zuruecksetzen, da die Cursorpositionen fuer PageUp/-Down
-    //nicht mehr zum aktuell sichtbaren Bereich passen
-    pWrtShell->ResetCursorStack();
+            const Fraction aFrac( nZoom, 100 );
+            pVRuler->SetZoom( aFrac );
+            pHRuler->SetZoom( aFrac );
+            InvalidateRulerPos();   //Inhalt invalidieren.
+        }
+        //CursorStack zuruecksetzen, da die Cursorpositionen fuer PageUp/-Down
+        //nicht mehr zum aktuell sichtbaren Bereich passen
+        pWrtShell->ResetCursorStack();
 
-    //EditWin niemals einstellen!
+        //EditWin niemals einstellen!
 
-    //VisArea einstellen, aber dort nicht das SetVisArea der DocShell rufen!
-    bProtectDocShellVisArea = TRUE;
-    CalcVisArea( aEditSz );
+        //VisArea einstellen, aber dort nicht das SetVisArea der DocShell rufen!
+        bProtectDocShellVisArea = TRUE;
+        CalcVisArea( aEditSz );
+        //visibility changes of the automatic horizontal scrollbar
+        //require to repeat the ViewResizePixel() call - but only once!
+        if(bRepeat)
+            bRepeat = FALSE;
+        else if(bHScrollVisible != pHScrollbar->IsVisible(TRUE) ||
+                bVScrollVisible != pVScrollbar->IsVisible(TRUE))
+            bRepeat = TRUE;
+    }while( bRepeat );
     bProtectDocShellVisArea = FALSE;
     bInInnerResizePixel = FALSE;
 }
@@ -1220,8 +1233,12 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         //nicht mehr zum aktuell sichtbaren Bereich passen
         pWrtShell->ResetCursorStack();
 
-        ASSERT( ( aEditSz.Width() > 0 && aEditSz.Height() > 0 )
-                || !aVisArea.IsEmpty(), "Small world, isn't it?" );
+#ifdef DEBUG
+        SwEditWin &rW = GetEditWin();
+#endif
+        ASSERT( !GetEditWin().IsVisible() ||
+                    (( aEditSz.Width() > 0 && aEditSz.Height() > 0 )
+                        || !aVisArea.IsEmpty()), "Small world, isn't it?" );
 
         //EditWin niemals einstellen!
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-10-30 10:38:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,15 @@
 #endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
+#endif
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+#ifndef _CNTFRM_HXX
+#include <cntfrm.hxx>
 #endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
@@ -531,12 +540,22 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 #endif
                 continue;
             }
-            const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-            ULONG nPos = rTxtNode.GetIndex();
-            if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
-                rTxtNode.GetNodes().IsDocNodes() )
+            const SwTxtNode& rFldTxtNode = pTxtFld->GetTxtNode();
+            SwPosition aFldPos(rFldTxtNode);
+            SwDoc& rDoc = *(SwDoc*)rFldTxtNode.GetDoc();
+            SwCntntFrm *pFrm = rFldTxtNode.GetFrm();
+            const SwTxtNode* pTxtNode = 0;
+            if(pFrm && !pFrm->IsInDocBody())
+                pTxtNode = GetBodyTxtNode( rDoc, aFldPos, *pFrm );
+            //if no text node could be found or the field is in the document
+            //body the directly available text node will be used
+            if(!pTxtNode)
+                pTxtNode = &rFldTxtNode;
+            ULONG nPos = pTxtNode->GetIndex();
+            if( pTxtNode->GetTxt().Len() && pTxtNode->GetFrm() &&
+                pTxtNode->GetNodes().IsDocNodes() )
             {
-                SwTOXAuthority* pNew = new SwTOXAuthority( rTxtNode,
+                SwTOXAuthority* pNew = new SwTOXAuthority( *pTxtNode,
                                                             *pFmtFld, aIntl );
 
                 for(short i = 0; i < aSortArr.Count(); ++i)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-03 15:57:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR2_HXX
@@ -116,6 +115,7 @@ struct WW8FlyPara
     bool bGrafApo;              // true: Dieser Rahmen dient allein dazu, die
                                 // enthaltene Grafik anders als zeichengebunden
                                 // zu positionieren
+    bool mbVertSet;             // true if vertical positioning has been set
 
     WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = 0);
     bool operator==(const WW8FlyPara& rSrc) const;
@@ -306,3 +306,5 @@ enum WW8LvlType {WW8_None, WW8_Outline, WW8_Numbering, WW8_Sequence, WW8_Pause};
 
 WW8LvlType GetNumType(BYTE nWwLevelNo);
 #endif
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */

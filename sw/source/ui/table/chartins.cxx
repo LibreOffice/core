@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 06:19:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,8 @@ SwInsertChartDlg::SwInsertChartDlg( SfxBindings* pBindings,
     pOutItemSet(0),
     pChartData(0),
     bUpdateChartData(TRUE),
-    bChartInserted(FALSE)
+    bChartInserted(FALSE),
+    bChildOpen(FALSE)
 {
     FreeResource();
     pSh->Push();
@@ -225,6 +226,23 @@ BOOL SwInsertChartDlg::Close()
     return SfxModelessDialog::Close();
 }
 
+
+void SwInsertChartDlg::Activate()
+{
+    SfxModelessDialog::Activate();
+
+    if ( bChildOpen && pChartDlg )
+    {
+        //  #107337# The ChildWindow's "hidden" state is reset if the view is activated,
+        //  so it is hidden again on activating if the child dialog is open.
+
+        SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
+        pVFrame->ShowChildWindow(SID_INSERT_DIAGRAM, FALSE);
+
+        pChartDlg->GrabFocus();     // child dialog should have focus
+    }
+}
+
 /*------------------------------------------------------------------------
     Beschreibung:
 ------------------------------------------------------------------------*/
@@ -253,7 +271,9 @@ IMPL_LINK( SwInsertChartDlg, NextHdl, Button *, pBtn )
     pChartDlg->SetPosPixel(GetPosPixel());
     SfxViewFrame* pVFrame = pWrtShell->GetView().GetViewFrame();
     pVFrame->ShowChildWindow(SID_INSERT_DIAGRAM, FALSE);
+    bChildOpen = TRUE;
     USHORT nResult = pChartDlg->Execute();
+    bChildOpen = FALSE;
     switch( nResult )
     {
         case RET_OK:

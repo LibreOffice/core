@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-14 08:54:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ class SwSubFont : public SvxFont
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetItalic( const FontItalic eItalic );
     inline void SetOutline( const BOOL bOutline );
-    inline void SetVertical( const USHORT nDir );
+    inline void SetVertical( const USHORT nDir, const BOOL bVertFormat );
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( const BYTE nAutoKern );
     inline void SetWordLineMode( const BOOL bWordLineMode );
@@ -836,10 +836,10 @@ inline void SwFont::SetNoCol( const BOOL bNew )
     bNoColReplace = bNew;
 }
 
-inline void SwSubFont::SetVertical( const USHORT nDir )
+inline void SwSubFont::SetVertical( const USHORT nDir, const BOOL bVertFormat )
 {
     pMagic = 0;
-    Font::SetVertical( nDir > 1000 );
+    Font::SetVertical( bVertFormat );
     Font::SetOrientation( nDir );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 11:36:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 15:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,7 @@ void _FinitCore()
 
 #ifndef PRODUCT
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
-    if ( aAttrTab[0]->GetRef() )
+    if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, FALSE);
 #endif
     delete SwDoc::pACmpltWords;
