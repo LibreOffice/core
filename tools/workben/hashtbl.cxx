@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hashtbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:11 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include <tlgen.hxx>
 #include "hashtbl.hxx"
 
+#include <algorithm>
+
 // -------------------------------------------------------------
 // class HashItem
 //
@@ -116,8 +118,8 @@ HashTable::HashTable(ULONG lSize, BOOL bOwner, double dMaxLoadFactor, double dGr
     m_lSize          = lSize;
     m_bOwner         = bOwner;
     m_lElem          = 0;
-    m_dMaxLoadFactor = max(0.5,min(1.0,dMaxLoadFactor));  // 0.5 ... 1.0
-    m_dGrowFactor    = max(1.3,(5.0,dGrowFactor));     // 1.3 ... 5.0
+    m_dMaxLoadFactor = std::max(0.5,std::min(1.0,dMaxLoadFactor));  // 0.5 ... 1.0
+    m_dGrowFactor    = std::max(1.3,(5.0,dGrowFactor));     // 1.3 ... 5.0
     m_pData          = new HashItem [lSize];
 
 // Statistik
