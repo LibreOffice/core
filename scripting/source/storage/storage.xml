@@ -21,8 +21,6 @@
     <type> drafts.com.sun.star.script.framework.storage.XParcelStore                </type>
     <type> drafts.com.sun.star.script.framework.storage.NoSuchView              </type>
     <type> drafts.com.sun.star.script.framework.storage.ScriptInfoAccessException               </type>
-    <type> drafts.com.sun.star.script.framework.storage.XBinding                </type>
-    <type> drafts.com.sun.star.script.framework.storage.XBindingStore               </type>
     <type> drafts.com.sun.star.script.framework.storage.XScriptInfo             </type>
     <type> drafts.com.sun.star.script.framework.storage.XNameNode               </type>
     <type> drafts.com.sun.star.script.framework.storage.XNamingAccess               </type>
