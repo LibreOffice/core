@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
+ *  last change: $Author: kso $ $Date: 2001-11-21 15:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,17 @@ ContentProvider::queryContent(
 
     uno::Reference< com::sun::star::ucb::XContentIdentifier > xCanonicId;
 
+    bool bNewId = false;
+    if ( aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+    {
+        aURL = aURL.replaceAt( 0,
+                               WEBDAV_URL_SCHEME_LENGTH,
+                               rtl::OUString::createFromAscii(
+                                                    HTTP_URL_SCHEME ) );
+        bNewId = true;
+    }
+
     sal_Int32 nPos = aURL.lastIndexOf( '/' );
     if ( nPos != aURL.getLength() - 1 )
     {
@@ -205,11 +216,12 @@ ContentProvider::queryContent(
         if ( nPos == -1 )
         {
             aURL += rtl::OUString::createFromAscii( "/" );
-            xCanonicId = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+            bNewId = true;
         }
-        else
-            xCanonicId = Identifier;
     }
+
+    if ( bNewId )
+        xCanonicId = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
     else
         xCanonicId = Identifier;
 

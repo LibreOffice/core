@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
+ *  last change: $Author: kso $ $Date: 2001-11-21 15:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,18 +106,15 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
     rtl::OString theInputUri(
         inUri.getStr(), inUri.getLength(), RTL_TEXTENCODING_UTF8 );
 
-    rtl::OString aProtocol
-        = theInputUri.copy( 0, RTL_CONSTASCII_LENGTH( "https:" ) );
-
     uri theUri;
     uri* pUriDefs
         = matchIgnoreAsciiCase(theInputUri,
-                               RTL_CONSTASCII_STRINGPARAM("http:")) ?
-              &sUriDefaultsHTTP :
+                               RTL_CONSTASCII_STRINGPARAM("ftp:")) ?
+              &sUriDefaultsFTP :
           matchIgnoreAsciiCase(theInputUri,
                                RTL_CONSTASCII_STRINGPARAM("https:")) ?
               &sUriDefaultsHTTPS :
-              &sUriDefaultsFTP;
+              &sUriDefaultsHTTP;
 
     if ( uri_parse( theInputUri.getStr(), &theUri, pUriDefs ) != 0 )
     {
