@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-09 10:43:53 $
+ *  last change: $Author: cd $ $Date: 2001-08-09 16:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,10 +562,18 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 {
     if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
     {
-        sal_Bool        bWorkstationInstallation = sal_False;
-        ::rtl::OUString aBaseInstallURL;
-        ::rtl::OUString aUserInstallURL;
+        sal_Bool            bWorkstationInstallation = sal_False;
+        ::rtl::OUString     aBaseInstallURL;
+        ::rtl::OUString     aUserInstallURL;
+        ::rtl::OUString     aProductKey;
+        ::vos::OStartupInfo aInfo;
 
+        aInfo.getExecutableFile( aProductKey );
+        sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
+        if ( lastIndex > 0 )
+            aProductKey = aProductKey.copy( lastIndex+1 );
+
+        aProductKey = ::utl::Bootstrap::getProductKey( aProductKey );
         ::utl::Bootstrap::PathStatus aBaseInstallStatus = ::utl::Bootstrap::locateBaseInstallation( aBaseInstallURL );
         ::utl::Bootstrap::PathStatus aUserInstallStatus = ::utl::Bootstrap::locateUserInstallation( aUserInstallURL );
 
@@ -589,10 +597,11 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
             if (( aBootstrapStatus == ::utl::Bootstrap::MISSING_USER_INSTALL ) || bWorkstationInstallation )
             {
-                aBuffer.appendAscii( ".Start setup application to check installation?" );
+                aBuffer.appendAscii( "Start setup application to check installation?" );
                 aMessage = aBuffer.makeStringAndClear();
 
                 ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+                aBootstrapFailedBox.SetText( aProductKey );
                 int nResult = aBootstrapFailedBox.Execute();
 
                 if ( nResult == RET_YES )
@@ -604,10 +613,11 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
             else if (( aBootstrapStatus == utl::Bootstrap::INVALID_USER_INSTALL ) ||
                      ( aBootstrapStatus == utl::Bootstrap::INVALID_BASE_INSTALL )    )
             {
-                aBuffer.appendAscii( ".Start setup application to repair installation?" );
+                aBuffer.appendAscii( "Start setup application to repair installation?" );
                 aMessage = aBuffer.makeStringAndClear();
 
                 ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+                aBootstrapFailedBox.SetText( aProductKey );
                 int nResult = aBootstrapFailedBox.Execute();
 
                 if ( nResult == RET_YES )
