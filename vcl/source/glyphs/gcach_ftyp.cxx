@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.98 $
- *  last change: $Author: hr $ $Date: 2003-07-16 17:46:21 $
+ *  $Revision: 1.99 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 #else
     rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
 #endif
-    rTo.mnLeading           = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
+    rTo.mnIntLeading        = ((rMetrics.height + 32) >> 6) - (rTo.mnAscent + rTo.mnDescent);
     rTo.mnSlant             = 0;
 
     rTo.maName              = mpFontInfo->GetFontData().maName;
@@ -779,25 +779,47 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
         rTo.mnAscent        = (long)( +pOS2->usWinAscent * fScale + 0.5 );
         rTo.mnDescent       = (long)( +nDescent * fScale + 0.5 );
-        rTo.mnLeading       = (long)( (+pOS2->usWinAscent + pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
+        rTo.mnIntLeading    = (long)( (+pOS2->usWinAscent + pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
+        rTo.mnExtLeading = 0;
+        if( pHHEA != NULL )
+        {
+            // extleading formula from www.microsoft.com/typography/otspec/recom.htm
+            int nExtLeading = pHHEA->Line_Gap;
+            nExtLeading -= (pOS2->usWinAscent + pOS2->usWinDescent);
+            nExtLeading -= (pHHEA->Ascender - pHHEA->Descender);
+            if( nExtLeading > 0 )
+                rTo.mnExtLeading = (long)(nExtLeading * fScale + 0.5);
+        }
 
         // Check for CJK capabilities of the current font
         // #107888# workaround for Asian...
+        // TODO: remove when ExtLeading fully implemented
         BOOL bCJKCapable = ((( pOS2->ulUnicodeRange2 & 0x2fff0000 ) | ( pOS2->ulUnicodeRange3 & 0x00000001 )) != 0 );
         BOOL bHasKoreanRange = ((( pOS2->ulUnicodeRange1 & 0x10000000 ) | ( pOS2->ulUnicodeRange2 & 0x00100000 ) |
                                  ( pOS2->ulUnicodeRange2 & 0x01000000 )) != 0 );
 
-        if ( bCJKCapable && pHHEA )
+        if ( bCJKCapable )
         {
-            // formula taken from www.microsoft.com/typography/otspec/recom.htm
-            long externalLeading = std::max(0, +pHHEA->Line_Gap - ((+pOS2->usWinAscent + +pOS2->usWinDescent)
-                - (+pHHEA->Ascender - +pHHEA->Descender)));
+            rTo.mnIntLeading += rTo.mnExtLeading;
 
-            rTo.mnAscent    += (long)(+externalLeading * fScale + 0.5 );
-            rTo.mnLeading   += (long)(+externalLeading * fScale + 0.5 );
-            // #109280# korean only: increase descent for wavelines and improved line space
-            if( bHasKoreanRange )
-                rTo.mnDescent    += (long)(+externalLeading * fScale + 0.5 );
+            // #109280# The line height for Asian fonts is too small.
+            // Therefore we add half of the external leading to the
+            // ascent, the other half is added to the descent.
+            const long nHalfTmpExtLeading = rTo.mnExtLeading / 2;
+            const long nOtherHalfTmpExtLeading = rTo.mnExtLeading -
+                                                 nHalfTmpExtLeading;
+
+            // #110641# external leading for Asian fonts.
+            // The factor 0.3 has been verified during experiments.
+            const long nCJKExtLeading = 0.30 * (rTo.mnAscent + rTo.mnDescent);
+
+            if ( nCJKExtLeading > rTo.mnExtLeading )
+                rTo.mnExtLeading = nCJKExtLeading - rTo.mnExtLeading;
+            else
+                rTo.mnExtLeading = 0;
+
+            rTo.mnAscent   += nHalfTmpExtLeading;
+            rTo.mnDescent  += nOtherHalfTmpExtLeading;
         }
 
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
