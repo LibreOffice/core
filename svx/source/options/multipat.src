@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 17:35:31 $
+ *  last change: $Author: kz $ $Date: 2002-10-31 13:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text[ portuguese ] = "Select archives";
     Text[ russian ] = "Select archives";
     Text[ greek ] = "Select archives";
-    Text[ dutch ] = "Select archives";
+    Text[ dutch ] = "Archieven selecteren";
     Text[ french ] = "Sélection des archives";
     Text[ spanish ] = "Seleccionar archivos";
     Text[ finnish ] = "Select archives";
@@ -328,7 +328,7 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text[ portuguese ] = "Archives";
     Text[ russian ] = "Archives";
     Text[ greek ] = "Archives";
-    Text[ dutch ] = "Archives";
+    Text[ dutch ] = "Archieven";
     Text[ french ] = "Archives";
     Text[ spanish ] = "Archivos";
     Text[ finnish ] = "Archives";
