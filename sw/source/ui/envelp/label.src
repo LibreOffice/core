@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: os $ $Date: 2001-06-01 11:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,29 +749,29 @@ String STR_DOC_TITLE
 };
 String STR_CUSTOM
 {
-    Text = "[Benutzer]" ;
-    Text [ English ] = "[Custom]" ;
-    Text [ norwegian ] = "[Custom]" ;
-    Text [ italian ] = "[Utente]" ;
-    Text [ portuguese_brazilian ] = "[Pessoal]" ;
-    Text [ portuguese ] = "[Utilizador]" ;
-    Text [ finnish ] = "[Käyttäjän määrittämä]" ;
-    Text [ danish ] = "[Bruger]" ;
-    Text [ french ] = "[Personnalisé]" ;
-    Text [ swedish ] = "[Användare]" ;
-    Text [ dutch ] = "[Gebruiker] " ;
-    Text [ spanish ] = "[Usuario]" ;
-    Text [ english_us ] = "[User-defined]" ;
-    Text[ chinese_simplified ] = "[Ê¹ÓÃÕß]";
-    Text[ russian ] = "[Ïîëüçîâàòåëü]";
-    Text[ polish ] = "[U¿ytkownik]";
-    Text[ japanese ] = "[Õ°»Ş°]";
-    Text[ greek ] = "[×ñŞóôçò]";
-    Text[ korean ] = "[»ç¿ëÀÚ]";
-    Text[ chinese_traditional ] = "[¨Ï¥ÎªÌ]";
-    Text[ arabic ] = "[ãÓÊÎÏã]";
-    Text[ turkish ] = "[Kullanıcı tanımlı]";
-    Text[ catalan ] = "[Usuario]";
+    Text                        = "(Benutzer)" ;
+    Text [ English ]            = "(Custom)" ;
+    Text [ norwegian ]          = "(Custom)" ;
+    Text [ italian ]            = "(Utente)" ;
+    Text [ portuguese_brazilian ) = "(Pessoal)" ;
+    Text [ portuguese ]         = "(Utilizador)" ;
+    Text [ finnish ]            = "(Käyttäjän määrittämä)" ;
+    Text [ danish ]             = "(Bruger)" ;
+    Text [ french ]             = "(Personnalisé)" ;
+    Text [ swedish ]            = "(Användare)" ;
+    Text [ dutch ]              = "(Gebruiker) " ;
+    Text [ spanish ]            = "(Usuario)" ;
+    Text [ english_us ]         = "(User-defined)" ;
+    Text[ chinese_simplified ]  = "(Ê¹ÓÃÕß)";
+    Text[ russian ]             = "(Ïîëüçîâàòåëü)";
+    Text[ polish ]              = "(U¿ytkownik)";
+    Text[ japanese ]            = "(Õ°»Ş°)";
+    Text[ greek ]               = "(×ñŞóôçò)";
+    Text[ korean ]              = "(»ç¿ëÀÚ)";
+    Text[ chinese_traditional ] = "(¨Ï¥ÎªÌ)";
+    Text[ arabic ]              = "(ãÓÊÎÏã)";
+    Text[ turkish ]             = "(Kullanıcı tanımlı)";
+    Text[ catalan ]             = "(Usuario)";
 };
 /********************************************************************/
 TabPage TP_VISITING_CARDS
