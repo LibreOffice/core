@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-20 18:16:36 $
+ *  last change: $Author: hdu $ $Date: 2000-11-28 13:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,21 @@
 #include "freetype/tttables.h"
 #include "freetype/tttags.h"
 
+#include <vector>
+//#include <hash_multimap>
+
 // -----------------------------------------------------------------------
 
 static FT_Library aLibFT = 0;
 
 // =======================================================================
 // FreetypeManager
+// =======================================================================
+
+#include "freetype/internal/ftobjs.h"
+#include "freetype/internal/sfnt.h"
+#include "freetype/internal/ftstream.h"
+
 // =======================================================================
 
 size_t std::hash<FtFontInfo*>::operator()( const FtFontInfo* pFI ) const
@@ -235,10 +244,13 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     const char* pszFontFileName = rFI.aNativeFileName.getStr();
     FT_Error rc = FT_New_Face( aLibFT, pszFontFileName, 0, &maFaceFT );
 
-    FT_Encoding eEnc = /*(rFI.aFontData.meCharSet==RTL_TEXTENCODING_SYMBOL) ? ft_encoding_none :*/ ft_encoding_unicode;
-    rc = FT_Select_Charmap( maFaceFT, eEnc );
+    rc = FT_Select_Charmap( maFaceFT, ft_encoding_unicode );
 
     rc = FT_Set_Pixel_Sizes( maFaceFT, rFSD.mnHeight, rFSD.mnWidth );
+
+    //TODO: LanguageType aLanguage = GetLanguage();
+    //TODO: GSUB glyph substitution
+    //TODO: GPOS
 
     if( rFSD.mnOrientation != 0 )
     {
@@ -296,17 +308,17 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
     if( pOS2 && (~pOS2->version != 0) )
     {
-        double scale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
-        rTo.mnWidth         = (long)( pOS2->xAvgCharWidth * scale + 0.5 );
-        rTo.mnAscent        = (long)( +pOS2->usWinAscent * scale + 0.5 );
-        rTo.mnDescent       = (long)( +pOS2->usWinDescent * scale + 0.5 );
-        rTo.mnLeading       = (long)( (+pOS2->usWinAscent - pOS2->usWinDescent - maFaceFT->units_per_EM ) * scale + 0.5 );
+        const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
+        rTo.mnWidth         = (long)( pOS2->xAvgCharWidth * fScale + 0.5 );
+        rTo.mnAscent        = (long)( +pOS2->usWinAscent * fScale + 0.5 );
+        rTo.mnDescent       = (long)( +pOS2->usWinDescent * fScale + 0.5 );
+        rTo.mnLeading       = (long)( (+pOS2->usWinAscent - pOS2->usWinDescent - maFaceFT->units_per_EM ) * fScale + 0.5 );
 
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
         rTo.mnLastChar      = pOS2->usLastCharIndex;
 
-        rTo.mnStrikeoutSize     = Min( 1L, (long)( pOS2->yStrikeoutSize * scale + 0.5 ) );
-        rTo.mnStrikeoutOffset   = (long)( pOS2->yStrikeoutPosition * scale + 0.5 );
+        rTo.mnStrikeoutSize     = Min( 1L, (long)( pOS2->yStrikeoutSize * fScale + 0.5 ) );
+        rTo.mnStrikeoutOffset   = (long)( pOS2->yStrikeoutPosition * fScale + 0.5 );
     }
 
     // TODO: improve these metrics
@@ -345,10 +357,17 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 
 void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphData& rGD ) const
 {
-    const FT_Int nLoadFlags = (GetFontSelData().mnOrientation == 0) ? FT_LOAD_DEFAULT : FT_LOAD_NO_HINTING;
+    FT_Int nLoadFlags = FT_LOAD_DEFAULT;
+    if( GetFontSelData().mnOrientation != 0 )
+        nLoadFlags |= FT_LOAD_NO_HINTING;
+    if( GetFontSelData().mbVertical )
+        nLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
 
-    rGD.SetCharWidth( (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6 );
+    if( GetFontSelData().mbVertical && FT_HAS_VERTICAL(maFaceFT) )
+        rGD.SetCharWidth( (maFaceFT->glyph->metrics.vertAdvance + 32) >> 6 );
+    else
+        rGD.SetCharWidth( (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6 );
 
     FT_Glyph aGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
@@ -356,12 +375,8 @@ void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphD
     rGD.SetDelta( (aGlyphFT->advance.x + 0x8000) >> 16, -((aGlyphFT->advance.y + 0x8000) >> 16) );
 
     FT_BBox aBbox;
-    const FT_UInt nBboxMode = /*(nLoadFlags & FT_LOAD_NO_HINTING) ? ft_glyph_bbox_pixels :*/ ft_glyph_bbox_gridfit;
-    FT_Glyph_Get_CBox( aGlyphFT, nBboxMode, &aBbox );
+    FT_Glyph_Get_CBox( aGlyphFT, ft_glyph_bbox_gridfit, &aBbox );
     rGD.SetOffset( aBbox.xMin, -aBbox.yMax );
-
-    if( nBboxMode != ft_glyph_bbox_gridfit)
-        FT_Glyph_Get_CBox( aGlyphFT, ft_glyph_bbox_gridfit, &aBbox );
     const Size aSize( ( (aBbox.xMax - aBbox.xMin + 7 ) & ~7), (aBbox.yMax - aBbox.yMin) );
     rGD.SetSize( aSize );
 
@@ -371,7 +386,6 @@ void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphD
 
         if( !pBitmap->IsEmpty())    // empty bitmap e.g. for SPACE character
         {
-            // TODO: if( GetFontSelData().mbVertical ) ...
             rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_mono, 0, TRUE );
 
             const FT_Bitmap& rBitmapFT = reinterpret_cast<FT_BitmapGlyph>(aGlyphFT)->bitmap;
@@ -418,6 +432,7 @@ void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphD
             pBitmap->ReleaseAccess( wa);
         }
 
+        // TODO: if( GetFontSelData().mbVertical ) ...
         rGD.SetBitmap( pBitmap);
     }
 
@@ -425,32 +440,162 @@ void FreetypeServerFont::SetGlyphData( int nGlyphIndex, bool bWithBitmap, GlyphD
 }
 
 // -----------------------------------------------------------------------
-// kerning helper functions
+// kerning stuff
 // -----------------------------------------------------------------------
 
 ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 {
-    ULONG nKernCount = 0;
+    *ppKernPairs = NULL;
     if( !FT_HAS_KERNING( maFaceFT ) )
-        ppKernPairs = NULL;
-    else
+        return 0;
+
+    // first figure out which glyph pairs are involved in kerning
+    SFNT_Interface* pSFNT = (SFNT_Interface*) FT_Get_Module_Interface( aLibFT, "sfnt" );
+    DBG_ASSERT( (pSFNT!=NULL), "pSFNT==NULL!" );
+    if( !pSFNT )
+        return 0;
+
+    FT_ULong nKernLength = 0;
+    FT_Error rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_kern, 0, NULL, &nKernLength );
+    if( rcFT != FT_Err_Ok )
+        return 0;
+
+    FT_Byte* const pKern = new FT_Byte[ nKernLength ];
+    rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_kern, 0, pKern, &nKernLength );
+
+    typedef std::vector<ImplKernPairData> KernVector;
+    KernVector aKernGlyphVector;
+    ImplKernPairData aKernPair;
+
+    const FT_Byte* pBuffer = pKern;
+    USHORT nVersion = NEXT_UShort( pBuffer );
+    USHORT nTableCnt = NEXT_UShort( pBuffer );
+    if( nVersion != 0 )     // ignore Apple's versions for now
+        nTableCnt = 0;
+    for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
     {
-        // TODO...
+        USHORT nSubVersion  = NEXT_UShort( pBuffer );
+        USHORT nSubLength   = NEXT_UShort( pBuffer );
+        USHORT nSubCoverage = NEXT_UShort( pBuffer );
+        if( (nSubCoverage&0x03) != 0x01 )   // no interest in minimum info here
+            continue;
+        switch( nSubCoverage >> 8 )
+        {
+            case 0: // version 0, kerning format 0
+            {
+                USHORT nPairs = NEXT_UShort( pBuffer );
+                pBuffer += 6;   // skip search hints
+                aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
+                for( int i = 0; i < nPairs; ++i )
+                {
+                    aKernPair.mnChar1   = NEXT_UShort( pBuffer );
+                    aKernPair.mnChar2   = NEXT_UShort( pBuffer );
+                    /*long nUnscaledKern=*/ NEXT_Short( pBuffer );
+                    aKernGlyphVector.push_back( aKernPair );
+                }
+            }
+            break;
+
+            case 2: // version 0, kerning format 2
+            {
+                const FT_Byte* pSubTable = pBuffer;
+                /*USHORT nRowWidth  =*/ NEXT_UShort( pBuffer );
+                USHORT nOfsLeft     = NEXT_UShort( pBuffer );
+                USHORT nOfsRight    = NEXT_UShort( pBuffer );
+                USHORT nOfsArray    = NEXT_UShort( pBuffer );
+
+                const FT_Byte* pTmp = pSubTable + nOfsLeft;
+                USHORT nFirstLeft   = NEXT_UShort( pTmp );
+                USHORT nLastLeft    = NEXT_UShort( pTmp ) + nFirstLeft - 1;
+
+                pTmp = pSubTable + nOfsRight;
+                USHORT nFirstRight  = NEXT_UShort( pTmp );
+                USHORT nLastRight   = NEXT_UShort( pTmp ) + nFirstRight - 1;
+
+                ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
+                aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
+
+                pTmp = pSubTable + nOfsArray;
+                for( int nLeft = nFirstLeft; nLeft < nLastLeft; ++nLeft )
+                {
+                    aKernPair.mnChar1 = nLeft;
+                    for( int nRight = 0; nRight < nLastRight; ++nRight )
+                    {
+                        if( NEXT_Short( pTmp ) != 0 )
+                        {
+                            aKernPair.mnChar2 = nRight;
+                            aKernGlyphVector.push_back( aKernPair );
+                        }
+                    }
+                }
+            }
+            break;
+        }
     }
+
+    delete[] pKern;
+
+    // now create VCL's ImplKernPairData[] format for all glyph pairs
+    ULONG nKernCount = aKernGlyphVector.size();
+    if( nKernCount )
+    {
+        // prepare glyphindex to character mapping
+        // TODO: this is needed to support VCL's existing kerning infrastructure,
+        // eliminate it up by redesigning kerning infrastructure to work with glyph indizes
+        typedef std::hash_multimap<USHORT,sal_Unicode> Cmap;
+        Cmap aCmap;
+        for( sal_Unicode aChar = 0x0001; aChar < 0xFFFE; ++aChar )
+        {
+            USHORT nGlyphIndex = GetGlyphIndex( aChar );
+            if( nGlyphIndex )
+                aCmap.insert( Cmap::value_type( nGlyphIndex, aChar ) );
+        }
+
+        // translate both glyph indizes in kerning pairs to characters
+        // problem is that these are 1:n mappings...
+        KernVector aKernCharVector( nKernCount );
+        KernVector::iterator it;
+        for( it = aKernGlyphVector.begin(); it != aKernGlyphVector.end(); ++it )
+        {
+            FT_Vector aKernVal;
+            FT_Error rcFT = FT_Get_Kerning( maFaceFT, it->mnChar1, it->mnChar2,
+                ft_kerning_default, &aKernVal );
+            aKernPair.mnKern = aKernVal.x;
+            if( (aKernPair.mnKern == 0) || (rcFT != FT_Err_Ok) )
+                continue;
+
+            typedef std::pair<Cmap::iterator,Cmap::iterator> CPair;
+            const CPair p1 = aCmap.equal_range( it->mnChar1 );
+            const CPair p2 = aCmap.equal_range( it->mnChar2 );
+            for( Cmap::const_iterator i1 = p1.first; i1 != p1.second; ++i1 )
+            {
+                aKernPair.mnChar1 = (*i1).second;
+                for( Cmap::const_iterator i2 = p2.first; i2 != p2.second; ++i2 )
+                {
+                    aKernPair.mnChar2 = (*i2).second;
+                    aKernCharVector.push_back( aKernPair );
+                }
+            }
+        }
+
+        // now move the resulting vector into VCL's ImplKernPairData[] format
+        nKernCount = aKernCharVector.size();
+        ImplKernPairData* pTo = new ImplKernPairData[ nKernCount ];
+        *ppKernPairs = pTo;
+        for( it = aKernCharVector.begin(); it != aKernCharVector.end(); ++it, ++pTo )
+        {
+            pTo->mnChar1 = it->mnChar1;
+            pTo->mnChar2 = it->mnChar2;
+            pTo->mnKern = it->mnKern;
+        }
+    }
+
     return nKernCount;
 }
 
 // -----------------------------------------------------------------------
 // outline helper functions
 // -----------------------------------------------------------------------
-
-extern "C"
-{
-    int FT_move_to( FT_Vector* p0, void* vpPolyArgs );
-    int FT_line_to( FT_Vector* p1, void* vpPolyArgs );
-    int FT_conic_to( FT_Vector* p1, FT_Vector* p2, void* vpPolyArgs );
-    int FT_cubic_to( FT_Vector* p1, FT_Vector* p2, FT_Vector* p3, void* vpPolyArgs );
-};  // end extern "C"
 
 class PolyArgs
 {
@@ -539,7 +684,10 @@ void PolyArgs::ClosePolygon()
 
 // -----------------------------------------------------------------------
 
-int FT_move_to( FT_Vector* const p0, void* vpPolyArgs )
+// TODO: wait till all compilers accept that calling conventions
+// for functions are the same independent of implementation constness,
+// then uncomment the const-tokens in the function interfaces below
+static int FT_move_to( FT_Vector* /*const*/ p0, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
 
@@ -550,14 +698,14 @@ int FT_move_to( FT_Vector* const p0, void* vpPolyArgs )
     return 0;
 }
 
-int FT_line_to( FT_Vector* const p1, void* vpPolyArgs )
+static int FT_line_to( FT_Vector* /*const*/ p1, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
-    rA.AddPoint( p1->x, p1->y , POLY_NORMAL );
+    rA.AddPoint( p1->x, p1->y, POLY_NORMAL );
     return 0;
 }
 
-int FT_conic_to( FT_Vector* const p1, FT_Vector* const p2, void* vpPolyArgs )
+static int FT_conic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, void* vpPolyArgs )
 {
     PolyArgs& rA = *reinterpret_cast<PolyArgs*>(vpPolyArgs);
 
@@ -574,7 +722,7 @@ int FT_conic_to( FT_Vector* const p1, FT_Vector* const p2, void* vpPolyArgs )
     return 0;
 }
 
-int FT_cubic_to( FT_Vector* const p1, FT_Vector* const p2, FT_Vector* const p3, void* vpPolyArgs )
+static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vector* /*const*/ p3, void* vpPolyArgs )
 {
     PolyArgs* const pA = reinterpret_cast<PolyArgs*>(vpPolyArgs);
     pA->AddPoint( p1->x, p1->y, POLY_CONTROL );
