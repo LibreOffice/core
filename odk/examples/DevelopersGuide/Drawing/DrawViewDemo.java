@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewDemo.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:22:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -83,7 +83,7 @@ public class DrawViewDemo
                 if ( args.length >= 2 )
                     sConnection = args[ 1 ];
                 else
-                    sConnection = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+                    sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
                 XMultiServiceFactory xServiceFactory =
                     Helper.connect( sConnection );
 
