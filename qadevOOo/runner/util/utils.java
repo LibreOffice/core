@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-12-10 17:02:03 $
+ *  last change:$Date: 2005-02-02 14:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@ import com.sun.star.util.XURLTransformer;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.XMacroExpander;
 
 import java.util.Collections;
 
@@ -248,6 +250,61 @@ public class utils {
             return "/";
         }
     }
+    /**
+     *
+     * This method get's the user dir of the connected office
+     *
+     */
+    public static String getOfficeUserPath (XMultiServiceFactory msf) {
+        String userPath = null;
+
+        // get a folder wich is located in the user dir
+        try{
+            userPath = (String) getOfficeSettingsValue(msf, "UserConfig");
+        } catch (Exception e) {
+            System.out.println("Couldn't get Office User Path");
+            e.printStackTrace();
+        }
+
+        // strip the returned folder to the user dir
+        String[] split =  userPath.split("/");
+        String returnValue = split[0];
+        for (int i=1; i<(split.length-1); i++)
+            returnValue += "/" + split[i];
+
+        return returnValue;
+    }
+
+    /**
+     * In the office there are some sttetings available. This function
+     * returns the value of the given setting name. For Example the setting name "Temp"
+     * "Temp" returns the temp folder of the office instance.
+     * @param msf a XMultiServiceFactory
+     * @param setting  the name of the setting the value should be returned.
+     * For example "Temp" reutrns the temp folder of the current office instance.
+     * @see com.sun.star.util.PathSettings
+     * @return the value as String
+     */
+    public static String getOfficeSettingsValue(XMultiServiceFactory msf, String setting){
+
+        String settingPath = null;
+        try {
+            Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
+            XPropertySet pthSettings = null;
+            try{
+                pthSettings = (XPropertySet) AnyConverter.toObject(
+                                    new Type(XPropertySet.class),settings);
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                System.out.println("### couldn't get Office Settings");
+            }
+            settingPath = (String) pthSettings.getPropertyValue(setting);
+
+        } catch (Exception e) {
+            System.out.println("Couldn't get stting value for " + setting);
+            e.printStackTrace();
+        }
+        return settingPath;
+    }
 
     /**
      *
@@ -258,22 +315,7 @@ public class utils {
     public static String getOfficeTemp (XMultiServiceFactory msf) {
         String tmpDir = System.getProperty("java.io.tmpdir");
         try {
-            Object settings = msf.createInstance("com.sun.star.comp.framework.PathSettings");
-            if (settings == null) {
-                String td = getFullURL(tmpDir);
-                if (td == null)
-                td = getFullTestDocName("");
-                return td;
-            }
-
-            XPropertySet pthSettings = null;
-            try{
-                pthSettings = (XPropertySet) AnyConverter.toObject(
-                                    new Type(XPropertySet.class),settings);
-            } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                System.out.println("### couldn't get office user temp folder");
-            }
-            String tmp = (String) pthSettings.getPropertyValue("Temp");
+            String tmp = (String) getOfficeSettingsValue(msf, "Temp");
             if (! tmp.endsWith(System.getProperty("file.separator"))){
                 tmp += System.getProperty("file.separator");
             }
@@ -338,8 +380,29 @@ public class utils {
             sysDir += "/";
 
         // remove leading '/' and replace others with '\' on windows machines
-        String sep = System.getProperty("file.separator");
-        if (sep.equalsIgnoreCase("\\")) {
+        if (sysDir.indexOf(":") != -1){
+            sysDir = sysDir.substring(1);
+            sysDir = sysDir.replace('/','\\');
+        }
+        return sysDir;
+    }
+
+    /**
+     * converts a fileURL to a system URL
+     * @param a file URL
+     * @return a system URL
+     */
+    public static String getSystemURL(String fileURL){
+        String sysDir = "";
+
+        int idx = fileURL.indexOf("file://") ;
+
+        // remove leading 'file://'
+        if (idx < 0) sysDir = fileURL;
+                    else sysDir = fileURL.substring("file://".length());
+
+        // remove leading '/' and replace others with '\' on windows machines
+        if (sysDir.indexOf(":") != -1){
             sysDir = sysDir.substring(1);
             sysDir = sysDir.replace('/','\\');
         }
@@ -676,12 +739,16 @@ public class utils {
         return originalString;
     }
 
-    public static void main(String[] args) {
-        System.out.println("1st: " + utils.replaceAll13("Hallo Welt", "l", "r"));
-        System.out.println("2nd " + utils.replaceAll13("Hallo Welt", "z", "s"));
-        System.out.println("3rd " + utils.replaceAll13("Hallo Wellt", "ll", "p"));
-        System.out.println("1st: " + utils.replaceAll13("Hallo Welt", "l", "rpl"));
+    public static String expandMacro(XMultiServiceFactory xMSF, String expand) throws java.lang.Exception{
+        try {
+            XPropertySet xPS = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xMSF);
+            XComponentContext xContext = (XComponentContext) UnoRuntime.queryInterface(XComponentContext.class, xPS.getPropertyValue("DefaultContext"));
+            XMacroExpander xME = (XMacroExpander) UnoRuntime.queryInterface(XMacroExpander.class, xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander"));
+            return xME.expandMacros(expand);
+        }
+        catch(Exception e) {
+            throw new Exception("could not expand macro: " + e.toString());
+        }
+
     }
-
-
 }
