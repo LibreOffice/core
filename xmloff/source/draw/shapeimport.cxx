@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:34:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -142,7 +146,7 @@ struct ConnectionHint
 {
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxConnector;
     sal_Bool  bStart;
-    sal_Int32 nDestShapeId;
+    OUString aDestShapeId;
     sal_Int32 nDestGlueId;
 };
 
@@ -365,6 +369,7 @@ static __FAR_DATA SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
     { XML_NAMESPACE_DRAW,           XML_FRAME,          XML_TOK_GROUP_FRAME         },
     { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
 
+    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
     { XML_NAMESPACE_OFFICE,         XML_ANNOTATION,     XML_TOK_GROUP_ANNOTATION    },
 
     XML_TOKEN_MAP_END
@@ -904,6 +909,12 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             pContext = new SdXMLCustomShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes, sal_False );
             break;
         }
+//      case XML_TOK_GROUP_CUSTOM_SHAPE:
+//      {
+//          // draw:customshape
+//          pContext = new SdXMLCustomShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+//          break;
+//      }
         // add other shapes here...
         default:
             return new SvXMLShapeContext( rImport, nPrefix, rLocalName, bTemporaryShape );
@@ -1260,36 +1271,15 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
     }
 }
 
-void XMLShapeImportHelper::createShapeId( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nId )
-{
-    DBG_ASSERT( mpImpl->maShapeIds.find(nId) == mpImpl->maShapeIds.end(), "draw:id imported twice!" );
-    mpImpl->maShapeIds[nId] = xShape;
-}
-
-uno::Reference< drawing::XShape > XMLShapeImportHelper::getShapeFromId( sal_Int32 nId )
-{
-    IdShapeMap::iterator aShapeIter( mpImpl->maShapeIds.find( nId ) );
-    if( aShapeIter != mpImpl->maShapeIds.end() )
-    {
-        return (*aShapeIter).second;
-    }
-    else
-    {
-        DBG_ERROR( "unknown draw:id found!" );
-        uno::Reference< drawing::XShape > xShape;
-        return xShape;
-    }
-}
-
 void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
                          sal_Bool bStart,
-                         sal_Int32 nDestShapeId,
+                         const rtl::OUString& rDestShapeId,
                          sal_Int32 nDestGlueId )
 {
     ConnectionHint aHint;
     aHint.mxConnector = rConnectorShape;
     aHint.bStart = bStart;
-    aHint.nDestShapeId = nDestShapeId;
+    aHint.aDestShapeId = rDestShapeId;
     aHint.nDestGlueId = nDestGlueId;
 
     mpImpl->maConnections.push_back( aHint );
@@ -1322,7 +1312,8 @@ void XMLShapeImportHelper::restoreConnections()
                 // #86637# simply setting these values WILL force the connector to do
                 // an new layout promptly. So the line delta values have to be rescued
                 // and restored around connector changes.
-                uno::Reference< drawing::XShape > xShape( getShapeFromId( rHint.nDestShapeId ) );
+                uno::Reference< drawing::XShape > xShape(
+                    mrImporter.getInterfaceToIdentifierMapper().getReference( rHint.aDestShapeId ), uno::UNO_QUERY );
                 if( xShape.is() )
                 {
                     aAny <<= xShape;
