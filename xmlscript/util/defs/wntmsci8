@@ -1242,3 +1242,14 @@ _real@0000000000000000
 ?importLibrary@XML_script_impl@?A0x9a436dc0@@UAA?AV?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@AAULibDescriptor@xmlscript@@@Z
 ?importLibraryContainer@XML_script_impl@?A0x9a436dc0@@UAA?AV?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@PAULibDescriptorArray@xmlscript@@@Z
 ?importScriptModule@XML_script_impl@?A0x9a436dc0@@UAA?AV?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@AAUModuleDescriptor@xmlscript@@@Z
+??0XML_script_impl@?A0x1567038b@@QAE@XZ
+?exportDialogModel@XML_script_impl@?A0x1567038b@@UAA?AV?$Reference@VXInputStreamProvider@io@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXNameContainer@container@star@sun@com@@@4567@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@4567@@Z
+?exportDialogModel@XML_script_impl@?A0x1567038b@@UAAXABV?$Reference@VXExtendedDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXNameContainer@container@star@sun@com@@@4567@@Z
+?exportLibrary@XML_script_impl@?A0x1567038b@@UAAXABV?$Reference@VXExtendedDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@ABULibDescriptor@xmlscript@@@Z
+?exportLibraryContainer@XML_script_impl@?A0x1567038b@@UAAXABV?$Reference@VXExtendedDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@PBULibDescriptorArray@xmlscript@@@Z
+?exportScriptModule@XML_script_impl@?A0x1567038b@@UAAXABV?$Reference@VXExtendedDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@ABUModuleDescriptor@xmlscript@@@Z
+?importDialogModel@XML_script_impl@?A0x1567038b@@UAA?AV?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXNameContainer@container@star@sun@com@@@4567@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@4567@@Z
+?importDialogModel@XML_script_impl@?A0x1567038b@@UAAXV?$Reference@VXInputStream@io@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXNameContainer@container@star@sun@com@@@4567@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@4567@@Z
+?importLibrary@XML_script_impl@?A0x1567038b@@UAA?AV?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@AAULibDescriptor@xmlscript@@@Z
+?importLibraryContainer@XML_script_impl@?A0x1567038b@@UAA?AV?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@PAULibDescriptorArray@xmlscript@@@Z
+?importScriptModule@XML_script_impl@?A0x1567038b@@UAA?AV?$Reference@VXDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@AAUModuleDescriptor@xmlscript@@@Z
