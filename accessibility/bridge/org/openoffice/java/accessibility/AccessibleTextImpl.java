@@ -349,14 +349,14 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
     /** Given a point in local coordinates, return the zero-based index of the character under that point */
     public int getIndexAtPoint(java.awt.Point point) {
         try {
-            if (Build.DEBUG) {
-                System.err.println(this + "getIndexAtPoint(" + point.x + ", " + point.y + ") returns " +
-                    unoObject.getIndexAtPoint(new Point(point.x, point.y)));
-            }
+//          if (Build.DEBUG) {
+//              System.err.println(this + "getIndexAtPoint(" + point.x + ", " + point.y + ") returns " +
+//                  unoObject.getIndexAtPoint(new Point(point.x, point.y)));
+//          }
             return unoObject.getIndexAtPoint(new Point(point.x, point.y));
         } catch (com.sun.star.uno.RuntimeException e) {
             if (Build.DEBUG) {
-                System.err.println("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
+                System.err.println(this + "RuntimeException caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
                 System.err.println(e.getMessage());
             }
             return -1;
@@ -425,13 +425,13 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                     }
                 }
 
-                if (Build.DEBUG && (type == AccessibleTextType.LINE)) {
-                    System.err.println(this + " getAtIndex(" + part + "," + index + ") returns " + s + " (length: " + s.length() + ")");
-                }
+//              if (Build.DEBUG) {
+//                  System.err.println(this + " getAtIndex(" + part + "," + index + ") returns " + s + " (length: " + s.length() + ")");
+//              }
                 return s;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                    if (Build.DEBUG) {
-                       System.err.println(e.getClass().getName() + " caught for " + this + " getAtIndex(" + part + "," + index + ")");
+                       System.err.println(this + "IndexOutOfBoundsException caught for getAtIndex(" + part + "," + index + ")");
                 }
                 // Workaround for #104847#
                 if (type == AccessibleTextType.LINE) {
@@ -471,7 +471,18 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             Rectangle unoRect = unoObject.getCharacterBounds(index);
             return new java.awt.Rectangle(unoRect.X, unoRect.Y, unoRect.Width, unoRect.Height);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+//          if (Build.DEBUG) {
+//              System.err.println(this + "IndexOutOfBoundsException caught for getCharacterBounds(" + index + ")");
+//              System.err.println(e.getMessage());
+//          }
+            if (index > 0) {
+                return getCharacterBounds(index - 1);
+            }
         } catch (com.sun.star.uno.RuntimeException e) {
+            if (Build.DEBUG) {
+                System.err.println(this + "RuntimeException caught for getCharacterBounds(" + index + ")");
+                System.err.println(e.getMessage());
+            }
         }
         return new java.awt.Rectangle();
     }
