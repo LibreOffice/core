@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-20 09:41:10 $
+ *  last change: $Author: mt $ $Date: 2002-11-21 12:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,6 +1205,13 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
             }
             break;
+            case BASEPROPERTY_MOUSETRANSPARENT:
+            {
+                sal_Bool bMouseTransparent;
+                Value >>= bMouseTransparent;
+                pWindow->SetMouseTransparent( bMouseTransparent );
+            }
+            break;
         }
     }
 }
@@ -1309,6 +1316,13 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 aProp <<= bAutoMnemonics;
             }
             break;
+            case BASEPROPERTY_MOUSETRANSPARENT:
+            {
+                sal_Bool bMouseTransparent = GetWindow()->IsMouseTransparent();
+                aProp <<= bMouseTransparent;
+            }
+            break;
+
         }
     }
     return aProp;
