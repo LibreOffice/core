@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-15 17:51:17 $
+ *  last change: $Author: bm $ $Date: 2001-01-11 17:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _XMLOFF_XMLTYPES_HXX
 #include "xmltypes.hxx"
 #endif
+#ifndef _XMLOFF_CONTEXTID_HXX_
+#include "contextid.hxx"
+#endif
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include "xmlement.hxx"
 #endif
@@ -90,6 +93,9 @@
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
+#endif
+#ifndef _XMLOFF_SHAPEIMPORT_HXX_
+#include "shapeimport.hxx"
 #endif
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
 #include "NamedBoolPropertyHdl.hxx"
@@ -142,41 +148,35 @@
 
 using namespace com::sun::star;
 
-// special handling
+// custom types
 #define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )
 #define XML_SCH_TYPE_ERROR_CATEGORY         ( XML_SCH_TYPES_START + 1 )
 #define XML_SCH_TYPE_REGRESSION_TYPE        ( XML_SCH_TYPES_START + 2 )
 #define XML_SCH_TYPE_SOLID_TYPE             ( XML_SCH_TYPES_START + 3 )
 #define XML_SCH_TYPE_ERROR_INDICATOR_UPPER  ( XML_SCH_TYPES_START + 4 )
 #define XML_SCH_TYPE_ERROR_INDICATOR_LOWER  ( XML_SCH_TYPES_START + 5 )
-// copyied from draw
-#define XML_SCH_TYPE_STROKE                 ( XML_SCH_TYPES_START + 20 )
-#define XML_SCH_TYPE_LINEJOIN               ( XML_SCH_TYPES_START + 21 )
-#define XML_SCH_TYPE_FILLSTYLE              ( XML_SCH_TYPES_START + 22 )
-#define XML_SCH_TYPE_TEXT_CROSSEDOUT        ( XML_SCH_TYPES_START + 23 )
+
+// context ids
+#define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
+#define XML_SCH_CONTEXT_MIN                         ( XML_SCH_CTF_START + 1 )
+#define XML_SCH_CONTEXT_MAX                         ( XML_SCH_CTF_START + 2 )
+#define XML_SCH_CONTEXT_STEP_MAIN                   ( XML_SCH_CTF_START + 3 )
+#define XML_SCH_CONTEXT_STEP_HELP                   ( XML_SCH_CTF_START + 4 )
+#define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 5 )
+
+#define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER     ( XML_SCH_CTF_START + 10 )
+#define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER     ( XML_SCH_CTF_START + 11 )
+#define XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER     ( XML_SCH_CTF_START + 12 )
+#define XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER     ( XML_SCH_CTF_START + 13 )
+#define XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION       ( XML_SCH_CTF_START + 14 )
+#define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER   ( XML_SCH_CTF_START + 15 )
+#define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT     ( XML_SCH_CTF_START + 16 )
+#define XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL   ( XML_SCH_CTF_START + 17 )
 
 #define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, XML_SCH_CONTEXT_##c }
-#define MAP_SPECIAL( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t | MID_FLAG_SPECIAL_ITEM, XML_SCH_SPECIAL_##c }
+#define MAP_SPECIAL( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c }
 #define MAP_ENTRY_END { 0,0,0,0 }
-
-#define XML_SCH_SPECIAL_TICKS_MAJ_INNER 1
-#define XML_SCH_SPECIAL_TICKS_MAJ_OUTER 2
-#define XML_SCH_SPECIAL_TICKS_MIN_INNER 3
-#define XML_SCH_SPECIAL_TICKS_MIN_OUTER 4
-#define XML_SCH_SPECIAL_TEXT_ROTATION 7
-#define XML_SCH_SPECIAL_DATA_LABEL_NUMBER 8
-#define XML_SCH_SPECIAL_DATA_LABEL_TEXT 9
-#define XML_SCH_SPECIAL_DATA_LABEL_SYMBOL 10
-#define XML_SCH_SPECIAL_AXIS_MIN 11
-#define XML_SCH_SPECIAL_AXIS_MAX 12
-
-#define XML_SCH_CONTEXT_USER_SYMBOL 1001
-#define XML_SCH_CONTEXT_MIN 1002
-#define XML_SCH_CONTEXT_MAX 1003
-#define XML_SCH_CONTEXT_STEP_MAIN 1004
-#define XML_SCH_CONTEXT_STEP_HELP 1005
-#define XML_SCH_CONTEXT_ORIGIN 1006
 
 const XMLPropertyMapEntry aXMLChartPropMap[] =
 {
@@ -232,76 +232,6 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 
     // text properties for titles
     MAP_SPECIAL( "TextRotation", TEXT, rotation_angle, XML_TYPE_NUMBER, TEXT_ROTATION ),    // convert 1/100th degrees to degrees
-
-    // misc properties
-
-    // draw properties
-
-    // stroke attributes
-    { "LineStyle",      XML_NAMESPACE_DRAW, sXML_stroke,                XML_SCH_TYPE_STROKE, 0 },
-    { "LineDashName",   XML_NAMESPACE_DRAW, sXML_stroke_dash,           XML_TYPE_STRING, 0 },
-    { "LineWidth",      XML_NAMESPACE_SVG,  sXML_stroke_width,          XML_TYPE_MEASURE, 0 },
-    { "LineColor",      XML_NAMESPACE_SVG,  sXML_stroke_color,          XML_TYPE_COLOR, 0 },
-    { "LineStartName",  XML_NAMESPACE_DRAW, sXML_marker_start,          XML_TYPE_STRING, 0 },
-    { "LineStartWidth", XML_NAMESPACE_DRAW, sXML_marker_start_width,    XML_TYPE_MEASURE, 0 },
-    { "LineStartCenter",XML_NAMESPACE_DRAW, sXML_marker_start_center,   XML_TYPE_BOOL, 0 },
-    { "LineEndName",    XML_NAMESPACE_DRAW, sXML_marker_end,            XML_TYPE_STRING, 0 },
-    { "LineEndWidth",   XML_NAMESPACE_DRAW, sXML_marker_end_width,      XML_TYPE_MEASURE, 0 },
-    { "LineEndCenter",  XML_NAMESPACE_DRAW, sXML_marker_end_center,     XML_TYPE_BOOL, 0 },
-    { "LineTransparence", XML_NAMESPACE_SVG,sXML_stroke_opacity,        XML_TYPE_PERCENT16, 0 },
-    { "LineJoint",      XML_NAMESPACE_SVG,  sXML_stroke_linejoin,       XML_SCH_TYPE_LINEJOIN, 0 },
-
-    // fill attributes
-    { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                      XML_SCH_TYPE_FILLSTYLE, 0 },
-    { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,                XML_TYPE_COLOR, 0 },
-    { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, 0 },
-    { "FillGradientStepCount",  XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
-    { "FillHatchName",  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,           XML_TYPE_STRING, 0 },
-    { "FillBitmapName", XML_NAMESPACE_DRAW, sXML_fill_image_name,           XML_TYPE_STRING, 0 },
-    { "FillTransparence",   XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16, 0 },
-    { "FillTransparenceName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
-    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
-
-    // text attributes
-
-    { "CharColor",      XML_NAMESPACE_FO,       sXML_color,                 XML_TYPE_COLOR, 0 },
-    { "CharCrossedOut", XML_NAMESPACE_STYLE,    sXML_text_crossing_out,     XML_SCH_TYPE_TEXT_CROSSEDOUT,   0},
-    { "CharFontStyleName",XML_NAMESPACE_STYLE,  sXML_font_style_name,       XML_TYPE_STRING, 0 },
-    { "CharFontFamily", XML_NAMESPACE_STYLE,    sXML_font_family_generic,   XML_TYPE_TEXT_FONTFAMILY, 0 },
-    { "CharFontCharSet",XML_NAMESPACE_STYLE,    sXML_font_charset,          XML_TYPE_TEXT_FONTENCODING, 0 },
-    { "CharHeight",     XML_NAMESPACE_FO,       sXML_font_size,             XML_TYPE_CHAR_HEIGHT },
-    { "CharPosture",    XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
-    { "CharUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
-    { "CharWeight",     XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
-
-    // 3D geometry attributes
-    { "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, sXML_horizontal_segments,   XML_TYPE_NUMBER, 0 },
-    { "D3DVerticalSegments",            XML_NAMESPACE_DR3D, sXML_vertical_segments,     XML_TYPE_NUMBER, 0 },
-    { "D3DPercentDiagonal",             XML_NAMESPACE_DR3D, sXML_edge_rounding,         XML_TYPE_PERCENT, 0 },
-    { "D3DBackscale",                   XML_NAMESPACE_DR3D, sXML_back_scale,            XML_TYPE_PERCENT, 0 },
-    { "D3DEndAngle",                    XML_NAMESPACE_DR3D, sXML_end_angle,             XML_TYPE_NUMBER, 0 },
-    { "D3DDepth",                       XML_NAMESPACE_DR3D, sXML_depth,                 XML_TYPE_MEASURE, 0 },
-//      { "D3DDoubleSided",                 XML_NAMESPACE_DR3D, sXML_backface_culling,      XML_SD_TYPE_BACKFACE_CULLING, 0 },
-
-    // 3D lighting attributes
-//      { "D3DNormalsKind",                 XML_NAMESPACE_DR3D, sXML_normals_kind,          XML_SD_TYPE_NORMALS_KIND, 0 },
-//      { "D3DNormalsInvert",               XML_NAMESPACE_DR3D, sXML_normals_direction,     XML_SD_TYPE_NORMALS_DIRECTION, 0 },
-
-    // 3D texture attributes
-//      { "D3DTextureProjectionX",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_x, XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 },
-//      { "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_y, XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 },
-//      { "D3DTextureKind",                 XML_NAMESPACE_DR3D, sXML_tex_kind,              XML_SD_TYPE_TEX_KIND, 0 },
-//      { "D3DTextureMode",                 XML_NAMESPACE_DR3D, sXML_tex_mode,              XML_SD_TYPE_TEX_MODE, 0 },
-    { "D3DTextureFilter",               XML_NAMESPACE_DR3D, sXML_tex_filter,            XML_TYPE_BOOL, 0 },
-
-    // 3D material attributes
-    { "D3DMaterialColor",               XML_NAMESPACE_DR3D, sXML_diffuse_color,         XML_TYPE_COLOR, 0 },
-    { "D3DMaterialEmission",            XML_NAMESPACE_DR3D, sXML_emissive_color,        XML_TYPE_COLOR, 0 },
-    { "D3DMaterialSpecular",            XML_NAMESPACE_DR3D, sXML_specular_color,        XML_TYPE_COLOR, 0 },
-    { "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, sXML_shininess,             XML_TYPE_PERCENT, 0 },
-
-    // 3D shadow attributes
-    { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_TYPE_BOOL, 0 },
 
     MAP_ENTRY_END
 };
@@ -415,25 +345,25 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 pHdl = new XMLConstantsPropertyHandler( aXMLChartSolidTypeEnumMap, sXML_cuboid );
                 break;
 
-            case XML_SCH_TYPE_FILLSTYLE:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartFillStyleEnumMap, ::getCppuType((const drawing::FillStyle*)0) );
-                break;
+//              case XML_SCH_TYPE_FILLSTYLE:
+//                  pHdl = new XMLEnumPropertyHdl( aXMLChartFillStyleEnumMap, ::getCppuType((const drawing::FillStyle*)0) );
+//                  break;
 
-            case XML_SCH_TYPE_STROKE:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartLineStyleEnumMap, ::getCppuType((const drawing::LineStyle*)0) );
-                break;
+//              case XML_SCH_TYPE_STROKE:
+//                  pHdl = new XMLEnumPropertyHdl( aXMLChartLineStyleEnumMap, ::getCppuType((const drawing::LineStyle*)0) );
+//                  break;
 
-            case XML_SCH_TYPE_LINEJOIN:
-                pHdl = new XMLEnumPropertyHdl( aXMLChartLineJointEnumMap, ::getCppuType((const drawing::LineJoint*)0) );
-                break;
+//              case XML_SCH_TYPE_LINEJOIN:
+//                  pHdl = new XMLEnumPropertyHdl( aXMLChartLineJointEnumMap, ::getCppuType((const drawing::LineJoint*)0) );
+//                  break;
 
-            case XML_SCH_TYPE_TEXT_CROSSEDOUT:
-            {
-                const rtl::OUString aTrueStr( rtl::OUString::createFromAscii( sXML_crossedout_single ));
-                const rtl::OUString aFalseStr( rtl::OUString::createFromAscii( sXML_none ));
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
-                break;
-            }
+//              case XML_SCH_TYPE_TEXT_CROSSEDOUT:
+//              {
+//                  const rtl::OUString aTrueStr( rtl::OUString::createFromAscii( sXML_crossedout_single ));
+//                  const rtl::OUString aFalseStr( rtl::OUString::createFromAscii( sXML_none ));
+//                  pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+//                  break;
+//              }
         }
         if( pHdl )
             PutHdlCache( nType, pHdl );
@@ -571,19 +501,19 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 
         switch( nContextId )
         {
-            case XML_SCH_SPECIAL_TICKS_MAJ_INNER:
-            case XML_SCH_SPECIAL_TICKS_MIN_INNER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartAxisMarks::INNER ) == chart::ChartAxisMarks::INNER );
                 SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
                 break;
-            case XML_SCH_SPECIAL_TICKS_MAJ_OUTER:
-            case XML_SCH_SPECIAL_TICKS_MIN_OUTER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartAxisMarks::OUTER ) == chart::ChartAxisMarks::OUTER );
                 SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
                 break;
-            case XML_SCH_SPECIAL_TEXT_ROTATION:
+            case XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION:
                 {
                     // convert from 100th degrees to degrees (double)
                     rProperty.maValue >>= nValue;
@@ -591,7 +521,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                     SvXMLUnitConverter::convertNumber( sValueBuffer, fVal );
                 }
                 break;
-            case XML_SCH_SPECIAL_DATA_LABEL_NUMBER:
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
                 {
                     rProperty.maValue >>= nValue;
                     if((( nValue & chart::ChartDataCaption::VALUE ) == chart::ChartDataCaption::VALUE ))
@@ -602,12 +532,12 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                         sValueBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( sXML_none ));
                 }
                 break;
-            case XML_SCH_SPECIAL_DATA_LABEL_TEXT:
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartDataCaption::TEXT ) == chart::ChartDataCaption::TEXT );
                 SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
                 break;
-            case XML_SCH_SPECIAL_DATA_LABEL_SYMBOL:
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL:
                 rProperty.maValue >>= nValue;
                 bValue = (( nValue & chart::ChartDataCaption::SYMBOL ) == chart::ChartDataCaption::SYMBOL );
                 SvXMLUnitConverter::convertBool( sValueBuffer, bValue );
@@ -632,6 +562,11 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper ) :
         SvXMLImportPropertyMapper( rMapper )
 {
+    // chain shape mapper for drawing properties
+
+    // give an empty model. It is only used for numbering rules that don't exist in chart
+    uno::Reference< frame::XModel > xEmptyModel;
+    ChainImportMapper( XMLShapeImportHelper::CreateShapePropMapper( xEmptyModel ));
 }
 
 XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
@@ -655,8 +590,8 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
 
         switch( nContextId )
         {
-            case XML_SCH_SPECIAL_TICKS_MAJ_INNER:
-            case XML_SCH_SPECIAL_TICKS_MIN_INNER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER:
                 SvXMLUnitConverter::convertBool( bValue, rValue );
                 // modify old value
                 rProperty.maValue >>= nValue;
@@ -666,8 +601,8 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     SCH_XML_UNSETFLAG( nValue, chart::ChartAxisMarks::INNER );
                 rProperty.maValue <<= nValue;
                 break;
-            case XML_SCH_SPECIAL_TICKS_MAJ_OUTER:
-            case XML_SCH_SPECIAL_TICKS_MIN_OUTER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER:
                 SvXMLUnitConverter::convertBool( bValue, rValue );
                 // modify old value
                 rProperty.maValue >>= nValue;
@@ -677,7 +612,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     SCH_XML_UNSETFLAG( nValue, chart::ChartAxisMarks::OUTER );
                 rProperty.maValue <<= nValue;
                 break;
-            case XML_SCH_SPECIAL_TEXT_ROTATION:
+            case XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION:
                 {
                     // convert from degrees (double) to 100th degrees (integer)
                     double fVal;
@@ -686,7 +621,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     rProperty.maValue <<= nValue;
                 }
                 break;
-            case XML_SCH_SPECIAL_DATA_LABEL_NUMBER:
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
                 {
                     // modify old value
                     rProperty.maValue >>= nValue;
@@ -699,7 +634,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     rProperty.maValue <<= nValue;
                 }
                 break;
-            case XML_SCH_SPECIAL_DATA_LABEL_TEXT:
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT:
                 rProperty.maValue >>= nValue;
                 SvXMLUnitConverter::convertBool( bValue, rValue );
                 if( bValue )
@@ -708,7 +643,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::TEXT );
                 rProperty.maValue <<= nValue;
                 break;
-            case XML_SCH_SPECIAL_DATA_LABEL_SYMBOL:
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL:
                 rProperty.maValue >>= nValue;
                 SvXMLUnitConverter::convertBool( bValue, rValue );
                 if( bValue )
