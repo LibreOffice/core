@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-07 16:23:58 $
+ *  last change: $Author: fs $ $Date: 2002-09-11 09:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
 
 // -------------------------------------------------------------------------------------
 
-#define IMPL_XTYPEPROVIDER_START( ClassName )   \
+#define IMPL_IMPLEMENTATION_ID( ClassName ) \
 ::com::sun::star::uno::Sequence< sal_Int8 > ClassName::getImplementationId() throw(::com::sun::star::uno::RuntimeException) \
 { \
     static ::cppu::OImplementationId* pId = NULL; \
@@ -140,7 +140,10 @@ ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference<
         } \
     } \
     return (*pId).getImplementationId(); \
-} \
+}
+
+#define IMPL_XTYPEPROVIDER_START( ClassName )   \
+IMPL_IMPLEMENTATION_ID( ClassName ) \
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > ClassName::getTypes() throw(::com::sun::star::uno::RuntimeException) \
 { \
     static ::cppu::OTypeCollection* pCollection = NULL; \
