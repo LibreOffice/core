@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventnotifier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:25:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,18 +96,11 @@ namespace comphelper
     public:
         typedef sal_uInt32  TClientId;
 
-    private:
         typedef ::std::pair< TClientId, ::com::sun::star::accessibility::AccessibleEventObject >
                                                                                     ClientEvent;
 
         typedef ::cppu::OInterfaceContainerHelper                                   EventListeners;
         typedef ::std::map< TClientId, EventListeners*, ::std::less< TClientId > >  ClientMap;
-
-    // members
-    private:
-        // client administration
-        static ::osl::Mutex     s_aMutex;
-        static ClientMap        s_aClients;
 
     protected:
         AccessibleEventNotifier( );     // never implemented
