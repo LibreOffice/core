@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:53:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 11:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@ namespace dbaccess
 
         connectivity::OWeakRefArray                             m_aClones;
         connectivity::ORowVector< connectivity::ORowSetValue >  m_aParameterRow; // hold all parameters
+
+        ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
+        ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
 
         OTableContainer*                            m_pTables;
 
@@ -461,6 +464,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.25  2001/07/30 08:53:02  oj
+    #90015# use ORowSetValue as const ref
+
     Revision 1.24  2001/07/24 13:25:25  oj
     #89430# move ORowSetValue into dbtools
 

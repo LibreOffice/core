@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:53:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 11:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,8 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     : ORowSet_BASE1(m_aMutex)
     , ORowSetBase(ORowSet_BASE1::rBHelper,m_aMutex)
     , m_xServiceManager(_xFac)
-    //  ,m_pParseTree(NULL)
+    ,m_aRowsetListeners(m_rMutex)
+    ,m_aApproveListeners(m_rMutex)
     ,m_nFetchDirection(FetchDirection::FORWARD)
     ,m_nFetchSize(1)
     ,m_nCommandType(CommandType::COMMAND)
@@ -562,6 +563,10 @@ void SAL_CALL ORowSet::disposing(void)
     OPropertyContainer::disposing();
 
     MutexGuard aGuard(m_aMutex);
+    EventObject aDisposeEvent;
+    aDisposeEvent.Source = static_cast< XComponent* >(this);
+    m_aRowsetListeners.disposeAndClear( aDisposeEvent );
+    m_aApproveListeners.disposeAndClear( aDisposeEvent );
 
     // just because we want to clear all see freeResources()
     m_bCreateStatement = sal_True;
@@ -1050,7 +1055,7 @@ void SAL_CALL ORowSet::addRowSetListener( const Reference< XRowSetListener >& li
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     if(listener.is())
-        m_aListeners.addInterface(listener);
+        m_aRowsetListeners.addInterface(listener);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::removeRowSetListener( const Reference< XRowSetListener >& listener ) throw(RuntimeException)
@@ -1059,13 +1064,13 @@ void SAL_CALL ORowSet::removeRowSetListener( const Reference< XRowSetListener >&
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     if(listener.is())
-        m_aListeners.removeInterface(listener);
+        m_aRowsetListeners.removeInterface(listener);
 }
 // -------------------------------------------------------------------------
 void ORowSet::notifyAllListeners()
 {
     EventObject aEvt(*m_pMySelf);
-    OInterfaceIteratorHelper aIter(m_aListeners);
+    OInterfaceIteratorHelper aIter(m_aRowsetListeners);
     while (aIter.hasMoreElements())
         ((XRowSetListener*)aIter.next())->rowSetChanged(aEvt);
 }
@@ -1073,14 +1078,14 @@ void ORowSet::notifyAllListeners()
 void ORowSet::notifyAllListenersCursorMoved()
 {
     EventObject aEvt(*m_pMySelf);
-    OInterfaceIteratorHelper aIter(m_aListeners);
+    OInterfaceIteratorHelper aIter(m_aRowsetListeners);
     while (aIter.hasMoreElements())
         ((XRowSetListener*)aIter.next())->cursorMoved(aEvt);
 }
 // -------------------------------------------------------------------------
 void ORowSet::notifyAllListenersRowChanged(const RowChangeEvent &rEvt)
 {
-    OInterfaceIteratorHelper aIter(m_aListeners);
+    OInterfaceIteratorHelper aIter(m_aRowsetListeners);
     while (aIter.hasMoreElements())
         ((XRowSetListener*)aIter.next())->rowChanged(rEvt);
 }
