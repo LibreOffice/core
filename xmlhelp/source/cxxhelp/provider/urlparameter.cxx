@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:17:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,8 @@ rtl::OString URLParameter::getByName( const char* par )
         val = get_program();
     else if( strcmp( par,"Database" ) == 0 )
         val = get_module();
+    else if( strcmp( par,"DatabasePar" ) == 0 )
+        val = get_dbpar();
     else if( strcmp( par,"Id" ) == 0 )
         val = get_id();
     else if( strcmp( par,"Path" ) == 0 )
@@ -721,6 +723,8 @@ bool URLParameter::query()
             m_aEid = value;
         else if( parameter.compareToAscii( "UseDB" ) == 0 )
             m_bUseDB = ! ( value.compareToAscii("no") == 0 );
+        else if( parameter.compareToAscii( "DbPAR" ) == 0 )
+            m_aDbPar = value;
         else if( parameter.compareToAscii( "Query" ) == 0 )
         {
             if( ! m_aQuery.getLength() )
@@ -846,7 +850,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         parString[last++] = "Program";
         parString[last++] = urlParam->getByName( "Program" );
         parString[last++] = "Database";
-        parString[last++] = urlParam->getByName( "Database" );
+        parString[last++] = urlParam->getByName( "DatabasePar" );
         parString[last++] = "Id";
         parString[last++] = urlParam->getByName( "Id" );
         parString[last++] = "Path";
