@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 14:00:16 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 11:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,10 +363,8 @@ void XMLTextStyleContext::FillPropertySet(
 
 
             // catch combined characters
-            if (XML_NAMESPACE_STYLE == rPropMapper->GetEntryNameSpace(nIdx) &&
-                rPropMapper->GetEntryXMLName(nIdx).equalsAsciiL(
-                    sXML_text_combine, sizeof(sXML_text_combine)-1) &&
-                (rPropMapper->GetEntryAPIName(nIdx).getLength() == 0) )
+            if ( CTF_COMBINED_CHARACTERS_FIELD ==
+                 rPropMapper->GetEntryContextId(nIdx) )
             {
                 Any aAny = rProp.maValue;
                 sal_Bool bVal = *(sal_Bool*)aAny.getValue();

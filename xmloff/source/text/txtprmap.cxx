@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-27 16:39:44 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 11:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,7 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "CharCombineSuffix",       STYLE,      text_combine_end_char,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
 
     // combined characters field, does not correspond to a property
-    M_E( "",                        STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE_CHARACTERS|MID_FLAG_NO_PROPERTY, 0 ),
+    M_E( "",                        STYLE,      text_combine,               XML_TYPE_TEXT_COMBINE_CHARACTERS|MID_FLAG_NO_PROPERTY, CTF_COMBINED_CHARACTERS_FIELD ),
 
     // RES_TXTATR_INETFMT
     // TODO
