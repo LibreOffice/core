@@ -1,4 +1,4 @@
-    <node oor:name="StarDraw 5.0 Vorlage (StarImpress)" oor:op="replace">
+    <node oor:name="StarDraw 5.0 Vorlage (StarImpress)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>5050</value></prop>
         <prop oor:name="Type"><value>draw_StarDraw_50_Vorlage</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
@@ -13,16 +13,16 @@
             <value xml:lang="es">StarDraw 5.0 - Plantilla (%productname% Impress)</value>
             <value xml:lang="tr">StarDraw 5.0 Şablonu (%productname% Impress)</value>
             <value xml:lang="ru">StarDraw 5.0 Шаблон (%productname% Impress)</value>
-            <value xml:lang="th">แม่แบบ StarDraw 5.0 (%PRODUCTNAME Impress)</value>
+            <value xml:lang="th">�?ม่�?บบ StarDraw 5.0 (%PRODUCTNAME Impress)</value>
             <value xml:lang="x-comment">StarDraw 5.0 Vorlage (%productname% Impress)</value>
             <value xml:lang="ca">StarDraw 5.0 Template (%productname% Impress)</value>
-            <value xml:lang="el">StarDraw 5.0 Πρότυπο (%productname% Impress)</value>
-            <value xml:lang="zh-CN">StarDraw 5.0 样式 (%productname% Impress)</value>
+            <value xml:lang="el">StarDraw 5.0 Π�?ότυπο (%productname% Impress)</value>
+            <value xml:lang="zh-CN">StarDraw 5.0 样�? (%productname% Impress)</value>
             <value xml:lang="pt">StarDraw 5.0 Modelo (%productname% Impress)</value>
             <value xml:lang="cs">Šablona StarDraw 5.0 (%productname% Impress)</value>
             <value xml:lang="fr">StarDraw 5.0 Modèle (%productname% Impress)</value>
             <value xml:lang="ar">StarDraw 5.0 قالب (StarOffice Impress)</value>
-            <value xml:lang="zh-TW">StarDraw 5.0 樣式 (%productname% Impress)</value>
+            <value xml:lang="zh-TW">StarDraw 5.0 樣�? (%productname% Impress)</value>
             <value xml:lang="sl">StarDraw 5.0 Predloga (%productname% Impress)</value>
             <value xml:lang="fi">StarDraw 5.0 -mallipohja (StarOffice Impress)</value>
             <value xml:lang="hi-IN">StarDraw 5.0 Template (%productname% Impress)</value>
@@ -32,7 +32,7 @@
             <value xml:lang="sv">StarDraw 5.0 mall (%productname% Impress)</value>
             <value xml:lang="da">StarDraw 5.0 skabelon (%productname% Impress)</value>
             <value xml:lang="de">StarDraw 5.0 Vorlage (%productname% Impress)</value>
-            <value xml:lang="ko">StarDraw 5.0 서식 파일(%productname% Impress)</value>
+            <value xml:lang="ko">StarDraw 5.0 서�? 파�?�(%productname% Impress)</value>
             <value xml:lang="nl">StarDraw 5.0 Sjabloon (%productname% Impress)</value>
             <value xml:lang="pt-BR">StarDraw 5.0 Vorlage (StarOffice Impress)</value>
             <value xml:lang="it">StarDraw 5.0 Modello (%productname% Impress)</value>

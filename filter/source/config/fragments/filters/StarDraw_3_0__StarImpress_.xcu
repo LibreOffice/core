@@ -1,4 +1,4 @@
-    <node oor:name="StarDraw 3.0 (StarImpress)" oor:op="replace">
+    <node oor:name="StarDraw 3.0 (StarImpress)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>3450</value></prop>
         <prop oor:name="Type"><value>draw_StarDraw_30</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
