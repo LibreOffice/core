@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:48:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,17 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
             break;
         }
 
+        case SID_SEARCH_DLG:
+            // We have to handle the SID_SEARCH_DLG slot explicitly because
+            // in some cases (when the slide sorter is displayed in the
+            // center pane) we want to disable the search dialog.  Therefore
+            // we have to handle the execution of that slot as well.
+            // We try to do that by forwarding the request to the view frame
+            // of the view shell.
+            mrController.GetViewShell().GetViewFrame()->ExecuteSlot (
+                rRequest);
+            break;
+
         default:
             break;
     }
@@ -800,8 +811,11 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     // Vorlagenkatalog darf nicht aufgerufen werden
     rSet.DisableItem(SID_STYLE_CATALOG);
     //  rSet.DisableItem(SID_SIZE_ALL);
-    rSet.DisableItem(SID_SPELL_DIALOG);
-    rSet.DisableItem(SID_SEARCH_DLG);
+    if (rShell.IsMainViewShell())
+    {
+        rSet.DisableItem(SID_SPELL_DIALOG);
+        rSet.DisableItem(SID_SEARCH_DLG);
+    }
 
     if ( ! rShell.GetZoomList()->IsNextPossible())
     {
