@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
+ *  last change: $Author: nn $ $Date: 2001-01-15 14:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,7 @@ void SAL_CALL ScCellFieldsObj::removeContainerListener(
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
 ScCellFieldObj::ScCellFieldObj() :
+    OComponentHelper( getMutex() ),
     aPropSet( lcl_GetURLPropertyMap() ),
     pDocShell( NULL )
 {
@@ -375,6 +376,7 @@ ScCellFieldObj::ScCellFieldObj() :
 
 ScCellFieldObj::ScCellFieldObj(ScDocShell* pDocSh, const ScAddress& rPos,
                                             const ESelection& rSel) :
+    OComponentHelper( getMutex() ),
     aPropSet( lcl_GetURLPropertyMap() ),
     pDocShell( pDocSh ),
     aCellPos( rPos ),
@@ -389,6 +391,68 @@ ScCellFieldObj::ScCellFieldObj(ScDocShell* pDocSh, const ScAddress& rPos,
     }
     else
         pEditSource = NULL;
+}
+
+uno::Any SAL_CALL ScCellFieldObj::queryAggregation( const uno::Type& rType )
+                                                throw(uno::RuntimeException)
+{
+    SC_QUERYINTERFACE( text::XTextField )
+    SC_QUERYINTERFACE( text::XTextContent )         // parent of XTextField
+    SC_QUERYINTERFACE( beans::XPropertySet )
+    SC_QUERYINTERFACE( lang::XUnoTunnel )
+    SC_QUERYINTERFACE( lang::XServiceInfo )
+
+    return OComponentHelper::queryAggregation( rType );     // XComponent
+}
+
+uno::Sequence<uno::Type> SAL_CALL ScCellFieldObj::getTypes() throw(uno::RuntimeException)
+{
+    static uno::Sequence<uno::Type> aTypes;
+    if ( aTypes.getLength() == 0 )
+    {
+        uno::Sequence<uno::Type> aParentTypes = OComponentHelper::getTypes();
+        long nParentLen = aParentTypes.getLength();
+        const uno::Type* pParentPtr = aParentTypes.getConstArray();
+
+        aTypes.realloc( nParentLen + 4 );
+        uno::Type* pPtr = aTypes.getArray();
+        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<text::XTextField>*)0);
+        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
+        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+
+        for (long i=0; i<nParentLen; i++)
+            pPtr[i] = pParentPtr[i];                // parent types first
+    }
+    return aTypes;
+}
+
+uno::Sequence<sal_Int8> SAL_CALL ScCellFieldObj::getImplementationId()
+                                                    throw(uno::RuntimeException)
+{
+    static uno::Sequence< sal_Int8 > aId;
+    if( aId.getLength() == 0 )
+    {
+        aId.realloc( 16 );
+        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    }
+    return aId;
+}
+
+uno::Any SAL_CALL ScCellFieldObj::queryInterface( const uno::Type& rType )
+                                                throw(uno::RuntimeException)
+{
+    return OComponentHelper::queryInterface( rType );
+}
+
+void SAL_CALL ScCellFieldObj::acquire() throw(uno::RuntimeException)
+{
+    OComponentHelper::acquire();
+}
+
+void SAL_CALL ScCellFieldObj::release() throw(uno::RuntimeException)
+{
+    OComponentHelper::release();
 }
 
 void ScCellFieldObj::InitDoc( ScDocShell* pDocSh, const ScAddress& rPos,
@@ -522,21 +586,21 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellFieldObj::getAnchor() throw(uno:
 
 void SAL_CALL ScCellFieldObj::dispose() throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OComponentHelper::dispose();
 }
 
 void SAL_CALL ScCellFieldObj::addEventListener(
                         const uno::Reference<lang::XEventListener>& xListener )
                                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OComponentHelper::addEventListener( xListener );
 }
 
 void SAL_CALL ScCellFieldObj::removeEventListener(
-                        const uno::Reference<lang::XEventListener>& aListener )
+                        const uno::Reference<lang::XEventListener>& xListener )
                                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OComponentHelper::removeEventListener( xListener );
 }
 
 // XPropertySet
@@ -847,6 +911,7 @@ void SAL_CALL ScHeaderFieldsObj::removeContainerListener(
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
 ScHeaderFieldObj::ScHeaderFieldObj() :
+    OComponentHelper( getMutex() ),
     aPropSet( lcl_GetHeaderFieldPropertyMap() ),
     pContentObj( NULL ),
     nPart( 0 ),
@@ -857,6 +922,7 @@ ScHeaderFieldObj::ScHeaderFieldObj() :
 
 ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP,
                                             USHORT nT, const ESelection& rSel) :
+    OComponentHelper( getMutex() ),
     aPropSet( lcl_GetHeaderFieldPropertyMap() ),
     pContentObj( pContent ),
     nPart( nP ),
@@ -872,6 +938,68 @@ ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP
     }
     else
         pEditSource = NULL;
+}
+
+uno::Any SAL_CALL ScHeaderFieldObj::queryAggregation( const uno::Type& rType )
+                                                throw(uno::RuntimeException)
+{
+    SC_QUERYINTERFACE( text::XTextField )
+    SC_QUERYINTERFACE( text::XTextContent )         // parent of XTextField
+    SC_QUERYINTERFACE( beans::XPropertySet )
+    SC_QUERYINTERFACE( lang::XUnoTunnel )
+    SC_QUERYINTERFACE( lang::XServiceInfo )
+
+    return OComponentHelper::queryAggregation( rType );     // XComponent
+}
+
+uno::Sequence<uno::Type> SAL_CALL ScHeaderFieldObj::getTypes() throw(uno::RuntimeException)
+{
+    static uno::Sequence<uno::Type> aTypes;
+    if ( aTypes.getLength() == 0 )
+    {
+        uno::Sequence<uno::Type> aParentTypes = OComponentHelper::getTypes();
+        long nParentLen = aParentTypes.getLength();
+        const uno::Type* pParentPtr = aParentTypes.getConstArray();
+
+        aTypes.realloc( nParentLen + 4 );
+        uno::Type* pPtr = aTypes.getArray();
+        pPtr[nParentLen + 0] = getCppuType((const uno::Reference<text::XTextField>*)0);
+        pPtr[nParentLen + 1] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
+        pPtr[nParentLen + 2] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+
+        for (long i=0; i<nParentLen; i++)
+            pPtr[i] = pParentPtr[i];                // parent types first
+    }
+    return aTypes;
+}
+
+uno::Sequence<sal_Int8> SAL_CALL ScHeaderFieldObj::getImplementationId()
+                                                    throw(uno::RuntimeException)
+{
+    static uno::Sequence< sal_Int8 > aId;
+    if( aId.getLength() == 0 )
+    {
+        aId.realloc( 16 );
+        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    }
+    return aId;
+}
+
+uno::Any SAL_CALL ScHeaderFieldObj::queryInterface( const uno::Type& rType )
+                                                throw(uno::RuntimeException)
+{
+    return OComponentHelper::queryInterface( rType );
+}
+
+void SAL_CALL ScHeaderFieldObj::acquire() throw(uno::RuntimeException)
+{
+    OComponentHelper::acquire();
+}
+
+void SAL_CALL ScHeaderFieldObj::release() throw(uno::RuntimeException)
+{
+    OComponentHelper::release();
 }
 
 void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, USHORT nP,
@@ -1012,21 +1140,21 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFieldObj::getAnchor() throw(un
 
 void SAL_CALL ScHeaderFieldObj::dispose() throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OComponentHelper::dispose();
 }
 
 void SAL_CALL ScHeaderFieldObj::addEventListener(
                         const uno::Reference<lang::XEventListener>& xListener )
                                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OComponentHelper::addEventListener( xListener );
 }
 
 void SAL_CALL ScHeaderFieldObj::removeEventListener(
-                        const uno::Reference<lang::XEventListener>& aListener )
+                        const uno::Reference<lang::XEventListener>& xListener )
                                                     throw(uno::RuntimeException)
 {
-    DBG_ERROR("not implemented");
+    OComponentHelper::removeEventListener( xListener );
 }
 
 // XPropertySet

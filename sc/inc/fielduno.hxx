@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-01-15 14:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"           // ScRange, ScAddress
 #endif
+#ifndef SC_MUTEXHLP_HXX
+#include "mutexhlp.hxx"
+#endif
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -98,6 +101,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _CPPUHELPER_COMPONENT_HXX_
+#include <cppuhelper/component.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
@@ -167,11 +173,12 @@ public:
 };
 
 
-class ScCellFieldObj : public cppu::WeakImplHelper4<
-                            com::sun::star::text::XTextField,
-                            com::sun::star::beans::XPropertySet,
-                            com::sun::star::lang::XUnoTunnel,
-                            com::sun::star::lang::XServiceInfo >,
+class ScCellFieldObj : public ScMutexHelper,
+                        public ::cppu::OComponentHelper,
+                        public ::com::sun::star::text::XTextField,
+                        public ::com::sun::star::beans::XPropertySet,
+                        public ::com::sun::star::lang::XUnoTunnel,
+                        public ::com::sun::star::lang::XServiceInfo,
                         public SfxListener
 {
 private:
@@ -199,6 +206,15 @@ public:
     SvxFieldItem            CreateFieldItem();
     void                    InitDoc( ScDocShell* pDocSh, const ScAddress& rPos,
                                         const ESelection& rSel );
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
+                                const ::com::sun::star::uno::Type & rType )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+                                const ::com::sun::star::uno::Type & rType )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   acquire() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   release() throw(::com::sun::star::uno::RuntimeException);
 
                             // XTextField
     virtual ::rtl::OUString SAL_CALL getPresentation( sal_Bool bShowCommand )
@@ -278,6 +294,12 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+                                throw(::com::sun::star::uno::RuntimeException);
 };
 
 //------------------------------------------------------------------
@@ -335,11 +357,12 @@ public:
 };
 
 
-class ScHeaderFieldObj : public cppu::WeakImplHelper4<
-                            com::sun::star::text::XTextField,
-                            com::sun::star::beans::XPropertySet,
-                            com::sun::star::lang::XUnoTunnel,
-                            com::sun::star::lang::XServiceInfo >
+class ScHeaderFieldObj : public ScMutexHelper,
+                            public ::cppu::OComponentHelper,
+                            public ::com::sun::star::text::XTextField,
+                            public ::com::sun::star::beans::XPropertySet,
+                            public ::com::sun::star::lang::XUnoTunnel,
+                            public ::com::sun::star::lang::XServiceInfo
 {
 private:
     SfxItemPropertySet          aPropSet;
@@ -361,6 +384,15 @@ public:
     SvxFieldItem            CreateFieldItem();
     void                    InitDoc( ScHeaderFooterContentObj* pContent, USHORT nP,
                                         const ESelection& rSel );
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
+                                const ::com::sun::star::uno::Type & rType )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+                                const ::com::sun::star::uno::Type & rType )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   acquire() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   release() throw(::com::sun::star::uno::RuntimeException);
 
                             // XTextField
     virtual ::rtl::OUString SAL_CALL getPresentation( sal_Bool bShowCommand )
@@ -439,6 +471,12 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
