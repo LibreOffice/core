@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 13:04:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 class ZipPackage;
 struct ZipEntry;
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 class ZipPackageStream : public ZipPackageEntry,
                                              public ::cppu::OWeakObject,
                                                  public ::com::sun::star::io::XActiveDataSink
@@ -154,7 +154,7 @@ public:
         return aImplementationId;
     }
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);
