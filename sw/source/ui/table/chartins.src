@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:02:40 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
         Text[ slovak ] = "Výber";
+        Text[ hungarian ] = "Kijelölés";
+        Text[ slovenian ] = "Izbor";
     };
     FixedText FT_RANGE
     {
@@ -119,7 +121,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ french ] = "Plage" ;
         Text [ dutch ] = "~Bereik" ;
         Text [ swedish ] = "~Omr�de" ;
-        Text [ danish ] = "Omr�de" ;
+        Text [ danish ] = "O~mr�de" ;
         Text [ portuguese_brazilian ] = "�~rea..." ;
         Text [ portuguese ] = "~�rea" ;
         Text[ chinese_simplified ] = "区域(~R)";
@@ -140,6 +142,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "~Bereich";
         Text[ hindi ] = "~विस्तीर्ण";
         Text[ slovak ] = "~Oblasť";
+        Text[ hungarian ] = "Te~rület";
+        Text[ slovenian ] = "Pod~ročje";
     };
     Edit ED_RANGE
     {
@@ -161,7 +165,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ french ] = "Premi�re ligne comme �tiquette" ;
         Text [ dutch ] = "Eerste ~rij als kop" ;
         Text [ swedish ] = "F�rsta ~raden som etikett" ;
-        Text [ danish ] = "F�rste r�kke som etiket" ;
+        Text [ danish ] = "F�rste ~r�kke som etiket" ;
         Text [ portuguese_brazilian ] = "Primeira ~linha como legenda" ;
         Text [ portuguese ] = "Primeira ~linha como etiqueta" ;
         Text[ chinese_simplified ] = "第一行作为标题(~F)";
@@ -182,6 +186,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "Erste ~Zeile als Beschriftung";
         Text[ hindi ] = "~पहिला पंक्ति कॉप्शन् जैसे";
         Text[ slovak ] = "P~rvý riadok ako popisok";
+        Text[ hungarian ] = "~Az első sor elemei feliratok";
+        Text[ slovenian ] = "~Prva vrstica kot napis";
     };
     CheckBox CB_FIRST_COL
     {
@@ -197,7 +203,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ french ] = "Premi�re colonne comme �tiquette" ;
         Text [ dutch ] = "Eerste ~kolom als kop" ;
         Text [ swedish ] = "F�rsta kolumnen ~som etikett" ;
-        Text [ danish ] = "F�rste kolonne som etiket" ;
+        Text [ danish ] = "F�rste ~kolonne som etiket" ;
         Text [ portuguese_brazilian ] = "Primeira ~coluna como legenda" ;
         Text [ portuguese ] = "Primeira ~coluna como etiqueta" ;
         Text[ chinese_simplified ] = "第一列作为标题(~C)";
@@ -218,6 +224,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "Erste ~Spalte als Beschriftung";
         Text[ hindi ] = "पहिला स्तं~भ कॉप्शन् जैसे";
         Text[ slovak ] = "Prvý s~tĺpec ako popisok";
+        Text[ hungarian ] = "Az első ~oszlop elemei feliratok";
+        Text[ slovenian ] = "Prvi ~stolpec kot napis";
     };
     FixedText FT_TEXT
     {
@@ -233,7 +241,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ french ] = "Si les cellules s�lectionn�es ne contiennent pas les donn�es souhait�es, s�lectionnez � pr�sent la plage.\n\nMarquez les �tiquettes des colonnes et des lignes si vous souhaitez les faire figurer dans le diagramme." ;
         Text [ dutch ] = "Als de gemarkeerde cellen niet de gewenste gegevens bevatten, markeert u nu het bereik.\n\nMarkeer eveneens de cellen met de kolom- of de rijlabels als u deze in uw afbeelding wilt weergeven." ;
         Text [ swedish ] = "Om de markerade cellerna inte inneh�ller de �nskade uppgifterna, markerar du dataomr�det nu.\n\nTa med de celler som inneh�ller kolumn- och radetiketter om du vill att de ska visas i diagrammet." ;
-        Text [ danish ] = "Hvis de markerede celler ikke indeholder de �nskede data, marker det �nskede omr�de nu.\n\nInkluder cellerne med kolonne- hhv.r�kkeetiketter, hvis de skal vises i din grafik." ;
+        Text [ danish ] = "Hvis de markerede celler ikke indeholder de �nskede data, marker det �nskede omr�de nu.\n\nInkluder cellerne med kolonne- og r�kkeetiketter, hvis de skal vises i dit diagram." ;
         Text [ portuguese_brazilian ] = "Se as c�lulas marcadas n�o representam os dados desejados, marque a �rea agora.\nInclua as c�lulas contendo os r�tulos das colunas e linhas se desejar t�-las inclu�das em seu gr�fico." ;
         Text [ portuguese ] = "Se as c�lulas marcadas n�o inclu�rem os dados desejados, marque-os agora.\n\nInclua as c�lulas contendo os t�tulos das colunas e linhas se desejar v�-las representadas no seu gr�fico." ;
         Text[ chinese_simplified ] = "如果选中的单元格没有数据，那么请您选择区域。\n\n您可以也选中列标题和行标题，如此这些资料也会被显示在图表内。";
@@ -254,6 +262,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "Falls die ausgewählten Zellen nicht die gewünschten Daten enthalten, wählen Sie jetzt den Bereich aus.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbeschriftungen mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten.";
         Text[ hindi ] = "अगर सूचित की हुयी कोष्ठें उद्देशित ड़ॉटा को प्रतिनिधित्व नहीं करता है, तो विस्तीर्ण को सूचित करो ।\nअगर आप चाहते है कि स्तंभ और पंक्ति लेबिलों को सम्मिलित की हुयी कोष्ठों को आपके चार्ट में सम्मिलित कर सकते है ।";
         Text[ slovak ] = "Ak označené bunky nereprezentujú požadované údaje, označte správnu oblasť.\nZahrňte aj bunky obsahujúce popisy riadkov a stĺpcov, ak ich chcete mať v grafe.";
+        Text[ hungarian ] = "Ha a jelenlegi kijelölés nem a kívánt adatokat tartalmazza, jelölje ki most az adattartományt.\n\nVálassza ki az oszlop- és sorcímkéket tartalmazó sorokat is, ha szeretné, hogy ezek a diagramba bekerüljenek.";
+        Text[ slovenian ] = "Če izbrane celice ne vsebujejo želenih podatkov, sedaj označite obseg podatkov.\n\nVključite tudi celice z oznakami stolpcev in vrstic, če jih želite v grafikonu.";
     };
     FixedLine FL_HLINE
     {
@@ -288,7 +298,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ spanish ] = "<< ~Regresar" ;
         Text [ french ] = "<< Pr�c�dent" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
-        Text [ danish ] = "<< Tilbage" ;
+        Text [ danish ] = "<< ~Tilbage" ;
         Text [ portuguese ] = "<< ~Anterior" ;
         Text [ portuguese_brazilian ] = "<< ~Voltar" ;
         Text[ chinese_simplified ] = "<< 返回(~B)";
@@ -309,6 +319,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "<< ‮הקודם‬";
         Text[ hindi ] = "<< ~पीछे";
         Text[ slovak ] = "<< ~Späť";
+        Text[ hungarian ] = "<< ~Vissza";
+        Text[ slovenian ] = "<< N~azaj";
     };
     PushButton BT_NEXT
     {
@@ -324,7 +336,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ spanish ] = "~Siguiente >>" ;
         Text [ french ] = "Suivant >>" ;
         Text [ swedish ] = "~N�sta >>" ;
-        Text [ danish ] = "N�ste >>" ;
+        Text [ danish ] = "~N�ste >>" ;
         Text [ portuguese ] = "~Continuar >>" ;
         Text [ portuguese_brazilian ] = "~Pr�ximo >>" ;
         Text[ chinese_simplified ] = "继续(~N) >>";
@@ -345,6 +357,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "‮הבא‬ >>";
         Text[ hindi ] = "~आगे >>";
         Text[ slovak ] = "Ďa~lší >>";
+        Text[ hungarian ] = "~Tovább >>";
+        Text[ slovenian ] = "~Naprej >>";
     };
     PushButton BT_FINISH
     {
@@ -359,7 +373,7 @@ ModelessDialog DLG_INSERT_CHART
         Text [ spanish ] = "~Crear" ;
         Text [ french ] = "Cr�er" ;
         Text [ swedish ] = "~F�rdigst�ll" ;
-        Text [ danish ] = "Udf�r" ;
+        Text [ danish ] = "~Opret" ;
         Text [ portuguese ] = "~Criar" ;
         Text [ portuguese_brazilian ] = "~Criar" ;
         Text[ chinese_simplified ] = "完成(~A)";
@@ -380,6 +394,8 @@ ModelessDialog DLG_INSERT_CHART
         Text[ hebrew ] = "~Fertig stellen";
         Text[ hindi ] = "~उत्पन्न करो";
         Text[ slovak ] = "Vy~tvoriť";
+        Text[ hungarian ] = "~Létrehozás";
+        Text[ slovenian ] = "U~stvari";
     };
     Text [ italian ] = "Formattazione automatica diagramma (1-4)" ;
     Text [ spanish ] = "Formateado autom�tico de diagrama (1-4)" ;
@@ -407,7 +423,11 @@ ModelessDialog DLG_INSERT_CHART
     Text[ hebrew ] = "Autoformat Diagramm (1-4)";
     Text[ hindi ] = "स्वचालित रचना का चार्ट (1-4)";
     Text[ slovak ] = "Automatický formát grafu (1-4)";
+    Text[ hungarian ] = "Diagram beszúrása";
+    Text[ slovenian ] = "Samooblikuj grafikon (1-4)";
 };
+
+
 
 
 
