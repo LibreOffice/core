@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-10-26 10:02:20 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2569,6 +2569,7 @@ Any SwXTextCursor::GetPropertyValue(
     SfxItemSet aSet(rPaM.GetDoc()->GetAttrPool(),
         RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
         RES_FILL_ORDER,     RES_FRMATR_END -1,
         0L);
     SwXTextCursor::GetCrsrAttr(rPaM, aSet);
@@ -2636,6 +2637,8 @@ PropertyState lcl_SwXTextCursor_GetPropertyState( SfxItemSet** ppSet,
             *ppSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
                     RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
                     RES_FILL_ORDER,     RES_FRMATR_END -1,
+                    RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                    RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                     0L );
             SwXTextCursor::GetCrsrAttr( rPaM, **ppSet, FALSE );
         }
@@ -4711,6 +4714,8 @@ beans::PropertyState lcl_SwXParagraph_getPropertyState(
         *ppSet = new SfxItemSet( rUnoCrsr.GetDoc()->GetAttrPool(),
                         RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
                         RES_FILL_ORDER,     RES_FRMATR_END -1,
+                        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
                         0L);
         SwXTextCursor::GetCrsrAttr( rUnoCrsr, **ppSet, TRUE );
     }

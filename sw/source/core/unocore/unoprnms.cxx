@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-10-26 10:02:20 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,8 +505,7 @@ const SwPropNameLen __FAR_DATA  UNO_LINK_DISPLAY_BITMAP                         
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADING_STYLE_NAME                     (MAP_CHAR_LEN("HeadingStyleName"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_ONLINE_LAYOUT                     (MAP_CHAR_LEN("ShowOnlineLayout"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_USER_DEFINED_ATTRIBUTES                (MAP_CHAR_LEN("UserDefinedAttributes"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES           (MAP_CHAR_LEN("ParaUserDefinedAttributes"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES           (MAP_CHAR_LEN("CharUserDefinedAttributes"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES           (MAP_CHAR_LEN("TextUserDefinedAttributes"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FILE_PATH                              (MAP_CHAR_LEN("FilePath"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL           (MAP_CHAR_LEN("ParaChapterNumberingLevel"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_CONDITIONAL_STYLE_NAME            (MAP_CHAR_LEN("ParaConditionalStyleName"));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,6 +496,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
             RES_CHRATR_BEGIN,       RES_CHRATR_END - 1,
             RES_PARATR_BEGIN,       RES_PARATR_END - 1,
             RES_FRMATR_BEGIN,       RES_FRMATR_END - 1,
+            RES_UNKNOWNATR_BEGIN,   RES_UNKNOWNATR_END-1,
             SID_ATTR_PAGE,          SID_ATTR_PAGE_EXT1,
             SID_ATTR_PAGE_HEADERSET,SID_ATTR_PAGE_FOOTERSET,
             SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
@@ -2740,43 +2741,5 @@ void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
             aLst.DeleteAndDestroy( nTmpPos );
     }
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.157  2000/09/18 16:05:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.156  2000/06/28 13:04:04  jp
-    FillStyleSheet dont create always a new Style
-
-    Revision 1.155  2000/06/14 13:01:00  jp
-    Bug #71738#: Changes on the templatename must be dispatch
-
-    Revision 1.154  2000/04/20 12:49:35  os
-    GetName() returns String&
-
-    Revision 1.153  2000/04/18 15:23:06  os
-    UNICODE
-
-    Revision 1.152  2000/04/11 08:01:31  os
-    UNICODE
-
-    Revision 1.151  2000/03/10 14:10:27  jp
-    Bug #74104#: SetItemSet - remove Dialog-Flag from the NumRules
-
-    Revision 1.150  2000/02/11 14:42:51  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.149  2000/01/18 17:15:14  jp
-    Bug #72023#: dont create CurrShell-Object with 0-Pointer
-
-    Revision 1.148  1999/11/15 14:22:25  jp
-    Bug #69833#: GetDescription - ignore hint Para-Bckgrnd-destination
-
-    Revision 1.147  1999/02/05 16:43:58  JP
-    Task #61467#/#61014#: neu FindPageDescByName
-
-
-------------------------------------------------------------------------*/
 
 
