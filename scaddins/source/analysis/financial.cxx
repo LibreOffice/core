@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:46:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,18 +488,72 @@ double SAL_CALL AnalysisAddIn::getOddlyield( constREFXPS& xOpt,
 }
 
 
-double lcl_Sca_Analysis_CalcXirrDiff( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fGuessInt )
+// ============================================================================
+// XIRR helper functions
+
+#define V_(i) (*rValues.Get(i))
+#define D_(i) (*rDates.Get(i))
+
+/** Calculates the resulting amount for the passed interest rate and the given XIRR parameters. */
+double lcl_sca_XirrResult( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fRate )
 {
-    double fFirstDate = *rDates.Get( 0 );
-    double fIntRate = fGuessInt + 1.0;
-    double fXirrDiff = 0.0;
-    for( sal_uInt32 nIndex = 0, nCount = rValues.Count(); nIndex < nCount; ++nIndex )
-        fXirrDiff += *rValues.Get( nIndex ) / pow( fIntRate, (*rDates.Get( nIndex ) - fFirstDate) / 365.0 );
-    return fXirrDiff;
+    /*  V_0 ... V_n = input values.
+        D_0 ... D_n = input dates.
+        R           = input interest rate.
+
+        r   := R+1
+        E_i := (D_i-D_0) / 365
+
+                    n    V_i                n    V_i
+        f(R)  =  SUM   -------  =  V_0 + SUM   ------- .
+                   i=0  r^E_i              i=1  r^E_i
+    */
+    double D_0 = D_(0);
+    double r = fRate + 1.0;
+    double fResult = V_(0);
+    for( sal_uInt32 i = 1, nCount = rValues.Count(); i < nCount; ++i )
+        fResult += V_(i) / pow( r, (D_(i) - D_0) / 365.0 );
+    return fResult;
 }
 
+/** Calculates the first derivation of lcl_sca_XirrResult(). */
+double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fRate )
+{
+    /*  V_0 ... V_n = input values.
+        D_0 ... D_n = input dates.
+        R           = input interest rate.
+
+        r   := R+1
+        E_i := (D_i-D_0) / 365
+
+                             n    V_i
+        f'(R)  =  [ V_0 + SUM   ------- ]'
+                            i=1  r^E_i
+
+                         n           V_i                 n    E_i V_i
+               =  0 + SUM   -E_i ----------- r'  =  - SUM   ----------- .
+                        i=1       r^(E_i+1)             i=1  r^(E_i+1)
+    */
+    double D_0 = D_(0);
+    double r = fRate + 1.0;
+    double fResult = 0.0;
+    for( sal_uInt32 i = 1, nCount = rValues.Count(); i < nCount; ++i )
+    {
+        double E_i = (D_(i) - D_0) / 365.0;
+        fResult -= E_i * V_(i) / pow( r, E_i + 1.0 );
+    }
+    return fResult;
+}
+
+#undef V_
+#undef D_
+
+
+// ----------------------------------------------------------------------------
+// XIRR calculation
+
 double SAL_CALL AnalysisAddIn::getXirr(
-    constREFXPS& xOpt, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE
+    constREFXPS& xOpt, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuessRate ) THROWDEF_RTE_IAE
 {
     ScaDoubleList aValues, aDates;
     aValues.Append( rValues );
@@ -509,42 +563,36 @@ double SAL_CALL AnalysisAddIn::getXirr(
         THROW_IAE;
 
     // result interest rate, initialized with passed guessed rate, or 10%
-    double fResultInt = aAnyConv.getDouble( xOpt, rGuess, 0.1 );
-    // lower boundary for iteration -> lowest possible is -100%
-    double fLowerInt = -1;
-    // upper boundary is open end -> try to find appropriate limit, start with 100%
-    double fUpperInt = 1;
-    while( (fUpperInt < 1e20) && (lcl_Sca_Analysis_CalcXirrDiff( aValues, aDates, fUpperInt ) > 0.0) )
-        fUpperInt *= 1e2;
-
-    // maximum epsilon (upper-lower difference) for end of iteration
-    static const double fMaxEpsilon = 1e-10;
-    // maximum XIRR result for end of iteration (ideal result is 0.0)
-    static const double fMaxXirrDiff = 1e-13;
-    // true = a result has been found
-    bool bResultReached = false;
-
-    // iteration counter
-    sal_Int32 nIteration = 0;
-    // maximum number of iterations
-    static const sal_Int32 nMaxIterations = 200;
-
-    while( !bResultReached && (++nIteration <= nMaxIterations) )
-    {
-        double fXirrDiff = lcl_Sca_Analysis_CalcXirrDiff( aValues, aDates, fResultInt );
-        if( fXirrDiff < 0.0 )
-            fUpperInt = fResultInt;
-        else if( fXirrDiff > 0.0 )
-            fLowerInt = fResultInt;
-        fResultInt = (fUpperInt + fLowerInt) / 2.0;
-        bResultReached = (fabs( fUpperInt - fLowerInt ) <= fMaxEpsilon) || (fabs( fXirrDiff ) <= fMaxXirrDiff);
-    }
-
-    if( !bResultReached )
+    double fResultRate = aAnyConv.getDouble( xOpt, rGuessRate, 0.1 );
+    if( fResultRate <= -1 )
         THROW_IAE;
-    RETURN_FINITE( fResultInt );
+
+    // maximum epsilon for end of iteration
+    static const double fMaxEps = 1e-10;
+    // maximum number of iterations
+    static const sal_Int32 nMaxIter = 50;
+
+    // Newton's method - try to find a fResultRate, so that lcl_sca_XirrResult() returns 0.
+    double fNewRate, fRateEps, fResultValue;
+    sal_Int32 nIter = 0;
+    bool bContLoop;
+    do
+    {
+        fResultValue = lcl_sca_XirrResult( aValues, aDates, fResultRate );
+        fNewRate = fResultRate - fResultValue / lcl_sca_XirrResult_Deriv1( aValues, aDates, fResultRate );
+        fRateEps = fabs( fNewRate - fResultRate );
+        fResultRate = fNewRate;
+        bContLoop = (fRateEps > fMaxEps) && (fabs( fResultValue ) > fMaxEps);
+    }
+    while( bContLoop && (++nIter < nMaxIter) );
+
+    if( bContLoop )
+        THROW_IAE;
+    RETURN_FINITE( fResultRate );
 }
 
+
+// ============================================================================
 
 double SAL_CALL AnalysisAddIn::getXnpv(
     double fRate, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates ) THROWDEF_RTE_IAE
