@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:27:58 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,13 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30.6.1  2003/07/16 17:08:00  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.30  2003/07/03 17:27:58  hr
+ *  INTEGRATION: CWS rc2merge (1.29.8); FILE MERGED
+ *  2003/07/03 14:40:42 ihi 1.29.8.1: rc-2 merge all languages
+ *
  *  Revision 1.29.8.1  2003/07/03 14:40:42  ihi
  *  rc-2 merge all languages
  *
@@ -375,6 +382,8 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
+
 
 
 
