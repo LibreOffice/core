@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-11-02 11:27:12 $
+#   last change: $Date: 2004-12-10 16:59:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ JAVAFILES = \
  FilenameHelper.java \
  NameHelper.java \
  HTMLOutputter.java \
+ INIOutputter.java \
  PropertyName.java \
  StatusHelper.java \
  ConvWatchException.java \
@@ -99,7 +100,8 @@ JAVAFILES = \
  MSOfficePrint.java \
  GraphicalTestArguments.java \
  StringHelper.java \
- GraphicalDifferenceCheck.java
+ GraphicalDifferenceCheck.java \
+ DocumentConverter.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
