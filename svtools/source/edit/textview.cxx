@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-31 14:25:53 $
+ *  last change: $Author: mt $ $Date: 2001-02-13 10:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,125 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+
+#include <comphelper/processfactory.hxx>
+
+
 using namespace ::com::sun::star;
 
 
-// -------------------------------------------------------------------------
+class TETextDataObject :    public ::com::sun::star::datatransfer::XTransferable,
+                        public ::cppu::OWeakObject
+
+{
+private:
+    String          maText;
+    SvMemoryStream  maHTMLStream;
+
+public:
+                    TETextDataObject( const String& rText );
+                    ~TETextDataObject();
+
+    String&         GetText() { return maText; }
+    SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
+
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::release(); }
+
+    // ::com::sun::star::datatransfer::XTransferable
+    ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException);
+};
+
+TETextDataObject::TETextDataObject( const String& rText ) : maText( rText )
+{
+}
+
+TETextDataObject::~TETextDataObject()
+{
+}
+
+// uno::XInterface
+uno::Any TETextDataObject::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( datatransfer::XTransferable*, this ) );
+    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
+}
+
+// datatransfer::XTransferable
+uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor ) throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException)
+{
+    uno::Any aAny;
+
+    ULONG nT = SotExchange::GetFormat( rFlavor );
+    if ( nT == SOT_FORMAT_STRING )
+    {
+        aAny <<= (::rtl::OUString)GetText();
+    }
+    else if ( nT == SOT_FORMATSTR_ID_HTML )
+    {
+        GetHTMLStream().Seek( STREAM_SEEK_TO_END );
+        ULONG nLen = GetHTMLStream().Tell();
+        GetHTMLStream().Seek(0);
+
+        uno::Sequence< sal_Int8 > aSeq( nLen );
+        memcpy( aSeq.getArray(), GetHTMLStream().GetData(), nLen );
+        aAny <<= aSeq;
+    }
+    return aAny;
+}
+
+uno::Sequence< datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  ) throw(uno::RuntimeException)
+{
+    GetHTMLStream().Seek( STREAM_SEEK_TO_END );
+    BOOL bHTML = GetHTMLStream().Tell() > 0;
+    uno::Sequence< datatransfer::DataFlavor > aDataFlavors( bHTML ? 2 : 1 );
+    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aDataFlavors.getArray()[0] );
+    if ( bHTML )
+        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_HTML, aDataFlavors.getArray()[1] );
+    return aDataFlavors;
+}
+
+sal_Bool TETextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
+{
+    ULONG nT = SotExchange::GetFormat( rFlavor );
+    return ( nT == SOT_FORMAT_STRING );
+}
+
+static uno::Reference< datatransfer::clipboard::XClipboard > ImplGetClipboard()
+{
+    static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
+    if ( !xClipboard.is() )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+    }
+    return xClipboard;
+}
+
+
+// -------------------------------------------------------------------------
 // (+) class TextView
 // -------------------------------------------------------------------------
 TextView::TextView( TextEngine* pEng, Window* pWindow )
@@ -911,51 +1026,41 @@ void TextView::Cut()
 
 void TextView::Copy()
 {
-    Clipboard::Clear();
-    TextSelection aSel( maSelection );
-    aSel.Justify();
-    SvMemoryStream aMem;
-    mpTextEngine->Write( aMem, &aSel );
-    aMem << '\0';
-    Clipboard::CopyData( (const char*)aMem.GetData(), aMem.Tell(), FORMAT_STRING );
-    if ( mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )
+    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+    if ( xClipboard.is() )
     {
-        // Dann auch als HTML
-        aMem.SetStreamSize( 0 );
-        aMem.Seek( 0 );
-        mpTextEngine->Write( aMem, &aSel, TRUE );
-        aMem << '\0';
-        Clipboard::CopyData( (const char*)aMem.GetData(), aMem.Tell(), SOT_FORMATSTR_ID_HTML );
+        TETextDataObject* pDataObj = new TETextDataObject( GetSelected() );
+
+        if ( mpTextEngine->HasAttrib( TEXTATTR_HYPERLINK ) )  // Dann auch als HTML
+            mpTextEngine->Write( pDataObj->GetHTMLStream(), &maSelection, TRUE );
+
+        xClipboard->setContents( pDataObj, NULL );
     }
 }
 
 void TextView::Paste()
 {
-    BOOL bPaste = TRUE;
-    if ( mpTextEngine->GetMaxTextLen() )
+    uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = ImplGetClipboard();
+    if ( xClipboard.is() )
     {
-        // QuickCheck, kein String > 64K moeglich...
-        String aStr( Clipboard::PasteString() );
-        aStr.ConvertLineEnd( LINEEND_LF );
-        bPaste = ImplCheckTextLen( aStr );
-    }
+        uno::Reference< datatransfer::XTransferable > xDataObj = xClipboard->getContents();
+        if ( xDataObj.is() )
+        {
+            datatransfer::DataFlavor aFlavor;
+            SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+            if ( xDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                ::rtl::OUString aText;
+                aData >>= aText;
 
-    if ( bPaste )
-    {
-        mpTextEngine->UndoActionStart( TEXTUNDO_PASTE );
+                String aStr( aText );
+                aStr.ConvertLineEnd( LINEEND_LF );
 
-        ULONG nLen = Clipboard::GetDataLen( FORMAT_STRING );
-        void* pBuf = SvMemAlloc( nLen );
-        Clipboard::PasteData( pBuf, nLen, FORMAT_STRING );
-
-        // commented out while converting to Unicode
-        // long nStringLen = strlen( (const char*) pBuf );  // 0-terminiert, Datenmuell im Clipborad dahinter.
-
-        SvMemoryStream aMem( (char*)pBuf, nLen /*nStringLen*/, STREAM_READ );
-        aMem.ObjectOwnsMemory( TRUE );
-        mpTextEngine->Read( aMem, &maSelection );
-
-        mpTextEngine->UndoActionEnd( TEXTUNDO_PASTE );
+                if ( !mpTextEngine->GetMaxTextLen() || ImplCheckTextLen( aStr ) )
+                    InsertText( aText, FALSE );
+            }
+        }
     }
 }
 
