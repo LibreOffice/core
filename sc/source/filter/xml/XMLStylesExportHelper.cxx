@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:10:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
                 sCondition = rtl::OUString();
     }
     if (sCondition.getLength())
-        sCondition = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sCondition );
+        sCondition = rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOC, sCondition, sal_False );
 
     return sCondition;
 }
