@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:24:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,11 @@ void SvXMLImportPropertyMapper::importXML(
         vector< XMLPropertyState >& rProperties,
            Reference< XAttributeList > xAttrList,
            const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt32 nPropType ) const
 {
-    importXML( rProperties, xAttrList, rUnitConverter, rNamespaceMap, -1, -1 );
+    importXML( rProperties, xAttrList, rUnitConverter, rNamespaceMap,
+               nPropType,-1, -1 );
 }
 
 /** fills the given itemset with the attributes in the given list */
@@ -195,6 +197,7 @@ void SvXMLImportPropertyMapper::importXML(
            Reference< XAttributeList > xAttrList,
            const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt32 nPropType,
         sal_Int32 nStartIdx,
         sal_Int32 nEndIdx ) const
 {
@@ -234,7 +237,8 @@ void SvXMLImportPropertyMapper::importXML(
         do
         {
             // find an entry for this attribute
-            nIndex = maPropMapper->GetEntryIndex( nPrefix, aLocalName, nIndex );
+            nIndex = maPropMapper->GetEntryIndex( nPrefix, aLocalName,
+                                                  nPropType, nIndex );
 
             if( nIndex > -1 && nIndex < nEndIdx  )
             {
@@ -254,7 +258,9 @@ void SvXMLImportPropertyMapper::importXML(
                         const sal_Int32 nSize = rProperties.size();
                         for( nReference = 0; nReference < nSize; nReference++ )
                         {
-                            if( (nIndex != rProperties[nReference].mnIndex) && (maPropMapper->GetEntryAPIName( rProperties[nReference].mnIndex ) == aAPIName ))
+                            sal_Int32 nRefIdx = rProperties[nReference].mnIndex;
+                            if( (nRefIdx != -1) && (nIndex != nRefIdx) &&
+                                (maPropMapper->GetEntryAPIName( nRefIdx ) == aAPIName ))
                             {
                                 aNewProperty = rProperties[nReference];
                                 aNewProperty.mnIndex = nIndex;
@@ -318,53 +324,59 @@ void SvXMLImportPropertyMapper::importXML(
             }
             else if( !bFound )
             {
-                if( !xAttrContainer.is() )
+                if( (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) || (XML_NAMESPACE_NONE == nPrefix) )
                 {
-                    // add an unknown attribute container to the properties
-                    Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
-                    xAttrContainer = xNew;
-
-                    // find map entry and create new property state
-                    nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                    if( -1 == nIndex )
-                        nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-                    if( -1 == nIndex )
-                        nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
-
-                    OSL_ENSURE( nIndex != -1,
-                                "not able to store alien attribute");
-
-                    // #106963#; use userdefined attribute only if it is in the specified property range
-                    if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
+                    OSL_ENSURE( XML_NAMESPACE_NONE == nPrefix ||
+                                (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix),
+                                "unknown attribute - might be a new feature?" );
+                    if( !xAttrContainer.is() )
                     {
+                        // add an unknown attribute container to the properties
+                        Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
+                        xAttrContainer = xNew;
+
+                        // find map entry and create new property state
+                        nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        if( -1 == nIndex )
+                            nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        if( -1 == nIndex )
+                            nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+
+                        OSL_ENSURE( nIndex != -1,
+                                    "not able to store alien attribute");
+
+                        // #106963#; use userdefined attribute only if it is in the specified property range
+                        if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
+                        {
+                            Any aAny;
+                            aAny <<= xAttrContainer;
+                            XMLPropertyState aNewProperty( nIndex, aAny );
+
+                            // push it on our stack so we export it later
+                            rProperties.push_back( aNewProperty );
+                        }
+                    }
+
+                    if( xAttrContainer.is() )
+                    {
+                        AttributeData aData;
+                        aData.Type = GetXMLToken( XML_CDATA );
+                        aData.Value = rValue;
+
+                        OUStringBuffer sName;
+                        if( XML_NAMESPACE_NONE != nPrefix )
+                        {
+                            sName.append( aPrefix );
+                            sName.append( sal_Unicode(':') );
+                            aData.Namespace = aNamespace;
+                        }
+
+                        sName.append( aLocalName );
+
                         Any aAny;
-                        aAny <<= xAttrContainer;
-                        XMLPropertyState aNewProperty( nIndex, aAny );
-
-                        // push it on our stack so we export it later
-                        rProperties.push_back( aNewProperty );
+                        aAny <<= aData;
+                        xAttrContainer->insertByName( sName.makeStringAndClear(), aAny );
                     }
-                }
-
-                if( xAttrContainer.is() )
-                {
-                    AttributeData aData;
-                    aData.Type = GetXMLToken( XML_CDATA );
-                    aData.Value = rValue;
-
-                    OUStringBuffer sName;
-                    if( XML_NAMESPACE_NONE != nPrefix )
-                    {
-                        sName.append( aPrefix );
-                        sName.append( sal_Unicode(':') );
-                        aData.Namespace = aNamespace;
-                    }
-
-                    sName.append( aLocalName );
-
-                    Any aAny;
-                    aAny <<= aData;
-                    xAttrContainer->insertByName( sName.makeStringAndClear(), aAny );
                 }
             }
         }
@@ -403,7 +415,8 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
 
 sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
             const vector< XMLPropertyState >& aProperties,
-            const Reference< XPropertySet > rPropSet ) const
+            const Reference< XPropertySet > rPropSet,
+            struct _ContextID_Index_Pair* pSpecialContextIds ) const
 {
     sal_Bool bSet = sal_False;
 
@@ -416,14 +429,17 @@ sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
     {
         // Try XMultiPropertySet. If that fails, try the regular route.
         bSet = _FillMultiPropertySet( aProperties, xMultiPropSet,
-                                      xInfo, maPropMapper );
+                                      xInfo, maPropMapper,
+                                         pSpecialContextIds );
         if ( !bSet )
             bSet = _FillPropertySet( aProperties, rPropSet,
-                                     xInfo, maPropMapper, rImport);
+                                     xInfo, maPropMapper, rImport,
+                                        pSpecialContextIds);
     }
     else
         bSet = _FillPropertySet( aProperties, rPropSet, xInfo,
-                                 maPropMapper, rImport );
+                                 maPropMapper, rImport,
+                                 pSpecialContextIds );
 
     return bSet;
 }
