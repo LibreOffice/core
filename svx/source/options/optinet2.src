@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-22 21:23:36 $
+ *  last change: $Author: rt $ $Date: 2002-01-23 21:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2244,7 +2244,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî îòêëş÷àÿ Java,\nÂû îòêëş÷èòå è JavaScript.\n\nÎòêëş÷èòü Java íåñìîòğÿ íà ıòî?";
         Text[ dutch ] = "Wij wijzen u erop dat u met Java\nook Javascript uitschakelt.\n\nWilt u Java toch uitschakelen?";
         Text[ danish ] = "Bemærk venligst, at du deaktiverer\nJavaScript sammenmed Java.\n\nVil du deaktivere Java alligevel?";
-        Text[ swedish ] = "Tänk på att Du även stänger av\nJavascript tillsammans med Java.\n\nVill Du trots det stänga av Java?";
+        Text[ swedish ] = "Tänk på att du även stänger av\nJavascript tillsammans med Java.\n\nVill du ändå stänga av Java?";
         Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e po wy³¹czeniu Javy \nywy³¹czony zostanie równie¿ JavaScript. \n\nCzy mimo to wy³¹czyæ Javê?";
         Text[ portuguese_brazilian ] = "Please note that with Java\nyou disable Javascript as well.\n\nDo you want to disable Java anyway?";
         Text[ japanese ] = "Java ã ã‘ã§ãªã\nJavaScript ã‚‚ä½œå‹•ã—ãªããªã‚‹ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚\n\nJava ã‚’ã‚ªãƒ•ã«åˆ‡ã‚Šæ›¿ãˆã¾ã™ã‹ã€‚";
