@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:24:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #ifndef _AVMEDIA_MEDIAPPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
 #endif
+
+#include <sfx2/objface.hxx>
 
 #ifndef _NAVIPI_HXX //autogen
 #include <navipi.hxx>
