@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-25 08:25:26 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 11:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,11 @@ public:
     STDMETHOD(Save) ( LPCOLESTR pszFileName, BOOL fRemember );
     STDMETHOD(SaveCompleted) ( LPCOLESTR pszFileName );
     STDMETHOD(GetCurFile) ( LPOLESTR *ppszFileName );
+
+
+    // c++ - methods
+
+    void notify();
 
 protected:
     oslInterlockedCount                 m_refCount;

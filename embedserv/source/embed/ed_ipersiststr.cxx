@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-25 08:22:13 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 11:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_nAdviseNum( 0 )
 //, m_bLoadedFromFile( sal_False )
 {
-    m_pDocHolder = new DocumentHolder( xFactory );
+    m_pDocHolder = new DocumentHolder( xFactory,this );
     m_pDocHolder->acquire();
 }
 
@@ -252,7 +252,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
     aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
     aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
-    aArgs[1].Value <<= ( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
+    aArgs[1].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
     if ( xStream.is() )
     {
@@ -285,8 +285,6 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
                     sDocUrl = aURL.Complete;
             }
         }
-        else // REMOVE
-            sDocUrl = getTestFileURLFromGUID_Impl( &m_guid ); // REMOVE
 
         aArgs[3].Value <<= sDocUrl;
     }
@@ -425,15 +423,15 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                             uno::UNO_QUERY );
             if ( aDocument.is() )
             {
-                m_pDocHolder->SetDocument( aDocument );
+                m_pDocHolder->SetDocument( aDocument,nStreamMode );
 
                 uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
                 if( xLoadable.is() )
                 {
                     try
                     {
-                        // xLoadable->initNew();
-                        xLoadable->load( fillArgsForLoading_Impl( uno::Reference< io::XInputStream >(), nStreamMode ) );
+                        xLoadable->initNew();
+                        // xLoadable->load( fillArgsForLoading_Impl( uno::Reference< io::XInputStream >(), nStreamMode ) );
                         hr = S_OK;
                     }
                     catch( uno::Exception& )
@@ -510,7 +508,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
                                             uno::UNO_QUERY );
         if ( aDocument.is() )
         {
-            m_pDocHolder->SetDocument( aDocument );
+            m_pDocHolder->SetDocument( aDocument,nStreamMode );
 
             uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
             if( xLoadable.is() )
@@ -690,7 +688,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
                     uno::UNO_QUERY );
     if ( aDocument.is() )
     {
-        m_pDocHolder->SetDocument( aDocument );
+        m_pDocHolder->SetDocument( aDocument,nStreamMode );
 
         uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
         if( xLoadable.is() )

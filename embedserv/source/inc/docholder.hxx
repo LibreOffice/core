@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-19 08:35:38 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 11:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,24 +70,52 @@
 #ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #endif
 
-class DocumentHolder : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCloseListener,
-                                                        ::com::sun::star::frame::XTerminateListener >
+class EmbedDocument_Impl;
+
+class DocumentHolder :
+    public ::cppu::WeakImplHelper3<
+                        ::com::sun::star::util::XCloseListener,
+                          ::com::sun::star::frame::XTerminateListener,
+                        ::com::sun::star::util::XModifyListener >
 {
+private:
+
+    EmbedDocument_Impl* m_pOLEInterface;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
+    DWORD m_nStreamMode;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+
+    sal_Bool IsReadOnly() const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > DocumentFrame();
 
 public:
 
-    DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,EmbedDocument_Impl *pOLEInterface);
     ~DocumentHolder();
 
-    void SetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xDoc );
+    void SetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xDoc,DWORD nStreamMode );
+
     void CloseDocument();
     void FreeOffice();
+
+    void show();
+
+    void hide();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetDocument() { return m_xDocument; }
 
@@ -106,6 +134,8 @@ public:
 
     virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& aSource );
 
+// XModifyListener
+    virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-11 13:02:14 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 11:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,20 @@
  ************************************************************************/
 
 #include "embeddoc.hxx"
+
+#ifndef _COM_SUN_STAR_FRAME_XController_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+
+using namespace ::com::sun::star;
+
+
+extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
+
 
 STDMETHODIMP EmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
 {
@@ -120,29 +134,47 @@ STDMETHODIMP EmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject
     return E_NOTIMPL;
 }
 
+
+void EmbedDocument_Impl::notify()
+{
+    for ( AdviseSinkHashMapIterator iAdvise =
+              m_aAdviseHashMap.begin();
+          iAdvise != m_aAdviseHashMap.end();
+          iAdvise++ )
+        if ( iAdvise->second )
+            iAdvise->second->OnViewChange( DVASPECT_CONTENT, -1 );
+
+    if ( m_pDAdviseHolder )
+        m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
+}
+
+
 STDMETHODIMP EmbedDocument_Impl::DoVerb( LONG iVerb, LPMSG lpmsg, IOleClientSite *pActiveSite, LONG lindex, HWND hwndParent, LPCRECT lprcPosRect )
 {
-    if ( iVerb == OLEIVERB_PRIMARY || iVerb == OLEIVERB_OPEN || iVerb == OLEIVERB_SHOW )
+    if ( iVerb == OLEIVERB_PRIMARY || iVerb == OLEIVERB_SHOW || iVerb == OLEIVERB_OPEN )
     {
+        if( m_pDocHolder )
+            m_pDocHolder->show();
+
         if ( m_pClientSite )
-        {
             m_pClientSite->OnShowWindow( TRUE );
-            m_pClientSite->OnShowWindow( FALSE );
-        }
 
-        for ( AdviseSinkHashMapIterator iAdvise = m_aAdviseHashMap.begin(); iAdvise != m_aAdviseHashMap.end(); iAdvise++ )
-        {
-            if ( iAdvise->second )
-                iAdvise->second->OnViewChange( DVASPECT_CONTENT, -1 );
-        }
-
-        if ( m_pDAdviseHolder )
-            m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, 0 );
+        notify();
 
         return S_OK;
     }
+    else if( iVerb == OLEIVERB_HIDE )
+    {
+        if(m_pDocHolder)
+            m_pDocHolder->hide();
 
-    return E_NOTIMPL;
+        if( m_pClientSite )
+            m_pClientSite->OnShowWindow( FALSE );
+
+        return S_OK;
+    }
+    else
+        return E_NOTIMPL;
 }
 
 STDMETHODIMP EmbedDocument_Impl::EnumVerbs( IEnumOLEVERB **ppEnumOleVerb )
