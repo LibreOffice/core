@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: abi $ $Date: 2002-03-07 11:55:55 $
+ *  last change: $Author: abi $ $Date: 2002-03-28 12:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,12 @@
  *
  *
  ************************************************************************/
+
+#define WORKAROUND_98119
+
+#ifdef WORKAROUND_98119
+#include <provider/bufferedinputstream.hxx>
+#endif
 
 #include <string.h>
 #ifndef _VOS_DIAGNOSE_HXX_
@@ -537,7 +543,11 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
             {
             }
         }
+#ifdef WORKAROUND_98119
+        xDataSink->setInputStream( turnToSeekable(xStream) );
+#else
         xDataSink->setInputStream( xStream );
+#endif
     }
     else
         // a standard document or else an active help text, plug in the new input stream
