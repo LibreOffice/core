@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-29 10:12:17 $
+ *  last change: $Author: dv $ $Date: 2001-07-02 12:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,12 +143,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
-
-//#define DONT_USE_FILE_DIALOG_SERVICE
-
-#ifdef DONT_USE_FILE_DIALOG_SERVICE
-#include "iodlg.hxx"
-#endif
 
 #include "objsh.hxx"
 #include "childwin.hxx"
@@ -1550,91 +1544,6 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     {
         if(! bUrl )
         {
-#ifdef DONT_USE_FILE_DIALOG_SERVICE
-            // get the filename by dialog
-            ISfxModule *pMod = GetModule();
-            if ( !pMod )
-            {
-                DBG_ERROR( "ObjectShell without Module!" );
-                SetError(ERRCODE_IO_ABORT);
-                return FALSE;
-            }
-
-            SfxFileDialog* pDlg = pMod->CreateDocFileDialog( WB_SAVEAS | WB_3DLOOK, GetFactory(), pParams );
-            if ( HasName() )
-            {
-                String aLastName = QueryTitle(
-                    SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL );
-                const SfxFilter* pMedFilter = GetMedium()->GetFilter();
-                if( pImp->bSetStandardName && !IsTemplate() || !pMedFilter ||
-                    !pMedFilter->CanExport() /*!!!||
-                    pMedFilter->GetVersion() != SOFFICE_FILEFORMAT_CURRENT*/ )
-                {
-                    if( aLastName.Len() )
-                    {
-                        String aPath( aLastName );
-                        bool bWasAbsolute = FALSE;
-                        INetURLObject aObj( SvtPathOptions().GetWorkPath() );
-                        aObj.setFinalSlash();
-                        aObj = INetURLObject( aObj.RelToAbs( aPath, bWasAbsolute ) );
-                        aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
-                        pDlg->SetPath( aObj.GetMainURL() );
-                    }
-
-                    pDlg->SetCurFilter( pFilt->GetName() );
-                }
-                else
-                {
-                    if( aLastName.Len() )
-                    {
-                        String aPath( pDlg->GetPath() );
-                        aPath += aLastName;
-                        pDlg->SetSmartPath( aPath );
-                    }
-
-                    pDlg->SetCurFilter( pMedFilter->GetName() );
-                }
-            }
-            else
-            {
-                pDlg->SetPath( SvtPathOptions().GetWorkPath() );
-            }
-
-            if ( pDlg->Execute() == RET_CANCEL )
-            {
-                delete pDlg;
-                SetError(ERRCODE_IO_ABORT);
-                return sal_False;
-            }
-
-            aURL.SetURL( pDlg->GetPath() );
-
-            // gibt es schon ein Doc mit dem Namen?
-            const String aName(aURL.GetMainURL());
-            SfxObjectShell* pDoc = 0;
-            for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
-                  pTmp && !pDoc;
-                  pTmp = SfxObjectShell::GetNext(*pTmp) )
-                //! fsys bug op==
-                if ( pTmp->GetMedium() )
-                    // ??? HasName() MM
-                    if(pTmp != this && pTmp->GetMedium()->GetName() == aName )
-                        pDoc = pTmp;
-            if ( pDoc )
-            {
-                // dann Fehlermeldeung: "schon offen"
-                SetError(ERRCODE_SFX_ALREADYOPEN);
-                delete pDlg;
-                return sal_False;
-            }
-
-            // Parameter aus Dialog holen
-            const String aFilter(pDlg->GetCurFilter());
-            if(aFilter.Len())
-                aFilterName = aFilter;
-            pParams->Put( *pDlg->GetItemSet() );
-            delete pDlg;
-#else
             // get the filename by dialog ...
             // create the file dialog
             sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
@@ -1714,7 +1623,6 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                 }
                 catch( IllegalArgumentException ){}
             }
-#endif
         }
         else
         {
@@ -1743,34 +1651,9 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     DBG_ASSERT( pRequest->GetArgs() != 0, "fehlerhafte Parameter");
     SFX_REQUEST_ARG( (*pRequest), pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
     FASTBOOL bSaveTo = pSaveToItem ? pSaveToItem->GetValue() : sal_False;
+
     if ( !pFileNameItem && bSaveTo )
     {
-#ifdef DONT_USE_FILE_DIALOG_SERVICE
-        // SaveTo auch ohne Filenamen m"oglich -> dann FileDialog "offnen
-        ISfxModule *pMod = GetModule();
-        if ( !pMod )
-        {
-            DBG_ERROR( "ObjectShell without Module!" );
-            SetError(ERRCODE_IO_ABORT);
-            return sal_False;;
-        }
-
-        SfxFileDialog* pDlg = pMod->CreateDocFileDialog( WB_SAVEAS | WB_3DLOOK, GetFactory(), pRequest->GetArgs() );
-        if ( pDlg->Execute() == RET_CANCEL )
-        {
-            // Speichern abbrechen
-            delete pDlg;
-            SetError(ERRCODE_IO_ABORT);
-            return sal_False;
-        }
-        else
-        {
-            // Einstellungen aus dem FileDialog "ubernehmen
-            aURL.SetURL( pDlg->GetPath() );
-            aFilterName = pDlg->GetCurFilter();
-            delete pDlg;
-        }
-#else
         // get the filename by dialog ...
         // create the file dialog
         sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
@@ -1783,7 +1666,6 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
         // get the path from the dialog
         aURL.SetURL( aFileDlg.GetPath() );
-#endif
     }
     else if ( pFileNameItem )
     {
