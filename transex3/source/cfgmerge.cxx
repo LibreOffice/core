@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-22 10:53:28 $
+ *  last change: $Author: nf $ $Date: 2000-11-22 12:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,14 @@ int InitCfgExport( char *pOutput )
 
     pParser = new CfgParser();
 
+/*  if ( bMergeMode )
+        pParser = new CfgMerge( sMergeSrc, sOutputFile, bErrorLog );
+      else  */
+    if ( sOutputFile.Len()) {
+        pParser = new CfgExport( sOutputFile, sPrj, sActFileName );
+    }
+    else
+        pParser = new CfgParser();
 
     return 1;
 }
@@ -329,11 +337,14 @@ void CfgParser::WorkOnText(
 )
 /*****************************************************************************/
 {
-//  fprintf( stdout, "%s %s %s %s\n", rCurrentGid.GetBuffer(), rCurrentLid.GetBuffer(), rIsoLang.GetBuffer(), rText.GetBuffer());
-
-    USHORT nLang = GetLang( rIsoLang );
+    USHORT nLang = Export::GetLangByIsoLang( rIsoLang );
     if ( nLang ) {
          pStackData->sText[ Export::GetLangIndex( nLang )] = rText;
+    }
+    else {
+        ByteString sError( "Unknown language code: " );
+        sError += rIsoLang;
+        Error( sError );
     }
 }
 
@@ -341,16 +352,6 @@ void CfgParser::WorkOnText(
 void CfgParser::WorkOnRessourceEnd( const ByteString &rResTyp )
 /*****************************************************************************/
 {
-    if ( pStackData->sText[ ENGLISH_US_INDEX ].Len()) {
-        pStackData->sResTyp = rResTyp;
-
-        fprintf( stdout, "%s\n", aStack.GetAccessPath().GetBuffer());
-        fprintf( stdout, "%s\n", pStackData->sResTyp.GetBuffer());
-        for ( ULONG i = 0; i < LANGUAGES; i++ ) {
-            if ( pStackData->sText[ i ].Len())
-                fprintf( stdout, "\t%s%s%s\n", pStackData->sTextTag.GetBuffer(), pStackData->sText[ i ].GetBuffer(), pStackData->sEndTextTag.GetBuffer());
-        }
-    }
 }
 
 /*****************************************************************************/
@@ -457,78 +458,131 @@ int CfgParser::Execute( int nToken, char * pToken )
     return ExecuteAnalyzedToken( nToken, pToken );
 }
 
-/*****************************************************************************/
-USHORT CfgParser::GetLang( const ByteString &rIsoLang )
-/*****************************************************************************/
-{
-    ByteString sLang( rIsoLang );
-
-    sLang.ToUpperAscii();
-
-    if ( sLang == ByteString( COMMENT_ISO ).ToUpperAscii())
-        return COMMENT;
-    else if ( sLang == ByteString( ENGLISH_US_ISO ).ToUpperAscii())
-        return ENGLISH_US;
-    else if ( sLang == ByteString( PORTUGUESE_ISO ).ToUpperAscii())
-        return PORTUGUESE;
-    else if ( sLang == ByteString( RUSSIAN_ISO ).ToUpperAscii())
-        return RUSSIAN;
-    else if ( sLang == ByteString( GREEK_ISO ).ToUpperAscii())
-        return GREEK;
-    else if ( sLang == ByteString( DUTCH_ISO ).ToUpperAscii())
-        return DUTCH;
-    else if ( sLang == ByteString( FRENCH_ISO ).ToUpperAscii())
-        return FRENCH;
-    else if ( sLang == ByteString( SPANISH_ISO ).ToUpperAscii())
-        return SPANISH;
-    else if ( sLang == ByteString( FINNISH_ISO ).ToUpperAscii())
-        return FINNISH;
-    else if ( sLang == ByteString( HUNGARIAN_ISO ).ToUpperAscii())
-        return HUNGARIAN;
-    else if ( sLang == ByteString( ITALIAN_ISO ).ToUpperAscii())
-        return ITALIAN;
-    else if ( sLang == ByteString( CZECH_ISO ).ToUpperAscii())
-        return CZECH;
-    else if ( sLang == ByteString( SLOVAK_ISO ).ToUpperAscii())
-        return SLOVAK;
-    else if ( sLang == ByteString( ENGLISH_ISO ).ToUpperAscii())
-        return ENGLISH;
-    else if ( sLang == ByteString( DANISH_ISO ).ToUpperAscii())
-        return DANISH;
-    else if ( sLang == ByteString( SWEDISH_ISO ).ToUpperAscii())
-        return SWEDISH;
-    else if ( sLang == ByteString( NORWEGIAN_ISO ).ToUpperAscii())
-        return NORWEGIAN;
-    else if ( sLang == ByteString( POLISH_ISO ).ToUpperAscii())
-        return POLISH;
-    else if ( sLang == ByteString( GERMAN_ISO ).ToUpperAscii())
-        return GERMAN;
-    else if ( sLang == ByteString( PORTUGUESE_BRAZILIAN_ISO ).ToUpperAscii())
-        return PORTUGUESE_BRAZILIAN;
-    else if ( sLang == ByteString( JAPANESE_ISO ).ToUpperAscii())
-        return JAPANESE;
-    else if ( sLang == ByteString( KOREAN_ISO ).ToUpperAscii())
-        return KOREAN;
-    else if ( sLang == ByteString( CHINESE_SIMPLIFIED_ISO ).ToUpperAscii())
-        return CHINESE_SIMPLIFIED;
-    else if ( sLang == ByteString( CHINESE_TRADITIONAL_ISO ).ToUpperAscii())
-        return CHINESE_TRADITIONAL;
-    else if ( sLang == ByteString( TURKISH_ISO ).ToUpperAscii())
-        return TURKISH;
-    else if ( sLang == ByteString( ARABIC_ISO ).ToUpperAscii())
-        return ARABIC;
-    else if ( sLang == ByteString( HEBREW_ISO ).ToUpperAscii())
-        return HEBREW;
-
-    ByteString sError( "Unknown language code: " );
-    sError += rIsoLang;
-    Error( sError );
-    return 0;
-}
 
 /*****************************************************************************/
 void CfgParser::Error( const ByteString &rError )
 /*****************************************************************************/
 {
     yyerror(( char * ) rError.GetBuffer());
+}
+
+
+//
+// class CfgOutputParser
+//
+
+/*****************************************************************************/
+CfgOutputParser::CfgOutputParser( const ByteString &rOutputFile )
+/*****************************************************************************/
+{
+    pOutputStream =
+        new SvFileStream(
+            String( rOutputFile, RTL_TEXTENCODING_ASCII_US ),
+            STREAM_STD_WRITE | STREAM_TRUNC
+        );
+
+    if ( !pOutputStream->IsOpen()) {
+        ByteString sError( "Unable to open output file: " );
+        sError += rOutputFile;
+        Error( sError );
+        delete pOutputStream;
+        pOutputStream = NULL;
+    }
+}
+
+/*****************************************************************************/
+CfgOutputParser::~CfgOutputParser()
+/*****************************************************************************/
+{
+    if ( pOutputStream ) {
+        pOutputStream->Close();
+        delete pOutputStream;
+    }
+}
+
+//
+// class CfgExport
+//
+
+/*****************************************************************************/
+CfgExport::CfgExport(
+        const ByteString &rOutputFile,
+        const ByteString &rProject,
+        const ByteString &rFilePath
+)
+/*****************************************************************************/
+                : CfgOutputParser( rOutputFile ),
+                sPrj( rProject ),
+                sPath( rFilePath )
+{
+}
+
+/*****************************************************************************/
+CfgExport::~CfgExport()
+/*****************************************************************************/
+{
+}
+
+/*****************************************************************************/
+void CfgExport::WorkOnRessourceEnd( const ByteString &rResTyp )
+/*****************************************************************************/
+{
+    if ( pOutputStream ) {
+        if ( pStackData->sText[ GERMAN_INDEX ].Len() &&
+            ( pStackData->sText[ ENGLISH_US_INDEX ].Len() ||
+                pStackData->sText[ ENGLISH_INDEX ].Len())
+            )
+        {
+            ByteString sFallback = pStackData->sText[ GERMAN_INDEX ];
+            if ( pStackData->sText[ ENGLISH_US_INDEX ].Len())
+                sFallback = pStackData->sText[ ENGLISH_US_INDEX ];
+            else if ( pStackData->sText[ ENGLISH_INDEX ].Len())
+                sFallback = pStackData->sText[ ENGLISH_INDEX ];
+
+            ByteString sLocalId = pStackData->sIdentifier;
+            ByteString sGroupId;
+            if ( aStack.Count() == 1 ) {
+                sGroupId = sLocalId;
+                sLocalId = "";
+            }
+            else {
+                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
+            }
+
+            Time aTime;
+            ByteString sTimeStamp( ByteString::CreateFromInt64( Date().GetDate()));
+            sTimeStamp += " ";
+            sTimeStamp += ByteString::CreateFromInt32( aTime.GetHour());
+            sTimeStamp += ":";
+            sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
+            sTimeStamp += ":";
+            sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
+
+            for ( ULONG i = 0; i < LANGUAGES; i++ ) {
+                if ( LANGUAGE_ALLOWED( i )) {
+                    ByteString sText = pStackData->sText[ i ];
+                    if ( !sText.Len())
+                        sText = sFallback;
+
+                    Export::UnquotHTML( sText );
+                    USHORT nLangId = Export::LangId[ i ];
+                    sText = UTF8Converter::ConvertFromUTF8(
+                        sText, Export::GetCharSet( nLangId ));
+
+                    ByteString sOutput( sPrj ); sOutput += "\t";
+                    sOutput += sPath;
+                    sOutput += "\t0\t";
+                    sOutput += rResTyp; sOutput += "\t";
+                    sOutput += sGroupId; sOutput += "\t";
+                    sOutput += sLocalId; sOutput += "\t\t\t0\t";
+                    sOutput += ByteString::CreateFromInt64( nLangId );
+                    sOutput += "\t";
+                    sOutput += sText; sOutput += "\t\t\t\t";
+                    sOutput += sTimeStamp;
+
+                    pOutputStream->WriteLine( sOutput );
+                }
+            }
+        }
+    }
 }

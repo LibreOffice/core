@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-15 12:29:30 $
+ *  last change: $Author: nf $ $Date: 2000-11-22 12:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,41 +330,6 @@ BOOL ResData::SetId( const ByteString &rId, USHORT nLevel )
 //
 // class Export
 //
-
-
-/*****************************************************************************/
-const ByteString Export::LangName[ LANGUAGES ] =
-/*****************************************************************************/
-{
-    "language_user1",
-    "english_us",
-    "portuguese",
-    "german_de",
-    "russian",
-    "greek",
-    "dutch",
-    "french",
-    "spanish",
-    "finnish",
-    "hungarian",
-    "italian",
-    "czech",
-    "slovak",
-    "english",
-    "danish",
-    "swedish",
-    "norwegian",
-    "polish",
-    "german",
-    "portuguese_brazilian",
-    "japanese",
-    "korean",
-    "chinese_simplified",
-    "chinese_traditional",
-    "turkish",
-    "arabic",
-    "hebrew"
-};
 
 /*****************************************************************************/
 Export::Export( const ByteString &rOutput, BOOL bWrite,
