@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:16:40 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,5 +252,5 @@ inline sal_Bool operator == (const Uik & uik1, const Uik & uik2)
 
 
 
-#endif _OLE2UNO_HXX
+#endif // _OLE2UNO_HXX
 
