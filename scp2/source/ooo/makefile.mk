@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-22 08:00:46 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:51:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,10 @@ SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
 
 .IF "$(ENABLE_GTK)" != ""
 SCPDEFS+=-DENABLE_GTK
+.ENDIF
+
+.IF "$(ENABLE_PASF)" != ""
+SCPDEFS+=-DUSE_PASF
 .ENDIF
 
 .IF "$(ENABLE_DIRECTX)" != ""
