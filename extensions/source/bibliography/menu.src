@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-24 05:47:31 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ Menu RID_MAIN_MENU
             Text[ danish ] = "~Insert";
             Text[ swedish ] = "~Infoga";
             Text[ polish ] = "~Insert";
-            Text[ portuguese_brazilian ] = "~Insert";
+            Text[ portuguese_brazilian ] = "~Inserir";
             Text[ japanese ] = "挿入(~I)";
             Text[ korean ] = "삽입(~I)";
             Text[ chinese_simplified ] = "插入(~I)";
