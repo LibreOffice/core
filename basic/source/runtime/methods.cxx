@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 12:01:22 $
+ *  last change: $Author: svesik $ $Date: 2000-11-22 13:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ using namespace com::sun::star::io;
 #endif
 #include <sbintern.hxx>
 
-#include <stl/list>
+#include <list>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
