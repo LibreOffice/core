@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_import.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 16:19:35 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ ModuleImport::~ModuleImport()
 
 //##################################################################################################
 
-SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler >
+Reference< xml::sax::XDocumentHandler >
 SAL_CALL importScriptModule( ModuleDescriptor& rMod )
     SAL_THROW( (Exception) )
 {
