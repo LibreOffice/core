@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:27:33 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:27:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,26 +466,10 @@ void ViewShell::Construct(void)
     mpWindowUpdater->SetDocument (GetDoc());
 }
 
-
-
-
 void ViewShell::Init (void)
 {
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
-
-    // Listen for events from the frame window so that we can layout
-    // the controls when the size of the window changes.  Do this only
-    // when not in in-place mode which is handled differently.
-    if ( ! GetDocSh()->GetProtocol().IsInPlaceActive())
-    {
-        pViewShell->GetViewFrame()->GetWindow().AddEventListener (
-            LINK(this,ViewShell,FrameWindowEventListener));
-
-        // Initiate a re-arragangement of the window controls.
-        OuterResizePixel (Point(),
-            pViewShell->GetViewFrame()->GetWindow().GetOutputSizePixel());
-    }
 }
 
 
@@ -887,57 +871,9 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 |*
 \************************************************************************/
 
-void ViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
-{
-    Point rP = rPos;
-    Size rS = rSize;
-    rS.Width() += aScrBarWH.Width();
-    rS.Height() += aScrBarWH.Height();
-
-    if ( bHasRuler )
-    {
-        long nHRulerOfs = 0;
-
-        if ( !pVRulerArray[0] )
-        {
-            pVRulerArray[0] = CreateVRuler(pWindow);
-            if ( pVRulerArray[0] )
-            {
-                nHRulerOfs = pVRulerArray[0]->GetSizePixel().Width();
-                pVRulerArray[0]->SetActive(TRUE);
-                pVRulerArray[0]->Show();
-            }
-        }
-        if ( !pHRulerArray[0] )
-        {
-            pHRulerArray[0] = CreateHRuler(pWindow, TRUE);
-            if ( pHRulerArray[0] )
-            {
-                pHRulerArray[0]->SetWinPos(nHRulerOfs);
-                pHRulerArray[0]->SetActive(TRUE);
-                pHRulerArray[0]->Show();
-            }
-        }
-
-        if ( pVRulerArray[0] )
-            rS.Width() += pVRulerArray[0]->GetSizePixel().Width();
-        if ( pHRulerArray[0] )
-            rS.Height() += pHRulerArray[0]->GetSizePixel().Height();
-    }
-
-    AdjustPosSizePixel(rP, rS);
-}
-
-/*************************************************************************
-|*
-|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
-|*
-\************************************************************************/
-
-void ViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
+void ViewShell::CreateBorder()
 {
     long nHRulerOfs = 0;
-
     if( !pFuSlideShow || ( ANIMATIONMODE_PREVIEW == pFuSlideShow->GetAnimationMode() ) )
     {
         if ( !pVRulerArray[0] )
@@ -963,6 +899,46 @@ void ViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
         }
     }
 
+    SvBorder aBorder (
+        bHasRuler && pVRulerArray[0]!=NULL
+        ? pVRulerArray[0]->GetSizePixel().Width()
+        : 0,
+        bHasRuler && pHRulerArray[0]!=NULL
+        ? pHRulerArray[0]->GetSizePixel().Height()
+        : 0,
+        aScrBarWH.Width(),
+        aScrBarWH.Height());
+    GetViewShellBase().SetBorderPixel (aBorder);
+}
+
+void ViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
+{
+    Point rP = rPos;
+    Size rS = rSize;
+    rS.Width() += aScrBarWH.Width();
+    rS.Height() += aScrBarWH.Height();
+
+    if ( bHasRuler )
+    {
+        CreateBorder();
+        if ( pVRulerArray[0] )
+            rS.Width() += pVRulerArray[0]->GetSizePixel().Width();
+        if ( pHRulerArray[0] )
+            rS.Height() += pHRulerArray[0]->GetSizePixel().Height();
+    }
+
+    AdjustPosSizePixel(rP, rS);
+}
+
+/*************************************************************************
+|*
+|* Ersatz fuer AdjustPosSizePixel ab Sfx 248a
+|*
+\************************************************************************/
+
+void ViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
+{
+    CreateBorder();
     AdjustPosSizePixel(rPos, rSize);
 
     Size aVisSizePixel = pWindow->GetOutputSizePixel();
