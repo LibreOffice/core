@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.ByteArrayOutputStream;
 import com.sun.star.xml.XImportFilter;
 import com.sun.star.xml.XExportFilter;
+import java.io.*;
 
 
 
@@ -39,6 +40,9 @@ import com.sun.star.xml.sax.XParser;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.xml.sax.XDocumentHandler;
+
+//Uno to java Adaptor
+import com.sun.star.lib.uno.adapter.*;
 
 /** This outer class provides an inner class to implement the service
  * description, a method to instantiate the
@@ -98,8 +102,8 @@ public class XFlatXml {
         public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
                 com.sun.star.xml.sax.XDocumentHandler xDocHandler,
                 java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException {
-        /*
-        System.out.println("\nFound the Importer!\n");
+                    /*
+        System.out.println("\nFound the  Java Importer!\n");
 
         System.out.println("\n"+msUserData[0]);
         System.out.println("\n"+msUserData[1]);
@@ -119,6 +123,7 @@ public class XFlatXml {
 
         for  (int  i = 0 ; i < pValue.length; i++)
         {
+        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
         if (pValue[i].Name.compareTo("InputStream")==0){
             xis =(com.sun.star.io.XInputStream) pValue[i].Value;
 
@@ -141,15 +146,6 @@ public class XFlatXml {
                                             XConfigManager.class , xCfgMgrObj );
         String PathString=xCfgMgr.substituteVariables("$(progurl)" );
         PathString= PathString.concat("/");
-        udJarPath= PathString.concat(udJarPath);
-
-        Object xPipeObj=xMSF.createInstance("com.sun.star.io.Pipe");
-        xInStream = (XInputStream) UnoRuntime.queryInterface(
-                        XInputStream.class , xPipeObj );
-            xOutStream = (XOutputStream) UnoRuntime.queryInterface(
-                        XOutputStream.class , xPipeObj );
-
-        convert (xis,xOutStream,false,udJarPath,sFileName);
 
         Object xSaxParserObj=xMSF.createInstance("com.sun.star.xml.sax.Parser");
 
@@ -157,16 +153,20 @@ public class XFlatXml {
                         XParser.class , xSaxParserObj );
 
         InputSource aInput = new InputSource();
+        if (sFileName==null)
+            sFileName=" ";
         aInput.sSystemId = sFileName;
-        aInput.aInputStream =xInStream;
+        aInput.aInputStream =xis;
                 xParser.setDocumentHandler ( xDocHandler );
         xParser.parseStream ( aInput );
 
+
         }
         catch (Exception e){
-        System.out.println("Exception "+e);
-        }
+        //e.printStackTrace();
+        System.out.println("\nException "+e);
 
+        }
         return true;
     }
 
@@ -194,6 +194,7 @@ public class XFlatXml {
         com.sun.star.beans.PropertyValue[] pValue = aSourceData;
         for  (int  i = 0 ; i < pValue.length; i++)
         {
+        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
         if (pValue[i].Name.compareTo("OutputStream")==0){
             xos =(com.sun.star.io.XOutputStream)pValue[i].Value;
 
@@ -273,7 +274,6 @@ public class XFlatXml {
     }
 
     public void endElement(String str){
-
         str="</".concat(str);
         str=str.concat(">");
           str=str.concat("\n");
@@ -288,15 +288,98 @@ public class XFlatXml {
 
     }
     public void characters(String str){
-        //System.out.println(str);
+        String tmp="";
+        int index=str.indexOf("&");
+        if(index !=-1){
+        while (index !=-1){
+           String first =str.substring(0,index);
+           first=first.concat("&amp;");
+           tmp=tmp.concat(first);
+           str=str.substring(index+1,str.length());
+           index=str.indexOf("&");
+           if(index==-1) {
+               tmp=tmp.concat(str);
+           }
+
+        }
+        }else{
+        tmp=str;
+        }
+        str=tmp;
+         tmp="";
+        index=str.indexOf("<");
+        if(index !=-1){
+        while (index !=-1){
+           String first =str.substring(0,index);
+           first=first.concat("&lt;");
+           tmp=tmp.concat(first);
+           str=str.substring(index+1,str.length());
+           index=str.indexOf("&");
+           if(index==-1) {
+               tmp=tmp.concat(str);
+           }
+
+        }
+        }else{
+        tmp=str;
+        }
+         str=tmp;
+         tmp="";
+        index=str.indexOf(">");
+        if(index !=-1){
+        while (index !=-1){
+           String first =str.substring(0,index);
+           first=first.concat("&gt;");
+           tmp=tmp.concat(first);
+           str=str.substring(index+1,str.length());
+           index=str.indexOf("&");
+           if(index==-1) {
+               tmp=tmp.concat(str);
+           }
+
+        }
+        }else{
+        tmp=str;
+        }
+
         try{
-        //xOutStream.writeBytes(str.getBytes());
-        xOutStream.writeBytes(str.getBytes("UTF-8"));
+         xOutStream.writeBytes(tmp.getBytes("UTF-8"));
         }
        catch (Exception e){
            System.out.println("\n"+e);
        }
 
+
+
+
+        /*
+        String tmp="";
+        int index=str.indexOf("&");
+        if(index !=-1){
+        while (index !=-1){
+           String first =str.substring(0,index);
+           first=first.concat("&amp;");
+           tmp=tmp.concat(first);
+           str=str.substring(index+1,str.length());
+           index=str.indexOf("&");
+           if(index==-1) {
+               tmp=tmp.concat(str);
+           }
+
+        }
+        }else{
+        tmp=str;
+        }
+
+
+        try{
+        //xOutStream.writeBytes(str.getBytes());
+        xOutStream.writeBytes(tmp.getBytes("UTF-8"));
+        }
+       catch (Exception e){
+           System.out.println("\n"+e);
+       }
+       */
 
     }
 
@@ -368,15 +451,19 @@ String getFileName(String origName)
          catch (Exception e){}
          }
          else{
-          try{
+
+         try{
 
                while (xis.available()>0)
              {
                  byte[] bytearr = new byte[xis.available()];
                  xis.read(bytearr);
                  xos.write(bytearr);
+
              }
-           xos.write(-1); //EOF character
+           xos.close();
+           xis.close();
+           //xos.write(-1); //EOF character
           }
           catch (Exception e){}
          }
