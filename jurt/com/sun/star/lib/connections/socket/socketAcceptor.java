@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socketAcceptor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-28 11:17:52 $
+ *  last change: $Author: kr $ $Date: 2001-04-17 09:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ import com.sun.star.registry.XRegistryKey;
  * <code>sockets</code> for communication.
  * The socketAcceptor is in general used by the Acceptor service.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-11-28 11:17:52 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-04-17 09:43:05 $
  * @author      Kay Ramme
  * @see         com.sun.star.connections.XAcceptor
  * @see         com.sun.star.connections.XConnector
@@ -148,7 +148,7 @@ public class socketAcceptor implements XAcceptor {
     protected String       _hostname      = "0";
     protected int          _backlog       = 50;
     protected String       _description;
-
+    protected Boolean      _tcpNoDelay    = null;
 
     /**
      * Accepts a connect request through the described socket.
@@ -218,8 +218,13 @@ public class socketAcceptor implements XAcceptor {
                         }
                         else if(left.equals("port"))
                             _port = Integer.parseInt(right);
+
                         else if(left.equals("backlog"))
                             _backlog = Integer.parseInt(right);
+
+                        else if(left.equals("tcpnodelay"))
+                            _tcpNoDelay = new Boolean(Integer.parseInt(right) == 1);
+
                         else
                             System.err.println(getClass().getName() + ".accept - unknown attribute:" + left);
                     }
@@ -233,11 +238,14 @@ public class socketAcceptor implements XAcceptor {
                 throw new com.sun.star.lang.IllegalArgumentException(getClass().getName() + ".accept");
 
             Socket socket = _serverSocket.accept();
-            socket.setTcpNoDelay(true);
+            if (DEBUG) System.err.println("##### " + getClass().getName() + " - accepted from " + socket);
+
+            if(_tcpNoDelay != null) { // trilogic: did the user specify something about nagle?
+                if (DEBUG) System.err.println("##### " + getClass().getName() + ".accept - setting tcpNoDelay with " + _tcpNoDelay.booleanValue());
+                socket.setTcpNoDelay(_tcpNoDelay.booleanValue());
+            }
 
             xConnection = new SocketConnection(_description, socket);
-
-            if (DEBUG) System.err.println("##### " + getClass().getName() + " - accepted from " + socket);
         }
         catch(IOException ioException) {
             throw new com.sun.star.connection.ConnectionSetupException(ioException.toString());
