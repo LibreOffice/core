@@ -1,0 +1,19 @@
+# BEGIN ----------------------------------------------------------------
+# auto generated Target:job by codegen.pl 
+SHL1OBJS=  \
+	$(SLO)$/rtl_random.obj
+
+SHL1TARGET= job
+SHL1STDLIBS=\
+   $(SALLIB) \
+   $(CPPUNITLIB) 
+
+SHL1IMPLIB= i$(SHL1TARGET)
+# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME    =$(SHL1TARGET)
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP= export.map
+# auto generated Target:job
+# END ------------------------------------------------------------------
+
