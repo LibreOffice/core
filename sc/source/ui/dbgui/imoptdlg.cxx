@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,13 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 #include "imoptdlg.hxx"
 #include "scresid.hxx"
 #include "imoptdlg.hrc"
 
-SEG_EOFGLOBALS()
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
 
 //========================================================================
 // ScDelimiterTable
@@ -103,7 +101,6 @@ private:
 };
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(imoptdlg_02)
 
 USHORT ScDelimiterTable::GetCode( const String& rDel ) const
 {
@@ -128,7 +125,6 @@ USHORT ScDelimiterTable::GetCode( const String& rDel ) const
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(imoptdlg_03)
 
 String ScDelimiterTable::GetDelimiter( USHORT nCode ) const
 {
@@ -155,12 +151,12 @@ String ScDelimiterTable::GetDelimiter( USHORT nCode ) const
 //========================================================================
 // ScImportOptionsDlg
 //========================================================================
-#pragma SEG_FUNCDEF(imoptdlg_04)
 
 ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
                                         BOOL                    bAsciiImport,
                                         const ScImportOptions*  pOptions,
-                                        const String*           pStrTitle )
+                                        const String*           pStrTitle,
+                                        BOOL                    bMultiByte )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
@@ -172,9 +168,7 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
         aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
         aFtFont     ( this, ScResId( FT_FONT ) ),
         aLbFont     ( this, ScResId( bAsciiImport ? DDLB_FONT : LB_FONT ) ),
-        aGbFieldOpt ( this, ScResId( GB_FIELDOPT ) ),
-
-        aCharKeyList( ScResId( STR_CHARSETKEYS ) )
+        aGbFieldOpt ( this, ScResId( GB_FIELDOPT ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
@@ -197,15 +191,19 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
         aStr = pTextSepTab->NextDel();
     }
 
-    aLbFont.SelectEntryPos( aLbFont.GetEntryCount()-1 );
     aEdFieldSep.SetText( aEdFieldSep.GetEntry(0) );
     aEdTextSep.SetText( aEdTextSep.GetEntry(0) );
 
-    if ( pOptions )
-        aLbFont.SelectEntry( pOptions->aStrFont );
-
     if ( !bAsciiImport )
     {
+        //!TODO: Unicode and MultiByte would need work in each filter
+        // (e.g. think of MultiByte and dBase export field lengths)
+        if ( bMultiByte )
+            aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE,
+                RTL_TEXTENCODING_INFO_MIME );
+        else
+            aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE |
+                RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME );
         aGbFieldOpt.SetText( aFtFont.GetText() );
         aFtFieldSep.Hide();
         aFtTextSep .Hide();
@@ -234,7 +232,13 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
             else
                 aEdTextSep.SetText( aStr );
         }
+        //!TODO: raw Unicode would need work in AsciiFilter
+        aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE,
+            RTL_TEXTENCODING_INFO_MIME );
     }
+
+    aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :
+        gsl_getSystemTextEncoding() );
 
     // optionaler Titel:
     if ( pStrTitle )
@@ -244,7 +248,6 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(imoptdlg_05)
 
 __EXPORT ScImportOptionsDlg::~ScImportOptionsDlg()
 {
@@ -253,17 +256,10 @@ __EXPORT ScImportOptionsDlg::~ScImportOptionsDlg()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(imoptdlg_06)
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
-    USHORT  nKeyIdx = aLbFont.GetEntryCount()-1;
-
-    if ( aLbFont.GetSelectEntryCount() != 0 )
-        nKeyIdx = aLbFont.GetSelectEntryPos();
-
-    rOptions.aStrFont = aCharKeyList.GetToken( nKeyIdx );
-    rOptions.eCharSet = (CharSet)((long)aLbFont.GetEntryData( nKeyIdx ));
+    rOptions.SetTextEncoding( aLbFont.GetSelectTextEncoding() );
 
     if ( aFtFieldSep.IsEnabled() )
     {
@@ -273,7 +269,6 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(imoptdlg_07)
 
 USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
@@ -305,7 +300,6 @@ USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 //  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
 //  darum ab Version 336 Komma stattdessen
 
-#pragma SEG_FUNCDEF(imoptdlg_08)
 
 ScImportOptions::ScImportOptions( const String& rStr )
 {
@@ -314,12 +308,11 @@ ScImportOptions::ScImportOptions( const String& rStr )
         nFieldSepCode = (USHORT) rStr.GetToken(0,',').ToInt32();
         nTextSepCode  = (USHORT) rStr.GetToken(1,',').ToInt32();
         aStrFont      = rStr.GetToken(2,',');
-        eCharSet      = GetCharsetValue(aStrFont);
+        eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
     }
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(imoptdlg_0a)
 
 String ScImportOptions::BuildString() const
 {
@@ -335,84 +328,10 @@ String ScImportOptions::BuildString() const
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(imoptdlg_09)
 
-String ScImportOptions::BuildParaString( const String& rTyp, const String& rDsn ) const
+void ScImportOptions::SetTextEncoding( rtl_TextEncoding nEnc )
 {
-    String  aResult;
-
-    aResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM("Typ="));
-    aResult += rTyp;
-    aResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM(";Dsn="));
-    aResult += rDsn;
-    aResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM(";Charset="));
-    aResult += aStrFont;
-    aResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM(";del="));
-    aResult += (sal_Unicode)nFieldSepCode;
-    aResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM(";strdel="));
-    aResult += (sal_Unicode)nTextSepCode;
-    aResult.AppendAscii(RTL_CONSTASCII_STRINGPARAM(";deleted;HDR;"));
-
-    return aResult;
+    eCharSet = (nEnc == RTL_TEXTENCODING_DONTKNOW ?
+        gsl_getSystemTextEncoding() : nEnc);
+    aStrFont = ScGlobal::GetCharsetString( nEnc );
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.16  2000/09/17 14:08:56  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.15  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.14  2000/04/14 17:38:03  nn
-    unicode changes
-
-    Revision 1.13  1997/12/05 18:55:10  ANK
-    Includes geaendert
-
-
-      Rev 1.12   05 Dec 1997 19:55:10   ANK
-   Includes geaendert
-
-      Rev 1.11   29 Oct 1996 14:03:36   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.10   16 Sep 1996 20:05:00   NN
-   kein Semikolon in Options-String
-
-      Rev 1.9   05 Jun 1996 15:49:34   NN
-   STR_FIELD/TEXTSEP jetzt SCSTR...
-
-      Rev 1.8   15 Jan 1996 11:45:20   NN
-   #24293# String mit Ascii-Codes, #24246# leere Trenner erlauben
-
-      Rev 1.7   07 Dec 1995 17:22:32   MO
-   Cancel wieder aktiviert, GrabFocus auf Lb im Non-ASCII Modus
-
-      Rev 1.6   06 Dec 1995 14:11:48   MO
-   bei nicht-ASCII-Import nur FontListBox (BugId: 21193)
-
-      Rev 1.5   19 Nov 1995 11:54:46   OG
-   pragma korrigiert
-
-      Rev 1.4   15 Nov 1995 16:44:08   JN
-   Optimierungen
-
-      Rev 1.3   16 Oct 1995 19:19:38   JN
-   richtigen Zeichensatz ausgeben
-
-      Rev 1.2   28 Jul 1995 10:27:32   MO
-   Feldtrenner-Delimiter auf TAB geandert
-
-      Rev 1.1   28 Jul 1995 09:33:46   MO
-   Dialog-Titel als optionalen Parameter
-
-      Rev 1.0   20 Jul 1995 15:33:24   MO
-   Initial revision.
-
------------------------------------------------------------------------- */
-
-#pragma SEG_EOFMODULE
-

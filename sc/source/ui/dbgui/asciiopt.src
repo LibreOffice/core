@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:58:59 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     FixedText FT_CHARSET
     {
-        Pos = MAP_APPFONT ( 139 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 46 , 10 ) ;
         Text = "Z~eichensatz" ;
         Text [ ENGLISH ] = "Charset" ;
@@ -258,10 +258,11 @@ ModalDialog RID_SCDLG_ASCII
     };
     ListBox LB_CHARSET
     {
-        Pos = MAP_APPFONT ( 186 , 13 ) ;
-        Size = MAP_APPFONT ( 65 , 61 ) ;
+        Pos = MAP_APPFONT ( 59 , 13 ) ;
+        Size = MAP_APPFONT ( 115 , 61 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
+        Sort = TRUE;
     };
     GroupBox GB_FIELDOPT
     {
@@ -552,7 +553,7 @@ ModalDialog RID_SCDLG_ASCII
     };
     FixedText FT_AT_ROW
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 182 , 14 ) ;
         Size = MAP_APPFONT ( 43 , 10 ) ;
         Text = "Ab ~Zeile" ;
         Text [ ENGLISH ] = "At Row" ;
@@ -582,7 +583,7 @@ ModalDialog RID_SCDLG_ASCII
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 13 ) ;
+        Pos = MAP_APPFONT ( 226 , 13 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:04:03 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,12 @@
 
 #include "imoptdlg.hrc"
 
-//! modify CharSet handling like in asciiopt
-
-#define FONTLISTBOX \
-    Border = TRUE;                              \
-    StringList = {                              \
-        < "Ansi";        1; >;      \
-        < "Mac";         2; >;      \
-        < "IBMPC";       4; >;      \
-        < "IBMPC (437)"; 3; >;  \
-        < "IBMPC (850)"; 4; >;  \
-        < "IBMPC (860)"; 5; >;  \
-        < "IBMPC (861)"; 6; >;  \
-        < "IBMPC (863)"; 7; >;  \
-        < "IBMPC (865)"; 8; >;  \
-        < "System";      9; >;      \
-    };
-
-
 ModalDialog RID_SCDLG_IMPORTOPT
 {
     HelpId = HID_SC_INPORTOPT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 196 , 77 ) ;
+    Size = MAP_APPFONT ( 256 , 77 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     Text = "Datei Importieren" ;
@@ -103,7 +85,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Text [ english_us ] = "Import File" ;
     FixedText FT_FIELDSEP
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Pos = MAP_APPFONT ( 12 , 35 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "~Feldtrenner" ;
         Text [ ENGLISH ] = "~Field delimiter" ;
@@ -131,13 +113,13 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ComboBox ED_FIELDSEP
     {
-        Pos = MAP_APPFONT ( 70 , 14 ) ;
-        Size = MAP_APPFONT ( 60 , 60 ) ;
+        Pos = MAP_APPFONT ( 70 , 33 ) ;
+        Size = MAP_APPFONT ( 120 , 60 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_TEXTSEP
     {
-        Pos = MAP_APPFONT ( 12 , 35 ) ;
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "~Texttrenner" ;
         Text [ ENGLISH ] = "~Text delimiter" ;
@@ -165,13 +147,13 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ComboBox ED_TEXTSEP
     {
-        Pos = MAP_APPFONT ( 70 , 33 ) ;
-        Size = MAP_APPFONT ( 60 , 60 ) ;
+        Pos = MAP_APPFONT ( 70 , 51 ) ;
+        Size = MAP_APPFONT ( 120 , 60 ) ;
         DropDown = TRUE ;
     };
     FixedText FT_FONT
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "~Zeichensatz" ;
         Text [ ENGLISH ] = "F~ont" ;
@@ -199,22 +181,24 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ListBox DDLB_FONT
     {
-        FONTLISTBOX
+        Border = TRUE;
+        Sort = TRUE;
         DropDown = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 51 ) ;
-        Size = MAP_APPFONT ( 60 , 81 ) ;
+        Pos = MAP_APPFONT ( 70 , 14 ) ;
+        Size = MAP_APPFONT ( 120 , 52 ) ;
     };
     ListBox LB_FONT
     {
-        FONTLISTBOX
+        Border = TRUE;
+        Sort = TRUE;
         DropDown = FALSE ;
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 119 , 50 ) ;
+        Size = MAP_APPFONT ( 179 , 50 ) ;
     };
     GroupBox GB_FIELDOPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 130 , 68 ) ;
+        Size = MAP_APPFONT ( 190 , 68 ) ;
         Text = "Feld Optionen" ;
         Text [ ENGLISH ] = "Field Options" ;
         Text [ norwegian ] = "Field Options" ;
@@ -241,29 +225,19 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 142 , 6 ) ;
+        Pos = MAP_APPFONT ( 202 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 142 , 24 ) ;
+        Pos = MAP_APPFONT ( 202 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 142 , 43 ) ;
+        Pos = MAP_APPFONT ( 202 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String STR_CHARSETKEYS // DO NOT TRANSLATE
-     // DO NOT TRANSLATE
-     // DO NOT TRANSLATE
-     // DO NOT TRANSLATE
-     // DO NOT TRANSLATE
-     // DO NOT TRANSLATE
-    {
-         // DO NOT TRANSLATE
-        Text = "ANSI;MAC;IBMPC;IBMPC_437;IBMPC_850;IBMPC_860;IBMPC_861;IBMPC_863;IBMPC_865;SYSTEM" ;
     };
     Text[ chinese_simplified ] = " ‰»ÎŒƒº˛";
     Text[ russian ] = "»ÏÔÓÚ Ù‡ÈÎ‡";

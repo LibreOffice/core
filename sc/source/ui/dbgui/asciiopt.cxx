@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include "segmentc.hxx"
-#endif
-
 #include "global.hxx"
 #include "scresid.hxx"
 #include "impex.hxx"
@@ -76,6 +72,9 @@
 #include "asciiopt.hrc"
 
 #include <vcl/system.hxx>
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
 
 
 //------------------------------------------------------------------------
@@ -95,20 +94,6 @@
 static const sal_Char __FAR_DATA pStrFix[] = "FIX";
 static const sal_Char __FAR_DATA pStrMrg[] = "MRG";
 
-//  Liste der CharSet-Werte passend zum String SCSTR_CHARSET_USER
-
-static CharSet eCharSetList[] =
-    { RTL_TEXTENCODING_MS_1252,         // "Ansi"
-      RTL_TEXTENCODING_APPLE_ROMAN,     // "Mac"
-      RTL_TEXTENCODING_IBM_850,         // "IBMPC"
-      RTL_TEXTENCODING_IBM_437,         // "IBMPC (437)"
-      RTL_TEXTENCODING_IBM_850,         // "IBMPC (850)"
-      RTL_TEXTENCODING_IBM_860,         // "IBMPC (860)"
-      RTL_TEXTENCODING_IBM_861,         // "IBMPC (861)"
-      RTL_TEXTENCODING_IBM_863,         // "IBMPC (863)"
-      RTL_TEXTENCODING_IBM_865,         // "IBMPC (865)"
-      RTL_TEXTENCODING_DONTKNOW };      // "System" (handled in GetCharSetFromList)
-
 
 //  Liste der Spaltentypen passend zum String SCSTR_COLUMN_USER
 
@@ -117,39 +102,7 @@ static BYTE nColTypeList[] =
         SC_COL_ENGLISH, SC_COL_SKIP };
 
 
-SEG_EOFGLOBALS()
-
-#pragma SEG_FUNCDEF(asciiopt_07)
-
-String lcl_GetCharsetString(CharSet eCharSet)       //! nach global oder so verschieben
-{
-    const sal_Char* pChar;
-    switch (eCharSet)
-    {
-        case RTL_TEXTENCODING_MS_1252:      pChar = "ANSI";         break;
-        case RTL_TEXTENCODING_APPLE_ROMAN:  pChar = "MAC";          break;
-        // IBMPC == IBMPC_850
-        case RTL_TEXTENCODING_IBM_437:      pChar = "IBMPC_437";    break;
-        case RTL_TEXTENCODING_IBM_850:      pChar = "IBMPC_850";    break;
-        case RTL_TEXTENCODING_IBM_860:      pChar = "IBMPC_860";    break;
-        case RTL_TEXTENCODING_IBM_861:      pChar = "IBMPC_861";    break;
-        case RTL_TEXTENCODING_IBM_863:      pChar = "IBMPC_863";    break;
-        case RTL_TEXTENCODING_IBM_865:      pChar = "IBMPC_865";    break;
-        default:                            pChar = "SYSTEM";       break;
-    }
-    return String::CreateFromAscii(pChar);
-}
-
-CharSet lcl_GetCharSetFromList( USHORT nPos )
-{
-    CharSet eRet = eCharSetList[nPos];
-    if (eRet == RTL_TEXTENCODING_DONTKNOW)
-        eRet = gsl_getSystemTextEncoding();
-    return eRet;
-}
-
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(asciiopt_01)
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( FALSE ),
@@ -157,6 +110,7 @@ ScAsciiOptions::ScAsciiOptions() :
     bMergeFieldSeps ( FALSE ),
     cTextSep        ( 34 ),
     eCharSet        ( gsl_getSystemTextEncoding() ),
+    bCharSetSystem  ( FALSE ),
     nStartRow       ( 1 ),
     nInfoCount      ( 0 ),
     pColStart       ( NULL ),
@@ -164,7 +118,6 @@ ScAsciiOptions::ScAsciiOptions() :
 {
 }
 
-#pragma SEG_FUNCDEF(asciiopt_02)
 
 ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     bFixedLen       ( rOpt.bFixedLen ),
@@ -172,6 +125,7 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     bMergeFieldSeps ( rOpt.bMergeFieldSeps ),
     cTextSep        ( rOpt.cTextSep ),
     eCharSet        ( rOpt.eCharSet ),
+    bCharSetSystem  ( rOpt.bCharSetSystem ),
     nStartRow       ( rOpt.nStartRow ),
     nInfoCount      ( rOpt.nInfoCount )
 {
@@ -192,7 +146,6 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     }
 }
 
-#pragma SEG_FUNCDEF(asciiopt_03)
 
 ScAsciiOptions::~ScAsciiOptions()
 {
@@ -200,7 +153,6 @@ ScAsciiOptions::~ScAsciiOptions()
     delete[] pColFormat;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_0a)
 
 void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat )
 {
@@ -226,7 +178,6 @@ void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const 
     }
 }
 
-#pragma SEG_FUNCDEF(asciiopt_04)
 
 ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 {
@@ -237,12 +188,12 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     bMergeFieldSeps = rCpy.bMergeFieldSeps;
     cTextSep        = rCpy.cTextSep;
     eCharSet        = rCpy.eCharSet;
+    bCharSetSystem  = rCpy.bCharSetSystem;
     nStartRow       = rCpy.nStartRow;
 
     return *this;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_08)
 
 BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 {
@@ -251,6 +202,7 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
          bMergeFieldSeps == rCmp.bMergeFieldSeps &&
          cTextSep        == rCmp.cTextSep &&
          eCharSet        == rCmp.eCharSet &&
+         bCharSetSystem  == rCmp.bCharSetSystem &&
          nStartRow       == rCmp.nStartRow &&
          nInfoCount      == rCmp.nInfoCount )
     {
@@ -271,7 +223,6 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 //  darum ab Version 336 Komma stattdessen
 //
 
-#pragma SEG_FUNCDEF(asciiopt_05)
 
 void ScAsciiOptions::ReadFromString( const String& rString )
 {
@@ -325,7 +276,7 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     if ( nCount >= 3 )
     {
         aToken = rString.GetToken(2,',');
-        eCharSet = GetCharsetValue( aToken );
+        eCharSet = ScGlobal::GetCharsetValue( aToken );
     }
 
         //
@@ -368,7 +319,6 @@ void ScAsciiOptions::ReadFromString( const String& rString )
     }
 }
 
-#pragma SEG_FUNCDEF(asciiopt_06)
 
 String ScAsciiOptions::WriteToString() const
 {
@@ -411,7 +361,10 @@ String ScAsciiOptions::WriteToString() const
         //  Zeichensatz
         //
 
-    aOutStr += lcl_GetCharsetString( eCharSet );
+    if ( bCharSetSystem )           // force "SYSTEM"
+        aOutStr += ScGlobal::GetCharsetString( RTL_TEXTENCODING_DONTKNOW );
+    else
+        aOutStr += ScGlobal::GetCharsetString( eCharSet );
     aOutStr += ',';                 // Token-Ende
 
         //
@@ -441,7 +394,6 @@ String ScAsciiOptions::WriteToString() const
 #if 0
 //  Code, um die Spalten-Liste aus einem Excel-kompatiblen String zu erzeugen:
 //  (im Moment nicht benutzt)
-#pragma SEG_FUNCDEF(asciiopt_09)
 
 void ScAsciiOptions::InterpretColumnList( const String& rString )
 {
@@ -517,7 +469,6 @@ void ScAsciiOptions::InterpretColumnList( const String& rString )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(asciiopt_0b)
 
 void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
 {
@@ -539,7 +490,6 @@ void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
     }
 }
 
-#pragma SEG_FUNCDEF(asciiopt_0c)
 
 sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
 {
@@ -560,7 +510,6 @@ sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
     return c;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_0d)
 
 ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                                     SvStream* pInStream, sal_Unicode cSep ) :
@@ -581,6 +530,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aTableBox   ( this, ScResId( CTR_TABLE  ) ),
         aFtCharSet  ( this, ScResId( FT_CHARSET ) ),
         aLbCharSet  ( this, ScResId( LB_CHARSET ) ),
+        bCharSetSystem  ( FALSE ),
         aGbSepOpt   ( this, ScResId( GB_SEPOPT ) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
@@ -689,21 +639,25 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     aTableBox.SetSelectionHdl(LINK( this, ScImportAsciiDlg, SelectHdl ));
 
-    //  Zeichensatz - Listbox
+    //  CharacterSet / TextEncoding - Listbox
 
-    xub_StrLen nCount = aCharSetUser.GetTokenCount();
-    xub_StrLen i;
-    for (i=0; i<nCount; i++)
-        aLbCharSet.InsertEntry(aCharSetUser.GetToken(i));
-    aLbCharSet.SelectEntryPos( nCount - 1 );                // "System" ganz hinten
+    // All TextEncodings but raw Unicode; Unicode would need a special handling
+    // in preview and import, not ByteString -> UniString but UniString only.
+    //!TODO: should be implemented though
+    aLbCharSet.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE,
+        RTL_TEXTENCODING_INFO_MIME );
+    // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
+    // independent document linkage.
+    aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
+    aLbCharSet.SelectTextEncoding( gsl_getSystemTextEncoding() );
     GetCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
 
-    //  Spaltentyp - Listboxen
+    //  Column type - Listboxes
 
     ListBox* pType =&aLbType;
-    nCount = aColumnUser.GetTokenCount();
-    for (i=0; i<nCount; i++)
+    xub_StrLen nCount = aColumnUser.GetTokenCount();
+    for (xub_StrLen i=0; i<nCount; i++)
     {
         String aToken = aColumnUser.GetToken(i);
         pType->InsertEntry(aToken);
@@ -734,7 +688,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     VarFixHdl(&aRbFixed);
 }
 
-#pragma SEG_FUNCDEF(asciiopt_0e)
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
@@ -744,7 +697,6 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 
 }
 
-#pragma SEG_FUNCDEF(asciiopt_0f)
 
 IMPL_LINK( ScImportAsciiDlg, VarFixHdl, void *, pCtr )
 {
@@ -795,7 +747,6 @@ IMPL_LINK( ScImportAsciiDlg, VarSepHdl, void*, pCtr )
     return 0;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_10)
 
 IMPL_LINK( ScImportAsciiDlg, ScrollHdl, void*, pScroll )
 {
@@ -828,22 +779,18 @@ IMPL_LINK( ScImportAsciiDlg, ScrollHdl, void*, pScroll )
     return 0;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_11)
 
 IMPL_LINK( ScImportAsciiDlg, CharSetHdl, void*, EMPTY_ARG )
 {
     if ( aLbCharSet.GetSelectEntryCount() == 1 )
     {
-        USHORT nSel = aLbCharSet.GetSelectEntryPos();
-        eCharSet = lcl_GetCharSetFromList(nSel);
-
+        GetCharSet();
         CheckValues();              // Preview anpassen
     }
 
     return 0;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_12)
 
 IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, void*, pCtr )
 {
@@ -852,7 +799,6 @@ IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, void*, pCtr )
     return 0;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_13)
 
 IMPL_LINK( ScImportAsciiDlg, SelectHdl, ScTableWithRuler*, pModified )
 {
@@ -896,7 +842,6 @@ void ScImportAsciiDlg::CheckScrollRange()
     }
 }
 
-#pragma SEG_FUNCDEF(asciiopt_14)
 
 void ScImportAsciiDlg::CheckValues( BOOL bReadVal, USHORT nEditField )
 {
@@ -1077,7 +1022,6 @@ void ScImportAsciiDlg::DelimitedPreview()
     }
 }
 
-#pragma SEG_FUNCDEF(asciiopt_15)
 
 void ScImportAsciiDlg::CheckScrollPos()
 {
@@ -1147,7 +1091,6 @@ void ScImportAsciiDlg::UpdateVertical()
 }
 
 
-#pragma SEG_FUNCDEF(asciiopt_16)
 
 void ScImportAsciiDlg::CheckColTypes(BOOL bReadVal,void *pCtr)
 {
@@ -1186,7 +1129,6 @@ void ScImportAsciiDlg::CheckColTypes(BOOL bReadVal,void *pCtr)
     }
 }
 
-#pragma SEG_FUNCDEF(asciiopt_17)
 
 void lcl_DoEnable( Window& rWin, BOOL bEnable )
 {
@@ -1199,7 +1141,6 @@ void lcl_DoEnable( Window& rWin, BOOL bEnable )
 
 }
 
-#pragma SEG_FUNCDEF(asciiopt_18)
 
 void ScImportAsciiDlg::CheckDisable()
 {
@@ -1217,29 +1158,26 @@ void ScImportAsciiDlg::CheckDisable()
     lcl_DoEnable( aCbTextSep,   bVar );
 }
 
-#pragma SEG_FUNCDEF(asciiopt_19)
 
 void ScImportAsciiDlg::GetCharSet()
 {
-    String aUser = aLbCharSet.GetSelectEntry();
-    xub_StrLen nPos = 0;
-    xub_StrLen nCount = aCharSetUser.GetTokenCount();
-    for (xub_StrLen i=0; i<nCount; i++)
-        if ( ScGlobal::pScInternational->CompareEqual(
-                aUser, aCharSetUser.GetToken(i), INTN_COMPARE_IGNORECASE ) )
-        {
-            nPos = i;
-        }
-    eCharSet = lcl_GetCharSetFromList(nPos);
+    eCharSet = aLbCharSet.GetSelectTextEncoding();
+    if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
+    {
+        eCharSet = gsl_getSystemTextEncoding();
+        bCharSetSystem = TRUE;
+    }
+    else
+        bCharSetSystem = FALSE;
 }
 
-#pragma SEG_FUNCDEF(asciiopt_1a)
 
 void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
 {
     BOOL bFix = aRbFixed.IsChecked();
 
     rOpt.SetCharSet( eCharSet );
+    rOpt.SetCharSetSystem( bCharSetSystem );
     rOpt.SetFixedLen( bFix );
     USHORT nRow=(USHORT)aNfRow.GetText().ToInt32();
 
@@ -1313,92 +1251,4 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
         delete[] pColNum;
     }
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.25  2000/09/17 14:08:55  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.24  2000/08/31 16:38:19  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.23  2000/05/22 18:05:11  nn
-    DelimitedPreview: right Field len
-
-    Revision 1.22  2000/05/19 18:35:33  nn
-    CreateFromInt32
-
-    Revision 1.21  2000/04/28 18:55:41  nn
-    include
-
-    Revision 1.20  2000/04/14 17:38:02  nn
-    unicode changes
-
-    Revision 1.19  2000/02/11 12:22:37  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.18  1998/12/02 10:17:56  ANK
-    #59981# Horizontale Begrenzung aufgehoben
-
-
-      Rev 1.17   02 Dec 1998 11:17:56   ANK
-   #59981# Horizontale Begrenzung aufgehoben
-
-      Rev 1.16   19 Nov 1998 11:48:30   ER
-   #59519# hmblgrmbl.. BSE und Alzheimer
-
-      Rev 1.15   16 Nov 1998 20:51:54   ER
-   #59519# DelimitedPreview: letzte Spalte auch anzeigen wenn gerade leer
-
-      Rev 1.14   26 Aug 1998 17:11:36   ANK
-   #55355# Positionierung nach Umschalten
-
-      Rev 1.13   04 Jul 1998 19:57:22   ER
-   opt: ScanNextFieldFromString mit const char* statt const String&
-
-      Rev 1.12   23 Jun 1998 22:59:32   NN
-   US-Englisch in Typ-Liste
-
-      Rev 1.11   08 Jan 1998 16:19:38   ANK
-   Flackern des Focus beseitigt
-
-      Rev 1.10   18 Dec 1997 15:38:40   ANK
-   VScroll- Verhalten geaendert
-
-      Rev 1.9   16 Dec 1997 12:09:56   ANK
-   Anfangszeile geaendert
-
-      Rev 1.8   11 Dec 1997 17:24:22   ANK
-   Erweiterungen fuer Tabellen-Control
-
-      Rev 1.7   04 Dec 1997 17:20:58   ANK
-   neue Controls
-
-      Rev 1.6   15 Jul 1997 17:20:50   ER
-   #41637# 3 Zeilen Preview im Ascii-Import Dialog
-
-      Rev 1.5   07 Jul 1997 17:18:26   NN
-   #41318# Spaltentyp/Preview auch bei Import mit Feldtrennern
-
-      Rev 1.4   26 Mar 1997 13:05:28   NN
-   ModifyHdl: Anpassung der benutzten Spalten richtig
-
-      Rev 1.3   29 Oct 1996 14:02:40   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.2   16 Sep 1996 20:05:00   NN
-   kein Semikolon in Options-String
-
-      Rev 1.1   05 Jun 1996 15:50:32   NN
-   ImportAsciiDlg
-
-      Rev 1.0   31 May 1996 19:30:02   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
 

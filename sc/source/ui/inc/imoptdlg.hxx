@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #include <vcl/group.hxx>
 #endif
 
+#ifndef _SVX_TXENCBOX_HXX
+#include <svx/txencbox.hxx>
+#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -102,19 +105,20 @@ public:
                 ScImportOptionsDlg( Window*                 pParent,
                                     BOOL                    bAsciiImport = TRUE,
                                     const ScImportOptions*  pOptions = NULL,
-                                    const String*           pStrTitle = NULL );
+                                    const String*           pStrTitle = NULL,
+                                    BOOL                    bMultiByte = FALSE );
 
                 ~ScImportOptionsDlg();
 
     void GetImportOptions( ScImportOptions& rOptions ) const;
 
 private:
+    FixedText           aFtFont;
+    SvxTextEncodingBox  aLbFont;
     FixedText           aFtFieldSep;
     ComboBox            aEdFieldSep;
     FixedText           aFtTextSep;
     ComboBox            aEdTextSep;
-    FixedText           aFtFont;
-    ListBox             aLbFont;
     GroupBox            aGbFieldOpt;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
@@ -122,7 +126,6 @@ private:
 
     ScDelimiterTable*   pFieldSepTab;
     ScDelimiterTable*   pTextSepTab;
-    String              aCharKeyList;
 
 private:
     USHORT GetCodeFromCombo( const ComboBox& rEd ) const;
@@ -139,8 +142,12 @@ public:
         ScImportOptions( const String& rStr );
 
         ScImportOptions( USHORT nFieldSep, USHORT nTextSep, const String& rStr )
-            : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep),aStrFont(rStr),eCharSet(RTL_TEXTENCODING_DONTKNOW)
-        { eCharSet = GetCharsetValue(aStrFont); }
+            : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep),aStrFont(rStr)
+        { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
+
+        ScImportOptions( USHORT nFieldSep, USHORT nTextSep, rtl_TextEncoding nEnc )
+            : nFieldSepCode(nFieldSep),nTextSepCode(nTextSep)
+        { SetTextEncoding( nEnc ); }
 
         ScImportOptions( const ScImportOptions& rCpy )
             : nFieldSepCode (rCpy.nFieldSepCode),
@@ -167,7 +174,8 @@ public:
                                 && aStrFont      == rCmp.aStrFont;
                         }
     String  BuildString() const;
-    String  BuildParaString( const String& rTyp, const String& rDsn ) const;
+
+    void    SetTextEncoding( rtl_TextEncoding nEnc );
 
     USHORT  nFieldSepCode;
     USHORT  nTextSepCode;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:27:34 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2576,26 +2576,26 @@ String SCSTR_VALUE
 
 String SCSTR_CHARSET_USER
 {
-    Text = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ ENGLISH ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ english_us ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ italian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
-    Text [ spanish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
-    Text [ french ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeme" ;
-    Text [ dutch ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ swedish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ danish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ portuguese ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
-    Text [ portuguese_brazilian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text[ chinese_simplified ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ÏµÍ³";
-    Text[ russian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Ñèñòåìà";
-    Text[ polish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-    Text[ japanese ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¼½ÃÑ";
-    Text[ chinese_traditional ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¨t²Î";
-    Text[ arabic ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);äÙÇã";
-    Text[ greek ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Óýóôçìá";
-    Text[ korean ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);½Ã½ºÅÛ";
-    Text[ turkish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
+    Text = "System" ;
+    Text [ ENGLISH ] = "System" ;
+    Text [ english_us ] = "System" ;
+    Text [ italian ] = "Sistema" ;
+    Text [ spanish ] = "Sistema" ;
+    Text [ french ] = "Systeme" ;
+    Text [ dutch ] = "System" ;
+    Text [ swedish ] = "System" ;
+    Text [ danish ] = "System" ;
+    Text [ portuguese ] = "Sistema" ;
+    Text [ portuguese_brazilian ] = "System" ;
+    Text[ chinese_simplified ] = "ÏµÍ³";
+    Text[ russian ] = "Ñèñòåìà";
+    Text[ polish ] = "System";
+    Text[ japanese ] = "¼½ÃÑ";
+    Text[ chinese_traditional ] = "¨t²Î";
+    Text[ arabic ] = "äÙÇã";
+    Text[ greek ] = "Óýóôçìá";
+    Text[ korean ] = "½Ã½ºÅÛ";
+    Text[ turkish ] = "Sistem";
     Text[ language_user1 ] = " ";
 };
 

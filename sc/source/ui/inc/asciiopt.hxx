@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: er $ $Date: 2000-12-20 12:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
+#ifndef _SVX_TXENCBOX_HXX
+#include <svx/txencbox.hxx>
+#endif
 
 #ifndef _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGS
@@ -128,6 +131,7 @@ private:
     BOOL        bMergeFieldSeps;
     sal_Unicode cTextSep;
     CharSet     eCharSet;
+    BOOL        bCharSetSystem;
     long        nStartRow;
     USHORT      nInfoCount;
     xub_StrLen* pColStart;
@@ -148,6 +152,7 @@ public:
     void            InterpretColumnList( const String& rString );
 
     CharSet             GetCharSet() const      { return eCharSet; }
+    BOOL                GetCharSetSystem() const    { return bCharSetSystem; }
     const String&       GetFieldSeps() const    { return aFieldSeps; }
     BOOL                IsMergeSeps() const     { return bMergeFieldSeps; }
     sal_Unicode         GetTextSep() const      { return cTextSep; }
@@ -158,6 +163,7 @@ public:
     long                GetStartRow() const     { return nStartRow; }
 
     void    SetCharSet( CharSet eNew )          { eCharSet = eNew; }
+    void    SetCharSetSystem( BOOL bSet )       { bCharSetSystem = bSet; }
     void    SetFixedLen( BOOL bSet )            { bFixedLen = bSet; }
     void    SetFieldSeps( const String& rStr )  { aFieldSeps = rStr; }
     void    SetMergeSeps( BOOL bSet )           { bMergeFieldSeps = bSet; }
@@ -178,11 +184,12 @@ class ScImportAsciiDlg : public ModalDialog
 
     BOOL            bVFlag;
 
+    FixedText       aFtCharSet;
+    SvxTextEncodingBox aLbCharSet;
+    BOOL            bCharSetSystem;
+
     FixedText       aFtRow;
     NumericField    aNfRow;
-
-    FixedText       aFtCharSet;
-    ListBox         aLbCharSet;
 
     RadioButton     aRbFixed;
     RadioButton     aRbSeparated;
