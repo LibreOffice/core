@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-14 15:12:44 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,14 @@
 #include "sc.hrc"
 #include "scmod.hxx"
 
+// #98185# Create default drawing objects via keyboard
+#ifndef _SVDPAGV_HXX
+#include <svx/svdpagv.hxx>
+#endif
+
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -341,6 +349,52 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     rBindings.Invalidate( SID_INSERT_DRAW );
     rBindings.Update( SID_INSERT_DRAW );
+
+    // #98185# Create default drawing objects via keyboard
+    // with qualifier construct directly
+    FuPoor* pFuActual = GetDrawFuncPtr();
+
+    if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
+    {
+        // get ScAppOptions
+
+        // #98185# Create default drawing objects via keyboard
+        // Here the width and height needs to be read from the settings.
+        // This needs to be done by the calc.
+
+        // SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+        // sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
+        // sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
+
+        sal_uInt32 nDefaultObjectSizeWidth(8000);
+        sal_uInt32 nDefaultObjectSizeHeight(6000);
+
+        // calc position and size
+        Rectangle aVisArea = pWin->PixelToLogic(Rectangle(Point(0,0), pWin->GetOutputSizePixel()));
+        Point aPagePos = aVisArea.Center();
+        aPagePos.X() -= nDefaultObjectSizeWidth / 2;
+        aPagePos.Y() -= nDefaultObjectSizeHeight / 2;
+        Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+
+        ScDrawView* pDrView = GetScDrawView();
+
+        if(pDrView)
+        {
+            SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
+
+            if(pPageView)
+            {
+                // create the default object
+                SdrObject* pObj = pFuActual->CreateDefaultObject(nNewId, aNewObjectRectangle);
+
+                if(pObj)
+                {
+                    // insert into page
+                    pView->InsertObject(pObj, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+                }
+            }
+        }
+    }
 }
 
 void ScTabViewShell::GetDrawState(SfxItemSet &rSet)

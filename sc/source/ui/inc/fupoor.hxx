@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ class Window;
 class SdrModel;
 class Dialog;
 
+// #98185# Create default drawing objects via keyboard
+class SdrObject;
 
 //  Return-Werte fuer Command
 #define SC_CMD_NONE     0
@@ -142,6 +144,11 @@ class FuPoor
     BOOL    IsDetectiveHit( const Point& rLogicPos );
 
     void    StopDragTimer();
+
+    // #98185# Create default drawing objects via keyboard
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+protected:
+    void ImpForceQuadratic(Rectangle& rRect);
 };
 
 

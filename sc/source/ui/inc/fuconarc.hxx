@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 09:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@ class FuConstArc : public FuConstruct
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
+
+    // #98185# Create default drawing objects via keyboard
+    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 
 
