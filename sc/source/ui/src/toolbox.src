@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:47:39 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2003-06-13 13:47:39 $ $Revision: 1.54 $
+ // $Author: vg $ $Date: 2003-07-02 14:33:31 $ $Revision: 1.55 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1940,6 +1940,8 @@ ImageList RID_DEFAULTIMAGELIST_SC
         File [ japanese ] = "sc_out81.bmp" ;
         File [ korean ] = "sc_out82.bmp" ;
         File [ arabic ] = "sc_out96.bmp" ;
+        File [ czech ] = "sc_out42.bmp" ;
+        File [ slovak ] = "sc_out43.bmp" ;
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -1970,6 +1972,8 @@ ImageList RID_DEFAULTIMAGELIST_LC
         File [ japanese ] = "lc_out81.bmp" ;
         File [ korean ] = "lc_out82.bmp" ;
         File [ arabic ] = "lc_out96.bmp" ;
+        File [ czech ] = "lc_out42.bmp" ;
+        File [ slovak ] = "lc_out43.bmp" ;
     };
     MaskColor = STD_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -2000,6 +2004,8 @@ ImageList RID_DEFAULTIMAGELIST_SCH
         File [ japanese ] = "sch_out81.bmp" ;
         File [ korean ] = "sch_out82.bmp" ;
         File [ arabic ] = "sch_out96.bmp" ;
+        File [ czech ] = "sch_out42.bmp" ;
+        File [ slovak ] = "sch_out43.bmp" ;
     };
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
@@ -2030,6 +2036,8 @@ ImageList RID_DEFAULTIMAGELIST_LCH
         File [ japanese ] = "lch_out81.bmp" ;
         File [ korean ] = "lch_out82.bmp" ;
         File [ arabic ] = "lch_out96.bmp" ;
+        File [ czech ] = "lch_out42.bmp" ;
+        File [ slovak ] = "lch_out43.bmp" ;
     };
     MaskColor = SC_HC_MASKCOLOR ;
     DEFAULT_IDLIST
