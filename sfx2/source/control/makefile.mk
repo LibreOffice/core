@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-06 13:33:56 $
+#   last change: $Author: rt $ $Date: 2005-01-11 14:57:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,11 +65,11 @@ PRJ=..$/..
 PRJNAME=sfx2
 TARGET=control
 ENABLE_EXCEPTIONS=TRUE
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # w.g. compilerbugs
 .IF "$(GUI)"=="WNT"
