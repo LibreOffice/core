@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2002-03-12 09:40:07 $
+ *  last change: $Author: kso $ $Date: 2002-08-29 12:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,13 @@
 
  *************************************************************************/
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -82,13 +89,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
-#endif
-
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
 #endif
 
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
@@ -118,14 +118,10 @@ class ContentBroker_Impl
     Reference< XContentProvider >           m_xProvider;
     Reference< XContentProviderManager >    m_xProviderMgr;
     Reference< XCommandProcessor >          m_xCommandProc;
-    vos::OMutex                             m_aMutex;
+    osl::Mutex                              m_aMutex;
     Sequence< Any >                         m_aArguments;
     ContentProviderDataList                 m_aProvData;
-    sal_Bool                                m_bInitDone;
-
-private:
-    void init() const;
-    void init();
+    bool                                    m_bInitDone;
 
 public:
     ContentBroker_Impl( const Reference< XMultiServiceFactory >& rSMgr,
@@ -139,6 +135,9 @@ public:
     {}
 
     ~ContentBroker_Impl();
+
+    bool init() const;
+    bool init();
 
     const Reference< XMultiServiceFactory >& getServiceManager() const
     { return m_xSMgr; }
@@ -227,13 +226,24 @@ sal_Bool ContentBroker::initialize(
                         const Reference< XMultiServiceFactory >& rSMgr,
                         const Sequence< Any >& rArguments )
 {
-    vos::OGuard aGuard( vos::OMutex::getGlobalMutex() );
-
-    VOS_ENSURE( !m_pTheBroker,
-                "ContentBroker::create - already created!" );
+    OSL_ENSURE( !m_pTheBroker,
+                "ContentBroker::initialize - already initialized!" );
 
     if ( !m_pTheBroker )
-        m_pTheBroker = new ContentBroker( rSMgr, rArguments );
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+        if ( !m_pTheBroker )
+        {
+            ContentBroker * pBroker = new ContentBroker( rSMgr, rArguments );
+
+            // Force init to be able to detect UCB init trouble immediately.
+            if ( pBroker->m_pImpl->init() )
+                m_pTheBroker = pBroker;
+            else
+                delete pBroker;
+        }
+    }
 
     return m_pTheBroker != 0;
 }
@@ -244,13 +254,24 @@ sal_Bool ContentBroker::initialize(
                         const Reference< XMultiServiceFactory >& rSMgr,
                         const ContentProviderDataList & rData )
 {
-    vos::OGuard aGuard( vos::OMutex::getGlobalMutex() );
-
-    VOS_ENSURE( !m_pTheBroker,
-                "ContentBroker::create - already created!" );
+    OSL_ENSURE( !m_pTheBroker,
+                "ContentBroker::initialize - already initialized!" );
 
     if ( !m_pTheBroker )
-        m_pTheBroker = new ContentBroker( rSMgr, rData );
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+        if ( !m_pTheBroker )
+        {
+            ContentBroker * pBroker = new ContentBroker( rSMgr, rData );
+
+            // Force init to be able to detect UCB init trouble immediately.
+            if ( pBroker->m_pImpl->init() )
+                m_pTheBroker = pBroker;
+            else
+                delete pBroker;
+        }
+    }
 
     return m_pTheBroker != 0;
 }
@@ -259,7 +280,7 @@ sal_Bool ContentBroker::initialize(
 // static
 void ContentBroker::deinitialize()
 {
-    vos::OGuard aGuard( vos::OMutex::getGlobalMutex() );
+    osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
     delete m_pTheBroker;
     m_pTheBroker = 0;
@@ -294,83 +315,101 @@ ContentBroker_Impl::~ContentBroker_Impl()
 }
 
 //=========================================================================
-void ContentBroker_Impl::init() const
+bool ContentBroker_Impl::init() const
 {
-    const_cast< ContentBroker_Impl * >( this )->init();
+    return const_cast< ContentBroker_Impl * >( this )->init();
 }
 
 //=========================================================================
-void ContentBroker_Impl::init()
+bool ContentBroker_Impl::init()
 {
-    vos::OGuard aGuard( m_aMutex );
-
     if ( !m_bInitDone )
     {
-        m_bInitDone = sal_True;
+        osl::MutexGuard aGuard( m_aMutex );
 
-        Reference< XInterface > xIfc;
-
-        if ( m_aProvData.size() > 0 )
+        if ( !m_bInitDone )
         {
-            xIfc
-                = m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.UniversalContentBroker" ) );
+            Reference< XInterface > xIfc;
 
-            if ( xIfc.is() )
+            if ( m_aProvData.size() > 0 )
             {
-                m_xProviderMgr
-                    = Reference< XContentProviderManager >( xIfc, UNO_QUERY );
+                xIfc
+                    = m_xSMgr->createInstance(
+                        OUString::createFromAscii(
+                            "com.sun.star.ucb.UniversalContentBroker" ) );
 
-                if ( m_xProviderMgr.is() )
+                if ( xIfc.is() )
                 {
-                    if ( !::ucb::configureUcb( m_xProviderMgr,
-                                               m_xSMgr,
-                                               m_aProvData,
-                                               0 ) )
-                        VOS_ENSURE( false, "Failed to configure UCB!" );
+                    m_xProviderMgr
+                        = Reference< XContentProviderManager >( xIfc, UNO_QUERY );
+
+                    if ( m_xProviderMgr.is() )
+                    {
+                        if ( !::ucb::configureUcb( m_xProviderMgr,
+                                                   m_xSMgr,
+                                                   m_aProvData,
+                                                   0 ) )
+                            OSL_ENSURE( false, "Failed to configure UCB!" );
+                            return false;
+                    }
                 }
             }
-        }
-        else
-        {
-            xIfc
-                = m_xSMgr->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.UniversalContentBroker" ),
-                    m_aArguments );
-        }
+            else
+            {
+                xIfc
+                    = m_xSMgr->createInstanceWithArguments(
+                        OUString::createFromAscii(
+                            "com.sun.star.ucb.UniversalContentBroker" ),
+                        m_aArguments );
+            }
 
-        VOS_ENSURE( xIfc.is(), "Error creating UCB service!" );
+            OSL_ENSURE( xIfc.is(), "Error creating UCB service!" );
 
-        if ( xIfc.is() )
-        {
+            if ( !xIfc.is() )
+                return false;
+
+
             m_xIdFac
-                 = Reference< XContentIdentifierFactory >( xIfc, UNO_QUERY );
+                = Reference< XContentIdentifierFactory >( xIfc, UNO_QUERY );
 
-            VOS_ENSURE( m_xIdFac.is(),
-                        "UCB without XContentIdentifierFactory!" );
+            OSL_ENSURE( m_xIdFac.is(),
+                "UCB without required interface XContentIdentifierFactory!" );
 
-            m_xProvider
-                 = Reference< XContentProvider >( xIfc, UNO_QUERY );
+            if ( !m_xIdFac.is() )
+                return false;
 
-            VOS_ENSURE( m_xProvider.is(),
-                        "UCB without XContentProvider!" );
+            m_xProvider = Reference< XContentProvider >( xIfc, UNO_QUERY );
+
+            OSL_ENSURE( m_xProvider.is(),
+                "UCB without required interface XContentProvider!" );
+
+            if ( !m_xProvider.is() )
+                return false;
 
             if ( !m_xProviderMgr.is() )
                 m_xProviderMgr
                     = Reference< XContentProviderManager >( xIfc, UNO_QUERY );
 
-            VOS_ENSURE( m_xProviderMgr.is(),
-                        "UCB without XContentProviderManager!" );
+            OSL_ENSURE( m_xProviderMgr.is(),
+                "UCB without required interface XContentProviderManager!" );
 
-            m_xCommandProc
-                = Reference< XCommandProcessor >( xIfc, UNO_QUERY );
+            if ( !m_xProviderMgr.is() )
+                return false;
 
-            VOS_ENSURE( m_xCommandProc.is(),
-                        "UCB without XCommandProcessor!" );
+            m_xCommandProc = Reference< XCommandProcessor >( xIfc, UNO_QUERY );
+
+            OSL_ENSURE( m_xCommandProc.is(),
+                "UCB without required interface XCommandProcessor!" );
+
+            if ( !m_xCommandProc.is() )
+                return false;
+
+            // Everything okay.
+            m_bInitDone = sal_True;
         }
     }
+
+    return true;
 }
 
 } /* namespace ucb */
