@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TextHit.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:30:05 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_TextHit_idl__
+#define __com_sun_star_rendering_TextHit_idl__
+
+module com { module sun { module star { module rendering {
+
+/** This structure contains hit information for <type>XTextLayout</type>.<p>
+
+    This structure is used from the <type>XTextLayout</type> interface
+    to transport information regarding hit tests.<p>
+
+    @since #110496#
+ */
+struct TextHit
+{
+    /** This contains the entry index.<p>
+
+        The entry index is the index of the insertion point in the
+        character sequence. The insertion point denotes positions
+        <em>between</em> the actual characters in the string, and can
+        thus have values ranging from 0 up to the number of characters
+        in the string. Hereby, an index of 0 denotes an insertion
+        position <em>before</em> the first character, and an index
+        containing the number of characters denotes an insertion
+        <em>behind</em> the last character.<p>
+     */
+    long        EntryIndex;
+
+    /** This member denotes whether the hit was on the leading
+        edge.<p>
+
+        Each character is divided in two halves, the leading and the
+        trailing part. The leading edge is the part of the glyph on
+        encounteres first when reading text of the corresponding
+        language (i.e. the leading edge of an Arabic glyph is the
+        right half of it, whereas it is the left half of a Latin
+        character). If the hit was on the leading edge, this member is
+        set to <TRUE>.
+     */
+    boolean     IsLeadingEdge;
+};
+
+}; }; }; };
+
+#endif
