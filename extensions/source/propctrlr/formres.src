@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-21 21:44:52 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4659,6 +4659,9 @@ String RID_STR_ENUM_ORIENTATION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/06/21 21:44:52  kz
+ *  Merge SRC633: 21.06.01 - 23:46:17
+ *
  *  Revision 1.22  2001/06/13 22:40:43  kz
  *  Merge SRC633: 14.06.01 - 00:40:24
  *
@@ -4728,6 +4731,7 @@ String RID_STR_ENUM_ORIENTATION
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
 
