@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,9 @@
 #ifndef _BASESH_HXX
 #include <basesh.hxx>
 #endif
-#ifndef _CHRDLG_HXX
-#include <chrdlg.hxx>
-#endif
+//CHINA001 #ifndef _CHRDLG_HXX
+//CHINA001 #include <chrdlg.hxx>
+//CHINA001 #endif
 #ifndef _DRPCPS_HXX
 #include <drpcps.hxx>
 #endif
@@ -123,7 +123,7 @@
 #include <fmtcol.hxx>
 #endif
 #ifndef _PARDLG_HXX
-#include <pardlg.hxx>
+#include "swuipardlg.hxx" //CHINA001
 #endif
 #ifndef _PATTERN_HXX
 #include <pattern.hxx>
@@ -141,6 +141,9 @@
 #ifndef _ENVFMT_HRC
 #include <envfmt.hrc>
 #endif
+
+#include "swabstdlg.hxx" //CHINA001
+#include "chrdlg.hrc" //CHINA001
 
 static PopupMenu *pMenu;
 static long lUserW = 5669; // 10 cm
@@ -341,7 +344,12 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             else
                 aTmpSet.ClearItem( RES_BACKGROUND );
 
-            SwCharDlg* pDlg = new SwCharDlg(GetParent(), pSh->GetView(), aTmpSet, &pColl->GetName());
+            //CHINA001 SwCharDlg* pDlg = new SwCharDlg(GetParent(), pSh->GetView(), aTmpSet, &pColl->GetName());
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet,ResId( DLG_CHAR ),&pColl->GetName() );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if (pDlg->Execute() == RET_OK)
             {
                 SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
