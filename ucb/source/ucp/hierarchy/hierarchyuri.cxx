@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyuri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 07:56:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,8 +538,8 @@ void appendUCS4(rtl::OUStringBuffer & rTheText, sal_uInt32 nUCS4,
                 sal_Char cEscapePrefix, rtl_TextEncoding eCharset,
                 bool bKeepVisibleEscapes)
 {
-    bool bEscape;
-    rtl_TextEncoding eTargetCharset;
+    bool bEscape = false;
+    rtl_TextEncoding eTargetCharset = RTL_TEXTENCODING_ASCII_US;
     switch (eEscapeType)
     {
         case ESCAPE_NO:
