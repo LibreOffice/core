@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-29 15:55:47 $
+ *  last change: $Author: mt $ $Date: 2000-12-01 12:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1789,7 +1789,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     for ( USHORT nT = 0; nT < rTypes.Count(); nT++ )
         aPositions.Insert( rTypes[nT].nStartPos );
 
-    if ( mpIMEInfos && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
+    if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
     {
         sal_uInt16 nLastAttr = 0xFFFF;
         for( sal_uInt16 n = 0; n < mpIMEInfos->nLen; n++ )
@@ -1800,6 +1800,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
                 nLastAttr = mpIMEInfos->pAttribs[n];
             }
         }
+        aPositions.Insert( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen );
     }
 
     // Ab ... loeschen:
