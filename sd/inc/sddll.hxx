@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:14:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,15 +114,6 @@ public:
 };
 
 
-
-
-/*************************************************************************
-|*
-|* This tricky class keeps pointers to the SvFactories while
-|* the DLL isn`t loaded. A pointer to the one instance is available
-|* through SD_MOD() (shared-lib-app-data).
-|*
-\************************************************************************/
 
 #ifndef _SD_DLL                      // Das define muss im Draw gesetzt werden
 #define SD_MOD() ( *(SdModule**) GetAppData(SHL_DRAW) )
