@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 08:05:15 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 13:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _XMLOFF_FORMS_ELEMENTIMPORT_HXX_
 #include "elementimport.hxx"
+#endif
+#ifndef _XMLOFF_FORMS_OFFICEFORMS_HXX_
+#include "officeforms.hxx"
 #endif
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
@@ -463,6 +466,15 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    SvXMLImportContext* OFormLayerXMLImport_Impl::createOfficeFormsContext(
+        SvXMLImport& _rImport,
+        sal_uInt16 _nPrefix,
+        const rtl::OUString& _rLocalName)
+    {
+        return new OFormsRootImport( _rImport, _nPrefix, _rLocalName );
+    }
+
+    //---------------------------------------------------------------------
     SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
         const Reference< sax::XAttributeList >& _rxAttribs)
     {
@@ -492,6 +504,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/03/20 08:05:15  fs
+ *  #85514# added an attribute to the map for compatibility to old (buggy) files
+ *
  *  Revision 1.9  2001/02/28 16:42:16  fs
  *  State/DefaultState are int16-properties
  *

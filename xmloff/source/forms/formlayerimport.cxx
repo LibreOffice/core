@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 08:02:56 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 13:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,15 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    SvXMLImportContext* OFormLayerXMLImport::createOfficeFormsContext(
+        SvXMLImport& _rImport,
+        sal_uInt16 _nPrefix,
+        const rtl::OUString& _rLocalName)
+    {
+        return m_pImpl->createOfficeFormsContext(_rImport, _nPrefix, _rLocalName);
+    }
+
+    //---------------------------------------------------------------------
     SvXMLImportContext* OFormLayerXMLImport::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
         const Reference< sax::XAttributeList >& _rxAttribs)
     {
@@ -139,6 +148,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/20 08:02:56  fs
+ *  removed setAutoStyle (was obsolete)
+ *
  *  Revision 1.5  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *

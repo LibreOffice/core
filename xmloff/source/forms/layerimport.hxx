@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-01 09:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 13:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,13 @@ namespace xmloff
         */
         void endPage();
 
+        /** creates an import context for the office:forms element
+        */
+        SvXMLImportContext* createOfficeFormsContext(
+            SvXMLImport& _rImport,
+            sal_uInt16 _nPrefix,
+            const rtl::OUString& _rLocalName);
+
         /** create an <type>SvXMLImportContext</type> instance which is able to import the &lt;form:form&gt;
             element.
         */
@@ -212,6 +219,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/02/01 09:46:47  fs
+ *  no own style handling anymore - the shape exporter is responsible for our styles now
+ *
  *  Revision 1.6  2001/01/24 09:34:40  fs
  *  +enter-/leaveEventContext
  *
