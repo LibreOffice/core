@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-06-11 17:21:54 $
+ *  last change: $Author: ka $ $Date: 2001-06-19 14:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,8 @@ String SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType e
 
     double fDiffDate = aDate - *(rFormatter.GetNullDate());
     String aStr;
-    rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, NULL );
+       Color* pColor = NULL;
+    rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, &pColor );
     return aStr;
 }
 
@@ -780,7 +781,8 @@ String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageTyp
 
     double fFracTime = aTime.GetTimeInDays();
     String aStr;
-    rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, NULL );
+       Color* pColor = NULL;
+    rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, &pColor );
     return aStr;
 }
 
