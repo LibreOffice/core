@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-12 12:57:52 $
+ *  last change: $Author: mt $ $Date: 2001-02-12 15:36:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors
 sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
 {
     ULONG nT = SotExchange::GetFormat( rFlavor );
-    return ( nT == SOT_FORMAT_RTF );
+    return ( nT == SOT_FORMAT_STRING );
 }
 
 
