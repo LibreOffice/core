@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: awt_UnoControlDateFieldModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:45 $ 
+'*  last change:$Date: 2003-10-06 12:45:29 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -66,9 +66,6 @@
 '*************************************************************************
 
 
-
-
-
 Sub RunTest()
 
 '*************************************************************************
@@ -88,8 +85,6 @@ On Error Goto ErrHndl
     PropertyTester.TestProperty("DateMax")
 
     PropertyTester.TestProperty("DateMin")
-
-    PropertyTester.TestProperty("DefaultControl")
 
     PropertyTester.TestProperty("Enabled")
 
