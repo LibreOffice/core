@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grdocsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:15:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #include <sot/clsids.hxx>
 #endif
 
-#include <sfx2/fcontnr.hxx>
+#include <sfx2/objface.hxx>
 
 #pragma hdrstop
 
@@ -116,87 +116,7 @@ SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
     SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
-//SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SFXOBJECTSHELL_STD_NORMAL, sdraw, SvGlobalName(SO3_SDRAW_CLASSID_60) )
-SotFactory* GraphicDocShell::pFactory = NULL;
-SotFactory * GraphicDocShell::ClassFactory()
-{
-    SotFactory **ppFactory = GetFactoryAdress();
-    if( !*ppFactory )
-    {
-        *ppFactory = new SfxObjectFactory( SvGlobalName(SO3_SDRAW_CLASSID_60),
-            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "GraphicDocShell" ) ),
-                                GraphicDocShell::CreateInstance );
-        (*ppFactory)->PutSuperClass( SfxInPlaceObject::ClassFactory() );
-    }
-    return *ppFactory;
-}
-
-void * GraphicDocShell::CreateInstance( SotObject ** ppObj )
-{
-    GraphicDocShell * p = new GraphicDocShell();
-    SfxInPlaceObject* pSfxInPlaceObject = p;
-    SotObject* pBasicObj = pSfxInPlaceObject;
-    if( ppObj )
-        *ppObj = pBasicObj;
-    return p;
-}
-const SotFactory * GraphicDocShell::GetSvFactory() const
-{
-    return ClassFactory();
-}
-void * GraphicDocShell::Cast( const SotFactory * pFact )
-{
-    void * pRet = NULL;
-    if( !pFact || pFact == ClassFactory() )
-        pRet = this;
-    if( !pRet )
-        pRet = SfxInPlaceObject::Cast( pFact );
-    return pRet;
-}
-
-SfxObjectFactory* GraphicDocShell::pObjectFactory = 0;
-
-SfxObjectShell* GraphicDocShell::CreateObject(SfxObjectCreateMode eMode)
-{
-    SfxObjectShell* pDoc = new GraphicDocShell(eMode);
-    return pDoc;
-}
-SfxObjectFactory& GraphicDocShell::GetFactory() const
-{
-    return Factory();
-}
-void GraphicDocShell::RegisterFactory( USHORT nPrio )
-{
-    Factory().Construct(
-        nPrio,
-        &GraphicDocShell::CreateObject, SFXOBJECTSHELL_STD_NORMAL | SFXOBJECTSHELL_HASMENU,
-        "sdraw" );
-    Factory().RegisterInitFactory( &InitFactory );
-    Factory().Register();
-}
-BOOL GraphicDocShell::DoInitNew( SvStorage *pStor )
-{ return SfxObjectShell::DoInitNew(pStor); }
-
-BOOL GraphicDocShell::DoClose()
-{ return SfxInPlaceObject::DoClose(); }
-
-BOOL GraphicDocShell::Close()
-{   SvObjectRef aRef(this);
-    SfxInPlaceObject::Close();
-    return SfxObjectShell::Close(); }
-
-void GraphicDocShell::ModifyChanged()
-{ SfxObjectShell::ModifyChanged(); }
-
-void GraphicDocShell::InitFactory()
-{
-    GraphicDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) );
-    //GraphicDocShell::Factory().GetFilterContainer()->SetDetectFilter( &SdDLL::DetectFilter );
-    GraphicDocShell::Factory().RegisterMenuBar( SdResId( RID_GRAPHIC_DEFAULTMENU ) );
-    GraphicDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_GRAPHIC_PORTALMENU ) );
-    GraphicDocShell::Factory().RegisterAccel( SdResId( RID_GRAPHIC_DEFAULTACCEL ) );
-}
-
+SFX_IMPL_OBJECTFACTORY( GraphicDocShell, SvGlobalName(SO3_SDRAW_CLASSID_60), SFXOBJECTSHELL_STD_NORMAL, "sdraw" )
 
 /*************************************************************************
 |*
