@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-31 14:23:22 $
+ *  last change: $Author: tl $ $Date: 2002-06-04 11:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,6 +1715,10 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                     "Sm : unterschiedliche Fontgrößen");
         aSize.Width() = Min((long) nBraceHeight * 60L / 100L,
                             rFormat.GetBaseSize().Height() * 3L / 2L);
+        // correction factor since change from StarMath to StarSymbol font
+        // because of the different font width in the FontMetric
+        aSize.Width() *= 182;
+        aSize.Width() /= 267;
 
         xub_Unicode cChar = pLeft->GetToken().cMathChar;
         if (cChar != MS_LINE  &&  cChar != MS_DLINE)
