@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-20 21:24:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,30 +95,8 @@ ModalDialog RID_STYLECATALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 181 , 134 ) ;
-    Text = "Vorlagenkatalog" ;
-    Text [ English ] = "Stylesheet Catalogue" ;
-    Text [ norwegian ] = "Stylesheet Catalogue" ;
-    Text [ italian ] = "Catalogo modelli" ;
-    Text [ portuguese_brazilian ] = "Catálogo de estilos" ;
-    Text [ portuguese ] = "Catálogo de estilos" ;
-    Text [ french ] = "Catalogue des styles" ;
-    Text [ dutch ] = "Catalogus opmaakprofielen" ;
-    Text [ spanish ] = "Catálogo de estilos" ;
-    Text [ danish ] = "Typografikatalog" ;
-    Text [ swedish ] = "Mallkatalog" ;
-    Text [ finnish ] = "Tyyliluettelo" ;
-    Text [ english_us ] = "Style Catalog" ;
-    Text[ chinese_simplified ] = "æ ·å¼ç›®å½•";
-    Text[ russian ] = "Êàòàëîã ñòèëåé";
-    Text[ polish ] = "Katalog stylów";
-    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®ã‚«ã‚¿ãƒ­ã‚°";
-    Text[ chinese_traditional ] = "æ¨£å¼ç›®éŒ„";
-    Text[ arabic ] = "ßÊÇáæÌ ÇáÃäãÇØ";
-    Text[ greek ] = "ÊáôÜëïãïò ğñïôığùí";
-    Text[ korean ] = "ìŠ¤íƒ€ì¼ ëª©ë¡";
-    Text[ turkish ] = "Biçim kataloğu";
-    Text[ catalan ] = "Catàleg d'estils";
-    Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£à¸¥à¸±à¸à¸©à¸“à¸°";
+    Text [ de ] = "Vorlagenkatalog" ;
+    Text [ en-US ] = "Style Catalog" ;
     Moveable = TRUE ;
     OKButton BT_OK
     {
@@ -137,145 +115,33 @@ ModalDialog RID_STYLECATALOG
     {
         Pos = MAP_APPFONT ( 123 , 97 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Verwalten..." ;
-        Text [ English ] = "~Organize..." ;
-        Text [ norwegian ] = "~Organize..." ;
-        Text [ italian ] = "Gestisci..." ;
-        Text [ portuguese_brazilian ] = "~Organizador..." ;
-        Text [ portuguese ] = "~Gerir..." ;
-        Text [ french ] = "~Gérer..." ;
-        Text [ dutch ] = "Be~heren..." ;
-        Text [ spanish ] = "~Administrar..." ;
-        Text [ danish ] = "~Administration..." ;
-        Text [ swedish ] = "~Administrera..." ;
-        Text [ finnish ] = "~Järjestelytyökalu..." ;
-        Text [ english_us ] = "~Organizer..." ;
+        Text [ de ] = "~Verwalten..." ;
+        Text [ en-US ] = "~Organizer..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ç®¡ç†(~O)...";
-        Text[ russian ] = "Óïğàâëåíèå...";
-        Text[ polish ] = "~Zarz¹dzaj...";
-        Text[ japanese ] = "ç®¡ç†(~O)...";
-        Text[ chinese_traditional ] = "ç®¡ç†(~O)...";
-        Text[ arabic ] = "ÇáÅÏÇÑÉ...";
-        Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "ê´€ë¦¬(~O)...";
-        Text[ turkish ] = "~Yönet...";
-        Text[ catalan ] = "~Organitzador...";
-        Text[ thai ] = "~à¸•à¸±à¸§à¸ˆà¸±à¸”à¸£à¸°à¹€à¸šà¸µà¸¢à¸š...";
-        Text[ czech ] = "OrganizÃ¡tor...";
-        Text[ hebrew ] = "â€®×¡×“×¨×Ÿâ€¬";
-        Text[ hindi ] = "~à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾à¤ªà¤•...";
-        Text[ slovak ] = "~OrganizÃ¡tor...";
-        Text[ hungarian ] = "~SzervezÅ‘...";
-        Text[ slovenian ] = "~Organizator...";
     };
     PushButton BT_DEL
     {
         Pos = MAP_APPFONT ( 123 , 78 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Löschen..." ;
-        Text [ English ] = "~Delete..." ;
-        Text [ norwegian ] = "~Delete..." ;
-        Text [ italian ] = "Elimina..." ;
-        Text [ portuguese_brazilian ] = "Exc~luir..." ;
-        Text [ portuguese ] = "E~liminar..." ;
-        Text [ french ] = "~Supprimer..." ;
-        Text [ dutch ] = "~Wissen..." ;
-        Text [ spanish ] = "~Borrar..." ;
-        Text [ danish ] = "~Slet..." ;
-        Text [ swedish ] = "~Radera..." ;
-        Text [ finnish ] = "~Poista..." ;
-        Text [ english_us ] = "~Delete..." ;
+        Text [ de ] = "~Löschen..." ;
+        Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)...";
-        Text[ russian ] = "Óäàëèòü...";
-        Text[ polish ] = "~Usuñ...";
-        Text[ japanese ] = "å‰Šé™¤(~D)...";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)...";
-        Text[ arabic ] = "ÍĞİ...";
-        Text[ greek ] = "ÄéáãñáöŞ...";
-        Text[ korean ] = "ì‚­ì œ(~D)...";
-        Text[ turkish ] = "~Sil...";
-        Text[ catalan ] = "~Suprimeix...";
-        Text[ thai ] = "~à¸¥à¸š...";
-        Text[ czech ] = "Smazat...";
-        Text[ hebrew ] = "â€®××—×™×§×”...â€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“...";
-        Text[ slovak ] = "~ZmazaÅ¥...";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s...";
-        Text[ slovenian ] = "~IzbriÅ¡i...";
     };
     PushButton BT_EDIT
     {
         Pos = MAP_APPFONT ( 123 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Än~dern..." ;
-        Text [ English ] = "~Change..." ;
-        Text [ norwegian ] = "~Change..." ;
-        Text [ italian ] = "Mo~difica..." ;
-        Text [ portuguese_brazilian ] = "~Modificar..." ;
-        Text [ portuguese ] = "~Modificar..." ;
-        Text [ french ] = "Modifier..." ;
-        Text [ dutch ] = "~Wijzigen..." ;
-        Text [ spanish ] = "~Modificar..." ;
-        Text [ danish ] = "~Modificer..." ;
-        Text [ swedish ] = "Än~dra..." ;
-        Text [ finnish ] = "~Muuta..." ;
-        Text [ english_us ] = "~Modify..." ;
+        Text [ de ] = "Än~dern..." ;
+        Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ›´æ”¹(~M)...";
-        Text[ russian ] = "Èçìåíèòü...";
-        Text[ polish ] = "M~odyfikuj...";
-        Text[ japanese ] = "å¤‰æ›´(~M)...";
-        Text[ chinese_traditional ] = "è®Šæ›´(~M)...";
-        Text[ arabic ] = "ÊÚÏíá...";
-        Text[ greek ] = "Ôñïğïğïßçóç...";
-        Text[ korean ] = "ìˆ˜ì •(~M)...";
-        Text[ turkish ] = "~Değiştir...";
-        Text[ catalan ] = "~Modifica...";
-        Text[ thai ] = "~à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚...";
-        Text[ czech ] = "ZmÄ›nit...";
-        Text[ hebrew ] = "â€®×©×™× ×•×™...â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤§à¤¾à¤°à¥‹...";
-        Text[ slovak ] = "Z~meniÅ¥...";
-        Text[ hungarian ] = "~MÃ³dosÃ­tÃ¡s...";
-        Text[ slovenian ] = "~Spremeni...";
     };
     PushButton BT_NEW
     {
         Pos = MAP_APPFONT ( 123 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Neu..." ;
-        Text [ English ] = "~New..." ;
-        Text [ norwegian ] = "~New..." ;
-        Text [ italian ] = "Nuovo..." ;
-        Text [ portuguese_brazilian ] = "~Novo..." ;
-        Text [ portuguese ] = "~Novo..." ;
-        Text [ english_us ] = "~New..." ;
-        Text [ finnish ] = "~Uusi..." ;
-        Text [ danish ] = "~Ny(t)..." ;
-        Text [ french ] = "~Nouveau..." ;
-        Text [ swedish ] = "~Ny..." ;
-        Text [ dutch ] = "~Nieuw.." ;
-        Text [ spanish ] = "~Nuevo..." ;
+        Text [ de ] = "~Neu..." ;
+        Text [ en-US ] = "~New..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ–°å»º(~N)...";
-        Text[ russian ] = "Ñîçäàòü...";
-        Text[ polish ] = "~Nowy...";
-        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)...";
-        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)...";
-        Text[ arabic ] = "...ÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá...";
-        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)...";
-        Text[ turkish ] = "~Yeni...";
-        Text[ catalan ] = "~Nou...";
-        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ...";
-        Text[ czech ] = "NovÃ½...";
-        Text[ hebrew ] = "â€®×—×“×©...â€¬";
-        Text[ hindi ] = "~à¤¨à¤¯à¤¾...";
-        Text[ slovak ] = "~NovÃ½...";
-        Text[ hungarian ] = "Ãš~j...";
-        Text[ slovenian ] = "~Nov...";
     };
     HelpButton BT_HELP
     {
@@ -308,78 +174,17 @@ ModalDialog RID_STYLECATALOG
         Hide = TRUE ;
         DropDown = TRUE ;
     };
-    Text[ czech ] = "Katalog stylÅ¯";
-    Text[ hebrew ] = "â€®×§×˜×œ×•×’ ×¡×’× ×•× ×•×ªâ€¬";
-    Text[ hindi ] = "à¤¶à¥ˆà¤²à¥€ à¤µà¤°à¥à¤—";
-    Text[ slovak ] = "KatalÃ³g Å¡tÃ½lov";
-    Text[ hungarian ] = "StÃ­lustÃ¡r";
-    Text[ slovenian ] = "Katalog slogov";
 };
  // Strings ---------------------------------------------------------------
 String DLG_STYLE_DESIGNER
 {
-    Text = "Stylist" ;
-    Text [ English ] = "Stylist" ;
-    Text [ english_us ] = "Stylist" ;
-    Text [ portuguese_brazilian ] = "Estilista" ;
-    Text [ swedish ] = "Stylist" ;
-    Text [ danish ] = "Stylist" ;
-    Text [ italian ] = "Stilista" ;
-    Text [ spanish ] = "Estilista" ;
-    Text [ french ] = "Styliste" ;
-    Text [ dutch ] = "Stylist" ;
-    Text [ portuguese ] = "Estilista" ;
-    Text[ chinese_simplified ] = "å„ç±»æ ·å¼";
-    Text[ russian ] = "Ìàñòåğ ñòèëåé";
-    Text[ polish ] = "Stylista";
-    Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒªã‚¹ãƒˆ";
-    Text[ chinese_traditional ] = "å„é¡æ¨£å¼";
-    Text[ arabic ] = "ÇáãõÕãã";
-    Text[ greek ] = "Óôõëßóôáò";
-    Text[ korean ] = "ìŠ¤íƒ€ì¼ë¦¬ìŠ¤íŠ¸";
-    Text[ turkish ] = "Stil listesi";
-    Text[ catalan ] = "Estilista";
-    Text[ finnish ] = "Tyylityökalu";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸­à¸à¹à¸šà¸š";
-    Text[ czech ] = "Stylista";
-    Text[ hebrew ] = "â€®××¢×¦×‘â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤Ÿà¤‡à¤²à¤¿à¤¸à¥à¤Ÿà¥";
-    Text[ slovak ] = "Å tylista";
-    Text[ hungarian ] = "StÃ­lussegÃ©d";
-    Text[ slovenian ] = "Slogovnik";
+    Text [ de ] = "Stylist" ;
+    Text [ en-US ] = "Stylist" ;
 };
 String STR_STYLE_FILTER_HIERARCHICAL
 {
-    TEXT = "Hierarchisch" ;
-    TEXT [ English ] = "Hierarchical" ;
-    TEXT [ norwegian ] = "Hierarkisk" ;
-    TEXT [ italian ] = "Gerarchico" ;
-    TEXT [ portuguese_brazilian ] = "Hierárquico" ;
-    TEXT [ portuguese ] = "Hierárquico" ;
-    TEXT [ finnish ] = "Hierarkkinen" ;
-    TEXT [ danish ] = "Hierarkisk" ;
-    TEXT [ french ] = "Hiérarchie" ;
-    TEXT [ swedish ] = "Hierarkiskt" ;
-    TEXT [ dutch ] = "Hiërarchisch" ;
-    TEXT [ spanish ] = "Jerárquico" ;
-    TEXT [ english_us ] = "Hierarchical" ;
-    TEXT[ chinese_simplified ] = "ç­‰çº§å¼";
-    TEXT[ russian ] = "Ïî èåğàğõèè";
-    TEXT[ polish ] = "Hierarchicznie";
-    TEXT[ japanese ] = "éšå±¤";
-    TEXT[ chinese_traditional ] = "ç­‰ç´šå¼";
-    TEXT[ arabic ] = "åíßáí";
-    TEXT[ greek ] = "Éåñáñ÷éêÜ";
-    TEXT[ korean ] = "ê³„ì¸µ";
-    TEXT[ turkish ] = "Hiyerarşik";
-    TEXT[ catalan ] = "Jeràrquic";
-    TEXT[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸Šà¸±à¹‰à¸™";
-    TEXT[ czech ] = "Hierarchicky";
-    TEXT[ hebrew ] = "â€®××“×•×¨×’ (×”×™×™×¨×¨×›×™×”)â€¬";
-    TEXT[ hindi ] = "à¤¹à¤‡à¤°à¤¾à¤°à¥à¤•à¤¿à¤•à¤²";
-    TEXT[ slovak ] = "HierarchickÃ½";
-    TEXT[ hungarian ] = "Hierarchikus";
-    TEXT[ slovenian ] = "HierarhiÄen";
+    Text [ de ] = "Hierarchisch" ;
+    Text [ en-US ] = "Hierarchical" ;
 };
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
@@ -411,106 +216,22 @@ DockingWindow DLG_STYLE_DESIGNER
             {
                 HelpId = HID_TEMPLDLG_WATERCAN ;
                 Identifier = SID_STYLE_WATERCAN ;
-                Text = "Gießkannenmodus" ;
-                Text [ English ] = "Watercan" ;
-                Text [ norwegian ] = "Rammefyll" ;
-                Text [ italian ] = "Modo riempimento" ;
-                Text [ portuguese_brazilian ] = "Preenchimento completo" ;
-                Text [ portuguese ] = "Preenchimento completo" ;
-                Text [ english_us ] = "Fill Format Mode" ;
-                Text [ finnish ] = "Täyttömuotoilutila" ;
-                Text [ danish ] = "Fyldformattilstand" ;
-                Text [ french ] = "Mode Remplir tout" ;
-                Text [ swedish ] = "Tilldelningsläge" ;
-                Text [ dutch ] = "Gietermodus" ;
-                Text [ spanish ] = "Modo relleno" ;
-                Text[ chinese_simplified ] = "å……å¡«æ¨¡å¼";
-                Text[ russian ] = "Ñòèëåâàÿ çàëèâêà";
-                Text[ polish ] = "Tryb wype³niania formatem";
-                Text[ japanese ] = "æ°´ã‚„ã‚Šãƒ¢ãƒ¼ãƒ‰";
-                Text[ chinese_traditional ] = "å……å¡«æ¨¡å¼";
-                Text[ arabic ] = "æÖÚ ÇáÑÔÇÔÉ";
-                Text[ greek ] = "ÊáôÜóôáóç ãåìßóìáôïò";
-                Text[ korean ] = "ì±„ìš°ê¸° ëª¨ë“œ";
-                Text[ turkish ] = "Doldur kipi";
-                Text[ catalan ] = "Mode Format d'emplenament";
-                Text[ thai ] = "à¹€à¸•à¸´à¸¡à¹‚à¸«à¸¡à¸”à¸£à¸¹à¸›à¹à¸šà¸š";
-                Text[ czech ] = "ReÅ¾im vyplÅˆovÃ¡nÃ­ formÃ¡tu";
-                Text[ hebrew ] = "â€®××¦×‘ ××™×œ×•×™â€¬";
-                Text[ hindi ] = "à¤°à¤šà¤¨à¤¾ à¤ªà¥à¤°à¤•à¤¾à¤° à¤­à¤°à¥‹";
-                Text[ slovak ] = "VyplniÅ¥ mÃ³d formÃ¡tu";
-                Text[ hungarian ] = "KitÃ¶ltÃ©s formÃ¡tummal";
-                Text[ slovenian ] = "NaÄin zapolnitev oblik";
+                Text [ de ] = "Gießkannenmodus" ;
+                Text [ en-US ] = "Fill Format Mode" ;
             };
             ToolBoxItem
             {
                 HelpId = HID_TEMPLDLG_NEWBYEXAMPLE ;
                 Identifier = SID_STYLE_NEW_BY_EXAMPLE ;
-                Text = "Neue Vorlage aus Selektion" ;
-                Text [ English ] = "New style by example" ;
-                Text [ norwegian ] = "Ny mal etter eksempel" ;
-                Text [ italian ] = "Nuovo modello dalla selezione" ;
-                Text [ portuguese_brazilian ] = "Novo estilo a partir da seleção" ;
-                Text [ portuguese ] = "Novo estilo a partir da selecção" ;
-                Text [ english_us ] = "New Style from Selection" ;
-                Text [ finnish ] = "Uusi tyyli valinnasta" ;
-                Text [ danish ] = "Ny typografi fra markeringen" ;
-                Text [ french ] = "Nouveau style à partir de la sélection" ;
-                Text [ swedish ] = "Ny formatmall av markering" ;
-                Text [ dutch ] = "Nieuw opmaakprofiel uit selectie" ;
-                Text [ spanish ] = "Nuevo estilo a partir de selección" ;
-                Text[ chinese_simplified ] = "é€‰ä¸­çš„æ–°æ ·å¼";
-                Text[ russian ] = "Ñîçäàòü ñòèëü èç âûäåëåííîãî";
-                Text[ polish ] = "Nowy styl z zaznaczenia";
-                Text[ japanese ] = "é¸æŠã‚¹ã‚¿ã‚¤ãƒ«ã‹ã‚‰æ–°è¦ä½œæˆ";
-                Text[ chinese_traditional ] = "é¸å–çš„æ–°æ¨£å¼";
-                Text[ arabic ] = "äãØ ÌÏíÏ ãä ÇáÊÍÏíÏ";
-                Text[ greek ] = "Íİï ğñüôõğï áğü åğéëïãŞ";
-                Text[ korean ] = "ì„ íƒ ìŠ¤íƒ€ì¼ë¡œë¶€í„° ìƒˆë¡œ ë§Œë“¤ê¸° ";
-                Text[ turkish ] = "Yeni biçim seçimi";
-                Text[ catalan ] = "Nou estil a partir de la selecció";
-                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¹ƒà¸«à¸¡à¹ˆà¸ˆà¸²à¸à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸";
-                Text[ czech ] = "NovÃ½ styl z vÃ½bÄ›ru";
-                Text[ hebrew ] = "â€®×¡×’× ×•×Ÿ ×—×“×© ××‘×—×™×¨×”â€¬";
-                Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ à¤¸à¥‡ à¤¨à¤¯à¤¾ à¤¶à¥ˆà¤²à¥€";
-                Text[ slovak ] = "NovÃ½ Å¡tÃ½l z vÃ½beru";
-                Text[ hungarian ] = "Ãšj stÃ­lus a kijelÃ¶lÃ©s alapjÃ¡n";
-                Text[ slovenian ] = "Nov slog iz izbora";
+                Text [ de ] = "Neue Vorlage aus Selektion" ;
+                Text [ en-US ] = "New Style from Selection" ;
             };
             ToolBoxItem
             {
                 HelpId = HID_TEMPLDLG_UPDATEBYEXAMPLE ;
                 Identifier = SID_STYLE_UPDATE_BY_EXAMPLE ;
-                Text = "Vorlage aktualisieren" ;
-                Text [ English ] = "Update style by example" ;
-                Text [ norwegian ] = "Oppdater mal etter eksempel" ;
-                Text [ italian ] = "Aggiorna modello" ;
-                Text [ portuguese_brazilian ] = "Atualizar estilo" ;
-                Text [ portuguese ] = "Actualizar modelo" ;
-                Text [ english_us ] = "Update Style" ;
-                Text [ finnish ] = "Päivitä tyyli" ;
-                Text [ danish ] = "Opdater typografi" ;
-                Text [ french ] = "Actualiser le style" ;
-                Text [ swedish ] = "Uppdatera formatmall" ;
-                Text [ dutch ] = "Opmaakprofiel bijwerken" ;
-                Text [ spanish ] = "Actualizar estilo" ;
-                Text[ chinese_simplified ] = "æ›´æ–°æ ·å¼";
-                Text[ russian ] = "Îáíîâèòü ñòèëü ïî îáğàçöó";
-                Text[ polish ] = "Aktualizuj styl";
-                Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã®æ›´æ–°";
-                Text[ chinese_traditional ] = "æ›´æ–°æ¨£å¼";
-                Text[ arabic ] = "ÊÍÏíË ÇáäãØ";
-                Text[ greek ] = "Åíçìİñùóç ğñïôığïõ";
-                Text[ korean ] = "ìŠ¤íƒ€ì¼ ì—…ë°ì´íŠ¸";
-                Text[ turkish ] = "Biçimi güncelle";
-                Text[ catalan ] = "Actualitza l'estil";
-                Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡à¸¥à¸±à¸à¸©à¸“à¸°";
-                Text[ czech ] = "Aktualizovat styl";
-                Text[ hebrew ] = "â€®×¢×™×“×›×•×Ÿ ×¡×’× ×•×Ÿâ€¬";
-                Text[ hindi ] = "à¤¶à¥ˆà¤²à¥€ à¤…à¤ªà¤¡à¥‡à¤Ÿà¥ à¤•à¤°à¥‹";
-                Text[ slovak ] = "AktualizovaÅ¥ Å¡tÃ½l";
-                Text[ hungarian ] = "StÃ­lus frissÃ­tÃ©se";
-                Text[ slovenian ] = "Posodobi slog";
+                Text [ de ] = "Vorlage aktualisieren" ;
+                Text [ en-US ] = "Update Style" ;
             };
         };
     };
