@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:34:08 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 				<desc xml:lang="it">Contains data describing the configuration parameters of a Content Provider.</desc>
 				<desc xml:lang="sv">Contains data describing the configuration parameters of a Content Provider.</desc>
 				<desc xml:lang="pl">Contains data describing the configuration parameters of a Content Provider.</desc>
-				<desc xml:lang="pt-BR">Contains data describing the configuration parameters of a Content Provider.</desc>
-				<desc xml:lang="ja">Contains data describing the configuration parameters of a Content Provider.</desc>
+				<desc xml:lang="pt-BR">Contém dados que descrevem os parâmetros de configuração do provedor de conteúdo.</desc>
+				<desc xml:lang="ja">コンテンツプロバイダの設定パラメータを記述するデータが含まれます。</desc>
 				<desc xml:lang="ko">Contains data describing the configuration parameters of a Content Provider.</desc>
 				<desc xml:lang="tr">Contains data describing the configuration parameters of a Content Provider.</desc>
 				<desc xml:lang="th">Contains data describing the configuration parameters of a Content Provider.</desc>
@@ -114,8 +114,8 @@
 					<desc xml:lang="it">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
 					<desc xml:lang="sv">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
 					<desc xml:lang="pl">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
-					<desc xml:lang="ja">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome do serviço UNO a ser usado para instanciar o UCP.</desc>
+					<desc xml:lang="ja">UCP をインスタンス化するために使用する UNO サービスの名前を指定します。</desc>
 					<desc xml:lang="ko">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
 					<desc xml:lang="tr">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
 					<desc xml:lang="th">Specifies the name of the UNO service to be used to instantiate the UCP.</desc>
@@ -143,8 +143,8 @@
 					<desc xml:lang="it">Contains the URL template.</desc>
 					<desc xml:lang="sv">Contains the URL template.</desc>
 					<desc xml:lang="pl">Contains the URL template.</desc>
-					<desc xml:lang="pt-BR">Contains the URL template.</desc>
-					<desc xml:lang="ja">Contains the URL template.</desc>
+					<desc xml:lang="pt-BR">Contém o modelo de URL.</desc>
+					<desc xml:lang="ja">URL テンプレートが含まれます。</desc>
 					<desc xml:lang="ko">Contains the URL template.</desc>
 					<desc xml:lang="tr">Contains the URL template.</desc>
 					<desc xml:lang="th">Contains the URL template.</desc>
@@ -172,8 +172,8 @@
 					<desc xml:lang="it">Contains additional arguments for UCP creation.</desc>
 					<desc xml:lang="sv">Contains additional arguments for UCP creation.</desc>
 					<desc xml:lang="pl">Contains additional arguments for UCP creation.</desc>
-					<desc xml:lang="pt-BR">Contains additional arguments for UCP creation.</desc>
-					<desc xml:lang="ja">Contains additional arguments for UCP creation.</desc>
+					<desc xml:lang="pt-BR">Contém argumentos adicionais para a criação de UCP.</desc>
+					<desc xml:lang="ja">UCP の作成に関する追加引数が含まれます。</desc>
 					<desc xml:lang="ko">Contains additional arguments for UCP creation.</desc>
 					<desc xml:lang="tr">Contains additional arguments for UCP creation.</desc>
 					<desc xml:lang="th">Contains additional arguments for UCP creation.</desc>
@@ -202,8 +202,8 @@
 				<desc xml:lang="it">Specifies secondary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="sv">Specifies secondary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="pl">Specifies secondary keys for Content Provider configuration data.</desc>
-				<desc xml:lang="pt-BR">Specifies secondary keys for Content Provider configuration data.</desc>
-				<desc xml:lang="ja">Specifies secondary keys for Content Provider configuration data.</desc>
+				<desc xml:lang="pt-BR">Especifica a chave secundária para os dados de configuração do provedor de conteúdo.</desc>
+				<desc xml:lang="ja">コンテンツプロバイダ設定データのセカンダリキーを指定します。</desc>
 				<desc xml:lang="ko">Specifies secondary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="tr">Specifies secondary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="th">Specifies secondary keys for Content Provider configuration data.</desc>
@@ -230,8 +230,8 @@
 					<desc xml:lang="it">Specifies a set of Content Provider configuration data for the UCB.</desc>
 					<desc xml:lang="sv">Specifies a set of Content Provider configuration data for the UCB.</desc>
 					<desc xml:lang="pl">Specifies a set of Content Provider configuration data for the UCB.</desc>
-					<desc xml:lang="pt-BR">Specifies a set of Content Provider configuration data for the UCB.</desc>
-					<desc xml:lang="ja">Specifies a set of Content Provider configuration data for the UCB.</desc>
+					<desc xml:lang="pt-BR">Especifica um conjunto de dados de configuração do provedor de conteúdo para o UCB.</desc>
+					<desc xml:lang="ja">UCB に対するコンテンツプロバイダ設定データセットを指定します。</desc>
 					<desc xml:lang="ko">Specifies a set of Content Provider configuration data for the UCB.</desc>
 					<desc xml:lang="tr">Specifies a set of Content Provider configuration data for the UCB.</desc>
 					<desc xml:lang="th">Specifies a set of Content Provider configuration data for the UCB.</desc>
@@ -260,8 +260,8 @@
 				<desc xml:lang="it">Specifies primary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="sv">Specifies primary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="pl">Specifies primary keys for Content Provider configuration data.</desc>
-				<desc xml:lang="pt-BR">Specifies primary keys for Content Provider configuration data.</desc>
-				<desc xml:lang="ja">Specifies primary keys for Content Provider configuration data.</desc>
+				<desc xml:lang="pt-BR">Especifica a chave primária para os dados de configuração do provedor de conteúdo.</desc>
+				<desc xml:lang="ja">コンテンツプロバイダ設定データのプライマリキーを指定します。</desc>
 				<desc xml:lang="ko">Specifies primary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="tr">Specifies primary keys for Content Provider configuration data.</desc>
 				<desc xml:lang="th">Specifies primary keys for Content Provider configuration data.</desc>
@@ -288,8 +288,8 @@
 					<desc xml:lang="it">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
 					<desc xml:lang="sv">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
 					<desc xml:lang="pl">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
-					<desc xml:lang="pt-BR">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
-					<desc xml:lang="ja">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
+					<desc xml:lang="pt-BR">Especifica um conjunto de chaves secundárias para a configuração do provedor de conteúdo para o UCB. </desc>
+					<desc xml:lang="ja">UCB に対するコンテンツプロバイダ設定データのセカンダリキーセットを指定します。</desc>
 					<desc xml:lang="ko">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
 					<desc xml:lang="tr">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
 					<desc xml:lang="th">Specifies a set of secondary keys for Content Provider configuration for the UCB.</desc>
@@ -320,8 +320,8 @@
 				<desc xml:lang="it">Contains a root entry for Content Provider configurations.</desc>
 				<desc xml:lang="sv">Contains a root entry for Content Provider configurations.</desc>
 				<desc xml:lang="pl">Contains a root entry for Content Provider configurations.</desc>
-				<desc xml:lang="pt-BR">Contains a root entry for Content Provider configurations.</desc>
-				<desc xml:lang="ja">Contains a root entry for Content Provider configurations.</desc>
+				<desc xml:lang="pt-BR">Contém a entrada raiz para as configurações do provedor de conteúdo.</desc>
+				<desc xml:lang="ja">コンテンツプロバイダ設定のルート項目が含まれます。</desc>
 				<desc xml:lang="ko">Contains a root entry for Content Provider configurations.</desc>
 				<desc xml:lang="tr">Contains a root entry for Content Provider configurations.</desc>
 				<desc xml:lang="th">Contains a root entry for Content Provider configurations.</desc>
@@ -331,6 +331,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 

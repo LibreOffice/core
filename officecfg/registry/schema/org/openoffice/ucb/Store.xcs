@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Store.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:34:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 				<desc xml:lang="it">Specifies a property value.</desc>
 				<desc xml:lang="sv">Specifies a property value.</desc>
 				<desc xml:lang="pl">Specifies a property value.</desc>
-				<desc xml:lang="pt-BR">Specifies a property value.</desc>
-				<desc xml:lang="ja">Specifies a property value.</desc>
+				<desc xml:lang="pt-BR">Especifica um valor da propriedade.</desc>
+				<desc xml:lang="ja">プロパティ値を指定します。</desc>
 				<desc xml:lang="ko">Specifies a property value.</desc>
 				<desc xml:lang="tr">Specifies a property value.</desc>
 				<desc xml:lang="th">Specifies a property value.</desc>
@@ -114,8 +114,8 @@
 					<desc xml:lang="it">Specifies the numeric property identifier.</desc>
 					<desc xml:lang="sv">Specifies the numeric property identifier.</desc>
 					<desc xml:lang="pl">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="pt-BR">Specifies the numeric property identifier.</desc>
-					<desc xml:lang="ja">Specifies the numeric property identifier.</desc>
+					<desc xml:lang="pt-BR">Especifica o identificador de propriedade numérica.</desc>
+					<desc xml:lang="ja">数値プロパティ識別子を指定します。</desc>
 					<desc xml:lang="ko">Specifies the numeric property identifier.</desc>
 					<desc xml:lang="tr">Specifies the numeric property identifier.</desc>
 					<desc xml:lang="th">Specifies the numeric property identifier.</desc>
@@ -143,8 +143,8 @@
 					<desc xml:lang="it">Specifies property attributes.</desc>
 					<desc xml:lang="sv">Specifies property attributes.</desc>
 					<desc xml:lang="pl">Specifies property attributes.</desc>
-					<desc xml:lang="pt-BR">Specifies property attributes.</desc>
-					<desc xml:lang="ja">Specifies property attributes.</desc>
+					<desc xml:lang="pt-BR">Especifica atributos de propriedade.</desc>
+					<desc xml:lang="ja">プロパティの属性を指定します。</desc>
 					<desc xml:lang="ko">Specifies property attributes.</desc>
 					<desc xml:lang="tr">Specifies property attributes.</desc>
 					<desc xml:lang="th">Specifies property attributes.</desc>
@@ -172,8 +172,8 @@
 					<desc xml:lang="it">Specifies the Property value.</desc>
 					<desc xml:lang="sv">Specifies the Property value.</desc>
 					<desc xml:lang="pl">Specifies the Property value.</desc>
-					<desc xml:lang="pt-BR">Specifies the Property value.</desc>
-					<desc xml:lang="ja">Specifies the Property value.</desc>
+					<desc xml:lang="pt-BR">Especifica o valor da propriedade.</desc>
+					<desc xml:lang="ja">プロパティ値を指定します。</desc>
 					<desc xml:lang="ko">Specifies the Property value.</desc>
 					<desc xml:lang="tr">Specifies the Property value.</desc>
 					<desc xml:lang="th">Specifies the Property value.</desc>
@@ -201,8 +201,8 @@
 					<desc xml:lang="it">Specifies the property state.</desc>
 					<desc xml:lang="sv">Specifies the property state.</desc>
 					<desc xml:lang="pl">Specifies the property state.</desc>
-					<desc xml:lang="pt-BR">Specifies the property state.</desc>
-					<desc xml:lang="ja">Specifies the property state.</desc>
+					<desc xml:lang="pt-BR">Especifica o estado da propriedade.</desc>
+					<desc xml:lang="ja">プロパティの状態を指定します。</desc>
 					<desc xml:lang="ko">Specifies the property state.</desc>
 					<desc xml:lang="tr">Specifies the property state.</desc>
 					<desc xml:lang="th">Specifies the property state.</desc>
@@ -231,8 +231,8 @@
 				<desc xml:lang="it">Specifies a set of property values.</desc>
 				<desc xml:lang="sv">Specifies a set of property values.</desc>
 				<desc xml:lang="pl">Specifies a set of property values.</desc>
-				<desc xml:lang="pt-BR">Specifies a set of property values.</desc>
-				<desc xml:lang="ja">Specifies a set of property values.</desc>
+				<desc xml:lang="pt-BR">Especifica um conjunto de valores de propriedade.</desc>
+				<desc xml:lang="ja">プロパティ値セットを指定します。</desc>
 				<desc xml:lang="ko">Specifies a set of property values.</desc>
 				<desc xml:lang="tr">Specifies a set of property values.</desc>
 				<desc xml:lang="th">Specifies a set of property values.</desc>
@@ -259,8 +259,8 @@
 					<desc xml:lang="it">Specifies a set of property values.</desc>
 					<desc xml:lang="sv">Specifies a set of property values.</desc>
 					<desc xml:lang="pl">Specifies a set of property values.</desc>
-					<desc xml:lang="pt-BR">Specifies a set of property values.</desc>
-					<desc xml:lang="ja">Specifies a set of property values.</desc>
+					<desc xml:lang="pt-BR">Especifica um conjunto de valores de propriedade.</desc>
+					<desc xml:lang="ja">プロパティ値セットを指定します。</desc>
 					<desc xml:lang="ko">Specifies a set of property values.</desc>
 					<desc xml:lang="tr">Specifies a set of property values.</desc>
 					<desc xml:lang="th">Specifies a set of property values.</desc>
@@ -291,8 +291,8 @@
 				<desc xml:lang="it">Specifies the root entry for stored content properties.</desc>
 				<desc xml:lang="sv">Specifies the root entry for stored content properties.</desc>
 				<desc xml:lang="pl">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="pt-BR">Specifies the root entry for stored content properties.</desc>
-				<desc xml:lang="ja">Specifies the root entry for stored content properties.</desc>
+				<desc xml:lang="pt-BR">Especifica a entrada raiz para conteúdos de propriedade armazenados.</desc>
+				<desc xml:lang="ja">格納済みの内容プロパティのルート項目を指定します。</desc>
 				<desc xml:lang="ko">Specifies the root entry for stored content properties.</desc>
 				<desc xml:lang="tr">Specifies the root entry for stored content properties.</desc>
 				<desc xml:lang="th">Specifies the root entry for stored content properties.</desc>
@@ -302,6 +302,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
