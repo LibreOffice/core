@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
+ *  last change: $Author: nn $ $Date: 2001-02-05 11:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,7 @@ const SfxItemSet* ScDocument::GetCondResult( USHORT nCol, USHORT nRow, USHORT nT
             SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find( aStyle, SFX_STYLE_FAMILY_PARA );
             if ( pStyleSheet )
                 return &pStyleSheet->GetItemSet();
-            DBG_ERROR("Style nicht gefunden");
+            // if style is not there, treat like no condition
         }
     }
     return NULL;

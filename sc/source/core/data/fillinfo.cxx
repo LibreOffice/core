@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:36 $
+ *  last change: $Author: nn $ $Date: 2001-02-05 11:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,8 +558,7 @@ USHORT ScDocument::FillInfo( RowInfo* pRowInfo, USHORT nX1, USHORT nY1, USHORT n
                                             pInfo->pConditionSet = &pStyleSheet->GetItemSet();
                                             bAnyCondition = TRUE;
                                         }
-                                        else
-                                            DBG_ERROR("Style nicht gefunden");
+                                        // if style is not there, treat like no condition
                                     }
                                 }
 
