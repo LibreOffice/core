@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:52:12 $
+ *  last change: $Author: oj $ $Date: 2002-05-06 10:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,33 +765,33 @@ String STR_QUERY_HANDLETEXT
     Text[ catalan ] = "Camp;Àlies;Taula;Ordenació;Visible;Funció;Criteri;O;O";
 };
 
-ErrorBox ERR_QRY_TOO_MANY_COLUMNS
+String STR_QRY_TOO_MANY_COLUMNS
 {
-    Message = "Es sind zu viele Spalten vorhanden." ;
-    Message [ ENGLISH ] = "There are too many columns." ;
-    Message[ italian ] = "Esistono troppe colonne.";
-    Message[ portuguese_brazilian ] = "There are too many columns.";
-    Message[ portuguese ] = "Existem demasiadas colunas.";
-    Message[ danish ] = "Der er for mange kolonner.";
-    Message[ french ] = "Il y a trop de colonnes.";
-    Message[ swedish ] = "Det finns för många kolumner.";
-    Message[ dutch ] = "Er zijn teveel kolommen";
-    Message[ spanish ] = "Existen demasiadas columnas.";
-    Message[ english_us ] = "There are too many columns.";
-    Message[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„åˆ—ã€‚";
-    Message[ russian ] = "Ñëèøêîì ìíîãî êîëîíîê.";
-    Message[ polish ] = "Jest za du¿o kolumn.";
-    Message[ japanese ] = "åˆ—ãŒå¤šã™ãã¾ã™ã€‚";
-    Message[ chinese_traditional ] = "æœ‰å¤ªå¤šçš„æ¬„ã€‚";
-    Message[ dutch ] = "Er zijn teveel kolommen";
-    Message[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„åˆ—ã€‚";
-    Message[ greek ] = "ÕğÜñ÷ïõí Şäç ğïëëİò óôŞëåò.";
-    Message[ korean ] = "ì—´ì´ ë„ˆë¬´ ë§ì´ ìˆìŠµë‹ˆë‹¤.";
-    Message[ arabic ] = "ÊæÌÏ ÃÚãÏÉ ßËíÑÉ ÌÏÇğ.";
-    Message[ turkish ] = "Mevcut sütun sayısı çok fazla.";
-    Message[ language_user1 ] = " ";
-    Message[ finnish ] = "Sarakkeita on liikaa.";
-    Message[ catalan ] = "Hi ha massa columnes.";
+    Text = "Es sind zu viele Spalten vorhanden." ;
+    Text [ ENGLISH ] = "There are too many columns." ;
+    Text[ italian ] = "Esistono troppe colonne.";
+    Text[ portuguese_brazilian ] = "There are too many columns.";
+    Text[ portuguese ] = "Existem demasiadas colunas.";
+    Text[ danish ] = "Der er for mange kolonner.";
+    Text[ french ] = "Il y a trop de colonnes.";
+    Text[ swedish ] = "Det finns för många kolumner.";
+    Text[ dutch ] = "Er zijn teveel kolommen";
+    Text[ spanish ] = "Existen demasiadas columnas.";
+    Text[ english_us ] = "There are too many columns.";
+    Text[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„åˆ—ã€‚";
+    Text[ russian ] = "Ñëèøêîì ìíîãî êîëîíîê.";
+    Text[ polish ] = "Jest za du¿o kolumn.";
+    Text[ japanese ] = "åˆ—ãŒå¤šã™ãã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "æœ‰å¤ªå¤šçš„æ¬„ã€‚";
+    Text[ dutch ] = "Er zijn teveel kolommen";
+    Text[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„åˆ—ã€‚";
+    Text[ greek ] = "ÕğÜñ÷ïõí Şäç ğïëëİò óôŞëåò.";
+    Text[ korean ] = "ì—´ì´ ë„ˆë¬´ ë§ì´ ìˆìŠµë‹ˆë‹¤.";
+    Text[ arabic ] = "ÊæÌÏ ÃÚãÏÉ ßËíÑÉ ÌÏÇğ.";
+    Text[ turkish ] = "Mevcut sütun sayısı çok fazla.";
+    Text[ language_user1 ] = " ";
+    Text[ finnish ] = "Sarakkeita on liikaa.";
+    Text[ catalan ] = "Hi ha massa columnes.";
 };
 
 ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
@@ -820,149 +820,149 @@ ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
     Message[ finnish ] = "Ehtoa ei voi käyttää kenttään [*]";
     Message[ catalan ] = "No es pot aplicar cap condició al camp [*]";
 };
-ErrorBox ERR_QRY_TOO_LONG_STATEMENT
+String STR_QRY_TOO_LONG_STATEMENT
 {
-    Message = "Der erzeugte SQL Ausdruck ist zu lang." ;
-    Message [ ENGLISH ] = "The created sql expression ist too long." ;
-    Message[ italian ] = "L'espressione SQL creata è troppo lunga.";
-    Message[ portuguese_brazilian ] = "The created sql expression ist too long.";
-    Message[ portuguese ] = "A expressão sql criada é demasiado extensa.";
-    Message[ danish ] = "Det frembragte SQL-udtryk er for langt.";
-    Message[ french ] = "L'expression SQL créée est trop longue.";
-    Message[ swedish ] = "Det skapade SQL-uttrycket är för långt.";
-    Message[ dutch ] = "Deze SQL-uitdrukking is te lang.";
-    Message[ spanish ] = "La expresión creada SQL es demasiado larga.";
-    Message[ english_us ] = "The SQL statement created is too long.";
-    Message[ chinese_simplified ] = "ç”Ÿæˆçš„ SQL è¡¨è¾¾å¼å¤ªé•¿ã€‚";
-    Message[ russian ] = "Ñîçäàííîå âûğàæåíèå SQL ÿâëÿåòñÿ ñëèøêîì äëèííûì.";
-    Message[ polish ] = "Utworzone wyra¿enie SQL jest za d³ugie.";
-    Message[ japanese ] = "ä½œæˆã—ãŸ SQL è¡¨ç¾ãŒé•·ã™ãã¾ã™ã€‚";
-    Message[ chinese_traditional ] = "ç”Ÿæˆçš„ SQL è¡¨é”å¼å¤ªé•·ã€‚";
-    Message[ dutch ] = "Deze SQL-uitdrukking is te lang.";
-    Message[ chinese_simplified ] = "ç”Ÿæˆçš„ SQL è¡¨è¾¾å¼å¤ªé•¿ã€‚";
-    Message[ greek ] = "Ôï ìŞêïò ôçò İêöñáóçò SQL ğïõ äçìéïõñãŞèçêå åßíáé õğåñâïëéêÜ ìåãÜëï.";
-    Message[ korean ] = "ì‘ì„±ëœ SQLë¬¸ì¥ì´ ë„ˆë¬´ ê¹ë‹ˆë‹¤.";
-    Message[ arabic ] = "ÚÈÇÑÉ SQL ÇáÊí Êã ÅäÔÇÁåÇ ØæíáÉ ÌÏÇğ.";
-    Message[ turkish ] = "Yaratılan SQL deyimi çok uzun.";
-    Message[ language_user1 ] = " ";
-    Message[ finnish ] = "Luotu SQL-lauseke on liian pitkä.";
-    Message[ catalan ] = "L'expressió SQL que s'ha creat és massa llarga.";
+    Text = "Der erzeugte SQL Ausdruck ist zu lang." ;
+    Text [ ENGLISH ] = "The created sql expression ist too long." ;
+    Text[ italian ] = "L'espressione SQL creata è troppo lunga.";
+    Text[ portuguese_brazilian ] = "The created sql expression ist too long.";
+    Text[ portuguese ] = "A expressão sql criada é demasiado extensa.";
+    Text[ danish ] = "Det frembragte SQL-udtryk er for langt.";
+    Text[ french ] = "L'expression SQL créée est trop longue.";
+    Text[ swedish ] = "Det skapade SQL-uttrycket är för långt.";
+    Text[ dutch ] = "Deze SQL-uitdrukking is te lang.";
+    Text[ spanish ] = "La expresión creada SQL es demasiado larga.";
+    Text[ english_us ] = "The SQL statement created is too long.";
+    Text[ chinese_simplified ] = "ç”Ÿæˆçš„ SQL è¡¨è¾¾å¼å¤ªé•¿ã€‚";
+    Text[ russian ] = "Ñîçäàííîå âûğàæåíèå SQL ÿâëÿåòñÿ ñëèøêîì äëèííûì.";
+    Text[ polish ] = "Utworzone wyra¿enie SQL jest za d³ugie.";
+    Text[ japanese ] = "ä½œæˆã—ãŸ SQL è¡¨ç¾ãŒé•·ã™ãã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "ç”Ÿæˆçš„ SQL è¡¨é”å¼å¤ªé•·ã€‚";
+    Text[ dutch ] = "Deze SQL-uitdrukking is te lang.";
+    Text[ chinese_simplified ] = "ç”Ÿæˆçš„ SQL è¡¨è¾¾å¼å¤ªé•¿ã€‚";
+    Text[ greek ] = "Ôï ìŞêïò ôçò İêöñáóçò SQL ğïõ äçìéïõñãŞèçêå åßíáé õğåñâïëéêÜ ìåãÜëï.";
+    Text[ korean ] = "ì‘ì„±ëœ SQLë¬¸ì¥ì´ ë„ˆë¬´ ê¹ë‹ˆë‹¤.";
+    Text[ arabic ] = "ÚÈÇÑÉ SQL ÇáÊí Êã ÅäÔÇÁåÇ ØæíáÉ ÌÏÇğ.";
+    Text[ turkish ] = "Yaratılan SQL deyimi çok uzun.";
+    Text[ language_user1 ] = " ";
+    Text[ finnish ] = "Luotu SQL-lauseke on liian pitkä.";
+    Text[ catalan ] = "L'expressió SQL que s'ha creat és massa llarga.";
 };
-ErrorBox ERR_QRY_TOOCOMPLEX
+String STR_QRY_TOOCOMPLEX
 {
-    Message = "Anfrage ist zu komplex" ;
-    Message [ ENGLISH ] = "Query too complex" ;
-    Message [ norwegian ] = "Query too complex" ;
-    Message [ italian ] = "Ricerca troppo complessa" ;
-    Message [ portuguese_brazilian ] = "Consulta muito complexa" ;
-    Message [ portuguese ] = "Consulta demasiado complexa" ;
-    Message [ finnish ] = "Kysely on liian monimutkainen" ;
-    Message [ danish ] = "Forespørgslen er for kompleks" ;
-    Message [ french ] = "Requête est trop complexe" ;
-    Message [ swedish ] = "Förfrågan är alltför komplex" ;
-    Message [ dutch ] = "De query is te complex" ;
-    Message [ spanish ] = "Consulta demasiado compleja" ;
-    Message [ english_us ] = "Query is too complex" ;
-    Message[ chinese_simplified ] = "æŸ¥è¯¢å†…å®¹å¤ªå¤åˆ";
-    Message[ russian ] = "Ñëèøêîì ñëîæíûé çàïğîñ";
-    Message[ polish ] = "Kwerenda jest zbyt z³o¿ona";
-    Message[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼ãŒè¤‡é›‘ã™ãã¾ã™ã€‚";
-    Message[ chinese_traditional ] = "æŸ¥è©¢å…§å®¹å¤ªè¤‡åˆ";
-    Message[ dutch ] = "De query is te complex";
-    Message[ chinese_simplified ] = "æŸ¥è¯¢å†…å®¹å¤ªå¤åˆ";
-    Message[ greek ] = "Ôï åñşôçìá åßíáé ğïëı ğåñßğëïêï";
-    Message[ korean ] = "ì§ˆì˜ê°€ ë„ˆë¬´ ë³µì¡í•©ë‹ˆë‹¤";
-    Message[ arabic ] = "ÇáÇÓÊİÓÇÑ İí ÛÇíÉ ÇáÊÚŞíÏ";
-    Message[ turkish ] = "Sorgu çok karmaşık";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "La consulta és massa complexa";
+    Text = "Anfrage ist zu komplex" ;
+    Text [ ENGLISH ] = "Query too complex" ;
+    Text [ norwegian ] = "Query too complex" ;
+    Text [ italian ] = "Ricerca troppo complessa" ;
+    Text [ portuguese_brazilian ] = "Consulta muito complexa" ;
+    Text [ portuguese ] = "Consulta demasiado complexa" ;
+    Text [ finnish ] = "Kysely on liian monimutkainen" ;
+    Text [ danish ] = "Forespørgslen er for kompleks" ;
+    Text [ french ] = "Requête est trop complexe" ;
+    Text [ swedish ] = "Förfrågan är alltför komplex" ;
+    Text [ dutch ] = "De query is te complex" ;
+    Text [ spanish ] = "Consulta demasiado compleja" ;
+    Text [ english_us ] = "Query is too complex" ;
+    Text[ chinese_simplified ] = "æŸ¥è¯¢å†…å®¹å¤ªå¤åˆ";
+    Text[ russian ] = "Ñëèøêîì ñëîæíûé çàïğîñ";
+    Text[ polish ] = "Kwerenda jest zbyt z³o¿ona";
+    Text[ japanese ] = "ã‚¯ã‚¨ãƒªãƒ¼ãŒè¤‡é›‘ã™ãã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "æŸ¥è©¢å…§å®¹å¤ªè¤‡åˆ";
+    Text[ dutch ] = "De query is te complex";
+    Text[ chinese_simplified ] = "æŸ¥è¯¢å†…å®¹å¤ªå¤åˆ";
+    Text[ greek ] = "Ôï åñşôçìá åßíáé ğïëı ğåñßğëïêï";
+    Text[ korean ] = "ì§ˆì˜ê°€ ë„ˆë¬´ ë³µì¡í•©ë‹ˆë‹¤";
+    Text[ arabic ] = "ÇáÇÓÊİÓÇÑ İí ÛÇíÉ ÇáÊÚŞíÏ";
+    Text[ turkish ] = "Sorgu çok karmaşık";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La consulta és massa complexa";
 };
-ErrorBox ERR_QRY_NOSELECT
+String STR_QRY_NOSELECT
 {
-    Message = "Es fehlt eine Selektion!" ;
-    Message [ ENGLISH ] = "Missing selection!" ;
-    Message [ norwegian ] = "Missing selection!" ;
-    Message [ italian ] = "Selezione mancante" ;
-    Message [ portuguese_brazilian ] = "Falta sele??o" ;
-    Message [ portuguese ] = "Falta selecção" ;
-    Message [ finnish ] = "Mitään ei ole valittu." ;
-    Message [ danish ] = "Manglende markering" ;
-    Message [ french ] = "Sélection manquante !" ;
-    Message [ swedish ] = "Det saknas en markering!" ;
-    Message [ dutch ] = "De selectie ontbreekt!" ;
-    Message [ spanish ] = "Falta una selección" ;
-    Message [ english_us ] = "Nothing has been selected!" ;
-    Message[ chinese_simplified ] = "æ²¡æœ‰ä»»ä½•é€‰ä¸­ï¼";
-    Message[ russian ] = "Íåîáõîäèìî âûäåëåíèå!";
-    Message[ polish ] = "Nale¿y coœ wybraæ!";
-    Message[ japanese ] = "é¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-    Message[ chinese_traditional ] = "ç¼ºå°‘ä¸€å€‹é¸æ“‡ï¼";
-    Message[ dutch ] = "De selectie ontbreekt!";
-    Message[ chinese_simplified ] = "æ²¡æœ‰ä»»ä½•é€‰ä¸­ï¼";
-    Message[ greek ] = "Äåí İãéíå åğéëïãŞ!";
-    Message[ korean ] = "ì„ íƒ ë¶€ì¡±";
-    Message[ arabic ] = "áã íÊã Úãá ÊÍÏíÏ";
-    Message[ turkish ] = "Seçim yapılmadı";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No s'ha seleccionat res";
+    Text = "Es fehlt eine Selektion!" ;
+    Text [ ENGLISH ] = "Missing selection!" ;
+    Text [ norwegian ] = "Missing selection!" ;
+    Text [ italian ] = "Selezione mancante" ;
+    Text [ portuguese_brazilian ] = "Falta sele??o" ;
+    Text [ portuguese ] = "Falta selecção" ;
+    Text [ finnish ] = "Mitään ei ole valittu." ;
+    Text [ danish ] = "Manglende markering" ;
+    Text [ french ] = "Sélection manquante !" ;
+    Text [ swedish ] = "Det saknas en markering!" ;
+    Text [ dutch ] = "De selectie ontbreekt!" ;
+    Text [ spanish ] = "Falta una selección" ;
+    Text [ english_us ] = "Nothing has been selected!" ;
+    Text[ chinese_simplified ] = "æ²¡æœ‰ä»»ä½•é€‰ä¸­ï¼";
+    Text[ russian ] = "Íåîáõîäèìî âûäåëåíèå!";
+    Text[ polish ] = "Nale¿y coœ wybraæ!";
+    Text[ japanese ] = "é¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ç¼ºå°‘ä¸€å€‹é¸æ“‡ï¼";
+    Text[ dutch ] = "De selectie ontbreekt!";
+    Text[ chinese_simplified ] = "æ²¡æœ‰ä»»ä½•é€‰ä¸­ï¼";
+    Text[ greek ] = "Äåí İãéíå åğéëïãŞ!";
+    Text[ korean ] = "ì„ íƒ ë¶€ì¡±";
+    Text[ arabic ] = "áã íÊã Úãá ÊÍÏíÏ";
+    Text[ turkish ] = "Seçim yapılmadı";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No s'ha seleccionat res";
 };
-ErrorBox ERR_QRY_TOOMANYCOND
+String STR_QRY_TOOMANYCOND
 {
-    Message = "Zu viele Suchkriterien" ;
-    Message [ ENGLISH ] = "Too many search criteria" ;
-    Message [ norwegian ] = "Too many search criteria" ;
-    Message [ italian ] = "Troppi criteri di ricerca" ;
-    Message [ portuguese_brazilian ] = "Excesso de crit?rios de  procura" ;
-    Message [ portuguese ] = "Excesso de critérios de procura" ;
-    Message [ finnish ] = "Liian monta hakuehtoa" ;
-    Message [ danish ] = "For mange søgekriterier" ;
-    Message [ french ] = "Trop de critères de recherche" ;
-    Message [ swedish ] = "För många sökkriterier" ;
-    Message [ dutch ] = "Teveel zoekcriteria" ;
-    Message [ spanish ] = "Demasiados criterios de búsqueda" ;
-    Message [ english_us ] = "Too many search criteria" ;
-    Message[ chinese_simplified ] = "æœå¯»è§„åˆ™å¤ªå¤š";
-    Message[ russian ] = "Ñëèøêîì ìíîãî êğèòåğèåâ ïîèñêà";
-    Message[ polish ] = "Za du¿o kryteriów wyszukiwania";
-    Message[ japanese ] = "æ¤œç´¢æ¡ä»¶ãŒå¤šã™ãã¾ã™ã€‚";
-    Message[ chinese_traditional ] = "æœå°‹è¦å‰‡å¤ªå¤š";
-    Message[ dutch ] = "Teveel zoekcriteria";
-    Message[ chinese_simplified ] = "æœå¯»è§„åˆ™å¤ªå¤š";
-    Message[ greek ] = "Ï áñéèìüò ôùí êñéôçñßùí áíáæŞôçóçò åßíáé õğåñâïëéêÜ ìåãÜëïò";
-    Message[ korean ] = "ê²€ìƒ‰ê¸°ì¤€ì´ ë„ˆë¬´ ë§ìŒ";
-    Message[ arabic ] = "ãÚÇííÑ ÇáÈÍË ßËíÑÉ ááÛÇíÉ";
-    Message[ turkish ] = "Arama ölçütü sayısı çok fazla";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Massa criteris de cerca";
+    Text = "Zu viele Suchkriterien" ;
+    Text [ ENGLISH ] = "Too many search criteria" ;
+    Text [ norwegian ] = "Too many search criteria" ;
+    Text [ italian ] = "Troppi criteri di ricerca" ;
+    Text [ portuguese_brazilian ] = "Excesso de crit?rios de  procura" ;
+    Text [ portuguese ] = "Excesso de critérios de procura" ;
+    Text [ finnish ] = "Liian monta hakuehtoa" ;
+    Text [ danish ] = "For mange søgekriterier" ;
+    Text [ french ] = "Trop de critères de recherche" ;
+    Text [ swedish ] = "För många sökkriterier" ;
+    Text [ dutch ] = "Teveel zoekcriteria" ;
+    Text [ spanish ] = "Demasiados criterios de búsqueda" ;
+    Text [ english_us ] = "Too many search criteria" ;
+    Text[ chinese_simplified ] = "æœå¯»è§„åˆ™å¤ªå¤š";
+    Text[ russian ] = "Ñëèøêîì ìíîãî êğèòåğèåâ ïîèñêà";
+    Text[ polish ] = "Za du¿o kryteriów wyszukiwania";
+    Text[ japanese ] = "æ¤œç´¢æ¡ä»¶ãŒå¤šã™ãã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "æœå°‹è¦å‰‡å¤ªå¤š";
+    Text[ dutch ] = "Teveel zoekcriteria";
+    Text[ chinese_simplified ] = "æœå¯»è§„åˆ™å¤ªå¤š";
+    Text[ greek ] = "Ï áñéèìüò ôùí êñéôçñßùí áíáæŞôçóçò åßíáé õğåñâïëéêÜ ìåãÜëïò";
+    Text[ korean ] = "ê²€ìƒ‰ê¸°ì¤€ì´ ë„ˆë¬´ ë§ìŒ";
+    Text[ arabic ] = "ãÚÇííÑ ÇáÈÍË ßËíÑÉ ááÛÇíÉ";
+    Text[ turkish ] = "Arama ölçütü sayısı çok fazla";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Massa criteris de cerca";
 };
-ErrorBox ERR_QRY_SYNTAX
+String STR_QRY_SYNTAX
 {
-    Message = "Fehler in der SQL Syntax" ;
-    Message [ ENGLISH ] = "SQL syntax error" ;
-    Message [ norwegian ] = "SQL syntax error" ;
-    Message [ italian ] = "Errore di sintassi SQL" ;
-    Message [ portuguese_brazilian ] = "Erro de sintaxe SQL" ;
-    Message [ portuguese ] = "Erro de sintaxe SQL" ;
-    Message [ finnish ] = "SQL-syntaksivirhe" ;
-    Message [ danish ] = "SQL syntaksfejl" ;
-    Message [ french ] = "Erreur de syntaxe SQL" ;
-    Message [ swedish ] = "Fel i SQL-syntax" ;
-    Message [ dutch ] = "SQL-syntaxisfout" ;
-    Message [ spanish ] = "Error en la sintaxis SQL" ;
-    Message [ english_us ] = "SQL syntax error" ;
-    Message[ chinese_simplified ] = "SQL è¯­æ³•é”™è¯¯";
-    Message[ russian ] = "Îøèáêà â ñèíòàêñèñå SQL";
-    Message[ polish ] = "B³¹d sk³adni SQL";
-    Message[ japanese ] = "SQL ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ã‚¨ãƒ©ãƒ¼";
-    Message[ chinese_traditional ] = "SQL èªæ³•éŒ¯èª¤";
-    Message[ dutch ] = "SQL-syntaxisfout";
-    Message[ chinese_simplified ] = "SQL è¯­æ³•é”™è¯¯";
-    Message[ greek ] = "Óõíôáêôéêü óöÜëìá SQL";
-    Message[ korean ] = "SQL êµ¬ë¬¸ ì˜¤ë¥˜";
-    Message[ arabic ] = "SQL ÎØÃ İí ÈäÇÁ ÌãáÉ";
-    Message[ turkish ] = "SQL sözdizimi hatası";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "S'ha produït un error de sintaxi de l'SQL";
+    Text = "Fehler in der SQL Syntax" ;
+    Text [ ENGLISH ] = "SQL syntax error" ;
+    Text [ norwegian ] = "SQL syntax error" ;
+    Text [ italian ] = "Errore di sintassi SQL" ;
+    Text [ portuguese_brazilian ] = "Erro de sintaxe SQL" ;
+    Text [ portuguese ] = "Erro de sintaxe SQL" ;
+    Text [ finnish ] = "SQL-syntaksivirhe" ;
+    Text [ danish ] = "SQL syntaksfejl" ;
+    Text [ french ] = "Erreur de syntaxe SQL" ;
+    Text [ swedish ] = "Fel i SQL-syntax" ;
+    Text [ dutch ] = "SQL-syntaxisfout" ;
+    Text [ spanish ] = "Error en la sintaxis SQL" ;
+    Text [ english_us ] = "SQL syntax error" ;
+    Text[ chinese_simplified ] = "SQL è¯­æ³•é”™è¯¯";
+    Text[ russian ] = "Îøèáêà â ñèíòàêñèñå SQL";
+    Text[ polish ] = "B³¹d sk³adni SQL";
+    Text[ japanese ] = "SQL ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ã‚¨ãƒ©ãƒ¼";
+    Text[ chinese_traditional ] = "SQL èªæ³•éŒ¯èª¤";
+    Text[ dutch ] = "SQL-syntaxisfout";
+    Text[ chinese_simplified ] = "SQL è¯­æ³•é”™è¯¯";
+    Text[ greek ] = "Óõíôáêôéêü óöÜëìá SQL";
+    Text[ korean ] = "SQL êµ¬ë¬¸ ì˜¤ë¥˜";
+    Text[ arabic ] = "SQL ÎØÃ İí ÈäÇÁ ÌãáÉ";
+    Text[ turkish ] = "SQL sözdizimi hatası";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "S'ha produït un error de sintaxi de l'SQL";
 };
 ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
 {
@@ -1044,65 +1044,64 @@ String STR_QUERY_FALSE
     Text[ finnish ] = "FALSE";
     Text[ catalan ] = "FALSE";
 };
-ErrorBox ERR_QRY_TOO_MANY_TABLES
+String STR_QRY_TOO_MANY_TABLES
 {
-    Message = "Es sind zu viele Tabellen vorhanden." ;
-    Message [ ENGLISH ] = "There are too many tables." ;
-    Message[ italian ] = "Esistono troppe tabelle.";
-    Message[ portuguese_brazilian ] = "There are too many tables.";
-    Message[ portuguese ] = "Existem demasiadas tabelas.";
-    Message[ danish ] = "Der er for mange tabeller.";
-    Message[ french ] = "Il y a trop de tables.";
-    Message[ swedish ] = "Det finns för många tabeller.";
-    Message[ dutch ] = "Er zijn teveel tabellen";
-    Message[ spanish ] = "Existen demasiadas tablas.";
-    Message[ english_us ] = "There are too many tables.";
-    Message[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„è¡¨æ ¼ã€‚";
-    Message[ russian ] = "Ñëèøêîì ìíîãî òàáëèö.";
-    Message[ polish ] = "Jest za du¿o tabel.";
-    Message[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ•°ãŒå¤šã™ãã¾ã™ã€‚";
-    Message[ chinese_traditional ] = "è¡¨æ ¼æ•¸ç›®å¤ªå¤šã€‚";
-    Message[ dutch ] = "Er zijn teveel tabellen";
-    Message[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„è¡¨æ ¼ã€‚";
-    Message[ greek ] = "ÕğÜñ÷ïõí õğåñâïëéêÜ ğïëëïß ğßíáêåò.";
-    Message[ korean ] = "ì‹œíŠ¸ê°€ ë„ˆë¬´ ë§ìŠµë‹ˆë‹¤.";
-    Message[ arabic ] = "ÊæÌÏ ÌÏÇæá ßËíÑÉ ÌÏÇğ.";
-    Message[ turkish ] = "Mevcut tablo sayısı çok fazla.";
-    Message[ language_user1 ] = " ";
-    Message[ finnish ] = "Taulukoita on liikaa.";
-    Message[ catalan ] = "Hi ha massa taules.";
+    Text = "Es sind zu viele Tabellen vorhanden." ;
+    Text [ ENGLISH ] = "There are too many tables." ;
+    Text[ italian ] = "Esistono troppe tabelle.";
+    Text[ portuguese_brazilian ] = "There are too many tables.";
+    Text[ portuguese ] = "Existem demasiadas tabelas.";
+    Text[ danish ] = "Der er for mange tabeller.";
+    Text[ french ] = "Il y a trop de tables.";
+    Text[ swedish ] = "Det finns för många tabeller.";
+    Text[ dutch ] = "Er zijn teveel tabellen";
+    Text[ spanish ] = "Existen demasiadas tablas.";
+    Text[ english_us ] = "There are too many tables.";
+    Text[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„è¡¨æ ¼ã€‚";
+    Text[ russian ] = "Ñëèøêîì ìíîãî òàáëèö.";
+    Text[ polish ] = "Jest za du¿o tabel.";
+    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ•°ãŒå¤šã™ãã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "è¡¨æ ¼æ•¸ç›®å¤ªå¤šã€‚";
+    Text[ dutch ] = "Er zijn teveel tabellen";
+    Text[ chinese_simplified ] = "æœ‰å¤ªå¤šçš„è¡¨æ ¼ã€‚";
+    Text[ greek ] = "ÕğÜñ÷ïõí õğåñâïëéêÜ ğïëëïß ğßíáêåò.";
+    Text[ korean ] = "ì‹œíŠ¸ê°€ ë„ˆë¬´ ë§ìŠµë‹ˆë‹¤.";
+    Text[ arabic ] = "ÊæÌÏ ÌÏÇæá ßËíÑÉ ÌÏÇğ.";
+    Text[ turkish ] = "Mevcut tablo sayısı çok fazla.";
+    Text[ language_user1 ] = " ";
+    Text[ finnish ] = "Taulukoita on liikaa.";
+    Text[ catalan ] = "Hi ha massa taules.";
 };
 
-WarningBox WARN_QRY_NATIVE
+String STR_QRY_NATIVE
 {
-    Buttons = WB_OK_CANCEL ;
     /* ### ACHTUNG: Neuer Text in Resource? Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen : Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen */
-    Message = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
-    Message [ ENGLISH ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
-    Message [ norwegian ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
-    Message [ italian ] = "Con una ricerca nel dialetto SQL del database lo statement non viene accettato" ;
-    Message [ portuguese_brazilian ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht ?ernommen" ;
-    Message [ portuguese ] = "A instrução não será executada se efectuar a consulta no dialecto SQL da base de dados." ;
-    Message [ french ] = "En cas de requête dans le langage SQL de la base de données, l'instruction ne sera pas appliquée." ;
-    Message [ dutch ] = "Bij een query in SQL-dialect van database wordt statement niet overgenomen." ;
-    Message [ spanish ] = "Al consultar en el dialecto SQL de la base de datos no se acepta la instrucción." ;
-    Message [ danish ] = "Ved forespørgsel i databasens SQL-dialekt bliver sætningen ikke overtaget" ;
-    Message [ swedish ] = "Vid förfrågan i databasens SQL-dialekt kommer inte satsen att övertas" ;
-    Message [ finnish ] = "Kun kysely lähetetään tietokannan SQL-kielellä, lauseketta ei käytetä." ;
-    Message [ english_us ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
-    Message[ chinese_simplified ] = "ä¸æ¥å—æ•°æ®åº“çš„ SQL æ–¹è¨€æŸ¥è¯¢æŒ‡ä»¤ã€‚";
-    Message[ russian ] = "Ïğè çàïğîñå â äèàëåêòå SQL áàçû äàííûõ èíñòğóêöèÿ ïğèìåíåíà íå áóäåò.";
-    Message[ polish ] = "W przypadku kwerend w dialekcie bazy danych SQL wykonanie instrukcji nie bêdzie mo¿liwe.";
-    Message[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ SQL ãƒ€ã‚¤ã‚¢ãƒ¬ã‚¯ãƒˆã®ã‚¯ã‚¨ãƒªãƒ¼ã§ã¯ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆã¯é©ç”¨ã•ã‚Œã¾ã›ã‚“ã€‚";
-    Message[ chinese_traditional ] = "ä¸æ¥å—è³‡æ–™åº«çš„ SQL æ–¹è¨€æŸ¥è©¢æŒ‡ä»¤ã€‚";
-    Message[ dutch ] = "Bij een query in SQL-dialect van database wordt statement niet overgenomen.";
-    Message[ chinese_simplified ] = "ä¸æ¥å—æ•°æ®åº“çš„ SQL æ–¹è¨€æŸ¥è¯¢æŒ‡ä»¤ã€‚";
-    Message[ greek ] = "ÊáôÜ ôçí åêôİëåóç ôïõ åñùôŞìáôïò óôç äéÜëåêôï SQL ôçò âÜóçò äåäïìİíùí ç åíôïëŞ äåí èá åöáñìïóôåß";
-    Message[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ì˜ SQL ë°©ì–¸ìœ¼ë¡œ ëœ ì§ˆì˜ì˜ ê²½ìš° ë¬¸ì¥ì´ ì ìš©ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤";
-    Message[ arabic ] = "áä íÊã ÊØÈíŞ ÇáÚÈÇÑÉ¡ ÅĞÇ ßÇä ÇáÇÓÊİÓÇÑ ÈáåÌÉ SQL ÇáÎÇÕÉ ÈŞÇÚÏÉ ÇáÈíÇäÇÊ ";
-    Message[ turkish ] = "Deyim, sorgunun bu veritabanının SQL dilinde yapılması halinde kullanılmayacaktır";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "L'expressió no s'aplicarà en consultar en el dialecte SQL de la base de dades.";
+    Text = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Text [ ENGLISH ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Text [ norwegian ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Text [ italian ] = "Con una ricerca nel dialetto SQL del database lo statement non viene accettato" ;
+    Text [ portuguese_brazilian ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht ?ernommen" ;
+    Text [ portuguese ] = "A instrução não será executada se efectuar a consulta no dialecto SQL da base de dados." ;
+    Text [ french ] = "En cas de requête dans le langage SQL de la base de données, l'instruction ne sera pas appliquée." ;
+    Text [ dutch ] = "Bij een query in SQL-dialect van database wordt statement niet overgenomen." ;
+    Text [ spanish ] = "Al consultar en el dialecto SQL de la base de datos no se acepta la instrucción." ;
+    Text [ danish ] = "Ved forespørgsel i databasens SQL-dialekt bliver sætningen ikke overtaget" ;
+    Text [ swedish ] = "Vid förfrågan i databasens SQL-dialekt kommer inte satsen att övertas" ;
+    Text [ finnish ] = "Kun kysely lähetetään tietokannan SQL-kielellä, lauseketta ei käytetä." ;
+    Text [ english_us ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
+    Text[ chinese_simplified ] = "ä¸æ¥å—æ•°æ®åº“çš„ SQL æ–¹è¨€æŸ¥è¯¢æŒ‡ä»¤ã€‚";
+    Text[ russian ] = "Ïğè çàïğîñå â äèàëåêòå SQL áàçû äàííûõ èíñòğóêöèÿ ïğèìåíåíà íå áóäåò.";
+    Text[ polish ] = "W przypadku kwerend w dialekcie bazy danych SQL wykonanie instrukcji nie bêdzie mo¿liwe.";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ SQL ãƒ€ã‚¤ã‚¢ãƒ¬ã‚¯ãƒˆã®ã‚¯ã‚¨ãƒªãƒ¼ã§ã¯ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆã¯é©ç”¨ã•ã‚Œã¾ã›ã‚“ã€‚";
+    Text[ chinese_traditional ] = "ä¸æ¥å—è³‡æ–™åº«çš„ SQL æ–¹è¨€æŸ¥è©¢æŒ‡ä»¤ã€‚";
+    Text[ dutch ] = "Bij een query in SQL-dialect van database wordt statement niet overgenomen.";
+    Text[ chinese_simplified ] = "ä¸æ¥å—æ•°æ®åº“çš„ SQL æ–¹è¨€æŸ¥è¯¢æŒ‡ä»¤ã€‚";
+    Text[ greek ] = "ÊáôÜ ôçí åêôİëåóç ôïõ åñùôŞìáôïò óôç äéÜëåêôï SQL ôçò âÜóçò äåäïìİíùí ç åíôïëŞ äåí èá åöáñìïóôåß";
+    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ì˜ SQL ë°©ì–¸ìœ¼ë¡œ ëœ ì§ˆì˜ì˜ ê²½ìš° ë¬¸ì¥ì´ ì ìš©ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤";
+    Text[ arabic ] = "áä íÊã ÊØÈíŞ ÇáÚÈÇÑÉ¡ ÅĞÇ ßÇä ÇáÇÓÊİÓÇÑ ÈáåÌÉ SQL ÇáÎÇÕÉ ÈŞÇÚÏÉ ÇáÈíÇäÇÊ ";
+    Text[ turkish ] = "Deyim, sorgunun bu veritabanının SQL dilinde yapılması halinde kullanılmayacaktır";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "L'expressió no s'aplicarà en consultar en el dialecte SQL de la base de dades.";
 };
 ErrorBox ERR_QRY_AMB_FIELD
 {
@@ -1133,35 +1132,35 @@ ErrorBox ERR_QRY_AMB_FIELD
     Message[ turkish ] = "Alan adı bulunamadı ya da benzersiz değil";
     Message[ catalan ] = "No s'ha trobat el nom del camp o no és únic";
 };
-ErrorBox ERR_QRY_ILLEGAL_JOIN
+String STR_QRY_ILLEGAL_JOIN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung konnte nicht ausgeführt werden : Verknüpfung konnte nicht ausgeführt werden */
-    Message = "Verknüpfung konnte nicht ausgeführt werden" ;
-    Message [ ENGLISH ] = "Could not create link" ;
-    Message [ norwegian ] = "Could not create link" ;
-    Message [ italian ] = "Impossibile creare il collegamento" ;
-    Message [ portuguese_brazilian ] = "N?o pude criar liga??o" ;
-    Message [ portuguese ] = "Impossível criar ligação" ;
-    Message [ finnish ] = "Yhdistämistä ei voitu käsitellä" ;
-    Message [ danish ] = "Det var ikke muligt at oprette en kæde" ;
-    Message [ french ] = "Jointure impossible" ;
-    Message [ swedish ] = "Länk kunde inte utföras" ;
-    Message [ dutch ] = "Koppeling kon niet tot stand worden gebracht" ;
-    Message [ spanish ] = "No se pudo ejecutar el vínculo." ;
-    Message [ english_us ] = "Join could not be processed" ;
-    Message[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œè¿ç»“åŠŸèƒ½";
-    Message[ russian ] = "Îñóùåñòâèòü ñâÿçü íå óäàåòñÿ";
-    Message[ polish ] = "Z³¹czenie nie by³o mo¿liwe";
-    Message[ japanese ] = "ãƒªãƒ³ã‚¯ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Message[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œé€£çµåŠŸèƒ½";
-    Message[ dutch ] = "Koppeling kon niet tot stand worden gebracht";
-    Message[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œè¿ç»“åŠŸèƒ½";
-    Message[ greek ] = "Ï óıíäåóìïò äåí Şôáí äõíáôüí íá ïëïêëçñùèåß";
-    Message[ korean ] = "ê²°í•©ì´ ì‹¤í–‰ë˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Message[ arabic ] = "áã íãßä ÊäİíĞ ÇÑÊÈÇØ";
-    Message[ turkish ] = "Bağlantı oluşturulamadı";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No s'ha pogut processar la unió";
+    Text = "Verknüpfung konnte nicht ausgeführt werden" ;
+    Text [ ENGLISH ] = "Could not create link" ;
+    Text [ norwegian ] = "Could not create link" ;
+    Text [ italian ] = "Impossibile creare il collegamento" ;
+    Text [ portuguese_brazilian ] = "N?o pude criar liga??o" ;
+    Text [ portuguese ] = "Impossível criar ligação" ;
+    Text [ finnish ] = "Yhdistämistä ei voitu käsitellä" ;
+    Text [ danish ] = "Det var ikke muligt at oprette en kæde" ;
+    Text [ french ] = "Jointure impossible" ;
+    Text [ swedish ] = "Länk kunde inte utföras" ;
+    Text [ dutch ] = "Koppeling kon niet tot stand worden gebracht" ;
+    Text [ spanish ] = "No se pudo ejecutar el vínculo." ;
+    Text [ english_us ] = "Join could not be processed" ;
+    Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œè¿ç»“åŠŸèƒ½";
+    Text[ russian ] = "Îñóùåñòâèòü ñâÿçü íå óäàåòñÿ";
+    Text[ polish ] = "Z³¹czenie nie by³o mo¿liwe";
+    Text[ japanese ] = "ãƒªãƒ³ã‚¯ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
+    Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œé€£çµåŠŸèƒ½";
+    Text[ dutch ] = "Koppeling kon niet tot stand worden gebracht";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œè¿ç»“åŠŸèƒ½";
+    Text[ greek ] = "Ï óıíäåóìïò äåí Şôáí äõíáôüí íá ïëïêëçñùèåß";
+    Text[ korean ] = "ê²°í•©ì´ ì‹¤í–‰ë˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ arabic ] = "áã íãßä ÊäİíĞ ÇÑÊÈÇØ";
+    Text[ turkish ] = "Bağlantı oluşturulamadı";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No s'ha pogut processar la unió";
 };
 ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
 {
@@ -2294,10 +2293,10 @@ String STR_DATASOURCE_DELETED
     Text[ catalan ] = "La font de les dades s'ha borrat. No és possible desar dades rellevants sobre ella.";
 };
 
-String STR_COLUMN_UNKNOWN
+String STR_QRY_COLUMN_NOT_FOUND
 {
-    Text = "Die Splate \"$column$\" konnte nicht gefunden werden. Überprüfen Sie bitte die Gross-, und Kleinschreibung.";
-    Text [ ENGLISH ] = "The column \"$column$\" could not be found. Please check if the case is correct.";
+    Text = "Die Spalte '$name$' ist unbekannt!";
+    Text [ ENGLISH ] = "The column '$name$' is unknown!";
 };
 
 String STR_ERR_LIKE_COLUMN
@@ -2305,5 +2304,24 @@ String STR_ERR_LIKE_COLUMN
     Text = "Der WIE Konstrukt ist falsch. Auf der linken Seite muß ein Spaltenname stehen.";
     Text [ ENGLISH ] = "The LIKE construct is wrong. On the left side must be a column name.";
 };
+
+String STR_QRY_JOIN_COLUMN_COMPARE
+{
+    Text = "Spalten dürfen nur mit '=' verglichen werden!";
+    Text [ ENGLISH ] = "Columns can only be compared with the equal sign '=' .";
+};
+
+String STR_QRY_LIKE_LEFT_NO_COLUMN
+{
+    Text = "Links eines 'WIE' Ausdrucks darf nur ein Spaltename stehen.";
+    Text [ ENGLISH ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
+};
+
+String STR_QRY_CHECK_CASESENSITIVE
+{
+    Text = "Bitte überprüfen Sie die Gross- und Kleinschreibung.";
+    Text [ ENGLISH ] = "Please check if you are using the correct case.";
+};
+
 
 
