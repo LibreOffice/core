@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:43:57 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 
 #include <list>
 #include <map>
+
 
 namespace sd {
 
@@ -433,7 +434,6 @@ public:
     ~MainSequence();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode();
-
     void reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode );
 
     /** this method rebuilds the animation nodes */
