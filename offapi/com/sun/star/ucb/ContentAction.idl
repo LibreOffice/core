@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentAction.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ module com { module sun { module star { module ucb {
     <tr><td>R3</td><td>E3(F, A) results in F sending an INSERTED event.</td></tr>
     </table>
 */
-constants ContentAction
+published constants ContentAction
 {
     //-------------------------------------------------------------------------
     /** A content was inserted into a folder content (i.e., while updating the

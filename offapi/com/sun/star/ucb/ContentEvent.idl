@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 09:48:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,13 @@
 
 module com { module sun { module star { module ucb {
 
-interface XContent;
-interface XContentIdentifier;
+ published interface XContent;
+ published interface XContentIdentifier;
 
 //=============================================================================
 /** A structure for content events.
 */
-struct ContentEvent: com::sun::star::lang::EventObject
+published struct ContentEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /** The action.
