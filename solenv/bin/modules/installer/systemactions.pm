@@ -947,6 +947,12 @@ sub create_directory_structure
     {
         my $parentdir = $directory;
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$parentdir);
+
+        my $infoline = "INFO: Did not create directory $directory\n";
+        push(@installer::globals::logfileinfo, $infoline);
+        $infoline = "Now trying to create parent directory $parentdir\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
         create_directory_structure($parentdir);                                 # recursive
     }
 
