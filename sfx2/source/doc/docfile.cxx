@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:59:40 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,7 +907,7 @@ void SfxMedium::StorageBackup_Impl()
     ::ucb::Content aOriginalContent;
     Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     if ( !pImp->pTempFile && !pImp->m_aBackupURL.getLength()
-      && GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).Len()
+      && GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).getLength()
       && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
       && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) )
       && ::ucb::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, aOriginalContent ) )
