@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+ *  last change: $Author: af $ $Date: 2002-02-07 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,10 @@
  ************************************************************************/
 
 #ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_HXX
-#include <svx/ChildrenManager.hxx>
+#include "ChildrenManager.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
-#include <svx/ShapeTypeHandler.hxx>
+#include "ShapeTypeHandler.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XIndexAccess_HPP_

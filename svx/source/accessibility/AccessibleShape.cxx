@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+ *  last change: $Author: af $ $Date: 2002-02-07 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #endif
 
-#include <svx/svdobj.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/unoapi.hxx>
+#include "svdobj.hxx"
+#include "svdmodel.hxx"
+#include "unoapi.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 
 #include "ShapeTypeHandler.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-02-05 10:35:08 $
+ *  last change: $Author: af $ $Date: 2002-02-07 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,13 @@
 #include "SvxShapeTypes.hxx"
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
-#include <svx/AccessibleShape.hxx>
+#include "AccessibleShape.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_GRAPHIC_SHAPE_HXX
-#include <svx/AccessibleGraphicShape.hxx>
+#include "AccessibleGraphicShape.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_OLE_SHAPE_HXX
-#include <svx/AccessibleOLEShape.hxx>
+#include "AccessibleOLEShape.hxx"
 #endif
 
 namespace accessibility {
