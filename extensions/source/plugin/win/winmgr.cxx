@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-30 11:15:34 $
+ *  last change: $Author: pl $ $Date: 2001-06-07 09:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,9 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
 
         // no netscape default plugin anymore...
         // and no double plugin dlls
-        if (!aName.equals( "npnul32.dll" ) && rPlugins.find( aName ) == rPlugins.end())
+        if ( !aName.equals( "npnul32.dll" ) &&
+             ! aName.equals( "npnrvp.dll" ) &&
+             rPlugins.find( aName ) == rPlugins.end())
         {
             TCHAR arComplete[MAX_PATH];
             ::lstrcpy( arComplete, arPluginsPath );
