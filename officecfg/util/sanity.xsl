@@ -18,16 +18,15 @@
     <!-- match all elements that could possibly contain info/desc elements -->
     <xsl:template match="group|set|node-ref|prop|enumeration|length|minLength|maxLength|minInclusive|maxInclusive|minExclusive|maxExclusive|whiteSpace">
 
-        <xsl:if test="not(info/desc)">
+        <xsl:if test="1>string-length(info/desc)">
             <!-- print TPF's path to current node -->
             <xsl:message terminate="yes">
 
                 <!-- print linefeed -->
                 <xsl:text>&#10;</xsl:text>
-
-                <xsl:text>ERROR: No info/desc element specified</xsl:text>
-    
-                <!-- print linefeed -->
+                <xsl:text>ERROR: No info/desc element specified or string length of info/desc element is 0.</xsl:text>
+                <xsl:text>&#10;</xsl:text>
+                <xsl:text>       There has to be a reasonable description to be specified for any item.</xsl:text>
                 <xsl:text>&#10;</xsl:text>
 
                 <xsl:text>       - path: </xsl:text>
@@ -39,10 +38,9 @@
                     </xsl:choose>
                 </xsl:for-each>
 
-                <!-- print linefeed -->
                 <xsl:text>&#10;</xsl:text>
-
                 <xsl:text>       - author: </xsl:text>
+
                 <xsl:for-each select="ancestor-or-self::*">
                     <!-- print element name -->
                     <xsl:if test="info/author">

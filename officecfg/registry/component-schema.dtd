@@ -76,7 +76,6 @@
 
 <!ELEMENT value (#PCDATA)>
 <!ATTLIST value
-    xsi:nil (true | false) #IMPLIED
     oor:separator CDATA #IMPLIED
 >
 

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@
 			</group>
 			<group oor:name="Window">
 				<info>
-					<desc xml:lang="en-US">Contains vaious settings for the window, such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="en-US">Contains various settings for the window, such as scrollbars, rules, etc.</desc>
 				</info>
 				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
@@ -298,7 +298,7 @@
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Specifies, if rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+						<desc xml:lang="en-US">Specifies whether rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
 						<label xml:lang="en-US">Show rulers</label>
 					</info>
 					<value>true</value>
@@ -509,7 +509,6 @@
 							</info>
 						</enumeration>
 					</constraints>
-					<value>2</value>
 				</prop>
 			</group>
 			<group oor:name="Zoom">
@@ -797,7 +796,8 @@
 						<desc xml:lang="en-US">Specifies which fax machine is used when faxing directly from the document</desc>
 						<label xml:lang="en-US">Fax</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Papertray">
@@ -913,7 +913,7 @@
 			</group>
 			<group oor:name="Input">
 				<info>
-					<desc xml:lang="en-US">Contains settings used when inputing text or data in tables.</desc>
+					<desc xml:lang="en-US">Contains settings used when inputting text or data in tables.</desc>
 				</info>
 				<prop oor:name="NumberRecognition" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Insert/IntoTables -->
@@ -952,11 +952,11 @@
 		</group>
 		<group oor:name="Insert">
 			<info>
-				<desc xml:lang="en-US">Settings for inserting various object types.</desc>
+				<desc xml:lang="en-US">Specifies the settings for inserting various object types.</desc>
 			</info>
 			<group oor:name="Table">
 				<info>
-					<desc xml:lang="en-US">Default settings for inserting tables.</desc>
+					<desc xml:lang="en-US">Specifies the default settings for inserting tables.</desc>
 				</info>
 				<prop oor:name="Header" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Insert/Tables -->
@@ -1025,7 +1025,7 @@
 				</prop>
 				<prop oor:name="NumberedList_InTable" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Specifies wehther the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
+						<desc xml:lang="en-US">Specifies whether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
 					</info>
 					<value>-1</value>
 				</prop>

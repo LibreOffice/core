@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-12-06 14:06:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 		<group oor:name="Product">
 			<info>
 				<author>MBA</author>
-				<desc xml:lang="en-US">Common product and version information</desc>
+				<desc xml:lang="en-US">Contains common product and version information</desc>
 			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooName" oor:type="xs:string">
@@ -204,7 +204,7 @@
 				<info>
 					<deprecated>This feature is controlled by an entry in the soffice.ini or the -nologo command line parameter.</deprecated>
 					<author>CD</author>
-					<desc xml:lang="en-US">Specifies if the splash screen should be displayed or not during startup.</desc>
+					<desc xml:lang="en-US">Specifies whether the splash screen is displayed during startup.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
@@ -265,7 +265,7 @@
 		<group oor:name="Configuration">
 			<info>
 				<author>JB</author>
-				<desc xml:lang="en-US">Settings that control configuration data access.</desc>
+				<desc xml:lang="en-US">Contains settings that control configuration data access.</desc>
 			</info>
 			<prop oor:name="TransferUserSettingsOnce" oor:type="xs:boolean" oor:nillable="false">
 				<info>

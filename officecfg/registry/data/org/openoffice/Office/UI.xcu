@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 14:01:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
                         <value xml:lang="pl">Arkusze kalkulacyjne</value>
                         <value xml:lang="pt-BR">Planilhas</value>
                         <value xml:lang="ja">表計算ドキュメント</value>
-                        <value xml:lang="ko">스트레드시트 문서</value>
+                        <value xml:lang="ko">스트레드시트</value>
                         <value xml:lang="zh-CN">工作表文档</value>
                         <value xml:lang="zh-TW">工作表文件</value>
                         <value xml:lang="tr">Table documents</value>
@@ -207,7 +207,7 @@
                         <value xml:lang="pl">Strony WWW</value>
                         <value xml:lang="pt-BR">Páginas web</value>
                         <value xml:lang="ja">Webページ</value>
-                        <value xml:lang="ko">웹페이지</value>
+                        <value xml:lang="ko">웹 페이지</value>
                         <value xml:lang="zh-CN">网页</value>
                         <value xml:lang="zh-TW">網頁</value>
                         <value xml:lang="tr">web pages</value>
@@ -229,7 +229,7 @@
                         <value xml:lang="ru">Главные документы</value>
                         <value xml:lang="el">Master documents</value>
                         <value xml:lang="nl">Masterdocumenten</value>
-                        <value xml:lang="fr">Documents maître</value>
+                        <value xml:lang="fr">Documents maîtres</value>
                         <value xml:lang="es">Documentos maestros</value>
                         <value xml:lang="fi">Master documents</value>
                         <value xml:lang="it">Documenti master</value>
@@ -250,7 +250,7 @@
                         <value oor:separator=";">StarWriter 4.0 (StarWriter/GlobalDocument)/GlobalDocument;StarWriter 5.0 (StarWriter/GlobalDocument)/GlobalDocument;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value>
                     </prop>
                 </node>
-                <node oor:name="com.sun.star.formular.FormularProperties" oor:op="replace">
+                <node oor:name="com.sun.star.formula.FormularProperties" oor:op="replace">
                     <prop oor:name="DisplayName">
                         <value xml:lang="de">Formeln</value>
                         <value xml:lang="en">Formulas</value>
@@ -366,7 +366,7 @@
                         <value xml:lang="pl">StarWriter 3.0 - 5.0 Szablony</value>
                         <value xml:lang="pt-BR">Modelos StarWriter 3.0 - 5.0 </value>
                         <value xml:lang="ja">StarWriter 3.0 - 5.0 テンプレート</value>
-                        <value xml:lang="ko">StarWriter 3.0 - 5.0 템플릿</value>
+                        <value xml:lang="ko">StarWriter 3.0 - 5.0 서식 파일</value>
                         <value xml:lang="zh-CN">StarWriter 3.0 - 5.0 样式</value>
                         <value xml:lang="zh-TW">StarWriter 3.0 - 5.0 樣式</value>
                         <value xml:lang="tr">StarWriter 3.0 - 5.0 Templates</value>
@@ -459,7 +459,7 @@
                         <value xml:lang="pl">Microsoft Excel 4.x - 5.0 / 95 Szablony</value>
                         <value xml:lang="pt-BR">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="ja">Microsoft Excel 4.x - 5.0 / 95 テンプレート</value>
-                        <value xml:lang="ko">Microsoft Excel 4.x - 5.0 / 95 템플릿</value>
+                        <value xml:lang="ko">Microsoft Excel 4.x - 5.0 / 95 서식 파일</value>
                         <value xml:lang="zh-CN">Microsoft Excel 4.x - 5.0 / 95 模板</value>
                         <value xml:lang="zh-TW">Microsoft Excel 4.x - 5.0 / 95 範本</value>
                         <value xml:lang="tr">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
@@ -521,7 +521,7 @@
                         <value xml:lang="pl">StarCalc 3.0 - 5.0 Szablony</value>
                         <value xml:lang="pt-BR">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="ja">StarCalc 3.0 - 5.0 テンプレート</value>
-                        <value xml:lang="ko">StarCalc 3.0 - 5.0 템플릿</value>
+                        <value xml:lang="ko">StarCalc 3.0 - 5.0 서식 파일</value>
                         <value xml:lang="zh-CN">StarCalc 3.0 - 5.0 样式</value>
                         <value xml:lang="zh-TW">StarCalc 3.0 - 5.0 樣式</value>
                         <value xml:lang="tr">StarCalc 3.0 - 5.0 Templates</value>
@@ -583,7 +583,7 @@
                         <value xml:lang="pl">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="pt-BR">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="ja">StarDraw 3.0 / 5.0 テンプレート (StarImpress)</value>
-                        <value xml:lang="ko">StarDraw 3.0 / 5.0 템플릿 (StarImpress)</value>
+                        <value xml:lang="ko">StarDraw 3.0 / 5.0 서식 파일(StarImpress)</value>
                         <value xml:lang="zh-CN">StarDraw 3.0 / 5.0 样式 (StarImpress)</value>
                         <value xml:lang="zh-TW">StarDraw 3.0 / 5.0 樣式 (StarImpress)</value>
                         <value xml:lang="tr">StarDraw 3.0 / 5.0 (StarImpress)</value>
@@ -645,7 +645,7 @@
                         <value xml:lang="pl">StarImpress 4.0 / 5.0 Szablony</value>
                         <value xml:lang="pt-BR">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="ja">StarImpress 4.0 / 5.0 テンプレート</value>
-                        <value xml:lang="ko">StarImpress 4.0 / 5.0 템플릿</value>
+                        <value xml:lang="ko">StarImpress 4.0 / 5.0 서식 파일</value>
                         <value xml:lang="zh-CN">StarImpress 4.0 / 5.0 样式</value>
                         <value xml:lang="zh-TW">StarImpress 4.0 / 5.0 樣式</value>
                         <value xml:lang="tr">StarImpress 4.0 / 5.0 Templates</value>
@@ -707,7 +707,7 @@
                         <value xml:lang="pl">StarDraw 3.0 / 5.0 Szablony</value>
                         <value xml:lang="pt-BR">StarDraw 3.0 / 5.0 Vorlagen</value>
                         <value xml:lang="ja">StarDraw 3.0 / 5.0 テンプレート</value>
-                        <value xml:lang="ko">StarDraw 3.0 / 5.0 템플릿</value>
+                        <value xml:lang="ko">StarDraw 3.0 / 5.0 서식 파일</value>
                         <value xml:lang="zh-CN">StarDraw 3.0 / 5.0 样式</value>
                         <value xml:lang="zh-TW">StarDraw 3.0 / 5.0 樣式</value>
                         <value xml:lang="tr">StarDraw 3.0 / 5.0 Vorlagen</value>
@@ -738,7 +738,7 @@
                         <value xml:lang="pl">StarWriter/Web 4.0 / 5.0 Szablony</value>
                         <value xml:lang="pt-BR">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="ja">StarWriter/Web 4.0 / 5.0 テンプレート</value>
-                        <value xml:lang="ko">StarWriter/Web 4.0 / 5.0 템플릿</value>
+                        <value xml:lang="ko">StarWriter/Web 4.0 / 5.0 서식 파일</value>
                         <value xml:lang="zh-CN">StarWriter/Web 4.0 / 5.0 样式</value>
                         <value xml:lang="zh-TW">StarWriter/Web 4.0 / 5.0 樣式</value>
                         <value xml:lang="tr">StarWriter/Web 4.0 / 5.0 Templates</value>
@@ -822,7 +822,7 @@
                         <value xml:lang="ru">StarWriter4.0/ 5.0 Главные документы</value>
                         <value xml:lang="el">StarWriter4.0/ 5.0 Master Documents</value>
                         <value xml:lang="nl">StarWriter4.0/ 5.0 Masterdocumenten</value>
-                        <value xml:lang="fr">StarWriter 4.0 / 5.0 Documents maître</value>
+                        <value xml:lang="fr">StarWriter 4.0 / 5.0 Documents maîtres</value>
                         <value xml:lang="es">StarWriter 4.0 / 5.0 Documentos maestros</value>
                         <value xml:lang="fi">StarWriter4.0/ 5.0 Master Documents</value>
                         <value xml:lang="it">StarWriter 4.0 / 5.0 Documenti master</value>
@@ -1148,3 +1148,8 @@
         </node>
     </node>
 </oor:node>
+
+
+
+
+

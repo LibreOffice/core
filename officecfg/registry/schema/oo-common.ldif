@@ -1,5 +1,8 @@
 dn: cn=schema
-objectclasses: ( oo-registry-object-oid NAME 'oo-registry-object' DESC 'oo-registry-object objclass' SUP 'top' MAY (cn $))
+attributetypes: (oo-registry-object-attr-oid NAME 'oo-registry-object-attr' DESC 'Generic registry container' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE )
+
+dn: cn=schema
+objectclasses: ( oo-registry-object-oid NAME 'oo-registry-object' DESC 'oo-registry-object objclass' SUP 'top' MAY (cn $ oo-registry-object-attr $))
 
 dn: cn=schema
 attributetypes: (oo-org-mapping-attr-oid NAME 'oo-org-mapping-attr' DESC 'organizational mapping' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE )
@@ -8,10 +11,7 @@ dn: cn=schema
 attributetypes: (oo-ldap-attr-mapping-attr-oid NAME 'oo-ldap-attr-mapping-attr' DESC 'ldap attribute mapping' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE )
 
 dn: cn=schema
-attributetypes: (oo-component-mapping-attr-oid NAME 'oo-component-mapping-attr' DESC 'oo compoent mapping information' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE )
-
-dn: cn=schema
-objectclasses: (oo-registry-meta-class-oid NAME 'oo-registry-meta-class' DESC 'meta configuration of oo registry' SUP 'top' MAY (oo-org-mapping-attr $ oo-ldap-attr-mapping-attr $ oo-component-mapping-attr $))
+objectclasses: (oo-registry-meta-class-oid NAME 'oo-registry-meta-class' DESC 'meta configuration of oo registry' SUP 'oo-registry-object' MAY (oo-org-mapping-attr $ oo-ldap-attr-mapping-attr $))
 
 dn: cn=schema
 attributetypes: (oo-role-priority-attr-oid NAME 'oo-role-priority-attr' DESC 'Role priority' SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE_VALUE)

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Store.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tpf $ $Date: 2002-11-21 15:00:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,36 +68,36 @@
 	<templates>
 		<group oor:name="PropertyValue">
 			<info>
-				<desc xml:lang="en-US">A property value</desc>
+				<desc xml:lang="en-US">Specifies a property value.</desc>
 			</info>
 			<prop oor:name="Handle" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Numeric property identifier</desc>
+					<desc xml:lang="en-US">Specifies the numeric property identifier.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Attributes" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Property attributes</desc>
+					<desc xml:lang="en-US">Specifies property attributes.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Value" oor:type="oor:any">
 				<info>
-					<desc xml:lang="en-US">Property value</desc>
+					<desc xml:lang="en-US">Specifies the Property value.</desc>
 				</info>
 			</prop>
 			<prop oor:name="State" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Property state</desc>
+					<desc xml:lang="en-US">Specifies the property state.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="Properties">
 			<info>
-				<desc xml:lang="en-US">A set of property values</desc>
+				<desc xml:lang="en-US">Specifies a set of property values.</desc>
 			</info>
 			<set oor:name="Values" oor:node-type="PropertyValue">
 				<info>
-					<desc xml:lang="en-US">A set of property values</desc>
+					<desc xml:lang="en-US">Specifies a set of property values.</desc>
 				</info>
 			</set>
 		</group>
@@ -105,7 +105,7 @@
 	<component>
 		<set oor:name="ContentProperties" oor:node-type="Properties">
 			<info>
-				<desc xml:lang="en-US">Root entry for stored content properties</desc>
+				<desc xml:lang="en-US">Specifies the root entry for stored content properties.</desc>
 			</info>
 		</set>
 	</component>

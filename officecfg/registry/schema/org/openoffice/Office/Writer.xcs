@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 15:48:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,34 +69,34 @@
 	<templates>
 		<group oor:name="AgendaType">
 			<info>
-				<desc xml:lang="en-US">Settings for a single agenda entry.</desc>
+				<desc xml:lang="en-US">Specifies the settings for a single agenda entry.</desc>
 			</info>
 			<prop oor:name="Author" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Person responsible person for the topic.</desc>
+					<desc xml:lang="en-US">Specifies the name of the person who is responsible for the topic.</desc>
 					<label xml:lang="en-US">Responsible</label>
 				</info>
 			</prop>
 			<prop oor:name="Topic" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Title for each agenda topic.</desc>
+					<desc xml:lang="en-US">Specifies the title for each agenda topic.</desc>
 					<label xml:lang="en-US">Agenda topic</label>
 				</info>
 			</prop>
 			<prop oor:name="Duration" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Scheduled duration of each topic  [UNIT=Minute].</desc>
+					<desc xml:lang="en-US">Specifies the duration of each topic [UNIT=Minute].</desc>
 					<label xml:lang="en-US">Duration</label>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="StyleType">
 			<info>
-				<desc xml:lang="en-US">A type for the preferred style of templates.</desc>
+				<desc xml:lang="en-US">Determines the default template style.</desc>
 			</info>
 			<prop oor:name="PreferredStyle" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Preferred style for the template.</desc>
+					<desc xml:lang="en-US">Specifies the default template style.</desc>
 					<label xml:lang="en-US">Style - Modern/Classic/Decorative</label>
 				</info>
 				<constraints>
@@ -124,13 +124,13 @@
 			</info>
 			<prop oor:name="Width" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the width. [UNIT=1/100 mm]</desc>
 					<label xml:lang="en-US"/>
 				</info>
 			</prop>
 			<prop oor:name="Height" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the height. [UNIT=1/100 mm]</desc>
 					<label xml:lang="en-US"/>
 				</info>
 			</prop>
@@ -141,22 +141,22 @@
 			</info>
 			<prop oor:name="Left" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Left distance of the object  [UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the left distance of the object [UNIT=1/100 mm]</desc>
 				</info>
 			</prop>
 			<prop oor:name="Right" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Right distance of the object  [UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the right distance of the object [UNIT=1/100 mm].</desc>
 				</info>
 			</prop>
 			<prop oor:name="Top" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Top distance of the object  [UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the top distance of the object [UNIT=1/100 mm]</desc>
 				</info>
 			</prop>
 			<prop oor:name="Bottom" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Bottom distance of the object  [UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the bottom distance of the object [UNIT=1/100 mm].</desc>
 				</info>
 			</prop>
 		</group>
@@ -165,10 +165,10 @@
 				<desc xml:lang="en-US">Contains settings for aligning an object or an element.</desc>
 			</info>
 			<prop oor:name="Position" oor:type="xs:int">
-                <info>
-                    <desc xml:lang="en-US">Specifies alignment enumeration values.</desc>
-                </info>
-                <constraints>
+				<info>
+					<desc xml:lang="en-US">Specifies alignment enumeration values.</desc>
+				</info>
+				<constraints>
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">Zero</desc>
@@ -219,51 +219,51 @@
 		</group>
 		<group oor:name="TextElementType">
 			<info>
-				<desc xml:lang="en-US"/>
+				<desc xml:lang="en-US">Contains a text information together with a visibility information.</desc>
 			</info>
 			<prop oor:name="Visible" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Determines whether the element is visible.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Content" oor:type="xs:string" oor:localized="true">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Contains the text content.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="IntElementType">
 			<info>
-				<desc xml:lang="en-US"/>
+				<desc xml:lang="en-US">Contains a date or time information together with a visibility information.</desc>
 			</info>
 			<prop oor:name="Visible" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Determines whether the element is visible or not.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Content" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Contains the date or time value.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="FileType">
 			<info>
-				<desc xml:lang="en-US"/>
+				<desc xml:lang="en-US">Contains information about a linked file, i.e. a graphic file.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Contains the file name as URL.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Contains the name of the import filter to load the file.</desc>
 				</info>
 			</prop>
 			<prop oor:name="AsLink" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Determines whether the file is embedded or linked.</desc>
 				</info>
 			</prop>
 		</group>
@@ -273,13 +273,13 @@
 			</info>
 			<prop oor:name="X" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the X-value. [UNIT=1/100 mm]</desc>
 					<label xml:lang="en-US"/>
 				</info>
 			</prop>
 			<prop oor:name="Y" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">[UNIT=1/100 mm]</desc>
+					<desc xml:lang="en-US">Specifies the Y-value. [UNIT=1/100 mm]</desc>
 					<label xml:lang="en-US"/>
 				</info>
 			</prop>
@@ -295,7 +295,7 @@
 			</prop>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The name of the database table or query.</desc>
+					<desc xml:lang="en-US">Specifies the name of the database table or query.</desc>
 				</info>
 			</prop>
 			<prop oor:name="CommandType" oor:type="xs:short">
@@ -305,12 +305,12 @@
 			</prop>
 			<prop oor:name="ColumnsToText" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Name of the columns that have been selected for inserting data into text or fields, as well as inserted text and line breaks.</desc>
+					<desc xml:lang="en-US">Specifies the name of the columns that have been selected for inserting data into text or fields, as well as inserted text and line breaks.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ColumnsToTable" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Name of the columns, that have been selected for inserting data into tables, plus inserted text and line breaks.</desc>
+					<desc xml:lang="en-US">Specifies the name of the columns, that have been selected for inserting data into tables, plus inserted text and line breaks.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ParaStyle" oor:type="xs:string">
@@ -623,7 +623,7 @@
 			</info>
 			<group oor:name="Line">
 				<info>
-					<desc xml:lang="en-US">Contains settings for guiding lines or points (for example when selcting/moving an aobject or frame).</desc>
+					<desc xml:lang="en-US">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
 				</info>
 				<prop oor:name="Guide" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Layout/Lines -->
@@ -661,7 +661,7 @@
 			</group>
 			<group oor:name="Window">
 				<info>
-					<desc xml:lang="en-US">Contains vairous window settings such as scrollbars, rules, etc.</desc>
+					<desc xml:lang="en-US">Contains various window settings such as scrollbars, rules, etc.</desc>
 				</info>
 				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Layout/Window -->
@@ -689,7 +689,7 @@
 					<!-- UIHints: Tools - Options - Text document - View - [Section] View -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Specifies, if rulers are displayed. It filters the values of HorizontalRuler and VerticalRuler</desc>
+						<desc xml:lang="en-US">Specifies whether rulers are displayed. Filters the values of HorizontalRuler and VerticalRuler.</desc>
 						<label xml:lang="en-US">Show rulers</label>
 					</info>
 					<value>true</value>
@@ -909,7 +909,6 @@
 							</info>
 						</enumeration>
 					</constraints>
-					<value>2</value>
 				</prop>
 				<prop oor:name="TabStop" oor:type="xs:int">
 					<!-- OldPath: Writer/Layout -->
@@ -926,7 +925,7 @@
 			</group>
 			<group oor:name="Zoom">
 				<info>
-					<desc xml:lang="en-US">Contains zoom ttings..</desc>
+					<desc xml:lang="en-US">Contains zoom settings.</desc>
 				</info>
 				<prop oor:name="Type" oor:type="xs:int">
 					<!-- UIHints: (Status Bar) -->
@@ -979,7 +978,7 @@
 					<!-- UIHints: Tools - Options - Text document  Grid - [Section] Options -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Move frames, drawing elements, and form functions only between the grid points.</desc>
+						<desc xml:lang="en-US">Moves frames, drawing elements, and form functions only between the grid points.</desc>
 						<label xml:lang="en-US">Snap to grid</label>
 					</info>
 					<value>false</value>
@@ -1353,7 +1352,7 @@
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Prints all left pages in the document.</desc>
+						<desc xml:lang="en-US">Prints only the even pages in the document.</desc>
 						<label xml:lang="en-US">Left pages</label>
 					</info>
 					<value>true</value>
@@ -1364,7 +1363,7 @@
 					<!-- UIHints: Tools - Options - Text document - Print - [Section] Pages -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Prints all right pages in the document.</desc>
+						<desc xml:lang="en-US">Prints only the odd pages in the document.</desc>
 						<label xml:lang="en-US">Right pages</label>
 					</info>
 					<value>true</value>
@@ -1416,7 +1415,8 @@
 						<desc xml:lang="en-US">Specifies the fax machine that is used when faxing directly from the document.</desc>
 						<label xml:lang="en-US">Fax</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Papertray">
@@ -1532,7 +1532,7 @@
 			</group>
 			<group oor:name="Input">
 				<info>
-					<desc xml:lang="en-US">Contains settings used when inputing text or data in tables.</desc>
+					<desc xml:lang="en-US">Contains settings used when inputting text or data in tables.</desc>
 				</info>
 				<prop oor:name="NumberRecognition" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Insert/IntoTables -->
@@ -1932,7 +1932,7 @@
 		</group>
 		<group oor:name="Insert">
 			<info>
-				<desc xml:lang="en-US">Settings for insertion of various object types.</desc>
+				<desc xml:lang="en-US">Specifies the settings for inserting various object types.</desc>
 			</info>
 			<group oor:name="Caption">
 				<!-- OldLocation: Soffice.cfg -->
@@ -1940,23 +1940,23 @@
 				<!--UIHints: Tools - Options - Text document  Insert - [Section] Caption  -->
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">Settings for insertion of captions for various object types.</desc>
+					<desc xml:lang="en-US">Specifies the settings for inserting captions for various object types.</desc>
 				</info>
 				<prop oor:name="Automatic" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies how tables, graphics, frames and Office documents, which have been inserted as OLE objects, are labelled.</desc>
+						<desc xml:lang="en-US">Specifies how tables, graphics, frames and Office documents, which have been inserted as OLE objects, are labeled</desc>
 						<label xml:lang="en-US">Automatic</label>
 					</info>
 					<value>false</value>
 				</prop>
 				<group oor:name="WriterObject">
 					<info>
-						<desc xml:lang="en-US">Settings for insertion of captions for Writer objects.</desc>
+						<desc xml:lang="en-US">Specifies the settings for inserting captions for Writer objects.</desc>
 					</info>
 					<group oor:name="Table">
 						<!--OldPath: Writer/Insert/Caption/Object/StarWriter_Table-->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for tables.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for tables.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -1971,13 +1971,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2021,14 +2021,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2047,18 +2048,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2066,7 +2067,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2076,7 +2077,7 @@
 					<group oor:name="Frame">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarWriter_Frame -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for frames.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for frames.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -2091,13 +2092,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2141,14 +2142,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2167,18 +2169,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2186,7 +2188,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2211,13 +2213,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2261,25 +2263,26 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2287,7 +2290,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2297,12 +2300,12 @@
 				</group>
 				<group oor:name="OfficeObject">
 					<info>
-						<desc xml:lang="en-US">Settings for insertion of captions for office objects.</desc>
+						<desc xml:lang="en-US">Specifies the settings for inserting captions for office objects.</desc>
 					</info>
 					<group oor:name="Calc">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Calc -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for Calc documents.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for Calc documents.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -2317,13 +2320,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2367,14 +2370,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2393,18 +2397,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2412,7 +2416,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2422,7 +2426,7 @@
 					<group oor:name="Draw">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Draw -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for Draw documents.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for Draw documents.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -2437,13 +2441,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2487,14 +2491,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2513,18 +2518,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2532,7 +2537,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2542,7 +2547,7 @@
 					<group oor:name="Chart">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Chart -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for Chart documents.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for Chart documents.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -2557,13 +2562,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2607,14 +2612,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2633,18 +2639,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2652,7 +2658,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2662,7 +2668,7 @@
 					<group oor:name="Image">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Image -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for Image documents.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for Image documents.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -2677,13 +2683,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2727,14 +2733,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2753,18 +2760,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the feadings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2772,7 +2779,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appear directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2782,7 +2789,7 @@
 					<group oor:name="Formula">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Formula -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions formula documents.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for formula documents.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -2797,13 +2804,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2847,14 +2854,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2873,18 +2881,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -2892,7 +2900,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -2902,7 +2910,7 @@
 					<group oor:name="Impress">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_Impress -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for Impress objects.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for Impress objects.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -2917,13 +2925,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -2967,14 +2975,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -2993,18 +3002,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document.</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document.</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -3012,7 +3021,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -3022,7 +3031,7 @@
 					<group oor:name="OLEMisc">
 						<!-- OldPath: Writer/Insert/Caption/Object/StarOffice5.2_OLEMisc -->
 						<info>
-							<desc xml:lang="en-US">Settings for insertion of captions for other OLE objects.</desc>
+							<desc xml:lang="en-US">Specifies the settings for inserting captions for other OLE objects.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<info>
@@ -3037,13 +3046,13 @@
 							</info>
 							<prop oor:name="Category" oor:type="xs:string" oor:localized="true">
 								<info>
-									<desc xml:lang="en-US">Category of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the category of the caption field.</desc>
 									<label xml:lang="en-US">Category</label>
 								</info>
 							</prop>
 							<prop oor:name="Numbering" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Numbering of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the numbering of the caption field.</desc>
 									<label xml:lang="en-US">Numbering</label>
 								</info>
 								<constraints>
@@ -3087,14 +3096,15 @@
 							</prop>
 							<prop oor:name="CaptionText" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">Text of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the text of the caption field.</desc>
 									<label xml:lang="en-US">CaptionText</label>
 								</info>
-								<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+								<value/>
+								<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 							</prop>
 							<prop oor:name="Position" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Position of the caption field.</desc>
+									<desc xml:lang="en-US">Specifies the position of the caption field.</desc>
 									<label xml:lang="en-US">Position</label>
 								</info>
 								<constraints>
@@ -3113,18 +3123,18 @@
 							</prop>
 							<prop oor:name="Level" oor:type="xs:int">
 								<info>
-									<desc xml:lang="en-US">Headings or chapter levels where the numbering starts in the document</desc>
+									<desc xml:lang="en-US">Specifies the headings or chapter levels where the numbering starts in the document</desc>
 									<label xml:lang="en-US">Level</label>
 								</info>
 								<constraints>
 									<minInclusive oor:value="0">
 										<info>
-											<desc xml:lang="en-US">Minimum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 										</info>
 									</minInclusive>
 									<maxInclusive oor:value="11">
 										<info>
-											<desc xml:lang="en-US">Maximum value allowed.</desc>
+											<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 										</info>
 									</maxInclusive>
 								</constraints>
@@ -3132,7 +3142,7 @@
 							</prop>
 							<prop oor:name="Delimiter" oor:type="xs:string">
 								<info>
-									<desc xml:lang="en-US">The character that appears directly after the number of the heading or chapter level.</desc>
+									<desc xml:lang="en-US">Specifies the character that appears directly after the number of the heading or chapter level.</desc>
 									<label xml:lang="en-US">Separator</label>
 								</info>
 								<value>.</value>
@@ -3147,7 +3157,7 @@
 				<!-- UIHints: Tools - Options - Text document - Insert - [Section] Tables -->
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">Default settings for tables to be inserted.</desc>
+					<desc xml:lang="en-US">Specifies the default settings for tables to be inserted.</desc>
 				</info>
 				<prop oor:name="Header" oor:type="xs:boolean">
 					<info>
@@ -3193,7 +3203,7 @@
 					<!-- UIHints: Tools - Options - Text document - Other - [Section] Compatibility -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Specifies if spacings between paragraphs and tables are added to ensure the compatibility to MS Word documents.</desc>
+						<desc xml:lang="en-US">Specifies if spacing between paragraphs and tables are added to ensure the compatibility to MS Word documents.</desc>
 						<label xml:lang="en-US">Add spacing between paragraphs and tables</label>
 					</info>
 					<value>false</value>
@@ -3437,7 +3447,7 @@
 					</prop>
 					<group oor:name="ChangeToBullets">
 						<info>
-							<desc xml:lang="en-US">Settings for automatic replacement of enumeration characters (dash, plus, and so on) into bullets.</desc>
+							<desc xml:lang="en-US">Specifies the settings for the automatic replacement of enumeration characters (dash, plus, and so on) into bullets.</desc>
 						</info>
 						<prop oor:name="Enable" oor:type="xs:boolean">
 							<!-- OldPath: Writer/AutoFormat/Options -->
@@ -3818,7 +3828,8 @@
 						<desc xml:lang="en-US">Specifies the label text (address).</desc>
 						<label xml:lang="en-US">Label text</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Database" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
@@ -3829,7 +3840,8 @@
 						<desc xml:lang="en-US">Specifies the database used.</desc>
 						<label xml:lang="en-US">Database</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Medium">
@@ -3856,7 +3868,8 @@
 						<desc xml:lang="en-US">Specifies the brand name of the label format.</desc>
 						<label xml:lang="en-US">Brand</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Type" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/Labels/Labels -->
@@ -3867,7 +3880,8 @@
 						<desc xml:lang="en-US">Specifies the type of the label format.</desc>
 						<label xml:lang="en-US">Type</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Format">
@@ -4041,7 +4055,8 @@
 						<desc xml:lang="en-US">Specifies the brand name of the business card format.</desc>
 						<label xml:lang="en-US">Brand</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Type" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/Medium -->
@@ -4052,7 +4067,8 @@
 						<desc xml:lang="en-US">Specifies the type of the business card format.</desc>
 						<label xml:lang="en-US">Type</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Format">
@@ -4223,7 +4239,7 @@
 			</group>
 			<group oor:name="PrivateAddress">
 				<info>
-					<desc xml:lang="en-US">Private address data.</desc>
+					<desc xml:lang="en-US">Species private address data.</desc>
 				</info>
 				<prop oor:name="FirstName" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/PrivateAddress -->
@@ -4231,7 +4247,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your first name</desc>
+						<desc xml:lang="en-US">Specifies your first name.</desc>
 						<label xml:lang="en-US">First name</label>
 					</info>
 				</prop>
@@ -4241,7 +4257,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your last name</desc>
+						<desc xml:lang="en-US">Specifies your last name.</desc>
 						<label xml:lang="en-US">Last name</label>
 					</info>
 				</prop>
@@ -4251,7 +4267,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your initials</desc>
+						<desc xml:lang="en-US">Specifies your initials.</desc>
 						<label xml:lang="en-US">Initials</label>
 					</info>
 				</prop>
@@ -4261,7 +4277,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your first name (2nd entry)</desc>
+						<desc xml:lang="en-US">Specifies your first name (2nd entry).</desc>
 						<label xml:lang="en-US">First name 2</label>
 					</info>
 				</prop>
@@ -4271,7 +4287,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your last name (2nd entry)</desc>
+						<desc xml:lang="en-US">Specifies your last name (2nd entry).</desc>
 						<label xml:lang="en-US">Last name 2</label>
 					</info>
 				</prop>
@@ -4281,7 +4297,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your initials (2nd entry)</desc>
+						<desc xml:lang="en-US">Specifies your initials (2nd entry).</desc>
 						<label xml:lang="en-US">Initials 2</label>
 					</info>
 				</prop>
@@ -4291,7 +4307,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The name of the street where you live.</desc>
+						<desc xml:lang="en-US">Specifies the name of the street where you live.</desc>
 						<label xml:lang="en-US">Street</label>
 					</info>
 				</prop>
@@ -4301,7 +4317,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your ZIP code</desc>
+						<desc xml:lang="en-US">Specifies your ZIP code.</desc>
 						<label xml:lang="en-US">Zip</label>
 					</info>
 				</prop>
@@ -4311,7 +4327,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The city where you live.</desc>
+						<desc xml:lang="en-US">Specifies the city where you live.</desc>
 						<label xml:lang="en-US">City</label>
 					</info>
 				</prop>
@@ -4321,7 +4337,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The country where you live.</desc>
+						<desc xml:lang="en-US">Specifies the country where you live.</desc>
 						<label xml:lang="en-US">Country</label>
 					</info>
 				</prop>
@@ -4331,7 +4347,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The state where you live.</desc>
+						<desc xml:lang="en-US">Specifies the state where you live.</desc>
 						<label xml:lang="en-US">State</label>
 					</info>
 				</prop>
@@ -4341,7 +4357,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your title.</desc>
+						<desc xml:lang="en-US">Specifies your title.</desc>
 						<label xml:lang="en-US">Title</label>
 					</info>
 				</prop>
@@ -4351,7 +4367,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your profession.</desc>
+						<desc xml:lang="en-US">Specifies your profession.</desc>
 						<label xml:lang="en-US">Profession</label>
 					</info>
 				</prop>
@@ -4361,7 +4377,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your phone number.</desc>
+						<desc xml:lang="en-US">Specifies your phone number.</desc>
 						<label xml:lang="en-US">Phone</label>
 					</info>
 				</prop>
@@ -4371,7 +4387,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your mobile phone number.</desc>
+						<desc xml:lang="en-US">Specifies your mobile phone number.</desc>
 						<label xml:lang="en-US">Mobile</label>
 					</info>
 				</prop>
@@ -4381,7 +4397,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your fax number.</desc>
+						<desc xml:lang="en-US">Specifies your fax number.</desc>
 						<label xml:lang="en-US">Fax</label>
 					</info>
 				</prop>
@@ -4391,7 +4407,7 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The address of your homepage.</desc>
+						<desc xml:lang="en-US">Specifies the address of your homepage.</desc>
 						<label xml:lang="en-US">Homepage</label>
 					</info>
 				</prop>
@@ -4401,14 +4417,14 @@
 					<!-- UIHints: File  New  BusinessCards  Private -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your e-mail address.</desc>
+						<desc xml:lang="en-US">Specifies your e-mail address.</desc>
 						<label xml:lang="en-US">E-mail</label>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BusinessAddress">
 				<info>
-					<desc xml:lang="en-US">Business address data.</desc>
+					<desc xml:lang="en-US">Specifies the business address data.</desc>
 				</info>
 				<prop oor:name="Company" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/BusinessCards/BusinessAddress -->
@@ -4416,7 +4432,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The company name, 1st line.</desc>
+						<desc xml:lang="en-US">Specifies the company name, 1st line.</desc>
 						<label xml:lang="en-US">Company</label>
 					</info>
 				</prop>
@@ -4426,7 +4442,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The company name, 2nd line.</desc>
+						<desc xml:lang="en-US">Specifies the company name, 2nd line.</desc>
 						<label xml:lang="en-US">CompanyExt</label>
 					</info>
 				</prop>
@@ -4436,7 +4452,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The company slogan.</desc>
+						<desc xml:lang="en-US">Specifies the company slogan.</desc>
 						<label xml:lang="en-US">Slogan</label>
 					</info>
 				</prop>
@@ -4446,7 +4462,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The name of the street.</desc>
+						<desc xml:lang="en-US">Specifies the name of the street.</desc>
 						<label xml:lang="en-US">Street</label>
 					</info>
 				</prop>
@@ -4456,7 +4472,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The ZIP code.</desc>
+						<desc xml:lang="en-US">Specifies the postal code or zip code.</desc>
 						<label xml:lang="en-US">Zip</label>
 					</info>
 				</prop>
@@ -4466,7 +4482,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The name of the city.</desc>
+						<desc xml:lang="en-US">Specifies the name of the city.</desc>
 						<label xml:lang="en-US">City</label>
 					</info>
 				</prop>
@@ -4476,7 +4492,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The country where the company is located.</desc>
+						<desc xml:lang="en-US">Specifies the country where the company is located.</desc>
 						<label xml:lang="en-US">Country</label>
 					</info>
 				</prop>
@@ -4486,7 +4502,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The state where the company is located.</desc>
+						<desc xml:lang="en-US">Specifies the state where the company is located.</desc>
 						<label xml:lang="en-US">State</label>
 					</info>
 				</prop>
@@ -4496,7 +4512,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your position in the company.</desc>
+						<desc xml:lang="en-US">Specifies your position in the company.</desc>
 						<label xml:lang="en-US">Position</label>
 					</info>
 				</prop>
@@ -4506,7 +4522,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your phone number.</desc>
+						<desc xml:lang="en-US">Specifies your phone number.</desc>
 						<label xml:lang="en-US">Phone</label>
 					</info>
 				</prop>
@@ -4516,7 +4532,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your mobile phone number.</desc>
+						<desc xml:lang="en-US">Specifies your mobile phone number.</desc>
 						<label xml:lang="en-US">Mobile</label>
 					</info>
 				</prop>
@@ -4526,7 +4542,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your fax number.</desc>
+						<desc xml:lang="en-US">Specifies your fax number.</desc>
 						<label xml:lang="en-US">Fax</label>
 					</info>
 				</prop>
@@ -4536,7 +4552,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">The internet address for the company.</desc>
+						<desc xml:lang="en-US">Specifies the internet address for the company.</desc>
 						<label xml:lang="en-US">WebAddress</label>
 					</info>
 				</prop>
@@ -4546,7 +4562,7 @@
 					<!-- UIHints: File  New  BusinessCards  Business -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Your e-mail address.</desc>
+						<desc xml:lang="en-US">Specifies your e-mail address.</desc>
 						<label xml:lang="en-US">Email</label>
 					</info>
 				</prop>
@@ -4650,18 +4666,18 @@
 				<!-- UIHints: Navigator -->
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">Specifies the ouline level shown in the Navigator.</desc>
+					<desc xml:lang="en-US">Specifies the outline level shown in the Navigator.</desc>
 					<label xml:lang="en-US">Heading levels shown</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="10">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -4723,7 +4739,8 @@
 						<desc xml:lang="en-US">Specifies the recipient&amp;apos;s address.</desc>
 						<label xml:lang="en-US">Addressee</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<prop oor:name="Sender" oor:type="xs:string">
 					<!-- OldPath: Writer/Dialog/Envelope/Envelope -->
@@ -4755,7 +4772,8 @@
 						<desc xml:lang="en-US">Specifies the database to be used for the addressee.</desc>
 						<label xml:lang="en-US">Database</label>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 			</group>
 			<group oor:name="Format">
@@ -4921,7 +4939,7 @@
 				<!-- UIHints: Dialog Insert Database Columns -->
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">The data set to be inserted.</desc>
+					<desc xml:lang="en-US">Specifies the data set that you want to insert.</desc>
 				</info>
 			</set>
 		</group>
@@ -4942,7 +4960,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page1-->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">The template for the preferred style.</desc>
+							<desc xml:lang="en-US">Specifies the template for the preferred style.</desc>
 						</info>
 					</node-ref>
 				</group>
@@ -4975,7 +4993,7 @@
 						<!-- Notice: Constraints: Any -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Title for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the title for the agenda.</desc>
 							<label xml:lang="en-US">Title of meeting</label>
 						</info>
 					</prop>
@@ -4985,7 +5003,7 @@
 						<!-- Notice: Default: Current date -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Date of the meeting.</desc>
+							<desc xml:lang="en-US">Displays the date of the meeting.</desc>
 							<label xml:lang="en-US">Date</label>
 						</info>
 					</prop>
@@ -4995,7 +5013,7 @@
 						<!--Current Time-->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Time of the meeting.</desc>
+							<desc xml:lang="en-US">Specifies the time of the meeting.</desc>
 							<label xml:lang="en-US">Time</label>
 						</info>
 					</prop>
@@ -5004,7 +5022,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 2 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Location of the meeting.</desc>
+							<desc xml:lang="en-US">Specifies the location of the meeting.</desc>
 							<label xml:lang="en-US">Location</label>
 						</info>
 					</prop>
@@ -5013,7 +5031,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 2 / Occasion -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Reference Occasion as a header for the agenda.</desc>
+							<desc xml:lang="en-US">Uses the Reference Occasion as a header for the agenda.</desc>
 							<label xml:lang="en-US">Occasion</label>
 						</info>
 					</prop>
@@ -5022,7 +5040,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 2 / Bring along -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header _Bring along_ for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header _Bring along_ for the agenda.</desc>
 							<label xml:lang="en-US">Bring along</label>
 						</info>
 					</prop>
@@ -5031,7 +5049,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 2 / Please prepare -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Reference _Please prepare_ for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Reference _Please prepare_ for the agenda.</desc>
 							<label xml:lang="en-US">Please prepare</label>
 						</info>
 					</prop>
@@ -5040,7 +5058,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 2 / Notes -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Element Notes for the agenda.</desc>
+							<desc xml:lang="en-US">Defines Element Notes for the agenda.</desc>
 							<label xml:lang="en-US">Notes</label>
 						</info>
 					</prop>
@@ -5049,7 +5067,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 3 / Convened by -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header _Convened by_ for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header _Convened by_ for the agenda.</desc>
 							<label xml:lang="en-US">Convened by</label>
 						</info>
 					</prop>
@@ -5058,7 +5076,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 3 / Presiding -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header _Presiding_ for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header _Presiding_ for the agenda.</desc>
 							<label xml:lang="en-US">Presiding</label>
 						</info>
 					</prop>
@@ -5067,7 +5085,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 3 / Minutes -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header _Minutes_ for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header _Minutes_ for the agenda.</desc>
 							<label xml:lang="en-US">Minutes</label>
 						</info>
 					</prop>
@@ -5076,7 +5094,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 3 / Participants -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header Participants for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header Participants for the agenda.</desc>
 							<label xml:lang="en-US">Participants</label>
 						</info>
 					</prop>
@@ -5085,7 +5103,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 3 / Guests -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header_ Guests_ for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header_ Guests_ for the agenda.</desc>
 							<label xml:lang="en-US">Guests</label>
 						</info>
 					</prop>
@@ -5094,7 +5112,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 3 / Experts -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header _Experts_ for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header _Experts_ for the agenda.</desc>
 							<label xml:lang="en-US">Experts</label>
 						</info>
 					</prop>
@@ -5103,7 +5121,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 3 / Follow-up -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Header Follow-up for the agenda.</desc>
+							<desc xml:lang="en-US">Specifies the Header Follow-up for the agenda.</desc>
 							<label xml:lang="en-US">Follow-up</label>
 						</info>
 					</prop>
@@ -5133,7 +5151,7 @@
 						<constraints>
 							<minInclusive oor:value="0">
 								<info>
-									<desc xml:lang="en-US">Minimum value allowed.</desc>
+									<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 								</info>
 							</minInclusive>
 						</constraints>
@@ -5143,13 +5161,13 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page4-->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">The set of specified agenda topics.</desc>
+							<desc xml:lang="en-US">Specifies the set of specified agenda topics.</desc>
 						</info>
 					</set>
 				</group>
 				<group oor:name="Save">
 					<info>
-						<desc xml:lang="en-US">Options for saving the agenda document and template.</desc>
+						<desc xml:lang="en-US">Specifies the options for saving the agenda document and template.</desc>
 					</info>
 					<prop oor:name="DocInfoTitle" oor:type="xs:string">
 						<!-- OldLocation: wizard.ini -->
@@ -5162,82 +5180,82 @@
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not be filled.</desc>
+									<desc xml:lang="en-US">Not filled</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason for the meeting.</desc>
+									<desc xml:lang="en-US">Reason for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes from the meeting.</desc>
+									<desc xml:lang="en-US">Notes from the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convened the meeting.</desc>
+									<desc xml:lang="en-US">Person who convened the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meetings</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -5247,88 +5265,88 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 5 / Subject -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Subject for the properties</desc>
+							<desc xml:lang="en-US">Specifies the subject for the properties.</desc>
 							<label xml:lang="en-US">Subject</label>
 						</info>
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not filled.</desc>
+									<desc xml:lang="en-US">Not filled</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason for the meeting.</desc>
+									<desc xml:lang="en-US">Reason for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items which are to be brought to the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes of the meeting.</desc>
+									<desc xml:lang="en-US">Notes of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convened the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who convened the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meeting</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -5348,7 +5366,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 5 / Info -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Text that appears in the description field of the properties dialog.</desc>
+							<desc xml:lang="en-US">Specifies the text that appears in the description field of the properties dialog.</desc>
 							<label xml:lang="en-US">Info</label>
 						</info>
 					</prop>
@@ -5366,7 +5384,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 5 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Prefix of the automatically created document name.</desc>
+							<desc xml:lang="en-US">Specifies the prefix of the automatically created document name.</desc>
 							<label xml:lang="en-US">Prefix</label>
 						</info>
 					</prop>
@@ -5375,7 +5393,7 @@
 						<!-- UIHints: File / AutoPilot / Agenda / Page 5 / Destination -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Location to save the document.</desc>
+							<desc xml:lang="en-US">Specifies the location that you want to save the document.</desc>
 							<label xml:lang="en-US">Destination</label>
 						</info>
 					</prop>
@@ -5403,7 +5421,7 @@
 						<!-- UIHints: File / AutoPilot / Letter / Page1-->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">The template for the preferred style.</desc>
+							<desc xml:lang="en-US">Specifies the template for the preferred style.</desc>
 						</info>
 					</node-ref>
 				</group>
@@ -5648,7 +5666,7 @@
 						<!-- UIHints: File / AutoPilot / Letter / Page 5 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Copies</desc>
+							<desc xml:lang="en-US">Copies a component.</desc>
 							<label xml:lang="en-US">Copy to</label>
 						</info>
 					</prop>
@@ -5903,7 +5921,7 @@
 							<!-- UIHints: File / AutoPilot / Letter / Page 6 / Footer -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Toggles the delimiter line of the document footer.</desc>
+								<desc xml:lang="en-US">Specifies whether the delimiter line of the document footer is visible.</desc>
 								<label xml:lang="en-US">Separator line</label>
 							</info>
 						</prop>
@@ -6005,82 +6023,82 @@
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not filled.</desc>
+									<desc xml:lang="en-US">not filled</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason the meeting.</desc>
+									<desc xml:lang="en-US">Reason the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items which are to be brought to the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes of the meeting.</desc>
+									<desc xml:lang="en-US">Notes of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convened the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who convened the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meetings</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -6090,88 +6108,88 @@
 						<!-- UIHints: File / AutoPilot / Letter / Page 8 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Subject for the properties.</desc>
+							<desc xml:lang="en-US">Specifies the subject for the properties.</desc>
 							<label xml:lang="en-US">Subject</label>
 						</info>
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not filled.</desc>
+									<desc xml:lang="en-US">not filled.</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting.</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason for the meeting.</desc>
+									<desc xml:lang="en-US">Reason for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items which are to be brought to the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes of the meeting.</desc>
+									<desc xml:lang="en-US">Notes of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convened the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who convened the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meetings</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -6336,38 +6354,38 @@
 						<!-- UIHints: File / AutoPilot / Fax / Page 1 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Fax title</desc>
+							<desc xml:lang="en-US">Specifies the Fax title.</desc>
 							<label xml:lang="en-US">Please enter the fax title</label>
 						</info>
 						<constraints>
 							<enumeration oor:value="Fax Note">
 								<info>
-									<desc xml:lang="en-US">The entry contains the note entered for the fax.</desc>
+									<desc xml:lang="en-US">Note entered for the fax</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Fax Cover">
 								<info>
-									<desc xml:lang="en-US">The entry contains the fax cover page.</desc>
+									<desc xml:lang="en-US">Fax cover page</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Fax Letter">
 								<info>
-									<desc xml:lang="en-US">The entry contains the letter selected for the fax.</desc>
+									<desc xml:lang="en-US">Letter selected for the fax</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Fax Message">
 								<info>
-									<desc xml:lang="en-US">The entry contains the fax message.</desc>
+									<desc xml:lang="en-US">Fax message</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Telefax">
 								<info>
-									<desc xml:lang="en-US">The entry contains the text 'Telefax'.</desc>
+									<desc xml:lang="en-US">Text 'Telefax'</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="User Title">
 								<info>
-									<desc xml:lang="en-US">The entry contains the user-defined title.</desc>
+									<desc xml:lang="en-US">User-defined title</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -6587,7 +6605,7 @@
 						<!-- UIHints: File / AutoPilot / Fax / Page 4 / Salutation -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">The telephone number of the addressee.</desc>
+							<desc xml:lang="en-US">Specifies the telephone number of the addressee.</desc>
 							<label xml:lang="en-US">Phone</label>
 						</info>
 					</prop>
@@ -6596,7 +6614,7 @@
 						<!-- UIHints: File / AutoPilot / Fax / Page 4 / Salutation -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">The fax number of the addressee.</desc>
+							<desc xml:lang="en-US">Specifies the fax number of the addressee.</desc>
 							<label xml:lang="en-US">Fax</label>
 						</info>
 					</prop>
@@ -6640,14 +6658,14 @@
 				</group>
 				<group oor:name="Elements">
 					<info>
-						<desc xml:lang="en-US">Contains settings for the content elemnts.</desc>
+						<desc xml:lang="en-US">Contains settings for the content elements</desc>
 					</info>
 					<prop oor:name="Copy" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
 						<!-- UIHints: File / AutoPilot / Fax / Page 5 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Copies</desc>
+							<desc xml:lang="en-US">Copies a component.</desc>
 							<label xml:lang="en-US">Copy to</label>
 						</info>
 					</prop>
@@ -6768,7 +6786,7 @@
 						<!-- UIHints: File / AutoPilot / Fax / Page 6 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Toggles the delimiter line of the document footer.</desc>
+							<desc xml:lang="en-US">Specifies whether the delimiter line of the document footer is visible.</desc>
 							<label xml:lang="en-US">Separator line</label>
 						</info>
 					</prop>
@@ -6819,82 +6837,82 @@
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not filled.</desc>
+									<desc xml:lang="en-US">not filled</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason for the meeting.</desc>
+									<desc xml:lang="en-US">Reason for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items which are to be brought to the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes of the meeting.</desc>
+									<desc xml:lang="en-US">Notes of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convenes the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who convenes the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meetings</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -6910,82 +6928,82 @@
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not filled.</desc>
+									<desc xml:lang="en-US">not filled</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason of the meeting.</desc>
+									<desc xml:lang="en-US">Reason of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items which are to be brought to the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes of the meeting.</desc>
+									<desc xml:lang="en-US">Notes of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convened the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who convened the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meetings</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -7013,7 +7031,7 @@
 						<!-- UIHints: File / AutoPilot / Fax / Page 7 / File name -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Create a document name automatically</desc>
+							<desc xml:lang="en-US">Creates a document name automatically.</desc>
 							<label xml:lang="en-US">Automatic</label>
 						</info>
 					</prop>
@@ -7067,17 +7085,17 @@
 							<constraints>
 								<enumeration oor:value="Internal Memo">
 									<info>
-										<desc xml:lang="en-US">The entry contains the text 'Internal Memo'.</desc>
+										<desc xml:lang="en-US">Text 'Internal Memo'</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="Interoffice Memo">
 									<info>
-										<desc xml:lang="en-US">The entry contains the text 'Interoffice Memo'.</desc>
+										<desc xml:lang="en-US">Text 'Interoffice Memo'</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="Memorandum">
 									<info>
-										<desc xml:lang="en-US">The entry contains the text 'Memorandum'.</desc>
+										<desc xml:lang="en-US">Text 'Memorandum'</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -7110,7 +7128,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 2 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Add Addressee</desc>
+							<desc xml:lang="en-US">Adds Addressee.</desc>
 							<label xml:lang="en-US">To</label>
 						</info>
 					</prop>
@@ -7128,7 +7146,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 2 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Add Sender address</desc>
+							<desc xml:lang="en-US">Adds Sender address.</desc>
 							<label xml:lang="en-US">From</label>
 						</info>
 					</prop>
@@ -7226,7 +7244,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 3 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Date in the header</desc>
+							<desc xml:lang="en-US">Displays the date in the header.</desc>
 							<label xml:lang="en-US">Date</label>
 						</info>
 					</prop>
@@ -7244,7 +7262,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 3 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Page number in the header</desc>
+							<desc xml:lang="en-US">Specifies that the page number is in the header.</desc>
 							<label xml:lang="en-US">Page number</label>
 						</info>
 					</prop>
@@ -7253,7 +7271,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 3 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Toggles the delimiter line of the document header.</desc>
+							<desc xml:lang="en-US">Specifies whether the delimiter line of the document footer is visible.</desc>
 							<label xml:lang="en-US">Separator line</label>
 						</info>
 					</prop>
@@ -7276,7 +7294,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 3 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Page number in the footer</desc>
+							<desc xml:lang="en-US">Specifies that the page number is in the footer.</desc>
 							<label xml:lang="en-US">Continuation page number</label>
 						</info>
 					</prop>
@@ -7285,7 +7303,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 3 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Toggles the delimiter line of the document footer.</desc>
+							<desc xml:lang="en-US">Specifies whether the delimiter line of the document footer is visible.</desc>
 							<label xml:lang="en-US">Separator line</label>
 						</info>
 					</prop>
@@ -7294,7 +7312,7 @@
 						<!-- UIHints: File / AutoPilot / Memo / Page 3 -->
 						<info>
 							<author>OS</author>
-							<desc xml:lang="en-US">Confidential visible in the footer.</desc>
+							<desc xml:lang="en-US">Specifies that Confidential is visible in the footer.</desc>
 							<label xml:lang="en-US">Confidentiality level</label>
 						</info>
 					</node-ref>
@@ -7314,82 +7332,82 @@
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not filled.</desc>
+									<desc xml:lang="en-US">not filled</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason for the meeting.</desc>
+									<desc xml:lang="en-US">Reason for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items which are to be brought to the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes of the meeting.</desc>
+									<desc xml:lang="en-US">Notes of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convened the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who convened the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meetings</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -7405,82 +7423,82 @@
 						<constraints>
 							<enumeration oor:value="None">
 								<info>
-									<desc xml:lang="en-US">The entry is not filled.</desc>
+									<desc xml:lang="en-US">not filled</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Weekly Project Meeting">
 								<info>
-									<desc xml:lang="en-US">The entry contains the title of the meeting.</desc>
+									<desc xml:lang="en-US">Title of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Date">
 								<info>
-									<desc xml:lang="en-US">The entry contains the date of the meeting.</desc>
+									<desc xml:lang="en-US">Date of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Time">
 								<info>
-									<desc xml:lang="en-US">The entry contains the time of the meeting.</desc>
+									<desc xml:lang="en-US">Time of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Location">
 								<info>
-									<desc xml:lang="en-US">The entry contains the location of the meeting.</desc>
+									<desc xml:lang="en-US">Location of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Occasion">
 								<info>
-									<desc xml:lang="en-US">The entry contains the reason for the meeting.</desc>
+									<desc xml:lang="en-US">Reason for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Bring ~along">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items which are to be brought to the meeting.</desc>
+									<desc xml:lang="en-US">Items which are to be brought to the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Please prepare">
 								<info>
-									<desc xml:lang="en-US">The entry contains the items to prepare for the meeting.</desc>
+									<desc xml:lang="en-US">Items to prepare for the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="No~tes">
 								<info>
-									<desc xml:lang="en-US">The entry contains notes of the meeting.</desc>
+									<desc xml:lang="en-US">Notes of the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="Co~nvened by">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who convened the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who convened the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Presiding">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the person who presides over the meeting.</desc>
+									<desc xml:lang="en-US">Name of the person who presides over the meeting</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Minutes">
 								<info>
-									<desc xml:lang="en-US">The entry contains the name of the meeting minutes.</desc>
+									<desc xml:lang="en-US">Name of the meeting minutes</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="P~articipants">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the participants.</desc>
+									<desc xml:lang="en-US">Number of the participants</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Guests">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the guests.</desc>
+									<desc xml:lang="en-US">Number of the guests</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Experts">
 								<info>
-									<desc xml:lang="en-US">The entry contains the number of the experts.</desc>
+									<desc xml:lang="en-US">Number of the experts</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="~Follow-up">
 								<info>
-									<desc xml:lang="en-US">The entry will contain the date of the follow-up meetings.</desc>
+									<desc xml:lang="en-US">Date of the follow-up meeting</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -7511,7 +7529,6 @@
 							<desc xml:lang="en-US">Specifies the prefix of the automatically created document name.</desc>
 							<label xml:lang="en-US">Prefix</label>
 						</info>
-						<value xsi:nil="true"/>
 					</prop>
 					<prop oor:name="AutoDocName" oor:type="xs:boolean">
 						<!-- OldLocation: wizard.ini -->
@@ -7679,7 +7696,7 @@
 			</group>
 			<group oor:name="FileOutput">
 				<info>
-					<desc xml:lang="en-US">Settings for form letter output to file.</desc>
+					<desc xml:lang="en-US">Specifies the settings for outputting a form letter to a file.</desc>
 				</info>
 				<prop oor:name="Path" oor:type="xs:string">
 					<!-- OldLocation: Soffice.cfg -->
@@ -7688,7 +7705,8 @@
 						<author>OS</author>
 						<desc xml:lang="en-US">Specifies the path for the form letter file.</desc>
 					</info>
-					<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					<value/>
+					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 				</prop>
 				<group oor:name="FileName">
 					<!-- OldLocation: Soffice.cfg -->
@@ -7783,7 +7801,7 @@
 				</prop>
 				<prop oor:name="W4W000" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">A Word for Word filter flag entry. If W4W000 is set, the flag is valid for all W4W filters that are not specified in detail. To specify a filter, replace "000" with the corresponding filter ID.</desc>
+						<desc xml:lang="en-US">Specifies a Word for Word filter flag entry. If W4W000 is set, the flag is valid for all W4W filters that are not specified in detail. To specify a filter, replace "000" with the corresponding filter ID.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -7871,7 +7889,7 @@
 				</info>
 				<prop oor:name="WW1F" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">Flags for controlling the import of WinWord 1.0 documents.</desc>
+						<desc xml:lang="en-US">Specifies the flags for controlling the import of WinWord 1.0 documents.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -7899,7 +7917,7 @@
 				</prop>
 				<prop oor:name="WW" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">Flags for importing WinWord documents.</desc>
+						<desc xml:lang="en-US">Specifies the flags for importing WinWord documents.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -8027,7 +8045,7 @@
 				</prop>
 				<prop oor:name="WW8" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">Flags for importing WinWord 8 documents.</desc>
+						<desc xml:lang="en-US">Specifies the flags for importing WinWord 8 documents.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -8050,7 +8068,7 @@
 				</prop>
 				<prop oor:name="WWF" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">Flags for controlling the import of fields in WW6 documents. The key WWF stands for "WinWord Field". </desc>
+						<desc xml:lang="en-US">Specifies the flags for controlling the import of fields in WW6 documents. The key WWF stands for "WinWord Field".</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -8108,37 +8126,37 @@
 				</prop>
 				<prop oor:name="WWFA0" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">"WinWord-field tag Always". A bit-field with 32 bits for enabling the tagging of fields for every field type. WWFA0 controls the field types 0 to 31.</desc>
+						<desc xml:lang="en-US">Enables the tagging of fields for every field type. Controls the field types 0 to 31.</desc>
 					</info>
 					<value>0</value>
 				</prop>
 				<prop oor:name="WWFA1" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">"WinWord-field tag Always". A bit-field with 32 bits for enabling the tagging of fields for every field type. WWFA0 controls the field types 32 to 63.</desc>
+						<desc xml:lang="en-US">Enables  the tagging of fields for every field type.Controls the field types 32 to 63.</desc>
 					</info>
 					<value>0</value>
 				</prop>
 				<prop oor:name="WWFA2" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">"WinWord-field tag Always". A bit-field with 32 bits for enabling the tagging of fields for every field type. WWFA0 controls the field types 64 to 95.</desc>
+						<desc xml:lang="en-US">Enables the tagging of fields for every field type.Controls the field types 64 to 95.</desc>
 					</info>
 					<value>0</value>
 				</prop>
 				<prop oor:name="WWFB0" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">"WinWord-field tag when Bad". A bit-field with 32 bits for disabling the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields. WWFB0 controls the field types 0 to 31.</desc>
+						<desc xml:lang="en-US">Disables the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields.Controls the field types 0 to 31.</desc>
 					</info>
 					<value>0</value>
 				</prop>
 				<prop oor:name="WWFB1" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">"WinWord-field tag when Bad". A bit-field with 32 bits for disabling the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields. WWFB0 controls the field types 32 to 63.</desc>
+						<desc xml:lang="en-US">Disables the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields. Controls the field types 32 to 63.</desc>
 					</info>
 					<value>0</value>
 				</prop>
 				<prop oor:name="WWFB2" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">"WinWord-field tag when Bad". A bit-field with 32 bits for disabling the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields. WWFB0 controls the field types 64 to 95.</desc>
+						<desc xml:lang="en-US">Disables the tagging of fields for every field type. Useful for fields that cannot be imported completely, for example, nested fields. Controls the field types 64 to 95.</desc>
 					</info>
 					<value>0</value>
 				</prop>
@@ -8162,7 +8180,7 @@
 				</prop>
 				<prop oor:name="WWWR" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">Several flags for exporting (for debugging).</desc>
+						<desc xml:lang="en-US">Specifies several flags for exporting (for debugging).</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -8195,7 +8213,7 @@
 				</info>
 				<prop oor:name="SW3Imp" oor:type="xs:long">
 					<info>
-						<desc xml:lang="en-US">Flags for the Writer filter.</desc>
+						<desc xml:lang="en-US">Specifies the flags for the Writer filter.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">

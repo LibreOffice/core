@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mba $ $Date: 2002-12-06 18:26:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,11 @@
 		<group oor:name="Passwordstorage">
 			<info>
 				<author>MAV</author>
-				<desc xml:lang="en-US">A container for passwords.</desc>
+				<desc xml:lang="en-US">Contains a container for passwords.</desc>
 			</info>
 			<prop oor:name="Password" oor:type="xs:string" oor:localized="false">
 				<info>
-					<desc xml:lang="en-US">A password encoded with the master password.</desc>
+					<desc xml:lang="en-US">Contains a password encoded with the master password.</desc>
 				</info>
 			</prop>
 		</group>
@@ -88,43 +88,43 @@
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the filtername that was choosen to load the document.</desc>
+					<desc xml:lang="en-US">Specifies the filter name that was chosen to load the document.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Title of the URL which is displayed on the user-interface.</desc>
+					<desc xml:lang="en-US">Indicates the title of the URL that is displayed on the user-interface.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Password" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">An encoded password used to open the document.</desc>
+					<desc xml:lang="en-US">Contains an encoded password used to open the document.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="MenuType">
 			<info>
 				<author>AS</author>
-				<desc xml:lang="en-US">Describes a menu entry for configurable office menues (e.g. file new).</desc>
+				<desc xml:lang="en-US">Describes a menu entry for configurable office menus (e.g. file new).</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">URL for dispatch.</desc>
+					<desc xml:lang="en-US">Specifies the URL for dispatch.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
 				<info>
-					<desc xml:lang="en-US">Is the label of a menu entry.</desc>
+					<desc xml:lang="en-US">Specifies the label of a menu entry.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageIdentifier" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Is the identifier of an assigned icon.</desc>
+					<desc xml:lang="en-US">Specifies the identifier of an assigned icon.</desc>
 				</info>
 			</prop>
 			<prop oor:name="TargetName" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Is the target of dispatch (e.g. _blank to open URL in new frame).</desc>
+					<desc xml:lang="en-US">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
 				</info>
 			</prop>
 		</group>
@@ -153,25 +153,21 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the exact name of the font ("Arial","Courier", "Frutiger").</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Height" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the height of the font in the measure of the destination.</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Width" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the width of the font in the measure of the destination.</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="StyleName" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Specifies the style name of the font ("Bold", "Italic", "Italic Bold").</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Family" oor:type="xs:short">
 				<info>
@@ -219,7 +215,6 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="CharSet" oor:type="xs:short">
 				<info>
@@ -282,7 +277,6 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Pitch" oor:type="xs:short">
 				<info>
@@ -305,19 +299,16 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="CharacterWidth" oor:type="xs:double">
 				<info>
 					<desc xml:lang="en-US">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Weight" oor:type="xs:double">
 				<info>
 					<desc xml:lang="en-US">Specifies the thickness of the line.</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Slant" oor:type="xs:short">
 				<info>
@@ -355,7 +346,6 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="UnderLine" oor:type="xs:short">
 				<info>
@@ -458,7 +448,6 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Strikeout" oor:type="xs:short">
 				<info>
@@ -501,25 +490,21 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Orientation" oor:type="xs:double">
 				<info>
 					<desc xml:lang="en-US">Specifies the rotation of the font.  [UNIT=degree].</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Kerning" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US">For requesting, specifies if there is a kerning table available. For selecting, specifies if the kerning table is to be used.</desc>
+					<desc xml:lang="en-US">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="WordLineMode" oor:type="xs:boolean">
 				<info>
 					<desc xml:lang="en-US">Specifies if only words get underlined.</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Type" oor:type="xs:short">
 				<info>
@@ -547,7 +532,6 @@
 						</info>
 					</enumeration>
 				</constraints>
-				<value xsi:nil="true"/>
 			</prop>
 		</group>
 		<group oor:name="FontReplacement">
@@ -741,7 +725,7 @@
 			</info>
 			<group oor:name="FormatStrings">
 				<info>
-					<desc xml:lang="en-US">Contains the different string tokens for "to" and "cc" etc. Adresses will be concatenated to create the command line.</desc>
+					<desc xml:lang="en-US">Contains the different string tokens for "to" and "cc" etc. Addresses will be concatenated to create the command line.</desc>
 				</info>
 				<prop oor:name="base" oor:type="xs:string">
 					<info>
@@ -786,7 +770,7 @@
 			</group>
 			<group oor:name="EnumDelimiters">
 				<info>
-					<desc xml:lang="en-US">Contains the delimiters used to seperate values for various command line parameters of the external mailer.</desc>
+					<desc xml:lang="en-US">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
 				</info>
 				<prop oor:name="base" oor:type="xs:string">
 					<info>
@@ -901,7 +885,7 @@
 				<!-- UIHints: Tools - Options - General - Other - [Section] 3D-View -->
 				<info>
 					<author>AW</author>
-					<desc xml:lang="en-US">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferrered as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
+					<desc xml:lang="en-US">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
 					<label xml:lang="en-US">Optimized output</label>
 				</info>
 				<value>true</value>
@@ -1115,12 +1099,12 @@
 		<group oor:name="Cache">
 			<info>
 				<author>AF</author>
-				<desc xml:lang="en-US">Cache related options.</desc>
+				<desc xml:lang="en-US">Specifies cache related options.</desc>
 			</info>
 			<group oor:name="DrawingEngine">
 				<info>
 					<author>AF</author>
-					<desc xml:lang="en-US">Cache related options of the drawing engine.</desc>
+					<desc xml:lang="en-US">Specifies the cache related options for the drawing engine.</desc>
 				</info>
 				<prop oor:name="OLE_Objects" oor:type="xs:int">
 					<!-- OldPath: soffice-WorkingSet -->
@@ -1136,7 +1120,7 @@
 			<group oor:name="Writer">
 				<info>
 					<author>AF</author>
-					<desc xml:lang="en-US">Cache related options of the Writer.</desc>
+					<desc xml:lang="en-US">Specifies the cache related options for Writer.</desc>
 				</info>
 				<prop oor:name="OLE_Objects" oor:type="xs:int">
 					<!-- OldPath: soffice-WorkingSet -->
@@ -1151,7 +1135,7 @@
 			</group>
 			<group oor:name="GraphicManager">
 				<info>
-					<desc xml:lang="en-US">Group of graphic manager cache options.</desc>
+					<desc xml:lang="en-US">Specifies a group of graphic manager cache options.</desc>
 					<label xml:lang="en-US">Graphic Manager Cache</label>
 				</info>
 				<prop oor:name="TotalCacheSize" oor:type="xs:int">
@@ -1312,7 +1296,7 @@
 				<prop oor:name="Module" oor:type="xs:string">
 					<info>
 						<author>MBA</author>
-						<desc xml:lang="en-US">This directory contains the Office modules.</desc>
+						<desc xml:lang="en-US">Contains the Office modules.</desc>
 					</info>
 					<value>$(progpath)</value>
 				</prop>
@@ -1326,14 +1310,14 @@
 				<prop oor:name="Plugin" oor:type="oor:string-list">
 					<info>
 						<author>MBA</author>
-						<desc xml:lang="en-US">Specifies the directoray in which the plugins are saved.</desc>
+						<desc xml:lang="en-US">Specifies the directory in which the plugins are saved.</desc>
 					</info>
 					<value oor:separator=":">$(userpath)/plugin</value>
 				</prop>
 				<prop oor:name="Storage" oor:type="xs:string">
 					<info>
 						<author>KSO</author>
-						<desc xml:lang="en-US">Mail, news files and other information (for example, information about the FTP Server) are stored here.</desc>
+						<desc xml:lang="en-US">Specifies the location where mail, news files and other information (for example, information about the FTP Server) are stored.</desc>
 					</info>
 					<value>$(userpath)/store</value>
 				</prop>
@@ -1347,7 +1331,7 @@
 				<prop oor:name="Template" oor:type="oor:string-list">
 					<info>
 						<author>MBA</author>
-						<desc xml:lang="en-US">The templates originate from these folders and sub-folders.</desc>
+						<desc xml:lang="en-US">Specifies the templates originate from these folders and sub-folders.</desc>
 					</info>
 					<value oor:separator=":">$(insturl)/share/template/$(vlang):$(userurl)/template</value>
 				</prop>
@@ -1582,20 +1566,19 @@
 					<value>true</value>
 				</prop>
 			</group>
-            <group oor:name="SourceViewFont">
+			<group oor:name="SourceViewFont">
 				<info>
 					<author>OS</author>
-                    <desc xml:lang="en-US">Specifies the font name and height used in HTML source view</desc>
-               </info>
+					<desc xml:lang="en-US">Specifies the font name and height used in HTML source view</desc>
+				</info>
 				<prop oor:name="FontName" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the name of the font that is used in source views (HTML source view or BASIC IDE)</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="FontHeight" oor:type="xs:short">
 					<info>
-						<desc xml:lang="en-US">Specifies the height in point of the font that is used in source views (HTML source view or BASIC IDE)</desc>
+						<desc xml:lang="en-US">Specifies the height, in points, of the font that is used in source views (HTML source view or BASIC IDE)</desc>
 					</info>
 					<value>10</value>
 				</prop>
@@ -1610,7 +1593,7 @@
 		<group oor:name="Gallery">
 			<info>
 				<author>AF</author>
-				<desc xml:lang="en-US">Gallery options.</desc>
+				<desc xml:lang="en-US">Specifies Gallery options.</desc>
 				<label xml:lang="en-US">Gallery Options</label>
 			</info>
 			<prop oor:name="ID_Dialog" oor:type="xs:boolean">
@@ -1661,12 +1644,12 @@
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">It's the minimum range of the help bookmark history list.</desc>
+							<desc xml:lang="en-US">Defines the minimum range of the help bookmark history list.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="10000">
 						<info>
-							<desc xml:lang="en-US">It's the maximum range of the help bookmark history list.</desc>
+							<desc xml:lang="en-US">Defines the maximum range of the help bookmark history list.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1679,12 +1662,12 @@
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">It's the min range for the history size.</desc>
+							<desc xml:lang="en-US">Defines the min range for the history size.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="100">
 						<info>
-							<desc xml:lang="en-US">It's the max range for the history size.</desc>
+							<desc xml:lang="en-US">Defines the max range for the history size.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1698,12 +1681,12 @@
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">It's the min range for the picklist size.</desc>
+							<desc xml:lang="en-US">Defines the min range for the picklist size.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
 						<info>
-							<desc xml:lang="en-US">It's the max range for the picklist size.</desc>
+							<desc xml:lang="en-US">Defines the max range for the picklist size.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1737,7 +1720,7 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
-					<desc xml:lang="en-US">Send mails with stack trace after crash</desc>
+					<desc xml:lang="en-US">Sends a mail that includes the stack trace after a crash.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1762,7 +1745,7 @@
 			<prop oor:name="DevelopmentChart" oor:type="xs:boolean">
 				<info>
 					<author>BM</author>
-					<desc xml:lang="en-US">If this option is set to true the new development chart library is used insted of the standard one. Do not set this option to true unless you know exactly what you do. This new library will be unstable and incomplete most of the time. This flag will be removed when the new library is in a stable state.</desc>
+					<desc xml:lang="en-US">Specifies that If this option is set to true, the new development chart library is used instead of the standard one. Do not set this option to true unless you know exactly what to do. This new library will be unstable and incomplete most of the time. This flag will be removed when the new library is in a stable state.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1860,7 +1843,7 @@
 					<!-- UIHints: Tools  Options - General  Save - [Section] Save -->
 					<info>
 						<author>MBA</author>
-						<desc xml:lang="en-US">Shows a prompt when doing AutoSave, even when the document already has a filename.</desc>
+						<desc xml:lang="en-US">Shows a prompt during AutoSave,even when the document has a filename.</desc>
 						<label xml:lang="en-US">Prompt to save</label>
 					</info>
 					<value>true</value>
@@ -1877,12 +1860,12 @@
 					<constraints>
 						<minInclusive oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Minimum is 1 minute</desc>
+								<desc xml:lang="en-US">Specifies that the minimum time interval is 1 minute.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="60">
 							<info>
-								<desc xml:lang="en-US">Maximum is 60 minute</desc>
+								<desc xml:lang="en-US">Specifies that the maximum time interval is 60 minutes.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -2015,7 +1998,7 @@
 					<!-- UIHints: Tools - Options - Browser -->
 					<info>
 						<author>MBA</author>
-						<desc xml:lang="en-US">A list of all trustworthy URLs: file:/ =&gt; All scripts from the local file system including a LAN; private:explorer =&gt; Scripts from the Explorer; private:help =&gt; Scripts in the help system; private:newmenu =&gt; Scripts that are executed by the commands File-New and AutoPilot; private:schedule =&gt; Scripts of the scheduler; private:searchfolder =&gt; Scripts of the searchfolder; private:user =&gt; Scripts that are entered in the URL field.</desc>
+						<desc xml:lang="en-US">Lists all trustworthy URLs: file: All scripts from the local file system including a LAN; private:explorer: Scripts from the Explorer; private:help: Scripts in the help system; private:newmenu: Scripts that are executed by the commands File-New and AutoPilot; private:schedule: Scripts of the scheduler; private:searchfolder: Scripts of the searchfolder; private:user: Scripts that are entered in the URL field.</desc>
 					</info>
 					<value>$(userurl) $(insturl)</value>
 				</prop>
@@ -2030,17 +2013,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Basic scripts should never be executed.</desc>
+								<desc xml:lang="en-US">Never</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Basic scripts opened from a medium which belongs to the SecureURL list can be executed.</desc>
+								<desc xml:lang="en-US">According to Path List</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Basic scripts can always be executed.</desc>
+								<desc xml:lang="en-US">Always</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -2087,13 +2070,13 @@
 					<minInclusive oor:value="50">
 						<info>
 							<author>PB</author>
-							<desc xml:lang="en-US">It is the minimum range of the scaling.</desc>
+							<desc xml:lang="en-US">Specifies the minimum range of the scaling.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
 						<info>
 							<author>PB</author>
-							<desc xml:lang="en-US">It is the maximum range of the scaling.</desc>
+							<desc xml:lang="en-US">Specifies the maximum range of the scaling.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2156,17 +2139,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Use last setting before program exit.</desc>
+								<desc xml:lang="en-US">Use last setting</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Only shown as task in the task bar with the same setting as 0.</desc>
+								<desc xml:lang="en-US">Show in task bar</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Application window will be opened in Fullscreen mode.</desc>
+								<desc xml:lang="en-US">Open in Fullscreen mode</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -2281,7 +2264,7 @@
 			<group oor:name="Localisation">
 				<info>
 					<author>SSA</author>
-					<desc xml:lang="en-US">Contains locatisation specific settings.</desc>
+					<desc xml:lang="en-US">Contains localization specific settings.</desc>
 				</info>
 				<prop oor:name="AutoMnemonic" oor:type="xs:boolean" oor:localized="true">
 					<!-- OldPath: International/AutoMnemonic -->
@@ -2302,13 +2285,13 @@
 						<minInclusive oor:value="0">
 							<info>
 								<author>SSA</author>
-								<desc xml:lang="en-US">Lower limit for enlarging the controls is 0%.</desc>
+								<desc xml:lang="en-US">Specifies the upper limit for enlarging the controls is 100%.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
 								<author>SSA</author>
-								<desc xml:lang="en-US">Upper limit for enlarging the controls is 100%.</desc>
+								<desc xml:lang="en-US">Specifies the upper limit for enlarging the controls is 100%.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -2390,7 +2373,7 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 				</prop>
 				<prop oor:name="Version" oor:type="xs:string">
@@ -2399,7 +2382,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2410,7 +2393,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2420,7 +2403,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="01">
@@ -2461,7 +2444,7 @@
 					<!-- Notice: LM: Description is missing -->
 					<info>
 						<deprecated/>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2471,7 +2454,7 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
-					<desc xml:lang="en-US">Properties of window containers for docked windows</desc>
+					<desc xml:lang="en-US">Specifies the properties of window containers for docked windows.</desc>
 				</info>
 				<prop oor:name="Key" oor:type="xs:string">
 					<!-- OldPath: soffice_View/SplitWindow -->
@@ -2480,8 +2463,7 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
-						<desc xml:lang="en-US"></desc>
-
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -2493,7 +2475,7 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 				</prop>
 				<prop oor:name="State" oor:type="xs:int">
@@ -2502,7 +2484,7 @@
 					<info>
 						<deprecated/>
 						<author>MBA</author>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -2530,7 +2512,7 @@
 				<prop oor:name="Count" oor:type="xs:int">
 					<info>
 						<deprecated/>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
@@ -2539,7 +2521,7 @@
 				<prop oor:name="Sequence" oor:type="xs:int">
 					<info>
 						<deprecated/>
-						<desc xml:lang="en-US"></desc>
+						<desc xml:lang="en-US">Deprecated.</desc>
 					</info>
 					<!-- OldPath: soffice_View/SplitWindow -->
 					<!-- OldLocation: soffice.ini -->
@@ -2552,14 +2534,14 @@
 				</info>
 				<prop oor:name="Enabled" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies whether fonts should be antialiased. This setting is used on UNIX systems only.</desc>
+						<desc xml:lang="en-US">Specifies font antialiasing properties</desc>
 						<label xml:lang="en-US">Font Antialiasing Enabled</label>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="MinPixelHeight" oor:type="xs:short">
 					<info>
-						<desc xml:lang="en-US">If Font Antialiasing is enabled, this values specifies an additional limit. Fonts which are smaller than the value given as limit here are not antialiased.</desc>
+						<desc xml:lang="en-US">Specifies an additional limit if Font Antialiasing is enabled. Fonts that are smaller than the specified limit are not anti-aliased.</desc>
 						<label xml:lang="en-US">Font Antialiasing Minimum Pixel Height</label>
 					</info>
 					<value>8</value>
@@ -2583,12 +2565,12 @@
 				<constraints>
 					<minInclusive oor:value="1">
 						<info>
-							<desc xml:lang="en-US">The lowest number of undo steps possible.</desc>
+							<desc xml:lang="en-US">Specifies the lowest number of undo steps possible.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="100">
 						<info>
-							<desc xml:lang="en-US">The highest number of undo steps possible.</desc>
+							<desc xml:lang="en-US">Specifies the highest number of undo steps possible.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2602,7 +2584,7 @@
 			</info>
 			<group oor:name="Language">
 				<info>
-					<desc xml:lang="en-US">Specifies options related to the installd languages.</desc>
+					<desc xml:lang="en-US">Specifies options related to the installed languages.</desc>
 				</info>
 				<prop oor:name="Locales" oor:type="oor:string-list">
 					<!--OldPath: OfficeLanguage/[Code]=Installed -->
@@ -2623,7 +2605,7 @@
 				<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
 				<info>
 					<author>MBA</author>
-					<desc xml:lang="en-US">Specifies if printing a document can modify a document due to reformating.</desc>
+					<desc xml:lang="en-US">Specifies if printing a document can modify a document due to reformatting</desc>
 					<label xml:lang="en-US">(PrinterOptions) PrintingModifiesDocument</label>
 				</info>
 				<value>true</value>
@@ -2679,11 +2661,11 @@
 			<group oor:name="Option">
 				<info>
 					<author>AF</author>
-					<desc xml:lang="en-US">Options related to printing.</desc>
+					<desc xml:lang="en-US">Specifies the options related to printing.</desc>
 				</info>
 				<group oor:name="Printer">
 					<info>
-						<desc xml:lang="en-US">Options related to printing.</desc>
+						<desc xml:lang="en-US">Specifies the options related to printing.</desc>
 					</info>
 					<prop oor:name="ReduceTransparency" oor:type="xs:boolean">
 						<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
@@ -2698,7 +2680,7 @@
 						<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
 						<info>
 							<author>AF</author>
-							<desc xml:lang="en-US">Specifies type of transparency reduction: 0 - Automatically	determine reduction, 1 - Allways disabled.</desc>
+							<desc xml:lang="en-US">Specifies type of transparency reduction: 0 - Automatically determine reduction, 1 - Always disabled.</desc>
 							<label xml:lang="en-US">(PrinterOptions) ReducedTransparencyMode</label>
 						</info>
 						<value>0</value>
@@ -2725,7 +2707,7 @@
 						<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
 						<info>
 							<author>AF</author>
-							<desc xml:lang="en-US">Specifies the Mmximum number stripes used for output of	gradients.</desc>
+							<desc xml:lang="en-US">Specifies the maximum number stripes used for output of gradients.</desc>
 							<label xml:lang="en-US">(PrinterOptions) ReducedGradientStepCount</label>
 						</info>
 						<value>64</value>
@@ -2771,7 +2753,7 @@
 						<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
 						<info>
 							<author>AF</author>
-							<desc xml:lang="en-US">Indicates whether to create only greyscale output of	all objects.</desc>
+							<desc xml:lang="en-US">Indicates whether to create only grayscale output of all objects.</desc>
 							<label xml:lang="en-US">(PrinterOptions) ConvertToGreyscales</label>
 						</info>
 						<value>false</value>
@@ -2779,7 +2761,7 @@
 				</group>
 				<group oor:name="File">
 					<info>
-						<desc xml:lang="en-US">Options for printing into a file.</desc>
+						<desc xml:lang="en-US">Specifies the options for printing to a file.</desc>
 						<label xml:lang="en-US">Print File</label>
 					</info>
 					<prop oor:name="ReduceTransparency" oor:type="xs:boolean">
@@ -2872,8 +2854,7 @@
 						<!-- UIHints: Tools  Options - General  Print  [Section] PrintFileOptions-->
 						<info>
 							<author>AF</author>
-							<desc xml:lang="en-US">Indicates whether to create only greyscale output of
-							all objects.</desc>
+							<desc xml:lang="en-US">Indicates whether to create only grayscale output of all objects.</desc>
 							<label xml:lang="en-US">(PrintFileOptions) ConvertToGreyscales</label>
 						</info>
 						<value>false</value>
@@ -2885,7 +2866,7 @@
 			<info>
 				<deprecated/>
 				<author>MBA</author>
-				<desc xml:lang="en-US">List of open documents/windows</desc>
+				<desc xml:lang="en-US">Lists open documents or windows.</desc>
 			</info>
 			<prop oor:name="WindowList" oor:type="oor:string-list">
 				<!-- OldPath: SavedWorkingSet -->
@@ -2894,14 +2875,14 @@
 				<info>
 					<deprecated/>
 					<author>MBA</author>
-					<desc xml:lang="en-US">List of open documents/windows</desc>
+					<desc xml:lang="en-US">Lists open documents or windows.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="AddXMLToStorage">
 			<info>
 				<author>OS</author>
-				<desc xml:lang="en-US">Contains settings specifiing if a XML package is added to the applications binary files.</desc>
+				<desc xml:lang="en-US">Contains settings specifying if a XML package is added to the applications binary files.</desc>
 			</info>
 			<prop oor:name="Writer" oor:type="xs:boolean">
 				<!-- OldPath: AddXMLToStorage_Writer -->
@@ -2943,7 +2924,7 @@
 		<group oor:name="Help">
 			<info>
 				<author>FS</author>
-				<desc xml:lang="en-US">Contains settings which specify the common help settings.</desc>
+				<desc xml:lang="en-US">Contains settings that specify the common help settings.</desc>
 			</info>
 			<prop oor:name="Locale" oor:type="xs:string">
 				<info>
@@ -2991,7 +2972,7 @@
 			<group oor:name="HelpAgent">
 				<info>
 					<author>MBA</author>
-					<desc xml:lang="en-US">HelpAgent properties</desc>
+					<desc xml:lang="en-US">Specifies the properties of the HelpAgent.</desc>
 				</info>
 				<prop oor:name="Enabled" oor:type="xs:boolean">
 					<info>
@@ -3002,7 +2983,7 @@
 				</prop>
 				<prop oor:name="Timeout" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Specifies the timeout value in seconds after which the HelpAgent is closed automatically if ignored by the user.</desc>
+						<desc xml:lang="en-US">Specifies the time-out value in seconds after which the HelpAgent is closed automatically if ignored by the user.</desc>
 						<label xml:lang="en-US">HelpAgent timeout</label>
 					</info>
 					<value>30</value>
@@ -3024,7 +3005,7 @@
 			<group oor:name="Registration">
 				<info>
 					<author>FS</author>
-					<desc xml:lang="en-US">Contains various settings regarding the product registrastion feature.</desc>
+					<desc xml:lang="en-US">Contains various settings regarding the product registration feature.</desc>
 				</info>
 				<prop oor:name="URL" oor:type="xs:string">
 					<info>
@@ -3035,7 +3016,7 @@
 				</prop>
 				<prop oor:name="ReminderDate" oor:type="xs:string">
 					<info>
-						<desc xml:lang="en-US">Contains a string representation of the date on which the user recieves a reminder (e.g. "13.02.2002").</desc>
+						<desc xml:lang="en-US">Contains a string representation of the date on which the user receives a reminder (e.g. "13.02.2002").</desc>
 					</info>
 					<value/>
 					<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -3044,11 +3025,11 @@
 					<info>
 						<desc xml:lang="en-US">Contains the number used internally to determine when the dialog should be started.</desc>
 					</info>
-					<value>2</value>
+					<value>1</value>
 				</prop>
 				<prop oor:name="ShowMenuItem" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Contains a boolean specifying if the "Registration..." menu item is available.</desc>
+						<desc xml:lang="en-US">Contains a Boolean that specifies if the "Registration..." menu item is available.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -3078,7 +3059,7 @@
 		<group oor:name="Vectorize">
 			<info>
 				<author>AF</author>
-				<desc xml:lang="en-US">Options related to the vectorization of bitmaps.</desc>
+				<desc xml:lang="en-US">Specifies the options related to the vectorization of bitmaps.</desc>
 			</info>
 			<prop oor:name="ColorCount" oor:type="xs:short">
 				<!-- OldPath: Draw_Impress/Vectorize -->
@@ -3086,21 +3067,18 @@
 				<!-- UIHints: Select bitmap =&amp;gt; context menu  convert  To polygon -->
 				<info>
 					<author>AF</author>
-					<desc xml:lang="en-US">Number of
-					colors used to create a vector graphic in Draw/Impress [UNIT=count].</desc>
+					<desc xml:lang="en-US">Specifies the number of colors that are used to create a vector graphic in Draw/Impress [UNIT=count].</desc>
 					<label xml:lang="en-US">Number of colors</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="8">
 						<info>
-							<desc xml:lang="en-US">Minimal number that can be used to create
-							a vector graphic is 8.</desc>
+							<desc xml:lang="en-US">Specifies that the lowest number that can be used to create a vector graphic is 8.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="32">
 						<info>
-							<desc xml:lang="en-US">Minimal number that can be used to create
-							 a vector graphic is 32.</desc>
+							<desc xml:lang="en-US">Specifies that the lowest number that can be used to create a vector graphic is 32.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -3112,20 +3090,18 @@
 				<!-- UIHints: Select bitmap =&amp;gt; context menu  convert  To polygon -->
 				<info>
 					<author>AF</author>
-					<desc xml:lang="en-US">Number of
-					pixels to be used as one pixel when creating a vector
-					graphic.</desc>
+					<desc xml:lang="en-US">Specifies the number of pixels that you want to combine as a single pixel when creating a vector graphic.</desc>
 					<label xml:lang="en-US">Point reduction</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Minimal value to reduce pount are 0 pixels.</desc>
+							<desc xml:lang="en-US">Specifies the minimum value to reduce point is 0 pixels.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="32">
 						<info>
-							<desc xml:lang="en-US">Maximal value to reduce pount are 32 pixels.</desc>
+							<desc xml:lang="en-US">Specifies the maximum value to reduce point is 32 pixels.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -3156,12 +3132,12 @@
 				<constraints>
 					<minInclusive oor:value="8">
 						<info>
-							<desc xml:lang="en-US">Minimal extent are 8 pixels.</desc>
+							<desc xml:lang="en-US">Specifies that the minimum extent is  8 pixels.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="128">
 						<info>
-							<desc xml:lang="en-US">Maximal extent are 128 pixels.</desc>
+							<desc xml:lang="en-US">Specifies that the maximum extent is 128 pixels.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -3171,12 +3147,12 @@
 		<group oor:name="Image">
 			<info>
 				<author>AF</author>
-				<desc xml:lang="en-US">Image options.</desc>
+				<desc xml:lang="en-US">Specifies the options for images.</desc>
 				<label xml:lang="en-US">Image</label>
 			</info>
 			<group oor:name="Color">
 				<info>
-					<desc xml:lang="en-US">Image color options.</desc>
+					<desc xml:lang="en-US">Specifies the color options for images.</desc>
 					<label xml:lang="en-US">Image Color</label>
 				</info>
 				<prop oor:name="Grayscale" oor:type="xs:short">
@@ -3337,7 +3313,7 @@
 				</prop>
 				<group oor:name="RGB">
 					<info>
-						<desc xml:lang="en-US">Image options regarding colors in RGB format.</desc>
+						<desc xml:lang="en-US">Specifies the RGB color options for images.</desc>
 						<label xml:lang="en-US">Image RGB Color</label>
 					</info>
 					<prop oor:name="Red" oor:type="xs:int">
@@ -3416,7 +3392,7 @@
 			</group>
 			<group oor:name="Effect">
 				<info>
-					<desc xml:lang="en-US">Image effects options.</desc>
+					<desc xml:lang="en-US">Specifies the effects options for images.</desc>
 					<label xml:lang="en-US">Image Effects</label>
 				</info>
 				<prop oor:name="MosaicX_Tile" oor:type="xs:short">
@@ -3480,22 +3456,22 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -3599,22 +3575,22 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
 							<info>
-								<desc xml:lang="en-US">Deprecated.</desc>
+								<desc xml:lang="en-US">Deprecated</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -3633,12 +3609,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimal intensity is 0.</desc>
+								<desc xml:lang="en-US">Specifies that the minimum intensity is 0.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum intensity is 100.</desc>
+								<desc xml:lang="en-US">Specifies that the maximum intensity is 100.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3679,25 +3655,25 @@
 					</info>
 					<prop oor:name="MathTypeToMath" oor:type="xs:boolean">
 						<info>
-							<desc xml:lang="en-US">Specifies if convertable MathType OLE objects are converted into Math objects.</desc>
+							<desc xml:lang="en-US">Specifies if convertible MathType OLE objects are converted into Math objects.</desc>
 						</info>
 						<value>false</value>
 					</prop>
 					<prop oor:name="WinWordToWriter" oor:type="xs:boolean">
 						<info>
-							<desc xml:lang="en-US">Specifies if convertable WinWord OLE objects are converted into Writer objects.</desc>
+							<desc xml:lang="en-US">Specifies if convertible WinWord OLE objects are converted into Writer objects.</desc>
 						</info>
 						<value>false</value>
 					</prop>
 					<prop oor:name="ExcelToCalc" oor:type="xs:boolean">
 						<info>
-							<desc xml:lang="en-US">Specifies if convertable Excel OLE objects are converted into Calc objects.</desc>
+							<desc xml:lang="en-US">Specifies if convertible Excel OLE objects are converted into Calc objects.</desc>
 						</info>
 						<value>false</value>
 					</prop>
 					<prop oor:name="PowerPointToImpress" oor:type="xs:boolean">
 						<info>
-							<desc xml:lang="en-US">Specifies if convertable PowerPoint OLE objects are converted into Impress objects.</desc>
+							<desc xml:lang="en-US">Specifies if convertible PowerPoint OLE objects are converted into Impress objects.</desc>
 						</info>
 						<value>false</value>
 					</prop>
@@ -3755,17 +3731,17 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">PCD-Base16, imports a PCD graphic with a resolution of 192*128 pixel.</desc>
+										<desc xml:lang="en-US">PCD-Base16, 192*128 PCD graphic.</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">PCD-Base4, imports a PCD graphic with a resolution of 384*256 pixel.</desc>
+										<desc xml:lang="en-US">PCD-Base4, 384*256 PCD graphic.</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">PCD-Base, imports a PCD graphic with a resolution of 768 * 512 pixel.</desc>
+										<desc xml:lang="en-US">PCD-Base, 768*512 PCD graphic.</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -3792,18 +3768,17 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
+										<desc xml:lang="en-US">Original size</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Resolution mode, graphics are stored using a logical size that depends to the given dpi/pixel ratio.
-										Storing a 300 pixel wide graphic by 150 dpi will result in a graphic which is 2 inch wide.</desc>
+										<desc xml:lang="en-US">Logical size (dpi/pixel ratio)</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
+										<desc xml:lang="en-US">Given size</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -3820,22 +3795,22 @@
 							<constraints>
 								<enumeration oor:value="75">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using a resolution of 75 dpi.</desc>
+										<desc xml:lang="en-US">75</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="150">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using a resolution of 150 dpi.</desc>
+										<desc xml:lang="en-US">150</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="300">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using a resolution of 300 dpi.</desc>
+										<desc xml:lang="en-US">300</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="600">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using a resolution of 600 dpi.</desc>
+										<desc xml:lang="en-US">600</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -3845,48 +3820,48 @@
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
 							<info>
-								<desc xml:lang="en-US">Specifies number colors that are to be used for the export.</desc>
+								<desc xml:lang="en-US">Specifies the number of colors that are to be used for the export.</desc>
 								<label xml:lang="en-US">Color resolution</label>
 							</info>
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Original - Graphics are exported using the same number of colors as the original.</desc>
+										<desc xml:lang="en-US">Original</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">1 bit - Graphics are exported with a color reduction to 1 bit threshold value.</desc>
+										<desc xml:lang="en-US">1 bit, 1 bit threshold</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">1 bit - Graphics are exported with a color reduction to 1 bit dithered value.</desc>
+										<desc xml:lang="en-US">1 bit, 1 bit dithered</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="3">
 									<info>
-										<desc xml:lang="en-US">4 bit - Graphics are exported with a color resolution of 4 bit grayscale value.</desc>
+										<desc xml:lang="en-US">4 bit, 4 bit grayscale</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="4">
 									<info>
-										<desc xml:lang="en-US">4 bit - Graphics are exported with a color resolution of 4 bit color palette value.</desc>
+										<desc xml:lang="en-US">4 bit, 4 bit color palette</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="5">
 									<info>
-										<desc xml:lang="en-US">8 bit - Graphics are exported with a color resolution of 8 bit grayscale color value.</desc>
+										<desc xml:lang="en-US">8 bit, 8 bit grayscale color</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="6">
 									<info>
-										<desc xml:lang="en-US">8 bit - Graphics are exported with a color resolution of 8 bit color palette value.</desc>
+										<desc xml:lang="en-US">8 bit, 8 bit color palette</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="7">
 									<info>
-										<desc xml:lang="en-US">24 bit true color - Graphics are exported with a color resolution of 24 bit.</desc>
+										<desc xml:lang="en-US">24 bit, 24 bit true color</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -3914,39 +3889,32 @@
 						<!-- OldLocation: fltopt.ini -->
 						<!-- UIHints: File  Export  Filetype File  Export  Filetype  EPS-Encapsulated Postscript -->
 						<info>
-							<desc xml:lang="en-US">Specifies default settings of the EPS - Encapsualted Postscript export dialog.</desc>
+							<desc xml:lang="en-US">Specifies default settings of the EPS - Encapsulated Postscript export dialog.</desc>
 						</info>
 						<prop oor:name="Preview" oor:type="xs:int">
 							<info>
-								<desc xml:lang="en-US">Specifies if a preview graphic should be exported together with the Encapsulated PostScript file.
-													   Due to the fact that most programs can't render eps graphics, it is useful to
-													   provide a preview that can be displayed as replacement. The preview graphic will also be
-													   printed if the printer is not capable of Postscript.</desc>
+								<desc xml:lang="en-US">Specifies if a preview graphic should be exported together with the Encapsulated PostScript file. Due to the fact that most programs can't render eps graphics, it is useful to provide a preview that can be displayed as replacement. The preview graphic will also be printed if the printer is not capable of Postscript.</desc>
 								<label xml:lang="en-US">Preview - Picture preview (TIFF) / Interchange (EPSI)</label>
 							</info>
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported without preview graphic.</desc>
+										<desc xml:lang="en-US">None</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported together with a TIFF preview graphic.
-															   If a TIFF preview graphic is used, the created eps won't be editable as standard text file.</desc>
+										<desc xml:lang="en-US">TIFF</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported together with a Interchange (EPSI) preview graphic, which
-															   has a color resolution of 1 bit. EPS graphics containing an EPSI preview
-															   graphic remain editable as standard text file.</desc>
+										<desc xml:lang="en-US">Interchange (EPSI) - 1 bit color resolution</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="3">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported together with a TIFF- and EPSI preview graphic.
-															   The created eps won't be editable as standard text file.</desc>
+										<desc xml:lang="en-US">TIFF and EPSI</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -3954,20 +3922,18 @@
 						</prop>
 						<prop oor:name="Version" oor:type="xs:int">
 							<info>
-								<desc xml:lang="en-US">Specifies the PostScript version that has to be used for the EPS export.  Because not every PostScript printer is capable of version 2 PostScript, it
-													   is sometimes necessary to create version 1 PostScript graphics.
-													   PostScript Level 1 does not suppong color and bitmap compression.</desc>
+								<desc xml:lang="en-US">Specifies the PostScript version that has to be used for the EPS export. Because not every PostScript printer is capable of version 2 PostScript, it is sometimes necessary to create version 1 PostScript graphics. PostScript Level 1 does not support color and bitmap compression.</desc>
 								<label xml:lang="en-US">Version - Level 1 / Level 2</label>
 							</info>
 							<constraints>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to version 1 PostScript.</desc>
+										<desc xml:lang="en-US">Version 1 PostScript</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to version 2 PostScript.</desc>
+										<desc xml:lang="en-US">Version 2 PostScript</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -3975,19 +3941,18 @@
 						</prop>
 						<prop oor:name="ColorFormat" oor:type="xs:int">
 							<info>
-								<desc xml:lang="en-US">Specifies if color or grayscale format is used for the EPS export.
-													   This option is not available for version 1 PostScript files.</desc>
+								<desc xml:lang="en-US">Specifies if color or grayscale format is used for the EPS export. This option is not available for version 1 PostScript files.</desc>
 								<label xml:lang="en-US">Color format - Color / Grayscale</label>
 							</info>
 							<constraints>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using color format.</desc>
+										<desc xml:lang="en-US">Color format</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using grayscale format.</desc>
+										<desc xml:lang="en-US">Grayscale format</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4002,12 +3967,12 @@
 							<constraints>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Bitmpas are exported with LZW compression.</desc>
+										<desc xml:lang="en-US">LZW compression</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">Bitmaps are exported without compression.</desc>
+										<desc xml:lang="en-US">No compression</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4015,22 +3980,18 @@
 						</prop>
 						<prop oor:name="TextMode" oor:type="xs:int">
 							<info>
-								<desc xml:lang="en-US">Specifies if glyph outlines are exported.</desc>
+								<desc xml:lang="en-US">Specifies if glyph outlines are exported. They produce the highest quality and it is the only possible way to create EPS files that are CJK compliant. Not using glyphs will produce smaller files, but it might lead to problems if not all fonts are available during printing.</desc>
 								<label xml:lang="en-US">Export text using glyph outlines - always / never</label>
 							</info>
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using glyph outlines.
-															   This will produce the highest quality and it is the only
-															   possible way to create EPS files which are CJK compliant.</desc>
+										<desc xml:lang="en-US">Glyph outlines</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported without using glyph outlines.
-															   This will produce smaller files, but it might lead to problems,
-															   if not all fonts are available during printing.</desc>
+										<desc xml:lang="en-US">No glyph outlines</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4053,12 +4014,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Deactivate interlace mode.</desc>
+										<desc xml:lang="en-US">Deactivate</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Activate interlace mode.</desc>
+										<desc xml:lang="en-US">Activate</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4074,12 +4035,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Export graphics without transparency.</desc>
+										<desc xml:lang="en-US">No transparency</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Export graphics using transparency.</desc>
+										<desc xml:lang="en-US">Transparency</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4095,7 +4056,7 @@
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  JPG-JPEG -->
 							<info>
-								<desc xml:lang="en-US">Specifies quality of the JPG export. A higher value results in hiqher quality and file size.</desc>
+								<desc xml:lang="en-US">Specifies quality of the JPG export. A higher value results in higher quality and file size.</desc>
 							</info>
 							<constraints>
 								<minInclusive oor:value="1">
@@ -4121,12 +4082,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using true colors.</desc>
+										<desc xml:lang="en-US">True colors</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported using grayscale.</desc>
+										<desc xml:lang="en-US">Grayscale</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4147,12 +4108,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
+										<desc xml:lang="en-US">Original size</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
+										<desc xml:lang="en-US">Given size</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4180,12 +4141,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
+										<desc xml:lang="en-US">Original size</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
+										<desc xml:lang="en-US">Given size</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4213,12 +4174,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to binary format.</desc>
+										<desc xml:lang="en-US">Binary</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to ASCII format.</desc>
+										<desc xml:lang="en-US">ASCII</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4239,12 +4200,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to binary format.</desc>
+										<desc xml:lang="en-US">Binary</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to ASCII format.</desc>
+										<desc xml:lang="en-US">ASCII</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4265,12 +4226,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to binary format.</desc>
+										<desc xml:lang="en-US">Binary</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported to ASCII format.</desc>
+										<desc xml:lang="en-US">ASCII</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4291,12 +4252,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
+										<desc xml:lang="en-US">Original size</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
+										<desc xml:lang="en-US">Given size</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4324,12 +4285,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
+										<desc xml:lang="en-US">Original size</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
+										<desc xml:lang="en-US">Given size</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4357,12 +4318,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Original mode, graphics are stored using the original size.</desc>
+										<desc xml:lang="en-US">Original size</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Size mode, graphics are stored using the given size.</desc>
+										<desc xml:lang="en-US">Given size</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4415,12 +4376,12 @@
 							<constraints>
 								<enumeration oor:value="0">
 									<info>
-										<desc xml:lang="en-US">Deactivate interlace mode.</desc>
+										<desc xml:lang="en-US">Deactivate interlace mode</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="1">
 									<info>
-										<desc xml:lang="en-US">Activate interlace mode.</desc>
+										<desc xml:lang="en-US">Activate interlace mode</desc>
 									</info>
 								</enumeration>
 							</constraints>
@@ -4460,14 +4421,17 @@
 						</info>
 						<value>false</value>
 					</prop>
-                    <group oor:name="FontSize"><info><desc xml:lang="en-US">Specifies fontsize for HTML</desc></info>
+					<group oor:name="FontSize">
+						<info>
+							<desc xml:lang="en-US">Specifies font size for HTML.</desc>
+						</info>
 						<prop oor:name="Size_1" oor:type="xs:int">
 							<!-- OldPath: Browser/HTML/Font_Sizes -->
 							<!-- OldLocation: soffice.cfg -->
 							<!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Specifies fontsize for HTML as Token Font 1.</desc>
+								<desc xml:lang="en-US">Specifies font size for HTML as Token Font 1.</desc>
 								<label xml:lang="en-US">Size 1</label>
 							</info>
 							<value>7</value>
@@ -4478,7 +4442,7 @@
 							<!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Specifies fontsize for HTML as Token Font 2.</desc>
+								<desc xml:lang="en-US">Specifies font size for HTML as Token Font 2.</desc>
 								<label xml:lang="en-US">Size 2</label>
 							</info>
 							<value>10</value>
@@ -4489,7 +4453,7 @@
 							<!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Specifies fontsize for HTML as Token Font 3.</desc>
+								<desc xml:lang="en-US">Specifies font size for HTML as Token Font 3.</desc>
 								<label xml:lang="en-US">Size 3</label>
 							</info>
 							<value>12</value>
@@ -4500,7 +4464,7 @@
 							<!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Specifies fontsize for HTML as Token Font 4.</desc>
+								<desc xml:lang="en-US">Specifies font size for HTML as Token Font 4.</desc>
 								<label xml:lang="en-US">Size 4</label>
 							</info>
 							<value>14</value>
@@ -4511,7 +4475,7 @@
 							<!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Specifies fontsize for HTML as Token Font 5.</desc>
+								<desc xml:lang="en-US">Specifies font size for HTML as Token Font 5.</desc>
 								<label xml:lang="en-US">Size 5</label>
 							</info>
 							<value>18</value>
@@ -4522,7 +4486,7 @@
 							<!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Specifies fontsize for HTML as Token Font 6.</desc>
+								<desc xml:lang="en-US">Specifies font size for HTML as Token Font 6.</desc>
 								<label xml:lang="en-US">Size 6</label>
 							</info>
 							<value>24</value>
@@ -4533,7 +4497,7 @@
 							<!-- UIHints: Tools  Options - Browser  HTML [Section] Font sizes -->
 							<info>
 								<author>OS</author>
-								<desc xml:lang="en-US">Specifies fontsize for HTML as Token Font 7.</desc>
+								<desc xml:lang="en-US">Specifies font size for HTML as Token Font 7.</desc>
 								<label xml:lang="en-US">Size 7</label>
 							</info>
 							<value>36</value>
@@ -4653,17 +4617,17 @@
 						<constraints>
 							<enumeration oor:value="0">
 								<info>
-									<desc xml:lang="en-US">Screen mode - medium quality (600DPI, bitmaps reduced to 72DPI)</desc>
+									<desc xml:lang="en-US">Screen mode (600DPI, bitmaps 72DPI)</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="1">
 								<info>
-									<desc xml:lang="en-US">Print mode - high quality (1200DPI, bitmaps reduced to 300DPI)</desc>
+									<desc xml:lang="en-US">Print mode (1200DPI, bitmaps 300DPI)</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
 								<info>
-									<desc xml:lang="en-US">Press mode - maximum quality (2400DPI, bitmaps reduced to 300DPI)</desc>
+									<desc xml:lang="en-US">Press mode (2400DPI, bitmaps 300DPI)</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -4675,7 +4639,7 @@
 		<group oor:name="Misc">
 			<info>
 				<author>MBA</author>
-				<desc xml:lang="en-US">Miscellaneous entries for the common group.</desc>
+				<desc xml:lang="en-US">Determines the miscellaneous entries for the common group.</desc>
 			</info>
 			<prop oor:name="PluginsEnabled" oor:type="xs:boolean">
 				<!-- OldPath: ? -->
@@ -4704,12 +4668,12 @@
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Specifies that small icons with 16x16 pixel should be used for toolboxes.</desc>
+							<desc xml:lang="en-US">16x16 pixel icons</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Specifies that big icons with 32x32 pixel should be used for toolboxes.</desc>
+							<desc xml:lang="en-US">32x32 pixel icons</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -4724,12 +4688,12 @@
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">A 3D style should be used for displaying the toolboxes.</desc>
+							<desc xml:lang="en-US">3D style</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">A flat style should be used for displaying the toolboxes.</desc>
+							<desc xml:lang="en-US">Flat style</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -4762,7 +4726,7 @@
 				<!-- UIHints: Tools  Options  Asian typography  Asian layout Kerning Western characters only-->
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">Determins the kerning of western text and/or punctuation inside of asian text.</desc>
+					<desc xml:lang="en-US">Determines the kerning of western text and/or punctuation inside of Asian text.</desc>
 					<label xml:lang="en-US">IsKerningWesternTextOnly</label>
 				</info>
 				<value>true</value>
@@ -4773,7 +4737,7 @@
 				<!-- UIHints: Tools  Options  Asian typography  Asian layout Character distance  -->
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">Determins the type of character distance compression in asian text: 0 - no compression; 1 - compress punctuation only; 2 - compress interpunction an japanese kana.</desc>
+					<desc xml:lang="en-US">Determines the type of character distance compression in Asian text: 0 - no compression; 1 - compress punctuation only; 2 - compress interpunction an japanese kana.</desc>
 					<label xml:lang="en-US">CompressCharacterDistance</label>
 				</info>
 				<value>0</value>
@@ -4807,7 +4771,7 @@
 				<!-- UIHints: Edit/Find & Replace -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifices search backwards.</desc>
+					<desc xml:lang="en-US">Specifies search backwards.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -4857,7 +4821,7 @@
 				<!-- UIHints: Edit/Find & Replace -->
 				<info>
 					<author>PB</author>
-					<desc xml:lang="en-US">Specifies search with the use of asian options.</desc>
+					<desc xml:lang="en-US">Specifies search with the use of Asian options.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -4872,7 +4836,7 @@
 					<!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Do not distinguish between full-width and half-width characters.</desc>
+						<desc xml:lang="en-US">Does not distinguish between full-width and half-width characters.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -4882,7 +4846,7 @@
 					<!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
 					<info>
 						<author>OS</author>
-						<desc xml:lang="en-US">Do not distinguish between hiragana and katakana characters.</desc>
+						<desc xml:lang="en-US">Does not distinguish between hiragana and katakana characters.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5056,7 +5020,7 @@
 			<prop oor:name="AutoDetectSystemHC" oor:type="xs:boolean">
 				<info>
 					<author>FS</author>
-					<desc xml:lang="en-US">Enables the automatic detection of a high contrast mode set for your desktop. Some OS' do not expose this option explicitly, but allow to choose a color scheme which is HC-compliant implicitly, which is recognized if this option is set.</desc>
+					<desc xml:lang="en-US">Enables the automatic detection of a high contrast mode set for your desktop. Some OS' do not provide this option explicitly, but allow the user to choose a color scheme that is HC-compliant implicitly, which is recognized if the option is set.</desc>
 					<label xml:lang="en-US">detect system's high contrast</label>
 				</info>
 				<value>true</value>
@@ -5072,7 +5036,7 @@
 			<prop oor:name="IsHelpTipsDisappear" oor:type="xs:boolean">
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">This enables/disables the automatic time out of Helptips. Duration (n) could be chosen from 1 to 99 seconds. If option is disabled the Helptip will not expire automatically (Loosing focus or ESC key if automatic time out is inactive.)</desc>
+					<desc xml:lang="en-US">Enables or disables the automatic time out of help tips. You can specify a duration (n) of 1 to 99 seconds. If this option is disabled, press the Esc key to dismiss the help tip.</desc>
 					<label xml:lang="en-US">Help tips disappear after</label>
 				</info>
 				<value>true</value>
@@ -5080,13 +5044,21 @@
 			<prop oor:name="HelpTipSeconds" oor:type="xs:short">
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">This enables/disables the automatic time out of Helptips. Duration (n) could be chosen from 1 to 99 seconds. If option is disabled the Helptip will not expire automatically (Loosing focus or ESC key if automatic time out is inactive.)</desc>
+					<desc xml:lang="en-US">Enables or disables the automatic time out of help tips. You can specify a duration (n) of 1 to 99 seconds. If this option is disabled, press the Esc key to dismiss the help tip.</desc>
 					<label xml:lang="en-US">Help tips disappear after</label>
 				</info>
 				<constraints>
-                    <minInclusive oor:value="1"><info><desc xml:lang="en-US">second</desc></info></minInclusive>
-                    <maxInclusive oor:value="99"><info><desc xml:lang="en-US">seconds</desc></info></maxInclusive>
-                </constraints>
+					<minInclusive oor:value="1">
+						<info>
+							<desc xml:lang="en-US">Specifies the number of seconds to wait before displaying a help tip.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="99">
+						<info>
+							<desc xml:lang="en-US">Specifies the number of seconds to display a help tip.</desc>
+						</info>
+					</maxInclusive>
+				</constraints>
 				<value>4</value>
 			</prop>
 			<prop oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean">
@@ -5128,7 +5100,7 @@
 			<prop oor:name="IsSelectionInReadonly" oor:type="xs:boolean">
 				<info>
 					<author>OS</author>
-					<desc xml:lang="en-US">Indicates whether or not the cursor is displayed in readonly texts.</desc>
+					<desc xml:lang="en-US">Indicates whether the cursor is displayed in read-only texts.</desc>
 					<label xml:lang="en-US">Use text selection mode in readonly texts.</label>
 				</info>
 				<value>false</value>
@@ -5155,7 +5127,6 @@
 				<info>
 					<desc xml:lang="en-US">Indicates if the mail application in the OS specific user settings should be used.</desc>
 				</info>
-				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Program" oor:type="xs:string">
 				<info>
@@ -5187,12 +5158,7 @@
 				</info>
 				<prop oor:name="ShowStatusWindow" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">
-							Currently, this entry only controls the behavior of the IIIMP status window on Unix.
-							If true, the status window is always displayed.
-							If false, the status window is never displayed.
-							If nil (the default), the status window is displayed depending on the current locale.
-						</desc>
+						<desc xml:lang="en-US">Controls the behavior of the IIIMP status window on Unix. If true, the status window is always displayed. If false, the status window is never displayed. If nil (the default), the status window is displayed depending on the current locale.</desc>
 					</info>
 				</prop>
 			</group>
@@ -5217,7 +5183,7 @@
 				<prop oor:name="AsianTypography" oor:type="xs:boolean">
 					<!-- UIHints: setup -->
 					<info>
-						<desc xml:lang="en-US">Specifies, whether asian typography options like compression and forbidden characters are available (true) or not (false).</desc>
+						<desc xml:lang="en-US">Specifies, whether Asian typography options like compression and forbidden characters are available (true) or not (false).</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5285,16 +5251,27 @@
 				<prop oor:name="CTLCursorMovement" oor:type="xs:int">
 					<!-- UIHints: options-->
 					<info>
-						<desc xml:lang="en-US">Specifies the kind of text cursor movement (logical (0) or visual (1)) within mixed text (RTL and LTR).</desc>
+						<desc xml:lang="en-US">Specifies the type of text cursor movement (logical (0) or visual (1)) within mixed text (RTL and LTR).</desc>
 					</info>
 					<value>0</value>
 				</prop>
 				<prop oor:name="CTLTextNumerals" oor:type="xs:int">
 					<!-- UIHints: options-->
 					<info>
-						<desc xml:lang="en-US">Specifies the kind of numerals (arabic (0), hindi (1) or system settings (2)) is used per default in all applications.</desc>
+						<desc xml:lang="en-US">Specifies the type of numerals (Arabic (0), Hindi (1) or system settings (2)) is used per default in all applications.</desc>
 					</info>
 					<value>0</value>
+				</prop>
+				<prop oor:name="UIMirroring" oor:type="xs:boolean">
+					<info>
+					    <author>SSA</author>
+						<desc xml:lang="en-US">
+						    Specifies whether the whole user interface (UI) will be mirrored.
+							If true, the UI will be right-to-left.
+							If false, the UI will be left-to-right.
+							If nil (the default), the UI will be mirrored depending on the office locale.
+						</desc>
+					</info>
 				</prop>
 			</group>
 		</group>
@@ -5302,18 +5279,18 @@
 			<info>
 				<deprecated>Use cfg package Jobs instead of this.</deprecated>
 				<author>AS</author>
-				<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+				<desc xml:lang="en-US">Uses cfg package Jobs instead of this component.</desc>
 			</info>
 			<set oor:name="Run" oor:node-type="JobDescription">
 				<info>
 					<deprecated>Use cfg package Jobs instead of this.</deprecated>
-					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="en-US">Uses cfg package Jobs instead of this component.</desc>
 				</info>
 			</set>
 			<set oor:name="RunOnce" oor:node-type="JobDescription">
 				<info>
 					<deprecated>Use cfg package Jobs instead of this.</deprecated>
-					<desc xml:lang="en-US">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="en-US">Uses cfg package Jobs instead of this component.</desc>
 				</info>
 			</set>
 		</group>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 15:40:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
               <value xml:lang="zh-TW">表格</value>
               <value xml:lang="tr">Table</value>
               <value xml:lang="ar">Table</value>
-              <value xml:lang="ca">Table</value>
-              <value xml:lang="th">ตาราง</value>
+              <value xml:lang="ca">Crea</value>
+              <value xml:lang="th">กระดาษคำนวณ</value>
             </prop>
           </node>
         </node>
@@ -141,12 +141,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -172,12 +172,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -201,12 +201,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -230,12 +230,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -259,12 +259,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -288,12 +288,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -317,12 +317,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -346,12 +346,12 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">그림</value>
+              <value xml:lang="ko">삽화</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
               <value xml:lang="ar">Illustration</value>
-              <value xml:lang="ca">Illustration</value>
+              <value xml:lang="ca">Il.lustració</value>
               <value xml:lang="th">ภาพประกอบ</value>
             </prop>
           </node>
@@ -910,3 +910,5 @@
     </node>
   </node>
 </oor:node>
+
+

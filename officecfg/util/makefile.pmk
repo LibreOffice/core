@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: tpf $ $Date: 2002-12-02 10:44:24 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:50:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,15 +75,6 @@ $(MISC)$/registry$/schema$/%.xcs : %.xcs
     +$(RM) $(@:d)$(<:b).tmp > $(NULLDEV)
     +$(RM) $(@:d)$(<:b).val > $(NULLDEV)
     
-$(MISC)$/xcdformat$/%.xcd : %.xcs
-    @+echo -------------+ convert xcs to old format xcd format
-    -$(MKDIR) -p $(@:d)
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/rschema.xsl $(MISC)$/xcdformat$/$(<:d)$(<:b).xcd xcu=$(PRJ)$/registry$/data$/$(<:d)$(<:b).xcu schemaRoot=$(PRJ)$/registry$/schema 
-
-$(MISC)$/instance$/%.xml : $(MISC)$/xcdformat$/%.xcd
-    @+echo -------------+ create old output format
-    $(JAVA) -Xmx128m -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar org.openoffice.configuration.XMLDefaultGenerator $< $(PRJ)$/util $(MISC) $(PRJ)$/data
-
 $(MISC)$/registry$/res$/{$(alliso)}$/%.properties :| %.xcs
     @+echo -------------+ creating locale dependent resource bundles
     -$(MKDIR) -p $(@:d)
@@ -101,32 +92,9 @@ $(MISC)$/registry$/data$/%.xcu : %.xcu
     +$(RM) $(@:d)$(<:b).tmp > $(NULLDEV)
     +$(RM) $(@:d)$(<:b).val > $(NULLDEV)
 
-$(MISC)$/xcdformat$/%.xcd : %.xcu
-    @+echo -------------+ convert xcu to old format xcd format
-    -$(MKDIR) -p $(@:d)
-    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs $(PRJ)$/util$/rschema.xsl $(MISC)$/xcdformat$/$(<:d)$(<:b).xcd xcu=$(PRJ)$/registry$/data$/$(<:d)$(<:b).xcu schemaRoot=$(PRJ)$/registry$/schema 
-
 $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
     @+echo -------------+ creating locale dependent entries
     -$(MKDIR) -p $(@:d)
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp xcs=$(PRJ)$/registry$/schema$/$(<:d)$(<:b).xcs schemaRoot=$(PRJ)$/registry$/schema locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
     +$(RM) $(@:d)$(<:b).tmp > $(NULLDEV)
-    
-$(MISC)$/compare$/%.xcd : $(MISC)$/xcdformat$/%.xcd
-    @+echo -------------+ comparing generated xcd with original xcd
-    -$(MKDIR) -p $(@:d)
-    $(JAVA) -Xmx128m -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/compare.xsl $@ org=$(PRJ)$/data$/{$(subst,$(MISC)$/xcdformat,  $(<:d))}$(<:b).xcd
-
-
-# create old output format obsolete
-#$(MISC)$/instance$/%.xml : %.xcd
-#	$(JAVA) -Xmx128m -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar org.openoffice.configuration.XMLDefaultGenerator $< $(PRJ)$/util $(MISC) $(PRJ)$/data
-
-#$(MISC)$/compare-instance$/%.xml : $(MISC)$/instance$/%.xml
-#	-$(MKDIR) -p $(@:d)
-#	$(JAVA) -Xmx128m -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/compare-xml.xsl $@ org=$(PRJ)$/instance$/{$(subst,$(MISC)$/instance,  $(<:d))}$(<:b).xml
-
-#$(MISC)$/compare-template$/%.xml : $(MISC)$/template$/%.xml
-#	-$(MKDIR) -p $(@:d)
-#	$(JAVA) -Xmx128m -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/compare-xml.xsl $@ org=$(PRJ)$/template$/{$(subst,$(MISC)$/template,  $(<:d))}$(<:b).xml

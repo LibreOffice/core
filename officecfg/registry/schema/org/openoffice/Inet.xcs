@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2002-12-11 13:01:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 			</info>
 			<group oor:name="And">
 				<info>
-					<desc xml:lang="en-US">Search options for 'AND' search (all words must be found).</desc>
+					<desc xml:lang="en-US">Specifies the search options for 'AND' searches (all words must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -117,7 +117,7 @@
 			</group>
 			<group oor:name="Or">
 				<info>
-					<desc xml:lang="en-US">Search options for 'OR' search (at least one word must be found).</desc>
+					<desc xml:lang="en-US">Specifies the search options for 'OR' searches (at least one word must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -159,7 +159,7 @@
 			</group>
 			<group oor:name="Exact">
 				<info>
-					<desc xml:lang="en-US">Search options for 'Exact' search (the whole text must be found).</desc>
+					<desc xml:lang="en-US">Specifies the search options for 'Exact' searches (the whole text must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -215,7 +215,8 @@
 					<author>ABI/SB/MHU</author>
 					<desc xml:lang="en-US">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="ooInetNoProxy" oor:type="xs:string">
 				<!-- OldPath: Inet/NoProxy -->
@@ -225,7 +226,8 @@
 					<author>ABI/SB/MHU</author>
 					<desc xml:lang="en-US">Enumerates the names of servers that do not require any proxies.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="ooInetProxyType" oor:type="xs:int">
 				<!-- OldPath: Inet/ProxyType -->
@@ -238,17 +240,17 @@
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Specifies that no proxies are used.</desc>
+							<desc xml:lang="en-US">No proxies</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Specifies automatic proxy configuration.</desc>
+							<desc xml:lang="en-US">Automatic proxy configuration</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Specifies manual proxy configuration.</desc>
+							<desc xml:lang="en-US">Manual proxy configuration</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -261,7 +263,8 @@
 					<author>ABI/SB/MHU</author>
 					<desc xml:lang="en-US">Specifies the name of the FTP proxy server.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="ooInetFTPProxyPort" oor:type="xs:int">
 				<!-- OldPath: Inet/FTPProxyPort -->
@@ -292,7 +295,8 @@
 					<author>ABI/SB/MHU</author>
 					<desc xml:lang="en-US">Specifies the name of the HTTP proxy server.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="ooInetHTTPProxyPort" oor:type="xs:int">
 				<!-- OldPath: Inet/HTTPProxyPort -->
@@ -324,7 +328,8 @@
 					<author>ABI/SB/MHU</author>
 					<desc xml:lang="en-US">Specifies the name of the Socks proxy server.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="ooInetSOCKSProxyPort" oor:type="xs:int">
 				<!-- OldPath: Inet/SOCKSProxyPort -->

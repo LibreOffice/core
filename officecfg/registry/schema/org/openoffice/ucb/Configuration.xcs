@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tpf $ $Date: 2002-11-21 15:08:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 	<templates>
 		<group oor:name="ContentProviderData">
 			<info>
-				<desc xml:lang="en-US">Contains data describing the configuartion parameters of a Content Provider.</desc>
+				<desc xml:lang="en-US">Contains data describing the configuration parameters of a Content Provider.</desc>
 			</info>
 			<prop oor:name="ServiceName" oor:type="xs:string">
 				<info>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-12-04 12:27:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@
 					<desc xml:lang="en-US">Specifies the default document CJK language.</desc>
 					<label xml:lang="en-US">Default language for CJK linguistics</label>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="DefaultLocale_CTL" oor:type="xs:string">
 				<!-- OldPath: DefaultLanguage -->
@@ -107,7 +108,8 @@
 					<desc xml:lang="en-US">Specifies the default document CTL language.</desc>
 					<label xml:lang="en-US">Default language for CTL linguistics</label>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="IsGermanPreReform" oor:type="xs:boolean">
 				<!-- OldPath: MiscOptions -->
@@ -122,7 +124,7 @@
 			</prop>
 			<group oor:name="DictionaryList">
 				<info>
-					<desc xml:lang="en-US">Defines which personal dictonaries are used.</desc>
+					<desc xml:lang="en-US">Defines which personal dictionaries are used.</desc>
 				</info>
 				<prop oor:name="ActiveDictionaries" oor:type="oor:string-list">
 					<!-- OldPath: Active-Dictionaries -->
@@ -188,7 +190,7 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Hides markings from automatic spell check.</desc>
+					<desc xml:lang="en-US">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
 					<label xml:lang="en-US">Hide markings</label>
 				</info>
 				<value>false</value>
@@ -254,12 +256,12 @@
 				<constraints>
 					<minInclusive oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -277,12 +279,12 @@
 				<constraints>
 					<minInclusive oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -299,12 +301,12 @@
 				<constraints>
 					<minInclusive oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed.</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -349,24 +351,24 @@
 			</group>
 			<group oor:name="HyphenatorList" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. Only languages listed will be supported.</desc>
+					<desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
 				</info>
 			</group>
-            <group oor:name="LastFoundSpellCheckers" oor:extensible="true">
-                <info>
-                    <desc xml:lang="en-US">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-                </info>
-            </group>
-            <group oor:name="LastFoundThesauri" oor:extensible="true">
-                <info>
-                    <desc xml:lang="en-US">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-                </info>
-            </group>
-            <group oor:name="LastFoundHyphenators" oor:extensible="true">
-                <info>
-                    <desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-                </info>
-            </group>
+			<group oor:name="LastFoundSpellCheckers" oor:extensible="true">
+				<info>
+					<desc xml:lang="en-US">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
+				</info>
+			</group>
+			<group oor:name="LastFoundThesauri" oor:extensible="true">
+				<info>
+					<desc xml:lang="en-US">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
+				</info>
+			</group>
+			<group oor:name="LastFoundHyphenators" oor:extensible="true">
+				<info>
+					<desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
+				</info>
+			</group>
 		</group>
 	</component>
 </oor:component-schema>

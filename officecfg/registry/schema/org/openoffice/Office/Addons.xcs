@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,11 @@
 	<templates>
 		<group oor:name="MenuType">
 			<info>
-				<desc xml:lang="en-US">Describes a menu item representing a function of of an external component. The name of the name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+				<desc xml:lang="en-US">Describes a menu item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">A command URL which represents the function to execute. This property can be empty if menu item is the root of a sub menu.</desc>
+					<desc xml:lang="en-US">A command URL which represents the function to execute.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
@@ -82,7 +82,7 @@
 			</prop>
 			<prop oor:name="Target" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">An URL used to reference an optional menu image. It is allowed to use path variables to reference images relative to the office installation or user installation path.</desc>
+					<desc xml:lang="en-US">This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageIdentifier" oor:type="xs:string">
@@ -92,31 +92,27 @@
 			</prop>
 			<group oor:name="Images">
 				<info>
-					<desc xml:lang="en-US">A group of optional menu item images for toolbars and menus.</desc>
+					<desc xml:lang="en-US">A group of optional menu item images.</desc>
 				</info>
 				<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
 					<info>
 						<desc xml:lang="en-US">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="ImageBig" oor:type="xs:hexBinary">
 					<info>
 						<desc xml:lang="en-US">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
 					<info>
 						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
 					<info>
 						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 			<set oor:name="Submenu" oor:node-type="MenuType">
@@ -124,6 +120,112 @@
 					<desc xml:lang="en-US">An optional set to allow sub menus.</desc>
 				</info>
 			</set>
+		</group>
+		<group oor:name="PopupMenuType">
+			<info>
+				<desc xml:lang="en-US">Describes a menu item/toolbar item representing a function of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+			</info>
+			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+				<info>
+					<desc xml:lang="en-US">A localized string used to as the menu title.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Target" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ImageIdentifier" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A private URL used to reference an optional internal image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Context" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">An property to define the context of a top-level popup-menu or toolbar item. It can be empty or a colon separated list of the supported application modules. Currently suported and not case-sensitve are: Writer, Calc, Draw, Impress, Math</desc>
+				</info>
+				<value/>
+			</prop>
+			<group oor:name="Images">
+				<info>
+					<desc xml:lang="en-US">A group of optional images for toolbars and menus.</desc>
+				</info>
+				<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
+					</info>
+				</prop>
+				<prop oor:name="ImageBig" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
+					</info>
+				</prop>
+				<prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
+					</info>
+				</prop>
+				<prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
+					</info>
+				</prop>
+			</group>
+			<set oor:name="Submenu" oor:node-type="MenuType">
+				<info>
+					<desc xml:lang="en-US">An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
+				</info>
+			</set>
+		</group>
+		<group oor:name="ToolBarItemType">
+			<info>
+				<desc xml:lang="en-US">Describes a toolbar item representing a function of of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+			</info>
+			<prop oor:name="URL" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A command URL which represents the function to execute.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+				<info>
+					<desc xml:lang="en-US">A localized string used to as the menu item title.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Target" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">This is the target URL which is used for the dispatch command. There are special URL's to address certain targets: _self, current frame; _default, default; _blank, create new frame.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ImageIdentifier" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+				</info>
+			</prop>
+			<group oor:name="Images">
+				<info>
+					<desc xml:lang="en-US">A group of optional menu item images.</desc>
+				</info>
+				<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
+					</info>
+				</prop>
+				<prop oor:name="ImageBig" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
+					</info>
+				</prop>
+				<prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
+					</info>
+				</prop>
+				<prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
+					</info>
+				</prop>
+			</group>
 		</group>
 	</templates>
 	<component>
@@ -134,6 +236,16 @@
 			<set oor:name="AddonMenu" oor:node-type="MenuType">
 				<info>
 					<desc xml:lang="en-US">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+				</info>
+			</set>
+			<set oor:name="OfficeMenuBar" oor:node-type="PopupMenuType">
+				<info>
+					<desc xml:lang="en-US">Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
+				</info>
+			</set>
+			<set oor:name="OfficeToolBar" oor:node-type="ToolBarItemType">
+				<info>
+					<desc xml:lang="en-US">Contains the a list of functions inserted into the Office function bar. The optional property "Submenu" is not supported for this set!</desc>
 				</info>
 			</set>
 		</group>

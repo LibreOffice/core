@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Views.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Can be used for own purposes.</desc>
+					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -97,7 +97,7 @@
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Can be used for own purposes.</desc>
+					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -112,7 +112,7 @@
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Can be used for own purposes.</desc>
+					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>
@@ -127,12 +127,12 @@
 			</prop>
 			<prop oor:name="Visible" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US">Make window visible.</desc>
+					<desc xml:lang="en-US">Makes window visible.</desc>
 				</info>
 			</prop>
 			<group oor:name="UserData" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Can be used for own purposes.</desc>
+					<desc xml:lang="en-US">Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
 				</info>
 			</group>
 		</group>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-22 12:30:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,18 @@
     </node>
     <node oor:name="writer_XHTML_File" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="de">XHTML</value>
         <value xml:lang="en-US">XHTML</value>
-        <value xml:lang="x-translate">XHTML</value>
-        <value xml:lang="x-Comment">XHTML</value>
       </prop>
       <prop oor:name="Data">
         <value>0,,,,xhtml,20002,</value>
+      </prop>
+    </node>
+    <node oor:name="writer_Flat_XML_File" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">Flat Xml</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>1,,,,xml,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_DocBook_File" oor:op="replace">
@@ -86,18 +91,35 @@
         <value xml:lang="de">DocBook</value>
         <value xml:lang="en-US">DocBook</value>
         <value xml:lang="x-translate">DocBook</value>
-        <value xml:lang="x-Comment">DocBook</value>
+        <value xml:lang="x-Comment">EM Oct 2002: Do not translate &quot;DocBook&quot; it is a product name. For more info visit http://www.docbook.org/</value>
+          <value xml:lang="pt">DocBook</value>
+          <value xml:lang="ru">DocBook</value>
+          <value xml:lang="el">DocBook</value>
+          <value xml:lang="nl">DocBook</value>
+          <value xml:lang="fr">DocBook</value>
+          <value xml:lang="es">DocBook</value>
+          <value xml:lang="fi">DocBook</value>
+          <value xml:lang="it">DocBook</value>
+          <value xml:lang="da">DocBook</value>
+          <value xml:lang="sv">DocBook</value>
+          <value xml:lang="pl">DocBook</value>
+          <value xml:lang="pt-BR">DocBook</value>
+          <value xml:lang="ja">DocBook</value>
+          <value xml:lang="ko">DocBook</value>
+          <value xml:lang="zh-CN">DocBook</value>
+          <value xml:lang="zh-TW">DocBook</value>
+          <value xml:lang="tr">DocBook</value>
+          <value xml:lang="ar">DocBook</value>
+          <value xml:lang="ca">DocBook</value>
+          <value xml:lang="th">DocBook</value>
       </prop>
       <prop oor:name="Data">
-        <value>1,,,,xml,20002,</value>
+        <value>1,,,doctype:-//OASIS//DTD DocBook XML V4.1.2//EN,xml,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_PocketWord_File" oor:op="replace">
       <prop oor:name="UIName">
-        <value xml:lang="de">Pocket Word</value>
         <value xml:lang="en-US">Pocket Word</value>
-        <value xml:lang="x-translate">Pocket Word</value>
-        <value xml:lang="x-Comment">Pocket Word</value>
       </prop>
       <prop oor:name="Data">
         <value>0,,,,psw,20002,</value>
@@ -109,17 +131,6 @@
       </prop>
       <prop oor:name="Data">
         <value>0,,,,pdb,20002,</value>
-      </prop>
-    </node>
-    <node oor:name="writer_Flat_XML_File" oor:op="replace">
-      <prop oor:name="UIName">
-        <value xml:lang="de">Flat XML</value>
-        <value xml:lang="en-US">Flat XML</value>
-        <value xml:lang="x-translate">Flat XML</value>
-        <value xml:lang="x-comment">Flat XML</value>
-      </prop>
-      <prop oor:name="Data">
-        <value>0,,,,xml,20002,</value>
       </prop>
     </node>
     <node oor:name="calc_Pocket_Excel_File" oor:op="replace">
@@ -1954,6 +1965,28 @@
       </prop>
       <prop oor:name="UIName">
         <value xml:lang="en-US">AportisDoc (Palm)</value>
+    <value xml:lang="de">AportisDoc (Palm)</value>
+          <value xml:lang="x-comment">AportisDoc (Palm)</value>
+          <value xml:lang="pt">AportisDoc (Palm)</value>
+          <value xml:lang="ru">AportisDoc (Palm)</value>
+          <value xml:lang="el">AportisDoc (Palm)</value>
+          <value xml:lang="nl">AportisDoc (Palm)</value>
+          <value xml:lang="fr">AportisDoc (Palm)</value>
+          <value xml:lang="es">AportisDoc (Palm)</value>
+          <value xml:lang="fi">AportisDoc (Palm)</value>
+          <value xml:lang="it">AportisDoc (Palm)</value>
+          <value xml:lang="da">AportisDoc (Palm)</value>
+          <value xml:lang="sv">AportisDoc (Palm)</value>
+          <value xml:lang="pl">AportisDoc (Palm)</value>
+          <value xml:lang="pt-BR">AportisDoc (Palm)</value>
+          <value xml:lang="ja">AportisDoc (Palm)</value>
+          <value xml:lang="ko">AportisDoc (Palm)</value>
+          <value xml:lang="zh-CN">AportisDoc (Palm)</value>
+          <value xml:lang="zh-TW">AportisDoc (Palm)</value>
+          <value xml:lang="tr">AportisDoc (Palm)</value>
+          <value xml:lang="ar">AportisDoc (Palm)</value>
+          <value xml:lang="ca">AportisDoc (Palm)</value>
+          <value xml:lang="th">AportisDoc (Palm)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,writer_AportisDoc_PalmDB_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/aportisdoc.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;staroffice/sxw;application/x-aportisdoc,0,,</value>
@@ -1964,10 +1997,30 @@
         <value>false</value>
       </prop>
       <prop oor:name="UIName">
-        <value xml:lang="de">Flat XML</value>
+        <value xml:lang="de">Flat Xml</value>
         <value xml:lang="en-US">Flat XML</value>
-        <value xml:lang="x-translate">Flat XML</value>
-        <value xml:lang="x-comment">Flat XML</value>
+        <value xml:lang="x-translate">Flat Xml</value>
+        <value xml:lang="x-comment">EM Aug2002: Product name,Do NOT TRANSLATE</value>
+          <value xml:lang="pt">Flat XML File</value>
+          <value xml:lang="ru">Flat XML File</value>
+          <value xml:lang="el">Flat XML File</value>
+          <value xml:lang="nl">Flat XML File</value>
+          <value xml:lang="fr">Flat XML</value>
+          <value xml:lang="es">Flat XML</value>
+          <value xml:lang="fi">Flat XML File</value>
+          <value xml:lang="it">Flat XML</value>
+          <value xml:lang="da">Flat XML File</value>
+          <value xml:lang="sv">Flat XML</value>
+          <value xml:lang="pl">Flat XML File</value>
+          <value xml:lang="pt-BR">Flat XML File</value>
+          <value xml:lang="ja">Flat XML</value>
+          <value xml:lang="ko">Flat XML</value>
+          <value xml:lang="zh-CN">Flat XML</value>
+          <value xml:lang="zh-TW">Flat XML</value>
+          <value xml:lang="tr">Flat XML File</value>
+          <value xml:lang="ar">Flat XML File</value>
+          <value xml:lang="ca">Flat XML File</value>
+          <value xml:lang="th">Flat XML File</value>
       </prop>
       <prop oor:name="Data">
         <value>0,writer_Flat_XML_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XFlatXml; ;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter,0,,</value>
@@ -1981,7 +2034,27 @@
         <value xml:lang="de">XHTML</value>
         <value xml:lang="en-US">XHTML</value>
         <value xml:lang="x-translate">XHTML</value>
-        <value xml:lang="x-comment">XHTML</value>
+        <value xml:lang="x-comment">EM Aug 2002: Product name, do not translate</value>
+          <value xml:lang="pt">XHTML File</value>
+          <value xml:lang="ru">XHTML File</value>
+          <value xml:lang="el">XHTML File</value>
+          <value xml:lang="nl">XHTML File</value>
+          <value xml:lang="fr">XHTML</value>
+          <value xml:lang="es">XHTML</value>
+          <value xml:lang="fi">XHTML File</value>
+          <value xml:lang="it">XHTML</value>
+          <value xml:lang="da">XHTML File</value>
+          <value xml:lang="sv">XHTML</value>
+          <value xml:lang="pl">XHTML File</value>
+          <value xml:lang="pt-BR">XHTML File</value>
+          <value xml:lang="ja">XHTML</value>
+          <value xml:lang="ko">XHTML</value>
+          <value xml:lang="zh-CN">XHTML</value>
+          <value xml:lang="zh-TW">XHTML</value>
+          <value xml:lang="tr">XHTML File</value>
+          <value xml:lang="ar">XHTML File</value>
+          <value xml:lang="ca">XHTML File</value>
+          <value xml:lang="th">XHTML File</value>
       </prop>
       <prop oor:name="Data">
         <value>0,writer_XHTML_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/htmlsoff.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;staroffice/sxw;text/html,0,,</value>
@@ -1995,7 +2068,27 @@
         <value xml:lang="de">DocBook</value>
         <value xml:lang="en-US">DocBook</value>
         <value xml:lang="x-translate">DocBook</value>
-        <value xml:lang="x-comment">DocBook</value>
+        <value xml:lang="x-comment">EM Oct 2002: Do not translate &quot;DocBook&quot; it is a product name. For more info visit http://www.docbook.org/</value>
+          <value xml:lang="pt">DocBook</value>
+          <value xml:lang="ru">DocBook</value>
+          <value xml:lang="el">DocBook</value>
+          <value xml:lang="nl">DocBook</value>
+          <value xml:lang="fr">DocBook</value>
+          <value xml:lang="es">DocBook</value>
+          <value xml:lang="fi">DocBook</value>
+          <value xml:lang="it">DocBook</value>
+          <value xml:lang="da">DocBook</value>
+          <value xml:lang="sv">DocBook</value>
+          <value xml:lang="pl">DocBook</value>
+          <value xml:lang="pt-BR">DocBook</value>
+          <value xml:lang="ja">DocBook</value>
+          <value xml:lang="ko">DocBook</value>
+          <value xml:lang="zh-CN">DocBook</value>
+          <value xml:lang="zh-TW">DocBook</value>
+          <value xml:lang="tr">DocBook</value>
+          <value xml:lang="ar">DocBook</value>
+          <value xml:lang="ca">DocBook</value>
+          <value xml:lang="th">DocBook</value>
       </prop>
       <prop oor:name="Data">
         <value>0,writer_DocBook_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/docbook.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;staroffice/sxw;application/x-docbook,0,,</value>
@@ -2009,13 +2102,33 @@
         <value xml:lang="de">Pocket Word</value>
         <value xml:lang="en-US">Pocket Word</value>
         <value xml:lang="x-translate">Pocket Word</value>
-        <value xml:lang="x-comment">Pocket Word</value>
+        <value xml:lang="x-comment">PocketWord File</value>
+          <value xml:lang="pt">PocketWord File</value>
+          <value xml:lang="ru">PocketWord File</value>
+          <value xml:lang="el">PocketWord File</value>
+          <value xml:lang="nl">PocketWord File</value>
+          <value xml:lang="fr">Pocket Word</value>
+          <value xml:lang="es">Pocket Word </value>
+          <value xml:lang="fi">PocketWord File</value>
+          <value xml:lang="it">Pocket Word</value>
+          <value xml:lang="da">PocketWord File</value>
+          <value xml:lang="sv">Pocket Word</value>
+          <value xml:lang="pl">PocketWord File</value>
+          <value xml:lang="pt-BR">PocketWord File</value>
+          <value xml:lang="ja">Pocket Word</value>
+          <value xml:lang="ko">Pocket Word</value>
+          <value xml:lang="zh-CN">Pocket Word</value>
+          <value xml:lang="zh-TW">Pocket Word</value>
+          <value xml:lang="tr">PocketWord File</value>
+          <value xml:lang="ar">PocketWord File</value>
+          <value xml:lang="ca">PocketWord File</value>
+          <value xml:lang="th">PocketWord File</value>
       </prop>
       <prop oor:name="Data">
         <value>0,writer_PocketWord_File,com.sun.star.text.TextDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/pocketword.jar;com.sun.star.comp.Writer.XMLImporter;com.sun.star.comp.Writer.XMLExporter;staroffice/sxw;application/x-pocket-word,0,,</value>
       </prop>
     </node>
-    <node oor:name="MiniCalc Palm DB" oor:op="replace">
+    <node oor:name="MiniCalc (Palm)" oor:op="replace">
       <prop oor:name="Installed">
         <value>false</value>
       </prop>
@@ -2023,7 +2136,7 @@
         <value xml:lang="en-US">MiniCalc (Palm)</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,calc_MiniCalc_PalmDB_File,com.sun.star.sheet.SpreadsheetDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/minicalc.jar;com.sun.star.comp.Calc.XMLImporter;com.sun.star.comp.Calc.XMLExporter;staroffice/sxc;application/x-minicalc,1,,</value>
+      <value>0,calc_MiniCalc_PalmDB_File,com.sun.star.sheet.SpreadsheetDocument,com.sun.star.comp.Writer.XmlFilterAdaptor,524355,com.sun.star.documentconversion.XMergeBridge;classes/minicalc.jar;com.sun.star.comp.Calc.XMLImporter;com.sun.star.comp.Calc.XMLExporter;staroffice/sxc;application/x-minicalc,1,,</value>
       </prop>
     </node>
     <node oor:name="Pocket Excel" oor:op="replace">
@@ -2046,9 +2159,27 @@
         <value xml:lang="x-translate">HTML-Document (%productname% Draw)</value>
         <value xml:lang="x-comment">HTML-Document (%productname% Draw)</value>
         <value xml:lang="en-US">HTML Document (%productname% Draw)</value>
+          <value xml:lang="pt">Web Page</value>
+          <value xml:lang="ru">Web Page</value>
+          <value xml:lang="el">Web Page</value>
+          <value xml:lang="nl">Web Page</value>
+          <value xml:lang="fr">Document HTML (%productname% Draw)</value>
+          <value xml:lang="es">Documento HTML (%productname% Draw)</value>
+          <value xml:lang="fi">Web Page</value>
+          <value xml:lang="it">Documento HTML (%productname% Draw)</value>
+          <value xml:lang="da">Web Page</value>
+          <value xml:lang="sv">HTML-dokument (%productname% Draw)</value>
+          <value xml:lang="pl">Web Page</value>
+          <value xml:lang="ja">HTML ドキュメント (%productname% Draw)</value>
+          <value xml:lang="ko">HTML 문서 (%productname% Draw)</value>
+          <value xml:lang="zh-CN">HTML 文档 (%productname% Draw)</value>
+          <value xml:lang="zh-TW">HTML 文件 (%productname% Draw)</value>
+          <value xml:lang="tr">Web Page</value>
+          <value xml:lang="ar">Web Page</value>
+          <value xml:lang="th">เว็บเพจ</value>
       </prop>
       <prop oor:name="Data">
-        <value>1,graphic_HTML,com.sun.star.drawing.DrawingDocument,,2,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
+        <value>1,graphic_HTML,com.sun.star.drawing.DrawingDocument,,66,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_html_Export" oor:op="replace">
@@ -2060,9 +2191,27 @@
         <value xml:lang="x-translate">HTML-Document (%productname% Impress)</value>
         <value xml:lang="x-comment">HTML-Document (%productname% Impress)</value>
         <value xml:lang="en-US">HTML Document (%productname% Impress)</value>
+          <value xml:lang="pt">Web Page</value>
+          <value xml:lang="ru">Web Page</value>
+          <value xml:lang="el">Web Page</value>
+          <value xml:lang="nl">Web Page</value>
+          <value xml:lang="fr">Document HTML (%productname% Impress)</value>
+          <value xml:lang="es">Documento HTML (%productname% Impress)</value>
+          <value xml:lang="fi">Web Page</value>
+          <value xml:lang="it">Documento HTML (%productname% Impress)</value>
+          <value xml:lang="da">Web Page</value>
+          <value xml:lang="sv">HTML-dokument (%productname% Impress)</value>
+          <value xml:lang="pl">Web Page</value>
+          <value xml:lang="ja">HTML ドキュメント (%productname% Impress)</value>
+          <value xml:lang="ko">HTML 문서 (%productname% Impress)</value>
+          <value xml:lang="zh-CN">HTML 文档 (%productname% Impress)</value>
+          <value xml:lang="zh-TW">HTML 文件 (%productname% Impress)</value>
+          <value xml:lang="tr">Web Page</value>
+          <value xml:lang="ar">Web Page</value>
+          <value xml:lang="th">เว็บเพจ</value>
       </prop>
       <prop oor:name="Data">
-        <value>1,graphic_HTML,com.sun.star.presentation.PresentationDocument,,2,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
+        <value>1,graphic_HTML,com.sun.star.presentation.PresentationDocument,,66,,0,,com.sun.star.comp.draw.SdHtmlOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="CTOS DEF (W4W)" oor:op="replace">
@@ -2271,7 +2420,27 @@
         <value xml:lang="de">HTML-Dokument (%productname% Writer)</value>
         <value xml:lang="x-translate">HTML-Document (%productname% Writer)</value>
         <value xml:lang="x-comment">HTML-Document (%productname% Writer)</value>
-        <value xml:lang="en-US">HTML-Document (%productname% Writer)</value>
+        <value xml:lang="en-US">HTML Document (%productname% Writer)</value>
+          <value xml:lang="pt">Página Web (%productname% Writer)</value>
+          <value xml:lang="ru">Web-страница (%productname% Writer)</value>
+          <value xml:lang="el">HTML-Dokument (%productname% Writer)</value>
+          <value xml:lang="nl">Webpagina (%productname% Writer)</value>
+          <value xml:lang="fr">Document HTLM (%productname% Writer)</value>
+          <value xml:lang="es">Documento HTML (%productname% Writer)</value>
+          <value xml:lang="fi">HTML-Dokument (%productname% Writer)</value>
+          <value xml:lang="it">Documento HTML (%productname% Writer)</value>
+          <value xml:lang="da">HTML-Dokument (%productname% Writer)</value>
+          <value xml:lang="sv">HTML-dokument (%productname% Writer)</value>
+          <value xml:lang="pl">Strona WWW (%productname% Writer)</value>
+          <value xml:lang="pt-BR">HTML-Dokument (%productname% Writer)</value>
+          <value xml:lang="ja">HTML ドキュメント (%productname% Writer)</value>
+          <value xml:lang="ko">HTML 문서 (%productname% Writer)</value>
+          <value xml:lang="zh-CN">HTML 文档(%productname% Writer)</value>
+          <value xml:lang="zh-TW">HTML 文件 (%productname% Writer)</value>
+          <value xml:lang="tr">HTML-Dokument (%productname% Writer)</value>
+          <value xml:lang="ar">HTML-Dokument (%productname% Writer)</value>
+          <value xml:lang="ca">HTML-Dokument (%productname% Writer)</value>
+          <value xml:lang="th">Web Page (%productname% Writer)</value>
       </prop>
       <prop oor:name="Data">
         <value>24,writer_web_HTML,com.sun.star.text.TextDocument,,16451,HTML,0,,</value>
@@ -2339,15 +2508,20 @@
         <value xml:lang="pl">Ichitaro 8/9/10/11</value>
         <value xml:lang="pt-BR">Ichitaro 8/9/10/11</value>
         <value xml:lang="ja">一太郎 8/9/10/11</value>
-        <value xml:lang="ko">이치타로 8/9/10/11</value>
+        <value xml:lang="ko">Ichitaro 8/9/10/11</value>
         <value xml:lang="zh-CN">一太郎 8/9/10/11</value>
         <value xml:lang="zh-TW">一太郎 8/9/10/11</value>
         <value xml:lang="tr">Ichitaro 8/9/10/11</value>
         <value xml:lang="ar">Ichitaro 8/9/10/11</value>
         <value xml:lang="ca">Ichitaro 8/9/10/11</value>
+          <value xml:lang="fr">Ichitaro 8/9/10/11</value>
+          <value xml:lang="es">Ichitaro 8/9/10/11</value>
+          <value xml:lang="it">Ichitaro 8/9/10/11</value>
+          <value xml:lang="sv">Ichitaro 8/9/10/11</value>
+          <value xml:lang="th">Ichitaro 8/9/10/11</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,writer_JustSystem_Ichitaro_10,com.sun.star.text.TextDocument,com.sun.comp.jsimport.IchitaroImportFilter,524289,,0,,</value>
+        <value>0,writer_JustSystem_Ichitaro_10,com.sun.star.text.TextDocument,com.sun.comp.jsimport.IchitaroImportFilter,524353,,0,</value>
       </prop>
     </node>
     <node oor:name="writer_JustSystem_Ichitaro_10_template" oor:op="replace">
@@ -2372,7 +2546,7 @@
         <value xml:lang="pl">Ichitaro 8/9/10/11 Template</value>
         <value xml:lang="pt-BR">Ichitaro 8/9/10/11 Template</value>
         <value xml:lang="ja">一太郎 8/9/10/11 テンプレート</value>
-        <value xml:lang="ko">Ichitaro 8/9/10/11 템플릿</value>
+        <value xml:lang="ko">Ichitaro 8/9/10/11 서식 파일</value>
         <value xml:lang="zh-CN">一太郎 8/9/10/11 样式</value>
         <value xml:lang="zh-TW">一太郎 8/9/10/11 樣式</value>
         <value xml:lang="tr">Ichitaro 8/9/10/11 Template</value>
@@ -2381,7 +2555,7 @@
         <value xml:lang="th">Ichitaro 8/9/10/11 Template</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,writer_JustSystem_Ichitaro_10_template,com.sun.star.text.TextDocument,com.sun.comp.jsimport.IchitaroImportFilter,524289,,0,,</value>
+        <value>0,writer_JustSystem_Ichitaro_10_template,com.sun.star.text.TextDocument,com.sun.comp.jsimport.IchitaroImportFilter,524353,,0,</value>
       </prop>
     </node>
     <node oor:name="Legacy Winstar onGO (W4W)" oor:op="replace">
@@ -2436,7 +2610,7 @@
         <value xml:lang="en-US">Hangul WP 97</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,writer_MIZI_Hwp_97,com.sun.star.text.TextDocument,com.sun.comp.hwpimport.HwpImportFilter,524289,,0,,</value>
+        <value>0,writer_MIZI_Hwp_97,com.sun.star.text.TextDocument,com.sun.comp.hwpimport.HwpImportFilter,524353,,0,</value>
       </prop>
     </node>
     <node oor:name="MS MacWord 3.0 (W4W)" oor:op="replace">
@@ -2876,7 +3050,7 @@
         <value xml:lang="en-US">WPS 2000/Office 1.0</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,writer_WPSSystem_WPS2000_10,com.sun.star.text.TextDocument,com.sun.comp.WPSimport.IWPSImportFilter,524289,,0,,</value>
+        <value>0,writer_WPSSystem_WPS2000_10,com.sun.star.text.TextDocument,com.sun.comp.WPSimport.IWPSImportFilter,524353,,0,</value>
       </prop>
     </node>
     <node oor:name="Wang II SWP (W4W)" oor:op="replace">
@@ -3327,7 +3501,7 @@
         <value xml:lang="en-US">BMP - Windows Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,bmp_MS_Windows,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,bmp_MS_Windows,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_bmp_Export" oor:op="replace">
@@ -3338,7 +3512,7 @@
         <value xml:lang="en-US">BMP - Windows Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,bmp_MS_Windows,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,bmp_MS_Windows,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="bmp_Import" oor:op="replace">
@@ -3361,6 +3535,26 @@
         <value xml:lang="x-translate">Web Page Query (%productname% Calc)</value>
         <value xml:lang="x-comment">Web Page Query (%productname% Calc)</value>
         <value xml:lang="en-US">Web Page Query (%productname% Calc)</value>
+          <value xml:lang="pt">Consulta de páginas Web (StarOffice  Calc)</value>
+          <value xml:lang="ru">Запрос Web-страницы (%productname% Calc)</value>
+          <value xml:lang="el">HTML WebQuery (StarOffice  Calc)</value>
+          <value xml:lang="nl">Webpagina-query (%productname% Calc)</value>
+          <value xml:lang="fr">Requête pages Web (%productname% Calc)</value>
+          <value xml:lang="es">Consulta de páginas web (%productname% Calc)</value>
+          <value xml:lang="fi">HTML WebQuery (StarOffice Calc)</value>
+          <value xml:lang="it">Ricerca pagina Web (%productname% Calc)</value>
+          <value xml:lang="da">HTML WebQuery (StarOffice  Calc)</value>
+          <value xml:lang="sv">Webbsidessökning (%productname% Calc)</value>
+          <value xml:lang="pl">Kwerenda stron WWW (%productname% Calc)</value>
+          <value xml:lang="pt-BR">HTML WebQuery (StarOffice  Calc)</value>
+          <value xml:lang="ja">Webページのクエリー (%productname% Calc)</value>
+          <value xml:lang="ko">웹 페이지 쿼리 (%productname% Calc)</value>
+          <value xml:lang="zh-CN">网页查询 (%productname% Calc)</value>
+          <value xml:lang="zh-TW">網頁查詢 (%productname% Calc)</value>
+          <value xml:lang="tr">HTML WebQuery (StarOffice  Calc)</value>
+          <value xml:lang="ar">HTML WebQuery (StarOffice  Calc)</value>
+          <value xml:lang="ca">HTML WebQuery (StarOffice  Calc)</value>
+          <value xml:lang="th">แบบสอบถามเว็บเพจ (%productname% Calc)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,writer_web_HTML,com.sun.star.sheet.SpreadsheetDocument,,65,,0,,</value>
@@ -3380,7 +3574,7 @@
         <value xml:lang="el">Calc 6.0 - Πρότυπο</value>
         <value xml:lang="nl">%productname% 6.0 Sjabloon voor werkbladdocumenten</value>
         <value xml:lang="fr">%productname% 6.0 Modèle de classeur</value>
-        <value xml:lang="es">%productname% 6.0 Plantilla de hoja de cálculo</value>
+        <value xml:lang="es">%productname% 6.0 - Plantilla de hoja de cálculo</value>
         <value xml:lang="fi">Calc 6.0 -mallipohja</value>
         <value xml:lang="it">%productname% 6.0 Modello di foglio elettronico</value>
         <value xml:lang="da">Calc 6.0 Vorlage</value>
@@ -3388,7 +3582,7 @@
         <value xml:lang="pl">%productname% 6.0 - Szablon arkusza kalkulacyjnego</value>
         <value xml:lang="pt-BR">Calc 6.0 Vorlage</value>
         <value xml:lang="ja">%productname% 6.0 表計算ドキュメント テンプレート</value>
-        <value xml:lang="ko">%productname% 6.0 스프레드시트 문서 템플릿</value>
+        <value xml:lang="ko">%productname% 6.0 스프레드시트 서식 파일</value>
         <value xml:lang="zh-CN">%productname% 6.0 工作表文档样式</value>
         <value xml:lang="zh-TW">%productname% 6.0 工作表樣式</value>
         <value xml:lang="tr">Calc 6.0 Vorlage</value>
@@ -3447,7 +3641,7 @@
         <value xml:lang="el">Draw 6.0 - Πρότυπο</value>
         <value xml:lang="nl">%productname% 6.0 Sjabloon voor tekeningen</value>
         <value xml:lang="fr">%productname% 6.0 Modèle de dessin</value>
-        <value xml:lang="es">%productname% 6.0 Plantilla de dibujo</value>
+        <value xml:lang="es">%productname% 6.0 - Plantilla de dibujo</value>
         <value xml:lang="fi">Draw 6.0 -mallipohja</value>
         <value xml:lang="it">%productname% 6.0 Modello di disegno</value>
         <value xml:lang="da">Draw 6.0 Vorlage</value>
@@ -3455,7 +3649,7 @@
         <value xml:lang="pl">%productname% 6.0 - Szablon rysunku</value>
         <value xml:lang="pt-BR">Draw 6.0 Vorlage</value>
         <value xml:lang="ja">%productname% 6.0 図形描画テンプレート</value>
-        <value xml:lang="ko">%productname% 6.0 그리기 템플릿</value>
+        <value xml:lang="ko">%productname% 6.0 그리기 서식 파일</value>
         <value xml:lang="zh-CN">%productname% 6.0 绘图样式</value>
         <value xml:lang="zh-TW">%productname% 6.0 繪圖樣式</value>
         <value xml:lang="tr">Draw 6.0 Vorlage</value>
@@ -3497,7 +3691,7 @@
         <value xml:lang="en-US">EMF - Enhanced Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,emf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,emf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_emf_Export" oor:op="replace">
@@ -3508,7 +3702,7 @@
         <value xml:lang="en-US">EMF - Enhanced Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,emf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,emf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="emf_Import" oor:op="replace">
@@ -3541,7 +3735,7 @@
         <value xml:lang="en-US">EPS - Encapsulated PostScript</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,eps_Encapsulated_PostScript,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,eps_Encapsulated_PostScript,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_eps_Export" oor:op="replace">
@@ -3552,7 +3746,7 @@
         <value xml:lang="en-US">EPS - Encapsulated PostScript</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,eps_Encapsulated_PostScript,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,eps_Encapsulated_PostScript,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="eps_Import" oor:op="replace">
@@ -3585,7 +3779,7 @@
         <value xml:lang="en-US">GIF - Graphics Interchange Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,gif_Graphics_Interchange,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,gif_Graphics_Interchange,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_gif_Export" oor:op="replace">
@@ -3596,7 +3790,7 @@
         <value xml:lang="en-US">GIF - Graphics Interchange Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,gif_Graphics_Interchange,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,gif_Graphics_Interchange,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="gif_Import" oor:op="replace">
@@ -3624,7 +3818,7 @@
         <value xml:lang="el">Draw 6.0 (Impress)</value>
         <value xml:lang="nl">%productname% 6.0 Tekening (%productname% Impress</value>
         <value xml:lang="fr">%productname% 6.0 Dessin (%productname% Impress)</value>
-        <value xml:lang="es">%productname% 6.0 Dibujo (%productname% Impress)</value>
+        <value xml:lang="es">%productname% 6.0 - Dibujo (%productname% Impress)</value>
         <value xml:lang="fi">Draw 6.0 (Impress)</value>
         <value xml:lang="it">%productname% 6.0 Disegno (%productname% Impress)</value>
         <value xml:lang="da">Draw 6.0 (Impress)</value>
@@ -3658,7 +3852,7 @@
         <value xml:lang="el">Impress 6.0 - Πρότυπο</value>
         <value xml:lang="nl">%productname% 6.0 Sjabloon voor presentaties</value>
         <value xml:lang="fr">%productname% 6.0 Modèle de présentation</value>
-        <value xml:lang="es">%productname% 6.0 Plantilla de presentación</value>
+        <value xml:lang="es">%productname% 6.0 - Plantilla de presentación</value>
         <value xml:lang="fi">Impress 6.0 -mallipohja</value>
         <value xml:lang="it">%productname% 6.0 Modello di presentazione</value>
         <value xml:lang="da">Impress 6.0 Vorlage</value>
@@ -3666,7 +3860,7 @@
         <value xml:lang="pl">%productname% 6.0 - Szablon prezentacji</value>
         <value xml:lang="pt-BR">Impress 6.0 Vorlage</value>
         <value xml:lang="ja">%productname% 6.0 プレゼンテーションテンプレート</value>
-        <value xml:lang="ko">%productname% 6.0 프리젠테이션 템플릿</value>
+        <value xml:lang="ko">%productname% 6.0 프레젠테이션 서식 파일</value>
         <value xml:lang="zh-CN">%productname% 6.0 演示文稿样式</value>
         <value xml:lang="zh-TW">%productname% 6.0 簡報樣式</value>
         <value xml:lang="tr">Impress 6.0 Vorlage</value>
@@ -3697,7 +3891,7 @@
         <value xml:lang="en-US">JPEG - Joint Photographic Experts Group</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,jpg_JPEG,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,jpg_JPEG,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_jpg_Export" oor:op="replace">
@@ -3708,7 +3902,7 @@
         <value xml:lang="en-US">JPEG - Joint Photographic Experts Group</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,jpg_JPEG,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,jpg_JPEG,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="jpg_Import" oor:op="replace">
@@ -3741,7 +3935,7 @@
         <value xml:lang="en-US">MET - OS/2 Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,met_OS2_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,met_OS2_Metafile,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_met_Export" oor:op="replace">
@@ -3752,7 +3946,7 @@
         <value xml:lang="en-US">MET - OS/2 Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,met_OS2_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,met_OS2_Metafile,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="met_Import" oor:op="replace">
@@ -3785,7 +3979,7 @@
         <value xml:lang="en-US">PBM - Portable Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pbm_Portable_Bitmap,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pbm_Portable_Bitmap,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_pbm_Export" oor:op="replace">
@@ -3796,7 +3990,7 @@
         <value xml:lang="en-US">PBM - Portable Bitmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pbm_Portable_Bitmap,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pbm_Portable_Bitmap,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="pbm_Import" oor:op="replace">
@@ -3862,7 +4056,7 @@
         <value xml:lang="en-US">PCT - Mac Pict</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pct_Mac_Pict,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pct_Mac_Pict,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_pct_Export" oor:op="replace">
@@ -3873,7 +4067,7 @@
         <value xml:lang="en-US">PCT - Mac Pict</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pct_Mac_Pict,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pct_Mac_Pict,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="pct_Import" oor:op="replace">
@@ -3917,7 +4111,7 @@
         <value xml:lang="en-US">PGM - Portable Graymap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pgm_Portable_Graymap,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pgm_Portable_Graymap,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_pgm_Export" oor:op="replace">
@@ -3928,7 +4122,7 @@
         <value xml:lang="en-US">PGM - Portable Graymap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,pgm_Portable_Graymap,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,pgm_Portable_Graymap,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="pgm_Import" oor:op="replace">
@@ -3961,7 +4155,7 @@
         <value xml:lang="en-US">PNG - Portable Network Graphic</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,png_Portable_Network_Graphic,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,png_Portable_Network_Graphic,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_png_Export" oor:op="replace">
@@ -3972,7 +4166,7 @@
         <value xml:lang="en-US">PNG - Portable Network Graphic</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,png_Portable_Network_Graphic,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,png_Portable_Network_Graphic,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="png_Import" oor:op="replace">
@@ -4005,7 +4199,7 @@
         <value xml:lang="en-US">PPM - Portable Pixelmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ppm_Portable_Pixelmap,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,ppm_Portable_Pixelmap,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_ppm_Export" oor:op="replace">
@@ -4016,7 +4210,7 @@
         <value xml:lang="en-US">PPM - Portable Pixelmap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ppm_Portable_Pixelmap,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,ppm_Portable_Pixelmap,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="ppm_Import" oor:op="replace">
@@ -4060,7 +4254,7 @@
         <value xml:lang="en-US">RAS - Sun Raster Image</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ras_Sun_Rasterfile,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
+        <value>0,ras_Sun_Rasterfile,com.sun.star.drawing.DrawingDocument,,1090,,0,</value>
       </prop>
     </node>
     <node oor:name="impress_ras_Export" oor:op="replace">
@@ -4071,7 +4265,7 @@
         <value xml:lang="en-US">RAS - Sun Raster Image</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,ras_Sun_Rasterfile,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
+        <value>0,ras_Sun_Rasterfile,com.sun.star.presentation.PresentationDocument,,1090,,0,</value>
       </prop>
     </node>
     <node oor:name="ras_Import" oor:op="replace">
@@ -4104,7 +4298,27 @@
         <value xml:lang="de">HTML-Dokument (%productname% Calc)</value>
         <value xml:lang="x-translate">HTML-Document (%productname% Calc)</value>
         <value xml:lang="x-comment">HTML-Document (%productname% Calc)</value>
-        <value xml:lang="en-US">HTML-Document (%productname% Calc)</value>
+        <value xml:lang="en-US">HTML Document (%productname% Calc)</value>
+          <value xml:lang="pt">Página Web (%productname% Calc)</value>
+          <value xml:lang="ru">Web-страница (%productname% Calc)</value>
+          <value xml:lang="el">HTML (StarOffice  Calc)</value>
+          <value xml:lang="nl">Webpagina (%productname% Calc)</value>
+          <value xml:lang="fr">Document HTLM (%productname% Calc)</value>
+          <value xml:lang="es">Documento HTML (%productname% Calc)</value>
+          <value xml:lang="fi">HTML (StarOffice  Calc)</value>
+          <value xml:lang="it">Documento HTML (%productname% Calc)</value>
+          <value xml:lang="da">HTML (StarOffice  Calc)</value>
+          <value xml:lang="sv">HTML-dokument (%productname% Calc)</value>
+          <value xml:lang="pl">Strona WWW (%productname% Calc)</value>
+          <value xml:lang="pt-BR">HTML (StarOffice  Calc)</value>
+          <value xml:lang="ja">HTML ドキュメント (%productname% Calc)</value>
+          <value xml:lang="ko">HTML 문서 (%productname% Calc)</value>
+          <value xml:lang="zh-CN">HTML 文档 (%productname% Calc)</value>
+          <value xml:lang="zh-TW">HTML 文件 (%productname% Calc)</value>
+          <value xml:lang="tr">HTML (StarOffice  Calc)</value>
+          <value xml:lang="ar">HTML (StarOffice  Calc)</value>
+          <value xml:lang="ca">HTML (StarOffice  Calc)</value>
+          <value xml:lang="th">Web Page (%productname% Calc)</value>
       </prop>
       <prop oor:name="Data">
         <value>23,writer_web_HTML,com.sun.star.sheet.SpreadsheetDocument,,67,,0,,</value>
@@ -4129,7 +4343,7 @@
         <value xml:lang="en-US">Microsoft Excel 4.0</value>
       </prop>
       <prop oor:name="Data">
-        <value>11,calc_MS_Excel_40,com.sun.star.sheet.SpreadsheetDocument,,268435457,,0,,</value>
+        <value>11,calc_MS_Excel_40,com.sun.star.sheet.SpreadsheetDocument,,268435521,,0,</value>
       </prop>
     </node>
     <node oor:name="MS Excel 4.0 Vorlage/Template" oor:op="replace">
@@ -4163,7 +4377,7 @@
         <value xml:lang="th">Microsoft Excel 4.0 Template</value>
       </prop>
       <prop oor:name="Data">
-        <value>12,calc_MS_Excel_40_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,21,,0,,</value>
+        <value>12,calc_MS_Excel_40_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,85,,0,</value>
       </prop>
     </node>
     <node oor:name="MS Excel 5.0/95" oor:op="replace">
@@ -4174,7 +4388,7 @@
         <value xml:lang="en-US">Microsoft Excel 5.0</value>
       </prop>
       <prop oor:name="Data">
-        <value>9,calc_MS_Excel_5095,com.sun.star.sheet.SpreadsheetDocument,,268435459,,0,,</value>
+        <value>9,calc_MS_Excel_5095,com.sun.star.sheet.SpreadsheetDocument,,268435523,,0,</value>
       </prop>
     </node>
     <node oor:name="MS Excel 5.0/95 Vorlage/Template" oor:op="replace">
@@ -4208,7 +4422,7 @@
         <value xml:lang="th">Microsoft Excel 5.0 Template</value>
       </prop>
       <prop oor:name="Data">
-        <value>10,calc_MS_Excel_5095_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,23,,0,,</value>
+        <value>10,calc_MS_Excel_5095_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,87,,0,</value>
       </prop>
     </node>
     <node oor:name="MS Excel 95" oor:op="replace">
@@ -4219,7 +4433,7 @@
         <value xml:lang="en-US">Microsoft Excel 95</value>
       </prop>
       <prop oor:name="Data">
-        <value>7,calc_MS_Excel_95,com.sun.star.sheet.SpreadsheetDocument,,268435459,,0,,</value>
+        <value>7,calc_MS_Excel_95,com.sun.star.sheet.SpreadsheetDocument,,268435523,,0,</value>
       </prop>
     </node>
     <node oor:name="MS Excel 95 Vorlage/Template" oor:op="replace">
@@ -4253,7 +4467,7 @@
         <value xml:lang="th">Microsoft Excel 95 Template</value>
       </prop>
       <prop oor:name="Data">
-        <value>8,calc_MS_Excel_95_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,23,,0,,</value>
+        <value>8,calc_MS_Excel_95_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,87,,0,</value>
       </prop>
     </node>
     <node oor:name="MS Excel 97" oor:op="replace">
@@ -4264,7 +4478,7 @@
         <value xml:lang="en-US">Microsoft Excel 97/2000/XP</value>
       </prop>
       <prop oor:name="Data">
-        <value>5,calc_MS_Excel_97,com.sun.star.sheet.SpreadsheetDocument,,3,,0,,</value>
+        <value>5,calc_MS_Excel_97,com.sun.star.sheet.SpreadsheetDocument,,67,,0,</value>
       </prop>
     </node>
     <node oor:name="MS Excel 97 Vorlage/Template" oor:op="replace">
@@ -4298,7 +4512,7 @@
         <value xml:lang="th">Microsoft Excel 97/2000/XP Template</value>
       </prop>
       <prop oor:name="Data">
-        <value>6,calc_MS_Excel_97_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,23,,0,,</value>
+        <value>6,calc_MS_Excel_97_VorlageTemplate,com.sun.star.sheet.SpreadsheetDocument,,87,,0,</value>
       </prop>
     </node>
     <node oor:name="Rich Text Format (StarCalc)" oor:op="replace">
@@ -4365,14 +4579,14 @@
         <value xml:lang="da">StarCalc 3.0 Vorlage</value>
         <value xml:lang="sv">StarCalc 3.0 mall</value>
         <value xml:lang="pl">StarCalc 3.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarCalc 3.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarCalc 3.0 </value>
         <value xml:lang="ja">StarCalc 3.0 テンプレート</value>
-        <value xml:lang="ko">StarCalc 3.0 템플릿</value>
+        <value xml:lang="ko">StarCalc 3.0 서식 파일</value>
         <value xml:lang="zh-CN">StarCalc 3.0 样式</value>
         <value xml:lang="zh-TW">StarCalc 3.0 樣式</value>
         <value xml:lang="tr">StarCalc 3.0 Vorlage</value>
         <value xml:lang="ar">StarCalc 3.0 قالب</value>
-        <value xml:lang="ca">StarCalc 3.0 Plantilla</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarCalc 3.0</value>
         <value xml:lang="th">StarCalc 3.0 Template</value>
       </prop>
       <prop oor:name="Data">
@@ -4410,14 +4624,14 @@
         <value xml:lang="da">StarCalc 4.0 Vorlage</value>
         <value xml:lang="sv">StarCalc 4.0 mall</value>
         <value xml:lang="pl">StarCalc 4.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarCalc 4.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarCalc 4.0 </value>
         <value xml:lang="ja">StarCalc 4.0 テンプレート</value>
-        <value xml:lang="ko">StarCalc 4.0 템플릿</value>
+        <value xml:lang="ko">StarCalc 4.0 서식 파일</value>
         <value xml:lang="zh-CN">StarCalc 4.0 样式</value>
         <value xml:lang="zh-TW">StarCalc 4.0 樣式</value>
         <value xml:lang="tr">StarCalc 4.0 Vorlage</value>
         <value xml:lang="ar">StarCalc 4.0 قالب</value>
-        <value xml:lang="ca">StarCalc 4.0 Plantilla</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarCalc 4.0</value>
         <value xml:lang="th">StarCalc 4.0 Template</value>
       </prop>
       <prop oor:name="Data">
@@ -4455,14 +4669,14 @@
         <value xml:lang="da">StarCalc 5.0 Vorlage</value>
         <value xml:lang="sv">StarCalc 5.0 mall</value>
         <value xml:lang="pl">StarCalc 5.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarCalc 5.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarCalc 5.0 </value>
         <value xml:lang="ja">StarCalc 5.0 テンプレート</value>
-        <value xml:lang="ko">StarCalc 5.0 템플릿</value>
+        <value xml:lang="ko">StarCalc 5.0 서식 파일</value>
         <value xml:lang="zh-CN">StarCalc 5.0 样式</value>
         <value xml:lang="zh-TW">StarCalc 5.0 樣式</value>
         <value xml:lang="tr">StarCalc 5.0 Vorlage</value>
         <value xml:lang="ar">StarCalc 5.0 قالب</value>
-        <value xml:lang="ca">StarCalc 5.0 Plantilla</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarCalc 5.0</value>
         <value xml:lang="th">StarCalc 5.0 Template</value>
       </prop>
       <prop oor:name="Data">
@@ -4483,13 +4697,13 @@
         <value xml:lang="el">Calc 6.0</value>
         <value xml:lang="nl">%productname% 6.0 Werkbladdocument</value>
         <value xml:lang="fr">%productname% 6.0 Classeur</value>
-        <value xml:lang="es">%productname% 6.0 Hoja de cálculo</value>
+        <value xml:lang="es">%productname% 6.0 - Hoja de cálculo</value>
         <value xml:lang="fi">Calc 6.0</value>
         <value xml:lang="it">%productname% 6.0 Foglio elettronico</value>
         <value xml:lang="da">%productname% 6.0 Tabellendokument</value>
         <value xml:lang="sv">%productname% 6.0 tabelldokument</value>
         <value xml:lang="pl">%productname% 6.0 - Arkusz kalkulacyjny</value>
-        <value xml:lang="pt-BR">%productname% 6.0 Tabellendokument</value>
+        <value xml:lang="pt-BR">Planilha %productname% 6.0 </value>
         <value xml:lang="ja">%productname% 6.0 表計算ドキュメント</value>
         <value xml:lang="ko">%productname% 6.0 스프레드시트</value>
         <value xml:lang="zh-CN">%productname% 6.0 工作表文档</value>
@@ -4556,7 +4770,7 @@
         <value xml:lang="en-US">StarChart 3.0</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,chart_StarChart_30,com.sun.star.chart.ChartDocument,,2097251,,3450,,</value>
+        <value>0,chart_StarChart_30,com.sun.star.chart.ChartDocument,,2109537,,3450,</value>
       </prop>
     </node>
     <node oor:name="StarChart 4.0" oor:op="replace">
@@ -4567,7 +4781,7 @@
         <value xml:lang="en-US">StarChart 4.0</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,chart_StarChart_40,com.sun.star.chart.ChartDocument,,2097251,,3580,,</value>
+        <value>0,chart_StarChart_40,com.sun.star.chart.ChartDocument,,2109537,,3580,,</value>
       </prop>
     </node>
     <node oor:name="StarChart 5.0" oor:op="replace">
@@ -4578,7 +4792,7 @@
         <value xml:lang="en-US">StarChart 5.0</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,chart_StarChart_50,com.sun.star.chart.ChartDocument,,2097251,,5050,,</value>
+        <value>0,chart_StarChart_50,com.sun.star.chart.ChartDocument,,2109537,,5050,</value>
       </prop>
     </node>
     <node oor:name="StarOffice XML (Chart)" oor:op="replace">
@@ -4595,15 +4809,15 @@
         <value xml:lang="el">%productname% 6.0 Diagramm</value>
         <value xml:lang="nl">%productname% 6.0 Diagram</value>
         <value xml:lang="fr">%productname% 6.0 Diagramme</value>
-        <value xml:lang="es">%productname% 6.0 Diagrama</value>
+        <value xml:lang="es">%productname% 6.0 - Diagrama</value>
         <value xml:lang="fi">%productname% 6.0 Diagramm</value>
         <value xml:lang="it">%productname% 6.0 Diagramma</value>
         <value xml:lang="da">%productname% 6.0 Diagramm</value>
         <value xml:lang="sv">%productname% 6.0 diagram</value>
         <value xml:lang="pl">%productname% 6.0 - Wykres</value>
-        <value xml:lang="pt-BR">%productname% 6.0 Diagramm</value>
+        <value xml:lang="pt-BR">Gráfico %productname% 6.0 </value>
         <value xml:lang="ja">%productname% 6.0 グラフ</value>
-        <value xml:lang="ko">%productname% 6.0 도표</value>
+        <value xml:lang="ko">%productname% 6.0 차트</value>
         <value xml:lang="zh-CN">%productname% 6.0 图表</value>
         <value xml:lang="zh-TW">%productname% 6.0 圖表</value>
         <value xml:lang="tr">%productname% 6.0 Diagramm</value>
@@ -4612,7 +4826,7 @@
         <value xml:lang="th">%productname% 6.0 Chart</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,chart_StarOffice_XML_Chart,com.sun.star.chart.ChartDocument,,12579,XML,6200,,</value>
+        <value>0,chart_StarOffice_XML_Chart,com.sun.star.chart.ChartDocument,,12577,XML,6200,,</value>
       </prop>
     </node>
     <node oor:name="BMP - MS Windows" oor:op="replace">
@@ -4844,15 +5058,15 @@
         <value xml:lang="da">StarDraw 3.0 Vorlage</value>
         <value xml:lang="sv">StarDraw 3.0 mall</value>
         <value xml:lang="pl">StarDraw 3.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarDraw 3.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarDraw 3.0 </value>
         <value xml:lang="ja">StarDraw 3.0 テンプレート</value>
-        <value xml:lang="ko">StarDraw 3.0 템플릿</value>
+        <value xml:lang="ko">StarDraw 3.0 서식 파일</value>
         <value xml:lang="zh-CN">StarDraw 3.0 样式</value>
         <value xml:lang="zh-TW">StarDraw 3.0 樣式</value>
         <value xml:lang="tr">StarDraw 3.0 Vorlage</value>
         <value xml:lang="ar">StarDraw 3.0 قالب</value>
-        <value xml:lang="ca">StarDraw 3.0 Plantilla</value>
-        <value xml:lang="th">StarDraw 3.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarDraw 3.0</value>
+        <value xml:lang="th">แม่แบบ StarDraw 3.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>13,draw_StarDraw_30_Vorlage,com.sun.star.drawing.DrawingDocument,,119,,3450,,</value>
@@ -4889,15 +5103,15 @@
         <value xml:lang="da">StarDraw 5.0 Vorlage</value>
         <value xml:lang="sv">StarDraw 5.0 mall</value>
         <value xml:lang="pl">StarDraw 5.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarDraw 5.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarDraw 5.0 </value>
         <value xml:lang="ja">StarDraw 5.0 テンプレート</value>
-        <value xml:lang="ko">StarDraw 5.0 템플릿</value>
+        <value xml:lang="ko">StarDraw 5.0 서식 파일</value>
         <value xml:lang="zh-CN">StarDraw 5.0 样式</value>
         <value xml:lang="zh-TW">StarDraw 5.0 樣式</value>
         <value xml:lang="tr">StarDraw 5.0 Vorlage</value>
         <value xml:lang="ar">StarDraw 5.0 قالب</value>
-        <value xml:lang="ca">StarDraw 5.0 Plantilla</value>
-        <value xml:lang="th">StarDraw 5.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarDraw 5.0</value>
+        <value xml:lang="th">แม่แบบ StarDraw 5.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>11,draw_StarDraw_50_Vorlage,com.sun.star.drawing.DrawingDocument,,268435575,,5050,,</value>
@@ -4917,13 +5131,13 @@
         <value xml:lang="el">%productname% 6.0 Zeichnung</value>
         <value xml:lang="nl">%productname% 6.0 Tekening</value>
         <value xml:lang="fr">%productname% 6.0 Dessin</value>
-        <value xml:lang="es">%productname% 6.0 Dibujo</value>
+        <value xml:lang="es">%productname% 6.0 - Dibujo</value>
         <value xml:lang="fi">%productname% 6.0 Zeichnung</value>
         <value xml:lang="it">%productname% 6.0 Disegno</value>
         <value xml:lang="da">%productname% 6.0 Zeichnung</value>
         <value xml:lang="sv">%productname% 6.0 teckning</value>
         <value xml:lang="pl">%productname% 6.0 - Rysunek</value>
-        <value xml:lang="pt-BR">%productname% 6.0 Zeichnung</value>
+        <value xml:lang="pt-BR">Desenho %productname% 6.0 </value>
         <value xml:lang="ja">%productname% 6.0 図形描画</value>
         <value xml:lang="ko">%productname% 6.0 그리기</value>
         <value xml:lang="zh-CN">%productname% 6.0 绘图</value>
@@ -5095,7 +5309,7 @@
         <value xml:lang="el">StarDraw 3.0 Πρότυπο (StarOffice Impress)</value>
         <value xml:lang="nl">StarDraw 3.0 Sjabloon (%productname% Impress)</value>
         <value xml:lang="fr">StarDraw 3.0 Modèle (%productname% Impress)</value>
-        <value xml:lang="es">StarDraw 3.0 Plantilla (%productname% Impress)</value>
+        <value xml:lang="es">StarDraw 3.0 - Plantilla (%productname% Impress)</value>
         <value xml:lang="fi">StarDraw 3.0 -mallipohja (StarOffice Impress)</value>
         <value xml:lang="it">StarDraw 3.0 Modello (%productname% Impress)</value>
         <value xml:lang="da">StarDraw 3.0 Vorlage (StarOffice Impress)</value>
@@ -5103,13 +5317,13 @@
         <value xml:lang="pl">StarDraw 3.0 - Szablon (%productname% Impress)</value>
         <value xml:lang="pt-BR">StarDraw 3.0 Vorlage (StarOffice Impress)</value>
         <value xml:lang="ja">StarDraw 3.0 テンプレート (%productname% Impress)</value>
-        <value xml:lang="ko">StarDraw 3.0 템플릿 (%productname% Impress)</value>
+        <value xml:lang="ko">StarDraw 3.0 서식 파일(%productname% Impress)</value>
         <value xml:lang="zh-CN">StarDraw 3.0 样式 (%productname% Impress)</value>
         <value xml:lang="zh-TW">StarDraw 3.0 樣式 (%productname% Impress)</value>
         <value xml:lang="tr">StarDraw 3.0 Vorlage (StarOffice Impress)</value>
         <value xml:lang="ar">StarDraw 3.0 قالب (StarOffice Impress)</value>
         <value xml:lang="ca">StarDraw 3.0 Plantilla (StarOffice Impress)</value>
-        <value xml:lang="th">StarDraw 3.0 Template (%productname% Impress)</value>
+        <value xml:lang="th">แม่แบบ StarDraw 3.0(%PRODUCTNAME Impress)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,draw_StarDraw_30_Vorlage,com.sun.star.presentation.PresentationDocument,,12407,,3450,,</value>
@@ -5140,7 +5354,7 @@
         <value xml:lang="el">StarDraw 5.0 Πρότυπο (StarOffice Impress)</value>
         <value xml:lang="nl">StarDraw 5.0 Sjabloon (%productname% Impress)</value>
         <value xml:lang="fr">StarDraw 5.0 Modèle (%productname% Impress)</value>
-        <value xml:lang="es">StarDraw 5.0 Plantilla (%productname% Impress)</value>
+        <value xml:lang="es">StarDraw 5.0 - Plantilla (%productname% Impress)</value>
         <value xml:lang="fi">StarDraw 5.0 -mallipohja (StarOffice Impress)</value>
         <value xml:lang="it">StarDraw 5.0 Modello (%productname% Impress)</value>
         <value xml:lang="da">StarDraw 5.0 Vorlage (StarOffice Impress)</value>
@@ -5148,13 +5362,13 @@
         <value xml:lang="pl">StarDraw 5.0 - Szablon (%productname% Impress)</value>
         <value xml:lang="pt-BR">StarDraw 5.0 Vorlage (StarOffice Impress)</value>
         <value xml:lang="ja">StarDraw 5.0 テンプレート (%productname% Impress)</value>
-        <value xml:lang="ko">StarDraw 5.0 템플릿 (%productname% Impress)</value>
+        <value xml:lang="ko">StarDraw 5.0 서식 파일(%productname% Impress)</value>
         <value xml:lang="zh-CN">StarDraw 5.0 样式 (%productname% Impress)</value>
         <value xml:lang="zh-TW">StarDraw 5.0 樣式 (%productname% Impress)</value>
         <value xml:lang="tr">StarDraw 5.0 Vorlage (StarOffice Impress)</value>
         <value xml:lang="ar">StarDraw 5.0 قالب (StarOffice Impress)</value>
         <value xml:lang="ca">StarDraw 5.0 Plantilla (StarOffice Impress)</value>
-        <value xml:lang="th">StarDraw 5.0 Template (%productname% Impress)</value>
+        <value xml:lang="th">แม่แบบ StarDraw 5.0  (%PRODUCTNAME Impress)</value>
       </prop>
       <prop oor:name="Data">
         <value>0,draw_StarDraw_50_Vorlage,com.sun.star.presentation.PresentationDocument,,12407,,5050,,</value>
@@ -5191,15 +5405,15 @@
         <value xml:lang="da">StarImpress 4.0 skabelon</value>
         <value xml:lang="sv">StarImpress 4.0 mall</value>
         <value xml:lang="pl">StarImpress 4.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarImpress 4.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo StarImpress 4.0 </value>
         <value xml:lang="ja">StarImpress 4.0 テンプレート</value>
-        <value xml:lang="ko">StarImpress 4.0 템플릿</value>
+        <value xml:lang="ko">StarImpress 4.0 서식 파일</value>
         <value xml:lang="zh-CN">StarImpress 4.0 样式</value>
         <value xml:lang="zh-TW">StarImpress 4.0 樣式</value>
         <value xml:lang="tr">StarImpress 4.0 şablonu</value>
         <value xml:lang="ar">StarImpress 4.0 قالب</value>
-        <value xml:lang="ca">StarImpress 4.0 Plantilla</value>
-        <value xml:lang="th">StarImpress 4.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarImpress 4.0</value>
+        <value xml:lang="th">แม่แบบ StarImpress 4.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>12,impress_StarImpress_40_Vorlage,com.sun.star.presentation.PresentationDocument,,119,,3580,,</value>
@@ -5224,7 +5438,7 @@
         <value xml:lang="de">StarImpress 5.0 gepackt</value>
         <value xml:lang="x-translate">StarImpress 5.0 gepackt</value>
         <value xml:lang="x-comment">StarImpress 5.0 gepackt</value>
-        <value xml:lang="en-US">StarImpress 5.0 packed</value>
+        <value xml:lang="en-US">StarImpress 5.0 Packed</value>
         <value xml:lang="pt">StarImpress 5.0 comprimido</value>
         <value xml:lang="ru">StarImpress 5.0 (ужат)</value>
         <value xml:lang="el">StarOffice Impress (συμπιεσμένο)</value>
@@ -5247,7 +5461,7 @@
         <value xml:lang="th">StarImpress 5.0 packed</value>
       </prop>
       <prop oor:name="Data">
-        <value>10,impress_StarImpress_50_packed,com.sun.star.presentation.PresentationDocument,,1048577,,0,,</value>
+        <value>10,impress_StarImpress_50_packed,com.sun.star.presentation.PresentationDocument,,1048641,,0,</value>
       </prop>
     </node>
     <node oor:name="StarImpress 5.0 Vorlage" oor:op="replace">
@@ -5270,15 +5484,15 @@
         <value xml:lang="da">StarImpress 5.0 Vorlage</value>
         <value xml:lang="sv">StarImpress 5.0 mall</value>
         <value xml:lang="pl">StarImpress 5.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarImpress 5.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo StarImpress 5.0 </value>
         <value xml:lang="ja">StarImpress 5.0 テンプレート</value>
-        <value xml:lang="ko">StarImpress 5.0 템플릿</value>
+        <value xml:lang="ko">StarImpress 5.0 서식 파일</value>
         <value xml:lang="zh-CN">StarImpress 5.0 样式</value>
         <value xml:lang="zh-TW">StarImpress 5.0 樣式</value>
         <value xml:lang="tr">StarImpress 5.0 Vorlage</value>
         <value xml:lang="ar">StarImpress 5.0 قالب</value>
-        <value xml:lang="ca">StarImpress 5.0 Plantilla</value>
-        <value xml:lang="th">StarImpress 5.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarImpress 5.0</value>
+        <value xml:lang="th">แม่แบบ StarImpress 5.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>9,impress_StarImpress_50_Vorlage,com.sun.star.presentation.PresentationDocument,,119,,5050,,</value>
@@ -5298,15 +5512,15 @@
         <value xml:lang="el">%productname% 6.0 Prδsentation</value>
         <value xml:lang="nl">%productname% 6.0 Presentatie</value>
         <value xml:lang="fr">%productname% 6.0 Présentation</value>
-        <value xml:lang="es">%productname% 6.0 Presentación</value>
+        <value xml:lang="es">%productname% 6.0 - Presentación</value>
         <value xml:lang="fi">%productname% 6.0 Präsentation</value>
         <value xml:lang="it">%productname% 6.0 Presentazione</value>
         <value xml:lang="da">%productname% 6.0 Präsentation</value>
         <value xml:lang="sv">%productname% 6.0 presentation</value>
         <value xml:lang="pl">%productname% 6.0 - Prezentacja</value>
-        <value xml:lang="pt-BR">%productname% 6.0 Präsentation</value>
+        <value xml:lang="pt-BR">Apresentação %productname% 6.0 </value>
         <value xml:lang="ja">%productname% 6.0 プレゼンテーション</value>
-        <value xml:lang="ko">%productname% 6.0 프리젠테이션</value>
+        <value xml:lang="ko">%productname% 6.0 프레젠테이션</value>
         <value xml:lang="zh-CN">%productname% 6.0 演示文稿</value>
         <value xml:lang="zh-TW">%productname% 6.0 簡報</value>
         <value xml:lang="tr">%productname% 6.0 Präsentation</value>
@@ -5398,13 +5612,13 @@
         <value xml:lang="el">%productname% 6.0 Formel</value>
         <value xml:lang="nl">%PRODUCTNAME 6.0 Formule</value>
         <value xml:lang="fr">%productname% 6.0 Formule</value>
-        <value xml:lang="es">%productname% 6.0 Fórmula</value>
+        <value xml:lang="es">%productname% 6.0 - Fórmula</value>
         <value xml:lang="fi">%productname% 6.0 Formel</value>
         <value xml:lang="it">%productname% 6.0 Formula</value>
         <value xml:lang="da">%productname% 6.0 Formel</value>
         <value xml:lang="sv">%productname% 6.0 formel</value>
         <value xml:lang="pl">%productname% 6.0 - Formuła</value>
-        <value xml:lang="pt-BR">%productname% 6.0 Formel</value>
+        <value xml:lang="pt-BR">Fórmula %productname% 6.0 </value>
         <value xml:lang="ja">%productname% 6.0 数式</value>
         <value xml:lang="ko">%productname% 6.0 수식</value>
         <value xml:lang="zh-CN">%productname% 6.0 公式</value>
@@ -5437,7 +5651,18 @@
         <value xml:lang="en-US">SVG - Scalable Vector Graphics</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
+        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.drawing.DrawingDocument,,1090,,0,</value>
+      </prop>
+    </node>
+    <node oor:name="impress_svg_Export" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">SVG - Scalable Vector Graphics</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.presentation.PresentationDocument,,1090,,0,</value>
       </prop>
     </node>
     <node oor:name="draw_flash_Export" oor:op="replace">
@@ -5460,17 +5685,6 @@
       </prop>
       <prop oor:name="Data">
         <value>3,graphic_SWF,com.sun.star.presentation.PresentationDocument,com.sun.star.comp.Impress.FlashExportFilter,524354,,0,,</value>
-      </prop>
-    </node>
-    <node oor:name="impress_svg_Export" oor:op="replace">
-      <prop oor:name="Installed">
-        <value>false</value>
-      </prop>
-      <prop oor:name="UIName">
-        <value xml:lang="en-US">SVG - Scalable Vector Graphics</value>
-      </prop>
-      <prop oor:name="Data">
-        <value>0,svg_Scalable_Vector_Graphics,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
       </prop>
     </node>
     <node oor:name="placeware_Export" oor:op="replace">
@@ -5503,7 +5717,7 @@
         <value xml:lang="en-US">SVM - StarView Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,svm_StarView_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,svm_StarView_Metafile,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_svm_Export" oor:op="replace">
@@ -5514,7 +5728,7 @@
         <value xml:lang="en-US">SVM - StarView Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,svm_StarView_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,svm_StarView_Metafile,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="svm_Import" oor:op="replace">
@@ -5549,7 +5763,7 @@
         <value xml:lang="sv">StarWriter 3.0 </value>
         <value xml:lang="pl">StarWriter 3.0 </value>
         <value xml:lang="pt-BR">StarWriter 3.0</value>
-        <value xml:lang="ja">StarWriter 3.0</value>
+        <value xml:lang="ja">StarWriter 3.0 </value>
         <value xml:lang="ko">StarWriter 3.0 </value>
         <value xml:lang="zh-CN">StarWriter 3.0 </value>
         <value xml:lang="zh-TW">StarWriter 3.0</value>
@@ -5583,7 +5797,7 @@
         <value xml:lang="sv">StarWriter 4.0 </value>
         <value xml:lang="pl">StarWriter 4.0 </value>
         <value xml:lang="pt-BR">StarWriter 4.0</value>
-        <value xml:lang="ja">StarWriter 4.0</value>
+        <value xml:lang="ja">StarWriter 4.0 </value>
         <value xml:lang="ko">StarWriter 4.0 </value>
         <value xml:lang="zh-CN">StarWriter 4.0 </value>
         <value xml:lang="zh-TW">StarWriter 4.0 </value>
@@ -5616,15 +5830,15 @@
         <value xml:lang="da">StarWriter 4.0 Globaldokument</value>
         <value xml:lang="sv">StarWriter 4.0 samlingsdokument</value>
         <value xml:lang="pl">StarWriter 4.0 - Dokument główny</value>
-        <value xml:lang="pt-BR">StarWriter 4.0 Globaldokument</value>
+        <value xml:lang="pt-BR">Documento Mestre do StarWriter 4.0 </value>
         <value xml:lang="ja">StarWriter 4.0 マスタードキュメント</value>
         <value xml:lang="ko">StarWriter 4.0 마스터 문서</value>
         <value xml:lang="zh-CN">StarWriter 4.0 主控文档</value>
         <value xml:lang="zh-TW">StarWriter 4.0 主控文件</value>
         <value xml:lang="tr">StarWriter 4.0 Globaldokument</value>
         <value xml:lang="ar">StarWriter 4.0 مستند شامل</value>
-        <value xml:lang="ca">StarWriter 4.0 Documento maestro</value>
-        <value xml:lang="th">StarWriter 4.0 Master Document</value>
+        <value xml:lang="ca">Document mestre de l&apos;StarWriter 4.0</value>
+        <value xml:lang="th">เอกสารต้นฉบับ StarWriter 4.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>3,writer_globaldocument_StarWriter_40GlobalDocument,com.sun.star.text.GlobalDocument,,103,CSW4,3580,,</value>
@@ -5651,7 +5865,7 @@
         <value xml:lang="sv">StarWriter 5.0 </value>
         <value xml:lang="pl">StarWriter 5.0 </value>
         <value xml:lang="pt-BR">StarWriter 5.0</value>
-        <value xml:lang="ja">StarWriter 5.0</value>
+        <value xml:lang="ja">StarWriter 5.0 </value>
         <value xml:lang="ko">StarWriter 5.0 </value>
         <value xml:lang="zh-CN">StarWriter 5.0 </value>
         <value xml:lang="zh-TW">StarWriter 5.0 </value>
@@ -5684,15 +5898,15 @@
         <value xml:lang="da">StarWriter 5.0 Globaldokument</value>
         <value xml:lang="sv">StarWriter 5.0 samlingsdokument</value>
         <value xml:lang="pl">StarWriter 5.0 - Dokument główny</value>
-        <value xml:lang="pt-BR">StarWriter 5.0 Globaldokument</value>
+        <value xml:lang="pt-BR">Documento Mestre do StarWriter 5.0 </value>
         <value xml:lang="ja">StarWriter 5.0 マスタードキュメント</value>
         <value xml:lang="ko">StarWriter 5.0 마스터 문서</value>
         <value xml:lang="zh-CN">StarWriter 5.0 主控文档</value>
         <value xml:lang="zh-TW">StarWriter 5.0 主控文件</value>
         <value xml:lang="tr">StarWriter 5.0 Globaldokument</value>
         <value xml:lang="ar">StarWriter 5.0 مستند شامل</value>
-        <value xml:lang="ca">StarWriter 5.0 Documento maestro</value>
-        <value xml:lang="th">StarWriter 5.0 Master Document</value>
+        <value xml:lang="ca">Document mestre de l&apos;StarWriter 5.0</value>
+        <value xml:lang="th">เอกสารต้นฉบับ StarWriter 5.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>2,writer_globaldocument_StarWriter_50GlobalDocument,com.sun.star.text.GlobalDocument,,103,CSW5,5050,,</value>
@@ -5712,7 +5926,7 @@
         <value xml:lang="el">Text (encoded)</value>
         <value xml:lang="nl">Tekst gecodeerd (%productname% Masterdocument)</value>
         <value xml:lang="fr">Texte codé (%productname% Document maître)</value>
-        <value xml:lang="es">Texto codificado (%productname% documento maestro)</value>
+        <value xml:lang="es">Texto codificado (%productname% Documento maestro)</value>
         <value xml:lang="fi">Text (encoded)</value>
         <value xml:lang="it">Testo codificato (%productname% Documento master)</value>
         <value xml:lang="da">Text (encoded)</value>
@@ -5721,7 +5935,7 @@
         <value xml:lang="pt-BR">Text (encoded)</value>
         <value xml:lang="ja">エンコードされたテキスト (%productname% マスタードキュメント)</value>
         <value xml:lang="ko">인코딩된 텍스트 (%productname% 마스터 문서)</value>
-        <value xml:lang="zh-CN">文字 使用编码的(%productname% 主控文档)</value>
+        <value xml:lang="zh-CN">文字 使用编码的 (%productname% 主控文档)</value>
         <value xml:lang="zh-TW">文字 使用編碼的(%productname% 主控文件)</value>
         <value xml:lang="tr">Text (encoded)</value>
         <value xml:lang="ar">Text (encoded)</value>
@@ -5740,7 +5954,27 @@
         <value xml:lang="de">HTML-Dokument</value>
         <value xml:lang="x-translate">HTML-Document</value>
         <value xml:lang="x-comment">HTML-Document</value>
-        <value xml:lang="en-US">HTML-Document</value>
+        <value xml:lang="en-US">HTML Document</value>
+          <value xml:lang="pt">Página Web</value>
+          <value xml:lang="ru">Web-страница</value>
+          <value xml:lang="el">Έγγραφο HTML</value>
+          <value xml:lang="nl">Webpagina</value>
+          <value xml:lang="fr">Document HTML</value>
+          <value xml:lang="es">Documento HTML</value>
+          <value xml:lang="fi">HTML-asiakirja</value>
+          <value xml:lang="it">Documento HTML</value>
+          <value xml:lang="da">HTML-Dokument</value>
+          <value xml:lang="sv">HTML-dokument</value>
+          <value xml:lang="pl">Strona WWW</value>
+          <value xml:lang="pt-BR">Documento HTML</value>
+          <value xml:lang="ja">HTML ドキュメント</value>
+          <value xml:lang="ko">HTML 문서</value>
+          <value xml:lang="zh-CN">HTML 文档</value>
+          <value xml:lang="zh-TW">HTML 文件</value>
+          <value xml:lang="tr">HTML belgesi</value>
+          <value xml:lang="ar">مستند HTML</value>
+          <value xml:lang="ca">Document HTML</value>
+          <value xml:lang="th">เอกสาร HTML </value>
       </prop>
       <prop oor:name="Data">
         <value>1,writer_web_HTML,com.sun.star.text.WebDocument,,268452099,HTML,0,,</value>
@@ -5799,15 +6033,15 @@
         <value xml:lang="da">StarWriter/Web 4.0 Vorlage</value>
         <value xml:lang="sv">StarWriter/Web 4.0 mall</value>
         <value xml:lang="pl">StarWriter/Web 4.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarWriter/Web 4.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarWriter/Web 4.0 </value>
         <value xml:lang="ja">StarWriter/Web 4.0 テンプレート</value>
-        <value xml:lang="ko">StarWriter/Web 4.0 템플릿</value>
+        <value xml:lang="ko">StarWriter/Web 4.0 서식 파일</value>
         <value xml:lang="zh-CN">StarWriter/Web 4.0 样式</value>
         <value xml:lang="zh-TW">StarWriter/Web 4.0 樣式</value>
         <value xml:lang="tr">StarWriter/Web 4.0 Vorlage</value>
         <value xml:lang="ar">StarWriter/Web 4.0 قالب</value>
-        <value xml:lang="ca">StarWriter/Web 4.0 Plantilla</value>
-        <value xml:lang="th">StarWriter/Web 4.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarWriter/Web 4.0</value>
+        <value xml:lang="th">แม่แบบ StarWriter/Web 4.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>5,writer_web_StarWriterWeb_40_VorlageTemplate,com.sun.star.text.WebDocument,,119,CSW4VWEB,3580,,</value>
@@ -5833,15 +6067,15 @@
         <value xml:lang="da">StarWriter/Web 5.0 Vorlage</value>
         <value xml:lang="sv">StarWriter/Web 5.0 mall</value>
         <value xml:lang="pl">StarWriter/Web 5.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarWriter/Web 5.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarWriter/Web 5.0 </value>
         <value xml:lang="ja">StarWriter/Web 5.0 テンプレート</value>
-        <value xml:lang="ko">StarWriter/Web 5.0 템플릿</value>
+        <value xml:lang="ko">StarWriter/Web 5.0 서식 파일</value>
         <value xml:lang="zh-CN">StarWriter/Web 5.0 样式</value>
         <value xml:lang="zh-TW">StarWriter/Web 5.0 樣式</value>
         <value xml:lang="tr">StarWriter/Web 5.0 Vorlage</value>
         <value xml:lang="ar">StarWriter/Web 5.0 قالب</value>
-        <value xml:lang="ca">StarWriter/Web 5.0 Plantilla</value>
-        <value xml:lang="th">StarWriter/Web 5.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarWriter/Web 5.0</value>
+        <value xml:lang="th">แม่แบบ StarWriter/Web 5.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>4,writer_web_StarWriterWeb_50_VorlageTemplate,com.sun.star.text.WebDocument,,119,CSW5VWEB,5050,,</value>
@@ -6151,7 +6385,7 @@
         <value xml:lang="el">%productname% 6.0 Textdokument</value>
         <value xml:lang="nl">%productname% 6.0 Tekstdocument</value>
         <value xml:lang="fr">%productname% 6.0 Texte</value>
-        <value xml:lang="es">%productname% 6.0 Documento de texto</value>
+        <value xml:lang="es">%productname% 6.0 - Documento de texto</value>
         <value xml:lang="fi">Writer 6.0</value>
         <value xml:lang="it">%productname% 6.0 Documento di testo</value>
         <value xml:lang="da">%productname% 6.0 Textdokument</value>
@@ -6165,7 +6399,7 @@
         <value xml:lang="tr">%productname% 6.0 Textdokument</value>
         <value xml:lang="ar">%productname% 6.0 Textdokument</value>
         <value xml:lang="ca">%productname% 6.0 Textdokument</value>
-        <value xml:lang="th">%productname% 6.0 Text Document</value>
+        <value xml:lang="th">เอกสารข้อความ %productname%  (ต้นฉบับเอกสาร %productname% )</value>
       </prop>
       <prop oor:name="Data">
         <value>1,writer_StarOffice_XML_Writer,com.sun.star.text.TextDocument,,268435751,CXML,6200,,</value>
@@ -6224,15 +6458,15 @@
         <value xml:lang="da">StarWriter 3.0 Vorlage</value>
         <value xml:lang="sv">StarWriter 3.0 mall</value>
         <value xml:lang="pl">StarWriter 3.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarWriter 3.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarWriter 3.0 </value>
         <value xml:lang="ja">StarWriter 3.0 テンプレート</value>
-        <value xml:lang="ko">StarWriter 3.0 템플릿</value>
+        <value xml:lang="ko">StarWriter 3.0 서식 파일</value>
         <value xml:lang="zh-CN">StarWriter 3.0 样式</value>
         <value xml:lang="zh-TW">StarWriter 3.0 樣式</value>
         <value xml:lang="tr">StarWriter 3.0 Vorlage</value>
         <value xml:lang="ar">StarWriter 3.0 قالب</value>
-        <value xml:lang="ca">StarWriter 3.0 Plantilla</value>
-        <value xml:lang="th">StarWriter 3.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarWriter 3.0</value>
+        <value xml:lang="th">แม่แบบ StarWriter 3.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>15,writer_StarWriter_30_VorlageTemplate,com.sun.star.text.TextDocument,,119,CSW3V,3450,,</value>
@@ -6269,15 +6503,15 @@
         <value xml:lang="da">StarWriter 4.0 Vorlage</value>
         <value xml:lang="sv">StarWriter 4.0 mall</value>
         <value xml:lang="pl">StarWriter 4.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarWriter 4.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarWriter 4.0 </value>
         <value xml:lang="ja">StarWriter 4.0 テンプレート</value>
-        <value xml:lang="ko">StarWriter 4.0 템플릿</value>
+        <value xml:lang="ko">StarWriter 4.0 서식 파일</value>
         <value xml:lang="zh-CN">StarWriter 4.0 样式</value>
         <value xml:lang="zh-TW">StarWriter 4.0 樣式</value>
         <value xml:lang="tr">StarWriter 4.0 Vorlage</value>
         <value xml:lang="ar">StarWriter 4.0 قالب</value>
-        <value xml:lang="ca">StarWriter 4.0 Plantilla</value>
-        <value xml:lang="th">StarWriter 4.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarWriter 4.0</value>
+        <value xml:lang="th">แม่แบบ StarWriter 4.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>13,writer_StarWriter_40_VorlageTemplate,com.sun.star.text.TextDocument,,119,CSW4V,3580,,</value>
@@ -6314,15 +6548,15 @@
         <value xml:lang="da">StarWriter 5.0 Vorlage</value>
         <value xml:lang="sv">StarWriter 5.0 mall</value>
         <value xml:lang="pl">StarWriter 5.0 - Szablon</value>
-        <value xml:lang="pt-BR">StarWriter 5.0 Vorlage</value>
+        <value xml:lang="pt-BR">Modelo do StarWriter 5.0 </value>
         <value xml:lang="ja">StarWriter 5.0 テンプレート</value>
-        <value xml:lang="ko">StarWriter 5.0 템플릿</value>
+        <value xml:lang="ko">StarWriter 5.0 서식 파일</value>
         <value xml:lang="zh-CN">StarWriter 5.0 样式</value>
         <value xml:lang="zh-TW">StarWriter 5.0 樣式</value>
         <value xml:lang="tr">StarWriter 5.0 Vorlage</value>
         <value xml:lang="ar">StarWriter 5.0 قالب</value>
-        <value xml:lang="ca">StarWriter 5.0 Plantilla</value>
-        <value xml:lang="th">StarWriter 5.0 Template</value>
+        <value xml:lang="ca">Plantilla de l&apos;StarWriter 5.0</value>
+        <value xml:lang="th">แม่แบบ StarWriter 5.0 </value>
       </prop>
       <prop oor:name="Data">
         <value>11,writer_StarWriter_50_VorlageTemplate,com.sun.star.text.TextDocument,,119,CSW5V,5050,,</value>
@@ -6448,7 +6682,7 @@
         <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,tif_Tag_Image_File,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
+        <value>0,tif_Tag_Image_File,com.sun.star.drawing.DrawingDocument,,1090,,0,</value>
       </prop>
     </node>
     <node oor:name="impress_tif_Export" oor:op="replace">
@@ -6459,7 +6693,7 @@
         <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,tif_Tag_Image_File,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
+        <value>0,tif_Tag_Image_File,com.sun.star.presentation.PresentationDocument,,1090,,0,</value>
       </prop>
     </node>
     <node oor:name="tif_Import" oor:op="replace">
@@ -6492,7 +6726,7 @@
         <value xml:lang="en-US">WMF - Windows Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,wmf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,wmf_MS_Windows_Metafile,com.sun.star.drawing.DrawingDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="impress_wmf_Export" oor:op="replace">
@@ -6503,7 +6737,7 @@
         <value xml:lang="en-US">WMF - Windows Metafile</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,wmf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,1026,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
+        <value>0,wmf_MS_Windows_Metafile,com.sun.star.presentation.PresentationDocument,,1090,,0,,com.sun.star.svtools.SvFilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="wmf_Import" oor:op="replace">
@@ -6531,7 +6765,7 @@
         <value xml:lang="el">Writer 6.0 Πρότυπο</value>
         <value xml:lang="nl">%productname% 6.0 Sjabloon voor tekstdocumenten</value>
         <value xml:lang="fr">%productname% 6.0 Modèle de texte</value>
-        <value xml:lang="es">%productname% 6.0 Plantilla de documento de texto</value>
+        <value xml:lang="es">%productname% 6.0 - Plantilla de texto</value>
         <value xml:lang="fi">Writer 6.0 -mallipohja</value>
         <value xml:lang="it">%productname% 6.0 Modello di documento di testo</value>
         <value xml:lang="da">Writer 6.0 Vorlage</value>
@@ -6539,7 +6773,7 @@
         <value xml:lang="pl">%productname% 6.0 - Szablon dokumentu tekstowego</value>
         <value xml:lang="pt-BR">Writer 6.0 Vorlage</value>
         <value xml:lang="ja">%productname% 6.0 文書ドキュメント テンプレート</value>
-        <value xml:lang="ko">%productname% 6.0 텍스트 문서 템플릿</value>
+        <value xml:lang="ko">%productname% 6.0 텍스트 문서 서식 파일</value>
         <value xml:lang="zh-CN">%productname% 6.0 文本文档样式</value>
         <value xml:lang="zh-TW">%productname% 6.0 文字文件樣式</value>
         <value xml:lang="tr">Writer 6.0 Vorlage</value>
@@ -6565,7 +6799,7 @@
         <value xml:lang="el">Writer 6.0</value>
         <value xml:lang="nl">%productname% 6.0 Tekstdocument </value>
         <value xml:lang="fr">%productname% 6.0 Texte </value>
-        <value xml:lang="es">%productname% 6.0 Documento de texto </value>
+        <value xml:lang="es">%productname% 6.0 - Documento de texto </value>
         <value xml:lang="fi">Writer 6.0</value>
         <value xml:lang="it">%productname% 6.0 Documento di testo </value>
         <value xml:lang="da">Writer 6.0</value>
@@ -6573,7 +6807,7 @@
         <value xml:lang="pl">%productname% 6.0 </value>
         <value xml:lang="pt-BR">Writer 6.0</value>
         <value xml:lang="ja">%productname% 6.0 文書ドキュメント </value>
-        <value xml:lang="ko">%productname% 텍스트 문서 (%productname%마스터 문서)</value>
+        <value xml:lang="ko">%productname% 6.0 텍스트 문서</value>
         <value xml:lang="zh-CN">%productname% 6.0 文本文档 </value>
         <value xml:lang="zh-TW">%productname% 6.0 文字文件</value>
         <value xml:lang="tr">Writer 6.0</value>
@@ -6599,7 +6833,7 @@
         <value xml:lang="el">Writer 6.0 Κύριο έγγραφο</value>
         <value xml:lang="nl">%productname% 6.0 Masterdocument</value>
         <value xml:lang="fr">%productname% 6.0 Document maître</value>
-        <value xml:lang="es">%productname% 6.0 Documento maestro</value>
+        <value xml:lang="es">%productname% 6.0 - Documento maestro</value>
         <value xml:lang="fi">Writer 6.0 -pääasiakirja</value>
         <value xml:lang="it">%productname% 6.0 Documento master</value>
         <value xml:lang="da">Writer 6.0 Globaldokument</value>
@@ -6643,16 +6877,16 @@
         <value xml:lang="ru">%productname% 6.0 Текстовый документ (%productname% 6.0 Writer/Web)</value>
         <value xml:lang="el">Writer 6.0</value>
         <value xml:lang="nl">%productname% Tekstdocument (%productname% Writer/Web)</value>
-        <value xml:lang="fr">%productname% Texte (%productname% Writer/Web)</value>
-        <value xml:lang="es">%productname% Documento de texto (%productname% Writer/Web)</value>
+        <value xml:lang="fr">%productname% Texte 6.0 (%productname% Writer/Web)</value>
+        <value xml:lang="es">%productname% 6.0 - Documento de texto (%productname% Writer/Web)</value>
         <value xml:lang="fi">Writer 6.0</value>
-        <value xml:lang="it">%productname% Documento di testo (%productname% Writer/Web)</value>
+        <value xml:lang="it">%productname% 6.0 Documento di testo (%productname% Writer/Web)</value>
         <value xml:lang="da">Writer 6.0</value>
-        <value xml:lang="sv">%productname% textdokument (%productname% Writer/Web)</value>
+        <value xml:lang="sv">%productname% 6.0 textdokument (%productname% Writer/Web)</value>
         <value xml:lang="pl">%productname% - Dokument tekstowy (%productname% Writer/Web)</value>
         <value xml:lang="pt-BR">Writer 6.0</value>
         <value xml:lang="ja">%productname% 文書ドキュメント (%productname% Writer/Web)</value>
-        <value xml:lang="ko">%productname% 마스터 문서 (%productname% Writer/Web)</value>
+        <value xml:lang="ko">%productname% 6.0 텍스트 문서 (%productname% Writer/Web)</value>
         <value xml:lang="zh-CN">%productname% 文本文档 (%productname% Writer/Web)</value>
         <value xml:lang="zh-TW">%productname% 文字文件 (%productname% Writer/Web)</value>
         <value xml:lang="tr">Writer 6.0</value>
@@ -6672,6 +6906,27 @@
         <value xml:lang="de">%productname% 6.0 HTML-Dokumentvorlage</value>
         <value xml:lang="x-translate">%productname% 6.0 HTML-Dokumentvorlage</value>
         <value xml:lang="x-comment">%productname% 6.0 HTML-Dokumentvorlage</value>
+          <value xml:lang="en-US">%productname% 6.0 HTML Template</value>
+          <value xml:lang="pt">%productname% 6.0 Modelo de páginas Web</value>
+          <value xml:lang="ru">%productname% 6.0 Шаблон Web-страниц</value>
+          <value xml:lang="el">Writer/Web 6.0 Πρότυπο</value>
+          <value xml:lang="nl">%productname% 6.0 Sjabloon voor webpagina&apos;s</value>
+          <value xml:lang="fr">%productname% 6.0 Modèle HTLM</value>
+          <value xml:lang="es">%productname% 6.0 - Plantilla HTML</value>
+          <value xml:lang="fi">Writer/Web 6.0 -mallipohja</value>
+          <value xml:lang="it">%productname% 6.0 Modello di documento HTML</value>
+          <value xml:lang="da">Writer/Web 6.0 Vorlage</value>
+          <value xml:lang="sv">%productname% 6.0 HTML-dokumentmall</value>
+          <value xml:lang="pl">%productname% 6.0 - Szablon stron WWW</value>
+          <value xml:lang="pt-BR">Writer/Web 6.0 Vorlage</value>
+          <value xml:lang="ja">%productname% 6.0 HTML ドキュメントテンプレート</value>
+          <value xml:lang="ko">%productname% 6.0 HTML 서식 파일</value>
+          <value xml:lang="zh-CN">%productname% 6.0 HTML 文档样式</value>
+          <value xml:lang="zh-TW">%productname% 6.0 HTML 文件樣式</value>
+          <value xml:lang="tr">Writer/Web 6.0 Vorlage</value>
+          <value xml:lang="ar">Writer/Web 6.0 قالب</value>
+          <value xml:lang="ca">Writer/Web 6.0 Vorlage</value>
+          <value xml:lang="th">เว็บเพจ %productname% 6.0  - แม่แบบ</value>
       </prop>
       <prop oor:name="Data">
         <value>2,writer_web_StarOffice_XML_Writer_Web_Template,com.sun.star.text.WebDocument,,55,CXMLVWEB,6200,,</value>
@@ -6707,7 +6962,7 @@
         <value xml:lang="en-US">XPM - X PixMap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,xpm_XPM,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
+        <value>0,xpm_XPM,com.sun.star.drawing.DrawingDocument,,1090,,0,</value>
       </prop>
     </node>
     <node oor:name="impress_xpm_Export" oor:op="replace">
@@ -6718,7 +6973,7 @@
         <value xml:lang="en-US">XPM - X PixMap</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,xpm_XPM,com.sun.star.presentation.PresentationDocument,,1026,,0,,</value>
+        <value>0,xpm_XPM,com.sun.star.presentation.PresentationDocument,,1090,,0,</value>
       </prop>
     </node>
     <node oor:name="xpm_Import" oor:op="replace">
@@ -6817,6 +7072,14 @@
       </prop>
     </node>
   </node>
+  <node oor:name="DetectServices">
+    <node oor:name="com.sun.star.comp.filters.XMLFilterDetect" oor:op="replace">
+    <prop oor:name="Types">
+        <value>writer_DocBook_File</value>
+        <value>writer_Flat_XML_File</value>
+    </prop>
+    </node>
+  </node>
   <node oor:name="FrameLoaders">
     <node oor:name="com.sun.star.comp.sfx2.SfxMacroLoader" oor:op="replace">
       <prop oor:name="UIName">
@@ -6844,3 +7107,8 @@
     </node>
   </node>
 </oor:node>
+
+
+
+
+

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Substitution.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,43 +77,38 @@
 			</prop>
 			<group oor:name="Environment">
 				<info>
-					<desc xml:lang="en-US">Specifies a rule parameter that restricts applying mappings to a certain environment.</desc>
+					<desc xml:lang="en-US">Specifies the operating system required for this share point mapping. As a result, system dependent settings can be defined.</desc>
 				</info>
 				<prop oor:name="OS" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the operating system required for this share point mapping. As a result, system depedent settings can be defined.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="Host" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the name of the host for which the Directory property setting is valid. You can use the '*' wildcard for the name.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="DNSDomain" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the dns domain for which the Directory property variable is valid. You can use the '*' wildcard for the domain.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="YPDomain" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the yellow pages or NIS domain for which the Directory property variable is valid. You can use the '*' wildcard for the name.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 				<prop oor:name="NTDomain" oor:type="xs:string">
 					<info>
 						<desc xml:lang="en-US">Specifies the NT domain for which the Directory property variable is valid.  You can use the '*' wildcard for the domain.</desc>
 					</info>
-					<value xsi:nil="true"/>
 				</prop>
 			</group>
 		</group>
 		<set oor:name="SharePoint" oor:node-type="SharePointMapping">
 			<info>
-				<desc xml:lang="en-US">Used as the path variable name. The name is case-sensitive and must be defined with ascii characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
+				<desc xml:lang="en-US">Specifies the path variable name. The name is case-sensitive and must be defined with ASCII characters. The name is used as a placeholder within path settings and can be substituted during runtime with a path defined in one of the defined mappings.</desc>
 			</info>
 		</set>
 	</templates>

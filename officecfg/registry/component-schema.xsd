@@ -4,7 +4,24 @@
   <xs:annotation>
     <xs:documentation>specifies the document format for OOo configuration component schemata.</xs:documentation>
   </xs:annotation>
-  <xs:redefine schemaLocation="component-types.xsd">
+  <xs:attribute name="extensible" type="xs:boolean" use="optional" default="false">
+  <xs:annotation>
+	<xs:documentation>determines, whether a node has an extensible list of attributes or fixed list of attributes.</xs:documentation>
+  </xs:annotation>
+</xs:attribute>
+<xs:attribute name="localized" type="xs:boolean" use="optional" default="false">
+  <xs:annotation>
+	<xs:documentation>specifies, whether an attribute has or might have different values for different locales. </xs:documentation>
+  </xs:annotation>
+</xs:attribute>
+  <xs:attribute name="nillable" type="xs:boolean" use="optional" default="true">
+ <xs:annotation>
+   <xs:documentation>specifies, whether it is permissible to have a 'nil' i.e., missing, node content. The default for 'nillable' is 'true'.
+If a non-optional (nillable = 'false') has no default value (given in the component schema) it must be
+explicitly specified for each user.</xs:documentation>
+ </xs:annotation>
+</xs:attribute>
+<xs:redefine schemaLocation="component-types.xsd">
     <xs:complexType name="prop">
       <xs:annotation>
         <xs:documentation>redefines the property type 
@@ -31,6 +48,7 @@
             </xs:element>
             <xs:element name="value" type="oor:value" nillable="true" minOccurs="0"/>
           </xs:sequence>
+          <xs:attribute ref="oor:localized"/>
           <xs:attribute ref="oor:nillable"/>
           <xs:attribute ref="oor:type" use="required"/>
         </xs:extension>
@@ -52,6 +70,7 @@
             <xs:element name="node-ref" type="oor:node-ref"/>
           </xs:choice>
         </xs:sequence>
+        <xs:attribute ref="oor:extensible"/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -65,12 +84,12 @@
           <xs:element name="info" type="oor:info" minOccurs="0"/>
           <xs:element name="item" minOccurs="0" maxOccurs="unbounded">
             <xs:complexType>
-              <xs:attribute ref="oor:node-type"/>
-              <xs:attribute ref="oor:component"/>
+              <xs:attributeGroup ref="oor:node-type-info" />
             </xs:complexType>
           </xs:element>
         </xs:sequence>
-        <xs:attribute ref="oor:node-type" use="required"/>
+        <xs:attribute ref="oor:extensible"/>
+        <xs:attributeGroup ref="oor:node-type-info" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -82,8 +101,7 @@
       <xs:element name="info" type="oor:info" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute ref="oor:name" use="required"/>
-    <xs:attribute ref="oor:node-type" use="required"/>
-    <xs:attribute ref="oor:component"/>
+    <xs:attributeGroup ref="oor:node-type-info" />
   </xs:complexType>
   <xs:complexType name="constraint">
     <xs:annotation>
@@ -159,12 +177,8 @@
             <xs:sequence>
               <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="group" type="oor:group">
-                  <xs:unique name="groupProperties">
-                    <xs:selector xpath="prop"/>
-                    <xs:field xpath="@oor:name"/>
-                  </xs:unique>
                   <xs:unique name="groupMember">
-                    <xs:selector xpath="group|set|node-ref"/>
+                    <xs:selector xpath="group|set|node-ref|prop"/>
                     <xs:field xpath="@oor:name"/>
                   </xs:unique>
                 </xs:element>
@@ -184,12 +198,8 @@
                 <xs:element name="prop" type="oor:prop"/>
                 <xs:element name="node-ref" type="oor:node-ref"/>
                 <xs:element name="group" type="oor:group">
-                  <xs:unique name="groupProperties1">
-                    <xs:selector xpath="oor:prop"/>
-                    <xs:field xpath="@oor:name"/>
-                  </xs:unique>
                   <xs:unique name="groupMember1">
-                    <xs:selector xpath="oor:group|oor:set|oor:node-ref"/>
+                    <xs:selector xpath="oor:group|oor:set|oor:node-ref|oor:prop"/>
                     <xs:field xpath="@oor:name"/>
                   </xs:unique>
                 </xs:element>
@@ -197,12 +207,8 @@
               </xs:choice>
             </xs:sequence>
           </xs:complexType>
-          <xs:unique name="schemaProperties">
-            <xs:selector xpath="oor:prop"/>
-            <xs:field xpath="@oor:name"/>
-          </xs:unique>
           <xs:unique name="schemaMember">
-            <xs:selector xpath="oor:group|oor:set|oor:node-ref"/>
+            <xs:selector xpath="oor:group|oor:set|oor:node-ref|oor:prop"/>
             <xs:field xpath="@oor:name"/>
           </xs:unique>
         </xs:element>

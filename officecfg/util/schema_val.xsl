@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_val.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-22 11:48:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@
 		</xsl:if>
 	</xsl:template>
 
-<!-- warn for (deprecated) NIL values -->
+<!-- inhibit (explicit) NIL values -->
 	<xsl:template match="value[@xsi:nil]">
-		<xsl:message terminate="no">WARNING: xsi:nil is deprecated in schemas and will be stripped !</xsl:message>
+		<xsl:message terminate="yes">ERROR: xsi:nil is not allowed in schemas !</xsl:message>
 	</xsl:template>
 
 <!-- validate for correct node references -->

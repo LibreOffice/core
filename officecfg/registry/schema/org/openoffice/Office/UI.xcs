@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-05 07:25:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,12 @@
 			</info>
 			<prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true" oor:nillable="false">
 				<info>
-					<desc xml:lang="en-US">Localized name used when presenting the class to the user.</desc>
+					<desc xml:lang="en-US">Specifies the localized name that is used when presenting the class to the user.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Filters" oor:type="oor:string-list">
 				<info>
-					<desc xml:lang="en-US">List of filters which belong to this filter class. All filters referred here (for a given class) will be collected at runtime and presented as one single entry.</desc>
+					<desc xml:lang="en-US">Contains a list of filters that belong to this filter class. Filters that referred here (for a given class) are collected at runtime and then presented as one single entry.</desc>
 				</info>
 			</prop>
 		</group>
@@ -85,37 +85,37 @@
 			<!-- UIHints: Tools / Options / Star|OpenOffice / Appearance -->
 			<info>
 				<author>OS</author>
-				<desc xml:lang="en-US">Templates for color settings used to customize the appearance of the applications.</desc>
+				<desc xml:lang="en-US">Defines the templates for color settings used to customize the appearance of the applications.</desc>
 			</info>
 			<group oor:name="DocColor">
 				<info>
-					<desc xml:lang="en-US">Color settings for the document.</desc>
+					<desc xml:lang="en-US">Specifies the color settings for the document.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color of the document.</desc>
+						<desc xml:lang="en-US">Specifies the color of the document.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="DocBoundaries">
 				<info>
-					<desc xml:lang="en-US">Settings for the documents boundaries.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the documents boundaries.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of the document boundaries (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of anchors (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for of the document boundaries.</desc>
+						<desc xml:lang="en-US">Specifies the color used for of the document boundaries.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="AppBackground">
 				<info>
-					<desc xml:lang="en-US">Settings for the application background.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the application background.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -125,39 +125,39 @@
 			</group>
 			<group oor:name="ObjectBoundaries">
 				<info>
-					<desc xml:lang="en-US">Settings for object boundaries.</desc>
+					<desc xml:lang="en-US">Specifies the settings for object boundaries.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of object boundaries (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of object boundaries (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for object boundaries.</desc>
+						<desc xml:lang="en-US">Specifies the color used for object boundaries.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="TableBoundaries">
 				<info>
-					<desc xml:lang="en-US">Settings for table boundaries.</desc>
+					<desc xml:lang="en-US">Specifies the settings for table boundaries.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of table boundaries (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of table boundaries (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for table boundaries.</desc>
+						<desc xml:lang="en-US">Specifies the color used for table boundaries.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="FontColor">
 				<info>
-					<desc xml:lang="en-US">Settings for the font.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the font.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
@@ -167,389 +167,389 @@
 			</group>
 			<group oor:name="Links">
 				<info>
-					<desc xml:lang="en-US">Settings for unvisited links.</desc>
+					<desc xml:lang="en-US">Specifies the settings for unvisited links.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of unvisited links (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of unvisited links (true = visible).</desc>
 					</info>
 					<value>false</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for unvisited links.</desc>
+						<desc xml:lang="en-US">Specifies the color used for unvisited links.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="LinksVisited">
 				<info>
-					<desc xml:lang="en-US">Settings for visited links.</desc>
+					<desc xml:lang="en-US">Specifies the settings for visited links.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of visited links (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of visited links (true = visible).</desc>
 					</info>
 					<value>false</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for visited links.</desc>
+						<desc xml:lang="en-US">Specifies the color used for visited links.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="Anchor">
 				<info>
-					<desc xml:lang="en-US">Settings for anchors.</desc>
+					<desc xml:lang="en-US">Specifies the settings for anchors.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of anchors (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of anchors (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for anchors.</desc>
+						<desc xml:lang="en-US">Specifies the color used for anchors.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="Spell">
 				<info>
-					<desc xml:lang="en-US">Settings for incorrect text found with spellchecking.</desc>
+					<desc xml:lang="en-US">Specifies the settings for incorrect text found with spellchecking.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color of incorrect text found with AutoSpellcheck.</desc>
+						<desc xml:lang="en-US">Specifies the color of incorrect text found with AutoSpellcheck.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterTextGrid">
 				<info>
-					<desc xml:lang="en-US">Settings for the text grid in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the text grid in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the text grid.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the text grid.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterFieldShadings">
 				<info>
-					<desc xml:lang="en-US">Settings for field shadings in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for field shadings in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of field shadings (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of field shadings (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the field shadings.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the field shadings.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterIdxShadings">
 				<info>
-					<desc xml:lang="en-US">Settings for index and table shadings in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for index and table shadings in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of index and table shadings (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of index and table shadings (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the index and table shadings.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the index and table shadings.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterDirectCursor">
 				<info>
-					<desc xml:lang="en-US">Settings for the direct cursor in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the direct cursor in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of direct cursor (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of direct cursor (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the direct cursor.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the direct cursor.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterNotesIndicator">
 				<info>
-					<desc xml:lang="en-US">Settings for note indicators in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for note indicators in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for note indicators.</desc>
+						<desc xml:lang="en-US">Specifies the color used for note indicators.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterScriptIndicator">
 				<info>
-					<desc xml:lang="en-US">Settings for script indicators in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for script indicators in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for script indicators.</desc>
+						<desc xml:lang="en-US">Specifies the color used for script indicators.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterSectionBoundaries">
 				<info>
-					<desc xml:lang="en-US">Settings for section boundaries in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for section boundaries in Writer.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of section boundaries (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of section boundaries (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for section boundaries.</desc>
+						<desc xml:lang="en-US">Specifies the color used for section boundaries.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="WriterPageBreaks">
 				<info>
-					<desc xml:lang="en-US">Settings for the page break mark in Writer.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the page break mark in Writer.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the page break mark.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the page break mark.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="HTMLSGML">
 				<info>
-					<desc xml:lang="en-US">Settings used for SGML in HTML documents.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for SGML in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for SGML code.</desc>
+						<desc xml:lang="en-US">Specifies the color used for SGML code.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="HTMLComment">
 				<info>
-					<desc xml:lang="en-US">Settings used for comments in HTML documents.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for comments in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for comments.</desc>
+						<desc xml:lang="en-US">Specifies the color used for comments.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="HTMLKeyword">
 				<info>
-					<desc xml:lang="en-US">Settings used for keywords in HTML documents.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for keywords in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for keywords.</desc>
+						<desc xml:lang="en-US">Specifies the color used for keywords.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="HTMLUnknown">
 				<info>
-					<desc xml:lang="en-US">Settings used for other text in HTML documents.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for other text in HTML documents.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for other text.</desc>
+						<desc xml:lang="en-US">Specifies the color used for other text.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcGrid">
 				<info>
-					<desc xml:lang="en-US">Settings used for grid lines in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for grid lines in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the grid.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the grid.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcPageBreak">
 				<info>
-					<desc xml:lang="en-US">Settings used for page breaks in the page break preview in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for page breaks in the page break preview in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for page breaks in the page break preview.</desc>
+						<desc xml:lang="en-US">Specifies the color used for page breaks in the page break preview.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcPageBreakManual">
 				<info>
-					<desc xml:lang="en-US">Settings used for manual breaks in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for manual breaks in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for manual page breaks.</desc>
+						<desc xml:lang="en-US">Specifies the color used for manual page breaks.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcPageBreakAutomatic">
 				<info>
-					<desc xml:lang="en-US">Settings used for automatic breaks in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for automatic breaks in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for automatic page breaks.</desc>
+						<desc xml:lang="en-US">Specifies the color used for automatic page breaks.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcDetective">
 				<info>
-					<desc xml:lang="en-US">Settings used for audition arrows in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for audition arrows in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for audition arrows to precedent or dependent cells.</desc>
+						<desc xml:lang="en-US">Specifies the color used for audition arrows to precedent or dependent cells.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcDetectiveError">
 				<info>
-					<desc xml:lang="en-US">Settings used for audition arrows to cells with errors in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for audition arrows to cells with errors in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for audition arrows to cells containing errors.</desc>
+						<desc xml:lang="en-US">Specifies the color used for audition arrows to cells containing errors.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcReference">
 				<info>
-					<desc xml:lang="en-US">Settings used for the cursor when editing references in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for the cursor when editing references in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the cursor when editing references.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the cursor when editing references.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="CalcNotesBackground">
 				<info>
-					<desc xml:lang="en-US">Settings used for the background of notes in Calc.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for the background of notes in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the background of notes.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the background of notes.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="DrawGrid">
 				<info>
-					<desc xml:lang="en-US">Settings used for the grid in Draw/Impress.</desc>
+					<desc xml:lang="en-US">Specifies the settings used for the grid in Draw/Impress.</desc>
 				</info>
 				<prop oor:name="IsVisible" oor:type="xs:boolean">
 					<info>
-						<desc xml:lang="en-US">Specifies the visibilty of the grid (true = visible).</desc>
+						<desc xml:lang="en-US">Specifies the visibility of the grid (true = visible).</desc>
 					</info>
 					<value>true</value>
 				</prop>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for the grid.</desc>
+						<desc xml:lang="en-US">Specifies the color used for the grid.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="DrawDrawing">
 				<info>
-					<desc xml:lang="en-US">Settings for the default drawing color in Draw/Impress.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the default drawing color in Draw/Impress.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">The default drawing color being used.</desc>
+						<desc xml:lang="en-US">Specifies the default drawing color.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="DrawFill">
 				<info>
-					<desc xml:lang="en-US">Settings for the default fill color in Draw/Impress.</desc>
+					<desc xml:lang="en-US">Specifies the settings for the default fill color in Draw/Impress.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">The default fill color being used.</desc>
+						<desc xml:lang="en-US">Specifies the default fill color.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BASICIdentifier">
 				<info>
-					<desc xml:lang="en-US">Settings for identifiers in BASIC source code.</desc>
+					<desc xml:lang="en-US">Specifies the settings for identifiers in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for identifiers.</desc>
+						<desc xml:lang="en-US">Specifies the color used for identifiers.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BASICComment">
 				<info>
-					<desc xml:lang="en-US">Settings for comments in BASIC source code.</desc>
+					<desc xml:lang="en-US">Specifies the settings for comments in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for comments.</desc>
+						<desc xml:lang="en-US">Specifies the color used for comments.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BASICNumber">
 				<info>
-					<desc xml:lang="en-US">Settings for numbers in BASIC source code.</desc>
+					<desc xml:lang="en-US">Specifies the settings for numbers in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for numbers.</desc>
+						<desc xml:lang="en-US">Specifies the color used for numbers.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BASICString">
 				<info>
-					<desc xml:lang="en-US">Settings for strings in BASIC source code.</desc>
+					<desc xml:lang="en-US">Specifies the settings for strings in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for strings.</desc>
+						<desc xml:lang="en-US">Specifies the color used for strings.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BASICOperator">
 				<info>
-					<desc xml:lang="en-US">Settings for operators in BASIC source code.</desc>
+					<desc xml:lang="en-US">Specifies the settings for operators in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for operators.</desc>
+						<desc xml:lang="en-US">Specifies the color used for operators.</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BASICKeyword">
 				<info>
-					<desc xml:lang="en-US">Settings for keywords in BASIC source code.</desc>
+					<desc xml:lang="en-US">Specifies the settings for keywords in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for keywords (reserved expressions).</desc>
+						<desc xml:lang="en-US">Specifies the color used for keywords (reserved expressions).</desc>
 					</info>
 				</prop>
 			</group>
 			<group oor:name="BASICError">
 				<info>
-					<desc xml:lang="en-US">Settings for errors shown in BASIC source code.</desc>
+					<desc xml:lang="en-US">Specifies the settings for errors shown in BASIC source code.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc xml:lang="en-US">Color used for errors.</desc>
+						<desc xml:lang="en-US">Specifies the color used for errors.</desc>
 					</info>
 				</prop>
 			</group>
@@ -559,19 +559,17 @@
 		<group oor:name="FilterClassification">
 			<info>
 				<author>FS</author>
-				<desc xml:lang="en-US">Collection of settings relevant for filter classification.
-These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from.
-Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
+				<desc xml:lang="en-US">Contains the collection of settings relevant for filter classification. These settings are used in the file open / file save dialogs, where the user is presented with a list of file format filters to choose from. Filters are classified into so-called global and local classes, which control how filters are grouped together in the user interface.</desc>
 			</info>
 			<group oor:name="GlobalFilters">
 				<info>
-					<desc xml:lang="en-US">Global classes are presented to the user in a group of it's own. A typical example for a global class is "text documents", whereas "StarWriter 4.0 / 5.0 documents" is not a global class.</desc>
+					<desc xml:lang="en-US">Presents global classes to the user in a group of their own. A typical example for a global class is "text documents", whereas "StarWriter 4.0 / 5.0 documents" is not a global class.</desc>
 				</info>
 				<prop oor:name="Order" oor:type="oor:string-list">
 					<info>
 						<desc xml:lang="en-US">List specifying the order of the global filters within their group.</desc>
 					</info>
-					<value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formular.FormularProperties</value>
+					<value oor:separator=";">com.sun.star.text.TextDocument;com.sun.star.sheet.SpreadsheetDocument;com.sun.star.presentation.PresentationDocument;com.sun.star.drawing.DrawingDocument;com.sun.star.text.WebDocument;com.sun.star.text.GlobalDocument;com.sun.star.formula.FormularProperties</value>
 				</prop>
 				<set oor:name="Classes" oor:node-type="FilterClass">
 					<info>
@@ -581,9 +579,7 @@ Filters are classified into so-called global and local classes, which control ho
 			</group>
 			<group oor:name="LocalFilters">
 				<info>
-					<desc xml:lang="en-US">Like global classes, local classes combine several filters into one entry.
-The only difference to global filters is that all these are presented in an own group, while entries resulting from local classes are presented "in-place", at the position where the first of it's filters would normally appear.
-Additionally, filters in global classes can repeat elsewhere, while filters in local classes do not appear anywhere else than in the entry which is assembled from their class.</desc>
+					<desc xml:lang="en-US">Combines several filters into one entry and presents the classes to the user "in-place".</desc>
 				</info>
 				<set oor:name="Classes" oor:node-type="FilterClass">
 					<info>
@@ -595,11 +591,11 @@ Additionally, filters in global classes can repeat elsewhere, while filters in l
 		<group oor:name="ColorScheme">
 			<info>
 				<author>OS</author>
-				<desc xml:lang="en-US">Color settings for customizing the appearance of the applications.</desc>
+				<desc xml:lang="en-US">Specifies the color settings for customizing the appearance of the applications.</desc>
 			</info>
 			<prop oor:name="CurrentColorScheme" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Name of the columns selected for inserting data into text or fields, plus inserted text and line breaks</desc>
+					<desc xml:lang="en-US">Specifies the name of the columns selected for inserting data into text or fields, plus inserted text and line breaks.</desc>
 				</info>
 				<value>Default</value>
 			</prop>

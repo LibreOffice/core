@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Jobs" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
 		<author>AS</author>
-		<desc xml:lang="en-US">Contains informations about registered jobs, bound on events.</desc>
+		<desc xml:lang="en-US">Contains information about registered jobs, bound on events.</desc>
 	</info>
 	<templates>
 		<group oor:name="Job">

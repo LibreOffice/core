@@ -3,9 +3,9 @@
  *
  *  $RCSfile: ProtocolHandler.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 	<templates>
 		<group oor:name="Handler">
 			<info>
-				<desc xml:lang="en-US">A UNO service used for URL dispatches that handle special URL protocols.</desc>
+				<desc xml:lang="en-US">Specifies the UNO service to use for URL dispatches that handle special URL protocols.</desc>
 			</info>
 			<prop oor:name="Protocols" oor:type="oor:string-list">
 				<info>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-12-04 15:44:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,15 +95,17 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the JVM shared library that is used.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="SystemClassPath" oor:type="xs:string">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-					<desc xml:lang="en-US">Contains jars of the Office intallation and may also contain other jars or folders.</desc>
+					<desc xml:lang="en-US">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Enable" oor:type="xs:boolean">
 				<!-- OldPath: Java -->
@@ -129,23 +131,23 @@
 				<!-- OldLocation: java.ini -->
 				<!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
 				<info>
-					<desc xml:lang="en-US">Determines if and to what extent java applets are allowed to access the network.</desc>
+					<desc xml:lang="en-US">Determines if and to what extent Java applets are allowed to access the network.</desc>
 					<label xml:lang="en-US">Net access</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Host - the applet may connect to the computer where it originated from.</desc>
+							<desc xml:lang="en-US">Host - connect to origin</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Unrestricted - the applet may connect to other computers on the network.</desc>
+							<desc xml:lang="en-US">Unrestricted - connect to all</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
 						<info>
-							<desc xml:lang="en-US">None - the applet cannot connect to other computers.</desc>
+							<desc xml:lang="en-US">None - no connection alloed</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -155,17 +157,18 @@
 				<!-- OldLocation: java.ini -->
 				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
 				<info>
-					<desc xml:lang="en-US">Specifies additional java classes or jars which are contained in the classpath of the JVM  (java.class.path system property).</desc>
+					<desc xml:lang="en-US">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 					<label xml:lang="en-US">Classpath</label>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Debug" oor:type="xs:boolean">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
-					<desc xml:lang="en-US"> JVM supports debugging.</desc>
+					<desc xml:lang="en-US"> Indicates that JVM supports debugging.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DebugPort" oor:type="xs:int">
@@ -181,7 +184,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
-					<desc xml:lang="en-US">Turns on the verbose garbace collection.</desc>
+					<desc xml:lang="en-US">Turns on verbose garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Verbose" oor:type="xs:boolean">
@@ -205,7 +208,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
-					<desc xml:lang="en-US">Determines the java stack size.</desc>
+					<desc xml:lang="en-US">Determines the Java stack size.</desc>
 				</info>
 			</prop>
 			<prop oor:name="VerifyMode" oor:type="xs:int">
@@ -219,19 +222,19 @@
 					<enumeration oor:value="0">
 						<info>
 							<deprecated/>
-							<desc xml:lang="en-US">Verify mode 0.</desc>
+							<desc xml:lang="en-US">Verify mode 0</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
 							<deprecated/>
-							<desc xml:lang="en-US">Verify mode 1.</desc>		
+							<desc xml:lang="en-US">Verify mode 1</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
 							<deprecated/>
-							<desc xml:lang="en-US">Verify mode 2.</desc>
+							<desc xml:lang="en-US">Verify mode 2</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -240,8 +243,8 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-				    <deprecated/>
-					<desc xml:lang="en-US">Determines the minimal size of the heap.</desc>
+					<deprecated/>
+					<desc xml:lang="en-US">Determines the minimum size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="MaxHeapSize" oor:type="xs:int">
@@ -249,7 +252,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
-					<desc xml:lang="en-US">Determines the maximal size of the heap.</desc>
+					<desc xml:lang="en-US">Determines the maximum size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DisableAsyncGC" oor:type="xs:boolean">
@@ -273,18 +276,18 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
-					<desc xml:lang="en-US">Values for different VM types.</desc>
+					<desc xml:lang="en-US">Specifies values for different VM types.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="Classic">
-					    <info>
-							<desc xml:lang="en-US">Use classic VM.</desc>
-					    </info>
+						<info>
+							<desc xml:lang="en-US">Classic VM</desc>
+						</info>
 					</enumeration>
 					<enumeration oor:value="Hotspot">
 						<info>
-							<desc xml:lang="en-US">Use hospot VM.</desc>
-					    </info>
+							<desc xml:lang="en-US">Hotspot VM</desc>
+						</info>
 					</enumeration>
 				</constraints>
 			</prop>
@@ -297,12 +300,12 @@
 				<constraints>
 					<enumeration oor:value="JDK">
 						<info>
-							<desc xml:lang="en-US">The Virtual Machine comes from a JDKxxx or j2sdkxxx installation. </desc>
+							<desc xml:lang="en-US">JDKxxx or j2sdkxxx</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="JRE">
 						<info>
-							<desc xml:lang="en-US">The Virtual Machine comes from a JRExxx installation. </desc>
+							<desc xml:lang="en-US">JRExxx</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -312,16 +315,17 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-					<desc xml:lang="en-US">Contains directories which contain shared libraries which are used by the Java runtime library.</desc>
+					<desc xml:lang="en-US">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Properties" oor:type="oor:string-list">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
-					<desc xml:lang="en-US">Properties for use with the Java VM.</desc>
+					<desc xml:lang="en-US">Specifies properties for use with the Java VM.</desc>
 				</info>
 			</prop>
 		</group>
@@ -335,7 +339,8 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="VerifiedVersion" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -343,7 +348,8 @@
 				<info>
 					<desc xml:lang="en-US">Contains a space separated list of verified Java versions.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Version" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -351,7 +357,8 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the version of the JRE which is provided by the setup.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Vendor" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -359,7 +366,8 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the vendor of the JRE package.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="RequiredVersion" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -367,7 +375,8 @@
 				<info>
 					<desc xml:lang="en-US">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="InstallationPackage" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -375,7 +384,8 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the JRE package which can be installed during the Java setup.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="ExcludeVersion" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -383,16 +393,18 @@
 				<info>
 					<desc xml:lang="en-US">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="AdditionalSearchPath" oor:type="xs:string">
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
-					<desc xml:lang="en-US">Used to locate resources.</desc>
+					<desc xml:lang="en-US">Locates resources.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="AdditionalClasspath" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -400,7 +412,8 @@
 				<info>
 					<desc xml:lang="en-US">Contains the Office's jar files. The Java setup uses it to form the SystemClasspath.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 		</group>
 	</component>

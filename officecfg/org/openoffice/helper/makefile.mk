@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-10 16:10:19 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:49:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,14 +66,11 @@ PRJNAME=officecfg
 TARGET =schema
 PACKAGE=org$/openoffice$/helper
 
-# Our jar build rules don't like -P#
-MAXPROCESS=1
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-JARFILES = jaxp.jar parser.jar
+EXTRAJARFILES = jaxp.jar parser.jar
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/DefaultNamespaceRemover.class \
@@ -91,6 +88,9 @@ JARCOMPRESS     = TRUE
 
 # --- Targets ------------------------------------------------------
 
-
 .INCLUDE :  target.mk
+
+.IF "$(JARTARGETN)"!=""
+$(JARTARGETN) : $(JAVACLASSFILES) $(JAVATARGET)
+.ENDIF          # "$(JARTARGETN)"!=""
 

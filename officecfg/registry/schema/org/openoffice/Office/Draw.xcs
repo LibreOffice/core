@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-12-03 16:21:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@
 			</group>
 			<group oor:name="Other">
 				<info>
-					<desc xml:lang="en-US">Defines other properties regarding device independant graphical object representation.</desc>
+					<desc xml:lang="en-US">Defines other properties regarding device independent graphical object representation.</desc>
 				</info>
 				<group oor:name="TabStop">
 					<!-- OldPath: Draw/Layout -->
@@ -295,7 +295,7 @@
 		</group>
 		<group oor:name="Misc">
 			<info>
-				<desc xml:lang="en-US">Contains a collection of configuration items of the Draw application that do not fit into another category.</desc>
+				<desc xml:lang="en-US">Contains a collection of configuration items for the Draw application that do not fit into another category.</desc>
 			</info>
 			<prop oor:name="BackgroundCache" oor:type="xs:boolean">
 				<!-- OldPath: Draw/Other -->
@@ -461,18 +461,18 @@
 					<!-- UIHints: Select two objects =&amp;gt; Edit  Cross-fade -->
 					<info>
 						<author>AF</author>
-						<desc xml:lang="en-US">Number of intermediate morphing steps between two objects.</desc>
+						<desc xml:lang="en-US">Specifies the number of intermediate morphing steps between two objects.</desc>
 						<label xml:lang="en-US">Steps</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="1">
 							<info>
-								<desc xml:lang="en-US">There have to be at least one morphing step.</desc>
+								<desc xml:lang="en-US">Specifies that there has to be at least one morphing step.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="256">
 							<info>
-									<desc xml:lang="en-US">There may be at least this much morphing steps.</desc>
+								<desc xml:lang="en-US">Specifies that there may be at least this many morphing steps.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -507,7 +507,7 @@
 				<!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Klick -->
 				<info>
 					<author>AW</author>
-					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Klick at a object creating Button</desc>
+					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button</desc>
 					<label xml:lang="en-US">Default Object Size</label>
 				</info>
 				<prop oor:name="Width" oor:type="xs:int">
@@ -601,12 +601,12 @@
 					<constraints>
 						<minInclusive oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Minimal snap range is 1.</desc>
+								<desc xml:lang="en-US">Specifies that the minimum snap range is 1.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="50">
 							<info>
-								<desc xml:lang="en-US">Maximal snap range is 50.</desc>
+								<desc xml:lang="en-US">Specifies that the maximum snap range is 50.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -662,12 +662,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimal rotation angle is 0/100 degree.</desc>
+								<desc xml:lang="en-US">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="18000">
 							<info>
-								<desc xml:lang="en-US">Maximal rotation angle is 18000/100 degree.</desc>
+								<desc xml:lang="en-US">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -679,21 +679,18 @@
 					<!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
 					<info>
 						<author>AF</author>
-						<desc xml:lang="en-US">When moving a point in the point editor this is the maximal angle
-												at the two adjacent points between the lines connecting those two points with each other
-												and with the moved point at which snapping to the connection line and removal of the
-												moved point takes place. [UNIT=Degree/100]</desc>
+						<desc xml:lang="en-US">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 						<label xml:lang="en-US">Point reduction</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Minimal angle is 100/100 degree.</desc>
+								<desc xml:lang="en-US">Specifies that the minimum angle is 100/100 degrees.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="9000">
 							<info>
-								<desc xml:lang="en-US">Maximal angle is 9000/100 degree.</desc>
+								<desc xml:lang="en-US">Specifies that the maximum angle is 9000/100 degrees.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>

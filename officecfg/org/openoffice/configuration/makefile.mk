@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-10 16:09:54 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:49:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,14 +66,11 @@ PRJNAME=officecfg
 TARGET =cfgimport
 PACKAGE=org$/openoffice$/configuration
 
-# Our jar build rules don't like -P#
-MAXPROCESS=1
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-JARFILES = jaxp.jar parser.jar xt.jar
+EXTRAJARFILES = jaxp.jar parser.jar xt.jar
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/XMLDefaultGenerator.class \
@@ -96,4 +93,8 @@ JARCOMPRESS     = TRUE
 
 
 .INCLUDE :  target.mk
+
+.IF "$(JARTARGETN)"!=""
+$(JARTARGETN) : $(JAVACLASSFILES) $(JAVATARGET)
+.ENDIF          # "$(JARTARGETN)"!=""
 

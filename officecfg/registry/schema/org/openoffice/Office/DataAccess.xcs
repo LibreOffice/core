@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 14:44:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,34 +96,28 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the height of a data row.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="TextColor" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the text color (RGB) for displaying text.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="TextLineColor" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the color (RGB) for text lines (i.e. underlining and outstriking).</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="CharacterEmphasis" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the character emphasis to use. This is a com.sun.star.awt.FontEmphasisMark value.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="CharacterRelief" oor:type="xs:short">
 				<info>
 					<desc xml:lang="en-US">Specifies the character relief to use. This is a com.sun.star.FontRelief value.</desc>
 				</info>
-				
 			</prop>
-			<node-ref oor:name="Font" oor:node-type="Font">
-				<!-- oor:component="org.openoffice.Office.Common" -->
+			<node-ref oor:name="Font" oor:node-type="Font" oor:component="org.openoffice.Office.Common">
 				<info>
 					<desc xml:lang="en-US">Specifies the font attributes for data displaying.</desc>
 				</info>
@@ -135,21 +129,18 @@
 			</info>
 			<prop oor:name="FormatKey" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can't be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the datatype of the column.</desc>
+					<desc xml:lang="en-US">Contains the index of the number format that is used for the column. If the number format to be used for this column is not a standard number format (and thus can't be made persistent using a format key only), the FormatDescriptor and FormatLocale settings should be applied to calculate the format. FormatKey would be NULL in this case. If FormatKey as well as FormatDescriptor are NULL, a default number format should be used according to the data type of the column.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="FormatString" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Contains the format which will be used to query the format key when not already set.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="FormatLocale" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Contains the locale which will be used to query the format key when not already set.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="Align" oor:type="xs:int">
 				<info>
@@ -172,13 +163,11 @@
 						</info>
 					</enumeration>
 				</constraints>
-				
 			</prop>
 			<prop oor:name="Width" oor:type="xs:int">
 				<info>
 					<desc xml:lang="en-US">Specifies the width of the column displayed in a grid. If the value is NULL, a default width should be used according to the size of the columns name.  [UNIT=1/100 mm]</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="Position" oor:type="xs:int">
 				<info>
@@ -195,13 +184,11 @@
 				<info>
 					<desc xml:lang="en-US">Contains information about a control used for displaying and editing the columns data.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="HelpText" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Describes an optional help text which can be used by UI components when representing this column.</desc>
 				</info>
-				
 			</prop>
 			<prop oor:name="ControlDefault" oor:type="xs:string">
 				<info>
@@ -256,7 +243,7 @@
 			</prop>
 			<prop oor:name="LayoutInformation" oor:type="xs:hexBinary" oor:nillable="false">
 				<info>
-					<desc xml:lang="en-US">Contains the information for the querydesign.</desc>
+					<desc xml:lang="en-US">Contains the information for the query design.</desc>
 				</info>
 			</prop>
 			<node-ref oor:name="Settings" oor:node-type="DataSettings">
@@ -323,17 +310,17 @@
 			</prop>
 			<prop oor:name="User" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the user name for the authentification upon creating a connection to the data source.</desc>
+					<desc xml:lang="en-US">Specifies the user name for the authentication upon creating a connection to the data source.</desc>
 				</info>
 			</prop>
 			<prop oor:name="LoginTimeout" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the default timeout to be used when establishing a connection for this data source.</desc>
+					<desc xml:lang="en-US">Specifies the default time-out to be used when establishing a connection for this data source.</desc>
 				</info>
 			</prop>
 			<prop oor:name="SuppressVersionColumns" oor:type="xs:boolean">
 				<info>
-					<desc xml:lang="en-US">If set to true (the default), components displaying data obtained from this data source will suppress version columns.</desc>
+					<desc xml:lang="en-US">Suppresses version columns in components that display data obtained from the data source that you specify, if set to true (the default).</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -423,411 +410,24 @@
 				</info>
 			</prop>
 		</group>
-		<group oor:name="Font">
-			<!-- Copied from org.openoffice.Office.Common -->
+		<group oor:name="UserDefinedDriver">
 			<info>
-				<author>JB (Temporary 'hack' to avoid cross-component references)</author>
-				<desc xml:lang="en-US">Describes the characteristics of a font.</desc>
+				<desc xml:lang="en-US">Specifies the user defined database drivers which should appear in the data source administration dialog.</desc>
 			</info>
-			<prop oor:name="Name" oor:type="xs:string">
+			<prop oor:name="DriverPageDisplayName" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the exact name of the font ("Arial","Courier", "Frutiger").</desc>
+					<desc xml:lang="en-US">Specifies the display name of the database driver page.</desc>
 				</info>
-				
 			</prop>
-			<prop oor:name="Height" oor:type="xs:short">
+			<prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the height of the font in the measure of the destination.</desc>
+					<desc xml:lang="en-US">Specifies the display name of the database driver.</desc>
 				</info>
-				
 			</prop>
-			<prop oor:name="Width" oor:type="xs:short">
+			<prop oor:name="DriverDsnPrefix" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Specifies the width of the font in the measure of the destination.</desc>
+					<desc xml:lang="en-US">Specifies the prefix of the URL of the database driver.</desc>
 				</info>
-				
-			</prop>
-			<prop oor:name="StyleName" oor:type="xs:string">
-				<info>
-					<desc xml:lang="en-US">Specifies the style name of the font ("Bold", "Italic", "Italic Bold").</desc>
-				</info>
-				
-			</prop>
-			<prop oor:name="Family" oor:type="xs:short">
-				<info>
-					<desc xml:lang="en-US">Specifies the general style of the font.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc xml:lang="en-US">DECORATIVE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc xml:lang="en-US">MODERN</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc xml:lang="en-US">ROMAN</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="4">
-						<info>
-							<desc xml:lang="en-US">SCRIPT</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="5">
-						<info>
-							<desc xml:lang="en-US">SWISS</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="6">
-						<info>
-							<desc xml:lang="en-US">SYSTEM</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="7">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				
-			</prop>
-			<prop oor:name="CharSet" oor:type="xs:short">
-				<info>
-					<desc xml:lang="en-US">Specifies the character set that is supported by the font.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc xml:lang="en-US">ANSI</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc xml:lang="en-US">MAC</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc xml:lang="en-US">IBMPC_437</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="4">
-						<info>
-							<desc xml:lang="en-US">IBMPC_850</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="5">
-						<info>
-							<desc xml:lang="en-US">IBMPC_860</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="6">
-						<info>
-							<desc xml:lang="en-US">IBMPC_861</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="7">
-						<info>
-							<desc xml:lang="en-US">IBMPC_863</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="8">
-						<info>
-							<desc xml:lang="en-US">IBMPC_865</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="9">
-						<info>
-							<desc xml:lang="en-US">SYSTEM</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="10">
-						<info>
-							<desc xml:lang="en-US">SYMBOL</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				
-			</prop>
-			<prop oor:name="Pitch" oor:type="xs:short">
-				<info>
-					<desc xml:lang="en-US">Specifies the pitch of the font.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc xml:lang="en-US">FIXED</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc xml:lang="en-US">VARIABLE</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				
-			</prop>
-			<prop oor:name="CharacterWidth" oor:type="xs:double">
-				<info>
-					<desc xml:lang="en-US">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%]</desc>
-				</info>
-				
-			</prop>
-			<prop oor:name="Weight" oor:type="xs:double">
-				<info>
-					<desc xml:lang="en-US">Specifies the thickness of the line.</desc>
-				</info>
-				
-			</prop>
-			<prop oor:name="Slant" oor:type="xs:short">
-				<info>
-					<desc xml:lang="en-US">Specifies if there is a character slant (italic).</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc xml:lang="en-US">NONE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc xml:lang="en-US">OBLIQUE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc xml:lang="en-US"> ITALIC</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="4">
-						<info>
-							<desc xml:lang="en-US">REVERSE_OBLIQUE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="5">
-						<info>
-							<desc xml:lang="en-US">REVERSE_ITALIC</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				
-			</prop>
-			<prop oor:name="UnderLine" oor:type="xs:short">
-				<info>
-					<desc xml:lang="en-US">Specifies the type of underline.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc xml:lang="en-US">NONE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc xml:lang="en-US">SINGLE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc xml:lang="en-US">DOUBLE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc xml:lang="en-US">DOTTED</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="4">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="5">
-						<info>
-							<desc xml:lang="en-US">DASH</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="6">
-						<info>
-							<desc xml:lang="en-US">LONGDASH</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="7">
-						<info>
-							<desc xml:lang="en-US">DASHDOT</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="8">
-						<info>
-							<desc xml:lang="en-US">DASHDOTDOT</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="9">
-						<info>
-							<desc xml:lang="en-US">SMALLWAVE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="10">
-						<info>
-							<desc xml:lang="en-US">WAVE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="11">
-						<info>
-							<desc xml:lang="en-US">DOUBLEWAVE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="12">
-						<info>
-							<desc xml:lang="en-US">BOLD</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="13">
-						<info>
-							<desc xml:lang="en-US">BOLDDOTTED</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="14">
-						<info>
-							<desc xml:lang="en-US">BOLDDASH</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="15">
-						<info>
-							<desc xml:lang="en-US">BOLDLONGDASH</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="16">
-						<info>
-							<desc xml:lang="en-US">BOLDDASHDOT</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="17">
-						<info>
-							<desc xml:lang="en-US">BOLDDASHDOTDOT</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="18">
-						<info>
-							<desc xml:lang="en-US">BOLDWAVE</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				
-			</prop>
-			<prop oor:name="Strikeout" oor:type="xs:short">
-				<info>
-					<desc xml:lang="en-US">Specifies the type of strikeout.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc xml:lang="en-US">NONE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc xml:lang="en-US">SINGLE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc xml:lang="en-US">DOUBLE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="4">
-						<info>
-							<desc xml:lang="en-US">BOLD</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="5">
-						<info>
-							<desc xml:lang="en-US">SLASH</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="6">
-						<info>
-							<desc xml:lang="en-US">X</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				
-			</prop>
-			<prop oor:name="Orientation" oor:type="xs:double">
-				<info>
-					<desc xml:lang="en-US">Specifies the rotation of the font.  [UNIT=degree]</desc>
-				</info>
-				
-			</prop>
-			<prop oor:name="Kerning" oor:type="xs:boolean">
-				<info>
-					<desc xml:lang="en-US">For requesting, specifies if there is a kerning table available. For selecting, specifies if the kerning table is to be used.</desc>
-				</info>
-				
-			</prop>
-			<prop oor:name="WordLineMode" oor:type="xs:boolean">
-				<info>
-					<desc xml:lang="en-US">Specifies if only words get underlined.</desc>
-				</info>
-				
-			</prop>
-			<prop oor:name="Type" oor:type="xs:short">
-				<info>
-					<desc xml:lang="en-US">Specifies the technology of the font representation.</desc>
-				</info>
-				<constraints>
-					<enumeration oor:value="0">
-						<info>
-							<desc xml:lang="en-US">DONTKNOW</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="1">
-						<info>
-							<desc xml:lang="en-US">RASTER</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="2">
-						<info>
-							<desc xml:lang="en-US">DEVICE</desc>
-						</info>
-					</enumeration>
-					<enumeration oor:value="3">
-						<info>
-							<desc xml:lang="en-US">SCALABLE</desc>
-						</info>
-					</enumeration>
-				</constraints>
-				
 			</prop>
 		</group>
 	</templates>
@@ -841,7 +441,7 @@
 			</info>
 			<prop oor:name="DriverPrecedence" oor:type="oor:string-list">
 				<info>
-					<desc xml:lang="en-US">Specifies order of database drivers in which they should be asked if the accept the conncetion string.</desc>
+					<desc xml:lang="en-US">Specifies order of database drivers in which they should be asked if the accept the connection string.</desc>
 				</info>
 				<value oor:separator=";">com.sun.star.comp.sdbc.ODBCDriver;com.sun.star.comp.sdbc.JDBCDriver</value>
 			</prop>
@@ -867,6 +467,11 @@
 				<desc xml:lang="en-US">Contains a list of descriptions for data sources.</desc>
 			</info>
 		</set>
+		<set oor:name="UserDefinedDriverSettings" oor:node-type="UserDefinedDriver">
+			<info>
+				<desc xml:lang="en-US">Contains a list of descriptions for user defined drivers.</desc>
+			</info>
+		</set>
 		<group oor:name="AddressBook">
 			<info>
 				<desc xml:lang="en-US">Specifies the data source that can be used as an AddressBook.</desc>
@@ -875,13 +480,15 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the name of the registered data source.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">Specifies the command to execute on the data source to retrieve the result set. This may be an SQL command or a table name or a query name.</desc>
 				</info>
-				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="CommandType" oor:type="xs:short">
 				<info>
@@ -903,22 +510,32 @@
 		<group oor:name="Bibliography">
 			<info>
 				<author>OS</author>
-                <desc xml:lang="en-US">Specifies settings of the bibliography component</desc>
+				<desc xml:lang="en-US">Specifies settings of the bibliography component</desc>
 			</info>
-            <prop oor:name="BeamerHeight" oor:type="xs:int">
-            <info><desc xml:lang="en-US">Specifies the height of the database beamer</desc></info>
-            </prop>
-            <prop oor:name="ViewHeight" oor:type="xs:int">
-            <info><desc xml:lang="en-US">Specifies the height of the view window</desc></info>
-            </prop>
-            <prop oor:name="QueryText" oor:type="xs:string">
-            <info><desc xml:lang="en-US">Specifies the search text for filtering</desc></info>
-              <value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-            </prop>
+			<prop oor:name="BeamerHeight" oor:type="xs:int">
+				<info>
+					<desc xml:lang="en-US">Specifies the height of the database beamer</desc>
+				</info>
+			</prop>
+			<prop oor:name="ViewHeight" oor:type="xs:int">
+				<info>
+					<desc xml:lang="en-US">Specifies the height of the view window</desc>
+				</info>
+			</prop>
+			<prop oor:name="QueryText" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">Specifies the search text for filtering</desc>
+				</info>
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+			</prop>
 			<prop oor:name="QueryField" oor:type="xs:string">
-            <info><desc xml:lang="en-US">Specifies the search field for filtering</desc></info>
-                <value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
-            </prop>
+				<info>
+					<desc xml:lang="en-US">Specifies the search field for filtering</desc>
+				</info>
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+			</prop>
 			<prop oor:name="ShowColumnAssignmentWarning" oor:type="xs:boolean">
 				<info>
 					<desc xml:lang="en-US">Determines whether a non-assigned column results in a warning box.</desc>
@@ -956,9 +573,10 @@
 					</info>
 					<prop oor:name="ProfileName" oor:type="xs:string">
 						<info>
-							<desc xml:lang="en-US">Specifies the mozilla profilename.</desc>
+							<desc xml:lang="en-US">Specifies the mozilla profile name.</desc>
 						</info>
-						<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+						<value/>
+						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 					</prop>
 				</group>
 				<group oor:name="ColumnAliases">
@@ -997,7 +615,7 @@
 					</prop>
 					<prop oor:name="PreferMailFormat" oor:type="xs:string" oor:localized="true">
 						<info>
-							<desc xml:lang="en-US">Specifies the perfered mail format.</desc>
+							<desc xml:lang="en-US">Specifies the preferred mail format.</desc>
 						</info>
 					</prop>
 					<prop oor:name="WorkPhone" oor:type="xs:string" oor:localized="true">
@@ -1164,17 +782,17 @@
 				<constraints>
 					<enumeration oor:value="text">
 						<info>
-							<desc xml:lang="en-US">A text value should be searched for.</desc>
+							<desc xml:lang="en-US">Search for text</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="null">
 						<info>
-							<desc xml:lang="en-US">A NULL value should be searched for.</desc>
+							<desc xml:lang="en-US">Search for NULL</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="non-null">
 						<info>
-							<desc xml:lang="en-US">A non-NULL value should be searched for.</desc>
+							<desc xml:lang="en-US">Search for non-NULL</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1187,22 +805,22 @@
 				<constraints>
 					<enumeration oor:value="anywhere-in-field">
 						<info>
-							<desc xml:lang="en-US">Specifies that the searched value can be anywhere in the field.</desc>
+							<desc xml:lang="en-US">Anywhere</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="beginning-of-field">
 						<info>
-							<desc xml:lang="en-US">Specifies that the searched value must be at the beginning of the field.</desc>
+							<desc xml:lang="en-US">Beginning</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="end-of-field">
 						<info>
-							<desc xml:lang="en-US">Specifies that the searched value must be at the end of the field.</desc>
+							<desc xml:lang="en-US">End</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="complete-field">
 						<info>
-							<desc xml:lang="en-US">Specifies that the searched value must be the complete field.</desc>
+							<desc xml:lang="en-US">Complete</desc>
 						</info>
 					</enumeration>
 				</constraints>

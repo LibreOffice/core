@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Math.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-12-09 08:56:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,32 +92,32 @@
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">'decorative'</desc>
+							<desc xml:lang="en-US">decorative</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">'modern'</desc>
+							<desc xml:lang="en-US">modern</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
 						<info>
-							<desc xml:lang="en-US">'roman'</desc>
+							<desc xml:lang="en-US">roman</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
 						<info>
-							<desc xml:lang="en-US">'script'</desc>
+							<desc xml:lang="en-US">script</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
 						<info>
-							<desc xml:lang="en-US">'swiss'</desc>
+							<desc xml:lang="en-US">swiss</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
 						<info>
-							<desc xml:lang="en-US">'system'</desc>
+							<desc xml:lang="en-US">system</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -156,52 +156,52 @@
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">'thin'</desc>
+							<desc xml:lang="en-US">thin</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">'ultra light'</desc>
+							<desc xml:lang="en-US">ultra light</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
 						<info>
-							<desc xml:lang="en-US">'light'</desc>
+							<desc xml:lang="en-US">light</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
 						<info>
-							<desc xml:lang="en-US">'semi light'</desc>
+							<desc xml:lang="en-US">semi light</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
 						<info>
-							<desc xml:lang="en-US">'normal'</desc>
+							<desc xml:lang="en-US">normal</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
 						<info>
-							<desc xml:lang="en-US">'medium'</desc>
+							<desc xml:lang="en-US">medium</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="7">
 						<info>
-							<desc xml:lang="en-US">'semi bold'</desc>
+							<desc xml:lang="en-US">semi bold</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="8">
 						<info>
-							<desc xml:lang="en-US">'bold'</desc>
+							<desc xml:lang="en-US">bold</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="9">
 						<info>
-							<desc xml:lang="en-US">'ultra bold'</desc>
+							<desc xml:lang="en-US">ultra bold</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="10">
 						<info>
-							<desc xml:lang="en-US">'black'</desc>
+							<desc xml:lang="en-US">black</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -218,12 +218,12 @@
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">'oblique'</desc>
+							<desc xml:lang="en-US">oblique</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">'normal'</desc>
+							<desc xml:lang="en-US">normal</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -311,17 +311,17 @@
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Prints the formula in original size.</desc>
+							<desc xml:lang="en-US">Original size</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Adapts formula size to paper size.</desc>
+							<desc xml:lang="en-US">Adapt to paper size</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Defines the zoom factor.</desc>
+							<desc xml:lang="en-US">Define zoom factor</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -333,18 +333,18 @@
 				<!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Zoom factor for printing formulas. Only valid when the print size is defined by the zoom factor.  [UNIT=%]</desc>
+					<desc xml:lang="en-US">Specifies the zoom factor for printing formulas. This is only valid when the print size is defined by the zoom factor. [UNIT=%]</desc>
 					<label xml:lang="en-US">Zoom factor</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="10">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="400">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -362,7 +362,7 @@
 				<info>
 					<deprecated/>
 					<author>TL</author>
-					<desc xml:lang="en-US">If true a warning message will be shown when symbol file used by the formulars is missing.</desc>
+					<desc xml:lang="en-US">Specifies that, if true, a warning message is shown when the symbol file used by the formulas is missing.</desc>
 					<label xml:lang="en-US">Missing symbols warning.</label>
 				</info>
 				<value>true</value>
@@ -400,7 +400,7 @@
 				<!-- UIHints: View - AutoRefresh Display -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Automatically updates th display of the formula after the text has changed.</desc>
+					<desc xml:lang="en-US">Automatically updates the display of the formula after the text has changed.</desc>
 					<label xml:lang="en-US">Update display automatically</label>
 				</info>
 				<value>true</value>
@@ -460,17 +460,17 @@
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">The formula is aligned left.</desc>
+							<desc xml:lang="en-US">left</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">The formula is aligned centered.</desc>
+							<desc xml:lang="en-US">centered</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">The formula is aligned right.</desc>
+							<desc xml:lang="en-US">right</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -488,12 +488,12 @@
 				<constraints>
 					<minInclusive oor:value="4">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="127">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -511,12 +511,12 @@
 				<constraints>
 					<minInclusive oor:value="5">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -534,12 +534,12 @@
 				<constraints>
 					<minInclusive oor:value="5">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -557,12 +557,12 @@
 				<constraints>
 					<minInclusive oor:value="5">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -580,12 +580,12 @@
 				<constraints>
 					<minInclusive oor:value="5">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -603,12 +603,12 @@
 				<constraints>
 					<minInclusive oor:value="5">
 						<info>
-							<desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
+							<desc xml:lang="en-US">Specifies the minimum value allowed (must be positive)</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="200">
 						<info>
-							<desc xml:lang="en-US">Maximum value allowed</desc>
+							<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -707,12 +707,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="200">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -730,12 +730,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="200">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -753,12 +753,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -776,12 +776,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -799,12 +799,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -822,12 +822,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -845,12 +845,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -868,12 +868,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -891,12 +891,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -914,12 +914,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -931,18 +931,18 @@
 					<!-- UIHints: Format - Spacing - Category - Fractions - Denominator -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the vertical distance from the denominator to the fraction seperator.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the vertical distance from the denominator to the fraction separator [UNIT=%]</desc>
 						<label xml:lang="en-US">Denominator distance</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -960,12 +960,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -977,18 +977,18 @@
 					<!-- UIHints: Format - Spacing - Category - Fraction Bars - Weight -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the strokewidth of the fraction seperator.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the stroke width of the fraction separator [UNIT=%]</desc>
 						<label xml:lang="en-US">Fraction strokewidth</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed (must be positive)</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1006,12 +1006,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1029,12 +1029,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1052,12 +1052,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1075,12 +1075,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="300">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1098,12 +1098,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="300">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1121,12 +1121,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1144,12 +1144,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="100">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1167,12 +1167,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1190,12 +1190,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1213,12 +1213,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -1236,12 +1236,12 @@
 					<constraints>
 						<minInclusive oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Minimum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the minimum value allowed</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="10000">
 							<info>
-								<desc xml:lang="en-US">Maximum value allowed</desc>
+								<desc xml:lang="en-US">Specifies the maximum value allowed</desc>
 							</info>
 						</maxInclusive>
 					</constraints>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 			</info>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Is the command name for dispatching without a protocol part.</desc>
+					<desc xml:lang="en-US">Specifies the command name for dispatching without a protocol part.</desc>
 				</info>
 			</prop>
 		</group>

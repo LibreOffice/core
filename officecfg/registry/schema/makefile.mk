@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: tpf $ $Date: 2002-10-25 17:26:17 $
+#   last change: $Author: hr $ $Date: 2003-03-26 13:49:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,12 +99,6 @@ XCSFILES= \
     org$/openoffice$/ucb$/Hierarchy.xcs \
     org$/openoffice$/ucb$/Store.xcs
 
-# trans form component schemas into old xcd format
-XCDTRANSFORM=$(foreach,i,$(XCSFILES) $(MISC)$/xcdformat$/{$(subst,.xcs,.xcd $i)})
-
-# transform xcd format to output format
-OLDTRANSFORM=$(foreach,i,$(XCSFILES) $(MISC)$/instance$/{$(subst,.xcs,.xml $i)})
-
 # transform xcs format to properties format
 RESOURCES1=$(foreach,j,$(foreach,i,$(XCSFILES) $(MISC)$/registry$/res$/$i) $(foreach,k,$(alllangext) $(subst,$/res,$/res$/{$(iso_$(k))} $j)))
 RESOURCES=$(foreach,i,$(RESOURCES1) $(subst,.xcs,.properties $i))
@@ -112,39 +106,17 @@ RESOURCES=$(foreach,i,$(RESOURCES1) $(subst,.xcs,.properties $i))
 # remove unnecessary info from the component schemas
 TRIMXSL=$(foreach,i,$(XCSFILES) $(MISC)$/registry$/schema$/{$(subst,.xcs,.xcs $i)})
 
-## for testing the compatibility with old format
-#COMPARE=$(foreach,i,$(XCSFILES) $(MISC)$/compare$/{$(subst,.xcs,.xcd $i)})
-
 UNIXTEXT= \
     $(MISC)$/oo-org-map.properties \
     $(MISC)$/oo-ldap-attr-map.properties \
     $(MISC)$/oo-common.conf \
-    $(MISC)$/oo-common.ldif
+    $(MISC)$/oo-common.ldif	\
+    $(MISC)$/oo-common-ad.ldf
 
 .INCLUDE :  target.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-# create the mapping for the component data to ldap data store
-$(MISC)$/oo-component-map.properties : $(TRIMXSL)
-    +$(PERL) $(PRJ)$/util$/component-map.gen $@
-
-# create an ldap schema for component data in ldif format
-$(MISC)$/oo-component-list.ldif : $(MISC)$/oo-component-map.properties
-    +$(PERL) $(PRJ)$/util$/component-ldif.gen $@
-
-# create an ldap schema for component data in slapd format
-$(MISC)$/oo-component-list.conf : $(MISC)$/oo-component-list.ldif
-    +$(PERL) $(PRJ)$/util$/component-conf.gen $@
-
 ALLTAR: \
     $(TRIMXSL) \
     $(UNIXTEXT) \
-    $(MISC)$/oo-component-map.properties \
-    $(MISC)$/oo-component-list.ldif \
-    $(MISC)$/oo-component-list.conf \
-    $(XCDTRANSFORM) \
-    $(OLDTRANSFORM) \
-    $(COMPARE) \
     $(RESOURCES)
-
-    

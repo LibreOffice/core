@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,17 +206,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Indicates that objects and graphics are shown.</desc>
+								<desc xml:lang="en-US">Show</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Indicates that objects and graphics are hidden.</desc>
+								<desc xml:lang="en-US">Hide</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Indicates that placeholders are shown for objects and graphics.</desc>
+								<desc xml:lang="en-US">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -234,17 +234,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Indicates that charts are shown.</desc>
+								<desc xml:lang="en-US">Show</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Indicates that charts are hidden.</desc>
+								<desc xml:lang="en-US">Hide</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Indicates that placeholders are shown for charts.</desc>
+								<desc xml:lang="en-US">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -262,17 +262,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Indicates that drawing objects are shown.</desc>
+								<desc xml:lang="en-US">Show</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Indicates that drawing objects are hidden.</desc>
+								<desc xml:lang="en-US">Hide</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Indicates that placeholders are shown for drawing objects.</desc>
+								<desc xml:lang="en-US">Show placeholders</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -295,17 +295,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Indicates that links are always updated.</desc>
+								<desc xml:lang="en-US">Update always</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Indicates that links are not updated.</desc>
+								<desc xml:lang="en-US">Update never</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Indicates that links are updated on request.</desc>
+								<desc xml:lang="en-US">Update on request</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -465,37 +465,37 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Indicates that no function is calculated.</desc>
+								<desc xml:lang="en-US">No function</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
-								<desc xml:lang="en-US">Indicates that the average is calculated.</desc>
+								<desc xml:lang="en-US">Average</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Indicates that the number count is calculated.</desc>
+								<desc xml:lang="en-US">Number count</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
 							<info>
-								<desc xml:lang="en-US">Indicates that the count of all non-empty cells is calculated.</desc>
+								<desc xml:lang="en-US">Count of all non-empty cells</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="4">
 							<info>
-								<desc xml:lang="en-US">Indicates that the maximum is calculated.</desc>
+								<desc xml:lang="en-US">Maximum</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="5">
 							<info>
-								<desc xml:lang="en-US">Indicates that the minimum is calculated.</desc>
+								<desc xml:lang="en-US">Minimum</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="9">
 							<info>
-								<desc xml:lang="en-US">Indicates that the sum is calculated.</desc>
+								<desc xml:lang="en-US">Sum</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -541,27 +541,27 @@
 						<constraints>
 							<enumeration oor:value="1">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Millimeter.</desc>
+									<desc xml:lang="en-US">Millimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Centimeter.</desc>
+									<desc xml:lang="en-US">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Point.</desc>
+									<desc xml:lang="en-US">Point</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Pica.</desc>
+									<desc xml:lang="en-US">Pica</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Inch.</desc>
+									<desc xml:lang="en-US">Inch</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -574,27 +574,27 @@
 						<constraints>
 							<enumeration oor:value="1">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Millimeter.</desc>
+									<desc xml:lang="en-US">Millimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Centimeter.</desc>
+									<desc xml:lang="en-US">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Point.</desc>
+									<desc xml:lang="en-US">Point</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Pica.</desc>
+									<desc xml:lang="en-US">Pica</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
 								<info>
-									<desc xml:lang="en-US">Indicates that the measurement unit is Inch.</desc>
+									<desc xml:lang="en-US">Inch</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -618,17 +618,17 @@
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Indicates that the view is scaled to a percentage value.</desc>
+								<desc xml:lang="en-US">Percentage value</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Indicates that the view is scaled to display a whole page.</desc>
+								<desc xml:lang="en-US">Whole page</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
 							<info>
-								<desc xml:lang="en-US">Indicates that the view is scaled to display the width of a page.</desc>
+								<desc xml:lang="en-US">Width of a page</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -674,22 +674,22 @@
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-							<desc xml:lang="en-US">Indicates the selection is moved down.</desc>
+							<desc xml:lang="en-US">Move down</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-							<desc xml:lang="en-US">Indicates the selection is moved right.</desc>
+							<desc xml:lang="en-US">Move right</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Indicates the selection is moved up.</desc>
+							<desc xml:lang="en-US">Move up</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
 						<info>
-							<desc xml:lang="en-US">Indicates the selection is moved left.</desc>
+							<desc xml:lang="en-US">Move left</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -790,27 +790,27 @@
 				<constraints>
 					<enumeration oor:value="224">
 						<info>
-							<desc xml:lang="en-US">Selects the SUM function.</desc>
+							<desc xml:lang="en-US">SUM</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="226">
 						<info>
-							<desc xml:lang="en-US">Selects the AVERAGE function.</desc>
+							<desc xml:lang="en-US">AVERAGE</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="222">
 						<info>
-							<desc xml:lang="en-US">Selects the MIN function.</desc>
+							<desc xml:lang="en-US">MIN</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="223">
 						<info>
-							<desc xml:lang="en-US">Selects the MAX function.</desc>
+							<desc xml:lang="en-US">MAX</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
 						<info>
-							<desc xml:lang="en-US">Selects the IF function.</desc>
+							<desc xml:lang="en-US">IF</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -886,7 +886,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
 					<info>
 						<author>NN</author>
-						<desc xml:lang="en-US">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes will remain the same.</desc>
+						<desc xml:lang="en-US">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes remain the same.</desc>
 						<label xml:lang="en-US">Synchronize axes</label>
 					</info>
 					<value>true</value>
@@ -1282,7 +1282,7 @@
 						<constraints>
 							<minExclusive oor:value="0.1">
 								<info>
-									<desc xml:lang="en-US">Is the minimum allowed value.</desc>
+									<desc xml:lang="en-US">Specifies the minimum allowed value.</desc>
 								</info>
 							</minExclusive>
 						</constraints>
@@ -1299,7 +1299,7 @@
 						<constraints>
 							<minExclusive oor:value="0.1">
 								<info>
-									<desc xml:lang="en-US">Is the minimum allowed value.</desc>
+									<desc xml:lang="en-US">Specifies the minimum allowed value.</desc>
 								</info>
 							</minExclusive>
 						</constraints>
@@ -1345,7 +1345,7 @@
 			<group oor:name="DefaultObjectSize">
 				<info>
 					<author>NN</author>
-					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Klick at an object creating Button.</desc>
+					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>
 					<label xml:lang="en-US">Default Object Size</label>
 				</info>
 				<prop oor:name="Width" oor:type="xs:int">

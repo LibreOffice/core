@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 	<templates>
 		<group oor:name="Type">
 			<info>
-				<desc xml:lang="en-US">A list of types representing common content formats in Office.</desc>
+				<desc xml:lang="en-US">Lists the types that represent common content formats in Office.</desc>
 			</info>
 			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
 				<info>
@@ -77,7 +77,7 @@
 			</prop>
 			<prop oor:name="Data" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Contains all other data of a type as an own formated string. Items are seperated by using "," - list items are seperated by using ";". Data={Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID}</desc>
+					<desc xml:lang="en-US">Contains configuration items of the type. Items are separated by using ",", list items are separated by";". Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -99,13 +99,13 @@
 			</prop>
 			<prop oor:name="Data" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Contains all other data of a filter as an own formated string. Items are seperated by "," - lists items are seperated by using ";". Data={Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent}</desc>
+					<desc xml:lang="en-US">Contains configuration items of the filter. Items are separated by ",", list items are separated by ";". Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="DetectService">
 			<info>
-				<desc xml:lang="en-US">Improve the type detection. UNO services access stored content to determine type.</desc>
+				<desc xml:lang="en-US">Improves the type detection. UNO services access stored content to determine type.</desc>
 			</info>
 			<prop oor:name="Types" oor:type="oor:string-list">
 				<info>
@@ -125,7 +125,7 @@
 		</group>
 		<group oor:name="FrameLoader">
 			<info>
-				<desc xml:lang="en-US">Such UNO services are used to load "visible content" into a frame.</desc>
+				<desc xml:lang="en-US">Loads "visible content" into a frame.</desc>
 			</info>
 			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
 				<info>

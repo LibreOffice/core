@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-26 07:14:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,7 @@
           <value xml:lang="pl">Wyświetl nazwę</value>
           <value xml:lang="pt-BR">DisplayName</value>
           <value xml:lang="ja">表示する名前</value>
-          <value xml:lang="ko">표시 명칭</value>
+          <value xml:lang="ko">표시 이름</value>
           <value xml:lang="zh-CN">显示名称</value>
           <value xml:lang="zh-TW">顯示名稱</value>
           <value xml:lang="tr">DisplayName</value>
@@ -596,7 +596,7 @@
           <value xml:lang="el">PrimaryEmail</value>
           <value xml:lang="nl">E-mail</value>
           <value xml:lang="fr">E-mail</value>
-          <value xml:lang="es">E-mail</value>
+          <value xml:lang="es">Correo-e</value>
           <value xml:lang="fi">PrimaryEmail</value>
           <value xml:lang="it">eMail</value>
           <value xml:lang="da">PrimaryEmail</value>
@@ -604,7 +604,7 @@
           <value xml:lang="pl">Adres e-mail</value>
           <value xml:lang="pt-BR">PrimaryEmail</value>
           <value xml:lang="ja">Eｰmail</value>
-          <value xml:lang="ko">전자 우편</value>
+          <value xml:lang="ko">전자 메일</value>
           <value xml:lang="zh-CN">电子邮件</value>
           <value xml:lang="zh-TW">電子郵件</value>
           <value xml:lang="tr">PrimaryEmail</value>
@@ -621,7 +621,7 @@
           <value xml:lang="el">SecondEmail</value>
           <value xml:lang="nl">E-mail (2)</value>
           <value xml:lang="fr">E-mail (2)</value>
-          <value xml:lang="es">E-mail(2)</value>
+          <value xml:lang="es">Correo-e (2)</value>
           <value xml:lang="fi">SecondEmail</value>
           <value xml:lang="it">eMail (2)</value>
           <value xml:lang="da">SecondEmail</value>
@@ -629,7 +629,7 @@
           <value xml:lang="pl">e-mail (2)</value>
           <value xml:lang="pt-BR">SecondEmail</value>
           <value xml:lang="ja">Eｰmail (2)</value>
-          <value xml:lang="ko">전자 우편 (2)</value>
+          <value xml:lang="ko">전자 메일 (2)</value>
           <value xml:lang="zh-CN">电子邮件 2</value>
           <value xml:lang="zh-TW">電子郵件 2</value>
           <value xml:lang="tr">SecondEmail</value>
@@ -646,7 +646,7 @@
           <value xml:lang="el">PreferedMailFormat</value>
           <value xml:lang="nl">Mail-formaat</value>
           <value xml:lang="fr">Format Courrier</value>
-          <value xml:lang="es">Formato correo</value>
+          <value xml:lang="es">Formato de correo</value>
           <value xml:lang="fi">PreferedMailFormat</value>
           <value xml:lang="it">Formato mail</value>
           <value xml:lang="da">PreferedMailFormat</value>
@@ -654,7 +654,7 @@
           <value xml:lang="pl">Format poczty elektr.</value>
           <value xml:lang="pt-BR">PreferedMailFormat</value>
           <value xml:lang="ja">電子メール書式</value>
-          <value xml:lang="ko">전자우편 형식</value>
+          <value xml:lang="ko">메일 형식</value>
           <value xml:lang="zh-CN">电子邮件格式</value>
           <value xml:lang="zh-TW">電子郵件格式</value>
           <value xml:lang="tr">PreferedMailFormat</value>
@@ -854,7 +854,7 @@
           <value xml:lang="pl">Miejscowość</value>
           <value xml:lang="pt-BR">HomeCity</value>
           <value xml:lang="ja">市町村名</value>
-          <value xml:lang="ko">시</value>
+          <value xml:lang="ko">구/군/시</value>
           <value xml:lang="zh-CN">城市</value>
           <value xml:lang="zh-TW">城市</value>
           <value xml:lang="tr">HomeCity</value>
@@ -1046,7 +1046,7 @@
           <value xml:lang="el">WorkZipCode</value>
           <value xml:lang="nl">Postcode (firma)</value>
           <value xml:lang="fr">C.P. (bureau)</value>
-          <value xml:lang="es">CP (trabajo)</value>
+          <value xml:lang="es">C.P. (trabajo)</value>
           <value xml:lang="fi">WorkZipCode</value>
           <value xml:lang="it">C.A.P. (lav)</value>
           <value xml:lang="da">WorkZipCode</value>
@@ -1154,7 +1154,7 @@
           <value xml:lang="pl">Firma</value>
           <value xml:lang="pt-BR">Company</value>
           <value xml:lang="ja">会社名</value>
-          <value xml:lang="ko">회사명</value>
+          <value xml:lang="ko">회사</value>
           <value xml:lang="zh-CN">公司</value>
           <value xml:lang="zh-TW">公司</value>
           <value xml:lang="tr">Company</value>
@@ -1170,18 +1170,18 @@
           <value xml:lang="ru">Web-страница 1</value>
           <value xml:lang="el">WebPage1</value>
           <value xml:lang="nl">Web-pagina 1</value>
-          <value xml:lang="fr">Site Web 1</value>
-          <value xml:lang="es">Página web 1</value>
+          <value xml:lang="fr">Site Web (prof.)</value>
+          <value xml:lang="es">Página web (trabajo)</value>
           <value xml:lang="fi">WebPage1</value>
-          <value xml:lang="it">Pagina Web 1</value>
+          <value xml:lang="it">Pagina Web (lavoro)</value>
           <value xml:lang="da">WebPage1</value>
-          <value xml:lang="sv">Webbsida 1</value>
+          <value xml:lang="sv">Webbsida (arb.)</value>
           <value xml:lang="pl">Strona WWW 1</value>
           <value xml:lang="pt-BR">WebPage1</value>
-          <value xml:lang="ja">Webページ 1</value>
-          <value xml:lang="ko">웹 페이지 1</value>
-          <value xml:lang="zh-CN">网页 1</value>
-          <value xml:lang="zh-TW">網頁 1</value>
+          <value xml:lang="ja">Web ページ (ワーク)</value>
+          <value xml:lang="ko">웹 페이지 (사무)</value>
+          <value xml:lang="zh-CN">网页(公务)</value>
+          <value xml:lang="zh-TW">網頁(公司)</value>
           <value xml:lang="tr">WebPage1</value>
           <value xml:lang="ar">WebPage1</value>
           <value xml:lang="ca">WebPage1</value>
@@ -1195,18 +1195,18 @@
           <value xml:lang="ru">Web-страница 2</value>
           <value xml:lang="el">WebPage2</value>
           <value xml:lang="nl">Web-pagina 2</value>
-          <value xml:lang="fr">Site Web 2</value>
-          <value xml:lang="es">Página web 2</value>
+          <value xml:lang="fr">Site Web (privé)</value>
+          <value xml:lang="es">Página web (priv.)</value>
           <value xml:lang="fi">WebPage2</value>
-          <value xml:lang="it">Pagina Web 2</value>
+          <value xml:lang="it">Pagina Web (privato)</value>
           <value xml:lang="da">WebPage2</value>
-          <value xml:lang="sv">Webbsida 2</value>
+          <value xml:lang="sv">Webbsida (privat)</value>
           <value xml:lang="pl">Strona WWW 2</value>
           <value xml:lang="pt-BR">WebPage2</value>
-          <value xml:lang="ja">Webページ 2</value>
-          <value xml:lang="ko">웹 페이지 2</value>
-          <value xml:lang="zh-CN">网页 2</value>
-          <value xml:lang="zh-TW">網頁 2</value>
+          <value xml:lang="ja">Web ページ (ホーム)</value>
+          <value xml:lang="ko">웹 페이지 (홈)</value>
+          <value xml:lang="zh-CN">网页(私人)</value>
+          <value xml:lang="zh-TW">網頁(私人)</value>
           <value xml:lang="tr">WebPage2</value>
           <value xml:lang="ar">WebPage2</value>
           <value xml:lang="ca">WebPage2</value>
@@ -1229,7 +1229,7 @@
           <value xml:lang="pl">Data urodz. (rok)</value>
           <value xml:lang="pt-BR">BirthYear</value>
           <value xml:lang="ja">誕生年</value>
-          <value xml:lang="ko">생일(연도)</value>
+          <value xml:lang="ko">출생 연도</value>
           <value xml:lang="zh-CN">出生年份</value>
           <value xml:lang="zh-TW">出生年份</value>
           <value xml:lang="tr">BirthYear</value>
@@ -1404,7 +1404,7 @@
           <value xml:lang="pl">Uwagi</value>
           <value xml:lang="pt-BR">Notes</value>
           <value xml:lang="ja">コメント</value>
-          <value xml:lang="ko">주</value>
+          <value xml:lang="ko">설명</value>
           <value xml:lang="zh-CN">备注</value>
           <value xml:lang="zh-TW">評語</value>
           <value xml:lang="tr">Notes</value>
@@ -1416,3 +1416,8 @@
     </node>
   </node>
 </oor:node>
+
+
+
+
+

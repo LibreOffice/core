@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tpf $ $Date: 2002-11-25 17:18:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,66 +103,20 @@
 			</prop>
 			<prop oor:name="FontType" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Denotes the compatible styles for the font. Multiple styles are separated by ','. Valid styles are:
-											"Default" for a default font (Arial, Andale, ...),
-											"Standard" for a standard font (Times, Helvetica, ...),
-											"Normal" for a normal font (e.g. non-italic, non-script, etc.)
-											"Symbol" for a symbol font,
-											"Fixed" for a fixed-width font,
-											"SansSerif" for a font without serifs,
-											"Serif" for a font with serifs,
-											"Decorative" for readable, for example, in drawings,
-											"Special" for a decorative font that has no good readability,
-											"Italic" for a italic designed font,
-											"Title" for a font containing only upper case,
-											"Capitals" for fonts where lower case are small caps,
-											"CJK" for fonts usable in a cjk context,
-											"CJK_JP" for japanese cjk fonts,
-											"CJK_SC" for simplified chinese cjk fonts,
-											"CJK_TC" for traditional chinese cjk fonts,
-											"CJK_KR" for korean cjk fonts,
-											"CTL" for a ctl font (thai, arabic,...),
-											"NoneLatin" for a font not containing latin letters,
-											"Full" for a font containing all characters,
-											"Outline" for a outline designed font,
-											"Shadow" for a font designed with shadows,
-											"Rounded" for a font designed withoud edges,
-											"Typewriter" for a fixed width typewriter like font,
-											"Script" for a font designed like script,
-											"Handwriting" for a font designed like handwriting,
-											"Chancery" for a font resembling chancery,
-											"comic" for a font resembling comic,
-											"brushscript" for a font designed like brush painting,
-											"gothic" for a font resembling gothic,
-											"schoolbook" for a font resembling schoolbook,
-											"other" for a font that can replace many things</desc>
+					<desc xml:lang="en-US">Denotes the compatible styles for the font. Multiple styles are separated by ','. Valid styles are: "Default", "Standard", "Normal", "Symbol", "Fixed", "SansSerif", "Serif", "Decorative", "Special", "Italic", "Title", "Capitals", "CJK", "CJK_JP", "CJK_SC", "CJK_TC", "CJK_KR", "CTL", "NoneLatin", "Full", "Outline", "Shadow", "Rounded", "Typewriter", "Script", "Handwriting", "Chancery", "comic", "brushscript", "gothic", "schoolbook", "other"</desc>
 				</info>
 			</prop>
 		</group>
 		<group oor:name="ConfigurableSettings" oor:extensible="true">
 			<info>
 				<author>PL</author>
-				<desc xml:lang="en-US">An extensible set of options used by VCL ordered into key/value pairs. A valid key is: "EnableATToolSupport" (valid values = "true", "false"), that describes when ATTools are activated.</desc>
+				<desc xml:lang="en-US">Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: "EnableATToolSupport" (valid values = "true", "false").</desc>
 			</info>
 		</group>
 		<group oor:name="LocalizedDefaultFonts" oor:extensible="true">
 			<info>
 				<author>PL</author>
-				<desc xml:lang="en-US">Contains a localized table of default font lists organized as a set of sets ofkey/value pairs. The outer set denotes the language (e.g. "en-US") so that default fonts can be declared for different language contexts. Each value is a font list separated by ';' that will be searched in ascending order to find the specified default font. The following default fonts are defined:
-										CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS
-										The corresponding font lists are used for:
-										*_DISPLAY: for control fonts,
-										*_HEADING: for title texts,
-										*_PRESENTATION: for the default font in presentations,
-										*_SPREADSHEET: for the default font in spreadsheets,
-										*_TEXT: for the default font in text documents,
-										SANS: the default font without serifs,
-										SANS_UNICODE: the default font without serifs that has a (more or less) complete unicode subset,
-										SERIF: the default font with serifs,
-										SYMBOL: the default symbol font,
-										UI_FIXED: the default monospaced font,
-										UI_SANS: the default ui font,
-										The language specifics are handle the following way: if the office requests a font for a certain language context the configuration is first search for this language, e.g. for japanes first the set "ja-jp" would be searched for. If the corresponding key cannot be found the key for the general locale (e.g. "ja") is searched in if that is not found we fall back to "en".</desc>
+				<desc xml:lang="en-US">Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. "en-US") so that default fonts can be declared for different language contexts. Each value is a font list separated by ';'. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
 			</info>
 		</group>
 		<set oor:name="LocalizedFontSubstitutions" oor:node-type="LFonts">

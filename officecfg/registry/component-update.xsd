@@ -22,8 +22,9 @@
 						</xs:element>
 					</xs:choice>
 					<xs:attributeGroup ref="oor:update-info"/>
+		            <xs:attribute ref="oor:mandatory"/>
                     <xs:attribute ref="oor:package" use="optional"/>
-					<xs:attribute ref="oor:node-type" use="optional"/>
+					<xs:attributeGroup ref="oor:node-type-info" use="optional"/>
 				</xs:extension>
 			</xs:complexContent>
 		</xs:complexType>
@@ -46,9 +47,7 @@
 					<xs:sequence minOccurs="0" maxOccurs="unbounded">
 						<xs:element name="value" type="oor:value" nillable="true"/>
 					</xs:sequence>
-					<xs:attribute ref="oor:op"/>
-					<xs:attribute ref="oor:finalized"/>
-					<xs:attribute ref="oor:readonly"/>
+					<xs:attributeGroup ref="oor:update-info"/>
 					<xs:attribute ref="oor:type" use="optional"/>
 				</xs:extension>
 			</xs:complexContent>
@@ -56,7 +55,6 @@
 	</xs:redefine>
 	<xs:attributeGroup name="update-info">
 		<xs:attribute ref="oor:finalized"/>
-		<xs:attribute ref="oor:mandatory"/>
 		<xs:attribute ref="oor:readonly"/>
 		<xs:attribute ref="oor:op"/>
 	</xs:attributeGroup>
@@ -92,12 +90,8 @@
 		<xs:annotation>
 			<xs:documentation>root element of the update document.</xs:documentation>
 		</xs:annotation>
-		<xs:unique name="properties">
-			<xs:selector xpath="oor:prop"/>
-			<xs:field xpath="@oor:name"/>
-		</xs:unique>
 		<xs:unique name="member">
-			<xs:selector xpath="oor:node"/>
+			<xs:selector xpath="oor:node|oor:prop"/>
 			<xs:field xpath="@oor:name"/>
 		</xs:unique>
 	</xs:element>

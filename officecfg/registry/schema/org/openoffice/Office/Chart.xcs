@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Chart.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tpf $ $Date: 2002-11-25 17:18:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 		<group oor:name="DefaultColor">
 			<info>
 				<author>BM</author>
-				<desc xml:lang="en-US">Comprises settings for colors being used when creating new charts.</desc>
+				<desc xml:lang="en-US">Specifies the colors for creating new charts.</desc>
 			</info>
 			<prop oor:name="Series" oor:type="oor:long-list">
 				<!-- OldPath: Chart/Default_Colors -->

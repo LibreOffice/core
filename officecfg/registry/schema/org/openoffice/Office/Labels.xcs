@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Labels.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 	<!-- UIHints: File - New - Labels - Labels -->
 	<info>
 		<author>OS</author>
-		<desc xml:lang="en-US">Containings settings for Writer documents used as labels.</desc>
+		<desc xml:lang="en-US">Contains settings for Writer documents used as labels.</desc>
 	</info>
 	<templates>
 		<group oor:name="LabelType">
@@ -80,7 +80,7 @@
 			<prop oor:name="Measure" oor:type="xs:string">
 				<!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'-->
 				<info>
-					<desc xml:lang="en-US">Contains the measurement data of the label conacenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'.</desc>
+					<desc xml:lang="en-US">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'.</desc>
 				</info>
 			</prop>
 		</group>

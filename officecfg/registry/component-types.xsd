@@ -30,17 +30,7 @@
       <xs:documentation>specifies the component, which contains a template definition</xs:documentation>
     </xs:annotation>
   </xs:attribute>
-  <xs:attribute name="extensible" type="xs:boolean" use="optional" default="false">
-    <xs:annotation>
-      <xs:documentation>determines, whether a node has an extensible list of attributes or fixed list of attributes.</xs:documentation>
-    </xs:annotation>
-  </xs:attribute>
-  <xs:attribute name="localized" type="xs:boolean" use="optional" default="false">
-    <xs:annotation>
-      <xs:documentation>specifies, whether an attribute has or might have different values for different locales. </xs:documentation>
-    </xs:annotation>
-  </xs:attribute>
-  <xs:attribute name="separator" type="xs:string" default=" ">
+ <xs:attribute name="separator" type="xs:string" default=" ">
     <xs:annotation>
       <xs:documentation>specifies a separator for list types. The default
 			is a blank, which is sufficient for most basic types like xs:int or
@@ -48,14 +38,7 @@
 			list, the separator might differ. For example, a list of string values like build of the items 'europe' and 'south america' needs a different separator, as the usage of the default separator would result in a list of three items.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
-  <xs:attribute name="nillable" type="xs:boolean" use="optional" default="true">
-    <xs:annotation>
-      <xs:documentation>specifies, whether it is permissible to have a 'nil' i.e., missing, node content. The default for 'nillable' is 'true'.
- If a non-optional (nillable = 'false') has no default value (given in the component schema) it must be
- explicitly specified for each user.</xs:documentation>
-    </xs:annotation>
-  </xs:attribute>
-  <xs:attribute name="type" use="optional">
+ <xs:attribute name="type" use="optional">
     <xs:annotation>
       <xs:documentation>specifies the list of known basic types and their list equivalents. Is only allowed for properties.</xs:documentation>
     </xs:annotation>
@@ -83,8 +66,13 @@
     <xs:annotation>
       <xs:documentation>encompasses common attributes for nodes.</xs:documentation>
     </xs:annotation>
-    <xs:attribute ref="oor:name"/>
-    <xs:attribute ref="oor:extensible"/>
+    <xs:attribute ref="oor:name" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="node-type-info">
+    <xs:annotation>
+      <xs:documentation>encompasses attributes for referencing a node-type.</xs:documentation>
+    </xs:annotation>
+    <xs:attribute ref="oor:node-type" use="required"/>
     <xs:attribute ref="oor:component" use="optional"/>
   </xs:attributeGroup>
   <xs:attributeGroup name="prop-info">
@@ -92,7 +80,6 @@
       <xs:documentation>encompasses common attributes for properties.</xs:documentation>
     </xs:annotation>
     <xs:attribute ref="oor:name" use="required"/>
-    <xs:attribute ref="oor:localized"/>
   </xs:attributeGroup>
   <!--List of list data types supported by OOR-->
   <xs:simpleType name="boolean-list">

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-08 16:50:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,21 +62,6 @@
 <!DOCTYPE oor:node SYSTEM "../../../../component-update.dtd">
 <oor:node oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Jobs">
-    <node oor:name="AddressBookSourcePilot" oor:op="replace">
-      <prop oor:name="AdminTime">
-        <value>01.01.2001/00:00:01</value>
-      </prop>
-      <prop oor:name="UserTime">
-        <value>01.01.2001/00:00:00</value>
-      </prop>
-      <prop oor:name="Service">
-        <value>com.sun.star.ui.dialogs.AddressBookSourcePilot</value>
-      </prop>
-      <prop oor:name="Async">
-        <value>false</value>
-      </prop>
-      <node oor:name="Arguments"/>
-    </node>
     <node oor:name="RegistrationRequest" oor:op="replace">
       <prop oor:name="AdminTime">
         <value>01.01.2001/00:00:01</value>
@@ -96,7 +81,7 @@
   <node oor:name="Events">
     <node oor:name="onFirstVisibleTask" oor:op="replace">
       <prop oor:name="Joblist">
-        <value oor:separator=";">AddressBookSourcePilot;RegistrationRequest</value>
+        <value oor:separator=";">RegistrationRequest</value>
       </prop>
     </node>
   </node>
