@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:25:03 $
+ *  last change: $Author: os $ $Date: 2001-07-20 12:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,17 +202,21 @@ sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
 }
 //-----------------------------------------------------------------------------
 
-void ReplacePoint( String& rTmpName )
+void ReplacePoint( String& rTmpName, BOOL bWithCommandType )
 {
-    // Ersten und letzten Punkt ersetzen, da in Tabellennamen Punkte erlaubt sind
+    // replace first and last (if bWithCommandType: last two) dot Ersten und letzten Punkt ersetzen, da in Tabellennamen Punkte erlaubt sind
+    // since table names may contain dots
+
     xub_StrLen nLen = rTmpName.Len();
     sal_Unicode *pStr = rTmpName.GetBufferAccess(), *pBackStr = pStr + nLen;
 
+    long nBackCount = bWithCommandType ? 2 : 1;
     for( xub_StrLen i = nLen; i; --i, pBackStr-- )
         if( '.' == *pBackStr )
         {
             *pBackStr = DB_DELIM;
-            break;
+            if(!--nBackCount)
+                break;
         }
     for( i = 0; i < nLen; ++i, ++pStr )
         if( '.' == *pStr )

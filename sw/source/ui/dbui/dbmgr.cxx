@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 10:07:05 $
+ *  last change: $Author: os $ $Date: 2001-07-20 12:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,10 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
             Sequence<OUString> aTbls = xTbls->getElementNames();
             const OUString* pTbls = aTbls.getConstArray();
             for(long i = 0; i < aTbls.getLength(); i++)
-                pListBox->InsertEntry(pTbls[i]);
+            {
+                USHORT nEntry = pListBox->InsertEntry(pTbls[i]);
+                pListBox->SetEntryData(nEntry, (void*)0);
+            }
         }
         Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
         if(xQSupplier.is())
@@ -745,7 +748,10 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
             Sequence<OUString> aQueries = xQueries->getElementNames();
             const OUString* pQueries = aQueries.getConstArray();
             for(long i = 0; i < aQueries.getLength(); i++)
+            {
                 pListBox->InsertEntry(pQueries[i]);
+                pListBox->SetEntryData(nEntry, (void*)1);
+            }
         }
         if (sOldTableName.Len())
             pListBox->SelectEntry(sOldTableName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: os $ $Date: 2001-07-20 12:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ class SwFmtFld;
 const SwTxtNode* GetBodyTxtNode( const SwDoc& pDoc, SwPosition& rPos,
                                  const SwFrm& rFrm );
 // Wandlung Address -> Adressen
-void ReplacePoint(String& sTmpName);
+void ReplacePoint(String& sTmpName, BOOL bWithCommandType = FALSE);
 
 struct _SeqFldLstElem
 {

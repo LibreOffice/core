@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: os $ $Date: 2001-07-20 12:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,8 @@ IMPL_LINK( SwEnvPage, FieldHdl, Button *, EMPTYARG )
     aStr += '.';
 //  aStr += DB_DELIM;
     aStr += aTableLB.GetSelectEntry();
+    aStr += '.';
+    aStr += aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1';
     aStr += '.';
 //  aStr += DB_DELIM;
     aStr += aDBFieldLB.GetSelectEntry();

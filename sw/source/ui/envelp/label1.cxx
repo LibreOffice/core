@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 09:44:44 $
+ *  last change: $Author: os $ $Date: 2001-07-20 12:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,8 @@ IMPL_LINK( SwLabPage, FieldHdl, Button *, EMPTYARG )
     aStr += aDatabaseLB.GetSelectEntry();
     aStr += '.';
     aStr += aTableLB.GetSelectEntry();
+    aStr += '.';
+    aStr += aTableLB.GetEntryData(aTableLB.GetSelectEntryPos()) == 0 ? '0' : '1';
     aStr += '.';
     aStr += aDBFieldLB.GetSelectEntry();
     aStr += '>';
