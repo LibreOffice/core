@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:46:02 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,19 +484,17 @@ public:
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    // XAccessibleExtendedTable -----------------------------------------------
-
     /** Returns the child index of the cell at the specified position. */
     virtual sal_Int32 SAL_CALL getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the row index of the specified child. */
     virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the column index of the specified child. */
     virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     // XAccessibleSelection ---------------------------------------------------
 
