@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:17:09 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,9 +213,6 @@
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
 #endif
-#ifndef _FMTHDFT_HXX //autogen
-#include <fmthdft.hxx>
-#endif
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
 #endif
@@ -324,11 +321,14 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
-#ifndef _SW_HF_EAT_SPACINGITEM_HXX
-#include <hfspacingitem.hxx>
-#endif
 #ifndef _FLDDROPDOWN_HXX
 #include <flddropdown.hxx>
+#endif
+#ifndef _CHPFLD_HXX
+#include <chpfld.hxx>
+#endif
+#ifndef _FMTHDFT_HXX
+#include <fmthdft.hxx>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -556,6 +556,91 @@ void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
     }
 }
 
+void SwWW8Writer::GatherChapterFields()
+{
+    //If the header/footer contains a chapter field
+    SwClientIter aIter(*pDoc->GetSysFldType(RES_CHAPTERFLD));
+    const SwClient *pField = aIter.First(TYPE(SwFmtFld));
+    while (pField)
+    {
+        const SwFmtFld* pFld = (const SwFmtFld*)(pField);
+        if (const SwTxtFld *pTxtFld = pFld->GetTxtFld())
+        {
+            const SwTxtNode &rTxtNode = pTxtFld->GetTxtNode();
+            maChapterFieldLocs.push_back(rTxtNode.GetIndex());
+        }
+       pField = aIter.Next();
+    }
+}
+
+bool SwWW8Writer::CntntContainsChapterField(const SwFmtCntnt &rCntnt) const
+{
+    bool bRet = false;
+    if (const SwNodeIndex* pSttIdx = rCntnt.GetCntntIdx())
+    {
+        SwNodeIndex aIdx(*pSttIdx, 1);
+        SwNodeIndex aEnd(*pSttIdx->GetNode().EndOfSectionNode());
+        ULONG nStart = aIdx.GetIndex();
+        ULONG nEnd = aEnd.GetIndex();
+        //If the header/footer contains a chapter field
+        mycCFIter aIEnd = maChapterFieldLocs.end();
+        for (mycCFIter aI = maChapterFieldLocs.begin(); aI != aIEnd; ++aI)
+        {
+            if ((nStart <= *aI) && (*aI <= nEnd))
+            {
+                bRet = true;
+                break;
+            }
+        }
+    }
+    return bRet;
+}
+
+bool SwWW8Writer::FmtHdFtContainsChapterField(const SwFrmFmt &rFmt) const
+{
+    if (maChapterFieldLocs.empty())
+        return false;
+    bool bRet = false;
+
+    const SwFrmFmt *pFmt = 0;
+    if (pFmt = rFmt.GetHeader().GetHeaderFmt())
+        bRet = CntntContainsChapterField(pFmt->GetCntnt());
+    if (!bRet && (pFmt = rFmt.GetFooter().GetFooterFmt()))
+        bRet = CntntContainsChapterField(pFmt->GetCntnt());
+
+    return bRet;
+}
+
+bool SwWW8Writer::SetAktPageDescFromNode(const SwNode &rNd)
+{
+    bool bNewPageDesc = false;
+    const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
+    ASSERT(pCurrent && pAktPageDesc, "Not possible surely");
+    if (pAktPageDesc && pCurrent)
+    {
+        if (pCurrent != pAktPageDesc)
+        {
+            if (pAktPageDesc->GetFollow() != pCurrent)
+                bNewPageDesc = true;
+            else
+            {
+                const SwFrmFmt& rTitleFmt = pAktPageDesc->GetMaster();
+                const SwFrmFmt& rFollowFmt = pCurrent->GetMaster();
+
+                bNewPageDesc = !sw::util::IsPlausableSingleWordSection(
+                    rTitleFmt, rFollowFmt);
+            }
+            pAktPageDesc = pCurrent;
+        }
+        else
+        {
+            const SwFrmFmt &rFmt = pCurrent->GetMaster();
+            bNewPageDesc = FmtHdFtContainsChapterField(rFmt);
+        }
+    }
+    return bNewPageDesc;
+}
+
 // Da WW nur Break-After ( Pagebreak und Sectionbreaks ) kennt, im SW aber
 // Bagebreaks "vor" und "nach" und Pagedescs nur "vor" existieren, werden
 // die Breaks 2* durchgeklimpert, naemlich vor und hinter jeder Zeile.
@@ -563,94 +648,113 @@ void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
 // Es duerfen nur Funktionen gerufen werden, die nicht in den
 // Ausgabebereich pO schreiben, da dieser nur einmal fuer CHP und PAP existiert
 // und damit im falschen landen wuerden.
-void SwWW8Writer::Out_SfxBreakItems( const SfxItemSet& rSet, const SwNode& rNd )
+void SwWW8Writer::Out_SfxBreakItems(const SfxItemSet *pSet, const SwNode& rNd)
 {
-    //Output a sectionbreak if theres a new pagedesciptor.
-    //otherwise output a pagebreak if there is a pagebreak here, unless
-    //the new page (follow style) is different to the current one, in
-    //which case plump for a section.
-    if( rSet.Count() )
+    bool bAllowOutputPageDesc = false;
+    if (!bStyDef && !bOutKF && !bInWriteEscher && !bOutPageDescs)
+        bAllowOutputPageDesc = true;
+
+    if (!bAllowOutputPageDesc)
+        return;
+
+    bBreakBefore = true;
+
+    bool bNewPageDesc = false;
+    const SfxPoolItem* pItem=0;
+    const SwFmtPageDesc *pPgDesc=0;
+
+    //Output a sectionbreak if theres a new pagedesciptor.  otherwise output a
+    //pagebreak if there is a pagebreak here, unless the new page (follow
+    //style) is different to the current one, in which case plump for a
+    //section.
+    bool bBreakSet = false;
+    if (pSet && pSet->Count())
     {
-        bBreakBefore = true;
-
-        bool bNewPageDesc = false;
-        const SfxPoolItem* pItem=0;
-        const SwFmtPageDesc *pPgDesc=0;
-
-        bool bAllowOutputPageDesc = false;
-        if (!bStyDef && !bOutKF && !bInWriteEscher && !bOutPageDescs)
-            bAllowOutputPageDesc = true;
-
-        if (bAllowOutputPageDesc)
+        if (SFX_ITEM_SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem)
+            && ((SwFmtPageDesc*)pItem)->GetRegisteredIn())
         {
-            if (SFX_ITEM_SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem)
-                && ((SwFmtPageDesc*)pItem)->GetRegisteredIn())
-            {
-                bNewPageDesc = true;
-                pPgDesc = (const SwFmtPageDesc*)pItem;
-                pAktPageDesc = pPgDesc->GetPageDesc();
-            }
-            else if (SFX_ITEM_SET == rSet.GetItemState(RES_BREAK, false, &pItem))
-            {
-                ASSERT(pAktPageDesc, "should not be possible");
-                //If because of this pagebreak the page desc following the
-                //page break is the follow style of the current page desc
-                //then output a section break using that style instead.
-                //At least in those cases we end up with the same style
-                //in word and writer, nothing can be done when it happens
-                //when we get a new pagedesc because we overflow from the
-                //first page style.
-                if (pAktPageDesc)
-                {
-                    const SwPageDesc* pCurrent = SwPageDesc::GetPageDescOfNode(rNd);
-                    if (pCurrent != pAktPageDesc)
-                    {
-                        pAktPageDesc = pCurrent;
-                        bNewPageDesc = true;
-                    }
-                }
-                if (!bNewPageDesc)
-                    OutWW8_SwFmtBreak( *this, *pItem );
-            }
+            bBreakSet = true;
+            bNewPageDesc = true;
+            pPgDesc = (const SwFmtPageDesc*)pItem;
+            pAktPageDesc = pPgDesc->GetPageDesc();
         }
-
-        if (bNewPageDesc)
+        else if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false, &pItem))
         {
-            // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur
-            // in WW8Writer::pSepx mit der entsprechenden Position
-            // eingetragen.  Das Aufbauen und die Ausgabe der am PageDesc
-            // haengenden Attribute und Kopf/Fusszeilen passiert nach dem
-            // Haupttext und seinen Attributen.
-            if( pAktPageDesc )
-            {
-                ULONG nFcPos = ReplaceCr( 0x0c ); // Page/Section-Break
-
-                const SwSectionFmt *pFmt=0;
-                const SwSectionNode* pSect = rNd.FindSectionNode();
-                if (pSect && CONTENT_SECTION == pSect->GetSection().GetType())
-                    pFmt = pSect->GetSection().GetFmt();
-
-                // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
-                // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
-                if( nFcPos )
-                {
-                    if (pPgDesc)
-                    {
-                        pSepx->AppendSep( Fc2Cp( nFcPos ), *pPgDesc, rNd, pFmt,
-                            ((const SwFmtLineNumber&)rSet.Get(RES_LINENUMBER )).GetStartValue());
-                    }
-                    else
-                    {
-                        pSepx->AppendSep( Fc2Cp( nFcPos ), pAktPageDesc, rNd,
-                            pFmt,
-                            ((const SwFmtLineNumber&)rSet.Get(RES_LINENUMBER )).GetStartValue());
-                    }
-                }
-            }
+            bBreakSet = true;
+            ASSERT(pAktPageDesc, "should not be possible");
+            /*
+             If because of this pagebreak the page desc following the page
+             break is the follow style of the current page desc then output a
+             section break using that style instead.  At least in those cases
+             we end up with the same style in word and writer, nothing can be
+             done when it happens when we get a new pagedesc because we
+             overflow from the first page style.
+            */
+            if (pAktPageDesc)
+                bNewPageDesc = SetAktPageDescFromNode(rNd);
+            if (!bNewPageDesc)
+                OutWW8_SwFmtBreak( *this, *pItem );
         }
-
-        bBreakBefore = false;
     }
+
+    /*
+    #i9301#
+    No explicit page break, lets see if the style had one and we've moved to a
+    new page style because of it, if we have to then we take the opportunity to
+    set the equivalent word section here. We *could* do it for every paragraph
+    that moves onto a new page because of layout, but that would be insane.
+    */
+    bool bHackInBreak = false;
+    if (!bBreakSet)
+    {
+        if (const SwCntntNode *pNd = rNd.GetCntntNode())
+        {
+            const SvxFmtBreakItem &rBreak =
+                ItemGet<SvxFmtBreakItem>(*pNd, RES_BREAK);
+            if (rBreak.GetBreak() == SVX_BREAK_PAGE_BEFORE)
+                bHackInBreak = true;
+        }
+    }
+
+    if (bHackInBreak)
+    {
+        ASSERT(pAktPageDesc, "should not be possible");
+        if (pAktPageDesc)
+            bNewPageDesc = SetAktPageDescFromNode(rNd);
+    }
+
+    if (bNewPageDesc && pAktPageDesc)
+    {
+        // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur in
+        // WW8Writer::pSepx mit der entsprechenden Position eingetragen.  Das
+        // Aufbauen und die Ausgabe der am PageDesc haengenden Attribute und
+        // Kopf/Fusszeilen passiert nach dem Haupttext und seinen Attributen.
+
+        ULONG nFcPos = ReplaceCr(0x0c); // Page/Section-Break
+
+        const SwSectionFmt *pFmt = 0;
+        const SwSectionNode* pSect = rNd.FindSectionNode();
+        if (pSect && CONTENT_SECTION == pSect->GetSection().GetType())
+            pFmt = pSect->GetSection().GetFmt();
+
+        // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
+        // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
+        if (nFcPos)
+        {
+            const SwFmtLineNumber *pNItem = 0;
+            if (pSet)
+                pNItem = &(ItemGet<SwFmtLineNumber>(*pSet,RES_LINENUMBER));
+            else if (const SwCntntNode *pNd = rNd.GetCntntNode())
+                pNItem = &(ItemGet<SwFmtLineNumber>(*pNd,RES_LINENUMBER));
+            ULONG nLnNm = pNItem ? pNItem->GetStartValue() : 0;
+
+            if (pPgDesc)
+                pSepx->AppendSep(Fc2Cp(nFcPos), *pPgDesc, rNd, pFmt, nLnNm);
+            else
+                pSepx->AppendSep(Fc2Cp(nFcPos), pAktPageDesc, rNd, pFmt, nLnNm);
+        }
+    }
+    bBreakBefore = false;
 }
 
 void SwWW8Writer::CorrTabStopInSet(SfxItemSet& rSet, USHORT nAbsLeft)
@@ -774,33 +878,40 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
     case RES_CHRFMT:
         break;
     case RES_FLYFRMFMT:
-        if( bFlyFmt )
+        if (bFlyFmt)
         {
-            SfxItemSet aSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
-                                                RES_FRMATR_END-1 );
-            aSet.Set( pFlyFmt->GetAttrSet() );
+            ASSERT(mpParentFrame, "No parent frame, all broken");
 
-            // Fly als Zeichen werden bei uns zu Absatz-gebundenen
-            // jetzt den Abstand vom Absatz-Rand setzen
-            if( pFlyOffset )
+            if (mpParentFrame)
             {
-                aSet.Put( SwFmtVertOrient( pFlyOffset->Y() ));
-                aSet.Put( SwFmtHoriOrient( pFlyOffset->X() ));
-                SwFmtAnchor aAnchor(pFlyFmt->GetAnchor());
-                aAnchor.SetType(eNewAnchorType);
-                aSet.Put( aAnchor );
+                const SwFrmFmt &rFmt = mpParentFrame->GetFrmFmt();
+
+                SfxItemSet aSet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
+                    RES_FRMATR_END-1);
+                aSet.Set(rFmt.GetAttrSet());
+
+                // Fly als Zeichen werden bei uns zu Absatz-gebundenen
+                // jetzt den Abstand vom Absatz-Rand setzen
+                if (pFlyOffset)
+                {
+                    aSet.Put(SwFmtHoriOrient(pFlyOffset->X()));
+                    aSet.Put(SwFmtVertOrient(pFlyOffset->Y()));
+                    SwFmtAnchor aAnchor(rFmt.GetAnchor());
+                    aAnchor.SetType(eNewAnchorType);
+                    aSet.Put(aAnchor);
+                }
+
+                if (SFX_ITEM_SET != aSet.GetItemState(RES_SURROUND))
+                    aSet.Put(SwFmtSurround(SURROUND_NONE));
+
+                bOutFlyFrmAttrs = true;
+                //script doesn't matter if not exporting chp
+                Out_SfxItemSet(aSet, true, false,
+                    com::sun::star::i18n::ScriptType::LATIN);
+                bOutFlyFrmAttrs = false;
+
+                bCallOutSet = false;
             }
-
-            if( SFX_ITEM_SET != aSet.GetItemState( RES_SURROUND ))
-                aSet.Put( SwFmtSurround( SURROUND_NONE ) );
-
-            bOutFlyFrmAttrs = true;
-            //script doesn't matter if not exporting chp
-            Out_SfxItemSet(aSet, true, false,
-                com::sun::star::i18n::ScriptType::LATIN);
-            bOutFlyFrmAttrs = false;
-
-            bCallOutSet = false;
         }
         break;
     default:
@@ -1524,10 +1635,6 @@ String lcl_GetExpandedField(const SwField &rFld)
 void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     const String& rFldCmd, BYTE nMode)
 {
-    BYTE aFld13[2] = { 0x13, 0x00 };  // will change
-    static const BYTE aFld14[2] = { 0x14, 0xff };
-    static const BYTE aFld15[2] = { 0x15, 0x80 };
-
     bool bUnicode = IsUnicode();
     WW8_WrPlcFld* pFldP;
     switch (nTxtTyp)
@@ -1557,6 +1664,10 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
 
     if (WRITEFIELD_START & nMode)
     {
+        BYTE aFld13[2] = { 0x13, 0x00 };  // will change
+        //#i3958#, Needed to make this field work correctly in Word 2000
+        if (eFldType == ww::eSHAPE)
+            aFld13[0] |= 0x80;
         aFld13[1] = eFldType;                           // Typ nachtragen
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld13 );
         InsertSpecialChar( *this, 0x13 );
@@ -1573,6 +1684,7 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     }
     if (WRITEFIELD_CMD_END & nMode)
     {
+        static const BYTE aFld14[2] = { 0x14, 0xff };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld14 );
         InsertSpecialChar( *this, 0x14 );
     }
@@ -1596,6 +1708,7 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     }
     if (WRITEFIELD_CLOSE & nMode)
     {
+        static const BYTE aFld15[2] = { 0x15, 0x80 };
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld15 );
         InsertSpecialChar( *this, 0x15 );
     }
@@ -1672,6 +1785,25 @@ int lcl_CheckForm( const SwForm& rForm, BYTE nLvl, String& rText )
     return nRet;
 }
 
+bool lcl_IsHyperlinked(const SwForm& rForm, USHORT nTOXLvl)
+{
+    for (USHORT nI = 1; nI < nTOXLvl; ++nI)
+    {
+        SwFormTokenEnumerator aIter( rForm.CreateTokenEnumerator(nI));
+        FormTokenType eTType;
+        while (TOKEN_END != (eTType = aIter.GetNextTokenType()))
+        {
+            switch (eTType)
+            {
+                case TOKEN_LINK_START:
+                case TOKEN_LINK_END:
+                    return true;
+                    break;
+            }
+        }
+    }
+    return false;
+}
 
 void SwWW8Writer::StartTOX( const SwSection& rSect )
 {
@@ -1886,6 +2018,9 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
                     sStr += sTOption;
                     sStr.AppendAscii(sEntryEnd);
                 }
+
+                if (lcl_IsHyperlinked(pTOX->GetTOXForm(), nTOXLvl))
+                    sStr.APPEND_CONST_ASC("\\h");
             }
             break;
         }
@@ -2005,23 +2140,26 @@ void WW8_GetNumberPara( String& rStr, const SwField& rFld )
     {
         case SVX_NUM_CHARS_UPPER_LETTER:
         case SVX_NUM_CHARS_UPPER_LETTER_N:
-            rStr.APPEND_CONST_ASC( "\\*ALPHABETISCH ");
+            rStr.APPEND_CONST_ASC( "\\*ALPHABETIC ");
             break;
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:
-            rStr.APPEND_CONST_ASC("\\*alphabetisch ");
+            rStr.APPEND_CONST_ASC("\\*alphabetic ");
             break;
         case SVX_NUM_ROMAN_UPPER:
-            rStr.APPEND_CONST_ASC("\\*R\xd6MISCH ");
+            rStr.APPEND_CONST_ASC("\\*ROMAN ");
             break;
         case SVX_NUM_ROMAN_LOWER:
-            rStr.APPEND_CONST_ASC("\\*r\xf6misch ");
+            rStr.APPEND_CONST_ASC("\\*roman ");
             break;
         default:
             ASSERT(rFld.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default\n");
         case SVX_NUM_ARABIC:
-            rStr.APPEND_CONST_ASC("\\*Arabisch ");
+            rStr.APPEND_CONST_ASC("\\*Arabic ");
+            break;
+        case SVX_NUM_PAGEDESC:
+            //Nothing, use word's default
             break;
     }
 }
@@ -2077,6 +2215,18 @@ void OutWW8_RefField(SwWW8Writer& rWW8Wrt, const SwField &rFld,
         }
     }
     rWW8Wrt.OutField(&rFld, eREF, sStr, WRITEFIELD_CLOSE);
+}
+
+void WriteExpand(SwWW8Writer& rWW8Wrt, const SwField &rFld)
+{
+    String sExpand(lcl_GetExpandedField(rFld));
+    if (rWW8Wrt.IsUnicode())
+        SwWW8Writer::WriteString16(rWW8Wrt.Strm(), sExpand, false);
+    else
+    {
+        SwWW8Writer::WriteString8(rWW8Wrt.Strm(), sExpand, false,
+            RTL_TEXTENCODING_MS_1252);
+    }
 }
 
 static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
@@ -2237,6 +2387,8 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
                 case DI_CHANGE:
                     if (DI_SUB_AUTHOR == (nSubType & ~DI_SUB_AUTHOR))
                         eFld = eLASTSAVEDBY;
+                    else if (rWW8Wrt.GetNumberFmt(*pFld, sStr))
+                        eFld = eSAVEDATE;
                     break;
 
                 case DI_PRINT:
@@ -2460,37 +2612,51 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         else
             bWriteExpand = true;
         break;
+    case RES_CHAPTERFLD:
+        bWriteExpand = true;
+        if (rWW8Wrt.bOutKF && rFld.GetTxtFld())
+        {
+            const SwTxtNode *pTxtNd = rWW8Wrt.GetHdFtPageRoot();
+            if (!pTxtNd)
+            {
+                if (const SwNode *pNd = rWW8Wrt.pCurPam->GetNode())
+                    pTxtNd = pNd->GetTxtNode();
+            }
+
+            if (pTxtNd)
+            {
+                SwChapterField aCopy(*(const SwChapterField*)pFld);
+                aCopy.ChangeExpansion(*pTxtNd, false);
+                WriteExpand(rWW8Wrt, aCopy);
+                bWriteExpand = false;
+            }
+        }
+        break;
     default:
         bWriteExpand = true;
         break;
     }
 
     if (bWriteExpand)
-    {
-        String sExpand(lcl_GetExpandedField(*pFld));
-        if (rWW8Wrt.IsUnicode())
-            SwWW8Writer::WriteString16(rWrt.Strm(), sExpand, false);
-        else
-        {
-            SwWW8Writer::WriteString8(rWrt.Strm(), sExpand, false,
-                RTL_TEXTENCODING_MS_1252);
-        }
-    }
+        WriteExpand(rWW8Wrt, *pFld);
 
     return rWrt;
 }
 
 static Writer& OutWW8_SwFlyCntnt( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    if( rWrtWW8.pOutFmtNode && rWrtWW8.pOutFmtNode->ISA( SwCntntNode ))
+        SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if (rWrtWW8.pOutFmtNode && rWrtWW8.pOutFmtNode->ISA(SwCntntNode))
     {
         SwTxtNode* pTxtNd = (SwTxtNode*)rWrtWW8.pOutFmtNode;
 
         Point aLayPos;
         aLayPos = pTxtNd->FindLayoutRect(false, &aLayPos).Pos();
 
-        rWrtWW8.OutWW8FlyFrm( *((SwFmtFlyCnt&)rHt).GetFrmFmt(), aLayPos );
+        SwPosition aPos(*pTxtNd);
+        sw::Frame aFrm(*((const SwFmtFlyCnt&)rHt).GetFrmFmt(), aPos);
+
+        rWrtWW8.OutWW8FlyFrm(aFrm, aLayPos);
     }
     return rWrt;
 }
@@ -3098,7 +3264,7 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
             break;
         }
     }
-    else if( !rWW8Wrt.pFlyFmt )
+    else if (!rWW8Wrt.mpParentFrame)
     {
         BYTE nC = 0;
         bool bBefore = false;
@@ -3298,45 +3464,6 @@ static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-static USHORT lcl_CalcHdFtDist(const SwFrmFmt& rFmt, bool bLower)
-{
-    /*
-    #98506#
-    If we have dynamic spacing, the normal case for reexporting word docs, as
-    this is word's only setting. Then we can add spacing to the set height of
-    the h/f and get the wanted total size for word. Otherwise we have to get
-    the real rendered height like we used to before this property became
-    available.
-    */
-    long nDist=0;
-    const SvxULSpaceItem& rUL = rFmt.GetULSpace();
-    const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
-
-    const SwHeaderAndFooterEatSpacingItem &rSpacingCtrl =
-        ItemGet<SwHeaderAndFooterEatSpacingItem>
-        (rFmt,RES_HEADER_FOOTER_EAT_SPACING);
-    if (rSpacingCtrl.GetValue())
-        nDist += rSz.GetHeight();
-    else
-    {
-        SwRect aRect(rFmt.FindLayoutRect(false));
-        if (aRect.Height())
-            nDist += aRect.Height();
-        else
-        {
-            const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
-            if (ATT_VAR_SIZE != rSz.GetSizeType())
-                nDist += rSz.GetHeight();
-            else
-            {
-                nDist += 274;       // defaulten fuer 12pt Schrift
-                nDist += (bLower ? rUL.GetLower() : rUL.GetUpper());
-            }
-        }
-    }
-    return (USHORT)nDist;
-}
-
 static Writer& OutWW8_SwFmtULSpace( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
@@ -3356,61 +3483,45 @@ static Writer& OutWW8_SwFmtULSpace( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rWW8Wrt.bOutPageDescs )            // Page-UL
     {
-        USHORT nUDist, nLDist;
-        const SfxPoolItem* pItem = rWW8Wrt.HasItem( RES_BOX );
-        if( pItem )
-        {
-            nUDist = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_TOP );
-            nLDist = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_BOTTOM );
-        }
-        else
-            nUDist = nLDist = 0;
-        nUDist += rUL.GetUpper();
-        nLDist += rUL.GetLower();
+        ASSERT(rWW8Wrt.GetCurItemSet(), "Impossible");
+        if (!rWW8Wrt.GetCurItemSet())
+            return rWrt;
 
-        // Kopf-/Fusszeilen beachten:
-        if( 0 != ( pItem = rWW8Wrt.HasItem( RES_HEADER )) &&
-            ((SwFmtHeader*)pItem)->IsActive() )
+        HdFtDistanceGlue aDistances(*rWW8Wrt.GetCurItemSet());
+
+        if (aDistances.HasHeader())
         {
-            // dann aufjedenfall schon mal den Abstand der Kopfzeile zum
-            // SeitenAnfang ausgeben
-            // sprmSDyaHdrTop
-            if( rWW8Wrt.bWrtWW8 )
-                rWW8Wrt.InsUInt16( 0xB017 );
+            //sprmSDyaHdrTop
+            if (rWW8Wrt.bWrtWW8)
+                rWW8Wrt.InsUInt16(0xB017);
             else
-                rWW8Wrt.pO->Insert( 156, rWW8Wrt.pO->Count() );
-            rWW8Wrt.InsUInt16( nUDist );
-            nUDist += ::lcl_CalcHdFtDist(
-                *((SwFmtHeader*)pItem)->GetHeaderFmt(), true);
+                rWW8Wrt.pO->Insert(156, rWW8Wrt.pO->Count());
+            rWW8Wrt.InsUInt16(aDistances.dyaHdrTop);
         }
+
         // sprmSDyaTop
-        if( rWW8Wrt.bWrtWW8 )
-            rWW8Wrt.InsUInt16( 0x9023 );
+        if (rWW8Wrt.bWrtWW8)
+            rWW8Wrt.InsUInt16(0x9023);
         else
-            rWW8Wrt.pO->Insert( 168, rWW8Wrt.pO->Count() );
-        rWW8Wrt.InsUInt16( nUDist );
+            rWW8Wrt.pO->Insert(168, rWW8Wrt.pO->Count());
+        rWW8Wrt.InsUInt16(aDistances.dyaTop);
 
-
-        if( 0 != ( pItem = rWW8Wrt.HasItem( RES_FOOTER )) &&
-            ((SwFmtFooter*)pItem)->IsActive() )
+        if (aDistances.HasFooter())
         {
-            // dann aufjedenfall schon mal den Abstand der Fusszeile zum
-            // SeitenEnde ausgeben
-            // sprmSDyaHdrBottom
-            if( rWW8Wrt.bWrtWW8 )
-                rWW8Wrt.InsUInt16( 0xB018 );
+            //sprmSDyaHdrBottom
+            if (rWW8Wrt.bWrtWW8)
+                rWW8Wrt.InsUInt16(0xB018);
             else
-                rWW8Wrt.pO->Insert( 157, rWW8Wrt.pO->Count() );
-            rWW8Wrt.InsUInt16( nLDist );
-            nLDist += ::lcl_CalcHdFtDist( *((SwFmtFooter*)pItem)->
-                                            GetFooterFmt(), false);
+                rWW8Wrt.pO->Insert(157, rWW8Wrt.pO->Count());
+            rWW8Wrt.InsUInt16(aDistances.dyaHdrBottom);
         }
-        // sprmSDyaBottom
-        if( rWW8Wrt.bWrtWW8 )
-            rWW8Wrt.InsUInt16( 0x9024 );
+
+        //sprmSDyaBottom
+        if (rWW8Wrt.bWrtWW8)
+            rWW8Wrt.InsUInt16(0x9024);
         else
-            rWW8Wrt.pO->Insert( 169, rWW8Wrt.pO->Count() );
-        rWW8Wrt.InsUInt16( nLDist );
+            rWW8Wrt.pO->Insert(169, rWW8Wrt.pO->Count());
+        rWW8Wrt.InsUInt16(aDistances.dyaBottom);
     }
     else
     {
@@ -3494,9 +3605,9 @@ Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt )
 Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
-    if( !rWW8Wrt.pFlyFmt )
+    if (!rWW8Wrt.mpParentFrame)
     {
-        ASSERT( rWW8Wrt.pFlyFmt, "HoriOrient ohne pFlyFmt !!" );
+        ASSERT(rWW8Wrt.mpParentFrame, "HoriOrient without mpParentFrame !!");
         return rWrt;
     }
 
@@ -3512,15 +3623,6 @@ Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
                                 nPos = (short)rFlyHori.GetPos();
                                 if( !nPos )
                                     nPos = 1;   // WW: 0 ist reserviert
-#if 0
-// ist nicht noetig, da Bindung an Absatz als hor. Bindung an die
-// Spalte exportiert wird, da so das Verhalten bei Mehrspaltigkeit
-// am AEhnlichsten ist.
-                                RndStdIds eAn = rWW8Wrt.pFlyFmt->GetAttrSet().
-                                                GetAnchor().GetAnchorId();
-                                if( eAn == FLY_AT_CNTNT || eAn == FLY_IN_CNTNT )
-                                    nPos += GetPageL( rWW8Wrt );
-#endif
                            }
                            break;
 
@@ -3546,7 +3648,7 @@ Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutWW8_SwFmtAnchor( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
-    ASSERT( rWW8Wrt.pFlyFmt, "Anker ohne pFlyFmt !!" );
+    ASSERT(rWW8Wrt.mpParentFrame, "Anchor without mpParentFrame !!");
 
     if( rWW8Wrt.bOutFlyFrmAttrs )
     {
@@ -4254,7 +4356,13 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
             nPara = 1;
             break;
         case SVX_TAB_ADJUST_DECIMAL:
-            nPara = ',' == rTS.GetDecimal() ? 3 : 1;
+            /*
+            Theres nothing we can do btw the the decimal seperator has been
+            customized, but if you think different remember that different
+            locales have different seperators, i.e. german is a , while english
+            is a .
+            */
+            nPara = 3;
             break;
     }
 
