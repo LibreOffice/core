@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:54:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,89 @@ TabPage TP_FLD_FUNC
         Text[ hebrew ] = "‮הפעלת מאקרו...‬";
         Text[ hindi ] = "~मॉक्रो...";
         Text[ slovak ] = "~Makro...";
+    };
+    FixedText FT_LISTITEM
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Hide = TRUE;
+        Text = "Eintrag" ;
+        Text [ english_us ] = "Ite~m" ;
+    };
+    Edit ED_LISTITEM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Hide = TRUE;
+    };
+    PushButton PB_LISTADD
+    {
+        Pos = MAP_APPFONT ( 170 , 29 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Hide = TRUE;
+        Text = "Hi~nzuf�gen" ;
+        Text [ english_us ] = "~Add" ;
+    };
+    FixedText FT_LISTITEMS
+    {
+        Pos = MAP_APPFONT ( 170 , 46 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Hide = TRUE;
+        Text = "Listeneintr�ge" ;
+        Text [ english_us ] = "Items on ~list" ;
+    };
+    ListBox LB_LISTITEMS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 57 ) ;
+        Size = MAP_APPFONT ( 83 , 44 ) ;
+        TabStop = TRUE ;
+        Sort = FALSE ;
+        AutoHScroll = TRUE ;
+    };
+    PushButton PB_LISTREMOVE
+    {
+        Pos = MAP_APPFONT ( 203 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Hide = TRUE;
+        Text = "Entfernen" ;
+        Text [ english_us ] = "~Remove" ;
+    };
+    PushButton PB_LISTUP
+    {
+        Pos = MAP_APPFONT ( 203 , 121 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Hide = TRUE;
+        Text = "Nach ~oben" ;
+        Text [ english_us ] = "Move ~Up" ;
+    };
+    PushButton PB_LISTDOWN
+    {
+        Pos = MAP_APPFONT ( 203 , 138 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Hide = TRUE;
+        Text = "Nach ~unten" ;
+        Text [ english_us ] = "Move Do~wn" ;
+    };
+    FixedText FT_LISTNAME
+    {
+        Pos = MAP_APPFONT ( 170 , 156 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Hide = TRUE;
+        Text = "Name" ;
+        Text [ english_us ] = "Na~me" ;
+    };
+    Edit ED_LISTNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 167 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Hide = TRUE;
     };
     Text [ english_us ] = "Functions" ;
     Text [ portuguese_brazilian ] = "Fun��es" ;
