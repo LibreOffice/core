@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-16 12:08:07 $
+ *  last change: $Author: sb $ $Date: 2002-10-17 13:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,7 +574,7 @@ public:
     */
     OString copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
-        OSL_ENSURE(beginIndex >= 0 && beginIndex <= getLength());
+        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength());
         if ( beginIndex == 0 )
             return *this;
         else
@@ -598,7 +598,7 @@ public:
     */
     OString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        OSL_ENSURE(beginIndex >= 0 && beginIndex <= getLength()
+        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength()
                    && count >= 0 && count <= getLength() - beginIndex);
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
