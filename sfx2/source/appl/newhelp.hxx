@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:47:52 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace com { namespace sun { namespace star { namespace text { class XTextRan
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <svtools/svtreebx.hxx>
+#include <svtools/moduleoptions.hxx>
 
 #include "srchdlg.hxx"
 
@@ -481,12 +482,15 @@ class SfxHelpTextWindow_Impl : public Window
 {
 private:
     ToolBox                 aToolBox;
+    CheckBox                aOnStartupCB;
     Timer                   aSelectTimer;
     Image                   aIndexOnImage;
     Image                   aIndexOffImage;
     String                  aIndexOnText;
     String                  aIndexOffText;
     String                  aSearchText;
+    String                  aOnStartupText;
+    ::rtl::OUString         sCurrentFactory;
 
     SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
@@ -495,6 +499,9 @@ private:
                             xFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
                             xBreakIterator;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                            xConfiguration;
+    long                    nMinPos;
     sal_Bool                bIsDebug;
     sal_Bool                bIsIndexOn;
     sal_Bool                bIsInClose;
@@ -502,6 +509,9 @@ private:
 
     sal_Bool                HasSelection() const;
     void                    InitToolBoxImages();
+    void                    InitOnStartupBox( bool bOnlyText );
+    void                    SetOnStartupBoxPosition();
+
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
                             GetBreakIterator();
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >
@@ -512,6 +522,7 @@ private:
     DECL_LINK(              NotifyHdl, SvtMiscOptions* );
     DECL_LINK(              FindHdl, sfx2::SearchDialog* );
     DECL_LINK(              CloseHdl, sfx2::SearchDialog* );
+    DECL_LINK(              CheckHdl, CheckBox* );
 
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
