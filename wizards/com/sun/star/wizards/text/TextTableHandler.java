@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextTableHandler.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:49:37 $
+*  last change: $Author: vg $ $Date: 2005-02-21 14:03:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,16 +57,17 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.text;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.frame.XFrame;
+import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.BreakType;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XSimpleText;
+import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;
@@ -80,25 +81,38 @@ import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.view.XSelectionSupplier;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.NumberFormatter;
 
 
 public class TextTableHandler {
     public XTextTablesSupplier xTextTablesSupplier;
     public XMultiServiceFactory xMSFDoc;
     public XTextDocument xTextDocument;
-    public XNumberFormats NumberFormats;
     public XSimpleText xSimpleText;
+    private XText xText;
+    private NumberFormatter oNumberFormatter;
+    private Locale aCharLocale;
+
 
 
     /** Creates a new instance of TextTableHandler */
     public TextTableHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument) {
+    try {
         this.xMSFDoc = xMSF;
         this.xTextDocument = xTextDocument;
+        xText = xTextDocument.getText();
         xTextTablesSupplier = (XTextTablesSupplier) UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
-        XNumberFormatsSupplier xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
-        NumberFormats = xNumberFormatsSupplier.getNumberFormats();
         xSimpleText = (XSimpleText) UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
+        XNumberFormatsSupplier xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        aCharLocale = (Locale) Helper.getUnoStructValue((Object) xTextDocument, "CharLocale");
+        oNumberFormatter = new NumberFormatter(xNumberFormatsSupplier, aCharLocale );
+    } catch (java.lang.Exception e) {
+        e.printStackTrace(System.out);
+    }
+}
 
+    public NumberFormatter getNumberFormatter(){
+        return oNumberFormatter;
     }
 
     public com.sun.star.text.XTextTable getlastTextTable() {
@@ -130,14 +144,10 @@ public class TextTableHandler {
 
     public void removeAllTextTables() {
         try {
-            Object oTextTable;
-            com.sun.star.text.XText xText = xTextDocument.getText();
             XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             int TextTableCount = xAllTextTables.getCount();
             for (int i = TextTableCount - 1; i >= 0; i--) {
-                oTextTable = xAllTextTables.getByIndex(i);
-                XTextContent xTextContentTextTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextTable);
-                xText.removeTextContent(xTextContentTextTable);
+                removeTextTable(xAllTextTables.getByIndex(i));
             }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -148,20 +158,27 @@ public class TextTableHandler {
         try {
             XIndexAccess xAllTextTables = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, xTextTablesSupplier.getTextTables());
             Object oTextTable = xAllTextTables.getByIndex(xAllTextTables.getCount() - 1);
-            XTextContent xTextContentTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextTable);
-            xTextDocument.getText().removeTextContent(xTextContentTable);
+            removeTextTable(oTextTable);
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
     }
 
+
+    public void removeTextTable(Object oTextTable){
+    try {
+        XTextContent xTextContentTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextTable);
+        xTextDocument.getText().removeTextContent(xTextContentTable);
+    } catch (Exception exception) {
+        exception.printStackTrace(System.out);
+    }}
+
+
     public void removeTextTablebyName(String TableName) {
         try {
-            com.sun.star.container.XNameAccess xAllTextTables = xTextTablesSupplier.getTextTables();
+            XNameAccess xAllTextTables = xTextTablesSupplier.getTextTables();
             if (xAllTextTables.hasByName(TableName) == true) {
-                Object oTextTable = xAllTextTables.getByName(TableName);
-                XTextContent xTextContentoTextTable = (XTextContent) UnoRuntime.queryInterface(XTextContent.class, oTextTable);
-                xTextDocument.getText().removeTextContent(xTextContentoTextTable);
+                removeTextTable(xAllTextTables.getByName(TableName));
             }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -173,7 +190,7 @@ public class TextTableHandler {
             XNameAccess xTextTableNames = xTextTablesSupplier.getTextTables();
             if (xTextTableNames.hasByName(OldTableName)) {
                 Object oTextTable = xTextTableNames.getByName(OldTableName);
-                XNamed xTextTableName = (com.sun.star.container.XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
+                XNamed xTextTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, oTextTable);
                 xTextTableName.setName(NewTableName);
             }
         } catch (Exception exception) {
