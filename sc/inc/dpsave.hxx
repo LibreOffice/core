@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2001-01-17 18:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ public:
     long                    GetUsedHierarchy() { return nUsedHierarchy; }
     void                    SetLayoutName(const String* pName);
     const String&           GetLayoutName() const;
+    BOOL                    HasLayoutName() const;
+    void                    ResetLayoutName();
 
     USHORT                  GetOrientation() const  { return nOrientation; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 17:25:08 $
+ *  last change: $Author: nn $ $Date: 2001-01-17 18:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,17 @@ void ScDPSaveDimension::SetFunction(USHORT nNew)
 void ScDPSaveDimension::SetUsedHierarchy(long nNew)
 {
     nUsedHierarchy = nNew;
+}
+
+BOOL ScDPSaveDimension::HasLayoutName() const
+{
+    return ( pLayoutName != NULL );
+}
+
+void ScDPSaveDimension::ResetLayoutName()
+{
+    delete pLayoutName;
+    pLayoutName = NULL;
 }
 
 void ScDPSaveDimension::SetLayoutName(const String* pName)
