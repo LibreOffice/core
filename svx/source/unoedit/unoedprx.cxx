@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:13:09 $
+ *  last change: $Author: sab $ $Date: 2002-10-22 15:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ SvxAccessibleTextEditViewAdapter* SvxEditSourceAdapter::GetEditViewForwarderAdap
 {
     if( mbEditSourceValid && mpAdaptee.get() )
     {
-        SvxEditViewForwarder* pEditViewForwarder = mpAdaptee->GetEditViewForwarder();
+        SvxEditViewForwarder* pEditViewForwarder = mpAdaptee->GetEditViewForwarder(bCreate);
 
         if( pEditViewForwarder )
         {
