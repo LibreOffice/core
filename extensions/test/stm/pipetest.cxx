@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipetest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:20:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ INT32 OPipeTest::test(  const UString& TestName,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.io.Pipe" == TestName )  {
-        TRY {
+        try {
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
@@ -235,13 +235,12 @@ INT32 OPipeTest::test(  const UString& TestName,
                 testMultithreading( TestObject );
             }
         }
-        CATCH( Exception , e )  {
+        catch( Exception& e )  {
             BUILD_ERROR( 0 , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        END_CATCH;
 
         hTestHandle ++;
 
@@ -334,26 +333,24 @@ void OPipeTest::testSimple( const XInterfaceRef &r )
 
 
     output->closeOutput();
-    TRY {
+    try {
         output->writeBytes( Sequence<BYTE> (100) );
         ERROR_ASSERT( 0 , "writing on a closed stream does not cause an exception" );
     }
-    CATCH (IOException , e ) {
+    catch (IOException& e ) {
         e;      // just to suppress warning during compile
     }
-    END_CATCH;
 
     ERROR_ASSERT(! input->readBytes( seqRead , 1 ), "eof not found !" );
 
     input->closeInput();
-    TRY {
+    try {
         input->readBytes( seqRead , 1 );
         ERROR_ASSERT( 0 , "reading from a closed stream does not cause an exception" );
     }
-    CATCH( IOException , e ) {
+    catch( IOException& e ) {
         e;          // just to suppress warning during compile
     }
-    END_CATCH;
 
 }
 
@@ -429,7 +426,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
 }
 
 /*  {
-        TRY {
+        try {
             XInterfaceRef x = xSMgr->createInstance( strService );
 
             XInputStreamRef input( x , USR_QUERY );
@@ -443,7 +440,7 @@ void OPipeTest::testMultithreading( const XInterfaceRef &r )
 
             }
         }
-        CATCH( IOException , e ) {
+        catch( IOException& e ) {
             printf( "%s %s\n" , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() ,
                                 UStringToString( e.Message , CHARSET_SYSTEM ).GetCharStr() );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:20:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ INT32 OMarkableOutputStreamTest::test(  const UString& TestName,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.io.MarkableOutputStream" == TestName )  {
-        TRY {
+        try {
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
@@ -203,13 +203,12 @@ INT32 OMarkableOutputStreamTest::test(  const UString& TestName,
             }
 
         }
-        CATCH( Exception , e )  {
+        catch( Exception& e )  {
             BUILD_ERROR( 0 , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        END_CATCH;
 
         hTestHandle ++;
 
@@ -304,15 +303,14 @@ void OMarkableOutputStreamTest::testSimple(     const XOutputStreamRef &rOutput 
     rInput->skipBytes( nMax*seqWrite.getLen() );
     ERROR_ASSERT( 0 == rInput->available(), "skip bytes failure" );
 
-    TRY {
+    try {
         rMarkable->jumpToMark( nMark );
         ERROR_ASSERT( 0 , "jump to non existing mark possible !" );
     }
-    CATCH ( IllegalArgumentException , e )
+    catch ( IllegalArgumentException& e )
     {
         e;// ok, exception was thrown
     }
-    END_CATCH;
 
     // test putting marks not at the end of the stream!
     ERROR_ASSERT( 0 == rInput->available(), "stream isn't clean" );
@@ -549,7 +547,7 @@ INT32 OMarkableInputStreamTest::test(   const UString& TestName,
                                                                             UsrSystemException) )
 {
     if( L"com.sun.star.io.MarkableInputStream" == TestName )  {
-        TRY {
+        try {
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
@@ -572,13 +570,12 @@ INT32 OMarkableInputStreamTest::test(   const UString& TestName,
             }
 
         }
-        CATCH( Exception , e )  {
+        catch( Exception& e )  {
             BUILD_ERROR( 0 , UStringToString( e.getName() , CHARSET_SYSTEM ).GetCharStr() );
         }
-        AND_CATCH_ALL() {
+        catch(...) {
             BUILD_ERROR( 0 , "unknown exception (Exception is  not base class)" );
         }
-        END_CATCH;
 
         hTestHandle ++;
 
