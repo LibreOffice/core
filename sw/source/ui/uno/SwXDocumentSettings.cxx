@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:52:36 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_VERTICAL_GRID_SUBDIVISION,
     HANDLE_UPDATE_FROM_TEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT,
-    HANDLE_IS_LABEL_DOC
+    HANDLE_IS_LABEL_DOC,
+    HANDLE_IS_ADD_FLY_OFFSET
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -194,6 +195,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
 
         { RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout"),   HANDLE_PRINTER_INDEPENDENT_LAYOUT,      CPPUTYPE_INT16,             0,   0},
         { RTL_CONSTASCII_STRINGPARAM("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               CPPUTYPE_BOOLEAN,           0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -523,6 +525,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetLabelDoc(bSet);
         }
         break;
+        case HANDLE_IS_ADD_FLY_OFFSET:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetAddFlyOffsets( bTmp );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -691,6 +699,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bLabel = mpDoc->IsLabelDoc();
             rValue <<= bLabel;
+        }
+        break;
+        case HANDLE_IS_ADD_FLY_OFFSET:
+        {
+            sal_Bool bTmp = mpDoc->IsAddFlyOffsets();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
         default:
