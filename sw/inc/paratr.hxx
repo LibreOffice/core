@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:09:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -97,7 +101,7 @@ class IntlWrapper;
 //das CharFmt des Absatzes benutzt.
 //Wird das CharFmt verandert, so wird diese Aenderung ueber das Modify des
 //SwFmtDrop an die Absatze propagiert.
-class SwFmtDrop: public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
 {
     SwModify* pDefinedIn;   // Modify-Object, in dem der DropCaps steht
                             // kann nur TxtFmtCollection/TxtNode sein
@@ -110,8 +114,14 @@ public:
     TYPEINFO(); //Bereits in der Basisklasse SwClient
 
     SwFmtDrop();
+    virtual ~SwFmtDrop();
+
+    // @@@ public copy ctor, but no copy assignment?
     SwFmtDrop( const SwFmtDrop & );
-    ~SwFmtDrop();
+private:
+    // @@@ public copy ctor, but no copy assignment?
+    SwFmtDrop & operator= (const SwFmtDrop &);
+public:
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -162,6 +172,8 @@ public:
     TYPEINFO();
 
     inline SwRegisterItem( const BOOL bRegister = FALSE );
+
+    // @@@ public copy assignment, but no copy ctor?
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
 
     // "pure virtual Methoden" vom SfxPoolItem
@@ -227,12 +239,15 @@ public:
     inline void ChgDefinedIn( const SwModify* pNew )
     { pDefinedIn = (SwModify*)pNew; }
 };
+
 class SwParaConnectBorderItem : public SfxBoolItem
 {
 public:
     TYPEINFO();
 
     inline SwParaConnectBorderItem( const BOOL bConnect = TRUE );
+
+    // @@@ public copy assignment, but no copy ctor?
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
 
     // "pure virtual Methoden" vom SfxPoolItem
