@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.2 $
+#*  $Revision: 1.3 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-26 17:13:19 $
+#*  last change: $Author: khong $ $Date: 2002-03-30 09:24:46 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -109,7 +109,9 @@ SLOFILES=   \
                         $(SLO)$/ignoreMiddleDot_ja_JP.obj \
                         $(SLO)$/textToPronounce_zh.obj \
                         $(SLO)$/numtochar.obj \
-                        $(SLO)$/numtotext_cjk.obj
+                        $(SLO)$/numtotext_cjk.obj \
+                        $(SLO)$/chartonum.obj \
+                        $(SLO)$/texttonum.obj
 
 # MACOSX: manually initialization some static data members
 .IF "$(OS)"=="MACOSX"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-03-28 00:35:49 $
+ *  last change: $Author: khong $ $Date: 2002-03-30 09:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #include <textToPronounce_zh.hxx>
 #include <numtotext_cjk.hxx>
 #include <numtochar.hxx>
+#include <texttonum.hxx>
+#include <chartonum.hxx>
 
 #include <calendarImpl.hxx>
 #include <calendar_gregorian.hxx>
@@ -248,21 +250,41 @@ IMPL_CREATEINSTANCE( ignoreSpace_ja_JP)
 IMPL_CREATEINSTANCE( TextToChuyin_zh_TW )
 IMPL_CREATEINSTANCE( TextToPinyin_zh_CN )
 
-IMPL_CREATEINSTANCE( NumToTextLower_zh_CN )
-IMPL_CREATEINSTANCE( NumToTextUpper_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharLower_zh_CN )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_CN )
-
 IMPL_CREATEINSTANCE( NumToCharLower_zh_TW )
 IMPL_CREATEINSTANCE( NumToCharUpper_zh_TW )
-IMPL_CREATEINSTANCE( NumToTextLower_zh_TW )
-IMPL_CREATEINSTANCE( NumToTextUpper_zh_TW )
-
+IMPL_CREATEINSTANCE( NumToCharFullwidth )
+IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
 IMPL_CREATEINSTANCE( NumToCharHangul_ko )
 IMPL_CREATEINSTANCE( NumToCharLower_ko )
 IMPL_CREATEINSTANCE( NumToCharUpper_ko )
-IMPL_CREATEINSTANCE( NumToCharFullwidth )
-IMPL_CREATEINSTANCE( NumToCharKanjiShort_ja_JP )
+IMPL_CREATEINSTANCE( NumToCharIndic_ar )
+IMPL_CREATEINSTANCE( NumToCharEastIndic_ar )
+IMPL_CREATEINSTANCE( NumToCharIndic_hi )
+IMPL_CREATEINSTANCE( NumToChar_th )
+
+IMPL_CREATEINSTANCE( CharToNum )
+IMPL_CREATEINSTANCE( CharToNumLower_zh_CN )
+IMPL_CREATEINSTANCE( CharToNumUpper_zh_CN )
+IMPL_CREATEINSTANCE( CharToNumLower_zh_TW )
+IMPL_CREATEINSTANCE( CharToNumUpper_zh_TW )
+IMPL_CREATEINSTANCE( CharToNumFullwidth )
+IMPL_CREATEINSTANCE( CharToNumKanjiShort_ja_JP )
+IMPL_CREATEINSTANCE( CharToNumHangul_ko )
+IMPL_CREATEINSTANCE( CharToNumLower_ko )
+IMPL_CREATEINSTANCE( CharToNumUpper_ko )
+IMPL_CREATEINSTANCE( CharToNumIndic_ar )
+IMPL_CREATEINSTANCE( CharToNumEastIndic_ar )
+IMPL_CREATEINSTANCE( CharToNumIndic_hi )
+IMPL_CREATEINSTANCE( CharToNum_th )
+
+IMPL_CREATEINSTANCE( NumToTextLower_zh_CN )
+IMPL_CREATEINSTANCE( NumToTextUpper_zh_CN )
+IMPL_CREATEINSTANCE( NumToTextLower_zh_TW )
+IMPL_CREATEINSTANCE( NumToTextUpper_zh_TW )
+IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
 IMPL_CREATEINSTANCE( NumToTextFormalHangul_ko )
 IMPL_CREATEINSTANCE( NumToTextFormalLower_ko )
 IMPL_CREATEINSTANCE( NumToTextFormalUpper_ko )
@@ -270,13 +292,26 @@ IMPL_CREATEINSTANCE( NumToTextInformalHangul_ko )
 IMPL_CREATEINSTANCE( NumToTextInformalUpper_ko )
 IMPL_CREATEINSTANCE( NumToTextInformalLower_ko )
 
-IMPL_CREATEINSTANCE( NumToCharIndic_ar )
-IMPL_CREATEINSTANCE( NumToCharEastIndic_ar )
-IMPL_CREATEINSTANCE( NumToCharIndic_hi )
-IMPL_CREATEINSTANCE( NumToChar_th )
+IMPL_CREATEINSTANCE( TextToNum )
+IMPL_CREATEINSTANCE( TextToNumLower_zh_CN )
+IMPL_CREATEINSTANCE( TextToNumUpper_zh_CN )
+IMPL_CREATEINSTANCE( TextToNumLower_zh_TW )
+IMPL_CREATEINSTANCE( TextToNumUpper_zh_TW )
+IMPL_CREATEINSTANCE( TextToNumKanjiLongModern_ja_JP )
+IMPL_CREATEINSTANCE( TextToNumKanjiLongTraditional_ja_JP )
+IMPL_CREATEINSTANCE( TextToNumFormalHangul_ko )
+IMPL_CREATEINSTANCE( TextToNumFormalLower_ko )
+IMPL_CREATEINSTANCE( TextToNumFormalUpper_ko )
+IMPL_CREATEINSTANCE( TextToNumInformalHangul_ko )
+IMPL_CREATEINSTANCE( TextToNumInformalUpper_ko )
+IMPL_CREATEINSTANCE( TextToNumInformalLower_ko )
 
-IMPL_CREATEINSTANCE( NumToTextKanjiLongModern_ja_JP )
-IMPL_CREATEINSTANCE( NumToTextKanjiLongTraditional_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextDate_zh )
+IMPL_CREATEINSTANCE( NumToTextAIUFullWidth_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextAIUHalfWidth_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextIROHAFullWidth_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextIROHAHalfWidth_ja_JP )
+IMPL_CREATEINSTANCE( NumToTextCircledNumber )
 
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
@@ -484,31 +519,69 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (ignoreSpace_ja_JP),
     IMPL_TRANSLITERATION_ITEM (TextToPinyin_zh_CN),
     IMPL_TRANSLITERATION_ITEM (TextToChuyin_zh_TW),
-    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_CN),
+
     IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_CN),
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_CN),
-    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_TW),
-    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_TW),
     IMPL_TRANSLITERATION_ITEM (NumToCharUpper_zh_TW),
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToCharFullwidth),
+    IMPL_TRANSLITERATION_ITEM (NumToCharKanjiShort_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToCharLower_ko),
     IMPL_TRANSLITERATION_ITEM (NumToCharUpper_ko),
     IMPL_TRANSLITERATION_ITEM (NumToCharHangul_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToCharFullwidth),
-    IMPL_TRANSLITERATION_ITEM (NumToCharKanjiShort_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_ar),
+    IMPL_TRANSLITERATION_ITEM (NumToCharEastIndic_ar),
+    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_hi),
+    IMPL_TRANSLITERATION_ITEM (NumToChar_th),
+
+    IMPL_TRANSLITERATION_ITEM (CharToNum),
+    IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (CharToNumUpper_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (CharToNumLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (CharToNumFullwidth),
+    IMPL_TRANSLITERATION_ITEM (CharToNumKanjiShort_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (CharToNumLower_ko),
+    IMPL_TRANSLITERATION_ITEM (CharToNumUpper_ko),
+    IMPL_TRANSLITERATION_ITEM (CharToNumHangul_ko),
+    IMPL_TRANSLITERATION_ITEM (CharToNumIndic_ar),
+    IMPL_TRANSLITERATION_ITEM (CharToNumEastIndic_ar),
+    IMPL_TRANSLITERATION_ITEM (CharToNumIndic_hi),
+    IMPL_TRANSLITERATION_ITEM (CharToNum_th),
+
+    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (NumToTextUpper_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToTextLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongModern_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongTraditional_ja_JP),
     IMPL_TRANSLITERATION_ITEM (NumToTextInformalHangul_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextInformalLower_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextInformalUpper_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextFormalHangul_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextFormalLower_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextFormalUpper_ko),
-    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_ar),
-    IMPL_TRANSLITERATION_ITEM (NumToCharEastIndic_ar),
-    IMPL_TRANSLITERATION_ITEM (NumToCharIndic_hi),
-    IMPL_TRANSLITERATION_ITEM (NumToChar_th),
-    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongModern_ja_JP),
-    IMPL_TRANSLITERATION_ITEM (NumToTextKanjiLongTraditional_ja_JP),
+
+    IMPL_TRANSLITERATION_ITEM (TextToNum),
+    IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (TextToNumLower_zh_CN),
+    IMPL_TRANSLITERATION_ITEM (TextToNumUpper_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (TextToNumLower_zh_TW),
+    IMPL_TRANSLITERATION_ITEM (TextToNumKanjiLongModern_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (TextToNumKanjiLongTraditional_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (TextToNumInformalHangul_ko),
+    IMPL_TRANSLITERATION_ITEM (TextToNumInformalLower_ko),
+    IMPL_TRANSLITERATION_ITEM (TextToNumInformalUpper_ko),
+    IMPL_TRANSLITERATION_ITEM (TextToNumFormalHangul_ko),
+    IMPL_TRANSLITERATION_ITEM (TextToNumFormalLower_ko),
+    IMPL_TRANSLITERATION_ITEM (TextToNumFormalUpper_ko),
+
+    IMPL_TRANSLITERATION_ITEM (NumToTextDate_zh),
+    IMPL_TRANSLITERATION_ITEM (NumToTextAIUFullWidth_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextAIUHalfWidth_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextIROHAFullWidth_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextIROHAHalfWidth_ja_JP),
+    IMPL_TRANSLITERATION_ITEM (NumToTextCircledNumber),
 
 // add here new services !!
     { 0, 0, 0 }

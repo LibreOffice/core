@@ -1,22 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: numtochar.hxx,v $
- *
- *  $Revision: 1.3 $
- *
- *  last change: $Author: khong $ $Date: 2002-03-30 09:23:22 $
- *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
+ *  Copyright 2002 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or
@@ -50,7 +36,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -58,47 +44,52 @@
  *
  *
  ************************************************************************/
-#ifndef _L10N_TRANSLITERATION_NUMTOCHAR_HXX_
-#define _L10N_TRANSLITERATION_NUMTOCHAR_HXX_
+
+#ifndef _L10N_TRANSLITERATION_TEXTTONUM_HXX_
+#define _L10N_TRANSLITERATION_TEXTTONUM_HXX_
 
 #include <transliteration_Numeric.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class NumToChar : public transliteration_Numeric {
+class TextToNum : public transliteration_Numeric {
 public:
-    NumToChar();
+    TextToNum();
 
-    rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
+    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset ) throw(com::sun::star::uno::RuntimeException);
 
 protected:
     sal_Int16 number;
+    sal_Int16 multiplier;
+private:
+    void SAL_CALL numberMaker(sal_Int16 max, sal_Int16 cur, const sal_Unicode *str, sal_Int32& i,
+        sal_Int32 len, sal_Unicode *dst, sal_Int32& count, com::sun::star::uno::Sequence< sal_Int32 >& offset,
+        rtl::OUString& numberChar, rtl::OUString& multiplierChar);
 };
 
-#define TRANSLITERATION_NUMTOCHAR( name ) \
-class NumToChar##name : public NumToChar \
+#define TRANSLITERATION_TEXTTONUM( name ) \
+class TextToNum##name : public TextToNum \
 { \
 public: \
-    NumToChar##name (); \
+    TextToNum##name (); \
 };
 
 #ifdef TRANSLITERATION_ALL
-TRANSLITERATION_NUMTOCHAR(Lower_zh_CN)
-TRANSLITERATION_NUMTOCHAR(Upper_zh_CN)
-TRANSLITERATION_NUMTOCHAR(Lower_zh_TW)
-TRANSLITERATION_NUMTOCHAR(Upper_zh_TW)
-TRANSLITERATION_NUMTOCHAR(Upper_ko)
-TRANSLITERATION_NUMTOCHAR(Hangul_ko)
-TRANSLITERATION_NUMTOCHAR(Lower_ko)
-TRANSLITERATION_NUMTOCHAR(KanjiShort_ja_JP)
-TRANSLITERATION_NUMTOCHAR(Fullwidth)
-TRANSLITERATION_NUMTOCHAR(Indic_ar)
-TRANSLITERATION_NUMTOCHAR(EastIndic_ar)
-TRANSLITERATION_NUMTOCHAR(Indic_hi)
-TRANSLITERATION_NUMTOCHAR(_th)
+TRANSLITERATION_TEXTTONUM(Lower_zh_CN)
+TRANSLITERATION_TEXTTONUM(Upper_zh_CN)
+TRANSLITERATION_TEXTTONUM(Lower_zh_TW)
+TRANSLITERATION_TEXTTONUM(Upper_zh_TW)
+TRANSLITERATION_TEXTTONUM(InformalLower_ko)
+TRANSLITERATION_TEXTTONUM(InformalUpper_ko)
+TRANSLITERATION_TEXTTONUM(InformalHangul_ko)
+TRANSLITERATION_TEXTTONUM(FormalLower_ko)
+TRANSLITERATION_TEXTTONUM(FormalUpper_ko)
+TRANSLITERATION_TEXTTONUM(FormalHangul_ko)
+TRANSLITERATION_TEXTTONUM(KanjiLongModern_ja_JP)
+TRANSLITERATION_TEXTTONUM(KanjiLongTraditional_ja_JP)
 #endif
-#undef TRANSLITERATION_NUMTOCHAR
+#undef TRANSLITERATION_TEXTTONUM
 
 } } } }
 
-#endif // _L10N_TRANSLITERATION_NUMTOCHAR_HXX_
+#endif // _L10N_TRANSLITERATION_TEXTTONUM_HXX_

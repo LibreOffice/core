@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtochar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:13:19 $
+ *  last change: $Author: khong $ $Date: 2002-03-30 09:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,52 +71,44 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-OUString SAL_CALL NumToChar::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset ) throw(RuntimeException) {
-
-    // Create a string buffer which can hold nCount + 1 characters.
-    rtl_uString *newStr;
-    x_rtl_uString_new_WithLength( &newStr, nCount ); // defined in x_rtl_ustring.h  The reference count is 0 now.
-
-    // Prepare pointers of unicode character arrays.
+OUString SAL_CALL NumToChar::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    Sequence< sal_Int32 >& offset ) throw(RuntimeException)
+{
     const sal_Unicode *src = inStr.getStr() + startPos;
-    sal_Unicode *dst = newStr->buffer;
+    rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount);
+    offset.realloc(nCount);
 
-    // Allocate the same length as inStr to offset argument.
-    offset.realloc(inStr.getLength());
-    sal_Int32 *p = offset.getArray();
-    sal_Int32 position = startPos;
-
-    for (sal_Int32 index = 0; index < nCount; index++) {
-        sal_Unicode ch = src[index];
-        dst[index] = (0x0030 <= ch && ch <= 0x0039) ? num2char[ ch - 0x0030 ] : ch;
-        *p++ = position++;
+    for (sal_Int32 i = 0; i < nCount; i++) {
+        sal_Unicode ch = src[i];
+        newStr->buffer[i] = (isNumber(ch) ? NumberChar[number][ ch - NUMBER_ZERO ] :
+            (isDecimal(ch) ? DecimalChar[number] : (isMinus(ch) ? MinusChar[number] : ch)));
+        offset[i] = startPos + i;
     }
-
-    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    return OUString(newStr->buffer, nCount);
 }
 
-#define TRANSLITERATION_NUMTOCHAR( number, name ) \
+#define TRANSLITERATION_NUMTOCHAR( name, _number ) \
 NumToChar##name::NumToChar##name() \
 { \
-    num2char = NumberChar[number]; \
+    number = NumberChar_##_number; \
     transliterationName = "NumToChar"#name; \
     implementationName = "com.sun.star.i18n.Transliteration.NumToChar"#name; \
 }
 
-TRANSLITERATION_NUMTOCHAR( NumberChar_HalfWidth, )
-TRANSLITERATION_NUMTOCHAR( NumberChar_FullWidth, Fullwidth)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Lower_zh, Lower_zh_CN)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Lower_zh, Lower_zh_TW)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Upper_zh, Upper_zh_CN)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Upper_zh_TW, Upper_zh_TW)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Modern_ja, KanjiShort_ja_JP)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Lower_ko, Lower_ko)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Upper_ko, Upper_ko)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Hangul_ko, Hangul_ko)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Indic_ar, Indic_ar)
-TRANSLITERATION_NUMTOCHAR( NumberChar_EastIndic_ar, EastIndic_ar)
-TRANSLITERATION_NUMTOCHAR( NumberChar_Indic_hi, Indic_hi)
-TRANSLITERATION_NUMTOCHAR( NumberChar_th, _th)
+TRANSLITERATION_NUMTOCHAR( , HalfWidth )
+TRANSLITERATION_NUMTOCHAR( Fullwidth, FullWidth )
+TRANSLITERATION_NUMTOCHAR( Lower_zh_CN, Lower_zh )
+TRANSLITERATION_NUMTOCHAR( Lower_zh_TW, Lower_zh )
+TRANSLITERATION_NUMTOCHAR( Upper_zh_CN, Upper_zh )
+TRANSLITERATION_NUMTOCHAR( Upper_zh_TW, Upper_zh_TW )
+TRANSLITERATION_NUMTOCHAR( KanjiShort_ja_JP, Modern_ja )
+TRANSLITERATION_NUMTOCHAR( Lower_ko, Lower_ko )
+TRANSLITERATION_NUMTOCHAR( Upper_ko, Upper_ko )
+TRANSLITERATION_NUMTOCHAR( Hangul_ko, Hangul_ko )
+TRANSLITERATION_NUMTOCHAR( Indic_ar, Indic_ar )
+TRANSLITERATION_NUMTOCHAR( EastIndic_ar, EastIndic_ar )
+TRANSLITERATION_NUMTOCHAR( Indic_hi, Indic_hi )
+TRANSLITERATION_NUMTOCHAR( _th, th )
 #undef TRANSLITERATION_NUMTOCHAR
 
 } } } }

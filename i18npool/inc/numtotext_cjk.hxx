@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: khong $ $Date: 2002-03-30 09:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,6 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-struct NumberMultiplier {
-    sal_Int16 power;
-    sal_Unicode multiplierChar;
-};
-
 class NumToText_CJK : public transliteration_Numeric {
 public:
     NumToText_CJK();
@@ -77,35 +72,43 @@ public:
     virtual rtl::OUString SAL_CALL transliterate( const ::rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset ) throw(com::sun::star::uno::RuntimeException);
 
 protected:
-    const NumberMultiplier *numberMultiplier;
+    const sal_Unicode *multiplierChar;
     const sal_Unicode *numberChar;
     sal_Int16 numberFlag;
+    sal_Int16 bulletCount;
+    sal_Int16 number;
 
 private:
     sal_Bool SAL_CALL numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
-        sal_Unicode *dst, sal_Int32& count, sal_Unicode numberChar, sal_Int32** offset);
+        sal_Unicode *dst, sal_Int32& count, sal_Unicode multiChar, com::sun::star::uno::Sequence< sal_Int32 >& offset, sal_Int32 startPos);
 };
 
 #define TRANSLITERATION_NUMTOTEXT_CJK( name ) \
-class name : public NumToText_CJK \
+class NumToText##name : public NumToText_CJK \
 { \
 public: \
-    name (); \
+    NumToText##name (); \
 };
 
 #ifdef TRANSLITERATION_ALL
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextLower_zh_CN)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextUpper_zh_CN)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextLower_zh_TW)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextUpper_zh_TW)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextInformalLower_ko)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextInformalUpper_ko)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextInformalHangul_ko)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextFormalLower_ko)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextFormalUpper_ko)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextFormalHangul_ko)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextKanjiLongModern_ja_JP)
-TRANSLITERATION_NUMTOTEXT_CJK(NumToTextKanjiLongTraditional_ja_JP)
+TRANSLITERATION_NUMTOTEXT_CJK ( Lower_zh_CN )
+TRANSLITERATION_NUMTOTEXT_CJK ( Upper_zh_CN )
+TRANSLITERATION_NUMTOTEXT_CJK ( Lower_zh_TW )
+TRANSLITERATION_NUMTOTEXT_CJK ( Upper_zh_TW )
+TRANSLITERATION_NUMTOTEXT_CJK ( Date_zh )
+TRANSLITERATION_NUMTOTEXT_CJK ( InformalLower_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( InformalUpper_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( InformalHangul_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( FormalLower_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( FormalUpper_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( FormalHangul_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongModern_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongTraditional_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( AIUFullWidth_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( AIUHalfWidth_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( IROHAFullWidth_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( IROHAHalfWidth_ja_JP )
+TRANSLITERATION_NUMTOTEXT_CJK ( CircledNumber )
 #endif
 #undef TRANSLITERATION_NUMTOTEXT
 
