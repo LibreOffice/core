@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-09 16:30:49 $
+ *  last change: $Author: bm $ $Date: 2003-12-10 18:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,21 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
 #include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#endif
+
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
+#endif
+#ifndef _SVX_SIZEITEM_HXX
+#define ITEMID_SIZE SCHATTR_SYMBOL_SIZE
+#include <svx/sizeitem.hxx>
+#endif
+
+// for SVX_SYMBOLTYPE_...
+#ifndef _SVX_TAB_LINE_HXX
+#include <svx/tabline.hxx>
 #endif
 
 #include <functional>
@@ -95,6 +108,33 @@ namespace
 
     return aDataPointPropertyMap;
 };
+
+sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
+{
+    sal_Int32 nStyle = SVX_SYMBOLTYPE_UNKNOWN;
+    switch( rSymbol.aStyle )
+    {
+        case chart2::SymbolStyle_NONE:
+            nStyle = SVX_SYMBOLTYPE_NONE;
+            break;
+        case chart2::SymbolStyle_AUTO:
+            nStyle = SVX_SYMBOLTYPE_AUTO;
+            break;
+        case chart2::SymbolStyle_BITMAP:
+            nStyle = SVX_SYMBOLTYPE_BRUSHITEM;
+            break;
+        case chart2::SymbolStyle_STANDARD:
+            nStyle = rSymbol.nStandardSymbol;
+            break;
+
+        case chart2::SymbolStyle_POLYGON:
+            // to avoid warning
+        case chart2::SymbolStyle_MAKE_FIXED_SIZE:
+            // nothing
+            break;
+    }
+    return nStyle;
+}
 } // anonymous namespace
 
 namespace chart
@@ -273,6 +313,68 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
         }
         break;
+
+        case SCHATTR_STYLE_SYMBOL:
+        {
+            sal_Int32 nStyle =
+                reinterpret_cast< const SfxInt32Item & >(
+                    rItemSet.Get( nWhichId )).GetValue();
+            chart2::Symbol aSymbol;
+
+            GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol;
+            sal_Int32 nOldStyle = lcl_getSymbolStyleForSymbol( aSymbol );
+
+            if( nStyle != nOldStyle )
+            {
+                bool bDeleteSymbol = false;
+                switch( nStyle )
+                {
+                    case SVX_SYMBOLTYPE_NONE:
+                        aSymbol.aStyle = chart2::SymbolStyle_NONE;
+                        break;
+                    case SVX_SYMBOLTYPE_AUTO:
+                        aSymbol.aStyle = chart2::SymbolStyle_AUTO;
+                        break;
+                    case SVX_SYMBOLTYPE_BRUSHITEM:
+                        aSymbol.aStyle = chart2::SymbolStyle_BITMAP;
+                        break;
+                    case SVX_SYMBOLTYPE_UNKNOWN:
+                        bDeleteSymbol = true;
+                        break;
+
+                    default:
+                        aSymbol.aStyle = chart2::SymbolStyle_STANDARD;
+                        aSymbol.nStandardSymbol = nStyle;
+                }
+
+                if( bDeleteSymbol )
+                    GetPropertySet()->setPropertyValue( C2U( "Symbol" ), uno::Any());
+                else
+                    GetPropertySet()->setPropertyValue( C2U( "Symbol" ),
+                                                        uno::makeAny( aSymbol ));
+                bChanged = true;
+            }
+        }
+        break;
+
+        case SCHATTR_SYMBOL_SIZE:
+        {
+            Size aSize = reinterpret_cast< const SvxSizeItem & >(
+                rItemSet.Get( nWhichId )).GetSize();
+            chart2::Symbol aSymbol;
+
+            GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol;
+            if( aSize.getWidth() != aSymbol.aSize.Width ||
+                aSize.getHeight() != aSymbol.aSize.Height )
+            {
+                aSymbol.aSize.Width = aSize.getWidth();
+                aSymbol.aSize.Height = aSize.getHeight();
+
+                GetPropertySet()->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbol ));
+                bChanged = true;
+            }
+        }
+        break;
     }
 
     return bChanged;
@@ -338,6 +440,23 @@ void DataPointItemConverter::FillSpecialItem(
             {
                 OSL_ENSURE( false, "No NumberFormatterWrapper !" );
             }
+        }
+        break;
+
+        case SCHATTR_STYLE_SYMBOL:
+        {
+            chart2::Symbol aSymbol;
+            if( GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol )
+                rOutItemSet.Put( SfxInt32Item( nWhichId, lcl_getSymbolStyleForSymbol( aSymbol ) ));
+        }
+        break;
+
+        case SCHATTR_SYMBOL_SIZE:
+        {
+            chart2::Symbol aSymbol;
+            if( GetPropertySet()->getPropertyValue( C2U( "Symbol" )) >>= aSymbol )
+                rOutItemSet.Put(
+                    SvxSizeItem( nWhichId, Size( aSymbol.aSize.Width, aSymbol.aSize.Height ) ));
         }
         break;
    }
