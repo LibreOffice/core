@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XOutputStreamToOutputStreamAdapter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aidan $ $Date: 2002-04-03 09:52:29 $
+ *  last change: $Author: aidan $ $Date: 2002-08-07 13:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ public class XOutputStreamToOutputStreamAdapter extends OutputStream {
      *  @param  out  The <code>XOutputStream</code> to be
      *          accessed as an <code>OutputStream</code>.
      */
-    XOutputStreamToOutputStreamAdapter(XOutputStream out) {
+    public XOutputStreamToOutputStreamAdapter(XOutputStream out) {
         xout = out;
     }
 
