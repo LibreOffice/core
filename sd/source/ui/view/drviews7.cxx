@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:44:36 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1739,6 +1739,21 @@ void DrawViewShell::Execute (SfxRequest& rReq)
             // Forward this request to the the common (old) code of the
             // document shell.
             GetDocSh()->Execute (rReq);
+        break;
+
+        case SID_SPELL_DIALOG:
+        {
+            SfxViewFrame* pViewFrame = GetViewFrame();
+            if (rReq.GetArgs() != NULL)
+                pViewFrame->SetChildWindow (SID_SPELL_DIALOG,
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_SPELL_DIALOG))).GetValue());
+            else
+                pViewFrame->ToggleChildWindow(SID_SPELL_DIALOG);
+
+            pViewFrame->GetBindings().Invalidate(SID_SPELL_DIALOG);
+            rReq.Ignore ();
+        }
         break;
 
         default:
