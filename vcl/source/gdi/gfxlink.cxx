@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:32:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,9 @@
 
 GfxLink::GfxLink() :
     meType      ( GFX_LINK_TYPE_NONE ),
-    mnBufSize   ( 0 ),
     mpBuf       ( NULL ),
     mpSwap      ( NULL ),
+    mnBufSize   ( 0 ),
     mnUserId    ( 0UL ),
     mpImpData   ( new ImpGfxLink )
 {
