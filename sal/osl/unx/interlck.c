@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-03-13 19:01:54 $
+ *  last change: $Author: hr $ $Date: 2001-03-15 14:22:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,32 +109,34 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 /*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    oslInterlockedCount nCount;
+    /* "addi" doesn't work with r0 as second parameter */
+    register oslInterlockedCount nCount __asm__ ("r4");
 
     __asm__ __volatile__ (
         "1: lwarx   %0,0,%2\n\t"
-        "   addic   %0,%0,1\n\t"
+        "   addi    %0,%0,1\n\t"
         "   stwcx.  %0,0,%2\n\t"
         "   bne-    1b"
         : "=r" (nCount), "=m" (*pCount)
         : "r" (pCount)
-        : "cc", "memory");
+        : "r4", "memory");
 
     return nCount;
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    oslInterlockedCount nCount;
+    /* "subi" doesn't work with r0 as second parameter */
+    register oslInterlockedCount nCount __asm__ ("r4");
 
     __asm__ __volatile__ (
         "1: lwarx   %0,0,%2\n\t"
-        "   subic   %0,%0,1\n\t"
+        "   subi    %0,%0,1\n\t"
         "   stwcx.  %0,0,%2\n\t"
         "   bne-    1b"
         : "=r" (nCount), "=m" (*pCount)
         : "r" (pCount)
-        : "cc", "memory");
+        : "r4", "memory");
 
     return nCount;
 }
