@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TextEmbeddedObject.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:13:37 $
+ *  last change:$Date: 2004-03-19 14:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,67 +58,45 @@
  *
  *
  ************************************************************************/
-
 package ifc.text;
 
 import lib.MultiPropertyTest;
+
 
 /**
  * Testing <code>com.sun.star.text.TextEmbeddedObject</code>
  * service properties :
  * <ul>
- *  <li><code> AnchorPageNo          </code></li>
- *  <li><code> AnchorType            </code></li>
- *  <li><code> BackColor             </code></li>
- *  <li><code> BorderDistance        </code></li>
- *  <li><code> BottomBorder          </code></li>
- *  <li><code> BottomMargin          </code></li>
- *  <li><code> ChainNextName         </code></li>
- *  <li><code> ChainPrevName         </code></li>
- *  <li><code> ContentProtected      </code></li>
- *  <li><code> EditInReadonly        </code></li>
- *  <li><code> FrameStyle            </code></li>
- *  <li><code> GraphicFilter         </code></li>
- *  <li><code> GraphicLocation       </code></li>
- *  <li><code> GraphicURL            </code></li>
- *  <li><code> Height                </code></li>
- *  <li><code> HoriOrient            </code></li>
- *  <li><code> HoriOrientPosition    </code></li>
- *  <li><code> HoriOrientRelation    </code></li>
- *  <li><code> HyperLinkName         </code></li>
- *  <li><code> HyperLinkTarget       </code></li>
- *  <li><code> HyperLinkURL          </code></li>
- *  <li><code> LeftBorder            </code></li>
- *  <li><code> LeftMargin            </code></li>
- *  <li><code> Opaque                </code></li>
- *  <li><code> PageToggle            </code></li>
- *  <li><code> PositionProtected     </code></li>
- *  <li><code> Print                 </code></li>
- *  <li><code> RelativeHeight        </code></li>
- *  <li><code> RelativeWidth         </code></li>
- *  <li><code> RightBorder           </code></li>
- *  <li><code> RightMargin           </code></li>
- *  <li><code> ServerMap             </code></li>
- *  <li><code> ShadowFormat          </code></li>
- *  <li><code> Size                  </code></li>
- *  <li><code> SizeProtected         </code></li>
- *  <li><code> SizeRelative          </code></li>
- *  <li><code> SizeType              </code></li>
- *  <li><code> Surround              </code></li>
- *  <li><code> SurroundAnchoronly    </code></li>
- *  <li><code> TextColumns           </code></li>
- *  <li><code> TopBorder             </code></li>
- *  <li><code> TopMargin             </code></li>
- *  <li><code> TransparentBackground </code></li>
- *  <li><code> VertOrient            </code></li>
- *  <li><code> VertOrientPosition    </code></li>
- *  <li><code> VertOrientRelation    </code></li>
- *  <li><code> Width                 </code></li>
+ *  <li><code> CLSID</code></li>
+ *  <li><code> Model</code></li>
+ *  <li><code> Component</code></li>
  * </ul> <p>
  * Properties testing is automated by <code>lib.MultiPropertyTest</code>.
  * @see com.sun.star.text.TextEmbeddedObject
  */
 public class _TextEmbeddedObject extends MultiPropertyTest {
 
-}  // finish class _TextEmbeddedObject
+    /**
+     * This property can't be set, as soon as the object is inserted
+     * so the set method will be skipped.
+     */
+    public void _CLSID() {
+        boolean result = false;
 
+        try {
+            String clsid = (String) oObj.getPropertyValue("CLSID");
+            log.println("Getting " + clsid);
+            log.println(
+                    "According to the idl-description this property can't be set as soon as the Object is inserted in the document, so setting will be skipped");
+            result=true;
+        } catch (com.sun.star.beans.UnknownPropertyException e) {
+            log.println("Exception while getting Property 'CLSID' " +
+                        e.getMessage());
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            log.println("Exception while getting Property 'CLSID' " +
+                        e.getMessage());
+        }
+
+        tRes.tested("CLSID", result);
+    }
+} // finish class _TextEmbeddedObject
