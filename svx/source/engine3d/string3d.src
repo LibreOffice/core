@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 20:21:44 $
+ *  last change: $Author: kz $ $Date: 2001-08-30 20:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text [ italian ] = "Incolla oggetti" ;
     Text [ portuguese_brazilian ] = "Colar objeto(s)" ;
     Text [ portuguese ] = "Inserir objecto(s)" ;
-    Text [ finnish ] = "Lisää objekti(t)" ;
+    Text [ finnish ] = "Lis?? objekti(t)" ;
     Text [ danish ] = "Indsæt objekt(er)" ;
     Text [ french ] = "Insérer le(s) objet(s)" ;
     Text [ swedish ] = "Infoga objekt" ;
@@ -142,7 +142,7 @@ String RID_SVX_3D_UNDO_SEGMENTS
     Text[ turkish ] = "Parça sayýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número de segmentos";
-    Text[ finnish ] = "Osioiden määrä";
+    Text[ finnish ] = "Osioiden m??r?";
 };
 String RID_SVX_3D_UNDO_DEEPTH
 {
@@ -246,7 +246,7 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ turkish ] = "3B nesneyi döndür";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rodar un objeto 3D";
-    Text[ finnish ] = "Kierrä 3D-objektia";
+    Text[ finnish ] = "Kierr? 3D-objektia";
 };
 String RID_SVX_3D_UNDO_EXTRUDE
 {
@@ -354,9 +354,10 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ turkish ] = "3B öznitelikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos en 3D";
-    Text[ finnish ] = "3D-määritteet";
+    Text[ finnish ] = "3D-m??ritteet";
 };
  // ********************************************************************** EOF
+
 
 
 
