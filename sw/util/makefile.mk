@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2001-01-23 12:13:55 $
+#   last change: $Author: kz $ $Date: 2001-01-24 09:24:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -240,7 +240,8 @@ SHL2OBJS= \
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
 
 .IF "$(OS)"!="LINUX"
-SHL2OBJS+= atrfrm.obj      \
+SHL2OBJS+= \
+            $(SLO)$/atrfrm.obj      \
             $(SLO)$/fmtatr2.obj
 .ENDIF
 
@@ -251,82 +252,6 @@ SHL2OBJS +=  $(SOLARLIBDIR)$/autorec.o
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 SHL2BASE=	0x1e000000
 
-
-# rem ===== hier wird die Mega Dll gebaut ==========================
-.IF "$(make_xl)" != ""
-
-.IF "$(GUI)"=="WNT"
-LINKFLAGS=$(LINKFLAGS) /FORCE:MULTIPLE /ENTRY:DLLEntryPoint@12
-.ENDIF
-
-.IF "$(GUI)"=="OS2"
-LIBFLAGS=$(LIBFLAGS) /P4096
-.ENDIF
-
-LIB5TARGET= $(SLB)$/xl.lib
-LIB5FILES=	$(SLB)$/$(TARGET).lib		\
-            $(SOLARLIBDIR)$/xtools.lib	\
-            $(SOLARLIBDIR)$/xsv.lib		\
-            $(SOLARLIBDIR)$/xsvtool.lib	\
-            $(SOLARLIBDIR)$/xsb.lib		\
-            $(SOLARLIBDIR)$/xso2.lib		\
-            $(SOLARLIBDIR)$/xgo.lib		\
-            $(SOLARLIBDIR)$/xsj.lib		\
-            $(SOLARLIBDIR)$/xsfx.lib		\
-            $(SOLARLIBDIR)$/xdg.lib		\
-            $(SOLARLIBDIR)$/xsvx.lib
-
-LIB6TARGET=	$(LB)$/xapp.lib
-LIB6FILES=	$(SOLARLIBDIR)$/xsfxapp.obj	\
-            $(SOLARLIBDIR)$/xsvapp.obj	\
-            $(SOLARLIBDIR)$/xsvmain.obj	\
-            $(SOLARLIBDIR)$/xword2.obj	\
-            $(SOLARLIBDIR)$/xplugapp.obj	\
-            $(OBJ)$/appctor.obj
-
-SHL3TARGET= xl$(UPD)$(DLLPOSTFIX)
-SHL3IMPLIB= _xl
-SHL3LIBS=   $(SLB)$/xl.lib
-
-.IF "$(GUI)"=="WNT"
-SHL3STDLIBS=svmem.lib\
-            comdlg32.lib advapi32.lib shell32.lib gdi32.lib \
-            ole32.lib uuid.lib oleaut32.lib comctl32.lib winspool.lib
-.ELSE
-SHL3STDLIBS=svmem.lib\
-            $(L)$/mail.lib
-.ENDIF
-
-SHL3STDLIBS+= \
-            go.lib \
-            docmgr.lib sj.lib thread.lib inetdll.lib ipc.lib
-
-SHL3DEPN=   \
-    $(SLB)$/core1.lib\
-    $(SLB)$/core2.lib\
-    $(SLB)$/filter.lib\
-    $(SLB)$/ui1.lib\
-    $(SLB)$/ui2.lib
-
-.IF "$(GUI)"!="WNT"
-SHL3DEPN+=   \
-    $(L)$/mail.lib
-.ENDIF
-
-SHL3OBJS=\
-            $(SOLARLIBDIR)$/xsvdll.obj $(SLO)$/app.obj
-
-SHL3RES=    $(SOLARRESDIR)$/svsrc.res
-SHL3DEF=    $(MISC)$/$(SHL3TARGET).def
-SHL3BASE=	0x1c000000
-
-DEF3NAME=   $(SHL3TARGET)
-DEF3DEPN=   $(MISC)$/$(SHL3TARGET).flt
-DEFLIB3NAME =xl
-DEF3DES     =offmgr app-interface
-
-.ENDIF
-# rem ===== hier wird die Mega Dll gebaut  (ENDE) ===================
 
 .IF "$(GUI)"=="WNT"
 do_build+= \
@@ -354,74 +279,6 @@ $(MISCX)$/$(SHL2TARGET).flt:
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
 
-
-# ------------------------------------------------------------------
-# Windows
-# ------------------------------------------------------------------
-
-
-
-
-# ------------------------------------------------------------------
-# OS/2
-# ------------------------------------------------------------------
-
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL2TARGET).def:  makefile.mk
-    @echo ================================================================
-    @echo building $@
-    @echo ----------------------------------------------------------------
-.IF "$(COM)"!="WTC"
-    echo  LIBRARY		INITINSTANCE TERMINSTANCE			>$@
-    echo  DESCRIPTION   'SwDLL'                            >>$@
-    echo  PROTMODE										   >>$@
-        @echo CODE        LOADONCALL 			              >>$@
-    @echo DATA		  PRELOAD MULTIPLE NONSHARED					  >>$@
-        @echo EXPORTS                                              >>$@
-.IF "$(COM)"!="ICC"
-    @echo _CreateSdDrawDocShellDll @2                              >>$@
-    @echo _CreateSdGraphicDocShellDll @3                           >>$@
-    @echo _CreateObjSdDrawDocShellDll @4                           >>$@
-    @echo _CreateObjSdGraphicDocShellDll @5                        >>$@
-    @echo _InitSdDll @6                                            >>$@
-    @echo _DeInitSdDll @7                                          >>$@
-    @echo _component_getImplementationEnvironment @7				>>$@
-    @echo _component_writeInfo @8									>>$@
-    @echo _component_getFactory @9								>>$@
-.ELSE
-    @echo   CreateSwDocShellDll @2 	                           >>$@
-    @echo   CreateSwWebDocShellDll @3                            >>$@
-    @echo   CreateSwGlobalDocShellDll @4                            >>$@
-    @echo   CreateObjSwDocShellDll @5                         >>$@
-    @echo   CreateObjSwWebDocShellDll @6                         >>$@
-    @echo   CreateObjSwGlobalDocShellDll @7                         >>$@
-    @echo   InitSwDll @8                                          >>$@
-    @echo   DeInitSwDll @9                                        >>$@
-    @echo _component_getImplementationEnvironment @10				>>$@
-    @echo _component_writeInfo @11									>>$@
-    @echo _component_getFactory @12								>>$@
-.ENDIF
-.ELSE
-        @echo option DESCRIPTION 'SwDLL'                            >$@
-        @echo name $(BIN)$/$(SHL2TARGET).dll                         >>$@
-    @echo CreateSwDocShellDll_ @2      >>temp.def
-    @echo CreateSwGlobalDocShellDll_ @2      >>temp.def
-    @echo CreateSwWebDocShellDll_ @3   >>temp.def
-    @echo CreateObjSwDocShellDll_ @4   >>temp.def
-    @echo CreateObjSwGlobalDocShellDll_ @4   >>temp.def
-    @echo CreateObjSwWebDocShellDll_ @5   >>temp.def
-    @echo InitSwDll_ @6                    >>temp.def
-    @echo DeInitSwDll_ @7                  >>temp.def
-    @echo _component_getImplementationEnvironment @10				>>$@
-    @echo _component_writeInfo @11									>>$@
-    @echo _component_getFactory @12								>>$@
-    @gawk -f s:\util\exp.awk temp.def				>>$@
-    del temp.def
-.ENDIF
-.ENDIF
-
 # ------------------------------------------------------------------
 # Windows NT
 # ------------------------------------------------------------------
@@ -446,26 +303,6 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
     @echo   component_getImplementationEnvironment @50				>>$@
     @echo   component_writeInfo @51									>>$@
     @echo   component_getFactory @52								>>$@
-
-.ENDIF
-
-.IF "$(GUI)" == "MAC"
-
-$(MISC)$/$(SHL2TARGET).def:  makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo   CreateSwDocShellDll                             > $@
-    @echo   CreateSwWebDocShellDll                            >> $@
-    @echo   CreateSwGlobalDocShellDll                             >> $@
-    @echo   CreateObjSwDocShellDll                          >> $@
-    @echo   CreateObjSwWebDocShellDll                          >> $@
-    @echo   CreateObjSwGlobalDocShellDll                        >> $@
-    @echo   InitSwDll                                         >> $@
-    @echo   DeInitSwDll                                       >> $@
-    @echo   component_getImplementationEnvironment0				>>$@
-    @echo   component_writeInfo									>>$@
-    @echo   component_getFactory								>>$@
-
 
 .ENDIF
 
