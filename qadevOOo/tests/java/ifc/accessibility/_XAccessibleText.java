@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:22 $
+ *  last change:$Date: 2003-02-13 15:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,14 @@
 package ifc.accessibility;
 
 import drafts.com.sun.star.accessibility.XAccessibleText;
+import drafts.com.sun.star.accessibility.XAccessibleComponent;
 import lib.MultiMethodTest;
 import lib.StatusException;
 import lib.Status;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
+import com.sun.star.uno.UnoRuntime;
 import drafts.com.sun.star.accessibility.AccessibleTextType;
 
 /**
@@ -109,6 +111,7 @@ public class _XAccessibleText extends MultiMethodTest {
         "drafts.com.sun.star.accessibility.XAccessibleText" ;
 
     public XAccessibleText oObj = null;
+    protected com.sun.star.awt.Rectangle bounds = null;
 
     // temporary while accessibility package is in drafts.com.sun.star
     protected String getTestedClassName() {
@@ -126,8 +129,6 @@ public class _XAccessibleText extends MultiMethodTest {
         text = (String)tEnv.getObjRelation("XAccessibleText.Text");
         if (text == null) {
             text = oObj.getText();
-//            throw new StatusException(Status.failed(
-//                "Couldn't get relation 'XAccessibleText.Text'"));
         }
         if (text.length() == 0) {
             throw new StatusException(Status.failed(
@@ -135,6 +136,12 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         editOnly = (String)tEnv.getObjRelation("EditOnly");
+
+        XAccessibleComponent component = (XAccessibleComponent)
+            UnoRuntime.queryInterface(
+                XAccessibleComponent.class, tEnv.getTestObject());
+
+        bounds = component.getBounds();
 
         log.println("Text is '" + text + "'");
     }
@@ -364,11 +371,25 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.println("getCharacterBounds(chCount-1)");
-            chBounds = oObj.getCharacterBounds(chCount-1);
-            res &= chBounds != null;
-            log.println("rect: " + chBounds.X + ", " + chBounds.Y + ", " +
-                chBounds.Width + ", " + chBounds.Height);
+            for ( int i = 0; i < chCount ; i++ ) {
+                log.println("getCharacterBounds("+i+")");
+                chBounds = oObj.getCharacterBounds(i);
+                boolean localres = true;
+                localres = chBounds.X >= 0;
+                localres &= chBounds.Y >= 0;
+                localres &= chBounds.X + chBounds.Width <= bounds.Width;
+                localres &= chBounds.X + chBounds.Width > 0;
+                localres &= chBounds.Y + chBounds.Height <= bounds.Height;
+                localres &= chBounds.Y + chBounds.Height > 0;
+                if (! localres) {
+                    log.println("Character bounds outside component");
+                    log.println("Character rect: " + chBounds.X + ", " +
+                        chBounds.Y + ", " + chBounds.Width + ", " + chBounds.Height);
+                    log.println("Component rect: " + bounds.X + ", " + bounds.Y + ", " +
+                        bounds.Width + ", " + bounds.Height);
+                    res &= localres;
+                }
+            }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Unexpected exception");
             e.printStackTrace(log);
@@ -404,7 +425,7 @@ public class _XAccessibleText extends MultiMethodTest {
      * </ul>
      */
     public void _getIndexAtPoint() {
-        requiredMethod("getCharacterBounds()");
+        //requiredMethod("getCharacterBounds()");
 
         boolean res = true;
         log.print("getIndexAtPoint(-1, -1):");
@@ -413,11 +434,29 @@ public class _XAccessibleText extends MultiMethodTest {
         log.println(index);
         res &= index == -1;
 
-        pt = new Point(chBounds.X , chBounds.Y );
-        log.print("getIndexAtPoint(" + pt.X + ", " + pt.Y + "):");
-        index = oObj.getIndexAtPoint(pt);
-        log.println(index);
-        res &= index == (chCount - 1);
+        for ( int i = 0; i < chCount ; i++ )
+        {
+            Rectangle aRect = null;
+            String text="empty";
+            try {
+                aRect = oObj.getCharacterBounds( i );
+                text = oObj.getTextAtIndex(i,(short)1);
+            } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+
+            }
+            int x = aRect.X+aRect.Width/2-1;
+            int y = bounds.Height/2;
+            Point aPoint = new Point( x,y);
+            int nIndex = oObj.getIndexAtPoint( aPoint );
+            if ( nIndex != i )
+            {
+              log.println("## Method didn't work for Point ("+x+","+y+")");
+              log.println("Expected Index "+i);
+              log.println("Gained Index: "+nIndex);
+              log.println("CharacterAtIndex: "+text);
+              res &= false;
+            }
+        }
 
         tRes.tested("getIndexAtPoint()", res);
     }
