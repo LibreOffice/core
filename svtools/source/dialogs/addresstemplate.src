@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:13:00 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ japanese ] = "±ÄÞÚ½’ ¿°½";
         Text[ korean ] = "ÁÖ¼Ò·Ï ¼Ò½º";
         Text[ chinese_simplified ] = "Í¨Ñ¶²¾Ô´";
-        Text[ chinese_traditional ] = "³q°T¿ý·½";
+        Text[ chinese_traditional ] = "³q°T¿ý¨Ó·½";
         Text[ turkish ] = "Address Book Source";
         Text[ arabic ] = "ãÕÏÑ ÏÝÊÑ ÇáÚäÇæíä";
     };
@@ -129,7 +129,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ japanese ] = "ÃÞ°À¿°½";
         Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º";
         Text[ chinese_simplified ] = "Êý¾ÝÔ´";
-        Text[ chinese_traditional ] = "¸ê®Æ·½";
+        Text[ chinese_traditional ] = "¸ê®Æ¨Ó·½";
         Text[ turkish ] = "Datasource";
         Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
     };
@@ -794,7 +794,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ japanese ] = "ÒÓ";
     Text[ korean ] = "¸Þ¸ð";
     Text[ chinese_simplified ] = "±¸×¢";
-    Text[ chinese_traditional ] = "³Æª`";
+    Text[ chinese_traditional ] = "³Æµù";
     Text[ turkish ] = "Note";
     Text[ arabic ] = "ãáÇÍÙÉ";
 };
