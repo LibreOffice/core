@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-12 14:23:47 $
+ *  last change: $Author: mib $ $Date: 2001-11-26 11:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,16 +228,20 @@ public:
             ParamMap &rParamMap);
     virtual ~XMLTextFrameParam_Impl();
 };
+
 TYPEINIT1( XMLTextFrameParam_Impl, SvXMLImportContext );
+
 XMLTextFrameParam_Impl::~XMLTextFrameParam_Impl()
 {
 }
-XMLTextFrameParam_Impl::XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& rLName,
-            const ::com::sun::star::uno::Reference<
+
+XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
+        SvXMLImport& rImport, sal_uInt16 nPrfx,
+          const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            sal_uInt16 nType,
-            ParamMap &rParamMap):
+        sal_uInt16 nType,
+        ParamMap &rParamMap):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     OUString sName, sValue;
@@ -250,13 +254,18 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16
 
         OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        if ( XML_NAMESPACE_DRAW == nPrefix && IsXMLToken(aLocalName, XML_VALUE) )
+        if ( XML_NAMESPACE_DRAW == nPrefix )
         {
-            sValue = rValue;
-            bFoundValue=sal_True;
+               if( IsXMLToken(aLocalName, XML_VALUE) )
+            {
+                sValue = rValue;
+                bFoundValue=sal_True;
+            }
+            else if( IsXMLToken(aLocalName, XML_NAME) )
+            {
+                sName = rValue;
+            }
         }
-        else if ( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken(aLocalName, XML_NAME) )
-            sName = rValue;
     }
     if (sName.getLength() && bFoundValue )
         rParamMap[sName] = sValue;
