@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-29 20:10:22 $
+ *  last change: $Author: sj $ $Date: 2002-09-05 10:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6700,6 +6700,39 @@
         </prop>
         <prop oor:name="Data">
             <value>2,pdf_Portable_Document_Format,com.sun.star.text.TextDocument,com.sun.star.comp.PDF.PDFFilter,524354,,0,,com.sun.star.comp.PDF.PDFDialog</value>
+        </prop>
+    </node>
+    <node oor:name="writer_web_pdf_Export" oor:op="replace">
+        <prop oor:name="Installed">
+            <value>true</value>
+        </prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="Data">
+            <value>2,pdf_Portable_Document_Format,com.sun.star.text.WebDocument,com.sun.star.comp.PDF.PDFFilter,524354,,0,,com.sun.star.comp.PDF.PDFDialog</value>
+        </prop>
+    </node>
+    <node oor:name="writer_globaldocument_pdf_Export" oor:op="replace">
+        <prop oor:name="Installed">
+            <value>true</value>
+        </prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="Data">
+            <value>2,pdf_Portable_Document_Format,com.sun.star.text.GlobalDocument,com.sun.star.comp.PDF.PDFFilter,524354,,0,,com.sun.star.comp.PDF.PDFDialog</value>
+        </prop>
+    </node>
+    <node oor:name="math_pdf_Export" oor:op="replace">
+        <prop oor:name="Installed">
+            <value>true</value>
+        </prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PDF - Portable Document Format</value>
+        </prop>
+        <prop oor:name="Data">
+            <value>2,pdf_Portable_Document_Format,com.sun.star.formula.FormulaProperties,com.sun.star.comp.PDF.PDFFilter,524354,,0,,com.sun.star.comp.PDF.PDFDialog</value>
         </prop>
     </node>
   </node>
