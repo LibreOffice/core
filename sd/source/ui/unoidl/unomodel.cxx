@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:42:50 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1927,7 +1927,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
 
                 ::sd::ClientView* pView = new ::sd::ClientView( pDocShell, pOut, NULL );
-                Rectangle               aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
+                Rectangle               aVisArea( Point(), pDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind )->GetSize() );
                 Region                  aRegion( aVisArea );
                 Point                   aOrigin;
 
