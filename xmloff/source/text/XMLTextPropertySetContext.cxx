@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-09 17:12:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,12 @@ XMLTextPropertySetContext::XMLTextPropertySetContext(
                  SvXMLImport& rImport, sal_uInt16 nPrfx,
                  const OUString& rLName,
                  const Reference< xml::sax::XAttributeList > & xAttrList,
+                 sal_uInt32 nFamily,
                  ::std::vector< XMLPropertyState > &rProps,
                  const UniReference < SvXMLImportPropertyMapper > &rMap,
                  OUString& rDCTextStyleName ) :
-    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, rProps, rMap ),
+    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
+                             rProps, rMap ),
     rDropCapTextStyleName( rDCTextStyleName )
 {
 }
