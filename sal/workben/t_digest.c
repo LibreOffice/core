@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_digest.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: mhu $ $Date: 2001-05-03 20:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -123,6 +124,69 @@ static const char *digest_bigout_SHA_0=
 static const char *digest_bigout_SHA_1=
     "34aa973cd4c4daa4f61eeb2bdbad27316534016f";
 
+
+static const char digest_key_HMAC_MD5_1[] =
+{
+    0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+    0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b, 0x0b,
+    0x00
+};
+static const char digest_key_HMAC_MD5_2[] =
+{
+    /* "Jefe" */
+    'J', 'e', 'f', 'e',
+    0x00
+};
+static const unsigned char digest_key_HMAC_MD5_3[] =
+{
+    0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA,
+    0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA,
+    0x00
+};
+static const char *digest_key_HMAC_MD5[] =
+{
+    (const char*)&digest_key_HMAC_MD5_1,
+    (const char*)&digest_key_HMAC_MD5_2, /* "Jefe", */
+    (const char*)&digest_key_HMAC_MD5_3,
+    NULL
+};
+
+static const unsigned char digest_in_HMAC_MD5_3[] =
+{
+    0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD,
+    0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD,
+    0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD,
+    0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD,
+    0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD,
+    0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD, 0xDD,
+    0xDD, 0xDD,
+    0x00
+};
+static const char *digest_in_HMAC_MD5[] =
+{
+    "Hi There",
+    "what do ya want for nothing?",
+    (const char*)&digest_in_HMAC_MD5_3,
+    NULL
+};
+
+static const char *digest_out_HMAC_MD5[] =
+{
+    "9294727a3638bb1c13f48ef8158bfc9d",
+    "750c783e6ab0b503eaa86e310a5db738",
+    "56be34521d144c88dbb8c733f0e8b3f6",
+    NULL
+};
+static const char *digest_out_HMAC_SHA1[] =
+{
+    /* unofficial, i.e. not verified */
+    "675b0b3a1b4ddf4e124872da6c2f632bfed957e9",
+    "effcdf6ae5eb2fa2d27416d5f184df9c259a7c79",
+    "d730594d167e35d5956fd8003d0db3d3f46dc7bb",
+    NULL
+};
+
+
 static char *pt (unsigned char *md, int length)
 {
     int i;
@@ -134,13 +198,9 @@ static char *pt (unsigned char *md, int length)
     return(buf);
 }
 
-#ifdef WIN32
-int __cdecl main (int argc, char **argv)
-#else
-int main (int argc, char **argv)
-#endif
+int SAL_CALL main (int argc, char **argv)
 {
-    const char **P,**R;
+    const char **P,**R, **Q;
     char *p;
     int i=1, err=0;
 
@@ -266,14 +326,87 @@ int main (int argc, char **argv)
     p=pt (md, RTL_DIGEST_LENGTH_SHA1);
     if (strcmp (p, *R))
     {
-        printf("error calculating SHA-0 on '%s'\n",p);
+        printf("error calculating SHA-1 on '%s'\n",p);
         printf("got %s instead of %s\n",p,*R);
         err++;
     }
     else
         printf("test (SHA-1) n ok\n");
 
-    exit(err);
-    return(0);
+
+    P=digest_in_HMAC_MD5;
+    Q=digest_key_HMAC_MD5;
+    R=digest_out_HMAC_MD5;
+    Digest = rtl_digest_createHMAC_MD5();
+    i = 1;
+    while (*P)
+    {
+        rtl_digest_initHMAC_MD5 (Digest, *Q, strlen(*Q));
+        rtl_digest_updateHMAC_MD5 (Digest, *P, strlen(*P));
+        rtl_digest_getHMAC_MD5 (Digest, md, sizeof(md));
+
+        p=pt (md, RTL_DIGEST_LENGTH_HMAC_MD5);
+        if (strcmp (p, *R))
+        {
+            printf("error calculating HMAC-MD5 on '%s'\n",*P);
+            printf("got %s instead of %s\n",p,*R);
+            err++;
+        }
+        else
+            printf("test (HMAC-MD5) %d ok\n",i);
+        i++;
+        R++;
+        P++;
+        Q++;
+    }
+    rtl_digest_destroyHMAC_MD5 (Digest);
+
+
+    P=digest_in_HMAC_MD5;
+    Q=digest_key_HMAC_MD5;
+    R=digest_out_HMAC_SHA1;
+    Digest = rtl_digest_createHMAC_SHA1();
+    i = 1;
+    while (*P)
+    {
+        rtl_digest_initHMAC_SHA1 (Digest, *Q, strlen(*Q));
+        rtl_digest_updateHMAC_SHA1 (Digest, *P, strlen(*P));
+        rtl_digest_getHMAC_SHA1 (Digest, md, sizeof(md));
+
+        p=pt (md, RTL_DIGEST_LENGTH_HMAC_SHA1);
+        if (strcmp (p, *R))
+        {
+            printf("error calculating HMAC-SHA-1 on '%s'\n",*P);
+            printf("got %s instead of %s\n",p,*R);
+            err++;
+        }
+        else
+            printf("test (HMAC-SHA-1) %d ok\n",i);
+        i++;
+        P++;
+        Q++;
+        R++;
+    }
+    rtl_digest_destroyHMAC_SHA1 (Digest);
+
+
+    P=digest_in_HMAC_MD5;
+    Q=digest_key_HMAC_MD5;
+    rtl_digest_PBKDF2 (
+        md, RTL_DIGEST_LENGTH_MD5, /* [out] derived key     */
+        Q[1], strlen(Q[1]),        /* [in]  password        */
+        P[1], strlen(P[1]),        /* [in]  salt            */
+        1000);                     /* [in]  iteration count */
+
+    p=pt (md, RTL_DIGEST_LENGTH_MD5);
+    if (strcmp (p, "6349e09cb6b8c1485cfa9780ee3264df"))
+    {
+        printf("error calculating PBKDF2 on '%s'\n", P[1]);
+        err++;
+    }
+    else
+        printf("test (PBKDF2) %d ok\n", 1);
+
+    return (err);
 }
 
