@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 16:51:48 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 20:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ USHORT SchAttribTabDlg::GetResId(ObjectType eObjectType)
         case OBJECTTYPE_DATA_ERRORS_Z:
                 nRet=TAB_LINE;
                 break;
-        case OBJECTTYPE_DATA_FUNCTION:
+        case OBJECTTYPE_DATA_CURVE:
                 nRet=TAB_LINE;
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
@@ -471,7 +471,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
-        case OBJECTTYPE_DATA_FUNCTION:
+        case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_STOCK_RANGE://ATTR_LINE
             AddTabPage(RID_SVXPAGE_LINE, SvxLineTabPage::Create, NULL);
             break;

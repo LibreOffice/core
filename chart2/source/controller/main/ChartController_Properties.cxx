@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-12 21:49:13 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 20:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ private:
                     break;
             case OBJECTTYPE_DATA_ERRORS_Z:
                     break;
-            case OBJECTTYPE_DATA_FUNCTION:
+            case OBJECTTYPE_DATA_CURVE:
                     break;
             case OBJECTTYPE_DATA_STOCK_RANGE:
                     break;
