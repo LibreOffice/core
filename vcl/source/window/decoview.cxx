@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:05:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,9 @@
 #ifndef _SV_DECOVIEW_HXX
 #include <decoview.hxx>
 #endif
-
-
+#ifndef _SV_WINDOW_HXX
+#include <window.hxx>
+#endif
 
 // =======================================================================
 
@@ -828,7 +829,7 @@ void DecorationView::DrawHighlightFrame( const Rectangle& rRect,
 // =======================================================================
 
 static void ImplDrawDPILineRect( OutputDevice* pDev, Rectangle& rRect,
-                                 const Color* pColor )
+                                 const Color* pColor, BOOL bRound = FALSE )
 {
     long nLineWidth = pDev->ImplGetDPIX()/300;
     long nLineHeight = pDev->ImplGetDPIY()/300;
@@ -843,7 +844,15 @@ static void ImplDrawDPILineRect( OutputDevice* pDev, Rectangle& rRect,
         {
             pDev->SetLineColor( *pColor );
             pDev->SetFillColor();
-            pDev->DrawRect( rRect );
+            if( bRound )
+            {
+                pDev->DrawLine( Point( rRect.Left()+1, rRect.Top()), Point( rRect.Right()-1, rRect.Top()) );
+                pDev->DrawLine( Point( rRect.Left()+1, rRect.Bottom()), Point( rRect.Right()-1, rRect.Bottom()) );
+                pDev->DrawLine( Point( rRect.Left(), rRect.Top()+1), Point( rRect.Left(), rRect.Bottom()-1) );
+                pDev->DrawLine( Point( rRect.Right(), rRect.Top()+1), Point( rRect.Right(), rRect.Bottom()-1) );
+            }
+            else
+                pDev->DrawRect( rRect );
         }
         else
         {
@@ -875,14 +884,33 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     BOOL bMenuStyle = nStyle & FRAME_DRAW_MENU;
     nStyle &= ~FRAME_DRAW_MENU;
 
+    Window *pWin = NULL;
+    if( pDev->GetOutDevType() == OUTDEV_WINDOW )
+        pWin = (Window*) pDev;
+
+    // UseFlatBorders disables 3D style for all frames except menus
+    // menus may use different border colors (eg on XP)
+    // normal frames will be drawn using the shadow color
+    // whereas window frame borders will use black
+    BOOL bFlatBorders = ( !bMenuStyle && rStyleSettings.GetUseFlatBorders() );
+
+    // no flat borders for standard VCL controls (ie formcontrols that keep their classic look)
+    // will not affect frame windows (like dropdowns)
+    if( pWin && pWin->GetType() == WINDOW_BORDERWINDOW && (pWin != pWin->ImplGetFrameWindow()) )
+        bFlatBorders = FALSE;
+
+    // no round corners for window frame borders
+    BOOL bRound = (bFlatBorders && !(nStyle & FRAME_DRAW_WINDOWBORDER));
+
     if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
-         (pDev->GetOutDevType() == OUTDEV_PRINTER) )
+         (pDev->GetOutDevType() == OUTDEV_PRINTER) ||
+         bFlatBorders )
         nStyle |= FRAME_DRAW_MONO;
 
     if ( nStyle & FRAME_DRAW_NODRAW )
     {
         if ( nStyle & FRAME_DRAW_MONO )
-            ImplDrawDPILineRect( pDev, rRect, NULL );
+            ImplDrawDPILineRect( pDev, rRect, NULL, bRound );
         else
         {
             USHORT nFrameStyle = nStyle & FRAME_DRAW_STYLE;
@@ -915,10 +943,12 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     {
         if ( nStyle & FRAME_DRAW_MONO )
         {
-            Color aColor( COL_BLACK );
-            if( pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+            // flat borders will be drawn in the shadow color
+            // but flat window borders will use black
+            Color aColor( bRound ? rStyleSettings.GetShadowColor() : COL_BLACK );
+            if( aColor.IsDark() && pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
                 aColor = Color( COL_WHITE );
-            ImplDrawDPILineRect( pDev, rRect, &aColor );
+            ImplDrawDPILineRect( pDev, rRect, &aColor, bRound );
         }
         else
         {
@@ -968,17 +998,28 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                 {
                     if ( nFrameStyle == FRAME_DRAW_DOUBLEIN )
                     {
-                        pDev->ImplDraw2ColorFrame( rRect,
-                                                   rStyleSettings.GetShadowColor(),
-                                                   rStyleSettings.GetLightColor() );
+                        if( bFlatBorders ) // no 3d effect
+                            pDev->ImplDraw2ColorFrame( rRect,
+                                                    rStyleSettings.GetShadowColor(),
+                                                    rStyleSettings.GetShadowColor() );
+                        else
+                            pDev->ImplDraw2ColorFrame( rRect,
+                                                    rStyleSettings.GetShadowColor(),
+                                                    rStyleSettings.GetLightColor() );
                     }
                     else
                     {
-                        pDev->ImplDraw2ColorFrame( rRect,
-                                                   bMenuStyle ?
-                                                   rStyleSettings.GetMenuBorderColor() :
+                        if( bMenuStyle )
+                            pDev->ImplDraw2ColorFrame( rRect,
+                                                   rStyleSettings.GetMenuBorderColor(),
+                                                   rStyleSettings.GetDarkShadowColor() );
+                        else
+                            pDev->ImplDraw2ColorFrame( rRect,
+                                                   bFlatBorders ? // no 3d effect
+                                                   rStyleSettings.GetDarkShadowColor() :
                                                    rStyleSettings.GetLightBorderColor(),
                                                    rStyleSettings.GetDarkShadowColor() );
+
                     }
 
                     rRect.Left()++;
@@ -986,11 +1027,17 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                     rRect.Right()--;
                     rRect.Bottom()--;
 
+                    BOOL bDrawn = TRUE;
                     if ( nFrameStyle == FRAME_DRAW_DOUBLEIN )
                     {
-                        pDev->ImplDraw2ColorFrame( rRect,
-                                                   rStyleSettings.GetDarkShadowColor(),
-                                                   rStyleSettings.GetLightBorderColor() );
+                        if( bFlatBorders ) // no 3d effect
+                            pDev->ImplDraw2ColorFrame( rRect,
+                                                    rStyleSettings.GetFaceColor(),
+                                                    rStyleSettings.GetFaceColor() );
+                        else
+                            pDev->ImplDraw2ColorFrame( rRect,
+                                                    rStyleSettings.GetDarkShadowColor(),
+                                                    rStyleSettings.GetLightBorderColor() );
                     }
                     else
                     {
@@ -999,12 +1046,16 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
                             pDev->ImplDraw2ColorFrame( rRect,
                                                     rStyleSettings.GetLightColor(),
                                                     rStyleSettings.GetShadowColor() );
+                        else
+                            bDrawn = FALSE;
                     }
-
-                    rRect.Left()++;
-                    rRect.Top()++;
-                    rRect.Right()--;
-                    rRect.Bottom()--;
+                    if( bDrawn )
+                    {
+                        rRect.Left()++;
+                        rRect.Top()++;
+                        rRect.Right()--;
+                        rRect.Bottom()--;
+                    }
                 }
             }
         }
