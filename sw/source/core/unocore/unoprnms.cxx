@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 09:36:46 $
+ *  last change: $Author: os $ $Date: 2000-11-29 11:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,3 +610,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_FIELDS                              (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_DATE_TIME_VALUE                     (MAP_CHAR_LEN("DateTimeValue"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_ON                               (MAP_CHAR_LEN("IsOn"));
 const SwPropNameLen __FAR_DATA UNO_NAME_Z_ORDER                             (MAP_CHAR_LEN("ZOrder"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_CONTENT_SECTION                     (MAP_CHAR_LEN("ContentSection"));
+const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_SECTION                      (MAP_CHAR_LEN("HeaderSection"));
+

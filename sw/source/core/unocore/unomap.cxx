@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 11:13:17 $
+ *  last change: $Author: os $ $Date: 2000-11-29 11:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,6 +584,11 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_PREFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_START_BRACKET}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PropertyAttribute::MAYBEVOID, MID_END_BRACKET}, \
         { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIZE),            RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_EMPHASIS},
+
+#define _BASE_INDEX_PROPERTIES_\
+        { SW_PROP_NAME(UNO_NAME_TITLE), WID_IDX_TITLE,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},\
+        { SW_PROP_NAME(UNO_NAME_CONTENT_SECTION), WID_IDX_CONTENT_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::READONLY,     0},\
+        { SW_PROP_NAME(UNO_NAME_HEADER_SECTION), WID_IDX_HEADER_SECTION,  &::getCppuType((uno::Reference<text::XTextSection>*)0)  , PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,     0},\
 
 
 const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nPropertyId)
@@ -1399,7 +1404,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTOXIndexMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_TITLE                                ),   WID_IDX_TITLE                                ,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},
+                    _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_CHAPTER               ),   WID_CREATE_FROM_CHAPTER                 ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED                         ),   WID_PROTECTED                           ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_USE_ALPHABETICAL_SEPARATORS       ),   WID_USE_ALPHABETICAL_SEPARATORS         ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
@@ -1439,7 +1444,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTOXContentMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_TITLE                                ), WID_IDX_TITLE                                  ,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},
+                    _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NAME(UNO_NAME_LEVEL                             ), WID_LEVEL                               ,  &::getCppuType((const sal_Int16*)0)  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_MARKS                 ), WID_CREATE_FROM_MARKS                   ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_OUTLINE               ), WID_CREATE_FROM_OUTLINE                 ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
@@ -1478,7 +1483,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTOXUserMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_TITLE                                ), WID_IDX_TITLE                                  ,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},
+                    _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_MARKS                 ), WID_CREATE_FROM_MARKS                   ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                 //  { SW_PROP_NAME(UNO_NAME_PARAGRAPH_STYLE_NAMES             ), WID_PARAGRAPH_STYLE_NAMES               ,  &::getCppuType((uno::Reference<container::XIndexReplace>*)0)  , PROPERTY_NONE,0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_CHAPTER               ), WID_CREATE_FROM_CHAPTER                 ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
@@ -1523,7 +1528,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTOXTablesMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_TITLE                                ), WID_IDX_TITLE                                  ,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},
+                    _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_CHAPTER               ), WID_CREATE_FROM_CHAPTER                 ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_LABELS                ), WID_CREATE_FROM_LABELS                  ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED                         ), WID_PROTECTED                           ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
@@ -1548,7 +1553,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTOXObjectsMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_TITLE                                ), WID_IDX_TITLE                                  ,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},
+                    _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_CHAPTER               ), WID_CREATE_FROM_CHAPTER                 ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED                         ), WID_PROTECTED                           ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_USE_ALPHABETICAL_SEPARATORS       ), WID_USE_ALPHABETICAL_SEPARATORS         ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
@@ -1576,7 +1581,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aTOXIllustrationsMap_Impl[] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_TITLE                                ), WID_IDX_TITLE                                  ,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},
+                    _BASE_INDEX_PROPERTIES_
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_CHAPTER               ), WID_CREATE_FROM_CHAPTER                 ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_CREATE_FROM_LABELS                ), WID_CREATE_FROM_LABELS                  ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_PROTECTED                         ), WID_PROTECTED                           ,  &::getBooleanCppuType()  , PROPERTY_NONE,     0},

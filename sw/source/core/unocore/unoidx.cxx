@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 12:00:41 $
+ *  last change: $Author: os $ $Date: 2000-11-29 11:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,30 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
         sal_Bool bRet = sal_False;
         switch(pMap->nWID)
         {
+            case WID_IDX_CONTENT_SECTION:
+            case WID_IDX_HEADER_SECTION :
+                bBOOL = sal_False;
+                if(WID_IDX_CONTENT_SECTION == pMap->nWID)
+                {
+                    Reference <XTextSection> xContentSect = SwXTextSections::GetObject( *GetFmt() );
+                    aRet <<= xContentSect;
+                }
+                else
+                {
+                    SwSections aSectArr;
+                    GetFmt()->GetChildSections( aSectArr, SORTSECT_NOT, FALSE);
+                    for(USHORT i = 0; i < aSectArr.Count(); i++)
+                    {
+                        SwSection* pSect = aSectArr[i];
+                        if(pSect->GetType() == TOX_HEADER_SECTION)
+                        {
+                            Reference <XTextSection> xHeaderSect = SwXTextSections::GetObject( *pSect->GetFmt() );
+                            aRet <<= xHeaderSect;
+                            break;
+                        }
+                    }
+                }
+            break;
             case WID_IDX_TITLE  :
             {
                 bBOOL = sal_False;
