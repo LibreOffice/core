@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-04-29 14:07:14 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 10:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/unoshcol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "sdwindow.hxx"
 #include <vcl/svapp.hxx>
@@ -442,6 +443,115 @@ void SAL_CALL
         sDescription = OUString (
             RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
     return sDescription;
+}
+
+/** Return selection state of specified child
+*/
+sal_Bool
+    AccessibleDrawDocumentView::implIsSelected( sal_Int32 nAccessibleChildIndex )
+    throw (uno::RuntimeException)
+{
+    const vos::OGuard                           aSolarGuard( Application::GetSolarMutex() );
+    uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
+    sal_Bool                                    bRet = sal_False;
+
+    OSL_ENSURE( 0 <= nAccessibleChildIndex, "AccessibleDrawDocumentView::implIsSelected: invalid index!" );
+
+    if( xSel.is() && ( 0 <= nAccessibleChildIndex ) )
+    {
+        uno::Any                            aAny( xSel->getSelection() );
+        uno::Reference< drawing::XShapes >  xShapes;
+
+        aAny >>= xShapes;
+
+        if( xShapes.is() )
+        {
+            AccessibleShape* pAcc = AccessibleShape::getImplementation( getAccessibleChild( nAccessibleChildIndex ) );
+
+            if( pAcc )
+            {
+                uno::Reference< drawing::XShape > xShape( pAcc->GetXShape() );
+
+                if( xShape.is() )
+                {
+                    for( sal_Int32 i = 0, nCount = xShapes->getCount(); ( i < nCount ) && !bRet; ++i )
+                        if( xShapes->getByIndex( i ) == xShape )
+                            bRet = sal_True;
+                }
+            }
+        }
+    }
+
+    return( bRet );
+}
+
+/** Set selection state of specified child
+*/
+void
+    AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    const vos::OGuard                           aSolarGuard( Application::GetSolarMutex() );
+    uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
+
+    if( xSel.is() )
+    {
+        uno::Any aAny;
+
+        if( ACCESSIBLE_SELECTION_CHILD_ALL == nAccessibleChildIndex )
+        {
+            if( !bSelect )
+                xSel->select( aAny );
+            else
+            {
+                uno::Reference< drawing::XShapes > xShapes( new SvxShapeCollection() );
+
+                for( sal_Int32 i = 0, nChildCount = getAccessibleChildCount(); i < nChildCount; ++i )
+                {
+                    AccessibleShape* pAcc = AccessibleShape::getImplementation( getAccessibleChild( i ) );
+
+                    if( pAcc && pAcc->GetXShape().is() )
+                        xShapes->add( pAcc->GetXShape() );
+                }
+
+                if( xShapes->getCount() )
+                {
+                    aAny <<= xShapes;
+                    xSel->select( aAny );
+                }
+            }
+        }
+        else if( nAccessibleChildIndex >= 0 )
+        {
+            AccessibleShape* pAcc = AccessibleShape::getImplementation( getAccessibleChild( nAccessibleChildIndex ) );
+
+            if( pAcc )
+            {
+                uno::Reference< drawing::XShape > xShape( pAcc->GetXShape() );
+
+                if( xShape.is() )
+                {
+                    uno::Reference< drawing::XShapes >  xShapes;
+                    sal_Bool                            bFound = sal_False;
+
+                    aAny = xSel->getSelection();
+                    aAny >>= xShapes;
+
+                    for( sal_Int32 i = 0, nCount = xShapes->getCount(); ( i < nCount ) && !bFound; ++i )
+                        if( xShapes->getByIndex( i ) == xShape )
+                            bFound = sal_True;
+
+                    if( !bFound && bSelect )
+                        xShapes->add( xShape );
+                    else if( bFound && !bSelect )
+                        xShapes->remove( xShape );
+
+                    aAny <<= xShapes;
+                    xSel->select( aAny );
+                }
+            }
+        }
+    }
 }
 
 } // end of namespace accessibility

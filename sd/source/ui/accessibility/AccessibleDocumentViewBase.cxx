@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 14:43:57 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 10:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,8 +326,9 @@ uno::Any SAL_CALL
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
             static_cast<XAccessibleComponent*>(this),
+            static_cast<XAccessibleSelection*>(this),
             static_cast<lang::XEventListener*>(
-                static_cast<frame::XFrameActionListener*>(this)),
+            static_cast<frame::XFrameActionListener*>(this)),
             static_cast<frame::XFrameActionListener*>(this),
             static_cast<beans::XPropertyChangeListener*>(this),
             static_cast<awt::XWindowListener*>(this));
@@ -634,6 +635,38 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
         sDescription = OUString (
             RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
     return sDescription;
+}
+
+//=====  methods from AccessibleSelectionBase ==================================================
+
+// return the member maMutex;
+::osl::Mutex&
+    AccessibleDocumentViewBase::implGetMutex()
+{
+    return( maMutex );
+}
+
+// return ourself as context in default case
+uno::Reference< XAccessibleContext >
+    AccessibleDocumentViewBase::implGetAccessibleContext()
+    throw (uno::RuntimeException)
+{
+    return( this );
+}
+
+// return sal_False in default case
+sal_Bool
+    AccessibleDocumentViewBase::implIsSelected( sal_Int32 nAccessibleChildIndex )
+    throw (uno::RuntimeException)
+{
+    return( sal_False );
+}
+
+// return nothing in default case
+void
+    AccessibleDocumentViewBase::implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
 }
 
 } // end of namespace accessibility

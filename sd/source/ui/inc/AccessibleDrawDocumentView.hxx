@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 08:32:27 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 09:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #include "AccessibleDocumentViewBase.hxx"
 #endif
 
-
 namespace accessibility {
 
 
@@ -79,8 +78,8 @@ namespace accessibility {
     Please see the documentation of the base class for further
     explanations of the individual methods.
 */
-class AccessibleDrawDocumentView
-    : public AccessibleDocumentViewBase
+class AccessibleDrawDocumentView :
+    public AccessibleDocumentViewBase
 {
 public:
     //=====  internal  ========================================================
@@ -143,6 +142,15 @@ public:
         propertyChange (const ::com::sun::star::beans::PropertyChangeEvent& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
+protected:
+
+    virtual sal_Bool
+        implIsSelected( sal_Int32 nAccessibleChildIndex )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void
+        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     /** This object manages the shapes of the represented draw page.  It is

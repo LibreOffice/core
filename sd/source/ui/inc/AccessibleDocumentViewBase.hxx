@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 08:36:52 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 09:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_COMPONENT_BASE_HXX
 #include <svx/AccessibleComponentBase.hxx>
 #endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SELECTION_BASE_HXX
+#include <svx/AccessibleSelectionBase.hxx>
+#endif
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_VIEW_FORWARDER_HXX
 #include "AccessibleViewForwarder.hxx"
 #endif
@@ -111,6 +114,7 @@ namespace accessibility {
 class AccessibleDocumentViewBase
     :   public AccessibleContextBase,
         public AccessibleComponentBase,
+        public AccessibleSelectionBase,
         public IAccessibleViewForwarderListener,
         public ::com::sun::star::beans::XPropertyChangeListener,
         public ::com::sun::star::frame::XFrameActionListener,
@@ -252,6 +256,27 @@ public:
     virtual void SAL_CALL
         windowHidden (const ::com::sun::star::lang::EventObject& e)
         throw (::com::sun::star::uno::RuntimeException);
+
+protected:
+
+    // return the member maMutex;
+    virtual ::osl::Mutex&
+        implGetMutex();
+
+    // return ourself as context in default case
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+        implGetAccessibleContext()
+        throw ( ::com::sun::star::uno::RuntimeException );
+
+    // return sal_False in default case
+    virtual sal_Bool
+        implIsSelected( sal_Int32 nAccessibleChildIndex )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // return nothing in default case
+    virtual void
+        implSelect( sal_Int32 nAccessibleChildIndex, sal_Bool bSelect )
+        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     /// The core window that is made accessible.
