@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:31:11 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #include <vector>
 
 class SalDisplay;
-class SalFrame;
+class X11SalFrame;
 
 namespace vcl_sal {
 
@@ -227,7 +227,7 @@ public:
     /*
      *  sets window title
      */
-    virtual void setWMName( SalFrame* pFrame, const String& rWMName ) const;
+    virtual void setWMName( X11SalFrame* pFrame, const String& rWMName ) const;
 
     /*
      *  maximizes frame
@@ -235,11 +235,11 @@ public:
      *  to get the original position and size
      *  use maximizeFrame( pFrame, false, false )
      */
-    virtual void maximizeFrame( SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
+    virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
     /*
      *  start/stop fullscreen mode on a frame
      */
-    virtual void showFullScreen( SalFrame* pFrame, bool bFullScreen ) const;
+    virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const;
 
     /*
      *  tells whether fullscreen mode is supported by WM
@@ -249,13 +249,13 @@ public:
     /*
      *  shade/unshade frame
      */
-    virtual void shade( SalFrame* pFrame, bool bToShaded ) const;
+    virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const;
 
     /*
      *  set hints what decoration is needed;
      *  must be called before showing the frame
      */
-    virtual void setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, SalFrame* pTransientFrame = NULL ) const;
+    virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = NULL ) const;
 
     /*
      *  tells whether there is WM support for splash screens
@@ -265,7 +265,7 @@ public:
     /*
      *  enables always on top or equivalent if possible
      */
-    virtual void enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const;
+    virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const;
 
     /*
      *  tells whether enableAlwaysOnTop actually works with this WM
@@ -275,7 +275,7 @@ public:
     /*
      *  handle WM messages (especially WM state changes)
      */
-    virtual int handlePropertyNotify( SalFrame* pFrame, XPropertyEvent* pEvent ) const;
+    virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const;
 
     /*
      *  gets a WM atom
@@ -305,7 +305,7 @@ public:
      *  changes the transient hint of a window to reference frame
      *  if reference frame is NULL the root window is used instead
      */
-    void changeReferenceFrame( SalFrame* pFrame, SalFrame* pReferenceFrame ) const;
+    void changeReferenceFrame( X11SalFrame* pFrame, X11SalFrame* pReferenceFrame ) const;
 };
 
 } // namespace
