@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:50:52 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,9 @@
 #include <ieeefp.h> // finite
 #include <alloca.h>
 #endif
-#include <stdlib.h>
-#include <math.h> // for isnan
-#include <string.h> // strcpy
+#include <cstdlib>
+#include <cmath> // for isnan
+#include <cstring>
 
 namespace psp {
 
@@ -643,19 +643,19 @@ int getValueOfDouble( char* pBuffer, double f, int nPrecision )
 
     if( ! finite( f ) )
     {
-        strcpy( pBuffer, "Inf" );
+        strncpy( pBuffer, "Inf", 3 );
         return 3;
     }
 
     if( isnan( f ) )
     {
-        strcpy( pBuffer, "NaN" );
+        strncpy( pBuffer, "NaN", 3 );
         return 3;
     }
 
     if( f == 0.0 )
     {
-        strcpy( pBuffer, "0" );
+        strncpy( pBuffer, "0", 3 );
         return 1;
     }
 
