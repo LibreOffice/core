@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:52:31 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@
     }; \
     StringList [ polish ] = \
     { \
-            < "I" ; Default ; > ; \
+            < "ORAZ" ; Default ; > ; \
         < "LUB" ; Default ; > ; \
     }; \
     StringList [ chinese_traditional ] = \
@@ -401,7 +401,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ chinese_traditional ] = "±¶®|";
         Text[ arabic ] = "ÇÑÊÈÇØ";
         Text[ greek ] = "Óıíäåóç";
-        Text[ korean ] = "¿¬»êÀÚ";
+        Text[ korean ] = "¸µÅ©";
         Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
     };
@@ -496,7 +496,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ chinese_traditional ] = "=;<>;<;<=;>;>=;µ¥©ó;¤£µ¥©ó;ªÅ¯Ê;¤£ªÅ¯Ê";
         Text[ arabic ] = "=;<>;<;<=;>;>=;ãËá;áíÓ ãËá;ÎÇáí;áíÓ ÎÇáíÇğ";
         Text[ greek ] = "=;<>;<;<=;>;>=;üğùò;ü÷é üğùò;êåíü;ü÷é êåíü";
-        Text[ korean ] = "=;<>;<;<=;>;>=;°°À½;°°Áö ¾ÊÀ½;³Î;³ÎÀÌ ¾Æ´Ô";
+        Text[ korean ] = "=;<>;<;<=;>;>=;°°À½;°°Áö ¾ÊÀ½;ºó;ºñ¾îÀÖÁö¾ÊÀ½";
         Text[ turkish ] = "=;<>;<;<=;>;>=;gibi;gibi değil;boş;boş değil";
         Text[ language_user1 ] = " ";
     };
