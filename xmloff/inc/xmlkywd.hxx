@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-28 09:00:37 $
+ *  last change: $Author: dvo $ $Date: 2001-03-29 14:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@ XML_CONSTASCII_ACTION( sXML_archive, "archive" );
 XML_CONSTASCII_ACTION( sXML_arcsin, "arcsin" );
 XML_CONSTASCII_ACTION( sXML_arctan, "arctan" );
 XML_CONSTASCII_ACTION( sXML_area, "area" );
+XML_CONSTASCII_ACTION( sXML_area_circle, "area-circle" );
+XML_CONSTASCII_ACTION( sXML_area_polygon, "area-polygon" );
+XML_CONSTASCII_ACTION( sXML_area_rectangle, "area-rectangle" );
 XML_CONSTASCII_ACTION( sXML_article, "article" );
 XML_CONSTASCII_ACTION( sXML_as_char, "as-char" );
 XML_CONSTASCII_ACTION( sXML_ascending, "ascending");
@@ -879,6 +882,7 @@ XML_CONSTASCII_ACTION( sXML_illustration_index_entry_template, "illustration-ind
 XML_CONSTASCII_ACTION( sXML_illustration_index_source, "illustration-index-source" );
 XML_CONSTASCII_ACTION( sXML_image, "image" );
 XML_CONSTASCII_ACTION( sXML_image_count, "image-count" );
+XML_CONSTASCII_ACTION( sXML_image_map, "image-map" );
 XML_CONSTASCII_ACTION( sXML_implies, "implies" );
 XML_CONSTASCII_ACTION( sXML_in, "in");
 XML_CONSTASCII_ACTION( sXML_in_range, "in-range");
@@ -1133,6 +1137,7 @@ XML_CONSTASCII_ACTION( sXML_new, "new" );
 XML_CONSTASCII_ACTION( sXML_next, "next" );
 XML_CONSTASCII_ACTION( sXML_next_page, "next-page" );
 XML_CONSTASCII_ACTION( sXML_next_style_name, "next-style-name" );
+XML_CONSTASCII_ACTION( sXML_nohref, "nohref" );
 XML_CONSTASCII_ACTION( sXML_no_limit, "no-limit" );
 XML_CONSTASCII_ACTION( sXML_no_wrap, "no-wrap" );
 XML_CONSTASCII_ACTION( sXML_noempty, "!empty");

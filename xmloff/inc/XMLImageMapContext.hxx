@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLImageMapExport.hxx,v $
+ *  $RCSfile: XMLImageMapContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2001-03-29 14:40:26 $
  *
@@ -59,96 +59,60 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
-#define _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
+#ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
+#define _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
+
+#ifndef _XMLOFF_XMLICTXT_HXX
+#include "xmlictxt.hxx"
+#endif
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
 namespace com { namespace sun { namespace star {
-    namespace uno { template<class X> class Reference; }
-    namespace beans { class XPropertySet; }
     namespace container { class XIndexContainer; }
+    namespace beans { class XPropertySet; }
+    namespace xml { namespace sax { class XAttributeList; } }
 } } }
-class SvXMLExport;
 
 
-/**
- * Export an ImageMap as defined by service com.sun.star.image.ImageMap to XML.
- */
-class XMLImageMapExport
+class XMLImageMapContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sBoundary;
-    const ::rtl::OUString sCenter;
-    const ::rtl::OUString sDescription;
     const ::rtl::OUString sImageMap;
-    const ::rtl::OUString sIsActive;
-    const ::rtl::OUString sName;
-    const ::rtl::OUString sPolygon;
-    const ::rtl::OUString sRadius;
-    const ::rtl::OUString sTarget;
-    const ::rtl::OUString sURL;
 
-    SvXMLExport& rExport;
+    /// the image map to be imported
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XIndexContainer> xImageMap;
 
-    sal_Bool bWhiteSpace;   /// use whitespace between image map elements?
+    /// the property set from which to get and where eventually to set the
+    /// image map
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> xPropertySet;
 
 public:
-    XMLImageMapExport(SvXMLExport& rExport);
+    TYPEINFO();
 
-    ~XMLImageMapExport();
-
-    /**
-     * Get the ImageMap object from the "ImageMap" property and subsequently
-     * export the map (if present).
-     */
-    void Export(
-        /// the property set containing the ImageMap property
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
-    /**
-     * Export an ImageMap (XIndexContainer).
-     */
-    void Export(
-        /// the container containing the image map elements
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XIndexContainer> & rContainer);
-
-protected:
-
-    /**
-     * Export a single, named map entry.
-     * (as given by com.sun.star.image.ImageMapObject)
-     * Calls methods for specific image map entries.
-     */
-    void ExportMapEntry(
-        const ::com::sun::star::uno::Reference<
+    XMLImageMapContext(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropertySet);
 
-    /**
-     * Export the specifics of a rectangular image map entry.
-     * To be called by ExportMapEntry.
-     */
-    void ExportRectangle(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+    virtual ~XMLImageMapContext();
 
-    /**
-     * Export the specifics of a circular image map entry.
-     * To be called by ExportMapEntry.
-     */
-    void ExportCircle(
+    virtual SvXMLImportContext *CreateChildContext(
+        USHORT nPrefix,
+        const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+            ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    /**
-     * Export the specifics of a polygonal image map entry;
-     * To be called by ExportMapEntry.
-     */
-    void ExportPolygon(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropertySet);
+    virtual void EndElement();
 };
 
 #endif
