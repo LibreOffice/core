@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:04:48 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 10:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,10 +412,9 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
                     }
                 }
             }
+            aUniqueName = aUser;
+            aUniqueName += String::CreateFromInt32( nUserIndex );
         }
-
-        aUniqueName = aUser;
-        aUniqueName += String::CreateFromInt32( nUserIndex );
     }
 
     return aUniqueName;
