@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 10:58:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:47:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,6 @@
 
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
-#endif
-
-#ifndef _MULTIPRO_HXX
-#include "multipro.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
@@ -284,10 +280,11 @@
 #define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); }
 
 
-extern SfxType0 aSfxVoidItem_Impl;
+//extern SfxType0 aSfxVoidItem_Impl;
 
 #define FmFormShell
-#include <svxslots.hxx>
+#include "svxslots.hxx"
+
 #ifndef _SVX_SVXIDS_HRC
 #include <svxids.hrc>
 #endif
@@ -461,12 +458,13 @@ FmDesignModeChangedHint::~FmDesignModeChangedHint()
 #endif
 
 //========================================================================
-const sal_uInt32 FM_UI_FEATURE_SHOW_DATABASEBAR     = 0x00000001;
-const sal_uInt32 FM_UI_FEATURE_SHOW_FIELD           = 0x00000002;
-const sal_uInt32 FM_UI_FEATURE_SHOW_PROPERTIES      = 0x00000004;
-const sal_uInt32 FM_UI_FEATURE_SHOW_EXPLORER            = 0x00000008;
-const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERBAR       = 0x00000010;
-const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERNAVIGATOR = 0x00000020;
+const sal_uInt32 FM_UI_FEATURE_SHOW_DATABASEBAR      = 0x00000001;
+const sal_uInt32 FM_UI_FEATURE_SHOW_FIELD            = 0x00000002;
+const sal_uInt32 FM_UI_FEATURE_SHOW_PROPERTIES       = 0x00000004;
+const sal_uInt32 FM_UI_FEATURE_SHOW_EXPLORER         = 0x00000008;
+const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERBAR        = 0x00000010;
+const sal_uInt32 FM_UI_FEATURE_SHOW_FILTERNAVIGATOR  = 0x00000020;
+const sal_uInt32 FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR = 0x00000040;
 
 SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
 {
@@ -477,6 +475,10 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
     SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_NAVIGATION|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_READONLYDOC,
         SVX_RES(RID_SVXTBX_FORM_FILTER),
         FM_UI_FEATURE_SHOW_FILTERBAR );
+
+    SFX_FEATURED_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_READONLYDOC,
+        SVX_RES( RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES ),
+        FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR );
 
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_FM_ADD_FIELD, FM_UI_FEATURE_SHOW_FIELD);
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_FM_SHOW_PROPERTIES, FM_UI_FEATURE_SHOW_PROPERTIES);
@@ -649,6 +651,10 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
     else if ((nFeature & FM_UI_FEATURE_SHOW_EXPLORER) == FM_UI_FEATURE_SHOW_EXPLORER)
     {
         bResult = m_bDesignMode; // OJ #101593# && m_pFormView && m_bHasForms;
+    }
+    else if ( ( nFeature & FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR ) == FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR )
+    {
+        bResult = m_pImpl->IsActiveControl( true );
     }
     return bResult;
 }
@@ -1541,4 +1547,32 @@ void FmFormShell::Deactivate(sal_Bool bMDI)
     GetImpl()->viewDeactivated( m_pFormView, sal_False );
 }
 
+//------------------------------------------------------------------------
+void FmFormShell::ExecuteTextAttribute( SfxRequest& _rReq )
+{
+    m_pImpl->ExecuteTextAttribute( _rReq );
+}
 
+//------------------------------------------------------------------------
+void FmFormShell::GetTextAttributeState( SfxItemSet& _rSet )
+{
+    m_pImpl->GetTextAttributeState( _rSet );
+}
+
+//------------------------------------------------------------------------
+bool FmFormShell::IsActiveControl() const
+{
+    return m_pImpl->IsActiveControl();
+}
+
+//------------------------------------------------------------------------
+void FmFormShell::ForgetActiveControl()
+{
+    m_pImpl->ForgetActiveControl();
+}
+
+//------------------------------------------------------------------------
+void FmFormShell::SetControlActivationHandler( const Link& _rHdl )
+{
+    m_pImpl->SetControlActivationHandler( _rHdl );
+}
