@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 13:20:13 $
+ *  last change: $Author: cmc $ $Date: 2002-08-28 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,8 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
         pDataStream->Read( &pPic->rgbrc[i], bVer67 ? 2 : 4);
     *pDataStream >> pPic->dxaOrigin;
     *pDataStream >> pPic->dyaOrigin;
+    if (!bVer67)
+        pDataStream->SeekRel(2);  //cProps
 }
 
 bool SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
@@ -779,8 +781,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         else if((0x64 == aPic.MFP.mm) || (0x66 == aPic.MFP.mm))
         {
             // verlinkte Grafik im Escher-Objekt
-            pDataStream->SeekRel( 2 );
-
             SdrObject* pObject = 0;
             WW8PicDesc aPD( aPic );
             String aGrName;
@@ -947,7 +947,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     if (pRecord)
                         SetAttributesAtGrfNode(pRecord,pRet,0);
                     // mehrfaches Auftreten gleicher Grafik-Namen vermeiden
-                    aGrfNameGenerator.SetUniqueGraphName(pRet,aObjectName);
+                    if (pObject->HasSetName())
+                        pRet->SetName(pObject->GetName());
+                    else
+                        aGrfNameGenerator.SetUniqueGraphName(pRet,aObjectName);
 
                     // Zeiger auf neues Objekt ermitteln und Z-Order-Liste
                     // entsprechend korrigieren (oder Eintrag loeschen)
