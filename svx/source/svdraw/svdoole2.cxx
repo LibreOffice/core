@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-12 10:06:03 $
+ *  last change: $Author: ka $ $Date: 2001-04-20 13:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,22 +384,17 @@ void SdrOle2Obj::Disconnect()
 
     if (pModel && aName.Len() )
     {
-        GetObjRef();    // try to load inplace object
         if ( ppObjRef->Is() )
-        {
             (*ppObjRef)->DoClose();
 
-            SvPersist* pPers=pModel->GetPersist();
+        SvPersist* pPers = pModel->GetPersist();
 
-            if (pPers)
-            {
-                SvInfoObject* pInfo = pPers->Find(aName);
+        if (pPers)
+        {
+            SvInfoObject* pInfo = pPers->Find(aName);
 
-                if (pInfo)
-                {
-                    pInfo->SetDeleted(TRUE);
-                }
-            }
+            if (pInfo)
+                pInfo->SetDeleted(TRUE);
         }
 
         // Aus Cache entfernen

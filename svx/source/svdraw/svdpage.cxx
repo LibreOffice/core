@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-12 10:06:59 $
+ *  last change: $Author: ka $ $Date: 2001-04-20 13:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
+#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
@@ -105,8 +108,6 @@
 #else
 #include "unopage.hxx"
 #endif
-
-#define CONVERT_STARIMAGE_OLE_OBJECT_TO_GRAPHIC 1
 
 using namespace ::com::sun::star;
 
@@ -1077,62 +1078,96 @@ void SdrObjList::Save(SvStream& rOut) const
 void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
 {
     Clear();
-    if (rIn.GetError()!=0) return;
-    FASTBOOL bEnde=FALSE;
+
+    if (rIn.GetError()!=0)
+        return;
+
     SdrInsertReason aReason(SDRREASON_STREAMING);
-    while (rIn.GetError()==0 && !rIn.IsEof() && !bEnde) {
+    FASTBOOL        bEnde=FALSE;
+
+    while( rIn.GetError()==0 && !rIn.IsEof() && !bEnde )
+    {
         SdrObjIOHeaderLookAhead aHead(rIn,STREAM_READ);
-        if (!aHead.IsEnde()) {
+
+        if (!aHead.IsEnde())
+        {
             SdrObject* pObj=SdrObjFactory::MakeNewObject(aHead.nInventor,aHead.nIdentifier,&rPage);
-            if (pObj!=NULL) {
-                rIn>>*pObj;
-#ifdef CONVERT_STARIMAGE_OLE_OBJECT_TO_GRAPHIC
-                if( ( pObj->GetObjIdentifier() == OBJ_OLE2 ) &&
-                    ( pObj->GetObjInventor() == SdrInventor ) &&
-                    ( ( SdrOle2Obj*) pObj )->GetProgName() == String( RTL_CONSTASCII_USTRINGPARAM( "StarImage" ) ) )
+
+            if( pObj!=NULL )
+            {
+                rIn >> *pObj;
+
+                if( ( pObj->GetObjIdentifier() == OBJ_OLE2 ) && ( pObj->GetObjInventor() == SdrInventor ) )
                 {
-                    SotStorage*     pModelStorage = pModel->GetModelStorage();
-                    const String    aSimStorageName( ( (SdrOle2Obj*) pObj )->GetName() );
+                    // convert StarImage OLE objects to normal graphic objects
+                    SdrOle2Obj* pOLEObj = (SdrOle2Obj*) pObj;
+                    BOOL        bImageOLE = FALSE;
 
-                    if( pModelStorage && pModelStorage->IsStorage( aSimStorageName ) )
+                    if( pOLEObj->GetProgName() == String( RTL_CONSTASCII_USTRINGPARAM( "StarImage" ) ) )
+                        bImageOLE = TRUE;
+                    else if( pModel->GetPersist() )
                     {
-                        SotStorageRef xSimStorage( pModelStorage->OpenSotStorage( aSimStorageName ) );
+                        SvInfoObjectRef             xInfo( pModel->GetPersist()->Find( pOLEObj->GetName() ) );
+                        static const SvGlobalName   aSim30Name( SO3_SIM_CLASSID_30 );
+                        static const SvGlobalName   aSim40Name( SO3_SIM_CLASSID_40 );
+                        static const SvGlobalName   aSim50Name( SO3_SIM_CLASSID_50 );
 
-                        if( xSimStorage.Is() )
+                        if( xInfo.Is() &&
+                            ( xInfo->GetClassName() == aSim30Name ||
+                              xInfo->GetClassName() == aSim40Name ||
+                              xInfo->GetClassName() == aSim50Name ) )
                         {
-                            String aStmName( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument" ) );
+                            bImageOLE = TRUE;
+                        }
+                    }
 
-                            if( xSimStorage->IsStream( aStmName ) ||
-                                xSimStorage->IsStream( aStmName = String( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument 4.0" ) ) ) )
+                    if( bImageOLE && pOLEObj->GetName().Len() )
+                    {
+                        SotStorage*     pModelStorage = pModel->GetModelStorage();
+                        const String    aSimStorageName( pOLEObj->GetName() );
+
+                        if( pModelStorage && pModelStorage->IsStorage( aSimStorageName ) )
+                        {
+                            SotStorageRef xSimStorage( pModelStorage->OpenSotStorage( aSimStorageName ) );
+
+                            if( xSimStorage.Is() )
                             {
-                                SotStorageStreamRef xSimStm( xSimStorage->OpenSotStream( aStmName ) );
+                                String aStmName( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument" ) );
 
-                                if( xSimStm.Is() && !xSimStm->GetError() )
+                                if( xSimStorage->IsStream( aStmName ) ||
+                                    xSimStorage->IsStream( aStmName = String( RTL_CONSTASCII_USTRINGPARAM( "StarImageDocument 4.0" ) ) ) )
                                 {
-                                    Graphic aGraphic;
+                                    SotStorageStreamRef xSimStm( xSimStorage->OpenSotStream( aStmName ) );
 
-                                    xSimStm->SetBufferSize( 32768 );
-                                    xSimStm->SetKey( xSimStorage->GetKey() );
-                                    *xSimStm >> aGraphic;
-                                    xSimStm->SetBufferSize( 0 );
-
-                                    SdrGrafObj* pNewObj = (SdrGrafObj*) SdrObjFactory::MakeNewObject( SdrInventor, OBJ_GRAF, &rPage );
-
-                                    if( pNewObj )
+                                    if( xSimStm.Is() && !xSimStm->GetError() )
                                     {
-                                        pNewObj->SetGraphic( aGraphic );
-                                        pNewObj->SetLogicRect( pObj->GetLogicRect() );
-                                        delete pObj;
-                                        pObj = pNewObj;
+                                        Graphic aGraphic;
+
+                                        xSimStm->SetBufferSize( 32768 );
+                                        xSimStm->SetKey( xSimStorage->GetKey() );
+                                        *xSimStm >> aGraphic;
+                                        xSimStm->SetBufferSize( 0 );
+
+                                        SdrGrafObj* pNewObj = (SdrGrafObj*) SdrObjFactory::MakeNewObject( SdrInventor, OBJ_GRAF, &rPage );
+
+                                        if( pNewObj )
+                                        {
+                                            pNewObj->SetGraphic( aGraphic );
+                                            pNewObj->SetLogicRect( pObj->GetLogicRect() );
+                                            delete pObj;
+                                            pObj = pNewObj;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-#endif
+
                 InsertObject(pObj,CONTAINER_APPEND,&aReason);
-            } else { // aha, das wil keiner. Also ueberlesen.
+            }
+            else
+            { // aha, das wil keiner. Also ueberlesen.
 #ifdef SVX_LIGHT
                 if( aHead.nInventor != FmFormInventor )
                 {
@@ -1166,13 +1201,20 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
 #endif
                 aHead.SkipRecord();
             }
-        } else {
+        }
+        else
+        {
             bEnde=TRUE;
             aHead.SkipRecord(); // die Endemarke weglesen
         }
+
         SdrModel* pMd=pModel;
-        if (pMd==NULL) pMd=rPage.GetModel();
-        if (pMd!=NULL) pMd->DoProgress(rIn.Tell());
+
+        if (pMd==NULL)
+            pMd=rPage.GetModel();
+
+        if (pMd!=NULL)
+            pMd->DoProgress(rIn.Tell());
     }
 }
 
