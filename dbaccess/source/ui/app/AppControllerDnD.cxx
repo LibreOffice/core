@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:28:29 $
+ *  last change: $Author: hr $ $Date: 2004-08-05 13:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,7 +863,7 @@ void OApplicationController::getElements(ElementType _eType,::std::vector< ::rtl
 
         const ::rtl::OUString* pBegin = aSeq.getConstArray();
         const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
-        _rList.assign(pBegin,pEnd);
+        ::std::copy(pBegin,pEnd,::std::back_inserter(_rList));
     }
 }
 // -----------------------------------------------------------------------------
