@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoutl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: cl $ $Date: 2001-12-05 15:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,16 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         ClearPolygon();
     }
 
+    pTextObj = pObj;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
+{
     pTextObj = pObj;
 }
 
