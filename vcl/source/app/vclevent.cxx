@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclevent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:46:15 $
+ *  last change: $Author: ssa $ $Date: 2002-07-18 08:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,4 +75,22 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
         (*aIter).Call( pEvent );
         aIter++;
     }
+}
+
+BOOL VclEventListeners::Process( VclSimpleEvent* pEvent ) const
+{
+    BOOL bProcessed = FALSE;
+    // Copy the list, because this can be destroyed when calling a Link...
+    std::list<Link> aCopy( *this );
+    std::list<Link>::iterator aIter( aCopy.begin() );
+    while ( aIter != aCopy.end() )
+    {
+        if( (*aIter).Call( pEvent ) != 0 )
+        {
+            bProcessed = TRUE;
+            break;
+        }
+        aIter++;
+    }
+    return bProcessed;
 }

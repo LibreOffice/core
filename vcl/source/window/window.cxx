@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-16 08:58:52 $
+ *  last change: $Author: ssa $ $Date: 2002-07-18 08:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4857,6 +4857,9 @@ void Window::ImplCallEventListeners( ULONG nEvent, void* pData )
 {
     VclWindowEvent aEvent( this, nEvent, pData );
 
+    ImplSVData* pSVData = ImplGetSVData();
+    pSVData->mpApp->ImplCallEventListeners( &aEvent );
+
     if ( !maEventListeners.empty() )
         maEventListeners.Call( &aEvent );
 
@@ -8130,3 +8133,13 @@ BOOL Window::IsScrollable() const
     }
     return false;
 }
+
+BOOL Window::IsTopWindow() const
+{
+    // check for decorated frames
+    if( mbFrame && (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE)) )
+        return TRUE;
+    else
+        return FALSE;
+}
+

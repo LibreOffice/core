@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-17 09:43:42 $
+ *  last change: $Author: ssa $ $Date: 2002-07-18 08:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,6 +1084,17 @@ void Application::ImplCallEventListeners( ULONG nEvent, Window *pWin, void* pDat
 
 // -----------------------------------------------------------------------
 
+void Application::ImplCallEventListeners( VclWindowEvent* pEvent )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if ( pSVData->maAppData.mpEventListeners )
+        if ( !pSVData->maAppData.mpEventListeners->empty() )
+            pSVData->maAppData.mpEventListeners->Call( pEvent );
+}
+
+// -----------------------------------------------------------------------
+
 void Application::AddEventListener( const Link& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1099,6 +1110,41 @@ void Application::RemoveEventListener( const Link& rEventListener )
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpEventListeners )
         pSVData->maAppData.mpEventListeners->remove( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+void Application::AddKeyListener( const Link& rKeyListener )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( !pSVData->maAppData.mpKeyListeners )
+        pSVData->maAppData.mpKeyListeners = new VclEventListeners;
+    pSVData->maAppData.mpKeyListeners->push_back( rKeyListener );
+}
+
+// -----------------------------------------------------------------------
+
+void Application::RemoveKeyListener( const Link& rKeyListener )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->maAppData.mpKeyListeners )
+        pSVData->maAppData.mpKeyListeners->remove( rKeyListener );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
+{
+    // let listeners process the key event
+    VclWindowEvent aEvent( pWin, nEvent, (void *) pKeyEvent );
+
+    ImplSVData* pSVData = ImplGetSVData();
+    BOOL bProcessed = FALSE;
+
+    if ( pSVData->maAppData.mpKeyListeners )
+        if ( !pSVData->maAppData.mpKeyListeners->empty() )
+            bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
+
+    return bProcessed;
 }
 
 // -----------------------------------------------------------------------
@@ -1250,6 +1296,55 @@ Window* Application::GetFirstTopLevelWindow()
 Window* Application::GetNextTopLevelWindow( Window* pWindow )
 {
     return pWindow->mpFrameData->mpNextFrame;
+}
+
+// -----------------------------------------------------------------------
+
+long    Application::GetTopWindowCount()
+{
+    long nRet = 0;
+    ImplSVData* pSVData = ImplGetSVData();
+    Window *pWin = pSVData->maWinData.mpFirstFrame;
+    while( pWin )
+    {
+        if( pWin->IsTopWindow() )
+            nRet++;
+        pWin = pWin->mpFrameData->mpNextFrame;
+    }
+    return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+Window* Application::GetTopWindow( long nIndex )
+{
+    long nIdx = 0;
+    ImplSVData* pSVData = ImplGetSVData();
+    Window *pWin = pSVData->maWinData.mpFirstFrame;
+    while( pWin )
+    {
+        if( pWin->IsTopWindow() )
+            if( nIdx == nIndex )
+                return pWin;
+            else
+                nIdx++;
+        pWin = pWin->mpFrameData->mpNextFrame;
+    }
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+Window* Application::GetActiveTopWindow()
+{
+    Window *pWin = ImplGetSVData()->maWinData.mpFocusWin;
+    while( pWin )
+    {
+        if( pWin->IsTopWindow() )
+            return pWin;
+        pWin = pWin->mpParent;
+    }
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
