@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:18:08 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:12:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,7 @@ TARGETTYPE=CUI
 SCP_PRODUCT_TYPE=osl
 PARFILES= \
         module_draw.par              \
-        file_draw.par                \
-        configurationitem_draw.par
+        file_draw.par  
 
 .IF "$(GUI)"=="WNT"
 PARFILES += \
@@ -88,8 +87,7 @@ PARFILES += \
 ULFFILES= \
         module_draw.ulf              \
         registryitem_draw.ulf        \
-        folderitem_draw.ulf          \
-        configurationitem_draw.ulf
+        folderitem_draw.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
