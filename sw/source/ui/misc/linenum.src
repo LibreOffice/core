@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,10 +237,10 @@ TabPage TP_LINENUMBERING
         };
         stringlist [ swedish ] =
         {
-            < "Vänster" ; > ;
-            < "Höger" ; > ;
-            < "Inre" ; > ;
-            < "utanför" ; > ;
+            < "Till vänster" ; > ;
+            < "Till höger" ; > ;
+            < "Innanför" ; > ;
+            < "Utanför" ; > ;
         };
         stringlist [ danish ] =
         {
@@ -447,7 +447,7 @@ TabPage TP_LINENUMBERING
         Text [ English ] = "Rows" ;
         Text [ english_us ] = "lines" ;
         Text [ portuguese_brazilian ] = "Zeilen" ;
-        Text [ swedish ] = "Rader" ;
+        Text [ swedish ] = "rader" ;
         Text [ danish ] = "linjer" ;
         Text [ italian ] = "Righe" ;
         Text [ spanish ] = "Líneas" ;
@@ -533,7 +533,7 @@ TabPage TP_LINENUMBERING
          //        Disable = TRUE ;
         Text [ english_us ] = "Every" ;
         Text [ portuguese_brazilian ] = "Alle" ;
-        Text [ swedish ] = "A~lla" ;
+        Text [ swedish ] = "~Var" ;
         Text [ danish ] = "Alle" ;
         Text [ italian ] = "~Tutti" ;
         Text [ spanish ] = "Ca~da" ;
@@ -575,7 +575,7 @@ TabPage TP_LINENUMBERING
         Text [ English ] = "Rows" ;
         Text [ english_us ] = "Lines" ;
         Text [ portuguese_brazilian ] = "Zeilen" ;
-        Text [ swedish ] = "Rader" ;
+        Text [ swedish ] = "rad" ;
         Text [ danish ] = "linjer" ;
         Text [ italian ] = "Righe" ;
         Text [ spanish ] = "Líneas" ;
@@ -632,7 +632,7 @@ TabPage TP_LINENUMBERING
         Text [ danish ] = "Tomme rækker" ;
         Text [ italian ] = "~Righe vuote" ;
         Text [ spanish ] = "Líneas en ~blanco" ;
-        Text [ french ] = "~Renvois à la ligne" ;
+        Text [ french ] = "~Lignes inutilisées" ;
         Text [ dutch ] = "~Tussenregels" ;
         Text [ portuguese ] = "Linhas em ~branco" ;
         Text[ chinese_simplified ] = "¿ÕÐÐ";
@@ -680,6 +680,24 @@ TabPage TP_LINENUMBERING
         Text = "~Neustart am Seitenanfang";
         Text [ ENGLISH ] = "~Restart each new page";
         TabStop = TRUE;
+        Text[ english_us ] = "~Restart each new page";
+        Text[ portuguese ] = "~Restart each new page";
+        Text[ russian ] = "~Restart each new page";
+        Text[ greek ] = "~Restart each new page";
+        Text[ dutch ] = "~Restart each new page";
+        Text[ french ] = "~Restart each new page";
+        Text[ spanish ] = "~Restart each new page";
+        Text[ italian ] = "~Restart each new page";
+        Text[ danish ] = "~Restart each new page";
+        Text[ swedish ] = "~Restart each new page";
+        Text[ polish ] = "~Restart each new page";
+        Text[ portuguese_brazilian ] = "~Restart each new page";
+        Text[ japanese ] = "~Restart each new page";
+        Text[ korean ] = "~Restart each new page";
+        Text[ chinese_simplified ] = "~Restart each new page";
+        Text[ chinese_traditional ] = "~Restart each new page";
+        Text[ turkish ] = "~Restart each new page";
+        Text[ arabic ] = "~Restart each new page";
     };
     GroupBox GB_COUNT
     {
