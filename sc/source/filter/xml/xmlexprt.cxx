@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 08:35:44 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 09:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2012,33 +2012,6 @@ sal_Bool ScXMLExport::GetCellText (ScMyCell& rMyCell) const
     return sal_False;
 }
 
-sal_Int16 ScXMLExport::GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard)
-{
-    uno::Reference <util::XNumberFormatsSupplier> xNumberFormatsSupplier = GetNumberFormatsSupplier();
-    if (xNumberFormatsSupplier.is())
-    {
-        uno::Reference <util::XNumberFormats> xNumberFormats = xNumberFormatsSupplier->getNumberFormats();
-        if (xNumberFormats.is())
-        {
-            try
-            {
-                uno::Reference <beans::XPropertySet> xNumberPropertySet = xNumberFormats->getByKey(nNumberFormat);
-                uno::Any aIsStandardFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_STANDARDFORMAT)));
-                aIsStandardFormat >>= bIsStandard;
-                uno::Any aNumberFormat = xNumberPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)));
-                sal_Int16 nNumberFormat;
-                if ( aNumberFormat >>= nNumberFormat )
-                    return nNumberFormat;
-            }
-            catch ( uno::Exception& )
-            {
-                DBG_ERROR("Numberformat not found");
-            }
-        }
-    }
-    return 0;
-}
-
 OUString ScXMLExport::GetPrintRanges()
 {
     rtl::OUString sPrintRanges;
@@ -2116,7 +2089,8 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                     if (pFormulaCell->IsValue())
                     {
                         sal_Bool bIsStandard;
-                        GetCellType(aCell.nNumberFormat, bIsStandard);
+                        rtl::OUString sCurrency;
+                        pNumberFormatAttributesExportHelper->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
                         if (bIsStandard)
                         {
                             if (pDoc)
