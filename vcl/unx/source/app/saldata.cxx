@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cp $ $Date: 2002-05-31 14:45:00 $
+ *  last change: $Author: cp $ $Date: 2002-08-06 14:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include <vos/mutex.hxx>
 #endif
 
-#include <svunx.h>
 #include <prex.h>
 #include <X11/Xproto.h>
 #include <postx.h>
