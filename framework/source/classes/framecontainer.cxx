@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:27:02 $
+ *  last change: $Author: mba $ $Date: 2001-08-22 08:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,19 +205,6 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
         if( m_xActiveFrame == xFrame )
         {
             m_xActiveFrame = Reference< XFrame >();
-        }
-
-        // looking for zombies ... and deletion of it!
-        for( sal_uInt32 nIndex=0; nIndex<m_aContainer.size();  )
-        {
-            if( m_aContainer.at(nIndex)->getComponentWindow().is() == sal_False )
-            {
-                m_aContainer.erase( m_aContainer.begin() + nIndex );
-            }
-            else
-            {
-                ++nIndex;
-            }
         }
 
         // We don't need the write lock any longer ...
