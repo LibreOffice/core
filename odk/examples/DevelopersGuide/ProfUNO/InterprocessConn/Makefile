@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:49:43 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:13:00 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -80,8 +80,8 @@ $(EXAMPLE_NAME) : $(CLASSFILES)
 	@echo -----
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make ConnectionAwareClient.run
-	@echo make UrlResolver.run
+	@echo $(MAKE) ConnectionAwareClient.run
+	@echo $(MAKE) UrlResolver.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_APP_CLASS)/%.class

@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:49:55 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:13:15 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -120,8 +120,8 @@ ProUNOLifetimeExamples : $(OUT_BIN)/$(COMPONENT_NAME)$(EXE_EXT) $(OUT_COMP_CLASS
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make MyUnoObject.run
-	@echo make ProfUnoLifetime.runexe
+	@echo $(MAKE) MyUnoObject.run
+	@echo $(MAKE) ProfUnoLifetime.runexe
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
