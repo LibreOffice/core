@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderActivator.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-09 10:27:00 $
+ *  last change: $Author: sb $ $Date: 2001-02-09 12:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,33 @@ module com { module sun { module star { module ucb {
 interface XContentProviderManager;
 
 //============================================================================
+/** This interface should be implemented together with
+    <type scope="com::sun::star::ucb">XRemoteContentProviderAcceptor</type>
+    and allows for a lazy implementation of
+    <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>.
+ */
 [uik(F2686420-FDB7-11D4-A0370050-04526AAD),
     ident("XRemoteContentProviderActivator", 1.0)]
 interface XRemoteContentProviderActivator: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
+    /** Activate (i.e., register at the broker) the remote content providers
+        that until now have only been remembered by
+        <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>, but not registered.
+
+        @descr
+        This allows for
+        <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>
+        to be implemented in a layz fashion (remember the remote content
+        providers, but do not register them right away), which can increase
+        performance in certain situations.  But it is not required that an
+        implementation of
+        <type scope"com::sun::star::ucb">XRemoteContentProviderAcceptor</type>
+        uses this lazy strategy (and thus also implements this interface).
+
+        @return
+        the broker at which the remote content providers have been registered.
+     */
     XContentProviderManager activateRemoteContentProviders();
 };
 
