@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-05 21:20:36 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:53:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=sal
-TARGET=qa
+TARGET=qa_osl_socket
 
 ENABLE_EXCEPTIONS=TRUE
 
