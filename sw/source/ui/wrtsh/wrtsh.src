@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ String STR_DELBOOKMARK
     TEXT[ arabic ] = "ÍĞİ ÅÔÇÑÉ ãÑÌÚíÉ";
     TEXT[ dutch ] = "Tekstmarkering verwijderen";
     TEXT[ chinese_simplified ] = "É¾³ıÊéÇ©";
-    TEXT[ greek ] = "ÄéáãñáöŞ óåëéäïäåßêôç";
+    TEXT[ greek ] = "ÄéáãñáöŞ óçìáäéïı êåéìİíïõ";
     TEXT[ korean ] = "Ã¥ °¥ÇÇ »èÁ¦";
     TEXT[ turkish ] = "Metin işaretini sil";
     TEXT[ language_user1 ] = " ";
@@ -448,7 +448,7 @@ String STR_INSBOOKMARK
     TEXT[ arabic ] = "ÅÏÑÇÌ ÅÔÇÑÉ ãÑÌÚíÉ";
     TEXT[ dutch ] = "Tekstmarkering invoegen";
     TEXT[ chinese_simplified ] = "²åÈëÊéÇ©";
-    TEXT[ greek ] = "ÅéóáãùãŞ óåëéäïäåßêôç";
+    TEXT[ greek ] = "ÅéóáãùãŞ óçìáäéïı êåéìİíïõ";
     TEXT[ korean ] = "Ã¥ °¥ÇÇ »ğÀÔ";
     TEXT[ turkish ] = "Metin işareti ekle";
     TEXT[ language_user1 ] = " ";
@@ -555,7 +555,7 @@ String STR_TEXTTOTABLE_UNDO
     TEXT[ chinese_simplified ] = "ÎÄ×Ö×ª»»³É±í¸ñ";
     TEXT[ russian ] = "Ïğåîáğàçîâàòü Òåêñò -> Òàáëèöà";
     TEXT[ polish ] = "Konwertuj tekst na tabelê";
-    TEXT[ japanese ] = "Ã·½Ä->•\\‚Ö‚Ì•ÏŠ·";
+    TEXT[ japanese ] = "•¶‘‚ğ•\\‚É•ÏŠ·";
     TEXT[ chinese_traditional ] = "¤å¦rÂà´«¦¨ªí®æ";
     TEXT[ arabic ] = "ÊÍæíá äÕ -> ÌÏæá";
     TEXT[ dutch ] = "Tekst naar tabel converteren";
@@ -583,7 +583,7 @@ String STR_TABLETOTEXT_UNDO
     TEXT[ chinese_simplified ] = "±í¸ñ×ª»»³ÉÎÄ×Ö";
     TEXT[ russian ] = "Ïğåîáğàçîâàòü Òàáëèöà -> Òåêñò";
     TEXT[ polish ] = "Konwertuj tabelê na tekst";
-    TEXT[ japanese ] = "•\\->Ã·½Ä‚Ö‚Ì•ÏŠ·";
+    TEXT[ japanese ] = "•\\‚ğ•¶‘‚É•ÏŠ·";
     TEXT[ chinese_traditional ] = "ªí®æÂà´«¦¨¤å¦r";
     TEXT[ arabic ] = "ÊÍæíá ÇáÌÏæá Åáì äÕ";
     TEXT[ dutch ] = "Tabel naar tekst converteren";
@@ -820,7 +820,7 @@ String STR_INSERT_RULER
     Text [ portuguese ] = "Inserir régua" ;
     Text [ english_us ] = "Insert ruler" ;
     Text [ portuguese_brazilian ] = "Ruler einfügen" ;
-    Text [ swedish ] = "Infoga Ruler" ;
+    Text [ swedish ] = "Infoga linjal" ;
     Text [ danish ] = "Indsæt lineal" ;
     Text [ italian ] = "Inserisci ruler" ;
     Text [ spanish ] = "Insertar regla" ;
@@ -1314,7 +1314,7 @@ String STR_NUMORNONUM
     Text [ english_us ] = "Number On/Off" ;
     Text [ italian ] = "Numero on/off" ;
     Text [ spanish ] = "Número activado/desactivado" ;
-    Text [ french ] = "Numéro act./désact." ;
+    Text [ french ] = "(Dés)activer le numéro" ;
     Text [ dutch ] = "Nummer aan/uit" ;
     Text [ swedish ] = "Nummer på/av" ;
     Text [ danish ] = "Aktiver/deaktiver nummer" ;
@@ -1793,7 +1793,7 @@ String STR_DELGRF
     Text [ spanish ] = "Eliminar imagen" ;
     Text [ french ] = "Supprimer l'image" ;
     Text [ swedish ] = "Radera grafik" ;
-    Text [ danish ] = "Slet billede" ;
+    Text [ danish ] = "Slet grafik" ;
     Text [ portuguese ] = "Eliminar imagem" ;
     Text [ portuguese_brazilian ] = "Grafik löschen" ;
     Text[ chinese_simplified ] = "É¾³ıÍ¼ĞÎ";
