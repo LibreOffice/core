@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:10:38 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,19 +172,3 @@ void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& Pro
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
-Sequence< sal_Int8 > ZipPackageEntry::getUnoTunnelImplementationId( void )
-    throw (RuntimeException)
-{
-    static ::cppu::OImplementationId * pId = 0;
-    if (! pId)
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static ::cppu::OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
