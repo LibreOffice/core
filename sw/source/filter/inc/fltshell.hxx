@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-18 12:27:40 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 13:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ SV_DECL_PTRARR(SwFltControlStackEntries,SwFltStackEntryPtr,5,10)
 
 class SwFltControlStack : public SwFltControlStackEntries
 {
-    friend SwFltShell;
+    friend class SwFltShell;
 
     ULONG nFieldFlags;
     KeyCode aEmptyKeyCode; // fuer Bookmarks
@@ -250,7 +250,7 @@ public:
 
 class SwFltBookmark : public SfxPoolItem
 {
-friend class SwFltShell;    // darf aName und aVal uebersetzen
+    friend class SwFltShell;    // darf aName und aVal uebersetzen
     long nHandle;
     String aName;
     String aVal;
@@ -512,7 +512,7 @@ class SwFltShell
 //
     USHORT nPageDescOffset; // fuers update der pagedescs
     CharSet eSrcCharSet; // charset der quelle
-    friend SwFltControlStack;
+    friend class SwFltControlStack;
     BOOL bNewDoc;
     BOOL bStdPD;
     BOOL bProtect;
