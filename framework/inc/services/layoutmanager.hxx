@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:50:40 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,20 +139,20 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XUIConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATION_HPP_
+#include <com/sun/star/ui/XUIConfiguration.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAMEACTIONLISTENER_HPP_
@@ -167,16 +167,16 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
-#include <drafts/com/sun/star/ui/XUIElementFactory.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTFACTORY_HPP_
+#include <com/sun/star/ui/XUIElementFactory.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XINPLACELAYOUT_HPP_
-#include <drafts/com/sun/star/frame/XInplaceLayout.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XINPLACELAYOUT_HPP_
+#include <com/sun/star/frame/XInplaceLayout.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_DOCKINGAREA_HPP_
-#include <drafts/com/sun/star/ui/DockingArea.hpp>
+#ifndef _COM_SUN_STAR_UI_DOCKINGAREA_HPP_
+#include <com/sun/star/ui/DockingArea.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XDOCKABLEWINDOW_HPP_
@@ -187,8 +187,12 @@
 #include <com/sun/star/awt/XDockableWindowListener.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMENUBARMERGINGACCEPTOR_HPP_
-#include <drafts/com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMENUBARMERGINGACCEPTOR_HPP_
+#include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGEREVENTBROADCASTER_HPP_
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -226,15 +230,16 @@
 class MenuBar;
 namespace framework
 {
-    class LayoutManager : public  css::lang::XTypeProvider                              ,
-                          public  css::lang::XServiceInfo                               ,
-                          public  drafts::com::sun::star::frame::XLayoutManager         ,
-                          public  css::awt::XWindowListener                             ,
-                          public  css::frame::XFrameActionListener                      ,
-                          public  drafts::com::sun::star::ui::XUIConfigurationListener  ,
-                          public  drafts::com::sun::star::frame::XInplaceLayout         ,
-                          public  css::awt::XDockableWindowListener                     ,
-                          public  drafts::com::sun::star::frame::XMenuBarMergingAcceptor,
+    class LayoutManager : public  css::lang::XTypeProvider                        ,
+                          public  css::lang::XServiceInfo                         ,
+                          public  ::com::sun::star::frame::XLayoutManager         ,
+                          public  css::awt::XWindowListener                       ,
+                          public  css::frame::XFrameActionListener                ,
+                          public  ::com::sun::star::ui::XUIConfigurationListener  ,
+                          public  ::com::sun::star::frame::XInplaceLayout         ,
+                          public  css::awt::XDockableWindowListener               ,
+                          public  ::com::sun::star::frame::XMenuBarMergingAcceptor,
+                          public  css::frame::XLayoutManagerEventBroadcaster      ,
                           // base classes
                           // Order is neccessary for right initialization!
                           private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
@@ -259,16 +264,16 @@ namespace framework
             virtual void SAL_CALL attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL reset(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setDockingAreaAcceptor( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setDockingAreaAcceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL createElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL destroyElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::sal_Bool SAL_CALL requestElement( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIElement > SAL_CALL getElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIElement > > SAL_CALL getElements(  ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL getElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > > SAL_CALL getElements(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL showElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL hideElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL dockWindow( const ::rtl::OUString& aName, ::drafts::com::sun::star::ui::DockingArea DockingArea, const ::com::sun::star::awt::Point& Pos ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL dockWindow( const ::rtl::OUString& aName, ::com::sun::star::ui::DockingArea DockingArea, const ::com::sun::star::awt::Point& Pos ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::sal_Bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) throw (::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL floatWindow( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::sal_Bool SAL_CALL lockWindow( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
@@ -322,9 +327,9 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             //  XUIConfigurationListener
             //---------------------------------------------------------------------------------------------------------
-            virtual void SAL_CALL elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
             //---------------------------------------------------------------------------------------------------------
             //  XDockableWindowListener
@@ -337,13 +342,19 @@ namespace framework
             virtual void SAL_CALL closed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
+            //---------------------------------------------------------------------------------------------------------
+            //  XLayoutManagerEventBroadcaster
+            //---------------------------------------------------------------------------------------------------------
+            virtual void SAL_CALL addLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException);
+
             DECL_LINK( MenuBarClose, MenuBar * );
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
             struct DockedData
             {
                 DockedData() : m_aPos( LONG_MAX, LONG_MAX ),
-                               m_nDockedArea( ::drafts::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ),
+                               m_nDockedArea( ::com::sun::star::ui::DockingArea_DOCKINGAREA_TOP ),
                                m_bLocked( sal_False ) {}
 
                 Point       m_aPos;
@@ -399,7 +410,7 @@ namespace framework
 
                 UIElement( const rtl::OUString& rName,
                            const rtl::OUString& rType,
-                           const com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement >& rUIElement,
+                           const com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& rUIElement,
                            sal_Bool bFloating = sal_False
                            ) : m_aName( rName ),
                                m_aType( rType ),
@@ -417,7 +428,7 @@ namespace framework
                 rtl::OUString                                                            m_aType;
                 rtl::OUString                                                            m_aName;
                 rtl::OUString                                                            m_aUIName;
-                com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > m_xUIElement;
+                com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > m_xUIElement;
                 sal_Bool                                                                 m_bFloating : 1,
                                                                                          m_bVisible : 1,
                                                                                          m_bUserActive : 1,
@@ -442,7 +453,7 @@ namespace framework
             void implts_lock();
             sal_Bool implts_unlock();
 
-            sal_Bool implts_findElement( const rtl::OUString& aName, rtl::OUString& aElementType, rtl::OUString& aElementName, ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement >& xSettings );
+            sal_Bool implts_findElement( const rtl::OUString& aName, rtl::OUString& aElementType, rtl::OUString& aElementName, ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xSettings );
             sal_Bool implts_findElement( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xUIElement, UIElement& aElementData );
             sal_Bool implts_findElement( const rtl::OUString& aName, UIElement& aElementData );
             UIElement& impl_findElement( const rtl::OUString& aName );
@@ -460,15 +471,15 @@ namespace framework
             void implts_toggleFloatingUIElementsVisibility( sal_Bool bActive );
             sal_Int16 implts_getCurrentSymbolSet();
             ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > implts_createToolkitWindow( const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer >& rParent );
-            ::com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
             rtl::OUString implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber ) const;
 
             // docking methods
             ::Rectangle      implts_calcHotZoneRect( const ::Rectangle& rRect, sal_Int32 nHotZoneOffset );
             void             implts_calcDockingPosSize( UIElement& aUIElement, DockingOperation& eDockOperation, ::Rectangle& rTrackingRect, const Point& rMousePos );
-            DockingOperation implts_determineDockingOperation( ::drafts::com::sun::star::ui::DockingArea DockingArea, const ::Rectangle& rRowColRect, const Point& rMousePos );
-            ::Rectangle      implts_getWindowRectFromRowColumn( drafts::com::sun::star::ui::DockingArea DockingArea, const SingleRowColumnWindowData& rRowColumnWindowData, const ::Point& rMousePos, const rtl::OUString& rExcludeElementName );
-            ::Rectangle      implts_determineFrontDockingRect( ::drafts::com::sun::star::ui::DockingArea eDockingArea,
+            DockingOperation implts_determineDockingOperation( ::com::sun::star::ui::DockingArea DockingArea, const ::Rectangle& rRowColRect, const Point& rMousePos );
+            ::Rectangle      implts_getWindowRectFromRowColumn( ::com::sun::star::ui::DockingArea DockingArea, const SingleRowColumnWindowData& rRowColumnWindowData, const ::Point& rMousePos, const rtl::OUString& rExcludeElementName );
+            ::Rectangle      implts_determineFrontDockingRect( ::com::sun::star::ui::DockingArea eDockingArea,
                                                                sal_Int32 nRowCol,
                                                                const ::Rectangle& rDockedElementRect,
                                                                const ::rtl::OUString& rMovedElementName,
@@ -477,25 +488,25 @@ namespace framework
                                                                         sal_Int32 nOffset,
                                                                         SingleRowColumnWindowData& rRowColumnWindowData,
                                                                         const ::Size& rContainerSize );
-            ::Rectangle      implts_calcTrackingAndElementRect( ::drafts::com::sun::star::ui::DockingArea eDockingArea,
+            ::Rectangle      implts_calcTrackingAndElementRect( ::com::sun::star::ui::DockingArea eDockingArea,
                                                                 sal_Int32 nRowCol,
                                                                 UIElement& rUIElement,
                                                                 const ::Rectangle& rTrackingRect,
                                                                 const ::Rectangle& rRowColumnRect,
                                                                 const ::Size& rContainerWinSize );
-            void             implts_renumberRowColumnData( ::drafts::com::sun::star::ui::DockingArea eDockingArea, DockingOperation eDockingOperation, const UIElement& rUIElement );
+            void             implts_renumberRowColumnData( ::com::sun::star::ui::DockingArea eDockingArea, DockingOperation eDockingOperation, const UIElement& rUIElement );
 
             // layouting methods
             sal_Bool implts_compareRectangles( const ::com::sun::star::awt::Rectangle& rRect1, const ::com::sun::star::awt::Rectangle& rRect2 );
             ::Size  implts_getTopBottomDockingAreaSizes();
             ::Size  implts_getContainerWindowOutputSize();
             ::com::sun::star::awt::Rectangle implts_getDockingAreaWindowSizes();
-            void    implts_getDockingAreaElementInfos( ::drafts::com::sun::star::ui::DockingArea DockingArea, std::vector< SingleRowColumnWindowData >& rRowColumnsWindowData );
-            void    implts_getDockingAreaElementInfoOnSingleRowCol( ::drafts::com::sun::star::ui::DockingArea,
+            void    implts_getDockingAreaElementInfos( ::com::sun::star::ui::DockingArea DockingArea, std::vector< SingleRowColumnWindowData >& rRowColumnsWindowData );
+            void    implts_getDockingAreaElementInfoOnSingleRowCol( ::com::sun::star::ui::DockingArea,
                                                                      sal_Int32 nRowCol,
                                                                      SingleRowColumnWindowData& rRowColumnWindowData );
             ::Point implts_findNextCascadeFloatingPos();
-            void    implts_findNextDockingPos( ::drafts::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::Point& rVirtualPos, ::Point& rPixelPos );
+            void    implts_findNextDockingPos( ::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::Point& rVirtualPos, ::Point& rPixelPos );
             void    implts_sortActiveElement( const UIElement& aElementData );
             ::com::sun::star::awt::Rectangle implts_calcDockingAreaSizes();
             void    implts_setDockingAreaWindowSizes( const com::sun::star::awt::Rectangle& rBorderSpace );
@@ -544,8 +555,8 @@ namespace framework
             css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xSMGR; /** reference to factory, which has created this instance. */
             css::uno::Reference< css::util::XURLTransformer >                           m_xURLTransformer;
             css::uno::Reference< css::frame::XFrame >                                   m_xFrame;
-            css::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager >  m_xModuleCfgMgr;
-            css::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationManager >  m_xDocCfgMgr;
+            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >  m_xModuleCfgMgr;
+            css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >  m_xDocCfgMgr;
             css::uno::WeakReference< css::frame::XModel >                               m_xModel;
             css::uno::Reference< css::awt::XWindow >                                    m_xContainerWindow;
             css::uno::Reference< css::awt::XWindow >                                    m_xDockAreaWindows[DOCKINGAREAS_COUNT];
@@ -562,16 +573,16 @@ namespace framework
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;
-            css::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor >   m_xDockingAreaAcceptor;
+            css::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >   m_xDockingAreaAcceptor;
             Point                                                                       m_aStartDockMousePos;
             css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xInplaceMenuBar;
             MenuBarManager*                                                             m_pInplaceMenuBar;
-            css::uno::Reference< ::drafts::com::sun::star::ui::XUIElement >             m_xMenuBar;
+            css::uno::Reference< ::com::sun::star::ui::XUIElement >             m_xMenuBar;
             UIElement                                                                   m_aStatusBarElement;
             UIElement                                                                   m_aProgressBarElement;
-            com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement >    m_xProgressBarBackup;
-            css::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager >      m_xModuleManager;
-            css::uno::Reference< ::drafts::com::sun::star::ui::XUIElementFactory >      m_xUIElementFactoryManager;
+            com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >    m_xProgressBarBackup;
+            css::uno::Reference< ::com::sun::star::frame::XModuleManager >      m_xModuleManager;
+            css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >      m_xUIElementFactoryManager;
             css::uno::Reference< ::com::sun::star::frame::XStatusListener >             m_xMenuBarCloseListener;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
