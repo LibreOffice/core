@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:20:40 $
+ *  last change: $Author: mtg $ $Date: 2001-01-24 11:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@ XML_CONSTASCII_ACTION( sXML_namespace_script, "script" );
 XML_CONSTASCII_ACTION( sXML_url_script, "http://openoffice.org/2000/script" );
 
 
+XML_CONSTASCII_ACTION( sXML_np_block_list, "block-list");
+XML_CONSTASCII_ACTION( sXML_n_block_list, "http://openoffice.org/2001/block-list" );
+
 XML_CONSTASCII_ACTION( sXML_np_math, "math");
 XML_CONSTASCII_ACTION( sXML_n_math, "http://www.w3.org/1998/Math/MathML" );
 
@@ -168,6 +171,7 @@ XML_CONSTASCII_ACTION( sXML__colon, ":" );
 XML_CONSTASCII_ACTION( sXML__empty, "" );
 XML_CONSTASCII_ACTION( sXML__unknown_, "_unknown_" );
 XML_CONSTASCII_ACTION( sXML_a, "a" );
+XML_CONSTASCII_ACTION( sXML_abbreviated_name, "abbreviated-name" );
 XML_CONSTASCII_ACTION( sXML_above, "above" );
 XML_CONSTASCII_ACTION( sXML_abs, "abs" );
 XML_CONSTASCII_ACTION( sXML_accent, "accent" );
@@ -251,6 +255,8 @@ XML_CONSTASCII_ACTION( sXML_bind_styles_to_content, "bind-styles-to-content");
 XML_CONSTASCII_ACTION( sXML_bitmap , "bitmap" );
 XML_CONSTASCII_ACTION( sXML_black, "black" );
 XML_CONSTASCII_ACTION( sXML_blend, "blend" );
+XML_CONSTASCII_ACTION( sXML_block, "block" );
+XML_CONSTASCII_ACTION( sXML_block_list, "block-list" );
 XML_CONSTASCII_ACTION( sXML_blue , "blue" );
 XML_CONSTASCII_ACTION( sXML_body, "body" );
 XML_CONSTASCII_ACTION( sXML_bold, "bold" );
@@ -1083,6 +1089,7 @@ XML_CONSTASCII_ACTION( sXML_outset, "outset" );
 XML_CONSTASCII_ACTION( sXML_outside, "outside" );
 XML_CONSTASCII_ACTION( sXML_overlap, "overlap" );
 XML_CONSTASCII_ACTION( sXML_p, "p" );
+XML_CONSTASCII_ACTION( sXML_package_name, "package-name" );
 XML_CONSTASCII_ACTION( sXML_padding, "padding" );
 XML_CONSTASCII_ACTION( sXML_padding_bottom, "padding-bottom" );
 XML_CONSTASCII_ACTION( sXML_padding_left, "padding-left" );
