@@ -112,17 +112,17 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             try {
                 // the office returns an empty string when asking for the word at
                 // the position of a blank
-                String s = unoObject.getTextBehindIndex(index, type);
-                if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+                TextSegment ts = unoObject.getTextBehindIndex(index, type);
+                if ((part == AccessibleText.WORD) && (ts.SegmentText.length() == 0)) {
 //                  int max = getCharCount();
 //                  for (int i=index; i < max; i++) {
 //                      if (! unoObject.getTextBehindIndex(i, AccessibleTextType.CHARACTER).equals(" "))
 //                          break;
 //                      s += " ";
 //                  }
-                    s = " ";
+                    ts.SegmentText = " ";
                 }
-                return s;
+                return ts.SegmentText;
             } catch (com.sun.star.uno.Exception e) {
             }
         }
@@ -401,17 +401,17 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             try {
                 // the office returns an empty string when asking for the word at
                 // the position of a blank
-                String s = unoObject.getTextBeforeIndex(index, type);
-                if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+                TextSegment ts = unoObject.getTextBeforeIndex(index, type);
+                if ((part == AccessibleText.WORD) && (ts.SegmentText.length() == 0)) {
 //                  int max = getCharCount();
 //                  for (int i=index; i < max; i++) {
 //                      if (! unoObject.getTextBeforeIndex(i, AccessibleTextType.CHARACTER).equals(" "))
 //                          break;
 //                      s += " ";
 //                  }
-                    s = " ";
+                    ts.SegmentText = " ";
                 }
-                return s;
+                return ts.SegmentText;
             } catch (com.sun.star.uno.Exception e) {
                 if (Build.DEBUG) {
                     System.err.println(this + e .getClass().getName() + " caught in getBeforeIndex(" + part + ", " + index + "): ");
@@ -429,27 +429,27 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
             try {
                 // the office returns an empty string when asking for the word at
                 // the position of a blank
-                String s = unoObject.getTextAtIndex(index, type);
-                if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+                TextSegment ts = unoObject.getTextAtIndex(index, type);
+                if ((part == AccessibleText.WORD) && (ts.SegmentText.length() == 0)) {
 //                  int max = getCharCount();
 //                  for (int i=index; i < max; i++) {
 //                      if (! unoObject.getTextAtIndex(i, AccessibleTextType.CHARACTER).equals(" "))
 //                          break;
 //                      s += " ";
 //                  }
-                    s = " ";
+                    ts.SegmentText = " ";
 
                 // Workaround for #104847#
-                } else if ((type == AccessibleTextType.LINE) && (s.length() == 0)) {
+                } else if ((type == AccessibleTextType.LINE) && (ts.SegmentText.length() == 0)) {
                     if (index == getCharCount()) {
-                        s = unoObject.getTextAtIndex(index - 1, type);
+                        ts = unoObject.getTextAtIndex(index - 1, type);
                     }
                 }
 
 //              if (Build.DEBUG) {
 //                  System.err.println(this + " getAtIndex(" + part + "," + index + ") returns " + s + " (length: " + s.length() + ")");
 //              }
-                return s;
+                return ts.SegmentText;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                    if (Build.DEBUG) {
                        System.err.println(this + "IndexOutOfBoundsException caught for getAtIndex(" + part + "," + index + ")");
@@ -459,7 +459,7 @@ public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
                 if (type == AccessibleTextType.LINE) {
 
                     try {
-                        return unoObject.getTextAtIndex(index - 1, type);
+                        return unoObject.getTextAtIndex(index - 1, type).SegmentText;
                     } catch (com.sun.star.uno.Exception e2) {
                     }
                 }
