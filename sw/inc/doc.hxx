@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:21:57 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1614,8 +1614,16 @@ public:
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt = USHRT_MAX );
 
     SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
-    SwNumRuleTbl& GetNumRuleTbl() { return *pNumRuleTbl; }
     const SwNumRuleTbl& GetNumRuleTbl() const { return *pNumRuleTbl; }
+
+    // #i36749#
+    /**
+       Add numbering rule to document.
+
+       @param pRule    rule to add
+    */
+    void AddNumRule(SwNumRule * pRule);
+
     sal_uInt16 MakeNumRule( const String &rName, const SwNumRule* pCpy = 0,
                             BOOL bBroadcast = FALSE);
     sal_uInt16 FindNumRule( const String& rName ) const;
@@ -2256,6 +2264,15 @@ public:
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
     void ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem);
+
+    // #i36903#
+    /**
+       Propagates numbering rule from a SwFmt to all text nodes
+       registered in the SwFmt,
+
+       @param rFmt    SwFmt whose numbering rule shall be propagated
+     */
+    void SetNumRuleFromColl(SwFmt & rFmt);
 
     void RenameFmt(SwFmt & rFmt, const String & sNewName,
                    BOOL bBroadcast = FALSE);
