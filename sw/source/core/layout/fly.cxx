@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:05:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2285,23 +2285,58 @@ void lcl_MakeFlyPosition( SwFlyFrm *pFly )
         pFly->Unlock();
 }
 
+// OD 10.10.2003 #i17629# - Due to the re-work of method <SwDrawContact::ChkPage(..)>
+// for supporting drawing objects in page header/footer, the internal list
+// <GetDrawObjs()> could be changed. Thus, the work on this loop has to be adjusted.
 void SwFrm::CalcFlys( BOOL bPosOnly )
 {
     if ( GetDrawObjs() )
     {
-        USHORT nCnt = GetDrawObjs()->Count();
-        for ( USHORT i = 0; i < nCnt; ++i )
+        // OD 10.10.2003 #i17629# - copy objects, which are connected to the
+        // frame, to a local list to perform the corresponding actions for each object.
+        std::vector<SdrObject*> aObjsAtFrm;
         {
-            SdrObject *pO = (*GetDrawObjs())[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )
+            for ( USHORT i = 0; i < GetDrawObjs()->Count(); ++i )
             {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                SdrObject* pObjAtFrm = (*GetDrawObjs())[i];
+                aObjsAtFrm.push_back( pObjAtFrm );
+            }
+        }
+
+        // loop on objects, which are connected to the frame
+        while ( !aObjsAtFrm.empty() )
+        {
+            SdrObject* pObjAtFrm = aObjsAtFrm.back();
+            // For savety reason, assure that object in local list is still
+            // connected to the frame.
+            bool bObjConnected = false;
+            for ( USHORT i = 0; i < GetDrawObjs()->Count(); ++i )
+            {
+                if ( pObjAtFrm == (*GetDrawObjs())[i] )
+                {
+                    bObjConnected = true;
+                    break;
+                }
+            }
+            if ( !bObjConnected )
+            {
+                aObjsAtFrm.pop_back();
+                continue;
+            }
+
+            // distinguish between writer fly frames and drawing objects
+            if ( pObjAtFrm->ISA(SwVirtFlyDrawObj) )
+            {
+                SwFlyFrm* pFly = static_cast<SwVirtFlyDrawObj*>(pObjAtFrm)->GetFlyFrm();
                 // Bei autopositionierten (am Zeichen geb.) Rahmen vertrauen wir
                 // darauf, dass die Positionierung vom SwTxtFrm::Format vorgenommen
                 // wird. Wenn wir sie dagegen hier kalkulieren wuerden, fuehrt es
                 // zur Endlosschleife in Bug 50796.
                 if ( pFly->IsFlyInCntFrm() )
+                {
+                    aObjsAtFrm.pop_back();
                     continue;
+                }
                 if( pFly->IsAutoPos() )
                 {
                     if( bPosOnly )
@@ -2309,6 +2344,7 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
                         pFly->_Invalidate();
                         pFly->_InvalidatePos();
                     }
+                    aObjsAtFrm.pop_back();
                     continue;
                 }
                 pFly->_Invalidate();
@@ -2322,57 +2358,52 @@ void SwFrm::CalcFlys( BOOL bPosOnly )
                         pFly->_InvalidateSize();
                     pFly->Calc();
                 }
-                if ( !GetDrawObjs() )
-                    break;
-                if ( GetDrawObjs()->Count() < nCnt )
-                {
-                    --i;
-                    --nCnt;
-                }
             }
             else
             {
-                // assumption: <pO> is a drawing object.
-                SwFrmFmt *pFrmFmt = ::FindFrmFmt( pO );
+                // assumption: <pObjAtFrm> is a drawing object.
+                SwFrmFmt* pFrmFmt = ::FindFrmFmt( pObjAtFrm );
                 if( !pFrmFmt ||
                     FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     // change anchor position
-                    pO->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pO ) ) );
+                    pObjAtFrm->SetAnchorPos( GetFrmAnchorPos( ::HasWrap( pObjAtFrm ) ) );
                     // OD 19.06.2003 #108784# - correct relative position of
                     // <SwDrawVirtObj>-objects to reference object.
-                    if ( pO->ISA(SwDrawVirtObj) )
+                    if ( pObjAtFrm->ISA(SwDrawVirtObj) )
                     {
-                        static_cast<SwDrawVirtObj*>(pO)->AdjustRelativePosToReference();
+                        static_cast<SwDrawVirtObj*>(pObjAtFrm)->AdjustRelativePosToReference();
                     }
                     else
                     {
                         if ( GetValidPosFlag() )
                         {
                             SwPageFrm* pPage = FindPageFrm();
-                            if ( pPage && ! pPage->IsInvalidLayout() )
+                            if ( pPage && !pPage->IsInvalidLayout() )
                             {
                                 // check if the new position
                                 // would not exceed the margins of the page
-                                CaptureDrawObj( *pO, pPage->Frm() );
+                                CaptureDrawObj( *pObjAtFrm, pPage->Frm() );
                             }
                         }
 
-                        ((SwDrawContact*)GetUserCall(pO))->ChkPage();
-
-                        // OD 27.06.2003 #108784# - correct movement of 'virtual'
-                        // drawing objects caused by the <SetAnchorPos(..)>
-                        // of the 'master' drawing object.
                         SwDrawContact* pDrawContact =
-                            static_cast<SwDrawContact*>(pO->GetUserCall());
+                            static_cast<SwDrawContact*>(pObjAtFrm->GetUserCall());
                         if ( pDrawContact )
                         {
+                            pDrawContact->ChkPage();
+
+                            // OD 27.06.2003 #108784# - correct movement of 'virtual'
+                            // drawing objects caused by the <SetAnchorPos(..)>
+                            // of the 'master' drawing object.
                             pDrawContact->CorrectRelativePosOfVirtObjs();
                         }
                     }
                 }
-            }
-        }
+            } // end of distinction between writer fly frames and drawing objects
+
+            aObjsAtFrm.pop_back();
+        } // end of loop on objects, which are connected to the frame
     }
 }
 
