@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-08 19:21:25 $
+ *  last change: $Author: pl $ $Date: 2001-11-15 12:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,25 +470,28 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
         maClientData.pFrame = pFrame;
     }
 
-    if ( (maContext == NULL) && mbUseable)
+    if( mbUseable )
     {
         I18NStatus& rStatus(I18NStatus::get() );
         rStatus.setParent( pFrame );
         if( pFrame )
         {
             rStatus.show( true, I18NStatus::contextmap );
-            SalI18N_InputMethod *pInputMethod;
-            pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
+            if ( maContext == NULL )
+            {
+                SalI18N_InputMethod *pInputMethod;
+                pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
 
-            maContext = XCreateIC( pInputMethod->GetMethod(),
-                                   XNVaNestedList, mpAttributes,
-                                   NULL );
-            if ( maContext != NULL && mbMultiLingual )
-                XSetICValues( maContext,
-                              XNCommitStringCallback, &maCommitStringCallback,
-                              XNSwitchIMNotifyCallback, &maSwitchIMCallback,
-                              NULL );
-            SetICFocus( pFrame );
+                maContext = XCreateIC( pInputMethod->GetMethod(),
+                                       XNVaNestedList, mpAttributes,
+                                       NULL );
+                if ( maContext != NULL && mbMultiLingual )
+                    XSetICValues( maContext,
+                                  XNCommitStringCallback, &maCommitStringCallback,
+                                  XNSwitchIMNotifyCallback, &maSwitchIMCallback,
+                                  NULL );
+                SetICFocus( pFrame );
+            }
         }
     }
 }
