@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 17:52:46 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:23:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,10 @@ PARFILES += \
         folderitem_math.par
 .ENDIF
 
-LNGFILES= \
-        module_math.lng              \
-        registryitem_math.lng        \
-        configurationitem_math.lng
+ULFFILES= \
+        module_math.ulf              \
+        registryitem_math.ulf        \
+        configurationitem_math.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
