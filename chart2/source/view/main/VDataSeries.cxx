@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 15:26:53 $
+ *  last change: $Author: iha $ $Date: 2003-11-22 09:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,12 +282,6 @@ sal_Int32 VDataSeries::getTotalPointCount() const
     return m_nPointCount;
 }
 
-double lcl_mkRandomNumber()
-{
-    // return  number between 0 and 100 with two digits precision
-    return floor(( rand() * 100.0 ) / ( RAND_MAX + 1.0 )) / 10.0;
-}
-
 double VDataSeries::getX( sal_Int32 index ) const
 {
     if(m_xData_XValues.is())
@@ -297,7 +291,6 @@ double VDataSeries::getX( sal_Int32 index ) const
     }
     else
     {
-        return lcl_mkRandomNumber(); //@todo remove this test
         return index;
     }
 }
