@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-06-12 13:04:36 $
+ *  last change: $Author: er $ $Date: 2001-06-12 15:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,52 +289,51 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
             }
         }
 
-        ::com::sun::star::uno::Sequence< sal_uInt16 > xKnown;
-        if ( nLangList & LANG_LIST_ONLY_KNOWN )
-            xKnown = LocaleDataWrapper::getInstalledLanguageTypes();
         SvxLanguageTable aLangTable;
-        const USHORT nCount = aLangTable.GetEntryCount();
+        ::com::sun::star::uno::Sequence< sal_uInt16 > xKnown;
+        const sal_uInt16* pKnown;
+        USHORT nCount;
+        if ( nLangList & LANG_LIST_ONLY_KNOWN )
+        {
+            xKnown = LocaleDataWrapper::getInstalledLanguageTypes();
+            pKnown = xKnown.getConstArray();
+            nCount = (USHORT) xKnown.getLength();
+        }
+        else
+        {
+            nCount = aLangTable.GetEntryCount();
+            pKnown = NULL;
+        }
         for ( USHORT i = 0; i < nCount; i++ )
         {
-            LanguageType nLangType = aLangTable.GetTypeAtIndex( i );
+            LanguageType nLangType;
+            if ( nLangList & LANG_LIST_ONLY_KNOWN )
+                nLangType = pKnown[i];
+            else
+                nLangType = aLangTable.GetTypeAtIndex( i );
             BOOL bInsert = FALSE;
             if ( nLangType != LANGUAGE_DONTKNOW &&
                  nLangType != LANGUAGE_SYSTEM   &&
                  nLangType != LANGUAGE_NONE     &&
                 !(LANGUAGE_USER1 <= nLangType  &&  nLangType <= LANGUAGE_USER9) )
             {
-                BOOL bDoList = TRUE;
-                if ( nLangList & LANG_LIST_ONLY_KNOWN )
-                {
-                    const sal_uInt16* pKnown = xKnown.getConstArray();
-                    for ( sal_Int32 j=0; j < xKnown.getLength(); ++j )
-                    {
-                        if ( pKnown[j] == nLangType )
-                            break;  // for
-                    }
-                    if ( j >= xKnown.getLength() )
-                        bDoList = FALSE;
-                }
-                if ( bDoList )
-                {
-                    if (!bInsert && (nLangList & LANG_LIST_ALL))
-                        bInsert |= TRUE;
-                    if (!bInsert && (nLangList & LANG_LIST_WESTERN))
-                        bInsert |= SCRIPTTYPE_LATIN == GetScriptTypeOfLanguage( nLangType );
-                    if (!bInsert && (nLangList & LANG_LIST_CTL))
-                        bInsert |= SCRIPTTYPE_COMPLEX == GetScriptTypeOfLanguage( nLangType );
-                    if (!bInsert && (nLangList & LANG_LIST_CJK))
-                        bInsert |= SCRIPTTYPE_ASIAN == GetScriptTypeOfLanguage( nLangType );
-                    if (!bInsert && (nLangList & LANG_LIST_FBD_CHARS))
-                        bInsert |= lcl_HasLanguage( aForbiddenCharLang,
-                                            nForbiddenCharLang, nLangType );
-                    if (!bInsert && (nLangList & LANG_LIST_SPELL_AVAIL))
-                        bInsert |= lcl_SeqHasLang( aSpellAvailLang, nLangType );
-                    if (!bInsert && (nLangList & LANG_LIST_HYPH_AVAIL))
-                        bInsert |= lcl_SeqHasLang( aHyphAvailLang, nLangType );
-                    if (!bInsert && (nLangList & LANG_LIST_THES_AVAIL))
-                        bInsert |= lcl_SeqHasLang( aThesAvailLang, nLangType );
-                }
+                if (!bInsert && (nLangList & LANG_LIST_ALL))
+                    bInsert |= TRUE;
+                if (!bInsert && (nLangList & LANG_LIST_WESTERN))
+                    bInsert |= SCRIPTTYPE_LATIN == GetScriptTypeOfLanguage( nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_CTL))
+                    bInsert |= SCRIPTTYPE_COMPLEX == GetScriptTypeOfLanguage( nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_CJK))
+                    bInsert |= SCRIPTTYPE_ASIAN == GetScriptTypeOfLanguage( nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_FBD_CHARS))
+                    bInsert |= lcl_HasLanguage( aForbiddenCharLang,
+                                        nForbiddenCharLang, nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_SPELL_AVAIL))
+                    bInsert |= lcl_SeqHasLang( aSpellAvailLang, nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_HYPH_AVAIL))
+                    bInsert |= lcl_SeqHasLang( aHyphAvailLang, nLangType );
+                if (!bInsert && (nLangList & LANG_LIST_THES_AVAIL))
+                    bInsert |= lcl_SeqHasLang( aThesAvailLang, nLangType );
             }
 
             if (bInsert)
