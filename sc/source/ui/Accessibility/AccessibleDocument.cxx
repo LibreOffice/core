@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-07 10:37:49 $
+ *  last change: $Author: sab $ $Date: 2002-08-07 10:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,6 +1388,10 @@ uno::Reference<XAccessible> SAL_CALL
         else if(mpChildrenShapes)
             xAccessible = mpChildrenShapes->Get(nIndex - 1); // decrement childindex, because the shapes list starts at 0
     }
+
+    if (!xAccessible.is())
+        throw lang::IndexOutOfBoundsException();
+
     return xAccessible;
 }
 
@@ -1439,7 +1443,7 @@ void SAL_CALL
         --nChildIndex; // decrement childindex, because the shapes list starts at 0
 
         if (mpChildrenShapes)
-            mpChildrenShapes->Select(nChildIndex);
+            mpChildrenShapes->Select(nChildIndex); // throws lang::IndexOutOfBoundsException if Index is to high
 
         if (bWasTableSelected)
             mpViewShell->SelectAll();
@@ -1462,7 +1466,7 @@ sal_Bool SAL_CALL
     {
         --nChildIndex; // decrement childindex, because the shapes list starts at 0
         uno::Reference<drawing::XShape> xShape;
-        bResult = (mpChildrenShapes && mpChildrenShapes->IsSelected(nChildIndex, xShape));
+        bResult = (mpChildrenShapes && mpChildrenShapes->IsSelected(nChildIndex, xShape)); // throws lang::IndexOutOfBoundsException if Index is to high
     }
     else
         throw lang::IndexOutOfBoundsException();
@@ -1525,14 +1529,16 @@ uno::Reference<XAccessible > SAL_CALL
 
     if ((nSelectedChildIndex == 0) && bTabMarked)
         xAccessible = GetAccessibleSpreadsheet();
-    else
+    else if (nSelectedChildIndex > 0)
     {
         if (bTabMarked)
             --nSelectedChildIndex;
 
         if (mpChildrenShapes)
-            xAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex);
+            xAccessible = mpChildrenShapes->GetSelected(nSelectedChildIndex); // throws lang::IndexOutOfBoundsException if Index is to high
     }
+    else
+        throw lang::IndexOutOfBoundsException();
 
     return xAccessible;
 }
@@ -1554,7 +1560,7 @@ void SAL_CALL
             --nChildIndex;
 
         if (mpChildrenShapes)
-            mpChildrenShapes->Deselect(nChildIndex);
+            mpChildrenShapes->Deselect(nChildIndex); // throws lang::IndexOutOfBoundsException if Index is to high
 
         if (bTabMarked)
             mpViewShell->SelectAll();
