@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:17:42 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 21:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,6 +856,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     };
     Text[ catalan ] = "Relieve";
 };
+
 
 
 
