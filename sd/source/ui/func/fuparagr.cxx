@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:30:01 $
+ *  last change: $Author: cl $ $Date: 2002-09-13 11:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,10 +158,10 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             SID_ATTR_PARA_LINESPACE_15,
                             SID_ATTR_PARA_LINESPACE_20,
                             SID_ATTR_PARA_LRSPACE,
-                            SID_PARASPACE_INCREASE,
-                            SID_PARASPACE_DECREASE,
                             SID_ATTR_PARA_LEFT_TO_RIGHT,
                             SID_ATTR_PARA_RIGHT_TO_LEFT,
+                            SID_PARASPACE_INCREASE,
+                            SID_PARASPACE_DECREASE,
                             0 };
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
