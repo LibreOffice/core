@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-06 12:45:37 $
+ *  last change: $Author: ka $ $Date: 2001-08-13 12:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
             }
         }
         else
-            nRet = DND_ACTION_MOVE;
+            nRet = DND_ACTION_COPY;
     }
 
     return nRet;

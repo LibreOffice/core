@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:05:20 $
+ *  last change: $Author: ka $ $Date: 2001-08-13 12:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,7 @@ sal_Int8 GalleryListView::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         if( !mpTheme->IsDragging() )
             nRet = DND_ACTION_COPY;
         else
-            nRet = DND_ACTION_MOVE;
+            nRet = DND_ACTION_COPY;
     }
 
     return nRet;

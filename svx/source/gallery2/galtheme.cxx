@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:07:02 $
+ *  last change: $Author: ka $ $Date: 2001-08-13 12:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,7 +1240,7 @@ void GalleryTheme::CopyToClipboard( Window* pWindow, ULONG nPos )
 void GalleryTheme::StartDrag( Window* pWindow, ULONG nPos )
 {
     GalleryTransferable* pTransferable = new GalleryTransferable( this, nPos );
-    pTransferable->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
+    pTransferable->StartDrag( pWindow, DND_ACTION_COPY | DND_ACTION_LINK );
 }
 
 // -----------------------------------------------------------------------------
