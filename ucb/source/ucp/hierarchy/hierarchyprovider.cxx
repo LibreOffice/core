@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-12 15:04:00 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,14 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XOFFICEINSTALLATIONDIRECTORIES_HPP_
+#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
@@ -337,5 +343,48 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
     }
 
     return (*it).second.xRootReadAccess;
+}
+
+//=========================================================================
+uno::Reference< util::XOfficeInstallationDirectories >
+HierarchyContentProvider::getOfficeInstallationDirectories()
+{
+    if ( !m_xOfficeInstDirs.is() )
+    {
+        vos::OGuard aGuard( m_aMutex );
+        if ( !m_xOfficeInstDirs.is() )
+        {
+            OSL_ENSURE( m_xSMgr.is(), "No service manager!" );
+
+            uno::Reference< uno::XComponentContext > xCtx;
+            uno::Reference< beans::XPropertySet > xPropSet(
+                m_xSMgr, uno::UNO_QUERY );
+            if ( xPropSet.is() )
+            {
+                xPropSet->getPropertyValue(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                >>= xCtx;
+            }
+
+            OSL_ENSURE( xCtx.is(),
+                        "Unable to obtain component context from "
+                        "service manager!" );
+
+            if ( xCtx.is() )
+            {
+                xCtx->getValueByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "/singletons/"
+                        "com.sun.star.util.theOfficeInstallationDirectories" ) ) )
+                >>= m_xOfficeInstDirs;
+
+// Be silent. singleton only available in an Office environment.
+//                OSL_ENSURE( m_xOfficeInstDirs.is(),
+//                            "Unable to obtain office directories singleton!" );
+            }
+        }
+    }
+    return m_xOfficeInstDirs;
 }
 
