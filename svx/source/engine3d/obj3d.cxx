@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-14 13:34:45 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1406,19 +1406,19 @@ void E3dObject::RotateZ(double fAng)
 |*
 \************************************************************************/
 
-void E3dObject::ApplyTransform(const Matrix4D& rMatrix)
-{
-    E3dObjList* pOL = pSub;
-    ULONG nObjCnt = pOL->GetObjCount();
-
-    for (ULONG i = 0; i < nObjCnt; i++)
-    {
-        SdrObject* pObj = pOL->GetObj(i);
-        DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
-
-        ((E3dObject*) pObj)->ApplyTransform(rMatrix);
-    }
-}
+//void E3dObject::ApplyTransform(const Matrix4D& rMatrix)
+//{
+//  E3dObjList* pOL = pSub;
+//  ULONG nObjCnt = pOL->GetObjCount();
+//
+//  for (ULONG i = 0; i < nObjCnt; i++)
+//  {
+//      SdrObject* pObj = pOL->GetObj(i);
+//      DBG_ASSERT(pObj->ISA(E3dObject), "In E3dObject sind nur 3D-Objekte erlaubt!");
+//
+//      ((E3dObject*) pObj)->ApplyTransform(rMatrix);
+//  }
+//}
 
 /*************************************************************************
 |*
@@ -3913,33 +3913,33 @@ void E3dCompoundObject::SetBase3DParams(ExtOutputDevice& rOut, Base3D* pBase3D,
 |*
 \************************************************************************/
 
-void E3dCompoundObject::ApplyTransform(const Matrix4D& rMatrix)
-{
-    // call parent
-    E3dObject::ApplyTransform(rMatrix);
-
-    // Anwenden auf subobjekte (alte Geometrie)
-    ULONG nObjCnt = pSub->GetObjCount();
-    aLocalBoundVol = Volume3D();
-
-    for (ULONG i = 0; i < nObjCnt; i++)
-    {
-        E3dObject *p3DObj = (E3dObject*) pSub->GetObj(i);
-
-        if ( p3DObj->IsPartOfParent() )
-            aLocalBoundVol.Union(p3DObj->GetLocalBoundVolume());
-    }
-
-    // Geometrie herstellen
-    if(!bGeometryValid)
-        ReCreateGeometry();
-
-    // Matrix auch auf die neue Geometrie anwenden
-    aDisplayGeometry.Transform(rMatrix);
-
-    // LocalBoundVol neu aufbauen
-    aLocalBoundVol = aDisplayGeometry.GetBoundVolume();
-}
+//void E3dCompoundObject::ApplyTransform(const Matrix4D& rMatrix)
+//{
+//  // call parent
+//  E3dObject::ApplyTransform(rMatrix);
+//
+//  // Anwenden auf subobjekte (alte Geometrie)
+//  ULONG nObjCnt = pSub->GetObjCount();
+//  aLocalBoundVol = Volume3D();
+//
+//  for (ULONG i = 0; i < nObjCnt; i++)
+//  {
+//      E3dObject *p3DObj = (E3dObject*) pSub->GetObj(i);
+//
+//      if ( p3DObj->IsPartOfParent() )
+//          aLocalBoundVol.Union(p3DObj->GetLocalBoundVolume());
+//  }
+//
+//  // Geometrie herstellen
+//  if(!bGeometryValid)
+//      ReCreateGeometry();
+//
+//  // Matrix auch auf die neue Geometrie anwenden
+//  aDisplayGeometry.Transform(rMatrix);
+//
+//  // LocalBoundVol neu aufbauen
+//  aLocalBoundVol = aDisplayGeometry.GetBoundVolume();
+//}
 
 /*************************************************************************
 |*
@@ -4033,7 +4033,7 @@ void E3dCompoundObject::CenterObject(const Vector3D& rCenter)
     Matrix4D aTransMat;
 
     aTransMat.Translate(aMoveVector);
-    ApplyTransform(aTransMat);
+    SetTransform(GetTransform() * aTransMat);
 }
 
 /*************************************************************************

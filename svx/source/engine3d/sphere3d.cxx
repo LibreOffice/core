@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:52:02 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,17 +742,17 @@ void E3dSphereObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dSphereObj::ApplyTransform(const Matrix4D& rMatrix)
-{
-    // call parent
-    E3dCompoundObject::ApplyTransform(rMatrix);
-
-    // Anwenden auf lokale geometrie
-    Vector3D aOuterEdge = aCenter + aSize;
-    aCenter *= rMatrix;
-    aOuterEdge *= rMatrix;
-    aSize = aOuterEdge - aCenter;
-}
+//void E3dSphereObj::ApplyTransform(const Matrix4D& rMatrix)
+//{
+//  // call parent
+//  E3dCompoundObject::ApplyTransform(rMatrix);
+//
+//  // Anwenden auf lokale geometrie
+//  Vector3D aOuterEdge = aCenter + aSize;
+//  aCenter *= rMatrix;
+//  aOuterEdge *= rMatrix;
+//  aSize = aOuterEdge - aCenter;
+//}
 
 /*************************************************************************
 |*

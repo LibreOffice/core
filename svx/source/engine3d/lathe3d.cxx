@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:52:01 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,14 +480,14 @@ void E3dLatheObj::CreateWireframe(Polygon3D& rWirePoly, const Matrix4D* pTf,
 |*
 \************************************************************************/
 
-void E3dLatheObj::ApplyTransform(const Matrix4D& rMatrix)
-{
-    // call parent
-    E3dCompoundObject::ApplyTransform(rMatrix);
-
-    // Anwenden auf lokale geometrie
-    aPolyPoly3D.Transform(rMatrix);
-}
+//void E3dLatheObj::ApplyTransform(const Matrix4D& rMatrix)
+//{
+//  // call parent
+//  E3dCompoundObject::ApplyTransform(rMatrix);
+//
+//  // Anwenden auf lokale geometrie
+//  aPolyPoly3D.Transform(rMatrix);
+//}
 
 /*************************************************************************
 |*
@@ -879,6 +879,31 @@ void E3dLatheObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 //-/            rIn >> bTmp; bFilterTexture = bTmp;
             rIn >> bTmp;
             mpObjectItemSet->Put(Svx3DTextureFilterItem(bTmp));
+        }
+    }
+
+    // correct position of extrude polygon, in case it's not positioned
+    // at the Z==0 layer
+    if(aPolyPoly3D.Count() && aPolyPoly3D[0].GetPointCount())
+    {
+        const Vector3D& rFirstPoint = aPolyPoly3D[0][0];
+        if(rFirstPoint.Z() != 0.0)
+        {
+            // change transformation so that source poly lies in Z == 0,
+            // so it can be exported as 2D polygon
+            //
+            // ATTENTION: the translation has to be multiplied from LEFT
+            // SIDE since it was executed as the first translate for this
+            // 3D object during it's creation.
+            double fTransDepth(rFirstPoint.Z());
+            Matrix4D aTransMat;
+            aTransMat.TranslateZ(fTransDepth);
+            NbcSetTransform(aTransMat * GetTransform());
+
+            // correct polygon itself
+            aTransMat.Identity();
+            aTransMat.TranslateZ(-fTransDepth);
+            aPolyPoly3D.Transform(aTransMat);
         }
     }
 

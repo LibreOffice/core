@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:23:33 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,7 +1105,7 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
             Matrix4D aMatrix;
 
             aMatrix.Translate(-aCenter);
-            pScene->ApplyTransform(aMatrix);
+            pScene->SetTransform(pScene->GetTransform() * aMatrix);
 
             // Szene initialisieren
             pScene->NbcSetSnapRect(aRect);
@@ -1480,14 +1480,20 @@ void E3dView::SetCurrent3DObj(E3dObject* p3DObj)
     DBG_ASSERT(p3DObj != NULL, "Nana, wer steckt denn hier 'nen NULL-Zeiger rein?");
     E3dScene* pScene = NULL;
 
-    const Volume3D& rVolume = p3DObj->GetBoundVolume();
-    double fW = rVolume.GetWidth();
-    double fH = rVolume.GetHeight();
+    // get transformed BoundVolume of the object
+    Volume3D aVolume;
+    const Volume3D& rObjVol = p3DObj->GetBoundVolume();
+    const Matrix4D& rObjTrans = p3DObj->GetTransform();
+    aVolume.Union(rObjVol.GetTransformVolume(rObjTrans));
+
+    double fW = aVolume.GetWidth();
+    double fH = aVolume.GetHeight();
+
     Rectangle aRect(0,0, (long) fW, (long) fH);
 
     pScene = new E3dPolyScene(Get3DDefaultAttributes());
 
-    InitScene(pScene, fW, fH, rVolume.MaxVec().Z() + ((fW + fH) / 4.0));
+    InitScene(pScene, fW, fH, aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
 
     pScene->Insert3DObj(p3DObj);
     pScene->NbcSetSnapRect(aRect);
@@ -2197,7 +2203,7 @@ void E3dView::MergeScenes ()
 
                         Matrix4D aMatrix;
                         aMatrix.Translate(Vector3D(aBoundRect.Left () - aCenter.X (), aCenter.Y(), 0));
-                        pNewObj->ApplyTransform(aMatrix);
+                        pNewObj->SetTransform(pNewObj->GetTransform() * aMatrix);
 
                         if (pNewObj) aBoundVol.Union (pNewObj->GetBoundVolume());
                         pScene->Insert3DObj (pNewObj);

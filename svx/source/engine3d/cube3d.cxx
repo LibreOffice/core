@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:55:03 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 09:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,17 +364,17 @@ void E3dCubeObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-void E3dCubeObj::ApplyTransform(const Matrix4D& rMatrix)
-{
-    // call parent
-    E3dCompoundObject::ApplyTransform(rMatrix);
-
-    // Anwenden auf lokale geometrie
-    Vector3D aOuterEdge = aCubePos + aCubeSize;
-    aCubePos *= rMatrix;
-    aOuterEdge *= rMatrix;
-    aCubeSize = aOuterEdge - aCubePos;
-}
+//void E3dCubeObj::ApplyTransform(const Matrix4D& rMatrix)
+//{
+//  // call parent
+//  E3dCompoundObject::ApplyTransform(rMatrix);
+//
+//  // Anwenden auf lokale geometrie
+//  Vector3D aOuterEdge = aCubePos + aCubeSize;
+//  aCubePos *= rMatrix;
+//  aOuterEdge *= rMatrix;
+//  aCubeSize = aOuterEdge - aCubePos;
+//}
 
 /*************************************************************************
 |*
