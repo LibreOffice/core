@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:25:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,10 +497,10 @@ SvLBoxEntry* OApplicationView::elementAdded(ElementType eType,const ::rtl::OUStr
     return getDetailView()->elementAdded(eType,_rName,_rObject,_rxConn);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::elementRemoved(const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
+void OApplicationView::elementRemoved(ElementType eType,const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
-    getDetailView()->elementRemoved(_rName,_rxConn);
+    getDetailView()->elementRemoved(eType,_rName,_rxConn);
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::elementReplaced(ElementType _eType
