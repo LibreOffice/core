@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:20:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
+#ifndef _SV_WINTYPES_HXX
+#include <vcl/wintypes.hxx>
+#endif
 
 class Window;
 class VCLXWindow;
@@ -116,7 +119,7 @@ namespace awt {
 } } } }
 
 extern "C" {
-    typedef Window* (SAL_CALL *FN_SvtCreateWindow)( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, sal_uInt32 nWinBits );
+    typedef Window* (SAL_CALL *FN_SvtCreateWindow)( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits );
 };
 
 
@@ -170,7 +173,7 @@ protected:
 
     virtual void SAL_CALL disposing();
 
-    Window* ImplCreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, sal_uInt32 nWinBits );
+    Window* ImplCreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, WinBits nWinBits );
 
 public:
 
