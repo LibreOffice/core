@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:08:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,8 +1084,23 @@ void SwShellTableCrsr::FillRects()
     SwNodes& rNds = GetDoc()->GetNodes();
     for( USHORT n = 0; n < aSelBoxes.Count(); ++n )
     {
-        SwNodeIndex aIdx( *(*(aSelBoxes.GetData() + n ))->GetSttNd() );
-        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+        const SwStartNode* pSttNd = (*(aSelBoxes.GetData() + n ))->GetSttNd();
+        const SwTableNode* pSelTblNd = pSttNd->FindTableNode();
+
+        SwNodeIndex aIdx( *pSttNd );
+           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+
+        // TABLE IN TABLE
+        // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
+        // version to do this)
+        const SwTableNode* pCurTblNd = pCNd->FindTableNode();
+        while ( pSelTblNd != pCurTblNd )
+        {
+            aIdx = pCurTblNd->EndOfSectionIndex();
+            pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+            pCurTblNd = pCNd->FindTableNode();
+        }
+
         if( !pCNd )
             continue;
 
