@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-21 14:19:39 $
+ *  last change: $Author: mt $ $Date: 2002-11-22 13:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,6 +873,13 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
     pImpEditEngine->EnterBlockNotifications();
 
+    if ( GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_INPUT_START );
+        aNotify.pEditEngine = this;
+        pImpEditEngine->CallNotify( aNotify );
+    }
+
     if ( eFunc == KEYFUNC_DONTKNOW )
     {
         switch ( nCode )
@@ -1164,6 +1171,13 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     }
 
 #endif
+
+    if ( GetNotifyHdl().IsSet() )
+    {
+        EENotify aNotify( EE_NOTIFY_INPUT_END );
+        aNotify.pEditEngine = this;
+        pImpEditEngine->CallNotify( aNotify );
+    }
 
     pImpEditEngine->LeaveBlockNotifications();
 

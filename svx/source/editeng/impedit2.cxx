@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-05 15:42:43 $
+ *  last change: $Author: mt $ $Date: 2002-11-22 13:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3820,9 +3820,17 @@ void ImpEditEngine::LeaveBlockNotifications()
     DBG_ASSERT( nBlockNotifications, "LeaveBlockNotifications - Why?" );
 
     nBlockNotifications--;
-    if ( !nBlockNotifications )
+    if ( !nBlockNotifications && aNotifyCache.Count() )
     {
         // Call blocked notify events...
+        BOOL bMultipleNotifications = aNotifyCache.Count() > 1;
+        if ( bMultipleNotifications )
+        {
+            EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_START );
+            aNotify.pEditEngine = GetEditEnginePtr();
+            GetNotifyHdl().Call( &aNotify );
+        }
+
         while ( aNotifyCache.Count() )
         {
             EENotify* pNotify = aNotifyCache[0];
@@ -3830,6 +3838,13 @@ void ImpEditEngine::LeaveBlockNotifications()
             aNotifyCache.Remove( 0 );
             GetNotifyHdl().Call( pNotify );
             delete pNotify;
+        }
+
+        if ( bMultipleNotifications )
+        {
+            EENotify aNotify( EE_NOTIFY_BLOCKNOTIFICATION_END );
+            aNotify.pEditEngine = GetEditEnginePtr();
+            GetNotifyHdl().Call( &aNotify );
         }
     }
 }
