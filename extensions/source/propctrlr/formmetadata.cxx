@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-22 09:31:44 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 16:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ namespace pcr
             static OPropertyInfoImpl __READONLY_DATA aPropertyInfos[] =
             {
                 OPropertyInfoImpl(PROPERTY_NAME,                PROPERTY_ID_NAME,               sal_False, String(ModuleRes(RID_STR_NAME)),             nPos++, HID_PROP_NAME) ,
+                OPropertyInfoImpl(PROPERTY_TITLE,               PROPERTY_ID_TITLE,              sal_True,  String(ModuleRes(RID_STR_TITLE)),            nPos++, 0),
                 OPropertyInfoImpl(PROPERTY_LABEL,               PROPERTY_ID_LABEL,              sal_True,  String(ModuleRes(RID_STR_LABEL)),            nPos++, HID_PROP_LABEL),
                 OPropertyInfoImpl(PROPERTY_CONTROLLABEL,        PROPERTY_ID_CONTROLLABEL,       sal_False, String(ModuleRes(RID_STR_LABELCONTROL)),     nPos++, HID_PROP_CONTROLLABEL),
                 OPropertyInfoImpl(PROPERTY_MAXTEXTLEN,          PROPERTY_ID_MAXTEXTLEN,         sal_True,  String(ModuleRes(RID_STR_MAXTEXTLEN)),       nPos++, HID_PROP_MAXTEXTLEN),
@@ -473,6 +474,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/02/22 09:31:44  tbe
+ *  added properties for dialog controls
+ *
  *  Revision 1.4  2001/02/06 10:19:29  fs
  *  #83479# reintroduced the HasNavigationBar property
  *

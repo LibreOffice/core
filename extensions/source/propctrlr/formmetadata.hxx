@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-22 09:31:55 $
+ *  last change: $Author: tbe $ $Date: 2001-03-02 16:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ namespace pcr
     #define PROPERTY_ID_HASNAVIGATION        98
     #define PROPERTY_ID_POSITIONX            99
     #define PROPERTY_ID_POSITIONY            100
+    #define PROPERTY_ID_TITLE                101
 
 //............................................................................
 } // namespace pcr
@@ -241,6 +242,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/02/22 09:31:55  tbe
+ *  added properties for dialog controls
+ *
  *  Revision 1.3  2001/02/06 10:18:10  fs
  *  #83479# reintroduced the HasNavigationBar property
  *
