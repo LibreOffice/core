@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:21:37 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,13 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         { "StreamName", sizeof("StreamName")-1, 0,
               &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        // --> OD 2004-08-10 #i28749# - Add property, which indicates, if the
+        // shape position attributes are given in horizontal left-to-right layout.
+        // This is the case for the OpenOffice.org file format.
+        { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -663,6 +670,14 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     rDoc.SetRedlineMode_intern( REDLINE_NONE );
 
     sal_Bool bOASIS = pStorage->GetVersion() > SOFFICE_FILEFORMAT_60;
+    // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
+    {
+        const sal_Bool bShapePositionInHoriL2R = !bOASIS;
+        xInfoSet->setPropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R")),
+                makeAny( bShapePositionInHoriL2R ) );
+    }
+    // <--
     sal_uInt32 nWarn = 0;
     sal_uInt32 nWarn2 = 0;
     // read storage streams
