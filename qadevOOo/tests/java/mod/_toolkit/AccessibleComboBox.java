@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComboBox.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Date: 2004-11-02 12:13:24 $
+ *  last change: $Date: 2004-12-10 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,6 @@ public class AccessibleComboBox extends TestCase {
                                                     PrintWriter log) {
         XInterface oObj = null;
 
-        AccessibilityTools at = new AccessibilityTools();
-
         try {
             oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
                            "com.sun.star.awt.Toolkit");
@@ -141,6 +139,10 @@ public class AccessibleComboBox extends TestCase {
         DiagThread psDiag = new DiagThread(xTextDoc,
                                            (XMultiServiceFactory) Param.getMSF());
         psDiag.start();
+
+        util.utils.shortWait(Param.getInt("ShortWait"));
+
+        AccessibilityTools at = new AccessibilityTools();
 
         util.utils.shortWait(Param.getInt("ShortWait"));
 
