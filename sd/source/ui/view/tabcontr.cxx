@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-22 12:01:58 $
+ *  last change: $Author: af $ $Date: 2002-10-25 14:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,4 +468,17 @@ long SdTabControl::DeactivatePage()
 
 
 
+void SdTabControl::SendActivatePageEvent (void)
+{
+    CallEventListeners (VCLEVENT_TABBAR_PAGEACTIVATED,
+        reinterpret_cast<void*>(GetCurPageId()));
+}
 
+
+
+
+void SdTabControl::SendDeactivatePageEvent (void)
+{
+    CallEventListeners (VCLEVENT_TABBAR_PAGEDEACTIVATED,
+        reinterpret_cast<void*>(GetCurPageId()));
+}
