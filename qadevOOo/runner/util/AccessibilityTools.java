@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityTools.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-04-28 12:15:17 $
+ *  last change:$Date: 2004-02-04 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@ public class AccessibilityTools {
 
     public static void getAccessibleObjectForRole_(XAccessible xacc,short role) {
         XAccessibleContext ac = xacc.getAccessibleContext();
-        if (ac.getAccessibleRole()==role) {
+        boolean isShowing = ac.getAccessibleStateSet().contains(
+                com.sun.star.accessibility.AccessibleStateType.SHOWING);
+        if (ac.getAccessibleRole()==role && isShowing) {
             SearchedContext = ac;
             SearchedAccessible = xacc;
         } else {
@@ -168,12 +170,15 @@ public class AccessibilityTools {
         short role, String name, String implName) {
 
         XAccessibleContext ac = xacc.getAccessibleContext();
+        boolean isShowing = ac.getAccessibleStateSet().contains(
+                com.sun.star.accessibility.AccessibleStateType.SHOWING);
         if (ac.getAccessibleRole()==role
             && ac.getAccessibleName().indexOf(name) > -1
-            && utils.getImplName(ac).indexOf(implName) > -1) {
+            && utils.getImplName(ac).indexOf(implName) > -1
+            && isShowing) {
 
             SearchedAccessible = xacc;
-            System.out.println("FOUND the desired component");
+            //System.out.println("FOUND the desired component -- "+ ac.getAccessibleName() +isShowing);
             return ac;
         } else {
             int k = ac.getAccessibleChildCount();
