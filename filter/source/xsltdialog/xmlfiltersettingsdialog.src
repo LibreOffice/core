@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:26:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
     Closeable               = TRUE ;
     Sizeable                = FALSE;
     DialogControl           = TRUE ;
-    Text                    = "XML-Filter Einstellungen" ;
-    Text [ english_us ]     = "XML Filter Settings" ;
+    Text [ de ] = "XML-Filter Einstellungen" ;
+    Text [ en-US ]      = "XML Filter Settings" ;
 
     Control CTRL_XML_FILTER_LIST
     {
@@ -95,34 +95,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_NEW;
         TabStop             = TRUE ;
-        Text                = "~Neu...";
-        Text[ english_us ]  = "~New...";
-        Text[ french ] = "Nouveau...";
-        Text[ spanish ] = "~Nuevo...";
-        Text[ italian ] = "~Nuovo...";
-        Text[ swedish ] = "~Nytt...";
-        Text[ japanese ] = "Êñ∞Ë¶è‰ΩúÊàê(~N)...";
-        Text[ korean ] = "ÏÉàÎ°ú ÎßåÎì§Í∏∞(~N)...";
-        Text[ chinese_simplified ] = "Êñ∞Âª∫(~N)...";
-        Text[ chinese_traditional ] = "Êñ∞Â¢û(~N)...";
-        Text[ portuguese ] = "~Novo...";
-        Text[ russian ] = "—ÓÁ‰‡Ú¸...";
-        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·...";
-        Text[ dutch ] = "~Nieuw..";
-        Text[ finnish ] = "~Uusi";
-        Text[ czech ] = "Nov√Ω...";
-        Text[ danish ] = "~Ny(t)...";
-        Text[ polish ] = "Nowy...";
-        Text[ portuguese_brazilian ] = "~Novo...";
-        Text[ turkish ] = "~Yeni...";
-        Text[ arabic ] = "...ÃœÌœ";
-        Text[ hebrew ] = "‚ÄÆ◊ó◊ì◊©...‚Ä¨";
-        Text[ catalan ] = "~Nou...";
-        Text[ thai ] = "‡πÉ~‡∏´‡∏°‡πà...";
-        Text[ slovak ] = "~Nov√Ω...";
-        Text[ hindi ] = "~‡§®‡§Ø‡§æ...";
-        Text[ hungarian ] = "√ö~j...";
-        Text[ slovenian ] = "~Nov...";
+        Text [ de ] = "~Neu...";
+        Text [ en-US ]  = "~New...";
     };
 
     PushButton PB_XML_FILTER_EDIT
@@ -131,34 +105,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_EDIT;
         TabStop             = TRUE ;
-        Text                = "~Bearbeiten...";
-        Text[ english_us ]  = "~Edit...";
-        Text[ french ] = "…diter...";
-        Text[ spanish ] = "E~ditar...";
-        Text[ italian ] = "~Modifica...";
-        Text[ swedish ] = "~Redigera...";
-        Text[ japanese ] = "Á∑®ÈõÜ(~E)...";
-        Text[ korean ] = "Ìé∏Ïßë(~E)";
-        Text[ chinese_simplified ] = "ÁºñËæë(~E)...";
-        Text[ chinese_traditional ] = "Á∑®ËºØ(~E)...";
-        Text[ portuguese ] = "Edi~tar...";
-        Text[ russian ] = "~œ‡‚Í‡...";
-        Text[ greek ] = "≈~ÂÓÂÒ„·Ûﬂ·...";
-        Text[ dutch ] = "~Bewerken";
-        Text[ finnish ] = "~Muokkaa";
-        Text[ czech ] = "Upravit...";
-        Text[ danish ] = "~Rediger...";
-        Text[ polish ] = "~Edytuj...";
-        Text[ portuguese_brazilian ] = "~Editar...";
-        Text[ turkish ] = "D~¸zenle...";
-        Text[ arabic ] = " Õ—Ì—...";
-        Text[ hebrew ] = "‚ÄÆ◊¢◊®◊ô◊õ◊î...‚Ä¨";
-        Text[ thai ] = "‡πÅ~‡∏Å‡πâ‡πÑ‡∏Ç...";
-        Text[ slovak ] = "~Upravi≈•...";
-        Text[ catalan ] = "~Edit...";
-        Text[ hindi ] = "~‡§∏‡§Ç‡§™‡§æ‡§¶‡§®...";
-        Text[ hungarian ] = "S~zerkeszt√©s...";
-        Text[ slovenian ] = "~Uredi...";
+        Text [ de ] = "~Bearbeiten...";
+        Text [ en-US ]  = "~Edit...";
     };
 
     PushButton PB_XML_FILTER_TEST
@@ -167,34 +115,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_TEST;
         TabStop             = TRUE ;
-        Text                = "~XSLTs testen...";
-        Text[ english_us ]  = "~Test XSLTs...";
-        Text[ french ] = "Tester les XSLT...";
-        Text[ spanish ] = "~Probar los XSLTs...";
-        Text[ italian ] = "~Test XSLTs...";
-        Text[ swedish ] = "Testa ~XSLT:er...";
-        Text[ japanese ] = "XSL~T „ÇíË©¶„Åô...";
-        Text[ korean ] = "XSLT Í≤ÄÏÇ¨(~T)...";
-        Text[ chinese_simplified ] = "ÊµãËØï XSL~T...";
-        Text[ chinese_traditional ] = "Ê∏¨Ë©¶ XSL~T...";
-        Text[ slovak ] = "~Testovacie XSLT-y...";
-        Text[ portuguese_brazilian ] = "~Testar XSLTs...";
-        Text[ greek ] = "~Test XSLTs...";
-        Text[ dutch ] = "XSLTs ~Testen...";
-        Text[ finnish ] = "~Test XSLTs...";
-        Text[ czech ] = "Ovƒõ≈ôit XSLT...";
-        Text[ danish ] = "~Test XSLTs...";
-        Text[ arabic ] = "~Test XSLTs...";
-        Text[ hebrew ] = "~Test XSLTs...";
-        Text[ catalan ] = "~Test XSLTs...";
-        Text[ hindi ] = "~Test XSLTs...";
-        Text[ portuguese ] = "~Test XSLTs...";
-        Text[ russian ] = "~Test XSLTs...";
-        Text[ polish ] = "~Test XSLTs...";
-        Text[ turkish ] = "~Test XSLTs...";
-        Text[ thai ] = "~Test XSLTs...";
-        Text[ hungarian ] = "XSLT-k ~ellen≈ërz√©se...";
-        Text[ slovenian ] = "~Preizkusi XSLT...";
+        Text [ de ] = "~XSLTs testen...";
+        Text [ en-US ]  = "~Test XSLTs...";
     };
 
     PushButton PB_XML_FILTER_DELETE
@@ -203,34 +125,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_DELETE;
         TabStop             = TRUE ;
-        Text                = "~Lˆschen...";
-        Text[ english_us ]  = "~Delete...";
-        Text[ french ] = "Supprimer...";
-        Text[ spanish ] = "~Borrar...";
-        Text[ italian ] = "~Elimina...";
-        Text[ swedish ] = "R~adera...";
-        Text[ japanese ] = "ÂâäÈô§(~D)...";
-        Text[ korean ] = "ÏÇ≠Ï†ú(~D)...";
-        Text[ chinese_simplified ] = "Âà†Èô§(~D)...";
-        Text[ chinese_traditional ] = "Âà™Èô§(~D)...";
-        Text[ portuguese ] = "E~liminar...";
-        Text[ russian ] = "”‰‡ÎËÚ¸...";
-        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ...";
-        Text[ dutch ] = "~Wissen...";
-        Text[ finnish ] = "~Poista";
-        Text[ czech ] = "Smazat...";
-        Text[ danish ] = "~Slet...";
-        Text[ polish ] = "UsuÒ...";
-        Text[ portuguese_brazilian ] = "E~xcluir...";
-        Text[ turkish ] = "~Sil...";
-        Text[ arabic ] = "Õ–›...";
-        Text[ hebrew ] = "‚ÄÆ◊û◊ó◊ô◊ß◊î...‚Ä¨";
-        Text[ catalan ] = "Su~primeix...";
-        Text[ thai ] = "~‡∏•‡∏ö...";
-        Text[ slovak ] = "~Zmaza≈•...";
-        Text[ hindi ] = "~‡§Æ‡§ø‡§ü‡§æ‡§ì...";
-        Text[ hungarian ] = "~T√∂rl√©s...";
-        Text[ slovenian ] = "~Izbri≈°i...";
+        Text [ de ] = "~Lˆschen...";
+        Text [ en-US ]  = "~Delete...";
     };
 
     PushButton PB_XML_FILTER_SAVE
@@ -239,34 +135,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_SAVE;
         TabStop             = TRUE ;
-        Text                = "~Als Paket sichern...";
-        Text[ english_us ]  = "~Save as Package...";
-        Text[ french ] = "Enregistrer...";
-        Text[ spanish ] = "~Guardar como paquete...";
-        Text[ italian ] = "~Salva nel pacchetto...";
-        Text[ swedish ] = "~Spara som paket...";
-        Text[ japanese ] = "„Éë„ÉÉ„Ç±„Éº„Ç∏„Å®„Åó„Å¶‰øùÂ≠ò(~S)...";
-        Text[ korean ] = "Ìå®ÌÇ§ÏßÄÎ°ú Ï†ÄÏû•(~S)...";
-        Text[ chinese_simplified ] = "Â≠ò‰∏∫ËΩØ‰ª∂ÂåÖ(~S)...";
-        Text[ chinese_traditional ] = "Âè¶Â≠òÁÇ∫ËªüÈ´îÂ•óË£ù(~S)...";
-        Text[ slovak ] = "~Ulo≈æi≈• ako bal√≠k...";
-        Text[ portuguese_brazilian ] = "~Salvar como pacote... ";
-        Text[ greek ] = "~Save as Package...";
-        Text[ dutch ] = "~Opslaan als Pakket...";
-        Text[ finnish ] = "~Save as Package...";
-        Text[ czech ] = "Ulo≈æit jako bal√≠k...";
-        Text[ danish ] = "~Gem som pakke...";
-        Text[ arabic ] = "~Save as Package...";
-        Text[ hebrew ] = "~Save as Package...";
-        Text[ catalan ] = "~Save as Package...";
-        Text[ hindi ] = "~Save as Package...";
-        Text[ portuguese ] = "~Save as Package...";
-        Text[ russian ] = "~Save as Package...";
-        Text[ polish ] = "~Save as Package...";
-        Text[ turkish ] = "~Save as Package...";
-        Text[ thai ] = "~Save as Package...";
-        Text[ hungarian ] = "~Ment√©s csomagk√©nt...";
-        Text[ slovenian ] = "~Shrani kot paket...";
+        Text [ de ] = "~Als Paket sichern...";
+        Text [ en-US ]  = "~Save as Package...";
     };
 
     PushButton PB_XML_FILTER_OPEN
@@ -275,36 +145,10 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_OPEN;
         TabStop             = TRUE ;
-        Text                = "~Paket ˆffnen...";
-        Text[ english_us ]  = "~Open Package...";
+        Text [ de ] = "~Paket ˆffnen...";
+        Text [ en-US ]  = "~Open Package...";
         TabStop             = TRUE ;
-        Text[ french ] = "Ouvrir le paquetage...";
-        Text[ spanish ] = "~Abrir paquete...";
-        Text[ italian ] = "~Apri pacchetto...";
-        Text[ swedish ] = "~÷ppna paket...";
-        Text[ japanese ] = "„Éë„ÉÉ„Ç±„Éº„Ç∏„ÇíÈñã„Åè(~O)...";
-        Text[ korean ] = "Ìå®ÌÇ§ÏßÄ Ïó¥Í∏∞(~O)...";
-        Text[ chinese_simplified ] = "ÊâìÂºÄËΩØ‰ª∂ÂåÖ(~O)";
-        Text[ chinese_traditional ] = "ÈñãÂïìËªüÈ´îÂ•óË£ù(~O)";
-        Text[ language_user1 ] = "NK06.06.2003: It can be a shortage of writing space on push button for Japanese string with mnemonic.";
-        Text[ slovak ] = "~Otvori≈• bal√≠k...";
-        Text[ portuguese_brazilian ] = "~Abrir pacote";
-        Text[ greek ] = "~Open Package...";
-        Text[ dutch ] = "~Open Pakket...";
-        Text[ finnish ] = "~Open Package...";
-        Text[ czech ] = "Otev≈ô√≠t bal√≠k...";
-        Text[ danish ] = "≈~ben pakke...";
-        Text[ arabic ] = "~Open Package...";
-        Text[ hebrew ] = "~Open Package...";
-        Text[ catalan ] = "~Open Package...";
-        Text[ hindi ] = "~Open Package...";
-        Text[ portuguese ] = "~Open Package...";
-        Text[ russian ] = "~Open Package...";
-        Text[ polish ] = "~Open Package...";
-        Text[ turkish ] = "~Open Package...";
-        Text[ thai ] = "~Open Package...";
-        Text[ hungarian ] = "~Csomag megnyit√°sa...";
-        Text[ slovenian ] = "~Odpri paket...";
+        Text [ x-comment ] = "NK06.06.2003: It can be a shortage of writing space on push button for Japanese string with mnemonic.";
     };
 
     HelpButton BTN_XML_FILTER_HELP
@@ -319,62 +163,10 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_CLOSE;
         TabStop             = TRUE ;
-        Text                = "~Schlieﬂen";
-        Text[ english_us ]  = "~Close";
-        Text[ french ] = "Fermer";
-        Text[ spanish ] = "~Cerrar";
-        Text[ italian ] = "~Chiudi";
-        Text[ swedish ] = "S~t‰ng";
-        Text[ japanese ] = "Èñâ„Åò„Çã(~C)";
-        Text[ korean ] = "Îã´Í∏∞(~C)";
-        Text[ chinese_simplified ] = "ÂÖ≥Èó≠(~C)";
-        Text[ chinese_traditional ] = "ÈóúÈñâ(~C)";
-        Text[ portuguese ] = "~Fechar";
-        Text[ russian ] = "~«‡Í˚Ú¸";
-        Text[ greek ] = " ÎÂﬂ~ÛÈÏÔ";
-        Text[ dutch ] = "~Sluiten";
-        Text[ finnish ] = "~Sulje";
-        Text[ czech ] = "Zav≈ô√≠t";
-        Text[ danish ] = "~Luk";
-        Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "~Fechar";
-        Text[ turkish ] = "~Kapat";
-        Text[ arabic ] = "≈€·«ﬁ";
-        Text[ hebrew ] = "‚ÄÆ◊°◊í◊ô◊®◊î‚Ä¨";
-        Text[ catalan ] = "~Tanca";
-        Text[ thai ] = "~‡∏õ‡∏¥‡∏î";
-        Text[ slovak ] = "~Zavrie≈•";
-        Text[ hindi ] = "~‡§¨‡§®‡•ç‡§¶ ‡§ï‡§∞‡•ã";
-        Text[ hungarian ] = "~Bez√°r√°s";
-        Text[ slovenian ] = "~Zapri";
+        Text [ de ] = "~Schlieﬂen";
+        Text [ en-US ]  = "~Close";
     };
 
-    Text[ french ] = "ParamËtres du filtre XML";
-    Text[ spanish ] = "ConfiguraciÛn del filtro XML";
-    Text[ italian ] = "Impostazione filtri XML";
-    Text[ swedish ] = "XML-filterinst‰llningar";
-    Text[ japanese ] = "XML „Éï„Ç£„É´„Çø„ÅÆË®≠ÂÆö";
-    Text[ korean ] = "XML ÌïÑÌÑ∞ ÏÑ§Ï†ï";
-    Text[ chinese_simplified ] = "XML Á≠õÈÄâÂô®ËÆæÂÆö";
-    Text[ chinese_traditional ] = "XML ÁØ©ÈÅ∏Âô®Ë®≠ÂÆö";
-    Text[ slovak ] = "Nastavenia XML filtra";
-    Text[ portuguese_brazilian ] = "ConfiguraÁ„o dos filtros XSLT";
-    Text[ greek ] = "—ıËÏﬂÛÂÈÚ ˆﬂÎÙÒ˘Ì XML";
-    Text[ dutch ] = "XML-filter Instellingen";
-    Text[ finnish ] = "XML Filter Settings";
-    Text[ czech ] = "Nastaven√≠ XML filtr≈Ø";
-    Text[ danish ] = "Indstillinger for XML-filter";
-    Text[ arabic ] = "XML Filter Settings";
-    Text[ hebrew ] = "XML Filter Settings";
-    Text[ catalan ] = "XML Filter Settings";
-    Text[ hindi ] = "XML Filter Settings";
-    Text[ portuguese ] = "XML Filter Settings";
-    Text[ russian ] = "XML Filter Settings";
-    Text[ polish ] = "XML Filter Settings";
-    Text[ turkish ] = "XML Filter Settings";
-    Text[ thai ] = "XML Filter Settings";
-    Text[ hungarian ] = "XML-sz≈±r≈ëbe√°ll√≠t√°sok";
-    Text[ slovenian ] = "Nastavitve XML filtra";
 };
 
 
