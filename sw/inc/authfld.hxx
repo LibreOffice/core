@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:59:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _AUTHFLD_HXX
 #define _AUTHFLD_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
 #endif
@@ -112,7 +115,8 @@ struct SwTOXSortKey
 class SvUShorts;
 class SwAuthorityField;
 class SortKeyArr;
-class SwAuthorityFieldType : public SwFieldType
+
+class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
     SwDoc*          m_pDoc;
     SwAuthDataArr*  m_pDataArr;
@@ -125,6 +129,7 @@ class SwAuthorityFieldType : public SwFieldType
     LanguageType    m_eLanguage;
     String          m_sSortAlgorithm;
 
+    // @@@ private copy assignment, but public copy ctor? @@@
     const SwAuthorityFieldType& operator=( const SwAuthorityFieldType& );
 
 public:
