@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-12 12:48:59 $
+ *  last change: $Author: dvo $ $Date: 2002-04-12 15:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
     sal_Bool IsValidRange(sal_Int32 nBegin, sal_Int32 nEnd, sal_Int32 nLength);
 
     /// Ensure ordered range (i.e. nBegin is smaller then nEnd)
-    inline sal_Bool OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
+    inline void OrderRange(sal_Int32& nBegin, sal_Int32& nEnd)
     {
         if( nBegin > nEnd )
         {
