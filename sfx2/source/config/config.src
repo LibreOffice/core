@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:25:38 $
+ *  last change: $Author: kz $ $Date: 2002-01-22 21:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,9 +262,9 @@ QueryBox DLG_MACROQUERY
     Message[ greek ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ dutch ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ french ] = "Le déclenchement d'un événement a eu lieu en rapport avec la macro $(MACRO). $(TEXT)";
-    Message[ spanish ] = "Ejecutar macro";
+    Message[ spanish ] = "Se ha producido el evento para el cual se configuró la macro $(MACRO). $(TEXT)";
     Message[ finnish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
-    Message[ italian ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message[ italian ] = "Si è verificato l'evento per cui è stata configurata la macro $(MACRO). $(TEXT)";
     Message[ danish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message[ swedish ] = "En händelse utlöstes för vilken makrot $(MACRO) har konfigurerats. $(TEXT)";
     Message[ polish ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
