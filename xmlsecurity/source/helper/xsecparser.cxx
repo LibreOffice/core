@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-28 02:26:48 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ void SAL_CALL XSecParser::startDocument(  )
     m_bInSignatureValue = false;
     m_bInDigestValue = false;
     m_bInDate = false;
-    m_bInTime = false;
+    //m_bInTime = false;
 
     if (m_xNextHandler.is())
     {
@@ -210,16 +210,20 @@ void SAL_CALL XSecParser::startElement(
             m_pXSecController->setPropertyId( ouIdAttr );
         }
     }
-        else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DATE)))
+        else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
         {
         m_ouDate = rtl::OUString::createFromAscii("");
             m_bInDate = true;
         }
+        /*
         else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)))
         {
         m_ouTime = rtl::OUString::createFromAscii("");
             m_bInTime = true;
         }
+        */
 
     if (m_xNextHandler.is())
     {
@@ -271,16 +275,20 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
         m_pXSecController->setX509Certificate( m_ouX509Certificate );
         m_bInX509Certificate = false;
         }
-    else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DATE)) )
+        else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                    +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
     {
         m_pXSecController->setDate( m_ouDate );
             m_bInDate = false;
     }
+    /*
     else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)) )
     {
         m_pXSecController->setTime( m_ouTime );
             m_bInTime = false;
     }
+    */
 
     if (m_xNextHandler.is())
     {
@@ -315,10 +323,12 @@ void SAL_CALL XSecParser::characters( const rtl::OUString& aChars )
     {
         m_ouDate += aChars;
     }
+    /*
     else if (m_bInTime)
     {
         m_ouTime += aChars;
     }
+    */
 
     if (m_xNextHandler.is())
     {

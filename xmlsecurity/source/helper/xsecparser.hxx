@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecparser.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ private:
     rtl::OUString m_ouDigestValue;
     rtl::OUString m_ouSignatureValue;
     rtl::OUString m_ouDate;
-    rtl::OUString m_ouTime;
+    //rtl::OUString m_ouTime;
 
     /*
      * whether inside a particular element
@@ -120,7 +120,7 @@ private:
     bool m_bInDigestValue;
     bool m_bInSignatureValue;
     bool m_bInDate;
-    bool m_bInTime;
+    //bool m_bInTime;
 
     /*
      * the XSecController collaborating with XSecParser

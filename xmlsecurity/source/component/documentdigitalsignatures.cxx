@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,11 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
             if ( !aInfos[n].Signer.is() )
                 aInfos[n].Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
 
+            // MM : the ouDate and ouTime fields have been replaced with stDateTime (com::sun::star::util::DataTime)
+            /*
             aInfos[n].SignatureDate = String( rInfo.ouDate ).ToInt32();
             aInfos[n].SignatureTime = String( rInfo.ouTime ).ToInt32();
+            */
 
             DBG_ASSERT( rInfo.nStatus != STATUS_INIT, "Signature not processed!" );
 

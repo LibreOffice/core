@@ -2,9 +2,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-27 11:55:25 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,11 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
                 aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
+
+                    // MM : the ouDate and ouTime fields have been replaced with stDateTime (com::sun::star::util::DataTime)
+                    /*
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
+                */
             }
 
             // New signatures are not verified, must be valid. Status is INIT.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:08 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,22 @@
 
 #include <xmloff/attrlist.hxx>
 
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 namespace cssxw = com::sun::star::xml::wrapper;
 namespace cssb = com::sun::star::beans;
+
+const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
+const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 
 /* bridge component names */
 #define XMLSIGNATURE_COMPONENT "com.sun.star.xml.crypto.XMLSignature"
@@ -110,6 +120,182 @@ XSecController::~XSecController()
 /*
  * private methods
  */
+/** convert string to number with optional min and max values */
+sal_Bool XSecController::convertNumber( sal_Int32& rValue,
+                                        const rtl::OUString& rString,
+                                        sal_Int32 nMin, sal_Int32 nMax )
+{
+    sal_Bool bNeg = sal_False;
+    rValue = 0;
+
+    sal_Int32 nPos = 0L;
+    sal_Int32 nLen = rString.getLength();
+
+    // skip white space
+    while( nPos < nLen && sal_Unicode(' ') == rString[nPos] )
+        nPos++;
+
+    if( nPos < nLen && sal_Unicode('-') == rString[nPos] )
+    {
+        bNeg = sal_True;
+        nPos++;
+    }
+
+    // get number
+    while( nPos < nLen &&
+           sal_Unicode('0') <= rString[nPos] &&
+           sal_Unicode('9') >= rString[nPos] )
+    {
+        // TODO: check overflow!
+        rValue *= 10;
+        rValue += (rString[nPos] - sal_Unicode('0'));
+        nPos++;
+    }
+
+    if( bNeg )
+        rValue *= -1;
+
+    return nPos == nLen;
+}
+
+/** convert util::DateTime to ISO Date String */
+void XSecController::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
+                                const com::sun::star::util::DateTime& rDateTime )
+{
+    String aString( String::CreateFromInt32( rDateTime.Year ) );
+    aString += '-';
+    if( rDateTime.Month < 10 )
+        aString += '0';
+    aString += String::CreateFromInt32( rDateTime.Month );
+    aString += '-';
+    if( rDateTime.Day < 10 )
+        aString += '0';
+    aString += String::CreateFromInt32( rDateTime.Day );
+
+    if( rDateTime.Seconds != 0 ||
+        rDateTime.Minutes != 0 ||
+        rDateTime.Hours   != 0 )
+    {
+        aString += 'T';
+        if( rDateTime.Hours < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Hours );
+        aString += ':';
+        if( rDateTime.Minutes < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Minutes );
+        aString += ':';
+        if( rDateTime.Seconds < 10 )
+            aString += '0';
+        aString += String::CreateFromInt32( rDateTime.Seconds );
+        if ( rDateTime.HundredthSeconds > 0)
+        {
+            aString += ',';
+            if (rDateTime.HundredthSeconds < 10)
+                aString += '0';
+            aString += String::CreateFromInt32( rDateTime.HundredthSeconds );
+        }
+    }
+
+    rBuffer.append( aString );
+}
+
+/** convert ISO Date String to util::DateTime */
+sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateTime,
+                                     const ::rtl::OUString& rString )
+{
+    sal_Bool bSuccess = sal_True;
+
+    rtl::OUString aDateStr, aTimeStr, sDoubleStr;
+    sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
+    sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
+    if ( nPos >= 0 )
+    {
+        aDateStr = rString.copy( 0, nPos );
+        if ( nPos2 >= 0 )
+        {
+            aTimeStr = rString.copy( nPos + 1, nPos2 - nPos - 1 );
+            sDoubleStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0."));
+            sDoubleStr += rString.copy( nPos2 + 1 );
+        }
+        else
+        {
+            aTimeStr = rString.copy(nPos + 1);
+            sDoubleStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0.0"));
+        }
+    }
+    else
+        aDateStr = rString;         // no separator: only date part
+
+    sal_Int32 nYear  = 1899;
+    sal_Int32 nMonth = 12;
+    sal_Int32 nDay   = 30;
+    sal_Int32 nHour  = 0;
+    sal_Int32 nMin   = 0;
+    sal_Int32 nSec   = 0;
+
+    const sal_Unicode* pStr = aDateStr.getStr();
+    sal_Int32 nDateTokens = 1;
+    while ( *pStr )
+    {
+        if ( *pStr == '-' )
+            nDateTokens++;
+        pStr++;
+    }
+    if ( nDateTokens > 3 || aDateStr.getLength() == 0 )
+        bSuccess = sal_False;
+    else
+    {
+        sal_Int32 n = 0;
+        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
+            bSuccess = sal_False;
+        if ( nDateTokens >= 2 )
+            if ( !convertNumber( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
+                bSuccess = sal_False;
+        if ( nDateTokens >= 3 )
+            if ( !convertNumber( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
+                bSuccess = sal_False;
+    }
+
+    if ( aTimeStr.getLength() > 0 )           // time is optional
+    {
+        pStr = aTimeStr.getStr();
+        sal_Int32 nTimeTokens = 1;
+        while ( *pStr )
+        {
+            if ( *pStr == ':' )
+                nTimeTokens++;
+            pStr++;
+        }
+        if ( nTimeTokens > 3 )
+            bSuccess = sal_False;
+        else
+        {
+            sal_Int32 n = 0;
+            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':', n ), 0, 23 ) )
+                bSuccess = sal_False;
+            if ( nTimeTokens >= 2 )
+                if ( !convertNumber( nMin, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
+                    bSuccess = sal_False;
+            if ( nTimeTokens >= 3 )
+                if ( !convertNumber( nSec, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
+                    bSuccess = sal_False;
+        }
+    }
+
+    if (bSuccess)
+    {
+        rDateTime.Year = (sal_uInt16)nYear;
+        rDateTime.Month = (sal_uInt16)nMonth;
+        rDateTime.Day = (sal_uInt16)nDay;
+        rDateTime.Hours = (sal_uInt16)nHour;
+        rDateTime.Minutes = (sal_uInt16)nMin;
+        rDateTime.Seconds = (sal_uInt16)nSec;
+        rDateTime.HundredthSeconds = sDoubleStr.toDouble() * 100;
+    }
+    return bSuccess;
+}
+
 int XSecController::findSignatureInfor( sal_Int32 nSecurityId)
 /****** XSecController/findSignatureInfor *************************************
  *
@@ -964,9 +1150,12 @@ void XSecController::exportSignature(
         rtl::OUString tag_Object(RTL_CONSTASCII_USTRINGPARAM(TAG_OBJECT));
             rtl::OUString tag_SignatureProperties(RTL_CONSTASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTIES));
                 rtl::OUString tag_SignatureProperty(RTL_CONSTASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY));
+                    rtl::OUString tag_Date(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE));
+#if 0
                     rtl::OUString tag_Timestamp(RTL_CONSTASCII_USTRINGPARAM(TAG_TIMESTAMP));
                         rtl::OUString tag_Date(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE));
                         rtl::OUString tag_Time(RTL_CONSTASCII_USTRINGPARAM(TAG_TIME));
+#endif
 
     const SignatureReferenceInformations& vReferenceInfors = signatureInfo.vSignatureReferenceInfors;
     SvXMLAttributeList *pAttributeList;
@@ -1135,61 +1324,57 @@ void XSecController::exportSignature(
         }
         xDocumentHandler->endElement( tag_KeyInfo );
 
-        if (signatureInfo.ouDate.getLength()>0 ||signatureInfo.ouTime.getLength()>0)
+        /* Write Object element */
+        xDocumentHandler->startElement(
+            tag_Object,
+            cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
         {
-            /* Write Object element */
+            /* Write SignatureProperties element */
             xDocumentHandler->startElement(
-                tag_Object,
+                tag_SignatureProperties,
                 cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
             {
-                /* Write SignatureProperties element */
+                /* Write SignatureProperty element */
+                pAttributeList = new SvXMLAttributeList();
+                pAttributeList->AddAttribute(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_ID)),
+                    signatureInfo.ouPropertyId);
+                pAttributeList->AddAttribute(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_TARGET)),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CHAR_FRAGMENT))+signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
-                    tag_SignatureProperties,
-                    cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
+                    tag_SignatureProperty,
+                    cssu::Reference< cssxs::XAttributeList > (pAttributeList));
                 {
-                    /* Write SignatureProperty element */
+                    /* Write timestamp element */
+
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_ID)),
-                        signatureInfo.ouPropertyId);
-                    pAttributeList->AddAttribute(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_TARGET)),
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CHAR_FRAGMENT))+signatureInfo.ouSignatureId);
-                    xDocumentHandler->startElement(
-                        tag_SignatureProperty,
-                        cssu::Reference< cssxs::XAttributeList > (pAttributeList));
-                    {
-                        /* Write timestamp element */
-                        pAttributeList = new SvXMLAttributeList();
-                        pAttributeList->AddAttribute(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_XMLNS)),
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DATETIME)));
-                        xDocumentHandler->startElement(
-                            tag_Timestamp,
-                            cssu::Reference< cssxs::XAttributeList > (pAttributeList));
-                        {
-                            /* Write date element */
-                            xDocumentHandler->startElement(
-                                tag_Date,
-                                cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
-                            xDocumentHandler->characters( signatureInfo.ouDate );
-                            xDocumentHandler->endElement( tag_Date );
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_XMLNS))
+                            +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                            +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC)),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DC)));
 
-                            /* Write time element */
-                            xDocumentHandler->startElement(
-                                tag_Time,
-                                cssu::Reference< cssxs::XAttributeList > (new SvXMLAttributeList()));
-                            xDocumentHandler->characters( signatureInfo.ouTime );
-                            xDocumentHandler->endElement( tag_Time );
-                        }
-                        xDocumentHandler->endElement( tag_Timestamp );
-                    }
-                    xDocumentHandler->endElement( tag_SignatureProperty );
+                    xDocumentHandler->startElement(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                            +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                            +tag_Date,
+                        cssu::Reference< cssxs::XAttributeList > (pAttributeList));
+
+                    ::rtl::OUStringBuffer buffer;
+                    convertDateTime( buffer, signatureInfo.stDateTime );
+                    xDocumentHandler->characters( buffer.makeStringAndClear() );
+
+                    xDocumentHandler->endElement(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                            +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
+                            +tag_Date);
                 }
-                xDocumentHandler->endElement( tag_SignatureProperties );
+                xDocumentHandler->endElement( tag_SignatureProperty );
             }
-            xDocumentHandler->endElement( tag_Object );
+            xDocumentHandler->endElement( tag_SignatureProperties );
         }
+        xDocumentHandler->endElement( tag_Object );
     }
     xDocumentHandler->endElement( tag_Signature );
 }

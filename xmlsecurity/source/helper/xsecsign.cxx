@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecsign.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:12:09 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,17 +199,10 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference<cssxc::sax::XKeyCollector> keyCollector (xReferenceResolvedListener, cssu::UNO_QUERY);
     keyCollector->setKeyId(0);
 
-    if (internalSignatureInfor.signatureInfor.ouDate.getLength()>0 ||internalSignatureInfor.signatureInfor.ouTime.getLength()>0)
-    /*
-     * add a reference to datatime property, this reference is transparent to the xmlsecurity
-     * framework
-     */
-    {
-        internalSignatureInfor.signatureInfor.ouSignatureId = createId();
-        internalSignatureInfor.signatureInfor.ouPropertyId = createId();
-        internalSignatureInfor.addReference(TYPE_SAMEDOCUMENT_REFERENCE, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
-        size++;
-    }
+    internalSignatureInfor.signatureInfor.ouSignatureId = createId();
+    internalSignatureInfor.signatureInfor.ouPropertyId = createId();
+    internalSignatureInfor.addReference(TYPE_SAMEDOCUMENT_REFERENCE, internalSignatureInfor.signatureInfor.ouPropertyId, -1 );
+    size++;
 
     /*
      * replace both digestValues and signatueValue to " "
@@ -296,26 +289,23 @@ void XSecController::setX509Certificate(
     }
 }
 
-void XSecController::setDateTime(
+void XSecController::setDate(
     sal_Int32 nSecurityId,
-    const rtl::OUString& ouDate,
-    const rtl::OUString& ouTime)
+    const ::com::sun::star::util::DateTime& rDateTime )
 {
     int index = findSignatureInfor( nSecurityId );
 
     if ( index == -1 )
     {
         InternalSignatureInformation isi(nSecurityId, NULL);
-        isi.signatureInfor.ouDate = ouDate;
-        isi.signatureInfor.ouTime = ouTime;
+        isi.signatureInfor.stDateTime = rDateTime;
         m_vInternalSignatureInformations.push_back( isi );
     }
     else
     {
         SignatureInformation &si
             = m_vInternalSignatureInformations[index].signatureInfor;
-        si.ouDate = ouDate;
-        si.ouTime = ouTime;
+        si.stDateTime = rDateTime;
     }
 }
 

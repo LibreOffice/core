@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-28 02:26:48 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
+#include <rtl/ustrbuf.hxx>
+
 #include <cppuhelper/implbase4.hxx>
 
 #ifndef INCLUDED_VECTOR
@@ -121,7 +123,7 @@
 #define TAG_SIGNATUREPROPERTY       "SignatureProperty"
 #define TAG_TIMESTAMP           "timestamp"
 #define TAG_DATE            "date"
-#define TAG_TIME            "time"
+//#define TAG_TIME          "time"
 
 #define ATTR_XMLNS          "xmlns"
 #define ATTR_ALGORITHM          "Algorithm"
@@ -129,8 +131,11 @@
 #define ATTR_ID             "Id"
 #define ATTR_TARGET         "Target"
 
+#define NSTAG_DC            "dc"
+
 #define NS_XMLDSIG          "http://www.w3.org/2000/09/xmldsig#"
-#define NS_DATETIME         "http://www.ietf.org/rfcXXXX.txt"
+//#define NS_DATETIME           "http://www.ietf.org/rfcXXXX.txt"
+#define NS_DC               "http://purl.org/dc/elements/1.1/"
 
 #define ALGO_C14N           "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
 #define ALGO_RSASHA1            "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
@@ -401,6 +406,10 @@ private:
     /*
      * Common methods
      */
+    sal_Bool convertNumber( sal_Int32& rValue, const rtl::OUString& rString, sal_Int32 nMin, sal_Int32 nMax );
+    void convertDateTime( ::rtl::OUStringBuffer& rBuffer, const com::sun::star::util::DateTime& rDateTime );
+    sal_Bool convertDateTime( com::sun::star::util::DateTime& rDateTime, const ::rtl::OUString& rString );
+
     void createXSecComponent( );
     int findSignatureInfor( sal_Int32 nSecurityId );
     bool chainOn( bool bRetrievingLastEvent );
@@ -436,8 +445,9 @@ private:
     void setX509Certificate( rtl::OUString& ouX509Certificate );
     void setSignatureValue( rtl::OUString& ouSignatureValue );
     void setDigestValue( rtl::OUString& ouDigestValue );
+
     void setDate( rtl::OUString& ouDate );
-    void setTime( rtl::OUString& ouTime );
+
     void setId( rtl::OUString& ouId );
     void setPropertyId( rtl::OUString& ouPropertyId );
 
@@ -507,10 +517,10 @@ public:
         const rtl::OUString& ouX509IssuerName,
         const rtl::OUString& ouX509SerialNumber);
 
-    void setDateTime(
+    void setDate(
         sal_Int32 nSecurityId,
-        const rtl::OUString& ouDate,
-        const rtl::OUString& ouTime);
+        const ::com::sun::star::util::DateTime& rDateTime );
+
 
     bool WriteSignature(
         const com::sun::star::uno::Reference<

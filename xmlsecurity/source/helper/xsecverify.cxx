@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecverify.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-28 02:26:48 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,14 +248,16 @@ void XSecController::setDigestValue( rtl::OUString& ouDigestValue )
 void XSecController::setDate( rtl::OUString& ouDate )
 {
     InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
-    isi.signatureInfor.ouDate = ouDate;
+    convertDateTime( isi.signatureInfor.stDateTime, ouDate );
 }
 
+/*
 void XSecController::setTime( rtl::OUString& ouTime )
 {
     InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
     isi.signatureInfor.ouTime = ouTime;
 }
+*/
 
 void XSecController::setId( rtl::OUString& ouId )
 {

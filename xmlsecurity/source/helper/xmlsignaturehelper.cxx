@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-26 15:45:14 $
+ *  last change: $Author: mmi $ $Date: 2004-08-12 02:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
@@ -85,7 +84,8 @@
 /* SEInitializer component */
 #define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
-#define SIGFILEROOTELEMENT  "all-signatures"
+#define TAG_DOCUMENTSIGNATURES  "document-signatures"
+#define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
 
 using namespace ::com::sun::star;
 
@@ -231,9 +231,20 @@ void XMLSignatureHelper::SetX509Certificate(
 
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime )
 {
+    /*
     rtl::OUString aDate = String::CreateFromInt32( rDate.GetDate() );
     rtl::OUString aTime = String::CreateFromInt32( rTime.GetTime() );
     mpXSecController->setDateTime( nSecurityId, aDate, aTime );
+    */
+    ::com::sun::star::util::DateTime stDateTime;
+    stDateTime.HundredthSeconds = (::sal_uInt16)rTime.Get100Sec();
+    stDateTime.Seconds = (::sal_uInt16)rTime.GetSec();
+    stDateTime.Minutes = (::sal_uInt16)rTime.GetMin();
+    stDateTime.Hours = (::sal_uInt16)rTime.GetHour();
+    stDateTime.Day = (::sal_uInt16)rDate.GetDay();
+    stDateTime.Month = (::sal_uInt16)rDate.GetMonth();
+    stDateTime.Year = (::sal_uInt16)rDate.GetYear();
+    mpXSecController->setDate( nSecurityId, stDateTime );
 }
 
 void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary )
@@ -268,19 +279,24 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
     /*
      * write the xml context for signatures
      */
-    rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(SIGFILEROOTELEMENT));
+    rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(TAG_DOCUMENTSIGNATURES));
+
+    SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
+    pAttributeList->AddAttribute(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ATTR_XMLNS)),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NS_DOCUMENTSIGNATURES)));
 
     xDocHandler->startDocument();
     xDocHandler->startElement(
         tag_AllSignatures,
-        uno::Reference< xml::sax::XAttributeList > (new SvXMLAttributeList()));
+        uno::Reference< com::sun::star::xml::sax::XAttributeList > (pAttributeList));
 
     return xDocHandler;
 }
 
 void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler )
 {
-    rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(SIGFILEROOTELEMENT));
+    rtl::OUString tag_AllSignatures(RTL_CONSTASCII_USTRINGPARAM(TAG_DOCUMENTSIGNATURES));
     xDocumentHandler->endElement( tag_AllSignatures );
     xDocumentHandler->endDocument();
 }
