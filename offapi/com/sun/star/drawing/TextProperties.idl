@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 13:16:38 $
+ *  last change: $Author: jsc $ $Date: 2002-12-03 17:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,14 +139,14 @@ service TextProperties
     /** The properties in this service set default formats for asian text
         inside the <type>Shape</type>.
      */
-    service com::sun::star::style::CharacterPropertiesAsian;
+    [optional] service com::sun::star::style::CharacterPropertiesAsian;
 
     //-------------------------------------------------------------------------
 
     /** The properties in this service set default formats for complex text
         inside the <type>Shape</type>.
      */
-    service com::sun::star::style::CharacterPropertiesComplex;
+    [optional] service com::sun::star::style::CharacterPropertiesComplex;
 
     //-------------------------------------------------------------------------
 
@@ -160,14 +160,14 @@ service TextProperties
     /** The properties in this service set default formats for asian text
         inside the <type>Shape</type>.
      */
-    service com::sun::star::style::ParagraphPropertiesAsian;
+    [optional] service com::sun::star::style::ParagraphPropertiesAsian;
 
     //-------------------------------------------------------------------------
 
     /** The properties in this service set default formats for complex text
         inside the <type>Shape</type>.
      */
-    service com::sun::star::style::ParagraphPropertiesComplex;
+    [optional] service com::sun::star::style::ParagraphPropertiesComplex;
     //-------------------------------------------------------------------------
 
     /** If this is <TRUE/>, numbering is ON for the text of

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentDrawView.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-12 15:24:50 $
+ *  last change: $Author: jsc $ $Date: 2002-12-03 17:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ service DrawingDocumentDrawView
 
     /** lets you access the window for this view
     */
-    interface com::sun::star::awt::XWindow;
+    [optional] interface com::sun::star::awt::XWindow;
 
     //-------------------------------------------------------------------------
 

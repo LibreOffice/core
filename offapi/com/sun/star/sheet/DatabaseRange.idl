@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRange.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-11 07:50:35 $
+ *  last change: $Author: jsc $ $Date: 2002-12-03 17:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,20 +137,20 @@ service DatabaseRange
 
     /** specifies whether the AutoFilter is enabled or not.
      */
-    [property] boolean AutoFilter;
+    [optional, property] boolean AutoFilter;
 
     //-------------------------------------------------------------------------
 
     /** specifies whether the filter criteria should be taken from a CellRange
      */
-    [property] boolean UseFilterCriteriaSource;
+    [optional, property] boolean UseFilterCriteriaSource;
 
     //-------------------------------------------------------------------------
 
     /** specifies the range where the filter can find the filter criterias.
         <p>This is only used if <member>SheetFilterDescriptor::UseFilterCriteriaSource</member> is <TRUE/>.</p>
      */
-    [property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
+    [optional, property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
 
 };
 
@@ -161,6 +161,9 @@ service DatabaseRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/10/11 07:50:35  sab
+    #100469#; add AutoFilter and FilterCriteriaSource support
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 
