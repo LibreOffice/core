@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:48:54 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,10 @@ namespace rtl {
 #define BASEPROPERTY_ENFORCE_FORMAT        102  // sal_Bool
 #define BASEPROPERTY_LIVE_SCROLL           103  // sal_Bool
 #define BASEPROPERTY_LINE_END_FORMAT       104  // sal_Int16
+#define BASEPROPERTY_ACTIVATED            105  // sal Bool
+#define BASEPROPERTY_COMPLETE             106  // sal_Bool
+#define BASEPROPERTY_CURRENTITEMID            107  // sal_Int16
+
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
