@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:14 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,11 +254,15 @@
 #include <goodies/grfmgr.hxx>
 #endif
 
+#ifndef SW_WRITERHELPER
+#include "writerhelper.hxx"
+#endif
 #ifndef _ESCHER_HXX
 #include "escher.hxx"
 #endif
 
 using namespace ::com::sun::star;
+using namespace sw::util;
 //#110185# get a part fix for this type of element
 bool SwWW8Writer::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
 {
@@ -928,7 +932,7 @@ void WW8_SdrAttrIter::NextPara( USHORT nPar )
 
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
     pEditPool = aSet.GetPool();
-    eNdChrSet = ((SvxFontItem&)aSet.Get( EE_CHAR_FONTINFO )).GetCharSet();
+    eNdChrSet = ItemGet<SvxFontItem>(aSet,EE_CHAR_FONTINFO).GetCharSet();
 
     if( pBreakIt->xBreak.is() )
         nScript = pBreakIt->xBreak->getScriptType( pEditObj->GetText(nPara), 0);
@@ -1410,10 +1414,7 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
             sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId,
                 aRect, 0 );
             if ( nBlibId )
-            {
-                aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
                 aPropOpt.AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
-            }
         }
     }
 
@@ -2572,10 +2573,7 @@ void SwBasicEscherEx::WritePicture(EscherPropertyContainer &rPropOpt,
         aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
         sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, 0);
         if (nBlibId)
-        {
-            rPropOpt.AddOpt(ESCHER_Prop_fillType, ESCHER_FillPicture);
             rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
-        }
     }
 
     SetPicId(rObj, nShapeId, rPropOpt);
