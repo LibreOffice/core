@@ -2,6 +2,16 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleControls" script:language="StarBasic">Option Explicit
 
+Public DlgOverwrite as Object
+Public Const SBOVERWRITEUNDEFINED as Integer = 0
+Public Const SBOVERWRITECANCEL as Integer = 2
+Public Const SBOVERWRITEQUERY as Integer = 7
+Public Const SBOVERWRITEALWAYS as Integer = 6
+Public Const SBOVERWRITENEVER as Integer = 8
+Public iGeneralOverwrite as Integer
+
+
+
 &apos; Accepts the name of a control and returns the respective control model as object
 &apos; The Container can either be a whole document or a specific sheet of a Calc-Document
 &apos; &apos;CName&apos; is the name of the Control
@@ -297,4 +307,43 @@ Dim oWindowPointer as Object
 		oWindowPointer.SetType(com.sun.star.awt.SystemPointer.WAIT)
 	End If
 	oWindowPeer.SetPointer(oWindowPointer)
+End Sub
+
+
+Sub ShowOverwriteAllDialog(FilePath as String, sTitle as String)
+Dim QueryString as String
+Dim LocRetValue as Integer
+	If InitResources(&quot;&quot;, &quot;com&quot;) Then
+		DlgOverwrite = LoadDialog(&quot;Tools&quot;, &quot;DlgOverwriteAll&quot;)
+		DlgOverwrite.Title = sTitle
+		QueryString = &quot;Das Dokument &apos;&lt;PATH&gt;&apos; existiert bereits.&lt;BR&gt;&lt;BR&gt;Möchten Sie Datei(en) überschreiben?&quot;
+		QueryString = ReplaceString(QueryString, ConvertFromUrl(FilePath), &quot;&lt;PATH&gt;&quot;)
+		QueryString = ReplaceString(QueryString, chr(13), &quot;&lt;BR&gt;&quot;)
+		DlgOverwrite.Model.lblQueryforSave.Label = QueryString
+		LocRetValue = DlgOverwrite.execute()
+		If LocRetValue = 0 Then
+			iGeneralOverwrite = SBOVERWRITECANCEL
+		End If
+		DlgOverwrite.dispose()
+	Else
+		iGeneralOverwrite = SBOVERWRITECANCEL
+	End If
+End Sub
+
+
+Sub SetOVERWRITEToQuery()
+	iGeneralOverwrite = SBOVERWRITEQUERY
+	DlgOverwrite.EndExecute()
+End Sub
+
+
+Sub SetOVERWRITEToAlways()
+	iGeneralOverwrite = SBOVERWRITEALWAYS
+	DlgOverwrite.EndExecute()
+End Sub
+
+
+Sub SetOVERWRITEToNever()
+	iGeneralOverwrite = SBOVERWRITENEVER
+	DlgOverwrite.EndExecute()
 End Sub</script:module>
