@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:58:55 $
+ *  last change: $Author: cl $ $Date: 2003-05-08 09:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,8 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
     mpFilterInfo( NULL ),
     sDTDPath( RTL_CONSTASCII_USTRINGPARAM( "$(inst)/share/dtd/officedocument/1_0/office.dtd" ) )
 {
+    FreeResource();
+
     maPBExportBrowse.SetClickHdl(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );
     maPBCurrentDocument.SetClickHdl(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );
     maPBImportBrowse.SetClickHdl(LINK( this, XMLFilterTestDialog, ClickHdl_Impl ) );
@@ -287,8 +289,6 @@ XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, cons
 
 XMLFilterTestDialog::~XMLFilterTestDialog()
 {
-    FreeResource();
-
     try
     {
         if( mxGlobalBroadcaster.is() )

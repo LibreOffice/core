@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-08 11:09:20 $
+ *  last change: $Author: cl $ $Date: 2003-05-08 09:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     sTemplatePath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/template/") ),
     sDocTypePrefix( RTL_CONSTASCII_USTRINGPARAM( "doctype:") )
 {
+    FreeResource();
+
     mpResMgr = &rResMgr;
 
     mpFilterListBox = new XMLFilterListBox( &maCtrlFilterList );
@@ -178,8 +180,6 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
 XMLFilterSettingsDialog::~XMLFilterSettingsDialog()
 {
     delete mpFilterListBox;
-
-    FreeResource();
 }
 
 // -----------------------------------------------------------------------
