@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:38:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ public:
                             BindDispatch_Impl(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > & rDisp,
                                 const ::com::sun::star::util::URL& rURL,
-                                SfxStateCache* pStateCache );
+                                SfxStateCache* pStateCache, const SfxSlot* pSlot );
 
     SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
@@ -133,6 +133,8 @@ class SfxStateCache
 friend class BindDispatch_Impl;
     BindDispatch_Impl*      pDispatch;
     sal_uInt16              nId;           // Slot-Id
+    SfxControllerItem*      pInternalController;
+    com::sun::star::uno::Reference < com::sun::star::frame::XDispatch > xMyDispatch;
     SfxControllerItem*      pController;   // Ptr auf 1. gebundenen Controller (untereinander verkettet)
     SfxSlotServer           aSlotServ;     // SlotServer, SlotPtr = 0 -> Nicht auf Stack
     SfxPoolItem*            pLastItem;     // zuletzt verschicktes Item, nie -1
@@ -170,6 +172,15 @@ public:
 
     SfxControllerItem*      ChangeItemLink( SfxControllerItem* pNewBinding );
     SfxControllerItem*      GetItemLink() const;
+    void                    SetInternalController( SfxControllerItem* pCtrl )
+                            { DBG_ASSERT( !pInternalController, "Only one internal controller allowed!" ); pInternalController = pCtrl; }
+    void                    ReleaseInternalController() { pInternalController = 0; }
+    SfxControllerItem*      GetInternalController() const { return pInternalController; }
+    com::sun::star::uno::Reference < com::sun::star::frame::XDispatch >
+                            GetInternalDispatch() const
+                            { return xMyDispatch; }
+    void                    SetInternalDispatch( const com::sun::star::uno::Reference < com::sun::star::frame::XDispatch >& rDisp )
+                            { xMyDispatch = rDisp; }
 };
 
 //--------------------------------------------------------------------
