@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 16:49:36 $
+ *  last change: $Author: obr $ $Date: 2001-06-14 14:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
         return;
     }
 
-    osl_incrementInterlockedCount(&pThreadImpl->m_nTerminationRequested);
+    osl_incrementInterlockedCount(&(pThreadImpl->m_nTerminationRequested));
 }
 
 
