@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:14:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 typedef struct _osl_TThreadImpl
 {
     HANDLE              m_hThread;      /* OS-handle used for all thread-functions */
-    sal_uInt32          m_ThreadId;     /* identifier for this thread */
+    unsigned            m_ThreadId;     /* identifier for this thread */
     sal_Int32           m_nTerminationRequested;
     oslWorkerFunction   m_WorkerFunction;
     void*               m_pData;
@@ -83,7 +83,7 @@ typedef struct _osl_TThreadImpl
 
 #define THREADIMPL_FLAGS_TERMINATE  0x0001
 
-static sal_uInt32 __stdcall oslWorkerWrapperFunction(void* pData);
+static unsigned __stdcall oslWorkerWrapperFunction(void* pData);
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
 static HRESULT WINAPI osl_CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit);
 
@@ -94,7 +94,7 @@ CoInitializeEx_PROC _CoInitializeEx = osl_CoInitializeEx;
 /*****************************************************************************/
 /* oslWorkerWrapperFunction */
 /*****************************************************************************/
-static sal_uInt32 __stdcall oslWorkerWrapperFunction(void* pData)
+static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
 {
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)pData;
 
@@ -158,6 +158,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
 static HRESULT WINAPI osl_CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit)
 {
+    dwCoInit = dwCoInit; /* avoid warnigns */
     return CoInitialize( pvReserved );
 }
 
@@ -364,7 +365,7 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
         return sal_False;
     }
 
-    return (WaitForSingleObject(pThreadImpl->m_hThread, 0) != WAIT_OBJECT_0);
+    return (sal_Bool)(WaitForSingleObject(pThreadImpl->m_hThread, 0) != WAIT_OBJECT_0);
 }
 
 /*****************************************************************************/
@@ -431,13 +432,13 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
         return sal_False;
     }
 
-    return (0 == pThreadImpl->m_nTerminationRequested);
+    return (sal_Bool)(0 == pThreadImpl->m_nTerminationRequested);
 }
 
 /*****************************************************************************/
 /* osl_yieldThread */
 /*****************************************************************************/
-void SAL_CALL osl_yieldThread()
+void SAL_CALL osl_yieldThread(void)
 {
     Sleep(0);
 }
@@ -489,7 +490,7 @@ static void RemoveKeyFromList( PTLS pTls )
     }
 }
 
-void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach()
+void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void)
 {
     PTLS    pTls;
 
@@ -571,7 +572,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     if (Key != 0)
     {
         PTLS    pTls = (PTLS)Key;
-        void*   pOldData;
+        void*   pOldData = NULL;
         BOOL    fSuccess;
 
         if ( pTls->pfnCallback )
@@ -582,7 +583,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
         if ( fSuccess && pTls->pfnCallback && pOldData )
             pTls->pfnCallback( pOldData );
 
-        return (fSuccess != FALSE);
+        return (sal_Bool)(fSuccess != FALSE);
     }
 
     return (sal_False);
@@ -596,7 +597,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 DWORD   g_dwTLSTextEncodingIndex = (DWORD)-1;
 
 
-rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
+rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding(void)
 {
     DWORD               dwEncoding;
     rtl_TextEncoding    _encoding;
@@ -615,7 +616,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
         char    *pszEncoding;
 
         if ( NULL != (pszEncoding = getenv( "SOLAR_USER_RTL_TEXTENCODING" )) )
-            _encoding = atoi(pszEncoding);
+            _encoding = (rtl_TextEncoding)atoi(pszEncoding);
         else
             _encoding = rtl_getTextEncodingFromWindowsCodePage( GetACP() );
 
