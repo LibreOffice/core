@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AnimationRestart.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:37:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_AnimationRestart_idl__
+#define __com_sun_star_animations_AnimationRestart_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** defines the restart behaviour
+
+    @see <member>XTiming::Restart</member>
+    @see <member>XTiming::RestartDefault</member>
+    @see http://www.w3.org/TR/smil20/smil-timing.html#adef-restart
+*/
+constants AnimationRestart
+{
+    /** The restart behavior for the element is determined by the value of the <member>XTiming::RestartDefault</member> attribute.
+        This is the default value for the <member>XTiming::Restart</member> attribute.
+    */
+    const short DEFAULT = 0;
+
+    /**  Specifies that the value of this attribute (and of the restart behavior) are
+         inherited from the <member>XTiming::RestartDefault</member> value of the parent element.
+         If there is no parent element, the value is <const>AnimationRestart::ALWAYS</const>.
+         This is the default value for the <member>XTiming::RestartDefault</member> attribute.
+    */
+    const short INHERIT = 0;
+
+    /** The element can be restarted at any time.
+    */
+    const short ALWAYS = 1;
+
+    /** The element can only be restarted when it is not active (i.e. it can be restarted after the active end).
+        Attempts to restart the element during its active duration are ignored.
+    */
+    const short WHEN_NOT_ACTIVE = 2;
+
+    /** The element cannot be restarted for the remainder of the current simple
+        duration of the parent time container.
+    */
+    const short NEVER = 3;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
