@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttributeTypeInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:36:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,38 @@
  ************************************************************************/
 package com.sun.star.lib.uno.typeinfo;
 
+import com.sun.star.uno.Type;
 
 public class AttributeTypeInfo extends TypeInfo
 {
     protected int m_index;
+    private final Type m_unoType; // @since UDK 3.2
+
+    /**
+       Create an attribute type info with a UNO type that cannot unambiguously
+       be represented as a Java&nbsp;1.2 type.
+
+       @param name the name of this attribute; must not be <code>null</code>
+
+       @param index the index among the direct members
+
+       @param flags any flags (<code>READONLY</code>, <code>BOUND</code>,
+       <code>UNSIGNED</code>, <code>ANY</code>, <code>INTERFACE</code>)
+
+       @param unoType the exact UNO type; or <code>null</code> if the UNO type
+       is already unambiguously represented by the Java&nbsp;1.2 type
+
+       @since UDK 3.2
+     */
+    public AttributeTypeInfo(String name, int index, int flags, Type unoType) {
+        super(name, flags);
+        m_index = index;
+        m_unoType = unoType;
+    }
 
     public AttributeTypeInfo(String name, int index, int flags)
     {
-        super(name, flags);
-
-        m_index = index;
+        this(name, index, flags, null);
     }
 
     public int getIndex()
@@ -89,5 +111,19 @@ public class AttributeTypeInfo extends TypeInfo
      */
     public final boolean isBound() {
         return (m_flags & TypeInfo.BOUND) != 0;
+    }
+
+    /**
+       Get the exact UNO type of this attribute type info, in case it cannot
+       unambiguously be represented as a Java&nbsp;1.2 type.
+
+       @return the exact UNO type of this attribute type info, or
+       <code>null</code> if the UNO type is already unambiguously represented by
+       the Java&nbsp;1.2 type
+
+       @since UDK 3.2
+     */
+    public final Type getUnoType() {
+        return m_unoType;
     }
 }
