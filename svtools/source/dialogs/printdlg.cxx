@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-04-19 09:52:49 $
+ *  last change: $Author: pl $ $Date: 2002-07-04 16:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,15 +409,30 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
             xInit->initialize( aServiceType );
 
 #ifdef UNX
-            // add PostScript and PDF
-            try
+            if( ! Application::IsRemote() )
+                // sensible only for Unix local
             {
-                xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
-                xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDF" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
-            }
-            catch( IllegalArgumentException& rExc )
-            {
-                DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+                // add PostScript and PDF
+                try
+                {
+                    Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
+                    bool bPS = true, bPDF = true;
+                    if( pPrinter )
+                    {
+                        if( pPrinter->GetCapabilities( PRINTER_CAPABILITIES_PDF ) )
+                            bPS = false;
+                        else
+                            bPDF = false;
+                    }
+                    if( bPS )
+                        xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
+                    if( bPDF )
+                        xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "Portable Document Format" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
+                }
+                catch( IllegalArgumentException& rExc )
+                {
+                    DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+                }
             }
 #endif
 
