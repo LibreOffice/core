@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-24 20:18:29 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 20:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ String RID_EDITUNDO_MOVE
     TEXT [ italian ] = "Sposta" ;
     TEXT [ portuguese_brazilian ] = "Mover" ;
     TEXT [ portuguese ] = "Mover" ;
-    TEXT [ finnish ] = "Siirrä" ;
+    TEXT [ finnish ] = "Siirr?" ;
     TEXT [ danish ] = "Flyt" ;
     TEXT [ french ] = "Déplacer" ;
     TEXT [ swedish ] = "Flytta" ;
@@ -128,7 +128,7 @@ String RID_EDITUNDO_INSERT
     TEXT [ italian ] = "Inserisci" ;
     TEXT [ portuguese_brazilian ] = "Inserir" ;
     TEXT [ portuguese ] = "Inserir" ;
-    TEXT [ finnish ] = "Lisää" ;
+    TEXT [ finnish ] = "Lis??" ;
     TEXT [ danish ] = "Indsæt" ;
     TEXT [ french ] = "Insérer" ;
     TEXT [ swedish ] = "Infoga" ;
@@ -186,7 +186,7 @@ String RID_EDITUNDO_SETATTRIBS
     TEXT [ italian ] = "Applica attributi" ;
     TEXT [ portuguese_brazilian ] = "Aplicar atributos" ;
     TEXT [ portuguese ] = "Aplicar atributos" ;
-    TEXT [ finnish ] = "Käytä määritteitä" ;
+    TEXT [ finnish ] = "K?yt? m??ritteit?" ;
     TEXT [ danish ] = "Anvend attributter" ;
     TEXT [ french ] = "Appliquer les attributs" ;
     TEXT [ swedish ] = "Använd attribut" ;
@@ -215,7 +215,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT [ italian ] = "Reimposta attributi" ;
     TEXT [ portuguese_brazilian ] = "Redefinir atributos" ;
     TEXT [ portuguese ] = "Repor atributos" ;
-    TEXT [ finnish ] = "Palauta määritteet" ;
+    TEXT [ finnish ] = "Palauta m??ritteet" ;
     TEXT [ danish ] = "Nulstil attributer" ;
     TEXT [ french ] = "Restaurer les attributs" ;
     TEXT [ swedish ] = "Återställ attribut" ;
@@ -261,7 +261,7 @@ String RID_EDITUNDO_INDENT
     Text[ korean ] = "ë“¤ì—¬ì“°ê¸°";
     Text[ turkish ] = "Girinti";
     Text[ catalan ] = "Sangría";
-    Text[ finnish ] = "Sisennä";
+    Text[ finnish ] = "Sisenn?";
 };
 
 String RID_EDITUNDO_SETSTYLE
@@ -272,7 +272,7 @@ String RID_EDITUNDO_SETSTYLE
     TEXT [ italian ] = "Applica modelli" ;
     TEXT [ portuguese_brazilian ] = "Apicar estilos" ;
     TEXT [ portuguese ] = "Aplicar estilos" ;
-    TEXT [ finnish ] = "Käytä tyylejä" ;
+    TEXT [ finnish ] = "K?yt? tyylej?" ;
     TEXT [ danish ] = "Anvend typografier" ;
     TEXT [ french ] = "Appliquer les styles" ;
     TEXT [ swedish ] = "Använd mallar" ;
@@ -384,7 +384,7 @@ Menu RID_MENU_SPELL
             Text[ korean ] = "ì¶”ê°€(~A)";
             Text[ turkish ] = "Ekle";
             Text[ catalan ] = "~Incluir";
-            Text[ finnish ] = "~Lisää";
+            Text[ finnish ] = "~Lis??";
         };
         MenuItem
         {
@@ -450,6 +450,7 @@ Menu RID_MENU_SPELL
         };
     };
 };
+
 
 
 
