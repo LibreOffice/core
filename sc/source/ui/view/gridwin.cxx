@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:48:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #include <svx/editobj.hxx>
 #endif
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/svlbox.hxx>
@@ -1421,7 +1422,7 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
     BOOL bNewPointer = FALSE;
 
     SfxInPlaceClient* pClient = pViewData->GetViewShell()->GetIPClient();
-    BOOL bOleActive = ( pClient && pClient->IsInPlaceActive() );
+    BOOL bOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
     if ( pViewData->IsActive() && !bOleActive )
     {
@@ -3052,7 +3053,7 @@ void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             if ( bHadKeyMarker )
                 HideNoteMarker();
             else
-                pViewData->GetDocShell()->DoInPlaceActivate(FALSE);
+                pViewSh->Escape();
             return;
         }
         if ( aCode.GetCode() == KEY_F1 && aCode.GetModifier() == KEY_MOD1 )
@@ -3504,7 +3505,7 @@ ULONG lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xT
         if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
             aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
         {
-            SvStorageRef xStore( new SvStorage( *xStm ) );
+            SotStorageRef xStore( new SotStorage( *xStm ) );
             bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
                          aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
                        && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
