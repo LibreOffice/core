@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:13:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ FRENCH ] = "Zone d'impression" ;
         Text [ ITALIAN ] = "Area di stampa" ;
         Text [ DUTCH ] = "Afdrukbereik" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Area de impress“o" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Area de impress?o" ;
         Text [ SWEDISH ] = "UtskriftsomrÂde" ;
         Text [ PORTUGUESE ] = "¡rea de impress„o" ;
         Text[ chinese_simplified ] = "¥Ú”°«¯”Ú";
@@ -295,7 +295,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -362,7 +362,7 @@ ModelessDialog RID_SCDLG_AREAS
         StringList [ portuguese_brazilian ] =
         {
             < "- keine -" ; Default ; > ;
-            < "- definido pelo usu·rio -" ; Default ; > ;
+            < "- definido pelo usu?rio -" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -484,7 +484,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -508,7 +508,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ FRENCH ] = "Colonne ‡ rÈpÈter" ;
         Text [ ITALIAN ] = "Colonna da ripetere" ;
         Text [ DUTCH ] = "Kolom herhalen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Colunas para repetir ” esquerda" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Colunas para repetir ? esquerda" ;
         Text [ SWEDISH ] = "Upprepningskolumn" ;
         Text [ PORTUGUESE ] = "Coluna a repetir" ;
         Text[ chinese_simplified ] = "÷ÿ∏¥¡–";
@@ -551,7 +551,7 @@ ModelessDialog RID_SCDLG_AREAS
         StringList [ portuguese_brazilian ] =
         {
             < "- keine -" ; Default ; > ;
-            < "- definido pelo usu·rio -" ; Default ; > ;
+            < "- definido pelo usu?rio -" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -673,7 +673,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText [ portuguese ] = "Afastar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "èkè¨";
+        QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
         QuickHelpText[ arabic ] = " ’€Ì—";
@@ -715,7 +715,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "Column- & row he~adings" ;
         Text [ norwegian ] = "Column- & row he~adings" ;
         Text [ italian ] = "Intestazioni colo~nna/riga" ;
-        Text [ portuguese_brazilian ] = "TÌ~tulos de Coluna- & fileira" ;
+        Text [ portuguese_brazilian ] = "T?~tulos de Coluna- & fileira" ;
         Text [ portuguese ] = "TÌ~tulos de colunas & linhas" ;
         Text [ finnish ] = "~Sarake- ja riviotsikot" ;
         Text [ danish ] = "RÊkke-/kolonneoverskrifter" ;
@@ -773,7 +773,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Notes" ;
         Text [ norwegian ] = "~Notes" ;
         Text [ italian ] = "~Note" ;
-        Text [ portuguese_brazilian ] = "~ObservaÁıes" ;
+        Text [ portuguese_brazilian ] = "~Observa??s" ;
         Text [ portuguese ] = "~AnotaÁıes" ;
         Text [ finnish ] = "~Huomautukset" ;
         Text [ danish ] = "Noter" ;
@@ -831,7 +831,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Charts" ;
         Text [ norwegian ] = "~Charts" ;
         Text [ italian ] = "Diagrammi" ;
-        Text [ portuguese_brazilian ] = "~Gr·ficos" ;
+        Text [ portuguese_brazilian ] = "~Gr?ficos" ;
         Text [ portuguese ] = "~Gr·ficos" ;
         Text [ finnish ] = "~Kaaviot" ;
         Text [ danish ] = "Diagrammer" ;
@@ -889,7 +889,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Formulas" ;
         Text [ norwegian ] = "~Formulas" ;
         Text [ italian ] = "~Formula" ;
-        Text [ portuguese_brazilian ] = "~FÛrmulas" ;
+        Text [ portuguese_brazilian ] = "~F?mulas" ;
         Text [ portuguese ] = "~FÛrmulas" ;
         Text [ finnish ] = "~Kaavat" ;
         Text [ danish ] = "~Formler" ;
@@ -930,7 +930,7 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¡„÷µ(~Z)";
         Text[ russian ] = "ÕÛÎÂ‚˚Â ÁÌ‡˜ÂÌËˇ";
-        Text[ polish ] = "Warto~úci zerowe";
+        Text[ polish ] = "Warto~?ci zerowe";
         Text[ japanese ] = "æﬁ€íl(~Z)";
         Text[ chinese_traditional ] = "πs≠»(~Z)";
         Text[ arabic ] = "ﬁÌ„ «·’›—";
@@ -1012,7 +1012,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ swedish ] = "FrÂn v‰nster till hˆg~er" ;
         Text [ dutch ] = "Van ~links naar rechts" ;
         Text [ spanish ] = "De ~izquierda a derecha" ;
-        Text [ english_us ] = "~Left to right" ;
+        Text [ english_us ] = "L~eft to right" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¥”◊ÛœÚ”“(~L)";
         Text[ russian ] = "—ÎÂ‚‡ Ì‡Ô‡‚Ó";
@@ -1043,7 +1043,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "First ~page" ;
         Text [ norwegian ] = "First ~page" ;
         Text [ italian ] = "Primo numero di ~pagina" ;
-        Text [ portuguese_brazilian ] = "Primeira p·gina" ;
+        Text [ portuguese_brazilian ] = "Primeira p?gina" ;
         Text [ portuguese ] = "~N˙mero da primeira p·gina" ;
         Text [ finnish ] = "Ensimm‰isen sivun numero" ;
         Text [ danish ] = "F¯rste sidetal" ;
@@ -1084,7 +1084,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "Page Order" ;
         Text [ norwegian ] = "Page Order" ;
         Text [ italian ] = "Sequenza pagine" ;
-        Text [ portuguese_brazilian ] = "Ordem das P·ginas" ;
+        Text [ portuguese_brazilian ] = "Ordem das P?ginas" ;
         Text [ portuguese ] = "Ordem das p·ginas" ;
         Text [ finnish ] = "Sivuj‰rjestys" ;
         Text [ danish ] = "SiderÊkkef¯lge" ;
@@ -1095,7 +1095,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH_US ] = "Page order" ;
         Text[ chinese_simplified ] = "“≥–Ú";
         Text[ russian ] = "œÓˇ‰ÓÍ ÒÚ‡ÌËˆ";
-        Text[ polish ] = "KolejnoúÊ stron";
+        Text[ polish ] = "Kolejno?Ê stron";
         Text[ japanese ] = "Õﬂ∞ºﬁÇÃèáèò";
         Text[ chinese_traditional ] = "≠∂ß«";
         Text[ arabic ] = " — Ì» «·’›Õ…";
@@ -1112,7 +1112,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~All pages to [%]" ;
         Text [ norwegian ] = "~All pages to [%]" ;
         Text [ italian ] = "~Tutto a [%]" ;
-        Text [ portuguese_brazilian ] = "~Todas as p·ginas para [%]" ;
+        Text [ portuguese_brazilian ] = "~Todas as p?ginas para [%]" ;
         Text [ portuguese ] = "~Tudo para [%]" ;
         Text [ DANISH ] = "Alt til [%]" ;
         Text [ ENGLISH_US ] = "~All to [%]" ;
@@ -1141,7 +1141,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "To ~fit on pages" ;
         Text [ norwegian ] = "To ~fit on pages" ;
         Text [ italian ] = "Num. massimo pagine" ;
-        Text [ portuguese_brazilian ] = "Para ~se ajustar nas p·ginas" ;
+        Text [ portuguese_brazilian ] = "Para ~se ajustar nas p?ginas" ;
         Text [ portuguese ] = "~M·ximo de p·ginas" ;
         Text [ DANISH ] = "Maks. antal sider" ;
         Text [ ENGLISH_US ] = "~Max. no. of pages" ;
