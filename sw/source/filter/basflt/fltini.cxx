@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:45:26 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,8 @@
 #include <svtools/parhtml.hxx>
 #endif
 #include <svtools/svstdarr.hxx>
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <sot/storage.hxx>
+#include <sot/clsids.hxx>
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
@@ -135,9 +131,6 @@
 #endif
 #ifndef _SWGPAR_HXX
 #include <swgpar.hxx>           // fuer den SW/G Parser
-#endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>
 #endif
 #ifndef _W4WFLT_HXX
 #include <w4wflt.hxx>           // AutoDetect
@@ -222,9 +215,9 @@ void _InitFilter()
     SwRead pRd, pWW8Rd = new WW8Reader;
 
     USHORT nCnt = 0;
-    _SetFltPtr( nCnt, (ReadSw3 = new Sw3Reader), FILTER_SW5 );
-    _SetFltPtr( nCnt, ReadSw3, FILTER_SW4 );
-    _SetFltPtr( nCnt, ReadSw3, FILTER_SW3 );
+    //_SetFltPtr( nCnt, (ReadSw3 = new Sw3Reader), FILTER_SW5 );
+    //_SetFltPtr( nCnt, ReadSw3, FILTER_SW4 );
+    //_SetFltPtr( nCnt, ReadSw3, FILTER_SW3 );
     _SetFltPtr( nCnt, (ReadSwg = new SwgReader), FILTER_SWG );
     _SetFltPtr( nCnt, ReadSwg, FILTER_SWGV );
     _SetFltPtr( nCnt, (ReadRtf = new RtfReader), FILTER_RTF );
@@ -244,8 +237,8 @@ void _InitFilter()
     _SetFltPtr( nCnt, (ReadXML = new XMLReader), FILTER_XML );
 
 #ifdef NEW_WW97_EXPORT
-    aReaderWriter[ 8 ].fnGetWriter =  &::GetWW8Writer;
-    aReaderWriter[ 9 ].fnGetWriter = &::GetWW8Writer;
+    aReaderWriter[ 8-3 ].fnGetWriter =  &::GetWW8Writer;
+    aReaderWriter[ 9-3 ].fnGetWriter = &::GetWW8Writer;
 #endif
 
 #ifdef DEBUG_SH
@@ -355,7 +348,7 @@ ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
     const SfxFilter* pFltr = SwIoSystem::GetFilterOfFormat( aFltName );
     if( pFltr )
     {
-        rRef = pStg->OpenStream( SwIoSystem::GetSubStorageName( *pFltr ),
+        rRef = pStg->OpenSotStream( SwIoSystem::GetSubStorageName( *pFltr ),
                                     STREAM_READ | STREAM_SHARE_DENYALL );
 
         if( rRef.Is() )
@@ -375,8 +368,7 @@ ULONG StgReader::OpenMainStream( SvStorageStreamRef& rRef, USHORT& rBuffSize )
 }
 
 /*  */
-
-
+/*
 ULONG Sw3Reader::Read( SwDoc &rDoc, SwPaM &rPam, const String & )
 {
     ULONG nRet;
@@ -418,12 +410,13 @@ USHORT Sw3Reader::GetSectionList( SfxMedium& rMedium,
     if( pIO )
         pIO->GetSectionList( &aStg, rStrings );
     return rStrings.Count();
+    return 0;
 }
-
+*/
 
 ULONG Sw3Writer::WriteStorage()
 {
-    ULONG nRet;
+    ULONG nRet;    /*
     if( pIO )
     {
         // der gleiche Storage -> Save, sonst SaveAs aufrufen
@@ -438,7 +431,7 @@ ULONG Sw3Writer::WriteStorage()
     {
         ASSERT( !this, "Sw3-Writer ohne IO-System" )
         nRet = ERR_SWG_WRITE_ERROR;
-    }
+    }*/
     return nRet;
 }
 
