@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:00:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,7 @@ void XMLSectionExport::ExportRegularSectionStart(
     {
         OUString sQValue =
             GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOW,
-                                                         sCond );
+                                                         sCond, sal_False );
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_CONDITION, sQValue);
         eDisplay = XML_CONDITION;
 
