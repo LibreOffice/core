@@ -709,7 +709,7 @@ item String SvxColumnItem;
 item String SvxShadowItem;
 item UINT32 SvxObjectItem;
 item String SdrTextFitToSizeTypeItem;
-
+item String SvxClipboardFmtItem;
 struct FmFormInfo
 {
     INT32 Pos MID_POS ;
