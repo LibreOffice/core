@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-18 14:12:38 $
+ *  last change: $Author: mt $ $Date: 2002-06-25 08:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1374,7 +1374,7 @@
           </info>
         </prop>
         <prop oor:name="Help" oor:type="xs:string">
-          <!-- Responsible: MT -->
+          <!-- Responsible: ABI -->
           <value>$(instpath)/help</value>
           <info>
             <desc xml:lang="en-US">The path to the Office help files.</desc>
