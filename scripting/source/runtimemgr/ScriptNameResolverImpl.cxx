@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-06-19 11:11:41 $
+ *  last change: $Author: dfoster $ $Date: 2003-07-23 14:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
             ::rtl::OUString::createFromAscii(
                     "com.sun.star.ucb.SimpleFileAccess" ), m_xContext );
         validateXRef( xInterface,
-            "FunctionProvider::initialise: cannot get SimpleFileAccess Service\n" );
+            "ScriptProvider::initialise: cannot get SimpleFileAccess Service\n" );
         Reference < ucb::XSimpleFileAccess > xSimpleFileAccess = Reference <
                     ucb::XSimpleFileAccess > ( xInterface, UNO_QUERY_THROW );
 

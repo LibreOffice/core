@@ -4,20 +4,20 @@
     <module-name>   ScriptRuntimeManager    </module-name>
     <component-description>
         <author> Noel Power</author>
-        <name>  drafts.com.sun.star.script.framework.provider.FunctionProvider  </name>
+        <name>  drafts.com.sun.star.script.framework.provider.ScriptProvider    </name>
         <description>
     This component is part of the Scripting Framework
 </description>
         <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
         <language>  c++ </language>
         <status value="drafts"/>
-        <supported-service> drafts.com.sun.star.script.framework.provider.FunctionProvider  </supported-service>
+        <supported-service> drafts.com.sun.star.script.framework.provider.ScriptProvider    </supported-service>
         <type>  com.sun.star.beans.XPropertySet                 </type>
         <type>  com.sun.star.uno.Exception                  </type>
         <type>  com.sun.star.io.IOException                 </type>
         <type>  com.sun.star.io.XStream                 </type>
-        <type>  drafts.com.sun.star.script.framework.provider.XFunction </type>
-        <type>  drafts.com.sun.star.script.framework.provider.XFunctionProvider </type>
+        <type>  drafts.com.sun.star.script.framework.provider.XScript </type>
+        <type>  drafts.com.sun.star.script.framework.provider.XScriptProvider </type>
         <type>  drafts.com.sun.star.script.framework.runtime.XScriptInvocation </type>
 
     </component-description>

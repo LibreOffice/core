@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: npower $ $Date: 2003-07-07 14:25:54 $
+ *  last change: $Author: dfoster $ $Date: 2003-07-23 14:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,16 +454,16 @@ OUString ssm_getImplementationName() SAL_THROW( () );
 //*************************************************************************
 
 //************ Script Provider defines ************************************
-Reference< XInterface > SAL_CALL fp_create( const Reference< XComponentContext > & xCompC );
-//******************** FunctionProvider defines ***************************
-Sequence< OUString > fp_getSupportedServiceNames( ) SAL_THROW( () );
+Reference< XInterface > SAL_CALL sp_create( const Reference< XComponentContext > & xCompC );
+//******************** ScriptProvider defines ***************************
+Sequence< OUString > sp_getSupportedServiceNames( ) SAL_THROW( () );
 //*************************************************************************
-OUString fp_getImplementationName( ) SAL_THROW( () );
+OUString sp_getImplementationName( ) SAL_THROW( () );
 //*************************************************************************
 
 //************ ScriptStorage defines **************************************
 Reference< XInterface > SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
-//******************** FunctionProvider defines ***************************
+//******************** ScriptProvider defines ***************************
 Sequence< OUString > ss_getSupportedServiceNames( ) SAL_THROW( () );
 //*************************************************************************
 OUString ss_getImplementationName( ) SAL_THROW( () );
@@ -493,8 +493,8 @@ static struct cppu::ImplementationEntry s_entries [] =
             0, 0
         },
         {
-            fp_create, fp_getImplementationName,
-            fp_getSupportedServiceNames, cppu::createSingleComponentFactory,
+            sp_create, sp_getImplementationName,
+            sp_getSupportedServiceNames, cppu::createSingleComponentFactory,
             0, 0
         },
         { 0, 0, 0, 0, 0, 0 }

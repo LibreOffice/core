@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:53 $
+*  last change: $Author: dfoster $ $Date: 2003-07-23 14:01:00 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -166,13 +166,13 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            // Creates a FunctionProvider ( if one is not created allready )
-            createFunctionProvider( aURL.Complete );
+            // Creates a ScriptProvider ( if one is not created allready )
+            createScriptProvider( aURL.Complete );
 
-            Reference< provider::XFunction > xFunc =
-                m_xFunctionProvider->getFunction( aURL.Complete );
+            Reference< provider::XScript > xFunc =
+                m_xScriptProvider->getScript( aURL.Complete );
             validateXRef( xFunc,
-                "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XFunction interface" );
+                "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
 
 
             Sequence< Any > inArgs( 0 );
@@ -307,12 +307,12 @@ throw ( RuntimeException )
 {}
 
 void
-ScriptProtocolHandler::createFunctionProvider( const ::rtl::OUString& url )
+ScriptProtocolHandler::createScriptProvider( const ::rtl::OUString& url )
 throw ( RuntimeException )
 {
-    if ( m_xFunctionProvider.is() )
+    if ( m_xScriptProvider.is() )
     {
-        OSL_TRACE("ScriptProtocolHandler::createFunctionProvider(), function provider already created");
+        OSL_TRACE("ScriptProtocolHandler::createScriptProvider(), function provider already created");
         return;
     }
     try
@@ -332,22 +332,22 @@ throw ( RuntimeException )
         rtl::OUString filesystemString = rtl::OUString::createFromAscii( "location=filesystem" );
 
         // Detect if workaround is necessary.
-        // Problem, when FunctionProvier is created,
+        // Problem, when ScriptProvider is created,
         // and document contains scripts, storage mangager adds script
         // storage to security manager ( this results in security dialogs
-        // getting raised. ) This is a problem as FunctionProvider is not
+        // getting raised. ) This is a problem as ScriptProvider is not
         // at this time created by the document and dialogs are raised
-        // at unexpected times. This code should be removed when FProvider
+        // at unexpected times. This code should be removed when provider
         // is created by document.
         // Workaround: If uri of script to be invoked is NOT a document
-        // located script create FunctionProvider with extra paramater
+        // located script create ScriptProvider with extra paramater
         // which indicates to storage not to use security
         //
         // workaround also applies to scripts located on the filesystem
         if ( ( url.indexOf( documentString ) == -1 ) && ( url.indexOf( filesystemString ) == -1 ) )
         {
             // Not a document or filesystem script - no need to use security
-            OSL_TRACE(" Will create special FunctionProvider eg. one that doesn't user security" );
+            OSL_TRACE(" Will create special ScriptProvider eg. one that doesn't user security" );
             args.realloc( 2 );
             args[ 1 ] <<= sal_False;
         }
@@ -355,31 +355,31 @@ throw ( RuntimeException )
         Reference< XInterface > xXinterface =
         m_xFactory->createInstanceWithArguments(
             ::rtl::OUString::createFromAscii(
-            "drafts.com.sun.star.script.framework.provider.FunctionProvider" ),
+            "drafts.com.sun.star.script.framework.provider.ScriptProvider" ),
             args );
         validateXRef( xXinterface,
-            "ScriptProtocolHandler::initialize: cannot get instance of FunctionProvider" );
-        m_xFunctionProvider = Reference< provider::XFunctionProvider >( xXinterface,
+            "ScriptProtocolHandler::initialize: cannot get instance of ScriptProvider" );
+        m_xScriptProvider = Reference< provider::XScriptProvider >( xXinterface,
             UNO_QUERY_THROW );
     }
     catch ( RuntimeException & e )
     {
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createFunctionProvider(),  " );
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider(),  " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
     catch ( Exception & e )
     {
-        OSL_TRACE( "ScriptProtocolHandler::createFunctionProvider: Caught Exception %s",
+        OSL_TRACE( "ScriptProtocolHandler::createScriptProvider: Caught Exception %s",
         ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createFunctionProvider: " );
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 #ifdef _DEBUG
     catch ( ... )
     {
-        OSL_TRACE( "ScriptProtocolHandler::createFunctionProvier: Unknown exception caught" );
+        OSL_TRACE( "ScriptProtocolHandler::createScriptProvier: Unknown exception caught" );
         throw RuntimeException(
-        OUSTR( "ScriptProtocolHandler::createFunctionProvider: UnknownException: " ),
+        OUSTR( "ScriptProtocolHandler::createScriptProvider: UnknownException: " ),
             Reference< XInterface > () );
     }
 #endif
