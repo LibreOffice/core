@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 14:18:45 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 08:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,6 +539,26 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
+    void ODataAccessDescriptor::initializeFrom(const Reference< XPropertySet >& _rxValues, sal_Bool _bClear)
+    {
+#ifndef SVX_LIGHT
+        if (_bClear)
+            clear();
+        m_pImpl->buildFrom(_rxValues);
+#endif
+    }
+
+    //--------------------------------------------------------------------
+    void ODataAccessDescriptor::initializeFrom(const Sequence< PropertyValue >& _rValues, sal_Bool _bClear)
+    {
+#ifndef SVX_LIGHT
+        if (_bClear)
+            clear();
+        m_pImpl->buildFrom(_rValues);
+#endif
+    }
+
+    //--------------------------------------------------------------------
     Sequence< PropertyValue > ODataAccessDescriptor::createPropertyValueSequence()
     {
 #ifndef SVX_LIGHT
@@ -567,6 +587,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/05/10 14:18:45  fs
+ *  Cursor is of type XResultSet, not string
+ *
  *  Revision 1.3  2001/04/20 16:14:36  fs
  *  exclude some stuff when compiling for SVX_LIGHT
  *
