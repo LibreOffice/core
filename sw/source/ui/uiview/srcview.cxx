@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,6 +1060,12 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             rtl_TextEncoding eHeaderEnc =
                 SfxHTMLParser::GetEncodingByHttpHeader(
                                             pDocShell->GetHeaderAttributes() );
+            if( RTL_TEXTENCODING_DONTKNOW == eHeaderEnc )
+            {
+                const sal_Char *pCharSet =
+                    rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 );
+                eHeaderEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+            }
             if( RTL_TEXTENCODING_DONTKNOW != eHeaderEnc &&
                  eDestEnc != eHeaderEnc )
             {
