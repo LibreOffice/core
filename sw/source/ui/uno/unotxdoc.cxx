@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 12:58:27 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1720,13 +1720,10 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
     }
     else
     {
-        sal_uInt16 nTokenCount = rServiceName.getTokenCount('.');
-        if(nTokenCount >= 4 &&
-            rServiceName.getToken( 0, '.' ) == C2U("com") &&
-            rServiceName.getToken( 1, '.' ) == C2U("sun") &&
-            rServiceName.getToken( 2, '.' ) == C2U("star"))
+        if( rServiceName.compareToAscii( "com.sun.star.", 13 ) == 0 )
         {
-            OUString sCategory = rServiceName.getToken( 3, '.' );
+            sal_Int32 nIndex = 13;
+            OUString sCategory = rServiceName.getToken( 0, '.', nIndex );
             sal_Bool bShape = sCategory == C2U("drawing");
             if( bShape || sCategory == C2U("form"))
             {
