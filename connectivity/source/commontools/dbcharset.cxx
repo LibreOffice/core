@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 06:09:58 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 08:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ namespace dbtools
         :m_nLivingIterators(0)
     #endif
     {
-        m_aEncodings.resize(9);
+        m_aEncodings.resize(10);
         m_aEncodings[0] = RTL_TEXTENCODING_MS_1252;     // ANSI
         m_aEncodings[1] = RTL_TEXTENCODING_APPLE_ROMAN; // MAC
         m_aEncodings[2] = RTL_TEXTENCODING_IBM_437;     // IBMPC_437
@@ -104,8 +104,9 @@ namespace dbtools
         m_aEncodings[6] = RTL_TEXTENCODING_IBM_863;     // IBMPC_863
         m_aEncodings[7] = RTL_TEXTENCODING_IBM_865;     // IBMPC_865
         m_aEncodings[8] = RTL_TEXTENCODING_DONTKNOW;    // SYSTEM
+        m_aEncodings[9] = RTL_TEXTENCODING_UTF8;        // UTF-8
 
-        m_aNames.resize(9);
+        m_aNames.resize(10);
         m_aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ANSI"));
         m_aNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAC"));
         m_aNames[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_437"));
@@ -115,12 +116,13 @@ namespace dbtools
         m_aNames[6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_863"));
         m_aNames[7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_865"));
         m_aNames[8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSTEM"));
+        m_aNames[9] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UTF-8"));
 
         OSL_ENSURE(m_aEncodings.size() == m_aNames.size(),
             "OCharsetMap::OCharsetMap: inconsistentce(1)!");
 
         // the IANA representations of the character sets which we know
-        m_aIanaNames.resize(9);
+        m_aIanaNames.resize(10);
         m_aIanaNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("windows-1252"));
         m_aIanaNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macintosh"));
         m_aIanaNames[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM437"));
@@ -130,6 +132,7 @@ namespace dbtools
         m_aIanaNames[6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM863"));
         m_aIanaNames[7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM865"));
         m_aIanaNames[8] = ::rtl::OUString();
+        m_aIanaNames[9] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UTF-8"));
 
         OSL_ENSURE(m_aNames.size() == m_aIanaNames.size(),
             "OCharsetMap::OCharsetMap: inconsistentce(2)!");
@@ -231,9 +234,9 @@ namespace dbtools
     //-------------------------------------------------------------------------
     CharsetIteratorDerefHelper OCharsetMap::CharsetIterator::operator*() const
     {
-        OSL_ENSURE(m_nPosition < m_pContainer->m_aEncodings.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
-        OSL_ENSURE(m_nPosition < m_pContainer->m_aIanaNames.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
-        OSL_ENSURE(m_nPosition < m_pContainer->m_aNames.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
+        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aEncodings.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
+        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aIanaNames.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
+        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aNames.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
         return CharsetIteratorDerefHelper(
             m_pContainer->m_aEncodings[m_nPosition],
             m_pContainer->m_aIanaNames[m_nPosition],
@@ -243,8 +246,8 @@ namespace dbtools
     //-------------------------------------------------------------------------
     const OCharsetMap::CharsetIterator& OCharsetMap::CharsetIterator::operator++()
     {
-        OSL_ENSURE(m_nPosition < m_pContainer->m_aNames.size(), "OCharsetMap::CharsetIterator::operator++ : invalid position!");
-        if (m_nPosition < m_pContainer->m_aNames.size())
+        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aNames.size(), "OCharsetMap::CharsetIterator::operator++ : invalid position!");
+        if ((sal_uInt32)m_nPosition < m_pContainer->m_aNames.size())
             ++m_nPosition;
         return *this;
     }
@@ -277,6 +280,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/04/09 06:09:58  fs
+ *  m_nLivingIterators for _DEBUG, not DBG_UTIL
+ *
  *  Revision 1.2  2001/02/13 09:47:39  fs
  *  #83632# merge IBMPC, IBMPC(850), DOS
  *
