@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:14:10 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,17 +125,19 @@ GridWindow::GridWindow(
     setBoundings( 0, 0, 1023, 1023 );
     computeExtremes();
 
-    m_pLeftMarker = new B2dIAOBitmapExReference(
+    // #i21114#
+    // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
+    m_pLeftMarker = new B2dIAOBitmapEx(
         &m_aIAOManager,
         transform( findMinX(), findMinY() ),
-        &m_aMarkerBitmap,
+        m_aMarkerBitmap,
         m_aMarkerBitmap.GetSizePixel().Width()/2,
         m_aMarkerBitmap.GetSizePixel().Height()/2 );
     m_pLeftMarker->SetHittable( TRUE );
-    m_pRightMarker = new B2dIAOBitmapExReference(
+    m_pRightMarker = new B2dIAOBitmapEx(
         &m_aIAOManager,
         transform( findMaxX(), findMaxY() ),
-        &m_aMarkerBitmap,
+        m_aMarkerBitmap,
         m_aMarkerBitmap.GetSizePixel().Width()/2,
         m_aMarkerBitmap.GetSizePixel().Height()/2 );
     m_pRightMarker->SetHittable( TRUE );
@@ -539,7 +541,11 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
     {
         // user wants to drag a button
         if( pMarker )
-            m_pDragMarker = (B2dIAOBitmapExReference*)pMarker;
+        {
+            // #i21114#
+            // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
+            m_pDragMarker = (B2dIAOBitmapEx*)pMarker;
+        }
     }
     else if( rEvt.GetButtons() == MOUSE_RIGHT )
     {
@@ -553,10 +559,12 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
         }
         else if( ! pMarker )
         {
-            pMarker = new B2dIAOBitmapExReference(
+            // #i21114#
+            // B2dIAOBitmapExReference is no longer used, use B2dIAOBitmapEx
+            pMarker = new B2dIAOBitmapEx(
                 &m_aIAOManager,
                 aPoint,
-                &m_aMarkerBitmap,
+                m_aMarkerBitmap,
                 m_aMarkerBitmap.GetSizePixel().Width()/2,
                 m_aMarkerBitmap.GetSizePixel().Height()/2 );
             pMarker->SetHittable( TRUE );
