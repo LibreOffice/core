@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-10 12:49:13 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,43 +164,10 @@ static USHORT GetKeyCode( guint keyval )
             case GDK_Menu:          nCode = KEY_MENU;       break;
             case GDK_Help:          nCode = KEY_HELP;       break;
             case GDK_Undo:          nCode = KEY_UNDO;       break;
+            case GDK_KP_Separator:  nCode = KEY_DECIMAL;    break;
         }
     }
     return nCode;
-}
-
-static USHORT GetKeyCodeFromUnicode( sal_Unicode cCode )
-{
-    USHORT nRet = 0;
-
-    if( cCode >= '0' && cCode <= '9' )
-        nRet = KEY_0 + (cCode - '0');
-    else if( cCode >= 'a' && cCode <= 'z' )
-        nRet = KEY_A + (cCode -'a' );
-    else if( cCode >= 'A' && cCode <= 'Z' )
-        nRet = KEY_A + (cCode -'A' );
-    else if( cCode == ' ' )
-        nRet = KEY_SPACE;
-    else if( cCode == '+' )
-        nRet = KEY_ADD;
-    else if( cCode == '-' )
-        nRet = KEY_SUBTRACT;
-    else if( cCode == '*' )
-        nRet = KEY_MULTIPLY;
-    else if( cCode == '/' )
-        nRet = KEY_DIVIDE;
-    else if( cCode == '.' )
-        nRet = KEY_POINT;
-    else if( cCode == ',' )
-        nRet = KEY_COMMA;
-    else if( cCode == '<' )
-        nRet = KEY_LESS;
-    else if( cCode == '>' )
-        nRet = KEY_GREATER;
-    else if( cCode == '=' )
-        nRet = KEY_EQUAL;
-
-    return nRet;
 }
 
 GtkSalFrame::GraphicsHolder::~GraphicsHolder()
@@ -261,6 +228,7 @@ void GtkSalFrame::InitCommon()
     g_signal_connect( G_OBJECT(m_pWindow), "leave-notify-event", G_CALLBACK(signalCrossing), this );
     g_signal_connect( G_OBJECT(m_pWindow), "enter-notify-event", G_CALLBACK(signalCrossing), this );
     g_signal_connect( G_OBJECT(m_pWindow), "visibility-notify-event", G_CALLBACK(signalVisibility), this );
+    g_signal_connect( G_OBJECT(m_pWindow), "destroy", G_CALLBACK(signalDestroy), this );
 
     // init members
     m_pCurrentCursor    = NULL;
@@ -281,6 +249,17 @@ void GtkSalFrame::InitCommon()
         delete m_aGraphics[i].pGraphics;
         m_aGraphics[i].pGraphics = NULL;
     }
+    m_aLastKeyPress.type                = GDK_KEY_PRESS;
+    m_aLastKeyPress.window              = NULL;
+    m_aLastKeyPress.send_event          = 0;
+    m_aLastKeyPress.time                = 0;
+    m_aLastKeyPress.state               = 0;
+    m_aLastKeyPress.keyval              = 0;
+    m_aLastKeyPress.length              = 0;
+    m_aLastKeyPress.string              = NULL;
+    m_aLastKeyPress.hardware_keycode    = 0;
+    m_aLastKeyPress.group               = 0;
+
 
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
@@ -559,13 +538,12 @@ void GtkSalFrame::SetTitle( const String& rTitle )
 
 void GtkSalFrame::SetIcon( USHORT nIcon )
 {
-    if( m_nStyle & SAL_FRAME_STYLE_CHILD )
+    if( m_nStyle & SAL_FRAME_STYLE_CHILD || ! m_pWindow )
         return;
 
     GList *pPixbufs = NULL;
 
-    // pl: evil ? don't be scared so easily :-)
-    { // Begin this unutterably evil; we need to pass a nice handle down
+    {
         VCL_CUSTOM_ICON_FN *pCustomIcon = 0;
         char *pSymbol = g_strdup_printf ("%s%d", VCL_CUSTOM_ICON_BASE, nIcon );
         void *pAppHdl = dlopen( NULL, RTLD_LAZY );
@@ -584,7 +562,7 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
         }
         g_free( pSymbol );
         dlclose( pAppHdl );
-    } // End evilness
+    }
 
     gtk_window_set_icon_list( m_pWindow, pPixbufs );
 
@@ -673,7 +651,7 @@ void GtkSalFrame::SetDefaultSize()
     SetPosSize( 0, 0, aDefSize.Width(), aDefSize.Height(),
                 SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
 
-    if( m_nStyle & SAL_FRAME_STYLE_DEFAULT )
+    if( m_nStyle & SAL_FRAME_STYLE_DEFAULT && m_pWindow )
         gtk_window_maximize( m_pWindow );
 }
 
@@ -866,7 +844,7 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, USHOR
 
 void GtkSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    if( GTK_WIDGET_MAPPED( GTK_WIDGET(m_pWindow) ) )
+    if( m_pWindow && GTK_WIDGET_MAPPED( GTK_WIDGET(m_pWindow) ) )
     {
         rWidth = maGeometry.nWidth;
         rHeight = maGeometry.nHeight;
@@ -1068,25 +1046,31 @@ void GtkSalFrame::ToTop( USHORT nFlags )
 
 void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 {
-    GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
-    gdk_window_set_cursor( GTK_WIDGET(m_pWindow)->window, pCursor );
-    m_pCurrentCursor = pCursor;
+    if( m_pWindow )
+    {
+        GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
+        gdk_window_set_cursor( GTK_WIDGET(m_pWindow)->window, pCursor );
+        m_pCurrentCursor = pCursor;
+    }
 }
 
 void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
 {
-    int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
-    GdkGrabStatus nStatus;
+    if( m_pWindow )
+    {
+        int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
+        GdkGrabStatus nStatus;
 
-    if( bGrab )
-        nStatus = gdk_pointer_grab
+        if( bGrab )
+            nStatus = gdk_pointer_grab
                 ( GTK_WIDGET(m_pWindow)->window, bOwnerEvents,
                   (GdkEventMask) nMask, NULL, m_pCurrentCursor,
                   GDK_CURRENT_TIME );
-    else
-    {
-        // Two GdkDisplays may be open
-        gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
+        else
+        {
+            // Two GdkDisplays may be open
+            gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
+        }
     }
 }
 
@@ -1354,7 +1338,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 #endif
 
     // match font to e.g. resolve "Sans"
-    psp::PrintFontManager::get().matchFont( aInfo );
+    psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
@@ -1548,26 +1532,35 @@ gboolean GtkSalFrame::signalButton( GtkWidget* pWidget, GdkEventButton* pEvent, 
     }
 
     GTK_YIELD_GRAB();
+
+    vcl::DeletionListener aDel( pThis );
+
     pThis->CallCallback( nEventType, &aEvent );
 
-    if( bClosePopups )
+    if( ! aDel.isDeleted() )
     {
-        ImplSVData* pSVData = ImplGetSVData();
-        if ( pSVData->maWinData.mpFirstFloat )
+        if( bClosePopups )
         {
-            static const char* pEnv = getenv( "SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
-            if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) && !(pEnv && *pEnv) )
-                pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+            ImplSVData* pSVData = ImplGetSVData();
+            if ( pSVData->maWinData.mpFirstFloat )
+            {
+                static const char* pEnv = getenv( "SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
+                if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) && !(pEnv && *pEnv) )
+                    pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+            }
         }
-    }
 
-    int frame_x = (int)(pEvent->x_root - pEvent->x);
-    int frame_y = (int)(pEvent->y_root - pEvent->y);
-    if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
-    {
-        pThis->maGeometry.nX = frame_x;
-        pThis->maGeometry.nY = frame_y;
-        pThis->CallCallback( SALEVENT_MOVE, NULL );
+        if( ! aDel.isDeleted() )
+        {
+            int frame_x = (int)(pEvent->x_root - pEvent->x);
+            int frame_y = (int)(pEvent->y_root - pEvent->y);
+            if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
+            {
+                pThis->maGeometry.nX = frame_x;
+                pThis->maGeometry.nY = frame_y;
+                pThis->CallCallback( SALEVENT_MOVE, NULL );
+            }
+        }
     }
 
     return FALSE;
@@ -1618,21 +1611,30 @@ gboolean GtkSalFrame::signalMotion( GtkWidget* pWidget, GdkEventMotion* pEvent, 
 
     GTK_YIELD_GRAB();
 
+    vcl::DeletionListener aDel( pThis );
+
     pThis->CallCallback( SALEVENT_MOUSEMOVE, &aEvent );
 
-    int frame_x = (int)(pEvent->x_root - pEvent->x);
-    int frame_y = (int)(pEvent->y_root - pEvent->y);
-    if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
+    if( ! aDel.isDeleted() )
     {
-        pThis->maGeometry.nX = frame_x;
-        pThis->maGeometry.nY = frame_y;
-        pThis->CallCallback( SALEVENT_MOVE, NULL );
-    }
+        int frame_x = (int)(pEvent->x_root - pEvent->x);
+        int frame_y = (int)(pEvent->y_root - pEvent->y);
+        if( frame_x != pThis->maGeometry.nX || frame_y != pThis->maGeometry.nY )
+        {
+            pThis->maGeometry.nX = frame_x;
+            pThis->maGeometry.nY = frame_y;
+            pThis->CallCallback( SALEVENT_MOVE, NULL );
+        }
 
-    // ask for the next hint
-    gint x, y;
-    GdkModifierType mask;
-    gdk_window_get_pointer( GTK_WIDGET(pThis->m_pWindow)->window, &x, &y, &mask );
+        if( ! aDel.isDeleted() )
+        {
+            // ask for the next hint
+            gint x, y;
+            GdkModifierType mask;
+            gdk_window_get_pointer( GTK_WIDGET(pThis->m_pWindow)->window, &x, &y, &mask );
+
+        }
+    }
 
     return TRUE;
 }
@@ -1810,32 +1812,30 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
-    static GdkEventKey aLastPressEvent = { GDK_KEY_PRESS, NULL, 0, 0, 0, 0, 0, NULL, 0, 0 };
-
     if( pThis->m_pIMContext )
     {
+        if( pEvent->type == GDK_KEY_PRESS )
+            pThis->m_aLastKeyPress = *pEvent;
         if( gtk_im_context_filter_keypress( pThis->m_pIMContext, pEvent ) )
-        {
-            aLastPressEvent = *pEvent;
             return TRUE;
-        }
-        else
-            if( pEvent->type == GDK_KEY_PRESS )
-                aLastPressEvent.window = NULL;
+        else if( pEvent->type == GDK_KEY_PRESS )
+                pThis->m_aLastKeyPress.window = NULL;
     }
 
     // swallow key release events if according keypress was filtered
-    if( pEvent->type == GDK_KEY_RELEASE                         &&
-        pEvent->window      == aLastPressEvent.window           &&
-        pEvent->send_event  == aLastPressEvent.send_event       &&
-        pEvent->state       == aLastPressEvent.state            &&
-        pEvent->keyval      == aLastPressEvent.keyval )
+    if( pEvent->type == GDK_KEY_RELEASE                                 &&
+        pEvent->window      == pThis->m_aLastKeyPress.window            &&
+        pEvent->send_event  == pThis->m_aLastKeyPress.send_event        &&
+        pEvent->state       == pThis->m_aLastKeyPress.state             &&
+        pEvent->keyval      == pThis->m_aLastKeyPress.keyval )
     {
-        aLastPressEvent.window = NULL;
+        pThis->m_aLastKeyPress.window = NULL;
         return TRUE;
     }
 
     GTK_YIELD_GRAB();
+
+    vcl::DeletionListener aDel( pThis );
 
     // handle modifiers
     if( pEvent->keyval == GDK_Shift_L || pEvent->keyval == GDK_Shift_R ||
@@ -1907,30 +1907,36 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
 
         pThis->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
 
-        // emulate KEY_MENU
-        if( ( pEvent->keyval == GDK_Alt_L || pEvent->keyval == GDK_Alt_R ) &&
-            ( nModCode & ~(KEY_CONTROLMOD|KEY_MOD2)) == 0 )
+        if( ! aDel.isDeleted() )
         {
-            if( pEvent->type == GDK_KEY_PRESS )
-                pThis->m_bSingleAltPress = true;
-
-            else if( pThis->m_bSingleAltPress )
+            // emulate KEY_MENU
+            if( ( pEvent->keyval == GDK_Alt_L || pEvent->keyval == GDK_Alt_R ) &&
+                ( nModCode & ~(KEY_CONTROLMOD|KEY_MOD2)) == 0 )
             {
-                SalKeyEvent aKeyEvt;
+                if( pEvent->type == GDK_KEY_PRESS )
+                    pThis->m_bSingleAltPress = true;
 
-                aKeyEvt.mnCode     = KEY_MENU | nModCode;
-                aKeyEvt.mnRepeat   = 0;
-                aKeyEvt.mnTime     = pEvent->time;
-                aKeyEvt.mnCharCode = 0;
+                else if( pThis->m_bSingleAltPress )
+                {
+                    SalKeyEvent aKeyEvt;
 
-                // simulate KEY_MENU
-                pThis->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-                pThis->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
-                pThis->m_bSingleAltPress = false;
+                    aKeyEvt.mnCode     = KEY_MENU | nModCode;
+                    aKeyEvt.mnRepeat   = 0;
+                    aKeyEvt.mnTime     = pEvent->time;
+                    aKeyEvt.mnCharCode = 0;
+
+                    // simulate KEY_MENU
+                    pThis->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
+                    if( ! aDel.isDeleted() )
+                    {
+                        pThis->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+                        pThis->m_bSingleAltPress = false;
+                    }
+                }
             }
+            else
+                pThis->m_bSingleAltPress = false;
         }
-        else
-            pThis->m_bSingleAltPress = false;
     }
     else
     {
@@ -1943,8 +1949,11 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
 
         pThis->CallCallback( (pEvent->type == GDK_KEY_PRESS) ? SALEVENT_KEYINPUT : SALEVENT_KEYUP, &aEvent );
 
-        pThis->m_bSendModChangeOnRelease = false;
-        pThis->m_bSingleAltPress = false;
+        if( ! aDel.isDeleted() )
+        {
+            pThis->m_bSendModChangeOnRelease = false;
+            pThis->m_bSingleAltPress = false;
+        }
     }
 
     return TRUE;
@@ -2014,6 +2023,8 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
 
     GTK_YIELD_GRAB();
 
+    vcl::DeletionListener aDel( pThis );
+
     /* necessary HACK: all keyboard input comes in here as soon as a IMContext is set
      *  which is logical and consequent. But since even simple input like
      *  <space> comes through the commit signal instead of signalKey
@@ -2028,23 +2039,25 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
      */
     if( ! pThis->m_bWasPreedit && aTextEvent.maText.Len() == 1 )
     {
-        USHORT nCharCode = GetKeyCodeFromUnicode( aTextEvent.maText.GetChar( 0 ) );
         SalKeyEvent aEvent;
 
         aEvent.mnTime           = 0;
-        aEvent.mnCode           = nCharCode;
+        aEvent.mnCode           = GetKeyCode( pThis->m_aLastKeyPress.keyval ) |
+                                  GetModCode( pThis->m_aLastKeyPress.state );
         aEvent.mnCharCode       = aTextEvent.maText.GetChar(0);
         aEvent.mnRepeat         = 0;
 
         pThis->m_bWasPreedit = false;
         pThis->CallCallback( SALEVENT_KEYINPUT, &aEvent );
-        pThis->CallCallback( SALEVENT_KEYUP, &aEvent );
+        if( ! aDel.isDeleted() )
+            pThis->CallCallback( SALEVENT_KEYUP, &aEvent );
         return;
     }
 
     pThis->m_bWasPreedit = false;
     pThis->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aTextEvent);
-    pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+    if( ! aDel.isDeleted() )
+        pThis->CallCallback( SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
 }
 
 void GtkSalFrame::signalIMPreeditChanged( GtkIMContext* pContext, gpointer frame )
@@ -2107,4 +2120,13 @@ gboolean GtkSalFrame::signalIMDeleteSurrounding( GtkIMContext* pContext, gint ar
 //    GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     return FALSE;
+}
+
+void GtkSalFrame::signalDestroy( GtkObject* pObj, gpointer frame )
+{
+    GtkSalFrame* pThis = (GtkSalFrame*)frame;
+    if( GTK_WINDOW( pObj ) == pThis->m_pWindow )
+    {
+        pThis->m_pWindow = NULL;
+    }
 }
