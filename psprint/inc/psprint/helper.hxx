@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:17:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@ void getPrinterPathList( std::list< rtl::OUString >& rPathList, const char* pSub
 const ::rtl::OUString& getFontPath();
 
 bool convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile );
+
+enum whichOfficePath { NetPath, UserPath };
+const rtl::OUString& getOfficePath( enum whichOfficePath ePath );
+
 } // namespace
 
 #endif // _PSPRINT_HELPER_HXX_
