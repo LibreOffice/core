@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRowsEnumeration.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module table {
 
     @see com::sun::star::table::TableRows
  */
-service TableRowsEnumeration
+published service TableRowsEnumeration
 {
     //-------------------------------------------------------------------------
 
