@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:18:14 $
+ *  last change: $Author: thb $ $Date: 2002-08-12 15:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 
 #include <memory>
+
+#include "accessibility.hrc"
+#include "sdresid.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
@@ -319,8 +322,9 @@ void SAL_CALL
     AccessibleOutlineView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString (
-        RTL_CONSTASCII_USTRINGPARAM("AccessibleOutlineView"));
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    return ::rtl::OUString( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_N) );
 }
 
 
@@ -331,12 +335,9 @@ void SAL_CALL
     AccessibleOutlineView::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString sDescription;
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    sDescription = ::rtl::OUString (
-        RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document Outline"));
-
-    return sDescription;
+    return ::rtl::OUString( SdResId(SID_SD_A11Y_I_OUTLINEVIEW_D) );
 }
 
 void AccessibleOutlineView::UpdateChildren()

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: thb $ $Date: 2002-04-26 10:42:39 $
+#   last change: $Author: thb $ $Date: 2002-08-12 15:38:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,9 @@ SLOFILES =      									\
 
 
 EXCEPTIONSFILES= 
+
+SRS2NAME = accessibility
+SRC2FILES = accessibility.src
 
 # --- Tagets -------------------------------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ka $ $Date: 2002-04-18 15:48:12 $
+#   last change: $Author: thb $ $Date: 2002-08-12 15:41:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,12 +89,12 @@ LINKFLAGS+=/SEGMENTS:512 /PACKD:32768
 RESLIBSPLIT1NAME=sd
 RESLIBSPLIT1SRSFILES= \
      $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
-     $(SOLARRESDIR)$/sfx.srs
+     $(SRS)$/accessibility.srs $(SOLARRESDIR)$/sfx.srs
 .ELSE
 RESLIB1NAME=sd
 RESLIB1SRSFILES=\
      $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
-     $(SOLARRESDIR)$/sfx.srs
+     $(SRS)$/accessibility.srs $(SOLARRESDIR)$/sfx.srs
 .ENDIF
 
 #.IF "$(solarlang)" == "deut"

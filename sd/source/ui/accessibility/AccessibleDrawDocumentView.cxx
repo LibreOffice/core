@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 14:46:44 $
+ *  last change: $Author: thb $ $Date: 2002-08-12 15:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #include "sdview.hxx"
 #endif
 #include <memory>
+
+#include "accessibility.hrc"
+#include "sdresid.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -434,8 +437,51 @@ void SAL_CALL
     AccessibleDrawDocumentView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString (
-        RTL_CONSTASCII_USTRINGPARAM("AccessibleDrawDocumentView"));
+    rtl::OUString sName;
+
+    uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
+    if (xInfo.is())
+    {
+        uno::Sequence< ::rtl::OUString > aServices( xInfo->getSupportedServiceNames() );
+        OUString sFirstService = aServices[0];
+        if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
+        {
+            if( aServices.getLength() >= 2 &&
+                aServices[1] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationView")))
+            {
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+                sName = OUString( SdResId(SID_SD_A11Y_I_DRAWVIEW_N) );
+            }
+            else
+            {
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+                sName = OUString( SdResId(SID_SD_A11Y_D_DRAWVIEW_N) );
+            }
+        }
+        else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesView")))
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+            sName = OUString( SdResId(SID_SD_A11Y_I_NOTESVIEW_N) );
+        }
+        else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutView")))
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+            sName = OUString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_N) );
+        }
+        else
+        {
+            sName = sFirstService;
+        }
+    }
+    else
+    {
+        sName = OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleDrawDocumentView"));
+    }
+    return sName;
 }
 
 
@@ -453,18 +499,45 @@ void SAL_CALL
     uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
     if (xInfo.is())
     {
-        OUString sFirstService = xInfo->getSupportedServiceNames()[0];
-        if (sFirstService == OUString (
-                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
+        uno::Sequence< ::rtl::OUString > aServices( xInfo->getSupportedServiceNames() );
+        OUString sFirstService = aServices[0];
+        if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView")))
         {
-            sDescription = OUString (RTL_CONSTASCII_USTRINGPARAM("Draw Document"));
+            if( aServices.getLength() >= 2 &&
+                aServices[1] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationView")))
+            {
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+                sDescription = OUString( SdResId(SID_SD_A11Y_I_DRAWVIEW_D) );
+            }
+            else
+            {
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+                sDescription = OUString( SdResId(SID_SD_A11Y_D_DRAWVIEW_D) );
+            }
+        }
+        else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesView")))
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+            sDescription = OUString( SdResId(SID_SD_A11Y_I_NOTESVIEW_D) );
+        }
+        else if (sFirstService == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutView")))
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+            sDescription = OUString( SdResId(SID_SD_A11Y_I_HANDOUTVIEW_D) );
         }
         else
+        {
             sDescription = sFirstService;
+        }
     }
     else
-        sDescription = OUString (
-            RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
+    {
+        sDescription = OUString(RTL_CONSTASCII_USTRINGPARAM("Accessible Draw Document"));
+    }
     return sDescription;
 }
 
