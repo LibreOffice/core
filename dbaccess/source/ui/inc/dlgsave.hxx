@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 14:38:24 $
+ *  last change: $Author: fs $ $Date: 2001-03-23 10:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,19 @@
 #include <vcl/msgbox.hxx>
 #endif
 
+#define SAD_DEFAULT                 0x0000
+#define SAD_OVERWRITE               0x0001
+#define SAD_ADDITIONAL_DESCRIPTION  0x0002
+
+#define SAD_TITLE_STORE_AS          0x0000
+#define SAD_TITLE_PASTE_AS          0x0100
+
 namespace dbaui
 {
     class OSaveAsDlg : public ModalDialog
     {
     private:
+        FixedText       m_aDescription;
         FixedText       m_aCatalogLbl;
         Edit            m_aCatalog;
         FixedText       m_aSchemaLbl;
@@ -105,7 +113,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xNames;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xMetaData;
         sal_Int32       m_nType;
-        sal_Bool        m_bOverWrite;
+        sal_Int32       m_nFlags;
 
 
     public:
@@ -113,7 +121,7 @@ namespace dbaui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>&  _rxNames,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMetaData,
                     const String& rDefault,
-                    sal_Bool _bOverWrite = sal_False);
+                    sal_Int32 _nFlags = SAD_DEFAULT | SAD_TITLE_STORE_AS);
 
         String getName() const      { return m_aName; }
         String getCatalog() const   { return m_aCatalog.IsVisible() ? m_aCatalog.GetText() : String(); }
