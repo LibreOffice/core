@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:30:10 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@
 #include "ObjectBarManager.hxx"
 #endif
 #include "SdUnoDrawView.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -321,7 +324,7 @@ DrawViewShell::~DrawViewShell()
 
     EndListening (*GetDocSh());
 
-    if (pFuSlideShow != NULL)
+    if (mpSlideShow != NULL)
         StopSlideShow(false);
 
     if (pFuActual)
@@ -878,7 +881,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Seite) mit Hilfe des ZoomItems weitergegeben werden !!!
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
-        if (GetDocSh()->IsUIActive() || pFuSlideShow)
+        if (GetDocSh()->IsUIActive() || mpSlideShow)
         {
             rSet.DisableItem( SID_ATTR_ZOOM );
         }
