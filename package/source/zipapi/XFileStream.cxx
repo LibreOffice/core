@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 18:47:36 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 10:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #ifndef _ZIP_FILE_HXX
 #include <ZipFile.hxx>
 #endif
-#include <memory.h> // for memcpy
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
