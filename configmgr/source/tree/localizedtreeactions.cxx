@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 14:46:29 $
+ *  last change: $Author: obo $ $Date: 2001-04-18 15:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const&
         return std::auto_ptr< INode >();
 
     else if ( designatesAllLocales(makeLocale(_sLocale)) ) // from expanded to expanded
-        return _pNode->clone();
+        return (std::auto_ptr<INode>) _pNode->clone();
 
     else // needs reduction
     {
