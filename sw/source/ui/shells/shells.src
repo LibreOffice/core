@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 14:44:02 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 21:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ String STR_REDLINE_AUTOFMT
     TEXT[ english_us ] = "AutoFormat";
     TEXT[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
     TEXT[ russian ] = "Àâòîôîğìàò";
-    TEXT[ polish ] = "Autoformatowanie";
+    TEXT[ polish ] = "Autoformat";
     TEXT[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
     TEXT[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
     TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
@@ -538,7 +538,7 @@ String STR_REDLINE_TITLE
     Text[ english_us ] = "AutoFormat";
     Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
     Text[ russian ] = "Àâòîôîğìàò";
-    Text[ polish ] = "Autoformatowanie";
+    Text[ polish ] = "Autoformat";
     Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
     Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
     Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
@@ -564,7 +564,7 @@ String STR_REDLINE_MSG
     Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
     Text[ chinese_simplified ] = "ÒÑ¾­Íê³É×Ô¶¯¸ñÊ½¡£\nÄúÏÖÔÚÄÜ¹»½ÓÊÜ»ò¾Ü¾øËùÓĞµÄ¸ü¸Ä£¬»òÕß\n½ÓÊÜ»ò¾Ü¾øµ¥¸ö¸ü¸Ä¡£";
     Text[ russian ] = "Àâòîôîğìàòèğîâàíèå çàêîí÷åíî.\nÑåé÷àñ Âû ìîæåòå ïğèíÿòü èëè îòêëîíèòü ñğàçó âñå èçìåíåíèÿ, èëè êàæäîå ïî îòäåëüíîñòè.";
-    Text[ polish ] = "Autoformatowanie jest zakoñczone.\nMo¿esz zaaakceptowaæ lub odrzuciæ teraz wszystkie zmiany,\nlub akceptowaæ je oraz odrzucaæ pojedynczo.";
+    Text[ polish ] = "Automatyczne formatowanie zakoñczone.\nMo¿na zaaakceptowaæ lub odrzuciæ\nteraz wszystkie lub pojedyncze zmiany.";
     Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚ªI—¹‚µ‚Ü‚µ‚½B\n‚·‚×‚Ä‚Ì•ÏX‚ğó‚¯“ü‚ê‚é‚©AŒ³‚É–ß‚·‚±‚Æ‚ª‚Å‚«‚Ü‚·B\n‚Ü‚½‚Í‚Ğ‚Æ‚Â‚Ğ‚Æ‚Â‚Ì•ÏX‚É‚Â‚¢‚ÄŒŸ“¢‚·‚é‚±‚Æ‚à‚Å‚«‚Ü‚·B";
     Text[ chinese_traditional ] = "¤w¸g§¹¦¨¦Û°Ê®æ¦¡¡C\n±z²{¦b¯à°÷±µ¨ü©Î©Úµ´©Ò¦³ªºÅÜ§ó¡A±z¤]¯à°÷\n±µ¨ü©Î©Úµ´³æ­ÓªºÅÜ§ó¡C";
     Text[ arabic ] = "ÊãøóÊ ÚãáíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí.\níãßäß ÇáÂä ŞÈæá Ãæ ÑİÖ ÇáÊÛííÑÇÊ ßáåÇ¡\nÃæ ŞÈæá Ãæ ÑİÖ ßá ÊÛííÑ Úáì ÍÏå.";
