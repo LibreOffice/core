@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-18 13:53:35 $
+ *  last change: $Author: cd $ $Date: 2001-10-22 06:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,10 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -189,8 +193,12 @@ StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::
 
     try
     {
-        // Create status indicator window to shared it for all created indictaor objects by this factory.
-        m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
+        {
+            // Create status indicator window to shared it for all created indictaor objects by this factory.
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
+        }
+
         m_xParentWindow->addWindowListener( this );
 
         // We must be listener for disposing of our owner frame too.
@@ -363,8 +371,11 @@ void SAL_CALL StatusIndicatorFactory::disposing( const css::lang::EventObject& a
         // Destroy shared status indicator.
         // Attention: Don't do it after destroying of parent or indicator window!
         // Otherwhise vcl say: "parent with living child destroyed ..."
-        delete m_pStatusBar;
-        m_pStatusBar = NULL;
+        {
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            delete m_pStatusBar;
+            m_pStatusBar = NULL;
+        }
 
         // Let owner, parent and all other references die ...
         m_xParentWindow     = css::uno::Reference< css::awt::XWindow >();
@@ -446,6 +457,20 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
 
     try
     {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+        if ( pParentWindow )
+        {
+            WinBits nParentWinBits = pParentWindow->GetStyle();
+            pParentWindow->SetStyle( nParentWinBits & ~WB_CLIPCHILDREN );
+
+            OutputDevice* pOutDev = (OutputDevice*)pParentWindow;
+            pOutDev->SetBackgroundBrush( Brush( Color( COL_WHITE )) );
+
+            pParentWindow->Invalidate( INVALIDATE_NOCLIPCHILDREN );
+            pParentWindow->Flush();
+        }
         m_xParentWindow->setVisible   ( sal_True      );
         m_pStatusBar->Show();
         m_pStatusBar->StartProgressMode( sText );
@@ -496,6 +521,8 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
     {
         try
         {
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+
             m_pStatusBar->EndProgressMode();
 
             IndicatorStack::reverse_iterator pInfo = m_aStack.rbegin();
@@ -506,6 +533,13 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
             }
             else
             {
+                Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+                if ( pParentWindow )
+                {
+                    WinBits nParentWinBits = pParentWindow->GetStyle();
+                    pParentWindow->SetStyle( nParentWinBits | WB_CLIPCHILDREN );
+                }
+
                 m_pStatusBar->Show( sal_False );
                 m_xActiveIndicator = css::uno::Reference< css::task::XStatusIndicator >();
             }
@@ -559,6 +593,7 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
     {
         try
         {
+            vos::OGuard aGuard( Application::GetSolarMutex() );
             m_pStatusBar->SetProgressValue( 0 );
         }
         catch( css::uno::RuntimeException& )
@@ -588,6 +623,7 @@ void StatusIndicatorFactory::setText( const css::uno::Reference< css::task::XSta
     {
         try
         {
+            vos::OGuard aGuard( Application::GetSolarMutex() );
             m_pStatusBar->SetText( sText );
         }
         catch( css::uno::RuntimeException& )
@@ -619,6 +655,7 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
         {
             USHORT nPercentage = (USHORT)( ::std::min( (( nValue * 100 )/ ::std::max( pItem->m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 ));
 
+            vos::OGuard aGuard( Application::GetSolarMutex() );
             m_pStatusBar->SetProgressValue( nPercentage );
         }
         catch( css::uno::RuntimeException& )
@@ -656,11 +693,13 @@ void StatusIndicatorFactory::implts_recalcLayout()
 
     try
     {
-        css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize();
-        Size                  aStatusBarSize  = m_pStatusBar->GetSizePixel();
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        {
+            css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize();
+            Size                  aStatusBarSize  = m_pStatusBar->GetSizePixel();
 
-
-        m_pStatusBar->SetPosSizePixel( 0, aParentSize.Height-aStatusBarSize.Height(), aParentSize.Width, aStatusBarSize.Height() );
+            m_pStatusBar->SetPosSizePixel( 0, aParentSize.Height-aStatusBarSize.Height(), aParentSize.Width, aStatusBarSize.Height() );
+        }
     }
     catch( css::uno::RuntimeException& )
     {
