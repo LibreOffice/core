@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:51:20 $
+#   last change: $Author: hr $ $Date: 2003-06-30 16:02:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@ if (-d "$StartDir") {
     if (-d "$StartDir/docs") {
     my @filelist = ( "install.html","DevelopersGuide_intro.html","notsupported.html",
              "sdk_styles.css", "tools.html", "images/black_dot.gif",
-             "images/logo.gif", "images/logo.gif");
+             "images/logo.gif", "images/sdk_logo.gif", "images/nada.gif");
 
     foreach $i (@filelist)
     {
