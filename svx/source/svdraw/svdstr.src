@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:33:02 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 05:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String STR_ObjNameSingulNONE
     Text [ italian ] = "Oggetto di disegno" ;
     Text [ portuguese_brazilian ] = "Desenhar objeto" ;
     Text [ portuguese ] = "Objecto de desenho" ;
-    Text [ finnish ] = "Piirto-objekti" ;
+    Text [ finnish ] = "piirrosobjekti" ;
     Text [ danish ] = "Tegneobjekt" ;
     Text [ french ] = "Objet de dessin" ;
     Text [ swedish ] = "Ritobjekt" ;
@@ -99,7 +99,7 @@ String STR_ObjNamePluralNONE
     Text [ italian ] = "Oggetti di disegno" ;
     Text [ portuguese_brazilian ] = "Desenhar objetos" ;
     Text [ portuguese ] = "Objectos de desenho" ;
-    Text [ finnish ] = "Piirto-objektit" ;
+    Text [ finnish ] = "piirrosobjektit" ;
     Text [ danish ] = "Tegneobjekter" ;
     Text [ french ] = "Objets de dessin" ;
     Text [ swedish ] = "Ritobjekt" ;
@@ -129,7 +129,7 @@ String STR_ObjNameSingulGRUP
     Text [ italian ] = "Oggetto di gruppo" ;
     Text [ portuguese_brazilian ] = "Agrupar objeto" ;
     Text [ portuguese ] = "Objecto de grupo" ;
-    Text [ finnish ] = "Ryhmäohjekti" ;
+    Text [ finnish ] = "ryhmäobjekti" ;
     Text [ danish ] = "Gruppeobjekt" ;
     Text [ french ] = "Objet de groupe" ;
     Text [ swedish ] = "Gruppobjekt" ;
@@ -158,7 +158,7 @@ String STR_ObjNamePluralGRUP
     Text [ italian ] = "Oggetti di gruppo" ;
     Text [ portuguese_brazilian ] = "Agrupar objetos" ;
     Text [ portuguese ] = "Objectos de grupo" ;
-    Text [ finnish ] = "Ryhmäobjektit" ;
+    Text [ finnish ] = "ryhmäobjektit" ;
     Text [ danish ] = "Gruppeobjekter" ;
     Text [ french ] = "Objets de groupe" ;
     Text [ swedish ] = "Gruppobjekt" ;
@@ -205,6 +205,7 @@ String STR_ObjNameSingulGRUPEMPTY
     Text[ turkish ] = "Boþ grup nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de grupo vacío";
+    Text[ finnish ] = "Tyhjä ryhmäobjekti";
 };
 String STR_ObjNamePluralGRUPEMPTY
 {
@@ -232,6 +233,7 @@ String STR_ObjNamePluralGRUPEMPTY
     Text[ turkish ] = "Boþ grup nesneleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de grupo vacíos";
+    Text[ finnish ] = "Tyhjiä ryhmäobjekteja";
 };
 String STR_ObjNameSingulGRUPLNK
 {
@@ -259,6 +261,7 @@ String STR_ObjNameSingulGRUPLNK
     Text[ turkish ] = "Baðlantýlý grup nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de grupo enlazado";
+    Text[ finnish ] = "Linkitetty ryhmäobjekti";
 };
 String STR_ObjNamePluralGRUPLNK
 {
@@ -286,6 +289,7 @@ String STR_ObjNamePluralGRUPLNK
     Text[ turkish ] = "Baðlantýlý grup nesneleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de grupo vinculados";
+    Text[ finnish ] = "Linkitetyt ryhmäobjektit";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulLINE
@@ -343,6 +347,7 @@ String STR_ObjNameSingulLINE_Hori
     Text[ turkish ] = "Yatay çizgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea horizontal";
+    Text[ finnish ] = "vaakaviiva";
 };
 String STR_ObjNameSingulLINE_Vert
 {
@@ -370,6 +375,7 @@ String STR_ObjNameSingulLINE_Vert
     Text[ turkish ] = "Dikey çizgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea vertical";
+    Text[ finnish ] = "pystyviiva";
 };
 String STR_ObjNameSingulLINE_Diag
 {
@@ -397,6 +403,7 @@ String STR_ObjNameSingulLINE_Diag
     Text[ turkish ] = "Diyagonal çizgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea diagonal";
+    Text[ finnish ] = "lävistäjäviiva";
 };
 String STR_ObjNamePluralLINE
 {
@@ -436,7 +443,7 @@ String STR_ObjNameSingulRECT
     Text [ italian ] = "Rettangolo" ;
     Text [ portuguese_brazilian ] = "Rectangular" ;
     Text [ portuguese ] = "Rectângulo" ;
-    Text [ finnish ] = "Rectangular" ;
+    Text [ finnish ] = "Suorakulmio" ;
     Text [ danish ] = "Rektangel" ;
     Text [ french ] = "Rectangle" ;
     Text [ swedish ] = "Rektangel" ;
@@ -512,6 +519,7 @@ String STR_ObjNameSingulQUAD
     Text[ turkish ] = "Kare";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cuadrado";
+    Text[ finnish ] = "Neliö";
 };
 String STR_ObjNamePluralQUAD
 {
@@ -539,6 +547,7 @@ String STR_ObjNamePluralQUAD
     Text[ turkish ] = "Kareler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cuadrados";
+    Text[ finnish ] = "Neliöt";
 };
 String STR_ObjNameSingulPARAL
 {
@@ -566,6 +575,7 @@ String STR_ObjNameSingulPARAL
     Text[ turkish ] = "Paralelkenar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Paralelograma";
+    Text[ finnish ] = "Suunnikas";
 };
 String STR_ObjNamePluralPARAL
 {
@@ -593,6 +603,7 @@ String STR_ObjNamePluralPARAL
     Text[ turkish ] = "Paralelkenarlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Paralelogramos";
+    Text[ finnish ] = "Suunnikkaat";
 };
 String STR_ObjNameSingulRAUTE
 {
@@ -620,6 +631,7 @@ String STR_ObjNameSingulRAUTE
     Text[ turkish ] = "Elmas";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rombo";
+    Text[ finnish ] = "Vinoneliö";
 };
 String STR_ObjNamePluralRAUTE
 {
@@ -647,6 +659,7 @@ String STR_ObjNamePluralRAUTE
     Text[ turkish ] = "Elmaslar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rombos";
+    Text[ finnish ] = "Vinoneliöt";
 };
 String STR_ObjNameSingulRECTRND
 {
@@ -674,6 +687,7 @@ String STR_ObjNameSingulRECTRND
     Text[ turkish ] = "Yuvarlak köþeli dikdörtgen";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rectángulo redondeado";
+    Text[ finnish ] = "Pyöristetty nelikulmio";
 };
 String STR_ObjNamePluralRECTRND
 {
@@ -701,6 +715,7 @@ String STR_ObjNamePluralRECTRND
     Text[ turkish ] = "Yuvarlak köþeli dikdörtgenler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rectángulos redondeados";
+    Text[ finnish ] = "Pyöristetyt nelikulmiot";
 };
 String STR_ObjNameSingulQUADRND
 {
@@ -728,6 +743,7 @@ String STR_ObjNameSingulQUADRND
     Text[ turkish ] = "Yuvarlak köþeli kare";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cuadrado redondeado";
+    Text[ finnish ] = "pyöristetty neliö";
 };
 String STR_ObjNamePluralQUADRND
 {
@@ -755,6 +771,7 @@ String STR_ObjNamePluralQUADRND
     Text[ turkish ] = "Yuvarlak köþeli kareler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cuadrados redondeados";
+    Text[ finnish ] = "Pyöristetyt neliöt";
 };
 String STR_ObjNameSingulPARALRND
 {
@@ -782,6 +799,7 @@ String STR_ObjNameSingulPARALRND
     Text[ turkish ] = "Yuvarlak köþeli paralelkenar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Paralelograma redondeado";
+    Text[ finnish ] = "Pyöristetty suunnikas";
 };
 String STR_ObjNamePluralPARALRND
 {
@@ -809,6 +827,7 @@ String STR_ObjNamePluralPARALRND
     Text[ turkish ] = "Yuvarlak köþeli paralelkenarlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Paralelogramas redondeados";
+    Text[ finnish ] = "Pyöristetyt suunnikkaat";
 };
 String STR_ObjNameSingulRAUTERND
 {
@@ -836,6 +855,7 @@ String STR_ObjNameSingulRAUTERND
     Text[ turkish ] = "Yuvarlak köþeli elmas";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rombo redondeado";
+    Text[ finnish ] = "pyöristetty vinoneliö";
 };
 String STR_ObjNamePluralRAUTERND
 {
@@ -863,6 +883,7 @@ String STR_ObjNamePluralRAUTERND
     Text[ turkish ] = "Yuvarlak köþeli elmaslar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rombos redondeados";
+    Text[ finnish ] = "Pyöristetyt vinoneliöt";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulCIRC
@@ -902,7 +923,7 @@ String STR_ObjNamePluralCIRC
     Text [ italian ] = "Cerchi" ;
     Text [ portuguese_brazilian ] = "Círculos" ;
     Text [ portuguese ] = "Círculos" ;
-    Text [ finnish ] = "Ymyrät" ;
+    Text [ finnish ] = "Ympyrät" ;
     Text [ danish ] = "Cirkler" ;
     Text [ french ] = "Cercles" ;
     Text [ swedish ] = "Cirklar" ;
@@ -931,7 +952,7 @@ String STR_ObjNameSingulSECT
     Text [ italian ] = "Settore di cerchio" ;
     Text [ portuguese_brazilian ] = "Setor" ;
     Text [ portuguese ] = "Sector" ;
-    Text [ finnish ] = "Lohko" ;
+    Text [ finnish ] = "Ympyrän sektori" ;
     Text [ danish ] = "Cirkelsektor" ;
     Text [ french ] = "Secteur de cercle" ;
     Text [ swedish ] = "Cirkelsektor" ;
@@ -960,7 +981,7 @@ String STR_ObjNamePluralSECT
     Text [ italian ] = "Settori di cerchio" ;
     Text [ portuguese_brazilian ] = "Setores" ;
     Text [ portuguese ] = "Sectores de círculo" ;
-    Text [ finnish ] = "Lohkot" ;
+    Text [ finnish ] = "Ympyrän sektorit" ;
     Text [ danish ] = "Cirkelsektorer" ;
     Text [ french ] = "Secteurs de cercle" ;
     Text [ swedish ] = "Cirkelsektorer" ;
@@ -1047,7 +1068,7 @@ String STR_ObjNameSingulCCUT
     Text [ italian ] = "Segmento di cerchio" ;
     Text [ portuguese_brazilian ] = "Segmento" ;
     Text [ portuguese ] = "Segmento" ;
-    Text [ finnish ] = "Segmentti" ;
+    Text [ finnish ] = "Ympyrän segmentti" ;
     Text [ danish ] = "Cirkelsegment" ;
     Text [ french ] = "Segment de cercle" ;
     Text [ swedish ] = "Cirkelsegment" ;
@@ -1076,7 +1097,7 @@ String STR_ObjNamePluralCCUT
     Text [ italian ] = "Segmenti di cerchio" ;
     Text [ portuguese_brazilian ] = "Segmentos" ;
     Text [ portuguese ] = "Segmentos" ;
-    Text [ finnish ] = "Segmentti" ;
+    Text [ finnish ] = "Ympyräsegmentit" ;
     Text [ danish ] = "Cirkelsegmenter" ;
     Text [ french ] = "Segments de cercle" ;
     Text [ swedish ] = "Cirkelsegment" ;
@@ -1105,7 +1126,7 @@ String STR_ObjNameSingulCIRCE
     Text [ italian ] = "Ellisse" ;
     Text [ portuguese_brazilian ] = "Elipse" ;
     Text [ portuguese ] = "Elipse" ;
-    Text [ finnish ] = "Soikio" ;
+    Text [ finnish ] = "Ellipsi" ;
     Text [ danish ] = "Ellipse" ;
     Text [ french ] = "Ellipse" ;
     Text [ swedish ] = "Ellips" ;
@@ -1134,7 +1155,7 @@ String STR_ObjNamePluralCIRCE
     Text [ italian ] = "Ellissi" ;
     Text [ portuguese_brazilian ] = "Elipses" ;
     Text [ portuguese ] = "Elipses" ;
-    Text [ finnish ] = "Soikiot" ;
+    Text [ finnish ] = "Ellipsit" ;
     Text [ danish ] = "Ellipser" ;
     Text [ french ] = "Ellipses" ;
     Text [ swedish ] = "Ellipser" ;
@@ -1163,7 +1184,7 @@ String STR_ObjNameSingulSECTE
     Text [ italian ] = "Settore di ellisse" ;
     Text [ portuguese_brazilian ] = "Setor Elíptico" ;
     Text [ portuguese ] = "Sector de elipse" ;
-    Text [ finnish ] = "Soikion lohko" ;
+    Text [ finnish ] = "Ellipsikaavio" ;
     Text [ danish ] = "Ellipsesektor" ;
     Text [ french ] = "Secteur elliptique" ;
     Text [ swedish ] = "Ellipssektor" ;
@@ -1192,7 +1213,7 @@ String STR_ObjNamePluralSECTE
     Text [ italian ] = "Settori di ellisse" ;
     Text [ portuguese_brazilian ] = "Setores Elípticos" ;
     Text [ portuguese ] = "Sectores de elipse" ;
-    Text [ finnish ] = "Soikion lohkot" ;
+    Text [ finnish ] = "Ellipsikaaviot" ;
     Text [ danish ] = "Ellipsesektorer" ;
     Text [ french ] = "Secteurs ellipse" ;
     Text [ swedish ] = "Ellipssektorer" ;
@@ -1221,7 +1242,7 @@ String STR_ObjNameSingulCARCE
     Text [ italian ] = "Arco ellittico" ;
     Text [ portuguese_brazilian ] = "Arco Elíptico" ;
     Text [ portuguese ] = "Arco elíptico" ;
-    Text [ finnish ] = "Soikea kaari" ;
+    Text [ finnish ] = "Ellipsikaari" ;
     Text [ danish ] = "Ellipsebue" ;
     Text [ french ] = "Arc d'ellipse" ;
     Text [ swedish ] = "Ellipsbåge" ;
@@ -1250,7 +1271,7 @@ String STR_ObjNamePluralCARCE
     Text [ italian ] = "Archi ellittici" ;
     Text [ portuguese_brazilian ] = "Arcos Elípticos" ;
     Text [ portuguese ] = "Arcos elípticos" ;
-    Text [ finnish ] = "Soikeat kaaret" ;
+    Text [ finnish ] = "Elliptiset kaaret" ;
     Text [ danish ] = "Ellipsebuer" ;
     Text [ french ] = "Arcs d'ellipse" ;
     Text [ swedish ] = "Ellipsbågar" ;
@@ -1279,7 +1300,7 @@ String STR_ObjNameSingulCCUTE
     Text [ italian ] = "Segmento di ellisse" ;
     Text [ portuguese_brazilian ] = "Segmento Elíptico" ;
     Text [ portuguese ] = "Segmento elíptico" ;
-    Text [ finnish ] = "Soikion segmentti" ;
+    Text [ finnish ] = "Ellipsin segmentti" ;
     Text [ danish ] = "Ellipsesegment" ;
     Text [ french ] = "Segment d'ellipse" ;
     Text [ swedish ] = "Ellipssegment" ;
@@ -1308,7 +1329,7 @@ String STR_ObjNamePluralCCUTE
     Text [ italian ] = "Segmenti di ellisse" ;
     Text [ portuguese_brazilian ] = "Segmentos Elípticos" ;
     Text [ portuguese ] = "Segmentos elípticos" ;
-    Text [ finnish ] = "Soikion segmentit" ;
+    Text [ finnish ] = "Ellipsisegmentit" ;
     Text [ danish ] = "Ellipsesegmenter" ;
     Text [ french ] = "Segments d'ellipse" ;
     Text [ swedish ] = "Ellipssegment" ;
@@ -1338,7 +1359,7 @@ String STR_ObjNameSingulPOLY
     Text [ italian ] = "Poligono" ;
     Text [ portuguese_brazilian ] = "Polígono" ;
     Text [ portuguese ] = "Polígono" ;
-    Text [ finnish ] = "Murtoviiva" ;
+    Text [ finnish ] = "Polygoni" ;
     Text [ danish ] = "Polygon" ;
     Text [ french ] = "Polygone" ;
     Text [ swedish ] = "Polygon" ;
@@ -1367,7 +1388,7 @@ String STR_ObjNameSingulPOLY_PntAnz
     Text [ italian ] = "Poligono con %N punti" ;
     Text [ portuguese_brazilian ] = "+++Polígono" ;
     Text [ portuguese ] = "Polígono com %N pontos" ;
-    Text [ finnish ] = "+++Murtoviiva" ;
+    Text [ finnish ] = "Polygoni, jossa %N kulmaa" ;
     Text [ danish ] = "Polygon med %N punkter" ;
     Text [ french ] = "Polygone avec %N points" ;
     Text [ swedish ] = "Polygon med %N punkter" ;
@@ -1396,7 +1417,7 @@ String STR_ObjNamePluralPOLY
     Text [ italian ] = "Poligoni" ;
     Text [ portuguese_brazilian ] = "Polígonos" ;
     Text [ portuguese ] = "Polígonos" ;
-    Text [ finnish ] = "Murtoviivat" ;
+    Text [ finnish ] = "Polygonit" ;
     Text [ danish ] = "Polygoner" ;
     Text [ french ] = "Polygones" ;
     Text [ swedish ] = "Polygoner" ;
@@ -1454,7 +1475,7 @@ String STR_ObjNameSingulPLIN_PntAnz
     Text [ italian ] = "Polilinea con %N punti" ;
     Text [ portuguese_brazilian ] = "+++Polilinha" ;
     Text [ portuguese ] = "Polilinha com %N pontos" ;
-    Text [ finnish ] = "+++Murtoviiva" ;
+    Text [ finnish ] = "Murtoviiva, jossa %N kulmaa" ;
     Text [ danish ] = "Polylinje med %N punkter" ;
     Text [ french ] = "Polyligne avec %N points" ;
     Text [ swedish ] = "Polylinje med %N punkter" ;
@@ -1512,7 +1533,7 @@ String STR_ObjNameSingulPATHLINE
     Text [ italian ] = "Curva di Bezier" ;
     Text [ portuguese_brazilian ] = "Curva de Bézier" ;
     Text [ portuguese ] = "Curvas Bézier" ;
-    Text [ finnish ] = "Bezier-käyrä" ;
+    Text [ finnish ] = "Bézier-käyrä" ;
     Text [ danish ] = "Bezierkurve" ;
     Text [ french ] = "Courbe de Bézier" ;
     Text [ swedish ] = "Bézierkurva" ;
@@ -1541,7 +1562,7 @@ String STR_ObjNamePluralPATHLINE
     Text [ italian ] = "Curve di Bezier" ;
     Text [ portuguese_brazilian ] = "Curvas de Bézier" ;
     Text [ portuguese ] = "Curvas Bézier" ;
-    Text [ finnish ] = "Bezier-käyrät" ;
+    Text [ finnish ] = "Bézier-käyrät" ;
     Text [ danish ] = "Bezierkurver" ;
     Text [ french ] = "Courbes de Bézier" ;
     Text [ swedish ] = "Bézierkurvor" ;
@@ -1570,7 +1591,7 @@ String STR_ObjNameSingulPATHFILL
     Text [ italian ] = "Curva di Bezier" ;
     Text [ portuguese_brazilian ] = "Curva de Bézier" ;
     Text [ portuguese ] = "Curvas Bézier" ;
-    Text [ finnish ] = "Bezier-käyrä" ;
+    Text [ finnish ] = "Bézier-käyrä" ;
     Text [ danish ] = "Bezierkurve" ;
     Text [ french ] = "Courbe de Bézier" ;
     Text [ swedish ] = "Bézierkurva" ;
@@ -1599,7 +1620,7 @@ String STR_ObjNamePluralPATHFILL
     Text [ italian ] = "Curve di Bezier" ;
     Text [ portuguese_brazilian ] = "Curvas de Bézier" ;
     Text [ portuguese ] = "Curvas Bézier" ;
-    Text [ finnish ] = "Bezier-käyrät" ;
+    Text [ finnish ] = "Bézier-käyrät" ;
     Text [ danish ] = "Bezierkurver" ;
     Text [ french ] = "Courbes de Bézier" ;
     Text [ swedish ] = "Bézierkurvor" ;
@@ -1628,7 +1649,7 @@ String STR_ObjNameSingulFREELINE
     Text [ italian ] = "Linea a mano libera" ;
     Text [ portuguese_brazilian ] = "Linha a mao livre" ;
     Text [ portuguese ] = "Linha de forma livre" ;
-    Text [ finnish ] = "Vapaa kuvio" ;
+    Text [ finnish ] = "Vapaamuotoinen viiva" ;
     Text [ danish ] = "Frihåndslinje" ;
     Text [ french ] = "Ligne à main levée" ;
     Text [ swedish ] = "Frihandslinje" ;
@@ -1657,7 +1678,7 @@ String STR_ObjNamePluralFREELINE
     Text [ italian ] = "Linee a mano libera" ;
     Text [ portuguese_brazilian ] = "Linhas a mao livre" ;
     Text [ portuguese ] = "Linhas de forma livre" ;
-    Text [ finnish ] = "Vapaat kuviot" ;
+    Text [ finnish ] = "Vapaamuotoiset viivat" ;
     Text [ danish ] = "Frihåndslinjer" ;
     Text [ french ] = "Lignes à main levée" ;
     Text [ swedish ] = "Frihandslinjer" ;
@@ -1686,7 +1707,7 @@ String STR_ObjNameSingulFREEFILL
     Text [ italian ] = "Linea a mano libera" ;
     Text [ portuguese_brazilian ] = "Linha a mao livre" ;
     Text [ portuguese ] = "Linha de forma livre" ;
-    Text [ finnish ] = "Vapaa kuvio" ;
+    Text [ finnish ] = "Vapaamuotoinen viiva" ;
     Text [ danish ] = "Frihåndslinje" ;
     Text [ french ] = "Ligne à main levée" ;
     Text [ swedish ] = "Frihandslinje" ;
@@ -1715,7 +1736,7 @@ String STR_ObjNamePluralFREEFILL
     Text [ italian ] = "Linee a mano libera" ;
     Text [ portuguese_brazilian ] = "Linhas a mao livre" ;
     Text [ portuguese ] = "Linhas de forma livre" ;
-    Text [ finnish ] = "Vapaat kuviot" ;
+    Text [ finnish ] = "Vapaamuotoiset viivat" ;
     Text [ danish ] = "Frihåndslinjer" ;
     Text [ french ] = "Lignes à main levée" ;
     Text [ swedish ] = "Frihandslinjer" ;
@@ -1762,6 +1783,7 @@ String STR_ObjNameSingulCOMBLINE
     Text[ turkish ] = "Eðri nesneler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de curva";
+    Text[ finnish ] = "Käyrä";
 };
 String STR_ObjNamePluralCOMBLINE
 {
@@ -1789,6 +1811,7 @@ String STR_ObjNamePluralCOMBLINE
     Text[ turkish ] = "Eðri nesneler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de curva";
+    Text[ finnish ] = "Käyräobjektit";
 };
 String STR_ObjNameSingulCOMBFILL
 {
@@ -1816,6 +1839,7 @@ String STR_ObjNameSingulCOMBFILL
     Text[ turkish ] = "Eðri nesne";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de curva";
+    Text[ finnish ] = "Käyrä";
 };
 String STR_ObjNamePluralCOMBFILL
 {
@@ -1843,6 +1867,7 @@ String STR_ObjNamePluralCOMBFILL
     Text[ turkish ] = "Eðri nesneler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de curva";
+    Text[ finnish ] = "Käyräobjektit";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulNATSPLN
@@ -1853,7 +1878,7 @@ String STR_ObjNameSingulNATSPLN
     Text [ italian ] = "Curva Spline naturale" ;
     Text [ portuguese_brazilian ] = "Spline Natural" ;
     Text [ portuguese ] = "Spline natural" ;
-    Text [ finnish ] = "Luonnollinen splini" ;
+    Text [ finnish ] = "Luonnollinen splinikäyrä" ;
     Text [ danish ] = "Naturlig spline" ;
     Text [ french ] = "Spline naturelle" ;
     Text [ swedish ] = "Naturlig spline" ;
@@ -1882,7 +1907,7 @@ String STR_ObjNamePluralNATSPLN
     Text [ italian ] = "Curve Spline naturali" ;
     Text [ portuguese_brazilian ] = "Splines Naturais" ;
     Text [ portuguese ] = "Splines naturais" ;
-    Text [ finnish ] = "Luonnolliset splinit" ;
+    Text [ finnish ] = "Luonnolliset splinikäyrät" ;
     Text [ danish ] = "Naturlige splines" ;
     Text [ french ] = "Splines naturelles" ;
     Text [ swedish ] = "Naturliga splines" ;
@@ -1911,7 +1936,7 @@ String STR_ObjNameSingulPERSPLN
     Text [ italian ] = "Curva Spline periodica" ;
     Text [ portuguese_brazilian ] = "Spline Periódico" ;
     Text [ portuguese ] = "Spline periódico" ;
-    Text [ finnish ] = "Jaksollinen splini" ;
+    Text [ finnish ] = "Säännöllinen splinikäyrä" ;
     Text [ danish ] = "Periodisk spline" ;
     Text [ french ] = "Spline périodique" ;
     Text [ swedish ] = "Periodisk spline" ;
@@ -1940,7 +1965,7 @@ String STR_ObjNamePluralPERSPLN
     Text [ italian ] = "Curve Spline periodiche" ;
     Text [ portuguese_brazilian ] = "Splines Periódicos" ;
     Text [ portuguese ] = "Splines periódicos" ;
-    Text [ finnish ] = "Jaksolliset splinit" ;
+    Text [ finnish ] = "Säännölliset splinikäyrät" ;
     Text [ danish ] = "Periodiske splines" ;
     Text [ french ] = "Splines périodiques" ;
     Text [ swedish ] = "Periodiska splines" ;
@@ -1999,7 +2024,7 @@ String STR_ObjNamePluralTEXT
     Text [ italian ] = "Cornici" ;
     Text [ portuguese_brazilian ] = "Molduras de texto" ;
     Text [ portuguese ] = "Moldura de texto" ;
-    Text [ finnish ] = "Tekstikehykset" ;
+    Text [ finnish ] = "Tekstikehys" ;
     Text [ danish ] = "Tekstbokse" ;
     Text [ french ] = "Cadre texte" ;
     Text [ swedish ] = "Textramar" ;
@@ -2046,6 +2071,7 @@ String STR_ObjNameSingulTEXTLNK
     Text[ turkish ] = "Baðlantýlý metin çerçevesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco de texto vinculado";
+    Text[ finnish ] = "Linkitetty tekstikehys";
 };
 String STR_ObjNamePluralTEXTLNK
 {
@@ -2073,6 +2099,7 @@ String STR_ObjNamePluralTEXTLNK
     Text[ turkish ] = "Baðlantýlý metin çerçeveleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcos de texto vinculados";
+    Text[ finnish ] = "Linkitetyt tekstikehykset";
 };
  //String STR_ObjNameSingulXTXT {
  //    Text="Textfortsetzungsrahmen";
@@ -2112,7 +2139,7 @@ String STR_ObjNameSingulFITTEXT
     Text [ italian ] = "Oggetto di testo adattato" ;
     Text [ portuguese_brazilian ] = "Objeto de texto encaixado" ;
     Text [ portuguese ] = "Objecto de texto encaixado" ;
-    Text [ finnish ] = "Muuttuvakokoinen tekstiobjekti" ;
+    Text [ finnish ] = "Kokoon sovitettava tekstiobjekti" ;
     Text [ danish ] = "Tilpasset tekstobjekt" ;
     Text [ french ] = "Ajuster la taille de l'objet au texte" ;
     Text [ swedish ] = "anpassat textobjekt" ;
@@ -2141,7 +2168,7 @@ String STR_ObjNamePluralFITTEXT
     Text [ italian ] = "oggetti di testo adattati" ;
     Text [ portuguese_brazilian ] = "Objetos de texto encaixados" ;
     Text [ portuguese ] = "Objectos de texto encaixados" ;
-    Text [ finnish ] = "Muuttuvakokoiset tekstiobjektit" ;
+    Text [ finnish ] = "Kokoon sovitettavat tekstiobjektit" ;
     Text [ danish ] = "Tilpassede tekstobjekter" ;
     Text [ french ] = "Objets de texte adaptés" ;
     Text [ swedish ] = "anpassade textobjekt" ;
@@ -2170,7 +2197,7 @@ String STR_ObjNameSingulFITALLTEXT
     Text [ italian ] = "Oggetto di testo adattato" ;
     Text [ portuguese_brazilian ] = "Objeto de texto encaixado" ;
     Text [ portuguese ] = "Objecto de texto encaixado" ;
-    Text [ finnish ] = "Muuttuvakokoinen tekstiobjekti" ;
+    Text [ finnish ] = "Kokoon sovitettava tekstiobjekti" ;
     Text [ danish ] = "Tilpasset tekstobjekt" ;
     Text [ french ] = "Ajuster la taille de l'objet au texte" ;
     Text [ swedish ] = "anpassat textobjekt" ;
@@ -2199,7 +2226,7 @@ String STR_ObjNamePluralFITALLTEXT
     Text [ italian ] = "oggetti di testo adattati" ;
     Text [ portuguese_brazilian ] = "Objetos de texto encaixados" ;
     Text [ portuguese ] = "Objectos de texto encaixados" ;
-    Text [ finnish ] = "Muuttuvakokoiset tekstiobjektit" ;
+    Text [ finnish ] = "Kokoon sovitettavat tekstiobjektit" ;
     Text [ danish ] = "Tilpassede tekstobjekter" ;
     Text [ french ] = "Objets de texte adaptés" ;
     Text [ swedish ] = "anpassade textobjekt" ;
@@ -2286,7 +2313,7 @@ String STR_ObjNameSingulOUTLINETEXT
     Text [ italian ] = "Testo struttura" ;
     Text [ portuguese_brazilian ] = "Esboço" ;
     Text [ portuguese ] = "Texto do esquema" ;
-    Text [ finnish ] = "Jäsennys" ;
+    Text [ finnish ] = "Jäsennä teksti" ;
     Text [ danish ] = "Dispositionstekst" ;
     Text [ french ] = "Texte de plan" ;
     Text [ swedish ] = "Dispositionstext" ;
@@ -2315,7 +2342,7 @@ String STR_ObjNamePluralOUTLINETEXT
     Text [ italian ] = "Testi struttura" ;
     Text [ portuguese_brazilian ] = "Vazados" ;
     Text [ portuguese ] = "Textos do esquema" ;
-    Text [ finnish ] = "Jäsennykset" ;
+    Text [ finnish ] = "Jäsennä tekstit" ;
     Text [ danish ] = "Dispositionstekster" ;
     Text [ french ] = "Textes de plan" ;
     Text [ swedish ] = "Dispositionstexter" ;
@@ -2374,7 +2401,7 @@ String STR_ObjNamePluralGRAF
     Text [ italian ] = "Immagini" ;
     Text [ portuguese_brazilian ] = "Gráficos" ;
     Text [ portuguese ] = "Imagens" ;
-    Text [ finnish ] = "Kuvat" ;
+    Text [ finnish ] = "kuvat" ;
     Text [ danish ] = "Grafik" ;
     Text [ french ] = "Images" ;
     Text [ swedish ] = "Grafik" ;
@@ -2421,6 +2448,7 @@ String STR_ObjNameSingulGRAFLNK
     Text[ turkish ] = "Baðlantýlý grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imagen vinculada";
+    Text[ finnish ] = "Linkitetty kuva";
 };
 String STR_ObjNamePluralGRAFLNK
 {
@@ -2448,6 +2476,7 @@ String STR_ObjNamePluralGRAFLNK
     Text[ turkish ] = "Baðlantýlý grafikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imágenes vinculadas";
+    Text[ finnish ] = "Linkitetyt kuvat";
 };
 String STR_ObjNameSingulGRAFNONE
 {
@@ -2486,7 +2515,7 @@ String STR_ObjNamePluralGRAFNONE
     Text [ italian ] = "Oggetti grafici vuoti" ;
     Text [ portuguese_brazilian ] = "Objetos gráficos vazios" ;
     Text [ portuguese ] = "Objectos gráficos vazios" ;
-    Text [ finnish ] = "Tyhjät grafiikkaobjektit" ;
+    Text [ finnish ] = "Avoimet grafiikkaobjektit" ;
     Text [ danish ] = "Tomme grafikobjekter" ;
     Text [ french ] = "Objets graphiques vides" ;
     Text [ swedish ] = "tomma grafikobjekt" ;
@@ -2533,6 +2562,7 @@ String STR_ObjNameSingulGRAFNONELNK
     Text[ turkish ] = "Boþ baðlantýlý grafik nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto gráfico enlazado vacío";
+    Text[ finnish ] = "Avoin linkitetty kuva";
 };
 String STR_ObjNamePluralGRAFNONELNK
 {
@@ -2560,6 +2590,7 @@ String STR_ObjNamePluralGRAFNONELNK
     Text[ turkish ] = "Boþ baðlantýlý grafik nesneleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos gráficos vinculados vacíos";
+    Text[ finnish ] = "Avoimet linkitetyt kuvat";
 };
 String STR_ObjNameSingulGRAFMTF
 {
@@ -2645,6 +2676,7 @@ String STR_ObjNameSingulGRAFMTFLNK
     Text[ turkish ] = "Baðlantýlý Metafile";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Metaarchivo vinculado";
+    Text[ finnish ] = "Linkitetty metatiedosto";
 };
 String STR_ObjNamePluralGRAFMTFLNK
 {
@@ -2672,6 +2704,7 @@ String STR_ObjNamePluralGRAFMTFLNK
     Text[ turkish ] = "Baðlantýlý meta dosyalarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Metaarchivos vinculados";
+    Text[ finnish ] = "Linkitetyt metatiedostot";
 };
 String STR_ObjNameSingulGRAFBMP
 {
@@ -2757,6 +2790,7 @@ String STR_ObjNameSingulGRAFBMPLNK
     Text[ turkish ] = "Baðlantýlý bit eþlem";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bitmap vinculado";
+    Text[ finnish ] = "Linkitetty bittikartta";
 };
 String STR_ObjNamePluralGRAFBMPLNK
 {
@@ -2784,6 +2818,7 @@ String STR_ObjNamePluralGRAFBMPLNK
     Text[ turkish ] = "Baðlantýlý bit eþlemler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bitmaps vinculados";
+    Text[ finnish ] = "Linkitetyt bittikartat";
 };
 String STR_ObjNameSingulGRAFMAC
 {
@@ -2869,6 +2904,7 @@ String STR_ObjNameSingulGRAFMACLNK
     Text[ turkish ] = "Baðlantýlý Mac grafikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imágenes Mac vinculadas";
+    Text[ finnish ] = "Linkitetty Mac-kuva";
 };
 String STR_ObjNamePluralGRAFMACLNK
 {
@@ -2896,6 +2932,7 @@ String STR_ObjNamePluralGRAFMACLNK
     Text[ turkish ] = "Baðlantýlý Mac grafikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imagen Mac vinculada";
+    Text[ finnish ] = "Linkitetyt Mac-kuvat";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulOLE2
@@ -2906,7 +2943,7 @@ String STR_ObjNameSingulOLE2
     Text [ italian ] = "Oggetto incorporato (OLE)" ;
     Text [ portuguese_brazilian ] = "Objeto embutido (OLE)" ;
     Text [ portuguese ] = "Objecto incorporado (OLE)" ;
-    Text [ finnish ] = "Upotettu objekti (OLE)" ;
+    Text [ finnish ] = "upotettu objekti (OLE)" ;
     Text [ danish ] = "Integreret objekt (OLE)" ;
     Text [ french ] = "Objet incorporé (OLE)" ;
     Text [ swedish ] = "inbäddat objekt (OLE)" ;
@@ -2982,6 +3019,7 @@ String STR_ObjNameSingulUno
     Text[ turkish ] = "Komut alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de control";
+    Text[ finnish ] = "Ohjain";
 };
 String STR_ObjNamePluralUno
 {
@@ -3009,6 +3047,7 @@ String STR_ObjNamePluralUno
     Text[ turkish ] = "Komut alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campos de control";
+    Text[ finnish ] = "Ohjaimet";
 };
 String STR_ObjNameSingulOLE2LNK
 {
@@ -3036,6 +3075,7 @@ String STR_ObjNameSingulOLE2LNK
     Text[ turkish ] = "Baðlantýlý gömülü nesne (OLE)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto (OLE) incrustado vinculado";
+    Text[ finnish ] = "linkitetty upotettu objekti (OLE)";
 };
 String STR_ObjNamePluralOLE2LNK
 {
@@ -3063,6 +3103,7 @@ String STR_ObjNamePluralOLE2LNK
     Text[ turkish ] = "Baðlantýlý, gömülü nesne (OLE)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos (OLE) incrustados vinculados";
+    Text[ finnish ] = "Linkitetyt upotetut objektit (OLE)";
 };
 String STR_ObjOLE2NamePrefix
 {
@@ -3090,6 +3131,7 @@ String STR_ObjOLE2NamePrefix
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto";
+    Text[ finnish ] = "Objekti";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulFrame
@@ -3118,6 +3160,7 @@ String STR_ObjNameSingulFrame
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Frame";
+    Text[ finnish ] = "Kehys";
 };
 String STR_ObjNamePluralFrame
 {
@@ -3145,6 +3188,7 @@ String STR_ObjNamePluralFrame
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Frames";
+    Text[ finnish ] = "Kehykset";
 };
 String STR_ObjFrameNamePrefix
 {
@@ -3172,6 +3216,7 @@ String STR_ObjFrameNamePrefix
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Frame";
+    Text[ finnish ] = "Kehys";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulEDGE
@@ -3182,7 +3227,7 @@ String STR_ObjNameSingulEDGE
     Text [ italian ] = "Connettore di oggetti" ;
     Text [ portuguese_brazilian ] = "Conector" ;
     Text [ portuguese ] = "Conectores de objectos" ;
-    Text [ finnish ] = "Yhdistin" ;
+    Text [ finnish ] = "Objektiliittimet" ;
     Text [ danish ] = "Objektforbindelser" ;
     Text [ french ] = "Connecteurs d'objets" ;
     Text [ swedish ] = "Objektförbindelse" ;
@@ -3211,7 +3256,7 @@ String STR_ObjNamePluralEDGE
     Text [ italian ] = "Connettori di oggetti" ;
     Text [ portuguese_brazilian ] = "Conectores" ;
     Text [ portuguese ] = "Conectores de objectos" ;
-    Text [ finnish ] = "Yhdistimet" ;
+    Text [ finnish ] = "Objektiliittimet" ;
     Text [ danish ] = "Objektforbindelser" ;
     Text [ french ] = "Connecteurs d'objets" ;
     Text [ swedish ] = "Objektförbindelse" ;
@@ -3240,7 +3285,7 @@ String STR_ObjNameSingulCAPTION
     Text [ italian ] = "Legenda" ;
     Text [ portuguese_brazilian ] = "Legenda" ;
     Text [ portuguese ] = "Legenda" ;
-    Text [ finnish ] = "Selite" ;
+    Text [ finnish ] = "Kuvateksti" ;
     Text [ danish ] = "Forklaring" ;
     Text [ french ] = "Légende" ;
     Text [ swedish ] = "Förklaring" ;
@@ -3269,7 +3314,7 @@ String STR_ObjNamePluralCAPTION
     Text [ italian ] = "Legende" ;
     Text [ portuguese_brazilian ] = "Capturas" ;
     Text [ portuguese ] = "Legendas" ;
-    Text [ finnish ] = "Selitteet" ;
+    Text [ finnish ] = "Kuvatekstit" ;
     Text [ danish ] = "Forklaringer" ;
     Text [ french ] = "Légendes" ;
     Text [ swedish ] = "Förklaringar" ;
@@ -3299,7 +3344,7 @@ String STR_ObjNameSingulPAGE
     Text [ italian ] = "Oggetto anteprima di stampa" ;
     Text [ portuguese_brazilian ] = "Examinar-objeto" ;
     Text [ portuguese ] = "Objecto de apresentação de páginas" ;
-    Text [ finnish ] = "Esikatseluobjekti" ;
+    Text [ finnish ] = "Esikatsele objektia" ;
     Text [ danish ] = "Sidevisningsobjekt" ;
     Text [ french ] = "Objet de prévisualisation" ;
     Text [ swedish ] = "Förhandsgranskningsobjekt" ;
@@ -3328,7 +3373,7 @@ String STR_ObjNamePluralPAGE
     Text [ italian ] = "Oggetti Anteprima di stampa" ;
     Text [ portuguese_brazilian ] = "Examinar-objetos" ;
     Text [ portuguese ] = "Objectos de apresentação de páginas" ;
-    Text [ finnish ] = "Esikatseluobjektit" ;
+    Text [ finnish ] = "Esikatsele objekteja" ;
     Text [ danish ] = "Sidevisningsobjekter" ;
     Text [ french ] = "Objets de prévisualisation" ;
     Text [ swedish ] = "Förhandsgranskningsobjekt" ;
@@ -3377,6 +3422,7 @@ String STR_ObjNameSingulMEASURE
     Text[ turkish ] = "Ölçüm nesnesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de dimensiones";
+    Text[ finnish ] = "Mittaviiva";
 };
 String STR_ObjNamePluralMEASURE
 {
@@ -3406,6 +3452,7 @@ String STR_ObjNamePluralMEASURE
     Text[ turkish ] = "Ölçüm nesneleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de dimensiones";
+    Text[ finnish ] = "Mitoitusobjektit";
 };
 String STR_ObjNamePlural
 {
@@ -3415,7 +3462,7 @@ String STR_ObjNamePlural
     Text [ italian ] = "Oggetti di disegno" ;
     Text [ portuguese_brazilian ] = "Desenhar objetos" ;
     Text [ portuguese ] = "Objectos de desenho" ;
-    Text [ finnish ] = "Piirto-objektit" ;
+    Text [ finnish ] = "piirrosobjektit" ;
     Text [ danish ] = "Tegneobjekter" ;
     Text [ french ] = "Objets de dessin" ;
     Text [ swedish ] = "Ritobjekt" ;
@@ -3444,7 +3491,7 @@ String STR_ObjNameNoObj
     Text [ italian ] = "Nessun oggetto disegnato" ;
     Text [ portuguese_brazilian ] = "Sem Desenhar objetos" ;
     Text [ portuguese ] = "Sem objecto de desenho" ;
-    Text [ finnish ] = "Ei piirto-objektia" ;
+    Text [ finnish ] = "Ei piirrosobjektia" ;
     Text [ danish ] = "Intet tegneobjekt" ;
     Text [ french ] = "Pas d'objet de dessin" ;
     Text [ swedish ] = "Inget ritobjekt" ;
@@ -3502,7 +3549,7 @@ String STR_ObjNameSingulPlural
     Text [ italian ] = "Oggetto(i) di disegno" ;
     Text [ portuguese_brazilian ] = "desenhar objeto(s)" ;
     Text [ portuguese ] = "Objecto(s) de desenho" ;
-    Text [ finnish ] = "piirto-objekti(a)" ;
+    Text [ finnish ] = "piirrosobjekti(t)" ;
     Text [ danish ] = "Tegneobjekt(er)" ;
     Text [ french ] = "objet(s) de dessin" ;
     Text [ swedish ] = "Ritobjekt" ;
@@ -3553,6 +3600,7 @@ String STR_ObjNameSingulCube3d
     Text[ turkish ] = "3B küp";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cubo 3D";
+    Text[ finnish ] = "3D-kuutio";
 };
 
 String STR_ObjNamePluralCube3d
@@ -3579,6 +3627,7 @@ String STR_ObjNamePluralCube3d
     Text[ turkish ] = "3B küpler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cubos 3D";
+    Text[ finnish ] = "3D-kuutiot";
 };
 
 String STR_ObjNameSingulExtrude3d
@@ -3604,6 +3653,7 @@ String STR_ObjNameSingulExtrude3d
     Text[ arabic ] = "ßÇÆä ãäÈËÞ";
     Text[ turkish ] = "Kalýp nesne";
     Text[ catalan ] = "Objeto de extrusión";
+    Text[ finnish ] = "Pursotusobjekti";
 };
 
 String STR_ObjNamePluralExtrude3d
@@ -3629,6 +3679,7 @@ String STR_ObjNamePluralExtrude3d
     Text[ arabic ] = "ßÇÆäÇÊ ãäÈËÞÉ";
     Text[ turkish ] = "Kalýp nesneler";
     Text[ catalan ] = "Objetos de extrusión";
+    Text[ finnish ] = "Pursotusobjektit";
 };
 
 String STR_ObjNameSingulLabel3d
@@ -3655,6 +3706,7 @@ String STR_ObjNameSingulLabel3d
     Text[ turkish ] = "3B metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto 3D";
+    Text[ finnish ] = "3D-teksti";
 };
 
 String STR_ObjNamePluralLabel3d
@@ -3681,6 +3733,7 @@ String STR_ObjNamePluralLabel3d
     Text[ turkish ] = "3B metinler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Textos 3D";
+    Text[ finnish ] = "3D-tekstit";
 };
 
 String STR_ObjNameSingulLathe3d
@@ -3706,6 +3759,7 @@ String STR_ObjNameSingulLathe3d
     Text[ arabic ] = "ßÇÆä ÇÓÊÏÇÑÉ";
     Text[ turkish ] = "Döner nesne";
     Text[ catalan ] = "Objeto de rotación";
+    Text[ finnish ] = "kierto-objekti";
 };
 
 String STR_ObjNamePluralLathe3d
@@ -3731,6 +3785,7 @@ String STR_ObjNamePluralLathe3d
     Text[ arabic ] = "ßÇÆäÇÊ ÇÓÊÏÇÑÉ";
     Text[ turkish ] = "Döner nesneler";
     Text[ catalan ] = "Objetos de rotación";
+    Text[ finnish ] = "kierto-objektit";
 };
 
 String STR_ObjNameSingulObj3d
@@ -3757,6 +3812,7 @@ String STR_ObjNameSingulObj3d
     Text[ turkish ] = "3B nesne";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto 3D";
+    Text[ finnish ] = "3D-objekti";
 };
 
 String STR_ObjNamePluralObj3d
@@ -3783,6 +3839,7 @@ String STR_ObjNamePluralObj3d
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos 3D";
+    Text[ finnish ] = "3D-objektit";
 };
 
 String STR_ObjNameSingulPoly3d
@@ -3809,6 +3866,7 @@ String STR_ObjNameSingulPoly3d
     Text[ turkish ] = "3B çokgen";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Polígono 3D";
+    Text[ finnish ] = "3D-polygoni";
 };
 
 String STR_ObjNamePluralPoly3d
@@ -3835,6 +3893,7 @@ String STR_ObjNamePluralPoly3d
     Text[ turkish ] = "3B çokgenler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Polígonos 3D";
+    Text[ finnish ] = "3D-polygonit";
 };
 
 String STR_ObjNameSingulScene3d
@@ -3861,6 +3920,7 @@ String STR_ObjNameSingulScene3d
     Text[ turkish ] = "3B görüntü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escena 3D";
+    Text[ finnish ] = "3D-alue";
 };
 
 String STR_ObjNamePluralScene3d
@@ -3887,6 +3947,7 @@ String STR_ObjNamePluralScene3d
     Text[ turkish ] = "3B görüntüler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escenas 3D";
+    Text[ finnish ] = "3D-alueet";
 };
 
 String STR_ObjNameSingulSphere3d
@@ -3912,6 +3973,7 @@ String STR_ObjNameSingulSphere3d
     Text[ arabic ] = "ßÑÉ";
     Text[ turkish ] = "Küre";
     Text[ catalan ] = "Esfera";
+    Text[ finnish ] = "pallo";
 };
 
 String STR_ObjNamePluralSphere3d
@@ -3937,6 +3999,7 @@ String STR_ObjNamePluralSphere3d
     Text[ arabic ] = "ßÑÇÊ";
     Text[ turkish ] = "Küreler";
     Text[ catalan ] = "Esferas";
+    Text[ finnish ] = "pallot";
 };
 
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3951,7 +4014,7 @@ String STR_EditWithCopy
     Text [ italian ] = "con la copia" ;
     Text [ portuguese_brazilian ] = "com cópia" ;
     Text [ portuguese ] = "com cópia" ;
-    Text [ finnish ] = " kopioineen" ;
+    Text [ finnish ] = "kopion kanssa" ;
     Text [ danish ] = "med kopier" ;
     Text [ french ] = "avec copie" ;
     Text [ swedish ] = "med kopiering" ;
@@ -3982,7 +4045,7 @@ String STR_EditPosSize
     Text [ italian ] = "Imposta posizione e dimensione per %O" ;
     Text [ portuguese_brazilian ] = "Definir posição e tamanho para %O" ;
     Text [ portuguese ] = "Definir posição e tamanho para %O" ;
-    Text [ finnish ] = "Määritä objektin %O paikka ja koko" ;
+    Text [ finnish ] = "Määritä kohteen %O sijainti ja koko" ;
     Text [ danish ] = "Definer placering og størrelse for %O" ;
     Text [ french ] = "Définir position et taille de %O" ;
     Text [ swedish ] = "Definiera placering och storlek för %O" ;
@@ -4042,7 +4105,7 @@ String STR_EditMovToTop
     Text [ italian ] = "Porta %O più avanti" ;
     Text [ portuguese_brazilian ] = "Mover %O para frente" ;
     Text [ portuguese ] = "Mover %O mais para a frente" ;
-    Text [ finnish ] = "Siirrä %O askel eteen" ;
+    Text [ finnish ] = "Siirrä %O eteenpäin" ;
     Text [ danish ] = "Flyt %O fremad" ;
     Text [ french ] = "Déplacer %O vers l'avant" ;
     Text [ swedish ] = "Flytta %O längre fram" ;
@@ -4071,7 +4134,7 @@ String STR_EditMovToBtm
     Text [ italian ] = "Porta %O più indietro" ;
     Text [ portuguese_brazilian ] = "Mover %O para tr s" ;
     Text [ portuguese ] = "Mover %O mais para trás" ;
-    Text [ finnish ] = "Siirrä %O askel taakse" ;
+    Text [ finnish ] = "Siirrä kohdetta %O enemmän taaksepäin" ;
     Text [ danish ] = "Flyt %O bagud" ;
     Text [ french ] = "Déplacer %O vers l'arrière" ;
     Text [ swedish ] = "Flytta %O längre bak" ;
@@ -4100,7 +4163,7 @@ String STR_EditPutToTop
     Text [ italian ] = "Sposta %O in avanti" ;
     Text [ portuguese_brazilian ] = "Colocar %O para frente" ;
     Text [ portuguese ] = "Mover %O para a frente" ;
-    Text [ finnish ] = "Siirrä %O edustalle" ;
+    Text [ finnish ] = "Siirrä kohde %O etualalle" ;
     Text [ danish ] = "Placer %O forrest" ;
     Text [ french ] = "Placer %O à l'avant" ;
     Text [ swedish ] = "Flytta %O längst fram" ;
@@ -4129,7 +4192,7 @@ String STR_EditPutToBtm
     Text [ italian ] = "Sposta %O indietro" ;
     Text [ portuguese_brazilian ] = "Colcar %O para tr s" ;
     Text [ portuguese ] = "Mover %O para trás" ;
-    Text [ finnish ] = "Siirrä %O taustalle" ;
+    Text [ finnish ] = "Siirrä kohdetta %O taaksepäin" ;
     Text [ danish ] = "Placer %O bagest" ;
     Text [ french ] = "Placer %O à l'arrière" ;
     Text [ swedish ] = "Flytta %O längst bak" ;
@@ -4176,6 +4239,7 @@ String STR_EditRevOrder
     Text[ turkish ] = "Sýrasýný deðiþtir: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Invertir el orden de %O";
+    Text[ finnish ] = "Muuta kohteen %O järjestystä";
 };
 String STR_EditMove
 {
@@ -4216,7 +4280,7 @@ String STR_EditResize
     Text [ italian ] = "Ridimensiona %O" ;
     Text [ portuguese_brazilian ] = "Redimensionar %O" ;
     Text [ portuguese ] = "Redimensionar %O" ;
-    Text [ finnish ] = "Muuta objektin %O kokoa" ;
+    Text [ finnish ] = "Muuta kohteen %O kokoa" ;
     Text [ danish ] = "Modificer størrelse på %O" ;
     Text [ french ] = "Redimensionner %O" ;
     Text [ swedish ] = "Förändra storleken på %O" ;
@@ -4245,7 +4309,7 @@ String STR_EditRotate
     Text [ italian ] = "Ruota %O" ;
     Text [ portuguese_brazilian ] = "Rotar %O" ;
     Text [ portuguese ] = "Rodar %O" ;
-    Text [ finnish ] = "Käännä %O" ;
+    Text [ finnish ] = "Kierrä kohdetta %O" ;
     Text [ danish ] = "Roter %O" ;
     Text [ french ] = "Rotation %O" ;
     Text [ swedish ] = "Rotera %O" ;
@@ -4274,7 +4338,7 @@ String STR_EditMirrorHori
     Text [ italian ] = "Rispecchia %O in orizzontale" ;
     Text [ portuguese_brazilian ] = "Espelhar %O horizontalmente" ;
     Text [ portuguese ] = "Reflectir %O na horizontal" ;
-    Text [ finnish ] = "Peilaa %O vaakasuunnassa" ;
+    Text [ finnish ] = "Käännä %O vaakasuunnassa" ;
     Text [ danish ] = "Spejlvend %O vandret" ;
     Text [ french ] = "Refléter %O horizontalement" ;
     Text [ swedish ] = "Spegelvänd %O horisontellt" ;
@@ -4303,7 +4367,7 @@ String STR_EditMirrorVert
     Text [ italian ] = "Rispecchia %O in verticale" ;
     Text [ portuguese_brazilian ] = "Espelhar %O verticalmente" ;
     Text [ portuguese ] = "Reflectir %O na vertical" ;
-    Text [ finnish ] = "Peilaa %O pystysuunnassa" ;
+    Text [ finnish ] = "Käännä %O pystysuunnassa" ;
     Text [ danish ] = "Spejlvend %O lodret" ;
     Text [ french ] = "Refléter %O verticalement" ;
     Text [ swedish ] = "Spegelvänd %O vertikalt" ;
@@ -4332,7 +4396,7 @@ String STR_EditMirrorDiag
     Text [ italian ] = "Rispecchia %O in diagonale" ;
     Text [ portuguese_brazilian ] = "Espelhar %O em diagonal" ;
     Text [ portuguese ] = "Reflectir %O na diagonal" ;
-    Text [ finnish ] = "Peilaa %O vinosti" ;
+    Text [ finnish ] = "Käännä %O lävistäjän ympäri" ;
     Text [ danish ] = "Spejlvend %O diagonalt" ;
     Text [ french ] = "Refléter %O diagonalement" ;
     Text [ swedish ] = "Spegelvänd %O diagonalt" ;
@@ -4361,7 +4425,7 @@ String STR_EditMirrorFree
     Text [ italian ] = "Rispecchia %O liberamente" ;
     Text [ portuguese_brazilian ] = "Espelhar %O" ;
     Text [ portuguese ] = "Reflectir %O livremente" ;
-    Text [ finnish ] = "Peilaa %O" ;
+    Text [ finnish ] = "Käännä %O vapaasti" ;
     Text [ danish ] = "Spejlvend %O frit" ;
     Text [ french ] = "Refléter %O librement" ;
     Text [ swedish ] = "Spegelvänd %O" ;
@@ -4392,7 +4456,7 @@ String STR_EditShear
     Text [ italian ] = "Distorci %O (inclina)" ;
     Text [ portuguese_brazilian ] = "Aparar %O" ;
     Text [ portuguese ] = "Deformar %O (inclinar)" ;
-    Text [ finnish ] = "Vääristä %O" ;
+    Text [ finnish ] = "Vääristä %O (kallistus)" ;
     Text [ danish ] = "Vrid %O (stil skråt)" ;
     Text [ french ] = "Déformer %O (incliner)" ;
     Text [ swedish ] = "Förvräng %O (snedställ)" ;
@@ -4439,6 +4503,7 @@ String STR_EditCrook
     Text[ turkish ] = "Daire biçiminde düzenle: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Organizar %O en círculo";
+    Text[ finnish ] = "Järjestä %O ympyrään";
 };
 String STR_EditCrookContortion
 {
@@ -4468,6 +4533,7 @@ String STR_EditCrookContortion
     Text[ turkish ] = "Daire biçiminde eð: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Doblar %O en círculo";
+    Text[ finnish ] = "Kaareuta %O ympyräksi";
 };
 String STR_EditDistort
 {
@@ -4495,6 +4561,7 @@ String STR_EditDistort
     Text[ turkish ] = "Serbest çarpýt: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distorsión libre de %O";
+    Text[ finnish ] = "Vääristä %O";
 };
 String STR_EditRipUp
 {
@@ -4504,7 +4571,7 @@ String STR_EditRipUp
     Text [ italian ] = "separa %O" ;
     Text [ portuguese_brazilian ] = "Abrir %O" ;
     Text [ portuguese ] = "Separar %O" ;
-    Text [ finnish ] = "Katkaise %O" ;
+    Text [ finnish ] = "Peruuta %O" ;
     Text [ danish ] = "Opdel %O" ;
     Text [ french ] = "Scinder %O" ;
     Text [ swedish ] = "Upphäv %O" ;
@@ -4553,6 +4620,7 @@ String STR_EditSetPointsSmooth
     Text[ turkish ] = "Bézier özelliklerini deðiþtir: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar propiedades Bézier de %O";
+    Text[ finnish ] = "Muokkaa kohteen %O bezier-ominaisuuksia";
 };
 String STR_EditSetSegmentsKind
 {
@@ -4582,6 +4650,7 @@ String STR_EditSetSegmentsKind
     Text[ turkish ] = "Bézier özelliklerini deðiþtir: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar propiedades Bézier de %O";
+    Text[ finnish ] = "Muokkaa kohteen %O bezier-ominaisuuksia";
 };
 String STR_EditShut
 {
@@ -4642,6 +4711,7 @@ String STR_EditSetGlueEscDir
     Text[ korean ] = "%OÀÇ ³¡³»±â ¹æÇâ ¼³Á¤";
     Text[ turkish ] = "%O için çýkýþ yönü belirle";
     Text[ catalan ] = "Definir dirección de salida de %O";
+    Text[ finnish ] = "Määritä kohteen %O poistumissuunta";
 };
 String STR_EditSetGluePercent
 {
@@ -4671,6 +4741,7 @@ String STR_EditSetGluePercent
     Text[ turkish ] = "%O için göreceli öznitelik belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir atributo relativo para %O";
+    Text[ finnish ] = "Määritä suhteellinen määrite kohteeseen %O";
 };
 String STR_EditSetGlueAlign
 {
@@ -4700,6 +4771,7 @@ String STR_EditSetGlueAlign
     Text[ turkish ] = "%O için referans noktasý belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir puntos de referencia para %O";
+    Text[ finnish ] = "Määritä kohteen %O viitepiste";
 };
 String STR_EditGroup
 {
@@ -4709,7 +4781,7 @@ String STR_EditGroup
     Text [ italian ] = "Raggruppa %O" ;
     Text [ portuguese_brazilian ] = "Agrupar %O" ;
     Text [ portuguese ] = "Agrupar %O" ;
-    Text [ finnish ] = "Ryhmitä %O" ;
+    Text [ finnish ] = "Ryhmittele %O" ;
     Text [ danish ] = "Grupper %O" ;
     Text [ french ] = "Grouper %O" ;
     Text [ swedish ] = "Gruppera %O" ;
@@ -4769,7 +4841,7 @@ String STR_EditSetAttributes
     Text [ italian ] = "Applica attributi a %O" ;
     Text [ portuguese_brazilian ] = "Aplicar atributos a %O" ;
     Text [ portuguese ] = "Aplicar atributos a %O" ;
-    Text [ finnish ] = "Käytä määritteitä objektissa %O" ;
+    Text [ finnish ] = "Käytä määritteitä kohteessa %O" ;
     Text [ danish ] = "Anvend attributter på %O" ;
     Text [ french ] = "Appliquer les attributs à %O" ;
     Text [ swedish ] = "Använd attribut på %O" ;
@@ -4798,7 +4870,7 @@ String STR_EditSetStylesheet
     Text [ italian ] = "Applica modello a %O" ;
     Text [ portuguese_brazilian ] = "Aplicar folha de estilos a %O" ;
     Text [ portuguese ] = "Aplicar estilos a %O" ;
-    Text [ finnish ] = "Käytä tyylitiedostoa objektissa %O" ;
+    Text [ finnish ] = "Käytä tyylejä kohteessa %O" ;
     Text [ danish ] = "Anvend typografi på %O" ;
     Text [ french ] = "Appliquer la feuille de style à %O" ;
     Text [ swedish ] = "Använd formatmall för %O" ;
@@ -4827,7 +4899,7 @@ String STR_EditDelStylesheet
     Text [ italian ] = "Rimuovi fogli di stile da %O" ;
     Text [ portuguese_brazilian ] = "Remover folha de estilos de %O" ;
     Text [ portuguese ] = "Remover estilo de %O" ;
-    Text [ finnish ] = "Poista tyylitiedosto objektista %O" ;
+    Text [ finnish ] = "Poista tyyli kohteesta %O" ;
     Text [ danish ] = "Fjern typografi fra %O" ;
     Text [ french ] = "Retirer la feuille de style de %O" ;
     Text [ swedish ] = "Ta bort formatmall för %O" ;
@@ -4914,7 +4986,7 @@ String STR_EditConvToCurve
     Text [ italian ] = "Converti %O in curva" ;
     Text [ portuguese_brazilian ] = "Converter %O em curva" ;
     Text [ portuguese ] = "Converter %O em curva" ;
-    Text [ finnish ] = "Muunna %O käyräksi" ;
+    Text [ finnish ] = "Muunna %O kaareksi" ;
     Text [ danish ] = "Konverter %O til kurve" ;
     Text [ french ] = "Convertir %O en courbe" ;
     Text [ swedish ] = "Omvandla %O till kurva" ;
@@ -4943,7 +5015,7 @@ String STR_EditConvToCurves
     Text [ italian ] = "Converti %O in curve" ;
     Text [ portuguese_brazilian ] = "Converter %O em curvas" ;
     Text [ portuguese ] = "Converter %O em curvas" ;
-    Text [ finnish ] = "Muunna %O käyriksi" ;
+    Text [ finnish ] = "Muunna %O kaariksi" ;
     Text [ danish ] = "Konverter %O til kurver" ;
     Text [ french ] = "Convertir %O en courbes" ;
     Text [ swedish ] = "Omvandla %O till kurvor" ;
@@ -4987,6 +5059,7 @@ String STR_EditConvToContour
     Text[ arabic ] = "ÊÍæíá %O Åáì ÎØ ßÝÇÝí";
     Text[ turkish ] = "Kontura dönüþtür: %O";
     Text[ catalan ] = "Convertir %O en contorno";
+    Text[ finnish ] = "Muunna %O ääriviivaksi";
 };
 String STR_EditConvToContours
 {
@@ -5011,6 +5084,7 @@ String STR_EditConvToContours
     Text[ arabic ] = "ÊÍæíá %O Åáì ÎØæØ ßÝÇÝíÉ";
     Text[ turkish ] = "Konturlara dönüþtür: %O";
     Text[ catalan ] = "Convertir %O en contornos";
+    Text[ finnish ] = "Muunna %O ääriviivoiksi";
 };
 String STR_EditAlign
 {
@@ -5051,7 +5125,7 @@ String STR_EditAlignVTop
     Text [ italian ] = "Allinea %O in alto" ;
     Text [ portuguese_brazilian ] = "Alinhar %O" ;
     Text [ portuguese ] = "Alinhar %O em cima" ;
-    Text [ finnish ] = "Tasaa %O" ;
+    Text [ finnish ] = "Tasaa %O ylös" ;
     Text [ danish ] = "Juster %O til toppen" ;
     Text [ french ] = "Aligner %O à l'en-tête" ;
     Text [ swedish ] = "Justera %O mot överkant" ;
@@ -5082,7 +5156,7 @@ String STR_EditAlignVBottom
     Text [ italian ] = "Allinea %O in basso" ;
     Text [ portuguese_brazilian ] = "Alinhar %O" ;
     Text [ portuguese ] = "Alinhar %O em baixo" ;
-    Text [ finnish ] = "Tasaa %O" ;
+    Text [ finnish ] = "Tasaa %O alas" ;
     Text [ danish ] = "Juster %O til bunden" ;
     Text [ french ] = "Aligner %O au pied de page " ;
     Text [ swedish ] = "Justera %O mot nederkant" ;
@@ -5142,7 +5216,7 @@ String STR_EditAlignHLeft
     Text [ italian ] = "Allinea %O a sinistra" ;
     Text [ portuguese_brazilian ] = "Alinhar %O" ;
     Text [ portuguese ] = "Alinhar %O à esquerda" ;
-    Text [ finnish ] = "Tasaa %O" ;
+    Text [ finnish ] = "Tasaa %O vasemmalle" ;
     Text [ danish ] = "Venstrejuster %O" ;
     Text [ french ] = "Aligner %O à gauche" ;
     Text [ swedish ] = "Justera %O mot vänsterkant" ;
@@ -5173,7 +5247,7 @@ String STR_EditAlignHRight
     Text [ italian ] = "Allinea %O a destra" ;
     Text [ portuguese_brazilian ] = "Alinhar %O" ;
     Text [ portuguese ] = "Alinhar %O à direita" ;
-    Text [ finnish ] = "Tasaa %O" ;
+    Text [ finnish ] = "Tasaa %O oikealle" ;
     Text [ danish ] = "Højrejuster %O" ;
     Text [ french ] = "Aligner %O à droite" ;
     Text [ swedish ] = "Justera %O mot högerkant" ;
@@ -5260,7 +5334,7 @@ String STR_EditTransform
     Text [ italian ] = "Trasforma %O" ;
     Text [ portuguese_brazilian ] = "Transformar %O" ;
     Text [ portuguese ] = "Transformar %O" ;
-    Text [ finnish ] = "Transformoi %O" ;
+    Text [ finnish ] = "Muunna %O" ;
     Text [ danish ] = "Transformer %O" ;
     Text [ french ] = "Transformer %O" ;
     Text [ swedish ] = "Omvandla %O" ;
@@ -5307,6 +5381,7 @@ String STR_EditCombine_PolyPoly
     Text[ turkish ] = "Birleþtir: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Combinar %O";
+    Text[ finnish ] = "Yhdistä %O";
 };
 String STR_EditMergeMergePoly
 {
@@ -5331,6 +5406,7 @@ String STR_EditMergeMergePoly
     Text[ arabic ] = "ÏãÌ %O";
     Text[ turkish ] = "Birleþtir: %O";
     Text[ catalan ] = "Unir %O";
+    Text[ finnish ] = "Yhdistä %O";
 };
 String STR_EditMergeSubstractPoly
 {
@@ -5355,6 +5431,7 @@ String STR_EditMergeSubstractPoly
     Text[ arabic ] = "ØÑÍ %O";
     Text[ turkish ] = "%O çýkart";
     Text[ catalan ] = "Substraer %O";
+    Text[ finnish ] = "Vähennä %O";
 };
 String STR_EditMergeIntersectPoly
 {
@@ -5379,6 +5456,7 @@ String STR_EditMergeIntersectPoly
     Text[ arabic ] = "ÔØÑ %O";
     Text[ turkish ] = "%O kes";
     Text[ catalan ] = "Cortar %O";
+    Text[ finnish ] = "Leikkaa %O";
 };
 String STR_DistributeMarkedObjects
 {
@@ -5404,6 +5482,7 @@ String STR_DistributeMarkedObjects
     Text[ turkish ] = "Seçilen nesneleri daðýt";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distribuir objetos de la selección";
+    Text[ finnish ] = "Jaa valitut objektit";
 };
 String STR_EditCombine_OnePoly
 {
@@ -5431,6 +5510,7 @@ String STR_EditCombine_OnePoly
     Text[ turkish ] = "Baðlantý oluþtur: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enlazar %O";
+    Text[ finnish ] = "Yhdistä %O";
 };
 String STR_EditDismantle_Polys
 {
@@ -5458,6 +5538,7 @@ String STR_EditDismantle_Polys
     Text[ turkish ] = "Kombinasyonu kaldýr: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Deshacer combinación de %O";
+    Text[ finnish ] = "Jaa %O";
 };
 String STR_EditDismantle_Lines
 {
@@ -5485,6 +5566,7 @@ String STR_EditDismantle_Lines
     Text[ turkish ] = "Ayýr: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%O dividir";
+    Text[ finnish ] = "Jaa %O";
 };
 String STR_EditImportMtf
 {
@@ -5512,6 +5594,7 @@ String STR_EditImportMtf
     Text[ turkish ] = "Ayýr: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Dividir %O";
+    Text[ finnish ] = "Jaa %O";
 };
 String STR_EditImportSGV
 {
@@ -5535,7 +5618,7 @@ String STR_ExchangePaste
     Text [ italian ] = "Incolla oggetti" ;
     Text [ portuguese_brazilian ] = "Colar objeto(s)" ;
     Text [ portuguese ] = "Inserir objecto(s)" ;
-    Text [ finnish ] = "Liitä objekteja" ;
+    Text [ finnish ] = "Lisää objekti(t)" ;
     Text [ danish ] = "Indsæt objekt(er)" ;
     Text [ french ] = "Insérer le(s) objet(s)" ;
     Text [ swedish ] = "Infoga objekt" ;
@@ -5595,7 +5678,7 @@ String STR_ExchangeClpPaste
     Text [ italian ] = "Incolla Appunti" ;
     Text [ portuguese_brazilian ] = "Colar clipboard" ;
     Text [ portuguese ] = "Colar conteúdo da Área de Transferência" ;
-    Text [ finnish ] = "Liitä leikepöydältä" ;
+    Text [ finnish ] = "Liitä leikepöytä" ;
     Text [ danish ] = "Indsæt udklipsholder" ;
     Text [ french ] = "Coller le contenu du presse-papiers" ;
     Text [ swedish ] = "Klistra in innehållet i urklippet" ;
@@ -5624,7 +5707,7 @@ String STR_ExchangeDD
     Text [ italian ] = "Trascina&Rilascia %O" ;
     Text [ portuguese_brazilian ] = "Arrastar e Soltar %O" ;
     Text [ portuguese ] = "Arrastar & Largar %O" ;
-    Text [ finnish ] = "Vedä & pudota %O" ;
+    Text [ finnish ] = "Vedä ja pudota %O" ;
     Text [ danish ] = "Træk-og-slip %O" ;
     Text [ french ] = "Glisser-Déposer %O" ;
     Text [ swedish ] = "Dra-och-släpp %O" ;
@@ -5655,7 +5738,7 @@ String STR_ExchangeDDPaste
     Text [ italian ] = "Incolla Trascina&Rilascia" ;
     Text [ portuguese_brazilian ] = "Colar Arrastar e Soltar" ;
     Text [ portuguese ] = "Inserir Arrastar & Largar" ;
-    Text [ finnish ] = "Liitä veto & pudotus" ;
+    Text [ finnish ] = "Lisää vetämällä ja pudottamalla" ;
     Text [ danish ] = "Indsæt træk-og-slip" ;
     Text [ french ] = "Coller Glisser-Déposer" ;
     Text [ swedish ] = "Infoga dra-och-släpp" ;
@@ -5686,7 +5769,7 @@ String STR_DragInsertPoint
     Text [ italian ] = "Inserisci punto a %O" ;
     Text [ portuguese_brazilian ] = "Inserir ponto a %O" ;
     Text [ portuguese ] = "Inserir ponto em %O" ;
-    Text [ finnish ] = "Lisää piste objektiin %O" ;
+    Text [ finnish ] = "Lisää piste kohteeseen %O" ;
     Text [ danish ] = "Indsæt punkt i %O" ;
     Text [ french ] = "Insérer un point dans %O" ;
     Text [ swedish ] = "Infoga punkt i %O" ;
@@ -5735,6 +5818,7 @@ String STR_DragInsertGluePoint
     Text[ turkish ] = "Yapýþtýrma noktasý ekle: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir punto de adhesión en %O";
+    Text[ finnish ] = "Lisää liimapiste kohteeseen %O";
 };
 String STR_DragMethMovHdl
 {
@@ -5744,7 +5828,7 @@ String STR_DragMethMovHdl
     Text [ italian ] = "Sposta punto di riferimento" ;
     Text [ portuguese_brazilian ] = "Mover ponto de referência" ;
     Text [ portuguese ] = "Mover ponto de referência" ;
-    Text [ finnish ] = "Siirrä lähtöpistettä" ;
+    Text [ finnish ] = "Siirrä viitekohtaa" ;
     Text [ danish ] = "Flyt referencepunkt" ;
     Text [ french ] = "Déplacer le point de référence" ;
     Text [ swedish ] = "Flytta referenspunkt" ;
@@ -5775,7 +5859,7 @@ String STR_DragMethObjOwn
     Text [ italian ] = "Cambia %O geometricamente" ;
     Text [ portuguese_brazilian ] = "Mudar geometria de %O" ;
     Text [ portuguese ] = "Mudar geometria de %O" ;
-    Text [ finnish ] = "Muuta objektin %O geometriaa" ;
+    Text [ finnish ] = "Muuta %O geometrisesti" ;
     Text [ danish ] = "Modificer %O geometrisk" ;
     Text [ french ] = "Modifier la géométrie de %O" ;
     Text [ swedish ] = "Ändra %O geometriskt" ;
@@ -5835,7 +5919,7 @@ String STR_DragMethResize
     Text [ italian ] = "Ridimensiona %O" ;
     Text [ portuguese_brazilian ] = "Redimensionar %O" ;
     Text [ portuguese ] = "Redimensionar %O" ;
-    Text [ finnish ] = "Muuta objektin %O kokoa" ;
+    Text [ finnish ] = "Muuta kohteen %O kokoa" ;
     Text [ danish ] = "Modificer størrelse på %O" ;
     Text [ french ] = "Redimensionner %O" ;
     Text [ swedish ] = "Förändra storleken för %O" ;
@@ -5864,7 +5948,7 @@ String STR_DragMethRotate
     Text [ italian ] = "Ruota %O" ;
     Text [ portuguese_brazilian ] = "Rotar %O" ;
     Text [ portuguese ] = "Rodar %O" ;
-    Text [ finnish ] = "Käännä %O" ;
+    Text [ finnish ] = "Kierrä kohdetta %O" ;
     Text [ danish ] = "Roter %O" ;
     Text [ french ] = "Rotation %O" ;
     Text [ swedish ] = "Rotera %O" ;
@@ -5893,7 +5977,7 @@ String STR_DragMethMirrorHori
     Text [ italian ] = "Rispecchia %O in orizzontale" ;
     Text [ portuguese_brazilian ] = "Espelhar %O horizontalmente" ;
     Text [ portuguese ] = "Reflectir %O na horizontal" ;
-    Text [ finnish ] = "Peilaa %O vaakasuunnassa" ;
+    Text [ finnish ] = "Käännä %O vaakasuunnassa" ;
     Text [ danish ] = "Spejlvend %O vandret" ;
     Text [ french ] = "Refléter %O horizontalement" ;
     Text [ swedish ] = "Spegelvänd %O horisontellt" ;
@@ -5922,7 +6006,7 @@ String STR_DragMethMirrorVert
     Text [ italian ] = "Rispecchia %O in verticale" ;
     Text [ portuguese_brazilian ] = "Espelhar %O verticalmente" ;
     Text [ portuguese ] = "Reflectir %O na vertical" ;
-    Text [ finnish ] = "Peilaa %O pystysuunnassa" ;
+    Text [ finnish ] = "Käännä %O pystysuunnassa" ;
     Text [ danish ] = "Spejlvend %O lodret" ;
     Text [ french ] = "Refléter %O verticalement" ;
     Text [ swedish ] = "Spegelvänd %O vertikalt" ;
@@ -5951,7 +6035,7 @@ String STR_DragMethMirrorDiag
     Text [ italian ] = "Rispecchia %O in diagonale" ;
     Text [ portuguese_brazilian ] = "Espelhar %O em diagonal" ;
     Text [ portuguese ] = "Reflectir %O na diagonal" ;
-    Text [ finnish ] = "Peilaa %O vinosti" ;
+    Text [ finnish ] = "Käännä %O lävistäjän ympäri" ;
     Text [ danish ] = "Spejlvend %O diagonalt" ;
     Text [ french ] = "Refléter %O diagonalement" ;
     Text [ swedish ] = "Spegelvänd %O diagonalt" ;
@@ -5980,7 +6064,7 @@ String STR_DragMethMirrorFree
     Text [ italian ] = "Rispecchia %O" ;
     Text [ portuguese_brazilian ] = "Espelhar %O" ;
     Text [ portuguese ] = "Reflectir %O livremente" ;
-    Text [ finnish ] = "Peilaa %O" ;
+    Text [ finnish ] = "Käännä %O vapaasti" ;
     Text [ danish ] = "Spejlvend %O" ;
     Text [ french ] = "Refléter %O librement" ;
     Text [ swedish ] = "Spegelvänd %O" ;
@@ -6024,6 +6108,7 @@ String STR_DragMethGradient
     Text[ arabic ] = "ÊÏÑÌ áæä ÊÈÇÏáí áÜ %O";
     Text[ turkish ] = "%O için etkileþimli gradyan";
     Text[ catalan ] = "gradiente interactivo para %O";
+    Text[ finnish ] = "Vuorovaikutteinen sävytys kohteelle %O";
 };
 String STR_DragMethTransparence
 {
@@ -6048,6 +6133,7 @@ String STR_DragMethTransparence
     Text[ arabic ] = "ÔÝÇÝíÉ ÊÈÇÏáíÉ áÜ %O";
     Text[ turkish ] = "%O için etkileþimli saydamlýk";
     Text[ catalan ] = "transparencia interactiva para %O";
+    Text[ finnish ] = "Vuorovaikutteinen läpinäkyvyys kohteelle %O";
 };
 String STR_DragMethShear
 {
@@ -6059,7 +6145,7 @@ String STR_DragMethShear
     Text [ italian ] = "Distorci %O (inclina)" ;
     Text [ portuguese_brazilian ] = "Aparar %O" ;
     Text [ portuguese ] = "Deformar %O (inclinar)" ;
-    Text [ finnish ] = "Vääristä %O" ;
+    Text [ finnish ] = "Vääristä %O (kallistus)" ;
     Text [ danish ] = "Vrid %O (stil skråt)" ;
     Text [ french ] = "Déformer %O (incliner)" ;
     Text [ swedish ] = "Förvräng %O (snedställ)" ;
@@ -6106,6 +6192,7 @@ String STR_DragMethCrook
     Text[ turkish ] = "Daire biçiminde düzenle: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Organizar %O en círculo";
+    Text[ finnish ] = "Järjestä %O ympyrään";
 };
 String STR_DragMethCrookContortion
 {
@@ -6135,6 +6222,7 @@ String STR_DragMethCrookContortion
     Text[ turkish ] = "Daire biçiminde eð: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Doblar %O en círculo";
+    Text[ finnish ] = "Kaareuta %O ympyräksi";
 };
 String STR_DragMethDistort
 {
@@ -6162,6 +6250,7 @@ String STR_DragMethDistort
     Text[ turkish ] = "Serbest çarpýt: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distorsión libre de %O";
+    Text[ finnish ] = "Vääristä %O";
 };
 String STR_DragRectEckRad
 {
@@ -6173,7 +6262,7 @@ String STR_DragRectEckRad
     Text [ italian ] = "Cambia il raggio d'angolo di %O" ;
     Text [ portuguese_brazilian ] = "Mudar o raio de %O" ;
     Text [ portuguese ] = "Mudar o raio do ângulo de %O" ;
-    Text [ finnish ] = "Muuta objektin %O sädettä" ;
+    Text [ finnish ] = "Muuta sädettä arvolla %O" ;
     Text [ danish ] = "Modificer hjørneradius på %O" ;
     Text [ french ] = "Modifier le rayon d'angle de %O" ;
     Text [ swedish ] = "Ändra hörnradien från %O" ;
@@ -6204,7 +6293,7 @@ String STR_DragPathObj
     Text [ italian ] = "Cambia %O" ;
     Text [ portuguese_brazilian ] = "Mudar %O" ;
     Text [ portuguese ] = "Mudar %O" ;
-    Text [ finnish ] = "Muokkaa objektia %O" ;
+    Text [ finnish ] = "Muuta %O" ;
     Text [ danish ] = "Modificer %O" ;
     Text [ french ] = "Modifier %O" ;
     Text [ swedish ] = "Ändra %O" ;
@@ -6235,7 +6324,7 @@ String STR_DragRectResize
     Text [ italian ] = "Ridimensiona %O" ;
     Text [ portuguese_brazilian ] = "Redimensionar %O" ;
     Text [ portuguese ] = "Redimensionar %O" ;
-    Text [ finnish ] = "Muuta objektin %O kokoa" ;
+    Text [ finnish ] = "Muuta kohteen %O kokoa" ;
     Text [ danish ] = "Modificer størrelse på %O" ;
     Text [ french ] = "Redimensionner %O" ;
     Text [ swedish ] = "Förändra storleken på %O" ;
@@ -6293,7 +6382,7 @@ String STR_DragCaptTail
     Text [ italian ] = "Sposta coda di %O" ;
     Text [ portuguese_brazilian ] = "Mover ponto final de %O" ;
     Text [ portuguese ] = "Mover ponto final de %O" ;
-    Text [ finnish ] = "Siirrä objektin %O loppupiste" ;
+    Text [ finnish ] = "Siirrä kohteen %O loppupistettä" ;
     Text [ danish ] = "Flyt slutpunkt på %O" ;
     Text [ french ] = "Déplacer point limite de %O" ;
     Text [ swedish ] = "Flytta slutpunkten för %O" ;
@@ -6324,7 +6413,7 @@ String STR_DragCircAngle
     Text [ italian ] = "Cambia angolo di %O" ;
     Text [ portuguese_brazilian ] = "Mudar ângulo de %O" ;
     Text [ portuguese ] = "Mudar ângulo de %O" ;
-    Text [ finnish ] = "Muuta objektin %O kulmaa" ;
+    Text [ finnish ] = "Säädä kulmaa arvolla %O" ;
     Text [ danish ] = "Modificer vinkel på %O" ;
     Text [ french ] = "Changer angle de %O" ;
     Text [ swedish ] = "Ändra vinkeln för %O" ;
@@ -6355,7 +6444,7 @@ String STR_DragEdgeTail
     Text [ italian ] = "Cambia %O" ;
     Text [ portuguese_brazilian ] = "Mudar %O" ;
     Text [ portuguese ] = "Mudar %O" ;
-    Text [ finnish ] = "Muokkaa objektia %O" ;
+    Text [ finnish ] = "Muuta %O" ;
     Text [ danish ] = "Modificer %O" ;
     Text [ french ] = "Modifier %O" ;
     Text [ swedish ] = "Ändra %O" ;
@@ -6402,6 +6491,7 @@ String STR_ViewTextEdit
     Text[ turkish ] = "Metin düzenleme: Paragraf %a, Satýr %z, Sütun %s";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar Texto: Párrafo %a, Línea %z, Columna %s";
+    Text[ finnish ] = "Tekstin muokkaus: Kappale %a, Rivi %z, Sarake %s";
 };
 String STR_ViewMarked
 {
@@ -6411,7 +6501,7 @@ String STR_ViewMarked
     Text [ italian ] = "%O" ;
     Text [ portuguese_brazilian ] = "%O marcado" ;
     Text [ portuguese ] = "%O marcado(s)" ;
-    Text [ finnish ] = "%O merkitty" ;
+    Text [ finnish ] = "%O valittu" ;
     Text [ danish ] = "%O markeret" ;
     Text [ french ] = "%O sélectionné(e)(s)" ;
     Text [ swedish ] = "markerad %O" ;
@@ -6458,6 +6548,7 @@ String STR_ViewMarkedPoint
     Text[ turkish ] = "Nokta: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Punto de %O";
+    Text[ finnish ] = "Piste kohteesta %O";
 };
 String STR_ViewMarkedPoints
 {
@@ -6485,6 +6576,7 @@ String STR_ViewMarkedPoints
     Text[ turkish ] = "%N yapýþtýrma noktasý: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%N Puntos de %O";
+    Text[ finnish ] = "%N pistettä kohteesta %O";
 };
 String STR_ViewMarkedGluePoint
 {
@@ -6512,6 +6604,7 @@ String STR_ViewMarkedGluePoint
     Text[ turkish ] = "Yapýþtýrma noktasý: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Punto de adhesión de %O";
+    Text[ finnish ] = "Liimapiste kohteesta %O";
 };
 String STR_ViewMarkedGluePoints
 {
@@ -6539,6 +6632,7 @@ String STR_ViewMarkedGluePoints
     Text[ turkish ] = "%N yapýþtýrma noktasý: %O";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%N Puntos de adhesión de %O";
+    Text[ finnish ] = "%N liimapistettä kohteesta %O";
 };
 String STR_ViewMarkObjs
 {
@@ -6577,7 +6671,7 @@ String STR_ViewMarkMoreObjs
     Text [ italian ] = "Seleziona oggetti aggiuntivi" ;
     Text [ portuguese_brazilian ] = "Marcar objetos adicionais" ;
     Text [ portuguese ] = "Marcar objectos adicionais" ;
-    Text [ finnish ] = "Merkitse lisää objekteja" ;
+    Text [ finnish ] = "Merkitse lisäobjektit" ;
     Text [ danish ] = "Marker flere objekter" ;
     Text [ french ] = "Sélectionner des objets supplémentaires" ;
     Text [ swedish ] = "Markera ytterligare objekt" ;
@@ -6624,6 +6718,7 @@ String STR_ViewMarkPoints
     Text[ turkish ] = "Noktalarý seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcar puntos";
+    Text[ finnish ] = "Merkitse kohdat";
 };
 String STR_ViewMarkMorePoints
 {
@@ -6651,6 +6746,7 @@ String STR_ViewMarkMorePoints
     Text[ turkish ] = "Ek noktalar seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcar puntos adicionales";
+    Text[ finnish ] = "Merkitse lisäkohdat";
 };
 String STR_ViewMarkGluePoints
 {
@@ -6678,6 +6774,7 @@ String STR_ViewMarkGluePoints
     Text[ turkish ] = "Yapýþtýrma noktalarýný seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcar puntos de adhesión";
+    Text[ finnish ] = "Merkitse kiinnityskohdat";
 };
 String STR_ViewMarkMoreGluePoints
 {
@@ -6705,6 +6802,7 @@ String STR_ViewMarkMoreGluePoints
     Text[ turkish ] = "Ek yapýþtýrma noktalarý seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcar puntos de adhesión adicionales";
+    Text[ finnish ] = "Merkitse lisäkiinnityskohdat";
 };
 String STR_ViewCreateObj
 {
@@ -6805,7 +6903,7 @@ String STR_UndoObjOrdNum
     Text [ italian ] = "Cambia la sequenza degli oggetti di %O" ;
     Text [ portuguese_brazilian ] = "Mudar ordem de %O" ;
     Text [ portuguese ] = "Alterar sequência dos objectos de %O" ;
-    Text [ finnish ] = "Muuta objektien %O järjestystä" ;
+    Text [ finnish ] = "Muuta kohteen %O objektijärjestystä" ;
     Text [ danish ] = "Modificer objektrækkefølge for %O" ;
     Text [ french ] = "Modifier l'ordre de %O" ;
     Text [ swedish ] = "Ändra objektordningen för %O" ;
@@ -6834,7 +6932,7 @@ String STR_UndoObjSetText
     Text [ italian ] = "Modifica testo di %O" ;
     Text [ portuguese_brazilian ] = "Edit text of %O" ;
     Text [ portuguese ] = "Editar texto de %O" ;
-    Text [ finnish ] = "Edit text of %O" ;
+    Text [ finnish ] = "Muokkaa kohteen %O tekstiä" ;
     Text [ danish ] = "Rediger tekst af %O" ;
     Text [ french ] = "Éditer le texte de %O" ;
     Text [ swedish ] = "Redigera text för %0" ;
@@ -6865,7 +6963,7 @@ String STR_UndoNewPage
     Text [ italian ] = "Inserisci pagina" ;
     Text [ portuguese_brazilian ] = "Inserir página" ;
     Text [ portuguese ] = "Inserir página" ;
-    Text [ finnish ] = "Lisää sivu" ;
+    Text [ finnish ] = "Insert sivu" ;
     Text [ danish ] = "Indsæt side" ;
     Text [ french ] = "Insérer une page" ;
     Text [ swedish ] = "Infoga sida" ;
@@ -6896,7 +6994,7 @@ String STR_UndoDelPage
     Text [ italian ] = "Elimina pagina" ;
     Text [ portuguese_brazilian ] = "Apagar página" ;
     Text [ portuguese ] = "Eliminar página" ;
-    Text [ finnish ] = "Delete page" ;
+    Text [ finnish ] = "Poista sivu" ;
     Text [ danish ] = "Slet side" ;
     Text [ french ] = "Supprimer la page" ;
     Text [ swedish ] = "Radera sida" ;
@@ -6925,7 +7023,7 @@ String STR_UndoCopPage
     Text [ italian ] = "Copia pagina" ;
     Text [ portuguese_brazilian ] = "Copiar página" ;
     Text [ portuguese ] = "Copiar página" ;
-    Text [ finnish ] = "Copy page" ;
+    Text [ finnish ] = "Kopioi sivu" ;
     Text [ danish ] = "Kopier side" ;
     Text [ french ] = "Copier la page" ;
     Text [ swedish ] = "Kopiera sida" ;
@@ -6956,7 +7054,7 @@ String STR_UndoMovPage
     Text [ italian ] = "Cambia la sequenza delle pagine" ;
     Text [ portuguese_brazilian ] = "Change order of pages" ;
     Text [ portuguese ] = "Alterar a ordem das páginas" ;
-    Text [ finnish ] = "Change order of pages" ;
+    Text [ finnish ] = "Muuta sivujärjestystä" ;
     Text [ danish ] = "Modificer siderækkefølge" ;
     Text [ french ] = "Changer l'ordre des pages" ;
     Text [ swedish ] = "Ändra sidornas följd" ;
@@ -7003,6 +7101,7 @@ String STR_UndoNewPageMasterDscr
     Text[ turkish ] = "Artalan sayfasý ata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Asignar página de fondo";
+    Text[ finnish ] = "Määritä taustasivu";
 };
 String STR_UndoDelPageMasterDscr
 {
@@ -7030,6 +7129,7 @@ String STR_UndoDelPageMasterDscr
     Text[ turkish ] = "Artalan sayfa atamasýný kaldýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar atributos de la página de fondo";
+    Text[ finnish ] = "Tyhjennä taustasivun määritykset";
 };
 String STR_UndoMovPageMasterDscr
 {
@@ -7057,6 +7157,7 @@ String STR_UndoMovPageMasterDscr
     Text[ turkish ] = "Artalan sayfa atamasýný taþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar atributos de la página de fondo";
+    Text[ finnish ] = "Siirrä taustasivun määrityksiä";
 };
 String STR_UndoChgPageMasterDscr
 {
@@ -7086,6 +7187,7 @@ String STR_UndoChgPageMasterDscr
     Text[ turkish ] = "Artalan sayfa atamasýný deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar atributos de la página de fondo";
+    Text[ finnish ] = "Muuta taustasivun määrityksiä";
 };
 String STR_UndoMergeModel
 {
@@ -7115,6 +7217,7 @@ String STR_UndoMergeModel
     Text[ turkish ] = "Belge ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar documento";
+    Text[ finnish ] = "Lisää asiakirja";
 };
 String STR_UndoNewLayer
 {
@@ -7144,6 +7247,7 @@ String STR_UndoNewLayer
     Text[ turkish ] = "Düzey ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar nivel";
+    Text[ finnish ] = "Lisää kerros";
 };
 String STR_UndoDelLayer
 {
@@ -7173,6 +7277,7 @@ String STR_UndoDelLayer
     Text[ turkish ] = "Düzey sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar nivel";
+    Text[ finnish ] = "Poista kerros";
 };
 String STR_UndoMovLayer
 {
@@ -7202,6 +7307,7 @@ String STR_UndoMovLayer
     Text[ turkish ] = "Düzey sýrasýný deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar el orden de los niveles";
+    Text[ finnish ] = "Muuta kerrosjärjestystä";
 };
 String STR_StandardLayerName
 {
@@ -7261,6 +7367,7 @@ String STR_ItemValON
     Text[ turkish ] = "Açýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "activado";
+    Text[ finnish ] = "on";
 };
 String STR_ItemValOFF
 {
@@ -7288,6 +7395,7 @@ String STR_ItemValOFF
     Text[ turkish ] = "Kapalý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "desactivado";
+    Text[ finnish ] = "off";
 };
 String STR_ItemValYES
 {
@@ -7315,6 +7423,7 @@ String STR_ItemValYES
     Text[ turkish ] = "Evet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "sí";
+    Text[ finnish ] = "kyllä";
 };
 String STR_ItemValNO
 {
@@ -7342,6 +7451,7 @@ String STR_ItemValNO
     Text[ turkish ] = "Hayýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No";
+    Text[ finnish ] = "Ei";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValCAPTIONTYPE1
@@ -7370,6 +7480,7 @@ String STR_ItemValCAPTIONTYPE1
     Text[ turkish ] = "Tip 1";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo 1";
+    Text[ finnish ] = "Tyyppi 1";
 };
 String STR_ItemValCAPTIONTYPE2
 {
@@ -7397,6 +7508,7 @@ String STR_ItemValCAPTIONTYPE2
     Text[ turkish ] = "Tip 2";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo 2";
+    Text[ finnish ] = "Tyyppi 2";
 };
 String STR_ItemValCAPTIONTYPE3
 {
@@ -7424,6 +7536,7 @@ String STR_ItemValCAPTIONTYPE3
     Text[ turkish ] = "Tip 3";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo 3";
+    Text[ finnish ] = "Tyyppi 3";
 };
 String STR_ItemValCAPTIONTYPE4
 {
@@ -7451,6 +7564,7 @@ String STR_ItemValCAPTIONTYPE4
     Text[ turkish ] = "Tip 4";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo 4";
+    Text[ finnish ] = "Tyyppi 4";
 };
 String STR_ItemValCAPTIONESCHORI
 {
@@ -7478,6 +7592,7 @@ String STR_ItemValCAPTIONESCHORI
     Text[ turkish ] = "Yatay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Horizontal";
+    Text[ finnish ] = "Vaakataso";
 };
 String STR_ItemValCAPTIONESCVERT
 {
@@ -7505,6 +7620,7 @@ String STR_ItemValCAPTIONESCVERT
     Text[ turkish ] = "Dikey";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vertical";
+    Text[ finnish ] = "Pystysuora";
 };
 String STR_ItemValCAPTIONESCBESTFIT
 {
@@ -7532,6 +7648,7 @@ String STR_ItemValCAPTIONESCBESTFIT
     Text[ turkish ] = "Otomatik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Automático";
+    Text[ finnish ] = "Automaattinen";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValFITTOSIZENONE
@@ -7560,6 +7677,7 @@ String STR_ItemValFITTOSIZENONE
     Text[ turkish ] = "Kapalý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desactivado";
+    Text[ finnish ] = "Off";
 };
 String STR_ItemValFITTOSIZEPROP
 {
@@ -7587,6 +7705,7 @@ String STR_ItemValFITTOSIZEPROP
     Text[ turkish ] = "Orantýlý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Proporcional";
+    Text[ finnish ] = "Suhteellinen";
 };
 String STR_ItemValFITTOSIZEALLLINES
 {
@@ -7614,6 +7733,7 @@ String STR_ItemValFITTOSIZEALLLINES
     Text[ turkish ] = "Tüm satýrlarý tek tek sýðdýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Todas las filas separadas";
+    Text[ finnish ] = "Sovita kokoon (kaikki rivit erikseen) ";
 };
 String STR_ItemValFITTOSIZERESIZEAT
 {
@@ -7641,6 +7761,7 @@ String STR_ItemValFITTOSIZERESIZEAT
     Text[ korean ] = "°íÁ¤ ¼Ó¼º »ç¿ë";
     Text[ turkish ] = "Sabit öznitelikler";
     Text[ catalan ] = "Usar atributos fijos";
+    Text[ finnish ] = "Käytä välttämättömiä määritteitä";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValTEXTVADJTOP
@@ -7669,6 +7790,7 @@ String STR_ItemValTEXTVADJTOP
     Text[ turkish ] = "Üst";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arriba";
+    Text[ finnish ] = "Yläosa";
 };
 String STR_ItemValTEXTVADJCENTER
 {
@@ -7696,6 +7818,7 @@ String STR_ItemValTEXTVADJCENTER
     Text[ turkish ] = "Orta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Centro";
+    Text[ finnish ] = "Keskitä";
 };
 String STR_ItemValTEXTVADJBOTTOM
 {
@@ -7723,6 +7846,7 @@ String STR_ItemValTEXTVADJBOTTOM
     Text[ turkish ] = "Alt";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Abajo";
+    Text[ finnish ] = "Alaosa";
 };
 String STR_ItemValTEXTVADJBLOCK
 {
@@ -7752,6 +7876,7 @@ String STR_ItemValTEXTVADJBLOCK
     Text[ turkish ] = "Tüm yüksekliði kullan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Utilizar toda la altura";
+    Text[ finnish ] = "Käytä koko korkeutta";
 };
 String STR_ItemValTEXTVADJSTRETCH
 {
@@ -7779,6 +7904,7 @@ String STR_ItemValTEXTVADJSTRETCH
     Text[ turkish ] = "Geniþletilmiþ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Extendido";
+    Text[ finnish ] = "Venytetty";
 };
 String STR_ItemValTEXTHADJLEFT
 {
@@ -7806,6 +7932,7 @@ String STR_ItemValTEXTHADJLEFT
     Text[ turkish ] = "Sol";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Izquierda";
+    Text[ finnish ] = "Vasen";
 };
 String STR_ItemValTEXTHADJCENTER
 {
@@ -7833,6 +7960,7 @@ String STR_ItemValTEXTHADJCENTER
     Text[ turkish ] = "Orta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Centro";
+    Text[ finnish ] = "Keskitä";
 };
 String STR_ItemValTEXTHADJRIGHT
 {
@@ -7860,6 +7988,7 @@ String STR_ItemValTEXTHADJRIGHT
     Text[ turkish ] = "Sað";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "A la derecha";
+    Text[ finnish ] = "Oikea";
 };
 String STR_ItemValTEXTHADJBLOCK
 {
@@ -7887,6 +8016,7 @@ String STR_ItemValTEXTHADJBLOCK
     Text[ turkish ] = "Tüm geniþliði kullan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Utilizar todo el ancho";
+    Text[ finnish ] = "Käytä koko leveyttä";
 };
 String STR_ItemValTEXTHADJSTRETCH
 {
@@ -7914,6 +8044,7 @@ String STR_ItemValTEXTHADJSTRETCH
     Text[ turkish ] = "Geniþletilmiþ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Extendido";
+    Text[ finnish ] = "Venytetty";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValTEXTANI_NONE
@@ -7942,6 +8073,7 @@ String STR_ItemValTEXTANI_NONE
     Text[ turkish ] = "Kapalý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "desactivado";
+    Text[ finnish ] = "off";
 };
 String STR_ItemValTEXTANI_BLINK
 {
@@ -7969,6 +8101,7 @@ String STR_ItemValTEXTANI_BLINK
     Text[ turkish ] = "Yanýp sönme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "intermitente";
+    Text[ finnish ] = "väläys";
 };
 String STR_ItemValTEXTANI_SCROLL
 {
@@ -7996,6 +8129,7 @@ String STR_ItemValTEXTANI_SCROLL
     Text[ turkish ] = "Kaydýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "continuo";
+    Text[ finnish ] = "Vieritä läpi";
 };
 String STR_ItemValTEXTANI_ALTERNATE
 {
@@ -8023,6 +8157,7 @@ String STR_ItemValTEXTANI_ALTERNATE
     Text[ turkish ] = "Deðiken";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "alternando";
+    Text[ finnish ] = "vuorotteleva";
 };
 String STR_ItemValTEXTANI_SLIDE
 {
@@ -8050,6 +8185,7 @@ String STR_ItemValTEXTANI_SLIDE
     Text[ turkish ] = "Ýçeri sür";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "solo entrar";
+    Text[ finnish ] = "Vieritä sisään";
 };
 String STR_ItemValTEXTANI_LEFT
 {
@@ -8077,6 +8213,7 @@ String STR_ItemValTEXTANI_LEFT
     Text[ korean ] = "¿ÞÂÊÀ¸·Î";
     Text[ turkish ] = "Sola";
     Text[ catalan ] = "hacia la izquierda";
+    Text[ finnish ] = "vasen";
 };
 String STR_ItemValTEXTANI_UP
 {
@@ -8104,6 +8241,7 @@ String STR_ItemValTEXTANI_UP
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Yukarý";
     Text[ catalan ] = "hacia arriba";
+    Text[ finnish ] = "ylös";
 };
 String STR_ItemValTEXTANI_RIGHT
 {
@@ -8131,6 +8269,7 @@ String STR_ItemValTEXTANI_RIGHT
     Text[ turkish ] = "Saða";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "hacia la derecha";
+    Text[ finnish ] = "oikea";
 };
 String STR_ItemValTEXTANI_DOWN
 {
@@ -8158,6 +8297,7 @@ String STR_ItemValTEXTANI_DOWN
     Text[ turkish ] = "Aþaðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "hacia abajo";
+    Text[ finnish ] = "alas";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValEDGE_ORTHOLINES
@@ -8186,6 +8326,7 @@ String STR_ItemValEDGE_ORTHOLINES
     Text[ turkish ] = "Standart baðlayýcý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector estándar";
+    Text[ finnish ] = "Vakioliitin";
 };
 String STR_ItemValEDGE_THREELINES
 {
@@ -8213,6 +8354,7 @@ String STR_ItemValEDGE_THREELINES
     Text[ turkish ] = "Köþeli baðlayýcý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector lineal";
+    Text[ finnish ] = "Viivaliitin";
 };
 String STR_ItemValEDGE_ONELINE
 {
@@ -8240,6 +8382,7 @@ String STR_ItemValEDGE_ONELINE
     Text[ turkish ] = "Düz baðlayýcý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector directo";
+    Text[ finnish ] = "Suora liitin";
 };
 String STR_ItemValEDGE_BEZIER
 {
@@ -8267,6 +8410,7 @@ String STR_ItemValEDGE_BEZIER
     Text[ turkish ] = "Eðri baðlayýcý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conector curvo";
+    Text[ finnish ] = "Käyräliitin";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValMEASURE_STD
@@ -8295,6 +8439,7 @@ String STR_ItemValMEASURE_STD
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Predeterminado";
+    Text[ finnish ] = "Vakio";
 };
 String STR_ItemValMEASURE_RADIUS
 {
@@ -8322,6 +8467,7 @@ String STR_ItemValMEASURE_RADIUS
     Text[ turkish ] = "Çap";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Radio";
+    Text[ finnish ] = "Säde";
 };
 String STR_ItemValMEASURE_TEXTHAUTO
 {
@@ -8349,6 +8495,7 @@ String STR_ItemValMEASURE_TEXTHAUTO
     Text[ turkish ] = "otomatik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "automático";
+    Text[ finnish ] = "automaattinen";
 };
 String STR_ItemValMEASURE_TEXTLEFTOUTSIDE
 {
@@ -8378,6 +8525,7 @@ String STR_ItemValMEASURE_TEXTLEFTOUTSIDE
     Text[ turkish ] = "Sol dýþta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "izquierda fuera";
+    Text[ finnish ] = "vasemmalla ulkopuolella";
 };
 String STR_ItemValMEASURE_TEXTINSIDE
 {
@@ -8405,6 +8553,7 @@ String STR_ItemValMEASURE_TEXTINSIDE
     Text[ turkish ] = "Ýç (orta)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "interior centro";
+    Text[ finnish ] = "sisällä (keskitetty)";
 };
 String STR_ItemValMEASURE_TEXTRIGHTOUTSID
 {
@@ -8434,6 +8583,7 @@ String STR_ItemValMEASURE_TEXTRIGHTOUTSID
     Text[ turkish ] = "Sað dýþta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "derecha fuera";
+    Text[ finnish ] = "oikealla ulkopuolella";
 };
 String STR_ItemValMEASURE_TEXTVAUTO
 {
@@ -8461,6 +8611,7 @@ String STR_ItemValMEASURE_TEXTVAUTO
     Text[ turkish ] = "Otomatik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "automático";
+    Text[ finnish ] = "automaattinen";
 };
 String STR_ItemValMEASURE_ABOVE
 {
@@ -8488,6 +8639,7 @@ String STR_ItemValMEASURE_ABOVE
     Text[ turkish ] = "Çizgi üzerinde";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "en la línea";
+    Text[ finnish ] = "rivillä";
 };
 String STR_ItemValMEASURETEXT_BREAKEDLINE
 {
@@ -8515,6 +8667,7 @@ String STR_ItemValMEASURETEXT_BREAKEDLINE
     Text[ turkish ] = "Kesik çizgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "línea interrumpida";
+    Text[ finnish ] = "vajaa rivi";
 };
 String STR_ItemValMEASURE_BELOW
 {
@@ -8542,6 +8695,7 @@ String STR_ItemValMEASURE_BELOW
     Text[ turkish ] = "Çizginin altýnda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "bajo la línea";
+    Text[ finnish ] = "rivin alapuolella";
 };
 String STR_ItemValMEASURETEXT_VERTICALCEN
 {
@@ -8569,6 +8723,7 @@ String STR_ItemValMEASURETEXT_VERTICALCEN
     Text[ turkish ] = "Ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "centrado según línea";
+    Text[ finnish ] = "keskitetty";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ItemValCIRC_FULL
@@ -8597,6 +8752,7 @@ String STR_ItemValCIRC_FULL
     Text[ turkish ] = "Tam daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Círculo completo";
+    Text[ finnish ] = "täysi ympyrä";
 };
 String STR_ItemValCIRC_SECT
 {
@@ -8624,6 +8780,7 @@ String STR_ItemValCIRC_SECT
     Text[ turkish ] = "Daire dilimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sector de círculo";
+    Text[ finnish ] = "Ympyräkaavio";
 };
 String STR_ItemValCIRC_CUT
 {
@@ -8651,6 +8808,7 @@ String STR_ItemValCIRC_CUT
     Text[ turkish ] = "Daire parçasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segmento de círculo";
+    Text[ finnish ] = "Ympyrän segmentti";
 };
 String STR_ItemValCIRC_ARC
 {
@@ -8678,6 +8836,7 @@ String STR_ItemValCIRC_ARC
     Text[ turkish ] = "Yay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arco de círculo";
+    Text[ finnish ] = "Kaari";
 };
  ///////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -8707,6 +8866,7 @@ String STR_ItemNam_SHADOW
     Text[ turkish ] = "Gölge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sombra";
+    Text[ finnish ] = "Varjo";
 };
 String STR_ItemNam_SHADOWCOLOR
 {
@@ -8734,6 +8894,7 @@ String STR_ItemNam_SHADOWCOLOR
     Text[ turkish ] = "Gölge rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de sombra";
+    Text[ finnish ] = "Varjon väri";
 };
 String STR_ItemNam_SHADOWXDIST
 {
@@ -8761,6 +8922,7 @@ String STR_ItemNam_SHADOWXDIST
     Text[ turkish ] = "Yatay gölge konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazamiento hor. de sombra";
+    Text[ finnish ] = "Vaakatason varjokorostus";
 };
 String STR_ItemNam_SHADOWYDIST
 {
@@ -8788,6 +8950,7 @@ String STR_ItemNam_SHADOWYDIST
     Text[ turkish ] = "Dikey gölge kaymasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazamiento vert. de sombra";
+    Text[ finnish ] = "Pystytason varjokorostus";
 };
 String STR_ItemNam_SHADOWTRANSPARENCE
 {
@@ -8815,6 +8978,7 @@ String STR_ItemNam_SHADOWTRANSPARENCE
     Text[ turkish ] = "Gölge saydamlýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Transparencia de sombra";
+    Text[ finnish ] = "Varjon läpinäkyvyys";
 };
 String STR_ItemNam_SHADOW3D
 {
@@ -8842,6 +9006,7 @@ String STR_ItemNam_SHADOW3D
     Text[ turkish ] = "3B gölge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sombra 3D";
+    Text[ finnish ] = "3D-varjo";
 };
 String STR_ItemNam_SHADOWPERSP
 {
@@ -8869,6 +9034,7 @@ String STR_ItemNam_SHADOWPERSP
     Text[ turkish ] = "Perspektifli gölge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sombra en perspectiva";
+    Text[ finnish ] = "Perspektiivivarjo";
 };
 String STR_ItemNam_SHADOWRESERVE1 { Text = "" ; };
 String STR_ItemNam_SHADOWRESERVE2 { Text = "" ; };
@@ -8901,6 +9067,7 @@ String STR_ItemNamSET_SHADOW
     Text[ turkish ] = "Gölge öznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de sombra";
+    Text[ finnish ] = "Varjon ominaisuudet";
 };
 String STR_ItemNam_CAPTIONTYPE
 {
@@ -8928,6 +9095,7 @@ String STR_ItemNam_CAPTIONTYPE
     Text[ turkish ] = "Belirtme çizgisi tipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo de leyenda";
+    Text[ finnish ] = "Kuvatekstityyppi";
 };
 String STR_ItemNam_CAPTIONFIXEDANGLE
 {
@@ -8955,6 +9123,7 @@ String STR_ItemNam_CAPTIONFIXEDANGLE
     Text[ turkish ] = "Belirlenen açý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ángulo dado";
+    Text[ finnish ] = "Määritetty kulma";
 };
 String STR_ItemNam_CAPTIONANGLE
 {
@@ -8982,6 +9151,7 @@ String STR_ItemNam_CAPTIONANGLE
     Text[ turkish ] = "Açý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ángulo";
+    Text[ finnish ] = "Kulma";
 };
 String STR_ItemNam_CAPTIONGAP
 {
@@ -9009,6 +9179,7 @@ String STR_ItemNam_CAPTIONGAP
     Text[ turkish ] = "Boþluk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Espacio libre";
+    Text[ finnish ] = "Väli";
 };
 String STR_ItemNam_CAPTIONESCDIR
 {
@@ -9036,6 +9207,7 @@ String STR_ItemNam_CAPTIONESCDIR
     Text[ turkish ] = "Çýkýþ yönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Dirección de salida";
+    Text[ finnish ] = "Poistumissuunta";
 };
 String STR_ItemNam_CAPTIONESCISREL
 {
@@ -9063,6 +9235,7 @@ String STR_ItemNam_CAPTIONESCISREL
     Text[ turkish ] = "Göreceli çýkýþ konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Dirección de salida relativa";
+    Text[ finnish ] = "Suhteellinen poistumissijainti";
 };
 String STR_ItemNam_CAPTIONESCREL
 {
@@ -9090,6 +9263,7 @@ String STR_ItemNam_CAPTIONESCREL
     Text[ turkish ] = "Çýkýþ konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición de salida";
+    Text[ finnish ] = "Poistumissijainti";
 };
 String STR_ItemNam_CAPTIONESCABS
 {
@@ -9117,6 +9291,7 @@ String STR_ItemNam_CAPTIONESCABS
     Text[ turkish ] = "Çýkýþ konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición de salida";
+    Text[ finnish ] = "Poistumissijainti";
 };
 String STR_ItemNam_CAPTIONLINELEN
 {
@@ -9146,6 +9321,7 @@ String STR_ItemNam_CAPTIONLINELEN
     Text[ turkish ] = "Çizgi uzunluðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Largo de la línea";
+    Text[ finnish ] = "Viivan pituus";
 };
 String STR_ItemNam_CAPTIONFITLINELEN
 {
@@ -9175,6 +9351,7 @@ String STR_ItemNam_CAPTIONFITLINELEN
     Text[ turkish ] = "Otomatik çizgi uzunluðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Largo de línea automático";
+    Text[ finnish ] = "Automaattinen rivin pituus";
 };
 String STR_ItemNam_CAPTIONRESERVE1 { Text = "" ; };
 String STR_ItemNam_CAPTIONRESERVE2 { Text = "" ; };
@@ -9207,6 +9384,7 @@ String STR_ItemNamSET_CAPTION
     Text[ turkish ] = "Belirtme çizgisi öznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de leyenda";
+    Text[ finnish ] = "Kuvatekstin määritteet";
 };
 String STR_ItemNamSET_OUTLINER
 {
@@ -9234,6 +9412,7 @@ String STR_ItemNamSET_OUTLINER
     Text[ turkish ] = "Metin öznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de texto";
+    Text[ finnish ] = "Tekstin ominaisuudet";
 };
 String STR_ItemNam_ECKENRADIUS
 {
@@ -9261,6 +9440,7 @@ String STR_ItemNam_ECKENRADIUS
     Text[ turkish ] = "Köþe çapý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Radio de ángulo";
+    Text[ finnish ] = "Kulmasäde";
 };
 String STR_ItemNam_TEXT_LEFTDIST
 {
@@ -9288,6 +9468,7 @@ String STR_ItemNam_TEXT_LEFTDIST
     Text[ turkish ] = "Sol çerçeve aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen izquierdo";
+    Text[ finnish ] = "Vasen reunaväli";
 };
 String STR_ItemNam_TEXT_RIGHTDIST
 {
@@ -9315,6 +9496,7 @@ String STR_ItemNam_TEXT_RIGHTDIST
     Text[ turkish ] = "Sað çerçeve aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen derecho";
+    Text[ finnish ] = "Oikea reunaväli";
 };
 String STR_ItemNam_TEXT_UPPERDIST
 {
@@ -9342,6 +9524,7 @@ String STR_ItemNam_TEXT_UPPERDIST
     Text[ turkish ] = "Üst çerçeve aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen superior";
+    Text[ finnish ] = "Yläreunaväli";
 };
 String STR_ItemNam_TEXT_LOWERDIST
 {
@@ -9369,6 +9552,7 @@ String STR_ItemNam_TEXT_LOWERDIST
     Text[ turkish ] = "Alt çerçeve aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen inferior";
+    Text[ finnish ] = "Alareunaväli";
 };
 String STR_ItemNam_TEXT_AUTOGROWHEIGHT
 {
@@ -9398,6 +9582,7 @@ String STR_ItemNam_TEXT_AUTOGROWHEIGHT
     Text[ turkish ] = "Otomatik çerçeve yüksekliði ayarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajuste automático de la altura del marco";
+    Text[ finnish ] = "Automaattinen kehyksen korkeuden sovitus";
 };
 String STR_ItemNam_TEXT_MINFRAMEHEIGHT
 {
@@ -9427,6 +9612,7 @@ String STR_ItemNam_TEXT_MINFRAMEHEIGHT
     Text[ turkish ] = "Asgari çerçeve yüksekliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Altura mínima del marco";
+    Text[ finnish ] = "Kehyskorkeus väh.";
 };
 String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
 {
@@ -9456,6 +9642,7 @@ String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
     Text[ turkish ] = "Azami çerçeve yüksekliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Altura máxima del marco";
+    Text[ finnish ] = "Suurin kehyskorkeus";
 };
 String STR_ItemNam_TEXT_AUTOGROWWIDTH
 {
@@ -9483,6 +9670,7 @@ String STR_ItemNam_TEXT_AUTOGROWWIDTH
     Text[ turkish ] = "Otomatik çerçeve geniþliði ayarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajuste automático del ancho del marco";
+    Text[ finnish ] = "Automaattinen kehyksen leveyden sovitus";
 };
 String STR_ItemNam_TEXT_MINFRAMEWIDTH
 {
@@ -9510,6 +9698,7 @@ String STR_ItemNam_TEXT_MINFRAMEWIDTH
     Text[ turkish ] = "Asgari çerçeve geniþliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ancho mínimo del marco";
+    Text[ finnish ] = "Kehysleveys väh.";
 };
 String STR_ItemNam_TEXT_MAXFRAMEWIDTH
 {
@@ -9537,6 +9726,7 @@ String STR_ItemNam_TEXT_MAXFRAMEWIDTH
     Text[ turkish ] = "Azami çerçeve geniþliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ancho máximo del marco";
+    Text[ finnish ] = "Suurin kehysleveys";
 };
 String STR_ItemNam_TEXT_VERTADJUST
 {
@@ -9564,6 +9754,7 @@ String STR_ItemNam_TEXT_VERTADJUST
     Text[ turkish ] = "Dikey metin sabitleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Anclaje vertical del texto";
+    Text[ finnish ] = "Pystytason tekstiankkuri";
 };
 String STR_ItemNam_TEXT_HORZADJUST
 {
@@ -9591,6 +9782,7 @@ String STR_ItemNam_TEXT_HORZADJUST
     Text[ turkish ] = "Yatay metin sabitleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Anclaje horizontal del texto";
+    Text[ finnish ] = "Vaakatason tekstiankkuri";
 };
 String STR_ItemNam_TEXT_FITTOSIZE
 {
@@ -9618,6 +9810,7 @@ String STR_ItemNam_TEXT_FITTOSIZE
     Text[ turkish ] = "Metni çerçeveye sýðdýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto en marco";
+    Text[ finnish ] = "Sovita teksti kehykseen";
 };
 
 String STR_ItemNam_GRAFRED
@@ -9643,6 +9836,7 @@ String STR_ItemNam_GRAFRED
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
     Text[ turkish ] = "Kýrmýzý oraný";
     Text[ catalan ] = "Proporción de rojo";
+    Text[ finnish ] = "Punainen";
 };
 String STR_ItemNam_GRAFGREEN
 {
@@ -9667,6 +9861,7 @@ String STR_ItemNam_GRAFGREEN
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
     Text[ turkish ] = "Yeþil oraný";
     Text[ catalan ] = "Proporción de verde";
+    Text[ finnish ] = "Vihreä";
 };
 String STR_ItemNam_GRAFBLUE
 {
@@ -9691,6 +9886,7 @@ String STR_ItemNam_GRAFBLUE
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑÞ";
     Text[ turkish ] = "Mavi oraný";
     Text[ catalan ] = "Proporción de azul";
+    Text[ finnish ] = "Sininen";
 };
 String STR_ItemNam_GRAFLUMINANCE
 {
@@ -9715,6 +9911,7 @@ String STR_ItemNam_GRAFLUMINANCE
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
     Text[ turkish ] = "Parlaklýk";
     Text[ catalan ] = "Brillo";
+    Text[ finnish ] = "Kirkkaus";
 };
 String STR_ItemNam_GRAFCONTRAST
 {
@@ -9739,6 +9936,7 @@ String STR_ItemNam_GRAFCONTRAST
     Text[ arabic ] = "ÇáÊÈÇíä";
     Text[ turkish ] = "Kontrast";
     Text[ catalan ] = "Contraste";
+    Text[ finnish ] = "Kontrasti";
 };
 String STR_ItemNam_GRAFGAMMA
 {
@@ -9763,6 +9961,7 @@ String STR_ItemNam_GRAFGAMMA
     Text[ arabic ] = "ÛÇãÇ";
     Text[ turkish ] = "Gamma";
     Text[ catalan ] = "Gamma";
+    Text[ finnish ] = "Gamma";
 };
 String STR_ItemNam_GRAFTRANSPARENCE
 {
@@ -9787,6 +9986,7 @@ String STR_ItemNam_GRAFTRANSPARENCE
     Text[ arabic ] = "ÔÝÇÝíÉ";
     Text[ turkish ] = "Saydamlýk";
     Text[ catalan ] = "Transparencia";
+    Text[ finnish ] = "Läpinäkyvyys";
 };
 String STR_ItemNam_GRAFINVERT
 {
@@ -9811,6 +10011,7 @@ String STR_ItemNam_GRAFINVERT
     Text[ arabic ] = "ÚßÓ";
     Text[ turkish ] = "Tersine çevir";
     Text[ catalan ] = "Invertir";
+    Text[ finnish ] = "Käännä";
 };
 String STR_ItemNam_GRAFMODE
 {
@@ -9835,6 +10036,7 @@ String STR_ItemNam_GRAFMODE
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
     Text[ catalan ] = "Modo gráfico";
+    Text[ finnish ] = "Grafiikkatila";
 };
 String STR_ItemNam_GRAFRESERVE2 { Text = "" ; };
 String STR_ItemNam_GRAFRESERVE3 { Text = "" ; };
@@ -9869,6 +10071,7 @@ String STR_ItemNamSET_MISC
     Text[ turkish ] = "Çeþitli öznitelikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos diversos";
+    Text[ finnish ] = "Useita ominaisuuksia";
 };
 String STR_ItemNam_OBJMOVEPROTECT
 {
@@ -9896,6 +10099,7 @@ String STR_ItemNam_OBJMOVEPROTECT
     Text[ turkish ] = "Konum korumasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protección de posición";
+    Text[ finnish ] = "Suojattu sijainti";
 };
 String STR_ItemNam_OBJSIZEPROTECT
 {
@@ -9925,6 +10129,7 @@ String STR_ItemNam_OBJSIZEPROTECT
     Text[ turkish ] = "Boyut korumasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protección de tamaño";
+    Text[ finnish ] = "Kokosuojaus";
 };
 String STR_ItemNam_OBJPRINTABLE
 {
@@ -9952,6 +10157,7 @@ String STR_ItemNam_OBJPRINTABLE
     Text[ turkish ] = "Yazdýrma";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No imprimir";
+    Text[ finnish ] = "Älä tulosta";
 };
 String STR_ItemNam_LAYERID
 {
@@ -9979,6 +10185,7 @@ String STR_ItemNam_LAYERID
     Text[ turkish ] = "Düzey tanýtýcýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Identificación de niveles";
+    Text[ finnish ] = "Kerrosilmaisin";
 };
 String STR_ItemNam_LAYERNAME
 {
@@ -10006,6 +10213,7 @@ String STR_ItemNam_LAYERNAME
     Text[ turkish ] = "Düzey";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nivel";
+    Text[ finnish ] = "~Taso";
 };
 String STR_ItemNam_OBJECTNAME
 {
@@ -10033,6 +10241,7 @@ String STR_ItemNam_OBJECTNAME
     Text[ turkish ] = "Nesne adý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre del objeto";
+    Text[ finnish ] = "Objektin nimi";
 };
 String STR_ItemNam_STARTANGLE
 {
@@ -10060,6 +10269,7 @@ String STR_ItemNam_STARTANGLE
     Text[ turkish ] = "Baþlangýç açýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ángulo inicial";
+    Text[ finnish ] = "Aloituskulma";
 };
 String STR_ItemNam_ENDANGLE
 {
@@ -10087,6 +10297,7 @@ String STR_ItemNam_ENDANGLE
     Text[ turkish ] = "Son açý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ángulo final";
+    Text[ finnish ] = "Lopullinen kulma";
 };
 String STR_ItemNam_POSITIONX
 {
@@ -10114,6 +10325,7 @@ String STR_ItemNam_POSITIONX
     Text[ turkish ] = "X konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición X";
+    Text[ finnish ] = "~X-sijainti";
 };
 String STR_ItemNam_POSITIONY
 {
@@ -10141,6 +10353,7 @@ String STR_ItemNam_POSITIONY
     Text[ turkish ] = "Y konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición Y";
+    Text[ finnish ] = "~Y-sijainti";
 };
 String STR_ItemNam_SIZEWIDTH
 {
@@ -10168,6 +10381,7 @@ String STR_ItemNam_SIZEWIDTH
     Text[ turkish ] = "Geniþlik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ancho";
+    Text[ finnish ] = "Leveys";
 };
 String STR_ItemNam_SIZEHEIGHT
 {
@@ -10197,6 +10411,7 @@ String STR_ItemNam_SIZEHEIGHT
     Text[ turkish ] = "Yükseklik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Altura";
+    Text[ finnish ] = "Korkeus";
 };
 String STR_ItemNam_ROTATEANGLE
 {
@@ -10224,6 +10439,7 @@ String STR_ItemNam_ROTATEANGLE
     Text[ turkish ] = "Dönüþ açýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ángulo de rotación";
+    Text[ finnish ] = "Kiertokulma";
 };
 String STR_ItemNam_SHEARANGLE
 {
@@ -10251,6 +10467,7 @@ String STR_ItemNam_SHEARANGLE
     Text[ turkish ] = "Kesiþme açýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ángulo de desviación";
+    Text[ finnish ] = "Murtumakulma";
 };
  ////////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10287,6 +10504,7 @@ String SIP_UNKNOWN_ATTR
     Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ¼Ó¼º";
     Text[ turkish ] = "Bilinmeyen öznitelik";
     Text[ catalan ] = "Atributo desconocido";
+    Text[ finnish ] = "Tuntematon määrite";
 };
 
 // Strings fuer den Vorlagen-Dialog
@@ -10316,6 +10534,7 @@ String SIP_XA_LINESTYLE
     Text[ turkish ] = "Çizgi biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de línea";
+    Text[ finnish ] = "Viivatyyli";
 };
 
 String SIP_XA_LINEDASH
@@ -10343,6 +10562,7 @@ String SIP_XA_LINEDASH
     Text[ korean ] = "¼± ÆÐÅÏ";
     Text[ turkish ] = "Çizgi deseni";
     Text[ catalan ] = "Diseño de línea";
+    Text[ finnish ] = "Viivakuvio";
 };
 
 String SIP_XA_LINEWIDTH
@@ -10370,6 +10590,7 @@ String SIP_XA_LINEWIDTH
     Text[ korean ] = "¼± ³Êºñ";
     Text[ turkish ] = "Çizgi kalýnlýðý";
     Text[ catalan ] = "Espesor del trazo";
+    Text[ finnish ] = "Rivin leveys";
 };
 
 String SIP_XA_LINECOLOR
@@ -10398,6 +10619,7 @@ String SIP_XA_LINECOLOR
     Text[ turkish ] = "Çizgi rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de línea";
+    Text[ finnish ] = "Viivan väri";
 };
 
 String SIP_XA_LINESTART
@@ -10425,6 +10647,7 @@ String SIP_XA_LINESTART
     Text[ korean ] = "¼± ½ÃÀÛ";
     Text[ turkish ] = "Çizgi baþý";
     Text[ catalan ] = "Comienzo de línea";
+    Text[ finnish ] = "Rivin alku";
 };
 
 String SIP_XA_LINEEND
@@ -10452,6 +10675,7 @@ String SIP_XA_LINEEND
     Text[ korean ] = "¼± ³¡";
     Text[ turkish ] = "Çizgi sonu";
     Text[ catalan ] = "Fin de línea";
+    Text[ finnish ] = "Rivin loppu";
 };
 
 String SIP_XA_LINESTARTWIDTH
@@ -10479,6 +10703,7 @@ String SIP_XA_LINESTARTWIDTH
     Text[ korean ] = "¼± ½ÃÀÛÀÇ ³Êºñ";
     Text[ turkish ] = "Çizgi baþý geniþliði";
     Text[ catalan ] = "Ancho de comienzo de línea";
+    Text[ finnish ] = "Rivin alun leveys";
 };
 
 String SIP_XA_LINEENDWIDTH
@@ -10506,6 +10731,7 @@ String SIP_XA_LINEENDWIDTH
     Text[ korean ] = "¼± ³¡ÀÇ ³Êºñ";
     Text[ turkish ] = "Çizgi sonu geniþliði";
     Text[ catalan ] = "Ancho de fin de línea";
+    Text[ finnish ] = "Rivin lopun leveys";
 };
 
 String SIP_XA_LINESTARTCENTER
@@ -10533,6 +10759,7 @@ String SIP_XA_LINESTARTCENTER
     Text[ korean ] = "¼± ½ÃÀÛ - °¡¿îµ¥";
     Text[ turkish ] = "Çizgi baþýný ortala";
     Text[ catalan ] = "Comienzo de línea, centrado";
+    Text[ finnish ] = "Keskitä nuolenkärki";
 };
 
 String SIP_XA_LINEENDCENTER
@@ -10560,6 +10787,7 @@ String SIP_XA_LINEENDCENTER
     Text[ korean ] = "¼± ³¡ - °¡¿îµ¥";
     Text[ turkish ] = "Çizgi sonunu ortala";
     Text[ catalan ] = "Fines de línea, centrado";
+    Text[ finnish ] = "Keskitä nuolenpää";
 };
 
 String SIP_XA_LINETRANSPARENCE
@@ -10587,6 +10815,7 @@ String SIP_XA_LINETRANSPARENCE
     Text[ korean ] = "Åõ¸í ¼±";
     Text[ turkish ] = "Çizgi saydamlýðý";
     Text[ catalan ] = "Transparencia de línea";
+    Text[ finnish ] = "Viivan läpikuultavuus";
 };
 
 String SIP_XA_LINEJOINT
@@ -10612,6 +10841,7 @@ String SIP_XA_LINEJOINT
     Text[ arabic ] = "æÕáÉ ÎØæØ";
     Text[ turkish ] = "Çizgi geçiþi";
     Text[ catalan ] = "Junta de líneas";
+    Text[ finnish ] = "Viivaliitos";
 };
 
 String SIP_XA_LINERESERVED2
@@ -10639,6 +10869,7 @@ String SIP_XA_LINERESERVED2
     Text[ korean ] = "¼± ¿¹ºñ2";
     Text[ turkish ] = "Çizgi - Yedek 2";
     Text[ catalan ] = "Línea reserva 2";
+    Text[ finnish ] = "Rivi varattu 2:lle";
 };
 
 String SIP_XA_LINERESERVED3
@@ -10666,6 +10897,7 @@ String SIP_XA_LINERESERVED3
     Text[ korean ] = "¼± ¿¹ºñ3";
     Text[ turkish ] = "Çizgi - Yedek 3";
     Text[ catalan ] = "Línea reserva 3";
+    Text[ finnish ] = "Rivi varattu 3:lle";
 };
 
 String SIP_XA_LINERESERVED4
@@ -10693,6 +10925,7 @@ String SIP_XA_LINERESERVED4
     Text[ korean ] = "¼± ¿¹ºñ4";
     Text[ turkish ] = "Çizgi - Yedek 4";
     Text[ catalan ] = "Línea reserva 4";
+    Text[ finnish ] = "Rivi varattu 4:lle";
 };
 
 String SIP_XA_LINERESERVED5
@@ -10720,6 +10953,7 @@ String SIP_XA_LINERESERVED5
     Text[ korean ] = "¼± ¿¹ºñ5";
     Text[ turkish ] = "Çizgi - Yedek 5";
     Text[ catalan ] = "Línea reserva 5";
+    Text[ finnish ] = "Rivi varattu 5:lle";
 };
 
 String SIP_XA_LINERESERVED_LAST
@@ -10747,6 +10981,7 @@ String SIP_XA_LINERESERVED_LAST
     Text[ korean ] = "¼± ¿¹ºñ6";
     Text[ turkish ] = "Çizgi - Yedek 6";
     Text[ catalan ] = "Línea reserva 6";
+    Text[ finnish ] = "Rivi varattu 6:lle";
 };
 
 String SIP_XATTRSET_LINE
@@ -10774,6 +11009,7 @@ String SIP_XATTRSET_LINE
     Text[ korean ] = "¼± ¼Ó¼º";
     Text[ turkish ] = "Çizgi öznitelikleri";
     Text[ catalan ] = "Atributos de línea";
+    Text[ finnish ] = "Viivan määritteet";
 };
 
 String SIP_XA_FILLSTYLE
@@ -10802,6 +11038,7 @@ String SIP_XA_FILLSTYLE
     Text[ turkish ] = "Dolgu biçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de relleno";
+    Text[ finnish ] = "Täyttötyyli";
 };
 
 String SIP_XA_FILLCOLOR
@@ -10830,6 +11067,7 @@ String SIP_XA_FILLCOLOR
     Text[ turkish ] = "Dolgu rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de relleno";
+    Text[ finnish ] = "Täyttöväri";
 };
 
 String SIP_XA_FILLGRADIENT
@@ -10857,6 +11095,7 @@ String SIP_XA_FILLGRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç";
     Text[ turkish ] = "Gradyan";
     Text[ catalan ] = "Gradiente";
+    Text[ finnish ] = "Sävytys";
 };
 
 String SIP_XA_FILLHATCH
@@ -10884,6 +11123,7 @@ String SIP_XA_FILLHATCH
     Text[ korean ] = "ÇØÄª";
     Text[ turkish ] = "Tarama";
     Text[ catalan ] = "Trama";
+    Text[ finnish ] = "Viivoitus";
 };
 
 String SIP_XA_FILLBITMAP
@@ -10912,6 +11152,7 @@ String SIP_XA_FILLBITMAP
     Text[ turkish ] = "Dolgu için bit eþlem";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Bitmap de relleno";
+    Text[ finnish ] = "Täyttöbittikartta";
 };
 
 String SIP_XA_FILLTRANSPARENCE
@@ -10939,6 +11180,7 @@ String SIP_XA_FILLTRANSPARENCE
     Text[ korean ] = "Åõ¸í Ã¤¿ì±â";
     Text[ turkish ] = "Yüzey saydamlýðý";
     Text[ catalan ] = "Transparencia";
+    Text[ finnish ] = "Läpinäkyvyys";
 };
 
 String SIP_XA_GRADIENTSTEPCOUNT
@@ -10966,6 +11208,7 @@ String SIP_XA_GRADIENTSTEPCOUNT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç ´Ü°èÀÇ ¼ö";
     Text[ turkish ] = "Gradyan adýmlarý sayýsý";
     Text[ catalan ] = "Incremento";
+    Text[ finnish ] = "Sävytysasteiden määrä";
 };
 
 String SIP_XA_FILLBMP_TILE
@@ -10993,6 +11236,7 @@ String SIP_XA_FILLBMP_TILE
     Text[ korean ] = "¹ÙµÏÆÇ Ã¤¿ì±â";
     Text[ turkish ] = "Döþeme taþlarý";
     Text[ catalan ] = "Relleno de azulejo";
+    Text[ finnish ] = "Vierekkäinen täyttö";
 };
 
 String SIP_XA_FILLBMP_POS
@@ -11021,6 +11265,7 @@ String SIP_XA_FILLBMP_POS
     Text[ turkish ] = "Dolgu bit eþlem konumu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Posición bitmap de relleno";
+    Text[ finnish ] = "Täyttöbittikartan sijainti";
 };
 
 String SIP_XA_FILLBMP_SIZEX
@@ -11049,6 +11294,7 @@ String SIP_XA_FILLBMP_SIZEX
     Text[ turkish ] = "Dolgu bit eþlem geniþliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ancho bitmap de relleno";
+    Text[ finnish ] = "Täyttöbittikartan leveys";
 };
 
 String SIP_XA_FILLBMP_SIZEY
@@ -11077,6 +11323,7 @@ String SIP_XA_FILLBMP_SIZEY
     Text[ turkish ] = "Dolgu bit eþlem yüksekliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alto de bitmap de relleno";
+    Text[ finnish ] = "Täyttöbittikartan korkeus";
 };
 
 String SIP_XA_FILLFLOATTRANSPARENCE
@@ -11102,6 +11349,7 @@ String SIP_XA_FILLFLOATTRANSPARENCE
     Text[ arabic ] = "ÊÏÑÌ ÔÝÇÝ";
     Text[ turkish ] = "Saydam gradyan";
     Text[ catalan ] = "Gradiente transparente";
+    Text[ finnish ] = "Läpinäkyvä sävytys";
 };
 
 String SIP_XA_FILLRESERVED2
@@ -11129,6 +11377,7 @@ String SIP_XA_FILLRESERVED2
     Text[ korean ] = "Ã¤¿ì±â¡¡¿¹ºñ2";
     Text[ turkish ] = "Dolgu - Yedek 2";
     Text[ catalan ] = "Relleno reserva 2";
+    Text[ finnish ] = "Täyttö varattu 2:lle";
 };
 
 String SIP_XA_FILLBMP_SIZELOG
@@ -11156,6 +11405,7 @@ String SIP_XA_FILLBMP_SIZELOG
     Text[ korean ] = "¹ÙµÏÆÇ Å©±â¸¦ %·Î ÇÏÁö ¾ÊÀ½";
     Text[ turkish ] = "Döþeme taþlarý boyutu % deðil";
     Text[ catalan ] = "Tamaño de azulejo en %";
+    Text[ finnish ] = "Lohkokokoa ei alueella %";
 };
 
 String SIP_XA_FILLBMP_TILEOFFSETX
@@ -11183,6 +11433,7 @@ String SIP_XA_FILLBMP_TILEOFFSETX
     Text[ korean ] = "¹ÙµÏÆÇ ¿ÀÇÁ¼ÂX¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu X (%)";
     Text[ catalan ] = "Desplazamiento de azulejo en %";
+    Text[ finnish ] = "Lohkosiirtymä X kohteessa %";
 };
 
 String SIP_XA_FILLBMP_TILEOFFSETY
@@ -11210,6 +11461,7 @@ String SIP_XA_FILLBMP_TILEOFFSETY
     Text[ korean ] = "¹ÙµÏÆÇ ¿ÀÇÁ¼ÂY¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu Y (%)";
     Text[ catalan ] = "Desplazamiento de azulejo Y en %";
+    Text[ finnish ] = "Lohkosiirtymä Y kohteessa %";
 };
 
 String SIP_XA_FILLBMP_STRETCH
@@ -11237,6 +11489,7 @@ String SIP_XA_FILLBMP_STRETCH
     Text[ korean ] = "ºñÆ®¸Ê ±æ°Ô ´ÃÀÓ";
     Text[ turkish ] = "Bit eþlem ölçeklendirme";
     Text[ catalan ] = "Redimensionamiento de bitmap";
+    Text[ finnish ] = "Bittikartan skaalaus";
 };
 
 String SIP_XA_FILLRESERVED3
@@ -11264,6 +11517,7 @@ String SIP_XA_FILLRESERVED3
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ3";
     Text[ turkish ] = "Bit eþlem - Yedek 3";
     Text[ catalan ] = "Bitmap reserva 3";
+    Text[ finnish ] = "Bittikartta varattu 3:lle";
 };
 
 String SIP_XA_FILLRESERVED4
@@ -11291,6 +11545,7 @@ String SIP_XA_FILLRESERVED4
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ4";
     Text[ turkish ] = "Bit eþlem - Yedek 4";
     Text[ catalan ] = "Bitmap reserva 4";
+    Text[ finnish ] = "Bittikartta varattu 4:lle";
 };
 
 String SIP_XA_FILLRESERVED5
@@ -11318,6 +11573,7 @@ String SIP_XA_FILLRESERVED5
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ5";
     Text[ turkish ] = "Bit eþlem - Yedek 5";
     Text[ catalan ] = "Bitmap reserva 5";
+    Text[ finnish ] = "Bittikartta varattu 5:lle";
 };
 
 String SIP_XA_FILLRESERVED6
@@ -11345,6 +11601,7 @@ String SIP_XA_FILLRESERVED6
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ6";
     Text[ turkish ] = "Bit eþlem - Yedek 6";
     Text[ catalan ] = "Bitmap reserva 6";
+    Text[ finnish ] = "Bittikartta varattu 6:lle";
 };
 
 String SIP_XA_FILLRESERVED7
@@ -11372,6 +11629,7 @@ String SIP_XA_FILLRESERVED7
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ7";
     Text[ turkish ] = "Bit eþlem - Yedek 7";
     Text[ catalan ] = "Bitmap reserva 7";
+    Text[ finnish ] = "Bittikartta varattu 7:lle";
 };
 
 String SIP_XA_FILLRESERVED8
@@ -11399,6 +11657,7 @@ String SIP_XA_FILLRESERVED8
     Text[ korean ] = "ºñÆ®¸Ê ¿¹ºñ8";
     Text[ turkish ] = "Bit eþlem - Yedek 8";
     Text[ catalan ] = "Bitmap reserva 8";
+    Text[ finnish ] = "Bittikartta varattu 8:lle";
 };
 
 String SIP_XA_FILLBMP_POSOFFSETX
@@ -11426,6 +11685,7 @@ String SIP_XA_FILLBMP_POSOFFSETX
     Text[ korean ] = "¹ÙµÏÆÇ À§Ä¡X ¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu X (%)";
     Text[ catalan ] = "Posición azulejo X en %";
+    Text[ finnish ] = "Lohkosijainti X kohteessa %";
 };
 
 String SIP_XA_FILLBMP_POSOFFSETY
@@ -11453,6 +11713,7 @@ String SIP_XA_FILLBMP_POSOFFSETY
     Text[ korean ] = "¹ÙµÏÆÇ À§Ä¡Y¸¦ %·Î";
     Text[ turkish ] = "Döþeme taþý konumu Y (%)";
     Text[ catalan ] = "Posición azulejo Y en %";
+    Text[ finnish ] = "Lohkosijainti Y kohteessa %";
 };
 
 String SIP_XA_FILLBACKGROUND
@@ -11479,6 +11740,7 @@ String SIP_XA_FILLBACKGROUND
     Text[ turkish ] = "Artalan dolgusu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Relleno de fondo";
+    Text[ finnish ] = "Taustan täyttö";
 };
 
 String SIP_XA_FILLRESERVED10
@@ -11506,6 +11768,7 @@ String SIP_XA_FILLRESERVED10
     Text[ korean ] = "Ã¤¿ì±â¡¡¿¹ºñ10";
     Text[ turkish ] = "Dolgu - Yedek 10";
     Text[ catalan ] = "Relleno reserva 10";
+    Text[ finnish ] = "Täyttö varattu 10:lle";
 };
 
 String SIP_XA_FILLRESERVED11
@@ -11533,6 +11796,7 @@ String SIP_XA_FILLRESERVED11
     Text[ korean ] = "Ã¤¿ì±â¡¡¿¹ºñ 11";
     Text[ turkish ] = "Dolgu - Yedek 11";
     Text[ catalan ] = "Relleno reserva 11";
+    Text[ finnish ] = "Täyttö varattu 11:lle";
 };
 
 String SIP_XA_FILLRESERVED_LAST
@@ -11560,6 +11824,7 @@ String SIP_XA_FILLRESERVED_LAST
     Text[ korean ] = "Ã¤¿ì±â ¿¹ºñ12";
     Text[ turkish ] = "Dolgu - Yedek 12";
     Text[ catalan ] = "Relleno reserva 12";
+    Text[ finnish ] = "Täyttö varattu 12:lle";
 };
 
 String SIP_XATTRSET_FILL
@@ -11588,6 +11853,7 @@ String SIP_XATTRSET_FILL
     Text[ turkish ] = "Yüzey öznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de relleno";
+    Text[ finnish ] = "Alueen määritteet";
 };
 
 String SIP_XA_FORMTXTSTYLE
@@ -11615,6 +11881,7 @@ String SIP_XA_FORMTXTSTYLE
     Text[ korean ] = "Fontwork À¯Çü";
     Text[ turkish ] = "Fontwork biçimi";
     Text[ catalan ] = "Estilos Fontwork";
+    Text[ finnish ] = "Fonttityön tyyli";
 };
 
 String SIP_XA_FORMTXTADJUST
@@ -11643,6 +11910,7 @@ String SIP_XA_FORMTXTADJUST
     Text[ turkish ] = "Fontwork hizalamasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineación Fontwork";
+    Text[ finnish ] = "Fonttityön tasaus";
 };
 
 String SIP_XA_FORMTXTDISTANCE
@@ -11671,6 +11939,7 @@ String SIP_XA_FORMTXTDISTANCE
     Text[ turkish ] = "Fontwork aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia Fontwork";
+    Text[ finnish ] = "Fonttityön väli";
 };
 
 String SIP_XA_FORMTXTSTART
@@ -11699,6 +11968,7 @@ String SIP_XA_FORMTXTSTART
     Text[ turkish ] = "Fontwork: Yazýtipi baþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inicio Fontwork";
+    Text[ finnish ] = "Fonttityön fonttialoitus";
 };
 
 String SIP_XA_FORMTXTMIRROR
@@ -11726,6 +11996,7 @@ String SIP_XA_FORMTXTMIRROR
     Text[ korean ] = "Fontwork ´ëÄª±Û²Ã";
     Text[ turkish ] = "Fontwork aynalý yazý";
     Text[ catalan ] = "Reflejo Fontwork";
+    Text[ finnish ] = "Fonttityön kopio";
 };
 
 String SIP_XA_FORMTXTOUTLINE
@@ -11753,6 +12024,7 @@ String SIP_XA_FORMTXTOUTLINE
     Text[ korean ] = "Fontwork À±°û ¹®ÀÚ";
     Text[ turkish ] = "Fontwork: Konturlu yazý";
     Text[ catalan ] = "Contorno Fontwork";
+    Text[ finnish ] = "Fonttityön ääriviiva";
 };
 
 String SIP_XA_FORMTXTSHADOW
@@ -11780,6 +12052,7 @@ String SIP_XA_FORMTXTSHADOW
     Text[ korean ] = "Fontwork À½¿µ";
     Text[ turkish ] = "Fontwork gölgesi";
     Text[ catalan ] = "Sombra Fontwork";
+    Text[ finnish ] = "Fonttityön varjostus";
 };
 
 String SIP_XA_FORMTXTSHDWCOLOR
@@ -11807,6 +12080,7 @@ String SIP_XA_FORMTXTSHDWCOLOR
     Text[ korean ] = "Fontwork À½¿µ »ö»ó";
     Text[ turkish ] = "Fontwork gölge rengi";
     Text[ catalan ] = "Color de sombra Fontwork";
+    Text[ finnish ] = "Fonttityön varjostusväri";
 };
 
 String SIP_XA_FORMTXTSHDWXVAL
@@ -11834,6 +12108,7 @@ String SIP_XA_FORMTXTSHDWXVAL
     Text[ korean ] = "Fontwork À½¿µ ¿ÀÇÁ¼Â X";
     Text[ turkish ] = "Fontwork gölge konumu X";
     Text[ catalan ] = "Desplaz. sombra de Fontwork X";
+    Text[ finnish ] = "Fonttityön varjosiirtymä X";
 };
 
 String SIP_XA_FORMTXTSHDWYVAL
@@ -11861,6 +12136,7 @@ String SIP_XA_FORMTXTSHDWYVAL
     Text[ korean ] = "Fontwork À½¿µ ¿ÀÇÁ¼Â Y";
     Text[ turkish ] = "Fontwork gölge konumu Y";
     Text[ catalan ] = "Desplaz. sombra de Fontwork Y";
+    Text[ finnish ] = "Fonttityön varjosiirtymä Y";
 };
 
 String SIP_XA_FORMTXTSTDFORM
@@ -11889,6 +12165,7 @@ String SIP_XA_FORMTXTSTDFORM
     Text[ turkish ] = "Fontwork: Standart biçim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Forma estándar Fontwork";
+    Text[ finnish ] = "Fonttityön oletuslomake";
 };
 
 String SIP_XA_FORMTXTHIDEFORM
@@ -11916,6 +12193,7 @@ String SIP_XA_FORMTXTHIDEFORM
     Text[ korean ] = "Fontwork À±°û ¼û±â±â";
     Text[ turkish ] = "Fontwork konturunu gizle";
     Text[ catalan ] = "Ocultar contorno Fontwork";
+    Text[ finnish ] = "Piilota fonttityön ääriviivat";
 };
 
 String SIP_XA_FORMTXTSHDWTRANSP
@@ -11943,6 +12221,7 @@ String SIP_XA_FORMTXTSHDWTRANSP
     Text[ korean ] = "Fontwork À½¿µ¡¡Åõ¸í";
     Text[ turkish ] = "Fontwork gölge saydamlýðý";
     Text[ catalan ] = "Transparencia de sombra Fontwork";
+    Text[ finnish ] = "Fonttityön varjostuksen läpinäkyvyys";
 };
 
 String SIP_XA_FTRESERVED2
@@ -11970,6 +12249,7 @@ String SIP_XA_FTRESERVED2
     Text[ korean ] = "Fontwork ¿¹ºñ 2";
     Text[ turkish ] = "Fontwork: Yedek 2";
     Text[ catalan ] = "Fontwork reserva 2";
+    Text[ finnish ] = "Fonttityö varattu 2:lle";
 };
 
 String SIP_XA_FTRESERVED3
@@ -11997,6 +12277,7 @@ String SIP_XA_FTRESERVED3
     Text[ korean ] = "Fontwork ¿¹ºñ 3";
     Text[ turkish ] = "Fontwork: Yedek 3";
     Text[ catalan ] = "Fontwork reserva 3";
+    Text[ finnish ] = "Fonttityö varattu 3:lle";
 };
 
 String SIP_XA_FTRESERVED4
@@ -12024,6 +12305,7 @@ String SIP_XA_FTRESERVED4
     Text[ korean ] = "Fontwork ¿¹ºñ 4";
     Text[ turkish ] = "Fontwork: Yedek 4";
     Text[ catalan ] = "Fontwork reserva 4";
+    Text[ finnish ] = "Fonttityö varattu 4:lle";
 };
 
 String SIP_XA_FTRESERVED5
@@ -12051,6 +12333,7 @@ String SIP_XA_FTRESERVED5
     Text[ korean ] = "Fontwork ¿¹ºñ 5";
     Text[ turkish ] = "Fontwork: Yedek 5";
     Text[ catalan ] = "Fontwork reserva 5";
+    Text[ finnish ] = "Fonttityö varattu 5:lle";
 };
 
 String SIP_XA_FTRESERVED_LAST
@@ -12078,6 +12361,7 @@ String SIP_XA_FTRESERVED_LAST
     Text[ korean ] = "Fontwork ¿¹ºñ 6";
     Text[ turkish ] = "Fontwork: Yedek 6";
     Text[ catalan ] = "Fontwork reserva 6";
+    Text[ finnish ] = "Fonttityö varattu 6:lle";
 };
 
 String SIP_XATTRSET_TEXT
@@ -12106,6 +12390,7 @@ String SIP_XATTRSET_TEXT
     Text[ turkish ] = "Fontwork öznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de Fontwork";
+    Text[ finnish ] = "Fonttityön määritteet";
 };
 
 String SIP_SA_SHADOW
@@ -12133,6 +12418,7 @@ String SIP_SA_SHADOW
     Text[ korean ] = "À½¿µ";
     Text[ turkish ] = "Gölge";
     Text[ catalan ] = "Sombra";
+    Text[ finnish ] = "Varjo";
 };
 
 String SIP_SA_SHADOWCOLOR
@@ -12161,6 +12447,7 @@ String SIP_SA_SHADOWCOLOR
     Text[ turkish ] = "Gölge rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de sombra";
+    Text[ finnish ] = "Varjon väri";
 };
 
 String SIP_SA_SHADOWXDIST
@@ -12188,6 +12475,7 @@ String SIP_SA_SHADOWXDIST
     Text[ korean ] = "À½¿µ °£°Ý X";
     Text[ turkish ] = "Gölge aralýðý X";
     Text[ catalan ] = "Distancia de sombra X";
+    Text[ finnish ] = "Varjovälit X";
 };
 
 String SIP_SA_SHADOWYDIST
@@ -12215,6 +12503,7 @@ String SIP_SA_SHADOWYDIST
     Text[ korean ] = "À½¿µ °£°Ý Y";
     Text[ turkish ] = "Gölge aralýðý Y";
     Text[ catalan ] = "Distancia de sombra Y";
+    Text[ finnish ] = "Varjovälit Y";
 };
 
 String SIP_SA_SHADOWTRANSPARENCE
@@ -12242,6 +12531,7 @@ String SIP_SA_SHADOWTRANSPARENCE
     Text[ korean ] = "Åõ¸í À½¿µ";
     Text[ turkish ] = "Gölge saydamlýðý";
     Text[ catalan ] = "Transparencia de sombra";
+    Text[ finnish ] = "Varjon läpinäkyvyys";
 };
 
 String SIP_SA_SHADOW3D
@@ -12270,6 +12560,7 @@ String SIP_SA_SHADOW3D
     Text[ turkish ] = "3B gölge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sombra 3D";
+    Text[ finnish ] = "3D-varjo";
 };
 
 String SIP_SA_SHADOWPERSP
@@ -12297,6 +12588,7 @@ String SIP_SA_SHADOWPERSP
     Text[ korean ] = "¿ø±Ù°¨ÀÖ´Â À½¿µ";
     Text[ turkish ] = "Perspektifli gölge";
     Text[ catalan ] = "Sombra en perspectiva";
+    Text[ finnish ] = "Perspektiivivarjo";
 };
 
 String SIP_SA_SHADOWRESERVE1
@@ -12324,6 +12616,7 @@ String SIP_SA_SHADOWRESERVE1
     Text[ korean ] = "À½¿µ ¿¹ºñ1";
     Text[ turkish ] = "Gölge - Yedek 1";
     Text[ catalan ] = "Sombra reserva 1";
+    Text[ finnish ] = "Varjo varattu 1:lle";
 };
 
 String SIP_SA_SHADOWRESERVE2
@@ -12351,6 +12644,7 @@ String SIP_SA_SHADOWRESERVE2
     Text[ korean ] = "À½¿µ ¿¹ºñ2";
     Text[ turkish ] = "Gölge - Yedek 2";
     Text[ catalan ] = "Sombra reserva 2";
+    Text[ finnish ] = "Varjo varattu 2:lle";
 };
 
 String SIP_SA_SHADOWRESERVE3
@@ -12378,6 +12672,7 @@ String SIP_SA_SHADOWRESERVE3
     Text[ korean ] = "À½¿µ ¿¹ºñ3";
     Text[ turkish ] = "Gölge - Yedek 3";
     Text[ catalan ] = "Sombra reserva 3";
+    Text[ finnish ] = "Varjo varattu 3:lle";
 };
 
 String SIP_SA_SHADOWRESERVE4
@@ -12405,6 +12700,7 @@ String SIP_SA_SHADOWRESERVE4
     Text[ korean ] = "À½¿µ ¿¹ºñ4";
     Text[ turkish ] = "Gölge - Yedek 4";
     Text[ catalan ] = "Sombra reserva 4";
+    Text[ finnish ] = "Varjo varattu 4:lle";
 };
 
 String SIP_SA_SHADOWRESERVE5
@@ -12432,6 +12728,7 @@ String SIP_SA_SHADOWRESERVE5
     Text[ korean ] = "À½¿µ ¿¹ºñ5";
     Text[ turkish ] = "Gölge - Yedek 5";
     Text[ catalan ] = "Sombra reserva 5";
+    Text[ finnish ] = "Varjo varattu 5:lle";
 };
 
 String SIP_SDRATTRSET_SHADOW
@@ -12459,6 +12756,7 @@ String SIP_SDRATTRSET_SHADOW
     Text[ korean ] = "À½¿µ ¼Ó¼º";
     Text[ turkish ] = "Gölge öznitelikleri";
     Text[ catalan ] = "Atributos de sombra";
+    Text[ finnish ] = "Varjon ominaisuudet";
 };
 
 String SIP_SA_CAPTIONTYPE
@@ -12486,6 +12784,7 @@ String SIP_SA_CAPTIONTYPE
     Text[ korean ] = "¹ü·Ê Çü½Ä";
     Text[ turkish ] = "Belirtme çizgisi tipi";
     Text[ catalan ] = "Tipo de leyenda";
+    Text[ finnish ] = "Selitteen laji";
 };
 
 String SIP_SA_CAPTIONFIXEDANGLE
@@ -12513,6 +12812,7 @@ String SIP_SA_CAPTIONFIXEDANGLE
     Text[ korean ] = "¹ü·Ê °¢µµ °íÁ¤";
     Text[ turkish ] = "Sabit belirtme çizgisi açýsý";
     Text[ catalan ] = "Fijación ángulo de leyenda";
+    Text[ finnish ] = "Kiinteä selitteen kulma";
 };
 
 String SIP_SA_CAPTIONANGLE
@@ -12540,6 +12840,7 @@ String SIP_SA_CAPTIONANGLE
     Text[ korean ] = "¹ü·Ê °¢µµ";
     Text[ turkish ] = "Belirtme çizgisi açýsý";
     Text[ catalan ] = "Angulo de leyenda";
+    Text[ finnish ] = "Selitteen kulma";
 };
 
 String SIP_SA_CAPTIONGAP
@@ -12567,6 +12868,7 @@ String SIP_SA_CAPTIONGAP
     Text[ korean ] = "¹ü·Ê¼± °£°Ý";
     Text[ turkish ] = "Belirtme çizgisi aralýðý";
     Text[ catalan ] = "Distancia línea de leyenda";
+    Text[ finnish ] = "Selitteen rivitys";
 };
 
 String SIP_SA_CAPTIONESCDIR
@@ -12595,6 +12897,7 @@ String SIP_SA_CAPTIONESCDIR
     Text[ korean ] = "¹ü·Ê ³¡³»±â ¹æÇâ";
     Text[ turkish ] = "Belirtme çizgisi çýkýþ yönü";
     Text[ catalan ] = "Dirección salida de leyenda";
+    Text[ finnish ] = "Selitteen lopun kohdistus";
 };
 
 String SIP_SA_CAPTIONESCISREL
@@ -12623,6 +12926,7 @@ String SIP_SA_CAPTIONESCISREL
     Text[ korean ] = "¹ü·Ê »ó´ëÀû ³¡³»±â";
     Text[ turkish ] = "Belirtme çizgisi: Göreceli çýkýþ";
     Text[ catalan ] = "Salida relativa de leyenda";
+    Text[ finnish ] = "Suhteellinen poistumaselite";
 };
 
 String SIP_SA_CAPTIONESCREL
@@ -12650,6 +12954,7 @@ String SIP_SA_CAPTIONESCREL
     Text[ korean ] = "¹ü·Ê »ó´ëÀû ³¡³»±â";
     Text[ turkish ] = "Belirtme çizgisi: Göreceli çýkýþ";
     Text[ catalan ] = "Salida relativa de leyenda";
+    Text[ finnish ] = "Suhteellinen poistumaselite";
 };
 
 String SIP_SA_CAPTIONESCABS
@@ -12677,6 +12982,7 @@ String SIP_SA_CAPTIONESCABS
     Text[ korean ] = "¹ü·Ê Àý´ëÀû ³¡³»±â";
     Text[ turkish ] = "Belirtme çizgisi: Mutlak çýkýþ";
     Text[ catalan ] = "Salida absoluta de leyenda";
+    Text[ finnish ] = "Absoluuttinen poistumaselite";
 };
 
 String SIP_SA_CAPTIONLINELEN
@@ -12704,6 +13010,7 @@ String SIP_SA_CAPTIONLINELEN
     Text[ korean ] = "¹ü·Ê ¼± ±æÀÌ";
     Text[ turkish ] = "Belirtme çizgisi uzunluðu";
     Text[ catalan ] = "Longitud de línea de leyenda";
+    Text[ finnish ] = "Selitteen rivipituus";
 };
 
 String SIP_SA_CAPTIONFITLINELEN
@@ -12731,6 +13038,7 @@ String SIP_SA_CAPTIONFITLINELEN
     Text[ korean ] = "ÀÚµ¿ ¹ü·Ê¼± ±æÀÌ";
     Text[ turkish ] = "Otomatik belirtme çizgisi uzunluðu";
     Text[ catalan ] = "Longitud de línea de leyenda, automático";
+    Text[ finnish ] = "Seliterivien automaattinen pituus";
 };
 
 String SIP_SA_CAPTIONRESERVE1
@@ -12758,6 +13066,7 @@ String SIP_SA_CAPTIONRESERVE1
     Text[ korean ] = "¹ü·Ê ¿¹ºñ1";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 1";
     Text[ catalan ] = "Leyenda reserva 1";
+    Text[ finnish ] = "Selite varattu 1:lle";
 };
 
 String SIP_SA_CAPTIONRESERVE2
@@ -12785,6 +13094,7 @@ String SIP_SA_CAPTIONRESERVE2
     Text[ korean ] = "¹ü·Ê ¿¹ºñ2";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 2";
     Text[ catalan ] = "Leyenda reserva 2";
+    Text[ finnish ] = "Selite varattu 2:lle";
 };
 
 String SIP_SA_CAPTIONRESERVE3
@@ -12812,6 +13122,7 @@ String SIP_SA_CAPTIONRESERVE3
     Text[ korean ] = "¹ü·Ê ¿¹ºñ3";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 3";
     Text[ catalan ] = "Leyenda reserva 3";
+    Text[ finnish ] = "Selite varattu 3:lle";
 };
 
 String SIP_SA_CAPTIONRESERVE4
@@ -12839,6 +13150,7 @@ String SIP_SA_CAPTIONRESERVE4
     Text[ korean ] = "¹ü·Ê ¿¹ºñ4";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 4";
     Text[ catalan ] = "Leyenda reserva 4";
+    Text[ finnish ] = "Selite varattu 4:lle";
 };
 
 String SIP_SA_CAPTIONRESERVE5
@@ -12866,6 +13178,7 @@ String SIP_SA_CAPTIONRESERVE5
     Text[ korean ] = "¹ü·Ê ¿¹ºñ5";
     Text[ turkish ] = "Belirtme çizgisi - Yedek 5";
     Text[ catalan ] = "Leyenda reserva 5";
+    Text[ finnish ] = "Selite varattu 5:lle";
 };
 
 String SIP_SDRATTRSET_CAPTION
@@ -12893,6 +13206,7 @@ String SIP_SDRATTRSET_CAPTION
     Text[ korean ] = "¹ü·Ê ¼Ó¼º";
     Text[ turkish ] = "Belirtme çizgisi öznitelikleri";
     Text[ catalan ] = "Atributos de leyenda";
+    Text[ finnish ] = "Selitteen määritteet";
 };
 
 String SIP_SDRATTRSET_OUTLINER
@@ -12921,6 +13235,7 @@ String SIP_SDRATTRSET_OUTLINER
     Text[ turkish ] = "Metin öznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de texto";
+    Text[ finnish ] = "Tekstin ominaisuudet";
 };
 
 String SIP_SA_ECKENRADIUS
@@ -12948,6 +13263,7 @@ String SIP_SA_ECKENRADIUS
     Text[ korean ] = "¸ð¼­¸® °¢µµ";
     Text[ turkish ] = "Köþe çapý";
     Text[ catalan ] = "Radio de ángulo";
+    Text[ finnish ] = "Kulmasäde";
 };
 
 String SIP_SA_TEXT_MINFRAMEHEIGHT
@@ -12975,6 +13291,7 @@ String SIP_SA_TEXT_MINFRAMEHEIGHT
     Text[ korean ] = "ÃÖ¼Ò Æ² ³ôÀÌ";
     Text[ turkish ] = "Asgari çerçeve yüksekliði";
     Text[ catalan ] = "Altura de marco mínima";
+    Text[ finnish ] = "Kehyskorkeus vähintään";
 };
 
 String SIP_SA_TEXT_AUTOGROWHEIGHT
@@ -13002,6 +13319,7 @@ String SIP_SA_TEXT_AUTOGROWHEIGHT
     Text[ korean ] = "ÀÚµ¿ ³ôÀÌ Á¶Á¤";
     Text[ turkish ] = "Otomatik yükseklik ayarý";
     Text[ catalan ] = "Ajute de altura automático";
+    Text[ finnish ] = "Automaattinen korkeuden sovitus";
 };
 
 String SIP_SA_TEXT_FITTOSIZE
@@ -13030,6 +13348,7 @@ String SIP_SA_TEXT_FITTOSIZE
     Text[ turkish ] = "Metni çerçeveye sýðdýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajustar texto al marco";
+    Text[ finnish ] = "Sovita teksti kehykseen";
 };
 
 String SIP_SA_TEXT_LEFTDIST
@@ -13058,6 +13377,7 @@ String SIP_SA_TEXT_LEFTDIST
     Text[ turkish ] = "Sol metin çerçevesi aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia izquierda al marco de texto";
+    Text[ finnish ] = "Vasemman tekstikehyksen välit";
 };
 
 String SIP_SA_TEXT_RIGHTDIST
@@ -13085,6 +13405,7 @@ String SIP_SA_TEXT_RIGHTDIST
     Text[ korean ] = "¿À¸¥ÂÊ ÅØ½ºÆ® Æ² °£°Ý";
     Text[ turkish ] = "Sað metin çerçevesi aralýðý";
     Text[ catalan ] = "Distancia derecha al marco de texto";
+    Text[ finnish ] = "Oikean tekstikehyksen välit";
 };
 
 String SIP_SA_TEXT_UPPERDIST
@@ -13112,6 +13433,7 @@ String SIP_SA_TEXT_UPPERDIST
     Text[ korean ] = "À§ÂÊ ÅØ½ºÆ® Æ² °£°Ý";
     Text[ turkish ] = "Üst metin çerçevesi aralýðý";
     Text[ catalan ] = "Distancia superior al marco de texto";
+    Text[ finnish ] = "Ylemmän tekstikehyksen välit";
 };
 
 String SIP_SA_TEXT_LOWERDIST
@@ -13140,6 +13462,7 @@ String SIP_SA_TEXT_LOWERDIST
     Text[ turkish ] = "Alt metin çerçevesi aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia inferior al marco de texto";
+    Text[ finnish ] = "Alemman tekstikehyksen välit";
 };
 
 String SIP_SA_TEXT_VERTADJUST
@@ -13168,6 +13491,7 @@ String SIP_SA_TEXT_VERTADJUST
     Text[ turkish ] = "Dikey metin sabitleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Anclaje de texto, vertical";
+    Text[ finnish ] = "Pystytason tekstiankkuri";
 };
 
 String SIP_SA_TEXT_MAXFRAMEHEIGHT
@@ -13195,6 +13519,7 @@ String SIP_SA_TEXT_MAXFRAMEHEIGHT
     Text[ korean ] = "ÃÖ´ë Æ² ³ôÀÌ";
     Text[ turkish ] = "Azami çerçeve yüksekliði";
     Text[ catalan ] = "Altura de marco máxima";
+    Text[ finnish ] = "Kehyskorkeus enintään";
 };
 
 String SIP_SA_TEXT_MINFRAMEWIDTH
@@ -13222,6 +13547,7 @@ String SIP_SA_TEXT_MINFRAMEWIDTH
     Text[ korean ] = "ÃÖ¼Ò Æ² ³Êºñ";
     Text[ turkish ] = "Asgari çerçeve geniþliði";
     Text[ catalan ] = "Ancho mínimo de marco";
+    Text[ finnish ] = "Kehysleveys vähintään";
 };
 
 String SIP_SA_TEXT_MAXFRAMEWIDTH
@@ -13249,6 +13575,7 @@ String SIP_SA_TEXT_MAXFRAMEWIDTH
     Text[ korean ] = "ÃÖ´ë Æ² ³Êºñ";
     Text[ turkish ] = "Azami çerçeve geniþliði";
     Text[ catalan ] = "Ancho máximo de marco";
+    Text[ finnish ] = "Kehysleveys enintään";
 };
 
 String SIP_SA_TEXT_AUTOGROWWIDTH
@@ -13276,6 +13603,7 @@ String SIP_SA_TEXT_AUTOGROWWIDTH
     Text[ korean ] = "ÀÚµ¿ ³Êºñ Á¶Á¤";
     Text[ turkish ] = "Otomatik geniþlik ayarý";
     Text[ catalan ] = "Ajuste automático de ancho";
+    Text[ finnish ] = "Automaattinen leveyden sovitus";
 };
 
 String SIP_SA_TEXT_HORZADJUST
@@ -13304,6 +13632,7 @@ String SIP_SA_TEXT_HORZADJUST
     Text[ turkish ] = "Yatay metin sabitleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Anclaje horizontal de texto";
+    Text[ finnish ] = "Vaakatason tekstiankkuri";
 };
 
 String SIP_SA_TEXT_ANIKIND
@@ -13331,6 +13660,7 @@ String SIP_SA_TEXT_ANIKIND
     Text[ korean ] = "Æ¼Ä¿";
     Text[ turkish ] = "Hareketli yazý";
     Text[ catalan ] = "Animación de texto";
+    Text[ finnish ] = "Ajanotto";
 };
 
 String SIP_SA_TEXT_ANIDIRECTION
@@ -13358,6 +13688,7 @@ String SIP_SA_TEXT_ANIDIRECTION
     Text[ korean ] = "Æ¼Ä¿ ¹æÇâ";
     Text[ turkish ] = "Hareketli yazý yönü";
     Text[ catalan ] = "Dirección de la animación de texto";
+    Text[ finnish ] = "Ajanoton suunta";
 };
 
 String SIP_SA_TEXT_ANISTARTINSIDE
@@ -13385,6 +13716,7 @@ String SIP_SA_TEXT_ANISTARTINSIDE
     Text[ korean ] = "Æ¼Ä¿ ½ÃÀÛ ¹üÀ§";
     Text[ turkish ] = "Hareketli yazý baþlangýcý:";
     Text[ catalan ] = "Inicio de la animación en";
+    Text[ finnish ] = "Ajanoton käynnistys sisältä";
 };
 
 String SIP_SA_TEXT_ANISTOPINSIDE
@@ -13413,6 +13745,7 @@ String SIP_SA_TEXT_ANISTOPINSIDE
     Text[ turkish ] = "Hareketli yazý duraðý:";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Parada de animación en";
+    Text[ finnish ] = "Ajanoton sammutus sisältä";
 };
 
 String SIP_SA_TEXT_ANICOUNT
@@ -13440,6 +13773,7 @@ String SIP_SA_TEXT_ANICOUNT
     Text[ korean ] = "¼øÈ¯ ¹®ÀÚ  ¼ö";
     Text[ turkish ] = "Hareketli yazý hareket sayýsý";
     Text[ catalan ] = "Cantidad de animaciones";
+    Text[ finnish ] = "Ajanottojen määrä";
 };
 
 String SIP_SA_TEXT_ANIDELAY
@@ -13467,6 +13801,7 @@ String SIP_SA_TEXT_ANIDELAY
     Text[ korean ] = "Æ¼Ä¿ ¼Óµµ";
     Text[ turkish ] = "Hareketli yazý hýzý";
     Text[ catalan ] = "Incremento de animación";
+    Text[ finnish ] = "Ajanoton nopeus";
 };
 
 String SIP_SA_TEXT_ANIAMOUNT
@@ -13494,6 +13829,7 @@ String SIP_SA_TEXT_ANIAMOUNT
     Text[ korean ] = "Æ¼Ä¿ Áõ°¡Æø";
     Text[ turkish ] = "Hareketli yazý aralýðý";
     Text[ catalan ] = "Retardo de la animación";
+    Text[ finnish ] = "Ajanoton vaihekoko";
 };
 
 String SIP_SA_TEXT_CONTOURFRAME
@@ -13521,6 +13857,7 @@ String SIP_SA_TEXT_CONTOURFRAME
     Text[ korean ] = "À±°û ÅØ½ºÆ® Èå¸§";
     Text[ turkish ] = "Konturlu metin akýþý";
     Text[ catalan ] = "Flujo de texto de contorno";
+    Text[ finnish ] = "Jäsennyksen rivitys";
 };
 
 String SIP_SA_AUTOSHAPE_ADJUSTMENT
@@ -13546,6 +13883,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ turkish ] = "SvDraw Autoshape Adjustment";
     Text[ arabic ] = "ÖÈØ ÇáÃÔßÇá ÇáÊáÞÇÆíÉ";
     Text[ catalan ] = "Ajuste de autoformas";
+    Text[ finnish ] = "Automaattinen muutosten muotoilu";
 };
 
 String SIP_SA_RESERVE14
@@ -13573,6 +13911,7 @@ String SIP_SA_RESERVE14
     Text[ korean ] = "SvDraw ¿¹ºñ 14";
     Text[ turkish ] = "SvDraw - Yedek 14";
     Text[ catalan ] = "SvDraw reserva 14";
+    Text[ finnish ] = "SvDraw varattu 14:lle";
 };
 
 String SIP_SA_RESERVE15
@@ -13600,6 +13939,7 @@ String SIP_SA_RESERVE15
     Text[ korean ] = "SvDraw ¿¹ºñ 15";
     Text[ turkish ] = "SvDraw - Yedek 15";
     Text[ catalan ] = "SvDraw reserva 15";
+    Text[ finnish ] = "SvDraw varattu 15:lle";
 };
 
 String SIP_SA_RESERVE16
@@ -13627,6 +13967,7 @@ String SIP_SA_RESERVE16
     Text[ korean ] = "SvDraw ¿¹ºñ 16";
     Text[ turkish ] = "SvDraw - Yedek 16";
     Text[ catalan ] = "SvDraw reserva 16";
+    Text[ finnish ] = "SvDraw varattu 16:lle";
 };
 
 String SIP_SA_RESERVE17
@@ -13654,6 +13995,7 @@ String SIP_SA_RESERVE17
     Text[ korean ] = "SvDraw ¿¹ºñ 17";
     Text[ turkish ] = "SvDraw - Yedek 17";
     Text[ catalan ] = "SvDraw reserva 17";
+    Text[ finnish ] = "SvDraw varattu 17:lle";
 };
 
 String SIP_SA_RESERVE18
@@ -13681,6 +14023,7 @@ String SIP_SA_RESERVE18
     Text[ korean ] = "SvDraw ¿¹ºñ 18";
     Text[ turkish ] = "SvDraw - Yedek 18";
     Text[ catalan ] = "SvDraw reserva 18";
+    Text[ finnish ] = "SvDraw varattu 18:lle";
 };
 
 String SIP_SA_RESERVE19
@@ -13708,6 +14051,7 @@ String SIP_SA_RESERVE19
     Text[ korean ] = "SvDraw ¿¹ºñ 19";
     Text[ turkish ] = "SvDraw - Yedek 19";
     Text[ catalan ] = "SvDraw reserva 19";
+    Text[ finnish ] = "SvDraw varattu 19:lle";
 };
 
 String SIP_SDRATTRSET_MISC
@@ -13735,6 +14079,7 @@ String SIP_SDRATTRSET_MISC
     Text[ korean ] = "´Ù¾çÇÑ ¼Ó¼º";
     Text[ turkish ] = "Çeþitli öznitelikler";
     Text[ catalan ] = "Diversos atributos";
+    Text[ finnish ] = "Useita ominaisuuksia";
 };
 
 String SIP_SA_EDGEKIND
@@ -13762,6 +14107,7 @@ String SIP_SA_EDGEKIND
     Text[ korean ] = "¿¬°á¼± À¯Çü";
     Text[ turkish ] = "Baðlayýcý tipi";
     Text[ catalan ] = "Tipo de conector";
+    Text[ finnish ] = "Liittimen tyyppi";
 };
 
 String SIP_SA_EDGENODE1HORZDIST
@@ -13789,6 +14135,7 @@ String SIP_SA_EDGENODE1HORZDIST
     Text[ korean ] = "¼öÆò °£°Ý °³Ã¼ 1";
     Text[ turkish ] = "Yatay uzaklýk Nesne 1";
     Text[ catalan ] = "Distancia horz. objeto 1";
+    Text[ finnish ] = "Vaakaväliobjekti 1";
 };
 
 String SIP_SA_EDGENODE1VERTDIST
@@ -13816,6 +14163,7 @@ String SIP_SA_EDGENODE1VERTDIST
     Text[ korean ] = "¼öÁ÷ °£°Ý °³Ã¼ 1";
     Text[ turkish ] = "Dikey uzaklýk Nesne 1";
     Text[ catalan ] = "Distancia vert. objeto 1";
+    Text[ finnish ] = "Pystyväliobjekti 1";
 };
 
 String SIP_SA_EDGENODE2HORZDIST
@@ -13844,6 +14192,7 @@ String SIP_SA_EDGENODE2HORZDIST
     Text[ turkish ] = "Yatay uzaklýk Nesne 2";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia hor. objeto 2";
+    Text[ finnish ] = "Vaakaväliobjekti 2";
 };
 
 String SIP_SA_EDGENODE2VERTDIST
@@ -13871,6 +14220,7 @@ String SIP_SA_EDGENODE2VERTDIST
     Text[ korean ] = "¼öÁ÷ °£°Ý °³Ã¼ 2";
     Text[ turkish ] = "Dikey uzaklýk Nesne 2";
     Text[ catalan ] = "Distancia ver. objeto 2";
+    Text[ finnish ] = "Pystyväliobjekti 2";
 };
 
 String SIP_SA_EDGENODE1GLUEDIST
@@ -13898,6 +14248,7 @@ String SIP_SA_EDGENODE1GLUEDIST
     Text[ korean ] = "Á¢Âø °£°Ý °³Ã¼ 1";
     Text[ turkish ] = "Yapýþtýrma aralýðý: Nesne 1";
     Text[ catalan ] = "Distancia adhesión objeto 1";
+    Text[ finnish ] = "Liimaväliobjekti 1";
 };
 
 String SIP_SA_EDGENODE2GLUEDIST
@@ -13925,6 +14276,7 @@ String SIP_SA_EDGENODE2GLUEDIST
     Text[ korean ] = "Á¢Âø °£°Ý °³Ã¼ 2";
     Text[ turkish ] = "Yapýþtýrma aralýðý: Nesne 2";
     Text[ catalan ] = "Distancia adhesión objeto 2";
+    Text[ finnish ] = "Liimaväliobjekti 2";
 };
 
 String SIP_SA_EDGELINEDELTAANZ
@@ -13952,6 +14304,7 @@ String SIP_SA_EDGELINEDELTAANZ
     Text[ korean ] = "ÀÌµ¿°¡´ÉÇÑ ¼±ÀÇ °³¼ö";
     Text[ turkish ] = "Taþýnabilir çizgi sayýsý";
     Text[ catalan ] = "Núm. líneas desplazables";
+    Text[ finnish ] = "Siirrettävien rivien määrä";
 };
 
 String SIP_SA_EDGELINE1DELTA
@@ -13979,6 +14332,7 @@ String SIP_SA_EDGELINE1DELTA
     Text[ korean ] = "¿ÀÇÁ¼Â ¼± 1";
     Text[ turkish ] = "Kayma çizgisi 1";
     Text[ catalan ] = "Desplazamiento línea 1";
+    Text[ finnish ] = "Siirtymärivi 1";
 };
 
 String SIP_SA_EDGELINE2DELTA
@@ -14006,6 +14360,7 @@ String SIP_SA_EDGELINE2DELTA
     Text[ korean ] = "¿ÀÇÁ¼Â ¼± 2";
     Text[ turkish ] = "Kayma çizgisi 2";
     Text[ catalan ] = "Desplazamiento línea 2";
+    Text[ finnish ] = "Siirtymärivi 2";
 };
 
 String SIP_SA_EDGELINE3DELTA
@@ -14033,6 +14388,7 @@ String SIP_SA_EDGELINE3DELTA
     Text[ korean ] = "¿ÀÇÁ¼Â ¼± 3";
     Text[ turkish ] = "Kayma çizgisi 3";
     Text[ catalan ] = "Desplazamiento línea 3";
+    Text[ finnish ] = "Siirtymärivi 3";
 };
 
 String SIP_SA_EDGERESERVE02
@@ -14060,6 +14416,7 @@ String SIP_SA_EDGERESERVE02
     Text[ korean ] = "Ä¿³ØÅÍ¡¡¿¹ºñ2";
     Text[ turkish ] = "Baðlayýcý - Yedek 2";
     Text[ catalan ] = "Conector reserva 2";
+    Text[ finnish ] = "Varattu liitin 2";
 };
 
 String SIP_SA_EDGERESERVE03
@@ -14087,6 +14444,7 @@ String SIP_SA_EDGERESERVE03
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ3";
     Text[ turkish ] = "Baðlayýcý - Yedek 3";
     Text[ catalan ] = "Conector reserva 3";
+    Text[ finnish ] = "Varattu liitin 3";
 };
 
 String SIP_SA_EDGERESERVE04
@@ -14114,6 +14472,7 @@ String SIP_SA_EDGERESERVE04
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ4";
     Text[ turkish ] = "Baðlayýcý - Yedek 4";
     Text[ catalan ] = "Conector reserva 4";
+    Text[ finnish ] = "Varattu liitin 4";
 };
 
 String SIP_SA_EDGERESERVE05
@@ -14141,6 +14500,7 @@ String SIP_SA_EDGERESERVE05
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ5";
     Text[ turkish ] = "Baðlayýcý - Yedek 5";
     Text[ catalan ] = "Conector reserva 5";
+    Text[ finnish ] = "Varattu liitin 5";
 };
 
 String SIP_SA_EDGERESERVE06
@@ -14168,6 +14528,7 @@ String SIP_SA_EDGERESERVE06
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ6";
     Text[ turkish ] = "Baðlayýcý - Yedek 6";
     Text[ catalan ] = "Conector reserva 6";
+    Text[ finnish ] = "Varattu liitin 6";
 };
 
 String SIP_SA_EDGERESERVE07
@@ -14195,6 +14556,7 @@ String SIP_SA_EDGERESERVE07
     Text[ korean ] = "Ä¿³ØÅÍ ¿¹ºñ7";
     Text[ turkish ] = "Baðlayýcý - Yedek 7";
     Text[ catalan ] = "Conector reserva 7";
+    Text[ finnish ] = "Varattu liitin 7";
 };
 
 String SIP_SA_EDGERESERVE08
@@ -14222,6 +14584,7 @@ String SIP_SA_EDGERESERVE08
     Text[ korean ] = "Ä¿³ØÅÍ¡¡¿¹ºñ8";
     Text[ turkish ] = "Baðlayýcý - Yedek 8";
     Text[ catalan ] = "Conector reserva 8";
+    Text[ finnish ] = "Varattu liitin 8";
 };
 
 String SIP_SA_EDGERESERVE09
@@ -14249,6 +14612,7 @@ String SIP_SA_EDGERESERVE09
     Text[ korean ] = "Ä¿³ØÅÍ¡¡¿¹ºñ9";
     Text[ turkish ] = "Baðlayýcý - Yedek 9";
     Text[ catalan ] = "Conector reserva 9";
+    Text[ finnish ] = "Varattu liitin 9";
 };
 
 String SIP_SDRATTRSET_EDGE
@@ -14276,6 +14640,7 @@ String SIP_SDRATTRSET_EDGE
     Text[ korean ] = "Ä¿³ØÅÍ ¼Ó¼º";
     Text[ turkish ] = "Baðlayýcý öznitelikleri";
     Text[ catalan ] = "Atributos de conector";
+    Text[ finnish ] = "Liitinmääritteet";
 };
 
 String SIP_SA_MEASUREKIND
@@ -14303,6 +14668,7 @@ String SIP_SA_MEASUREKIND
     Text[ korean ] = "Ä¡¼ö À¯Çü";
     Text[ turkish ] = "Ölçüm tipi";
     Text[ catalan ] = "Tipo de dimensionamiento";
+    Text[ finnish ] = "Mitoituslaji";
 };
 
 String SIP_SA_MEASURETEXTHPOS
@@ -14331,6 +14697,7 @@ String SIP_SA_MEASURETEXTHPOS
     Text[ korean ] = "Ä¡¼ö°ª - ¼öÆò À§Ä¡";
     Text[ turkish ] = "Ölçüm metni - Yatay konum";
     Text[ catalan ] = "Pos. horiz. texto dimension.";
+    Text[ finnish ] = "Mitoitusarvo - vaakasijainti";
 };
 
 String SIP_SA_MEASURETEXTVPOS
@@ -14359,6 +14726,7 @@ String SIP_SA_MEASURETEXTVPOS
     Text[ korean ] = "Ä¡¼ö°ª - ¼öÁ÷ À§Ä¡";
     Text[ turkish ] = "Ölçüm metni - Dikey konum";
     Text[ catalan ] = "Pos. vert. texto dimension.";
+    Text[ finnish ] = "Mitoitusarvo - pystysijainti";
 };
 
 String SIP_SA_MEASURELINEDIST
@@ -14387,6 +14755,7 @@ String SIP_SA_MEASURELINEDIST
     Text[ turkish ] = "Ölçüm çizgisi aralýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia líneas dimensiones";
+    Text[ finnish ] = "Mittaviivatila";
 };
 
 String SIP_SA_MEASUREHELPLINEOVERHANG
@@ -14414,6 +14783,7 @@ String SIP_SA_MEASUREHELPLINEOVERHANG
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± µ¹Ãâ";
     Text[ turkish ] = "Yardýmcý çizgi sarkmasý";
     Text[ catalan ] = "Guías sobresalientes";
+    Text[ finnish ] = "Leijuva ohjemittaviiva";
 };
 
 String SIP_SA_MEASUREHELPLINEDIST
@@ -14441,6 +14811,7 @@ String SIP_SA_MEASUREHELPLINEDIST
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± °£°Ý";
     Text[ turkish ] = "Yardýmcý ölçüm çizgisi aralýðý";
     Text[ catalan ] = "Distancia entre guías";
+    Text[ finnish ] = "Ohjemittaviivan välit";
 };
 
 String SIP_SA_MEASUREHELPLINE1LEN
@@ -14468,6 +14839,7 @@ String SIP_SA_MEASUREHELPLINE1LEN
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± ¹é·Î±× 1";
     Text[ turkish ] = "Yardýmcý ölçüm çizgisi taþmasý 1";
     Text[ catalan ] = "Extralargo líneas aux. de dimensionamiento 1";
+    Text[ finnish ] = "Ohjemittaviivan taustaloki 1";
 };
 
 String SIP_SA_MEASUREHELPLINE2LEN
@@ -14495,6 +14867,7 @@ String SIP_SA_MEASUREHELPLINE2LEN
     Text[ korean ] = "Ä¡¼ö ¾È³»¼± ¹é·Î±× 2";
     Text[ turkish ] = "Yardýmcý ölçüm çizgisi taþmasý 2";
     Text[ catalan ] = "Extralargo líneas aux. de dimensionamiento 2";
+    Text[ finnish ] = "Ohjemittaviivan taustaloki 2";
 };
 
 String SIP_SA_MEASUREBELOWREFEDGE
@@ -14522,6 +14895,7 @@ String SIP_SA_MEASUREBELOWREFEDGE
     Text[ korean ] = "¾Æ·¡ ¸ð¼­¸® Ä¡¼ö";
     Text[ turkish ] = "Alt kenar ölçüsü";
     Text[ catalan ] = "Dimensiones borde inferior";
+    Text[ finnish ] = "Alareunan mitat";
 };
 
 String SIP_SA_MEASURETEXTROTA90
@@ -14549,6 +14923,7 @@ String SIP_SA_MEASURETEXTROTA90
     Text[ korean ] = "Ä¡¼ö°ªÀ» Ä¡¼ö¼±¿¡ °¡·Î·Î";
     Text[ turkish ] = "Ölçüm çizgisini kesen ölçüm metni";
     Text[ catalan ] = "Dimens. de texto a través de línea";
+    Text[ finnish ] = "Mittaviivojen mitta-arvo";
 };
 
 String SIP_SA_MEASURETEXTUPSIDEDOWN
@@ -14576,6 +14951,7 @@ String SIP_SA_MEASURETEXTUPSIDEDOWN
     Text[ korean ] = "Ä¡¼ö°ª 180 È¸Àü";
     Text[ turkish ] = "Ölçüm metnini 180ø döndür";
     Text[ catalan ] = "Girar texto dimens. en 180ø";
+    Text[ finnish ] = "Käännä mitta-arvoa 180 astetta";
 };
 
 String SIP_SA_MEASUREOVERHANG
@@ -14603,6 +14979,7 @@ String SIP_SA_MEASUREOVERHANG
     Text[ korean ] = "Ä¡¼ö¼± µ¹Ãâ";
     Text[ turkish ] = "Ölçüm çizgisi sarkmasý";
     Text[ catalan ] = "Resalte líneas de dimensiones";
+    Text[ finnish ] = "Leijuva mittaviiva";
 };
 
 String SIP_SA_MEASUREUNIT
@@ -14630,6 +15007,7 @@ String SIP_SA_MEASUREUNIT
     Text[ korean ] = "Ä¡¼ö ´ÜÀ§";
     Text[ turkish ] = "Ölçüm birimi";
     Text[ catalan ] = "Unidad de medida";
+    Text[ finnish ] = "Mittayksikkö";
 };
 
 String SIP_SA_MEASURESCALE
@@ -14658,6 +15036,7 @@ String SIP_SA_MEASURESCALE
     Text[ turkish ] = "Ek ölçek faktörü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Factor adicional de escala";
+    Text[ finnish ] = "Lisäskaalauskerroin";
 };
 
 String SIP_SA_MEASURESHOWUNIT
@@ -14685,6 +15064,7 @@ String SIP_SA_MEASURESHOWUNIT
     Text[ korean ] = "Ä¡¼ö ´ÜÀ§ Ç¥½Ã";
     Text[ turkish ] = "Ölçü birimini göster";
     Text[ catalan ] = "Visualización unidades de medida";
+    Text[ finnish ] = "Mittayksikön näyttö";
 };
 
 String SIP_SA_MEASUREFORMATSTRING
@@ -14712,6 +15092,7 @@ String SIP_SA_MEASUREFORMATSTRING
     Text[ korean ] = "Ä¡¼ö°ª Æ÷¸Ë";
     Text[ turkish ] = "Ölçüm metni formatý";
     Text[ catalan ] = "Formato texto dimensionado";
+    Text[ finnish ] = "Mitoitusarvon muoto";
 };
 
 String SIP_SA_MEASURETEXTAUTOANGLE
@@ -14739,6 +15120,7 @@ String SIP_SA_MEASURETEXTAUTOANGLE
     Text[ korean ] = "Ä¡¼ö°ª°¢ ÀÚµ¿";
     Text[ turkish ] = "Otomatik ölçüm metni açýsý";
     Text[ catalan ] = "Posicionamiento automático del texto de ángulo";
+    Text[ finnish ] = "Mitta-arvon automaattinen sijoitus";
 };
 
 String SIP_SA_MEASURETEXTAUTOANGLEVIEW
@@ -14766,6 +15148,7 @@ String SIP_SA_MEASURETEXTAUTOANGLEVIEW
     Text[ korean ] = "Ä¡¼ö°ª°¢ ÀÚµ¿¿ë °¢µµ";
     Text[ turkish ] = "Otomatik ölçüm metni açýsý için açý";
     Text[ catalan ] = "Angulo para ángulo automát. de texto dimens.";
+    Text[ finnish ] = "Mitta-arvon automaattisen sijoituksen kulma";
 };
 
 String SIP_SA_MEASURETEXTISFIXEDANGLE
@@ -14793,6 +15176,7 @@ String SIP_SA_MEASURETEXTISFIXEDANGLE
     Text[ korean ] = "Ä¡¼ö°ª°¢ Á¤ÀÇ";
     Text[ turkish ] = "Ölçüm metni açýsýnýn belirlenmesi";
     Text[ catalan ] = "Definición del ángulo de texto dimensionado";
+    Text[ finnish ] = "Mitta-arvon kulman määritys";
 };
 
 String SIP_SA_MEASURETEXTFIXEDANGLE
@@ -14820,6 +15204,7 @@ String SIP_SA_MEASURETEXTFIXEDANGLE
     Text[ korean ] = "Ä¡¼ö°ª°¢";
     Text[ turkish ] = "Ölçüm metni açýsý";
     Text[ catalan ] = "Angulo de texto dimensionado";
+    Text[ finnish ] = "Mitta-arvon kulma";
 };
 
 String SIP_SA_MEASURERESERVE04
@@ -14847,6 +15232,7 @@ String SIP_SA_MEASURERESERVE04
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ4";
     Text[ turkish ] = "Boyutlar - Yedek 4";
     Text[ catalan ] = "Dimensiones reserva 4";
+    Text[ finnish ] = "Mitoitus varattu 4:lle";
 };
 
 String SIP_SA_MEASURERESERVE05
@@ -14874,6 +15260,7 @@ String SIP_SA_MEASURERESERVE05
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ5";
     Text[ turkish ] = "Boyutlar - Yedek 5";
     Text[ catalan ] = "Dimensionamiento reserva 5";
+    Text[ finnish ] = "Mitoitus varattu 5:lle";
 };
 
 String SIP_SA_MEASURERESERVE06
@@ -14901,6 +15288,7 @@ String SIP_SA_MEASURERESERVE06
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ6";
     Text[ turkish ] = "Boyutlar - Yedek 6";
     Text[ catalan ] = "Dimensionamiento reserva 6";
+    Text[ finnish ] = "Mitoitus varattu 6:lle";
 };
 
 String SIP_SA_MEASURERESERVE07
@@ -14928,6 +15316,7 @@ String SIP_SA_MEASURERESERVE07
     Text[ korean ] = "Ä¡¼ö ¿¹ºñ7";
     Text[ turkish ] = "Boyutlar - Yedek 7";
     Text[ catalan ] = "Dimensionamiento reserva 7";
+    Text[ finnish ] = "Mitoitus varattu 7:lle";
 };
 
 String SIP_SDRATTRSET_MEASURE
@@ -14955,6 +15344,7 @@ String SIP_SDRATTRSET_MEASURE
     Text[ korean ] = "Ä¡¼ö ¼Ó¼º";
     Text[ turkish ] = "Boyut öznitelikleri";
     Text[ catalan ] = "Atributo de dimensiones";
+    Text[ finnish ] = "Mitoitusmääritteet";
 };
 
 String SIP_SA_CIRCKIND
@@ -14983,6 +15373,7 @@ String SIP_SA_CIRCKIND
     Text[ turkish ] = "Daire tipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo de círculo";
+    Text[ finnish ] = "Ympyrän tyyppi";
 };
 
 String SIP_SA_CIRCSTARTANGLE
@@ -15011,6 +15402,7 @@ String SIP_SA_CIRCSTARTANGLE
     Text[ turkish ] = "Baþlangýç açýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Angulo inicial";
+    Text[ finnish ] = "Aloituskulma";
 };
 
 String SIP_SA_CIRCENDANGLE
@@ -15038,6 +15430,7 @@ String SIP_SA_CIRCENDANGLE
     Text[ korean ] = "³¡ °¢µµ";
     Text[ turkish ] = "Bitiþ açýsý";
     Text[ catalan ] = "Angulo final";
+    Text[ finnish ] = "Loppukulma";
 };
 
 String SIP_SA_CIRCRESERVE0
@@ -15065,6 +15458,7 @@ String SIP_SA_CIRCRESERVE0
     Text[ korean ] = "¿ø ¿¹ºñ0";
     Text[ turkish ] = "Daire - Yedek 0";
     Text[ catalan ] = "Círculo reserva 0";
+    Text[ finnish ] = "Ympyrä varattu 0:lle";
 };
 
 String SIP_SA_CIRCRESERVE1
@@ -15092,6 +15486,7 @@ String SIP_SA_CIRCRESERVE1
     Text[ korean ] = "¿ø ¿¹ºñ1";
     Text[ turkish ] = "Daire - Yedek 1";
     Text[ catalan ] = "Círculo reserva 1";
+    Text[ finnish ] = "Ympyrä varattu 1:lle";
 };
 
 String SIP_SA_CIRCRESERVE2
@@ -15119,6 +15514,7 @@ String SIP_SA_CIRCRESERVE2
     Text[ korean ] = "¿ø ¿¹ºñ2";
     Text[ turkish ] = "Daire - Yedek 2";
     Text[ catalan ] = "Círculo reserva 2";
+    Text[ finnish ] = "Ympyrä varattu 2:lle";
 };
 
 String SIP_SA_CIRCRESERVE3
@@ -15146,6 +15542,7 @@ String SIP_SA_CIRCRESERVE3
     Text[ korean ] = "¿ø ¿¹ºñ3";
     Text[ turkish ] = "Daire - Yedek 3";
     Text[ catalan ] = "Círculo reserva 3";
+    Text[ finnish ] = "Ympyrä varattu 3:lle";
 };
 
 String SIP_SDRATTRSET_CIRC
@@ -15173,6 +15570,7 @@ String SIP_SDRATTRSET_CIRC
     Text[ korean ] = "¿ø ¼Ó¼º";
     Text[ turkish ] = "Daire öznitelikleri";
     Text[ catalan ] = "Atributos de círculo";
+    Text[ finnish ] = "Ympyrän määritteet";
 };
 
 String SIP_SA_OBJMOVEPROTECT
@@ -15200,6 +15598,7 @@ String SIP_SA_OBJMOVEPROTECT
     Text[ korean ] = "°³Ã¼ À§Ä¡ º¸È£";
     Text[ turkish ] = "Nesne konumu korumalý";
     Text[ catalan ] = "Posición de objeto protegida";
+    Text[ finnish ] = "Suojattu objektisijainti";
 };
 
 String SIP_SA_OBJSIZEPROTECT
@@ -15228,6 +15627,7 @@ String SIP_SA_OBJSIZEPROTECT
     Text[ turkish ] = "Nesne boyutu korumalý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tamaño de objeto protegido";
+    Text[ finnish ] = "Suojattu objektikoko";
 };
 
 String SIP_SA_OBJPRINTABLE
@@ -15256,6 +15656,7 @@ String SIP_SA_OBJPRINTABLE
     Text[ turkish ] = "Nesne yazdýrýlabilir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto imprimible";
+    Text[ finnish ] = "Objekti, tulostettava";
 };
 
 String SIP_SA_LAYERID
@@ -15283,6 +15684,7 @@ String SIP_SA_LAYERID
     Text[ korean ] = "·¹º§ ID";
     Text[ turkish ] = "Düzey tanýtýcýsý";
     Text[ catalan ] = "Identificación de niveles";
+    Text[ finnish ] = "Tasotunnus";
 };
 
 String SIP_SA_LAYERNAME
@@ -15310,6 +15712,7 @@ String SIP_SA_LAYERNAME
     Text[ korean ] = "·¹º§";
     Text[ turkish ] = "Düzey";
     Text[ catalan ] = "Nivel";
+    Text[ finnish ] = "Taso ";
 };
 
 String SIP_SA_OBJECTNAME
@@ -15338,6 +15741,7 @@ String SIP_SA_OBJECTNAME
     Text[ turkish ] = "Nesne adý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre de objeto";
+    Text[ finnish ] = "Objektin nimi";
 };
 
 String SIP_SA_ALLPOSITIONX
@@ -15365,6 +15769,7 @@ String SIP_SA_ALLPOSITIONX
     Text[ korean ] = "X À§Ä¡, ÀüÃ¼";
     Text[ turkish ] = "X konumu (tümü)";
     Text[ catalan ] = "Posición X, todo";
+    Text[ finnish ] = "Sijainti X, valmis";
 };
 
 String SIP_SA_ALLPOSITIONY
@@ -15392,6 +15797,7 @@ String SIP_SA_ALLPOSITIONY
     Text[ korean ] = "Y À§Ä¡, ÀüÃ¼";
     Text[ turkish ] = "Y konumu (tümü)";
     Text[ catalan ] = "Posición Y, todo";
+    Text[ finnish ] = "Sijainti Y, valmis";
 };
 
 String SIP_SA_ALLSIZEWIDTH
@@ -15419,6 +15825,7 @@ String SIP_SA_ALLSIZEWIDTH
     Text[ korean ] = "³Êºñ, ÀüÃ¼";
     Text[ turkish ] = "Toplam geniþlik";
     Text[ catalan ] = "Ancho, todo";
+    Text[ finnish ] = "Kokonaisleveys";
 };
 
 String SIP_SA_ALLSIZEHEIGHT
@@ -15446,6 +15853,7 @@ String SIP_SA_ALLSIZEHEIGHT
     Text[ korean ] = "³ôÀÌ, ÀüÃ¼";
     Text[ turkish ] = "Toplam yükseklik";
     Text[ catalan ] = "Alto, todo";
+    Text[ finnish ] = "Korkeus, täydellinen";
 };
 
 String SIP_SA_ONEPOSITIONX
@@ -15473,6 +15881,7 @@ String SIP_SA_ONEPOSITIONX
     Text[ korean ] = "X À§Ä¡, ´ÜÀÏ";
     Text[ turkish ] = "X konumu (tek)";
     Text[ catalan ] = "Posición X, individual";
+    Text[ finnish ] = "Yksittäinen sijainti X";
 };
 
 String SIP_SA_ONEPOSITIONY
@@ -15500,6 +15909,7 @@ String SIP_SA_ONEPOSITIONY
     Text[ korean ] = "Y À§Ä¡, ´ÜÀÏ";
     Text[ turkish ] = "Y konumu (tek)";
     Text[ catalan ] = "Posición Y, individual";
+    Text[ finnish ] = "Yksittäinen sijainti Y";
 };
 
 String SIP_SA_ONESIZEWIDTH
@@ -15527,6 +15937,7 @@ String SIP_SA_ONESIZEWIDTH
     Text[ korean ] = "´ÜÀÏ ³Êºñ";
     Text[ turkish ] = "Geniþlik (tek)";
     Text[ catalan ] = "Ancho, individual";
+    Text[ finnish ] = "Yksittäinen leveys";
 };
 
 String SIP_SA_ONESIZEHEIGHT
@@ -15554,6 +15965,7 @@ String SIP_SA_ONESIZEHEIGHT
     Text[ korean ] = "´ÜÀÏ ³ôÀÌ";
     Text[ turkish ] = "Yükseklik (tek)";
     Text[ catalan ] = "Alto, individual";
+    Text[ finnish ] = "Yksittäinen korkeus";
 };
 
 String SIP_SA_LOGICSIZEWIDTH
@@ -15581,6 +15993,7 @@ String SIP_SA_LOGICSIZEWIDTH
     Text[ korean ] = "³í¸®Àû ³Êºñ";
     Text[ turkish ] = "Mantýksal geniþlik";
     Text[ catalan ] = "Ancho, lógico";
+    Text[ finnish ] = "Looginen leveys";
 };
 
 String SIP_SA_LOGICSIZEHEIGHT
@@ -15608,6 +16021,7 @@ String SIP_SA_LOGICSIZEHEIGHT
     Text[ korean ] = "³í¸®Àû ³ôÀÌ";
     Text[ turkish ] = "Mantýksal yükseklik";
     Text[ catalan ] = "Alto, lógico";
+    Text[ finnish ] = "Looginen korkeus";
 };
 
 String SIP_SA_ROTATEANGLE
@@ -15635,6 +16049,7 @@ String SIP_SA_ROTATEANGLE
     Text[ korean ] = "´ÜÀÏ È¸Àü °¢µµ";
     Text[ turkish ] = "Dönüþ açýsý (tek)";
     Text[ catalan ] = "Angulo de rotación, individual";
+    Text[ finnish ] = "Yksittäinen kääntökulma";
 };
 
 String SIP_SA_SHEARANGLE
@@ -15662,6 +16077,7 @@ String SIP_SA_SHEARANGLE
     Text[ korean ] = "´ÜÀÏ ±³Â÷ °¢µµ";
     Text[ turkish ] = "Kesiþme açýsý (tek)";
     Text[ catalan ] = "Angulo de desviación, individual";
+    Text[ finnish ] = "Yksittäinen murtumakulma";
 };
 
 String SIP_SA_MOVEX
@@ -15690,6 +16106,7 @@ String SIP_SA_MOVEX
     Text[ turkish ] = "Yatay taþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar horizontal";
+    Text[ finnish ] = "Siirrä vaakatasossa";
 };
 
 String SIP_SA_MOVEY
@@ -15718,6 +16135,7 @@ String SIP_SA_MOVEY
     Text[ turkish ] = "Dikey taþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar vertical";
+    Text[ finnish ] = "Siirrä pystytasossa";
 };
 
 String SIP_SA_RESIZEXONE
@@ -15746,6 +16164,7 @@ String SIP_SA_RESIZEXONE
     Text[ turkish ] = "X için yeni boyut (tek)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Redimensión X, individual";
+    Text[ finnish ] = "Muuta X:n kokoa, yksittäinen";
 };
 
 String SIP_SA_RESIZEYONE
@@ -15774,6 +16193,7 @@ String SIP_SA_RESIZEYONE
     Text[ turkish ] = "Y için yeni boyut (tek)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Redimensión Y, individual";
+    Text[ finnish ] = "Muuta Y:n kokoa, yksittäinen";
 };
 
 String SIP_SA_ROTATEONE
@@ -15801,6 +16221,7 @@ String SIP_SA_ROTATEONE
     Text[ korean ] = "´ÜÀÏ È¸Àü";
     Text[ turkish ] = "Döndür (tek)";
     Text[ catalan ] = "Rodar, individual";
+    Text[ finnish ] = "Yksittäinen kääntö";
 };
 
 String SIP_SA_HORZSHEARONE
@@ -15828,6 +16249,7 @@ String SIP_SA_HORZSHEARONE
     Text[ korean ] = "¼öÆòÀ¸·Î ´ÜÀÏ ±³Â÷";
     Text[ turkish ] = "Yatay kesiþme (tek)";
     Text[ catalan ] = "Cortar horiz., individual";
+    Text[ finnish ] = "Yksittäinen vaakasuora murtuma";
 };
 
 String SIP_SA_VERTSHEARONE
@@ -15855,6 +16277,7 @@ String SIP_SA_VERTSHEARONE
     Text[ korean ] = "¼öÁ÷À¸·Î ´ÜÀÏ ±³Â÷";
     Text[ turkish ] = "Dikey kesiþme (tek)";
     Text[ catalan ] = "Cortar vert., individual";
+    Text[ finnish ] = "Yksittäinen pystysuora murtuma";
 };
 
 String SIP_SA_RESIZEXALL
@@ -15883,6 +16306,7 @@ String SIP_SA_RESIZEXALL
     Text[ turkish ] = "X için yeni boyut (tümü)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Redimensión X, todo";
+    Text[ finnish ] = "Muuta X:n kokoa, täysin";
 };
 
 String SIP_SA_RESIZEYALL
@@ -15911,6 +16335,7 @@ String SIP_SA_RESIZEYALL
     Text[ turkish ] = "Y için yeni boyut (tümü)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Redimensión Y, todo";
+    Text[ finnish ] = "Muuta Y:n kokoa, täysin";
 };
 
 String SIP_SA_ROTATEALL
@@ -15938,6 +16363,7 @@ String SIP_SA_ROTATEALL
     Text[ korean ] = "ÀüÃ¼ È¸Àü";
     Text[ turkish ] = "Döndür (tümü)";
     Text[ catalan ] = "Rodar, todo";
+    Text[ finnish ] = "Kierrä kaikkia";
 };
 
 String SIP_SA_HORZSHEARALL
@@ -15966,6 +16392,7 @@ String SIP_SA_HORZSHEARALL
     Text[ turkish ] = "Yatay kesiþme (tümü)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cortar horiz., todo";
+    Text[ finnish ] = "Shear horizontal, complete";
 };
 
 String SIP_SA_VERTSHEARALL
@@ -15993,6 +16420,7 @@ String SIP_SA_VERTSHEARALL
     Text[ korean ] = "¼öÁ÷À¸·Î ÀüÃ¼ ±³Â÷";
     Text[ turkish ] = "Dikey kesiþme (tümü)";
     Text[ catalan ] = "Cortar vert., todo";
+    Text[ finnish ] = "Pystymurtuma, täydellinen";
 };
 
 String SIP_SA_TRANSFORMREF1X
@@ -16021,6 +16449,7 @@ String SIP_SA_TRANSFORMREF1X
     Text[ turkish ] = "Referans noktasý 1 X";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Punto de referencia 1 X";
+    Text[ finnish ] = "Viitepiste 1 X";
 };
 
 String SIP_SA_TRANSFORMREF1Y
@@ -16049,6 +16478,7 @@ String SIP_SA_TRANSFORMREF1Y
     Text[ turkish ] = "Referans noktasý 1 Y";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Punto de referencia 1 Y";
+    Text[ finnish ] = "Viitepiste 1 Y";
 };
 
 String SIP_SA_TRANSFORMREF2X
@@ -16077,6 +16507,7 @@ String SIP_SA_TRANSFORMREF2X
     Text[ turkish ] = "Referans noktasý 2 X";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Punto de referencia 2 X";
+    Text[ finnish ] = "Viitepiste 2 X";
 };
 
 String SIP_SA_TRANSFORMREF2Y
@@ -16105,6 +16536,7 @@ String SIP_SA_TRANSFORMREF2Y
     Text[ turkish ] = "Referans noktasý 2 Y";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Punto de referencia 2 Y";
+    Text[ finnish ] = "Viitepiste 2 Y";
 };
 
 String SIP_EE_PARA_HYPHENATE
@@ -16133,6 +16565,7 @@ String SIP_EE_PARA_HYPHENATE
     Text[ turkish ] = "Heceleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Separación silábica";
+    Text[ finnish ] = "Tavutus";
 };
 
 String SIP_EE_PARA_BULLETSTATE
@@ -16161,6 +16594,7 @@ String SIP_EE_PARA_BULLETSTATE
     Text[ turkish ] = "Madde iþaretlerini göster";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar viñeta";
+    Text[ finnish ] = "Näytä luettelomerkit";
 };
 
 String SIP_EE_PARA_OUTLLRSPACE
@@ -16189,6 +16623,7 @@ String SIP_EE_PARA_OUTLLRSPACE
     Text[ turkish ] = "Numaralama için girintiler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sangría en enumeración";
+    Text[ finnish ] = "Numeroinnin sisennys";
 };
 
 String SIP_EE_PARA_OUTLLEVEL
@@ -16217,6 +16652,7 @@ String SIP_EE_PARA_OUTLLEVEL
     Text[ turkish ] = "Numaralama düzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nivel de enumeración";
+    Text[ finnish ] = "Numerointitaso";
 };
 
 String SIP_EE_PARA_BULLET
@@ -16245,6 +16681,7 @@ String SIP_EE_PARA_BULLET
     Text[ turkish ] = "Numaralama ve madde iþaretleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Viñeta";
+    Text[ finnish ] = "Luettelomerkit ja numeroinnit";
 };
 
 String SIP_EE_PARA_LRSPACE
@@ -16273,6 +16710,7 @@ String SIP_EE_PARA_LRSPACE
     Text[ turkish ] = "Girintiler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sangrías";
+    Text[ finnish ] = "Sisennykset";
 };
 
 String SIP_EE_PARA_ULSPACE
@@ -16300,6 +16738,7 @@ String SIP_EE_PARA_ULSPACE
     Text[ korean ] = "´Ü¶ô °£°Ý";
     Text[ turkish ] = "Paragraf aralýklarý";
     Text[ catalan ] = "Espacios entre párrafos";
+    Text[ finnish ] = "Kappaleväli";
 };
 
 String SIP_EE_PARA_SBL
@@ -16327,6 +16766,7 @@ String SIP_EE_PARA_SBL
     Text[ korean ] = "Çà°£";
     Text[ turkish ] = "Satýr aralýðý";
     Text[ catalan ] = "Interlineado";
+    Text[ finnish ] = "Riviväli";
 };
 
 String SIP_EE_PARA_JUST
@@ -16355,6 +16795,7 @@ String SIP_EE_PARA_JUST
     Text[ turkish ] = "Paragraf hizalamasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineación de párrafo";
+    Text[ finnish ] = "Kappaleen tasaus";
 };
 
 String SIP_EE_PARA_TABS
@@ -16382,6 +16823,7 @@ String SIP_EE_PARA_TABS
     Text[ korean ] = "ÅÇ";
     Text[ turkish ] = "Sekmeler";
     Text[ catalan ] = "Tabulaciones";
+    Text[ finnish ] = "Tabulaattorit";
 };
 
 String SIP_EE_CHAR_COLOR
@@ -16410,6 +16852,7 @@ String SIP_EE_CHAR_COLOR
     Text[ turkish ] = "Yazýtipi rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de fuente";
+    Text[ finnish ] = "Fontin väri";
 };
 
 String SIP_EE_CHAR_FONTINFO
@@ -16437,6 +16880,7 @@ String SIP_EE_CHAR_FONTINFO
     Text[ korean ] = "¹®ÀÚÁýÇÕ";
     Text[ turkish ] = "Karakter kümesi";
     Text[ catalan ] = "Juego de caracteres";
+    Text[ finnish ] = "Merkistö";
 };
 
 String SIP_EE_CHAR_FONTHEIGHT
@@ -16465,6 +16909,7 @@ String SIP_EE_CHAR_FONTHEIGHT
     Text[ turkish ] = "Yazýtipi boyutu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tamaño de fuente";
+    Text[ finnish ] = "Fonttikoko";
 };
 
 String SIP_EE_CHAR_FONTWIDTH
@@ -16493,6 +16938,7 @@ String SIP_EE_CHAR_FONTWIDTH
     Text[ turkish ] = "Yazýtipi geniþliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ancho de fuente";
+    Text[ finnish ] = "Fontin leveys";
 };
 
 String SIP_EE_CHAR_WEIGHT
@@ -16520,6 +16966,7 @@ String SIP_EE_CHAR_WEIGHT
     Text[ korean ] = "±Û²Ã µÎ²²";
     Text[ turkish ] = "Yazýtipi kalýnlýðý";
     Text[ catalan ] = "Negrita";
+    Text[ finnish ] = "Lihavointi (paksuus)";
 };
 
 String SIP_EE_CHAR_UNDERLINE
@@ -16548,6 +16995,7 @@ String SIP_EE_CHAR_UNDERLINE
     Text[ turkish ] = "Altý çizili";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subrayado";
+    Text[ finnish ] = "Alleviivaa";
 };
 
 String SIP_EE_CHAR_STRIKEOUT
@@ -16576,6 +17024,7 @@ String SIP_EE_CHAR_STRIKEOUT
     Text[ turkish ] = "Üstü çizili";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tachado";
+    Text[ finnish ] = "Yliviivaus";
 };
 
 String SIP_EE_CHAR_ITALIC
@@ -16604,6 +17053,7 @@ String SIP_EE_CHAR_ITALIC
     Text[ turkish ] = "Ýtalik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cursiva";
+    Text[ finnish ] = "Kursivointi";
 };
 
 String SIP_EE_CHAR_OUTLINE
@@ -16631,6 +17081,7 @@ String SIP_EE_CHAR_OUTLINE
     Text[ korean ] = "À±°û¹®ÀÚ";
     Text[ turkish ] = "Konturlu yazý";
     Text[ catalan ] = "Contorno";
+    Text[ finnish ] = "Ääriviiva";
 };
 
 String SIP_EE_CHAR_SHADOW
@@ -16658,6 +17109,7 @@ String SIP_EE_CHAR_SHADOW
     Text[ korean ] = "±Û²Ã À½¿µ";
     Text[ turkish ] = "Yazýtipi gölgesi";
     Text[ catalan ] = "Sombra";
+    Text[ finnish ] = "Fontin varjostus";
 };
 
 String SIP_EE_CHAR_ESCAPEMENT
@@ -16686,6 +17138,7 @@ String SIP_EE_CHAR_ESCAPEMENT
     Text[ turkish ] = "Alt/üst simge";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sub/Superíndice";
+    Text[ finnish ] = "Yläindeksi/alaindeksi";
 };
 
 String SIP_EE_CHAR_PAIRKERNING
@@ -16714,6 +17167,7 @@ String SIP_EE_CHAR_PAIRKERNING
     Text[ turkish ] = "Aralýk azaltma";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ajuste entre caracteres";
+    Text[ finnish ] = "Fonttilimitys";
 };
 
 String SIP_EE_CHAR_KERNING
@@ -16741,6 +17195,7 @@ String SIP_EE_CHAR_KERNING
     Text[ korean ] = "¼öµ¿ Ä¿´×";
     Text[ turkish ] = "Manüel aralýk azaltma";
     Text[ catalan ] = "Ajuste entre caracteres, manual";
+    Text[ finnish ] = "Manuaalinen välistys";
 };
 
 String SIP_EE_CHAR_WLM
@@ -16769,6 +17224,7 @@ String SIP_EE_CHAR_WLM
     Text[ turkish ] = "Boþluklarýn altýný çizme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No subrayar espacios vacíos";
+    Text[ finnish ] = "Ei alleviivausta väleihin";
 };
 
 String SIP_EE_FEATURE_TAB
@@ -16797,6 +17253,7 @@ String SIP_EE_FEATURE_TAB
     Text[ turkish ] = "Sekme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabulación";
+    Text[ finnish ] = "Tabulaattori";
 };
 
 String SIP_EE_FEATURE_LINEBR
@@ -16824,6 +17281,7 @@ String SIP_EE_FEATURE_LINEBR
     Text[ korean ] = "ÀÓÀÇÀÇ °³Çà";
     Text[ turkish ] = "Satýr sonu";
     Text[ catalan ] = "Salto de línea manual";
+    Text[ finnish ] = "Valinnainen rivinvaihto";
 };
 
 String SIP_EE_FEATURE_NOTCONV
@@ -16851,6 +17309,7 @@ String SIP_EE_FEATURE_NOTCONV
     Text[ korean ] = "º¯È¯ ºÒ°¡´ÉÇÑ ¹®ÀÚ";
     Text[ turkish ] = "Dönüþtürülemeyen karakter";
     Text[ catalan ] = "Carácter no convertible";
+    Text[ finnish ] = "Merkkiä ei voi muuntaa";
 };
 
 String SIP_EE_FEATURE_FIELD
@@ -16878,6 +17337,7 @@ String SIP_EE_FEATURE_FIELD
     Text[ korean ] = "ÇÊµå ¸í·É";
     Text[ turkish ] = "Alan öðesi";
     Text[ catalan ] = "Campo";
+    Text[ finnish ] = "Kentät";
 };
 
 String SIP_SA_GRAFRED
@@ -16903,6 +17363,7 @@ String SIP_SA_GRAFRED
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
     Text[ turkish ] = "Kýrmýzý oraný";
     Text[ catalan ] = "Proporción de rojo";
+    Text[ finnish ] = "Punainen";
 };
 String SIP_SA_GRAFGREEN
 {
@@ -16927,6 +17388,7 @@ String SIP_SA_GRAFGREEN
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
     Text[ turkish ] = "Yeþil oraný";
     Text[ catalan ] = "Proporción de verde";
+    Text[ finnish ] = "Vihreä";
 };
 String SIP_SA_GRAFBLUE
 {
@@ -16951,6 +17413,7 @@ String SIP_SA_GRAFBLUE
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑÞ";
     Text[ turkish ] = "Mavi oraný";
     Text[ catalan ] = "Proporción de azul";
+    Text[ finnish ] = "Sininen";
 };
 String SIP_SA_GRAFLUMINANCE
 {
@@ -16975,6 +17438,7 @@ String SIP_SA_GRAFLUMINANCE
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
     Text[ turkish ] = "Parlaklýk";
     Text[ catalan ] = "Brillo";
+    Text[ finnish ] = "Kirkkaus";
 };
 String SIP_SA_GRAFCONTRAST
 {
@@ -16999,6 +17463,7 @@ String SIP_SA_GRAFCONTRAST
     Text[ arabic ] = "ÇáÊÈÇíä";
     Text[ turkish ] = "Kontrast";
     Text[ catalan ] = "Contraste";
+    Text[ finnish ] = "Kontrasti";
 };
 String SIP_SA_GRAFGAMMA
 {
@@ -17023,6 +17488,7 @@ String SIP_SA_GRAFGAMMA
     Text[ arabic ] = "ÛÇãÇ";
     Text[ turkish ] = "Gamma";
     Text[ catalan ] = "Gamma";
+    Text[ finnish ] = "Gamma";
 };
 String SIP_SA_GRAFTRANSPARENCE
 {
@@ -17047,6 +17513,7 @@ String SIP_SA_GRAFTRANSPARENCE
     Text[ arabic ] = "ÔÝÇÝíÉ";
     Text[ turkish ] = "Saydamlýk";
     Text[ catalan ] = "Transparencia";
+    Text[ finnish ] = "Läpinäkyvyys";
 };
 String SIP_SA_GRAFINVERT
 {
@@ -17071,6 +17538,7 @@ String SIP_SA_GRAFINVERT
     Text[ arabic ] = "ÚßÓ";
     Text[ turkish ] = "Tersine çevir";
     Text[ catalan ] = "Invertir";
+    Text[ finnish ] = "Käännä";
 };
 String SIP_SA_GRAFMODE
 {
@@ -17095,6 +17563,7 @@ String SIP_SA_GRAFMODE
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
     Text[ catalan ] = "Modo gráfico";
+    Text[ finnish ] = "Grafiikkatila";
 };
 String SIP_SA_GRAFCROP
 {
@@ -17120,6 +17589,7 @@ String SIP_SA_GRAFCROP
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ÇÞÊÕÇÕ";
     Text[ catalan ] = "Cortar";
+    Text[ finnish ] = "Rajaa";
 };
 String SIP_SA_GRAFRESERVE3 { Text = "" ; };
 String SIP_SA_GRAFRESERVE4 { Text = "" ; };
@@ -17148,6 +17618,7 @@ String SIP_SDRATTRSET_GRAF
     Text[ arabic ] = "ÓãÇÊ ÇáÕæÑ";
     Text[ turkish ] = "Grafik öznitelikleri";
     Text[ catalan ] = "Atributos de imagen";
+    Text[ finnish ] = "Grafiikkamääritteet";
 };
 
 Bitmap SIP_SA_MARKERS
