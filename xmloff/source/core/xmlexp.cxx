@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-14 16:10:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-
-// #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
-
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -196,6 +193,9 @@
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
 #include "XMLFilterServiceNames.h"
 #endif
@@ -216,6 +216,9 @@
 
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
+#include "PropertySetMerger.hxx"
 #endif
 
 using namespace ::rtl;
@@ -302,10 +305,20 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& rEve
 
 //==============================================================================
 
+void SvXMLExport::SetDocHandler( const uno::Reference< xml::sax::XDocumentHandler > &rHandler )
+{
+    xHandler = rHandler;
+    xExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( xHandler, UNO_QUERY );
+}
+
 
 void SvXMLExport::_InitCtor()
 {
-    pNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+    if( getExportFlags() != 0 )
+    {
+        pNamespaceMap->Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
+    }
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
     {
         pNamespaceMap->Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
@@ -319,7 +332,7 @@ void SvXMLExport::_InitCtor()
         pNamespaceMap->Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
-    if( (getExportFlags() & EXPORT_META) != 0 )
+    if( (getExportFlags() & (EXPORT_META|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
         pNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
         pNamespaceMap->Add( GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META), XML_NAMESPACE_META );
@@ -339,6 +352,8 @@ void SvXMLExport::_InitCtor()
         pNamespaceMap->Add( GetXMLToken(XML_NP_CHART), GetXMLToken(XML_N_CHART), XML_NAMESPACE_CHART );
         pNamespaceMap->Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
         pNamespaceMap->Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_OOOW), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_OOOC), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
@@ -348,6 +363,7 @@ void SvXMLExport::_InitCtor()
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS) ) != 0 )
     {
         pNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
+        pNamespaceMap->Add( GetXMLToken(XML_NP_DOM), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
     }
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
@@ -422,7 +438,7 @@ SvXMLExport::SvXMLExport(
     pImageMapExport( NULL ),
     pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
-    mnExportFlags( EXPORT_ALL ),
+    mnExportFlags( 0 ),
     mnErrorFlags( ERROR_NO )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
@@ -463,7 +479,7 @@ SvXMLExport::SvXMLExport(
     pImageMapExport( NULL ),
     pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
-    mnExportFlags( EXPORT_ALL ),
+    mnExportFlags( 0 ),
     mnErrorFlags( ERROR_NO )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
@@ -506,7 +522,7 @@ SvXMLExport::SvXMLExport(
     pImageMapExport( NULL ),
     pXMLErrors( NULL ),
     bSaveLinkedSections(sal_True),
-    mnExportFlags( EXPORT_ALL ),
+    mnExportFlags( 0 ),
     mnErrorFlags( ERROR_NO )
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
@@ -705,7 +721,44 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             xValue, UNO_QUERY );
         if( xTmpPropertySet.is() )
             xExportInfo = xTmpPropertySet;
+
     }
+
+    if( xExportInfo.is() )
+    {
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
+            xExportInfo->getPropertySetInfo();
+        OUString sPropName(
+                RTL_CONSTASCII_USTRINGPARAM("BaseURI" ) );
+        if( xPropertySetInfo->hasPropertyByName(sPropName) )
+        {
+            uno::Any aAny = xExportInfo->getPropertyValue(sPropName);
+            aAny >>= sOrigFileName;
+        }
+        OUString sRelPath;
+        sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamRelPath" ) );
+        if( xPropertySetInfo->hasPropertyByName(sPropName) )
+        {
+            uno::Any aAny = xExportInfo->getPropertyValue(sPropName);
+            aAny >>= sRelPath;
+        }
+        OUString sName;
+        sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("StreamName" ) );
+        if( xPropertySetInfo->hasPropertyByName(sPropName) )
+        {
+            uno::Any aAny = xExportInfo->getPropertyValue(sPropName);
+            aAny >>= sName;
+        }
+        if( sOrigFileName.getLength() && sName.getLength() )
+        {
+            INetURLObject aBaseURL( sOrigFileName );
+            if( sRelPath.getLength() )
+                aBaseURL.insertName( sRelPath );
+            aBaseURL.insertName( sName );
+            sOrigFileName = aBaseURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+        }
+    }
+
 }
 
 // XFilter
@@ -720,23 +773,30 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
 
     try
     {
-        const sal_Int32 nPropCount = aDescriptor.getLength();
-        const beans::PropertyValue* pProps = aDescriptor.getConstArray();
-
-        for( sal_Int32 nIndex = 0; nIndex < nPropCount; nIndex++, pProps++ )
+        const sal_uInt32 nTest =
+            EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS;
+        if( (mnExportFlags & nTest) == nTest && !sOrigFileName.getLength() )
         {
-            const OUString& rPropName = pProps->Name;
-            const Any& rValue = pProps->Value;
+            // evaluate descriptor only for flat files and if a base URI
+            // has not been provided already
+            const sal_Int32 nPropCount = aDescriptor.getLength();
+            const beans::PropertyValue* pProps = aDescriptor.getConstArray();
 
-            if( rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
+            for( sal_Int32 nIndex = 0; nIndex < nPropCount; nIndex++, pProps++ )
             {
-                if( !(rValue >>= sOrigFileName ) )
-                    return sal_False;
-            }
-            else if (rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
-            {
-                if( !(rValue >>= sFilterName ) )
-                    return sal_False;
+                const OUString& rPropName = pProps->Name;
+                const Any& rValue = pProps->Value;
+
+                if( rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
+                {
+                    if( !(rValue >>= sOrigFileName ) )
+                        return sal_False;
+                }
+                else if (rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+                {
+                    if( !(rValue >>= sFilterName ) )
+                        return sal_False;
+                }
             }
         }
 
@@ -1006,8 +1066,20 @@ void SvXMLExport::ImplExportContent()
         SetBodyAttributes();
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_BODY,
                                   sal_True, sal_True );
+        {
+            XMLTokenEnum eClass = meClass;
+            if( XML_TEXT_GLOBAL == eClass )
+            {
+                AddAttribute( XML_NAMESPACE_TEXT, XML_GLOBAL,
+                      GetXMLToken( XML_TRUE ) );
+                eClass = XML_TEXT;
+            }
+            SvXMLElementExport aElem( *this, meClass != XML_TOKEN_INVALID,
+                                      XML_NAMESPACE_OFFICE, eClass,
+                                        sal_True, sal_True );
 
-        _ExportContent();
+            _ExportContent();
+        }
     }
 }
 
@@ -1050,6 +1122,57 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             }
         }
     }
+    if( (getExportFlags() & EXPORT_OASIS) == 0 )
+    {
+        Reference< lang::XMultiServiceFactory > xFactory = getServiceFactory();
+        if( xFactory.is() )
+        {
+            try
+            {
+                ::comphelper::PropertyMapEntry aInfoMap[] =
+                {
+                    { "Class", sizeof("Class")-1, 0,
+                        &::getCppuType((::rtl::OUString*)0),
+                          PropertyAttribute::MAYBEVOID, 0},
+                    { NULL, 0, 0, NULL, 0, 0 }
+                };
+                Reference< XPropertySet > xConvPropSet(
+                    ::comphelper::GenericPropertySet_CreateInstance(
+                            new ::comphelper::PropertySetInfo( aInfoMap ) ) );
+
+                Any aAny;
+                aAny <<= GetXMLToken( eClass );
+                xConvPropSet->setPropertyValue(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("Class")), aAny );
+
+                Reference< XPropertySet > xPropSet =
+                    xExportInfo.is()
+                        ?  PropertySetMerger_CreateInstance( xExportInfo,
+                                                          xConvPropSet )
+                        : xExportInfo;
+
+                Sequence<Any> aArgs( 2 );
+                aArgs[0] <<= xHandler;
+                aArgs[1] <<= xPropSet;
+
+                // get filter component
+                Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
+                    xFactory->createInstanceWithArguments(
+                    OUString::createFromAscii("com.sun.star.comp.Oasis2OOoTransformer"),
+                                aArgs), UNO_QUERY);
+                OSL_ENSURE( xTmpDocHandler.is(),
+                    "can't instantiate OASIS transformer component" );
+                if( xTmpDocHandler.is() )
+                {
+                    xHandler = xTmpDocHandler;
+                    xExtHandler = uno::Reference<xml::sax::XExtendedDocumentHandler>( xHandler, UNO_QUERY );
+                }
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+            }
+        }
+    }
 
 
     xHandler->startDocument();
@@ -1072,9 +1195,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         nPos = pNamespaceMap->GetNextKey( nPos );
     }
 
-    // office:class = ... (only for stream containing the content)
-    if( (eClass != XML_TOKEN_INVALID) && ((mnExportFlags & EXPORT_CONTENT) != 0) )
-        AddAttribute( XML_NAMESPACE_OFFICE, XML_CLASS, eClass );
+
 
     // office:version = ...
     if( !bExtended )
@@ -1108,21 +1229,28 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         {
             // the god'ol one4all element
             eRootService = XML_DOCUMENT;
+            // office:mimetype = ... (only for stream containing the content)
+            if( eClass != XML_TOKEN_INVALID )
+            {
+                OUString aTmp( RTL_CONSTASCII_USTRINGPARAM("application/x-vnd.oasis.openoffice.") );
+                aTmp += GetXMLToken( eClass );
+                AddAttribute( XML_NAMESPACE_OFFICE, XML_MIMETYPE, aTmp );
+            }
         }
 
-        if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
-            xExtHandler.is() )
-        {
-            OUStringBuffer aDocType(
-                GetXMLToken(XML_XML_DOCTYPE_PREFIX).getLength() +
-                GetXMLToken(XML_XML_DOCTYPE_SUFFIX).getLength() + 30 );
-
-            aDocType.append( GetXMLToken(XML_XML_DOCTYPE_PREFIX) );
-            aDocType.append( GetNamespaceMap().GetQNameByKey(
-                           XML_NAMESPACE_OFFICE, GetXMLToken(eRootService) ) );
-            aDocType.append( GetXMLToken(XML_XML_DOCTYPE_SUFFIX) );
-            xExtHandler->unknown( aDocType.makeStringAndClear() );
-        }
+//      if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
+//          xExtHandler.is() )
+//      {
+//          OUStringBuffer aDocType(
+//               GetXMLToken(XML_XML_DOCTYPE_PREFIX).getLength() +
+//              GetXMLToken(XML_XML_DOCTYPE_SUFFIX).getLength() + 30 );
+//
+//          aDocType.append( GetXMLToken(XML_XML_DOCTYPE_PREFIX) );
+//          aDocType.append( GetNamespaceMap().GetQNameByKey(
+//                         XML_NAMESPACE_OFFICE, GetXMLToken(eRootService) ) );
+//          aDocType.append( GetXMLToken(XML_XML_DOCTYPE_SUFFIX) );
+//          xExtHandler->unknown( aDocType.makeStringAndClear() );
+//      }
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, eRootService, sal_True, sal_True );
 
@@ -1217,16 +1345,17 @@ void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rS
 
 void SvXMLExport::_ExportScripts()
 {
+// There is no script support at the moment, so we don't need this
     // <office:script>
-    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT,
-                            sal_True, sal_True );
+//  SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPTS,
+//                          sal_True, sal_True );
 
-    XMLBasicExport aBasicExp( *this );
-    aBasicExp.Export();
+//  XMLBasicExport aBasicExp( *this );
+//  aBasicExp.Export();
 
     // export document events
-    Reference<document::XEventsSupplier> xEvents(GetModel(), UNO_QUERY);
-    GetEventExport().Export(xEvents, sal_True);
+//  Reference<document::XEventsSupplier> xEvents(GetModel(), UNO_QUERY);
+//  GetEventExport().Export(xEvents, sal_True);
 }
 
 void SvXMLExport::_ExportFontDecls()
@@ -1520,7 +1649,7 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
             sRet = OUString();
     }
     else
-        sRet = INetURLObject::AbsToRel( sRet );
+        sRet = GetRelativeReference( sRet );
 
     return sRet;
 }
@@ -1587,6 +1716,13 @@ sal_Bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObject
     }
 
     return bRet;
+}
+
+OUString SvXMLExport::EncodeStyleName(
+        const OUString& rName,
+        sal_Bool *pEncoded ) const
+{
+    return GetMM100UnitConverter().encodeStyleName( rName, pEncoded );
 }
 
 ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
@@ -1760,7 +1896,19 @@ sal_Bool SvXMLExport::ExportEmbeddedOwnObject( Reference< XComponent >& rComp )
 
 OUString SvXMLExport::GetRelativeReference(const OUString& rValue)
 {
-    return INetURLObject::AbsToRel( rValue );
+    // That's ugly, but it is a temporary solution only that will be
+    // changed in CWS sab19
+    OUString aOldBaseURL( INetURLObject::GetBaseURL() );
+    sal_Bool bSet = sOrigFileName != aOldBaseURL;
+    if( bSet )
+        INetURLObject::SetBaseURL( sOrigFileName );
+
+    OUString aRet( INetURLObject::AbsToRel( rValue ) );
+
+    if( bSet )
+        INetURLObject::SetBaseURL( aOldBaseURL );
+
+    return aRet;
 }
 
 void SvXMLExport::StartElement(sal_uInt16 nPrefix,
