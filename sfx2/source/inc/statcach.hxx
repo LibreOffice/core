@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-24 15:12:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ public:
     void                    ClearCache();
 
     void                    SetState( SfxItemState, const SfxPoolItem*, BOOL bMaybeDirty=FALSE );
-    void                    SetCachedState();
+    void                    SetCachedState(BOOL bAlways = FALSE);
     void                    DeleteFloatingWindows();
     void                    Invalidate( sal_Bool bWithSlot );
 
