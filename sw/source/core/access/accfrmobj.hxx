@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:29:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,8 @@ inline sal_Bool SwFrmOrObj::IsVisibleChildrenOnly() const
 {
     return !pFrm || pFrm->IsRootFrm() ||
            !( pFrm->IsTabFrm() || pFrm->IsInTab() ||
-             (IsBoundAsChar() &&
-              static_cast< const SwFlyFrm *>(pFrm)->GetAnchor()->IsInTab()) );
+              ( IsBoundAsChar() &&
+                static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm()->IsInTab()) );
 }
 
 inline SwRect SwFrmOrObj::GetBox() const
@@ -248,8 +248,8 @@ inline SwRect SwFrmOrObj::GetBox() const
     }
     else if( pObj )
         return SwRect( pObj->GetCurrentBoundRect() );
-    return SwRect();
-
+    else
+        return SwRect();
 }
 
 inline SwRect SwFrmOrObj::GetBounds() const
