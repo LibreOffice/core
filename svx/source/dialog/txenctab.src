@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-23 20:15:37 $
+ *  last change: $Author: rt $ $Date: 2002-05-28 20:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,7 +1312,7 @@ ItemList [ language_user1 ] =
         < "한국어 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
         < "한국어 (Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "유니코드"                                            ; RTL_TEXTENCODING_UCS2             ; > ;
-        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "태국어(TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -1439,22 +1439,22 @@ ItemList [ language_user1 ] =
         < "中文繁體(GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "中文簡體(GBK/GB-2312-80)"            ; RTL_TEXTENCODING_GBK              ; > ;
         < "中文繁體(BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "日文(EUC-JP)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "中文簡體(EUC-CN)"                    ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "中文繁體(EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "日文(ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "中文簡體(ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "西里爾語(KOI8-R)"                                ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "統一碼(UTF-7)"                                    ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "統一碼(UTF-8)"                                    ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "東歐(ISO-8859-10)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "東歐(ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "韓文(EUC-KR)"                              ; RTL_TEXTENCODING_EUC_KR           ; > ;
-        < "韓文(ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-        < "韓文(Windows-Johab-1361)"                  ; RTL_TEXTENCODING_MS_1361          ; > ;
-        < "統一碼"                                           ; RTL_TEXTENCODING_UCS2             ; > ;
+        < "中文繁體 (BIG5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
+        < "日文 (EUC-JP)"                             ; RTL_TEXTENCODING_EUC_JP           ; > ;
+        < "中文簡體 (EUC-CN)"                   ; RTL_TEXTENCODING_EUC_CN           ; > ;
+        < "中文繁體 (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
+        < "日文 (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
+        < "中文簡體 (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
+        < "西里爾語 (KOI8-R)"                               ; RTL_TEXTENCODING_KOI8_R           ; > ;
+        < "統一碼 (UTF-7)"                                   ; RTL_TEXTENCODING_UTF7             ; > ;
+        < "統一碼 (UTF-8)"                                   ; RTL_TEXTENCODING_UTF8             ; > ;
+        < "東歐 (ISO-8859-10)"                            ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
+        < "東歐 (ISO-8859-13)"                            ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
+        < "韓文 (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
+        < "韓文 (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
+        < "韓文 (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
         < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
-        < "Thai (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
+        < "泰語 (TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
     };
     ItemList [ turkish ] =
     {
