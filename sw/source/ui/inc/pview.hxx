@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:09:34 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <sfx2/viewsh.hxx>
 #endif
 #include "shellid.hxx"
+#ifndef _SVX_ZOOMITEM_HXX
+#include <svx/zoomitem.hxx>
+#endif
 
 class SwViewOption;
 class SwDocShell;
@@ -209,6 +212,8 @@ protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
     virtual Size    GetOptimalSizePixel() const;
+
+    void         SetZoom(SvxZoomType eSet, USHORT nFactor);
 
 public:
     SFX_DECL_VIEWFACTORY(SwPagePreView);

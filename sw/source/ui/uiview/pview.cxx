@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-25 11:49:52 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,12 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _SVX_ZOOM_HXX
+#include <svx/zoom.hxx>
 #endif
 #ifndef _SVX_STDDLG_HXX //autogen
 #include <svx/stddlg.hxx>
@@ -238,7 +244,32 @@ TYPEINIT1(SwPagePreView,SfxViewShell)
 #define SWVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|SFX_VIEW_OPTIMIZE_EACH|  \
                       SFX_VIEW_CAN_PRINT|SFX_VIEW_HAS_PRINTOPTIONS )
 
+#define MIN_PREVIEW_ZOOM 25
+#define MAX_PREVIEW_ZOOM 600
 /*  */
+/* -----------------26.11.2002 10:41-----------------
+ *
+ * --------------------------------------------------*/
+USHORT lcl_GetNextZoomStep(USHORT nCurrentZoom, BOOL bZoomIn)
+{
+    static USHORT aZoomArr[] =
+    {
+        25, 50, 75, 100, 150, 200, 400, 600
+    };
+    if(bZoomIn)
+        for(USHORT i = sizeof(aZoomArr) / sizeof(USHORT); i >= 0 ; i--)
+        {
+            if(nCurrentZoom > aZoomArr[i] || !i)
+                return aZoomArr[i];
+        }
+    else
+        for(USHORT i = 0; i < sizeof(aZoomArr) / sizeof(USHORT); i++)
+        {
+            if(nCurrentZoom < aZoomArr[i])
+                return aZoomArr[i];
+        }
+    return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;
+};
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -891,7 +922,6 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
     rBindings.Update( FN_SHOW_TWO_PAGES );
     rBindings.Update( FN_SHOW_FOUR_PAGES );
 }
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -1143,9 +1173,22 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
             break;
 
         case FN_SHOW_FOUR_PAGES:
-            nRow = 2;
-            // keine break;
+        {
+            const SfxItemSet *pArgs = rReq.GetArgs();
+            if( pArgs && pArgs->Count() >= 2 )
+            {
+                BYTE nCols = (BYTE)((SfxUInt16Item &)pArgs->Get(
+                                        SID_ATTR_TABLE_COLUMN)).GetValue();
+                BYTE nRows = (BYTE)((SfxUInt16Item &)pArgs->Get(
+                                        SID_ATTR_TABLE_ROW)).GetValue();
+                aViewWin.CalcWish( nRows, nCols );
 
+            }
+            else
+                SwPreViewZoomDlg( aViewWin ).Execute();
+
+        }
+        break;
         case FN_SHOW_TWO_PAGES:
             aViewWin.CalcWish( nRow, 2 );
             break;
@@ -1154,19 +1197,60 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         case SID_ATTR_ZOOM:
         {
             const SfxItemSet *pArgs = rReq.GetArgs();
-            if( pArgs && pArgs->Count() >= 2 )
+            const SfxPoolItem* pItem;
+            if(!pArgs)
             {
-                BYTE nCols = (BYTE)((SfxUInt16Item &)pArgs->Get(
-                                           SID_ATTR_TABLE_COLUMN)).GetValue();
-                BYTE nRows = (BYTE)((SfxUInt16Item &)pArgs->Get(
-                                        SID_ATTR_TABLE_ROW)).GetValue();
-                aViewWin.CalcWish( nRows, nCols );
+                SfxItemSet aCoreSet(GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+                const SwViewOption* pVOpt = GetViewShell().GetViewOptions();
+                SvxZoomItem aZoom( (SvxZoomType)pVOpt->GetZoomType(),
+                                            pVOpt->GetZoom() );
+                aZoom.SetValueSet(
+                        SVX_ZOOM_ENABLE_50|
+                        SVX_ZOOM_ENABLE_75|
+                        SVX_ZOOM_ENABLE_100|
+                        SVX_ZOOM_ENABLE_150|
+                        SVX_ZOOM_ENABLE_200|
+                        SVX_ZOOM_ENABLE_WHOLEPAGE);
+                aCoreSet.Put( aZoom );
+
+                SvxZoomDialog* pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
+                pDlg->SetLimits( MINZOOM, MAXZOOM );
+
+                if( pDlg->Execute() != RET_CANCEL )
+                    pArgs = pDlg->GetOutputItemSet();
             }
-            else
-                SwPreViewZoomDlg( aViewWin ).Execute();
+            if( pArgs )
+            {
+                enum SvxZoomType eType = SVX_ZOOM_PERCENT;
+                USHORT nZoomFactor = USHRT_MAX;
+                if(SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOM, TRUE, &pItem))
+                {
+                    eType = ((const SvxZoomItem *)pItem)->GetType();
+                    nZoomFactor = ((const SvxZoomItem *)pItem)->GetValue();
+                }
+                else if(SFX_ITEM_SET == pArgs->GetItemState(FN_PREVIEW_ZOOM, TRUE, &pItem))
+                    nZoomFactor = ((const SfxUInt16Item *)pItem)->GetValue();
+                if(USHRT_MAX != nZoomFactor)
+                    SetZoom(eType, nZoomFactor);
+            }
         }
         break;
-
+        case SID_ZOOM_IN:
+        case SID_ZOOM_OUT:
+        {
+            enum SvxZoomType eType = SVX_ZOOM_PERCENT;
+            const SwViewOption* pVOpt = GetViewShell().GetViewOptions();
+            SetZoom(eType,
+                    lcl_GetNextZoomStep(pVOpt->GetZoom(), SID_ZOOM_IN == rReq.GetSlot()));
+            static USHORT __READONLY_DATA aInval[] =
+            {
+                SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN, FN_STAT_ZOOM,
+                0
+            };
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate( aInval );
+        }
+        break;
         case FN_CHAR_LEFT:
             //change the display only when the selection is already at the first position
             if( aViewWin.GetSelectedPage() < 2 )
@@ -1367,15 +1451,32 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
         case SID_ATTR_ZOOM:
         case FN_STAT_ZOOM:
             {
-                String aStr( String::CreateFromInt32( aViewWin.GetRow() ) );
-                (aStr += 'x') += String::CreateFromInt32( aViewWin.GetCol() );
-                rSet.Put( SfxStringItem( nWhich, aStr) );
+                const SwViewOption* pVOpt = GetViewShell().GetViewOptions();
+                SvxZoomItem aZoom((SvxZoomType)pVOpt->GetZoomType(),
+                                    pVOpt->GetZoom());
+                aZoom.SetValueSet(
+                        SVX_ZOOM_ENABLE_50|
+                        SVX_ZOOM_ENABLE_75|
+                        SVX_ZOOM_ENABLE_100|
+                        SVX_ZOOM_ENABLE_150|
+                        SVX_ZOOM_ENABLE_200);
+                rSet.Put( aZoom );
             }
-            break;
-
+        break;
+        case SID_ZOOM_IN:
+        case SID_ZOOM_OUT:
+        {
+            const SwViewOption* pVOpt = GetViewShell().GetViewOptions();
+            if((SID_ZOOM_OUT == nWhich && pVOpt->GetZoom() <= MIN_PREVIEW_ZOOM)||
+              (SID_ZOOM_IN == nWhich && pVOpt->GetZoom() >= MAX_PREVIEW_ZOOM))
+            {
+                rSet.DisableItem(nWhich);
+            }
+        }
+        break;
         case FN_SHOW_FOUR_PAGES:
-            nRow = 2;
-            // kein break;
+        //should never be disabled
+        break;
 
         case FN_SHOW_TWO_PAGES:
             if( 2 == aViewWin.GetCol() && nRow == aViewWin.GetRow() )
@@ -2303,5 +2404,16 @@ void SwPagePreView::ShowVScrollbar(sal_Bool bShow)
 sal_Bool SwPagePreView::IsVScrollbarVisible()const
 {
     return pVScrollbar->IsVisible();
+}
+/* -----------------25.11.2002 16:36-----------------
+ *
+ * --------------------------------------------------*/
+void SwPagePreView::SetZoom(SvxZoomType eType, USHORT nFactor)
+{
+    ViewShell& rSh = GetViewShell();
+    SwViewOption aOpt(*rSh.GetViewOptions());
+    aOpt.SetZoom(nFactor);
+    aOpt.SetZoomType(eType);
+    rSh.ApplyViewOptions( aOpt );
 }
 

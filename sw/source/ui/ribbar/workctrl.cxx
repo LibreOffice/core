@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 12:38:31 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #endif
 #ifndef _SVT_IMAGEITM_HXX
 #include <svtools/imageitm.hxx>
+#endif
+#ifndef _SV_LSTBOX_HXX
+#include <vcl/lstbox.hxx>
 #endif
 
 //JP 14.01.99: Size Abpruefung
@@ -676,4 +679,97 @@ void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
 
     Window::DataChanged( rDCEvt );
 }
+/* -----------------26.11.2002 09:28-----------------
+ *
+ * --------------------------------------------------*/
+class SwZoomBox_Impl : public ComboBox
+{
+public:
+    SwZoomBox_Impl( Window* pParent, USHORT nSlot, SfxBindings& rBind );
+    ~SwZoomBox_Impl();
+
+protected:
+    virtual void    Select();
+
+private:
+    USHORT          nSlotId;
+    SfxBindings&    rBindings;
+};
+/* -----------------26.11.2002 09:29-----------------
+ *
+ * --------------------------------------------------*/
+SwZoomBox_Impl::SwZoomBox_Impl( Window* pParent, USHORT nSlot, SfxBindings& rBind ):
+    ComboBox(pParent, SW_RES(RID_PVIEW_ZOOM_LB)),
+    nSlotId(nSlot),
+    rBindings(rBind)
+{
+    USHORT aZoomValues[] =
+    {   25, 50, 75, 100, 150, 200 };
+    for(USHORT i = 0; i < sizeof(aZoomValues)/sizeof(USHORT); i++)
+    {
+        String sEntry = String::CreateFromInt32(aZoomValues[i]);
+        sEntry += '%';
+        InsertEntry(sEntry);
+    }
+}
+/* -----------------26.11.2002 09:29-----------------
+ *
+ * --------------------------------------------------*/
+SwZoomBox_Impl::~SwZoomBox_Impl()
+{}
+/* -----------------26.11.2002 09:34-----------------
+ *
+ * --------------------------------------------------*/
+void    SwZoomBox_Impl::Select()
+{
+    if ( !IsTravelSelect() )
+    {
+        String sEntry(GetText());
+        sEntry.EraseAllChars( '%' );
+        USHORT nZoom = (USHORT)sEntry.ToInt32();
+        if(nZoom > MINZOOM && nZoom < MAXZOOM)
+        {
+            SfxUInt16Item aItem( nSlotId, nZoom );
+            rBindings.GetDispatcher()->Execute(
+                nSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+    //        ReleaseFocus();
+        }
+    }
+}
+/* -----------------26.11.2002 09:29-----------------
+ *
+ * --------------------------------------------------*/
+SFX_IMPL_TOOLBOX_CONTROL( SwPreviewZoomControl, SfxUInt16Item);
+
+SwPreviewZoomControl::SwPreviewZoomControl( USHORT nId,
+                                    ToolBox& rTbx,
+                                    SfxBindings& rBind ) :
+        SfxToolBoxControl( nId, rTbx, rBind )
+{
+}
+/* -----------------26.11.2002 09:29-----------------
+ *
+ * --------------------------------------------------*/
+SwPreviewZoomControl::~SwPreviewZoomControl()
+{
+}
+/* -----------------26.11.2002 09:29-----------------
+ *
+ * --------------------------------------------------*/
+void SwPreviewZoomControl::StateChanged( USHORT nSID,
+                                              SfxItemState eState,
+                                              const SfxPoolItem* pState )
+{
+    USHORT nId = GetId();
+    GetToolBox().EnableItem( nId, (GetItemState(pState) != SFX_ITEM_DISABLED) );
+}
+/* -----------------26.11.2002 09:29-----------------
+ *
+ * --------------------------------------------------*/
+Window* SwPreviewZoomControl::CreateItemWindow( Window *pParent )
+{
+    SwZoomBox_Impl* pRet = new SwZoomBox_Impl(pParent, GetId(), GetBindings());
+    return pRet;
+}
+
 

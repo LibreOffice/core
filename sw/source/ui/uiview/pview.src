@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-06 20:12:25 $
+ *  last change: $Author: os $ $Date: 2002-11-27 09:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,6 +954,16 @@ ToolBox RID_PVIEW_TOOLBOX
         {
             Identifier = FN_SHOW_FOUR_PAGES ;
             HelpID = FN_SHOW_FOUR_PAGES ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_IN;
+            HelpID = SID_ZOOM_IN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_OUT;
+            HelpID = SID_ZOOM_OUT ;
         };
         ToolBoxItem
         {

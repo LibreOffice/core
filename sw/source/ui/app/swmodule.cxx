@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:39:22 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,12 +559,13 @@ void SwDLL::RegisterControls()
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_COLUMN_SECTION, pMod );
     SvxTableToolBoxControl::RegisterControl(FN_INSERT_TABLE, pMod );
-    SvxTableToolBoxControl::RegisterControl(FN_PREVIEW_ZOOM, pMod );
+    SvxTableToolBoxControl::RegisterControl(FN_SHOW_FOUR_PAGES, pMod );
 
     SvxFontMenuControl::RegisterControl(SID_ATTR_CHAR_FONT, pMod );
     SvxFontSizeMenuControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod );
 
     SwZoomControl::RegisterControl(SID_ATTR_ZOOM, pMod );
+    SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);
     SwHyperlinkControl::RegisterControl(FN_STAT_HYPERLINKS, pMod );
     SvxPosSizeStatusBarControl::RegisterControl(0, pMod );
     SvxInsertStatusBarControl::RegisterControl(0, pMod );

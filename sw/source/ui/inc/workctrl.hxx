@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 12:38:30 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,23 @@ class SwHlpImageButton : public ImageButton
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
+};
+/* -----------------26.11.2002 09:25-----------------
+ *
+ * --------------------------------------------------*/
+class SwPreviewZoomControl : public SfxToolBoxControl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+
+    SwPreviewZoomControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    ~SwPreviewZoomControl();
+
+    virtual void            StateChanged( USHORT nSID,
+                                              SfxItemState eState,
+                                              const SfxPoolItem* pState );
+
+    virtual Window*         CreateItemWindow( Window *pParent );
 };
 #endif
 

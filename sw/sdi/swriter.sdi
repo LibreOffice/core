@@ -7617,6 +7617,8 @@ SfxVoidItem ShowFourPages FN_SHOW_FOUR_PAGES
     RecordPerSet;
     Synchron;
 
+    /* status: */
+    SlotType = SfxUInt16Item
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,

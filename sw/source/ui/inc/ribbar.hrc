@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ribbar.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2002-11-27 08:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #define RID_BEZIER_WIN              (RC_RIBBAR_BEGIN + 28)
 #define RID_SCROLL_NAVI_TBX         (RC_RIBBAR_BEGIN + 29)
 #define RID_SCROLL_NAVIGATION_WIN   (RC_RIBBAR_BEGIN + 30)
+#define RID_PVIEW_ZOOM_LB           (RC_RIBBAR_BEGIN + 31)
 
 #define STR_IMGBTN_START            (RC_RIBBAR_BEGIN + 31)
 
