@@ -78,7 +78,6 @@ hedabu: ..\inc\frmload.hxx %_DEST%\inc%_EXT%\sfx2\frmload.hxx
 hedabu: ..\inc\genlink.hxx %_DEST%\inc%_EXT%\sfx2\genlink.hxx
 hedabu: ..\inc\hintpost.hxx %_DEST%\inc%_EXT%\sfx2\hintpost.hxx
 hedabu: ..\inc\interno.hxx %_DEST%\inc%_EXT%\sfx2\interno.hxx
-hedabu: ..\inc\inimgr.hxx %_DEST%\inc%_EXT%\sfx2\inimgr.hxx
 hedabu: ..\inc\imgmgr.hxx %_DEST%\inc%_EXT%\sfx2\imgmgr.hxx
 hedabu: ..\inc\imgdef.hxx %_DEST%\inc%_EXT%\sfx2\imgdef.hxx
 hedabu: ..\inc\interno.hxx %_DEST%\inc%_EXT%\sfx2\interno.hxx
