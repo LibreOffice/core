@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:57:51 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ void SwTxtFrm::HideHidden()
         {
             SdrObject *pObj = (*GetDrawObjs())[i];
             SwFlyFrm *pFly;
-            if ( pObj->IsWriterFlyFrame() &&
+            if ( pObj->ISA(SwVirtFlyDrawObj) &&
                  (pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm())->IsFlyInCntFrm())
             {
                 pFly->GetAnchor()->RemoveFly( pFly );
@@ -1067,7 +1067,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
                 {
                     SdrObject *pO = (*pObjs)[MSHORT(i)];
-                    if ( pO->IsWriterFlyFrame() )
+                    if ( pO->ISA(SwVirtFlyDrawObj) )
                     {
                         SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                         if( !pFly->IsFlyInCntFrm() )
@@ -1577,7 +1577,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         for ( MSHORT i = 0; i < nCnt; ++i )
                         {
                             SdrObject *pO = (*GetDrawObjs())[i];
-                            if ( pO->IsWriterFlyFrame() )
+                            if ( pO->ISA(SwVirtFlyDrawObj) )
                             {
                                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                                 if( pFly->IsAutoPos() )
