@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:36:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ public:
     // #110680#
     //XMLAutoTextEventExport();
     XMLAutoTextEventExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory, sal_uInt16 nFlags
         );
 
     // #110680#
@@ -120,7 +120,7 @@ public:
         const ::rtl::OUString& rFileName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & rEvents);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & rEvents, sal_uInt16 nFlags);
 
     ~XMLAutoTextEventExport();
 
@@ -173,7 +173,20 @@ protected:
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    XMLAutoTextEventExport_createInstance(
+    XMLAutoTextEventExportOOO_createInstance(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & )
+    throw( ::com::sun::star::uno::Exception );
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    XMLAutoTextEventExportOOO_getSupportedServiceNames()
+    throw();
+
+::rtl::OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName()
+    throw();
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+    XMLAutoTextEventExportOOO_createInstance(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & )
     throw( ::com::sun::star::uno::Exception );
