@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 11:58:53 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,9 +690,16 @@ void ODBTable::refreshIndexes()
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
+    sal_Int64 nRet(0);
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        return (sal_Int64)this;
-    return OTable_Base::getSomething(rId);
+        nRet = (sal_Int64)this;
+    else
+    {
+        nRet = OTable_Base::getSomething(rId);
+        if(!nRet)
+            nRet = OConfigurationFlushable::getSomething(rId);
+    }
+    return nRet;
 }
 // -----------------------------------------------------------------------------
 Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()

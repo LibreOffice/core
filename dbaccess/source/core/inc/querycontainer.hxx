@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,9 @@ namespace dbaccess
     // ::com::sun::star::sdbcx::XDrop
         virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+        // sets the new confignode at his children
+        void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
 
     protected:
         // OConfigurationFlushable

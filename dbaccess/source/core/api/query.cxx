@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:38:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
+#ifndef _DBA_CORE_REGISTRYHELPER_HXX_
 #include "registryhelper.hxx"
+#endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>

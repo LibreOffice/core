@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:49:37 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,8 +886,37 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
 {
     return static_cast< XNameContainer* >(&m_aCommandDefinitions);
 }
+// -----------------------------------------------------------------------------
+class OConnectionNotifier //: public ::std::unary_function<OWeakConnection,void>
+{
+    ::utl::OConfigurationTreeRoot m_aConfigTreeNode;
+public:
+    OConnectionNotifier()
+    {
+    }
+    OConnectionNotifier(const ::utl::OConfigurationTreeRoot& _rConfigTreeNode) : m_aConfigTreeNode(_rConfigTreeNode)
+    {
+    }
 
-//------------------------------------------------------------------------------
+    void operator()(OWeakConnection& _xConnection)
+    {
+        Reference< XUnoTunnel > xTunnel(Reference<XConnection>(_xConnection), UNO_QUERY);
+        OConnection* pObjectImpl = NULL;
+        if (xTunnel.is())
+        {
+            static Sequence<sal_Int8> aTunnelId = OConnection::getUnoTunnelImplementationId();
+            pObjectImpl = reinterpret_cast<OConnection*> (xTunnel->getSomething(aTunnelId));
+        }
+        if(pObjectImpl)
+        {
+            if (m_aConfigTreeNode.isValid())
+                pObjectImpl->setNewConfigNode(m_aConfigTreeNode);
+            else
+                pObjectImpl->flushMembers();
+        }
+    }
+};
+// -----------------------------------------------------------------------------
 void ODatabaseSource::inserted(const Reference< XInterface >& _rxContainer, const ::rtl::OUString& _rRegistrationName, const OConfigurationTreeRoot& _rConfigRoot)
 {
     MutexGuard aGuard(m_aMutex);
@@ -907,6 +936,9 @@ void ODatabaseSource::inserted(const Reference< XInterface >& _rxContainer, cons
         // (Usually, we do this from within the ctor which gets a config node, but if we're here, we have been
         // instantiated as service, so we didn't have any config location before, so the documents haven't any, too.)
         initializeDocuments(sal_False);
+        // we now have to set the new confignode at our connections
+        ::std::for_each(m_aConnections.begin(),m_aConnections.end(),OConnectionNotifier(m_aConfigurationNode));
+        // and now flush
         flushToConfiguration();
     }
 
@@ -988,6 +1020,8 @@ void ODatabaseSource::flushDocuments()
 // -----------------------------------------------------------------------------
 void ODatabaseSource::flushTables()
 {
+    // flush all tables and queries
+    ::std::for_each(m_aConnections.begin(),m_aConnections.end(),OConnectionNotifier());
 }
 //------------------------------------------------------------------------------
 void ODatabaseSource::flushToConfiguration()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,8 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _CPPUHELPER_COMPBASE9_HXX_
-#include <cppuhelper/compbase9.hxx>
+#ifndef _CPPUHELPER_COMPBASE8_HXX_
+#include <cppuhelper/compbase8.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
@@ -122,15 +119,14 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakComponentImplHelper9<   ::com::sun::star::sdbcx::XColumnsSupplier,
+    typedef ::cppu::WeakComponentImplHelper8<   ::com::sun::star::sdbcx::XColumnsSupplier,
                                                 ::com::sun::star::sdbcx::XKeysSupplier,
                                                 ::com::sun::star::container::XNamed,
                                                 ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                                 ::com::sun::star::sdbcx::XIndexesSupplier,
                                                 ::com::sun::star::sdbcx::XRename,
-                                                ::com::sun::star::sdbcx::XAlterTable,
-                                                ::com::sun::star::lang::XUnoTunnel> OTableDescriptor_BASE;
+                                                ::com::sun::star::sdbcx::XAlterTable> OTableDescriptor_BASE;
     //==========================================================================
     //= OTables
     //==========================================================================

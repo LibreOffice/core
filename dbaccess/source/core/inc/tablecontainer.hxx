@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,9 @@ namespace dbaccess
         virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
+        // sets the new confignodes
+        void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
     };
 }
 #endif // _DBA_CORE_TABLECONTAINER_HXX_

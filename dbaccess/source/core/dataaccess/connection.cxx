@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,17 +543,7 @@ Sequence< Type > OConnection::getTypes() throw (RuntimeException)
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
 {
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
+    return getUnoTunnelImplementationId();
 }
 
 // com::sun::star::uno::XInterface
@@ -733,7 +723,45 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
     // TODO EscapeProcessing
     return prepareStatement(aStatement);
 }
+//--------------------------------------------------------------------------
+Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+// -----------------------------------------------------------------------------
+// com::sun::star::XUnoTunnel
+sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
+{
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
 
+    return 0;
+}
+// -----------------------------------------------------------------------------
+void OConnection::flushMembers()
+{
+    if(m_pTables)
+        m_pTables->flush();
+    m_aQueries.flush();
+}
+// -----------------------------------------------------------------------------
+void OConnection::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode)
+{
+    if(m_pTables)
+        m_pTables->setNewConfigNode(_aConfigTreeNode);
+
+    m_aQueries.setNewConfigNode(_aConfigTreeNode.openNode(CONFIGKEY_DBLINK_QUERYDOCUMENTS).cloneAsRoot());
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

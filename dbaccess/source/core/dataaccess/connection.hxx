@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,14 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -184,12 +187,13 @@ inline void OConnectionRerouter::checkDisposed() throw (::com::sun::star::lang::
         throw ::com::sun::star::lang::DisposedException();
 }
 //==========================================================================
-typedef ::cppu::ImplHelper6< ::com::sun::star::container::XChild
+typedef ::cppu::ImplHelper7< ::com::sun::star::container::XChild
                             ,::com::sun::star::sdbcx::XTablesSupplier
                             ,::com::sun::star::sdbcx::XViewsSupplier
                             ,::com::sun::star::sdb::XQueriesSupplier
                             ,::com::sun::star::sdb::XSQLQueryComposerFactory
                             ,::com::sun::star::sdb::XCommandPreparation
+                            ,::com::sun::star::lang::XUnoTunnel
                             >   OConnection_Base;
 
 class ODatabaseSource;
@@ -257,7 +261,14 @@ public:
 // ::com::sun::star::sdbc::XWarningsSupplier
     virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
+    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
+    // flush the tables and queries
+    void flushMembers();
+    // set the confignode this happens when the datasource was reinserted
+    void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
 protected:
     // IWarningsContainer
     virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning);

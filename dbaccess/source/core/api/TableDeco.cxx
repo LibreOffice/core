@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-22 15:32:41 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,8 @@ sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& 
     Reference<XUnoTunnel> xTunnel(m_xTable,UNO_QUERY);
     if(xTunnel.is())
         nRet = xTunnel->getSomething(rId);
+    if(!nRet)
+        nRet = OConfigurationFlushable::getSomething(rId);
     return nRet;
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 10:55:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,6 +879,40 @@ void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) th
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
 {
+}
+// -----------------------------------------------------------------------------
+void OTableContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode)
+{
+    m_aCommitLocation   = _aConfigTreeNode;
+    m_aTablesConfig     = _aConfigTreeNode.openNode(CONFIGKEY_DBLINK_TABLES);
+    m_aTablesConfig.setEscape(m_aTablesConfig.isSetNode());
+    // now set the new config node at our children
+    ::std::vector< ObjectIter >::iterator aIter = m_aElements.begin();
+    for(;aIter != m_aElements.end();++aIter)
+    {
+        if((*aIter)->second.is())
+        {
+            Reference< XUnoTunnel > xTunnel((*aIter)->second, UNO_QUERY);
+            OConfigurationFlushable* pObjectImpl = NULL;
+            if (xTunnel.is())
+            {
+                static Sequence<sal_Int8> aTunnelId = OConfigurationFlushable::getUnoTunnelImplementationId();
+                pObjectImpl = reinterpret_cast<OConfigurationFlushable*> (xTunnel->getSomething(aTunnelId));
+            }
+            if(pObjectImpl)
+            {
+                OConfigurationNode aTableConfig;
+                if(m_aTablesConfig.hasByName((*aIter)->first))
+                    aTableConfig = m_aTablesConfig.openNode((*aIter)->first);
+                else
+                {
+                    aTableConfig = m_aTablesConfig.createNode((*aIter)->first);
+                    m_aCommitLocation.commit();
+                }
+                pObjectImpl->setConfigurationNode(aTableConfig.cloneAsRoot());
+            }
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:38:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,6 +685,17 @@ sal_Int32 OQueryContainer::implGetIndex(const ::rtl::OUString& _rName)
 
 
     return -1;
+}
+// -----------------------------------------------------------------------------
+void OQueryContainer::setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode)
+{
+    m_aConfigurationNode = _aConfigTreeNode;
+    Queries::iterator aIter = m_aQueries.begin();
+    for(;aIter != m_aQueries.end();++aIter)
+    {
+        if(aIter->second)
+            aIter->second->setConfigurationNode(implGetObjectKey(aIter->first,sal_True).cloneAsRoot());
+    }
 }
 
 //........................................................................
