@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: npower $ $Date: 2003-08-19 09:48:12 $
+#   last change: $Author: npower $ $Date: 2003-09-04 07:25:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,8 @@ COMP1TYPELIST=$(TARGET)
 SLOFILES=\
         $(SLO)$/ScriptingContext.obj\
         $(SLO)$/MasterScriptProvider.obj\
+        $(SLO)$/ActiveMSPList.obj\
+        $(SLO)$/ProviderCache.obj\
 
 # --- Targets ------------------------------------------------------
 
