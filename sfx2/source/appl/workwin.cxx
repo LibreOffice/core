@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-20 17:50:21 $
+ *  last change: $Author: mba $ $Date: 2002-01-08 08:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,6 +1404,8 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW )
         BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
         SfxChildWinInfo aInfo = pChildWin->GetInfo();
         pCW->aInfo.aExtraString = aInfo.aExtraString;
+        pCW->aInfo.bVisible = aInfo.bVisible;
+        pCW->aInfo.nFlags = aInfo.nFlags;
         if ( bTask )
             pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
 
