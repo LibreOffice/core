@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 12:52:37 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:56:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #include "svdoimp.hxx"
 #endif
 
+#ifndef _SDR_PROPERTIES_CIRCLEPROPERTIES_HXX
+#include <svx/sdr/properties/circleproperties.hxx>
+#endif
+
 void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
 {
     Point aCenter(rR.Center());
@@ -148,6 +152,15 @@ void SetWinkPnt(const Rectangle& rR, long nWink, Point& rPnt)
     }
     rPnt+=aCenter;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* SdrCircObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::CircleProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrCircObj,SdrRectObj);
 
@@ -209,7 +222,7 @@ FASTBOOL SdrCircObj::PaintNeedsXPoly() const
     if (eKind!=OBJ_CIRC) bNeed=TRUE;
 #endif
 
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     if(!bNeed)
     {
         // XPoly ist notwendig fuer alles was nicht LineSolid oder LineNone ist
@@ -336,18 +349,19 @@ void SdrCircObj::RecalcBoundRect()
     ImpAddTextToBoundRect();
 }
 
-FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrCircObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
+    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
+    //// Hidden objects on masterpages, draw nothing
+    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
+    //  return TRUE;
 
     BOOL bHideContour(IsHideContour());
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
     BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
 
     // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
 
     // perepare ItemSet to avoid old XOut line drawing
     SfxItemSet aEmptySet(*rSet.GetPool());
@@ -395,7 +409,7 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
             if (eKind==OBJ_CIRC) {
                 rXOut.DrawEllipse(aR);
             } else {
-                GetBoundRect(); // fuer aPnt1,aPnt2
+                GetCurrentBoundRect(); // fuer aPnt1,aPnt2
                 Point aTmpPt1(aPnt1);
                 Point aTmpPt2(aPnt2);
                 aTmpPt1.X()+=nXDist;
@@ -405,7 +419,7 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 switch (eKind) {
                     case OBJ_SECT: rXOut.DrawPie(aR,aTmpPt1,aTmpPt2); break;
                     case OBJ_CARC: rXOut.DrawArc(aR,aTmpPt1,aTmpPt2); break;
-                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::Paint(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
+                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::DoPaintObject(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
                 }
             }
         }
@@ -442,11 +456,11 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
             if (eKind==OBJ_CIRC) {
                 rXOut.DrawEllipse(aRect);
             } else {
-                GetBoundRect(); // fuer aPnt1,aPnt2
+                GetCurrentBoundRect(); // fuer aPnt1,aPnt2
                 switch (eKind) {
                     case OBJ_SECT: rXOut.DrawPie(aRect,aPnt1,aPnt2); break;
                     case OBJ_CARC: rXOut.DrawArc(aRect,aPnt1,aPnt2); break;
-                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::Paint(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
+                    case OBJ_CCUT: DBG_ERROR("SdrCircObj::DoPaintObject(): ein Kreisabschnitt muss immer mit XPoly gepaintet werden"); break;
                 }
             }
         }
@@ -461,11 +475,13 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
     FASTBOOL bOk=TRUE;
     if (HasText()) {
-        bOk=SdrTextObj::Paint(rXOut,rInfoRec);
+        bOk=SdrTextObj::DoPaintObject(rXOut,rInfoRec);
     }
-    if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-        bOk=PaintGluePoints(rXOut,rInfoRec);
-    }
+
+    // #110094#-13
+    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
+    //  bOk=PaintGluePoints(rXOut,rInfoRec);
+    //}
 
     return bOk;
 }
@@ -665,9 +681,10 @@ void SdrCircObj::TakeContour(XPolyPolygon& rPoly) const
     SdrRectObj::TakeContour(rPoly);
 }
 
-void SdrCircObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrCircObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 class ImpCircUser
 {
@@ -800,8 +817,8 @@ FASTBOOL SdrCircObj::EndDrag(SdrDragStat& rDrag)
 {
     FASTBOOL bWink=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
     if (bWink) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-        SendRepaintBroadcast();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
         long nWink=*((long*)(rDrag.GetUser()));
         if (rDrag.GetHdl()->GetPointNum()==1) nStartWink=nWink;
         if (rDrag.GetHdl()->GetPointNum()==2) nEndWink=nWink;
@@ -809,7 +826,7 @@ FASTBOOL SdrCircObj::EndDrag(SdrDragStat& rDrag)
         SetXPolyDirty();
         ImpSetCircInfoToAttr();
         SetChanged();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         return TRUE;
     } else {
@@ -1065,7 +1082,7 @@ void SdrCircObj::NbcMove(const Size& aSiz)
     MovePoint(aPnt1,aSiz);
     MovePoint(aPnt2,aSiz);
     SetXPolyDirty();
-    SetRectsDirty(TRUE);
+    SetRectsDirty(sal_True);
 }
 
 void SdrCircObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -1326,83 +1343,11 @@ void __EXPORT SdrCircObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
     ImpSetAttrToCircInfo();
 }
 
-void SdrCircObj::ForceDefaultAttr()
-{
-    SdrCircKind eKindA = SDRCIRC_FULL;
-
-    if(eKind == OBJ_SECT)
-        eKindA = SDRCIRC_SECT;
-    else if(eKind == OBJ_CARC)
-        eKindA = SDRCIRC_ARC;
-    else if(eKind == OBJ_CCUT)
-        eKindA = SDRCIRC_CUT;
-
-    if(eKindA != SDRCIRC_FULL)
-    {
-        ImpForceItemSet();
-        mpObjectItemSet->Put(SdrCircKindItem(eKindA));
-
-        if(nStartWink)
-            mpObjectItemSet->Put(SdrCircStartAngleItem(nStartWink));
-
-        if(nEndWink != 36000)
-            mpObjectItemSet->Put(SdrCircEndAngleItem(nEndWink));
-    }
-
-    // call parent, after SetItem(SdrCircKindItem())
-    // because ForceDefaultAttr() will call
-    // ImpSetAttrToCircInfo() which needs a correct
-    // SdrCircKindItem
-    SdrRectObj::ForceDefaultAttr();
-
-}
-
-void SdrCircObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    SetXPolyDirty();
-    SdrRectObj::NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
-    ImpSetAttrToCircInfo();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// ItemSet access
-
-SfxItemSet* SdrCircObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    // include ALL items, 2D and 3D
-    return new SfxItemSet(rPool,
-        // ranges from SdrAttrObj
-        SDRATTR_START, SDRATTRSET_SHADOW,
-        SDRATTRSET_OUTLINER, SDRATTRSET_MISC,
-        SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-
-        // circle attributes
-        SDRATTR_CIRC_FIRST, SDRATTRSET_CIRC,
-
-        // outliner and end
-        EE_ITEMS_START, EE_ITEMS_END,
-        0, 0);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-void SdrCircObj::ItemSetChanged(const SfxItemSet& rSet)
-{
-    // local changes
-    SetXPolyDirty();
-
-    // call parent
-    SdrRectObj::ItemSetChanged(rSet);
-
-    // local changes
-    ImpSetAttrToCircInfo();
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrCircObj::ImpSetAttrToCircInfo()
 {
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     SdrCircKind eNewKindA = ((SdrCircKindItem&)rSet.Get(SDRATTR_CIRCKIND)).GetValue();
     SdrObjKind eNewKind = eKind;
 
@@ -1438,7 +1383,7 @@ void SdrCircObj::ImpSetAttrToCircInfo()
 void SdrCircObj::ImpSetCircInfoToAttr()
 {
     SdrCircKind eNewKindA = SDRCIRC_FULL;
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
 
     if(eKind == OBJ_SECT)
         eNewKindA = SDRCIRC_SECT;
@@ -1455,16 +1400,20 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     {
         // #81921# since SetItem() implicitly calls ImpSetAttrToCircInfo()
         // setting the item directly is necessary here.
-        ImpForceItemSet();
-
         if(eNewKindA != eOldKindA)
-            mpObjectItemSet->Put(SdrCircKindItem(eNewKindA));
+        {
+            GetProperties().SetObjectItemDirect(SdrCircKindItem(eNewKindA));
+        }
 
         if(nStartWink != nOldStartWink)
-            mpObjectItemSet->Put(SdrCircStartAngleItem(nStartWink));
+        {
+            GetProperties().SetObjectItemDirect(SdrCircStartAngleItem(nStartWink));
+        }
 
         if(nEndWink != nOldEndWink)
-            mpObjectItemSet->Put(SdrCircEndAngleItem(nEndWink));
+        {
+            GetProperties().SetObjectItemDirect(SdrCircEndAngleItem(nEndWink));
+        }
 
         SetXPolyDirty();
         ImpSetAttrToCircInfo();
@@ -1480,32 +1429,6 @@ SdrObject* SdrCircObj::DoConvertToPolyObj(BOOL bBezier) const
     SdrObject* pRet=ImpConvertMakeObj(XPolyPolygon(aXP),bFill,bBezier);
     pRet=ImpConvertAddText(pRet,bBezier);
     return pRet;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// pre- and postprocessing for objects for saving
-
-void SdrCircObj::PreSave()
-{
-    // call parent
-    SdrRectObj::PreSave();
-
-    // prepare SetItems for storage
-    const SfxItemSet& rSet = GetUnmergedItemSet();
-    const SfxItemSet* pParent = GetStyleSheet() ? &GetStyleSheet()->GetItemSet() : 0L;
-    SdrCircSetItem aCircAttr(rSet.GetPool());
-    aCircAttr.GetItemSet().Put(rSet);
-    aCircAttr.GetItemSet().SetParent(pParent);
-    mpObjectItemSet->Put(aCircAttr);
-}
-
-void SdrCircObj::PostSave()
-{
-    // call parent
-    SdrRectObj::PostSave();
-
-    // remove SetItems from local itemset
-    mpObjectItemSet->ClearItem(SDRATTRSET_CIRC);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1527,7 +1450,7 @@ void SdrCircObj::WriteData(SvStream& rOut) const
     SfxItemPool* pPool=GetItemPool();
     if(pPool)
     {
-        const SfxItemSet& rSet = GetUnmergedItemSet();
+        const SfxItemSet& rSet = GetObjectItemSet();
 
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_CIRC));
     }
@@ -1572,7 +1495,7 @@ void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             sal_uInt16 nSetID = SDRATTRSET_CIRC;
             const SdrCircSetItem* pCircAttr = (const SdrCircSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
             if(pCircAttr)
-                SetItemSet(pCircAttr->GetItemSet());
+                SetObjectItemSet(pCircAttr->GetItemSet());
         }
         else
         {
@@ -1594,13 +1517,17 @@ void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
         if(eKindA != SDRCIRC_FULL)
         {
-            mpObjectItemSet->Put(SdrCircKindItem(eKindA));
+            GetProperties().SetObjectItemDirect(SdrCircKindItem(eKindA));
 
             if(nStartWink)
-                mpObjectItemSet->Put(SdrCircStartAngleItem(nStartWink));
+            {
+                GetProperties().SetObjectItemDirect(SdrCircStartAngleItem(nStartWink));
+            }
 
             if(nEndWink != 36000)
-                mpObjectItemSet->Put(SdrCircEndAngleItem(nEndWink));
+            {
+                GetProperties().SetObjectItemDirect(SdrCircEndAngleItem(nEndWink));
+            }
         }
     }
 }
