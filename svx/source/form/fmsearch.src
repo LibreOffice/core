@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-18 21:19:02 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,9 +379,9 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ greek ] = "ÈÝóç :";
         Text[ dutch ] = "~Positie";
         Text[ french ] = "Position";
-        Text[ spanish ] = "~Posición";
+        Text[ spanish ] = "Posición";
         Text[ finnish ] = "Sijainti";
-        Text[ italian ] = "~Posizione";
+        Text[ italian ] = "Posizione";
         Text[ danish ] = "Placering :";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "Pozycja";
@@ -445,7 +445,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese_brazilian ] = "E~xakte Suche";
         Text[ portuguese ] = "Procura e~xacta";
         Text[ danish ] = "Søg eksakt";
-        Text[ french ] = "Respecter la ~casse";
+        Text[ french ] = "Respecter la casse";
         Text[ swedish ] = "E~xakt sökning";
         Text[ dutch ] = "E~xact dezelfde tekens";
         Text[ spanish ] = "Coincidencia ~exacta";
@@ -595,7 +595,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese_brazilian ] = "~?hnlichkeitssuche";
         Text[ portuguese ] = "Pro~cura por semelhança";
         Text[ danish ] = "Søg lignende";
-        Text[ french ] = "R~echerche de similarité";
+        Text[ french ] = "Recherche de similarité";
         Text[ swedish ] = "~Likhetssökning";
         Text[ dutch ] = "~Zoeken naar overeenkomsten";
         Text[ spanish ] = "~Búsqueda por semejanza";
@@ -808,7 +808,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese_brazilian ] = "~Suchen";
         Text[ portuguese ] = "~Procurar";
         Text[ danish ] = "Søg";
-        Text[ french ] = "~Rechercher";
+        Text[ french ] = "Rechercher";
         Text[ swedish ] = "~Sök";
         Text[ dutch ] = "~Zoeken";
         Text[ spanish ] = "~Buscar";
@@ -867,7 +867,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese_brazilian ] = "~Hilfe";
         Text[ portuguese ] = "~Ajuda";
         Text[ danish ] = "~Hjælp";
-        Text[ french ] = "Ai~de";
+        Text[ french ] = "Aide";
         Text[ swedish ] = "~Hjälp";
         Text[ dutch ] = "~Help";
         Text[ spanish ] = "~Ayuda";
