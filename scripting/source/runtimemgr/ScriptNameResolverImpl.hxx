@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-23 14:11:23 $
+*  last change: $Author: dsherwin $ $Date: 2002-10-29 10:27:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -113,13 +113,13 @@ public:
      @exception NullPointerException
      @return  the resolved XScriptURI
     */
-    css::uno::Reference < XInterface > SAL_CALL resolve(
+    css::uno::Reference < css::uno::XInterface > SAL_CALL resolve(
         const ::rtl::OUString & scriptURI,
         css::uno::Any& invocationCtx )
         throw( css::script::CannotConvertException, css::lang::IllegalArgumentException,
            css::uno::RuntimeException );
 private:
-    css::uno::Reference < XInterface >
+    css::uno::Reference < css::uno::XInterface >
     resolveURIFromStorageID( sal_Int32 sid, const ::rtl::OUString &
         nameToResolve )
         SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );

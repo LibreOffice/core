@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptRuntimeManager.hxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-24 13:57:02 $
+*  last change: $Author: dsherwin $ $Date: 2002-10-29 10:27:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -160,7 +160,7 @@ public:
      same as the documentStorageID.
      * @return the resolved URI
      */
-    virtual css::uno::Reference< XInterface > SAL_CALL resolve(
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL resolve(
         const ::rtl::OUString& scriptUri,
         css::uno::Any& invocationCtx )
         throw( css::lang::IllegalArgumentException, css::script::CannotConvertException,
