@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndexes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:00:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 using namespace ::comphelper;
 
 using namespace utl;
+using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -87,7 +88,7 @@ using namespace ::com::sun::star::lang;
 
 namespace starutil      = ::com::sun::star::util;
 
-Reference< XNamed > ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
 {
     //  Dir* pDir = m_pTable->getConnection()->getDir();
     //  String aPath = pDir->GetName();
@@ -99,7 +100,7 @@ Reference< XNamed > ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     if(!UCBContentHelper::Exists(sFile))
         throw SQLException(::rtl::OUString::createFromAscii("Index file doesn't exists!"),*m_pTable,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 
-    Reference< XNamed > xRet;
+    sdbcx::ObjectType xRet;
     SvStream* pFileStream = ::connectivity::file::OFileTable::createStream_simpleError(sFile,STREAM_READ | STREAM_NOCREATE| STREAM_SHARE_DENYWRITE);
     if(pFileStream)
     {
@@ -157,12 +158,5 @@ void ODbaseIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementNa
 
 }
 // -------------------------------------------------------------------------
-Reference< XNamed > ODbaseIndexes::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
-}
-// -----------------------------------------------------------------------------
 
 
