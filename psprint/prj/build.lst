@@ -1,4 +1,4 @@
-pp	psprint	:	tools unotools cpputools jvmaccess print_header NULL
+pp	psprint	:	tools unotools cpputools jvmaccess print_header jvmfwk NULL
 pp	psprint									usr1	-	all	pp_mkout NULL
 pp	psprint\source\fontsubset				nmake	-	all	pp_fontsset NULL
 pp	psprint\source\printer					nmake	-	u	pp_printer NULL
