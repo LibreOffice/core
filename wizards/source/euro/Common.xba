@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic"> REM  *****  BASIC  *****
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Common" script:language="StarBasic"> REM  *****  BASIC  *****
 Public DialogModel as Object
 Public DialogConvert as Object
 Public DialogPassword as Object
@@ -189,9 +189,10 @@ Sub StartConversion()
 			End If
 		Case 2
 			bCancelTask = False
-			InitializeThirdStep()
-			ConvertDocuments()
-			bCancelTask = True
+			If InitializeThirdStep() Then
+				ConvertDocuments()
+				bCancelTask = True
+			End If
 		Case 3
 			DialogConvert.EndExecute()
 	End Select

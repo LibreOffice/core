@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ConvertRun" script:language="StarBasic">Option Explicit
 
 Public oPreSelRange as Object
 
@@ -17,6 +17,8 @@ Sub Main()
 		bDoUnProtect = False
 		bPreSelected = True
 		oDocument = ThisComponent
+		Msgbox Vartype(oDocument)
+		Msgbox oDocument.CharLocale.Language &amp; &quot;;&quot; &amp; oDocument.CharLocale.Country
 		RetrieveDocumentObjects()											&apos; Statusline, SheetsCollection etc.
 		InitializeConverter(oDocument.CharLocale, 1)
 		GetPreSelectedRange()

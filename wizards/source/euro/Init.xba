@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Init" script:language="StarBasic">Option Explicit
 REM  *****  BASIC  *****
 
 &apos; Zu diskutieren:
@@ -156,7 +156,6 @@ Sub InitializeResources()
 		.cmdGoOn.Label =  sGOON
 		.lblHint.Label =  GetResText(1004)
 		.lblCurrencies.Label = GetResText(1006)
-&apos; Todo: Dieses Model später am Control unsichtbar machen	
 		If .Step = 1 Then
 			.chkComplete.Label = GetResText(1100)
 			.hlnSelection.Label = GetResText(1101)
@@ -171,7 +170,8 @@ Sub InitializeResources()
 			.optSingleFile.Label = GetResText(1201) &apos;&quot;Einzelnes StarOffice -Dokument&quot;&apos;GetResText(1201)
  			.optWholeDir.Label = GetResText(1202)
  			.chkProtect.Label = GetResText(1207)
- 			.chkTextDocuments.Label = GetResText(1210) 	&apos; &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;
+ 			.chkTextDocuments.Label = GetResText(1210) 	&apos; &quot;Auch Feldbefehle und Tabellen in Textdokumenten konvertieren&quot;&apos; Todo: Dieses Model später am Control unsichtbar machen	
+
 			sSOURCEFILE = GetResText(1203)
 			sSOURCEDIR = GetResText(1204)
  			.lblSource.Label = sSOURCEDIR
