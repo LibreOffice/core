@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
+ *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,4 @@ inline void ElementDescriptor::addBoolAttr( OUString const & rAttrName, sal_Bool
                    : OUString( RTL_CONSTASCII_USTRINGPARAM("false") )) );
 }
 
-//##################################################################################################
-
-
-};
+}

@@ -863,3 +863,15 @@ cpp_queryInterface
 ?setDocumentLocator@ModuleImport@xmlscript@@UAAXABV?$Reference@VXLocator@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
 ?startDocument@ModuleImport@xmlscript@@UAAXXZ
 ?exportScriptModule@xmlscript@@YAXABV?$Reference@VXExtendedDocumentHandler@sax@xml@star@sun@com@@@uno@star@sun@com@@ABUModuleDescriptor@1@@Z
+??0ElementBase@xmlscript@@QAE@JABVOUString@rtl@@ABV?$Reference@VXExtendedAttributes@sax2@xml@star@sun@com@@@uno@star@sun@com@@PAV01@PAUDialogImport@1@@Z
+??0OString@rtl@@QAE@PBGJGK@Z
+??1OString@rtl@@QAE@XZ
+?OUStringToOString@rtl@@YA?AVOString@1@ABVOUString@1@GK@Z
+?g_pEventTranslations@xmlscript@@3QBUStringTriple@1@B
+?getBoolAttr@xmlscript@@YA_NPAEABVOUString@rtl@@ABV?$Reference@VXExtendedAttributes@sax2@xml@star@sun@com@@@uno@star@sun@com@@J@Z
+?getLongAttr@xmlscript@@YA_NPAJABVOUString@rtl@@ABV?$Reference@VXExtendedAttributes@sax2@xml@star@sun@com@@@uno@star@sun@com@@J@Z
+?getStr@OString@rtl@@QBEPBDXZ
+?getStringAttr@xmlscript@@YA_NPAVOUString@rtl@@ABV23@ABV?$Reference@VXExtendedAttributes@sax2@xml@star@sun@com@@@uno@star@sun@com@@J@Z
+?importEvents@ImportContext@xmlscript@@QAEXABV?$vector@V?$Reference@VXImportContext@xml@star@sun@com@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXImportContext@xml@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@@Z
+??0EventElement@xmlscript@@QAE@JABVOUString@rtl@@ABV?$Reference@VXExtendedAttributes@sax2@xml@star@sun@com@@@uno@star@sun@com@@PAVElementBase@1@PAUDialogImport@1@@Z
+?getEvents@ControlElement@xmlscript@@QAEPBV?$vector@V?$Reference@VXImportContext@xml@star@sun@com@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXImportContext@xml@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@XZ

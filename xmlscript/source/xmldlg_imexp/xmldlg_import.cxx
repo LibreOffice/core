@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,4 +1319,4 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
         static_cast< xml::XImporter * >( new DialogImport( xDialogModel ) ) );
 }
 
-};
+}

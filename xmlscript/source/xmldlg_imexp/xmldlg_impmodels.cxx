@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-16 14:11:24 $
+ *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,7 +1586,12 @@ Reference< xml::XImportContext > WindowElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    // event
+    if (isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else if (XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1668,4 +1673,4 @@ void WindowElement::endElement()
     ctx.importEvents( _events );
 }
 
-};
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_helper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:07 $
+ *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,33 +103,28 @@ public:
 
     /** Adds a sub element of element.
 
-        @param xElem
-               element reference
+        @param xElem element reference
     */
-    void SAL_CALL addSubElement( ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::xml::sax::XAttributeList > const & xElem )
+    void SAL_CALL addSubElement(
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > const & xElem )
         SAL_THROW( () );
 
-    /** Gets sub element of given index.  The index follows order in which sub elements
-        were added.
+    /** Gets sub element of given index.  The index follows order in which sub elements were added.
 
-        @param nIndex
-               index of sub element
+        @param nIndex index of sub element
     */
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::xml::sax::XAttributeList > SAL_CALL getSubElement( sal_Int32 nIndex )
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > SAL_CALL getSubElement( sal_Int32 nIndex )
         SAL_THROW( () );
 
-    /** Adds an attribute to elements
+    /** Adds an attribute to elements.
 
         @param rAttrName qname of attribute
         @param rValue value string of element
     */
-    void SAL_CALL addAttribute(
-        ::rtl::OUString const & rAttrName, ::rtl::OUString const & rValue )
+    void SAL_CALL addAttribute( ::rtl::OUString const & rAttrName, ::rtl::OUString const & rValue )
         SAL_THROW( () );
 
-    /** Gets the tag name (qname) of element
+    /** Gets the tag name (qname) of element.
 
         @return
                 qname of element
@@ -137,13 +132,18 @@ public:
     inline ::rtl::OUString SAL_CALL getName() SAL_THROW( () )
         { return _name; }
 
-    /** Dumps out element (and all sub element).
+    /** Dumps out element (and all sub elements).
 
-        @param xOut
-               document handler to be written to
+        @param xOut document handler to be written to
     */
-    void SAL_CALL dump( ::com::sun::star::uno::Reference<
-                        ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut );
+    void SAL_CALL dump(
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut );
+    /** Dumps out sub elements (and all further sub elements).
+
+        @param xOut document handler to be written to
+    */
+    void SAL_CALL dumpSubElements(
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut );
 
     // XAttributeList
     virtual sal_Int16 SAL_CALL getLength()

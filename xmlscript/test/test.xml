@@ -7,6 +7,8 @@
     style-id="dialog"
     id="window1" title="Test-Dialog" left="50" top="50" height="690" width="400">
 
+    <script:event script:event-name="on-rowchange" script:macro-name="ExecutingMacro" script:location="application" script:language="StarBasic"/>
+
     <dlg:styles xmlns:dlg="http://openoffice.org/2000/dialog">
         <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
         <dlg:style style-id="bla3" background-color="0" dlg:text-color="0xffffff" font-name="Arial" font-height="24"/>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-16 14:11:24 $
+ *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,4 +811,4 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     readEvents();
 }
 
-};
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_element.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-15 14:44:15 $
+ *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,16 +89,21 @@ Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nInde
     return _subElems[ (size_t)nIndex ];
 }
 //__________________________________________________________________________________________________
-void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
+void XMLElement::dumpSubElements( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
 {
-    xOut->ignorableWhitespace( OUString() );
-    xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
-    // write sub elements
     for ( size_t nPos = 0; nPos < _subElems.size(); ++nPos )
     {
         XMLElement * pElem = static_cast< XMLElement * >( _subElems[ nPos ].get() );
         pElem->dump( xOut );
     }
+}
+//__________________________________________________________________________________________________
+void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
+{
+    xOut->ignorableWhitespace( OUString() );
+    xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
+    // write sub elements
+    dumpSubElements( xOut );
     //
     xOut->ignorableWhitespace( OUString() );
     xOut->endElement( _name );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
+ *  last change: $Author: dbo $ $Date: 2001-08-24 11:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1206,7 +1206,8 @@ void SAL_CALL exportDialogModel(
     pWindow->readDialogModel( &all_styles );
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aWindowName, xWindow );
-
+     // dump out events
+    pWindow->dumpSubElements( xOut );
     // dump out stylebag
     all_styles.dump( xOut );
 
@@ -1236,4 +1237,4 @@ void SAL_CALL exportDialogModel(
     xOut->endDocument();
 }
 
-};
+}
