@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-14 12:38:48 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 15:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -984,11 +984,11 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
             }
             catch (InvalidRegistryException &)
             {
-                OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+                OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
             }
     }
 #endif
-    return True;
+    return sal_True;
 }
 
 void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,
