@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-22 23:11:03 $
+ *  last change: $Author: rt $ $Date: 2001-11-27 23:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
