@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_body.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:45:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #define TRANSLITERATION_BODY_H
 
 #include <transliteration_commonclass.hxx>
-#include <casefolding.hxx>
+#include <i18nutil/casefolding.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -84,7 +84,7 @@ public:
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar)
         throw(com::sun::star::uno::RuntimeException,
-        drafts::com::sun::star::i18n::MultipleCharsOutputException);
+        com::sun::star::i18n::MultipleCharsOutputException);
 
     rtl::OUString SAL_CALL folding(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_commonclass.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:45:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 #ifndef _I18N_TRANSLITERATION_TRANSLITERATION_COMMONCLASS_H_
 #define _I18N_TRANSLITERATION_TRANSLITERATION_COMMONCLASS_H_
 
-#include <drafts/com/sun/star/i18n/XExtendedTransliteration.hpp>
+#include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
-#include <x_rtl_ustring.h>
+#include <i18nutil/x_rtl_ustring.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class transliteration_commonclass : public cppu::WeakImplHelper1< drafts::com::sun::star::i18n::XExtendedTransliteration >
+class transliteration_commonclass : public cppu::WeakImplHelper1< com::sun::star::i18n::XExtendedTransliteration >
 {
 public:
         transliteration_commonclass();
@@ -118,7 +118,7 @@ public:
         throw(com::sun::star::uno::RuntimeException);
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar )
-        throw(drafts::com::sun::star::i18n::MultipleCharsOutputException,
+        throw(com::sun::star::i18n::MultipleCharsOutputException,
                 com::sun::star::uno::RuntimeException) = 0;
 
         virtual sal_Bool SAL_CALL
