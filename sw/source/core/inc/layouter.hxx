@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:05:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,13 @@ class SwLooping;
 class SwMovedFwdFrmsByObjPos;
 class SwTxtFrm;
 // <--
+// --> OD 2004-10-05 #i26945#
+class SwRowFrm;
+// <--
+// --> OD 2004-10-22 #i35911#
+class SwObjsMarkedAsTmpConsiderWrapInfluence;
+class SwAnchoredObject;
+// <--
 
 #define LOOP_PAGE 1
 
@@ -85,7 +92,10 @@ class SwLayouter
 
     // --> OD 2004-06-23 #i28701#
     SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
-
+    // <--
+    // --> OD 2004-10-22 #i35911#
+    SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
+    // <--
 public:
     SwLayouter();
     ~SwLayouter();
@@ -108,6 +118,17 @@ public:
     static bool FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                      const SwTxtFrm& _rTxtFrm,
                                      sal_uInt32& _ornToPageNum );
+    // <--
+    // --> OD 2004-10-05 #i26945#
+    static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
+                                           const SwRowFrm& _rRowFrm );
+    // <--
+
+    // --> OD 2004-10-22 #i35911#
+    static void ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc );
+    static void InsertObjForTmpConsiderWrapInfluence(
+                                        const SwDoc& _rDoc,
+                                        SwAnchoredObject& _rAnchoredObj );
     // <--
 };
 
