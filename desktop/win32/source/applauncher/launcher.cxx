@@ -29,7 +29,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     ppArguments = GetArgv( &nArguments );
 
-    if ( 1 == nArguments )
+    // if ( 1 == nArguments )
     {
         lpCommandLine = (LPTSTR)_alloca( sizeof(_TCHAR) * (_tcslen(lpCommandLine) + _tcslen(APPLICATION_SWITCH) + 2) );
 
