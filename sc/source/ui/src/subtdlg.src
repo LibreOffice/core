@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:58:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "Gruppen";
         Text[ hindi ] = "समूह";
         Text[ slovak ] = "Zoskupenie";
+        Text[ hungarian ] = "Csoportok";
+        Text[ slovenian ] = "Skupine";
     };
     CheckBox BTN_PAGEBREAK
     {
@@ -106,7 +108,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "Neue Seite bei Gru~ppenwechsel" ;
         Text [ ENGLISH ] = "Pagebreak for each grou~p" ;
         Text [ NORWEGIAN ] = "Sideskift for hver grupp~e" ;
-        Text [ DANISH ] = "Sid~eskift mellem grupper" ;
+        Text [ DANISH ] = "~Sideskift mellem grupper" ;
         Text [ ENGLISH_US ] = "~Page break between groups" ;
         Text [ SPANISH ] = "~Nueva p�gina entre grupos" ;
         Text [ FINNISH ] = "S~ivunvaihto ryhmien v�lill�" ;
@@ -133,6 +135,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "Neue Seite bei Gru~ppenwechsel";
         Text[ hindi ] = "समूह के बीच में ~पृष्ठ खण्डन";
         Text[ slovak ] = "Zalomenie stránky medzi sku~pinami";
+        Text[ hungarian ] = "~Oldaltörés a csoportok között";
+        Text[ slovenian ] = "Prelom s~trani med skupinami";
     };
     CheckBox BTN_CASE
     {
@@ -142,7 +146,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "~Gro�-/Kleinschreibung beachten" ;
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ NORWEGIAN ] = "~Case sensitive" ;
-        Text [ DANISH ] = "Forskel p� store og sm� bogstaver" ;
+        Text [ DANISH ] = "~STORE og sm� bogstaver" ;
         Text [ ENGLISH_US ] = "~Case sensitive" ;
         Text [ SPANISH ] = "~May�sculas/min�sculas" ;
         Text [ FINNISH ] = "~Kirjainkoon erottelu" ;
@@ -169,6 +173,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "~Groß-/Kleinschreibung beachten";
         Text[ hindi ] = "~केस सचेतन";
         Text[ slovak ] = "Rozlišovať veľké/~malé písmená";
+        Text[ hungarian ] = "~Kis- és nagybetűk megkülönböztetése";
+        Text[ slovenian ] = "Raz~likuj velike in male črke";
     };
     CheckBox BTN_SORT
     {
@@ -177,7 +183,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "Bereich vorher nach Gruppen ~sortieren" ;
         Text [ ENGLISH ] = "~Sort area" ;
         Text [ NORWEGIAN ] = "~Sorter omr�de" ;
-        Text [ DANISH ] = "Sorter omr�det f�rst efter grupper" ;
+        Text [ DANISH ] = "Sorter f�rst omr�det efter grupper" ;
         Text [ ENGLISH_US ] = "Pre-~sort area according to groups" ;
         Text [ SPANISH ] = "Ordenar primero e~l �rea por grupos" ;
         Text [ FINNISH ] = "Alueen esi~lajittelu ryhmien mukaan" ;
@@ -204,6 +210,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "Bereich vorher nach Gruppen ~sortieren";
         Text[ hindi ] = "समूह के आधार पर विस्तीर्ण को पहिले से ही ~सोर्ट करो";
         Text[ slovak ] = "Preu~sporiadať oblasť podľa skupín";
+        Text[ hungarian ] = "Előren~dezi a területet a csoportoknak megfelelően";
+        Text[ slovenian ] = "Pred~razvrsti področje glede na skupine";
     };
     CheckBox BTN_FORMATS
     {
@@ -240,6 +248,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "~Formate einschließen";
         Text[ hindi ] = "रचनों को स~म्मिलित करो";
         Text[ slovak ] = "Zahr~núť formáty";
+        Text[ hungarian ] = "~Formátummal együtt";
+        Text[ slovenian ] = "V~ključi oblike zapisa";
     };
     CheckBox BTN_USERDEF
     {
@@ -248,7 +258,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "~Benutzerdefinierte Sortierreihenfolge" ;
         Text [ ENGLISH ] = "~Userdefined sort precedence" ;
         Text [ NORWEGIAN ] = "~Brukerdefinert sorteringsrekkef�lge " ;
-        Text [ DANISH ] = "Brugerdefineret sorteringsr�kkef�lge" ;
+        Text [ DANISH ] = "~Brugerdefineret sorteringsr�kkef�lge" ;
         Text [ ENGLISH_US ] = "C~ustom sort order" ;
         Text [ SPANISH ] = "~Orden de clasificaci�n definido por el usuario" ;
         Text [ FINNISH ] = "M~ukautettu lajitteluj�rjestys" ;
@@ -275,6 +285,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "~Benutzerdefinierte Sortierreihenfolge";
         Text[ hindi ] = "सोर्ट क्रम को व्य~वस्था करो";
         Text[ slovak ] = "~Užívateľské poradie triedenia";
+        Text[ hungarian ] = "~Saját rendezési sorrend";
+        Text[ slovenian ] = "Vrstni ~red po meri";
     };
     ListBox LB_USERDEF
     {
@@ -291,7 +303,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "A~ufsteigend" ;
         Text [ ENGLISH ] = "~Ascending" ;
         Text [ NORWEGIAN ] = "St~igende" ;
-        Text [ DANISH ] = "Stigende" ;
+        Text [ DANISH ] = "St~igende" ;
         Text [ ENGLISH_US ] = "~Ascending" ;
         Text [ SPANISH ] = "~Ascendente" ;
         Text [ FINNISH ] = "~Nouseva" ;
@@ -318,6 +330,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "A~ufsteigend";
         Text[ hindi ] = "~आरोहण क्रम";
         Text[ slovak ] = "~Vzostupne";
+        Text[ hungarian ] = "Növ~ekvő";
+        Text[ slovenian ] = "N~araščajoče";
     };
     RadioButton BTN_DESCENDING
     {
@@ -326,7 +340,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "Abs~teigend" ;
         Text [ ENGLISH ] = "~Descending" ;
         Text [ NORWEGIAN ] = "~Synkende" ;
-        Text [ DANISH ] = "Fal~dende" ;
+        Text [ DANISH ] = "~Faldende" ;
         Text [ ENGLISH_US ] = "D~escending" ;
         Text [ SPANISH ] = "~Descendente" ;
         Text [ FINNISH ] = "L~askeva" ;
@@ -353,6 +367,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "Abs~teigend";
         Text[ hindi ] = "अ~वरोहण क्रम";
         Text[ slovak ] = "Zostupn~e";
+        Text[ hungarian ] = "~Csökkenő";
+        Text[ slovenian ] = "Padajoč~e";
     };
     FixedLine FL_SORT
     {
@@ -387,6 +403,8 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ hebrew ] = "‮מיון‬";
         Text[ hindi ] = "सोर्ट";
         Text[ slovak ] = "Zoradiť";
+        Text[ hungarian ] = "Rendezés";
+        Text[ slovenian ] = "Razvrsti";
     };
 };
 
@@ -432,6 +450,8 @@ TabPage RID_SUBTBASE
         Text[ hebrew ] = "~Gruppieren nach";
         Text[ hindi ] = "से ~समूह";
         Text[ slovak ] = "Zos~kupiť";
+        Text[ hungarian ] = "~Csoportosítási szempont";
+        Text[ slovenian ] = "~Združi po";
     };
     ListBox LB_GROUP
     {
@@ -454,7 +474,7 @@ TabPage RID_SUBTBASE
         Text [ portuguese_brazilian ] = "Calcular sub ~totais para" ;
         Text [ portuguese ] = "Calcular sub~totais para" ;
         Text [ finnish ] = "~Laske v�lisummat" ;
-        Text [ danish ] = "Beregn subtotaler for" ;
+        Text [ danish ] = "~Beregn subtotaler for" ;
         Text [ french ] = "~Calculer les sous-totaux pour" ;
         Text [ swedish ] = "Ber�kna delresul~tat f�r" ;
         Text [ dutch ] = "~Subtotalen berekenen van" ;
@@ -476,6 +496,8 @@ TabPage RID_SUBTBASE
         Text[ hebrew ] = "~Teilergebnisse berechnen für";
         Text[ hindi ] = "केलिए आधाकुलजोड़ को ~गणना करो";
         Text[ slovak ] = "Spočít~ať medzisúčet pre";
+        Text[ hungarian ] = "~Részösszegek számítása ehhez:";
+        Text[ slovenian ] = "~Izračunaj delne vsote za";
     };
     Control WND_COLUMNS
     {
@@ -496,7 +518,7 @@ TabPage RID_SUBTBASE
         Text [ portuguese_brazilian ] = "Usar ~fun��o" ;
         Text [ portuguese ] = "Usar fu~n��o" ;
         Text [ finnish ] = "K�yt� ~funktiota" ;
-        Text [ danish ] = "Beregningsfunktion" ;
+        Text [ danish ] = "Brug ~funktion" ;
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "~Ber�kningsregler" ;
         Text [ dutch ] = "~Functie" ;
@@ -518,6 +540,8 @@ TabPage RID_SUBTBASE
         Text[ hebrew ] = "~Berechnungsvorschrift";
         Text[ hindi ] = "~फ़ंक्शन् का उपयोग करो";
         Text[ slovak ] = "Použiť ~funkciu";
+        Text[ hungarian ] = "~Függvény használata";
+        Text[ slovenian ] = "Uporabi ~funkcijo";
     };
     ListBox LB_FUNCTIONS
     {
@@ -933,6 +957,34 @@ TabPage RID_SUBTBASE
         < "Var (vzor)" ; Default ; > ;
         < "VarP (populácia)" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Sum" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (csak számok)" ; Default ; > ;
+        < "StDev (minta)" ; Default ; > ;
+        < "StDevP (sokaság)" ; Default ; > ;
+        < "Var (minta)" ; Default ; > ;
+        < "VarP (sokaság)" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Vsota" ; Default ; > ;
+        < "Seštevek" ; Default ; > ;
+        < "Povprečje" ; Default ; > ;
+        < "Maks" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Seštevek (samo števke)" ; Default ; > ;
+        < "Stand. odklon (vzorec)" ; Default ; > ;
+        < "Stand. odklon pop. (celotna populacija)" ; Default ; > ;
+        < "Varianca (vzorec)" ; Default ; > ;
+        < "Varianca pop. (celotna populacija)" ; Default ; > ;
+    };
     };
 };
 
@@ -1011,6 +1063,8 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ hebrew ] = "1. Gruppe";
                 Text[ hindi ] = "1st समूह";
                 Text[ slovak ] = "1. skupina";
+                Text[ hungarian ] = "Első csoport";
+                Text[ slovenian ] = "1. skupina";
             };
             PageItem
             {
@@ -1044,6 +1098,8 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ hebrew ] = "2. Gruppe";
                 Text[ hindi ] = "2nd समूह";
                 Text[ slovak ] = "2. skupina";
+                Text[ hungarian ] = "Második csoport";
+                Text[ slovenian ] = "2. skupina";
             };
             PageItem
             {
@@ -1077,6 +1133,8 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ hebrew ] = "3. Gruppe";
                 Text[ hindi ] = "3rd समूह";
                 Text[ slovak ] = "3. skupina";
+                Text[ hungarian ] = "Harmadik csoport";
+                Text[ slovenian ] = "3. skupina";
             };
             PageItem
             {
@@ -1110,6 +1168,8 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
                 Text[ slovak ] = "Nastavenia";
+                Text[ hungarian ] = "Beállítások";
+                Text[ slovenian ] = "Možnosti";
             };
         };
     };
@@ -1125,7 +1185,7 @@ TabDialog RID_SCDLG_SUBTOTALS
         Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
@@ -1148,6 +1208,8 @@ TabDialog RID_SCDLG_SUBTOTALS
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     Text[ chinese_simplified ] = "分类汇总";
     Text[ russian ] = "������������� �����";
@@ -1165,7 +1227,12 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ hebrew ] = "Teilergebnisse";
     Text[ hindi ] = "आधा कुलजोड़";
     Text[ slovak ] = "Medzisúčty";
+    Text[ hungarian ] = "Részösszegek";
+    Text[ slovenian ] = "Delne vsote";
 };
+
+
+
 
 
 
