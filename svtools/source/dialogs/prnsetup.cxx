@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-12 08:50:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ IMPL_LINK( PrinterSetupDialog, ImplPropertiesHdl, void*, EMPTYARG )
 {
     if ( !mpTempPrinter )
         mpTempPrinter = new Printer( mpPrinter->GetJobSetup() );
-    mpTempPrinter->Setup();
+    mpTempPrinter->Setup( this );
 
     return 0;
 }
