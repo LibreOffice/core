@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-06 10:08:39 $
+ *  last change: $Author: ssa $ $Date: 2001-11-14 11:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3154,38 +3154,26 @@ static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
     RECT aRect;
     GetWindowRect( hWnd, &aRect );
     memset(&pFrame->maGeometry, 0, sizeof(SalFrame::Geometry) );
-    int cx=0;
-    int cy=0;
-    /// calc coordinates of client area and border
-    if ( GetWindowStyle( hWnd ) & WS_CAPTION )
-    {
-        pFrame->maGeometry.nTopDecoration += GetSystemMetrics(SM_CYCAPTION);
-        aRect.top += pFrame->maGeometry.nTopDecoration;
-    }
-    if ( GetWindowStyle( hWnd ) & WS_BORDER )
-    {
-        cx += GetSystemMetrics(SM_CXBORDER);
-        cy += GetSystemMetrics(SM_CYBORDER);
-    }
-    if ( GetWindowStyle( hWnd ) & WS_THICKFRAME )
-    {
-        cx += GetSystemMetrics(SM_CXEDGE);
-        cy += GetSystemMetrics(SM_CYEDGE);
-    }
-    aRect.left += cx;
-    aRect.top  += cy;
+
+    POINT aPt;
+    aPt.x=0;
+    aPt.y=0;
+    ClientToScreen(hWnd, &aPt);
+    int cx = aPt.x - aRect.left;
+    pFrame->maGeometry.nTopDecoration = aPt.y - aRect.top;
 
     pFrame->maGeometry.nLeftDecoration += cx;
     pFrame->maGeometry.nRightDecoration += cx;
-    pFrame->maGeometry.nTopDecoration += cy;
-    pFrame->maGeometry.nBottomDecoration += cy;
 
-    pFrame->maGeometry.nX = aRect.left;
-    pFrame->maGeometry.nY = aRect.top;
+    pFrame->maGeometry.nX = aPt.x;
+    pFrame->maGeometry.nY = aPt.y;
 
-    GetClientRect( hWnd, &aRect );
-    pFrame->maGeometry.nWidth  = aRect.right - aRect.left;
-    pFrame->maGeometry.nHeight = aRect.bottom - aRect.top;
+    RECT aInnerRect;
+    GetClientRect( hWnd, &aInnerRect );
+    pFrame->maGeometry.nBottomDecoration += aRect.bottom - aPt.y - aInnerRect.bottom;
+
+    pFrame->maGeometry.nWidth  = aInnerRect.right - aInnerRect.left;
+    pFrame->maGeometry.nHeight = aInnerRect.bottom - aInnerRect.top;
 }
 
 // -----------------------------------------------------------------------
