@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:51:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         case SID_NAME_GROUP:
         {
             // Jetzt nur noch fuer ein Objekt moeglich (28.10.96)
-            const SdrMarkList& rMarkList = pDrView->GetMarkList();
+            const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
             SdrObject* pObj = NULL;
             ULONG nMarkCount = rMarkList.GetMarkCount();
 
@@ -430,7 +430,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             {
 
                 WaitObject aWait( (Window*)GetActiveWindow() );
-                const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                 ULONG nAnz=rMarkList.GetMarkCount();
 
                 // Summe der Metaobjekte aller sel. Metafiles erm.
@@ -682,7 +682,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if ( GetViewFrame()->HasChildWindow( nId ) && ( ( pDlg = SVXIMAPDLG() ) != NULL ) )
             {
-                const SdrMarkList&  rMarkList = pDrView->GetMarkList();
+                const SdrMarkList&  rMarkList = pDrView->GetMarkedObjectList();
 
                 if ( rMarkList.GetMarkCount() == 1 )
                     UpdateIMapDlg( rMarkList.GetMark( 0 )->GetObj() );
