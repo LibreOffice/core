@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:26:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,21 +68,15 @@
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include "topfrm.hxx"
-//#include "clientsh.hxx"
 #include "arrdecl.hxx"
 #include "viewfrm.hxx"
 #include "module.hxx"
 #include "dispatch.hxx"
-#include "tbxmgr.hxx"
 #include "tbxchild.hxx"
-#include "tbxconf.hxx"
-#include "imgmgr.hxx"
 #include "dockwin.hxx"
 #include "viewsh.hxx"
-//#include "ipenv.hxx"
 #include "splitwin.hxx"
 #include "msgpool.hxx"
-#include "stbmgr.hxx"
 #include "sfxresid.hxx"
 #include "objsh.hxx"
 #include <vcl/taskpanelist.hxx>
@@ -654,7 +648,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     if ( xLayoutManager.is() )
     {
         rtl::OUString aStatusBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
-     xLayoutManager->destroyElement( aStatusBarResStr );
+        xLayoutManager->destroyElement( aStatusBarResStr );
         ResetStatusBar_Impl();
 
         // ObjectBars l"oschen( zuletzt, damit pChilds nicht tote Pointer enh"alt )
@@ -1330,10 +1324,6 @@ void SfxIPWorkWin_Impl::UpdateObjectBars_Impl()
     }
 }
 #endif
-SfxStatusBarManager* SfxWorkWindow::GetStatusBarManager_Impl()
-{
-    return NULL;
-}
 
 Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 {
@@ -1381,7 +1371,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
     // was man so "ofters braucht, merkt man sich (spart Code und Laufzeit)
     SFX_APP();
-    SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
 
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
     Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
@@ -1686,6 +1675,8 @@ void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBi
     }
 }
 
+#define SFX_ITEMTYPE_STATBAR 4
+
 void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 {
     if ( aStatBar.bTemp != bSet && bShowStatusBar && IsVisible_Impl() )
@@ -1713,13 +1704,6 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
         if ( bReset )
             ResetStatusBar_Impl();
     }
-}
-
-//------------------------------------------------------------------------
-SfxStatusBarManager* SfxWorkWindow::MakeStatusBarManager_Impl( BOOL )
-{
-    // obsolete
-    return NULL;
 }
 
 void SfxWorkWindow::UpdateStatusBar_Impl()
@@ -2722,11 +2706,11 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
         }
     }
 }
-
+/*
 SfxStatBar_Impl* SfxWorkWindow::GetStatusBar_Impl()
 {
     return &aStatBar;
-}
+} */
 
 SfxSplitWindow* SfxWorkWindow::GetSplitWindow_Impl( SfxChildAlignment eAlign )
 {
@@ -3150,4 +3134,3 @@ void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
     ArrangeChilds_Impl();
 }
 
-SfxStatBar_Impl*        GetStatusBar_Impl();
