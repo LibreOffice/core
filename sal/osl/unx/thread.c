@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mhu $ $Date: 2002-10-30 21:05:08 $
+ *  last change: $Author: mhu $ $Date: 2002-10-30 23:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 /*****************************************************************************/
 
 #define THREADIMPL_FLAGS_TERMINATE  0x00001
+#define THREADIMPL_FLAGS_STARTUP    0x00002
 #define THREADIMPL_FLAGS_SUSPENDED  0x00004
 #define THREADIMPL_FLAGS_ACTIVE     0x00008
 #define THREADIMPL_FLAGS_ATTACHED   0x00010
@@ -279,8 +280,9 @@ static void* osl_thread_start_Impl (void* pData)
     /* request oslThreadIdentifier @@@ see TODO @@@ */
     pImpl->m_Ident = insertThreadId (pImpl->m_hThread);
 
-    /* signal change to ACTIVE state */
-    pImpl->m_Flags |= THREADIMPL_FLAGS_ACTIVE;
+    /* signal change from STARTUP to ACTIVE state */
+    pImpl->m_Flags &= ~THREADIMPL_FLAGS_STARTUP;
+    pImpl->m_Flags |=  THREADIMPL_FLAGS_ACTIVE;
     pthread_cond_signal (&(pImpl->m_Cond));
 
     /* Check if thread is started in SUSPENDED state */
@@ -325,7 +327,7 @@ static oslThread osl_thread_create_Impl (
 
     pImpl->m_WorkerFunction = pWorker;
     pImpl->m_pData = pThreadData;
-    pImpl->m_Flags = nFlags;
+    pImpl->m_Flags = nFlags | THREADIMPL_FLAGS_STARTUP;
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
@@ -344,10 +346,10 @@ static oslThread osl_thread_create_Impl (
         return (0);
     }
 
-    /* wait for change to ACTIVE state */
-    while (!(pImpl->m_Flags & THREADIMPL_FLAGS_ACTIVE))
+    /* wait for change from STARTUP to ACTIVE state */
+    while (pImpl->m_Flags & THREADIMPL_FLAGS_STARTUP)
     {
-        /* wait until ACTIVE flag is set */
+        /* wait until STARTUP flag is cleared */
         pthread_cleanup_push (osl_thread_wait_cleanup_Impl, &(pImpl->m_Lock));
         pthread_cond_wait (&(pImpl->m_Cond), &(pImpl->m_Lock));
         pthread_cleanup_pop (0);
