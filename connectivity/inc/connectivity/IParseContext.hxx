@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IParseContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-30 06:42:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ namespace connectivity
             ERROR_INVALID_DATE_COMPARE,     // "The field can not be compared with a date!"
             ERROR_INVALID_REAL_COMPARE,     // "The field can not be compared with a floating point number!"
             ERROR_INVALID_TABLE,            // "The table \"#\" is unknown in the database!"
-            ERROR_INVALID_COLUMN            // "The column \"#\" is unknown in the table \"#\"!"
+            ERROR_INVALID_COLUMN,           // "The column \"#\" is unknown in the table \"#\"!"
+            ERROR_INVALID_TABLE_EXIST       // "The table or view \"#\" is already in the database!"
         };
 
         enum    InternationalKeyCode
