@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-14 17:42:05 $
+ *  last change: $Author: khong $ $Date: 2002-05-20 23:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,13 +145,18 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
     sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
     throw(RuntimeException)
 {
-    if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR);
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
+        if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR);
 
-    characterBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
-    for (nDone = 0; nDone < nCount; nDone++) {
+        characterBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
+        for (nDone = 0; nDone < nCount; nDone++) {
         nStartPos = characterBreak->preceding(nStartPos);
         if (nStartPos == BreakIterator::DONE)
-        return 0;
+            return 0;
+        }
+    } else { // for BS to delete one char.
+        nDone = (nStartPos > nCount) ? nCount : nStartPos;
+        nStartPos -= nDone;
     }
     return nStartPos;
 }
