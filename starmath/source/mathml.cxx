@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:38:36 $
+ *  last change: $Author: tl $ $Date: 2002-11-12 10:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3338,18 +3338,22 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
             sal_Int32 nCount = aConfProps.getLength();
             const PropertyValue* pValues = aConfProps.getConstArray();
 
+            const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
+            const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
             while( nCount-- )
             {
-                try
+                if (pValues->Name != sFormula &&
+                    pValues->Name != sBasicLibraries)
                 {
-                    if( xInfo->hasPropertyByName( pValues->Name ) )
+                    try
                     {
-                        xProps->setPropertyValue( pValues->Name, pValues->Value );
+                        if( xInfo->hasPropertyByName( pValues->Name ) )
+                            xProps->setPropertyValue( pValues->Name, pValues->Value );
                     }
-                }
-                catch( Exception& )
-                {
-                    DBG_ERROR( "SmXMLImport::SetConfigurationSettings: Exception!" );
+                    catch( Exception& )
+                    {
+                        DBG_ERROR( "SmXMLImport::SetConfigurationSettings: Exception!" );
+                    }
                 }
 
                 pValues++;
@@ -3457,12 +3461,15 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                 if (pProps)
                 {
                     const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
+                    const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
                     for (sal_Int32 i = 0; i < nCount; i++, pProps++)
                     {
-                        if (aProps[i].Name == sFormula )
-                            continue;
-                        pProps->Name = aProps[i].Name;
-                        pProps->Value = xProps->getPropertyValue(aProps[i].Name);
+                        if (aProps[i].Name != sFormula &&
+                            aProps[i].Name != sBasicLibraries)
+                        {
+                            pProps->Name = aProps[i].Name;
+                            pProps->Value = xProps->getPropertyValue(aProps[i].Name);
+                        }
                     }
                 }
             }
