@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-27 12:28:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,15 +565,6 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                       nSlot == SID_ATTR_PARA_RIGHT_TO_LEFT )
             {
                 sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
-
-                const SfxPoolItem* pPoolItem;
-                if( SFX_ITEM_SET == pArgs->GetItemState( nSlot, TRUE, &pPoolItem ) )
-                {
-                    if( false == ( (SfxBoolItem*)pPoolItem)->GetValue() )
-                    {
-                        bLeftToRight = !bLeftToRight;
-                    }
-                }
 
                 USHORT nAdjust = SVX_ADJUST_LEFT;
                 if( SFX_ITEM_ON == aEditAttr.GetItemState(ITEMID_ADJUST, TRUE, &pPoolItem ) )
