@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.22 2000-12-19 14:43:37 cl Exp $
+	$Id: drawing.mod,v 1.23 2000-12-19 16:19:46 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -67,6 +67,7 @@
 <!ENTITY % zindex "draw:z-index %nonNegativeInteger; #IMPLIED">
 <!ENTITY % distance "CDATA">
 <!ENTITY % rectanglePoint "(top-left|top|top-right|left|center|right|bottom-left|bottom|bottom-right)">
+<!ENTITY % vector3D "CDATA">
 
 <!-- commont presentation shape attributes -->
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
@@ -461,3 +462,92 @@
 <!ATTLIST draw:a office:name %string; #IMPLIED>
 <!ATTLIST draw:a office:target-frame-name %string; #IMPLIED>
 <!ATTLIST draw:a office:server-map %boolean; "false">
+
+<!-- 3d properties -->
+<!ATTLIST style:properties dr3d:horizontal-segments %nonNegativeInteger; #IMPLIED>
+<!ATTLIST style:properties dr3d:vertical-segments %nonNegativeInteger; #IMPLIED>
+<!ATTLIST style:properties dr3d:edge-rounding %percentage; #IMPLIED>
+<!ATTLIST style:properties dr3d:edge-rounding-mode (correct|attractive) #IMPLIED>
+<!ATTLIST style:properties dr3d:back-scale %percentage; #IMPLIED>
+<!ATTLIST style:properties dr3d:end-angle %nonNegativeInteger; #IMPLIED>
+<!ATTLIST style:properties dr3d:depth %length; #IMPLIED>
+<!ATTLIST style:properties dr3d:backface-culling (enabled|disabled) #IMPLIED>
+<!ATTLIST style:properties dr3d:lighting-mode (standard|double-sided) #IMPLIED>
+<!ATTLIST style:properties dr3d:normals-kind (object|flat|sphere) #IMPLIED>
+<!ATTLIST style:properties dr3d:normals-direction (normal|inverse) #IMPLIED>
+<!ATTLIST style:properties dr3d:texture-generation-mode-x (object|parallel|sphere) #IMPLIED>
+<!ATTLIST style:properties dr3d:texture-generation-mode-y (object|parallel|sphere) #IMPLIED>
+<!ATTLIST style:properties dr3d:texture-kind (luminance|intesity|color) #IMPLIED>
+<!ATTLIST style:properties dr3d:texture-filter (enabled|disabled) #IMPLIED>
+<!ATTLIST style:properties dr3d:texture-mode (replace|modulate|blend) #IMPLIED>
+<!ATTLIST style:properties dr3d:ambient-color %color; #IMPLIED>
+<!ATTLIST style:properties dr3d:emissive-color %color; #IMPLIED>
+<!ATTLIST style:properties dr3d:specular-color %color; #IMPLIED>
+<!ATTLIST style:properties dr3d:diffuse-color %color; #IMPLIED>
+<!ATTLIST style:properties dr3d:shininess %percentage; #IMPLIED>
+<!ATTLIST style:properties dr3d:shadow (visible|hidden) #IMPLIED>
+
+<!ELEMENT dr3d:light EMPTY>
+<!ATTLIST dr3d:light dr3d:diffuse-color %color; #IMPLIED>
+<!ATTLIST dr3d:light dr3d:direction %vector3D; #REQUIRED>
+<!ATTLIST dr3d:light dr3d:enabled %boolean; #IMPLIED>
+<!ATTLIST dr3d:light dr3d:specular %boolean; #IMPLIED>
+
+<!ENTITY % shapes3d "(dr3d:scene|dr3d:extrude|dr3d:sphere|dr3d:rotate|dr3d:cube)">
+
+<!ELEMENT dr3d:cube EMPTY>
+<!ATTLIST dr3d:cube dr3d:transform CDATA #IMPLIED>
+<!ATTLIST dr3d:cube dr3d:min-edge %vector3D; #IMPLIED>
+<!ATTLIST dr3d:cube dr3d:max-edge %vector3D; #IMPLIED>
+<!ATTLIST dr3d:cube %zindex;>
+<!ATTLIST dr3d:cube draw:id %shapeId;>
+<!ATTLIST dr3d:cube %draw-end-position; >
+<!ATTLIST dr3d:cube %draw-style-name; >
+
+<!ELEMENT dr3d:sphere EMPTY>
+<!ATTLIST dr3d:sphere dr3d:transform CDATA #IMPLIED>
+<!ATTLIST dr3d:sphere dr3d:center %vector3D; #IMPLIED>
+<!ATTLIST dr3d:sphere dr3d:size %vector3D; #IMPLIED>
+<!ATTLIST dr3d:sphere %zindex;>
+<!ATTLIST dr3d:sphere draw:id %shapeId;>
+<!ATTLIST dr3d:sphere %draw-end-position; >
+<!ATTLIST dr3d:sphere %draw-style-name; >
+
+<!ELEMENT dr3d:extrude EMPTY>
+<!ATTLIST dr3d:extrude dr3d:transform CDATA #IMPLIED>
+<!ATTLIST dr3d:extrude %draw-viewbox;>
+<!ATTLIST dr3d:extrude svg:d %pathData; #REQUIRED >
+<!ATTLIST dr3d:extrude %zindex;>
+<!ATTLIST dr3d:extrude draw:id %shapeId;>
+<!ATTLIST dr3d:extrude %draw-end-position; >
+<!ATTLIST dr3d:extrude %draw-style-name; >
+
+<!ELEMENT dr3d:rotate EMPTY>
+<!ATTLIST dr3d:rotate dr3d:transform CDATA #IMPLIED>
+<!ATTLIST dr3d:rotate %draw-viewbox;>
+<!ATTLIST dr3d:rotate svg:d %pathData; #REQUIRED >
+<!ATTLIST dr3d:rotate %zindex;>
+<!ATTLIST dr3d:rotate draw:id %shapeId;>
+<!ATTLIST dr3d:rotate %draw-end-position; >
+<!ATTLIST dr3d:rotate %draw-style-name; >
+
+<!ELEMENT dr3d:scene (dr3d:light*,(%shapes3d;)*)>
+<!ATTLIST dr3d:scene svg:x %coordinate; #IMPLIED>
+<!ATTLIST dr3d:scene svg:y %coordinate; #IMPLIED>
+<!ATTLIST dr3d:scene svg:width %length; #IMPLIED>
+<!ATTLIST dr3d:scene svg:height %length; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:vrp %vector3D; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:vpn %vector3D; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:vup %vector3D; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:projection (parallel|perspective) #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:transform CDATA #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:distance %length; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:focal-length %length; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:shadow-slant %nonNegativeInteger; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:shade-mode (flat|phong|gouraud|draft) #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:ambient-color %color; #IMPLIED>
+<!ATTLIST dr3d:scene dr3d:lighting-mode %boolean; #IMPLIED>
+<!ATTLIST dr3d:scene %zindex;>
+<!ATTLIST dr3d:scene draw:id %shapeId;>
+<!ATTLIST dr3d:scene %draw-end-position; >
+
