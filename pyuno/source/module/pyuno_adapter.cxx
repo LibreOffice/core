@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_adapter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:29:37 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,6 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
                 {
                     // sequence must be interpreted as return value/outparameter tuple !
                     nOuts ++;
-                    break;
                 }
             }
 
