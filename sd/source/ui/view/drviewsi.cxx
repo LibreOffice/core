@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:20:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,7 +1183,7 @@ void DrawViewShell::Update3DWindow()
         Svx3DWin* p3DWin = (Svx3DWin*) pWindow->GetWindow();
         if( p3DWin && p3DWin->IsUpdateMode() )
         {
-            SfxItemSet aTmpItemSet = pView->Get3DAttributes();
+            SfxItemSet aTmpItemSet = GetView()->Get3DAttributes();
             p3DWin->Update( aTmpItemSet );
         }
     }
@@ -1202,7 +1202,7 @@ void DrawViewShell::AssignFrom3DWindow()
         Svx3DWin* p3DWin = (Svx3DWin*) pWin->GetWindow();
         if( p3DWin )
         {
-            if(!pView->IsPresObjSelected())
+            if(!GetView()->IsPresObjSelected())
             {
                 SfxItemSet aSet( GetDoc()->GetPool(),
                     SDRATTR_START,  SDRATTR_END,
@@ -1210,15 +1210,15 @@ void DrawViewShell::AssignFrom3DWindow()
                 p3DWin->GetAttr( aSet );
 
                 // Eigene UNDO-Klammerung auch um die Wandlung in 3D
-                pView->BegUndo(String(SdResId(STR_UNDO_APPLY_3D_FAVOURITE)));
+                GetView()->BegUndo(String(SdResId(STR_UNDO_APPLY_3D_FAVOURITE)));
 
-                if(pView->IsConvertTo3DObjPossible())
+                if(GetView()->IsConvertTo3DObjPossible())
                 {
                     // Nur TextAttribute zuweisen
                     SfxItemSet aTextSet( GetDoc()->GetPool(),
                         EE_ITEMS_START, EE_ITEMS_END, 0 );
                     aTextSet.Put( aSet, FALSE );
-                    pView->SetAttributes( aTextSet );
+                    GetView()->SetAttributes( aTextSet );
 
                     // Text in 3D umwandeln
                     USHORT nSId = SID_CONVERT_TO_3D;
@@ -1241,18 +1241,21 @@ void DrawViewShell::AssignFrom3DWindow()
                 }
 
                 // Attribute zuweisen
-                pView->Set3DAttributes( aSet );
+                GetView()->Set3DAttributes( aSet );
 
                 // Ende UNDO
-                pView->EndUndo();
+                GetView()->EndUndo();
             }
             else
             {
-                InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE))).Execute();
+                InfoBox aInfoBox (
+                    GetActiveWindow(),
+                    String(SdResId(STR_ACTION_NOTPOSSIBLE)));
+                aInfoBox.Execute();
             }
 
             // Focus zurueckholen
-            pWindow->GrabFocus();
+            GetActiveWindow()->GrabFocus();
         }
     }
 }
