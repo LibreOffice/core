@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 15:05:35 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 07:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2657,6 +2657,11 @@ String RID_SVXSTR_HYPERDLG_HLINETTP
     Text[ catalan ] = "Internet";
     Text[ finnish ] = "Internet";
 };
+String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
+{
+    Text = "Erstellen Sie einen Hyperlink zu einer Webseite, einem FTP Server oder einer Telnet-Verbindung." ;
+    Text [ english_us ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection." ;
+};
 
 String RID_SVXSTR_HYPERDLG_HLMAILTP
 {
@@ -2682,6 +2687,11 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ turkish ] = "E-posta ve haber gruplarý";
     Text[ catalan ] = "Correo y noticias";
     Text[ finnish ] = "Sähköposti ja uutisryhmä";
+};
+String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
+{
+    Text = "Erstellen Sie einen Hyperlink auf eine Mail-Adresse oder zu einem News-Forum." ;
+    Text [ english_us ] = "This is where you create a hyperlink to an e-mail address or newsgroup." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCTP
@@ -2709,6 +2719,11 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP
     Text[ catalan ] = "Documento";
     Text[ finnish ] = "Asiakirja";
 };
+String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
+{
+    Text = "Erstellen Sie einen Hyperlink zu einem bestehenden Dokument oder ein Ziel innerhalb eines Dokumentes." ;
+    Text [ english_us ] = "This is where you create a hyperlink to an exisitng document or a target within a document." ;
+};
 
 String RID_SVXSTR_HYPERDLG_HLDOCNTP
 {
@@ -2734,6 +2749,11 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
     Text[ turkish ] = "Yeni belge";
     Text[ catalan ] = "Nuevo documento";
     Text[ finnish ] = "Uusi asiakirja";
+};
+String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
+{
+    Text = "Erstellen Sie ein neues Dokument, auf das dann der neue Hyperlink verweist." ;
+    Text [ english_us ] = "This is where you create a new document to which the new link points." ;
 };
 
 String RID_SVXSTR_HYPERDLG_FORM_BUTTON

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 15:05:35 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 07:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,23 +198,28 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     Image aImage;
     Image aImageHC;
     String aStrTitle;
+    SvxIconChoiceCtrlEntry* pEntry = NULL;
 
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLINETTP ) );
     aImageHC = Image( SVX_RES ( RID_SVXBMP_HLINETTP_H ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, aImageHC, SvxHyperlinkInternetTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, aImageHC, SvxHyperlinkInternetTp::Create );
+    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLMAILTP ) );
     aImageHC = Image( SVX_RES ( RID_SVXBMP_HLMAILTP_H ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, aImageHC, SvxHyperlinkMailTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, aImageHC, SvxHyperlinkMailTp::Create );
+    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLDOCTP ) );
     aImageHC = Image( SVX_RES ( RID_SVXBMP_HLDOCTP_H ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkDocTp::Create );
+    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
     aStrTitle = SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
     aImage = Image( SVX_RES ( RID_SVXBMP_HLDOCNTP ) );
     aImageHC = Image( SVX_RES ( RID_SVXBMP_HLDOCNTP_H ) );
-    AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
+    pEntry->SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // all tab pages set -> create mnemonics
     CreateIconTextAutoMnemonics();
