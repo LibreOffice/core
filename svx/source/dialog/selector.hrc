@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:14:30 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #define BTN_SELECTOR_HELP 8
 #define GRP_SELECTOR_DESCRIPTION 9
 #define TXT_SELECTOR_DESCRIPTION 10
+#define IMG_HARDDISK                   1
+#define IMG_HARDDISK_HC                2
 
 #define STR_SELECTOR_ADD 310
 #define STR_SELECTOR_CLOSE 311
@@ -79,3 +81,12 @@
 #define STR_SELECTOR_CATEGORIES 316
 #define STR_BASICMACROS 317
 #define STR_SELECTOR_RUN 318
+#define STR_MYMACROS                    319
+#define STR_PRODMACROS                  320
+
+#define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
+#define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)
+#define IMGID_APPICON           ( SID_BASICIDE_IMAGESTART + 1 )
+#define IMGID_LIB               ( SID_BASICIDE_IMAGESTART + 2 )
+#define IMGID_MODULE            ( SID_BASICIDE_IMAGESTART + 3 )
+#define IMGID_DOCUMENT          ( SID_BASICIDE_IMAGESTART + 8 )
