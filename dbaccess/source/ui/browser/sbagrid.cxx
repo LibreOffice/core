@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:21:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,15 @@
 #ifndef DBAUI_DBEXCHANGE_HXX
 #include "dbexchange.hxx"
 #endif
-
+#ifndef DBAUI_TABLEROW_EXCHANGE_HXX
+#include "TableRowExchange.hxx"
+#endif
+#ifndef DBAUI_TABLEROW_HXX
+#include "TableRow.hxx"
+#endif
+#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
+#include "FieldDescriptions.hxx"
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -983,6 +991,10 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
             rMenu.InsertItem(ID_BROWSER_COLWIDTH, aNewItems.GetItemText(ID_BROWSER_COLWIDTH), 0, nPos++);
             rMenu.SetHelpId(ID_BROWSER_COLWIDTH, aNewItems.GetHelpId(ID_BROWSER_COLWIDTH));
             rMenu.InsertSeparator(nPos++);
+
+            rMenu.InsertItem(ID_BROWSER_COLUMNINFO, aNewItems.GetItemText(ID_BROWSER_COLUMNINFO), 0, nPos++);
+            rMenu.SetHelpId(ID_BROWSER_COLUMNINFO, aNewItems.GetHelpId(ID_BROWSER_COLUMNINFO));
+            rMenu.InsertSeparator(nPos++);
         }
     }
 }
@@ -998,6 +1010,22 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
 
         case ID_BROWSER_COLATTRSET:
             ((SbaGridControl*)GetParent())->SetColAttrs(nColId);
+            break;
+        case ID_BROWSER_COLUMNINFO:
+            {
+                sal_uInt16 nModelPos = ((SbaGridControl*)GetParent())->GetModelColumnPos(nColId);
+                Reference< XPropertySet >  xField = ((SbaGridControl*)GetParent())->getField(nModelPos);
+
+                if(!xField.is())
+                    break;
+                ::std::vector<OTableRow*> vClipboardList;
+                OTableRow* pTableRow = new OTableRow(xField);
+                // send it to the clipboard
+                vClipboardList.push_back(pTableRow);
+                OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
+                Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
+                pData->CopyToClipboard();
+            }
             break;
 
         default: FmGridHeader::PostExecuteColumnContextMenu(nColId, rMenu, nExecutionResult);

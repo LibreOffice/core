@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:21:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,8 @@ sal_Bool SbaXDataBrowserController::LoadForm()
     sal_Bool bThreadSafe(sal_False);
     try
     {
-        bThreadSafe = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_THREADSAFE));
+        if(xFormSet->getPropertySetInfo()->hasPropertyByName(PROPERTY_THREADSAFE))
+            bThreadSafe = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_THREADSAFE));
     }
     catch(Exception&)
     {
