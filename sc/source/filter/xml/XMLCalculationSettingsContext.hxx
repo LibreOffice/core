@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 16:40:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,12 @@ class ScXMLCalculationSettingsContext : public SvXMLImportContext
     double fIterationEpsilon;
     sal_Int32 nIterationCount;
     sal_uInt16 nYear2000;
-    sal_Bool bIsIterationEnabled : 1;
-    sal_Bool bCalcAsShown : 1;
-    sal_Bool bIgnoreCase : 1;
-    sal_Bool bLookUpLabels : 1;
-    sal_Bool bMatchWholeCell : 1;
-    sal_Bool bUseRegularExpressions : 1;
+    sal_Bool bIsIterationEnabled;
+    sal_Bool bCalcAsShown;
+    sal_Bool bIgnoreCase;
+    sal_Bool bLookUpLabels;
+    sal_Bool bMatchWholeCell;
+    sal_Bool bUseRegularExpressions;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
