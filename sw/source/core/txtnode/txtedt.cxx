@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-28 12:10:32 $
+ *  last change: $Author: fme $ $Date: 2001-11-28 12:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,13 +800,16 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             nEnd = nInsertPos;
 
         // get word around nBegin, we start at nBegin - 1
-        if ( nBegin )
-            --nBegin;
+        if ( STRING_LEN != nBegin )
+        {
+            if ( nBegin )
+                --nBegin;
 
-        LanguageType eActLang = pNode->GetLang( nBegin );
-        Boundary aBound = pBreakIt->xBreak->getWordBoundary( pNode->aText, nBegin,
-                          pBreakIt->GetLocale( eActLang ), WordType::DICTIONARY_WORD, TRUE );
-        nBegin = aBound.startPos;
+            LanguageType eActLang = pNode->GetLang( nBegin );
+            Boundary aBound = pBreakIt->xBreak->getWordBoundary( pNode->aText, nBegin,
+                            pBreakIt->GetLocale( eActLang ), WordType::DICTIONARY_WORD, TRUE );
+            nBegin = aBound.startPos;
+        }
 
         // get the position in the wrong list
         nInsertPos = pNode->GetWrong()->GetPos( nBegin );
