@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:41:17 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,10 @@
 // OD 2004-03-10 #i11860#
 #ifndef _FLOWFRM_HXX
 #include <flowfrm.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
     // No inline cause we need the function pointers
@@ -362,31 +366,25 @@ void SwFrm::CheckDirChange()
                     if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm())
                         pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
 
-                    SwSortDrawObjs *pObjs = ((SwPageFrm*)this)->GetSortedObjs();
+                    SwSortedObjs* pObjs = ((SwPageFrm*)this)->GetSortedObjs();
                     if( pObjs )
                     {
-                        USHORT nCnt = pObjs->Count();
-                        for ( USHORT i = 0; i < nCnt; ++i )
+                        sal_uInt32 nCnt = pObjs->Count();
+                        for ( sal_uInt32 i = 0; i < nCnt; ++i )
                         {
-                            SdrObject *pObj = (*pObjs)[i];
-                            if ( pObj->ISA(SwVirtFlyDrawObj) )
+                            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+                            if ( pAnchoredObj->GetAnchorFrm() == this )
                             {
-                                SwFlyFrm *pFly =
-                                         ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                                if( pFly->GetAnchorFrm() == this )
-                                    pFly->CheckDirChange();
-                            }
-                            else
-                            {
-                                SwDrawContact* pDrawContact =
-                                    static_cast<SwDrawContact*>(::GetUserCall( pObj ));
-                                if ( pDrawContact &&
-                                     pDrawContact->GetAnchorFrm( pObj ) == this )
+                                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                                {
+                                    static_cast<SwFlyFrm*>(pAnchoredObj)->CheckDirChange();
+                                }
+                                else
                                 {
                                     // OD 2004-04-06 #i26791# - direct object
                                     // positioning no longer needed. Instead
                                     // invalidate
-                                    pDrawContact->GetAnchoredObj( pObj )->InvalidateObjPos();
+                                    pAnchoredObj->InvalidateObjPos();
                                 }
                             }
                         }
@@ -413,20 +411,19 @@ void SwFrm::CheckDirChange()
 
         if( !IsPageFrm() && GetDrawObjs() )
         {
-            const SwDrawObjs *pObjs = GetDrawObjs();
-            USHORT nCnt = pObjs->Count();
-            for ( USHORT i = 0; i < nCnt; ++i )
+            const SwSortedObjs *pObjs = GetDrawObjs();
+            sal_uInt32 nCnt = pObjs->Count();
+            for ( sal_uInt32 i = 0; i < nCnt; ++i )
             {
-                SdrObject *pObj = (*pObjs)[i];
-                if( pObj->ISA(SwVirtFlyDrawObj) )
-                    ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->CheckDirChange();
+                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+                if( pAnchoredObj->ISA(SwFlyFrm) )
+                    static_cast<SwFlyFrm*>(pAnchoredObj)->CheckDirChange();
                 else
                 {
                     // OD 2004-04-06 #i26791# - direct object
                     // positioning no longer needed. Instead
                     // invalidate
-                    SwContact* pContact = ::GetUserCall( pObj );
-                    pContact->GetAnchoredObj( pObj )->InvalidateObjPos();
+                    pAnchoredObj->InvalidateObjPos();
                 }
             }
         }
@@ -486,7 +483,6 @@ Point SwFrm::GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const
 
 SwFrm::~SwFrm()
 {
-#ifdef ACCESSIBLE_LAYOUT
     // accessible objects for fly and cell frames have been already disposed
     // by the destructors of the derived classes.
     if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
@@ -502,21 +498,24 @@ SwFrm::~SwFrm()
             }
         }
     }
-#endif
 
     if( pDrawObjs )
     {
-        for ( USHORT i = pDrawObjs->Count(); i; )
+        for ( sal_uInt32 i = pDrawObjs->Count(); i; )
         {
-            SdrObject *pObj = (*pDrawObjs)[--i];
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
-                delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+            SwAnchoredObject* pAnchoredObj = (*pDrawObjs)[--i];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )
+                delete pAnchoredObj;
             else
-            // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
             {
-                if ( pObj->GetUserCall() )
+                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
+                SwDrawContact* pContact =
+                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                ASSERT( pContact,
+                        "<SwFrm::~SwFrm> - missing contact for drawing object" );
+                if ( pContact )
                 {
-                    ((SwDrawContact*)pObj->GetUserCall())->DisconnectObjFromLayout( pObj );
+                    pContact->DisconnectObjFromLayout( pSdrObj );
                 }
             }
         }
@@ -526,7 +525,7 @@ SwFrm::~SwFrm()
 
 #ifndef PRODUCT
     // JP 15.10.2001: for detection of access to deleted frames
-    pDrawObjs = (SwDrawObjs*)0x33333333;
+    pDrawObjs = (SwSortedObjs*)0x33333333;
 #endif
 }
 
@@ -633,47 +632,64 @@ SwLayoutFrm::~SwLayoutFrm()
             //Falls sich einer nicht abmeldet wollen wir nicht gleich
             //endlos schleifen.
 
-            USHORT nCnt;
+            sal_uInt32 nCnt;
             while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
             {
                 nCnt = pFrm->GetDrawObjs()->Count();
-                SdrObject *pObj = (*pFrm->GetDrawObjs())[0];
-                if ( pObj->ISA(SwVirtFlyDrawObj) )
-                    delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                else if ( pObj->GetUserCall() )
+                // --> OD 2004-06-30 #i28701#
+                SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    delete pAnchoredObj;
+                else
                 {
-                    // OD 19.06.2003 #108784# - adjustments for drawing objects
-                    // in header/footer.
-                    ((SwDrawContact*)pObj->GetUserCall())->DisconnectObjFromLayout( pObj );
+                    SdrObject* pSdrObj = pAnchoredObj->DrawObj();
+                    SwDrawContact* pContact =
+                            static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                    ASSERT( pContact,
+                            "<SwFrm::~SwFrm> - missing contact for drawing object" );
+                    if ( pContact )
+                    {
+                        pContact->DisconnectObjFromLayout( pSdrObj );
+                    }
                 }
-
                 if ( pFrm->GetDrawObjs() &&
                      nCnt == pFrm->GetDrawObjs()->Count() )
                 {
-                    pFrm->GetDrawObjs()->Remove( 0 );
+                    pFrm->GetDrawObjs()->Remove( *pAnchoredObj );
                 }
+                // <--
             }
             pFrm->Remove();
             delete pFrm;
             pFrm = pLower;
         }
         //Fly's vernichten. Der letzte loescht gleich das Array.
-        USHORT nCnt;
+        sal_uInt32 nCnt;
         while ( GetDrawObjs() && GetDrawObjs()->Count() )
         {
             nCnt = GetDrawObjs()->Count();
-            SdrObject *pObj = (*GetDrawObjs())[0];
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
-                delete ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-            else if ( pObj->GetUserCall() )
-            {
-                // OD 19.06.2003 #108784# - adjustments for drawing objects
-                // in header/footer.
-                ((SwDrawContact*)pObj->GetUserCall())->DisconnectObjFromLayout( pObj );
-            }
 
+            // --> OD 2004-06-30 #i28701#
+            SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )
+                delete pAnchoredObj;
+            else
+            {
+                SdrObject* pSdrObj = pAnchoredObj->DrawObj();
+                SwDrawContact* pContact =
+                        static_cast<SwDrawContact*>(pSdrObj->GetUserCall());
+                ASSERT( pContact,
+                        "<SwFrm::~SwFrm> - missing contact for drawing object" );
+                if ( pContact )
+                {
+                    pContact->DisconnectObjFromLayout( pSdrObj );
+                }
+            }
             if ( GetDrawObjs() && nCnt == GetDrawObjs()->Count() )
-                GetDrawObjs()->Remove( 0 );
+            {
+                GetDrawObjs()->Remove( *pAnchoredObj );
+            }
+            // <--
         }
     }
     else
