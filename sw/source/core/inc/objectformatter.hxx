@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:06:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,16 @@
 #endif
 
 class SwFrm;
+// --> OD 2004-10-08 #i26945#
+class SwTxtFrm;
+// <--
 class SwLayoutFrm;
 class SwPageFrm;
 class SwAnchoredObject;
 class SwLayAction;
-class SwPageNumOfAnchors;
+// --> OD 2004-10-04 #i26945#
+class SwPageNumAndTypeOfAnchors;
+// <--
 
 // -----------------------------------------------------------------------------
 // OD 2004-06-25 #i28701#
@@ -95,7 +100,9 @@ class SwObjectFormatter
         SwLayAction* mpLayAction;
 
         // data structure to collect page number of object's 'anchor'
-        SwPageNumOfAnchors* mpPgNumOfAnchors;
+        // --> OD 2004-10-04 #i26945#
+        SwPageNumAndTypeOfAnchors* mpPgNumAndTypeOfAnchors;
+        // <--
 
         /** helper method for method <_FormatObj(..)> - performs the intrinsic
             format of the layout of the given layout frame and all its lower
@@ -154,10 +161,17 @@ class SwObjectFormatter
             anchored at anchor frame on the given page frame
 
             OD 2004-06-28 #i28701#
+            OD 2004-10-08 #i26945# - for format of floating screen objects for
+            follow text frames, the 'master' text frame is passed to the method.
+            Thus, the objects, whose anchor character is inside the follow text
+            frame can be formatted.
 
             @author OD
+
+            @param _pMasterTxtFrm
+            input parameter - pointer to 'master' text frame. default value: NULL
         */
-        bool _FormatObjsAtFrm();
+        bool _FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm = 0L );
 
         /** accessor to collected anchored object
 
@@ -174,6 +188,14 @@ class SwObjectFormatter
             @author OD
         */
         sal_uInt32 GetPgNumOfCollected( const sal_uInt32 _nIndex );
+
+        /** accessor to 'anchor' type of collected anchored object
+
+            OD 2004-10-04 #i26945#
+
+            @author OD
+        */
+        bool IsCollectedAnchoredAtMaster( const sal_uInt32 _nIndex );
 
         /** accessor to total number of collected anchored objects
 
