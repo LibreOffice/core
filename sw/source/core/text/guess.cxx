@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:36:49 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
 
     nHeight = nPorHeight;
 
-    KSHORT nLineWidth = rInf.Width() - rInf.X();
+    SwTwips nLineWidth = rInf.Width() - rInf.X();
     const xub_StrLen nMaxLen = Min( xub_StrLen(rInf.GetTxt().Len() - rInf.GetIdx()),
                                 rInf.GetLen() );
     // Sonderfall: Zeichen breiter als Zeile
@@ -422,21 +422,17 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
                 aHyphOpt = LineBreakHyphenationOptions( xHyph, nHyphPos );
             }
 
-#ifdef ON_YOUR_OWN_RISK
-            ::rtl::OUString aForbidden( ::rtl::OUString::createFromAscii(".") );
-            LineBreakUserOptions aUserOpt( aForbidden, aForbidden, sal_True,
-                                           sal_True, sal_False );
-            LineBreakResults aResult = pBreakIt->xBreak->getLineBreak( rInf.GetTxt(),
-                nRightPos, pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-                rInf.GetIdx(), aHyphOpt, aUserOpt );
-#else
-            LineBreakResults aResult = pBreakIt->xBreak->getLineBreak( rInf.GetTxt(),
-                nRightPos, pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-                rInf.GetIdx(), aHyphOpt, LineBreakUserOptions() );
-#endif
-            nLeftPos = aResult.breakIndex;
+            LanguageType aLang = rInf.GetFont()->GetLanguage();
+            ForbiddenCharacters &aForbidden = pBreakIt->GetForbidden( aLang );
+            LineBreakUserOptions aUserOpt( aForbidden.beginLine,
+                aForbidden.endLine, sal_True, rInf.IsHanging(), sal_False );
+            LineBreakResults aResult =
+                pBreakIt->xBreak->getLineBreak( rInf.GetTxt(), nRightPos,
+                pBreakIt->GetLocale(aLang), rInf.GetIdx(), aHyphOpt, aUserOpt );
+            nLeftPos = (xub_StrLen)aResult.breakIndex;
             if( nLeftPos == STRING_LEN )
                 nLeftPos = 0;
+
             bHyph = aResult.breakType == BreakType::HYPHENATION;
             if( bHyph )
                 xHyphWord = aResult.rHyphenatedWord;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:50:21 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+
 #include <svx/unolingu.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -88,8 +92,10 @@ using namespace ::com::sun::star::i18n;
 
 
 SwBreakIt::SwBreakIt()
+    : pLocale( NULL ), pForbidden( NULL )
 {
     _GetLocale( LANGUAGE_NONE );
+    _GetForbidden( LANGUAGE_NONE );
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference < XInterface > xI = xMSF->createInstance(
         ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
@@ -103,10 +109,18 @@ SwBreakIt::SwBreakIt()
 Locale& SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;
+    delete pLocale;
     pLocale = new Locale( SvxCreateLocale( aLast ) );
     return *pLocale;
 }
 
-
-
+ForbiddenCharacters& SwBreakIt::_GetForbidden( const LanguageType aLang )
+{
+    aForbiddenLang = aLang;
+    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    LocaleDataWrapper aWrap( xMSF, GetLocale( aLang ) );
+    delete pForbidden;
+    pForbidden = new ForbiddenCharacters( aWrap.getForbiddenCharacters() );
+    return *pForbidden;
+}
 
