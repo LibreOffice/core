@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-30 16:49:12 $
+ *  last change: $Author: mhu $ $Date: 2001-04-04 12:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,7 @@
 
 #include <rtl/alloc.h>
 
-
 #include <ctype.h>
-
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -78,10 +76,34 @@
 
 #include "sockimpl.h"
 
+
+/* defines for poll */
+#ifdef HAVE_POLL_H
+#undef HAVE_POLL_H
+#endif
+
+#if defined(LINUX)
+#include <sys/poll.h>
+#define HAVE_POLL_H
+#endif /* HAVE_POLL_H */
+
+#if defined(SOLARIS)
+#include <poll.h>
+#define HAVE_POLL_H
+#endif /* SOLARIS */
+
+#ifndef HAVE_POLL_H
+#define POLLIN  0x0001
+#define POLLOUT 0x0002
+#define POLLPRI 0x0004
+#endif /* HAVE_POLL_H */
+
+
 /* defines for shutdown */
 #define SD_RECEIVE 0
 #define SD_SEND 1
 #define SD_BOTH 2
+
 
 /*
     oslSocketAddr is a pointer to a Berkeley struct sockaddr.
@@ -491,7 +513,7 @@ struct LeakWarning
 LeakWarning socketWarning;
 #endif
 
-#endif
+#endif /* DEBUG */
 
 
 oslSocket __osl_createSocketImpl(int Socket)
@@ -1713,7 +1735,7 @@ oslSocketResult SAL_CALL osl_psz_getDottedInetAddrOfSocketAddr(oslSocketAddr pAd
     return osl_Socket_Error;
 }
 
-#if 0
+#if 0  /* OBSOLETE */
 /*****************************************************************************/
 /* osl_getIpxNetNumber  */
 /*****************************************************************************/
@@ -1776,7 +1798,7 @@ sal_Int32 SAL_CALL osl_getIpxSocketNumber(oslSocketAddr Addr)
           return OSL_INVALID_IPX_SOCKET_NO;
 }
 
-#endif
+#endif /* OBSOLETE */
 
 /*****************************************************************************/
 /* osl_createSocket  */
@@ -1857,7 +1879,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
         OSL_ENSURE(0, "osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
     }
-#endif
+#endif /* LINUX */
         osl_closeSocket( pSocket );
         __osl_destroySocketImpl( pSocket );
     }
@@ -2239,7 +2261,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     pSocket->m_nLastError=0;
 #if defined(LINUX)
     pSocket->m_bIsAccepting = sal_True;
-#endif
+#endif /* LINUX */
 
     if( ppAddr && *ppAddr )
     {
@@ -2258,14 +2280,11 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     if( Connection == OSL_SOCKET_ERROR )
     {
         pSocket->m_nLastError=errno;
-
-#if defined(DEBUG)
-        fprintf(stderr,"osl_acceptConnectionOnSocket : accept error '%s'\n",strerror(errno));
-#endif
+        OSL_TRACE("osl_acceptConnectionOnSocket : accept error '%s'\n",strerror(errno));
 
 #if defined(LINUX)
         pSocket->m_bIsAccepting = sal_False;
-#endif
+#endif /* LINUX */
         return 0;
     }
 
@@ -2276,12 +2295,10 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     if ( pSocket->m_bIsInShutdown == sal_True )
     {
         close(Connection);
-#if defined(DEBUG)
-        fprintf(stderr,"osl_acceptConnectionOnSocket : close while accept\n");
-#endif
+        OSL_TRACE("osl_acceptConnectionOnSocket : close while accept\n");
         return 0;
     }
-#endif
+#endif /* LINUX */
 
 
     if(ppAddr)
@@ -2314,7 +2331,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     pConnectionSockImpl->m_bIsAccepting     = sal_False;
 
     pSocket->m_bIsAccepting = sal_False;
-#endif
+#endif /* LINUX */
     return pConnectionSockImpl;
 }
 
@@ -2502,7 +2519,8 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket pSocket,
 /*****************************************************************************/
 /* osl_readSocket  */
 /*****************************************************************************/
-sal_Int32 SAL_CALL osl_readSocket( oslSocket pSocket, void *pBuffer, sal_Int32 n )
+sal_Int32 SAL_CALL osl_readSocket (
+    oslSocket pSocket, void *pBuffer, sal_Int32 n )
 {
     sal_uInt8 * Ptr = (sal_uInt8 *)pBuffer;
     sal_uInt32 BytesRead= 0;
@@ -2536,7 +2554,8 @@ sal_Int32 SAL_CALL osl_readSocket( oslSocket pSocket, void *pBuffer, sal_Int32 n
 /*****************************************************************************/
 /* osl_writeSocket  */
 /*****************************************************************************/
-sal_Int32 SAL_CALL osl_writeSocket( oslSocket pSocket, const void *pBuffer, sal_Int32 n )
+sal_Int32 SAL_CALL osl_writeSocket(
+    oslSocket pSocket, const void *pBuffer, sal_Int32 n )
 {
     /* loop until all desired bytes were send or an error occured */
     sal_uInt32 BytesSend= 0;
@@ -2566,147 +2585,147 @@ sal_Int32 SAL_CALL osl_writeSocket( oslSocket pSocket, const void *pBuffer, sal_
 }
 
 /*****************************************************************************/
-/* osl_isReceiveReady  */
+/* __osl_socket_poll */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_isReceiveReady(oslSocket pSocket, const TimeValue* pTimeout)
+
+#ifdef HAVE_POLL_H /* poll() */
+
+sal_Bool __osl_socket_poll (
+    oslSocket        pSocket,
+    const TimeValue* pTimeout,
+    short            nEvent)
 {
-    fd_set fds;
-    struct timeval tv;
-    int result;
+    struct pollfd fds;
+    int           timeout;
+    int           result;
 
     OSL_ASSERT(pSocket);
-    if ( pSocket == 0 )
+    pSocket->m_nLastError = 0;
+
+    fds.fd      = pSocket->m_Socket;
+    fds.events  = nEvent;
+    fds.revents = 0;
+
+    timeout = -1;
+    if (pTimeout)
     {
+        /* Convert to [ms] */
+        timeout  = pTimeout->Seconds * 1000;
+        timeout += pTimeout->Nanosec / (1000 * 1000);
+    }
+
+    result = poll (&fds, 1, timeout);
+    if (result < 0)
+    {
+        pSocket->m_nLastError = errno;
+        OSL_TRACE("__osl_socket_poll(): poll error: %d (%s)",
+                  errno, strerror(errno));
+        return sal_False;
+    }
+    if (result == 0)
+    {
+        /* Timeout */
         return sal_False;
     }
 
-    pSocket->m_nLastError=0;
+    return ((fds.revents & nEvent) == nEvent);
+}
+
+#else  /* select() */
+
+sal_Bool __osl_socket_poll (
+    oslSocket        pSocket,
+    const TimeValue* pTimeout,
+    short            nEvent)
+{
+    fd_set         fds;
+    struct timeval tv;
+    int            result;
+
+    OSL_ASSERT(pSocket);
+    pSocket->m_nLastError = 0;
 
     FD_ZERO(&fds);
     FD_SET(pSocket->m_Socket, &fds);
 
     if (pTimeout)
     {
+        /* Convert to 'timeval' */
         tv.tv_sec  = pTimeout->Seconds;
-        tv.tv_usec = pTimeout->Nanosec / 1000L;
+        tv.tv_usec = pTimeout->Nanosec / 1000;
     }
 
-    result= select(pSocket->m_Socket+1,     /* highest socketno to monitor */
-                   PTR_FD_SET(fds),             /* check read operations */
-                   0,                           /* check write ops */
-                   0,                           /* ckeck for OOB */
-                   (pTimeout) ? &tv : 0);       /* use timeout? */
+    result = select (
+        pSocket->m_Socket + 1,
+        (nEvent == POLLIN ) ? PTR_FD_SET(fds) : NULL,
+        (nEvent == POLLOUT) ? PTR_FD_SET(fds) : NULL,
+        (nEvent == POLLPRI) ? PTR_FD_SET(fds) : NULL,
+        (pTimeout)          ? &tv             : NULL);
 
-    if(result < 0)     /* error */
+    if (result < 0)
     {
-        pSocket->m_nLastError=errno;
-        OSL_TRACE("osl_isReceiveReady(): select-error: %d (%s)\n", errno, strerror(errno));
+        pSocket->m_nLastError = errno;
+        OSL_TRACE("__osl_socket_poll(): select error: %d (%s)",
+                  errno, strerror(errno));
+        return sal_False;
+    }
+    if (result == 0)
+    {
+        /* Timeout */
         return sal_False;
     }
 
-    if(result == 0)    /* timeout */
-    {
-        pSocket->m_nLastError=errno;
-        return sal_False;
-    }
-
-    return sal_True;
+    return (FD_ISSET(pSockImpl->m_Socket, &fds) ? sal_True : sal_False);
 }
 
+#endif /* HAVE_POLL_H */
+
+/*****************************************************************************/
+/* osl_isReceiveReady  */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_isReceiveReady (
+    oslSocket pSocket, const TimeValue* pTimeout)
+{
+    OSL_ASSERT(pSocket);
+    if (pSocket == NULL)
+    {
+        /* ENOTSOCK */
+        return sal_False;
+    }
+
+    return __osl_socket_poll (pSocket, pTimeout, POLLIN);
+}
 
 /*****************************************************************************/
 /* osl_isSendReady  */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_isSendReady(oslSocket pSocket, const TimeValue* pTimeout)
+sal_Bool SAL_CALL osl_isSendReady (
+    oslSocket pSocket, const TimeValue* pTimeout)
 {
-    fd_set fds;
-    struct timeval tv;
-    int nRet;
-
     OSL_ASSERT(pSocket);
-    if ( pSocket == 0 )
+    if (pSocket == NULL)
     {
-        return sal_False;
-    }
-    pSocket->m_nLastError=0;
-
-    FD_ZERO(&fds);
-    FD_SET(pSocket->m_Socket, &fds);
-
-    if (pTimeout)
-    {
-        tv.tv_sec  = pTimeout->Seconds;
-        tv.tv_usec = pTimeout->Nanosec / 1000L;
-    }
-
-    nRet = select(pSocket->m_Socket+1,      /* highest socketno to monitor */
-                  0,                            /* check read operations */
-                  PTR_FD_SET(fds),              /* check write ops */
-                  0,                            /* ckeck for OOB */
-                  (pTimeout) ? &tv : 0);    /* use timeout? */
-
-    if ( nRet < 0 )
-    {
-        pSocket->m_nLastError=errno;
-        OSL_TRACE("osl_isSendReady(): select-error: %d (%s)\n", errno, strerror(errno));
+        /* ENOTSOCK */
         return sal_False;
     }
 
-    if( nRet == 0 )
-    {
-        pSocket->m_nLastError=errno;
-        return sal_False;
-    }
-
-    return sal_True;
+    return __osl_socket_poll (pSocket, pTimeout, POLLOUT);
 }
 
 /*****************************************************************************/
 /* osl_isExceptionPending  */
 /*****************************************************************************/
-sal_Bool SAL_CALL osl_isExceptionPending(oslSocket pSocket, const TimeValue* pTimeout)
+sal_Bool SAL_CALL osl_isExceptionPending (
+    oslSocket pSocket, const TimeValue* pTimeout)
 {
-    fd_set fds;
-    struct timeval tv;
-    int nRet;
-
     OSL_ASSERT(pSocket);
-    if ( pSocket == 0 )
+    if (pSocket == NULL)
     {
+        /* ENOTSOCK */
         return sal_False;
     }
 
-    pSocket->m_nLastError=0;
-
-    FD_ZERO(&fds);
-    FD_SET(pSocket->m_Socket, &fds);
-
-    if (pTimeout)
-    {
-        tv.tv_sec  = pTimeout->Seconds;
-        tv.tv_usec = pTimeout->Nanosec / 1000L;
-    }
-
-    nRet = select(pSocket->m_Socket+1,      /* highest socketno to monitor */
-                  0,                            /* check read operations */
-                  0,                            /* check write ops */
-                  PTR_FD_SET(fds),              /* ckeck for OOB */
-                  (pTimeout) ? &tv : 0);        /* use timeout? */
-
-    if ( nRet < 0 )
-    {
-        pSocket->m_nLastError=errno;
-        OSL_TRACE("osl_isExceptionPending(): select-error: %d (%s)\n", errno, strerror(errno));
-        return sal_False;
-    }
-
-    if( nRet == 0 )
-    {
-        pSocket->m_nLastError=errno;
-        return sal_False;
-    }
-
-    return sal_True;
+    return __osl_socket_poll (pSocket, pTimeout, POLLPRI);
 }
 
 /*****************************************************************************/
@@ -2729,9 +2748,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket pSocket,
     if (nRet != 0 )
     {
         pSocket->m_nLastError=errno;
-#ifdef DEBUG
-        fprintf(stderr,"shutdown error '%s'\n",strerror(errno));
-#endif
+        OSL_TRACE("shutdown error '%s'\n",strerror(errno));
     }
     return (nRet==0);
 }
