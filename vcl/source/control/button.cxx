@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:10:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2516,7 +2516,7 @@ void RadioButton::ImplDrawRadioButton( bool bLayout )
 
     Size aImageSize;
     if ( !maImage )
-        aImageSize = GetRadioImage( GetSettings(), 0 ).GetSizePixel();
+        aImageSize = ImplGetRadioImageSize();
     else
         aImageSize  = maImage.GetSizePixel();
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
@@ -3080,6 +3080,34 @@ void RadioButton::Check( BOOL bCheck )
 
 // -----------------------------------------------------------------------
 
+Size RadioButton::ImplGetRadioImageSize() const
+{
+    Size aSize;
+    // why are IsNativeControlSupported and GetNativeControlRegion not const ?
+    RadioButton* pThis = const_cast<RadioButton*>(this);
+    bool bDefaultSize = true;
+    if( pThis->IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) )
+    {
+        ImplControlValue aControlValue;
+        Region           aCtrlRegion( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+        ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
+        Region aBoundingRgn, aContentRgn;
+
+        // get native size of a radio button
+        if( pThis->GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                           nState, aControlValue, rtl::OUString(),
+                                           aBoundingRgn, aContentRgn ) )
+        {
+            Rectangle aCont(aContentRgn.GetBoundRect());
+            aSize = aCont.GetSize();
+            bDefaultSize = false;
+        }
+    }
+    if( bDefaultSize )
+        aSize = GetRadioImage( GetSettings(), 0 ).GetSizePixel();
+    return aSize;
+}
+
 Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
 {
     ImplSVData*             pSVData = ImplGetSVData();
@@ -3156,7 +3184,7 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
 {
     Size aSize;
     if ( !maImage )
-        aSize = GetRadioImage( GetSettings(), 0 ).GetSizePixel();
+        aSize = ImplGetRadioImageSize();
     else
         aSize = maImage.GetSizePixel();
 
@@ -3398,7 +3426,7 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
 void CheckBox::ImplDrawCheckBox( bool bLayout )
 {
-    Size aImageSize = GetCheckImage( GetSettings(), 0 ).GetSizePixel();
+    Size aImageSize = ImplGetCheckImageSize();
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
     aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
@@ -3870,6 +3898,34 @@ void CheckBox::EnableTriState( BOOL bTriState )
 
 // -----------------------------------------------------------------------
 
+Size CheckBox::ImplGetCheckImageSize() const
+{
+    Size aSize;
+    // why are IsNativeControlSupported and GetNativeControlRegion not const ?
+    CheckBox* pThis = const_cast<CheckBox*>(this);
+    bool bDefaultSize = true;
+    if( pThis->IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) )
+    {
+        ImplControlValue aControlValue;
+        Region           aCtrlRegion( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
+        ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
+        Region aBoundingRgn, aContentRgn;
+
+        // get native size of a check box
+        if( pThis->GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                           nState, aControlValue, rtl::OUString(),
+                                           aBoundingRgn, aContentRgn ) )
+        {
+            Rectangle aCont(aContentRgn.GetBoundRect());
+            aSize = aCont.GetSize();
+            bDefaultSize = false;
+        }
+    }
+    if( bDefaultSize )
+        aSize = GetCheckImage( GetSettings(), 0 ).GetSizePixel();
+    return aSize;
+}
+
 Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
 {
     ImplSVData*             pSVData = ImplGetSVData();
@@ -3950,7 +4006,7 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
 
 Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
 {
-    Size aSize = GetCheckImage( GetSettings(), 0 ).GetSizePixel();
+    Size aSize = ImplGetCheckImageSize();
     nMaxWidth -= aSize.Width();
 
     XubString aText = GetText();
