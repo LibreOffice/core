@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:28:30 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ String RID_SVXSTR_SEARCH_STYLES
     Text[ hebrew ] = "‮כולל סגנונות‬";
     Text[ hindi ] = "शैलियों को सम्मिलित करना";
     Text[ slovak ] = "Vrátane štýlov";
+    Text[ hungarian ] = "Stílusokkal együtt";
+    Text[ slovenian ] = "Vključno s slogi";
 };
 String RID_SVXSTR_SEARCH
 {
@@ -129,6 +131,8 @@ String RID_SVXSTR_SEARCH
     Text[ hebrew ] = "‮(חיפוש)‬";
     Text[ hindi ] = "(खोज)";
     Text[ slovak ] = "(Hľadať)";
+    Text[ hungarian ] = "(Keresés)";
+    Text[ slovenian ] = "(Išči)";
 };
 String RID_SVXSTR_REPLACE
 {
@@ -161,6 +165,8 @@ String RID_SVXSTR_REPLACE
     Text[ hebrew ] = "‮(החלפה)‬";
     Text[ hindi ] = "(प्रतिस्थापन)";
     Text[ slovak ] = "(Nahradiť)";
+    Text[ hungarian ] = "(Csere)";
+    Text[ slovenian ] = "(Zamenjaj)";
 };
 
  // RID_SVXDLG_SEARCH -----------------------------------------------------
@@ -182,7 +188,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ danish ] = "S�g og erstat" ;
     Text [ french ] = "Rechercher & remplacer" ;
     Text [ swedish ] = "S�k och ers�tt" ;
-    Text [ dutch ] = "Zoeken & vervangen" ;
+    Text [ dutch ] = "Search & Replace" ;
     Text [ spanish ] = "Buscar y reemplazar" ;
     Text [ english_us ] = "Find & Replace" ;
     Text[ chinese_simplified ] = "搜寻和替换";
@@ -191,7 +197,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text[ japanese ] = "検索と置換";
     Text[ chinese_traditional ] = "尋找和替代";
     Text[ arabic ] = "��� ��������";
-    Text[ greek ] = "��������� & �������������";
+    Text[ greek ] = "Search & Replace";
     Text[ korean ] = "찾기 및 바꾸기";
     Text[ turkish ] = "Ara & De�i�tir";
     Text[ language_user1 ] = " ";
@@ -201,6 +207,8 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text[ hebrew ] = "‮חיפוש והחלפה‬";
     Text[ hindi ] = "खोज और प्रतिस्थापन";
     Text[ slovak ] = "Nájsť a nahradiť";
+    Text[ hungarian ] = "Keresés és csere";
+    Text[ slovenian ] = "Najdi in zamenjaj";
     Moveable = TRUE ;
     FixedText FT_SEARCH
     {
@@ -213,7 +221,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Pesq~uisar por" ;
         Text [ portuguese ] = "L~ocalizar" ;
         Text [ finnish ] = "~Etsitt�v�" ;
-        Text [ danish ] = "S�~g efter" ;
+        Text [ danish ] = "~S�g efter" ;
         Text [ french ] = "Rechercher" ;
         Text [ swedish ] = "S�k efter" ;
         Text [ dutch ] = "Zoeken ~naar" ;
@@ -235,6 +243,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮יש לחפש‬";
         Text[ hindi ] = "केलिए ~खोज";
         Text[ slovak ] = "~Hľadať";
+        Text[ hungarian ] = "Keresett s~zöveg";
+        Text[ slovenian ] = "~Išči";
     };
     ComboBox ED_SEARCH
     {
@@ -277,7 +287,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Substituir ~por" ;
         Text [ portuguese ] = "~Substituir por" ;
         Text [ finnish ] = "Korvaava" ;
-        Text [ danish ] = "Erstat med" ;
+        Text [ danish ] = "~Erstat med" ;
         Text [ french ] = "Remplacer par" ;
         Text [ swedish ] = "Ers�tt med" ;
         Text [ dutch ] = "Vervangen ~door" ;
@@ -299,6 +309,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮ולהחליף ב‬";
         Text[ hindi ] = "से प्रतिस्था~पित करो";
         Text[ slovak ] = "~Nahradiť čím";
+        Text[ hungarian ] = "Cse~re erre";
+        Text[ slovenian ] = "Za~menjaj z";
     };
     ComboBox ED_REPLACE
     {
@@ -351,7 +363,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Somente palavras int~eiras" ;
         Text [ portuguese ] = "Apenas palavras int~eiras" ;
         Text [ finnish ] = "Vai~n kokonaiset sanat" ;
-        Text [ danish ] = "Kun hele ord" ;
+        Text [ danish ] = "Kun hele or~d" ;
         Text [ french ] = "Uniquement les mots entiers" ;
         Text [ swedish ] = "Bara hela ord" ;
         Text [ dutch ] = "Alleen hele ~woorden" ;
@@ -374,6 +386,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮מילים שלמות בלבד‬";
         Text[ hindi ] = "केवल पूर्ण ~शब्द";
         Text[ slovak ] = "Iba ~celé slová";
+        Text[ hungarian ] = "Csak ~teljes szavak";
+        Text[ slovenian ] = "Samo cele bese~de";
     };
     CheckBox CB_MATCH_CASE
     {
@@ -392,7 +406,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ spanish ] = "Coincidencia e~xacta";
         Text[ finnish ] = "Sama kir~jainkoko";
         Text[ italian ] = "Ricerca esatta";
-        Text[ danish ] = "E~ksakt s�gning";
+        Text[ danish ] = "~STORE og sm� bogstaver";
         Text[ swedish ] = "Exakt s�kning";
         Text[ polish ] = "Uwzgl�dniaj wielk~o�� liter";
         Text[ portuguese_brazilian ] = "~Diferenciar Mai�sculas/Min�sculas";
@@ -408,6 +422,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮התאמת אותיות גדולות/קטנות‬";
         Text[ hindi ] = "केस तुल~ना";
         Text[ slovak ] = "Rozlišovať ~veľkosť";
+        Text[ hungarian ] = "Kis- és nag~ybetű különbözik";
+        Text[ slovenian ] = "Ra~zlikuj velike in male črke";
     };
     CheckBox BTN_BACKWARDS
     {
@@ -420,7 +436,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Para tr�s" ;
         Text [ portuguese ] = "~Para tr�s" ;
         Text [ finnish ] = "~Taaksep�in" ;
-        Text [ danish ] = "Til~bage" ;
+        Text [ danish ] = "~Bagl�ns" ;
         Text [ french ] = "~Vers le haut" ;
         Text [ swedish ] = "Bakl�nges" ;
         Text [ dutch ] = "Ach~terwaarts" ;
@@ -443,6 +459,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮אחורנית‬";
         Text[ hindi ] = "पीछे की ओ~र";
         Text[ slovak ] = "Pospiat~ky";
+        Text[ hungarian ] = "~Visszafelé";
+        Text[ slovenian ] = "N~azaj";
     };
     CheckBox BTN_SELECTIONS
     {
@@ -478,6 +496,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮קטע בבחירה בלבד‬";
         Text[ hindi ] = "के~वल प्रचलित चुनाव";
         Text[ slovak ] = "~Iba súčasný výber";
+        Text[ hungarian ] = "Csak a kije~lölésben";
+        Text[ slovenian ] = "~Samo trenutni izbor";
     };
     CheckBox BTN_REGEXP
     {
@@ -490,10 +510,10 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Express�es re~gulares" ;
         Text [ portuguese ] = "~Express�o regular" ;
         Text [ finnish ] = "S��nn~�lliset lausekkeet" ;
-        Text [ danish ] = "Regul�rt udtryk" ;
+        Text [ danish ] = "R~egul�rt udtryk" ;
         Text [ french ] = "Caract�re ~g�n�rique" ;
         Text [ swedish ] = "Regulj�rt uttryck" ;
-        Text [ dutch ] = "Gangbare ~uitdrukking" ;
+        Text [ dutch ] = "Reguliere e~xpressies" ;
         Text [ spanish ] = "Expresi�n re~gular" ;
         Text [ english_us ] = "Regular e~xpressions" ;
         TabStop = TRUE ;
@@ -513,6 +533,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮ביטויים רגולריים‬";
         Text[ hindi ] = "नियमित व~र्णन";
         Text[ slovak ] = "~Regulárne výrazy";
+        Text[ hungarian ] = "R~eguláris kifejezés";
+        Text[ slovenian ] = "~Regularni izrazi";
     };
     CheckBox BTN_LAYOUTS
     {
@@ -548,6 +570,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮חיפוש סגנון‬";
         Text[ hindi ] = "शैलि~यों केलिए खोज";
         Text[ slovak ] = "Hľadať štýl~y";
+        Text[ hungarian ] = "Stíl~us keresése";
+        Text[ slovenian ] = "Išči slo~ge";
     };
     CheckBox CB_SIMILARITY
     {
@@ -562,7 +586,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ spanish ] = "B�squeda por se~mejanza" ;
         Text [ french ] = "Recherche de similarit�" ;
         Text [ swedish ] = "Likhetss�kning" ;
-        Text [ danish ] = "S~�g lignende" ;
+        Text [ danish ] = "S�g ~lignende" ;
         Text [ portuguese_brazilian ] = "~Pesquisa por semelhan�a" ;
         Text [ portuguese ] = "Pro~cura por semelhan�a" ;
         Text[ chinese_simplified ] = "类似搜寻(~I)";
@@ -582,6 +606,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮חיפוש על בסיס דמיון‬";
         Text[ hindi ] = "तुल्यता ~अन्वेषण";
         Text[ slovak ] = "Hľadanie ~podobností";
+        Text[ hungarian ] = "~Hasonló hangzásúak is";
+        Text[ slovenian ] = "Iskanje p~odobnosti";
     };
     PushButton PB_SIMILARITY
     {
@@ -606,7 +632,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ spanish ] = "Considerar ancho de car�cter";
         Text[ finnish ] = "T�sm�yt� puoli- ja t�ysleve�t muodot";
         Text[ italian ] = "Considera la larghezza dei caratteri";
-        Text[ danish ] = "Halv-/nor~malbrede former";
+        Text[ danish ] = "Samme tegnbredde";
         Text[ swedish ] = "Ta h�nsyn till teckenbredd";
         Text[ polish ] = "Uwz~gl�dniaj szeroko�� znak�w";
         Text[ portuguese_brazilian ] = "Coincidir largura do caracter";
@@ -622,6 +648,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮חיפוש לפי רוחב אות‬";
         Text[ hindi ] = "अक्षर की चौड़ाई का तुलना";
         Text[ slovak ] = "Porovnať šírku znaku";
+        Text[ hungarian ] = "Karakterszélesség egyeztetése";
+        Text[ slovenian ] = "Razlikuj širine znakov";
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
@@ -655,6 +683,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮סאונדקס (ביפנית)‬";
         Text[ hindi ] = "के समान (जापनीस)";
         Text[ slovak ] = "Znie ako (japončina)";
+        Text[ hungarian ] = "(Japánnak) tűnik/hangzik";
+        Text[ slovenian ] = "Zveni kot (Japonščina)";
     };
     PushButton PB_JAP_OPTIONS
     {
@@ -696,6 +726,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     RadioButton BTN_FORMULAS
     {
@@ -708,7 +740,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "F~�rmulas" ;
         Text [ portuguese ] = "F~�rmulas" ;
         Text [ finnish ] = "~Kaavat" ;
-        Text [ danish ] = "For~mler" ;
+        Text [ danish ] = "F~ormler" ;
         Text [ french ] = "F~ormules" ;
         Text [ swedish ] = "Formler" ;
         Text [ dutch ] = "~Formules" ;
@@ -731,6 +763,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮נוסחאות‬";
         Text[ hindi ] = "~सूत्र";
         Text[ slovak ] = "Vz~orce";
+        Text[ hungarian ] = "Ké~pletek";
+        Text[ slovenian ] = "F~ormule";
     };
     RadioButton BTN_VALUES
     {
@@ -766,6 +800,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮ערכים‬";
         Text[ hindi ] = "~मूल्य";
         Text[ slovak ] = "~Hodnoty";
+        Text[ hungarian ] = "~Értékek";
+        Text[ slovenian ] = "~Vrednosti";
     };
     RadioButton BTN_NOTES
     {
@@ -778,7 +814,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Anota��es" ;
         Text [ portuguese ] = "~Anota��es" ;
         Text [ finnish ] = "Hu~omautukset" ;
-        Text [ danish ] = "No~ter" ;
+        Text [ danish ] = "~Noter" ;
         Text [ french ] = "Notes" ;
         Text [ swedish ] = "Anteckningar" ;
         Text [ dutch ] = "Aantekenin~gen" ;
@@ -801,6 +837,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "~टिप्पणी";
         Text[ slovak ] = "~Poznámky";
+        Text[ hungarian ] = "~Megjegyzés";
+        Text[ slovenian ] = "~Opombe";
     };
     FixedLine FL_SEARCH
     {
@@ -836,6 +874,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮חיפוש ב ‬";
         Text[ hindi ] = "में खोज";
         Text[ slovak ] = "Hľadať v";
+        Text[ hungarian ] = "Keresés";
+        Text[ slovenian ] = "Išči v";
     };
     FixedLine FL_SEARCHDIR_VERT
     {
@@ -854,7 +894,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
-        Text [ danish ] = "R~�kkevis" ;
+        Text [ danish ] = "~R�kker" ;
         Text [ french ] = "~Ligne par ligne" ;
         Text [ swedish ] = "Radvis" ;
         Text [ dutch ] = "~Rijen" ;
@@ -877,6 +917,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮שורות‬";
         Text[ hindi ] = "~पंक्तियाँ";
         Text[ slovak ] = "R~iadky";
+        Text[ hungarian ] = "~Sorok";
+        Text[ slovenian ] = "V~rstice";
     };
     RadioButton BTN_COLUMNS
     {
@@ -889,7 +931,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Col~unas" ;
         Text [ portuguese ] = "Col~unas" ;
         Text [ finnish ] = "~Sarakkeet" ;
-        Text [ danish ] = "Kolo~nnevis" ;
+        Text [ danish ] = "~Kolonner" ;
         Text [ french ] = "Col~onne par colonne" ;
         Text [ swedish ] = "Kolumnvis" ;
         Text [ dutch ] = "K~olommen" ;
@@ -912,6 +954,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮עמודות‬";
         Text[ hindi ] = "स्तं~भ";
         Text[ slovak ] = "S~tĺpce";
+        Text[ hungarian ] = "~Oszlopok";
+        Text[ slovenian ] = "Stol~pci";
     };
     FixedLine FL_SEARCHDIR
     {
@@ -947,6 +991,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮כיוון החיפוש‬";
         Text[ hindi ] = "खोज की दिशा";
         Text[ slovak ] = "Smer hľadania";
+        Text[ hungarian ] = "Keresés iránya";
+        Text[ slovenian ] = "Smer iskanja";
     };
     FixedLine FL_SEARCH_VERT
     {
@@ -965,7 +1011,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ english_us ] = "Search in all sheets" ;
         Text [ portuguese_brazilian ] = "Pesquisar em todas as folhas" ;
         Text [ swedish ] = "S�k i alla tabeller" ;
-        Text [ danish ] = "S�g ~i alle tabeller" ;
+        Text [ danish ] = "S�g i alle ark" ;
         Text [ italian ] = "~Cerca in tutte le tabelle" ;
         Text [ spanish ] = "~Buscar en todas las hojas" ;
         Text [ french ] = "~Rechercher dans toutes les feuilles" ;
@@ -987,6 +1033,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮חיפוש בכל הדפים‬";
         Text[ hindi ] = "सब शीटों में खोज ";
         Text[ slovak ] = "Hľadať vo všetkých listoch";
+        Text[ hungarian ] = "Keresés az összes munkalapon";
+        Text[ slovenian ] = "Išči na vseh listih";
     };
     FixedLine FL_CALCEXTRAS
     {
@@ -998,7 +1046,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ english_us ] = "Options" ;
         Text [ portuguese_brazilian ] = "Op��es" ;
         Text [ swedish ] = "Till�gg" ;
-        Text [ danish ] = "Supplerende" ;
+        Text [ danish ] = "Indstillinger" ;
         Text [ italian ] = "Strumenti" ;
         Text [ spanish ] = "Opciones" ;
         Text [ french ] = "Classeur � plusieurs feuilles" ;
@@ -1021,6 +1069,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     PushButton BTN_SEARCH_ALL
     {
@@ -1033,7 +1083,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Localizar ~Tudo" ;
         Text [ portuguese ] = "Localizar ~tudo" ;
         Text [ finnish ] = "Etsi k~aikki" ;
-        Text [ danish ] = "S�g alle" ;
+        Text [ danish ] = "S�g ~alle" ;
         Text [ french ] = "Tout rechercher" ;
         Text [ swedish ] = "S�k alla" ;
         Text [ dutch ] = "~Alles zoeken" ;
@@ -1056,6 +1106,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮חיפוש כל המופעים‬";
         Text[ hindi ] = "~सब अन्वेषण करो";
         Text[ slovak ] = "Nájsť ~všetko";
+        Text[ hungarian ] = "~Mindet keresi";
+        Text[ slovenian ] = "Najdi ~vse";
     };
     PushButton BTN_SEARCH
     {
@@ -1092,6 +1144,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮חיפוש‬";
         Text[ hindi ] = "~अन्वेषण";
         Text[ slovak ] = "~Nájsť";
+        Text[ hungarian ] = "~Keresés";
+        Text[ slovenian ] = "~Najdi";
     };
     PushButton BTN_REPLACE_ALL
     {
@@ -1104,7 +1158,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Substituir T~udo" ;
         Text [ portuguese ] = "Substituir t~udo" ;
         Text [ finnish ] = "Kor~vaa kaikki" ;
-        Text [ danish ] = "Erstat alle" ;
+        Text [ danish ] = "Erstat a~lle" ;
         Text [ french ] = "Tout remplacer" ;
         Text [ swedish ] = "Ers�tt alla" ;
         Text [ dutch ] = "A~lles vervangen" ;
@@ -1127,6 +1181,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮החלפת כל המופעים‬";
         Text[ hindi ] = "सब प्रतिस्थापि~त करो";
         Text[ slovak ] = "Nahradiť vš~etko";
+        Text[ hungarian ] = "Mi~ndet cseréli";
+        Text[ slovenian ] = "Zamenjaj v~se";
     };
     PushButton BTN_REPLACE
     {
@@ -1139,7 +1195,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Substituir" ;
         Text [ portuguese ] = "~Substituir" ;
         Text [ finnish ] = "~Korvaa" ;
-        Text [ danish ] = "Erstat" ;
+        Text [ danish ] = "~Erstat" ;
         Text [ french ] = "Remplacer" ;
         Text [ swedish ] = "Ers�tt" ;
         Text [ dutch ] = "~Vervangen" ;
@@ -1162,6 +1218,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮החלפה‬";
         Text[ hindi ] = "प्रतिस्थाप~न";
         Text[ slovak ] = "~Nahradiť";
+        Text[ hungarian ] = "~Csere";
+        Text[ slovenian ] = "~Zamenjaj";
     };
     CancelButton BTN_CLOSE
     {
@@ -1174,7 +1232,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Fechar" ;
         Text [ portuguese ] = "~Fechar" ;
         Text [ finnish ] = "~Sulje" ;
-        Text [ danish ] = "Luk" ;
+        Text [ danish ] = "~Luk" ;
         Text [ french ] = "Fermer" ;
         Text [ swedish ] = "St�ng" ;
         Text [ dutch ] = "~Sluiten" ;
@@ -1197,6 +1255,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     HelpButton BTN_HELP
     {
@@ -1215,7 +1275,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Mais" ;
         Text [ portuguese ] = "~Op��es" ;
         Text [ finnish ] = "~Lis��" ;
-        Text [ danish ] = "Flere" ;
+        Text [ danish ] = "~Flere" ;
         Text [ french ] = "O~ptions" ;
         Text [ swedish ] = "Fler" ;
         Text [ dutch ] = "Over~ige" ;
@@ -1241,6 +1301,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮עוד‬";
         Text[ hindi ] = "~अधिक";
         Text[ slovak ] = "Via~c";
+        Text[ hungarian ] = "~Egyebek";
+        Text[ slovenian ] = "~Dodatno";
     };
     PushButton BTN_ATTRIBUTE
     {
@@ -1253,7 +1315,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Atri~butos..." ;
         Text [ portuguese ] = "Atri~butos..." ;
         Text [ finnish ] = "M��~ritteet..." ;
-        Text [ danish ] = "Attributter..." ;
+        Text [ danish ] = "Attri~butter..." ;
         Text [ french ] = "Attri~buts..." ;
         Text [ swedish ] = "Attribut..." ;
         Text [ dutch ] = "A~ttributen..." ;
@@ -1276,6 +1338,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮תכונות...‬";
         Text[ hindi ] = "~ऐट्रिब्यूट्स...";
         Text[ slovak ] = "Atri~búty...";
+        Text[ hungarian ] = " ~Jellemzők...";
+        Text[ slovenian ] = "~Atributi...";
     };
     PushButton BTN_FORMAT
     {
@@ -1288,7 +1352,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Formatar..." ;
         Text [ portuguese ] = "Fo~rmatar..." ;
         Text [ finnish ] = "M~uotoilu..." ;
-        Text [ danish ] = "Format..." ;
+        Text [ danish ] = "For~mat..." ;
         Text [ french ] = "Format..." ;
         Text [ swedish ] = "Format..." ;
         Text [ dutch ] = "~Opmaak..." ;
@@ -1311,6 +1375,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮עיצוב...‬";
         Text[ hindi ] = "~रचना...";
         Text[ slovak ] = "~Formát...";
+        Text[ hungarian ] = "~Formátum...";
+        Text[ slovenian ] = "~Oblika...";
     };
     PushButton BTN_NOFORMAT
     {
@@ -1323,7 +1389,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "~Sem Formato" ;
         Text [ portuguese ] = "~Sem formato" ;
         Text [ finnish ] = "Ei ~muotoilua" ;
-        Text [ danish ] = "Intet format" ;
+        Text [ danish ] = "~Intet format" ;
         Text [ french ] = "Aucun attribut" ;
         Text [ swedish ] = "Inget format" ;
         Text [ dutch ] = "~Geen opmaak" ;
@@ -1346,6 +1412,8 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮ללא עיצוב‬";
         Text[ hindi ] = "को~ई रचना नहीं";
         Text[ slovak ] = "~Bez formátu";
+        Text[ hungarian ] = "F~ormázás nélkül";
+        Text[ slovenian ] = "~Brez oblike";
     };
     String STR_WORDCALC
     {
@@ -1356,7 +1424,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "C�lulas in~teiras" ;
         Text [ portuguese ] = "S� c�lulas com~pletas" ;
         Text [ finnish ] = "Kaikki solut" ;
-        Text [ danish ] = "K~un hele r�kker" ;
+        Text [ danish ] = "H~ele celler" ;
         Text [ french ] = "Cellules enti�res" ;
         Text [ swedish ] = "Bara hela celler" ;
         Text [ dutch ] = "Alleen hele c~ellen" ;
@@ -1378,11 +1446,15 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ hebrew ] = "‮תאים שלמים‬";
         Text[ hindi ] = "~पूरा कोष्ठ";
         Text[ slovak ] = "C~elé bunky";
+        Text[ hungarian ] = "T~eljes cellák";
+        Text[ slovenian ] = "~Cele celice";
     };
     Text[ catalan ] = "Buscar y reemplazar";
 };
 
  // ********************************************************************** EOF
+
+
 
 
 
