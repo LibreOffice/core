@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:31:51 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,24 +66,38 @@
 #include <so3/clsids.hxx>
 #endif
 
+#include <sot/clsids.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <svtools/moduleoptions.hxx>
+
 #include "swtypes.hxx"
-
-
 #include "shellio.hxx"
 #include "globdoc.hxx"
 #include "globdoc.hrc"
+#include "cfgid.h"
+
+#define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Alle Filter registrieren
  --------------------------------------------------------------------*/
 
-// 4.0: {340AC970-E30D-11d0-A53F-00A0249D57B1}
-// 4.0: 0x340ac970, 0xe30d, 0x11d0, 0xa5, 0x3f, 0x0, 0xa0, 0x24, 0x9d, 0x57, 0xb1
-// 5.0: 0xc20cf9d3, 0x85ae, 0x11d1, 0xaa, 0xb4, 0x0, 0x60, 0x97, 0xda, 0x56, 0x1a
-SFX_IMPL_OBJECTFACTORY_LOD(SwGlobalDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, /*swriter4/GlobalDocument,*/ \
-        SvGlobalName(SO3_SWGLOB_CLASSID) , Sw)
-
 TYPEINIT1(SwGlobalDocShell, SwDocShell);
+
+//-------------------------------------------------------------------------
+SFX_IMPL_OBJECTFACTORY(SwGlobalDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, swriter/GlobalDocument, SvGlobalName(SO3_SWGLOB_CLASSID) )
+{
+    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
+    rFactory.SetDocumentServiceName(C2S("com.sun.star.text.GlobalDocument"));
+    //rFactory.GetFilterContainer()->SetDetectFilter( &SwDLL::GlobDetectFilter );
+    SwGlobalDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SWGLOBAL_MENU));
+    SwGlobalDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
+    if ( SvtModuleOptions().IsWriter() )
+    {
+        SwGlobalDocShell::Factory().RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
+        //SwGlobalDocShell::Factory().RegisterHelpPIFile(String::CreateFromAscii("swriter.svh"));
+    }
+}
 
 SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode)
