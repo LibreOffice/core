@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:24:26 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <math.h>
-
 #include <limits.h>
+#include <vector>
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>               // UINTXX
@@ -123,6 +123,12 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
+#include <com/sun/star/drawing/Position3D.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
+#include <com/sun/star/drawing/Direction3D.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
 #include <com/sun/star/drawing/GluePoint2.hpp>
@@ -232,7 +238,12 @@
 #ifndef _SVDOPATH_HXX
 #include <svdopath.hxx>
 #endif
-
+#ifndef _SVX_FRMDIR_HXX
+#include <frmdir.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <frmdiritem.hxx>
+#endif
 #ifndef _SVDTRANS_HXX
 #include <svdtrans.hxx>
 #endif
@@ -318,7 +329,12 @@
 #ifndef _SVX3DITEMS_HXX
 #include <svx3ditems.hxx>
 #endif
-
+#ifndef _SVDOASHP_HXX
+#include "svdoashp.hxx"
+#endif
+#ifndef _SDASAITM_HXX
+#include <sdasaitm.hxx>
+#endif
 #ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
 #endif
@@ -330,7 +346,45 @@
 using namespace vos;
 #endif
 
+#ifndef _ENHANCED_CUSTOMSHAPE_TYPE_NAMES_HXX
+#include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
+#endif
+#ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
+#include "../customshapes/EnhancedCustomShapeGeometry.hxx"
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPAIR_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENT_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPESEGMENTCOMMAND_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPETEXTFRAME_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEEQUATION_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeEquation.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEOPERATION_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeOperation.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
+#include <drafts/com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#endif
+#ifndef __com_sun_star_beans_PropertyValues_hpp__
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#ifndef _ENHANCEDCUSTOMSHAPE2D_HXX
+#include "../customshapes/EnhancedCustomShape2d.hxx"
+#endif
+
 using namespace ::com::sun::star    ;
+using namespace ::drafts::com::sun::star::drawing;
 using namespace uno                 ;
 using namespace beans               ;
 using namespace drawing             ;
@@ -394,7 +448,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
             rRec.mpContents[ nRecType ] &= ( ( nContent >> 16 ) ^ 0xffffffff );
             // set flags that have to be set
             rRec.mpContents[ nRecType ] |= nContent;
-            nContentEx |= nContent & ( nContent >> 16 );
+            nContentEx |= ( nContent >> 16 );
             rRec.Replace( nRecType, (void*)nContentEx );
         }
         else
@@ -412,7 +466,9 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
                 // I love special threatments :-(
                 if ( ( nRecType == DFF_Prop_pVertices ) || ( nRecType == DFF_Prop_pSegmentInfo )
                     || ( nRecType == DFF_Prop_fillShadeColors ) || ( nRecType == DFF_Prop_lineDashStyle )
-                        || ( nRecType == DFF_Prop_pWrapPolygonVertices ) )
+                        || ( nRecType == DFF_Prop_pWrapPolygonVertices ) || ( nRecType == DFF_Prop_connectorPoints )
+                            || ( nRecType == DFF_Prop_Handles ) || ( nRecType == DFF_Prop_pFormulas )
+                                || ( nRecType == DFF_Prop_textRectangles ) )
                 {
                     // now check if the current content size is possible, or 6 bytes too small
                     sal_uInt32  nOldPos = rIn.Tell();
@@ -571,6 +627,12 @@ void DffPropSet::Merge( DffPropSet& rMaster ) const
                             | ( nMergeFlags >> 16 ) ) ^ 0xffffffff;
             nCurrentFlags |= (UINT16)nMergeFlags;                           // apply filled master bits
             ( (DffPropSet*) this )->mpContents[ nRecType ] = nCurrentFlags;
+
+
+            sal_uInt32 nNewContentEx = (sal_uInt32)rMaster.GetCurObject();
+            if ( ((DffPropSet*)this)->Seek( nRecType ) )
+                nNewContentEx |= (sal_uInt32)GetCurObject();
+            ( (DffPropSet*) this )->Replace( nRecType, (void*)nNewContentEx );
         }
         else
         {
@@ -665,7 +727,7 @@ void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, UINT32 nOffsDgg ) 
     rStCtrl.Seek( nMerk );
 }
 
-#ifdef DBG_AUTOSHAPE
+#ifdef DBG_CUSTOMSHAPE
 void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData, UINT32 nShapeId ) const
 #else
 void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
@@ -693,7 +755,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     ( (DffPropertyReader*) this )->mnFix16Angle = Fix16ToAngle( GetPropertyValue( DFF_Prop_Rotation, 0 ) );
 
-#ifdef DBG_AUTOSHAPE
+#ifdef DBG_CUSTOMSHAPE
 
     String aURLStr;
 
@@ -1166,108 +1228,8 @@ static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd
     rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
 }
 
-void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObject* pObj ) const
+void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet ) const
 {
-    MapUnit eMap( rManager.GetModel()->GetScaleUnit() );
-
-    for ( void* pDummy = ((DffPropertyReader*)this)->First(); pDummy; pDummy = ((DffPropertyReader*)this)->Next() )
-    {
-        UINT32 nRecType = GetCurKey();
-        UINT32 nContent = mpContents[ nRecType ];
-        switch ( nRecType )
-        {
-            case DFF_Prop_gtextSize :
-                rSet.Put( SvxFontHeightItem( rManager.ScalePt( nContent ) ) );
-            break;
-            // GeoText
-            case DFF_Prop_gtextFStrikethrough :
-            {
-                if ( nContent & 0x20 )
-                    rSet.Put( SvxWeightItem( nContent ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
-                if ( nContent & 0x10 )
-                    rSet.Put( SvxPostureItem( nContent ? ITALIC_NORMAL : ITALIC_NONE ) );
-                if ( nContent & 0x08 )
-                    rSet.Put( SvxUnderlineItem( nContent ? UNDERLINE_SINGLE : UNDERLINE_NONE ) );
-                if ( nContent & 0x40 )
-                    rSet.Put(SvxShadowedItem( nContent != 0 ) );
-//              if ( nContent & 0x02 )
-//                  rSet.Put( SvxCaseMapItem( nContent ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
-                if ( nContent & 0x01 )
-                    rSet.Put( SvxCrossedOutItem( nContent ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
-            }
-            break;
-
-            case DFF_Prop_fillColor :
-                rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_fillColor ) ) );
-            break;
-
-            // ShadowStyle
-            case DFF_Prop_shadowType :
-            {
-                MSO_ShadowType eShadowType = (MSO_ShadowType)nContent;
-                if( eShadowType != mso_shadowOffset )
-                {
-                    //   mso_shadowDouble
-                    //   mso_shadowRich
-                    //   mso_shadowEmbossOrEngrave
-                    // koennen wir nicht, kreiere Default-Schatten mit default-
-                    // Abstand
-                    rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm Schattendistanz
-                    rSet.Put( SdrShadowYDistItem( 35 ) );
-                }
-            }
-            break;
-            case DFF_Prop_shadowColor :
-                rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_shadowColor ) ) );
-            break;
-            case DFF_Prop_shadowOpacity :
-                rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( nContent / 655 ) ) );
-            break;
-            case DFF_Prop_shadowOffsetX :
-            {
-                INT32 nVal = (INT32)nContent;
-                rManager.ScaleEmu( nVal );
-                if ( nVal )
-                    rSet.Put( SdrShadowXDistItem( nVal ) );
-            }
-            break;
-            case DFF_Prop_shadowOffsetY :
-            {
-                INT32 nVal = (INT32)nContent;
-                rManager.ScaleEmu( nVal );
-                if ( nVal )
-                    rSet.Put( SdrShadowYDistItem( nVal ) );
-            }
-            break;
-            case DFF_Prop_fshadowObscured :
-            {
-                sal_Bool bHasShadow = ( nContent & 2 ) != 0;
-                rSet.Put( SdrShadowItem( bHasShadow ) );
-                if ( bHasShadow )
-                {
-                    if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
-                        rSet.Put( SdrShadowXDistItem( 35 ) );
-                    if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
-                        rSet.Put( SdrShadowYDistItem( 35 ) );
-                }
-            }
-            break;
-            // Protection
-            case DFF_Prop_LockPosition :
-            {
-                if ( pObj )
-                    pObj->SetMoveProtect( nContent != 0 );
-            }
-            break;
-            case DFF_Prop_LockAgainstSelect :
-            {
-                if ( pObj )
-                    pObj->SetMarkProtect( nContent != 0 );
-            }
-            break;
-        }
-    }
-
     UINT32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
     if ( nLineFlags & 8 )
     {
@@ -1414,8 +1376,15 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
     }
     else
         rSet.Put( XLineStyleItem( XLINE_NONE ) );
+}
 
-    if ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 )
+
+void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, const MSO_SPT eShapeType ) const
+{
+    sal_Bool bFilled = IsHardAttribute( DFF_Prop_fFilled )
+                        ? ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) != 0
+                        : IsCustomShapeFilledByDefault( eShapeType );
+    if ( bFilled )
     {
         MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
         XFillStyle eXFill = XFILL_NONE;
@@ -1580,6 +1549,1428 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
     }
     else
         rSet.Put( XFillStyleItem( XFILL_NONE ) );
+}
+
+void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
+{
+//    sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
+    sal_Bool  bVerticalText = sal_False;
+    sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 ) / 360;     // 0.25 cm (emu)
+    sal_Int32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 25 * 3600 ) / 360;   // 0.25 cm (emu)
+    sal_Int32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 13 * 3600 ) / 360;       // 0.13 cm (emu)
+    sal_Int32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 13 * 3600 ) /360;  // 0.13 cm (emu)
+
+    SdrTextVertAdjust eTVA;
+    SdrTextHorzAdjust eTHA;
+
+    if ( IsProperty( DFF_Prop_txflTextFlow ) )
+    {
+        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+        switch( eTextFlow )
+        {
+            case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
+            case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
+            case mso_txflVertN :                    // Vertical, non-@, oben -> unten
+                bVerticalText = sal_True;           // nTextRotationAngle += 27000;
+            break;
+        }
+    }
+    if ( bVerticalText )
+    {
+        eTVA = SDRTEXTVERTADJUST_BLOCK;
+        eTHA = SDRTEXTHORZADJUST_CENTER;
+
+        // Textverankerung lesen
+        MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+
+        switch( eTextAnchor )
+        {
+            case mso_anchorTop:
+            case mso_anchorTopCentered:
+            case mso_anchorTopBaseline:
+            case mso_anchorTopCenteredBaseline:
+                eTHA = SDRTEXTHORZADJUST_RIGHT;
+            break;
+
+            case mso_anchorMiddle :
+            case mso_anchorMiddleCentered:
+                eTHA = SDRTEXTHORZADJUST_CENTER;
+            break;
+
+            case mso_anchorBottom:
+            case mso_anchorBottomCentered:
+            case mso_anchorBottomBaseline:
+            case mso_anchorBottomCenteredBaseline:
+                eTHA = SDRTEXTHORZADJUST_LEFT;
+            break;
+        }
+        // if there is a 100% use of following attributes, the textbox can been aligned also in vertical direction
+        switch ( eTextAnchor )
+        {
+            case mso_anchorTopCentered :
+            case mso_anchorMiddleCentered :
+            case mso_anchorBottomCentered :
+            case mso_anchorTopCenteredBaseline:
+            case mso_anchorBottomCenteredBaseline:
+                eTVA = SDRTEXTVERTADJUST_CENTER;
+            break;
+
+            default :
+                eTVA = SDRTEXTVERTADJUST_TOP;
+            break;
+        }
+    }
+    else
+    {
+        eTVA = SDRTEXTVERTADJUST_CENTER;
+        eTHA = SDRTEXTHORZADJUST_BLOCK;
+
+        // Textverankerung lesen
+        MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+
+        switch( eTextAnchor )
+        {
+            case mso_anchorTop:
+            case mso_anchorTopCentered:
+            case mso_anchorTopBaseline:
+            case mso_anchorTopCenteredBaseline:
+                eTVA = SDRTEXTVERTADJUST_TOP;
+            break;
+
+            case mso_anchorMiddle :
+            case mso_anchorMiddleCentered:
+                eTVA = SDRTEXTVERTADJUST_CENTER;
+            break;
+
+            case mso_anchorBottom:
+            case mso_anchorBottomCentered:
+            case mso_anchorBottomBaseline:
+            case mso_anchorBottomCenteredBaseline:
+                eTVA = SDRTEXTVERTADJUST_BOTTOM;
+            break;
+        }
+        // if there is a 100% usage of following attributes, the textbox can be aligned also in horizontal direction
+        switch ( eTextAnchor )
+        {
+            case mso_anchorTopCentered :
+            case mso_anchorMiddleCentered :
+            case mso_anchorBottomCentered :
+            case mso_anchorTopCenteredBaseline:
+            case mso_anchorBottomCenteredBaseline:
+                eTHA = SDRTEXTHORZADJUST_CENTER;    // the text has to be displayed using the full width;
+            break;
+
+            default :
+                eTHA = SDRTEXTHORZADJUST_LEFT;
+            break;
+        }
+    }
+    rSet.Put( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
+
+    rSet.Put( SdrTextVertAdjustItem( eTVA ) );
+    rSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+
+    rSet.Put( SdrTextLeftDistItem( nTextLeft ) );
+    rSet.Put( SdrTextRightDistItem( nTextRight ) );
+    rSet.Put( SdrTextUpperDistItem( nTextTop ) );
+    rSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+
+    rSet.Put( SdrTextWordWrapItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_True : sal_False ) );
+    rSet.Put( SdrTextAutoGrowSizeItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
+
+//  rSet.Put( SdrTextAutoGrowWidthItem( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ? sal_False : sal_True ) );
+//  rSet.Put( SdrTextAutoGrowHeightItem( ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0 ) );
+}
+
+void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxItemSet& rSet, const MSO_SPT eShapeType, const sal_uInt32 nShapeFlags ) const
+{
+
+    sal_uInt32 nAdjustmentsWhichNeedsToBeConverted = 0;
+
+    ///////////////////////////////////////
+    // creating SdrCustomShapeGeometryItem //
+    ///////////////////////////////////////
+    typedef uno::Sequence< beans::PropertyValue > PropSeq;
+    typedef std::vector< beans::PropertyValue > PropVec;
+    typedef PropVec::iterator PropVecIter;
+    PropVecIter aIter;
+    PropVecIter aEnd;
+
+
+    // aPropVec will be filled with all PropertyValues
+    PropVec aPropVec;
+    PropertyValue aProp;
+
+    /////////////////////////////////////////////////////////////////////////////
+    // "PredefinedType" property, including the predefined CustomShape type name //
+    /////////////////////////////////////////////////////////////////////////////
+    const rtl::OUString sPredefinedType( RTL_CONSTASCII_USTRINGPARAM ( "PredefinedType" ) );
+    aProp.Name  = sPredefinedType;
+    aProp.Value <<= EnhancedCustomShapeTypeNames::Get( eShapeType );
+    aPropVec.push_back( aProp );
+
+/*
+    /////////////////
+    // "MirroredX" //
+    /////////////////
+    if ( nShapeFlags & SP_FFLIPH )
+    {
+        const rtl::OUString sMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
+        sal_Bool bMirroredX = sal_True;
+        aProp.Name = sMirroredX;
+        aProp.Value <<= bMirroredX;
+        aPropVec.push_back( aProp );
+    }
+    /////////////////
+    // "MirroredY" //
+    /////////////////
+    if ( nShapeFlags & SP_FFLIPV )
+    {
+        const rtl::OUString sMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
+        sal_Bool bMirroredY = sal_True;
+        aProp.Name = sMirroredY;
+        aProp.Value <<= bMirroredY;
+        aPropVec.push_back( aProp );
+    }
+*/
+    ////////////////////////
+    // "CoordinateOrigin" //
+    ////////////////////////
+    com::sun::star::awt::Point aCoordinateOrigin( 0, 0 );
+    if ( IsProperty( DFF_Prop_geoLeft ) || IsProperty( DFF_Prop_geoTop ) )
+    {
+        const rtl::OUString sCoordinateOrigin( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateOrigin" ) );
+        aCoordinateOrigin.X = GetPropertyValue( DFF_Prop_geoLeft, 0 );
+        aCoordinateOrigin.Y = GetPropertyValue( DFF_Prop_geoTop, 0 );
+        aProp.Name = sCoordinateOrigin;
+        aProp.Value <<= aCoordinateOrigin;
+        aPropVec.push_back( aProp );
+    }
+    //////////////////////
+    // "CoordinateSize" //
+    //////////////////////
+    if ( IsProperty( DFF_Prop_geoRight ) || IsProperty( DFF_Prop_geoBottom ) )
+    {
+        const rtl::OUString sCoordinateSize( RTL_CONSTASCII_USTRINGPARAM ( "CoordinateSize" ) );
+        com::sun::star::awt::Size aCoordinateSize(
+            ((sal_Int32)GetPropertyValue( DFF_Prop_geoRight, 21600 ) ) - aCoordinateOrigin.X,
+            ((sal_Int32)GetPropertyValue( DFF_Prop_geoBottom, 21600 ) ) - aCoordinateOrigin.Y );
+        aProp.Name = sCoordinateSize;
+        aProp.Value <<= aCoordinateSize;
+        aPropVec.push_back( aProp );
+    }
+    /////////////////////
+    // TextRotateAngle //
+    /////////////////////
+    if ( IsProperty( DFF_Prop_txflTextFlow ) || IsProperty( DFF_Prop_cdirFont ) )
+    {
+        sal_Int32 nTextRotateAngle = 0;
+        MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
+        switch( eTextFlow )
+        {
+            case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
+                nTextRotateAngle += 90;
+            break;
+        }
+        switch( GetPropertyValue( DFF_Prop_cdirFont, mso_cdir0 ) )
+        {
+            case mso_cdir90 : nTextRotateAngle -=  90; break;
+            case mso_cdir180: nTextRotateAngle -= 180; break;
+            case mso_cdir270: nTextRotateAngle -= 270; break;
+        }
+        if ( nTextRotateAngle )
+        {
+            double fTextRotateAngle = nTextRotateAngle;
+            const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+            aProp.Name = sTextRotateAngle;
+            aProp.Value <<= fTextRotateAngle;
+            aPropVec.push_back( aProp );
+        }
+    }
+    ////////////////////////////////////////
+    // "Callout" PropertySequence element //
+    ////////////////////////////////////////
+    sal_Bool bCalloutOn = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 64 ) != 0;
+    if ( !bCalloutOn )
+        bCalloutOn = ( ( ( eShapeType >= mso_sptCallout1 ) && ( eShapeType <= mso_sptAccentBorderCallout3 ) )
+                        || ( eShapeType == mso_sptCallout90 )
+                        || ( eShapeType == mso_sptAccentCallout90 )
+                        || ( eShapeType == mso_sptBorderCallout90 )
+                        || ( eShapeType == mso_sptAccentBorderCallout90 ) );
+    if ( bCalloutOn )
+    {
+        PropVec aCalloutPropVec;
+
+        // "On"
+        const rtl::OUString sCalloutOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
+        aProp.Name = sCalloutOn;
+        aProp.Value <<= bCalloutOn;
+        aCalloutPropVec.push_back( aProp );
+        // "AccentBar"
+        const rtl::OUString sCalloutAccentBar( RTL_CONSTASCII_USTRINGPARAM ( "AccentBar" ) );
+        sal_Bool bCalloutAccentBar = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 32 ) != 0;
+        aProp.Name = sCalloutAccentBar;
+        aProp.Value <<= bCalloutAccentBar;
+        aCalloutPropVec.push_back( aProp );
+        // "Angle" in Grad
+        if ( IsProperty( DFF_Prop_spcoa ) )
+        {
+            const rtl::OUString sCalloutAngle( RTL_CONSTASCII_USTRINGPARAM ( "Angle" ) );
+            double fCalloutAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_spcoa )) / 65536.0;
+            aProp.Name = sCalloutAngle;
+            aProp.Value <<= fCalloutAngle;
+            aCalloutPropVec.push_back( aProp );
+        }
+        // "Gap"
+        if ( IsProperty( DFF_Prop_dxyCalloutGap ) )
+        {
+            const rtl::OUString sCalloutDistance( RTL_CONSTASCII_USTRINGPARAM ( "Gap" ) );
+            double fGap = (double)((sal_Int32)GetPropertyValue( DFF_Prop_dxyCalloutGap )) / 360.0;
+            aProp.Name = sCalloutDistance;
+            aProp.Value <<= fGap;
+            aCalloutPropVec.push_back( aProp );
+        }
+        // "Drop"
+        if ( IsProperty( DFF_Prop_spcod ) )
+        {
+            const rtl::OUString sCalloutDrop( RTL_CONSTASCII_USTRINGPARAM ( "Drop" ) );
+            sal_Int16 nCalloutDrop = (sal_Int16)GetPropertyValue( DFF_Prop_spcod );
+            aProp.Name = sCalloutDrop;
+            aProp.Value <<= nCalloutDrop;
+            aCalloutPropVec.push_back( aProp );
+        }
+        // "DropAuto"
+        const rtl::OUString sCalloutDropAuto( RTL_CONSTASCII_USTRINGPARAM ( "DropAuto" ) );
+        sal_Bool bCalloutAutoDrop = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 2 ) != 0;
+        aProp.Name = sCalloutDropAuto;
+        aProp.Value <<= bCalloutAutoDrop;
+        aCalloutPropVec.push_back( aProp );
+        // "Distance"
+        if ( IsProperty( DFF_Prop_dxyCalloutDropSpecified ) )
+        {
+            const rtl::OUString sCalloutGap( RTL_CONSTASCII_USTRINGPARAM ( "Distance" ) );
+            double fDistance = (double)((sal_Int32)GetPropertyValue( DFF_Prop_dxyCalloutDropSpecified )) / 360.0;
+            aProp.Name = sCalloutGap;
+            aProp.Value <<= fDistance;
+            aCalloutPropVec.push_back( aProp );
+        }
+        // "Length"
+        if ( IsProperty( DFF_Prop_dxyCalloutLengthSpecified ) )
+        {
+            const rtl::OUString sCalloutLength( RTL_CONSTASCII_USTRINGPARAM ( "Length" ) );
+            double fLength = (double)((sal_Int32)GetPropertyValue( DFF_Prop_dxyCalloutLengthSpecified )) / 360.0;
+            aProp.Name = sCalloutLength;
+            aProp.Value <<= fLength;
+            aCalloutPropVec.push_back( aProp );
+        }
+        // "LengthSpecified"
+        const rtl::OUString sCalloutLenghtSpecified( RTL_CONSTASCII_USTRINGPARAM ( "LengthSpecified" ) );
+        sal_Bool bCalloutLengthSpecified = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 1 ) != 0;
+        aProp.Name = sCalloutLenghtSpecified;
+        aProp.Value <<= bCalloutLengthSpecified;
+        aCalloutPropVec.push_back( aProp );
+        // "FlipX"
+        const rtl::OUString sCalloutFlipX( RTL_CONSTASCII_USTRINGPARAM ( "FlipX" ) );
+        sal_Bool bCalloutFlipX = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 8 ) != 0;
+        aProp.Name = sCalloutFlipX;
+        aProp.Value <<= bCalloutFlipX;
+        aCalloutPropVec.push_back( aProp );
+        // "FlipY"
+        const rtl::OUString sCalloutFlipY( RTL_CONSTASCII_USTRINGPARAM ( "FlipY" ) );
+        sal_Bool bCalloutFlipY = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 4 ) != 0;
+        aProp.Name = sCalloutFlipY;
+        aProp.Value <<= bCalloutFlipY;
+        aCalloutPropVec.push_back( aProp );
+        // "TextBorder"
+        const rtl::OUString sCalloutTextBorder( RTL_CONSTASCII_USTRINGPARAM ( "TextBorder" ) );
+        sal_Bool bCalloutTextBorder = ( GetPropertyValue( DFF_Prop_fCalloutLengthSpecified ) & 16 ) != 0;
+        aProp.Name = sCalloutTextBorder;
+        aProp.Value <<= bCalloutTextBorder;
+        aCalloutPropVec.push_back( aProp );
+        // "Type"
+        if ( IsProperty( DFF_Prop_spcot ) )
+        {
+            const rtl::OUString sCalloutType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
+            sal_Int16 nType = (sal_Int16)GetPropertyValue( DFF_Prop_spcot );
+            aProp.Name = sCalloutType;
+            aProp.Value <<= nType;
+            aCalloutPropVec.push_back( aProp );
+        }
+        // pushing the whole Callout element
+        const rtl::OUString sCallout( RTL_CONSTASCII_USTRINGPARAM ( "Callout" ) );
+        PropSeq aCalloutPropSeq( aCalloutPropVec.size() );
+        aIter = aCalloutPropVec.begin();
+        aEnd =aCalloutPropVec.end();
+        beans::PropertyValue* pCalloutValues = aCalloutPropSeq.getArray();
+        while ( aIter != aEnd )
+            *pCalloutValues++ = *aIter++;
+        aProp.Name = sCallout;
+        aProp.Value <<= aCalloutPropSeq;
+        aPropVec.push_back( aProp );
+    }
+    //////////////////////////////////////////
+    // "Extrusion" PropertySequence element //
+    //////////////////////////////////////////
+    sal_Bool bExtrusionOn = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 8 ) != 0;
+    if ( bExtrusionOn )
+    {
+        PropVec aExtrusionPropVec;
+
+        // "On"
+        const rtl::OUString sExtrusionOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
+        aProp.Name = sExtrusionOn;
+        aProp.Value <<= bExtrusionOn;
+        aExtrusionPropVec.push_back( aProp );
+        // "AutoRotationCenter"
+        const rtl::OUString sExtrusionAutoRotationCenter( RTL_CONSTASCII_USTRINGPARAM ( "AutoRotationCenter" ) );
+        sal_Bool bExtrusionAutoRotationCenter = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 8 ) != 0;
+        aProp.Name = sExtrusionAutoRotationCenter;
+        aProp.Value <<= bExtrusionAutoRotationCenter;
+        aExtrusionPropVec.push_back( aProp );
+        // "BackwardDepth"  in 1/100mm
+        if ( IsProperty( DFF_Prop_c3DExtrudeBackward ) )
+        {
+            const rtl::OUString sExtrusionBackwardDepth( RTL_CONSTASCII_USTRINGPARAM ( "BackwardDepth" ) );
+            double fBackwardDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeBackward )) / 360.0;
+            aProp.Name = sExtrusionBackwardDepth;
+            aProp.Value <<= fBackwardDepth;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Brightness"
+        if ( IsProperty( DFF_Prop_c3DAmbientIntensity ) )
+        {
+            const rtl::OUString sExtrusionBrightness( RTL_CONSTASCII_USTRINGPARAM ( "Brightness" ) );
+            double fBrightness = (sal_Int32)GetPropertyValue( DFF_Prop_c3DAmbientIntensity );
+            fBrightness /= 655.36;
+            aProp.Name = sExtrusionBrightness;
+            aProp.Value <<= fBrightness;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Diffusity"
+        if ( IsProperty( DFF_Prop_c3DDiffuseAmt ) )
+        {
+            const rtl::OUString sExtrusionDiffusity( RTL_CONSTASCII_USTRINGPARAM ( "Diffusity" ) );
+            double fDiffusity = (sal_Int32)GetPropertyValue( DFF_Prop_c3DDiffuseAmt );
+            fDiffusity /= 655.36;
+            aProp.Name = sExtrusionDiffusity;
+            aProp.Value <<= fDiffusity;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Edge"
+        if ( IsProperty( DFF_Prop_c3DEdgeThickness ) )
+        {
+            const rtl::OUString sExtrusionEdge( RTL_CONSTASCII_USTRINGPARAM ( "Edge" ) );
+            aProp.Name = sExtrusionEdge;
+            aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DEdgeThickness );
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Facet"
+        if ( IsProperty( DFF_Prop_c3DTolerance ) )
+        {
+            const rtl::OUString sExtrusionFacet( RTL_CONSTASCII_USTRINGPARAM ( "Facet" ) );
+            aProp.Name = sExtrusionFacet;
+            aProp.Value <<= (sal_Int32)GetPropertyValue( DFF_Prop_c3DTolerance );
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "ForewardDepth" in 1/100mm
+        if ( IsProperty( DFF_Prop_c3DExtrudeForward ) )
+        {
+            const rtl::OUString sExtrusionForewardDepth( RTL_CONSTASCII_USTRINGPARAM ( "ForewardDepth" ) );
+            double fForewardDepth = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DExtrudeForward )) / 360.0;
+            aProp.Name = sExtrusionForewardDepth;
+            aProp.Value <<= fForewardDepth;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "LightFace"
+        const rtl::OUString sExtrusionLightFace( RTL_CONSTASCII_USTRINGPARAM ( "LightFace" ) );
+        sal_Bool bExtrusionLightFace = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 1 ) != 0;
+        aProp.Name = sExtrusionLightFace;
+        aProp.Value <<= bExtrusionLightFace;
+        aExtrusionPropVec.push_back( aProp );
+        // "LightHarsh1"
+        const rtl::OUString sExtrusionLightHarsh1( RTL_CONSTASCII_USTRINGPARAM ( "LightHarsh1" ) );
+        sal_Bool bExtrusionLightHarsh1 = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 2 ) != 0;
+        aProp.Name = sExtrusionLightHarsh1;
+        aProp.Value <<= bExtrusionLightHarsh1;
+        aExtrusionPropVec.push_back( aProp );
+        // "LightHarsh2"
+        const rtl::OUString sExtrusionLightHarsh2( RTL_CONSTASCII_USTRINGPARAM ( "LightHarsh2" ) );
+        sal_Bool bExtrusionLightHarsh2 = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 1 ) != 0;
+        aProp.Name = sExtrusionLightHarsh2;
+        aProp.Value <<= bExtrusionLightHarsh2;
+        aExtrusionPropVec.push_back( aProp );
+        // "LightLevel1"
+        if ( IsProperty( DFF_Prop_c3DKeyIntensity ) )
+        {
+            const rtl::OUString sExtrusionLightLevel1( RTL_CONSTASCII_USTRINGPARAM ( "LightLevel1" ) );
+            double fLightLevel1 = (sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyIntensity );
+            fLightLevel1 /= 655.36;
+            aProp.Name = sExtrusionLightLevel1;
+            aProp.Value <<= fLightLevel1;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "LightLevel2"
+        if ( IsProperty( DFF_Prop_c3DFillIntensity ) )
+        {
+            const rtl::OUString sExtrusionLightLevel2( RTL_CONSTASCII_USTRINGPARAM ( "LightLevel2" ) );
+            double fLightLevel2 = (sal_Int32)GetPropertyValue( DFF_Prop_c3DFillIntensity );
+            fLightLevel2 /= 655.36;
+            aProp.Name = sExtrusionLightLevel2;
+            aProp.Value <<= fLightLevel2;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "LightDirection1"
+        if ( IsProperty( DFF_Prop_c3DKeyX ) || IsProperty( DFF_Prop_c3DKeyY ) || IsProperty( DFF_Prop_c3DKeyZ ) )
+        {
+            double fLightX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyX, 50000 ));
+            double fLightY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyY, 0 ));
+            double fLightZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DKeyZ, 10000 ));
+            ::com::sun::star::drawing::Direction3D aExtrusionLightDirection1( fLightX, fLightY, fLightZ );
+            const rtl::OUString sExtrusionLightDirection1( RTL_CONSTASCII_USTRINGPARAM ( "LightDirection1" ) );
+            aProp.Name = sExtrusionLightDirection1;
+            aProp.Value <<= aExtrusionLightDirection1;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "LightDirection2"
+        if ( IsProperty( DFF_Prop_c3DFillX ) || IsProperty( DFF_Prop_c3DFillY ) || IsProperty( DFF_Prop_c3DFillZ ) )
+        {
+            double fLight2X = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillX, -50000 ));
+            double fLight2Y = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillY, 0 ));
+            double fLight2Z = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DFillZ, 10000 ));
+            ::com::sun::star::drawing::Direction3D aExtrusionLightDirection2( fLight2X, fLight2Y, fLight2Z );
+            const rtl::OUString sExtrusionLightDirection2( RTL_CONSTASCII_USTRINGPARAM ( "LightDirection2" ) );
+            aProp.Name = sExtrusionLightDirection2;
+            aProp.Value <<= aExtrusionLightDirection2;
+            aExtrusionPropVec.push_back( aProp );
+        }
+
+/* LockRotationCenter, OrientationAngle and Orientation needs to be converted to use the properties AngleX, AngleY and RotationAngle instead.
+        // "LockRotationCenter"
+        const rtl::OUString sExtrusionLockRotationCenter( RTL_CONSTASCII_USTRINGPARAM ( "LockRotationCenter" ) );
+        sal_Bool bExtrusionLockRotationCenter = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 16 ) != 0;
+        aProp.Name = sExtrusionLockRotationCenter;
+        aProp.Value <<= bExtrusionLockRotationCenter;
+        aExtrusionPropVec.push_back( aProp );
+
+        // "Orientation"
+        if ( IsProperty( DFF_Prop_c3DRotationAxisX ) || IsProperty( DFF_Prop_c3DRotationAxisY ) || IsProperty( DFF_Prop_c3DRotationAxisZ ) )
+        {
+            double fRotX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationAxisX, 100 ));
+            double fRotY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationAxisY, 0 ));
+            double fRotZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationAxisZ, 0 ));
+            ::com::sun::star::drawing::Direction3D aExtrusionDirection( fRotX, fRotY, fRotZ );
+            const rtl::OUString sExtrusionDirection( RTL_CONSTASCII_USTRINGPARAM ( "Orientation" ) );
+            aProp.Name = sExtrusionDirection;
+            aProp.Value <<= aExtrusionDirection;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "OrientationAngle" in Grad
+        if ( IsProperty( DFF_Prop_c3DRotationAngle ) )
+        {
+            const rtl::OUString sExtrusionOrientationAngle( RTL_CONSTASCII_USTRINGPARAM ( "OrientationAngle" ) );
+            double fOrientationAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationAngle )) / 65536.0;
+            aProp.Name = sExtrusionOrientationAngle;
+            aProp.Value <<= fOrientationAngle;
+            aExtrusionPropVec.push_back( aProp );
+        }
+*/
+
+        // "Metal"
+        const rtl::OUString sExtrusionMetal( RTL_CONSTASCII_USTRINGPARAM ( "Metal" ) );
+        sal_Bool bExtrusionMetal = ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 4 ) != 0;
+        aProp.Name = sExtrusionMetal;
+        aProp.Value <<= bExtrusionMetal;
+        aExtrusionPropVec.push_back( aProp );
+        // "Plane"
+        // !!!! EnhancedExtrusionPlane has to be used
+        if ( IsProperty( DFF_Prop_c3DExtrudePlane ) )
+        {
+            const rtl::OUString sExtrusionPlane( RTL_CONSTASCII_USTRINGPARAM ( "Plane" ) );
+            sal_Int16 nExtrusionPlane = (sal_Int16)GetPropertyValue( DFF_Prop_c3DExtrudePlane );
+            aProp.Name = sExtrusionPlane;
+            aProp.Value <<= nExtrusionPlane;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "RenderMode"
+        if ( IsProperty( DFF_Prop_c3DRenderMode ) )
+        {
+            const rtl::OUString sExtrusionRenderMode( RTL_CONSTASCII_USTRINGPARAM ( "RenderMode" ) );
+            sal_Int16 nExtrusionRenderMode = (sal_Int16)GetPropertyValue( DFF_Prop_c3DRenderMode );
+            aProp.Name = sExtrusionRenderMode;
+            aProp.Value <<= nExtrusionRenderMode;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "AngleX" in Grad
+        if ( IsProperty( DFF_Prop_c3DXRotationAngle ) )
+        {
+            const rtl::OUString sExtrusionAngleX( RTL_CONSTASCII_USTRINGPARAM ( "AngleX" ) );
+            double fAngleX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXRotationAngle )) / 65536.0;
+            aProp.Name = sExtrusionAngleX;
+            aProp.Value <<= fAngleX;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "AngleY" in Grad
+        if ( IsProperty( DFF_Prop_c3DYRotationAngle ) )
+        {
+            const rtl::OUString sExtrusionAngleY( RTL_CONSTASCII_USTRINGPARAM ( "AngleY" ) );
+            double fAngleY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYRotationAngle )) / 65536.0;
+            aProp.Name = sExtrusionAngleY;
+            aProp.Value <<= fAngleY;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "RotationCenterX"
+        if ( IsProperty( DFF_Prop_c3DRotationCenterX ) )
+        {
+            double fRotationCenterX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 )) / 360.0;
+            const rtl::OUString sExtrusionRotationCenterX( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterX" ) );
+            aProp.Name = sExtrusionRotationCenterX;
+            aProp.Value <<= fRotationCenterX;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "RotationCenterY"
+        if ( IsProperty( DFF_Prop_c3DRotationCenterY ) )
+        {
+            double fRotationCenterY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 )) / 360.0;
+            const rtl::OUString sExtrusionRotationCenterY( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterY" ) );
+            aProp.Name = sExtrusionRotationCenterY;
+            aProp.Value <<= fRotationCenterY;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "RotationCenterZ"
+        if ( IsProperty( DFF_Prop_c3DRotationCenterZ ) )
+        {
+            double fRotationCenterZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DRotationCenterZ, 0 )) / 360.0;
+            const rtl::OUString sExtrusionRotationCenterZ( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenterZ" ) );
+            aProp.Name = sExtrusionRotationCenterZ;
+            aProp.Value <<= fRotationCenterZ;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Shininess"
+        if ( IsProperty( DFF_Prop_c3DShininess ) )
+        {
+            const rtl::OUString sExtrusionShininess( RTL_CONSTASCII_USTRINGPARAM ( "Shininess" ) );
+            double fShininess = (sal_Int32)GetPropertyValue( DFF_Prop_c3DShininess );
+            fShininess /= 655.36;
+            aProp.Name = sExtrusionShininess;
+            aProp.Value <<= fShininess;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Skew"
+        if ( IsProperty( DFF_Prop_c3DSkewAmount ) )
+        {
+            const rtl::OUString sExtrusionSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
+            double fSkew = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAmount );
+            aProp.Name = sExtrusionSkew;
+            aProp.Value <<= fSkew;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "SkewAngle" in Grad
+        if ( IsProperty( DFF_Prop_c3DSkewAngle ) )
+        {
+            const rtl::OUString sExtrusionSkewAngle( RTL_CONSTASCII_USTRINGPARAM ( "SkewAngle" ) );
+            double fSkewAngle = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DSkewAngle )) / 65536.0;
+            aProp.Name = sExtrusionSkewAngle;
+            aProp.Value <<= fSkewAngle;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Specularity"
+        if ( IsProperty( DFF_Prop_c3DSpecularAmt ) )
+        {
+            const rtl::OUString sExtrusionSpecularity( RTL_CONSTASCII_USTRINGPARAM ( "Specularity" ) );
+            double fSpecularity = (sal_Int32)GetPropertyValue( DFF_Prop_c3DSpecularAmt );
+            fSpecularity /= 1333;
+            aProp.Name = sExtrusionSpecularity;
+            aProp.Value <<= fSpecularity;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "Parallel"
+        const rtl::OUString sExtrusionParallel( RTL_CONSTASCII_USTRINGPARAM ( "Parallel" ) );
+        sal_Bool bExtrusionParallel = ( GetPropertyValue( DFF_Prop_fc3DFillHarsh ) & 4 ) != 0;
+        aProp.Name = sExtrusionParallel;
+        aProp.Value <<= bExtrusionParallel;
+        aExtrusionPropVec.push_back( aProp );
+        // "ViewPoint" in 1/100mm
+        if ( IsProperty( DFF_Prop_c3DXViewpoint ) || IsProperty( DFF_Prop_c3DYViewpoint ) || IsProperty( DFF_Prop_c3DZViewpoint ) )
+        {
+            double fViewX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DXViewpoint, 1249920 )) / 360.0;
+            double fViewY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DYViewpoint, -1249920 ))/ 360.0;
+            double fViewZ = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DZViewpoint, 9000000 )) / 360.0;
+            ::com::sun::star::drawing::Position3D aExtrusionViewPoint( fViewX, fViewY, fViewZ );
+            const rtl::OUString sExtrusionViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
+            aProp.Name = sExtrusionViewPoint;
+            aProp.Value <<= aExtrusionViewPoint;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "OriginX"
+        if ( IsProperty( DFF_Prop_c3DOriginX ) )
+        {
+            const rtl::OUString sExtrusionOriginX( RTL_CONSTASCII_USTRINGPARAM ( "OriginX" ) );
+            double fOriginX = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginX, 0 ));
+            fOriginX /= 655.36;
+            aProp.Name = sExtrusionOriginX;
+            aProp.Value <<= fOriginX;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "OriginY"
+        if ( IsProperty( DFF_Prop_c3DOriginY ) )
+        {
+            const rtl::OUString sExtrusionOriginY( RTL_CONSTASCII_USTRINGPARAM ( "OriginY" ) );
+            double fOriginY = (double)((sal_Int32)GetPropertyValue( DFF_Prop_c3DOriginY, 0 ));
+            fOriginY /= 655.36;
+            aProp.Name = sExtrusionOriginY;
+            aProp.Value <<= fOriginY;
+            aExtrusionPropVec.push_back( aProp );
+        }
+        // "ExtrusionColor"
+        const rtl::OUString sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
+        sal_Bool bExtrusionColor = IsProperty( DFF_Prop_c3DExtrusionColor );    // ( GetPropertyValue( DFF_Prop_fc3DLightFace ) & 2 ) != 0;
+        aProp.Name = sExtrusionColor;
+        aProp.Value <<= bExtrusionColor;
+        aExtrusionPropVec.push_back( aProp );
+        if ( IsProperty( DFF_Prop_c3DExtrusionColor ) )
+            rSet.Put( XSecondaryFillColorItem( String(), rManager.MSO_CLR_ToColor(
+                GetPropertyValue( DFF_Prop_c3DExtrusionColor ), DFF_Prop_c3DExtrusionColor ) ) );
+        // pushing the whole Extrusion element
+        const rtl::OUString sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+        PropSeq aExtrusionPropSeq( aExtrusionPropVec.size() );
+        aIter = aExtrusionPropVec.begin();
+        aEnd = aExtrusionPropVec.end();
+        beans::PropertyValue* pExtrusionValues = aExtrusionPropSeq.getArray();
+        while ( aIter != aEnd )
+            *pExtrusionValues++ = *aIter++;
+        aProp.Name = sExtrusion;
+        aProp.Value <<= aExtrusionPropSeq;
+        aPropVec.push_back( aProp );
+    }
+    /////////////////////////////////////////
+    // "Equations" PropertySequence element //
+    /////////////////////////////////////////
+    if ( IsProperty( DFF_Prop_pFormulas ) )
+    {
+        sal_uInt16 i, j;
+        sal_uInt16 nNumElem = 0;
+        sal_uInt16 nNumElemMem = 0;
+        sal_uInt16 nElemSize = 8;
+
+        if ( SeekToContent( DFF_Prop_pFormulas, rIn ) )
+            rIn >> nNumElem >> nNumElemMem >> nElemSize;
+
+        sal_Int16 nPara[ 3 ];
+        sal_uInt16 nFlags;
+
+        uno::Sequence< EnhancedCustomShapeEquation > aEquations( nNumElem );
+        for ( i = 0; i < nNumElem; i++ )
+        {
+            rIn >> nFlags >> nPara[ 0 ] >> nPara[ 1 ]>> nPara[ 2 ];
+            aEquations[ i ].Operation = nFlags & 0xff;
+
+            sal_Int32 nParameters = 0;
+            switch( aEquations[ i ].Operation )
+            {
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::PROD :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUM :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::IF :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MOD :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COSATAN2 :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SINATAN2 :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SUMANGLE :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ELLIPSE :
+                    nParameters = 3;
+                break;
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MID :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MIN :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::MAX :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ATAN2 :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SIN :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::COS :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::TAN :
+                    nParameters = 2;
+                break;
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::ABS :
+                case drafts::com::sun::star::drawing::EnhancedCustomShapeOperation::SQRT :
+                    nParameters = 1;
+                break;
+            }
+            aEquations[ i ].Parameters.realloc( nParameters );
+            for ( j = 0; j < nParameters; j++ )
+                EnhancedCustomShape2d::SetEnhancedCustomShapeEquationParameter(
+                    aEquations[ i ].Parameters[ j ], nPara[ j ], ( nFlags & ( 0x2000 << j ) ) != 0 );
+        }
+        // pushing the whole Equations element
+        const rtl::OUString sEquations( RTL_CONSTASCII_USTRINGPARAM ( "Equations" ) );
+        aProp.Name = sEquations;
+        aProp.Value <<= aEquations;
+        aPropVec.push_back( aProp );
+    }
+    ////////////////////////////////////////
+    // "Handles" PropertySequence element //
+    ////////////////////////////////////////
+    if ( IsProperty( DFF_Prop_Handles ) )
+    {
+        sal_uInt16 i;
+        sal_uInt16 nNumElem = 0;
+        sal_uInt16 nNumElemMem = 0;
+        sal_uInt16 nElemSize = 36;
+
+        if ( SeekToContent( DFF_Prop_Handles, rIn ) )
+            rIn >> nNumElem >> nNumElemMem >> nElemSize;
+        if ( nElemSize == 36 )
+        {
+            uno::Sequence< beans::PropertyValues > aHandles( nNumElem );
+            for ( i = 0; i < nNumElem; i++ )
+            {
+                PropVec aHandlePropVec;
+                sal_uInt32  nFlags;
+                sal_Int32   nPositionX, nPositionY, nCenterX, nCenterY, nRangeXMin, nRangeXMax, nRangeYMin, nRangeYMax;
+                rIn >> nFlags
+                    >> nPositionX
+                    >> nPositionY
+                    >> nCenterX
+                    >> nCenterY
+                    >> nRangeXMin
+                    >> nRangeXMax
+                    >> nRangeYMin
+                    >> nRangeYMax;
+
+                EnhancedCustomShapeParameterPair aPosition;
+                EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.First,  nPositionX, sal_True, sal_True  );
+                EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPosition.Second, nPositionY, sal_True, sal_False );
+                const rtl::OUString sHandlePosition( RTL_CONSTASCII_USTRINGPARAM ( "Position" ) );
+                aProp.Name = sHandlePosition;
+                aProp.Value <<= aPosition;
+                aHandlePropVec.push_back( aProp );
+
+                if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_X )
+                {
+                    sal_Bool bMirroredX = sal_True;
+                    const rtl::OUString sHandleMirroredX( RTL_CONSTASCII_USTRINGPARAM ( "MirroredX" ) );
+                    aProp.Name = sHandleMirroredX;
+                    aProp.Value <<= bMirroredX;
+                    aHandlePropVec.push_back( aProp );
+                }
+                if ( nFlags & MSDFF_HANDLE_FLAGS_MIRRORED_Y )
+                {
+                    sal_Bool bMirroredY = sal_True;
+                    const rtl::OUString sHandleMirroredY( RTL_CONSTASCII_USTRINGPARAM ( "MirroredY" ) );
+                    aProp.Name = sHandleMirroredY;
+                    aProp.Value <<= bMirroredY;
+                    aHandlePropVec.push_back( aProp );
+                }
+                if ( nFlags & MSDFF_HANDLE_FLAGS_SWITCHED )
+                {
+                    sal_Bool bSwitched = sal_True;
+                    const rtl::OUString sHandleSwitched( RTL_CONSTASCII_USTRINGPARAM ( "Switched" ) );
+                    aProp.Name = sHandleSwitched;
+                    aProp.Value <<= bSwitched;
+                    aHandlePropVec.push_back( aProp );
+                }
+                if ( nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+                {
+                    if ( ( nPositionY >= 0x256 ) || ( nPositionY <= 0x107 ) )   // position y
+                        nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );
+                    EnhancedCustomShapeParameterPair aPolar;
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.First,  nCenterX, ( nFlags & 0x800  ) != 0, sal_True  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aPolar.Second, nCenterY, ( nFlags & 0x1000 ) != 0, sal_False );
+                    const rtl::OUString sHandlePolar( RTL_CONSTASCII_USTRINGPARAM ( "Polar" ) );
+                    aProp.Name = sHandlePolar;
+                    aProp.Value <<= aPolar;
+                    aHandlePropVec.push_back( aProp );
+                }
+                if ( nFlags & MSDFF_HANDLE_FLAGS_MAP )
+                {
+                    EnhancedCustomShapeParameterPair aMap;
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.First,  nCenterX, ( nFlags & 0x800  ) != 0, sal_True  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aMap.Second, nCenterY, ( nFlags & 0x1000 ) != 0, sal_False );
+                    const rtl::OUString sHandleMap( RTL_CONSTASCII_USTRINGPARAM ( "Map" ) );
+                    aProp.Name = sHandleMap;
+                    aProp.Value <<= aMap;
+                    aHandlePropVec.push_back( aProp );
+                }
+                if ( nFlags & MSDFF_HANDLE_FLAGS_RANGE )
+                {
+                    if ( (sal_uInt32)nRangeXMin != 0x80000000 )
+                    {
+                        EnhancedCustomShapeParameter aRangeXMinimum;
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMinimum,  nRangeXMin,
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
+                        const rtl::OUString sHandleRangeXMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMinimum" ) );
+                        aProp.Name = sHandleRangeXMinimum;
+                        aProp.Value <<= aRangeXMinimum;
+                        aHandlePropVec.push_back( aProp );
+                    }
+                    if ( (sal_uInt32)nRangeXMax != 0x7fffffff )
+                    {
+                        EnhancedCustomShapeParameter aRangeXMaximum;
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeXMaximum, nRangeXMax,
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
+                        const rtl::OUString sHandleRangeXMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeXMaximum" ) );
+                        aProp.Name = sHandleRangeXMaximum;
+                        aProp.Value <<= aRangeXMaximum;
+                        aHandlePropVec.push_back( aProp );
+                    }
+                    if ( (sal_uInt32)nRangeYMin != 0x80000000 )
+                    {
+                        EnhancedCustomShapeParameter aRangeYMinimum;
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMinimum, nRangeYMin,
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL ) != 0, sal_True );
+                        const rtl::OUString sHandleRangeYMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMinimum" ) );
+                        aProp.Name = sHandleRangeYMinimum;
+                        aProp.Value <<= aRangeYMinimum;
+                        aHandlePropVec.push_back( aProp );
+                    }
+                    if ( (sal_uInt32)nRangeYMax != 0x7fffffff )
+                    {
+                        EnhancedCustomShapeParameter aRangeYMaximum;
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRangeYMaximum, nRangeYMax,
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL ) != 0, sal_False );
+                        const rtl::OUString sHandleRangeYMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RangeYMaximum" ) );
+                        aProp.Name = sHandleRangeYMaximum;
+                        aProp.Value <<= aRangeYMaximum;
+                        aHandlePropVec.push_back( aProp );
+                    }
+                }
+                if ( nFlags & MSDFF_HANDLE_FLAGS_RADIUS_RANGE )
+                {
+                    if ( (sal_uInt32)nRangeXMin != 0x7fffffff )
+                    {
+                        EnhancedCustomShapeParameter aRadiusRangeMinimum;
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMinimum, nRangeXMin,
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL ) != 0, sal_True  );
+                        const rtl::OUString sHandleRadiusRangeMinimum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMinimum" ) );
+                        aProp.Name = sHandleRadiusRangeMinimum;
+                        aProp.Value <<= aRadiusRangeMinimum;
+                        aHandlePropVec.push_back( aProp );
+                    }
+                    if ( (sal_uInt32)nRangeXMax != 0x80000000 )
+                    {
+                        EnhancedCustomShapeParameter aRadiusRangeMaximum;
+                        EnhancedCustomShape2d::SetEnhancedCustomShapeHandleParameter( aRadiusRangeMaximum, nRangeXMax,
+                            ( nFlags & MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL ) != 0, sal_False );
+                        const rtl::OUString sHandleRadiusRangeMaximum( RTL_CONSTASCII_USTRINGPARAM ( "RadiusRangeMaximum" ) );
+                        aProp.Name = sHandleRadiusRangeMaximum;
+                        aProp.Value <<= aRadiusRangeMaximum;
+                        aHandlePropVec.push_back( aProp );
+                    }
+                }
+                if ( aHandlePropVec.size() )
+                {
+                    PropSeq aHandlePropSeq( aHandlePropVec.size() );
+                    aIter = aHandlePropVec.begin();
+                    aEnd = aHandlePropVec.end();
+                    beans::PropertyValue* pHandleValues = aHandlePropSeq.getArray();
+                    while ( aIter != aEnd )
+                        *pHandleValues++ = *aIter++;
+                    aHandles[ i ] = aHandlePropSeq;
+                }
+            }
+            // pushing the whole Handles element
+            const rtl::OUString sHandles( RTL_CONSTASCII_USTRINGPARAM ( "Handles" ) );
+            aProp.Name = sHandles;
+            aProp.Value <<= aHandles;
+            aPropVec.push_back( aProp );
+        }
+    }
+    else
+    {
+        const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eShapeType );
+        if ( pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
+        {
+            sal_Int32 i, nCount = pDefCustomShape->nHandles;
+            const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
+            for ( i = 0; i < nCount; i++, pData++ )
+            {
+                if ( pData->nFlags & MSDFF_HANDLE_FLAGS_POLAR )
+                {
+                    if ( ( pData->nPositionY >= 0x256 ) || ( pData->nPositionY <= 0x107 ) )
+                        nAdjustmentsWhichNeedsToBeConverted |= ( 1 << i );
+                }
+            }
+        }
+    }
+    /////////////////////////////////////
+    // "Path" PropertySequence element //
+    /////////////////////////////////////
+    {
+        PropVec aPathPropVec;
+
+        // "Path/ExtrusionAllowed"
+        if ( IsHardAttribute( DFF_Prop_f3DOK ) )
+        {
+            const rtl::OUString sExtrusionAllowed( RTL_CONSTASCII_USTRINGPARAM ( "ExtrusionAllowed" ) );
+            sal_Bool bExtrusionAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 16 ) != 0;
+            aProp.Name = sExtrusionAllowed;
+            aProp.Value <<= bExtrusionAllowed;
+            aPathPropVec.push_back( aProp );
+        }
+        // "Path/ConcentricGradientFillAllowed"
+        if ( IsHardAttribute( DFF_Prop_fFillShadeShapeOK ) )
+        {
+            const rtl::OUString sConcentricGradientFillAllowed( RTL_CONSTASCII_USTRINGPARAM ( "ConcentricGradientFillAllowed" ) );
+            sal_Bool bConcentricGradientFillAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 2 ) != 0;
+            aProp.Name = sConcentricGradientFillAllowed;
+            aProp.Value <<= bConcentricGradientFillAllowed;
+            aPathPropVec.push_back( aProp );
+        }
+        // "Path/TextPathAllowed"
+        if ( IsHardAttribute( DFF_Prop_fGtextOK ) )
+        {
+            const rtl::OUString sTextPathAllowed( RTL_CONSTASCII_USTRINGPARAM ( "TextPathAllowed" ) );
+            sal_Bool bTextPathAllowed = ( GetPropertyValue( DFF_Prop_fFillOK ) & 4 ) != 0;
+            aProp.Name = sTextPathAllowed;
+            aProp.Value <<= bTextPathAllowed;
+            aPathPropVec.push_back( aProp );
+        }
+        // Path/Coordinates
+        if ( IsProperty( DFF_Prop_pVertices ) )
+        {
+            com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+
+            sal_uInt16 i;
+            sal_uInt16 nNumElemVert = 0;
+            sal_uInt16 nNumElemMemVert = 0;
+            sal_uInt16 nElemSizeVert = 8;
+
+            if ( SeekToContent( DFF_Prop_pVertices, rIn ) )
+                rIn >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+            if ( nNumElemVert )
+            {
+                sal_Int32 nX, nY;
+                sal_Int16 nTmpA, nTmpB;
+                aCoordinates.realloc( nNumElemVert );
+                for ( i = 0; i < nNumElemVert; i++ )
+                {
+                    if ( nElemSizeVert == 8 )
+                    {
+                        rIn >> nX
+                            >> nY;
+                    }
+                    else
+                    {
+                        rIn >> nTmpA
+                            >> nTmpB;
+
+                        nX = nTmpA;
+                        nY = nTmpB;
+                    }
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aCoordinates[ i ].First, nX );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aCoordinates[ i ].Second, nY );
+                }
+            }
+            const rtl::OUString sCoordinates( RTL_CONSTASCII_USTRINGPARAM ( "Coordinates" ) );
+            aProp.Name = sCoordinates;
+            aProp.Value <<= aCoordinates;
+            aPathPropVec.push_back( aProp );
+        }
+        // Path/Segments
+        if ( IsProperty( DFF_Prop_pSegmentInfo ) )
+        {
+            com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeSegment > aSegments;
+
+            sal_uInt16 i, nTmp;
+            sal_uInt16 nNumElemSeg = 0;
+            sal_uInt16 nNumElemMemSeg = 0;
+            sal_uInt16 nElemSizeSeg = 2;
+
+            if ( SeekToContent( DFF_Prop_pSegmentInfo, rIn ) )
+                rIn >> nNumElemSeg >> nNumElemMemSeg >> nElemSizeSeg;
+            if ( nNumElemSeg )
+            {
+                sal_Int16 nCommand;
+                sal_Int16 nCount;
+                aSegments.realloc( nNumElemSeg );
+                for ( i = 0; i < nNumElemSeg; i++ )
+                {
+                    rIn >> nTmp;
+                    nCommand = EnhancedCustomShapeSegmentCommand::UNKNOWN;
+                    nCount = (sal_Int16)( nTmp & 0xfff );
+                    switch( nTmp >> 12 )
+                    {
+                        case 0x0: nCommand = EnhancedCustomShapeSegmentCommand::LINETO; if ( !nCount ) nCount = 1; break;
+                        case 0x1: nCommand = EnhancedCustomShapeSegmentCommand::LINETO; if ( !nCount ) nCount = 1; break;   // seems to the relative lineto
+                        case 0x4: nCommand = EnhancedCustomShapeSegmentCommand::MOVETO; if ( !nCount ) nCount = 1; break;
+                        case 0x2: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCount ) nCount = 1; break;
+                        case 0x3: nCommand = EnhancedCustomShapeSegmentCommand::CURVETO; if ( !nCount ) nCount = 1; break;  // seems to be the relative curveto
+                        case 0x8: nCommand = EnhancedCustomShapeSegmentCommand::ENDSUBPATH; break;
+                        case 0x6: nCommand = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH; break;
+                        case 0xa:
+                        case 0xb:
+                        {
+                            switch ( ( nTmp >> 8 ) & 0xf )
+                            {
+                                case 0x0:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::LINETO;
+                                    if ( !nCount )
+                                        nCount = 1;
+                                }
+                                break;
+                                case 0x1:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO;
+                                    nCount = ( nTmp & 0xff ) / 3;
+                                }
+                                break;
+                                case 0x2:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE;
+                                    nCount = ( nTmp & 0xff ) / 3;
+                                }
+                                break;
+                                case 0x3:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::ARCTO;
+                                    nCount = ( nTmp & 0xff ) >> 2;
+                                };
+                                break;
+                                case 0x4:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::ARC;
+                                    nCount = ( nTmp & 0xff ) >> 2;
+                                }
+                                break;
+                                case 0x5:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO;
+                                    nCount = ( nTmp & 0xff ) >> 2;
+                                }
+                                break;
+                                case 0x6:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::CLOCKWISEARC;
+                                    nCount = ( nTmp & 0xff ) >> 2;
+                                }
+                                break;
+                                case 0x7:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX;
+                                    nCount = nTmp & 0xff;
+                                }
+                                break;
+                                case 0x8:
+                                {
+                                    nCommand = EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY;
+                                    nCount = nTmp & 0xff;
+                                }
+                                break;
+                                case 0xa: nCommand = EnhancedCustomShapeSegmentCommand::NOFILL; break;
+                                case 0xb: nCommand = EnhancedCustomShapeSegmentCommand::NOSTROKE; break;
+                            }
+                        }
+                        break;
+                    }
+                    // if the command is unknown, we will store all the data in nCount, so it will be possible to export without loss
+                    if ( nCommand == EnhancedCustomShapeSegmentCommand::UNKNOWN )
+                        nCount = (sal_Int16)nTmp;
+                    aSegments[ i ].Command = nCommand;
+                    aSegments[ i ].Count = nCount;
+                }
+            }
+            const rtl::OUString sSegments( RTL_CONSTASCII_USTRINGPARAM ( "Segments" ) );
+            aProp.Name = sSegments;
+            aProp.Value <<= aSegments;
+            aPathPropVec.push_back( aProp );
+        }
+        // Path/StretchPoint
+        if ( IsProperty( DFF_Prop_stretchPointX ) || IsProperty( DFF_Prop_stretchPointY ) )
+        {
+            const rtl::OUString sStretchPoint( RTL_CONSTASCII_USTRINGPARAM ( "StretchPoint" ) );
+            com::sun::star::awt::Point aStretchPoint( GetPropertyValue( DFF_Prop_stretchPointX, 0 ),
+                GetPropertyValue( DFF_Prop_stretchPointY, 0 ) );
+            aProp.Name = sStretchPoint;
+            aProp.Value <<= aStretchPoint;
+            aPathPropVec.push_back( aProp );
+        }
+        // Path/TextFrames
+        if ( IsProperty( DFF_Prop_textRectangles ) )
+        {
+            sal_uInt16 i;
+            sal_uInt16 nNumElem = 0;
+            sal_uInt16 nNumElemMem = 0;
+            sal_uInt16 nElemSize = 16;
+
+            if ( SeekToContent( DFF_Prop_textRectangles, rIn ) )
+                rIn >> nNumElem >> nNumElemMem >> nElemSize;
+            if ( nElemSize == 16 )
+            {
+                sal_Int32 nLeft, nTop, nRight, nBottom;
+                com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
+                for ( i = 0; i < nNumElem; i++ )
+                {
+                    rIn >> nLeft
+                        >> nTop
+                        >> nRight
+                        >> nBottom;
+
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].TopLeft.First,  nLeft );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].TopLeft.Second, nTop  );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].BottomRight.First,  nRight );
+                    EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aTextFrames[ i ].BottomRight.Second, nBottom);
+                }
+                const rtl::OUString sTextFrames( RTL_CONSTASCII_USTRINGPARAM ( "TextFrames" ) );
+                aProp.Name = sTextFrames;
+                aProp.Value <<= aTextFrames;
+                aPathPropVec.push_back( aProp );
+            }
+        }
+        //Path/GluePoints
+        if ( IsProperty( DFF_Prop_connectorPoints ) )
+        {
+            com::sun::star::uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+
+            sal_uInt16 i;
+            sal_uInt16 nNumElemVert = 0;
+            sal_uInt16 nNumElemMemVert = 0;
+            sal_uInt16 nElemSizeVert = 8;
+
+            if ( SeekToContent( DFF_Prop_connectorPoints, rIn ) )
+                rIn >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+
+            sal_Int32 nX, nY;
+            sal_Int16 nTmpA, nTmpB;
+            aGluePoints.realloc( nNumElemVert );
+            for ( i = 0; i < nNumElemVert; i++ )
+            {
+                if ( nElemSizeVert == 8 )
+                {
+                    rIn >> nX
+                        >> nY;
+                }
+                else
+                {
+                    rIn >> nTmpA
+                        >> nTmpB;
+
+                    nX = nTmpA;
+                    nY = nTmpB;
+                }
+                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].First,  nX );
+                EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( aGluePoints[ i ].Second, nY );
+            }
+            const rtl::OUString sGluePoints( RTL_CONSTASCII_USTRINGPARAM ( "GluePoints" ) );
+            aProp.Name = sGluePoints;
+            aProp.Value <<= aGluePoints;
+            aPathPropVec.push_back( aProp );
+        }
+        if ( IsProperty( DFF_Prop_connectorType ) )
+        {
+            sal_Int16 nGluePointType = (sal_uInt16)GetPropertyValue( DFF_Prop_connectorType );
+            const rtl::OUString sGluePointType( RTL_CONSTASCII_USTRINGPARAM ( "GluePointType" ) );
+            aProp.Name = sGluePointType;
+            aProp.Value <<= nGluePointType;
+            aPathPropVec.push_back( aProp );
+        }
+        // pushing the whole Path element
+        if ( aPathPropVec.size() )
+        {
+            const rtl::OUString sPath( RTL_CONSTASCII_USTRINGPARAM ( "Path" ) );
+            PropSeq aPathPropSeq( aPathPropVec.size() );
+            aIter = aPathPropVec.begin();
+            aEnd = aPathPropVec.end();
+            beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
+            while ( aIter != aEnd )
+                *pPathValues++ = *aIter++;
+            aProp.Name = sPath;
+            aProp.Value <<= aPathPropSeq;
+            aPropVec.push_back( aProp );
+        }
+    }
+    /////////////////////////////////////////
+    // "TextPath" PropertySequence element //
+    /////////////////////////////////////////
+    sal_Bool bTextPathOn = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x4000 ) != 0;
+    if ( bTextPathOn )
+    {
+        PropVec aTextPathPropVec;
+
+        // On
+        const rtl::OUString sTextPathOn( RTL_CONSTASCII_USTRINGPARAM ( "On" ) );
+        aProp.Name = sTextPathOn;
+        aProp.Value <<= bTextPathOn;
+        aTextPathPropVec.push_back( aProp );
+        // FitPath
+        const rtl::OUString sTextPathFitPath( RTL_CONSTASCII_USTRINGPARAM ( "FitPath" ) );
+        sal_Bool bTextPathFitPath = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x100 ) != 0;
+        aProp.Name = sTextPathFitPath;
+        aProp.Value <<= bTextPathFitPath;
+        aTextPathPropVec.push_back( aProp );
+        // FitShape
+        const rtl::OUString sTextPathFitShape( RTL_CONSTASCII_USTRINGPARAM ( "FitShape" ) );
+        sal_Bool bTextPathFitShape = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x400 ) != 0;
+        aProp.Name = sTextPathFitShape;
+        aProp.Value <<= bTextPathFitShape;
+        aTextPathPropVec.push_back( aProp );
+        // ScaleX
+        const rtl::OUString sTextPathScaleX( RTL_CONSTASCII_USTRINGPARAM ( "ScaleX" ) );
+        sal_Bool bTextPathScaleX = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x40 ) != 0;
+        aProp.Name = sTextPathScaleX;
+        aProp.Value <<= bTextPathScaleX;
+        aTextPathPropVec.push_back( aProp );
+        // SameLetterHeights
+        const rtl::OUString sSameLetterHeight( RTL_CONSTASCII_USTRINGPARAM ( "SameLetterHeights" ) );
+        sal_Bool bSameLetterHeight = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x80 ) != 0;
+        aProp.Name = sSameLetterHeight;
+        aProp.Value <<= bSameLetterHeight;
+        aTextPathPropVec.push_back( aProp );
+
+        // pushing the whole TextPath element
+        const rtl::OUString sTextPath( RTL_CONSTASCII_USTRINGPARAM ( "TextPath" ) );
+        PropSeq aTextPathPropSeq( aTextPathPropVec.size() );
+        aIter = aTextPathPropVec.begin();
+        aEnd = aTextPathPropVec.end();
+        beans::PropertyValue* pTextPathValues = aTextPathPropSeq.getArray();
+        while ( aIter != aEnd )
+            *pTextPathValues++ = *aIter++;
+        aProp.Name = sTextPath;
+        aProp.Value <<= aTextPathPropSeq;
+        aPropVec.push_back( aProp );
+    }
+    ////////////////////////
+    // "AdjustmentValues" // The AdjustmentValues are imported at last, because depending to the type of the
+    //////////////////////// handle (POLAR) we will convert the adjustment value from a fixed float to double
+
+    // checking the last used adjustment handle, so we can determine how many handles are to allocate
+    sal_Int32 i = DFF_Prop_adjust10Value;
+    while ( ( i >= DFF_Prop_adjustValue ) && !IsProperty( i ) )
+        i--;
+    sal_Int32 nAdjustmentValues = ( i - DFF_Prop_adjustValue ) + 1;
+    if ( nAdjustmentValues )
+    {
+        uno::Sequence< drafts::com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
+        while( --nAdjustmentValues >= 0 )
+        {
+            sal_Int32 nValue = 0;
+            beans::PropertyState ePropertyState = beans::PropertyState_DEFAULT_VALUE;
+            if ( IsProperty( i ) )
+            {
+                nValue = GetPropertyValue( i );
+                ePropertyState = beans::PropertyState_DIRECT_VALUE;
+            }
+            if ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << ( i - DFF_Prop_adjustValue ) ) )
+            {
+                double fValue = nValue;
+                fValue /= 65536;
+                aAdjustmentSeq[ nAdjustmentValues ].Value <<= fValue;
+            }
+            else
+                aAdjustmentSeq[ nAdjustmentValues ].Value <<= nValue;
+            aAdjustmentSeq[ nAdjustmentValues ].State = ePropertyState;
+            i--;
+        }
+        const rtl::OUString sAdjustmentValues( RTL_CONSTASCII_USTRINGPARAM ( "AdjustmentValues" ) );
+        aProp.Name = sAdjustmentValues;
+        aProp.Value <<= aAdjustmentSeq;
+        aPropVec.push_back( aProp );
+    }
+
+    // creating the whole property set
+    PropSeq aSeq( aPropVec.size() );
+    beans::PropertyValue* pValues = aSeq.getArray();
+    aIter = aPropVec.begin();
+    aEnd = aPropVec.end();
+    while ( aIter != aEnd )
+        *pValues++ = *aIter++;
+    rSet.Put( SdrCustomShapeGeometryItem( aSeq ) );
+}
+
+void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const MSO_SPT eShapeType, const sal_uInt32 nShapeFlags ) const
+{
+    MapUnit eMap( rManager.GetModel()->GetScaleUnit() );
+
+    for ( void* pDummy = ((DffPropertyReader*)this)->First(); pDummy; pDummy = ((DffPropertyReader*)this)->Next() )
+    {
+        UINT32 nRecType = GetCurKey();
+        UINT32 nContent = mpContents[ nRecType ];
+        switch ( nRecType )
+        {
+            case DFF_Prop_gtextSize :
+                rSet.Put( SvxFontHeightItem( rManager.ScalePt( nContent ) ) );
+            break;
+            // GeoText
+            case DFF_Prop_gtextFStrikethrough :
+            {
+                if ( nContent & 0x20 )
+                    rSet.Put( SvxWeightItem( nContent ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
+                if ( nContent & 0x10 )
+                    rSet.Put( SvxPostureItem( nContent ? ITALIC_NORMAL : ITALIC_NONE ) );
+                if ( nContent & 0x08 )
+                    rSet.Put( SvxUnderlineItem( nContent ? UNDERLINE_SINGLE : UNDERLINE_NONE ) );
+                if ( nContent & 0x40 )
+                    rSet.Put(SvxShadowedItem( nContent != 0 ) );
+//              if ( nContent & 0x02 )
+//                  rSet.Put( SvxCaseMapItem( nContent ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
+                if ( nContent & 0x01 )
+                    rSet.Put( SvxCrossedOutItem( nContent ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
+            }
+            break;
+
+            case DFF_Prop_fillColor :
+                rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_fillColor ) ) );
+            break;
+
+            // ShadowStyle
+            case DFF_Prop_shadowType :
+            {
+                MSO_ShadowType eShadowType = (MSO_ShadowType)nContent;
+                if( eShadowType != mso_shadowOffset )
+                {
+                    //   mso_shadowDouble
+                    //   mso_shadowRich
+                    //   mso_shadowEmbossOrEngrave
+                    // koennen wir nicht, kreiere Default-Schatten mit default-
+                    // Abstand
+                    rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm Schattendistanz
+                    rSet.Put( SdrShadowYDistItem( 35 ) );
+                }
+            }
+            break;
+            case DFF_Prop_shadowColor :
+                rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_shadowColor ) ) );
+            break;
+            case DFF_Prop_shadowOpacity :
+                rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - nContent ) / 655 ) ) );
+            break;
+            case DFF_Prop_shadowOffsetX :
+            {
+                INT32 nVal = (INT32)nContent;
+                rManager.ScaleEmu( nVal );
+                if ( nVal )
+                    rSet.Put( SdrShadowXDistItem( nVal ) );
+            }
+            break;
+            case DFF_Prop_shadowOffsetY :
+            {
+                INT32 nVal = (INT32)nContent;
+                rManager.ScaleEmu( nVal );
+                if ( nVal )
+                    rSet.Put( SdrShadowYDistItem( nVal ) );
+            }
+            break;
+            case DFF_Prop_fshadowObscured :
+            {
+                sal_Bool bHasShadow = ( nContent & 2 ) != 0;
+                rSet.Put( SdrShadowItem( bHasShadow ) );
+                if ( bHasShadow )
+                {
+                    if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
+                        rSet.Put( SdrShadowXDistItem( 35 ) );
+                    if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
+                        rSet.Put( SdrShadowYDistItem( 35 ) );
+                }
+            }
+            break;
+        }
+    }
+
+    ApplyLineAttributes( rSet );
+    ApplyFillAttributes( rIn, rSet, eShapeType );
+    if (  rManager.GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_IAS )
+    {
+        if ( eShapeType != mso_sptNil )
+        {
+            ApplyCustomShapeGeometryAttributes( rIn, rSet, eShapeType, nShapeFlags );
+            ApplyCustomShapeTextAttributes( rSet );
+        }
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -2483,7 +3874,7 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
         rStr.Erase();
 }
 
-SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, Rectangle& rBoundRect ) const
+SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCtrl, SfxItemSet& rSet, Rectangle& rBoundRect ) const
 {
     SdrObject*  pRet = NULL;
     String      aObjectText;
@@ -2517,7 +3908,7 @@ SdrObject* SvxMSDffManager::ImportWordArt( SvStream& rStCtrl, SfxItemSet& rSet, 
         bTextRotate = TRUE;
     }
     if ( aObjectText.Len() )
-    {   // WordArt-Objekt Mit dem Text in aObjectText erzeugen
+    {   // FontWork-Objekt Mit dem Text in aObjectText erzeugen
         SdrObject* pNewObj = new SdrRectObj( OBJ_TEXT, rBoundRect );
         if( pNewObj )
         {
@@ -3081,7 +4472,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             SfxItemSet  aSet( pSdrModel->GetItemPool() );
 
             sal_Bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
-            sal_Bool    bIsAutoShape = FALSE;
+            sal_Bool    bIsCustomShape = sal_False;
             sal_Int32   nObjectRotation = mnFix16Angle;
             sal_uInt32  nSpFlags = aObjData.nSpFlags;
 
@@ -3090,22 +4481,23 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 pRet = ImportGraphic( rSt, aSet, aBoundRect, aObjData );
                 if ( pRet )
                 {
-                    if ( !IsHardAttribute( DFF_Prop_fFilled ) )     // the default for graphic objects is: not filled
-                    {
-                        UINT32 nOldProp = GetPropertyValue( DFF_Prop_fNoFillHitTest );
-                        if ( nOldProp & 0x10 )
-                            SetPropertyValue( DFF_Prop_fNoFillHitTest, nOldProp &~0x10 );
+                    sal_Bool bFilled = ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 16 ) != 0;
+                    if ( bFilled && !IsHardAttribute( DFF_Prop_fFilled ) )  // shapes are filled by default, but graphic objects not
+                    {                                                       // we are taking care of this here
+                        sal_uInt32 nOpt = GetPropertyValue( DFF_Prop_fNoFillHitTest  );
+                        SetPropertyValue( DFF_Prop_fNoFillHitTest, nOpt & ~16 );
+                        bFilled = sal_False;
                     }
-                    if ( !IsHardAttribute( DFF_Prop_fLine ) )       // the default for graphic objects is: no line
+                    BOOL bLine = ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) != 0;
+                    if ( bLine && !IsHardAttribute( DFF_Prop_fLine ) )
                     {
-                        UINT32 nOldProp = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
-                        if ( nOldProp & 8 )
-                            SetPropertyValue( DFF_Prop_fNoLineDrawDash, nOldProp &~8 );
+                        sal_uInt32 nOpt = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+                        SetPropertyValue( DFF_Prop_fNoFillHitTest, nOpt & ~8 );
+                        bLine = sal_False;
                     }
                     if ( GetSvxMSDffSettings() & ( SVXMSDFF_SETTINGS_IMPORT_PPT | SVXMSDFF_SETTINGS_IMPORT_EXCEL ) )
-                    {   // impress does not support line propertys on graphic objects
-                        BOOL bFilled = ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 16 ) != 0;
-                        BOOL bLine = ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 ) != 0;
+                    {
+                        // impress does not support line propertys on graphic objects
                         if ( bLine || bFilled )
                         {
                             SdrObject* pRect;
@@ -3135,7 +4527,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                 }
                 nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );         // #68396#
             }
-            else  if ( ( aObjData.eShapeType == mso_sptCurvedLeftArrow )    // #97935# not taking the autoshapes from msashape,
+            else  if ( ( aObjData.eShapeType == mso_sptCurvedLeftArrow )    // #97935# not taking the customshapes from msashape,
                     || ( aObjData.eShapeType == mso_sptCurvedRightArrow )   // instead we are using our precalculated ones
                     || ( aObjData.eShapeType == mso_sptCurvedUpArrow )
                     || ( aObjData.eShapeType == mso_sptCurvedDownArrow ) )
@@ -3146,144 +4538,224 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             }
             else
             {
-                SvxMSDffAutoShape aAutoShape( *this, rSt, aObjData, aBoundRect, nObjectRotation, mpTracer );
-                if ( !aAutoShape.IsEmpty() )
+                // Check if we are using our new as shape type. This is done by
+                // the PowerPoint import now. As result nearly each escher object
+                // will be imported as customshape, this is also done in the case for
+                // simple text objects.
+                // The new shape is having the advantage to fully support wordwrapping
+                // and autogrow size attributes.
+
+                if (  GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_IAS )
                 {
-                    ApplyAttributes( rSt, aSet, NULL );
-                    pRet = aAutoShape.GetObject( pSdrModel, aSet, TRUE );
-                    aTextRect = aAutoShape.GetTextRect();
-                    bIsAutoShape = TRUE;
-                }
-                else if ( aObjData.eShapeType == mso_sptTextBox )
-                {
-                    if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
-                        || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
+                    if ( GetCustomShapeContent( aObjData.eShapeType ) || IsProperty( DFF_Prop_pVertices ) )
                     {
-                        pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
+
+                        ApplyAttributes( rSt, aSet, aObjData.eShapeType, aObjData.nSpFlags );
+// the com.sun.star.drawing.EnhancedCustomShapeEngine is default, so we do not need to set a hard attribute
+//                      aSet.Put( SdrCustomShapeEngineItem( String::CreateFromAscii( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) ) );
+                        pRet = new SdrObjCustomShape();
+                        pRet->SetModel( pSdrModel );
+
+                        // in case of a FontWork, the text is set by the escher import
+                        if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x4000 ) // Is FontWork
+                        {
+                            String              aObjectText;
+                            String              aFontName;
+                            MSO_GeoTextAlign    eGeoTextAlign;
+
+                            if ( SeekToContent( DFF_Prop_gtextUNICODE, rStCtrl ) )
+                            {
+                                MSDFFReadZString( rStCtrl, aObjectText, GetPropertyValue( DFF_Prop_gtextUNICODE ), TRUE );
+                                ((SdrObjCustomShape*)pRet)->SetText( aObjectText );
+                            }
+                            if ( SeekToContent( DFF_Prop_gtextFont, rStCtrl ) )
+                            {
+                                SvxFontItem aLatin, aAsian, aComplex;
+                                GetDefaultFonts( aLatin, aAsian, aComplex );
+
+                                MSDFFReadZString( rStCtrl, aFontName, GetPropertyValue( DFF_Prop_gtextFont ), TRUE );
+                                aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName() ) );
+                            }
+                            eGeoTextAlign = ( (MSO_GeoTextAlign)GetPropertyValue( DFF_Prop_gtextAlign, mso_alignTextCenter ) );
+                            {
+                                SdrTextHorzAdjust eHorzAdjust;
+                                switch( eGeoTextAlign )
+                                {
+                                    case mso_alignTextLetterJust :
+                                    case mso_alignTextWordJust :
+                                    case mso_alignTextStretch : eHorzAdjust = SDRTEXTHORZADJUST_BLOCK; break;
+                                    default:
+                                    case mso_alignTextInvalid :
+                                    case mso_alignTextCenter : eHorzAdjust = SDRTEXTHORZADJUST_CENTER; break;
+                                    case mso_alignTextLeft : eHorzAdjust = SDRTEXTHORZADJUST_LEFT; break;
+                                    case mso_alignTextRight : eHorzAdjust = SDRTEXTHORZADJUST_RIGHT; break;
+                                }
+                                aSet.Put( SdrTextHorzAdjustItem( eHorzAdjust ) );
+
+                                SdrFitToSizeType eFTS = SDRTEXTFIT_NONE;
+                                if ( eGeoTextAlign == mso_alignTextStretch )
+                                    eFTS = SDRTEXTFIT_ALLLINES;
+                                aSet.Put( SdrTextFitToSizeTypeItem( eFTS ) );
+                            }
+                            if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x2000 )
+                            {   // SJ TODO: Vertical Writing is not correct, instead this should be
+                                // replaced through "CharacterRotation" by 90°, therefore a new Item has to be
+                                // supported by svx core, api and xml file format
+                                ((SdrObjCustomShape*)pRet)->SetVerticalWriting( sal_True );
+                            }
+                        }
+                        pRet->SetMergedItemSet( aSet );
+                        pRet->SetSnapRect( aBoundRect );
+
+                        EnhancedCustomShape2d aCustomShape2d( pRet );
+                        aTextRect = aCustomShape2d.GetTextRect();
+                        bIsCustomShape = TRUE;
                     }
                 }
-                else if (
-                    mso_sptWedgeRectCallout == aObjData.eShapeType ||
-                    mso_sptWedgeRRectCallout == aObjData.eShapeType ||
-                    mso_sptWedgeEllipseCallout == aObjData.eShapeType ||
-                    mso_sptBalloon == aObjData.eShapeType ||
-                    mso_sptCloudCallout == aObjData.eShapeType )
+                else
                 {
-                    // Balloon mappen
-                    if( mso_sptBalloon == aObjData.eShapeType )
-                        aObjData.eShapeType = mso_sptWedgeRRectCallout;
-
-                    pRet = GetAutoForm( aObjData.eShapeType );
-                    if ( pRet )
-                        pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
-                }
-                else if ( ( ( aObjData.eShapeType >= mso_sptCallout1 ) && ( aObjData.eShapeType <= mso_sptAccentBorderCallout3 ) )
-                            || ( aObjData.eShapeType == mso_sptCallout90 )
-                            || ( aObjData.eShapeType == mso_sptAccentCallout90 )
-                            || ( aObjData.eShapeType == mso_sptBorderCallout90 )
-                            || ( aObjData.eShapeType == mso_sptAccentBorderCallout90 ) )
-                {
-                    pRet = new SdrCaptionObj( aBoundRect );
-                    INT32 nAdjust0 = GetPropertyValue( DFF_Prop_adjustValue, 0 );
-                    INT32 nAdjust1 = GetPropertyValue( DFF_Prop_adjust2Value, 0 );
-                    if( nAdjust0 | nAdjust1 )
-                    {   // AdjustValues anwenden, nur welche ?!?
-                        nAdjust0 = ( nAdjust0 * 100 ) / 850;
-                        nAdjust1 = ( nAdjust1 * 100 ) / 1275;
-                        Point aTailPos( nAdjust0 + aBoundRect.Left(), nAdjust1 + aBoundRect.Top() );
-                        ((SdrCaptionObj*)pRet)->NbcSetTailPos( aTailPos );
+                    SvxMSDffCustomShape aCustomShape( *this, rSt, aObjData, aBoundRect, nObjectRotation, mpTracer );
+                    if ( !aCustomShape.IsEmpty() )
+                    {
+                        ApplyAttributes( rSt, aSet, aObjData.eShapeType, aObjData.nSpFlags );
+                        pRet = aCustomShape.GetObject( pSdrModel, aSet, TRUE );
+                        aTextRect = aCustomShape.GetTextRect();
+                        bIsCustomShape = TRUE;
                     }
                 }
-                else if( ( aObjData.eShapeType >= mso_sptTextPlainText ) && ( aObjData.eShapeType <= mso_sptTextCanDown ) ) // WordArt
+                if ( !bIsCustomShape )
                 {
-                    aObjData.bIsAutoText = TRUE;
-                    if ( mbTracing )
-                        mpTracer->Trace( rtl::OUString::createFromAscii( "escher1000" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
-                    pRet = ImportWordArt( rSt, aSet, aBoundRect );
-                }
-                else if ( aObjData.eShapeType == mso_sptLine )
-                {
-                    pRet = new SdrPathObj( aBoundRect.TopLeft(), aBoundRect.BottomRight() );
-                }
-                else if( bIsConnector )
-                {
-                    // Konnektoren
-                    MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
-
-                    pRet = new SdrEdgeObj();
-                    if( pRet )
+                    if ( aObjData.eShapeType == mso_sptTextBox )
                     {
-                        pRet->SetLogicRect(aBoundRect);
-
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(TRUE, NULL);
-                        ((SdrEdgeObj*)pRet)->ConnectToNode(FALSE, NULL);
-
-                        Point aPoint1( aBoundRect.TopLeft() );
-                        Point aPoint2( aBoundRect.BottomRight() );
-
-                        // Rotationen beachten
-                        if ( nObjectRotation )
+                        if ( ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
+                            || ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) )
                         {
-                            double a = nObjectRotation * nPi180;
-                            Point aCenter( aBoundRect.Center() );
-                            double ss = sin(a);
-                            double cc = cos(a);
-
-                            RotatePoint(aPoint1, aCenter, ss, cc);
-                            RotatePoint(aPoint2, aCenter, ss, cc);
+                            pRet = new SdrRectObj( aBoundRect );  // SJ: changed the type from OBJ_TEXT to OBJ_RECT (#88277#)
                         }
-
-                        // Linie innerhalb des Bereiches zurechtdrehen/spiegeln
-                        if ( nSpFlags & SP_FFLIPH )
-                        {
-                            INT32 n = aPoint1.X();
-                            aPoint1.X() = aPoint2.X();
-                            aPoint2.X() = n;
-                        }
-                        if ( nSpFlags & SP_FFLIPV )
-                        {
-                            INT32 n = aPoint1.Y();
-                            aPoint1.Y() = aPoint2.Y();
-                            aPoint2.Y() = n;
-                        }
-                        nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
-
-                        pRet->NbcSetPoint(aPoint1, 0);  // Startpunkt
-                        pRet->NbcSetPoint(aPoint2, 1);  // Endpunkt
-
-                        switch( eConnectorStyle )
-                        {
-                            case mso_cxstyleBent:
-                                aSet.Put( SdrEdgeKindItem( SDREDGE_ORTHOLINES ) );
-                            break;
-                            case mso_cxstyleCurved:
-                                aSet.Put( SdrEdgeKindItem( SDREDGE_BEZIER ) );
-                            break;
-                            default: // mso_cxstyleStraight || mso_cxstyleNone
-                                aSet.Put( SdrEdgeKindItem( SDREDGE_ONELINE ) );
-                            break;
-                        }
-                        aSet.Put( SdrEdgeNode1HorzDistItem( 0 ) );
-                        aSet.Put( SdrEdgeNode1VertDistItem( 0 ) );
-                        aSet.Put( SdrEdgeNode2HorzDistItem( 0 ) );
-                        aSet.Put( SdrEdgeNode2VertDistItem( 0 ) );
                     }
-                }
-                else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptTextBox ) )
-                {
-                    pRet = GetAutoForm( aObjData.eShapeType );
-                    if ( pRet )
+                    else if (
+                        mso_sptWedgeRectCallout == aObjData.eShapeType ||
+                        mso_sptWedgeRRectCallout == aObjData.eShapeType ||
+                        mso_sptWedgeEllipseCallout == aObjData.eShapeType ||
+                        mso_sptBalloon == aObjData.eShapeType ||
+                        mso_sptCloudCallout == aObjData.eShapeType )
                     {
-                        mpTracer->Trace( rtl::OUString::createFromAscii( "escher1001" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
-                        pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
+                        // Balloon mappen
+                        if( mso_sptBalloon == aObjData.eShapeType )
+                            aObjData.eShapeType = mso_sptWedgeRRectCallout;
+
+                        pRet = GetAutoForm( aObjData.eShapeType );
+                        if ( pRet )
+                            pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
+                    }
+                    else if ( ( ( aObjData.eShapeType >= mso_sptCallout1 ) && ( aObjData.eShapeType <= mso_sptAccentBorderCallout3 ) )
+                                || ( aObjData.eShapeType == mso_sptCallout90 )
+                                || ( aObjData.eShapeType == mso_sptAccentCallout90 )
+                                || ( aObjData.eShapeType == mso_sptBorderCallout90 )
+                                || ( aObjData.eShapeType == mso_sptAccentBorderCallout90 ) )
+                    {
+                        pRet = new SdrCaptionObj( aBoundRect );
+                        INT32 nAdjust0 = GetPropertyValue( DFF_Prop_adjustValue, 0 );
+                        INT32 nAdjust1 = GetPropertyValue( DFF_Prop_adjust2Value, 0 );
+                        if( nAdjust0 | nAdjust1 )
+                        {   // AdjustValues anwenden, nur welche ?!?
+                            nAdjust0 = ( nAdjust0 * 100 ) / 850;
+                            nAdjust1 = ( nAdjust1 * 100 ) / 1275;
+                            Point aTailPos( nAdjust0 + aBoundRect.Left(), nAdjust1 + aBoundRect.Top() );
+                            ((SdrCaptionObj*)pRet)->NbcSetTailPos( aTailPos );
+                        }
+                    }
+                    else if( ( aObjData.eShapeType >= mso_sptTextPlainText ) && ( aObjData.eShapeType <= mso_sptTextCanDown ) ) // FontWork
+                    {
+                        aObjData.bIsAutoText = TRUE;
+                        if ( mbTracing )
+                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1000" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
+                        pRet = ImportFontWork( rSt, aSet, aBoundRect );
+                    }
+                    else if ( aObjData.eShapeType == mso_sptLine )
+                    {
+                        pRet = new SdrPathObj( aBoundRect.TopLeft(), aBoundRect.BottomRight() );
+                    }
+                    else if( bIsConnector )
+                    {
+                        // Konnektoren
+                        MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
+
+                        pRet = new SdrEdgeObj();
+                        if( pRet )
+                        {
+                            pRet->SetLogicRect(aBoundRect);
+
+                            ((SdrEdgeObj*)pRet)->ConnectToNode(TRUE, NULL);
+                            ((SdrEdgeObj*)pRet)->ConnectToNode(FALSE, NULL);
+
+                            Point aPoint1( aBoundRect.TopLeft() );
+                            Point aPoint2( aBoundRect.BottomRight() );
+
+                            // Rotationen beachten
+                            if ( nObjectRotation )
+                            {
+                                double a = nObjectRotation * nPi180;
+                                Point aCenter( aBoundRect.Center() );
+                                double ss = sin(a);
+                                double cc = cos(a);
+
+                                RotatePoint(aPoint1, aCenter, ss, cc);
+                                RotatePoint(aPoint2, aCenter, ss, cc);
+                            }
+
+                            // Linie innerhalb des Bereiches zurechtdrehen/spiegeln
+                            if ( nSpFlags & SP_FFLIPH )
+                            {
+                                INT32 n = aPoint1.X();
+                                aPoint1.X() = aPoint2.X();
+                                aPoint2.X() = n;
+                            }
+                            if ( nSpFlags & SP_FFLIPV )
+                            {
+                                INT32 n = aPoint1.Y();
+                                aPoint1.Y() = aPoint2.Y();
+                                aPoint2.Y() = n;
+                            }
+                            nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
+
+                            pRet->NbcSetPoint(aPoint1, 0);  // Startpunkt
+                            pRet->NbcSetPoint(aPoint2, 1);  // Endpunkt
+
+                            switch( eConnectorStyle )
+                            {
+                                case mso_cxstyleBent:
+                                    aSet.Put( SdrEdgeKindItem( SDREDGE_ORTHOLINES ) );
+                                break;
+                                case mso_cxstyleCurved:
+                                    aSet.Put( SdrEdgeKindItem( SDREDGE_BEZIER ) );
+                                break;
+                                default: // mso_cxstyleStraight || mso_cxstyleNone
+                                    aSet.Put( SdrEdgeKindItem( SDREDGE_ONELINE ) );
+                                break;
+                            }
+                            aSet.Put( SdrEdgeNode1HorzDistItem( 0 ) );
+                            aSet.Put( SdrEdgeNode1VertDistItem( 0 ) );
+                            aSet.Put( SdrEdgeNode2HorzDistItem( 0 ) );
+                            aSet.Put( SdrEdgeNode2VertDistItem( 0 ) );
+                        }
+                    }
+                    else if ( ( (int)aObjData.eShapeType > (int)mso_sptRectangle ) && ( (int)aObjData.eShapeType < (int)mso_sptTextBox ) )
+                    {
+                        pRet = GetAutoForm( aObjData.eShapeType );
+                        if ( pRet )
+                        {
+                            mpTracer->Trace( rtl::OUString::createFromAscii( "escher1001" ), rtl::OUString::valueOf( (sal_Int32)aObjData.eShapeType ) );
+                            pRet->NbcSetSnapRect( aBoundRect ); // Groesse setzen
+                        }
                     }
                 }
             }
             if ( pRet )
             {
-                if ( !bIsAutoShape )
+                if ( !bIsCustomShape )
                 {
-                     ApplyAttributes( rSt, aSet, pRet );
+                     ApplyAttributes( rSt, aSet, aObjData.eShapeType, aObjData.nSpFlags );
                     if ( !GetPropertyValue( DFF_Prop_gtextSize, 0 ) )
                         aSet.Put( SvxFontHeightItem( ScalePt( 24 << 16 ) ) );
                     if ( aObjData.eShapeType == mso_sptTextBox )
@@ -3311,7 +4783,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     // #81981# not all objects are effected by 3d effects
                     if ( !bGraphic )
                     {
-                        SdrObject* p3d = SvxMSDffAutoShape3D::Create3DObject( pRet, *this, aSet, aBoundRect, nSpFlags );
+                        SdrObject* p3d = SvxMSDffCustomShape3D::Create3DObject( pRet, *this, aSet, aBoundRect, nSpFlags );
                         if ( p3d )
                         {
                             nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
@@ -3592,7 +5064,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 pObj = pOrgObj = 0;
             }
 
-            // Distance of Textbox to it's surrounding Autoshape
+            // Distance of Textbox to it's surrounding Customshape
             INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
             INT32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
             INT32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
@@ -3701,7 +5173,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             }
 
             if( !pObj )
-                ApplyAttributes( rSt, aSet, pTextObj );
+                ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
 
             bool bFitText = false;
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
@@ -3863,7 +5335,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pOrgObj = pObj;
             pObj->SetModel( pSdrModel );
             SfxItemSet aSet( pSdrModel->GetItemPool() );
-            ApplyAttributes( rSt, aSet, pObj );
+            ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
 
             const SfxPoolItem* pPoolItem=NULL;
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
@@ -5333,7 +6805,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
     if( rSrcStorage.Is() && rDestStorage.Is() && rStorageName.Len() )
     {
         // Ist der 01Ole-Stream ueberhaupt vorhanden ?
-        // ( ist er z.B. bei WordArt nicht )
+        // ( ist er z.B. bei FontWork nicht )
         // Wenn nicht -> Einbindung als Grafik
         BOOL bValidStorage = FALSE;
         String aDstStgName( String::CreateFromAscii(
