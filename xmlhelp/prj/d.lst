@@ -1,2 +1,3 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.*
-..\%__SRC%\lib\*.so %_DEST%\bin%_EXT%\*.*
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.*
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.*
