@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:17:19 $
+ *  last change: $Author: mav $ $Date: 2002-09-30 15:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,12 +137,6 @@ void SfxApplication::Quit()
 }
 */
 //--------------------------------------------------------------------
-BOOL SfxApplicationClass::QueryExit()
-{
-    const SfxBoolItem *pRet = (const SfxBoolItem*) SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_SYNCHRON );
-    return pRet ? pRet->GetValue() : FALSE;
-}
-
 BOOL SfxApplication::QueryExit_Impl()
 
 /*  [Beschreibung]

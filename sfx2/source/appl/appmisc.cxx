@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: as $ $Date: 2002-07-05 12:25:30 $
+ *  last change: $Author: mav $ $Date: 2002-09-30 15:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,25 +238,6 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(0))
 }
 
 //--------------------------------------------------------------------
-
-#if SUPD<638
-void SfxApplicationClass::ActivateExtHelp()
-{
-    SFX_APP()->Invalidate( SID_EXTENDEDHELP );
-    ShowStatusText(String());
-}
-
-//-------------------------------------------------------------------------
-
-
-void SfxApplicationClass::DeactivateExtHelp()
-{
-    SFX_APP()->Invalidate( SID_EXTENDEDHELP );
-    HideStatusText();
-}
-#endif
-
-//-------------------------------------------------------------------------
 
 SfxViewFrame* SfxApplication::CreateViewFrame(
     SfxObjectShell& rDoc, sal_uInt16 nViewId, sal_Bool bHidden )
@@ -564,16 +545,6 @@ void SfxApplication::ToolboxState_Impl( SfxItemSet &rSet )
 
 //------------------------------------------------------------------------
 
-#if SUPD<638
-VclFileDialog* SfxApplicationClass::CreateFileDialog( Window* pParent, sal_uInt32 nWinBits )
-{
-    DBG_ERRORFILE( "SfxApplicationClass::CreateFileDialog() isn't supported any longer" );
-
-//    return new SfxFileDialog( pParent, nWinBits );
-    return NULL;
-}
-#endif
-
 SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 {
     sal_Bool bError = sal_False;
@@ -583,13 +554,13 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
         // Gibt es eine Slotdatei ?
         INetURLObject aUserObj( SvtPathOptions().GetUserConfigPath() );
         aUserObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
-        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL(), STREAM_STD_READ );
+        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aUserObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         if ( !pStream || pStream->GetError() == ERRCODE_IO_NOTEXISTS )
         {
             delete pStream;
             INetURLObject aObj( SvtPathOptions().GetConfigPath() );
             aObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
-            pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READ );
+            pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         }
 
         BOOL bSlotsEnabled = SvtInternalOptions().SlotCFGEnabled();

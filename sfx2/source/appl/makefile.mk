@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: pb $ $Date: 2001-10-17 11:00:16 $
+#   last change: $Author: mav $ $Date: 2002-09-30 15:14:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,12 +91,8 @@ SRS2NAME=sfx
 SRC2FILES =  \
         sfx.src
 
-OBJFILES =	\
-        $(OBJ)$/appctor.obj
-
 SLOFILES =  \
     $(SLO)$/imagemgr.obj\
-    $(SLO)$/rmacceptor.obj\
     $(SLO)$/appuno.obj \
     $(SLO)$/appmail.obj \
     $(SLO)$/appmain.obj \
@@ -124,13 +120,8 @@ SLOFILES =  \
     $(SLO)$/dlgcont.obj \
     $(SLO)$/namecont.obj \
     $(SLO)$/scriptcont.obj \
-    $(SLO)$/oinstanceprovider.obj \
-    $(SLO)$/opluginframefactory.obj \
-    $(SLO)$/pluginacceptthread.obj  \
-    $(SLO)$/officeacceptthread.obj \
     $(SLO)$/newhelp.obj \
     $(SLO)$/helpinterceptor.obj \
-    $(SLO)$/cmdlineargs.obj \
     $(SLO)$/shutdownicon.obj \
     $(SLO)$/shutdowniconw32.obj \
     $(SLO)$/sfxpicklist.obj \
@@ -143,7 +134,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/frstinit.obj		\
     $(SLO)$/appinit.obj			\
     $(SLO)$/picklist.obj		\
-    $(SLO)$/rmacceptor.obj		\
     $(SLO)$/appcfg.obj			\
     $(SLO)$/helpinterceptor.obj	\
     $(SLO)$/newhelp.obj			\

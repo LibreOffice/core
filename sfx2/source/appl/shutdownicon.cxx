@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-27 08:50:19 $
+ *  last change: $Author: mav $ $Date: 2002-09-30 15:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #include <app.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
-#include <cmdlineargs.hxx>
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
