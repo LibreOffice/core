@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-02 23:06:25 $
+ *  last change: $Author: rt $ $Date: 2001-07-03 21:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ chinese_traditional ] = "µLªkΈό¤Jµ{¦΅³΅¥σ(%s)΅C\n½Π±zΏοΎά¦wΈΛµ{¦΅ªΊ­Χ½ΖΏο¶µ΅C";
     Text[ arabic ] = "ΚΪΠΡ ΚΝγνα Ηαγίζδ (%s).\n ΗαΡΜΗΑ ΘΟΑ ΘΡδΗγΜ ΗαΕΪΟΗΟ΅ Λγ ΗαήνΗγ ΘΪγανΙ ΗαΕΥαΗΝ ΗααΗÒγΙ.";
     Text[ greek ] = "Δεν ήταν δυνατόν να φορτωθεί το στοιχείο (%s)\nΠαρακαλώ εκκινήστε ξανά το πρόγραμμα εγκατάστασης και εκτελέστε την επισκευή.";
-    Text[ korean ] = "±ΈΌΊΏδΌÒ (%s)ΐ»£¨Έ¦£©·ΞµεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.\nΌΒΎχΐ»΅΅½ΓΐΫΗΡ ΄Ωΐ½ ΌφΈ®ΗΟ½Κ½ΓΏΐ.";
+    Text[ korean ] = "±ΈΌΊΏδΌÒ (%s)ΐ»(Έ¦) ·ΞµεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.\nΌΒΎχΐ» ½ΓΐΫΗΡ ΄Ωΐ½ ΊΉ±ΈΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Bir bileώen (%s) yόklenemedi.\nSetup programύnύ ηalύώtύrύp onarύnύz.";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Komponenttia (%s) ei voitu ladata.\nKδynnistδ asennusohjelma korjausasetuksella.";
@@ -109,7 +109,7 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ polish ] = "Nie wywietlaj wiκcej ostrzeΏenia.";
     Text[ portuguese_brazilian ] = "Do not warn me again.";
     Text[ japanese ] = "΅γ‚±‚Μw¦‚Ν‚ΰ‚¤•\\¦‚µ‚Θ‚ΆB";
-    Text[ korean ] = "Do not warn me again.";
+    Text[ korean ] = "ΐΜ Έή½ΓΑφΈ¦ ΄υ ΐΜ»σ Η¥½ΓΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
     Text[ chinese_simplified ] = "²»ΤΩΟΤΚΎΥβΈφΜαΚΎ΅£";
     Text[ chinese_traditional ] = "¤£­n¦AΕγ¥ά³o­Σ΄£¥ά΅C";
     Text[ turkish ] = "Do not warn me again.";
@@ -117,6 +117,7 @@ String SV_STDTEXT_DONTWARNAGAIN
     Text[ catalan ] = "Do not warn me again.";
     Text[ finnish ] = "Diesen Hinweis nicht mehr anzeigen.";
 };
+
 
 
 
