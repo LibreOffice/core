@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_bridgetest.cs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:17:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,8 @@ using uno;
 using uno.util;
 using unoidl.com.sun.star.uno;
 using unoidl.com.sun.star.lang;
-using unoidl.com.sun.star.test.bridge;
+//using unoidl.com.sun.star.test.bridge;
+using unoidl.test.testtools.bridgetest;
 
 namespace foo
 {
@@ -386,59 +387,60 @@ static bool performTest(XBridgeTest xLBT)
 {
 	check( xLBT != null, "### no test interface!" );
     bool bRet = true;
-	if (xLBT != null)
-	{
-		// this data is never ever granted access to by calls other than equals(), assign()!
-		TestDataElements aData = new TestDataElements(); // test against this data
-		
-		Object xI= new WeakBase();
-
-        Any aAny = new Any( typeof(Object), xI);
-		assign( (TestElement)aData,
-				true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-				0x123456789abcdef0, 0xfedcba9876543210,
-				17.0815f, 3.1415926359, TestEnum.LOLA,
-				Constants.STRING_TEST_CONSTANT, xI,
-				aAny);
-
-		bRet = check( aData.Any.Value == xI, "### unexpected any!" ) && bRet;
-		bRet = check( !(aData.Any.Value != xI), "### unexpected any!" ) && bRet;
-		
-		aData.Sequence = new TestElement[2];
-        aData.Sequence[0] = new TestElement(
-			aData.Bool, aData.Char, aData.Byte, aData.Short,
-			aData.UShort, aData.Long, aData.ULong, 
-			aData.Hyper, aData.UHyper, aData.Float, 
-			aData.Double, aData.Enum, aData.String, 
-			aData.Interface, aData.Any); //(TestElement) aData;
-        aData.Sequence[1] = new TestElement(); //is empty
-        
-		// aData complete
-		//
-		// this is a manually copy of aData for first setting...
-		TestDataElements aSetData = new TestDataElements();
-		Any aAnySet= new Any(typeof(Object), xI);
-		assign( (TestElement)aSetData,
-				aData.Bool, aData.Char, aData.Byte, aData.Short, aData.UShort,
-				aData.Long, aData.ULong, aData.Hyper, aData.UHyper, aData.Float, aData.Double,
-				aData.Enum, aData.String, xI,
-				aAnySet);
-		
-		aSetData.Sequence = new TestElement[2];
-        aSetData.Sequence[0] = new TestElement(
-			aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short,
-			aSetData.UShort, aSetData.Long, aSetData.ULong, 
-			aSetData.Hyper, aSetData.UHyper, aSetData.Float, 
-			aSetData.Double, aSetData.Enum, aSetData.String, 
-			aSetData.Interface, aSetData.Any); //TestElement) aSetData;
-        aSetData.Sequence[1] = new TestElement(); // empty struct
-
-		xLBT.setValues(
-				aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short, aSetData.UShort,
-				aSetData.Long, aSetData.ULong, aSetData.Hyper, aSetData.UHyper, aSetData.Float, aSetData.Double,
-				aSetData.Enum, aSetData.String, aSetData.Interface, aSetData.Any, aSetData.Sequence, aSetData );
-		
-		{
+	if (xLBT == null)
+        return false;
+    
+    // this data is never ever granted access to by calls other than equals(), assign()!
+    TestDataElements aData = new TestDataElements(); // test against this data
+    
+    Object xI= new WeakBase();
+    
+    Any aAny = new Any( typeof(Object), xI);
+    assign( (TestElement)aData,
+            true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
+            0x123456789abcdef0, 0xfedcba9876543210,
+            17.0815f, 3.1415926359, TestEnum.LOLA,
+            Constants.STRING_TEST_CONSTANT, xI,
+            aAny);
+    
+    bRet = check( aData.Any.Value == xI, "### unexpected any!" ) && bRet;
+    bRet = check( !(aData.Any.Value != xI), "### unexpected any!" ) && bRet;
+    
+    aData.Sequence = new TestElement[2];
+    aData.Sequence[0] = new TestElement(
+        aData.Bool, aData.Char, aData.Byte, aData.Short,
+        aData.UShort, aData.Long, aData.ULong, 
+        aData.Hyper, aData.UHyper, aData.Float, 
+        aData.Double, aData.Enum, aData.String, 
+        aData.Interface, aData.Any); //(TestElement) aData;
+    aData.Sequence[1] = new TestElement(); //is empty
+    
+    // aData complete
+    //
+    // this is a manually copy of aData for first setting...
+    TestDataElements aSetData = new TestDataElements();
+    Any aAnySet= new Any(typeof(Object), xI);
+    assign( (TestElement)aSetData,
+            aData.Bool, aData.Char, aData.Byte, aData.Short, aData.UShort,
+            aData.Long, aData.ULong, aData.Hyper, aData.UHyper, aData.Float, aData.Double,
+            aData.Enum, aData.String, xI,
+            aAnySet);
+    
+    aSetData.Sequence = new TestElement[2];
+    aSetData.Sequence[0] = new TestElement(
+        aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short,
+        aSetData.UShort, aSetData.Long, aSetData.ULong, 
+        aSetData.Hyper, aSetData.UHyper, aSetData.Float, 
+        aSetData.Double, aSetData.Enum, aSetData.String, 
+        aSetData.Interface, aSetData.Any); //TestElement) aSetData;
+    aSetData.Sequence[1] = new TestElement(); // empty struct
+    
+    xLBT.setValues(
+        aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short, aSetData.UShort,
+        aSetData.Long, aSetData.ULong, aSetData.Hyper, aSetData.UHyper, aSetData.Float, aSetData.Double,
+        aSetData.Enum, aSetData.String, aSetData.Interface, aSetData.Any, aSetData.Sequence, aSetData );
+    
+    {
 		TestDataElements aRet = new TestDataElements();
         TestDataElements aRet2 = new TestDataElements();
 		xLBT.getValues(
@@ -465,8 +467,8 @@ static bool performTest(XBridgeTest xLBT)
 		bRet = check(
             compareData( aData, aSV2ret ) && compareData( aData, aRet2 ),
             "getValues2 test") && bRet;
-		}
-		{
+    }
+    {
 		TestDataElements aRet = new TestDataElements();
         TestDataElements aRet2 = new TestDataElements();
 		TestDataElements aGVret = xLBT.getValues(
@@ -496,8 +498,8 @@ static bool performTest(XBridgeTest xLBT)
 		xLBT.Any = aRet.Any;
 		xLBT.Sequence = aRet.Sequence;
 		xLBT.Struct = aRet2;
-		}
-		{
+    }
+    {
 		TestDataElements aRet = new TestDataElements();
         TestDataElements aRet2 = new TestDataElements();
 		aRet.Hyper = xLBT.Hyper;
@@ -519,31 +521,132 @@ static bool performTest(XBridgeTest xLBT)
 		aRet2 = xLBT.Struct;
 		
 		bRet = check( compareData( aData, aRet ) && compareData( aData, aRet2 ) , "struct comparison test") && bRet;
-
+        
 		bRet = check(performSequenceTest(xLBT), "sequence test") && bRet;
-
+        
 		// any test
 		bRet = check( performAnyTest( xLBT , aData ) , "any test" ) && bRet;
-
+        
 		// sequence of call test
 		bRet = check( performSequenceOfCallTest( xLBT ) , "sequence of call test" ) && bRet;
-
+        
 		// recursive call test
 		bRet = check( performRecursiveCallTest( xLBT ) , "recursive test" ) && bRet;
 		
 		bRet = (compareData( aData, aRet ) && compareData( aData, aRet2 )) && bRet ;
-
+        
         // check setting of null reference
         xLBT.Interface = null;
         aRet.Interface = xLBT.Interface;
         bRet = (aRet.Interface == null) && bRet;
+        
+    }
+        // Test extended attributes that raise exceptions:
+    try {
+        int i = xLBT.RaiseAttr1;
+            bRet &= check(false, "getRaiseAttr1 did not throw");
+    } catch (RuntimeException )
+    {
+    }
+    catch (System.Exception) {
+        bRet &= check(false, "getRaiseAttr1 threw wrong type");
+    }
+    try {
+        xLBT.RaiseAttr1 = 0;
+        bRet &= check(false, "setRaiseAttr1 did not throw");
+    } catch (IllegalArgumentException) {
+    } catch (System.Exception) {
+        bRet &= check(false, "setRaiseAttr1 threw wrong type");
+    }
+    try {
+        int i = xLBT.RaiseAttr2;
+        bRet &= check(false, "getRaiseAttr2 did not throw");
+    } catch (IllegalArgumentException ) {
+    } catch (System.Exception) {
+        bRet &= check(false, "getRaiseAttr2 threw wrong type");
+    }
+    
+       // Test instantiated polymorphic struct types:
+    {
+        TestPolyStruct poly = new TestPolyStruct(true);
+        bRet &= check(
+            (bool) xLBT.transportPolyBoolean(poly).member,
+            "transportPolyBoolean");
+        poly = new TestPolyStruct(12345UL);
+        xLBT.transportPolyUnsignedHyper(ref poly);
+        bRet &= check((ulong)poly.member == 12345UL, "transportPolyUnsignedHyper");
 
+        Any[] seq = {  new Any(33), new Any("ABC")};
+        poly = new TestPolyStruct(seq);
+        TestPolyStruct poly2;
+        xLBT.transportPolySequence(poly, out poly2);
+        try {
+            Any[] ar = (Any[]) poly2.member;
+            bRet &= check(
+            ar.Length == 2, "transportPolySequence, length");
+
+            int v0;
+            v0 = (int) ar[0].Value;
+            bRet &= check(v0 == 33, "transportPolySequence, element 0");
+
+            string v1 = (string) ar[1].Value;
+            bRet &= check(
+            v1.Equals("ABC"),
+            "transportPolySequence, element 1");
+        } catch (InvalidCastException )
+        {
+            bRet &= check(false, "transportPolySequence");
+        }
+
+        
+        try {
+            //When the test object is a cli object then them member is null
+            //otherwise the bridge has provided a default value.
+            TestPolyStruct s = (TestPolyStruct) xLBT.getNullPolyLong();
+            if (s.member != null)
+                bRet &= check(((int) s.member) == 0, "getNullPolyLong");
+
+            s = (TestPolyStruct) xLBT.getNullPolyString();
+            if (s.member != null)
+                bRet &= check(((string) s.member).Length == 0,
+                              "getNullPolyString");
+            s = (TestPolyStruct) xLBT.getNullPolyType();
+            if (s.member != null)
+                bRet &= check(((Type) s.member) == typeof(void),
+                              "getNullPolyType");
+            s = (TestPolyStruct) xLBT.getNullPolyAny();
+            if (s.member != null)
+            {
+                Any nullAny = (Any) s.member;
+                //???
+                bRet &= check(nullAny.Type == typeof(void),
+                    "getNullPolyAny");
+            }
+            s = (TestPolyStruct) xLBT.getNullPolySequence();
+            if (s.member != null)
+                bRet &= check(((bool[]) s.member).Length == 0,
+                              "getNullPolySequence");
+            s = (TestPolyStruct) xLBT.getNullPolyEnum();
+            if (s.member != null)
+                bRet &= check(((TestEnum) s.member) == TestEnum.TEST,
+                              "getNullPolyEnum");
+            s = (TestPolyStruct) xLBT.getNullPolyStruct();
+            if (s.member != null)
+                bRet &= check(((TestStruct) s.member).member == 0,
+                              "getNullPolyStruct");
+            s = (TestPolyStruct) xLBT.getNullPolyInterface();
+                bRet &= check(s.member == null, "getNullPolyInterface");
+            
+        } catch(InvalidCastException)
+        {
+            bRet &= check(false, "getNullPolyXXX, InvalidCastException");
         }
         
+        }
 
-	}
-        return bRet;
- }
+
+    return bRet;
+}
 static bool performSequenceTest(XBridgeTest xBT)
 {
     bool bRet = true;
