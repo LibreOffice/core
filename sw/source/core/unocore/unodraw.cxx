@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 14:18:51 $
+ *  last change: $Author: os $ $Date: 2001-03-14 12:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,11 +910,39 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             if(pFmt)
             {
                 SwAttrSet aSet(pFmt->GetAttrSet());
-                if( pFmt->GetDoc()->GetRootFrm() )
+                SwDoc* pDoc = pFmt->GetDoc();
+                if(RES_ANCHOR == pMap->nWID && MID_ANCHOR_ANCHORFRAME == pMap->nMemberId)
                 {
-                    UnoActionContext aCtx(pFmt->GetDoc());
-                     if(    COMPARE_EQUAL ==
-                        rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE) )
+                    sal_Bool bDone = sal_True;
+                    Reference<XTextFrame> xFrame;
+                    if(aValue >>= xFrame)
+                    {
+                        Reference<XUnoTunnel> xTunnel(xFrame, UNO_QUERY);
+                        SwXFrame* pFrame = xTunnel.is() ?
+                                (SwXFrame*)xTunnel->getSomething(SwXFrame::getUnoTunnelId()) : 0;
+                        if(pFrame && pFrame->GetFrmFmt() &&
+                            pFrame->GetFrmFmt()->GetDoc() == pDoc)
+                        {
+                            UnoActionContext aCtx(pDoc);
+                            SfxItemSet aSet( pDoc->GetAttrPool(),
+                                        RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
+                            aSet.SetParent(&pFmt->GetAttrSet());
+                            SwFmtAnchor aAnchor = (const SwFmtAnchor&)aSet.Get(pMap->nWID);
+                            SwPosition aPos(*pFrame->GetFrmFmt()->GetCntnt().GetCntntIdx());
+                            aAnchor.SetAnchor(&aPos);
+                            aAnchor.SetType(FLY_AT_FLY);
+                            aSet.Put(aAnchor);
+                            pFmt->SetAttr(aSet);
+                            bDone = sal_True;
+                        }
+                    }
+                    if(!bDone)
+                        throw (IllegalArgumentException());
+                }
+                else if( pDoc->GetRootFrm() )
+                {
+                    UnoActionContext aCtx(pDoc);
+                    if(RES_ANCHOR == pMap->nWID && MID_ANCHOR_ANCHORTYPE == pMap->nMemberId)
                     {
                         SdrObject* pObj = pFmt->FindSdrObject();
                         SdrMarkList aList;
@@ -922,8 +950,8 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         aList.InsertEntry(aMark);
                         sal_Int32 nAnchor;
                         cppu::enum2int( nAnchor, aValue );
-                        pFmt->GetDoc()->ChgAnchor( aList, nAnchor,
-                                                   sal_False, sal_True );
+                        pDoc->ChgAnchor( aList, nAnchor,
+                                                sal_False, sal_True );
                     }
                     else
                     {

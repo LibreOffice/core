@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 10:42:04 $
+ *  last change: $Author: os $ $Date: 2001-03-14 12:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,7 +1372,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 {
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_PAGE_NO),            RES_ANCHOR,             &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_ANCHOR_PAGENUM      },
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),            RES_ANCHOR,             &::getCppuType((text::TextContentAnchorType*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_ANCHOR_ANCHORTYPE},
-                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_HORIORIENT_ORIENT   },
+                    { SW_PROP_NAME(UNO_NAME_ANCHOR_FRAME   ),           RES_ANCHOR,             &::getCppuType((uno::Reference<text::XTextFrame>*)0),    PropertyAttribute::MAYBEVOID, MID_ANCHOR_ANCHORFRAME},
+                    { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),   PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_HORIORIENT_ORIENT },
                     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_HORIORIENT_POSITION|CONVERT_TWIPS   },
                     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE|PropertyAttribute::MAYBEVOID ,MID_HORIORIENT_RELATION },
                     { SW_PROP_NAME(UNO_NAME_LEFT_MARGIN),           RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE|PropertyAttribute::MAYBEVOID, MID_L_MARGIN|CONVERT_TWIPS},
