@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:26:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@
 #ifndef _HTMLKYWD_HXX
 #include <svtools/htmlkywd.hxx>
 #endif
+#include "svtools/urihelper.hxx"
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -654,8 +655,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         ((sOut += ' ') += sHTML_O_action) += "=\"";
         Strm() << sOut.GetBuffer();
         String aURL( *(OUString*)aTmp.getValue() );
-        aURL = INetURLObject::AbsToRel( aURL, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
+        aURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), aURL);
         HTMLOutFuncs::Out_String( Strm(), aURL, eDestEnc, &aNonConvertableCharacters );
         sOut = '\"';
     }
@@ -1096,9 +1096,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 += "=\"";
             rWrt.Strm() << sOut.GetStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(),
-                INetURLObject::AbsToRel( ((VCURLButton*)pVCSbxCtrl)->GetURL(),
-                                        INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS),
+                URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), ((VCURLButton*)pVCSbxCtrl)->GetURL()),
                 rHTMLWrt.eDestEnc, rHTMLWrt.eDestEnc );
             sOut = '\"';
             const String& rTarget =
@@ -1173,9 +1171,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             rWrt.Strm() << sOut.GetBuffer();
 
             HTMLOutFuncs::Out_String( rWrt.Strm(),
-                        INetURLObject::AbsToRel( *(OUString*)aTmp.getValue(),
-                                        INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS),
+                        URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), *(OUString*)aTmp.getValue()),
                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             sOut = '\"';
         }
