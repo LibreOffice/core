@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:07:44 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ String STR_DRAW_DEFAULTTOOLBOX
     Text [ English ] = "Functionbar" ;
     Text [ norwegian ] = "Funksjonslinje" ;
     Text [ italian ] = "Barra delle funzioni" ;
-    Text [ portuguese_brazilian ] = "Barra de funções" ;
+    Text [ portuguese_brazilian ] = "Barra de fun??s" ;
     Text [ portuguese ] = "Barra de funções" ;
     Text [ finnish ] = "Toimintopalkki" ;
     Text [ danish ] = "Funktionslinje" ;
@@ -194,7 +194,7 @@ String STR_OUTLINE_TOOLBOX
     Text [ ENGLISH ] = "Outline toolbox" ;
     Text [ norwegian ] = "Outline toolbox" ;
     Text [ italian ] = "Barra degli strumenti per struttura" ;
-    Text [ portuguese_brazilian ] = "Quadro de ferramentas do esboço" ;
+    Text [ portuguese_brazilian ] = "Quadro de ferramentas do esbo?o" ;
     Text [ portuguese ] = "Barra de ferramentas de Esquema" ;
     Text [ finnish ] = "Jäsennyspalkki" ;
     Text [ danish ] = "Dispositionsværktøjslinje" ;
@@ -322,7 +322,7 @@ String STR_DRAW_COMMONTASK_TOOLBOX
     Text [ ENGLISH ] = "Presentation" ;
     Text [ portuguese ] = "Apresentação" ;
     Text [ english_us ] = "Presentation" ;
-    Text [ portuguese_brazilian ] = "Präsentation" ;
+    Text [ portuguese_brazilian ] = "Pr?sentation" ;
     Text [ swedish ] = "Presentation" ;
     Text [ danish ] = "Præsentation" ;
     Text [ italian ] = "Presentazione" ;
@@ -374,7 +374,7 @@ String STR_BEZIER_TOOLBOX
     Text [ ENGLISH ] = "Bezier toolbox" ;
     Text [ norwegian ] = "Bezier toolbox" ;
     Text [ italian ] = "Barra degli oggetti di Bézier" ;
-    Text [ portuguese_brazilian ] = "Quadro de ferramentas bézier" ;
+    Text [ portuguese_brazilian ] = "Quadro de ferramentas b?zier" ;
     Text [ portuguese ] = "Barra de objectos Bézier" ;
     Text [ finnish ] = "Bézier-objektipalkki" ;
     Text [ danish ] = "Bezierobjektlinje" ;
@@ -499,7 +499,7 @@ String STR_DEFAULTVIEW
     Text [ ENGLISH ] = "Default" ;
     Text [ norwegian ] = "Standard" ;
     Text [ italian ] = "Predefinito" ;
-    Text [ portuguese_brazilian ] = "Padrão" ;
+    Text [ portuguese_brazilian ] = "Padr?o" ;
     Text [ portuguese ] = "Padrão" ;
     Text [ finnish ] = "Oletusarvo" ;
     Text [ danish ] = "Standard" ;
@@ -510,7 +510,7 @@ String STR_DEFAULTVIEW
     Text [ english_us ] = "Default" ;
     Text[ chinese_simplified ] = "Ä¬ÈÏ";
     Text[ russian ] = "Ïî óìîë÷àíèş";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "ÃŞÌ«ÙÄ";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ korean ] = "±âº»";
@@ -604,7 +604,7 @@ String STR_SOLID
     Text [ ENGLISH ] = "Solid" ;
     Text [ norwegian ] = "Solid" ;
     Text [ italian ] = "Piena" ;
-    Text [ portuguese_brazilian ] = "Sólido" ;
+    Text [ portuguese_brazilian ] = "S?ido" ;
     Text [ portuguese ] = "Contínuo" ;
     Text [ finnish ] = "Jatkuva" ;
     Text [ danish ] = "Gennemgående" ;
@@ -656,7 +656,7 @@ String STR_DASH
     Text [ ENGLISH ] = "Dashes" ;
     Text [ norwegian ] = "Dashes" ;
     Text [ italian ] = "Tratti" ;
-    Text [ portuguese_brazilian ] = "Traços" ;
+    Text [ portuguese_brazilian ] = "Tra?os" ;
     Text [ portuguese ] = "Traços" ;
     Text [ finnish ] = "Väliviivat" ;
     Text [ danish ] = "Streger" ;
@@ -682,7 +682,7 @@ String STR_DASHDOT
     Text [ ENGLISH ] = "Dashes and dots" ;
     Text [ norwegian ] = "Dashes and dots" ;
     Text [ italian ] = "Trattini e punti" ;
-    Text [ portuguese_brazilian ] = "Traços e pontos" ;
+    Text [ portuguese_brazilian ] = "Tra?os e pontos" ;
     Text [ portuguese ] = "Traços e pontos" ;
     Text [ finnish ] = "Viivat ja pilkut" ;
     Text [ danish ] = "Streger og prikker" ;
@@ -1127,7 +1127,7 @@ String STR_BRUSH_SOLID
     Text [ ENGLISH ] = "Solid" ;
     Text [ norwegian ] = "Solid" ;
     Text [ italian ] = "Pieno" ;
-    Text [ portuguese_brazilian ] = "Sólido" ;
+    Text [ portuguese_brazilian ] = "S?ido" ;
     Text [ portuguese ] = "Cheio" ;
     Text [ finnish ] = "Tasainen" ;
     Text [ danish ] = "Massiv" ;
@@ -1414,7 +1414,7 @@ String STR_INSERTPAGE
     Text [ ENGLISH ] = "Insert page" ;
     Text [ norwegian ] = "Insert page" ;
     Text [ italian ] = "Inserisci pagina" ;
-    Text [ portuguese_brazilian ] = "Inserir página" ;
+    Text [ portuguese_brazilian ] = "Inserir p?gina" ;
     Text [ portuguese ] = "Inserir página" ;
     Text [ finnish ] = "Lisää dia" ;
     Text [ danish ] = "Indsæt side" ;
@@ -1446,7 +1446,7 @@ String STR_MODIFYPAGE
     Text [ dutch ] = "Paginalay-out wijzigen" ;
     Text [ swedish ] = "Ändra sidlayout" ;
     Text [ danish ] = "Modificer sidelayout" ;
-    Text [ portuguese_brazilian ] = "Seitenlayout ändern" ;
+    Text [ portuguese_brazilian ] = "Seitenlayout ?ndern" ;
     Text [ portuguese ] = "Modificar configuração de página" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÒ³Ãæ°æÊ½";
     Text[ russian ] = "Èçìåíèòü ğàçìåòêó ñëàéäà";
@@ -1546,7 +1546,7 @@ String STR_UNDO_SLIDE_PARAMS
     Text [ ENGLISH ] = "Slide parameter" ;
     Text [ norwegian ] = "Slide parameter" ;
     Text [ italian ] = "Parametro diapositiva" ;
-    Text [ portuguese_brazilian ] = "Parâmetro do slide" ;
+    Text [ portuguese_brazilian ] = "Par?metro do slide" ;
     Text [ portuguese ] = "Parâmetros do diapositivo" ;
     Text [ finnish ] = "Dian parametri" ;
     Text [ danish ] = "Diasparameter" ;
@@ -1583,7 +1583,7 @@ String STR_UNDO_SLIDE_MOVE
     Text [ english_us ] = "Move slide" ;
     Text[ chinese_simplified ] = "ÒÆ¶¯»ÃµÆÆ¬";
     Text[ russian ] = "Ïåğåìåñòèòü ñëàéä";
-    Text[ polish ] = "Przenieœ slajd";
+    Text[ polish ] = "Przenie? slajd";
     Text[ japanese ] = "½×²ÄŞ‚ÌˆÚ“®";
     Text[ greek ] = "Ìåôáêßíçóç äéáöÜíåéáò";
     Text[ korean ] = "½½¶óÀÌµå ÀÌµ¿";
@@ -1688,7 +1688,7 @@ String STR_ALIGN_CENTER
     Text [ english_us ] = "Align centered" ;
     Text[ chinese_simplified ] = "¾ÓÖĞ¶ÔÆë";
     Text[ russian ] = "Âûğîâíÿòü â öåíòğå";
-    Text[ polish ] = "Wyœrodkuj";
+    Text[ polish ] = "Wy?rodkuj";
     Text[ japanese ] = "’†‰›‚É‘µ‚¦‚é";
     Text[ greek ] = "Êåíôñáñéóìİíç óôïß÷éóç";
     Text[ korean ] = "°¡¿îµ¥ ¸ÂÃã";
@@ -1766,7 +1766,7 @@ String STR_ALIGN_MIDDLE
     Text [ english_us ] = "Align middle" ;
     Text[ chinese_simplified ] = "¾ÓÖĞ¶ÔÆë";
     Text[ russian ] = "Âûğîâíÿòü ïî ñåğåäèíå";
-    Text[ polish ] = "Wyrównaj do œrodka";
+    Text[ polish ] = "Wyrównaj do ?rodka";
     Text[ japanese ] = "^’†‚É‘µ‚¦‚é";
     Text[ greek ] = "Óôïß÷éóç êİíôñï";
     Text[ korean ] = "°¡¿îµ¥ ¸ÂÃã";
@@ -1818,7 +1818,7 @@ String STR_UNDO_DRAGDROP
     Text [ english_us ] = "Drag and Drop" ;
     Text[ chinese_simplified ] = "ÍÏ·Å";
     Text[ russian ] = "Ïåğåòàñêèâàíèå";
-    Text[ polish ] = "Przeci¹gij i upuœæ";
+    Text[ polish ] = "Przeci¹gij i upu?æ";
     Text[ japanese ] = "ÄŞ×¯¸Ş&ÄŞÛ¯Ìß";
     Text[ greek ] = "Ìåôáêßíçóç êáé Ağüèåóç";
     Text[ korean ] = "µå·¡±× ¾Ø µå·Ó";
@@ -1834,7 +1834,7 @@ String STR_INSERTGRAPHIC
     Text [ ENGLISH ] = "Insert graphic" ;
     Text [ norwegian ] = "Insert graphic" ;
     Text [ italian ] = "Inserisci immagine" ;
-    Text [ portuguese_brazilian ] = "Inserir gráfico" ;
+    Text [ portuguese_brazilian ] = "Inserir gr?fico" ;
     Text [ portuguese ] = "Inserir imagem" ;
     Text [ finnish ] = "Lisää kuva" ;
     Text [ danish ] = "Indsæt grafik" ;
@@ -1967,7 +1967,7 @@ String STR_INVISIBLE
     Text [ ENGLISH ] = "Invisible" ;
     Text [ norwegian ] = "Usynlig" ;
     Text [ italian ] = "Invisibile" ;
-    Text [ portuguese_brazilian ] = "Invisível" ;
+    Text [ portuguese_brazilian ] = "Invis?vel" ;
     Text [ portuguese ] = "Invisível" ;
     Text [ finnish ] = "Näkymätön" ;
     Text [ danish ] = "Usynlig" ;
@@ -2150,7 +2150,7 @@ String STR_MEDIUM
     Text [ ENGLISH ] = "Medium" ;
     Text [ norwegian ] = "Medium" ;
     Text [ italian ] = "Medio" ;
-    Text [ portuguese_brazilian ] = "Médio" ;
+    Text [ portuguese_brazilian ] = "M?dio" ;
     Text [ portuguese ] = "Meio" ;
     Text [ finnish ] = "Normaali" ;
     Text [ danish ] = "Middel" ;
@@ -2161,7 +2161,7 @@ String STR_MEDIUM
     Text [ english_us ] = "Medium" ;
     Text[ chinese_simplified ] = "ÖĞµÈ";
     Text[ russian ] = "Ñğåäíÿÿ";
-    Text[ polish ] = "Œrednio";
+    Text[ polish ] = "?rednio";
     Text[ japanese ] = "•’Ê";
     Text[ greek ] = "Ìåóáßï";
     Text[ korean ] = "¸ÅÃ¼";
@@ -2176,7 +2176,7 @@ String STR_FAST
     Text [ ENGLISH ] = "Fast" ;
     Text [ norwegian ] = "Fast" ;
     Text [ italian ] = "Veloce" ;
-    Text [ portuguese_brazilian ] = "Rápido" ;
+    Text [ portuguese_brazilian ] = "R?pido" ;
     Text [ portuguese ] = "Rápido" ;
     Text [ finnish ] = "Nopea" ;
     Text [ danish ] = "Hurtig" ;
@@ -2213,7 +2213,7 @@ String STR_CHANGE
     Text [ english_us ] = "Transition" ;
     Text[ chinese_simplified ] = "×ª»»";
     Text[ russian ] = "Ïåğåõîä";
-    Text[ polish ] = "Przejœcie";
+    Text[ polish ] = "Przej?cie";
     Text[ japanese ] = "Ø‚è‘Ö‚¦";
     Text[ greek ] = "ÁëëáãŞ";
     Text[ korean ] = "ÀüÈ¯";
@@ -2228,7 +2228,7 @@ String STR_AUTO
     Text [ ENGLISH ] = "Automatic" ;
     Text [ norwegian ] = "Automatic" ;
     Text [ italian ] = "Automatico" ;
-    Text [ portuguese_brazilian ] = "Automático" ;
+    Text [ portuguese_brazilian ] = "Autom?tico" ;
     Text [ portuguese ] = "Automático" ;
     Text [ finnish ] = "Automaattinen" ;
     Text [ danish ] = "Automatisk" ;
@@ -2385,7 +2385,7 @@ String STR_UNDO_BEZCONV
     Text [ ENGLISH ] = "convert polygon segment" ;
     Text [ norwegian ] = "convert polygon segment" ;
     Text [ italian ] = "Converti segmento poligono" ;
-    Text [ portuguese_brazilian ] = "Converter segmento de polígono" ;
+    Text [ portuguese_brazilian ] = "Converter segmento de pol?gono" ;
     Text [ portuguese ] = "Converter segmento de polígono" ;
     Text [ finnish ] = "Muunna monikulmiosegmentti" ;
     Text [ danish ] = "Konverter polygonsegment" ;
@@ -2439,7 +2439,7 @@ String STR_UNDO_BEZCLOSE
     Text [ ENGLISH ] = "close polygon" ;
     Text [ norwegian ] = "close polygon" ;
     Text [ italian ] = "Chiudi poligono" ;
-    Text [ portuguese_brazilian ] = "fechar o polígono" ;
+    Text [ portuguese_brazilian ] = "fechar o pol?gono" ;
     Text [ portuguese ] = "Fechar polígono" ;
     Text [ finnish ] = "Sulje monikulmio" ;
     Text [ danish ] = "Luk polygon" ;
@@ -2525,7 +2525,7 @@ String STR_OUTLINE_MODE
 
     Text [ norwegian ] = "Outline mode" ;
     Text [ italian ] = "Vista struttura" ;
-    Text [ portuguese_brazilian ] = "Modo Esboço" ;
+    Text [ portuguese_brazilian ] = "Modo Esbo?o" ;
     Text [ portuguese ] = "Modo Esquema" ;
     Text [ finnish ] = "Jäsennysnäkymä" ;
     Text [ danish ] = "Dispositionsvisning" ;
@@ -2607,7 +2607,7 @@ String STR_PRESENTATION_LAYOUT
     Text [ ENGLISH ] = "Presentation layout" ;
     Text [ norwegian ] = "Presentation layout" ;
     Text [ italian ] = "Layout di presentazione" ;
-    Text [ portuguese_brazilian ] = "Layout de apresentação" ;
+    Text [ portuguese_brazilian ] = "Layout de apresenta??o" ;
     Text [ portuguese ] = "Configuração da apresentação" ;
     Text [ finnish ] = "Esityksen asettelu" ;
     Text [ danish ] = "Præsentationslayout" ;
@@ -2659,7 +2659,7 @@ String STR_AUTOLAYOUT_ONLY_TITLE
     Text [ ENGLISH ] = "only title" ;
     Text [ norwegian ] = "only title" ;
     Text [ italian ] = "Solo titolo" ;
-    Text [ portuguese_brazilian ] = "só título" ;
+    Text [ portuguese_brazilian ] = "s?t?tulo" ;
     Text [ portuguese ] = "Só título" ;
     Text [ finnish ] = "Vain otsikko" ;
     Text [ danish ] = "Kun titel" ;
@@ -2685,7 +2685,7 @@ String STR_AUTOLAYOUT_TITLE
     Text [ ENGLISH ] = "title" ;
     Text [ norwegian ] = "title" ;
     Text [ italian ] = "Titolo, testo centrato" ;
-    Text [ portuguese_brazilian ] = "título" ;
+    Text [ portuguese_brazilian ] = "t?tulo" ;
     Text [ portuguese ] = "Diapositivo-título" ;
     Text [ finnish ] = "Otsikkodia" ;
     Text [ danish ] = "Titeldias" ;
@@ -2711,7 +2711,7 @@ String STR_AUTOLAYOUT_OBJ
     Text [ ENGLISH ] = "title, object" ;
     Text [ norwegian ] = "title, object" ;
     Text [ italian ] = "Titolo, oggetto" ;
-    Text [ portuguese_brazilian ] = "título, objeto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, objeto" ;
     Text [ portuguese ] = "título, objecto" ;
     Text [ finnish ] = "Otsikko, objekti" ;
     Text [ danish ] = "Titel, objekt" ;
@@ -2737,7 +2737,7 @@ String STR_AUTOLAYOUT_ENUM
     Text [ ENGLISH ] = "title, text" ;
     Text [ norwegian ] = "title, text" ;
     Text [ italian ] = "Titolo, testo" ;
-    Text [ portuguese_brazilian ] = "título, texto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, texto" ;
     Text [ portuguese ] = "título, texto" ;
     Text [ finnish ] = "Otsikko, teksti" ;
     Text [ danish ] = "Titel, tekst" ;
@@ -2763,7 +2763,7 @@ String STR_AUTOLAYOUT_CHART
     Text [ ENGLISH ] = "title, chart" ;
     Text [ norwegian ] = "title, chart" ;
     Text [ italian ] = "Titolo, diagramma" ;
-    Text [ portuguese_brazilian ] = "título, gráfico" ;
+    Text [ portuguese_brazilian ] = "t?tulo, gr?fico" ;
     Text [ portuguese ] = "Título, gráfico" ;
     Text [ finnish ] = "Otsikko, kaavio" ;
     Text [ danish ] = "Titel, diagram" ;
@@ -2789,7 +2789,7 @@ String STR_AUTOLAYOUT_ORG
     Text [ ENGLISH ] = "title, orgchart" ;
     Text [ norwegian ] = "title, orgchart" ;
     Text [ italian ] = "Titolo, organigramma" ;
-    Text [ portuguese_brazilian ] = "título, gráfico organizacional" ;
+    Text [ portuguese_brazilian ] = "t?tulo, gr?fico organizacional" ;
     Text [ portuguese ] = "Título, organigrama" ;
     Text [ finnish ] = "Otsikko, organisaatiokaavio" ;
     Text [ danish ] = "Titel, organisationsdiagram" ;
@@ -2815,7 +2815,7 @@ String STR_AUTOLAYOUT_TAB
     Text [ ENGLISH ] = "title, table" ;
     Text [ norwegian ] = "title, table" ;
     Text [ italian ] = "Titolo, tabella" ;
-    Text [ portuguese_brazilian ] = "título, tabela" ;
+    Text [ portuguese_brazilian ] = "t?tulo, tabela" ;
     Text [ portuguese ] = "Título, folha de cálculo" ;
     Text [ finnish ] = "Otsikko, laskentataulukko" ;
     Text [ danish ] = "Titel, regneark" ;
@@ -2841,7 +2841,7 @@ String STR_AUTOLAYOUT_CLIPTEXT
     Text [ ENGLISH ] = "title, clipart, text" ;
     Text [ norwegian ] = "title, clipart, text" ;
     Text [ italian ] = "Titolo, clipart, testo" ;
-    Text [ portuguese_brazilian ] = "título, clipart, texto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, clipart, texto" ;
     Text [ portuguese ] = "título, clipart, texto" ;
     Text [ finnish ] = "Otsikko, leikekuva, teksti" ;
     Text [ danish ] = "Titel, clipart, tekst" ;
@@ -2867,7 +2867,7 @@ String STR_AUTOLAYOUT_2TEXT
     Text [ ENGLISH ] = "title, 2 texts" ;
     Text [ norwegian ] = "title, 2 texts" ;
     Text [ italian ] = "Titolo, 2 testi" ;
-    Text [ portuguese_brazilian ] = "título, 2 textos" ;
+    Text [ portuguese_brazilian ] = "t?tulo, 2 textos" ;
     Text [ portuguese ] = "título, 2 textos" ;
     Text [ finnish ] = "Otsikko, kaksi tekstilohkoa" ;
     Text [ danish ] = "Titel, 2 tekster" ;
@@ -2893,7 +2893,7 @@ String STR_AUTOLAYOUT_TEXTCHART
     Text [ ENGLISH ] = "title, text, chart" ;
     Text [ norwegian ] = "title, text, chart" ;
     Text [ italian ] = "Titolo, testo, diagramma" ;
-    Text [ portuguese_brazilian ] = "título, texto, gráfico" ;
+    Text [ portuguese_brazilian ] = "t?tulo, texto, gr?fico" ;
     Text [ portuguese ] = "Título, texto, gráfico" ;
     Text [ finnish ] = "Otsikko, teksti, kaavio" ;
     Text [ danish ] = "Titel, tekst, diagram" ;
@@ -2919,7 +2919,7 @@ String STR_AUTOLAYOUT_TEXTCLIP
     Text [ ENGLISH ] = "title, text, clipart" ;
     Text [ norwegian ] = "title, text, clipart" ;
     Text [ italian ] = "Titolo, testo, clipart" ;
-    Text [ portuguese_brazilian ] = "título, texto, clipart" ;
+    Text [ portuguese_brazilian ] = "t?tulo, texto, clipart" ;
     Text [ portuguese ] = "Título, texto, clipart" ;
     Text [ finnish ] = "Otsikko, teksti, leikekuva" ;
     Text [ danish ] = "Titel, tekst, clipart" ;
@@ -2945,7 +2945,7 @@ String STR_AUTOLAYOUT_CHARTTEXT
     Text [ ENGLISH ] = "title, chart, text" ;
     Text [ norwegian ] = "title, chart, text" ;
     Text [ italian ] = "Titolo, diagramma, testo" ;
-    Text [ portuguese_brazilian ] = "título, gráfico, texto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, gr?fico, texto" ;
     Text [ portuguese ] = "Título, gráfico, texto" ;
     Text [ finnish ] = "Otsikko, kaavio, teksti" ;
     Text [ danish ] = "Titel, diagram, tekst" ;
@@ -2971,7 +2971,7 @@ String STR_AUTOLAYOUT_TEXTOBJ
     Text [ ENGLISH ] = "title, text, object" ;
     Text [ norwegian ] = "title, text, object" ;
     Text [ italian ] = "Titolo, testo, oggetto" ;
-    Text [ portuguese_brazilian ] = "título, texto, objeto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, texto, objeto" ;
     Text [ portuguese ] = "Título, texto, objecto" ;
     Text [ finnish ] = "Otsikko, teksti, objekti" ;
     Text [ danish ] = "Titel, tekst, objekt" ;
@@ -2997,7 +2997,7 @@ String STR_AUTOLAYOUT_TEXT2OBJ
     Text [ ENGLISH ] = "title, text, 2 objects" ;
     Text [ norwegian ] = "title, text, 2 objects" ;
     Text [ italian ] = "Titolo, testo, 2 oggetti" ;
-    Text [ portuguese_brazilian ] = "título, texto, 2 objetos" ;
+    Text [ portuguese_brazilian ] = "t?tulo, texto, 2 objetos" ;
     Text [ portuguese ] = "Título, texto, 2 objectos" ;
     Text [ finnish ] = "Otsikko, teksti, kaksi objektia" ;
     Text [ danish ] = "Titel, tekst, 2 objekter" ;
@@ -3023,7 +3023,7 @@ String STR_AUTOLAYOUT_OBJTEXT
     Text [ ENGLISH ] = "title, object, text" ;
     Text [ norwegian ] = "title, object, text" ;
     Text [ italian ] = "Titolo, oggetto, testo" ;
-    Text [ portuguese_brazilian ] = "título, objeto, texto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, objeto, texto" ;
     Text [ portuguese ] = "título, objecto, texto" ;
     Text [ finnish ] = "Otsikko, objekti, teksti" ;
     Text [ danish ] = "Titel, objekt, tekst" ;
@@ -3050,7 +3050,7 @@ String STR_AUTOLAYOUT_OBJOVERTEXT
     Text [ ENGLISH ] = "title, object over text" ;
     Text [ norwegian ] = "title, object over text" ;
     Text [ italian ] = "Titolo, oggetto su testo" ;
-    Text [ portuguese_brazilian ] = "título, objeto sobre texto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, objeto sobre texto" ;
     Text [ portuguese ] = "título, objecto sobre texto" ;
     Text [ finnish ] = "Otsikko, objekti tekstin yläpuolella" ;
     Text [ danish ] = "Titel, objekt over tekst" ;
@@ -3076,7 +3076,7 @@ String STR_AUTOLAYOUT_2OBJTEXT
     Text [ ENGLISH ] = "title, 2 objects, text" ;
     Text [ norwegian ] = "title, 2 objects, text" ;
     Text [ italian ] = "Titolo, 2 oggetti, testo" ;
-    Text [ portuguese_brazilian ] = "título, 2 objetos, texto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, 2 objetos, texto" ;
     Text [ portuguese ] = "título, 2 objectos, texto" ;
     Text [ finnish ] = "Otsikko, kaksi objektia, teksti" ;
     Text [ danish ] = "Titel, 2 objekter, tekst" ;
@@ -3103,7 +3103,7 @@ String STR_AUTOLAYOUT_2OBJOVERTEXT
     Text [ ENGLISH ] = "title, 2 objects over text" ;
     Text [ norwegian ] = "title, 2 objects over text" ;
     Text [ italian ] = "Titolo, 2 oggetti su testo" ;
-    Text [ portuguese_brazilian ] = "título, 2 objetos sobre texto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, 2 objetos sobre texto" ;
     Text [ portuguese ] = "título, 2 objectos sobre texto" ;
     Text [ finnish ] = "Otsikko, kaksi objektia tekstin yläpuolella" ;
     Text [ danish ] = "Titel, 2 objekter over tekst" ;
@@ -3130,7 +3130,7 @@ String STR_AUTOLAYOUT_TEXTOVEROBJ
     Text [ ENGLISH ] = "title, text over object" ;
     Text [ norwegian ] = "title, text over object" ;
     Text [ italian ] = "Titolo, testo su oggetto" ;
-    Text [ portuguese_brazilian ] = "título, texto sobre objeto" ;
+    Text [ portuguese_brazilian ] = "t?tulo, texto sobre objeto" ;
     Text [ portuguese ] = "Título, texto sobre objecto" ;
     Text [ finnish ] = "Otsikko, teksti objektin yläpuolella" ;
     Text [ danish ] = "Titel, tekst over objekt" ;
@@ -3156,7 +3156,7 @@ String STR_AUTOLAYOUT_4OBJ
     Text [ ENGLISH ] = "title, 2 objects" ;
     Text [ norwegian ] = "title, 2 objects" ;
     Text [ italian ] = "Titolo, 4 oggetti" ;
-    Text [ portuguese_brazilian ] = "título, 2 objetos" ;
+    Text [ portuguese_brazilian ] = "t?tulo, 2 objetos" ;
     Text [ portuguese ] = "título, 4 objectos" ;
     Text [ finnish ] = "Otsikko, neljä objektia" ;
     Text [ danish ] = "Titel, 4 objekter" ;
@@ -3283,7 +3283,7 @@ String STR_AUTOLAYOUT_HANDOUT1
     Text [ ENGLISH ] = "One page" ;
     Text [ norwegian ] = "One page" ;
     Text [ italian ] = "Una pagina" ;
-    Text [ portuguese_brazilian ] = "Uma página" ;
+    Text [ portuguese_brazilian ] = "Uma p?gina" ;
     Text [ portuguese ] = "Uma página" ;
     Text [ finnish ] = "Yksi dia" ;
     Text [ danish ] = "En side" ;
@@ -3309,7 +3309,7 @@ String STR_AUTOLAYOUT_HANDOUT2
     Text [ ENGLISH ] = "Two pages" ;
     Text [ norwegian ] = "Two pages" ;
     Text [ italian ] = "Due pagine" ;
-    Text [ portuguese_brazilian ] = "Duas páginas" ;
+    Text [ portuguese_brazilian ] = "Duas p?ginas" ;
     Text [ portuguese ] = "Duas páginas" ;
     Text [ finnish ] = "Kaksi diaa" ;
     Text [ danish ] = "To sider" ;
@@ -3335,7 +3335,7 @@ String STR_AUTOLAYOUT_HANDOUT3
     Text [ ENGLISH ] = "Three pages" ;
     Text [ norwegian ] = "Three pages" ;
     Text [ italian ] = "Tre pagine" ;
-    Text [ portuguese_brazilian ] = "Três páginas" ;
+    Text [ portuguese_brazilian ] = "Tr?s p?ginas" ;
     Text [ portuguese ] = "Três páginas" ;
     Text [ finnish ] = "Kolme diaa" ;
     Text [ danish ] = "Tre sider" ;
@@ -3361,7 +3361,7 @@ String STR_AUTOLAYOUT_HANDOUT4
     Text [ ENGLISH ] = "Four pages" ;
     Text [ norwegian ] = "Four pages" ;
     Text [ italian ] = "Quattro pagine" ;
-    Text [ portuguese_brazilian ] = "Quatro páginas" ;
+    Text [ portuguese_brazilian ] = "Quatro p?ginas" ;
     Text [ portuguese ] = "Quatro páginas" ;
     Text [ finnish ] = "Neljä diaa" ;
     Text [ danish ] = "Fire sider" ;
@@ -3387,7 +3387,7 @@ String STR_AUTOLAYOUT_HANDOUT6
     Text [ ENGLISH ] = "Six pages" ;
     Text [ norwegian ] = "Six pages" ;
     Text [ italian ] = "Sei pagine" ;
-    Text [ portuguese_brazilian ] = "Seis páginas" ;
+    Text [ portuguese_brazilian ] = "Seis p?ginas" ;
     Text [ portuguese ] = "Seis páginas" ;
     Text [ finnish ] = "Kuusi diaa" ;
     Text [ danish ] = "Seks sider" ;
@@ -3398,7 +3398,7 @@ String STR_AUTOLAYOUT_HANDOUT6
     Text [ english_us ] = "Six Slides" ;
     Text[ chinese_simplified ] = "ÁùÒ³";
     Text[ russian ] = "Øåñòü ñòğàíèö";
-    Text[ polish ] = "Szeœæ slajdów";
+    Text[ polish ] = "Sze?æ slajdów";
     Text[ japanese ] = "6Íß°¼Ş";
     Text[ greek ] = "¸îé óåëßäåò";
     Text[ korean ] = "6 ½½¶óÀÌµå";
@@ -3468,7 +3468,7 @@ String STR_PAGEMODE
 
     Text [ norwegian ] = "Page mode" ;
     Text [ italian ] = "Vista pagina" ;
-    Text [ portuguese_brazilian ] = "Modo Página" ;
+    Text [ portuguese_brazilian ] = "Modo P?gina" ;
     Text [ portuguese ] = "Modo Página" ;
     Text [ finnish ] = "Dianäkymä" ;
     Text [ danish ] = "Sidevisning" ;
@@ -3656,7 +3656,7 @@ String STR_WARN_NAME_DUPLICATE
     Text [ ENGLISH ] = "Your choosen Name already exists. \nPlease Choose another name." ;
     Text [ norwegian ] = "Your choosen Name already exists. \nPlease Choose another name." ;
     Text [ italian ] = "Nome scelto già esistente. \nDigitate un altro nome." ;
-    Text [ portuguese_brazilian ] = "O nome escolhido já existe. \nEscolha outro nome." ;
+    Text [ portuguese_brazilian ] = "O nome escolhido j? existe. \nEscolha outro nome." ;
     Text [ portuguese ] = "O nome indicado já existe. \nIndique outro nome." ;
     Text [ finnish ] = "Valittu nimi on jo olemassa. \nMääritä toinen nimi." ;
     Text [ danish ] = "Det indtastede navn eksisterer allerede. \nIndtast venligst et andet navn." ;
@@ -3682,7 +3682,7 @@ String STR_UNDO_ANIMATION
     Text [ ENGLISH ] = "animation parameters" ;
     Text [ norwegian ] = "animation parameters" ;
     Text [ italian ] = "Parametri animazione" ;
-    Text [ portuguese_brazilian ] = "parâmetros de animação" ;
+    Text [ portuguese_brazilian ] = "par?metros de anima??o" ;
     Text [ portuguese ] = "Parâmetros de animação" ;
     Text [ finnish ] = "Animaatioparametrit" ;
     Text [ danish ] = "Animationsparametre" ;
@@ -3717,7 +3717,7 @@ String STR_UNDO_ANIMATION_ORDER
     Text [ dutch ] = "Animatievolgorde" ;
     Text[ chinese_simplified ] = "¶¯»­Ë³Ğò";
     Text[ russian ] = "Ïîğÿäîê àíèìàöèè";
-    Text[ polish ] = "Kolejnoœæ animacji";
+    Text[ polish ] = "Kolejno?æ animacji";
     Text[ japanese ] = "±ÆÒ°¼®İ‚Ì‡˜";
     Text[ greek ] = "ÓåéñÜ åöİ êéíŞóåùí";
     Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç ¼ø¼­";
@@ -3785,7 +3785,7 @@ String STR_EXPORT_PATH_NOT_FOUND1
     Text [ English ] = "The directory '" ;
     Text [ norwegian ] = "The directory '" ;
     Text [ italian ] = "La cartella" ;
-    Text [ portuguese_brazilian ] = "O diretório" ;
+    Text [ portuguese_brazilian ] = "O diret?io" ;
     Text [ portuguese ] = "O directório \"" ;
     Text [ finnish ] = "Hakemistoa " ;
     Text [ danish ] = "Biblioteket '" ;
@@ -3811,7 +3811,7 @@ String STR_EXPORT_PATH_NOT_FOUND2
     Text [ English ] = "' does not exist." ;
     Text [ norwegian ] = "' does not exist." ;
     Text [ italian ] = "' non esiste." ;
-    Text [ portuguese_brazilian ] = "' não existe." ;
+    Text [ portuguese_brazilian ] = "' n?o existe." ;
     Text [ portuguese ] = "\" não existe." ;
     Text [ finnish ] = " ei ole" ;
     Text [ danish ] = "' eksisterer ikke." ;
@@ -3854,7 +3854,7 @@ String STR_EXPORT_GRFILTER_OPENERROR
     TEXT [ English ] = "Can't open graphic file" ;
     TEXT [ norwegian ] = "Can't open graphic file" ;
     TEXT [ italian ] = "Impossibile aprire il file grafico" ;
-    TEXT [ portuguese_brazilian ] = "Não consigo abrir arquivo gráfico" ;
+    TEXT [ portuguese_brazilian ] = "N?o consigo abrir arquivo gr?fico" ;
     TEXT [ portuguese ] = "Impossível abrir o ficheiro gráfico." ;
     TEXT [ finnish ] = "Kuvatiedoston avaaminen ei onnistu." ;
     TEXT [ danish ] = "Det er ikke muligt at åbne grafikfilen" ;
@@ -3880,7 +3880,7 @@ String STR_EXPORT_GRFILTER_IOERROR
     TEXT [ English ] = "Can't read graphic file" ;
     TEXT [ norwegian ] = "Can't read graphic file" ;
     TEXT [ italian ] = "Impossibile leggere il file grafico" ;
-    TEXT [ portuguese_brazilian ] = "Não consigo ler arquivo gráfico" ;
+    TEXT [ portuguese_brazilian ] = "N?o consigo ler arquivo gr?fico" ;
     TEXT [ portuguese ] = "Impossível ler o ficheiro gráfico." ;
     TEXT [ finnish ] = "Kuvatiedoston lukeminen ei onnistu." ;
     TEXT [ danish ] = "Det er ikke muligt at læse grafikfilen" ;
@@ -3906,7 +3906,7 @@ String STR_EXPORT_GRFILTER_FORMATERROR
     TEXT [ English ] = "Unknown graphic format" ;
     TEXT [ norwegian ] = "Unknown graphic format" ;
     TEXT [ italian ] = "Formato grafico sconosciuto" ;
-    TEXT [ portuguese_brazilian ] = "Formato gráfico desconhecido" ;
+    TEXT [ portuguese_brazilian ] = "Formato gr?fico desconhecido" ;
     TEXT [ portuguese ] = "Formato gráfico desconhecido." ;
     TEXT [ finnish ] = "Tuntematon grafiikkamuoto" ;
     TEXT [ danish ] = "Ukendt grafikformat" ;
@@ -3933,7 +3933,7 @@ String STR_EXPORT_GRFILTER_VERSIONERROR
     TEXT [ English ] = "Version of graphic file not supported" ;
     TEXT [ norwegian ] = "Version of graphic file not supported" ;
     TEXT [ italian ] = "Versione del file grafico non supportata" ;
-    TEXT [ portuguese_brazilian ] = "Versão de arquivo gráfico não suportada" ;
+    TEXT [ portuguese_brazilian ] = "Vers?o de arquivo gr?fico n?o suportada" ;
     TEXT [ portuguese ] = "Este ficheiro gráfico não tem suporte." ;
     TEXT [ finnish ] = "Tätä grafiikkatiedoston versiota ei tueta" ;
     TEXT [ danish ] = "Denne version af grafikfilen understøttes ikke" ;
@@ -3959,7 +3959,7 @@ String STR_EXPORT_GRFILTER_FILTERERROR
     TEXT [ English ] = "Graphic filter not found" ;
     TEXT [ norwegian ] = "Graphic filter not found" ;
     TEXT [ italian ] = "Filtro grafico non trovato" ;
-    TEXT [ portuguese_brazilian ] = "Filtro gráfico não encontrado" ;
+    TEXT [ portuguese_brazilian ] = "Filtro gr?fico n?o encontrado" ;
     TEXT [ portuguese ] = "Filtro gráfico não encontrado" ;
     TEXT [ finnish ] = "Grafiikkasuodatinta ei löytynyt" ;
     TEXT [ danish ] = "Grafikfiltret blev ikke fundet" ;
@@ -3985,7 +3985,7 @@ String STR_EXPORT_GRFILTER_TOOBIG
     TEXT [ English ] = "Not enough memory to insert graphic" ;
     TEXT [ norwegian ] = "Not enough memory to insert graphic" ;
     TEXT [ italian ] = "Memoria insufficiente per esportare l'immagine" ;
-    TEXT [ portuguese_brazilian ] = "Memória insuficiente para inserir o gráfico" ;
+    TEXT [ portuguese_brazilian ] = "Mem?ia insuficiente para inserir o gr?fico" ;
     TEXT [ portuguese ] = "Memória insuficiente para exportar a imagem" ;
     TEXT [ finnish ] = "Muisti ei riitä kuvien viemiseen" ;
     TEXT [ danish ] = "Der er ikke tilstrækkelig hukommelse til at eksportere denne grafik" ;
@@ -4022,7 +4022,7 @@ String STR_EXPORT_PROPERTIES
     Text [ english_us ] = "~Properties..." ;
     Text[ chinese_simplified ] = "ÊôĞÔ(~P)...";
     Text[ russian ] = "Ñâîéñòâà...";
-    Text[ polish ] = "W³aœciwoœci...";
+    Text[ polish ] = "W³a?ciwo?ci...";
     Text[ japanese ] = "ÌßÛÊßÃ¨(~P)...";
     Text[ greek ] = "Éäéüôçôåò...";
     Text[ korean ] = "µî·ÏÁ¤º¸(~P)...";
@@ -4048,7 +4048,7 @@ String STR_EXPORT_STANDARD
     Text [ english_us ] = "Default" ;
     Text[ chinese_simplified ] = "±ê×¼(~O)";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "•W€(~O)";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ korean ] = "±âº»";
@@ -4064,7 +4064,7 @@ String STR_EXPORT_LINK
     Text [ English ] = "~Link" ;
     Text [ norwegian ] = "~Link" ;
     Text [ italian ] = "~Collega" ;
-    Text [ portuguese_brazilian ] = "~Ligação" ;
+    Text [ portuguese_brazilian ] = "~Liga??o" ;
     Text [ portuguese ] = "~Ligar" ;
     Text [ finnish ] = "~Linkki" ;
     Text [ danish ] = "Kæd" ;
@@ -4257,7 +4257,7 @@ String STR_WARN_PAGE_EXISTS
     Text [ swedish ] = "Sidnamnet finns redan eller är ogiltigt. Mata in ett annat namn" ;
     Text [ danish ] = "Dette sidenavnet eksisterer allerede eller er ugyldigt. Indtast venligst et andet navn." ;
     Text [ portuguese ] = "O nome da página já existe ou está incorrecto. Por favor introduza outro nome." ;
-    Text [ portuguese_brazilian ] = "Der Seitenname ist schon vorhanden oder ungültig.Geben Sie bitte einen anderen Namen ein" ;
+    Text [ portuguese_brazilian ] = "Der Seitenname ist schon vorhanden oder ung?tig.Geben Sie bitte einen anderen Namen ein" ;
     Text[ chinese_simplified ] = "Õâ¸öÒ³ÃæÃû³ÆÒÑ¾­´æÔÚ»òÊÇÎŞĞ§µÄ¡£ÇëÄúÊäÈëÒ»¸öÓĞĞ§µÄÃû³Æ¡£";
     Text[ russian ] = "İòî èìÿ ñëàéäà èëè óæå èìååòñÿ, èëè îíî íåïğàâèëüíîå. Ïğèñâîéòå, ïîæàëóéñòà, äğóãîå èìÿ.";
     Text[ polish ] = "Ta nazwa slajdu ju¿ istnieje lub jest nieprawid³owa. Proszê podaæ inn¹ nazwê.";
@@ -4301,7 +4301,7 @@ String STR_FORMAT_STRING
     Text [ ENGLISH ] = "Unformatted text" ;
     Text [ norwegian ] = "Unformatted text" ;
     Text [ italian ] = "Testo non formattato" ;
-    Text [ portuguese_brazilian ] = "Texto não formatado" ;
+    Text [ portuguese_brazilian ] = "Texto n?o formatado" ;
     Text [ portuguese ] = "Texto não formatado" ;
     Text [ finnish ] = "Muotoilematon teksti" ;
     Text [ danish ] = "Uformateret tekst" ;
@@ -4462,7 +4462,7 @@ String STR_POPUP_DELETE_SNAPLINE
     Text [ swedish ] = "Radera stödlinje" ;
     Text [ danish ] = "Slet fanglinje" ;
     Text [ portuguese ] = "Eliminar linha de captura" ;
-    Text [ portuguese_brazilian ] = "Fanglinie löschen" ;
+    Text [ portuguese_brazilian ] = "Fanglinie l?chen" ;
     Text[ chinese_simplified ] = "É¾³ı×ø±êÏß";
     Text[ russian ] = "Óäàëèòü ëèíèş ïğèâÿçêè";
     Text[ polish ] = "Usuñ linie zaczepu";
@@ -4488,7 +4488,7 @@ String STR_POPUP_DELETE_SNAPPOINT
     Text [ swedish ] = "Radera stödpunkt" ;
     Text [ danish ] = "Slet fangpunkt" ;
     Text [ portuguese ] = "Eliminar ponto de captura" ;
-    Text [ portuguese_brazilian ] = "Fangpunkt löschen" ;
+    Text [ portuguese_brazilian ] = "Fangpunkt l?chen" ;
     Text[ chinese_simplified ] = "É¾³ı×ø±êµã";
     Text[ russian ] = "Óäàëèòü òî÷êó ïğèâÿçêè";
     Text[ polish ] = "Usuñ punkt zaczepu";
@@ -4794,7 +4794,7 @@ String STR_UNDO_DELETEPAGES
     Text [ ENGLISH ] = "Delete pages" ;
     Text [ norwegian ] = "Delete pages" ;
     Text [ italian ] = "Elimina pagine" ;
-    Text [ portuguese_brazilian ] = "Apagar páginas" ;
+    Text [ portuguese_brazilian ] = "Apagar p?ginas" ;
     Text [ portuguese ] = "Eliminar páginas" ;
     Text [ finnish ] = "Poista diat" ;
     Text [ danish ] = "Slet sider" ;
@@ -4821,7 +4821,7 @@ String STR_UNDO_INSERTPAGES
     Text [ ENGLISH ] = "Insert pages" ;
     Text [ norwegian ] = "Insert pages" ;
     Text [ italian ] = "Inserisci pagine" ;
-    Text [ portuguese_brazilian ] = "Inserir páginas" ;
+    Text [ portuguese_brazilian ] = "Inserir p?ginas" ;
     Text [ portuguese ] = "Inserir páginas" ;
     Text [ finnish ] = "Lisää diat" ;
     Text [ danish ] = "Indsæt sider" ;
@@ -4880,7 +4880,7 @@ String STR_ASK_DELETE_LAYER
     Text [ french ] = "Voulez-vous vraiment supprimer la couche '$' ?\nAttention : tous les objets sur cette couche seront également supprimés !" ;
     Text [ swedish ] = "Vill Du verkligen radera nivå '$'?\nAlla objekt på denna nivå kommer också att raderas!" ;
     Text [ danish ] = "Er du sikker på, at du vil slette niveau '$'?\nBemærk: Alle objekter på dette niveau bliver ligeledes slettet!" ;
-    Text [ portuguese_brazilian ] = "Wollen Sie die Ebene $ wirklich löschen?\nHinweis: Alle Objekte auf dieser Ebene werden ebenfalls gelöscht!" ;
+    Text [ portuguese_brazilian ] = "Wollen Sie die Ebene $ wirklich l?chen?\nHinweis: Alle Objekte auf dieser Ebene werden ebenfalls gel?cht!" ;
     Text [ portuguese ] = "Eliminar realmente o nível '$'?\nAtenção: todos os objectos deste nível serão também eliminados!" ;
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ı·Ö²ã'$' £¿\nÌáÊ¾£ºÕâÑù´Ë·Ö²ãÄÚµÄËùÓĞ¶ÔÏó±ã»á±»É¾³ı£¡";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò ñëîé '$'?\nÊ Âàøåìó ñâåäåíèş: âñå îáúåêòû ıòîãî ñëîÿ áóäóò òàêæå óäàëåíû!";
@@ -4907,7 +4907,7 @@ String STR_ASK_DELETE_ALL_PICTURES
     Text [ swedish ] = "Vill Du verkligen radera alla bilder?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette alle billeder?" ;
     Text [ portuguese ] = "Deseja realmente eliminar todas as imagens?" ;
-    Text [ portuguese_brazilian ] = "Sollen wirklich alle Bilder gelöscht werden?" ;
+    Text [ portuguese_brazilian ] = "Sollen wirklich alle Bilder gel?cht werden?" ;
     Text[ chinese_simplified ] = "ÄúÕæÒªÉ¾³ıÈ«²¿µÄÍ¼ÏñÂğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü âñå ğèñóíêè?";
     Text[ polish ] = "Czy na pewno usun¹æ wszystkie rysunki?";
@@ -4964,7 +4964,7 @@ String STR_WAV_FILE
     Text [ spanish ] = "Sonido" ;
     Text[ chinese_simplified ] = "ÉùÒô";
     Text[ russian ] = "Çâóê";
-    Text[ polish ] = "DŸwiêk";
+    Text[ polish ] = "D?wiêk";
     Text[ japanese ] = "»³İÄŞ";
     Text[ greek ] = "¹÷ïò";
     Text[ korean ] = "»ç¿îµå";
@@ -5105,7 +5105,7 @@ String STR_SD_PAGE
     Text [ ENGLISH ] = "Page" ;
     Text [ norwegian ] = "Page" ;
     Text [ italian ] = "Pagina" ;
-    Text [ portuguese_brazilian ] = "Página" ;
+    Text [ portuguese_brazilian ] = "P?gina" ;
     Text [ portuguese ] = "Página" ;
     Text [ finnish ] = "Dia" ;
     Text [ danish ] = "Side" ;
@@ -5320,7 +5320,7 @@ String STR_DLG_INSERT_PAGES_FROM_FILE
     Text [ swedish ] = "Infoga fil" ;
     Text [ danish ] = "Indsæt fil" ;
     Text [ portuguese ] = "Inserir ficheiro" ;
-    Text [ portuguese_brazilian ] = "Datei einfügen" ;
+    Text [ portuguese_brazilian ] = "Datei einf?en" ;
     Text[ chinese_simplified ] = "²åÈëÎÄ¼ş";
     Text[ russian ] = "Âñòàâèòü ñëàéä";
     Text[ polish ] = "Wstaw plik";
@@ -5340,7 +5340,7 @@ String STR_DLG_INSERT_PAGES_FROM_OUTLINE
     Text [ ENGLISH ] = "Insert pages from outline" ;
     Text [ norwegian ] = "Insert pages from outline" ;
     Text [ italian ] = "Inserisci pagine da struttura" ;
-    Text [ portuguese_brazilian ] = "Insere páginas do esboço" ;
+    Text [ portuguese_brazilian ] = "Insere p?ginas do esbo?o" ;
     Text [ portuguese ] = "Inserir páginas a partir do esquema" ;
     Text [ english_us ] = "Insert slides from outline" ;
     Text [ finnish ] = "Lisää diat jäsennyksestä" ;
@@ -5392,7 +5392,7 @@ String STR_READ_DATA_ERROR
     Text [ ENGLISH ] = "The file couldn't be loaded!" ;
     Text [ norwegian ] = "Filen kan ikke lastes inn!" ;
     Text [ italian ] = "Impossibile caricare il file." ;
-    Text [ portuguese_brazilian ] = "O arquivo não pode ser carregado!" ;
+    Text [ portuguese_brazilian ] = "O arquivo n?o pode ser carregado!" ;
     Text [ portuguese ] = "Foi impossível carregar o ficheiro!" ;
     Text [ finnish ] = "Tiedoston lataaminen ei onnistunut." ;
     Text [ danish ] = "Det var ikke muligt at indlæse filen!" ;
@@ -5425,7 +5425,7 @@ String STR_SCALE_OBJECTS
     Text [ swedish ] = "De nya sidornas format anpassas.\nVill Du anpassa objekten också?" ;
     Text [ danish ] = "De nye siders format bliver tilpasset.\nSkal objekterne også tilpasses?" ;
     Text [ portuguese ] = "O formato das novas páginas será ajustado.\nAjustar também os objectos?" ;
-    Text [ portuguese_brazilian ] = "Das Format der neuen Seiten wird angepaßt.\nWollen Sie die Objekte auch anpassen?" ;
+    Text [ portuguese_brazilian ] = "Das Format der neuen Seiten wird angepa?t.\nWollen Sie die Objekte auch anpassen?" ;
     Text[ chinese_simplified ] = "ÒÑ¾­ÏàÓ¦µ÷ÕûÁËĞÂ½¨Ò³ÃæµÄ¸ñÊ½¡£\nÒ²ÒªÏàÓ¦µ÷ÕûÕâ¸ö¶ÔÏóÂğ£¿";
     Text[ russian ] = "Ôîğìàò íîâîé ñòğàíèöû áóäåò ñîãëàñîâàí.\nÂû õîòèòå òàêæå ñîãëàñîâàòü îáúåêòû?";
     Text[ polish ] = "Format nowych stron zostanie dopasowany.\nCzy dopasowaæ równie¿ obiekty?";
@@ -5476,7 +5476,7 @@ String STR_UNDO_CHANGE_PAGEFORMAT
     Text [ swedish ] = "Ändra sidformat" ;
     Text [ danish ] = "Modificer sideformat" ;
     Text [ portuguese ] = "Alterar formato da página" ;
-    Text [ portuguese_brazilian ] = "Seitenformat ändern" ;
+    Text [ portuguese_brazilian ] = "Seitenformat ?ndern" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÒ³Ãæ¸ñÊ½";
     Text[ russian ] = "Èçìåíèòü ôîğìàò ñòğàíèöû";
     Text[ polish ] = "Zmieñ format stron";
@@ -5502,7 +5502,7 @@ String STR_UNDO_CHANGE_PAGEBORDER
     Text [ swedish ] = "Ändra sidmarginaler" ;
     Text [ danish ] = "Modificer sidemargener" ;
     Text [ portuguese ] = "Alterar margens das páginas" ;
-    Text [ portuguese_brazilian ] = "Seitenränder ändern" ;
+    Text [ portuguese_brazilian ] = "Seitenr?nder ?ndern" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÒ³Ãæ¿Õ°×";
     Text[ russian ] = "Èçìåíèòü ïîëÿ ñòğàíèöû";
     Text[ polish ] = "Zmieñ marginesy stron";
@@ -5555,7 +5555,7 @@ String STR_SOUNDFILE1
     Text [ portuguese_brazilian ] = "Systemton" ;
     Text[ chinese_simplified ] = "ÏµÍ³ÉùÒô";
     Text[ russian ] = "Çâóê ñèñòåìû";
-    Text[ polish ] = "DŸwiêk systemowy";
+    Text[ polish ] = "D?wiêk systemowy";
     Text[ japanese ] = "¼½ÃÑ»³İÄŞ";
     Text[ greek ] = "¹÷ïò óõóôŞìáôïò";
     Text[ korean ] = "½Ã½ºÅÛ »ç¿îµå";
@@ -5605,7 +5605,7 @@ String STR_SOUNDFILE3
     Text [ portuguese_brazilian ] = "<Klangformat 3>" ;
     Text[ chinese_simplified ] = "<ÉùÒô¸ñÊ½ 3>";
     Text[ russian ] = "<Çâóêîâîé ôîğìàò 3>";
-    Text[ polish ] = "<Format dŸwiêkowy 3>";
+    Text[ polish ] = "<Format d?wiêkowy 3>";
     Text[ japanese ] = "<»³İÄŞ‘® 3>";
     Text[ greek ] = "<ÌïñöŞ Ş÷ïõ 3>";
     Text[ korean ] = "<»ç¿îµå ¼­½Ä 3>";
@@ -5630,7 +5630,7 @@ String STR_SOUNDFILE4
     Text [ portuguese_brazilian ] = "<Klangformat 4>" ;
     Text[ chinese_simplified ] = "<ÉùÒô¸ñÊ½ 4>";
     Text[ russian ] = "<Çâóêîâîé ôîğìàò 4>";
-    Text[ polish ] = "<Format dŸwiêkowy 4>";
+    Text[ polish ] = "<Format d?wiêkowy 4>";
     Text[ japanese ] = "<»³İÄŞ‘® 4>";
     Text[ greek ] = "<ÌïñöŞ Ş÷ïõ 4>";
     Text[ korean ] = "<»ç¿îµå ¼­½Ä 4>";
@@ -5655,7 +5655,7 @@ String STR_SOUNDFILE5
     Text [ portuguese_brazilian ] = "<Klangformat 5>" ;
     Text[ chinese_simplified ] = "<ÉùÒô¸ñÊ½ 5>";
     Text[ russian ] = "<Çâóêîâîé ôîğìàò 5>";
-    Text[ polish ] = "<Format dŸwiêkowy 5>";
+    Text[ polish ] = "<Format d?wiêkowy 5>";
     Text[ japanese ] = "<»³İÄŞ‘® 5>";
     Text[ greek ] = "<ÌïñöŞ Ş÷ïõ 5>";
     Text[ korean ] = "<»ç¿îµå ¼­½Ä 5>";
@@ -5678,7 +5678,7 @@ String STR_WARN_DEL_PAGE
     Text [ swedish ] = "Denna åtgärd tar bort sidan '$'.\nSidan innehåller ritobjekt!" ;
     Text [ danish ] = "Denne handling sletter side $. \nSiden indeholder tegneobjekter!" ;
     Text [ portuguese ] = "Esta acção elimina a página '$'. \nA página contém objectos de desenho!" ;
-    Text [ portuguese_brazilian ] = "Diese Aktion löscht die Seite $. \nDie Seite enthält Zeichenobjekte!" ;
+    Text [ portuguese_brazilian ] = "Diese Aktion l?cht die Seite $. \nDie Seite enth?lt Zeichenobjekte!" ;
     Text[ chinese_simplified ] = "Õâ¸ö²Ù×÷»áÉ¾³ıÒ³ '$' ¡£\nÕâÒ³º¬ÓĞ»æÍ¼¶ÔÏó£¡";
     Text[ russian ] = "İòà àêöèÿ óäàëÿåò ñòğàíèöó '$'. \nİòà ñòğàíèöà ñîäåğæèò ãğàôè÷åñêèå îáúåêòû!";
     Text[ polish ] = "Ta akcja usuwa slajd '$'.\nSlajd zawiera obiekty graficzne!";
@@ -5703,7 +5703,7 @@ String STR_WARN_DEL_SEL_PAGES
     Text [ swedish ] = "Den här åtgärden tar bort de valda sidorna.\nSidorna innehåller ritobjekt!" ;
     Text [ danish ] = "Denne handling sletter de udvalgte sider \nSiderne indeholder tegneobjekter!" ;
     Text [ portuguese ] = "Esta acção elimina as páginas seleccionadas. \nAs páginas contêm objectos de desenho!" ;
-    Text [ portuguese_brazilian ] = "Diese Aktion löscht die selektierten Seiten. \nDie Seiten enthalten Zeichenobjekte!" ;
+    Text [ portuguese_brazilian ] = "Diese Aktion l?cht die selektierten Seiten. \nDie Seiten enthalten Zeichenobjekte!" ;
     Text[ chinese_simplified ] = "Õâ¸ö²Ù×÷É¾³ı±»Ñ¡ÖĞµÄÒ³¡£\nÕâĞ©Ò³º¬ÓĞ»æÍ¼¶ÔÏó£¡";
     Text[ russian ] = "İòà àêöèÿ óäàëÿåò ñòğàíèöû. \nİòè ñòğàíèöû ñîäåğæàò ãğàôè÷åñêèå îáúåêòû!";
     Text[ polish ] = "Ta akcja usuwa zaznaczone slajdy.\nSlajdy zawieraj¹ obiekty graficzne!";
@@ -5756,7 +5756,7 @@ String STR_DEL_SHAPE
     Text [ swedish ] = "Radera ikon" ;
     Text [ danish ] = "Slet symbol" ;
     Text [ portuguese ] = "Eliminar símbolo" ;
-    Text [ portuguese_brazilian ] = "Symbol löschen" ;
+    Text [ portuguese_brazilian ] = "Symbol l?chen" ;
     Text[ chinese_simplified ] = "É¾³ıÍ¼±ê";
     Text[ russian ] = "Óäàëèòü ñèìâîë";
     Text[ polish ] = "Usuñ ikonê";
@@ -5782,7 +5782,7 @@ String STR_WARN_DEL_SHAPE
     Text [ swedish ] = "Skall symbolen verkligen raderas?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette dette symbol?" ;
     Text [ portuguese ] = "Eliminar realmente o símbolo?" ;
-    Text [ portuguese_brazilian ] = "Soll das Symbol wirklich gelöscht werden?" ;
+    Text [ portuguese_brazilian ] = "Soll das Symbol wirklich gel?cht werden?" ;
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÍ¼±êÂğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò ñèìâîë?";
     Text[ polish ] = "Czy na pewno usun¹æ symbol?";
@@ -5808,7 +5808,7 @@ String STR_MODIFY_SHAPE
     Text [ swedish ] = "Ändra symbol" ;
     Text [ danish ] = "Modificer symbol" ;
     Text [ portuguese ] = "Modificar símbolo" ;
-    Text [ portuguese_brazilian ] = "Symbol ändern" ;
+    Text [ portuguese_brazilian ] = "Symbol ?ndern" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÍ¼±ê";
     Text[ russian ] = "Èçìåíèòü ñèìâîë";
     Text[ polish ] = "Modyfikuj symbol";
@@ -5834,7 +5834,7 @@ String STR_WARN_MODIFY_SHAPE
     Text [ swedish ] = "Ska symbolen verkligen ändras?" ;
     Text [ danish ] = "Er du sikker på, at du vil ændre dette symbol?" ;
     Text [ portuguese ] = "Modificar realmente o símbolo?" ;
-    Text [ portuguese_brazilian ] = "Soll das Symbol wirklich geändert werden?" ;
+    Text [ portuguese_brazilian ] = "Soll das Symbol wirklich ge?ndert werden?" ;
     Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÍ¼±êÂğ£¿";
     Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå èçìåíèòü ıòîò ñèìâîë?";
     Text[ polish ] = "Czy na pewno zmodyfikowaæ symbol?";
@@ -5860,7 +5860,7 @@ String STR_DELETE_PAGES
     Text [ swedish ] = "Radera sidor" ;
     Text [ danish ] = "Slet sider" ;
     Text [ portuguese ] = "Eliminar páginas" ;
-    Text [ portuguese_brazilian ] = "Seiten löschen" ;
+    Text [ portuguese_brazilian ] = "Seiten l?chen" ;
     Text[ chinese_simplified ] = "É¾³ıÒ³Ãæ";
     Text[ russian ] = "Óäàëèòü ñëàéä";
     Text[ polish ] = "Usuñ slajdy";
@@ -5938,7 +5938,7 @@ String STR_IMPORT_GRFILTER_OPENERROR
     Text [ swedish ] = "Grafikfil kan inte öppnas" ;
     Text [ danish ] = "Det er ikke muligt at åbne grafikfilen" ;
     Text [ portuguese ] = "Impossível abrir o ficheiro gráfico." ;
-    Text [ portuguese_brazilian ] = "Grafikdatei kann nicht geöffnet werden" ;
+    Text [ portuguese_brazilian ] = "Grafikdatei kann nicht ge?fnet werden" ;
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
     Text[ russian ] = "Íå óäàåòñÿ îòêğûòü ôàéë ãğàôèêè";
     Text[ polish ] = "Pliku graficznego nie mo¿na otworzyæ.";
@@ -6014,7 +6014,7 @@ String STR_IMPORT_GRFILTER_VERSIONERROR
     Text [ swedish ] = "Grafikfilens version blir inte stödd" ;
     Text [ danish ] = "Denne version af grafikfilen understøttes ikke" ;
     Text [ portuguese ] = "A versão do ficheiro gráfico não tem suporte." ;
-    Text [ portuguese_brazilian ] = "Die Version der Grafikdatei wird nicht unterstützt" ;
+    Text [ portuguese_brazilian ] = "Die Version der Grafikdatei wird nicht unterst?zt" ;
     Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸öÍ¼ĞÎÎÄ¼şµÄ°æ±¾";
     Text[ russian ] = "İòà âåğñèÿ ôàéëà ãğàôèêè íå ïîääåğæèâàåòñÿ";
     Text[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana.";
@@ -6115,7 +6115,7 @@ String STR_END_SEARCHING
     Text [ swedish ] = "Sökningen för det här dokumentet är avslutad." ;
     Text [ danish ] = "Dokumentsøgningen er færdig!" ;
     Text [ portuguese ] = "Concluída a procura para este documento!" ;
-    Text [ portuguese_brazilian ] = "Die Suche für dieses Dokument ist abgeschlossen!" ;
+    Text [ portuguese_brazilian ] = "Die Suche f? dieses Dokument ist abgeschlossen!" ;
     Text[ chinese_simplified ] = "ÒÑ¾­Íê³ÉËÑÑ°Õâ¸öÎÄµµ£¡";
     Text[ russian ] = "Ïîèñê ıòîãî äîêóìåíòà çàêîí÷åí!";
     Text[ polish ] = "Szukanie dokumentu zosta³o zakoñczone!";
@@ -6141,7 +6141,7 @@ String STR_END_SPELLING
     Text [ swedish ] = "Rättstavningskontrollen för detta dokument är avslutad." ;
     Text [ danish ] = "Stavekontrollen for dette dokument er færdig!" ;
     Text [ portuguese ] = "Concluída a verificação ortográfica para este documento!" ;
-    Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung für dieses Dokument ist abgeschlossen!" ;
+    Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung f? dieses Dokument ist abgeschlossen!" ;
     Text[ chinese_simplified ] = "ÒÑ¾­Íê³ÉÕû¸öÎÄµµµÄÆ´Ğ´¼ì²é£¡";
     Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ ıòîãî äîêóìåíòà çàêîí÷åíà!";
     Text[ polish ] = "Sprawdzanie pisowni dla tego dokumentu zosta³o zakoñczone!";
@@ -6161,7 +6161,7 @@ String STR_END_SPELLING_OBJ
     Text [ ENGLISH ] = "Spell checking for the selected objects has finished." ;
     Text [ english_us ] = "The spellcheck for the selected objects has been completed." ;
     Text [ portuguese ] = "A verificação ortográfica para os objectos seleccionados foi concluída!" ;
-    Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung für die selektierten Objekte ist abgeschlossen!" ;
+    Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung f? die selektierten Objekte ist abgeschlossen!" ;
     Text [ swedish ] = "Rättstavningskontrollen för de markerade objekten är avslutad!" ;
     Text [ danish ] = "Stavekontrollen for de markerede objekter er færdig!" ;
     Text [ italian ] = "Il controllo ortografico per gli oggetti scelti è concluso!" ;
@@ -6193,7 +6193,7 @@ String STR_NOLANGUAGE
     Text [ swedish ] = "Det inställda språket är inte tillgängligt." ;
     Text [ danish ] = "Det valgte sprog står ikke til rådighed." ;
     Text [ portuguese ] = "A língua seleccionada não está disponível." ;
-    Text [ portuguese_brazilian ] = "Die eingestellte Sprache ist nicht verfügbar." ;
+    Text [ portuguese_brazilian ] = "Die eingestellte Sprache ist nicht verf?bar." ;
     Text[ chinese_simplified ] = "ÄúÑ¡ÔñµÄÓïÑÔ²»´æÔÚ¡£";
     Text[ russian ] = "Âûáğàííûé ÿçûê íåäîñòóïåí.";
     Text[ polish ] = "Wybrany jêzyk jest niedostêpny.";
@@ -6238,7 +6238,7 @@ String STR_CLPBRD_CLEAR
     Text [ English ] = "Shall the Clipboard Content be available for other Applications?" ;
     Text [ norwegian ] = "Vil du at Innholdet på Utklippstavlen skal være tilgjengelig til andre applikasjoner?" ;
     Text [ italian ] = "Negli appunti ci sono molti dati.\nRenderli disponibili per altre applicazioni?" ;
-    Text [ portuguese_brazilian ] = "O Conteúdo do Clipboard deve estar disponível para outros Aplicativos?" ;
+    Text [ portuguese_brazilian ] = "O Conte?o do Clipboard deve estar dispon?vel para outros Aplicativos?" ;
     Text [ portuguese ] = "Na área de transferência encontram-se grandes quantidades de dados.\nColocar o conteúdo da área de transferência à disposição de outras aplicações?" ;
     Text [ english_us ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard content to be available for other applications?" ;
     Text [ finnish ] = "Leikepöydällä on paljon tietoja.\nHaluatko säilyttää leikepöydän tiedot muita sovelluksia varten?" ;
@@ -6249,7 +6249,7 @@ String STR_CLPBRD_CLEAR
     Text [ spanish ] = "Ha copiado una gran cantidad de datos al portapapeles.\n¿Desea que el contenido del portapapeles esté disponible para otras aplicaciones?" ;
     Text[ chinese_simplified ] = "ÔÚ¼ôÌù°åÄÚ´æÓĞÒ»¸ö½Ï´óµÄÊı¾İ¡£\nÄúÒªÈÃÕâ¸öÊı¾İÒ²Ìá¹©¸øÆäËûÓ¦ÓÃ³ÌĞòÊ¹ÓÃ£¿";
     Text[ russian ] = "Âû ïîìåñòèëè ñëèøêîì áîëüøîå êîëè÷åñòâî äàííûõ â áóôåğ îáìåíà.\nÏğåäîñòàâèòü ñîäåğæèìîå áóôåğà îáìåíà äğóãèì ïğèëîæåíèÿì?";
-    Text[ polish ] = "Umieœci³eœ wiêksze iloœci danych w schowku.\nCzy udostêpniæ zawartoœæ schowka innym aplikacjom?";
+    Text[ polish ] = "Umie?ci³e? wiêksze ilo?ci danych w schowku.\nCzy udostêpniæ zawarto?æ schowka innym aplikacjom?";
     Text[ japanese ] = "‘å—Ê‚ÌÃŞ°À‚ª¸Ø¯ÌßÎŞ°ÄŞ‚É•ÛŠÇ‚³‚ê‚Ä‚¢‚Ü‚·B\n¸Ø¯ÌßÎŞ°ÄŞ‚Ì“à—e‚ğ•Ê‚Ì±ÌßØ¹°¼®İ‚É‚àg—p‚µ‚Ü‚·‚©B";
     Text[ greek ] = "¸÷åôå áğïèçêåıóåé ìåãÜëç ğïóüôçôá äåäïìİíùí óôï ğñü÷åéñï.\nÈİëåôå ôá äåäïìİíá áõôÜ íá åßíáé äéáèİóéìá êáé ãéá Üëëåò åöáñìïãİò;";
     Text[ korean ] = "»ç¿ëÀÚ´Â¡¡Å¬¸³º¸µå¿¡ ¸¹Àº ¾çÀÇ µ¥ÀÌÅÍ¸¦ ÀúÀåÇÏ¿´½À´Ï´Ù.\nÅ¬¸³º¸µåÀÇ ³»¿ëÀ» ´Ù¸¥ ÀÀ¿ë ÇÁ·Î±×·¥¿¡¼­µµ »ç¿ë°¡´ÉÇÏ°ÔÇÏ½Ã°Ú½À´Ï±î?";
@@ -6321,7 +6321,7 @@ String STR_UNDO_CHANGE_PRES_OBJECT
     Text [ swedish ] = "Ändra presentationsobjekt '$'" ;
     Text [ danish ] = "Modificer præsentationsobjekt '$'" ;
     Text [ portuguese ] = "Modificar objecto de apresentação '$'" ;
-    Text [ portuguese_brazilian ] = "Präsentationsobjekt '$' ändern" ;
+    Text [ portuguese_brazilian ] = "Pr?sentationsobjekt '$' ?ndern" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÑİÊ¾ÎÄ¸å¶ÔÏó '$'";
     Text[ russian ] = "Èçìåíèòü îáúåêò ïğåçåíòàöèè '$'";
     Text[ polish ] = "Zmieñ obiekt prezentacji '$'";
@@ -6347,7 +6347,7 @@ String STR_UNDO_MODIFY_PAGE
     Text [ swedish ] = "Ändra sida" ;
     Text [ danish ] = "Modificer side" ;
     Text [ portuguese ] = "Alterar página" ;
-    Text [ portuguese_brazilian ] = "Seite ändern" ;
+    Text [ portuguese_brazilian ] = "Seite ?ndern" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÒ³Ãæ";
     Text[ russian ] = "Èçìåíèòü ñëàéä";
     Text[ polish ] = "Modyfikuj slajd";
@@ -6399,7 +6399,7 @@ String STR_UNDO_INSERT_FILE
     Text [ swedish ] = "Infoga fil" ;
     Text [ danish ] = "Indsæt fil" ;
     Text [ portuguese ] = "Inserir ficheiro" ;
-    Text [ portuguese_brazilian ] = "Datei einfügen" ;
+    Text [ portuguese_brazilian ] = "Datei einf?en" ;
     Text[ chinese_simplified ] = "²åÈëÎÄ¼ş";
     Text[ russian ] = "Âñòàâèòü ôàéë";
     Text[ polish ] = "Wstaw plik";
@@ -6425,7 +6425,7 @@ String STR_SCALE_OBJS_TO_PAGE
     Text [ swedish ] = "Ska grafikobjekten anpassas till det nya sidformatet?" ;
     Text [ danish ] = "Skal grafikobjekterne tilpasses til det nye sideformat?" ;
     Text [ portuguese ] = "Deseja ajustar os objectos gráficos ao novo formato da página?" ;
-    Text [ portuguese_brazilian ] = "Sollen die Grafikobjekte an das neue Seitenformat angepaßt werden?" ;
+    Text [ portuguese_brazilian ] = "Sollen die Grafikobjekte an das neue Seitenformat angepa?t werden?" ;
     Text[ chinese_simplified ] = "Òª¸ù¾İÒ³Ãæ¸ñÊ½¶ÔÕâ¸öÍ¼ĞÎ¶ÔÏó×öÏàÓ¦µ÷ÕûÂğ£¿";
     Text[ russian ] = "Ñîãëàñîâàòü ãğàôè÷åñêèå îáúåêòû ñ íîâûì ôîğìàòîì ñëàéäà?";
     Text[ polish ] = "Czy obiekty graficzne maj¹ zostaæ dostosowane do nowego formatu stron?";
@@ -6451,7 +6451,7 @@ String STR_UNDO_INSERT_SPECCHAR
     Text [ swedish ] = "Infoga specialtecken" ;
     Text [ danish ] = "Indsæt specialtegn" ;
     Text [ portuguese ] = "Inserir caracteres especiais" ;
-    Text [ portuguese_brazilian ] = "Sonderzeichen einfügen" ;
+    Text [ portuguese_brazilian ] = "Sonderzeichen einf?en" ;
     Text[ chinese_simplified ] = "²åÈëÌØÊâ×Ö·û";
     Text[ russian ] = "Âñòàâèòü ñïåöèàëüíûå ñèìâîëû";
     Text[ polish ] = "Wstaw znaki specjalne";
@@ -6477,7 +6477,7 @@ String STR_UNDO_SET_PRESLAYOUT
     Text [ swedish ] = "Tilldela presentationslayout" ;
     Text [ danish ] = "Tildel præsentationslayout" ;
     Text [ portuguese ] = "Configurar página de apresentação" ;
-    Text [ portuguese_brazilian ] = "Präsentationslayout zuweisen" ;
+    Text [ portuguese_brazilian ] = "Pr?sentationslayout zuweisen" ;
     Text[ chinese_simplified ] = "Ö¸¶¨ÑİÊ¾ÎÄ¸å°æÊ½";
     Text[ russian ] = "Íàçíà÷èòü ğàçìåòêó ïğåçåíòàöèè";
     Text[ polish ] = "Zastosuj uk³ad prezentacji";
@@ -6503,7 +6503,7 @@ String STR_DEMO_EXPORT_LIMIT
     Text [ swedish ] = "Max 10 objekt kan exporteras" ;
     Text [ danish ] = "Det er kun muligt at eksportere maks. 10 objekter" ;
     Text [ portuguese ] = "Só é possível exportar o máximo de 10 objectos." ;
-    Text [ portuguese_brazilian ] = "Es können max. 10 Objekte exportiert werden" ;
+    Text [ portuguese_brazilian ] = "Es k?nen max. 10 Objekte exportiert werden" ;
     Text[ chinese_simplified ] = "×î¶àÖ»ÄÜÊä³ö 10 ¶ÔÏó";
     Text[ russian ] = "İêñïîğò âîçìîæåí ìàêñèìàëüíî 10 îáúåêòîâ";
     Text[ polish ] = "Mo¿na importowaæ maksym. 10 obiektów";
@@ -6522,7 +6522,7 @@ String STR_STRING_NOTFOUND
     Text [ ENGLISH ] = "Search pattern not found." ;
     Text [ norwegian ] = "Søkekriterier ikke funnet." ;
     Text [ italian ] = "Termine non trovato" ;
-    Text [ portuguese_brazilian ] = "Padrao de busca não encontrado." ;
+    Text [ portuguese_brazilian ] = "Padrao de busca n?o encontrado." ;
     Text [ portuguese ] = "Impossível encontrar expressão procurada." ;
     Text [ finnish ] = "Hakuavainta ei löytynyt." ;
     Text [ danish ] = "Søgningen gav intet resultat." ;
@@ -6682,7 +6682,7 @@ String STR_EXPORT_EMPTYGRAPHIC
     Text [ swedish ] = "Tom grafik stöds inte" ;
     Text [ danish ] = "Tom grafik understøttes ikke." ;
     Text [ portuguese ] = "As imagens vazias não têm suporte." ;
-    Text [ portuguese_brazilian ] = "Leere Grafiken werden nicht unterstützt" ;
+    Text [ portuguese_brazilian ] = "Leere Grafiken werden nicht unterst?zt" ;
     Text[ chinese_simplified ] = "²»Ö§³Ö¿Õ°×µÄÍ¼ĞÎ";
     Text[ russian ] = "Ïóñòàÿ ãğàôèêà íå ïîääåğæèâàåòñÿ";
     Text[ polish ] = "Puste grafiki nie bêd¹ obs³ugiwane.";
@@ -6808,7 +6808,7 @@ String STR_WARN_SCALE_FAIL
     Text [ swedish ] = "Den angivna skalan är ogiltig.\nVill Du mata in en ny?" ;
     Text [ danish ] = "Den angivne målestok er ugyldig.\nVil du indtasteen ny?" ;
     Text [ portuguese ] = "A escala indicada não é válida. \nIntroduzir outra?" ;
-    Text [ portuguese_brazilian ] = "Der eingegebene Maßstab ist ungültig.\nWollen Sie einen neuen eingeben?" ;
+    Text [ portuguese_brazilian ] = "Der eingegebene Ma?stab ist ung?tig.\nWollen Sie einen neuen eingeben?" ;
     Text[ chinese_simplified ] = "Ö¸¶¨µÄÏÔÊ¾±ÈÁĞÊÇÎŞĞ§µÄ¡£\nÒªÊäÈëÒ»¸öĞÂµÄÏÔÊ¾±ÈÁĞ£¿";
     Text[ russian ] = "Ââåäåííûé ìàñøòàá ÿâëÿåòñÿ íåïğàâèëüíûì.\nÂâåñòè íîâûé ìàñøòàá?";
     Text[ polish ] = "Podana skala jest nieprawid³owa.\nChcesz podaæ now¹ skalê?";
@@ -6861,7 +6861,7 @@ String STR_CLICK_ACTION_PREVPAGE
     Text [ portuguese_brazilian ] = "Sprung zur vorhergehenden Seite" ;
     Text[ chinese_simplified ] = "×ªµ½ÉÏÒ»Ò³";
     Text[ russian ] = "Ïåğåéòè ê ïğåäûäóùåìó ñëàéäó";
-    Text[ polish ] = "PrzejdŸ do poprzedniego slajdu";
+    Text[ polish ] = "Przejd? do poprzedniego slajdu";
     Text[ japanese ] = "‘O‚ÌÍß°¼Ş‚Ö¼Ş¬İÌß";
     Text[ greek ] = "ÌåôÜâáóç ğñïò ôçí ğñïçãïıìåíç óåëßäá";
     Text[ korean ] = "ÀÌÀü ½½¶óÀÌµå·Î ³Ñ¾î°¡±â";
@@ -6884,10 +6884,10 @@ String STR_CLICK_ACTION_NEXTPAGE
     Text [ swedish ] = "Hoppa till nästa sida" ;
     Text [ danish ] = "Gå til næste side" ;
     Text [ portuguese ] = "Ir para página seguinte" ;
-    Text [ portuguese_brazilian ] = "Sprung zur nächsten Seite" ;
+    Text [ portuguese_brazilian ] = "Sprung zur n?chsten Seite" ;
     Text[ chinese_simplified ] = "×ªµ½ÏÂÒ»Ò³";
     Text[ russian ] = "Ïåğåéòè ê ñëåäóşùåìó ñëàéäó";
-    Text[ polish ] = "PrzejdŸ do nastêpnego slajdu";
+    Text[ polish ] = "Przejd? do nastêpnego slajdu";
     Text[ japanese ] = "Ÿ‚ÌÍß°¼Ş‚Ö¼Ş¬İÌß";
     Text[ greek ] = "ÌåôÜâáóç ğñïò ôçí åğüìåíç óåëßäá";
     Text[ korean ] = "´ÙÀ½ ½½¶óÀÌµå·Î ³Ñ¾î°¡±â";
@@ -6912,7 +6912,7 @@ String STR_CLICK_ACTION_FIRSTPAGE
     Text [ portuguese_brazilian ] = "Sprung zur ersten Seite" ;
     Text[ chinese_simplified ] = "×ªµ½Ê×Ò³";
     Text[ russian ] = "Ïåğåéòè ê ïåğâîìó ñëàéäó";
-    Text[ polish ] = "PrzejdŸ do pierwszego slajdu";
+    Text[ polish ] = "Przejd? do pierwszego slajdu";
     Text[ japanese ] = "1Íß°¼Ş–ÚÍ¼Ş¬İÌß";
     Text[ greek ] = "ÌåôÜâáóç ğñïò ôç ğñşôç óåëßäá";
     Text[ korean ] = "Ã¹ ½½¶óÀÌµå·Î ³Ñ¾î°¡±â";
@@ -6937,7 +6937,7 @@ String STR_CLICK_ACTION_LASTPAGE
     Text [ portuguese_brazilian ] = "Sprung zur letzten Seite" ;
     Text[ chinese_simplified ] = "×ªµ½Î²Ò³";
     Text[ russian ] = "Ïåğåéòè ê ïîñëåäíåìó ñëàéäó";
-    Text[ polish ] = "PrzejdŸ do ostatniego slajdu";
+    Text[ polish ] = "Przejd? do ostatniego slajdu";
     Text[ japanese ] = "ÅŒã‚ÌÍß°¼Ş‚Ö¼Ş¬İÌß";
     Text[ greek ] = "ÌåôÜâáóç ğñïò ôç ôåëåõôáßá óåëßäá";
     Text[ korean ] = "¸¶Áö¸· ½½¶óÀÌµå·Î ³Ñ¾î°¡±â";
@@ -6962,7 +6962,7 @@ String STR_CLICK_ACTION_BOOKMARK
     Text [ portuguese_brazilian ] = "Sprung zu Seite oder Objekt" ;
     Text[ chinese_simplified ] = "×ªµ½Ò³Ãæ»ò¶ÔÏó";
     Text[ russian ] = "Ïåğåéòè ê ñòğàíèöå èëè îáúåêòó";
-    Text[ polish ] = "PrzejdŸ do slajdu lub dokumentu";
+    Text[ polish ] = "Przejd? do slajdu lub dokumentu";
     Text[ japanese ] = "Íß°¼Ş‚Ü‚½‚ÍµÌŞ¼Şª¸Ä‚Ö¼Ş¬İÌß";
     Text[ greek ] = "ÌåôÜâáóç óå óåëßäá Ş áíôéêåßìåíï";
     Text[ korean ] = "ÂÊÀÌ³ª °³Ã¼·Î ³Ñ¾î°¡±â";
@@ -6987,7 +6987,7 @@ String STR_CLICK_ACTION_DOCUMENT
     Text [ portuguese_brazilian ] = "Sprung zu Dokument" ;
     Text[ chinese_simplified ] = "×ªµ½ÎÄµµ";
     Text[ russian ] = "Ïåğåéòè ê äîêóìåíòó";
-    Text[ polish ] = "PrzejdŸ do dokumentu";
+    Text[ polish ] = "Przejd? do dokumentu";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ö¼Ş¬İÌß";
     Text[ greek ] = "ÌåôÜâáóç óôï İããñáöï";
     Text[ korean ] = "¹®¼­·Î ³Ñ¾î°¡±â";
@@ -7062,7 +7062,7 @@ String STR_CLICK_ACTION_SOUND
     Text [ portuguese_brazilian ] = "Klang abspielen" ;
     Text[ chinese_simplified ] = "²¥·¢ÉùÒô";
     Text[ russian ] = "Âîñïğîèçâåñòè çâóê";
-    Text[ polish ] = "Odtwórz dŸwiêk";
+    Text[ polish ] = "Odtwórz d?wiêk";
     Text[ japanese ] = "»³İÄŞ‚ÌÄ¶";
     Text[ greek ] = "Åêôİëåóç Ş÷ïõ";
     Text[ korean ] = "»ç¿îµå Àç»ı";
@@ -7085,7 +7085,7 @@ String STR_CLICK_ACTION_VERB
     Text [ swedish ] = "Utför objektaktion" ;
     Text [ danish ] = "Udfør objekthandling" ;
     Text [ portuguese ] = "Executar acção do objecto" ;
-    Text [ portuguese_brazilian ] = "Objektaktion ausführen" ;
+    Text [ portuguese_brazilian ] = "Objektaktion ausf?ren" ;
     Text[ chinese_simplified ] = "Ö´ĞĞ¶ÔÏó²Ù×÷";
     Text[ russian ] = "Âûïîëíèòü äåéñòâèå îáúåêòà";
     Text[ polish ] = "Uruchom akcjê obiektu";
@@ -7111,7 +7111,7 @@ String STR_CLICK_ACTION_PROGRAM
     Text [ swedish ] = "Utför program" ;
     Text [ danish ] = "Udfør program" ;
     Text [ portuguese ] = "Executar programa" ;
-    Text [ portuguese_brazilian ] = "Programm ausführen" ;
+    Text [ portuguese_brazilian ] = "Programm ausf?ren" ;
     Text[ chinese_simplified ] = "Ö´ĞĞ³ÌĞò";
     Text[ russian ] = "Âûïîëíèòü ïğîãğàììó";
     Text[ polish ] = "Wykonaj program";
@@ -7137,7 +7137,7 @@ String STR_CLICK_ACTION_MACRO
     Text [ swedish ] = "Utför makro" ;
     Text [ danish ] = "Udfør makro" ;
     Text [ portuguese ] = "Executar macro" ;
-    Text [ portuguese_brazilian ] = "Makro ausführen" ;
+    Text [ portuguese_brazilian ] = "Makro ausf?ren" ;
     Text[ chinese_simplified ] = "Ö´ĞĞºê";
     Text[ russian ] = "Âûïîëíèòü ìàêğîñ";
     Text[ polish ] = "Uruchom makro";
@@ -7163,7 +7163,7 @@ String STR_CLICK_ACTION_STOPPRESENTATION
     Text [ swedish ] = "Avsluta presentation" ;
     Text [ danish ] = "Afslut præsentation" ;
     Text [ portuguese ] = "Terminar apresentação" ;
-    Text [ portuguese_brazilian ] = "Präsentation beenden" ;
+    Text [ portuguese_brazilian ] = "Pr?sentation beenden" ;
     Text[ chinese_simplified ] = "½áÊøÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Çàêîí÷èòü ïğåçåíòàöèş";
     Text[ polish ] = "Zakoñcz prezentacjê";
@@ -7182,7 +7182,7 @@ String STR_START_PRESENTATION
     Text [ ENGLISH ] = "Start presentation" ;
     Text [ english_us ] = "Start Slide Show" ;
     Text [ portuguese ] = "Iniciar apresentação" ;
-    Text [ portuguese_brazilian ] = "Bildschirmpräsentation starten" ;
+    Text [ portuguese_brazilian ] = "Bildschirmpr?sentation starten" ;
     Text [ swedish ] = "Starta bildskärmspresentation" ;
     Text [ danish ] = "Start præsentation" ;
     Text [ italian ] = "Avvia la presentazione" ;
@@ -7216,7 +7216,7 @@ String STR_EFFECTDLG_SOUND
     Text [ portuguese ] = "Som" ;
     Text[ chinese_simplified ] = "ÉùÒô";
     Text[ russian ] = "Çâóê";
-    Text[ polish ] = "DŸwiêk";
+    Text[ polish ] = "D?wiêk";
     Text[ japanese ] = "»³İÄŞ";
     Text[ greek ] = "¹÷ïò";
     Text[ korean ] = "»ç¿îµå";
@@ -8473,7 +8473,7 @@ String STR_EFFECT_CLOSE_VERTICAL
     Text [ swedish ] = "Stäng vertikalt" ;
     Text [ danish ] = "Luk lodret" ;
     Text [ portuguese ] = "Fechar na vertical" ;
-    Text [ portuguese_brazilian ] = "Vertikal schließen" ;
+    Text [ portuguese_brazilian ] = "Vertikal schlie?en" ;
     Text[ chinese_simplified ] = "´¹Ö±·½Ïò¹Ø±Õ";
     Text[ russian ] = "Çàêğûâàòü ïî âåğòèêàëè";
     Text[ polish ] = "Zamknij w pionie";
@@ -8499,7 +8499,7 @@ String STR_EFFECT_CLOSE_HORIZONTAL
     Text [ swedish ] = "Stäng horisontellt" ;
     Text [ danish ] = "Luk vandret" ;
     Text [ portuguese ] = "Fechar na horizontal" ;
-    Text [ portuguese_brazilian ] = "Horizontal schließen" ;
+    Text [ portuguese_brazilian ] = "Horizontal schlie?en" ;
     Text[ chinese_simplified ] = "Ë®Æ½·½Ïò¹Ø±Õ";
     Text[ russian ] = "Çàêğûâàòü ïî ãîğèçîíòàëè";
     Text[ polish ] = "Zamknij w poziomie";
@@ -8525,7 +8525,7 @@ String STR_EFFECT_OPEN_VERTICAL
     Text [ swedish ] = "Öppna vertikalt" ;
     Text [ danish ] = "Åbn lodret" ;
     Text [ portuguese ] = "Abrir na vertical" ;
-    Text [ portuguese_brazilian ] = "Vertikal öffnen" ;
+    Text [ portuguese_brazilian ] = "Vertikal ?fnen" ;
     Text[ chinese_simplified ] = "ºáÏò´ò¿ª";
     Text[ russian ] = "Ğàñêğûòü ïî âåğòèêàëè";
     Text[ polish ] = "Otwórz pionowo";
@@ -8551,7 +8551,7 @@ String STR_EFFECT_OPEN_HORIZONTAL
     Text [ swedish ] = "Öppna horisontellt" ;
     Text [ danish ] = "Åbn vandret" ;
     Text [ portuguese ] = "Abrir na horizontal" ;
-    Text [ portuguese_brazilian ] = "Horizontal öffnen" ;
+    Text [ portuguese_brazilian ] = "Horizontal ?fnen" ;
     Text[ chinese_simplified ] = "Ë®Æ½·½Ïò´ò¿ª";
     Text[ russian ] = "Ğàñêğûòü ïî ãîğèçîíòàëè";
     Text[ polish ] = "Otwórz poziomo";
@@ -9004,7 +9004,7 @@ String STR_EFFECT_SPIRALIN_L
     Text [ portuguese_brazilian ] = "Spirale nach innen links" ;
     Text[ chinese_simplified ] = "Ë³Ê±ÕëÄÚĞı";
     Text[ russian ] = "Ñïèğàëü âî âíóòğü ñëåâà";
-    Text[ polish ] = "Spirala do œrodka z lewej";
+    Text[ polish ] = "Spirala do ?rodka z lewej";
     Text[ japanese ] = "ŠO‚©‚ç“à‚Ö¶‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åóùôåñéêÜ áñéóôåñÜ";
     Text[ korean ] = "¾ÈÂÊÀ¸·Î ¿ŞÂÊÀ¸·Î ³ª¼±";
@@ -9029,7 +9029,7 @@ String STR_EFFECT_SPIRALIN_R
     Text [ portuguese_brazilian ] = "Spirale nach innen rechts" ;
     Text[ chinese_simplified ] = "ÄæÊ±ÕëÄÚĞı";
     Text[ russian ] = "Ñïèğàëü âî âíóòğü âïğàâî";
-    Text[ polish ] = "Spirala do œrodka z prawej";
+    Text[ polish ] = "Spirala do ?rodka z prawej";
     Text[ japanese ] = "ŠO‚©‚ç“à‚Ö‰E‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åóùôåñéêÜ äåîéÜ";
     Text[ korean ] = "¾ÈÂÊÀ¸·Î ¿À¸¥ÂÊÀ¸·Î ³ª¼±";
@@ -9052,7 +9052,7 @@ String STR_EFFECT_SPIRALOUT_L
     Text [ swedish ] = "Spiral utåt till vänster" ;
     Text [ danish ] = "Spiral udad med uret" ;
     Text [ portuguese ] = "Espiral para fora, à esquerda" ;
-    Text [ portuguese_brazilian ] = "Spirale nach außen links" ;
+    Text [ portuguese_brazilian ] = "Spirale nach au?en links" ;
     Text[ chinese_simplified ] = "Ë³Ê±ÕëÍâĞı";
     Text[ russian ] = "Ñïèğàëü íàğóæó ñëåâà";
     Text[ polish ] = "Spirala na zewn¹trz z lewej";
@@ -9078,7 +9078,7 @@ String STR_EFFECT_SPIRALOUT_R
     Text [ swedish ] = "Spiral utåt till höger" ;
     Text [ danish ] = "Spiral udad mod uret" ;
     Text [ portuguese ] = "Espiral para fora, à direita" ;
-    Text [ portuguese_brazilian ] = "Spirale nach außen rechts" ;
+    Text [ portuguese_brazilian ] = "Spirale nach au?en rechts" ;
     Text[ chinese_simplified ] = "ÄæÊ±ÕëÍâĞı";
     Text[ russian ] = "Ñïèğàëü íàğóæó âïğàâî";
     Text[ polish ] = "Spirala na zewn¹trz z prawej";
@@ -9104,10 +9104,10 @@ String STR_EFFECT_DISSOLVE
     Text [ swedish ] = "Upplösa" ;
     Text [ danish ] = "Opløs" ;
     Text [ portuguese ] = "Resolver" ;
-    Text [ portuguese_brazilian ] = "Auflösen" ;
+    Text [ portuguese_brazilian ] = "Aufl?en" ;
     Text[ chinese_simplified ] = "ÈÚ»¯Ğ§¹û";
     Text[ russian ] = "Ğàñòâîğåíèå";
-    Text[ polish ] = "Rozpuœæ";
+    Text[ polish ] = "Rozpu?æ";
     Text[ japanese ] = "ÃŞ¨¿ŞÙÌŞ";
     Text[ language_user1 ] = "Ğàñòâîğåíèå - - - -";
     Text[ greek ] = "ÄéÜëõóç";
@@ -9507,7 +9507,7 @@ String STR_GENERAL_PUBLISHING_ERROR
     Text [ swedish ] = "Ett fel uppstod när publikationen sparades." ;
     Text [ danish ] = "Der opstod en fejl under forsøget på at gemme publikationen." ;
     Text [ portuguese ] = "Ao guardar a publicação surgiu um erro." ;
-    Text [ portuguese_brazilian ] = "Beim Speichern der Veröffentlichung ist ein Fehler aufgetreten." ;
+    Text [ portuguese_brazilian ] = "Beim Speichern der Ver?fentlichung ist ein Fehler aufgetreten." ;
     Text[ chinese_simplified ] = "±£´æ·¢±íÎÄ¼şÊ±·¢ÉúÒ»¸ö´íÎó¡£";
     Text[ russian ] = "Ïğè ñîõğàíåíèè ïóáëèêàöèè ïğîèçîøëà îøèáêà.";
     Text[ polish ] = "Przy zapisie publikacji wyst¹pi³ b³¹d.";
@@ -9533,7 +9533,7 @@ String STR_INSERT_TEXT
     Text [ swedish ] = "Infoga text" ;
     Text [ danish ] = "Indsæt tekst" ;
     Text [ portuguese ] = "Inserir texto" ;
-    Text [ portuguese_brazilian ] = "Text einfügen" ;
+    Text [ portuguese_brazilian ] = "Text einf?en" ;
     Text[ chinese_simplified ] = "²åÈëÕıÎÄ";
     Text[ russian ] = "Âñòàâèòü òåêñò";
     Text[ polish ] = "Wstaw tekst";
@@ -9784,10 +9784,10 @@ String STR_RESOLUTION
     Text [ swedish ] = "Upplösning" ;
     Text [ danish ] = "Opløsning" ;
     Text [ portuguese ] = "Resolução" ;
-    Text [ portuguese_brazilian ] = "Auflösung" ;
+    Text [ portuguese_brazilian ] = "Aufl?ung" ;
     Text[ chinese_simplified ] = "·Ö±æÂÊ";
     Text[ russian ] = "Ğàçğåøåíèå";
-    Text[ polish ] = "Rozdzielczoœæ";
+    Text[ polish ] = "Rozdzielczo?æ";
     Text[ japanese ] = "‰ğ‘œ“x";
     Text[ greek ] = "ÁíÜëõóç";
     Text[ korean ] = "ÇØ»óµµ";
@@ -9961,7 +9961,7 @@ String STR_DRAGTYPE_URL
     Text [ spanish ] = "Insertar como hiperenlace" ;
     Text [ french ] = "Insérer comme hyperlien" ;
     Text [ portuguese ] = "Inserir como hiperligação" ;
-    Text [ portuguese_brazilian ] = "Als Hyperlink einfügen" ;
+    Text [ portuguese_brazilian ] = "Als Hyperlink einf?en" ;
     Text[ chinese_simplified ] = "µ±×÷³¬Á´½Ó²åÈë";
     Text[ russian ] = "Âñòàâèòü êàê ãèïåğññûëêó";
     Text[ polish ] = "Wstaw jako hiper³¹cze";
@@ -9987,7 +9987,7 @@ String STR_DRAGTYPE_EMBEDDED
     Text [ swedish ] = "Infoga som kopia" ;
     Text [ danish ] = "Indsæt som kopi" ;
     Text [ portuguese ] = "Inserir como cópia" ;
-    Text [ portuguese_brazilian ] = "Als Kopie einfügen" ;
+    Text [ portuguese_brazilian ] = "Als Kopie einf?en" ;
     Text[ chinese_simplified ] = "µ±×÷¸´¼ş²åÈë";
     Text[ russian ] = "Âñòàâèòü êàê êîïèş";
     Text[ polish ] = "Wstaw jako kopiê";
@@ -10013,7 +10013,7 @@ String STR_DRAGTYPE_LINK
     Text [ swedish ] = "Infoga som länk" ;
     Text [ danish ] = "Indsæt som kæde" ;
     Text [ portuguese ] = "Inserir como ligação" ;
-    Text [ portuguese_brazilian ] = "Als Verknüpfung einfügen" ;
+    Text [ portuguese_brazilian ] = "Als Verkn?fung einf?en" ;
     Text[ chinese_simplified ] = "µ±×÷Á´½Ó²åÈë";
     Text[ russian ] = "Âñòàâèòü êàê ññûëêó";
     Text[ polish ] = "Wstaw jako ³¹cze";
@@ -10264,7 +10264,7 @@ String STR_EFFECT_FADEFROM
     Text [ swedish ] = "Tona över" ;
     Text [ danish ] = "Ton over" ;
     Text [ portuguese ] = "Dissolver" ;
-    Text [ portuguese_brazilian ] = "Überblenden" ;
+    Text [ portuguese_brazilian ] = "?berblenden" ;
     Text[ chinese_simplified ] = "ÒşÈë";
     Text[ russian ] = "Íàïëûâ";
     Text[ polish ] = "Przenikanie";
@@ -10365,7 +10365,7 @@ String STR_EFFECT_OPEN_CLOSE
     Text [ swedish ] = "Öppna / Stäng" ;
     Text [ danish ] = "Åbn / luk" ;
     Text [ portuguese ] = "Abrir / Fechar" ;
-    Text [ portuguese_brazilian ] = "Öffnen / Schließen" ;
+    Text [ portuguese_brazilian ] = "?ffnen / Schlie?en" ;
     Text[ chinese_simplified ] = "´ò¿ª/¹Ø±Õ";
     Text[ russian ] = "Ğàñêğûòü / Çàêğûòü";
     Text[ polish ] = "Otwórz / Zamknij";
@@ -10866,7 +10866,7 @@ String STR_CANT_PERFORM_IN_LIVEMODE
     Text [ swedish ] = "Den här åtgärden kan inte utföras i liveläge." ;
     Text [ danish ] = "Det er ikke muligt at udføre denne handling i livemodus." ;
     Text [ portuguese ] = "Esta acção não pode ser executada no modo \"Ao vivo\"." ;
-    Text [ portuguese_brazilian ] = "Diese Aktion kann nicht im Livemodus ausgeführt werden." ;
+    Text [ portuguese_brazilian ] = "Diese Aktion kann nicht im Livemodus ausgef?rt werden." ;
     Text[ chinese_simplified ] = "²»ÄÜÔÚÊµ¿öÄ£Ê½ÏÂÖ´ĞĞÕâ¸ö²Ù×÷¡£";
     Text[ russian ] = "Âûïîëíèòü ıòî äåéñòâèå ğåæèìå Live íåâîçìîæíî.";
     Text[ polish ] = "Tej akcji nie mo¿na wykonaæ w trybie Live.";
@@ -10892,7 +10892,7 @@ String STR_PUBLISH_BACK
     Text [ swedish ] = "Tillbaka" ;
     Text [ danish ] = "Tilbage" ;
     Text [ portuguese ] = "Anterior" ;
-    Text [ portuguese_brazilian ] = "Zurück" ;
+    Text [ portuguese_brazilian ] = "Zur?k" ;
     Text[ chinese_simplified ] = "·µ»Ø";
     Text[ russian ] = "Íàçàä";
     Text[ polish ] = "Wstecz";
@@ -10943,7 +10943,7 @@ String STR_PUBLISH_OUTLINE
     Text [ swedish ] = "Översikt" ;
     Text [ danish ] = "Oversigt" ;
     Text [ portuguese ] = "Sumário" ;
-    Text [ portuguese_brazilian ] = "Übersicht" ;
+    Text [ portuguese_brazilian ] = "?bersicht" ;
     Text[ chinese_simplified ] = "ÕªÒª";
     Text[ russian ] = "Ïğîñìîòğ";
     Text[ polish ] = "Podsumowanie";
@@ -10994,7 +10994,7 @@ String STR_UNDO_MORPHING
     Text [ swedish ] = "Tona över" ;
     Text [ danish ] = "Ton over" ;
     Text [ portuguese ] = "Dissolver" ;
-    Text [ portuguese_brazilian ] = "Überblenden" ;
+    Text [ portuguese_brazilian ] = "?berblenden" ;
     Text[ chinese_simplified ] = "½¥½¥Òş³ö";
     Text[ russian ] = "Íàïëûâ";
     Text[ polish ] = "Przenikaj";
@@ -11097,7 +11097,7 @@ String STR_VIEWTYPE_ORDER
     Text [ dutch ] = "Volgorde" ;
     Text[ chinese_simplified ] = "Ë³Ğò";
     Text[ russian ] = "Ïîñëåäîâàòåëüíîñòü";
-    Text[ polish ] = "Kolejnoœæ";
+    Text[ polish ] = "Kolejno?æ";
     Text[ japanese ] = "‡˜";
     Text[ greek ] = "ÓåéñÜ";
     Text[ korean ] = "¼ø¼­";
@@ -11151,7 +11151,7 @@ String STR_UNDO_3D_DIALOG
     Text [ portuguese_brazilian ] = "3D-Objekteigenschaften" ;
     Text[ chinese_simplified ] = "3 Î¬-¶ÔÏóÊôĞÔ";
     Text[ russian ] = "Ñâîéñòâà îáúåêòîâ 3-Ì";
-    Text[ polish ] = "W³aœciwoœci obiektów 3-W";
+    Text[ polish ] = "W³a?ciwo?ci obiektów 3-W";
     Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä‚Ì‘®«";
     Text[ greek ] = "Éäéüôçôåò áíôéêåéìİíùí 3Ä";
     Text[ korean ] = "3£Ä£­ °³Ã¼ ¼Ó¼º";
@@ -11168,7 +11168,7 @@ String STR_UNDO_COLORRESOLUTION
     Text [ ENGLISH ] = "Color resolution" ;
     Text [ portuguese ] = "Resolução de cores" ;
     Text [ english_us ] = "Color resolution" ;
-    Text [ portuguese_brazilian ] = "Farbauflösung" ;
+    Text [ portuguese_brazilian ] = "Farbaufl?ung" ;
     Text [ swedish ] = "Färgupplösning" ;
     Text [ danish ] = "Farveopløsning" ;
     Text [ italian ] = "Profondità cromatica" ;
@@ -11177,7 +11177,7 @@ String STR_UNDO_COLORRESOLUTION
     Text [ dutch ] = "Kleurdichtheid" ;
     Text[ chinese_simplified ] = "²ÊÉ«·Ö±æÂÊ";
     Text[ russian ] = "Öâåòîâîå ğàçğåøåíèå";
-    Text[ polish ] = "Rozdzielczoœæ kolorów";
+    Text[ polish ] = "Rozdzielczo?æ kolorów";
     Text[ japanese ] = "F‚Ì‰ğ‘œ“x";
     Text[ greek ] = "ÁíÜëõóç ÷ñùìÜôùí";
     Text[ korean ] = "»ö ÇØ»óµµ";
@@ -11227,7 +11227,7 @@ String STR_UNDO_SUMMARY_PAGE
     Text [ dutch ] = "Inhoudsopgave" ;
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼-Ò³Ãæ";
     Text[ russian ] = "Ñëàéä ñîäåğæàíèÿ";
-    Text[ polish ] = "Strona spisu treœci";
+    Text[ polish ] = "Strona spisu tre?ci";
     Text[ japanese ] = "–ÚŸÍß°¼Ş";
     Text[ greek ] = "ÊáôÜëïãïò ğåñéå÷ïìİíùí-Óåëßäá";
     Text[ korean ] = "¸ñÂ÷ ½½¶óÀÌµå";
@@ -11244,7 +11244,7 @@ String STR_ASK_GALLERY_INSERT
     Text [ ENGLISH ] = "Do you want to insert the Sound into Gallery?" ;
     Text [ portuguese ] = "Deseja inserir o som na Gallery?" ;
     Text [ english_us ] = "Do you want to add the sound to the Gallery?" ;
-    Text [ portuguese_brazilian ] = "Soll der Sound zum Gallery-Thema hinzugefügt werden?" ;
+    Text [ portuguese_brazilian ] = "Soll der Sound zum Gallery-Thema hinzugef?t werden?" ;
     Text [ swedish ] = "Vill Du lägga till ljud till Gallery-temat?" ;
     Text [ danish ] = "Skal lyden tilføjes til Gallery-emnet?" ;
     Text [ italian ] = "Aggiungere lil suono all'argomento Gallery?" ;
@@ -11253,7 +11253,7 @@ String STR_ASK_GALLERY_INSERT
     Text [ dutch ] = "Wilt u het geluid opnemen in de gallery?" ;
     Text[ chinese_simplified ] = "ÄúÒª½«Õâ¸öÒôÆµ¼ÓÈë»­ÀÈ-Ö÷Ìâ£¿";
     Text[ russian ] = "Âû õîòèòå äîïîëíèòü Ãàëåğåş çâóêîì?";
-    Text[ polish ] = "Czy chcesz dodaæ dŸwiêk do galerii?";
+    Text[ polish ] = "Czy chcesz dodaæ d?wiêk do galerii?";
     Text[ japanese ] = "»³İÄŞ‚ğ·Ş¬×ØÃ°Ï‚É‘}“ü‚µ‚Ü‚·‚©B";
     Text[ greek ] = "Èİëåôå íá åéóá÷èåß ï Ş÷ïò óôï èİìá ôçò Gallery;";
     Text[ korean ] = "»ç¿îµå¸¦ °¶·¯¸® ÁÖÁ¦¿¡ Ãß°¡ÇÏ½Ã°Ú½À´Ï±î?";
@@ -11271,7 +11271,7 @@ String STR_TWAIN_NO_SOURCE_UNX
     Text [ ENGLISH ] = "Sorry, no SANE source available at the moment." ;
     Text [ english_us ] = "No SANE source is available at the moment." ;
     Text [ portuguese ] = "De momento não existe fonte-SANE disponível." ;
-    Text [ portuguese_brazilian ] = "Zur Zeit ist leider keine SANE-Quelle verfügbar." ;
+    Text [ portuguese_brazilian ] = "Zur Zeit ist leider keine SANE-Quelle verf?bar." ;
     Text [ swedish ] = "För närvarande är tyvärr ingen SANE-källa tillgänglig." ;
     Text [ danish ] = "Der er desværre ingen SANE-kilde tilgængelig for tiden." ;
     Text [ italian ] = "Al momento non è disponibile alcuna sorgente SANE." ;
@@ -11280,7 +11280,7 @@ String STR_TWAIN_NO_SOURCE_UNX
     Text [ dutch ] = "Momenteel helaas geen SANE-bron beschikbaar." ;
     Text[ russian ] = "Â íàñòîÿùèé ìîìåíò èñòî÷íèê SANE íåäîñòóïåí.";
     Text[ greek ] = "Äåí õğÜñ÷åé äéáèİóéìç ğñïİëåõóç SANE áõôŞ ôç óôéãìŞ.";
-    Text[ polish ] = "Nie jest narazie dostêpne Ÿród³o SANE.";
+    Text[ polish ] = "Nie jest narazie dostêpne ?ród³o SANE.";
     Text[ japanese ] = "SANE ¿°½‚Í‘ü¡g—p‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "Áö±İÀº SANE ¼Ò½º¸¦ »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "µ±Ç°ÎŞ·¨Ìá¹©SANE×ÊÔ´¡£";
@@ -11298,7 +11298,7 @@ String STR_TWAIN_NO_SOURCE
     Text [ ENGLISH ] = "Sorry, no TWAIN source available at the moment." ;
     Text [ english_us ] = "At present, no TWAIN source is available." ;
     Text [ portuguese ] = "De momento não existe nenhuma fonte-TWAIN disponível." ;
-    Text [ portuguese_brazilian ] = "Zur Zeit ist leider keine TWAIN-Quelle verfügbar." ;
+    Text [ portuguese_brazilian ] = "Zur Zeit ist leider keine TWAIN-Quelle verf?bar." ;
     Text [ swedish ] = "För tillfället är tyvärr ingen TWAIN-källa tillgänglig." ;
     Text [ danish ] = "Der er desværre ingen TWAIN-kilde tilgængelig for tiden." ;
     Text [ italian ] = "Al momento non è disponibile alcuna sorgente TWAIN." ;
@@ -11307,7 +11307,7 @@ String STR_TWAIN_NO_SOURCE
     Text [ dutch ] = "Momenteel helaas geen TWAIN-bron beschikbaar" ;
     Text[ chinese_simplified ] = "µ±Ç°²»´æÔÚÈÎºÎ TWAIN-Ô´¡£";
     Text[ russian ] = "Ê ñîæëåíèş, â íàñòîÿùèé ìîìåíò èñòî÷íèê TWAIN íåäîñòóïåí.";
-    Text[ polish ] = "Niestety, w tej chwili nie jest dostêpne ¿adne Ÿród³o TWAIN.";
+    Text[ polish ] = "Niestety, w tej chwili nie jest dostêpne ¿adne ?ród³o TWAIN.";
     Text[ japanese ] = "c”O‚È‚ª‚ç–Ú‰º‚Ì‚Æ‚±‚ëTWAIN¿°½‚Íg‚¦‚Ü‚¹‚ñB";
     Text[ greek ] = "Ğñïò ôï ğáñüí äåí åßíáé äéáèİóéìç êáìéÜ ğñïİëåõóç TWAIN.";
     Text[ korean ] = "Áö±İÀº TWAIN ¼Ò½º¸¦ »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
@@ -11383,7 +11383,7 @@ String STR_STANDARD_NORMAL
     Text [ dutch ] = "Standaard" ;
     Text[ chinese_simplified ] = "±ê×¼";
     Text[ russian ] = "Ñòàíäàğò";
-    Text[ polish ] = "Domyœlnie";
+    Text[ polish ] = "Domy?lnie";
     Text[ japanese ] = "•W€";
     Text[ greek ] = "ĞñïåğéëïãŞ";
     Text[ korean ] = "Ç¥ÁØ";
@@ -11408,7 +11408,7 @@ String STR_STANDARD_SMALL
     Text [ dutch ] = "Standaard (kort)" ;
     Text[ chinese_simplified ] = "±ê×¼(¶Ì)";
     Text[ russian ] = "Ñòàíäàğò (êîğîòêèé)";
-    Text[ polish ] = "Domyœlnie (krótki)";
+    Text[ polish ] = "Domy?lnie (krótki)";
     Text[ japanese ] = "•W€(’Z‚¢)";
     Text[ greek ] = "ĞñïåğéëïãŞ (âñá÷ı)";
     Text[ korean ] = "Ç¥ÁØ (ÂªÀº)";
@@ -11433,7 +11433,7 @@ String STR_STANDARD_BIG
     Text [ dutch ] = "Standaard (lang)" ;
     Text[ chinese_simplified ] = "±ê×¼ (³¤)";
     Text[ russian ] = "Ñòàíäàğò (äëèííûé)";
-    Text[ polish ] = "Domyœlnie (d³ugi)";
+    Text[ polish ] = "Domy?lnie (d³ugi)";
     Text[ japanese ] = "•W€(’·‚¢)";
     Text[ greek ] = "ĞñïåğéëïãŞ (ìáêñı)";
     Text[ korean ] = "Ç¥ÁØ (±ä)";
@@ -11483,7 +11483,7 @@ String STR_FILEFORMAT_FULLPATH
     Text [ dutch ] = "Pad/Bestandsnaam" ;
     Text[ chinese_simplified ] = "Â·¾¶/ÎÄ¼şÃû";
     Text[ russian ] = "Ïóòü/Èìÿ ôàéëà";
-    Text[ polish ] = "Œcie¿ka/Nazwa pliku";
+    Text[ polish ] = "?cie¿ka/Nazwa pliku";
     Text[ japanese ] = "Êß½/Ì§²Ù–¼";
     Text[ greek ] = "¼íïìá äéáäñïìŞò/áñ÷åßïõ";
     Text[ korean ] = "°æ·Î/ÆÄÀÏ ÀÌ¸§";
@@ -11508,7 +11508,7 @@ String STR_FILEFORMAT_PATH
     Text [ dutch ] = "Pad" ;
     Text[ chinese_simplified ] = "Â·¾¶";
     Text[ russian ] = "Ïóòü";
-    Text[ polish ] = "Œcie¿ka";
+    Text[ polish ] = "?cie¿ka";
     Text[ japanese ] = "Êß½";
     Text[ greek ] = "ÄéáäñïìŞ";
     Text[ korean ] = "°æ·Î";
@@ -11576,7 +11576,7 @@ String STR_NEW_CUSTOMSHOW
     Text [ ENGLISH ] = "New Custom Show" ;
     Text [ portuguese ] = "Nova apresentação personalizada" ;
     Text [ english_us ] = "New Custom Slide Show" ;
-    Text [ portuguese_brazilian ] = "Neue individuelle Präsentation" ;
+    Text [ portuguese_brazilian ] = "Neue individuelle Pr?sentation" ;
     Text [ swedish ] = "Ny individuell bildskärmspresentation" ;
     Text [ danish ] = "Ny individuel præsentation" ;
     Text [ italian ] = "Nuova presentazione su schermo personalizzata" ;
@@ -11633,7 +11633,7 @@ String STR_IMPRESS_DOCUMENT
     Text [ spanish ] = "Presentación" ;
     Text [ french ] = "Présentation" ;
     Text [ portuguese ] = "Apresentação" ;
-    Text [ portuguese_brazilian ] = "Präsentation" ;
+    Text [ portuguese_brazilian ] = "Pr?sentation" ;
     Text [ italian ] = "Presentazione" ;
     Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Ïğåçåíòàöèÿ";
@@ -11659,7 +11659,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text [ spanish ] = "%PRODUCTNAME 6.0 Presentación" ;
     Text [ french ] = "%PRODUCTNAME 6.0 Présentation" ;
     Text [ portuguese ] = "%PRODUCTNAME 6.0 Apresentação" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Präsentation" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Pr?sentation" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Ïğåçåíòàöèÿ â %PRODUCTNAME 6.0";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Prezentacja";
@@ -11684,7 +11684,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_50
     Text [ spanish ] = "%PRODUCTNAME 5.0 Presentación" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Présentation" ;
     Text [ portuguese ] = "Apresentação (%PRODUCTNAME 5.0)" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Präsentation" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Pr?sentation" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Ïğåçåíòàöèÿ â %PRODUCTNAME 5.0";
     Text[ polish ] = "%PRODUCTNAME 5.0 - Prezentacja";
@@ -11710,7 +11710,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_40
     Text [ spanish ] = "%PRODUCTNAME 4.0 Presentación" ;
     Text [ french ] = "%PRODUCTNAME 4.0 Présentation" ;
     Text [ portuguese ] = "Apresentação (%PRODUCTNAME 4.0)" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Graphik / Präsentation" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Graphik / Pr?sentation" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Ïğåçåíòàöèÿ â %PRODUCTNAME 4.0";
     Text[ polish ] = "Prezentacja w %PRODUCTNAME 4.0";
@@ -11736,7 +11736,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_31
     Text [ spanish ] = "%PRODUCTNAME 3.0 Imagen / Presentación" ;
     Text [ french ] = "%PRODUCTNAME 3.0 Image / Présentation" ;
     Text [ portuguese ] = "Gráfica/Apresentação (%PRODUCTNAME 3.0)" ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Graphik / Präsentation" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Graphik / Pr?sentation" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 Í¼ĞÎ/ÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Ãğàôèêà/ïğåçåíòàöèÿ â %PRODUCTNAME 3.0";
     Text[ polish ] = "Grafika / Prezentacja w %PRODUCTNAME 3.0";
@@ -12148,7 +12148,7 @@ String STR_HTMLEXP_CONTENTS
     Text[ english_us ] = "Table of contents";
     Text[ chinese_simplified ] = "ÄÚÈİÄ¿Â¼";
     Text[ russian ] = "Îãëàâëåíèå";
-    Text[ polish ] = "Spis treœci";
+    Text[ polish ] = "Spis tre?ci";
     Text[ japanese ] = "–ÚŸ";
     Text[ greek ] = "ÊáôÜëïãïò ğåñéå÷ïìİíùí";
     Text[ korean ] = "¸ñÂ÷";
@@ -12178,7 +12178,7 @@ String STR_HTMLEXP_CLICKSTART
     Text[ japanese ] = "‚±‚±‚ğ¸Ø¯¸‚µ‚ÄŠJn‚µ‚Ü‚·";
     Text[ greek ] = "ĞáôŞóôå åäş ãéá ôçí åêêßíçóç";
     Text[ korean ] = "½ÃÀÛÇÏ·Á¸é ¿©±â¸¦ Å¬¸¯ÇÏ½Ê½Ã¿À";
-    Text[ chinese_traditional ] = "«ö¤@¤U³oùØ±Ò°Ê";
+    Text[ chinese_traditional ] = "«ö¤@¤U³o¡Å±Ò°Ê";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÊÈÏÃ";
     Text[ turkish ] = "Başlamak için burayı tıklayın";
     Text[ catalan ] = "Pulse aquí para comenzar";
@@ -12330,7 +12330,7 @@ String STR_HTMLEXP_DOWNLOAD
     Text[ english_us ] = "Download presentation";
     Text[ chinese_simplified ] = "ÏÂÔØÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "Çàãğóçèòü èñòî÷íèê ïğåçåíòàöèè";
-    Text[ polish ] = "Pobieranie Ÿród³a prezentacji";
+    Text[ polish ] = "Pobieranie ?ród³a prezentacji";
     Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚Ì¿°½‚ğÀŞ³İÛ°ÄŞ";
     Text[ language_user1 ] = "Ïğîèçâåñòè Download - - - -";
     Text[ greek ] = "ËŞøç áñ÷åßùí ğñïïñéóìïı ğáñïõóßáóçò";
@@ -12487,7 +12487,7 @@ String STR_HTMLEXP_OUTLINE
     Text[ english_us ] = "With contents";
     Text[ chinese_simplified ] = "º¬ÓĞÄÚÈİ";
     Text[ russian ] = "Ñ ñîäåğæèìûì";
-    Text[ polish ] = "Z zawartoœci¹";
+    Text[ polish ] = "Z zawarto?ci¹";
     Text[ japanese ] = "“à—e‚Æ‚Æ‚à‚É";
     Text[ greek ] = "Ìå ğåñéå÷üìåíï";
     Text[ korean ] = "³»¿ë°ú ÇÔ²²";
@@ -12513,7 +12513,7 @@ String STR_HTMLEXP_NOOUTLINE
     Text[ english_us ] = "Without contents";
     Text[ chinese_simplified ] = "Ã»ÓĞÄÚÈİ";
     Text[ russian ] = "Áåç ñîäåğæèìîãî";
-    Text[ polish ] = "Bez zawartoœci";
+    Text[ polish ] = "Bez zawarto?ci";
     Text[ japanese ] = "“à—e‚È‚µ‚Å";
     Text[ greek ] = "Äß÷ùò ğåñéå÷üìåíï";
     Text[ korean ] = "³»¿ë¾øÀÌ";
@@ -13182,7 +13182,7 @@ String STR_UNDO_GRAFRED
     Text[ russian ] = "Êîëè÷åñòâî êğàñíîãî";
     Text[ italian ] = "Percentuale di rosso";
     Text[ danish ] = "Rød-andel";
-    Text[ polish ] = "Zawartoœæ czerw.";
+    Text[ polish ] = "Zawarto?æ czerw.";
     Text[ portuguese_brazilian ] = "Red portion";
     Text[ japanese ] = "ÔF‚ÌŠ„‡";
     Text[ korean ] = "Àû»ö";
@@ -13207,7 +13207,7 @@ String STR_UNDO_GRAFGREEN
     Text[ russian ] = "Êîëè÷åñòâî çåëåíîãî";
     Text[ italian ] = "Percentuale di verde";
     Text[ danish ] = "Grøn-andel";
-    Text[ polish ] = "Zawartoœæ zielonego";
+    Text[ polish ] = "Zawarto?æ zielonego";
     Text[ portuguese_brazilian ] = "Green portion";
     Text[ japanese ] = "—ÎF‚ÌŠ„‡";
     Text[ korean ] = "³ì»ö";
@@ -13232,7 +13232,7 @@ String STR_UNDO_GRAFBLUE
     Text[ russian ] = "Êîëè÷åñòâî ñèíåãî";
     Text[ italian ] = "Percentuale di blu";
     Text[ danish ] = "Blå-andel";
-    Text[ polish ] = "Zawartoœæ niebiesk.";
+    Text[ polish ] = "Zawarto?æ niebiesk.";
     Text[ portuguese_brazilian ] = "Blue portion";
     Text[ japanese ] = "ÂF‚ÌŠ„‡";
     Text[ korean ] = "Ã»»ö";
@@ -13257,7 +13257,7 @@ String STR_UNDO_GRAFLUMINANCE
     Text[ russian ] = "ßğêîñòü";
     Text[ italian ] = "Luminosità";
     Text[ danish ] = "Lysstyrke";
-    Text[ polish ] = "Jasnoœæ";
+    Text[ polish ] = "Jasno?æ";
     Text[ portuguese_brazilian ] = "Luminance";
     Text[ japanese ] = "–¾“x";
     Text[ korean ] = "¹à±â";
@@ -13332,7 +13332,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ russian ] = "Ïğîçğà÷íîñòü";
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "Transparens";
-    Text[ polish ] = "Przezroczystoœæ";
+    Text[ polish ] = "Przezroczysto?æ";
     Text[ portuguese_brazilian ] = "Transparency";
     Text[ japanese ] = "“§‰ß«";
     Text[ korean ] = "Åõ¸í";
