@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:30:34 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
 #include <connectivity/sdbcx/VTable.hxx>
 #endif
+#ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
+#include "configurationflushable.hxx"
+#endif
 
 namespace dbaccess
 {
@@ -123,6 +126,7 @@ namespace dbaccess
     class ODBTable  :public ODataSettings_Base
                     ,public ODBTable_PROP
                     ,public OTable_Base
+                    ,public OConfigurationFlushable
     {
     protected:
         //  OWeakConnection                                                                 m_aConnection;
@@ -135,8 +139,10 @@ namespace dbaccess
         void refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys);
         void refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys);
 
-
-        DECLARE_CTY_PROPERTY(ODBTable_PROP,OTable_Base)
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
+        virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+        // OConfigurationFlushable
+        virtual void flush_NoBroadcast_NoCommit();
     public:
         /** constructs a wrapper supporting the com.sun.star.sdb.Table service.<BR>
             @param          _rxConn         the connection the table belongs to
@@ -147,7 +153,7 @@ namespace dbaccess
             @param          _rType          the type of the table, as supplied by the driver
             @param          _rDesc          the description of the table, as supplied by the driver
         */
-        ODBTable(
+        ODBTable(const OConfigurationNode& _rTableConfig,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
                 const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
@@ -174,6 +180,8 @@ namespace dbaccess
 
     // ::com::sun::star::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
+        // XInterface
+        DECLARE_CTY_DEFAULTS(OTable_Base);
 
     // com::sun::star::beans::XPropertySet
         //  virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);

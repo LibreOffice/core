@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:41:49 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ namespace dbaccess
             @see    OColumn::writeUITo
             @see    loadSettings
         */
-        virtual void    storeSettings(const OConfigurationNode& _rLocation, const OConfigurationTreeRoot& _rCommitLocation);
+        virtual void    storeSettings(const OConfigurationNode& _rLocation);
 
         // XAppend
         virtual void SAL_CALL appendByDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);

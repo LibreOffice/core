@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 09:55:44 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 ORowSetCache::~ORowSetCache()
 {
     delete m_pCacheSet;
+    m_pCacheSet = NULL;
     if(m_pMatrix)
     {
         m_pMatrix->clear();
@@ -1554,6 +1555,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.16  2000/12/06 09:55:44  oj
+    #80219# correted deleterow(s) and remeber position
+
     Revision 1.15  2000/11/22 14:56:33  oj
     #80276# resolve some trouble with positioning
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:30:34 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #define _DBA_CORE_TABLECONTAINER_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -93,6 +93,13 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
+#ifndef _DBA_CONFIGNODE_HXX_
+#include "confignode.hxx"
+#endif
+
 
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -101,9 +108,10 @@
 class WildCard;
 namespace dbaccess
 {
-    typedef ::cppu::WeakImplHelper4< ::com::sun::star::container::XEnumerationAccess,
+    typedef ::cppu::WeakImplHelper5< ::com::sun::star::container::XEnumerationAccess,
                                      ::com::sun::star::container::XNameAccess,
                                      ::com::sun::star::container::XIndexAccess,
+                                     ::com::sun::star::util::XFlushable,
                                      ::com::sun::star::lang::XServiceInfo > OTableContainer_Base;
 
 
@@ -123,6 +131,9 @@ namespace dbaccess
         DECLARE_STL_VECTOR(TablesIterator, TablesIndexAccess);
         Tables                  m_aTables;
         TablesIndexAccess       m_aTablesIndexed;
+
+        OConfigurationTreeRoot  m_aCommitLocation; // need to commit new table nodes
+        OConfigurationNode      m_aTablesConfig;
 
         // holds the original tables which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
@@ -145,7 +156,7 @@ namespace dbaccess
             @param          _rTableTypeFilter   restricts the visible tables by type
             @see            construct
         */
-        OTableContainer(
+        OTableContainer( const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon
@@ -198,6 +209,10 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+        // ::com::sun::star::util::XFlushable
+        virtual void SAL_CALL flush(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException){}
+        virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException){}
     };
 }
 #endif // _DBA_CORE_TABLECONTAINER_HXX_

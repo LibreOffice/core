@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 08:12:04 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #endif
@@ -133,6 +136,7 @@
 #endif
 
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -813,7 +817,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     Reference< XConnection > xConn;
 
     // build a connection server and return it (no stubs)
-    xConn = new OConnection(*this, xSdbcConn, m_xServiceFactory);
+    xConn = new OConnection(*this, m_aConfigurationNode.openNode(CONFIGKEY_DBLINK_TABLES),m_aConfigurationNode,xSdbcConn, m_xServiceFactory);
     Reference< XComponent> xComp(xConn,UNO_QUERY);
     if(xComp.is())
     {
@@ -949,8 +953,10 @@ void ODatabaseSource::flushDocuments()
 //  m_aReports.flush();
     m_aCommandDefinitions.flush();
 }
-
-
+// -----------------------------------------------------------------------------
+void ODatabaseSource::flushTables()
+{
+}
 //------------------------------------------------------------------------------
 void ODatabaseSource::flushToConfiguration()
 {
@@ -1022,6 +1028,7 @@ void ODatabaseSource::flushToConfiguration()
     }
 
     flushDocuments();
+    flushTables();
 
     // TODO : flushing of queries/tables ?
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 14:34:55 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
 using namespace utl;
 using namespace dbaccess;
@@ -352,7 +355,11 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             {
                 Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
                 if (xComponent.is())
-                    xComponent->removeEventListener(this);
+                {
+                    Reference<XEventListener> xEvt;
+                    query_aggregation(this,xEvt);
+                    xComponent->removeEventListener(xEvt);
+                }
             }
             catch(Exception&) // doesn't matter here
             {
@@ -373,7 +380,11 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             {
                 Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
                 if (xComponent.is())
-                    xComponent->addEventListener(this);
+                {
+                    Reference<XEventListener> xEvt;
+                    query_aggregation(this,xEvt);
+                    xComponent->addEventListener(xEvt);
+                }
             }
             break;
         case PROPERTY_ID_APPLYFILTER:
@@ -596,7 +607,11 @@ void SAL_CALL ORowSet::disposing(void)
     // remove myself as dispose listener
     Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
     if (xComponent.is())
-        xComponent->removeEventListener(this);
+    {
+        Reference<XEventListener> xEvt;
+        query_aggregation(this,xEvt);
+        xComponent->removeEventListener(xEvt);
+    }
 
     m_xActiveConnection = NULL;
     m_aActiveConnection = Any(); // the any conatains a reference too
@@ -2017,7 +2032,11 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
         // listen if the connection disappears
         Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
         if (xComponent.is())
-            xComponent->addEventListener(this);
+        {
+            Reference<XEventListener> xEvt;
+            query_aggregation(this,xEvt);
+            xComponent->addEventListener(xEvt);
+        }
     }
     return m_xActiveConnection;
 }
@@ -2041,7 +2060,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
         {
             if(!m_xActiveConnection.is())
                 throw SQLException();
-            m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection);
+            m_pTables = new OTableContainer(OConfigurationNode(),OConfigurationTreeRoot(),*this,m_aMutex,m_xActiveConnection);
             _rxRetTables = m_pTables;
             Sequence< ::rtl::OUString> aTableFilter(1);
             aTableFilter[0] = ::rtl::OUString::createFromAscii("%");

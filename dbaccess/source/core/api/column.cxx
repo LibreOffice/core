@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:56:33 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ void OColumn::setFastPropertyValue_NoBroadcast(
     {
         case PROPERTY_ID_NAME:
             OSL_ENSHURE(rValue.getValueType().equals(::getCppuType(static_cast< ::rtl::OUString* >(NULL))),
-                "OColumn::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
+                "OColumn::setFastPropertyValue_NoBroadcast(NAME) : invalid value !");
             rValue >>= m_sName;
             break;
     }
@@ -347,7 +347,7 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
     {
         case PROPERTY_ID_ALIGN:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlignment,
-                ::getCppuType(static_cast< sal_Int32* >(NULL)));
+                ::getCppuType(static_cast< sal_Int16* >(NULL)));
             break;
         case PROPERTY_ID_WIDTH:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth,
@@ -391,7 +391,7 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
     switch (nHandle)
     {
         case PROPERTY_ID_ALIGN:
-            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
+            OSL_ENSHURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int16* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
             m_aAlignment = rValue;
             break;
@@ -586,7 +586,7 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation, const IColumnF
 }
 
 //------------------------------------------------------------------------------
-void OColumns::storeSettings(const OConfigurationNode& _rLocation, const OConfigurationTreeRoot& _rCommitLocation)
+void OColumns::storeSettings(const OConfigurationNode& _rLocation)
 {
     MutexGuard aGuard(m_rMutex);
     if (!_rLocation.isValid())
@@ -648,14 +648,12 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation, const OConfig
             // the configuration does not support different types of operations in one transaction, so we must commit
             // before and after we create the new node, to ensure, that every transaction we ever do contains only
             // one type of operation (insert, remove, update)
-            OSL_VERIFY(_rCommitLocation.commit());
             aColumnNode = _rLocation.createNode(sCurrent);
             if (!aColumnNode.isValid())
             {
                 OSL_ASSERT("OColumns::storeSettings: could not create the structures for writing a column !");
                 continue;
             }
-            OSL_VERIFY(_rCommitLocation.commit());
         }
 
         // let the column write itself
@@ -671,9 +669,7 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation, const OConfig
         // the configuration does not support different types of operations in one transaction, so we must commit
         // before and after we create the new node, to ensure, that every transaction we ever do contains only
         // one type of operation (insert, remove, update)
-        OSL_VERIFY(_rCommitLocation.commit());
         _rLocation.removeNode(aRemove->first);
-        OSL_VERIFY(_rCommitLocation.commit());
     }
 }
 

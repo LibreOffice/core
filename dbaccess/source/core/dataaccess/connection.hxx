@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:32:59 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,6 @@ class OConnection           :public OSubComponent
 {
 protected:
     OQueryContainer         m_aQueries;
-    OTableContainer*        m_pTables;
     OWeakRefArray           m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
@@ -203,11 +202,14 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                             m_xORB;
 
+    OTableContainer*        m_pTables;
+
 protected:
     virtual ~OConnection();
 public:
     OConnection(
-        ODatabaseSource& _rDB,  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster,
+        ODatabaseSource& _rDB,  const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
+                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
 // com::sun::star::lang::XTypeProvider

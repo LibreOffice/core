@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:41:49 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,7 @@ namespace dbaccess
                                                 the <type scope="com::sun::star::sdb">CommandDefinition</type> service
                                                 which this container's elements extend
         */
-        OQueryContainer(
-            ::cppu::OWeakObject& _rConnection,
+        OQueryContainer(::cppu::OWeakObject& _rConnection,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
             const OConfigurationTreeRoot& _rRootConfigNode,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:32:59 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,8 @@ void OConnectionRerouter::disposing()
 //==========================================================================
 DBG_NAME(OConnection)
 //--------------------------------------------------------------------------
-OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& _rxMaster, const Reference< XMultiServiceFactory >& _rxORB)
+OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
+                         const Reference< XConnection >& _rxMaster, const Reference< XMultiServiceFactory >& _rxORB)
             :OConnectionRerouter(_rxMaster)
             ,OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
             ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation().cloneAsRoot(), _rxORB)
@@ -397,7 +398,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const Reference< XConnection >& 
 {
     DBG_CTOR(OConnection,NULL);
 
-    m_pTables = new OTableContainer(*this, m_aMutex,this);
+    m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex,this);
     // initialize the queries
     DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
 }

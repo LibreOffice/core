@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -118,7 +121,9 @@ using namespace ::cppu;
 //==========================================================================
 DBG_NAME(OTableContainer)
 //------------------------------------------------------------------------------
-OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
+OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
+                                 const OConfigurationTreeRoot& _rCommitLocation,
+                                 ::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon)
     :m_rParent(_rParent)
@@ -127,6 +132,8 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
     ,m_xConnection(_xCon)
     ,m_aTables(_xCon->getMetaData()->storesMixedCaseQuotedIdentifiers())
     ,m_xMetaData(_xCon->getMetaData())
+    ,m_aCommitLocation(_rCommitLocation)
+    ,m_aTablesConfig(_rTablesConfig)
 {
     DBG_CTOR(OTableContainer, NULL);
 }
@@ -319,15 +326,32 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
                 for (sal_Int32 i=0; i<aCatalogs.size(); ++i)
                 {
                     Reference<XPropertySet> xTable;
+                    OConfigurationNode aTableConfig;
+                    if(m_aTablesConfig.isValid())
+                    {
+                        if(m_aTablesConfig.hasByName(aComposedNames[i]))
+                            aTableConfig = m_aTablesConfig.openNode(aComposedNames[i]);
+                        else
+                        {
+                            aTableConfig = m_aTablesConfig.createNode(aComposedNames[i]);
+                            m_aCommitLocation.commit();
+                        }
+                    }
                     try
                     {   // the ctor is allowed to throw an exception
-                        xTable = new ODBTable(m_xMetaData, NULL,aCatalogs[i], aSchemas[i], aNames[i], aTypes[i], aDescs[i]);
+                        xTable = new ODBTable(aTableConfig,m_xMetaData, NULL,aCatalogs[i], aSchemas[i], aNames[i], aTypes[i], aDescs[i]);
                     }
                     catch(SQLException&)
                     {
                     }
                     if (xTable.is())
                         m_aTablesIndexed.push_back(m_aTables.insert(Tables::value_type(aComposedNames[i], xTable)).first);
+                    else if(m_aTablesConfig.isValid())
+                    {
+                        m_aTablesConfig.removeNode(aComposedNames[i]);
+                        m_aCommitLocation.commit();
+                    }
+
                 }
             }
             else
@@ -368,7 +392,20 @@ void OTableContainer::dispose()
     m_xMetaData     = NULL;
     m_bConstructed  = sal_False;
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableContainer::flush(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    for (TablesIterator i = m_aTables.begin(); i != m_aTables.end(); ++i)
+    {
+        if((*i).second.is())
+        {
+            Reference< ::com::sun::star::util::XFlushable > xFlush((*i).second, UNO_QUERY);
+            if(xFlush.is())
+                xFlush->flush();
+        }
+    }
 
+}
 // XServiceInfo
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
@@ -414,7 +451,19 @@ Any OTableContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsExcept
         m_xMasterTables->getByName(m_aTablesIndexed[_nIndex]->first) >>= xProp;
         Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
 
-        xReturn = new ODBTable(m_xMetaData,
+        OConfigurationNode aTableConfig;
+        if(m_aTablesConfig.isValid())
+        {
+            if(m_aTablesConfig.hasByName(m_aTablesIndexed[_nIndex]->first))
+                aTableConfig = m_aTablesConfig.openNode(m_aTablesIndexed[_nIndex]->first);
+            else
+            {
+                aTableConfig = m_aTablesConfig.createNode(m_aTablesIndexed[_nIndex]->first);
+                m_aCommitLocation.commit();
+            }
+        }
+
+        xReturn = new ODBTable(aTableConfig,m_xMetaData,
                             xSup,
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_CATALOGNAME)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_SCHEMANAME)),
@@ -442,7 +491,20 @@ Any OTableContainer::getByName(const rtl::OUString& _rName) throw( NoSuchElement
         m_xMasterTables->getByName(_rName) >>= xProp;
         Reference<XColumnsSupplier > xSup(xProp,UNO_QUERY);
 
-        xReturn = new ODBTable(m_xMetaData,
+        OConfigurationNode aTableConfig;
+        if(m_aTablesConfig.isValid())
+        {
+            if(m_aTablesConfig.hasByName(_rName))
+                aTableConfig = m_aTablesConfig.openNode(_rName);
+            else
+            {
+                aTableConfig = m_aTablesConfig.createNode(_rName);
+                m_aCommitLocation.commit();
+            }
+        }
+
+        xReturn = new ODBTable(aTableConfig,
+                            m_xMetaData,
                             xSup,
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_CATALOGNAME)),
                             comphelper::getString(xProp->getPropertyValue(PROPERTY_SCHEMANAME)),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:32:59 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,7 @@ protected:
 
     void    initializeDocuments(sal_Bool _bRead = sal_True);
     void    flushDocuments();
+    void    flushTables();
 };
 
 //........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,10 @@ void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
     // the columns UI information
     OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
     if (aColumnsNode.isValid())
-        m_aColumns.storeSettings(aColumnsNode, _rConfigLocation);
+    {
+        m_aColumns.storeSettings(aColumnsNode);
+        _rConfigLocation.commit();
+    }
     else
         OSL_ENSHURE(sal_False, "OQueryDescriptor::storeTo : could not open the node for the columns UI information !");
 }

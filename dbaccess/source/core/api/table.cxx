@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 14:37:10 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ typedef ::std::map <sal_Int32, OTableColumn*, std::less <sal_Int32> > OColMap;
 //==========================================================================
 DBG_NAME(ODBTable)
 //--------------------------------------------------------------------------
-ODBTable::ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
         const Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable,
         const ::rtl::OUString& _rCatalog,
         const ::rtl::OUString& _rSchema,
@@ -140,12 +141,14 @@ ODBTable::ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
         const ::rtl::OUString& _rType,
         const ::rtl::OUString& _rDesc) throw(SQLException)
         : connectivity::sdbcx::OTable(_rxMetaData->storesMixedCaseQuotedIdentifiers(),_rName,_rType,_rDesc,_rSchema,_rCatalog)
+        ,OConfigurationFlushable(m_aMutex,_rTableConfig.cloneAsRoot())
         ,m_nPrivileges(0)
         ,m_xTable(_rxTable)
         ,m_xMetaData(_rxMetaData)
 {
     DBG_CTOR(ODBTable, NULL);
     osl_incrementInterlockedCount( &m_refCount );
+
     DBG_ASSERT(_rxMetaData.is(), "ODBTable::ODBTable : invalid conn !");
     DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
     // register our properties
@@ -154,6 +157,9 @@ ODBTable::ODBTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
     refreshKeys();
     refreshIndexes();
 
+    // load the settings from the configuration
+    if(m_aConfigurationNode.isValid())
+        loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
     // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
     // (see getFastPropertyValue)
     m_nPrivileges = -1;
@@ -191,6 +197,8 @@ Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException)
 void SAL_CALL ODBTable::disposing()
 {
     OTable_Base::disposing();
+    OConfigurationFlushable::disposing();
+
     MutexGuard aGuard(m_aMutex);
     m_xTable        = NULL;
     m_xMetaData     = NULL;
@@ -213,8 +221,7 @@ void ODBTable::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
             if (xCurrentRow.is())
             {
                 ::rtl::OUString sUserWorkingFor = m_xMetaData->getUserName();
-                ;
-                    // after creation the set is positioned before the first record, per definitionem
+                // after creation the set is positioned before the first record, per definitionem
 
                 ::rtl::OUString sPrivilege, sGrantee;
                 while (xPrivileges->next())
@@ -292,6 +299,35 @@ void ODBTable::construct()
     registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND ,
                     &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 }
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper* ODBTable::createArrayHelper( sal_Int32 _nId) const
+{
+    Sequence< Property > aProps;
+    describeProperties(aProps);
+    if(!_nId)
+    {
+        ::com::sun::star::beans::Property* pBegin   = aProps.getArray();
+        ::com::sun::star::beans::Property* pEnd     = pBegin + aProps.getLength();
+        for(;pBegin != pEnd;++pBegin)
+        {
+            if(pBegin->Name == PROPERTY_CATALOGNAME)
+                pBegin->Attributes = PropertyAttribute::READONLY;
+            else if(pBegin->Name == PROPERTY_SCHEMANAME)
+                pBegin->Attributes = PropertyAttribute::READONLY;
+            else if(pBegin->Name == PROPERTY_DESCRIPTION)
+                pBegin->Attributes = PropertyAttribute::READONLY;
+            else if(pBegin->Name == PROPERTY_NAME)
+                pBegin->Attributes = PropertyAttribute::READONLY;
+        }
+    }
+
+    return new ::cppu::OPropertyArrayHelper(aProps);
+}
+// -----------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper & SAL_CALL ODBTable::getInfoHelper()
+{
+    return *ODBTable_PROP::getArrayHelper(isNew() ? 1 : 0);
+}
 // -------------------------------------------------------------------------
 // XServiceInfo
 IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_SDBCX_TABLE)
@@ -302,6 +338,9 @@ Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeExcepti
         return Any();
     if(rType == getCppuType( (Reference<XAlterTable>*)0))
         return Any();
+    Any aRet = OConfigurationFlushable::queryInterface( rType);
+    if(aRet.hasValue())
+        return aRet;
 
     return OTable_Base::queryInterface( rType);
 }
@@ -323,7 +362,21 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
             aRet.getArray()[i++] = *pBegin;
         }
     }
-    return aRet;
+    return ::comphelper::concatSequences(aRet,OConfigurationFlushable::getTypes());
+}
+// -----------------------------------------------------------------------------
+//
+void ODBTable::flush_NoBroadcast_NoCommit()
+{
+    if(m_aConfigurationNode.isValid())
+    {
+        storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
+        OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
+        if(pColumns)
+        {
+            pColumns->storeSettings(m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS));
+        }
+    }
 }
 // XDataDescriptorFactory
 //------------------------------------------------------------------------------
