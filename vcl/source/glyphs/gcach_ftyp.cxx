@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.72 $
- *  last change: $Author: hdu $ $Date: 2002-05-08 12:40:17 $
+ *  $Revision: 1.73 $
+ *  last change: $Author: hdu $ $Date: 2002-07-30 12:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,9 +803,11 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) co
         nGlyphFlags |= SetVerticalFlags( aChar );
 
 #if !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
-    // #95556# autohinting not ready for for east asian characters yet
+    // #95556# autohinting not yet optimized for non-western glyph styles
     if( !(mnLoadFlags & FT_LOAD_NO_HINTING)
-    &&  ( (aChar >= 0x2900 && aChar < 0xD800) || (aChar >= 0xF800) ) )
+    &&  ( (aChar >= 0x0600 && aChar < 0x1E00)   // south-east asian + arabic
+        ||(aChar >= 0x2900 && aChar < 0xD800)   // CJKV
+        ||(aChar >= 0xF800) ) )                 // presentation + symbols
         nGlyphFlags |= GF_UNHINTED;
 #endif
 
