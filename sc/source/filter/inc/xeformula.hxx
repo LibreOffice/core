@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeformula.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:41:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,6 @@ enum XclExpFomulaType
 // ----------------------------------------------------------------------------
 
 class ScRangeList;
-struct XclAddress;
 class XclExpFmlaCompImpl;
 
 /** The formula compiler to create Excel token arrays from Calc token arrays. */
