@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 22:07:07 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ french ] = "Devant" ;
         Text [ swedish ] = "Fra~mfˆr" ;
         Text [ dutch ] = "~Ervoor" ;
-        Text [ spanish ] = "~Delante" ;
+        Text [ spanish ] = "Delante" ;
         Text [ english_us ] = "Before" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÁºñÂè∑Ââç";
@@ -796,7 +796,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ french ] = "D~erriËre" ;
         Text [ swedish ] = "Ba~kom" ;
         Text [ dutch ] = "E~rachter" ;
-        Text [ spanish ] = "D~etr·s" ;
+        Text [ spanish ] = "Detr·s" ;
         Text [ english_us ] = "After" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÁºñÂè∑Âêé";
@@ -1863,7 +1863,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ swedish ] = "Fort~lˆpande numrering" ;
         Text [ danish ] = "Fortl¯bende nummerering" ;
         Text [ italian ] = "~Numerazione continua" ;
-        Text [ spanish ] = "NumeraciÛn c~onsecutiva" ;
+        Text [ spanish ] = "NumeraciÛn consecutiva" ;
         Text [ french ] = "NumÈrotation continue" ;
         Text [ dutch ] = "~Doorlopende nummering" ;
         Text [ portuguese ] = "NumeraÁ„o c~ontÌnua" ;
