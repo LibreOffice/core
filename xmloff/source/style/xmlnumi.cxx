@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 10:50:10 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 16:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@
 
 #include "xmlnumi.hxx"
 
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

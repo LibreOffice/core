@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-19 18:07:10 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 16:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #include "nmspmap.hxx"
 #include "families.hxx"
 #include "xmlnumfi.hxx"     // SvXMLNumFmtDefaults
+
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

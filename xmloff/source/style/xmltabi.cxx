@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-26 07:44:26 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 16:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 
 #include "xmltabi.hxx"
+
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

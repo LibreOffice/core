@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-02 11:24:50 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 16:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #ifndef _XMLTEXTCOLUMNSCONTEXT_HXX
 #include "XMLTextColumnsContext.hxx"
 #endif
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
