@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:40:30 $
+ *  last change: $Author: fme $ $Date: 2001-05-15 11:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,14 +218,12 @@ private:
     ListBox         aSearchTmplLB;
     FixedInfo       aSearchAttrText;
     MultiLineEdit   aSearchFormatsED;
-    GroupBox        aSearchAttrBox;
 
     FixedText       aReplaceText;
     ComboBox        aReplaceLB;
     ListBox         aReplaceTmplLB;
     FixedInfo       aReplaceAttrText;
     MultiLineEdit   aReplaceFormatsED;
-    GroupBox        aReplaceAttrBox;
 
     PushButton      aSearchAllBtn;
     PushButton      aSearchBtn;
@@ -250,20 +248,22 @@ private:
     CheckBox        aJapMatchFullHalfWidthCB;
     CheckBox        aJapOptionsCB;
     PushButton      aJapOptionsBtn;
-    GroupBox        aOptionsBox;
+    FixedLine       aOptionsFL;
 
                     // nur f"ur Calc
     RadioButton     aFormulasBtn;
     RadioButton     aValuesBtn;
     RadioButton     aNotesBtn;
-    GroupBox        aSearchBox;
+    FixedLine       aSearchFL;
+    FixedLine       aSearchVertFL;
 
     RadioButton     aRowsBtn;
     RadioButton     aColumnsBtn;
-    GroupBox        aSearchDirBox;
+    FixedLine       aSearchDirFL;
+    FixedLine       aSearchDirVertFL;
 
     CheckBox        aAllTablesCB;
-    GroupBox        aCalcExtrasBox;
+    FixedLine       aCalcExtrasFL;
 
     SfxBindings&    rBindings;
     BOOL            bWriter;
