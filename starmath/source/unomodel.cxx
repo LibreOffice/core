@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-30 08:20:57 $
+ *  last change: $Author: tl $ $Date: 2002-09-05 10:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,30 +888,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     if (!pDocSh)
         throw RuntimeException();
 
-    uno::Sequence< beans::PropertyValue > aRenderer(1);
+    SmPrinterAccess aPrinterAccess( *pDocSh );
+    Printer *pPrinter = aPrinterAccess.GetPrinter();
+    //Point   aPrtPageOffset( pPrinter->GetPageOffset() );
+    Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+    awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
-    const Rectangle aVisArea( pDocSh->GetVisArea() );
-    awt::Size       aPageSize( aVisArea.GetWidth(), aVisArea.GetHeight() );
+    uno::Sequence< beans::PropertyValue > aRenderer(1);
     PropertyValue  &rValue = aRenderer.getArray()[0];
     rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
     rValue.Value <<= aPageSize;
 
-#ifdef TL_TEST
-{
-SmPrinterAccess aPrinterAccess( *pDocSh );
-Printer *pPrinter = aPrinterAccess.GetPrinter();
-
-Point     aZeroPoint;
-Rectangle OutputRect( aZeroPoint, pPrinter->GetOutputSize() );
-
-Point   aPrtPageOffset( pPrinter->GetPageOffset() );
-Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
-
-aPageSize.Width  = aPrtPaperSize.Width();
-aPageSize.Height = aPrtPaperSize.Height();
-rValue.Value <<= aPageSize;
-}
-#endif
     return aRenderer;
 }
 
@@ -946,10 +933,7 @@ void SAL_CALL SmModel::render(
         if (!pOut)
             throw RuntimeException();
 
-        const Rectangle aVisArea( pDocSh->GetVisArea() );
-
         pOut->SetMapMode( MAP_100TH_MM );
-        pOut->IntersectClipRegion( aVisArea );
 
         uno::Reference< frame::XModel > xModel;
         rSelection >>= xModel;
@@ -982,7 +966,6 @@ void SAL_CALL SmModel::render(
                 if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
                     OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
                                                 (aPrtPageOffset.X() + OutputRect.Right()));
-
 
                 pView->Impl_Print( *pOut, PRINT_SIZE_NORMAL,
                      Rectangle( OutputRect ), Point() );
