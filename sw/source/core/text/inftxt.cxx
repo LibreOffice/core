@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:19:15 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,18 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
         nDirection = DIR_LEFT2RIGHT;
     }
+
+    LanguageType eLang;
+    const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+    if ( SvtCTLOptions::NUMERALS_HINDI == rCTLOptions.GetCTLTextNumerals() )
+        eLang = LANGUAGE_ARABIC;
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == rCTLOptions.GetCTLTextNumerals() )
+        eLang = LANGUAGE_ENGLISH;
+    else
+        eLang = (LanguageType)::GetAppLanguage();
+
+    pOut->SetDigitLanguage( eLang );
+    pRef->SetDigitLanguage( eLang );
 
     //
     // The Options
