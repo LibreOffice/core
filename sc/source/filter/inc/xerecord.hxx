@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:10:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,19 +279,14 @@ public:
     /** Returns true, if the passed index points to an exiting record. */
     inline bool         HasRecord( size_t nPos ) const
                             { return (0 <= nPos) && (nPos < maRecs.size()); }
-
     /** Returns reference to an existing record or empty reference on error. */
-    inline const RecordRefType GetRecord( size_t nPos ) const
+    inline RecordRefType GetRecord( size_t nPos ) const
                             { return (nPos < maRecs.size()) ? maRecs[ nPos ] : RecordRefType(); }
-    /** Returns reference to an existing record or empty reference on error. */
-    inline RecordRefType GetRecord( size_t nPos )
-                            { return (nPos < maRecs.size()) ? maRecs[ nPos ] : RecordRefType(); }
-
+    /** Returns reference to the first existing record or empty reference, if list is empty. */
+    inline RecordRefType GetFirstRecord() const
+                            { return maRecs.empty() ? RecordRefType() : maRecs.front(); }
     /** Returns reference to the last existing record or empty reference, if list is empty. */
-    inline const RecordRefType GetLastRecord() const
-                            { return maRecs.empty() ? RecordRefType() : maRecs.back(); }
-    /** Returns reference to the last existing record or empty reference, if list is empty. */
-    inline RecordRefType GetLastRecord()
+    inline RecordRefType GetLastRecord() const
                             { return maRecs.empty() ? RecordRefType() : maRecs.back(); }
 
     /** Inserts a record at the specified position into the list. */
