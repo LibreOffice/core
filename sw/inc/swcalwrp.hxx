@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcalwrp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-25 20:03:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ public:
     {}
 
     void LoadDefaultCalendar( USHORT nLang );
-    void LoadCalendar( USHORT nLang, const String& rUniqueId );
 };
 
 
