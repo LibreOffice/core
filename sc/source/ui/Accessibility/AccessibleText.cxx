@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-02 14:09:03 $
+ *  last change: $Author: sab $ $Date: 2002-10-22 15:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,12 +1104,24 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
 
 SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bool bCreate )
 {
-    DBG_ASSERT(!bCreate, "the focus should switch now into the editline, but this is not implemented yet");
-
     ScTextWnd* pTxtWnd = (ScTextWnd*)mpWindow;
 
     if (pTxtWnd)
+    {
         mpEditView = pTxtWnd->GetEditView();
+        if (!mpEditView && bCreate)
+        {
+            if ( !pTxtWnd->IsActive() )
+            {
+                pTxtWnd->StartEditEngine();
+                pTxtWnd->GrabFocus();
+//              pTxtWnd->SetTextString( rText );
+//              pTxtWnd->GetEditView()->SetSelection( rSel );
+
+                mpEditView = pTxtWnd->GetEditView();
+            }
+        }
+    }
 
     return ScAccessibleEditObjectTextData::GetEditViewForwarder(bCreate);
 }
