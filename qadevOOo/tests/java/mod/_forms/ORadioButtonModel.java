@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ORadioButtonModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:51:22 $
+ *  last change:$Date: 2005-02-24 17:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,27 +60,13 @@
  ************************************************************************/
 package mod._forms;
 
+import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
 
-import lib.StatusException;
-import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.DBTools;
-import util.FormTools;
-import util.WriterTools;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
-import com.sun.star.form.XBoundComponent;
-import com.sun.star.form.XLoadable;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdbc.XResultSetUpdate;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XCloseable;
 
 
 /**
@@ -147,180 +133,65 @@ import com.sun.star.util.XCloseable;
 * @see ifc.form._XLoadListener
 * @see ifc.container._XChild
 */
-public class ORadioButtonModel extends TestCase {
-    XTextDocument xTextDoc;
+public class ORadioButtonModel extends GenericModelTest {
 
     /**
-    * Creates Writer document where controls are placed.
-    */
+     * Set some member variable of the super class <CODE>GenericModelTest</CODE>:
+     * <pre>
+     *    super.m_ChangePropertyName</CODE> = "State";
+     *    super.m_kindOfControl</CODE>="RadioButton";
+     *    super.m_ObjectName</CODE> = "RadioButton";
+     *    NamedValue myProp = new NamedValue();
+     *        myProp.Name = "DataField";
+     *        myProp.Value = DBTools.TST_STRING_F;
+     *        super.m_propertiesToSet.add(myProp);
+     *    super.m_LCShape_Type = "GroupBox";
+     * </pre>
+     * Then <CODE>super.initialize()</CODE> was called.
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
+
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        log.println("creating a text document");
-        xTextDoc = WriterTools.createTextDoc(((XMultiServiceFactory) tParam.getMSF()));
+        super.m_ChangePropertyName = "State";
+
+        super.m_kindOfControl="RadioButton";
+
+        super.m_ObjectName = "stardiv.one.form.component.RadioButton";
+
+        NamedValue myProp = new NamedValue();
+        myProp.Name = "DataField";
+        myProp.Value = DBTools.TST_STRING_F;
+        super.m_propertiesToSet.add(myProp);
+
+        super.m_LCShape_Type = "GroupBox";
+
+        super.initialize(tParam, log);
     }
 
     /**
-    * Disposes Writer document.
-    */
+     * calls <CODE>cleanup()</CODE> from it's super class
+     * @param tParam the test parameter
+     * @param log the log writer
+     */
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing xTextDoc ");
-
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        super.cleanup(tParam, log);
     }
 
+
     /**
-    * Creating a Testenvironment for the interfaces to be tested.
-    * First <code>TestDB</code> database is registered.
-    * Creates radio button in the Form, then binds it to TestDB
-    * database and returns Field's control. <p>
-    *     Object relations created :
-    * <ul>
-    *  <li> <code>'OBJNAME'</code> for
-    *      {@link ifc.io._XPersistObject} : name of service which is
-    *    represented by this object. </li>
-    *  <li> <code>'LC'</code> for {@link ifc.form._DataAwareControlModel}.
-    *    Specifies the value for LabelControl property. It is
-    *    <code>FixedText</code> component added to the document.</li>
-    *  <li> <code>'FL'</code> for
-    *      {@link ifc.form._DataAwareControlModel} interface.
-    *    Specifies XLoadable implementation which connects form to
-    *    the data source.</li>
-    *  <li> <code>'XUpdateBroadcaster.Checker'</code> : <code>
-    *    _XUpdateBroadcaster.UpdateChecker</code> interface implementation
-    *    which can update, commit data and check if the data was successfully
-    *    commited.</li>
-    *  <li> <code>'DataAwareControlModel.NewFieldName'</code> : for
-    *    <code>com.sun.star.form.DataAwareControlModel</code> service
-    *    which contains new name of the field to bind control to.
-    *  </li>
-    * </ul>
-    * @see ifc.form._XUpdateBroadcaster
-    */
+     * calls <CODE>createTestEnvironment()</CODE> from it's super class
+     * @param Param the test parameter
+     * @param log the log writer
+     * @return lib.TestEnvironment
+     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                                  PrintWriter log) {
-        XInterface oObj = null;
-
-
-        // creation of testobject here
-        // first we write what we are intend to do to log file
-        log.println("creating a test environment");
-
-
-        //get RadioButtonModel
-        String objName = "RadioButton";
-        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
-                                                            4500, 15000, 10000,
-                                                            objName);
-
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
-        oObj = aShape.getControl();
-
-        XLoadable formLoader = null;
-
-        try {
-            DBTools dbTools = new DBTools(((XMultiServiceFactory) Param.getMSF()));
-            dbTools.registerTestDB((String) System.getProperty("DOCPTH"));
-
-            formLoader = FormTools.bindForm(xTextDoc, "APITestDatabase",
-                                            "TestDB");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("!!! Can't access TestDB !!!");
-            e.printStackTrace(log);
-            throw new StatusException("Can't access TestDB", e);
-        }
-
-        final XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
-                                        XPropertySet.class, oObj);
-
-        try {
-            ps.setPropertyValue("DataField", DBTools.TST_STRING_F);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set Default Date", e);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set Default Date", e);
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set Default Date", e);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't set Default Date", e);
-        }
-
-        aShape = FormTools.createControlShape(xTextDoc, 6000, 4500, 15000,
-                                              10000, "GroupBox");
-        WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
-
-        log.println("creating a new environment for drawpage object");
-
-        TestEnvironment tEnv = new TestEnvironment(oObj);
-
-        tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component." +
-                            objName);
-
-
-        // added LabelControl for 'DataAwareControlModel'
-        tEnv.addObjRelation("LC", aShape.getControl());
-
-
-        //adding ObjRelation for XPersistObject
-        tEnv.addObjRelation("PSEUDOPERSISTENT", new Boolean(true));
-
-
-        // added FormLoader for 'DataAwareControlModel'
-        tEnv.addObjRelation("FL", formLoader);
+        TestEnvironment tEnv = super.createTestEnvironment(Param, log);
         tEnv.addObjRelation("DataAwareControlModel.NewFieldName",
                             DBTools.TST_INT_F);
 
-        // adding relation for XUpdateBroadcaster
-        final XInterface ctrl = oObj;
-        final XLoadable formLoaderF = formLoader;
-
-        tEnv.addObjRelation("XUpdateBroadcaster.Checker",
-                            new ifc.form._XUpdateBroadcaster.UpdateChecker() {
-            private short lastVal = 0;
-
-            public void update() throws com.sun.star.uno.Exception {
-                if (!formLoaderF.isLoaded()) {
-                    formLoaderF.load();
-                }
-
-                lastVal = (short) (1 - lastVal);
-                ps.setPropertyValue("State", new Short(lastVal));
-            }
-
-            public void commit() throws com.sun.star.sdbc.SQLException {
-                XBoundComponent bound = (XBoundComponent) UnoRuntime.queryInterface(
-                                                XBoundComponent.class, ctrl);
-                XResultSetUpdate update = (XResultSetUpdate) UnoRuntime.queryInterface(
-                                                  XResultSetUpdate.class,
-                                                  formLoaderF);
-
-                // XBoundComponent is optional here
-                if (bound != null) {
-                    bound.commit();
-                }
-
-                update.updateRow();
-            }
-
-            public boolean wasCommited() throws com.sun.star.uno.Exception {
-                formLoaderF.reload();
-
-                Short getS = (Short) ps.getPropertyValue("State");
-
-                return (getS != null) && (lastVal == getS.shortValue());
-            }
-        });
-
         return tEnv;
-    } // finish method getTestEnvironment
+    }
+
 } // finish class ORadioButtonModel
