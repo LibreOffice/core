@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 11:11:09 $
+ *  last change: $Author: mba $ $Date: 2002-04-24 16:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3039,7 +3039,7 @@ void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
     if ( aStatBar.pStatusBar )
     {
         StatusBar* pBar = aStatBar.pStatusBar->GetStatusBar();
-        pBar->DataChanged( rDCEvt );
+        pBar->UpdateSettings( Application::GetSettings() );
     }
 
     USHORT n;
@@ -3047,7 +3047,7 @@ void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
     {
         SfxToolBoxManager *pTbx = aObjBars[n].pTbx;
         if ( pTbx )
-            pTbx->GetToolBox().DataChanged( rDCEvt );
+            pTbx->GetToolBox().UpdateSettings( Application::GetSettings() );
     }
 
     USHORT nCount = pChildWins->Count();
@@ -3055,7 +3055,7 @@ void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
     {
         SfxChildWin_Impl*pCW = (*pChildWins)[n];
         if ( pCW && pCW->pWin )
-            pCW->pWin->GetWindow()->DataChanged( rDCEvt );
+            pCW->pWin->GetWindow()->UpdateSettings( Application::GetSettings() );
     }
 
     ArrangeChilds_Impl();
