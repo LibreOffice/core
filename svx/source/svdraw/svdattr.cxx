@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 10:18:21 $
+ *  last change: $Author: cl $ $Date: 2002-10-09 15:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,8 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_MEASURETEXTAUTOANGLEVIEW-SDRATTR_START]=new SdrMeasureTextAutoAngleViewItem();
     ppPoolDefaults[SDRATTR_MEASURETEXTISFIXEDANGLE -SDRATTR_START]=new SdrMeasureTextIsFixedAngleItem();
     ppPoolDefaults[SDRATTR_MEASURETEXTFIXEDANGLE   -SDRATTR_START]=new SdrMeasureTextFixedAngleItem();
-    for (i=SDRATTR_MEASURERESERVE04; i<=SDRATTR_MEASURERESERVE07; i++) {
+    ppPoolDefaults[SDRATTR_MEASUREDECIMALPLACES    -SDRATTR_START]=new SdrMeasureDecimalPlacesItem();
+    for (i=SDRATTR_MEASURERESERVE05; i<=SDRATTR_MEASURERESERVE07; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
     }
     ppPoolDefaults[SDRATTRSET_MEASURE-SDRATTR_START]=new SdrMeasureSetItem(pMaster);
@@ -713,7 +714,7 @@ FASTBOOL SdrItemPool::TakeItemName(USHORT nWhich, String& rItemName)
         case SDRATTR_MEASURETEXTAUTOANGLEVIEW: nResId = SIP_SA_MEASURETEXTAUTOANGLEVIEW;break;
         case SDRATTR_MEASURETEXTISFIXEDANGLE : nResId = SIP_SA_MEASURETEXTISFIXEDANGLE;break;
         case SDRATTR_MEASURETEXTFIXEDANGLE   : nResId = SIP_SA_MEASURETEXTFIXEDANGLE;break;
-        case SDRATTR_MEASURERESERVE04        : nResId = SIP_SA_MEASURERESERVE04;break;
+        case SDRATTR_MEASUREDECIMALPLACES    : nResId = SIP_SA_MEASUREDECIMALPLACES;break;
         case SDRATTR_MEASURERESERVE05        : nResId = SIP_SA_MEASURERESERVE05;break;
         case SDRATTR_MEASURERESERVE06        : nResId = SIP_SA_MEASURERESERVE06;break;
         case SDRATTR_MEASURERESERVE07        : nResId = SIP_SA_MEASURERESERVE07;break;
@@ -1000,7 +1001,7 @@ BOOL SdrItemPool::TakeWhichName(USHORT nWhich, ByteString& rWhichName)
         case SDRATTR_MEASURETEXTAUTOANGLEVIEW: aStr="SDRATTR_MEASURETEXTAUTOANGLEVIEW"; break;
         case SDRATTR_MEASURETEXTISFIXEDANGLE : aStr="SDRATTR_MEASURETEXTISFIXEDANGLE "; break;
         case SDRATTR_MEASURETEXTFIXEDANGLE   : aStr="SDRATTR_MEASURETEXTFIXEDANGLE   "; break;
-        case SDRATTR_MEASURERESERVE04        : aStr="SDRATTR_MEASURERESERVE04        "; break;
+        case SDRATTR_MEASUREDECIMALPLACES    : aStr="SDRATTR_MEASUREDECIMALPLACES    "; break;
         case SDRATTR_MEASURERESERVE05        : aStr="SDRATTR_MEASURERESERVE05        "; break;
         case SDRATTR_MEASURERESERVE06        : aStr="SDRATTR_MEASURERESERVE06        "; break;
         case SDRATTR_MEASURERESERVE07        : aStr="SDRATTR_MEASURERESERVE07        "; break;

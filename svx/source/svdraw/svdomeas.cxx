@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-10 08:13:02 $
+ *  last change: $Author: cl $ $Date: 2002-10-09 15:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
     eMeasureUnit = ((SdrMeasureUnitItem&)rSet.Get(SDRATTR_MEASUREUNIT)).GetValue();
     aMeasureScale = ((SdrMeasureScaleItem&)rSet.Get(SDRATTR_MEASURESCALE)).GetValue();
     bShowUnit = ((SdrMeasureShowUnitItem&)rSet.Get(SDRATTR_MEASURESHOWUNIT)).GetValue();
+    sal_Int16 nNumDigits = ((SdrMeasureDecimalPlacesItem&)rSet.Get(SDRATTR_MEASUREDECIMALPLACES)).GetValue();
 
     SdrModel* pModel = rObj.pModel;
 
@@ -235,7 +236,7 @@ void SdrMeasureField::TakeRepresentation(const SdrMeasureObj& rObj, XubString& r
                     nLen = BigMulDiv(nLen, aFact.GetNumerator(), aFact.GetDenominator());
                 }
 
-                pModel->TakeMetricStr(nLen, rStr, TRUE);
+                pModel->TakeMetricStr(nLen, rStr, TRUE, nNumDigits);
 
                 if(!aFact.IsValid())
                 {

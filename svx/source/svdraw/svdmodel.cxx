@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-12 18:09:03 $
+ *  last change: $Author: cl $ $Date: 2002-10-09 15:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,7 +1331,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr) const
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars) const
+void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars, sal_Int32 nNumDigits) const
 {
     if(!bUIOnlyKomma)
         nVal = (nVal * aUIUnitFact.GetNumerator()) / aUIUnitFact.GetDenominator();
@@ -1344,7 +1344,8 @@ void SdrModel::TakeMetricStr(long nVal, XubString& rStr, FASTBOOL bNoUnitChars) 
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
     sal_Int32 nKomma(nUIUnitKomma);
-    sal_Int32 nNumDigits(rLoc.getNumDigits());
+    if( -1 == nNumDigits )
+        nNumDigits = rLoc.getNumDigits();
 
     while(nKomma > nNumDigits)
     {

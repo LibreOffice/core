@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:18:33 $
+ *  last change: $Author: cl $ $Date: 2002-10-09 15:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,29 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ arabic ] = "≈ŸÂ«— «·ﬁÌ«” »«·√”›·";
         Text[ catalan ] = "Mostrar ~abajo";
         Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DECIMALPLACES
+    {
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
+
+        Text = "Nachkommastellen" ;
+        Text [ ENGLISH ] = "Decimal places" ;
+        Text [ english_us ] = "Decimal places" ;
+    };
+    MetricField MTR_FLD_DECIMALPLACES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 78 , 110 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+        TabStop = TRUE ;
+        Right = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        StrictFormat = TRUE ;
+        Last = 99 ;
+        SpinSize = 1 ;
     };
     FixedLine FL_VERT
     {
