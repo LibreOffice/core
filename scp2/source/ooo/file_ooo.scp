@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.48 $
+*  $Revision: 1.49 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-17 15:08:04 $
+*  last change: $Author: obo $ $Date: 2004-11-18 08:59:21 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -312,6 +312,17 @@ File gid_File_Bin_Soffice
   #endif
 End
 
+#ifdef WNT
+
+File gid_File_Bin_Soffice_Langpack
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "soffice.exe";
+    Styles = (PACKED, LANGUAGEPACK);
+End
+
+#endif
+
 File GID_FILE_EXE_MSFONTEXTRACT
         BIN_FILE_BODY;
         Dir             = gid_Dir_Program;
@@ -532,6 +543,17 @@ File gid_File_Exe_Regsvrex
     Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = "regsvrex.exe";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Exe_Sbase
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = EXENAME(sbase);
+    Styles = (PACKED);
 End
 
 #endif
@@ -2468,3 +2490,17 @@ File gid_File_JREProperties
     Styles = (PACKED);
 End
 #endif
+
+File gid_Starregistry_Legacy_Binfilters_Rdb
+    TXT_FILE_BODY;
+    Name = "legacy_binfilters.rdb";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, STARREGISTRY);
+End
+
+File gid_Starregistry_Services_Rdb
+    TXT_FILE_BODY;
+    Name = "services.rdb";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, STARREGISTRY);
+End
