@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
+ *  last change: $Author: jp $ $Date: 2000-11-15 14:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@ RES_FLTRATTR_BEGIN = RES_MSG_END,
     RES_FLTR_TOX,
     RES_FLTR_SECTION,
     RES_FLTR_REDLINE,
+    RES_FLTR_SCRIPTTYPE,
 RES_FLTRATTR_END
 };
 
