@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:47:03 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
     };
@@ -220,14 +220,14 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ dutch ] = "~Hoogte" ;
         Text[ spanish ] = "A~ltura" ;
         Text[ english_us ] = "H~eight" ;
-        Text[ chinese_simplified ] = "¸ß(~H)";
+        Text[ chinese_simplified ] = "¸ß(~E)";
         Text[ russian ] = "~Âûñîòà";
         Text[ polish ] = "Wys.";
-        Text[ japanese ] = "‚‚³(~H)";
-        Text[ chinese_traditional ] = "°ª«×(~H)";
+        Text[ japanese ] = "‚‚³(~E)";
+        Text[ chinese_traditional ] = "°ª«×(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "³ôÀÌ(~E)";
         Text[ turkish ] = "Yüksek.";
         Text[ language_user1 ] = " ";
     };
@@ -267,10 +267,10 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ swedish ] = "Framhäv ~kanter";
         Text[ polish ] = "Wyró¿nij krawêdzie";
         Text[ portuguese_brazilian ] = "~Enhance edges";
-        Text[ japanese ] = "Šp‚ğ‹­’²‚·‚é(~E)";
-        Text[ korean ] = "°¡ÀåÀÚ¸® °­Á¶";
-        Text[ chinese_simplified ] = "Í»³öÏÔÊ¾±ß½Ç(~E)";
-        Text[ chinese_traditional ] = "¬ğ¥XÅã¥ÜÃä¨¤(~E)";
+        Text[ japanese ] = "Šp‚ğ‹­’²‚·‚é(~N)";
+        Text[ korean ] = "°¡ÀåÀÚ¸® °­Á¶(~N)";
+        Text[ chinese_simplified ] = "Í»³öÏÔÊ¾±ß½Ç(~N)";
+        Text[ chinese_traditional ] = "¬ğ¥XÅã¥ÜÃä¨¤(~N)";
         Text[ turkish ] = "~Enhance edges";
         Text[ arabic ] = "ÅÈÑÇÒ ÇáÍæÇİ";
     };
@@ -411,7 +411,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ chinese_traditional ] = "ªì©l­È(~V)";
         Text[ arabic ] = "ŞíãÉ ÇáÈÏÁ";
         Text[ greek ] = "ÔéìŞ ïñßïõ";
-        Text[ korean ] = "ÀÓ°è°ª";
+        Text[ korean ] = "ÀÓ°è°ª(~V)";
         Text[ turkish ] = "Eşik değer";
         Text[ language_user1 ] = " ";
     };
@@ -455,7 +455,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ chinese_traditional ] = "¤¬¸É¦âÂà´«(~I)";
         Text[ arabic ] = "ÚßÓ";
         Text[ greek ] = "Áíô~éóôñïöŞ";
-        Text[ korean ] = "¹İÀü";
+        Text[ korean ] = "¹İÀü(~I)";
         Text[ turkish ] = "Tersine çevir";
         Text[ language_user1 ] = " ";
     };
