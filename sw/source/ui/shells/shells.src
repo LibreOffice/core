@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-05 09:43:41 $
+ *  last change: $Author: kz $ $Date: 2002-08-08 20:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ InfoBox MSG_NO_RULER
     Message[ korean ] = "°¶·¯¸®- ÁÖÁ¦ '´«±ÝÀÚ'¿¡ ±×·¡ÇÈÀÌ ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "'Rulers' galeri konusunda bit eþlem grafik mevcut deðil.";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No hay imágenes en el tema de Gallery 'Rulers'.";
+    Message[ catalan ] = "No hi ha cap mapa de bits en la galeria de temes 'Rulers'.";
     Message[ finnish ] = "Galleriateemassa Viivaimet ei ole bittikarttoja.";
 };
 String STR_GRFILTER_OPENERROR
@@ -120,7 +120,7 @@ String STR_GRFILTER_OPENERROR
     Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀ»¡¡¿­ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Grafik dosyasý açýlamýyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es posible abrir el archivo gráfico";
+    Text[ catalan ] = "No es pot obrir el fitxer de gràfics";
 };
 String STR_GRFILTER_IOERROR
 {
@@ -149,7 +149,7 @@ String STR_GRFILTER_IOERROR
     Text[ korean ] = "±×·¡ÇÈ ÆÄÀÏÀ»¡¡ÀÐÀ»¡¡¼ö¡¡¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Grafik dosyasý okunamýyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es posible leer el archivo gráfico";
+    Text[ catalan ] = "No es pot llegir el fitxer de gràfics";
 };
 String STR_GRFILTER_FORMATERROR
 {
@@ -178,7 +178,7 @@ String STR_GRFILTER_FORMATERROR
     Text[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö¡¡¾ÊÀº ±×·¡ÇÈ ¼­½Ä";
     Text[ turkish ] = "Bilinmeyen grafik formatý";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formato de imagen desconocido";
+    Text[ catalan ] = "Format d'imatge desconegut";
 };
 String STR_GRFILTER_VERSIONERROR
 {
@@ -207,7 +207,7 @@ String STR_GRFILTER_VERSIONERROR
     Text[ korean ] = "ÀÌ ±×·¡ÇÈ ÆÄÀÏÀÇ ¹öÀüÀº Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
     Text[ turkish ] = "Grafik dosyasýnýnýn versiyonu desteklenmiyor";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se acepta la versión del archivo gráfico";
+    Text[ catalan ] = "No es permet l'ús d'aquesta versió del fitxer de gràfics";
 };
 String STR_GRFILTER_FILTERERROR
 {
@@ -236,7 +236,7 @@ String STR_GRFILTER_FILTERERROR
     Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Grafik filtresi bulunamadý";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No se encontró el filtro de imagen";
+    Text[ catalan ] = "No s'ha trobat el filtre gràfic";
 };
 String STR_GRFILTER_TOOBIG
 {
@@ -265,7 +265,7 @@ String STR_GRFILTER_TOOBIG
     Text[ korean ] = "±×·¡ÇÈÀ» »ðÀÔÇÏ±â À§ÇØ¼­´Â ¸Þ¸ð¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Grafiðin eklenmesi için yeterli bellek yok";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No hay suficiente memoria para insertar la imagen";
+    Text[ catalan ] = "No hi ha prou memòria per inserir la imatge.";
 };
 String STR_INSERT_GRAPHIC
 {
@@ -294,7 +294,7 @@ String STR_INSERT_GRAPHIC
     Text[ korean ] = "±×·¡ÇÈ »ðÀÔ";
     Text[ turkish ] = "Grafik ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar imagen";
+    Text[ catalan ] = "Insereix un gràfic";
 };
 String STR_NO_ADDRESSBOOK
 {
@@ -321,7 +321,7 @@ String STR_NO_ADDRESSBOOK
     Text[ korean ] = "ÁÖ¼Ò·ÏÀÌ ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Adres defteri mevcut deðil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No hay ninguna libreta de direcciones disponible";
+    Text[ catalan ] = "No existeix cap llibreta d'adreces";
     Text[ finnish ] = "Osoitekirjaa ei ole";
 };
 String STR_NOTIZ_INSERT
@@ -351,7 +351,7 @@ String STR_NOTIZ_INSERT
     TEXT[ korean ] = "¸Þ¸ð »ðÀÔ";
     TEXT[ turkish ] = "Not ekle";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insertar nota";
+    TEXT[ catalan ] = "Insereix una nota";
 };
 String STR_REDLINE_COMMENT
 {
@@ -378,7 +378,7 @@ String STR_REDLINE_COMMENT
     Text[ korean ] = "ÁÖ: ";
     Text[ turkish ] = "Açýklalama ekle: ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Comentario:  ";
+    Text[ catalan ] = "Comentari: ";
     Text[ finnish ] = "Kommentti: ";
 };
 String STR_REDLINE_INSERTED
@@ -406,7 +406,7 @@ String STR_REDLINE_INSERTED
     Text[ korean ] = "»ðÀÔ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Inserción";
+    Text[ catalan ] = "Inserció";
     Text[ finnish ] = "Lisäykset";
 };
 String STR_REDLINE_DELETED
@@ -434,7 +434,7 @@ String STR_REDLINE_DELETED
     Text[ korean ] = "»èÁ¦";
     Text[ turkish ] = "Silindi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminación";
+    Text[ catalan ] = "Supressió";
     Text[ finnish ] = "Poistot";
 };
 String STR_REDLINE_AUTOFMT
@@ -462,7 +462,7 @@ String STR_REDLINE_AUTOFMT
     TEXT[ korean ] = "ÀÚµ¿¼­½Ä";
     TEXT[ turkish ] = "Otomatik formatlama";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "AutoFormato";
+    TEXT[ catalan ] = "Formatatge automàtic";
     TEXT[ finnish ] = "Automaattinen muotoilu";
 };
 String STR_REDLINE_FORMATED
@@ -490,7 +490,7 @@ String STR_REDLINE_FORMATED
     Text[ greek ] = "Ìïñöïðïßçóç";
     Text[ korean ] = "¼Ó¼º";
     Text[ turkish ] = "Öznitelikler";
-    Text[ catalan ] = "Formateado";
+    Text[ catalan ] = "Formats";
     Text[ finnish ] = "Muodot";
 };
 String STR_REDLINE_TABLECHG
@@ -518,7 +518,7 @@ String STR_REDLINE_TABLECHG
     Text[ korean ] = "Ç¥°¡ ¹Ù²î¾ú½À´Ï´Ù.";
     Text[ turkish ] = "Tablo deðiþikliði";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificación de tabla";
+    Text[ catalan ] = "Canvis a la taula";
     Text[ finnish ] = "Taulukon muutokset";
 };
 String STR_REDLINE_FMTCOLLSET
@@ -546,7 +546,7 @@ String STR_REDLINE_FMTCOLLSET
     Text[ korean ] = "´Ü¶ô À¯Çü ¼³Á¤";
     Text[ turkish ] = "Paragraf biçimi seçildi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Aplicado estilo de párrafo";
+    Text[ catalan ] = "S'han aplicat els estils de paràgraf";
     Text[ finnish ] = "Käytetyt kappaletyylit";
 };
 String STR_REDLINE_TITLE
@@ -574,7 +574,7 @@ String STR_REDLINE_TITLE
     Text[ korean ] = "ÀÚµ¿¼­½Ä";
     Text[ turkish ] = "Otomatik formatlama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoFormato";
+    Text[ catalan ] = "Formatatge Automàtic";
     Text[ finnish ] = "Automaattinen muotoilu";
 };
 String STR_REDLINE_MSG
@@ -602,7 +602,7 @@ String STR_REDLINE_MSG
     Text[ korean ] = "ÀÚµ¿¼­½ÄÀÌ Á¾·áµÇ¾ú½À´Ï´Ù.\nÁö±Ý º¯°æ»çÇ×À» ¸ðµÎ Àû¿ëÇÏ°Å³ª Ãë¼ÒÇÒ ¼ö ÀÖÀ¸¸ç\nÈ¤Àº °³º°ÀûÀ¸·Î Àû¿ëÇÏ°Å³ª Ãë¼ÒÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Otomatik formatlama tamamlandý.\nÞimdi deðiþiklikleri tümden veya tek tek\n kabul ya da redd edebilirsiniz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El AutoFormato ha concluido.\nAhora puede aceptar o rechazar todos los cambios\na la vez o uno por uno.";
+    Text[ catalan ] = "El formatatge automàtic ha acabat.\nPodeu acceptar-ne o rebutjar-ne tots els canvis\nalhora o bé un per un.";
     Text[ finnish ] = "Automaattinen muotoilu valmis.\nVoit hyväksyä tai hylätä kaikki muutokset\ntai voit hyväksyä tai hylätä yksittäisiä muutoksia.";
 };
 String STR_REDLINE_ACCEPT_ALL
@@ -630,7 +630,7 @@ String STR_REDLINE_ACCEPT_ALL
     Text[ korean ] = "¸ðµÎ Àû¿ë";
     Text[ turkish ] = "Tümünü kabul et";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Aceptar todo";
+    Text[ catalan ] = "Accepta-ho tot";
     Text[ finnish ] = "Hyväksy kaikki";
 };
 String STR_REDLINE_REJECT_ALL
@@ -658,7 +658,7 @@ String STR_REDLINE_REJECT_ALL
     Text[ korean ] = "¸ðµÎ Ãë¼Ò";
     Text[ turkish ] = "Tümünü reddet";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Ocultar todo";
+    Text[ catalan ] = "Rebutja'ls tots";
     Text[ finnish ] = "Hylkää kaikki";
 };
 String STR_REDLINE_EDIT
@@ -686,7 +686,7 @@ String STR_REDLINE_EDIT
     Text[ korean ] = "º¯°æ»çÇ×¡¡ÆíÁý";
     Text[ turkish ] = "Deðiþiklikleri düzenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar ~modificaciones";
+    Text[ catalan ] = "Edita els canvis";
     Text[ finnish ] = "Muokkaa muutoksia";
 };
 QueryBox DLG_IMPORT_DBNAME
@@ -716,7 +716,7 @@ QueryBox DLG_IMPORT_DBNAME
     Message[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÀÌ¸§À» ¹®¼­ÀÇ ±âº» µ¥ÀÌÅÍº£ÀÌ½º·Î »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Veritabaný adý, belge için standart veritabaný olarak kullanýlsýn mý?";
     Message[ language_user1 ] = " ";
-    Message[ catalan ] = "¿Desea adoptar el nombre de la base de datos como base de datos estándar para el documento?";
+    Message[ catalan ] = "Voleu utilitzar el nom de la base de dades com a base de dades per defecte per al document?";
     Message[ finnish ] = "Käytetäänkö tietokannan nimeä asiakirjan oletustietokantana?";
 };
 String STR_PAGE
@@ -746,7 +746,7 @@ String STR_PAGE
     TEXT[ korean ] = "ÆäÀÌÁö ";
     TEXT[ turkish ] = "Sayfa ";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Página  ";
+    TEXT[ catalan ] = "Pàgina  ";
 };
 String RID_TEXT_TOOLBOX
 {
@@ -774,7 +774,7 @@ String RID_TEXT_TOOLBOX
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Metin nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos de texto";
+    Text[ catalan ] = "Barra d'objectes de text";
     Text[ finnish ] = "Tekstiobjektipalkki";
 };
 ToolBox RID_TEXT_TOOLBOX
@@ -833,7 +833,7 @@ String RID_TABLE_TOOLBOX
     Text[ korean ] = "Ç¥ °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Tablo nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos para tablas";
+    Text[ catalan ] = "Barra d'objectes de la taula";
 };
 ToolBox RID_TABLE_TOOLBOX
 {
@@ -1020,7 +1020,7 @@ String RID_FRAME_TOOLBOX
     Text[ korean ] = "ÇÁ·¹ÀÓ °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Çerçeve nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos de marco";
+    Text[ catalan ] = "Barra d'objectes del marc";
 };
 ToolBox RID_FRAME_TOOLBOX
 {
@@ -1100,7 +1100,7 @@ String RID_GRAFIK_TOOLBOX
     Text[ korean ] = "±×·¡ÇÈ °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Grafik nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos gráficos";
+    Text[ catalan ] = "Barra d'objectes gràfics";
 };
 ToolBox RID_GRAFIK_TOOLBOX
 {
@@ -1216,7 +1216,7 @@ String RID_OLE_TOOLBOX
     Text[ korean ] = "°³Ã¼";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto";
+    Text[ catalan ] = "Objecte";
 };
 ToolBox RID_OLE_TOOLBOX
 {
@@ -1282,7 +1282,7 @@ String RID_DRAW_TOOLBOX
     Text[ korean ] = "±×¸®±â °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Çizim nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos de dibujo";
+    Text[ catalan ] = "Barra d'objectes de dibuix";
 };
 ToolBox RID_DRAW_TOOLBOX
 {
@@ -1468,7 +1468,7 @@ String RID_DRAWFORM_TOOLBOX
     Text[ korean ] = "ÄÁÆ®·Ñ ¸ðÀ½";
     Text[ turkish ] = "Komut alaný çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de campos de control";
+    Text[ catalan ] = "Barra de control";
     Text[ finnish ] = "Ohjauspalkki";
 };
 ToolBox RID_DRAWFORM_TOOLBOX
@@ -1601,7 +1601,7 @@ String RID_BEZIER_TOOLBOX
     Text[ korean ] = "º£Áö¿¡ °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Bezier nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos Bézier";
+    Text[ catalan ] = "Barra d'objectes Bézier";
     Text[ finnish ] = "Bézier-objektipalkki";
 };
 ToolBox RID_BEZIER_TOOLBOX
@@ -1731,7 +1731,7 @@ String RID_DRAW_TEXT_TOOLBOX
     Text[ korean ] = "ÅØ½ºÆ® °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Metin nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos de texto";
+    Text[ catalan ] = "Barra d'objectes de text";
 };
 ToolBox RID_DRAW_TEXT_TOOLBOX
 {
@@ -1809,7 +1809,7 @@ String RID_NUM_TOOLBOX
     Text[ korean ] = "¹øÈ£¸Å±â±â °³Ã¼ ¸ðÀ½";
     Text[ turkish ] = "Numaralama nesne çubuðu";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de objetos de numeración";
+    Text[ catalan ] = "Barra d'objectes de numeració";
 };
 ToolBox RID_NUM_TOOLBOX
 {
@@ -1933,7 +1933,7 @@ String STR_SHELLNAME_TEXT
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
 };
 String STR_SHELLNAME_TABLE
@@ -1961,7 +1961,7 @@ String STR_SHELLNAME_TABLE
     Text[ korean ] = "Ç¥";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla";
+    Text[ catalan ] = "Taula";
     Text[ finnish ] = "Taulukko";
 };
 String STR_SHELLNAME_FRAME
@@ -1989,7 +1989,7 @@ String STR_SHELLNAME_FRAME
     Text[ korean ] = "ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Çerçeve";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marco";
+    Text[ catalan ] = "Marc";
     Text[ finnish ] = "Kehys";
 };
 String STR_SHELLNAME_GRAPHIC
@@ -2017,7 +2017,7 @@ String STR_SHELLNAME_GRAPHIC
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Gràfic";
     Text[ finnish ] = "Kuvat";
 };
 String STR_SHELLNAME_OBJECT
@@ -2045,7 +2045,7 @@ String STR_SHELLNAME_OBJECT
     Text[ korean ] = "°³Ã¼";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto";
+    Text[ catalan ] = "Objecte";
     Text[ finnish ] = "Objekti";
 };
 String STR_SHELLNAME_LIST
@@ -2073,7 +2073,7 @@ String STR_SHELLNAME_LIST
     Text[ korean ] = "¸ñ·Ï";
     Text[ turkish ] = "Liste";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Lista";
+    Text[ catalan ] = "Llista";
     Text[ finnish ] = "Luettelo";
 };
 String STR_SHELLNAME_DRAW
@@ -2101,7 +2101,7 @@ String STR_SHELLNAME_DRAW
     Text[ korean ] = "±×¸®±â";
     Text[ turkish ] = "Çizim";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dibujo";
+    Text[ catalan ] = "Dibuix";
     Text[ finnish ] = "Piirustus";
 };
 String STR_SHELLNAME_DRAWFORM
@@ -2129,7 +2129,7 @@ String STR_SHELLNAME_DRAWFORM
     Text[ korean ] = "¾ç½Ä";
     Text[ turkish ] = "Form";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formularios";
+    Text[ catalan ] = "Formularis";
     Text[ finnish ] = "Lomakkeet";
 };
 String STR_SHELLNAME_BEZIER
@@ -2185,7 +2185,7 @@ String STR_SHELLNAME_DRAW_TEXT
     Text[ korean ] = "¹®ÀÚ ÅØ½ºÆ®";
     Text[ turkish ] = "Çizim metni";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto de diseño";
+    Text[ catalan ] = "Text del dibuix";
     Text[ finnish ] = "Piirrä teksti";
 };
  //Strings fuer Gallery/Hintergrund
@@ -2214,7 +2214,7 @@ String STR_SWBG_PARAGRAPH
     Text[ korean ] = "´Ü¶ô";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Párrafo";
+    Text[ catalan ] = "Paràgraf";
     Text[ finnish ] = "Kappale";
 };
 String STR_SWBG_GRAPHIC
@@ -2242,7 +2242,7 @@ String STR_SWBG_GRAPHIC
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Gràfics";
     Text[ finnish ] = "Kuvat";
 };
 String STR_SWBG_OLE
@@ -2270,7 +2270,7 @@ String STR_SWBG_OLE
     Text[ korean ] = "OLE °³Ã¼";
     Text[ turkish ] = "OLE nesnesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objeto OLE";
+    Text[ catalan ] = "Objecte OLE";
     Text[ finnish ] = "OLE-objekti";
 };
 String STR_SWBG_FRAME
@@ -2298,7 +2298,7 @@ String STR_SWBG_FRAME
     Text[ korean ] = "ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Çerçeve";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marco";
+    Text[ catalan ] = "Marc";
     Text[ finnish ] = "Kehys";
 };
 String STR_SWBG_TABLE
@@ -2326,7 +2326,7 @@ String STR_SWBG_TABLE
     Text[ korean ] = "Ç¥";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Tabla";
+    Text[ catalan ] = "Taula";
     Text[ finnish ] = "Taulukko";
 };
 String STR_SWBG_TABLE_ROW
@@ -2354,7 +2354,7 @@ String STR_SWBG_TABLE_ROW
     Text[ korean ] = "Ç¥ Çà";
     Text[ turkish ] = "Tablo satýrý";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fila de la tabla";
+    Text[ catalan ] = "Fila de la taula";
     Text[ finnish ] = "Taulukon rivi";
 };
 String STR_SWBG_TABLE_CELL
@@ -2382,7 +2382,7 @@ String STR_SWBG_TABLE_CELL
     Text[ korean ] = "Ç¥ ¼¿";
     Text[ turkish ] = "Tablo hücresi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Celda de la tabla";
+    Text[ catalan ] = "Cel·la de la taula";
     Text[ finnish ] = "Taulukon solu";
 };
 String STR_SWBG_PAGE
@@ -2410,7 +2410,7 @@ String STR_SWBG_PAGE
     Text[ korean ] = "ÆäÀÌÁö";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Página";
+    Text[ catalan ] = "Pàgina";
     Text[ finnish ] = "Sivu";
 };
 String STR_SWBG_HEADER
@@ -2438,7 +2438,7 @@ String STR_SWBG_HEADER
     Text[ korean ] = "¸Ó¸®±Û";
     Text[ turkish ] = "Üstbilgi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Encabezamiento";
+    Text[ catalan ] = "Capçalera";
     Text[ finnish ] = "Yläotsikko";
 };
 String STR_SWBG_FOOTER
@@ -2466,7 +2466,7 @@ String STR_SWBG_FOOTER
     Text[ korean ] = "¹Ù´Ú±Û";
     Text[ turkish ] = "Altbilgi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pie de página";
+    Text[ catalan ] = "Peu de pàgina";
     Text[ finnish ] = "Alaselite";
 };
  //Ende: Strings fuer Gallery/Hintergrund
