@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-19 12:39:21 $
+ *  last change: $Author: tra $ $Date: 2001-07-19 13:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,8 +296,6 @@ HRESULT CMtaOleClipboard::flushClipboard( )
         OSL_ENSURE( sal_False, "clipboard sta thread not ready" );
         return E_FAIL;
     }
-
-    CAutoComInit comAutoInit;
 
     OSL_ENSURE( GetCurrentThreadId( ) != m_uOleThreadId, \
         "flushClipboard from within clipboard sta thread called" );
