@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-31 19:02:48 $
+ *  last change: $Author: ssa $ $Date: 2001-10-31 19:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,7 +760,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     // Fenster bei Klick nach vorne bringen
     if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
     {
-        if( !pChild->mbFloatWin )   // totop for floating windows would change the focus
+        if( !pSVData->maWinData.mpFirstFloat ) // totop for floating windows would change the focus
             pChild->ToTop();
         if ( aDelData.IsDelete() )
             return 1;
@@ -912,7 +912,7 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
     // focus or the last time the focus.
     // the first floating window always has the focus
     Window* pChild = pSVData->maWinData.mpFirstFloat;
-    if( !pChild )
+    if( !pChild || ( pChild->mbFloatWin && !((FloatingWindow *)pChild)->GrabsFocus() ) )
         pChild = pWindow->mpFrameData->mpFocusWin;
 
     // no child - than no input
@@ -1381,8 +1381,22 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
 
 // -----------------------------------------------------------------------
 
+void KillOwnPopups( Window* pWindow )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->maWinData.mpFirstFloat && pWindow->ImplIsRealParentPath( pSVData->maWinData.mpFirstFloat ) )
+    {
+        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
+            pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
+    KillOwnPopups( pWindow );
+
     if ( (nNewWidth > 0) && (nNewHeight > 0) ||
          pWindow->ImplGetWindow()->mbAllResize )
     {
@@ -1410,12 +1424,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 
 void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpFirstFloat && pWindow->ImplIsRealParentPath( pSVData->maWinData.mpFirstFloat ) )
-    {
-        if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
-            pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-    }
+    KillOwnPopups( pWindow );
 }
 
 // -----------------------------------------------------------------------
