@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:11:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,38 +1227,21 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
     if ( aIntersect.HasArea() )
     {
         OutputDevice* pOut = (OutputDevice*)GetOut();
-        sal_Bool bChgColor = sal_False;
+        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
         // For dark background we do not want to have a filled rectangle
         if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
         {
-            const StyleSettings& rS = GetVsh()->GetWin()->
-                                      GetSettings().GetStyleSettings();
-
-            Color aCol( SwViewOption::GetFontColor().GetColor() );
-            Color aOldColor( pOut->GetLineColor() );
-
-            if ( 0 != ( bChgColor = aOldColor != aCol ) )
-                pOut->SetLineColor( aCol );
-
-            DrawRect( aIntersect, sal_True );
-
-            if ( bChgColor )
-                pOut->SetLineColor( aOldColor );
+            pOut->SetLineColor( SwViewOption::GetFontColor().GetColor() );
         }
         else
         {
-            Color aCol( SwViewOption::GetFieldShadingsColor() );
-            Color aOldColor( pOut->GetFillColor() );
-
-            if( 0 != ( bChgColor = aOldColor != aCol ) )
-                pOut->SetFillColor( aCol );
-
-            DrawRect( aIntersect, sal_True );
-
-            if ( bChgColor )
-                pOut->SetFillColor( aOldColor );
+            pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+            pOut->SetLineColor();
         }
+
+        DrawRect( aIntersect, sal_True );
+        pOut->Pop();
     }
 }
 
@@ -1277,13 +1260,14 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
         // <--
 
-        const Color aOldColor( pOut->GetFillColor() );
-        sal_Bool bChgColor;
-        if( 0 != ( bChgColor = aOldColor != *pFnt->GetBackColor() ) )
-            pOut->SetFillColor( *pFnt->GetBackColor() );
+        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+
+        pOut->SetFillColor( *pFnt->GetBackColor() );
+        pOut->SetLineColor();
+
         DrawRect( aIntersect, sal_True, sal_False );
-        if( bChgColor )
-            pOut->SetFillColor( aOldColor );
+
+        pOut->Pop();
     }
 }
 
