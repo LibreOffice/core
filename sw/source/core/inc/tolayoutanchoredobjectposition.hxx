@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:59:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ namespace objectpositioning
     {
         private:
             // calculated data for object position type TO_LAYOUT
-            Point       maRelPos;
-
-            // method to cast <SwAnchoredObjectPosition::GetFrmOfObj()> to
-            // the needed type
-            SwFlyLayFrm* GetFlyLayFrmOfObj() const;
+            Point maRelPos;
+            // --> OD 2004-06-17 #i26791#
+            // determine offset to frame anchor position according to the
+            // positioning alignments
+            Point maOffsetToFrmAnchorPos;
 
         public:
             SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj );
@@ -107,6 +107,14 @@ namespace objectpositioning
                 @author OD
             */
             Point GetRelPos() const;
+
+            /** determined offset to frame anchor position
+
+                --> OD 2004-06-17 #i26791#
+
+                @author OD
+            */
+            Point GetOffsetToFrmAnchorPos() const;
     };
 };
 
