@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #include "userlist.hxx"
 #include "pivot.hxx"
 #include "rechead.hxx"
-#include "compiler.hxx"                         // fuer errNoValue
+#include "errorcodes.hxx"                           // fuer errNoValue
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
