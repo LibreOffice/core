@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:45:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,18 @@
 #ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XINPLACEOBJECT_HPP_
+#include <com/sun/star/embed/XInplaceObject.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGEBROADCASTER_HPP_
 #include <com/sun/star/embed/XStateChangeBroadcaster.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
@@ -121,7 +131,8 @@ namespace com { namespace sun { namespace star {
         class XCloseListener;
     }
     namespace beans {
-        class PropertyValue;
+        struct PropertyValue;
+        struct NamedValue;
     }
 }}}
 
@@ -129,24 +140,20 @@ namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
 }
 
-#define NUM_SUPPORTED_STATES 3
-#define NUM_SUPPORTED_VERBS 3
+#define NUM_SUPPORTED_STATES 5
+// #define NUM_SUPPORTED_VERBS 5
 
 #include "docholder.hxx"
 
 class Interceptor;
 
 class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
-                            // , public ::com::sun::star::embed::XVisualObject
                             , public ::com::sun::star::embed::XEmbedPersist
                             , public ::com::sun::star::embed::XLinkageSupport
-                            // , public ::com::sun::star::embed::XClassifiedObject
-                            // , public ::com::sun::star::embed::XComponentSupplier
-                            // , public ::com::sun::star::embed::XStateChangeBroadcaster
-                            // , public ::com::sun::star::util::XCloseable
-                            // , public ::com::sun::star::document::XEventBroadcaster
+                            , public ::com::sun::star::embed::XInplaceObject
                             , public ::cppu::OWeakObject
 {
+protected:
     ::osl::Mutex    m_aMutex;
 
     DocumentHolder* m_pDocHolder;
@@ -170,6 +177,10 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
 
     ::rtl::OUString m_aDocServiceName;
 
+    sal_Int64 m_nMiscStatus;
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > m_aObjectVerbs;
+
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aAcceptedStates;
     ::com::sun::star::uno::Sequence< sal_Int32 > m_pIntermediateStatesSeqs[NUM_SUPPORTED_STATES][NUM_SUPPORTED_STATES];
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int32 > > m_aVerbTable;
@@ -177,6 +188,7 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedClient > m_xClientSite;
 
     ::rtl::OUString m_aContainerName;
+    ::rtl::OUString m_aDefaultParentBaseURL;
 
     Interceptor* m_pInterceptor;
 
@@ -185,6 +197,11 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
     ::rtl::OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewObjectStorage;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aNewDocMediaDescriptor;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xClientWindow; // ???
+    ::com::sun::star::awt::Rectangle m_aOwnRectangle;
+    ::com::sun::star::awt::Rectangle m_aClipRectangle;
 
     sal_Bool m_bIsLink;
 
@@ -198,7 +215,12 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
     ::rtl::OUString m_aLinkFilterName;
 
 private:
-    void CommonInit_Impl();
+    void CommonInit_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
+
+    void LinkInit_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps,
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aObjectDescr );
+
 
     void SwitchOwnPersistence(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
@@ -211,9 +233,14 @@ private:
 
     ::rtl::OUString GetDocumentServiceName() { return m_aDocServiceName; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StoreDocumentToTempStream_Impl();
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+        StoreDocumentToTempStream_Impl( sal_Int32 nStorageFormat,
+                                        const ::rtl::OUString& aBaseURL,
+                                        const ::rtl::OUString& aHierarchName );
 
     sal_Int32 ConvertVerbToState_Impl( sal_Int32 nVerb );
+
+    void Deactivate();
 
     void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState,::osl::ResettableMutexGuard& _rGuard );
 
@@ -221,42 +248,50 @@ private:
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadDocumentFromStorage_Impl(
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadDocumentFromStorage_Impl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadLink_Impl();
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadLink_Impl();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > InitNewDocument_Impl();
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > InitNewDocument_Impl();
 
-    void StoreDocToStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    void StoreDocToStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                sal_Int32 nStorageVersion,
+                                const ::rtl::OUString& aBaseURL,
+                                const ::rtl::OUString& aHierarchName );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > CreateDocFromMediaDescr_Impl(
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateDocFromMediaDescr_Impl(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMedDescr );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > CreateTempDocFromLink_Impl();
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateTempDocFromLink_Impl();
+
+    ::rtl::OUString GetBaseURL_Impl();
+    ::rtl::OUString GetBaseURLFrom_Impl(
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs );
 
 public:
     OCommonEmbeddedObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-        const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID,
-        const ::rtl::OUString& aClassName,
-        const ::rtl::OUString& aDocServiceName );
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
 
-    // no persistance for linked objects, so the url is provided in constructor
+    // no persistance for linked objects, so the descriptors are provided in constructor
     OCommonEmbeddedObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-        const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID,
-        const ::rtl::OUString& aClassName,
-        const ::rtl::OUString& aDocServiceName,
-        const ::rtl::OUString& aLinkFilterName,
-        const ::rtl::OUString& aLinkURL );
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aObjectDescr );
 
     virtual ~OCommonEmbeddedObject();
 
     void SaveObject_Impl();
 
+    void requestPositioning( const ::com::sun::star::awt::Rectangle& aRect );
+
     // not a real listener and should not be
-    void PostEvent_Impl( const ::rtl::OUString& aEventName );
+    void PostEvent_Impl( const ::rtl::OUString& aEventName,
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xSource =
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
 
 // XInterface
 
@@ -344,7 +379,13 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Int32 SAL_CALL getMapMode( sal_Int64 nAspect )
+    virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
+        throw ( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int32 SAL_CALL getMapUnit( sal_Int64 nAspect )
         throw ( ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException);
 
@@ -358,12 +399,6 @@ public:
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL storeOwn()
-        throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
@@ -399,19 +434,6 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL isReadonly()
-        throw ( ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL reload(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
-        throw ( ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::embed::WrongStateException,
-                ::com::sun::star::io::IOException,
-                ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
-
 // XLinkageSupport
 
     virtual void SAL_CALL breakLink( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
@@ -430,6 +452,47 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException);
+
+
+// XCommonEmbedPersist
+
+    virtual void SAL_CALL storeOwn()
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Bool SAL_CALL isReadonly()
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL reload(
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
+        throw ( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
+
+
+// XInplaceObject
+
+    virtual void SAL_CALL setObjectRectangles( const ::com::sun::star::awt::Rectangle& aPosRect,
+                                          const ::com::sun::star::awt::Rectangle& aClipRect )
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL enableModeless( sal_Bool bEnable )
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL translateAccelerators(
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::awt::KeyEvent >& aKeys )
+        throw ( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::RuntimeException );
 
 // XClassifiedObject
 
