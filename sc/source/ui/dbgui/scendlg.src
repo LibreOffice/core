@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:52:13 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ english_us ] = "Display border in";
         Text[ portuguese ] = "Mostrar moldura em";
         Text[ russian ] = "Οξκΰηΰςό πΰμκσ";
-        Text[ greek ] = "Εμφάνιση πλαισίου στο";
+        Text[ greek ] = "Εμφάνιση πλαισίου";
         Text[ dutch ] = "Kader weergeven in";
         Text[ french ] = "Afficher le cadre";
         Text[ spanish ] = "Mostrar borde";
@@ -200,9 +200,9 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ russian ] = "Ξαπΰςνξε κξοθπξβΰνθε";
         Text[ polish ] = "Kopiuj z powrotem";
         Text[ japanese ] = "³‚Μ’l‚Ι–ί‚·";
-        Text[ chinese_traditional ] = "§σ·s¤u§@ªν¤θ®Χ";
+        Text[ chinese_traditional ] = "½Ζ»s¦^¨Σ";
         Text[ arabic ] = "ΕΪΗΟΙ ΗαδΣΞ";
-        Text[ greek ] = "Αντιγραφή πίσω";
+        Text[ greek ] = "Αντιγραφή πίσ~ω";
         Text[ korean ] = "µΗµΉ·Α ΊΉ»η";
         Text[ turkish ] = "Geri kopyala";
         Text[ language_user1 ] = " ";
@@ -288,7 +288,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ japanese ] = "•\\‘S‘Μ‚πΊΛί°";
         Text[ chinese_traditional ] = "½Ζ»sΎγ­Σ¤u§@ªν";
         Text[ arabic ] = "δΣΞ ία ΗαΜΟζα";
-        Text[ greek ] = "Αντιγραφή ολόκληρου πίνακα";
+        Text[ greek ] = "Αν~τιγραφή ολόκληρου πίνακα";
         Text[ korean ] = "ΐόΓΌ ½ΓΖ® ΊΉ»η";
         Text[ turkish ] = "Tablonun tόmόnό kopyala";
         Text[ language_user1 ] = " ";
@@ -312,7 +312,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ russian ] = "Οπΰβκΰ ρφενΰπθÿ";
         Text[ polish ] = "Edytuj scenariusz";
         Text[ japanese ] = "ΌΕΨµ‚Μ•ÒW";
-        Text[ chinese_traditional ] = "½sΏθ¤θ®Χ";
+        Text[ chinese_traditional ] = "½sΏθ¤ΐªRΒΕ¥»";
         Text[ arabic ] = "ΚΝΡνΡ ΗαΣνδΗΡνζ";
         Text[ greek ] = "Επεξεργασία σεναρίου";
         Text[ korean ] = "½Γ³ªΈ®Ώΐ ΖνΑύ";
@@ -396,7 +396,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ japanese ] = "ΌΕΨµ–Ό";
         Text[ chinese_traditional ] = "¤ΐªRΒΕ¥»ªΊ¦WΊΩ";
         Text[ arabic ] = "ΗΣγ ΗαΣνδΗΡνζ";
-        Text[ greek ] = "Όνομα σεναρίου";
+        Text[ greek ] = "Ό~νομα σεναρίου";
         Text[ korean ] = "½Γ³ªΈ®Ώΐ ΐΜΈ§";
         Text[ turkish ] = "Senaryonun adύ";
         Text[ language_user1 ] = " ";
@@ -463,7 +463,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ russian ] = "Ρξηδΰςό ρφενΰπθι";
     Text[ polish ] = "Utwσrz scenariusz";
     Text[ japanese ] = "ΌΕΨµ‚Μμ¬";
-    Text[ chinese_traditional ] = "«Ψ¥ί¤θ®Χ";
+    Text[ chinese_traditional ] = "«Ψ¥ί¤ΐªRΒΕ¥»";
     Text[ arabic ] = "ΕδΤΗΑ ΣνδΗΡνζ";
     Text[ greek ] = "Δημιουργία σεναρίου";
     Text[ korean ] = "½Γ³ªΈ®Ώΐ ΈΈµι±β";
@@ -471,3 +471,4 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear escenario";
 };
+
