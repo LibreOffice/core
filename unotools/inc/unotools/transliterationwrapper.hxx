@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-05-31 14:27:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef _COM_SUN_STAR_I18N_XTRANSLITERATION_HPP_
-#include <com/sun/star/i18n/XTransliteration.hpp>
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDTRANSLITERATION_HPP_
+#include <drafts/com/sun/star/i18n/XExtendedTransliteration.hpp>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -86,7 +86,7 @@ class TransliterationWrapper
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference<
-                    ::com::sun::star::i18n::XTransliteration > xTrans;
+        ::drafts::com::sun::star::i18n::XExtendedTransliteration > xTrans;
     ::com::sun::star::lang::Locale aLocale;
     sal_uInt32 nType;
     sal_uInt16 nLanguage;
