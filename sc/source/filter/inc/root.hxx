@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:43:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
@@ -85,6 +82,7 @@
 #include "excdefs.hxx"
 #endif
 
+class SotStorage;
 class SvNumberFormatter;
 class ScRangeName;
 class ScProgress;
@@ -98,6 +96,7 @@ class ExcelToSc;
 class ExcExternDup;
 
 class XclImpAutoFilterBuffer;
+class XclImpPivotCacheList;
 class _ScRangeListTabs;
 
 class XclExpChTrTabId;
