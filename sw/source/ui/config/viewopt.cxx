@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-07 10:52:48 $
+ *  last change: $Author: os $ $Date: 2002-05-29 13:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ Color SwViewOption::aIndexShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aLinksColor(COL_BLUE);
 Color SwViewOption::aVisitedLinksColor(COL_RED);
 Color SwViewOption::aDirectCursorColor(COL_BLUE);
-Color SwViewOption::aAnchorColor(COL_LIGHTGRAY);
 Color SwViewOption::aTextGridColor(COL_LIGHTGRAY);
 Color SwViewOption::aSpellColor(COL_LIGHTRED);
 Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
@@ -713,13 +712,6 @@ Color&   SwViewOption::GetDirectCursorColor()
 {
     return aDirectCursorColor;
 }
-/*-- 24.04.2002 10:50:13---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-Color&   SwViewOption::GetAnchorColor()
-{
-    return aAnchorColor;
-}
 /*-- 24.04.2002 10:50:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -803,9 +795,6 @@ void SwViewOption::ApplyColorConfigValues(const svx::ColorConfig& rConfig )
         nAppearanceFlags |= VIEWOPT_VISITED_LINKS;
 
     aDirectCursorColor.SetColor(rConfig.GetColorValue(svx::WRITERDIRECTCURSOR).nColor);
-
-    aValue = rConfig.GetColorValue(svx::ANCHOR);
-    aAnchorColor.SetColor(aValue.nColor);
 
     aTextGridColor.SetColor(rConfig.GetColorValue(svx::WRITERTEXTGRID).nColor);
 

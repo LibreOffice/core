@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 12:10:12 $
+ *  last change: $Author: os $ $Date: 2002-05-29 13:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,6 @@ class SwViewOption
     static Color    aLinksColor;
     static Color    aVisitedLinksColor;
     static Color    aDirectCursorColor;
-    static Color    aAnchorColor;
     static Color    aTextGridColor;
     static Color    aSpellColor;     // mark color of online spell checking
     static Color    aFieldShadingsColor;
@@ -563,7 +562,6 @@ public:
     static Color&   GetLinksColor();
     static Color&   GetVisitedLinksColor();
     static Color&   GetDirectCursorColor();
-    static Color&   GetAnchorColor();
     static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
     static Color&   GetFieldShadingsColor();
