@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:33:58 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@
 #endif
 
 #include <rtl/logfile.hxx>
+#include <vcl/edit.hxx>
 
 #ifndef GCC
 #pragma hdrstop
@@ -218,6 +219,41 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 }
 
 //====================================================================
+
+#define DOSTRING( x )                       #x
+#define STRING( x )                         DOSTRING( x )
+
+typedef String ( *PFunc_getSpecialCharsForEdit)( Window* pParent, const Font& rFont );
+
+//====================================================================
+// Lazy binding of the GetSpecialCharsForEdit function as it resides in
+// a library above us.
+//====================================================================
+
+String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
+{
+    static bool bDetermineFunction = false;
+    static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = 0;
+
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !bDetermineFunction )
+    {
+        bDetermineFunction = true;
+
+        String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+        sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "svx" ) ) );
+
+        rtl::OUString aLibName( sLibName );
+        oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+
+        // get symbol
+        ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "GetSpecialCharsForEdit" ) );
+        pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getSymbol( handleMod, aSymbol.pData );
+    }
+
+    if ( pfunc_getSpecialCharsForEdit )
+        return (*pfunc_getSpecialCharsForEdit)( pParent, rFont );
+}
 
 //====================================================================
 
@@ -375,6 +411,12 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData->aLateInitTimer.SetTimeout( 250 );
     pAppData->aLateInitTimer.SetTimeoutHdl( LINK( this, SfxApplication, LateInitTimerHdl_Impl ) );
     pAppData->aLateInitTimer.Start();
+
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        // Set special characters callback on vcl edit control
+        Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
+    }
 
     return sal_True;
 }
