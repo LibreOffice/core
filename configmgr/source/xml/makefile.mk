@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: lla $ $Date: 2001-05-14 12:06:26 $
+#   last change: $Author: lla $ $Date: 2001-05-28 11:10:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ SLOFILES=\
     $(SLO)$/simpletypehelper.obj \
     $(SLO)$/binarydecide.obj \
     $(SLO)$/pathhelper.obj \
+    $(SLO)$/binarybasereader.obj \
 
 
 # --- Targets ---
