@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:08:28 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,12 @@
 #ifndef _TOXMGR_HXX
 #define _TOXMGR_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _TOX_HXX
 #include "tox.hxx"
+#endif
 #ifndef _AUTHFLD_HXX
 #include <authfld.hxx>
 #endif
@@ -75,7 +80,7 @@ class SwForm;
  --------------------------------------------------------------------*/
 //one single method will be sufficient to insert AND upate indexes
 
-class SwTOXDescription
+class SW_DLLPUBLIC SwTOXDescription
 {
     TOXTypes            eTOXType;
     String              aStyleNames[MAXLEVEL];
@@ -106,9 +111,15 @@ class SwTOXDescription
 
     //TODO: TemplateNames
     //const String* pTemplateName = 0, ???
+
+    // forbidden and not implemented.
+    SwTOXDescription();
     SwTOXDescription(SwTOXDescription&);
+    SwTOXDescription & operator= (SwTOXDescription&);
+
 public:
-    SwTOXDescription(TOXTypes eType) :
+    // single argument ctors shall be explicit.
+    explicit SwTOXDescription(TOXTypes eType) :
         eTOXType(eType),
         pTitle(0),
         pForm(0),
@@ -228,8 +239,14 @@ class SwTOXMarkDescription
     String*     pPhoneticReadingOfPrimKey;
     String*     pPhoneticReadingOfSecKey;
 
+    // forbidden and not implemented.
+    SwTOXMarkDescription();
+    SwTOXMarkDescription(SwTOXMarkDescription&);
+    SwTOXMarkDescription & operator= (SwTOXMarkDescription&);
+
 public:
-    SwTOXMarkDescription(TOXTypes eType) :
+    // single argument ctors shall be explicit.
+    explicit SwTOXMarkDescription(TOXTypes eType) :
         eTOXType(eType),
         pPrimKey(0),
         pSecKey(0),
@@ -291,16 +308,18 @@ public:
     const String*   GetPhoneticReadingOfSecKey() const {    return pPhoneticReadingOfSecKey; }
 };
 
-class SwTOXMgr
+class SW_DLLPUBLIC SwTOXMgr
 {
     SwWrtShell*         pSh;
     SwTOXMark*          pCurTOXMark;
     SwTOXMarks          aCurMarks;
 
-    USHORT              GetUserTypeID(const String& rStr);
+    SW_DLLPRIVATE USHORT                GetUserTypeID(const String& rStr);
 
 public:
-    SwTOXMgr(SwWrtShell* pShell);
+    // single argument ctors shall be explicit.
+    explicit SwTOXMgr(SwWrtShell* pShell);
+
     //
     // Methoden fuer Verzeichnismarkierungen
     //
