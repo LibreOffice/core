@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-16 14:24:46 $
+ *  last change: $Author: sb $ $Date: 2001-08-20 07:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #include "passworddlg.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include "com/sun/star/awt/XWindow.hpp"
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include "com/sun/star/beans/PropertyValue.hpp"
 #endif
@@ -166,6 +169,12 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include "com/sun/star/uno/Any.hxx"
 #endif
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include "com/sun/star/uno/Exception.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
 #endif
@@ -174,6 +183,9 @@
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include "osl/mutex.hxx"
 #endif
 #ifndef _RTL_DIGEST_H
 #include "rtl/digest.h"
@@ -207,6 +219,9 @@
 #endif
 #ifndef _SVTOOLS_HRC
 #include "svtools/svtools.hrc"
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include "toolkit/helper/vclunohelper.hxx"
 #endif
 #ifndef _EINF_HXX
 #include "tools/errinf.hxx"
@@ -261,42 +276,31 @@ CookieList::~CookieList() SAL_THROW(())
 class SimpleErrorContext: public ErrorContext
 {
 public:
-    SimpleErrorContext(UniString const & rTheContext) SAL_THROW(()):
-        m_aContext(rTheContext) {}
+    inline SimpleErrorContext(Window * pParent,
+                              bool bHasContext,
+                              UniString const & rContext)
+        SAL_THROW(());
 
     virtual BOOL GetString(ULONG, UniString & rCtxStr);
 
 private:
-    UniString m_aContext;
+    rtl::OUString m_aContext;
+    bool m_bHasContext;
 };
+
+inline SimpleErrorContext::SimpleErrorContext(Window * pParent,
+                                              bool bHasContext,
+                                              UniString const & rContext)
+    SAL_THROW(()):
+    ErrorContext(pParent),
+    m_bHasContext(bHasContext),
+    m_aContext(rContext)
+{}
 
 BOOL SimpleErrorContext::GetString(ULONG, UniString & rCtxStr)
 {
     rCtxStr = m_aContext;
-    return true;
-}
-
-class SimpleErrorContextPtr
-{
-public:
-    SimpleErrorContextPtr() SAL_THROW(()): m_pContext(0) {}
-
-    ~SimpleErrorContextPtr() SAL_THROW(());
-
-    inline void set(SimpleErrorContext * pContext) SAL_THROW(())
-    { m_pContext = pContext; }
-
-private:
-    SimpleErrorContext * m_pContext;
-};
-
-SimpleErrorContextPtr::~SimpleErrorContextPtr() SAL_THROW(())
-{
-    if (m_pContext)
-    {
-        vos::OGuard aGuard(Application::GetSolarMutex());
-        delete m_pContext;
-    }
+    return m_bHasContext;
 }
 
 bool
@@ -385,6 +389,7 @@ bool getResourceNameArgument(star::uno::Sequence< star::uno::Any > const &
                      pValue))
         return false;
     // Use the resource name only for file URLs, to avoid confusion:
+    //TODO! work with ucp locality concept instead of hardcoded "file"?
     if (pValue
         && pValue->matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(
                                                   "file:")))
@@ -397,532 +402,12 @@ bool getResourceNameArgument(star::uno::Sequence< star::uno::Any > const &
 
 }
 
-USHORT UUIInteractionHandler::executeErrorDialog(ULONG nID, USHORT nMask)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    try
-    {
-        vos::OGuard aGuard(Application::GetSolarMutex());
-
-        std::auto_ptr< ResMgr >
-            xManager1(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa)));
-        std::auto_ptr< SfxErrorHandler >
-            xHandler1(new SfxErrorHandler(RID_ERRHDL,
-                                          ERRCODE_AREA_TOOLS,
-                                          ERRCODE_AREA_LIB1 - 1,
-                                          xManager1.get()));
-        std::auto_ptr< ResMgr >
-            xManager2(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(cnt)));
-        std::auto_ptr< SfxErrorHandler >
-            xHandler2(new SfxErrorHandler(RID_CHAOS_START + 12,
-                                          ERRCODE_AREA_CHAOS,
-                                          ERRCODE_AREA_CHAOS_END,
-                                          xManager2.get()));
-            // cf. chaos/source/inc/cntrids.hrc, where
-            // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
-        std::auto_ptr< ResMgr >
-            xManager3(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< SfxErrorHandler >
-            xHandler3(new SfxErrorHandler(RID_UUI_ERRHDL,
-                                          ERRCODE_AREA_UUI,
-                                          ERRCODE_AREA_UUI_END,
-                                          xManager3.get()));
-
-        // Needed because within ErrorHandler::HandleError() ResIds are
-        // created without a ResMgr---they require a default ResMgr:
-        ResMgr * pDefaultManager = Resource::GetResManager();
-        Resource::SetResManager(xManager1.get());
-        USHORT nButton = ErrorHandler::HandleError(nID, nMask);
-        Resource::SetResManager(pDefaultManager);
-        return nButton;
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
-    }
-}
-
-void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
-                                               rtl::OUString const & rRealm)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    try
-    {
-        vos::OGuard aGuard(Application::GetSolarMutex());
-
-        bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT)
-                            != 0;
-        bool bSavePassword = rInfo.GetIsPersistentPassword()
-                             || rInfo.GetIsSavePassword();
-
-        sal_uInt16 nFlags = 0;
-        if (rInfo.GetPath().Len() == 0)
-            nFlags |= LF_NO_PATH;
-        if (rInfo.GetErrorText().Len() == 0)
-            nFlags |= LF_NO_ERRORTEXT;
-        if (!bAccount)
-            nFlags |= LF_NO_ACCOUNT;
-        if (!(rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_USER_NAME))
-            nFlags |= LF_USERNAME_READONLY;
-
-        if (!bSavePassword)
-            nFlags |= LF_NO_SAVEPASSWORD;
-
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        UniString aRealm(rRealm); // Forte compiler needs it spelled out...
-        std::auto_ptr< LoginDialog >
-            xDialog(new LoginDialog(0,
-                                    nFlags,
-                                    rInfo.GetServer(),
-                                    &aRealm,
-                                    xManager.get()));
-        if (rInfo.GetErrorText().Len() != 0)
-            xDialog->SetErrorText(rInfo.GetErrorText());
-        xDialog->SetName(rInfo.GetUserName());
-        if (bAccount)
-            xDialog->ClearAccount();
-        else
-            xDialog->ClearPassword();
-        xDialog->SetPassword(rInfo.GetPassword());
-
-        if (bSavePassword)
-        {
-            xDialog->
-                SetSavePasswordText(ResId(rInfo.GetIsPersistentPassword() ?
-                                              RID_SAVE_PASSWORD :
-                                              RID_KEEP_PASSWORD,
-                                          xManager.get()));
-            xDialog->SetSavePassword(rInfo.GetIsSavePassword());
-        }
-
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                                                       ERRCODE_BUTTON_CANCEL);
-        rInfo.SetUserName(xDialog->GetName());
-        rInfo.SetPassword(xDialog->GetPassword());
-        rInfo.SetAccount(xDialog->GetAccount());
-        rInfo.SetSavePassword(xDialog->IsSavePassword());
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
-    }
-}
-
-void
-UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
-                                             star::task::PasswordRequestMode
-                                                 nMode)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    rtl::OString aMaster;
-    try
-    {
-        vos::OGuard aGuard(Application::GetSolarMutex());
-
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< MasterPasswordDialog >
-            xDialog(new MasterPasswordDialog(0, nMode, xManager.get()));
-        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
-                                                       ERRCODE_BUTTON_CANCEL);
-        aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
-                                         RTL_TEXTENCODING_UTF8);
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
-    }
-
-    sal_uInt8 aKey[RTL_DIGEST_LENGTH_MD5];
-    rtl_digest_PBKDF2(aKey,
-                      RTL_DIGEST_LENGTH_MD5,
-                      reinterpret_cast< sal_uInt8 const * >(aMaster.getStr()),
-                      aMaster.getLength(),
-                      reinterpret_cast< sal_uInt8 const * >(
-                          "3B5509ABA6BC42D9A3A1F3DAD49E56A51"),
-                      32,
-                      1000);
-
-    rtl::OUStringBuffer aBuffer;
-    for (int i = 0; i < RTL_DIGEST_LENGTH_MD5; ++i)
-    {
-        aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] >> 4)));
-        aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] & 15)));
-    }
-    rInfo.SetPassword(aBuffer.makeStringAndClear());
-}
-
-void
-UUIInteractionHandler::executeCookieDialog(CntHTTPCookieRequest & rRequest)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    try
-    {
-        vos::OGuard aGuard(Application::GetSolarMutex());
-
-        std::auto_ptr< ResMgr >
-            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< CookiesDialog >
-            xDialog(new CookiesDialog(0, &rRequest, xManager.get()));
-        xDialog->Execute();
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
-    }
-}
-
-void
-UUIInteractionHandler::handleAuthenticationRequest(
-    star::ucb::AuthenticationRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-        rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::task::XInteractionRetry > xRetry;
-    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
-        xSupplyAuthentication;
-    getAuthenticationContinuations(
-        rContinuations, &xAbort, &xRetry, &xSupplyAuthentication);
-    bool bRemember;
-    bool bRememberPersistent;
-    if (xSupplyAuthentication.is())
-    {
-        star::ucb::RememberAuthentication eDefault;
-        star::uno::Sequence< star::ucb::RememberAuthentication >
-            aModes(xSupplyAuthentication->getRememberPasswordModes(eDefault));
-        bRemember = eDefault != star::ucb::RememberAuthentication_NO;
-        bRememberPersistent = false;
-        for (sal_Int32 i = 0; i < aModes.getLength(); ++i)
-            if (aModes[i] == star::ucb::RememberAuthentication_PERSISTENT)
-            {
-                bRememberPersistent = true;
-                break;
-            }
-    }
-    else
-    {
-        bRemember = false;
-        bRememberPersistent = false;
-    }
-
-    // m_xContainer works with userName passwdSequences pairs:
-    if (m_xContainer.is() && rRequest.HasUserName && rRequest.HasPassword)
-        try
-        {
-            if (rRequest.UserName.getLength() == 0)
-            {
-                star::task::UrlRecord
-                    aRec(m_xContainer->find(rRequest.ServerName, this));
-                if (aRec.UserList.getLength() != 0)
-                {
-                    xSupplyAuthentication->
-                        setUserName(aRec.UserList[0].UserName.getStr());
-                    OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
-                               "empty password list");
-                    xSupplyAuthentication->
-                        setPassword(aRec.UserList[0].Passwords[0].getStr());
-                    if (aRec.UserList[0].Passwords.getLength() > 1)
-                        if (rRequest.HasRealm)
-                            xSupplyAuthentication->
-                                setRealm(aRec.UserList[0].Passwords[1].
-                                                              getStr());
-                        else
-                            xSupplyAuthentication->
-                                setAccount(aRec.UserList[0].Passwords[1].
-                                                                getStr());
-                    xSupplyAuthentication->select();
-                    return;
-                }
-            }
-            else
-            {
-                star::task::UrlRecord
-                    aRec(m_xContainer->findForName(rRequest.ServerName,
-                                                   rRequest.UserName,
-                                                   this));
-                if (aRec.UserList.getLength() != 0)
-                {
-                    OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
-                               "empty password list");
-                    if (!rRequest.HasPassword
-                        || rRequest.Password != aRec.UserList[0].Passwords[0])
-                    {
-                        xSupplyAuthentication->
-                            setUserName(aRec.UserList[0].UserName.getStr());
-                        xSupplyAuthentication->
-                            setPassword(aRec.UserList[0].Passwords[0].
-                                                             getStr());
-                        if (aRec.UserList[0].Passwords.getLength() > 1)
-                            if (rRequest.HasRealm)
-                                xSupplyAuthentication->
-                                    setRealm(aRec.UserList[0].Passwords[1].
-                                                                  getStr());
-                            else
-                                xSupplyAuthentication->
-                                    setAccount(aRec.UserList[0].Passwords[1].
-                                                                    getStr());
-                        xSupplyAuthentication->select();
-                        return;
-                    }
-                }
-            }
-        }
-        catch (star::task::NoMasterException const &)
-        {} // user did not enter master password
-
-    LoginErrorInfo aInfo;
-    aInfo.SetTitle(rRequest.ServerName);
-    aInfo.SetServer(rRequest.ServerName);
-    if (rRequest.HasAccount)
-        aInfo.SetAccount(rRequest.Account);
-    if (rRequest.HasUserName)
-        aInfo.SetUserName(rRequest.UserName);
-    if (rRequest.HasPassword)
-        aInfo.SetPassword(rRequest.Password);
-    aInfo.SetErrorText(rRequest.Diagnostic);
-    aInfo.SetPersistentPassword(bRememberPersistent);
-    aInfo.SetSavePassword(bRemember);
-    aInfo.SetModifyAccount(rRequest.HasAccount
-                           && xSupplyAuthentication.is()
-                           && xSupplyAuthentication->canSetAccount());
-    aInfo.SetModifyUserName(rRequest.HasUserName
-                            && xSupplyAuthentication.is()
-                            && xSupplyAuthentication->canSetUserName());
-    executeLoginDialog(aInfo,
-                       rRequest.HasRealm ? rRequest.Realm : rtl::OUString());
-    switch (aInfo.GetResult())
-    {
-    case ERRCODE_BUTTON_OK:
-        if (xSupplyAuthentication.is())
-        {
-            xSupplyAuthentication->setUserName(aInfo.GetUserName());
-            xSupplyAuthentication->setPassword(aInfo.GetPassword());
-            xSupplyAuthentication->
-                setRememberPassword(
-                    aInfo.GetIsSavePassword() ?
-                        bRememberPersistent ?
-                            star::ucb::RememberAuthentication_PERSISTENT :
-                            star::ucb::RememberAuthentication_SESSION :
-                        star::ucb::RememberAuthentication_NO);
-            if (rRequest.HasRealm)
-                xSupplyAuthentication->setRealm(aInfo.GetAccount());
-            else
-                xSupplyAuthentication->setAccount(aInfo.GetAccount());
-            xSupplyAuthentication->select();
-        }
-        // Empty user name can not be valid:
-        if (m_xContainer.is() && aInfo.GetUserName().Len() != 0)
-        {
-            star::uno::Sequence< rtl::OUString >
-                aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
-            aPassList[0] = aInfo.GetPassword();
-            if (aInfo.GetAccount().Len() != 0)
-                aPassList[1] = aInfo.GetAccount();
-            try
-            {
-                if (aInfo.GetIsSavePassword())
-                    if (bRememberPersistent)
-                        m_xContainer->addPersistent(rRequest.ServerName,
-                                                    aInfo.GetUserName(),
-                                                    aPassList,
-                                                    this);
-                    else
-                        m_xContainer->add(rRequest.ServerName,
-                                          aInfo.GetUserName(),
-                                          aPassList,
-                                          this);
-            }
-            catch (star::task::NoMasterException const &)
-            {} // user did not enter master password
-        }
-        break;
-
-    case ERRCODE_BUTTON_RETRY:
-        if (xRetry.is())
-            xRetry->select();
-        break;
-
-    default:
-        if (xAbort.is())
-            xAbort->select();
-        break;
-    }
-}
-
-void
-UUIInteractionHandler::handlePasswordRequest(
-    star::task::PasswordRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-        rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
-    star::uno::Reference< star::task::XInteractionRetry > xRetry;
-    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
-        xSupplyAuthentication;
-    getAuthenticationContinuations(
-        rContinuations, &xAbort, &xRetry, &xSupplyAuthentication);
-    LoginErrorInfo aInfo;
-    executePasswordDialog(aInfo, rRequest.Mode);
-    switch (aInfo.GetResult())
-    {
-    case ERRCODE_BUTTON_OK:
-        if (xSupplyAuthentication.is())
-        {
-            xSupplyAuthentication->setPassword(aInfo.GetPassword());
-            xSupplyAuthentication->select();
-        }
-        break;
-
-    case ERRCODE_BUTTON_RETRY:
-        if (xRetry.is())
-            xRetry->select();
-        break;
-
-    default:
-        if (xAbort.is())
-            xAbort->select();
-        break;
-    }
-}
-
-void
-UUIInteractionHandler::handleCookiesRequest(
-    star::ucb::HandleCookiesRequest const & rRequest,
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-        rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    CookieList aCookies;
-    {for (sal_Int32 i = 0; i < rRequest.Cookies.getLength(); ++i)
-        try
-        {
-            std::auto_ptr< CntHTTPCookie > xCookie(new CntHTTPCookie);
-            xCookie->m_aName = UniString(rRequest.Cookies[i].Name);
-            xCookie->m_aValue = UniString(rRequest.Cookies[i].Value);
-            xCookie->m_aDomain = UniString(rRequest.Cookies[i].Domain);
-            xCookie->m_aPath = UniString(rRequest.Cookies[i].Path);
-            xCookie->m_aExpires
-                = DateTime(Date(rRequest.Cookies[i].Expires.Day,
-                                rRequest.Cookies[i].Expires.Month,
-                                rRequest.Cookies[i].Expires.Year),
-                           Time(rRequest.Cookies[i].Expires.Hours,
-                                rRequest.Cookies[i].Expires.Minutes,
-                                rRequest.Cookies[i].Expires.Seconds,
-                                rRequest.Cookies[i].Expires.
-                                                        HundredthSeconds));
-            xCookie->m_nFlags
-                = rRequest.Cookies[i].Secure ? CNTHTTP_COOKIE_FLAG_SECURE : 0;
-            switch (rRequest.Cookies[i].Policy)
-            {
-            case star::ucb::CookiePolicy_CONFIRM:
-                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
-                break;
-
-            case star::ucb::CookiePolicy_ACCEPT:
-                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_ACCEPTED;
-                break;
-
-            case star::ucb::CookiePolicy_IGNORE:
-                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_BANNED;
-                break;
-            }
-            aCookies.Insert(xCookie.get(), LIST_APPEND);
-            xCookie.release();
-        }
-        catch (std::bad_alloc const &)
-        {
-            throw star::uno::RuntimeException(
-                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "out of memory")),
-                      *this);
-        }
-    }
-    CntHTTPCookieRequest
-        aRequest(rRequest.URL,
-                 aCookies,
-                 rRequest.Request == star::ucb::CookieRequest_RECEIVE ?
-                     CNTHTTP_COOKIE_REQUEST_RECV :
-                     CNTHTTP_COOKIE_REQUEST_SEND);
-    executeCookieDialog(aRequest);
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
-    {
-        star::uno::Reference< star::ucb::XInteractionCookieHandling >
-            xCookieHandling(rContinuations[i], star::uno::UNO_QUERY);
-        if (xCookieHandling.is())
-        {
-            switch (aRequest.m_nRet)
-            {
-            case CNTHTTP_COOKIE_POLICY_INTERACTIVE:
-                xCookieHandling->
-                    setGeneralPolicy(star::ucb::CookiePolicy_CONFIRM);
-                break;
-
-            case CNTHTTP_COOKIE_POLICY_ACCEPTED:
-                xCookieHandling->
-                    setGeneralPolicy(star::ucb::CookiePolicy_ACCEPT);
-                break;
-
-            case CNTHTTP_COOKIE_POLICY_BANNED:
-                xCookieHandling->
-                    setGeneralPolicy(star::ucb::CookiePolicy_IGNORE);
-                break;
-            }
-            for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
-                if (rRequest.Cookies[j].Policy
-                        == star::ucb::CookiePolicy_CONFIRM)
-                    switch (static_cast< CntHTTPCookie * >(aCookies.
-                                                               GetObject(j))->
-                                m_nPolicy)
-                    {
-                    case CNTHTTP_COOKIE_POLICY_ACCEPTED:
-                        xCookieHandling->
-                            setSpecificPolicy(rRequest.Cookies[j], true);
-                        break;
-
-                    case CNTHTTP_COOKIE_POLICY_BANNED:
-                        xCookieHandling->
-                            setSpecificPolicy(rRequest.Cookies[j], false);
-                        break;
-                    }
-            xCookieHandling->select();
-            break;
-        }
-    }
-}
-
-sal_Char const UUIInteractionHandler::m_aImplementationName[]
-    = "com.sun.star.comp.uui.UUIInteractionHandler";
-
 UUIInteractionHandler::UUIInteractionHandler(
     star::uno::Reference< star::lang::XMultiServiceFactory > const &
         rServiceFactory)
-    SAL_THROW((star::uno::Exception))
-{
-    if (rServiceFactory.is())
-        m_xContainer
-            = star::uno::Reference< star::task::XPasswordContainer >(
-                  rServiceFactory->
-                      createInstance(
-                          rtl::OUString(
-                              RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.task.PasswordContainer"))),
-                  star::uno::UNO_QUERY);
-}
+    SAL_THROW(()):
+    m_xServiceFactory(rServiceFactory)
+{}
 
 UUIInteractionHandler::~UUIInteractionHandler()
 {}
@@ -950,6 +435,14 @@ UUIInteractionHandler::getSupportedServiceNames()
     throw (star::uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
+}
+
+void SAL_CALL
+UUIInteractionHandler::initialize(
+    star::uno::Sequence< star::uno::Any > const & rArguments)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    m_aArguments = rArguments;
 }
 
 void SAL_CALL
@@ -996,7 +489,8 @@ UUIInteractionHandler::handle(
 
     ULONG nErrorID = ERRCODE_NONE;
     sal_uInt16 nErrorFlags = USHRT_MAX;
-    SimpleErrorContextPtr xContext;
+    bool bOverrideContext = false;
+    rtl::OUString aContext;
     Execute eExecute = EXECUTE_YES;
     USHORT nButton = ERRCODE_BUTTON_CANCEL;
 
@@ -1115,16 +609,16 @@ UUIInteractionHandler::handle(
             if (aTheRequest >>= aFileIOException)
             {
                 nErrorID = aID[aIOException.Code][0];
+                bOverrideContext = true;
 
                 vos::OGuard aGuard(Application::GetSolarMutex());
                 std::auto_ptr< ResMgr >
                     xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(
                                                       uui)));
-                UniString aTheContext(ResId(STR_ERROR_FILEIO,
-                                            xManager.get()));
-                aTheContext.SearchAndReplaceAscii("($URL1)",
-                                                  aFileIOException.FileName);
-                xContext.set(new SimpleErrorContext(aTheContext));
+                UniString aTemplate(ResId(STR_ERROR_FILEIO, xManager.get()));
+                aTemplate.SearchAndReplaceAscii("($URL1)",
+                                                aFileIOException.FileName);
+                aContext = aTemplate;
             }
             else
             {
@@ -1310,8 +804,8 @@ UUIInteractionHandler::handle(
                                         UniString::CreateFromInt32(nMedium
                                                                        + 1));
 
-            ErrorBox aErrorBox(0, WB_OK_CANCEL, aText);
-            nButton = aErrorBox.Execute();
+            nButton = ErrorBox(getParentArgument(), WB_OK_CANCEL, aText).
+                          Execute();
             eExecute = EXECUTE_NO;
         }
         else if (aTheRequest >>= aWrongJavaVersionException)
@@ -1368,7 +862,10 @@ UUIInteractionHandler::handle(
 
     if (eExecute != EXECUTE_NO)
     {
-        USHORT nResult = executeErrorDialog(nErrorID, nErrorFlags);
+        USHORT nResult = executeErrorDialog(nErrorID,
+                                            nErrorFlags,
+                                            bOverrideContext,
+                                            aContext);
         if (eExecute != EXECUTE_IGNORE_RESULT)
             nButton = nResult;
     }
@@ -1429,6 +926,604 @@ UUIInteractionHandler::handle(
         break;
     }
 }
+
+Window * UUIInteractionHandler::getParentArgument() SAL_THROW(())
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    for (sal_Int32 i = 0; i < m_aArguments.getLength(); ++i)
+    {
+        star::beans::PropertyValue aArgument;
+        if ((m_aArguments[i] >>= aArgument)
+            && aArgument.
+                   Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Parent")))
+        {
+            star::uno::Reference< star::awt::XWindow > xWindow;
+            aArgument.Value >>= xWindow;
+            return VCLUnoHelper::GetWindow(xWindow);
+        }
+    }
+    return 0;
+}
+
+bool UUIInteractionHandler::getContextArgument(rtl::OUString * pContext)
+    SAL_THROW(())
+{
+    OSL_ENSURE(pContext, "specification violation");
+    osl::MutexGuard aGuard(m_aMutex);
+    for (sal_Int32 i = 0; i < m_aArguments.getLength(); ++i)
+    {
+        star::beans::PropertyValue aArgument;
+        if ((m_aArguments[i] >>= aArgument)
+            && aArgument.
+                   Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Context")))
+        {
+            aArgument.Value >>= *pContext;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool
+UUIInteractionHandler::initPasswordContainer(
+    star::uno::Reference< star::task::XPasswordContainer > * pContainer)
+    const SAL_THROW(())
+{
+    OSL_ENSURE(pContainer, "specification violation");
+    if (!pContainer->is() && m_xServiceFactory.is())
+        try
+        {
+            *pContainer
+                = star::uno::Reference< star::task::XPasswordContainer >(
+                      m_xServiceFactory->
+                          createInstance(
+                              rtl::OUString(
+                                  RTL_CONSTASCII_USTRINGPARAM(
+                                     "com.sun.star.task.PasswordContainer"))),
+                      star::uno::UNO_QUERY);
+        }
+        catch (star::uno::Exception const &)
+        {}
+    OSL_ENSURE(pContainer->is(), "unexpected situation");
+    return pContainer->is();
+}
+
+USHORT
+UUIInteractionHandler::executeErrorDialog(ULONG nID,
+                                          USHORT nMask,
+                                          bool bOverrideContext,
+                                          rtl::OUString const & rContext)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager1(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa)));
+        std::auto_ptr< SfxErrorHandler >
+            xHandler1(new SfxErrorHandler(RID_ERRHDL,
+                                          ERRCODE_AREA_TOOLS,
+                                          ERRCODE_AREA_LIB1 - 1,
+                                          xManager1.get()));
+        std::auto_ptr< ResMgr >
+            xManager2(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(cnt)));
+        std::auto_ptr< SfxErrorHandler >
+            xHandler2(new SfxErrorHandler(RID_CHAOS_START + 12,
+                                          ERRCODE_AREA_CHAOS,
+                                          ERRCODE_AREA_CHAOS_END,
+                                          xManager2.get()));
+            // cf. chaos/source/inc/cntrids.hrc, where
+            // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
+        std::auto_ptr< ResMgr >
+            xManager3(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< SfxErrorHandler >
+            xHandler3(new SfxErrorHandler(RID_UUI_ERRHDL,
+                                          ERRCODE_AREA_UUI,
+                                          ERRCODE_AREA_UUI_END,
+                                          xManager3.get()));
+
+        bool bContext;
+        rtl::OUString aContext;
+        if (bOverrideContext)
+        {
+            bContext = true;
+            aContext = rContext;
+        }
+        else
+            bContext = getContextArgument(&aContext);
+        std::auto_ptr< ErrorContext >
+            xContext(new SimpleErrorContext(getParentArgument(),
+                                            bContext,
+                                            aContext));
+
+        // Needed because within ErrorHandler::HandleError() ResIds are
+        // created without a ResMgr---they require a default ResMgr:
+        ResMgr * pDefaultManager = Resource::GetResManager();
+        Resource::SetResManager(xManager1.get());
+        USHORT nButton = ErrorHandler::HandleError(nID, nMask);
+        Resource::SetResManager(pDefaultManager);
+        return nButton;
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  *this);
+    }
+}
+
+void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
+                                               rtl::OUString const & rRealm)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT)
+                            != 0;
+        bool bSavePassword = rInfo.GetIsPersistentPassword()
+                             || rInfo.GetIsSavePassword();
+
+        sal_uInt16 nFlags = 0;
+        if (rInfo.GetPath().Len() == 0)
+            nFlags |= LF_NO_PATH;
+        if (rInfo.GetErrorText().Len() == 0)
+            nFlags |= LF_NO_ERRORTEXT;
+        if (!bAccount)
+            nFlags |= LF_NO_ACCOUNT;
+        if (!(rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_USER_NAME))
+            nFlags |= LF_USERNAME_READONLY;
+
+        if (!bSavePassword)
+            nFlags |= LF_NO_SAVEPASSWORD;
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        UniString aRealm(rRealm); // Forte compiler needs it spelled out...
+        std::auto_ptr< LoginDialog >
+            xDialog(new LoginDialog(getParentArgument(),
+                                    nFlags,
+                                    rInfo.GetServer(),
+                                    &aRealm,
+                                    xManager.get()));
+        if (rInfo.GetErrorText().Len() != 0)
+            xDialog->SetErrorText(rInfo.GetErrorText());
+        xDialog->SetName(rInfo.GetUserName());
+        if (bAccount)
+            xDialog->ClearAccount();
+        else
+            xDialog->ClearPassword();
+        xDialog->SetPassword(rInfo.GetPassword());
+
+        if (bSavePassword)
+        {
+            xDialog->
+                SetSavePasswordText(ResId(rInfo.GetIsPersistentPassword() ?
+                                              RID_SAVE_PASSWORD :
+                                              RID_KEEP_PASSWORD,
+                                          xManager.get()));
+            xDialog->SetSavePassword(rInfo.GetIsSavePassword());
+        }
+
+        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                                                       ERRCODE_BUTTON_CANCEL);
+        rInfo.SetUserName(xDialog->GetName());
+        rInfo.SetPassword(xDialog->GetPassword());
+        rInfo.SetAccount(xDialog->GetAccount());
+        rInfo.SetSavePassword(xDialog->IsSavePassword());
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  *this);
+    }
+}
+
+void
+UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
+                                             star::task::PasswordRequestMode
+                                                 nMode)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    rtl::OString aMaster;
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< MasterPasswordDialog >
+            xDialog(new MasterPasswordDialog(
+                            getParentArgument(), nMode, xManager.get()));
+        rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                                                       ERRCODE_BUTTON_CANCEL);
+        aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
+                                         RTL_TEXTENCODING_UTF8);
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  *this);
+    }
+
+    sal_uInt8 aKey[RTL_DIGEST_LENGTH_MD5];
+    rtl_digest_PBKDF2(aKey,
+                      RTL_DIGEST_LENGTH_MD5,
+                      reinterpret_cast< sal_uInt8 const * >(aMaster.getStr()),
+                      aMaster.getLength(),
+                      reinterpret_cast< sal_uInt8 const * >(
+                          "3B5509ABA6BC42D9A3A1F3DAD49E56A51"),
+                      32,
+                      1000);
+
+    rtl::OUStringBuffer aBuffer;
+    for (int i = 0; i < RTL_DIGEST_LENGTH_MD5; ++i)
+    {
+        aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] >> 4)));
+        aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] & 15)));
+    }
+    rInfo.SetPassword(aBuffer.makeStringAndClear());
+}
+
+void
+UUIInteractionHandler::executeCookieDialog(CntHTTPCookieRequest & rRequest)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< CookiesDialog >
+            xDialog(new CookiesDialog(
+                            getParentArgument(), &rRequest, xManager.get()));
+        xDialog->Execute();
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  *this);
+    }
+}
+
+void
+UUIInteractionHandler::handleAuthenticationRequest(
+    star::ucb::AuthenticationRequest const & rRequest,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference< star::task::XInteractionRetry > xRetry;
+    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
+        xSupplyAuthentication;
+    getAuthenticationContinuations(
+        rContinuations, &xAbort, &xRetry, &xSupplyAuthentication);
+    bool bRemember;
+    bool bRememberPersistent;
+    if (xSupplyAuthentication.is())
+    {
+        star::ucb::RememberAuthentication eDefault;
+        star::uno::Sequence< star::ucb::RememberAuthentication >
+            aModes(xSupplyAuthentication->getRememberPasswordModes(eDefault));
+        bRemember = eDefault != star::ucb::RememberAuthentication_NO;
+        bRememberPersistent = false;
+        for (sal_Int32 i = 0; i < aModes.getLength(); ++i)
+            if (aModes[i] == star::ucb::RememberAuthentication_PERSISTENT)
+            {
+                bRememberPersistent = true;
+                break;
+            }
+    }
+    else
+    {
+        bRemember = false;
+        bRememberPersistent = false;
+    }
+
+    com::sun::star::uno::Reference< com::sun::star::task::XPasswordContainer >
+        xContainer;
+
+    // xContainer works with userName passwdSequences pairs:
+    if (rRequest.HasUserName
+        && rRequest.HasPassword
+        && initPasswordContainer(&xContainer))
+        try
+        {
+            if (rRequest.UserName.getLength() == 0)
+            {
+                star::task::UrlRecord
+                    aRec(xContainer->find(rRequest.ServerName, this));
+                if (aRec.UserList.getLength() != 0)
+                {
+                    xSupplyAuthentication->
+                        setUserName(aRec.UserList[0].UserName.getStr());
+                    OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
+                               "empty password list");
+                    xSupplyAuthentication->
+                        setPassword(aRec.UserList[0].Passwords[0].getStr());
+                    if (aRec.UserList[0].Passwords.getLength() > 1)
+                        if (rRequest.HasRealm)
+                            xSupplyAuthentication->
+                                setRealm(aRec.UserList[0].Passwords[1].
+                                                              getStr());
+                        else
+                            xSupplyAuthentication->
+                                setAccount(aRec.UserList[0].Passwords[1].
+                                                                getStr());
+                    xSupplyAuthentication->select();
+                    return;
+                }
+            }
+            else
+            {
+                star::task::UrlRecord
+                    aRec(xContainer->findForName(rRequest.ServerName,
+                                                 rRequest.UserName,
+                                                 this));
+                if (aRec.UserList.getLength() != 0)
+                {
+                    OSL_ENSURE(aRec.UserList[0].Passwords.getLength() != 0,
+                               "empty password list");
+                    if (!rRequest.HasPassword
+                        || rRequest.Password != aRec.UserList[0].Passwords[0])
+                    {
+                        xSupplyAuthentication->
+                            setUserName(aRec.UserList[0].UserName.getStr());
+                        xSupplyAuthentication->
+                            setPassword(aRec.UserList[0].Passwords[0].
+                                                             getStr());
+                        if (aRec.UserList[0].Passwords.getLength() > 1)
+                            if (rRequest.HasRealm)
+                                xSupplyAuthentication->
+                                    setRealm(aRec.UserList[0].Passwords[1].
+                                                                  getStr());
+                            else
+                                xSupplyAuthentication->
+                                    setAccount(aRec.UserList[0].Passwords[1].
+                                                                    getStr());
+                        xSupplyAuthentication->select();
+                        return;
+                    }
+                }
+            }
+        }
+        catch (star::task::NoMasterException const &)
+        {} // user did not enter master password
+
+    LoginErrorInfo aInfo;
+    aInfo.SetTitle(rRequest.ServerName);
+    aInfo.SetServer(rRequest.ServerName);
+    if (rRequest.HasAccount)
+        aInfo.SetAccount(rRequest.Account);
+    if (rRequest.HasUserName)
+        aInfo.SetUserName(rRequest.UserName);
+    if (rRequest.HasPassword)
+        aInfo.SetPassword(rRequest.Password);
+    aInfo.SetErrorText(rRequest.Diagnostic);
+    aInfo.SetPersistentPassword(bRememberPersistent);
+    aInfo.SetSavePassword(bRemember);
+    aInfo.SetModifyAccount(rRequest.HasAccount
+                           && xSupplyAuthentication.is()
+                           && xSupplyAuthentication->canSetAccount());
+    aInfo.SetModifyUserName(rRequest.HasUserName
+                            && xSupplyAuthentication.is()
+                            && xSupplyAuthentication->canSetUserName());
+    executeLoginDialog(aInfo,
+                       rRequest.HasRealm ? rRequest.Realm : rtl::OUString());
+    switch (aInfo.GetResult())
+    {
+    case ERRCODE_BUTTON_OK:
+        if (xSupplyAuthentication.is())
+        {
+            xSupplyAuthentication->setUserName(aInfo.GetUserName());
+            xSupplyAuthentication->setPassword(aInfo.GetPassword());
+            xSupplyAuthentication->
+                setRememberPassword(
+                    aInfo.GetIsSavePassword() ?
+                        bRememberPersistent ?
+                            star::ucb::RememberAuthentication_PERSISTENT :
+                            star::ucb::RememberAuthentication_SESSION :
+                        star::ucb::RememberAuthentication_NO);
+            if (rRequest.HasRealm)
+                xSupplyAuthentication->setRealm(aInfo.GetAccount());
+            else
+                xSupplyAuthentication->setAccount(aInfo.GetAccount());
+            xSupplyAuthentication->select();
+        }
+        // Empty user name can not be valid:
+        if (aInfo.GetUserName().Len() != 0
+            && initPasswordContainer(&xContainer))
+        {
+            star::uno::Sequence< rtl::OUString >
+                aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
+            aPassList[0] = aInfo.GetPassword();
+            if (aInfo.GetAccount().Len() != 0)
+                aPassList[1] = aInfo.GetAccount();
+            try
+            {
+                if (aInfo.GetIsSavePassword())
+                    if (bRememberPersistent)
+                        xContainer->addPersistent(rRequest.ServerName,
+                                                  aInfo.GetUserName(),
+                                                  aPassList,
+                                                  this);
+                    else
+                        xContainer->add(rRequest.ServerName,
+                                        aInfo.GetUserName(),
+                                        aPassList,
+                                        this);
+            }
+            catch (star::task::NoMasterException const &)
+            {} // user did not enter master password
+        }
+        break;
+
+    case ERRCODE_BUTTON_RETRY:
+        if (xRetry.is())
+            xRetry->select();
+        break;
+
+    default:
+        if (xAbort.is())
+            xAbort->select();
+        break;
+    }
+}
+
+void
+UUIInteractionHandler::handlePasswordRequest(
+    star::task::PasswordRequest const & rRequest,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference< star::task::XInteractionRetry > xRetry;
+    star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
+        xSupplyAuthentication;
+    getAuthenticationContinuations(
+        rContinuations, &xAbort, &xRetry, &xSupplyAuthentication);
+    LoginErrorInfo aInfo;
+    executePasswordDialog(aInfo, rRequest.Mode);
+    switch (aInfo.GetResult())
+    {
+    case ERRCODE_BUTTON_OK:
+        if (xSupplyAuthentication.is())
+        {
+            xSupplyAuthentication->setPassword(aInfo.GetPassword());
+            xSupplyAuthentication->select();
+        }
+        break;
+
+    case ERRCODE_BUTTON_RETRY:
+        if (xRetry.is())
+            xRetry->select();
+        break;
+
+    default:
+        if (xAbort.is())
+            xAbort->select();
+        break;
+    }
+}
+
+void
+UUIInteractionHandler::handleCookiesRequest(
+    star::ucb::HandleCookiesRequest const & rRequest,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    CookieList aCookies;
+    {for (sal_Int32 i = 0; i < rRequest.Cookies.getLength(); ++i)
+        try
+        {
+            std::auto_ptr< CntHTTPCookie > xCookie(new CntHTTPCookie);
+            xCookie->m_aName = UniString(rRequest.Cookies[i].Name);
+            xCookie->m_aValue = UniString(rRequest.Cookies[i].Value);
+            xCookie->m_aDomain = UniString(rRequest.Cookies[i].Domain);
+            xCookie->m_aPath = UniString(rRequest.Cookies[i].Path);
+            xCookie->m_aExpires
+                = DateTime(Date(rRequest.Cookies[i].Expires.Day,
+                                rRequest.Cookies[i].Expires.Month,
+                                rRequest.Cookies[i].Expires.Year),
+                           Time(rRequest.Cookies[i].Expires.Hours,
+                                rRequest.Cookies[i].Expires.Minutes,
+                                rRequest.Cookies[i].Expires.Seconds,
+                                rRequest.Cookies[i].Expires.
+                                                        HundredthSeconds));
+            xCookie->m_nFlags
+                = rRequest.Cookies[i].Secure ? CNTHTTP_COOKIE_FLAG_SECURE : 0;
+            switch (rRequest.Cookies[i].Policy)
+            {
+            case star::ucb::CookiePolicy_CONFIRM:
+                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
+                break;
+
+            case star::ucb::CookiePolicy_ACCEPT:
+                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_ACCEPTED;
+                break;
+
+            case star::ucb::CookiePolicy_IGNORE:
+                xCookie->m_nPolicy = CNTHTTP_COOKIE_POLICY_BANNED;
+                break;
+            }
+            aCookies.Insert(xCookie.get(), LIST_APPEND);
+            xCookie.release();
+        }
+        catch (std::bad_alloc const &)
+        {
+            throw star::uno::RuntimeException(
+                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "out of memory")),
+                      *this);
+        }
+    }
+    CntHTTPCookieRequest
+        aRequest(rRequest.URL,
+                 aCookies,
+                 rRequest.Request == star::ucb::CookieRequest_RECEIVE ?
+                     CNTHTTP_COOKIE_REQUEST_RECV :
+                     CNTHTTP_COOKIE_REQUEST_SEND);
+    executeCookieDialog(aRequest);
+    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
+    {
+        star::uno::Reference< star::ucb::XInteractionCookieHandling >
+            xCookieHandling(rContinuations[i], star::uno::UNO_QUERY);
+        if (xCookieHandling.is())
+        {
+            switch (aRequest.m_nRet)
+            {
+            case CNTHTTP_COOKIE_POLICY_INTERACTIVE:
+                xCookieHandling->
+                    setGeneralPolicy(star::ucb::CookiePolicy_CONFIRM);
+                break;
+
+            case CNTHTTP_COOKIE_POLICY_ACCEPTED:
+                xCookieHandling->
+                    setGeneralPolicy(star::ucb::CookiePolicy_ACCEPT);
+                break;
+
+            case CNTHTTP_COOKIE_POLICY_BANNED:
+                xCookieHandling->
+                    setGeneralPolicy(star::ucb::CookiePolicy_IGNORE);
+                break;
+            }
+            for (sal_Int32 j = 0; j < rRequest.Cookies.getLength(); ++j)
+                if (rRequest.Cookies[j].Policy
+                        == star::ucb::CookiePolicy_CONFIRM)
+                    switch (static_cast< CntHTTPCookie * >(aCookies.
+                                                               GetObject(j))->
+                                m_nPolicy)
+                    {
+                    case CNTHTTP_COOKIE_POLICY_ACCEPTED:
+                        xCookieHandling->
+                            setSpecificPolicy(rRequest.Cookies[j], true);
+                        break;
+
+                    case CNTHTTP_COOKIE_POLICY_BANNED:
+                        xCookieHandling->
+                            setSpecificPolicy(rRequest.Cookies[j], false);
+                        break;
+                    }
+            xCookieHandling->select();
+            break;
+        }
+    }
+}
+
+sal_Char const UUIInteractionHandler::m_aImplementationName[]
+    = "com.sun.star.comp.uui.UUIInteractionHandler";
 
 star::uno::Sequence< rtl::OUString >
 UUIInteractionHandler::getSupportedServiceNames_static()

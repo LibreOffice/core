@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-17 12:10:21 $
+ *  last change: $Author: sb $ $Date: 2001-08-20 07:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
     {
         uno::Reference< lang::XSingleServiceFactory >
             xTheFactory(
-                cppu::createOneInstanceFactory(
+                cppu::createSingleFactory(
                     static_cast< lang::XMultiServiceFactory * >(
                         pServiceManager),
                     rtl::OUString::createFromAscii(
@@ -173,4 +173,3 @@ extern "C" void * SAL_CALL component_getFactory(sal_Char const * pImplName,
     }
     return pFactory;
 }
-

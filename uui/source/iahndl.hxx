@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:34:19 $
+ *  last change: $Author: sb $ $Date: 2001-08-20 07:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef UUI_IAHNDL_HXX
 #define UUI_IAHNDL_HXX
 
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include "com/sun/star/lang/XInitialization.hpp"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #endif
@@ -83,8 +86,11 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include "cppuhelper/implbase2.hxx"
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include "cppuhelper/implbase3.hxx"
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include "osl/mutex.hxx"
 #endif
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
@@ -104,23 +110,49 @@ namespace com { namespace sun { namespace star {
         class AuthenticationRequest;
         class HandleCookiesRequest;
     }
-    namespace uno { class XInterface; }
+    namespace uno {
+        class Any;
+        class XInterface;
+    }
 } } }
 namespace rtl { class OUString; }
 struct CntHTTPCookieRequest;
 class LoginErrorInfo;
+class Window;
 
 class UUIInteractionHandler:
-    public cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
+    public cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
+                                  com::sun::star::lang::XInitialization,
                                   com::sun::star::task::XInteractionHandler >
 {
 public:
     static sal_Char const m_aImplementationName[];
 
+    static com::sun::star::uno::Sequence< rtl::OUString >
+    getSupportedServiceNames_static();
+
+    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
+    SAL_CALL
+    createInstance(
+        com::sun::star::uno::Reference<
+                com::sun::star::lang::XMultiServiceFactory > const &
+            rServiceFactory)
+        SAL_THROW((com::sun::star::uno::Exception));
+
+private:
+    osl::Mutex m_aMutex;
+    com::sun::star::uno::Reference<
+            com::sun::star::lang::XMultiServiceFactory >
+        m_xServiceFactory;
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aArguments;
+
+    UUIInteractionHandler(UUIInteractionHandler &); // not implemented
+    void operator =(UUIInteractionHandler); // not implemented
+
     UUIInteractionHandler(com::sun::star::uno::Reference<
                                   com::sun::star::lang::XMultiServiceFactory >
                               const & rServiceFactory)
-        SAL_THROW((com::sun::star::uno::Exception));
+        SAL_THROW(());
 
     virtual ~UUIInteractionHandler() SAL_THROW(());
 
@@ -136,30 +168,31 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
+    initialize(
+        com::sun::star::uno::Sequence< com::sun::star::uno::Any > const &
+            rArguments)
+        throw (com::sun::star::uno::Exception);
+
+    virtual void SAL_CALL
     handle(com::sun::star::uno::Reference<
                    com::sun::star::task::XInteractionRequest > const &
                rRequest)
         throw (com::sun::star::uno::RuntimeException);
 
-    static com::sun::star::uno::Sequence< rtl::OUString >
-    getSupportedServiceNames_static();
+    Window * getParentArgument() SAL_THROW(());
 
-    static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-    SAL_CALL
-    createInstance(
-        com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory > const &
-            rServiceFactory)
-        SAL_THROW((com::sun::star::uno::Exception));
+    bool getContextArgument(rtl::OUString * pContext) SAL_THROW(());
 
-private:
-    com::sun::star::uno::Reference< com::sun::star::task::XPasswordContainer >
-        m_xContainer;
+    bool
+    initPasswordContainer(com::sun::star::uno::Reference<
+                                  com::sun::star::task::XPasswordContainer > *
+                              pContainer)
+        const SAL_THROW(());
 
-    UUIInteractionHandler(UUIInteractionHandler &); // not implemented
-    void operator =(UUIInteractionHandler); // not implemented
-
-    USHORT executeErrorDialog(ULONG nID, USHORT nMask)
+    USHORT executeErrorDialog(ULONG nID,
+                              USHORT nMask,
+                              bool bOverrideContext,
+                              rtl::OUString const & rContext)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void executeLoginDialog(LoginErrorInfo & rInfo,
