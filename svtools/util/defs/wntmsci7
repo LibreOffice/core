@@ -7182,3 +7182,16 @@ FreeSpaceStr
 ?MoveClipRegion@WinMtfOutput@@QAEXABVSize@@@Z
 ?MoveClipRegion@WinMtfRegion@@QAEXABVSize@@@Z
 ?UpdateClipRegion@WinMtfMetaOutput@@QAEXABVRegion@@@Z
+??0NfCurrencyEntry@@QAE@ABUCurrency@i18n@star@sun@com@@ABVLocaleDataWrapper@@G@Z
+??8NfCurrencyEntry@@QBEEABV0@@Z
+?GetCurrencyEntry@SvNumberFormatter@@QBEPBVNfCurrencyEntry@@AAEABVString@@1GE@Z
+?ImpChangeSysCL@SvNumberFormatter@@AAEXGE@Z
+?ImpGenerateAdditionalFormats@SvNumberFormatter@@AAEXKAAVNumberFormatCodeWrapper@@@Z
+?ImpGenerateCL@SvNumberFormatter@@AAEKGE@Z
+?ImpGenerateFormats@SvNumberFormatter@@AAEXKE@Z
+?ImpInsertNewStandardFormat@SvNumberFormatter@@AAEPAVSvNumberformat@@ABUNumberFormatCode@i18n@star@sun@com@@KG@Z
+?ImpLookupCurrencyEntryLoopBody@SvNumberFormatter@@ABEEAAPBVNfCurrencyEntry@@AAEPBV2@GABVString@@@Z
+?getArray@?$Sequence@UCurrency@i18n@star@sun@com@@@uno@star@sun@com@@QAAPAUCurrency@i18n@345@XZ
+?s_pType@?$Sequence@UCurrency@i18n@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
+?s_pType_com_sun_star_i18n_Currency@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUCurrency@i18n@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?GetFormatSpecialInfo@SvNumberformat@@QBEXAAE0AAG1@Z
