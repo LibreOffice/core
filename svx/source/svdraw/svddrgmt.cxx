@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:11:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ void SdrDragMethod::MovAllPoints()
     USHORT nPvAnz=rView.GetPageViewCount();
     for (USHORT nv=0; nv<nPvAnz; nv++) {
         SdrPageView* pPV=rView.GetPageViewPvNum(nv);
-        if (pPV->HasMarkedObj()) {
+        if (pPV->HasMarkedObjPageView()) {
             pPV->DragPoly()=pPV->DragPoly0();
             USHORT i,j;
             USHORT nPolyAnz=pPV->DragPoly().Count();
@@ -182,7 +182,7 @@ void SdrDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) const
     for (USHORT nv=0; nv<nPvAnz; nv++)
     {
         SdrPageView* pPV=rView.GetPageViewPvNum(nv);
-        if (pPV->HasMarkedObj())
+        if (pPV->HasMarkedObjPageView())
         {
             rXOut.SetOffset(pPV->GetOffset());
             const XPolyPolygon& rXPP=pPV->DragPoly();
@@ -654,7 +654,7 @@ void SdrDragMove::MovAllPoints()
     USHORT nPvAnz=rView.GetPageViewCount();
     for (USHORT nv=0; nv<nPvAnz; nv++) {
         SdrPageView* pPV=rView.GetPageViewPvNum(nv);
-        if (pPV->HasMarkedObj()) {
+        if (pPV->HasMarkedObjPageView()) {
             pPV->DragPoly()=pPV->DragPoly0();
             pPV->DragPoly().Move(DragStat().GetDX(),DragStat().GetDY());
         }
@@ -753,7 +753,7 @@ void SdrDragMove::Mov(const Point& rNoSnapPnt_)
         }
         if (rView.IsDraggingGluePoints()) { // Klebepunkte aufs BoundRect des Obj limitieren
             aPt1-=DragStat().GetStart();
-            const SdrMarkList& rML=GetMarkList();
+            const SdrMarkList& rML=GetMarkedObjectList();
             ULONG nMarkAnz=rML.GetMarkCount();
             for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++) {
                 const SdrMark* pM=rML.GetMark(nMarkNum);
@@ -1509,7 +1509,7 @@ void SdrDragGradient::Mov(const Point& rPnt)
         }
 
         // new state
-        pIAOHandle->FromIAOToItem(rView.GetMarkList().GetMark(0)->GetObj(), FALSE, FALSE);
+        pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetObj(), FALSE, FALSE);
     }
 }
 
@@ -1520,7 +1520,7 @@ FASTBOOL SdrDragGradient::End(FASTBOOL bCopy)
     Ref2() = pIAOHandle->Get2ndPos();
 
     // new state
-    pIAOHandle->FromIAOToItem(rView.GetMarkList().GetMark(0)->GetObj(), TRUE, TRUE);
+    pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetObj(), TRUE, TRUE);
 
     return TRUE;
 }
@@ -1536,7 +1536,7 @@ void SdrDragGradient::Brk()
         pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2());
 
     // new state
-    pIAOHandle->FromIAOToItem(rView.GetMarkList().GetMark(0)->GetObj(), TRUE, FALSE);
+    pIAOHandle->FromIAOToItem(rView.GetMarkedObjectList().GetMark(0)->GetObj(), TRUE, FALSE);
 }
 
 Pointer SdrDragGradient::GetPointer() const
@@ -1688,7 +1688,7 @@ void SdrDragCrook::MovAllPoints()
     for (USHORT nv=0; nv<nPvAnz; nv++) {
         SdrPageView* pPV=rView.GetPageViewPvNum(nv);
         pPV->DragPoly()=pPV->DragPoly0();
-        if (pPV->HasMarkedObj()) {
+        if (pPV->HasMarkedObjPageView()) {
             Point aPvOfs(pPV->GetOffset());
             USHORT nPolyAnz=pPV->DragPoly().Count();
             if (!bContortion && !rView.IsNoDragXorPolys()) {
@@ -1941,9 +1941,9 @@ FASTBOOL SdrDragCrook::End(FASTBOOL bCopy)
                 else rView.ResizeMarkedObj(aCenter,aFact,aFact1,bCopy);
             } else {
                 if (bCopy) rView.CopyMarkedObj();
-                ULONG nMarkAnz=rView.GetMarkList().GetMarkCount();
+                ULONG nMarkAnz=rView.GetMarkedObjectList().GetMarkCount();
                 for (ULONG nm=0; nm<nMarkAnz; nm++) {
-                    SdrMark* pM=rView.GetMarkList().GetMark(nm);
+                    SdrMark* pM=rView.GetMarkedObjectList().GetMark(nm);
                     SdrObject* pO=pM->GetObj();
                     Point aCtr0(pO->GetSnapRect().Center());
                     Point aCtr1(aCtr0);
@@ -2062,7 +2062,7 @@ void SdrDragDistort::MovAllPoints()
         USHORT nPvAnz=rView.GetPageViewCount();
         for (USHORT nv=0; nv<nPvAnz; nv++) {
             SdrPageView* pPV=rView.GetPageViewPvNum(nv);
-            if (pPV->HasMarkedObj()) {
+            if (pPV->HasMarkedObjPageView()) {
                 Point aOfs(pPV->GetOffset());
                 pPV->DragPoly()=pPV->DragPoly0();
                 if (aOfs.X()==0 && aOfs.Y()==0) {
