@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:20:28 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,7 +1345,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ chinese_simplified ] = "CELL";
         Text[ chinese_traditional ] = "CELL";
         Text[ turkish ] = "CELL";
-        Text[ arabic ] = "Œ·Ì…";
+        Text[ arabic ] = "CELL";
     };
     String SC_OPCODE_IS_REF
     {
@@ -2155,7 +2155,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ chinese_simplified ] = "ARABIC";
         Text[ chinese_traditional ] = "ARABIC";
         Text[ turkish ] = "ARABIC";
-        Text[ arabic ] = "«·⁄—»Ì…";
+        Text[ arabic ] = "ARABIC";
     };
     String SC_OPCODE_ARC_TAN_2
     {
