@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:25:10 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 17:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,7 +585,8 @@ BOOL SfxEventConfigItem_Impl::StoreXML( SvStream& rOutStream )
         if ( aEventName.getLength() )
         {
             // search name
-            for ( long n=0; n<(long)nNamesCount; n++ )
+            long n;
+            for ( n=0; n<(long)nNamesCount; n++ )
             {
                 if ( aSequence[n] == aEventName )
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:25:13 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 17:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,8 @@ Bitmap* SfxBitmapList_Impl::GetBitmap(USHORT nId) const
 
 void SfxBitmapList_Impl::AddBitmap( USHORT nId, const Bitmap& rBmp )
 {
-    for ( USHORT nPos=0; nPos<pList->Count(); nPos++ )
+    USHORT nPos;
+    for ( nPos=0; nPos<pList->Count(); nPos++ )
         if ( (*pList)[nPos]->nId == nId ) break;
 
     DBG_ASSERT( nPos>=pList->Count(), "Bitmap mit dieser Id schon vorhanden!" );
