@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-20 09:56:16 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _CONNECTIVITY_FILE_TABLE_HXX_
 #include "file/FTable.hxx"
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 using namespace connectivity;
 using namespace connectivity::file;
@@ -187,18 +190,27 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQL
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
+        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
+        return sal_True;
     return m_pTable->isReadOnly();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
+        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
+        return sal_False;
     return !m_pTable->isReadOnly();
 ;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if((*m_xColumns)[column-1]->getPropertySetInfo()->hasPropertyByName(PROPERTY_FUNCTION) &&
+        ::cppu::any2bool((*m_xColumns)[column-1]->getPropertyValue(PROPERTY_FUNCTION)))
+        return sal_False;
     return !m_pTable->isReadOnly();
 }
 // -------------------------------------------------------------------------

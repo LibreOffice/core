@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-14 13:17:53 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
         nOrderbyColumnNumber[jj] = SQL_COLUMN_NOTFOUND;
         bOrderbyAscending[jj] = TRUE;
     }
+    m_nResultSetConcurrency = isCount() ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
     construct();
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -1155,7 +1156,7 @@ again:
     }
     // Evaluate darf nur gesetzt sein,
     // wenn der Keyset weiter aufgebaut werden soll
-    if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
+    if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && !isCount() &&
         (m_pFileSet || m_pSortIndex) && bEvaluate)
     {
         if (m_pSortIndex)
@@ -1215,7 +1216,8 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
     // exclusiver zugriff auf die Tabelle
     //  NAMESPACE_VOS(OGuard)* pGuard = m_pTable->Lock();
 
-    if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT)
+    if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
+        !isCount())
     {
         if (m_pFileSet == NULL) // kein Index verfuegbar
         {
@@ -1327,7 +1329,7 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
             }
         }
     }
-    else if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT)
+    else if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && isCount())
     {
         // Fetch des COUNT(*)
         switch (eCursorPosition)
@@ -1361,11 +1363,14 @@ BOOL OResultSet::Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, B
             {
                 (*m_aRow)[1] = m_nRowCountResult;
                 (*m_aRow)[0] = sal_Int32(1);
+                (*m_aRow)[1].setBound(sal_True);
             }
         }
         else
         {
-            goto Error;
+            m_bEOF = sal_True;
+            m_nRowPos = 1;
+            return sal_False;
         }
     }
     else
@@ -1951,209 +1956,249 @@ BOOL OResultSet::OpenImpl()
     {
         case SQL_STATEMENT_SELECT:
         {
-            INT32 nMaxRowCount = m_pTable->getCurrentLastPos();
-
-            BOOL bDistinct = FALSE;
-            BOOL bWasSorted = FALSE;
-            OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
-            if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT )
+            if(isCount())
             {
-                if(!IsSorted())
+                m_nRowCountResult = 0;
+                // Vorlaeufig einfach ueber alle Datensaetze iterieren und
+                // dabei die Aktionen bearbeiten (bzw. einfach nur zaehlen):
                 {
-                    nOrderbyColumnNumber[0] = 1;
-                    bOrderbyAscending[0] = FALSE;
-                }
-                else
-                    bWasSorted = TRUE;
-                bDistinct = TRUE;
-            }
-            // Ohne Restriction und Sortierung RowCount bekannt.
-            //  if (!HasRestriction() && !IsSorted() && bShowDeleted)
-                //  SetRowCount(MaxRowCount());
-
-            OSL_ENSHURE(sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
-            OKeyType eKeyType[SQL_ORDERBYKEYS];
-            aRowIter = m_aRow->begin()+1;
-            for (int i = 0; i < SQL_ORDERBYKEYS; i++)
-            {
-                if (nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND)
-                    eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                else
-                {
-                    switch (aRowIter->getTypeKind())
-                    {
-                    case DataType::CHAR:
-                        case DataType::VARCHAR:
-                            eKeyType[i] = SQL_ORDERBYKEY_STRING;
-                            break;
-
-                        case DataType::OTHER:
-                        case DataType::TINYINT:
-                        case DataType::SMALLINT:
-                        case DataType::INTEGER:
-                        case DataType::DECIMAL:
-                        case DataType::NUMERIC:
-                        case DataType::REAL:
-                        case DataType::DOUBLE:
-                        case DataType::DATE:
-                        case DataType::TIME:
-                        case DataType::TIMESTAMP:
-                        case DataType::BIT:
-                            eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
-                            break;
-
-                    // Andere Typen sind nicht implementiert (und damit immer FALSE)
-                        default:
-                            eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
-                            break;
-                    }
-                    (*m_aEvaluateRow)[nOrderbyColumnNumber[i]].setBound(sal_True);
-                }
-            }
-
-            // Nur wenn Sortierung gewuenscht, ueber alle Datensaetze iterieren und
-            // dabei den "Key", nach dem sortiert werden soll, in den Index eintragen:
-            if (IsSorted())
-            {
-                if (!m_aSQLAnalyzer.hasRestriction() && nOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
-                {
-                    // Ist nur ein Feld fuer die Sortierung angegeben
-                    // Und diese Feld ist indiziert, dann den Index ausnutzen
-                    Reference<XIndexesSupplier> xIndexSup(xTable,UNO_QUERY);
-                    Reference<XIndexAccess> xIndexes;
-                    if(xIndexSup.is())
-                    {
-                        xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
-                        Reference<XPropertySet> xColProp;
-                        if(nOrderbyColumnNumber[0] < xNames->getCount())
-                        {
-                            xNames->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
-                            // iterate through the indexes to find the matching column
-                            for(sal_Int32 i=0;i<xIndexes->getCount();++i)
-                            {
-                                Reference<XColumnsSupplier> xIndex;
-                                xIndexes->getByIndex(i) >>= xIndex;
-                                Reference<XNameAccess> xIndexCols = xIndex->getColumns();
-                                if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(PROPERTY_NAME))))
-                                {
-                                    m_pFileSet = new OKeySet();
-
-                                    if(fillIndexValues(xIndex))
-                                        goto DISTINCT;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                m_pSortIndex = new OFILESortIndex(eKeyType,
-                                                  bOrderbyAscending,
-                                                  nMaxRowCount,RTL_TEXTENCODING_MS_1252);
-
-                sal_Bool bOK = sal_True;
-                if (m_pEvaluationKeySet)
-                {
-                    if (m_pEvaluationKeySet->size())
-                        m_aEvaluateIter = m_pEvaluationKeySet->begin();
-
-                }
-                while (bOK)
-                {
+                    sal_Bool bOK = sal_True;
                     if (m_pEvaluationKeySet)
                     {
-                        ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
-                        ++m_aEvaluateIter;
+                        m_aEvaluateIter = m_pEvaluationKeySet->begin();
                         bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
+
+                    }
+                    while (bOK)
+                    {
+                        if (m_pEvaluationKeySet)
+                            ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                        else
+                            bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE);
+
+                        if (bOK)
+                        {
+                            m_nRowCountResult++;
+                            if(m_pEvaluationKeySet)
+                            {
+                                ++m_aEvaluateIter;
+                                bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
+                            }
+                        }
+                    }
+
+                    // Ergebnis von COUNT(*) in m_nRowCountResult merken.
+                    // nRowCount, also die Anzahl der Rows in der Ergebnismenge, ist bei dieser
+                    // Anfrage = 1!
+                    DELETEZ(m_pEvaluationKeySet);
+                }
+            }
+            else
+            {
+                INT32 nMaxRowCount = m_pTable->getCurrentLastPos();
+
+                BOOL bDistinct = FALSE;
+                BOOL bWasSorted = FALSE;
+                OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
+                if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT )
+                {
+                    if(!IsSorted())
+                    {
+                        nOrderbyColumnNumber[0] = 1;
+                        bOrderbyAscending[0] = FALSE;
                     }
                     else
-                        bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE);
+                        bWasSorted = TRUE;
+                    bDistinct = TRUE;
                 }
+                // Ohne Restriction und Sortierung RowCount bekannt.
+                //  if (!HasRestriction() && !IsSorted() && bShowDeleted)
+                    //  SetRowCount(MaxRowCount());
 
-                // Sortiertes Keyset erzeugen
-                DELETEZ(m_pEvaluationKeySet);
-                m_pFileSet = m_pSortIndex->CreateKeySet();
-                //  if(!bDistinct)
-                    //  SetRowCount(pFileSet->count());
-                DELETEZ(m_pSortIndex);
-                // Nun kann ueber den Index sortiert zugegriffen werden.
-            }
-
-            if (!m_pFileSet)
-            {
-                m_pFileSet = new OKeySet();
-
-                if (!m_aSQLAnalyzer.hasRestriction())
-                // jetzt kann das Keyset schon gefuellt werden!
-                // Aber Achtung: es wird davon ausgegangen, das die FilePositionen als Folge 1..n
-                // abgelegt werden!
+                OSL_ENSHURE(sizeof nOrderbyColumnNumber / sizeof (* nOrderbyColumnNumber) == SQL_ORDERBYKEYS,"Maximale Anzahl der ORDER BY Columns muss derzeit genau 3 sein!");
+                OKeyType eKeyType[SQL_ORDERBYKEYS];
+                aRowIter = m_aRow->begin()+1;
+                for (int i = 0; i < SQL_ORDERBYKEYS; i++)
                 {
-                    for (sal_Int32 i = 0; i < m_pTable->getCurrentLastPos(); i++)
-                       m_pFileSet->push_back(i + 1);
-                }
-            }
-            OSL_ENSHURE(m_pFileSet,"Kein KeySet vorhanden! :-(");
-DISTINCT:   if(bDistinct && m_pFileSet)   // sicher ist sicher
-            {
-                OValueRow aSearchRow;//(m_aRow);
-                //  ODbRowRef aSearchRow = new ODbRow(*aFileRow); // nach dieser wird gesucht
-                //  const ODbRow &rSearchRow = *aSearchRow,
-                    //  &rFileRow = *aFileRow;
-                INT32 nPos;
-                UINT16 nMaxRow = m_pFileSet->size();
-                if (nMaxRow)
-                {
-#if DEBUG
-                    INT32 nFound=0;
-#endif
-                    vector<BOOL> nWasAllwaysFound(nMaxRow,FALSE);
-                    INT32 nPrev_i;
-                    for(INT32 j= nMaxRow-1;j >= 0;j--)
+                    if (nOrderbyColumnNumber[i] == SQL_COLUMN_NOTFOUND)
+                        eKeyType[i] = SQL_ORDERBYKEY_NONE;
+                    else
                     {
-                        nPos = (*m_pFileSet)[j]; // aktuell zu löschender Key
-                        if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
+                        switch (aRowIter->getTypeKind())
                         {
-                            ExecuteRow(OFileTable::FILE_BOOKMARK,nPos,TRUE,FALSE);
-                            aSearchRow = m_aRow;
-                            // jetzt den Rest nach doppelten durchsuchen
-                            INT32 nKey;
-                            nPrev_i = j;
-                            for(INT32 i = j-1; i >= 0 ;i--)
-                            {
-                                nKey = (*m_pFileSet)[i];
-                                ExecuteRow(OFileTable::FILE_BOOKMARK,nKey ,TRUE,FALSE);
-                                if(!nWasAllwaysFound[i] && aSearchRow == m_aRow)
-                                {
-                                    // gefunden
-                                    // Key an der Stelle 0 setzen.
-                                    (*m_pFileSet)[nPrev_i] = 0;
-                                    // und altes i merken
-                                    nPrev_i = i;
-                                    nPos = nKey; // auf naechste gültige Position setzen
-                                    nWasAllwaysFound[i] = TRUE;
+                        case DataType::CHAR:
+                            case DataType::VARCHAR:
+                                eKeyType[i] = SQL_ORDERBYKEY_STRING;
+                                break;
 
+                            case DataType::OTHER:
+                            case DataType::TINYINT:
+                            case DataType::SMALLINT:
+                            case DataType::INTEGER:
+                            case DataType::DECIMAL:
+                            case DataType::NUMERIC:
+                            case DataType::REAL:
+                            case DataType::DOUBLE:
+                            case DataType::DATE:
+                            case DataType::TIME:
+                            case DataType::TIMESTAMP:
+                            case DataType::BIT:
+                                eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
+                                break;
+
+                        // Andere Typen sind nicht implementiert (und damit immer FALSE)
+                            default:
+                                eKeyType[i] = SQL_ORDERBYKEY_NONE;
+                                OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
+                                break;
+                        }
+                        (*m_aEvaluateRow)[nOrderbyColumnNumber[i]].setBound(sal_True);
+                    }
+                }
+
+                // Nur wenn Sortierung gewuenscht, ueber alle Datensaetze iterieren und
+                // dabei den "Key", nach dem sortiert werden soll, in den Index eintragen:
+                if (IsSorted())
+                {
+                    if (!m_aSQLAnalyzer.hasRestriction() && nOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
+                    {
+                        // Ist nur ein Feld fuer die Sortierung angegeben
+                        // Und diese Feld ist indiziert, dann den Index ausnutzen
+                        Reference<XIndexesSupplier> xIndexSup(xTable,UNO_QUERY);
+                        Reference<XIndexAccess> xIndexes;
+                        if(xIndexSup.is())
+                        {
+                            xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
+                            Reference<XPropertySet> xColProp;
+                            if(nOrderbyColumnNumber[0] < xNames->getCount())
+                            {
+                                xNames->getByIndex(nOrderbyColumnNumber[0]) >>= xColProp;
+                                // iterate through the indexes to find the matching column
+                                for(sal_Int32 i=0;i<xIndexes->getCount();++i)
+                                {
+                                    Reference<XColumnsSupplier> xIndex;
+                                    xIndexes->getByIndex(i) >>= xIndex;
+                                    Reference<XNameAccess> xIndexCols = xIndex->getColumns();
+                                    if(xIndexCols->hasByName(connectivity::getString(xColProp->getPropertyValue(PROPERTY_NAME))))
+                                    {
+                                        m_pFileSet = new OKeySet();
+
+                                        if(fillIndexValues(xIndex))
+                                            goto DISTINCT;
+                                    }
                                 }
                             }
                         }
-#if DEBUG
+                    }
+
+                    m_pSortIndex = new OFILESortIndex(eKeyType,
+                                                      bOrderbyAscending,
+                                                      nMaxRowCount,RTL_TEXTENCODING_MS_1252);
+
+                    sal_Bool bOK = sal_True;
+                    if (m_pEvaluationKeySet)
+                    {
+                        if (m_pEvaluationKeySet->size())
+                            m_aEvaluateIter = m_pEvaluationKeySet->begin();
+
+                    }
+                    while (bOK)
+                    {
+                        if (m_pEvaluationKeySet)
+                        {
+                            ExecuteRow(OFileTable::FILE_BOOKMARK,(*m_aEvaluateIter),FALSE,TRUE);
+                            ++m_aEvaluateIter;
+                            bOK = m_aEvaluateIter == m_pEvaluationKeySet->end();
+                        }
                         else
-                            nFound++;
-#endif
+                            bOK = ExecuteRow(OFileTable::FILE_NEXT,1,FALSE,TRUE);
                     }
-                    vector<INT32>::iterator aIter = m_pFileSet->end()-1;
-                    while(aIter != m_pFileSet->begin())
+
+                    // Sortiertes Keyset erzeugen
+                    DELETEZ(m_pEvaluationKeySet);
+                    m_pFileSet = m_pSortIndex->CreateKeySet();
+                    //  if(!bDistinct)
+                        //  SetRowCount(pFileSet->count());
+                    DELETEZ(m_pSortIndex);
+                    // Nun kann ueber den Index sortiert zugegriffen werden.
+                }
+
+                if (!m_pFileSet)
+                {
+                    m_pFileSet = new OKeySet();
+
+                    if (!m_aSQLAnalyzer.hasRestriction())
+                    // jetzt kann das Keyset schon gefuellt werden!
+                    // Aber Achtung: es wird davon ausgegangen, das die FilePositionen als Folge 1..n
+                    // abgelegt werden!
                     {
-                        if(!(*aIter))
-                            m_pFileSet->erase(aIter);
-                        aIter--;
-                    }
-                    if (!bWasSorted)
-                    {
-                        nOrderbyColumnNumber[0] = SQL_COLUMN_NOTFOUND;
-                        sort(m_pFileSet->begin(),m_pFileSet->end());
+                        for (sal_Int32 i = 0; i < m_pTable->getCurrentLastPos(); i++)
+                           m_pFileSet->push_back(i + 1);
                     }
                 }
-                //  SetRowCount(m_pFileSet->count());
+                OSL_ENSHURE(m_pFileSet,"Kein KeySet vorhanden! :-(");
+    DISTINCT:   if(bDistinct && m_pFileSet)   // sicher ist sicher
+                {
+                    OValueRow aSearchRow;//(m_aRow);
+                    //  ODbRowRef aSearchRow = new ODbRow(*aFileRow); // nach dieser wird gesucht
+                    //  const ODbRow &rSearchRow = *aSearchRow,
+                        //  &rFileRow = *aFileRow;
+                    INT32 nPos;
+                    UINT16 nMaxRow = m_pFileSet->size();
+                    if (nMaxRow)
+                    {
+    #if DEBUG
+                        INT32 nFound=0;
+    #endif
+                        vector<BOOL> nWasAllwaysFound(nMaxRow,FALSE);
+                        INT32 nPrev_i;
+                        for(INT32 j= nMaxRow-1;j >= 0;j--)
+                        {
+                            nPos = (*m_pFileSet)[j]; // aktuell zu löschender Key
+                            if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
+                            {
+                                ExecuteRow(OFileTable::FILE_BOOKMARK,nPos,TRUE,FALSE);
+                                aSearchRow = m_aRow;
+                                // jetzt den Rest nach doppelten durchsuchen
+                                INT32 nKey;
+                                nPrev_i = j;
+                                for(INT32 i = j-1; i >= 0 ;i--)
+                                {
+                                    nKey = (*m_pFileSet)[i];
+                                    ExecuteRow(OFileTable::FILE_BOOKMARK,nKey ,TRUE,FALSE);
+                                    if(!nWasAllwaysFound[i] && aSearchRow == m_aRow)
+                                    {
+                                        // gefunden
+                                        // Key an der Stelle 0 setzen.
+                                        (*m_pFileSet)[nPrev_i] = 0;
+                                        // und altes i merken
+                                        nPrev_i = i;
+                                        nPos = nKey; // auf naechste gültige Position setzen
+                                        nWasAllwaysFound[i] = TRUE;
+
+                                    }
+                                }
+                            }
+    #if DEBUG
+                            else
+                                nFound++;
+    #endif
+                        }
+                        vector<INT32>::iterator aIter = m_pFileSet->end()-1;
+                        while(aIter != m_pFileSet->begin())
+                        {
+                            if(!(*aIter))
+                                m_pFileSet->erase(aIter);
+                            aIter--;
+                        }
+                        if (!bWasSorted)
+                        {
+                            nOrderbyColumnNumber[0] = SQL_COLUMN_NOTFOUND;
+                            sort(m_pFileSet->begin(),m_pFileSet->end());
+                        }
+                    }
+                    //  SetRowCount(m_pFileSet->count());
+                }
             }
         }   break;
 
@@ -2707,5 +2752,16 @@ void OResultSet::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLPars
     for (UINT32 i = 0; i < pParseNode->count(); i++)
         scanParameter(pParseNode->getChild(i),_rParaNodes);
 }
+// -----------------------------------------------------------------------------
+sal_Bool OResultSet::isCount() const
+{
+    return (m_pParseTree &&
+            m_pParseTree->count() > 2 &&
+            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist) &&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column) &&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct)
+            );
+}
+// -----------------------------------------------------------------------------
 
 
