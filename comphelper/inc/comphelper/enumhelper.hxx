@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enumhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:45:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 //.........................................................................
 namespace comphelper
 {
@@ -105,7 +109,7 @@ struct OEnumerationLock
 /** provides an <type scope="com.sun.star.container">XEnumeration</type> access based
     on an object implementing the <type scope="com.sun.star.container">XNameAccess</type> interface
 */
-class OEnumerationByName : private OEnumerationLock
+class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
                          , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
                                                            starlang::XEventListener    >
 {
@@ -127,8 +131,8 @@ public:
     virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(staruno::RuntimeException);
 
 private:
-    void impl_startDisposeListening();
-    void impl_stopDisposeListening();
+    COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
+    COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
 };
 
 //==================================================================
@@ -137,7 +141,7 @@ private:
 /** provides an <type scope="com.sun.star.container">XEnumeration</type> access based
     on an object implementing the <type scope="com.sun.star.container">XNameAccess</type> interface
 */
-class OEnumerationByIndex : private OEnumerationLock
+class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
                           , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
                                                             starlang::XEventListener    >
 {
@@ -156,8 +160,8 @@ public:
     virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(staruno::RuntimeException);
 
 private:
-    void impl_startDisposeListening();
-    void impl_stopDisposeListening();
+    COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
+    COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
 };
 
 //.........................................................................
