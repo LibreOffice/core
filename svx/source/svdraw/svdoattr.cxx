@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-14 10:52:37 $
+ *  last change: $Author: cl $ $Date: 2001-11-22 13:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,6 +733,12 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
         // Jedes Objekt bekommt initial den DefaultStyleSheet
         // des Model, falls noch kein StyleSheet gesetzt.
         if(mpObjectItemSet && !GetStyleSheet() && pModel && !pModel->IsLoading())
+            NbcSetStyleSheet(pModel->GetDefaultStyleSheet(), TRUE);
+
+/* this code was removed because NbcSetStyleSheet called with TRUE does not
+   alter the hard attributes. So they don't need to be restored, a useless
+   process that cost us up to 20% for xml import. Also there is a memory
+   leek with aSet.Put( *pItem->Clone() );
         {
             SfxStyleSheet* pDefSS = pModel->GetDefaultStyleSheet();
 
@@ -770,6 +776,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
                     NbcSetStyleSheet(pDefSS, TRUE);
             }
         }
+*/
     }
 }
 
