@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 14:17:52 $
+#   last change: $Author: kz $ $Date: 2004-05-19 10:47:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ IDLFILES=\
     ChangesEvent.idl\
     ChangesSet.idl \
     CloseVetoException.idl\
-    color.idl\
+    Color.idl\
     Date.idl\
     DateTime.idl\
     DateTimeRange.idl\
