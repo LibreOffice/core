@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:46:00 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,9 +1148,10 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 
     for ( USHORT i = 0; i < nCount; ++i )
     {
-        String aText = aSearchED.GetEntry(i);
-        aUserData += INetURLObject::encode(
-            aText, INetURLObject::PART_UNO_PARAM_VALUE, '%', INetURLObject::ENCODE_ALL );
+        rtl::OUString aText = aSearchED.GetEntry(i);
+        aUserData += String(INetURLObject::encode(
+            aText, INetURLObject::PART_UNO_PARAM_VALUE, '%',
+            INetURLObject::ENCODE_ALL ));
         aUserData += ';';
     }
 
@@ -1414,7 +1415,7 @@ void BookmarksBox_Impl::DoAction( USHORT nAction )
                 {
                     String* pURL = (String*)(ULONG)GetEntryData( nPos );
                     RemoveEntry( nPos );
-                    String aImageURL = IMAGE_URL;
+                    rtl::OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
                     nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( aImageURL ) );
                     SetEntryData( nPos, (void*)(ULONG)( new String( *pURL ) ) );
@@ -1587,7 +1588,7 @@ String BookmarksTabPage_Impl::GetSelectEntry() const
 
 void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rURL )
 {
-    String aImageURL = IMAGE_URL;
+    rtl::OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
     USHORT nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( aImageURL ) );
     aBookmarksBox.SetEntryData( nPos, (void*)(ULONG)( new String( rURL ) ) );
