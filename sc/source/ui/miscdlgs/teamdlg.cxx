@@ -2,9 +2,9 @@
  *
  *  $RCSfile: teamdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-22 12:17:33 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 //------------------------------------------------------------------
 
-#include <vcl/system.hxx>
 #include <tools/shl.hxx>
 
 #include "teamdlg.hxx"
