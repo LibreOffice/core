@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ extern RTLFUNC(FileLen);
 extern RTLFUNC(Fix);
 extern RTLFUNC(Hex);
 extern RTLFUNC(InStr);
+extern RTLFUNC(InStrRev);
 extern RTLFUNC(Int);
 extern RTLFUNC(Join);
 extern RTLFUNC(LCase);
@@ -216,6 +217,7 @@ extern RTLFUNC(Mid);
 extern RTLFUNC(Oct);
 extern RTLFUNC(Right);
 extern RTLFUNC(RTrim);
+extern RTLFUNC(RTL);
 extern RTLFUNC(Sgn);
 extern RTLFUNC(Space);
 extern RTLFUNC(Split);
