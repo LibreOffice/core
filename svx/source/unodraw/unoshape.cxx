@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:07:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
 #endif
@@ -101,20 +100,16 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #include <comphelper/extract.hxx>
 
 #include <toolkit/unohlp.hxx>
+#include <sot/exchange.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-#include <so3/outplace.hxx>
+#include <vcl/gfxlink.hxx>
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
@@ -1020,7 +1015,8 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 
 Reference< uno::XInterface > SvxShape_NewInstance()
 {
-    return static_cast< OWeakObject* >(new SvxShape());
+    uno::Reference< uno::XInterface > xShape( (OWeakObject*)new SvxShape(), UNO_QUERY );
+    return xShape;
 }
 
 // SfxListener
@@ -1730,76 +1726,34 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             OUString aCLSID;
             if( rVal >>= aCLSID )
             {
-                // init a ole object with a global name
+                // init an ole object with a global name
                 if( pObj && pObj->ISA(SdrOle2Obj))
                 {
-                    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-                    if (!rIPRef.Is() )
+                    uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
+                    if ( !xObj.is() )
                     {
                         SvGlobalName aClassName;
                         if( aClassName.MakeId( aCLSID ) )
                         {
-                            SvGlobalName aClassName;
+                            SfxObjectShell* pPersist = pModel->GetPersist();
+                            ::rtl::OUString aPersistName;
+                            Any aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
+                            aAny >>= aPersistName;
 
-                            if( aClassName.MakeId( aCLSID ) )
+                            //TODO/LATER: how to cope with creation failure?!
+                            xObj = pPersist->GetEmbeddedObjectContainer().CreateEmbeddedObject( aClassName.GetByteSequence(), aPersistName );
+                            if( xObj.is() )
                             {
-                                // create storage and inplace object
-                                String              aEmptyStr;
-                                SvStorageRef        aStor( new SvStorage( aEmptyStr, STREAM_STD_READWRITE ) );
-                                SvInPlaceObjectRef  aIPObj( &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor) );
-                                SvPersist*          pPersist = pModel->GetPersist();
-                                String              aPersistName;
-                                OUString            aTmpStr;
-                                Any                 aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
-                                sal_Bool            bOk = sal_False;
+                                aAny <<= aPersistName;
+                                setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
+                                static_cast< SdrOle2Obj* >( pObj )->SetObjRef( xObj );
 
-                                if( aAny >>= aTmpStr )
-                                    aPersistName = aTmpStr;
-
-                                // if we already have a shape name check if its a unique storage name
-                                if( aPersistName.Len() && !pPersist->Find( aPersistName ) )
-                                {
-                                    SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aPersistName );
-                                    bOk = pPersist->Move( xSub, aPersistName );
-                                }
-                                else
-                                {
-                                    // generate a unique name
-                                    String aStr( aPersistName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") ) );
-
-                                    // for-Schleife wegen Storage Bug 46033
-                                    for( sal_Int32 i = 1, n = 0; n < 100; n++ )
-                                    {
-                                        do
-                                        {
-                                            aStr = aPersistName;
-                                            aStr += String::CreateFromInt32( i++ );
-                                        }
-                                        while ( pPersist->Find( aStr ) );
-
-                                        SvInfoObjectRef xSub( new SvEmbeddedInfoObject( aIPObj, aStr ) );
-
-                                        if( pPersist->Move( xSub, aStr ) ) // Eigentuemer Uebergang
-                                        {
-                                            bOk = sal_True;
-                                            aPersistName = aStr;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                DBG_ASSERT( bOk, "could not create move ole stream!" )
-
-                                if( bOk )
-                                {
-                                    aAny <<= ( aTmpStr = aPersistName );
-                                    setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
-                                }
-
-                                static_cast< SdrOle2Obj* >( pObj )->SetObjRef( aIPObj );
-                                aIPObj->SetVisAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize() );
-
-                                return;
+                                Rectangle aRect = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect();
+                                awt::Size aSz;
+                                Size aSize = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize();
+                                aSz.Width = aSize.Width();
+                                aSz.Height = aSize.Height();
+                                xObj->setVisualAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetAspect(), aSz );
                             }
                         }
                     }
@@ -2203,15 +2157,14 @@ const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 
         if( static_cast< SdrOle2Obj* >( pObj )->IsEmpty() )
         {
-            SvPersist* pPersist = pModel->GetPersist();
-
+            SfxObjectShell* pPersist = pModel->GetPersist();
             if( pPersist )
             {
-                SvInfoObject * pEle = pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
-
-                if( pEle )
+                uno::Reference < embed::XEmbeddedObject > xObj =
+                        pPersist->GetEmbeddedObjectContainer().GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+                if ( xObj.is() )
                 {
-                    aClassName = pEle->GetClassName();
+                    aClassName = SvGlobalName( xObj->getClassID() );
                     rHexCLSID = aClassName.GetHexName();
                 }
             }
@@ -2219,11 +2172,10 @@ const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 
         if (!rHexCLSID.getLength())
         {
-            const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-
-            if (rIPRef.Is() )
+            uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
+            if ( xObj.is() )
             {
-                aClassName = rIPRef->GetClassName();
+                aClassName = SvGlobalName( xObj->getClassID() );
                 rHexCLSID = aClassName.GetHexName();
             }
         }
@@ -2292,7 +2244,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             case OWN_ATTR_INTERNAL_OLE:
             {
                 rtl::OUString sCLSID;
-                sal_Bool bInternal = SvFactory::IsIntern( GetClassName_Impl(sCLSID), 0 );
+                sal_Bool bInternal = SotExchange::IsInternal( GetClassName_Impl(sCLSID) );
                 aAny <<= bInternal;
                 break;
             }
@@ -2395,13 +2347,10 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                    const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
-                    if( xInplace.Is() )
-                    {
-                        Rectangle aTmpArea( xInplace->GetVisArea() );
-                        aVisArea = awt::Rectangle( aTmpArea.Left(), aTmpArea.Top(), aTmpArea.GetWidth(), aTmpArea.GetHeight() );
-                    }
+                    Rectangle aTmpArea( aObj.GetVisibleArea() );
+                    aVisArea = awt::Rectangle( aTmpArea.Left(), aTmpArea.Top(), aTmpArea.GetWidth(), aTmpArea.GetHeight() );
                 }
+
                 aAny <<= aVisArea;
                 break;
             }
@@ -2411,12 +2360,8 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                    const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
-                    if( xInplace.Is() )
-                    {
-                        Size aTmpSize( xInplace->GetVisArea().GetSize() );
-                        aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
-                    }
+                    Size aTmpSize( aObj.GetVisibleArea().GetSize() );
+                    aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
                 }
                 aAny <<= aSize;
                 break;
@@ -2426,11 +2371,9 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                    SvOutPlaceObjectRef xOut( aObj.GetObjRef() );
-                    if ( xOut.Is() )
-                        aAny <<= xOut->GetUnoComponent();
-                    else
-                        aAny <<= ((SdrOle2Obj*)pObj)->getXModel();
+                    uno::Reference < embed::XComponentSupplier > xObj( aObj.GetObjRef(), uno::UNO_QUERY );
+                    if ( xObj.is() )
+                        return makeAny( xObj->getComponent() );
                 }
 
                 break;
@@ -2455,14 +2398,28 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-
-                    if(aObj.HasGDIMetaFile() && aObj.GetGDIMetaFile())
+                    Graphic* pGraphic = aObj.GetGraphic();
+                    if(pGraphic)
                     {
-                        SvMemoryStream aDestStrm( 65535, 65535 );
+                        BOOL bIsWMF = FALSE;
+                        if ( pGraphic->IsLink() )
+                        {
+                            GfxLink aLnk = pGraphic->GetLink();
+                            if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
+                            {
+                                bIsWMF = TRUE;
+                                uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
+                                aAny <<= aSeq;
+                            }
+                        }
 
-                        ConvertGDIMetaFileToWMF( *aObj.GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
-                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
-                        aAny <<= aSeq;
+                        if ( !bIsWMF )
+                        {
+                            SvMemoryStream aDestStrm( 65535, 65535 );
+                            ConvertGDIMetaFileToWMF( aObj.GetGraphic()->GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
+                            uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+                            aAny <<= aSeq;
+                        }
                     }
                 }
                 else
