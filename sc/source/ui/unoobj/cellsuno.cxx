@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-01-08 17:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,6 +759,11 @@ struct ScPropertyTester
     ScPropertyTester();
 };
 
+//extern const SfxItemPropertyMap* lcl_GetCellStyleMap();
+//extern const SfxItemPropertyMap* lcl_GetPageStyleMap();
+//extern const SfxItemPropertyMap* lcl_GetHeaderStyleMap();
+//extern const SfxItemPropertyMap* lcl_GetFooterStyleMap();
+
 ScPropertyTester::ScPropertyTester()
 {
     lcl_TestMap( lcl_GetCellsPropertyMap() );
@@ -767,6 +772,11 @@ ScPropertyTester::ScPropertyTester()
     lcl_TestMap( lcl_GetColumnPropertyMap() );
     lcl_TestMap( lcl_GetRowPropertyMap() );
     lcl_TestMap( lcl_GetSheetPropertyMap() );
+
+//  lcl_TestMap( lcl_GetCellStyleMap() );
+//  lcl_TestMap( lcl_GetPageStyleMap() );
+//  lcl_TestMap( lcl_GetHeaderStyleMap() );
+//  lcl_TestMap( lcl_GetFooterStyleMap() );
 }
 
 ScPropertyTester aPropertyTester;
@@ -7103,7 +7113,7 @@ void SAL_CALL ScTableRowObj::setPropertyValue(
 //      ScSizeMode eMode = bVis ? SC_SIZE_SHOW : SC_SIZE_DIRECT;
 //      aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, eMode, 0, TRUE, TRUE );
         //  SC_SIZE_DIRECT mit Groesse 0 blendet aus
-        Byte nFlags = pDoc->GetRowFlags(nRow, nTab);
+        BYTE nFlags = pDoc->GetRowFlags(nRow, nTab);
         if (bFil)
             nFlags |= CR_FILTERED;
         else
