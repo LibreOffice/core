@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-06 10:01:07 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,9 @@ namespace dbaui
                         BROWSER_HLINESFULL      |
                         BROWSER_VLINESFULL      |
                         BROWSER_HIDECURSOR      |
-                        BROWSER_HIDESELECT);
+                        BROWSER_HIDESELECT      |
+                        BROWSER_AUTO_HSCROLL    |
+                        BROWSER_AUTO_VSCROLL);
         }
         else
             // not the first call
