@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:49:12 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,11 +917,12 @@ public:
                                                 const String &sComment,
                                                 ScBaseCell* pOldCell,
                                                 ScDocument* pDoc,
-                                                const String& sResult); // to use for XML Import
+                                                const String& sOldValue); // to use for XML Import
                                 ScChangeActionContent(const ULONG nActionNumber,
                                                 ScBaseCell* pNewCell,
                                                 const ScBigRange& aBigRange,
-                                                ScDocument* pDoc); // to use for XML Import of Generated Actions
+                                                ScDocument* pDoc,
+                                                const String& sNewValue); // to use for XML Import of Generated Actions
     virtual                     ~ScChangeActionContent();
 
         ScChangeActionContent*  GetNextContent() const { return pNextContent; }
@@ -1450,7 +1451,7 @@ public:
                                     { return nLoadedFileFormatVersion; }
 
             ULONG               AddLoadedGenerated(ScBaseCell* pOldCell,
-                                                const ScBigRange& aBigRange ); // only to use in the XML import
+                                                const ScBigRange& aBigRange, const String& sNewValue ); // only to use in the XML import
             void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
             void                SetActionMax(ULONG nTempActionMax)
                                     { nActionMax = nTempActionMax; } // only to use in the XML import
