@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdef.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:58 $
+ *  last change: $Author: vs $ $Date: 2001-01-30 15:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,3 +190,10 @@ const char* GetEnv( const char *pVar )
     return pRet;
 }
 
+const char* GetEnv( const char *pVar, const char *pDefault )
+{
+    char *pRet = getenv( pVar );
+    if ( !pRet )
+        return pDefault;
+    return pRet;
+}
