@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:08:33 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,14 @@ hidspecial HID_PROP_SPINVALUE_MAX               { HelpId = HID_PROP_SPINVALUE_MA
 hidspecial HID_PROP_DEFAULT_SPINVALUE           { HelpId = HID_PROP_DEFAULT_SPINVALUE; }
 hidspecial HID_PROP_SPININCREMENT               { HelpId = HID_PROP_SPININCREMENT; }
 hidspecial HID_PROP_REPEAT                      { HelpId = HID_PROP_REPEAT; }
->hidspecial HID_PROP_WORDBREAK                   { HelpId = HID_PROP_WORDBREAK; }
+hidspecial HID_PROP_WORDBREAK                   { HelpId = HID_PROP_WORDBREAK; }
 hidspecial HID_PROP_SHOW_SCROLLBARS             { HelpId = HID_PROP_SHOW_SCROLLBARS; }
 hidspecial HID_PROP_TABORDER_CONTROLS           { HelpId = HID_PROP_TABORDER_CONTROLS; }
+hidspecial HID_PROP_ICONSIZE                    { HelpId = HID_PROP_ICONSIZE; }
+hidspecial HID_PROP_SHOW_POSITION               { HelpId = HID_PROP_SHOW_POSITION; }
+hidspecial HID_PROP_SHOW_NAVIGATION             { HelpId = HID_PROP_SHOW_NAVIGATION; }
+hidspecial HID_PROP_SHOW_RECORDACTIONS          { HelpId = HID_PROP_SHOW_RECORDACTIONS; }
+hidspecial HID_PROP_SHOW_FILTERSORT             { HelpId = HID_PROP_SHOW_FILTERSORT; }
 
 hidspecial UID_PROP_DLG_FONT_TYPE               { HelpId = UID_PROP_DLG_FONT_TYPE; }
 hidspecial UID_PROP_DLG_IMAGE_URL               { HelpId = UID_PROP_DLG_IMAGE_URL; }
