@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 12:46:19 $
+ *  last change: $Author: os $ $Date: 2000-09-25 13:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,13 +319,8 @@ sal_Bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
             catch(Exception&){}
 #endif
         }
-#if SUPD<605
-    Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
-    xBatch->commitChanges();
-
-#else
-    DBG_ERROR("does setPropertyValue work correctly now?")
-#endif
+        Reference<XChangesBatch> xBatch(xHierarchyAccess, UNO_QUERY);
+        xBatch->commitChanges();
     }
 
     bInPutValues = sal_False;
