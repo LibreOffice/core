@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:27:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2382,15 +2382,10 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     else
         return sal_False;
 
-    AllSettings aSettings;
-    Locale      aLocale = aSettings.GetLocale();
-
     Reference< XLocalizable > xLocalizable( xTemplates, UNO_QUERY );
 
-    xLocalizable->setLocale( aLocale );
-
     Sequence< Any > aCompareArg(1);
-    *(aCompareArg.getArray()) <<= aLocale;
+    *(aCompareArg.getArray()) <<= xLocalizable->getLocale();;
     m_rCompareFactory = Reference< XAnyCompareFactory >(
                     xFactory->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.ucb.AnyCompareFactory" ),
                                                            aCompareArg ),
