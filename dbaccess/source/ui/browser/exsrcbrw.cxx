@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 13:07:48 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw 
 SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :SbaXDataBrowserController(_rM)
     ,m_pDataSourceImpl(NULL)
-    ,m_aModifyListeners(m_aPropertyMutex)
+    ,m_aModifyListeners(getMutex())
     ,m_bInQueryDispatch(NULL)
 {
 }
