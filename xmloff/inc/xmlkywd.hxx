@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-11 15:50:53 $
+ *  last change: $Author: mtg $ $Date: 2001-03-14 14:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ XML_CONSTASCII_ACTION( sXML_n_presentation, "http://openoffice.org/2000/presenta
 XML_CONSTASCII_ACTION( sXML_n_presentation_old, "http://sun.com/xmlns/staroffice/presentation" );
 XML_CONSTASCII_ACTION( sXML_np_chart, "chart" );
 XML_CONSTASCII_ACTION( sXML_n_chart, "http://openoffice.org/2000/chart" );
+XML_CONSTASCII_ACTION( sXML_np_config, "config" );
+XML_CONSTASCII_ACTION( sXML_n_config, "http://openoffice.org/2001/config" );
 XML_CONSTASCII_ACTION( sXML_n_chart_old, "http://sun.com/xmlns/staroffice/chart" );
 XML_CONSTASCII_ACTION( sXML_np_fo, "fo" );
 XML_CONSTASCII_ACTION( sXML_n_fo_old, "http://www.w3.org/1999/XSL/Format/" );
