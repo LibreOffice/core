@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessiblePageView.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ public class SwAccessiblePageView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("dispose text document");
-        xTextDoc.dispose();
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     /**
