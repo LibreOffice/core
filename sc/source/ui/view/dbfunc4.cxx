@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:22:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,9 +318,9 @@
 #define _SDR_NOTRANSFORM        // Transformationen, selten verwendet
 #define _SDR_NOTOUCH            // Hit-Tests, selten verwendet
 
-#define _SDR_NOEXTDEV           // ExtOutputDevice
+#define _SDR_NOEXTDEV           // XOutputDevice
 //#define _SDR_NOUNDO           // Undo-Objekte
-#define _SDR_NOSURROGATEOBJ     // SdrObjSurrogate
+//BFS01#define _SDR_NOSURROGATEOBJ  // SdrObjSurrogate
 #define _SDR_NOPAGEOBJ          // SdrPageObj
 #define _SDR_NOVIRTOBJ          // SdrVirtObj
 #define _SDR_NOGROUPOBJ         // SdrGroupObj
