@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:38:32 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Efekty animace textu";
         Text[ hebrew ] = "Lauftext Effekte";
         Text[ hindi ] = "टेक्स्ट् हुलास प्रभाव";
+        Text[ slovak ] = "Efekty animácie textu";
     };
 #define MA_CURR_Y       RSC_SP_TBPG_INNERBORDER_TOP + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + MA_BUTTON_HEIGHT
     FixedText FT_EFFECTS
@@ -193,6 +194,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Efekt";
         Text[ hebrew ] = "E~ffekt";
         Text[ hindi ] = "प्र~भाव";
+        Text[ slovak ] = "E~fekt";
     };
     ListBox LB_EFFECT
     {
@@ -417,6 +419,14 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         < "आगे पीछे स्क्रॉल करो" ; Default ; > ;
         < "स्क्रॉल इन्" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Bez efektov" ; Default ; > ;
+        < "Blikať" ; Default ; > ;
+        < "Rolovať cez" ; Default ; > ;
+        < "Rolovať tam a späť" ; Default ; > ;
+        < "Jeden priebeh" ; Default ; > ;
+    };
     };
     FixedText FT_DIRECTION
     {
@@ -452,6 +462,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Směr";
         Text[ hebrew ] = "Laufrichtung";
         Text[ hindi ] = "दिशा";
+        Text[ slovak ] = "Smer";
     };
     ImageButton BTN_UP
     {
@@ -487,6 +498,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ czech ] = "Nahoru";
         QuickHelpText[ hebrew ] = "Nach Oben";
         QuickHelpText[ hindi ] = "ऊपर तक";
+        QuickHelpText[ slovak ] = "Nahor";
     };
     ImageButton BTN_LEFT
     {
@@ -522,6 +534,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ czech ] = "Doleva";
         QuickHelpText[ hebrew ] = "Nach Links";
         QuickHelpText[ hindi ] = "बायाँ ओर";
+        QuickHelpText[ slovak ] = "Doľava";
     };
     ImageButton BTN_RIGHT
     {
@@ -557,6 +570,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ czech ] = "Doprava";
         QuickHelpText[ hebrew ] = "Nach Rechts";
         QuickHelpText[ hindi ] = "दाहिनी ओर";
+        QuickHelpText[ slovak ] = "Doprava";
     };
     ImageButton BTN_DOWN
     {
@@ -592,6 +606,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ czech ] = "Dolů";
         QuickHelpText[ hebrew ] = "Nach Unten";
         QuickHelpText[ hindi ] = "नीचे तक";
+        QuickHelpText[ slovak ] = "Nadol";
     };
 
     FixedLine FL_PROPERTIES
@@ -624,6 +639,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
 #define MA_CURR_Y2      RSC_SP_TBPG_INNERBORDER_TOP + MA_EFFECTSGROUP_HEIGHT + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_START_INSIDE
@@ -658,6 +674,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Spustit uvnitř";
         Text[ hebrew ] = "Text sichtbar beim ~Starten";
         Text[ hindi ] = "भीतरी भाग प्रा~रंभ करो";
+        Text[ slovak ] = "Spus~tiť vo vnútri";
     };
 #define MA_CURR_Y3      MA_CURR_Y2 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     TriStateBox TSB_STOP_INSIDE
@@ -692,6 +709,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Viditelný text při ukončení";
         Text[ hebrew ] = "Text sichtbar beim ~Beenden";
         Text[ hindi ] = "निर्गम करने के समय टेक्स्ट् दृष्टिगोचर";
+        Text[ slovak ] = "Viditeľný text pri ukončení";
     };
 #define MA_CURR_Y4      MA_CURR_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_GROUP_Y
     FixedText FT_COUNT
@@ -726,6 +744,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Cykly animace";
         Text[ hebrew ] = "Animationsdurchläufe";
         Text[ hindi ] = "हुलास सइकल";
+        Text[ slovak ] = "Cykly animácie";
     };
 #define MA_CURR_Y5      MA_CURR_Y4 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_ENDLESS
@@ -760,6 +779,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Spojitě";
         Text[ hebrew ] = "‮רציף‬";
         Text[ hindi ] = "~निरन्तर";
+        Text[ slovak ] = "~Spojito";
     };
     NumericField NUM_FLD_COUNT
     {
@@ -806,6 +826,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Přírůstek";
         Text[ hebrew ] = "Schrittweite";
         Text[ hindi ] = "बढती";
+        Text[ slovak ] = "Prírastok";
     };
 #define MA_CURR_Y7      MA_CURR_Y6 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_PIXEL
@@ -840,6 +861,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Pixely";
         Text[ hebrew ] = "~Pixel";
         Text[ hindi ] = "~पिक्सल्स";
+        Text[ slovak ] = "~Body";
     };
     MetricField MTR_FLD_AMOUNT
     {
@@ -891,6 +913,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Prodleva";
         Text[ hebrew ] = "Schrittverzögerung";
         Text[ hindi ] = "विलम्ब";
+        Text[ slovak ] = "Pozdržať";
     };
 #define MA_CURR_Y9      MA_CURR_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP
     TriStateBox TSB_AUTO
@@ -925,6 +948,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "स्व~चालित";
+        Text[ slovak ] = "~Automaticky";
     };
     MetricField MTR_FLD_DELAY
     {
@@ -946,6 +970,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text[ czech ] = "Animace";
     Text[ hebrew ] = "Textanimation";
     Text[ hindi ] = "हुलास";
+    Text[ slovak ] = "Animácia";
 };
  // RID_SVXDLG_TEXT -------------------------------------------------------
 TabDialog RID_SVXDLG_TEXT
@@ -1015,6 +1040,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ czech ] = "Text";
                 Text[ hebrew ] = "‮טקסט‬";
                 Text[ hindi ] = "टेक्स्ट्";
+                Text[ slovak ] = "Text";
             };
             PageItem
             {
@@ -1047,6 +1073,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ czech ] = "Animace textu";
                 Text[ hebrew ] = "Lauftext";
                 Text[ hindi ] = "टेक्स्ट् हुलास";
+                Text[ slovak ] = "Animácia textu";
             };
         };
     };
@@ -1054,8 +1081,11 @@ TabDialog RID_SVXDLG_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
  // ******************************************************************* EOF
+
+
 
 
 
