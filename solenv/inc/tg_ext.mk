@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-03 10:22:19 $
+#   last change: $Author: rt $ $Date: 2002-09-26 15:19:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -172,7 +172,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpa
     +cd $(PACKAGE_DIR) && ( $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+echo make writeable...
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    @+cd $(PACKAGE_DIR) && chmod -R +w * && $(TOUCH) $(UNTAR_FLAG_FILE)
+    @+cd $(PACKAGE_DIR) && chmod -R +rw * && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ELSE			# "$(GUI)"=="WNT"
     @+cd $(PACKAGE_DIR) && attrib /s -r  >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ENDIF			# "$(GUI)"=="WNT"
