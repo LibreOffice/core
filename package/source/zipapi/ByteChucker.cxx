@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-28 12:52:33 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,13 @@ using namespace ::com::sun::star;
 ByteChucker::ByteChucker(uno::Reference<io::XOutputStream> xOstream)
 : xStream(xOstream)
 , xSeek (xOstream, uno::UNO_QUERY )
+, a1Sequence ( 1 )
+, a2Sequence ( 2 )
+, a4Sequence ( 4 )
 {
+    p1Sequence = a1Sequence.getArray();
+    p2Sequence = a2Sequence.getArray();
+    p4Sequence = a4Sequence.getArray();
 }
 ByteChucker::~ByteChucker()
 {
@@ -126,66 +132,50 @@ sal_Int64 SAL_CALL ByteChucker::getLength(  )
     else
         throw io::IOException();
 }
+
 ByteChucker& ByteChucker::operator << (sal_Int8 nInt8)
 {
-    uno::Sequence< sal_Int8 > aSequence (1);
-    sal_Int8 *pArray = aSequence.getArray();
-
-    *pArray     = nInt8  & 0xFF;
-    xStream->writeBytes(aSequence);
+    p1Sequence[0] = nInt8  & 0xFF;
+    xStream->writeBytes( a1Sequence );
     return *this;
 }
+
 ByteChucker& ByteChucker::operator << (sal_Int16 nInt16)
 {
-    uno::Sequence< sal_Int8 > aSequence (2);
-    sal_Int8 *pArray = aSequence.getArray();
-
-    *pArray     = (nInt16 >>  0 ) & 0xFF;
-    *(pArray+1) = (nInt16 >>  8 ) & 0xFF;
-    xStream->writeBytes(aSequence);
+    p2Sequence[0] = (nInt16 >>  0 ) & 0xFF;
+    p2Sequence[1] = (nInt16 >>  8 ) & 0xFF;
+    xStream->writeBytes( a2Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_Int32 nInt32)
 {
-    uno::Sequence< sal_Int8 > aSequence (4);
-    sal_Int8 *pArray = aSequence.getArray();
-
-    *pArray     = (nInt32 >>  0 ) & 0xFF;
-    *(pArray+1) = (nInt32 >>  8 ) & 0xFF;
-    *(pArray+2) = (nInt32 >> 16 ) & 0xFF;
-    *(pArray+3) = (nInt32 >> 24 ) & 0xFF;
-    xStream->writeBytes(aSequence);
+    p4Sequence[0] = (nInt32 >>  0 ) & 0xFF;
+    p4Sequence[1] = (nInt32 >>  8 ) & 0xFF;
+    p4Sequence[2] = (nInt32 >> 16 ) & 0xFF;
+    p4Sequence[3] = (nInt32 >> 24 ) & 0xFF;
+    xStream->writeBytes( a4Sequence);
     return *this;
 }
 
 ByteChucker& ByteChucker::operator << (sal_uInt8 nuInt8)
 {
-    uno::Sequence< sal_Int8 > aSequence (1);
-    sal_Int8 *pArray = aSequence.getArray();
-
-    *pArray     = nuInt8  & 0xFF;
-    xStream->writeBytes(aSequence);
+    p1Sequence[0] = nuInt8  & 0xFF;
+    xStream->writeBytes( a1Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_uInt16 nuInt16)
 {
-    uno::Sequence< sal_Int8 > aSequence (2);
-    sal_Int8 *pArray = aSequence.getArray();
-
-    *pArray     = (nuInt16 >>  0 ) & 0xFF;
-    *(pArray+1) = (nuInt16 >>  8 ) & 0xFF;
-    xStream->writeBytes(aSequence);
+    p2Sequence[0] = (nuInt16 >>  0 ) & 0xFF;
+    p2Sequence[1] = (nuInt16 >>  8 ) & 0xFF;
+    xStream->writeBytes( a2Sequence );
     return *this;
 }
 ByteChucker& ByteChucker::operator << (sal_uInt32 nuInt32)
 {
-    uno::Sequence< sal_Int8 > aSequence (4);
-    sal_Int8 *pArray = aSequence.getArray();
-
-    *pArray     = static_cast < sal_Int8 > ((nuInt32 >>  0 ) & 0xFF);
-    *(pArray+1) = static_cast < sal_Int8 > ((nuInt32 >>  8 ) & 0xFF);
-    *(pArray+2) = static_cast < sal_Int8 > ((nuInt32 >> 16 ) & 0xFF);
-    *(pArray+3) = static_cast < sal_Int8 > ((nuInt32 >> 24 ) & 0xFF);
-    xStream->writeBytes(aSequence);
+    p4Sequence[0] = static_cast < sal_Int8 > ((nuInt32 >>  0 ) & 0xFF);
+    p4Sequence[1] = static_cast < sal_Int8 > ((nuInt32 >>  8 ) & 0xFF);
+    p4Sequence[2] = static_cast < sal_Int8 > ((nuInt32 >> 16 ) & 0xFF);
+    p4Sequence[3] = static_cast < sal_Int8 > ((nuInt32 >> 24 ) & 0xFF);
+    xStream->writeBytes( a4Sequence);
     return *this;
 }
