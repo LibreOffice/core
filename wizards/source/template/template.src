@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:09:01 $
+ *  last change: $Author: tv $ $Date: 2001-03-30 12:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,18 +170,18 @@ String STYLES + 1
 
 String STYLES + 2
 {
-    Text = "&Abbrechen";
+    Text = "~Abbrechen";
     Text[English] = "Cancel";
-    Text[ english_us ] = "&Cancel";
+    Text[ english_us ] = "~Cancel";
     Text[ portuguese ] = "Cancelar";
     Text[ russian ] = "Ξςμενΰ";
-    Text[ greek ] = "&Ακύρωση";
+    Text[ greek ] = "~Ακύρωση";
     Text[ dutch ] = "Stoppen";
     Text[ french ] = "Annuler";
-    Text[ spanish ] = "&Cancelar";
+    Text[ spanish ] = "~Cancelar";
     Text[ italian ] = "Annulla";
     Text[ danish ] = "Annuller";
-    Text[ swedish ] = "&Avbryt";
+    Text[ swedish ] = "~Avbryt";
     Text[ polish ] = "Anuluj";
     Text[ portuguese_brazilian ] = "Cancel";
     Text[ japanese ] = "·¬έΎΩ";
@@ -195,18 +195,18 @@ String STYLES + 2
 
 String STYLES + 3
 {
-    Text = "&OK";
+    Text = "~OK";
     Text[English] = "OK";
-    Text[ english_us ] = "&OK";
+    Text[ english_us ] = "~OK";
     Text[ portuguese ] = "OK";
     Text[ russian ] = "OK";
-    Text[ greek ] = "&OK";
+    Text[ greek ] = "~OK";
     Text[ dutch ] = "OK";
     Text[ french ] = "OK";
-    Text[ spanish ] = "&Aceptar";
+    Text[ spanish ] = "~Aceptar";
     Text[ italian ] = "OK";
     Text[ danish ] = "OK";
-    Text[ swedish ] = "&OK";
+    Text[ swedish ] = "~OK";
     Text[ polish ] = "OK";
     Text[ portuguese_brazilian ] = "OK";
     Text[ japanese ] = "OK";

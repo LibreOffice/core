@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:10:34 $
+ *  last change: $Author: tv $ $Date: 2001-03-30 12:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,98 +68,98 @@
 // --------------------------------------------------------------------
 String STEP_ZERO
 {
-Text = "Be&enden";
-Text[English] = "&Cancel";
-Text[ english_us ] = "&Cancel";
-    Text[ portuguese ] = "Ca&ncelar";
-    Text[ russian ] = "&Âûõîä";
-    Text[ greek ] = "&¸îïäïò";
-    Text[ dutch ] = "&Annuleren";
-    Text[ french ] = "&Annuler";
-    Text[ spanish ] = "&Cancelar";
+Text = "Be~enden";
+Text[English] = "~Cancel";
+Text[ english_us ] = "~Cancel";
+    Text[ portuguese ] = "Ca~ncelar";
+    Text[ russian ] = "~Âûõîä";
+    Text[ greek ] = "~¸îïäïò";
+    Text[ dutch ] = "~Annuleren";
+    Text[ french ] = "~Annuler";
+    Text[ spanish ] = "~Cancelar";
     Text[ italian ] = "Esci";
-    Text[ danish ] = "&Afslut";
-    Text[ swedish ] = "&Avbryt";
-    Text[ polish ] = "&Zakoñcz";
-    Text[ portuguese_brazilian ] = "&Cancel";
+    Text[ danish ] = "~Afslut";
+    Text[ swedish ] = "~Avbryt";
+    Text[ polish ] = "~Zakoñcz";
+    Text[ portuguese_brazilian ] = "~Cancel";
     Text[ japanese ] = "I—¹";
     Text[ korean ] = "Á¾·á";
     Text[ chinese_simplified ] = "½áÊø(~C)";
-    Text[ chinese_traditional ] = "µ²§ô(&C)";
+    Text[ chinese_traditional ] = "µ²§ô(~C)";
     Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
-    Text[ turkish ] = "&İptal";
+    Text[ turkish ] = "~İptal";
 };
 
 String STEP_ZERO + 1
 {
-Text = "&Hilfe";
-Text[English] = "&Help";
-Text[ english_us ] = "&Help";
-    Text[ portuguese ] = "&Ajuda";
-    Text[ russian ] = "Ñï&ğàâêà";
-    Text[ greek ] = "&ÂïŞèåéá";
-    Text[ dutch ] = "&Help";
-    Text[ french ] = "&Aide";
-    Text[ spanish ] = "&Ayuda";
-    Text[ italian ] = "&Guida";
-    Text[ danish ] = "&Hjælp";
-    Text[ swedish ] = "&Hjälp";
-    Text[ polish ] = "&Pomoc";
-    Text[ portuguese_brazilian ] = "&Help";
+Text = "~Hilfe";
+Text[English] = "~Help";
+Text[ english_us ] = "~Help";
+    Text[ portuguese ] = "~Ajuda";
+    Text[ russian ] = "Ñï~ğàâêà";
+    Text[ greek ] = "~ÂïŞèåéá";
+    Text[ dutch ] = "~Help";
+    Text[ french ] = "~Aide";
+    Text[ spanish ] = "~Ayuda";
+    Text[ italian ] = "~Guida";
+    Text[ danish ] = "~Hjælp";
+    Text[ swedish ] = "~Hjälp";
+    Text[ polish ] = "~Pomoc";
+    Text[ portuguese_brazilian ] = "~Help";
     Text[ japanese ] = "ÍÙÌß";
     Text[ korean ] = "µµ¿ò¸»";
-    Text[ chinese_simplified ] = "°ïÖú(&H)";
-    Text[ chinese_traditional ] = "»¡©ú(&H)";
-    Text[ arabic ] = "ãÓÇÚÏÉ&";
-    Text[ turkish ] = "&Yardım";
+    Text[ chinese_simplified ] = "°ïÖú(~H)";
+    Text[ chinese_traditional ] = "»¡©ú(~H)";
+    Text[ arabic ] = "ãÓÇÚÏÉ~";
+    Text[ turkish ] = "~Yardım";
 };
 
 String STEP_ZERO + 2
 {
-Text = "<<&Zurück";
-Text[English] = "<<&Back";
-Text[ english_us ] = "<<&Back";
-    Text[ portuguese ] = "<<&Anterior";
-    Text[ russian ] = "<<&Íàçàä";
-    Text[ greek ] = "<<&Ğßóù";
-    Text[ dutch ] = "<<&Vorige";
-    Text[ french ] = "<<&Précédent";
-    Text[ spanish ] = "<<&Regresar";
+Text = "<<~Zurück";
+Text[English] = "<<~Back";
+Text[ english_us ] = "<<~Back";
+    Text[ portuguese ] = "<<~Anterior";
+    Text[ russian ] = "<<~Íàçàä";
+    Text[ greek ] = "<<~Ğßóù";
+    Text[ dutch ] = "<<~Vorige";
+    Text[ french ] = "<<~Précédent";
+    Text[ spanish ] = "<<~Regresar";
     Text[ italian ] = "<<~Indietro";
-    Text[ danish ] = "<<&Tilbage";
-    Text[ swedish ] = "<<&Tillbaka";
-    Text[ polish ] = "<<&Wstecz";
-    Text[ portuguese_brazilian ] = "&Back";
+    Text[ danish ] = "<<~Tilbage";
+    Text[ swedish ] = "<<~Tillbaka";
+    Text[ polish ] = "<<~Wstecz";
+    Text[ portuguese_brazilian ] = "~Back";
     Text[ japanese ] = "<< –ß‚é";
     Text[ korean ] = "<< µÚ·Î";
     Text[ chinese_simplified ] = "<<·µ»Ø(~B)";
-    Text[ chinese_traditional ] = "ªğ¦^(&B)";
-    Text[ arabic ] = "&>> ÇáÓÇÈŞ";
-    Text[ turkish ] = "<<Ge&ri";
+    Text[ chinese_traditional ] = "ªğ¦^(~B)";
+    Text[ arabic ] = "~>> ÇáÓÇÈŞ";
+    Text[ turkish ] = "<<Ge~ri";
 };
 
 String STEP_ZERO + 3
 {
-Text = "&Konvertieren";
-Text[English] = "&Ready";
-Text[ english_us ] = "&Convert";
-    Text[ portuguese ] = "&Converter";
-    Text[ russian ] = "&Ïğåîáğàçîâàòü";
-    Text[ greek ] = "&ÌåôáôñïğŞ";
-    Text[ dutch ] = "&Converteren";
-    Text[ french ] = "&Convertir";
-    Text[ spanish ] = "&Convertir";
+Text = "~Konvertieren";
+Text[English] = "~Ready";
+Text[ english_us ] = "~Convert";
+    Text[ portuguese ] = "~Converter";
+    Text[ russian ] = "~Ïğåîáğàçîâàòü";
+    Text[ greek ] = "~ÌåôáôñïğŞ";
+    Text[ dutch ] = "~Converteren";
+    Text[ french ] = "~Convertir";
+    Text[ spanish ] = "~Convertir";
     Text[ italian ] = "Converti";
-    Text[ danish ] = "&Konverter";
-    Text[ swedish ] = "&Konvertera";
-    Text[ polish ] = "&Konwertuj";
-    Text[ portuguese_brazilian ] = "&Ready";
+    Text[ danish ] = "~Konverter";
+    Text[ swedish ] = "~Konvertera";
+    Text[ polish ] = "~Konwertuj";
+    Text[ portuguese_brazilian ] = "~Ready";
     Text[ japanese ] = "•ÏŠ·";
     Text[ korean ] = "º¯È¯";
-    Text[ chinese_simplified ] = "×ª»»(&C)";
-    Text[ chinese_traditional ] = "Âà´«(&R)";
+    Text[ chinese_simplified ] = "×ª»»(~C)";
+    Text[ chinese_traditional ] = "Âà´«(~R)";
     Text[ arabic ] = "ÊÍæíá";
-    Text[ turkish ] = "&Dönüştür";
+    Text[ turkish ] = "~Dönüştür";
 };
 
 String STEP_ZERO + 4
@@ -237,50 +237,50 @@ Text[ english_us ] = "Currencies:";
 
 String STEP_ZERO + 7
 {
-Text = "&Weiter>>";
-Text[English] = "C&ontinue>>";
-Text[ english_us ] = "C&ontinue>>";
-    Text[ portuguese ] = "&Continuar>>";
+Text = "~Weiter>>";
+Text[English] = "C~ontinue>>";
+Text[ english_us ] = "C~ontinue>>";
+    Text[ portuguese ] = "~Continuar>>";
     Text[ russian ] = "Äàëåå>>";
-    Text[ greek ] = "Ó&õíİ÷åéá>>";
+    Text[ greek ] = "Ó~õíİ÷åéá>>";
     Text[ dutch ] = "Volgende>>";
-    Text[ french ] = "&Suivant>>";
-    Text[ spanish ] = "&Siguiente>>";
+    Text[ french ] = "~Suivant>>";
+    Text[ spanish ] = "~Siguiente>>";
     Text[ italian ] = "Avanti>>";
-    Text[ danish ] = "&Næste>>";
-    Text[ swedish ] = "&Nästa>>";
-    Text[ polish ] = "&Dalej>>";
-    Text[ portuguese_brazilian ] = "C&ontinue>>";
-    Text[ japanese ] = "‘±s(&O)>>";
-    Text[ korean ] = "&´ÙÀ½>>";
+    Text[ danish ] = "~Næste>>";
+    Text[ swedish ] = "~Nästa>>";
+    Text[ polish ] = "~Dalej>>";
+    Text[ portuguese_brazilian ] = "C~ontinue>>";
+    Text[ japanese ] = "‘±s(~O)>>";
+    Text[ korean ] = "~´ÙÀ½>>";
     Text[ chinese_simplified ] = "¼ÌĞø(~O)>>";
-    Text[ chinese_traditional ] = "Ä~Äò(&O) >>";
-    Text[ turkish ] = "&İleri>>";
-    Text[ arabic ] = "&ÇáÊÇáí>>";
+    Text[ chinese_traditional ] = "Ä~Äò(~O) >>";
+    Text[ turkish ] = "~İleri>>";
+    Text[ arabic ] = "~ÇáÊÇáí>>";
 };
 
 String STEP_CONVERTER
 {
-Text = "Kom&plettes Dokument";
-Text[English] = "&Entire Document";
-Text[ english_us ] = "&Entire document";
-    Text[ portuguese ] = "&Documento inteiro";
-    Text[ russian ] = "&Âåñü äîêóìåíò";
-    Text[ greek ] = "&Ïëüêëçñï İããñáöï";
-    Text[ dutch ] = "&Compleet document";
-    Text[ french ] = "Document &entier";
-    Text[ spanish ] = "&Documento completo";
+Text = "Kom~plettes Dokument";
+Text[English] = "~Entire Document";
+Text[ english_us ] = "~Entire document";
+    Text[ portuguese ] = "~Documento inteiro";
+    Text[ russian ] = "~Âåñü äîêóìåíò";
+    Text[ greek ] = "~Ïëüêëçñï İããñáöï";
+    Text[ dutch ] = "~Compleet document";
+    Text[ french ] = "Document ~entier";
+    Text[ spanish ] = "~Documento completo";
     Text[ italian ] = "Documento intero";
-    Text[ danish ] = "Hele &dokumentet";
-    Text[ swedish ] = "Kom&plett dokument";
-    Text[ polish ] = "&Ca³y dokument";
-    Text[ portuguese_brazilian ] = "&Entire Document";
+    Text[ danish ] = "Hele ~dokumentet";
+    Text[ swedish ] = "Kom~plett dokument";
+    Text[ polish ] = "~Ca³y dokument";
+    Text[ portuguese_brazilian ] = "~Entire Document";
     Text[ japanese ] = "‘SÄŞ·­ÒİÄ";
     Text[ korean ] = "ÀüÃ¼ ¹®¼­";
     Text[ chinese_simplified ] = "Õû¸öÎÄµµ(~E)";
     Text[ chinese_traditional ] = "§¹¾ãªº¤å¥ó";
     Text[ arabic ] = "ãÓÊäÏ ßÇãá";
-    Text[ turkish ] = "&Belgenin tümü";
+    Text[ turkish ] = "~Belgenin tümü";
 };
 
 String STEP_CONVERTER + 1
@@ -310,97 +310,97 @@ Text[ english_us ] = "Selection";
 
 String STEP_CONVERTER + 2
 {
-Text = "&Zellvorlagen";
-Text[English] = "Cell&templates";
-Text[ english_us ] = "Cell S&tyles";
-    Text[ portuguese ] = "Estilos de &células";
+Text = "~Zellvorlagen";
+Text[English] = "Cell~templates";
+Text[ english_us ] = "Cell S~tyles";
+    Text[ portuguese ] = "Estilos de ~células";
     Text[ russian ] = "Ñòèëè ÿ÷åéêè";
-    Text[ greek ] = "Ğñüôõğá &êåëéşí";
-    Text[ dutch ] = "&Celprofielen";
-    Text[ french ] = "Styles de &cellule";
-    Text[ spanish ] = "&Estilos de celda";
+    Text[ greek ] = "Ğñüôõğá ~êåëéşí";
+    Text[ dutch ] = "~Celprofielen";
+    Text[ french ] = "Styles de ~cellule";
+    Text[ spanish ] = "~Estilos de celda";
     Text[ italian ] = "Modelli di cella";
-    Text[ danish ] = "&Celletypografier";
-    Text[ swedish ] = "Cell&mallar";
-    Text[ polish ] = "&Style komórki";
-    Text[ portuguese_brazilian ] = "Cell&templates";
+    Text[ danish ] = "~Celletypografier";
+    Text[ swedish ] = "Cell~mallar";
+    Text[ polish ] = "~Style komórki";
+    Text[ portuguese_brazilian ] = "Cell~templates";
     Text[ japanese ] = "¾Ù ÃİÌßÚ°Ä";
     Text[ korean ] = "¼¿¡¡À¯Çü";
     Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½(~T)";
     Text[ chinese_traditional ] = "³æ¤¸®æ¼Ë¦¡";
-    Text[ arabic ] = "ÃäãÇØ ÇáÎáÇíÇ&";
-    Text[ turkish ] = "&Hücre şablonları";
+    Text[ arabic ] = "ÃäãÇØ ÇáÎáÇíÇ~";
+    Text[ turkish ] = "~Hücre şablonları";
 };
 
 String STEP_CONVERTER + 3
 {
-Text = "Währungszellen im aktuellen &Tabellenblatt";
-Text[English] = "Currency Cells in the current &Sheet";
-Text[ english_us ] = "Currency cells in the current &sheet";
-    Text[ portuguese ] = "Células de moeda na &folha activa";
+Text = "Währungszellen im aktuellen ~Tabellenblatt";
+Text[English] = "Currency Cells in the current ~Sheet";
+Text[ english_us ] = "Currency cells in the current ~sheet";
+    Text[ portuguese ] = "Células de moeda na ~folha activa";
     Text[ russian ] = "ß÷åéêè âàëşòû â òåêóùåì ëèñòå";
-    Text[ greek ] = "ÊåëéÜ íïìßóìáôïò óôï ôñİ÷ïí öıëëï &ğßíáêá";
-    Text[ dutch ] = "Valutacellen in het actuele &werkblad";
-    Text[ french ] = "Cellules monétaires dans la &feuille de calcul active";
-    Text[ spanish ] = "Celdas monetarias en hoja a&ctiva";
+    Text[ greek ] = "ÊåëéÜ íïìßóìáôïò óôï ôñİ÷ïí öıëëï ~ğßíáêá";
+    Text[ dutch ] = "Valutacellen in het actuele ~werkblad";
+    Text[ french ] = "Cellules monétaires dans la ~feuille de calcul active";
+    Text[ spanish ] = "Celdas monetarias en hoja a~ctiva";
     Text[ italian ] = "Celle della valuta nella tabella corrente";
-    Text[ danish ] = "Valutaceller i det aktuelle &ark";
-    Text[ swedish ] = "Valutaceller i det aktuella &tabellarket";
-    Text[ polish ] = "Komórki waluty w aktualnym &arkuszu";
-    Text[ portuguese_brazilian ] = "Currency Cells in the current &Sheet";
+    Text[ danish ] = "Valutaceller i det aktuelle ~ark";
+    Text[ swedish ] = "Valutaceller i det aktuella ~tabellarket";
+    Text[ polish ] = "Komórki waluty w aktualnym ~arkuszu";
+    Text[ portuguese_brazilian ] = "Currency Cells in the current ~Sheet";
     Text[ japanese ] = "Œ»İ‚Ì•\\‚Ì’Ê‰İ¾Ù";
     Text[ korean ] = "ÇöÀç ½ÃÆ®ÀÇ È­Æó ¼¿";
     Text[ chinese_simplified ] = "µ±Ç°¹¤×÷±íÖĞµÄ»õ±Òµ¥Ôª¸ñ(~S)";
     Text[ chinese_traditional ] = "·í«e¤u§@ªí­¶¤ºªº³f¹ô³æ¤¸®æ";
-    Text[ arabic ] = "ÎáÇíÇ ÇáÚãáÉ İí &æÑŞÉ ÇáÌÏæá ÇáÍÇáíÉ";
-    Text[ turkish ] = "Açık &sayfada bulunan para birimi hücreleri";
+    Text[ arabic ] = "ÎáÇíÇ ÇáÚãáÉ İí ~æÑŞÉ ÇáÌÏæá ÇáÍÇáíÉ";
+    Text[ turkish ] = "Açık ~sayfada bulunan para birimi hücreleri";
 };
 
 String STEP_CONVERTER + 4
 {
-Text = "Währungszellen im ganzen &Dokument";
-Text[English] = "Currency Cells in the entire &Document";
-Text[ english_us ] = "Currency cells in the entire &document";
-    Text[ portuguese ] = "Células de moeda no &documento inteiro";
+Text = "Währungszellen im ganzen ~Dokument";
+Text[English] = "Currency Cells in the entire ~Document";
+Text[ english_us ] = "Currency cells in the entire ~document";
+    Text[ portuguese ] = "Células de moeda no ~documento inteiro";
     Text[ russian ] = "ß÷åéêè âàëşòû âî âñåì äîêóìåíòå";
-    Text[ greek ] = "ÊåëéÜ íïìßóìáôïò óå ïëüêëçñï ôï &áñ÷åßï";
-    Text[ dutch ] = "Valutacellen in het gehele &document";
-    Text[ french ] = "Cellules monétaires dans le &document entier";
-    Text[ spanish ] = "Celdas monetarias en todo el &documento";
+    Text[ greek ] = "ÊåëéÜ íïìßóìáôïò óå ïëüêëçñï ôï ~áñ÷åßï";
+    Text[ dutch ] = "Valutacellen in het gehele ~document";
+    Text[ french ] = "Cellules monétaires dans le ~document entier";
+    Text[ spanish ] = "Celdas monetarias en todo el ~documento";
     Text[ italian ] = "Celle della valuta nell'intero documento";
-    Text[ danish ] = "Valutaceller i hele &dokumentet";
-    Text[ swedish ] = "Valutaceller i hela &dokumentet";
-    Text[ polish ] = "Komórki waluty w ca³ym &dokumencie";
-    Text[ portuguese_brazilian ] = "Currency Cells in the entire &Document";
+    Text[ danish ] = "Valutaceller i hele ~dokumentet";
+    Text[ swedish ] = "Valutaceller i hela ~dokumentet";
+    Text[ polish ] = "Komórki waluty w ca³ym ~dokumencie";
+    Text[ portuguese_brazilian ] = "Currency Cells in the entire ~Document";
     Text[ japanese ] = "‘SÄŞ·­ÒİÄ‚Ì’Ê‰İ¾Ù";
     Text[ korean ] = "ÀüÃ¼¹®¼­ÀÇ È­Æó ¼¿";
     Text[ chinese_simplified ] = "Õû¸öÎÄµµÖĞµÄ»õ±Òµ¥Ôª¸ñ(~D)";
     Text[ chinese_traditional ] = "¾ã­Ó¤å¥ó¤ºªº³f¹ô³æ¤¸®æ";
-    Text[ arabic ] = "ÎáÇíÇ ÇáÚãáÉ İí ÇáãÓÊäÏ &ÈÃßãáå";
-    Text[ turkish ] = "&Belgenin tümündeki para birimi hücreleri";
+    Text[ arabic ] = "ÎáÇíÇ ÇáÚãáÉ İí ÇáãÓÊäÏ ~ÈÃßãáå";
+    Text[ turkish ] = "~Belgenin tümündeki para birimi hücreleri";
 };
 
 String STEP_CONVERTER + 5
 {
-Text = "Ausgewählter &Bereich";
-Text[English] = "&Selected Range";
-Text[ english_us ] = "&Selected range";
-    Text[ portuguese ] = "&Intervalo seleccionado";
+Text = "Ausgewählter ~Bereich";
+Text[English] = "~Selected Range";
+Text[ english_us ] = "~Selected range";
+    Text[ portuguese ] = "~Intervalo seleccionado";
     Text[ russian ] = "Âûäåëåííàÿ îáëàñòü";
-    Text[ greek ] = "&Åğéëåãìİíç ğåñéï÷Ş";
-    Text[ dutch ] = "Geselecteerd &bereik";
-    Text[ french ] = "Plage &sélectionnée";
-    Text[ spanish ] = "Área &seleccionada";
+    Text[ greek ] = "~Åğéëåãìİíç ğåñéï÷Ş";
+    Text[ dutch ] = "Geselecteerd ~bereik";
+    Text[ french ] = "Plage ~sélectionnée";
+    Text[ spanish ] = "Área ~seleccionada";
     Text[ italian ] = "Area selezionata";
-    Text[ danish ] = "&Markeret område";
-    Text[ swedish ] = "&Utvalt område";
-    Text[ polish ] = "&Zaznaczony obszar";
-    Text[ portuguese_brazilian ] = "&Selected Range";
+    Text[ danish ] = "~Markeret område";
+    Text[ swedish ] = "~Utvalt område";
+    Text[ polish ] = "~Zaznaczony obszar";
+    Text[ portuguese_brazilian ] = "~Selected Range";
     Text[ japanese ] = "‘I‘ğ‚µ‚½”ÍˆÍ";
     Text[ korean ] = "¼±ÅÃµÈ¡¡¿µ¿ª.";
     Text[ chinese_simplified ] = "Ñ¡ÖĞµÄÇøÓò(~S)";
     Text[ chinese_traditional ] = "¿ï¤¤ªº°Ï°ì";
-    Text[ arabic ] = "&ÇáäØÇŞ ÇáãÍÏÏ";
+    Text[ arabic ] = "~ÇáäØÇŞ ÇáãÍÏÏ";
     Text[ turkish ] = "Seçilen aralık";
 };
 
@@ -504,10 +504,10 @@ Text[ english_us ] = "Templates:";
 String STEP_AUTOPILOT
 {
 Text = "Umfang";
-Text[English] = "&Extent";
+Text[English] = "~Extent";
 Text[ english_us ] = "Extent";
     Text[ portuguese ] = "Volume";
-    Text[ russian ] = "&Îáúåì";
+    Text[ russian ] = "~Îáúåì";
     Text[ greek ] = "Åıñïò";
     Text[ dutch ] = "Omvang";
     Text[ french ] = "Étendue";
@@ -516,7 +516,7 @@ Text[ english_us ] = "Extent";
     Text[ danish ] = "Omfang";
     Text[ swedish ] = "Omfattning";
     Text[ polish ] = "Zakres";
-    Text[ portuguese_brazilian ] = "&Extent";
+    Text[ portuguese_brazilian ] = "~Extent";
     Text[ japanese ] = "”ÍˆÍ";
     Text[ korean ] = "¹üÀ§";
     Text[ chinese_simplified ] = "·¶Î§(~E)";
@@ -527,50 +527,50 @@ Text[ english_us ] = "Extent";
 
 String STEP_AUTOPILOT + 1
 {
-Text = "&Einzelnes %PRODUCTNAME Calc-Dokument";
-Text[English] = "&Single File";
-Text[ english_us ] = "&Single %PRODUCTNAME Calc Document";
-    Text[ portuguese ] = "&Documento único do %PRODUCTNAME Calc";
-    Text[ russian ] = "&Îäèí äîêóìåíò %PRODUCTNAME Calc";
-    Text[ greek ] = "Ì&åìïíùìİíï İããñáöï ôïõ %PRODUCTNAME Calc";
-    Text[ dutch ] = "&Een %PRODUCTNAME Calc-document";
-    Text[ french ] = "&Document unique %PRODUCTNAME Calc";
-    Text[ spanish ] = "&Un archivo de %PRODUCTNAME Calc";
-    Text[ italian ] = "&Documento singolo %PRODUCTNAME Calc";
-    Text[ danish ] = "&Enkelt %PRODUCTNAME Calc-dokument";
-    Text[ swedish ] = "&Enskilt %PRODUCTNAME Calc-dokument";
-    Text[ polish ] = "&Pojedynczy dokument %PRODUCTNAME Calc";
-    Text[ portuguese_brazilian ] = "&Single File";
-    Text[ japanese ] = "ŒÂX‚Ì %PRODUCTNAME Calc ÄŞ·­ÒİÄ(&S)";
-    Text[ korean ] = "&°³º°ÀûÀÎ%PRODUCTNAME Calc-¹®¼­";
+Text = "~Einzelnes %PRODUCTNAME Calc-Dokument";
+Text[English] = "~Single File";
+Text[ english_us ] = "~Single %PRODUCTNAME Calc Document";
+    Text[ portuguese ] = "~Documento único do %PRODUCTNAME Calc";
+    Text[ russian ] = "~Îäèí äîêóìåíò %PRODUCTNAME Calc";
+    Text[ greek ] = "Ì~åìïíùìİíï İããñáöï ôïõ %PRODUCTNAME Calc";
+    Text[ dutch ] = "~Een %PRODUCTNAME Calc-document";
+    Text[ french ] = "~Document unique %PRODUCTNAME Calc";
+    Text[ spanish ] = "~Un archivo de %PRODUCTNAME Calc";
+    Text[ italian ] = "~Documento singolo %PRODUCTNAME Calc";
+    Text[ danish ] = "~Enkelt %PRODUCTNAME Calc-dokument";
+    Text[ swedish ] = "~Enskilt %PRODUCTNAME Calc-dokument";
+    Text[ polish ] = "~Pojedynczy dokument %PRODUCTNAME Calc";
+    Text[ portuguese_brazilian ] = "~Single File";
+    Text[ japanese ] = "ŒÂX‚Ì %PRODUCTNAME Calc ÄŞ·­ÒİÄ(~S)";
+    Text[ korean ] = "~°³º°ÀûÀÎ%PRODUCTNAME Calc-¹®¼­";
     Text[ chinese_simplified ] = "µ¥¸ö%PRODUCTNAME CalcÎÄµµ(~S)";
-    Text[ chinese_traditional ] = "³æ­Ó %PRODUCTNAME Calc ¤å¥ó(&S)";
-    Text[ arabic ] = "&ãáİ %PRODUCTNAME Calc İÑÏí";
-    Text[ turkish ] = "&Tek %PRODUCTNAME Calc belgesi";
+    Text[ chinese_traditional ] = "³æ­Ó %PRODUCTNAME Calc ¤å¥ó(~S)";
+    Text[ arabic ] = "~ãáİ %PRODUCTNAME Calc İÑÏí";
+    Text[ turkish ] = "~Tek %PRODUCTNAME Calc belgesi";
 };
 
 String STEP_AUTOPILOT + 2
 {
-Text = "&Gesamtes Verzeichnis";
-Text[English] = "Complete &Directory";
-Text[ english_us ] = "Complete &Directory";
-    Text[ portuguese ] = "Directório &inteiro";
+Text = "~Gesamtes Verzeichnis";
+Text[English] = "Complete ~Directory";
+Text[ english_us ] = "Complete ~Directory";
+    Text[ portuguese ] = "Directório ~inteiro";
     Text[ russian ] = "Âåñü êàòàëîã";
-    Text[ greek ] = "&Ïëüêëçñï êáôÜëïãï";
-    Text[ dutch ] = "&Complete directory";
-    Text[ french ] = "Répertoire &entier";
-    Text[ spanish ] = "&Directorio completo";
+    Text[ greek ] = "~Ïëüêëçñï êáôÜëïãï";
+    Text[ dutch ] = "~Complete directory";
+    Text[ french ] = "Répertoire ~entier";
+    Text[ spanish ] = "~Directorio completo";
     Text[ italian ] = "Tutte le cartelle";
-    Text[ danish ] = "Hele &biblioteket";
-    Text[ swedish ] = "&Hela mappen";
-    Text[ polish ] = "&Ca³y katalog";
-    Text[ portuguese_brazilian ] = "Complete &Directory";
+    Text[ danish ] = "Hele ~biblioteket";
+    Text[ swedish ] = "~Hela mappen";
+    Text[ polish ] = "~Ca³y katalog";
+    Text[ portuguese_brazilian ] = "Complete ~Directory";
     Text[ japanese ] = "‘SÃŞ¨Ú¸ÄØ";
     Text[ korean ] = "ÀüÃ¼¡¡µğ·ºÅä¸®";
     Text[ chinese_simplified ] = "È«²¿µÄÄ¿Â¼(~D)";
     Text[ chinese_traditional ] = "¥ş³¡ªº¥Ø¿ı";
-    Text[ arabic ] = "ÇáÏáíá &ßáå";
-    Text[ turkish ] = "&Dizinin tümü";
+    Text[ arabic ] = "ÇáÏáíá ~ßáå";
+    Text[ turkish ] = "~Dizinin tümü";
 };
 
 String STEP_AUTOPILOT + 3
@@ -623,26 +623,26 @@ Text[ english_us ] = "Source Directory:";
 
 String STEP_AUTOPILOT + 5
 {
-Text = "&Inklusive Unterverzeichnisse";
-Text[English] = "&Including Subfolders";
-Text[ english_us ] = "&Including Subfolders";
-    Text[ portuguese ] = "Incluindo &subdirectórios";
-    Text[ russian ] = "&Âêëş÷àÿ ïîäêàòàëîãè";
-    Text[ greek ] = "&Óõìğåñéëáìâáíïìİíùí ôùí õğïêáôáëüãùí";
-    Text[ dutch ] = "&Inclusief subdirectory's";
-    Text[ french ] = "Sous-répertoires &compris";
-    Text[ spanish ] = "Incluidos &subdirectorios";
+Text = "~Inklusive Unterverzeichnisse";
+Text[English] = "~Including Subfolders";
+Text[ english_us ] = "~Including Subfolders";
+    Text[ portuguese ] = "Incluindo ~subdirectórios";
+    Text[ russian ] = "~Âêëş÷àÿ ïîäêàòàëîãè";
+    Text[ greek ] = "~Óõìğåñéëáìâáíïìİíùí ôùí õğïêáôáëüãùí";
+    Text[ dutch ] = "~Inclusief subdirectory's";
+    Text[ french ] = "Sous-répertoires ~compris";
+    Text[ spanish ] = "Incluidos ~subdirectorios";
     Text[ italian ] = "Comprese le sottocartelle";
-    Text[ danish ] = "&Inklusive underbiblioteker";
-    Text[ swedish ] = "&Inklusive undermappar";
-    Text[ polish ] = "&³¹cznie z katalogami podrzêdn.";
-    Text[ portuguese_brazilian ] = "&Including Subfolders";
+    Text[ danish ] = "~Inklusive underbiblioteker";
+    Text[ swedish ] = "~Inklusive undermappar";
+    Text[ polish ] = "~³¹cznie z katalogami podrzêdn.";
+    Text[ portuguese_brazilian ] = "~Including Subfolders";
     Text[ japanese ] = "»ÌŞÌ«ÙÀŞ‚àŠÜ‚Ş";
     Text[ korean ] = "ÇÏÀ§ Æú´õ Æ÷ÇÔ";
     Text[ chinese_simplified ] = "°üÀ¨×ÓÄ¿Â¼(~I)";
     Text[ chinese_traditional ] = "¥]¬A¤l¥Ø¿ı";
-    Text[ arabic ] = "&ãÚ ÇáãÌáÏÇÊ ÇáİÑÚíÉ";
-    Text[ turkish ] = "&Alt dizinler dahil";
+    Text[ arabic ] = "~ãÚ ÇáãÌáÏÇÊ ÇáİÑÚíÉ";
+    Text[ turkish ] = "~Alt dizinler dahil";
 };
 
 String STEP_AUTOPILOT + 6

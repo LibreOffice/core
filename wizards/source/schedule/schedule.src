@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 23:10:10 $
+ *  last change: $Author: tv $ $Date: 2001-03-30 12:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,50 +282,50 @@ Text[ swedish ] = "Kalender";
 
 String  dlgCalOptionYear
 {
-Text = "&Jahresübersicht";
-Text[ English ] = "&Year Overview";
-Text[ English_us ] = "&Year Overview";
-Text[ french ] = "&Année";
-Text[ italian ] = "&Panoramica annuale";
-Text[ spanish ] = "&Resumen del año";
-Text[ portuguese ] = "&Plano anual";
-Text[ dutch ] = "&Jaaroverzicht";
-Text[ swedish ] = "&Årsöversikt";
-    Text[ russian ] = "&Ãîäîâîé îáçîğ";
-    Text[ greek ] = "&Óıíïøç İôïõò";
-    Text[ danish ] = "&Årsoversigt";
-    Text[ polish ] = "&Przegl¹d roku";
-    Text[ portuguese_brazilian ] = "&Year Overview";
-    Text[ japanese ] = "”NŠÔ•\\(&Y)";
+Text = "~Jahresübersicht";
+Text[ English ] = "~Year Overview";
+Text[ English_us ] = "~Year Overview";
+Text[ french ] = "~Année";
+Text[ italian ] = "~Panoramica annuale";
+Text[ spanish ] = "~Resumen del año";
+Text[ portuguese ] = "~Plano anual";
+Text[ dutch ] = "~Jaaroverzicht";
+Text[ swedish ] = "~Årsöversikt";
+    Text[ russian ] = "~Ãîäîâîé îáçîğ";
+    Text[ greek ] = "~Óıíïøç İôïõò";
+    Text[ danish ] = "~Årsoversigt";
+    Text[ polish ] = "~Przegl¹d roku";
+    Text[ portuguese_brazilian ] = "~Year Overview";
+    Text[ japanese ] = "”NŠÔ•\\(~Y)";
     Text[ korean ] = "³â°£ ÀÏÁ¤ °³¿ä";
-    Text[ chinese_simplified ] = "ÄêÊÓÍ¼(&Y)";
+    Text[ chinese_simplified ] = "ÄêÊÓÍ¼(~Y)";
     Text[ chinese_traditional ] = "¦~ÀËµø¹Ï";
-    Text[ arabic ] = "ãáÎÕ ÓäÉ&";
-    Text[ turkish ] = "&Yıla genel bakış";
+    Text[ arabic ] = "ãáÎÕ ÓäÉ~";
+    Text[ turkish ] = "~Yıla genel bakış";
 };
 
 String  dlgCalOptionMonth
 {
-Text = "&Monat";
-Text[ English ] = "&Month";
-Text[ English_us ] = "&Month";
-Text[ french ] = "&Mois";
-Text[ italian ] = "&Mese";
-Text[ spanish ] = "&Mes";
-Text[ portuguese ] = "&Mês";
-Text[ dutch ] = "&Maand";
-Text[ swedish ] = "&Månad";
-    Text[ russian ] = "&Ìåñÿö";
-    Text[ greek ] = "&ÌŞíáò";
-    Text[ danish ] = "&Måned";
-    Text[ polish ] = "&Miesi¹c";
-    Text[ portuguese_brazilian ] = "&Month";
-    Text[ japanese ] = "Œ(&M)";
+Text = "~Monat";
+Text[ English ] = "~Month";
+Text[ English_us ] = "~Month";
+Text[ french ] = "~Mois";
+Text[ italian ] = "~Mese";
+Text[ spanish ] = "~Mes";
+Text[ portuguese ] = "~Mês";
+Text[ dutch ] = "~Maand";
+Text[ swedish ] = "~Månad";
+    Text[ russian ] = "~Ìåñÿö";
+    Text[ greek ] = "~ÌŞíáò";
+    Text[ danish ] = "~Måned";
+    Text[ polish ] = "~Miesi¹c";
+    Text[ portuguese_brazilian ] = "~Month";
+    Text[ japanese ] = "Œ(~M)";
     Text[ korean ] = "¿ù";
-    Text[ chinese_simplified ] = "ÔÂ(&M)";
+    Text[ chinese_simplified ] = "ÔÂ(~M)";
     Text[ chinese_traditional ] = "¤ë";
-    Text[ arabic ] = "ÔåÑ&";
-    Text[ turkish ] = "&Ay";
+    Text[ arabic ] = "ÔåÑ~";
+    Text[ turkish ] = "~Ay";
 };
 
 String dlgSchdlDescription
@@ -496,50 +496,50 @@ Text[ swedish ] = "Egna data";
 
 String dlgCalInsert
 {
-Text = "&Einfügen";
-Text[ English ] = "&Insert";
-Text[ English_us ] = "&Insert";
-Text[ french ] = "&Insérer";
-Text[ italian ] = "&Aggiungi";
-Text[ spanish ] = "&Insertar";
-Text[ portuguese ] = "&Inserir";
-Text[ dutch ] = "&Invoegen";
-Text[ swedish ] = "&Infoga";
-    Text[ russian ] = "&Âñòàâèòü";
-    Text[ greek ] = "&ÅéóáãùãŞ";
-    Text[ danish ] = "&Indsæt";
-    Text[ polish ] = "&Wstaw";
-    Text[ portuguese_brazilian ] = "&Insert";
-    Text[ japanese ] = "‘}“ü(&I)";
+Text = "~Einfügen";
+Text[ English ] = "~Insert";
+Text[ English_us ] = "~Insert";
+Text[ french ] = "~Insérer";
+Text[ italian ] = "~Aggiungi";
+Text[ spanish ] = "~Insertar";
+Text[ portuguese ] = "~Inserir";
+Text[ dutch ] = "~Invoegen";
+Text[ swedish ] = "~Infoga";
+    Text[ russian ] = "~Âñòàâèòü";
+    Text[ greek ] = "~ÅéóáãùãŞ";
+    Text[ danish ] = "~Indsæt";
+    Text[ polish ] = "~Wstaw";
+    Text[ portuguese_brazilian ] = "~Insert";
+    Text[ japanese ] = "‘}“ü(~I)";
     Text[ korean ] = "»ğÀÔ";
-    Text[ chinese_simplified ] = "²åÈë(&I)";
+    Text[ chinese_simplified ] = "²åÈë(~I)";
     Text[ chinese_traditional ] = "´¡¤J";
-    Text[ arabic ] = "ÅÏÑÇÌ&";
-    Text[ turkish ] = "&Ekle";
+    Text[ arabic ] = "ÅÏÑÇÌ~";
+    Text[ turkish ] = "~Ekle";
 };
 
 String dlgCalDelete
 {
-Text = "Ent&fernen";
-Text[ English ] = "&Delete";
-Text[ English_us ] = "&Delete";
-Text[ french ] = "Supp&rimer";
-Text[ italian ] = "&Elimina";
-Text[ spanish ] = "&Eliminar";
-Text[ portuguese ] = "Rem&over";
-Text[ dutch ] = "Ver&wijderen";
-Text[ swedish ] = "Ta &bort";
-    Text[ russian ] = "&Óáğàòü";
-    Text[ greek ] = "Äéáãñá&öŞ";
-    Text[ danish ] = "&Fjern";
-    Text[ polish ] = "&Usuñ";
-    Text[ portuguese_brazilian ] = "&Delete";
-    Text[ japanese ] = "íœ(&D)";
+Text = "Ent~fernen";
+Text[ English ] = "~Delete";
+Text[ English_us ] = "~Delete";
+Text[ french ] = "Supp~rimer";
+Text[ italian ] = "~Elimina";
+Text[ spanish ] = "~Eliminar";
+Text[ portuguese ] = "Rem~over";
+Text[ dutch ] = "Ver~wijderen";
+Text[ swedish ] = "Ta ~bort";
+    Text[ russian ] = "~Óáğàòü";
+    Text[ greek ] = "Äéáãñá~öŞ";
+    Text[ danish ] = "~Fjern";
+    Text[ polish ] = "~Usuñ";
+    Text[ portuguese_brazilian ] = "~Delete";
+    Text[ japanese ] = "íœ(~D)";
     Text[ korean ] = "»èÁ¦";
-    Text[ chinese_simplified ] = "É¾³ı(&D)";
+    Text[ chinese_simplified ] = "É¾³ı(~D)";
     Text[ chinese_traditional ] = "§R°£";
-    Text[ arabic ] = "ÍĞİ&";
-    Text[ turkish ] = "&Sil";
+    Text[ arabic ] = "ÍĞİ~";
+    Text[ turkish ] = "~Sil";
 };
 
 String dlgCalNewEvent
