@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-03 10:37:58 $
+ *  last change: $Author: cl $ $Date: 2001-05-11 07:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1381,7 +1381,7 @@ static rtl::OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
     return aLines.makeStringAndClear();
 }
 
-#define NUM_VIEW_SETTINGS 47
+#define NUM_VIEW_SETTINGS 50
 void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     rSequence.realloc ( NUM_VIEW_SETTINGS );
@@ -1467,22 +1467,17 @@ void SdViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::co
 //  pValue->Value <<= (sal_Bool)pFrameView->IsGrafDraft();
 //  pValue++;nIndex++;
 
-/*
-        if ( pFrameView->GetVisibleLayers() != pPageView->GetVisibleLayers() )
-            pFrameView->SetVisibleLayers( pPageView->GetVisibleLayers() );
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_VisibleLayers ) );
+    pFrameView->GetVisibleLayers().QueryValue( pValue->Value );
+    pValue++;nIndex++;
 
-        if ( pFrameView->GetPrintableLayers() != pPageView->GetPrintableLayers() )
-            pFrameView->SetPrintableLayers( pPageView->GetPrintableLayers() );
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_PrintableLayers ) );
+    pFrameView->GetPrintableLayers().QueryValue( pValue->Value );
+    pValue++;nIndex++;
 
-        if ( pFrameView->GetLockedLayers() != pPageView->GetLockedLayers() )
-            pFrameView->SetLockedLayers( pPageView->GetLockedLayers() );
-*/
-    {
-        const rtl::OUString aActiveLayer( pFrameView->GetActiveLayer() );
-        pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_ActiveLayer ) );
-        pValue->Value <<= aActiveLayer;
-        pValue++;nIndex++;
-    }
+    pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_LockedLayers ) );
+    pFrameView->GetLockedLayers().QueryValue( pValue->Value );
+    pValue++;nIndex++;
 
     pValue->Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sUNO_View_NoAttribs ) );
     pValue->Value <<= (sal_Bool)pFrameView->IsNoAttribs();
@@ -2121,6 +2116,24 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_GridSnapWidthYDenominator ) ) )
             {
                 pValue->Value >>= aSnapGridWidthYDom;
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleLayers ) ) )
+            {
+                SetOfByte aSetOfBytes;
+                aSetOfBytes.PutValue( pValue->Value );
+                pFrameView->SetVisibleLayers( aSetOfBytes );
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_PrintableLayers ) ) )
+            {
+                SetOfByte aSetOfBytes;
+                aSetOfBytes.PutValue( pValue->Value );
+                pFrameView->SetPrintableLayers( aSetOfBytes );
+            }
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_LockedLayers ) ) )
+            {
+                SetOfByte aSetOfBytes;
+                aSetOfBytes.PutValue( pValue->Value );
+                pFrameView->SetLockedLayers( aSetOfBytes );
             }
         }
 

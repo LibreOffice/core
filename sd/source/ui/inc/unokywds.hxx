@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unokywds.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 15:10:59 $
+ *  last change: $Author: cl $ $Date: 2001-05-11 07:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,9 @@ SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXNumerator,        "GridSnapWidthXN
 SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthXDenominator,      "GridSnapWidthXDenominator" );
 SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYNumerator,        "GridSnapWidthYNumerator" );
 SD_CONSTASCII_ACTION( sUNO_View_GridSnapWidthYDenominator,      "GridSnapWidthYDenominator" );
+SD_CONSTASCII_ACTION( sUNO_View_VisibleLayers,                  "VisibleLayers" );
+SD_CONSTASCII_ACTION( sUNO_View_PrintableLayers,                "PrintableLayers" );
+SD_CONSTASCII_ACTION( sUNO_View_LockedLayers,                   "LockedLayers" );
 
 #endif
 
