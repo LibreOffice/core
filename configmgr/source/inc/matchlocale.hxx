@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:25:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,16 @@ namespace configmgr
 
         LocaleSequence makeLocaleSequence(uno::Sequence<OUString> const& sLocaleNames_);
         LocaleSequence makeLocaleSequence(uno::Sequence<Locale> const& aUnoLocales_);
+        uno::Sequence<OUString> makeIsoSequence(LocaleSequence const& aLocales_);
+        uno::Sequence<Locale>   makeUnoSequence(LocaleSequence const& aLocales_);
 
+        inline
+        bool equalLocale(Locale const & lhs, Locale const & rhs)
+        { return lhs.Language == rhs.Language && lhs.Country == rhs.Country; }
+
+        inline
+        bool equalLanguage(Locale const & lhs, Locale const & rhs)
+        { return lhs.Language == rhs.Language; }
     // -------------------------------------------------------------------------
         bool designatesAllLocales(Locale const& aLocale_);
         bool designatesAllLocales(LocaleSequence const& aLocales_);
@@ -209,6 +218,9 @@ namespace configmgr
 
         /// improve an existing match of a locale against a sequence of locales
         bool improveMatch(MatchResult& rMatch_, Locale const& aLocale_, LocaleSequence const& aTarget_);
+
+        /// match a locale against a sequence of locales for a given quality level
+        bool isMatch(Locale const& aLocales, LocaleSequence const& aTarget_, MatchQuality eRequiredQuality_);
 
     // -------------------------------------------------------------------------
         /// add defaults to a sequence of locales
