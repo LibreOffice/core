@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:26:21 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 // INCLUDE ---------------------------------------------------------
 
+#include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/stritem.hxx>
@@ -97,14 +98,14 @@
 #include "global.hxx"
 #include "hints.hxx"
 
-TYPEINIT1(ScTableLink, ::so3::SvBaseLink);
+TYPEINIT1(ScTableLink, ::sfx2::SvBaseLink);
 
 //------------------------------------------------------------------------
 
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
                             const String& rFilter, const String& rOpt,
                             ULONG nRefresh ):
-    ::so3::SvBaseLink(so3::LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
     pDocShell(pDocSh),
     aFileName(rFile),
@@ -120,7 +121,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
 ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
                             const String& rFilter, const String& rOpt,
                             ULONG nRefresh ):
-    ::so3::SvBaseLink(so3::LINKUPDATE_ONCALL,FORMAT_FILE),
+    ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ONCALL,FORMAT_FILE),
     ScRefreshTimer( nRefresh ),
     pDocShell((ScDocShell*)pShell),
     aFileName(rFile),
@@ -248,7 +249,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
         pMed->UseInteractionHandler( TRUE );    // enable the filter options dialog
 
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
-    SvEmbeddedObjectRef aRef = pSrcShell;
+    SfxObjectShellRef aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 
     // Optionen koennten gesetzt worden sein
