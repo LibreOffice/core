@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-26 15:56:27 $
+#   last change: $Author: hjs $ $Date: 2001-11-29 14:44:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -407,10 +407,11 @@ REAL_$(SECOND_BUILD)_OBJFILES=$(foreach,i,$($(SECOND_BUILD)_OBJFILES) $(i:d)$(SE
 .ENDIF
 .ENDIF			# "$(SECOND_BUILD)"!=""
 
-.IF "$(NOLIBOBJTARGET)"!=""
+.IF "$(NOLIBOBJTARGET)$(NOLIBSLOTARGET)"!=""
 dont_set_NOLIBOBJTARGET:
     @+echo --------------------------------------------------
-    @+echo setting NOLIBOBJTARGET in your makefile will cause serious problems!
+    @+echo setting NOLIBOBJTARGET or NOLIBOBJTARGET in your makefile
+    @+echo will cause serious problems!
     @+echo use DEPOBJFILES instead.
     @+echo --------------------------------------------------
     force_dmake_to_error
