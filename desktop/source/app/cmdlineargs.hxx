@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-17 10:46:28 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 13:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_QUICKSTART,
             CMD_BOOLPARAM_TERMINATEAFTERINIT,
             CMD_BOOLPARAM_NOLOGO,
+            CMD_BOOLPARAM_NOLOCKCHECK,
             CMD_BOOLPARAM_MASTER,
             CMD_BOOLPARAM_COUNT             // must be last element!
         };
@@ -134,6 +135,7 @@ class CommandLineArgs
         sal_Bool                IsQuickstart() const;
         sal_Bool                IsTerminateAfterInit() const;
         sal_Bool                IsNoLogo() const;
+        sal_Bool                IsNoLockcheck() const;
 
         sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
         sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-23 09:24:59 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 13:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,7 @@ void Desktop::Main()
     // check user installation directory for lockfile so we can be sure
     // there is no other instance using our data files from a remote host
     Lockfile aLock;
-    if (!pCmdLineArgs->IsInvisible() && !aLock.check() ) {
+    if (!pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !aLock.check() ) {
         // Lockfile exists, and user clicked 'no'
         return;
     }

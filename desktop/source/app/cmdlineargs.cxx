@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-17 10:46:27 $
+ *  last change: $Author: lo $ $Date: 2002-10-24 13:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,11 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_NOLOGO, sal_True );
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-nolockcheck" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_NOLOCKCHECK, sal_True );
+        return sal_True;
+    }
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
@@ -440,6 +445,12 @@ sal_Bool CommandLineArgs::IsNoLogo() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NOLOGO ];
+}
+
+sal_Bool CommandLineArgs::IsNoLockcheck() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_NOLOCKCHECK ];
 }
 
 sal_Bool CommandLineArgs::GetPortalConnectString( ::rtl::OUString& rPara ) const
