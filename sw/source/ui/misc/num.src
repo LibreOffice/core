@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-12-18 14:29:42 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 08:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ TabPage TP_NUM_POSITION
     Window WIN_PREVIEW
     {
         Pos = MAP_APPFONT ( 53 , 99 ) ;
-        Size = MAP_APPFONT ( 198 , 80 ) ;
+        Size = MAP_APPFONT ( 198 , 78 ) ;
     };
 };
 

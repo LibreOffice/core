@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:51:52 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 08:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,8 +1055,9 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 
-
-    pVDev->SetFillColor( Color( COL_WHITE ) );
+    // #101524# OJ
+    pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
+    pVDev->SetLineColor( GetSettings().GetStyleSettings().GetButtonTextColor() );
     pVDev->DrawRect(aRect);
 
     if(pActNum)
@@ -1082,6 +1083,8 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
         aStdFont = OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_UI_SANS, GetAppLanguage(),
                                     DEFAULTFONT_FLAGS_ONLYONE, this );
+        // #101524# OJ
+        aStdFont.SetColor(GetSettings().GetStyleSettings().GetWindowTextColor());
 
         //
         USHORT nFontHeight = nYStep * 6 / 10;
@@ -1143,7 +1146,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                 if(nNumberXPos + nBulletWidth + nTextOffset > nTextXPos )
                     nTextXPos = nNumberXPos + nBulletWidth + nTextOffset;
                 Rectangle aRect1(Point(nTextXPos, nYStart + nFontHeight / 2), Size(aSize.Width() / 2, 2));
-                pVDev->SetFillColor( Color( COL_BLACK ) );
+                pVDev->SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() ); // Color( COL_BLACK ) );
                 pVDev->DrawRect( aRect1 );
 
                 Rectangle aRect2(Point(nXStart, nYStart + nLineHeight + nFontHeight / 2 ), Size(aSize.Width() / 2, 2));
