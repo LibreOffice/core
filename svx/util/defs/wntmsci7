@@ -17298,3 +17298,5 @@ _real@8@3ffd820c49ba5e354000
 ?__query@?$Reference@VXThesaurus@linguistic2@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?__query@?$Reference@VXProgressBar@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
 ?__query@?$Reference@VXProgressMonitor@awt@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABUPropertyValue@beans@234@@Z
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABV?$Reference@VXChild@container@star@sun@com@@@1234@@Z
