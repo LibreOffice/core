@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:11:42 $
+ *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,6 +495,17 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },     \
     { SW_PROP_NAME(UNO_NAME_CHAR_POSTURE_COMPLEX),          RES_CHRATR_CTL_POSTURE   ,  &::getCppuType((FontSlant*)0),          PropertyAttribute::MAYBEVOID, MID_POSTURE},             \
     { SW_PROP_NAME(UNO_NAME_CHAR_LOCALE_COMPLEX),           RES_CHRATR_CTL_LANGUAGE ,   &::getCppuType((Locale*)0)  ,       PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
+
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+#define _REDLINE_NODE_PROPERTIES \
+    { SW_PROP_NAME(UNO_NAME_START_REDLINE),         FN_UNO_REDLINE_NODE_START,  new uno::Type(::getCppuType((Sequence<PropertyValue>*)0))  ,    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff },\
+    { SW_PROP_NAME(UNO_NAME_END_REDLINE),           FN_UNO_REDLINE_NODE_END,    new uno::Type(::getCppuType((Sequence<PropertyValue>*)0))  ,        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff },
+#else
+#define _REDLINE_NODE_PROPERTIES \
+    { SW_PROP_NAME(UNO_NAME_START_REDLINE),         FN_UNO_REDLINE_NODE_START , &::getCppuType((Sequence<PropertyValue>*)0)  ,      PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff }, \
+    { SW_PROP_NAME(UNO_NAME_END_REDLINE),           FN_UNO_REDLINE_NODE_END ,   &::getCppuType((Sequence<PropertyValue>*)0)  ,          PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0xff },
+#endif
+
 
 /* -----------------24.06.98 18:12-------------------
  *
@@ -1075,6 +1086,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),          FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_TEXT_SECTION),              FN_UNO_TEXT_SECTION,    &::getCppuType((uno::Reference<text::XTextSection>*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
+                    _REDLINE_NODE_PROPERTIES
                     {0,0}
                 };
 
@@ -1220,6 +1232,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_SUFFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_SUFFIX       },
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX), WID_SECT_DOCUMENT_INDEX, &::getCppuType((uno::Reference<text::XDocumentIndex>*)0), PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID, 0 },
                     COMMON_TEXT_CONTENT_PROPERTIES
+                    _REDLINE_NODE_PROPERTIES
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aSectionPropertyMap_Impl;
@@ -1246,9 +1259,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                 aMapArr[nPropertyId] = aSearchPropertyMap_Impl;
             }
             break;
-
-
-
             case PROPERTY_MAP_TEXT_FRAME:
             {
                 static SfxItemPropertyMap aFramePropertyMap_Impl[] =

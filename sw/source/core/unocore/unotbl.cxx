@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 14:35:14 $
+ *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,14 @@
 #ifndef _TABFRM_HXX //autogen
 #include <tabfrm.hxx>
 #endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
+#endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
+#endif
+#ifndef _UNOREDLINE_HXX
+#include <unoredline.hxx>
 #endif
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
@@ -417,6 +423,27 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
         break;
         case FN_PARAM_LINK_DISPLAY_NAME :
             aRet <<= OUString(pFmt->GetName());
+        break;
+        case FN_UNO_REDLINE_NODE_START:
+        case FN_UNO_REDLINE_NODE_END:
+        {
+            SwTable* pTable = SwTable::FindTable( pFmt );
+            SwNode* pTblNode = pTable->GetTableNode();
+            if(FN_UNO_REDLINE_NODE_END == pMap->nWID)
+                pTblNode = pTblNode->EndOfSectionNode();
+            const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
+            for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
+            {
+                const SwRedline* pRedline = rRedTbl[nRed];
+                const SwNode* pRedPointNode = pRedline->GetNode(TRUE);
+                const SwNode* pRedMarkNode = pRedline->GetNode(FALSE);
+                if(pRedPointNode == pTblNode || pRedMarkNode == pTblNode)
+                {
+                    aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline);
+                    break;
+                }
+            }
+        }
         break;
     }
     return aRet;

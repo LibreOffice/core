@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 15:37:44 $
+ *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@
 #endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
+#endif
+#ifndef _UNOREDLINE_HXX
+#include <unoredline.hxx>
+#endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
 #endif
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
@@ -792,6 +798,26 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
                 case  FN_UNO_TEXT_WRAP:
                 case  FN_UNO_ANCHOR_TYPE:
                     SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pMap->nWID);
+                break;
+                case FN_UNO_REDLINE_NODE_START:
+                case FN_UNO_REDLINE_NODE_END:
+                {
+                    SwNode* pSectNode = pFmt->GetSectionNode();
+                    if(FN_UNO_REDLINE_NODE_END == pMap->nWID)
+                        pSectNode = pSectNode->EndOfSectionNode();
+                    const SwRedlineTbl& rRedTbl = pFmt->GetDoc()->GetRedlineTbl();
+                    for(USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
+                    {
+                        const SwRedline* pRedline = rRedTbl[nRed];
+                        const SwNode* pRedPointNode = pRedline->GetNode(TRUE);
+                        const SwNode* pRedMarkNode = pRedline->GetNode(FALSE);
+                        if(pRedPointNode == pSectNode || pRedMarkNode == pSectNode)
+                        {
+                            aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline);
+                            break;
+                        }
+                    }
+                }
                 break;
                 default:
                     if(pFmt)

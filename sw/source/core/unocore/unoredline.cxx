@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:11:42 $
+ *  last change: $Author: os $ $Date: 2001-01-11 12:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,28 @@ OUString lcl_RedlineTypeToOUString(SwRedlineType eType)
     return sRet;
 }
 // ---------------------------------------------------------------------------
+Sequence<PropertyValue> lcl_GetSuccessorProperties(const SwRedline& rRedline)
+{
+    Sequence<PropertyValue> aValues(4);
+
+    const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
+    if(pNext)
+    {
+        PropertyValue* pValues = aValues.getArray();
+        pValues[0].Name = C2U(UNO_NAME_REDLINE_AUTHOR);
+        // GetAuthorString(n) walks the SwRedlineData* chain;
+        // here we always need element 1
+        pValues[0].Value <<= OUString(rRedline.GetAuthorString(1));
+        pValues[1].Name = C2U(UNO_NAME_REDLINE_DATE_TIME);
+        pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
+        pValues[2].Name = C2U(UNO_NAME_REDLINE_COMMENT);
+        pValues[2].Value <<= OUString(pNext->GetComment());
+        pValues[3].Name = C2U(UNO_NAME_REDLINE_TYPE);
+        pValues[3].Value <<= lcl_RedlineTypeToOUString(pNext->GetType());
+    }
+    return aValues;
+}
+// ---------------------------------------------------------------------------
 Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -329,23 +351,8 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     }
     else if(rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName, UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
     {
-        const SwRedlineData* pNext = pRedline->GetRedlineData().Next();
-        if(pNext)
-        {
-            Sequence<PropertyValue> aValues(4);
-            PropertyValue* pValues = aValues.getArray();
-            pValues[0].Name = C2U(UNO_NAME_REDLINE_AUTHOR);
-            // GetAuthorString(n) walks the SwRedlineData* chain;
-            // here we always need element 1
-            pValues[0].Value <<= OUString(pRedline->GetAuthorString(1));
-            pValues[1].Name = C2U(UNO_NAME_REDLINE_DATE_TIME);
-            pValues[1].Value <<= lcl_DateTimeToUno(pNext->GetTimeStamp());
-            pValues[2].Name = C2U(UNO_NAME_REDLINE_COMMENT);
-            pValues[2].Value <<= OUString(pNext->GetComment());
-            pValues[3].Name = C2U(UNO_NAME_REDLINE_TYPE);
-            pValues[3].Value <<= lcl_RedlineTypeToOUString(pNext->GetType());
-            aRet <<= aValues;
-        }
+        if(pRedline->GetRedlineData().Next())
+            aRet <<= lcl_GetSuccessorProperties(*pRedline);
     }
     else if (rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_IDENTIFIER.pName,
                                         UNO_NAME_REDLINE_IDENTIFIER.nNameLen))
@@ -434,5 +441,30 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) th
     if(!bInit)
         rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
     return aId;
+}
+/* -----------------------------11.01.01 11:22--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< PropertyValue > SwXRedlinePortion::CreateRedlineProperties( const SwRedline& rRedline ) throw()
+{
+    Sequence< PropertyValue > aRet;
+    const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
+    aRet.realloc( pNext ? 5 : 4 );
+    PropertyValue* pRet = aRet.getArray();
+
+    pRet[0].Name = C2U(UNO_NAME_REDLINE_AUTHOR.pName);
+    pRet[0].Value <<= OUString(rRedline.GetAuthorString());
+    pRet[1].Name = C2U(UNO_NAME_REDLINE_DATE_TIME.pName);
+    pRet[1].Value <<= lcl_DateTimeToUno(rRedline.GetTimeStamp());
+    pRet[2].Name = C2U(UNO_NAME_REDLINE_COMMENT  .pName);
+    pRet[2].Value <<= OUString(rRedline.GetComment());
+    pRet[3].Name = C2U(UNO_NAME_REDLINE_TYPE        .pName);
+    pRet[3].Value <<= lcl_RedlineTypeToOUString(rRedline.GetType());
+    if(pNext)
+    {
+        pRet[4].Name = C2U(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName);
+        pRet[4].Value <<= lcl_GetSuccessorProperties(rRedline);
+    }
+    return aRet;
 }
 
