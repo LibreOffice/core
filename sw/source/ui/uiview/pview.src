@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese ] = "~Linhas";
         TEXT[ danish ] = "Rækker";
         TEXT[ french ] = "~Lignes";
-        TEXT[ swedish ] = "~Rader";
+        TEXT[ swedish ] = "R~ader";
         TEXT[ dutch ] = "~Rijen";
         TEXT[ spanish ] = "~Filas";
         TEXT[ english_us ] = "~Rows";
@@ -230,7 +230,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese ] = "~Esquerda";
         TEXT[ danish ] = "Venstre";
         TEXT[ french ] = "~À gauche";
-        TEXT[ swedish ] = "~Vänster";
+        TEXT[ swedish ] = "V~änster";
         TEXT[ dutch ] = "~Links";
         TEXT[ spanish ] = "~Izquierda";
         TEXT[ english_us ] = "~Left";
@@ -275,7 +275,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese ] = "~Direita";
         TEXT[ danish ] = "Højre";
         TEXT[ french ] = "~À droite";
-        TEXT[ swedish ] = "~Höger";
+        TEXT[ swedish ] = "Höge~r";
         TEXT[ dutch ] = "R~echts";
         TEXT[ spanish ] = "~Derecha";
         TEXT[ english_us ] = "~Right";
@@ -320,7 +320,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese ] = "~Topo";
         TEXT[ danish ] = "Foroven";
         TEXT[ french ] = "~Sup.";
-        TEXT[ swedish ] = "~Uppåt";
+        TEXT[ swedish ] = "~Uppe";
         TEXT[ dutch ] = "~Boven";
         TEXT[ spanish ] = "A~rriba";
         TEXT[ english_us ] = "~Top";
@@ -365,7 +365,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese ] = "~Inferior";
         TEXT[ danish ] = "Forneden";
         TEXT[ french ] = "~Inf.";
-        TEXT[ swedish ] = "~Nedåt";
+        TEXT[ swedish ] = "~Nere";
         TEXT[ dutch ] = "~Onder";
         TEXT[ spanish ] = "A~bajo";
         TEXT[ english_us ] = "~Bottom";
@@ -439,7 +439,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ portuguese ] = "Espaçamento ~horizontal";
         TEXT[ danish ] = "Vandret";
         TEXT[ french ] = "~Horizontal";
-        TEXT[ swedish ] = "H~orisontell";
+        TEXT[ swedish ] = "H~orisontellt";
         TEXT[ dutch ] = "~Horizontaal";
         TEXT[ spanish ] = "~Horizontal";
         TEXT[ english_us ] = "~Horizontal";
@@ -743,7 +743,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text [ finnish ] = "~Sarakkeet" ;
         Text [ danish ] = "Kolonner" ;
         Text [ french ] = "~Colonnes" ;
-        Text [ swedish ] = "Kolumner" ;
+        Text [ swedish ] = "~Kolumner" ;
         Text [ dutch ] = "~Kolommen" ;
         Text [ spanish ] = "~Columnas" ;
         Text [ english_us ] = "~Columns" ;
@@ -894,7 +894,7 @@ String RID_PVIEW_TOOLBOX
     Text [ spanish ] = "Vista preliminar" ;
     Text [ french ] = "Aperçu" ;
     Text [ swedish ] = "Förhandsgranskning" ;
-    Text [ danish ] = "Vis udskrift" ;
+    Text [ danish ] = "Sidevisning" ;
     Text [ portuguese ] = "Ver página" ;
     Text [ portuguese_brazilian ] = "Seitenansicht" ;
     Text[ chinese_simplified ] = "Ò³ÃæÊÓÍ¼";
