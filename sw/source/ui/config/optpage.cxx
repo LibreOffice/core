@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:18:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1814,7 +1814,9 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
     aChangedColorLB.InsertEntry(sAuthor);
 
     XColorTable* pColorTbl = OFF_APP()->GetStdColorTable();
-    for( USHORT i = 0; i < pColorTbl->Count(); ++i )
+    USHORT i;
+
+    for( i = 0; i < pColorTbl->Count(); ++i )
     {
         XColorEntry* pEntry = pColorTbl->Get( i );
         Color aColor = pEntry->GetColor();
