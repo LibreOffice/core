@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-19 22:50:08 $
+ *  last change: $Author: mh $ $Date: 2000-09-19 23:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #endif
 #include <unistd.h>
 #endif
-#ifndef MACOSX
+#ifdef MACOSX
 #include <sys/stat.h>
 #else
 #include <stat.h>
