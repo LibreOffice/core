@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:38:56 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ String STR_DELBOOKMARK
     TEXT [ french ] = "Supprimer le repère de texte" ;
     TEXT [ swedish ] = "Radera bokmärke" ;
     TEXT [ dutch ] = "Tekstmarkering verwijderen" ;
-    TEXT [ spanish ] = "Eliminar marcador" ;
+    TEXT [ spanish ] = "Eliminar marca de texto" ;
     TEXT [ english_us ] = "Delete bookmark" ;
     TEXT[ chinese_simplified ] = "É¾³ıÊéÇ©";
     TEXT[ russian ] = "Óäàëèòü òåêñòîâóş ïîìåòêó";
@@ -1154,7 +1154,7 @@ String STR_OUTLINE_LR
     TEXT [ finnish ] = "Korota jäsennys" ;
     TEXT [ danish ] = "Inddel disposition" ;
     TEXT [ french ] = "Échelonner la structure" ;
-    TEXT [ swedish ] = "Höja dispositionsnivån" ;
+    TEXT [ swedish ] = "Dela in disposition" ;
     TEXT [ dutch ] = "Overzichtsniveaus bepalen" ;
     TEXT [ spanish ] = "Escalonar Esquema" ;
     TEXT [ english_us ] = "Promote Outline" ;
@@ -2221,7 +2221,7 @@ String STR_UNDO_CHAIN
     Text[ chinese_simplified ] = "Á´½ÓÎÄ±¾¿ò";
     Text[ russian ] = "Îáúåäèíèòü òåêñòîâûå ğàìêè";
     Text[ polish ] = "Po³¹cz ramkê tekstow¹";
-    Text[ japanese ] = "Ã·½Ä˜g‚ÌŒ‹‡";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì˜AŒ‹";
     Text[ chinese_traditional ] = "³sµ²¤å¦r¤è¶ô";
     Text[ arabic ] = "ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkader verbinden";
@@ -2247,7 +2247,7 @@ String STR_UNDO_UNCHAIN
     Text[ chinese_simplified ] = "È¡ÏûÎÄ±¾¿òµÄÁ´½Ó";
     Text[ russian ] = "Ğàçúåäèíèòü òåêñòîâóş ğàìêó";
     Text[ polish ] = "Roz³¹cz ramki tekstu";
-    Text[ japanese ] = "Ã·½Ä˜g‚ÌŒ‹‡‰ğœ";
+    Text[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì˜AŒ‹‰ğœ";
     Text[ chinese_traditional ] = "¨ú®ø¤å¦r¤è¶ôªº³sµ²";
     Text[ arabic ] = "İß ÊÑÇÈØ ßæÇÏÑ ÇáäÕ";
     Text[ dutch ] = "Tekstkaderverbinding verwijderen";
@@ -2316,7 +2316,7 @@ String STR_UNDO_COMPAREDOC
     Text [ portuguese ] = "Comparar documento" ;
     Text [ english_us ] = "Compare Document" ;
     Text [ portuguese_brazilian ] = "Dokument vergleich" ;
-    Text [ swedish ] = "Jämföra dokument" ;
+    Text [ swedish ] = "Jämförelse av dokument" ;
     Text [ danish ] = "Sammenlign dokument" ;
     Text [ italian ] = "Confronto documento" ;
     Text [ spanish ] = "Comparar documento" ;
