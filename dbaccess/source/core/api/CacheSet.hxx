@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:40:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#include <list>
+
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
 
 namespace dbaccess
@@ -122,7 +124,18 @@ namespace dbaccess
         }
         virtual ~OCacheSet();
 
-        void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const connectivity::ORowSetValue& _rValue,sal_Int32 _nType = ::com::sun::star::sdbc::DataType::OTHER);
+        void setParameter(sal_Int32 nPos
+                            ,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter
+                            ,const connectivity::ORowSetValue& _rValue
+                            ,sal_Bool _bSigned = sal_True
+                            ,sal_Int32 _nType = ::com::sun::star::sdbc::DataType::OTHER
+                            );
+        void fillParameters( const ORowSetRow& _rRow
+                            ,const connectivity::OSQLTable& _xTable
+                            ,::rtl::OUString& _sCondition
+                            ,::rtl::OUString& _sParameter
+                            ,::std::vector<sal_Bool>& _rSignedValues
+                            ,::std::list< sal_Int32>& _rOrgValues);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         /**
