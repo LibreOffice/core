@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:20:13 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Standard" ; > ;
         < "Arbejdsrelateret korrespondance" ; > ;
         < "Andre arbejdsrelaterede dokumenter" ; > ;
-        < "Privat korrespondance og private dokumenter" ; > ;
+        < "Privat korrespondance og dokumenter" ; > ;
         < "Formularer og kontrakter" ; > ;
         < "Finanser" ; > ;
         < "Uddannelse" ; > ;
@@ -447,6 +447,32 @@ ItemList [ language_user1 ] =
         < "Prezentácia" ; > ;
         < "Rôzne" ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "Alapértelmezett" ; > ;
+        < "Üzleti levelezés" ; > ;
+        < "Egyéb üzleti dokumentumok" ; > ;
+        < "Személyes levelezés és dokumentumok" ; > ;
+        < "Űrlapok és szerződések" ; > ;
+        < "Pénzügyek" ; > ;
+        < "Oktatás" ; > ;
+        < "Bemutatóhátterek" ; > ;
+        < "Bemutatók" ; > ;
+        < "Egyebek" ; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "Privzeto" ; > ;
+        < "Poslovna korespondenca" ; > ;
+        < "Razni poslovni dokumenti" ; > ;
+        < "Zasebna korespondenca in dokumenti" ; > ;
+        < "Obrazci in pogodbe" ; > ;
+        < "Finance" ; > ;
+        < "Izobrazba" ; > ;
+        < "Ozadje predstavitve" ; > ;
+        < "Predstavitve" ; > ;
+        < "Razno" ; > ;
+    };
     };
 
 String RID_CNT_STR_WAITING
@@ -462,7 +488,7 @@ String RID_CNT_STR_WAITING
     Text[ french ] = "Initialisation des mod�les pour une premi�re utilisation ...";
     Text[ spanish ] = "Las plantillas se inicializar�n ahora para el primer uso.";
     Text[ italian ] = "Inizializzazione dei modelli per il primo utilizzo del programma.";
-    Text[ danish ] = "Skabelonerne initialiseres nu til f�rste brug.";
+    Text[ danish ] = "Skabelonerne initialiseres nu til f�rstegangsbrug.";
     Text[ swedish ] = "Mallarna initieras nu f�r den f�rsta anv�ndningen.";
     Text[ polish ] = "Szablony s� teraz inicjowane do pierwszego u�ycia";
     Text[ portuguese_brazilian ] = "Os modelos est�o sendo inicializados para a primeira utiliza��o...";
@@ -479,7 +505,10 @@ String RID_CNT_STR_WAITING
     Text[ hebrew ] = "‮מתבצעת תיחול התבניות לשימושן בפעם הראשונה‬";
     Text[ hindi ] = "नमूनों को पहिले बार उपयोग करने केलिए इनिश्यलैज़ किया है ।";
     Text[ slovak ] = "Šablóny sú inicializované pre prvé použitie.";
+    Text[ hungarian ] = "Sablonok előkészítése az első használatra.";
+    Text[ slovenian ] = "Predloge se inicializirajo za prvo uporabo.";
 };
+
 
 
 
