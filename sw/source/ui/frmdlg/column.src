@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:33:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ TabPage TP_COLUMN
         Text[ polish ] = "Roz³ó¿ zawartoœæ równomiernie na wszystkie kolumny";
         Text[ portuguese_brazilian ] = "Balance columns";
         Text[ japanese ] = "“à—e‚ð’i‘g‚Ý‘S‘Ì‚Å‹Ï“™‚É”z•ª‚·‚é";
-        Text[ korean ] = "´Ü ±æÀÌ Á¶Á¤(~B)";
+        Text[ korean ] = "³»¿ëÀ» ¸ðµç ´Ü¿¡ °ÉÃÄ ÀÏÁ¤ÇÏ°Ô ºÐ¹è(~B)";
         Text[ chinese_simplified ] = "¶Ô³Æµ÷ÕûÀ¸¿í";
         Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e";
         Text[ arabic ] = "ÊæÒíÚ ÇáãÍÊæíÇÊ Úáì ßá ÇáÃÚãÏÉ ÈÇáÊÓÇæí";
@@ -175,7 +175,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "Colonne" ;
         Text [ portuguese_brazilian ] = "Colunas" ;
         Text [ portuguese ] = "Colunas" ;
-        Text [ finnish ] = "Spalten" ;
+        Text [ finnish ] = "Sarakkeet" ;
         Text [ danish ] = "Kolonner" ;
         Text [ french ] = "Colonnes" ;
         Text [ swedish ] = "Kolumner" ;
@@ -434,7 +434,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "Larghezza colonna" ;
         Text [ portuguese_brazilian ] = "Largura da coluna" ;
         Text [ portuguese ] = "Largura da coluna" ;
-        Text [ finnish ] = "Spaltenbreite" ;
+        Text [ finnish ] = "Sarakkeen leveys" ;
         Text [ danish ] = "Kolonnebredde" ;
         Text [ french ] = "Largeur de colonne" ;
         Text [ swedish ] = "Kolumnbredd" ;
@@ -852,7 +852,7 @@ TabPage TP_COLUMN
         Text [ italian ] = "Linea di separazione" ;
         Text [ portuguese_brazilian ] = "Linhas entre" ;
         Text [ portuguese ] = "Linha de separação" ;
-        Text [ finnish ] = "Trennlinie" ;
+        Text [ finnish ] = "Erotinviiva" ;
         Text [ danish ] = "Separator" ;
         Text [ french ] = "Trait de séparation" ;
         Text [ swedish ] = "Skiljelinje" ;
@@ -1128,10 +1128,10 @@ ModalDialog DLG_COLUMN
     };
     StringList [ finnish ] =
     {
-            < "Valinta" ;       LISTBOX_PAGE        ; > ;
-        < "Nykyinen osio" ;         LISTBOX_PAGE        ; > ;
-        < "Valittu osio" ;          LISTBOX_PAGE        ; > ;
-        < "Kehys" ;         LISTBOX_PAGE        ; > ;
+            < "Valinta" ;           LISTBOX_SELECTION; > ;
+        < "Nykyinen osio" ;     LISTBOX_SECTION     ; > ;
+        < "Valittu osio" ;  LISTBOX_SECTIONS    ; > ;
+        < "Kehys" ;                 LISTBOX_FRAME       ; > ;
         < "Sivun tyyli:" ;          LISTBOX_PAGE        ; > ;
     };
     };
