@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 12:52:39 $
+ *  last change: $Author: aw $ $Date: 2002-11-01 12:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,11 +131,14 @@ SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
     bCreating=FALSE;
 }
 
-SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const XPolyPolygon& rPathPoly):
-    aPathPolygon(rPathPoly)
+SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const XPolyPolygon& rPathPoly)
 {
     eKind=eNewKind;
     bClosedObj=IsClosed();
+
+    // #104640# Set local XPolyPolygon with open/close correction
+    NbcSetPathPoly(rPathPoly);
+
     bCreating=FALSE;
     ImpForceKind();
 }
