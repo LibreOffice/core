@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-29 14:47:22 $
+ *  last change: $Author: gt $ $Date: 2001-07-11 08:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,7 +972,7 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROW
 #define _MAX8   536870911           // max. val for octal numbers
 #define _MIN16  -1099511627776      // min. val for hexadecimal numbers
 #define _MAX16  1099511627775       // max. val for hexadecimal numbers
-#define GETPLACES()                 GetOpt(rPlaces,sal_Int32(-(2^31)))
+#define GETPLACES()                 GetOpt(rPlaces,sal_Int32(0x80000000))
 #define DOUBLECONV(from,to)         ConvertFromDec(sal_Int64(ConvertToDec(aNum,from,_P)),_MIN##to,_MAX##to,to,GETPLACES(),_P)
 
 

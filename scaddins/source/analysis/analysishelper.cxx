@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-28 12:58:52 $
+ *  last change: $Author: gt $ $Date: 2001-07-11 08:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,7 @@ static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 STRING ConvertFromDec( sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt16 nBase,
     sal_Int32 nPlaces, sal_Int32 nMaxPlaces ) THROWDEF_RTE_IAE
 {
-    sal_Bool        bUsePlaces = nPlaces != -(2^31);
+    sal_Bool        bUsePlaces = nPlaces != 0x80000000;
     if( nNum < nMin || nNum > nMax || ( bUsePlaces && ( nPlaces <= 0 || nPlaces > nMaxPlaces ) ) )
         THROW_IAE;
 
@@ -960,19 +960,23 @@ STRING ConvertFromDec( sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt1
     STRING          aRet( STRING::valueOf( nNum, nBase ).toAsciiUpperCase() );
 
     sal_Int32       nLen = aRet.getLength();
-    if( !bNeg && nLen > nPlaces )
-        THROW_IAE;
-    else if( bUsePlaces && ( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) ) )
-    {
-        sal_uInt32  nLeft = nPlaces - nLen;
-        sal_Char*   p = new sal_Char[ nLeft + 1 ];
-        memset( p, bNeg? GetMaxChar( nBase ) : '0', nLeft );
-        p[ nLeft ] = 0x00;
-        STRING  aTmp( p, nLeft, RTL_TEXTENCODING_MS_1252 );
-        aTmp += aRet;
-        aRet = aTmp;
 
-        delete[] p;
+    if( bUsePlaces )
+    {
+        if( !bNeg && nLen > nPlaces )
+            THROW_IAE;
+        else if( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) )
+        {
+            sal_uInt32  nLeft = nPlaces - nLen;
+            sal_Char*   p = new sal_Char[ nLeft + 1 ];
+            memset( p, bNeg? GetMaxChar( nBase ) : '0', nLeft );
+            p[ nLeft ] = 0x00;
+            STRING  aTmp( p, nLeft, RTL_TEXTENCODING_MS_1252 );
+            aTmp += aRet;
+            aRet = aTmp;
+
+            delete[] p;
+        }
     }
 
     return aRet;
@@ -2109,7 +2113,10 @@ void Complex::Power( double fPower ) THROWDEF_RTE_IAE
     if( r == 0.0 && i == 0.0 )
     {
         if( fPower > 0 )
+        {
             r = i = 0.0;
+            return;
+        }
         else
             THROW_IAE;
     }
@@ -2425,7 +2432,8 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "grain",  1.543236E01,            CDC_Mass        );      // grain                                    ***
     NEWD( "pweight",    7.054792E-01,       CDC_Mass        );      // Pennyweight                              ***
     NEWD( "hweight",    1.968413E-05,       CDC_Mass        );      // Hundredweight                            ***
-    NEWD( "shweight",   2.204623e-05,       CDC_Mass        );      // Shorthundredweight                       ***
+    NEWD( "shweight",   2.204623E-05,       CDC_Mass        );      // Shorthundredweight                       ***
+    NEWD( "brton",  9.842065E-07,           CDC_Mass        );      // BRT                                      ***
 
                                                                 // Meter ->
     NEWD( "m",      1.0000000000000000E00,  CDC_Length      );      // Meter
