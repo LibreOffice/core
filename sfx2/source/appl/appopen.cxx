@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-10 11:21:12 $
+ *  last change: $Author: mba $ $Date: 2001-10-12 13:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,21 +1159,23 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     Sequence < PropertyValue > aArgs;
     TransformItems( SID_OPENDOC, *rReq.GetArgs(), aArgs );
 
-    Reference < XController > xController;
-    if ( pFrame || pLinkItem || !rReq.IsSynchronCall() )
+    // extract target name
+    ::rtl::OUString aTarget;
+    SFX_REQUEST_ARG(rReq, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
+    if ( pTargetItem )
+        aTarget = pTargetItem->GetValue();
+    else
     {
-        // extract target name
-        ::rtl::OUString aTarget;
-        SFX_REQUEST_ARG(rReq, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
-        if ( pTargetItem )
-            aTarget = pTargetItem->GetValue();
-        else
-        {
-            SFX_REQUEST_ARG( rReq, pNewViewItem, SfxBoolItem, SID_OPEN_NEW_VIEW, FALSE );
-            if ( pNewViewItem && pNewViewItem->GetValue() )
-                aTarget = String::CreateFromAscii("_blank" );
-        }
+        SFX_REQUEST_ARG( rReq, pNewViewItem, SfxBoolItem, SID_OPEN_NEW_VIEW, FALSE );
+        if ( pNewViewItem && pNewViewItem->GetValue() )
+            aTarget = String::CreateFromAscii("_blank" );
+    }
 
+    BOOL bIsBlankTarget = ( aTarget.compareToAscii( "_blank" ) == COMPARE_EQUAL );
+
+    Reference < XController > xController;
+    if ( ( !bIsBlankTarget && pFrame ) || pLinkItem || !rReq.IsSynchronCall() )
+    {
         if ( bHidden )
             aTarget = String::CreateFromAscii("_blank");
 
@@ -1239,7 +1241,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 pListener->release();
             }
 
-            if ( !xController.is() && aTarget.compareToAscii( "_blank" ) == COMPARE_EQUAL )
+            if ( !xController.is() && bIsBlankTarget )
                 // a blank frame would have been created in findFrame; in this case I am the owner and I must delete it
                 xFrame->dispose();
         }
@@ -1254,7 +1256,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
     else
     {
-        // synchron loading without a given frame
+        // synchron loading without a given frame or as blank frame
         SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
         Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
         Reference < XModel > xModel( xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
