@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kso $ $Date: 2000-11-21 11:43:53 $
+#   last change: $Author: mtg $ $Date: 2000-11-21 12:09:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,6 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
     $(SALLIB)		\
-    $(TOOLSLIB)		\
     $(ZLIB3RDLIB)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
