@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 12:14:50 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,10 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // read/write the default for this item
     MG_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
 
-    M_END()
+    // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    M_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+
+M_END()
 };
 
 XMLPropertyMapEntry aXMLTextPropMap[] =
@@ -743,7 +746,9 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     MG_E( "GraphicColorMode", DRAW, COLOR_MODE,         XML_TYPE_COLOR_MODE, 0 ),
     MG_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
     // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
-    MG_E( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+    MG_E( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+    // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    MG_E( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
 
     // special entries for floating frames
     MG_E( "",           DRAW,   FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_SCROLLBAR ),
@@ -785,11 +790,13 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
     MG_E( "VertOrientRelation",     STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_FRAME ),
     // RES_HORI_ORIENT
     MG_E( "HoriOrient",             STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_POS|MID_FLAG_MULTI_PROPERTY, CTF_HORIZONTALPOS ),
-    MG_E( "PageToggle",     STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_MIRROR, CTF_HORIZONTALMIRROR ),
+        MG_E( "PageToggle",              STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_MIRROR, CTF_HORIZONTALMIRROR ),
     MG_E( "HoriOrient",             STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALPOS_MIRRORED ),
     MG_E( "HoriOrientRelation",     STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL, CTF_HORIZONTALREL ),
     MG_E( "HoriOrientRelation",     STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALREL_FRAME ),
-    // UserDefinedAttributes is already contained in the map this one is
+        // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+        MG_E( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+        // UserDefinedAttributes is already contained in the map this one is
     // chained to.
 
     // RES_FOLLOW_TEXT_FLOW - OD 2004-04-21 #i26791#
