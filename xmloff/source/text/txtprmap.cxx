@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:32:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     MP_E( "ParaLineSpacing",        STYLE,  LINE_SPACING,           XML_TYPE_LINE_SPACE_DISTANCE, 0 ),
     // RES_PARATR_ADJUST
     MP_E( "ParaAdjust",         FO,     TEXT_ALIGN,         XML_TYPE_TEXT_ADJUST, CTF_SD_SHAPE_PARA_ADJUST ),
-    MP_E( "ParaLastLineAdjust", FO,     TEXT_ALIGN_LAST,    XML_TYPE_TEXT_ADJUSTLAST, 0 ),
+    MP_E( "ParaLastLineAdjust", FO,     TEXT_ALIGN_LAST,    XML_TYPE_TEXT_ADJUSTLAST, CTF_PARA_ADJUSTLAST ),
     MP_E( "ParaExpandSingleWord",STYLE, JUSTIFY_SINGLE_WORD,XML_TYPE_BOOL, 0 ),
     // RES_PARATR_SPLIT
     MP_E( "ParaSplit",          FO,     KEEP_TOGETHER,      XML_TYPE_TEXT_SPLIT, 0 ),
