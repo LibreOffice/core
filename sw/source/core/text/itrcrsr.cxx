@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:09:18 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 10:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,6 +354,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
     const XubString &rText = GetInfo().GetTxt();
     SwTxtSizeInfo aInf( GetInfo(), rText, nStart );
+    if( GetPropFont() )
+        aInf.GetFont()->SetProportion( GetPropFont() );
     KSHORT nTmpAscent, nTmpHeight;  // Zeilenhoehe
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );
     const Size  aCharSize( 1, nTmpHeight );
@@ -498,6 +500,9 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         // rekursively and must add the x-position
                         // of the multi-portion.
                         xub_StrLen nOldStart = nStart;
+                        BYTE nOldProp = GetPropFont();
+                        if( ((SwMultiPortion*)pPor)->IsDouble() )
+                            SetPropFont( 50 );
                         nStart = aInf.GetIdx();
                         SwLineLayout* pOldCurr = pCurr;
                         pCurr = &((SwMultiPortion*)pPor)->GetRoot();
@@ -515,6 +520,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         pCurr = pOldCurr;
                         nStart = nOldStart;
                         bPrev = sal_False;
+                        SetPropFont( nOldProp );
                         return bRet;
                     }
                     if ( pPor->PrtWidth() )
@@ -991,17 +997,29 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
         if( pPor->InTxtGrp() )
         {
-            SwTxtSizeInfo aSizeInf( GetInfo(), rText, nCurrStart );
-            ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
-            SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor) );
-            SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
-                    ((SwDropPortion*)pPor)->GetFnt() : NULL );
-            nLength = aSizeInf.GetFont()->_GetCrsrOfst( aSizeInf.GetVsh(),
-                                    aSizeInf.GetOut(),
-                                    aSizeInf.GetTxt(), nX, aSizeInf.GetIdx(),
-                                    pPor->GetLen(), nSpaceAdd );
-            if( bFieldInfo && nLength == pPor->GetLen() )
-                --nLength;
+            BYTE nOldProp;
+            if( GetPropFont() )
+            {
+                ((SwFont*)GetFnt())->SetProportion( GetPropFont() );
+                nOldProp = GetFnt()->GetPropr();
+            }
+            else
+                nOldProp = 0;
+            {
+                SwTxtSizeInfo aSizeInf( GetInfo(), rText, nCurrStart );
+                ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
+                SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor) );
+                SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
+                        ((SwDropPortion*)pPor)->GetFnt() : NULL );
+                nLength = aSizeInf.GetFont()->_GetCrsrOfst( aSizeInf.GetVsh(),
+                                        aSizeInf.GetOut(),
+                                        aSizeInf.GetTxt(), nX,aSizeInf.GetIdx(),
+                                        pPor->GetLen(), nSpaceAdd );
+                if( bFieldInfo && nLength == pPor->GetLen() )
+                    --nLength;
+            }
+            if( nOldProp )
+                ((SwFont*)GetFnt())->SetProportion( nOldProp );
         }
         else
         {
