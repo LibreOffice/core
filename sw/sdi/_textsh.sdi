@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:30:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,6 +694,13 @@ interface BaseText : Selection
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    FN_TABLE_SORT_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     FN_NUMBERING_OUTLINE_DLG   // status(final|play)
     [
         ExecMethod = Execute ;
@@ -1449,7 +1456,6 @@ interface BaseText : Selection
     [
         ExecMethod = Execute;
     ]
-
 
 }  //ende interface text
 
