@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 15:13:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,13 @@ SvxLineTabPage::SvxLineTabPage
     aCbxSynchronize     ( this, ResId( CBX_SYNCHRONIZE ) ),
     aFlLineEnds         ( this, ResId( FL_LINE_ENDS ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-        aFLSeparator        ( this, ResId( FL_SEPARATOR ) ),
+    aFLSeparator        ( this, ResId( FL_SEPARATOR ) ),
+
+    // #116827#
+    maFLEdgeStyle       ( this, ResId( FL_EDGE_STYLE ) ),
+    maFTEdgeStyle       ( this, ResId( FT_EDGE_STYLE ) ),
+    maLBEdgeStyle       ( this, ResId( LB_EDGE_STYLE ) ),
+
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     aSymbolWidthFT      ( this, ResId(FT_SYMBOL_WIDTH)),
     aSymbolWidthMF      ( this, ResId(MF_SYMBOL_WIDTH)),
@@ -306,6 +312,9 @@ SvxLineTabPage::SvxLineTabPage
     pDashList = NULL;
     pLineEndList = NULL;
 
+    // #116827#
+    Link aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
+    maLBEdgeStyle.SetSelectHdl( aEdgeStyle );
 
     //#58425# Symbole auf einer Linie (z.B. StarChart) , MB-Handler setzen
     aSymbolMB.SetSelectHdl(LINK(this, SvxLineTabPage, GraphicHdl_Impl));
@@ -551,6 +560,11 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         aTsbCenterEnd.Hide();
         aCbxSynchronize.Hide();
         aFlLineEnds.Hide();
+
+        // #116827#
+        maFLEdgeStyle.Hide();
+        maFTEdgeStyle.Hide();
+        maLBEdgeStyle.Hide();
     }
 }
 
@@ -773,6 +787,51 @@ BOOL SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
             bModified = TRUE;
         }
     }
+
+    // #116827#
+    nPos = maLBEdgeStyle.GetSelectEntryPos();
+    if( LISTBOX_ENTRY_NOTFOUND != nPos && nPos != maLBEdgeStyle.GetSavedValue() )
+    {
+        XLineJointItem* pNew = 0L;
+
+        switch(nPos)
+        {
+            case 0: // Rounded, default
+            {
+                pNew = new XLineJointItem(XLINEJOINT_ROUND);
+                break;
+            }
+            case 1: // - none -
+            {
+                pNew = new XLineJointItem(XLINEJOINT_NONE);
+                break;
+            }
+            case 2: // Miter
+            {
+                pNew = new XLineJointItem(XLINEJOINT_MITER);
+                break;
+            }
+            case 3: // Bevel
+            {
+                pNew = new XLineJointItem(XLINEJOINT_BEVEL);
+                break;
+            }
+        }
+
+        if(pNew)
+        {
+            pOld = GetOldItem( rAttrs, XATTR_LINEJOINT );
+
+            if(!pOld || !(*(const XLineJointItem*)pOld == *pNew))
+            {
+                rAttrs.Put( *pNew );
+                bModified = TRUE;
+            }
+
+            delete pNew;
+        }
+    }
+
     if(nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || bNewSize)
     {
         //wurde also per Auswahl gesetzt oder Größe ist anders
@@ -858,6 +917,35 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
                         pLineEndList->Get( nPos - 1 )->GetLineEnd() ) );
     }
 
+    // #116827#
+    nPos = maLBEdgeStyle.GetSelectEntryPos();
+    if(LISTBOX_ENTRY_NOTFOUND != nPos)
+    {
+        switch(nPos)
+        {
+            case 0: // Rounded, default
+            {
+                rXLSet.Put(XLineJointItem(XLINEJOINT_ROUND));
+                break;
+            }
+            case 1: // - none -
+            {
+                rXLSet.Put(XLineJointItem(XLINEJOINT_NONE));
+                break;
+            }
+            case 2: // Miter
+            {
+                rXLSet.Put(XLineJointItem(XLINEJOINT_MITER));
+                break;
+            }
+            case 3: // Bevel
+            {
+                rXLSet.Put(XLineJointItem(XLINEJOINT_BEVEL));
+                break;
+            }
+        }
+    }
+
     rXLSet.Put( XLineStartWidthItem( GetCoreValue( aMtrStartWidth, ePoolUnit ) ) );
     rXLSet.Put( XLineEndWidthItem( GetCoreValue( aMtrEndWidth, ePoolUnit ) ) );
 
@@ -881,6 +969,9 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
     rXLSet.Put( XLineTransparenceItem( nVal ) );
 
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+
+    // #116827#
+    aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
 
     return( TRUE );
 }
@@ -1263,6 +1354,29 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     String aStr = GetUserData();
     aCbxSynchronize.Check( (BOOL)aStr.ToInt32() );
 
+    // #116827#
+    if(bObjSelected && SFX_ITEM_DEFAULT == rAttrs.GetItemState(XATTR_LINEJOINT))
+    {
+        maFTEdgeStyle.Disable();
+        maLBEdgeStyle.Disable();
+    }
+    else if(SFX_ITEM_DONTCARE != rAttrs.GetItemState(XATTR_LINEJOINT))
+    {
+        XLineJoint eLineJoint = ((const XLineJointItem&)(rAttrs.Get(XATTR_LINEJOINT))).GetValue();
+
+        switch(eLineJoint)
+        {
+            case XLINEJOINT_ROUND : maLBEdgeStyle.SelectEntryPos(0); break;
+            case XLINEJOINT_NONE : maLBEdgeStyle.SelectEntryPos(1); break;
+            case XLINEJOINT_MITER : maLBEdgeStyle.SelectEntryPos(2); break;
+            case XLINEJOINT_BEVEL : maLBEdgeStyle.SelectEntryPos(3); break;
+        }
+    }
+    else
+    {
+        maLBEdgeStyle.SetNoSelection();
+    }
+
     /*
     if( aLbStartStyle.GetSelectEntryPos() == aLbEndStyle.GetSelectEntryPos() &&
         aMtrStartWidth.GetValue() == aMtrEndWidth.GetValue() &&
@@ -1284,6 +1398,8 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     aTsbCenterEnd.SaveValue();
     aMtrTransparent.SaveValue();
 
+    // #116827#
+    maLBEdgeStyle.SaveValue();
 
     ClickInvisibleHdl_Impl( this );
     //ClickMeasuringHdl_Impl( this );
@@ -1382,19 +1498,10 @@ IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
 }
 
 //------------------------------------------------------------------------
+// #116827#
 
-IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
+IMPL_LINK( SvxLineTabPage, ChangeEdgeStyleHdl_Impl, void *, p )
 {
-    if( aCbxSynchronize.IsChecked() )
-    {
-        if( p == &aMtrEndWidth )
-            aMtrStartWidth.SetValue( aMtrEndWidth.GetValue() );
-        if( p == &aLbEndStyle )
-            aLbStartStyle.SelectEntryPos( aLbEndStyle.GetSelectEntryPos() );
-        if( p == &aTsbCenterEnd )
-            aTsbCenterStart.SetState( aTsbCenterEnd.GetState() );
-    }
-
     ChangePreviewHdl_Impl( this );
 
     return( 0L );
@@ -1422,6 +1529,10 @@ IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
             aMtrEndWidth.Disable();
             aTsbCenterEnd.Disable();
             aCbxSynchronize.Disable();
+
+            // #116827#
+            maFTEdgeStyle.Disable();
+            maLBEdgeStyle.Disable();
         }
     }
     else
@@ -1442,9 +1553,32 @@ IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
             aMtrEndWidth.Enable();
             aTsbCenterEnd.Enable();
             aCbxSynchronize.Enable();
+
+            // #116827#
+            maFTEdgeStyle.Enable();
+            maLBEdgeStyle.Enable();
         }
     }
     ChangePreviewHdl_Impl( NULL );
+
+    return( 0L );
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
+{
+    if( aCbxSynchronize.IsChecked() )
+    {
+        if( p == &aMtrEndWidth )
+            aMtrStartWidth.SetValue( aMtrEndWidth.GetValue() );
+        if( p == &aLbEndStyle )
+            aLbStartStyle.SelectEntryPos( aLbEndStyle.GetSelectEntryPos() );
+        if( p == &aTsbCenterEnd )
+            aTsbCenterStart.SetState( aTsbCenterEnd.GetState() );
+    }
+
+    ChangePreviewHdl_Impl( this );
 
     return( 0L );
 }
@@ -1478,6 +1612,9 @@ IMPL_LINK( SvxLineTabPage, ChangeTransparentHdl_Impl, void *, EMPTYARG )
 
     rXLSet.Put( XLineTransparenceItem( aItem ) );
     XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+
+    // #116827#
+    FillXLSet_Impl();
 
     aCtlPreview.Invalidate();
 
