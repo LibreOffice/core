@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2000-11-22 13:52:51 $
+ *  last change: $Author: tra $ $Date: 2000-12-06 10:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,14 @@
 #include <osl/diagnose.h>
 #include <sal/types.h>
 
+#include <systools/win32/advapi9x.h>
+#include <systools/win32/kernel9x.h>
+#include <systools/win32/shell9x.h>
+#include <systools/win32/comdlg9x.h>
+#include <systools/win32/user9x.h>
+
+#include <osl/diagnose.h>
+#include <sal/types.h>
 
 #define _DIRW9X_INITIALIZE_
 #include "dirW9X.h"
@@ -78,7 +86,7 @@ extern LPWSTR *lpArgvW;
 extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
-extern OSVERSIONINFO    g_OSVerInfo; // defined in systoolinit
+//extern OSVERSIONINFO    g_OSVerInfo; // defined in systoolinit
 
 //------------------------------------------------------------------------------
 // defines
@@ -157,6 +165,7 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
     {
         case DLL_PROCESS_ATTACH:
             {
+                OSVERSIONINFO aInfo;
                 WORD     wVersionRequested;
                 WSADATA  wsaData;
                 int      error;
@@ -192,25 +201,34 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 }
 
                 /* initialize Win9x unicode functions */
-
-                if ( VER_PLATFORM_WIN32_NT == g_OSVerInfo.dwPlatformId )
+                aInfo.dwOSVersionInfoSize = sizeof( aInfo );
+                if ( GetVersionEx(&aInfo) )
                 {
-                    lpfnFindFirstFile             = FindFirstFileW;
-                    lpfnFindNextFile              = FindNextFileW;
-                    lpfnSetFileAttributes         = SetFileAttributesW;
-                    lpfnSearchPath                = SearchPathW;
-                    lpfnCreateProcess             = CreateProcessW;
-                    lpfnCreateProcessAsUser       = CreateProcessAsUserW;
-                    lpfnGetEnvironmentVariable    = GetEnvironmentVariableW;
-                    lpfnWNetAddConnection2        = WNetAddConnection2W;
-                    lpfnWNetCancelConnection2     = WNetCancelConnection2W;
-                    lpfnWNetGetUser               = WNetGetUserW;
-                    lpfnGetWindowsDirectory       = GetWindowsDirectoryW;
-                    lpfnWritePrivateProfileString = WritePrivateProfileStringW;
-                    lpfnGetPrivateProfileString   = GetPrivateProfileStringW;
-                }
+                    Kernel9xInit(&aInfo);
+                    Advapi9xInit(&aInfo);
+                    Comdlg9xInit(&aInfo);
+                    Shell9xInit(&aInfo);
+                    User9xInit(&aInfo);
 
-                g_dwPlatformId = g_OSVerInfo.dwPlatformId;
+                    if ( VER_PLATFORM_WIN32_NT == aInfo.dwPlatformId )
+                    {
+                        lpfnFindFirstFile             = FindFirstFileW;
+                        lpfnFindNextFile              = FindNextFileW;
+                        lpfnSetFileAttributes         = SetFileAttributesW;
+                        lpfnSearchPath                = SearchPathW;
+                        lpfnCreateProcess             = CreateProcessW;
+                        lpfnCreateProcessAsUser       = CreateProcessAsUserW;
+                        lpfnGetEnvironmentVariable    = GetEnvironmentVariableW;
+                        lpfnWNetAddConnection2        = WNetAddConnection2W;
+                        lpfnWNetCancelConnection2     = WNetCancelConnection2W;
+                        lpfnWNetGetUser               = WNetGetUserW;
+                        lpfnGetWindowsDirectory       = GetWindowsDirectoryW;
+                        lpfnWritePrivateProfileString = WritePrivateProfileStringW;
+                        lpfnGetPrivateProfileString   = GetPrivateProfileStringW;
+                    }
+
+                    g_dwPlatformId = aInfo.dwPlatformId;
+                }
 
                 g_dwTLSTextEncodingIndex = TlsAlloc();
                 InitializeCriticalSection( &g_ThreadKeyListCS );
@@ -222,6 +240,12 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
 
         case DLL_PROCESS_DETACH:
             {
+                Kernel9xDeInit();
+                Advapi9xDeInit();
+                Comdlg9xDeInit();
+                Shell9xDeInit();
+                User9xDeInit();
+
                 WSACleanup( );
                 if ( lpArgvW )
                     GlobalFree( lpArgvW );
