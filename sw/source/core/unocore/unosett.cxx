@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 07:06:04 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,19 +632,39 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 break;
                 case  WID_PAGE_STYLE :
                 {
-                    aRet <<= OUString(
-                        SwXStyleFamilies::GetProgrammaticName(
-                            rFtnInfo.GetPageDesc( *pDoc )->GetName(),
-                            SFX_STYLE_FAMILY_PAGE));
+                    OUString sRet;
+                    if( rFtnInfo.GetPageDescDep()->GetRegisteredIn() )
+                    {
+                        sRet = OUString(
+                            SwXStyleFamilies::GetProgrammaticName(
+                                rFtnInfo.GetPageDesc( *pDoc )->GetName(),
+                                SFX_STYLE_FAMILY_PAGE));
+                    }
+                    aRet <<= sRet;
                 }
                 break;
                 case WID_ANCHOR_CHARACTER_STYLE:
                 case WID_CHARACTER_STYLE:
                 {
-                    const SwCharFmt* pCharFmt = pMap->nWID == WID_ANCHOR_CHARACTER_STYLE ?
-                            rFtnInfo.GetAnchorCharFmt(*pDoc) : rFtnInfo.GetCharFmt(*pDoc);
-                    aRet <<= OUString(
-                        SwXStyleFamilies::GetProgrammaticName(pCharFmt->GetName(), SFX_STYLE_FAMILY_CHAR));
+                    OUString sRet;
+                    const SwCharFmt* pCharFmt = 0;
+                    if( pMap->nWID == WID_ANCHOR_CHARACTER_STYLE )
+                    {
+                        if( rFtnInfo.GetAnchorCharFmtDep()->GetRegisteredIn() )
+                            pCharFmt = rFtnInfo.GetAnchorCharFmt(*pDoc);
+                    }
+                    else
+                    {
+                        if( rFtnInfo.GetCharFmtDep()->GetRegisteredIn() )
+                            pCharFmt = rFtnInfo.GetCharFmt(*pDoc);
+                    }
+                    if( pCharFmt )
+                    {
+                        sRet = OUString(
+                            SwXStyleFamilies::GetProgrammaticName(
+                                pCharFmt->GetName(), SFX_STYLE_FAMILY_CHAR));
+                    }
+                    aRet <<= sRet;
                 }
                 break;
                 case  WID_POSITION_END_OF_DOC:
@@ -816,11 +836,17 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                         aEndInfo.ChgPageDesc( pDesc );
                 }
                 break;
+                case WID_ANCHOR_CHARACTER_STYLE:
                 case  WID_CHARACTER_STYLE    :
                 {
                     SwCharFmt* pFmt = lcl_getCharFmt(pDoc, aValue);
                     if(pFmt)
-                        aEndInfo.SetCharFmt(pFmt);
+                    {
+                        if(pMap->nWID == WID_ANCHOR_CHARACTER_STYLE)
+                            aEndInfo.SetAnchorCharFmt(pFmt);
+                        else
+                            aEndInfo.SetCharFmt(pFmt);
+                    }
                 }
                 break;
             }
@@ -871,17 +897,39 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 break;
                 case  WID_PAGE_STYLE :
                 {
-                    aRet <<= OUString(
-                        SwXStyleFamilies::GetProgrammaticName(
-                            rEndInfo.GetPageDesc( *pDoc )->GetName(),
-                            SFX_STYLE_FAMILY_PAGE));
+                    OUString sRet;
+                    if( rEndInfo.GetPageDescDep()->GetRegisteredIn() )
+                    {
+                        sRet = OUString(
+                            SwXStyleFamilies::GetProgrammaticName(
+                                rEndInfo.GetPageDesc( *pDoc )->GetName(),
+                                SFX_STYLE_FAMILY_PAGE));
+                    }
+                    aRet <<= sRet;
                 }
                 break;
-                case  WID_CHARACTER_STYLE    :
+                case WID_ANCHOR_CHARACTER_STYLE:
+                case WID_CHARACTER_STYLE:
                 {
-                    const SwCharFmt* pCharFmt = rEndInfo.GetCharFmt(*pDoc);
-                    aRet <<= OUString(
-                        SwXStyleFamilies::GetProgrammaticName(pCharFmt->GetName(), SFX_STYLE_FAMILY_CHAR));
+                    OUString sRet;
+                    const SwCharFmt* pCharFmt = 0;
+                    if( pMap->nWID == WID_ANCHOR_CHARACTER_STYLE )
+                    {
+                        if( rEndInfo.GetAnchorCharFmtDep()->GetRegisteredIn() )
+                            pCharFmt = rEndInfo.GetAnchorCharFmt(*pDoc);
+                    }
+                    else
+                    {
+                        if( rEndInfo.GetCharFmtDep()->GetRegisteredIn() )
+                            pCharFmt = rEndInfo.GetCharFmt(*pDoc);
+                    }
+                    if( pCharFmt )
+                    {
+                        sRet = OUString(
+                            SwXStyleFamilies::GetProgrammaticName(
+                                pCharFmt->GetName(), SFX_STYLE_FAMILY_CHAR));
+                    }
+                    aRet <<= sRet;
                 }
                 break;
             }
@@ -2329,6 +2377,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/12 07:06:04  os
+    #79412# service name corrected
+
     Revision 1.2  2000/09/27 13:57:06  os
     #78252# don't create styles without a name
 
