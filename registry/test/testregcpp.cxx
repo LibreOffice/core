@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregcpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 16:59:01 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,12 @@
 #include "registry/reflread.hxx"
 #include "registry/reflwrit.hxx"
 
-
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
-
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -130,7 +126,7 @@ void test_coreReflection()
         RegistryTypeWriter writer(*pWriterLoader,
                                   RT_TYPE_MODULE,
                                   OUString::createFromAscii("ModuleA"),
-                                  OUString(), 9, 0, 0);
+                                  OUString(), 11, 0, 0);
 
         RTConstValue aConst;
 
@@ -173,14 +169,26 @@ void test_coreReflection()
                             OUString::createFromAscii("unsigned long"),
                             OUString::createFromAscii("ich bin ein unsigned long"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
+        aConst.m_type = RT_TYPE_INT64;
+        aConst.m_value.aHyper = -100000000;
+        writer.setFieldData(6, OUString::createFromAscii("aConstHyper"),
+                            OUString::createFromAscii("hyper"),
+                            OUString::createFromAscii("ich bin ein hyper"),
+                            OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
+        aConst.m_type = RT_TYPE_UINT64;
+        aConst.m_value.aUHyper = 100000000;
+        writer.setFieldData(7, OUString::createFromAscii("aConstULong"),
+                            OUString::createFromAscii("unsigned long"),
+                            OUString::createFromAscii("ich bin ein unsigned long"),
+                            OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_FLOAT;
         aConst.m_value.aFloat = -2e-10f;
-        writer.setFieldData(6, OUString::createFromAscii("aConstFloat"),
+        writer.setFieldData(8, OUString::createFromAscii("aConstFloat"),
                             OUString::createFromAscii("float"),
                             OUString::createFromAscii("ich bin ein float"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
         aConst.m_type = RT_TYPE_DOUBLE;
-        aConst.m_value.aDouble = -2e-100; writer.setFieldData(7, OUString::createFromAscii("aConstDouble"),
+        aConst.m_value.aDouble = -2e-100; writer.setFieldData(9, OUString::createFromAscii("aConstDouble"),
                                                               OUString::createFromAscii("double"),
                                                               OUString::createFromAscii("ich bin ein double"),
                                                               OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
@@ -188,7 +196,7 @@ void test_coreReflection()
         OUString tmpStr(OUString::createFromAscii( "dies ist ein unicode string" ));
         aConst.m_value.aString = tmpStr.getStr();
 
-        writer.setFieldData(8, OUString::createFromAscii("aConstString"),
+        writer.setFieldData(10, OUString::createFromAscii("aConstString"),
                             OUString::createFromAscii("string"),
                             OUString::createFromAscii("ich bin ein string"),
                             OUString::createFromAscii("DummyFile"), RT_ACCESS_CONST, aConst);
@@ -207,7 +215,15 @@ void test_coreReflection()
         {
             OSL_ENSURE(reader.getTypeName().equals(OUString::createFromAscii("ModuleA")), "testCoreReflection error 9a2");
 
-            RTConstValue aReadConst = reader.getFieldConstValue(8);
+            RTConstValue aReadConst = reader.getFieldConstValue(4);
+            OSL_ENSURE( aReadConst.m_type == RT_TYPE_INT32, "testCoreReflection error 9a3");
+            OSL_ENSURE( aReadConst.m_value.aLong == -100000, "testCoreReflection error 9a4");
+
+            aReadConst = reader.getFieldConstValue(6);
+            OSL_ENSURE( aReadConst.m_type == RT_TYPE_INT64, "testCoreReflection error 9a5");
+            OSL_ENSURE( aReadConst.m_value.aHyper == -100000000, "testCoreReflection error 9a6");
+
+            aReadConst = reader.getFieldConstValue(10);
             OString aConstStr = OUStringToOString(aConst.m_value.aString, RTL_TEXTENCODING_ASCII_US);
             OSL_ENSURE(aConstStr.equals("dies ist ein unicode string"), "testCoreReflection error 9b");
         }

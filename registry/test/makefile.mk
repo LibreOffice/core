@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+#   last change: $Author: jsc $ $Date: 2001-03-14 09:51:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,7 @@ SHL1TARGET= rgt$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= rgt
 SHL1STDLIBS=	\
                 $(SALLIB) \
-                $(VOSLIB)	\
+                $(SALHELPERLIB)	\
                 $(STDLIBCPP)
 
 .IF "$(GUI)" == "WNT"

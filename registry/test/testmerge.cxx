@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testmerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 16:59:01 $
+ *  last change: $Author: jsc $ $Date: 2001-03-14 09:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,11 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
 #ifndef _RTL_ALLOC_H_
-#include    <rtl/alloc.h>
+#include <rtl/alloc.h>
 #endif
-
 #ifndef _RTL_USTRING_HXX_
-#include    <rtl/ustring.hxx>
+#include <rtl/ustring.hxx>
 #endif
 
 
