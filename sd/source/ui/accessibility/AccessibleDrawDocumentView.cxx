@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 14:48:28 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     : AccessibleDocumentViewBase (pSdWindow, pViewShell, rxController, rxParent),
       mpChildrenManager (NULL)
 {
+    OSL_TRACE ("AccessibleDrawDocumentView");
 }
 
 
@@ -155,10 +156,8 @@ AccessibleDrawDocumentView::AccessibleDrawDocumentView (
 AccessibleDrawDocumentView::~AccessibleDrawDocumentView (void)
 {
     OSL_TRACE ("~AccessibleDrawDocumentView");
-
-    // Unregister from the various event broadcasters.
-    if (mpChildrenManager != NULL)
-        delete mpChildrenManager;
+    DBG_ASSERT (rBHelper.bDisposed || rBHelper.bInDispose,
+        "~AccessibleDrawDocumentView: object has not been disposed");
 }
 
 
@@ -334,43 +333,6 @@ void SAL_CALL
         // maShapeTreeInfo has been modified in base class.
         if (mpChildrenManager != NULL)
             mpChildrenManager->SetInfo (maShapeTreeInfo);
-    }
-}
-
-
-
-
-//=====  XFrameActionListener  ================================================
-
-void SAL_CALL
-    AccessibleDrawDocumentView::frameAction (const frame::FrameActionEvent& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    AccessibleDocumentViewBase::frameAction (rEventObject);
-
-    if (rEventObject.Action == frame::FrameAction_COMPONENT_REATTACHED)
-    {
-        if (mpChildrenManager != NULL)
-        {
-            // Clear the list of children to avoid unnecessary events and
-            // update the children manager.
-            mpChildrenManager->ClearAccessibleShapeList ();
-            mpChildrenManager->SetInfo (maShapeTreeInfo);
-            mpChildrenManager->ViewForwarderChanged (
-                IAccessibleViewForwarderListener::TRANSFORMATION,
-                &maViewForwarder);
-
-            // To properly inform the registered listeners of this we just have
-            // to call the children manager and update its shape list.
-            uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
-            if (xView.is())
-                mpChildrenManager->SetShapeList (
-                    uno::Reference<drawing::XShapes> (
-                        xView->getCurrentPage(), uno::UNO_QUERY));
-            mpChildrenManager->AddAccessibleShape (std::auto_ptr<AccessibleShape>(CreateDrawPageShape()));
-            mpChildrenManager->Update (false);
-            OSL_TRACE ("done handling frame event for AccessibleDrawDocumentView");
-        }
     }
 }
 
@@ -625,6 +587,28 @@ void AccessibleDrawDocumentView::Deactivated (void)
             pAccessibleShape->ResetState (AccessibleStateType::FOCUSED);
     }
 }
+
+
+
+
+/** This method is called from the component helper base class while
+    disposing.
+*/
+void SAL_CALL AccessibleDrawDocumentView::disposing (void)
+{
+
+    // Release resources.
+    if (mpChildrenManager != NULL)
+    {
+        delete mpChildrenManager;
+        mpChildrenManager = NULL;
+    }
+
+    // Forward call to base classes.
+    AccessibleDocumentViewBase::disposing ();
+}
+
+
 
 
 } // end of namespace accessibility

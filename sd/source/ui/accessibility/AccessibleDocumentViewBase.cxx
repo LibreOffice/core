@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 15:12:35 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,6 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
         static_cast<SdrPaintView*>(pViewShell->GetView()),
         *static_cast<OutputDevice*>(pSdWindow))
 {
-    OSL_TRACE ("new view is %xd", pViewShell->GetView());
     if (mxController.is())
         mxModel = mxController->getModel();
 
@@ -177,29 +176,8 @@ AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
 {
     OSL_TRACE ("~AccessibleDocumentViewBase");
 
-    // Unregister from the various event broadcasters.
-    if (mxModel.is())
-        mxModel->removeEventListener (
-            static_cast<frame::XFrameActionListener*>(this));
-    if (mxController.is())
-    {
-        uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
-        if (xFrame.is())
-            xFrame->removeFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
-        uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
-        if (xSet.is())
-            xSet->removePropertyChangeListener (
-                OUString (RTL_CONSTASCII_USTRINGPARAM("")),
-                static_cast<beans::XPropertyChangeListener*>(this));
-    }
-
-    // Unregister from VCL Window.
-    Window* pWindow = maShapeTreeInfo.GetWindow();
-    if (pWindow != NULL)
-    {
-        pWindow->RemoveChildEventListener (LINK(
-            this, AccessibleDocumentViewBase, WindowChildEventListener));
-    }
+    // At this place we should be disposed.  You may want to add a
+    // corresponding assertion into the destructor of a derived class.
 }
 
 
@@ -221,15 +199,10 @@ void AccessibleDocumentViewBase::Init (void)
         xShapeList = uno::Reference<drawing::XShapes> (
             xView->getCurrentPage(), uno::UNO_QUERY);
 
-    // Register this object as dispose event and document::XEventListener
-    // listener at the model.
+    // Register this object as dispose event listener at the model.
     if (mxModel.is())
-        mxModel->addEventListener (static_cast<frame::XFrameActionListener*>(this));
-
-    // Register as frame action listener at the frame of the controller.
-    uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
-    if (xFrame.is())
-        xFrame->addFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
+        mxModel->addEventListener (
+            static_cast<awt::XWindowListener*>(this));
 
     // Register as property change listener at the controller.
     uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
@@ -237,7 +210,6 @@ void AccessibleDocumentViewBase::Init (void)
         xSet->addPropertyChangeListener (
             OUString (RTL_CONSTASCII_USTRINGPARAM("")),
             static_cast<beans::XPropertyChangeListener*>(this));
-
 
     // Register as top window listener at the top window.
     uno::Reference<awt::XTopWindow> xTopWindow;
@@ -465,8 +437,7 @@ uno::Any SAL_CALL
             static_cast<XAccessibleComponent*>(this),
             static_cast<XAccessibleSelection*>(this),
             static_cast<lang::XEventListener*>(
-            static_cast<frame::XFrameActionListener*>(this)),
-            static_cast<frame::XFrameActionListener*>(this),
+                static_cast<awt::XWindowListener*>(this)),
             static_cast<beans::XPropertyChangeListener*>(this),
             static_cast<awt::XWindowListener*>(this),
             static_cast<awt::XTopWindowListener*>(this)
@@ -533,8 +504,6 @@ void SAL_CALL
     // ...and add the additional type for the component.
     const uno::Type aLangEventListenerType =
          ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
-    const uno::Type aFrameActionListenerType =
-         ::getCppuType((const uno::Reference<frame::XFrameActionListener>*)0);
     const uno::Type aPropertyChangeListenerType =
          ::getCppuType((const uno::Reference<beans::XPropertyChangeListener>*)0);
     const uno::Type aWindowListenerType =
@@ -545,11 +514,10 @@ void SAL_CALL
          ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0);
     aTypeList.realloc (nTypeCount + 5);
     aTypeList[nTypeCount+0] = aLangEventListenerType;
-    aTypeList[nTypeCount+2] = aFrameActionListenerType;
-    aTypeList[nTypeCount+3] = aPropertyChangeListenerType;
-    aTypeList[nTypeCount+3] = aWindowListenerType;
-    aTypeList[nTypeCount+4] = aTopWindowListenerType;
-    aTypeList[nTypeCount+5] = aEventBroadcaster;
+    aTypeList[nTypeCount+1] = aPropertyChangeListenerType;
+    aTypeList[nTypeCount+2] = aWindowListenerType;
+    aTypeList[nTypeCount+3] = aTopWindowListenerType;
+    aTypeList[nTypeCount+4] = aEventBroadcaster;
 
     return aTypeList;
 }
@@ -577,7 +545,8 @@ void SAL_CALL
 
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
 
-        mxModel->removeEventListener (static_cast<frame::XFrameActionListener*>(this));
+        mxModel->removeEventListener (
+            static_cast<awt::XWindowListener*>(this));
 
         // Reset the model reference.
         mxModel = NULL;
@@ -592,7 +561,7 @@ void SAL_CALL
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
 
         // Unregister as property change listener at the controller.
-        uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xSet (mxController,uno::UNO_QUERY);
         if (xSet.is())
             xSet->removePropertyChangeListener (
                 OUString (RTL_CONSTASCII_USTRINGPARAM("")),
@@ -600,69 +569,6 @@ void SAL_CALL
 
         // Reset the model reference.
         mxController = NULL;
-    }
-    else
-    {
-        uno::Reference<frame::XFrame> xFrame (rEventObject.Source, uno::UNO_QUERY);
-        if (xFrame.is())
-        {
-            OSL_TRACE ("  disposing frame");
-
-            // Unregister as frame action listener at the frame of the controller.
-            xFrame = mxController->getFrame();
-            if (xFrame.is())
-                xFrame->removeFrameActionListener (static_cast<frame::XFrameActionListener*>(this));
-        }
-    }
-}
-
-
-
-
-//=====  XFrameActionListener  ================================================
-
-void SAL_CALL
-    AccessibleDocumentViewBase::frameAction (const frame::FrameActionEvent& rEventObject)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    OSL_TRACE ("FrameAction (%d)", rEventObject.Action);
-    if (rEventObject.Action == frame::FrameAction_COMPONENT_REATTACHED)
-    {
-        if ((mxController.is() && rEventObject.Frame != mxController->getFrame()))
-            OSL_TRACE ("Controller invalid or event is not for us");
-        // The type of the view has (been) changed.
-        // Unregister from old controller.
-        if (mxController.is())
-        {
-            uno::Reference<frame::XFrame> xFrame (mxController->getFrame());
-            if (xFrame.is())
-                xFrame->removeFrameActionListener (
-                    static_cast<frame::XFrameActionListener*>(this));
-        }
-
-        // Get new controller, set the shape tree info accordingly, and
-        // register as frame listener.
-        mxController = rEventObject.Frame->getController();
-        maShapeTreeInfo.SetControllerBroadcaster (
-            uno::Reference<document::XEventBroadcaster>(
-                mxController->getModel(), uno::UNO_QUERY));
-        maShapeTreeInfo.SetController (mxController);
-        if (rEventObject.Frame.is())
-            rEventObject.Frame->addFrameActionListener (
-                static_cast<frame::XFrameActionListener*>(this));
-
-        // Set new view to view forwarder.
-        SfxViewShell* pViewShell = mpViewFrame->GetViewShell ();
-        if (pViewShell->ISA(SdViewShell))
-        {
-            maViewForwarder.SetView (PTR_CAST(SdViewShell, pViewShell)->GetView());
-        }
-
-        OSL_TRACE ("  done handling frame event");
-    }
-    else
-    {
-        OSL_TRACE ("  unhandled frame action");
     }
 }
 
@@ -699,7 +605,6 @@ void SAL_CALL
     AccessibleDocumentViewBase::windowMoved (const ::com::sun::star::awt::WindowEvent& e)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    OSL_TRACE ("window moved");
     ViewForwarderChanged (
         IAccessibleViewForwarderListener::VISIBLE_AREA,
         &maViewForwarder);
@@ -786,6 +691,35 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
         pWindow->RemoveChildEventListener (LINK(
             this, AccessibleDocumentViewBase, WindowChildEventListener));
     }
+
+    // Unregister from window.
+    if (mxWindow.is())
+        mxWindow->removeWindowListener (this);
+
+    // Unregister form the model.
+    if (mxModel.is())
+        mxModel->removeEventListener (
+            static_cast<awt::XWindowListener*>(this));
+
+    // Unregister from the controller.
+    uno::Reference<beans::XPropertySet> xSet (mxController, uno::UNO_QUERY);
+    if (xSet.is())
+        xSet->removePropertyChangeListener (
+            OUString (RTL_CONSTASCII_USTRINGPARAM("")),
+            static_cast<beans::XPropertyChangeListener*>(this));
+
+    // Unregister from top window.
+    if (mxController.is())
+        if (mxController->getFrame().is())
+        {
+            uno::Reference<awt::XTopWindow> xTopWindow (
+                uno::Reference<awt::XTopWindow> (
+                    mxController->getFrame()->getContainerWindow(),
+                    uno::UNO_QUERY));
+            if (xTopWindow.is())
+                xTopWindow->removeTopWindowListener (
+                    static_cast<awt::XTopWindowListener*>(this));
+        }
 
     AccessibleContextBase::disposing ();
 }
