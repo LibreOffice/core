@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 14:54:41 $
+ *  last change: $Author: af $ $Date: 2002-07-04 14:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
         int x = aPixelPosition.getX() - aParentLocation.X;
         int y = aPixelPosition.getY() - aParentLocation.Y;
 
-        //  The following block is a workarround for bug #99889# (property
+        /*        //  The following block is a workarround for bug #99889# (property
         //  BoundRect returnes coordinates relative to document window
         //  instead of absolute coordinates for shapes in Writer).  Has to
         //  be removed as soon as bug is fixed.
@@ -602,7 +602,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
                 }
             }
         //  End of workarround.
-
+        */
         // Clip with parent (with coordinates relative to itself).
         ::Rectangle aBBox (
             x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
