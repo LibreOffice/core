@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 10:41:27 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@
 #include <vcl/salctype.hxx>
 #include <svtools/printdlg.hxx>
 #include <sot/clsids.hxx>
+#include <sot/storinfo.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -324,9 +325,13 @@ using namespace ::com::sun::star::uno;
 
 struct IMPL_SfxBaseModel_DataContainer
 {
+    // counter for SfxBaseModel instances created.
+    static sal_Int64                                g_nInstanceCounter      ;
+
     SfxObjectShellRef                               m_pObjectShell          ;
     //SfxObjectShellLock                                m_pObjectShellLock      ;
     OUSTRING                                        m_sURL                  ;
+    OUSTRING                                        m_sRuntimeUID           ;
     sal_uInt16                                      m_nControllerLockCount  ;
     OMULTITYPEINTERFACECONTAINERHELPER              m_aInterfaceContainer   ;
     REFERENCE< XINTERFACE >                         m_xParent               ;
@@ -350,14 +355,22 @@ struct IMPL_SfxBaseModel_DataContainer
             :   m_pObjectShell          ( pObjectShell  )
 //          ,   m_pObjectShellLock      ( pObjectShell  )
             ,   m_sURL                  ( String()      )
+//            ,   m_sRuntimeUID           ( String()      )
             ,   m_nControllerLockCount  ( 0             )
             ,   m_aInterfaceContainer   ( aMutex        )
             ,   m_bClosed               ( sal_False     )
             ,   m_bClosing              ( sal_False     )
             ,   m_pChildCommitListen    ( NULL          )
     {
+        // increase global instance counter.
+        ++g_nInstanceCounter;
+        // set own Runtime UID
+        m_sRuntimeUID = rtl::OUString::valueOf( g_nInstanceCounter );
     }
 } ;
+
+// static member initialization.
+sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
 
 SIZE impl_Size_Object2Struct( const Size& aSize )
 {
@@ -2781,12 +2794,13 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
         throw DISPOSEDEXCEPTION();
 
     REFERENCE< XSTORAGE > xResult;
-    if ( m_pData->m_pObjectShell.Is() && m_pData->m_pObjectShell->GetMedium() )
+    if ( m_pData->m_pObjectShell.Is() )
     {
-        SotStorageRef rStorage = m_pData->m_pObjectShell->GetMedium()->GetStorage();
-        if ( rStorage.Is() )
+        SotStorageRef rStorage = m_pData->m_pObjectShell->GetStorage();
+        if ( rStorage.Is() && !rStorage->GetError() )
         {
             xResult = rStorage->GetUNOAPIDuplicate( aStorageName, nMode );
+            rStorage->ResetError();
             uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNO_QUERY );
             if ( xBroadcaster.is() )
             {
@@ -2802,6 +2816,43 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
     }
 
     return xResult;
+}
+
+Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
+    throw ( io::IOException,
+            RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw DISPOSEDEXCEPTION();
+
+    Sequence< ::rtl::OUString > aResult;
+    sal_Int32 nResultSize = 0;
+    sal_Bool bSuccess = sal_False;
+    if ( m_pData->m_pObjectShell.Is() )
+    {
+        SotStorageRef rStorage = m_pData->m_pObjectShell->GetStorage();
+        if ( rStorage.Is() && SOFFICE_FILEFORMAT_60 <= rStorage->GetVersion() )
+        {
+            SvStorageInfoList aSubStorInfoList;
+            rStorage->FillInfoList( &aSubStorInfoList );
+            for ( sal_Int32 nInd = 0; nInd < aSubStorInfoList.Count(); nInd++ )
+            {
+                if ( aSubStorInfoList[nInd].IsStorage() )
+                {
+                    aResult.realloc( ++nResultSize );
+                    aResult[ nResultSize - 1 ] = aSubStorInfoList[nInd].GetName();
+                }
+            }
+
+            bSuccess = sal_True;
+        }
+    }
+
+    if ( !bSuccess )
+        throw io::IOException();
+
+       return aResult;
 }
 
 REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
@@ -2823,6 +2874,13 @@ REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
     }
 
     return m_pData->m_xScriptProvider;
+}
+
+rtl::OUString SfxBaseModel::getRuntimeUID() const
+{
+    OSL_ENSURE( m_pData->m_sRuntimeUID.getLength() > 0,
+                "SfxBaseModel::getRuntimeUID - ID is empty!" );
+    return m_pData->m_sRuntimeUID;
 }
 
 REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationManager()
