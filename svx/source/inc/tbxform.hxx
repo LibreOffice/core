@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:24:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 
 #ifndef _SFXTBXCTRL_HXX //autogen
 #include <sfx2/tbxctrl.hxx>
-#endif
-
-#ifndef _SFXTBXMGR_HXX //autogen
-#include <sfx2/tbxmgr.hxx>
 #endif
 
 #ifndef _SV_FIELD_HXX //autogen
