@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-19 17:04:21 $
+ *  last change: $Author: kso $ $Date: 2001-01-22 11:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -796,14 +799,14 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                                                 HTTP_URL_SCHEME ) ) &&
                   !aScheme.equalsIgnoreCase( OUString::createFromAscii(
                                                 HTTPS_URL_SCHEME ) ) )
-                throw CommandAbortedException();
+                throw InteractiveBadTransferURLException();
 #else
             // Check scheme
             //
             const OUString aScheme = sourceURI.GetScheme();
             if ( !aScheme.equalsIgnoreCase( OUString::createFromAscii(
                                                 WEBDAV_URL_SCHEME ) ) )
-                throw CommandAbortedException();
+                throw InteractiveBadTransferURLException();
 #endif
             sourceURI.SetScheme (OUString::createFromAscii ("http"));
             targetURI.SetScheme (OUString::createFromAscii ("http"));
@@ -813,7 +816,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
             if (sourceURI.GetHost ().getLength () &&
                 sourceURI.GetHost () != targetURI.GetHost ())
             {
-                throw CommandAbortedException();
+                throw InteractiveBadTransferURLException();
             }
 
             if (!transferArgs.NewTitle.getLength ())
