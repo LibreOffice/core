@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.78 $
+*  $Revision: 1.79 $
 *
-*  last change: $Author: rt $ $Date: 2004-11-25 16:47:08 $
+*  last change: $Author: rt $ $Date: 2004-11-26 12:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2371,8 +2371,10 @@ namespace xmloff { namespace token {
 
         // OD 2004-05-05 #i28701#
         TOKEN( "wrap-influence-on-position",           XML_WRAP_INFLUENCE_ON_POSITION ),
-        TOKEN( "none-successive-positioned",           XML_NONE_SUCCESSIVE_POSITIONED ),
-        TOKEN( "none-concurrent-positioned",           XML_NONE_CONCURRENT_POSITIONED ),
+        // --> OD 2004-10-18 #i35017# - tokens have been renamed and
+        // <XML_ITERATIVE> has been added
+        TOKEN( "once-successive",                       XML_ONCE_SUCCESSIVE ),
+        TOKEN( "once-concurrent",                       XML_ONCE_CONCURRENT ),
 
         // Names for OOo format only
         TOKEN( "http://openoffice.org/2000/office",     XML_N_OFFICE_OOO ),
@@ -2540,6 +2542,12 @@ namespace xmloff { namespace token {
         TOKEN( "symbol-name",                  XML_SYMBOL_NAME ),
         TOKEN( "symbol-type",                  XML_SYMBOL_TYPE ),
         TOKEN( "image-opacity",                XML_IMAGE_OPACITY ), // #i25616#
+
+        TOKEN( "default-outline-level",        XML_DEFAULT_OUTLINE_LEVEL ),
+        TOKEN( "show-details",                 XML_SHOW_DETAILS ),
+        TOKEN( "show-empty",                   XML_SHOW_EMPTY ),
+        TOKEN( "iterative",                    XML_ITERATIVE ),
+
         TOKEN( "X",                            XML_uX ),
         TOKEN( "dlg",                                    XML_NP_DLG ),
         TOKEN( "http://openoffice.org/2000/dialog",      XML_N_DLG ),
