@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 10:19:00 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 11:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ using namespace bridges_urp;
 
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL __EXPORT_UNO_INITENVIRONMENT(
+extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
     uno_Environment * pEnvRemote )
 {
     // set C-virtual methods
@@ -483,7 +483,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL __EXPORT_UNO_INITENVIRONMENT(
 
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL __EXPORT_UNO_EXT_GETMAPPING(
+extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping,
     uno_Environment * pFrom,
     uno_Environment * pTo )

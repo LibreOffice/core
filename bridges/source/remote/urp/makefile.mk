@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-15 10:18:59 $
+#   last change: $Author: dbo $ $Date: 2000-12-15 11:10:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,8 @@ NO_BSYMBOLIC=TRUE
 # ------------------------------------------------------------------
 
 .IF "$(COM)$(OS)" == "GCCMACOSX"
-CFLAGS += -D__EXPORT_UNO_INITENVIRONMENT=$(TARGET)uno_initEnvironment \
-      -D__EXPORT_UNO_EXT_GETMAPPING=$(TARGET)uno_ext_getMapping
-.ELSE
-CFLAGS += -D__EXPORT_UNO_INITENVIRONMENT=uno_initEnvironment \
-      -D__EXPORT_UNO_EXT_GETMAPPING=uno_ext_getMapping
+CFLAGS += -Duno_initEnvironment=$(TARGET)uno_initEnvironment \
+      -Duno_ext_getMapping=$(TARGET)uno_ext_getMapping
 .ENDIF
 
 #CPPUMAKERFLAGS += -C
