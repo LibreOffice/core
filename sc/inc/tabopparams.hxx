@@ -2,7 +2,7 @@
  *
  *  $RCSfile: tabopparams.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
  *  last change: $ $
  *
@@ -120,7 +120,7 @@ struct ScInterpreterTableOpParams
         return *this;
     }
 
-    operator ==( const ScInterpreterTableOpParams& r )
+    sal_Bool operator ==( const ScInterpreterTableOpParams& r )
     {
         return
             bValid && r.bValid &&
