@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:54:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@ class SwTxtFrm: public SwCntntFrm
     // The x position for wrap-through flys anchored at this paragraph.
     SwTwips mnFlyAnchorOfstNoWrap;
     SwTwips mnFtnLine;
+    // OD 2004-03-17 #i11860# - re-factoring of #i11859#
+    // member for height of last line (value needed for proportional line spacing)
+    SwTwips mnHeightOfLastLine;
+
 
     xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
@@ -235,6 +239,14 @@ class SwTxtFrm: public SwCntntFrm
     // required for 'new' relative anchor position
     void CalcBaseOfstForFly();
 
+    /** method to determine height of last line, needed for proportional line spacing
+
+        OD 2004-03-17 #i11860#
+
+        @author OD
+    */
+    void _CalcHeightOfLastLine();
+
 public:
 
     //public, weil der eine oder andere die Methode rufen darf um das
@@ -261,6 +273,8 @@ public:
         Assumption: given position exists in the text frame or in a follow of it
         OD 2004-02-02 - adjustment
         Top of first paragraph line is the top of the paragraph.
+        OD 2004-03-18 #i11860# - Consider upper space amount considered for
+        previous frame and the page grid.
 
         @author OD
 
@@ -499,18 +513,6 @@ public:
     //      value of a proportional line spacing is returned or not
     long GetLineSpace( const bool _bNoPropLineSpacing = false ) const;
 
-    /** determine height of last line for the calculation of the proportional line
-        spacing
-
-        OD 08.01.2004 #i11859#
-        Used by method <SwTxtFrm::GetLineSpace(..)> and class <SwCntntNotify>.
-
-        @author OD
-
-        @return long - height of last line
-    */
-    long GetHeightOfLastLineForPropLineSpacing() const;
-
     // liefert die erste Zeilenhoehe zurueck
     USHORT FirstLineHeight() const;
 
@@ -597,6 +599,12 @@ public:
         return ( bIgnoreFlysAnchoredAtThisFrame ?
                  mnFlyAnchorOfst :
                  mnFlyAnchorOfstNoWrap );
+    }
+
+    // OD 2004-03-17 #i11860#
+    inline SwTwips GetHeightOfLastLine() const
+    {
+        return mnHeightOfLastLine;
     }
 
     /** method to invalidate printing area of next frame
