@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:50:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_EVENT_HXX
+#include <vcl/event.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
@@ -166,8 +169,8 @@ PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
         m_aFaxImg( Bitmap( PaResId( RID_BMP_SMALL_FAX ) ), Color( 0xff, 0x00, 0xff ) ),
         m_aPdfImg( Bitmap( PaResId( RID_BMP_SMALL_PDF ) ), Color( 0xff, 0x00, 0xff ) )
 {
-    Init();
     FreeResource();
+    Init();
 }
 
 void PADialog::Init()
@@ -198,6 +201,20 @@ PADialog::~PADialog()
     m_rPIManager.writePrinterConfig();
     freePadminRC();
 }
+
+long PADialog::Notify( NotifyEvent& rEv )
+{
+    if( rEv.GetType() == EVENT_GETFOCUS || rEv.GetType() == EVENT_LOSEFOCUS )
+    {
+        if( m_rPIManager.checkPrintersChanged() )
+        {
+            UpdateDevice();
+            UpdateText();
+        }
+    }
+    return ModalDialog::Notify( rEv );
+}
+
 
 String PADialog::getSelectedDevice()
 {
