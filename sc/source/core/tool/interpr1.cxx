@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:47:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 12:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5048,7 +5048,7 @@ void ScInterpreter::ScDBCount2()
 {
     USHORT nTab;
     ScQueryParam aQueryParam;
-    BOOL bMissingField = FALSE;
+    BOOL bMissingField = TRUE;
     if (GetDBParams( nTab, aQueryParam, bMissingField))
     {
         ULONG nCount = 0;
