@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:45:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-09 12:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                 _GetTopForObjPos( *pOrientFrm, fnRect, bVert );
                 const SwLayoutFrm& rVertEnvironLayFrm =
                     aEnvOfObj.GetVertEnvironmentLayoutFrm(
-                                            *(pOrientFrm->GetUpper()), false );
+                                            *(pOrientFrm->GetUpper()) );
                 const bool bCheckBottom = !bFollowTextFlow;
                 nRelPosY = _AdjustVertRelPos( nTopOfAnch, bVert,
                                               rVertEnvironLayFrm, nRelPosY,
