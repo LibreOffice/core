@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-30 14:13:00 $
+ *  last change: $Author: aw $ $Date: 2001-08-21 15:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,60 +800,85 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 // #67720#
                 SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
-                ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                    pUndoManager, pDoc, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
-                pUndoManager->AddUndoAction(pAction);
+                DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
 
-                SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow( SdPreviewChildWindow::GetChildWindowId() );
-                SdPreviewWin*   pPreviewWin = NULL;
+                // #90356#
+                sal_uInt16 nActionCount(pUndoManager->GetUndoActionCount());
+                sal_Bool bContinue(sal_True);
 
-                // notify preview slide show are changes are to be done
-                if( pPreviewChildWindow && ( ( pPreviewWin = (SdPreviewWin*) pPreviewChildWindow->GetWindow() ) != NULL ) )
+                if(nActionCount)
                 {
-                    FuSlideShow* pShow = pPreviewWin->GetSlideShow();
+                    // ask user if he wants to loose UNDO stack
+                    String aString(SdResId(STR_WARN_DEL_UNDO_STACK));
+                    WarningBox aWarningBox(pWindow, WB_YES_NO, aString);
 
-                    if( pShow )
-                        pShow->InitPageModify();
+                    if(RET_YES == aWarningBox.Execute())
+                    {
+                        pUndoManager->Clear();
+                    }
+                    else
+                    {
+                        bContinue = sal_False;
+                    }
                 }
 
-                if (!bHandoutMode)
+                if(bContinue)
                 {
-                    if (pActualPage->GetName() != aNewName)
-                    {
-                        pActualPage->SetName(aNewName);
+                    ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
+                        pUndoManager, pDoc, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
+                    pUndoManager->AddUndoAction(pAction);
 
-                        if (ePageKind == PK_STANDARD)
-                        {
-                            SdPage* pNotesPage = pDoc->GetSdPage(nPage, PK_NOTES);
-                            pNotesPage->SetName(aNewName);
-                        }
+                    SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow( SdPreviewChildWindow::GetChildWindowId() );
+                    SdPreviewWin*   pPreviewWin = NULL;
+
+                    // notify preview slide show are changes are to be done
+                    if( pPreviewChildWindow && ( ( pPreviewWin = (SdPreviewWin*) pPreviewChildWindow->GetWindow() ) != NULL ) )
+                    {
+                        FuSlideShow* pShow = pPreviewWin->GetSlideShow();
+
+                        if( pShow )
+                            pShow->InitPageModify();
                     }
 
-                    pActualPage->SetAutoLayout(aNewAutoLayout, TRUE);
+                    if (!bHandoutMode)
+                    {
+                        if (pActualPage->GetName() != aNewName)
+                        {
+                            pActualPage->SetName(aNewName);
 
-                    aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-                    aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-                    aVisibleLayers.Set(aBckgrnd, bBVisible);
-                    aVisibleLayers.Set(aBckgrndObj, bBObjsVisible);
-                    nPos = 0;
-                    pActualPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos);
+                            if (ePageKind == PK_STANDARD)
+                            {
+                                SdPage* pNotesPage = pDoc->GetSdPage(nPage, PK_NOTES);
+                                pNotesPage->SetName(aNewName);
+                            }
+                        }
+
+                        pActualPage->SetAutoLayout(aNewAutoLayout, TRUE);
+
+                        aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+                        aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+                        aVisibleLayers.Set(aBckgrnd, bBVisible);
+                        aVisibleLayers.Set(aBckgrndObj, bBObjsVisible);
+                        nPos = 0;
+                        pActualPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos);
+                    }
+                    else
+                    {
+                        pHandoutMPage->SetAutoLayout(aNewAutoLayout, TRUE);
+                    }
+
+                    GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
+                                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+
+                    BOOL bSetModified = TRUE;
+
+                    if (pArgs && pArgs->Count() == 1)
+                    {
+                        bSetModified = (BOOL) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
+                    }
+
+                    pDoc->SetChanged(bSetModified);
                 }
-                else
-                {
-                    pHandoutMPage->SetAutoLayout(aNewAutoLayout, TRUE);
-                }
-
-                GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHPAGE,
-                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-
-                BOOL bSetModified = TRUE;
-
-                if (pArgs && pArgs->Count() == 1)
-                {
-                    bSetModified = (BOOL) ((SfxBoolItem&) pArgs->Get(SID_MODIFYPAGE)).GetValue();
-                }
-
-                pDoc->SetChanged(bSetModified);
             }
 
             Cancel();
