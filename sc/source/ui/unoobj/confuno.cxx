@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 08:35:31 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 10:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_SHOWZERO),     0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_SHOWNOTES),    0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_SHOWGRID),     0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_GRIDCOLOR),    0,  &getCppuType((sal_Int32*)0),        0},
         {MAP_CHAR_LEN(SC_UNO_SHOWPAGEBR),   0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNONAME_LINKUPD),  0,  &getCppuType((sal_Int16*)0),        0},
         {MAP_CHAR_LEN(SC_UNO_COLROWHDR),    0,  &getBooleanCppuType(),              0},
@@ -185,6 +186,16 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 aViewOpt.SetOption(VOPT_NOTES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_SHOWGRID ) == 0 )
                 aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            else if ( aPropertyName.compareToAscii( SC_UNO_GRIDCOLOR ) == 0 )
+            {
+                sal_Int64 nColor;
+                if (aValue >>= nColor)
+                {
+                    String aColorName;
+                    Color aColor(static_cast<sal_uInt32>(nColor));
+                    aViewOpt.SetGridColor(aColor, aColorName);
+                }
+            }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHOWPAGEBR ) == 0 )
                 aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNONAME_LINKUPD ) == 0 )
@@ -239,6 +250,12 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_NOTES ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_SHOWGRID ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_GRID ) );
+            else if ( aPropertyName.compareToAscii( SC_UNO_GRIDCOLOR ) == 0 )
+            {
+                String aColorName;
+                Color aColor = aViewOpt.GetGridColor(&aColorName);
+                aRet <<= static_cast<sal_Int64>(aColor.GetColor());
+            }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHOWPAGEBR ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, aViewOpt.GetOption( VOPT_PAGEBREAKS ) );
             else if ( aPropertyName.compareToAscii( SC_UNONAME_LINKUPD ) == 0 )
