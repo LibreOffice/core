@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-01 10:42:53 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 15:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 #ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
@@ -475,7 +475,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     aSaveStr = aSaveStr.GetToken( 0, c );
                 }
 
-                rFieldStr = INetURLObject::RelToAbs( aSaveStr );
+                rFieldStr = URIHelper::SmartRelToAbs( aSaveStr );
             }
 //          SkipGroup();        // ueberlese den Rest
         }
@@ -736,7 +736,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     {
                     case 0:
                         if( !rFieldStr.Len() )
-                            rFieldStr = INetURLObject::RelToAbs( sParam );
+                            rFieldStr = URIHelper::SmartRelToAbs( sParam );
                         break;
 
                     case 'l':   case 'L':   sMark = sParam;     break;
@@ -1076,11 +1076,14 @@ INSINGLECHAR:
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.3 2001-06-01 10:42:53 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.4 2001-07-09 15:29:39 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/06/01 10:42:53  jp
+      Bug #87720#: im-/export of ruby attribute and combined characters
+
       Revision 1.2  2001/02/21 12:45:23  os
       use database struct instead of a combined string
 
