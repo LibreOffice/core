@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_body.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:07:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,10 @@
  *
  ************************************************************************/
 
+#include <i18nutil/casefolding.hxx>
 #define TRANSLITERATION_ALL
 #include "transliteration_body.hxx"
-#include "casefolding.hxx"
 
-using namespace ::drafts::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
