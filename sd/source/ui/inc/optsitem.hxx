@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-07 10:15:11 $
+ *  last change: $Author: ka $ $Date: 2002-06-20 08:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ public:
     BOOL    operator==( const SdOptionsZoom& rOpt ) const;
 
     void    GetScale( INT32& rX, INT32& rY ) const { Init(); rX = nX; rY = nY; }
-    void    SetScale( INT32 nInX, INT32 nInY ) { nX = nInX; nY = nInY; }
+    void    SetScale( INT32 nInX, INT32 nInY ) { if( nX != nInX || nY != nInY ) { OptionsChanged(); nX = nInX; nY = nInY; } }
 };
 
 // -----------------------------------------------------------------------------
