@@ -2,9 +2,9 @@
  *
  *  $RCSfile: group.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:13:03 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_GROUP_CXX
-
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
 #endif
@@ -72,7 +70,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 
