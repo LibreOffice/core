@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:00:22 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ TabPage TP_CONFIG_MENU
         Text [ dutch ] = "Nieuw ~menu" ;
         Text [ portuguese_brazilian ] = "Neues ~Menü" ;
         Text [ portuguese ] = "Novo ~menu" ;
-        Text[ chinese_simplified ] = "ĞÂ²Ëµ¥ÃüÁî(~U)";
+        Text[ chinese_simplified ] = "ĞÂ²Ëµ¥(~U)";
         Text[ russian ] = "Íîâîå ìåíş";
         Text[ polish ] = "Nowe menu";
         Text[ japanese ] = "V‚µ‚¢ÒÆ­°(~U)";
@@ -536,7 +536,7 @@ TabPage TP_CONFIG_MENU
         Text [ spanish ] = "Menú" ;
         Text [ english_us ] = "Menu" ;
         Group = TRUE ;
-        Text[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+        Text[ chinese_simplified ] = "²Ëµ¥";
         Text[ russian ] = "Ìåíş";
         Text[ polish ] = "Menu";
         Text[ japanese ] = "ÒÆ­°";
@@ -1152,7 +1152,7 @@ TabDialog DLG_CONFIG
                 Text [ danish ] = "Menu" ;
                 Text [ portuguese_brazilian ] = "Menü" ;
                 Text [ portuguese ] = "Menu" ;
-                Text[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+                Text[ chinese_simplified ] = "²Ëµ¥";
                 Text[ russian ] = "Ìåíş";
                 Text[ polish ] = "Menu";
                 Text[ japanese ] = "ÒÆ­°";
@@ -1711,11 +1711,11 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message [ dutch ] = "Er zijn nog items met functies die alleen aan popups kunnen worden toegewezen.\n\nWilt u deze configuratie toch overnemen?" ;
     Message [ spanish ] = "Todavía hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n¿Desea continuar de todos modos?" ;
     Message [ english_us ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
-    Message[ chinese_simplified ] = "»¹´æÔÚÒ»Ğ©Ö»ÄÜÖ¸¶¨¸øµ¯³öÊ½²Ëµ¥ÃüÁîÖ´ĞĞµÄ¾ßÓĞÄ³ÖÖ¹¦ÄÜµÄÌõÄ¿¡£\nÄú»¹ÊÇÒª½ÓÊÜÕâ¸öÅäÖÃÂğ£¿";
+    Message[ chinese_simplified ] = "»¹´æÔÚÒ»Ğ©Ö»ÄÜÈÃ¸øµ¯³öÊ½²Ëµ¥Ö´ĞĞµÄÌõÄ¿¡£\nÄú»¹ÊÇÒª½ÓÊÜÕâ¸öÅäÖÃÂğ£¿";
     Message[ russian ] = "Ñóùåñòâóşò çàïèñè ñ ôóíêöèÿìè, êîòîğûå ìîãóò áûòü ïğèñâîåíû òîëüêî âñïëûâàşùèì ìåíş.\n\nÂû âñå ğàâíî õîòèòå ïğèíÿòü ıòè êîíôèãóğàöèè?";
     Message[ polish ] = "Istniej¹ jeszcze wpisy, które mog¹ zostaæ przypisane tylko oknom typu popup. n\nCzy chcesz mimo to zastosowaæ tê konfiguracjê?";
     Message[ japanese ] = "‚Ü‚¾Îß¯Ìß±¯Ìß‚Ì‚İ‚ÉŠ„‚è“–‚Ä‚ç‚ê‚é‹@”\\‚Ì€–Ú‚ª‚ ‚è‚Ü‚·B\n\n‚±‚Ìİ’è‚ğ“K—p‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©?";
-    Message[ chinese_traditional ] = "ÁÙ¦s¦b¤@¨Ç¥u¯à«ü©wµ¹§Ö³t¥\\¯àªí°õ¦æªº¨ã¦³¬YºØ¥\\¯àªº¶µ¥Ø¡C\n±zÁÙ¬O­n±µ¨ü³o­Ó°t¸m¡H";
+    Message[ chinese_traditional ] = "ÁÙ¦s¦b¤@¨Ç¥u¯àÅıµ¹§Ö³t¥\\¯àªí°õ¦æªº¶µ¥Ø¡C\n±zÁÙ¬O­n±µ¨ü³o­Ó°t¸m¡H";
     Message[ arabic ] = "ãÇÒÇáÊ åäÇáß ÅÏÎÇáÇÊ ÈåÇ ãåÇã áÇ íãßä ÊÚííäåÇ ÅáÇ áŞæÇÆã ÇäÈËÇŞíÉ İŞØ.\n\nåá ÊÑíÏ ŞÈæá ÇáÊßæíä Úáì ÇáÑÛã ãä Ğáß¿";
     Message[ greek ] = "ÕğÜñ÷ïõí áêüìç åããñáöİò ìå ëåéôïõñãßåò ôùí ïğïßùí ìğïñåß íá ãßíåé ìüíï áíôéóôïß÷éóç ìå áíáäõüìåíá ğáñÜèõñá.\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéáìüñöùóç áõôŞ;";
     Message[ korean ] = "ÆË¾÷¿¡¸¸ ÁöÁ¤µÉ ¼ö ÀÖ´Â ±â´ÉµéÀ» Áö´Ñ Ç×¸ñµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. \n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
@@ -1732,12 +1732,12 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message [ portuguese ] = "A função já está incluída neste menu instantâneo." ;
     Message [ finnish ] = "Toiminto on jo lisätty tähän kohovalikkoon." ;
     Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
-    Message [ french ] = "Cette fonction est déjà incluse dans la liste Menu." ;
+    Message [ french ] = "Cette fonction est déjà incluse dans ce Pop-up." ;
     Message [ swedish ] = "Funktionen ingår redan i denna snabbmeny." ;
     Message [ dutch ] = "Deze functie komt al voor in dit menu." ;
     Message [ spanish ] = "La función ya está incluida en este emergente." ;
     Message [ english_us ] = "Function is already included in this popup." ;
-    Message[ chinese_simplified ] = "Õâ¸öµ¯³öÊ½²Ëµ¥ÃüÁîÒÑ¾­°üº¬ÁËÕâ¸ö¹¦ÄÜ¡£";
+    Message[ chinese_simplified ] = "Õâ¸öµ¯³öÊ½²Ëµ¥ÒÑ¾­°üº¬ÁËÕâ¸ö¹¦ÄÜ¡£";
     Message[ russian ] = "İòà ôóíêöèÿ óæå ñîäåğæèòñÿ â âñïëûâàşùåì ìåíş.";
     Message[ polish ] = "Ta funkcja jest ju¿ zawarta w menu podrêcznym.";
     Message[ japanese ] = "‹@”\\‚Í‚·‚Å‚É‚±‚ÌÎß¯Ìß±¯Ìß‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B";
@@ -1763,7 +1763,7 @@ String STR_LOADMENUCONFIG
     Text [ danish ] = "Indlæs menukonfiguration" ;
     Text [ portuguese_brazilian ] = "Menükonfiguration laden" ;
     Text [ portuguese ] = "Carregar configuração do menu" ;
-    Text[ chinese_simplified ] = "×°ÔØ²Ëµ¥ÃüÁîÅäÖÃ";
+    Text[ chinese_simplified ] = "×°ÔØ²Ëµ¥ÅäÖÃ";
     Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ìåíş";
     Text[ polish ] = "£aduj konfiguracjê menu";
     Text[ japanese ] = "ÒÆ­°İ’è‚Ì“Ç‚İ‚İ";
@@ -1904,7 +1904,7 @@ String STR_MENU
     Text [ dutch ] = "Menu" ;
     Text [ portuguese_brazilian ] = "Menü" ;
     Text [ portuguese ] = "Menu" ;
-    Text[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+    Text[ chinese_simplified ] = "²Ëµ¥";
     Text[ russian ] = "Ìåíş";
     Text[ polish ] = "Menu";
     Text[ japanese ] = "ÒÆ­°";
