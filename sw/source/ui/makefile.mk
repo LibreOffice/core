@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-24 14:22:26 $
+#   last change: $Author: vg $ $Date: 2003-04-17 15:10:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,14 +65,6 @@ PRJ=..$/..
 PRJNAME=sw
 TARGET=ui
 
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=.$/ui_1st$/ui_pch
-
-.IF "$(CALLTARGETS)"=="ui"
-RC_SUBDIRS=
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -92,35 +84,6 @@ LIBFLAGS=/NOI /NOE /PAGE:256
 # --- Files --------------------------------------------------------
 
 # andere Label als Verzeichnisnamen fuer VC++/NT
-.IF "$(RC_SUBDIRS)" == ""
-SWSUBDIRS= \
-        ui_1st \
-        app      \
-        cctrl    \
-        chrdlg   \
-        config   \
-        dbui     \
-        dialog   \
-        dochdl   \
-        docvw    \
-        envelp   \
-        fldui    \
-        fmtui    \
-        frmdlg   \
-        globdoc  \
-        index    \
-        lingu    \
-        misc     \
-        ribbar   \
-        shells   \
-        table    \
-        uno	\
-        uiview   \
-        utlui    \
-        web	  \
-        wizard	  \
-        wrtsh
-.ENDIF
 
 SUBLIBS1= \
         $(SLB)$/app.lib      \
@@ -153,20 +116,6 @@ SUBLIBS2= \
 
 # -----------------------------------------------------------
 
-.IF "$(L10N-framework)" == ""
-.IF "$(RC_SUBDIRS)" == ""
-.IF "$(depend)" == ""
-ui:						\
-    ui_1st				\
-    $(SWSUBDIRS) \
-    ALLTAR
-.ELSE
-ui:
-    @+echo Doing nothing in source\ui
-.ENDIF
-.ENDIF
-.ENDIF          # "$(L10N-framework)" == ""
-
 ################################################################
 
 LIB1TARGET=$(SLB)$/ui1.lib
@@ -181,166 +130,8 @@ LIB2FILES= \
 
 ################################################################
 
-.IF "$(dbutil)" != ""
-dbutilx="dbutil=true"
-.ENDIF
-.IF "$(debug)" != ""
-.IF "$(debug)"!="D_FORCE_OPT"
-dbutilx="debug=$(debug)"
-.ENDIF
-.ENDIF
-
-.IF "$(compact)" != ""
-dcompact="compact=true"
-.ELSE
-dcompact=
-.ENDIF
-
-.IF "$(CALLTARGETS)"!="ui"
-.IF "$(DOPLD)$(dopld)" == ""
-
-.IF "$(RC_SUBDIRS)" == ""
-#rule lib / subdir
-$(LB)$/%.lib : %
-    @echo @
-
-ui_1st .SETDIR=ui_1st:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS)  $(dbutilx) $(CALLMACROS)
-
-#	app $(LB)$/app.lib .SETDIR=app:
-app .SETDIR=app:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-cctrl  .SETDIR=cctrl:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-chrdlg  .SETDIR=chrdlg:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-config  .SETDIR=config:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-dbui  .SETDIR=dbui:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-dialog  .SETDIR=dialog:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-dochdl  .SETDIR=dochdl:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-docvw  .SETDIR=docvw:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-envelp  .SETDIR=envelp:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-fldui  .SETDIR=fldui:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-fmtui  .SETDIR=fmtui:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-frmdlg  .SETDIR=frmdlg:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-globdoc  .SETDIR=globdoc:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-index  .SETDIR=index:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-lingu  .SETDIR=lingu:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-misc  .SETDIR=misc:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-ribbar  .SETDIR=ribbar:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-shells  .SETDIR=shells:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-table  .SETDIR=table:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-uiview  .SETDIR=uiview:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-utlui  .SETDIR=utlui:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-uno  .SETDIR=uno:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-wizard  .SETDIR=wizard:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-web  .SETDIR=web:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-
-wrtsh  .SETDIR=wrtsh:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(dcompact) $(CALLMACROS)
-.ENDIF
-.ELSE
-ui_1st:
-    @echo nix
-.ENDIF
-.ENDIF
-
 kill:
     @+$(RM) $(SLB)$/ui.lst
     @+$(RM) $(SLB)$/ui.lib
 
-app      : ui_1st
-cctrl    : ui_1st
-chrdlg   : ui_1st
-config   : ui_1st
-dbui     : ui_1st
-dialog   : ui_1st
-dochdl   : ui_1st
-docvw    : ui_1st
-envelp   : ui_1st
-fldui    : ui_1st
-fmtui    : ui_1st
-frmdlg   : ui_1st
-globdoc  : ui_1st
-index    : ui_1st
-lingu    : ui_1st
-misc     : ui_1st
-ribbar   : ui_1st
-shells   : ui_1st
-table    : ui_1st
-uno	     : ui_1st
-uiview   : ui_1st
-utlui    : ui_1st
-web	     : ui_1st
-wizard	 : ui_1st
-wrtsh    : ui_1st
+
