@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: certificatechooser.src,v $
+ *  $RCSfile: warnings.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-19 11:08:45 $
+ *  last change: $Author: gt $ $Date: 2004-07-19 11:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,63 +61,95 @@
 
 #include "dialogs.hrc"
 
-ModalDialog RID_XMLSECDLG_CERTCHOOSER
+ModalDialog RID_XMLSECTP_MACROWARN
 {
-//  HelpId = HID_XMLSECDLG_CERTCHOOSER;
-    Size = MAP_APPFONT( CS_WIDTH, CS_HEIGHT );
+//  HelpId = HID_XMLSECTP_MACROWARN;
+    Size = MAP_APPFONT( MW_WIDTH, MW_HEIGHT );
     OutputSize = TRUE;
     Closeable = TRUE;
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text = "Zertifikat auswählen";
-    Text [ en-US ] = "Select Certificate";
+    Text [ de ] = "Sicherheitswarnung";
+    Text [ en-US ] = "Security Warning";
 
-    FixedText FT_HINT_SELECT
+    FixedText FI_DOCNAME
     {
-        Pos = MAP_APPFONT( CS_COL_0, CS_ROW_0 );
-        Size = MAP_APPFONT( CS_COL_2-CS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text = "Select the certificate you want to use for signing";
-        Text [ en-US ] = "Select the certificate you want to use for signing";
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_0 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, 3*RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ de ] = "";
+        Text [ en-US ] = "";
     };
-    Control LB_SIGNATURES
+    FixedText FI_DESCR1A
     {
-        Pos = MAP_APPFONT( CS_COL_0, CS_ROW_1 );
-        Size = MAP_APPFONT( CS_LB_WIDTH, CS_ROW_2-CS_ROW_1 );
-        SVLook = TRUE;
-        Border = TRUE;
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_1 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ de ] = "";
+        Text [ en-US ] = "The document contains document macros signed by:";
     };
-    String STR_HEADERBAR
+    FixedText FI_DESCR1B
     {
-        Text = "Issued to\tIssued by\tExpiration Date";
-        Text [ en-US ] = "Issued to\tIssued by\tExpiration Date";
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_1 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ de ] = "";
+        Text [ en-US ] = "The document contains document macros.";
     };
-    PushButton BTN_VIEWCERT
+    FixedText FI_SIGNS
     {
-        Pos = MAP_APPFONT( CS_COL_1, CS_ROW_3 );
-        Size = MAP_APPFONT( CS_COL_2-CS_COL_1, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text = "Zertifikat anzeigen...";
-        Text [ en-US ] = "View Certificate...";
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_2 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_2, MW_ROW_3-MW_ROW_2 );
+        Wordbreak = TRUE;
+        Text [ de ] = "";
+        Text [ en-US ] = "";
+    };
+    PushButton PB_VIEWSIGNS
+    {
+        Pos = MAP_APPFONT( MW_COL_3, MW_ROW_2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ de ] = "Signatur anzeigen...";
+        Text [ en-US ] = "View Signatures...";
+    };
+    FixedText FI_DESCR2
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_3 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ de ] = "";
+        Text [ en-US ] = "Macros may contain viruses. Disabling macros for a document is always save. If you disable macros you may lose functionality provided by the document macros.";
+    };
+    CheckBox CB_ALWAYSTRUST
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_4 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "";
+        Text [ en-US ] = "Always trust macros from this source";
     };
     FixedLine FL_BOTTOM_SEP
     {
-        Pos = MAP_APPFONT( 0, DLGS_BOTTOM_FL_Y( CS_HEIGHT ) );
-        Size = MAP_APPFONT( CS_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+        Pos = MAP_APPFONT( 0, DLGS_BOTTOM_FL_Y( MW_HEIGHT ) );
+        Size = MAP_APPFONT( MW_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
     };
-    OKButton BTN_OK
+    OKButton PB_ENABLE
     {
-        DefButton = TRUE;
-        Pos = MAP_APPFONT( DLGS_BOTTOM_OK_X( CS_WIDTH ), DLGS_BOTTOM_BTN_Y( CS_HEIGHT ) );
+        Pos = MAP_APPFONT( DLGS_BOTTOM_OK_X( MW_WIDTH ), DLGS_BOTTOM_BTN_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Default = FALSE;
+        Text [ de ] = "";
+        Text [ en-US ] = "Enable Macros";
     };
-    CancelButton BTN_CANCEL
+    CancelButton PB_DISABLE
     {
-        Pos = MAP_APPFONT( DLGS_BOTTOM_CANCEL_X( CS_WIDTH ), DLGS_BOTTOM_BTN_Y( CS_HEIGHT ) );
+        Pos = MAP_APPFONT( DLGS_BOTTOM_CANCEL_X( MW_WIDTH ), DLGS_BOTTOM_BTN_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ de ] = "";
+        Text [ en-US ] = "Disable Macros";
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT( DLGS_BOTTOM_HELP_X( CS_WIDTH ), DLGS_BOTTOM_BTN_Y( CS_HEIGHT ) );
+        Pos = MAP_APPFONT( DLGS_BOTTOM_HELP_X( MW_WIDTH ), DLGS_BOTTOM_BTN_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
 };
