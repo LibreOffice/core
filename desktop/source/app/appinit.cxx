@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 09:18:18 $
+ *  last change: $Author: mav $ $Date: 2002-09-04 14:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,6 @@ extern desktop::CommandLineArgs*        GetCommandLineArgs();
 extern desktop::OOfficeAcceptorThread*  pOfficeAcceptThread;
 
 static String aCurrentTempURL;
-static String aCurrentTempBase;
 
 
 // -----------------------------------------------------------------------------
@@ -297,10 +296,9 @@ void createTemporaryDirectory()
 
     // set temp base directory
     ::rtl::OUString aTempBaseURL( aOpt.GetTempPath() );
-    sal_Int32 nIndex = aTempBaseURL.lastIndexOf( '/' );
-    if ( nIndex != aTempBaseURL.getLength()-1 )
-        aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
-    aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( DESKTOP_TEMPDIRNAME ));
+    sal_Int32 nLength = aTempBaseURL.getLength();
+    if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
+        aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
 
     String aOldTempURL = aInternalOpt.GetCurrentTempURL();
     if ( aOldTempURL.Len() > 0 )
@@ -309,14 +307,11 @@ void createTemporaryDirectory()
         ::utl::UCBContentHelper::Kill( aOldTempURL );
     }
 
-    // set new temporary base directory
-    aCurrentTempBase = aTempBaseURL;
-
     String aRet;
     ::rtl::OUString aTempPath( aTempBaseURL );
 
     // create new current temporary directory
-    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aCurrentTempBase, aRet );
+    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTempBaseURL, aRet );
     ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
     aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
     if ( !aTempPath.getLength() )
@@ -329,12 +324,11 @@ void createTemporaryDirectory()
         aTempBaseURL = ::rtl::OUString::createFromAscii("$(userurl)/temp");
         aTempBaseURL = aOpt.SubstituteVariable( aTempBaseURL );
 #endif
-        sal_Int32 nIndex = aTempBaseURL.lastIndexOf( '/' );
-        if ( nIndex != aTempBaseURL.getLength()-1 )
-            aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
-        aTempBaseURL += OUString( RTL_CONSTASCII_USTRINGPARAM( DESKTOP_TEMPDIRNAME ));
-        aTempPath = aCurrentTempBase = aTempBaseURL;
-        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aCurrentTempBase, aRet );
+        sal_Int32 nLength = aTempBaseURL.getLength();
+        if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
+            aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
+
+        aTempPath = aTempBaseURL;
         ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
         aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
     }
@@ -349,14 +343,10 @@ void removeTemporaryDirectory()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::removeTemporaryDirectory" );
 
-    // remove current base and current temporary directory
-    if ( aCurrentTempURL.Len() > 0 && aCurrentTempBase.Len() > 0 )
+    // remove current temporary directory
+    if ( aCurrentTempURL.Len() > 0 )
     {
         if ( ::utl::UCBContentHelper::Kill( aCurrentTempURL ) )
-        {
             SvtInternalOptions().SetCurrentTempURL( String() );
-            ::osl::Directory::remove( aCurrentTempBase );
-            //::utl::UCBContentHelper::Kill( aCurrentTempBase );
-        }
     }
 }
