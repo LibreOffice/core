@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-13 12:18:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident)
                                          (SQLUSMALLINT)column,
                                          (SQLUSMALLINT)ident,
                                          NULL,
-                                         NULL,
+                                         0,
                                          NULL,
                                          &nValue),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return nValue;
