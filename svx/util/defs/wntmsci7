@@ -18970,3 +18970,7 @@ _real@8@40088000000000000000
 ?release@SvxShapeGroup@@WJM@AAXXZ
 ?setPosition@SvxShapeGroup@@WJI@AAXABUPoint@awt@star@sun@com@@@Z
 ?setSize@SvxShapeGroup@@WJI@AAXABUSize@awt@star@sun@com@@@Z
+?exportDoc@SvXMLAutoCorrectExport@@QAEKPBD@Z
+?exportDoc@SvXMLExceptionListExport@@QAEKPBD@Z
+?AcceptDrop@SvxHyperURLBox@@MAECABUAcceptDropEvent@@@Z
+?ExecuteDrop@SvxHyperURLBox@@MAECABUExecuteDropEvent@@@Z
