@@ -2,9 +2,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.1.1.1 $
+#  $Revision: 1.2 $
 #
-#  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+#  last change: $Author: ka $ $Date: 2004-08-23 11:01:24 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
