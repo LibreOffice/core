@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:32:20 $
+ *  last change: $Author: hr $ $Date: 2004-06-24 10:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1549,7 +1549,7 @@ void PNGReaderImpl::ImplOpenChunk()
     mnChunkDatSizeOrg = nChunkDatSizeOrg;
     mnChunkType = nChunkType;
 
-#ifdef  __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
     nChunkType = SWAPLONG( nChunkType );
 #endif
     mnCRC = rtl_crc32( 0, &nChunkType, 4 );
@@ -1581,7 +1581,7 @@ sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
     mnChunkDatSize+=4;
     *mpIStm >> nRet;
 
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
     sal_uInt32 nTemp = SWAPLONG( nRet );
     mnCRC = rtl_crc32( mnCRC, &nTemp, 4 );
 #else
