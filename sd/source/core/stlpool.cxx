@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:43:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@
 #include "sdpage.hxx"
 #include "helpids.h"
 
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
 
 /*************************************************************************
 |*
