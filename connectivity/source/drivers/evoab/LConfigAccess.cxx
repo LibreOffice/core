@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LConfigAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:55:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace connectivity
             Reference< XPropertySet > xNode;
             try
             {
-                //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                //=============================================================
                 // create the config provider
                 Reference< XMultiServiceFactory > xConfigProvider(
                     _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
@@ -102,7 +102,7 @@ namespace connectivity
                     //sCompleteNodePath += ::rtl::OUString::createFromAscii ("com.sun.star.comp.sdbc.MozabDriver");
                     EVO_TRACE_STRING("createDriverConfigNode()::sCompleteNodePath = %s\n", sCompleteNodePath );
 
-                    //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                    //=========================================================
                     // arguments for creating the config access
                     Sequence< Any > aArguments(2);
                     // the path to the node to open
@@ -120,7 +120,7 @@ namespace connectivity
                         PropertyState_DIRECT_VALUE
                     );
 
-                    //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+                    //=========================================================
                     // create the access
                     Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
                         ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
