@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-01 17:07:47 $
+ *  last change: $Author: fs $ $Date: 2001-10-12 12:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,3 +136,4 @@ hidspecial HID_ABSPILOT                         { HelpId = HID_ABSPILOT; }
 hidspecial UID_ABSPILOT_HELP                    { HelpId = UID_ABSPILOT_HELP; }
 hidspecial HID_DBIWIZARD                        { HelpId = HID_DBIWIZARD; }
 hidspecial UID_DBIWIZARD_HELP                   { HelpId = UID_DBIWIZARD_HELP; }
+hidspecial HID_DBIWIZARD_FILESELECTION          { HelpId = HID_DBIWIZARD_FILESELECTION; }
