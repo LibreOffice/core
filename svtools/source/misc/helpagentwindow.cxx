@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 15:18:58 $
+ *  last change: $Author: rt $ $Date: 2001-05-11 09:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,8 @@ namespace svt
         FloatingWindow::Paint(rRect);
 
         Size        aOutputSize( GetOutputSizePixel() );
-        Rectangle   aOutputRect( Point(), aOutputSize );
+        Point       aPoint=Point();
+        Rectangle   aOutputRect( aPoint, aOutputSize );
         Rectangle   aInnerRect( aOutputRect );
 
         // paint the background
@@ -205,6 +206,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/07 15:18:58  fs
+ *  initial checkin - window for the new help agent
+ *
  *  Revision 1.1  2001/05/07 13:42:30  fs
  *  initial checkin - help agent window
  *
