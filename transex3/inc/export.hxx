@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-26 12:56:08 $
+ *  last change: $Author: nf $ $Date: 2001-07-31 13:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,8 +206,22 @@
 #define GERMAN_LIST_LINE_INDEX  LANGUAGES
 #define LIST_REFID              (GERMAN_LIST_LINE_INDEX+1)
 typedef ByteString ExportListEntry[ LANGUAGES + 2 ];
-DECLARE_LIST( ExportList, ExportListEntry * );
+DECLARE_LIST( ExportListBase, ExportListEntry * );
 
+//
+// class ExportList
+//
+
+class ExportList : public ExportListBase
+{
+private:
+    ULONG nGermanEntryCount;
+
+public:
+    ExportList() : ExportListBase() { nGermanEntryCount = 0; }
+    ULONG GetGermanEntryCount() { return nGermanEntryCount; }
+    void NewGermanEntry() { nGermanEntryCount++; }
+};
 
 #define REFID_NONE 0xFFFF
 

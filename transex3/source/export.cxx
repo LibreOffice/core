@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-25 10:08:22 $
+ *  last change: $Author: nf $ $Date: 2001-07-31 13:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,8 +1558,10 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
     }
     ExportListEntry *pCurEntry = pList->GetObject( nListIndex );
     (*pCurEntry)[ nListLang ] = rText;
-    if ( nListLang == GERMAN_INDEX )
+    if ( nListLang == GERMAN_INDEX ) {
         (*pCurEntry)[ GERMAN_LIST_LINE_INDEX ] = rLine;
+        pList->NewGermanEntry();
+    }
     nListIndex++;
 }
 
@@ -2322,7 +2324,8 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         pResData->sId = ByteString::CreateFromInt32( nIdx );
                         PFormEntrys *pEntrys;
                         ULONG nLIndex = 0;
-                        while( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) {
+                        ULONG nMaxIndex = pList->GetGermanEntryCount();
+                        while(( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) && ( nLIndex < nMaxIndex )) {
                             ByteString sText;
                             BOOL bText = pEntrys->GetText( sText, STRING_TYP_TEXT, nLang, TRUE );
                             if ( bText && sText.Len()) {
@@ -2425,6 +2428,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
             }
 
             nListIndex++;
+            ULONG nMaxIndex = pList->GetGermanEntryCount();
             ByteString sLine;
             if ( pList && pList->GetObject( nListIndex ))
                 sLine = ( *pList->GetObject( nListIndex ))[ GERMAN_LIST_LINE_INDEX ];
@@ -2439,7 +2443,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
             {
                 sLine.SearchAndReplace( "\"", "< \"" );
             }
-            while( PrepareTextToMerge( sLine, nList, nListLang, pResData )) {
+            while( PrepareTextToMerge( sLine, nList, nListLang, pResData ) && ( nListIndex < nMaxIndex )) {
                 ByteString sText( "\t" );
                 sText += sLine;
                 sText += " ;";
