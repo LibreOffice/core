@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:31:03 $
+#   last change: $Author: hjs $ $Date: 2002-04-18 11:35:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,8 +117,6 @@ SHL1LIBS=       $(SLB)$/basctl.lib
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME        =$(SHL1TARGET)
-DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME=basctl
 DEF1DES		= Rtf, Edt, Outliner, SvDraw, Form, Fmcomp, Engine3D, MSFilter
 DEF1EXPORTFILE	= basctl.dxp
 
@@ -140,156 +138,6 @@ RESLIB1SRSFILES= $(SRSFILELIST)
 
 .INCLUDE :  target.mk
 
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo lcl > $@
-    @echo +getImplementation >> $@
-    @echo Impl >> $@
-    @echo IMPL >> $@
-    @echo START >> $@
-    @echo CharAttribList >> $@
-    @echo CharPosArray >> $@
-    @echo ContentAttribs >> $@
-    @echo ContentAttribsInfo >> $@
-    @echo ContentInfo >> $@
-    @echo ContentNode >> $@
-    @echo DeletedNodeInfo >> $@
-    @echo EditAttrib >> $@
-    @echo EditCharAttrib >> $@
-    @echo EditDbg >> $@
-    @echo EditDoc >> $@
-    @echo EditEngineItemPool >> $@
-    @echo EditHTMLParser >> $@
-    @echo EditLine >> $@
-    @echo EditNodeIdx >> $@
-    @echo EditPaM >> $@
-    @echo EditPosition >> $@
-    @echo EditRTFParser >> $@
-    @echo EditSel >> $@
-    @echo EditSpellWrapper >> $@
-    @echo EditStyleSheet >> $@
-    @echo EditUndoConnectParas >> $@
-    @echo EditUndoDelContent >> $@
-    @echo EditUndoInsertChars >> $@
-    @echo EditUndoInsertFeature >> $@
-    @echo EditUndoManager >> $@
-    @echo EditUndoMoveParagraphs >> $@
-    @echo EditUndoRemoveChars >> $@
-    @echo EditUndoRemoveFeature >> $@
-    @echo EditUndoSetAttribs >> $@
-    @echo EditUndoSetParaAttribs >> $@
-    @echo EditUndoSetStyleSheet >> $@
-    @echo EditUndoSplitPara >> $@
-    @echo GlobalEditData >> $@
-    @echo IdleFormattter >> $@
-    @echo ImpEditEngine >> $@
-    @echo ImpEditView >> $@
-    @echo InternalEditStatus >> $@
-    @echo ParaPortion >> $@
-    @echo ParagraphList >> $@
-    @echo RTFPardAttrMapIds >> $@
-    @echo RTFPlainAttrMapIds >> $@
-    @echo SelRange >> $@
-    @echo SortedPositions_SAR >> $@
-    @echo SvxACorrChars >> $@
-    @echo SvxColorList >> $@
-    @echo SvxFontTable >> $@
-    @echo SvxRTFStyleType >> $@
-    @echo SvxTabStopArr_SAR >> $@
-    @echo TextPortionList >> $@
-    @echo XEditAttrib >> $@
-    @echo XParaPortionList >> $@
-    @echo BinTextObject >> $@
-    @echo DialogsResMgr >> $@
-    @echo E3dDragMethod >> $@
-    @echo E3dTriangle >> $@
-.IF "$(GUI)" != "MAC"
-    @echo GetImp >> $@
-.ENDIF
-    @echo ImpA >> $@
-    @echo ImpB >> $@
-    @echo ImpBrw >> $@
-    @echo ImpC >> $@
-    @echo ImpCheck >> $@
-    @echo ImpColor >> $@
-    @echo ImpD >> $@
-    @echo ImpDrag >> $@
-    @echo ImpEdCtrl >> $@
-    @echo ImpEdit >> $@
-    @echo ImpF >> $@
-    @echo ImpGet >> $@
-    @echo ImpH >> $@
-    @echo ImpHide >> $@
-    @echo ImpI >> $@
-    @echo ImpItem >> $@
-    @echo ImpJ >> $@
-    @echo ImpL >> $@
-    @echo ImpList >> $@
-    @echo ImpM >> $@
-    @echo ImpMulti >> $@
-    @echo ImportInfo >> $@
-    @echo ImpP >> $@
-    @echo ImpPaint >> $@
-    @echo ImpPast >> $@
-    @echo ImpRecalc >> $@
-    @echo ImpReset >> $@
-    @echo ImpRemove >> $@
-    @echo ImpRef >> $@
-    @echo ImpReset >> $@
-    @echo ImpS >> $@
-    @echo ImpScroll >> $@
-    @echo ImpSdrGDIMetaFileImport >> $@
-    @echo ImpSet >> $@
-    @echo ImpShow >> $@
-    @echo ImpT >> $@
-    @echo ImpX >> $@
-    @echo OLUndoAttr >> $@
-    @echo OLUndoDepth >> $@
-    @echo OLUndoExpand >> $@
-    @echo OLUndoHeight >> $@
-    @echo OutlinerEditEng >> $@
-    @echo SdrGraphicLink >> $@
-    @echo SdrItemBrowser >> $@
-    @echo SdrOleLink >> $@
-    @echo SpellCache >> $@
-    @echo SvFileObject >> $@
-    @echo WrongList >> $@
-    @echo WrongRanges >> $@
-    @echo XIOCompat >> $@
-    @echo _SdrItemBrowserControl >> $@
-    @echo _SdrItemBrowserWindow >> $@
-    @echo +FmXGridPeer >> $@
-    @echo +FmXGridControl >> $@
-    @echo FmX >> $@
-    @echo FmExp >> $@
-    @echo ODatabaseForm >> $@
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
-    @echo WEP>>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-.ENDIF
-.IF "$(COM)"=="MSC"
-    @echo ??_5>>$@
-    @echo ??_7>>$@
-    @echo ??_8>>$@
-    @echo ??_9>>$@
-    @echo ??_C>>$@
-    @echo ??_E>>$@
-    @echo ??_F>>$@
-    @echo ??_G>>$@
-    @echo ??_H>>$@
-    @echo ??_I>>$@
-    @echo __CT>>$@
-#   @echo ?CreateType@>>$@
-#   @echo ?LinkStub>>$@
-.ENDIF
-.IF "$(COM)"=="ICC"
-    @echo _alloc >> $@
-    @echo _lower_bound >> $@
-    @echo _stl_prime >> $@
-.ENDIF
 
 ALLTAR: $(SRS)$/hidother.hid
 
