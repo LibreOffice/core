@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: armin $ $Date: 2001-05-29 11:01:37 $
+#   last change: $Author: svesik $ $Date: 2001-06-25 22:21:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,7 +128,6 @@ RC_SUBDIRS =  \
 	ldapber \
 	lingu \
 	linguistic \
-	mkdepend \
 	offapi \
 	officecfg \
 	offmgr \
@@ -160,6 +159,7 @@ RC_SUBDIRS =  \
 	so3 \
 	soltools \
 	sot \
+	so_berkeleydb \
 	starmath \
 	stoc \
 	store \
@@ -167,6 +167,7 @@ RC_SUBDIRS =  \
 	sysui \
 	svx \
 	sw \
+	sysui \
 	toolkit \
 	tools \
 	transex3 \
@@ -211,7 +212,7 @@ udk_modules :	xml2cmp sal vos store registry idlc udkapi codemaker \
 
 non_vcl :	udk_modules ucbhelper offuh unoil officecfg UnoControls \
 		rsc sot eventattacher idl transex3 inet package xmlscript \
-		sax eventatatcher xmlhelp fileaccess sysui psprint
+		sax xmlhelp fileaccess sysui psprint
 
 frmwrk:		dtrans framework chaos i18n uui xmloff setup2 scptools scp \
 		connectivity 
@@ -260,7 +261,7 @@ offapi : udkapi
 offmgr : basctl sch starmath uui
 offuh : codemaker drafts
 package : tools unotools
-padmin : vcl
+padmin : psprint vcl
 psprint : tools unotools
 rdbmaker : cppuhelper
 registry : store salhelper
@@ -278,7 +279,7 @@ scptools : setup2
 sd : offmgr sc
 setup2 : automation basic transex3 unoil unzip
 shell : rdbmaker
-sfx2 : idl setup2 xmloff xmlscript
+sfx2 : framework idl setup2 xmloff xmlscript so_berkeleydb
 sip : sd
 sj2 : sandbox svtools
 so3 : inet sj2
