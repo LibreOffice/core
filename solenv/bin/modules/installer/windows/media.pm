@@ -2,9 +2,9 @@
 #
 #   $RCSfile: media.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:33:44 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:19:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -158,6 +158,25 @@ sub set_cabinetfilename_for_component_in_file_collector
     }
 }
 
+#################################################
+# Creating the cab file name dynamically
+#################################################
+
+sub generate_cab_filename
+{
+    my ( $allvariables ) = @_;
+
+    my $name = $allvariables->{'PRODUCTNAME'};
+
+    $name = lc($name);
+    $name =~ s/\.//g;
+    $name =~ s/\s//g;
+
+    $name = $name . ".cab";
+
+    return $name;
+}
+
 #################################################################################
 # Creating the file Media.idt dynamically
 # Content:
@@ -167,7 +186,7 @@ sub set_cabinetfilename_for_component_in_file_collector
 
 sub create_media_table
 {
-    my ($filesref, $basedir) = @_;
+    my ($filesref, $basedir, $allvariables) = @_;
 
     my @mediatable = ();
 
@@ -175,38 +194,70 @@ sub create_media_table
 
     installer::windows::idtglobal::write_idt_header(\@mediatable, "media");
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    if ( $installer::globals::many_cab_files )
     {
-        my $onefile = ${$filesref}[$i];
-        my $nextfile = ${$filesref}[$i+1];
-
-        my $filecomponent = "";
-        my $nextcomponent = "";
-
-        if ( $onefile->{'componentname'} ) { $filecomponent = $onefile->{'componentname'}; }
-        if ( $nextfile->{'componentname'} ) { $nextcomponent = $nextfile->{'componentname'}; }
-
-        if ( $filecomponent eq $nextcomponent )
+        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
-            next;       # nothing to do, this is not the last file of a component
+            my $onefile = ${$filesref}[$i];
+            my $nextfile = ${$filesref}[$i+1];
+
+            my $filecomponent = "";
+            my $nextcomponent = "";
+
+            if ( $onefile->{'componentname'} ) { $filecomponent = $onefile->{'componentname'}; }
+            if ( $nextfile->{'componentname'} ) { $nextcomponent = $nextfile->{'componentname'}; }
+
+            if ( $filecomponent eq $nextcomponent )
+            {
+                next;       # nothing to do, this is not the last file of a component
+            }
+
+            my %media = ();
+            $diskid++;
+
+            $media{'DiskId'} = get_media_diskid($diskid);
+            $media{'LastSequence'} = get_media_lastsequence($onefile);
+            $media{'DiskPrompt'} = get_media_diskprompt();
+            $media{'Cabinet'} = get_media_cabinet($diskid);
+            $media{'VolumeLabel'} = get_media_volumelabel();
+            $media{'Source'} = get_media_source();
+
+            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
+                    . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
+
+            push(@mediatable, $oneline);
+
+            set_cabinetfilename_for_component_in_file_collector($media{'Cabinet'}, $filesref, $filecomponent, $i);
         }
+    }
+
+    if ( $installer::globals::one_cab_file )
+    {
 
         my %media = ();
         $diskid++;
 
+        my $maximumfile = $#{$filesref};
+
         $media{'DiskId'} = get_media_diskid($diskid);
-        $media{'LastSequence'} = get_media_lastsequence($onefile);
+        $media{'LastSequence'} = ${$filesref}[$maximumfile]->{'sequencenumber'};    # sequence number of the last file
         $media{'DiskPrompt'} = get_media_diskprompt();
-        $media{'Cabinet'} = get_media_cabinet($diskid);
+        $media{'Cabinet'} = generate_cab_filename($allvariables);
         $media{'VolumeLabel'} = get_media_volumelabel();
         $media{'Source'} = get_media_source();
 
         my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
-                . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
+                    . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
 
         push(@mediatable, $oneline);
 
-        set_cabinetfilename_for_component_in_file_collector($media{'Cabinet'}, $filesref, $filecomponent, $i);
+        # Saving the cabinet file name in the file collector
+
+        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        {
+            my $onefile = ${$filesref}[$i];
+            $onefile->{'cabinet'} = $media{'Cabinet'};
+        }
     }
 
     # Saving the file
