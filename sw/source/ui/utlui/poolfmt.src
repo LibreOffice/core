@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:10:42 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ String STR_POOLCHR_LINENUM
     Text[ chinese_simplified ] = "ΠΠ±ΰΊΕ";
     Text[ russian ] = "Νσμεπΰφθÿ ρςπξκ";
     Text[ polish ] = "Numeracja wierszy";
-    Text[ japanese ] = "s‚Μ”Τ†•t‚―";
+    Text[ japanese ] = "s”Τ†•t‚―";
     Text[ chinese_traditional ] = "¦ζ½sΈΉ";
     Text[ arabic ] = "ΚΡήνγ ΗαΓΣΨΡ";
     Text[ greek ] = "Αρίθμηση γραμμών";
@@ -3868,7 +3868,7 @@ String STR_POOLCOLL_HTML_HR
     Text[ chinese_traditional ] = "¤τ¥­½u±ψ";
     Text[ arabic ] = "ΞΨ Γέήν";
     Text[ greek ] = "Οριζόντια γραμμή";
-    Text[ korean ] = "ΌφΖς ΑΩ";
+    Text[ korean ] = "ΌφΖς Ό±";
     Text[ turkish ] = "Yatay ηizgi";
     Text[ language_user1 ] = " ";
 };
