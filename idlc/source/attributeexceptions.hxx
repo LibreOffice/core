@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributeexceptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:46:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,15 @@
 #ifndef INCLUDED_idlc_source_attributeexceptions_hxx
 #define INCLUDED_idlc_source_attributeexceptions_hxx
 
+#include "rtl/ustring.hxx"
+
 struct AttributeExceptions {
-    DeclList * getExceptions;
-    DeclList * setExceptions;
+    struct Part {
+        rtl::OUString const * documentation;
+        DeclList const * exceptions;
+    };
+    Part get;
+    Part set;
 };
 
 #endif
