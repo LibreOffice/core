@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:20:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ private:
     List *pOldEscherBlipCache;
 
     virtual BOOL GetOLEStorageName( long nOLEId, String& rStorageName,
-        SvStorageRef& rSrcStorage, SvStorageRef& rDestStorage ) const;
+        SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
     virtual BOOL ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
     virtual SdrObject* ImportOLE( long nOLEId, const Graphic& rGrf,
         const Rectangle& rBoundRect ) const;
