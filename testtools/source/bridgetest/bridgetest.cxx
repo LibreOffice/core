@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: vg $ $Date: 2003-10-06 12:58:44 $
-#*    $Revision: 1.9 $
+#*    last change   $Author: svesik $ $Date: 2004-04-21 13:48:58 $
+#*    $Revision: 1.10 $
 #*
 #*    $Logfile: $
 #*
@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <osl/diagnose.h>
 #include <osl/time.h>
+#include <sal/types.h>
 #include "typelib/typedescription.hxx"
 #include <uno/dispatcher.hxx>
 #include "uno/mapping.hxx"
@@ -372,7 +373,8 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
 
         assign( (TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-                0x123456789abcdef0, 0xfedcba9876543210,
+                SAL_CONST_INT64(0x123456789abcdef0),
+                SAL_CONST_UINT64(0xfedcba9876543210),
                 (float)17.0815, 3.1415926359, TestEnum_LOLA,
                 OUSTR(STRING_TEST_CONSTANT), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
@@ -505,8 +507,10 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
     sal_uInt16 _arUShort[] = {0 , 1, 0xffff};
     sal_Int32 _arLong[] = {0x80000000, 1, 0x7fffffff};
     sal_uInt32 _arULong[] = {0, 1, 0xffffffff};
-    sal_Int64 _arHyper[] = {0x8000000000000000, 1, 0x7fffffffffffffff};
-    sal_uInt64 _arUHyper[] = {0, 1, 0xffffffffffffffff};
+    sal_Int64 _arHyper[] = {
+    SAL_CONST_INT64(0x8000000000000000), 1,
+    SAL_CONST_INT64(0x7fffffffffffffff)};
+    sal_uInt64 _arUHyper[] = {0, 1, SAL_CONST_UINT64(0xffffffffffffffff)};
     float _arFloat[] = {1.1f, 2.2f, 3.3f};
     double _arDouble[] = {1.11, 2.22, 3.33};
     OUString _arString[] = {
@@ -532,15 +536,21 @@ static sal_Bool performTest( const Reference<XBridgeTest > & xLBT )
 
     TestElement _arStruct[3];
     assign( _arStruct[0], sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-            0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+            SAL_CONST_INT64(0x123456789abcdef0),
+            SAL_CONST_UINT64(0xfedcba9876543210),
+            17.0815f, 3.1415926359,
             TestEnum_LOLA, OUSTR(STRING_TEST_CONSTANT), _arObj[0],
             Any( &_arObj[0], ::getCppuType( (const Reference<XInterface > *)0 ) ) );
     assign( _arStruct[1], sal_True, 'A', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-            0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+            SAL_CONST_INT64(0x123456789abcdef0),
+            SAL_CONST_UINT64(0xfedcba9876543210),
+            17.0815f, 3.1415926359,
             TestEnum_TWO, OUSTR(STRING_TEST_CONSTANT), _arObj[1],
             Any( &_arObj[1], ::getCppuType( (const Reference<XInterface > *)0 ) ) );
     assign( _arStruct[2], sal_True, 'B', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-            0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+            SAL_CONST_INT64(0x123456789abcdef0),
+            SAL_CONST_UINT64(0xfedcba9876543210),
+            17.0815f, 3.1415926359,
             TestEnum_CHECK, OUSTR(STRING_TEST_CONSTANT), _arObj[2],
             Any( &_arObj[2], ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
