@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 06:47:15 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 11:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,7 +988,7 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || !x.is())
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );
@@ -1006,7 +1006,7 @@ void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Refer
     if (ORowSet_BASE1::rBHelper.bDisposed)
         throw DisposedException();
 
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd())
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || !x.is())
         throw FunctionSequenceException(*this);
 
     ::osl::MutexGuard aGuard( m_rMutex );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-06 12:51:13 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 11:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _LIST_
 #include <list>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -118,6 +121,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::io;
 using namespace ::cppu;
 using namespace ::osl;
 
@@ -131,8 +135,8 @@ OKeySet::OKeySet(const Reference< XResultSet>& _xDriverSet,
             ,m_bRowCountFinal(sal_False)
             ,m_xComposer(_xComposer)
             ,m_sUpdateTableName(_rUpdateTableName)
-            ,m_aKeyColumnNames(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
-            ,m_aColumnNames(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
+            ,m_aKeyColumnNames(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false)
+            ,m_aColumnNames(m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false)
 {
     try
     {
@@ -755,7 +759,7 @@ sal_Bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, Runtime
     }
     else
     {
-        if(row >= m_aKeyMap.size())
+        if(row >= (sal_Int32)m_aKeyMap.size())
         {
             if(!m_bRowCountFinal)
             {
@@ -853,6 +857,20 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::INTEGER:
             xParameter->setInt(nPos,*aIter);
             break;
+        case DataType::CLOB:
+            {
+                Reference<XInputStream> xStream;
+                aIter->getAny() >>= xStream;
+                xParameter->setCharacterStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
+            }
+            break;
+        case DataType::BLOB:
+            {
+                Reference<XInputStream> xStream;
+                aIter->getAny() >>= xStream;
+                xParameter->setBinaryStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
+            }
+            break;
         }
     }
 
@@ -916,6 +934,14 @@ sal_Bool OKeySet::fetchRow()
             case DataType::INTEGER:
                 (*aIter) = m_xDriverRow->getInt(aPosIter->second);
                 break;
+            case DataType::CLOB:
+                *aIter = makeAny(m_xDriverRow->getCharacterStream(aPosIter->second));
+                aIter->setTypeKind(DataType::CLOB);
+                break;
+            case DataType::BLOB:
+                *aIter = makeAny(m_xDriverRow->getBinaryStream(aPosIter->second));
+                aIter->setTypeKind(DataType::BLOB);
+                break;
             }
             if(m_xDriverRow->wasNull())
                 aIter->setNull();
@@ -970,7 +996,7 @@ namespace dbaccess
                 if(bCase(sRealName,*pTableBegin) && bCase(_rsUpdateTableName,sTableName) && _rColumnNames.find(*pTableBegin) == _rColumnNames.end())
                 {
                     _rColumnNames[sRealName] = nPos;
-                    if(_rColumnNames.size() == aTableNames.getLength())
+                    if((sal_Int32)_rColumnNames.size() == aTableNames.getLength())
                         return; // early break we found all columns
                     break;
                 }
@@ -982,6 +1008,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/02/06 12:51:13  rt
+    #65293# syntax
+
     Revision 1.11  2001/02/01 14:23:57  oj
     change for insert , delete and update rows
 
