@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:58:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 08:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,7 @@ File gid_File_Exe_Sdraw
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(sdraw);
-  #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
     Styles = (PACKED);
-  #endif
 End
 
 // new user interface configuration files
