@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 08:21:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 14:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ namespace dbaui
                     Reference< XDatabaseMetaData > xMeta;
                     if (m_xCurrentConnection.is())
                         xMeta = m_xCurrentConnection->getMetaData();
-                    if (xMeta.is())
+                    if (xMeta.is() && xMeta->supportsCatalogsInDataManipulation())
                     {
                         m_sCatalogSeparator = xMeta->getCatalogSeparator();
                         m_bCatalogAtStart = xMeta->isCatalogAtStart();
@@ -1416,6 +1416,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/08/28 08:21:15  fs
+ *  #91573# enable the items (drop/add/edit) only if the connection is capable
+ *
  *  Revision 1.7  2001/08/15 14:08:08  fs
  *  #88194# dropSelection: add the all button only if more than one table is left
  *
