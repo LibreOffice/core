@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:24:56 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,17 +94,17 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text = "Schrift" ;
                 Text [ english_us ] = "Font" ;
                 Text[ portuguese ] = "Font";
-                Text[ russian ] = "Font";
+                Text[ russian ] = "Øðèôò";
                 Text[ greek ] = "ÃñáììáôïóåéñÜ";
-                Text[ dutch ] = "Font";
-                Text[ french ] = "Font";
-                Text[ spanish ] = "Font";
-                Text[ italian ] = "Font";
+                Text[ dutch ] = "Lettertype";
+                Text[ french ] = "Police";
+                Text[ spanish ] = "Fuente";
+                Text[ italian ] = "Caratteri";
                 Text[ danish ] = "Font";
                 Text[ swedish ] = "Teckensnitt";
-                Text[ polish ] = "Font";
+                Text[ polish ] = "Czcionka";
                 Text[ portuguese_brazilian ] = "Font";
-                Text[ japanese ] = "Font";
+                Text[ japanese ] = "Ì«ÝÄ";
                 Text[ korean ] = "±Û²Ã";
                 Text[ chinese_simplified ] = "×ÖÌå";
                 Text[ chinese_traditional ] = "¦r«¬";
@@ -117,17 +117,17 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text = "Schrifteffekt" ;
                 Text [ english_us ] = "Font Effects" ;
                 Text[ portuguese ] = "Font Effects";
-                Text[ russian ] = "Font Effects";
+                Text[ russian ] = "Ýôôåêòû øðèôòà";
                 Text[ greek ] = "ÅöÝ ãñáììáôïóåéñÜò";
-                Text[ dutch ] = "Font Effects";
-                Text[ french ] = "Font Effects";
-                Text[ spanish ] = "Font Effects";
-                Text[ italian ] = "Font Effects";
+                Text[ dutch ] = "Schrifteffecten";
+                Text[ french ] = "Effets de caractères";
+                Text[ spanish ] = "Efectos de fuente";
+                Text[ italian ] = "Effetto caratteri";
                 Text[ danish ] = "Font Effects";
                 Text[ swedish ] = "Teckensnittseffekt";
-                Text[ polish ] = "Font Effects";
+                Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Font Effects";
-                Text[ japanese ] = "Font Effects";
+                Text[ japanese ] = "Ì«ÝÄŒø‰Ê";
                 Text[ korean ] = "±Û²Ã È¿°ú";
                 Text[ chinese_simplified ] = "×ÖÌåÐ§¹û";
                 Text[ chinese_traditional ] = "¦r«¬®ÄªG";
@@ -140,17 +140,17 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text = "Position" ;
                 Text [ english_us ] = "Position" ;
                 Text[ portuguese ] = "Position";
-                Text[ russian ] = "Position";
+                Text[ russian ] = "Ïîçèöèÿ";
                 Text[ greek ] = "ÈÝóç";
-                Text[ dutch ] = "Position";
+                Text[ dutch ] = "Positie";
                 Text[ french ] = "Position";
-                Text[ spanish ] = "Position";
-                Text[ italian ] = "Position";
+                Text[ spanish ] = "Posición";
+                Text[ italian ] = "Posizione";
                 Text[ danish ] = "Position";
                 Text[ swedish ] = "Position";
-                Text[ polish ] = "Position";
+                Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
-                Text[ japanese ] = "Position";
+                Text[ japanese ] = "ˆÊ’u";
                 Text[ korean ] = "À§Ä¡";
                 Text[ chinese_simplified ] = "Î»ÖÃ";
                 Text[ chinese_traditional ] = "¦ì¸m";
