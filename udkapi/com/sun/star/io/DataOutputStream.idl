@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataOutputStream.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,8 @@ module com {  module sun {  module star {  module io {
     <p>
     An implementation of this service in general does not need
     to buffer data itself.
-
  */
-service DataOutputStream
+published service DataOutputStream
 {
     /** allows to write structured data.
      */
