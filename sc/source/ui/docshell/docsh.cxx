@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-23 14:51:33 $
+ *  last change: $Author: nn $ $Date: 2001-11-07 08:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,12 +527,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     // prevent unnecessary broadcasts and "half way listeners"
     aDocument.SetInsertingFromOtherDoc( TRUE );
 
-    if ( pMedium )
-    {
-        SvStream* pInStream = pMedium->GetInStream();
-        if (pInStream)
-            pInStream->Seek( 0 );
-    }
+    // no Seek(0) here - always loading from storage, GetInStream must not be called
 
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
     sal_Bool bRet(sal_False);
