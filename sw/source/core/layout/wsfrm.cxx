@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:10:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
                         if ( pFly->IsFlyInCntFrm() )
                         {   pPage->InvalidateFlyInCnt();
                             ((SwFlyInCntFrm*)pFly)->InvalidateCntnt();
-                            pFly->GetAnchor()->InvalidatePage();
+                            pFly->GetAnchorFrm()->InvalidatePage();
                         }
                         else
                             pPage->InvalidateFlyCntnt();
@@ -563,7 +563,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
                     if ( pFly->IsFlyInCntFrm() )
                     {   pPage->InvalidateFlyInCnt();
                         ((SwFlyInCntFrm*)pFly)->InvalidateLayout();
-                        pFly->GetAnchor()->InvalidatePage();
+                        pFly->GetAnchorFrm()->InvalidatePage();
                     }
                     else
                         pPage->InvalidateFlyLayout();
@@ -2008,8 +2008,8 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                         if( SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() )
                         {
                             const SwFrm* pAnchor = pObj->ISA(SwVirtFlyDrawObj) ?
-                                                   ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchor() :
-                                                   ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
+                                                   ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchorFrm() :
+                                                   ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchorFrm();
 
                             if ( pAnchor && pAnchor->FindFooterOrHeader() == GetUpper() )
                             {
@@ -3166,11 +3166,11 @@ static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
             {
                 BOOL bNotify = TRUE;
                 // If we've a fly with more than 90% relative height...
-                if( rSz.GetHeightPercent() > 90 && pFly->GetAnchor() &&
+                if( rSz.GetHeightPercent() > 90 && pFly->GetAnchorFrm() &&
                     rSz.GetHeightPercent() != 0xFF && nDiff )
                 {
-                    const SwFrm *pRel = pFly->IsFlyLayFrm() ? pFly->GetAnchor():
-                                        pFly->GetAnchor()->GetUpper();
+                    const SwFrm *pRel = pFly->IsFlyLayFrm() ? pFly->GetAnchorFrm():
+                                        pFly->GetAnchorFrm()->GetUpper();
                     // ... and we have already more than 90% height and we
                     // not allow the text to go through...
                     // then a notifycation could cause an endless loop, e.g.
@@ -3862,25 +3862,14 @@ void SwRootFrm::InvalidateAllObjPos()
                             static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
                     pFlyFrm->InvalidatePos();
                 }
-                else if ( pObj->ISA(SwDrawVirtObj) )
-                {
-                    // 'virtual' drawing object
-                    // re-calculate its position by settings its anchor position
-                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
-                    pDrawVirtObj->SetAnchorPos(
-                        pDrawVirtObj->GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                    pDrawVirtObj->AdjustRelativePosToReference();
-                }
                 else
                 {
-                    // 'master' drawing object
-                    // re-calculate its position by settings its anchor position
+                    // OD 2004-04-14 #i26791# - invalidate object position
                     SwDrawContact* pDrawContact =
                                 static_cast<SwDrawContact*>(GetUserCall(pObj));
                     ASSERT( pDrawContact,
                         "<SwRootFrm::InvalidateAllObjPos()> - no contact found for connected object" );
-                    pObj->SetAnchorPos( pDrawContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
-                    pDrawContact->CorrectRelativePosOfVirtObjs();
+                    pDrawContact->GetAnchoredObj( pObj )->InvalidateObjPos();
                 }
             }
         }
