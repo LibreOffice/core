@@ -55,6 +55,8 @@ public class AccessibilityTree
         // allow editing of XAccessibleText interfaces
         //        setEditable (true);
         //        maTreeModel.addTreeModelListener( new TextUpdateListener() );
+
+        addMouseListener( new MouseListener() );
     }
 
 
@@ -155,6 +157,67 @@ public class AccessibilityTree
     }
 
 
+
+    class MouseListener extends MouseAdapter
+    {
+        public void mousePressed(MouseEvent e) { popupTrigger(e); }
+        public void mouseClicked(MouseEvent e) { popupTrigger(e); }
+        public void mouseEntered(MouseEvent e) { popupTrigger(e); }
+        public void mouseExited(MouseEvent e) { popupTrigger(e); }
+        public void mouseReleased(MouseEvent e) { popupTrigger(e); }
+
+        public boolean popupTrigger( MouseEvent e )
+        {
+            boolean bIsPopup = e.isPopupTrigger();
+            if( bIsPopup )
+            {
+                int selRow = getRowForLocation(e.getX(), e.getY());
+                TreePath aPath = getPathForLocation(e.getX(), e.getY());
+
+                // check for actions
+                Object aObject = aPath.getLastPathComponent();
+                if( aObject instanceof AccTreeNode )
+                {
+                    AccTreeNode aNode = (AccTreeNode)aObject;
+
+                    JPopupMenu aMenu = new JPopupMenu();
+
+                    Vector aActions = new Vector();
+                    aNode.getActions(aActions);
+                    for( int i = 0; i < aActions.size(); i++ )
+                    {
+                        aMenu.add( new NodeAction(
+                            aActions.elementAt(i).toString(),
+                            aNode, i ) );
+                    }
+
+                    // show menu (if we have actions)
+                    if( aActions.size() > 0 )
+                        aMenu.show( AccessibilityTree.this, e.getX(), e.getY() );
+                }
+            }
+
+            return bIsPopup;
+        }
+    }
+
+    class NodeAction extends AbstractAction
+    {
+        private int mnIndex;
+        private AccTreeNode maNode;
+
+        public NodeAction( String aName, AccTreeNode aNode, int nIndex )
+        {
+            super( aName );
+            maNode = aNode;
+            mnIndex = nIndex;
+        }
+
+        public void actionPerformed(ActionEvent e)
+        {
+            maNode.performAction(mnIndex);
+        }
+    }
 
 
     /** listen to tree model changes in order to update XAccessibleText objects
