@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tbe $ $Date: 2002-03-07 19:58:09 $
+#   last change: $Author: tbe $ $Date: 2002-07-17 11:16:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,8 +88,7 @@ UNOUCROUT=$(OUT)$/inc
 # --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/accessiblestatesethelper.obj		\
-        $(SLO)$/accessiblerelationsethelper.obj			\
-        $(SLO)$/accessibletexthelper.obj
+        $(SLO)$/accessiblerelationsethelper.obj
 
 # --- Targets ----------------------------------
 
