@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:15:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
         SfxStringItem aName( SID_FILE_NAME, rFileName );
         SfxStringItem aReferer( SID_REFERER, String::CreateFromAscii("private:user") );
         SfxStringItem aFlags( SID_OPTIONS, String::CreateFromAscii("T") );
-        SfxBoolItem aHidden( SID_VIEW, FALSE );
+        SfxBoolItem aHidden( SID_HIDDEN, TRUE );
         const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
         const SfxObjectItem *pObj = PTR_CAST( SfxObjectItem, pRet );
         xDoc = PTR_CAST( SfxObjectShell, pObj->GetShell() );
@@ -1251,6 +1251,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     }
                     else if ( aINetProtocol == INET_PROT_FILE )
                     {
+                        BOOL bLoadInternal = FALSE;
+
                         // security reservation: => we have to check the referer before executing
                         if ( SFX_APP()->IsSecureURL( String(), &aReferer ) )
                         {
@@ -1271,9 +1273,18 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                 }
                                 catch ( ::com::sun::star::system::SystemShellExecuteException& )
                                 {
-                                    vos::OGuard aGuard( Application::GetSolarMutex() );
-                                    Window *pWindow = SFX_APP()->GetTopWindow();
-                                    ErrorBox( pWindow, SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
+                                    if ( !pFilter )
+                                    {
+                                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                                        Window *pWindow = SFX_APP()->GetTopWindow();
+                                        ErrorBox( pWindow, SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
+                                    }
+                                    else
+                                    {
+                                        rReq.RemoveItem( SID_TARGETNAME );
+                                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
+                                        bLoadInternal = TRUE;
+                                    }
                                 }
                             }
                         }
@@ -1283,7 +1294,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                             ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
                         }
 
-                        return;
+                        if ( !bLoadInternal )
+                            return;
                     }
                     else if ( aINetProtocol == INET_PROT_MAILTO )
                     {
