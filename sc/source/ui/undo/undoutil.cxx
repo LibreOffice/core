@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 10:35:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,13 +78,13 @@
 #include "global.hxx"
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
-                                USHORT nStartX, USHORT nStartY, USHORT nStartZ,
-                                USHORT nEndX, USHORT nEndY, USHORT nEndZ )
+                                SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
+                                SCCOL nEndX, SCROW nEndY, SCTAB nEndZ )
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        USHORT nViewTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nViewTab = pViewShell->GetViewData()->GetTabNo();
         if ( nViewTab < nStartZ || nViewTab > nEndZ )
             pViewShell->SetTabNo( nStartZ );
 
@@ -98,11 +98,11 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
 
 
 void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
-                                const ScTripel& rBlockStart,
-                                const ScTripel& rBlockEnd )
+                                const ScAddress& rBlockStart,
+                                const ScAddress& rBlockEnd )
 {
-    MarkSimpleBlock( pDocShell, rBlockStart.GetCol(), rBlockStart.GetRow(), rBlockStart.GetTab(),
-                                rBlockEnd.GetCol(), rBlockEnd.GetRow(), rBlockEnd.GetTab() );
+    MarkSimpleBlock( pDocShell, rBlockStart.Col(), rBlockStart.Row(), rBlockStart.Tab(),
+                                rBlockEnd.Col(), rBlockEnd.Row(), rBlockEnd.Tab() );
 }
 
 
@@ -115,8 +115,8 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
 
 
 
-ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, USHORT nTab,
-                                    USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 )
+ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB nTab,
+                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     ScDBData* pRet = pDoc->GetDBAtArea( nTab, nCol1, nRow1, nCol2, nRow2 );
 
@@ -153,12 +153,12 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, USHOR
 void ScUndoUtil::PaintMore( ScDocShell* pDocShell,
                                 const ScRange& rRange )
 {
-    USHORT nCol1 = rRange.aStart.Col();
-    USHORT nRow1 = rRange.aStart.Row();
-    USHORT nCol2 = rRange.aEnd.Col();
-    USHORT nRow2 = rRange.aEnd.Row();
-    if (nCol1) --nCol1;
-    if (nRow1) --nRow1;
+    SCCOL nCol1 = rRange.aStart.Col();
+    SCROW nRow1 = rRange.aStart.Row();
+    SCCOL nCol2 = rRange.aEnd.Col();
+    SCROW nRow2 = rRange.aEnd.Row();
+    if (nCol1 > 0) --nCol1;
+    if (nRow1 > 0) --nRow1;
     if (nCol2<MAXCOL) ++nCol2;
     if (nRow2<MAXROW) ++nRow2;
 
