@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-28 08:19:33 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 16:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     com::sun::star::table::CellAddress aFilterOutputPosition;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
+    sal_Int16       nSubTotalsUserListIndex;
+    sal_Int16       nSubTotalRuleGroupFieldNumber;
     sal_Bool        bNative : 1;
     sal_Bool        bIsSelection : 1;
     sal_Bool        bKeepFormats : 1;
@@ -139,8 +141,6 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     sal_Bool        bSubTotalsSortGroups : 1;
     sal_Bool        bSubTotalsEnabledUserList : 1;
     sal_Bool        bSubTotalsAscending : 1;
-    sal_Int16       nSubTotalsUserListIndex : 1;
-    sal_Int16       nSubTotalRuleGroupFieldNumber : 1;
     sal_Bool        bFilterCopyOutputData : 1;
     sal_Bool        bFilterIsCaseSensitive : 1;
     sal_Bool        bFilterSkipDuplicates : 1;
