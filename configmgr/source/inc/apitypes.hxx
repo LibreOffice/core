@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
+ *  last change: $Author: kr $ $Date: 2001-09-12 12:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,13 +123,13 @@ namespace configmgr
             return ::getCppuType( static_cast< uno::Sequence<Type> const * >(0) );
         }
 
-        template <typename Type>
+        template <typename T>
         inline
-        uno::Sequence<Type> makeSequence(vector<Type> const& aVector)
+        uno::Sequence<T> makeSequence(vector<T> const& aVector)
         {
             if (aVector.empty())
-                return uno::Sequence<Type>();
-            return uno::Sequence<Type>(&aVector[0],aVector.size());
+                return uno::Sequence<T>();
+            return uno::Sequence<T>(&aVector[0],aVector.size());
         }
     }
 
