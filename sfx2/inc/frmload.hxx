@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-01 08:56:20 $
+ *  last change: $Author: cd $ $Date: 2001-05-14 11:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #endif
 
 #ifdef TF_FILTER//MUSTFILTER
-    #ifndef _RTL_USTRING_
-    #include <rtl/ustring>
+    #ifndef _RTL_USTRING_HXX_
+    #include <rtl/ustring.hxx>
     #endif
 
     #ifndef _TOOLS_DEBUG_HXX
