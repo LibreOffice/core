@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePageHeaderArea.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:16:45 $
+ *  last change: $Date: 2003-01-31 13:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XText;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.AnyConverter;
 
 import drafts.com.sun.star.accessibility.XAccessibleStateSet;
 
@@ -145,13 +147,17 @@ public class ScAccessiblePageHeaderArea extends TestCase {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                            new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessiblePageHeaderArea");
         } catch(com.sun.star.lang.WrappedTargetException e) {
             log.println("Exception ceating relation :");
             e.printStackTrace(log);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Exception ceating relation :");
+            e.printStackTrace(log);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println("Exception ceating relation :");
             e.printStackTrace(log);
         }
@@ -217,13 +223,18 @@ public class ScAccessiblePageHeaderArea extends TestCase {
         XStyle StdStyle = null;
 
         try{
-            XNameAccess PageStyles = (XNameAccess)
-                                        StyleFamNames.getByName("PageStyles");
-            StdStyle = (XStyle)PageStyles.getByName("Default");
+            XNameAccess PageStyles = (XNameAccess) AnyConverter.toObject(
+                        new Type(XNameAccess.class),
+                                        StyleFamNames.getByName("PageStyles"));
+            StdStyle = (XStyle)AnyConverter.toObject(
+                        new Type(XStyle.class),PageStyles.getByName("Default"));
         } catch(com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by name", e);
         } catch(com.sun.star.container.NoSuchElementException e){
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get by name", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e){
             e.printStackTrace(log);
             throw new StatusException("Couldn't get by name", e);
         }

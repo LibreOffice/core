@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewCell.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:45 $
+ *  last change:$Date: 2003-01-31 13:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.table.XCell;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Object implements the following interfaces:
@@ -156,7 +158,8 @@ public class ScAccessiblePreviewCell extends TestCase {
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
             log.println("Getting a cell from sheet") ;
             xCell = oSheet.getCellByPosition(0, 0);
@@ -165,6 +168,10 @@ public class ScAccessiblePreviewCell extends TestCase {
             throw new StatusException(
                 "Error getting cell object from spreadsheet document", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException(
+                "Error getting cell object from spreadsheet document", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
                 "Error getting cell object from spreadsheet document", e);
