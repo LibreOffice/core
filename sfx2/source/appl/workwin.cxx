@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-11 16:36:37 $
+ *  last change: $Author: mba $ $Date: 2002-01-18 17:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1542,7 +1542,7 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
             bOn = TRUE;
 
         aStatBar.bTemp = bSet;
-        if ( !bOn || bReset )
+        if ( !bOn || bReset || (!bSet && aStatBar.nId ) )
         {
             if ( aStatBar.pStatusBar && !aStatBar.pStatusBar->GetBindings_Impl() )
             {
@@ -1603,6 +1603,9 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
         pBar = aStatBar.pStatusBar->GetStatusBar();
         nActId = aStatBar.pStatusBar->GetType();
     }
+
+    if ( nActId && aStatBar.bTemp )
+        return;
 
     // keine Statusleiste, wenn keine Id gew"unscht oder bei FullScreenView
     // oder wenn ausgeschaltet
