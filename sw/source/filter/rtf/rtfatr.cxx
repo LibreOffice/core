@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:42:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,9 @@
 #endif
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
 #endif
 
 
@@ -1968,6 +1971,7 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         if( !nLine && rTbl.IsHeadlineRepeat() )
             rWrt.Strm() << sRTF_TRHDR;
 
+        const SwTableLine* pLine = pBoxArr[ 0 ]->GetBox()->GetUpper();
         // Zeilenhoehe ausgeben
         long nHeight = 0;
         if( bFixRowHeight && rWrt.pDoc->GetRootFrm() )
@@ -1975,19 +1979,22 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             nHeight = -pRow->GetPos();      //neg. => abs. height!
             if( nLine )
                 nHeight += rRows[ nLine - 1 ]->GetPos();
-
-            // merged line -> dont split it
-            rWrt.Strm() << sRTF_TRKEEP;
         }
         else
         {
-            const SwTableLine* pLine = pBoxArr[ 0 ]->GetBox()->GetUpper();
             const SwFmtFrmSize& rLSz = pLine->GetFrmFmt()->GetFrmSize();
             if( ATT_VAR_SIZE != rLSz.GetSizeType() && rLSz.GetHeight() )
                 nHeight = ATT_MIN_SIZE == rLSz.GetSizeType()
                                                 ? rLSz.GetHeight()
                                                 : -rLSz.GetHeight();
         }
+
+        //The rtf default is to allow a row to break, so if we are not
+        //splittable export TRKEEP
+        const SwFrmFmt *pLineFmt = pLine ? pLine->GetFrmFmt() : 0;
+        if (!pLineFmt || pLineFmt->GetRowSplit().GetValue() == 0)
+            rWrt.Strm() << sRTF_TRKEEP;
+
         if( nHeight )
         {
             rWrt.Strm() << sRTF_TRRH;
