@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-13 11:34:34 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,15 +142,23 @@ protected:
 
 public:
 
-    SwXMLImport(sal_uInt16 nImportFlags = IMPORT_ALL);
+    // #110680#
+    SwXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        sal_uInt16 nImportFlags = IMPORT_ALL);
+
 #ifdef XML_CORE_API
-    SwXMLImport( SwDoc& rDoc, const SwPaM& rPaM, sal_Bool bLoadDoc,
-                 sal_Bool bInsertMode, sal_uInt16 nStyleFamMask,
-                 const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::frame::XModel > & rModel,
-                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::document::XGraphicObjectResolver > &,
-                   SvStorage *pPkg );
+    // #110680#
+    SwXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SwDoc& rDoc,
+        const SwPaM& rPaM,
+        sal_Bool bLoadDoc,
+        sal_Bool bInsertMode,
+        sal_uInt16 nStyleFamMask,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > &,
+        SvStorage *pPkg );
 #endif
 
     ~SwXMLImport() throw();
