@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:23:16 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,12 +127,6 @@ public:
 #else
         { return SwpHtStart::GetPos( pHt ); }
 #endif
-
-#ifdef USED
-    // Der Zugriffsoperator soll bald nur noch const sein!
-    inline SwTxtAttr *operator[]( const USHORT nIdx ) { return SwpHtStart::operator[](nIdx); }
-#endif
-
 
     inline SwTxtAttr *GetHt( const USHORT nIdx ) { return SwpHtStart::operator[](nIdx); }
     inline const SwTxtAttr *operator[]( const USHORT nIdx )const
