@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:23 $
+ *  last change: $Author: hjs $ $Date: 2000-11-06 17:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,14 @@
  *
  ************************************************************************/
 
+#include <cstring>
+#include <string>
+#include <algorithm>
+
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
 
-#define __STL_IMPORT_VENDOR_CSTD
-#include <cstring>
 #ifndef _CONNECTIVITY_ODBC_OFUNCTIONS_HXX_
 #include "odbc/OFunctions.hxx"
 #endif
@@ -79,9 +81,7 @@ using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
-#ifndef min
-#define min(x,y) (x) < ( y) ? (x) : (y)
-#endif
+
 // -------------------------------------------------------------------------
 void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT _nHandleType,const Reference< XInterface >& _xInterface,sal_Bool _bNoFound) throw(SQLException, RuntimeException)
 {
@@ -157,7 +157,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
     if(_bWasNull)
         return Sequence<sal_Int8>();
 
-    SQLINTEGER nBytes = pcbValue != SQL_NO_TOTAL ? min(pcbValue, nMaxLen) : nMaxLen;
+    SQLINTEGER nBytes = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
     Sequence<sal_Int8> aData((sal_Int8*)aCharArray, nBytes);
 
 
@@ -186,7 +186,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
         sal_Int32 nLen = aData.getLength();
         aData.realloc(nLen + nBytes);
-        ::std::memcpy(aData.getArray() + nLen, aCharArray, nBytes);
+        memcpy(aData.getArray() + nLen, aCharArray, nBytes);
     }
     return aData;
 }
@@ -219,7 +219,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
                 return ::rtl::OUString();
             // Bei Fehler bricht der GETDATA-Makro mit return ab,
             // bei NULL mit break!
-            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? min(pcbValue, nMaxLen) : nMaxLen;
+            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
             waCharArray[nLen] = 0;
             aData = ::rtl::OUString(waCharArray);
 
@@ -271,7 +271,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
             if(_bWasNull)
                 return ::rtl::OUString();
 
-            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? min(pcbValue, nMaxLen) : nMaxLen;
+            SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
             aCharArray[nLen] = 0;
             aData = ::rtl::OUString((const sal_Char*)aCharArray,nLen, osl_getThreadTextEncoding());
 
