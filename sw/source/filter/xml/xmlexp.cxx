@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:46:22 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 14:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,8 +593,7 @@ void SwXMLExport::_ExportContent()
             Reference<XFormsSupplier> xFormSupp(xPage, UNO_QUERY);
             if (xFormSupp->getForms()->hasElements())
             {
-                SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE,
-                                          sXML_forms, sal_True, sal_True);
+                ::xmloff::OOfficeFormsExport aOfficeForms(*this);
 
                 GetFormExport()->seekPage(xPage);
                 GetFormExport()->exportForms(xPage);
