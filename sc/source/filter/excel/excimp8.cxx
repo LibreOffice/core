@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:42:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@
 #ifndef SC_XLOCX_HXX
 #include "xlocx.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
+
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
 #endif
@@ -145,8 +149,8 @@
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
 #endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
+#ifndef SC_XIPIVOT_HXX
+#include "xipivot.hxx"
 #endif
 
 #include "excimp8.hxx"
@@ -176,8 +180,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( pExcRoot, aIn );
 
     pExcRoot->pPivotCacheStorage = pPivotCache;
-    pCurrPivTab = NULL;
-    pCurrPivotCache = NULL;
 
     pExcRoot->pRootStorage = pStorage;
 
@@ -277,32 +279,6 @@ void ImportExcel8::Cont( void )
 }
 
 
-void ImportExcel8::Dconref( void )
-{
-    if( !pCurrPivotCache )
-        return;
-
-    UINT16  nR1, nR2;
-    UINT8   nC1, nC2;
-    String  aEncodedUrl, aUrl, aTabName;
-    bool    bSelf;
-
-    aIn >> nR1 >> nR2 >> nC1 >> nC2;
-
-
-    aIn.AppendUniString( aEncodedUrl );
-    XclImpUrlHelper::DecodeUrl( aUrl, aTabName, bSelf, *pExcRoot->pIR, aEncodedUrl );
-
-    if( !aTabName.Len() )
-    {
-        aTabName = aUrl;
-        aUrl.Erase();
-    }
-    ScfTools::ConvertToScSheetName( aTabName );
-    pCurrPivotCache->SetSource( static_cast<SCCOL>(nC1), static_cast<SCROW>(nR1), static_cast<SCCOL>(nC2), static_cast<SCROW>(nR2), aUrl, aTabName, bSelf );
-}
-
-
 void ImportExcel8::Obj()
 {
     GetObjectManager().ReadObj( maStrm );
@@ -318,6 +294,7 @@ void ImportExcel8::Boundsheet( void )
     aIn >> nGrbit >> nLen;
 
     String aName( aIn.ReadUniString( nLen ) );
+    GetTabInfo().AppendXclTabName( aName, nBdshtTab );
 
     ScfTools::ConvertToScSheetName( aName );
     *pExcRoot->pTabNameBuff << aName;
@@ -547,7 +524,7 @@ void ImportExcel8::PostDocLoad( void )
     {
         pD->UpdateChartListenerCollection();    // references in charts must be updated
 
-        aScenList.Apply( *pD );
+        aScenList.Apply( GetRoot() );
     }
 
     SfxObjectShell* pShell = GetDocShell();
@@ -587,7 +564,7 @@ void ImportExcel8::PostDocLoad( void )
     }
 
     // building pivot tables
-    aPivotTabList.Apply();
+    GetPivotTableManager().Apply();
 }
 
 
@@ -617,8 +594,8 @@ void ImportExcel8::ApplyEscherObjects()
                             {
                                 if( const XclEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
                                 {
-                                    bool bSkipObj = aPivotTabList.IsInPivotRange( static_cast<SCCOL>(pAnchor->mnLCol), static_cast<SCROW>(pAnchor->mnTRow), pAnchor->mnScTab );
-                                    if( !bSkipObj && pExcRoot->pAutoFilterBuffer )
+                                    bool bSkipObj = false;
+                                    if( pExcRoot->pAutoFilterBuffer )
                                         bSkipObj = pExcRoot->pAutoFilterBuffer->HasDropDown( static_cast<SCCOL>(pAnchor->mnLCol), static_cast<SCROW>(pAnchor->mnTRow), pAnchor->mnScTab );
                                     if( bSkipObj )
                                         pEscherObj->SetSkip();
@@ -638,118 +615,6 @@ void ImportExcel8::ApplyEscherObjects()
 void ImportExcel8::EndAllChartObjects( void )
 {
 }
-
-
-//___________________________________________________________________
-// pivot tables
-
-void ImportExcel8::SXView( void )
-{
-    pCurrPivTab = new XclImpPivotTable( aIn, pExcRoot, GetCurrScTab() );
-    aPivotTabList.Append( pCurrPivTab );
-}
-
-void ImportExcel8::SXVd( void )
-{
-    if( !pCurrPivTab )
-        return;
-    pCurrPivTab->AddViewField( aIn );
-}
-
-void ImportExcel8::SXVi( void )
-{
-    if( !pCurrPivTab )
-        return;
-
-    UINT16  nItemType, nGrBit, nCache;
-    aIn >> nItemType >> nGrBit >> nCache;
-    pCurrPivTab->AddViewItem( nItemType, nCache, nGrBit );
-}
-
-void ImportExcel8::SXIvd( void )
-{
-    if( !pCurrPivTab )
-        return;
-    pCurrPivTab->ReadRCFieldIDs( aIn );
-}
-
-void ImportExcel8::SXLi( void )
-{
-}   // unnecessary to read this record
-
-void ImportExcel8::SXPi( void )
-{
-    if( !pCurrPivTab )
-        return;
-
-    UINT16  nArrayCnt = (UINT16)(aIn.GetRecSize() / 6);      // SXPI contains 6-byte-arrays
-    UINT16  nSXVD;
-    UINT16  nSXVI;
-    UINT16  nObjID;
-
-    for( UINT16 iArray = 0; iArray < nArrayCnt; iArray++ )
-    {
-        aIn >> nSXVD >> nSXVI >> nObjID;
-        pCurrPivTab->AddPageItemInfo( nSXVD, nSXVI );
-    }
-}
-
-void ImportExcel8::SXDi( void )
-{
-    if( !pCurrPivTab )
-        return;
-    pCurrPivTab->AddDataItem( aIn );
-}
-
-void ImportExcel8::SXIdStm( void )
-{
-    UINT16 nStrId;
-    aIn >> nStrId;
-
-    if( !pExcRoot->pImpPivotCacheList )
-        pExcRoot->pImpPivotCacheList = new XclImpPivotCacheList;
-
-    pCurrPivotCache = new XclImpPivotCache( pExcRoot, nStrId );
-    pExcRoot->pImpPivotCacheList->Append( pCurrPivotCache );
-}
-
-void ImportExcel8::SXVs( void )
-{
-    if( !pCurrPivotCache )
-        return;
-
-    UINT16 nSrcType;
-    aIn >> nSrcType;
-    pCurrPivotCache->SetSourceType( nSrcType );
-    GetTracer().TracePivotDataSource(nSrcType == EXC_SXVS_EXTERN);
-}
-
-void ImportExcel8::SXRule( void )
-{
-}
-
-void ImportExcel8::SXEx( void )
-{
-}
-
-void ImportExcel8::SXFilt( void )
-{
-}
-
-void ImportExcel8::SXSelect( void )
-{
-}
-
-void ImportExcel8::SXVdex( void )
-{
-    if( !pCurrPivTab )
-        return;
-
-    UINT32 nFlags;
-    aIn >> nFlags;
-    pCurrPivTab->SetShowEmpty( TRUEBOOL( nFlags & 0x00000001 ) );
-}
-
 
 
 //___________________________________________________________________
