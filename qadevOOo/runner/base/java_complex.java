@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-12-10 16:54:46 $
+ *  last change:$Date: 2005-02-02 13:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ import stats.Summarizer;
 import base.TestBase;
 import lib.Status;
 import lib.TestParameters;
+import util.PropertyName;
 
 /**
  * Test base for executing a java complex test.
@@ -113,6 +114,16 @@ public class java_complex implements TestBase{
         ComplexTestCase testClass = null;
         boolean returnVal = true;
 
+//        the concept of the TimeOut depends on runner logs. If the runner log,
+//        for exmaple to start a test method, the timeout was restet. This is not
+//        while the test itself log something like "open docuent...".
+//        An property of complex test could be that it have only one test method
+//        which works for serveral minutes. Ih this case the TimeOut get not trigger
+//        and the office was killed.
+//        In complex tests just use "ThreadTimeOut" as timout.
+
+        param.put("TimeOut", new Integer(0));
+
         for (int i=0; i<entries.length; i++) {
 
             if (entries[i] == null) continue;
@@ -139,7 +150,7 @@ public class java_complex implements TestBase{
                     office = null;
                 }
             }
-            log.initialize(entries[i],true);
+            log.initialize(entries[i],param.getBool(PropertyName.LOGGING_IS_ACTIVE));
             entries[i].Logger = log;
 
             // create an instance
