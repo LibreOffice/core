@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 18:48:35 $
+ *  last change: $Author: jp $ $Date: 2001-03-13 16:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
         if( nSttCnt < nEndCnt )
             pTNd->Erase( aIdx, nEndCnt - nSttCnt );
 
-        pTNd->Insert( rData.GetText(), aIdx );
+        pTNd->Insert( rData.GetText(), aIdx, INS_EMPTYEXPAND );
 
         SetMark();
         GetPoint()->nContent = nSttCnt;
