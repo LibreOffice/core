@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-08 11:31:28 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 15:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,7 +862,7 @@ void ImpGraphic::ImplSetDocFileName( const String& rName, ULONG nFilePos )
 {
     const INetURLObject aURL( rName );
 
-    DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Graphic::SetDocFileName(...): invalid URL" );
+    DBG_ASSERT( !rName.Len() || ( aURL.GetProtocol() != INET_PROT_NOT_VALID ), "Graphic::SetDocFileName(...): invalid URL" );
 
     maDocFileURLStr = aURL.GetMainURL();
     mnDocFilePos = nFilePos;
