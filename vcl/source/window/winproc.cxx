@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:05 $
+ *  last change: $Author: ssa $ $Date: 2002-04-25 12:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,16 @@ static BOOL ImplCallCommand( Window* pChild, USHORT nEvt, void* pData = NULL,
     if ( pPos )
         aPos = *pPos;
     else
-        aPos = pChild->GetPointerPosPixel();
+    {
+        if( bMouse )
+            aPos = pChild->GetPointerPosPixel();
+        else
+        {
+            // simulate mouseposition at center of window
+            Size aSize = pChild->GetOutputSize();
+            aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+        }
+    }
 
     CommandEvent        aCEvt( aPos, nEvt, bMouse, pData );
     NotifyEvent         aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
