@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-10-05 13:22:51 $
+ *  last change: $Author: aw $ $Date: 2001-10-08 16:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,6 +714,9 @@ void  SdDrawViewShell::ExecRuler(SfxRequest& rReq)
                         rItem.GetTxtFirstLineOfst(), nId );
                 aEditAttr.Put( aLRSpaceItem );
                 pDrView->SetAttributes( aEditAttr );
+
+                // #92557# Invalidate is missing here
+                Invalidate(SID_ATTR_PARA_LRSPACE);
             }
             break;
         }
