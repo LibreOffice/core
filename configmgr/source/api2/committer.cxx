@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ Committer::Committer(ApiRootTreeImpl& rTree)
 {}
 //-----------------------------------------------------------------------------
 
-ITreeProvider2* Committer::getUpdateProvider()
+ITreeManager* Committer::getUpdateProvider()
 {
     return &m_rTree.getApiTree().getProvider().getProviderImpl();
 }
@@ -121,20 +121,21 @@ void Committer::commit()
     Tree aTree(rApiTree.getTree());
     if (!aTree.hasChanges()) return;
 
-    TreeChangeList  aChangeList(aTree.getContextPath().toString(),
+    OSL_ENSURE(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
+    TreeChangeList  aChangeList(m_rTree.getOptions(),
+                                aTree.getContextPath().toString(),
                                 aTree.getRootNode().getName().toString(),
                                 rtl::OUString(),
                                 aTree.getRootNode().getAttributes());
 
-    ITreeProvider2* pUpdateProvider = getUpdateProvider();
+    ITreeManager* pUpdateProvider = getUpdateProvider();
     OSL_ASSERT(pUpdateProvider);
 
     CommitHelper    aHelper(aTree);
     if (aHelper.prepareCommit(aChangeList))
     try
     {
-        OSL_ENSURE(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
-        pUpdateProvider->updateTree(aChangeList, m_rTree.getOptions());
+        pUpdateProvider->updateTree(aChangeList);
         aHelper.finishCommit(aChangeList);
 
         aLocalGuard.clear();        // done locally
