@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,84 +110,84 @@ class SalGraphicsData
     friend  class           SalPrinter;
     friend  class           SalInfoPrinter;
 
-                            STDAPI( SalGraphicsData )
+    STDAPI( SalGraphicsData );
 
 #ifndef _USE_PRINT_EXTENSION_
-            ::psp::JobData*         m_pJobData;
-            ::psp::PrinterGfx*      m_pPrinterGfx;
-            String*                 m_pPhoneNr;
-            bool                    m_bSwallowFaxNo;
+    ::psp::JobData*         m_pJobData;
+    ::psp::PrinterGfx*      m_pPrinterGfx;
+    String*                 m_pPhoneNr;
+    bool                    m_bSwallowFaxNo;
 #endif
 
-            SalColormapRef  xColormap_;
-            Drawable        hDrawable_;         // use
+    SalColormapRef  xColormap_;
+    Drawable        hDrawable_;         // use
 
-            XLIB_Region     pPaintRegion_;
-            XLIB_Region     pClipRegion_;
+    XLIB_Region     pPaintRegion_;
+    XLIB_Region     pClipRegion_;
 
-            GC              pPenGC_;            // Pen attributes
-            SalColor        nPenColor_;
-            Pixel           nPenPixel_;
+    GC              pPenGC_;            // Pen attributes
+    SalColor        nPenColor_;
+    Pixel           nPenPixel_;
 
-            GC              pFontGC_;           // Font attributes
-            ExtendedFontStructRef       xFont_;
-            ExtendedFontStructRef       mxFallbackFont;
-            ServerFont                  *mpServerSideFont;
-            ServerFont                  *mpSrvFallbackFont;
+    GC              pFontGC_;           // Font attributes
+    ExtendedFontStructRef       xFont_;
+    ExtendedFontStructRef       mxFallbackFont;
+    ServerFont                  *mpServerSideFont;
+    ServerFont                  *mpSrvFallbackFont;
 
-            Fraction        aScale_;
-            SalColor        nTextColor_;
-            Pixel           nTextPixel_;
-            short           nFontOrientation_;
-            BOOL            bFontVertical_;
+    Fraction        aScale_;
+    SalColor        nTextColor_;
+    Pixel           nTextPixel_;
+    short           nFontOrientation_;
+    BOOL            bFontVertical_;
 
-            GC              pBrushGC_;          // Brush attributes
-            SalColor        nBrushColor_;
-            Pixel           nBrushPixel_;
-            Pixmap          hBrush_;            // Dither
+    GC              pBrushGC_;          // Brush attributes
+    SalColor        nBrushColor_;
+    Pixel           nBrushPixel_;
+    Pixmap          hBrush_;            // Dither
 
-             GC             pMonoGC_;
-            GC              pCopyGC_;
-             GC             pMaskGC_;
-            GC              pInvertGC_;
-            GC              pInvert50GC_;
-            GC              pStippleGC_;
-            GC              pTrackingGC_;
+    GC              pMonoGC_;
+    GC              pCopyGC_;
+    GC              pMaskGC_;
+    GC              pInvertGC_;
+    GC              pInvert50GC_;
+    GC              pStippleGC_;
+    GC              pTrackingGC_;
 
-            BOOL            bWindow_ : 1;       // is Window
-            BOOL            bPrinter_ : 1;      // is Printer
-            BOOL            bVirDev_ : 1;       // is VirDev
-            BOOL            bPenGC_ : 1;        // is Pen GC valid
-            BOOL            bFontGC_ : 1;       // is Font GC valid
-            BOOL            bBrushGC_ : 1;      // is Brush GC valid
-            BOOL            bMonoGC_ : 1;       // is Mono GC valid
-            BOOL            bCopyGC_ : 1;       // is Copy GC valid
-            BOOL            bInvertGC_ : 1;     // is Invert GC valid
-            BOOL            bInvert50GC_ : 1;   // is Invert50 GC valid
-            BOOL            bStippleGC_ : 1;    // is Stipple GC valid
-            BOOL            bTrackingGC_ : 1;   // is Tracking GC valid
-            BOOL            bXORMode_ : 1;      // is ROP XOR Mode set
-            BOOL            bDitherBrush_ : 1;  // is solid or tile
+    BOOL            bWindow_ : 1;       // is Window
+    BOOL            bPrinter_ : 1;      // is Printer
+    BOOL            bVirDev_ : 1;       // is VirDev
+    BOOL            bPenGC_ : 1;        // is Pen GC valid
+    BOOL            bFontGC_ : 1;       // is Font GC valid
+    BOOL            bBrushGC_ : 1;      // is Brush GC valid
+    BOOL            bMonoGC_ : 1;       // is Mono GC valid
+    BOOL            bCopyGC_ : 1;       // is Copy GC valid
+    BOOL            bInvertGC_ : 1;     // is Invert GC valid
+    BOOL            bInvert50GC_ : 1;   // is Invert50 GC valid
+    BOOL            bStippleGC_ : 1;    // is Stipple GC valid
+    BOOL            bTrackingGC_ : 1;   // is Tracking GC valid
+    BOOL            bXORMode_ : 1;      // is ROP XOR Mode set
+    BOOL            bDitherBrush_ : 1;  // is solid or tile
 
-            void            SetClipRegion( GC          pGC,
-                                           XLIB_Region pXReg = NULL ) const;
+    void            SetClipRegion( GC          pGC,
+                                   XLIB_Region pXReg = NULL ) const;
 
 
 #if defined(_SV_SALGDI_CXX) || defined (_SV_SALGDI2_CXX)
-            GC              GetTrackingGC();
-            GC              GetInvertGC();
-            GC              GetInvert50GC();
-            GC              CreateGC( Drawable      hDrawable,
-                                      unsigned long nMask = GCGraphicsExposures );
+    GC              GetTrackingGC();
+    GC              GetInvertGC();
+    GC              GetInvert50GC();
+    GC              CreateGC( Drawable      hDrawable,
+                              unsigned long nMask = GCGraphicsExposures );
 #endif
 
 #if defined _SV_SALGDI_CXX
-            GC              SelectPen();
-            GC              SelectBrush();
-            void            DrawLines( ULONG              nPoints,
-                                       const SalPolyLine &rPoints,
-                                       GC                 pGC );
-            BOOL            GetDitherPixmap ( SalColor nSalColor );
+    GC              SelectPen();
+    GC              SelectBrush();
+    void            DrawLines( ULONG              nPoints,
+                               const SalPolyLine &rPoints,
+                               GC                 pGC );
+    BOOL            GetDitherPixmap ( SalColor nSalColor );
 #endif
 
 #if defined _SV_SALGDI2_CXX
@@ -196,85 +196,85 @@ class SalGraphicsData
     inline  GC              GetCopyGC();
     inline  GC              GetStippleGC();
 
-            int             Clip      ( XLIB_Region   pRegion,
-                                        int          &nX,
-                                        int          &nY,
-                                        unsigned int &nDX,
-                                        unsigned int &nDY,
-                                        int          &nSrcX,
-                                        int          &nSrcY ) const;
-            int             Clip      ( int          &nX,
-                                        int          &nY,
-                                        unsigned int &nDX,
-                                        unsigned int &nDY,
-                                        int          &nSrcX,
-                                        int          &nSrcY ) const;
-            GC              SetMask   ( int          &nX,
-                                        int          &nY,
-                                        unsigned int &nDX,
-                                        unsigned int &nDY,
-                                        int          &nSrcX,
-                                        int          &nSrcY,
-                                        Pixmap        hClipMask );
-            void            DrawBitmap( const SalTwoRect *pPosAry,
-                                        SalGraphics      *pThis,
-                                        const SalBitmap  &rSalBitmap,
-                                        const SalBitmap  &rTransparentBitmap,
-                                        SalColor          nTransparentColor );
+    int             Clip      ( XLIB_Region   pRegion,
+                                int          &nX,
+                                int          &nY,
+                                unsigned int &nDX,
+                                unsigned int &nDY,
+                                int          &nSrcX,
+                                int          &nSrcY ) const;
+    int             Clip      ( int          &nX,
+                                int          &nY,
+                                unsigned int &nDX,
+                                unsigned int &nDY,
+                                int          &nSrcX,
+                                int          &nSrcY ) const;
+    GC              SetMask   ( int          &nX,
+                                int          &nY,
+                                unsigned int &nDX,
+                                unsigned int &nDY,
+                                int          &nSrcX,
+                                int          &nSrcY,
+                                Pixmap        hClipMask );
+    void            DrawBitmap( const SalTwoRect *pPosAry,
+                                SalGraphics      *pThis,
+                                const SalBitmap  &rSalBitmap,
+                                const SalBitmap  &rTransparentBitmap,
+                                SalColor          nTransparentColor );
 #endif
 
 #if defined _SV_SALGDI3_CXX
-            GC              SelectFont();
+    GC              SelectFont();
 
-            void            SetFont( const ImplFontSelectData* pEntry );
-            void            DrawText( long          nX,
-                                      long          nY,
-                                      const xub_Unicode* pStr,
-                                      USHORT        nLen,
-                                      const long*   pDXAry );
-            void            DrawText( long nX,
-                                      long nY,
-                                      const xub_Unicode* pStr,
-                                      USHORT nLen );
+    void            SetFont( const ImplFontSelectData* pEntry );
+    void            DrawText( long          nX,
+                              long          nY,
+                              const xub_Unicode* pStr,
+                              USHORT        nLen,
+                              const long*   pDXAry );
+    void            DrawText( long nX,
+                              long nY,
+                              const xub_Unicode* pStr,
+                              USHORT nLen );
 
 protected:
-            void            DrawStringMB( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength );
+    void            DrawStringMB( int nX, int nY,
+                                  const sal_Unicode* pStr, int nLength );
 
-            void            DrawStringUCS2( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength );
+    void            DrawStringUCS2( int nX, int nY,
+                                    const sal_Unicode* pStr, int nLength );
 
-            void            DispatchServerFontString( int nX, int nY,
+    void            DispatchServerFontString( int nX, int nY,
+                                              ServerFont *pFont, const sal_uInt32* pGlyph,
+                                              int nLength, const long* pDXAry );
+
+    void            DrawServerSimpleFontString( int nX, int nY,
                                 ServerFont *pFont, const sal_uInt32* pGlyph,
-                                int nLength, const long* pDXAry );
+                                                int nLength, const long* pDXAry );
 
-            void            DrawServerSimpleFontString( int nX, int nY,
-                                ServerFont *pFont, const sal_uInt32* pGlyph,
-                                int nLength, const long* pDXAry );
+    void            DrawServerAAFontString( int nX, int nY,
+                                            ServerFont *pFont, const sal_uInt32* pGlyph,
+                                            int nLength, const long* pDXAry );
 
-            void            DrawServerAAFontString( int nX, int nY,
-                                ServerFont *pFont, const sal_uInt32* pGlyph,
-                                int nLength, const long* pDXAry );
+    bool            DrawServerAAForcedString( int nX, int nY,
+                                              ServerFont *pFont,    const sal_uInt32* pGlyph,
+                                              int nLength, const long* pDXAry );
 
-            bool            DrawServerAAForcedString( int nX, int nY,
-                                ServerFont *pFont,  const sal_uInt32* pGlyph,
-                                int nLength, const long* pDXAry );
+    void            DrawServerFontString( int nX, int nY,
+                                          const sal_Unicode* pStr,
+                                          int nLength, const long* pDXAry );
 
-            void            DrawServerFontString( int nX, int nY,
-                                const sal_Unicode* pStr,
-                                int nLength, const long* pDXAry );
-
-            ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
+    ULONG           GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 #endif
 public:
-                            SalGraphicsData();
-                            ~SalGraphicsData();
+    SalGraphicsData();
+    ~SalGraphicsData();
 
-            void            Init( SalFrame         *pFrame );
-            void            Init( SalVirtualDevice *pVirtualDevice,
-                                  SalGraphics      *pSalGraphics );
-            void            Init( class ImplSalPrinterData  *pPrinter );
-            void            DeInit();
+    void            Init( SalFrame         *pFrame );
+    void            Init( SalVirtualDevice *pVirtualDevice,
+                          SalGraphics      *pSalGraphics );
+    void            Init( class ImplSalPrinterData  *pPrinter );
+    void            DeInit();
 
     inline  SalDisplay     *GetDisplay() const;
     inline  Display        *GetXDisplay() const;

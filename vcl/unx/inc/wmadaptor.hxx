@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,12 @@ public:
      */
     bool isTransientBehaviourAsExpected() const
     { return m_bTransientBehaviour; }
+
+    /*
+     *  changes the transient hint of a window to reference frame
+     *  if reference frame is NULL the root window is used instead
+     */
+    void changeReferenceFrame( SalFrame* pFrame, SalFrame* pReferenceFrame ) const;
 };
 
 } // namespace

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,102 +128,103 @@ class SalFrameData
     friend  SalFrame* SalInstance::CreateChildFrame( SystemParentData*, ULONG );
 
     static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pSalFrameData );
-                            STDAPI( SalFrameData )
+    STDAPI( SalFrameData );
 
-            SalFrame       *pNextFrame_;        // pointer to next frame
-            SalFrame       *pFrame_;
+    SalFrame       *pNextFrame_;        // pointer to next frame
+    SalFrame       *pFrame_;
 
-            SalFrame*       mpParent;            // pointer to parent frame
+    SalFrame*       mpParent;            // pointer to parent frame
                                     // which should never obscur this frame
-             ::std::list< SalFrame* > maChildren;         // List of child frames
+    bool            mbTransientForRoot;
+    ::std::list< SalFrame* > maChildren;         // List of child frames
 
-            SALFRAMEPROC    pProc_;             // callback proc
-            void           *pInst_;             // instance handle for callback
+    SALFRAMEPROC    pProc_;             // callback proc
+    void           *pInst_;             // instance handle for callback
 
-            SalDisplay     *pDisplay_;
-            Widget          hShell_;
-            Widget          hComposite_;
-            XLIB_Window     hForeignParent_;
-            XLIB_Window     hForeignTopLevelWindow_;
-            // window to fall back to when no longer in fullscreen mode
-            XLIB_Window     hStackingWindow_;
-            // window to listen for CirculateNotify events
+    SalDisplay     *pDisplay_;
+    Widget          hShell_;
+    Widget          hComposite_;
+    XLIB_Window     hForeignParent_;
+    XLIB_Window     hForeignTopLevelWindow_;
+    // window to fall back to when no longer in fullscreen mode
+    XLIB_Window     hStackingWindow_;
+    // window to listen for CirculateNotify events
 
-            XLIB_Cursor     hCursor_;
-            int             nCaptured_;         // is captured
+    XLIB_Cursor     hCursor_;
+    int             nCaptured_;         // is captured
 
-            SalGraphics    *pGraphics_;         // current frame graphics
-            SalGraphics    *pFreeGraphics_;     // first free frame graphics
+    SalGraphics    *pGraphics_;         // current frame graphics
+    SalGraphics    *pFreeGraphics_;     // first free frame graphics
 
-             XLIB_Time      nReleaseTime_;      // timestamp of last key release
-            USHORT          nKeyCode_;          // last key code
-            USHORT          nKeyState_;         // last key state
-            int             nCompose_;          // compose state
+    XLIB_Time       nReleaseTime_;      // timestamp of last key release
+    USHORT          nKeyCode_;          // last key code
+    USHORT          nKeyState_;         // last key state
+    int             nCompose_;          // compose state
 
-            int             nShowState_;        // show state
-            int             nLeft_;             // left decoration size
-            int             nTop_;              // top decoration size
-            int             nRight_;            // right decoration size
-            int             nBottom_;           // bottom decoration size
-            int             nMaxWidth_;         // client max width
-            int             nMaxHeight_;        // client max height
-            int             nWidth_;            // client width
-            int             nHeight_;           // client height
-            Rectangle       aPosSize_;          // Shells Pos&Size
-            Rectangle       aRestoreFullScreen_;
-            ULONG           nStyle_;
-            BOOL            bAlwaysOnTop_;
-            BOOL            bViewable_;
-            BOOL            bMapped_;
-            BOOL            bDefaultPosition_;  // client is centered initially
-            int             nVisibility_;
+    int             nShowState_;        // show state
+    int             nLeft_;             // left decoration size
+    int             nTop_;              // top decoration size
+    int             nRight_;            // right decoration size
+    int             nBottom_;           // bottom decoration size
+    int             nMaxWidth_;         // client max width
+    int             nMaxHeight_;        // client max height
+    int             nWidth_;            // client width
+    int             nHeight_;           // client height
+    Rectangle       aPosSize_;          // Shells Pos&Size
+    Rectangle       aRestoreFullScreen_;
+    ULONG           nStyle_;
+    BOOL            bAlwaysOnTop_;
+    BOOL            bViewable_;
+    BOOL            bMapped_;
+    BOOL            bDefaultPosition_;  // client is centered initially
+    int             nVisibility_;
 
-            int             nScreenSaversTimeout_;
-            Timer           maResizeTimer;
-            Rectangle       maResizeBuffer;
-            Rectangle       maPaintRegion;
+    int             nScreenSaversTimeout_;
+    Timer           maResizeTimer;
+    Rectangle       maResizeBuffer;
+    Rectangle       maPaintRegion;
 
-            // data for WMAdaptor
-            int             meWindowType;
-            int             mnDecorationFlags;
-            bool            mbMaximizedVert;
-            bool            mbMaximizedHorz;
+    // data for WMAdaptor
+    int             meWindowType;
+    int             mnDecorationFlags;
+    bool            mbMaximizedVert;
+    bool            mbMaximizedHorz;
 
-            // icon id
-            int             mnIconID;
+    // icon id
+    int             mnIconID;
 
-            SystemChildData maSystemChildData;
+    SystemChildData maSystemChildData;
 
-            SalI18N_InputContext *mpInputContext;
-            bool            mbDeleteInputContext;
-            Bool            mbInputFocus;
-            SalFrameDelData *mpDeleteData;
-            void            RegisterDeleteData (SalFrameDelData *pData);
-            void            UnregisterDeleteData (SalFrameDelData *pData);
-            void            NotifyDeleteData ();
+    SalI18N_InputContext *mpInputContext;
+    bool            mbDeleteInputContext;
+    Bool            mbInputFocus;
+    SalFrameDelData *mpDeleteData;
+    void            RegisterDeleteData (SalFrameDelData *pData);
+    void            UnregisterDeleteData (SalFrameDelData *pData);
+    void            NotifyDeleteData ();
 
-            SalGraphics    *GetGraphics();
+    SalGraphics    *GetGraphics();
 
-            void            GetPosSize( Rectangle &rPosSize );
-            void            SetSize   ( const Size      &rSize );
-            void            SetPosSize( const Rectangle &rPosSize );
-            void            Minimize();
-            void            Maximize();
-            void            Restore();
+    void            GetPosSize( Rectangle &rPosSize );
+    void            SetSize   ( const Size      &rSize );
+    void            SetPosSize( const Rectangle &rPosSize );
+    void            Minimize();
+    void            Maximize();
+    void            Restore();
 
-            void            RepositionFloatChildren();
-            void            RepositionChildren();
+    void            RepositionFloatChildren();
+    void            RepositionChildren();
 
-            long            HandleKeyEvent      ( XKeyEvent         *pEvent );
-            long            HandleMouseEvent    ( XEvent            *pEvent );
-            long            HandleFocusEvent    ( XFocusChangeEvent *pEvent );
-            long            HandleExposeEvent   ( XEvent            *pEvent );
-            long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
-            long            HandleColormapEvent ( XColormapEvent    *pEvent );
-            long            HandleMapUnmapEvent ( XEvent            *pEvent );
-            long            HandleStateEvent    ( XPropertyEvent    *pEvent );
-            long            HandleReparentEvent ( XReparentEvent    *pEvent );
-            long            HandleClientMessage ( XClientMessageEvent*pEvent );
+    long            HandleKeyEvent      ( XKeyEvent         *pEvent );
+    long            HandleMouseEvent    ( XEvent            *pEvent );
+    long            HandleFocusEvent    ( XFocusChangeEvent *pEvent );
+    long            HandleExposeEvent   ( XEvent            *pEvent );
+    long            HandleSizeEvent     ( XConfigureEvent   *pEvent );
+    long            HandleColormapEvent ( XColormapEvent    *pEvent );
+    long            HandleMapUnmapEvent ( XEvent            *pEvent );
+    long            HandleStateEvent    ( XPropertyEvent    *pEvent );
+    long            HandleReparentEvent ( XReparentEvent    *pEvent );
+    long            HandleClientMessage ( XClientMessageEvent*pEvent );
 
     inline  void            CaptureMouse( BOOL bCapture );
     inline  void            SetPointer( PointerStyle ePointerStyle );
@@ -233,10 +234,10 @@ class SalFrameData
 
             DECL_LINK( HandleResizeTimer, void* );
 public:
-            long            Dispatch( XEvent *pEvent );
-            void            Init( ULONG nSalFrameStyle, SystemParentData* pParentData = NULL );
+    long            Dispatch( XEvent *pEvent );
+    void            Init( ULONG nSalFrameStyle, SystemParentData* pParentData = NULL );
 
-            SalDisplay     *GetDisplay() const { return pDisplay_; }
+    SalDisplay     *GetDisplay() const { return pDisplay_; }
     inline  Display        *GetXDisplay() const;
     inline  XLIB_Window     GetDrawable() const;
     inline  XLIB_Window     GetWindow() const { return XtWindow( hComposite_ ); }

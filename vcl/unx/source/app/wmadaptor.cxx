@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-12 09:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,12 +1182,16 @@ void WMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eType,
      *  instead.
      */
     if( pReferenceFrame )
+    {
         XSetTransientForHint( m_pDisplay,
                               pFrame->maFrameData.GetShellWindow(),
                               pReferenceFrame->maFrameData.bMapped_ ?
                               pReferenceFrame->maFrameData.GetShellWindow() :
                               m_pSalDisplay->GetRootWindow()
                               );
+        if( ! pReferenceFrame->maFrameData.bMapped_ )
+            pFrame->maFrameData.mbTransientForRoot = true;
+    }
 }
 
 /*
@@ -1229,9 +1233,12 @@ void NetWMAdaptor::setFrameTypeAndDecoration( SalFrame* pFrame, WMWindowType eTy
     if( ( eType == windowType_ModalDialogue ||
           eType == windowType_ModelessDialogue )
         && ! pReferenceFrame )
+    {
         XSetTransientForHint( m_pDisplay,
                               pFrame->maFrameData.GetShellWindow(),
                               m_pSalDisplay->GetRootWindow() );
+        pFrame->maFrameData.mbTransientForRoot = true;
+    }
 }
 
 /*
@@ -1535,5 +1542,31 @@ void GnomeWMAdaptor::enableAlwaysOnTop( SalFrame* pFrame, bool bEnable ) const
                              1
                              );
         }
+    }
+}
+
+/*
+ *  WMAdaptor::changeReferenceFrame
+ */
+void WMAdaptor::changeReferenceFrame( SalFrame* pFrame, SalFrame* pReferenceFrame ) const
+{
+    SalFrameData& rData( pFrame->maFrameData );
+    if( ! ( rData.nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
+        && ! rData.IsOverrideRedirect()
+        )
+    {
+        XLIB_Window aTransient = rData.pDisplay_->GetRootWindow();
+        rData.mbTransientForRoot = true;
+        if( pReferenceFrame )
+        {
+            SalFrameData& rRefData( pReferenceFrame->maFrameData );
+            aTransient = (rRefData.nStyle_ & SAL_FRAME_STYLE_CHILD)
+                ? rRefData.hForeignTopLevelWindow_
+                : rRefData.GetShellWindow();
+            rData.mbTransientForRoot = false;
+        }
+        XSetTransientForHint( m_pDisplay,
+                              rData.GetShellWindow(),
+                              aTransient );
     }
 }

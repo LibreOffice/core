@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-11 15:57:02 $
+ *  last change: $Author: pl $ $Date: 2001-10-12 09:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,7 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     pNextFrame_                 = pSalData->pFirstFrame_;
     pSalData->pFirstFrame_      = pFrame;
     pFrame_                     = pFrame;
+    mbTransientForRoot          = false;
 
     pProc_                      = sal_CallbackDummy;
     pInst_                      = (void*)ILLEGAL_POINTER;
@@ -878,6 +879,23 @@ void SalFrame::Show( BOOL bVisible )
 
         XSync( _GetXDisplay(), False );
         maFrameData.Call( SALEVENT_RESIZE, NULL );
+
+        /*
+         *  sometimes a message box/dialogue is brought up when a frame is not mapped
+         *  the corresponding TRANSIENT_FOR hint is then set to the root window
+         *  so that the dialogue shows in all cases. Correct it here if the
+         *  frame is shown afterwards.
+         */
+        if( ! ( maFrameData.nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_CHILD ) )
+            && ! maFrameData.IsOverrideRedirect() )
+        {
+            for( ::std::list< SalFrame* >::const_iterator it = maFrameData.maChildren.begin();
+                 it != maFrameData.maChildren.end(); ++it )
+            {
+                if( (*it)->maFrameData.mbTransientForRoot )
+                    _GetDisplay()->getWMAdaptor()->changeReferenceFrame( *it, this );
+            }
+        }
     }
     else
     {
@@ -2886,6 +2904,22 @@ long SalFrameData::Dispatch( XEvent *pEvent )
 
                     if( nStyle_ & SAL_FRAME_STYLE_CHILD )
                         XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+                    /*
+                     *  sometimes a message box/dialogue is brought up when a frame is not mapped
+                     *  the corresponding TRANSIENT_FOR hint is then set to the root window
+                     *  so that the dialogue shows in all cases. Correct it here if the
+                     *  frame is shown afterwards.
+                     */
+                    if( ! ( nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_CHILD ) )
+                        && ! IsOverrideRedirect() )
+                    {
+                        for( ::std::list< SalFrame* >::const_iterator it = maChildren.begin();
+                             it != maChildren.end(); ++it )
+                        {
+                            if( (*it)->maFrameData.mbTransientForRoot )
+                                pDisplay_->getWMAdaptor()->changeReferenceFrame( *it, pFrame_ );
+                        }
+                    }
                 }
                 break;
 
