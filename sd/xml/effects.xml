@@ -444,7 +444,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-fade-in-and-swivel" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-fade-in-and-swivel" anim:iterate-type="by-letter" anim:iterate-interval="0.2s">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:transitionFilter smil:dur="2" smil:type="fade" smil:subtype="crossfade"/>
         <anim:animate smil:dur="2" smil:fill="hold" smil:attributeName="width" smil:values="0;1" smil:keyTimes="0;1" anim:formula="width*sin(2.5*pi*$)" pres:additive="base"/>
@@ -486,7 +486,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:preset-property="Color1;Color2" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-colored-lettering" anim:iterate-type="by-letter" anim:iterate-interval="50%">
+    <anim:iterate pres:preset-property="Color1;Color2" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-colored-lettering" anim:iterate-type="by-letter" anim:iterate-interval="0.04s">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:animate smil:dur="0.08" smil:attributeName="color" smil:values="#333399;#009999" smil:keyTimes="0;0.5" smil:calcMode="discrete" pres:additive="base"/>
         <anim:animate smil:dur="0.08" smil:attributeName="fill-color" smil:values="#333399;#009999" smil:keyTimes="0;0.5" smil:calcMode="discrete" pres:additive="base"/>
@@ -526,7 +526,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-turn-and-grow" anim:iterate-type="by-letter" anim:iterate-interval="5%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-turn-and-grow" anim:iterate-type="by-letter" anim:iterate-interval="0.05s">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="width" smil:values="0;width" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="height" smil:values="0;height" smil:keyTimes="0;1" pres:additive="base"/>
@@ -612,7 +612,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-unfold" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-unfold" anim:iterate-type="by-letter" anim:iterate-interval="0.1s">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:transitionFilter smil:dur="1" smil:type="fade" smil:subtype="crossfade"/>
         <anim:animate smil:dur="1" smil:fill="hold" smil:attributeName="x" smil:values="x-.1;x" smil:keyTimes="0;1" pres:additive="base"/>
@@ -735,7 +735,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-flip" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-flip" anim:iterate-type="by-letter" anim:iterate-interval="0.1s">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:animate smil:begin="0" smil:dur="0.5" smil:fill="hold" smil:autoReverse="true" smil:attributeName="width" smil:by="(-width*2)" pres:additive="base"/>
         <anim:animate smil:begin="0" smil:dur="0.5" smil:fill="hold" smil:decelerate="0.5" smil:autoReverse="true" smil:attributeName="x" smil:by="(width*0.50)" pres:additive="base"/>
@@ -841,7 +841,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" smil:accelerate="0.5" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-falling-in" anim:iterate-type="by-letter" anim:iterate-interval="50%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" smil:accelerate="0.5" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-falling-in" anim:iterate-type="by-letter" anim:iterate-interval="0.5s">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:set smil:begin="0" smil:dur="0.455" smil:fill="hold" smil:attributeName="rotate" smil:to="-45"/>
         <anim:animate smil:begin="0.455" smil:dur="0.455" smil:fill="hold" smil:attributeName="rotate" smil:values="-45;45;0" smil:keyTimes="0;0.699;1" pres:additive="base"/>
@@ -882,7 +882,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-whip" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="entrance" pres:preset-id="ooo-entrance-whip" anim:iterate-type="by-letter" anim:iterate-interval="0.05s">
         <anim:set smil:begin="0" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="visible"/>
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="x" smil:values="x;x+.1;x" smil:keyTimes="0;0.5;1" pres:additive="base"/>
         <anim:animate smil:dur="0.5" smil:fill="hold" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1" pres:additive="base"/>
@@ -968,7 +968,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:preset-property="Color" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-color-over-by-word" anim:iterate-type="by-letter" anim:iterate-interval="4%">
+    <anim:iterate pres:preset-property="Color" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-color-over-by-word" anim:iterate-type="by-letter" anim:iterate-interval="0.2s">
         <anim:set smil:dur="0.5" smil:fill="hold" smil:attributeName="color" smil:to="#333399"/>
         <anim:set smil:dur="0.5" smil:fill="hold" smil:attributeName="fill-color" smil:to="#333399"/>
         <anim:set smil:dur="0.5" smil:fill="hold" smil:attributeName="fill" smil:to="solid"/>
@@ -977,7 +977,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-reveal-underline" anim:iterate-type="by-letter" anim:iterate-interval="4%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-reveal-underline" anim:iterate-type="by-letter" anim:iterate-interval="0.2s">
         <anim:set smil:dur="0.5" smil:fill="hold" anim:sub-item="text" smil:attributeName="text-underline" smil:to="solid"/>
     </anim:iterate>
     </anim:par>
@@ -993,7 +993,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:preset-property="Color" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-color-over-by-letter" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:preset-property="Color" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-color-over-by-letter" anim:iterate-type="by-letter" anim:iterate-interval="0.05s">
         <anim:set smil:dur="0.5" smil:fill="hold" smil:autoReverse="true" smil:attributeName="color" smil:to="#333399"/>
         <anim:set smil:dur="0.5" smil:fill="hold" smil:autoReverse="true" smil:attributeName="fill-color" smil:to="#333399"/>
         <anim:set smil:dur="0.5" smil:fill="hold" smil:autoReverse="true" smil:attributeName="fill" smil:to="solid"/>
@@ -1089,7 +1089,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:preset-property="Color" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-grow-with-color" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:preset-property="Color" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-grow-with-color" anim:iterate-type="by-letter" anim:iterate-interval="0.05s">
         <anim:animateColor smil:dur="0.5" smil:fill="hold" anim:sub-item="text" smil:attributeName="color" smil:to="#333399" pres:additive="base" anim:color-interpolation="rgb" anim:color-interpolation-direction="clockwise"/>
         <anim:animateColor smil:dur="0.5" smil:fill="hold" anim:sub-item="text" smil:attributeName="fill-color" smil:to="#333399" pres:additive="base" anim:color-interpolation="rgb" anim:color-interpolation-direction="clockwise"/>
         <anim:set smil:dur="0.5" smil:fill="hold" anim:sub-item="text" smil:attributeName="fill" smil:to="solid"/>
@@ -1099,7 +1099,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-shimmer" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-shimmer" anim:iterate-type="by-letter" anim:iterate-interval="0.025s">
         <anim:animateTransform smil:begin="0" smil:dur="0.25" smil:fill="hold" smil:autoReverse="true" smil:to="0.8,1" pres:additive="base" svg:type="scale"/>
         <anim:animate smil:begin="0" smil:dur="0.25" smil:fill="hold" smil:autoReverse="true" smil:attributeName="x" smil:by="(width*0.10)" pres:additive="base"/>
         <anim:animate smil:begin="0" smil:dur="0.25" smil:fill="hold" smil:autoReverse="true" smil:attributeName="y" smil:by="(-width*0.10)" pres:additive="base"/>
@@ -1142,7 +1142,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-bold-reveal" anim:iterate-type="by-letter" anim:iterate-interval="0.025000000372529%">
+    <anim:iterate pres:text-only="true" smil:begin="0" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-bold-reveal" anim:iterate-type="by-letter" anim:iterate-interval="0.025s">
         <anim:set smil:dur="indefinite" anim:sub-item="text" smil:attributeName="font-weight" smil:to="bold"/>
     </anim:iterate>
     </anim:par>
@@ -1159,7 +1159,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-wave" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="emphasis" pres:preset-id="ooo-emphasis-wave" anim:iterate-type="by-letter" anim:iterate-interval="0.05s">
         <anim:animateMotion smil:begin="0" smil:dur="0.25" smil:fill="hold" smil:accelerate="0.5" smil:decelerate="0.5" smil:autoReverse="true" pres:additive="base" svg:path="M 0.0 0.0 L 0.0 -0.07213"/>
         <anim:animateTransform smil:begin="0" smil:dur="0.125" smil:fill="hold" smil:by="25" pres:additive="base" svg:type="rotate"/>
         <anim:animateTransform smil:begin="0.125" smil:dur="0.125" smil:fill="hold" smil:by="-25" pres:additive="base" svg:type="rotate"/>
@@ -1612,7 +1612,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fade-out-and-swivel" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-fade-out-and-swivel" anim:iterate-type="by-letter" anim:iterate-interval="0.2s">
         <anim:transitionFilter smil:dur="2" smil:type="fade" smil:subtype="crossfade" smil:mode="out"/>
         <anim:animate smil:dur="2" smil:attributeName="width" smil:values="width;0.92*width;0.71*width;0.38*width;0;-0.38*width;-0.71*width;-0.92*width;-width;-0.92*width;-0.71*width;-0.38*width;0;0.38*width;0.71*width;0.92*width;width;0.92*width;0.71*width;0.38*width;0" smil:keyTimes="0;0.05;0.1;0.15;0.2;0.25;0.3;0.35;0.4;0.45;0.5;0.55;0.6;0.65;0.7;0.75;0.8;0.85;0.9;0.95;1" pres:additive="base"/>
         <anim:animate smil:dur="2" smil:attributeName="height" smil:values="height;height" smil:keyTimes="0;1" pres:additive="base"/>
@@ -1663,7 +1663,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:preset-property="Color1;Color2" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-colored-lettering" anim:iterate-type="by-letter" anim:iterate-interval="50%">
+    <anim:iterate pres:preset-property="Color1;Color2" pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-colored-lettering" anim:iterate-type="by-letter" anim:iterate-interval="0.04s">
         <anim:animate smil:dur="0.08" smil:attributeName="color" smil:values="#009999;#333399" smil:keyTimes="0;0.5" smil:calcMode="discrete" pres:additive="base"/>
         <anim:animate smil:dur="0.08" smil:attributeName="fill-color" smil:values="#009999;#333399" smil:keyTimes="0;0.5" smil:calcMode="discrete" pres:additive="base"/>
         <anim:set smil:dur="0.08" smil:attributeName="fill" smil:to="solid"/>
@@ -1693,7 +1693,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-turn-and-grow" anim:iterate-type="by-letter" anim:iterate-interval="5%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-turn-and-grow" anim:iterate-type="by-letter" anim:iterate-interval="0.05s">
         <anim:animate smil:dur="1" smil:attributeName="width" smil:values="width;0" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="1" smil:attributeName="height" smil:values="height;0" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="1" smil:attributeName="rotate" smil:values="0;90" smil:keyTimes="0;1" pres:additive="base"/>
@@ -1736,7 +1736,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-unfold" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-unfold" anim:iterate-type="by-letter" anim:iterate-interval="0.1s">
         <anim:transitionFilter smil:dur="1" smil:type="fade" smil:subtype="crossfade" smil:mode="out"/>
         <anim:animate smil:dur="1" smil:attributeName="x" smil:values="x;x-.1" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="1" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1" pres:additive="base"/>
@@ -1875,7 +1875,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-flip" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-flip" anim:iterate-type="by-letter" anim:iterate-interval="0.1s">
         <anim:animate smil:begin="0" smil:dur="0.5" smil:autoReverse="true" smil:attributeName="width" smil:from="(width)" smil:to="(-width*2)" pres:additive="base"/>
         <anim:animate smil:begin="0" smil:dur="0.5" smil:decelerate="0.5" smil:autoReverse="true" smil:attributeName="x" smil:by="(width*0.50)" pres:additive="base"/>
         <anim:animate smil:begin="0" smil:dur="1" smil:attributeName="y" smil:from="(y)" smil:to="(1+height/2)" pres:additive="base"/>
@@ -1980,7 +1980,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" smil:accelerate="0.5" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-swish" anim:iterate-type="by-letter" anim:iterate-interval="50%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" smil:accelerate="0.5" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-swish" anim:iterate-type="by-letter" anim:iterate-interval="0.5s">
         <anim:animate smil:begin="0" smil:dur="1" smil:attributeName="rotate" smil:values="0;45" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:begin="0" smil:dur="1" smil:attributeName="y" smil:values="y;y+1" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:set smil:begin="0.999" smil:dur="0.001" smil:fill="hold" smil:attributeName="visibility" smil:to="hidden"/>
@@ -2009,7 +2009,7 @@
     </anim:par>
     <anim:par smil:begin="indefinite" smil:fill="hold">
     <anim:par smil:begin="0" smil:fill="hold">
-    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-whip" anim:iterate-type="by-letter" anim:iterate-interval="10%">
+    <anim:iterate pres:text-only="true" smil:begin="0" smil:fill="hold" pres:node-type="on-click" pres:preset-class="exit" pres:preset-id="ooo-exit-whip" anim:iterate-type="by-letter" anim:iterate-interval="0.05s">
         <anim:animate smil:dur="0.5" smil:attributeName="x" smil:values="x;x+.1;x" smil:keyTimes="0;0.5;1" pres:additive="base"/>
         <anim:animate smil:dur="0.5" smil:attributeName="y" smil:values="y;y" smil:keyTimes="0;1" pres:additive="base"/>
         <anim:animate smil:dur="0.5" smil:attributeName="height" smil:values="height;height+.01;height/10" smil:keyTimes="0;0.5;1" pres:additive="base"/>
