@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:24:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
 #ifndef _PORFLY_HXX
 #define _PORFLY_HXX
 
+// OD 29.07.2003 #110978#
+#ifndef _ANCHOREDOBJECTPOSITION_HXX
+#include <anchoredobjectposition.hxx>
+#endif
+
 #include "porglue.hxx"
 
 class SwDrawContact;
@@ -90,16 +95,6 @@ public:
  *                class SwFlyCntPortion
  *************************************************************************/
 
-#define SETBASE_NOFLAG  0
-#define SETBASE_QUICK   1
-#define SETBASE_ULSPACE 2
-#define SETBASE_INIT    4
-#define SETBASE_ROTATE  8
-#define SETBASE_REVERSE 16
-#ifdef BIDI
-#define SETBASE_BIDI    32
-#endif
-
 class SwFlyCntPortion : public SwLinePortion
 {
     void *pContact; // bDraw ? DrawContact : FlyInCntFrm
@@ -110,12 +105,16 @@ class SwFlyCntPortion : public SwLinePortion
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
 
 public:
+    // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
     SwFlyCntPortion( const SwTxtFrm& rFrm, SwFlyInCntFrm *pFly,
-                     const Point &rBase, long nAscent, long nDescent,
-                     long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags );
+                     const Point &rBase,
+                     long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
+                     objectpositioning::AsCharFlags nFlags );
+    // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
     SwFlyCntPortion( const SwTxtFrm& rFrm, SwDrawContact *pDrawContact,
-                     const Point &rBase, long nAscent, long nDescent,
-                     long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags );
+                     const Point &rBase,
+                     long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
+                     objectpositioning::AsCharFlags nFlags );
     inline const Point& GetRefPoint() const { return aRef; }
     inline SwFlyInCntFrm *GetFlyFrm() { return (SwFlyInCntFrm*)pContact; }
     inline const SwFlyInCntFrm *GetFlyFrm() const
@@ -128,9 +127,11 @@ public:
     inline const sal_uInt8 GetAlign() const { return nAlign; }
     inline void SetAlign( sal_uInt8 nNew ) { nAlign = nNew; }
     inline void SetMax( sal_Bool bNew ) { bMax = bNew; }
+    // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
     void SetBase( const SwTxtFrm& rFrm, const Point &rBase,
-                  long nLnAscent, long nLnDescent, long nFlyAscent,
-                  long nFlyDescent, sal_uInt8 nFlags );
+                  long nLnAscent, long nLnDescent,
+                  long nFlyAscent, long nFlyDescent,
+                  objectpositioning::AsCharFlags nFlags );
     const SwFrmFmt *GetFrmFmt() const;
     xub_StrLen GetFlyCrsrOfst( const KSHORT nOfst, const Point &rPoint,
                         SwPosition *pPos, const SwCrsrMoveState* pCMS ) const;
