@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
+ *  last change: $Author: jp $ $Date: 2000-11-06 10:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,13 +73,9 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
-#ifndef _STRING_HXX //autogen
-#include <tools/string.hxx>
-#endif
 
 class SwFont;
 class SfxItemPool;
-
 class SvxBrushItem;
 class SvxFontItem;
 class SvxPostureItem;
@@ -98,17 +94,14 @@ class SvXMLAttrContainerItem;
 class SwFmtRuby;
 class SwFmt2Lines;
 class SvxEmphasisMarkItem;
-
 class SwFmtCharFmt;
 class SwFmtINetFmt;
-
 class SvxKerningItem;
 class SvxCaseMapItem;
 class SvxLanguageItem;
 class SvxEscapementItem;
 class SvxBlinkItem;
 class SvxNoHyphenItem;
-
 class SwFmtSoftHyph;
 class SwFmtHardBlank;
 class SwFmtFld;
@@ -121,10 +114,21 @@ class SwTxtAttr
 {
     const SfxPoolItem* pAttr;
     xub_StrLen nStart;
-    BOOL bDontExpand    : 1;
+    BOOL bDontExpand : 1;
+    BOOL bLockExpandFlag : 1;
 
+    BOOL bDontMergeAttr : 1;            // refmarks, toxmarks, ruby
+    BOOL bDontMoveAttr : 1;             // refmarks, toxmarks
+    BOOL bCharFmtAttr : 1;              // charfmt, inet
+    BOOL bOverlapAllowedAttr : 1;       // refmarks, toxmarks
 protected:
     SwTxtAttr( const SfxPoolItem& rAttr, xub_StrLen nStart );
+
+    void SetLockExpandFlag( BOOL bFlag )    { bLockExpandFlag = bFlag; }
+    void SetDontMergeAttr( BOOL bFlag )     { bDontMergeAttr = bFlag; }
+    void SetDontMoveAttr( BOOL bFlag )      { bDontMoveAttr = bFlag; }
+    void SetCharFmtAttr( BOOL bFlag )       { bCharFmtAttr = bFlag; }
+    void SetOverlapAllowedAttr( BOOL bFlag ){ bOverlapAllowedAttr = bFlag; }
 
 public:
     virtual ~SwTxtAttr();
@@ -141,8 +145,13 @@ public:
     inline const xub_StrLen* GetEnd() const;
     inline const xub_StrLen* GetAnyEnd() const;
 
-    BOOL DontExpand() const             { return bDontExpand; }
-    void SetDontExpand( BOOL bNew )     { bDontExpand = bNew; }
+    inline void SetDontExpand( BOOL bNew );
+    BOOL DontExpand() const                 { return bDontExpand; }
+    BOOL IsLockExpandFlag() const           { return bLockExpandFlag; }
+    BOOL IsDontMergeAttr() const            { return bDontMergeAttr; }
+    BOOL IsDontMoveAttr() const             { return bDontMoveAttr; }
+    BOOL IsCharFmtAttr() const              { return bCharFmtAttr; }
+    BOOL IsOverlapAllowedAttr() const       { return bOverlapAllowedAttr; }
 
     inline const SfxPoolItem& GetAttr() const;
     inline USHORT Which() const { return GetAttr().Which(); }
@@ -185,10 +194,8 @@ public:
     inline const SwFmtRefMark           &GetRefMark() const;
     inline const SwFmtINetFmt           &GetINetFmt() const;
     inline const SvXMLAttrContainerItem &GetXMLAttrContainer() const;
-
     inline const SwFmtRuby              &GetRuby() const;
     inline const SwFmt2Lines            &Get2Lines() const;
-
     inline const SvxEmphasisMarkItem    &GetEmphasisMark() const;
 
 private:
@@ -203,7 +210,6 @@ protected:
     SwTxtAttrEnd( const SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
 
 public:
-
     virtual xub_StrLen* GetEnd();
 };
 
@@ -225,6 +231,12 @@ inline const SfxPoolItem& SwTxtAttr::GetAttr() const
 {
     ASSERT( pAttr, "wo ist mein Attribut?" );
     return *pAttr;
+}
+
+inline void SwTxtAttr::SetDontExpand( BOOL bNew )
+{
+    if( !bLockExpandFlag )
+        bDontExpand = bNew;
 }
 
 inline const SvxFontItem& SwTxtAttr::GetFont() const
@@ -430,6 +442,9 @@ inline const SvxEmphasisMarkItem& SwTxtAttr::GetEmphasisMark() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/02 17:26:48  jp
+      TwoLines as char and not as text attribute
+
       Revision 1.3  2000/10/30 12:49:30  jp
       new: EmphasisItem
 
