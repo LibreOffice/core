@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:30:14 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,151 +89,208 @@
 #include "copy.hxx"
 #include "destr.hxx"
 
+
 using namespace cppu;
 
 namespace cppu
 {
-//--------------------------------------------------------------------------------------------------
-static inline void allocSeq(
-    uno_Sequence ** ppSeq, sal_Int32 nElementSize, sal_Int32 nElements )
-    SAL_THROW( () )
+
+//------------------------------------------------------------------------------
+static inline uno_Sequence * reallocSeq(
+    uno_Sequence * pReallocate, sal_Int32 nElementSize, sal_Int32 nElements )
 {
-    if (nElements >= 0) // (re)alloc memory?
+    OSL_ASSERT( nElementSize >= 0 && nElements >= 0 );
+    uno_Sequence * pNew = 0;
+    sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
+    if (nSize > 0)
     {
-        uno_Sequence * pSeq = (uno_Sequence *)
-            (*ppSeq
-             ? ::rtl_reallocateMemory( *ppSeq, SAL_SEQUENCE_HEADER_SIZE + (nElementSize * nElements) )
-             : ::rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE + (nElementSize * nElements) ));
-        pSeq->nRefCount = 1;
-        pSeq->nElements = nElements;
-        *ppSeq = pSeq;
+        if (pReallocate == 0)
+        {
+            pNew = (uno_Sequence *) rtl_allocateMemory( nSize );
+        }
+        else
+        {
+            pNew = (uno_Sequence *) rtl_reallocateMemory( pReallocate, nSize );
+        }
+        if (pNew != 0)
+        {
+            // header init
+            pNew->nRefCount = 1;
+            pNew->nElements = nElements;
+        }
     }
+    return pNew;
 }
-//--------------------------------------------------------------------------------------------------
-static inline void _defaultConstructElements(
-    uno_Sequence ** ppSequence,
+
+//------------------------------------------------------------------------------
+static inline bool idefaultConstructElements(
+    uno_Sequence ** ppSeq,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
-    SAL_THROW( () )
 {
+    uno_Sequence * pSeq = *ppSeq;
     switch (pElementType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        allocSeq( ppSequence, sizeof(sal_Unicode), nAlloc );
-        ::rtl_zeroMemory(
-            (*ppSequence)->elements + (sizeof(sal_Unicode) * nStartIndex),
-            sizeof(sal_Unicode) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Unicode), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_zeroMemory(
+                pSeq->elements + (sizeof(sal_Unicode) * nStartIndex),
+                sizeof(sal_Unicode) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_BOOLEAN:
-        allocSeq( ppSequence, sizeof(sal_Bool), nAlloc );
-        ::rtl_zeroMemory(
-            (*ppSequence)->elements + (sizeof(sal_Bool) * nStartIndex),
-            sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_zeroMemory(
+                pSeq->elements + (sizeof(sal_Bool) * nStartIndex),
+                sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_BYTE:
-        allocSeq( ppSequence, sizeof(sal_Int8), nAlloc );
-        ::rtl_zeroMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int8) * nStartIndex),
-            sizeof(sal_Int8) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int8), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_zeroMemory(
+                pSeq->elements + (sizeof(sal_Int8) * nStartIndex),
+                sizeof(sal_Int8) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        allocSeq( ppSequence, sizeof(sal_Int16), nAlloc );
-        ::rtl_zeroMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int16) * nStartIndex),
-            sizeof(sal_Int16) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int16), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_zeroMemory(
+                pSeq->elements + (sizeof(sal_Int16) * nStartIndex),
+                sizeof(sal_Int16) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        allocSeq( ppSequence, sizeof(sal_Int32), nAlloc );
-        ::rtl_zeroMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int32) * nStartIndex),
-            sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_zeroMemory(
+                pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
+                sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        allocSeq( ppSequence, sizeof(sal_Int64), nAlloc );
-        ::rtl_zeroMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int64) * nStartIndex),
-            sizeof(sal_Int64) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int64), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_zeroMemory(
+                pSeq->elements + (sizeof(sal_Int64) * nStartIndex),
+                sizeof(sal_Int64) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_FLOAT:
     {
-        allocSeq( ppSequence, sizeof(float), nAlloc );
-
-        float * pElements = (float *)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(float), nAlloc );
+        if (pSeq != 0)
         {
-            pElements[nPos] = 0.0;
+            float * pElements = (float *) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                pElements[nPos] = 0.0;
+            }
         }
         break;
     }
     case typelib_TypeClass_DOUBLE:
     {
-        allocSeq( ppSequence, sizeof(double), nAlloc );
-
-        double * pElements = (double *)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(double), nAlloc );
+        if (pSeq != 0)
         {
-            pElements[nPos] = 0.0;
+            double * pElements = (double *) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                pElements[nPos] = 0.0;
+            }
         }
         break;
     }
     case typelib_TypeClass_STRING:
     {
-        allocSeq( ppSequence, sizeof(rtl_uString *), nAlloc );
-
-        rtl_uString ** pElements = (rtl_uString **)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(rtl_uString *), nAlloc );
+        if (pSeq != 0)
         {
-            pElements[nPos] = 0;
-            rtl_uString_new( &pElements[nPos] );
+            rtl_uString ** pElements = (rtl_uString **) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                pElements[nPos] = 0;
+                rtl_uString_new( &pElements[nPos] );
+            }
         }
         break;
     }
     case typelib_TypeClass_TYPE:
     {
-        allocSeq( ppSequence, sizeof(typelib_TypeDescriptionReference *), nAlloc );
-
-        typelib_TypeDescriptionReference ** pElements =
-            (typelib_TypeDescriptionReference **)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
         {
-            pElements[nPos] = _getVoidType();
+            pSeq = reallocSeq(
+                pSeq, sizeof(typelib_TypeDescriptionReference *), nAlloc );
+        }
+        if (pSeq != 0)
+        {
+            typelib_TypeDescriptionReference ** pElements =
+                (typelib_TypeDescriptionReference **) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                pElements[nPos] = _getVoidType();
+            }
         }
         break;
     }
     case typelib_TypeClass_ANY:
     {
-        allocSeq( ppSequence, sizeof(uno_Any), nAlloc );
-
-        uno_Any * pElements = (uno_Any *)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(uno_Any), nAlloc );
+        if (pSeq != 0)
         {
-            CONSTRUCT_EMPTY_ANY( &pElements[nPos] );
+            uno_Any * pElements = (uno_Any *) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                CONSTRUCT_EMPTY_ANY( &pElements[nPos] );
+            }
         }
         break;
     }
     case typelib_TypeClass_ENUM:
     {
-        allocSeq( ppSequence, sizeof(sal_Int32), nAlloc );
-
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        sal_Int32 eEnum = ((typelib_EnumTypeDescription *)pElementTypeDescr)->nDefaultEnumValue;
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-
-        sal_Int32 * pElements = (sal_Int32 *)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
+        if (pSeq != 0)
         {
-            pElements[nPos] = eEnum;
+            typelib_TypeDescription * pElementTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+            sal_Int32 eEnum =
+                ((typelib_EnumTypeDescription *)
+                 pElementTypeDescr)->nDefaultEnumValue;
+            TYPELIB_DANGER_RELEASE( pElementTypeDescr );
+
+            sal_Int32 * pElements = (sal_Int32 *) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                pElements[nPos] = eEnum;
+            }
         }
         break;
     }
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -241,15 +298,19 @@ static inline void _defaultConstructElements(
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
-        allocSeq( ppSequence, nElementSize, nAlloc );
-
-        char * pElements = (*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
+        if (pSeq != 0)
         {
-            _defaultConstructStruct(
-                pElements + (nElementSize * nPos),
-                (typelib_CompoundTypeDescription *)pElementTypeDescr );
+            char * pElements = pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                _defaultConstructStruct(
+                    pElements + (nElementSize * nPos),
+                    (typelib_CompoundTypeDescription *)pElementTypeDescr );
+            }
         }
+
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;
     }
@@ -259,15 +320,19 @@ static inline void _defaultConstructElements(
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
-        allocSeq( ppSequence, nElementSize, nAlloc );
-
-        char * pElements = (*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
+        if (pSeq != 0)
         {
-            _defaultConstructArray(
-                pElements + (nElementSize * nPos),
-                (typelib_ArrayTypeDescription *)pElementTypeDescr );
+            char * pElements = pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                _defaultConstructArray(
+                    pElements + (nElementSize * nPos),
+                    (typelib_ArrayTypeDescription *)pElementTypeDescr );
+            }
         }
+
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;
     }
@@ -275,169 +340,253 @@ static inline void _defaultConstructElements(
     {
         typelib_TypeDescription * pElementTypeDescr = 0;
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
-        allocSeq( ppSequence, nElementSize, nAlloc );
-
-        sal_Int32 nValueOffset = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nValueOffset;
-        sal_Int64 nDefaultDiscr = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nDefaultDiscriminant;
-
-        typelib_TypeDescription * pDefaultTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pDefaultTypeDescr, ((typelib_UnionTypeDescription *)pElementTypeDescr)->pDefaultTypeRef );
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
-
-        char * pElements = (*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
+        if (pSeq != 0)
         {
-            char * pMem = pElements + (nElementSize * nPos);
-            ::uno_constructData( (char *)pMem + nValueOffset, pDefaultTypeDescr );
-            *(sal_Int64 *)pMem = nDefaultDiscr;
+            sal_Int32 nValueOffset =
+                ((typelib_UnionTypeDescription *)
+                 pElementTypeDescr)->nValueOffset;
+            sal_Int64 nDefaultDiscr =
+                ((typelib_UnionTypeDescription *)
+                 pElementTypeDescr)->nDefaultDiscriminant;
+
+            typelib_TypeDescription * pDefaultTypeDescr = 0;
+            TYPELIB_DANGER_GET(
+                &pDefaultTypeDescr,
+                ((typelib_UnionTypeDescription *)
+                 pElementTypeDescr)->pDefaultTypeRef );
+
+            char * pElements = pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                char * pMem = pElements + (nElementSize * nPos);
+                ::uno_constructData(
+                    (char *)pMem + nValueOffset, pDefaultTypeDescr );
+                *(sal_Int64 *)pMem = nDefaultDiscr;
+            }
+            TYPELIB_DANGER_RELEASE( pDefaultTypeDescr );
         }
-        TYPELIB_DANGER_RELEASE( pDefaultTypeDescr );
+
+        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;
     }
     case typelib_TypeClass_SEQUENCE:
     {
-        allocSeq( ppSequence, sizeof(uno_Sequence *), nAlloc );
-
-        uno_Sequence ** pElements = (uno_Sequence **)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(uno_Sequence *), nAlloc );
+        if (pSeq != 0)
         {
-            pElements[nPos] = _getEmptySequence();
+            uno_Sequence ** pElements =
+                (uno_Sequence **) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                pElements[nPos] = createEmptySequence();
+            }
         }
         break;
     }
-    case typelib_TypeClass_INTERFACE: // either cpp or c-uno interface
-        allocSeq( ppSequence, sizeof(void *), nAlloc );
-
-        ::rtl_zeroMemory(
-            (*ppSequence)->elements + (sizeof(void *) * nStartIndex),
-            sizeof(void *) * (nStopIndex - nStartIndex) );
+    case typelib_TypeClass_INTERFACE: // either C++ or C-UNO interface
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(void *), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_zeroMemory(
+                pSeq->elements + (sizeof(void *) * nStartIndex),
+                sizeof(void *) * (nStopIndex - nStartIndex) );
+        }
+        break;
+    default:
+        OSL_ENSURE( 0, "### unexpected element type!" );
+        pSeq = 0;
         break;
     }
+
+    if (pSeq == 0)
+    {
+        OSL_ASSERT( nAlloc >= 0 ); // must have been an allocation failure
+        return false;
+    }
+    else
+    {
+        *ppSeq = pSeq;
+        return true;
+    }
 }
-//--------------------------------------------------------------------------------------------------
-static inline void _copyConstructElements(
-    uno_Sequence ** ppSequence, void * pSourceElements,
+
+//------------------------------------------------------------------------------
+static inline bool icopyConstructFromElements(
+    uno_Sequence ** ppSeq, void * pSourceElements,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_AcquireFunc acquire,
     sal_Int32 nAlloc = -1 ) // >= 0 means (re)alloc memory for nAlloc elements
-    SAL_THROW( () )
 {
+    uno_Sequence * pSeq = *ppSeq;
     switch (pElementType->eTypeClass)
     {
     case typelib_TypeClass_CHAR:
-        allocSeq( ppSequence, sizeof(sal_Unicode), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(sal_Unicode) * nStartIndex),
-            (char *)pSourceElements + (sizeof(sal_Unicode) * nStartIndex),
-            sizeof(sal_Unicode) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Unicode), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(sal_Unicode) * nStartIndex),
+                (char *)pSourceElements + (sizeof(sal_Unicode) * nStartIndex),
+                sizeof(sal_Unicode) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_BOOLEAN:
-        allocSeq( ppSequence, sizeof(sal_Bool), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(sal_Bool) * nStartIndex),
-            (char *)pSourceElements + (sizeof(sal_Bool) * nStartIndex),
-            sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Bool), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(sal_Bool) * nStartIndex),
+                (char *)pSourceElements + (sizeof(sal_Bool) * nStartIndex),
+                sizeof(sal_Bool) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_BYTE:
-        allocSeq( ppSequence, sizeof(sal_Int8), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int8) * nStartIndex),
-            (char *)pSourceElements + (sizeof(sal_Int8) * nStartIndex),
-            sizeof(sal_Int8) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int8), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(sal_Int8) * nStartIndex),
+                (char *)pSourceElements + (sizeof(sal_Int8) * nStartIndex),
+                sizeof(sal_Int8) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        allocSeq( ppSequence, sizeof(sal_Int16), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int16) * nStartIndex),
-            (char *)pSourceElements + (sizeof(sal_Int16) * nStartIndex),
-            sizeof(sal_Int16) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int16), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(sal_Int16) * nStartIndex),
+                (char *)pSourceElements + (sizeof(sal_Int16) * nStartIndex),
+                sizeof(sal_Int16) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
-        allocSeq( ppSequence, sizeof(sal_Int32), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int32) * nStartIndex),
-            (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
-            sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
+                (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
+                sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        allocSeq( ppSequence, sizeof(sal_Int64), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int64) * nStartIndex),
-            (char *)pSourceElements + (sizeof(sal_Int64) * nStartIndex),
-            sizeof(sal_Int64) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int64), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(sal_Int64) * nStartIndex),
+                (char *)pSourceElements + (sizeof(sal_Int64) * nStartIndex),
+                sizeof(sal_Int64) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_FLOAT:
-        allocSeq( ppSequence, sizeof(float), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(float) * nStartIndex),
-            (char *)pSourceElements + (sizeof(float) * nStartIndex),
-            sizeof(float) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(float), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(float) * nStartIndex),
+                (char *)pSourceElements + (sizeof(float) * nStartIndex),
+                sizeof(float) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_DOUBLE:
-        allocSeq( ppSequence, sizeof(double), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(double) * nStartIndex),
-            (char *)pSourceElements + (sizeof(double) * nStartIndex),
-            sizeof(double) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(double), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(double) * nStartIndex),
+                (char *)pSourceElements + (sizeof(double) * nStartIndex),
+                sizeof(double) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_ENUM:
-        allocSeq( ppSequence, sizeof(sal_Int32), nAlloc );
-        ::rtl_copyMemory(
-            (*ppSequence)->elements + (sizeof(sal_Int32) * nStartIndex),
-            (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
-            sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(sal_Int32), nAlloc );
+        if (pSeq != 0)
+        {
+            ::rtl_copyMemory(
+                pSeq->elements + (sizeof(sal_Int32) * nStartIndex),
+                (char *)pSourceElements + (sizeof(sal_Int32) * nStartIndex),
+                sizeof(sal_Int32) * (nStopIndex - nStartIndex) );
+        }
         break;
     case typelib_TypeClass_STRING:
     {
-        allocSeq( ppSequence, sizeof(rtl_uString *), nAlloc );
-
-        rtl_uString ** pDestElements = (rtl_uString **)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(rtl_uString *), nAlloc );
+        if (pSeq != 0)
         {
-            ::rtl_uString_acquire( ((rtl_uString **)pSourceElements)[nPos] );
-            pDestElements[nPos] = ((rtl_uString **)pSourceElements)[nPos];
+            rtl_uString ** pDestElements = (rtl_uString **) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                ::rtl_uString_acquire(
+                    ((rtl_uString **)pSourceElements)[nPos] );
+                pDestElements[nPos] = ((rtl_uString **)pSourceElements)[nPos];
+            }
         }
         break;
     }
     case typelib_TypeClass_TYPE:
     {
-        allocSeq( ppSequence, sizeof(typelib_TypeDescriptionReference *), nAlloc );
-
-        typelib_TypeDescriptionReference ** pDestElements =
-            (typelib_TypeDescriptionReference **)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
         {
-            TYPE_ACQUIRE( ((typelib_TypeDescriptionReference **)pSourceElements)[nPos] );
-            pDestElements[nPos] = ((typelib_TypeDescriptionReference **)pSourceElements)[nPos];
+            pSeq = reallocSeq(
+                pSeq, sizeof(typelib_TypeDescriptionReference *), nAlloc );
+        }
+        if (pSeq != 0)
+        {
+            typelib_TypeDescriptionReference ** pDestElements =
+                (typelib_TypeDescriptionReference **) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                TYPE_ACQUIRE(
+                    ((typelib_TypeDescriptionReference **)
+                     pSourceElements)[nPos] );
+                pDestElements[nPos] =
+                    ((typelib_TypeDescriptionReference **)
+                     pSourceElements)[nPos];
+            }
         }
         break;
     }
     case typelib_TypeClass_ANY:
     {
-        allocSeq( ppSequence, sizeof(uno_Any), nAlloc );
-
-        uno_Any * pDestElements = (uno_Any *)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(uno_Any), nAlloc );
+        if (pSeq != 0)
         {
-            uno_Any * pSource = (uno_Any *)pSourceElements + nPos;
-            _copyConstructAny(
-                &pDestElements[nPos],
-                pSource->pData,
-                pSource->pType, 0,
-                acquire, 0 );
+            uno_Any * pDestElements = (uno_Any *) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                uno_Any * pSource = (uno_Any *)pSourceElements + nPos;
+                _copyConstructAny(
+                    &pDestElements[nPos],
+                    pSource->pData,
+                    pSource->pType, 0,
+                    acquire, 0 );
+            }
         }
         break;
     }
-    case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( 0, "### unexpected typedef!" );
-        break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
@@ -445,36 +594,45 @@ static inline void _copyConstructElements(
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
-        allocSeq( ppSequence, nElementSize, nAlloc );
-
-        char * pDestElements = (*ppSequence)->elements;
-
-        typelib_CompoundTypeDescription * pTypeDescr = (typelib_CompoundTypeDescription *)pElementTypeDescr;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
+        if (pSeq != 0)
         {
-            char * pDest = pDestElements + (nElementSize * nPos);
-            char * pSource = (char *)pSourceElements + (nElementSize * nPos);
+            char * pDestElements = pSeq->elements;
 
-            if (pTypeDescr->pBaseTypeDescription)
+            typelib_CompoundTypeDescription * pTypeDescr =
+                (typelib_CompoundTypeDescription *)pElementTypeDescr;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
-                // copy base value
-                _copyConstructStruct(
-                    pDest, pSource, pTypeDescr->pBaseTypeDescription, acquire, 0 );
-            }
+                char * pDest =
+                    pDestElements + (nElementSize * nPos);
+                char * pSource =
+                    (char *)pSourceElements + (nElementSize * nPos);
 
-            // then copy members
-            typelib_TypeDescriptionReference ** ppTypeRefs = pTypeDescr->ppTypeRefs;
-            sal_Int32 * pMemberOffsets = pTypeDescr->pMemberOffsets;
-            sal_Int32 nDescr = pTypeDescr->nMembers;
+                if (pTypeDescr->pBaseTypeDescription)
+                {
+                    // copy base value
+                    _copyConstructStruct(
+                        pDest, pSource,
+                        pTypeDescr->pBaseTypeDescription, acquire, 0 );
+                }
 
-            while (nDescr--)
-            {
-                ::uno_type_copyData(
-                    pDest + pMemberOffsets[nDescr],
-                    pSource + pMemberOffsets[nDescr],
-                    ppTypeRefs[nDescr], acquire );
+                // then copy members
+                typelib_TypeDescriptionReference ** ppTypeRefs =
+                    pTypeDescr->ppTypeRefs;
+                sal_Int32 * pMemberOffsets = pTypeDescr->pMemberOffsets;
+                sal_Int32 nDescr = pTypeDescr->nMembers;
+
+                while (nDescr--)
+                {
+                    ::uno_type_copyData(
+                        pDest + pMemberOffsets[nDescr],
+                        pSource + pMemberOffsets[nDescr],
+                        ppTypeRefs[nDescr], acquire );
+                }
             }
         }
+
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;
     }
@@ -484,143 +642,187 @@ static inline void _copyConstructElements(
         TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
         sal_Int32 nElementSize = pElementTypeDescr->nSize;
 
-        allocSeq( ppSequence, nElementSize, nAlloc );
-
-        char * pDestElements = (*ppSequence)->elements;
-
-        sal_Int32 nValueOffset = ((typelib_UnionTypeDescription *)pElementTypeDescr)->nValueOffset;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, nElementSize, nAlloc );
+        if (pSeq != 0)
         {
-            char * pDest = pDestElements + (nElementSize * nPos);
-            char * pSource = (char *)pSourceElements + (nElementSize * nPos);
+            char * pDestElements = pSeq->elements;
 
-            typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
-                pSource, pElementTypeDescr );
-            ::uno_type_copyData(
-                pDest + nValueOffset,
-                pSource + nValueOffset,
-                pSetType, acquire );
-            *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
-            typelib_typedescriptionreference_release( pSetType );
+            sal_Int32 nValueOffset =
+                ((typelib_UnionTypeDescription *)
+                 pElementTypeDescr)->nValueOffset;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                char * pDest =
+                    pDestElements + (nElementSize * nPos);
+                char * pSource =
+                    (char *)pSourceElements + (nElementSize * nPos);
+
+                typelib_TypeDescriptionReference * pSetType = _unionGetSetType(
+                    pSource, pElementTypeDescr );
+                ::uno_type_copyData(
+                    pDest + nValueOffset,
+                    pSource + nValueOffset,
+                    pSetType, acquire );
+                *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
+                typelib_typedescriptionreference_release( pSetType );
+            }
         }
+
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;
     }
-    case typelib_TypeClass_SEQUENCE:
+    case typelib_TypeClass_SEQUENCE: // sequence of sequence
     {
-        allocSeq( ppSequence, sizeof(uno_Sequence *), nAlloc );
-
-        typelib_TypeDescription * pElementTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
-        uno_Sequence ** pDestElements = (uno_Sequence **)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(uno_Sequence *), nAlloc );
+        if (pSeq != 0)
         {
-            _copyConstructSequence(
-                &pDestElements[nPos],
-                ((uno_Sequence **)pSourceElements)[nPos],
-                ((typelib_IndirectTypeDescription *)pElementTypeDescr)->pType,
-                acquire, 0 );
+            typelib_TypeDescription * pElementTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
+            typelib_TypeDescriptionReference * pSeqElementType =
+                ((typelib_IndirectTypeDescription *) pElementTypeDescr)->pType;
+            uno_Sequence ** pDestElements = (uno_Sequence **) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                uno_Sequence * pNew = icopyConstructSequence(
+                    ((uno_Sequence **) pSourceElements)[nPos],
+                    pSeqElementType, acquire, 0 );
+                OSL_ASSERT( pNew != 0 );
+                // ought never be a memory allocation problem,
+                // because of reference counted sequence handles
+                pDestElements[ nPos ] = pNew;
+            }
+            TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         }
-        TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         break;
     }
     case typelib_TypeClass_INTERFACE:
     {
-        allocSeq( ppSequence, sizeof(void *), nAlloc );
-
-        void ** pDestElements = (void **)(*ppSequence)->elements;
-        for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+        if (nAlloc >= 0)
+            pSeq = reallocSeq( pSeq, sizeof(void *), nAlloc );
+        if (pSeq != 0)
         {
-            _acquire( pDestElements[nPos] = ((void **)pSourceElements)[nPos], acquire );
+            void ** pDestElements = (void **) pSeq->elements;
+            for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
+            {
+                _acquire( pDestElements[nPos] =
+                          ((void **)pSourceElements)[nPos], acquire );
+            }
         }
         break;
     }
+    default:
+        OSL_ENSURE( 0, "### unexpected element type!" );
+        pSeq = 0;
+        break;
+    }
+
+    if (pSeq == 0)
+    {
+        OSL_ASSERT( nAlloc >= 0 ); // must have been an allocation failure
+        return false;
+    }
+    else
+    {
+        *ppSeq = pSeq;
+        return true;
     }
 }
-//--------------------------------------------------------------------------------------------------
-static inline void _reallocSequence(
+
+//------------------------------------------------------------------------------
+static inline bool ireallocSequence(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nSize,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW( () )
 {
-    uno_Sequence * pSource = *ppSequence;
-    sal_Int32 nSourceElements = pSource->nElements;
+    bool ret = true;
+    uno_Sequence * pSeq = *ppSequence;
+    sal_Int32 nElements = pSeq->nElements;
 
-    if (pSource->nRefCount > 1 ||
+    if (pSeq->nRefCount > 1 ||
         // not mem-copyable elements?
         typelib_TypeClass_ANY == pElementType->eTypeClass ||
         typelib_TypeClass_STRUCT == pElementType->eTypeClass ||
         typelib_TypeClass_EXCEPTION == pElementType->eTypeClass)
     {
         // split sequence and construct new one from scratch
-
         uno_Sequence * pNew = 0;
 
-        sal_Int32 nRest = nSize - nSourceElements;
-        sal_Int32 nCopy = (nRest > 0 ? nSourceElements : nSize);
+        sal_Int32 nRest = nSize - nElements;
+        sal_Int32 nCopy = (nRest > 0 ? nElements : nSize);
 
         if (nCopy >= 0)
         {
-            _copyConstructElements(
-                &pNew, pSource->elements, pElementType,
+            ret = icopyConstructFromElements(
+                &pNew, pSeq->elements, pElementType,
                 0, nCopy, acquire,
                 nSize ); // alloc to nSize
         }
-        if (nRest > 0)
+        if (ret && nRest > 0)
         {
-            _defaultConstructElements(
+            ret = idefaultConstructElements(
                 &pNew, pElementType,
                 nCopy, nSize,
-                nCopy >= 0 ? -1 /* already allocated */ : nSize );
+                nCopy >= 0 ? -1 /* no mem allocation */ : nSize );
         }
 
-        // destruct sequence
-        if (! ::osl_decrementInterlockedCount( &(*ppSequence)->nRefCount ))
+        if (ret)
         {
-            if ((*ppSequence)->nElements)
+            // destruct sequence
+            if (osl_decrementInterlockedCount( &pSeq->nRefCount ) == 0)
             {
-                _destructElements(
-                    (*ppSequence)->elements, pElementType, 0, (*ppSequence)->nElements, release );
+                if (nElements > 0)
+                {
+                    idestructElements(
+                        pSeq->elements, pElementType,
+                        0, nElements, release );
+                }
+                rtl_freeMemory( pSeq );
             }
-            ::rtl_freeMemory( *ppSequence );
+            *ppSequence = pNew;
         }
-
-        *ppSequence = pNew;
     }
     else
     {
-        if (nSize > nSourceElements) // default construct the rest
+        OSL_ASSERT( pSeq->nRefCount == 1 );
+        if (nSize > nElements) // default construct the rest
         {
-            _defaultConstructElements(
+            ret = idefaultConstructElements(
                 ppSequence, pElementType,
-                nSourceElements, nSize,
+                nElements, nSize,
                 nSize ); // realloc to nSize
         }
         else // or destruct the rest and realloc mem
         {
-            sal_Int32 nElementSize = _destructElements(
-                (*ppSequence)->elements, pElementType,
-                nSize, nSourceElements, release );
-            *ppSequence = (uno_Sequence *)::rtl_reallocateMemory(
-                *ppSequence, SAL_SEQUENCE_HEADER_SIZE + (nSize * nElementSize) );
-            (*ppSequence)->nElements = nSize;
+            sal_Int32 nElementSize = idestructElements(
+                pSeq->elements, pElementType,
+                nSize, nElements, release );
+            // warning: it is assumed that the following will never fail,
+            //          else this leads to a sequence null handle
+            *ppSequence = reallocSeq( pSeq, nElementSize, nSize );
+            OSL_ASSERT( *ppSequence != 0 );
+            ret = (*ppSequence != 0);
         }
     }
+
+    return ret;
 }
 
 }
 
 extern "C"
 {
-//##################################################################################################
-void SAL_CALL uno_type_sequence_construct(
+
+//##############################################################################
+sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
+    bool ret;
     if (len)
     {
         typelib_TypeDescription * pTypeDescr = 0;
@@ -629,179 +831,206 @@ void SAL_CALL uno_type_sequence_construct(
         typelib_TypeDescriptionReference * pElementType =
             ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
 
-        uno_Sequence * pSequence = 0;
-
-        if (pElements)
+        *ppSequence = 0;
+        if (pElements == 0)
         {
-            _copyConstructElements(
-                &pSequence, pElements, pElementType,
-                0, len, acquire,
+            ret = idefaultConstructElements(
+                ppSequence, pElementType,
+                0, len,
                 len ); // alloc to len
         }
         else
         {
-            _defaultConstructElements(
-                &pSequence,
-                pElementType,
-                0, len,
+            ret = icopyConstructFromElements(
+                ppSequence, pElements, pElementType,
+                0, len, acquire,
                 len ); // alloc to len
         }
-
-        *ppSequence = pSequence;
 
         TYPELIB_DANGER_RELEASE( pTypeDescr );
     }
     else
     {
-        *ppSequence = _getEmptySequence();
+        *ppSequence = createEmptySequence();
+        ret = true;
     }
+
+    OSL_ASSERT( (*ppSequence != 0) == ret );
+    return ret;
 }
-//##################################################################################################
-void SAL_CALL uno_sequence_construct(
+
+//##############################################################################
+sal_Bool SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
     uno_AcquireFunc acquire )
     SAL_THROW_EXTERN_C()
 {
-    if (len)
+    bool ret;
+    if (len > 0)
     {
         typelib_TypeDescriptionReference * pElementType =
             ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
 
-        uno_Sequence * pSequence = 0;
-
-        if (pElements)
+        *ppSequence = 0;
+        if (pElements == 0)
         {
-            _copyConstructElements(
-                &pSequence, pElements, pElementType,
-                0, len, acquire,
+            ret = idefaultConstructElements(
+                ppSequence, pElementType,
+                0, len,
                 len ); // alloc to len
         }
         else
         {
-            _defaultConstructElements(
-                &pSequence,
-                pElementType,
-                0, len,
+            ret = icopyConstructFromElements(
+                ppSequence, pElements, pElementType,
+                0, len, acquire,
                 len ); // alloc to len
         }
-
-        *ppSequence = pSequence;
     }
     else
     {
-        *ppSequence = _getEmptySequence();
+        *ppSequence = createEmptySequence();
+        ret = true;
     }
+
+    OSL_ASSERT( (*ppSequence != 0) == ret );
+    return ret;
 }
-//##################################################################################################
-void SAL_CALL uno_type_sequence_realloc(
-    uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType, sal_Int32 nSize,
-    uno_AcquireFunc acquire, uno_ReleaseFunc release )
+
+//##############################################################################
+sal_Bool SAL_CALL uno_type_sequence_realloc(
+    uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
+    sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppSequence, "### null ptr!" );
     OSL_ENSURE( nSize >= 0, "### new size must be at least 0!" );
 
+    bool ret = true;
     if (nSize != (*ppSequence)->nElements)
     {
         typelib_TypeDescription * pTypeDescr = 0;
         TYPELIB_DANGER_GET( &pTypeDescr, pType );
-        _reallocSequence(
+        ret = ireallocSequence(
             ppSequence, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
             nSize, acquire, release );
         TYPELIB_DANGER_RELEASE( pTypeDescr );
     }
+    return ret;
 }
-//##################################################################################################
-void SAL_CALL uno_sequence_realloc(
-    uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr, sal_Int32 nSize,
-    uno_AcquireFunc acquire, uno_ReleaseFunc release )
+
+//##############################################################################
+sal_Bool SAL_CALL uno_sequence_realloc(
+    uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
+    sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppSequence, "### null ptr!" );
     OSL_ENSURE( nSize >= 0, "### new size must be at least 0!" );
 
+    bool ret = true;
     if (nSize != (*ppSequence)->nElements)
     {
-        _reallocSequence(
+        ret = ireallocSequence(
             ppSequence, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
             nSize, acquire, release );
     }
+    return ret;
 }
-//##################################################################################################
-void SAL_CALL uno_type_sequence_reference2One(
+
+//##############################################################################
+sal_Bool SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppSequence, "### null ptr!" );
+    bool ret = true;
     uno_Sequence * pSequence = *ppSequence;
     if (pSequence->nRefCount > 1)
     {
-        if (pSequence->nElements)
+        uno_Sequence * pNew = 0;
+        if (pSequence->nElements > 0)
         {
             typelib_TypeDescription * pTypeDescr = 0;
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
 
-            uno_Sequence * pNew = 0;
-            _copyConstructElements(
+            ret = icopyConstructFromElements(
                 &pNew, pSequence->elements,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 0, pSequence->nElements, acquire,
                 pSequence->nElements ); // alloc nElements
-
-            _destructSequence( *ppSequence, pType, pTypeDescr, release );
-            *ppSequence = pNew;
+            if (ret)
+            {
+                idestructSequence( *ppSequence, pType, pTypeDescr, release );
+                *ppSequence = pNew;
+            }
 
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         else
         {
-            _destructSequence( *ppSequence, pType, 0, release );
-
-            uno_Sequence * pNew = (uno_Sequence *)::rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE );
-            pNew->nRefCount = 1;
-            pNew->nElements = 0;
-            *ppSequence = pNew;
+            pNew = allocSeq( 0, 0 );
+            ret = (pNew != 0);
+            if (ret)
+            {
+                // easy destruction of empty sequence:
+                if (osl_decrementInterlockedCount( &pSequence->nRefCount ) == 0)
+                    rtl_freeMemory( pSequence );
+                *ppSequence = pNew;
+            }
         }
     }
+    return ret;
 }
-//##################################################################################################
-void SAL_CALL uno_sequence_reference2One(
+
+//##############################################################################
+sal_Bool SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
     uno_AcquireFunc acquire, uno_ReleaseFunc release )
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppSequence, "### null ptr!" );
+    bool ret = true;
     uno_Sequence * pSequence = *ppSequence;
     if (pSequence->nRefCount > 1)
     {
-        if (pSequence->nElements)
+        uno_Sequence * pNew = 0;
+        if (pSequence->nElements > 0)
         {
-            uno_Sequence * pNew = 0;
-            _copyConstructElements(
+            ret = icopyConstructFromElements(
                 &pNew, pSequence->elements,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 0, pSequence->nElements, acquire,
                 pSequence->nElements ); // alloc nElements
-
-            _destructSequence( *ppSequence, pTypeDescr->pWeakRef, pTypeDescr, release );
-            *ppSequence = pNew;
+            if (ret)
+            {
+                idestructSequence(
+                    pSequence, pTypeDescr->pWeakRef, pTypeDescr, release );
+                *ppSequence = pNew;
+            }
         }
         else
         {
-            _destructSequence( *ppSequence, pTypeDescr->pWeakRef, pTypeDescr, release );
-
-            uno_Sequence * pNew = (uno_Sequence *)::rtl_allocateMemory( SAL_SEQUENCE_HEADER_SIZE );
-            pNew->nRefCount = 1;
-            pNew->nElements = 0;
-            *ppSequence = pNew;
+            pNew = allocSeq( 0, 0 );
+            ret = (pNew != 0);
+            if (ret)
+            {
+                // easy destruction of empty sequence:
+                if (osl_decrementInterlockedCount( &pSequence->nRefCount ) == 0)
+                    rtl_freeMemory( pSequence );
+                *ppSequence = pNew;
+            }
         }
+
     }
+    return ret;
 }
-//##################################################################################################
+
+//##############################################################################
 void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
@@ -812,11 +1041,12 @@ void SAL_CALL uno_sequence_assign(
     if (*ppDest != pSource)
     {
         ::osl_incrementInterlockedCount( &pSource->nRefCount );
-        _destructSequence( *ppDest, pTypeDescr->pWeakRef, pTypeDescr, release );
+        idestructSequence( *ppDest, pTypeDescr->pWeakRef, pTypeDescr, release );
         *ppDest = pSource;
     }
 }
-//##################################################################################################
+
+//##############################################################################
 void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
@@ -827,7 +1057,7 @@ void SAL_CALL uno_type_sequence_assign(
     if (*ppDest != pSource)
     {
         ::osl_incrementInterlockedCount( &pSource->nRefCount );
-        _destructSequence( *ppDest, pType, 0, release );
+        idestructSequence( *ppDest, pType, 0, release );
         *ppDest = pSource;
     }
 }
