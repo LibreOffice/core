@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.34 $
+#*  $Revision: 1.35 $
 #*
-#*  last change: $Author: dr $ $Date: 2002-04-02 08:56:18 $
+#*  last change: $Author: hjs $ $Date: 2002-04-05 14:36:29 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -330,182 +330,10 @@ $(SRS)$/hidother.hid: hidother.src
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo AUTO_CODE > $@
-    @echo BrowserDataWin >> $@
-    @echo BrowserColumn >> $@
-    @echo ButtonFrame >> $@
-    @echo CreateLoader >> $@
-    @echo DdeString >> $@
-    @echo DlgSource >> $@
-    @echo DlgExport >> $@
-    @echo EditWindow >> $@
-    @echo FileEntry >> $@
-    @echo GIFLZWDecompressor >> $@
-    @echo GIFReader >> $@
-    @echo PNGReader >> $@
-    @echo ImpDetect >> $@
-    @echo ImpDraw >> $@
-    @echo ImpGet >> $@
-    @echo ImpPut >>$@
-    @echo ImpSv >> $@
-    @echo JPEGReader >> $@
-    @echo WMFReader >> $@
-    @echo EnhWMFReader >> $@
-    @echo WMFWriter >> $@
-    @echo LinkStub >> $@
-    @echo MultiTextLineInfo >> $@
-    @echo Regexpr >> $@
-    @echo RemoteControlServer >> $@
-    @echo RemoteControlService >> $@
-    @echo RetStream >> $@
-    @echo SCmdStream >> $@
-    @echo SbxArrayRef >> $@
-    @echo SbxBasicFormater >> $@
-    @echo SbxRes >> $@
-    @echo SbxVariableRef >> $@
-    @echo SfxListUndoAction >> $@
-    @echo SfxPointerEntry >> $@
-    @echo SfxUINT32s >> $@
-    @echo SfxULongRangeItem >> $@
-    @echo SfxULongRanges >> $@
-    @echo SfxULongRangesItem >> $@
-    @echo SgfFontLst >> $@
-    @echo SgfFontOne >> $@
-    @echo StatementCommand >> $@
-    @echo StatementControl >> $@
-    @echo StatementFlow >> $@
-    @echo StatementList >> $@
-    @echo StatementSlot >> $@
-    @echo SVDDE_MISC_CODE >> $@
-    @echo SvInterfaceClient >> $@
-    @echo SvImp >> $@
-    @echo SvStringLockBytes >> $@
-    @echo SVTOOLS_FILTER >> $@
-    @echo SVTOOLS_CODE >> $@
-    @echo SVTOOLS_FILTER4 >> $@
-    @echo SVTOOLS_FILTER_CODE >> $@
-    @echo ValueSetItem >> $@
-    @echo WMFRecord >> $@
-    @echo WriteRecord >> $@
-    @echo XPMReader >> $@
-    @echo XBMReader >> $@
-    @echo _grow >> $@
-    @echo _ImplINetHistoryLoadTimer >> $@
-    @echo _ImplINetHistoryStoreTimer >> $@
-    @echo sRTF_>>$@
-    @echo sHTML_>>$@
-    @echo unnamed>>$@
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
-    @echo WEP>>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-.ENDIF
-.IF "$(COM)"=="MSC"
-    @echo ??_7>>$@
-    @echo ??_8>>$@
-    @echo ??_C>>$@
-    @echo ??_E>>$@
-    @echo ??_F>>$@
-    @echo ??_G>>$@
-    @echo ??_H>>$@
-    @echo ??_I>>$@
-    @echo 0Imp>>$@
-    @echo Impl@@>>$@
-    @echo Imp@@>>$@
-    @echo __CT>>$@
-    @echo _STL>>$@
-.ENDIF
+    +$(TYPE) svt.flt >$@
 
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo AUTO_CODE > $@
-    @echo BrowserDataWin >> $@
-    @echo BrowserColumn >> $@
-    @echo ButtonFrame >> $@
-    @echo CreateLoader >> $@
-    @echo DdeString >> $@
-    @echo DlgSource >> $@
-    @echo DlgExport >> $@
-    @echo EditWindow >> $@
-    @echo FileEntry >> $@
-    @echo GIFLZWDecompressor >> $@
-    @echo GIFReader >> $@
-    @echo PNGReader >> $@
-    @echo ImpDetect >> $@
-    @echo ImpDraw >> $@
-    @echo ImpGet >> $@
-    @echo ImpPut >>$@
-    @echo ImpSvNum >>$@
-    @echo JPEGReader >> $@
-    @echo WMFReader >> $@
-    @echo EnhWMFReader >> $@
-    @echo WMFWriter >> $@
-    @echo LinkStub >> $@
-    @echo MultiTextLineInfo >> $@
-    @echo Regexpr >> $@
-    @echo RemoteControlServer >> $@
-    @echo RemoteControlService >> $@
-    @echo RetStream >> $@
-    @echo SCmdStream >> $@
-    @echo SbxArrayRef >> $@
-    @echo SbxBasicFormater >> $@
-    @echo SbxRes >> $@
-    @echo SbxVariableRef >> $@
-    @echo SfxListUndoAction >> $@
-    @echo SfxPointerEntry >> $@
-    @echo SfxUINT32s >> $@
-    @echo SfxULongRangeItem >> $@
-    @echo SfxULongRanges >> $@
-    @echo SfxULongRangesItem >> $@
-    @echo SgfFontLst >> $@
-    @echo SgfFontOne >> $@
-    @echo StatementCommand >> $@
-    @echo StatementControl >> $@
-    @echo StatementFlow >> $@
-    @echo StatementList >> $@
-    @echo StatementSlot >> $@
-    @echo SVDDE_MISC_CODE >> $@
-    @echo SvInterfaceClient >> $@
-    @echo SvImp >> $@
-    @echo SvStringLockBytes >> $@
-    @echo svtools >> $@
-    @echo SVTOOLS_FILTER >> $@
-    @echo SVTOOLS_CODE >> $@
-    @echo SVTOOLS_FILTER4 >> $@
-    @echo SVTOOLS_FILTER_CODE >> $@
-    @echo ValueSetItem >> $@
-    @echo WMFRecord >> $@
-    @echo WriteRecord >> $@
-    @echo XPMReader >> $@
-    @echo XBMReader >> $@
-    @echo _grow >> $@
-    @echo _ImplINetHistoryLoadTimer >> $@
-    @echo _ImplINetHistoryStoreTimer >> $@
-    @echo sRTF_>>$@
-    @echo sHTML_>>$@
-    @echo SdbSqlScanner>>$@
-    @echo Sdbyy_scan>>$@
-    @echo SqlInternalNode>>$@
-    @echo unnamed>>$@
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
-    @echo WEP>>$@
-    @echo LIBMAIN>>$@
-    @echo LibMain>>$@
-.ENDIF
-.IF "$(COM)"=="MSC"
-    @echo ??_7>>$@
-    @echo ??_8>>$@
-    @echo ??_C>>$@
-    @echo ??_E>>$@
-    @echo ??_F>>$@
-    @echo ??_G>>$@
-    @echo ??_H>>$@
-    @echo ??_I>>$@
-    @echo 0Imp>>$@
-    @echo Impl@@>>$@
-    @echo Imp@@>>$@
-    @echo __CT>>$@
-    @echo _STL>>$@
-.ENDIF
+    +$(TYPE) svl.flt >$@
 
