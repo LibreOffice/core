@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,10 +328,11 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
 //----------------------------------------------------------------------------
 //      C O P Y
 
-BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bIncludeObjects )
+BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bIncludeObjects, BOOL bStopEdit )
 {
     BOOL bDone = FALSE;
-    UpdateInputLine();
+    if ( bStopEdit )
+        UpdateInputLine();
 
     ScRange aRange;
     if ( GetViewData()->GetSimpleArea( aRange ) )
@@ -758,8 +759,9 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         if (!InsertCells( eMoveMode, bRecord, TRUE ))   // is inserting possible?
         {
             delete pTransClip;                          // cancel
-            pUndoMgr->LeaveListAction();
             return FALSE;
+            //  #i21036# EnterListAction isn't used, and InsertCells doesn't insert
+            //  its undo action on failure, so no undo handling is needed here
         }
         if ( bCut )
             pClipDoc->SetCutMode( bCut );
