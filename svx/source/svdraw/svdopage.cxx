@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
+ *  last change: $Author: sj $ $Date: 2002-07-26 14:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,8 +328,8 @@ FASTBOOL SdrPageObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 Fraction aFact1(1,1);
                 Point aOfs(aOutRect.TopLeft());
                 rXOut.GetOutDev()->SetMapMode(MapMode(MAP_RELATIVE,aOfs,aFact1,aFact1));
-                long nXMul=aOutRect.GetWidth()-1;
-                long nYMul=aOutRect.GetHeight()-1;
+                long nXMul=aOutRect.GetWidth();     // SJ: #99149# fixed problem with
+                long nYMul=aOutRect.GetHeight();    // one pixel wide preview objects
                 long nXDiv=pMainPage->GetWdt();
                 long nYDiv=pMainPage->GetHgt();
                 Fraction aXScl(nXMul,nXDiv);
