@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:28:13 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,7 +1939,7 @@ BOOL EntryData_Impl::DeleteObjectShell()
                 {
                     bRet=mxObjShell->PreDoSaveAs_Impl(
                         GetTargetURL(),
-                        mxObjShell->GetFactory().GetFilter(0)->GetFilterName(),0 );
+                        mxObjShell->GetFactory().GetFilterContainer()->GetAnyFilter( SFX_FILTER_EXPORT | SFX_FILTER_IMPORT, SFX_FILTER_INTERNAL )->GetFilterName(), 0 );
                 }
                 else
                 {
