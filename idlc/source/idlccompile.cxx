@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-23 07:21:56 $
+ *  last change: $Author: jbu $ $Date: 2001-08-24 11:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,14 @@ OString makeTempName(const OString& prefix, const OString& postfix)
     strcat(tmpFilePattern, "XXXXXX");
 
 #ifdef SAL_UNX
-    (void) mkstemp(tmpFilePattern);
+    int nDescriptor = mkstemp(tmpFilePattern);
+    if( -1 == nDescriptor )
+    {
+        fprintf( stderr,"idlc: couldn't create temporary file\n" );
+        exit( 1 );
+    }
+    // the file shall later be reopened by stdio functions
+    close( nDescriptor );
 #else
     (void) mktemp(tmpFilePattern);
 #endif
