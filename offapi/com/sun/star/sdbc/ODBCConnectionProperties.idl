@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODBCConnectionProperties.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:24 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 #ifndef __com_sun_star_sdbc_ODBCConnectionProperties_idl__
 #define __com_sun_star_sdbc_ODBCConnectionProperties_idl__
 
- module com {  module sun {  module star {  module sdbc {
-
 #ifndef __com_sun_star_sdbc_ConnectionProperties_idl__
 #include <com/sun/star/sdbc/ConnectionProperties.idl>
 #endif
+
+module com {  module sun {  module star {  module sdbc {
 
 /** represents the properties for a ODBC connection (session) with a specific
     database. These properties can be used when calling the method
