@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:43:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,14 @@
  ************************************************************************/
 
 #define _SVX_USE_UNOGLOBALS_
+
+#ifndef _COM_SUN_STAR_DOCUMENT_EVENTOBJECT_HPP_
+#include <com/sun/star/document/EventObject.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -139,7 +147,8 @@ UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 
 SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw() :
         pPage   ( pInPage ),
-        pModel  ( NULL )
+        pModel  ( NULL ),
+        mrBHelper( getMutex() )
 {
     // Am Broadcaster anmelden
     pModel = pPage->GetModel();
@@ -157,23 +166,153 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw() :
 SvxDrawPage::SvxDrawPage() throw() :
         pPage   ( NULL ),
         pModel  ( NULL ),
-        pView   ( NULL )
+        pView   ( NULL ),
+        mrBHelper( getMutex() )
 {
 }
 
 //----------------------------------------------------------------------
 SvxDrawPage::~SvxDrawPage() throw()
 {
-    // Am Broadcaster abmelden
-    if( pModel )
-        EndListening( *pModel );
-
-    delete pView;
+    DBG_ASSERT( mrBHelper.bDisposed, "SvxDrawPage must be disposed!" );
+    if( !mrBHelper.bDisposed )
+        disposing();
 }
+
+//----------------------------------------------------------------------
+
+// XInterface
+void SvxDrawPage::release() throw()
+{
+    uno::Reference< uno::XInterface > x( xDelegator );
+    if (! x.is())
+    {
+        if (osl_decrementInterlockedCount( &m_refCount ) == 0)
+        {
+            if (! mrBHelper.bDisposed)
+            {
+                uno::Reference< uno::XInterface > xHoldAlive( (uno::XWeak*)this );
+                // First dispose
+                try
+                {
+                    dispose();
+                }
+                catch(::com::sun::star::uno::Exception&)
+                {
+                    // release should not throw exceptions
+                }
+
+                // only the alive ref holds the object
+                OSL_ASSERT( m_refCount == 1 );
+                // destroy the object if xHoldAlive decrement the refcount to 0
+                return;
+            }
+        }
+        // restore the reference count
+        osl_incrementInterlockedCount( &m_refCount );
+    }
+    OWeakAggObject::release();
+}
+
+//----------------------------------------------------------------------
 
 SvxDrawPage* SvxDrawPage::GetPageForSdrPage( SdrPage* pPage ) throw()
 {
     return getImplementation( pPage->getUnoPage() );
+}
+
+// XComponent
+void SvxDrawPage::disposing() throw()
+{
+    if( pModel )
+    {
+        EndListening( *pModel );
+        pModel = NULL;
+    }
+
+    if( pView )
+    {
+        delete pView;
+        pView = NULL;
+    }
+    pPage = 0;
+}
+
+// XComponent
+void SvxDrawPage::dispose()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    // An frequently programming error is to release the last
+    // reference to this object in the disposing message.
+    // Make it rubust, hold a self Reference.
+    uno::Reference< lang::XComponent > xSelf( this );
+
+    // Guard dispose against multible threading
+    // Remark: It is an error to call dispose more than once
+    sal_Bool bDoDispose = sal_False;
+    {
+    osl::MutexGuard aGuard( mrBHelper.rMutex );
+    if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
+    {
+        // only one call go into this section
+        mrBHelper.bInDispose = sal_True;
+        bDoDispose = sal_True;
+    }
+    }
+
+    // Do not hold the mutex because we are broadcasting
+    if( bDoDispose )
+    {
+        // Create an event with this as sender
+        try
+        {
+            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( (lang::XComponent *)this ) );
+            ::com::sun::star::document::EventObject aEvt;
+            aEvt.Source = xSource;
+            // inform all listeners to release this object
+            // The listener container are automaticly cleared
+            mrBHelper.aLC.disposeAndClear( aEvt );
+            // notify subclasses to do their dispose
+            disposing();
+        }
+        catch(::com::sun::star::uno::Exception& e)
+        {
+            // catch exception and throw again but signal that
+            // the object was disposed. Dispose should be called
+            // only once.
+            mrBHelper.bDisposed = sal_True;
+            mrBHelper.bInDispose = sal_False;
+            throw e;
+        }
+
+        // the values bDispose and bInDisposing must set in this order.
+        // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
+        mrBHelper.bDisposed = sal_True;
+        mrBHelper.bInDispose = sal_False;
+    }
+
+}
+
+// XComponent
+void SAL_CALL SvxDrawPage::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
+    mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
+}
+
+// XComponent
+void SAL_CALL SvxDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
+    mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
 }
 
 // SfxListener
@@ -209,10 +348,7 @@ void SvxDrawPage::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         if( bInvalid )
         {
-            pModel = NULL;
-            delete pView;
-            pView = NULL;
-            pPage = NULL;
+            dispose();
         }
     }
 }
@@ -224,6 +360,9 @@ void SAL_CALL SvxDrawPage::add( const Reference< drawing::XShape >& xShape )
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( (pModel == 0) || (pPage == 0) )
+        throw lang::DisposedException();
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
@@ -258,6 +397,9 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( (pModel == 0) || (pPage == 0) )
+        throw lang::DisposedException();
+
     SvxShape* pShape = SvxShape::getImplementation( xShape );
 
     if(pShape)
@@ -289,6 +431,11 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 sal_Int32 SAL_CALL SvxDrawPage::getCount()
     throw( uno::RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( (pModel == 0) || (pPage == 0) )
+        throw lang::DisposedException();
+
     return( (sal_Int32) pPage->GetObjCount() );
 }
 
@@ -298,8 +445,8 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pPage == NULL)
-        throw uno::RuntimeException();
+    if( (pModel == 0) || (pPage == 0) )
+        throw lang::DisposedException();
 
     if ( Index < 0 || Index >= (sal_Int32)pPage->GetObjCount() )
         throw lang::IndexOutOfBoundsException();
@@ -326,6 +473,11 @@ uno::Type SAL_CALL SvxDrawPage::getElementType()
 sal_Bool SAL_CALL SvxDrawPage::hasElements()
     throw( uno::RuntimeException )
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( (pModel == 0) || (pPage == 0) )
+        throw lang::DisposedException();
+
     return pPage?(pPage->GetObjCount()>0):sal_False;
 }
 
@@ -384,6 +536,9 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( (pModel == 0) || (pPage == 0) )
+        throw lang::DisposedException();
+
     DBG_ASSERT(pPage,"SdrPage ist NULL! [CL]");
     DBG_ASSERT(pView, "SdrView ist NULL! [CL]");
 
@@ -419,6 +574,9 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( (pModel == 0) || (pPage == 0) )
+        throw lang::DisposedException();
 
     DBG_ASSERT(pPage,"SdrPage ist NULL! [CL]");
     DBG_ASSERT(pView, "SdrView ist NULL! [CL]");
