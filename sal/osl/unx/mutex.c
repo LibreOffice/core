@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:13:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 
 #include <osl/mutex.h>
 #include <osl/diagnose.h>
+
+#include <pthread.h>
 
 /*
     Implementation notes:
@@ -485,7 +487,7 @@ oslMutex * SAL_CALL osl_getGlobalMutex()
     };
 
     /* necessary to get a "oslMutex *" */
-    static oslMutex const globalMutex = (oslMutex) &globalMutexImpl;
+    static oslMutex globalMutex = (oslMutex) &globalMutexImpl;
 
     return &globalMutex;
 }
