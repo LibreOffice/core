@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
+ *  last change: $Author: vg $ $Date: 2001-05-21 13:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,8 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, Window* pWindow ) :
 
 ImpEditView::~ImpEditView()
 {
-    if ( GetWindow()->GetDragGestureRecognizer().is() )
+    if ( GetWindow() &&
+         GetWindow()->GetDragGestureRecognizer().is() )
     {
         uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
         GetWindow()->GetDragGestureRecognizer()->removeDragGestureListener( xDGL );
