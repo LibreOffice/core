@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-20 09:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace com { namespace sun { namespace star {
     namespace container
     {
         class XHierarchicalNameAccess;
+        class XEnumeration;
     }
     namespace io
     {
@@ -314,6 +315,11 @@ public:
                        const ::vos::ORef< ::ucb::ContentProviderImplHelper >&
                                rProvider,
                        const ::rtl::OUString& rContentId );
+
+    // Called from resultset data supplier.
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XEnumeration >
+    getIterator();
 };
 
 }

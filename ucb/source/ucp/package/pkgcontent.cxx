@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-20 09:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1732,12 +1732,15 @@ Reference< XInputStream > Content::getInputStream()
         if ( !xSink.is() )
         {
             VOS_ENSURE( sal_False,
-                        "Content::storeData - "
+                        "Content::getInputStream - "
                         "Got no XActiveDataSink interface!" );
             return xStream;
         }
 
         xStream = xSink->getInputStream();
+
+        VOS_ENSURE( xStream.is(),
+                    "Content::getInputStream - Got no stream!" );
     }
     catch ( NoSuchElementException & )
     {
@@ -1745,5 +1748,40 @@ Reference< XInputStream > Content::getInputStream()
     }
 
     return xStream;
+}
+
+//=========================================================================
+Reference< XEnumeration > Content::getIterator()
+{
+    Reference< XEnumeration > xIter;
+    Reference< XHierarchicalNameAccess > xNA = getPackage( m_xSMgr, m_aUri );
+    if ( !xNA.is() )
+        return xIter;
+
+    try
+    {
+        Any aEntry = xNA->getByHierarchicalName( m_aUri.getPath() );
+        Reference< XEnumerationAccess > xIterFac;
+        aEntry >>= xIterFac;
+
+        if ( !xIterFac.is() )
+        {
+            VOS_ENSURE( sal_False,
+                        "Content::getIterator - "
+                        "Got no XEnumerationAccess interface!" );
+            return xIter;
+        }
+
+        xIter = xIterFac->createEnumeration();
+
+        VOS_ENSURE( xIter.is(),
+                    "Content::getIterator - Got no iterator!" );
+    }
+    catch ( NoSuchElementException & )
+    {
+        // getByHierarchicalName
+    }
+
+    return xIter;
 }
 
