@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-09 12:11:22 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 14:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
+#endif
+#ifndef _SWGLOBDOCSH_HXX
+#include <globdoc.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
@@ -1856,9 +1859,13 @@ OUString SwXTextDocument::getImplementationName(void) throw( RuntimeException )
  * --------------------------------------------------*/
 sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
+    BOOL bWebDoc    = 0 != PTR_CAST(SwWebDocShell,    pDocShell);
+    BOOL bGlobalDoc = 0 != PTR_CAST(SwGlobalDocShell, pDocShell);
     sal_Bool bRet = sal_False;
     if( rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.TextDocument" ) ) ||
-        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.document.OfficeDocument" ) ) )
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.document.OfficeDocument" ) ) ||
+        (bWebDoc && rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.WebDocument" ) )) ||
+        (bGlobalDoc && rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.GlobalDocument" ) )) )
         bRet = sal_True;
     return bRet;
 }
@@ -1867,10 +1874,18 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
  * --------------------------------------------------*/
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet ( 2 );
+    BOOL bWebDoc    = 0 != PTR_CAST(SwWebDocShell,    pDocShell);
+    BOOL bGlobalDoc = 0 != PTR_CAST(SwGlobalDocShell, pDocShell);
+    INT32 nCnt = (bWebDoc || bGlobalDoc) ? 3 : 2;
+    Sequence< OUString > aRet ( nCnt );
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.text.TextDocument" ) ) );
     pArray[1] = OUString ( RTL_CONSTASCII_USTRINGPARAM ( ( "com.sun.star.document.OfficeDocument" ) ) );
+    if (3 == nCnt)
+    {   OUString aTmp( bWebDoc ? C2U("com.sun.star.text.WebDocument")
+                               : C2U("com.sun.star.text.GlobalDocument"));
+        pArray[2] = aTmp;
+    }
     return aRet;
 }
 /* -----------------05.05.99 12:10-------------------
