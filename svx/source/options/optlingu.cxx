@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 11:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,8 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
-#endif
+#include <comphelper/processfactory.hxx>
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -952,7 +951,7 @@ SvxExternalLinguTabPage::SvxExternalLinguTabPage(Window* pParent, const SfxItemS
     aSettingsGB(this, ResId(GB_SETTINGS))
 {
     FreeResource();
-    Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+    Reference< lang::XMultiServiceFactory >  xMgr = ::comphelper::getProcessServiceFactory();
     Reference< XInterface >  xInst = xMgr->createInstance( C2U("com.sun.star.linguistic.OtherLingu") );
     xOtherLingu = Reference< XOtherLingu > (xInst, UNO_QUERY);
     if(xOtherLingu.is())

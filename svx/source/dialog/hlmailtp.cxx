@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmailtp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 11:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
 
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -551,7 +551,7 @@ IMPL_LINK ( SvxHyperlinkMailTp, ClickAdrBookHdl_Impl, void *, EMPTYARG )
         util::URL aURL;
         aURL.Complete = ::rtl::OUString( aObj.GetMainURL() );
 
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
         if( xFactory.is() )
         {
             uno::Reference< util::XURLTransformer > xTrans( xFactory->createInstance

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-17 15:29:58 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 11:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,7 @@
 #include <com/sun/star/plugin/XPluginManager.hpp>
 #endif
 
-#include <unotools/processfactory.hxx>
-//#include <usr/ustring.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "pfiledlg.hxx"
 #include "dialogs.hrc"
@@ -111,7 +110,7 @@ SvxPluginFileDlg::SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind )
     }
 
     // fill the filterlist of the filedialog with data of installed plugins
-    uno::Reference< lang::XMultiServiceFactory >  xMgr( ::utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
 
     if( xMgr.is() )
     {
@@ -228,7 +227,7 @@ sal_Bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
         return (nCheck & PFDLG_FOUND_VIDEO);
 
     sal_Bool bFound=sal_False;
-    uno::Reference< lang::XMultiServiceFactory >  xMgr( ::utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
 
     if( xMgr.is() )
     {

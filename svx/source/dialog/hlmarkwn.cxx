@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 16:04:20 $
+ *  last change: $Author: pb $ $Date: 2000-10-23 11:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
 // UNO-Stuff
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -304,7 +304,7 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
 {
     mnError = LERR_NOERROR;
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory( ::utl::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
         uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
