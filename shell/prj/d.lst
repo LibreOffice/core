@@ -17,6 +17,7 @@ mkdir: %_DEST%\inc%_EXT%\shell
 ..\%__SRC%\bin\gnome-open-url %_DEST%\bin%_EXT%\gnome-open-url
 ..\%__SRC%\bin\gnome-open-url.bin %_DEST%\bin%_EXT%\gnome-open-url.bin
 ..\%__SRC%\bin\senddoc %_DEST%\bin%_EXT%\senddoc
+..\%__SRC%\bin\uri-encode %_DEST%\bin%_EXT%\uri-encode
 
 ..\source\win32\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
 ..\source\unix\exec\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
