@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:09:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,7 +878,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
             DBG_ASSERT( !xObjRef.is() || xObjRef.GetObject() == xObj, "Wrong object identity!" );
             if ( xObj.is() )
             {
-                pDestPers->GetEmbeddedObjectContainer().CopyEmbeddedObject( xObj, aTmp );
+                pDestPers->GetEmbeddedObjectContainer().CopyEmbeddedObject( rContainer, xObj, aTmp );
 
                 if ( xObjRef.is() )
                 {
@@ -1251,7 +1251,7 @@ void SdrOle2Obj::ImpCopyObject( SfxObjectShell* pSrcPersist, SfxObjectShell* pDs
     if ( xObj.is() )
     {
         ::rtl::OUString aTmp;
-        pDstPersist->GetEmbeddedObjectContainer().CopyEmbeddedObject( xObj, aTmp );
+        pDstPersist->GetEmbeddedObjectContainer().CopyEmbeddedObject( rContainer, xObj, aTmp );
         rPersistName = aTmp;
         CheckFileLink_Impl();
     }
