@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:12:15 $
+ *  last change: $Author: fme $ $Date: 2002-03-08 16:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@ class SwScriptInfo
 private:
     SvXub_StrLens aScriptChg;
     SvBytes aScriptType;
+#ifdef BIDI
+    SvXub_StrLens aDirChg;
+    SvBytes aDirType;
+#endif
     SvXub_StrLens aCompChg;
     SvXub_StrLens aCompLen;
     SvBytes aCompType;
@@ -126,6 +130,12 @@ public:
     inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
     inline BYTE GetScriptType( const USHORT nCnt ) const;
 
+#ifdef BIDI
+    inline USHORT CountDirChg() const;
+    inline xub_StrLen GetDirChg( const USHORT nCnt ) const;
+    inline BYTE GetDirType( const USHORT nCnt ) const;
+#endif
+
     inline USHORT CountCompChg() const;
     inline xub_StrLen GetCompStart( const USHORT nCnt ) const;
     inline xub_StrLen GetCompLen( const USHORT nCnt ) const;
@@ -134,6 +144,10 @@ public:
     // "high" level operations, nPos refers to string position
     xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
     BYTE ScriptType( const xub_StrLen nPos ) const;
+#ifdef BIDI
+    xub_StrLen NextDirChg( const xub_StrLen nPos ) const;
+    BYTE DirType( const xub_StrLen nPos ) const;
+#endif
     BYTE CompType( const xub_StrLen nPos ) const;
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
@@ -162,6 +176,21 @@ inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
     ASSERT( nCnt < aScriptChg.Count(),"No ScriptType today!");
     return aScriptType[ nCnt ];
 }
+
+#ifdef BIDI
+inline USHORT SwScriptInfo::CountDirChg() const { return aDirChg.Count(); }
+inline xub_StrLen SwScriptInfo::GetDirChg( const USHORT nCnt ) const
+{
+    ASSERT( nCnt < aDirChg.Count(),"No DirChange today!");
+    return aDirChg[ nCnt ];
+}
+inline BYTE SwScriptInfo::GetDirType( const xub_StrLen nCnt ) const
+{
+    ASSERT( nCnt < aDirChg.Count(),"No DirType today!");
+    return aDirType[ nCnt ];
+}
+#endif
+
 inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
 inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
 {
@@ -218,7 +247,7 @@ class SwDrawTextInfo
     BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
     BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
     BOOL bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
-    BOOL bDarkBack : 1; // Dark background sets automatic font color to white
+    BOOL bDarkBack : 1;     // Dark background sets automatic font color to white
 #ifdef VERTICAL_LAYOUT
     BOOL bSpaceStop : 1;    // For underlining we need to know, if a portion
                             // is right in front of a hole portion or a
@@ -246,8 +275,6 @@ public:
     BOOL bUppr  : 1;
     BOOL bDrawSp: 1;
     BOOL bGreyWv: 1;
-    BOOL bSpaceSt: 1;
-    BOOL bSnapToGrd : 1;
     BOOL bLeft  : 1;
     BOOL bRight : 1;
     BOOL bKana  : 1;
@@ -396,11 +423,9 @@ public:
     }
 #ifdef VERTICAL_LAYOUT
     BOOL IsSpaceStop() const {
-        ASSERT( bSpaceSt, "DrawTextInfo: Undefined SpaceStop" );
         return bSpaceStop;
     }
     BOOL SnapToGrid() const {
-        ASSERT( bSnapToGrd, "DrawTextInfo: Undefined Grid" );
         return bSnapToGrid;
     }
 #endif
@@ -536,16 +561,8 @@ public:
     void SetDarkBack( BOOL bNew ){ bDarkBack = bNew; }
 
 #ifdef VERTICAL_LAYOUT
-    void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew;
-#ifndef PRODUCT
-        bSpaceSt = TRUE;
-#endif
-    }
-    void SetSnapToGrid( BOOL bNew ) { bSnapToGrid = bNew;
-#ifndef PRODUCT
-        bSnapToGrd = TRUE;
-#endif
-    }
+    void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew; }
+    void SetSnapToGrid( BOOL bNew ) { bSnapToGrid = bNew; }
 #endif
 
     void Shift( USHORT nDir );

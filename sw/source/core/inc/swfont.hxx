@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-28 17:53:41 $
+ *  last change: $Author: fme $ $Date: 2002-03-08 16:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
+#endif
+
+#ifdef VERTICAL_LAYOUT
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>     // SwDrawTextInfo
+#endif
 #endif
 
 class LinguBase;        // SetLingu()
@@ -378,8 +384,13 @@ public:
     void DoOnCapitals( SwDoCapitals &rDo )
         { aSub[nActual].DoOnCapitals( rDo ); }
 
+#ifdef VERTICAL_LAYOUT
+    Size _GetTxtSize( SwDrawTextInfo& rInf )
+        { rInf.SetFont( this ); return aSub[nActual]._GetTxtSize( rInf ); }
+#else
     Size _GetTxtSize( SwDrawTextInfo& rInf )
         { return aSub[nActual]._GetTxtSize( rInf ); }
+#endif
 
     xub_StrLen GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
