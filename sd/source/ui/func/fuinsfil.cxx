@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:03:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,11 +162,12 @@
 #include "DrawDocShell.hxx"
 #include "app.hrc"
 #include "unmovss.hxx"
-#include "inspagob.hxx"
+//CHINA001 #include "inspagob.hxx"
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
 #endif
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "inspagob.hrc" //CHINA001
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
@@ -437,13 +438,17 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     List* pBookmarkList = NULL;
 
     pDocSh->SetWaitCursor( FALSE );
-    SdInsertPagesObjsDlg* pDlg = new SdInsertPagesObjsDlg( NULL, pDoc,
+//CHINA001  SdInsertPagesObjsDlg* pDlg = new SdInsertPagesObjsDlg( NULL, pDoc,
+//CHINA001  pMedium, aFile );
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    AbstractSdInsertPagesObjsDlg* pDlg = pFact->CreateSdInsertPagesObjsDlg(ResId( DLG_INSERT_PAGES_OBJS ), NULL, pDoc,
                                                     pMedium, aFile );
-
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     // Ev. wird eine QueryBox geoeffnet ("Links aktualisieren?"),
     // daher wird der Dialog der aktuelle DefModalDialogParent
     ::Window* pDefParent = GetpApp()->GetDefDialogParent();
-    GetpApp()->SetDefDialogParent(pDlg);
+    GetpApp()->SetDefDialogParent(pDlg->GetWindow()); //CHINA001 GetpApp()->SetDefDialogParent(pDlg);
 
     USHORT nRet = pDlg->Execute();
 
@@ -577,9 +582,13 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     pDocSh->SetWaitCursor( FALSE );
-    SdInsertPagesObjsDlg* pDlg = new SdInsertPagesObjsDlg( NULL, pDoc,
+//CHINA001  SdInsertPagesObjsDlg* pDlg = new SdInsertPagesObjsDlg( NULL, pDoc,
+//CHINA001  NULL, aFile );
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    AbstractSdInsertPagesObjsDlg* pDlg = pFact->CreateSdInsertPagesObjsDlg(ResId( DLG_INSERT_PAGES_OBJS ), NULL, pDoc,
                                                         NULL, aFile );
-
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     USHORT nRet = pDlg->Execute();
     pDocSh->SetWaitCursor( TRUE );
 
