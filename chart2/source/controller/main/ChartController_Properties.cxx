@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-15 20:24:06 $
+ *  last change: $Author: iha $ $Date: 2003-12-15 20:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,12 +240,6 @@ private:
             break;
             case OBJECTTYPE_AXIS_UNITLABEL:
                     break;
-            case OBJECTTYPE_GRID:
-                pItemConverter =  new wrapper::GraphicPropertyItemConverter(
-                                        xObjectProperties, rDrawModel.GetItemPool(),
-                                        rDrawModel,
-                                        wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES );
-                    break;
             case OBJECTTYPE_DATA_LABELS:
             case OBJECTTYPE_DATA_SERIES:
             case OBJECTTYPE_DATA_LABEL:
@@ -277,7 +271,9 @@ private:
                                         bIncludeStatistics );
                     break;
             }
+            case OBJECTTYPE_GRID:
             case OBJECTTYPE_DATA_ERRORS:
+            case OBJECTTYPE_DATA_CURVE:
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel,
@@ -288,8 +284,6 @@ private:
             case OBJECTTYPE_DATA_ERRORS_Y:
                     break;
             case OBJECTTYPE_DATA_ERRORS_Z:
-                    break;
-            case OBJECTTYPE_DATA_CURVE:
                     break;
             case OBJECTTYPE_DATA_STOCK_RANGE:
                     break;
