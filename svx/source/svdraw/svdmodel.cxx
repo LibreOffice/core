@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 08:40:13 $
+ *  last change: $Author: sj $ $Date: 2001-05-22 10:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1562,7 +1562,7 @@ void SdrModel::WriteData(SvStream& rOut) const
             // ab V11
             rOut << UINT16(rOut.GetNumberFormatInt());
 
-            rOut.SetCompressMode(nNewCompressMode);
+            rOut.SetCompressMode( (sal_uInt16)nNewCompressMode);
             // CompressMode erst an dieser Stelle setzen, damit konform zu ReadData()
         }
 
@@ -1876,7 +1876,7 @@ void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
 
 #ifdef DBG_UTIL
             ByteString aMsg("Das Format dieser Datei ist noch von April '95 (Version ");
-            aMsg += rHead.GetVersion();
+            aMsg += ByteString::CreateFromInt32( rHead.GetVersion() );
             aMsg += "). Mit dieser Programmversion kann das nicht mehr gelesen werden";
 
             DBG_ERROR(aMsg.GetBuffer());
