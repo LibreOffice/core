@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,13 +74,13 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text [ ENGLISH ] = "Insert pages/objects" ;
     Text [ english_us ] = "Insert Slides/Objects" ;
     Text [ italian ] = "Inserisci pagine/oggetti" ;
-    Text [ spanish ] = "Insertar páginas/objetos" ;
+    Text [ spanish ] = "Insertar diapositivas/objetos" ;
     Text [ french ] = "Insertion de pages/d'objets" ;
     Text [ dutch ] = "Pagina/objecten invoegen" ;
     Text [ swedish ] = "Infoga sidor/objekt" ;
     Text [ danish ] = "Indsæt sider/objekter" ;
     Text [ portuguese ] = "Inserir páginas/objectos" ;
-    Text [ portuguese_brazilian ] = "Seiten/Objekte einf?en" ;
+    Text [ portuguese_brazilian ] = "Inserir Slides/Objetos" ;
     Text[ chinese_simplified ] = "æ’å…¥é¡µé¢æˆ–å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü ñëàéäû/îáúåêòû";
     Text[ polish ] = "Wstaw slajdy/obiekty";
@@ -129,10 +129,10 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text [ swedish ] = "~Länk" ;
         Text [ danish ] = "Kæde" ;
         Text [ portuguese ] = "~Ligação" ;
-        Text [ portuguese_brazilian ] = "~Verkn?fung" ;
+        Text [ portuguese_brazilian ] = "~Vínculo" ;
         Text[ chinese_simplified ] = "é“¾æ¥(~L)";
         Text[ russian ] = "~Ññûëêà";
-        Text[ polish ] = "£¹cze";
+        Text[ polish ] = "~Po³¹cz";
         Text[ japanese ] = "ãƒªãƒ³ã‚¯(~L)";
         Text[ chinese_traditional ] = "æ·å¾‘(~L)";
         Text[ arabic ] = "ÇÑÊÈÇØ";
@@ -143,6 +143,9 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ catalan ] = "~Enllaç";
         Text[ finnish ] = "~Linkitä tiedostoon";
         Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+        Text[ czech ] = "Odkaz";
+        Text[ hebrew ] = "~VerknÃ¼pfung";
+        Text[ hindi ] = "~à¤•à¤¡à¤¼à¥€";
     };
     CheckBox CBX_CHECK_MASTERS
     {
@@ -160,8 +163,8 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ italian ] = "Elimi~na pagine di sfondo non utilizzate";
         Text[ danish ] = "Slet ikke-brugte baggrundssider";
         Text[ swedish ] = "Radera ej a~nvända bakgrundssidor";
-        Text[ polish ] = "Usuñ nieu¿ywane strony t³a";
-        Text[ portuguese_brazilian ] = "~Remove not used master pages";
+        Text[ polish ] = "Usuñ nieu¿ywane ~t³a";
+        Text[ portuguese_brazilian ] = "~Excluir planos de fundo não utilizados";
         Text[ japanese ] = "æœªä½¿ç”¨ã®ãƒã‚¹ã‚¿ãƒ¼ãƒ¼ãƒšãƒ¼ã‚¸ã¯å‰Šé™¤ã™ã‚‹(~R)";
         Text[ chinese_simplified ] = "æ¸…é™¤ä¸é‡‡ç”¨çš„èƒŒæ™¯é¡µé¢(~R)";
         Text[ chinese_traditional ] = "åˆªé™¤ä¸ç”¨çš„èƒŒæ™¯é é¢(~R)";
@@ -172,6 +175,9 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ catalan ] = "Suprimeix els ~fons no utilitzats";
         Text[ finnish ] = "Poista käyttämättömät taus~tat";
         Text[ thai ] = "à¸¥à¸šà¸à¸·à¹‰à¸™~à¸«à¸¥à¸±à¸‡à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹ƒà¸Šà¹‰";
+        Text[ czech ] = "Smazat nepouÅ¾itÃ¡ pozadÃ­";
+        Text[ hebrew ] = "~Nicht verwendete Hintergrundseiten lÃ¶schen";
+        Text[ hindi ] = "~à¤…à¤¨à¥à¤­à¥à¤¯à¤¸à¥à¤¤ à¤ªà¥ƒà¤·à¥à¤ à¤­à¤¾à¤— à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤“";
     };
     Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíùí/óåëßäùí";
     Text[ korean ] = "ìŠ¬ë¼ì´ë“œ/ê°œì²´ ì‚½ì…";
@@ -180,7 +186,23 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ catalan ] = "Insereix diapositives/objectes";
     Text[ finnish ] = "Lisää dioja tai objekteja";
     Text[ thai ] = "à¹à¸—à¸£à¸à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡/à¸§à¸±à¸•à¸–à¸¸";
+    Text[ czech ] = "VloÅ¾it snÃ­mky/objekty";
+    Text[ hebrew ] = "Seiten/Objekte einfÃ¼gen";
+    Text[ hindi ] = "à¤¸à¥à¤²à¤‡à¤¡à¥‹à¤‚/à¤µà¤¸à¥à¤¤à¥à¤“à¤‚ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
