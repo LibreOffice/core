@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 11:28:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
 static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
 static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
 static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DROP_DOWN[] = "DropDown";
 
 
 SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
@@ -377,6 +378,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
 
     // deprecated fields
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_TABLE_FORMULA, FIELD_ID_TABLE_FORMULA ),
+    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DROP_DOWN, FIELD_ID_DROP_DOWN ),
     ENUM_STRING_MAP_END()
 };
 
@@ -402,6 +404,9 @@ inline sal_Int8 const GetInt8Property(const OUString&,
 inline DateTime const GetDateTimeProperty( const OUString& sPropName,
                                            const Reference<XPropertySet> & xPropSet);
 inline Date const GetDateProperty( const OUString& sPropName,
+                                   const Reference<XPropertySet> & xPropSet);
+inline Sequence<OUString> const GetStringSequenceProperty(
+                                   const OUString& sPropName,
                                    const Reference<XPropertySet> & xPropSet);
 
 
@@ -488,6 +493,8 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM("DataCommandType")),
       sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")),
       sPropertyCharStyleNames(RTL_CONSTASCII_USTRINGPARAM("CharStyleNames")),
+      sPropertyItems(RTL_CONSTASCII_USTRINGPARAM("Items")),
+      sPropertySelectedItem(RTL_CONSTASCII_USTRINGPARAM("SelectedItem")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -725,6 +732,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_MEASURE:
         case FIELD_ID_URL:
         case FIELD_ID_TABLE_FORMULA:
+        case FIELD_ID_DROP_DOWN:
             ; // these field IDs are final
             break;
 
@@ -834,6 +842,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_SHEET_NAME:
     case FIELD_ID_MEASURE:
     case FIELD_ID_URL:
+    case FIELD_ID_DROP_DOWN:
         // always string:
         return sal_True;
 
@@ -1052,6 +1061,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_SHEET_NAME:
     case FIELD_ID_MEASURE:
     case FIELD_ID_URL:
+    case FIELD_ID_DROP_DOWN:
         ; // no formats for these fields!
         break;
 
@@ -1850,6 +1860,19 @@ void XMLTextFieldExport::ExportFieldHelper(
                              sal_False, sal_False );
         ExportElement( XML_TABLE_FORMULA, sPresentation );
         break;
+
+    case FIELD_ID_DROP_DOWN:
+    {
+        ProcessString(XML_NAME, GetStringProperty(sPropertyName, rPropSet));
+        SvXMLElementExport aElem( GetExport(),
+                                  XML_NAMESPACE_TEXT, XML_DROPDOWN,
+                                  sal_False, sal_False );
+        ProcessStringSequence(
+            GetStringSequenceProperty( sPropertyItems, rPropSet ),
+            GetStringProperty( sPropertySelectedItem, rPropSet ) );
+        GetExport().Characters( sPresentation );
+    }
+    break;
 
     case FIELD_ID_UNKNOWN:
     default:
@@ -2697,6 +2720,43 @@ void XMLTextFieldExport::ProcessCommandType(
 }
 
 
+void XMLTextFieldExport::ProcessStringSequence(
+    const Sequence<OUString>& rSequence,
+    const OUString sSelected )
+{
+    // find selected element
+    sal_Int32 nSelected = -1;
+    sal_Int32 nLength = rSequence.getLength();
+    const OUString* pSequence = rSequence.getConstArray();
+    for( sal_Int32 i = 0; i < nLength; i++ )
+    {
+        if( pSequence[i] == sSelected )
+            nSelected = i;
+    }
+
+    // delegate to ProcessStringSequence(OUString,sal_Int32)
+    ProcessStringSequence( rSequence, nSelected );
+}
+
+void XMLTextFieldExport::ProcessStringSequence(
+    const Sequence<OUString>& rSequence,
+    sal_Int32 nSelected )
+{
+    sal_Int32 nLength = rSequence.getLength();
+    const OUString* pSequence = rSequence.getConstArray();
+    for( sal_Int32 i = 0; i < nLength; i++ )
+    {
+        if( i == nSelected )
+            rExport.AddAttribute( XML_NAMESPACE_TEXT,
+                                  XML_CURRENT_SELECTED, XML_TRUE );
+        rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_VALUE, pSequence[i] );
+        SvXMLElementExport aElement( rExport, XML_NAMESPACE_TEXT, XML_LABEL,
+                                     sal_False, sal_False );
+    }
+}
+
+
+
 // explode a field master name into field type and field name
 sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
     const OUString& sMasterName, OUString& sFieldType, OUString& sVarName)
@@ -3444,3 +3504,12 @@ inline Date const GetDateProperty(
     return aDate;
 }
 
+inline Sequence<OUString> const GetStringSequenceProperty(
+    const OUString& sPropName,
+    const Reference<XPropertySet> & xPropSet)
+{
+    Any aAny = xPropSet->getPropertyValue(sPropName);
+    Sequence<OUString> aSequence;
+    aAny >>= aSequence;
+    return aSequence;
+}
