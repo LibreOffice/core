@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:39:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,9 +160,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_VALIDATION_XVALIDATABLEFORMCOMPONENT_HPP_
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
@@ -347,17 +344,13 @@ protected:
 //= OBoundControl
 //= a form control implementing the XBoundControl interface
 //==================================================================
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::form::XBoundControl
-                            ,   ::com::sun::star::form::validation::XFormComponentValidityListener
-                            ,   ::com::sun::star::beans::XPropertiesChangeListener
+typedef ::cppu::ImplHelper1 <   ::com::sun::star::form::XBoundControl
                             >  OBoundControl_BASE;
 class OBoundControl :public OControl
                     ,public OBoundControl_BASE
 {
 protected:
     sal_Bool    m_bLocked : 1;
-    sal_Bool        m_bLastKnownValidity : 1;           // remember the validity of the current text/value
-    ::rtl::OUString m_sLastKnownInvalidityExplanation;  // remember the explanation for invalidity
 
     ::rtl::OUString m_sOriginalHelpText;                // as long as the text/value is invalid, we change the help text of our peer
     ::com::sun::star::awt::FontDescriptor
@@ -384,12 +377,6 @@ public:
     // XControl
     virtual sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw (::com::sun::star::uno::RuntimeException);
 
-    // XFormComponentValidityListener
-    virtual void SAL_CALL componentValidityChanged( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-
-    // XPropertiesChangeListener
-    virtual void SAL_CALL propertiesChange( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
@@ -400,15 +387,6 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
     // implement the lock setting
     virtual void         _setLock(sal_Bool _bLock);
-
-private:
-    void    implCheckValidity() SAL_THROW(());
-    void    implMarkValid() SAL_THROW(( ::com::sun::star::uno::Exception ));
-    void    implMarkInvalid( const ::rtl::OUString& _rExplanation ) SAL_THROW(( ::com::sun::star::uno::Exception ));
-
-    void    implStartStopModelValidityListening( bool _bStart );
-
-    bool    implPropertyChanged( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue );
 };
 
 //==================================================================
@@ -647,6 +625,14 @@ class OBoundControlModel    :public OControlModel
                             ,public OBoundControlModel_VALIDATION
                             ,public ::comphelper::OPropertyChangeListener
 {
+protected:
+    enum ValueChangeInstigator
+    {
+        eDbColumnBinding,
+        eExternalBinding,
+        eOther
+    };
+
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xField;
@@ -654,30 +640,16 @@ private:
     ::rtl::OUString                     m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
 
-protected:
     cppu::OInterfaceContainerHelper     m_aUpdateListeners;
     cppu::OInterfaceContainerHelper     m_aResetListeners;
     ::std::auto_ptr< OFormComponentListeners >
                                         m_pFormComponentListeners;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
-                                        m_xCursor;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate >
-                                        m_xColumnUpdate;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >
-                                        m_xColumn;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
                                         m_xExternalBinding;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidator >
                                         m_xValidator;
 
-
-    ::rtl::OUString                     m_aLabelServiceName;
-        // when setting the label for our control (property FM_PROP_CONTROLLABEL, member m_xLabelControl),
-        // we accept only objects supporting an XControlModel interface, an XServiceInfo interface and
-        // support for a service (XServiceInfo::supportsService) determined by this string.
-        // Any other arguments will throw an IllegalArgumentException.
-        // The default value is FM_COMPONENT_FIXEDTEXT.
 
 // <properties>
     ::rtl::OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
@@ -695,12 +667,35 @@ protected:
     sal_Bool                    m_bSupportsExternalBinding  : 1;    // do we support XBindableValue?
     sal_Bool                    m_bSupportsValidation       : 1;    // do we support XValidatable?
     sal_Bool                    m_bForwardValueChanges      : 1;    // do we currently handle changes in the bound database field?
-    sal_Bool                    m_bSettingAggregateState    : 1;    // true within setNewAggregateState
+    sal_Bool                    m_bTransferingValue         : 1;    // true if we're currently transfering our value to an external binding
     sal_Bool                    m_bIsCurrentValueValid      : 1;    // flag specifying whether our current value is valid, relative to our external validator
+
+    ValueChangeInstigator       m_eControlValueChangeInstigator;
+
+protected:
+    ::rtl::OUString                     m_aLabelServiceName;
+        // when setting the label for our control (property FM_PROP_CONTROLLABEL, member m_xLabelControl),
+        // we accept only objects supporting an XControlModel interface, an XServiceInfo interface and
+        // support for a service (XServiceInfo::supportsService) determined by this string.
+        // Any other arguments will throw an IllegalArgumentException.
+        // The default value is FM_COMPONENT_FIXEDTEXT.
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
+                                        m_xCursor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate >
+                                        m_xColumnUpdate;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >
+                                        m_xColumn;
 
 protected:
     inline const ::rtl::OUString&   getValuePropertyName( ) const       { return m_sValuePropertyName; }
     inline sal_Int32                getValuePropertyAggHandle( ) const  { return m_nValuePropertyAggregateHandle; }
+    inline const ::rtl::OUString&   getControlSource( ) const           { return m_aControlSource; }
+    inline sal_Bool                 isRequired() const                  { return m_bRequired; }
+    inline sal_Bool                 isLoaded() const                    { return m_bLoaded; }
+
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >&
+                                    getExternalValueBinding() const { return m_xExternalBinding; }
 
 protected:
 
@@ -862,7 +857,8 @@ protected:
             <member>translateExternalValueToControlValue</member>
     */
     virtual void            setControlValue(
-                                const ::com::sun::star::uno::Any& _rValue
+                                const ::com::sun::star::uno::Any& _rValue,
+                                ValueChangeInstigator _eInstigator
                             );
 
     /** retrieves the current value of the control
