@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basscript.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-09-16 15:23:11 $
+ *  last change: $Author: tbe $ $Date: 2003-09-23 10:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace basprov
         if ( m_pMethod )
         {
             // check if compiled
-            SbModule* pModule = (SbModule*)m_pMethod->GetParent();
+            SbModule* pModule = static_cast< SbModule* >( m_pMethod->GetParent() );
             if ( pModule && !pModule->IsCompiled() )
                 pModule->Compile();
 
@@ -164,8 +164,8 @@ namespace basprov
                 for ( sal_Int32 i = 0; i < nParamsCount; ++i )
                 {
                     SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
-                    unoToSbxValue( (SbxVariable*)xSbxVar, pParams[i] );
-                    xSbxParams->Put( xSbxVar, (USHORT)i + 1 );
+                    unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
+                    xSbxParams->Put( xSbxVar, static_cast< USHORT >( i ) + 1 );
                 }
             }
             if ( xSbxParams.Is() )
