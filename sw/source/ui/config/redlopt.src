@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:16:34 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1027,7 +1027,7 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_traditional ] = "ÃC¦â";
         Text[ arabic ] = "Çááæä";
         Text[ greek ] = "×ñþìá";
-        Text[ korean ] = "»ö»ó";
+        Text[ korean ] = "»ö";
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
     };
