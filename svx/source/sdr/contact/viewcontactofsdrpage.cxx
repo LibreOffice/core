@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:55:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,74 +422,90 @@ namespace sdr
         // #i37869#
         void ViewContactOfSdrPage::DrawPaperBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage)
         {
-            OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+            // #i42714#
+            if(!rDisplayInfo.OutputToPrinter())
+            {
+                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
 
-            pOut->SetLineColor(Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor));
-            pOut->SetFillColor();
-            pOut->DrawRect(Rectangle(
-                0L, 0L,
-                rPage.GetWdt(), rPage.GetHgt()));
+                pOut->SetLineColor(Color(rDisplayInfo.GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor));
+                pOut->SetFillColor();
+                pOut->DrawRect(Rectangle(
+                    0L, 0L,
+                    rPage.GetWdt(), rPage.GetHgt()));
+            }
         }
 
         // #i37869#
         void ViewContactOfSdrPage::DrawBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage)
         {
-            if(rPage.GetLftBorder() || rPage.GetUppBorder() || rPage.GetRgtBorder() || rPage.GetLwrBorder())
+            // #i42714#
+            if(!rDisplayInfo.OutputToPrinter())
             {
-                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-                Color aBorderColor;
-
-                if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+                if(rPage.GetLftBorder() || rPage.GetUppBorder() || rPage.GetRgtBorder() || rPage.GetLwrBorder())
                 {
-                    aBorderColor = rDisplayInfo.GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+                    Color aBorderColor;
+
+                    if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
+                    {
+                        aBorderColor = rDisplayInfo.GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+                    }
+                    else
+                    {
+                        aBorderColor = rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor;
+                    }
+
+                    pOut->SetLineColor(aBorderColor);
+                    pOut->SetFillColor();
+
+                    Rectangle aRect(Rectangle(
+                        0L, 0L,
+                        rPage.GetWdt(), rPage.GetHgt()));
+
+                    aRect.Left() += rPage.GetLftBorder();
+                    aRect.Top() += rPage.GetUppBorder();
+                    aRect.Right() -= rPage.GetRgtBorder();
+                    aRect.Bottom() -= rPage.GetLwrBorder();
+
+                    pOut->DrawRect(aRect);
                 }
-                else
-                {
-                    aBorderColor = rDisplayInfo.GetColorConfig().GetColorValue(svtools::DOCBOUNDARIES).nColor;
-                }
-
-                pOut->SetLineColor(aBorderColor);
-                pOut->SetFillColor();
-
-                Rectangle aRect(Rectangle(
-                    0L, 0L,
-                    rPage.GetWdt(), rPage.GetHgt()));
-
-                aRect.Left() += rPage.GetLftBorder();
-                aRect.Top() += rPage.GetUppBorder();
-                aRect.Right() -= rPage.GetRgtBorder();
-                aRect.Bottom() -= rPage.GetLwrBorder();
-
-                pOut->DrawRect(aRect);
             }
         }
 
         void ViewContactOfSdrPage::DrawHelplines(DisplayInfo& rDisplayInfo)
         {
-            const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-
-            if(pPageView)
+            // #i42714#
+            if(!rDisplayInfo.OutputToPrinter())
             {
-                const SdrHelpLineList& rHelpLineList = pPageView->GetHelpLines();
-                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+                const SdrPageView* pPageView = rDisplayInfo.GetPageView();
 
-                rHelpLineList.DrawAll(*pOut, Point());
+                if(pPageView)
+                {
+                    const SdrHelpLineList& rHelpLineList = pPageView->GetHelpLines();
+                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+
+                    rHelpLineList.DrawAll(*pOut, Point());
+                }
             }
         }
 
         void ViewContactOfSdrPage::DrawGrid(DisplayInfo& rDisplayInfo)
         {
-            const SdrPageView* pPageView = rDisplayInfo.GetPageView();
-
-            if(pPageView)
+            // #i42714#
+            if(!rDisplayInfo.OutputToPrinter())
             {
-                const SdrView& rView = pPageView->GetView();
-                OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+                const SdrPageView* pPageView = rDisplayInfo.GetPageView();
 
-                ((SdrPageView*)pPageView)->DrawGrid(
-                    *pOut,
-                    rDisplayInfo.GetPaintInfoRec()->aCheckRect,
-                    rView.GetGridColor());
+                if(pPageView)
+                {
+                    const SdrView& rView = pPageView->GetView();
+                    OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
+
+                    ((SdrPageView*)pPageView)->DrawGrid(
+                        *pOut,
+                        rDisplayInfo.GetPaintInfoRec()->aCheckRect,
+                        rView.GetGridColor());
+                }
             }
         }
 
