@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:32:18 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #endif
 
 #include <sfx2/bindings.hxx>
-#include <sfx2/ipfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svtools/aeitem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/moduleoptions.hxx>
@@ -448,7 +448,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 
             case SID_DRAW_CHART:
                 {
-                    BOOL bOle = GetViewFrame()->ISA(SfxInPlaceFrame);
+                    BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
                     if ( bOle || !SvtModuleOptions().IsChart() )
                         rSet.DisableItem( nWhich );
                 }
