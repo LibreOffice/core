@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:44:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,12 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
+    virtual void        EstablishContacts(
+                            UnoIDL_PE *         io_pParentPE,
+                            ary::idl::Gate &
+                                                io_rGate,
+                            TokenProcessing_Result &
+                                                o_rResult );
     virtual void        Enter(
                             E_EnvStackAction    i_eWayOfEntering );
     virtual void        Leave(
@@ -140,11 +146,6 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                             ary::idl::CodeEntity &
                                                 io_rCe );
 
-/*
-    const SemanticNode &
-                        Node() const            { return aMyNode; }
-    SemanticNode &      Node()                  { return aMyNode; }
-*/
     UnoIDL_PE *         Parent() const          { return aMyNode.Parent(); }
 
     void                SetResult(
@@ -155,7 +156,8 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
     virtual const ary::idl::Module &
                         CurNamespace() const;
     ary::idl::Gate &    Gate() const            { return aMyNode.AryGate(); }
-
+    TokenProcessing_Result &
+                        TokenResult() const     { return aMyNode.TokenResult(); }
     DYN ary::info::CodeInformation *
                         ReleaseDocu()           { return pDocu.Release(); }
 
