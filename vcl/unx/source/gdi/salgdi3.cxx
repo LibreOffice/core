@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:57:41 $
+ *  last change: $Author: obo $ $Date: 2003-12-02 15:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1897,11 +1897,11 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
         return;
     }
 
-    ExtendedFontStruct* pFont = maGraphicsData.mXFont[0];
+    ExtendedFontStruct* pFont = mXFont[0];
     if( pFont != NULL )
     {
         pFont->ToImplFontMetricData( pMetric );
-        if ( maGraphicsData.bFontVertical_ )
+        if ( bFontVertical_ )
             pMetric->mnOrientation = 0;
     }
 }
