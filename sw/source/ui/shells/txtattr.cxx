@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,7 +836,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_CHAR_KERNING:
             case RES_PARATR_DROP:
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 const SfxPoolItem& rItem = aCoreSet.Get(GetPool().GetWhich(nSlot), TRUE);
                 rSet.Put(rItem);
 #else
@@ -861,7 +861,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
                 rSh.GetAttr(aSet);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
                 rSet.Put(rItem);
 #else
