@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:05:10 $
+ *  last change: $Author: aw $ $Date: 2001-05-25 16:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,8 @@ const Rectangle& SdrCaptionObj::GetSnapRect() const
 void SdrCaptionObj::NbcSetSnapRect(const Rectangle& rRect)
 {
     // !!!!! fehlende Impl.
+    // #86616#
+    SdrRectObj::NbcSetSnapRect(rRect);
 }
 
 const Rectangle& SdrCaptionObj::GetLogicRect() const
