@@ -58,6 +58,7 @@ package org.openoffice.xmerge.converter.xml.xslt;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -144,8 +145,65 @@ public final class DocumentSerializerImpl
     public ConvertData serialize() throws ConvertException, IOException {
     String docName = sxwDoc.getName();
     org.w3c.dom.Document domDoc = sxwDoc.getContentDOM();
+    org.w3c.dom.Document metaDoc = sxwDoc.getMetaDOM();
+    org.w3c.dom.Document styleDoc = sxwDoc.getStyleDOM();
     ByteArrayOutputStream baos= new ByteArrayOutputStream();
            ConvertData cd = new ConvertData();
+    Node offnode = (Node)domDoc.getDocumentElement();
+    if (!(offnode.getNodeName()).equals("office:document")){
+        try{
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder= builderFactory.newDocumentBuilder();
+        DOMImplementation domImpl = builder.getDOMImplementation();
+        DocumentType docType =domImpl.createDocumentType("office:document","-//OpenOffice.org//DTD OfficeDocument 1.0//EN",null);
+        org.w3c.dom.Document newDoc = domImpl.createDocument("http://openoffice.org/2000/office","office:document",docType);
+
+
+        Element rootElement=newDoc.getDocumentElement();
+        rootElement.setAttribute("xmlns:office","http://openoffice.org/2000/office");
+        rootElement.setAttribute("xmlns:style","http://openoffice.org/2000/style" );
+        rootElement.setAttribute("xmlns:text","http://openoffice.org/2000/text");
+         rootElement.setAttribute("xmlns:table","http://openoffice.org/2000/table");
+
+        rootElement.setAttribute("xmlns:draw","http://openoffice.org/2000/drawing");
+        rootElement.setAttribute("xmlns:fo","http://www.w3.org/1999/XSL/Format" );
+        rootElement.setAttribute("xmlns:xlink","http://www.w3.org/1999/xlink" );
+        rootElement.setAttribute("xmlns:dc","http://purl.org/dc/elements/1.1/" );
+        rootElement.setAttribute("xmlns:meta","http://openoffice.org/2000/meta" );
+        rootElement.setAttribute("xmlns:number","http://openoffice.org/2000/datastyle" );
+        rootElement.setAttribute("xmlns:svg","http://www.w3.org/2000/svg" );
+        rootElement.setAttribute("xmlns:chart","http://openoffice.org/2000/chart" );
+        rootElement.setAttribute("xmlns:dr3d","http://openoffice.org/2000/dr3d" );
+        rootElement.setAttribute("xmlns:math","http://www.w3.org/1998/Math/MathML" );
+        rootElement.setAttribute("xmlns:form","http://openoffice.org/2000/form" );
+        rootElement.setAttribute("xmlns:script","http://openoffice.org/2000/script" );
+        rootElement.setAttribute("xmlns:config","http://openoffice.org/2001/config" );
+        rootElement.setAttribute("office:class","text" );
+        rootElement.setAttribute("office:version","1.0");
+
+
+        NodeList nodeList;
+        Node tmpNode;
+        Node rootNode = (Node)rootElement;
+
+        nodeList= metaDoc.getElementsByTagName("office:meta");
+        tmpNode = newDoc.importNode(nodeList.item(0),true);
+        rootNode.appendChild(tmpNode);
+
+         nodeList= styleDoc.getElementsByTagName("office:styles");
+        tmpNode = newDoc.importNode(nodeList.item(0),true);
+        rootNode.appendChild(tmpNode);
+
+        nodeList= domDoc.getElementsByTagName("office:body");
+        tmpNode = newDoc.importNode(nodeList.item(0),true);
+        rootNode.appendChild(tmpNode);
+        domDoc=newDoc;
+        }catch(Exception e){
+        System.out.println("\n"+e);
+        }
+
+    }
+
     try{
          baos=transform(domDoc);
     }
@@ -220,6 +278,7 @@ public final class DocumentSerializerImpl
                  //serializer.setOutputStream(System.out);
           serializer.setOutputStream(baos);
           serializer.asDOMSerializer().serialize(xmlDomResult.getNode());
+          //serializer.asDOMSerializer().serialize(xmlDomSource.getNode());
           //System.out.println(baos.toString());
           //System.out.println("\n** Transform Complete ***");
        }

@@ -97,6 +97,9 @@ public abstract class OfficeDocument
     /** DOM <code>Document</code> of content.xml. */
     private Document contentDoc = null;
 
+   /** DOM <code>Document</code> of meta.xml. */
+    private Document metaDoc = null;
+
     /** DOM <code>Document</code> of content.xml. */
     private Document styleDoc = null;
 
@@ -181,6 +184,20 @@ public abstract class OfficeDocument
     public Document getContentDOM() {
 
         return contentDoc;
+    }
+
+ /**
+     *  Return a DOM <code>Document</code> object of the meta.xml
+     *  file.  Note that a content DOM is not created when the constructor
+     *  is called.  So, either the <code>read</code> method or the
+     *  <code>initContentDOM</code> method will need to be called ahead
+     *  on this object before calling this method.
+     *
+     *  @return  DOM <code>Document</code> object.
+     */
+    public Document getMetaDOM() {
+
+        return metaDoc;
     }
 
 
@@ -298,6 +315,21 @@ public abstract class OfficeDocument
                 throw new OfficeDocumentException(ex);
             }
         }
+
+    byte metaBytes[] = zip.getMetaXMLBytes();
+
+        if (metaBytes != null) {
+
+            try {
+
+                metaDoc = parse(builder, metaBytes);
+
+            } catch (SAXException ex) {
+
+                throw new OfficeDocumentException(ex);
+            }
+        }
+
     }
 
 
@@ -363,6 +395,19 @@ public abstract class OfficeDocument
              throw new OfficeDocumentException(ex);
          }
          }
+         byte metaBytes[] = zip.getMetaXMLBytes();
+
+         if (metaBytes != null) {
+
+            try {
+
+                metaDoc = parse(builder, metaBytes);
+
+            } catch (SAXException ex) {
+
+                throw new OfficeDocumentException(ex);
+            }
+        }
     }
     else{
         try{

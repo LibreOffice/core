@@ -83,6 +83,7 @@ class OfficeZip {
     private final static String CONTENTXML = "content.xml";
 
     private final static String STYLEXML = "styles.xml";
+    private final static String METAXML = "meta.xml";
 
     private final static int BUFFERSIZE = 1024;
 
@@ -91,6 +92,7 @@ class OfficeZip {
     private int contentIndex = -1;
 
     private int styleIndex = -1;
+      private int metaIndex = -1;
 
     /** Default constructor. */
     OfficeZip() {
@@ -145,7 +147,10 @@ class OfficeZip {
                 contentIndex = i;
             } else if (isSameName(name, STYLEXML)) {
                 styleIndex = i;
+            }else if (isSameName(name, METAXML)) {
+                metaIndex = i;
             }
+
         }
 
         zis.close();
@@ -177,6 +182,17 @@ class OfficeZip {
         return getEntryBytes(styleIndex);
     }
 
+     /**
+     *  This method returns the METAXML file in a
+     *  <code>byte</code> array.  It returns null if there is
+     *  no METAXML in this zip file.
+     *
+     *  @return  METAXML in a <code>byte</code> array.
+     */
+    byte[] getMetaXMLBytes() {
+        return getEntryBytes(metaIndex);
+    }
+
 
     /**
      *  Used by the <code>getContentXMLBytes</code> method and the
@@ -199,7 +215,6 @@ class OfficeZip {
             Entry entry = (Entry) entryList.get(index);
             bytes = entry.bytes;
         }
-
         return bytes;
     }
 
@@ -227,6 +242,19 @@ class OfficeZip {
     void setStyleXMLBytes(byte bytes[]) {
 
         styleIndex = setEntryBytes(styleIndex, bytes, STYLEXML);
+    }
+
+
+      /**
+     *  Set or replace the <code>byte</code> array for the
+     *  METAXML file.
+     *
+     *  @param  bytes  <code>byte</code> array for the
+     *                 METAXML file.
+     */
+    void setMetaXMLBytes(byte bytes[]) {
+
+        metaIndex = setEntryBytes(metaIndex, bytes, METAXML);
     }
 
 
