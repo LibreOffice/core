@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficePrint.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-12-10 16:58:49 $
+ *  last change: $Date: 2005-02-24 17:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,7 @@ public class OfficePrint {
         {
             if (! FileHelper.exists(_sAbsoluteInputFile))
             {
-                throw new ConvWatchCancelException("Input file: " + _sAbsoluteInputFile + " does not exist.");
+                throw new ConvWatchCancelException("buildReference(): Input file: " + _sAbsoluteInputFile + " does not exist.");
             }
 
             String fs = System.getProperty("file.separator");
@@ -800,11 +800,16 @@ public class OfficePrint {
                 if (aNameAccess != null)
                 {
 
-                    // System.out.println("Show ElementNames" );
+                    // if (_sFilterName.toLowerCase().equals("help"))
+                    // {
+                    //     System.out.println("Show all possible ElementNames from current version." );
                     // String[] aElementNames = aNameAccess.getElementNames();
                     // for (int i = 0; i<aElementNames.length; i++)
                     // {
                     //     System.out.println(aElementNames[i]);
+                    // }
+                    //     System.out.println("Must quit.");
+                    //     System.out.exit(1);
                     // }
 
                     if (! aNameAccess.hasByName(_sFilterName))
