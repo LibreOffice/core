@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-14 16:20:48 $
+ *  last change: $Author: cmc $ $Date: 2002-06-21 15:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2253,8 +2253,9 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             offsets correspondingly by the offsets of the parent
             */
             const SwFrmFmt *pFmt = pPaM->GetCntntNode()->GetFrmFmt();
-            if (pFmt && !pRecord->bReplaceByFly)
+            if (pSFlyPara && pSFlyPara->pFlyFmt && !pRecord->bReplaceByFly)
             {
+                SwFlyFrmFmt *pFmt = pSFlyPara->pFlyFmt;
                 const SvxBoxItem &rParentBox = pFmt->GetBox();
                 pFSPA->nYaTop -= rParentBox.GetDistance();
                 pFSPA->nYaBottom -= rParentBox.GetDistance();
