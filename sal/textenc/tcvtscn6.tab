@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtscn6.tab,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2002-05-28 10:12:54 $
+ *  last change: $Author: sb $ $Date: 2002-06-07 13:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1234,6 +1234,92 @@ static ImplTextEncodingData const aImplGBT12345TextEncodingData
 
 /* ======================================================================= */
 
+/* #100054# In the GBK range FE50--FEA0, added those mappings (in both
+   directions) taken from GB-18030 that do not map to Unicode PUA (i.e., those
+   mappings marked with an * below):
+
+   FE50 -> U+2E81 *
+   FE51 -> U+E816
+   FE52 -> U+E817
+   FE53 -> U+E818
+   FE54 -> U+2E84 *
+   FE55 -> U+3473 *
+   FE56 -> U+3447 *
+   FE57 -> U+2E88 *
+   FE58 -> U+2E8B *
+   FE59 -> U+E81E
+   FE5A -> U+359E *
+   FE5B -> U+361A *
+   FE5C -> U+360E *
+   FE5D -> U+2E8C *
+   FE5E -> U+2E97 *
+   FE5F -> U+396E *
+   FE60 -> U+3918 *
+   FE61 -> U+E826
+   FE62 -> U+39CF *
+   FE63 -> U+39DF *
+   FE64 -> U+3A73 *
+   FE65 -> U+39D0 *
+   FE66 -> U+E82B
+   FE67 -> U+E82C
+   FE68 -> U+3B4E *
+   FE69 -> U+3C6E *
+   FE6A -> U+3CE0 *
+   FE6B -> U+2EA7 *
+   FE6C -> U+E831
+   FE6D -> U+E832
+   FE6E -> U+2EAA *
+   FE6F -> U+4056 *
+   FE70 -> U+415F *
+   FE71 -> U+2EAE *
+   FE72 -> U+4337 *
+   FE73 -> U+2EB3 *
+   FE74 -> U+2EB6 *
+   FE75 -> U+2EB7 *
+   FE76 -> U+E83B
+   FE77 -> U+43B1 *
+   FE78 -> U+43AC *
+   FE79 -> U+2EBB *
+   FE7A -> U+43DD *
+   FE7B -> U+44D6 *
+   FE7C -> U+4661 *
+   FE7D -> U+464C *
+   FE7E -> U+E843
+   FE80 -> U+4723 *
+   FE81 -> U+4729 *
+   FE82 -> U+477C *
+   FE83 -> U+478D *
+   FE84 -> U+2ECA *
+   FE85 -> U+4947 *
+   FE86 -> U+497A *
+   FE87 -> U+497D *
+   FE88 -> U+4982 *
+   FE89 -> U+4983 *
+   FE8A -> U+4985 *
+   FE8B -> U+4986 *
+   FE8C -> U+499F *
+   FE8D -> U+499B *
+   FE8E -> U+49B7 *
+   FE8F -> U+49B6 *
+   FE90 -> U+E854
+   FE91 -> U+E855
+   FE92 -> U+4CA3 *
+   FE93 -> U+4C9F *
+   FE94 -> U+4CA0 *
+   FE95 -> U+4CA1 *
+   FE96 -> U+4C77 *
+   FE97 -> U+4CA2 *
+   FE98 -> U+4D13 *
+   FE99 -> U+4D14 *
+   FE9A -> U+4D15 *
+   FE9B -> U+4D16 *
+   FE9C -> U+4D17 *
+   FE9D -> U+4D18 *
+   FE9E -> U+4D19 *
+   FE9F -> U+4DAE *
+   FEA0 -> U+E864
+*/
+
 static ImplDBCSToUniLeadTab const aGBKUniLeadTab[256] =
 {
     { 0x0000,    0,    0, NULL },                               /* 0x00 */
@@ -1490,7 +1576,7 @@ static ImplDBCSToUniLeadTab const aGBKUniLeadTab[256] =
     {      0, 0x40, 0xA0, aImplDBCSToUniTab_GBK_FB },           /* 0xFB */
     {      0, 0x40, 0xA0, aImplDBCSToUniTab_GBK_FC },           /* 0xFC */
     {      0, 0x40, 0xA0, aImplDBCSToUniTab_GBK_FD },           /* 0xFD */
-    {      0, 0x40, 0x4F, aImplDBCSToUniTab_GBK_FE },           /* 0xFE */
+    {      0, 0x40, 0x9F, aImplDBCSToUniTab_GBK_FE },           /* 0xFE */
     {      0,    1,    0, NULL }                                /* 0xFF */
 };
 
@@ -1544,38 +1630,38 @@ static ImplUniToDBCSHighTab const aGBKDBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x2B */
     {    1,    0, NULL },                                       /* 0x2C */
     {    1,    0, NULL },                                       /* 0x2D */
-    {    1,    0, NULL },                                       /* 0x2E */
+    { 0x81, 0xCA, aImplUniToDBCSTab_GBK_2E },                   /* 0x2E */
     {    1,    0, NULL },                                       /* 0x2F */
     { 0x00, 0xFE, aImplUniToDBCSTab_GBK_30 },                   /* 0x30 */
     { 0x05, 0x29, aImplUniToDBCSTab_GB_31 },                    /* 0x31 */
     { 0x20, 0xA3, aImplUniToDBCSTab_GBK_32 },                   /* 0x32 */
     { 0x8E, 0xD5, aImplUniToDBCSTab_GBK_33 },                   /* 0x33 */
-    {    1,    0, NULL },                                       /* 0x34 */
-    {    1,    0, NULL },                                       /* 0x35 */
-    {    1,    0, NULL },                                       /* 0x36 */
+    { 0x47, 0x73, aImplUniToDBCSTab_GBK_34 },                   /* 0x34 */
+    { 0x9E, 0x9E, aImplUniToDBCSTab_GBK_35 },                   /* 0x35 */
+    { 0x0E, 0x1A, aImplUniToDBCSTab_GBK_36 },                   /* 0x36 */
     {    1,    0, NULL },                                       /* 0x37 */
     {    1,    0, NULL },                                       /* 0x38 */
-    {    1,    0, NULL },                                       /* 0x39 */
-    {    1,    0, NULL },                                       /* 0x3A */
-    {    1,    0, NULL },                                       /* 0x3B */
-    {    1,    0, NULL },                                       /* 0x3C */
+    { 0x18, 0xDF, aImplUniToDBCSTab_GBK_39 },                   /* 0x39 */
+    { 0x73, 0x73, aImplUniToDBCSTab_GBK_3A },                   /* 0x3A */
+    { 0x4E, 0x4E, aImplUniToDBCSTab_GBK_3B },                   /* 0x3B */
+    { 0x6E, 0xE0, aImplUniToDBCSTab_GBK_3C },                   /* 0x3C */
     {    1,    0, NULL },                                       /* 0x3D */
     {    1,    0, NULL },                                       /* 0x3E */
     {    1,    0, NULL },                                       /* 0x3F */
-    {    1,    0, NULL },                                       /* 0x40 */
-    {    1,    0, NULL },                                       /* 0x41 */
+    { 0x56, 0x56, aImplUniToDBCSTab_GBK_40 },                   /* 0x40 */
+    { 0x5F, 0x5F, aImplUniToDBCSTab_GBK_41 },                   /* 0x41 */
     {    1,    0, NULL },                                       /* 0x42 */
-    {    1,    0, NULL },                                       /* 0x43 */
-    {    1,    0, NULL },                                       /* 0x44 */
+    { 0x37, 0xDD, aImplUniToDBCSTab_GBK_43 },                   /* 0x43 */
+    { 0xD6, 0xD6, aImplUniToDBCSTab_GBK_44 },                   /* 0x44 */
     {    1,    0, NULL },                                       /* 0x45 */
-    {    1,    0, NULL },                                       /* 0x46 */
-    {    1,    0, NULL },                                       /* 0x47 */
+    { 0x4C, 0x61, aImplUniToDBCSTab_GBK_46 },                   /* 0x46 */
+    { 0x23, 0x8D, aImplUniToDBCSTab_GBK_47 },                   /* 0x47 */
     {    1,    0, NULL },                                       /* 0x48 */
-    {    1,    0, NULL },                                       /* 0x49 */
+    { 0x47, 0xB7, aImplUniToDBCSTab_GBK_49 },                   /* 0x49 */
     {    1,    0, NULL },                                       /* 0x4A */
     {    1,    0, NULL },                                       /* 0x4B */
-    {    1,    0, NULL },                                       /* 0x4C */
-    {    1,    0, NULL },                                       /* 0x4D */
+    { 0x77, 0xA3, aImplUniToDBCSTab_GBK_4C },                   /* 0x4C */
+    { 0x13, 0xAE, aImplUniToDBCSTab_GBK_4D },                   /* 0x4D */
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_4E },                   /* 0x4E */
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_4F },                   /* 0x4F */
     { 0x00, 0xFF, aImplUniToDBCSTab_GBK_50 },                   /* 0x50 */
