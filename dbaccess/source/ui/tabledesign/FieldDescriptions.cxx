@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 12:11:42 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,8 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
             SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
             SetDefaultValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE)));
-        if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTVALUE))
-            SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTVALUE)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION))
+            SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
             SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
