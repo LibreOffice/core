@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:23:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #include <frmatr.hxx>
 #endif
 
-#ifdef VERTICAL_LAYOUT
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
@@ -95,7 +94,6 @@
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
 #endif
 
 #ifndef _VIEWSH_HXX
@@ -210,36 +208,55 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
 
     pInf = pNewInf;
     GetInfo().SetFont( GetFnt() );
-    SwTxtNode *pNode = pFrm->GetTxtNode();
+    const SwTxtNode *pNode = pFrm->GetTxtNode();
 
     const SvxLRSpaceItem &rSpace =
         pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
 
-#ifdef BIDI
     //
     // Carefully adjust the text formatting ranges.
     //
+    // This whole area desperately needs some rework. There are
+    // quite a couple of values that need to be considered:
+    // 1. paragraph indent
+    // 2. paragraph first line indent
+    // 3. numbering indent
+    // 4. numbering spacing to text
+    // 5. paragraph border
+    // Note: These values have already been used during calculation
+    // of the printing area of the paragraph.
     const int nLMWithNum = pNode->GetLeftMarginWithNum( sal_True );
     if ( pFrm->IsRightToLeft() )
-        nLeft = pFrm->Frm().Left() + pFrm->Prt().Left() + nLMWithNum -
+    {
+        nLeft = pFrm->Frm().Left() +
+                pFrm->Prt().Left() +
+                nLMWithNum -
                 ( rSpace.GetTxtFirstLineOfst() < 0 ?
                   rSpace.GetTxtFirstLineOfst() :
                   0 );
+    }
     else
     {
-        if (! pNewInf->GetVsh()->IsOldNumbering())
-            nLeft = long( rSpace.GetTxtLeft() + nLMWithNum) +
-                pFrm->Frm().Left();
+        if ( !pNewInf->GetVsh()->IsOldNumbering() )
+        {
+            // --> FME 2004-07-29 #i32267# Do not forget paragraph border
+            // I'm quite sure this can be optimized. But how?
+            // Not enough time to figure out.
+            nLeft = pFrm->Frm().Left() +
+                    pFrm->Prt().Left() +
+                    nLMWithNum -
+                    pNode->GetLeftMarginWithNum( sal_False ) -
+                    rSpace.GetLeft() +
+                    rSpace.GetTxtLeft();
+            // <--
+        }
         else
-            nLeft = Max( long( rSpace.GetTxtLeft() + nLMWithNum),
-                         pFrm->Prt().Left() ) +
-                pFrm->Frm().Left();
+        {
+            nLeft = pFrm->Frm().Left() +
+                    Max( long( rSpace.GetTxtLeft() + nLMWithNum ),
+                         pFrm->Prt().Left() );
+        }
     }
-#else
-    nLeft = Max( long( rSpace.GetTxtLeft() + pNode->GetLeftMarginWithNum(sal_True) ),
-                 pFrm->Prt().Left() ) +
-            pFrm->Frm().Left();
-#endif
 
     nRight = pFrm->Frm().Left() + pFrm->Prt().Left() + pFrm->Prt().Width();
 
@@ -306,18 +323,16 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
         else
             nFirstLineOfs = nFLOfst;
 
-#ifdef BIDI
-        if ( pFrm->IsRightToLeft() )
+        if ( pFrm->IsRightToLeft() || !pNewInf->GetVsh()->IsOldNumbering() )
+        {
             nFirst = nLeft + nFirstLineOfs;
+        }
         else
         {
-            nFirst = rSpace.GetTxtLeft() + nLMWithNum + nFirstLineOfs
-                + pFrm->Frm().Left();
+              nFirst = pFrm->Frm().Left() +
+                     Max( rSpace.GetTxtLeft() + nLMWithNum+ nFirstLineOfs,
+                          pFrm->Prt().Left() );
         }
-#else
-        nFirst = Max( rSpace.GetTxtLeft() + pNode->GetLeftMarginWithNum( sal_True )
-            + nFirstLineOfs, pFrm->Prt().Left() ) + pFrm->Frm().Left();
-#endif
 
         if( nFirst >= nRight )
             nFirst = nRight - 1;
@@ -325,7 +340,6 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
     const SvxAdjustItem& rAdjust = pFrm->GetTxtNode()->GetSwAttrSet().GetAdjust();
     nAdjust = rAdjust.GetAdjust();
 
-#ifdef BIDI
     // left is left and right is right
     if ( pFrm->IsRightToLeft() )
     {
@@ -334,7 +348,6 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
         else if ( SVX_ADJUST_RIGHT == nAdjust )
             nAdjust = SVX_ADJUST_LEFT;
     }
-#endif
 
     bOneBlock = rAdjust.GetOneWord() == SVX_ADJUST_BLOCK;
     bLastBlock = rAdjust.GetLastBlock() == SVX_ADJUST_BLOCK;
@@ -599,13 +612,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 nPorHeight = pPor->Height();
                 nPorAscent = pPor->GetAscent();
             }
-#ifdef BIDI
             while( pPor && !pPor->IsBreakPortion() && ( aInf.GetIdx() < nOfst ||
                    ( bWidth && ( pPor->IsKernPortion() || pPor->IsMultiPortion() ) ) ) )
-#else
-            while( pPor && !pPor->IsBreakPortion() && ( aInf.GetIdx() < nOfst ||
-                   ( bWidth && pPor->IsMultiPortion() ) ) )
-#endif
             {
                 if( !pPor->IsMarginPortion() && !pPor->IsPostItsPortion() &&
                     (!pPor->InFldGrp() || pPor->GetAscent() ) )
@@ -681,13 +689,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     if( pPor->IsMultiPortion() )
                     {
-#ifdef VERTICAL_LAYOUT
                         nTmpAscent = AdjustBaseLine( *pCurr, pPor );
                         GetInfo().SetMulti( sal_True );
-#else
-                        GetInfo().SetMulti( sal_True );
-                        nTmpAscent = AdjustBaseLine( *pCurr, *pPor );
-#endif
                         pOrig->Pos().Y() += nTmpAscent - nPorAscent;
 
                         if( pCMS && pCMS->b2Lines )
@@ -738,7 +741,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         pCurr = &((SwMultiPortion*)pPor)->GetRoot();
                         if( ((SwMultiPortion*)pPor)->IsDouble() )
                             SetPropFont( 50 );
-#ifdef VERTICAL_LAYOUT
+
                         GETGRID( GetTxtFrm()->FindPageFrm() )
                         const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
                         const USHORT nRubyHeight = bHasGrid ?
@@ -759,11 +762,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                 nOffset = GetLineHeight();
 
                             pOrig->Pos().Y() += nOffset;
-#else
-                        if( nStart + pCurr->GetLen() <= nOfst && GetNext() )
-                        {
-                            pOrig->Pos().Y() += GetLineHeight();
-#endif
                             Next();
                         }
 
@@ -771,7 +769,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                                 ChgSpaceAdd( pCurr, nSpaceAdd );
                         Point aOldPos = pOrig->Pos();
 
-#ifdef VERTICAL_LAYOUT
                         // Ok, for ruby portions in grid mode we have to
                         // temporarily set the inner line height to the
                         // outer line height because that value is needed
@@ -787,26 +784,21 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             pCurr->SetRealHeight( pOldCurr->GetRealHeight() -
                                                   nRubyHeight );
                         }
-#endif
 
-#ifdef BIDI
                         SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
                         if ( ((SwMultiPortion*)pPor)->IsBidi() )
                         {
                             aLayoutModeModifier.Modify(
                                 ((SwBidiPortion*)pPor)->GetLevel() % 2 );
                         }
-#endif
 
                         _GetCharRect( pOrig, nOfst, pCMS );
 
-#ifdef VERTICAL_LAYOUT
                         if ( bChgHeight )
                         {
                             pCurr->Height( nOldRubyHeight );
                             pCurr->SetRealHeight( nOldRubyRealHeight );
                         }
-#endif
 
                         // if we are still in the first row of
                         // our 2 line multiportion, we use the FirstMulti flag
@@ -832,12 +824,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             }
                         }
                         // ruby portions are treated like single line portions
-#ifdef BIDI
                         else if( ((SwMultiPortion*)pPor)->IsRuby() ||
                                  ((SwMultiPortion*)pPor)->IsBidi() )
-#else
-                        else if( ((SwMultiPortion*)pPor)->IsRuby() )
-#endif
                             GetInfo().SetMulti( sal_False );
 
                         // calculate cursor values
@@ -887,7 +875,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         else
                         {
                             pOrig->Pos().Y() += aOldPos.Y();
-#ifdef BIDI
                             if ( ((SwMultiPortion*)pPor)->IsBidi() )
                             {
                                 const SwTwips nPorWidth = pPor->Width() +
@@ -898,9 +885,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             }
                             else
                                 pOrig->Pos().X() += nX;
-#else
-                            pOrig->Pos().X() += nX;
-#endif
+
                             if( ((SwMultiPortion*)pPor)->HasBrackets() )
                                 pOrig->Pos().X() +=
                                     ((SwDoubleLinePortion*)pPor)->PreWidth();
@@ -1167,11 +1152,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if ( pCMS && pCMS->bRealHeight )
         {
-#ifdef VERTICAL_LAYOUT
             nTmpAscent = AdjustBaseLine( *pCurr, 0, nPorHeight, nPorAscent );
-#else
-            nTmpAscent = AdjustBaseLine( *pCurr, nPorHeight, nPorAscent );
-#endif
             if ( nTmpAscent > nPorAscent )
                 pCMS->aRealHeight.X() = nTmpAscent - nPorAscent;
             else
@@ -1242,20 +1223,11 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
     if( nMax )
     {
-
-#ifdef VERTICAL_LAYOUT
         if( pOrig->Top() + pOrig->Height() > nMax )
         {
             if( pOrig->Top() > nMax )
                 pOrig->Top( nMax );
             pOrig->Height( nMax - pOrig->Top() );
-#else
-        if( pOrig->Bottom() > nMax )
-        {
-            if( pOrig->Top() > nMax )
-                pOrig->Top( nMax );
-            pOrig->Bottom( nMax );
-#endif
         }
         if ( pCMS && pCMS->bRealHeight && pCMS->aRealHeight.Y() >= 0 )
         {
@@ -1580,7 +1552,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                  ! ((SwMultiPortion*)pPor)->OnTop() )
                 nTmpY = 0;
 
-#ifdef BIDI
             SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
                  nTmpY, nX, nCurrStart, nSpaceAdd );
 
@@ -1590,10 +1561,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 const BYTE nBidiLevel = ((SwBidiPortion*)pPor)->GetLevel();
                 aLayoutModeModifier.Modify( nBidiLevel % 2 );
             }
-#else
-            SwTxtCursorSave aSave( (SwTxtCursor*)this, (SwMultiPortion*)pPor,
-                nTmpY,  nCurrStart, nSpaceAdd );
-#endif
 
             if( ((SwMultiPortion*)pPor)->HasRotation() )
             {
@@ -1685,7 +1652,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     if( pLower && (pLower->IsTxtFrm() || pLower->IsLayoutFrm()) )
                         bChgNode = sal_True;
                 }
-#ifdef VERTICAL_LAYOUT
                 Point aTmpPoint( rPoint );
 
                 if ( pFrm->IsRightToLeft() )
@@ -1699,13 +1665,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 {
                     nLength = ((SwFlyCntPortion*)pPor)->
                               GetFlyCrsrOfst( nX, aTmpPoint, pPos, pCMS );
-#else
-                if( bChgNode && pTmp->Frm().IsInside( rPoint ) &&
-                    !( pTmp->IsProtected() ) )
-                {
-                    nLength = ((SwFlyCntPortion*)pPor)->
-                              GetFlyCrsrOfst( nX, rPoint, pPos, pCMS );
-#endif
                     // Sobald der Frame gewechselt wird, muessen wir aufpassen, dass
                     // unser Font wieder im OutputDevice steht.
                     // vgl. Paint und new SwFlyCntPortion !
