@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 07:46:28 $
+ *  last change: $Author: sab $ $Date: 2002-11-15 09:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSetAcc:
         if ( m_pParent->getCharSetControl()->IsReallyVisible() )
             pStateSet->AddState( AccessibleStateType::VISIBLE );
 
-        pStateSet->AddState( AccessibleStateType::CHILDREN_TRANSIENT );
+        pStateSet->AddState( AccessibleStateType::MANAGES_DESCENDANT );
     }
 
     return pStateSet;
