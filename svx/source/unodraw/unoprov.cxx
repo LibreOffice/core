@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:17:28 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,7 @@ SfxItemPropertyMap* ImplGetSvxControlShapePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_EDIT_PARA_ADJUST),          0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
         { MAP_CHAR_LEN("ControlBackground"),                0,  &::getCppuType((const sal_Int32*)0),        0, 0 },
         { MAP_CHAR_LEN("ControlBorder"),                    0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
+        { MAP_CHAR_LEN("ControlBorderColor"),               0,  &::getCppuType((const sal_Int32*)0),        0, 0 },
         { MAP_CHAR_LEN("ControlForeground"),                0,  &::getCppuType((const sal_Int16*)0),        0, 0 },
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, &::getBooleanCppuType(),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, &::getBooleanCppuType(),0, 0},
