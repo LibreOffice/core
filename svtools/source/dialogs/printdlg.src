@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:09:50 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ english_us ] = "Fax number";
         Text[ portuguese ] = "NΊ de fax";
         Text[ russian ] = "Νξμεπ τΰκρΰ";
-        Text[ greek ] = "Αριθμός Fax";
+        Text[ greek ] = "Αριθμός φαξ";
         Text[ dutch ] = "Faxnummer";
         Text[ french ] = "Numιro de fax";
         Text[ spanish ] = "Nϊmero de fax";
@@ -818,6 +818,7 @@ Image RID_IMG_PRNDLG_NOCOLLATE_HC
     ImageBitmap = Bitmap { File = "ncollate_h.bmp" ; };
     MaskColor = IMAGE_MAGENTA_MASK ;
 };
+
 
 
 
