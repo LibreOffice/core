@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:09:53 $
+ *  last change: $Author: os $ $Date: 2002-11-01 13:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,16 +91,16 @@ namespace svx{ class ColorConfig;}
 
 #define VIEWOPT_1_REF           0x00000400L
 #define VIEWOPT_1_FLDNAME       0x00000800L
-#define VIEWOPT_1_ALWAYS_AUTOCOLOR          0x00001000L
-#define VIEWOPT_1_STOP_ANIMATED_GRAPHIC     0x00002000L
+//#define           0x00001000L
+//#define      0x00002000L
 #define VIEWOPT_1_POSTITS       0x00004000L
 #define VIEWOPT_1_HIDDEN        0x00008000L
-#define VIEWOPT_1_USE_AUTO_BORDER_COLOR     0x00010000L
+//#define      0x00010000L
 #define VIEWOPT_1_GRAPHIC       0x00020000L
 #define VIEWOPT_1_TABLE         0x00040000L
 #define VIEWOPT_1_DRAW          0x00080000L
 #define VIEWOPT_1_CONTROL       0x00100000L
-#define VIEWOPT_1_STOP_ANIMATED_TEXT 0x00200000L
+//#define  0x00200000L
 #define VIEWOPT_1_CROSSHAIR     0x00400000L
 #define VIEWOPT_1_SNAP          0x00800000L
 #define VIEWOPT_1_SYNCHRONIZE   0x01000000L
@@ -409,24 +409,6 @@ public:
 
     inline void SetCursorInProtectedArea(BOOL b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_CRSR_IN_PROT) : (nCore2Options &= ~VIEWOPT_CORE2_CRSR_IN_PROT);}
-
-    //--------Accessibility options
-    inline BOOL IsAlwaysAutoColor() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_ALWAYS_AUTOCOLOR) ? TRUE : FALSE; }
-    inline void SetAlwaysAutoColor( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_ALWAYS_AUTOCOLOR ) : ( nCoreOptions &= ~VIEWOPT_1_ALWAYS_AUTOCOLOR); }
-
-
-    inline BOOL IsStopAnimatedGraphics() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_STOP_ANIMATED_GRAPHIC ) ? TRUE : FALSE; }
-    inline void SetStopAnimatedGraphics( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_STOP_ANIMATED_GRAPHIC  ) : ( nCoreOptions &= ~VIEWOPT_1_STOP_ANIMATED_GRAPHIC ); }
-
-    inline BOOL IsStopAnimatedText() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_STOP_ANIMATED_TEXT ) ? TRUE : FALSE; }
-    inline void SetStopAnimatedText( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_STOP_ANIMATED_TEXT  ) : ( nCoreOptions &= ~VIEWOPT_1_STOP_ANIMATED_TEXT ); }
-
-    inline BOOL IsUseAutomaticBorderColor() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_USE_AUTO_BORDER_COLOR ) ? TRUE : FALSE; }
-    inline void SetUseAutomaticBorderColor( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_USE_AUTO_BORDER_COLOR  ) : ( nCoreOptions &= ~VIEWOPT_1_USE_AUTO_BORDER_COLOR ); }
 
 /*---------------------------------------------------------------------------
 
