@@ -3,7 +3,6 @@
 ..\%__SRC%\bin\*.aff %_DEST%\bin%_EXT%\*.aff
 ..\%__SRC%\bin\*.dic %_DEST%\bin%_EXT%\*.dic
 ..\%__SRC%\bin\*.lst %_DEST%\bin%_EXT%\*.lst
-..\%__SRC%\bin\thencode* %_DEST%\bin%_EXT%
 
 ..\%__SRC%\bin\lnth* %_DEST%\bin%_EXT%\lnth*
 ..\%__SRC%\lib\ilnth* %_DEST%\lib%_EXT%\ilnth*
@@ -17,6 +16,12 @@
 ..\%__SRC%\lib\libspell*.dylib %_DEST%\lib%_EXT%\libspell*.dylib
 ..\%__SRC%\lib\libspell*.so %_DEST%\lib%_EXT%\libspell*.so
 
+..\%__SRC%\bin\myspell* %_DEST%\bin%_EXT%\myspell*
+..\%__SRC%\lib\ilmyspell* %_DEST%\lib%_EXT%\ilmyspell*
+..\%__SRC%\lib\libmyspell.a %_DEST%\lib%_EXT%\libmyspell.a
+..\%__SRC%\lib\libmyspell*.dylib %_DEST%\lib%_EXT%\libmyspell*.dylib
+..\%__SRC%\lib\libmyspell*.so %_DEST%\lib%_EXT%\libmyspell*.so
+
 ..\%__SRC%\bin\hyph* %_DEST%\bin%_EXT%\hyph*
 ..\%__SRC%\lib\ihyph* %_DEST%\lib%_EXT%\ihyph*
 ..\%__SRC%\lib\libhnj.* %_DEST%\lib%_EXT%\libhnj.*
@@ -27,5 +32,3 @@
 ..\%__SRC%\lib\ilulingu* %_DEST%\lib%_EXT%\iulingu*
 ..\%__SRC%\lib\libulingu.a %_DEST%\lib%_EXT%\libulingu.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\lib\libulingu*.so %_DEST%\lib%_EXT%\libulingu*.so
-
