@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-20 07:43:30 $
+#   last change: $Author: gh $ $Date: 2001-07-13 15:24:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,6 +174,7 @@ APP1TARGET=$(PRJNAME)
 APP1STDLIBS= \
             $(SALLIB) \
             $(TOOLSLIB) \
+            $(UNOTOOLSLIB) \
             $(SVTOOLLIB) \
             $(SVLLIB) \
             $(SVLIB) \
