@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:32:51 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,11 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             // shell is set in MarkListHasChanged
             break;
 
+        case SID_INSERT_AVMEDIA:
+            FuInsertMedia(this, pWin, pView, pDrModel, rReq);
+            // shell is set in MarkListHasChanged
+            break;
+
         case SID_INSERT_DIAGRAM:
             FuInsertChart(this, pWin, pView, pDrModel, rReq);
 //?         SC_MOD()->SetFunctionDlg( NULL );//XXX
@@ -562,6 +567,11 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_GRAPHIC:
+                if (bTabProt)
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case SID_INSERT_AVMEDIA:
                 if (bTabProt)
                     rSet.DisableItem( nWhich );
                 break;
