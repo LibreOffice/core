@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:19:13 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ chinese_traditional ] = "øÔæ‹∏ÍÆ∆®”∑Ω°G";
         Text[ turkish ] = "Choose a data source:";
         Text[ arabic ] = "«Œ — „’œ— »Ì«‰« :";
+        Text[ catalan ] = "Seleccione una fuente de datos:";
     };
     ListBox LB_DATASOURCE
     {
@@ -179,6 +180,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ korean ] = "∞¸∏Æ...";
         Text[ turkish ] = "Yˆnet...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Administrar...";
     };
     String STR_LOCAL_DATASOURCES
     {
@@ -204,6 +206,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ greek ] = "ÙÔÈÍ›Ú ÒÔÂÎÂ˝ÛÂÈÚ ‰Â‰ÔÏ›Ì˘Ì";
         Text[ korean ] = "∑Œƒ√ µ•¿Ã≈Õ º“Ω∫";
         Text[ turkish ] = "Yerel veri kaynaklar˝";
+        Text[ catalan ] = "fuentes de datos locales";
     };
     String STR_COULDNOTLOAD_CONFIGLIB
     {
@@ -227,12 +230,17 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ chinese_traditional ] = "µL™k∏¸§Jµ{¶°Æw #lib# ©Œ§w∏g∑lß•°CµL™k≥]©w ODBC ∏ÍÆ∆®”∑Ω°C";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ arabic ] = "≈„« √‰Â  ⁄–—  Õ„Ì· „ﬂ »… «·»—‰«„Ã #lib#° √Ê √‰Â« „⁄ÿÊ»….  ﬂÊÌ‰ „’«œ— »Ì«‰«  ODBC €Ì— „ Ê›—.";
+        Text[ catalan ] = "No se pudo cargar la biblioteca de programa #lib#, quiz·s estÈ daÒada. La configuraciÛn de fuente de datos ODBC no est· disponible.";
     };
+    Text[ catalan ] = "Fuente de datos";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/02/09 20:19:13  kz
+ *  Merge SWT614: 02/09/01 - 21:18:44
+ *
  *  Revision 1.9  2001/02/02 16:21:11  kz
  *  Merge SWT614: 02.02.01 - 17:20:45
  *
