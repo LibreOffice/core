@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 15:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,8 @@ ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 , bToBeCompressed ( sal_True )
 , bToBeEncrypted ( sal_False )
 , bPackageMember ( sal_False )
-, xEncryptionData ( new EncryptionData )
+, xEncryptionData ( )
+, ZipPackageEntry ( false )
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -115,8 +116,6 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
     aEntry.nSize = rInEntry.nSize;
     aEntry.nOffset = rInEntry.nOffset;
     aEntry.sName = rInEntry.sName;
-    aEntry.extra = rInEntry.extra;
-    aEntry.sComment = rInEntry.sComment;
 }
     //XInterface
 Any SAL_CALL ZipPackageStream::queryInterface( const Type& rType )
@@ -183,7 +182,8 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     {
         try
         {
-            xEncryptionData->aKey = rZipPackage.getEncryptionKey();
+            if ( IsToBeEncrypted() && rZipPackage.getEncryptionKey().getLength() )
+                xEncryptionData->aKey = rZipPackage.getEncryptionKey();
             return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData);
         }
         catch (ZipException &)//rException)
@@ -218,8 +218,8 @@ sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& a
 {
     sal_Int64 nMe = 0;
     if (aIdentifier.getLength() == 16 &&
-        0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),
-                               aIdentifier.getConstArray(), 16 ) )
+        ( 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) ||
+          0 == rtl_compareMemory(ZipPackageEntry::getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }
@@ -243,6 +243,8 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Encrypted") ) )
     {
         aValue >>= bToBeEncrypted;
+        if ( bToBeEncrypted && xEncryptionData.isEmpty())
+            xEncryptionData = new EncryptionData;
     }
 #if SUPD>617
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Compressed") ) )
