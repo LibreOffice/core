@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:12:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,14 +622,14 @@ TabPage TP_OPTTABLE_PAGE
     FixedLine FL_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Size = MAP_APPFONT ( 113 , 8 ) ;
         Text [ de ] = "Standard" ;
         Text [ en-US ] = "Default";
     };
     CheckBox CB_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Size = MAP_APPFONT ( 107 , 10 ) ;
         Text [ de ] = "Übe~rschrift" ;
         TabStop = TRUE ;
         Text [ en-US ] = "H~eading";
@@ -638,7 +638,7 @@ TabPage TP_OPTTABLE_PAGE
     CheckBox CB_REPEAT_HEADER
     {
         Pos = MAP_APPFONT ( 21 , 27 ) ;
-        Size = MAP_APPFONT ( 104 , 10 ) ;
+        Size = MAP_APPFONT ( 99 , 10 ) ;
         Text [ de ] = "Auf jeder Seite ~wiederholen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Re~peat on each page";
@@ -647,7 +647,7 @@ TabPage TP_OPTTABLE_PAGE
     CheckBox CB_DONT_SPLIT
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Size = MAP_APPFONT ( 107 , 10 ) ;
         Text [ de ] = "~Nicht trennen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Do not split";
@@ -656,7 +656,7 @@ TabPage TP_OPTTABLE_PAGE
     CheckBox CB_BORDER
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Size = MAP_APPFONT ( 107 , 10 ) ;
         Text [ de ] = "~Umrandung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "B~order";
@@ -664,22 +664,22 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedLine FL_TABLE_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 14 ) ;
+        Pos = MAP_APPFONT ( 120 , 14 ) ;
         Size = MAP_APPFONT ( 4 , 52 ) ;
         Vert = TRUE;
     };
     FixedLine FL_TABLE_INSERT
     {
-        Pos = MAP_APPFONT ( 130 , 3 ) ;
-        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Pos = MAP_APPFONT ( 125 , 3 ) ;
+        Size = MAP_APPFONT ( 129 , 8 ) ;
         Text [ de ] = "Eingabe in Tabellen" ;
         Text [ en-US ] = "Input in tables";
         Text [ x-comment ] = " ";
     };
     CheckBox CB_NUMFORMATTING
     {
-        Pos = MAP_APPFONT ( 136 , 14 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Pos = MAP_APPFONT ( 131 , 14 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ de ] = "Zahlen~erkennung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Number recognition";
@@ -687,8 +687,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_NUMFMT_FORMATTING
     {
-        Pos = MAP_APPFONT ( 145 , 27 ) ;
-        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Pos = MAP_APPFONT ( 140 , 27 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ de ] = "Zahlenformater~kennung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Number format recognition";
@@ -696,8 +696,8 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_NUMALIGNMENT
     {
-        Pos = MAP_APPFONT ( 145 , 40 ) ;
-        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Pos = MAP_APPFONT ( 140 , 40 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
         Text [ de ] = "Au~srichtung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Alignment";
