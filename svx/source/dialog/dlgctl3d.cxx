@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-12 16:46:22 $
+ *  last change: $Author: cl $ $Date: 2002-02-21 14:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,7 @@ void SvxPreviewCtl3D::Init()
     SetMapMode( MAP_100TH_MM );
 
     // Hintergrund in einem schoenen neutralen Grau
-    SetBackground( Wallpaper( Color( COL_GRAY ) ) );
+//  SetBackground( Wallpaper( Color( COL_GRAY ) ) );
 
     // Segmente
     nHorSegs = 24;
@@ -1637,6 +1637,139 @@ void SvxLightCtl3D::CheckSelection()
         aHorScroller.SetThumbPos( INT32(fHor * 100.0) );
         aVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
     }
+}
+
+void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
+{
+    double fHor, fVer;
+
+    aLightControl.GetPosition(fHor, fVer);
+
+    fHor += fDeltaHor;
+    fVer += fDeltaVer;
+
+    if( fVer > 90.0 )
+        return;
+
+    if ( fVer < -90.0 )
+        return;
+
+    aLightControl.SetPosition(fHor, fVer);
+    aHorScroller.SetThumbPos( INT32(fHor * 100.0) );
+    aVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
+
+    if(aUserInteractiveChangeCallback.IsSet())
+        aUserInteractiveChangeCallback.Call(this);
+
+}
+
+void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
+{
+    KeyCode aCode = rKEvt.GetKeyCode();
+
+    if( aCode.GetModifier() )
+    {
+        Control::KeyInput( rKEvt );
+        return;
+    }
+
+    switch ( aCode.GetCode() )
+    {
+        case KEY_SPACE:
+            ;
+            break;
+        case KEY_LEFT:
+            move(  4.0,  0.0 );
+            break;
+        case KEY_RIGHT:
+            move( -4.0,  0.0 );
+            break;
+        case KEY_UP:
+            move(  0.0,  4.0 );
+            break;
+        case KEY_DOWN:
+            move(  0.0, -4.0 );
+            break;
+        case KEY_PAGEUP:
+            {
+                B3dLightGroup* pLights = aLightControl.GetLightGroup();
+                int eLight = aLightControl.GetSelectedLight() - 1;
+
+                while( (eLight >= Base3DLight0) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
+                    eLight--;
+
+                if( eLight < Base3DLight0 )
+                {
+                    eLight =  Base3DLight7;
+                    while( (eLight >= Base3DLight0) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
+                        eLight--;
+                }
+
+                if( eLight >= Base3DLight0 )
+                {
+                    aLightControl.SelectLight((Base3DLightNumber)eLight);
+                    CheckSelection();
+                    if(aUserSelectionChangeCallback.IsSet())
+                        aUserSelectionChangeCallback.Call(this);
+                }
+                break;
+            }
+        case KEY_PAGEDOWN:
+            {
+                B3dLightGroup* pLights = aLightControl.GetLightGroup();
+                int eLight = aLightControl.GetSelectedLight() + 1;
+
+                while( (eLight < Base3DLightNone) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
+                    eLight++;
+
+                if( eLight == Base3DLightNone )
+                {
+                    eLight = Base3DLight0;
+                    while( (eLight < Base3DLightNone) && !pLights->IsEnabled((Base3DLightNumber)eLight) )
+                        eLight++;
+                }
+
+                if( eLight < Base3DLightNone )
+                {
+                    aLightControl.SelectLight((Base3DLightNumber)eLight);
+                    CheckSelection();
+                    if(aUserSelectionChangeCallback.IsSet())
+                        aUserSelectionChangeCallback.Call(this);
+                }
+                break;
+            }
+        default:
+            Control::KeyInput( rKEvt );
+            break;
+    }
+}
+
+void SvxLightCtl3D::GetFocus()
+{
+    Control::GetFocus();
+
+    if( HasFocus() && IsEnabled() )
+    {
+        CheckSelection();
+
+        Size aFocusSize = aLightControl.GetOutputSizePixel();
+
+        aFocusSize.Width() -= 4;
+        aFocusSize.Height() -= 4;
+
+        Rectangle aFocusRect( Point( 2, 2 ), aFocusSize );
+
+        aFocusRect = aLightControl.PixelToLogic( aFocusRect );
+
+        aLightControl.ShowFocus( aFocusRect );
+    }
+}
+
+void SvxLightCtl3D::LoseFocus()
+{
+    Control::LoseFocus();
+
+    aLightControl.HideFocus();
 }
 
 IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, pNil)
