@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 14:46:29 $
+ *  last change: $Author: jb $ $Date: 2001-06-11 08:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 namespace configmgr
 {
 //..........................................................................
+class OTreeNodeFactory;
+extern OTreeNodeFactory& getDefaultTreeNodeFactory();
 //==========================================================================
 //= OIdPropagator
 //==========================================================================
@@ -126,6 +128,32 @@ struct OChangeActionCounter : public ChangeTreeAction
 };
 
 //==========================================================================
+//= ONodeConverter
+//==========================================================================
+
+class ONodeConverter : public ChangeTreeModification
+{
+    OTreeNodeFactory&       m_rFactory;
+    std::auto_ptr<INode>    m_pNode;
+public:
+    static std::auto_ptr<ISubtree>  createCorrespondingNode(SubtreeChange   const& _rChange, OTreeNodeFactory& _rFactory);
+    static std::auto_ptr<ValueNode> createCorrespondingNode(ValueChange     const& _rChange, OTreeNodeFactory& _rFactory);
+    static std::auto_ptr<INode>     extractCorrespondingNode(AddNode& _rChange);
+    static std::auto_ptr<INode>     convertToNode(Change& _rChange, OTreeNodeFactory& _rFactory);
+public:
+    explicit
+    ONodeConverter(OTreeNodeFactory& rFactory)
+        : m_rFactory(rFactory)
+    {
+    }
+
+    virtual void handle(ValueChange& aValueNode);
+    virtual void handle(AddNode& aAddNode);
+    virtual void handle(RemoveNode& aRemoveNode);
+    virtual void handle(SubtreeChange& aSubtree);
+};
+
+//==========================================================================
 //= OMergeTreeAction
 //==========================================================================
 //= This class tests changes on an existing tree and drops them if they
@@ -133,13 +161,21 @@ struct OChangeActionCounter : public ChangeTreeAction
 //==========================================================================
 struct OMergeTreeAction : public ChangeTreeModification
 {
-    SubtreeChange&  m_rChangeList;  // list which containes changes merged with the existing nodes
-    const ISubtree* m_pRefTree;     // reference node needed for merging
-
+    SubtreeChange&      m_rChangeList;  // list which containes changes merged with the existing nodes
+    const ISubtree*     m_pRefTree;     // reference node needed for merging
+    OTreeNodeFactory&   m_rNodeFactory;
 public:
     OMergeTreeAction(SubtreeChange& rList, const ISubtree* pTree)
         :m_rChangeList(rList)
-        ,m_pRefTree(pTree){}
+        ,m_pRefTree(pTree)
+        ,m_rNodeFactory( getDefaultTreeNodeFactory())
+    {}
+
+    OMergeTreeAction(SubtreeChange& rList, const ISubtree* pTree, OTreeNodeFactory& rFactory )
+        :m_rChangeList(rList)
+        ,m_pRefTree(pTree)
+        ,m_rNodeFactory(rFactory)
+    {}
 
     void handle(ValueChange& aValueNode);
     void handle(AddNode& aAddNode);
@@ -158,20 +194,20 @@ private:
 //==========================================================================
 struct OCreateSubtreeAction : public ChangeTreeModification
 {
-    ISubtree*   m_pTree;
+    ISubtree&           m_rTree;
+    OTreeNodeFactory&   m_rNodeFactory;
 
 public:
-    OCreateSubtreeAction(ISubtree* _pTree)
-        :m_pTree(_pTree){}
+    OCreateSubtreeAction(ISubtree& _rTree, OTreeNodeFactory& rFactory)
+        :m_rTree(_rTree)
+        ,m_rNodeFactory(rFactory) {}
 
     void handle(ValueChange& aValueNode);
     void handle(AddNode& aAddNode);
     void handle(RemoveNode& aRemoveNode);
     void handle(SubtreeChange& aSubtree);
 
-private:
-    // ensuring the correct state
-    void ensure();
+    static std::auto_ptr<ISubtree> createSubtree(SubtreeChange& aSubtree, OTreeNodeFactory& rFactory);
 };
 
 
@@ -217,6 +253,10 @@ private:
 std::auto_ptr<INode> cloneForLocale(INode const* _pNode, OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const& _sLocale);
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> cloneExpandedForLocale(ISubtree const* _pNode, OUString const& _sLocale);
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale);
 
 // ===================================================================
 // = OChangeCounter

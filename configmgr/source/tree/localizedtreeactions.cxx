@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-04-18 15:36:53 $
+ *  last change: $Author: jb $ $Date: 2001-06-11 08:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ namespace
         }
         else
         {
+            // ISubtree should get a clone(NoChildCopy) member ...
             std::auto_ptr< Subtree > pCloneTree( new Subtree(_aSubtree, Subtree::NoChildCopy()) );
 
             OCloneChildrenForLocale aSubCloner(*pCloneTree,_rLocaleMatcher);
@@ -248,6 +249,24 @@ void OCloneForLocale::handle(ISubtree const&  _aSubtree)
 //==========================================================================
 // Helper function to invoke the previous ones properly
 
+// convert to the given locale format, assuming the original representation was expanded
+static std::auto_ptr<INode> impl_cloneExpandedForLocale(INode const* _pNode, OUString const& _sLocale)
+{
+    using namespace localehelper;
+
+    OSL_ASSERT(_pNode != NULL);
+
+    if ( designatesAllLocales(makeLocale(_sLocale)) ) // from expanded to expanded
+        return std::auto_ptr<INode>( _pNode->clone() );
+
+    else // needs reduction
+    {
+        OCloneForLocale aCloner(_sLocale);
+        aCloner.applyToNode(*_pNode);
+        return aCloner.getResult();
+    }
+}
+
 // convert to the given locale format, no matter what the original representation
 std::auto_ptr<INode> cloneForLocale(INode const* _pNode, OUString const& _sLocale)
 {
@@ -266,15 +285,45 @@ std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const&
     if (_pNode == NULL)
         return std::auto_ptr< INode >();
 
-    else if ( designatesAllLocales(makeLocale(_sLocale)) ) // from expanded to expanded
-        return (std::auto_ptr<INode>) _pNode->clone();
+    else if ( !_pNode->ISA( ISubtree )  ) // simple value - nothing to reduce
+        return std::auto_ptr<INode>( _pNode->clone() );
+
+    else
+        return impl_cloneExpandedForLocale(_pNode,_sLocale);
+}
+
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> cloneExpandedForLocale(ISubtree const* _pNode, OUString const& _sLocale)
+{
+    using namespace localehelper;
+
+    if (_pNode == NULL)
+        return std::auto_ptr< INode >();
+
+    else
+        return impl_cloneExpandedForLocale(_pNode,_sLocale);
+}
+
+// convert to the given locale format, assuming the original representation was expanded
+std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale)
+{
+    using namespace localehelper;
+
+    std::auto_ptr<INode> aResult;
+
+    if ( _pNode.get == NULL ||                           // nothing to reduce
+         designatesAllLocales(makeLocale(_sLocale)) ) // from expanded to expanded
+    {
+        aResult.reset( _pNode.release() );
+    }
 
     else // needs reduction
     {
         OCloneForLocale aCloner(_sLocale);
         aCloner.applyToNode(*_pNode);
-        return aCloner.getResult();
+        aResult = aCloner.getResult();
     }
+    return aResult;
 }
 
 
