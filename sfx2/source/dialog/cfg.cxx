@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:47:58 $
+ *  last change: $Author: mba $ $Date: 2001-11-02 16:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,13 +1178,16 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
         BOOL bCreated = FALSE;
         SfxObjectShellRef xDoc;
 
+        BOOL bLoadedDocument = FALSE;
         SfxConfigManager* pCfgMgr = SFX_APP()->GetConfigManager_Impl();
         if ( pCfgMgr->GetURL() != aCfgName )
         {
             // it was not the global configuration manager
             // first check if URL points to a document already loaded
             xDoc = SFX_APP()->DocAlreadyLoaded( aCfgName, TRUE, TRUE );
-            if ( !xDoc.Is() )
+            if ( xDoc.Is() )
+                bLoadedDocument = TRUE;
+            else
                 // try to load a document from the URL
                 xDoc = MakeObjectShellForOrganizer_Impl( aCfgName, TRUE );
             if ( xDoc.Is() )
@@ -1210,7 +1213,8 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
             SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
             Apply( pStbMgr, FALSE );
             pCfgMgr->StoreConfigItem( *pStbMgr );
-            pCfgMgr->StoreConfiguration();
+            if ( !bLoadedDocument )
+                pCfgMgr->StoreConfiguration();
 
             StatusBar* pBar = pStbMgr->GetStatusBar();
             delete pStbMgr;
