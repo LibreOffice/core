@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-03 19:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,24 +1121,24 @@ String STR_QUERY_DELETE_QUERY
 {
     Text = "Soll die Abfrage '$name$' gelöscht werden?" ;
     Text [ English ] = "Delete query '$name$'?" ;
-    Text [ english_us ] = "Do you want to delete the query '$name$'?" ;
-    Text[ portuguese ] = "Eliminar consulta '$name$'?";
-    Text[ russian ] = "Óäàëèòü çàïğîñ '$name$'?";
-    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï åñşôçìá '$name$';";
-    Text[ dutch ] = "Wilt u query '$name$' wissen?";
-    Text[ french ] = "Voulez-vous supprimer la requête '$name$' ?";
-    Text[ spanish ] = "¿Desea eliminar la consulta '$name$'?";
-    Text[ italian ] = "Volete eliminare la ricerca '$name$'?";
-    Text[ danish ] = "Do you want to delete the query '$name$'?";
-    Text[ swedish ] = "Ska sökningen '$name$' raderas?";
-    Text[ polish ] = "Usun¹æ kwerendê'$name$'?";
-    Text[ portuguese_brazilian ] = "Do you want to delete the query '$name$'?";
-    Text[ japanese ] = "¸´Ø° '$name$' ‚ğíœ‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "Do you want to delete the query '$name$'?";
-    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö²éÑ¯ '$name$'?";
-    Text[ chinese_traditional ] = "­n§R°£¬d¸ß'$name$'?";
-    Text[ turkish ] = "Do you want to delete the query '$name$'?";
-    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '$name$'¿";
+    Text [ english_us ] = "Do you want to delete the query '%1'?" ;
+    Text[ portuguese ] = "Eliminar consulta '%1'?";
+    Text[ russian ] = "Óäàëèòü çàïğîñ '%1'?";
+    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï åñşôçìá '%1';";
+    Text[ dutch ] = "Wilt u query '%1' wissen?";
+    Text[ french ] = "Voulez-vous supprimer la requête '%1' ?";
+    Text[ spanish ] = "¿Desea eliminar la consulta '%1'?";
+    Text[ italian ] = "Volete eliminare la ricerca '%1'?";
+    Text[ danish ] = "Do you want to delete the query '%1'?";
+    Text[ swedish ] = "Ska sökningen '%1' raderas?";
+    Text[ polish ] = "Usun¹æ kwerendê'%1'?";
+    Text[ portuguese_brazilian ] = "Do you want to delete the query '%1'?";
+    Text[ japanese ] = "¸´Ø° '%1' ‚ğíœ‚µ‚Ü‚·‚©B";
+    Text[ korean ] = "Do you want to delete the query '%1'?";
+    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö²éÑ¯ '%1'?";
+    Text[ chinese_traditional ] = "­n§R°£¬d¸ß'%1'?";
+    Text[ turkish ] = "Do you want to delete the query '%1'?";
+    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '%1'¿";
 };
 
 String STR_QUERY_DELETE_TABLE
@@ -1267,20 +1267,71 @@ String STR_CONNECTING_DATASOURCE
 {
     Text = "Verbindungsaufbau zu \"$name$\" ...";
     Text [ english ] = "connecting to \"$name$\" ...";
-    Text [ english_us ] = "connecting to \"$name$\" ...";
+    Text [ english_us ] = "Connecting to \"$name$\" ...";
+    Text[ portuguese ] = "A estabelecer ligação com \"$name$\" ...";
+    Text[ russian ] = "Ïîäêëş÷åíèå ê \"$name$\" ...";
+    Text[ greek ] = "connecting to \"$name$\" ...";
+    Text[ dutch ] = "connecting to \"$name$\" ...";
+    Text[ french ] = "connecting to \"$name$\" ...";
+    Text[ spanish ] = "Conectando a \"$name$\" ...";
+    Text[ italian ] = "Collegamento a \"$name$\" ...";
+    Text[ danish ] = "connecting to \"$name$\" ...";
+    Text[ swedish ] = "Kopplar till \"$name$\" ...";
+    Text[ polish ] = "trwa ³¹czenie z \"$name$\" ...";
+    Text[ portuguese_brazilian ] = "connecting to \"$name$\" ...";
+    Text[ japanese ] = "\"$name$\" ‚ÉÚ‘±’†...";
+    Text[ korean ] = "connecting to \"$name$\" ...";
+    Text[ chinese_simplified ] = "connecting to \"$name$\" ...";
+    Text[ chinese_traditional ] = "connecting to \"$name$\" ...";
+    Text[ turkish ] = "connecting to \"$name$\" ...";
+    Text[ arabic ] = "connecting to \"$name$\" ...";
 };
 
 String STR_LOADING_QUERY
 {
     Text = "lade Abfrage $name$ ...";
     Text [ english ] = "loading query $name$ ...";
-    Text [ english_us ] = "loading query $name$ ...";
+    Text [ english_us ] = "Loading query $name$ ...";
+    Text[ portuguese ] = "A carregar consulta $name$ ...";
+    Text[ russian ] = "Çàãğóçêà çàïğîñà $name$ ...";
+    Text[ greek ] = "loading query $name$ ...";
+    Text[ dutch ] = "loading query $name$ ...";
+    Text[ french ] = "loading query $name$ ...";
+    Text[ spanish ] = "cargando consulta $name$ ...";
+    Text[ italian ] = "Carica ricerca $name$ ...";
+    Text[ danish ] = "loading query $name$ ...";
+    Text[ swedish ] = "Laddar sökning $name$ ...";
+    Text[ polish ] = "trwa ³adowanie kwerendy $name$ ...";
+    Text[ portuguese_brazilian ] = "loading query $name$ ...";
+    Text[ japanese ] = "¸´Ø° $name$ ‚Ì“Ç‚İ‚İ’†...";
+    Text[ korean ] = "loading query $name$ ...";
+    Text[ chinese_simplified ] = "loading query $name$ ...";
+    Text[ chinese_traditional ] = "loading query $name$ ...";
+    Text[ turkish ] = "loading query $name$ ...";
+    Text[ arabic ] = "loading query $name$ ...";
 };
 
 String STR_LOADING_TABLE
 {
     Text = "lade Tabelle $name$ ...";
     Text [ english ] = "loading table $name$ ...";
-    Text [ english_us ] = "loading table $name$ ...";
+    Text [ english_us ] = "Loading table $name$ ...";
+    Text[ portuguese ] = "A carregar tabela $name$ ...";
+    Text[ russian ] = "Çàãğóçêà òàáëèöû $name$ ...";
+    Text[ greek ] = "loading table $name$ ...";
+    Text[ dutch ] = "loading table $name$ ...";
+    Text[ french ] = "loading table $name$ ...";
+    Text[ spanish ] = "cargando tabla $name$ ...";
+    Text[ italian ] = "Carica tabella $name$ ...";
+    Text[ danish ] = "loading table $name$ ...";
+    Text[ swedish ] = "Laddar tabell $name$ ...";
+    Text[ polish ] = "trwa ³adowanie tabeli $name$ ...";
+    Text[ portuguese_brazilian ] = "loading table $name$ ...";
+    Text[ japanese ] = "Ã°ÌŞÙ $name$ ‚Ì“Ç‚İ‚İ’†...";
+    Text[ korean ] = "loading table $name$ ...";
+    Text[ chinese_simplified ] = "loading table $name$ ...";
+    Text[ chinese_traditional ] = "loading table $name$ ...";
+    Text[ turkish ] = "loading table $name$ ...";
+    Text[ arabic ] = "loading table $name$ ...";
 };
 
