@@ -20369,3 +20369,13 @@ _real@8@3fff8666666666666800
 ?Execute@SvxOpenGraphicDialog@@QAEKXZ
 ?GetGraphic@SvxOpenGraphicDialog@@QBEKAAVGraphic@@@Z
 ?flushCache@SvxOutlinerForwarder@@QAEXXZ
+?GalleryGraphicImport@@YAGABVINetURLObject@@AAVGraphic@@AAVString@@E@Z
+?GalleryIsSoundFile@@YAEABVINetURLObject@@@Z
+?GallerySvDrawImport@@YAEAAVSvStream@@AAVFmFormModel@@@Z
+??0GalleryCodec@@QAE@AAVSvStream@@@Z
+??1GalleryCodec@@QAE@XZ
+?ImpReadRLEBuffer@GalleryCodec@@AAEPAEAAVSvStream@@KK@Z
+?ImpReadZBuffer@GalleryCodec@@AAEPAEAAVSvStream@@KK@Z
+?IsCoded@GalleryCodec@@SAEAAVSvStream@@AAK@Z
+?Read@GalleryCodec@@QAEKAAVSvMemoryStream@@@Z
+?Write@GalleryCodec@@QAEKAAVSvMemoryStream@@@Z
