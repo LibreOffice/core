@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:29:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,8 @@ E3dScene::E3dScene()
     aCamera(Vector3D(0,0,4), Vector3D()),
     bDoubleBuffered(FALSE),
     bClipping(FALSE),
-    nSaveStatus (0),
-    nRestStatus (0),
+    //BFS01nSaveStatus (0),
+    //BFS01nRestStatus (0),
     bFitInSnapRect(TRUE),
     aPaintTime(),
     nDisplayQuality(255),
@@ -331,8 +331,8 @@ E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
     aCamera(Vector3D(0,0,4), Vector3D()),
     bDoubleBuffered(FALSE),
     bClipping(FALSE),
-    nSaveStatus (0),
-    nRestStatus (0),
+    //BFS01nSaveStatus (0),
+    //BFS01nRestStatus (0),
     bFitInSnapRect(TRUE),
     aPaintTime(),
     nDisplayQuality(255),
@@ -398,7 +398,7 @@ void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     aCamera.SetDeviceWindow(Rectangle(0, 0, 10, 10));
     Rectangle aRect(0, 0, 10, 10);
     aCameraSet.SetViewportRectangle(aRect);
-    nSortingMode = E3D_SORT_FAST_SORTING | E3D_SORT_IN_PARENTS | E3D_SORT_TEST_LENGTH;
+    //BFS01nSortingMode = E3D_SORT_FAST_SORTING | E3D_SORT_IN_PARENTS | E3D_SORT_TEST_LENGTH;
 
     // set defaults for Camera from ItemPool
     aCamera.SetProjection(GetPerspective());
@@ -919,78 +919,78 @@ void E3dScene::InitTransformationSet()
 |*
 \************************************************************************/
 
-void E3dScene::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-    if(nVersion < 3830)
-    {
-        // Hier die Lichtobjekte erzeugen, um im alten Format schreiben zu koennen
-        ((E3dScene*)(this))->CreateLightObjectsFromLightGroup();
-    }
-
-    // Schreiben
-    E3dObject::WriteData(rOut);
-
-    if(nVersion < 3830)
-    {
-        // Lichtobjekte wieder wegnehmen
-        ((E3dScene*)(this))->RemoveLightObjects();
-    }
-    else
-    {
-#ifdef E3D_STREAMING
-        SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-        aCompat.SetID("B3dLightGroup");
-#endif
-        // LightGroup schreiben
-        aLightGroup.WriteData(rOut);
-
-#endif
-    }
-
-#ifdef E3D_STREAMING
-    SdrDownCompat aCompat(rOut, STREAM_WRITE);
-#ifdef DBG_UTIL
-    aCompat.SetID("E3dScene");
-#endif
-
-    DBG_ASSERT (rOut.GetVersion(),"3d-Engine: Keine Version am Stream gesetzt!");
-    if (rOut.GetVersion() < 3560) // FG: Das ist der Zeitpunkt der Umstellung
-    {
-        rOut << aCamera;
-    }
-    if (rOut.GetVersion() >= 3560)
-    {
-        aCamera.WriteData(rOut);
-    }
-
-    rOut << BOOL(bDoubleBuffered);
-    rOut << BOOL(bClipping);
-    rOut << BOOL(bFitInSnapRect);
-    rOut << nSortingMode;
-
-    // neu ab 377:
-    Vector3D aPlaneDirection = GetShadowPlaneDirection();
-    rOut << aPlaneDirection;
-
-    // neu ab 383:
-    rOut << (BOOL)bDither;
-
-    // neu ab 384:
-    sal_uInt16 nShadeMode = GetShadeMode();
-    if(nShadeMode == 0)
-        rOut << (sal_uInt16)Base3DFlat;
-    else if(nShadeMode == 1)
-        rOut << (sal_uInt16)Base3DPhong;
-    else
-        rOut << (sal_uInt16)Base3DSmooth;
-    rOut << (BOOL)(nShadeMode > 2);
-
-#endif
-#endif  // #ifndef SVX_LIGHT
-}
+//BFS01void E3dScene::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
+//BFS01 if(nVersion < 3830)
+//BFS01 {
+//BFS01     // Hier die Lichtobjekte erzeugen, um im alten Format schreiben zu koennen
+//BFS01     ((E3dScene*)(this))->CreateLightObjectsFromLightGroup();
+//BFS01 }
+//BFS01
+//BFS01 // Schreiben
+//BFS01 E3dObject::WriteData(rOut);
+//BFS01
+//BFS01 if(nVersion < 3830)
+//BFS01 {
+//BFS01     // Lichtobjekte wieder wegnehmen
+//BFS01     ((E3dScene*)(this))->RemoveLightObjects();
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01#ifdef E3D_STREAMING
+//BFS01     SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01     aCompat.SetID("B3dLightGroup");
+//BFS01#endif
+//BFS01     // LightGroup schreiben
+//BFS01     aLightGroup.WriteData(rOut);
+//BFS01
+//BFS01#endif
+//BFS01 }
+//BFS01
+//BFS01#ifdef E3D_STREAMING
+//BFS01 SdrDownCompat aCompat(rOut, STREAM_WRITE);
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("E3dScene");
+//BFS01#endif
+//BFS01
+//BFS01 DBG_ASSERT (rOut.GetVersion(),"3d-Engine: Keine Version am Stream gesetzt!");
+//BFS01 if (rOut.GetVersion() < 3560) // FG: Das ist der Zeitpunkt der Umstellung
+//BFS01 {
+//BFS01     rOut << aCamera;
+//BFS01 }
+//BFS01 if (rOut.GetVersion() >= 3560)
+//BFS01 {
+//BFS01     aCamera.WriteData(rOut);
+//BFS01 }
+//BFS01
+//BFS01 rOut << BOOL(bDoubleBuffered);
+//BFS01 rOut << BOOL(bClipping);
+//BFS01 rOut << BOOL(bFitInSnapRect);
+//BFS01 rOut << nSortingMode;
+//BFS01
+//BFS01 // neu ab 377:
+//BFS01 Vector3D aPlaneDirection = GetShadowPlaneDirection();
+//BFS01 rOut << aPlaneDirection;
+//BFS01
+//BFS01 // neu ab 383:
+//BFS01 rOut << (BOOL)bDither;
+//BFS01
+//BFS01 // neu ab 384:
+//BFS01 sal_uInt16 nShadeMode = GetShadeMode();
+//BFS01 if(nShadeMode == 0)
+//BFS01     rOut << (sal_uInt16)Base3DFlat;
+//BFS01 else if(nShadeMode == 1)
+//BFS01     rOut << (sal_uInt16)Base3DPhong;
+//BFS01 else
+//BFS01     rOut << (sal_uInt16)Base3DSmooth;
+//BFS01 rOut << (BOOL)(nShadeMode > 2);
+//BFS01
+//BFS01#endif
+//BFS01#endif   // #ifndef SVX_LIGHT
+//BFS01}
 
 /*************************************************************************
 |*
@@ -998,131 +998,131 @@ void E3dScene::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (ImpCheckSubRecords (rHead, rIn))
-    {
-        E3dObject::ReadData(rHead, rIn);
-
-        if(CountNumberOfLights())
-        {
-            // An dieser Stelle die gelesenen Lampen ausmerzen
-            // und in die neue Struktur ueberfuehren
-            FillLightGroup();
-            RemoveLightObjects();
-        }
-        long nVersion = rIn.GetVersion(); // Build_Nr * 10 z.B. 3810
-        if(nVersion >= 3830)
-        {
-            SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-            aCompat.SetID("B3dLightGroup");
-#endif
-            if(aCompat.GetBytesLeft())
-            {
-                // LightGroup lesen
-                aLightGroup.ReadData(rIn);
-            }
-        }
-
-        SdrDownCompat aCompat(rIn, STREAM_READ);
-#ifdef DBG_UTIL
-        aCompat.SetID("E3dScene");
-#endif
-        BOOL bTmp;
-
-        DBG_ASSERT (rIn.GetVersion(),"3d-Engine: Keine Version am Stream gesetzt!");
-
-        if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
-        {
-            rIn >> aCamera;
-        }
-        if ((rIn.GetVersion() >= 3560) && (rHead.GetVersion() >= 13))
-        {
-            aCamera.ReadData(rHead, rIn);
-        }
-
-        // Neue Kamera aus alter fuellen
-        Camera3D& rCam = (Camera3D&)GetCamera();
-
-        // Ratio abschalten
-        if(rCam.GetAspectMapping() == AS_NO_MAPPING)
-            GetCameraSet().SetRatio(0.0);
-
-        // Abbildungsgeometrie setzen
-        Vector3D aVRP = rCam.GetViewPoint();
-        Vector3D aVPN = aVRP - rCam.GetVRP();
-        Vector3D aVUV = rCam.GetVUV();
-        GetCameraSet().SetOrientation(aVRP, aVPN, aVUV);
-
-        // Perspektive setzen
-        GetCameraSet().SetPerspective(rCam.GetProjection() == PR_PERSPECTIVE);
-        GetCameraSet().SetViewportRectangle((Rectangle&)rCam.GetDeviceWindow());
-
-        rIn >> bTmp; bDoubleBuffered = bTmp;
-        rIn >> bTmp; bClipping = bTmp;
-        rIn >> bTmp; bFitInSnapRect = bTmp;
-
-        if (aCompat.GetBytesLeft() >= sizeof(UINT32))
-        {
-            rIn >> nSortingMode;
-        }
-
-        // neu ab 377:
-        if (aCompat.GetBytesLeft() >= sizeof(Vector3D))
-        {
-            Vector3D aShadowVec;
-            rIn >> aShadowVec;
-            SetShadowPlaneDirection(aShadowVec);
-        }
-
-        // neu ab 383:
-        if (aCompat.GetBytesLeft() >= sizeof(BOOL))
-        {
-            rIn >> bTmp; bDither = bTmp;
-        }
-
-        // neu ab 384:
-        if (aCompat.GetBytesLeft() >= sizeof(UINT16))
-        {
-            UINT16 nTmp;
-            rIn >> nTmp;
-            if(nTmp == (Base3DShadeModel)Base3DFlat)
-            {
-                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(0));
-            }
-            else if(nTmp == (Base3DShadeModel)Base3DPhong)
-            {
-                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(1));
-            }
-            else
-            {
-                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(2));
-            }
-        }
-        if (aCompat.GetBytesLeft() >= sizeof(BOOL))
-        {
-            rIn >> bTmp;
-            if(bTmp)
-            {
-                GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(3));
-            }
-        }
-
-        // SnapRects der Objekte ungueltig
-        SetRectsDirty();
-
-        // Transformationen initialisieren, damit bei RecalcSnapRect()
-        // richtig gerechnet wird
-        InitTransformationSet();
-
-        RebuildLists();
-
-        // set items from combined read objects like lightgroup and camera
-        ((sdr::properties::E3dSceneProperties&)GetProperties()).SetLightItemsFromLightGroup(aLightGroup);
-        ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
-    }
-}
+//BFS01void E3dScene::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (ImpCheckSubRecords (rHead, rIn))
+//BFS01 {
+//BFS01     E3dObject::ReadData(rHead, rIn);
+//BFS01
+//BFS01     if(CountNumberOfLights())
+//BFS01     {
+//BFS01         // An dieser Stelle die gelesenen Lampen ausmerzen
+//BFS01         // und in die neue Struktur ueberfuehren
+//BFS01         FillLightGroup();
+//BFS01         RemoveLightObjects();
+//BFS01     }
+//BFS01     long nVersion = rIn.GetVersion(); // Build_Nr * 10 z.B. 3810
+//BFS01     if(nVersion >= 3830)
+//BFS01     {
+//BFS01         SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01         aCompat.SetID("B3dLightGroup");
+//BFS01#endif
+//BFS01         if(aCompat.GetBytesLeft())
+//BFS01         {
+//BFS01             // LightGroup lesen
+//BFS01             aLightGroup.ReadData(rIn);
+//BFS01         }
+//BFS01     }
+//BFS01
+//BFS01     SdrDownCompat aCompat(rIn, STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01     aCompat.SetID("E3dScene");
+//BFS01#endif
+//BFS01     BOOL bTmp;
+//BFS01
+//BFS01     DBG_ASSERT (rIn.GetVersion(),"3d-Engine: Keine Version am Stream gesetzt!");
+//BFS01
+//BFS01     if ((rIn.GetVersion() < 3560) || (rHead.GetVersion() <= 12))
+//BFS01     {
+//BFS01         rIn >> aCamera;
+//BFS01     }
+//BFS01     if ((rIn.GetVersion() >= 3560) && (rHead.GetVersion() >= 13))
+//BFS01     {
+//BFS01         aCamera.ReadData(rHead, rIn);
+//BFS01     }
+//BFS01
+//BFS01     // Neue Kamera aus alter fuellen
+//BFS01     Camera3D& rCam = (Camera3D&)GetCamera();
+//BFS01
+//BFS01     // Ratio abschalten
+//BFS01     if(rCam.GetAspectMapping() == AS_NO_MAPPING)
+//BFS01         GetCameraSet().SetRatio(0.0);
+//BFS01
+//BFS01     // Abbildungsgeometrie setzen
+//BFS01     Vector3D aVRP = rCam.GetViewPoint();
+//BFS01     Vector3D aVPN = aVRP - rCam.GetVRP();
+//BFS01     Vector3D aVUV = rCam.GetVUV();
+//BFS01     GetCameraSet().SetOrientation(aVRP, aVPN, aVUV);
+//BFS01
+//BFS01     // Perspektive setzen
+//BFS01     GetCameraSet().SetPerspective(rCam.GetProjection() == PR_PERSPECTIVE);
+//BFS01     GetCameraSet().SetViewportRectangle((Rectangle&)rCam.GetDeviceWindow());
+//BFS01
+//BFS01     rIn >> bTmp; bDoubleBuffered = bTmp;
+//BFS01     rIn >> bTmp; bClipping = bTmp;
+//BFS01     rIn >> bTmp; bFitInSnapRect = bTmp;
+//BFS01
+//BFS01     if (aCompat.GetBytesLeft() >= sizeof(UINT32))
+//BFS01     {
+//BFS01         rIn >> nSortingMode;
+//BFS01     }
+//BFS01
+//BFS01     // neu ab 377:
+//BFS01     if (aCompat.GetBytesLeft() >= sizeof(Vector3D))
+//BFS01     {
+//BFS01         Vector3D aShadowVec;
+//BFS01         rIn >> aShadowVec;
+//BFS01         SetShadowPlaneDirection(aShadowVec);
+//BFS01     }
+//BFS01
+//BFS01     // neu ab 383:
+//BFS01     if (aCompat.GetBytesLeft() >= sizeof(BOOL))
+//BFS01     {
+//BFS01         rIn >> bTmp; bDither = bTmp;
+//BFS01     }
+//BFS01
+//BFS01     // neu ab 384:
+//BFS01     if (aCompat.GetBytesLeft() >= sizeof(UINT16))
+//BFS01     {
+//BFS01         UINT16 nTmp;
+//BFS01         rIn >> nTmp;
+//BFS01         if(nTmp == (Base3DShadeModel)Base3DFlat)
+//BFS01         {
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(0));
+//BFS01         }
+//BFS01         else if(nTmp == (Base3DShadeModel)Base3DPhong)
+//BFS01         {
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(1));
+//BFS01         }
+//BFS01         else
+//BFS01         {
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(2));
+//BFS01         }
+//BFS01     }
+//BFS01     if (aCompat.GetBytesLeft() >= sizeof(BOOL))
+//BFS01     {
+//BFS01         rIn >> bTmp;
+//BFS01         if(bTmp)
+//BFS01         {
+//BFS01             GetProperties().SetObjectItemDirect(Svx3DShadeModeItem(3));
+//BFS01         }
+//BFS01     }
+//BFS01
+//BFS01     // SnapRects der Objekte ungueltig
+//BFS01     SetRectsDirty();
+//BFS01
+//BFS01     // Transformationen initialisieren, damit bei RecalcSnapRect()
+//BFS01     // richtig gerechnet wird
+//BFS01     InitTransformationSet();
+//BFS01
+//BFS01     RebuildLists();
+//BFS01
+//BFS01     // set items from combined read objects like lightgroup and camera
+//BFS01     ((sdr::properties::E3dSceneProperties&)GetProperties()).SetLightItemsFromLightGroup(aLightGroup);
+//BFS01     ((sdr::properties::E3dSceneProperties&)GetProperties()).SetSceneItemsFromCamera();
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1208,7 +1208,7 @@ void E3dScene::operator=(const SdrObject& rObj)
     bDoubleBuffered  = r3DObj.bDoubleBuffered;
     bClipping        = r3DObj.bClipping;
     bFitInSnapRect   = r3DObj.bFitInSnapRect;
-    nSortingMode     = r3DObj.nSortingMode;
+    //BFS01nSortingMode     = r3DObj.nSortingMode;
 
     // neu ab 377:
     aCameraSet = r3DObj.aCameraSet;
@@ -1428,24 +1428,24 @@ void E3dScene::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 |*
 \************************************************************************/
 
-void E3dScene::RemoveLightObjects()
-{
-    SdrObjList* pSubList = GetSubList();
-    if(pSubList)
-    {
-        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-        while ( a3DIterator.IsMore() )
-        {
-            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-            if(pObj->ISA(E3dLight))
-            {
-                // Weg damit
-                Remove3DObj(pObj);
-            }
-        }
-    }
-}
+//BFS01void E3dScene::RemoveLightObjects()
+//BFS01{
+//BFS01 SdrObjList* pSubList = GetSubList();
+//BFS01 if(pSubList)
+//BFS01 {
+//BFS01     SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//BFS01     while ( a3DIterator.IsMore() )
+//BFS01     {
+//BFS01         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//BFS01         if(pObj->ISA(E3dLight))
+//BFS01         {
+//BFS01             // Weg damit
+//BFS01             Remove3DObj(pObj);
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1454,38 +1454,38 @@ void E3dScene::RemoveLightObjects()
 |*
 \************************************************************************/
 
-void E3dScene::CreateLightObjectsFromLightGroup()
-{
-    if(aLightGroup.IsLightingEnabled())
-    {
-        // Global Ambient Light
-        const Color& rAmbient = aLightGroup.GetGlobalAmbientLight();
-        if(rAmbient != Color(COL_BLACK))
-            Insert3DObj(new E3dLight(Vector3D(), rAmbient, 1.0));
-
-        // Andere Lichter
-        for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
-        {
-            B3dLight& rLight = aLightGroup.GetLightObject((Base3DLightNumber)(Base3DLight0 + a));
-            if(rLight.IsEnabled())
-            {
-                if(rLight.IsDirectionalSource())
-                {
-                    // erzeuge E3dDistantLight
-                    Insert3DObj(new E3dDistantLight(Vector3D(),
-                        rLight.GetPosition(),
-                        rLight.GetIntensity(Base3DMaterialDiffuse), 1.0));
-                }
-                else
-                {
-                    // erzeuge E3dPointLight
-                    Insert3DObj(new E3dPointLight(rLight.GetPosition(),
-                        rLight.GetIntensity(Base3DMaterialDiffuse), 1.0));
-                }
-            }
-        }
-    }
-}
+//BFS01void E3dScene::CreateLightObjectsFromLightGroup()
+//BFS01{
+//BFS01 if(aLightGroup.IsLightingEnabled())
+//BFS01 {
+//BFS01     // Global Ambient Light
+//BFS01     const Color& rAmbient = aLightGroup.GetGlobalAmbientLight();
+//BFS01     if(rAmbient != Color(COL_BLACK))
+//BFS01         Insert3DObj(new E3dLight(Vector3D(), rAmbient, 1.0));
+//BFS01
+//BFS01     // Andere Lichter
+//BFS01     for(UINT16 a=0;a<BASE3D_MAX_NUMBER_LIGHTS;a++)
+//BFS01     {
+//BFS01         B3dLight& rLight = aLightGroup.GetLightObject((Base3DLightNumber)(Base3DLight0 + a));
+//BFS01         if(rLight.IsEnabled())
+//BFS01         {
+//BFS01             if(rLight.IsDirectionalSource())
+//BFS01             {
+//BFS01                 // erzeuge E3dDistantLight
+//BFS01                 Insert3DObj(new E3dDistantLight(Vector3D(),
+//BFS01                     rLight.GetPosition(),
+//BFS01                     rLight.GetIntensity(Base3DMaterialDiffuse), 1.0));
+//BFS01             }
+//BFS01             else
+//BFS01             {
+//BFS01                 // erzeuge E3dPointLight
+//BFS01                 Insert3DObj(new E3dPointLight(rLight.GetPosition(),
+//BFS01                     rLight.GetIntensity(Base3DMaterialDiffuse), 1.0));
+//BFS01             }
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1493,89 +1493,89 @@ void E3dScene::CreateLightObjectsFromLightGroup()
 |*
 \************************************************************************/
 
-void E3dScene::FillLightGroup()
-{
-    SdrObjList* pSubList = GetSubList();
-    BOOL bLampFound = FALSE;
-
-    if(pSubList)
-    {
-        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-        Base3DLightNumber eLight = Base3DLight0;
-
-        // AmbientLight aus
-        aLightGroup.SetGlobalAmbientLight(Color(COL_BLACK));
-
-        while ( a3DIterator.IsMore() )
-        {
-            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-            if(pObj->ISA(E3dLight) && eLight <= Base3DLight7)
-            {
-                E3dLight* pLight = (E3dLight*)pObj;
-                bLampFound = TRUE;
-
-                // pLight in Base3D Konvention aktivieren
-                if(pLight->IsOn())
-                {
-                    if(pLight->ISA(E3dPointLight))
-                    {
-                        // ist ein E3dPointLight
-                        // Position, keine Richtung
-                        B3dColor aCol(pLight->GetColor().GetColor());
-                        aCol *= pLight->GetIntensity();
-                        aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
-                        aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
-                        Vector3D aPos = pLight->GetPosition();
-                        aLightGroup.SetPosition(aPos, eLight);
-
-                        // Lichtquelle einschalten
-                        aLightGroup.Enable(TRUE, eLight);
-
-                        // Naechstes Licht in Base3D
-                        eLight = (Base3DLightNumber)(eLight + 1);
-                    }
-                    else if(pLight->ISA(E3dDistantLight))
-                    {
-                        // ist ein E3dDistantLight
-                        // Richtung, keine Position
-                        B3dColor aCol(pLight->GetColor().GetColor());
-                        aCol *= pLight->GetIntensity();
-                        aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
-                        aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
-                        Vector3D aDir = ((E3dDistantLight *)pLight)->GetDirection();
-                        aLightGroup.SetDirection(aDir, eLight);
-
-                        // Lichtquelle einschalten
-                        aLightGroup.Enable(TRUE, eLight);
-
-                        // Naechstes Licht in Base3D
-                        eLight = (Base3DLightNumber)(eLight + 1);
-                    }
-                    else
-                    {
-                        // nur ein E3dLight, gibt ein
-                        // ambientes licht, auf globales aufaddieren
-                        B3dColor aCol(pLight->GetColor().GetColor());
-                        aCol *= pLight->GetIntensity();
-                        aCol += (const B3dColor &)aLightGroup.GetGlobalAmbientLight();
-                        aLightGroup.SetGlobalAmbientLight(aCol);
-                    }
-                }
-            }
-        }
-
-        // Alle anderen Lichter ausschalten
-        while(eLight <= Base3DLight7)
-        {
-            aLightGroup.Enable(FALSE, eLight);
-            eLight = (Base3DLightNumber)(eLight + 1);
-        }
-    }
-
-    // Beleuchtung einschalten, falls Lampen vorhanden
-    aLightGroup.EnableLighting(bLampFound);
-}
+//BFS01void E3dScene::FillLightGroup()
+//BFS01{
+//BFS01 SdrObjList* pSubList = GetSubList();
+//BFS01 BOOL bLampFound = FALSE;
+//BFS01
+//BFS01 if(pSubList)
+//BFS01 {
+//BFS01     SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//BFS01     Base3DLightNumber eLight = Base3DLight0;
+//BFS01
+//BFS01     // AmbientLight aus
+//BFS01     aLightGroup.SetGlobalAmbientLight(Color(COL_BLACK));
+//BFS01
+//BFS01     while ( a3DIterator.IsMore() )
+//BFS01     {
+//BFS01         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//BFS01         if(pObj->ISA(E3dLight) && eLight <= Base3DLight7)
+//BFS01         {
+//BFS01             E3dLight* pLight = (E3dLight*)pObj;
+//BFS01             bLampFound = TRUE;
+//BFS01
+//BFS01             // pLight in Base3D Konvention aktivieren
+//BFS01             if(pLight->IsOn())
+//BFS01             {
+//BFS01                 if(pLight->ISA(E3dPointLight))
+//BFS01                 {
+//BFS01                     // ist ein E3dPointLight
+//BFS01                     // Position, keine Richtung
+//BFS01                     B3dColor aCol(pLight->GetColor().GetColor());
+//BFS01                     aCol *= pLight->GetIntensity();
+//BFS01                     aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
+//BFS01                     aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
+//BFS01                     Vector3D aPos = pLight->GetPosition();
+//BFS01                     aLightGroup.SetPosition(aPos, eLight);
+//BFS01
+//BFS01                     // Lichtquelle einschalten
+//BFS01                     aLightGroup.Enable(TRUE, eLight);
+//BFS01
+//BFS01                     // Naechstes Licht in Base3D
+//BFS01                     eLight = (Base3DLightNumber)(eLight + 1);
+//BFS01                 }
+//BFS01                 else if(pLight->ISA(E3dDistantLight))
+//BFS01                 {
+//BFS01                     // ist ein E3dDistantLight
+//BFS01                     // Richtung, keine Position
+//BFS01                     B3dColor aCol(pLight->GetColor().GetColor());
+//BFS01                     aCol *= pLight->GetIntensity();
+//BFS01                     aLightGroup.SetIntensity(aCol, Base3DMaterialDiffuse, eLight);
+//BFS01                     aLightGroup.SetIntensity(Color(COL_WHITE), Base3DMaterialSpecular, eLight);
+//BFS01                     Vector3D aDir = ((E3dDistantLight *)pLight)->GetDirection();
+//BFS01                     aLightGroup.SetDirection(aDir, eLight);
+//BFS01
+//BFS01                     // Lichtquelle einschalten
+//BFS01                     aLightGroup.Enable(TRUE, eLight);
+//BFS01
+//BFS01                     // Naechstes Licht in Base3D
+//BFS01                     eLight = (Base3DLightNumber)(eLight + 1);
+//BFS01                 }
+//BFS01                 else
+//BFS01                 {
+//BFS01                     // nur ein E3dLight, gibt ein
+//BFS01                     // ambientes licht, auf globales aufaddieren
+//BFS01                     B3dColor aCol(pLight->GetColor().GetColor());
+//BFS01                     aCol *= pLight->GetIntensity();
+//BFS01                     aCol += (const B3dColor &)aLightGroup.GetGlobalAmbientLight();
+//BFS01                     aLightGroup.SetGlobalAmbientLight(aCol);
+//BFS01                 }
+//BFS01             }
+//BFS01         }
+//BFS01     }
+//BFS01
+//BFS01     // Alle anderen Lichter ausschalten
+//BFS01     while(eLight <= Base3DLight7)
+//BFS01     {
+//BFS01         aLightGroup.Enable(FALSE, eLight);
+//BFS01         eLight = (Base3DLightNumber)(eLight + 1);
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 // Beleuchtung einschalten, falls Lampen vorhanden
+//BFS01 aLightGroup.EnableLighting(bLampFound);
+//BFS01}
 
 /*************************************************************************
 |*
@@ -1583,27 +1583,27 @@ void E3dScene::FillLightGroup()
 |*
 \************************************************************************/
 
-UINT16 E3dScene::CountNumberOfLights()
-{
-    UINT16 nNumLights = 0;
-
-    SdrObjList* pSubList = GetSubList();
-    if(pSubList)
-    {
-        SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
-        while ( a3DIterator.IsMore() )
-        {
-            E3dObject* pObj = (E3dObject*) a3DIterator.Next();
-            DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
-            if(pObj->ISA(E3dLight))
-            {
-                // Zaehlen...
-                nNumLights++;
-            }
-        }
-    }
-    return nNumLights;
-}
+//BFS01UINT16 E3dScene::CountNumberOfLights()
+//BFS01{
+//BFS01 UINT16 nNumLights = 0;
+//BFS01
+//BFS01 SdrObjList* pSubList = GetSubList();
+//BFS01 if(pSubList)
+//BFS01 {
+//BFS01     SdrObjListIter a3DIterator(*pSubList, IM_DEEPWITHGROUPS);
+//BFS01     while ( a3DIterator.IsMore() )
+//BFS01     {
+//BFS01         E3dObject* pObj = (E3dObject*) a3DIterator.Next();
+//BFS01         DBG_ASSERT(pObj->ISA(E3dObject), "AW: In Szenen sind nur 3D-Objekte erlaubt!");
+//BFS01         if(pObj->ISA(E3dLight))
+//BFS01         {
+//BFS01             // Zaehlen...
+//BFS01             nNumLights++;
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01 return nNumLights;
+//BFS01}
 
 /*************************************************************************
 |*
