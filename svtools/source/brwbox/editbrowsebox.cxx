@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:57:26 $
+ *  last change: $Author: oj $ $Date: 2001-12-05 14:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,13 +1229,14 @@ namespace svt
         // First update the parent, preventing that while painting this window
         // an update for the parent is done (because it's in the queue already)
         // which may lead to hiding this window immediately
-        if (pCheckBoxPaint->GetParent())
+// #95598# comment out OJ
+/*      if (pCheckBoxPaint->GetParent())
             pCheckBoxPaint->GetParent()->Update();
-
+*/
         pCheckBoxPaint->GetBox().Enable(_bEnabled);
         pCheckBoxPaint->Show();
-        pCheckBoxPaint->Update();
         pCheckBoxPaint->SetParentUpdateMode( sal_False );
+        pCheckBoxPaint->Update();
         pCheckBoxPaint->Hide();
         pCheckBoxPaint->SetParentUpdateMode( sal_True );
     }
@@ -1426,6 +1427,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/10/12 16:57:26  hr
+ *  #92830#: required change: std::min()/std::max()
+ *
  *  Revision 1.2  2001/09/28 13:00:28  hr
  *  #65293#: gcc-3.0.1. needs lvalue
  *
