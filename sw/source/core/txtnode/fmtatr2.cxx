@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-19 08:40:48 $
+ *  last change: $Author: jp $ $Date: 2001-01-23 20:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,17 @@ SwFmtRuby::SwFmtRuby( const SwFmtRuby& rAttr )
 
 SwFmtRuby::~SwFmtRuby()
 {
+}
+
+SwFmtRuby& SwFmtRuby::operator=( const SwFmtRuby& rAttr )
+{
+    sRubyTxt = rAttr.sRubyTxt;
+    sCharFmtName = rAttr.sCharFmtName;
+    nCharFmtId = rAttr.nCharFmtId;
+    nPosition = rAttr.nPosition;
+    nAdjustment = rAttr.nAdjustment;
+    pTxtAttr =  0;
+    return *this;
 }
 
 int SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const

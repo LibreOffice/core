@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtruby.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 16:11:14 $
+ *  last change: $Author: jp $ $Date: 2001-01-23 20:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ public:
     SwFmtRuby( const String& rRubyTxt );
     SwFmtRuby( const SwFmtRuby& rAttr );
     virtual ~SwFmtRuby();
+
+    SwFmtRuby& operator=( const SwFmtRuby& rAttr );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
