@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:12:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,40 @@
 #define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
 #define UID_ABSOLUTE_RECORD_WINDOW              (HID_FORM_DLG_START +  38)
 
+#define HID_DATA_NAVIGATOR_WIN                  (HID_FM_OTHER_START +  39)
+#define HID_XFORMS_ADDDATAITEM_DLG              (HID_FM_OTHER_START +  40)
+#define HID_XFORMS_ADDCONDITION_DLG             (HID_FM_OTHER_START +  41)
+#define HID_XFORMS_NAMESPACEITEM_DLG            (HID_FM_OTHER_START +  42)
+#define HID_XFORMS_NAMESPACEITEM_LIST           (HID_FM_OTHER_START +  43)
+#define HID_XFORMS_MANAGENAMESPACE_DLG          (HID_FM_OTHER_START +  44)
+
+#define HID_TP_XFORMS_INSTANCE                  (HID_FM_OTHER_START +  45)
+#define HID_TP_XFORMS_SUBMISSION                (HID_FM_OTHER_START +  46)
+#define HID_TP_XFORMS_BINDING                   (HID_FM_OTHER_START +  47)
+
+#define HID_MN_XFORMS_MODELS_ADD                (HID_FM_OTHER_START +  48)
+#define HID_MN_XFORMS_MODELS_EDIT               (HID_FM_OTHER_START +  49)
+#define HID_MN_XFORMS_MODELS_REMOVE             (HID_FM_OTHER_START +  50)
+#define HID_MN_XFORMS_INSTANCES_ADD             (HID_FM_OTHER_START +  51)
+#define HID_MN_XFORMS_INSTANCES_EDIT            (HID_FM_OTHER_START +  52)
+#define HID_MN_XFORMS_INSTANCES_REMOVE          (HID_FM_OTHER_START +  53)
+#define HID_MN_XFORMS_SHOW_DETAILS              (HID_FM_OTHER_START +  54)
+#define HID_XFORMS_TOOLBOX                      (HID_FM_OTHER_START +  55)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD             (HID_FM_OTHER_START +  56)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT     (HID_FM_OTHER_START +  57)
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE   (HID_FM_OTHER_START +  58)
+#define HID_XFORMS_TOOLBOX_ITEM_EDIT            (HID_FM_OTHER_START +  59)
+#define HID_XFORMS_TOOLBOX_ITEM_REMOVE          (HID_FM_OTHER_START +  60)
+#define HID_XFORMS_ITEMS_LIST                   (HID_FM_OTHER_START +  61)
+#define HID_XFORMS_MODELS_LIST                  (HID_FM_OTHER_START +  62)
+#define HID_XFORMS_MODELS_MENUBTN               (HID_FM_OTHER_START +  63)
+#define HID_XFORMS_INSTANCES_MENUBTN            (HID_FM_OTHER_START +  64)
+#define HID_XFORMS_ADDSUBMISSION_DLG            (HID_FM_OTHER_START +  65)
+#define HID_XFORMS_ADDMODEL_DLG                 (HID_FM_OTHER_START +  66)
+#define HID_XFORMS_ADDINSTANCE_DLG              (HID_FM_OTHER_START +  67)
+#define HID_XFORMS_MID_INSERT_CONTROL           (HID_FM_OTHER_START +  68)
+#define HID_XFORMS_TAB_CONTROL                  (HID_FM_OTHER_START +  69)
+
 // if you add a new define here, please adjust the overflow check
 // at the end of the file!!
 
@@ -252,12 +286,11 @@
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END     UID_ABSOLUTE_RECORD_WINDOW
+#define ACT_FM_HID_END      HID_XFORMS_TAB_CONTROL
 
-#if ACT_SVX_HID_END > HID_FORMS_END
+#if ACT_FM_HID_END > HID_FORMS_END
 #error Resource-Ueberlauf in #line, #file
 #endif
-
 
 #endif
 
