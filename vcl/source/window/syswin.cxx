@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:12:02 $
+ *  last change: $Author: th $ $Date: 2001-08-07 11:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,14 +95,17 @@
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
 #endif
-#ifndef _SV_SYSWIN_HXX
-#include <syswin.hxx>
+#ifndef _SV_SOUND_HXX
+#include <sound.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
+#endif
+#ifndef _SV_SYSWIN_HXX
+#include <syswin.hxx>
 #endif
 
 #include <unowrap.hxx>
@@ -131,7 +134,6 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mbDockBtn           = FALSE;
     mbHideBtn           = FALSE;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
-
 }
 
 // -----------------------------------------------------------------------
@@ -167,6 +169,19 @@ BOOL SystemWindow::Close()
         Application::GetUnoWrapper()->WindowEvent_Close( this );
         if ( bCreatedWithToolkit )
             return FALSE;
+    }
+
+    // Is Window not closeable, ignore close
+    Window*     pBorderWin = ImplGetBorderWindow();
+    WinBits     nStyle;
+    if ( pBorderWin )
+        nStyle = pBorderWin->GetStyle();
+    else
+        nStyle = GetStyle();
+    if ( !(nStyle & WB_CLOSEABLE) )
+    {
+        Sound::Beep( SOUND_DISABLE, this );
+        return FALSE;
     }
 
     Hide();
