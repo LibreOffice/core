@@ -2,9 +2,9 @@
  *
  *  $RCSfile: version.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-07 13:58:17 $
+ *  last change: $Author: hjs $ $Date: 2002-03-07 17:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #include <stdio.h>
 #include <string.h>
 #else
-#include <stdlib.h>
 #ifdef WNT
 char *  __cdecl strcpy(char *, const char *);
 #endif
