@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAppend.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
  module com {  module sun {  module star {  module beans {
-interface XPropertySet;
+ published interface XPropertySet;
 };};};};
 
 #ifndef __com_sun_star_sdbc_SQLException_idl__
@@ -82,7 +82,7 @@ interface XPropertySet;
 // DocMerge from xml: interface com::sun::star::beans::com::sun::star::sdbcx::XAppend
 /** is used for creating and appending new objects to a specific container.
  */
-interface XAppend: com::sun::star::uno::XInterface
+published interface XAppend: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::beans::com::sun::star::sdbcx::XAppend::appendByDescriptor
