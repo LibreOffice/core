@@ -46,6 +46,7 @@ JAVA_FILES = \
     AccessibleTextHandler.java	\
     AccessibleTreeCellRenderer.java		\
     AccessibleTreeHandler.java	\
+    AccessibleTreeNode.java		\
     Canvas.java					\
     FrameActionListener.java	\
     InformationWriter.java		\
@@ -54,7 +55,8 @@ JAVA_FILES = \
     OfficeConnection.java		\
     Print.java					\
     SimpleOffice.java			\
-    VectorHandler.java
+    StringNode.java				\
+    VectorNode.java
 
 
 JAVA_CLASSPATHS := 			\
