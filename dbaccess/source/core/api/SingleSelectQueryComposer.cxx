@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:41:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -308,7 +314,7 @@ void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
         ||  SQL_ISRULE(pSqlParseNode,union_statement) ) // #i4229# OJ
     {
         SQLException aError1(command,*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
-        throw SQLException(::rtl::OUString::createFromAscii("No single select statement!"),*this,
+        throw SQLException(DBACORE_RESSTRING(RID_STR_ONLY_QUERY),*this,
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,makeAny(aError1));
     }
 
@@ -354,8 +360,12 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
         || !m_aCurrentColumns[SelectColumns]
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
         )
-        throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
-        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        {
+            String sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
+            sError.SearchAndReplaceAscii("%value", ::rtl::OUString(PROPERTY_NAME));
+            SQLException aErr(sError,*this,SQLSTATE_GENERAL,1000,Any() );
+            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+        }
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -363,8 +373,11 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
 
     if ( !m_xMetaData->supportsOrderByUnrelated() && m_aCurrentColumns[SelectColumns] && !m_aCurrentColumns[SelectColumns]->hasByName(aName))
-        throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),
-            *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+    {
+        String sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
+        sError.SearchAndReplaceAscii("%name", aName);
+        throw SQLException(sError,*this,SQLSTATE_GENERAL,1000,Any() );
+    }
 
     // filter anhaengen
     // select ohne where und order by aufbauen
@@ -414,8 +427,12 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
         || !m_aCurrentColumns[SelectColumns]
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
         )
-        throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
-        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        {
+            String sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
+            sError.SearchAndReplaceAscii("%value", ::rtl::OUString(PROPERTY_NAME));
+            SQLException aErr(sError,*this,SQLSTATE_GENERAL,1000,Any() );
+            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+        }
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -423,8 +440,11 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
     column->getPropertyValue(PROPERTY_NAME)         >>= aName;
 
     if ( !m_xMetaData->supportsGroupByUnrelated() && m_aCurrentColumns[SelectColumns] && !m_aCurrentColumns[SelectColumns]->hasByName(aName))
-        throw SQLException(::rtl::OUString::createFromAscii("Column not in select clause!"),
-            *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+    {
+        String sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
+        sError.SearchAndReplaceAscii("%name", aName);
+        throw SQLException(sError,*this,SQLSTATE_GENERAL,1000,Any() );
+    }
 
     // filter anhaengen
     // select ohne where und order by aufbauen
@@ -1208,15 +1228,13 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     if ( !column.is()
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE)
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME) )
-        throw SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
-        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
     sal_Int32 nType = 0;
     column->getPropertyValue(PROPERTY_TYPE) >>= nType;
     sal_Int32 nSearchable = dbtools::getSearchColumnFlag(m_xConnection,nType);
     if(nSearchable == ColumnSearch::NONE)
-        throw SQLException(::rtl::OUString::createFromAscii("Column not searchable!"),
-        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+        throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_SEARCHABLE),*this,SQLSTATE_GENERAL,1000,Any() );
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1294,8 +1312,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                             aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'"));
                     }
                     else
-                        throw SQLException(::rtl::OUString::createFromAscii("Column value isn't from type Sequence<sal_Int8>!"),
-                        *this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+                        throw SQLException(DBACORE_RESSTRING(RID_STR_NOT_SEQUENCE_INT8),*this,SQLSTATE_GENERAL,1000,Any() );
                 }
                 break;
             case DataType::BIT:
