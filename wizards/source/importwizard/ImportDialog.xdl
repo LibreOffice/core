@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="ImportDialog" dlg:title="ImportDialog" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0"/>
+ </dlg:styles>
+ <dlg:bulletinboard>
+  <dlg:button dlg:style-id="0" dlg:id="cbCancel" dlg:left="5" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="cbCancel">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.CancelButton"/>
+  </dlg:button>
+  <dlg:button dlg:style-id="0" dlg:id="cbHelp" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="cbHelp">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.HelperDialog"/>
+  </dlg:button>
+  <dlg:button dlg:style-id="0" dlg:id="cbGoOn" dlg:left="215" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="cbGoOn">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.NextStep"/>
+  </dlg:button>
+  <dlg:text dlg:style-id="0" dlg:id="WelcomeTextLabel" dlg:left="5" dlg:top="41" dlg:width="260" dlg:height="20" dlg:page="1" dlg:value="WelcomeTextLabel" dlg:multiline="true"/>
+  <dlg:text dlg:style-id="0" dlg:id="WelcomeTextLabel3" dlg:left="5" dlg:top="61" dlg:width="260" dlg:height="12" dlg:page="1" dlg:value="WelcomeTextLabel3"/>
+  <dlg:button dlg:style-id="0" dlg:id="Button1" dlg:left="245" dlg:top="80" dlg:width="12" dlg:height="12" dlg:page="2" dlg:value="..."/>
+  <dlg:button dlg:style-id="0" dlg:id="Button2" dlg:left="245" dlg:top="94" dlg:width="12" dlg:height="12" dlg:page="2" dlg:value="..."/>
+  <dlg:button dlg:style-id="0" dlg:id="Button3" dlg:left="245" dlg:top="154" dlg:width="12" dlg:height="12" dlg:page="2" dlg:value="..."/>
+  <dlg:button dlg:style-id="0" dlg:id="Button4" dlg:left="245" dlg:top="169" dlg:width="12" dlg:height="12" dlg:page="2" dlg:value="..."/>
+  <dlg:radiogroup>
+   <dlg:radio dlg:style-id="0" dlg:id="OptSODocuments" dlg:left="5" dlg:top="75" dlg:width="260" dlg:height="12" dlg:page="1" dlg:tag="XML" dlg:value="OptSODocuments">
+    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisorEnableCheckboxes"/>
+   </dlg:radio>
+   <dlg:radio dlg:style-id="0" dlg:id="OptMSDocuments" dlg:left="5" dlg:top="125" dlg:width="260" dlg:height="12" dlg:page="1" dlg:tag="MS" dlg:value="OptMSDocuments">
+    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisorEnableCheckboxes"/>
+   </dlg:radio>
+  </dlg:radiogroup>
+  <dlg:checkbox dlg:style-id="0" dlg:id="ChkFirstSOApplication" dlg:left="10" dlg:top="90" dlg:width="120" dlg:height="12" dlg:page="1" dlg:value="ChkFirstSOApplication">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisOrEnableNextButton"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="ChkSecondSOApplication" dlg:left="135" dlg:top="90" dlg:width="120" dlg:height="12" dlg:page="1" dlg:value="ChkSecondSOApplication">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisOrEnableNextButton"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="ChkThirdSOApplication" dlg:left="10" dlg:top="105" dlg:width="120" dlg:height="12" dlg:page="1" dlg:value="ChkThirdSOApplication">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisOrEnableNextButton"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="ChkFourthSOApplication" dlg:left="135" dlg:top="105" dlg:width="120" dlg:height="12" dlg:page="1" dlg:value="ChkFourthSOApplication">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisOrEnableNextButton"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="ChkFirstMSApplication" dlg:disabled="true" dlg:left="10" dlg:top="140" dlg:width="120" dlg:height="12" dlg:page="1" dlg:value="ChkFirstMSApplication">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisOrEnableNextButton"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="ChkSecondMSApplication" dlg:disabled="true" dlg:left="135" dlg:top="140" dlg:width="120" dlg:height="12" dlg:page="1" dlg:value="ChkSecondMSApplication">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisOrEnableNextButton"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="ChkThirdMSApplication" dlg:disabled="true" dlg:left="10" dlg:top="155" dlg:width="120" dlg:height="12" dlg:page="1" dlg:value="ChkThirdMSApplication">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.DisOrEnableNextButton"/>
+  </dlg:checkbox>
+  <dlg:text dlg:style-id="0" dlg:id="WelcomeTextLabel2" dlg:disabled="true" dlg:left="5" dlg:top="170" dlg:width="260" dlg:height="18" dlg:page="1" dlg:value="WelcomeTextLabel2"/>
+  <dlg:checkbox dlg:style-id="0" dlg:id="TemplateCheckbox" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:page="2" dlg:value="TemplateCheckbox">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.SetEnabledTemplate_InputPath"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="TemplateSearchSubDir" dlg:left="10" dlg:top="63" dlg:width="240" dlg:height="12" dlg:page="2" dlg:value="TemplateSearchSubDir"/>
+  <dlg:text dlg:style-id="0" dlg:id="TemplateImportLabel" dlg:left="10" dlg:top="80" dlg:width="60" dlg:height="12" dlg:page="2" dlg:value="TemplateImportLabel"/>
+  <dlg:text dlg:style-id="0" dlg:id="TemplateExportLabel" dlg:left="10" dlg:top="94" dlg:width="60" dlg:height="12" dlg:page="2" dlg:value="TemplateExportLabel"/>
+  <dlg:textfield dlg:style-id="0" dlg:id="TemplateImportPath" dlg:left="71" dlg:top="80" dlg:width="170" dlg:height="12" dlg:page="2"/>
+  <dlg:textfield dlg:style-id="0" dlg:id="TemplateExportPath" dlg:left="71" dlg:top="94" dlg:width="170" dlg:height="12" dlg:page="2"/>
+  <dlg:checkbox dlg:style-id="0" dlg:id="DocumentPathCheckbox" dlg:left="10" dlg:top="125" dlg:width="240" dlg:height="12" dlg:page="2" dlg:value="DocumentPathCheckbox">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.DialogModul.SetEnabledDocument_InputPath"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:style-id="0" dlg:id="DocumentSearchSubDir" dlg:left="10" dlg:top="138" dlg:width="240" dlg:height="12" dlg:page="2" dlg:value="DocumentSearchSubDir"/>
+  <dlg:text dlg:style-id="0" dlg:id="DocumentImportLabel" dlg:left="10" dlg:top="154" dlg:width="60" dlg:height="12" dlg:page="2" dlg:value="DocumentImportLabel"/>
+  <dlg:text dlg:style-id="0" dlg:id="DocumentExportLabel" dlg:left="10" dlg:top="169" dlg:width="60" dlg:height="12" dlg:page="2" dlg:value="DocumentExportLabel"/>
+  <dlg:textfield dlg:style-id="0" dlg:id="DocumentImportPath" dlg:left="71" dlg:top="154" dlg:width="170" dlg:height="12" dlg:page="2"/>
+  <dlg:textfield dlg:style-id="0" dlg:id="DocumentExportPath" dlg:left="71" dlg:top="169" dlg:width="170" dlg:height="12" dlg:page="2"/>
+  <dlg:titledbox dlg:style-id="0" dlg:id="TemplateFrame" dlg:left="5" dlg:top="40" dlg:width="260" dlg:height="70" dlg:page="2">
+   <dlg:title dlg:value="TemplateFrame"/>
+  </dlg:titledbox>
+  <dlg:text dlg:style-id="0" dlg:id="SummaryHeaderLabel" dlg:left="5" dlg:top="40" dlg:width="260" dlg:height="12" dlg:page="3" dlg:value="SummaryHeaderLabel"/>
+  <dlg:textfield dlg:style-id="0" dlg:id="SummaryTextbox" dlg:left="5" dlg:top="55" dlg:width="259" dlg:height="125" dlg:page="3" dlg:vscroll="true" dlg:multiline="true"/>
+  <dlg:titledbox dlg:style-id="0" dlg:id="FrameProgress" dlg:left="5" dlg:top="50" dlg:width="260" dlg:height="110" dlg:page="4">
+   <dlg:title dlg:value="FrameProgress"/>
+  </dlg:titledbox>
+  <dlg:text dlg:style-id="0" dlg:id="LabelRetrieval" dlg:left="10" dlg:top="65" dlg:width="240" dlg:height="12" dlg:page="4" dlg:value="LabelRetrieval"/>
+  <dlg:text dlg:style-id="0" dlg:id="LabelCurTemplateRetrieval" dlg:left="15" dlg:top="80" dlg:width="235" dlg:height="12" dlg:page="4" dlg:value="LabelCurTemplateRetrieval"/>
+  <dlg:text dlg:style-id="0" dlg:id="LabelCurDocumentRetrieval" dlg:left="15" dlg:top="95" dlg:width="235" dlg:height="12" dlg:page="4" dlg:value="LabelCurDocumentRetrieval"/>
+  <dlg:text dlg:style-id="0" dlg:id="LabelCurProgress" dlg:left="10" dlg:top="120" dlg:width="240" dlg:height="12" dlg:page="4" dlg:value="LabelCurProgress"/>
+  <dlg:text dlg:style-id="0" dlg:id="LabelCurDocument" dlg:left="15" dlg:top="135" dlg:width="235" dlg:height="12" dlg:page="4" dlg:value="LabelCurDocument"/>
+  <dlg:img dlg:id="ImportPreview" dlg:left="5" dlg:top="5" dlg:width="260" dlg:height="30"/>
+  <dlg:button dlg:style-id="0" dlg:id="cbBack" dlg:left="155" dlg:top="190" dlg:width="50" dlg:height="13" dlg:value="cbBack">
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.PrevStep"/>
+  </dlg:button>
+  <dlg:titledbox dlg:style-id="0" dlg:id="DocumentFrame" dlg:left="5" dlg:top="115" dlg:width="260" dlg:height="70" dlg:page="2">
+   <dlg:title dlg:value="DocumentFrame"/>
+  </dlg:titledbox>
+ </dlg:bulletinboard>
+</dlg:window>
