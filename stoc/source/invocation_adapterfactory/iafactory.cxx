@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-26 15:18:28 $
+ *  last change: $Author: dbo $ $Date: 2002-08-22 12:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,37 +59,23 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
+#include <hash_map>
+
 #include <osl/diagnose.h>
-#endif
-#ifndef _OSL_INTERLOCK_H_
 #include <osl/interlck.h>
-#endif
+#include <osl/mutex.hxx>
 
-#ifndef _UNO_DISPATCHER_H_
 #include <uno/dispatcher.h>
-#endif
-#ifndef _UNO_DATA_H_
 #include <uno/data.h>
-#endif
-#ifndef _UNO_ANY2_H_
 #include <uno/any2.h>
-#endif
-#ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
-#endif
 
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
-#endif
 
 #include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
@@ -99,17 +85,17 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 
-using namespace cppu;
-using namespace rtl;
-using namespace osl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::script;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::lang;
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 #define SERVICENAME "com.sun.star.script.InvocationAdapterFactory"
 #define IMPLNAME    "com.sun.star.comp.stoc.InvocationAdapterFactory"
+
+
+using namespace ::std;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace stoc_invadp
 {
@@ -147,78 +133,168 @@ static OUString invadp_getImplementationName()
     return *pImplName;
 }
 
+struct hash_ptr
+{
+    inline size_t operator() ( void * p ) const
+        { return (size_t)p; }
+};
+typedef hash_map< void *, uno_Interface *, hash_ptr, equal_to< void * > > t_receiver2adapter_map;
+
 //==================================================================================================
 class FactoryImpl
-    : public WeakImplHelper3< XServiceInfo, XInvocationAdapterFactory, XInvocationAdapterFactory2 >
+    : public ::cppu::WeakImplHelper3< lang::XServiceInfo,
+                                      script::XInvocationAdapterFactory,
+                                      script::XInvocationAdapterFactory2 >
 {
-    Mapping _aUno2Cpp;
-    Mapping _aCpp2Uno;
-
 public:
-    FactoryImpl();
-    virtual ~FactoryImpl();
+    Mapping m_aUno2Cpp;
+    Mapping m_aCpp2Uno;
+    uno_Interface * m_pConverter;
+
+    typelib_TypeDescription * m_pInvokMethodTD;
+    typelib_TypeDescription * m_pSetValueTD;
+    typelib_TypeDescription * m_pGetValueTD;
+    typelib_TypeDescription * m_pAnySeqTD;
+    typelib_TypeDescription * m_pShortSeqTD;
+    typelib_TypeDescription * m_pConvertToTD;
+
+    Mutex m_mutex;
+    t_receiver2adapter_map m_map;
+
+    FactoryImpl( Reference< XComponentContext > const & xContext ) SAL_THROW( (RuntimeException) );
+    virtual ~FactoryImpl() SAL_THROW( () );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName()
+        throw (RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
+        throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (RuntimeException);
 
     // XInvocationAdapterFactory
     virtual Reference< XInterface > SAL_CALL createAdapter(
-        const Reference< XInvocation > & xReceiver,
-        const Type & rType ) throw (RuntimeException);
+        const Reference< script::XInvocation > & xReceiver, const Type & rType )
+        throw (RuntimeException);
     // XInvocationAdapterFactory2
     virtual Reference< XInterface > SAL_CALL createAdapter(
-        const Reference< XInvocation > & xReceiver,
-        const Sequence< Type > & rTypes ) throw (RuntimeException);
+        const Reference< script::XInvocation > & xReceiver, const Sequence< Type > & rTypes )
+        throw (RuntimeException);
 };
-
 struct AdapterImpl;
 //==================================================================================================
 struct InterfaceAdapterImpl : public uno_Interface
 {
-    AdapterImpl * pAdapter;
-    typelib_InterfaceTypeDescription * pTypeDescr;
+    AdapterImpl *                           m_pAdapter;
+    typelib_InterfaceTypeDescription *      m_pTypeDescr;
 };
 //==================================================================================================
 struct AdapterImpl
 {
-    oslInterlockedCount         nRef;
-    uno_Interface *             pReceiver; // XInvocation receiver
+    oslInterlockedCount         m_nRef;
+    FactoryImpl *               m_pFactory;
+    void *                      m_key; // map key
+    uno_Interface *             m_pReceiver; // XInvocation receiver
 
-    sal_Int32                   nInterfaces;
-    InterfaceAdapterImpl *      pInterfaces;
+    sal_Int32                   m_nInterfaces;
+    InterfaceAdapterImpl *      m_pInterfaces;
 
     // XInvocation calls
-    void getValue( const typelib_TypeDescription * pMemberType,
-                   void * pReturn, void * pArgs[], uno_Any ** ppException );
-    void setValue( const typelib_TypeDescription * pMemberType,
-                   void * pReturn, void * pArgs[], uno_Any ** ppException );
-    void invoke( const typelib_TypeDescription * pMemberType,
-                 void * pReturn, void * pArgs[], uno_Any ** ppException );
+    void getValue(
+        const typelib_TypeDescription * pMemberType,
+        void * pReturn, void * pArgs[], uno_Any ** ppException );
+    void setValue(
+        const typelib_TypeDescription * pMemberType,
+        void * pReturn, void * pArgs[], uno_Any ** ppException );
+    void invoke(
+        const typelib_TypeDescription * pMemberType,
+        void * pReturn, void * pArgs[], uno_Any ** ppException );
 
-    inline ~AdapterImpl();
+    bool coerce_assign(
+        void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource )
+        SAL_THROW( () );
+    inline bool coerce_construct(
+        void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource )
+        SAL_THROW( () );
 
-    static inline uno_Interface * createAdapter(
-        uno_Interface * pReceiver_, const Sequence< Type > & rTypes );
+    inline AdapterImpl(
+        void * key, Reference< script::XInvocation > const & xReceiver,
+        const Sequence< Type > & rTypes,
+        FactoryImpl * pFactory )
+        SAL_THROW( (RuntimeException) );
+    inline ~AdapterImpl()
+        SAL_THROW( () );
 };
 
 //--------------------------------------------------------------------------------------------------
-inline static sal_Bool coerce_assign(
-    void * pDest, typelib_TypeDescription * pTD, uno_Any * pSource )
+static inline type_equals(
+    typelib_TypeDescriptionReference * pType1, typelib_TypeDescriptionReference * pType2 )
+    SAL_THROW( () )
 {
-    if (pSource->pType->eTypeClass != typelib_TypeClass_VOID)
+    return (pType1 == pType2 ||
+            (pType1->pTypeName->length == pType2->pTypeName->length &&
+             0 == ::rtl_ustr_compare( pType1->pTypeName->buffer, pType2->pTypeName->buffer )));
+}
+//__________________________________________________________________________________________________
+bool AdapterImpl::coerce_assign(
+    void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource )
+{
+    if (typelib_TypeClass_ANY == pType->eTypeClass)
     {
-        if (pTD->eTypeClass == typelib_TypeClass_ANY)
-            return uno_assignData( pDest, pTD, pSource, pTD, 0, 0, 0 );
+        ::uno_type_any_assign(
+            (uno_Any *)pDest, pSource->pData, pSource->pType, 0, 0 );
+        return true;
+    }
+    if (::uno_type_assignData(
+            pDest, pType, pSource->pData, pSource->pType, 0, 0, 0 ))
+    {
+        return true;
+    }
+    else // try type converter
+    {
+        uno_Any ret;
+        void * args[ 2 ];
+        args[ 0 ] = pSource;
+        args[ 1 ] = &pType;
+        uno_Any exc;
+        uno_Any * p_exc = &exc;
+
+        // converTo()
+        (*m_pFactory->m_pConverter->pDispatcher)(
+            m_pFactory->m_pConverter,
+            m_pFactory->m_pConvertToTD, &ret, args, &p_exc );
+
+        if (p_exc) // exception occured
+        {
+            ::uno_any_destruct( p_exc, 0 );
+            return false;
+        }
         else
-            return uno_type_assignData( pDest, pTD->pWeakRef, pSource->pData, pSource->pType, 0, 0, 0 );
+        {
+            bool succ = (sal_False != ::uno_type_assignData(
+                             pDest, pType, ret.pData, ret.pType, 0, 0, 0 ));
+            ::uno_any_destruct( &ret, 0 );
+            OSL_ENSURE( succ, "### conversion succeeded, but assignment failed!?" );
+            return succ;
+        }
     }
-    else
+}
+//__________________________________________________________________________________________________
+inline bool AdapterImpl::coerce_construct(
+    void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource )
+{
+    if (typelib_TypeClass_ANY == pType->eTypeClass)
     {
-        uno_constructData( pDest, pTD );
-        return sal_True;
+        ::uno_type_copyData( pDest, pSource, pType, 0 );
+        return true;
     }
+    if (type_equals( pType, pSource->pType))
+    {
+        ::uno_type_copyData( pDest, pSource->pData, pType, 0 );
+        return true;
+    }
+    ::uno_type_constructData( pDest, pType );
+    return coerce_assign( pDest, pType, pSource );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -235,14 +311,14 @@ static inline void constructRuntimeException( uno_Any * pExc, const OUString & r
 static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
 {
     OUString const & name =
-        * reinterpret_cast< OUString const * >( &pSource->pType->pTypeName );
+        *reinterpret_cast< OUString const * >( &pSource->pType->pTypeName );
 
     if (name.equalsAsciiL(
         RTL_CONSTASCII_STRINGPARAM("com.sun.star.reflection.InvocationTargetException") ))
     {
         // unwrap invocation target exception
         uno_Any * target_exc =
-            & reinterpret_cast< InvocationTargetException * >( pSource->pData )->TargetException;
+            &reinterpret_cast< reflection::InvocationTargetException * >( pSource->pData )->TargetException;
         ::uno_type_any_construct( pDest, target_exc->pData, target_exc->pType, 0 );
     }
     else // all other exceptions are wrapped to RuntimeException
@@ -255,27 +331,15 @@ static void handleInvokExc( uno_Any * pDest, uno_Any * pSource )
         else
         {
             constructRuntimeException(
-                pDest, OUString( RTL_CONSTASCII_USTRINGPARAM("no exception has been thrown via invocation?!") ) );
+                pDest, OUSTR("no exception has been thrown via invocation?!") );
         }
     }
 }
-
 //__________________________________________________________________________________________________
 void AdapterImpl::getValue(
     const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-    // XInvocation type description
-    typelib_InterfaceTypeDescription * pInvocationTD = 0;
-    const Type & rIType = ::getCppuType( (const Reference< XInvocation > *)0 );
-    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pInvocationTD, rIType.getTypeLibType() );
-    // getValue()
-    typelib_InterfaceMethodTypeDescription * pInvokMethodTD = 0;
-    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pInvokMethodTD, pInvocationTD->ppMembers[3] );
-    // attribute type
-    typelib_TypeDescription * pAttributeTD = 0;
-    TYPELIB_DANGER_GET( &pAttributeTD, ((typelib_InterfaceAttributeTypeDescription *)pMemberType)->pAttributeTypeRef );
-
     uno_Any aInvokRet;
     void * pInvokArgs[1];
     pInvokArgs[0] = &((typelib_InterfaceMemberTypeDescription *)pMemberType)->pMemberName;
@@ -283,54 +347,40 @@ void AdapterImpl::getValue(
     uno_Any * pInvokExc = &aInvokExc;
 
     // getValue()
-    (*pReceiver->pDispatcher)(
-        pReceiver, (typelib_TypeDescription *)pInvokMethodTD,
-        &aInvokRet, pInvokArgs, &pInvokExc );
+    (*m_pReceiver->pDispatcher)(
+        m_pReceiver, m_pFactory->m_pGetValueTD, &aInvokRet, pInvokArgs, &pInvokExc );
 
     if (pInvokExc) // getValue() call exception
     {
         handleInvokExc( *ppException, pInvokExc );
-        uno_any_destruct( pInvokExc, 0 ); // cleanup
+        ::uno_any_destruct( pInvokExc, 0 ); // cleanup
     }
     else // invocation call succeeded
     {
-        uno_constructData( pReturn, pAttributeTD );
-        if (coerce_assign( pReturn, pAttributeTD, &aInvokRet ))
+        if (coerce_construct(
+                pReturn,
+                ((typelib_InterfaceAttributeTypeDescription *)pMemberType)->pAttributeTypeRef,
+                &aInvokRet ))
         {
             *ppException = 0; // no exceptions be thrown
         }
         else // no assignment possible => throw runtime exception
         {
-            uno_destructData( pReturn, pAttributeTD, 0 );
             constructRuntimeException(
-                *ppException,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("cannot coerce return type of attribute get call!") ) );
+                *ppException, OUSTR("cannot coerce return type of attribute get call!") );
         }
-        uno_any_destruct( &aInvokRet, 0 );
+        ::uno_any_destruct( &aInvokRet, 0 );
     }
-
-    TYPELIB_DANGER_RELEASE( pAttributeTD );
-    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pInvokMethodTD );
-    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pInvocationTD );
 }
 //__________________________________________________________________________________________________
 void AdapterImpl::setValue(
     const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-    // XInvocation type description
-    typelib_InterfaceTypeDescription * pInvocationTD = 0;
-    const Type & rIType = ::getCppuType( (const Reference< XInvocation > *)0 );
-    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pInvocationTD, rIType.getTypeLibType() );
-    // setValue()
-    typelib_InterfaceMethodTypeDescription * pInvokMethodTD = 0;
-    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pInvokMethodTD, pInvocationTD->ppMembers[2] );
-    // attribute type
-    typelib_TypeDescription * pAttributeTD = 0;
-    TYPELIB_DANGER_GET( &pAttributeTD, ((typelib_InterfaceAttributeTypeDescription *)pMemberType)->pAttributeTypeRef );
-
     uno_Any aInvokVal;
-    uno_any_construct( &aInvokVal, pArgs[0], pAttributeTD, 0 );
+    ::uno_type_any_construct(
+        &aInvokVal, pArgs[0],
+        ((typelib_InterfaceAttributeTypeDescription *)pMemberType)->pAttributeTypeRef, 0 );
 
     void * pInvokArgs[2];
     pInvokArgs[0] = &((typelib_InterfaceMemberTypeDescription *)pMemberType)->pMemberName;
@@ -339,63 +389,40 @@ void AdapterImpl::setValue(
     uno_Any * pInvokExc = &aInvokExc;
 
     // setValue()
-    (*pReceiver->pDispatcher)(
-        pReceiver, (typelib_TypeDescription *)pInvokMethodTD,
-        0, pInvokArgs, &pInvokExc );
+    (*m_pReceiver->pDispatcher)(
+        m_pReceiver, m_pFactory->m_pSetValueTD, 0, pInvokArgs, &pInvokExc );
 
     if (pInvokExc) // setValue() call exception
     {
         handleInvokExc( *ppException, pInvokExc );
-        uno_any_destruct( pInvokExc, 0 ); // cleanup
+        ::uno_any_destruct( pInvokExc, 0 ); // cleanup
     }
     else // invocation call succeeded
     {
         *ppException = 0; // no exceptions be thrown
     }
 
-    uno_any_destruct( &aInvokVal, 0 ); // cleanup
-
-    TYPELIB_DANGER_RELEASE( pAttributeTD );
-    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pInvokMethodTD );
-    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pInvocationTD );
+    ::uno_any_destruct( &aInvokVal, 0 ); // cleanup
 }
 //__________________________________________________________________________________________________
 void AdapterImpl::invoke(
     const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-    // XInvocation type description
-    typelib_InterfaceTypeDescription * pInvocationTD = 0;
-    const Type & rIType = ::getCppuType( (const Reference< XInvocation > *)0 );
-    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pInvocationTD, rIType.getTypeLibType() );
-    // invoke()
-    typelib_InterfaceMethodTypeDescription * pInvokMethodTD = 0;
-    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pInvokMethodTD, pInvocationTD->ppMembers[1] );
-
     sal_Int32 nParams = ((typelib_InterfaceMethodTypeDescription *)pMemberType)->nParams;
-    typelib_MethodParameter * pFormalParams = ((typelib_InterfaceMethodTypeDescription *)pMemberType)->pParams;
+    typelib_MethodParameter * pFormalParams =
+        ((typelib_InterfaceMethodTypeDescription *)pMemberType)->pParams;
 
     // in params
-    typelib_TypeDescription * pAnySeqTD = 0;
-    const Type & rAnyType = ::getCppuType( (const Sequence< Any > *)0 );
-    TYPELIB_DANGER_GET( &pAnySeqTD, rAnyType.getTypeLibType() );
     uno_Sequence * pInParamsSeq = 0;
-    uno_sequence_construct( &pInParamsSeq, pAnySeqTD, 0, nParams, 0 );
-
+    ::uno_sequence_construct( &pInParamsSeq, m_pFactory->m_pAnySeqTD, 0, nParams, 0 );
     uno_Any * pInAnys = (uno_Any *)pInParamsSeq->elements;
-    typelib_TypeDescription * pAnyTD = 0;
-    TYPELIB_DANGER_GET( &pAnyTD, ((typelib_IndirectTypeDescription *)pAnySeqTD)->pType );
-
     for ( sal_Int32 nPos = nParams; nPos--; )
     {
-        typelib_MethodParameter & rParam = pFormalParams[nPos];
-        if (rParam.bIn) // in/ inout
+        typelib_MethodParameter const & rParam = pFormalParams[nPos];
+        if (rParam.bIn) // is in/inout param
         {
-            typelib_TypeDescription * pTD = 0;
-            TYPELIB_DANGER_GET( &pTD, rParam.pTypeRef );
-            // assignment to any never fails...
-            uno_assignData( &pInAnys[nPos], pAnyTD, pArgs[nPos], pTD, 0, 0, 0 );
-            TYPELIB_DANGER_RELEASE( pTD );
+            ::uno_type_any_assign( &pInAnys[nPos], pArgs[nPos], rParam.pTypeRef, 0, 0 );
         }
         // pure out is empty any
     }
@@ -403,7 +430,7 @@ void AdapterImpl::invoke(
     // out params, out indices
     uno_Sequence * pOutIndices;
     uno_Sequence * pOutParams;
-    // return
+    // return value
     uno_Any aInvokRet;
     // perform call
     void * pInvokArgs[4];
@@ -415,23 +442,20 @@ void AdapterImpl::invoke(
     uno_Any * pInvokExc = &aInvokExc;
 
     // invoke() call
-    (*pReceiver->pDispatcher)(
-        pReceiver, (typelib_TypeDescription *)pInvokMethodTD,
-        &aInvokRet, pInvokArgs, &pInvokExc );
+    (*m_pReceiver->pDispatcher)(
+        m_pReceiver, m_pFactory->m_pInvokMethodTD, &aInvokRet, pInvokArgs, &pInvokExc );
 
     if (pInvokExc)
     {
         handleInvokExc( *ppException, pInvokExc );
-        uno_any_destruct( pInvokExc, 0 ); // cleanup
+        ::uno_any_destruct( pInvokExc, 0 ); // cleanup
     }
     else // no invocation exception
     {
-        typelib_TypeDescription * pShortSeqTD = 0;
-        const Type & rSeqShortType = ::getCppuType( (const Sequence< sal_Int16 > *)0 );
-        TYPELIB_DANGER_GET( &pShortSeqTD, rSeqShortType.getTypeLibType() );
-
         // write changed out params
-        OSL_ENSURE( pOutParams->nElements == pOutIndices->nElements, "### out params lens differ!" );
+        OSL_ENSURE(
+            pOutParams->nElements == pOutIndices->nElements,
+            "### out params lens differ!" );
         if (pOutParams->nElements == pOutIndices->nElements)
         {
             sal_Int16 * pIndices = (sal_Int16 *)pOutIndices->elements;
@@ -439,56 +463,55 @@ void AdapterImpl::invoke(
             for ( nPos = 0; nPos < pOutIndices->nElements; ++nPos )
             {
                 sal_Int32 nIndex = pIndices[nPos];
-                typelib_TypeDescription * pTD = 0;
-                TYPELIB_DANGER_GET( &pTD, pFormalParams[nIndex].pTypeRef );
                 OSL_ENSURE( nIndex < nParams, "### illegal index!" );
-                if (! pFormalParams[nIndex].bIn) // is pure out param
-                    uno_constructData( pArgs[nIndex], pTD );
-                if (! coerce_assign( pArgs[nIndex], pTD, &pOut[nPos] )) // if fail
+                typelib_MethodParameter const & rParam = pFormalParams[nIndex];
+                bool succ;
+                if (rParam.bIn) // is in/inout param
                 {
-                    // cleanup of out params
-                    if (! pFormalParams[nIndex].bIn) // is pure out param
-                        uno_destructData( pArgs[nIndex], pTD, 0 );
-                    TYPELIB_DANGER_RELEASE( pTD );
-                    for ( sal_Int32 n = 0; n < nPos; ++n )
+                    succ = coerce_assign( pArgs[nIndex], rParam.pTypeRef, &pOut[nPos] );
+                }
+                else // pure out
+                {
+                    succ = coerce_construct( pArgs[nIndex], rParam.pTypeRef, &pOut[nPos] );
+                }
+                if (! succ) // cleanup of out params
+                {
+                    for ( sal_Int32 n = 0; n <= nPos; ++n )
                     {
                         sal_Int32 nIndex = pIndices[n];
-                        pTD = 0;
-                        TYPELIB_DANGER_GET( &pTD, pFormalParams[nIndex].pTypeRef );
                         OSL_ENSURE( nIndex < nParams, "### illegal index!" );
-                        uno_destructData( pArgs[nIndex], pTD, 0 );
-                        TYPELIB_DANGER_RELEASE( pTD );
+                        typelib_MethodParameter const & rParam = pFormalParams[nIndex];
+                        if (! rParam.bIn) // is pure out param
+                        {
+                            ::uno_type_destructData( pArgs[nIndex], rParam.pTypeRef, 0 );
+                        }
                     }
-                    break;
                 }
-                TYPELIB_DANGER_RELEASE( pTD );
             }
             if (nPos == pOutIndices->nElements) // out param copy ok; write return value
             {
                 // return value
-                typelib_TypeDescription * pReturnTD = 0;
-                TYPELIB_DANGER_GET( &pReturnTD, ((typelib_InterfaceMethodTypeDescription *)pMemberType)->pReturnTypeRef );
-                uno_constructData( pReturn, pReturnTD );
-                if (coerce_assign( pReturn, pReturnTD, &aInvokRet ))
+                if (coerce_construct(
+                        pReturn,
+                        ((typelib_InterfaceMethodTypeDescription *)pMemberType)->pReturnTypeRef,
+                        &aInvokRet ))
                 {
                     *ppException = 0; // no exception
                 }
                 else
                 {
-                    uno_destructData( pReturn, pReturnTD, 0 );
                     // set runtime exception
                     constructRuntimeException(
                         *ppException,
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("failed to coerce return type during invocation call!") ) );
+                        OUSTR("failed to coerce return type during invocation call!") );
                 }
-                TYPELIB_DANGER_RELEASE( pReturnTD );
             }
             else
             {
                 // set runtime exception
                 constructRuntimeException(
                     *ppException,
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("failed to coerce parameter type during invocation call!") ) );
+                    OUSTR("failed to coerce parameter type during invocation call!") );
             }
         }
         else
@@ -496,32 +519,29 @@ void AdapterImpl::invoke(
             // set runtime exception
             constructRuntimeException(
                 *ppException,
-                OUString( RTL_CONSTASCII_USTRINGPARAM("out params lengths differ after invocation call!") ) );
+                OUSTR("out params lengths differ after invocation call!") );
         }
         // cleanup invok out params
-        uno_destructData( &pOutIndices, pShortSeqTD, 0 );
-        uno_destructData( &pOutParams, pAnySeqTD, 0 );
+        ::uno_destructData( &pOutIndices, m_pFactory->m_pShortSeqTD, 0 );
+        ::uno_destructData( &pOutParams, m_pFactory->m_pAnySeqTD, 0 );
         // cleanup invok return value
-        uno_any_destruct( &aInvokRet, 0 );
-
-        TYPELIB_DANGER_RELEASE( pShortSeqTD );
+        ::uno_any_destruct( &aInvokRet, 0 );
     }
     // cleanup constructed in params
-    uno_destructData( &pInParamsSeq, pAnySeqTD, 0 );
-    TYPELIB_DANGER_RELEASE( pAnyTD );
-    TYPELIB_DANGER_RELEASE( pAnySeqTD );
-
-    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pInvokMethodTD );
-    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pInvocationTD );
+    ::uno_destructData( &pInParamsSeq, m_pFactory->m_pAnySeqTD, 0 );
 }
-
-//--------------------------------------------------------------------------------------------------
-static inline td_equals(
-    typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
+//__________________________________________________________________________________________________
+inline AdapterImpl::~AdapterImpl()
 {
-    return (pTD->pWeakRef == pType ||
-            (pTD->pTypeName->length == pType->pTypeName->length &&
-             rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
+    for ( sal_Int32 nPos = m_nInterfaces; nPos--; )
+    {
+        ::typelib_typedescription_release(
+            (typelib_TypeDescription *)m_pInterfaces[ nPos ].m_pTypeDescr );
+    }
+    delete [] m_pInterfaces;
+    //
+    (*m_pReceiver->release)( m_pReceiver );
+    m_pFactory->release();
 }
 
 extern "C"
@@ -530,14 +550,17 @@ extern "C"
 static void SAL_CALL adapter_acquire( uno_Interface * pUnoI )
 {
     ::osl_incrementInterlockedCount(
-        & static_cast< InterfaceAdapterImpl * >( pUnoI )->pAdapter->nRef );
+        &static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->m_nRef );
 }
 //__________________________________________________________________________________________________
 static void SAL_CALL adapter_release( uno_Interface * pUnoI )
 {
-    AdapterImpl * pThis = static_cast< InterfaceAdapterImpl * >( pUnoI )->pAdapter;
-    if (! osl_decrementInterlockedCount( &pThis->nRef ))
+    AdapterImpl * pThis = static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter;
+    MutexGuard guard( pThis->m_pFactory->m_mutex );
+    if (! ::osl_decrementInterlockedCount( &pThis->m_nRef ))
     {
+        size_t erased = pThis->m_pFactory->m_map.erase( pThis->m_key );
+        OSL_ASSERT( 1 == erased );
         delete pThis;
     }
 }
@@ -546,26 +569,25 @@ static void SAL_CALL adapter_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
-    AdapterImpl * pThis =
-        static_cast< InterfaceAdapterImpl * >( pUnoI )->pAdapter;
-
     // query to emulated interface
     switch (((typelib_InterfaceMemberTypeDescription *)pMemberType)->nPosition)
     {
     case 0: // queryInterface()
     {
+        AdapterImpl * pThis =
+            static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter;
         *ppException = 0; // no exc
         typelib_TypeDescriptionReference * pDemanded =
             *(typelib_TypeDescriptionReference **)pArgs[0];
         // pInterfaces[0] is XInterface
-        for ( sal_Int32 nPos = 0; nPos < pThis->nInterfaces; ++nPos )
+        for ( sal_Int32 nPos = 0; nPos < pThis->m_nInterfaces; ++nPos )
         {
-            typelib_InterfaceTypeDescription * pTD = pThis->pInterfaces[nPos].pTypeDescr;
+            typelib_InterfaceTypeDescription * pTD = pThis->m_pInterfaces[nPos].m_pTypeDescr;
             while (pTD)
             {
-                if (td_equals( (typelib_TypeDescription *)pTD, pDemanded ))
+                if (type_equals( ((typelib_TypeDescription *)pTD)->pWeakRef, pDemanded ))
                 {
-                    uno_Interface * pUnoI = &pThis->pInterfaces[nPos];
+                    uno_Interface * pUnoI = &pThis->m_pInterfaces[nPos];
                     ::uno_any_construct(
                         (uno_Any *)pReturn, &pUnoI, (typelib_TypeDescription *)pTD, 0 );
                     return;
@@ -587,6 +609,8 @@ static void SAL_CALL adapter_dispatch(
 
     default:
     {
+        AdapterImpl * pThis =
+            static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter;
         if (pMemberType->eTypeClass == typelib_TypeClass_INTERFACE_METHOD) // method
         {
             pThis->invoke( pMemberType, pReturn, pArgs, ppException );
@@ -602,71 +626,133 @@ static void SAL_CALL adapter_dispatch(
     }
 }
 }
-
 //__________________________________________________________________________________________________
-inline uno_Interface * AdapterImpl::createAdapter(
-    uno_Interface * pReceiver_, const Sequence< Type > & rTypes )
+AdapterImpl::AdapterImpl(
+    void * key, Reference< script::XInvocation > const & xReceiver,
+    const Sequence< Type > & rTypes,
+    FactoryImpl * pFactory )
+    SAL_THROW( (RuntimeException) )
+        : m_nRef( 1 ),
+          m_key( key ),
+          m_pFactory( pFactory )
 {
-    AdapterImpl * pThis = new AdapterImpl();
-
-    pThis->nRef = 1;
-
-    (*pReceiver_->acquire)( pReceiver_ );
-    pThis->pReceiver = pReceiver_;
-
-    pThis->nInterfaces = rTypes.getLength();
-    pThis->pInterfaces = new InterfaceAdapterImpl[ rTypes.getLength() ];
-
+    // init adapters
+    m_nInterfaces = rTypes.getLength();
+    m_pInterfaces = new InterfaceAdapterImpl[ rTypes.getLength() ];
     const Type * pTypes = rTypes.getConstArray();
     for ( sal_Int32 nPos = rTypes.getLength(); nPos--; )
     {
-        InterfaceAdapterImpl * pInterface = &pThis->pInterfaces[nPos];
-
-        pInterface->pAdapter = pThis;
-        pInterface->pTypeDescr = 0;
-        pTypes[nPos].getDescription( (typelib_TypeDescription **)&pInterface->pTypeDescr );
-        OSL_ASSERT( pInterface->pTypeDescr );
-        //
+        InterfaceAdapterImpl * pInterface = &m_pInterfaces[nPos];
         pInterface->acquire = adapter_acquire;
         pInterface->release = adapter_release;
         pInterface->pDispatcher = adapter_dispatch;
+        pInterface->m_pAdapter = this;
+        pInterface->m_pTypeDescr = 0;
+        pTypes[nPos].getDescription( (typelib_TypeDescription **)&pInterface->m_pTypeDescr );
+        OSL_ASSERT( pInterface->m_pTypeDescr );
+        if (! pInterface->m_pTypeDescr)
+        {
+            for ( sal_Int32 n = 0; n < nPos; ++n )
+            {
+                ::typelib_typedescription_release(
+                    (typelib_TypeDescription *)m_pInterfaces[ n ].m_pTypeDescr );
+            }
+            delete [] m_pInterfaces;
+            throw RuntimeException(
+                OUSTR("cannot retrieve all interface type infos!"), Reference< XInterface >() );
+        }
     }
 
-    // returns XInterface
-    return &pThis->pInterfaces[0];
-}
-//__________________________________________________________________________________________________
-inline AdapterImpl::~AdapterImpl()
-{
-    for ( sal_Int32 nPos = nInterfaces; nPos--; )
+    // map receiver
+    m_pReceiver = (uno_Interface *)m_pFactory->m_aCpp2Uno.mapInterface(
+        xReceiver.get(), ::getCppuType( &xReceiver ) );
+    OSL_ASSERT( 0 != m_pReceiver );
+    if (! m_pReceiver)
     {
-        ::typelib_typedescription_release( (typelib_TypeDescription *)pInterfaces[nPos].pTypeDescr );
+        throw RuntimeException(
+            OUSTR("cannot map receiver!"), Reference< XInterface >() );
     }
-    delete [] pInterfaces;
-    //
-    (*pReceiver->release)( pReceiver );
+
+    m_pFactory->acquire();
 }
 
 //__________________________________________________________________________________________________
-FactoryImpl::FactoryImpl()
+FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
+    SAL_THROW( (RuntimeException) )
+    : m_pInvokMethodTD( 0 ),
+      m_pSetValueTD( 0 ),
+      m_pGetValueTD( 0 ),
+      m_pAnySeqTD( 0 ),
+      m_pShortSeqTD( 0 ),
+      m_pConvertToTD( 0 )
 {
+    // C++/UNO bridge
+    OUString aCppEnvTypeName = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+    OUString aUnoEnvTypeName = OUSTR(UNO_LB_UNO);
+    m_aUno2Cpp = Mapping( aUnoEnvTypeName, aCppEnvTypeName );
+    m_aCpp2Uno = Mapping( aCppEnvTypeName, aUnoEnvTypeName );
+    OSL_ENSURE( m_aUno2Cpp.is() && m_aCpp2Uno.is(), "### no uno / C++ mappings!" );
+
+    // type converter
+    Reference< script::XTypeConverter > xConverter(
+        xContext->getServiceManager()->createInstanceWithContext(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter") ), xContext ),
+        UNO_QUERY_THROW );
+    m_pConverter = (uno_Interface *)m_aCpp2Uno.mapInterface(
+        xConverter.get(), ::getCppuType( &xConverter ) );
+    OSL_ASSERT( 0 != m_pConverter );
+
+    // some type info:
+    // sequence< any >
+    Type const & rAnySeqType = ::getCppuType( (const Sequence< Any > *)0 );
+    rAnySeqType.getDescription( &m_pAnySeqTD );
+    // sequence< short >
+    const Type & rShortSeqType = ::getCppuType( (const Sequence< sal_Int16 > *)0 );
+    rShortSeqType.getDescription( &m_pShortSeqTD );
+    // script.XInvocation
+    typelib_InterfaceTypeDescription * pTD = 0;
+    const Type & rInvType = ::getCppuType( (const Reference< script::XInvocation > *)0 );
+    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pTD, rInvType.getTypeLibType() );
+    ::typelib_typedescriptionreference_getDescription(
+        &m_pInvokMethodTD, pTD->ppMembers[ 1 ] ); // invoke()
+    ::typelib_typedescriptionreference_getDescription(
+        &m_pSetValueTD, pTD->ppMembers[ 2 ] ); // setValue()
+    ::typelib_typedescriptionreference_getDescription(
+        &m_pGetValueTD, pTD->ppMembers[ 3 ] ); // getValue()
+    // script.XTypeConverter
+    const Type & rTCType = ::getCppuType( (const Reference< script::XTypeConverter > *)0 );
+    TYPELIB_DANGER_GET( (typelib_TypeDescription **)&pTD, rTCType.getTypeLibType() );
+    ::typelib_typedescriptionreference_getDescription(
+        &m_pConvertToTD, pTD->ppMembers[ 0 ] ); // convertTo()
+    TYPELIB_DANGER_RELEASE( (typelib_TypeDescription *)pTD );
+
+    if (!m_pInvokMethodTD || !m_pSetValueTD || !m_pGetValueTD ||
+        !m_pConvertToTD ||
+        !m_pAnySeqTD || !m_pShortSeqTD)
+    {
+        throw RuntimeException( OUSTR("missing type descriptions!"), Reference< XInterface >() );
+    }
+
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-    OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
-
-    _aUno2Cpp = Mapping( aUnoEnvTypeName, aCppEnvTypeName );
-    _aCpp2Uno = Mapping( aCppEnvTypeName, aUnoEnvTypeName );
-    OSL_ENSURE( _aUno2Cpp.is() && _aCpp2Uno.is(), "### no uno / c++ mappings!" );
 }
-
-FactoryImpl::~FactoryImpl()
+//__________________________________________________________________________________________________
+FactoryImpl::~FactoryImpl() SAL_THROW( () )
 {
+    ::typelib_typedescription_release( m_pInvokMethodTD );
+    ::typelib_typedescription_release( m_pSetValueTD );
+    ::typelib_typedescription_release( m_pGetValueTD );
+    ::typelib_typedescription_release( m_pAnySeqTD );
+    ::typelib_typedescription_release( m_pShortSeqTD );
+    ::typelib_typedescription_release( m_pConvertToTD );
+
+    (*m_pConverter->release)( m_pConverter );
+
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 // XInvocationAdapterFactory
 //__________________________________________________________________________________________________
 Reference< XInterface > FactoryImpl::createAdapter(
-    const Reference< XInvocation > & xReceiver, const Type & rType )
+    const Reference< script::XInvocation > & xReceiver, const Type & rType )
     throw (RuntimeException)
 {
     return createAdapter( xReceiver, Sequence< Type >( &rType, 1 ) );
@@ -674,21 +760,58 @@ Reference< XInterface > FactoryImpl::createAdapter(
 // XInvocationAdapterFactory2
 //__________________________________________________________________________________________________
 Reference< XInterface > FactoryImpl::createAdapter(
-    const Reference< XInvocation > & xReceiver, const Sequence< Type > & rTypes )
+    const Reference< script::XInvocation > & xReceiver, const Sequence< Type > & rTypes )
     throw (RuntimeException)
 {
     Reference< XInterface > xRet;
     if (xReceiver.is() && rTypes.getLength())
     {
-        uno_Interface * pReceiver = (uno_Interface *)_aCpp2Uno.mapInterface(
-            xReceiver.get(), ::getCppuType( &xReceiver ) );
-        if (pReceiver)
+        uno_Interface * pAdapter;
+        Reference< XInterface > xKey( xReceiver, UNO_QUERY );
         {
-            uno_Interface * pRet = AdapterImpl::createAdapter( pReceiver, rTypes );
-            _aUno2Cpp.mapInterface( (void **)&xRet, pRet, ::getCppuType( &xRet ) );
-            OSL_ASSERT( xRet.is() );
-            (*pRet->release)( pRet );
-            (*pReceiver->release)( pReceiver );
+        ClearableMutexGuard guard( m_mutex );
+        t_receiver2adapter_map::const_iterator const iFind( m_map.find( xKey.get() ) );
+        if (m_map.end() == iFind) // no entry
+        {
+            guard.clear();
+            // create adapter
+            AdapterImpl * that = new AdapterImpl(
+                xKey.get(), xReceiver, rTypes, this ); // already acquired: m_nRef == 1
+            pAdapter = &that->m_pInterfaces[ 0 ];
+
+            // lookup again
+            ClearableMutexGuard guard( m_mutex );
+            t_receiver2adapter_map::const_iterator const iFind( m_map.find( xKey.get() ) );
+            if (m_map.end() == iFind) // no entry
+            {
+                // insert
+                pair< t_receiver2adapter_map::iterator, bool > insertion(
+                    m_map.insert( t_receiver2adapter_map::value_type( xKey.get(), pAdapter ) ) );
+                OSL_ASSERT( insertion.second );
+            }
+            else
+            {
+                pAdapter = iFind->second;
+                (*pAdapter->acquire)( pAdapter );
+                guard.clear();
+                delete that; // has never been inserted
+            }
+        }
+        else // entry found
+        {
+            pAdapter = iFind->second;
+            (*pAdapter->acquire)( pAdapter );
+        }
+        }
+        // map adapter to C++
+        m_aUno2Cpp.mapInterface(
+            (void **)&xRet, pAdapter, ::getCppuType( &xRet ) );
+        (*pAdapter->release)( pAdapter );
+        OSL_ASSERT( xRet.is() );
+        if (! xRet.is())
+        {
+            throw RuntimeException(
+                OUSTR("mapping UNO to C++ failed!"), Reference< XInterface >() );
         }
     }
     return xRet;
@@ -709,7 +832,7 @@ sal_Bool FactoryImpl::supportsService( const OUString & rServiceName )
     const OUString * pArray = rSNL.getConstArray();
     for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
     {
-        if (pArray[nPos] == rServiceName)
+        if (pArray[nPos].equals( rServiceName ))
             return sal_True;
     }
     return sal_False;
@@ -723,7 +846,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
 
 //==================================================================================================
 static Reference< XInterface > SAL_CALL FactoryImpl_create(
-    const Reference< XComponentContext > & xMgr )
+    const Reference< XComponentContext > & xContext )
     throw (Exception)
 {
     Reference< XInterface > rRet;
@@ -734,7 +857,7 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
 
         if( ! rRet.is() )
         {
-            rRet = (OWeakObject *)new FactoryImpl();
+            rRet = (::cppu::OWeakObject *)new FactoryImpl( xContext );
             rwInstance = rRet;
         }
     }
@@ -747,23 +870,23 @@ static Reference< XInterface > SAL_CALL FactoryImpl_create(
 //##################################################################################################
 //##################################################################################################
 //##################################################################################################
-using namespace stoc_invadp;
 
-static struct ImplementationEntry g_entries[] =
+static struct ::cppu::ImplementationEntry g_entries[] =
 {
     {
-        FactoryImpl_create, invadp_getImplementationName,
-        invadp_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
+        ::stoc_invadp::FactoryImpl_create, ::stoc_invadp::invadp_getImplementationName,
+        ::stoc_invadp::invadp_getSupportedServiceNames,
+        ::cppu::createSingleComponentFactory, &::stoc_invadp::g_moduleCount.modCnt , 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };
 
 extern "C"
 {
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+sal_Bool SAL_CALL component_canUnload(
+    TimeValue *pTime )
 {
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+    return ::stoc_invadp::g_moduleCount.canUnload( &::stoc_invadp::g_moduleCount, pTime );
 }
 
 //==================================================================================================
@@ -776,12 +899,14 @@ void SAL_CALL component_getImplementationEnvironment(
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
+    return ::cppu::component_writeInfoHelper(
+        pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
+    return ::cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey , g_entries );
 }
 }

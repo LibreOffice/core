@@ -13,6 +13,7 @@ interface by using an adapter factory instance.
         <language>  C++ </language>
         <status value="final"/>
         <supported-service> com.sun.star.script.InvocationAdapterFactory    </supported-service>
+        <type>  com.sun.star.script.XTypeConverter      </type>
         <type>  com.sun.star.script.XInvocationAdapterFactory       </type>
         <type>  com.sun.star.script.XInvocationAdapterFactory2      </type>
         <type>  com.sun.star.lang.XTypeProvider                     </type>
