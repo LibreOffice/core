@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:34:33 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:44:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,9 @@ INCLUDE!:=$(shell echo "$(EXT_INCLUDE)")
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(OS)"!="NETBSD"
+.IF "$(OS)"!="FREEBSD"
 PATCHFLAGS=-b
+.ENDIF			# "$(OS)"=="FREEBSD"
 .ENDIF			# "$(OS)"=="NETBSD"
 
 #override
