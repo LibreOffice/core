@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:52:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,10 @@
 #include <cppcanvas/customsprite.hxx>
 #endif
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XSpriteCanvas;
-} } } } }
+} } } }
 
 
 /* Definition of SpriteCanvas */
@@ -122,7 +122,7 @@ namespace cppcanvas
         }
 
         virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const = 0;
+            ::com::sun::star::rendering::XSpriteCanvas >    getUNOSpriteCanvas() const = 0;
     };
 
 }
