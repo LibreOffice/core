@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-12 12:33:22 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 16:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,10 +181,10 @@ using namespace ::com::sun::star::ucb;
 
 class UcbLockBytesCancellable_Impl : public SfxCancellable
 {
-    UcbLockBytesRef         xLockBytes;
+    ::utl::UcbLockBytesRef         xLockBytes;
 
 public:
-                            UcbLockBytesCancellable_Impl( const UcbLockBytesRef& rLockBytes, SfxCancelManager* pManager, const String& rTitle )
+                            UcbLockBytesCancellable_Impl( const ::utl::UcbLockBytesRef& rLockBytes, SfxCancelManager* pManager, const String& rTitle )
                                 : SfxCancellable( pManager, rTitle )
                                 , xLockBytes( rLockBytes )
                             {}
@@ -501,7 +501,7 @@ public:
 
     AsynchronLink       aDoneLink;
     AsynchronLink       aAvailableLink;
-    UCB_Link_HelperRef  aLinkList;
+    ::utl::UCB_Link_HelperRef  aLinkList;
 
     DECL_LINK(          Done_Impl, ErrCode );
     DECL_LINK(          DataAvailable_Impl, void* );
@@ -1045,7 +1045,7 @@ SvStorage* SfxMedium::GetStorage()
 
     aStorage = new SvStorage( pStream, FALSE );
     if ( INET_PROT_FILE == aStorageName.GetProtocol() )
-        aStorage->SetName( aStorageName.PathToFileName() );
+       aStorage->SetName( aStorageName.PathToFileName() );
 
     if ( aStorage->GetError() == SVSTREAM_OK )
         GetVersionList();
@@ -1350,10 +1350,10 @@ void SfxMedium::GetMedium_Impl()
         pImp->bDownloadDone = sal_False;
         pImp->bStreamReady = sal_False;
 
-        UcbLockBytesRef xLockBytes;
+        ::utl::UcbLockBytesRef xLockBytes;
         if ( !pImp->aLinkList.Is() )
         {
-            pImp->aLinkList = new UCB_Link_Helper;
+            pImp->aLinkList = new ::utl::UCB_Link_Helper;
             pImp->aLinkList->SetDoneLink( LINK( pImp, SfxMedium_Impl, Done_Impl ) );
             pImp->aLinkList->SetDataAvailLink( LINK( pImp, SfxMedium_Impl, DataAvailable_Impl ) );
             pImp->aLinkList->SetCancelLink( LINK( pImp, SfxMedium_Impl, Cancel_Impl ) );
@@ -1365,11 +1365,11 @@ void SfxMedium::GetMedium_Impl()
         {
             Reference < ::com::sun::star::io::XInputStream > xStream;
             if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
-                xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream, pImp->aLinkList );
+                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream, pImp->aLinkList );
         }
         else
         {
-            xLockBytes = UcbLockBytes::CreateInputLockBytes(
+            xLockBytes = ::utl::UcbLockBytes::CreateInputLockBytes(
                         GetContent(),
                         pImp->aLinkList );
         }
