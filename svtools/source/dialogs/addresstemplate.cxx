@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 15:47:47 $
+ *  last change: $Author: fs $ $Date: 2001-06-20 08:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ namespace svt
         {
             ::rtl::OUString sFieldPath(RTL_CONSTASCII_USTRINGPARAM("Fields/"));
             sFieldPath += _rLogicalName;
-            sFieldPath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/DatabaseFieldName"));
+            sFieldPath += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/AssignedFieldName"));
             sAssignment = getStringProperty(sFieldPath);
         }
         return sAssignment;
@@ -256,13 +256,13 @@ namespace svt
         sFieldElementNodePath += _rLogicalName;
 
         Sequence< PropertyValue > aNewFieldDescription(2);
-        // Fields/<field>/FieldName
+        // Fields/<field>/ProgrammaticFieldName
         aNewFieldDescription[0].Name = sFieldElementNodePath;
-        aNewFieldDescription[0].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/FieldName"));
+        aNewFieldDescription[0].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/ProgrammaticFieldName"));
         aNewFieldDescription[0].Value <<= _rLogicalName;
-        // Fields/<field>/DatabaseFieldName
+        // Fields/<field>/AssignedFieldName
         aNewFieldDescription[1].Name = sFieldElementNodePath;
-        aNewFieldDescription[1].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/DatabaseFieldName"));
+        aNewFieldDescription[1].Name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/AssignedFieldName"));
         aNewFieldDescription[1].Value <<= _rAssignment;
 
         // just set the new value
