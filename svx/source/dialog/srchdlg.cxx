@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 11:15:41 $
+ *  last change: $Author: tl $ $Date: 2001-03-12 11:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,14 +1170,12 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
             }
         }
 
-        BOOL bRegExpSrch = FALSE;
-        BOOL bLevSrch = FALSE;
+        pSearchItem->SetRegExp( FALSE );
+        pSearchItem->SetLevenshtein( FALSE );
         if (GetCheckBoxValue( aRegExpBtn ))
-            bRegExpSrch = TRUE;
+            pSearchItem->SetRegExp( TRUE );
         else if (GetCheckBoxValue( aSimilarityBox ))
-            bLevSrch = TRUE;
-        pSearchItem->SetRegExp( bRegExpSrch );
-        pSearchItem->SetLevenshtein( bLevSrch );
+            pSearchItem->SetLevenshtein( TRUE );
 
         pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
         pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
@@ -2094,14 +2092,12 @@ void SvxSearchDialog::SaveToModule_Impl()
         Remember_Impl( aSearchLB.GetText(), TRUE );
     }
 
-    BOOL bRegExpSrch = FALSE;
-    BOOL bLevSrch = FALSE;
+    pSearchItem->SetRegExp( FALSE );
+    pSearchItem->SetLevenshtein( FALSE );
     if (GetCheckBoxValue( aRegExpBtn ))
-        bRegExpSrch = TRUE;
+        pSearchItem->SetRegExp( TRUE );
     else if (GetCheckBoxValue( aSimilarityBox ))
-        bLevSrch = TRUE;
-    pSearchItem->SetRegExp( bRegExpSrch );
-    pSearchItem->SetLevenshtein( bLevSrch );
+        pSearchItem->SetLevenshtein( TRUE );
 
     pSearchItem->SetWordOnly( GetCheckBoxValue( aWordBtn ) );
     pSearchItem->SetBackward( GetCheckBoxValue( aBackwardsBtn ) );
