@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-15 16:33:15 $
+ *  last change: $Author: hdu $ $Date: 2002-08-16 07:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,6 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
 
 bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector ) const
 {
-    bool bRet = false;
-
     bool bHasGlyphs = HasGlyphs();
     for( int nStart = 0;;)
     {
@@ -238,14 +236,14 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
         // get outline of individual glyph
         PolyPolygon aGlyphOutline;
         if( rSalGraphics.GetGlyphOutline( nLGlyph, bHasGlyphs, aGlyphOutline ) )
-            bRet = true;
-
-        // insert outline at correct position
-        aGlyphOutline.Move( aPos.X(), aPos.Y() );
-        rVector.push_back(aGlyphOutline);
+        {
+            // insert outline at correct position
+            aGlyphOutline.Move( aPos.X(), aPos.Y() );
+            rVector.push_back( aGlyphOutline );
+    }
     }
 
-    return bRet;
+    return (rVector.size() > 0);
 }
 
 // -----------------------------------------------------------------------
@@ -470,6 +468,34 @@ long GenericSalLayout::FillDXArray( long* pDXArray ) const
 
 // -----------------------------------------------------------------------
 
+long GenericSalLayout::GetTextWidth() const
+{
+    if( mnGlyphCount <= 0 )
+    return 0;
+
+    const GlyphItem* pG = mpGlyphItems;
+    long nMinPos = pG->maLinearPos.X();
+    long nMaxPos = nMinPos + pG->mnNewWidth;
+    for( int i = 1; i < mnGlyphCount; ++i )
+    {
+        ++pG;
+        int n = pG->mnCharIndex;
+        if( (n<mnFirstCharIndex) || (n>=mnEndCharIndex) )
+            continue;
+        long nXPos = pG->maLinearPos.X();
+        if( nMinPos > nXPos )
+            nMinPos = nXPos;
+        nXPos += pG->mnNewWidth;
+       if( nMaxPos < nXPos )
+            nMaxPos = nXPos;
+    }
+
+    long nWidth = nMaxPos - nMinPos;
+    return nWidth;
+}
+
+// -----------------------------------------------------------------------
+
 void GenericSalLayout::ApplyDXArray( const long* pDXArray )
 {
     // determine cluster boundaries and x base offset
@@ -549,20 +575,41 @@ void GenericSalLayout::Justify( long nNewWidth )
     if( !nOldWidth || nNewWidth==nOldWidth )
         return;
 
-    double fFactor = (double)nNewWidth / nOldWidth;
-
+    // find rightmost glyph, it won't get stretched
     GlyphItem* pG = mpGlyphItems;
-    const long nBasePos = maBasePoint.X();
-    for( int i = mnGlyphCount; --i >= 0; ++pG )
+    for( pG += mnGlyphCount; --pG > mpGlyphItems; )
     {
         int n = pG->mnCharIndex;
-        if( n < mnFirstCharIndex || n >= mnEndCharIndex )
-            continue;
-        long nOldPos = pG->maLinearPos.X();
-        long nNewPos = nBasePos + (long)(fFactor * (nOldPos - nBasePos) + 0.5);
-        if( nNewPos != nOldPos )
-            pG->maLinearPos.X() += nNewPos - nOldPos;
+        if( (n >= mnFirstCharIndex) || (n < mnEndCharIndex) )
+            break;
     }
+    GlyphItem* pGRight = pG;
+
+    // move rightmost glyph to requested position, correct adjustment widths
+    nOldWidth -= pGRight->mnOrigWidth;
+    nNewWidth -= pGRight->mnOrigWidth;
+    if( (nOldWidth < 0) || (nNewWidth < 0) )
+        return;
+    const long nBasePos = maBasePoint.X();
+    pGRight->maLinearPos.X() = nBasePos + nNewWidth;
+
+    // interpolate inbetween glyph positions
+    double fFactor = (double)nNewWidth / nOldWidth;
+    for( pG = mpGlyphItems; pG < pGRight; ++pG )
+    {
+        int n = pG->mnCharIndex;
+        if( (n >= mnFirstCharIndex) || (n < mnEndCharIndex) )
+        {
+            long nOldPos = pG->maLinearPos.X();
+            long nNewPos = nBasePos + (long)(fFactor * (nOldPos - nBasePos) + 0.5);
+            pG->maLinearPos.X() += nNewPos - nOldPos;
+        }
+    }
+
+    // adjust new glyph advance widths to glyph movements above,
+    // the rightmost glyph keeps it's original advance width
+    for( pG = mpGlyphItems; pG < pGRight; ++pG )
+        pG[0].mnNewWidth = pG[1].maLinearPos.X() - pG[0].maLinearPos.X();
 }
 
 // -----------------------------------------------------------------------
