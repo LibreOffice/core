@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-28 08:55:19 $
+ *  last change: $Author: dv $ $Date: 2001-03-28 14:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,10 @@ struct NamePair_Impl
 
 DECLARE_LIST( NameList_Impl, NamePair_Impl* );
 
-//-----------------------------------------------------------------------------
+class Updater_Impl;
 
-class SfxDocTplService_Impl
+//-----------------------------------------------------------------------------
+class SfxDocTplService_Impl : public SvRefBase
 {
     Reference< XMultiServiceFactory >   mxFactory;
     Reference < XCommandEnvironment >   maCmdEnv;
@@ -219,6 +220,7 @@ class SfxDocTplService_Impl
     NameList_Impl               maNames;
     Locale                      maLocale;
     Content                     maRootContent;
+    Updater_Impl*               mpUpdater;
     sal_Bool                    mbIsInitialized : 1;
     sal_Bool                    mbLocaleSet     : 1;
 
@@ -279,7 +281,23 @@ public:
     sal_Bool                    renameGroup( const OUString& rOldName,
                                              const OUString& rNewName );
 
-    void                        update();
+    void                        update( sal_Bool bUpdateNow );
+    void                        doUpdate();
+    void                        finished() { mpUpdater = NULL; }
+};
+
+//------------------------------------------------------------------------
+class Updater_Impl : public ::vos::OThread
+{
+private:
+    SfxDocTplService_Impl   *mpDocTemplates;
+
+public:
+                             Updater_Impl( SfxDocTplService_Impl* pTemplates );
+                            ~Updater_Impl();
+
+    virtual void SAL_CALL   run();
+    virtual void SAL_CALL   onTerminated();
 };
 
 
@@ -299,6 +317,8 @@ void SfxDocTplService_Impl::init_Impl()
     // set maRootContent to the root of the templates hierarchy. Create the
     // entry if necessary
 
+    sal_Bool    bRootExists = sal_False;
+
     Reference < XCommandEnvironment > aCmdEnv;
     maCmdEnv = aCmdEnv;
 
@@ -309,6 +329,7 @@ void SfxDocTplService_Impl::init_Impl()
     if ( Content::create( maRootURL, maCmdEnv, maRootContent ) )
     {
         mbIsInitialized = sal_True;
+        bRootExists = sal_True;
     }
     else
     {
@@ -323,7 +344,14 @@ void SfxDocTplService_Impl::init_Impl()
 
         getDirList();
         readFolderList();
-        update();
+
+        if ( bRootExists )
+            update( sal_False );
+        else
+        {
+            WaitWindow_Impl aMsgWin;
+            update( sal_True );
+        }
     }
     else
     {
@@ -397,7 +425,8 @@ void SfxDocTplService_Impl::getDirList()
     if ( bHasProperty )
     {
         aValue >>= maTemplateDirs;
-        return;
+        if ( maTemplateDirs.getLength() )
+            return;
     }
 
     INetURLObject   aURL;
@@ -837,6 +866,7 @@ sal_Bool SfxDocTplService_Impl::getProperty( Content& rContent,
 SfxDocTplService_Impl::SfxDocTplService_Impl( Reference< XMultiServiceFactory > xFactory )
 {
     mxFactory       = xFactory;
+    mpUpdater       = NULL;
     mbIsInitialized = sal_False;
     mbLocaleSet     = sal_False;
 }
@@ -844,6 +874,11 @@ SfxDocTplService_Impl::SfxDocTplService_Impl( Reference< XMultiServiceFactory > 
 //-----------------------------------------------------------------------------
 SfxDocTplService_Impl::~SfxDocTplService_Impl()
 {
+    if ( mpUpdater )
+    {
+        mpUpdater->kill();
+        delete mpUpdater;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -868,7 +903,19 @@ void SfxDocTplService_Impl::setLocale( const Locale &rLocale )
 }
 
 //-----------------------------------------------------------------------------
-void SfxDocTplService_Impl::update()
+void SfxDocTplService_Impl::update( sal_Bool bUpdateNow )
+{
+    if ( bUpdateNow )
+        doUpdate();
+    else
+    {
+        mpUpdater = new Updater_Impl( this );
+        mpUpdater->create();
+    }
+}
+
+//-----------------------------------------------------------------------------
+void SfxDocTplService_Impl::doUpdate()
 {
     sal_Int32   nCount = maTemplateDirs.getLength();
     OUString*   pDirs = maTemplateDirs.getArray();
@@ -1058,7 +1105,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 {
     // Check, wether or not there is a group with this name
     // Return false, if there is no group with the given name
-    Content         aGroup, aTemplate;
+    Content         aGroup, aTemplate, aTargetGroup;
     OUString        aGroupURL, aTemplateURL;
     INetURLObject   aGroupObj( maRootURL );
 
@@ -1091,8 +1138,11 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     if ( !aTargetURL.getLength() )
         return sal_False;
 
+    if ( ! Content::create( aTargetURL, maCmdEnv, aTargetGroup ) )
+        return sal_False;
+
     // Get the content type
-    OUString aTitle, aType;
+    OUString aTitle, aType, aTargetURL2, aFullName;
 
     getTitleFromURL( rSourceURL, aTitle, aType );
 
@@ -1108,24 +1158,29 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                       INetURLObject::ENCODE_ALL );
     aTargetObj.setExtension( aSourceObj.getExtension() );
 
-    aTargetURL = aTargetObj.GetMainURL();
+    aTargetURL2 = aTargetObj.GetMainURL();
 
-    if ( aTargetURL == rSourceURL )
+    if ( aTargetURL2 == rSourceURL )
         return addEntry( aGroup, rTemplateName, rSourceURL, aType );
 
     // copy the template into the new group (targeturl)
+
+    // we need to keep the extension for the file, so we use the
+    // name from the INetURLObject here
+    aFullName = aTargetObj.getName( INetURLObject::LAST_SEGMENT, true,
+                                    INetURLObject::DECODE_WITH_CHARSET );
     try
     {
         TransferInfo aTransferInfo;
         aTransferInfo.MoveData = sal_False;
         aTransferInfo.SourceURL = rSourceURL;
-        aTransferInfo.NewTitle = rTemplateName;
+        aTransferInfo.NewTitle = aFullName;
         aTransferInfo.NameClash = NameClash::RENAME;
 
         Any aArg = makeAny( aTransferInfo );
         OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_TRANSFER ) );
 
-        aGroup.executeCommand( aCmd, aArg );
+        aTargetGroup.executeCommand( aCmd, aArg );
     }
     catch ( ContentCreationException& )
     { return FALSE; }
@@ -1349,6 +1404,9 @@ sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
                                                     const OUString& rNewName )
     throw( RUNTIMEEXCEPTION )
 {
+    if ( rOldName == rNewName )
+        return sal_True;
+
     if ( pImp->init() )
         return pImp->renameTemplate( rGroupName, rOldName, rNewName );
     else
@@ -1380,6 +1438,9 @@ sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
                                                  const OUString& rNewName )
     throw( RUNTIMEEXCEPTION )
 {
+    if ( rOldName == rNewName )
+        return sal_True;
+
     if ( pImp->init() )
         return pImp->renameGroup( rOldName, rNewName );
     else
@@ -1391,11 +1452,36 @@ void SAL_CALL SfxDocTplService::update()
     throw( RUNTIMEEXCEPTION )
 {
     if ( pImp->init() )
-        pImp->update();
+        pImp->update( sal_True );
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+//------------------------------------------------------------------------
+
+Updater_Impl::Updater_Impl( SfxDocTplService_Impl* pTemplates )
+{
+    mpDocTemplates = pTemplates;
+}
+
+//------------------------------------------------------------------------
+Updater_Impl::~Updater_Impl()
+{
+}
+
+//------------------------------------------------------------------------
+void SAL_CALL Updater_Impl::run()
+{
+    mpDocTemplates->doUpdate();
+}
+
+//------------------------------------------------------------------------
+void SAL_CALL Updater_Impl::onTerminated()
+{
+    mpDocTemplates->finished();
+    delete this;
+}
+
 //-----------------------------------------------------------------------------
 WaitWindow_Impl::WaitWindow_Impl()
     : WorkWindow( NULL, WB_BORDER | WB_3DLOOK )
