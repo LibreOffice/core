@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:39:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 14:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,8 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ hindi ] = "This font has not been installed. The closest available font will be used.";
     TEXT[ slovak ] = "Toto písmo nebolo nainštalované. Bude použité najbližšie dostupné písmo.";
 };
+
+
 
 
 
