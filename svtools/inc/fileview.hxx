@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-19 13:57:45 $
+ *  last change: $Author: pb $ $Date: 2001-12-04 10:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ public:
     String                  GetURL( SvLBoxEntry* pEntry ) const;
     String                  GetCurrentURL() const;
 
-    void                    CreateNewFolder( const String& rNewFolder );
+    sal_Bool                CreateNewFolder( const String& rNewFolder );
     sal_Bool                HasPreviousLevel( String& rParentURL ) const;
     sal_Bool                PreviousLevel( String& rNewURL );
 
