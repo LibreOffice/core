@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-31 10:04:20 $
+ *  last change: $Author: cd $ $Date: 2002-07-31 17:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,17 +104,17 @@
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooName" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">Name of an object or group.</desc>
+					<desc xml:lang="en-US">The name of a product.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupVersion" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The version number to appear at the user interface.</desc>
+					<desc xml:lang="en-US">The version number of the product that appears at the user interface.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupExtension" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The extension of the version number to appear at the user interface.</desc>
+					<desc xml:lang="en-US">The extension, like a product patch, of the version number to appear at the user interface.</desc>
 				</info>
 			</prop>
 		</group>
@@ -182,7 +182,12 @@
 					<desc xml:lang="en-US">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 				</info>
 			</prop>
-			<set oor:name="Factories" oor:node-type="Factory"/>
+			<set oor:name="Factories" oor:node-type="Factory">
+				<!-- Responsible: MBA -->
+				<info>
+					<desc xml:lang="en-US">Contains all document factories that were installed during setup.</desc>
+				</info>
+			</set>
 		</group>
 		<group oor:name="L10N">
 			<!-- Responsible: PB-->
