@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 09:28:20 $
+ *  last change: $Author: fme $ $Date: 2002-07-29 09:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,9 +928,25 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
             ( (Graphic*) pBrush->GetGraphic() )->StopAnimation( 0, nId );
     }
 
+    SwRect aRepaint( rInf.GetPaintRect() );
+    const SwTxtFrm& rFrm = *rInf.GetTxtFrm();
+    if( rFrm.IsVertical() )
+    {
+        rFrm.SwitchHorizontalToVertical( aTmp );
+        rFrm.SwitchHorizontalToVertical( aRepaint );
+    }
+
+#ifdef BIDI
+    if( rFrm.IsRightToLeft() )
+    {
+        rFrm.SwitchLTRtoRTL( aTmp );
+        rFrm.SwitchLTRtoRTL( aRepaint );
+    }
+#endif
+
     if( bDraw && aTmp.HasArea() )
         DrawGraphic( pBrush, (OutputDevice*)rInf.GetOut(),
-            aTmp, rInf.GetPaintRect(), bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
+            aTmp, aRepaint, bReplace ? GRFNUM_REPLACE : GRFNUM_YES );
 }
 
 void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
