@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-08 06:09:56 $
+ *  last change: $Author: kz $ $Date: 2001-05-11 05:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ italian ] = "Versione attuale";
     Text[ danish ] = "Aktuel version";
     Text[ swedish ] = "Aktuell version";
-    Text[ polish ] = "Wesja bieΏΉca";
+    Text[ polish ] = "Wersja bieΏΉca";
     Text[ portuguese_brazilian ] = "Actual version";
     Text[ japanese ] = "ΕV‚ΜΚή°Όή®έ";
     Text[ chinese_simplified ] = "µ±Η°µΔ°ζ±Ύ";
@@ -88,6 +88,7 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ greek ] = "Τρέχουσα έκδοση";
     Text[ korean ] = "Ηφΐη Ήφΐό";
     Text[ turkish ] = "Yόrόrlόkteki sόrόm";
+    Text[ catalan ] = "Current version";
 };
 
 String STR_SFX_EXPLORERFILE_INSERT
@@ -112,6 +113,7 @@ String STR_SFX_EXPLORERFILE_INSERT
     Text[ greek ] = "Εισαγωγή";
     Text[ korean ] = "»πΐΤ";
     Text[ turkish ] = "Ekle";
+    Text[ catalan ] = "Insert";
 };
 
 String STR_SFX_EXPLORERFILE_BUTTONINSERT
@@ -136,6 +138,7 @@ String STR_SFX_EXPLORERFILE_BUTTONINSERT
     Text[ greek ] = "~Εισαγωγή";
     Text[ korean ] = "»πΐΤ(~I)";
     Text[ turkish ] = "Ekle";
+    Text[ catalan ] = "~Insert";
 };
 
 String STR_SFX_IMPORT_ALL
