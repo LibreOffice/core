@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 15:42:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,9 +471,6 @@
             <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>true</value>
-                </prop>
-                <prop oor:name="Size" oor:type="xs:string">
-                    <value>362,75</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
