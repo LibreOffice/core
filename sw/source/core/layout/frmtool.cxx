@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:57:44 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,7 +897,7 @@ SwCntntNotify::~SwCntntNotify()
             {
                 ASSERT( pCnt->IsInFly(), "OLE not in FlyFrm" );
                 SwFlyFrm *pFly = pCnt->FindFlyFrm();
-                SvEmbeddedObjectRef xObj( (SvInPlaceObject*) pNd->GetOLEObj().GetOleRef() );
+                svt::EmbeddedObjectRef& xObj = pNd->GetOLEObj().GetObject();
                 SwFEShell *pFESh = 0;
                 ViewShell *pTmp = pSh;
                 do
@@ -929,7 +929,8 @@ SwCntntNotify::~SwCntntNotify()
                 if ( pFESh && pNd->IsOLESizeInvalid() )
                 {
                     pNd->SetOLESizeInvalid( FALSE );
-                    xObj->OnDocumentPrinterChanged( pNd->GetDoc()->GetPrt() );
+                    //TODO/LATER: needs OnDocumentPrinterChanged
+                    //xObj->OnDocumentPrinterChanged( pNd->GetDoc()->GetPrt() );
                     pFESh->CalcAndSetScale( xObj );//Client erzeugen lassen.
                 }
             }
