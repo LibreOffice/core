@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-07-09 17:49:31 $
+ *  last change: $Author: er $ $Date: 2001-11-23 19:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,11 @@ public:
     inline  sal_Unicode         getCurrZeroChar() const
                                     { return cCurrZeroChar; }
     inline  BOOL                isNumLeadingZero() const
+                                    { return TRUE; }
+                                /// standard decimal places
+    inline  USHORT              getNumDigits() const
+                                    { return 2; }
+    inline  BOOL                isNumTrailingZeros() const
                                     { return TRUE; }
 
 
