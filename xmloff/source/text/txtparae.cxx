@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-14 10:30:23 $
+ *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2091,11 +2091,10 @@ void XMLTextParagraphExport::_exportTextEmbedded(
 
 
     // xlink:href
-    OUString sURL, sClassId;
-    getTextEmbeddedObjectProperties( rPropSet, sURL, sClassId );
+    OUString sURL;
+    sal_Bool bExtern;
+    getTextEmbeddedObjectProperties( rPropSet, sURL, bExtern );
 
-    if( sClassId.getLength() )
-        GetExport().AddAttribute(XML_NAMESPACE_DRAW, sXML_class_id, sClassId );
     sURL = GetExport().AddEmbeddedObject( sURL );
 
     GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sURL );
@@ -2106,8 +2105,7 @@ void XMLTextParagraphExport::_exportTextEmbedded(
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
                                    sXML_onLoad );
 
-    const sal_Char *pElem = sClassId.getLength() ? sXML_object_ole
-                                                : sXML_object;
+    const sal_Char *pElem = bExtern ? sXML_object_ole : sXML_object;
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               pElem, sal_False, sal_True );
 
@@ -2172,7 +2170,7 @@ void XMLTextParagraphExport::exportTextEmbedded(
 
 void XMLTextParagraphExport::getTextEmbeddedObjectProperties(
     const Reference < XPropertySet >& rPropSet,
-    OUString& rStreamName, OUString& rClassId ) const
+    OUString& rStreamName, sal_Bool& r ) const
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-14 10:30:23 $
+ *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,6 @@ XMLTextFrameContext::XMLTextFrameContext(
     OUString    sChainNextName;
     OUString    sHRef;
     OUString    sFilterName;
-    OUString    sClassId;
     OUString    sCode;
     OUString    sObject;
     OUString    sArchive;
@@ -566,9 +565,6 @@ XMLTextFrameContext::XMLTextFrameContext(
                 }
             }
             break;
-        case XML_TOK_TEXT_FRAME_CLASS_ID:
-            sClassId = rValue;
-            break;
         case XML_TOK_TEXT_FRAME_CODE:
             sCode = rValue;
             break;
@@ -591,14 +587,17 @@ XMLTextFrameContext::XMLTextFrameContext(
     }
 
     if( (XML_TEXT_FRAME_APPLET  == nType || XML_TEXT_FRAME_PLUGIN == nType ||
-         XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OLE    == nType)
+         XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OBJECT == nType ||
+         XML_TEXT_FRAME_OBJECT_OLE    == nType)
         && !sHRef.getLength() )
         return; // no URL: no image or OLE object
 
     switch ( nType)
     {
-        case XML_TEXT_FRAME_OLE:
+        case XML_TEXT_FRAME_OBJECT:
+        case XML_TEXT_FRAME_OBJECT_OLE:
         {
+            OUString sClassId;
             OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef, sClassId ) );
 
             if( sURL.getLength() )
@@ -772,10 +771,11 @@ XMLTextFrameContext::XMLTextFrameContext(
         xPropSet->setPropertyValue( sGraphicRotation, aAny );
     }
 
-    if( XML_TEXT_FRAME_OLE != nType
-        && XML_TEXT_FRAME_APPLET != nType
-        && XML_TEXT_FRAME_PLUGIN!= nType
-        && XML_TEXT_FRAME_FLOATING_FRAME != nType)
+    if( XML_TEXT_FRAME_OBJECT != nType  &&
+        XML_TEXT_FRAME_OBJECT_OLE != nType  &&
+        XML_TEXT_FRAME_APPLET != nType &&
+        XML_TEXT_FRAME_PLUGIN!= nType &&
+        XML_TEXT_FRAME_FLOATING_FRAME != nType)
     {
         Reference < XTextContent > xTxtCntnt( xPropSet, UNO_QUERY );
         xTxtImport->InsertTextContent( xTxtCntnt );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:42:56 $
+ *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1470,6 +1470,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
+    sal_Bool bObjectOLE = sal_False;
     switch( nToken )
     {
     case XML_TOK_TEXT_SPAN:
@@ -1627,12 +1628,14 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                                             XML_TEXT_FRAME_PLUGIN );
         break;
 
-    case XML_TOK_TEXT_OBJECT:
     case XML_TOK_TEXT_OBJECT_OLE:
+        bObjectOLE = sal_True;
+    case XML_TOK_TEXT_OBJECT:
         pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                            rLocalName, xAttrList,
-                                            TextContentAnchorType_AS_CHARACTER,
-                                            XML_TEXT_FRAME_OLE );
+                            rLocalName, xAttrList,
+                            TextContentAnchorType_AS_CHARACTER,
+                            bObjectOLE ? XML_TEXT_FRAME_OBJECT
+                                       : XML_TEXT_FRAME_OBJECT_OLE );
         break;
 
     case XML_TOK_DRAW_A:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-09 16:02:08 $
+ *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@ namespace com { namespace sun { namespace star {
 
 #define XML_TEXT_FRAME_TEXTBOX 1
 #define XML_TEXT_FRAME_GRAPHIC 2
-#define XML_TEXT_FRAME_STAR 3
-#define XML_TEXT_FRAME_OLE 4
+#define XML_TEXT_FRAME_OBJECT 3
+#define XML_TEXT_FRAME_OBJECT_OLE 4
 #define XML_TEXT_FRAME_APPLET 5
 #define XML_TEXT_FRAME_PLUGIN 6
 #define XML_TEXT_FRAME_FLOATING_FRAME 7

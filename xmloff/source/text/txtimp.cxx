@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-13 15:50:56 $
+ *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,6 +1328,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     sal_Bool bOrdered = sal_False;
     sal_Bool bHeading = sal_False;
     sal_Bool bContent = sal_True;
+    sal_Bool bObjectOLE = sal_False;
     sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
     switch( nToken )
     {
@@ -1450,8 +1451,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         }
         break;
 
-    case XML_TOK_TEXT_OBJECT_PAGE:
     case XML_TOK_TEXT_OBJECT_OLE_PAGE:
+        bObjectOLE = sal_True;
+    case XML_TOK_TEXT_OBJECT_PAGE:
         if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
             XML_TEXT_TYPE_TEXTBOX == eType ||
              XML_TEXT_TYPE_CHANGED_REGION == eType )
@@ -1460,9 +1462,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                 XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
                                                : TextContentAnchorType_AT_PAGE;
             pContext = new XMLTextFrameContext( rImport, nPrefix,
-                                                rLocalName, xAttrList,
-                                                eAnchorType,
-                                                XML_TEXT_FRAME_OLE );
+                                    rLocalName, xAttrList, eAnchorType,
+                                    bObjectOLE ? XML_TEXT_FRAME_OBJECT
+                                               : XML_TEXT_FRAME_OBJECT_OLE );
             bContent = sal_False;
         }
         break;
