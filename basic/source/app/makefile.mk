@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2000-11-07 11:19:15 $
+#   last change: $Author: ab $ $Date: 2000-11-14 11:06:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,10 +120,8 @@ OBJFILES = \
     $(OBJ)$/comm_bas.obj	\
     $(SLO)$/sbintern.obj
 
-.IF "$(OS)" == "LINUX"
 EXCEPTIONSFILES = \
     $(OBJ)$/app.obj
-.ENDIF
 
 
 SRCFILES = \
