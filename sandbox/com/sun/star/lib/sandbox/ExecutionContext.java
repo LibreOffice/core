@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExecutionContext.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-24 13:31:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,16 @@ public abstract class ExecutionContext extends Observable {
         dispatchThread = new Thread( threadGroup, new Runnable() {
             public void run() {
                 while( loop ) {
+                    if( head != null) {
+                        if (DEBUG) System.err.println("#### ExecutionContext dispatchThread " + dispatchThread.toString() + " -dispatching: " + head.id);
+                        dispatch( head.id );
+                        if (DEBUG) System.err.println("#### ExecutionContext dispatchThread " + dispatchThread.toString() + " get next head - current state is " +head.id );
+                        synchronized( getSynObject() ) {
+                            head = head.next;
+                            getSynObject().notify();
+                        }
+                    }
+
                     synchronized( getSynObject() ) {
                         if (head == null) {
                             try {
@@ -172,18 +182,12 @@ public abstract class ExecutionContext extends Observable {
                             }
                         }
                     }
-                    if (DEBUG) System.err.println("#### ExecutionContext dispatchThread " + dispatchThread.toString() + " -dispatching: " + head.id);
-                    dispatch( head.id );
-                    if (DEBUG) System.err.println("#### ExecutionContext dispatchThread " + dispatchThread.toString() + " get next head - current state is " +head.id );
-                    synchronized( getSynObject() ) {
-                        head = head.next;
-                        getSynObject().notify();
-                    }
                 }
                   if(DEBUG) System.err.println("#### ExecutionContext - dispatchThread  -terminating");
             }
         });
 
+        dispatchThread.setDaemon(true);
         dispatchThread.start();
     }
     public void sendEvent(int id) {
@@ -224,22 +228,16 @@ public abstract class ExecutionContext extends Observable {
                 synchronized( getSynObject() ) {
                     while( head != null )
                         getSynObject().wait( timeout ); // wait at most one second for each queued command
-                }
+                      loop = false;
+                       getSynObject().notifyAll();
+                 }
+              dispatchThread.join(timeout);
             }
             catch(InterruptedException ee) {
                 if(DEBUG) System.err.println("#### ExecutionContext " + dispatchThread.toString() + " - dispose 1:" + ee);
             }
 
-            loop = false;
-
-            getSynObject().notifyAll();
-            // dispatchThread.interrupt();
-            dispatchThread.join(timeout);
-
             if(DEBUG) threadGroup.list();
-
-//              threadGroup.stop();
-
             if ( !threadGroup.isDestroyed() )
                 threadGroup.destroy();
         }
@@ -355,8 +353,8 @@ public abstract class ExecutionContext extends Observable {
                 if (status == LOADED || status == DESTROYED) {
                     xdispose();
                     //  baseResourceLoader.flush();
-                    setStatus(DISPOSED);
                     showStatus("disposed");
+                  setStatus(DISPOSED);
                 }
                 else
                     showStatus("notdestroyed");
