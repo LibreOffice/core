@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:35:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include "cntfrm.hxx"
 #include "pagefrm.hxx"
 #include "ftnfrm.hxx"
+#include "txtfrm.hxx"
+
 // --> OD 2004-06-23 #i28701#
 #ifndef _MOVEDFWDFRMSBYOBJPOS_HXX
 #include <movedfwdfrmsbyobjpos.hxx>
@@ -91,6 +93,7 @@ public:
     SwLooping( SwPageFrm* pPage );
     void Control( SwPageFrm* pPage );
     static void Drastic( SwFrm* pFrm );
+    bool IsLoopingLouieLight() const { return nCount > LOOP_DETECT - 30; };
 };
 
 class SwEndnoter
@@ -311,6 +314,17 @@ void SwLayouter::LoopControl( SwPageFrm* pPage, BYTE nLoop )
     pLooping->Control( pPage );
 }
 
+void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
+{
+    if ( pLooping && pLooping->IsLoopingLouieLight() )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( false, "Looping Louie (Light): Fixating fractious frame" )
+#endif
+        SwLayouter::InsertMovedFwdFrm( rDoc, rFrm, rFrm.FindPageFrm()->GetPhyPageNum() );
+    }
+}
+
 BOOL SwLayouter::StartLooping( SwPageFrm* pPage )
 {
     if( pLooping )
@@ -519,3 +533,15 @@ bool SwLayouter::FrmNotToWrap( const SwDoc& _rDoc,
     }
 }
 // <--
+
+void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
+{
+    if ( bCondition )
+    {
+        const SwDoc& rDoc = *rTxtFrm.GetAttrSet()->GetDoc();
+        if ( rDoc.GetLayouter() )
+        {
+            const_cast<SwDoc&>(rDoc).GetLayouter()->LoopingLouieLight( rDoc, rTxtFrm );
+        }
+    }
+}
