@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:27:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,25 +262,25 @@ void RVPConnectionListener::disposing( const ::com::sun::star::lang::EventObject
 
 void RVPConnectionListener::started() throw()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "RVPConnectionListener::started\n" );
 #endif
 }
 void RVPConnectionListener::closed() throw()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "RVPConnectionListener::closed\n" );
 #endif
 }
 void RVPConnectionListener::terminated() throw()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "RVPConnectionListener::terminated\n" );
 #endif
 }
 void RVPConnectionListener::error( const ::com::sun::star::uno::Any& rException ) throw()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "connection to client lost ... terminating\n" );
 #endif
     Application::PostUserEvent( LINK( this, RVPConnectionListener, signalSolarThread ) );
