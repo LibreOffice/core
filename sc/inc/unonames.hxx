@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:57:04 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,9 @@
 // data pilot descriptor
 #define SC_UNO_IGNEMPROWS           "IgnoreEmptyRows"
 #define SC_UNO_RPTEMPTY             "RepeatIfEmpty"
+#define SC_UNO_DRILLDOWN            "DrillDownOnDoubleClick"
+#define SC_UNO_SHOWFILT             "ShowFilterButton"
+
 
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
