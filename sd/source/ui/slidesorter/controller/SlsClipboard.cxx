@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:17:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,15 +170,8 @@ void Clipboard::DoCut (::Window* pWindow)
 {
     if (mrController.GetModel().GetPageCount() > 1)
     {
-        QueryBox aDialog (
-            pWindow,
-            WB_YES_NO,
-            SdResId(STR_WARN_DEL_SEL_PAGES));
-        if (aDialog.Execute() == RET_YES)
-        {
-            DoCopy (pWindow);
-            mrController.DeleteSelectedPages();
-        }
+        DoCopy (pWindow);
+        mrController.DeleteSelectedPages();
     }
 }
 
