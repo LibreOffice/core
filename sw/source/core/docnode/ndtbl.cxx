@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,10 @@
 
 #ifndef _DOCSH_HXX
 #include "docsh.hxx"
+#endif
+
+#ifdef _MSAVE_HXX
+#include "msave.hxx"
 #endif
 
 #ifdef LINUX
@@ -1735,6 +1739,17 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
                             GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
 
+            // save the cursors (UNO and otherwise)
+            SwPaM aSavePaM( SwNodeIndex( *pTblNd->EndOfSectionNode() ) );
+            if( ! aSavePaM.Move( fnMoveForward, fnGoNode ) )
+            {
+                *aSavePaM.GetMark() = SwPosition( *pTblNd );
+                aSavePaM.Move( fnMoveBackward, fnGoNode );
+            }
+            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
+                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
+                          *aSavePaM.GetMark() );
+
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             BOOL bSavePageBreak = FALSE, bSavePageDesc = FALSE;
             ULONG nNextNd = pTblNd->EndOfSectionIndex()+1;
@@ -1778,6 +1793,18 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
                 GetNodes().MakeTxtNode( aTmpIdx,
                             GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
             }
+
+            // save the cursors (UNO and otherwise)
+            SwPaM aSavePaM( SwNodeIndex( *pTblNd->EndOfSectionNode() ) );
+            if( ! aSavePaM.Move( fnMoveForward, fnGoNode ) )
+            {
+                *aSavePaM.GetMark() = SwPosition( *pTblNd );
+                aSavePaM.Move( fnMoveBackward, fnGoNode );
+            }
+            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
+                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
+                          *aSavePaM.GetMark() );
+
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             SwCntntNode* pNextNd = GetNodes()[ pTblNd->EndOfSectionIndex()+1 ]->GetCntntNode();
             if( pNextNd )
