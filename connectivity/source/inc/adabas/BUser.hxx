@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:13:17 $
+ *  last change: $Author: oj $ $Date: 2001-06-20 09:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ namespace connectivity
             OAdabasConnection*    m_pConnection;
 
             ::rtl::OUString getPrivilegeString(sal_Int32 nRights) const;
+            // return the privileges and additional the grant rights
+            void findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         public:
             virtual void refreshGroups();
         public:
