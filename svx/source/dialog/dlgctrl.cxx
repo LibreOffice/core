@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-08-26 12:52:04 $
+ *  last change: $Author: aw $ $Date: 2002-11-07 12:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
     nRadius     ( nCircle),
     m_nState    ( 0 ),
     eCS         ( eStyle ),
-    pBitmap     ( NULL )
+    pBitmap     ( NULL ),
+    mbCompleteDisable(sal_False)
 {
     SetMapMode( MAP_100TH_MM );
     Resize_Impl();
@@ -284,26 +285,30 @@ void SvxRectCtl::InitSettings( BOOL bForeground, BOOL bBackground )
 
 void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Point aPtLast = aPtNew;
-
-    aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
-
-    if( aPtNew == aPtMM && ( eCS == CS_SHADOW || eCS == CS_ANGLE ) )
+    // #103516# CompletelyDisabled() added to have a disabled state for SvxRectCtl
+    if(!IsCompletelyDisabled())
     {
-        aPtNew = aPtLast;
-    }
-    else
-    {
-        Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ),
-                               aPtLast + Point( nRadius, nRadius ) ) );
-        Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ),
-                               aPtNew + Point( nRadius, nRadius ) ) );
-        eRP = GetRPFromPoint( aPtNew );
+        Point aPtLast = aPtNew;
 
-        SetActualRP( eRP );
+        aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
 
-        if( WINDOW_TABPAGE == GetParent()->GetType() )
-            ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+        if( aPtNew == aPtMM && ( eCS == CS_SHADOW || eCS == CS_ANGLE ) )
+        {
+            aPtNew = aPtLast;
+        }
+        else
+        {
+            Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ),
+                                   aPtLast + Point( nRadius, nRadius ) ) );
+            Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ),
+                                   aPtNew + Point( nRadius, nRadius ) ) );
+            eRP = GetRPFromPoint( aPtNew );
+
+            SetActualRP( eRP );
+
+            if( WINDOW_TABPAGE == GetParent()->GetType() )
+                ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+        }
     }
 }
 
@@ -311,79 +316,83 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 {
-    RECT_POINT eNewRP = eRP;
-    BOOL bUseMM = (eCS != CS_SHADOW) && (eCS != CS_ANGLE);
-
-    switch( rKeyEvt.GetKeyCode().GetCode() )
+    // #103516# CompletelyDisabled() added to have a disabled state for SvxRectCtl
+    if(!IsCompletelyDisabled())
     {
-        case KEY_DOWN:
-        {
-            if( !(m_nState & CS_NOVERT) )
-                switch( eNewRP )
-                {
-                    case RP_LT: eNewRP = RP_LM; break;
-                    case RP_MT: eNewRP = bUseMM ? RP_MM : RP_MB; break;
-                    case RP_RT: eNewRP = RP_RM; break;
-                    case RP_LM: eNewRP = RP_LB; break;
-                    case RP_MM: eNewRP = RP_MB; break;
-                    case RP_RM: eNewRP = RP_RB; break;
-                }
-        }
-        break;
-        case KEY_UP:
-        {
-            if( !(m_nState & CS_NOVERT) )
-                switch( eNewRP )
-                {
-                    case RP_LM: eNewRP = RP_LT; break;
-                    case RP_MM: eNewRP = RP_MT; break;
-                    case RP_RM: eNewRP = RP_RT; break;
-                    case RP_LB: eNewRP = RP_LM; break;
-                    case RP_MB: eNewRP = bUseMM ? RP_MM : RP_MT; break;
-                    case RP_RB: eNewRP = RP_RM; break;
-                }
-        }
-        break;
-        case KEY_LEFT:
-        {
-            if( !(m_nState & CS_NOHORZ) )
-                switch( eNewRP )
-                {
-                    case RP_MT: eNewRP = RP_LT; break;
-                    case RP_RT: eNewRP = RP_MT; break;
-                    case RP_MM: eNewRP = RP_LM; break;
-                    case RP_RM: eNewRP = bUseMM ? RP_MM : RP_LM; break;
-                    case RP_MB: eNewRP = RP_LB; break;
-                    case RP_RB: eNewRP = RP_MB; break;
-                }
-        }
-        break;
-        case KEY_RIGHT:
-        {
-            if( !(m_nState & CS_NOHORZ) )
-                switch( eNewRP )
-                {
-                    case RP_LT: eNewRP = RP_MT; break;
-                    case RP_MT: eNewRP = RP_RT; break;
-                    case RP_LM: eNewRP = bUseMM ? RP_MM : RP_RM; break;
-                    case RP_MM: eNewRP = RP_RM; break;
-                    case RP_LB: eNewRP = RP_MB; break;
-                    case RP_MB: eNewRP = RP_RB; break;
-                }
-        }
-        break;
-        default:
-            Control::KeyInput( rKeyEvt );
-            return;
-    }
-    if( eNewRP != eRP )
-    {
-        SetActualRP( eNewRP );
+        RECT_POINT eNewRP = eRP;
+        BOOL bUseMM = (eCS != CS_SHADOW) && (eCS != CS_ANGLE);
 
-        if( WINDOW_TABPAGE == GetParent()->GetType() )
-            ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+        switch( rKeyEvt.GetKeyCode().GetCode() )
+        {
+            case KEY_DOWN:
+            {
+                if( !(m_nState & CS_NOVERT) )
+                    switch( eNewRP )
+                    {
+                        case RP_LT: eNewRP = RP_LM; break;
+                        case RP_MT: eNewRP = bUseMM ? RP_MM : RP_MB; break;
+                        case RP_RT: eNewRP = RP_RM; break;
+                        case RP_LM: eNewRP = RP_LB; break;
+                        case RP_MM: eNewRP = RP_MB; break;
+                        case RP_RM: eNewRP = RP_RB; break;
+                    }
+            }
+            break;
+            case KEY_UP:
+            {
+                if( !(m_nState & CS_NOVERT) )
+                    switch( eNewRP )
+                    {
+                        case RP_LM: eNewRP = RP_LT; break;
+                        case RP_MM: eNewRP = RP_MT; break;
+                        case RP_RM: eNewRP = RP_RT; break;
+                        case RP_LB: eNewRP = RP_LM; break;
+                        case RP_MB: eNewRP = bUseMM ? RP_MM : RP_MT; break;
+                        case RP_RB: eNewRP = RP_RM; break;
+                    }
+            }
+            break;
+            case KEY_LEFT:
+            {
+                if( !(m_nState & CS_NOHORZ) )
+                    switch( eNewRP )
+                    {
+                        case RP_MT: eNewRP = RP_LT; break;
+                        case RP_RT: eNewRP = RP_MT; break;
+                        case RP_MM: eNewRP = RP_LM; break;
+                        case RP_RM: eNewRP = bUseMM ? RP_MM : RP_LM; break;
+                        case RP_MB: eNewRP = RP_LB; break;
+                        case RP_RB: eNewRP = RP_MB; break;
+                    }
+            }
+            break;
+            case KEY_RIGHT:
+            {
+                if( !(m_nState & CS_NOHORZ) )
+                    switch( eNewRP )
+                    {
+                        case RP_LT: eNewRP = RP_MT; break;
+                        case RP_MT: eNewRP = RP_RT; break;
+                        case RP_LM: eNewRP = bUseMM ? RP_MM : RP_RM; break;
+                        case RP_MM: eNewRP = RP_RM; break;
+                        case RP_LB: eNewRP = RP_MB; break;
+                        case RP_MB: eNewRP = RP_RB; break;
+                    }
+            }
+            break;
+            default:
+                Control::KeyInput( rKeyEvt );
+                return;
+        }
+        if( eNewRP != eRP )
+        {
+            SetActualRP( eNewRP );
 
-        SetFocusRect();
+            if( WINDOW_TABPAGE == GetParent()->GetType() )
+                ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
+
+            SetFocusRect();
+        }
     }
 }
 
@@ -494,29 +503,50 @@ void SvxRectCtl::Paint( const Rectangle& rRect )
 
     Bitmap&         rBitmap = *GetBitmap();
 
-    DrawBitmap( aPtLT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-    DrawBitmap( aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-    DrawBitmap( aPtRT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+    // #103516# CompletelyDisabled() added to have a disabled state for SvxRectCtl
+    if(IsCompletelyDisabled())
+    {
+        DrawBitmap( aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        DrawBitmap( aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        DrawBitmap( aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        DrawBitmap( aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        if( eCS == CS_RECT || eCS == CS_LINE )
+            DrawBitmap( aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        DrawBitmap( aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        DrawBitmap( aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        DrawBitmap( aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+        DrawBitmap( aPtRB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap );
+    }
+    else
+    {
+        DrawBitmap( aPtLT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtMT - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtRT - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
-    DrawBitmap( aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
-    // Mittelpunkt bei Rechteck und Linie
-    if( eCS == CS_RECT || eCS == CS_LINE )
-        DrawBitmap( aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap );
+        // Mittelpunkt bei Rechteck und Linie
+        if( eCS == CS_RECT || eCS == CS_LINE )
+            DrawBitmap( aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap );
 
-    DrawBitmap( aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
 
-    DrawBitmap( aPtLB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-    DrawBitmap( aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
-    DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtLB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+        DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap );
+    }
 
     // draw active button, avoid center pos for angle
-    if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
+    // #103516# CompletelyDisabled() added to have a disabled state for SvxRectCtl
+    if(!IsCompletelyDisabled())
     {
-        Point       aCenterPt( aPtNew );
-        aCenterPt -= aToCenter;
+        if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
+        {
+            Point       aCenterPt( aPtNew );
+            aCenterPt -= aToCenter;
 
-        DrawBitmap( aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap );
+            DrawBitmap( aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, rBitmap );
+        }
     }
 }
 
@@ -758,6 +788,12 @@ RECT_POINT SvxRectCtl::GetApproxRPFromPixPt( const ::com::sun::star::awt::Point&
     return GetRPFromPoint( GetApproxLogPtFromPixPt( Point( r.X, r.Y ) ) );
 }
 
+// #103516# CompletelyDisabled() added to have a disabled state for SvxRectCtl
+void SvxRectCtl::DoCompletelyDisable(sal_Bool bNew)
+{
+    mbCompleteDisable = bNew;
+    Invalidate();
+}
 
 /*************************************************************************
 |*
