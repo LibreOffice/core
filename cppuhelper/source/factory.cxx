@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: jsc $ $Date: 2000-10-18 13:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,10 @@ Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime()
         return OFactoryComponentHelper::createInstanceEveryTime();
 
     if( !xModuleFactory.is() )
+    {
+        MutexGuard aGuard( aMutex );
         xModuleFactory = createModuleFactory();
+    }
 
     if( xModuleFactory.is() )
         return xModuleFactory->createInstance();
@@ -530,7 +533,10 @@ Reference<XInterface > SAL_CALL ORegistryFactoryHelper::createInstanceWithArgume
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     if( !xModuleFactory.is() )
+    {
+        MutexGuard aGuard( aMutex );
         xModuleFactory = createModuleFactory();
+    }
 
     if( xModuleFactory.is() )
         return xModuleFactory->createInstanceWithArguments( Arguments );
