@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:57:14 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 
 //========================================================================
 
-ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit )
+ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit, BOOL bSheetProtected)
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
@@ -102,6 +102,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
         //aCbAttrib     ( this, ResId( CB_ATTRIB ) ),
         //aCbValue      ( this, ResId( CB_VALUE ) ),
         aCbCopyAll      ( this, ResId( CB_COPYALL ) ),
+        aCbProtect      ( this, ResId( CB_PROTECT ) ),
         aFlName         ( this, ResId( FL_NAME )),
         aFlComment      ( this, ResId( FL_COMMENT ) ),
         aFlOptions      ( this, ResId( FL_OPTIONS ) ),
@@ -161,9 +162,15 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     //aCbAttrib.Check(FALSE);
     //aCbValue.Check(FALSE);
     aCbCopyAll.Check(FALSE);
+    aCbProtect.Check(TRUE);
 
     if (bIsEdit)
         aCbCopyAll.Enable(FALSE);
+    // If the Sheet is protected then we disable the Scenario Protect input
+    // and default it to true above. Note we are in 'Add' mode here as: if
+    // Sheet && scenario protection are true, then we cannot edit this dialog.
+    if (bSheetProtected)
+        aCbProtect.Enable(FALSE);
 
     //! die drei funktionieren noch nicht...
     /*
@@ -208,6 +215,8 @@ void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
     */
     if (aCbCopyAll.IsChecked())
         nBits |= SC_SCENARIO_COPYALL;
+    if (aCbProtect.IsChecked())
+        nBits |= SC_SCENARIO_PROTECT;
     rFlags = nBits;
 }
 
@@ -225,6 +234,7 @@ void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComm
     //aCbAttrib.Check    ( (nFlags & SC_SCENARIO_ATTRIB)     != 0 );
     //aCbValue.Check     ( (nFlags & SC_SCENARIO_VALUE)      != 0 );
     //  CopyAll nicht
+    aCbProtect.Check    ( (nFlags & SC_SCENARIO_PROTECT)     != 0 );
 }
 
 //------------------------------------------------------------------------
