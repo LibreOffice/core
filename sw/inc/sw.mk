@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:33:30 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:38:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,5 +69,21 @@ CDEFS+=-DNUM_RELSPACE
 CDEFS+=-DVERTICAL_LAYOUT
 CDEFS+=-DACCESSIBLE_LAYOUT
 CDEFS+=-DBIDI
+
+# define SW_DLLIMPLEMENTATION (see @ swdllapi.h)
+CDEFS += -DSW_DLLIMPLEMENTATION
+
+# set default symbol visibility / scope to hidden
+.IF "$(COMNAME)" == "gcc3"
+.IF "$(CCNUMVER)" >= "000300040000"
+#CFLAGS += -fvisibility=hidden
+.ENDIF # 3.4.0
+.ENDIF # gcc3
+
+.IF "$(COMNAME)" == "sunpro5"
+.IF "$(CCNUMVER)" >= "00050005"
+CFLAGS += -xldscope=hidden
+.ENDIF # 5.5
+.ENDIF # sunpro5
 
 # ------------------------------------------------------------------------
