@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:10:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #ifndef _TOOLS_DEBUG_H
 #include <tools/debug.hxx>
 #endif
+
+#include <sfx2/docfile.hxx>
 
 #define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 
@@ -751,9 +753,9 @@ void MathType::TypeFaceToString(String &rRet,sal_uInt8 nFace)
     aFont.AppendStyleToText(rRet);
 }
 
-int MathType::Parse(SvStorage *pStor)
+int MathType::Parse(SotStorage *pStor)
 {
-    SvStorageStreamRef xSrc = pStor->OpenStream(
+    SvStorageStreamRef xSrc = pStor->OpenSotStream(
         String::CreateFromAscii("Equation Native"),
         STREAM_STD_READ | STREAM_NOCREATE);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
@@ -2093,66 +2095,73 @@ sal_Bool MathType::HandleSize(sal_Int16 nLSize,sal_Int16 nDSize, int &rSetSize)
     return bRet;
 }
 
-int MathType::ConvertFromStarMath(SvStorage *pStor)
+int MathType::ConvertFromStarMath( SfxMedium& rMedium )
 {
     if (!pTree)
         return 0;
 
-    SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
-        0x00,0x00,0x00,0x00,0x00,0x46 );
-    pStor->SetClass( aGName, 0, C2S("Microsoft Equation 3.0"));
+    SvStream *pStream = rMedium.GetOutStream();
+    if ( pStream )
+    {
+        SvStorageRef pStor = new SotStorage( pStream, FALSE );
 
-    static sal_uInt8 __READONLY_DATA aCompObj[] = {
-        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
-        0xFF, 0xFF, 0xFF, 0xFF, 0x02, 0xCE, 0x02, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x46, 0x17, 0x00, 0x00, 0x00,
-        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
-        0x74, 0x20, 0x45, 0x71, 0x75, 0x61, 0x74, 0x69,
-        0x6F, 0x6E, 0x20, 0x33, 0x2E, 0x30, 0x00, 0x0C,
-        0x00, 0x00, 0x00, 0x44, 0x53, 0x20, 0x45, 0x71,
-        0x75, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x00, 0x0B,
-        0x00, 0x00, 0x00, 0x45, 0x71, 0x75, 0x61, 0x74,
-        0x69, 0x6F, 0x6E, 0x2E, 0x33, 0x00, 0xF4, 0x39,
-        0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    };
-    SvStorageStreamRef xStor( pStor->OpenStream( C2S("\1CompObj")));
-    xStor->Write(aCompObj,sizeof(aCompObj));
+        SvGlobalName aGName(0x0002ce02L, 0x0000, 0x0000,0xc0,0x00,
+            0x00,0x00,0x00,0x00,0x00,0x46 );
+        pStor->SetClass( aGName, 0, C2S("Microsoft Equation 3.0"));
 
-    static sal_uInt8 __READONLY_DATA aOle[] = {
-        0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00, 0x00
+        static sal_uInt8 __READONLY_DATA aCompObj[] = {
+            0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+            0xFF, 0xFF, 0xFF, 0xFF, 0x02, 0xCE, 0x02, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x46, 0x17, 0x00, 0x00, 0x00,
+            0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+            0x74, 0x20, 0x45, 0x71, 0x75, 0x61, 0x74, 0x69,
+            0x6F, 0x6E, 0x20, 0x33, 0x2E, 0x30, 0x00, 0x0C,
+            0x00, 0x00, 0x00, 0x44, 0x53, 0x20, 0x45, 0x71,
+            0x75, 0x61, 0x74, 0x69, 0x6F, 0x6E, 0x00, 0x0B,
+            0x00, 0x00, 0x00, 0x45, 0x71, 0x75, 0x61, 0x74,
+            0x69, 0x6F, 0x6E, 0x2E, 0x33, 0x00, 0xF4, 0x39,
+            0xB2, 0x71, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
-    SvStorageStreamRef xStor2( pStor->OpenStream( C2S("\1Ole")));
-    xStor2->Write(aOle,sizeof(aOle));
-    xStor.Clear();
-    xStor2.Clear();
+        SvStorageStreamRef xStor( pStor->OpenSotStream( C2S("\1CompObj")));
+        xStor->Write(aCompObj,sizeof(aCompObj));
 
-    SvStorageStreamRef xSrc = pStor->OpenStream(C2S("Equation Native"));
-    if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
-        return NULL;
+        static sal_uInt8 __READONLY_DATA aOle[] = {
+            0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00
+            };
+        SvStorageStreamRef xStor2( pStor->OpenSotStream( C2S("\1Ole")));
+        xStor2->Write(aOle,sizeof(aOle));
+        xStor.Clear();
+        xStor2.Clear();
 
-    pS = &xSrc;
-    pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+        SvStorageStreamRef xSrc = pStor->OpenSotStream(C2S("Equation Native"));
+        if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
+            return NULL;
 
-    pS->SeekRel(EQNOLEFILEHDR_SIZE); //Skip 28byte Header and fill it in later
-    *pS << sal_uInt8(0x03);
-    *pS << sal_uInt8(0x01);
-    *pS << sal_uInt8(0x01);
-    *pS << sal_uInt8(0x03);
-    *pS << sal_uInt8(0x00);
-    sal_uInt32 nSize = pS->Tell();
-    nPendingAttributes=0;
+        pS = &xSrc;
+        pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    HandleNodes(pTree);
-    *pS << sal_uInt8(END);
+        pS->SeekRel(EQNOLEFILEHDR_SIZE); //Skip 28byte Header and fill it in later
+        *pS << sal_uInt8(0x03);
+        *pS << sal_uInt8(0x01);
+        *pS << sal_uInt8(0x01);
+        *pS << sal_uInt8(0x03);
+        *pS << sal_uInt8(0x00);
+        sal_uInt32 nSize = pS->Tell();
+        nPendingAttributes=0;
 
-    nSize = pS->Tell()-nSize;
-    pS->Seek(0);
-    EQNOLEFILEHDR aHdr(nSize+4+1);
-    aHdr.Write(pS);
+        HandleNodes(pTree);
+        *pS << sal_uInt8(END);
+
+        nSize = pS->Tell()-nSize;
+        pS->Seek(0);
+        EQNOLEFILEHDR aHdr(nSize+4+1);
+        aHdr.Write(pS);
+    }
+
     return 1;
 }
 
