@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 09:17:53 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,6 +1078,7 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
                     bUI = 2;
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
+                    pDocSh->SetModified( FALSE );
                     rReq.Done(); // unbedingt vor Close() rufen!
                     if ( SfxApplication::IsPlugin() && rReq.GetSlot() == SID_BACKTOWEBTOP )
                     {
