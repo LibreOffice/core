@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:08:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ enum RES_FIELDS
     RES_DATETIMEFLD,
     RES_AUTHORITY,  //Table of authorities
     RES_COMBINED_CHARS,
+    RES_DROPDOWN,
     RES_FIELDS_END
 };
 
@@ -189,6 +190,7 @@ enum SwFldTypesEnum
     TYP_SCRIPTFLD,              // 40
     TYP_AUTHORITY,
     TYP_COMBINED_CHARS,
+    TYP_DROPDOWN,
     TYP_END
 };
 
