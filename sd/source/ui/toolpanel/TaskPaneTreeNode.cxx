@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneTreeNode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:57:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,13 +186,20 @@ ControlContainer& TreeNode::GetControlContainer (void)
 
 
 
-void TreeNode::Expand (bool bExpansionState)
+bool TreeNode::Expand (bool bExpansionState)
 {
-    if (IsExpandable())
+    bool bExpansionStateChanged (false);
+
+    if (IsExpandable() && IsExpanded()!=bExpansionState)
+    {
         if (bExpansionState)
             GetWindow()->Show();
         else
             GetWindow()->Hide();
+        bExpansionStateChanged = true;
+    }
+
+    return bExpansionStateChanged;
 }
 
 
