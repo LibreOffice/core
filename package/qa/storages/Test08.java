@@ -52,11 +52,11 @@ public class Test08 implements StorageTest {
                 return true;
             }
 
-            byte pPass1[] = { 1, 2, 3 };
-            byte pPass2[] = { 3, 2, 1 };
+            String sPass1 = "123";
+            String sPass2 = "321";
 
             try {
-                xTempStorageEncryption.setEncryptionKey( pPass1 );
+                xTempStorageEncryption.setEncryptionPassword( sPass1 );
             }
             catch( Exception e )
             {
@@ -67,7 +67,7 @@ public class Test08 implements StorageTest {
             // open a new substorage
             XStorage xTempSubStorage = m_aTestHelper.openSubStorage( xTempStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_WRITE );
+                                                                        ElementModes.WRITE );
             if ( xTempSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't create substorage!" );
@@ -92,21 +92,21 @@ public class Test08 implements StorageTest {
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             // the stream will not be encrypted
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream3", "MediaType3", false, pBytes3, pPass2 ) )
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream3", "MediaType3", false, pBytes3, sPass2 ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempStorage,
                                                             "MediaType4",
                                                             true,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
             if ( !m_aTestHelper.setStorageTypeAndCheckProps( xTempSubStorage,
                                                             "MediaType5",
                                                             false,
-                                                            ElementModes.ELEMENT_WRITE ) )
+                                                            ElementModes.WRITE ) )
                 return false;
 
             // create temporary file
@@ -120,7 +120,7 @@ public class Test08 implements StorageTest {
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempFileStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oTempFileStorage );
@@ -144,7 +144,7 @@ public class Test08 implements StorageTest {
             // ================================================
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.ELEMENT_READ );
+            pArgs[1] = new Integer( ElementModes.READ );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )
@@ -153,20 +153,20 @@ public class Test08 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType4", true, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType4", true, ElementModes.READ ) )
                 return false;
 
             // open existing substorage
             XStorage xResultSubStorage = m_aTestHelper.openSubStorage( xResultStorage,
                                                                         "SubStorage1",
-                                                                        ElementModes.ELEMENT_READ );
+                                                                        ElementModes.READ );
             if ( xResultSubStorage == null )
             {
                 m_aTestHelper.Error( "Can't open existing substorage!" );
                 return false;
             }
 
-            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType5", false, ElementModes.ELEMENT_READ ) )
+            if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType5", false, ElementModes.READ ) )
                 return false;
 
             // set the global password for the root storage
@@ -180,7 +180,7 @@ public class Test08 implements StorageTest {
             }
 
             try {
-                xResultStorageEncryption.setEncryptionKey( pPass2 );
+                xResultStorageEncryption.setEncryptionPassword( sPass2 );
             }
             catch( Exception e )
             {
@@ -188,7 +188,7 @@ public class Test08 implements StorageTest {
                 return false;
             }
 
-            if ( !m_aTestHelper.checkEncrStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1, pPass1 ) )
+            if ( !m_aTestHelper.checkEncrStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
             if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream2", "MediaType2", pBytes2 ) )

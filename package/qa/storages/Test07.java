@@ -49,23 +49,23 @@ public class Test07 implements StorageTest {
             }
 
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
-            byte pPass1[] = { 1, 2, 3, 4, 5 };
+            String sPass1 = "12345";
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", true, pBytes1, pPass1 ) )
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", true, pBytes1, sPass1 ) )
                 return false;
 
             byte pBytes2[] = { 2, 2, 2, 2, 2 };
-            byte pPass2[] = { 5, 4, 3, 2, 1 };
+            String sPass2 = "54321";
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
-            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream2", "MediaType2", false, pBytes2, pPass2 ) )
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream2", "MediaType2", false, pBytes2, sPass2 ) )
                 return false;
 
             // create temporary storage based on a previously created temporary file
             Object pArgs[] = new Object[2];
             pArgs[0] = (Object) sTempFileURL;
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
 
             Object oTempFileStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xTempFileStorage = (XStorage)UnoRuntime.queryInterface( XStorage.class, oTempFileStorage );
@@ -89,7 +89,7 @@ public class Test07 implements StorageTest {
             // ================================================
 
             // the temporary file must not be locked any more after storage disposing
-            pArgs[1] = new Integer( ElementModes.ELEMENT_WRITE );
+            pArgs[1] = new Integer( ElementModes.WRITE );
             Object oResultStorage = m_xStorageFactory.createInstanceWithArguments( pArgs );
             XStorage xResultStorage = (XStorage) UnoRuntime.queryInterface( XStorage.class, oResultStorage );
             if ( xResultStorage == null )
@@ -109,16 +109,16 @@ public class Test07 implements StorageTest {
             if ( !m_aTestHelper.copyStorage( xResultStorage, x2CopyStorage ) )
                 return false;
 
-            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream1", "MediaType1", pBytes1, pPass1 ) )
+            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream2", "MediaType2", pBytes2, pPass2 ) )
+            if ( !m_aTestHelper.checkEncrStream( xResultStorage, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "SubStream1", "MediaType1", pBytes1, pPass1 ) )
+            if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "SubStream2", "MediaType2", pBytes2, pPass2 ) )
+            if ( !m_aTestHelper.checkEncrStream( x2CopyStorage, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
                 return false;
 
             // dispose used storages to free resources
