@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 16:07:33 $
+ *  last change: $Author: cl $ $Date: 2001-12-14 15:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,7 +1534,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetRgtBorder(),
                                 pRefNotesPage->GetLwrBorder() );
         pDoc->InsertMasterPage(pMNotesPage,  nInsertPos + 1);
-        pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
+//      pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
         pMNotesPage->SetLayoutName( aLayoutName );
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
         rModel.SetModified();
