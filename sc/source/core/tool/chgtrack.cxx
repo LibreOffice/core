@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-11-21 10:27:27 $
+ *  last change: $Author: er $ $Date: 2000-11-21 11:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,18 +1971,21 @@ void ScChangeActionContent::SetCell( String& rStr, ScBaseCell* pCell,
         ULONG nFormat, const ScDocument* pDoc )
 {
     rStr.Erase();
-    switch ( pCell->GetCellType() )
+    if ( pCell )
     {
-        case CELLTYPE_VALUE :
-        {   // e.g. remember date as date string
-            double nValue = ((ScValueCell*)pCell)->GetValue();
-            pDoc->GetFormatTable()->GetInputLineString( nValue,
-                nFormat, rStr );
+        switch ( pCell->GetCellType() )
+        {
+            case CELLTYPE_VALUE :
+            {   // e.g. remember date as date string
+                double nValue = ((ScValueCell*)pCell)->GetValue();
+                pDoc->GetFormatTable()->GetInputLineString( nValue,
+                    nFormat, rStr );
+            }
+            break;
+            case CELLTYPE_FORMULA :
+                ((ScFormulaCell*)pCell)->SetInChangeTrack( TRUE );
+            break;
         }
-        break;
-        case CELLTYPE_FORMULA :
-            ((ScFormulaCell*)pCell)->SetInChangeTrack( TRUE );
-        break;
     }
 }
 
