@@ -40,7 +40,7 @@ CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions 
 
 # -fpermissive should be removed as soon as possible 
-CFLAGSCXX= -pipe -fno-for-scope -fpermissive 
+CFLAGSCXX= -pipe -fno-for-scope -fpermissive -frtti
 
 
 #Note: the build is not consistent in that it links static librtaries
@@ -68,7 +68,8 @@ CFLAGSDEBUG=-g
 CFLAGSDBGUTIL= 
 
 # Compiler flags for enabling optimazations
-CFLAGSOPT=-O1 
+CFLAGSOPT=-O2  -fno-schedule-insns -fno-strict-aliasing -fno-schedule-insns2
+
 # Compiler flags for disabling optimazations
 CFLAGSNOOPT=-O0
 
@@ -150,4 +151,3 @@ RCSETVERSION=
 DLLPOSTFIX=lp
 DLLPRE=lib 
 DLLPOST=.so 
-
