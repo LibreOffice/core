@@ -51,6 +51,7 @@ mkdir: %_DEST%\lib%_EXT%\python\lib-dynload
 ..\%__SRC%\misc\build\python-inst\lib\python2.2\lib-dynload\* %_DEST%\lib%_EXT%\python\lib-dynload\*
 ..\%__SRC%\misc\build\python-inst\bin\python %_DEST%\bin%_EXT%\python
 ..\%__SRC%\lib\libpython.so.2.2.2 %_DEST%\lib%_EXT%\libpython.so.2.2.2
+..\%__SRC%\lib\libpython*.dylib %_DEST%\lib%_EXT%\libpython*.dylib
 
 # WINDOWS ONLY !
 ..\%__SRC%\misc\build\pyconfig.h %_DEST%\inc%_EXT%\python\pyconfig.h
