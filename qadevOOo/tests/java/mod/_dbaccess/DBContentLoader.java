@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBContentLoader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:41:33 $
+ *  last change:$Date: 2005-03-29 11:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ public class DBContentLoader extends TestCase {
 
         oObj = (XInterface) oInterface ;
 
+        log.println("ImplementationName " + util.utils.getImplName(oObj));
         log.println( "creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
