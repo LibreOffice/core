@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iop.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 13:48:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,19 +59,18 @@
  *
  ************************************************************************/
 #include <com/sun/star/corba/corba.idl>
-
 module com { module sun { module star { module corba { module iop
 { // IDL
 
     /**
       @deprecated
      */
-    typedef unsigned long ProfileId;
+    published typedef unsigned long ProfileId;
 
     /**
       @deprecated
      */
-    constants ProfileIdGroup
+    published constants ProfileIdGroup
         {
             const ProfileId TAG_INTERNET_IOP = 0;
             const ProfileId TAG_MULTIPLE_COMPONENTS = 1;
@@ -80,7 +79,7 @@ module com { module sun { module star { module corba { module iop
     /**
       @deprecated
      */
-    struct TaggedProfile
+    published struct TaggedProfile
     {
         ProfileId tag;
         sequence <byte> profile_data;
@@ -91,7 +90,7 @@ module com { module sun { module star { module corba { module iop
     /**
       @deprecated
      */
-    struct IOR
+    published struct IOR
     {
         CorbaString8 type_id;
         sequence <TaggedProfile> profiles;
@@ -102,12 +101,12 @@ module com { module sun { module star { module corba { module iop
     /**
       @deprecated
      */
-    typedef unsigned long ComponentId;
+    published typedef unsigned long ComponentId;
 
     /**
       @deprecated
      */
-    struct TaggedComponent
+    published struct TaggedComponent
     {
         ComponentId tag;
         sequence <byte> component_data;
@@ -116,17 +115,17 @@ module com { module sun { module star { module corba { module iop
     /**
       @deprecated
      */
-    typedef sequence <TaggedComponent> MultipleComponentProfile;
+    published typedef sequence <TaggedComponent> MultipleComponentProfile;
 
     /**
       @deprecated
      */
-    typedef unsigned long ServiceId;
+    published typedef unsigned long ServiceId;
 
     /**
       @deprecated
      */
-    struct ServiceContext
+    published struct ServiceContext
     {
         ServiceId context_id;
         sequence < byte > context_data;
@@ -135,12 +134,12 @@ module com { module sun { module star { module corba { module iop
     /**
       @deprecated
      */
-    typedef sequence <ServiceContext> ServiceContextList;
+    published typedef sequence <ServiceContext> ServiceContextList;
 
     /**
       @deprecated
      */
-    constants ServiceIdGroup
+    published constants ServiceIdGroup
         {
             const ServiceId TransactionService = 0;
             const ServiceId CodeSets = 1;
