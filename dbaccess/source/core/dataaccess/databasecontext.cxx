@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-16 11:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace dbaccess;
 
-#define REGISTRYFILE    "temporary dbaccess persistence.rdb"
+#define REGISTRYFILE    "dbaccess.rdb"
 
 
 //==========================================================================
