@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 10:32:24 $
+ *  last change: $Author: kso $ $Date: 2001-03-20 09:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,12 +820,6 @@ Any Content::executeCommand( sal_Int32 nCommandHandle,
 void Content::abortCommand()
 {
     m_xImpl->abortCommand();
-}
-
-//=========================================================================
-Reference< XCommandEnvironment > Content::getCommandEnvironment()
-{
-    return m_xImpl->getEnvironment();
 }
 
 //=========================================================================

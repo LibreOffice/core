@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 08:00:51 $
+ *  last change: $Author: kso $ $Date: 2001-03-20 09:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,14 +525,6 @@ public:
       */
     void
     abortCommand();
-    /**
-      * This method returns the command environment of the content.
-      *
-      * @return the command environment.
-      */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ucb::XCommandEnvironment >
-    getCommandEnvironment();
 
     //////////////////////////////////////////////////////////////////////
     // Special commands.
