@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-24 10:00:48 $
+ *  last change: $Author: os $ $Date: 2000-12-14 09:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTGRAPHICOBJECTSSUPPLIER_HPP_
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
+#include <com/sun/star/drawing/ColorMode.hpp>
+#endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 
 #ifndef _GRFMGR_HXX
@@ -263,40 +269,12 @@ int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 
 BOOL SwRotationGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-/*
-!!JP 28.07.00: IMPL- fehlt
-    text::GraphicCrop  aCrop;
-    aCrop.Left   = TWIP_TO_MM100(nLeft);
-    aCrop.Right  = TWIP_TO_MM100(nRight) ;
-    aCrop.Top    = TWIP_TO_MM100(nTop)   ;
-    aCrop.Bottom = TWIP_TO_MM100(nBottom);
-    rVal.setValue( &aCrop, ::getCppuType((text::GraphicCrop*)0) );
-
-    return   sal_True;
-*/
-    return   sal_False;
+    return SfxUInt16Item::QueryValue(rVal, nMemberId);
 }
 
 BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bRet = sal_False;
-/*
-!!JP 28.07.00: IMPL- fehlt
-    if(rVal.getValueType() == ::getCppuType((const text::GraphicCrop*)0))
-    {
-        const text::GraphicCrop* pCrop = (const text::GraphicCrop*)rVal.getValue();
-Size aUnrotatedSize;
-        nLeft   = MM100_TO_TWIP(pCrop->Left  );
-        nRight  = MM100_TO_TWIP(pCrop->Right );
-        nTop    = MM100_TO_TWIP(pCrop->Top   );
-        nBottom = MM100_TO_TWIP(pCrop->Bottom);
-        bRet = sal_True;
-    }
-    else
-        //exception(wrong_type)
-        ;
-*/
-    return bRet;
+    return SfxUInt16Item::PutValue(rVal, nMemberId);
 }
 
 // ------------------------------------------------------------------
@@ -349,35 +327,13 @@ int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 
 BOOL SwGammaGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//!!JP 28.07.00: IMPL- fehlt
-    return sal_False;
+    rVal <<= nValue;
+    return sal_True;
 }
 
 BOOL SwGammaGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bRet = sal_False;
-/*
-!!JP 28.07.00: IMPL- fehlt
-    double aVal;
-    rVal >>= aVal;
-
-    if(rVal.getValueType() == ::getCppuType((const text::GraphicCrop*)0))
-    {
-        const text::GraphicCrop* pCrop = (const text::GraphicCrop*)rVal.getValue();
-Size aUnrotatedSize;
-        nLeft   = MM100_TO_TWIP(pCrop->Left  );
-        nRight  = MM100_TO_TWIP(pCrop->Right );
-        nTop    = MM100_TO_TWIP(pCrop->Top   );
-        nBottom = MM100_TO_TWIP(pCrop->Bottom);
-        bRet = sal_True;
-    }
-    else
-        //exception(wrong_type)
-        ;
-*/
-    return bRet;
-
-
+    return rVal >>= nValue;
 }
 
 // ------------------------------------------------------------------
@@ -413,13 +369,27 @@ USHORT SwDrawModeGrf::GetValueCount() const
 BOOL SwDrawModeGrf::QueryValue( com::sun::star::uno::Any& rVal,
                                 BYTE nMemberId ) const
 {
-    return FALSE;
+    drawing::ColorMode eRet = (drawing::ColorMode)GetEnumValue();
+    rVal <<= eRet;
+    return TRUE;
 }
 
 BOOL SwDrawModeGrf::PutValue( const com::sun::star::uno::Any& rVal,
                                 BYTE nMemberId  )
 {
-    return FALSE;
+    sal_Int32 eVal;
+    try
+    {
+        eVal = comphelper::getEnumAsINT32(rVal);
+    }
+    catch(...) {}
+    if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
+    {
+        SetEnumValue((USHORT)eVal);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 

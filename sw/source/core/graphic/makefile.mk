@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jp $ $Date: 2000-09-28 13:04:06 $
+#   last change: $Author: os $ $Date: 2000-12-14 09:35:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,9 @@ CXXFILES = \
 SLOFILES =	\
         $(SLO)$/grfatr.obj \
         $(SLO)$/ndgrf.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/grfatr.obj \
 
 # --- Tagets -------------------------------------------------------
 
