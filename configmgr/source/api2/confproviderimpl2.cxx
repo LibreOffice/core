@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:23:57 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ namespace configmgr
         {
             if (xOptions->getDefaultUser() == sUser)
             {
-                OSL_ASSERT(xOptions->hasDefaultUser());
+                OSL_ASSERT(xOptions->isForSessionUser());
                 OSL_ASSERT(xOptions->getUser() == sUser);
                 // respecified the actual user
                 CFG_TRACE_WARNING_NI("config provider: User should not be specified again when creating an Access");
@@ -190,7 +190,7 @@ namespace configmgr
         {
             if (xOptions->getDefaultUser() == sUser)
             {
-                OSL_ASSERT(xOptions->hasDefaultUser());
+                OSL_ASSERT(xOptions->isForSessionUser());
                 OSL_ASSERT(xOptions->getUser() == sUser);
                 // respecified the actual user
                 CFG_TRACE_WARNING_NI("config provider: User should not be specified again when creating an Access");

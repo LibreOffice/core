@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
+#   last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/cacheaccess.obj	\
+        $(SLO)$/cachedata.obj	\
+        $(SLO)$/cacheline.obj	\
+        $(SLO)$/cachemulticaster.obj	\
         $(SLO)$/loader.obj	\
         $(SLO)$/treecache.obj	\
         $(SLO)$/treedata.obj	\
@@ -81,7 +85,11 @@ SLOFILES=	\
         $(SLO)$/disposetimer.obj	\
         $(SLO)$/cachewritescheduler.obj	\
         $(SLO)$/invalidatetree.obj \
-
+        $(SLO)$/cachefactory.obj	\
+        $(SLO)$/backendwrap.obj	\
+    
+#		$(SLO)$/cachemanager.obj	\
+#		$(SLO)$/treemanager.obj	\
 
 # --- Targets ----------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-25 13:28:36 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
 
             if (!aDisposeList.empty())
             {
-                if (m_rTreeManager.m_pSession)
+                if (m_rTreeManager.getBackend() != NULL)
                 {
                     uno::Sequence< OUString > aCloseList = TreeInfo::collectNodeIds(aDisposeList);
                     if (aCloseList.getLength() > 0)

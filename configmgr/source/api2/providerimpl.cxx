@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef CONFIGMGR_BOOTSTRAP_HXX_
 #include "bootstrap.hxx"
 #endif
+#ifndef _CONFIGMGR_SESSION_CONFIGSESSION_HXX_
+#include "configsession.hxx"
+#endif
+#ifndef CONFIGMGR_CACHEFACTORY_HXX_
+#include "cachefactory.hxx"
+#endif
 
 #ifndef CONFIGMGR_API_PROVIDER_HXX_
 #include "provider.hxx"
@@ -100,7 +106,9 @@
 #ifndef CONFIGMGR_GROUPNODEACCESS_HXX
 #include "groupnodeaccess.hxx"
 #endif
+#ifndef CONFIGMGR_VALUENODEACCESS_HXX
 #include "valuenodeaccess.hxx"
+#endif
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
 #endif
@@ -159,6 +167,8 @@ namespace configmgr
     }
 
     //=============================================================================
+
+    //=============================================================================
     //= OProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------
@@ -195,7 +205,10 @@ namespace configmgr
         bool bNeedProfile = false;
         this->implInitFromSettings(_rSettings,bNeedProfile);
 
-        m_pTreeMgr = new TreeManager(_pSession, m_xDefaultOptions); //new OOptions(xConverter));
+        rtl::Reference< TreeManager > xNewTreeManager =
+            CacheFactory::instance().createCacheManager(_pSession, *m_xDefaultOptions);
+
+        m_pTreeMgr = xNewTreeManager.get();
         m_pTreeMgr->acquire();
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
@@ -778,34 +791,6 @@ namespace configmgr
         {
             OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Configuration Provider: Missing argument: no nodepath was provided"));
             throw   lang::IllegalArgumentException(sMessage,uno::Reference<uno::XInterface>(),-1);
-        }
-    }
-// class OOptions
-    //..........................................................................
-    static sal_Int32 getNextCacheID()
-    {
-        static oslInterlockedCount nNextID = 0;
-
-        oslInterlockedCount nNewID = osl_incrementInterlockedCount(&nNextID);
-
-        if (nNewID == 0)
-        {
-            CFG_TRACE_WARNING("Cache ID overflow - restarting sequence !");
-            OSL_ENSURE(false, "Cache ID overflow - restarting sequence !");
-        }
-
-        return static_cast<sal_Int32>(nNewID);
-    }
-
-    void OOptions::setNoCache(bool _bNoCache)
-    {
-        if (_bNoCache)
-        {
-            m_nCacheID = getNextCacheID();
-        }
-        else
-        {
-            m_nCacheID = 0;
         }
     }
 

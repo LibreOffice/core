@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ namespace lang  = ::com::sun::star::lang;
 namespace configmgr
 {
     class TreeManager;
+
+    class RequestOptions;
 ////////////////////////////////////////////////////////////////////////////////
 /* OTreeDisposeScheduler:
    does something special????
@@ -190,9 +192,11 @@ namespace configmgr
     //-------- Control of execution  ------------------------------------------
         /// ensure this will execute cleanup duties for _xOptions (no later than after getCleanupDelay() has elapsed)
         void scheduleCleanup(vos::ORef< OOptions > const& _xOptions);
+        void scheduleCleanup(RequestOptions const & _aOptions);
 
         /// stop and discard pending activities for _xOptions
         void clearTasks(vos::ORef< OOptions > const& _xOptions);
+        void clearTasks(RequestOptions const & _aOptions);
 
         /// stop and discard pending activities
         void stopAndClearTasks();
@@ -205,6 +209,9 @@ namespace configmgr
         void onTimerShot();
 
         vos::ORef< OOptions > getTask(TimeStamp const& _aActualTime, TimeStamp& _aNextTime);
+
+        /// ensure this will execute cleanup duties for _xOptions (no later than after getCleanupDelay() has elapsed)
+      //  TimeStamp fillDisposeList(CacheLoadingAccess & _aCache, DisposeList& _rList, TimeStamp const& aLimitTime)
 
         TimeStamp runDisposer(TimeStamp const& _aActualTime);
     private:

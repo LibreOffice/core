@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachewritescheduler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:07:04 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,10 @@
 #include "timestamp.hxx"
 #endif
 
+#ifndef INCLUDED_SET
 #include <set>
+#define INCLUDED_SET
+#endif
 
 #ifndef _VOS_TIMER_HXX_
 #include <vos/timer.hxx>
@@ -83,6 +86,9 @@
 // -----------------------------------------------------------------------------
 namespace configmgr
 {
+    class RequestOptions;
+    namespace backend { class ComponentRequest; }
+
     // Write down the Cache, much less complex than caching Nodes
     // (better control)
     class OCacheWriteScheduler
@@ -149,9 +155,11 @@ namespace configmgr
         }
     //-------- Control of execution  ------------------------------------------
         void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bASync = false) CFG_UNO_THROW_ALL(  );
+        void scheduleWrite(backend::ComponentRequest _aComponent) CFG_UNO_THROW_ALL(  );
 
         /// stop pending activities for one set of options (do not discard them)
         bool clearTasks(vos::ORef< OOptions > const& _xOptions);
+        bool clearTasks(RequestOptions const& _xOptions);
 
         /// stop and discard pending activities
         void stopAndWriteCache();

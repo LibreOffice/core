@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 
 #include "treecache.hxx"
 
-#ifndef _CONFIGMGR_SESSION_CONFIGSESSION_HXX_
-#include "configsession.hxx"
-#endif
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
 #endif
@@ -146,22 +143,19 @@ auto_ptr<TreeChangeList> createDiffs(data::NodeAccess const& _aCachedNode, ISubt
 }
 // -----------------------------------------------------------------------------
 
-auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, AbsolutePath const& _aAbsoluteSubtreePath,
+auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _aAbsoluteSubtreePath,
                                                      const vos::ORef < OOptions >& _xOptions,
                                                      sal_Int16 _nMinLevels)  CFG_UNO_THROW_ALL()
 {
     TreeInfo* pInfo = this->requestTreeInfo(_xOptions,true /*create TreeInfo*/);
 
     CFG_TRACE_INFO_NI("cache manager: cache miss. going to load the node");
-    vos::ORef< OTreeLoader > xLoader = pInfo->getNewLoaderWithoutPending(_aAbsoluteSubtreePath, _nMinLevels, _xOptions, _pSession);
+    rtl::Reference< OTreeLoader > xLoader = pInfo->getNewLoaderWithoutPending(_aAbsoluteSubtreePath, _nMinLevels, _xOptions, m_xBackend.get());
 
-    OSL_ENSURE(xLoader.getBodyPtr(), "Did not receive a loader for retrieving the node");
+    OSL_ENSURE(xLoader.is(), "Did not receive a loader for retrieving the node");
     CFG_TRACE_INFO_NI("cache manager: cache miss. going to load the node");
-    if (!xLoader.getBodyPtr())
+    if (!xLoader.is())
         throw container::NoSuchElementException((::rtl::OUString::createFromAscii("Error while retrieving the node")), NULL);
-
-    // start loading
-    xLoader->start(this);
 
     // now block for reading
     std::auto_ptr<ISubtree> pResponse;
@@ -172,7 +166,7 @@ auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, 
     catch (uno::Exception& e)
     {
         pInfo->releaseLoader(xLoader);
-        throw e;
+        throw;
     }
 
     pInfo->releaseLoader(xLoader);
@@ -226,7 +220,7 @@ void TreeManager::invalidateTreeAsync(const AbsolutePath &_aAbsoluteSubtreePath,
 void TreeManager::refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _aOptions) CFG_UNO_THROW_ALL()
 {
     // load the Node direct from the session, without using the cache
-    auto_ptr<ISubtree> aLoadedSubtree( this->loadNodeFromSession(m_pSession, _aAbsoluteSubtreePath, _aOptions, -1) );
+    auto_ptr<ISubtree> aLoadedSubtree( this->loadNodeFromSession( _aAbsoluteSubtreePath, _aOptions, -1) );
 
     if (aLoadedSubtree.get())
     {
