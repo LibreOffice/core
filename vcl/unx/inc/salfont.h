@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salfont.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:06:58 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 17:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,6 @@
  *
  *
  ************************************************************************/
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-//                                                                            //
-// (C) 1997 Star Division GmbH, Hamburg, Germany                              //
-//                                                                            //
-// $Revision: 1.2 $  $Author: vg $  $Date: 2003-04-15 16:06:58 $              //
-//                                                                            //
-// $Workfile:   salfont.h  $                                                  //
-//  $Modtime:   06 Sep 1997 15:11:06  $                                       //
-//                                                                            //
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
 
 #ifndef _SV_SALFONT_H
 #define _SV_SALFONT_H
