@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2002-02-07 14:54:18 $
+ *  last change: $Author: fs $ $Date: 2002-04-15 09:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,8 +869,8 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
         Group = TRUE ;
-        Text = "~Am Anfang des Textes" ;
-        Text [ ENGLISH ] = "At beginning o~f text" ;
+        Text = "Links/Oben" ;
+        Text [ ENGLISH ] = "Rechts/Unten" ;
     };
     RadioButton BTN_RIGHTALIGN
     {
@@ -974,7 +974,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Hide = TRUE ;
         StringList =
         {
-            < "Am Anfang des Textes" ; Default ; > ;
+            < "Links/Oben" ; Default ; > ;
             < "Zentriert" ; Default ; > ;
             < "Blocksatz" ; Default ; > ;
         };
@@ -1019,7 +1019,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Pos = MAP_APPFONT ( 20 , 100 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         Hide = TRUE ;
-        Text = "Am Textraster ausrichten (wenn aktiviert)" ;
+        Text = "Am Textraster fangen (wenn aktiviert)" ;
         Text [ ENGLISH ] = "~Snap to text grid (if active)" ;
     };
     Window WN_EXAMPLE
