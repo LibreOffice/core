@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:14:14 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,27 @@ void NoSpaceEdit::Modify()
     if(GetModifyHdl().IsSet())
         GetModifyHdl().Call(this);
 }
+/* -----------------25.06.2003 15:57-----------------
 
+ --------------------------------------------------*/
+ReturnActionEdit::~ReturnActionEdit()
+{
+}
+/* -----------------25.06.2003 15:58-----------------
+
+ --------------------------------------------------*/
+void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
+{
+    const KeyCode aKeyCode = rEvt.GetKeyCode();
+    const USHORT nModifier = aKeyCode.GetModifier();
+    if( aKeyCode.GetCode() == KEY_RETURN &&
+            !nModifier)
+    {
+        if(aReturnActionLink.IsSet())
+            aReturnActionLink.Call(this);
+    }
+    else
+        Edit::KeyInput(rEvt);
+}
 
 
