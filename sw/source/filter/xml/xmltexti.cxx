@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:23:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,8 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
                 if ( xObj.is() )
                 {
+                    // TODO/LEAN: created object should be in running state
+                    svt::EmbeddedObjectRef::TryRunningState( xObj );
                     MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                     aVisArea.SetSize( aTwipSize );
                     aVisArea = OutputDevice::LogicToLogic(
@@ -619,18 +621,21 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
                 xStorage, aName, aMediaDescriptor, uno::Sequence< beans::PropertyValue >() ),
             uno::UNO_QUERY_THROW );
 
-        svt::EmbeddedObjectRef::TryRunningState( xObj );
-        SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                        xObj,
-                                        &aItemSet );
+        // freshly created objects should be in running state
+        if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+        {
+            SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                                            xObj,
+                                            &aItemSet );
 
-        // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
+            // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
-        SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-        xPropSet = pXFrame;
-        if( pDoc->GetDrawModel() )
-            SwXFrame::GetOrCreateSdrObject(
-                    static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+            SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+            xPropSet = pXFrame;
+            if( pDoc->GetDrawModel() )
+                SwXFrame::GetOrCreateSdrObject(
+                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+        }
     }
     catch ( uno::Exception& )
     {
@@ -719,26 +724,28 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
             aClass, ::rtl::OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
-        svt::EmbeddedObjectRef::TryRunningState( xObj );
-        uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-        if ( xSet.is() )
+        if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
-            if( bValidURL )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
-                    makeAny( ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-            if( bValidMimeType )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
-                    makeAny( ::rtl::OUString( rMimeType ) ) );
-        }
+            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+            if ( xSet.is() )
+            {
+                if( bValidURL )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                        makeAny( ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                if( bValidMimeType )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType"),
+                        makeAny( ::rtl::OUString( rMimeType ) ) );
+            }
 
-        SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                        xObj,
-                                        &aItemSet);
-        SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-        xPropSet = pXFrame;
-        if( pDoc->GetDrawModel() )
-            SwXFrame::GetOrCreateSdrObject(
-                    static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+            SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                                            xObj,
+                                            &aItemSet);
+            SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+            xPropSet = pXFrame;
+            if( pDoc->GetDrawModel() )
+                SwXFrame::GetOrCreateSdrObject(
+                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+        }
     }
     catch ( uno::Exception& )
     {
@@ -841,45 +848,47 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFrame(
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
             aClass, ::rtl::OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
-        svt::EmbeddedObjectRef::TryRunningState( xObj );
-        uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
-        if ( xSet.is() )
+        if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
         {
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"),
-                makeAny( ::rtl::OUString( INetURLObject::RelToAbs( rHRef ) ) ) );
+            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+            if ( xSet.is() )
+            {
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"),
+                    makeAny( ::rtl::OUString( INetURLObject::RelToAbs( rHRef ) ) ) );
 
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"),
-                makeAny( ::rtl::OUString( rName ) ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"),
+                    makeAny( ::rtl::OUString( rName ) ) );
 
-            if ( eScrollMode == ScrollingAuto )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
-                    makeAny( sal_True ) );
-            else
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
-                    makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
+                if ( eScrollMode == ScrollingAuto )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                        makeAny( sal_True ) );
+                else
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                        makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
 
-            if ( bIsBorderSet )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
-                    makeAny( bHasBorder ) );
-            else
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
-                    makeAny( sal_True ) );
+                if ( bIsBorderSet )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                        makeAny( bHasBorder ) );
+                else
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                        makeAny( sal_True ) );
 
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
-                makeAny( sal_Int32( aMargin.Width() ) ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                    makeAny( sal_Int32( aMargin.Width() ) ) );
 
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
-                makeAny( sal_Int32( aMargin.Height() ) ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                    makeAny( sal_Int32( aMargin.Height() ) ) );
+            }
+
+            SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
+                                            xObj,
+                                            &aItemSet);
+            SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+            xPropSet = pXFrame;
+            if( pDoc->GetDrawModel() )
+                SwXFrame::GetOrCreateSdrObject(
+                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
         }
-
-        SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
-                                        xObj,
-                                        &aItemSet);
-        SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
-        xPropSet = pXFrame;
-        if( pDoc->GetDrawModel() )
-            SwXFrame::GetOrCreateSdrObject(
-                    static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
     }
     catch ( uno::Exception& )
     {
@@ -907,39 +916,43 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     SwOLENode *pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetNoTxtNode()->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
 
-    uno::Reference < beans::XPropertySet > xSet( rOLEObj.GetOleRef()->getComponent(), uno::UNO_QUERY );
-    if ( xSet.is() )
+    uno::Reference < embed::XEmbeddedObject > xEmbObj( rOLEObj.GetOleRef() );
+    if ( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
     {
-        const sal_Int32 nCount = rParamMap.size();
-        uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
+        uno::Reference < beans::XPropertySet > xSet( xEmbObj->getComponent(), uno::UNO_QUERY );
+        if ( xSet.is() )
+        {
+            const sal_Int32 nCount = rParamMap.size();
+            uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
 
-        ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aIter = rParamMap.begin();
-        ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aEnd = rParamMap.end();
-        sal_Int32 nIndex=0;
-        while (aIter != aEnd )
-        {
-            aCommandSequence[nIndex].Name = (*aIter).first;
-            aCommandSequence[nIndex].Handle = -1;
-            aCommandSequence[nIndex].Value = makeAny( OUString((*aIter).second) );
-            aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
-            aIter++, nIndex++;
-        }
+            ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aIter = rParamMap.begin();
+            ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aEnd = rParamMap.end();
+            sal_Int32 nIndex=0;
+            while (aIter != aEnd )
+            {
+                aCommandSequence[nIndex].Name = (*aIter).first;
+                aCommandSequence[nIndex].Handle = -1;
+                aCommandSequence[nIndex].Value = makeAny( OUString((*aIter).second) );
+                aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
+                aIter++, nIndex++;
+            }
 
-        // unfortunately the names of the properties are depending on the object
-        ::rtl::OUString aParaName = ::rtl::OUString::createFromAscii("AppletCommands");
-        try
-        {
-            xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
-        }
-        catch ( uno::Exception& )
-        {
-            aParaName = ::rtl::OUString::createFromAscii("PluginCommands");
+            // unfortunately the names of the properties are depending on the object
+            ::rtl::OUString aParaName = ::rtl::OUString::createFromAscii("AppletCommands");
             try
             {
                 xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
             }
             catch ( uno::Exception& )
             {
+                aParaName = ::rtl::OUString::createFromAscii("PluginCommands");
+                try
+                {
+                    xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
+                }
+                catch ( uno::Exception& )
+                {
+                }
             }
         }
     }
