@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-10 10:22:40 $
+ *  last change: $Author: pl $ $Date: 2001-04-11 15:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1973,6 +1973,7 @@ ULONG
 SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
 {
     if( ! _IsPrinter() )
+    {
 #ifdef USE_BUILTIN_RASTERIZER
         if( maGraphicsData.mpServerSideFont != NULL )
         {
@@ -1984,61 +1985,65 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
             return nGotPairs;
         }
 #endif //USE_BUILTIN_RASTERIZER
-
-#ifdef USE_PSPRINT
-    const ::std::list< ::psp::KernPair >& rPairs( maGraphicsData.m_pPrinterGfx->getKernPairs() );
-    ULONG nHavePairs = rPairs.size();
-    if( pKernPairs && nPairs )
-    {
-        ::std::list< ::psp::KernPair >::const_iterator it;
-        int i;
-        int nTextScale = maGraphicsData.m_pPrinterGfx->GetFontWidth();
-        if( ! nTextScale )
-            nTextScale = maGraphicsData.m_pPrinterGfx->GetFontHeight();
-        for( i = 0, it = rPairs.begin(); i < nPairs && i < nHavePairs; i++, ++it )
-        {
-            pKernPairs[i].mnChar1   = it->first;
-            pKernPairs[i].mnChar2   = it->second;
-            pKernPairs[i].mnKern    = it->kern_x * nTextScale / 1000;
-        }
     }
-    return nHavePairs;
+    else
+    {
+#ifdef USE_PSPRINT
+        const ::std::list< ::psp::KernPair >& rPairs( maGraphicsData.m_pPrinterGfx->getKernPairs() );
+        ULONG nHavePairs = rPairs.size();
+        if( pKernPairs && nPairs )
+        {
+            ::std::list< ::psp::KernPair >::const_iterator it;
+            int i;
+            int nTextScale = maGraphicsData.m_pPrinterGfx->GetFontWidth();
+            if( ! nTextScale )
+                nTextScale = maGraphicsData.m_pPrinterGfx->GetFontHeight();
+            for( i = 0, it = rPairs.begin(); i < nPairs && i < nHavePairs; i++, ++it )
+            {
+                pKernPairs[i].mnChar1   = it->first;
+                pKernPairs[i].mnChar2   = it->second;
+                pKernPairs[i].mnKern    = it->kern_x * nTextScale / 1000;
+            }
+        }
+        return nHavePairs;
 #else
     // get pair kerning table ( internal data from xprinter )
-    int i, nCurPair=0;
+        int i, nCurPair=0;
 
-    // XXX Fix me, improve this to be multi encoding aware: merge kern
-    // pair list for all encodings available in the xfont
-    rtl_TextEncoding nEncoding = maGraphicsData.xFont_->GetAsciiEncoding();
-    XFontStruct *pXFS = maGraphicsData.xFont_->GetFontStruct( nEncoding );
-    XExtData    *pXES = pXFS->ext_data;
+        // XXX Fix me, improve this to be multi encoding aware: merge kern
+        // pair list for all encodings available in the xfont
+        rtl_TextEncoding nEncoding = maGraphicsData.xFont_->GetAsciiEncoding();
+        XFontStruct *pXFS = maGraphicsData.xFont_->GetFontStruct( nEncoding );
+        XExtData    *pXES = pXFS->ext_data;
 
-    for( i = 0; pXES && i < 2; i++, pXES = pXES->next );
-    if( i < 2 )
-        return 0;
-    XpPairKernData* pXpPKD = (XpPairKernData*)(pXES->private_data);
-    PairKernData*   pPKD   = pXpPKD->pkd;
+        for( i = 0; pXES && i < 2; i++, pXES = pXES->next );
+        if( i < 2 )
+            return 0;
+        XpPairKernData* pXpPKD = (XpPairKernData*)(pXES->private_data);
+        PairKernData*   pPKD   = pXpPKD->pkd;
 
-    for( i = 0, nCurPair=0; i < pXpPKD->numOfPairs; i++ )
-    {
-        unsigned char c1 = TranslateCharName( pPKD[i].name1 );
-        unsigned char c2 = TranslateCharName( pPKD[i].name2 );
-        if( c1 && c2 )
+        for( i = 0, nCurPair=0; i < pXpPKD->numOfPairs; i++ )
         {
-            if( pKernPairs && nCurPair < nPairs )
-
+            unsigned char c1 = TranslateCharName( pPKD[i].name1 );
+            unsigned char c2 = TranslateCharName( pPKD[i].name2 );
+            if( c1 && c2 )
             {
-                pKernPairs[ nCurPair ].mnChar1 = c1;
-                pKernPairs[ nCurPair ].mnChar2 = c2;
-                pKernPairs[ nCurPair ].mnKern =
+                if( pKernPairs && nCurPair < nPairs )
+
+                {
+                    pKernPairs[ nCurPair ].mnChar1 = c1;
+                    pKernPairs[ nCurPair ].mnChar2 = c2;
+                    pKernPairs[ nCurPair ].mnKern =
                         (long)(pPKD[i].xamt * pXpPKD->pointsize / 1000 );
+                }
+                nCurPair++;
             }
-            nCurPair++;
         }
+
+        return nCurPair;
+#endif
     }
 
-    return nCurPair;
-#endif
     return 0;
 }
 
