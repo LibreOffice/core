@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:14:17 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1859,10 +1859,16 @@ VirtualDevice* ViewShell::GetVirDev( BOOL bCreate ) const
 
 OutputDevice& ViewShell::GetRefDev() const
 {
-    return ( GetWin() && IsBrowseMode() &&
-             ! GetViewOptions()->IsPrtFormat() ) ?
-            (OutputDevice&)*GetWin() :
-             GetDoc()->GetRefDev();
+    OutputDevice* pTmpOut = 0;
+    if ( GetWin() && IsBrowseMode() &&
+         ! GetViewOptions()->IsPrtFormat() )
+        pTmpOut = GetWin();
+    else if ( 0 != mpTmpRef )
+        pTmpOut = mpTmpRef;
+    else
+        pTmpOut = &GetDoc()->GetRefDev();
+
+    return *pTmpOut;
 }
 
 SwPrintData*    ViewShell::GetPrintData() const
