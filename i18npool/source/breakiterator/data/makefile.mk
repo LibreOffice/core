@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.1 $
+#*  $Revision: 1.2 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-03-26 06:28:32 $
+#*  last change: $Author: khong $ $Date: 2002-05-02 21:43:34 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -65,31 +65,18 @@ SHL1OBJS= \
 LIB1TARGET=	$(SLB)$/$(SHL1TARGET).lib
 LIB1OBJFILES=$(SHL1OBJS)
 
-# Thai dictionary
-SHL2TARGET=dict_th
+# Chinese dictionary
+SHL2TARGET=dict_zh
 SHL2IMPLIB= 	i$(SHL2TARGET)
 DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
 DEFLIB2NAME=	$(SHL2TARGET)
 SHL2OBJS= \
-    $(SLO)$/dict_th.obj
+    $(SLO)$/dict_zh.obj
 
 LIB2TARGET=	$(SLB)$/$(SHL2TARGET).lib
 LIB2OBJFILES=$(SHL2OBJS)
-
-# Chinese dictionary
-SHL3TARGET=dict_zh
-SHL3IMPLIB= 	i$(SHL3TARGET)
-DEF3DEPN=	$(MISC)$/$(SHL3TARGET).flt
-SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
-DEF3NAME=	$(SHL3TARGET)
-DEFLIB3NAME=	$(SHL3TARGET)
-SHL3OBJS= \
-    $(SLO)$/dict_zh.obj
-
-LIB3TARGET=	$(SLB)$/$(SHL3TARGET).lib
-LIB3OBJFILES=$(SHL3OBJS)
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
@@ -103,11 +90,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Provider>> $@
 
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
-$(MISC)$/$(SHL3TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo Provider>> $@

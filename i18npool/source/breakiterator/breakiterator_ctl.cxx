@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_ctl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-04-16 00:05:32 $
+ *  last change: $Author: khong $ $Date: 2002-05-02 21:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,5 +153,20 @@ void SAL_CALL BreakIterator_CTL::makeIndex(const OUString& text, sal_Int32 pos)
 {
     throw RuntimeException();
 }
+
+/*
+LineBreakResults SAL_CALL BreakIterator_ctl::getLineBreak(
+    const OUString& Text, sal_Int32 nStartPos,
+    const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
+    const LineBreakHyphenationOptions& hOptions,
+    const LineBreakUserOptions& bOptions ) throw(RuntimeException)
+{
+    LineBreakResults result = BreakIterator_Unicode::getLineBreak(Text, nStartPos,
+                    rLocale, nMinBreakPos, hOptions, bOptions )
+    makeIndex(Text, nStartPos);
+    result.breakIndex = previousCellIndex[ result.breakIndex ];
+    return result;
+}
+*/
 
 } } } }

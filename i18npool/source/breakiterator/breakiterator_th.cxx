@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_th.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+ *  last change: $Author: khong $ $Date: 2002-05-02 21:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,39 +75,11 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------;
 BreakIterator_th::BreakIterator_th()
 {
-    dict = new xdictionary("th");
     cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
-    dict->setCellBoundary(nextCellIndex);
 }
 
 BreakIterator_th::~BreakIterator_th()
 {
-    delete dict;
-}
-
-Boundary SAL_CALL
-BreakIterator_th::previousWord(const OUString& text, sal_Int32 anyPos,
-    const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
-{
-    makeIndex(text, anyPos);
-    return dict->previousWord(text.getStr(), anyPos, text.getLength());
-}
-
-Boundary SAL_CALL
-BreakIterator_th::nextWord(const OUString& text, sal_Int32 anyPos,
-    const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
-{
-    makeIndex(text, anyPos);
-    return dict->nextWord(text.getStr(), anyPos, text.getLength());
-}
-
-Boundary SAL_CALL
-BreakIterator_th::getWordBoundary( const OUString& text, sal_Int32 anyPos,
-    const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
-    throw(RuntimeException)
-{
-    makeIndex(text, anyPos);
-    return dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), bDirection);
 }
 
 #define SARA_AM 0x0E33
