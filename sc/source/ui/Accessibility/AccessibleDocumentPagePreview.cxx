@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,20 @@
 #ifndef _SC_ACCESSIBLEDOCUMENTPAGEPREVIEW_HXX
 #include "AccessibleDocumentPagePreview.hxx"
 #endif
+#ifndef _SC_ACCESSIBLEPREVIEWTABLE_HXX
+#include "AccessiblePreviewTable.hxx"
+#endif
 #ifndef SC_ACCESSIBILITYHINTS_HXX
 #include "AccessibilityHints.hxx"
 #endif
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
+#endif
+#ifndef SC_PREVWSH_HXX
+#include "prevwsh.hxx"
+#endif
+#ifndef SC_PREVLOC_HXX
+#include "prevloc.hxx"
 #endif
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
@@ -99,80 +108,160 @@
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 
-    //=====  internal  ========================================================
+//=====  internal  ========================================================
 
 ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
-        const uno::Reference<XAccessible>& rxParent)
-    : ScAccessibleDocumentBase(rxParent)
+        const uno::Reference<XAccessible>& rxParent, ScPreviewShell* pViewShell ) :
+    ScAccessibleDocumentBase(rxParent),
+    mpViewShell(pViewShell)
 {
+    if (pViewShell)
+        pViewShell->AddAccessibilityObject(*this);
 }
 
 ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
 {
+    if (mpViewShell)
+        mpViewShell->RemoveAccessibilityObject(*this);
 }
 
 void ScAccessibleDocumentPagePreview::SetDefunc()
 {
+    mxTable.clear();
+
+    if (mpViewShell)
+    {
+        mpViewShell->RemoveAccessibilityObject(*this);
+        mpViewShell = NULL;
+    }
+
     ScAccessibleDocumentBase::SetDefunc();
 }
 
-    //=====  SfxListener  =====================================================
+//=====  SfxListener  =====================================================
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    DBG_ERROR("not implemented");
+    if (rHint.ISA( SfxSimpleHint ))
+    {
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        if (rRef.GetId() == SFX_HINT_DYING)
+            SetDefunc();
+    }
 }
 
-    //=====  XAccessibleComponent  ============================================
+//=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleAt(
-        const awt::Point& rPoint )
-        throw (uno::RuntimeException)
+uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleAt( const awt::Point& rPoint )
+                                throw (uno::RuntimeException)
 {
-    ScUnoGuard();
-    uno::Reference<XAccessible> xAccessible = NULL;
-    DBG_ERROR("not implemented");
+    ScUnoGuard aGuard;
+    uno::Reference<XAccessible> xAccessible;
+
+    if ( mpViewShell )
+    {
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        if ( rData.HasCellsInRange( Rectangle( rPoint.X, rPoint.Y, rPoint.X, rPoint.Y ) ) )
+        {
+            if ( !mxTable.is() )
+            {
+                //! order is background shapes, header, table, footer, foreground shapes, controls
+                sal_Int32 nIndex = 0;
+
+                mxTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+            }
+            xAccessible = mxTable;
+        }
+    }
+
     return xAccessible;
 }
 
-void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus(  )
-        throw (uno::RuntimeException)
+void SAL_CALL ScAccessibleDocumentPagePreview::grabFocus() throw (uno::RuntimeException)
 {
-    ScUnoGuard();
-    DBG_ERROR("not implemented");
+    ScUnoGuard aGuard();
+    if (getAccessibleParent().is())
+    {
+        uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
+        if (xAccessibleComponent.is())
+        {
+            // just grab the focus for the window
+            xAccessibleComponent->grabFocus();
+        }
+    }
 }
 
-    //=====  XAccessibleContext  ==============================================
+//=====  XAccessibleContext  ==============================================
 
-    /// Return the number of currently visible children.
-long SAL_CALL
-    ScAccessibleDocumentPagePreview::getAccessibleChildCount(void)
-    throw (uno::RuntimeException)
+long SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChildCount(void) throw (uno::RuntimeException)
 {
-    ScUnoGuard();
-    DBG_ERROR("not implemented");
-    return 0;
+    ScUnoGuard aGuard;
+
+    long nRet = 0;
+    if ( mpViewShell )
+    {
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+
+        Size aOutputSize;
+        Window* pWindow = mpViewShell->GetWindow();
+        if ( pWindow )
+            aOutputSize = pWindow->GetOutputSizePixel();
+        Rectangle aVisRect( Point(), aOutputSize );
+
+        //! order is background shapes, header, table, footer, foreground shapes, controls
+
+        long nTables = 0;
+        if ( rData.HasCellsInRange( aVisRect ) )
+            nTables = 1;
+
+        nRet = nTables;
+    }
+
+    return nRet;
 }
 
-    /// Return the specified child or NULL if index is invalid.
-uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleDocumentPagePreview::getAccessibleChild(long nIndex)
-    throw (uno::RuntimeException,
-        lang::IndexOutOfBoundsException)
+uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleChild(long nIndex)
+                throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard();
-    uno::Reference<XAccessible> xAccessible;// = GetChild(nIndex);
-    DBG_ERROR("not implemented");
+    ScUnoGuard aGuard;
+    uno::Reference<XAccessible> xAccessible;
+
+    if ( mpViewShell )
+    {
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+
+        Size aOutputSize;
+        Window* pWindow = mpViewShell->GetWindow();
+        if ( pWindow )
+            aOutputSize = pWindow->GetOutputSizePixel();
+        Rectangle aVisRect( Point(), aOutputSize );
+
+        //! order is background shapes, header, table, footer, foreground shapes, controls
+
+        long nTables = 0;
+        if ( rData.HasCellsInRange( aVisRect ) )
+            nTables = 1;
+
+        if ( nIndex < nTables )
+        {
+            if ( !mxTable.is() )
+                mxTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+
+            xAccessible = mxTable;
+        }
+    }
+
+    if ( !xAccessible.is() )
+        throw lang::IndexOutOfBoundsException();
+
     return xAccessible;
 }
 
     /// Return the set of current states.
-uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleDocumentPagePreview::getAccessibleStateSet(void)
-    throw (uno::RuntimeException)
+uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::getAccessibleStateSet(void)
+                        throw (uno::RuntimeException)
 {
-    ScUnoGuard();
-    DBG_ERROR("not implemented");
+    ScUnoGuard aGuard;
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -182,6 +271,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
     if (IsDefunc(xParentStates))
         pStateSet->AddState(AccessibleStateType::DEFUNC);
+    // never editable
     pStateSet->AddState(AccessibleStateType::ENABLED);
     pStateSet->AddState(AccessibleStateType::OPAQUE);
     if (isShowing())
@@ -193,16 +283,14 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL
-    ScAccessibleDocumentPagePreview::getImplementationName(void)
-    throw (uno::RuntimeException)
+::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName(void)
+                    throw (uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleDocumentPagePreview"));
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessibleDocumentPagePreview"));
 }
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
-    ScAccessibleDocumentPagePreview::getSupportedServiceNames(void)
-        throw (uno::RuntimeException)
+uno::Sequence< ::rtl::OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames(void)
+                    throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
@@ -214,37 +302,43 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     return aSequence;
 }
 
-    //=====  internal  ========================================================
+//=====  internal  ========================================================
 
-::rtl::OUString SAL_CALL
-    ScAccessibleDocumentPagePreview::createAccessibleDescription(void)
-    throw (uno::RuntimeException)
+::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription(void)
+                    throw (uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("This is a page preview of a Spreadsheet Document."));
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This is a page preview of a Spreadsheet Document."));
 }
 
-::rtl::OUString SAL_CALL
-    ScAccessibleDocumentPagePreview::createAccessibleName(void)
-    throw (uno::RuntimeException)
+::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName(void)
+                    throw (uno::RuntimeException)
 {
-    ScUnoGuard();
-    rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM ("Spreadsheet Document Page Preview "));
+    ScUnoGuard aGuard;
+    rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("Spreadsheet Document Page Preview"));
     return sName;
 }
 
-Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen()
-    throw (uno::RuntimeException)
+Rectangle ScAccessibleDocumentPagePreview::GetBoundingBoxOnScreen() throw (uno::RuntimeException)
 {
     Rectangle aRect;
-    DBG_ERROR("not implemented");
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindow();
+        if (pWindow)
+            aRect = pWindow->GetWindowExtentsRelative(NULL);
+    }
     return aRect;
 }
 
-Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox()
-    throw (uno::RuntimeException)
+Rectangle ScAccessibleDocumentPagePreview::GetBoundingBox() throw (uno::RuntimeException)
 {
     Rectangle aRect;
-    DBG_ERROR("not implemented");
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindow();
+        if (pWindow)
+            aRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
+    }
     return aRect;
 }
 
@@ -254,3 +348,4 @@ sal_Bool ScAccessibleDocumentPagePreview::IsDefunc(
     return !getAccessibleParent().is() ||
         (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
+

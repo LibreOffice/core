@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-22 09:57:40 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <vcl/window.hxx>
+#include <tools/debug.hxx>
 
 #include "prevloc.hxx"
 #include "document.hxx"
@@ -89,12 +90,114 @@ struct ScPreviewLocationEntry
     ScPreviewLocationType   eType;
     Rectangle               aPixelRect;
     ScRange                 aCellRange;
+    BOOL                    bRepeatCol;
+    BOOL                    bRepeatRow;
 
-    ScPreviewLocationEntry( ScPreviewLocationType eNewType, const Rectangle& rPixel, const ScRange& rRange ) :
-        eType( eNewType ), aPixelRect( rPixel ), aCellRange( rRange ) {}
+    ScPreviewLocationEntry( ScPreviewLocationType eNewType, const Rectangle& rPixel, const ScRange& rRange,
+                            BOOL bRepCol, BOOL bRepRow ) :
+        eType( eNewType ),
+        aPixelRect( rPixel ),
+        aCellRange( rRange ),
+        bRepeatCol( bRepCol ),
+        bRepeatRow( bRepRow )
+    {
+    }
 };
 
 //==================================================================
+
+ScPreviewTableInfo::ScPreviewTableInfo() :
+    nTab(0),
+    nCols(0),
+    nRows(0),
+    pColInfo(NULL),
+    pRowInfo(NULL)
+{
+}
+
+ScPreviewTableInfo::~ScPreviewTableInfo()
+{
+    delete[] pColInfo;
+    delete[] pRowInfo;
+}
+
+void ScPreviewTableInfo::SetTab( USHORT nNewTab )
+{
+    nTab = nNewTab;
+}
+
+void ScPreviewTableInfo::SetColInfo( USHORT nCount, ScPreviewColRowInfo* pNewInfo )
+{
+    delete[] pColInfo;
+    pColInfo = pNewInfo;
+    nCols = nCount;
+}
+
+void ScPreviewTableInfo::SetRowInfo( USHORT nCount, ScPreviewColRowInfo* pNewInfo )
+{
+    delete[] pRowInfo;
+    pRowInfo = pNewInfo;
+    nRows = nCount;
+}
+
+void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
+{
+    if ( pColInfo )
+    {
+        //  cells completely left of the visible area
+        USHORT nStart = 0;
+        while ( nStart < nCols && pColInfo[nStart].nPixelEnd < rPixelArea.Left() )
+            ++nStart;
+
+        //  cells completely right of the visible area
+        USHORT nEnd = nCols;
+        while ( nEnd > 0 && pColInfo[nEnd-1].nPixelStart > rPixelArea.Right() )
+            --nEnd;
+
+        if ( nStart > 0 || nEnd < nCols )
+        {
+            if ( nEnd > nStart )
+            {
+                USHORT nNewCount = nEnd - nStart;
+                ScPreviewColRowInfo* pNewInfo = new ScPreviewColRowInfo[nNewCount];
+                for (USHORT i=0; i<nNewCount; i++)
+                    pNewInfo[i] = pColInfo[nStart + i];
+                SetColInfo( nNewCount, pNewInfo );
+            }
+            else
+                SetColInfo( 0, NULL );      // all invisible
+        }
+    }
+
+    if ( pRowInfo )
+    {
+        //  cells completely above the visible area
+        USHORT nStart = 0;
+        while ( nStart < nRows && pRowInfo[nStart].nPixelEnd < rPixelArea.Top() )
+            ++nStart;
+
+        //  cells completely below the visible area
+        USHORT nEnd = nRows;
+        while ( nEnd > 0 && pRowInfo[nEnd-1].nPixelStart > rPixelArea.Bottom() )
+            --nEnd;
+
+        if ( nStart > 0 || nEnd < nRows )
+        {
+            if ( nEnd > nStart )
+            {
+                USHORT nNewCount = nEnd - nStart;
+                ScPreviewColRowInfo* pNewInfo = new ScPreviewColRowInfo[nNewCount];
+                for (USHORT i=0; i<nNewCount; i++)
+                    pNewInfo[i] = pRowInfo[nStart + i];
+                SetRowInfo( nNewCount, pNewInfo );
+            }
+            else
+                SetRowInfo( 0, NULL );      // all invisible
+        }
+    }
+}
+
+//------------------------------------------------------------------
 
 ScPreviewLocationData::ScPreviewLocationData( ScDocument* pDocument, Window* pWin ) :
     pDoc( pDocument ),
@@ -123,47 +226,47 @@ void ScPreviewLocationData::Clear()
     aEntries.Clear();
 }
 
-void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange& rRange )
+void ScPreviewLocationData::AddCellRange( const Rectangle& rRect, const ScRange& rRange, BOOL bRepCol, BOOL bRepRow )
 {
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_CELLRANGE, aPixelRect, rRange ) );
+    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_CELLRANGE, aPixelRect, rRange, bRepCol, bRepRow ) );
 }
 
-void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol )
+void ScPreviewLocationData::AddColHeaders( const Rectangle& rRect, USHORT nStartCol, USHORT nEndCol, BOOL bRepCol )
 {
     USHORT nTab = 0;    //! ?
     ScRange aRange( nStartCol, 0, nTab, nEndCol, 0, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_COLHEADER, aPixelRect, aRange ) );
+    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_COLHEADER, aPixelRect, aRange, bRepCol, FALSE ) );
 }
 
-void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow )
+void ScPreviewLocationData::AddRowHeaders( const Rectangle& rRect, USHORT nStartRow, USHORT nEndRow, BOOL bRepRow )
 {
     USHORT nTab = 0;    //! ?
     ScRange aRange( 0, nStartRow, nTab, 0, nEndRow, nTab );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_ROWHEADER, aPixelRect, aRange ) );
+    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_ROWHEADER, aPixelRect, aRange, FALSE, bRepRow ) );
 }
 
 void ScPreviewLocationData::AddHeaderFooter( const Rectangle& rRect )
 {
     ScRange aRange;     //! ?
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_HEADERFOOTER, aPixelRect, aRange ) );
+    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_HEADERFOOTER, aPixelRect, aRange, FALSE, FALSE ) );
 }
 
 void ScPreviewLocationData::AddNoteMark( const Rectangle& rRect, const ScAddress& rPos )
 {
     ScRange aRange( rPos );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_NOTEMARK, aPixelRect, aRange ) );
+    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_NOTEMARK, aPixelRect, aRange, FALSE, FALSE ) );
 }
 
 void ScPreviewLocationData::AddNoteText( const Rectangle& rRect, const ScAddress& rPos )
 {
     ScRange aRange( rPos );
     Rectangle aPixelRect( pWindow->LogicToPixel( rRect ) );
-    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_NOTETEXT, aPixelRect, aRange ) );
+    aEntries.Insert( new ScPreviewLocationEntry( SC_PLOC_NOTETEXT, aPixelRect, aRange, FALSE, FALSE ) );
 }
 
 //------------------------------------------------------------------
@@ -295,4 +398,249 @@ BOOL ScPreviewLocationData::GetCellPosition( const ScAddress& rCellPos, Rectangl
     }
     return FALSE;
 }
+
+BOOL ScPreviewLocationData::HasCellsInRange( const Rectangle& rVisiblePixel ) const
+{
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        ScPreviewLocationType eType = pEntry->eType;
+        if ( eType == SC_PLOC_CELLRANGE || eType == SC_PLOC_COLHEADER || eType == SC_PLOC_ROWHEADER )
+            if ( pEntry->aPixelRect.IsOver( rVisiblePixel ) )
+                return TRUE;
+    }
+    return FALSE;
+}
+
+void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPreviewTableInfo& rInfo ) const
+{
+    const double nScaleX = HMM_PER_TWIPS;
+    const double nScaleY = HMM_PER_TWIPS;
+
+    // from left to right:
+    BOOL bHasHeaderCol = FALSE;
+    BOOL bHasRepCols   = FALSE;
+    BOOL bHasMainCols  = FALSE;
+    USHORT nRepeatColStart = 0;
+    USHORT nRepeatColEnd   = 0;
+    USHORT nMainColStart   = 0;
+    USHORT nMainColEnd     = 0;
+
+    // from top to bottom:
+    BOOL bHasHeaderRow = FALSE;
+    BOOL bHasRepRows   = FALSE;
+    BOOL bHasMainRows  = FALSE;
+    USHORT nRepeatRowStart = 0;
+    USHORT nRepeatRowEnd   = 0;
+    USHORT nMainRowStart   = 0;
+    USHORT nMainRowEnd     = 0;
+
+    Rectangle aHeaderRect, aRepeatRect, aMainRect;
+    USHORT nTab = 0;
+
+    ULONG nCount = aEntries.Count();
+    for (ULONG nListPos=0; nListPos<nCount; nListPos++)
+    {
+        ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
+        if ( pEntry->eType == SC_PLOC_CELLRANGE )
+        {
+            if ( pEntry->bRepeatCol )
+            {
+                bHasRepCols = TRUE;
+                nRepeatColStart = pEntry->aCellRange.aStart.Col();
+                nRepeatColEnd = pEntry->aCellRange.aEnd.Col();
+                aRepeatRect.Left() = pEntry->aPixelRect.Left();
+                aRepeatRect.Right() = pEntry->aPixelRect.Right();
+            }
+            else
+            {
+                bHasMainCols = TRUE;
+                nMainColStart = pEntry->aCellRange.aStart.Col();
+                nMainColEnd = pEntry->aCellRange.aEnd.Col();
+                aMainRect.Left() = pEntry->aPixelRect.Left();
+                aMainRect.Right() = pEntry->aPixelRect.Right();
+            }
+            if ( pEntry->bRepeatRow )
+            {
+                bHasRepRows = TRUE;
+                nRepeatRowStart = pEntry->aCellRange.aStart.Row();
+                nRepeatRowEnd = pEntry->aCellRange.aEnd.Row();
+                aRepeatRect.Top() = pEntry->aPixelRect.Top();
+                aRepeatRect.Bottom() = pEntry->aPixelRect.Bottom();
+            }
+            else
+            {
+                bHasMainRows = TRUE;
+                nMainRowStart = pEntry->aCellRange.aStart.Row();
+                nMainRowEnd = pEntry->aCellRange.aEnd.Row();
+                aMainRect.Top() = pEntry->aPixelRect.Top();
+                aMainRect.Bottom() = pEntry->aPixelRect.Bottom();
+            }
+            nTab = pEntry->aCellRange.aStart.Tab();     //! store separately?
+        }
+        else if ( pEntry->eType == SC_PLOC_ROWHEADER )
+        {
+            // row headers result in an additional column
+            bHasHeaderCol = TRUE;
+            aHeaderRect.Left() = pEntry->aPixelRect.Left();
+            aHeaderRect.Right() = pEntry->aPixelRect.Right();
+        }
+        else if ( pEntry->eType == SC_PLOC_COLHEADER )
+        {
+            // column headers result in an additional row
+            bHasHeaderRow = TRUE;
+            aHeaderRect.Top() = pEntry->aPixelRect.Top();
+            aHeaderRect.Bottom() = pEntry->aPixelRect.Bottom();
+        }
+    }
+
+    //
+    //  get column info
+    //
+
+    USHORT nColCount = 0;
+    USHORT nCol;
+    if ( bHasHeaderCol )
+        ++nColCount;
+    if ( bHasRepCols )
+        for ( nCol=nRepeatColStart; nCol<=nRepeatColEnd; nCol++ )
+            if ( ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN ) == 0 )
+                ++nColCount;
+    if ( bHasMainCols )
+        for ( nCol=nMainColStart; nCol<=nMainColEnd; nCol++ )
+            if ( ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN ) == 0 )
+                ++nColCount;
+
+    if ( nColCount > 0 )
+    {
+        ScPreviewColRowInfo* pColInfo = new ScPreviewColRowInfo[ nColCount ];
+        USHORT nColPos = 0;
+
+        if ( bHasHeaderCol )
+        {
+            pColInfo[nColPos].Set( TRUE, 0, aHeaderRect.Left(), aHeaderRect.Right() );
+            ++nColPos;
+        }
+        if ( bHasRepCols )
+        {
+            long nPosX = 0;
+            for ( nCol=nRepeatColStart; nCol<=nRepeatColEnd; nCol++ )
+                if ( ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN ) == 0 )
+                {
+                    USHORT nDocW = pDoc->GetColWidth( nCol, nTab );
+                    long nNextX = nPosX + (long) (nDocW * nScaleX);
+
+                    long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
+                    long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
+                    pColInfo[nColPos].Set( FALSE, nCol,
+                                                aRepeatRect.Left() + nPixelStart,
+                                                aRepeatRect.Left() + nPixelEnd );
+
+                    nPosX = nNextX;
+                    ++nColPos;
+                }
+        }
+        if ( bHasMainCols )
+        {
+            long nPosX = 0;
+            for ( nCol=nMainColStart; nCol<=nMainColEnd; nCol++ )
+                if ( ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN ) == 0 )
+                {
+                    USHORT nDocW = pDoc->GetColWidth( nCol, nTab );
+                    long nNextX = nPosX + (long) (nDocW * nScaleX);
+
+                    long nPixelStart = pWindow->LogicToPixel( Size( nPosX, 0 ), aCellMapMode ).Width();
+                    long nPixelEnd = pWindow->LogicToPixel( Size( nNextX, 0 ), aCellMapMode ).Width() - 1;
+                    pColInfo[nColPos].Set( FALSE, nCol,
+                                                aMainRect.Left() + nPixelStart,
+                                                aMainRect.Left() + nPixelEnd );
+
+                    nPosX = nNextX;
+                    ++nColPos;
+                }
+        }
+        rInfo.SetColInfo( nColCount, pColInfo );
+    }
+    else
+        rInfo.SetColInfo( 0, NULL );
+
+    //
+    //  get row info
+    //
+
+    USHORT nRowCount = 0;
+    USHORT nRow;
+    if ( bHasHeaderRow )
+        ++nRowCount;
+    if ( bHasRepRows )
+        for ( nRow=nRepeatRowStart; nRow<=nRepeatRowEnd; nRow++ )
+            if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
+                ++nRowCount;
+    if ( bHasMainRows )
+        for ( nRow=nMainRowStart; nRow<=nMainRowEnd; nRow++ )
+            if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
+                ++nRowCount;
+
+    if ( nRowCount > 0 )
+    {
+        ScPreviewColRowInfo* pRowInfo = new ScPreviewColRowInfo[ nRowCount ];
+        USHORT nRowPos = 0;
+
+        if ( bHasHeaderRow )
+        {
+            pRowInfo[nRowPos].Set( TRUE, 0, aHeaderRect.Top(), aHeaderRect.Bottom() );
+            ++nRowPos;
+        }
+        if ( bHasRepRows )
+        {
+            long nPosY = 0;
+            for ( nRow=nRepeatRowStart; nRow<=nRepeatRowEnd; nRow++ )
+                if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
+                {
+                    USHORT nDocH = pDoc->FastGetRowHeight( nRow, nTab );
+                    long nNextY = nPosY + (long) (nDocH * nScaleY);
+
+                    long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
+                    long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
+                    pRowInfo[nRowPos].Set( FALSE, nRow,
+                                                aRepeatRect.Top() + nPixelStart,
+                                                aRepeatRect.Top() + nPixelEnd );
+
+                    nPosY = nNextY;
+                    ++nRowPos;
+                }
+        }
+        if ( bHasMainRows )
+        {
+            long nPosY = 0;
+            for ( nRow=nMainRowStart; nRow<=nMainRowEnd; nRow++ )
+                if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
+                {
+                    USHORT nDocH = pDoc->FastGetRowHeight( nRow, nTab );
+                    long nNextY = nPosY + (long) (nDocH * nScaleY);
+
+                    long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
+                    long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
+                    pRowInfo[nRowPos].Set( FALSE, nRow,
+                                                aMainRect.Top() + nPixelStart,
+                                                aMainRect.Top() + nPixelEnd );
+
+                    nPosY = nNextY;
+                    ++nRowPos;
+                }
+        }
+        rInfo.SetRowInfo( nRowCount, pRowInfo );
+    }
+    else
+        rInfo.SetRowInfo( 0, NULL );
+
+    //
+    //  limit to visible area
+    //
+
+    rInfo.SetTab( nTab );
+    rInfo.LimitToArea( rVisiblePixel );
+}
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-22 09:57:40 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,7 +1425,7 @@ void ScPrintFunc::PrintRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY )
 }
 
 void ScPrintFunc::LocateColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY,
-                                ScPreviewLocationData& rLocationData )
+                                BOOL bRepCol, ScPreviewLocationData& rLocationData )
 {
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
@@ -1442,11 +1442,11 @@ void ScPrintFunc::LocateColHdr( USHORT nX1, USHORT nX2, long nScrX, long nScrY,
             nPosX += (long) (nDocW * nScaleX);
     }
     Rectangle aCellRect( nScrX, nScrY, nPosX, nEndY );
-    rLocationData.AddColHeaders( aCellRect, nX1, nX2 );
+    rLocationData.AddColHeaders( aCellRect, nX1, nX2, bRepCol );
 }
 
 void ScPrintFunc::LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY,
-                                ScPreviewLocationData& rLocationData )
+                                BOOL bRepRow, ScPreviewLocationData& rLocationData )
 {
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
@@ -1463,11 +1463,12 @@ void ScPrintFunc::LocateRowHdr( USHORT nY1, USHORT nY2, long nScrX, long nScrY,
             nPosY += (long) (nDocH * nScaleY);
     }
     Rectangle aCellRect( nScrX, nScrY, nEndX, nPosY );
-    rLocationData.AddColHeaders( aCellRect, nY1, nY2 );
+    rLocationData.AddRowHeaders( aCellRect, nY1, nY2, bRepRow );
 }
 
 void ScPrintFunc::LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
-                                long nScrX, long nScrY, ScPreviewLocationData& rLocationData )
+                                long nScrX, long nScrY, BOOL bRepCol, BOOL bRepRow,
+                                ScPreviewLocationData& rLocationData )
 {
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
@@ -1490,7 +1491,7 @@ void ScPrintFunc::LocateArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     }
 
     Rectangle aCellRect( nScrX, nScrY, nPosX, nPosY );
-    rLocationData.AddCellRange( aCellRect, ScRange( nX1,nY1,nPrintTab, nX2,nY2,nPrintTab ) );
+    rLocationData.AddCellRange( aCellRect, ScRange( nX1,nY1,nPrintTab, nX2,nY2,nPrintTab ), bRepCol, bRepRow );
 }
 
 void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
@@ -2142,7 +2143,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
                             nRepStartX,nRepStartY, TRUE,TRUE,FALSE,FALSE );
         if ( pLocationData )
             LocateArea( nRepeatStartCol,nRepeatStartRow, nRepeatEndCol,nRepeatEndRow,
-                            nRepStartX,nRepStartY, *pLocationData );
+                            nRepStartX,nRepStartY, TRUE,TRUE, *pLocationData );
     }
     if (bDoRepCol)
     {
@@ -2150,7 +2151,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
             PrintArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY,
                         TRUE,!bDoRepRow,FALSE,TRUE );
         if ( pLocationData )
-            LocateArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY, *pLocationData );
+            LocateArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY, TRUE,FALSE, *pLocationData );
     }
     if (bDoRepRow)
     {
@@ -2158,7 +2159,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
             PrintArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY,
                         !bDoRepCol,TRUE,TRUE,FALSE );
         if ( pLocationData )
-            LocateArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY, *pLocationData );
+            LocateArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY, FALSE,TRUE, *pLocationData );
     }
 
     //  Daten ausgeben
@@ -2166,7 +2167,7 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
     if ( bDoPrint )
         PrintArea( nX1,nY1, nX2,nY2, nDataX,nDataY, !bDoRepCol,!bDoRepRow,TRUE,TRUE );
     if ( pLocationData )
-        LocateArea( nX1,nY1, nX2,nY2, nDataX,nDataY, *pLocationData );
+        LocateArea( nX1,nY1, nX2,nY2, nDataX,nDataY, FALSE,FALSE, *pLocationData );
 
     //  Spalten-/Zeilenkoepfe ausgeben
     //  nach den Daten (ueber evtl. weitergezeichneten Schatten)
@@ -2189,23 +2190,23 @@ void ScPrintFunc::PrintPage( long nPageNo, USHORT nX1, USHORT nY1, USHORT nX2, U
             if ( bDoPrint )
                 PrintColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY );
             if ( pLocationData )
-                LocateColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY, *pLocationData );
+                LocateColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY, TRUE, *pLocationData );
         }
         if ( bDoPrint )
             PrintColHdr( nX1,nX2, nDataX,nInnerStartY );
         if ( pLocationData )
-            LocateColHdr( nX1,nX2, nDataX,nInnerStartY, *pLocationData );
+            LocateColHdr( nX1,nX2, nDataX,nInnerStartY, FALSE, *pLocationData );
         if (bDoRepRow)
         {
             if ( bDoPrint )
                 PrintRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY );
             if ( pLocationData )
-                LocateRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY, *pLocationData );
+                LocateRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY, TRUE, *pLocationData );
         }
         if ( bDoPrint )
             PrintRowHdr( nY1,nY2, nInnerStartX,nDataY );
         if ( pLocationData )
-            LocateRowHdr( nY1,nY2, nInnerStartX,nDataY, *pLocationData );
+            LocateRowHdr( nY1,nY2, nInnerStartX,nDataY, FALSE, *pLocationData );
     }
 
     //  einfacher Rahmen

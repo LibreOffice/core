@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 const ScPreviewShell& rWin ) :
     SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     pDocShell( rWin.pDocShell ),
-    aSourceData( rWin.aSourceData )
+    aSourceData( rWin.aSourceData ),
+    pAccessibilityBroadcaster( NULL )
 {
     Construct( &pViewFrame->GetWindow() );
 }
@@ -176,7 +177,8 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 Window *pParent ) :
     SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
-    pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() )
+    pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
+    pAccessibilityBroadcaster( NULL )
 {
     Construct( pParent );
 }
@@ -184,7 +186,8 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
-    pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() )
+    pDocShell( (ScDocShell*)pViewFrame->GetObjectShell() ),
+    pAccessibilityBroadcaster( NULL )
 {
     Construct( &pViewFrame->GetWindow() );
 
@@ -213,6 +216,8 @@ __EXPORT ScPreviewShell::~ScPreviewShell()
     delete pHorScroll;
     delete pVerScroll;
     delete pCorner;
+
+    DELETEZ(pAccessibilityBroadcaster);
 
     //  #47435# wie im Writer (SwPagePreView::~SwPagePreView):
     //  Wenn die Preview zugemacht wird, eine andere View des Dokuments suchen und aktivieren
@@ -899,5 +904,41 @@ void ScPreviewShell::DoScroll( USHORT nMode )
 
 }
 
+void ScPreviewShell::AddAccessibilityObject( SfxListener& rObject )
+{
+    if (!pAccessibilityBroadcaster)
+        pAccessibilityBroadcaster = new SfxBroadcaster;
+
+    rObject.StartListening( *pAccessibilityBroadcaster );
+}
+
+void ScPreviewShell::RemoveAccessibilityObject( SfxListener& rObject )
+{
+    if (pAccessibilityBroadcaster)
+        rObject.EndListening( *pAccessibilityBroadcaster );
+    else
+        DBG_ERROR("kein Accessibility-Broadcaster??!?");
+}
+
+void ScPreviewShell::BroadcastAccessibility( const SfxHint &rHint )
+{
+    if (pAccessibilityBroadcaster)
+        pAccessibilityBroadcaster->Broadcast( rHint );
+}
+
+BOOL ScPreviewShell::HasAccessibilityObjects()
+{
+    return pAccessibilityBroadcaster && pAccessibilityBroadcaster->HasListeners();
+}
+
+const ScPreviewLocationData& ScPreviewShell::GetLocationData()
+{
+    return pPreview->GetLocationData();
+}
+
+ScDocument* ScPreviewShell::GetDocument()
+{
+    return pDocShell->GetDocument();
+}
 
 

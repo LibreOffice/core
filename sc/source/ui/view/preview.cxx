@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-22 09:57:40 $
+ *  last change: $Author: nn $ $Date: 2002-02-27 19:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include "scmod.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"           // fuer ShellInvalidate
+#include "AccessibleDocumentPagePreview.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -463,7 +464,7 @@ void ScPreview::DataChanged(BOOL bNewTime)
     }
 
     bValid = FALSE;
-    bLocationValid = FALSE;
+    InvalidateLocationData();
     Invalidate();
 }
 
@@ -506,7 +507,7 @@ void ScPreview::SetZoom(USHORT nNewZoom)
 //      DataChanged();
 
         bStateValid = FALSE;
-        bLocationValid = FALSE;
+        InvalidateLocationData();
         DoInvalidate();
         Invalidate();
     }
@@ -518,7 +519,7 @@ void ScPreview::SetPageNo( long nPage )
     nPageNo = nPage;
     RecalcPages();
     UpdateDrawView();       // Tabelle evtl. geaendert
-    bLocationValid = FALSE;
+    InvalidateLocationData();
     Invalidate();
 }
 
@@ -613,7 +614,7 @@ void ScPreview::SetXOffset( long nX )
         if (!bInPaint)
             Invalidate();
     }
-    bLocationValid = FALSE;
+    InvalidateLocationData();
 }
 
 
@@ -636,7 +637,7 @@ void ScPreview::SetYOffset( long nY )
         if (!bInPaint)
             Invalidate();
     }
-    bLocationValid = FALSE;
+    InvalidateLocationData();
 }
 
 
@@ -695,10 +696,21 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
             pDocShell->UpdateFontList();
 
         Invalidate();
-        bLocationValid = FALSE;
+        InvalidateLocationData();
     }
 }
 
+void ScPreview::InvalidateLocationData()
+{
+    bLocationValid = FALSE;
+    pViewShell->BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+}
 
+com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> ScPreview::CreateAccessible()
+{
+    ScAccessibleDocumentPagePreview* pAccessible =
+        new ScAccessibleDocumentPagePreview( GetAccessibleParentWindow()->GetAccessible(), pViewShell );
+    return pAccessible;
+}
 
 
