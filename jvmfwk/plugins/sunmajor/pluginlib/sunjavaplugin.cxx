@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-03 14:29:51 $
+ *  last change: $Author: jl $ $Date: 2004-05-05 14:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-
+#define SUN_MICRO "Sun Microsystems Inc."
 namespace {
 
 struct Init
@@ -290,6 +290,10 @@ javaPluginError startJavaVirtualMachine(
     javaPluginError errcode = JFW_PLUGIN_E_NONE;
     if ( pInfo == NULL || ppVm == NULL || ppEnv == NULL)
         return JFW_PLUGIN_E_INVALID_ARG;
+    rtl::OUString sVendor(pInfo->sVendor);
+    rtl::OUString sSunVendor(OUSTR(SUN_MICRO));
+    if (sVendor.equals(sSunVendor) == sal_False)
+        return JFW_PLUGIN_E_WRONG_VENDOR;
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
     // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
     // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
