@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astconstant.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-27 10:54:22 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:44:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 #include <idlc/astscope.hxx>
 #endif
 
+#include "registry/writer.hxx"
+
 using namespace ::rtl;
 
 AstConstant::AstConstant(const ExprType type,
@@ -93,7 +95,7 @@ AstConstant::~AstConstant()
 
 }
 
-sal_Bool AstConstant::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
+sal_Bool AstConstant::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
 {
     RTConstValue    aConst;
     sal_Unicode*    str = NULL;
@@ -170,8 +172,9 @@ sal_Bool AstConstant::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
         fileName = OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8);
     }
 
-    rBlob.setFieldData(index, OStringToOUString(name, RTL_TEXTENCODING_UTF8), type,
-                       getDocumentation(), fileName, RT_ACCESS_CONST, aConst);
+    rBlob.setFieldData(
+        index, getDocumentation(), fileName, RT_ACCESS_CONST,
+        OStringToOUString(name, RTL_TEXTENCODING_UTF8), type, aConst);
     if (str)
         delete[] str;
 
