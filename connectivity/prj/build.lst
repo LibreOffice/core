@@ -9,6 +9,7 @@ cn	connectivity\source\sdbcx				nmake	-	all	cn_sdbcx cn_types NULL
 cn	connectivity\source\drivers\ado			nmake	-	w	cn_ado cn_dbtools NULL
 cn	connectivity\source\drivers\mozab\mozillasrc		nmake	-	all	cn_mozab_mozillasrc cn_file NULL
 cn	connectivity\source\drivers\mozab	nmake	-	all	cn_mozab cn_mozab_mozillasrc cn_dbtools NULL
+cn	connectivity\source\drivers\evoab	nmake	-	all	cn_evoab cn_dbtools cn_file NULL
 cn	connectivity\source\drivers\calc		nmake	-	all	cn_calc cn_file NULL
 cn	connectivity\source\drivers\odbc		nmake	-	all	cn_odbc cn_dbtools NULL
 cn	connectivity\source\drivers\mysql		nmake	-	all	cn_mysql cn_dbtools NULL
