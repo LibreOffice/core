@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: ka $ $Date: 2001-02-13 12:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,34 +61,21 @@
 #ifndef _SDXMLWRP_HXX
 #define _SDXMLWRP_HXX
 
-class SdDrawDocument;
-class SfxMedium;
+#include "sdfilter.hxx"
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
+// ---------------
+// - SdXMLFilter -
+// ---------------
 
-class SdXMLWrapper
+class SdXMLFilter : public SdFilter
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel> mxLocalModel;
-    SfxMedium&                  mrMedium;
-
-    BOOL                        mbIsDraw : 1;
-    BOOL                        mbShowProgress : 1;
-
 public:
-    SdXMLWrapper(
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xRef,
-        SfxMedium& rMedium,
-        BOOL bIsDraw, BOOL bShowProg = TRUE);
 
-    BOOL Import();
-    BOOL Export();
+                            SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
+                            ~SdXMLFilter();
 
-    BOOL IsDraw() const { return mbIsDraw; }
-    BOOL IsImpress() const { return !mbIsDraw; }
+    virtual sal_Bool        Import();
+    virtual sal_Bool        Export();
 };
 
 #endif  // _SDXMLWRP_HXX
-
-

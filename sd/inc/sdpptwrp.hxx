@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-25 17:19:32 $
+ *  last change: $Author: ka $ $Date: 2001-02-13 12:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,23 +62,21 @@
 #ifndef _SD_PPTWRP_HXX
 #define _SD_PPTWRP_HXX
 
-#ifndef _SFXDOCFILE_HXX //autogen
-#include <sfx2/docfile.hxx>
-#endif
+#include "sdfilter.hxx"
 
-class SdDrawDocument;
-class SdPPTWrapper
+// ---------------
+// - SdPPTFilter -
+// ---------------
+
+class SdPPTFilter : public SdFilter
 {
-        SdDrawDocument* pDoc;
-        SfxMedium&      rMed;
+public:
 
-    public :
+                            SdPPTFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
+                            ~SdPPTFilter();
 
-        SdPPTWrapper( SdDrawDocument* pDoc, SfxMedium& rMed );
-        ~SdPPTWrapper();
-
-        sal_Bool    Import();
+    virtual sal_Bool        Import();
+    virtual sal_Bool        Export();
 };
 
 #endif // _SD_PPTWRP_HXX
-
