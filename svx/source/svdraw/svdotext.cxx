@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: aw $ $Date: 2001-02-20 15:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,9 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));
         }
         if (eHAdj==SDRTEXTHORZADJUST_BLOCK)
+        {
             rOutliner.SetMinAutoPaperSize(Size(nAnkWdt,0));
+        }
     }
 
     rOutliner.SetPaperSize(aNullSize);
@@ -1310,7 +1312,16 @@ FASTBOOL SdrTextObj::ImpPaintAnimatedText(OutputDevice& rOut, const Point& rOffs
         VirtualDevice aBlackHole;
         aBlackHole.EnableOutput(FALSE);
         pMtf->Record(&aBlackHole);
-        Point aPaintPos(rPaintRect.TopLeft());
+
+        //AW vertical writing
+        // For the outliner::Draw method which takes a start position
+        // the upper right position must be offered for vertical writing.
+        Point aPaintPos;
+        if(rOutliner.IsVertical())
+            aPaintPos = rPaintRect.TopRight();
+        else
+            aPaintPos = rPaintRect.TopLeft();
+
         //aPaintPos-=aAnimationBoundRect.TopLeft();
         // Die RedLines der Online-Rechtschreibpruefung werden via DrawPixel
         // gemalt. Das ist bei Laufschrift, besonders unter OS/2, viel zu langsam.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
+ *  last change: $Author: aw $ $Date: 2001-02-20 15:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,7 +375,9 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
             if (aSiz.Height()<2) aSiz.Height()=2; // Mindestgroesse 2
             if (bHScroll) aSiz.Width()=0x0FFFFFFF; // Laufschrift nicht umbrechen
             if (bVScroll) aSiz.Height()=0x0FFFFFFF;
-            if (pEdtOutl!=NULL) {
+
+            if(pEdtOutl)
+            {
                 pEdtOutl->SetMaxAutoPaperSize(aSiz);
                 if (bWdtGrow) {
                     Size aSiz(pEdtOutl->CalcTextSize());
