@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 09:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,11 @@ sal_Bool ODbaseTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, s
     switch(eCursorPosition)
     {
         case FILE_NEXT:
-            m_nFilePos++;
+            ++m_nFilePos;
             break;
         case FILE_PRIOR:
             if (m_nFilePos > 0)
-                m_nFilePos--;
+                --m_nFilePos;
             break;
         case FILE_FIRST:
             m_nFilePos = 1;
