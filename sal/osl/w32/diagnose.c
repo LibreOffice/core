@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: hro $ $Date: 2000-10-30 12:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         hWndParent = GetLastActivePopup(hWndParent);
 
     /* set message box flags */
-    nFlags = MB_TASKMODAL|MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SETFOREGROUND;
+    nFlags = MB_TASKMODAL | MB_ICONWARNING | MB_YESNOCANCEL | MB_DEFBUTTON2;
     if (hWndParent == NULL)
         nFlags |= MB_SERVICE_NOTIFICATION;
 
