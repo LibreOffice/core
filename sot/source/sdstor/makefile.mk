@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+#   last change: $Author: mba $ $Date: 2000-11-20 12:58:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,20 +74,8 @@ TARGET=sdstor
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = 				\
-        stg.cxx 		\
-        stgcache.cxx 	\
-        stgstrms.cxx 	\
-        stgelem.cxx 	\
-        stgio.cxx 		\
-        stgole.cxx 		\
-        stgdir.cxx 		\
-        stgavl.cxx		\
-        storinfo.cxx	\
-        storage.cxx		\
-        $(PROJECTPCHSOURCE).cxx
-
 SLOFILES =  \
+        $(SLO)$/ucbstorage.obj         \
         $(SLO)$/stg.obj		\
         $(SLO)$/stgcache.obj \
         $(SLO)$/stgstrms.obj \
@@ -98,6 +86,8 @@ SLOFILES =  \
         $(SLO)$/stgavl.obj	\
         $(SLO)$/storinfo.obj	\
         $(SLO)$/storage.obj
+
+EXCEPTIONSFILES=$(SLO)$/ucbstorage.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
