@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragSourceEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: obr $ $Date: 2001-01-29 10:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
+interface XDragSource;
 interface XDragSourceContext;
 
 //=============================================================================
@@ -85,7 +86,14 @@ struct DragSourceEvent: com::sun::star::lang::EventObject
     //-------------------------------------------------------------------------
     /** the DragSourceContext of the current drag operation.
      */
+
     XDragSourceContext DragSourceContext;
+
+    //-------------------------------------------------------------------------
+    /** the DragSource on which the drag and drop operation was initiated.
+     */
+
+    XDragSource DragSource;
 };
 
 //=============================================================================

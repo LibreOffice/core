@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragSourceContext.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:47 $
+ *  last change: $Author: obr $ $Date: 2001-01-29 10:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,24 +89,6 @@ interface XDragSourceListener;
 [ uik(E6EFFA63-B551-11d4-82C90050-04D765F1), ident("XDragSourceContext",  0.1) ]
 interface XDragSourceContext: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    /** registers a new DragSourceListener.
-
-        @param dsl
-        the DragSourceListener to register with this DragSourceContext.
-    */
-
-    [oneway] void addDragSourceListener( [in] XDragSourceListener dsl );
-
-    //-------------------------------------------------------------------------
-    /** unregisters the specified DragSourceListener.
-
-        @param dsl
-        the DragSourceListener to register with this DragSourceContext.
-    */
-
-    [oneway] void removeDragSourceListener( [in] XDragSourceListener dsl );
-
     //-------------------------------------------------------------------------
     /** @returns the currently selected drag cursor.
     */
