@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-06-11 16:24:17 $
+ *  last change:$Date: 2003-08-07 15:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ public class java_complex implements TestBase{
 
             LogWriter out = (LogWriter)dcl.getInstance(
                                             (String)param.get("OutProducer"));
+
             out.summary(entries[i]);
             returnVal &= entries[i].State.endsWith("OK");
         }
@@ -192,4 +193,5 @@ public class java_complex implements TestBase{
         }
         catch(java.lang.NullPointerException e) {}
     }
+
 }
