@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:08:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,18 @@ const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYS
 BOOL WinSalFrame::mbInReparent = FALSE;
 
 // =======================================================================
+
+// Wegen Fehler in Windows-Headerfiles
+#ifndef IMN_OPENCANDIDATE
+#define IMN_OPENCANDIDATE               0x0005
+#endif
+#ifndef IMN_CLOSECANDIDATE
+#define IMN_CLOSECANDIDATE              0x0004
+#endif
+
+#ifndef WM_THEMECHANGED
+#define WM_THEMECHANGED                 0x031A
+#endif
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
 #define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
@@ -2675,6 +2687,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
+    // TODO: once those options vanish: just set bCompBorder to TRUE
+    // to have the system colors read
     aStyleSettings.SetScrollBarSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
     aStyleSettings.SetSpinSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
@@ -2718,6 +2732,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuColor( ImplWinColorToSal( GetSysColor( COLOR_MENU ) ) );
         aStyleSettings.SetMenuBarColor( aStyleSettings.GetMenuColor() );
         aStyleSettings.SetMenuBorderColor( aStyleSettings.GetLightBorderColor() ); // overriden below for flat menus
+        aStyleSettings.SetUseFlatBorders( FALSE );
         aStyleSettings.SetUseFlatMenues( FALSE );
         aStyleSettings.SetMenuTextColor( ImplWinColorToSal( GetSysColor( COLOR_MENUTEXT ) ) );
         aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
@@ -2735,6 +2750,10 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
                 aStyleSettings.SetMenuBarColor( ImplWinColorToSal( GetSysColor( COLOR_MENUBAR ) ) );
                 aStyleSettings.SetMenuHighlightColor( ImplWinColorToSal( GetSysColor( COLOR_MENUHILIGHT ) ) );
                 aStyleSettings.SetMenuBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
+
+                // flat borders for our controls etc. as well in this mode (ie, no 3d borders)
+                // this is not active in the classic style appearance
+                aStyleSettings.SetUseFlatBorders( TRUE );
             }
         }
     }
@@ -3831,6 +3850,14 @@ static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
 
     RECT aInnerRect;
     GetClientRect( hWnd, &aInnerRect );
+    if( aInnerRect.right )
+    {
+        // improve right decoration
+        aPt.x=aInnerRect.right;
+        aPt.y=aInnerRect.top;
+        ClientToScreen(hWnd, &aPt);
+        pFrame->maGeometry.nRightDecoration = aRect.right - aPt.x;
+    }
     if( aInnerRect.bottom ) // may be zero if window was not shown yet
         pFrame->maGeometry.nBottomDecoration += aRect.bottom - aPt.y - aInnerRect.bottom;
     else
@@ -5554,6 +5581,10 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_SYSCOLORCHANGE:
         case WM_TIMECHANGE:
             ImplHandleSettingsChangeMsg( hWnd, nMsg, wParam, lParam );
+            break;
+
+        case WM_THEMECHANGED:
+            GetSalData()->mbThemeChanged = TRUE;
             break;
 
         case SAL_MSG_USEREVENT:
