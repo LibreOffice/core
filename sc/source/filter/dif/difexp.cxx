@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-30 10:26:38 $
+ *  last change: $Author: nn $ $Date: 2001-12-10 19:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,19 @@ FltError ScExportDif( SvStream& rStream, ScDocument* pDoc,
 }
 
 
-void lcl_EscapeQuotes( String& rString )
+void lcl_EscapeQuotes( ByteString& rString )
 {
     //  Quotes in (quoted) strings have to be escaped (duplicated)
     //  (at least Excel and Quattro do it that way)
 
+    //  This has to be done after converting the string to 8-bit characters,
+    //  because different characters (typographic quotes) might get converted
+    //  into quote characters.
+
     xub_StrLen nPos = 0;
-    while( ( nPos = rString.Search( (sal_Unicode)'"', nPos ) ) != STRING_NOTFOUND )
+    while( ( nPos = rString.Search( (sal_Char)'"', nPos ) ) != STRING_NOTFOUND )
     {
-        rString.Insert( (sal_Unicode)'"', nPos );
+        rString.Insert( (sal_Char)'"', nPos );
         nPos += 2;
     }
 }
@@ -206,16 +210,18 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                     case CELLTYPE_EDIT:
                         aOS = pStringData;
                         ( ( ScEditCell* ) pAkt )->GetString( aUniString );
-                        lcl_EscapeQuotes( aUniString );
-                        aOS += ByteString( aUniString, eNach );
+                        aTmp = ByteString( aUniString, eNach );
+                        lcl_EscapeQuotes( aTmp );
+                        aOS += aTmp;
                         aOS += "\"\n";
                         pOutString = aOS.GetBuffer();
                         break;
                     case CELLTYPE_STRING:
                         aOS = pStringData;
                         ( ( ScStringCell* ) pAkt )->GetString( aUniString );
-                        lcl_EscapeQuotes( aUniString );
-                        aOS += ByteString( aUniString, eNach );
+                        aTmp = ByteString( aUniString, eNach );
+                        lcl_EscapeQuotes( aTmp );
+                        aOS += aTmp;
                         aOS += "\"\n";
                         pOutString = aOS.GetBuffer();
                         break;
@@ -241,8 +247,9 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                         {
                             aOS = pStringData;
                             ( ( ScFormulaCell * ) pAkt )->GetString( aUniString );
-                            lcl_EscapeQuotes( aUniString );
-                            aOS += ByteString( aUniString, eNach );
+                            aTmp = ByteString( aUniString, eNach );
+                            lcl_EscapeQuotes( aTmp );
+                            aOS += aTmp;
                             aOS += "\"\n";
                             pOutString = aOS.GetBuffer();
                         }
