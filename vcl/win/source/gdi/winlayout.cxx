@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:35:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,15 +623,40 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 
     Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
-    // #108267#, limit the number of glyphs to avoid paint errors
+    // #108267#, break up into glyph portions of a limited size required by Win32 API
     UINT limitedGlyphCount = min( 8192, mnGlyphCount );
+    const unsigned int maxGlyphCount = 8192;
+    UINT numGlyphPortions = mnGlyphCount / maxGlyphCount;
+    UINT remainingGlyphs = mnGlyphCount % maxGlyphCount;
+
     if( mnDrawOptions || aSalShlData.mbWNT )
     {
-        ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-            mpOutGlyphs, limitedGlyphCount, mpGlyphAdvances );
+        if( numGlyphPortions )
+        {
+            // #108267#,#109387# break up string into smaller chunks
+            // the output positions will be updated by windows (SetTextAlign)
+            long i,n;
+            POINT oldPos;
+            UINT oldTa = ::GetTextAlign( aHDC );
+            ::SetTextAlign( aHDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP );
+            ::MoveToEx( aHDC, aPos.X(), aPos.Y(), &oldPos );
+            for( i=n=0; n<numGlyphPortions; n++, i+=maxGlyphCount )
+                ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
+                    mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i );
+            ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
+                mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i );
+            ::MoveToEx( aHDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
+            ::SetTextAlign( aHDC, oldTa );
+        }
+        else
+            ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
+                mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
     }
     else
     {
+        // #108267#, On Win9x, we get paint errors when drawing huge strings, even when
+        // split into pieces (see above), seems to be a problem in the internal text clipping
+        // so we just cut off the string
         if( !mpGlyphOrigAdvs )
             ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), 0, NULL,
                 mpOutGlyphs, limitedGlyphCount, NULL );
@@ -673,10 +698,10 @@ long SimpleWinLayout::FillDXArray( long* pDXArray ) const
 // -----------------------------------------------------------------------
 
 int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
+// NOTE: the nFactor is used to prevent rounding errors for small nCharExtra values
 {
-    // NOTE: the factor prevents rounding errors for small nCharExtra values
     if( mnWidth )
-        if( mnWidth * nFactor <= nMaxWidth )
+        if( (mnWidth * nFactor + mnCharCount * nCharExtra) <= nMaxWidth )
             return STRING_LEN;
 
     long nExtraWidth = mnBaseAdv * nFactor;
