@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
+ *  last change: $Author: as $ $Date: 2001-12-19 13:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
+#include <framework/interaction.hxx>
 #endif
 
 #ifndef _TOOLKIT_UNOHLP_HXX
@@ -193,6 +197,7 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
     String rURL;
     String aTypeName;
     sal_uInt32 nPropertyCount = rArgs.getLength();
+    sal_Bool bReadOnlyTest = sal_False;
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
@@ -216,6 +221,8 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
             rArgs[nProperty].Value >>= sTemp;
             aFilterName = sTemp;
         }
+        if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
+            rArgs[nProperty].Value >>= bReadOnlyTest;
     }
 
     const SfxFilter*  pFilter  = NULL;
@@ -628,6 +635,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             ErrCode nErr = ERRCODE_ABORT;
             if ( pFilter )
             {
+                const SfxFilter* pOldFilter = pFilter;
                 // type or filter name matched to a valid filter name detectable with this service
                 SfxFilterFlags nFlags = pFilter->GetFilterFlags();
                 if ( ( nFlags & nMust ) == nMust && ( nFlags & nDont ) == 0 )
@@ -682,6 +690,42 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                         }
                     }
                 }
+                else if ( aPreselectedFilterName.Len() && nErr == ERRCODE_SFX_CONSULTUSER )
+                {
+                    // preselected filter could not be detected, but the detection function is
+                    // know to be a little bit "fuzzy"
+                    // ask user for his decision between two detected filters
+                    if( !xInteraction.is() )
+                    {
+                        // no interaction => pFilter wins
+                        nErr = ERRCODE_NONE;
+                        aMedium.SetError(nErr);
+                    }
+                    else
+                    {
+                        ::rtl::OUString aSelectedFilter( aPreselectedFilterName );  // name of pOldFilter
+                        ::rtl::OUString aDetectedFilter( pFilter->GetName()     );
+
+                        ::framework::RequestAmbigousFilter* pRequest = new ::framework::RequestAmbigousFilter( aURL, aSelectedFilter, aDetectedFilter );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest( static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), ::com::sun::star::uno::UNO_QUERY );
+
+                        xInteraction->handle( xRequest );
+                        if( pRequest->isAbort() )
+                        {
+                            nErr = ERRCODE_ABORT;
+                            aMedium.SetError(nErr);
+                        }
+                        else
+                        {
+                            if( pRequest->getFilter() == aSelectedFilter )
+                            {
+                                nErr = ERRCODE_NONE;
+                                aMedium.SetError(nErr);
+                                pFilter = pOldFilter;
+                            }
+                        }
+                    }
+                }
             }
 
             // No error while reading from medium ?
@@ -718,6 +762,11 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             exPacked.TargetException <<= exAbort;
             throw exPacked;
         }
+
+        // may be - w4w filter dont close these stream right
+        // so we should do that here.
+        if( !aMedium.IsOpen() )
+            xStream = NULL;
     }
 
     if ( pFilter )
