@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-21 09:21:40 $
+ *  last change: $Author: nn $ $Date: 2001-06-29 17:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,7 +865,7 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
     else
     {
         String aText = rEngine.GetText();
-        if (bInterpret)
+        if ( bInterpret || !aText.Len() )
             bRet = SetNormalString( rPos, aText, bApi );
         else
             bRet = PutCell( rPos, new ScStringCell( aText ), bApi );
@@ -933,7 +933,7 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
                 pNewCell = new ScFormulaCell( pDoc, rPos, pCode, 0 );
                 delete pCode;   // Zell-ctor hat das TokenArray kopiert
             }
-            else if ( rText.Len() && rText.GetChar(0) == '\'' )
+            else if ( rText.Len() > 1 && rText.GetChar(0) == '\'' )
             {
                 //  for bEnglish, "'" at the beginning is always interpreted as text
                 //  marker and stripped
@@ -946,7 +946,7 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
                 double fVal;
                 if ( pFormatter->IsNumberFormat( rText, nEnglish, fVal ) )
                     pNewCell = new ScValueCell( fVal );
-                else
+                else if ( rText.Len() )
                     pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );
 
                 //  das (englische) Zahlformat wird nicht gesetzt
