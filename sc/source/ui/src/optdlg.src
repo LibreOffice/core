@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:21:51 $
+ *  last change: $Author: kz $ $Date: 2001-04-07 19:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,7 +1047,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ dutch ] = "Visual aids";
         Text[ french ] = "Lignes";
         Text[ spanish ] = "Visual aids";
-        Text[ italian ] = "Visual aids";
+        Text[ italian ] = "Linee";
         Text[ danish ] = "Visual aids";
         Text[ swedish ] = "Linjer";
         Text[ polish ] = "Linie";
@@ -1159,10 +1159,10 @@ TabPage RID_SCPAGE_CONTENT
         Text[ portuguese ] = "Guides while moving";
         Text[ russian ] = "Íàïðàâëÿþùèå ëèíèè ïðè ïåðåìåùåíèè";
         Text[ greek ] = "Âïçèçô~éêÝò ãñáììÝò êáôÜ ôç ìåôáêßíçóç";
-        Text[ dutch ] = "Guides while moving";
+        Text[ dutch ] = "H~ulplijnen tijdens de beweging";
         Text[ french ] = "~Repères lors du déplacement";
         Text[ spanish ] = "Guides while moving";
-        Text[ italian ] = "Guides while moving";
+        Text[ italian ] = "Linee griglia durante il movimento";
         Text[ danish ] = "Guides while moving";
         Text[ swedish ] = "Hjälpl~injer under rörelsen";
         Text[ polish ] = "Linie pomocnicze podczas przesuwania";
@@ -1768,7 +1768,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ dutch ] = "Metrics";
         Text[ french ] = "~Métriques";
         Text[ spanish ] = "Metrics";
-        Text[ italian ] = "Metrics";
+        Text[ italian ] = "Metrici";
         Text[ danish ] = "Metrics";
         Text[ swedish ] = "~Metriker";
         Text[ polish ] = "Metryki";
@@ -1793,7 +1793,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ dutch ] = "Measurement unit";
         Text[ french ] = "Unité de mesure";
         Text[ spanish ] = "Measurement unit";
-        Text[ italian ] = "Measurement unit";
+        Text[ italian ] = "Unità di misura";
         Text[ danish ] = "Measurement unit";
         Text[ swedish ] = "Måttenhet";
         Text[ polish ] = "Jednostka miary";
@@ -2105,7 +2105,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ dutch ] = "Tab stops";
         Text[ french ] = "Tabulation";
         Text[ spanish ] = "Tab stops";
-        Text[ italian ] = "Tab stops";
+        Text[ italian ] = "Tabulazione";
         Text[ danish ] = "Tab stops";
         Text[ swedish ] = "Tabulator";
         Text[ polish ] = "Tabulator";
@@ -2279,7 +2279,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ dutch ] = "Input settings";
         Text[ french ] = "Paramètres de saisie";
         Text[ spanish ] = "Input settings";
-        Text[ italian ] = "Input settings";
+        Text[ italian ] = "Impostazioni di immissione";
         Text[ danish ] = "Input settings";
         Text[ swedish ] = "Inmatningsinställningar";
         Text[ polish ] = "Ustawienia wprowadzania";
