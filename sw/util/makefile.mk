@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 16:06:45 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:06:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,7 @@ LINKFLAGS= /F /PACKCODE:65520 /PACKDATA /NOD /NOE /MAP
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 .IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
+LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=40
 .ENDIF
 
 .IF "$(header)" == ""
