@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-13 10:06:29 $
+ *  last change: $Author: os $ $Date: 2002-06-05 12:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4626,6 +4626,12 @@ String STR_POOLCHR_RUBYTEXT
     Text[ turkish ] = "Phonetic Symbols";
     Text[ arabic ] = "—„Ê“ ’Ê Ì…";
     Text[ catalan ] = "SÌmbolos fonÈticos";
+};
+
+String STR_POOLCHR_VERT_NUM
+{
+    Text = "Vertikale Nummerierungszeichen" ;
+    Text [ English ] = "Vertical Numbering Symbols" ;
 };
 
 

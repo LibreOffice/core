@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:16:40 $
+ *  last change: $Author: os $ $Date: 2002-06-05 12:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ RES_POOLCHR_IDX_MAIN_ENTRY,                         // main entry in indexes
 RES_POOLCHR_FOOTNOTE_ANCHOR,                        // Fussnotenanker
 RES_POOLCHR_ENDNOTE_ANCHOR,                         // Endnotenanker
 RES_POOLCHR_RUBYTEXT,                               // Rubytext
+RES_POOLCHR_VERT_NUM,                               // Vertical numbering symbols
 
 RES_POOLCHR_NORMAL_END,
 

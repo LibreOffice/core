@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-04-25 13:57:38 $
+ *  last change: $Author: os $ $Date: 2002-06-05 12:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <svx/charrotateitem.hxx>
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -1415,7 +1418,9 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId, String* pDesc,
             ::lcl_SetDfltFont( DEFAULTFONT_FIXED, aSet );
         }
         break;
-
+   case RES_POOLCHR_VERT_NUM:
+            aSet.Put( SvxCharRotateItem( 900 ) );
+    break;
 //nichts besonderes
 //  case RES_POOLCHR_HTML_DEFINSTANCE:
 //          break;
