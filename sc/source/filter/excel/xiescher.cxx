@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 09:36:19 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
+#endif
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #ifndef _SCH_DLL_HXX
@@ -421,7 +424,8 @@ TYPEINIT1( XclImpEscherTxo, XclImpEscherDrawing );
 XclImpEscherTxo::XclImpEscherTxo( XclImpEscherObj& rSrcObj ) :
     XclImpEscherDrawing( rSrcObj, true ),
     meHorAlign( xlTxoHAlign_Default ),
-    meVerAlign( xlTxoVAlign_Default )
+    meVerAlign( xlTxoVAlign_Default ),
+    meRotation( xlTxoRot_Default )
 {
 }
 
@@ -429,6 +433,11 @@ void XclImpEscherTxo::SetAlignment( sal_uInt16 nAlign )
 {
     ::extract_value( meHorAlign, nAlign, 1, 3 );
     ::extract_value( meVerAlign, nAlign, 4, 3 );
+}
+
+void XclImpEscherTxo::SetRotation( sal_uInt16 nOrient )
+{
+    meRotation = static_cast<XclTxoRotation>(nOrient);
 }
 
 void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
@@ -441,7 +450,7 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
             {
                 // rich text
                 ::std::auto_ptr< EditTextObject > pEditObj(
-                    XclImpStringHelper::CreateTextObject( GetRoot(), *mxString ) );
+                XclImpStringHelper::CreateTextObject( GetRoot(), *mxString ) );
                 OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditObj );
                 pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
                 pTextObj->NbcSetOutlinerParaObject( pOPO );
@@ -476,6 +485,7 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
             case xlTxoVAlignJustify:    eSdrVerAlign = SDRTEXTVERTADJUST_BLOCK;     break;
         }
         pTextObj->SetMergedItem( SdrTextVertAdjustItem( eSdrVerAlign ) );
+
     }
 }
 
@@ -514,6 +524,25 @@ void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
             }
             if(pObj)
             {
+                SvxWritingModeItem aWriteMode(com::sun::star::text::WritingMode_LR_TB);
+                switch( GetRotation() )
+                {
+                    case xlTxoNoRot:
+                        aWriteMode = com::sun::star::text::WritingMode_LR_TB ;
+                        break;
+                    case xlTxoRotStacked:
+                        aWriteMode = com::sun::star::text::WritingMode_TB_RL ;
+                        break;
+                    case xlTxoRot90ccw:
+                        aWriteMode = com::sun::star::text::WritingMode_TB_RL ;
+                        break;
+                    case xlTxoRot90cw:
+                        aWriteMode = com::sun::star::text::WritingMode_TB_RL ;
+                        break;
+                }
+                pObj->SetMergedItem( SvxWritingModeItem(aWriteMode));
+                pObj->SetMergedItem(SdrTextAutoGrowWidthItem(false));
+                pObj->SetMergedItem(SdrTextAutoGrowHeightItem(false));
                 const SfxItemSet& aItemSet = pObj->GetMergedItemSet();
                 aNote.SetItemSet(aItemSet);
             }
@@ -1747,7 +1776,7 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
 {
     rStrm.ResetRecord( false );     // disable internal CONTINUE handling
 
-    sal_uInt16 nAlign, nTextLen, nFormCnt;
+    sal_uInt16 nAlign, nOrient, nTextLen, nFormCnt;
     ::std::auto_ptr< XclImpString > pString;
 
     /*  Let this function read all records in every case, even if text cannot be
@@ -1755,7 +1784,8 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
 
     // step 1: read TXO record
     rStrm >> nAlign;
-    rStrm.Ignore( 8 );
+    rStrm >> nOrient;
+    rStrm.Ignore( 6 );
     rStrm >> nTextLen >> nFormCnt;
     nFormCnt /= 8;
 
@@ -1808,6 +1838,7 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
 
             pTxoObj->SetString( pString.release() );
             pTxoObj->SetAlignment( nAlign );
+            pTxoObj->SetRotation( nOrient );
         }
     }
 }
