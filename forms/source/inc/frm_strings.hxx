@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:26:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,12 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_FONT_STRIKEOUT,           "FontStrikeout" );
     FORMS_CONSTASCII_STRING( PROPERTY_FONTEMPHASISMARK,         "FontEmphasisMark" );
     FORMS_CONSTASCII_STRING( PROPERTY_FONTRELIEF,               "FontRelief" );
+    FORMS_CONSTASCII_STRING( PROPERTY_FONT_CHARWIDTH,           "FontCharWidth");
+    FORMS_CONSTASCII_STRING( PROPERTY_FONT_KERNING,             "FontKerning");
+    FORMS_CONSTASCII_STRING( PROPERTY_FONT_ORIENTATION,         "FontOrientation");
+    FORMS_CONSTASCII_STRING( PROPERTY_FONT_PITCH,               "FontPitch");
+    FORMS_CONSTASCII_STRING( PROPERTY_FONT_TYPE,                "FontType");
+    FORMS_CONSTASCII_STRING( PROPERTY_FONT_WIDTH,               "FontWidth");
     FORMS_CONSTASCII_STRING( PROPERTY_HELPURL,                  "HelpURL" );
     FORMS_CONSTASCII_STRING( PROPERTY_RECORDMARKER,             "HasRecordMarker" );
     FORMS_CONSTASCII_STRING( PROPERTY_BOUNDFIELD,               "BoundField" );
@@ -265,6 +271,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_SCROLL_VALUE,             "ScrollValue"        );
     FORMS_CONSTASCII_STRING( PROPERTY_DEFAULT_SPIN_VALUE,       "DefaultSpinValue"   );
     FORMS_CONSTASCII_STRING( PROPERTY_SPIN_VALUE,               "SpinValue"          );
+    FORMS_CONSTASCII_STRING( PROPERTY_REFERENCE_DEVICE,         "ReferenceDevice"    );
     FORMS_CONSTASCII_STRING( PROPERTY_ISMODIFIED,               "IsModified" );
     FORMS_CONSTASCII_STRING( PROPERTY_ISNEW,                    "IsNew" );
     FORMS_CONSTASCII_STRING( PROPERTY_PRIVILEGES,               "Privileges" );
@@ -294,6 +301,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_PASSWORD,                 "Password" );
     FORMS_CONSTASCII_STRING( PROPERTY_DISPATCHURLINTERNAL,      "DispatchURLInternal" );
     FORMS_CONSTASCII_STRING( PROPERTY_PERSISTENCE_MAXTEXTLENGTH,"PersistenceMaxTextLength" );
+    FORMS_CONSTASCII_STRING( PROPERTY_RICH_TEXT,                "RichText" );
     FORMS_CONSTASCII_STRING( PROPERTY_ENFORCE_FORMAT,           "EnforceFormat" );
 
     FORMS_CONSTASCII_STRING( PROPERTY_BORDER,                   "Border" );
