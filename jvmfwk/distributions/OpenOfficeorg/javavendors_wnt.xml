@@ -9,9 +9,13 @@
   <vendor name="Sun Microsystems Inc.">
     <minVersion>1.4.1_01</minVersion>
   </vendor>
+  <vendor name="IBM Corporation">
+    <minVersion>1.4.1</minVersion>
+  </vendor>
  </vendorInfos>
 
  <plugins>
   <library vendor="Sun Microsystems Inc.">program/sunjavaplugin.dll</library>
+  <library vendor="IBM Corporation">program/ibmjavaplugin.dll</library>
  </plugins>
 </javaSelection>

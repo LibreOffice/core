@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2004-05-21 09:03:25 $
+#   last change: $Author: hr $ $Date: 2004-07-23 11:49:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,9 +71,15 @@ nojava:
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
-$(BIN)$/javavendors_ooo.xml: javavendors_unx.xml javavendors_wnt.xml 
+$(BIN)$/javavendors_ooo.xml: javavendors_unx.xml javavendors_wnt.xml javavendors_macosx.xml javavendors_linux.xml
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
+    +-$(COPY) javavendors_macosx.xml $(BIN)$/javavendors_ooo.xml
+.ELIF "$(OS)"=="LINUX"
+    +-$(COPY) javavendors_linux.xml $(BIN)$/javavendors_ooo.xml
+.ELSE
     +-$(COPY) javavendors_unx.xml $(BIN)$/javavendors_ooo.xml
+.ENDIF
 .ELIF "$(GUI)"=="WNT"
     +-$(COPY) javavendors_wnt.xml $(BIN)$/javavendors_ooo.xml	
 .ELSE
