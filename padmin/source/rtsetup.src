@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-21 21:16:43 $
+ *  last change: $Author: rt $ $Date: 2002-01-09 21:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,7 +1295,7 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Linker Rand" ;
         Text [ English ] = "~Left margin" ;
-        Text[ english_us ] = "~Left margin adjustment";
+        Text[ english_us ] = "~Left margin";
         Text[ portuguese ] = "~Ajuste da margem esquerda";
         Text[ russian ] = "~Βϋπΰβνθβΰνθε οξλÿ ρλεβΰ";
         Text[ greek ] = "Διόρθωση αριστερού περιθωρίου :";
@@ -1332,7 +1332,7 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Oberer Rand" ;
         Text [ English ] = "~Top margin" ;
-        Text[ english_us ] = "~Top margin adjustment";
+        Text[ english_us ] = "~Top margin";
         Text[ portuguese ] = "Aju~ste da margem superior";
         Text[ russian ] = "~Βϋπΰβνθβΰνθε οξλÿ ρβεπυσ";
         Text[ greek ] = "Διόρθωση πάνω περιθωρί~ου :";
@@ -1369,7 +1369,7 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Rechter Rand" ;
         Text [ English ] = "~Right margin" ;
-        Text[ english_us ] = "~Right margin adjustment";
+        Text[ english_us ] = "~Right margin";
         Text[ portuguese ] = "Ajuste ~da margem direita";
         Text[ russian ] = "~Βϋπΰβνθβΰνθε οξλÿ ροπΰβΰ";
         Text[ greek ] = "Διόρθωση δεξιού πε~ριθωρίου :";
@@ -1406,7 +1406,7 @@ TabPage RID_RTS_OTHERPAGE
         Size = MAP_APPFONT( 85, 8 );
         Text = "~Unterer Rand" ;
         Text [ English ] = "~Bottom margin" ;
-        Text[ english_us ] = "~Bottom margin adjustment";
+        Text[ english_us ] = "~Bottom margin";
         Text[ portuguese ] = "Ajuste da margem ~inferior";
         Text[ russian ] = "~Βϋπΰβνθβΰνθε οξλÿ ρνθησ";
         Text[ greek ] = "Διόρθωση κάτω περιθωρίο~υ :";
@@ -1524,6 +1524,7 @@ String RID_TXT_QUERYFAXNUMBER
     Text[ finnish ] = "~Kirjoita faksinumero.";
     Text[ catalan ] = "Indiqueu el nϊmero de fax";
 };
+
 
 
 
