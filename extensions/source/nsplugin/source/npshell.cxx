@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-16 10:35:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 
 
 #include "nsp_func.hxx"
+
+#include <comphelper/documentconstants.hxx>
 
 /***********************************************************************
  *
@@ -226,31 +228,28 @@ char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
 "application/vnd.stardivision.writer:vor:StarWriter Template 3.0 - 5.0;"
 "application/vnd.stardivision.writer-global:sgl:StarWriter Global 3.0 - 5.0;"
 "application/vnd.staroffice.writer:sdw:StarWriter 3.0 - 5.0;"
-"application/vnd.sun.xml.calc:sxc:StarCalc;"
-"application/vnd.sun.xml.calc.template:stc:StarCalc Template;"
-"application/vnd.sun.xml.draw:sxd:StarDraw;"
-"application/vnd.sun.xml.draw.template:std:StarDraw Template;"
-"application/vnd.sun.xml.impress:sxi:StarImpress;"
-"application/vnd.sun.xml.impress.template:sti:StarImpress Template;"
-"application/vnd.sun.xml.math:sxm:StarMath;"
-"application/vnd.sun.xml.writer:sxw:StarWriter;"
-"application/vnd.sun.xml.writer.global:sxg:StarWriter Global;"
-"application/vnd.sun.xml.writer.template:stw:StarWriter Template;"
-"application/msword:doc:Microsoft Word Document;"
-"application/vnd.ms-excel:xls:Microsoft Excel Document;"
-"application/vnd.ms-powerpoint:ppt:Microsoft Powerpoint Document;"
-"application/vnd.oasis.opendocument.text:odt:OpenDocument Text;"
-"application/vnd.oasis.opendocument-template:ott:OpenDocument Text Template;"
-"application/vnd.oasis.opendocument.text-master:odm:OpenDocument Master Document;"
-"application/vnd.oasis.opendocument.text-web:oth:HTML Document Template;"
-"application/vnd.oasis.opendocument.spreadsheet:ods:OpenDocument Spreadsheet;"
-"application/vnd.oasis.opendocument.spreadsheet-template:ots:OpenDocument Spreadsheet Template;"
-"application/vnd.oasis.opendocument.drawing:odg:OpenDocument Drawing;"
-"application/vnd.oasis.opendocument.drawing-template:otg:OpenDocument Drawing Template;"
-"application/vnd.oasis.opendocument.presentation:odp:OpenDocument Presentation;"
-"application/vnd.oasis.opendocument.presentation-template:otp:OpenDocument Presentation Template;"
-"application/vnd.oasis.opendocument.formula:odf:OpenDocument Formula;"
-"application/vnd.oasis.opendocument.database:odb:OpenDocument Database;";
+MIMETYPE_VND_SUN_XML_CALC_ASCII ":sxc:StarOffice 6.0/7 Spreadsheet;"
+MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII":stc:StarOffice 6.0/7 Spreadsheet Template;"
+MIMETYPE_VND_SUN_XML_DRAW_ASCII ":sxd:StarOffice 6.0/7 Drawing;"
+MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII ":std:StarOffice 6.0/7 Drawing Template;"
+MIMETYPE_VND_SUN_XML_IMPRESS_ASCII ":sxi:StarOffice 6.0/7 Presentation;"
+MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII ":sti:StarOffice 6.0/7 Presentation Template;"
+MIMETYPE_VND_SUN_XML_MATH_ASCII ":sxm:StarOffice 6.0/7 Formula;"
+MIMETYPE_VND_SUN_XML_WRITER_ASCII ":sxw:StarOffice 6.0/7 Text Document;"
+MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII ":sxg:StarOffice 6.0/7 Master Document;"
+MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII ":stw:StarOffice 6.0/7 Text Document Template;"
+MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ":odt:OpenDocument Text;"
+MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII ":ott:OpenDocument Text Template;"
+MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII ":odm:OpenDocument Master Document;"
+MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII ":oth:HTML Document Template;"
+MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ":ods:OpenDocument Spreadsheet;"
+MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII ":ots:OpenDocument Spreadsheet Template;"
+MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII ":odg:OpenDocument Drawing;"
+MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII ":otg:OpenDocument Drawing Template;"
+MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ":odp:OpenDocument Presentation;"
+MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ":otp:OpenDocument Presentation Template;"
+MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;"
+MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ":odb:OpenDocument Database;";
 
 char*
 NPP_GetMIMEDescription(void)
