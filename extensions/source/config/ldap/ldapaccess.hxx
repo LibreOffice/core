@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:49:17 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,9 @@
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 #define EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 
-#ifndef EXTENSIONS_CONFIG_LDAP_LDAPUSERPROF_HXX_
-#include "ldapuserprof.hxx"
-#endif // EXTENSIONS_CONFIG_LDAP_LDAPUSERPROF_HXX_
-
 #ifndef LDAP_INCLUDED
 #define LDAP_INCLUDED
-#include <mozilla/ldap/ldap.h>
+#include <ldap/ldap.h>
 #endif // LDAP_INCLUDED
 
 #ifndef _COM_SUN_STAR_LDAP_LDAPGENERICEXCEPTION_HPP_
@@ -90,8 +86,13 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace ldap = css::ldap ;
 //------------------------------------------------------------------------------
+// LdapUserProfile classes
+struct LdapUserProfile;
+class LdapUserProfileMap;
+
+//------------------------------------------------------------------------------
 /** Struct containing the information on LDAP connection */
-struct LdapDefinitionStruct
+struct LdapDefinition
 {
     /** LDAP server name */
     rtl::OString mServer ;
@@ -110,7 +111,6 @@ struct LdapDefinitionStruct
     /** Mapping File */
     rtl::OString mMapping;
  } ;
-typedef LdapDefinitionStruct  LdapDefinition;
 
 /** Class encapulating all LDAP functionality */
 class LdapConnection
@@ -125,6 +125,10 @@ public:
     void  connectSimple(const LdapDefinition& aDefinition)
         throw (ldap::LdapConnectionException,
                 ldap::LdapGenericException);
+
+    /** query connection status */
+    bool isConnected() const { return isValid(); }
+
     /**
         Gets LdapUserProfile from LDAP repository for specified user
         @param aUser    name of logged on user
@@ -164,6 +168,7 @@ private:
 
     void initConnection()
          throw (ldap::LdapConnectionException);
+    void disconnect();
     /**
       Indicates whether the connection is in a valid state.
       @return   sal_True if connection is valid, sal_False otherwise

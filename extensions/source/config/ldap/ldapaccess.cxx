@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:49:05 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,31 +59,58 @@
  *
  ************************************************************************/
 
-#ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 #include "ldapaccess.hxx"
-#endif // EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
+
+#include "ldapuserprof.hxx"
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
+#endif // _RTL_STRBUF_HXX_
 
 
 namespace extensions { namespace config { namespace ldap {
 
 
 //------------------------------------------------------------------------------
-
-LdapConnection::~LdapConnection(void)
+typedef int LdapErrCode;
+//------------------------------------------------------------------------------
+struct LdapMessageHolder
 {
-    if (mConnection != NULL) { ldap_unbind_s(mConnection) ; }
+    LdapMessageHolder() : msg(0) {}
+    ~LdapMessageHolder() { if (msg) ldap_msgfree(msg); }
+
+    LDAPMessage * msg;
+
+private:
+    LdapMessageHolder(LdapMessageHolder const&);
+    void operator=(LdapMessageHolder const&);
+};
+//------------------------------------------------------------------------------
+LdapConnection::~LdapConnection()
+{
+    if (isValid()) disconnect();
+}
+//------------------------------------------------------------------------------
+
+void LdapConnection::disconnect()
+{
+    if (mConnection != NULL)
+    {
+        ldap_unbind_s(mConnection) ;
+        mConnection = NULL;
+    }
 }
 //------------------------------------------------------------------------------
 
 static void checkLdapReturnCode(const sal_Char *aOperation,
-                                sal_Int32 aRetCode,
+                                LdapErrCode aRetCode,
                                 LDAP * aConnection)
 {
     if (aRetCode == LDAP_SUCCESS) { return ; }
+
     static const sal_Char *kNoSpecificMessage = "No additional information" ;
     rtl::OUStringBuffer message ;
 
@@ -114,6 +141,9 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
 void  LdapConnection::connectSimple(const LdapDefinition& aDefinition)
    throw (ldap::LdapConnectionException, ldap::LdapGenericException)
 {
+    OSL_ENSURE(!isValid(), "Recoonecting an LDAP connection that is already established");
+    if (isValid()) disconnect();
+
     mLdapDefinition = aDefinition;
     connectSimple();
 }
@@ -126,7 +156,7 @@ void  LdapConnection::connectSimple()
         // Connect to the server
         initConnection() ;
         // Set Protocol V3
-        sal_Int32 version = LDAP_VERSION3;
+        int version = LDAP_VERSION3;
         ldap_set_option(mConnection,
                         LDAP_OPT_PROTOCOL_VERSION,
                         &version);
@@ -137,7 +167,7 @@ void  LdapConnection::connectSimple()
                         &timeout );
 
         // Do the bind
-        sal_Int32 retCode = ldap_simple_bind_s(mConnection,
+        LdapErrCode retCode = ldap_simple_bind_s(mConnection,
                                                mLdapDefinition.mAnonUser ,
                                                mLdapDefinition.mAnonCredentials) ;
 
@@ -148,13 +178,23 @@ void  LdapConnection::connectSimple()
 void LdapConnection::initConnection()
     throw (ldap::LdapConnectionException)
 {
+    if (mLdapDefinition.mServer.getLength() == 0)
+    {
+        rtl::OUStringBuffer message ;
+
+        message.appendAscii("Cannot initialise connection to LDAP: No server specified.") ;
+        throw ldap::LdapConnectionException(message.makeStringAndClear(), NULL) ;
+    }
+
+    if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
+
     mConnection = ldap_init(mLdapDefinition.mServer,
                             mLdapDefinition.mPort) ;
     if (mConnection == NULL)
     {
         rtl::OUStringBuffer message ;
 
-        message.appendAscii("Cannot initialise connection to server ") ;
+        message.appendAscii("Cannot initialise connection to LDAP server ") ;
         message.appendAscii(mLdapDefinition.mServer) ;
         message.appendAscii(":") ;
         message.append(mLdapDefinition.mPort) ;
@@ -170,24 +210,24 @@ void LdapConnection::initConnection()
             ldap::LdapConnectionException, ldap::LdapGenericException)
  {
     if (!isValid()) { connectSimple(); }
-    rtl::OString aUserDn =findUserDn(
-        rtl::OUStringToOString(aUser, RTL_TEXTENCODING_ASCII_US));
-    LDAPMessage *result = NULL ;
-    sal_Int32 retCode = ldap_search_s(mConnection,
+
+    rtl::OString aUserDn =findUserDn( rtl::OUStringToOString(aUser, RTL_TEXTENCODING_ASCII_US));
+
+    LdapMessageHolder result;
+    LdapErrCode retCode = ldap_search_s(mConnection,
                                       aUserDn,
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
                                       const_cast<sal_Char **>(aUserProfileMap.getLdapAttributes()),
                                       0, // Attributes + values
-                                      &result) ;
+                                      &result.msg) ;
 
     checkLdapReturnCode("getUserProfile", retCode,mConnection) ;
 
 
     aUserProfileMap.ldapToUserProfile(mConnection,
-                                        result,
+                                        result.msg,
                                       aUserProfile) ;
-    ldap_msgfree(result) ;
 
  }
 //------------------------------------------------------------------------------
@@ -195,9 +235,9 @@ void LdapConnection::initConnection()
     throw (lang::IllegalArgumentException,
             ldap::LdapConnectionException, ldap::LdapGenericException)
 {
-
     if (!isValid()) { connectSimple(); }
-    if (aUser.equals(""))
+
+    if (aUser.getLength() == 0)
     {
         throw lang::IllegalArgumentException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
@@ -207,22 +247,23 @@ void LdapConnection::initConnection()
 
 
 
-    rtl::OString filter = "(&(objectclass=" ;
+    rtl::OStringBuffer filter( "(&(objectclass=" );
 
-    filter +=  mLdapDefinition.mUserObjectClass+ ")(" ;
-    filter +=  mLdapDefinition.mUserUniqueAttr+ "="+ aUser + "))" ;
-    LDAPMessage *result = NULL ;
+    filter.append( mLdapDefinition.mUserObjectClass ).append(")(") ;
+    filter.append( mLdapDefinition.mUserUniqueAttr ).append("=").append(aUser).append("))") ;
+
+    LdapMessageHolder result;
     sal_Char * attributes [2];
     attributes[0]= const_cast<sal_Char *>(LDAP_NO_ATTRS);
     attributes[1]= NULL;
-    sal_Int32 retCode = ldap_search_s(mConnection,
+    LdapErrCode retCode = ldap_search_s(mConnection,
                                       mLdapDefinition.mBaseDN,
                                       LDAP_SCOPE_SUBTREE,
-                                      filter, attributes, 0, &result) ;
+                                      filter.makeStringAndClear(), attributes, 0, &result.msg) ;
 
     checkLdapReturnCode("FindUserDn", retCode,mConnection) ;
     rtl::OString userDn ;
-    LDAPMessage *entry = ldap_first_entry(mConnection, result) ;
+    LDAPMessage *entry = ldap_first_entry(mConnection, result.msg) ;
 
     if (entry != NULL)
     {
@@ -235,7 +276,7 @@ void LdapConnection::initConnection()
     {
         OSL_ENSURE( false, "LdapConnection::findUserDn-could not get DN for User ");
     }
-    ldap_msgfree(result) ;
+
     return userDn ;
 }
 //------------------------------------------------------------------------------
@@ -250,21 +291,21 @@ rtl::OString LdapConnection::getSingleAttribute(
 
     attributes [0] = aAttribute ;
     attributes [1] = 0 ;
-    LDAPMessage *result  = NULL ;
-    sal_Int32 retCode = ldap_search_s(mConnection,
+    LdapMessageHolder result ;
+    LdapErrCode retCode = ldap_search_s(mConnection,
                                       aDn,
                                       LDAP_SCOPE_BASE,
                                       "(objectclass=*)",
                                       const_cast<sal_Char **>(attributes),
                                       0, // Attributes + values
-                                      &result) ;
+                                      &result.msg) ;
 
     if (retCode == LDAP_NO_SUCH_OBJECT)
     {
         return value ;
     }
     checkLdapReturnCode("GetSingleAttribute", retCode, mConnection) ;
-    LDAPMessage *entry = ldap_first_entry(mConnection, result) ;
+    LDAPMessage *entry = ldap_first_entry(mConnection, result.msg) ;
 
     if (entry != NULL)
     {
@@ -277,7 +318,6 @@ rtl::OString LdapConnection::getSingleAttribute(
             ldap_value_free(values) ;
         }
     }
-    ldap_msgfree(result) ;
     return value ;
 }
 
