@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadident.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 12:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,19 @@ struct IdContainer
 }
 using namespace cppu_threadpool;
 
+static void SAL_CALL destructIdContainer( void *p )
+{
+    fprintf( stderr, "destructIdContainer called\n" );
+    if( p )
+    {
+        IdContainer *pId = (IdContainer * ) p;
+        rtl_byte_sequence_release( pId->pLocalThreadId );
+        rtl_byte_sequence_release( pId->pCurrentId );
+        rtl_freeMemory( p );
+        fprintf( stderr, "id freed\n" );
+    }
+}
+
 static inline oslThreadKey getKey()
 {
     if( ! g_bInitialized )
@@ -101,7 +114,7 @@ static inline oslThreadKey getKey()
         ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
         if( ! g_bInitialized )
         {
-            g_key = osl_createThreadKey();
+            g_key = osl_createThreadKey( destructIdContainer );
             g_bInitialized = sal_True;
         }
     }
@@ -114,29 +127,6 @@ static inline void createLocalId( sal_Sequence **ppThreadId )
     *((sal_Int32*) ((*ppThreadId)->elements)) = osl_getThreadIdentifier(0);
 
     rtl_getGlobalProcessId( (sal_uInt8 * ) &( (*ppThreadId)->elements[4]) );
-}
-
-
-static void SAL_CALL destructIdContainer( void *p )
-{
-    if( p )
-    {
-        IdContainer *pId = (IdContainer * ) p;
-        rtl_byte_sequence_release( pId->pLocalThreadId );
-        rtl_byte_sequence_release( pId->pCurrentId );
-        rtl_freeMemory( p );
-    }
-}
-
-
-//--------------------------------------------------------
-// private hack as long as no proper threadlocal storage is provided
-//--------------------------------------------------------
-namespace cppu_threadpool {
-void SAL_CALL destructCurrentId()
-{
-    destructIdContainer( osl_getThreadKeyData( getKey() ) );
-}
 }
 
 

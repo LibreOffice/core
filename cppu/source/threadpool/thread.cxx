@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 12:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@ namespace cppu_threadpool {
         delete this;
     }
 
-    // hack during no proper threadlocalstorage support
-    void SAL_CALL destructCurrentId();
-
     void ORequestThread::run()
     {
         while ( m_pQueue )
@@ -165,6 +162,5 @@ namespace cppu_threadpool {
 
             cppu_threadpool::ThreadPool::getInstance()->waitInPool( this );
         }
-        destructCurrentId();
     }
 }
