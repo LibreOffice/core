@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 11:18:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,15 +257,18 @@ HF_IdlDocuTextDisplay::Display_TextToken( const csi::dsapi::DT_TextToken & i_rTo
             {   // only in original file
                 TheMessages().Out_TypeVsMemberMisuse(sLinkToken, Env().CurPageCe_AsText(), 0);
             }
-            else
-            {
-                Cerr() << "Error in documentation: Too many or too few tokens for a link in <member> or <type>." << Endl();
-                Cerr() << "  Link won't be created, but all tokens shown plain." << Endl();
-                Cerr() << "  \"" << sLinkToken << "\"";
-                if ( pScopeGivingCe != 0 )
-                    Cerr() << " in " << pScopeGivingCe->LocalName();
-                Cerr() << Endl();
-            }
+
+//          Would be duplicate, therefore we do nothing:
+//            else
+//            {
+//                Cerr() << "Error in documentation: Too many or too few tokens for a link in <member> or <type>." << Endl();
+//                Cerr() << "  Link won't be created, but all tokens shown plain." << Endl();
+//                Cerr() << "  \"" << sLinkToken << "\"";
+//                if ( pScopeGivingCe != 0 )
+//                    Cerr() << " in " << pScopeGivingCe->LocalName();
+//                Cerr() << Endl();
+//            }
+
             StopLinkGathering();
         }
     }   // endif (bGatherLink)
