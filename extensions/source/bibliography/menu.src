@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:43:43 $
+ *  last change: $Author: cd $ $Date: 2002-10-24 05:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ Menu RID_MAIN_MENU
         };
     MenuItem
     {
-        Identifier = MN_EXTRA ;
+        Identifier = ITEM_TOOLS_ID ;
         HelpID = MN_EXTRA ;
         Text = "E~xtras" ;
         Text [ English ] = "T~ools" ;
