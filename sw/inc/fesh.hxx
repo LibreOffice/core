@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:15:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,7 @@ public:
     //SS fuer Beschriftungen
     void InsertLabel( const SwLabelType eType, const String &rTxt,
                       const BOOL bBefore, const USHORT nId,
+                      const String& rCharacterStyle,
                       const BOOL bCpyBrd = TRUE );
 
     //Das Lineal will auch noch etwas von uns wissen.
