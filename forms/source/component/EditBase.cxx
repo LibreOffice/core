@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,7 @@ PropertyState OEditBaseModel::getPropertyStateByHandle(sal_Int32 nHandle)
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT:
-            if (!m_aDefaultText.len())
+            if (!m_aDefaultText.getLength())
                 eState = PropertyState_DEFAULT_VALUE;
             else
                 eState = PropertyState_DIRECT_VALUE;

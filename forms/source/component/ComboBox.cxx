@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 
     // Stringliste muß geleert werden, wenn eine Listenquelle gesetzt ist
     // dieses kann der Fall sein wenn im alive modus gespeichert wird
-    if (m_aListSource.len() && m_xAggregateSet.is())
+    if (m_aListSource.getLength() && m_xAggregateSet.is())
     {
         StringSequence aSequence;
         m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aSequence));
@@ -515,7 +515,7 @@ void OComboBoxModel::loadData()
     Reference<XStatement> xStmt;
     Reference<XResultSet> xListCursor;
 
-    if (!m_aListSource.len() || m_eListSourceType == ListSourceType_VALUELIST)
+    if (!m_aListSource.getLength() || m_eListSourceType == ListSourceType_VALUELIST)
         return;
 
     try
@@ -575,7 +575,7 @@ void OComboBoxModel::loadData()
                     disposeComponent(xComposer);
                 }
 
-                if (!aFieldName.len())
+                if (!aFieldName.getLength())
                     break;
 
                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
@@ -748,7 +748,7 @@ void OComboBoxModel::_loaded(const EventObject& rEvent)
     m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST) >>= m_aDesignModeStringItems;
 
     // Daten nur laden, wenn eine Listenquelle angegeben wurde
-    if (m_aListSource.len() && m_xCursor.is())
+    if (m_aListSource.getLength() && m_xCursor.is())
         loadData();
 }
 
@@ -774,7 +774,7 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
     OBoundControlModel::reloaded(aEvent);
 
     // reload data if we have a list source
-    if (m_aListSource.len() && m_xCursor.is())
+    if (m_aListSource.getLength() && m_xCursor.is())
         loadData();
 }
 

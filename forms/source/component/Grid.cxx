@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:09:57 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,11 +813,11 @@ PropertyState OGridControlModel::getPropertyStateByHandle(sal_Int32 nHandle)
                 eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_NAME:
-            if (!m_aFont.Name.len())
+            if (!m_aFont.Name.getLength())
                 eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_STYLENAME:
-            if (!m_aFont.StyleName.len())
+            if (!m_aFont.StyleName.getLength())
                 eState = PropertyState_DEFAULT_VALUE;
             break;
         case PROPERTY_ID_FONT_FAMILY:

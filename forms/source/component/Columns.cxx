@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 16:37:15 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,14 +180,14 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
         nTypeId = TYPE_TEXTFIELD;
     else
     {
-        sal_Int32 nPrefixPos = aModelName.search(aModelPrefix);
-        sal_Int32 nCampatiblePrefixPos = aModelName.search(aCompatibleModelPrefix);
+        sal_Int32 nPrefixPos = aModelName.indexOf(aModelPrefix);
+        sal_Int32 nCampatiblePrefixPos = aModelName.indexOf(aCompatibleModelPrefix);
         DBG_ASSERT( (nPrefixPos != -1) ||   (nCampatiblePrefixPos != -1),
                 "::getColumnTypeByModelName() : wrong servivce !");
 
         ::rtl::OUString aColumnType = (nPrefixPos != -1)
-            ? aModelName.copy(aModelPrefix.len())
-            : aModelName.copy(aCompatibleModelPrefix.len());
+            ? aModelName.copy(aModelPrefix.getLength())
+            : aModelName.copy(aCompatibleModelPrefix.getLength());
 
         const StringSequence& rColumnTypes = getColumnTypes();
         nTypeId = ::internal::findPos(aColumnType, rColumnTypes);
