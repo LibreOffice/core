@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:40:59 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,15 @@
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
 #endif
-#ifndef _SVX_BORDER_HXX
-#include <svx/border.hxx>
-#endif
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <svx/backgrnd.hxx>
-#endif
-#ifndef _SVX_GRFPAGE_HXX //autogen
-#include <svx/grfpage.hxx>
-#endif
+//CHINA001 #ifndef _SVX_BORDER_HXX
+//CHINA001 #include <svx/border.hxx>
+//CHINA001 #endif
+//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
+//CHINA001 #include <svx/backgrnd.hxx>
+//CHINA001 #endif
+//CHINA001 #ifndef _SVX_GRFPAGE_HXX //autogen
+//CHINA001 #include <svx/grfpage.hxx>
+//CHINA001 #endif
 
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
@@ -122,6 +122,9 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+#include <svx/svxids.hrc> //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
@@ -163,15 +166,17 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pFrame,
     if(nDlgType == DLG_FRM_GRF)
     {
         AddTabPage( TP_GRF_EXT, SwGrfExtPage::Create, 0 );
-        AddTabPage( RID_SVXPAGE_GRFCROP, SvxGrfCropPage::Create, 0 );
+        AddTabPage( RID_SVXPAGE_GRFCROP ); //CHINA001 AddTabPage( RID_SVXPAGE_GRFCROP, SvxGrfCropPage::Create, 0 );
     }
     if (nDlgType == DLG_FRM_STD)
     {
         AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     }
-    AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,    0);
     AddTabPage( TP_MACRO_ASSIGN, SfxMacroTabPage::Create, 0);
-    AddTabPage( TP_BORDER,   SvxBorderTabPage::Create,      0);
+    AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 ); //CHINA001 AddTabPage( TP_BORDER,    SvxBorderTabPage::Create,      0);
 
     if(bHTMLMode)
     {
@@ -215,6 +220,7 @@ SwFrmDlg::~SwFrmDlg()
 
 void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//CHINA001
     switch ( nId )
     {
     case TP_FRM_STD:
@@ -257,14 +263,21 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     case TP_BACKGROUND:
         if( DLG_FRM_STD == nDlgType )
         {
-            ((SvxBackgroundTabPage&)rPage).ShowSelector();
+            //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
             if(!bHTMLMode)
-                ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
+                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_ENABLE_TRANSPARENCY));
+                //CHINA001 ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
+            rPage.PageCreated(aSet);
         }
         break;
 
     case TP_BORDER:
-        ((SvxBorderTabPage&) rPage).SetSWMode(SW_BORDER_MODE_FRAME);
+        //CHINA001 ((SvxBorderTabPage&) rPage).SetSWMode(SW_BORDER_MODE_FRAME);
+        {
+            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
+            rPage.PageCreated(aSet);
+        }
         break;
     }
 }
