@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-01 07:06:44 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,12 +158,12 @@ extern ::rtl::OUString ConvertLikeToken(const OSQLParseNode* pTokenNode, const O
 //------------------------------------------------------------------
 OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUString& _rIdentifierQuote, const ::rtl::OUString& _rCatalogSep,
                                                             const Reference< XNumberFormatter > & _xFormatter, const Reference< XPropertySet > & _xField, const ::com::sun::star::lang::Locale& _rLocale,
-        const OParseContext* _pContext, sal_Bool _bIntl,  sal_Bool _bQuote, sal_Char _cDecSep,
+        const IParseContext* _pContext, sal_Bool _bIntl,  sal_Bool _bQuote, sal_Char _cDecSep,
         sal_Bool _bPredicate)
     :aIdentifierQuote(_rIdentifierQuote)
     ,aCatalogSeparator(_rCatalogSep)
     ,rLocale(_rLocale)
-    ,rContext(_pContext ? *_pContext : OSQLParser::s_aDefaultContext)
+    ,m_pContext(_pContext ? _pContext : &OSQLParser::s_aDefaultContext)
     ,bInternational(_bIntl)
     ,bQuote(_bQuote)
     ,cDecSep(_cDecSep)
@@ -214,7 +214,7 @@ OSQLParseNode::SQLParseNodeParameter::SQLParseNodeParameter(const ::rtl::OUStrin
 //-----------------------------------------------------------------------------
 void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                                    const Reference< XDatabaseMetaData > & xMeta,
-                                   const OParseContext* pContext,
+                                   const IParseContext* pContext,
                                    sal_Bool _bIntl,
                                    sal_Bool _bQuote) const
 {
@@ -231,7 +231,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               const Reference< XNumberFormatter > & xFormatter,
                                               const ::com::sun::star::lang::Locale& rIntl,
                                               sal_Char _cDec,
-                                              const OParseContext* pContext ) const
+                                              const IParseContext* pContext ) const
 {
 
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
@@ -247,7 +247,7 @@ void OSQLParseNode::parseNodeToPredicateStr(::rtl::OUString& rString,
                                               const Reference< XPropertySet > & _xField,
                                               const ::com::sun::star::lang::Locale& rIntl,
                                               sal_Char _cDec,
-                                              const OParseContext* pContext ) const
+                                              const IParseContext* pContext ) const
 {
 
     OSL_ENSURE(xFormatter.is(), "OSQLParseNode::parseNodeToPredicateStr:: no formatter!");
@@ -262,7 +262,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString,
                       const Reference< XNumberFormatter > & xFormatter,
                       const Reference< XPropertySet > & _xField,
                       const ::com::sun::star::lang::Locale& rIntl,
-                      const OParseContext* pContext,
+                      const IParseContext* pContext,
                       sal_Bool _bIntl,
                       sal_Bool _bQuote,
                       sal_Char _cDecSep,
@@ -636,13 +636,13 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                                         else
                                         {
                                             nErg = -1;
-                                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
                                         }
                                     }
                                     catch( Exception& )
                                     {
                                         nErg = -1;
-                                        m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
                                     }
                                 }
                             }
@@ -651,7 +651,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
 
                             break;
                         default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_COMPARE);
+                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
                     }
                     break;
                 case SQL_NODE_ACCESS_DATE:
@@ -684,24 +684,24 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                                         else
                                         {
                                             nErg = -1;
-                                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
                                         }
                                     }
                                     catch( Exception& )
                                     {
                                         nErg = -1;
-                                        m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
                                     }
                                 }
                             }
                             else
                             {
                                 nErg = -1;
-                                m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_DATE_COMPARE);
+                                m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_DATE_COMPARE);
                             }
                             break;
                         default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_COMPARE);
+                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
                     }
                     break;
                 case SQL_NODE_INTNUM:
@@ -734,7 +734,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                             nErg = buildNode_STR_NUM(pAppend,pLiteral,pCompare);
                             break;
                         default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_INT_COMPARE);
+                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_INT_COMPARE);
                     }
                     break;
                 case SQL_NODE_APPROXNUM:
@@ -766,7 +766,7 @@ sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode*
                             break;
                         case DataType::INTEGER:
                         default:
-                            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_REAL_COMPARE);
+                            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_REAL_COMPARE);
                     }
                     break;
             }
@@ -841,14 +841,14 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
                         break;
                     default:
                     {
-                        m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_VALUE_NO_LIKE);
+                        m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_VALUE_NO_LIKE);
                         m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString::createFromAscii("#1")),2,pLiteral->getTokenValue());
                     }
                 }
             }
             break;
         default:
-            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_FIELD_NO_LIKE);
+            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_FIELD_NO_LIKE);
     }
     return nErg;
 }
@@ -1034,7 +1034,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         if (!m_sErrorMessage.getLength())
             m_sErrorMessage = s_pScanner->getErrorMessage();
         if (!m_sErrorMessage.getLength())
-            m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
+            m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_GENERAL);
 
         rErrorMessage = m_sErrorMessage;
 
@@ -1067,7 +1067,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 }
 //=============================================================================
 //-----------------------------------------------------------------------------
-OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const OParseContext* _pContext)
+OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const IParseContext* _pContext)
            :m_pContext(_pContext)
            ,m_pParseTree(NULL)
            ,m_pLocale(NULL)

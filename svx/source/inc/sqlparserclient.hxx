@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparserclient.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-12 14:15:27 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef SVX_DBTOOLSCLIENT_HXX
 #include "dbtoolsclient.hxx"
 #endif
+#ifndef SVX_QUERYDESIGNCONTEXT_HXX
+#include "ParseContext.hxx"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -78,6 +81,7 @@ namespace svxform
     //= OSQLParserClient
     //====================================================================
     class OSQLParserClient : public ODbtoolsClient
+                            ,public ::svxform::OParseContextClient
     {
     private:
         //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
@@ -118,6 +122,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/09/12 14:15:27  fs
+ *  #97420# (on behalf of BerryJia@openoffice.org) lazy construction, to load the dbtools lib only if needed
+ *
  *  Revision 1.1  2001/07/25 13:35:23  fs
  *  initial checkin - base class for load-on-demand usage of the OSQLParser
  *

@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.16 2002-03-06 13:07:48 hjs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.17 2002-09-27 11:10:30 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hjs $ $Date: 2002-03-06 13:07:48 $ $Revision: 1.16 $
+//	$Author: oj $ $Date: 2002-09-27 11:10:30 $ $Revision: 1.17 $
 //
 // Description:
 //
@@ -113,6 +113,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Aa][Nn][Yy]									{SQL_NEW_KEYWORD(SQL_TOKEN_ANY); return SQL_TOKEN_ANY; }
 [Aa][Ss]										{SQL_NEW_KEYWORD(SQL_TOKEN_AS); return SQL_TOKEN_AS; }
 [Aa][Ss][Cc]									{SQL_NEW_KEYWORD(SQL_TOKEN_ASC); return SQL_TOKEN_ASC; }
+
 [Aa][Ss][Cc][Ii][Ii]							{SQL_NEW_KEYWORD(SQL_TOKEN_ASC); return SQL_TOKEN_ASCII; }
 [Aa][Tt]										{SQL_NEW_KEYWORD(SQL_TOKEN_AT); return SQL_TOKEN_AT; }
 [Aa][Uu][Tt][Hh][Oo][Rr][Ii][Zz][Aa][Tt][Ii][Oo][Nn]   		{SQL_NEW_KEYWORD(SQL_TOKEN_AUTHORIZATION); return SQL_TOKEN_AUTHORIZATION; }
@@ -352,8 +353,11 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 	sal_Int32 ch;
 	static sal_Int32 BUFFERSIZE = 256;
 	static sal_Char* Buffer = 0;
+
 	if(!Buffer)
+
 		Buffer = new sal_Char[BUFFERSIZE];
+
 	
 	sal_Char *s = Buffer;
 	sal_Int32 nPos = 0;
@@ -373,17 +377,23 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 				{
 					case 0:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+
 						delete Buffer;
+
 						Buffer = NULL;
 						return SQL_TOKEN_NAME;											
 					case 1:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+
 						delete Buffer;
+
 						Buffer = NULL;
 						return SQL_TOKEN_STRING;
 					case 2:
 						SQL_NEW_NODE(::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
+
 						delete Buffer;
+
 						Buffer = NULL;
 						return SQL_TOKEN_ACCESS_DATE;
 				}				
@@ -423,11 +433,57 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
 	}
 	*s = '\0';		 		
 	YY_FATAL_ERROR("Unterminated name string"); 
+
 	delete Buffer;
+
 	Buffer = NULL;
 	return SQL_TOKEN_INVALIDSYMBOL;		
 }
 
+
+
+sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
+
+{
+
+	sal_Int32 nTokenID = 0;
+
+	switch( _eKeyCode )
+
+	{
+
+		case IParseContext::KEY_LIKE:		nTokenID = SQL_TOKEN_LIKE;		break;
+
+		case IParseContext::KEY_NOT:		nTokenID = SQL_TOKEN_NOT;		break;
+
+		case IParseContext::KEY_NULL:		nTokenID = SQL_TOKEN_NULL;		break;
+
+		case IParseContext::KEY_TRUE:		nTokenID = SQL_TOKEN_TRUE;		break;
+
+		case IParseContext::KEY_FALSE:		nTokenID = SQL_TOKEN_FALSE;		break;
+
+		case IParseContext::KEY_IS:			nTokenID = SQL_TOKEN_IS;		break;
+
+		case IParseContext::KEY_BETWEEN:	nTokenID = SQL_TOKEN_BETWEEN;	break;
+
+		case IParseContext::KEY_OR:			nTokenID = SQL_TOKEN_OR;		break;
+
+		case IParseContext::KEY_AND:		nTokenID = SQL_TOKEN_AND;		break;
+
+		case IParseContext::KEY_AVG:		nTokenID = SQL_TOKEN_AVG;		break;
+
+		case IParseContext::KEY_COUNT:		nTokenID = SQL_TOKEN_COUNT;		break;
+
+		case IParseContext::KEY_MAX:		nTokenID = SQL_TOKEN_MAX;		break;
+
+		case IParseContext::KEY_MIN:		nTokenID = SQL_TOKEN_MIN;		break;
+
+		case IParseContext::KEY_SUM:		nTokenID = SQL_TOKEN_SUM;		break;
+
+	}
+	return nTokenID;
+
+}
 /*
  * Read SQL Name literal
  * Valid Names or internatioanl keywords:
@@ -435,24 +491,29 @@ sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
  */
 sal_Int32 gatherName(const sal_Char* text)
 {
+	sal_Int32 nToken;
+
 	OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
-	sal_Int32 nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
-	switch (nToken)
+
+	IParseContext::InternationalKeyCode eKeyCode = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
+	switch (eKeyCode)
 	{
-		case SQL_TOKEN_LIKE:
-		case SQL_TOKEN_NOT:
-		case SQL_TOKEN_NULL:
-		case SQL_TOKEN_TRUE:
-		case SQL_TOKEN_FALSE:
-		case SQL_TOKEN_IS:
-		case SQL_TOKEN_BETWEEN:
-		case SQL_TOKEN_OR:
-		case SQL_TOKEN_AND:
-		case SQL_TOKEN_COUNT:
-		case SQL_TOKEN_AVG:
-		case SQL_TOKEN_MAX:
-		case SQL_TOKEN_MIN:
-		case SQL_TOKEN_SUM:
+		case IParseContext::KEY_LIKE:
+		case IParseContext::KEY_NOT:
+		case IParseContext::KEY_NULL:
+		case IParseContext::KEY_TRUE:
+		case IParseContext::KEY_FALSE:
+		case IParseContext::KEY_IS:
+		case IParseContext::KEY_BETWEEN:
+		case IParseContext::KEY_OR:
+		case IParseContext::KEY_AND:
+		case IParseContext::KEY_COUNT:
+		case IParseContext::KEY_AVG:
+		case IParseContext::KEY_MAX:
+		case IParseContext::KEY_MIN:
+		case IParseContext::KEY_SUM:
+
+			nToken = mapEnumToToken(eKeyCode);
 			SQL_NEW_KEYWORD(nToken); 
 			return nToken;
 		default:
@@ -467,44 +528,81 @@ sal_Int32 gatherName(const sal_Char* text)
 */
 sal_Int32 gatherNamePre(const sal_Char* text)
 { 
+
+	sal_Int32 nToken;
 	OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
-	sal_Int32 nToken = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
-	switch (nToken)
+	IParseContext::InternationalKeyCode eKeyCode = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
+	switch (eKeyCode)
 	{
-		case SQL_TOKEN_LIKE:
-		case SQL_TOKEN_NOT:
-		case SQL_TOKEN_NULL:
-		case SQL_TOKEN_TRUE:
-		case SQL_TOKEN_FALSE:
-		case SQL_TOKEN_IS:
-		case SQL_TOKEN_BETWEEN:
-		case SQL_TOKEN_OR:
-		case SQL_TOKEN_AND:
-		case SQL_TOKEN_COUNT:
-		case SQL_TOKEN_AVG:
-		case SQL_TOKEN_MAX:
-		case SQL_TOKEN_MIN:
-		case SQL_TOKEN_SUM:
-			SQL_NEW_KEYWORD(nToken); 
+		case IParseContext::KEY_LIKE:
+
+		case IParseContext::KEY_NOT:
+
+		case IParseContext::KEY_NULL:
+
+		case IParseContext::KEY_TRUE:
+
+		case IParseContext::KEY_FALSE:
+
+		case IParseContext::KEY_IS:
+
+		case IParseContext::KEY_BETWEEN:
+
+		case IParseContext::KEY_OR:
+
+		case IParseContext::KEY_AND:
+
+		case IParseContext::KEY_COUNT:
+
+		case IParseContext::KEY_AVG:
+
+		case IParseContext::KEY_MAX:
+
+		case IParseContext::KEY_MIN:
+
+		case IParseContext::KEY_SUM:
+
+			nToken = mapEnumToToken(eKeyCode);
+			SQL_NEW_KEYWORD(nToken);
+
 			break;
+
 		default:
+
 		// we need a special handling for parameter
+
 		{
+
 			::rtl::OString sStmt = xxx_pGLOBAL_SQLSCAN->getStatement();
+
 			sal_Int32 nLength = strlen(text);
+
 			sal_Int32 nPos = sStmt.getLength() - nLength - 1;
+
 			if (sStmt.getStr()[nPos] == ':')
+
 			{
+
 				SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
+
 				nToken = SQL_TOKEN_NAME; 				
+
 			}
+
 			else
+
 			{
+
 				SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+
 				nToken = SQL_TOKEN_STRING;			
+
 			}
+
 		}
+
 	}
+
 	return nToken;
 }
 
@@ -525,6 +623,7 @@ OSQLScanner::OSQLScanner()
 			, m_pContext(NULL)
 			, m_nRule(0) // 0 is INITIAL
 {
+
 	IN_SQLyyerror = false;
 }
 
@@ -536,9 +635,14 @@ OSQLScanner::~OSQLScanner()
 void OSQLScanner::SQLyyerror(sal_Char *fmt)
 {
 
+
+
 	if(IN_SQLyyerror)
+
 		return;
+
 	IN_SQLyyerror = true;
+
 
 	OSL_ENSURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
 	m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
@@ -546,55 +650,100 @@ void OSQLScanner::SQLyyerror(sal_Char *fmt)
 	{
 		m_sErrorMessage += ::rtl::OUString::createFromAscii(": ");
 		
+
 		::rtl::OUString aError;
+
 		static sal_Int32 BUFFERSIZE = 256;
+
 		static sal_Char* Buffer = 0;
+
 		if(!Buffer)
+
 			Buffer = new sal_Char[BUFFERSIZE];
 
+
+
 		sal_Char *s = Buffer;
+
 		sal_Int32 nPos = 1;
+
 		sal_Int32 ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
+
 		*s++ = ch;
+
 		while ((ch = yyinput()) != EOF) 
+
 		{
+
 			if (ch == ' ') 
+
 			{
+
 				if ((ch = yyinput()) != ' ') 
+
 				{
+
 					if (ch != EOF)
+
 						unput(ch);
+
 				}
+
 				*s = '\0';
+
 				aError = ::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8);
+
 				break;
+
 			}
+
 			else
+
 			{
+
 				*s++ = ch;
+
 				if (++nPos == BUFFERSIZE)
+
 				{
+
 					::rtl::OString aBuf(Buffer);
+
 					delete Buffer;
+
 					BUFFERSIZE *=2;
+
 					Buffer = new sal_Char[BUFFERSIZE];
+
 					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
+
 						*Buffer = aBuf.getStr()[i];
+
 					s = &Buffer[nPos];
+
 				}
+
 			}
+
 		}
+
 		m_sErrorMessage += aError;
+
 		delete Buffer;
+
 		Buffer = NULL;
 	}
+
 	IN_SQLyyerror = false;
+
 	YY_FLUSH_BUFFER;
+
 }
 
 //------------------------------------------------------------------------------
-void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const OParseContext* pContext, sal_Bool bInternational)
+void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational)
 {
+
 	YY_FLUSH_BUFFER;
 	BEGIN(m_nRule);
 
@@ -603,6 +752,7 @@ void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const OPars
 	m_nCurrentPos	= 0;
 	m_bInternational = bInternational;
 	m_pContext		= pContext;
+
 }
 
 //------------------------------------------------------------------------------
@@ -612,10 +762,10 @@ sal_Int32 OSQLScanner::SQLyygetc(void)
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
+IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
 {		
 	OSL_ENSURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");			
-	return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken)) : 0;	
+	return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken) ) : IParseContext::KEY_NONE;	
 }
 // -------------------------------------------------------------------------
 sal_Int32	OSQLScanner::GetCurrentRule() const { return m_nRule; }
@@ -637,6 +787,7 @@ sal_Int32 OSQLScanner::SQLlex()
 /*------------------------------------------------------------------------
 
 	$Log: not supported by cvs2svn $
+	
 	Revision 1.2  2000/08/01 14:26:02  oj
 	modified
 	

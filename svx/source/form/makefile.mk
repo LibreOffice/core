@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: fs $ $Date: 2002-05-08 07:38:58 $
+#   last change: $Author: oj $ $Date: 2002-09-27 11:21:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,8 +90,9 @@ SRC1FILES= \
 
 
 SLOFILES = \
-    $(SLO)$/dbcharsethelper.obj      \
-    $(SLO)$/typeconversionclient.obj      \
+    $(SLO)$/dbcharsethelper.obj			\
+    $(SLO)$/ParseContext.obj			\
+    $(SLO)$/typeconversionclient.obj    \
     $(SLO)$/confirmdelete.obj      \
     $(SLO)$/dbtoolsclient.obj      \
     $(SLO)$/sqlparserclient.obj      \

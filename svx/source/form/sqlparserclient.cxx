@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparserclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-12 14:15:52 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef SVX_SQLPARSERCLIENT_HXX
 #include "sqlparserclient.hxx"
 #endif
+#include "ParseContext.hxx"
 
 //........................................................................
 namespace svxform
@@ -86,7 +87,7 @@ namespace svxform
         if (!getFactory().is())
             ODbtoolsClient::create();
         if (getFactory().is())
-             m_xParser = getFactory()->createSQLParser(m_xORB);
+             m_xParser = getFactory()->createSQLParser(m_xORB,getParseContext());
     }
 
 //........................................................................
@@ -96,6 +97,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/09/12 14:15:52  fs
+ *  #97420# (on behalf of BerryJia@openoffice.org) lazy construction, to load the dbtools lib only if needed
+ *
  *  Revision 1.1  2001/07/25 13:35:31  fs
  *  initial checkin - base class for load-on-demand usage of the OSQLParser
  *

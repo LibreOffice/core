@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-13 14:54:24 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,9 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    ::rtl::Reference< simple::ISQLParser > ODataAccessToolsFactory::createSQLParser(const Reference< XMultiServiceFactory >& _rxServiceFactory) const
+    ::rtl::Reference< simple::ISQLParser > ODataAccessToolsFactory::createSQLParser(const Reference< XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext) const
     {
-        return new OSimpleSQLParser(_rxServiceFactory);
+        return new OSimpleSQLParser(_rxServiceFactory,_pContext);
     }
 
 //........................................................................
@@ -146,6 +146,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/13 14:54:24  fs
+ *  #90761# +createCharsetHelper
+ *
  *  Revision 1.1  2001/07/25 13:28:12  fs
  *  initial checkin - main factory for load-on-demand usage of DBTOOLS
  *

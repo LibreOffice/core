@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenode_s.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:29:15 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ namespace connectivity
 
         // ISQLParseNode
         virtual void parseNodeToStr(::rtl::OUString& _rString,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
+            const IParseContext* _pContext
         ) const;
 
         virtual void parseNodeToPredicateStr(::rtl::OUString& _rString,
@@ -100,7 +101,8 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
             const ::com::sun::star::lang::Locale& _rIntl,
-            const sal_Char _cDecSeparator
+            const sal_Char _cDecSeparator,
+            const IParseContext* _pContext
         ) const;
 
         // disambiguate IReference
@@ -117,6 +119,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:29:15  fs
+ *  initial checkin - main factory for load-on-demand usage of OSQLParseNode
+ *
  *
  *  Revision 1.0 24.07.01 16:32:42  fs
  ************************************************************************/

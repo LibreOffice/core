@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.40 2002-05-14 09:30:32 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.41 2002-09-27 11:10:30 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2002-05-14 09:30:32 $ $Revision: 1.40 $
+//	$Author: oj $ $Date: 2002-09-27 11:10:30 $ $Revision: 1.41 $
 //
 // Description:
 //
@@ -3104,6 +3104,7 @@ IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NULL, "NULL");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_TRUE, "True");
+
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_FALSE, "False");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_IS, "IS");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_BETWEEN, "BETWEEN");
@@ -3178,9 +3179,9 @@ OParseContext::~OParseContext()
 }
 
 //-----------------------------------------------------------------------------
-OParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::OString& rToken) const
+IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::OString& rToken) const
 {
-	static OParseContext::InternationalKeyCode Intl_TokenID[] =
+	static IParseContext::InternationalKeyCode Intl_TokenID[] =
 	{
 		KEY_LIKE, KEY_NOT, KEY_NULL, KEY_TRUE,
 		KEY_FALSE, KEY_IS, KEY_BETWEEN, KEY_OR,
@@ -3191,6 +3192,7 @@ OParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 	sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
 	for (sal_uInt32 i = 0; i < nCount; i++)
 	{
+
 		::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
 		if (rToken.equalsIgnoreAsciiCase(aKey))
 			return Intl_TokenID[i];
@@ -3200,33 +3202,62 @@ OParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 }
 
 //------------------------------------------------------------------------------
+
 static Locale& impl_getLocaleInstance( )
+
 {
+
 	static Locale s_aLocale(
+
 		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) ),
+
 		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) ),
+
 		::rtl::OUString( )
+
 	);
+
 	return s_aLocale;
+
 }
 
+
+
 //------------------------------------------------------------------------------
+
 void OParseContext::setDefaultLocale( const ::com::sun::star::lang::Locale& _rLocale )
+
 {
+
 	impl_getLocaleInstance() = _rLocale;
+
 }
 
+
+
 //------------------------------------------------------------------------------
+
 Locale OParseContext::getPreferredLocale( ) const
+
 {
+
 	return getDefaultLocale();
+
 }
 
+
+
 //------------------------------------------------------------------------------
+
 const Locale& OParseContext::getDefaultLocale()
+
 {
+
 	return impl_getLocaleInstance();
+
 }
+
+
 
 //==========================================================================
 //= misc
@@ -3346,7 +3377,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 		if (!m_sErrorMessage.getLength())
 			m_sErrorMessage = s_pScanner->getErrorMessage();
 		if (!m_sErrorMessage.getLength())
-			m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_GENERAL);
+			m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_GENERAL);
 
 		rErrorMessage = m_sErrorMessage;
 
@@ -3378,11 +3409,51 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 	}
 }
 //-----------------------------------------------------------------------------
-::rtl::OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const OParseContext* pContext)
+::rtl::OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext)
 {
 	::rtl::OString aStr;
 	if (pContext)
-		aStr = pContext->getIntlKeywordAscii((OParseContext::InternationalKeyCode)nTokenID);
+
+	{
+
+		IParseContext::InternationalKeyCode eKeyCode = IParseContext::KEY_NONE;
+
+		switch( nTokenID )
+
+		{
+
+			case SQL_TOKEN_LIKE: eKeyCode = IParseContext::KEY_LIKE; break;
+
+			case SQL_TOKEN_NOT: eKeyCode = IParseContext::KEY_NOT; break;
+
+			case SQL_TOKEN_NULL: eKeyCode = IParseContext::KEY_NULL; break;
+
+			case SQL_TOKEN_TRUE: eKeyCode = IParseContext::KEY_TRUE; break;
+
+			case SQL_TOKEN_FALSE: eKeyCode = IParseContext::KEY_FALSE; break;
+
+			case SQL_TOKEN_IS: eKeyCode = IParseContext::KEY_IS; break;
+
+			case SQL_TOKEN_BETWEEN: eKeyCode = IParseContext::KEY_BETWEEN; break;
+
+			case SQL_TOKEN_OR: eKeyCode = IParseContext::KEY_OR; break;
+
+			case SQL_TOKEN_AND: eKeyCode = IParseContext::KEY_AND; break;
+
+			case SQL_TOKEN_AVG: eKeyCode = IParseContext::KEY_AVG; break;
+
+			case SQL_TOKEN_COUNT: eKeyCode = IParseContext::KEY_COUNT; break;
+
+			case SQL_TOKEN_MAX: eKeyCode = IParseContext::KEY_MAX; break;
+
+			case SQL_TOKEN_MIN: eKeyCode = IParseContext::KEY_MIN; break;
+
+			case SQL_TOKEN_SUM: eKeyCode = IParseContext::KEY_SUM; break;
+
+		}
+		aStr = pContext->getIntlKeywordAscii(eKeyCode);
+
+	}
 
 	if (!aStr.getLength())
 	{
@@ -3707,7 +3778,7 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 	}
 	if(SQL_ISRULE(pLiteral,term) || SQL_ISRULE(pLiteral,value_exp_primary))
 	{
-		m_sErrorMessage = m_pContext->getErrorMessage(OParseContext::ERROR_INVALID_COMPARE);
+		m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_INVALID_COMPARE);
 		return 0;
 	}
 	return 1;
@@ -3783,6 +3854,7 @@ int OSQLParser::SQLlex()
 /*------------------------------------------------------------------------
 
 	$Log: not supported by cvs2svn $
+	
 	Revision 1.34.8.1.2.1  2002/05/10 07:53:46  oj
 	#98357# enable = TRUE
 	

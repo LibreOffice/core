@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser_s.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:34:54 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ namespace connectivity
     //= OSimpleSQLParser
     //================================================================
     //----------------------------------------------------------------
-    OSimpleSQLParser::OSimpleSQLParser(const Reference< XMultiServiceFactory >& _rxServiceFactory)
-        :m_aFullParser(_rxServiceFactory)
+    OSimpleSQLParser::OSimpleSQLParser(const Reference< XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext)
+        :m_aFullParser(_rxServiceFactory,_pContext)
     {
     }
 
@@ -101,7 +101,7 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    const OParseContext& OSimpleSQLParser::getContext() const
+    const IParseContext& OSimpleSQLParser::getContext() const
     {
         return m_aFullParser.getContext();
     }
@@ -124,6 +124,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/06 07:34:54  fs
+ *  #90560# no OSimpleParseNode if we do not have a OSQLParseNode
+ *
  *  Revision 1.1  2001/07/25 13:28:40  fs
  *  initial checkin - main factory for load-on-demand usage of OSQLParser
  *

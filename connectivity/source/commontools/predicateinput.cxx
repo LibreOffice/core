@@ -2,9 +2,9 @@
  *
  *  $RCSfile: predicateinput.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 07:59:42 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ namespace dbtools
 
     //---------------------------------------------------------------------
     OPredicateInputController::OPredicateInputController(
-        const Reference< XMultiServiceFactory >& _rxORB, const Reference< XConnection >& _rxConnection, const OParseContext* _pParseContext )
+        const Reference< XMultiServiceFactory >& _rxORB, const Reference< XConnection >& _rxConnection, const IParseContext* _pParseContext )
         :m_xORB( _rxORB )
         ,m_xConnection( _rxConnection )
         ,m_aParser( m_xORB, _pParseContext )
@@ -235,7 +235,7 @@ namespace dbtools
                 ||  ( DataType::DECIMAL == nType )
                 )
             {
-                const OParseContext& rParseContext = m_aParser.getContext();
+                const IParseContext& rParseContext = m_aParser.getContext();
                 // get the separators for the locale of our parse context
                 sal_Unicode nCtxDecSep;
                 sal_Unicode nCtxThdSep;
@@ -309,7 +309,7 @@ namespace dbtools
 
             if ( pParseNode )
             {
-                const OParseContext& rParseContext = m_aParser.getContext();
+                const IParseContext& rParseContext = m_aParser.getContext();
                 sal_Unicode nDecSeparator, nThousandSeparator;
                 getSeparatorChars( rParseContext.getPreferredLocale(), nDecSeparator, nThousandSeparator );
 
@@ -424,6 +424,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/09/26 07:59:42  oj
+ *  #103685# correct index of replaceAt call
+ *
  *  Revision 1.1  2002/04/09 14:31:04  fs
  *  initial checkin - helper class for inputting predicate values
  *

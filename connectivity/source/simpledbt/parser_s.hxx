@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser_s.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:28:46 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ namespace connectivity
         OSQLParser      m_aFullParser;
 
     public:
-        OSimpleSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory);
+        OSimpleSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext);
 
         // ISQLParser
         virtual ::rtl::Reference< simple::ISQLParseNode > predicateTree(
@@ -98,7 +98,7 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
         ) const;
 
-        virtual const OParseContext& getContext() const;
+        virtual const IParseContext& getContext() const;
 
         // disambiguate IReference
         virtual oslInterlockedCount SAL_CALL acquire();
@@ -114,6 +114,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:28:46  fs
+ *  initial checkin - main factory for load-on-demand usage of OSQLParser
+ *
  *
  *  Revision 1.0 24.07.01 16:32:42  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenode_s.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:29:09 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,17 +111,17 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    void OSimpleParseNode::parseNodeToStr(::rtl::OUString& _rString, const Reference< XDatabaseMetaData >& _rxMeta) const
+    void OSimpleParseNode::parseNodeToStr(::rtl::OUString& _rString, const Reference< XDatabaseMetaData >& _rxMeta,const IParseContext* _pContext) const
     {
-        m_pFullNode->parseNodeToStr(_rString, _rxMeta);
+        m_pFullNode->parseNodeToStr(_rString, _rxMeta,_pContext);
     }
 
     //----------------------------------------------------------------
     void OSimpleParseNode::parseNodeToPredicateStr(::rtl::OUString& _rString, const Reference< XDatabaseMetaData >& _rxMeta,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField,
-        const Locale& _rIntl, const sal_Char _cDecSeparator) const
+        const Locale& _rIntl, const sal_Char _cDecSeparator,const IParseContext* _pContext) const
     {
-        m_pFullNode->parseNodeToPredicateStr(_rString, _rxMeta, _rxFormatter, _rxField, _rIntl, _cDecSeparator);
+        m_pFullNode->parseNodeToPredicateStr(_rString, _rxMeta, _rxFormatter, _rxField, _rIntl, _cDecSeparator,_pContext);
     }
 
 //........................................................................
@@ -131,6 +131,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:29:09  fs
+ *  initial checkin - main factory for load-on-demand usage of OSQLParseNode
+ *
  *
  *  Revision 1.0 24.07.01 16:32:42  fs
  ************************************************************************/

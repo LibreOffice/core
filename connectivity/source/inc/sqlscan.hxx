@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlscan.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:03:03 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,12 @@
 
 #include <stdarg.h>
 
+#ifndef CONNECTIVITY_IPARSECONTEXT_HXX
+#include "connectivity/IParseContext.hxx"
+#endif
+
 namespace connectivity
 {
-    class OParseContext;
     //==========================================================================
     //= OSQLScanner
     //==========================================================================
@@ -73,7 +76,7 @@ namespace connectivity
     */
     class OSQLScanner
     {
-        const OParseContext*    m_pContext;                 // context for parse, knows all international stuff
+        const IParseContext*    m_pContext;                 // context for parse, knows all international stuff
         ::rtl::OString          m_sStatement;               // statement to parse
         ::rtl::OUString         m_sErrorMessage;
 
@@ -98,10 +101,10 @@ namespace connectivity
         virtual void SQLyyerror(char *fmt);
         virtual void output(sal_Int32) { OSL_ASSERT("Internal error in sdblex.l: output not possible"); }
         virtual void ECHO(void) { OSL_ASSERT("Internal error in sdblex.l: ECHO not possible"); }
-        virtual sal_Int32 getInternationalTokenID(const char* sToken) const;
+        virtual IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning
-        void prepareScan(const ::rtl::OUString & rNewStatement, const OParseContext* pContext, sal_Bool bInternational);
+        void prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational);
         const ::rtl::OUString& getErrorMessage() const {return m_sErrorMessage;}
         ::rtl::OString getStatement() const { return m_sStatement; }
 
