@@ -21637,3 +21637,8 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?IsOf@SvxViewHint@@SAEP6APAXXZ@Z
 ?StaticType@SvxViewHint@@SAP6APAXXZXZ
 ?Type@SvxViewHint@@UBEP6APAXXZXZ
+?DataChanged@FillControl@@EAEXABVDataChangedEvent@@@Z
+?DataChanged@SvxColorBox@@MAEXABVDataChangedEvent@@@Z
+?DataChanged@SvxLineBox@@MAEXABVDataChangedEvent@@@Z
+?DataChanged@SvxMetricField@@MAEXABVDataChangedEvent@@@Z
+?__query@?$Reference@VXAccessibleEventListener@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@CAPAVXAccessibleEventListener@accessibility@345drafts@@PAVXInterface@2345@@Z
