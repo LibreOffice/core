@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hiodev.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 16:39:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
  *
  ************************************************************************/
 
-/* $Id: hiodev.cpp,v 1.2 2004-06-28 16:39:42 hjs Exp $ */
+/* $Id: hiodev.cpp,v 1.3 2005-02-16 18:16:15 vg Exp $ */
 
 #ifdef __GNUG__
 #pragma implementation "hiodev.h"
@@ -212,7 +212,7 @@ int HStreamIODev::state(void) const
 }
 
 
-// zlib 包访 何盒
+/* zlib 包访 何盒 */
 bool HStreamIODev::setCompressed(bool flag)
 {
     compressed = flag;
