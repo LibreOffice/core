@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:08:29 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,8 +680,6 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                 if( pView->InsertObject(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                 {
-                    pObj->SetOleLink(pInfoObj);
-
                     if (pOleDlg && pOleDlg->IsCreateNew())
                     {
                         pView->HideMarkHdl(NULL);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #ifndef SVX_LIGHT
 
-#ifndef _LNKBASE_HXX //autogen
+#ifndef _LNKBASE_HXX
 #include <so3/lnkbase.hxx>
 #endif
 
@@ -72,7 +72,7 @@ class SdPage;
 
 
 
-class SdPageLink : public SvBaseLink
+class SdPageLink : public ::so3::SvBaseLink
 {
     SdPage* pPage;
 
@@ -81,7 +81,8 @@ public:
     virtual ~SdPageLink();
 
     virtual void Closed();
-    virtual void DataChanged(SvData& rData);
+    virtual void DataChanged( const String& ,
+                              const ::com::sun::star::uno::Any & );
     FASTBOOL     Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pglink.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:46 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 SdPageLink::SdPageLink(SdPage* pPg, const String& rFileName,
                        const String& rBookmarkName) :
-    SvBaseLink(LINKUPDATE_ONCALL, FORMAT_FILE),
+    ::so3::SvBaseLink(LINKUPDATE_ONCALL, FORMAT_FILE),
     pPage(pPg)
 {
     pPage->SetFileName(rFileName);
@@ -103,7 +103,8 @@ __EXPORT SdPageLink::~SdPageLink()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageLink::DataChanged(SvData& rData)
+void __EXPORT SdPageLink::DataChanged( const String& ,
+                                       const ::com::sun::star::uno::Any& )
 {
     SdDrawDocument* pDoc = (SdDrawDocument*) pPage->GetModel();
     SvxLinkManager* pLinkManager = pDoc!=NULL ? pDoc->GetLinkManager() : NULL;
@@ -117,7 +118,7 @@ void __EXPORT SdPageLink::DataChanged(SvData& rData)
         String aFileName;
         String aBookmarkName;
         String aFilterName;
-        pLinkManager->GetDisplayNames(*this,0, &aFileName, &aBookmarkName,
+        pLinkManager->GetDisplayNames( this,0, &aFileName, &aBookmarkName,
                                       &aFilterName);
         pPage->SetFileName(aFileName);
         pPage->SetBookmarkName(aBookmarkName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ FuLink::FuLink( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-    SvBaseLinksDialog aLinkDlg( NULL, pLinkManager );
+    ::so3::SvBaseLinksDialog aLinkDlg( NULL, pLinkManager );
     aLinkDlg.Execute();
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_MANAGE_LINKS );
 }

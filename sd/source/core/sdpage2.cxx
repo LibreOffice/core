@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-30 15:25:02 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 20:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,7 +700,7 @@ void SdPage::DisconnectLink()
         * Abmelden
         * (Bei Remove wird *pGraphicLink implizit deleted)
         **********************************************************************/
-        pLinkManager->Remove(*pPageLink);
+        pLinkManager->Remove(pPageLink);
         pPageLink=NULL;
     }
 }
