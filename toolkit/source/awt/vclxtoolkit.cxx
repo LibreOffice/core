@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2002-04-09 08:28:42 $
+ *  last change: $Author: as $ $Date: 2002-05-27 09:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,17 +993,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     Window* pChildWindow = NULL;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
-        sal_Int8 MyProcessId[16];
-        rtl_getGlobalProcessId( (sal_uInt8*)MyProcessId );
-
-        const sal_Int8* pOtherProcessId = ProcessId.getConstArray();
-
-        sal_Bool bSameProcess = sal_True;
-        for ( int n = 0; bSameProcess && ( n < 16 ); n++ )
-            bSameProcess = ( MyProcessId[n] == pOtherProcessId[n] );
-
-        if ( bSameProcess )
-        {
 #if defined UNX
             sal_Int32 x11_id;
             if ( Parent >>= x11_id )
@@ -1012,6 +1001,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 SystemParentData aParentData;
                 aParentData.nSize = sizeof( aParentData );
                 aParentData.aWindow = x11_id;
+                osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
                 pChildWindow = new WorkWindow( &aParentData );
             }
 #elif defined WNT
@@ -1022,10 +1012,10 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 SystemParentData aParentData;
                 aParentData.nSize = sizeof( aParentData );
                 aParentData.hWnd = (HWND)hWnd;
+                osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
                 pChildWindow = new WorkWindow( &aParentData );
             }
 #endif
-        }
     }
     else if (nSystemType == com::sun::star::lang::SystemDependent::SYSTEM_JAVA)
     {
@@ -1037,6 +1027,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     if ( pChildWindow )
     {
         VCLXWindow* pPeer = new VCLXWindow;
+        osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
         pPeer->SetWindow( pChildWindow );
         xPeer = pPeer;
     }
