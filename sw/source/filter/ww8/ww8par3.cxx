@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-27 16:04:28 $
+ *  last change: $Author: cmc $ $Date: 2002-07-17 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,14 +483,6 @@ sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     return 0;                           // Sprm not found
 }
 
-class ListIdCompare : public
-    ::std::binary_function<const WW8LSTInfo *, const WW8LSTInfo *, bool>
-{
-public:
-    bool operator()(const WW8LSTInfo *pOne, const WW8LSTInfo *pTwo) const
-    { return pOne->nIdLst == pTwo->nIdLst; }
-};
-
 class ListWithId : public ::std::unary_function<const WW8LSTInfo *, bool>
 {
 private:
@@ -965,10 +957,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
     // Arrays anlegen
     pLFOInfos = new WW8LFOInfos;
-    sal_uInt16 nLfo;
     sal_Bool   bLVLOk=sal_True;
     sal_uInt8  aBits1;
-    String sPostfix;
 
     long nOriginalPos = rSt.Tell();
     //
@@ -1088,8 +1078,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         ;
     }
 
-    ::std::unique(maLSTInfos.begin(),maLSTInfos.end(),ListIdCompare());
-
     //
     // 2. PLF LFO auslesen und speichern
     //
@@ -1108,7 +1096,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         // 2.1 alle LFO einlesen
         //
-        for(nLfo = 0; nLfo < nLfoCount; nLfo++)
+        for(sal_uInt16 nLfo = 0; nLfo < nLfoCount; nLfo++)
         {
             bOk = sal_False;
             memset(&aLFO, 0, sizeof( aLFO ));
@@ -1142,7 +1130,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         //
         WW8LFOLVL aLFOLVL;
         sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
-        for(nLfo = 0; nLfo < nLFOInfos; nLfo++)
+        for(sal_uInt16 nLfo = 0; nLfo < nLFOInfos; nLfo++)
         {
             bOk = sal_False;
             WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLfo );
