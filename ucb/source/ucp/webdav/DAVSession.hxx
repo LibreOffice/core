@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:39:28 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 18:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ private:
     oslInterlockedCount m_nRefCount;
 
     friend class DAVSessionFactory;
-#if defined WNT
+#if defined WNT && _MSC_VER < 1310
     friend struct std::auto_ptr< DAVSession >;
     // work around compiler bug...
 #else // WNT
