@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPropertySetInfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-27 18:40:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
 {
     if( maProperties.getLength() )
         maProperties.realloc( 0 );
-    PropertyInfoHash::const_iterator aIter = rHash.begin(), aEnd = rHash.end();
+    PropertyInfoHash::iterator aIter = rHash.begin(), aEnd = rHash.end();
 
     while ( aIter != aEnd )
     {
@@ -203,7 +203,7 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
 Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUString& rName )
     throw(::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
-    PropertyDataHash::const_iterator aIter = maMap.find( rName );
+    PropertyDataHash::iterator aIter = maMap.find( rName );
 
     if ( maMap.end() == aIter )
         throw UnknownPropertyException();
