@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:59:49 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,23 @@ class TypeDetection : public ::cppu::ImplInheritanceHelper1< BaseContainer      
          */
         ::rtl::OUString impl_askDetectService(const ::rtl::OUString&               sDetectService,
                                                     ::comphelper::MediaDescriptor& rDescriptor   );
+
+        //---------------------------------------
+
+        /** @short      try to find an interaction handler and
+                        ask him to select a possible filter for
+                        this unknown format.
+
+            @descr      If the user select a filter, it will be used as return value
+                        without further checking against the given file content!
+
+            @param      rDescriptor
+                        a stl representation of the MediaDescriptor as in/out parameter.
+
+            @return     [string]
+                        a valid type name or an empty string if user canceled interaction.
+         */
+        ::rtl::OUString impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor);
 
         //---------------------------------------
 
