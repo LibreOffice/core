@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-13 08:23:02 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 15:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,14 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                     return FALSE;
             }
         }
+#ifdef VERTICAL_LAYOUT
+        BOOL bVert = IsVertical();
+        SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+        if( Abs( (pNewUpper->Prt().*fnRect->fnGetWidth)() -
+                 (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 )
+#else
         if( Abs(pNewUpper->Prt().Width() - GetUpper()->Prt().Width()) > 1 )
+#endif
             nMoveAnyway = 2; // Damit kommt nur noch ein _WouldFit mit Umhaengen in Frage
         if ( (nMoveAnyway |= BwdMoveNecessary( pOldPage, Frm() )) < 3 )
         {
@@ -176,15 +183,24 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             const SwFrm *pPrevFrm = pNewUpper->Lower();
             while ( pPrevFrm )
             {
+#ifdef VERTICAL_LAYOUT
+                (aRect.*fnRect->fnSetTop)(
+                    (pPrevFrm->Frm().*fnRect->fnGetBottom)() );
+#else
                 aRect.Top( pPrevFrm->Frm().Bottom() );
+#endif
                 pPrevFrm = pPrevFrm->GetNext();
             }
 
             nMoveAnyway |= BwdMoveNecessary( pNewPage, aRect);
             if ( nMoveAnyway < 3 )
             {
-                //Zur Verfuegung stehenden Raum berechenen.
+                //Zur Verfuegung stehenden Raum berechnen.
+#ifdef VERTICAL_LAYOUT
+                nSpace = (aRect.*fnRect->fnGetHeight)();
+#else
                 nSpace = aRect.Height();
+#endif
                 if ( IsInFtn() || GetAttrSet()->GetDoc()->IsBrowseMode() ||
                      ( pNewUpper->IsInSct() && ( pNewUpper->IsSctFrm() ||
                        ( pNewUpper->IsColBodyFrm() &&
@@ -209,7 +225,11 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                 //brauchbares Ergebnis liefern, also muessen wir wirklich
                 //zurueckfliessen
                 else if( pNewUpper->IsInSct() && pNewUpper->IsColBodyFrm() &&
+#ifdef VERTICAL_LAYOUT
+                    !(pNewUpper->Prt().*fnRect->fnGetWidth)() &&
+#else
                     !pNewUpper->Prt().Width() &&
+#endif
                     ( pNewUpper->GetUpper()->GetPrev() ||
                       pNewUpper->GetUpper()->GetNext() ) )
                     return TRUE;
