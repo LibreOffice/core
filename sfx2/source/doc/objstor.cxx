@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:47:25 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 10:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #include <svtools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 
 #include "objsh.hxx"
@@ -571,8 +572,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         if ( pSalvageItem )
         {
-            pMedium->SetTemporary( TRUE );
-            pMedium->SetName( pSalvageItem->GetValue(), TRUE );
+            pImp->aTempName = pMedium->GetPhysicalName();
             pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
             pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
         }

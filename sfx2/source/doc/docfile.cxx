@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:52:06 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 10:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,22 +739,18 @@ long SfxMedium::GetFileVersion() const
 //------------------------------------------------------------------
 Reference < XContent > SfxMedium::GetContent() const
 {
-    if ( !pImp->xContent.is() && GetName().Len() )
+    if ( !pImp->xContent.is() )
     {
-/*
-        SFX_ITEMSET_ARG( GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
-        Reference < XContent > xContent;
-        if ( pSalvageItem )
+        if ( aName.Len() )
         {
             String aTemp;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp );
             pImp->xContent = UCB_Helper::CreateContent( aTemp );
         }
-        else
- */
+        else if ( aLogicName.Len() )
         {
-            String aURL     = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            pImp->xContent  = UCB_Helper::CreateContent( aURL );
+            String aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            pImp->xContent = UCB_Helper::CreateContent( aURL );
         }
     }
 
@@ -1112,7 +1108,14 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     }
     else
     {
-        aStorageName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        if ( aName.Len() )
+        {
+            if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aStorageName ) )
+                DBG_ERROR("Physical name not convertable!");
+        }
+        else
+            aStorageName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+
         GetInStream();
         if ( pInStream )
         {
@@ -1357,6 +1360,7 @@ void SfxMedium::Transfer_Impl()
                     // take new unpacked storage as own storage
                     Close();
                     DELETEZ( pImp->pTempFile );
+                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
                     SetStorage_Impl( xStor );
                 }
                 else if ( !GetError() )
@@ -1373,13 +1377,13 @@ void SfxMedium::Transfer_Impl()
         // executed successfully
 
         BOOL            bTryTransfer = FALSE;
-        String          aName;
+        String          aFileName;
         INetURLObject   aDest = GetURLObject();
         INetURLObject   aSource( pImp->pTempFile->GetURL() );
 
-        aName = GetLongName();
-        if ( !aName.Len() )
-            aName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
+        aFileName = GetLongName();
+        if ( !aFileName.Len() )
+            aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
                                    INetURLObject::DECODE_WITH_CHARSET );
 
         if ( aDest.GetProtocol() == aSource.GetProtocol() )
@@ -1399,7 +1403,7 @@ void SfxMedium::Transfer_Impl()
 
             aInfo.MoveData = sal_True;
             aInfo.SourceURL = aSource.GetMainURL( INetURLObject::NO_DECODE );
-            aInfo.NewTitle = aName;
+            aInfo.NewTitle = aFileName;
 
             SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
             SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
@@ -1426,6 +1430,7 @@ void SfxMedium::Transfer_Impl()
                 pImp->pTempFile->EnableKillingFile( sal_False );
                 delete pImp->pTempFile;
                 pImp->pTempFile = NULL;
+                ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
                 return;
             }
         }
@@ -1458,7 +1463,7 @@ void SfxMedium::DoBackup_Impl()
     INetURLObject   aDest;
     INetURLObject   aSource = GetURLObject();
     String          aParentURL;
-    String          aName;
+    String          aFileName;
     String          aBakDir = SvtPathOptions().GetBackupPath();
     BOOL            bTryTransfer = FALSE;
     sal_Bool        bSuccess = sal_False;
@@ -1476,7 +1481,7 @@ void SfxMedium::DoBackup_Impl()
     }
 
     aDest.setExtension( DEFINE_CONST_UNICODE( "bak" ) );
-    aName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
+    aFileName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
                            INetURLObject::DECODE_WITH_CHARSET );
 
     // check wether the the temp file has the same protocol
@@ -1506,7 +1511,7 @@ void SfxMedium::DoBackup_Impl()
 
         aInfo.MoveData = sal_True;
         aInfo.SourceURL = aSource.GetMainURL( INetURLObject::NO_DECODE );
-        aInfo.NewTitle = aName;
+        aInfo.NewTitle = aFileName;
         aInfo.NameClash = NameClash::OVERWRITE;
 
         aAny <<= aInfo;
@@ -1556,7 +1561,7 @@ void SfxMedium::GetMedium_Impl()
 
         ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
         INetProtocol eProt = GetURLObject().GetProtocol();
-        if ( eProt != INET_PROT_HTTP && eProt != INET_PROT_FTP )
+        if ( eProt != INET_PROT_HTTP && eProt != INET_PROT_FTP || aName.Len() )
             pHandler = NULL;
         BOOL bSynchron = pImp->bForceSynchron || ! pImp->aDoneLink.IsSet();
         SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUnoAnyItem, SID_INPUTSTREAM, sal_False);
@@ -1813,6 +1818,7 @@ void SfxMedium::Init_Impl()
 {
     pImp->pVersions = NULL;
 
+    SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
     if( aLogicName.Len() )
     {
         INetURLObject aUrl( aLogicName );
@@ -1823,20 +1829,18 @@ void SfxMedium::Init_Impl()
         }
         else
         {
-            // try to convert the URL into a physical name
-            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
+            // try to convert the URL into a physical name - but never change a physical name
+            // physical name may be set if the logical name is changed after construction
+            if ( !aName.Len() )
+                ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
+            else
+                DBG_ASSERT( pSalvageItem, "Suspicious change of logical name!" );
         }
     }
 
+    if ( pSalvageItem && pSalvageItem->GetValue().Len() )
+        aLogicName = pSalvageItem->GetValue();
     SetIsRemote_Impl();
-
-    // Recover-Files sind immer temp
-    SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
-    if ( pSalvageItem )
-    {
-//      aLogicName = pSalvageItem->GetValue();
-//        pImp->bIsTemp = sal_True;
-    }
 }
 
 //------------------------------------------------------------------
@@ -1862,7 +1866,7 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
     bDirect       = rMedium.IsDirect();
     nStorOpenMode = rMedium.GetOpenMode();
     if ( !bTemporary )
-        aName = rMedium.GetName();
+        aName = rMedium.aName;
 
     pImp->bIsTemp = bTemporary;
     DBG_ASSERT( ! rMedium.pImp->bIsTemp, "Temporaeres Medium darf nicht kopiert werden" );
@@ -2011,17 +2015,21 @@ const String& SfxMedium::GetOrigURL() const
 
 void SfxMedium::SetPhysicalName( const String& rNameP )
 {
-    if( pImp->pTempFile )
+    if ( rNameP != aName )
     {
-        delete pImp->pTempFile;
-        pImp->pTempFile = NULL;
-    }
+        if( pImp->pTempFile )
+        {
+            delete pImp->pTempFile;
+            pImp->pTempFile = NULL;
+        }
 
-    aName = rNameP;
-    bTriedStorage = sal_False;
-    pImp->bIsStorage = sal_False;
-    if ( aName.Len() )
-        pImp->xContent = Reference < XContent >();
+        if ( aName.Len() || rNameP.Len() )
+            pImp->xContent = Reference < XContent >();
+
+        aName = rNameP;
+        bTriedStorage = sal_False;
+        pImp->bIsStorage = sal_False;
+    }
 }
 
 //------------------------------------------------------------------
@@ -2074,7 +2082,7 @@ SfxMedium::SfxMedium
     pImp(new SfxMedium_Impl( this )),
     pSet( pInSet )
 {
-    aName = aLogicName = rName;
+    aLogicName = rName;
     nStorOpenMode = nOpenMode;
     bDirect = bDirectP;
     Init_Impl();

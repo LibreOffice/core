@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 07:49:13 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 10:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,9 @@
 
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
-
-#if SUPD>636
+#include <unotools/localfilehelper.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
-#endif
 
 #include "picklist.hxx"
 #include "docfac.hxx"
@@ -249,6 +248,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( pImp->xModel.is() )
         pImp->xModel->dispose();
 
+    String aPhysName = pMedium->GetPhysicalName();
     DELETEX(pMedium);
     DELETEX(pImp->pEventConfig);
     DELETEX(pImp->pImageManager);
@@ -275,6 +275,15 @@ SfxObjectShell::~SfxObjectShell()
     delete pImp->pDocInfo;
     if ( pImp->xModel.is() )
         pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
+
+    if ( pImp->aTempName.Len() )
+    {
+        if ( aPhysName == pImp->aTempName )
+            HandsOff();
+        String aTmp;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
+        ::utl::UCBContentHelper::Kill( aTmp );
+    }
 
     delete pImp;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:15:24 $
+ *  last change: $Author: mba $ $Date: 2001-09-07 10:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ struct SfxObjectShell_Impl
     SfxDialogLibraryContainer* pDialogLibContainer;
     SfxProgress*        pProgress;
     String              aTitle;
+    String              aTempName;
     DateTime            nTime;
     sal_uInt16          nVisualDocumentNumber;
     sal_Bool            bTemplateConfig:1,
