@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:26:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,6 +908,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     Size aVisArea( aSize.Width, aSize.Height );
 
     BOOL bSetScale100 = TRUE;
+    sal_Bool bUseObjectSize = sal_False;
 
     // solange keine vernuenftige Size vom Object kommt, kann nichts
     // skaliert werden
@@ -954,6 +955,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                 return;
             }
             else*/
+
+            if ( nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE )
+            {
+                // the object must not be scaled, the size stored in object must be used for restoring
+                bUseObjectSize = sal_True;
+            }
+            else
             {
                 const Fraction aScaleWidth ( aObjArea.Width(),  aVisArea.Width() );
                 const Fraction aScaleHeight( aObjArea.Height(), aVisArea.Height());
@@ -983,8 +991,18 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, 0, xObj.GetObject() ).Pos();
     }
 
-    aArea.Width ( Fraction( aArea.Width()  ) / pCli->GetScaleWidth() );
-    aArea.Height( Fraction( aArea.Height() ) / pCli->GetScaleHeight());
+    if ( bUseObjectSize )
+    {
+        aArea.Width ( aVisArea.Width() );
+        aArea.Height( aVisArea.Height() );
+        RequestObjectResize( aArea, xObj.GetObject() );
+    }
+    else
+    {
+        aArea.Width ( Fraction( aArea.Width()  ) / pCli->GetScaleWidth() );
+        aArea.Height( Fraction( aArea.Height() ) / pCli->GetScaleHeight());
+    }
+
     pCli->SetObjArea( aArea.SVRect() );
 }
 
