@@ -11,10 +11,10 @@ mkdir: %_DEST%\odk%_EXT%\pck
 ..\%__SRC%\bin\*.sym %_DEST%\bin%_EXT%\*.sym
 ..\%__SRC%\bin\scalc3.pdb %_DEST%\bin%_EXT%\scalc3.pdb
 ..\%__SRC%\bin\scslots.tlb %_DEST%\bin%_EXT%\scslots.tlb
-..\%__SRC%\bin\sc%upd%*.dll %_DEST%\bin%_EXT%\sc%upd%*.dll
-..\%__SRC%\bin\sc%upd%*.res %_DEST%\bin%_EXT%\sc%upd%*.res
-..\%__SRC%\bin\dfa%upd%*.dll %_DEST%\bin%_EXT%\dfa%upd%*.dll
-..\%__SRC%\bin\rot%upd%*.dll %_DEST%\bin%_EXT%\rot%upd%*.dll
+..\%__SRC%\bin\sc?????.dll %_DEST%\bin%_EXT%\sc?????.dll
+..\%__SRC%\bin\sc?????.res %_DEST%\bin%_EXT%\sc?????.res
+..\%__SRC%\bin\dfa?????.dll %_DEST%\bin%_EXT%\dfa?????.dll
+..\%__SRC%\bin\rot?????.dll %_DEST%\bin%_EXT%\rot?????.dll
 ..\%__SRC%\bin\addin.zip %_DEST%\bin%_EXT%\addin.zip
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 touch: ..\%__SRC%\misc\sc.hid %_DEST%\bin%_EXT%\sc.hid
