@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:29:01 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,17 +409,20 @@ FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XM
 //------------------------------------------------------------------
 FmXFormController::~FmXFormController()
 {
-    if( m_nLoadEvent )
-        Application::RemoveUserEvent( m_nLoadEvent );
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        if( m_nLoadEvent )
+            Application::RemoveUserEvent( m_nLoadEvent );
 
-    if (m_nToggleEvent)
-        Application::RemoveUserEvent( m_nToggleEvent );
+        if (m_nToggleEvent)
+            Application::RemoveUserEvent( m_nToggleEvent );
 
-    if (m_nUpdateDispatcherEvent)
-        Application::RemoveUserEvent(m_nUpdateDispatcherEvent);
+        if (m_nUpdateDispatcherEvent)
+            Application::RemoveUserEvent(m_nUpdateDispatcherEvent);
 
-    if (m_aInsertTimer.IsActive())
-        m_aInsertTimer.Stop();
+        if (m_aInsertTimer.IsActive())
+            m_aInsertTimer.Stop();
+    }
 
     // Freigeben der Aggregation
     if (m_xAggregate.is())
@@ -1033,8 +1036,11 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmXFormController, OnToggleAutoFields, void*, EMPTYARG)
 {
-    OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    m_nToggleEvent = 0;
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
+        m_nToggleEvent = 0;
+    }
     toggleAutoFields(m_bCurrentRecordNew);
     return 1L;
 }
