@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:50:40 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@
 #ifndef CONNECTIVITY_MYSQL_CATALOG_HXX
 #include "mysql/YCatalog.hxx"
 #endif
+#include "mysql/YColumns.hxx"
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
@@ -192,7 +193,7 @@ void OMySQLTable::construct()
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)
 {
-    OColumnsHelper* pColumns = new OColumnsHelper(*this,sal_True,m_aMutex,_rNames);
+    OMySQLColumns* pColumns = new OMySQLColumns(*this,sal_True,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
