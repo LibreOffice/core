@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-07 16:19:50 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 15:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,19 @@ final void DeInitSalData()
     SalData *pSalData = GetSalData();
     delete pSalData;
     SetSalData( NULL );
+}
+
+void InitSalMain()
+{
+    if (GetSalData())
+    {
+        int argc = 0;
+        GetSalData()->Init( &argc, 0 );
+    }
+}
+
+void DeInitSalMain()
+{
 }
 
 final void SetFilterCallback( void* pCallback, void* pInst )

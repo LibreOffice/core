@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:22:15 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 15:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,16 @@
 
 #define _SV_SVMAIN_CXX
 
+#ifdef WNT
+#include <tools/prewin.h>
+#include <process.h>    // for _beginthreadex
+#include <ole2.h>   // for _beginthreadex
+#include <tools/postwin.h>
+#endif
+
+#ifndef _SV_SALDATA_HXX
+#include <saldata.hxx>
+#endif
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -248,12 +258,70 @@ public:
     return NAMESPACE_VOS(OSignalHandler)::TAction_CallNextHandler;
 }
 
+// =======================================================================
 BOOL SVMain()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMS;
+
+    BOOL bInit = InitVCL( xMS );
+
+    if( bInit )
+    {
+        // Application-Main rufen
+        pSVData->maAppData.mbInAppMain = TRUE;
+        pSVData->mpApp->Main();
+        pSVData->maAppData.mbInAppMain = FALSE;
+    }
+
+    DeInitVCL();
+    return bInit;
+}
+
+// This variable is set, when no Application object is instantiated
+// before SVInit is called
+static Application *        pOwnSvApp = NULL;
+// Exception handler. pExceptionHandler != NULL => VCL already inited
+ImplVCLExceptionHandler *   pExceptionHandler = NULL;
+
+class Application_Impl : public Application
+{
+public:
+    void                Main(){};
+};
+
+BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & )
+{
+    if( pExceptionHandler != NULL )
+        return FALSE;
+
+    if( !ImplGetSVData()->mpApp )
+    {
+        pOwnSvApp = new Application_Impl();
+        InitSalMain();
+    }
+
+#ifdef WNT
+    // remember data, copied from WinMain
+    SalData* pData = GetAppSalData();
+    if ( pData )    // Im AppServer NULL
+    {
+        STARTUPINFO aSI;
+        aSI.cb = sizeof( aSI );
+        GetStartupInfo( &aSI );
+        pData->mhInst                   = GetModuleHandle( NULL );
+        pData->mhPrevInst               = NULL;
+        pData->mnCmdShow                = aSI.wShowWindow;
+    }
+#endif
+
+    /*AllSettings aAS;
+    Application::SetSettings( aAS );// ???
+    */
+    ImplSVData* pSVData = ImplGetSVData();
 
     // SV bei den Tools anmelden
     InitTools();
@@ -273,9 +341,10 @@ BOOL SVMain()
     Application::EnterMultiThread( TRUE );
 #endif
 
-    // call init to initialize application class
-    // soffice/sfx implementation creates the global service manager
-    pSVData->mpApp->Init();
+    if( pSVData->mpApp )
+        // call init to initialize application class
+        // soffice/sfx implementation creates the global service manager
+        pSVData->mpApp->Init();
 
 #ifdef REMOTE_APPSERVER
     {
@@ -368,15 +437,20 @@ BOOL SVMain()
     // HACK: Hier SystemExchange initialisieren, damit Exception-Handler unter Windows funktioniert
     CreateSystemExchange();
 #endif
-    ImplVCLExceptionHandler aExceptionHandler;
+    pExceptionHandler = new ImplVCLExceptionHandler();
 
     // Debug-Daten initialisieren
     DBGGUI_INIT();
 
-    // Application-Main rufen
-    pSVData->maAppData.mbInAppMain = TRUE;
-    pSVData->mpApp->Main();
-    pSVData->maAppData.mbInAppMain = FALSE;
+    return TRUE;
+}
+
+void DeInitVCL()
+{
+    delete pExceptionHandler;
+    pExceptionHandler = NULL;
+
+    ImplSVData* pSVData = ImplGetSVData();
 
     // Debug Daten zuruecksetzen
     DBGGUI_DEINIT();
@@ -530,10 +604,11 @@ BOOL SVMain()
          }
     }
 
-    // call deinit to deinitialize application class
-    // soffice/sfx implementation disposes the global service manager
-    // Warning: After this call you can't call uno services
-    pSVData->mpApp->DeInit();
+    if( pSVData->mpApp )
+        // call deinit to deinitialize application class
+        // soffice/sfx implementation disposes the global service manager
+        // Warning: After this call you can't call uno services
+        pSVData->mpApp->DeInit();
 
     pSVData->maAppData.mpSolarMutex->release();
     delete pSVData->maAppData.mpSolarMutex;
@@ -552,10 +627,11 @@ BOOL SVMain()
         delete pSVData->mpKeyNames;
     }
 #else
-    // call deinit to deinitialize application class
-    // soffice/sfx implementation disposes the global service manager
-    // Warning: After this call you can't call uno services
-    pSVData->mpApp->DeInit();
+    if( pSVData->mpApp )
+        // call deinit to deinitialize application class
+        // soffice/sfx implementation disposes the global service manager
+        // Warning: After this call you can't call uno services
+        pSVData->mpApp->DeInit();
 #endif
 
     if ( pSVData->maAppData.mpSettings )
@@ -615,7 +691,74 @@ BOOL SVMain()
 
     DeInitTools();
 
-    return TRUE;
+    if( pOwnSvApp )
+    {
+        DeInitSalMain();
+        delete pOwnSvApp;
+        pOwnSvApp = NULL;
+    }
+}
 
-    return FALSE;
+// only one call is allowed
+struct WorkerThreadData
+{
+    oslWorkerFunction   pWorker;
+    void *              pThreadData;
+    WorkerThreadData( oslWorkerFunction pWorker_, void * pThreadData_ )
+        : pWorker( pWorker_ )
+        , pThreadData( pThreadData_ )
+    {
+    }
+};
+
+#ifdef WNT
+static HANDLE hThreadID = 0;
+static unsigned __stdcall _threadmain( void *pArgs )
+{
+    OleInitialize( NULL );
+    ((WorkerThreadData*)pArgs)->pWorker( ((WorkerThreadData*)pArgs)->pThreadData );
+    delete (WorkerThreadData*)pArgs;
+    OleUninitialize();
+    hThreadID = 0;
+    return 0;
+}
+#else
+static oslThread hThreadID = 0;
+static void SAL_CALL MainWorkerFunction( void* pArgs )
+{
+    ((WorkerThreadData*)pArgs)->pWorker( ((WorkerThreadData*)pArgs)->pThreadData );
+    delete (WorkerThreadData*)pArgs;
+    hThreadID = 0;
+}
+#endif
+
+void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
+{
+#ifdef WNT
+    // sal thread alway call CoInitializeEx, so a sysdepen implementation is necessary
+
+    unsigned uThreadID;
+    hThreadID = (HANDLE)_beginthreadex(
+        NULL,       // no security handle
+        0,          // stacksize 0 means default
+        _threadmain,    // thread worker function
+        new WorkerThreadData( pWorker, pThreadData ),       // arguments for worker function
+        0,          // 0 means: create immediatly otherwise use CREATE_SUSPENDED
+        &uThreadID );   // thread id to fill
+#else
+    hThreadID = osl_createThread( MainWorkerFunction, new WorkerThreadData( pWorker, pThreadData ) );
+#endif
+}
+
+void JoinMainLoopThread()
+{
+    if( hThreadID )
+    {
+#ifdef WNT
+        WaitForSingleObject(hThreadID, INFINITE);
+#else
+        osl_joinWithThread(hThreadID);
+        osl_freeThreadHandle( hThreadID );
+#endif
+    }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:22:14 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 15:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1986,14 +1986,3 @@ BOOL Application::IsHeadlessModeEnabled()
     return IsDialogCancelEnabled();
 }
 
-// =======================================================================
-
-void InitVCL()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void DeInitVCL()
-{
-}
