@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-18 09:51:09 $
+ *  last change: $Author: ka $ $Date: 2002-03-04 17:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,19 +734,27 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 
     if ( mnDrawMode & DRAWMODE_NOGRADIENT )
         return;
-    else if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT ) )
+    else if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
     {
-        BYTE cCmpVal;
+        Color aColor;
 
         if ( mnDrawMode & DRAWMODE_BLACKGRADIENT )
-            cCmpVal = ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT ) ? 0x80 : 0;
-        else
-            cCmpVal = 255;
+            aColor = Color( COL_BLACK );
+        else if ( mnDrawMode & DRAWMODE_WHITEGRADIENT )
+            aColor = Color( COL_WHITE );
+        else if ( mnDrawMode & DRAWMODE_SETTINGSGRADIENT )
+            aColor = GetSettings().GetStyleSettings().GetWindowColor();
 
-        Color aCol( cCmpVal, cCmpVal, cCmpVal );
+        if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
+        {
+            aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
+                            ( aColor.GetGreen() >> 1 ) | 0x80,
+                            ( aColor.GetBlue() >> 1 ) | 0x80 );
+        }
+
         Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        SetLineColor( aCol );
-        SetFillColor( aCol );
+        SetLineColor( aColor );
+        SetFillColor( aColor );
         DrawRect( rRect );
         Pop();
         return;
@@ -857,19 +865,27 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
 
     if( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() && !( mnDrawMode & DRAWMODE_NOGRADIENT ) )
     {
-        if( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT ) )
+        if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
         {
-            BYTE cCmpVal;
+            Color aColor;
 
             if ( mnDrawMode & DRAWMODE_BLACKGRADIENT )
-                cCmpVal = ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT ) ? 0x80 : 0;
-            else
-                cCmpVal = 255;
+                aColor = Color( COL_BLACK );
+            else if ( mnDrawMode & DRAWMODE_WHITEGRADIENT )
+                aColor = Color( COL_WHITE );
+            else if ( mnDrawMode & DRAWMODE_SETTINGSGRADIENT )
+                aColor = GetSettings().GetStyleSettings().GetWindowColor();
 
-            Color aCol( cCmpVal, cCmpVal, cCmpVal );
+            if ( mnDrawMode & DRAWMODE_GHOSTEDGRADIENT )
+            {
+                aColor = Color( ( aColor.GetRed() >> 1 ) | 0x80,
+                                ( aColor.GetGreen() >> 1 ) | 0x80,
+                                ( aColor.GetBlue() >> 1 ) | 0x80 );
+            }
+
             Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-            SetLineColor( aCol );
-            SetFillColor( aCol );
+            SetLineColor( aColor );
+            SetFillColor( aColor );
             DrawPolyPolygon( rPolyPoly );
             Pop();
             return;
@@ -1097,7 +1113,8 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
     Hatch aHatch( rHatch );
 
     if ( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
-                        DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE ) )
+                        DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
+                        DRAWMODE_SETTINGSLINE ) )
     {
         Color aColor( rHatch.GetColor() );
 
@@ -1109,6 +1126,10 @@ void OutputDevice::DrawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch 
         {
             const UINT8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
+        }
+        else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
+        {
+            aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
         }
 
         if ( mnDrawMode & DRAWMODE_GHOSTEDLINE )

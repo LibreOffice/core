@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-28 11:53:08 $
+ *  last change: $Author: ka $ $Date: 2002-03-04 17:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5054,11 +5054,12 @@ void OutputDevice::SetFont( const Font& rNewFont )
     DBG_CHKOBJ( &rNewFont, Font, NULL );
 
     Font aFont( rNewFont );
-    if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT |
+    if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT | DRAWMODE_SETTINGSTEXT |
                        DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
-                       DRAWMODE_GHOSTEDFILL) )
+                       DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
     {
         Color aTextColor( aFont.GetColor() );
+
         if ( mnDrawMode & DRAWMODE_BLACKTEXT )
             aTextColor = Color( COL_BLACK );
         else if ( mnDrawMode & DRAWMODE_WHITETEXT )
@@ -5068,18 +5069,24 @@ void OutputDevice::SetFont( const Font& rNewFont )
             const UINT8 cLum = aTextColor.GetLuminance();
             aTextColor = Color( cLum, cLum, cLum );
         }
+        else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+            aTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+
         if ( mnDrawMode & DRAWMODE_GHOSTEDTEXT )
         {
             aTextColor = Color( (aTextColor.GetRed() >> 1 ) | 0x80,
                                 (aTextColor.GetGreen() >> 1 ) | 0x80,
                                 (aTextColor.GetBlue() >> 1 ) | 0x80 );
         }
+
         aFont.SetColor( aTextColor );
 
         BOOL bTransFill = aFont.IsTransparent();
+
         if ( !bTransFill )
         {
             Color aTextFillColor( aFont.GetFillColor() );
+
             if ( mnDrawMode & DRAWMODE_BLACKFILL )
                 aTextFillColor = Color( COL_BLACK );
             else if ( mnDrawMode & DRAWMODE_WHITEFILL )
@@ -5089,17 +5096,21 @@ void OutputDevice::SetFont( const Font& rNewFont )
                 const UINT8 cLum = aTextFillColor.GetLuminance();
                 aTextFillColor = Color( cLum, cLum, cLum );
             }
+            else if( mnDrawMode & DRAWMODE_SETTINGSFILL )
+                aTextFillColor = GetSettings().GetStyleSettings().GetWindowColor();
             else if ( mnDrawMode & DRAWMODE_NOFILL )
             {
                 aTextFillColor = Color( COL_TRANSPARENT );
                 bTransFill = TRUE;
             }
+
             if ( !bTransFill && (mnDrawMode & DRAWMODE_GHOSTEDFILL) )
             {
                 aTextFillColor = Color( (aTextFillColor.GetRed() >> 1) | 0x80,
                                         (aTextFillColor.GetGreen() >> 1) | 0x80,
                                         (aTextFillColor.GetBlue() >> 1) | 0x80 );
             }
+
             aFont.SetFillColor( aTextFillColor );
         }
     }
@@ -5133,7 +5144,8 @@ void OutputDevice::SetTextColor( const Color& rColor )
     Color aColor( rColor );
 
     if ( mnDrawMode & ( DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT |
-                        DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT ) )
+                        DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT |
+                        DRAWMODE_SETTINGSTEXT ) )
     {
         if ( mnDrawMode & DRAWMODE_BLACKTEXT )
             aColor = Color( COL_BLACK );
@@ -5144,6 +5156,8 @@ void OutputDevice::SetTextColor( const Color& rColor )
             const UINT8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
+        else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+            aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
 
         if ( mnDrawMode & DRAWMODE_GHOSTEDTEXT )
         {
@@ -5193,7 +5207,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL |
                             DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
-                            DRAWMODE_GHOSTEDFILL ) )
+                            DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
         {
             if ( mnDrawMode & DRAWMODE_BLACKFILL )
                 aColor = Color( COL_BLACK );
@@ -5204,11 +5218,14 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
                 const UINT8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
             }
+            else if( mnDrawMode & DRAWMODE_SETTINGSFILL )
+                aColor = GetSettings().GetStyleSettings().GetWindowColor();
             else if ( mnDrawMode & DRAWMODE_NOFILL )
             {
                 aColor = Color( COL_TRANSPARENT );
                 bTransFill = TRUE;
             }
+
             if ( !bTransFill && (mnDrawMode & DRAWMODE_GHOSTEDFILL) )
             {
                 aColor = Color( (aColor.GetRed() >> 1) | 0x80,
@@ -5260,7 +5277,8 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
     Color aColor( rColor );
 
     if ( mnDrawMode & ( DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT |
-                        DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT ) )
+                        DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT |
+                        DRAWMODE_SETTINGSTEXT ) )
     {
         if ( mnDrawMode & DRAWMODE_BLACKTEXT )
             aColor = Color( COL_BLACK );
@@ -5271,6 +5289,8 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
             const UINT8 cLum = aColor.GetLuminance();
             aColor = Color( cLum, cLum, cLum );
         }
+        else if ( mnDrawMode & DRAWMODE_SETTINGSTEXT )
+            aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
 
         if ( mnDrawMode & DRAWMODE_GHOSTEDTEXT )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-27 13:35:51 $
+ *  last change: $Author: ka $ $Date: 2002-03-04 17:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,7 +1268,8 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     Color aColor( rColor );
 
     if( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
-                       DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE ) )
+                       DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
+                       DRAWMODE_SETTINGSLINE ) )
     {
         if( !ImplIsColorTransparent( aColor ) )
         {
@@ -1284,6 +1285,10 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
             {
                 const UINT8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
+            }
+            else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
+            {
+                aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
             }
 
             if( mnDrawMode & DRAWMODE_GHOSTEDLINE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 17:17:21 $
+ *  last change: $Author: ka $ $Date: 2002-03-04 17:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,7 +976,8 @@ void OutputDevice::SetLineColor( const Color& rColor )
     Color aColor( rColor );
 
     if( mnDrawMode & ( DRAWMODE_BLACKLINE | DRAWMODE_WHITELINE |
-                       DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE ) )
+                       DRAWMODE_GRAYLINE | DRAWMODE_GHOSTEDLINE |
+                       DRAWMODE_SETTINGSLINE ) )
     {
         if( !ImplIsColorTransparent( aColor ) )
         {
@@ -992,6 +993,10 @@ void OutputDevice::SetLineColor( const Color& rColor )
             {
                 const UINT8 cLum = aColor.GetLuminance();
                 aColor = Color( cLum, cLum, cLum );
+            }
+            else if( mnDrawMode & DRAWMODE_SETTINGSLINE )
+            {
+                aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
             }
 
             if( mnDrawMode & DRAWMODE_GHOSTEDLINE )
@@ -1055,7 +1060,7 @@ void OutputDevice::SetFillColor( const Color& rColor )
 
     if( mnDrawMode & ( DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL |
                        DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |
-                       DRAWMODE_GHOSTEDFILL ) )
+                       DRAWMODE_GHOSTEDFILL | DRAWMODE_SETTINGSFILL ) )
     {
         if( !ImplIsColorTransparent( aColor ) )
         {
@@ -1075,6 +1080,10 @@ void OutputDevice::SetFillColor( const Color& rColor )
             else if( mnDrawMode & DRAWMODE_NOFILL )
             {
                 aColor = Color( COL_TRANSPARENT );
+            }
+            else if( mnDrawMode & DRAWMODE_SETTINGSFILL )
+            {
+                aColor = GetSettings().GetStyleSettings().GetWindowColor();
             }
 
             if( mnDrawMode & DRAWMODE_GHOSTEDFILL )
