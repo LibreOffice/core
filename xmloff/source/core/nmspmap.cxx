@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:31:44 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 16:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,59 +81,43 @@
 
 using namespace rtl;
 
-typedef OUString *OUStringPtr;
-SV_DECL_PTRARR_DEL( OUStringsDtor_Impl, OUStringPtr, 5, 5 )
-SV_IMPL_PTRARR( OUStringsDtor_Impl, OUStringPtr )
-
 SvXMLNamespaceMap::SvXMLNamespaceMap() :
-    sXMLNS( OUString::createFromAscii(sXML_xmlns) ),
-    pPrefixes( new OUStringsDtor_Impl ),
-    pNames( new OUStringsDtor_Impl )
+    sXMLNS( OUString::createFromAscii(sXML_xmlns) )
 {
 }
 
 SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap ) :
-    sXMLNS( OUString::createFromAscii(sXML_xmlns) ),
-    pPrefixes( new OUStringsDtor_Impl ),
-    pNames( new OUStringsDtor_Impl )
+    sXMLNS( OUString::createFromAscii(sXML_xmlns) )
 {
-    USHORT nCount = rMap.aKeys.Count();
-    for( USHORT i=0; i<nCount; i++ )
-    {
-        pPrefixes->Insert( new OUString( *(*rMap.pPrefixes)[i] ), i );
-        pNames->Insert( new OUString( *(*rMap.pNames)[i] ), i );
-        aKeys.Insert( rMap.aKeys[i], i );
-    }
+    aNameHash = rMap.aNameHash;
+    aNameMap  = rMap.aNameMap;
 }
 
 SvXMLNamespaceMap::~SvXMLNamespaceMap()
 {
-    delete pPrefixes;
-    delete pNames;
 }
 
 int SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
 {
-    BOOL bRet = aKeys.Count() == rCmp.aKeys.Count();
-    if( bRet )
-    {
-        USHORT nCount = aKeys.Count();
-        USHORT i;
-        for( i=0; bRet && i<nCount; i++ )
-            bRet = aKeys[i] == rCmp.aKeys[i];
+    return static_cast < int > (aNameHash == rCmp.aNameHash);
+}
 
-        for( i=0; bRet && i<nCount; i++ )
-            bRet = *(*pPrefixes)[i] == *(*rCmp.pPrefixes)[i] &&
-                   *(*pNames)[i] == *(*rCmp.pNames)[i];
-    }
-
-    return (int)bRet;
+void SvXMLNamespaceMap::_Add( const OUString& rPrefix, const OUString &rName, USHORT nKey )
+{
+    NameSpaceEntry *pEntry = new NameSpaceEntry;
+    pEntry->sName   = rName;
+    pEntry->nKey    = nKey;
+    pEntry->sPrefix = rPrefix;
+    aNameHash[rPrefix] = pEntry;
+    aNameMap[nKey]     = pEntry;
 }
 
 USHORT SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rName,
                                USHORT nKey )
 {
-    if( XML_NAMESPACE_UNKNOWN==nKey )
+    sal_Bool bRet = sal_False;
+
+    if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
 
     DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
@@ -141,76 +125,30 @@ USHORT SvXMLNamespaceMap::Add( const OUString& rPrefix, const OUString& rName,
     if( XML_NAMESPACE_NONE==nKey )
         return USHRT_MAX;
 
-    USHORT nCount = aKeys.Count();
-    USHORT i;
-    for( i=0; i<nCount; i++ )
+    if (!(aNameHash.count ( rPrefix ) ) )
     {
-        if( 0 == (*pPrefixes)[i]->getLength() ||
-            *(*pPrefixes)[i] == rPrefix )
-        {
-            *(*pPrefixes)[i] = rPrefix;
-            *(*pNames)[i] = rName;
-            aKeys[i] = nKey;
-
-            break;
-        }
+        _Add( rPrefix, rName, nKey );
+        bRet = sal_True;
     }
-
-    if( i == aKeys.Count() )
-    {
-        pPrefixes->Insert( new OUString(rPrefix), i );
-        pNames->Insert( new OUString(rName), i );
-        aKeys.Insert( nKey, i );
-    }
-
-    return i;
+    return bRet;
 }
 
 BOOL SvXMLNamespaceMap::AddAtIndex( USHORT nIdx, const OUString& rPrefix,
                                     const OUString& rName, USHORT nKey )
 {
-    if( XML_NAMESPACE_UNKNOWN==nKey )
+    sal_Bool bRet = sal_False;
+
+    if( XML_NAMESPACE_UNKNOWN == nKey )
         nKey = GetKeyByName( rName );
 
     DBG_ASSERT( XML_NAMESPACE_NONE != nKey,
                 "SvXMLNamespaceMap::AddAtIndex: invalid namespace key" );
-    if( XML_NAMESPACE_NONE==nKey )
-        return FALSE;
-
-    BOOL bAdded = TRUE;
-    USHORT nCount = aKeys.Count();
-    if( nIdx >= nCount )
+    if( XML_NAMESPACE_NONE != nKey && ! ( aNameHash.count ( rPrefix ) ) )
     {
-        USHORT i;
-        for( i=nCount; i<nIdx; i++ )
-        {
-            pPrefixes->Insert( new OUString, i );
-            pNames->Insert( new OUString, i );
-            aKeys.Insert( XML_NAMESPACE_UNKNOWN, i );
-        }
-        pPrefixes->Insert( new OUString(rPrefix), nIdx );
-        pNames->Insert( new OUString(rName), nIdx );
-        aKeys.Insert( nKey, i );
+        _Add( rPrefix, rName, nKey );
+        bRet = sal_True;
     }
-    else
-    {
-        if( 0 == (*pPrefixes)[nIdx]->getLength() )
-        {
-            *(*pPrefixes)[nIdx] = rPrefix;
-            *(*pNames)[nIdx] = rName;
-            aKeys[nIdx] = nKey;
-        }
-        else
-        {
-            bAdded = *(*pPrefixes)[nIdx] == rPrefix &&
-                   *(*pNames)[nIdx] == rName &&
-                   aKeys[nIdx] == nKey;
-            DBG_ASSERT( bAdded,
-        "SvXMLNamespaceMap::AddByIndex: reuse of indices is not supported" );
-        }
-    }
-
-    return bAdded;
+    return bRet;
 }
 
 BOOL SvXMLNamespaceMap::AddAtIndex( USHORT nIdx, const sal_Char *pPrefix,
@@ -224,104 +162,75 @@ BOOL SvXMLNamespaceMap::AddAtIndex( USHORT nIdx, const sal_Char *pPrefix,
 
 USHORT SvXMLNamespaceMap::GetIndexByKey( USHORT nKey ) const
 {
-    USHORT nIdx = USHRT_MAX;
-    if( XML_NAMESPACE_UNKNOWN != nKey )
-    {
-        if( nKey < aKeys.Count() && aKeys[nKey] == nKey )
-        {
-            nIdx = nKey;
-        }
-        else
-        {
-            for( USHORT i=0; i<aKeys.Count(); i++ )
-            {
-                if( aKeys[i] == nKey )
-                {
-                    nIdx = i;
-                    break;
-                }
-            }
-        }
-    }
-
-    return nIdx;
+    return nKey;
 }
 
 USHORT SvXMLNamespaceMap::GetIndexByPrefix( const OUString& rPrefix ) const
 {
-    USHORT nIdx = USHRT_MAX;
-    for( USHORT i=0; i<pPrefixes->Count(); i++ )
-    {
-        if( *(*pPrefixes)[i] == rPrefix )
-        {
-            nIdx = i;
-            break;
-        }
-    }
-
-    return nIdx;
+    NameSpaceHash::const_iterator aIter = aNameHash.find(rPrefix);
+    return (aIter != aNameHash.end()) ? (*aIter).second->nKey : USHRT_MAX;
 }
 
 USHORT SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
 {
     USHORT nKey = XML_NAMESPACE_UNKNOWN;
-
-    for( USHORT i=0; i<aKeys.Count(); i++ )
+    NameSpaceHash::const_iterator aIter = aNameHash.begin(), aEnd = aNameHash.end();
+    while (aIter != aEnd )
     {
-        if( rName == *(*pNames)[i] )
+        if ((*aIter).second->sName == rName)
         {
-            nKey = aKeys[i];
+            nKey = (*aIter).second->nKey;
             break;
         }
+        aIter++;
     }
-
     return nKey;
 }
 
 const OUString& SvXMLNamespaceMap::GetPrefixByIndex( USHORT nIdx ) const
 {
-    return pPrefixes ? *(*pPrefixes)[nIdx] : sEmpty;
+    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
+    return (aIter != aNameMap.end()) ? (*aIter).second->sPrefix : sEmpty;
 }
 
 const OUString& SvXMLNamespaceMap::GetNameByIndex( USHORT nIdx ) const
 {
-    return pNames ? *(*pNames)[nIdx] : sEmpty;
+    NameSpaceMap::const_iterator aIter = aNameMap.find (nIdx);
+    return (aIter != aNameMap.end()) ? (*aIter).second->sName : sEmpty;
 }
 
 USHORT SvXMLNamespaceMap::GetKeyByIndex( USHORT nIdx ) const
 {
-    return aKeys[nIdx];
+    return nIdx;
 }
 
 OUString SvXMLNamespaceMap::GetAttrNameByIndex( USHORT nIdx ) const
 {
-    DBG_ASSERT( nIdx < aKeys.Count(),
-                "SvXMLNamespaceMap::GetAttrNameByIndex: invalid index" );
     OUStringBuffer sAttrName;
-    if( nIdx < aKeys.Count() )
+    NameSpaceMap::const_iterator aIter = aNameMap.find ( nIdx );
+    if (aIter != aNameMap.end())
     {
         sAttrName.append( sXMLNS  );
         sAttrName.append( sal_Unicode(':') );
-        sAttrName.append( *(*pPrefixes)[nIdx] );
+        sAttrName.append( (*aIter).second->sPrefix);
     }
-
     return sAttrName.makeStringAndClear();
 }
 
 OUString SvXMLNamespaceMap::GetQNameByIndex( USHORT nIdx,
                                            const OUString& rLocalName ) const
 {
-    DBG_ASSERT( nIdx < aKeys.Count() || USHRT_MAX == nIdx,
-                "SvXMLNamespaceMap::GetQNameByIndex: invalid index" );
-
     OUStringBuffer sQName;
-    if( nIdx < aKeys.Count() )
+    sal_Bool bNotEnd = sal_False;
+    NameSpaceMap::const_iterator aIter = aNameMap.find ( nIdx );
+    if ( aIter != aNameMap.end() )
     {
-        sQName.append( *(*pPrefixes)[nIdx] );
-        sQName.append( sal_Unicode(':') );
+        sQName.append ( (*aIter).second->sPrefix);
+        sQName.append ( sal_Unicode(':') );
+        bNotEnd = sal_True;
     }
-    if( nIdx < aKeys.Count() || USHRT_MAX == nIdx )
-        sQName.append( rLocalName );
+    if ( bNotEnd  || USHRT_MAX == nIdx )
+        sQName.append ( rLocalName );
 
     return sQName.makeStringAndClear();;
 }
@@ -337,32 +246,18 @@ USHORT SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
     sal_Int32 nColonPos = rAttrName.indexOf( sal_Unicode(':') );
     if( -1L != nColonPos )
     {
+        OUString aPrefix( rAttrName.copy( 0L, nColonPos ) );
         if( pPrefix )
-            *pPrefix = rAttrName.copy( 0L, nColonPos );
+            *pPrefix = aPrefix;
         if( pLocalName )
             *pLocalName = rAttrName.copy( nColonPos + 1L );
 
-        OUString aPrefix( rAttrName.copy( 0L, nColonPos ) );
-        if( nIdxGuess < aKeys.Count() && *(*pPrefixes)[nIdxGuess] == aPrefix )
+        NameSpaceHash::const_iterator aIter = aNameHash.find( aPrefix );
+        if ( aIter != aNameHash.end() )
         {
-            nKey = aKeys[nIdxGuess];
-            if( pNamespace )
-                *pNamespace = *(*pNames)[nIdxGuess];
-        }
-        else
-        {
-            for( USHORT i=0; i<aKeys.Count(); i++ )
-            {
-                if( *(*pPrefixes)[i] == aPrefix )
-                {
-                    nKey = aKeys[i];
-                    if( pNamespace )
-                        *pNamespace = *(*pNames)[i];
-                    break;
-                }
-            }
-            if( aKeys.Count() == i && sXMLNS == aPrefix )
-                nKey = XML_NAMESPACE_XMLNS;
+            nKey = (*aIter).second->nKey;
+            if ( pNamespace )
+                *pNamespace = (*aIter).second->sName;
         }
     }
     else
@@ -381,24 +276,11 @@ USHORT SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
 
 USHORT SvXMLNamespaceMap::GetFirstIndex() const
 {
-    USHORT nIdx = 0;
-    while( nIdx < aKeys.Count() && 0 == (*pPrefixes)[nIdx]->getLength() )
-        nIdx++;
-
-    return nIdx == aKeys.Count() ? USHRT_MAX : nIdx;
+    return aNameMap.empty() ? USHRT_MAX : (*aNameMap.begin()).second->nKey;
 }
 
 USHORT SvXMLNamespaceMap::GetNextIndex( USHORT nOldIdx ) const
 {
-    if( nOldIdx >= aKeys.Count() )
-        return USHRT_MAX;
-
-    nOldIdx++;
-    while( nOldIdx < aKeys.Count() && 0 == (*pPrefixes)[nOldIdx]->getLength() )
-        nOldIdx++;
-
-    return nOldIdx == aKeys.Count() ? USHRT_MAX : nOldIdx;
+    NameSpaceMap::const_iterator aIter = aNameMap.find ( nOldIdx );
+    return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second->nKey;
 }
-
-
-
