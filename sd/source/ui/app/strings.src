@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:42:19 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2257,7 +2257,7 @@ String STR_MANUEL
     Text [ portuguese ] = "Manual" ;
     Text [ finnish ] = "Manuaalinen" ;
     Text [ danish ] = "Manuel" ;
-    Text [ french ] = "Manuelle" ;
+    Text [ french ] = "Manuel" ;
     Text [ swedish ] = "Manuell" ;
     Text [ dutch ] = "Handmatig" ;
     Text [ spanish ] = "Manual" ;
@@ -4036,7 +4036,7 @@ String STR_EXPORT_STANDARD
     Text [ portuguese ] = "~Padrão" ;
     Text [ finnish ] = "Oletusarvo" ;
     Text [ danish ] = "Standard" ;
-    Text [ french ] = "~Standard" ;
+    Text [ french ] = "Standard" ;
     Text [ swedish ] = "~Standard" ;
     Text [ dutch ] = "~Standaard" ;
     Text [ spanish ] = "~Predeterminado" ;
@@ -5522,7 +5522,7 @@ String STR_EDIT_OBJ
     Text [ english_us ] = "~Edit" ;
     Text [ italian ] = "Modifica" ;
     Text [ spanish ] = "~Editar" ;
-    Text [ french ] = "~Éditer" ;
+    Text [ french ] = "Éditer" ;
     Text [ swedish ] = "~Redigera" ;
     Text [ danish ] = "Rediger" ;
     Text [ portuguese ] = "~Editar" ;
