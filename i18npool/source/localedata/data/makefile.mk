@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.12 $
+#*  $Revision: 1.13 $
 #*
-#*  last change: $Author: khong $ $Date: 2002-08-08 00:19:34 $
+#*  last change: $Author: khong $ $Date: 2002-08-13 07:21:27 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -165,6 +165,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_te_IN.cxx  \
     $(MISC)$/localedata_gu_IN.cxx  \
     $(MISC)$/localedata_mr_IN.cxx  \
+    $(MISC)$/localedata_pa_IN.cxx  \
     $(MISC)$/localedata_th_TH.cxx  \
     $(MISC)$/localedata_tr_TR.cxx  \
     $(MISC)$/localedata_zh_CN.cxx  \
@@ -303,6 +304,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_te_IN.obj \
     $(SLO)$/localedata_gu_IN.obj \
     $(SLO)$/localedata_mr_IN.obj \
+    $(SLO)$/localedata_pa_IN.obj \
     $(SLO)$/localedata_th_TH.obj \
     $(SLO)$/localedata_zh_CN.obj \
     $(SLO)$/localedata_zh_HK.obj \
