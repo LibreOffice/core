@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:16:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   tabopdlg.src  $
  //   $Author: kz $
- //     $Date: 2001-05-04 21:16:46 $
- // $Revision: 1.6 $
+ //     $Date: 2001-05-10 07:07:51 $
+ // $Revision: 1.7 $
  //  $Logfile:   T:/sc/source/ui/src/tabopdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ ModelessDialog RID_SCDLG_TABOP
     Text [ italian ] = "Tabella" ;
     Text [ portuguese_brazilian ] = "Tabela" ;
     Text [ portuguese ] = "Operações múltiplas" ;
-    Text [ finnish ] = "Taulukko" ;
+    Text [ finnish ] = "Useita toimintoja" ;
     Text [ danish ] = "Multioperationer" ;
     Text [ french ] = "Opérations multiples" ;
     Text [ swedish ] = "Multipla räkneoperationer" ;
@@ -103,7 +103,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "~Formule" ;
         Text [ portuguese_brazilian ] = "~formulas" ;
         Text [ portuguese ] = "~Fórmulas" ;
-        Text [ finnish ] = "~formulas" ;
+        Text [ finnish ] = "~Kaavat" ;
         Text [ danish ] = "~Formler" ;
         Text [ french ] = "~Formules" ;
         Text [ swedish ] = "~Formler" ;
@@ -156,6 +156,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     FixedText FT_ROWCELL
     {
@@ -167,7 +168,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Riga" ;
         Text [ portuguese_brazilian ] = "filei~ra" ;
         Text [ portuguese ] = "~Linha" ;
-        Text [ finnish ] = "~row" ;
+        Text [ finnish ] = "~Rivien syöttösolu" ;
         Text [ danish ] = "Række" ;
         Text [ french ] = "~Ligne" ;
         Text [ swedish ] = "~Rad" ;
@@ -220,6 +221,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     FixedText FT_COLCELL
     {
@@ -231,7 +233,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "~Colonna" ;
         Text [ portuguese_brazilian ] = "~coluna" ;
         Text [ portuguese ] = "~Coluna" ;
-        Text [ finnish ] = "~column" ;
+        Text [ finnish ] = "~Sarakkeiden syöttösolu" ;
         Text [ danish ] = "Kolonne" ;
         Text [ french ] = "~Colonne" ;
         Text [ swedish ] = "~Kolumn" ;
@@ -284,6 +286,7 @@ ModelessDialog RID_SCDLG_TABOP
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     GroupBox GB_VARIABLES
     {
@@ -295,7 +298,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Dati" ;
         Text [ portuguese_brazilian ] = "Variáveis" ;
         Text [ portuguese ] = "Definir variáveis" ;
-        Text [ finnish ] = "Muuttujat" ;
+        Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Forudindstillinger" ;
         Text [ french ] = "Définir les variables" ;
         Text [ swedish ] = "Förinställningar" ;
@@ -338,7 +341,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Nessuna formula specificata!" ;
         Text [ portuguese_brazilian ] = "No formula specified!" ;
         Text [ portuguese ] = "Fórmula não especificada!" ;
-        Text [ finnish ] = "No formula specified!" ;
+        Text [ finnish ] = "Kaavaa ei ole määritetty." ;
         Text [ danish ] = "Der er ikke specificeret nogen formel!" ;
         Text [ french ] = "Aucune formule n'a été spécifiée !" ;
         Text [ swedish ] = "Ingen formel specificerad!" ;
@@ -365,7 +368,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Non è stata specificata nessuna riga o colonna!" ;
         Text [ portuguese_brazilian ] = "Neither row nor column specified!" ;
         Text [ portuguese ] = "Linha e coluna indefinidas!" ;
-        Text [ finnish ] = "Neither row nor column specified!" ;
+        Text [ finnish ] = "Riviä tai saraketta ei ole määritetty." ;
         Text [ danish ] = "Der er hverken specificeret række eller kolonne!" ;
         Text [ french ] = "Ni ligne ni colonne n'ont été spécifiées !" ;
         Text [ swedish ] = "Varken rad eller kolumn specificerad!" ;
@@ -392,7 +395,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Nome o area non definiti!" ;
         Text [ portuguese_brazilian ] = "Undefined name or range for formula!" ;
         Text [ portuguese ] = "Nome ou área indefinidos!" ;
-        Text [ finnish ] = "Undefined name or range for formula!" ;
+        Text [ finnish ] = "Määrittämätön nimi tai alue." ;
         Text [ danish ] = "Udefineret navn eller område!" ;
         Text [ french ] = "Nom ou plage indéfini(e) !" ;
         Text [ swedish ] = "Odefinierat namn eller område!" ;
@@ -419,7 +422,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Nome non definito o riferimento a celle errato!" ;
         Text [ portuguese_brazilian ] = "Row: no formula cell!" ;
         Text [ portuguese ] = "Nome ou referência da célula indefinidos!" ;
-        Text [ finnish ] = "Row: no formula cell!" ;
+        Text [ finnish ] = "Määrittämätön nimi tai virheellinen soluviite." ;
         Text [ danish ] = "Udefineret navn eller forkert cellereference!" ;
         Text [ french ] = "Nom indéfini ou référence de cellule incorrecte !" ;
         Text [ swedish ] = "Odefinierat namn eller fel cellreferens!" ;
@@ -446,7 +449,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Le formule non producono una colonna!" ;
         Text [ portuguese_brazilian ] = "Formulas form no column!" ;
         Text [ portuguese ] = "Fórmulas não formam coluna!" ;
-        Text [ finnish ] = "Formulas form no column!" ;
+        Text [ finnish ] = "Kaavat eivät muodosta saraketta." ;
         Text [ danish ] = "Formler danner ikke kolonne!" ;
         Text [ french ] = "Les formules ne forment pas de colonne !" ;
         Text [ swedish ] = "Formlerna bildar ingen kolumn!" ;
@@ -473,7 +476,7 @@ ModelessDialog RID_SCDLG_TABOP
         Text [ italian ] = "Le formule non producono una riga!" ;
         Text [ portuguese_brazilian ] = "Formulas form no row!" ;
         Text [ portuguese ] = "Fórmulas não formam linha!" ;
-        Text [ finnish ] = "Formulas form no row!" ;
+        Text [ finnish ] = "Kaavat eivät muodosta riviä." ;
         Text [ danish ] = "Formler danner ikke række!" ;
         Text [ french ] = "Les formules ne forment pas de ligne !" ;
         Text [ swedish ] = "Formlerna bildar ingen rad!" ;
