@@ -1,0 +1,389 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ConvWatch.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Date: 2004-11-02 11:08:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+package convwatch;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import complexlib.ComplexTestCase;
+import convwatch.ConvWatchException;
+import convwatch.ConvWatchCancelException;
+import convwatch.FileHelper;
+import convwatch.OfficePrint;
+import convwatch.PRNCompare;
+import convwatch.StatusHelper;
+import helper.URLHelper;
+import java.io.File;
+
+public class ConvWatch
+{
+
+    /**
+     * Check if given document (_sAbsoluteInputFile) and it's postscript representation (_sAbsoluteReferenceFile) produce
+     * the same output like the StarOffice / OpenOffice.org which is accessable with XMultiServiceFactory.
+     * Here a simple graphically difference check is run through.
+     *
+     * Hint: In the OutputPath all needed files will create, there must
+     * be very much space. It's not possible to say how much.
+     * One page need up to 800kb as jpeg.
+     * Sample: If a document contains 2 pages, we need 2*800kb for prn
+     * output and 2*800kb for ps output and 2*800kb for it's difference
+     * output. So up to 4800kb or 4.8mb.
+     *
+     * RAM is need least 300mb. Will say, it's tested on a pc with 128mb RAM and 256mb swap.
+     *
+     * It's also absolutlly impossible to say, how much time this functions consume.
+     */
+
+    StatusHelper[] createPostscriptStartCheck(GraphicalTestArguments _aGTA,
+                                              String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile, boolean _bUseBorderMove)
+        throws ConvWatchCancelException
+        {
+//  TODO: some more checks
+
+            if (! FileHelper.exists(_sAbsoluteInputFile))
+            {
+                throw new ConvWatchCancelException("Input file: " + _sAbsoluteReferenceFile + " does not exist.");
+            }
+
+            if (_sAbsoluteReferenceFile == null)
+            {
+                // we assume, that the prn file is near the document
+                String sAbsoluteInputFileNoSuffix = FileHelper.getNameNoSuffix(_sAbsoluteInputFile);
+                _sAbsoluteReferenceFile = sAbsoluteInputFileNoSuffix + ".prn";
+            }
+
+            String fs = System.getProperty("file.separator");
+            File aAbsoluteReferenceFile = new File(_sAbsoluteReferenceFile);
+
+            if (aAbsoluteReferenceFile.isDirectory())
+            {
+                String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
+                String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
+                _sAbsoluteReferenceFile = _sAbsoluteReferenceFile + fs + sNameNoSuffix + ".prn";
+            }
+            else
+            {
+                // java file has problems to check for directories, if the given directory doesn't exist.
+                String sName = FileHelper.getBasename(_sAbsoluteReferenceFile);
+                // thanks to Mircosoft, every document has a suffix, so if a name doesn't have a suffix, it must be a directory name
+                int nIdx = sName.indexOf('.');
+                if (nIdx == -1)
+                {
+                    // must be a directory
+                    throw new ConvWatchCancelException("Given reference directory: '" + _sAbsoluteReferenceFile + "' does not exist.");
+                }
+            }
+
+            if (! FileHelper.exists(_sAbsoluteReferenceFile))
+            {
+                throw new ConvWatchCancelException("Given reference file: " + _sAbsoluteReferenceFile + " does not exist.");
+            }
+
+            FileHelper.makeDirectories("", _sOutputPath);
+
+            // runner.convwatch.compare();
+
+            String sAbsoluteInputFileURL = URLHelper.getFileURLFromSystemPath(_sAbsoluteInputFile);
+
+            String sInputFile = FileHelper.getBasename(_sAbsoluteInputFile);
+            // System.out.println("InputFile: " + sInputFile);
+
+            String sInputFileNoSuffix = FileHelper.getNameNoSuffix(sInputFile);
+            // System.out.println("BasenameNoSuffix: " + sInputFileNoSuffix);
+
+
+            String sAbsoluteOutputFile = _sOutputPath + fs + sInputFile;
+            String sAbsoluteOutputFileURL = URLHelper.getFileURLFromSystemPath(sAbsoluteOutputFile);
+
+            String sReferenceFile = FileHelper.getBasename(_sAbsoluteReferenceFile);
+            String sReferenceFileNoSuffix = FileHelper.getNameNoSuffix(sReferenceFile);
+            String sPostScriptFile = sReferenceFileNoSuffix + ".ps";
+            // System.out.println("PostscriptFile: " + sPostScriptFile);
+
+            String sAbsolutePrintFile = _sOutputPath + fs + sPostScriptFile;
+            String sAbsolutePrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFile);
+
+            // System.out.println("AbsoluteInputFileURL: " + sAbsoluteInputFileURL);
+            // System.out.println("AbsoluteOutputFileURL: " + sAbsoluteOutputFileURL);
+            // System.out.println("AbsolutePrintFileURL: " + sAbsolutePrintFileURL);
+
+            // store and print the sAbsoluteInputFileURL file with StarOffice / OpenOffice.org
+            OfficePrint.printToFile(_aGTA, sAbsoluteInputFileURL, sAbsoluteOutputFileURL, sAbsolutePrintFileURL);
+
+            // wait(2);
+
+            if (! FileHelper.exists(sAbsolutePrintFile))
+            {
+                throw new ConvWatchCancelException("Printed file " + sAbsolutePrintFile + " does not exist.");
+            }
+
+            PRNCompare a = new PRNCompare();
+            String sInputPath = FileHelper.getPath(_sAbsoluteInputFile);
+            String sReferencePath = FileHelper.getPath(_sAbsoluteReferenceFile);
+            // String sReferenceFile = FileHelper.getBasename(sAbsoluteReferenceFile);
+
+            // System.out.println("InputPath: " + sInputPath);
+            // System.out.println("sReferencePath: " + sReferencePath);
+            // System.out.println("sReferenceFile: " + sReferenceFile);
+
+            a.setInputPath(     sInputPath );
+            a.setReferencePath( sReferencePath );
+            a.setOutputPath(    _sOutputPath );
+            // a.setDocFile(       "1_Gov.ppt");
+            a.setReferenceFile( sReferenceFile );
+            a.setPostScriptFile(sPostScriptFile );
+            if (_aGTA.printAllPages() == true)
+            {
+                a.setMaxPages(9999);
+            }
+            else
+            {
+                if (_aGTA.getMaxPages() > 0)
+                {
+                    a.setMaxPages(_aGTA.getMaxPages());
+                }
+                if (_aGTA.getOnlyPages().length() != 0)
+                {
+                    // we can't interpret the string of getOnlyPages() right without much logic, so print all pages here!
+                    a.setMaxPages(9999);
+                }
+            }
+
+            a.setResolutionInDPI(_aGTA.getResolutionInDPI());
+            a.setBorderMove(_bUseBorderMove);
+
+            StatusHelper[] aList = a.compare();
+            return aList;
+        }
+
+    // -----------------------------------------------------------------------------
+    static boolean createHTMLStatus(StatusHelper[] aList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile)
+        {
+            // Status
+            String fs = System.getProperty("file.separator");
+            String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
+            String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
+            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
+
+            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, "", "");
+            HTMLoutput.header(sNameNoSuffix);
+//  TODO: version info was fine
+            HTMLoutput.checkSection(sBasename);
+            // Status end
+
+            boolean bResultIsOk = true;          // result over all pages
+            for (int i=0;i<aList.length; i++)
+            {
+                aList[i].printStatus();
+
+                boolean bCurrentResult = true;   // result over exact one page
+
+                int nCurrentDiffStatus = aList[i].nDiffStatus;
+
+                // check if the status is in a defined range
+                if (nCurrentDiffStatus == StatusHelper.DIFF_NO_DIFFERENCES)
+                {
+                    // ok.
+                }
+                else if (nCurrentDiffStatus == StatusHelper.DIFF_DIFFERENCES_FOUND && aList[i].nPercent < 5)
+                {
+                    // ok.
+                }
+                else if (nCurrentDiffStatus == StatusHelper.DIFF_AFTER_MOVE_DONE_NO_PROBLEMS)
+                {
+                    // ok.
+                }
+                else if (nCurrentDiffStatus == StatusHelper.DIFF_AFTER_MOVE_DONE_DIFFERENCES_FOUND && aList[i].nPercent2 < 5)
+                {
+                    // ok.
+                }
+                else
+                {
+                    // failed.
+                    bCurrentResult = false; // logic: nDiff==0 = true if there is no difference
+                }
+
+                // Status
+                HTMLoutput.checkLine(aList[i], bCurrentResult);
+                bResultIsOk &= bCurrentResult;
+            }
+            // Status
+            HTMLoutput.close();
+            return bResultIsOk;
+        }
+
+    // -----------------------------------------------------------------------------
+
+    static void createHTMLStatus_DiffDiff(StatusHelper[] aDiffDiffList, String _sFilenamePrefix, String _sOutputPath, String _sAbsoluteInputFile)
+        {
+            // Status
+            String fs = System.getProperty("file.separator");
+            String sBasename = FileHelper.getBasename(_sAbsoluteInputFile);
+            String sNameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
+            String sHTMLFile = _sFilenamePrefix + sNameNoSuffix + ".html";
+
+            HTMLOutputter HTMLoutput = HTMLOutputter.create(_sOutputPath, sHTMLFile, _sFilenamePrefix, "");
+            HTMLoutput.header(sNameNoSuffix);
+            HTMLoutput.checkDiffDiffSection(sBasename);
+
+            // LLA? what if the are no values in the list? true or false;
+            for (int i=0;i<aDiffDiffList.length; i++)
+            {
+                boolean bCurrentResult = (aDiffDiffList[i].nDiffStatus == StatusHelper.DIFF_NO_DIFFERENCES); // logic: nDiff==0 = true if there is no difference
+
+                HTMLoutput.checkDiffDiffLine(aDiffDiffList[i], bCurrentResult);
+            }
+            // Status
+            HTMLoutput.close();
+        }
+
+
+    // -----------------------------------------------------------------------------
+
+    public static boolean check(GraphicalTestArguments _aGTA,
+                             String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile)
+        throws ConvWatchCancelException, ConvWatchException
+        {
+            ConvWatch a = new ConvWatch();
+            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile, true);
+
+            boolean bResultIsOk = createHTMLStatus(aList, "", _sOutputPath, _sAbsoluteInputFile);
+
+            if (! bResultIsOk)
+            {
+                throw new ConvWatchException("File compare failed with file " + _sAbsoluteInputFile );
+            }
+            return bResultIsOk;
+        }
+
+    // -----------------------------------------------------------------------------
+    public static boolean checkDiffDiff(GraphicalTestArguments _aGTA,
+                                     String _sOutputPath, String _sAbsoluteInputFile, String _sAbsoluteReferenceFile,
+                                     String _sAbsoluteDiffPath)
+        throws ConvWatchCancelException, ConvWatchException
+        {
+            ConvWatch a = new ConvWatch();
+            StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile, false);
+
+            // Status
+            boolean bResultIsOk = createHTMLStatus(aList, "", _sOutputPath, _sAbsoluteInputFile);
+
+            StatusHelper[] aDiffDiffList = new StatusHelper[aList.length];
+
+            String fs = System.getProperty("file.separator");
+
+            boolean bDiffIsOk = true;
+            boolean bFoundAOldDiff = false;
+
+            PRNCompare aCompare = new PRNCompare();
+            // LLA? what if the are no values in the list? true or false;
+            for (int i=0;i<aList.length; i++)
+            {
+                String sOrigDiffName = aList[i].m_sDiffGfx;
+                String sDiffBasename = FileHelper.getBasename(sOrigDiffName);
+
+                String sNewDiffName = _sAbsoluteDiffPath + fs + sDiffBasename;
+                if (! FileHelper.exists(sNewDiffName))
+                {
+                    System.out.println("Old diff file: '" + sNewDiffName + "' does not exist." );
+                    continue;
+                }
+                // String sNewDiffName = _sAbsoluteDiffPath + fs + sDiffBasename;
+
+                // make a simple difference between these both diff files.
+                String sSourcePath1 = FileHelper.getPath(sOrigDiffName);
+                String sSourceFile1 = sDiffBasename;
+                String sSourcePath2 = _sAbsoluteDiffPath;
+                String sSourceFile2 = sDiffBasename;
+
+                StatusHelper aCurrentStatus = aCompare.checkDiffDiff(_sOutputPath, sSourcePath1, sSourceFile1, sSourcePath2, sSourceFile2);
+                boolean bCurrentResult = (aCurrentStatus.nDiffStatus == StatusHelper.DIFF_NO_DIFFERENCES); // logic: nDiff==0 = true if there is no difference
+                bDiffIsOk &= bCurrentResult;
+                bFoundAOldDiff = true;
+
+                aDiffDiffList[i] = aCurrentStatus;
+            }
+
+            createHTMLStatus_DiffDiff(aDiffDiffList, "DiffDiff_", _sOutputPath, _sAbsoluteInputFile);
+
+            if (bFoundAOldDiff == false)
+            {
+                throw new ConvWatchCancelException("No old diff file found." );
+            }
+            if (! bDiffIsOk)
+            {
+                throw new ConvWatchException("File diff diff compare failed with file " + _sAbsoluteInputFile );
+            }
+            return bDiffIsOk;
+        }
+
+    // public static void main( String[] argv )
+    //     {
+    //         PRNCompare a = new PRNCompare();
+    //         a.setInputPath(     "/cws/so-cwsserv06/qadev18/SRC680/src.m47/convwatch.keep/input/msoffice/xp/PowerPoint");
+    //         a.setDocFile(       "1_Gov.ppt");
+    //         a.setReferencePath( "/cws/so-cwsserv06/qadev18/SRC680/src.m47/convwatch.keep/input/msoffice/xp/PowerPoint");
+    //         a.setReferenceFile( "1_Gov.prn" );
+    //
+    //         a.setOutputPath(    "/tmp/convwatch_java");
+    //         a.setPostScriptFile("1_Gov.ps" );
+    //     }
+}
