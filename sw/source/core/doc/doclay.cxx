@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:28 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,10 @@
 #include <unoframe.hxx>
 #endif
 
+// --> OD 2004-07-26 #i32089#
+#include <vector>
+// <--
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -434,6 +438,43 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     }
     else
     {
+        // --> OD 2004-07-26 #i32089# - delete at-frame anchored objects
+        if ( nWh == RES_FLYFRMFMT )
+        {
+            // determine frame formats of at-frame anchored objects
+            const SwNodeIndex* pCntntIdx = pFmt->GetCntnt().GetCntntIdx();
+            if ( pCntntIdx )
+            {
+                const SwSpzFrmFmts* pTbl = pFmt->GetDoc()->GetSpzFrmFmts();
+                if ( pTbl )
+                {
+                    std::vector<SwFrmFmt*> aToDeleteFrmFmts;
+                    const ULONG nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
+
+                    for ( USHORT i = 0; i < pTbl->Count(); ++i )
+                    {
+                        SwFrmFmt* pTmpFmt = (*pTbl)[i];
+                        const SwFmtAnchor &rAnch = pTmpFmt->GetAnchor();
+                        if ( rAnch.GetAnchorId() == FLY_AT_FLY &&
+                             rAnch.GetCntntAnchor()->nNode.GetIndex() == nNodeIdxOfFlyFmt )
+                        {
+                            aToDeleteFrmFmts.push_back( pTmpFmt );
+                        }
+                    }
+
+                    // delete found frame formats
+                    while ( !aToDeleteFrmFmts.empty() )
+                    {
+                        SwFrmFmt* pTmpFmt = aToDeleteFrmFmts.back();
+                        pFmt->GetDoc()->DelLayoutFmt( pTmpFmt );
+
+                        aToDeleteFrmFmts.pop_back();
+                    }
+                }
+            }
+        }
+        // <--
+
         //Inhalt Loeschen.
         if( pCntIdx )
         {
