@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:55 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1824,6 +1824,42 @@ void SfxViewShell::RemoveContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTM
     return pImp->aInterceptorContainer;
 }
 
+void Change( Menu* pMenu, SfxViewShell* pView )
+{
+    SfxDispatcher *pDisp = pView->GetViewFrame()->GetDispatcher();
+    USHORT nCount = pMenu->GetItemCount();
+    for ( USHORT nPos=0; nPos<nCount; ++nPos )
+    {
+        USHORT nId = pMenu->GetItemId(nPos);
+        String aCmd = pMenu->GetItemCommand(nId);
+        PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
+        if ( nId < 5000 )
+        {
+            if ( aCmd.CompareToAscii(".uno:", 5) == 0 )
+            {
+                SfxShell *pShell=0;
+                USHORT nIdx;
+                for (nIdx=0; (pShell=pDisp->GetShell(nIdx)); nIdx++)
+                {
+                    const SfxInterface *pIFace = pShell->GetInterface();
+                    const SfxSlot* pSlot = pIFace->GetSlot( aCmd );
+                    if ( pSlot )
+                    {
+                        pMenu->InsertItem( pSlot->GetSlotId(), pMenu->GetItemText( nId ), pMenu->GetItemBits( nId ), nPos );
+                        pMenu->RemoveItem( nPos+1 );
+                        break;
+                    }
+                }
+            }
+        }
+        if ( pPopup )
+        {
+            Change( pPopup, pView );
+        }
+    }
+}
+
+
 BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent )
 {
     rpOut = NULL;
@@ -1881,6 +1917,8 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, Menu*& rpOut, ::com::s
         // container was modified, create a new window out of it
         rpOut = new PopupMenu;
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer( rpOut, aEvent.ActionTriggerContainer );
+
+        Change( rpOut, this );
     }
 
     return TRUE;
