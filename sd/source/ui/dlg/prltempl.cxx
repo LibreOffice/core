@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:10:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/flstitem.hxx>
-#include <svx/chardlg.hxx>
-#include <svx/paragrph.hxx>
+//CHINA001 #include <svx/chardlg.hxx>
+//CHINA001 #include <svx/paragrph.hxx>
 #include <svx/drawitem.hxx>
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
@@ -102,7 +102,7 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
-#include <svx/numpages.hxx>
+//CHINA001 #include <svx/numpages.hxx>
 #include <svx/numitem.hxx>
 #include <svx/tabstpge.hxx>
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
@@ -119,6 +119,7 @@
 #include "bulmaper.hxx"
 #include <svtools/intitem.hxx> //add CHINA001
 #include <svx/svxgrahicitem.hxx> //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
 #define IS_OUTLINE(x) (x >= PO_OUTLINE_1 && x <= PO_OUTLINE_9)
 
 /*************************************************************************
@@ -245,9 +246,9 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             AddTabPage( RID_SVXPAGE_AREA);//CHINA001 AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_SHADOW);//CHINA001 AddTabPage( RID_SVXPAGE_SHADOW, SvxShadowTabPage::Create, 0);
             AddTabPage( RID_SVXPAGE_TRANSPARENCE);//CHINA001 AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
-            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
         }
         break;
 
@@ -261,15 +262,15 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
 
         case TAB_PRES_LAYOUT_TEMPLATE_3:
         {
-            AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
-            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
-            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create, 0);
+            AddTabPage( RID_SVXPAGE_CHAR_EFFECTS ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create, 0);
+            AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
             if(IS_OUTLINE(ePO))
             {
-                AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM, &SvxSingleNumPickTabPage::Create, 0);
-                AddTabPage(RID_SVXPAGE_PICK_BULLET    , &SvxBulletPickTabPage::Create, 0);
-                AddTabPage(RID_SVXPAGE_PICK_BMP       , &SvxBitmapPickTabPage::Create, 0);
-                AddTabPage(RID_SVXPAGE_NUM_OPTIONS    , &SvxNumOptionsTabPage::Create, 0);
+                AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM, &SvxSingleNumPickTabPage::Create, 0);
+                AddTabPage( RID_SVXPAGE_PICK_BULLET );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_BULLET    , &SvxBulletPickTabPage::Create, 0);
+                AddTabPage( RID_SVXPAGE_PICK_BMP );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_BMP     , &SvxBitmapPickTabPage::Create, 0);
+                AddTabPage( RID_SVXPAGE_NUM_OPTIONS ); //CHINA001 AddTabPage(RID_SVXPAGE_NUM_OPTIONS      , &SvxNumOptionsTabPage::Create, 0);
             }
             else
             {
@@ -448,12 +449,16 @@ void SdPresLayoutTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             SvxFontListItem aItem(*( (const SvxFontListItem*)
                 ( pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
+            //CHINA001 ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
+            aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            rPage.PageCreated(aSet);
         }
         break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
+            //CHINA001 ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            rPage.PageCreated(aSet);
         break;
 
         case RID_SVXPAGE_STD_PARAGRAPH:
