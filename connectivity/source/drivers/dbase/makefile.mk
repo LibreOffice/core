@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-19 11:55:55 $
+#   last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,6 +119,7 @@ SLOFILES=\
 SLOFILES+=$(SLO)$/staticmbdbase.obj
 .ENDIF
 
+SHL1VERSIONMAP= $(TARGET).map
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:15:18 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
+#endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
+#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
+#include "propertyids.hxx"
 #endif
 
 using namespace connectivity;

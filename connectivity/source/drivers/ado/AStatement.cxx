@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:45:43 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #ifndef _CONNECTIVITY_ADO_ARESULTSET_HXX_
 #include "ado/AResultSet.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
@@ -101,6 +102,19 @@
 #define CHECK_RETURN(x)                                                 \
     if(!x)                                                              \
         ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+
+
+// define the properties of this lib
+// this file includes the properties for this dll
+namespace connectivity
+{
+    namespace ado
+    {
+#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
+#include "UStringDescription_Impl.hxx"
+#endif
+    }
+}
 
 using namespace connectivity::ado;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 12:02:13 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #endif
 
 using namespace connectivity::ado;
+using namespace connectivity::dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:15:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE dbase
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
@@ -104,6 +105,17 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
+// define the properties of this lib
+// this file includes the properties for this dll
+namespace connectivity
+{
+    namespace dbase
+    {
+#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
+#include "UStringDescription_Impl.hxx"
+#endif
+    }
+}
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace ucb;

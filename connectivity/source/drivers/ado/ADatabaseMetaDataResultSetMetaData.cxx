@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADO_HXX_
 #include "ado/Awrapado.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif

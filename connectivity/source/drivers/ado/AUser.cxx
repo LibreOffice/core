@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 11:23:39 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 16:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #ifndef _CONNECTIVITY_ADO_BCONNECTION_HXX_
 #include "ado/AConnection.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE ado
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
