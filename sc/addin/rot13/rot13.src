@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:54:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ dutch ] = "ROT13 Algorithme, ieder alfabetisch teken van de tekst roteert met het 13e in het alfabet.";
         Text[ chinese_simplified ] = "ROT13 ·¨Τς£¬ΞΔ±ΎΔΪΓΏΈφΧΦΔΈ½«ΡΨΧΦΔΈ±νµΔµΪ13ΈφΧΦΔΈΡ­»·ΠύΧª΅£";
         Text[ greek ] = "Αλγόριθμος ROT13, κάθε αλφαβητικός χαρακτήρας του κειμένου περιστρέφεται κατά 13 θέσεις στο αλφάβητο";
-        Text[ korean ] = "ROT13 ΎΛ°νΈ®Ας, ΕΨ½ΊΖ®ΐΗ °Ά ΎΛΖΔΊª Ή®ΐΪ΄Β ΎΛΖΔΊªΏ΅Ό­ 13  ΐΪΈ®ΎΏ ΐΜµΏΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "ROT13 ΎΛ°νΈ®Ας, ΕΨ½ΊΖ®ΐΗ Έπµη ΎΛΖΔΊª Ή®ΐΪ΄Β ΎΛΖΔΊªΏ΅Ό­ 13  ΐΪΈ®ΎΏ ΐΜµΏΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "ROT13 Algoritmi, metnin her alfabetik karakteri alfabe iηinde 13 sύra dφndόrόlόr.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Algoritmo ROT13, cada carαcter alfabιtico del texto rodarα 13 espacios en el alfabeto.";
@@ -150,6 +150,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ finnish ] = "Kierrettδvδ teksti";
     };
 };
+
 
 
 
