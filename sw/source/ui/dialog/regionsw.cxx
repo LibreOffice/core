@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:40:42 $
+ *  last change: $Author: mtg $ $Date: 2001-02-16 09:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #ifndef _SW3IO_HXX
 #include <sw3io.hxx>                    //fuer lcl_ReadSections
 #endif
+#ifndef _SW_XMLSECTIONLIST_HXX
+#include <SwXMLSectionList.hxx>                 //fuer lcl_ReadSections
+#endif
 #ifndef _REGIONSW_HXX
 #include <regionsw.hxx>
 #endif
@@ -178,8 +181,26 @@
 #include <globals.hrc>
 #endif
 
-#define FILE_NAME_LENGTH 17
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
+#include <com/sun/star/xml/sax/XParser.hpp>
+#endif
+#ifndef _UTL_STREAM_WRAPPER_HXX_
+#include <unotools/streamwrap.hxx>
+#endif
 
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::rtl;
+
+#define FILE_NAME_LENGTH 17
 
 SV_IMPL_OP_PTRARR_SORT( SectReprArr, SectReprPtr )
 
@@ -1435,13 +1456,15 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
     if( rMedium.IsStorage() )
     {
         SvStorageRef aStor = rMedium.GetStorage();
+        ULONG nFormat = aStor->GetFormat();
+
             // ist das unser eigenes Format?
         if( aStor.Is() && (
-            SOT_FORMATSTR_ID_STARWRITER_50 == aStor->GetFormat() ||
-            SOT_FORMATSTR_ID_STARWRITER_40 == aStor->GetFormat() ||
-            SOT_FORMATSTR_ID_STARWRITER_30 == aStor->GetFormat() ||
-            SOT_FORMATSTR_ID_STARWRITERGLOB_50 == aStor->GetFormat() ||
-            SOT_FORMATSTR_ID_STARWRITERGLOB_40 == aStor->GetFormat() ) )
+            SOT_FORMATSTR_ID_STARWRITER_50 == nFormat ||
+            SOT_FORMATSTR_ID_STARWRITER_40 == nFormat ||
+            SOT_FORMATSTR_ID_STARWRITER_30 == nFormat ||
+            SOT_FORMATSTR_ID_STARWRITERGLOB_50 == nFormat ||
+            SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nFormat ) )
         {
             // Dann noch die Fileformat-Version vom
             // Filter abholen.
@@ -1454,6 +1477,66 @@ void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
             Sw3Io& rIo = *rSh.GetView().GetDocShell()->GetIoSystem();
             SvStringsDtor aArr( 10, 10 );
             if( !rIo.GetSectionList( &aStor, (SvStrings&)aArr ) && aArr.Count() )
+            {
+                for( USHORT n = 0; n < aArr.Count(); ++n )
+                    rBox.InsertEntry( *aArr[ n ] );
+            }
+        }
+        else if ( aStor.Is() && ( SOT_FORMATSTR_ID_STARWRITER_60 == nFormat ) )
+        {
+            SvStringsDtor aArr( 10, 10 );
+            Reference< lang::XMultiServiceFactory > xServiceFactory =
+                    comphelper::getProcessServiceFactory();
+            ASSERT( xServiceFactory.is(),
+                    "XMLReader::Read: got no service manager" );
+            if( !xServiceFactory.is() )
+            {
+                // Throw an exception ?
+            }
+
+            xml::sax::InputSource aParserInput;
+            OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
+            aParserInput.sSystemId = sDocName;
+            SvStorageStreamRef xDocStream = aStor->OpenStream( sDocName, ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE ) );
+            xDocStream->Seek( 0L );
+            xDocStream->SetBufferSize( 16*1024 );
+            aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+
+            // get parser
+            Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+            ASSERT( xXMLParser.is(),
+                "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+            if( !xXMLParser.is() )
+            {
+                // Maybe throw an exception?
+            }
+
+            // get filter
+            Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( (SvStrings&)aArr );
+
+            // connect parser and filter
+            Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+            xParser->setDocumentHandler( xFilter );
+
+            // parse
+            try
+            {
+                xParser->parseStream( aParserInput );
+            }
+            catch( xml::sax::SAXParseException&  )
+            {
+                // re throw ?
+            }
+            catch( xml::sax::SAXException&  )
+            {
+                // re throw ?
+            }
+            catch( io::IOException& )
+            {
+                // re throw ?
+            }
+            if( aArr.Count() )
             {
                 for( USHORT n = 0; n < aArr.Count(); ++n )
                     rBox.InsertEntry( *aArr[ n ] );
@@ -2219,6 +2302,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/20 13:40:42  jp
+    use correct INetURL-Decode enum
+
     Revision 1.1.1.1  2000/09/18 17:14:34  hr
     initial import
 
