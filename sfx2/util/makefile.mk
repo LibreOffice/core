@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: mav $ $Date: 2002-07-24 14:06:41 $
+#   last change: $Author: hr $ $Date: 2002-08-15 15:37:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,12 @@ SHL1STDLIBS+=\
         $(XMLOFFLIB) \
         $(XMLSCRIPTLIB) \
         $(SYSSHELLLIB)
+
+# [ed] 6/17/02 Add in another library
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS += $(INETLIB)
+.ENDIF
 
 .IF "$(SOLAR_JAVA)" != ""
 SHL1STDLIBS+=\
