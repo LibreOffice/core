@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-09-27 11:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,18 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // 5964: bUnderFlow muss zurueckgesetzt werden, sonst wird beim
         //       naechsten Softhyphen wieder umgebrochen!
         if ( !bFull )
+        {
             rInf.ClrUnderFlow();
+            if( pPor->InTxtGrp() && pPor->GetLen() )
+            {
+                xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
+                // For the moment I insert a distance from 1/2 cm between
+                // two different scripts. This value must be replaced by
+                // the right document setting, perhaps depending on both scripts
+                if( nTmp == NextScriptChg( nTmp - 1 ) )
+                    new SwKernPortion( *pPor, 284 );
+            }
+        }
 
         // Restportions von mehrzeiligen Feldern haben bisher noch
         // nicht den richtigen Ascent.
@@ -878,11 +889,12 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
         // maximal bis zum naechsten Attributwchsel.
         xub_StrLen nNextAttr = GetNextAttr();
         nNextChg = Min( nNextAttr, rInf.GetTxt().Len() );
+        nNextAttr = NextScriptChg( rInf.GetIdx() );
+        if( nNextChg > nNextAttr )
+            nNextChg = nNextAttr;
         if ( nNextChg > 1 + rInf.GetIdx() && ' ' == rInf.GetChar( nNextChg-1 ) )
             --nNextChg;
 
-#define GUESS_NEXTCHG
-#ifdef  GUESS_NEXTCHG
         // 7515, 7516, 3470, 6441 : Turbo-Boost
         // Es wird unterstellt, dass die Buchstaben eines Fonts nicht
         // groesser als doppelt so breit wie hoch sind.
@@ -907,8 +919,6 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
         nExpect = rInf.GetIdx() + ((rInf.Width() - rInf.X()) / nExpect);
         if( nExpect > rInf.GetIdx() && nNextChg > nExpect )
             nNextChg = Min( nExpect, rInf.GetTxt().Len() );
-
-#endif /* GUESS_NEXTCHG */
 
         // 4294: Vorsicht vor STRING_LEN-Ueberrundungen !
         if( MAX_TXTPORLEN < nNextChg && STRING_LEN - MAX_TXTPORLEN > rInf.GetIdx() )

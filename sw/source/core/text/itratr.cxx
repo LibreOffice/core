@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-09-27 11:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
 #endif
 
 #ifndef _FMTANCHR_HXX //autogen
@@ -157,6 +160,8 @@
 #ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
 #endif
+
+using namespace ::com::sun::star::text;
 
 /*************************************************************************
  *                      SwAttrIter::Chg()
@@ -244,7 +249,8 @@ sal_Bool SwAttrIter::SeekAndChg( const xub_StrLen nNewPos, OutputDevice *pOut )
         // wenn der Aenderungszaehler auf Null ist, kennen wir die MagicNo
         // des gewuenschten Fonts ...
         if ( !nChgCnt )
-            pFnt->SetMagic( pMagicNo, nFntIdx, pFnt->GetActual() );
+            pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
+                aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
         pFnt->ChgPhysFnt( pShell, pOut );
     }
     return bChg;
@@ -254,9 +260,42 @@ sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
 {
     Seek( nNewPos );
     if ( !nChgCnt )
-        pFnt->SetMagic( pMagicNo, nFntIdx, pFnt->GetActual() );
+        pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
+            aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
     return pFnt->IsSymbol( pShell );
 }
+
+/*************************************************************************
+ *                        SwAttrIter::NextScriptChg(..)
+ * returns the position of the next character which belongs to another script
+ * than the character of the actual (input) position.
+ * If there's no script change until the end of the paragraph, it will return
+ * STRING_LEN.
+ * Scripts are Asian (Chinese, Japanese, Korean),
+ *             Latin ( English etc.)
+ *         and Complex ( Hebrew, Arabian )
+ *************************************************************************/
+
+xub_StrLen SwAttrIter::NextScriptChg( const xub_StrLen nPos )
+{
+    for( USHORT nX = 0; nX < aScriptChg.Count(); ++nX )
+        if( nPos < aScriptChg[ nX ] )
+            return aScriptChg[ nX ];
+    return STRING_LEN;
+}
+/*************************************************************************
+ *                        SwAttrIter::ScriptType(..)
+ * returns the script of the character at the input position
+ *************************************************************************/
+
+USHORT SwAttrIter::ScriptType( const xub_StrLen nPos )
+{
+    for( USHORT nX = 0; nX < aScriptChg.Count(); ++nX )
+        if( nPos < aScriptChg[ nX ] )
+            return aScriptType[ nX ];
+    return ScriptType::LATIN;
+}
+
 
 /*************************************************************************
  *                        SwAttrIter::SeekStartAndChg()
@@ -304,7 +343,8 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFo
         // wenn der Aenderungszaehler auf Null ist, kennen wir die MagicNo
         // des gewuenschten Fonts ...
         if ( !nChgCnt )
-            pFnt->SetMagic( pMagicNo, nFntIdx, pFnt->GetActual() );
+            pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
+                aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
         pFnt->ChgPhysFnt( pShell, pOut );
     }
     return bChg;
@@ -376,6 +416,17 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
         }
         SeekFwd( nNewPos );
     }
+    USHORT nScript = ScriptType( nNewPos );
+    BYTE nScr = SW_LATIN;
+    if( nScript == ScriptType::ASIAN )
+        nScr = SW_CJK;
+    else if( nScript == ScriptType::COMPLEX )
+        nScr = SW_CTL;
+#ifdef DEBUG
+    static BOOL bAct = FALSE;
+    if( bAct )
+        pFnt->SetActual( nScr );
+#endif
     if( pRedln )
         nChgCnt += pRedln->Seek( *pFnt, nNewPos, nPos );
     nPos = nNewPos;
@@ -683,9 +734,12 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     while( nIdx < nLen )
     {
         xub_StrLen nNextChg = aIter.GetNextAttr();
-        xub_StrLen nStop = nIdx;
+        xub_StrLen nStop = aIter.NextScriptChg( nIdx );
+        if( nNextChg > nStop )
+            nNextChg = nStop;
         SwTxtAttr *pHint = NULL;
         xub_Unicode cChar = CH_BLANK;
+        nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
                CH_TAB != ( cChar = aText.GetChar( nStop ) ) &&
                CH_BREAK != cChar && !pHint )

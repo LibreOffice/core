@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-09-27 11:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 #include <tools/solar.h>
 #endif
 #include "txttypes.hxx"
+#include "swfont.hxx"
+
+#define _SVSTDARR_XUB_STRLEN
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 
 class OutputDevice;
 class SwFont;
@@ -89,25 +94,31 @@ protected:
     const SwAttrSet* pAttrSet;       // das Char-Attribut-Set
 
 private:
-    xub_StrLen nStartIndex, nEndIndex, nPos;
-    MSHORT nChgCnt, nFntIdx;
-    const void* pMagicNo;
+    SvXub_StrLens aScriptChg;
+    SvUShorts aScriptType;
+    const void* aMagicNo[ SW_SCRIPTS ];
+    MSHORT aFntIdx[ SW_SCRIPTS ];
     OutputDevice *pLastOut;
     SwRedlineItr *pRedln;
+    xub_StrLen nStartIndex, nEndIndex, nPos;
+    MSHORT nChgCnt;
     void SeekFwd( const xub_StrLen nPos );
+    USHORT ScriptType( const xub_StrLen nPos );
 
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
     void CtorInit( SwTxtNode& rTxtNode );
-    inline SwAttrIter() : pFnt(0), pLastOut(0), pMagicNo(0), nChgCnt(0),
-        nFntIdx(0), pShell(0), pRedln( 0 ) { }
+    inline SwAttrIter() : pFnt(0), pLastOut(0), nChgCnt(0), pShell(0), pRedln(0)
+        { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
+          aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; }
 
 public:
     // Konstruktor, Destruktor
     inline SwAttrIter( SwTxtNode& rTxtNode )
-           : pFnt(0), pLastOut(0), pMagicNo(0), nChgCnt(0), pRedln(0), nFntIdx(0)
-           { CtorInit( rTxtNode ); }
+           : pFnt(0), pLastOut(0), nChgCnt(0), pRedln(0)
+           { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
+               aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; CtorInit( rTxtNode ); }
 
     virtual ~SwAttrIter();
 
@@ -116,6 +127,7 @@ public:
     // der uebergebenen Characterposition zurueck. Liefert sal_False, wenn vor
     // oder an dieser Position kein Wechsel mehr erfolgt, sal_True sonst.
     xub_StrLen GetNextAttr( ) const;
+    xub_StrLen NextScriptChg( const xub_StrLen nPos );
     // Macht die an der Characterposition i gueltigen Attribute im
     // logischen Font wirksam.
     sal_Bool Seek( const xub_StrLen nPos );

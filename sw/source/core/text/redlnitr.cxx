@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-09-27 11:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HDL_
+#include <com/sun/star/text/ScriptType.hdl>
+#endif
 
 #include "swmodule.hxx"
 
@@ -86,7 +89,7 @@
 #include "txatbase.hxx"     // SwTxtAttr
 #include "rootfrm.hxx"
 #include "frmsh.hxx"
-
+#include "breakit.hxx"
 
 //////////////////////////
 
@@ -108,6 +111,8 @@
 #include "redlnitr.hxx"
 #include "extinput.hxx"
 
+using namespace ::com::sun::star::text;
+
 /*************************************************************************
  *                      SwAttrIter::CtorInit()
  *************************************************************************/
@@ -126,7 +131,6 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
         // Hier wird noch ein weiterer Cache eingebaut werden,
         // der ueber ein paar SfxItemSets sucht.
         pFnt = new SwFont( pAttrSet );
-        pMagicNo = 0;
     }
     else
     {
@@ -135,8 +139,111 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
         SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
 //FEATURE::CONDCOLL
         pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
-        pFnt->ChkMagic( pShell, pFnt->GetActual() );
-        pFnt->GetMagic( pMagicNo, nFntIdx, pFnt->GetActual() );
+    }
+
+    aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
+    if( aScriptChg.Count() )
+    {
+        aScriptChg.Remove( 0, USHRT_MAX );
+        aScriptType.Remove( 0, USHRT_MAX );
+    }
+
+#ifdef DEBUG
+    static BOOL bTest = TRUE;
+    if( bTest )
+    {
+        const String& rTxt = rTxtNode.GetTxt();
+        xub_StrLen nCnt = 0;
+        USHORT nScript = ScriptType::LATIN;
+        for( xub_StrLen nI = 0; nI < rTxt.Len(); ++nI )
+        {
+            USHORT nNxt = nScript;
+            const xub_Unicode aChar = rTxt.GetChar( nI );
+            if( 'A' <= aChar && aChar <= 'Z' )
+                nNxt = ScriptType::LATIN;
+            else if( 'a' <= aChar && aChar <= 'z' )
+                nNxt = ScriptType::ASIAN;
+            if( nNxt != nScript )
+            {
+                aScriptChg.Insert( nI, nCnt );
+                aScriptType.Insert( nScript, nCnt++ );
+                BYTE nTmp = 4;
+                switch ( nScript ) {
+                    case ScriptType::ASIAN :
+                        if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
+                    case ScriptType::COMPLEX :
+                        if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL; break;
+                    default:
+                        if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
+                }
+                if( nTmp < 4 )
+                {
+                    pFnt->ChkMagic( pShell, nTmp );
+                    pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
+                }
+                nScript = nNxt;
+            }
+        }
+        aScriptChg.Insert( nI, nCnt );
+        aScriptType.Insert( nScript, nCnt++ );
+        BYTE nTmp = 4;
+        switch ( nScript ) {
+            case ScriptType::ASIAN :
+                if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
+            case ScriptType::COMPLEX :
+                if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL; break;
+            default:
+                if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
+        }
+        if( nTmp < 4 )
+        {
+            pFnt->ChkMagic( pShell, nTmp );
+            pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
+        }
+    }
+    else
+    if( pBreakIt->xBreak.is() )
+    {
+        const String& rTxt = rTxtNode.GetTxt();
+        USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
+        xub_StrLen nChg = 0;
+        USHORT nCnt = 0;
+        if( ScriptType::WEAK == nScript )
+        {
+            nChg = pBreakIt->xBreak->endOfScript( rTxt, 0, nScript );
+            if( nChg < rTxt.Len() )
+                nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+        }
+        do
+        {
+            nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+            aScriptChg.Insert( nChg, nCnt );
+            aScriptType.Insert( nScript, nCnt++ );
+            BYTE nTmp = 4;
+            switch ( nScript ) {
+                case ScriptType::ASIAN :
+                    if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
+                case ScriptType::COMPLEX :
+                    if( !aMagicNo[SW_CTL] ) nTmp = SW_CTL; break;
+                default:
+                    if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
+            }
+            if( nTmp < 4 )
+            {
+                pFnt->ChkMagic( pShell, nTmp );
+                pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
+            }
+            if( nChg < rTxt.Len() )
+                nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+            else
+                break;
+        } while( TRUE );
+    }
+    else
+#endif
+    {
+        pFnt->ChkMagic( pShell, SW_LATIN );
+        pFnt->GetMagic( aMagicNo[ SW_LATIN ], aFntIdx[ SW_LATIN ], SW_LATIN );
     }
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
     SwDoc* pDoc = rTxtNode.GetDoc();
