@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentfactory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:55 $
+ *  last change: $Author: er $ $Date: 2000-10-22 15:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <unotools/componentfactory.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -102,7 +102,7 @@ Reference< XInterface > getComponentInstance(
             )
 {
     Reference< XInterface > xI;
-    Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     if ( xMSF.is() )
         xI = xMSF->createInstance( rImplementationName );
     if( !xI.is() )
