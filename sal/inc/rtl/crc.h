@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crc.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: mhu $ $Date: 2001-11-04 20:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _RTL_CRC_H_
-#define _RTL_CRC_H_ "$Revision: 1.1.1.1 $"
+#define _RTL_CRC_H_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -76,15 +76,17 @@ extern "C" {
  *
  *======================================================================*/
 /** Evaluate CRC32 over given data.
- *
- *  @param  Crc    [in] CRC32 over previous data or zero.
- *  @param  Data   [in] data buffer.
- *  @param  DatLen [in] data buffer length.
- *  @return new CRC32 value.
+    @descr This function evaluates the CRC polynomial 0xEDB88320.
+
+    @param  Crc    [in] CRC32 over previous data or zero.
+    @param  Data   [in] data buffer.
+    @param  DatLen [in] data buffer length.
+    @return new CRC32 value.
  */
 sal_uInt32 SAL_CALL rtl_crc32 (
     sal_uInt32  Crc,
-    const void *Data, sal_uInt32 DatLen);
+    const void *Data, sal_uInt32 DatLen
+) SAL_THROW_EXTERN_C();
 
 /*========================================================================
  *

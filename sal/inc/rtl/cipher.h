@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cipher.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: mhu $ $Date: 2001-11-04 20:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _RTL_CIPHER_H_
-#define _RTL_CIPHER_H_ "$Revision: 1.2 $"
+#define _RTL_CIPHER_H_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -75,54 +75,67 @@ extern "C" {
  * rtlCipher interface.
  *
  *======================================================================*/
-/** Opaque cipher handle.
+/** Cipher Handle opaque type.
  */
 typedef void* rtlCipher;
 
 
-/** rtlCipherAlgorithm.
-
-    @see rtl_cipher_create.
+/** Cipher Algorithm type.
  */
-typedef enum
+typedef enum __rtl_CipherAlgorithm rtlCipherAlgorithm;
+
+/** Cipher Algorithm enumeration.
+    @see rtl_cipher_create()
+ */
+enum __rtl_CipherAlgorithm
 {
     rtl_Cipher_AlgorithmBF,
     rtl_Cipher_AlgorithmInvalid,
     rtl_Cipher_Algorithm_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} rtlCipherAlgorithm;
+};
 
 
-/** rtlCipherMode.
-
-    @see rtl_cipher_create.
+/** Cipher Mode type.
  */
-typedef enum
+typedef enum __rtl_CipherMode rtlCipherMode;
+
+/** Cipher Mode enumeration.
+    @see rtl_cipher_create()
+ */
+enum __rtl_CipherMode
 {
     rtl_Cipher_ModeECB,
     rtl_Cipher_ModeCBC,
     rtl_Cipher_ModeStream,
     rtl_Cipher_ModeInvalid,
     rtl_Cipher_Mode_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} rtlCipherMode;
+};
 
 
-/** rtlCipherDirection.
-
-    @see rtl_cipher_init.
+/** Cipher Direction type.
  */
-typedef enum
+typedef enum __rtl_CipherDirection rtlCipherDirection;
+
+/** Cipher Direction enumeration.
+    @see rtl_cipher_init()
+ */
+enum __rtl_CipherDirection
 {
     rtl_Cipher_DirectionBoth,
     rtl_Cipher_DirectionDecode,
     rtl_Cipher_DirectionEncode,
     rtl_Cipher_DirectionInvalid,
     rtl_Cipher_Direction_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} rtlCipherDirection;
+};
 
 
-/** rtlCipherError.
+/** Error Code type.
  */
-typedef enum
+typedef enum __rtl_CipherError rtlCipherError;
+
+/** Error Code enumeration.
+ */
+enum __rtl_CipherError
 {
     rtl_Cipher_E_None,
     rtl_Cipher_E_Argument,
@@ -133,133 +146,141 @@ typedef enum
     rtl_Cipher_E_Memory,
     rtl_Cipher_E_Unknown,
     rtl_Cipher_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
-} rtlCipherError;
+};
 
 
-/** rtl_cipher_create.
-    Create a cipher handle for the given algorithm and mode.
+/** Create a cipher handle for the given algorithm and mode.
+    @see rtlCipherAlgorithm
+    @see rtlCipherMode
 
-    @param  Algorithm [in]
-    @param  Mode      [in]
+    @param  Algorithm [in] cipher algorithm.
+    @param  Mode      [in] cipher mode.
     @return Cipher handle, or 0 upon failure.
  */
 rtlCipher SAL_CALL rtl_cipher_create (
     rtlCipherAlgorithm Algorithm,
-    rtlCipherMode      Mode);
+    rtlCipherMode      Mode
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_init.
+/** Inititialize a cipher for the given direction.
+    @see rtlCipherDirection
 
-    @param  Cipher    [in]
-    @param  Direction [in]
-    @param  pKeyData  [in]
-    @param  nKeyLen   [in]
-    @param  pArgData  [in]
-    @param  nArgLen   [in]
+    @param  Cipher    [in] cipher handle.
+    @param  Direction [in] cipher direction.
+    @param  pKeyData  [in] key material buffer.
+    @param  nKeyLen   [in] key material length in bytes.
+    @param  pArgData  [in] initialization vector buffer.
+    @param  nArgLen   [in] initialization vector length in bytes.
     @return rtl_Cipher_E_None upon success.
  */
 rtlCipherError SAL_CALL rtl_cipher_init (
     rtlCipher           Cipher,
     rtlCipherDirection  Direction,
     const sal_uInt8    *pKeyData, sal_uInt32 nKeyLen,
-    const sal_uInt8    *pArgData, sal_uInt32 nArgLen);
+    const sal_uInt8    *pArgData, sal_uInt32 nArgLen
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_encode.
+/** Encode a buffer under a given cipher algorithm.
+    @precond Initialized for a compatible cipher direction.
+    @see     rtl_cipher_init()
 
-    @param  Cipher  [in]
-    @param  pData   [in]
-    @param  nDatLen [in]
-    @param  pBuffer [out]
-    @param  nBufLen [in]
+    @param  Cipher  [in]  cipher handle.
+    @param  pData   [in]  plaintext buffer.
+    @param  nDatLen [in]  plaintext length in bytes.
+    @param  pBuffer [out] ciphertext buffer.
+    @param  nBufLen [in]  ciphertext length in bytes.
     @return rtl_Cipher_E_None upon success.
  */
 rtlCipherError SAL_CALL rtl_cipher_encode (
     rtlCipher   Cipher,
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen);
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_decode.
+/** Decode a buffer under a given cipher algorithm.
+    @precond Initialized for a compatible cipher direction.
+    @see     rtl_cipher_init()
 
-    @param  Cipher  [in]
-    @param  pData   [in]
-    @param  nDatLen [in]
-    @param  pBuffer [out]
-    @param  nBufLen [in]
+    @param  Cipher  [in]  cipher handle.
+    @param  pData   [in]  ciphertext buffer.
+    @param  nDatLen [in]  ciphertext length in bytes.
+    @param  pBuffer [out] plaintext buffer.
+    @param  nBufLen [in]  plaintext length in bytes.
     @return rtl_Cipher_E_None upon success.
  */
 rtlCipherError SAL_CALL rtl_cipher_decode (
     rtlCipher   Cipher,
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen);
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_destroy.
-
-    @param  Cipher [in] handle to be destroyed.
+/** Destroy a cipher handle.
+    @param  Cipher [in] cipher handle to be destroyed.
     @return None. Cipher handle destroyed and invalid.
  */
-void SAL_CALL rtl_cipher_destroy (rtlCipher Cipher);
+void SAL_CALL rtl_cipher_destroy (
+    rtlCipher Cipher
+) SAL_THROW_EXTERN_C();
 
 
 /*========================================================================
  *
  * rtl_cipherBF (Blowfish) interface.
  *
- * Reference:
- *   Bruce Schneier: Applied Cryptography, 2nd edition, ch. 14.3
- *
  *======================================================================*/
-/** rtl_cipher_createBF.
+/** Create a Blowfish cipher handle for the given mode.
+    @descr The Blowfish block cipher algorithm is specified in
+    Bruce Schneier: Applied Cryptography, 2nd edition, ch. 14.3
 
-    @return Cipher handle, or 0 upon failure.
-    @see    rtl_cipher_create.
+    @see rtl_cipher_create()
  */
-rtlCipher SAL_CALL rtl_cipher_createBF (rtlCipherMode Mode);
+rtlCipher SAL_CALL rtl_cipher_createBF (
+    rtlCipherMode Mode
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_initBF.
-
-    @return rtl_Cipher_E_None upon success.
-    @see    rtl_cipher_init.
+/** Inititialize a Blowfish cipher for the given direction.
+    @see rtl_cipher_init()
  */
 rtlCipherError SAL_CALL rtl_cipher_initBF (
     rtlCipher          Cipher,
     rtlCipherDirection Direction,
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen,
-    const sal_uInt8 *pArgData, sal_uInt32 nArgLen);
+    const sal_uInt8 *pArgData, sal_uInt32 nArgLen
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_encodeBF.
-
-    @return rtl_Cipher_E_None upon success.
-    @see    rtl_cipher_encode.
+/** Encode a buffer under the Blowfish cipher algorithm.
+    @see rtl_cipher_encode()
  */
 rtlCipherError SAL_CALL rtl_cipher_encodeBF (
     rtlCipher   Cipher,
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen);
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_decodeBF.
-
-    @return rtl_Cipher_E_None upon success.
-    @see    rtl_cipher_decode.
+/** Decode a buffer under the Blowfish cipher algorithm.
+    @see rtl_cipher_decode()
  */
 rtlCipherError SAL_CALL rtl_cipher_decodeBF (
     rtlCipher   Cipher,
     const void *pData,   sal_uInt32 nDatLen,
-    sal_uInt8  *pBuffer, sal_uInt32 nBufLen);
+    sal_uInt8  *pBuffer, sal_uInt32 nBufLen
+) SAL_THROW_EXTERN_C();
 
 
-/** rtl_cipher_destroyBF.
-
-    @param  Cipher [in] handle to be destroyed.
-    @return None. Cipher handle destroyed and invalid.
-    @see    rtl_cipher_destroy.
+/** Destroy a Blowfish cipher handle.
+    @see rtl_cipher_destroy()
  */
-void SAL_CALL rtl_cipher_destroyBF (rtlCipher Cipher);
+void SAL_CALL rtl_cipher_destroyBF (
+    rtlCipher Cipher
+) SAL_THROW_EXTERN_C();
+
 
 /*========================================================================
  *

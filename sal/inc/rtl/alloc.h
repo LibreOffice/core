@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-10-15 06:41:04 $
+ *  last change: $Author: mhu $ $Date: 2001-11-04 20:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
@@ -72,6 +72,9 @@ extern "C" {
 
 
 /** Allocate memory.
+    @descr A call to this function will NULL upon the requested memory
+    size being either zero or larger than currently allocatable.
+
     @param  Bytes [in] memory size.
     @return pointer to allocated memory.
  */
@@ -81,6 +84,15 @@ void * SAL_CALL rtl_allocateMemory (
 
 
 /** Reallocate memory.
+    @descr A call to this function with parameter 'Ptr' being NULL
+    is equivalent to a rtl_allocateMemory() call.
+
+    A call to this function with parameter 'Bytes' being 0
+    is equivalent to a rtl_freeMemory() call.
+
+    @see rtl_allocateMemory()
+    @see rtl_freeMemory()
+
     @param  Ptr   [in] pointer to previously allocated memory.
     @param  Bytes [in] new memory size.
     @return pointer to reallocated memory. May differ from Ptr.
@@ -101,6 +113,9 @@ void SAL_CALL rtl_freeMemory (
 
 
 /** Allocate and zero memory.
+    @descr A call to this function will NULL upon the requested memory
+    size being either zero or larger than currently allocatable.
+
     @param  Bytes [in] memory size.
     @return pointer to allocated and zero'ed memory.
  */
