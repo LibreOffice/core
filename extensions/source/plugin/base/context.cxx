@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 10:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #if STLPORT_VERSION>=321
 #include <cstdarg>
+#include <cstdio>
 #endif
 
 #include <plugin/impl.hxx>
