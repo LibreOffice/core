@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2001-01-16 09:52:47 $
+ *  last change: $Author: mba $ $Date: 2001-02-01 09:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #ifndef _COM_SUN_STAR_IO_DATATRANSFEREVENT_HPP_
 #include <com/sun/star/io/DataTransferEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XDATAIMPORTER_HPP_
-#include <com/sun/star/io/XDataImporter.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XDATATRANSFEREVENTLISTENER_HPP_
 #include <com/sun/star/io/XDataTransferEventListener.hpp>
 #endif
@@ -97,6 +94,16 @@
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/document/XFilter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XIMPORTER_HPP_
+#include <com/sun/star/document/XImporter.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
+#include <com/sun/star/document/XExporter.hpp>
 #endif
 #pragma hdrstop
 
@@ -846,9 +853,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     else
     {
         if ( rMedium.GetFilter() && ( rMedium.GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
-            bOk = ExportTo( rMedium );
+            bOk = ExportTo( rMedium, *pSet );
         else
-            bOk=ConvertTo( rMedium );
+            bOk = ConvertTo( rMedium );
 
         if( bOk )
             bOk = SaveChilds();
@@ -1134,12 +1141,19 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium&  rMedium )
 {
     String aName( GetMedium()->GetFilter()->GetFilterName() );
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XDataImporter >  xLoader( xMan->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilters (
+                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+    ::rtl::OUString aFilterName = SfxFilterContainer::ConvertToNewFilterName( aName );
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xLoader( xFilters->createInstance( aFilterName ), ::com::sun::star::uno::UNO_QUERY );
     if ( xLoader.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp( GetModel(), ::com::sun::star::uno::UNO_QUERY );
-        xLoader->importData( GetMedium()->GetDataSource(), xComp, new DataTransferEventListener_Impl( this, xLoader ) );
-        pImp->xFilter = ::com::sun::star::uno::Reference< ::com::sun::star::io::XDataExporter > ( xLoader, ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Reference< ::com::sun::star::document::XImporter > xImporter( xLoader, ::com::sun::star::uno::UNO_QUERY );
+        xImporter->setTargetDocument( xComp );
+        xLoader->filter( GetModel()->getArgs() );
+
+        pImp->xFilter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > ( xLoader, ::com::sun::star::uno::UNO_QUERY );
         if ( pImp->xFilter.is() )
             pImp->aStarOneFilterName = aName;
         else
@@ -1150,22 +1164,28 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium&  rMedium )
     return sal_False;
 }
 
-sal_Bool SfxObjectShell::ExportTo( SfxMedium&  rMedium )
+sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
 {
     String aName( rMedium.GetFilter()->GetFilterName() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XDataExporter >  xExport;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > xExporter;
     if ( pImp->aStarOneFilterName == aName )
-        xExport = pImp->xFilter;
+        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > ( pImp->xFilter, ::com::sun::star::uno::UNO_QUERY );
     else
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-        xExport = ::com::sun::star::uno::Reference< ::com::sun::star::io::XDataExporter > ( xMan->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilters (
+                xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+        ::rtl::OUString aFilterName = SfxFilterContainer::ConvertToNewFilterName( aName );
+        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > ( xFilters->createInstance( aFilterName ), ::com::sun::star::uno::UNO_QUERY );
     }
 
-    if ( xExport.is() )
+    if ( xExporter.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp( GetModel(), ::com::sun::star::uno::UNO_QUERY );
-        xExport->exportData( rMedium.GetDataSink(), xComp, new DataTransferEventListener_Impl( this, xExport ) );
+        ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xFilter( xExporter, ::com::sun::star::uno::UNO_QUERY );
+        xExporter->setSourceDocument( xComp );
+        xFilter->filter( GetModel()->getArgs() );
         return sal_True;
     }
 

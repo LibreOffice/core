@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mba $ $Date: 2001-02-01 09:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,67 +235,8 @@ void SfxObjectFactory::DoInitFactory()
 
         if ( pImpl->aServiceName.len() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-            ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >  xRegistry = ::com::sun::star::uno::Reference< ::com::sun::star::registry::XSimpleRegistry >
-                    ( xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.registry.DefaultRegistry" ) ), ::com::sun::star::uno::UNO_QUERY );
-            if ( xRegistry.is() )
-            {
-                SfxFilterContainer *pCont = GetFilterContainer();
-                ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xRootKey = xRegistry->getRootKey();
-
-                // In der Registry die Section suchen, in der Filter f"ur mein Model registriert sind
-                ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xKey = xRootKey->openKey( DEFINE_CONST_UNICODE( "/Filter/" ) + pImpl->aServiceName );
-                if ( xKey.is() && xKey->getValueType() == ::com::sun::star::registry::RegistryValueType_ASCIILIST )
-                {
-                    ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = xKey->getAsciiListValue();
-                    const ::rtl::OUString* pStr = aNames.getConstArray();
-                    for ( sal_uInt32 n=0; n<aNames.getLength(); n++ )
-                    {
-                        // F"ur jeden Filter die Kriterien einsammeln und einen SfxFilter generieren
-                        String aName, aPattern, aExtension, aMimeType;
-                        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xLocalKey = xRootKey->openKey( DEFINE_CONST_UNICODE( "/IMPLEMENTATIONS/" ) + pStr[n] + DEFINE_CONST_UNICODE( "/Filter" ) );
-
-                        sal_uInt32 nFilterFlags = 0;
-                        xKey = xLocalKey->openKey( DEFINE_CONST_UNICODE( "Import" ) );
-                        if ( xKey.is() )
-                        {
-                            nFilterFlags |= SFX_FILTER_IMPORT;
-                            xKey = xLocalKey->openKey( DEFINE_CONST_UNICODE( "Template" ) );
-                            if ( xKey.is() )
-                                nFilterFlags |= SFX_FILTER_TEMPLATE;
-                        }
-
-                        xKey = xLocalKey->openKey( DEFINE_CONST_UNICODE( "Export" ) );
-                        if ( xKey.is() )
-                            nFilterFlags |= SFX_FILTER_EXPORT;
-
-                        if ( nFilterFlags )
-                        {
-                            nFilterFlags |= SFX_FILTER_STARONEFILTER;
-
-                            xKey = xLocalKey->openKey( DEFINE_CONST_UNICODE( "Name" ) );
-                            if ( xKey.is() )
-                                aName = String( xKey->getAsciiValue() );
-                            xKey = xLocalKey->openKey( DEFINE_CONST_UNICODE( "Pattern" ) );
-                            if ( xKey.is() )
-                                aPattern = String( xKey->getAsciiValue() );
-                            xKey = xLocalKey->openKey( DEFINE_CONST_UNICODE( "MimeType" ) );
-                            if ( xKey.is() )
-                                aMimeType = String( xKey->getAsciiValue() );
-                            xKey = xLocalKey->openKey( DEFINE_CONST_UNICODE( "Extension" ) );
-                            if ( xKey.is() )
-                            {
-                                aExtension = DEFINE_CONST_UNICODE( "*." );
-                                aExtension += String( xKey->getAsciiValue() );
-                            }
-
-                            SfxFilter *pFilter = new SfxFilter( pStr[n], aExtension, nFilterFlags, 0, String(), String(), 0, aMimeType, pCont, String() );
-                            pFilter->SetUIName( aName );
-                            pCont->AddFilter( pFilter, pCont->GetFilterCount() );
-                        }
-                    }
-                }
-            }
+            SfxFilterContainer *pCont = GetFilterContainer();
+            pCont->ReadExternalFilters( pImpl->aServiceName );
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: mba $ $Date: 2001-02-01 09:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,8 @@
 
 #include "objsh.hxx"
 #include "bitset.hxx"
-#ifndef _COM_SUN_STAR_IO_DATATRANSFEREVENT_HPP_
-#include <com/sun/star/io/DataTransferEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XDATAIMPORTER_HPP_
-#include <com/sun/star/io/XDataImporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XDATATRANSFEREVENTLISTENER_HPP_
-#include <com/sun/star/io/XDataTransferEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XDATAEXPORTER_HPP_
-#include <com/sun/star/io/XDataExporter.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/document/XFilter.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -103,7 +94,7 @@ class SfxJSDocumentManager;
 class SvIPCClient;
 struct SfxObjectShell_Impl
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XDataExporter >     xFilter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xFilter;
     String              aStarOneFilterName;
     SfxDocumentInfo*    pDocInfo;
     SfxConfigManager*   pCfgMgr;
