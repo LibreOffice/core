@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:55:19 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2107,6 +2107,28 @@ public:
 
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
+
+    // -> #i27615#
+    /**
+       Marks/Unmarks a level of a numbring rule.
+
+       @param sNumRule   name of the numbering rule
+       @param nLevel     level to mark
+       @param bValue     - TRUE  mark the level
+                         - FALSE unmark the level
+     */
+    void SetMarkedNumLevel(const String & sNumRule, BYTE nLevel, BOOL bValue);
+
+    /**
+       Marks/Unmarks a level of a numbring rule.
+
+       @param rNumRule   the numbering rule
+       @param nLevel     level to mark
+       @param bValue     - TRUE  mark the level
+                         - FALSE unmark the level
+     */
+    void SetMarkedNumLevel(SwNumRule & rNumRule, BYTE nLevel, BOOL bValue);
+    // <- #i27615#
 
     // -> #i23726#
     BOOL IsFirstOfNumRule(SwPosition & rPos);
