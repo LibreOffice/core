@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 14:45:47 $
+ *  last change: $Author: nn $ $Date: 2002-04-29 18:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <svx/colorcfg.hxx>
 #include <svx/fmview.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
@@ -347,12 +348,14 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     BOOL bValidPage = ( nPageNo < nTotalPages );
 
     ScModule* pScMod = SC_MOD();
+    const svx::ColorConfig& rColorCfg = pScMod->GetColorConfig();
+    Color aBackColor( rColorCfg.GetColorValue(svx::APPBACKGROUND).nColor );
 
     if ( bDoPrint && ( aOffset.X() < 0 || aOffset.Y() < 0 ) && bValidPage )
     {
         SetMapMode( aMMMode );
         SetLineColor();
-        SetFillColor(COL_LIGHTGRAY);
+        SetFillColor(aBackColor);
 
         Size aWinSize = GetOutputSize();
         if ( aOffset.X() < 0 )
@@ -422,7 +425,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         if (bRight || bBottom)
         {
             SetLineColor();
-            SetFillColor(COL_LIGHTGRAY);
+            SetFillColor(aBackColor);
             if (bRight)
                 DrawRect(Rectangle(nPageEndX,0, aWinEnd.X(),aWinEnd.Y()));
             if (bBottom)

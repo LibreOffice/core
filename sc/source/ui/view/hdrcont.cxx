@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-18 09:14:38 $
+ *  last change: $Author: nn $ $Date: 2002-04-29 18:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/poly.hxx>
+#include <svx/colorcfg.hxx>
 
 #include "scresid.hxx"
 #include "sc.hrc"
@@ -261,10 +262,6 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     aNormFont.SetColor( aTextColor );
     aBoldFont.SetColor( aTextColor );
 
-    SetFillColor( rStyleSettings.GetFaceColor() );
-    SetLineColor();
-    DrawRect( rRect );
-
     const FunctionSet*  pFuncSet = pSelEngine->GetFunctionSet();
     String              aString;
     USHORT              nBarSize;
@@ -318,6 +315,31 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
             if (nHidden)
                 i += nHidden - 1;
         }
+    }
+
+    //  background is different for entry area and behind the entries
+
+    Rectangle aFillRect;
+    SetLineColor();
+
+    if ( nLineEnd >= 0 )
+    {
+        SetFillColor( rStyleSettings.GetFaceColor() );
+        if ( bVertical )
+            aFillRect = Rectangle( 0, 0, nBarSize-1, nLineEnd );
+        else
+            aFillRect = Rectangle( 0, 0, nLineEnd, nBarSize-1 );
+        DrawRect( aFillRect );
+    }
+
+    if ( nLineEnd < nPEnd )
+    {
+        SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svx::APPBACKGROUND).nColor );
+        if ( bVertical )
+            aFillRect = Rectangle( 0, nLineEnd+1, nBarSize-1, nPEnd );
+        else
+            aFillRect = Rectangle( nLineEnd+1, 0, nPEnd, nBarSize-1 );
+        DrawRect( aFillRect );
     }
 
     if ( nLineEnd >= nPStart )

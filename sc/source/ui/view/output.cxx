@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-25 18:26:01 $
+ *  last change: $Author: nn $ $Date: 2002-04-29 18:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "scitems.hxx"
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/colorcfg.hxx>
 #include <svx/rotmodit.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/svxfont.hxx>
@@ -348,8 +349,9 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
 
     if ( eType == OUTTYPE_WINDOW )
     {
-        aPageColor = COL_GRAY;
-        aManualColor = COL_BLUE;
+        const svx::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        aPageColor.SetColor( rColorCfg.GetColorValue(svx::CALCPAGEBREAKAUTOMATIC).nColor );
+        aManualColor.SetColor( rColorCfg.GetColorValue(svx::CALCPAGEBREAKMANUAL).nColor );
     }
     else
     {

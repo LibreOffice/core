@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
+ *  last change: $Author: nn $ $Date: 2002-04-29 18:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <svx/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editview.hxx>
 #include <svx/fhgtitem.hxx>
@@ -413,7 +414,8 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
 
 void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdateMode eMode )
 {
-    BOOL bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    ScModule* pScMod = SC_MOD();
+    BOOL bTextWysiwyg = pScMod->GetInputOptions().GetTextWysiwyg();
     BOOL bGridFirst = TRUE;     //! entscheiden!!!
 
     if (pViewData->IsMinimized())
@@ -512,8 +514,16 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
         aOutputData.SetFmtDevice( pFmtDev );
     }
 
+    const svx::ColorConfig& rColorCfg = pScMod->GetColorConfig();
+    Color aGridColor( rColorCfg.GetColorValue( svx::CALCGRID, FALSE ).nColor );
+    if ( aGridColor.GetColor() == COL_TRANSPARENT )
+    {
+        //  use view options' grid color only if color config has "automatic" color
+        aGridColor = rOpts.GetGridColor();
+    }
+
     aOutputData.SetSyntaxMode       ( pViewData->IsSyntaxMode() );
-    aOutputData.SetGridColor        ( rOpts.GetGridColor() );
+    aOutputData.SetGridColor        ( aGridColor );
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
     aOutputData.SetShowFormulas     ( bFormulaMode );
     aOutputData.SetShowSpellErrors  ( !rOpts.IsHideAutoSpell() &&
@@ -739,7 +749,7 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
 
         //  Range-Finder
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pViewData->GetViewShell() );
+    ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
     if (pHdl)
     {
         ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
@@ -769,7 +779,7 @@ void ScGridWindow::Draw( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2, ScUpdat
     if ( nX2==MAXCOL || nY2==MAXROW )
     {
         Rectangle aPixRect = Rectangle( Point(), GetOutputSizePixel() );
-        SetFillColor( COL_LIGHTGRAY );
+        SetFillColor( rColorCfg.GetColorValue(svx::APPBACKGROUND).nColor );
         SetLineColor();
         if ( nX2==MAXCOL )
         {
@@ -840,8 +850,9 @@ void ScGridWindow::DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT n
         ScDocument* pDoc = pViewData->GetDocument();
         USHORT nTab = pViewData->GetTabNo();
         Size aWinSize = GetOutputSizePixel();
-        Color aManual( COL_LIGHTBLUE );
-        Color aAutomatic( COL_BLUE );
+        const svx::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        Color aManual( rColorCfg.GetColorValue(svx::CALCPAGEBREAKMANUAL).nColor );
+        Color aAutomatic( rColorCfg.GetColorValue(svx::CALCPAGEBREAK).nColor );
 
         String aPageText = ScGlobal::GetRscString( STR_PAGE );
         if ( nPageScript == 0 )
