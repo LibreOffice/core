@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-26 15:05:18 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,8 +624,8 @@ void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 void ScFunctionDockWin::SetDescription()
 {
     aFiFuncDesc.SetText( EMPTY_STRING );
-    ScFuncDesc* pDesc =
-             (ScFuncDesc*)pAllFuncList->GetEntryData(
+    const ScFuncDesc* pDesc =
+             (const ScFuncDesc*)pAllFuncList->GetEntryData(
                     pAllFuncList->GetSelectEntryPos() );
     if (pDesc)
     {
@@ -868,12 +868,12 @@ void ScFunctionDockWin::UpdateFunctionList()
     {
         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
 
-        ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
+        const ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
         while ( pDesc )
         {
             pAllFuncList->SetEntryData(
                 pAllFuncList->InsertEntry( *(pDesc->pFuncName) ),
-                pDesc );
+                (void*)pDesc );
             pDesc = pFuncMgr->Next();
         }
     }
@@ -881,10 +881,10 @@ void ScFunctionDockWin::UpdateFunctionList()
     {
         for ( USHORT i=0; i<LRU_MAX && aLRUList[i]; i++ )
         {
-            ScFuncDesc* pDesc = aLRUList[i];
+            const ScFuncDesc* pDesc = aLRUList[i];
             pAllFuncList->SetEntryData(
                     pAllFuncList->InsertEntry( *(pDesc->pFuncName) ),
-                    pDesc );
+                    (void*)pDesc );
         }
     }
 
@@ -944,8 +944,8 @@ void ScFunctionDockWin::DoEnter(BOOL bOk) //@@ ???
             if (pHdl)
                 pHdl->ClearText();
         }
-        ScFuncDesc* pDesc =
-             (ScFuncDesc*)pAllFuncList->GetEntryData(
+        const ScFuncDesc* pDesc =
+             (const ScFuncDesc*)pAllFuncList->GetEntryData(
                     pAllFuncList->GetSelectEntryPos() );
         if (pDesc)
         {
