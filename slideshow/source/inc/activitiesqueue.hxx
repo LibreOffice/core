@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitiesqueue.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:11:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,13 @@
 #include <vector>
 
 #include <activity.hxx>
-#include <layermanager.hxx>
 #include <unoviewcontainer.hxx>
+#include <eventmultiplexer.hxx>
+
+#include "canvas/elapsedtime.hxx"
+
+#include <boost/shared_ptr.hpp>
+#include <boost/utility.hpp> // for boost::noncopyable
 
 
 /* Definition of ActivitiesQueue class */
@@ -81,17 +86,22 @@ namespace presentation
             activity objects to this class, which are called in a
             round-robin fashion.
         */
-        class ActivitiesQueue
+        class ActivitiesQueue : private ::boost::noncopyable
         {
         public:
             /** Create an ActivitiesQueue.
 
-                @param rViews
-                Container of presentation views, which will all be called
-                with updateScreen(), when a full round of activities
-                has been performed.
+                @param pPresTimer
+                Pointer to global presentation timer. Used for
+                adjusting and holding global presentation time.
+
+                @param rEventMultiplexer
+                Handles screen updates for us, when a full round of
+                activities has been performed.
              */
-            ActivitiesQueue( const UnoViewContainer& rViews );
+            ActivitiesQueue(
+                const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&  pPresTimer,
+                EventMultiplexer&                                           rEventMultiplexer );
 
             ~ActivitiesQueue();
 
@@ -113,28 +123,19 @@ namespace presentation
              */
             bool isEmpty();
 
-            /** Set a LayerManager for update() calls.
-
-                A LayerManager set via this method will receive one
-                update() call per animation frame. This is handy to
-                avoid multiple redraws. Note that every
-                setLayerManager() call will overwrite any previously
-                set.
-             */
-            void setLayerManager( const LayerManagerSharedPtr& rMgr );
-
             /** Remove all pending activities from the queue.
              */
             void clear();
 
+            /** Gets the queue's timer object.
+             */
+            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
+            getTimer() const { return mpTimer; }
+
         private:
-            // default: disabled copy/assignment
-            ActivitiesQueue(const ActivitiesQueue&);
-            ActivitiesQueue& operator=( const ActivitiesQueue& );
+            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
 
             typedef ::std::list< ActivitySharedPtr >        ActivityQueue;
-
-            LayerManagerSharedPtr   mpLayerManager; // for screen updates
 
             ActivityQueue           maCurrentActivitiesWaiting;  // currently running
                                                                  // activities, that still
@@ -148,11 +149,7 @@ namespace presentation
                                                                     // to be reinserted next
                                                                     // round
 
-            const UnoViewContainer& mrViews;                    // Container of presentation views,
-                                                                // which will all be called with
-                                                                // updateScreen(), when a full
-                                                                // round of activities has been
-                                                                // performed.
+            EventMultiplexer&       mrEventMultiplexer;
 
             bool                    mbCurrentRoundNeedsScreenUpdate;
         };
