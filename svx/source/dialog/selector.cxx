@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:35:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -431,10 +431,10 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
         Reference< frame::XDispatchInformationProvider > xDIP(
             m_xFrame, UNO_QUERY );
 
-        Reference< drafts::com::sun::star::frame::XModuleManager >
+        Reference< ::com::sun::star::frame::XModuleManager >
             xModuleManager( xMCF->createInstanceWithContext(
                 OUString::createFromAscii(
-                    "drafts.com.sun.star.frame.ModuleManager" ),
+                    "com.sun.star.frame.ModuleManager" ),
                 xContext ),
             UNO_QUERY );
 
@@ -447,7 +447,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
         Reference< container::XNameAccess > xNameAccess(
             xMCF->createInstanceWithContext(
                 OUString::createFromAscii(
-                    "drafts.com.sun.star.frame.UICommandDescription" ),
+                    "com.sun.star.frame.UICommandDescription" ),
                 xContext ),
             UNO_QUERY );
 
@@ -708,12 +708,11 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
             Reference<XInterface> xDocumentModel = getDocumentModel(xCtx, nodeName );
             if ( xDocumentModel.is() )
             {
-                Reference< ::drafts::com::sun::star::frame::XModuleManager >
+                Reference< ::com::sun::star::frame::XModuleManager >
                     xModuleManager(
                         xCtx->getServiceManager()
                             ->createInstanceWithContext(
-                                OUString::createFromAscii("drafts." // xxx todo
-                                      "com.sun.star.frame.ModuleManager"),
+                                OUString::createFromAscii("com.sun.star.frame.ModuleManager"),
                                 xCtx ),
                             UNO_QUERY_THROW );
                 Reference<container::XNameAccess> xModuleConfig(
