@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 09:39:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ namespace io_acceptor
                IllegalArgumentException,
                RuntimeException)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         OString tmp = OUStringToOString(sConnectionDescription, RTL_TEXTENCODING_ASCII_US);
         OSL_TRACE("acceptor %s\n", tmp.getStr());
 #endif
@@ -264,7 +264,7 @@ namespace io_acceptor
                     OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor."));
                     delegatee += aDesc.getName();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
                     OSL_TRACE("trying to get service %s\n", tmp.getStr());
 #endif
