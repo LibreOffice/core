@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaVirtualMachine.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:40 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module java {
+module com {  module sun {  module star {  module java {
 
 interface XJavaVM;
 interface XJavaThreadRegister_11;
@@ -90,6 +90,9 @@ service JavaVirtualMachine
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:40  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ServiceManager.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,61 +87,42 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::lang::ServiceManager
 /** provides a collection of implementations for services.
 
-
-
     <p>The factories are accessed with a service name. It is possible to
     access the factories with their implementation names, but you should
-    avoid this.
+    avoid this.  </p>
 
-    </p>
-    <p>The interfaces added through the <type scope="com::sun::star::container">XSet</type> interfaces
-    should support the following interfaces:
+    <p>The interfaces added through the <type scope="com::sun::star::container">XSet</type>
+    interfaces should support the following interfaces: </p>
 
     <dl>
-    <dt>
-    <type>XServiceInfo</type>
+        <dt> <type>XServiceInfo</type> </dt>
+        <dd>is used to support access through the implementation with
+            service names.
+        </dd>
 
-    </dt>
-    <dd>is used to support access through the implementation with
-    service names.
+        <dt> <type>XSingleServiceFactory</type> (optional) </dt>
+        <dd>is used to instanciate components from the implementation.
+        </dd>
 
-    </dd>
-    <dt>
-    <type>XSingleServiceFactory</type> (optional)
-    </dt>
-    <dd>is used to instanciate components from the implementation.
+        <dt> <type scope="com::sun::star::beans">XPropertySet</type> (optional) </dt>
+        <dd>offers additional information on the implementation.
+        </dd>
 
-    </dd>
-    <dt>
-    <type scope="com::sun::star::beans">XPropertySet</type> (optional)
-    </dt>
-    <dd>offers additional information on the implementation.
-
-    </dd>
-    <dt>
-    <type>XComponent</type> (optional)
-    </dt>
-    <dd>The service manager calls the method
-
-
-
-
-
-
-    on the registered factories. The service manager adds a
-    listener to this factory. The factory is automatically
-    revoked when the disposing listener is notified.
-    </dd>
+        <dt> <type>XComponent</type> (optional) </dt>
+        <dd>The service manager calls the method
+            <member scope="com::sun::star::lang">XComponent::dispose</member>
+            on the registered factories. The service manager adds a
+            listener to this factory. The factory is automatically
+            revoked when the disposing listener is notified.
+        </dd>
     </dl>
-
-    </p>
  */
 service ServiceManager
 {
@@ -151,59 +132,59 @@ service ServiceManager
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XComponent
     /** Normally you should call the method
-                <method scope="com::sun::star::util">XComponent::dispose</method>
-                at the service manager just before the application terminates.
+        <method scope="com::sun::star::util">XComponent::dispose</method>
+        at the service manager just before the application terminates.
 
-                <p>The service manager first broadcasts the
-                <method scope="com::sun::star::util">XEventListener::disposing()</method>
-                message to all registered listeners. In this state you can still get all
-                factories from the service manager, but it is not possible to
-                add disposing listeners. Second the service manager calls
-                <method scope="com::sun::star::util">XComponent::dispose</method>
-                at all registered factories that implement <type>XComponent</type>.
-                In this second state the service manager does not provide any factory.
-                This is called a two-phase shut down.
+        <p>The service manager first broadcasts the
+        <method scope="com::sun::star::util">XEventListener::disposing()</method>
+        message to all registered listeners. In this state you can still get all
+        factories from the service manager, but it is not possible to
+        add disposing listeners. Second the service manager calls
+        <method scope="com::sun::star::util">XComponent::dispose</method>
+        at all registered factories that implement <type>XComponent</type>.
+        In this second state the service manager does not provide any factory.
+        This is called a two-phase shut down. </p>
      */
     interface com::sun::star::lang::XComponent;
 
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::container::XSet
     /** The implementations are managed with this interface.
-                The supported services (<type>XServiceInfo</type> is used)
-                are registered automatically.
+        The supported services (<type>XServiceInfo</type> is used)
+        are registered automatically.
      */
     interface com::sun::star::container::XSet;
 
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::container::XContentEnumerationAccess
     /** It is possible to enumerate all implementations that support the
-                service specified with the argument of the
-                <method>XContentEnumerationAccess::createContentEnumeration</method> method.
+        service specified with the argument of the
+        <method>XContentEnumerationAccess::createContentEnumeration</method> method.
 
-                <p>The enumerator returns interfaces. The type of interfaces
-                are not specified. Normally these are
-                <type>XSingleServiceFactory</type>.
+        <p>The enumerator returns interfaces. The type of interfaces
+        are not specified. Normally these are
+        <type>XSingleServiceFactory</type>.
      */
     interface com::sun::star::container::XContentEnumerationAccess;
 
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XMultiServiceFactory
     /** Use a service name or an implementation name to instanciate a
-                component with this interface.
+        component with this interface.
 
-                <p>First the service manager gets the factory registered
-                under the service name. Then
-                <method>XMultiServiceFactory::createInstance</type> or
-                <method>XMultiServiceFactory::createInstanceWithArguments</method>
-                of this factory is called.
+        <p>First the service manager gets the factory registered
+        under the service name. Then
+        <method>XMultiServiceFactory::createInstance</type> or
+        <method>XMultiServiceFactory::createInstanceWithArguments</method>
+        of this factory is called.
      */
     interface com::sun::star::lang::XMultiServiceFactory;
 
 
     // DocMerge from xml: service com::sun::star::lang::ServiceManager: interface com::sun::star::lang::XServiceInfo
     /** Services should always support this interface. For a
-                <type>RegistryServiceManager</type>, at least the service
-                "com.sun.star.lang.RegistryServiceManager" must be supported.
+        <type>RegistryServiceManager</type>, at least the service
+        "com.sun.star.lang.RegistryServiceManager" must be supported.
      */
     interface com::sun::star::lang::XServiceInfo;
 
@@ -216,6 +197,9 @@ service ServiceManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:57  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvalidListenerException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,16 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
 // DocMerge from xml: exception com::sun::star::lang::InvalidListenerException
-/** is thrown by the
+/** is thrown by the <member>XConnectionPoint::advice</member> method
+    to indicate that the listener has not supplied the necessary
+    interface.
 
-
-
-
-
-    method to indicate that the listener has not supplied the necessary
-    interface.@see     XConnectionPoint
+    @see  XConnectionPoint
  */
 exception InvalidListenerException: com::sun::star::uno::Exception
 {
@@ -93,6 +90,9 @@ exception InvalidListenerException: com::sun::star::uno::Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

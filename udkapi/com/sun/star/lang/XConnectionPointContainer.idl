@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionPointContainer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 interface XConnectionPoint;
 
@@ -81,14 +81,12 @@ interface XConnectionPoint;
 /** makes it possible to locate a specific connection point
     for a specified UIK and manages a sequence of connections points.
 
-
-
     <p>An implementation of this interface <strong>must</strong>
-    support the <type scope="com::sun::star::uno">XWeak</type> interface. Look at the language
-    binding for a superclass or something else.
+    support the <type scope="com::sun::star::uno">XWeak</type> interface.
+    Look at the language binding for a superclass or something else.  </p>
 
-    </p>@see       XConnectionPoint
-        @see       com::sun::star::uno::XWeak
+    @see XConnectionPoint
+    @see com::sun::star::uno::XWeak
  */
 [ uik(E227A3D4-33D6-11D1-AABE00A0-249D5590), ident( "XConnectionPointContainer", 1.0 ) ]
 interface XConnectionPointContainer: com::sun::star::uno::XInterface
@@ -97,8 +95,8 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::getConnectionPointTypes
     /** @returns
-                    a sequence of all outgoing type spefifies which are supported
-                    by this connectable object.
+            a sequence of all outgoing type spefifies which are supported
+            by this connectable object.
      */
     [const] sequence<TYPE_XIDLCLASS> getConnectionPointTypes();
 
@@ -106,13 +104,13 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::lang::XConnectionPointContainer::queryConnectionPoint
     /** @returns
-                an <type>XConnectionPoint</type> interface of a
-                connection point for a specified type if that type
-                describes a supported outgoing interface. It is
-                <const>NULL</const> on failure of the call.
+            an <type>XConnectionPoint</type> interface of a
+            connection point for a specified type if that type
+            describes a supported outgoing interface. It is
+            <const>NULL</const> on failure of the call.
 
-                @param aType
-                specifies the connection point's type.
+        @param aType
+            specifies the connection point's type.
      */
     XConnectionPoint queryConnectionPoint( [in] TYPE_XIDLCLASS aType );
 
@@ -123,18 +121,15 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
         client's sink, where the sink implements the outgoing
         interface specified with ID.
 
-
-
         <p>The interface is advised under the connection point you
-        get with <code>queryConnectionPoint( id )</code>.
+        get with <code>queryConnectionPoint( id )</code>.  </p>
 
-        </p>
         <p>Use this method instead of the advise method at the
         connection point only if you know that the broadcaster supports
         the outgoing interface or if it does not matter that the
-        outgoing interface is not supported.
+        outgoing interface is not supported.  </p>
 
-        </p>@see XConnectionPoint::advise
+        @see XConnectionPoint::advise
      */
     [oneway] void advise( [in] TYPE_XIDLCLASS aType,
              [in] com::sun::star::uno::XInterface xListener );
@@ -143,7 +138,9 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::lang::XConnectionPointContainer::unadvise
     /** terminates a notification previously set up with
-        advise at the container or at the suitable connection point.@see XConnectionPoint::unadvise
+        advise at the container or at the suitable connection point.
+
+        @see XConnectionPoint::unadvise
      */
     [oneway] void unadvise( [in] TYPE_XIDLCLASS aType,
              [in] com::sun::star::uno::XInterface xListener );
@@ -157,6 +154,9 @@ interface XConnectionPointContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:57  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInitialization.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
@@ -80,18 +80,15 @@
 /** This is the only interface for initializing an object directly after
     its creation.
 
-
-
     <p>This interface works together with factories. If you want to
     initialize the object after creation, you <strong>must</strong>
     support this interface and you may support other type save
-    interfaces to initialize.
+    interfaces to initialize.  </p>
 
-    </p>
     <p>The object must work without an initializing call. In this case
-    it must use a meaningful default.
+    it must use a meaningful default.  </p>
 
-    </p>@see XProducer
+    @see XProducer
  */
 [ uik(E227A3DF-33D6-11D1-AABE00A0-249D5590), ident( "XInitialization", 1.0 ) ]
 interface XInitialization: com::sun::star::uno::XInterface
@@ -101,11 +98,7 @@ interface XInitialization: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::lang::XInitialization::initialize
     /** initializes the object.
 
-
-
-        <p> It should be called directly after the object is created.
-
-        </p>
+        <p>It should be called directly after the object is created.  </p>
      */
     void initialize( [in] sequence<any> aArguments )
             raises( com::sun::star::uno::Exception );
@@ -119,6 +112,9 @@ interface XInitialization: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:25  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemDependent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,28 +64,30 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
 // DocMerge from idl: constants com::sun::star::lang::SystemDependent
 /** These constants are used to specify systems which depend on return values.
 
-        <p> You should avoid system-dependent methods if possible.
+    <p> You should avoid system-dependent methods if possible.
 
-        @example:C++
+    @example:C++
 
-        <listing>
-        #ifdef __WINDOW // Microsoft Windows
-        HWND    hWin = (HWND)xInterface->getWindowHandle(SystemDependentWIN32);
-        if( hWin ) ...
-        #elif( ... ) // other systems
-        ...
-        #endif
-        </listing>
-        The Symbols are now prepended with SYSTEM_ thus we avoid collisions
-        with system headers.
-        @see com::sun::star::awt::XSystemDependentWindowPeer
+    <listing>
+    #ifdef __WINDOW // Microsoft Windows
+    HWND    hWin = (HWND)xInterface->getWindowHandle(SystemDependentWIN32);
+    if( hWin ) ...
+    #elif( ... ) // other systems
+    ...
+    #endif
+    </listing>
+
+    <p>The Symbols are now prepended with SYSTEM_ thus we avoid collisions
+    with system headers.  </p>
+
+    @see com::sun::star::awt::XSystemDependentWindowPeer
  */
 constants SystemDependent
 {
@@ -93,8 +95,9 @@ constants SystemDependent
 
     // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_WIN32
     /** The called interface method returns a value specified for the
-                32-bit Windows systems.
-                <p>These are Windows NT, Windows 95, Windows 98 or higher.
+        32-bit Windows systems.
+
+        <p>These are Windows NT, Windows 95, Windows 98 or higher. </p>
      */
     const short SYSTEM_WIN32 = 1;
 
@@ -102,48 +105,44 @@ constants SystemDependent
 
     // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_WIN16
     /** The called interface method returns a value specified for
-                the 16-bit Windows system.
+        the 16-bit Windows system.
 
-                <p>This is Windows 3.11.
+        <p>This is Windows 3.11. </p>
      */
     const short SYSTEM_WIN16 = 2;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_JAVA
-    /** The called interface method returns a value specified for
-                the system java.
+    /** The called interface method returns a value specified for  the system java.
 
-                <p>These are <em>JRE 1.1</em>, <em>JRE 1.2</em>, <em>JDK 1.1</em>,
-                <em>JDK 1.2</em> or higher.
+        <p>These are <em>JRE 1.1</em>, <em>JRE 1.2</em>, <em>JDK 1.1</em>,
+        <em>JDK 1.2</em> or higher.   </p>
 
-                <p>The return should be a handle to a java object locked with
-                the call <code>JavaEnvironment->NewGlobalRef( ... )</code>
-                by the callee.
+        <p>The return should be a handle to a java object locked with
+        the call <code>JavaEnvironment->NewGlobalRef( ... )</code>
+        by the callee. </p>
      */
     const short SYSTEM_JAVA = 3;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_OS2
-    /** The called interface method returns a value specified for
-                the <em>OS/2</em> system.
+    /** The called interface method returns a value specified for  the <em>OS/2</em> system.
      */
     const short SYSTEM_OS2 = 4;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_MAC
-    /** The called interface method returns a value specified for
-                the <em>MAC-OS</em> system.
+    /** The called interface method returns a value specified for the <em>MAC-OS</em> system.
      */
     const short SYSTEM_MAC = 5;
 
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
-    /** The called interface method returns a value specified for
-                the <em>X Window System</em>.
+    /** The called interface method returns a value specified for the <em>X Window System</em>.
      */
     const short SYSTEM_XWINDOW = 6;
 
@@ -156,6 +155,9 @@ constants SystemDependent
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.2  2000/10/09 14:24:57  mi
     #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceManager.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,79 +84,52 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::lang::RegistryServiceManager
 /** provides a collection of and a registry for implementations for services.
 
-
-
     <p>The factories are accessed with a service name. It is possible to
     access the factories with their implementation name, but that should be
-    avoided.
+    avoided.  </p>
 
-    </p>
-    <p>The first argument of the
-
-
-
-
-
-    method may be a
-    reference to a simple registry (<type scope="com::sun::star::registry">XSimpleRegistry</type>).
+    <p>The first argument of the <member>XInitialization::initialization</member>
+    method may be a reference to a simple registry (<type scope="com::sun::star::registry">XSimpleRegistry</type>).
     If it is not initialized with a registry, then the default registry
     "com::sun::star::registry::DefaultRegistry" is used. If this registry is not
-    found, then the manager works without a registry.
+    found, then the manager works without a registry.  </p>
 
-    </p>
     <p>You can get the current registry with
+    <member scope="com::sun::star:beans">XPropertySet::getPropertyValue</member>.  </p>
 
-
-
-
-
-    .
-
-    </p>
-    <p>The interfaces added through the <type scope="com::sun::star::container">XSet</type> interfaces
-    should support the following interfaces:
+    <p>The interfaces added through the <type scope="com::sun::star::container">XSet</type>
+    interfaces should support the following interfaces: </p>
 
     <dl>
-    <dt>
-    <type>XServiceInfo</type>
+        <dt> <type>XServiceInfo</type> </dt>
+        <dd>is used to support access through the implementation with
+            service names.
+        </dd>
 
-    </dt>
-    <dd>is used to support access through the implementation with
-    service names.
+        <dt> <type>XSingleServiceFactory</type> </dt>
+        <dd>is used to instanciate components from the implementation.
+        </dd>
 
-    </dd>
-    <dt>
-    <type>XSingleServiceFactory</type>
-    </dt>
-    <dd>is used to instanciate components from the implementation.
+        <dt> <type scope="com::sun::star::beans">XPropertySet</type> (optional) </dt>
+        <dd>provides additional information on the implementation.
+        </dd>
 
-    </dd>
-    <dt>
-    <type scope="com::sun::star::beans">XPropertySet</type> (optional)
-    </dt>
-    <dd>provides additional information on the implementation.
-
-    </dd>
-    <dt>
-    <type>XComponent</type> (optional)
-
-    </dt>
-    <dd>The service manager calls dispose on the registered
-    factories. The service manager adds a listener to this
-    factory. The factory is automatically revoked if the
-    disposing listener is notified.
-
-    </dd>
+        <dt> <type>XComponent</type> (optional) </dt>
+        <dd>The service manager calls dispose on the registered
+            factories. The service manager adds a listener to this
+            factory. The factory is automatically revoked if the
+            disposing listener is notified.
+        </dd>
     </dl>
 
-    </p>
+    @suspicious
  */
 service RegistryServiceManager
 {
@@ -187,8 +160,6 @@ service RegistryServiceManager
     // DocMerge from xml: property com::sun::star::lang::RegistryServiceManager::Registry
     /** specifies the current registry.
 
-
-
         <p>This property will be initialized by
         <type>XInitialization</type> or the default registry.
         </p>
@@ -204,6 +175,9 @@ service RegistryServiceManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:24  hjs
     initial import
 

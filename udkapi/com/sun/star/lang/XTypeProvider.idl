@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeProvider.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
@@ -85,22 +85,22 @@ interface XTypeProvider: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::lang::XTypeProvider::getTypes
     /** @returns
-                Sequence of all types (usually interface types) provided by the object.
-                Important: If the object aggregates other objects the sequence also has
-                to contain all types supportet by the aggregated objects.
+            Sequence of all types (usually interface types) provided by the object.
+            Important: If the object aggregates other objects the sequence also has
+            to contain all types supportet by the aggregated objects.
      */
     sequence<TYPE_XIDLCLASS> getTypes();
 
 
     // DocMerge from idl: method com::sun::star::lang::XTypeProvider::getImplementationId
     /** @returns
-                a UUID as sequence of 16 bytes as an Id that can be used to unambiguously
-                distinguish between two sets of types, e.g. to realise hashing functionality
-                when the object is introspected. Two objects that return the same UUID also
-                have to return the same set of types in getTypes(). If an unique implementation
-                Id cannot be provided this method has to return an empty sequence.
-                Important: If the object aggregates other objects the UUID has to be unique
-                for the whole combination of objects.
+            a UUID as sequence of 16 bytes as an Id that can be used to unambiguously
+            distinguish between two sets of types, e.g. to realise hashing functionality
+            when the object is introspected. Two objects that return the same UUID also
+            have to return the same set of types in getTypes(). If an unique implementation
+            Id cannot be provided this method has to return an empty sequence.
+            Important: If the object aggregates other objects the UUID has to be unique
+            for the whole combination of objects.
      */
     sequence<byte> getImplementationId();
 };
@@ -112,6 +112,9 @@ interface XTypeProvider: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:25  hjs
     initial import
 

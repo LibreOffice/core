@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Locale.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:41 $
+ *  last change: $Author: mi $ $Date: 2000-12-13 15:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,15 +66,12 @@
 
 //=============================================================================
 
- module com {  module sun {  module star {  module lang {
+module com {  module sun {  module star {  module lang {
 
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::lang::Locale
-/** A <code>Locale</code> object represents a specific geographical, political,
-    or cultural region.
-
-
+/** object represents a specific geographical, political, or cultural region.
 
     <p>An operation that requires a <code>Locale</code> to perform
     its task is called <em>locale-sensitive</em> and uses the
@@ -106,7 +103,8 @@ struct Locale
         <p>These codes are the lower-case two-letter codes as defined by
         ISO-639. You can find a full list of these codes at a number of
         sites, such as: <br>
-        <a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt"><code>http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</code></a>.
+        <a href="http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt">
+        <code>http://www.ics.uci.edu/pub/ietf/http/related/iso639.txt</code></a>.
         </p>
 
         <p>If this field contains an empty string, the meaning depends on the
@@ -155,6 +153,9 @@ struct Locale
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:41  mi
+    moved from api
+
     Revision 1.4  2000/10/29 16:19:44  er
     moved all types except struct Locale to ../i18n/XLocale.idl
 
