@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:23:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,37 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
+
+#define GET_PROP_TYPE( f ) static_cast<sal_uInt16>((f & XML_TYPE_PROP_MASK) >> XML_TYPE_PROP_SHIFT)
+
+struct XMLPropTokens_Impl
+{
+    sal_uInt16 nType;
+    XMLTokenEnum eToken;
+};
+
+#define ENTRY(t) { GET_PROP_TYPE(XML_TYPE_PROP_##t), XML_##t##_PROPERTIES }
+const sal_uInt16 MAX_PROP_TYPES =
+    (XML_TYPE_PROP_END >> XML_TYPE_PROP_SHIFT) -
+    (XML_TYPE_PROP_START >> XML_TYPE_PROP_SHIFT);
+
+static  XMLPropTokens_Impl aPropTokens[MAX_PROP_TYPES] =
+{
+    ENTRY(CHART),
+    ENTRY(GRAPHIC),
+    ENTRY(TABLE),
+    ENTRY(TABLE_COLUMN),
+    ENTRY(TABLE_ROW),
+    ENTRY(TABLE_CELL),
+    ENTRY(LIST_LEVEL),
+    ENTRY(PARAGRAPH),
+    ENTRY(TEXT),
+    ENTRY(DRAWING_PAGE),
+    ENTRY(PAGE_LAYOUT),
+    ENTRY(HEADER_FOOTER),
+    ENTRY(RUBY),
+    ENTRY(SECTION)
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -439,7 +470,8 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 {
                     if( *pStates == PropertyState_DIRECT_VALUE )
                     {
-                        *pAPINames++ = aItr->GetApiName();
+                        const OUString& rApiName = aItr->GetApiName();
+                        *pAPINames++ = rApiName;
                         *pPropIter++ = aItr;
                         i++;
                     }
@@ -520,8 +552,9 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         {
                             if( !bGotValue )
                             {
+                                const OUString& rApiName = aItr->GetApiName();
                                 aNewProperty.maValue =
-                                    rPropSet->getPropertyValue( aItr->GetApiName() );
+                                    rPropSet->getPropertyValue( rApiName );
                                 bGotValue = sal_True;
                             }
                             aNewProperty.mnIndex = *aIndexItr;
@@ -768,7 +801,7 @@ sal_Bool SvXMLExportPropertyMapper::Equals(
 }
 
 
-/** fills the given attribute list with the items in the given set */
+/** fills the given attribute list with the items in the given set
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
         const ::std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
@@ -790,6 +823,7 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
     _exportXML( rAttrList, rProperties, rUnitConverter, rNamespaceMap,
                 nFlags, 0, nPropMapStartIdx, nPropMapEndIdx );
 }
+*/
 
 
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
@@ -818,21 +852,33 @@ void SvXMLExportPropertyMapper::exportXML(
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
         sal_uInt16 nFlags ) const
 {
-    SvUShorts aIndexArray;
-
-    _exportXML( rExport.GetAttrList(), rProperties,
-                rExport.GetMM100UnitConverter(), rExport.GetNamespaceMap(),
-                nFlags, &aIndexArray, nPropMapStartIdx, nPropMapEndIdx );
-
-    if( rExport.GetAttrList().getLength() > 0L ||
-        (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
-        aIndexArray.Count() != 0 )
+    sal_uInt16 nPropTypeFlags = 0;
+    for( sal_uInt16 i=0; i<MAX_PROP_TYPES; ++i )
     {
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_PROPERTIES,
+        sal_uInt16 nPropType = aPropTokens[i].nType;
+        if( 0==i || (nPropTypeFlags & (1 << nPropType)) != 0 )
+        {
+            SvUShorts aIndexArray;
+
+            _exportXML( nPropType, nPropTypeFlags,
+                        rExport.GetAttrList(), rProperties,
+                        rExport.GetMM100UnitConverter(),
+                        rExport.GetNamespaceMap(),
+                        nFlags, &aIndexArray,
+                        nPropMapStartIdx, nPropMapEndIdx );
+
+            if( rExport.GetAttrList().getLength() > 0L ||
+                (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
+                aIndexArray.Count() != 0 )
+            {
+                SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE,
+                                  aPropTokens[i].eToken,
                                   (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0,
                                   sal_False );
 
-        exportElementItems( rExport, rProperties, nFlags, aIndexArray );
+                exportElementItems( rExport, rProperties, nFlags, aIndexArray );
+            }
+        }
     }
 }
 
@@ -874,6 +920,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
 
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportPropertyMapper::_exportXML(
+        sal_uInt16 nPropType, sal_uInt16& rPropTypeFlags,
         SvXMLAttributeList& rAttrList,
         const ::std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
@@ -896,19 +943,26 @@ void SvXMLExportPropertyMapper::_exportXML(
         if( nPropMapIdx >= nPropMapStartIdx &&
             nPropMapIdx < nPropMapEndIdx  )// valid entry?
         {
-            // we have a valid map entry here, so lets use it...
-            if( ( maPropMapper->GetEntryFlags( nPropMapIdx )
-                  & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
+            sal_uInt32 nEFlags = maPropMapper->GetEntryFlags( nPropMapIdx );
+            sal_uInt16 nEPType = GET_PROP_TYPE(nEFlags);
+            OSL_ENSURE( nEPType >= (XML_TYPE_PROP_START>>XML_TYPE_PROP_SHIFT),
+                        "no prop type sepcified" );
+            rPropTypeFlags |= (1 << nEPType);
+            if( nEPType == nPropType )
             {
-                // element items do not add any properties,
-                // we export it later
-                if( pIndexArray )
-                    pIndexArray->Insert( (sal_uInt16)nIndex, pIndexArray->Count() );
-            }
-            else
-            {
-                _exportXML( rAttrList, rProperties[nIndex], rUnitConverter,
-                            rNamespaceMap, nFlags, &rProperties, nIndex );
+                // we have a valid map entry here, so lets use it...
+                if( ( nEFlags & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
+                {
+                    // element items do not add any properties,
+                    // we export it later
+                    if( pIndexArray )
+                        pIndexArray->Insert( (sal_uInt16)nIndex, pIndexArray->Count() );
+                }
+                else
+                {
+                    _exportXML( rAttrList, rProperties[nIndex], rUnitConverter,
+                                rNamespaceMap, nFlags, &rProperties, nIndex );
+                }
             }
         }
 
@@ -976,8 +1030,11 @@ void SvXMLExportPropertyMapper::_exportXML(
                                                 sNamespace );
                     }
                 }
+                OUString sOldValue( rAttrList.getValueByName( *pAttribName ) );
+                OSL_ENSURE( sOldValue.getLength() == 0, "alien attribute exists already" );
                 OSL_ENSURE(aData.Type == GetXMLToken(XML_CDATA), "different type to our default type which should be written out");
-                rAttrList.AddAttribute( *pAttribName, aData.Value );
+                if( !sOldValue.getLength() )
+                    rAttrList.AddAttribute( *pAttribName, aData.Value );
             }
 
             delete pNewNamespaceMap;
