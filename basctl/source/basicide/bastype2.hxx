@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:48:14 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,24 +77,16 @@
 #ifndef _SBXITEM_HXX
 #include <sbxitem.hxx>
 #endif
+#ifndef _BASOBJ_HXX
+#include "basobj.hxx"
+#endif
 
-#define OBJTYPE_BASICMANAGER    1L
-#define OBJTYPE_LIB             2L
-#define OBJTYPE_MODULE          3L
-#define OBJTYPE_METHOD          4L
-#define OBJTYPE_METHODINOBJ     5L
-#define OBJTYPE_OBJECT          6L
-#define OBJTYPE_SUBOBJ          7L
-#define OBJTYPE_PROPERTY        8L
+enum BasicEntryType { OBJ_TYPE_UNKNOWN, OBJ_TYPE_SHELL, OBJ_TYPE_LIBRARY, OBJ_TYPE_MODULE, OBJ_TYPE_DIALOG, OBJ_TYPE_METHOD };
 
 #define BROWSEMODE_MODULES      0x01
 #define BROWSEMODE_SUBS         0x02
-#define BROWSEMODE_OBJS         0x04
-#define BROWSEMODE_PROPS        0x08
-#define BROWSEMODE_SUBOBJS      0x10
+#define BROWSEMODE_DIALOGS      0x04
 
-class BasicEntry;
-class BasicManager;
 class SbMethod;
 class SbxObject;
 class SbModule;
@@ -102,98 +94,146 @@ class SvLBoxEntry;
 class SbxVariable;
 class String;
 
+
+class BasicEntry
+{
+private:
+    BasicEntryType  m_eType;
+
+public:
+                    BasicEntry( BasicEntryType eType )  { m_eType = eType; }
+                    BasicEntry( const BasicEntry& r )   { m_eType = r.m_eType; }
+    virtual         ~BasicEntry();
+
+    BasicEntryType  GetType() const                     { return m_eType; }
+};
+
+class BasicShellEntry : public BasicEntry
+{
+private:
+    SfxObjectShell* m_pShell;
+    LibraryLocation m_eLocation;
+
+public:
+                    BasicShellEntry( SfxObjectShell* pShell, LibraryLocation eLocation, BasicEntryType eType = OBJ_TYPE_SHELL );
+    virtual         ~BasicShellEntry();
+
+    SfxObjectShell* GetShell() const { return m_pShell; }
+    LibraryLocation GetLocation() const { return m_eLocation; }
+};
+
+class BasicLibEntry : public BasicShellEntry
+{
+private:
+    String          m_aLibName;
+
+public:
+                    BasicLibEntry( SfxObjectShell* pShell, LibraryLocation eLocation, const String& rLibName, BasicEntryType eType = OBJ_TYPE_LIBRARY );
+    virtual         ~BasicLibEntry();
+
+    const String&   GetLibName() const { return m_aLibName; }
+};
+
+class BasicEntryDescriptor
+{
+    SfxObjectShell*         m_pShell;
+    LibraryLocation         m_eLocation;
+    String                  m_aLibName;
+    String                  m_aName;
+    String                  m_aMethodName;
+    BasicEntryType          m_eType;
+
+public:
+                            BasicEntryDescriptor();
+                            BasicEntryDescriptor( SfxObjectShell* pShell, LibraryLocation eLocation, const String& rLibName, const String& rName, BasicEntryType eType );
+                            BasicEntryDescriptor( SfxObjectShell* pShell, LibraryLocation eLocation, const String& rLibName, const String& rName, const String& rMethodName, BasicEntryType eType );
+    virtual                 ~BasicEntryDescriptor();
+
+                            BasicEntryDescriptor( const BasicEntryDescriptor& rDesc );
+    BasicEntryDescriptor&   operator=( const BasicEntryDescriptor& rDesc );
+    bool                    operator==( const BasicEntryDescriptor& rDesc ) const;
+
+    SfxObjectShell*         GetShell() const { return m_pShell; }
+    void                    SetShell( SfxObjectShell* pShell ) { m_pShell = pShell; }
+
+    LibraryLocation         GetLocation() const { return m_eLocation; }
+    void                    SetLocation( LibraryLocation eLocation ) { m_eLocation = eLocation; }
+
+    const String&           GetLibName() const { return m_aLibName; }
+    void                    SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
+
+    const String&           GetName() const { return m_aName; }
+    void                    SetName( const String& aName ) { m_aName = aName; }
+
+    const String&           GetMethodName() const { return m_aMethodName; }
+    void                    SetMethodName( const String& aMethodName ) { m_aMethodName = aMethodName; }
+
+    BasicEntryType          GetType() const { return m_eType; }
+    void                    SetType( BasicEntryType eType ) { m_eType = eType; }
+};
+
+
+/****************************************
+    Zuordnung von Typen und Pointern in BasicEntrys:
+
+    OBJ_TYPE_SHELL           BasicShellEntry
+    OBJ_TYPE_LIBRARY         BasicEntry
+    OBJ_TYPE_MODULE          BasicEntry
+    OBJ_TYPE_DIALOG          BasicEntry
+    OBJ_TYPE_METHOD          BasicEntry
+
+******************************************/
+
 class BasicTreeListBox : public SvTreeListBox
 {
 private:
     USHORT          nMode;
-    ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
 
-    void            ScanSbxObject( SbxObject* pObj, SvLBoxEntry* pObjEntry );
-
-    void setEntryBitmap(SvLBoxEntry * pEntry, USHORT nBitmap);
+    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC );
 
 protected:
     void                    ExpandTree( SvLBoxEntry* pRootEntry );
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
     virtual void            ExpandedHdl();
     virtual SvLBoxEntry*    CloneEntry( SvLBoxEntry* pSource );
-    SvLBoxEntry*            FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType );
     virtual long            ExpandingHdl();
 
+    void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, SfxObjectShell* pShell, LibraryLocation eLocation );
     void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxObjectShell* pShell, const String& rLibName );
 
 public:
                     BasicTreeListBox( Window* pParent, const ResId& rRes );
                     ~BasicTreeListBox();
 
-    void            ScanBasic( BasicManager* pBasMgr, const String& rName  );
-    void            ScanAllBasics();
+    void            ScanEntry( SfxObjectShell* pShell, LibraryLocation eLocation );
+    void            ScanAllEntries();
     void            UpdateEntries();
 
     void            ExpandAllTrees();
 
-    BYTE            GetSelectedType();
-    BasicManager*   GetSelectedSbx( String& rLib, String& rModOrObj, String& rSubOrProp );
-    BasicManager*   GetSelectedSbx( String& rLib, String& rModOrObj, String& rSubOrPropOrSObj, String& rPropOrSubInSObj );
-    BasicManager*   GetSbx( SvLBoxEntry* pEntry, String& rLib, String& rModOrObj, String& rSubOrPropOrSObj, String& rPropOrSubInSObj );
     BOOL            IsEntryProtected( SvLBoxEntry* pEntry );
 
     void            SetMode( USHORT nM ) { nMode = nM; }
     USHORT          GetMode() const { return nMode; }
 
-    SbMethod*       FindMethod( SvLBoxEntry* pEntry );
-    SbxObject*      FindObject( SvLBoxEntry* pEntry );
     SbModule*       FindModule( SvLBoxEntry* pEntry );
     SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
-    SvLBoxEntry*    FindLibEntry( StarBASIC* pLib );
+    SvLBoxEntry*    FindRootEntry( SfxObjectShell* pShell, LibraryLocation eLocation );
+    SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const String& rText, BasicEntryType eType );
 
-    // new dialogs
-    SbxItem         GetSbxItem( SvLBoxEntry* pEntry );
+    BasicEntryDescriptor    GetEntryDescriptor( SvLBoxEntry* pEntry );
 
-    SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
-                              SvLBoxEntry * pParent,
-                              bool bChildrenOnDemand,
-                              std::auto_ptr< BasicEntry > aUserData);
-};
+    USHORT          ConvertType( BasicEntryType eType );
+    bool            IsValidEntry( SvLBoxEntry* pEntry );
 
-/****************************************
-    Zuordnung von Typen und Pointern in BasicEntrys:
+    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage, const Image& rImageHC,
+                              SvLBoxEntry* pParent, bool bChildrenOnDemand,
+                              std::auto_ptr< BasicEntry > aUserData );
 
-    OBJTYPE_BASICMANAGER    BasicManagerEntry
-    OBJTYPE_MODULE          BasicEntry
-    OBJTYPE_OBJECT          BasicEntry
-    OBJTYPE_METHOD          BasicEntry
-    OBJTYPE_METHODINOBJ     BasicEntry
-    OBJTYPE_SUBOBJ          BasicEntry
-    OBJTYPE_PROPERTY        BasicEntry
-    OBJTYPE_LIB             BasicEntry
+    String          GetRootEntryName( SfxObjectShell* pShell, LibraryLocation eLocation );
+    void            GetRootEntryBitmaps( SfxObjectShell* pShell, Image& rImage, Image& rImageHC );
 
-******************************************/
-
-class BasicEntry
-{
-private:
-    BYTE            nType;
-
-public:
-                    BasicEntry( BYTE nT )               { nType = nT; }
-                    BasicEntry( const BasicEntry& r )   { nType = r.nType; }
-    virtual         ~BasicEntry();
-
-    BYTE            GetType() const                     { return nType; }
-};
-
-class BasicManagerEntry : public BasicEntry
-{
-private:
-    BasicManager*   pBasMgr;
-
-public:
-                    BasicManagerEntry( BasicManager* pMgr );
-    virtual         ~BasicManagerEntry();
-
-    BasicManager*   GetBasicManager() const { return pBasMgr; }
+    void            SetCurrentEntry( BasicEntryDescriptor& rDesc );
 };
 
 #endif  // _BASTYPE2_HXX
