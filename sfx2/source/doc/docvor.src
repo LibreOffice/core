@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:29:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ ModalDialog DLG_ORGANIZE
         Text[ korean ] = "´Ý±â";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cerrar";
     };
     PushButton BTN_FILES
     {
@@ -152,6 +153,7 @@ ModalDialog DLG_ORGANIZE
         Text[ korean ] = "ÆÄÀÏ(~F)...";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Archivo...";
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
@@ -177,6 +179,7 @@ ModalDialog DLG_ORGANIZE
         Text[ chinese_traditional ] = "³q°T¿ý(~A)...";
         Text[ turkish ] = "~Address Book...";
         Text[ arabic ] = "ÏÝÊÑ ÇáÚäÇæíä...";
+        Text[ catalan ] = "~Libreta de direcciones...";
     };
     ListBox LB_LEFT_TYP
     {
@@ -300,6 +303,11 @@ ModalDialog DLG_ORGANIZE
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Plantillas de documento" ; Default ; > ;
+        < "Documentos" ; Default ; > ;
     };
     };
     ListBox LB_RIGHT_TYP
@@ -425,6 +433,11 @@ ModalDialog DLG_ORGANIZE
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Plantillas de documento" ; Default ; > ;
+        < "Documentos" ; Default ; > ;
+    };
     };
     Control LB_LEFT
     {
@@ -519,6 +532,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "»õ·Î(~N)";
                     Text[ turkish ] = "Y~eni";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "~Nuevo";
                 };
                 MenuItem
                 {
@@ -553,6 +567,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "»èÁ¦(~D)";
                     Text[ turkish ] = "~Sil";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "~Eliminar";
                 };
                 MenuItem
                 {
@@ -581,6 +596,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "ÆíÁý(~E)";
                     Text[ turkish ] = "~Düzenle";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "E~ditar";
                 };
                 MenuItem
                 {
@@ -613,6 +629,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "¼­½ÄÆÄÀÏ °¡Á®¿À±â...";
                     Text[ turkish ] = "Þablonu içe aktar...";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "I~mportar plantilla...";
                 };
                 MenuItem
                 {
@@ -641,6 +658,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "¼­½ÄÆÄÀÏ ³»º¸³»±â...";
                     Text[ turkish ] = "Þablonu dýþa aktar...";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "E~xportar plantilla...";
                 };
                 MenuItem
                 {
@@ -673,6 +691,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "ÀÎ¼â(~P)";
                     Text[ turkish ] = "~Yazdýr";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "~Imprimir";
                 };
                 MenuItem
                 {
@@ -701,6 +720,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤...";
                     Text[ turkish ] = "Yazýcý ayarlarý";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "~Configuración de la impresora...";
                 };
                 MenuItem
                 {
@@ -733,6 +753,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ korean ] = "¾÷µ¥ÀÌÆ®";
                     Text[ turkish ] = "Güncelle";
                     Text[ language_user1 ] = " ";
+                    Text[ catalan ] = "~Actualizar";
                 };
             };
         };
@@ -746,6 +767,7 @@ ModalDialog DLG_ORGANIZE
         Text[ korean ] = "¸í·É";
         Text[ turkish ] = "Komutlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Comandos";
     };
     Bitmap BMP_OPENED_FOLDER
     {
@@ -796,5 +818,6 @@ ModalDialog DLG_ORGANIZE
     Text[ korean ] = "¹®¼­ ¼­½ÄÆÄÀÏ °ü¸®";
     Text[ turkish ] = "Belge þablonlarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
