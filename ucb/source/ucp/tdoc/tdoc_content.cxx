@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:40:37 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2087,7 +2087,11 @@ void Content::transfer(
     // Copy data.
     /////////////////////////////////////////////////////////////////////////
 
-    if ( !copyData( aSourceUri ) )
+    rtl::OUString aNewName( rInfo.NewTitle.getLength() > 0
+                                ? rInfo.NewTitle
+                                : aSourceUri.getDecodedName() );
+
+    if ( !copyData( aSourceUri, aNewName ) )
     {
         uno::Any aProps
             = uno::makeAny(
@@ -2115,7 +2119,10 @@ void Content::transfer(
     if ( ( aTargetUri.lastIndexOf( '/' ) + 1 ) != aTargetUri.getLength() )
         aTargetUri += rtl::OUString::createFromAscii( "/" );
 
-    aTargetUri += aSourceUri.getName();
+    if ( rInfo.NewTitle.getLength() > 0 )
+        aTargetUri += Uri::encodeSegment( rInfo.NewTitle );
+    else
+        aTargetUri += aSourceUri.getName();
 
     if ( !copyAdditionalPropertySet(
             aSourceUri.getUri(), aTargetUri, sal_True ) )
@@ -2197,9 +2204,8 @@ void Content::transfer(
 
             // Note: The static cast is okay here, because its sure
             //       that m_xProvider is always the ContentProvider.
-            rtl::Reference< Content > xSource
-                = static_cast< Content * >(
-                    m_xProvider->queryContent( xSourceId ).get() );
+            xSource = static_cast< Content * >(
+                m_xProvider->queryContent( xSourceId ).get() );
         }
         catch ( star::ucb::IllegalIdentifierException const & )
         {
@@ -2693,7 +2699,7 @@ bool Content::removeData()
 }
 
 //=========================================================================
-bool Content::copyData( const Uri & rSourceUri )
+bool Content::copyData( const Uri & rSourceUri, const rtl::OUString & rNewName )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -2721,7 +2727,7 @@ bool Content::copyData( const Uri & rSourceUri )
     {
         xSourceStorage->copyElementTo( rSourceUri.getDecodedName(),
                                        xDestStorage,
-                                       rSourceUri.getDecodedName() );
+                                       rNewName );
     }
     catch ( embed::InvalidStorageException const & )
     {
