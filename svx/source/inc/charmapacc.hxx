@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmapacc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 07:45:08 $
+ *  last change: $Author: oj $ $Date: 2002-10-29 15:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,9 @@ namespace svx
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException) { return this; }
+
+        virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException) { return mpParent->m_pParent->getForeground(); }
+        virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException) { return mpParent->m_pParent->getBackground(); }
 
         inline void SAL_CALL fireEvent(
                     const sal_Int16 _nEventId,
