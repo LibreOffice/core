@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:01:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:06:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,16 +122,10 @@ namespace dbaccess
                               , public OSharedConnection_BASE2
     {
     protected:
-        virtual void SAL_CALL disposing(void)
-        {
-            OSharedConnection_BASE::disposing();
-        }
+        virtual void SAL_CALL disposing(void);
+        virtual ~OSharedConnection();
     public:
-        OSharedConnection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection)
-            : OSharedConnection_BASE(m_aMutex)
-        {
-            setDelegation(_rxProxyConnection,m_refCount);
-        }
+        OSharedConnection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection);
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
