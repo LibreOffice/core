@@ -53,7 +53,7 @@
     <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href=".uno:ThesaurusDialog"/>
     <accel:item accel:code="KEY_ADD" accel:mod1="true" xlink:href=".uno:CalculateSel"/>
     <accel:item accel:code="KEY_F3" accel:mod1="true" xlink:href=".uno:EditGlossary"/>
-    <accel:item accel:code="KEY_F7" xlink:href=".uno:Spelling"/>
+    <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellDialog"/>
     <accel:item accel:code="KEY_F3" xlink:href=".uno:ExpandGlossary"/>
     <accel:item accel:code="KEY_F5" accel:shift="true" accel:mod1="true" xlink:href=".uno:GotoPage"/>
     <accel:item accel:code="KEY_LEFT" accel:shift="true" xlink:href=".uno:CharLeftSel"/>
@@ -101,4 +101,5 @@
     <accel:item accel:code="KEY_2" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_3" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
+    <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
 </accel:acceleratorlist>
