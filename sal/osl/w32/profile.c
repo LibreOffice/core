@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 16:28:04 $
+ *  last change: $Author: obr $ $Date: 2001-06-11 11:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,8 @@ static sal_Bool osl_ProfileSwapProfileNames(osl_TProfileImpl*);
 static rtl_uString* osl_ProfileGenerateExtension(rtl_uString* ustrFileName, rtl_uString* ustrExtension);
 
 static sal_Bool bGlobalSofficeFlag=sal_False;
+
+static sal_Bool SAL_CALL osl_getProfileName(rtl_uString* strPath, rtl_uString* strName, rtl_uString** strProfileName);
 
 /*****************************************************************************/
 /* Exported Module Functions */
