@@ -15,6 +15,7 @@
 ..\source\drivers\odbc\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\mozab\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\calc\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\mysql\*.xml %_DEST%\xml%_EXT%\*.xml
 
 mkdir: %_DEST%\inc%_EXT%\connectivity
 mkdir: %_DEST%\inc%_EXT%\connectivity\sdbcx
