@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-11 16:25:12 $
+ *  last change: $Author: cd $ $Date: 2002-07-12 07:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,11 +584,12 @@
             </info>
         </group>
         <group oor:name="RecoveryEntry">
+            <!-- Responsible: AS -->
             <prop oor:name="URL" oor:type="xs:string"/>
             <prop oor:name="Filter" oor:type="xs:string"/>
             <prop oor:name="TempName" oor:type="xs:string"/>
             <info>
-                <desc xml:lang="en-US">Specifies an entry of our recovery list which is used by our CrashGuard to save informations about last opened files top open it if office new start!</desc>
+                <desc xml:lang="en-US">Specifies an entry of our recovery list which is used by our CrashGuard to save informations about last opened files to open it if office new start!</desc>
             </info>
         </group>
         <group oor:name="StartEndCharacters">
@@ -1392,12 +1393,13 @@
             <prop oor:name="CurrentTempURL" oor:type="xs:string">
                 <!-- Responsible: CD -->
                 <info>
-                    <desc xml:lang="en-US">The current or last temp directory. This directory will be removed during shutdown or next office start</desc>
+                    <desc xml:lang="en-US">The current or last temp directory. This directory will be removed during shutdown or next office start.</desc>
                 </info>
             </prop>
             <set oor:name="RecoveryList" oor:node-type="RecoveryEntry">
-                <info>
-                    <desc xml:lang="en-US">The last opened documents.</desc>
+                <!-- Responsible: AS -->
+				<info>
+                    <desc xml:lang="en-US">The documents that were opened when the office crashed.</desc>
                 </info>
             </set>
         </group>
@@ -1900,7 +1902,7 @@
                     <!-- UIHints: Tools  Options - General  View  [Section] Options -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US"/>
+                        <desc xml:lang="en-US">Indicates whether icons in the office menus should be displayed or not</desc>
                     </info>
                 </prop>
             </group>
