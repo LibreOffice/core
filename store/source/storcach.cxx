@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storcach.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mhu $ $Date: 2002-08-17 17:29:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORCACH_CXX "$Revision: 1.4 $"
+#define _STORE_STORCACH_CXX "$Revision: 1.5 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -343,10 +343,10 @@ OStorePageCache::OStorePageCache (sal_uInt16 nPages)
  */
 OStorePageCache::~OStorePageCache (void)
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     double x = hitRatio();
     x = 0;
-#endif /* DEBUG */
+#endif /* OSL_DEBUG_LEVEL > 1 */
 
     for (sal_uInt16 i = 0; i < m_nSize; i++)
         delete m_pData[i];
