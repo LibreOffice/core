@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-11-29 13:14:18 $
+ *  last change: $Author: os $ $Date: 2001-12-11 09:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2839,8 +2839,8 @@ void SvxRuler::CalcMinMax()
                else
                rechts -= EZ - LAR
                */
-        case 0:
-        case 1:
+        case INDENT_FIRST_LINE - INDENT_GAP:
+        case INDENT_LEFT_MARGIN - INDENT_GAP:
             {
                 nMaxLeft = lNullPix;
 
@@ -2870,7 +2870,7 @@ void SvxRuler::CalcMinMax()
                    else
                    rechts += M2
                    */
-          case 2:
+          case INDENT_RIGHT_MARGIN - INDENT_GAP:
             {
                 nMaxLeft = lNullPix +
                     Max(GetFirstLineIndent(), GetLeftIndent());
