@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,9 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT, DWORD )
         // try this a short time later again.
         if ( ImplSalYieldMutexTryToAcquire() )
         {
+            pSalData->mbInTimerProc = TRUE;
             pSalData->mpTimerProc();
+            pSalData->mbInTimerProc = FALSE;
             ImplSalYieldMutexRelease();
 
             // Run the timer in the correct time, if we start this
