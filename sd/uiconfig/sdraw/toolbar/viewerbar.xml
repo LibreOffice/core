@@ -15,5 +15,4 @@
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="helpid:10366" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="helpid:10000" toolbar:text="" />
- <toolbar:toolbarseparator/>
 </toolbar:toolbar>
