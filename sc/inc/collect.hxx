@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:04:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,14 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef INCLUDED_LIMITS_H
 #include <limits.h>
+#define INCLUDED_LIMITS_H
+#endif
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #define MAXCOLLECTIONSIZE       16384
 #define MAXDELTA                1024
@@ -89,7 +96,7 @@ public:
     virtual DataObject*     Clone() const = 0;
 };
 
-class Collection : public DataObject
+class SC_DLLPUBLIC Collection : public DataObject
 {
 protected:
     USHORT          nCount;
@@ -119,7 +126,7 @@ public:
 };
 
 
-class SortedCollection : public Collection
+class SC_DLLPUBLIC SortedCollection : public Collection
 {
 private:
     BOOL    bDuplicates;
@@ -164,7 +171,7 @@ public:
 
 class SvStream;
 
-class StrCollection : public SortedCollection
+class SC_DLLPUBLIC StrCollection : public SortedCollection
 {
 public:
     StrCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) :
@@ -216,7 +223,7 @@ private:
     USHORT  nStrType;           // 0 = Value
 };
 
-class TypedStrCollection : public SortedCollection
+class SC_DLLPUBLIC TypedStrCollection : public SortedCollection
 {
 private:
     BOOL    bCaseSensitive;
@@ -241,5 +248,3 @@ public:
 };
 
 #endif
-
-
