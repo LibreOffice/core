@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadident.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 12:42:18 $
+ *  last change: $Author: jbu $ $Date: 2000-10-13 12:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,14 +96,12 @@ using namespace cppu_threadpool;
 
 static void SAL_CALL destructIdContainer( void *p )
 {
-    fprintf( stderr, "destructIdContainer called\n" );
     if( p )
     {
         IdContainer *pId = (IdContainer * ) p;
         rtl_byte_sequence_release( pId->pLocalThreadId );
         rtl_byte_sequence_release( pId->pCurrentId );
         rtl_freeMemory( p );
-        fprintf( stderr, "id freed\n" );
     }
 }
 
