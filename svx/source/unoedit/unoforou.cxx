@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:00:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,13 +350,14 @@ Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) con
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= GetTextLen(nPara) )
     {
-        Rectangle aLast(0,0,0,0);
+        // #109151# Don't use paper height, but line height instead
+        Rectangle aLast(0,0,0,rOutliner.GetLineHeight(nPara,0));
 
         if( nIndex )
             aLast = rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex-1) );
 
         aLast.Move( aLast.Right() - aLast.Left(), 0 );
-        aLast.SetSize( Size(1, aSize.Height()) );
+        aLast.SetSize( Size(1, aLast.GetHeight()) );
         return SvxEditSourceHelper::EEToUserSpace( aLast, aSize, rOutliner.IsVertical() == TRUE );
     }
     else
