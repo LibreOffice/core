@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:34:54 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,8 +285,8 @@ void SfxObjectShell::FlushDocInfo()
     SetModified(sal_True);
     SfxDocumentInfo &rInfo = GetDocInfo();
     Broadcast( SfxDocumentInfoHint( &rInfo ) );
-    SetAutoLoad( rInfo.GetReloadURL(), rInfo.GetReloadDelay() * 1000,
-                 rInfo.IsReloadEnabled() );
+    SetAutoLoad( INetURLObject(rInfo.GetReloadURL()),
+        rInfo.GetReloadDelay() * 1000, rInfo.IsReloadEnabled() );
 /*
     // bitte beachten:
     // 1. Titel in DocInfo aber nicht am Doc (nach HTML-Import)
@@ -1115,8 +1115,8 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         !(pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
     {
         SfxDocumentInfo& rInfo = GetDocInfo();
-        SetAutoLoad( rInfo.GetReloadURL(), rInfo.GetReloadDelay() * 1000,
-                     rInfo.IsReloadEnabled() );
+        SetAutoLoad( INetURLObject(rInfo.GetReloadURL()),
+            rInfo.GetReloadDelay() * 1000, rInfo.IsReloadEnabled() );
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( sal_False );
         Invalidate( SID_SAVEASDOC );
