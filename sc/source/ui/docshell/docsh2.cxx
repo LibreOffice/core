@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 15:59:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 #pragma hdrstop
 
+#include <svx/xtable.hxx>
 
 #include "scitems.hxx"
 #include <tools/gen.hxx>
@@ -84,7 +85,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
-#include <offmgr/app.hxx>
 #include <svx/asiancfg.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/unolingu.hxx>
@@ -187,8 +187,7 @@ void ScDocShell::InitItems()
     else
     {
         //  always use global color table instead of local copy
-
-        PutItem( SvxColorTableItem( OFF_APP()->GetStdColorTable() ) );
+        PutItem( SvxColorTableItem( XColorTable::GetStdColorTable() ) );
     }
 
     if ( !aDocument.GetForbiddenCharacters().isValid() ||
