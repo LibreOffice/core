@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:22:27 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,6 +614,14 @@ void View::LockRedraw(BOOL bLock)
             pLockedRedraws = NULL;
         }
     }
+}
+
+
+
+
+bool View::IsRedrawLocked (void) const
+{
+    return nLockRedrawSmph>0;
 }
 
 /*************************************************************************
