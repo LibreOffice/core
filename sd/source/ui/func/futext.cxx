@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:12:09 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,10 +586,10 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             aSet.Put(SdrTextMinFrameHeightItem(0));
             aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
             aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
-            pTxtObj->SetItemSet(aSet);
+            pTxtObj->SetMergedItemSet(aSet);
             pTxtObj->AdjustTextFrameWidthAndHeight();
             aSet.Put(SdrTextMaxFrameHeightItem(pTxtObj->GetLogicRect().GetSize().Height()));
-            pTxtObj->SetItemSet(aSet);
+            pTxtObj->SetMergedItemSet(aSet);
         }
         else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
         {
@@ -601,10 +601,10 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             // #91853# Needs to be set since default is SDRTEXTHORZADJUST_BLOCK
             aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-            pTxtObj->SetItemSet(aSet);
+            pTxtObj->SetMergedItemSet(aSet);
             pTxtObj->AdjustTextFrameWidthAndHeight();
             aSet.Put(SdrTextMaxFrameWidthItem(pTxtObj->GetLogicRect().GetSize().Width()));
-            pTxtObj->SetItemSet(aSet);
+            pTxtObj->SetMergedItemSet(aSet);
         }
     }
     else
@@ -630,7 +630,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK));
             aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-            pTxtObj->SetItemSet(aSet);
+            pTxtObj->SetMergedItemSet(aSet);
         }
     }
 }
@@ -644,7 +644,7 @@ void FuText::ImpSetAttributesFitToSize(SdrTextObj* pTxtObj)
     aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
     aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
     aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-    pTxtObj->SetItemSet(aSet);
+    pTxtObj->SetMergedItemSet(aSet);
     pTxtObj->AdjustTextFrameWidthAndHeight();
 }
 
@@ -657,7 +657,7 @@ void FuText::ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj)
     aSet.Put(SdrTextFitToSizeTypeItem(eFTS));
     aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
     aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-    pTxtObj->SetItemSet(aSet);
+    pTxtObj->SetMergedItemSet(aSet);
     pTxtObj->AdjustTextFrameWidthAndHeight();
 }
 
@@ -675,7 +675,7 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
             aSet.Put(SdrTextMaxFrameHeightItem(0));
             aSet.Put(SdrTextAutoGrowHeightItem(TRUE));
             aSet.Put(SdrTextAutoGrowWidthItem(FALSE));
-            pTxtObj->SetItemSet(aSet);
+            pTxtObj->SetMergedItemSet(aSet);
         }
         else if( nSlotId == SID_ATTR_CHAR_VERTICAL )
         {
@@ -684,7 +684,7 @@ void FuText::ImpSetAttributesFitCommon(SdrTextObj* pTxtObj)
             aSet.Put(SdrTextMaxFrameWidthItem(0));
             aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
             aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
-            pTxtObj->SetItemSet(aSet);
+            pTxtObj->SetMergedItemSet(aSet);
         }
 
         pTxtObj->AdjustTextFrameWidthAndHeight();
@@ -961,7 +961,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     }
                 }
 
-                pTextObj->SetItemSet(aSet);
+                pTextObj->SetMergedItemSet(aSet);
 
                 pTextObj->SetDisableAutoWidthOnDragging(TRUE);
                 SetInEditMode(rMEvt, FALSE);
