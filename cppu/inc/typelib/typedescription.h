@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:26:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ typedef struct _typelib_CompoundTypeDescription
    polymorphic struct types; there is no representation of polymorphic struct
    type templates at this level.
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 typedef struct _typelib_StructTypeDescription
 {
@@ -380,7 +380,7 @@ typedef struct _typelib_InterfaceMethodTypeDescription
     /** the inherited direct base method (null for a method that is not
         inherited)
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference *          pBaseRef;
     /** if pBaseRef is null, the member position of this method within
@@ -388,7 +388,7 @@ typedef struct _typelib_InterfaceMethodTypeDescription
         not null, the index of the direct base within pInterface from which this
         method is inherited
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     sal_Int32                                   nIndex;
 } typelib_InterfaceMethodTypeDescription;
@@ -417,7 +417,7 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
     /** the inherited direct base attribute (null for an attribute that is not
         inherited)
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference *          pBaseRef;
     /** if pBaseRef is null, the member position of this attribute within
@@ -425,27 +425,27 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
         not null, the index of the direct base within pInterface from which this
         attribute is inherited
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     sal_Int32                                   nIndex;
     /** number of getter exceptions
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     sal_Int32                                   nGetExceptions;
     /** array of getter exception types
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference **         ppGetExceptions;
     /** number of setter exceptions
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     sal_Int32                                   nSetExceptions;
     /** array of setter exception types
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     typelib_TypeDescriptionReference **         ppSetExceptions;
 } typelib_InterfaceAttributeTypeDescription;
@@ -518,12 +518,12 @@ typedef struct _typelib_InterfaceTypeDescription
     sal_Int32 *                                 pMapFunctionIndexToMemberIndex;
     /** number of base types
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     sal_Int32                                   nBaseTypes;
     /** array of base type descriptions
 
-        @since #i21150#
+        @since UDK 3.2.0
     */
     struct _typelib_InterfaceTypeDescription ** ppBaseTypes;
 } typelib_InterfaceTypeDescription;
@@ -549,7 +549,7 @@ typedef struct _typelib_CompoundMember_Init
 /**
    Init struct of members for typelib_typedescription_newStruct().
 
-   @since #i21150#
+   @since UDK 3.2.0
  */
 typedef struct _typelib_StructMember_Init
 {
@@ -693,7 +693,7 @@ void SAL_CALL typelib_typedescription_new(
     @param nMembers number of members
     @param pMember array of members
 
-    @since #i21150#
+    @since UDK 3.2.0
 */
 void SAL_CALL typelib_typedescription_newStruct(
     typelib_TypeDescription ** ppRet,
@@ -742,7 +742,7 @@ void SAL_CALL typelib_typedescription_newInterface(
     @param nMembers number of members
     @param ppMembers members; attributes or methods
 
-    @since #i21150#
+    @since UDK 3.2.0
 */
 void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_InterfaceTypeDescription ** ppRet,
@@ -817,7 +817,7 @@ void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     @param nSetExceptions number of setter exceptions
     @param ppSetExceptionNames type names of setter exceptions
 
-    @since #i21150#
+    @since UDK 3.2.0
 */
 void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     typelib_InterfaceAttributeTypeDescription ** ppRet,
@@ -1135,7 +1135,7 @@ void SAL_CALL typelib_static_compound_type_init(
         are of parameterized type (true) or explict type (false); must be null
         for a plain struct type
 
-    @since #i21150#
+    @since UDK 3.2.0
 */
 void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
@@ -1164,7 +1164,7 @@ void SAL_CALL typelib_static_interface_type_init(
     @param nBaseTypes number of base types
     @param ppBaseTypes base types
 
-    @since #i21150#
+    @since UDK 3.2.0
 */
 void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
