@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:08:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,16 +754,22 @@ Rectangle XPolygon::GetBoundRect() const
 
     if(pImpXPolygon->nPoints)
     {
-        const ::basegfx::B2DPolygon aPolygon(getB2DPolygon());
+        ::basegfx::B2DPolygon aPolygon(getB2DPolygon());
+
+        if(aPolygon.areControlPointsUsed())
+        {
+            // #i37709#
+            // For historical reasons the control points are not part of the
+            // BoundRect. This makes it necessary to subdivide the polygon to
+            // get a relatively correct BoundRect. Numerically, this is not
+            // correct and never was.
+            aPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aPolygon);
+        }
+
         const ::basegfx::B2DRange aPolygonRange(::basegfx::tools::getRange(aPolygon));
         aRetval = Rectangle(
             FRound(aPolygonRange.getMinX()), FRound(aPolygonRange.getMinY()),
             FRound(aPolygonRange.getMaxX()), FRound(aPolygonRange.getMaxY()));
-
-//BFS09     if(pOut)
-//BFS09     {
-//BFS09         aRetval = pOut->PixelToLogic(aRetval);
-//BFS09     }
     }
 
     return aRetval;
