@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-10 14:32:09 $
+ *  last change: $Author: fs $ $Date: 2002-10-15 07:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@
 #ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
 #include "editbrowseboxcell.hxx"
 #endif
+
 // .......................................................................
 namespace svt
 {
@@ -354,7 +355,7 @@ namespace svt
         nStartEvent = 0;
         if (IsEditing())
         {
-            aController->GetWindow().Show();
+            EnableAndShow();
             if (!aController->GetWindow().HasFocus() && (m_pFocusWhileRequest == Application::GetFocusWindow()))
                 aController->GetWindow().GrabFocus();
         }
@@ -534,6 +535,16 @@ namespace svt
         {
             CellControllerRef aController(Controller());
             HideAndDisable(aController);
+        }
+
+        // we are about to leave the current cell. If there is a "this cell has been modified" notification
+        // pending (asynchronously), this may be deadly -> do it synchronously
+        // 95826 - 2002-10-14 - fs@openoffice.org
+        if ( nCellModifiedEvent )
+        {
+            Application::RemoveUserEvent( nCellModifiedEvent );
+            nCellModifiedEvent = 0;
+            LINK( this, EditBrowseBox, CellModifiedHdl ).Call( NULL );
         }
 
         if (0 == rEvt.GetColumnId())
@@ -1357,21 +1368,20 @@ namespace svt
     //------------------------------------------------------------------------------
     inline void EditBrowseBox::HideAndDisable(CellControllerRef& rController)
     {
-        rController->GetWindow().Hide();
-        rController->GetWindow().Disable();
+        rController->suspend();
     }
     //------------------------------------------------------------------------------
     inline void EditBrowseBox::EnableAndShow() const
     {
-        Controller()->GetWindow().Enable();
-        Controller()->GetWindow().Show();
+        Controller()->resume();
     }
     //===============================================================================
 
     DBG_NAME(CellController);
     //------------------------------------------------------------------------------
     CellController::CellController(Window* pW)
-                   :pWindow(pW)
+                   :pWindow( pW )
+                   ,bSuspended( sal_True )
     {
         DBG_CTOR(CellController,NULL);
 
@@ -1384,6 +1394,37 @@ namespace svt
     {
 
         DBG_DTOR(CellController,NULL);
+    }
+
+    //-----------------------------------------------------------------------------
+    void CellController::suspend( )
+    {
+        DBG_ASSERT( bSuspended == !GetWindow().IsVisible(), "CellController::suspend: inconsistence!" );
+        if ( !isSuspended( ) )
+        {
+            CommitModifications();
+            GetWindow().Hide( );
+            GetWindow().Disable( );
+            bSuspended = sal_True;
+        }
+    }
+
+    //-----------------------------------------------------------------------------
+    void CellController::resume( )
+    {
+        DBG_ASSERT( bSuspended == !GetWindow().IsVisible(), "CellController::resume: inconsistence!" );
+        if ( isSuspended( ) )
+        {
+            GetWindow().Enable( );
+            GetWindow().Show( );
+            bSuspended = sal_False;
+        }
+    }
+
+    //-----------------------------------------------------------------------------
+    void CellController::CommitModifications()
+    {
+        // nothing to do in this base class
     }
 
     //-----------------------------------------------------------------------------
@@ -1403,114 +1444,6 @@ namespace svt
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
-    EditCellController::EditCellController(Edit* pWin)
-                         :CellController(pWin)
-    {
-    }
-
-    //-----------------------------------------------------------------------------
-    void EditCellController::SetModified()
-    {
-        GetEditWindow().SetModifyFlag();
-    }
-
-    //-----------------------------------------------------------------------------
-    void EditCellController::ClearModified()
-    {
-        GetEditWindow().ClearModifyFlag();
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool EditCellController::MoveAllowed(const KeyEvent& rEvt) const
-    {
-        sal_Bool bResult;
-        switch (rEvt.GetKeyCode().GetCode())
-        {
-            case KEY_END:
-            case KEY_RIGHT:
-            {
-                Selection aSel = GetEditWindow().GetSelection();
-                bResult = !aSel && aSel.Max() == GetEditWindow().GetText().Len();
-            }   break;
-            case KEY_HOME:
-            case KEY_LEFT:
-            {
-                Selection aSel = GetEditWindow().GetSelection();
-                bResult = !aSel && aSel.Min() == 0;
-            }   break;
-            default:
-                bResult = sal_True;
-        }
-        return bResult;
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool EditCellController::IsModified() const
-    {
-        return GetEditWindow().IsModified();
-    }
-
-    //------------------------------------------------------------------------------
-    void EditCellController::SetModifyHdl(const Link& rLink)
-    {
-        GetEditWindow().SetModifyHdl(rLink);
-    }
-
-    //------------------------------------------------------------------------------
-    SpinCellController::SpinCellController(SpinField* pWin)
-                         :CellController(pWin)
-    {
-    }
-
-    //-----------------------------------------------------------------------------
-    void SpinCellController::SetModified()
-    {
-        GetSpinWindow().SetModifyFlag();
-    }
-
-    //-----------------------------------------------------------------------------
-    void SpinCellController::ClearModified()
-    {
-        GetSpinWindow().ClearModifyFlag();
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool SpinCellController::MoveAllowed(const KeyEvent& rEvt) const
-    {
-        sal_Bool bResult;
-        switch (rEvt.GetKeyCode().GetCode())
-        {
-            case KEY_END:
-            case KEY_RIGHT:
-            {
-                Selection aSel = GetSpinWindow().GetSelection();
-                bResult = !aSel && aSel.Max() == GetSpinWindow().GetText().Len();
-            }   break;
-            case KEY_HOME:
-            case KEY_LEFT:
-            {
-                Selection aSel = GetSpinWindow().GetSelection();
-                bResult = !aSel && aSel.Min() == 0;
-            }   break;
-            default:
-                bResult = sal_True;
-        }
-        return bResult;
-    }
-
-    //------------------------------------------------------------------------------
-    sal_Bool SpinCellController::IsModified() const
-    {
-        return GetSpinWindow().IsModified();
-    }
-
-    //------------------------------------------------------------------------------
-    void SpinCellController::SetModifyHdl(const Link& rLink)
-    {
-        GetSpinWindow().SetModifyHdl(rLink);
-    }
-
 // .......................................................................
 }   // namespace svt
 // .......................................................................
@@ -1518,6 +1451,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2002/09/10 14:32:09  fs
+ *  #102119# added optional smart tab traveling (focus first/last cell when getting the focus)
+ *
  *  Revision 1.14  2002/08/08 11:43:35  oj
  *  #102008# only send a ACCESSIBLE_ACTIVE_DESCENDANT_EVENT event when we have the focus
  *
