@@ -17963,3 +17963,6 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?dispose@SvxUnoMarkerTable@@QAEXXZ
 ??1FmMutexHelper@@QAE@XZ
 ??1SvxEmphasisMarkItem@@UAE@XZ
+?GetForbiddenCharsTable@SdrModel@@QBE?AV?$ORef@VSvxForbiddenCharactersTable@@@vos@@XZ
+?ReformatAllTextObjects@SdrModel@@QAEXXZ
+?SetForbiddenCharsTable@SdrModel@@QAEXV?$ORef@VSvxForbiddenCharactersTable@@@vos@@@Z
