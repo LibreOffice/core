@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-26 06:29:54 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ TabPage TP_HELP_INDEX
         Text[ polish ] = "Poka�";
         Text[ portuguese_brazilian ] = "~Display";
         Text[ japanese ] = "表示(~D)";
-        Text[ korean ] = "나타내기(~D)";
+        Text[ korean ] = "표시(~D)";
         Text[ chinese_simplified ] = "显示(~D)";
         Text[ chinese_traditional ] = "顯示(~D)";
         Text[ turkish ] = "~Display";
@@ -348,7 +348,7 @@ TabPage TP_HELP_SEARCH
         Text[ polish ] = "~Tylko ca�e s�owa";
         Text[ portuguese_brazilian ] = "~Complete words only";
         Text[ japanese ] = "単語として(~C)";
-        Text[ korean ] = "~Complete words only";
+        Text[ korean ] = "완벽한 단어만(~C)";
         Text[ chinese_simplified ] = "只允许单词(~C)";
         Text[ chinese_traditional ] = "僅是單詞(~C)";
         Text[ turkish ] = "~Complete words only";
@@ -405,7 +405,7 @@ TabPage TP_HELP_SEARCH
         Text[ polish ] = "Poka�";
         Text[ portuguese_brazilian ] = "~Display";
         Text[ japanese ] = "表示(~D)";
-        Text[ korean ] = "나타내기(~D)";
+        Text[ korean ] = "표시(~D)";
         Text[ chinese_simplified ] = "显示(~D)";
         Text[ chinese_traditional ] = "顯示(~D)";
         Text[ turkish ] = "~Display";
@@ -472,7 +472,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ polish ] = "Poka�";
         Text[ portuguese_brazilian ] = "~Display";
         Text[ japanese ] = "表示(~D)";
-        Text[ korean ] = "나타내기(~D)";
+        Text[ korean ] = "표시(~D)";
         Text[ chinese_simplified ] = "显示(~D)";
         Text[ chinese_traditional ] = "顯示(~D)";
         Text[ turkish ] = "~Display";
@@ -784,7 +784,7 @@ String STR_HELP_BUTTON_SEARCHDIALOG
     Text[ polish ] = "Szukaj...";
     Text[ portuguese_brazilian ] = "Find...";
     Text[ japanese ] = "検索...";
-    Text[ korean ] = "Find...";
+    Text[ korean ] = "찾기...";
     Text[ chinese_simplified ] = "搜寻...";
     Text[ chinese_traditional ] = "搜尋...";
     Text[ turkish ] = "Find...";
@@ -812,7 +812,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ dutch ] = "HTLM-brontekst";
     Text[ chinese_simplified ] = "HTML 源文本";
     Text[ greek ] = "������� ���������� HTML";
-    Text[ korean ] = "HTML-소스텍스트";
+    Text[ korean ] = "HTML-소스 텍스트";
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ catalan ] = "HTML Source";
     Text[ finnish ] = "HTML-l�hde";
@@ -834,7 +834,7 @@ String STR_HELP_FIRST_MESSAGE
     Text[ polish ] = "Uruchamianie Pomocy...";
     Text[ portuguese_brazilian ] = "Help is started...";
     Text[ japanese ] = "ﾍﾙﾌﾟを開始しています...";
-    Text[ korean ] = "도움말을ㄹ 시작합니다...";
+    Text[ korean ] = "도움말을 시작합니다...";
     Text[ chinese_simplified ] = "正在启动帮助功能...";
     Text[ chinese_traditional ] = "正在啟動說明功能...";
     Text[ turkish ] = "Help is started...";
@@ -986,7 +986,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ polish ] = "Poka�";
             Text[ portuguese_brazilian ] = "New...";
             Text[ japanese ] = "表示";
-            Text[ korean ] = "나타내기...";
+            Text[ korean ] = "표시...";
             Text[ chinese_simplified ] = "显示";
             Text[ chinese_traditional ] = "顯示";
             Text[ turkish ] = "New...";
@@ -1081,6 +1081,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ arabic ] = "No themes found.";
     MESSAGE[ catalan ] = "No themes found.";
 };
+
 
 
 
