@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-30 11:31:51 $
+ *  last change: $Author: fs $ $Date: 2002-05-31 07:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2023,7 +2023,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     {
         const StyleSettings& rSettings = pOut->GetSettings().GetStyleSettings();
         Font aNewFont( aTempFont );
-        aNewFont.SetColor( rSettings.GetWindowTextColor() );
+        aNewFont.SetColor( bActiveSelection ? rSettings.GetHighlightTextColor() : rSettings.GetWindowTextColor() );
 
         // bei hart attributierter Font-Fuellcolor muessen wir diese
         // hart auf die Highlight-Color setzen
@@ -2072,11 +2072,11 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     if( !bNoEmphasis )
         PaintEmphasis(aTextRect,aBmpRect,bSelected,bDropTarget,bCursored,pOut,bIsBackgroundPainted);
 
-    PaintItem( aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, pOut );
-
     if ( bShowSelection )
         pView->DrawSelectionBackground( CalcFocusRect( pEntry ),
-        bActiveSelection ? 2 : 0 /* highlight */, sal_False /* check */, sal_True /* border */, sal_False /* ext border only */ );
+        bActiveSelection ? 1 : 2 /* highlight */, sal_False /* check */, sal_True /* border */, sal_False /* ext border only */ );
+
+    PaintItem( aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, pOut );
 
     PaintItem( aTextRect, IcnViewFieldTypeText, pEntry,
         nTextPaintFlags, pOut );
