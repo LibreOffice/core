@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTables.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:44:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 #endif
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace ::cppu;
 using namespace connectivity::mysql;
 using namespace ::com::sun::star::uno;
@@ -121,7 +121,7 @@ using namespace ::com::sun::star::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
@@ -140,7 +140,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
         aCatalog <<= sCatalog;
     Reference< XResultSet > xResult = m_xMetaData->getTables(aCatalog,sSchema,sTable,sTableTypes);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -198,13 +198,6 @@ void OTables::disposing(void)
 Reference< XPropertySet > OTables::createEmptyObject()
 {
     return new OMySQLTable(this,static_cast<OMySQLCatalog&>(m_rParent).getConnection());
-}
-// -----------------------------------------------------------------------------
-Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 // XAppend
@@ -286,6 +279,12 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
     OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
+{
+    OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
+    return ::dbtools::composeTableName(m_xMetaData,_xObject,sal_False,::dbtools::eInDataManipulation);
 }
 // -----------------------------------------------------------------------------
 
