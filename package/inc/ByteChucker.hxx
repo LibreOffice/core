@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:27:27 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 12:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,8 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
 
-class ThreadedBuffer;
-
 class ByteChucker
 {
-    friend class ThreadedBuffer;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 19:33:51 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 12:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,9 @@
 #endif
 
 class EncryptionData;
-class ThreadedBuffer;
 
 class ZipOutputStream
 {
-    friend class ThreadedBuffer;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
     ::std::vector < ::com::sun::star::packages::zip::ZipEntry *>            aZipList;
