@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 16:32:29 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 06:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,9 +333,7 @@ namespace pcr
         SetGetFocusHdl(LINK( this, OCommonBehaviourControl, GetFocusHdl));
         SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
 
-        International aInter=GetInternational();
-        aInter.SetCurrSymbol(String());
-        SetInternational(aInter);
+        SetCurrencySymbol(String());
 
         double nMax = GetMax();
         nMax = -nMax;
@@ -382,7 +380,7 @@ namespace pcr
             if (rString.getLength())
             {
                 int nErr = 0;
-                double nValue = SolarMath::StringToDouble(rString, GetInternational(), nErr);
+                double nValue = SolarMath::StringToDouble(rString, '.', ',', nErr);
                 BigInt aBInt = ImplCalcLongValue(nValue, GetDecimalDigits());
                 SetValue(aBInt);
             }
@@ -399,8 +397,8 @@ namespace pcr
         {
             String aBuffer;
             BigInt aBInt=GetValue();
-            double nValue = ImplCalcDoubleValue(aBInt,GetDecimalDigits());
-            SolarMath::DoubleToString(aBuffer,nValue,'F',GetDecimalDigits());
+            double nValue = ImplCalcDoubleValue(aBInt, GetDecimalDigits());
+            SolarMath::DoubleToString(aBuffer, nValue, 'F', GetDecimalDigits(), '.');
 
             return aBuffer;
         }
@@ -1246,6 +1244,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/02/19 16:32:29  fs
+ *  OColorControl: insert the standard entry at position 0
+ *
  *  Revision 1.3  2001/02/05 12:24:09  tbe
  *  get standard color table if SID_COLOR_TABLE item not available
  *
