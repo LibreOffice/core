@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:12:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,11 @@
 #define FIRST_ENTRY_TAB             1
 
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
-// FIXME: static images are currently leaked letting the OS clean up
 Image*  SvImpLBox::s_pDefCollapsed      = NULL;
 Image*  SvImpLBox::s_pDefExpanded       = NULL;
 Image*  SvImpLBox::s_pDefCollapsedHC    = NULL;
 Image*  SvImpLBox::s_pDefExpandedHC     = NULL;
+sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
 
@@ -123,6 +123,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     pTabBar( NULL )
 
 {
+    osl_incrementInterlockedCount(&s_nImageRefCount);
     pView = pLBView;
     pTree = pLBTree;
     aSelEng.SetFunctionSet( (FunctionSet*)&aFctSet );
@@ -185,6 +186,13 @@ SvImpLBox::~SvImpLBox()
     // #102891# ---------------------
     if( pIntlWrapper )
         delete pIntlWrapper;
+    if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
+    {
+        DELETEZ(s_pDefCollapsed);
+        DELETEZ(s_pDefExpanded);
+        DELETEZ(s_pDefCollapsedHC);
+        DELETEZ(s_pDefExpandedHC);
+    }
 }
 
 // #102891# --------------------
