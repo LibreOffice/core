@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 14:11:49 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 10:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,6 +859,14 @@ SVTXFormattedField::~SVTXFormattedField()
 }
 
 // --------------------------------------------------------------------------------------
+void SVTXFormattedField::SetWindow( Window* _pWindow )
+{
+    VCLXSpinField::SetWindow(_pWindow);
+    if (GetFormattedField())
+        GetFormattedField()->SetAutoColor(TRUE);
+}
+
+// --------------------------------------------------------------------------------------
 void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -1026,7 +1034,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
 {
     ::com::sun::star::uno::Any aReturn;
 
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField)
         return aReturn;
 
@@ -1085,7 +1093,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
 // --------------------------------------------------------------------------------------
 void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField)
         return;
 
@@ -1112,7 +1120,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 // --------------------------------------------------------------------------------------
 ::com::sun::star::uno::Any SVTXFormattedField::GetMinValue()
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField || !pField->HasMinValue())
         return ::com::sun::star::uno::Any();
 
@@ -1124,7 +1132,7 @@ void SVTXFormattedField::SetMinValue(const ::com::sun::star::uno::Any& rValue)
 // --------------------------------------------------------------------------------------
 void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField)
         return;
 
@@ -1150,7 +1158,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 // --------------------------------------------------------------------------------------
 ::com::sun::star::uno::Any SVTXFormattedField::GetMaxValue()
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField || !pField->HasMaxValue())
         return ::com::sun::star::uno::Any();
 
@@ -1162,7 +1170,7 @@ void SVTXFormattedField::SetMaxValue(const ::com::sun::star::uno::Any& rValue)
 // --------------------------------------------------------------------------------------
 void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField)
         return;
 
@@ -1195,7 +1203,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
 // --------------------------------------------------------------------------------------
 ::com::sun::star::uno::Any SVTXFormattedField::GetDefaultValue()
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField || pField->IsEmptyFieldEnabled())
         return ::com::sun::star::uno::Any();
 
@@ -1210,7 +1218,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
 // --------------------------------------------------------------------------------------
 sal_Bool SVTXFormattedField::GetTreatAsNumber()
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (pField)
         return pField->TreatingAsNumber();
 
@@ -1220,7 +1228,7 @@ sal_Bool SVTXFormattedField::GetTreatAsNumber()
 // --------------------------------------------------------------------------------------
 void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (pField)
         pField->TreatAsNumber(bSet);
 }
@@ -1228,7 +1236,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
 // --------------------------------------------------------------------------------------
 ::com::sun::star::uno::Any SVTXFormattedField::GetValue()
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField)
         return ::com::sun::star::uno::Any();
 
@@ -1250,7 +1258,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
 // --------------------------------------------------------------------------------------
 void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (!pField)
         return;
 
@@ -1291,7 +1299,7 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 // --------------------------------------------------------------------------------------
 void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xSupplier)
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
 
     SvNumberFormatsSupplierObj* pNew = NULL;
     if (!xSupplier.is())
@@ -1334,14 +1342,14 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
 // --------------------------------------------------------------------------------------
 sal_Int32 SVTXFormattedField::getFormatKey(void) const
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     return pField ? pField->GetFormatKey() : 0;
 }
 
 // --------------------------------------------------------------------------------------
 void SVTXFormattedField::setFormatKey(sal_Int32 nKey)
 {
-    FormattedField* pField = (FormattedField*)GetWindow();
+    FormattedField* pField = GetFormattedField();
     if (pField)
     {
         if (pField->GetFormatter())
