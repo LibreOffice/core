@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlPatternFieldModel.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:47:11 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 #ifndef __com_sun_star_awt_UnoControlPatternFieldModel_idl__
 #define __com_sun_star_awt_UnoControlPatternFieldModel_idl__
 
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
 
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
-#include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
 
@@ -161,6 +161,15 @@ published service UnoControlPatternFieldModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies whether the selection in the control should be hidden when
+        the control is not active (focused).
+
+        @since OOo 2.0.0
+     */
+    [optional, property] boolean HideInactiveSelection;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the literal mask.
      */
     [property] string LiteralMask;
@@ -214,12 +223,6 @@ published service UnoControlPatternFieldModel
      */
     [property] com::sun::star::util::Color TextLineColor;
 
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the selection in the control should be hidden when the control is not
-        active (focused).
-    */
-    [optional, property] boolean HideInactiveSelection;
 };
 
 //=============================================================================
