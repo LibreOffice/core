@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:13:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 14:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,9 @@ public:
     ScAddress       GetPos() const                  { return aPos; }
     // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
     void            SetIndex( USHORT nInd )         { nIndex = nExportIndex = nInd; }
-    const USHORT    GetIndex()                      { return nIndex; }
+    const USHORT    GetIndex() const                { return nIndex; }
     void            SetExportIndex( USHORT nInd )   { nExportIndex = nInd; }
-    const USHORT    GetExportIndex()                { return nExportIndex; }
+    const USHORT    GetExportIndex() const          { return nExportIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
     USHORT          GetErrCode();
     BOOL            HasReferences() const;
