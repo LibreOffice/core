@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:23:58 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,45 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
         if( !pNames->Insert( pName ) )
             delete pName;
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Retrieve the list of registered names
+//
+
+void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
+    uno::Sequence<sal_Int32>& rFamilies,
+    uno::Sequence<OUString>& rNames )
+{
+    // collect registered names + families
+    vector<sal_Int32> aFamilies;
+    vector<OUString> aNames;
+
+    // iterate over families
+    sal_uInt32 nCount = maFamilyList.Count();
+    for( sal_uInt32 i = 0; i < nCount; i++ )
+    {
+        XMLFamilyData_Impl* pFamily = maFamilyList.GetObject( i );
+
+        // iterate over names
+        SvXMLAutoStylePoolNamesP_Impl* pNames = pFamily->mpNameList;
+        sal_uInt32 nNames = ( pNames != NULL ) ? pNames->Count() : 0;
+        for( sal_uInt32 j = 0; j < nNames; j++ )
+        {
+            aFamilies.push_back( pFamily->mnFamily );
+            aNames.push_back( *pNames->GetObject( j ) );
+        }
+    }
+
+    // copy the families + names into the sequence types
+    DBG_ASSERT( aFamilies.size() == aNames.size(), "families != names" );
+
+    rFamilies.realloc( aFamilies.size() );
+    std::copy( aFamilies.begin(), aFamilies.end(), rFamilies.getArray() );
+
+    rNames.realloc( aNames.size() );
+    std::copy( aNames.begin(), aNames.end(), rNames.getArray() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
