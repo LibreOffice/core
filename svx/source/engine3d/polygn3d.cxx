@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polygn3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:59:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 
 #ifndef _E3D_E3DIOCMPT_HXX
 #include "e3dcmpt.hxx"
+#endif
+
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#include <basegfx/point/b3dpoint.hxx>
 #endif
 
 TYPEINIT1(E3dPolygonObj, E3dCompoundObject);
@@ -349,20 +353,20 @@ UINT16 E3dPolygonObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-void E3dPolygonObj::CreateWireframe(Polygon3D& rWirePoly,
-    const Matrix4D* pTf, E3dDragDetail eDetail)
-{
-    if ( eDetail == E3DDETAIL_ALLLINES ||
-        (eDetail == E3DDETAIL_DEFAULT && GetDragDetail() == E3DDETAIL_ALLLINES) )
-    {
-        // Detailliert erzeugen
-    }
-    else
-    {
-        // call parent
-        E3dObject::CreateWireframe(rWirePoly, pTf, eDetail);
-    }
-}
+//BFS01void E3dPolygonObj::CreateWireframe(Polygon3D& rWirePoly,
+//BFS01 const Matrix4D* pTf, E3dDragDetail eDetail)
+//BFS01{
+//BFS01 if ( eDetail == E3DDETAIL_ALLLINES ||
+//BFS01     (eDetail == E3DDETAIL_DEFAULT && GetDragDetail() == E3DDETAIL_ALLLINES) )
+//BFS01 {
+//BFS01     // Detailliert erzeugen
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     // call parent
+//BFS01     E3dObject::CreateWireframe(rWirePoly, pTf, eDetail);
+//BFS01 }
+//BFS01}
 
 /*************************************************************************
 |*
@@ -423,24 +427,24 @@ SdrObject *E3dPolygonObj::DoConvertToPolyObj(BOOL bBezier) const
 |*
 \************************************************************************/
 
-void E3dPolygonObj::GetLineGeometry(PolyPolygon3D& rLinePolyPolygon) const
+::basegfx::B3DPolyPolygon E3dPolygonObj::Get3DLineGeometry() const
 {
-    // add geometry describing polygons to rLinePolyPolygon
+    ::basegfx::B3DPolyPolygon aRetval;
+
     for(sal_uInt16 a(0); a < aPolyPoly3D.Count(); a++)
     {
-        Polygon3D aNew = aPolyPoly3D[a];
+        ::basegfx::B3DPolygon aNew(aPolyPoly3D[a].getB3DPolygon());
 
-        if(aNew.GetPointCount() && aNew.IsClosed())
+        if(aNew.count() && aNew.isClosed())
         {
-            aNew[aNew.GetPointCount()] = aNew[0];
-            aNew.SetClosed(FALSE);
+            aNew.append(aNew.getB3DPoint(0));
+            aNew.setClosed(sal_False);
         }
 
-        rLinePolyPolygon.Insert(aNew);
+        aRetval.append(aNew);
     }
 
-    // don't call parent
-    // E3dCompoundObject::GetLineGeometry(rLinePolyPolygon);
+    return aRetval;
 }
 
 /*************************************************************************
@@ -480,29 +484,29 @@ void E3dPolygonObj::CreateGeometry()
 |*
 \************************************************************************/
 
-void E3dPolygonObj::WriteData(SvStream& rOut) const
-{
-#ifndef SVX_LIGHT
-    long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
-    if(nVersion < 3800)
-    {
-        // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
-        ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
-    }
-
-    // call parent
-    E3dCompoundObject::WriteData(rOut);
-
-    E3dIOCompat aCompat(rOut, STREAM_WRITE, 1);
-    rOut << BOOL(bLineOnly);
-
-    if(nVersion < 3800)
-    {
-        // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
-        ((E3dCompoundObject*)this)->ReCreateGeometry();
-    }
-#endif
-}
+//BFS01void E3dPolygonObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01#ifndef SVX_LIGHT
+//BFS01 long nVersion = rOut.GetVersion(); // Build_Nr * 10 z.B. 3810
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Alte Geometrie erzeugen, um die E3dPolyObj's zu haben
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry(TRUE);
+//BFS01 }
+//BFS01
+//BFS01 // call parent
+//BFS01 E3dCompoundObject::WriteData(rOut);
+//BFS01
+//BFS01 E3dIOCompat aCompat(rOut, STREAM_WRITE, 1);
+//BFS01 rOut << BOOL(bLineOnly);
+//BFS01
+//BFS01 if(nVersion < 3800)
+//BFS01 {
+//BFS01     // Geometrie neu erzeugen, um E3dPolyObj's wieder loszuwerden
+//BFS01     ((E3dCompoundObject*)this)->ReCreateGeometry();
+//BFS01 }
+//BFS01#endif
+//BFS01}
 
 /*************************************************************************
 |*
@@ -510,24 +514,24 @@ void E3dPolygonObj::WriteData(SvStream& rOut) const
 |*
 \************************************************************************/
 
-void E3dPolygonObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    // call parent
-    E3dCompoundObject::ReadData(rHead, rIn);
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    if(AreBytesLeft())
-    {
-        E3dIOCompat aIoCompat(rIn, STREAM_READ);
-        if(aIoCompat.GetVersion() >= 1)
-        {
-            rIn >> bLineOnly;
-        }
-    }
-
-    // Geometrie neu erzeugen, mit oder ohne E3dPolyObj's
-    ReCreateGeometry();
-}
+//BFS01void E3dPolygonObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 // call parent
+//BFS01 E3dCompoundObject::ReadData(rHead, rIn);
+//BFS01
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 if(AreBytesLeft())
+//BFS01 {
+//BFS01     E3dIOCompat aIoCompat(rIn, STREAM_READ);
+//BFS01     if(aIoCompat.GetVersion() >= 1)
+//BFS01     {
+//BFS01         rIn >> bLineOnly;
+//BFS01     }
+//BFS01 }
+//BFS01
+//BFS01 // Geometrie neu erzeugen, mit oder ohne E3dPolyObj's
+//BFS01 ReCreateGeometry();
+//BFS01}
 
 /*************************************************************************
 |*
@@ -564,3 +568,4 @@ void E3dPolygonObj::SetLineOnly(BOOL bNew)
     }
 }
 
+// eof
