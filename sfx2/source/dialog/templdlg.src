@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:41:45 $
+ *  last change: $Author: kz $ $Date: 2001-08-30 20:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ DockingWindow DLG_STYLE_DESIGNER
                 Text [ portuguese_brazilian ] = "Atualizar estilo por exemplo" ;
                 Text [ portuguese ] = "Actualizar modelo" ;
                 Text [ english_us ] = "Update Style" ;
-                Text [ finnish ] = "Päivitä tyyli" ;
+                Text [ finnish ] = "P?ivit? tyyli" ;
                 Text [ danish ] = "Opdater typografi" ;
                 Text [ french ] = "Actualiser le style" ;
                 Text [ swedish ] = "Uppdatera formatmall" ;
@@ -444,6 +444,7 @@ DockingWindow DLG_STYLE_DESIGNER
     };
 };
  // ********************************************************************** EOF
+
 
 
 
