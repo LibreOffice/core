@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:09:05 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 15:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,13 +275,16 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         {
             aValue.Value >>= xFrame;
         }
+        /* #i42316#
         else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "ReadOnly" ) ) )
         {
             aValue.Value >>= m_bReadOnly;
         }
+        */
         else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Preview" ) ) )
         {
             aValue.Value >>= m_bPreview;
+            m_bReadOnly = sal_True;
         }
     }
     if ( xFrame.is() )
