@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 11:12:04 $
+ *  last change: $Author: mba $ $Date: 2002-07-15 13:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 
 //============================================================================
 // PropBrwMgr
@@ -259,10 +261,12 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,
     }
 
     // append our frame
-    //Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
-    //Reference < XFrames > xFrames = xSup->getFrames();
-    //xFrames->append( m_xMeAsFrame );
-    // TODO: where to append?
+    Reference < XFramesSupplier > xSup( pBindings->GetDispatcher()->GetFrame()->GetFrame()->GetFrameInterface(),UNO_QUERY);
+    if ( xSup.is() )
+    {
+        Reference < XFrames > xFrames = xSup->getFrames();
+        xFrames->append( m_xMeAsFrame );
+    }
 
     if (m_xMeAsFrame.is())
     {
