@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:57:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,27 @@ public:
     */
     Rectangle GetFadeEffectIndicatorArea (OutputDevice* pDevice) const;
 
+    /** Paint all parts of the frame arround a preview.  These are the
+        border, the selection frame, the focus rectangle, and the mouse over
+        effect.
+        @param rDevice
+            The output device to paint on.
+        @param bShowMouseOverEffect
+            This flag specifies whether to paint the mouse over effect or not.
+    */
+    void PaintFrame (
+        OutputDevice& rDevice,
+        bool bShowMouseOverEffect = false) const;
+
+    /** Return the rectangle of the whole page object, the preview toghether
+        with frames, indicators, and title, in pixel coordinates.
+    */
+    Rectangle GetPixelBox (const OutputDevice& rDevice);
+
+    /** Return the rectangle of the preview in pixel coordinates.
+    */
+    Rectangle GetPreviewPixelBox (const OutputDevice& rDevice);
+
 private:
     /// Gap between border of page object and inside of selection rectangle.
     static const sal_Int32 mnSelectionIndicatorOffset;
@@ -190,6 +211,9 @@ private:
     static const sal_Int32 mnFadeEffectIndicatorOffset;
     /// Gap between border of page object and number rectangle.
     static const sal_Int32 mnPageNumberOffset;
+    /// Offset and thickness of the mouse over effect rectangle.
+    static const sal_Int32 mnMouseOverEffectOffset;
+    static const sal_Int32 mnMouseOverEffectThickness;
 
     /** This flag is set to <FALSE/> when PrepareDelete() is called to
         indicate that further calls made to it must not call outside.
@@ -201,14 +225,6 @@ private:
     BitmapEx GetPreview (
         ::sdr::contact::DisplayInfo& rDisplayInfo,
         const Rectangle& rNewSizePixel);
-    /** Return the rectangle of the whole page object, the preview toghether
-        with frames, indicators, and title, in pixel coordinates.
-    */
-    Rectangle GetPixelBox (::sdr::contact::DisplayInfo& rDisplayInfo);
-    /** Return the rectangle of the preview in pixel coordinates.
-    */
-    Rectangle GetPreviewPixelBox (
-        ::sdr::contact::DisplayInfo& rDisplayInfo);
 
     virtual void ActionChanged (void);
 
@@ -221,17 +237,27 @@ private:
     */
     void PaintPreview (::sdr::contact::DisplayInfo& rDisplayInfo);
 
-    /** Paint a frame arround the page preview.
+    /** Paint a border arround the page preview.
     */
-    void PaintFrame (::sdr::contact::DisplayInfo& rDisplayInfo) const;
+    void PaintBorder (OutputDevice& rDevice) const;
 
     /** Paint the focus indicator for the specified page.
-        @param bVisible
-            Indicates whether the focus indicator is visible or not, i.e. a
-            previously visible focus indicator is erased.
     */
     void PaintFocusIndicator (
-        ::sdr::contact::DisplayInfo& rDisplayInfo) const;
+        OutputDevice& rDevice,
+        bool bEraseBackground) const;
+
+    /** Paint the selection indicator when the page is currently selected.
+        Otherwise the call is ignored.
+    */
+    void PaintSelectionIndicator (OutputDevice& rDevice) const;
+
+    /** Paint a mouse over effect.
+        @param bVisible
+            When bVisible is <FALSE/> then paint the area of the mouse over
+            effect in the background color, i.e. erase it.
+    */
+    void PaintMouseOverEffect (OutputDevice& rDevice, bool bVisible) const;
 
     /** Paint the fade effect indicator which indicates whether a fade
         effect is currently associated with a page.
@@ -245,12 +271,6 @@ private:
     void PaintFadeEffectIndicator (
         ::sdr::contact::DisplayInfo& rDisplayInfo,
         bool bHighlight = false) const;
-
-    /** Paint the selection indicator when the page is currently selected.
-        Otherwise the call is ignored.
-    */
-    void PaintSelectionIndicator (
-        ::sdr::contact::DisplayInfo& rDisplayInfo) const;
 
     /** Paint the name of the page to the bottom right of the page object.
     */
