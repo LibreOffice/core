@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:23:05 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:44:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,15 +96,19 @@ DRAWING_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/StyleDemo.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/TextDemo.java
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(DRAWING_FILES) \
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/devguide_drawing_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/devguide_drawing.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
