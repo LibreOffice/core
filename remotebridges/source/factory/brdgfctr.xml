@@ -40,6 +40,7 @@
 <Type>   com.sun.star.bridge.XInstanceProvider                  </Type>
 <Type>   com.sun.star.bridge.XBridge                                </Type>
 <Type>   com.sun.star.bridge.BridgeExistsException              </Type>
+<Type>   com.sun.star.container.XContentEnumerationAccess           </Type>
 <Type>   com.sun.star.lang.XMultiServiceFactory         </Type>
 <Type>   com.sun.star.lang.XSingleServiceFactory                </Type>
 <Type>   com.sun.star.lang.XInitialization                      </Type>
