@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:02:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,9 @@ void XMLPageMasterExportPropMapper::handleElementItem(
                     nPos = CTF_PM_FOOTERGRAPHICPOSITION;
                     nFilter = CTF_PM_FOOTERGRAPHICFILTER;
                     break;
+                default:
+                    nPos = 0;  // TODO What values should this be?
+                    nFilter = 0;
                 }
                 const Any*  pPos    = NULL;
                 const Any*  pFilter = NULL;
@@ -373,8 +376,9 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
     UniReference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
 
-    for( ::std::vector< XMLPropertyState >::iterator pProp = rPropState.begin(); pProp != rPropState.end(); pProp++ )
+    for( ::std::vector< XMLPropertyState >::iterator aIter = rPropState.begin(); aIter != rPropState.end(); ++aIter )
     {
+        XMLPropertyState *pProp = &(*aIter);
         sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
         sal_Int16 nFlag         = nContextId & CTF_PM_FLAGMASK;
         sal_Int16 nSimpleId     = nContextId & (~CTF_PM_FLAGMASK | XML_PM_CTF_START);
