@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-12 10:34:14 $
+ *  last change: $Author: sab $ $Date: 2002-06-24 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,14 +848,10 @@ void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 
 void __EXPORT ScTextWnd::GetFocus()
 {
-    if (pAccTextData)
-        pAccTextData->StartEdit();
 }
 
 void __EXPORT ScTextWnd::LoseFocus()
 {
-    if (pAccTextData)
-        pAccTextData->EndEdit();
 }
 
 String __EXPORT ScTextWnd::GetText() const
@@ -974,6 +970,9 @@ void ScTextWnd::StartEditEngine()
         pEditEngine->InsertView( pEditView, EE_APPEND );
 
         Resize();
+
+        if (pAccTextData)
+            pAccTextData->StartEdit();
     }
 
     SC_MOD()->SetInputMode( SC_INPUT_TOP );
@@ -987,6 +986,9 @@ void ScTextWnd::StopEditEngine( BOOL bAll )
 {
     if (pEditView)
     {
+        if (pAccTextData)
+            pAccTextData->EndEdit();
+
         ScModule* pScMod = SC_MOD();
 
         if (!bAll)
@@ -1110,6 +1112,9 @@ void ScTextWnd::MakeDialogEditView()
     pEditEngine->InsertView( pEditView, EE_APPEND );
 
     Resize();
+
+    if (pAccTextData)
+        pAccTextData->StartEdit();
 }
 
 void ScTextWnd::ImplInitSettings()
