@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 12:19:25 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
 #endif
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include "osl/mutex.hxx"
 #endif
@@ -309,8 +312,14 @@
 #ifndef _SOLAR_H
 #include "tools/solar.h"
 #endif
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
 #ifndef _STRING_HXX
 #include "tools/string.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include "vcl/msgbox.hxx"
@@ -576,8 +585,56 @@ UUIInteractionHandler::initialize(
     m_aProperties = rArguments;
 }
 
+
+class HandleData : public osl::Condition {
+public:
+    HandleData(
+        star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
+        : osl::Condition(),
+          m_rRequest(rRequest)
+    {
+    }
+
+    star::uno::Reference< star::task::XInteractionRequest > m_rRequest;
+};
+
+
+long handlerequest(void* pHandleData,void* pInteractionHandler)
+{
+    HandleData* pHND = (HandleData*) pHandleData;
+    UUIInteractionHandler* pUUI = (UUIInteractionHandler*) pInteractionHandler;
+    pUUI->handle_impl(pHND->m_rRequest);
+    pHND->set();
+    return 0;
+}
+
+
 void SAL_CALL
 UUIInteractionHandler::handle(
+    star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
+    throw (star::uno::RuntimeException)
+{
+    Application* pApp = 0;
+    if(
+        // be aware,it is the same type
+        ((oslThreadIdentifier) Application::GetMainThreadIdentifier())
+        != osl_getThreadIdentifier(NULL)
+        &&
+        (pApp = GetpApp())
+        != 0
+    ) {
+        // we are not in the main thread, let it handle that stuff
+        HandleData aHD(rRequest);
+        Link aLink(&aHD,handlerequest);
+        pApp->PostUserEvent(aLink,this);
+        aHD.wait();
+    }
+    else
+        handle_impl(rRequest);
+}
+
+void SAL_CALL
+UUIInteractionHandler::handle_impl(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
     throw (star::uno::RuntimeException)
 {
