@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 09:02:45 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,22 +106,22 @@
     Text [ swedish ] = "D~ölj" ; \
     Text [ dutch ] = "~Verbergen" ; \
     Text [ spanish ] = "~Ocultar" ; \
-    Text [ english_us ] = "H~idden" ; \
-    Text[ chinese_simplified ] = "ÒşÈë(~H)";    \
+    Text [ english_us ] = "H~ide" ; \
+    Text[ chinese_simplified ] = "ÒşÈë(~I)";    \
     Text[ russian ] = "Ñêğûòü"; \
     Text[ polish ] = "Ukryj";   \
-    Text[ japanese ] = "”ñ•\\¦(~H)";   \
-    Text[ chinese_traditional ] = "Áô¤J(~H)";   \
+    Text[ japanese ] = "”ñ•\\¦(~I)";   \
+    Text[ chinese_traditional ] = "Áô¤J(~I)";   \
     Text[ arabic ] = "ãÎİí";    \
     Text[ greek ] = "Á~ğüêñõøç";    \
-    Text[ korean ] = "¼û±â±â(~H)";  \
+    Text[ korean ] = "¼û±â±â(~I)";  \
     Text[ turkish ] = "Gizle";  \
     Text[ catalan ] = "~Ocultar";
 
 #define CB_CONDITION_TEXT  \
     Text = "M~it Bedingung" ; \
     Text [ English ] = "~With condition" ; \
-    Text [ english_us ] = "~With Condition" ; \
+    Text [ english_us ] = "~With condition" ; \
     Text [ italian ] = "Con condizione" ; \
     Text [ spanish ] = "Con ~condición" ; \
     Text [ french ] = "Sous ~condition" ; \
@@ -161,7 +161,7 @@
     Text[ chinese_traditional ] = "±¶®|";   \
     Text[ arabic ] = "ÇÑÊÈÇØ";  \
     Text[ greek ] = "Óıíäåóç"; \
-    Text[ korean ] = "¿¬°á(L)";    \
+    Text[ korean ] = "¸µÅ©";    \
     Text[ turkish ] = "Bağlantı";   \
     Text[ finnish ] = "Linkki"; \
     Text[ catalan ] = "Link";
@@ -183,12 +183,12 @@
     Text[ polish ] = "~Po³¹cz"; \
     Text[ portuguese_brazilian ] = "~Verkn?fung";   \
     Text[ japanese ] = "Øİ¸(~L)";   \
-    Text[ chinese_simplified ] = "Á´½Ó";    \
-    Text[ chinese_traditional ] = "±¶®|";   \
+    Text[ chinese_simplified ] = "Á´½Ó(~L)";    \
+    Text[ chinese_traditional ] = "±¶®|(~L)";   \
     Text[ turkish ] = "Bağlantı";   \
     Text[ arabic ] = "ÇÑÊÈÇØ";  \
     Text[ catalan ] = "~Vínculo";   \
-    Text[ korean ] = "¿¬°á(~L)";
+    Text[ korean ] = "¸µÅ©(~L)";
 
 #define CB_DDE_TEXT \
     Text = "~DDE" ; \
@@ -217,7 +217,7 @@
 #define FT_DDE_TEXT \
     Text = "DDE~-Befehl" ; \
     Text [ English ] = "DDE command" ; \
-    Text [ english_us ] = "DDE ~Command" ; \
+    Text [ english_us ] = "DDE ~command" ; \
     Text [ italian ] = "Comando DDE" ; \
     Text [ spanish ] = "~Comando DDE" ; \
     Text [ french ] = "Commande ~DDE" ; \
@@ -233,7 +233,7 @@
     Text[ chinese_traditional ] = "DDE - «ü¥O(~C)"; \
     Text[ arabic ] = "ÃãÑ DDE"; \
     Text[ greek ] = "~ÅíôïëŞ DDE";  \
-    Text[ korean ] = "DDE~£­¸í·É";  \
+    Text[ korean ] = "DDE£­¸í·É(~C)";   \
     Text[ turkish ] = "DDE komutu"; \
     Text[ finnish ] = "~DDE-komento";   \
     Text[ catalan ] = "~Comando DDE";
@@ -280,7 +280,7 @@
     Text[ polish ] = "Ukryj"; \
     Text[ portuguese_brazilian ] = "Hide"; \
     Text[ japanese ] = "‰B‚·"; \
-    Text[ korean ] = "Hide"; \
+    Text[ korean ] = "¼û±â±â"; \
     Text[ chinese_simplified ] = "ÒşÈë"; \
     Text[ chinese_traditional ] = "Áô¤J"; \
     Text[ turkish ] = "Hide"; \
@@ -315,7 +315,7 @@
 #define FL_PROTECT_TEXT \
         Text = "Schreibschutz" ;\
         Text [ English ] = "Write protection" ; \
-    Text[ english_us ] = "Write Protection";    \
+    Text[ english_us ] = "Write protection";    \
     Text[ portuguese ] = "Protecção contra escrita";    \
     Text[ russian ] = "Çàùèòà îò çàïèñè";   \
     Text[ greek ] = "Write protection"; \
@@ -329,7 +329,7 @@
     Text[ polish ] = "Zabezpieczenie przed zapisem";    \
     Text[ portuguese_brazilian ] = "Write protection";  \
     Text[ japanese ] = "‘‚«‚İ•ÛŒì";  \
-    Text[ korean ] = "Write protection";    \
+    Text[ korean ] = "¾²±â º¸È£";   \
     Text[ chinese_simplified ] = "·À¸²Ğ´";  \
     Text[ chinese_traditional ] = "¨¾ÂĞ¼g"; \
     Text[ turkish ] = "Write protection";   \
@@ -339,7 +339,7 @@
 #define CB_PASSWD_TEXT\
         Text = "~Mit Kennwort" ;\
         Text[English] = "With password" ;   \
-    Text[ english_us ] = "Wit~h Password";  \
+    Text[ english_us ] = "Wit~h password";  \
     Text[ portuguese ] = "Com ~senha";  \
     Text[ russian ] = "Ïàğîëåì";    \
     Text[ greek ] = "With password";    \
@@ -350,12 +350,12 @@
     Text[ italian ] = "Con pass~word";  \
     Text[ danish ] = "With password";   \
     Text[ swedish ] = "~Med lösenord";  \
-    Text[ polish ] = "~Z has³em";   \
+    Text[ polish ] = "~Za pomoc¹ has³a";    \
     Text[ portuguese_brazilian ] = "With password"; \
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚ğg—p"; \
-    Text[ korean ] = "With password";   \
-    Text[ chinese_simplified ] = "Ê¹ÓÃÃÜÂë";    \
-    Text[ chinese_traditional ] = "±Ä¥Î±K½X";   \
+    Text[ japanese ] = "Êß½Ü°ÄŞ‚ğg—p(~H)"; \
+    Text[ korean ] = "ÆĞ½º¿öµå »ç¿ë(~H)";   \
+    Text[ chinese_simplified ] = "Ê¹ÓÃÃÜÂë(~H)";    \
+    Text[ chinese_traditional ] = "±Ä¥Î±K½X(~H)";   \
     Text[ turkish ] = "With password";  \
     Text[ arabic ] = "With password";   \
     Text[ catalan ] = "With password";
@@ -411,7 +411,7 @@ ModalDialog MD_EDIT_REGION
         Text[ chinese_traditional ] = "°Ï°ì";
         Text[ arabic ] = "ÇáäØÇŞ";
         Text[ greek ] = "Åíüôçôá";
-        Text[ korean ] = "±¸¿ª";
+        Text[ korean ] = "¹üÀ§";
         Text[ turkish ] = "Bölüm";
         Text[ catalan ] = "Section";
     };
@@ -794,7 +794,7 @@ InfoBox REG_WRONG_PASSWORD
     Message[ chinese_traditional ] = "¿é¤Jªº±K½XµL®Ä¡C";
     Message[ arabic ] = "Êã ÅÏÎÇá ßáãÉ ÓÑ ÛíÑ ÕÍíÍÉ.";
     Message[ greek ] = "ÅéóáãùãŞ Üêõñïõ êùäéêïı ğñüóâáóçò.";
-    Message[ korean ] = "Æ²¸° ÆĞ½º¿öµå°¡¡¡ÀÔ·ÂµÇ¾ú½À´Ï´Ù.";
+    Message[ korean ] = "Æ²¸° ÄÚµå ¿öµå°¡¡¡ÀÔ·ÂµÇ¾ú½À´Ï´Ù.";
     Message[ turkish ] = "Girilen şifre yanlış.";
     Message[ finnish ] = "Annettu salasana on virheellinen.";
     Message[ catalan ] = "Se empleó una contraseña falsa.";
@@ -821,7 +821,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message[ chinese_traditional ] = "ÁÙ¥¼³]©w¤@­Ó±K½X¡C";
     Message[ arabic ] = "áã íÊã ÅÏÎÇá ßáãÉ ÇáÓÑ.";
     Message[ greek ] = "Äåí êáèïñßóôçêå êùäéêüò ğñüóâáóçò.";
-    Message[ korean ] = "ÆĞ½º¿öµå°¡ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Message[ korean ] = "ÄÚµå ¿öµå°¡ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
     Message[ turkish ] = "Şifre belirlenmedi.";
     Message[ finnish ] = "Salasanaa ei ole määritetty.";
     Message[ catalan ] = "No se ha definido la contraseña.";
@@ -1031,7 +1031,7 @@ TabPage TP_INSERT_SECTION
         Text[ chinese_traditional ] = "·s°Ï°ì";
         Text[ arabic ] = "äØÇŞ ÌÏíÏ";
         Text[ greek ] = "Íİïò ôïìİáò";
-        Text[ korean ] = "»õ ±¸¿ª";
+        Text[ korean ] = "»õ ¹üÀ§";
         Text[ turkish ] = "Yeni bölüm";
         Text[ finnish ] = "Uusi osio";
         Text[ catalan ] = "New section";
@@ -1140,9 +1140,9 @@ TabPage TP_INSERT_SECTION
         Text[ polish ] = "Chroñ";
         Text[ portuguese_brazilian ] = "Pro~tegido";
         Text[ japanese ] = "‘‚«‚İ•ÛŒì(~P)";
-        Text[ korean ] = "º¸È£(~P)";
-        Text[ chinese_simplified ] = "±£»¤";
-        Text[ chinese_traditional ] = "«OÅ@";
+        Text[ korean ] = "¹æ¾î(~P)";
+        Text[ chinese_simplified ] = "±£»¤(~P)";
+        Text[ chinese_traditional ] = "«OÅ@(~P)";
         Text[ turkish ] = "Korumalı";
         Text[ arabic ] = "ãÍãí";
         Text[ catalan ] = "~Protegida";
@@ -1339,7 +1339,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text[ polish ] = "Przypisy dolne";
         Text[ portuguese_brazilian ] = "Footnotes";
         Text[ japanese ] = "‹r’";
-        Text[ korean ] = "°¢ÁÖ";
+        Text[ korean ] = "¹Ù´Ú±Û";
         Text[ chinese_simplified ] = "×¢½Å";
         Text[ chinese_traditional ] = "µù¸}";
         Text[ arabic ] = "ÍæÇÔí ÓİáíÉ";
@@ -1414,7 +1414,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ english_us ] = "~Start at" ;
         Text [ italian ] = "Inizia con" ;
         Text [ spanish ] = "Comen~zar en" ;
-        Text [ french ] = "À partir ~de" ;
+        Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "~Börja med" ;
         Text [ danish ] = "Begynd med" ;
@@ -1653,7 +1653,7 @@ TabPage TP_SECTION_FTNENDNOTES
         Text [ english_us ] = "~Start at" ;
         Text [ italian ] = "Inizia con" ;
         Text [ spanish ] = "Comen~zar en" ;
-        Text [ french ] = "À partir ~de" ;
+        Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ swedish ] = "Börj~a med" ;
         Text [ danish ] = "Begynd med" ;
@@ -1809,6 +1809,7 @@ TabPage TP_SECTION_FTNENDNOTES
         MaxTextLength = 50 ;
     };
 };
+
 
 
 
