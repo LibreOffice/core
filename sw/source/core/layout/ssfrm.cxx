@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:13:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,30 +365,6 @@ void SwFrm::CheckDirChange()
                     pBody = ((SwPageFrm*)this)->FindBodyCont();
                     if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm())
                         pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
-
-                    SwSortedObjs* pObjs = ((SwPageFrm*)this)->GetSortedObjs();
-                    if( pObjs )
-                    {
-                        sal_uInt32 nCnt = pObjs->Count();
-                        for ( sal_uInt32 i = 0; i < nCnt; ++i )
-                        {
-                            SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                            if ( pAnchoredObj->GetAnchorFrm() == this )
-                            {
-                                if ( pAnchoredObj->ISA(SwFlyFrm) )
-                                {
-                                    static_cast<SwFlyFrm*>(pAnchoredObj)->CheckDirChange();
-                                }
-                                else
-                                {
-                                    // OD 2004-04-06 #i26791# - direct object
-                                    // positioning no longer needed. Instead
-                                    // invalidate
-                                    pAnchoredObj->InvalidateObjPos();
-                                }
-                            }
-                        }
-                    }
                 }
                 else if( pFrm->IsColumnFrm() )
                 {
@@ -409,7 +385,9 @@ void SwFrm::CheckDirChange()
         else if( IsTxtFrm() )
             ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
 
-        if( !IsPageFrm() && GetDrawObjs() )
+        // --> OD 2004-07-27 #i31698# - notify anchored objects also for page frames.
+        // Remove code above for special handling of page frames
+        if ( GetDrawObjs() )
         {
             const SwSortedObjs *pObjs = GetDrawObjs();
             sal_uInt32 nCnt = pObjs->Count();
@@ -425,6 +403,12 @@ void SwFrm::CheckDirChange()
                     // invalidate
                     pAnchoredObj->InvalidateObjPos();
                 }
+                // --> OD 2004-07-27 #i31698# - update layout direction of
+                // anchored object
+                {
+                    pAnchoredObj->UpdateLayoutDir();
+                }
+                // <--
             }
         }
     }
