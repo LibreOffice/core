@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:54:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@ namespace dbaccess
         OKeySetMatrix                                           m_aKeyMap;
         OKeySetMatrix::iterator                                 m_aKeyIter;
 
-        connectivity::ORowVector< connectivity::ORowSetValue >  m_aParameterRow; // contains the parameters from rowset
         ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
 
         OColumnNamePos*                                         m_pKeyColumnNames;  // contains all key column names
@@ -140,8 +139,6 @@ namespace dbaccess
 
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
-
-        void setExternParameters(const connectivity::ORowVector< connectivity::ORowSetValue >& _rParameterRow);
 
         // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
