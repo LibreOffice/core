@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 13:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace xmloff
             case CCA_READONLY:          return "readonly";
             case CCA_SELECTED:          return "selected";
             case CCA_SIZE:              return "size";
-            case CCA_TAB_INDEX:         return "tab_index";
+            case CCA_TAB_INDEX:         return "tab-index";
             case CCA_TARGET_FRAME:      return "target-frame";
             case CCA_TARGET_LOCATION:   return "href";      // the only special thing here: TargetLocation is represented by an xlink:href attribute
             case CCA_TAB_STOP:          return "tab-stop";
@@ -320,6 +320,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.4  2000/12/12 12:01:05  fs
  *  new implementations for the import - still under construction
  *
