@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TextGraphicObject.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:19 $
+ *  last change:$Date: 2003-09-08 11:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.text;
 
+import java.util.Random;
+
+import lib.MultiPropertyTest;
+import util.utils;
+
 import com.sun.star.awt.Point;
 import com.sun.star.container.XIndexContainer;
-import java.util.Random;
-import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
-import util.utils;
 
 /**
  * Testing <code>com.sun.star.text.TextGraphicObject</code>
