@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:44:52 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ namespace connectivity
                                 const OSQLParseNode* pRoot);
         ~OSQLParseTreeIterator();
 
+        void dispose();
         sal_Bool isCaseSensitive() const { return m_aCaseEqual.isCaseSensitive(); }
         // Der zu analysierende/zu traversierende Parse Tree:
         // bei "Ubergabe von NULL wird der aktuelle Parsetree gel"oscht und der Fehlerstatus gecleared
@@ -308,14 +309,8 @@ namespace connectivity
 
         // Die TableRangeMap enth"alt alle Tabellen unter dem zugeh"origen Rangenamen der zuerst gefunden wird
         const OSQLTables& getTables() const { return m_aTables;};
-        // return tables as nameaccess
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-            getTablesAsNameAccess(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) const;
 
         ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
-        // return select columns as nameaccess
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-            getSelectAsNameAccess(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) const;
         // gibt den Aliasnamen der Column zur"uck, Leer falls nicht vorhanden
         ::rtl::OUString getColumnAlias(const OSQLParseNode* pDerivedColumn) const;
         // gibt den Columnnamen und die Tablerange (falls vorhanden) zur"uck
