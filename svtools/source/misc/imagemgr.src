@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-18 21:18:18 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ String STR_DESCRIPTION_SIMPRESS_DOC
     Text[ dutch ] = "%PRODUCTNAME presentatie";
     Text[ chinese_simplified ] = "%PRODUCTNAME 演示文稿";
     Text[ greek ] = "���������� (%PRODUCTNAME)";
-    Text[ korean ] = "%PRODUCTNAME 프리젠테이션";
+    Text[ korean ] = "%PRODUCTNAME 프레젠테이션";
     Text[ turkish ] = "%PRODUCTNAME sunusu";
     Text[ finnish ] = "Ohjelman %PRODUCTNAME esitys";
     Text[ catalan ] = "Presentation (%PRODUCTNAME)";
@@ -990,7 +990,7 @@ String STR_DESCRIPTION_FACTORY_IMPRESS
     Text[ polish ] = "Prezentacja";
     Text[ portuguese_brazilian ] = "Presentation";
     Text[ japanese ] = "プレゼンテーション";
-    Text[ korean ] = "프리젠테이션";
+    Text[ korean ] = "프레젠테이션";
     Text[ chinese_simplified ] = "演示文稿";
     Text[ chinese_traditional ] = "簡報";
     Text[ turkish ] = "Sunu";
@@ -1162,7 +1162,7 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text[ polish ] = "%PRODUCTNAME 6.0 - Szablon prezentacji";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Presentation Template";
     Text[ japanese ] = "%PRODUCTNAME 6.0 プレゼンテーション テンプレート";
-    Text[ korean ] = "%PRODUCTNAME 6.0 프리젠테이션 템플릿";
+    Text[ korean ] = "%PRODUCTNAME 6.0 프레젠테이션 템플릿";
     Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 演示文稿样式";
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 簡報樣式";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Presentation Template";
