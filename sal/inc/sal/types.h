@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-04 16:17:33 $
+ *  last change: $Author: svesik $ $Date: 2000-12-06 11:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ typedef struct _sal_Sequence
     lack RTTI support, dynamic_cast is not included here).
  */
 #ifdef __cplusplus
-#if defined SAL_W32 || defined SOLARIS || defined LINUX
+#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined FREEBSD
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))
