@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:38:06 $
+ *  last change: $Author: dbo $ $Date: 2001-03-19 12:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,23 +193,22 @@ static sal_Bool getNumericValue( double & rfVal, const OUString & rStr )
 //==================================================================================================
 static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 {
-    sal_Int64 nRet = rStr.toInt64();
-    if (nRet == 0)
+    sal_Int32 nLen = rStr.getLength();
+    if (!nLen || (nLen == 1 && rStr[0] == '0')) // common case
     {
-        sal_Int32 nLen = rStr.getLength();
-        if (!nLen || (nLen == 1 && rStr[0] == '0')) // common case
-        {
-            rnVal = 0.0;
-            return sal_True;
-        }
+        rnVal = 0;
+        return sal_True;
+    }
 
-        OUString trim( rStr.trim() );
+    OUString trim( rStr.trim() );
 
-        // try hex
-        sal_Int32 nX = trim.indexOf( 'x' );
-        if (nX < 0)
-            nX = trim.indexOf( 'X' );
+    // try hex
+    sal_Int32 nX = trim.indexOf( 'x' );
+    if (nX < 0)
+        nX = trim.indexOf( 'X' );
 
+    if (nX >= 0)
+    {
         if (nX > 0 && trim[nX-1] == '0') // 0x
         {
             sal_Bool bNeg = sal_False;
@@ -241,34 +240,18 @@ static sal_Bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
             rnVal = (bNeg ? -nRet : nRet);
             return sal_True;
         }
-
-        nLen = trim.getLength();
-        sal_Int32 nPos = 0;
-
-        // skip +/-
-        if (nLen && (trim[0] == '-' || trim[0] == '+'))
-            ++nPos;
-
-        while (nPos < nLen) // skip leading zeros
-        {
-            if (trim[nPos] != '0')
-            {
-                if (trim[nPos] != '.')
-                    return sal_False;
-                ++nPos;
-                while (nPos < nLen) // skip trailing zeros
-                {
-                    if (trim[nPos] != '0')
-                        return sal_False;
-                    ++nPos;
-                }
-                break;
-            }
-            ++nPos;
-        }
+        return sal_False;
     }
-    rnVal = nRet;
-    return sal_True;
+
+    double fVal;
+    if (getNumericValue( fVal, rStr ) &&
+        fVal >= -(double)0x8000000000000000 &&
+        fVal <= (double)0xffffffffffffffff)
+    {
+        rnVal = (sal_Int64)round( fVal );
+        return sal_True;
+    }
+    return sal_False;
 }
 
 //==================================================================================================
@@ -433,9 +416,8 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     // STRING
     case TypeClass_STRING:
     {
-        // here is the BUG, a double can't get a real hyper value.
         sal_Int64 fVal;
-        if (! getHyperValue( fVal, *(OUString *)rAny.getValue() ))
+        if (! getHyperValue( fVal, *(OUString const *)rAny.getValue() ))
         {
             throw CannotConvertException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("invalid STRING value!") ),
@@ -663,8 +645,8 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             TYPELIB_DANGER_RELEASE( pDestElementTD );
             TYPELIB_DANGER_RELEASE( pSourceElementTD );
         }
+        break;
     }
-    break;
     // --- to ENUM ------------------------------------------------------------------------------
     case TypeClass_ENUM:
     {
@@ -683,7 +665,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                  aSourceClass!=TypeClass_BOOLEAN &&
                  aSourceClass!=TypeClass_CHAR)
         {
-            sal_Int32 nEnumValue = toHyper( rVal, 0, 0xffffffff );
+            sal_Int32 nEnumValue = (sal_Int32)toHyper( rVal, -(sal_Int64)0x80000000, 0x7fffffff );
             for ( nPos = ((typelib_EnumTypeDescription *)aEnumTD.get())->nEnumValues; nPos--; )
             {
                 if (nEnumValue == ((typelib_EnumTypeDescription *)aEnumTD.get())->pEnumValues[nPos])
