@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:04:04 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Πληροφορίες\nσυσκευής";
         Text[ korean ] = "ΐεΔ΅ Α¤ΊΈ(~I)";
         Text[ turkish ] = "Cihaz hakkύnda";
+        Text[ catalan ] = "Informaciσn sobre\n ~dispositivo";
     };
     PushButton RID_PREVIEW_BTN
     {
@@ -134,6 +135,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "ΉΜΈ®ΊΈ±β\nΐΫΌΊ";
         Text[ turkish ] = "Φnizleme\noluώtur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Crear\n~Previsualizaciσn";
     };
     GroupBox RID_PREVIEW_BOX
     {
@@ -161,6 +163,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Προεπισκόπηση";
         Text[ korean ] = "ΉΜΈ®ΊΈ±β";
         Text[ turkish ] = "Φnizleme";
+        Text[ catalan ] = "Previsualizaciσn";
     };
     GroupBox RID_SCANAREA_BOX
     {
@@ -188,6 +191,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Περιοχή σάρωσης";
         Text[ korean ] = "½ΊΔµ ΏµΏª";
         Text[ turkish ] = "Tarama alanύ";
+        Text[ catalan ] = "Αrea de escaneado";
     };
     FixedText RID_SCAN_LEFT_TXT
     {
@@ -215,6 +219,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Αριστερά:";
         Text[ korean ] = "ΏήΒΚ:";
         Text[ turkish ] = "Sol:";
+        Text[ catalan ] = "I~zquierda:";
     };
     MetricField RID_SCAN_LEFT_BOX
     {
@@ -251,6 +256,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "ΐ§:";
         Text[ turkish ] = "άst:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Arriba:";
     };
     MetricField RID_SCAN_TOP_BOX
     {
@@ -287,6 +293,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "ΏΐΈ¥ΒΚ:";
         Text[ turkish ] = "Saπ:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Derecha:";
     };
     MetricField RID_SCAN_RIGHT_BOX
     {
@@ -322,6 +329,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Κάτω:";
         Text[ korean ] = "ΎΖ·΅:";
         Text[ turkish ] = "Alt:";
+        Text[ catalan ] = "~Abajo:";
     };
     MetricField RID_SCAN_BOTTOM_BOX
     {
@@ -357,6 +365,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Χρησιμοποιούημενη συσκευή:";
         Text[ korean ] = "»ηΏλΗΡ ΐεΔ΅:";
         Text[ turkish ] = "Kullanύlan cihaz:";
+        Text[ catalan ] = "Dispositivo ~utilizado:";
     };
     ListBox RID_DEVICE_BOX
     {
@@ -390,6 +399,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ chinese_traditional ] = "ΈΡªR«Χ [~DPI]";
         Text[ arabic ] = "ΗΣΚΘΗδΙ [~DPI]";
         Text[ turkish ] = "Ηφzόnόrlόk [~DPI]";
+        Text[ catalan ] = "Resoluciσn [~DPI]:";
     };
     NumericBox RID_SCAN_RESOLUTION_BOX
     {
@@ -423,6 +433,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Εμφάνιση περισσότερων επιλογών";
         Text[ korean ] = "Θ®ΐεµΘ ΏΙΌΗ ³ªΕΈ³»±β";
         Text[ turkish ] = "Ek seηenekleri gφrόntόle";
+        Text[ catalan ] = "Mostrar otras ~opciones";
     };
     CheckBox RID_SCAN_ADVANCED_BOX
     {
@@ -457,6 +468,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ korean ] = "ΏΙΌΗ:";
         Text[ turkish ] = "Seηenekler:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones:";
     };
     Control RID_SCAN_OPTION_BOX
     {
@@ -533,6 +545,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Στοιχείο διανύσματος";
         Text[ korean ] = "Ί¤ΕΝ ΏδΌÒ";
         Text[ turkish ] = "Vektφr φπesi";
+        Text[ catalan ] = "Elemento vectorial";
     };
     NumericField RID_SCAN_NUMERIC_VECTOR_BOX
     {
@@ -568,6 +581,7 @@ ModalDialog RID_SANE_DIALOG
         Text[ greek ] = "Ορισμός";
         Text[ korean ] = "Ό³Α¤";
         Text[ turkish ] = "Tanύmla";
+        Text[ catalan ] = "Definir";
     };
     Bitmap RID_SCAN_BITMAP_PLUS
     {
@@ -597,6 +611,7 @@ ModalDialog RID_SANE_DIALOG
     Text[ greek ] = "Σαρωτής";
     Text[ korean ] = "½ΊΔ³³Κ";
     Text[ turkish ] = "Tarayύcύ";
+    Text[ catalan ] = "Escαner";
 };
 String RID_SANE_DEVICEINFO_TXT
 {
@@ -622,6 +637,7 @@ String RID_SANE_DEVICEINFO_TXT
     Text[ greek ] = "Συσκευή: %s\nΚατασκευαστής: %s\nΜοντέλο: %s\nΤύπος: %s";
     Text[ korean ] = "ΐεΔ΅: %s\nΑ¦Α¶ΎχΓΌ: %s\nΈπµ¨: %s\nΐ―Ηό: %s";
     Text[ turkish ] = "Cihaz: %s\nάretici: %s\nModel: %s\nTip: %s";
+    Text[ catalan ] = "Dispositivo: %s\nFabricante: %s\nModelo: %s\nTipo: %s";
 };
 String RID_SANE_SCANERROR_TXT
 {
@@ -647,6 +663,7 @@ String RID_SANE_SCANERROR_TXT
     Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την σάρωση.";
     Text[ korean ] = "½ΊΔµΗÒ ¶§ Ώΐ·ω°΅ Ήί»ύΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Tarama sύrasύnda hata oluώtu.";
+    Text[ catalan ] = "Se ha producido un error durante el escaneado.";
 };
 String RID_SANE_NORESOLUTIONOPTION_TXT
 {
@@ -672,6 +689,7 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text[ greek ] = "Η συσκευή δεν έχει ρυθμιστεί για την εμφάνιση προεπισκόπησης. Αντί αυτού χρησιμοποιείται μια κανονική σάρωση. Η διαδικασία αυτή μπορεί να αργήσει περισσότερο.";
     Text[ korean ] = "ΐεΔ΅΄Β ΉΜΈ®ΊΈ±β ΏΙΌΗΐ» Α¦°ψΗΟΑφ ΎΚ½ΐ΄Ο΄Ω. ±Χ ΄λ½Ε ΐΟΉέ ½ΊΔµΐΜ ΉΜΈ®ΊΈ±β·Ξ ΐΜΏλµΙ °ΝΐΤ΄Ο΄Ω. ΐΜ ½ΊΔµΐΊ ½Γ°£ΐΜ ΘΞΎΐ ΄υ Ώΐ·΅ °ΙΈ± Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Cihaz φnizleme iώlevine desteklemiyor. Bunun yerine φnizleme olarak normal bir tarama gφrόntόsό kullanύlacak. Bu iώlem daha fazla zaman alabilir.";
+    Text[ catalan ] = "El dispositivo no estα preparado para ofrecer opciσn de previsualizaciσn. En lugar de esta se utilizarα un escaneado normal, que puede tardar considerablemente mαs.";
 };
 String RID_SANE_NOSANELIB_TXT
 {
@@ -697,4 +715,5 @@ String RID_SANE_NOSANELIB_TXT
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει αναγνώριση της διασύνδεσης SANE. Αδύνατον να γίνει σάρωση.";
     Text[ korean ] = "SANE ΐΞΕΝΖδΐΜ½ΊΈ¦ ΓΚ±βΘ­ΗΟΑφ ΈψΗΨ ½ΊΔµ°ϊΑ¤ΐ» ΑψΗΰΗÒ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "SANE arabirimi baώlatύlamadύ. Tarama iώlemi yόrόtόlemez.";
+    Text[ catalan ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningϊn proceso de digitalizaciσn.";
 };
