@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:26:51 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -187,6 +186,11 @@
 #ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
 #include <fmtwrapinfluenceonobjpos.hxx>
 #endif
+// --> OD 2004-11-10 #i35007#
+#ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#endif
+// <--
 
 using namespace ::com::sun::star;
 
@@ -1367,23 +1371,28 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
             }
             else
                 xPrSet->setPropertyValue(rPropertyName, aValue);
-            // --> OD 2004-07-28 #i31698# - additionally adjust the position
-            // properties of the shape, if the transformation is set and
-            // the shape isn't a group member.
-            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation"))) &&
-                 !_GetTopGroupObj() )
-            {
-                drawing::HomogenMatrix3 aMatrix;
-                aValue >>= aMatrix;
-                awt::Point aNewPos( basegfx::fround( aMatrix.Line1.Column3 ),
-                                    basegfx::fround( aMatrix.Line2.Column3 ) );
-                _AdjustPositionProperties( aNewPos );
-            }
-            // <--
+            // --> OD 2004-11-11 #i35007# - adjustment of the position
+            // attributes, if the transformation is set, causes wrong alignments
+            // and is no longer needed.
+            // The position attributes are set, if the drawing object is added
+            // to the draw page - see <SwXDrawPage::add(..)> -  and on its first
+            // positioning - see <SwAnchoredDrawObject::MakeObjPos().
+//            // --> OD 2004-07-28 #i31698# - additionally adjust the position
+//            // properties of the shape, if the transformation is set and
+//            // the shape isn't a group member.
+//            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation"))) &&
+//                 !_GetTopGroupObj() )
+//            {
+//                drawing::HomogenMatrix3 aMatrix;
+//                aValue >>= aMatrix;
+//                awt::Point aNewPos( basegfx::fround( aMatrix.Line1.Column3 ),
+//                                    basegfx::fround( aMatrix.Line2.Column3 ) );
+//                _AdjustPositionProperties( aNewPos );
+//            }
             // --> OD 2004-08-05 #i31698# - restore object position, if caption
             // point is set.
-            else if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"))) &&
-                      getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))) )
+            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"))) &&
+                 getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))) )
             {
                 setPosition( aKeepedPosition );
             }
@@ -2350,6 +2359,20 @@ awt::Point SwXShape::_GetAttrPosition()
         }
     }
     // <--
+    // --> OD 2004-11-10 #i35007# - If drawing object is anchored as-character,
+    // it's x-position isn't sensible. Thus, return the x-position as zero in this case.
+    text::TextContentAnchorType eAnchorType =
+                            text::TextContentAnchorType_AT_PARAGRAPH;
+    {
+        rtl::OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+        uno::Any aAny = getPropertyValue( sAnchorType );
+        aAny >>= eAnchorType;
+    }
+    if ( eAnchorType == text::TextContentAnchorType_AS_CHARACTER )
+    {
+        aAttrPos.X = 0;
+    }
+    // <--
 
     return aAttrPos;
 }
@@ -2474,6 +2497,17 @@ drawing::HomogenMatrix3 SwXShape::_ConvertTransformationToLayoutDir(
 void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
 {
     // handle x-position
+    // --> OD 2004-11-10 #i35007# - no handling of x-position, if drawing
+    // object is anchored as-character, because it doesn't make sense.
+    text::TextContentAnchorType eAnchorType =
+                            text::TextContentAnchorType_AT_PARAGRAPH;
+    {
+        rtl::OUString sAnchorType( RTL_CONSTASCII_USTRINGPARAM( "AnchorType" ) );
+        uno::Any aAny = getPropertyValue( sAnchorType );
+        aAny >>= eAnchorType;
+    }
+    if ( eAnchorType != text::TextContentAnchorType_AS_CHARACTER )
+    // <--
     {
         // determine current x-postion
         rtl::OUString aHoriPosPropStr( RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition") );
