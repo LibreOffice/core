@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-11 16:40:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,8 +597,6 @@ static PyObject * fileUrlToSystemPath( PyObject *self, PyObject * args )
 
 static PyObject * absolutize( PyObject *self, PyObject * args )
 {
-    Py_UNICODE * path = 0;
-    Py_UNICODE * rel = 0;
     if( PyTuple_Check( args ) && PyTuple_Size( args ) == 2 )
     {
         OUString ouPath = pyString2ustring( PyTuple_GetItem( args , 0 ) );
@@ -621,7 +619,7 @@ static PyObject * absolutize( PyObject *self, PyObject * args )
                 OUStringToOString(buf.makeStringAndClear(),osl_getThreadTextEncoding()));
             return 0;
         }
-        return PyUnicode_FromUnicode( (const Py_UNICODE * ) ret.pData->buffer, ret.pData->length );
+        return ustring2PyUnicode( ret ).getAcquired();
     }
     return 0;
 }

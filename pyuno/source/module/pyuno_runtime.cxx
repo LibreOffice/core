@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-11 16:40:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,44 +654,9 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         a <<= d;
     }
     else if (PyString_Check (o))
-    {
-        // needed, if ByteSequence becomes a string
-//         Runtime runtime;
-//         if( PyObject_IsInstance( o, getByteSequenceClass( runtime ).get() ) )
-//         {
-//             // is it the byte sequence ?
-//             Sequence< sal_Int8 > seq;
-//             seq = Sequence<sal_Int8 > ((sal_Int8*) PyString_AsString(o) , PyString_Size(o));
-//             a <<= seq;
-//         }
-//         else
-//         {
-        a <<= OUString(PyString_AsString (o), strlen( PyString_AsString(o)),
-                       osl_getThreadTextEncoding());
-//         }
-    }
+    a <<= pyString2ustring(o);
     else if( PyUnicode_Check( o ) )
-    {
-        OUString s;
-        if( sizeof( Py_UNICODE ) == 2 )
-        {
-            s = OUString( (sal_Unicode *) PyUnicode_AsUnicode( o ), PyUnicode_GetSize( o ) );
-        }
-        else if( sizeof( Py_UNICODE ) == 4 )
-        {
-            // fixed for 0.9.2: OUString ctor expects the length of the byte array !
-            s = OUString( (sal_Char * ) PyUnicode_AsUnicode( o ),
-                          PyUnicode_GetSize( o ) * sizeof(Py_UNICODE), RTL_TEXTENCODING_UCS4 );
-        }
-        else
-        {
-            OUStringBuffer buf;
-            buf.appendAscii( "pyuno string conversion routines can't deal with sizeof(Py_UNICODE) ==" );
-            buf.append( (sal_Int32) sizeof( Py_UNICODE ) );
-            throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > ( ) );
-        }
-        a <<= s;
-    }
+    a <<= pyString2ustring(o);
     else if (PyTuple_Check (o))
     {
         Sequence<Any> s (PyTuple_Size (o));
