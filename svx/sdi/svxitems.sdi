@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:02:10 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,30 +605,6 @@ struct SvxHyperlink
     INT32   Type    MID_HLINK_TYPE;
 };
 item SvxHyperlink SvxHyperlinkItem;
-
-//-------------------------------------------------------------------------
-
-struct Address
-{
-    String  City            MID_ADR_CITY;
-    String  Company         MID_ADR_COMPANY;
-    String  Country         MID_ADR_COUNTRY;
-    String  EMail           MID_ADR_EMAIL;
-    String  Fax             MID_ADR_FAX;
-    String  FirstName       MID_ADR_FIRSTNAME;
-    String  ID              MID_ADR_ID;
-    String  LastName        MID_ADR_LASTNAME;
-    String  Phone           MID_ADR_PHONE;
-    String  PhonePrivate    MID_ADR_PHONEPRIVATE;
-    String  Position        MID_ADR_POSITION;
-    String  Street          MID_ADR_STREET;
-    String  Title           MID_ADR_TITLE;
-    String  ZIPCode         MID_ADR_ZIPCODE;
-    String  State           MID_ADR_STATE;
-    String  FathersName     MID_ADR_FATHERSNAME;
-    String  Apartment       MID_ADR_APARTMENT;
-};
-item Address SvxAddressItem;
 
 //-------------------------------------------------------------------------
 
