@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:44:48 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 09:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,10 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         eHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
         bLayerMode = pFrameView->IsLayerMode();
         bQuickEdit = pFrameView->IsQuickEdit();
+
+        // #i26631#
+        SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
+
         bDragWithCopy = pFrameView->IsDragWithCopy();
         bBigHandles          = pFrameView->IsBigHandles();
         bDoubleClickTextEdit = pFrameView->IsDoubleClickTextEdit();
@@ -647,8 +651,11 @@ void FrameView::Update(SdOptions* pOptions)
         Fraction aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
         SetSnapGridWidth(aFractX, aFractY);
         SetQuickEdit(pOptions->IsQuickEdit());
-        SetDragWithCopy(pOptions->IsDragWithCopy());
 
+        // #i26631#
+        SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
+
+        SetDragWithCopy(pOptions->IsDragWithCopy());
         SetBigHandles( pOptions->IsBigHandles() );
         SetDoubleClickTextEdit( pOptions->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pOptions->IsClickChangeRotation() );
