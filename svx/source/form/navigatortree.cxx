@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 07:06:03 $
+ *  last change: $Author: fs $ $Date: 2002-05-16 15:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,12 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
+#include <com/sun/star/datatransfer/XTransferable.hpp>
+#endif
 
 //............................................................................
 namespace svxform
@@ -166,6 +172,8 @@ namespace svxform
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::script;
+    using namespace ::com::sun::star::datatransfer;
+    using namespace ::com::sun::star::datatransfer::clipboard;
     using namespace ::com::sun::star::sdb;
 
     //========================================================================
@@ -190,8 +198,8 @@ namespace svxform
         ,m_bInitialUpdate(sal_True)
         ,m_bMarkingObjects(sal_False)
         ,m_sdiState(SDI_DIRTY)
-        ,m_bShellOrPageChanged(sal_False)
         ,m_bDragDataDirty(sal_False)
+        ,m_bKeyboardCut( sal_False )
         ,m_pRootEntry(NULL)
         ,m_xORB(_xORB)
     {
@@ -257,7 +265,6 @@ namespace svxform
             if (IsEditingActive())
                 CancelTextEditing();
 
-            m_bShellOrPageChanged = sal_True;
             m_bDragDataDirty = sal_True;    // sicherheitshalber, auch wenn ich gar nicht dragge
         }
         GetNavModel()->Update( pFormShell );
@@ -275,16 +282,11 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------------
-    sal_Bool NavigatorTree::implPrepareExchange( )
+    sal_Bool NavigatorTree::implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden )
     {
-        EndSelection();
-
         SvLBoxEntry* pCurEntry = GetCurEntry();
         if (!pCurEntry)
             return sal_False;
-
-        m_aControlExchange.prepareDrag();
-        m_aControlExchange->setFocusEntry( pCurEntry );
 
         // die Informationen fuer das AcceptDrop und ExecuteDrop
         CollectSelectionData(SDI_ALL);
@@ -292,17 +294,10 @@ namespace svxform
             // nothing to do
             return sal_False;
 
-        for (sal_Int32 i=0; i<m_arrCurrentSelection.Count(); ++i)
-            m_aControlExchange->addSelectedEntry(m_arrCurrentSelection[(sal_uInt16)i]);
-
-//      m_aControlExchange->setShellAndPage( GetNavModel()->GetFormShell(), GetNavModel()->GetFormPage() );
-        m_aControlExchange->setFormsRoot( GetNavModel()->GetFormPage()->GetForms() );
-        m_aControlExchange->buildPathFormat( this, m_pRootEntry );
-
         // testen, ob es sich vielleicht ausschliesslich um hidden controls handelt (dann koennte ich pCtrlExch noch ein
         // zusaetzliches Format geben)
         sal_Bool bHasNonHidden = sal_False;
-        for (i=0; i<m_arrCurrentSelection.Count(); i++)
+        for (sal_Int32 i=0; i<m_arrCurrentSelection.Count(); i++)
         {
             FmEntryData* pCurrent = static_cast< FmEntryData* >( m_arrCurrentSelection[(sal_uInt16)i]->GetUserData() );
             if ( IsHiddenControl( pCurrent ) )
@@ -310,6 +305,35 @@ namespace svxform
             bHasNonHidden = sal_True;
             break;
         }
+
+        if ( bHasNonHidden && ( 0 == ( _nAction & DND_ACTION_MOVE ) ) )
+            // non-hidden controls need to be moved
+            return sal_False;
+
+        if ( _pHasNonHidden )
+            *_pHasNonHidden = bHasNonHidden;
+
+        return sal_True;
+    }
+
+    //------------------------------------------------------------------------------
+    sal_Bool NavigatorTree::implPrepareExchange( sal_Int8 _nAction )
+    {
+        EndSelection();
+
+        sal_Bool bHasNonHidden = sal_False;
+        if ( !implAllowExchange( _nAction, &bHasNonHidden ) )
+            return sal_False;
+
+        m_aControlExchange.prepareDrag();
+        m_aControlExchange->setFocusEntry( GetCurEntry() );
+
+        for (sal_Int32 i=0; i<m_arrCurrentSelection.Count(); ++i)
+            m_aControlExchange->addSelectedEntry(m_arrCurrentSelection[(sal_uInt16)i]);
+
+        m_aControlExchange->setFormsRoot( GetNavModel()->GetFormPage()->GetForms() );
+        m_aControlExchange->buildPathFormat( this, m_pRootEntry );
+
         if (!bHasNonHidden)
         {
             // eine entsprechende Sequenz aufbauen
@@ -322,6 +346,7 @@ namespace svxform
             m_aControlExchange->addHiddenControlsFormat(seqIFaces);
         }
 
+        m_bDragDataDirty = sal_False;
         return sal_True;
     }
 
@@ -330,12 +355,11 @@ namespace svxform
     {
         EndSelection();
 
-        if ( !implPrepareExchange( ) )
+        if ( !implPrepareExchange( DND_ACTION_COPYMOVE ) )
             // nothing to do or something went wrong
             return;
 
         // jetzt haben wir alle in der aktuelle Situation moeglichen Formate eingesammelt, es kann also losgehen ...
-        m_bShellOrPageChanged = m_bDragDataDirty = sal_False;
         m_aControlExchange.startDrag( DND_ACTION_COPYMOVE );
     }
 
@@ -361,7 +385,8 @@ namespace svxform
                         Select(ptClickedOn, sal_True);
                         SetCurEntry(ptClickedOn);
                     }
-                } else
+                }
+                else
                 {
                     if (m_arrCurrentSelection.Count() == 0) // kann nur bei Kontextmenue ueber Tastatur passieren
                         break;
@@ -409,8 +434,19 @@ namespace svxform
                     // 'Neu'\'verstecktes...', wenn genau ein Formular selektiert ist
                     pSubMenuNew->EnableItem( SID_FM_NEW_HIDDEN, bSingleSelection && m_nFormsSelected );
 
-                    // 'Loeschen' : alles, was nicht Root ist, darf geloescht werden
+                    // 'Delete': everything which is not root can be removed
                     aContextMenu.EnableItem( SID_FM_DELETE, !m_bRootSelected );
+
+                    // 'Cut', 'Copy' and 'Paste'
+#ifdef FS_PRIV_DEBUG_
+                    aContextMenu.EnableItem( SID_CUT, implAllowExchange( DND_ACTION_MOVE ) );
+                    aContextMenu.EnableItem( SID_COPY, implAllowExchange( DND_ACTION_COPY ) );
+                    aContextMenu.EnableItem( SID_PASTE, implAcceptPaste( ) );
+#else
+                    aContextMenu.EnableItem( SID_CUT, sal_False );
+                    aContextMenu.EnableItem( SID_COPY, sal_False );
+                    aContextMenu.EnableItem( SID_PASTE, sal_False );
+#endif
 
                     // der TabDialog, wenn es genau ein Formular ist ...
                     aContextMenu.EnableItem( SID_FM_TAB_DIALOG, bSingleSelection && m_nFormsSelected );
@@ -481,6 +517,19 @@ namespace svxform
                             pFormModel->EndUndo();
 
                         }   break;
+
+                        case SID_CUT:
+                            doCut();
+                            break;
+
+                        case SID_COPY:
+                            doCopy();
+                            break;
+
+                        case SID_PASTE:
+                            doPaste();
+                            break;
+
                         case SID_FM_DELETE:
                         {
                             DeleteSelection();
@@ -721,29 +770,78 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Int8 NavigatorTree::implAcceptDrop( sal_Int8 _nAction, const ::Point& _rDropPos )
+    sal_Bool NavigatorTree::implAcceptPaste( )
     {
-        //////////////////////////////////////////////////////////////////////
-        // Hat das Object das richtige Format?
-        if (!m_aControlExchange.isDragSource())
+        SvLBoxEntry* pFirstSelected = FirstSelected();
+        if ( !pFirstSelected || NextSelected( pFirstSelected ) )
+            // no selected entry, or at least two selected entries
+            return sal_False;
+
+        // get the clipboard
+        TransferableDataHelper aClipboardContent( TransferableDataHelper::CreateFromSystemClipboard( this ) );
+
+        sal_Int8 nAction = m_aControlExchange.isClipboardOwner() && doingKeyboardCut( ) ? DND_ACTION_MOVE : DND_ACTION_COPY;
+        return ( nAction == implAcceptDataTransfer( aClipboardContent.GetDataFlavorExVector(), nAction, pFirstSelected, sal_False ) );
+    }
+
+    //------------------------------------------------------------------------
+    sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const ::Point& _rDropPos, sal_Bool _bDnD )
+    {
+        return implAcceptDataTransfer( _rFlavors, _nAction, GetEntry( _rDropPos ), _bDnD );
+    }
+
+    //------------------------------------------------------------------------
+    sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD )
+    {
+        // no target -> no drop
+        if (!_pTargetEntry)
             return DND_ACTION_NONE;
 
-        sal_Bool bHasDefControlFormat = OControlExchange::hasFieldExchangeFormat( GetDataFlavorExVector() );
-        sal_Bool bHasControlPathFormat = OControlExchange::hasControlPathFormat( GetDataFlavorExVector() );
-        sal_Bool bHasHiddenControlsFormat = OControlExchange::hasHiddenControlModelsFormat( GetDataFlavorExVector() );
+        // format check
+        sal_Bool bHasDefControlFormat = OControlExchange::hasFieldExchangeFormat( _rFlavors );
+        sal_Bool bHasControlPathFormat = OControlExchange::hasControlPathFormat( _rFlavors );
+        sal_Bool bHasHiddenControlsFormat = OControlExchange::hasHiddenControlModelsFormat( _rFlavors );
         if (!bHasDefControlFormat && !bHasControlPathFormat && !bHasHiddenControlsFormat)
             return DND_ACTION_NONE;
 
-        sal_Bool bForeignCollection = m_aControlExchange->getFormsRoot().get() != GetNavModel()->GetFormPage()->GetForms().get();
-        if (bForeignCollection || (bHasHiddenControlsFormat && (DND_ACTION_COPY == _nAction)))
-        {
-            // crossing shell/page boundaries, we can exchange hidden controls only
-            if (!bHasHiddenControlsFormat)
+        sal_Bool bSelfSource = _bDnD ? m_aControlExchange.isDragSource() : m_aControlExchange.isClipboardOwner();
+
+        if ( bHasHiddenControlsFormat )
+        {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
+
+            // hidden controls can be copied to a form only
+            if ( !_pTargetEntry || ( _pTargetEntry == m_pRootEntry ) || !IsFormEntry( _pTargetEntry ) )
                 return DND_ACTION_NONE;
 
-            SvLBoxEntry* pDropTarget = GetEntry(_rDropPos);
-            if (!pDropTarget || (pDropTarget == m_pRootEntry) || !IsFormEntry(pDropTarget))
-                return DND_ACTION_NONE;
+            return bSelfSource ? ( DND_ACTION_COPYMOVE & _nAction ) : DND_ACTION_COPY;
+        }
+
+        if  ( !bSelfSource )
+        {
+            // DnD or CnP crossing navigator boundaries
+            // The main problem here is that the current API does not allow us to sneak into the content which
+            // is to be inserted. So we have to allow it for the moment, but maybe reject later on (in the real drop).
+
+            // TODO: this smart behaviour later on ... at the moment, we disallow data transfer crossing navigator
+            // boundaries.
+
+            return DND_ACTION_NONE;
+        }
+
+        DBG_ASSERT( _bDnD ? m_aControlExchange.isDragSource() : m_aControlExchange.isClipboardOwner(),
+            "NavigatorTree::implAcceptDataTransfer: here only with source=dest!" );
+            // somebody changed the logic of this method ...
+
+        // from here on, I can work with m_aControlExchange instead of _rData!
+
+        sal_Bool bForeignCollection = m_aControlExchange->getFormsRoot().get() != GetNavModel()->GetFormPage()->GetForms().get();
+        if ( bForeignCollection )
+        {
+            // crossing shell/page boundaries, we can exchange hidden controls only
+            // But if we survived the checks above, we do not have hidden controls.
+            // -> no data transfer
+            DBG_ASSERT( !bHasHiddenControlsFormat, "NavigatorTree::implAcceptDataTransfer: still hidden controls format!" );
+                // somebody changed the logic of this method ...
 
             return DND_ACTION_COPY;
         }
@@ -751,7 +849,7 @@ namespace svxform
         if (DND_ACTION_MOVE != _nAction) // 'normal' controls within a shell are moved only (never copied)
             return DND_ACTION_NONE;
 
-        if (m_bDragDataDirty)
+        if ( m_bDragDataDirty || !bHasDefControlFormat )
         {
             if (!bHasControlPathFormat)
                 // ich befinde mich zwar in der Shell/Page, aus der die Controls stammen, habe aber kein Format, das den stattgefundenen
@@ -766,28 +864,23 @@ namespace svxform
 
         // die Liste der gedroppten Eintraege aus dem DragServer
         ListBoxEntryArray aDropped = m_aControlExchange->selected();
-        DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::AcceptDrop : keine Eintraege !");
+        DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implAcceptDataTransfer: keine Eintraege !");
 
-        // das Ziel des Droppens (plus einige Daten, die ich nicht in jeder Schleife ermitteln will)
-        SvLBoxEntry* pDropTarget = GetEntry( _rDropPos );
-        if (!pDropTarget)
-            return DND_ACTION_NONE;
-
-        sal_Bool bDropTargetIsComponent = IsFormComponentEntry( pDropTarget );
-        SvLBoxEntry* pDropTargetParent = GetParent( pDropTarget );
+        sal_Bool bDropTargetIsComponent = IsFormComponentEntry( _pTargetEntry );
+        SvLBoxEntry* pDropTargetParent = GetParent( _pTargetEntry );
 
         // conditions to disallow the drop
         // 0) the root entry is part of the list (can't DnD the root!)
         // 1) one of the draged entries is to be dropped onto it's own parent
         // 2) -               "       - is to be dropped onto itself
         // 3) -               "       - is a Form and to be dropped onto one of it's descendants
-        // 4) one of the entries is a controls and to be dropped onto the root
+        // 4) one of the entries is a control and to be dropped onto the root
         // 5) a control or form will be dropped onto a control which is _not_ a sibling (dropping onto a sibling
         //      means moving the control)
 
         // collect the ancestors of the drop targte (speeds up 3)
         SvLBoxEntrySortedArray arrDropAnchestors;
-        SvLBoxEntry* pLoop = pDropTarget;
+        SvLBoxEntry* pLoop = _pTargetEntry;
         while (pLoop)
         {
             arrDropAnchestors.Insert(pLoop);
@@ -804,11 +897,11 @@ namespace svxform
                 return DND_ACTION_NONE;
 
             // test for 1)
-            if ( pDropTarget == pCurrentParent )
+            if ( _pTargetEntry == pCurrentParent )
                 return DND_ACTION_NONE;
 
             // test for 2)
-            if (pCurrent == pDropTarget)
+            if (pCurrent == _pTargetEntry)
                 return DND_ACTION_NONE;
 
             // test for 5)
@@ -825,7 +918,7 @@ namespace svxform
             } else if ( IsFormComponentEntry(pCurrent) )
             {
                 // test for 4)
-                if (pDropTarget == m_pRootEntry)
+                if (_pTargetEntry == m_pRootEntry)
                     return DND_ACTION_NONE;
             }
         }
@@ -885,13 +978,21 @@ namespace svxform
                 m_aDropActionTimer.Stop();
         }
 
-        return implAcceptDrop( rEvt.mnAction, aDropPos );
+        return implAcceptDataTransfer( GetDataFlavorExVector(), rEvt.mnAction, aDropPos, sal_True );
     }
 
     //------------------------------------------------------------------------
-    sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
+    sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const ::Point& _rDropPos, sal_Bool _bDnD )
     {
-        if ( DND_ACTION_NONE == implAcceptDrop( rEvt.mnAction, rEvt.maPosPixel ) )
+        return implExecuteDataTransfer( _rData, _nAction, GetEntry( _rDropPos ), _bDnD );
+    }
+
+    //------------------------------------------------------------------------
+    sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD )
+    {
+        const DataFlavorExVector& rDataFlavors = _rData.GetDataFlavorExVector();
+
+        if ( DND_ACTION_NONE == implAcceptDataTransfer( rDataFlavors, _nAction, _pTargetEntry, _bDnD ) )
             // under some platforms, it may happen that ExecuteDrop is called though AcceptDrop returned DND_ACTION_NONE
             return DND_ACTION_NONE;
 
@@ -899,37 +1000,34 @@ namespace svxform
         if (m_aDropActionTimer.IsActive())
             m_aDropActionTimer.Stop();
 
-        // Format-Ueberpruefung
-        if (!m_aControlExchange.isDragSource())
+        if (!_pTargetEntry)
+            // no target -> no drop
             return DND_ACTION_NONE;
 
-        sal_Bool bHasHiddenControlsFormat = m_aControlExchange->hasHiddenControlModelsFormat(GetDataFlavorExVector());
-    #ifdef DBG_UTIL
-        sal_Bool bForeignCollection = m_aControlExchange->getFormsRoot().get() != GetNavModel()->GetFormPage()->GetForms().get();
-        DBG_ASSERT(!bForeignCollection || bHasHiddenControlsFormat, "NavigatorTree::ExecuteDrop : invalid format (AcceptDrop shouldn't have let this pass) !");
-        DBG_ASSERT(bForeignCollection || !m_bDragDataDirty, "NavigatorTree::ExecuteDrop : invalid state (shell changed since last exchange resync) !");
-            // das sollte in AcceptDrop erledigt worden sein : dort wird in m_aControlExchange die Liste der Controls aufgebaut und m_bDragDataDirty
+        // format checks
+        sal_Bool bHasHiddenControlsFormat = OControlExchange::hasHiddenControlModelsFormat( rDataFlavors );
+        sal_Bool bForeignCollection = _rData.getFormsRoot().get() != GetNavModel()->GetFormPage()->GetForms().get();
+#ifdef DBG_UTIL
+        DBG_ASSERT(!bForeignCollection || bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: invalid format (AcceptDrop shouldn't have let this pass) !");
+        DBG_ASSERT(bForeignCollection || !m_bDragDataDirty, "NavigatorTree::implExecuteDataTransfer: invalid state (shell changed since last exchange resync) !");
+            // das sollte in AcceptDrop erledigt worden sein : dort wird in _rData die Liste der Controls aufgebaut und m_bDragDataDirty
             // zurueckgesetzt
-    #endif
+#endif
 
-        // das Ziel des ExecuteDrop sowie einige Daten darueber
-        ::Point aDropPos = rEvt.maPosPixel;
-        SvLBoxEntry* pDropTarget = GetEntry( aDropPos );
-        if (!pDropTarget)
-            return DND_ACTION_NONE;
+        if ( DND_ACTION_COPY == _nAction )
+        {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
+            DBG_ASSERT( bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: copy allowed for hidden controls only!" );
+            DBG_ASSERT( _pTargetEntry && ( _pTargetEntry != m_pRootEntry ) && IsFormEntry( _pTargetEntry ),
+                "NavigatorTree::implExecuteDataTransfer: should not be here!" );
+                // implAcceptDataTransfer should have caught both cases
 
-        sal_Bool bDropTargetIsForm = IsFormEntry(pDropTarget);
-        FmFormData* pTargetData = bDropTargetIsForm ? (FmFormData*)pDropTarget->GetUserData() : NULL;
-
-        if (DND_ACTION_COPY == rEvt.mnAction)
-        {
-            DBG_ASSERT(bHasHiddenControlsFormat, "NavigatorTree::ExecuteDrop : only copying of hidden controls is supported !");
+            DBG_ASSERT(bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: only copying of hidden controls is supported !");
                 // das sollte das AcceptDrop abgefangen haben
 
             // da ich gleich die Zielobjekte alle selektieren will (und nur die)
             SelectAll(sal_False);
 
-            Sequence< Reference< XInterface > > aControls = m_aControlExchange->hiddenControls();
+            Sequence< Reference< XInterface > > aControls = _rData.hiddenControls();
             sal_Int32 nCount = aControls.getLength();
             const Reference< XInterface >* pControls = aControls.getConstArray();
 
@@ -950,28 +1048,28 @@ namespace svxform
             {
                 // neues Control anlegen
                 rtl::OUString fControlName = FM_COMPONENT_HIDDEN;
-                FmControlData* pNewControlData = NewControl( fControlName, pDropTarget, sal_False);
+                FmControlData* pNewControlData = NewControl( fControlName, _pTargetEntry, sal_False);
                 Reference< XPropertySet >  xNewPropSet(pNewControlData->GetElement(), UNO_QUERY);
 
                 // und die Properties des alten in das neue kopieren
                 Reference< XPropertySet >  xCurrent(pControls[i], UNO_QUERY);
-    #if DEBUG || DBG_UTIL
+#if DEBUG || DBG_UTIL
                 // nur mal eben sehen, ob das Ding tatsaechlich ein hidden control ist
                 sal_Int16 nClassId = ::comphelper::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
-                DBG_ASSERT(nClassId == FormComponentType::HIDDENCONTROL, "NavigatorTree::ExecuteDrop : invalid control in drop list !");
+                DBG_ASSERT(nClassId == FormComponentType::HIDDENCONTROL, "NavigatorTree::implExecuteDataTransfer: invalid control in drop list !");
                     // wenn das SVX_FM_HIDDEN_CONTROLS-Format vorhanden ist, dann sollten wirklich nur hidden controls in der Sequenz
                     // stecken
-    #endif // DEBUG || DBG_UTIL
+#endif // DEBUG || DBG_UTIL
                 Reference< XPropertySetInfo >  xPropInfo( xCurrent->getPropertySetInfo());
                 Sequence< Property> seqAllCurrentProps = xPropInfo->getProperties();
                 Property* pAllCurrentProps = seqAllCurrentProps.getArray();
                 for (sal_Int32 j=0; j<seqAllCurrentProps.getLength(); ++j)
                 {
-                    ::rtl::OUString ustrCurrentProp = pAllCurrentProps[j].Name;
-                    if (((pAllCurrentProps[j].Attributes & PropertyAttribute::READONLY) == 0) && (ustrCurrentProp != FM_PROP_NAME))
+                    ::rtl::OUString sCurrentProp = pAllCurrentProps[j].Name;
+                    if (((pAllCurrentProps[j].Attributes & PropertyAttribute::READONLY) == 0) && (sCurrentProp != FM_PROP_NAME))
                     {   // (read-only attribs werden natuerlich nicht gesetzt, dito der Name, den hat das NewControl schon eindeutig
                         // festgelegt)
-                        xNewPropSet->setPropertyValue(ustrCurrentProp, xCurrent->getPropertyValue(ustrCurrentProp));
+                        xNewPropSet->setPropertyValue(sCurrentProp, xCurrent->getPropertyValue(sCurrentProp));
                     }
                 }
 
@@ -983,13 +1081,26 @@ namespace svxform
 
             if (pFormModel)
                 pFormModel->EndUndo();
-            return DND_ACTION_COPY;
+
+            return _nAction;
         }
 
+        if ( !OControlExchange::hasFieldExchangeFormat( _rData.GetDataFlavorExVector() ) )
+        {
+            // can't do anything without the internal format here ... usually happens when doing DnD or CnP
+            // over navigator boundaries
+            return DND_ACTION_NONE;
+        }
+
+        // some data for the target
+        sal_Bool bDropTargetIsForm = IsFormEntry(_pTargetEntry);
+        FmFormData* pTargetData = bDropTargetIsForm ? (FmFormData*)_pTargetEntry->GetUserData() : NULL;
+
+        DBG_ASSERT( DND_ACTION_COPY != _nAction, "NavigatorTree::implExecuteDataTransfer: somebody changed the logics!" );
 
         // die Liste der gedraggten Eintraege
-        const ListBoxEntryArray& aDropped = m_aControlExchange->selected();
-        DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::ExecuteDrop : keine Eintraege !");
+        const ListBoxEntryArray& aDropped = _rData.selected();
+        DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implExecuteDataTransfer: no entries!");
 
         // die Shell und das Model
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();
@@ -1011,8 +1122,8 @@ namespace svxform
         {
             // ein paar Daten zum aktuellen Element
             SvLBoxEntry* pCurrent = aDropped[i];
-            DBG_ASSERT(pCurrent != NULL, "NavigatorTree::ExecuteDrop : ungueltiger Eintrag");
-            DBG_ASSERT(GetParent(pCurrent) != NULL, "NavigatorTree::ExecuteDrop : ungueltiger Eintrag");
+            DBG_ASSERT(pCurrent != NULL, "NavigatorTree::implExecuteDataTransfer: ungueltiger Eintrag");
+            DBG_ASSERT(GetParent(pCurrent) != NULL, "NavigatorTree::implExecuteDataTransfer: ungueltiger Eintrag");
                 // die Root darf nicht gedraggt werden
 
             FmEntryData* pCurrentUserData = (FmEntryData*)pCurrent->GetUserData();
@@ -1022,7 +1133,7 @@ namespace svxform
 
 
             FmFormData* pCurrentParentUserData = (FmFormData*)pCurrentUserData->GetParent();
-            DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "NavigatorTree::ExecuteDrop : ungueltiges Parent");
+            DBG_ASSERT(pCurrentParentUserData == NULL || pCurrentParentUserData->ISA(FmFormData), "NavigatorTree::implExecuteDataTransfer: ungueltiges Parent");
 
             // beim Vater austragen
             if (pCurrentParentUserData)
@@ -1101,6 +1212,12 @@ namespace svxform
 
             // dann bei mir selber bekanntgeben und neu selektieren
             SvLBoxEntry* pNew = Insert( pCurrentUserData, nIndex );
+            if ( ( 0 == i ) && pNew )
+            {
+                SvLBoxEntry* pParent = GetParent( pNew );
+                if ( pParent )
+                    Expand( pParent );
+            }
         }
 
         UnlockSelectionHandling();
@@ -1116,13 +1233,71 @@ namespace svxform
         if( pFormShell && pFormShell->GetImpl() && pFormShell->GetFormView() )
             pFormShell->GetImpl()->DetermineSelection( pFormShell->GetFormView()->GetMarkList() );
 
-        return rEvt.mnAction;
+        return _nAction;
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTree::MouseButtonUp( const ::MouseEvent& rMEvt )
+    sal_Int8 NavigatorTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
-        SvTreeListBox::MouseButtonUp( rMEvt );
+        sal_Int8 nResult( DND_ACTION_NONE );
+
+        if ( m_aControlExchange.isDragSource() )
+            nResult = implExecuteDataTransfer( *m_aControlExchange, rEvt.mnAction, rEvt.maPosPixel, sal_True );
+        else
+        {
+            OControlTransferData aDroppedData( rEvt.maDropEvent.Transferable );
+            nResult = implExecuteDataTransfer( aDroppedData, rEvt.mnAction, rEvt.maPosPixel, sal_True );
+        }
+
+        return nResult;
+    }
+
+    //------------------------------------------------------------------------
+    void NavigatorTree::doPaste()
+    {
+           try
+        {
+            if ( m_aControlExchange.isClipboardOwner() )
+            {
+                implExecuteDataTransfer( *m_aControlExchange, doingKeyboardCut( ) ? DND_ACTION_MOVE : DND_ACTION_COPY, FirstSelected(), sal_False );
+            }
+            else
+            {
+                // the clipboard content
+                Reference< XClipboard > xClipboard( GetClipboard() );
+                Reference< XTransferable > xTransferable;
+                if ( xClipboard.is() )
+                    xTransferable = xClipboard->getContents();
+
+                OControlTransferData aClipboardContent( xTransferable );
+                implExecuteDataTransfer( aClipboardContent, DND_ACTION_COPY, FirstSelected(), sal_False );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "NavigatorTree::doPaste: caught an exception!" );
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void NavigatorTree::doCopy()
+    {
+        if ( implPrepareExchange( DND_ACTION_COPY ) )
+        {
+            m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
+            m_aControlExchange.copyToClipboard( );
+        }
+    }
+
+    //------------------------------------------------------------------------
+    void NavigatorTree::doCut()
+    {
+        if ( implPrepareExchange( DND_ACTION_MOVE ) )
+        {
+            m_aControlExchange.setClipboardListener( LINK( this, NavigatorTree, OnClipboardAction ) );
+            m_aControlExchange.copyToClipboard( );
+            m_bKeyboardCut = sal_True;
+        }
     }
 
     //------------------------------------------------------------------------
@@ -1130,22 +1305,31 @@ namespace svxform
     {
         const KeyCode& rCode = rKEvt.GetKeyCode();
 
-        // deleet?
+        // delete?
         if (rKEvt.GetKeyCode().GetCode() == KEY_DELETE && !rKEvt.GetKeyCode().GetModifier())
         {
             DeleteSelection();
             return;
         }
 
+#ifdef FS_PRIV_DEBUG_
         // copy'n'paste?
         switch ( rCode.GetFunction() )
         {
+            case KEYFUNC_CUT:
+                doCut();
+                break;
+
+            case KEYFUNC_PASTE:
+                if ( implAcceptPaste() )
+                    doPaste();
+                break;
+
             case KEYFUNC_COPY:
-            {
-                sal_Int32 nDummy = 0;
-            }
-            break;
+                doCopy();
+                break;
         }
+#endif
 
         SvTreeListBox::KeyInput(rKEvt);
     }
@@ -1394,6 +1578,19 @@ namespace svxform
         return 0L;
     }
 
+
+    //------------------------------------------------------------------------
+    IMPL_LINK( NavigatorTree, OnClipboardAction, void*, EMPTYARG )
+    {
+        if ( !m_aControlExchange.isClipboardOwner() )
+        {
+            if ( doingKeyboardCut() )
+            {
+                m_bKeyboardCut = sal_False;
+            }
+        }
+        return 0L;
+    }
 
     //------------------------------------------------------------------------
     void NavigatorTree::ShowSelectionProperties(sal_Bool bForce)
@@ -1952,6 +2149,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/05/08 07:06:03  fs
+ *  initial checkin - outsourced the tree view from fmexpl.cxx
+ *
  *
  *  Revision 1.0 07.05.2002 09:32:19  fs
  ************************************************************************/
