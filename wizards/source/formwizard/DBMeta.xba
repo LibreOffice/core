@@ -221,8 +221,11 @@ Dim EmptyList()
 			Else
 				bEnableBinaryOptionGroup = False
 			End If
-			Redim Preserve ResultFieldNames(m-1)
-			Redim Preserve FieldNames(m-1)
+			If (DialogModel.optBinariesasGraphics.State = 1)  And (s &lt;&gt; 0) Then
+				ResultFieldNames() = AddListToList(ResultFieldNames(), ImgFieldNames())
+			Else
+				Redim Preserve ResultFieldNames(m-1)
+			End If
 			FieldNames() = ResultFieldNames()
 			DialogModel.lstFields.StringItemList = FieldNames()
 			InitializeListboxProcedures(DialogModel, DialogModel.lstFields, DialogModel.lstSelFields)
