@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-05 17:02:26 $
+ *  last change: $Author: pb $ $Date: 2000-10-11 11:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,9 @@ void UcbLockBytes::SetSynchronMode (BOOL bSynchron)
 //----------------------------------------------------------------------------
 ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *pRead) const
 {
+    if ( IsSynchronMode() )
+        SAL_CONST_CAST(UcbLockBytes*,this)->m_aInitialized.wait();
+
     Reference<XInputStream> xStream = getInputStream_Impl();
 
     if ( !xStream.is() )
@@ -445,6 +448,9 @@ ErrCode UcbLockBytes::SetSize (ULONG)
 //----------------------------------------------------------------------------
 ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 {
+    if ( IsSynchronMode() )
+        SAL_CONST_CAST(UcbLockBytes*,this)->m_aInitialized.wait();
+
     if (!pStat)
         return ERRCODE_IO_INVALIDPARAMETER;
 
