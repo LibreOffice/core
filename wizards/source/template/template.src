@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:33:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String SAMPLES
     Text[English] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
     Text[ english_us ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
     Text[ portuguese ] = "Para poder usufruir de toda a funcionalidade deste exemplo, terα que criar um novo documento com base neste modelo.";
-    Text[ greek ] = "Για να έχετε τη δυνατότητα χρήσης όλων των λειτουργιών αυτού του παραδείγματος Θα πρέπει να δημιουργήσετε ένα νέο έγγραφο με βάση αυτό το πρότυπο.";
+    Text[ greek ] = "Για να έχετε τη δυνατότητα χρήσης όλων των λειτουργιών αυτού του παραδείγματος Θα πρέπει να δημιουργήσετε ένα νέο έγγραφο με βάση αυτό το π";
     Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken maakt u een nieuw document op basis van deze sjabloon.";
     Text[ french ] = "Afin de pouvoir profiter de l'entiθre fonctionnalitι de cet exemple, il vous faut crιer un nouveau document basι sur ce modθle.";
     Text[ spanish ] = "Para que estι disponible toda la funcionalidad de este ejemplo debe crear un nuevo documento basado en esta plantilla.";
