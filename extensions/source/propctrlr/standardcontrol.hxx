@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:06:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ namespace pcr
     //= OMultilineEditControl
     //========================================================================
     class OMultilineFloatingEdit;
-    class OMultilineEditControl : public OCommonBehaviourControl, Control
+    class OMultilineEditControl : public OCommonBehaviourControl, Edit
     {
             OMultilineFloatingEdit*             m_pFloatingEdit;
             MultiLineEdit*                      m_pImplEdit;
@@ -295,7 +295,6 @@ namespace pcr
 
                                             ~OMultilineEditControl();
 
-            virtual void                    GetFocus();
             virtual sal_Bool                ShowDropDown( sal_Bool bShow );
 
             virtual void                    SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown=sal_False);
