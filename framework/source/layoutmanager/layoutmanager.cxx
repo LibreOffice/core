@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:14:17 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,6 +712,8 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
 
             implts_createCustomToolBars();
             implts_createAddonsToolBars();
+//            implts_createNonContextSensitiveToolBars();
+            implts_sortUIElements();
         }
         else
             implts_destroyElements();
@@ -929,7 +931,79 @@ void LayoutManager::implts_createAddonsToolBars()
         {
         }
     }
+}
 
+void LayoutManager::implts_createNonContextSensitiveToolBars()
+{
+    ReadGuard aReadLock( m_aLock );
+
+    if ( !m_xPersistentWindowState.is() ||
+         !m_xFrame.is() ||
+         !m_bComponentAttached )
+        return;
+
+    Reference< XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
+    Reference< XFrame > xFrame( m_xFrame );
+    Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
+    aReadLock.unlock();
+
+    std::vector< rtl::OUString > aMakeVisibleToolbars;
+
+    try
+    {
+
+        rtl::OUString aElementType;
+        rtl::OUString aElementName;
+        rtl::OUString aName;
+
+        Reference< ::com::sun::star::ui::XUIElement > xUIElement;
+        Sequence< rtl::OUString > aToolbarNames = xPersistentWindowState->getElementNames();
+
+        if ( aToolbarNames.getLength() > 0 )
+        {
+            WriteGuard aWriteLock( m_aLock );
+
+            const rtl::OUString* pTbNames = aToolbarNames.getConstArray();
+            for ( sal_Int32 i = 0; i < aToolbarNames.getLength(); i++ )
+            {
+                aName = pTbNames[i];
+                if ( impl_parseResourceURL( aName, aElementType, aElementName ))
+                {
+                    if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
+                    {
+
+
+                        UIElement aNewToolbar( aElementName, aElementType, xUIElement );
+                        aNewToolbar.m_aName = aName;
+                        implts_readWindowStateData( aName, aNewToolbar );
+
+                        if ( aNewToolbar.m_bVisible &&
+                             !aNewToolbar.m_bContextSensitive )
+                        {
+                            m_aUIElements.push_back( aNewToolbar );
+                            aMakeVisibleToolbars.push_back( aName );
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch ( RuntimeException& e )
+    {
+        throw e;
+    }
+    catch ( Exception& )
+    {
+    }
+
+    if ( aMakeVisibleToolbars.size() > 0 )
+    {
+        implts_lock();
+        for ( sal_uInt32 i = 0; i < aMakeVisibleToolbars.size(); i++ )
+            requestElement( aMakeVisibleToolbars[i] );
+
+        implts_unlock();
+    }
 }
 
 void LayoutManager::implts_toggleFloatingUIElementsVisibility( sal_Bool bActive )
@@ -1197,6 +1271,26 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                         if ( aWindowState[n].Value >>= bValue )
                             rElementData.m_aDockedData.m_bLocked = bValue;
                     }
+                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXT ))
+                    {
+                        if ( aWindowState[n].Value >>= bValue )
+                            rElementData.m_bContextSensitive = bValue;
+                    }
+                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_NOCLOSE ))
+                    {
+                        if ( aWindowState[n].Value >>= bValue )
+                            rElementData.m_bNoClose = bValue;
+                    }
+                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_CONTEXTACTIVE ))
+                    {
+                        if ( aWindowState[n].Value >>= bValue )
+                            rElementData.m_bContextActive = bValue;
+                    }
+                    else if ( aWindowState[n].Name.equalsAscii( WINDOWSTATE_PROPERTY_SOFTCLOSE ))
+                    {
+                        if ( aWindowState[n].Value >>= bValue )
+                            rElementData.m_bSoftClose = bValue;
+                    }
                 }
 
                 return sal_True;
@@ -1308,6 +1402,8 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                 String aText = pWindow->GetText();
                 if ( aText.Len() == 0 )
                     pWindow->SetText( rElement.m_aUIName );
+                if ( rElement.m_bNoClose )
+                    pWindow->SetStyle( pWindow->GetStyle() & ~WB_CLOSEABLE );
                 if ( pWindow->GetType() == WINDOW_TOOLBOX )
                     pToolBox = (ToolBox *)pWindow;
             }
@@ -1316,7 +1412,9 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                 if (( rElement.m_nStyle < 0 ) ||
                     ( rElement.m_nStyle > BUTTON_SYMBOLTEXT ))
                     rElement.m_nStyle = BUTTON_SYMBOL;
-                pToolBox->SetButtonType( (ButtonType)rElement.m_nStyle );
+                    pToolBox->SetButtonType( (ButtonType)rElement.m_nStyle );
+                if ( rElement.m_bNoClose )
+                    pToolBox->SetFloatStyle( pToolBox->GetFloatStyle() & ~WB_CLOSEABLE );
             }
         }
 
@@ -3216,6 +3314,13 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL LayoutManager::reset()
 throw (RuntimeException)
 {
+    sal_Bool bComponentAttached( sal_False );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    bComponentAttached = m_bComponentAttached;
+    aReadLock.unlock();
+
     implts_reset( sal_True );
 }
 
@@ -3375,6 +3480,7 @@ throw ( RuntimeException )
 
     implts_createAddonsToolBars(); // create addon toolbars
     implts_createCustomToolBars(); // create custom toolbars
+//    implts_createNonContextSensitiveToolBars();
     implts_sortUIElements();
     implts_doLayout( sal_True );
 }
@@ -3800,8 +3906,8 @@ throw (::com::sun::star::uno::RuntimeException)
                             Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
 
                             sal_Bool bShowElement( pIter->m_bVisible &&
-                                                !pIter->m_bMasterHide &&
-                                                m_bParentWindowVisible );
+                                                   !pIter->m_bMasterHide &&
+                                                   m_bParentWindowVisible );
 
                             if ( xWindow.is() && xDockWindow.is() && bShowElement )
                             {
@@ -6049,7 +6155,7 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( xIfac == e.Source )
             {
                 aName = pIter->m_aName;
-                pIter->m_bVisible = sal_False; // user close => make invisible!
+//                pIter->m_bVisible = sal_True; // user close => make invisible!
                 aUIElement = *pIter;
                 break;
             }
@@ -6254,6 +6360,12 @@ throw ( RuntimeException )
     {
         RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_ATTACHED|REATTACHED)" );
 
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+        m_bComponentAttached = sal_True;
+        aWriteLock.unlock();
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
         implts_reset( sal_True );
         implts_doLayout( sal_True );
     }
@@ -6274,6 +6386,13 @@ throw ( RuntimeException )
     else if ( aEvent.Action == FrameAction_COMPONENT_DETACHING )
     {
         RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::frameAction (COMPONENT_DETACHING)" );
+
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        WriteGuard aWriteLock( m_aLock );
+        m_bComponentAttached = sal_True;
+        aWriteLock.unlock();
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
         implts_reset( sal_False );
     }
 }
