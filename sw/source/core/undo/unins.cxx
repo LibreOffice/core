@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:08:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,7 +1135,8 @@ SwRewriter SwUndoInsertLabel::GetRewriter() const
     String aTmpStr;
 
     aTmpStr += String(SW_RES(STR_START_QUOTE));
-    aTmpStr += ShortenString(sText, nUndoStringLength, String(STR_LDOTS));
+    aTmpStr += ShortenString(sText, nUndoStringLength,
+                             String(SW_RES(STR_LDOTS)));
     aTmpStr += String(SW_RES(STR_END_QUOTE));
 
     aRewriter.AddRule(UNDO_ARG1, aTmpStr);
