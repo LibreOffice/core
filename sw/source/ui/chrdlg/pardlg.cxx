@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pardlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:35:38 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 
 #include <svx/htmlcfg.hxx>
 
-#ifndef _SVSTDARR_STRINGSISORTDTOR
-#define _SVSTDARR_STRINGSISORTDTOR
+#ifndef _SVSTDARR_STRINGSSORTDTOR
+#define _SVSTDARR_STRINGSSORTDTOR
 #include <svtools/svstdarr.hxx>
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
@@ -250,7 +250,7 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
         const SfxStyleSheetBase* pBase = pPool->First();
-        SvStringsISortDtor aNames;
+        SvStringsSortDtor aNames;
         while(pBase)
         {
             aNames.Insert(new String(pBase->GetName()));
