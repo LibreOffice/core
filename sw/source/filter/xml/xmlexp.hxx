@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ class SvXMLNumFmtExport;
 class XMLTextFieldExport;
 #endif
 class XMLPropertySetMapper;
+class XMLTextMasterPageExport;
 class SwXMLTextParagraphExport;
 
 class SwXMLExport : public SvXMLExport
@@ -137,6 +138,7 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableRowItemMap;
     SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
+    UniReference < XMLTextMasterPageExport> xMasterPageExport;
 
     sal_Bool                    bExportWholeDoc : 1;// export whole document?
     sal_Bool                    bExportFirstTableOnly : 1;

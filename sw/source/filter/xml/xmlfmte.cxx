@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-29 10:54:05 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 17:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,9 @@
 
 #ifndef _XMLOFF_XMLNUMFE_HXX
 #include <xmloff/xmlnumfe.hxx>
+#endif
+#ifndef _XMLOFF_XMLTEXTMASTERPAGEEXPORT
+#include <xmloff/XMLTextMasterPageExport.hxx>
 #endif
 
 #ifndef _UNOSTYLE_HXX
@@ -880,6 +883,7 @@ void SwXMLExport::_ExportAutoStyles()
 
     GetTextParagraphExport()->collectFrameBoundToPageAutoStyles();
     GetTextParagraphExport()->collectTextAutoStyles( xText );
+    xMasterPageExport->collectAutoStyles( sal_False );
     GetTextParagraphExport()->exportTextAutoStyles();
     exportAutoDataStyles();
 
@@ -889,6 +893,7 @@ void SwXMLExport::_ExportAutoStyles()
 
 void SwXMLExport::_ExportMasterStyles()
 {
+    xMasterPageExport->exportMasterStyles( sal_False );
 }
 
 // ---------------------------------------------------------------------
@@ -1001,11 +1006,14 @@ SvXMLAutoStylePoolP* SwXMLExport::CreateAutoStylePool()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmte.cxx,v 1.2 2000-09-29 10:54:05 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmte.cxx,v 1.3 2000-10-12 17:30:28 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/29 10:54:05  mib
+      export graphics styles again
+
       Revision 1.1.1.1  2000/09/18 17:15:00  hr
       initial import
 
