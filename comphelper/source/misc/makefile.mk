@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+#   last change: $Author: fs $ $Date: 2000-10-27 06:57:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/types.obj \
+SLOFILES=	$(SLO)$/interaction.obj \
+            $(SLO)$/types.obj \
             $(SLO)$/datetime.obj \
             $(SLO)$/numbers.obj \
             $(SLO)$/sequence.obj \
