@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:38:14 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,16 +643,6 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
                 bDone = pEditView->KeyInput( rKEvt );
         }
     }
-#ifndef PRODUCT
-    if( !bDone )
-    {
-        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_H ) &&
-            rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
-        {
-            ToggleHighlightMode();
-        }
-    }
-#endif
     if ( !bDone )
     {
         if ( !SfxViewShell::Current()->KeyInput( rKEvt ) )
@@ -872,16 +862,21 @@ void EditorWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     pModulWindow->GetHScrollBar()->SetThumbPos( pEditView->GetStartDocPos().X() );
                 }
             }
+            long nPrevTextWidth = nCurTextWidth;
+            nCurTextWidth = pEditEngine->CalcTextWidth();
+            if ( nCurTextWidth != nPrevTextWidth )
+                SetScrollBarRanges();
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAINSERTED )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), TRUE );
+            DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
         else if( rTextHint.GetId() == TEXT_HINT_PARAREMOVED )
         {
             ParagraphInsertedDeleted( rTextHint.GetValue(), FALSE );
         }
-        else if( rTextHint.GetId() == TEXT_HINT_FORMATPARA )
+        else if( rTextHint.GetId() == TEXT_HINT_PARACONTENTCHANGED )
         {
             DoDelayedSyntaxHighlight( rTextHint.GetValue() );
         }
@@ -939,7 +934,7 @@ void EditorWindow::ImpDoHighlight( ULONG nLine )
     }
 
     BOOL bWasModified = pEditEngine->IsModified();
-
+    pEditEngine->RemoveAttribs( nLine, TRUE );
     HighlightPortions aPortions;
     aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
     USHORT nCount = aPortions.Count();
@@ -947,7 +942,7 @@ void EditorWindow::ImpDoHighlight( ULONG nLine )
     {
         HighlightPortion& r = aPortions[i];
         const Color& rColor = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);
-        pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd );
+        pEditEngine->SetAttrib( TextAttribFontColor( rColor ), nLine, r.nBegin, r.nEnd, TRUE );
     }
 
     // Das Highlighten soll kein Modify setzen
@@ -991,7 +986,6 @@ void EditorWindow::DoSyntaxHighlight( ULONG nPara )
         // leider weis ich nicht, ob genau diese Zeile Modified() ...
         if ( pProgress )
             pProgress->StepProgress();
-        pEditEngine->RemoveAttribs( nPara );
         ImpDoHighlight( nPara );
     }
 }
@@ -1030,7 +1024,7 @@ IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
     DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
 
     BOOL bWasModified = pEditEngine->IsModified();
-    pEditEngine->SetUpdateMode( FALSE );
+    // pEditEngine->SetUpdateMode( FALSE );
 
     bHighlightning = TRUE;
     USHORT nLine;
@@ -1042,22 +1036,16 @@ IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
         p = aSyntaxLineTable.Next();
     }
 
-    pEditView->SetAutoScroll( FALSE );  // #101043# Don't scroll because of syntax highlight
-    pEditEngine->SetUpdateMode( TRUE );
-    pEditView->ShowCursor( FALSE, TRUE );
-    pEditView->SetAutoScroll( TRUE );
+    // MT: Removed, because of idle format now when set/remove attribs...
+    // pEditView->SetAutoScroll( FALSE );  // #101043# Don't scroll because of syntax highlight
+    // pEditEngine->SetUpdateMode( TRUE );
+    // pEditView->ShowCursor( FALSE, TRUE );
+    // pEditView->SetAutoScroll( TRUE );
 
     pEditEngine->SetModified( bWasModified );
 
     aSyntaxLineTable.Clear();
-    // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
-    // => gute Gelegenheit, Textbreite zu ermitteln!
-    long nPrevTextWidth = nCurTextWidth;
-    nCurTextWidth = pEditEngine->CalcTextWidth();
-    if ( nCurTextWidth != nPrevTextWidth )
-        SetScrollBarRanges();
     bHighlightning = FALSE;
-
 
     return 0;
 }
@@ -1093,32 +1081,6 @@ void EditorWindow::ParagraphInsertedDeleted( ULONG nPara, BOOL bInserted )
         aHighlighter.notifyChange( nPara, bInserted ? 1 : (-1), &aDummy, 1 );
     }
 }
-
-void EditorWindow::ToggleHighlightMode()
-{
-    bDoSyntaxHighlight = !bDoSyntaxHighlight;
-    if ( !pEditEngine )
-        return;
-
-
-    if ( bDoSyntaxHighlight )
-    {
-        for ( ULONG i = 0; i < pEditEngine->GetParagraphCount(); i++ )
-            DoDelayedSyntaxHighlight( i );
-    }
-    else
-    {
-        aSyntaxIdleTimer.Stop();
-        pEditEngine->SetUpdateMode( FALSE );
-        for ( ULONG i = 0; i < pEditEngine->GetParagraphCount(); i++ )
-            pEditEngine->RemoveAttribs( i );
-
-//      pEditEngine->QuickFormatDoc();
-        pEditEngine->SetUpdateMode( TRUE );
-        pEditView->ShowCursor(TRUE, TRUE );
-    }
-}
-
 
 void EditorWindow::CreateProgress( const String& rText, ULONG nRange )
 {
