@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:46 $
+ *  last change: $Author: dvo $ $Date: 2001-11-05 13:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,10 +282,15 @@ void SwXMLExport::_ExportAutoStyles()
     if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
         GetPageExport()->collectAutoStyles( sal_False );
 
+    // if we don't export styles (i.e. in content stream only, but not
+    // in single-stream case), then we can save ourselves a bit of
+    // work and memory by not collecting field masters
+    if( (getExportFlags() & EXPORT_STYLES ) == 0 )
+        GetTextParagraphExport()->exportUsedDeclarations( sal_False );
+
     // exported in _ExportContent
     if( (getExportFlags() & EXPORT_CONTENT) != 0 )
     {
-        GetTextParagraphExport()->exportUsedDeclarations( sal_False );
         GetTextParagraphExport()->exportTrackedChanges( sal_True );
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         Reference < XText > xText = xTextDoc->getText();
