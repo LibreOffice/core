@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:59:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && nPagePrevRow == rOpt.GetPagePrevRow()
             && nPagePrevCol == rOpt.GetPagePrevCol()
             && aRetoucheColor == rOpt.GetRetoucheColor()
+            && bFormView == rOpt.IsFormView()
 #ifndef PRODUCT
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
@@ -462,6 +463,9 @@ SwViewOption::SwViewOption() :
     nTblDest(TBL_DEST_CELL),
     bReadonly(FALSE),
     bSelectionInReadonly(FALSE),
+    // --> FME 2004-06-29 #114856# Formular view
+    bFormView(FALSE),
+    // <--
     aRetoucheColor( COL_TRANSPARENT ),
     nShdwCrsrFillMode( FILL_TAB ),
     bStarOneSetting(FALSE),
@@ -499,6 +503,9 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
     bReadonly = FALSE;
     bSelectionInReadonly = FALSE;
+    // --> FME 2004-06-29 #114856# Formular view
+    bFormView       = rVOpt.bFormView;
+    // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
     nDivisionX      = rVOpt.nDivisionX  ;
@@ -533,6 +540,9 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 
 SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 {
+    // --> DVO FME 2004-06-29 #114856# Formular view
+    bFormView       = rVOpt.bFormView   ;
+    // <--
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
     nDivisionX      = rVOpt.nDivisionX  ;
