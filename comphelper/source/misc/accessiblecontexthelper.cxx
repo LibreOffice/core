@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
@@ -90,7 +90,7 @@ namespace comphelper
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
 
     //=====================================================================
     //= OContextHelper_Impl
