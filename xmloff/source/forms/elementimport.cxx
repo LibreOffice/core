@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:01:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,9 +594,6 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
     {
-        static const ::rtl::OUString s_sBindAttribute           = ::rtl::OUString::createFromAscii("bind");
-        static const ::rtl::OUString s_sListBindAttribute       = ::rtl::OUString::createFromAscii("xforms-list-source");
-        static const ::rtl::OUString s_sSubmissionAttribute     = ::rtl::OUString::createFromAscii("submission");
         if ( !m_sControlId.getLength() && _rLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_CONTROL_ID ) ) )
         {   // it's the control id
             m_sControlId = _rValue;
@@ -605,15 +602,16 @@ namespace xmloff
         {   // it's the address of a spreadsheet cell
             m_sBoundCellAddress = _rValue;
         }
-        else if ( _rLocalName == s_sBindAttribute  &&  _nNamespaceKey == XML_NAMESPACE_XFORMS )
+        else if ( _nNamespaceKey == XML_NAMESPACE_XFORMS && IsXMLToken( _rLocalName, XML_BIND ) )
         {
             m_sBindingID = _rValue;
         }
-        else if ( _rLocalName == s_sListBindAttribute  &&  _nNamespaceKey == XML_NAMESPACE_FORM )
+        else if ( _nNamespaceKey == XML_NAMESPACE_FORM && IsXMLToken( _rLocalName, XML_XFORMS_LIST_SOURCE )  )
         {
             m_sListBindingID = _rValue;
         }
-        else if ( _rLocalName == s_sSubmissionAttribute  &&  _nNamespaceKey == XML_NAMESPACE_XFORMS )
+        else if ( (_nNamespaceKey == XML_NAMESPACE_FORM && IsXMLToken( _rLocalName, XML_XFORMS_SUBMISSION ) ) ||
+                  ( _nNamespaceKey == XML_NAMESPACE_XFORMS && IsXMLToken( _rLocalName, XML_SUBMISSION ) ) )
         {
             m_sSubmissionID = _rValue;
         }
