@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WrongStateException.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:52:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,20 @@
 #endif
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
+//============================================================================
 
-// DocMerge from xml: exception com::sun::star::embed::WrongStateException
-/** This exception can be thrown in case the object state does not allow
-to call requested functionality.
+/** This exception can be thrown in case the object's state does not allow
+    to call requested functionality.
  */
 exception WrongStateException: com::sun::star::uno::Exception
 {
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
