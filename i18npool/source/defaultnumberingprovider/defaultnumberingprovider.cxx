@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-20 10:12:01 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-26 06:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,12 @@
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::text;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 using namespace ::rtl;
+
+namespace com { namespace sun { namespace star { namespace i18n {
 
 inline
 rtl::OUString C2U( const char* s )
@@ -99,9 +97,7 @@ rtl::OUString C2U( const char* s )
   return OUString::createFromAscii(s);
 }
 
-DefaultNumberingProvider::DefaultNumberingProvider(
-    const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xMSF )
-    : xSMgr(xMSF)
+DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XMultiServiceFactory >& xMSF ) : xSMgr(xMSF)
 {
 }
 
@@ -109,20 +105,20 @@ DefaultNumberingProvider::~DefaultNumberingProvider()
 {
 }
 
-Sequence< Reference<XIndexAccess> >
+Sequence< Reference<container::XIndexAccess> >
 DefaultNumberingProvider::getDefaultOutlineNumberings(const Locale& rLocale ) throw(RuntimeException)
 {
-     return i18n::LocaleData().getOutlineNumberingLevels( rLocale );
+     return LocaleData().getOutlineNumberingLevels( rLocale );
 }
 
-Sequence< Sequence<PropertyValue> >
+Sequence< Sequence<beans::PropertyValue> >
 DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLocale ) throw(RuntimeException)
 {
-     return i18n::LocaleData().getContinuousNumberingLevels( rLocale );
+     return LocaleData().getContinuousNumberingLevels( rLocale );
 }
 
 
-::rtl::OUString toRoman( sal_Int32 n )
+OUString toRoman( sal_Int32 n )
 {
 
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
@@ -178,20 +174,20 @@ static
 const char* expected_type( int i, int last )
 {
      if(0);
-     else if( i==0    ) return "::rtl::OUString";
+     else if( i==0    ) return "OUString";
      else if( i==1    ) return "sal_Int16";
-     else if( i==2    ) return "::rtl::OUString";
+     else if( i==2    ) return "OUString";
      else if( i==last ) return "sal_Int32";
      else { assert(0); return ""; }
 }
 static
 void failedToConvert( int i, int last )
 {
-     throw lang::IllegalArgumentException();
+     throw IllegalArgumentException();
 }
 
 static
-void lcl_formatChars( char A, int n, ::rtl::OUString& s )
+void lcl_formatChars( char A, int n, OUString& s )
 {
      // string representation of n is appended to s.
      // if A=='A' then 0=>A, 1=>B, ..., 25=>Z, 26=>AA, 27=>AB, ...
@@ -199,18 +195,18 @@ void lcl_formatChars( char A, int n, ::rtl::OUString& s )
 
      if( n>=26 ) lcl_formatChars( A, (n-26)/26, s );
 
-     s += ::rtl::OUString::valueOf( (sal_Unicode) (( n%26 ) + A) );
+     s += OUString::valueOf( (sal_Unicode) (( n%26 ) + A) );
 }
 
 static
-should_ignore( ::rtl::OUString s )
+should_ignore( OUString s )
 {
     // return true if blank or null
     return s.compareToAscii(" ")==0 || (s.getLength()>0 && s[0]==0);
 }
 
 static
-uno::Any getPropertyByName( const uno::Sequence<beans::PropertyValue>& aProperties,
+Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
                                                 const char* name, sal_Bool bRequired )
 {
     for( int i=0; i<aProperties.getLength(); i++ )
@@ -221,18 +217,14 @@ uno::Any getPropertyByName( const uno::Sequence<beans::PropertyValue>& aProperti
         }
     }
     if(bRequired)
-        throw lang::IllegalArgumentException();
-    return uno::Any();
+        throw IllegalArgumentException();
+    return Any();
 }
 
 void
 DefaultNumberingProvider::getTransliteration()
 {
-    using namespace com::sun::star::uno;
-    using namespace com::sun::star::lang;
-    using namespace com::sun::star::i18n;
-
-    Reference < XInterface > xI = xSMgr->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.i18n.Transliteration") );
+    Reference < XInterface > xI = xSMgr->createInstance(OUString::createFromAscii( "com.sun.star.i18n.Transliteration") );
 
     if ( xI.is() ) {
         Any x = xI->queryInterface(
@@ -242,18 +234,18 @@ DefaultNumberingProvider::getTransliteration()
 }
 
 //XNumberingFormatter
-::rtl::OUString
-DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::PropertyValue>& aProperties,
-                                               const lang::Locale& aLocale )
-     throw( lang::IllegalArgumentException, uno::RuntimeException )
+OUString
+DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyValue>& aProperties,
+                                               const Locale& aLocale )
+     throw( IllegalArgumentException, RuntimeException )
 {
      // the Sequence of PropertyValues is expected to have at least 4 elements:
      // elt Name              Type             purpose
      // -----------------------------------------------------------------
      //
-     // 0.  "Prefix"          ::rtl::OUString
+     // 0.  "Prefix"          OUString
      // 1.  "NumberingType"   sal_Int16        type of formatting from style::NumberingType (roman, arabic, etc)
-     // 2.  "Suffix"          ::rtl::OUString
+     // 2.  "Suffix"          OUString
      // ... ...               ...
      // n.  "Value"           sal_Int32        the number to be formatted
      // example:
@@ -264,9 +256,9 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
      // A: an Any can't hold a style::NumberingType for some reason.
     //  add.: style::NumberingType holds constants of type sal_Int16, it's not an enum type
 
-     ::rtl::OUString  prefix;
+     OUString  prefix;
      sal_Int16        numType; // type of formatting from style::NumberingType (roman, arabic, etc)
-     ::rtl::OUString  suffix;
+     OUString  suffix;
      sal_Int32        number = -12345; // the number that needs to be formatted.
 
      int nProperties = aProperties.getLength();
@@ -274,7 +266,7 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
 
      try
      {
-        ::getPropertyByName(aProperties, "Prefix", sal_False)      >>=prefix;
+        getPropertyByName(aProperties, "Prefix", sal_False)      >>=prefix;
      }
      catch (Exception&)
      {
@@ -282,7 +274,7 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
      }
      try
      {
-        ::getPropertyByName(aProperties, "Suffix", sal_False)      >>=suffix;
+        getPropertyByName(aProperties, "Suffix", sal_False)      >>=suffix;
      }
      catch (Exception&)
      {
@@ -290,7 +282,7 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
      }
      try
      {
-        ::getPropertyByName(aProperties, "NumberingType", sal_True)   >>=numType;
+        getPropertyByName(aProperties, "NumberingType", sal_True)   >>=numType;
      }
      catch (Exception& )
      {
@@ -298,7 +290,7 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
      }
      try
      {
-        ::getPropertyByName(aProperties, "Value", sal_True)       >>=number;
+        getPropertyByName(aProperties, "Value", sal_True)       >>=number;
      }
      catch (Exception& )
      {
@@ -307,11 +299,11 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
 
      if( number <= 0 )
      {
-          throw lang::IllegalArgumentException();
+          throw IllegalArgumentException();
      }
 
      // start empty
-     ::rtl::OUString result;
+     OUString result;
 
      // this should be locale dependent.
      // for now, assume en_US
@@ -322,7 +314,7 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
           if( !should_ignore(prefix) ) result += prefix;
 
           // append formatted number
-          using namespace ::com::sun::star::style::NumberingType;
+          using namespace style::NumberingType;
           switch( numType )
           {
           case CHARS_UPPER_LETTER:
@@ -338,26 +330,26 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
                result += toRoman( number ).toAsciiLowerCase();
                break;
           case ARABIC:
-               result += ::rtl::OUString::valueOf( number );
+               result += OUString::valueOf( number );
                break;
           case NUMBER_NONE:
-               return ::rtl::OUString::createFromAscii(""); // ignore prefix and suffix
+               return OUString::createFromAscii(""); // ignore prefix and suffix
                break;
           case CHAR_SPECIAL:
                // apparently, we're supposed to return an empty string in this case...
-               return ::rtl::OUString::createFromAscii(""); // ignore prefix and suffix
+               return OUString::createFromAscii(""); // ignore prefix and suffix
                break;
           case PAGE_DESCRIPTOR:
           case BITMAP:
                assert(0);
-               throw lang::IllegalArgumentException();
+               throw IllegalArgumentException();
                break;
           case CHARS_UPPER_LETTER_N:
                {
                     sal_Unicode c    = ((--number)%26) + 'A';
                     int repeat_count = number / 26 + 1;
                     for( int i=0; i<repeat_count; i++ )
-                        result += ::rtl::OUString::valueOf( c );
+                        result += OUString::valueOf( c );
                }
                break;
           case CHARS_LOWER_LETTER_N:
@@ -365,7 +357,7 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
                     sal_Unicode c    = ((--number)%26) + 'a';
                     int repeat_count = number / 26 + 1;
                     for( int i=0; i<repeat_count; i++ )
-                        result += ::rtl::OUString::valueOf( c );
+                        result += OUString::valueOf( c );
                }
                break;
 #ifdef DEBUG
@@ -388,41 +380,41 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
 
           case TRANSLITERATION:
                {
-               ::rtl::OUString &tmp = ::rtl::OUString::valueOf( number );
-               ::rtl::OUString transliteration;
+               OUString &tmp = OUString::valueOf( number );
+               OUString transliteration;
            try {
-        ::getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
+        getPropertyByName(aProperties, "Transliteration", sal_True) >>= transliteration;
            } catch (Exception& ) {
-        transliteration = ::rtl::OUString::createFromAscii("");
+        transliteration = OUString::createFromAscii("");
            }
                getTransliteration();
         if ( ! translit.is() ) {
-                    throw lang::IllegalArgumentException();
+                    throw IllegalArgumentException();
         }
 
-        Sequence < i18n::TransliterationModulesNew > module(1);
+        Sequence < TransliterationModulesNew > module(1);
                if( !transliteration.compareToAscii("NumToTextLower_zh_CN") ) {
-                    module[0]=i18n::TransliterationModulesNew_NumToTextLower_zh_CN;
+                    module[0]=TransliterationModulesNew_NumToTextLower_zh_CN;
                } else if( !transliteration.compareToAscii("NumToTextUpper_zh_CN") ) {
-                    module[0]=i18n::TransliterationModulesNew_NumToTextUpper_zh_CN;
+                    module[0]=TransliterationModulesNew_NumToTextUpper_zh_CN;
                } else if( !transliteration.compareToAscii("NumToTextLower_zh_TW") ) {
-                    module[0]=i18n::TransliterationModulesNew_NumToTextLower_zh_TW;
+                    module[0]=TransliterationModulesNew_NumToTextLower_zh_TW;
                } else if( !transliteration.compareToAscii("NumToTextUpper_zh_TW") ) {
-                    module[0]=i18n::TransliterationModulesNew_NumToTextUpper_zh_TW;
+                    module[0]=TransliterationModulesNew_NumToTextUpper_zh_TW;
                } else if( !transliteration.compareToAscii("NumToTextFormalHangul_ko") ) {
-                    module[0]=i18n::TransliterationModulesNew_NumToTextFormalHangul_ko;
+                    module[0]=TransliterationModulesNew_NumToTextFormalHangul_ko;
                } else if( !transliteration.compareToAscii("NumToTextFormalLower_ko") ) {
-                    module[0]=i18n::TransliterationModulesNew_NumToTextFormalLower_ko;
+                    module[0]=TransliterationModulesNew_NumToTextFormalLower_ko;
                } else if( !transliteration.compareToAscii("NumToTextFormalUpper_ko") ) {
-                    module[0]=i18n::TransliterationModulesNew_NumToTextFormalUpper_ko;
+                    module[0]=TransliterationModulesNew_NumToTextFormalUpper_ko;
                } else
                {
                     assert(0);
-                    throw lang::IllegalArgumentException();
+                    throw IllegalArgumentException();
                }
                translit->loadModuleNew( module, aLocale);
-               uno::Sequence< long > offset( tmp.getLength()*2 );
-               ::rtl::OUString& res = translit->transliterate(tmp, 0, tmp.getLength(), offset);
+               Sequence< long > offset( tmp.getLength()*2 );
+               OUString& res = translit->transliterate(tmp, 0, tmp.getLength(), offset);
                result += res;
                result += C2U("~");
                }
@@ -430,7 +422,7 @@ DefaultNumberingProvider::makeNumberingString( const uno::Sequence<beans::Proper
 
           default:
                assert(0);
-               throw lang::IllegalArgumentException();
+               throw IllegalArgumentException();
                break;
           }
 
@@ -452,17 +444,17 @@ struct Supported_NumberingType
 };
 static const Supported_NumberingType aSupportedTypes[] =
 {
-    {NumberingType::CHARS_UPPER_LETTER,     "A"},
-    {NumberingType::CHARS_LOWER_LETTER,     "a"},
-    {NumberingType::ROMAN_UPPER,            "I"},
-    {NumberingType::ROMAN_LOWER,            "i"},
-    {NumberingType::ARABIC,                 "1"},
-    {NumberingType::NUMBER_NONE,            "''"},
-    {NumberingType::CHAR_SPECIAL,           "Bullet"},
-    {NumberingType::PAGE_DESCRIPTOR,        "Page"},
-    {NumberingType::BITMAP,                 "Bitmap"},
-    {NumberingType::CHARS_UPPER_LETTER_N,   "AAA"},
-    {NumberingType::CHARS_LOWER_LETTER_N,   "aaa"}
+    {style::NumberingType::CHARS_UPPER_LETTER,  "A"},
+    {style::NumberingType::CHARS_LOWER_LETTER,  "a"},
+    {style::NumberingType::ROMAN_UPPER,             "I"},
+    {style::NumberingType::ROMAN_LOWER,             "i"},
+    {style::NumberingType::ARABIC,              "1"},
+    {style::NumberingType::NUMBER_NONE,             "''"},
+    {style::NumberingType::CHAR_SPECIAL,            "Bullet"},
+    {style::NumberingType::PAGE_DESCRIPTOR,         "Page"},
+    {style::NumberingType::BITMAP,              "Bitmap"},
+    {style::NumberingType::CHARS_UPPER_LETTER_N,    "AAA"},
+    {style::NumberingType::CHARS_LOWER_LETTER_N,    "aaa"}
 #ifdef DEBUG
     ,{20,   "First"}
 #endif
@@ -542,4 +534,4 @@ Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames(void)
     return aRet;
 }
 
-
+} } } }
