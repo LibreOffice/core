@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXPresentation.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:27:44 $
+ *  last change:$Date: 2004-01-05 19:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public class SdXPresentation extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing xImpressDoc");
-        xImpressDoc.dispose();
+        util.DesktopTools.closeDoc(xImpressDoc);;
     }
 
     /**
