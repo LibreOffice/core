@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:11:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,6 @@ class DocTempl_EntryData_Impl
 {
     RegionData_Impl*    mpParent;
     SfxObjectShellLock  mxObjShell;
-    uno::Reference< embed::XStorage > mxStorage;
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;
@@ -1903,33 +1902,18 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
             }
             else if (pFilter)
             {
-                delete pMed;
                 mbDidConvert=sal_False;
-                try
+                mxObjShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
+                if ( mxObjShell.Is() )
                 {
-                    mxStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
-                                    aTargetURL,
-                                    embed::ElementModes::READWRITE | embed::ElementModes::NOCREATE );
-
-                    if ( mxStorage.is() )
+                    mxObjShell->DoInitNew(0);
+                    // TODO/LATER: make sure that we don't use binary templates!
+                    if( mxObjShell->LoadFrom( *pMed ) )
                     {
-                        mxObjShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
-                        if ( mxObjShell.Is() )
-                        {
-                            mxObjShell->DoInitNew(0);
-                            // TODO/LATER: make sure that we don't use binary templates!
-                            if( mxObjShell->LoadFrom( mxStorage ) )
-                            {
-                                mxObjShell->DoSaveCompleted( mxStorage );
-                            }
-                            else
-                                mxObjShell.Clear();
-                        }
+                        mxObjShell->DoSaveCompleted( pMed );
                     }
-                }
-                catch( uno::Exception& )
-                {
-                    // TODO: probably needs error handling
+                    else
+                        mxObjShell.Clear();
                 }
             }
         }
@@ -1961,7 +1945,7 @@ BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
                 {
                     if( mxObjShell->Save() )
                     {
-                        uno::Reference< embed::XTransactedObject > xTransacted( mxStorage, uno::UNO_QUERY );
+                        uno::Reference< embed::XTransactedObject > xTransacted( mxObjShell->GetStorage(), uno::UNO_QUERY );
                         DBG_ASSERT( xTransacted.is(), "Storage must implement XTransactedObject!\n" );
                         if ( xTransacted.is() )
                         {
@@ -1981,10 +1965,6 @@ BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
         if( bRet )
         {
             mxObjShell.Clear();
-
-             // disposing can be controlled by refcounting
-            // while the storage doesn't come outside of this class
-            mxStorage = uno::Reference< embed::XStorage >();
         }
     }
     return bRet;
