@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlbkitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include <svtools/eitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxNoLinebreakItem ----------------------------------------------
 
 
@@ -76,7 +80,7 @@
     PB: ???
 */
 
-class SvxNoLinebreakItem : public SfxBoolItem
+class SVX_DLLPUBLIC SvxNoLinebreakItem : public SfxBoolItem
 {
 public:
     TYPEINFO();
