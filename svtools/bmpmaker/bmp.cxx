@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:56:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,10 +180,10 @@ BOOL BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const Stri
 
 // -----------------------------------------------------------------------
 
-void BmpApp::Message( const String& rText, BYTE cExitCode )
+void BmpApp::Message( const String& rText, BYTE cExit )
 {
-    if( EXIT_NOERROR != cExitCode )
-        SetExitCode( cExitCode );
+    if( EXIT_NOERROR != cExit )
+        SetExitCode( cExit );
 
     ByteString aText( rText, RTL_TEXTENCODING_UTF8 );
     aText.Append( "\r\n" );
@@ -246,9 +246,6 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
         aOStm.Close();
     }
 
-//  if ( EXIT_NOERROR != cExitCode )
-//      raise( SIGABRT );
-
     return cExitCode;
 }
 
@@ -258,6 +255,13 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
 
 int main( int nArgCount, char* ppArgs[] )
 {
+#ifdef UNX
+    static char aDisplayVar[ 1024 ];
+
+    strcpy( aDisplayVar, "DISPLAY=" );
+    putenv( aDisplayVar );
+#endif
+
     ::std::vector< String > aArgs;
     BmpApp                  aBmpApp;
 
@@ -268,52 +272,3 @@ int main( int nArgCount, char* ppArgs[] )
 
     return aBmpApp.Start( aArgs );
 }
-
-#if 0
-
-// ---------------
-// - Application -
-// ---------------
-
-class ApplicationWrapper : public Application
-{
-protected:
-
-    virtual void    Main();
-
-public:
-
-                    ApplicationWrapper();
-                    ~ApplicationWrapper();
-};
-
-// -----------------------------------------------------------------------------
-
-ApplicationWrapper::ApplicationWrapper()
-{
-}
-
-// -----------------------------------------------------------------------------
-
-ApplicationWrapper::~ApplicationWrapper()
-{
-}
-
-// -----------------------------------------------------------------------------
-
-void ApplicationWrapper::Main()
-{
-    ::std::vector< String > aArgs;
-    BmpApp                  aBmpApp;
-
-    for( int i = 0; i < GetCommandLineParamCount(); i++ )
-        aArgs.push_back( GetCommandLineParam( i ) );
-
-    aBmpApp.Start( aArgs );
-}
-
-// -----------------------------------------------------------------------------
-
-ApplicationWrapper aApp;
-
-#endif
