@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-30 11:22:55 $
+ *  last change: $Author: pb $ $Date: 2000-12-01 05:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,6 @@ private:
     String          m_aBasicPath;
     String          m_aBitmapPath;
     String          m_aConfigPath;
-    String          m_aDatabasePath;
     String          m_aDictionaryPath;
     String          m_aFavoritesPath;
     String          m_aFilterPath;
@@ -196,7 +195,6 @@ private:
     String          m_aStoragePath;
     String          m_aTempPath;
     String          m_aTemplatePath;
-    String          m_aTrashPath;
     String          m_aUserConfigPath;
     String          m_aUserDictionaryPath;
     String          m_aWorkPath;
@@ -234,7 +232,6 @@ public:
     const String&   GetBasicPath() { return GetPath( &SvtPathOptions_Impl::m_aBasicPath); }
     const String&   GetBitmapPath() { return GetPath( &SvtPathOptions_Impl::m_aBitmapPath); }
     const String&   GetConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aConfigPath); }
-    const String&   GetDatabasePath() { return GetPath( &SvtPathOptions_Impl::m_aDatabasePath); }
     const String&   GetDictionaryPath() { return GetPath( &SvtPathOptions_Impl::m_aDictionaryPath); }
     const String&   GetFavoritesPath() { return GetPath( &SvtPathOptions_Impl::m_aFavoritesPath); }
     const String&   GetFilterPath() { return GetPath( &SvtPathOptions_Impl::m_aFilterPath); }
@@ -249,7 +246,6 @@ public:
     const String&   GetStoragePath() { return GetPath( &SvtPathOptions_Impl::m_aStoragePath); }
     const String&   GetTempPath() { return GetPath( &SvtPathOptions_Impl::m_aTempPath); }
     const String&   GetTemplatePath() { return GetPath( &SvtPathOptions_Impl::m_aTemplatePath); }
-    const String&   GetTrashPath() { return GetPath( &SvtPathOptions_Impl::m_aTrashPath); }
     const String&   GetUserConfigPath() { return GetPath( &SvtPathOptions_Impl::m_aUserConfigPath); }
     const String&   GetUserDictionaryPath() { return GetPath( &SvtPathOptions_Impl::m_aUserDictionaryPath ); }
     const String&   GetWorkPath() { return GetPath( &SvtPathOptions_Impl::m_aWorkPath ); }
@@ -263,7 +259,6 @@ public:
     void            SetBasicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBasicPath, rPath ); }
     void            SetBitmapPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBitmapPath, rPath ); }
     void            SetConfigPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aConfigPath, rPath ); }
-    void            SetDatabasePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aDatabasePath, rPath ); }
     void            SetDictionaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aDictionaryPath, rPath ); }
     void            SetFavoritesPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFavoritesPath, rPath ); }
     void            SetFilterPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aFilterPath, rPath ); }
@@ -278,7 +273,6 @@ public:
     void            SetStoragePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aStoragePath, rPath ); }
     void            SetTempPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTempPath, rPath ); }
     void            SetTemplatePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTemplatePath, rPath ); }
-    void            SetTrashPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aTrashPath, rPath ); }
     void            SetUserConfigPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aUserConfigPath, rPath ); }
     void            SetUserDictionaryPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aUserDictionaryPath, rPath ); }
     void            SetWorkPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aWorkPath, rPath ); }
@@ -306,7 +300,9 @@ Sequence< OUString > GetPathPropertyNames()
         "Basic",            // PATH_BASIC
         "Bitmap",           // PATH_BITMAP
         "Config",           // PATH_CONFIG
+#if SUPD < 615
         "Database",         // PATH_DATABASE
+#endif
         "Dictionary",       // PATH_DICTIONARY
         "Favorite",         // PATH_FAVORITES
         "Filter",           // PATH_FILTER
@@ -321,7 +317,9 @@ Sequence< OUString > GetPathPropertyNames()
         "Storage",          // PATH_STORAGE
         "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
+#if SUPD < 615
         "Trash",            // PATH_TRASH
+#endif
         "UserConfig",       // PATH_USERCONFIG
         "UserDictionary",   // PATH_USERDICTIONARY
         "Work"              // PATH_WORK
@@ -819,7 +817,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     case SvtPathOptions::PATH_BASIC:        m_aBasicPath = String( aFullPath );         break;
                     case SvtPathOptions::PATH_BITMAP:       m_aBitmapPath = String( aFullPath );        break;
                     case SvtPathOptions::PATH_CONFIG:       m_aConfigPath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_DATABASE:     m_aDatabasePath = String( aFullPath );      break;
+                    case SvtPathOptions::PATH_DATABASE:                                                 break;
                     case SvtPathOptions::PATH_DICTIONARY:   m_aDictionaryPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_FAVORITES:    m_aFavoritesPath = String( aFullPath );     break;
                     case SvtPathOptions::PATH_FILTER:       m_aFilterPath = String( aFullPath );        break;
@@ -834,7 +832,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                     case SvtPathOptions::PATH_STORAGE:      m_aStoragePath = String( aFullPath );       break;
                     case SvtPathOptions::PATH_TEMP:         m_aTempPath = String( aFullPath );          break;
                     case SvtPathOptions::PATH_TEMPLATE:     m_aTemplatePath = String( aFullPath );      break;
-                    case SvtPathOptions::PATH_TRASH:        m_aTrashPath = String( aFullPath );         break;
+                    case SvtPathOptions::PATH_TRASH:                                                    break;
                     case SvtPathOptions::PATH_USERCONFIG:   m_aUserConfigPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_USERDICTIONARY: m_aUserDictionaryPath = String( aFullPath );break;
                     case SvtPathOptions::PATH_WORK:         m_aWorkPath = String( aFullPath );          break;
@@ -879,7 +877,7 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_BACKUP:           aTempStr = OUString( m_aBackupPath );           break;
             case SvtPathOptions::PATH_BITMAP:           aTempStr = OUString( m_aBitmapPath );           break;
             case SvtPathOptions::PATH_CONFIG:           aTempStr = OUString( m_aConfigPath );           break;
-            case SvtPathOptions::PATH_DATABASE:         aTempStr = OUString( m_aDatabasePath );         break;
+            case SvtPathOptions::PATH_DATABASE:                                                         break;
             case SvtPathOptions::PATH_DICTIONARY:       aTempStr = OUString( m_aDictionaryPath );       break;
             case SvtPathOptions::PATH_FAVORITES:        aTempStr = OUString( m_aFavoritesPath );        break;
             case SvtPathOptions::PATH_FILTER:           aTempStr = OUString( m_aFilterPath );           break;
@@ -891,7 +889,7 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_PALETTE:          aTempStr = OUString( m_aPalettePath );          break;
             case SvtPathOptions::PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
             case SvtPathOptions::PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
-            case SvtPathOptions::PATH_TRASH:            aTempStr = OUString( m_aTrashPath );            break;
+            case SvtPathOptions::PATH_TRASH:                                                            break;
             case SvtPathOptions::PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
             case SvtPathOptions::PATH_USERDICTIONARY:   aTempStr = OUString( m_aUserDictionaryPath );   break;
             case SvtPathOptions::PATH_WORK:             aTempStr = OUString( m_aWorkPath );             break;
@@ -1010,13 +1008,6 @@ const String& SvtPathOptions::GetConfigPath() const
 
 // -----------------------------------------------------------------------
 
-const String& SvtPathOptions::GetDatabasePath() const
-{
-    return pImp->GetDatabasePath();
-}
-
-// -----------------------------------------------------------------------
-
 const String& SvtPathOptions::GetDictionaryPath() const
 {
     return pImp->GetDictionaryPath();
@@ -1115,13 +1106,6 @@ const String& SvtPathOptions::GetTemplatePath() const
 
 // -----------------------------------------------------------------------
 
-const String& SvtPathOptions::GetTrashPath() const
-{
-    return pImp->GetTrashPath();
-}
-
-// -----------------------------------------------------------------------
-
 const String& SvtPathOptions::GetUserConfigPath() const
 {
     return pImp->GetUserConfigPath();
@@ -1195,13 +1179,6 @@ void SvtPathOptions::SetBitmapPath( const String& rPath )
 void SvtPathOptions::SetConfigPath( const String& rPath )
 {
     pImp->SetConfigPath( rPath );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtPathOptions::SetDatabasePath( const String& rPath )
-{
-    pImp->SetDatabasePath( rPath );
 }
 
 // -----------------------------------------------------------------------
@@ -1304,13 +1281,6 @@ void SvtPathOptions::SetTemplatePath( const String& rPath )
 
 // -----------------------------------------------------------------------
 
-void SvtPathOptions::SetTrashPath( const String& rPath )
-{
-    pImp->SetTrashPath( rPath );
-}
-
-// -----------------------------------------------------------------------
-
 void SvtPathOptions::SetUserConfigPath( const String& rPath )
 {
     pImp->SetUserConfigPath( rPath );
@@ -1404,7 +1374,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_BASIC:        aPath = GetBasicPath();         break;
                 case PATH_BITMAP:       aPath = GetBitmapPath();        break;
                 case PATH_CONFIG:       aPath = GetConfigPath();        break;
-                case PATH_DATABASE:     aPath = GetDatabasePath();      break;
+                case PATH_DATABASE:     DBG_ERRORFILE( "invalid path" );break;
                 case PATH_DICTIONARY:   aPath = GetDictionaryPath();    break;
                 case PATH_FAVORITES:    aPath = GetFavoritesPath();     break;
                 case PATH_FILTER:       aPath = GetFilterPath();        break;
@@ -1419,7 +1389,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_STORAGE:      aPath = GetStoragePath();       break;
                 case PATH_TEMP:         aPath = GetTempPath();          break;
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
-                case PATH_TRASH:        aPath = GetTrashPath();         break;
+                case PATH_TRASH:        DBG_ERRORFILE( "invalid path" );break;
                 case PATH_WORK:         aPath = GetWorkPath();          break;
             }
             sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
