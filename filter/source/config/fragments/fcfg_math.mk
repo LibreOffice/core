@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 8
+# count = 9
 T4_MATH = \
     math_MathML_XML_Math \
     math_MathType_3x \
@@ -8,10 +8,11 @@ T4_MATH = \
     math_StarMath_40 \
     math_StarMath_50 \
     math_StarOffice_XML_Math \
-    pdf_Portable_Document_Format
+    pdf_Portable_Document_Format \
+    math8
 
 # -----------------------------------------------
-# count = 8
+# count = 9
 F4_MATH = \
     MathML_XML__Math_ \
     MathType_3_x \
@@ -20,7 +21,8 @@ F4_MATH = \
     StarMath_4_0 \
     StarMath_5_0 \
     StarOffice_XML__Math_ \
-    math_pdf_Export
+    math_pdf_Export \
+    math8
 
 # -----------------------------------------------
 # count = 0

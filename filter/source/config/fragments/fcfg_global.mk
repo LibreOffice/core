@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 9
+# count = 10
 T4_GLOBAL = \
     writer_StarWriter_30 \
     writer_StarWriter_40 \
@@ -9,10 +9,11 @@ T4_GLOBAL = \
     writer_Text \
     writer_StarOffice_XML_Writer \
     writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
-    pdf_Portable_Document_Format
+    pdf_Portable_Document_Format \
+    writerglobal8
 
 # -----------------------------------------------
-# count = 9
+# count = 11
 F4_GLOBAL = \
     StarWriter_3_0__StarWriter_GlobalDocument_ \
     StarWriter_4_0__StarWriter_GlobalDocument_ \
@@ -22,7 +23,9 @@ F4_GLOBAL = \
     Text__encoded___StarWriter_GlobalDocument_ \
     writer_globaldocument_StarOffice_XML_Writer \
     writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
-    writer_globaldocument_pdf_Export
+    writer_globaldocument_pdf_Export \
+    writerglobal8 \
+    writerglobal8_writer
 
 # -----------------------------------------------
 # count = 0
