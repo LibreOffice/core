@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:48:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4136,10 +4136,10 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
     if( bWordLine )
     {
         Point aPos, aStartPt;
-        long nWidth = 0, nAdvance=0;
+        sal_Int32 nWidth = 0, nAdvance=0;
         for( int nStart = 0;;)
         {
-            long nGlyphIndex;
+            sal_Int32 nGlyphIndex;
             if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                 break;
 
@@ -4453,7 +4453,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     Rectangle aRectangle;
     for( int nStart = 0;;)
     {
-        long nGlyphIndex;
+        sal_Int32 nGlyphIndex;
         if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aOutPoint, nStart ) )
             break;
 
@@ -5407,7 +5407,7 @@ long OutputDevice::GetTextHeight() const
 // -----------------------------------------------------------------------
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
-                                  const long* pDXAry,
+                                  const sal_Int32* pDXAry,
                                   xub_StrLen nIndex, xub_StrLen nLen )
 {
     DBG_TRACE( "OutputDevice::DrawTextArray()" );
@@ -5432,7 +5432,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::GetTextArray( const String& rStr, long* pDXAry,
+long OutputDevice::GetTextArray( const String& rStr, sal_Int32* pDXAry,
                                  xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_TRACE( "OutputDevice::GetTextArray()" );
@@ -5479,9 +5479,9 @@ long OutputDevice::GetTextArray( const String& rStr, long* pDXAry,
 
 // -----------------------------------------------------------------------
 
-bool OutputDevice::GetCaretPositions( const XubString& rStr, long* pCaretXArray,
+bool OutputDevice::GetCaretPositions( const XubString& rStr, sal_Int32* pCaretXArray,
     xub_StrLen nIndex, xub_StrLen nLen,
-    long* pDXAry, long nLayoutWidth,
+    sal_Int32* pDXAry, long nLayoutWidth,
     BOOL bCellBreaking ) const
 {
     DBG_TRACE( "OutputDevice::GetCaretPositions()" );
@@ -5576,7 +5576,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
 
 SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     xub_StrLen nMinIndex, xub_StrLen nLen,
-    const Point& rLogicalPos, long nLogicalWidth, const long* pDXArray ) const
+    const Point& rLogicalPos, long nLogicalWidth, const sal_Int32* pDXArray ) const
 {
     SalLayout* pSalLayout = NULL;
 
@@ -5704,7 +5704,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     if( pDXArray && mbMap )
     {
         // convert from logical units to font units using a temporary array
-        long* pTempDXAry = (long*)alloca( nLength * sizeof(long) );
+        sal_Int32* pTempDXAry = (sal_Int32*)alloca( nLength * sizeof(sal_Int32) );
         // using base position for better rounding a.k.a. "dancing characters"
         int nPixelXOfs = ImplLogicWidthToDevicePixel( rLogicalPos.X() );
         for( int i = 0; i < nLength; ++i )
@@ -6089,7 +6089,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
                         long        nMnemonicY;
                         long        nMnemonicWidth;
 
-                        long *pCaretXArray = (long*) alloca( 2 * sizeof(long) * nLineLen );
+                        sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * nLineLen );
                         BOOL bRet = GetCaretPositions( aStr, pCaretXArray,
                                                 nIndex, nLineLen);
                         long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
@@ -6160,7 +6160,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         long        nMnemonicWidth;
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
-            long *pCaretXArray = (long*) alloca( 2 * sizeof(long) * aStr.Len() );
+            sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
             BOOL bRet = GetCaretPositions( aStr, pCaretXArray, 0, aStr.Len() );
             long lc_x1 = pCaretXArray[2*(nMnemonicPos)];
             long lc_x2 = pCaretXArray[2*(nMnemonicPos)+1];
@@ -6511,7 +6511,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
                 nMnemonicPos = nLen-1;
             }
 
-            long *pCaretXArray = (long*)alloca( 2 * sizeof(long) * nLen );
+            sal_Int32* pCaretXArray = (sal_Int32*)alloca( 2 * sizeof(sal_Int32) * nLen );
             BOOL bRet = GetCaretPositions( aStr, pCaretXArray, nIndex, nLen );
             long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
@@ -7170,7 +7170,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
 BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    BOOL bOptimize, const ULONG nTWidth, const long* pDXArray ) const
+    BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     rPolyPoly.Clear();
     PolyPolyVector aVector;
@@ -7187,7 +7187,7 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
 
 BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const long* pDXArray ) const
+    xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     BOOL bRet = FALSE;
     rVector.clear();
