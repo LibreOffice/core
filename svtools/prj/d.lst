@@ -39,6 +39,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\misc\svt?????.map %_DEST%\bin%_EXT%\svt?????.map
 ..\%__SRC%\lib\libsvt?????.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\libsvl?????.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libsv*.dylib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\misc\svtools.hid %_DEST%\bin%_EXT%\svtools.hid
 ..\%__SRC%\inc\svtools\proped.hxx %_DEST%\inc%_EXT%\svtools\proped.hxx
 
