@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-26 16:38:55 $
+ *  last change: $Author: ssa $ $Date: 2002-07-01 08:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2530,7 +2530,7 @@ ImplMultiTextLineInfo::~ImplMultiTextLineInfo()
 {
     for ( xub_StrLen i = 0; i < mnLines; i++ )
         delete mpLines[i];
-    delete mpLines;
+    delete [] mpLines;
 }
 
 void ImplMultiTextLineInfo::AddLine( ImplTextLineInfo* pLine )

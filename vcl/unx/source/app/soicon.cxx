@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-05 13:40:12 $
+ *  last change: $Author: ssa $ $Date: 2002-07-01 08:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,8 @@ static void ConvertXpm( SalDisplay* pDisplay, char *xpm[], Pixmap& aPixmap, Pixm
             pRun += nCharsPerPixel;
         }
     }
-    delete pColors;
-    delete pColorAlias;
+    delete [] pColors;
+    delete [] pColorAlias;
     XFreeGC( pDisplay->GetDisplay(), aMonoGC );
 
     if( ! bTransparent )
