@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-12 08:36:16 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 07:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,7 @@ BOOL SwScanner::NextWord()
             "SwScanner::NextWord() currently not implemented for reverse mode" )
 
     const XubString& rText = rNode.GetTxt();
-    if( bReverse || nBegin + nLen >= rText.Len() )
+    if( bReverse || nBegin + nLen >= nEndPos )
         return FALSE;
 
     // get next language in order to find next or previous word
