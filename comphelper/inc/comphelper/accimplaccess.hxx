@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,10 @@
 #endif
 
 // forward declaration
-namespace drafts { namespace com { namespace sun { namespace star { namespace accessibility {
+namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
     class XAccessibleContext;
-}}}}}
+}}}}
 
 //.........................................................................
 namespace comphelper
@@ -117,7 +117,7 @@ namespace comphelper
 
     protected:
         /// retrieves the parent previously set via <method>setAccessibleParent</method>
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                 implGetForeignControlledParent( ) const;
 
         /** retrieves the set of currently set states which are controlled by a foreign instance
@@ -128,7 +128,7 @@ namespace comphelper
 
         /// sets the accessible parent component
         virtual void    setAccessibleParent(
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _rxAccParent );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxAccParent );
 
         /// sets or resets a bit of the foreign controlled states
         virtual void    setStateBit( const sal_Int16 _nState, const sal_Bool _bSet );
@@ -152,7 +152,7 @@ namespace comphelper
             from <type>OAccessibleImplementationAccess</type>, or retrieving the implementation failed).
         */
         static OAccessibleImplementationAccess* getImplementation(
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >& _rxComponent
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent
         );
 
 
@@ -167,8 +167,8 @@ namespace comphelper
             <method>getImplementation</method>.
         */
         static sal_Bool setAccessibleParent(
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& _rxNewParent
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewParent
         );
 
         /** sets or resets a state bit in the set of foreign-controlled states of the component.
@@ -184,7 +184,7 @@ namespace comphelper
             <method>getImplementation</method>.
         */
         static sal_Bool setForeignControlledState(
-            const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxComponent,
             const sal_Int16 _nState,
             const sal_Bool  _bSet
         );
