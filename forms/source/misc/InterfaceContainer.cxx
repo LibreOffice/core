@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 15:28:51 $
+ *  last change: $Author: fs $ $Date: 2002-10-04 08:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,11 @@
 #endif
 
 #include <algorithm>
+#include <memory>
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 //.........................................................................
 namespace frm
@@ -141,6 +146,22 @@ using namespace ::com::sun::star::form;
         throw IllegalArgumentException();
     }
 
+//==================================================================
+//= ElementDescription
+//==================================================================
+//------------------------------------------------------------------
+ElementDescription::ElementDescription( )
+{
+}
+
+//------------------------------------------------------------------
+ElementDescription::~ElementDescription()
+{
+}
+
+//==================================================================
+//= OInterfaceContainer
+//==================================================================
 //------------------------------------------------------------------
 OInterfaceContainer::OInterfaceContainer(
                 const Reference<XMultiServiceFactory>& _rxFactory,
@@ -502,13 +523,13 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 Any aElement = xObj->queryInterface(m_aElementType);
                 if (aElement.hasValue())
                 {
-                    Reference< XInterface > xElement;
+                    Reference< XPropertySet > xElement;
                     aElement >>= xElement;
                     implInsert(
                         m_aItems.size(),    // position
                         xElement,           // element to insert
                         sal_False,          // no event attacher manager handling
-                        sal_True,           // approve the element
+                        NULL,               // not yet approved - let implInsert do it
                         sal_True            // fire the event
                     );
                 }
@@ -542,12 +563,34 @@ void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw(
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
-    OInterfaceArray::iterator j = find(m_aItems.begin(), m_aItems.end(), _rSource.Source);
-    if (j != m_aItems.end())
+    Reference< XInterface > xSource( _rSource.Source, UNO_QUERY );
+        // normalized source
+
+    OInterfaceArray::iterator j;
+    for ( j = m_aItems.begin(); j != m_aItems.end(); ++j )
+    {
+        DBG_ASSERT( j->get() == Reference< XInterface >( *j, UNO_QUERY ).get(),
+            "OInterfaceContainer::disposing: vector element not normalized!" );
+
+        if ( xSource.get() == j->get() )
+            // found the element
+            break;
+    }
+
+    if ( m_aItems.end() != j )
     {
         OInterfaceMap::iterator i = m_aMap.begin();
-        while (i != m_aMap.end() && i->second != _rSource.Source)
+        while ( i != m_aMap.end() )
+        {
+            DBG_ASSERT( i->second.get() == Reference< XInterface >( i->second, UNO_QUERY ).get(),
+                "OInterfaceContainer::disposing: map element not normalized!" );
+
+            if ( i->second.get() == _rSource.Source.get() )
+                // found it
+                break;
+
             ++i;
+        }
 
         m_aMap.erase(i);
         m_aItems.erase(j);
@@ -644,80 +687,96 @@ Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsEx
 }
 
 //------------------------------------------------------------------------------
-InterfaceRef OInterfaceContainer::approveNewElement( const Any& _rObject )
+void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _rxObject, ElementDescription* _pElement )
 {
-    Reference< XInterface > xObject;
-    _rObject >>= xObject;
-    return approveNewElement( xObject );
-}
-
-//------------------------------------------------------------------------------
-InterfaceRef OInterfaceContainer::approveNewElement( const InterfaceRef& _rxObject )
-{
+    // it has to be non-NULL
     if ( !_rxObject.is() )
         throw IllegalArgumentException(FRM_RES_STRING(RID_STR_NEED_NON_NULL_OBJECT), static_cast<XContainer*>(this), 1);
 
+    // it has to support our element type interface
     Any aCorrectType = _rxObject->queryInterface( m_aElementType );
     if ( !aCorrectType.hasValue() )
         lcl_throwIllegalArgumentException();
 
-    Reference< XPropertySet > xSet( _rxObject, UNO_QUERY );
-    if ( !xSet.is() || !hasProperty( PROPERTY_NAME, xSet ) )
+    // it has to have a "Name" property
+    if ( !hasProperty( PROPERTY_NAME, _rxObject ) )
         lcl_throwIllegalArgumentException();
 
+    // it has to be a child, and it must not have a parent already
     Reference< XChild > xChild( _rxObject, UNO_QUERY );
     if ( !xChild.is() || xChild->getParent().is() )
         lcl_throwIllegalArgumentException();
 
-    return _rxObject;
+    // passed all tests. cache the information we have so far
+    DBG_ASSERT( _pElement, "OInterfaceContainer::approveNewElement: invalid event descriptor!" );
+    if ( _pElement )
+    {
+        _pElement->xPropertySet = _rxObject;
+        _pElement->xChild = xChild;
+        _pElement->aElementTypeInterface = aCorrectType;
+        _pElement->xInterface = Reference< XInterface >( _rxObject, UNO_QUERY );    // normalized XInterface
+    }
 }
 
 //------------------------------------------------------------------------------
-void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const InterfaceRef& _rxElement,
-    sal_Bool _bEvents, sal_Bool _bApprove, sal_Bool _bFire ) throw( IllegalArgumentException )
+void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XPropertySet >& _rxElement,
+    sal_Bool _bEvents, ElementDescription* _pApprovalResult, sal_Bool _bFire ) throw( IllegalArgumentException )
 {
+    RTL_LOGFILE_CONTEXT( aLogger, "forms::OInterfaceContainer::implInsert" );
+
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
 
-    // will throw an exception if necessary
-    if ( _bApprove )
-        approveNewElement( _rxElement );
+    ::std::auto_ptr< ElementDescription > aAutoDeleteMetaData;
+    ElementDescription* pElementMetaData = _pApprovalResult;
+    if ( !pElementMetaData )
+    {   // not yet approved by the caller -> do ourself
+        pElementMetaData = createElementMetaData();
+        DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::implInsert: createElementMetaData returned nonsense!" );
 
-    // das richtige Interface besorgen
-    InterfaceRef xCorrectType;
-    Any aCorrectedType = _rxElement->queryInterface( m_aElementType );
-    aCorrectedType >>= xCorrectType;
-    Reference<XPropertySet>  xSet( _rxElement, UNO_QUERY );
+        // ensure that the meta data structure will be deleted later on
+        aAutoDeleteMetaData = ::std::auto_ptr< ElementDescription >( pElementMetaData );
 
-    // approveNewElement has ensured that both xCorrectType and xSet are not NULL
+        // will throw an exception if necessary
+        approveNewElement( _rxElement, pElementMetaData );
+    }
 
+
+    // approveNewElement (no matter if called here or outside) has ensure that all relevant interfaces
+    // exist
+
+    // set the name, and add as change listener for the name
     ::rtl::OUString sName;
-    xSet->getPropertyValue(PROPERTY_NAME) >>= sName;
-    xSet->addPropertyChangeListener(PROPERTY_NAME, this);
+    _rxElement->getPropertyValue(PROPERTY_NAME) >>= sName;
+    _rxElement->addPropertyChangeListener(PROPERTY_NAME, this);
 
+    // insert the object into our internal structures
     if (_nIndex > (sal_Int32)m_aItems.size()) // ermitteln des tatsaechlichen Indexs
     {
         _nIndex = m_aItems.size();
-        m_aItems.push_back(xCorrectType);
+        m_aItems.push_back( pElementMetaData->xInterface );
     }
     else
-        m_aItems.insert(m_aItems.begin() + _nIndex, xCorrectType);
+        m_aItems.insert( m_aItems.begin() + _nIndex, pElementMetaData->xInterface );
 
-    m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef  >(sName,xCorrectType));
+    m_aMap.insert( pair< const ::rtl::OUString, InterfaceRef >( sName, pElementMetaData->xInterface ) );
 
-    Reference<XChild>  xChild(_rxElement, UNO_QUERY);
-    if (xChild.is())
-        xChild->setParent(static_cast<XContainer*>(this));
+    // announce ourself as parent to the new element
+    {
+        RTL_LOGFILE_CONTEXT( aLogger, "forms::OInterfaceContainer::implInsert::settingParent" );
+        pElementMetaData->xChild->setParent(static_cast<XContainer*>(this));
+    }
 
+    // handle the events
     if (_bEvents)
     {
         m_xEventAttacher->insertEntry(_nIndex);
-        Reference< XInterface > xAsIFace(_rxElement, UNO_QUERY);    // important to normalize this ....
-        m_xEventAttacher->attach( _nIndex, xAsIFace, makeAny( xSet ) );
+        m_xEventAttacher->attach( _nIndex, pElementMetaData->xInterface, makeAny( _rxElement ) );
     }
 
     // notify derived classes
-    implInserted(xCorrectType);
+    implInserted( pElementMetaData );
 
+    // fire the notification about the change
     if ( _bFire )
     {
         aGuard.clear();
@@ -726,7 +785,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const InterfaceRef& _rxE
         ContainerEvent aEvt;
         aEvt.Source   = static_cast<XContainer*>(this);
         aEvt.Accessor <<= _nIndex;
-        aEvt.Element  = aCorrectedType;
+        aEvt.Element  = pElementMetaData->aElementTypeInterface;
         NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementInserted, aEvt);
     }
 }
@@ -756,9 +815,9 @@ void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
 //------------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::insertByIndex( sal_Int32 _nIndex, const Any& _rElement ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    Reference< XInterface > xElement;
+    Reference< XPropertySet > xElement;
     _rElement >>= xElement;
-    implInsert( _nIndex, xElement );
+    implInsert( _nIndex, xElement, sal_True /* event handling */ , NULL /* not yet approved */ , sal_True /* notification */ );
 }
 
 //------------------------------------------------------------------------------
@@ -769,58 +828,67 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& 
 
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
 
-    InterfaceRef  xNewElement = approveNewElement( Element );
+    // approve the new object
+    ::std::auto_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
+    DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::replaceByIndex: createElementMetaData returned nonsense!" );
+    {
+        Reference< XPropertySet > xElementProps;
+        Element >>= xElementProps;
+        approveNewElement( xElementProps, aElementMetaData.get() );
+    }
 
-    InterfaceRef  xOldElement(m_aItems[_nIndex]);
+    // get the old element
+    InterfaceRef  xOldElement( m_aItems[ _nIndex ] );
+    DBG_ASSERT( xOldElement.get() == Reference< XInterface >( xOldElement, UNO_QUERY ).get(),
+        "OInterfaceContainer::replaceByIndex: elements should be held normalized!" );
 
-
+    // locate the old element in the map
     OInterfaceMap::iterator j = m_aMap.begin();
-    while (j != m_aMap.end() && (*j).second != xOldElement) ++j;
+    while ( ( j != m_aMap.end() ) && ( j->second.get() != xOldElement.get() ) )
+        ++j;
 
-    // Eventverknüpfungen aufheben
+    // remove event knittings
     InterfaceRef  xIfc(xOldElement, UNO_QUERY);// wichtig
     m_xEventAttacher->detach(_nIndex, xIfc);
     m_xEventAttacher->removeEntry(_nIndex);
 
-    Reference<XPropertySet>  xSet(xOldElement, UNO_QUERY);
+    // don't listen for property changes anymore
+    Reference<XPropertySet>  xSet( xOldElement, UNO_QUERY );
     if (xSet.is())
         xSet->removePropertyChangeListener(PROPERTY_NAME, this);
 
+    // give the old element a new (void) parent
     Reference<XChild>  xChild(xOldElement, UNO_QUERY);
     if (xChild.is())
         xChild->setParent(InterfaceRef ());
 
-    // neue einfuegen
-    ::rtl::OUString sName;
-    xSet = xSet.query( xNewElement );
-    DBG_ASSERT( xSet.is(), "OInterfaceContainer::replaceByIndex: what did approveNewElement do?" );
-
-    xSet->getPropertyValue(PROPERTY_NAME) >>= sName;
-    xSet->addPropertyChangeListener(PROPERTY_NAME, this);
-
     // remove the old one
     m_aMap.erase(j);
 
-    // insert the new one
-    m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef  >(sName,xNewElement));
-    m_aItems[_nIndex] = xNewElement;
+    // examine the new element
+    ::rtl::OUString sName;
+    DBG_ASSERT( aElementMetaData.get()->xPropertySet.is(), "OInterfaceContainer::replaceByIndex: what did approveNewElement do?" );
 
-    xChild = Reference<XChild> (xNewElement, UNO_QUERY);
-    if (xChild.is())
-        xChild->setParent(static_cast<XContainer*>(this));
+    aElementMetaData.get()->xPropertySet->getPropertyValue(PROPERTY_NAME) >>= sName;
+    aElementMetaData.get()->xPropertySet->addPropertyChangeListener(PROPERTY_NAME, this);
+
+    // insert the new one
+    m_aMap.insert( pair<const ::rtl::OUString, InterfaceRef  >( sName, aElementMetaData.get()->xInterface ) );
+    m_aItems[ _nIndex ] = aElementMetaData.get()->xInterface;
+
+    aElementMetaData.get()->xChild->setParent(static_cast<XContainer*>(this));
 
     m_xEventAttacher->insertEntry(_nIndex);
-    xIfc = InterfaceRef ( xNewElement, UNO_QUERY );// wichtig
-    m_xEventAttacher->attach( _nIndex, xIfc, makeAny( xSet ) );
+    m_xEventAttacher->attach( _nIndex, aElementMetaData.get()->xInterface, makeAny( aElementMetaData.get()->xPropertySet ) );
 
-    implReplaced(xOldElement, xNewElement);
+    implReplaced( xOldElement, aElementMetaData.get() );
 
     // benachrichtigen
     aGuard.clear();
     ContainerEvent aEvt;
     aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
-    aEvt.Element  = xNewElement->queryInterface( m_aElementType );
+    aEvt.Element  = aElementMetaData.get()->aElementTypeInterface;
     aEvt.ReplacedElement = xOldElement->queryInterface( m_aElementType );
     NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementReplaced, aEvt);
 }
@@ -866,14 +934,29 @@ void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( Index
 }
 
 //------------------------------------------------------------------------
+ElementDescription* OInterfaceContainer::createElementMetaData( )
+{
+    return new ElementDescription;
+}
+
+//------------------------------------------------------------------------
 void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
 {
     Reference< XPropertySet > xElementProps;
+
+    ::std::auto_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
+    DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::insertByName: createElementMetaData returned nonsense!" );
+
+    if ( getCount() == 2969 )
+    {
+        sal_Int32 nDummy = 0;
+    }
+
     // ensure the correct name of the element
     try
     {
         _rElement >>= xElementProps;
-        approveNewElement( xElementProps );
+        approveNewElement( xElementProps, aElementMetaData.get() );
 
         xElementProps->setPropertyValue( PROPERTY_NAME, makeAny( _rName ) );
     }
@@ -889,8 +972,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
     {
         DBG_ERROR( "OInterfaceContainer::insertByName: caught an exception!" );
     }
-    implInsert( m_aItems.size(), xElementProps, sal_True, sal_False, sal_True );
-        // do not approve - we already did this
+    implInsert( m_aItems.size(), xElementProps, sal_True, aElementMetaData.get(), sal_True );
 }
 
 //------------------------------------------------------------------------
