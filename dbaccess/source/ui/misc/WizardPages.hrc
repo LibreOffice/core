@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:06:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,10 @@
 #define LB_ORG_COLUMN_NAMES     1
 #define LB_NEW_COLUMN_NAMES     2
 
-#define PB_COLUMN_RH            1
-#define PB_COLUMN_LH            2
-#define PB_COLUMNS_RH           3
-#define PB_COLUMNS_LH           4
+#define IB_COLUMN_RH                    1
+#define IB_COLUMN_LH                    2
+#define IB_COLUMNS_RH                   3
+#define IB_COLUMNS_LH                   4
 #define PB_AUTO                 5
 #define PB_OK                   6
 #define PB_CANCEL               7
@@ -76,10 +76,10 @@
 #define PB_NEXT                 9
 #define PB_PREV                 10
 #define PB_UNDO                 11
-#define PB_COLUMN_UP            12
-#define PB_COLUMN_DOWN          13
-#define PB_COLUMN_UP_RIGHT      14
-#define PB_COLUMN_DOWN_RIGHT    15
+#define IB_COLUMN_UP                    12
+#define IB_COLUMN_DOWN                  13
+#define IB_COLUMN_UP_RIGHT              14
+#define IB_COLUMN_DOWN_RIGHT    15
 #define PB_ALL                  16
 #define PB_NONE                 17
 
@@ -93,11 +93,10 @@
 #define FT_TABLENAME            4
 #define FT_KEYNAME              5
 
-#define GB_COLUMN_SELECT        1
-#define GB_COLUMN_NAME          2
-#define GB_AUTO_TYPE            3
-#define GB_TEMP                 4
-#define GB_OPTIONS              5
+#define FL_COLUMN_SELECT                1
+#define FL_COLUMN_NAME                  2
+#define FL_AUTO_TYPE                    3
+#define FL_OPTIONS                              5
 
 #define RB_DEFDATA              1
 #define RB_DEF                  2
@@ -109,7 +108,6 @@
 // controls
 #define CTRL_LEFT               1
 #define CTRL_RIGHT              2
-#define BMP_COPYTABLE           3
 
 #endif // DBAUI_WIZARD_PAGES_HRC
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WExtendPages.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:07:13 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,17 +106,16 @@ void OWizRTFExtend::fillColumnList(sal_uInt32 nRows)
 OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent)
 {
     EnableAuto(sal_False);
-    Size aSize( GetSizePixel() );
-    Size agpSize( m_gpColumns.GetSizePixel() );
-    Point aPos(m_gpColumns.GetPosPixel());
+    Size aflSize( m_flColumns.GetSizePixel() );
+    Point aPos(m_flColumns.GetPosPixel());
+
+    m_flColumns.SetPosSizePixel(aPos, aflSize );
 
     sal_Int32 nHeight = m_lbColumnNames.GetSizePixel().Height() +6;
-    m_gpColumns.SetPosSizePixel(aPos,Size(agpSize.Width(),nHeight));
-
     aPos = m_aTypeControl.GetPosPixel();
     Size aNewSize(m_aTypeControl.GetSizePixel().Width(),nHeight - aPos.Y()-6);
 
-    agpSize = m_aTypeControl.GetSizePixel();
+    aflSize = m_aTypeControl.GetSizePixel();
     m_aTypeControl.SetPosSizePixel(aPos,aNewSize);
 }
 // -----------------------------------------------------------------------------

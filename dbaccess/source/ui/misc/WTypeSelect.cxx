@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:07:19 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,9 @@ DBG_NAME(OWizTypeSelect);
 OWizTypeSelect::OWizTypeSelect( Window* pParent)
                :OWizardPage( pParent, ModuleRes( TAB_WIZ_TYPE_SELECT ))
                ,m_lbColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
-               ,m_gpColumns( this, ModuleRes( GB_COLUMN_NAME ) )
+               ,m_flColumns( this, ModuleRes( FL_COLUMN_NAME ) )
                ,m_aTypeControl( this, ModuleRes( CONTROL_CONTAINER ))
-               ,m_gpAutoType( this, ModuleRes( GB_AUTO_TYPE ) )
+               ,m_flAutoType( this, ModuleRes( FL_AUTO_TYPE ) )
                ,m_ftAuto( this, ModuleRes( FT_AUTO ) )
                ,m_etAuto( this, ModuleRes( ET_AUTO ) )
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
@@ -309,14 +309,14 @@ void OWizTypeSelect::EnableAuto(sal_Bool bEnable)
         m_ftAuto.Show();
         m_etAuto.Show();
         m_pbAuto.Show();
-        m_gpAutoType.Show();
+        m_flAutoType.Show();
     }
     else
     {
         m_ftAuto.Hide();
         m_etAuto.Hide();
         m_pbAuto.Hide();
-        m_gpAutoType.Hide();
+        m_flAutoType.Hide();
     }
 }
 //------------------------------------------------------------------------------

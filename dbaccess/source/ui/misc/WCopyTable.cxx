@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-01 11:23:46 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,11 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
                                    const Reference< XNumberFormatter >& _xFormatter,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     : WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
-    ,m_pbFinish( this , ModuleRes(PB_OK))
+    ,m_pbHelp( this , ModuleRes(PB_HELP))
     ,m_pbCancel( this , ModuleRes(PB_CANCEL))
-    ,m_pbNext( this , ModuleRes(PB_NEXT))
     ,m_pbPrev( this , ModuleRes(PB_PREV))
+    ,m_pbNext( this , ModuleRes(PB_NEXT))
+    ,m_pbFinish( this , ModuleRes(PB_OK))
     ,m_nPageCount(0)
     ,m_xConnection(_xConnection)
     ,m_xSourceObject(_xSourceObject)
@@ -192,10 +193,11 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
                                    const Reference< XNumberFormatter >& _xFormatter,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     : WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
-    ,m_pbFinish( this , ModuleRes(PB_OK))
+    ,m_pbHelp( this , ModuleRes(PB_HELP))
     ,m_pbCancel( this , ModuleRes(PB_CANCEL))
-    ,m_pbNext( this , ModuleRes(PB_NEXT))
     ,m_pbPrev( this , ModuleRes(PB_PREV))
+    ,m_pbNext( this , ModuleRes(PB_NEXT))
+    ,m_pbFinish( this , ModuleRes(PB_OK))
     ,m_nPageCount(0)
     ,m_xConnection(_xConnection)
     ,m_bCreatePrimaryColumn(sal_False)
@@ -214,10 +216,10 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::construct()
 {
+    AddButton( &m_pbHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X );
+    AddButton( &m_pbCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
     AddButton( &m_pbPrev );
     AddButton( &m_pbNext, WIZARDDIALOG_BUTTON_STDOFFSET_X );
-
-    AddButton( &m_pbCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
     AddButton( &m_pbFinish );
 
     m_pbPrev.SetClickHdl( LINK( this, OCopyTableWizard, ImplPrevHdl ) );

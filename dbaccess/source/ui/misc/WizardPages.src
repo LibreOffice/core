@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:17:28 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
 
-#define WINDOW_SIZE_X   260
+#define WINDOW_SIZE_X   276
 #define WINDOW_SIZE_Y   185
 
 #define WINDOW_BORDER_X  12
@@ -261,6 +261,94 @@ ModalDialog WIZ_RTFCOPYTABLE
     Closeable       = TRUE ;
     Hide            = TRUE;
 
+    HelpButton PB_HELP
+    {
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text                = "~Hilfe" ;
+        Text [ ENGLISH ]    = "Help" ;
+    };
+    CancelButton PB_CANCEL
+    {
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text                = "~Abbrechen" ;
+        Text [ ENGLISH ]    = "Cancel" ;
+        Text[ english_us ] = "~Cancel";
+        Text[ portuguese ] = "C~ancelar";
+        Text[ russian ] = "Îòìåíà";
+        Text[ greek ] = "~Áêýñùóç";
+        Text[ dutch ] = "~Annuleren";
+        Text[ french ] = "~Annuler";
+        Text[ spanish ] = "~Cancelar";
+        Text[ italian ] = "~Annulla";
+        Text[ danish ] = "Annuller";
+        Text[ swedish ] = "~Avbryt";
+        Text[ polish ] = "Anuluj";
+        Text[ portuguese_brazilian ] = "Cancel";
+        Text[ japanese ] = "·¬Ý¾Ù(~C)";
+        Text[ korean ] = "Ãë¼Ò(~C)";
+        Text[ chinese_simplified ] = "È¡Ïû(~C)";
+        Text[ chinese_traditional ] = "¨ú®ø(~C)";
+        Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+        Text[ turkish ] = "Ýptal";
+        Text[ catalan ] = "~Cancelar";
+        Text[ finnish ] = "~Peruuta";
+    };
+    PushButton PB_PREV
+    {
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text                = "<~Zurück" ;
+        Text [ ENGLISH ]    = "< ~Back" ;
+        Text[ english_us ] = "< ~Back";
+        Text[ portuguese ] = "< ~Anterior";
+        Text[ russian ] = "<~Íàçàä";
+        Text[ greek ] = "<Ðßóù";
+        Text[ dutch ] = "< V~orige";
+        Text[ french ] = "<~Précédent";
+        Text[ spanish ] = "< ~Regresar";
+        Text[ italian ] = "<~Indietro";
+        Text[ danish ] = "<Tilbage";
+        Text[ swedish ] = "<Till~baka";
+        Text[ polish ] = "< Wstecz";
+        Text[ portuguese_brazilian ] = "< ~Back";
+        Text[ japanese ] = "< –ß‚é(~B)";
+        Text[ korean ] = "<µÚ·Î(~B)";
+        Text[ chinese_simplified ] = "< ·µ»Ø(~B)";
+        Text[ chinese_traditional ] = "< ªð¦^(~B)";
+        Text[ arabic ] = "<ÇáÓÇÈÞ";
+        Text[ turkish ] = "<Geri";
+        Text[ catalan ] = "< ~Regresar";
+        Text[ finnish ] = "<~Zurück";
+    };
+    PushButton PB_NEXT
+    {
+        TabStop             = TRUE ;
+        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
+        Text                = "~Weiter>" ;
+        Text [ ENGLISH ]    = "~Next>" ;
+        Text[ english_us ] = "~Next>";
+        Text[ portuguese ] = "~Seguinte>";
+        Text[ russian ] = "~Äàëåå>";
+        Text[ greek ] = "Åðüìåíï>";
+        Text[ dutch ] = "~Volgende>";
+        Text[ french ] = "~Suivant>";
+        Text[ spanish ] = "~Siguiente>";
+        Text[ italian ] = "A~vanti>";
+        Text[ danish ] = "Næste>";
+        Text[ swedish ] = "~Nästa>";
+        Text[ polish ] = "Dalej>";
+        Text[ portuguese_brazilian ] = "~Next>";
+        Text[ japanese ] = "ŽŸ‚Ö(~N)>";
+        Text[ korean ] = "´ÙÀ½(~N)";
+        Text[ chinese_simplified ] = "¼ÌÐø (~N)>";
+        Text[ chinese_traditional ] = "Ä~Äò >";
+        Text[ arabic ] = "ÇáÊÇáí>";
+        Text[ turkish ] = "Devam>";
+        Text[ catalan ] = "~Siguiente>";
+        Text[ finnish ] = "~Weiter>";
+    };
     OKButton PB_OK
     {
         TabStop             = TRUE ;
@@ -290,89 +378,6 @@ ModalDialog WIZ_RTFCOPYTABLE
         Text[ finnish ] = "~Luo";
     };
 
-    CancelButton PB_CANCEL
-    {
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text                = "~Abbrechen" ;
-        Text [ ENGLISH ]    = "Cancel" ;
-        Text[ english_us ] = "~Cancel";
-        Text[ portuguese ] = "C~ancelar";
-        Text[ russian ] = "Îòìåíà";
-        Text[ greek ] = "~Áêýñùóç";
-        Text[ dutch ] = "~Annuleren";
-        Text[ french ] = "~Annuler";
-        Text[ spanish ] = "~Cancelar";
-        Text[ italian ] = "~Annulla";
-        Text[ danish ] = "Annuller";
-        Text[ swedish ] = "~Avbryt";
-        Text[ polish ] = "Anuluj";
-        Text[ portuguese_brazilian ] = "Cancel";
-        Text[ japanese ] = "·¬Ý¾Ù(~C)";
-        Text[ korean ] = "Ãë¼Ò(~C)";
-        Text[ chinese_simplified ] = "È¡Ïû(~C)";
-        Text[ chinese_traditional ] = "¨ú®ø(~C)";
-        Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
-        Text[ turkish ] = "Ýptal";
-        Text[ catalan ] = "~Cancelar";
-        Text[ finnish ] = "~Peruuta";
-    };
-
-    PushButton PB_NEXT
-    {
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text                = "~Weiter>" ;
-        Text [ ENGLISH ]    = "~Next>" ;
-        Text[ english_us ] = "~Next>";
-        Text[ portuguese ] = "~Seguinte>";
-        Text[ russian ] = "~Äàëåå>";
-        Text[ greek ] = "Åðüìåíï>";
-        Text[ dutch ] = "~Volgende>";
-        Text[ french ] = "~Suivant>";
-        Text[ spanish ] = "~Siguiente>";
-        Text[ italian ] = "A~vanti>";
-        Text[ danish ] = "Næste>";
-        Text[ swedish ] = "~Nästa>";
-        Text[ polish ] = "Dalej>";
-        Text[ portuguese_brazilian ] = "~Next>";
-        Text[ japanese ] = "ŽŸ‚Ö(~N)>";
-        Text[ korean ] = "´ÙÀ½(~N)";
-        Text[ chinese_simplified ] = "¼ÌÐø (~N)>";
-        Text[ chinese_traditional ] = "Ä~Äò >";
-        Text[ arabic ] = "ÇáÊÇáí>";
-        Text[ turkish ] = "Devam>";
-        Text[ catalan ] = "~Siguiente>";
-        Text[ finnish ] = "~Weiter>";
-    };
-
-    PushButton PB_PREV
-    {
-        TabStop             = TRUE ;
-        Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text                = "<~Zurück" ;
-        Text [ ENGLISH ]    = "< ~Back" ;
-        Text[ english_us ] = "< ~Back";
-        Text[ portuguese ] = "< ~Anterior";
-        Text[ russian ] = "<~Íàçàä";
-        Text[ greek ] = "<Ðßóù";
-        Text[ dutch ] = "< V~orige";
-        Text[ french ] = "<~Précédent";
-        Text[ spanish ] = "< ~Regresar";
-        Text[ italian ] = "<~Indietro";
-        Text[ danish ] = "<Tilbage";
-        Text[ swedish ] = "<Till~baka";
-        Text[ polish ] = "< Wstecz";
-        Text[ portuguese_brazilian ] = "< ~Back";
-        Text[ japanese ] = "< –ß‚é(~B)";
-        Text[ korean ] = "<µÚ·Î(~B)";
-        Text[ chinese_simplified ] = "< ·µ»Ø(~B)";
-        Text[ chinese_traditional ] = "< ªð¦^(~B)";
-        Text[ arabic ] = "<ÇáÓÇÈÞ";
-        Text[ turkish ] = "<Geri";
-        Text[ catalan ] = "< ~Regresar";
-        Text[ finnish ] = "<~Zurück";
-    };
     Text[ greek ] = "ÁíôéãñáöÞ ðßíáêá RTF";
     Text[ korean ] = "RTF Å×ÀÌºí º¹»ç";
     Text[ chinese_traditional ] = "½Æ»sRTFªí®æ";
@@ -393,10 +398,10 @@ TabPage TAB_WIZ_COLUMN_SELECT
     HelpId  = HID_TAB_WIZ_COLUMN_SELECT;
     Hide    = TRUE;
 
-    GroupBox GB_COLUMN_SELECT
+    FixedLine FL_COLUMN_SELECT
     {
         Pos                 = MAP_APPFONT ( 6 , 3  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , WINDOW_SIZE_Y - 9) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
         Text                = "Vorhandene Spalten" ;
         Text [ ENGLISH ]    = "Column " ;
         Text [ english_us ] = "Existing columns" ;
@@ -425,7 +430,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
     {
         Border              = TRUE ;
         Pos                 = MAP_APPFONT ( WINDOW_BORDER_X , WINDOW_BORDER_Y ) ;
-        Size                = MAP_APPFONT ( 87 , WINDOW_SIZE_Y - 26 ) ;
+        Size                = MAP_APPFONT ( 95 , WINDOW_SIZE_Y - 23 ) ;
         TabStop             = TRUE ;
         HScroll             = TRUE;
         VScroll             = TRUE;
@@ -433,129 +438,89 @@ TabPage TAB_WIZ_COLUMN_SELECT
         SimpleMode          = TRUE;
         Sort                = FALSE;
     };
-
-    PushButton PB_COLUMN_RH
+    ImageButton IB_COLUMN_RH
     {
-        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 97 + 11 , WINDOW_BORDER_Y + 25 ) ;
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 25 ) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE ;
-        Text                = "->" ;
-        Text [ ENGLISH ]    = "->" ;
-        Text [ english_us ] = "->" ;
-        Text[ portuguese ] = "->";
-        Text[ russian ] = "->";
-        Text[ greek ] = "->";
-        Text[ dutch ] = "->";
-        Text[ french ] = "->";
-        Text[ spanish ] = "->";
-        Text[ italian ] = "->";
-        Text[ danish ] = "->";
-        Text[ swedish ] = "->";
-        Text[ polish ] = "->";
-        Text[ portuguese_brazilian ] = "->";
-        Text[ japanese ] = "->";
-        Text[ korean ] = "->";
-        Text[ chinese_simplified ] = "->";
-        Text[ chinese_traditional ] = "->";
-        Text[ arabic ] = "->";
-        Text[ turkish ] = "->";
-        Text[ catalan ] = "->";
-        Text[ finnish ] = "->";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-
-    PushButton PB_COLUMNS_RH
+    ImageButton IB_COLUMNS_RH
     {
-        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 97 + 11 , WINDOW_BORDER_Y + 45 ) ;
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 45 ) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE;
         DefButton           = TRUE;
-        Text                = "=>>" ;
-        Text [ ENGLISH ]    = "=>>" ;
-        Text [ english_us ] = "=>>" ;
-        Text[ portuguese ] = "=>>";
-        Text[ russian ] = "=>>";
-        Text[ greek ] = "=>>";
-        Text[ dutch ] = "=>>";
-        Text[ french ] = "=>>";
-        Text[ spanish ] = "=>>";
-        Text[ italian ] = "=>>";
-        Text[ danish ] = "=>>";
-        Text[ swedish ] = "=>>";
-        Text[ polish ] = "=>>";
-        Text[ portuguese_brazilian ] = "=>>";
-        Text[ japanese ] = "=>>";
-        Text[ korean ] = "=>>";
-        Text[ chinese_simplified ] = "=>>";
-        Text[ chinese_traditional ] = "=>>";
-        Text[ arabic ] = "=>>";
-        Text[ turkish ] = "=>>";
-        Text[ catalan ] = "=>>";
-        Text[ finnish ] = "=>>";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_right.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-
-    PushButton PB_COLUMN_LH
+    ImageButton IB_COLUMN_LH
     {
-        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 97 + 11 , WINDOW_BORDER_Y + 65) ;
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 65) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE ;
-        Text                = "<-" ;
-        Text [ ENGLISH ]    = "<-" ;
-        Text [ english_us ] = "<-" ;
-        Text[ portuguese ] = "<-";
-        Text[ russian ] = "<-";
-        Text[ greek ] = "<-";
-        Text[ dutch ] = "<-";
-        Text[ french ] = "<-";
-        Text[ spanish ] = "<-";
-        Text[ italian ] = "<-";
-        Text[ danish ] = "<-";
-        Text[ swedish ] = "<-";
-        Text[ polish ] = "<-";
-        Text[ portuguese_brazilian ] = "<-";
-        Text[ japanese ] = "<-";
-        Text[ korean ] = "<-";
-        Text[ chinese_simplified ] = "<-";
-        Text[ chinese_traditional ] = "<-";
-        Text[ arabic ] = "<-";
-        Text[ turkish ] = "<-";
-        Text[ catalan ] = "<-";
-        Text[ finnish ] = "<-";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_left.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
-
-    PushButton PB_COLUMNS_LH
+    ImageButton IB_COLUMNS_LH
     {
-        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 97 + 11 , WINDOW_BORDER_Y + 85) ;
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 116 , WINDOW_BORDER_Y + 85) ;
         Size                = MAP_APPFONT ( 20 , 14 ) ;
         TabStop             = TRUE ;
-        Text                = "<<=" ;
-        Text [ ENGLISH ]    = "<<=" ;
-        Text [ english_us ] = "<<=" ;
-        Text[ portuguese ] = "<<=";
-        Text[ russian ] = "<<=";
-        Text[ greek ] = "<<=";
-        Text[ dutch ] = "<<=";
-        Text[ french ] = "<<=";
-        Text[ spanish ] = "<<=";
-        Text[ italian ] = "<<=";
-        Text[ danish ] = "<<=";
-        Text[ swedish ] = "<<=";
-        Text[ polish ] = "<<=";
-        Text[ portuguese_brazilian ] = "<<=";
-        Text[ japanese ] = "<<=";
-        Text[ korean ] = "<<=";
-        Text[ chinese_simplified ] = "<<=";
-        Text[ chinese_traditional ] = "<<=";
-        Text[ arabic ] = "<<=";
-        Text[ turkish ] = "<<=";
-        Text[ catalan ] = "<<=";
-        Text[ finnish ] = "<<=";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_left.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xC000 ;
+                Green = 0xC000 ;
+                Blue = 0xC000 ;
+            };
+        };
     };
 
     MultiListBox LB_NEW_COLUMN_NAMES
     {
         Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 99 + 50, WINDOW_BORDER_Y) ;
-        Size                = MAP_APPFONT ( 87 , WINDOW_SIZE_Y - 26 ) ;
+        Pos                 = MAP_APPFONT ( WINDOW_BORDER_X + 157, WINDOW_BORDER_Y) ;
+        Size                = MAP_APPFONT ( 95 , WINDOW_SIZE_Y - 23 ) ;
         TabStop             = TRUE ;
         HScroll             = TRUE;
         VScroll             = TRUE;
@@ -588,10 +553,10 @@ TabPage TAB_WIZ_TYPE_SELECT
         SimpleMode          = TRUE;
     };
 
-    GroupBox GB_COLUMN_NAME
+    FixedLine FL_COLUMN_NAME
     {
         Pos                 = MAP_APPFONT ( 99 , 3  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X -  105, WINDOW_SIZE_Y - WINDOW_BORDER_Y - 50 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X -  105, 8 ) ;
         Text                = "Spalteninformation" ;
         Text [ ENGLISH ]    = "Columninformation" ;
         Text [ english_us ] = "Column information" ;
@@ -624,10 +589,10 @@ TabPage TAB_WIZ_TYPE_SELECT
         DialogControl       = TRUE;
     };
 
-    GroupBox GB_AUTO_TYPE
+    FixedLine FL_AUTO_TYPE
     {
         Pos                 = MAP_APPFONT ( 99 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 41  ) ;
-        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 105, WINDOW_BORDER_Y + 35 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 105, 8 ) ;
         Text                = "Automat. Typerkennung" ;
         Text [ ENGLISH ]    = "Automatic typeidentification" ;
         Text [ english_us ] = "Automatic type recognition" ;
@@ -654,43 +619,23 @@ TabPage TAB_WIZ_TYPE_SELECT
 
     FixedText FT_AUTO
     {
-        Pos                 = MAP_APPFONT ( 105 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 20 ) ;
-        Size                = MAP_APPFONT ( 40 , 10 ) ;
-        Text                = "(max.) ~Zeilen:" ;
-        Text [ English ]    = "Tablename:" ;
-        Text [ english_us ] = "Lines (ma~x):" ;
-        Text[ portuguese ] = "Linhas (max.):";
-        Text[ russian ] = "(ìàêñ.) ñòðîê:";
-        Text[ greek ] = "ÃñáììÝò (ìåã.):";
-        Text[ dutch ] = "(max.) ~regels:";
-        Text[ french ] = "~Lignes (max.) :";
-        Text[ spanish ] = "~Líneas (máx.):";
-        Text[ italian ] = "~Righe (max):";
-        Text[ danish ] = "(Maks.) rækker:";
-        Text[ swedish ] = "(ma~x) rader:";
-        Text[ polish ] = "Wiersze (maks.):";
-        Text[ portuguese_brazilian ] = "Tablename:";
-        Text[ japanese ] = "Å‘ås”(~X):";
-        Text[ korean ] = "(ÃÖ´ë)~ÁÙ:";
-        Text[ chinese_simplified ] = "(×î¶à)ÐÐ(~X)£º";
-        Text[ chinese_traditional ] = "(³Ì¦h)¦C(~X)¡G";
-        Text[ arabic ] = "(ÇáÍÏ ÇáÃÞÕì) ááÕÝæÝ:";
-        Text[ turkish ] = "Satýrlar (azami):";
-        Text[ catalan ] = "~Líneas (máx.):";
-        Text[ finnish ] = "(max.) ~Zeilen:";
+        Pos                 = MAP_APPFONT ( 105 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 28 ) ;
+        Size                = MAP_APPFONT ( 40 , 8 ) ;
+        Text                = "(max.) ~Zeilen" ;
+        Text [ English ]    = "Lines (ma~x)" ;
     };
 
     NumericField ET_AUTO
     {
         Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 151 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 20) ;
+        Pos                 = MAP_APPFONT ( 151 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 29) ;
         Size                = MAP_APPFONT ( 40 , 12 ) ;
         TabStop             = TRUE ;
     };
 
     PushButton PB_AUTO
     {
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 62 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 21) ;
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 62 , WINDOW_SIZE_Y - WINDOW_BORDER_Y - 30 ) ;
         Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
         TabStop             = TRUE ;
         Text                = "~Auto" ;
@@ -748,61 +693,21 @@ TabPage TAB_WIZ_NAME_MATCHING
         Size                = MAP_APPFONT ( 75 , 20) ;
         Text                = "Quelltabelle: \n" ;
         Text [ ENGLISH ]    = "Source table: \n" ;
-        Text [ english_us ] = "Source table: \n" ;
-        Text[ portuguese ] = "Tabela fonte: \n";
-        Text[ russian ] = "Èñõîäíàÿ òàáëèöà: \n";
-        Text[ greek ] = "Ðßíáêáò ðñïÝëåõóçò: \n";
-        Text[ dutch ] = "Brontabel: \n";
-        Text[ french ] = "Table source : \n";
-        Text[ spanish ] = "Tabla fuente: \n";
-        Text[ italian ] = "Tabella sorgente: \n";
-        Text[ danish ] = "Kildetabel: \n";
-        Text[ swedish ] = "Källtabell: \n";
-        Text[ polish ] = "Tabela Ÿród³owa: \n";
-        Text[ portuguese_brazilian ] = "Source table: \n";
-        Text[ japanese ] = "¿°½Ã°ÌÞÙ: \n";
-        Text[ korean ] = "¼Ò½º Å×ÀÌºí: \n";
-        Text[ chinese_simplified ] = "Ô´±í¸ñ£º\n";
-        Text[ chinese_traditional ] = "·½ªí®æ¡G\n";
-        Text[ arabic ] = "ÌÏæá ÇáãÕÏÑ: \n";
-        Text[ turkish ] = "Kaynak tablo: \n";
-        Text[ catalan ] = "Tabla fuente: \n";
-        Text[ finnish ] = "Quelltabelle: \n";
     };
 
     FixedText FT_TABLE_RIGHT
     {
-        Pos                 = MAP_APPFONT ( 137, 6  ) ;
+        Pos                 = MAP_APPFONT ( 144, 6  ) ;
         Size                = MAP_APPFONT ( 75 , 20) ;
         Text                = "Zieltabelle: \n" ;
         Text [ ENGLISH ]    = "Destination table: \n" ;
-        Text [ english_us ] = "Destination table: \n" ;
-        Text[ portuguese ] = "Tabela de destino: \n";
-        Text[ russian ] = "Öåëåâàÿ òàáëèöà: \n";
-        Text[ greek ] = "Ðßíáêáò ðñïïñéóìïý: \n";
-        Text[ dutch ] = "Doeltabel: \n";
-        Text[ french ] = "Table cible : \n";
-        Text[ spanish ] = "Tabla destino: \n";
-        Text[ italian ] = "Tabella destinazione: \n";
-        Text[ danish ] = "Måltabel: \n";
-        Text[ swedish ] = "Måltabell: \n";
-        Text[ polish ] = "Tabela docelowa: \n";
-        Text[ portuguese_brazilian ] = "Destination table: \n";
-        Text[ japanese ] = "À°¹Þ¯ÄÃ°ÌÞÙ: \n";
-        Text[ korean ] = "¸ñÇ¥ Å×ÀÌºí: \n";
-        Text[ chinese_simplified ] = "Ä¿±ê±í¸ñ£º\n";
-        Text[ chinese_traditional ] = "¥Ø¼Ðªí®æ¡G\n";
-        Text[ arabic ] = "ÌÏæá ÇáæÌåÉ: \n";
-        Text[ turkish ] = "Hedef tablo: \n";
-        Text[ catalan ] = "Tabla destino: \n";
-        Text[ finnish ] = "Zieltabelle: \n";
     };
 
     Control CTRL_LEFT
     {
         Border              = TRUE;
         Pos                 = MAP_APPFONT ( 52, 28) ;
-        Size                = MAP_APPFONT ( 74 , WINDOW_SIZE_Y - 34 ) ;
+        Size                = MAP_APPFONT ( 82 , WINDOW_SIZE_Y - 34 ) ;
         TabStop             = TRUE;
         HelpId              = HID_TAB_NAMEMATCHING_COLS_AVAIL;
         /*DialogControl       = TRUE;*/
@@ -811,134 +716,95 @@ TabPage TAB_WIZ_NAME_MATCHING
     Control CTRL_RIGHT
     {
         Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 136, 28) ;
-        Size                = MAP_APPFONT ( 74 , WINDOW_SIZE_Y - 34 ) ;
+        Pos                 = MAP_APPFONT ( 144, 28) ;
+        Size                = MAP_APPFONT ( 82 , WINDOW_SIZE_Y - 34 ) ;
         TabStop             = TRUE;
         HelpId              = HID_TAB_NAMEMATCHING_COLS_ASSIGN;
         /*DialogControl       = TRUE;*/
     };
 
-    PushButton PB_COLUMN_UP
+    ImageButton IB_COLUMN_UP
     {
-        Pos                 = MAP_APPFONT ( 6 ,  45 ) ;
-        Size                = MAP_APPFONT ( 40 , 14 ) ;
+        Pos                 = MAP_APPFONT ( 19 ,  45 ) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
         TabStop             = TRUE;
         DefButton           = TRUE;
-        Text                = "a~uf" ;
-        Text [ ENGLISH ]    = "up" ;
-        Text [ english_us ] = "~Up" ;
-        Text[ portuguese ] = "para ~cima";
-        Text[ russian ] = "ââåðõ";
-        Text[ greek ] = "ðÜíù";
-        Text[ dutch ] = "~omhoog";
-        Text[ french ] = "Vers le ~haut";
-        Text[ spanish ] = "~arriba";
-        Text[ italian ] = "S~u";
-        Text[ danish ] = "op";
-        Text[ swedish ] = "u~pp";
-        Text[ polish ] = "w górê";
-        Text[ portuguese_brazilian ] = "up";
-        Text[ japanese ] = "ã‚Ö(~U)";
-        Text[ korean ] = "À§·Î(~U)";
-        Text[ chinese_simplified ] = "ÏòÉÏ(~U)";
-        Text[ chinese_traditional ] = "¦V¤W(~U)";
-        Text[ arabic ] = "áÃÚáì";
-        Text[ turkish ] = "Yukarý";
-        Text[ catalan ] = "~arriba";
-        Text[ finnish ] = "a~uf";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortup.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
     };
-
-    PushButton PB_COLUMN_DOWN
+    ImageButton IB_COLUMN_DOWN
     {
-        Pos                 = MAP_APPFONT ( 6 ,  65 ) ;
-        Size                = MAP_APPFONT ( 40 , 14 ) ;
-        TabStop             = TRUE ;
-        Text                = "~ab" ;
-        Text [ ENGLISH ]    = "down" ;
-        Text [ english_us ] = "~Down" ;
-        Text[ portuguese ] = "para ~baixo";
-        Text[ russian ] = "âíèç";
-        Text[ greek ] = "êÜôù";
-        Text[ dutch ] = "o~mlaag";
-        Text[ french ] = "Vers le ~bas";
-        Text[ spanish ] = "a~bajo";
-        Text[ italian ] = "Giù";
-        Text[ danish ] = "ned";
-        Text[ swedish ] = "n~er";
-        Text[ polish ] = "w dó³";
-        Text[ portuguese_brazilian ] = "down";
-        Text[ japanese ] = "‰º‚Ö(~D)";
-        Text[ korean ] = "¾Æ·¡·Î(~D)";
-        Text[ chinese_simplified ] = "ÏòÏÂ(~D)";
-        Text[ chinese_traditional ] = "¦V¤U(~D)";
-        Text[ arabic ] = "áÃÓÝá";
-        Text[ turkish ] = "Aþaðý";
-        Text[ catalan ] = "a~bajo";
-        Text[ finnish ] = "~kohteessa";
+        Pos                 = MAP_APPFONT ( 19 ,  63 ) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop             = TRUE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortdown.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
     };
-
-    PushButton PB_COLUMN_UP_RIGHT
+    ImageButton IB_COLUMN_UP_RIGHT
     {
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 46, 45 ) ;
-        Size                = MAP_APPFONT ( 40 , 14 ) ;
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 45 ) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
         TabStop             = TRUE;
         DefButton           = TRUE;
-        Text                = "au~f" ;
-        Text [ ENGLISH ]    = "up" ;
-        Text [ english_us ] = "U~p" ;
-        Text[ portuguese ] = "para ~cima";
-        Text[ russian ] = "ââåðõ";
-        Text[ greek ] = "ðÜíù";
-        Text[ dutch ] = "om~hoog";
-        Text[ french ] = "Vers le ~haut";
-        Text[ spanish ] = "~arriba";
-        Text[ italian ] = "Su";
-        Text[ danish ] = "op";
-        Text[ swedish ] = "~upp";
-        Text[ polish ] = "w górê";
-        Text[ portuguese_brazilian ] = "up";
-        Text[ japanese ] = "ã‚Ö(~P)";
-        Text[ korean ] = "À§·Î(~P)";
-        Text[ chinese_simplified ] = "ÏòÉÏ(~P)";
-        Text[ chinese_traditional ] = "¦V¤W(~P)";
-        Text[ arabic ] = "áÃÚáì";
-        Text[ turkish ] = "Yukarý";
-        Text[ catalan ] = "~arriba";
-        Text[ finnish ] = "au~f";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortup.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
     };
-
-    PushButton PB_COLUMN_DOWN_RIGHT
+    ImageButton IB_COLUMN_DOWN_RIGHT
     {
-        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 46, 65) ;
-        Size                = MAP_APPFONT ( 40 , 14 ) ;
+        Pos                 = MAP_APPFONT ( WINDOW_SIZE_X - 33, 63) ;
+        Size                = MAP_APPFONT ( 14 , 14 ) ;
         TabStop             = TRUE ;
-        Text                = "a~b" ;
-        Text [ ENGLISH ]    = "down" ;
-        Text [ english_us ] = "D~own" ;
-        Text[ portuguese ] = "para ~baixo";
-        Text[ russian ] = "âíèç";
-        Text[ greek ] = "êÜôù";
-        Text[ dutch ] = "om~laag";
-        Text[ french ] = "Vers le ~bas";
-        Text[ spanish ] = "a~bajo";
-        Text[ italian ] = "Giù";
-        Text[ danish ] = "ned";
-        Text[ swedish ] = "ne~r";
-        Text[ polish ] = "w dó³";
-        Text[ portuguese_brazilian ] = "down";
-        Text[ japanese ] = "‰º‚Ö(~O)";
-        Text[ korean ] = "¾Æ·¡·Î(~O)";
-        Text[ chinese_simplified ] = "ÏòÏÂ(~O)";
-        Text[ chinese_traditional ] = "¦V¤U(~O)";
-        Text[ arabic ] = "áÃÓÝá";
-        Text[ turkish ] = "Aþaðý";
-        Text[ catalan ] = "a~bajo";
-        Text[ finnish ] = "~kohteessa";
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "sortdown.bmp" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
     };
 
     PushButton PB_ALL
     {
-        Pos                 = MAP_APPFONT ( 6, 85) ;
+        Pos                 = MAP_APPFONT ( 6, 83) ;
         Size                = MAP_APPFONT ( 40 , 14 ) ;
         TabStop             = TRUE ;
         Text                = "a~lle" ;
@@ -967,7 +833,7 @@ TabPage TAB_WIZ_NAME_MATCHING
 
     PushButton PB_NONE
     {
-        Pos                 = MAP_APPFONT ( 6, 105) ;
+        Pos                 = MAP_APPFONT ( 6, 103) ;
         Size                = MAP_APPFONT ( 40 , 14 ) ;
         TabStop             = TRUE ;
         Text                = "~keine" ;
@@ -997,67 +863,32 @@ TabPage TAB_WIZ_NAME_MATCHING
 TabPage TAB_WIZ_COPYTABLE
 {
     SVLook  = TRUE ;
-    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X, WINDOW_SIZE_Y ) ;
 
     HelpId  = HID_TAB_WIZ_COPYTABLE;
     Hide    = TRUE;
 
-    FixedBitmap BMP_COPYTABLE
-    {
-        Pos                 = MAP_APPFONT ( 6 , 3 ) ;
-        Size                = MAP_APPFONT ( 108 , WINDOW_SIZE_Y - 9 ) ;
-        Border              = TRUE;
-        Scale               = TRUE;
-        Fixed               = Bitmap { file = "cpytable.bmp"; };
-    };
-
-    GroupBox GB_TEMP
-    {
-        Pos                 = MAP_APPFONT ( 126 , 3 ) ;
-        Size                = MAP_APPFONT ( 128 , 24 ) ;
-    };
-
     FixedText FT_TABLENAME
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X , 10) ;
-        Size                = MAP_APPFONT ( 45 , 10 ) ;
-        Text                = "~Tabellenname:" ;
-        Text [ English ]    = "Tablename:" ;
-        Text [ english_us ] = "Ta~ble name:" ;
-        Text[ portuguese ] = "Nome da ta~bela:";
-        Text[ russian ] = "Èìÿ òàáëèöû:";
-        Text[ greek ] = "¼íïìá ðßíáêá:";
-        Text[ dutch ] = "~Tabelnaam:";
-        Text[ french ] = "Nom de la ~table :";
-        Text[ spanish ] = "Nombre de la ta~bla:";
-        Text[ italian ] = "Nome ~tabella:";
-        Text[ danish ] = "Tabelnavn:";
-        Text[ swedish ] = "~Tabellnamn:";
-        Text[ polish ] = "Nazwa tabeli:";
-        Text[ portuguese_brazilian ] = "Tabellenname:";
-        Text[ japanese ] = "Ã°ÌÞÙ–¼(~B):";
-        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~B):";
-        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~B)£º";
-        Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~B)¡G";
-        Text[ arabic ] = "ÇÓã ÇáÌÏæá:";
-        Text[ turkish ] = "Tablo adý:";
-        Text[ catalan ] = "Nombre de la ta~bla:";
-        Text[ finnish ] = "~Tabellenname:";
+        Pos                 = MAP_APPFONT ( 12 , 11) ;
+        Size                = MAP_APPFONT ( 60 , 8 ) ;
+        Text                = "~Tabellenname" ;
+        Text [ English ]    = "Tablename" ;
     };
 
     Edit ET_TABLENAME
     {
         HelpId              = HID_TAB_WIZ_TABLENAME_EDIT;
         Border              = TRUE ;
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X + 51 , 9) ;
-        Size                = MAP_APPFONT ( 65 , 12 ) ;
+        Pos                 = MAP_APPFONT ( 80 , 9) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 92 , 12 ) ;
         TabStop             = TRUE ;
     };
 
-    GroupBox GB_OPTIONS
+    FixedLine FL_OPTIONS
     {
-        Pos                 = MAP_APPFONT ( 126 , 33 ) ;
-        Size                = MAP_APPFONT ( 128 , WINDOW_SIZE_Y - 39 ) ;
+        Pos                 = MAP_APPFONT ( 6 , 24 ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
         Text                = "Optionen" ;
         Text [ ENGLISH ]    = "Options" ;
         Text [ english_us ] = "Options" ;
@@ -1083,7 +914,7 @@ TabPage TAB_WIZ_COPYTABLE
     };
     RadioButton RB_DEFDATA
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X , 47 ) ;
+        Pos                 = MAP_APPFONT ( 12 , 35 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text                = "Definition und D~aten" ;
         Text [ ENGLISH ]    = "Definition and d~ata" ;
@@ -1110,7 +941,7 @@ TabPage TAB_WIZ_COPYTABLE
     };
     RadioButton RB_DEF
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X , 60 ) ;
+        Pos                 = MAP_APPFONT ( 12, 49 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text                = "~Definition" ;
         Text [ ENGLISH ]    = "~Definition" ;
@@ -1138,7 +969,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     RadioButton RB_VIEW
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X , 73 ) ;
+        Pos                 = MAP_APPFONT ( 12, 63 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text                = "Als Tabellen~sicht" ;
         Text [ ENGLISH ]    = "A~s View" ;
@@ -1166,7 +997,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     RadioButton RB_APPENDDATA
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X , 86 ) ;
+        Pos                 = MAP_APPFONT ( 12, 77 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
         Text                = "Daten a~nhängen" ;
         Text [ ENGLISH ]    = "Appe~nd data" ;
@@ -1194,7 +1025,7 @@ TabPage TAB_WIZ_COPYTABLE
 
     CheckBox CB_PRIMARY_COLUMN
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X , 102 ) ;
+        Pos                 = MAP_APPFONT ( 12, 93 ) ;
         Size                = MAP_APPFONT ( 90 , 10 ) ;
         Text                = "~Primärschlüssel erzeugen" ;
         Text[ENGLISH]       = "~Create primary key" ;
@@ -1221,35 +1052,15 @@ TabPage TAB_WIZ_COPYTABLE
     };
     FixedText FT_KEYNAME
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X+9 , 114 ) ;
-        Size                = MAP_APPFONT ( 39 , 10 ) ;
-        Text                = "Name:";
-        Text[ENGLISH]       = "Name:";
-        Text[ english_us ] = "Name:";
-        Text[ portuguese ] = "Nome:";
-        Text[ russian ] = "Èìÿ:";
-        Text[ greek ] = "¼íïìá:";
-        Text[ dutch ] = "Naam:";
-        Text[ french ] = "Nom :";
-        Text[ spanish ] = "Nombre:";
-        Text[ italian ] = "Nome:";
-        Text[ danish ] = "Navn:";
-        Text[ swedish ] = "Namn:";
-        Text[ polish ] = "Nazwa:";
-        Text[ portuguese_brazilian ] = "Name:";
-        Text[ japanese ] = "–¼‘O:";
-        Text[ korean ] = "ÀÌ¸§:";
-        Text[ chinese_simplified ] = "Ãû³Æ£º";
-        Text[ chinese_traditional ] = "¦WºÙ¡G";
-        Text[ arabic ] = "ÇáÇÓã:";
-        Text[ turkish ] = "Ad:";
-        Text[ catalan ] = "Nombre:";
-        Text[ finnish ] = "Nimi:";
+        Pos                 = MAP_APPFONT ( 21 , 108 ) ;
+        Size                = MAP_APPFONT ( 39 , 8 ) ;
+        Text                = "Name";
+        Text[ENGLISH]       = "Name";
     };
 
     Edit ET_KEYNAME
     {
-        Pos                 = MAP_APPFONT ( 120+WINDOW_BORDER_X + 51 , 113) ;
+        Pos                 = MAP_APPFONT ( 80, 106 ) ;
         Size                = MAP_APPFONT ( 65 , 12 ) ;
         TabStop             = TRUE ;
         Border              = TRUE ;

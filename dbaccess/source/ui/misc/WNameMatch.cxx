@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:11:33 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,21 +100,21 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
         ,m_FT_TABLE_RIGHT(      this, ModuleRes( FT_TABLE_RIGHT         ) )
         ,m_CTRL_LEFT(           this, ModuleRes( CTRL_LEFT              ) )
         ,m_CTRL_RIGHT(          this, ModuleRes( CTRL_RIGHT             ) )
-        ,m_pbColumn_up(         this, ModuleRes( PB_COLUMN_UP           ) )
-        ,m_pbColumn_down(       this, ModuleRes( PB_COLUMN_DOWN         ) )
-        ,m_pbColumn_up_right(   this, ModuleRes( PB_COLUMN_UP_RIGHT     ) )
-        ,m_pbColumn_down_right( this, ModuleRes( PB_COLUMN_DOWN_RIGHT   ) )
+        ,m_ibColumn_up(         this, ModuleRes( IB_COLUMN_UP           ) )
+        ,m_ibColumn_down(       this, ModuleRes( IB_COLUMN_DOWN         ) )
+        ,m_ibColumn_up_right(   this, ModuleRes( IB_COLUMN_UP_RIGHT     ) )
+        ,m_ibColumn_down_right( this, ModuleRes( IB_COLUMN_DOWN_RIGHT   ) )
         ,m_pbAll(               this, ModuleRes( PB_ALL                 ) )
         ,m_pbNone(              this, ModuleRes( PB_NONE                    ) )
 
 {
     DBG_CTOR(OWizNameMatching,NULL);
 
-    m_pbColumn_up.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
-    m_pbColumn_down.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
+    m_ibColumn_up.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
+    m_ibColumn_down.SetClickHdl(LINK(this,OWizNameMatching,ButtonClickHdl));
 
-    m_pbColumn_up_right.SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
-    m_pbColumn_down_right.SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
+    m_ibColumn_up_right.SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
+    m_ibColumn_down_right.SetClickHdl(LINK(this,OWizNameMatching,RightButtonClickHdl));
 
     m_pbAll.SetClickHdl(LINK(this,OWizNameMatching,AllNoneClickHdl));
     m_pbNone.SetClickHdl(LINK(this,OWizNameMatching,AllNoneClickHdl));
@@ -147,15 +147,15 @@ void OWizNameMatching::ActivatePage( )
     DBG_CHKTHIS(OWizNameMatching,NULL);
 
     // set source table name
-    String aName = m_FT_TABLE_LEFT.GetText().GetToken(0,':');
-    aName.AppendAscii(": \n");
+    String aName = m_FT_TABLE_LEFT.GetText();
+    aName.AppendAscii("\n");
 
     aName += String(m_pParent->m_sName);
     m_FT_TABLE_LEFT.SetText(aName);
 
     // set dest table name
-    aName = m_FT_TABLE_RIGHT.GetText().GetToken(0,':');
-    aName.AppendAscii(": \n");
+    aName = m_FT_TABLE_RIGHT.GetText();
+    aName.AppendAscii("\n");
 
     //  aName += ;
     m_FT_TABLE_RIGHT.SetText(aName);
@@ -227,9 +227,9 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
     if(pEntry = m_CTRL_LEFT.FirstSelected())
     {
         sal_Int32 nPos      = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
-        if(pButton == &m_pbColumn_up && nPos)
+        if(pButton == &m_ibColumn_up && nPos)
             --nPos;
-        else if(pButton == &m_pbColumn_down)
+        else if(pButton == &m_ibColumn_down)
             nPos += 2;
 
         m_CTRL_LEFT.ModelIsMoving(pEntry,NULL,nPos);
@@ -239,7 +239,7 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
         long nThumbPos      = m_CTRL_LEFT.GetVScroll()->GetThumbPos();
         long nVisibleSize   = m_CTRL_LEFT.GetVScroll()->GetVisibleSize();
 
-        if(pButton == &m_pbColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
+        if(pButton == &m_ibColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
             m_CTRL_LEFT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
             //  m_CTRL_LEFT.MakeVisible(pEntry,sal_True);
@@ -258,9 +258,9 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
     if(pEntry = m_CTRL_RIGHT.FirstSelected())
     {
         sal_Int32 nPos      = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
-        if(pButton == &m_pbColumn_up_right && nPos)
+        if(pButton == &m_ibColumn_up_right && nPos)
             --nPos;
-        else if(pButton == &m_pbColumn_down_right)
+        else if(pButton == &m_ibColumn_down_right)
             nPos += 2;
 
         m_CTRL_RIGHT.ModelIsMoving(pEntry,NULL,nPos);
@@ -269,7 +269,7 @@ IMPL_LINK( OWizNameMatching, RightButtonClickHdl, Button *, pButton )
         long nThumbPos      = m_CTRL_RIGHT.GetVScroll()->GetThumbPos();
         long nVisibleSize   = m_CTRL_RIGHT.GetVScroll()->GetVisibleSize();
 
-        if(pButton == &m_pbColumn_down_right && (nThumbPos+nVisibleSize+1) < nPos)
+        if(pButton == &m_ibColumn_down_right && (nThumbPos+nVisibleSize+1) < nPos)
             m_CTRL_RIGHT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
         TableListRightSelectHdl(&m_CTRL_RIGHT);
     }

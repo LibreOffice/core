@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:07:41 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,19 +126,19 @@ DBG_NAME(OWizColumnSelect);
 //========================================================================
 OWizColumnSelect::OWizColumnSelect( Window* pParent)
                :OWizardPage( pParent, ModuleRes( TAB_WIZ_COLUMN_SELECT )),
-               m_gpColumns( this, ModuleRes( GB_COLUMN_SELECT ) ),
+               m_flColumns( this, ModuleRes( FL_COLUMN_SELECT ) ),
                m_lbOrgColumnNames( this, ModuleRes( LB_ORG_COLUMN_NAMES ) ),
-               m_pbColumn_RH( this, ModuleRes( PB_COLUMN_RH ) ),
-               m_pbColumn_LH( this, ModuleRes( PB_COLUMN_LH ) ),
-               m_pbColumns_RH( this, ModuleRes( PB_COLUMNS_RH ) ),
-               m_pbColumns_LH( this, ModuleRes( PB_COLUMNS_LH ) ),
+               m_ibColumn_RH( this, ModuleRes( IB_COLUMN_RH ) ),
+               m_ibColumn_LH( this, ModuleRes( IB_COLUMN_LH ) ),
+               m_ibColumns_RH( this, ModuleRes( IB_COLUMNS_RH ) ),
+               m_ibColumns_LH( this, ModuleRes( IB_COLUMNS_LH ) ),
                m_lbNewColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
 {
     DBG_CTOR(OWizColumnSelect,NULL);
-    m_pbColumn_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_pbColumn_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_pbColumns_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
-    m_pbColumns_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_ibColumn_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_ibColumn_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_ibColumns_RH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
+    m_ibColumns_LH.SetClickHdl(LINK(this,OWizColumnSelect,ButtonClickHdl));
 
     m_lbOrgColumnNames.EnableMultiSelection(sal_True);
     m_lbNewColumnNames.EnableMultiSelection(sal_True);
@@ -212,7 +212,7 @@ void OWizColumnSelect::ActivatePage( )
     }
     m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->m_eCreateStyle != OCopyTableWizard::WIZARD_APPEND_DATA);
-    m_pbColumns_RH.GrabFocus();
+    m_ibColumns_RH.GrabFocus();
 }
 // -----------------------------------------------------------------------
 sal_Bool OWizColumnSelect::LeavePage()
@@ -238,23 +238,23 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 {
     MultiListBox *pLeft,*pRight;
     sal_Bool bAll = sal_False;
-    if(pButton == &m_pbColumn_RH)
+    if(pButton == &m_ibColumn_RH)
     {
         pLeft  = &m_lbOrgColumnNames;
         pRight = &m_lbNewColumnNames;
     }
-    else if(pButton == &m_pbColumn_LH)
+    else if(pButton == &m_ibColumn_LH)
     {
         pLeft  = &m_lbNewColumnNames;
         pRight = &m_lbOrgColumnNames;
     }
-    else if(pButton == &m_pbColumns_RH)
+    else if(pButton == &m_ibColumns_RH)
     {
         pLeft  = &m_lbOrgColumnNames;
         pRight = &m_lbNewColumnNames;
         bAll   = sal_True;
     }
-    else if(pButton == &m_pbColumns_LH)
+    else if(pButton == &m_ibColumns_LH)
     {
         pLeft  = &m_lbNewColumnNames;
         pRight = &m_lbOrgColumnNames;

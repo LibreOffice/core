@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 09:45:25 $
+ *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,9 @@ DBG_NAME(OCopyTable);
 //------------------------------------------------------------------------
 OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery, OCopyTableWizard::Wizard_Create_Style nLastAction )
     : OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) ),
-    m_aFBmpCopyTable(       this, ResId( BMP_COPYTABLE      ) ),
-    m_aGB_Temp(             this, ResId( GB_TEMP            ) ),
     m_ftTableName(          this, ResId( FT_TABLENAME       ) ),
     m_edTableName(          this, ResId( ET_TABLENAME       ) ),
-    m_aGB_Options(          this, ResId( GB_OPTIONS         ) ),
+    m_aFL_Options(          this, ResId( FL_OPTIONS         ) ),
     m_aRB_DefData(          this, ResId( RB_DEFDATA         ) ),
     m_aRB_Def(              this, ResId( RB_DEF             ) ),
     m_aRB_View(             this, ResId( RB_VIEW            ) ),
