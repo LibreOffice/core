@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-26 13:07:10 $
+ *  last change: $Author: aw $ $Date: 2002-10-21 15:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,11 +125,9 @@
 #include "xflgrit.hxx"
 #endif
 
-/***********************************************************************
-* Macros fuer Umrechnung Twips<->100tel mm                             *
-***********************************************************************/
-#define TWIPS_TO_MM(val) ((val * 127 + 36) / 72)
-#define MM_TO_TWIPS(val) ((val * 72 + 63) / 127)
+// #104018# replace macros above with type-safe methods
+inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
+inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2418,12 +2416,14 @@ BOOL SdrTextObj::TRGetBaseGeometry(Matrix3D& rMat, XPolyPolygon& rPolyPolygon) c
             case SFX_MAPUNIT_TWIP :
             {
                 // position
-                aTranslate.X() = TWIPS_TO_MM(aTranslate.X());
-                aTranslate.Y() = TWIPS_TO_MM(aTranslate.Y());
+                // #104018#
+                aTranslate.X() = ImplTwipsToMM(aTranslate.X());
+                aTranslate.Y() = ImplTwipsToMM(aTranslate.Y());
 
                 // size
-                aScale.X() = TWIPS_TO_MM(aScale.X());
-                aScale.Y() = TWIPS_TO_MM(aScale.Y());
+                // #104018#
+                aScale.X() = ImplTwipsToMM(aScale.X());
+                aScale.Y() = ImplTwipsToMM(aScale.Y());
 
                 break;
             }
@@ -2473,12 +2473,14 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
             case SFX_MAPUNIT_TWIP :
             {
                 // position
-                aTranslate.X() = MM_TO_TWIPS(aTranslate.X());
-                aTranslate.Y() = MM_TO_TWIPS(aTranslate.Y());
+                // #104018#
+                aTranslate.X() = ImplMMToTwips(aTranslate.X());
+                aTranslate.Y() = ImplMMToTwips(aTranslate.Y());
 
                 // size
-                aScale.X() = MM_TO_TWIPS(aScale.X());
-                aScale.Y() = MM_TO_TWIPS(aScale.Y());
+                // #104018#
+                aScale.X() = ImplMMToTwips(aScale.X());
+                aScale.Y() = ImplMMToTwips(aScale.Y());
 
                 break;
             }
