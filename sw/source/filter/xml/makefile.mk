@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
+#   last change: $Author: ab $ $Date: 2000-11-28 11:40:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ SLOFILES =  \
         $(SLO)$/xmlfmt.obj \
         $(SLO)$/xmlfmte.obj \
         $(SLO)$/xmlmeta.obj \
+        $(SLO)$/xmlscript.obj \
         $(SLO)$/xmlitemm.obj \
         $(SLO)$/xmlitemi.obj \
         $(SLO)$/xmliteme.obj \
@@ -130,6 +131,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/xmlfmt.obj \
         $(SLO)$/xmlfmte.obj \
         $(SLO)$/xmlmeta.obj \
+        $(SLO)$/xmlscript.obj \
         $(SLO)$/xmlitemi.obj \
         $(SLO)$/xmliteme.obj \
         $(SLO)$/swxmlat.obj \
