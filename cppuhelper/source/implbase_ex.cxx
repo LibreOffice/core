@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:31:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@ static inline void * makeInterface( sal_Int32 nOffset, void * that ) SAL_THROW( 
 }
 //--------------------------------------------------------------------------------------------------
 static inline bool __td_equals(
-    typelib_TypeDescriptionReference * pTDR1, typelib_TypeDescriptionReference * pTDR2 )
+    typelib_TypeDescriptionReference const * pTDR1,
+    typelib_TypeDescriptionReference const * pTDR2 )
     SAL_THROW( () )
 {
     return ((pTDR1 == pTDR2) ||
@@ -183,6 +184,41 @@ static inline void __fillTypes( Type * types, class_data * cd )
     }
 }
 //--------------------------------------------------------------------------------------------------
+namespace {
+
+bool recursivelyFindType(
+    typelib_TypeDescriptionReference const * demandedType,
+    typelib_InterfaceTypeDescription const * type, sal_Int32 * offset)
+{
+    // This code assumes that the vtables of a multiple-inheritance class (the
+    // offset amount by which to adjust the this pointer) follow one another in
+    // the object layout, and that they contain slots for the inherited classes
+    // in a specifc order.  In theory, that need not hold for any given
+    // platform; in practice, it seems to work well on all supported platforms:
+    for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
+        if (i > 0) {
+            *offset += sizeof (void *);
+        }
+        typelib_InterfaceTypeDescription const * base = type->ppBaseTypes[i];
+        // ignore XInterface:
+        if (base->nBaseTypes > 0) {
+            if (__td_equals(
+                    reinterpret_cast<
+                        typelib_TypeDescriptionReference const * >(base),
+                    demandedType))
+            {
+                return true;
+            }
+            if (recursivelyFindType(demandedType, base, offset)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+}
+
 static inline void * __queryDeepNoXInterface(
     typelib_TypeDescriptionReference * pDemandedTDR, class_data * cd, void * that )
     SAL_THROW( (RuntimeException) )
@@ -207,19 +243,20 @@ static inline void * __queryDeepNoXInterface(
         if (pTD)
         {
             // exclude top (already tested) and bottom (XInterface) interface
-            typelib_InterfaceTypeDescription * pITD =
-                ((typelib_InterfaceTypeDescription *)pTD)->pBaseTypeDescription;
-            OSL_ENSURE( pITD, "### want to implement XInterface: template argument is XInterface?!?!?!" );
-            while (pITD->pBaseTypeDescription)
-            {
-                if (__td_equals( (typelib_TypeDescriptionReference *)pITD, pDemandedTDR ))
-                {
-                    TYPELIB_DANGER_RELEASE( pTD );
-                    return makeInterface( pEntries[ n ].m_offset, that );
-                }
-                pITD = pITD->pBaseTypeDescription;
-            }
+            OSL_ENSURE(
+                reinterpret_cast< typelib_InterfaceTypeDescription * >(pTD)->
+                    nBaseTypes > 0,
+                "### want to implement XInterface:"
+                    " template argument is XInterface?!?!?!" );
+            sal_Int32 offset = pEntries[n].m_offset;
+            bool found = recursivelyFindType(
+                pDemandedTDR,
+                reinterpret_cast< typelib_InterfaceTypeDescription * >(pTD),
+                &offset);
             TYPELIB_DANGER_RELEASE( pTD );
+            if (found) {
+                return makeInterface( offset, that );
+            }
         }
         else
         {
