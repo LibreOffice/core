@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-27 17:33:15 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,58 +1579,4 @@ void SwHTMLParser::StripTrailingPara()
         pCNd->SetAttr( SvxFontHeightItem(40) );
     }
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlgrin.cxx,v 1.2 2000-09-27 17:33:15 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.130  2000/09/18 16:04:45  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.129  2000/08/31 10:59:55  jp
-      add missing include
-
-      Revision 1.128  2000/07/20 13:16:10  jp
-      change old txtatr-character to the two new characters
-
-      Revision 1.127  2000/06/26 09:52:14  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.126  2000/04/10 12:20:56  mib
-      unicode
-
-      Revision 1.125  2000/03/03 15:21:01  os
-      StarView remainders removed
-
-      Revision 1.124  2000/03/03 12:44:32  mib
-      Removed JavaScript
-
-      Revision 1.123  2000/02/11 14:37:12  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.122  1999/12/03 08:40:07  jp
-      Task #70407#: use new GrfObj instead of Grafik with Cache (first only with define)
-
-      Revision 1.121  1999/11/19 16:40:20  os
-      modules renamed
-
-      Revision 1.120  1999/09/17 12:13:28  mib
-      support of multiple and non system text encodings
-
-      Revision 1.119  1999/06/10 08:34:12  JP
-      have to change: no AppWin from SfxApp
-
-
-      Rev 1.118   10 Jun 1999 10:34:12   JP
-   have to change: no AppWin from SfxApp
-
-*************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlflyt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,46 +628,4 @@ BYTE aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
         TE(GRFFRM,  INSIDE, NONE)       // Netscape 4
     }
 };
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlflyt.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.9  2000/09/18 16:04:44  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.8  1999/11/17 16:53:54  mib
-      #67938#: Export columned frames as images in MS-IE mode
-
-      Revision 1.7  1998/04/20 07:46:02  MIB
-      IE3-Export weg
-
-
-      Rev 1.6   20 Apr 1998 09:46:02   MIB
-   IE3-Export weg
-
-      Rev 1.5   02 Apr 1998 19:48:30   MIB
-   Spaltige Rahmen fuer SW ohne Container exportieren
-
-      Rev 1.4   31 Mar 1998 11:23:36   MIB
-   Keine Verschiebung von manchen am Zeichen geb. Rahmen und anderes
-
-      Rev 1.3   27 Mar 1998 17:25:50   MIB
-   direkte absolute Positionierung und Groessen-Export von Controls und Marquee
-
-      Rev 1.2   20 Mar 1998 10:50:14   MIB
-   Anpassungen an Netscape
-
-      Rev 1.1   19 Mar 1998 09:18:58   MIB
-   Rahmen-Export verbessert/aufgeraeumt
-
-      Rev 1.0   14 Mar 1998 19:05:18   MIB
-   Initial revision.
-
-
-*************************************************************************/
 

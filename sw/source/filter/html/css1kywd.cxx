@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1kywd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,95 +306,4 @@ sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_PV_landscape, "landscape" );
 // /Feature: PrintExt
 
 sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_class_abs_pos, "sd-abs-pos" );
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/css1kywd.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.25  2000/09/18 16:04:43  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.24  2000/04/10 12:20:55  mib
-      unicode
-
-      Revision 1.23  1999/06/11 14:44:00  MIB
-      Individuelle Umrandungs-Abstaende
-
-
-      Rev 1.22   11 Jun 1999 16:44:00   MIB
-   Individuelle Umrandungs-Abstaende
-
-      Rev 1.21   15 Apr 1999 13:44:52   MIB
-   background-color
-
-      Rev 1.20   15 Apr 1998 14:40:44   MIB
-   Zwei-seitige Printing-Extensions
-
-      Rev 1.19   03 Apr 1998 15:11:32   MIB
-   CSS1-Padding
-
-      Rev 1.18   26 Nov 1997 19:09:04   MA
-   includes
-
-      Rev 1.17   10 Oct 1997 10:14:22   MIB
-   CSS1-Printing-Ext: @page,page-break-before/after (noch kein left/right)
-
-      Rev 1.16   30 Jul 1997 12:27:18   MIB
-   absolute positioning
-
-      Rev 1.15   02 Jul 1997 17:11:28   MIB
-   neue CSS1-Border-Properties
-
-      Rev 1.14   21 May 1997 11:11:42   MIB
-   <LINK REL=STYLESHEET> zum Enbinden von externen Style-Sheets
-
-      Rev 1.13   22 Oct 1996 10:28:38   MIB
-   Umstellung von CSS1 auf Klein-Buchstaben (u.a. wegen Amaya)
-
-      Rev 1.12   15 Oct 1996 13:35:40   MIB
-   letter-spacing/Laufweite imp./exp.
-
-      Rev 1.11   14 Oct 1996 16:42:24   MIB
-   Import CSS1-Umrandung (border)
-
-      Rev 1.10   13 Oct 1996 12:12:40   MIB
-   first-letter-Pseudo-Element/DropCaps
-
-      Rev 1.9   11 Oct 1996 16:48:00   MIB
-   font-variant
-
-      Rev 1.8   24 Sep 1996 12:47:42   MIB
-   bug fix: Einheit fuer Inch ist in nicht inch
-
-      Rev 1.7   19 Aug 1996 18:04:56   MIB
-   Anpassungen an Draft vom 26.Juli 96
-
-      Rev 1.6   12 Aug 1996 10:29:56   MIB
-   Anpassungen an draft vom 26.7.96, Background-Property
-
-      Rev 1.5   07 Aug 1996 13:21:30   MIB
-   Import von color und text-decoration
-
-      Rev 1.4   10 Jul 1996 15:41:36   MIB
-   Includes fuer precompiled header gerichtet
-
-      Rev 1.3   03 Jul 1996 16:51:48   MIB
-   visited und link
-
-      Rev 1.2   18 Jun 1996 12:19:28   MIB
-   margin[-[left|right|top|bottom]]?, text-indent
-
-      Rev 1.1   17 Jun 1996 15:57:26   MIB
-   restliche Keywords fuer Font-Properties
-
-      Rev 1.0   16 Jun 1996 14:32:30   MIB
-   Initial revision.
-
-*************************************************************************/
-
 

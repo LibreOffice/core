@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-19 15:52:33 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1403,81 +1403,4 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
     xRet = new SwHTMLWriter;
 }
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.11 2001-07-19 15:52:33 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.10  2001/07/09 11:40:52  jp
-      changes for TF_DATA
-
-      Revision 1.9  2001/07/03 07:49:47  mib
-      #88156#: warning for unconvertable chars
-
-      Revision 1.8  2001/06/29 10:37:29  mib
-      #88918#: Use UTF-8 for Clipboard, evaluate encoding in insert mode
-
-      Revision 1.7  2001/02/19 19:34:29  jp
-      use HTMLOption of TextEncoding
-
-      Revision 1.6  2000/12/21 16:21:48  jp
-      writegraphic optional in original format and not general as JPG
-
-      Revision 1.5  2000/12/14 09:28:31  mib
-      #80006#: Export using utf-8 encoding
-
-      Revision 1.4  2000/12/12 13:11:13  mib
-      #80296#: Export start value if a list is continued
-
-      Revision 1.3  2000/11/01 19:23:14  jp
-      export of mail graphics removed
-
-      Revision 1.2  2000/10/20 13:43:17  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:56  hr
-      initial import
-
-      Revision 1.163  2000/09/18 16:04:48  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.162  2000/08/18 13:03:26  jp
-      don't export escaped URLs
-
-      Revision 1.161  2000/08/16 15:51:33  jp
-      OutSectionStartTag: write correct HTML
-
-      Revision 1.160  2000/06/26 12:55:06  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.159  2000/06/26 09:52:46  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.158  2000/05/15 10:06:57  os
-      Chg: GetOrigFileName()
-
-      Revision 1.157  2000/04/10 12:20:58  mib
-      unicode
-
-      Revision 1.156  2000/03/21 15:06:18  os
-      UNOIII
-
-      Revision 1.155  2000/03/03 16:29:44  pl
-      #73771# workaround for c50 intel compiler
-
-      Revision 1.154  2000/03/03 15:21:01  os
-      StarView remainders removed
-
-      Revision 1.153  2000/02/11 14:37:47  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.152  1999/11/22 08:31:09  mib
-      #67578#: wrong assert
-
-*************************************************************************/
 

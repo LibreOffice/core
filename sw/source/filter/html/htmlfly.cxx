@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1964,66 +1964,4 @@ BOOL SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
         return pNdIdx->GetIndex() < rFrm.pNdIdx->GetIndex();
 }
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.6 2001-07-03 07:49:47 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.5  2000/12/21 16:21:48  jp
-      writegraphic optional in original format and not general as JPG
-
-      Revision 1.4  2000/12/12 09:39:59  mib
-      #70821#: Don't export empty frames as spacer if they have a background
-
-      Revision 1.3  2000/11/01 19:23:14  jp
-      export of mail graphics removed
-
-      Revision 1.2  2000/10/20 13:42:52  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.81  2000/09/18 16:04:44  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.80  2000/08/18 13:03:15  jp
-      don't export escaped URLs
-
-      Revision 1.79  2000/06/26 12:55:05  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.78  2000/06/26 09:52:01  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.77  2000/05/15 16:35:52  jp
-      Changes for Unicode
-
-      Revision 1.76  2000/04/28 14:29:11  mib
-      unicode
-
-      Revision 1.75  2000/04/10 12:20:56  mib
-      unicode
-
-      Revision 1.74  2000/02/11 14:36:57  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.73  1999/09/21 09:49:42  mib
-      multiple text encodings
-
-      Revision 1.72  1999/07/09 10:40:20  MIB
-      #67508#: <BR CLEAR> for Frames that are centered
-
-
-      Rev 1.71   09 Jul 1999 12:40:20   MIB
-   #67508#: <BR CLEAR> for Frames that are centered
-
-      Rev 1.70   16 Jun 1999 19:48:10   JP
-   Change interface of base class Writer
-
-*************************************************************************/
 

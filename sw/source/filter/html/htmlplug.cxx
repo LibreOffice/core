@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 13:50:00 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,69 +1311,4 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     return rWrt;
 }
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlplug.cxx,v 1.8 2001-08-31 13:50:00 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.7  2001/07/05 11:33:43  jp
-      Changes for TFD636
-
-      Revision 1.6  2001/07/03 07:49:47  mib
-      #88156#: warning for unconvertable chars
-
-      Revision 1.5  2001/02/22 16:14:17  mtg
-      Changed to use SwAppletImpl
-
-      Revision 1.4  2000/12/21 16:21:48  jp
-      writegraphic optional in original format and not general as JPG
-
-      Revision 1.3  2000/11/01 19:23:14  jp
-      export of mail graphics removed
-
-      Revision 1.2  2000/10/20 13:43:09  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.95  2000/09/18 16:04:45  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.94  2000/08/18 13:03:22  jp
-      don't export escaped URLs
-
-      Revision 1.93  2000/06/26 12:55:06  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.92  2000/06/26 09:52:22  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.91  2000/05/15 10:06:56  os
-      Chg: GetOrigFileName()
-
-      Revision 1.90  2000/04/28 14:29:11  mib
-      unicode
-
-      Revision 1.89  2000/04/10 12:20:56  mib
-      unicode
-
-      Revision 1.88  2000/02/11 14:37:20  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.87  1999/09/21 09:49:53  mib
-      multiple text encodings
-
-      Revision 1.86  1999/09/17 12:14:02  mib
-      support of multiple and non system text encodings
-
-      Revision 1.85  1999/07/12 07:01:58  MIB
-      #34644#: Applet\'s codebase is set to document base if not specified
-
-
-*************************************************************************/
 

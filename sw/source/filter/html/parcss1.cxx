@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parcss1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1475,124 +1475,4 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
 
     return bRet;
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/parcss1.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.35  2000/09/18 16:04:47  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.34  2000/06/16 13:01:33  os
-      Unicode error corrected
-
-      Revision 1.33  2000/04/10 12:20:57  mib
-      unicode
-
-      Revision 1.32  2000/02/11 14:37:36  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.31  1999/04/19 10:46:32  MIB
-      #64963#: EOF beim Zurueckseeken loeschen
-
-
-      Rev 1.30   19 Apr 1999 12:46:32   MIB
-   #64963#: EOF beim Zurueckseeken loeschen
-
-      Rev 1.29   20 Feb 1998 19:02:20   MA
-   header
-
-      Rev 1.28   26 Nov 1997 19:09:48   MA
-   includes
-
-      Rev 1.27   03 Nov 1997 14:08:50   MA
-   precomp entfernt
-
-      Rev 1.26   10 Oct 1997 10:14:36   MIB
-   CSS1-Printing-Ext: @page,page-break-before/after (noch kein left/right)
-
-      Rev 1.25   19 Sep 1997 13:57:54   MIB
-   unbekannte @-Bloecke werden jetzt ueberlesen
-
-      Rev 1.24   29 Aug 1997 13:32:22   JP
-   VCL Color Anpassung
-
-      Rev 1.23   15 Jul 1997 16:52:24   MIB
-   fix: Auch 3-stellige Farben erlauben (fuer www.w3.org/Style
-
-      Rev 1.22   02 Jul 1997 17:13:14   MIB
-   fix: r??() nicht wie rgb() behandeln
-
-      Rev 1.21   13 Jun 1997 17:08:12   MIB
-   Ein par MS-IE Syntax-Goodies nachgebaut
-
-      Rev 1.20   13 Jun 1997 11:58:32   MIB
-   fix: .foo auch am Anfang erkennen
-
-      Rev 1.19   07 May 1997 15:46:38   MIB
-   Destruktoren nicht inline, sonst GPF unter Win16 (Warum auch immer?)
-
-      Rev 1.18   20 Dec 1996 14:00:46   MIB
-   Warnings
-
-      Rev 1.17   28 Oct 1996 19:12:14   MIB
-   Umaute in Identifiern-Erlauben, EOF-Behandlung
-
-      Rev 1.16   23 Oct 1996 19:49:06   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.15   21 Oct 1996 08:57:42   MIB
-   bug fix: H1.foo wurde falsch geparsed
-
-      Rev 1.14   13 Oct 1996 12:31:26   MIB
-   Argument von unbekannten @ident ueberlesen
-
-      Rev 1.13   20 Aug 1996 16:55:40   MIB
-   bug-fix: Hexzahlen muessen 6 Zeichen lang sein
-
-      Rev 1.12   19 Aug 1996 18:11:22   MIB
-   bugfix: PIXLENGTH durchlassen
-
-      Rev 1.11   14 Aug 1996 16:22:24   MIB
-   gcc und msvc: statt *aStr nicht aStr[0] sondern aStr[(USHORT)0]
-
-      Rev 1.10   13 Aug 1996 21:08:32   sdo
-   GCC
-
-      Rev 1.9   12 Aug 1996 10:32:16   MIB
-   Anpassungen an draft vom 26.7.96, Background-Property, Scannen von Farben verb.
-
-      Rev 1.8   07 Aug 1996 13:21:46   MIB
-   Import von color und text-decoration
-
-      Rev 1.7   17 Jul 1996 10:22:50   MIB
-   Loop-Check verbessert
-
-      Rev 1.6   27 Jun 1996 16:44:16   MIB
-   fix #29184#: Endlosschleife bei SGML-Kommentaren und andere Verbesserungen
-
-      Rev 1.5   26 Jun 1996 15:24:24   MIB
-   Anpassung an 324, Includes aufgeraeumt
-
-      Rev 1.4   20 Jun 1996 12:33:26   MIB
-   bug fix: Einheiten sind jetzt case-insensitiv
-
-      Rev 1.3   17 Jun 1996 15:59:50   MIB
-   Length nun in Twips, bug fixes und Erweiterungen
-
-      Rev 1.2   16 Jun 1996 14:32:58   MIB
-   Loops sicherer gemacht, Strings ausgelagert
-
-      Rev 1.1   14 Jun 1996 20:12:56   MIB
-   die erste Endlos-Schleife gefixed
-
-      Rev 1.0   14 Jun 1996 17:42:34   MIB
-   Initial revision.
-
-*************************************************************************/
 

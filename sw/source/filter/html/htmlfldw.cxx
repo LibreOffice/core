@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-07-20 18:33:22 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,136 +544,4 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfldw.cxx,v 1.4 2001-07-20 18:33:22 er Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/07/03 07:49:47  mib
-      #88156#: warning for unconvertable chars
-
-      Revision 1.2  2000/12/08 15:14:18  mib
-      #75662#: Don't add blanks to comments
-
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.36  2000/09/18 16:04:44  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.35  2000/04/10 12:20:56  mib
-      unicode
-
-      Revision 1.34  2000/03/02 11:28:52  mib
-      #73744#: state of ext user field
-
-      Revision 1.33  1999/09/21 13:53:35  os
-      SwExtUserSubType: language
-
-      Revision 1.32  1999/09/21 09:48:54  mib
-      multiple text encodings
-
-      Revision 1.31  1998/11/20 10:53:36  MIB
-      #59064#: Unbekannte Token/<NOSCRIPT> und <NOEMEBED> beibehalten
-
-
-      Rev 1.30   20 Nov 1998 11:53:36   MIB
-   #59064#: Unbekannte Token/<NOSCRIPT> und <NOEMEBED> beibehalten
-
-      Rev 1.29   17 Nov 1998 10:44:38   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.28   03 Nov 1998 14:01:14   MIB
-   #58427#: Fixe Filename-Felder
-
-      Rev 1.27   02 Nov 1998 17:17:52   MIB
-   #58480#: Fuss-/Endnoten
-
-      Rev 1.26   08 Jul 1998 17:21:38   MIB
-   StarScript
-
-      Rev 1.25   26 Jun 1998 12:21:56   OM
-   #51184# SubType an ExpressionFields richtig setzen und abfragen
-
-      Rev 1.24   27 Mar 1998 09:33:44   MIB
-   englisch ist besser
-
-      Rev 1.23   25 Mar 1998 12:14:42   MIB
-   Statistk-Feld
-
-      Rev 1.22   05 Mar 1998 17:41:24   OS
-   AF_SHORCUT->AF_SHORTCUT
-
-      Rev 1.21   02 Mar 1998 09:48:58   MIB
-   Fixe Author- und ExtUser-Felder
-
-      Rev 1.20   25 Feb 1998 16:52:16   OM
-   Includes
-
-      Rev 1.19   25 Feb 1998 16:50:54   OM
-   Fixe Author- und ExtUser-Felder
-
-      Rev 1.18   20 Feb 1998 19:04:32   MA
-   header
-
-      Rev 1.17   20 Feb 1998 12:27:34   MIB
-   SDFIELD-Token/String erst ab 382 aktiviert
-
-      Rev 1.16   16 Feb 1998 12:28:50   MIB
-   DokInfo-Feld jetzt auch fixed
-
-      Rev 1.15   13 Feb 1998 19:18:34   MIB
-   Feldumstelling Teil 1: Date/Time und nicht-fixe Dok-Info
-
-      Rev 1.14   26 Nov 1997 19:09:24   MA
-   includes
-
-      Rev 1.13   21 Nov 1997 17:22:26   OM
-   Feldbefehl-Umstellung: DocInfo
-
-      Rev 1.12   03 Nov 1997 14:08:48   MA
-   precomp entfernt
-
-      Rev 1.11   15 Oct 1997 12:00:16   OM
-   Feldumstellung
-
-      Rev 1.10   29 Sep 1997 12:16:38   OM
-   Feldumstellung
-
-      Rev 1.9   24 Sep 1997 15:25:02   OM
-   Feldumstellung
-
-      Rev 1.8   15 Aug 1997 12:46:34   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.7   08 Jul 1997 14:06:20   MIB
-   PostIts und Script-Felder aus 1. Absatz in Header exportieren
-
-      Rev 1.6   26 Jun 1997 14:13:52   OM
-   Feldbefehl Dateiname ohne Extension
-
-      Rev 1.5   11 Jun 1997 11:40:48   OM
-   Neue Datumsformate fuer Datums-Feldbefehl
-
-      Rev 1.4   05 Jun 1997 09:13:42   OS
-   ternaeren Ausdruck aufgeloest
-
-      Rev 1.3   22 May 1997 11:04:22   MIB
-   URL-Flag am Script-Feld
-
-      Rev 1.2   24 Mar 1997 17:42:44   MIB
-   fix: Kommentare uncodiert exportieren, opt: OutBasic aus goodies nutzen
-
-      Rev 1.1   17 Feb 1997 12:37:22   MIB
-   FileName-Feld im- und exportieren
-
-      Rev 1.0   07 Feb 1997 18:00:40   MIB
-   manche Felder als SDFIELD exportieren
-
- -------------------------------------------------------------------------*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-15 11:35:00 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3101,100 +3101,4 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
 
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.8 2001-08-15 11:35:00 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.7  2001/07/03 07:49:47  mib
-      #88156#: warning for unconvertable chars
-
-      Revision 1.6  2001/02/23 12:45:24  os
-      Complete use of DefaultNumbering component
-
-      Revision 1.5  2000/11/20 09:41:15  jp
-      new para attributes - expand para range
-
-      Revision 1.4  2000/11/13 20:32:39  jp
-      remove unused headerfile
-
-      Revision 1.3  2000/11/01 19:23:14  jp
-      export of mail graphics removed
-
-      Revision 1.2  2000/10/20 13:42:43  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.246  2000/09/18 16:04:43  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.245  2000/08/18 13:03:11  jp
-      don't export escaped URLs
-
-      Revision 1.244  2000/08/04 10:55:10  jp
-      Soft-/HardHyphens & HardBlanks changed from attribute to unicode character
-
-      Revision 1.243  2000/07/31 19:24:25  jp
-      new attributes for CJK/CTL and graphic
-
-      Revision 1.242  2000/06/26 09:51:53  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.241  2000/04/28 14:29:10  mib
-      unicode
-
-      Revision 1.240  2000/04/10 12:20:55  mib
-      unicode
-
-      Revision 1.239  2000/02/11 14:36:52  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.238  1999/12/08 13:50:39  jp
-      Task #70258#: textattr for XMLAttrContainer
-
-      Revision 1.237  1999/09/21 09:48:43  mib
-      multiple text encodings
-
-      Revision 1.236  1999/06/22 06:30:08  MIB
-      #64687#: if a center paragraph contains controls add a div tag
-
-
-      Rev 1.235   22 Jun 1999 08:30:08   MIB
-   #64687#: if a center paragraph contains controls add a div tag
-
-      Rev 1.234   10 Jun 1999 10:33:52   JP
-   have to change: no AppWin from SfxApp
-
-      Rev 1.233   09 Jun 1999 19:35:54   JP
-   have to change: no cast from GetpApp to SfxApp/OffApp, SfxShell only subclass of SfxApp
-
-      Rev 1.232   15 Apr 1999 13:25:30   MIB
-   #64159#: Beim Versenden von Mails auch in PRE umbrechen
-
-      Rev 1.231   23 Mar 1999 15:27:32   MIB
-   #63049#: Relative Einzuege in Numerierungen
-
-      Rev 1.230   17 Mar 1999 16:45:20   MIB
-   #63049#: Numerierungen mit relativen Abstaenden
-
-      Rev 1.229   18 Jan 1999 10:14:38   MIB
-   #60806#: Auch bei <FONT FACE=...> generische Fontnamen exportieren
-
-      Rev 1.228   06 Jan 1999 13:54:42   MIB
-   #60393#: Fuer Nscp4 in Tabellen keine line-spacing und margin-bottom exportieren
-
-      Rev 1.227   06 Jan 1999 10:33:38   MIB
-   #60311#: In Listen fuer nicht-numerierte Absaetze keine <PRE> ausgeben
-
-      Rev 1.226   02 Nov 1998 17:25:58   MIB
-   #58480#: Fuss-/Endnoten
-
-*************************************************************************/
 

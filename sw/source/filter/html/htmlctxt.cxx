@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlctxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,117 +818,4 @@ SfxItemSet *_HTMLAttrContext::GetFrmItemSet( SwDoc *pCreateDoc )
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     return pFrmItemSet;
 }
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlctxt.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.33  2000/09/18 16:04:44  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.32  2000/04/10 12:20:55  mib
-      unicode
-
-      Revision 1.31  1999/03/26 10:37:28  MIB
-      #63049#: Sofortige Numerierungs-Aktualisierung in Tabellen ist jetzt unnoetig
-
-
-      Rev 1.30   26 Mar 1999 11:37:28   MIB
-   #63049#: Sofortige Numerierungs-Aktualisierung in Tabellen ist jetzt unnoetig
-
-      Rev 1.29   23 Mar 1999 15:28:14   MIB
-   #63049#: Relative Einzuege in Numerierungen
-
-      Rev 1.28   17 Mar 1999 16:46:20   MIB
-   #63049#: Numerierungen mit relativen Abstaenden
-
-      Rev 1.27   06 Nov 1998 15:33:36   MIB
-   #59043#: negative Absatz-Einzuege
-
-      Rev 1.26   21 Apr 1998 13:46:10   MIB
-   fix: Keine Bookmark fuer abs-pos Objekte mit ID einfuegen
-
-      Rev 1.25   15 Apr 1998 14:47:42   MIB
-   Zwei-seitige Printing-Extensions
-
-      Rev 1.24   03 Apr 1998 12:21:46   MIB
-   Export des Rahmen-Namens als ID
-
-      Rev 1.23   02 Apr 1998 19:43:24   MIB
-   Positionierung von spaltigen Rahmen
-
-      Rev 1.22   27 Mar 1998 10:04:10   MIB
-   direkte Positionierung von Grafiken etc.
-
-      Rev 1.21   25 Mar 1998 12:08:18   MIB
-   abs.-pos. Container angefangen
-
-      Rev 1.20   19 Mar 1998 09:03:28   MIB
-   Abs.-Pos.: Attributierung nicht in Rahmen uebernehmen, Hoehe nun Mindest-Hoehe
-
-      Rev 1.19   15 Mar 1998 16:51:14   MIB
-   abs.-pos.: Abstaende bei Positionierung beachten, Hoehe nur noch Mindest-Hoehe
-
-      Rev 1.18   13 Mar 1998 09:25:52   MIB
-   Abs-Pos: margins als Rahmen-Abstaende uebernehmen
-
-      Rev 1.17   11 Mar 1998 18:25:38   MIB
-   abs. Pos.: Verankerung angepassr
-
-      Rev 1.16   20 Feb 1998 19:04:30   MA
-   header
-
-      Rev 1.15   19 Jan 1998 16:25:56   MIB
-   Numerierungs-Umbau
-
-      Rev 1.14   26 Nov 1997 19:09:22   MA
-   includes
-
-      Rev 1.13   17 Nov 1997 10:16:48   JP
-   Umstellung Numerierung
-
-      Rev 1.12   20 Oct 1997 09:51:56   MIB
-   Nur fuer absolute positioning benoetigten Code groesstenteils auskommentiert
-
-      Rev 1.11   17 Oct 1997 13:20:32   MIB
-   page-break-xxx auch uber STYLE/CLASS und ID-Optionen
-
-      Rev 1.10   09 Oct 1997 14:36:10   JP
-   Umstellung NodeIndex/-Array/BigPtrArray
-
-      Rev 1.9   16 Sep 1997 17:25:10   MIB
-   abs. Positioning fuer Absatz-Tags
-
-      Rev 1.8   16 Sep 1997 11:15:00   MIB
-   Kopf-/Fusszeilen ohne Moven von Nodes, autom. Beenden von Bereichen/Rahmen
-
-      Rev 1.7   12 Sep 1997 11:56:16   MIB
-   fix #41253#: Script in PRE (keine Schleifen), MULTICOL ohne Move von Nodes
-
-      Rev 1.6   08 Sep 1997 17:49:12   MIB
-   Verankerung von AUTO_CNTNT-Rahmen nicht mehr verschieben
-
-      Rev 1.5   08 Sep 1997 10:33:44   MIB
-   Keine Schleifen fuer PRE mehr (auch fix #41253#) (nicht freigeschaltet)
-
-      Rev 1.4   15 Aug 1997 12:47:48   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.3   12 Aug 1997 13:44:18   OS
-   Header-Umstellung
-
-      Rev 1.2   07 Aug 1997 15:07:50   OM
-   Headerfile-Umstellung
-
-      Rev 1.1   04 Aug 1997 13:54:08   MIB
-   aboslute psoitioning (fuer fast alle Zeichen-Attribute/-Vorlagen)
-
-      Rev 1.0   04 Aug 1997 13:02:32   MIB
-   Initial revision.
-
-*************************************************************************/
 

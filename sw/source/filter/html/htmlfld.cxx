@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-09 10:45:11 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,117 +691,4 @@ void SwHTMLParser::InsertComment( const String& rComment, const sal_Char *pTag )
     if( bMoveFwd )
         pPam->Move( fnMoveForward );
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfld.cxx,v 1.3 2000-10-09 10:45:11 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2000/10/06 13:08:26  jp
-      should changes: don't use IniManager
-
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.30  2000/09/18 16:04:44  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.29  2000/04/10 12:20:56  mib
-      unicode
-
-      Revision 1.28  2000/03/02 11:28:52  mib
-      #73744#: state of ext user field
-
-      Revision 1.27  1999/09/21 13:53:35  os
-      SwExtUserSubType: language
-
-      Revision 1.26  1999/09/17 12:12:56  mib
-      support of multiple and non system text encodings
-
-      Revision 1.25  1998/11/20 10:53:36  MIB
-      #59064#: Unbekannte Token/<NOSCRIPT> und <NOEMEBED> beibehalten
-
-
-      Rev 1.24   20 Nov 1998 11:53:36   MIB
-   #59064#: Unbekannte Token/<NOSCRIPT> und <NOEMEBED> beibehalten
-
-      Rev 1.23   17 Nov 1998 10:44:32   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.22   03 Nov 1998 14:01:14   MIB
-   #58427#: Fixe Filename-Felder
-
-      Rev 1.21   02 Nov 1998 17:17:50   MIB
-   #58480#: Fuss-/Endnoten
-
-      Rev 1.20   25 Mar 1998 12:14:40   MIB
-   Statistk-Feld
-
-      Rev 1.19   05 Mar 1998 17:41:24   OS
-   AF_SHORCUT->AF_SHORTCUT
-
-      Rev 1.18   02 Mar 1998 09:48:58   MIB
-   Fixe Author- und ExtUser-Felder
-
-      Rev 1.17   20 Feb 1998 19:03:28   MA
-   header
-
-      Rev 1.16   20 Feb 1998 12:27:34   MIB
-   SDFIELD-Token/String erst ab 382 aktiviert
-
-      Rev 1.15   16 Feb 1998 12:28:46   MIB
-   DokInfo-Feld jetzt auch fixed
-
-      Rev 1.14   13 Feb 1998 19:18:34   MIB
-   Feldumstelling Teil 1: Date/Time und nicht-fixe Dok-Info
-
-      Rev 1.13   26 Nov 1997 19:09:24   MA
-   includes
-
-      Rev 1.12   25 Nov 1997 11:50:14   TJ
-   include svhtml.hxx
-
-      Rev 1.11   21 Nov 1997 17:22:26   OM
-   Feldbefehl-Umstellung: DocInfo
-
-      Rev 1.10   03 Nov 1997 14:08:52   MA
-   precomp entfernt
-
-      Rev 1.9   14 Oct 1997 14:13:06   OM
-   Feldumstellung
-
-      Rev 1.8   29 Sep 1997 12:16:38   OM
-   Feldumstellung
-
-      Rev 1.7   24 Sep 1997 15:25:02   OM
-   Feldumstellung
-
-      Rev 1.6   15 Aug 1997 12:48:52   OS
-   charatr/frmatr/txtatr aufgeteilt
-
-      Rev 1.5   07 Aug 1997 15:07:44   OM
-   Headerfile-Umstellung
-
-      Rev 1.4   26 Jun 1997 14:13:52   OM
-   Feldbefehl Dateiname ohne Extension
-
-      Rev 1.3   11 Jun 1997 11:40:48   OM
-   Neue Datumsformate fuer Datums-Feldbefehl
-
-      Rev 1.2   18 Feb 1997 11:08:02   MIB
-   Optimierung
-
-      Rev 1.1   17 Feb 1997 12:37:22   MIB
-   FileName-Feld im- und exportieren
-
-      Rev 1.0   07 Feb 1997 18:05:10   MIB
-   Initial revision.
-
-*************************************************************************/
-
 

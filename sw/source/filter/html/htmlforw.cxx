@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 09:42:50 $
+ *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1582,71 +1582,4 @@ HTMLControl::HTMLControl(
 HTMLControl::~HTMLControl()
 {}
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlforw.cxx,v 1.7 2001-07-03 09:42:50 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.6  2001/07/03 07:49:47  mib
-      #88156#: warning for unconvertable chars
-
-      Revision 1.5  2001/06/28 13:26:36  jp
-      Bug #81329#: use OutputDevice::GetDefaultFont
-
-      Revision 1.4  2001/05/11 09:54:05  th
-      rtl-string-changes
-
-      Revision 1.3  2001/03/23 12:39:50  jl
-      replaced: Float->float
-
-      Revision 1.2  2000/10/20 13:43:01  jp
-      use correct INetURL-Decode enum
-
-      Revision 1.1.1.1  2000/09/18 17:14:55  hr
-      initial import
-
-      Revision 1.77  2000/09/18 16:04:45  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.76  2000/08/18 13:03:18  jp
-      don't export escaped URLs
-
-      Revision 1.75  2000/06/26 09:52:10  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.74  2000/04/28 14:29:11  mib
-      unicode
-
-      Revision 1.73  2000/04/11 10:46:30  mib
-      unicode
-
-      Revision 1.72  2000/03/31 06:16:25  os
-      UNO III: toolkit includes
-
-      Revision 1.71  2000/03/30 07:31:01  os
-      UNO III
-
-      Revision 1.70  2000/03/21 15:06:17  os
-      UNOIII
-
-      Revision 1.69  2000/03/03 15:21:00  os
-      StarView remainders removed
-
-      Revision 1.68  2000/02/14 13:59:45  mib
-      #70473#: unicode
-
-      Revision 1.67  2000/02/10 09:51:54  mib
-      #68571#: text/plain encoding for submit
-
-      Revision 1.66  1999/11/22 14:25:04  os
-      headers added
-
-      Revision 1.65  1999/11/19 16:40:20  os
-      modules renamed
-
-*************************************************************************/
 
