@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:55:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,53 +517,6 @@ namespace sdr
 {
     namespace contact
     {
-        // Get the correct BackgroundObject
-        SdrObject* ViewContactOfMasterPageDescriptor::GetBackgroundObject() const
-        {
-            SdrObject* pRetval = 0L;
-            const SdrPage& rMasterPage = GetMasterPageDescriptor().GetUsedPage();
-
-            // Here i will rely on old knowledge about the 0'st element of a masterpage
-            // being the PageBackgroundObject. This will be removed again when that definition
-            // will be changed.
-            const sal_uInt32 nMasterPageObjectCount(rMasterPage.GetObjCount());
-            DBG_ASSERT(1 <= nMasterPageObjectCount,
-                "ViewContactOfMasterPageDescriptor::GetBackgroundObject(): MasterPageBackgroundObject missing (!)");
-            pRetval = rMasterPage.GetObj(0L);
-
-            // Test if it's really what we need. There are known problems where
-            // the 0th object is not the MasterPageBackgroundObject at all.
-            if(!pRetval->IsMasterPageBackgroundObject())
-            {
-                pRetval = 0L;
-            }
-
-            // Get the evtl. existing page background object from the using page and use it
-            // preferred to the MasterPageBackgroundObject
-            const SdrPage& rOwnerPage = GetMasterPageDescriptor().GetOwnerPage();
-            SdrObject* pCandidate = rOwnerPage.GetBackgroundObj();
-
-            if(pCandidate)
-            {
-                pRetval = pCandidate;
-            }
-
-            return pRetval;
-        }
-
-        // Get the LayerId of the BackgroundObject
-        sal_uInt8 ViewContactOfMasterPageDescriptor::GetBackgroundObjectLayerId() const
-        {
-            SdrObject* pCandidate = GetBackgroundObject();
-
-            if(pCandidate)
-            {
-                return pCandidate->GetLayer();
-            }
-
-            return 0;
-        }
-
         // Create a Object-Specific ViewObjectContact, set ViewContact and
         // ObjectContact. Always needs to return something. Default is to create
         // a standard ViewObjectContact containing the given ObjectContact and *this
@@ -636,12 +589,6 @@ namespace sdr
                 return sal_False;
             }
 
-            // Test layer visibility. PageBackgroundObject uses the background layer.
-            if(!rDisplayInfo.GetProcessLayers().IsSet(GetBackgroundObjectLayerId()))
-            {
-                return sal_False;
-            }
-
             // test against PaintMode combinations
             const sal_uInt32 nDrawMode(rDisplayInfo.GetCurrentDrawMode());
 
@@ -654,6 +601,7 @@ namespace sdr
             {
                 return sal_False;
             }
+
             return sal_True;
         }
 
@@ -665,10 +613,14 @@ namespace sdr
             sal_Bool bRetval(sal_False);
 
             // Draw the correct BackgroundObject
-            SdrObject* pCandidate = GetBackgroundObject();
+            SdrObject* pCandidate = GetMasterPageDescriptor().GetBackgroundObject();
             if(pCandidate)
             {
-                bRetval = PaintBackgroundObject(*this, *pCandidate, rDisplayInfo, rPaintRectangle, rAssociatedVOC);
+                // #i42075# Test layer visibility. PageBackgroundObject uses the background layer.
+                if(GetMasterPageDescriptor().GetVisibleLayers().IsSet(pCandidate->GetLayer()))
+                {
+                    bRetval = PaintBackgroundObject(*this, *pCandidate, rDisplayInfo, rPaintRectangle, rAssociatedVOC);
+                }
             }
 
             // Draw the MasterPage content
@@ -733,7 +685,7 @@ namespace sdr
             // set global data
             SdrPage& rMasterPage = GetMasterPageDescriptor().GetUsedPage();
             SdrPage& rPage = GetMasterPageDescriptor().GetOwnerPage();
-            SdrObject* pBackgroundObject = GetBackgroundObject();
+            SdrObject* pBackgroundObject = GetMasterPageDescriptor().GetBackgroundObject();
             MasterPageBufferEntry aData(rBitmap, rMapMode, &rMasterPage, &rPage, pBackgroundObject);
             aMasterPageBuffer.OfferMasterPageData(aData);
         }
@@ -746,7 +698,7 @@ namespace sdr
             Bitmap aRetval;
             SdrPage& rMasterPage = GetMasterPageDescriptor().GetUsedPage();
             SdrPage& rPage = GetMasterPageDescriptor().GetOwnerPage();
-            SdrObject* pBackgroundObject = GetBackgroundObject();
+            SdrObject* pBackgroundObject = GetMasterPageDescriptor().GetBackgroundObject();
             aRetval = aMasterPageBuffer.FindCandidate(rMasterPage, rPage, rMapMode, pBackgroundObject);
 
             return aRetval;
