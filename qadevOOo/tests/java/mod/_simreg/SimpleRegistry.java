@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleRegistry.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:39 $
+ *  last change:$Date: 2003-05-27 13:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,14 +155,14 @@ public class SimpleRegistry extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        final String tmpDir = utils.getOfficeTempDirSys(Param.getMSF()) ;
+        final String tmpDir = utils.getOfficeTempDirSys((XMultiServiceFactory)Param.getMSF()) ;
         final String openF = "XSimpleRegistry_open.rdb" ;
         final String destroyF = "XSimpleRegistry_destroy.rdb" ;
         final String mergeF = "XSimpleRegistry_merge.rdb" ;
 
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             oInterface = xMSF.createInstance
                 ( "com.sun.star.registry.SimpleRegistry" );
         } catch( com.sun.star.uno.Exception e ) {
