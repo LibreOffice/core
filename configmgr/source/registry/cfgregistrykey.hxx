@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:39:30 $
+ *  last change: $Author: jb $ $Date: 2001-02-27 10:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,20 +284,17 @@ protected:
 
     /** get a default value for a value of a given type
 
-        <p>Some configuration value nodes are allowed to be NULL, but we no no chance to wrap this here (the registry
-        interface does not allow NULL values). So in case we encounter such a NULL leaf, we create a default value for
-        it, dependent on the type of the leaf (which can be retrieved from it's parent).</p>
+        <p>Creates an Any with an empty or zero value of the given type.</p>
 
         @param  _rType          the type of the element to create
         @return
             an <type scope="com::sun::star::uno">Any</type> representing a default for the node value type. If the
-            return value is still VOID, the node has a nullable type (e.g. any)
-        @throws com::sun::star::registry::InvalidRegistryException
-            if the type given could not be supported
+            return value is still VOID, the node has a nullable type (e.g. any) or is of unsupported type
+
     */
     ::com::sun::star::uno::Any
         implCreateDefaultElement(::com::sun::star::uno::Type const& _rType)
-            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+            throw(::com::sun::star::uno::RuntimeException);
 };
 
 
