@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontexthelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:25:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.........................................................................
 namespace comphelper
@@ -134,7 +137,7 @@ namespace comphelper
 
     /** helper class for implementing an AccessibleContext
     */
-    class OAccessibleContextHelper
+    class COMPHELPER_DLLPUBLIC OAccessibleContextHelper
                 :public ::comphelper::OBaseMutex
                 ,public OAccessibleContextHelper_Base
     {
