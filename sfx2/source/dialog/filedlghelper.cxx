@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:07:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -181,11 +184,11 @@
 #ifndef _PICKERHELPER_HXX
 #include <svtools/pickerhelper.hxx>
 #endif
-//#ifndef _SVX_SVXIDS_HRC
-//#include <svx/svxids.hrc>
-//#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 
 #ifndef _SFXAPP_HXX
@@ -289,35 +292,35 @@ String DecodeSpaces_Impl( const String& rSource );
 void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    mpParent->FileSelectionChanged( aEvent );
+    mpAntiImpl->FileSelectionChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    mpParent->DirectoryChanged( aEvent );
+    mpAntiImpl->DirectoryChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    return mpParent->HelpRequested( aEvent );
+    return mpAntiImpl->HelpRequested( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::controlStateChanged( const FilePickerEvent& aEvent ) throw ( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    mpParent->ControlStateChanged( aEvent );
+    mpAntiImpl->ControlStateChanged( aEvent );
 }
 
 // ------------------------------------------------------------------------
 void SAL_CALL FileDialogHelper_Impl::dialogSizeChanged() throw ( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    mpParent->DialogSizeChanged();
+    mpAntiImpl->DialogSizeChanged();
 }
 
 // ------------------------------------------------------------------------
@@ -1003,9 +1006,9 @@ sal_Bool lcl_isSystemFilePicker( const Reference< XFilePicker >& _rxFP )
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const short nDialogType, sal_uInt32 nFlags )
-    :m_nDialogType  ( nDialogType )
-    ,meContext      ( FileDialogHelper::UNKNOWN_CONTEXT )
+FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, const short nDialogType, sal_uInt32 nFlags, Window* _pPreferredParentWindow )
+    :m_nDialogType          ( nDialogType )
+    ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
 
@@ -1014,7 +1017,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
     // create the file open dialog
     // the flags can be SFXWB_INSERT or SFXWB_MULTISELECTION
 
-    mpParent                = pParent;
+    mpPreferredParentWindow = _pPreferredParentWindow;
+    mpAntiImpl              = _pAntiImpl;
     mnError                 = ERRCODE_NONE;
     mbHasAutoExt            = sal_False;
     mbHasPassword           = sal_False;
@@ -1044,7 +1048,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
     mpGraphicFilter = NULL;
     mnPostUserEventId = 0;
 
-    mxFileDlg = Reference < XFilePicker > ( xFactory->createInstance( aService ), UNO_QUERY );
+    // create the picker component
+    mxFileDlg = mxFileDlg.query( xFactory->createInstance( aService ) );
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
 
     Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
@@ -1056,90 +1061,136 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent, const s
         return;
     }
 
-    Sequence < Any > aServiceType(1);
-
-    switch ( m_nDialogType )
-    {
-    case FILEOPEN_SIMPLE:
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-        break;
-    case FILESAVE_SIMPLE:
-        aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-        mbIsSaveDlg = sal_True;
-        break;
-    case FILESAVE_AUTOEXTENSION_PASSWORD:
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
-        mbHasPassword = sal_True;
-        mbHasAutoExt = sal_True;
-        mbIsSaveDlg = sal_True;
-        break;
-    case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
-        mbHasPassword = sal_True;
-
-        m_bHaveFilterOptions = sal_True;
-        if( xFactory.is() )
-        {
-            mxFilterCFG = Reference< XNameAccess >(
-                xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
-                UNO_QUERY );
-        }
-
-        mbHasAutoExt = sal_True;
-        mbIsSaveDlg = sal_True;
-        break;
-    case FILESAVE_AUTOEXTENSION_SELECTION:
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
-        mbHasAutoExt = sal_True;
-        mbIsSaveDlg = sal_True;
-        if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
-        {
-            mxFilterCFG = Reference< XNameAccess >(
-                xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
-                UNO_QUERY );
-        }
-        break;
-    case FILESAVE_AUTOEXTENSION_TEMPLATE:
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
-        mbHasAutoExt = sal_True;
-        mbIsSaveDlg = sal_True;
-        break;
-    case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
-        mbHasPreview = sal_True;
-        mbHasLink = sal_True;
-
-        // aPreviewTimer
-        maPreViewTimer.SetTimeout( 500 );
-        maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
-        break;
-    case FILEOPEN_PLAY:
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_PLAY;
-        break;
-    case FILEOPEN_READONLY_VERSION:
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_READONLY_VERSION;
-        mbHasVersions = sal_True;
-        break;
-    case FILEOPEN_LINK_PREVIEW:
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_LINK_PREVIEW;
-        mbHasPreview = sal_True;
-        mbHasLink = sal_True;
-        // aPreviewTimer
-        maPreViewTimer.SetTimeout( 500 );
-        maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
-        break;
-    case FILESAVE_AUTOEXTENSION:
-        aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION;
-        mbHasAutoExt = sal_True;
-        mbIsSaveDlg = sal_True;
-        break;
-    default:
-        aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
-        DBG_ERRORFILE( "FileDialogHelper::ctor with unknown type" );
-    }
 
     if ( xInit.is() )
-        xInit->initialize( aServiceType );
+    {
+        sal_Int16 nTemplateDescription = TemplateDescription::FILEOPEN_SIMPLE;
+
+        switch ( m_nDialogType )
+        {
+            case FILEOPEN_SIMPLE:
+                nTemplateDescription = TemplateDescription::FILEOPEN_SIMPLE;
+                break;
+
+            case FILESAVE_SIMPLE:
+                nTemplateDescription = TemplateDescription::FILESAVE_SIMPLE;
+                mbIsSaveDlg = sal_True;
+                break;
+
+            case FILESAVE_AUTOEXTENSION_PASSWORD:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
+                mbHasPassword = sal_True;
+                mbHasAutoExt = sal_True;
+                mbIsSaveDlg = sal_True;
+                break;
+
+            case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS;
+                mbHasPassword = sal_True;
+
+                m_bHaveFilterOptions = sal_True;
+                if( xFactory.is() )
+                {
+                    mxFilterCFG = Reference< XNameAccess >(
+                        xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
+                        UNO_QUERY );
+                }
+
+                mbHasAutoExt = sal_True;
+                mbIsSaveDlg = sal_True;
+                break;
+
+            case FILESAVE_AUTOEXTENSION_SELECTION:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
+                mbHasAutoExt = sal_True;
+                mbIsSaveDlg = sal_True;
+                if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
+                {
+                    mxFilterCFG = Reference< XNameAccess >(
+                        xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.document.FilterFactory" ) ),
+                        UNO_QUERY );
+                }
+                break;
+
+            case FILESAVE_AUTOEXTENSION_TEMPLATE:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
+                mbHasAutoExt = sal_True;
+                mbIsSaveDlg = sal_True;
+                break;
+
+            case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
+                nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE;
+                mbHasPreview = sal_True;
+                mbHasLink = sal_True;
+
+                // aPreviewTimer
+                maPreViewTimer.SetTimeout( 500 );
+                maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                break;
+
+            case FILEOPEN_PLAY:
+                nTemplateDescription = TemplateDescription::FILEOPEN_PLAY;
+                break;
+
+            case FILEOPEN_READONLY_VERSION:
+                nTemplateDescription = TemplateDescription::FILEOPEN_READONLY_VERSION;
+                mbHasVersions = sal_True;
+                break;
+
+            case FILEOPEN_LINK_PREVIEW:
+                nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
+                mbHasPreview = sal_True;
+                mbHasLink = sal_True;
+                // aPreviewTimer
+                maPreViewTimer.SetTimeout( 500 );
+                maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                break;
+
+            case FILESAVE_AUTOEXTENSION:
+                nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION;
+                mbHasAutoExt = sal_True;
+                mbIsSaveDlg = sal_True;
+                break;
+
+            default:
+                DBG_ERRORFILE( "FileDialogHelper::ctor with unknown type" );
+                break;
+        }
+
+        Sequence < Any > aInitArguments( mbSystemPicker || !mpPreferredParentWindow ? 1 : 2 );
+        // This is a hack. We currently know that the internal file picker implementation
+        // supports the extended arguments as specified below.
+        // TODO:
+        // a) adjust the service description so that it includes the TemplateDescription and ParentWindow args
+        // b) adjust the implementation of the system file picker to that it recognizes it
+        if ( mbSystemPicker )
+        {
+            aInitArguments[0] <<= nTemplateDescription;
+        }
+        else
+        {
+            aInitArguments[0] <<= NamedValue(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TemplateDescription" ) ),
+                                    makeAny( nTemplateDescription )
+                                );
+
+            if ( mpPreferredParentWindow )
+                aInitArguments[1] <<= NamedValue(
+                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
+                                        makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
+                                    );
+        }
+
+        try
+        {
+            xInit->initialize( aInitArguments );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "FileDialogHelper_Impl::FileDialogHelper_Impl: could not initialize the picker!" );
+        }
+    }
+
 
     // set multiselection mode
     if ( nFlags & SFXWB_MULTISELECTION )
@@ -2168,11 +2219,21 @@ FileDialogHelper::FileDialogHelper( const short nDialogType,
     mpImp->addFilters( nFlags, rFact, nMust, nDont );
 }
 
+#ifdef FS_PRIV_DEBUG
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper( const short nDialogType,
                                     sal_uInt32 nFlags )
 {
     mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags );
+    mxImp = mpImp;
+}
+#endif
+
+// ------------------------------------------------------------------------
+FileDialogHelper::FileDialogHelper( const short nDialogType,
+                                    sal_uInt32 nFlags, Window* _pPreferredParent )
+{
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, _pPreferredParent );
     mxImp = mpImp;
 }
 
