@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class SwWrtShell;
 class Reader;
 class SvxClipboardFmtItem;
 class ViewShell;
+class SwView_Impl;
 
 enum TransferBufferType
 {
@@ -105,6 +106,7 @@ enum TransferBufferType
 
 class SwTransferable : public TransferableHelper
 {
+    friend class SwView_Impl;
     SvEmbeddedObjectRef             aDocShellRef;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
@@ -244,6 +246,11 @@ public:
     static void ClearSelection( SwWrtShell& rSh,
                                 const ViewShell * pCreator = NULL );
 
+    // the related SwView is being closed and the SwTransferable is invalid now
+    void    Invalidate() {pWrtShell = 0;}
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
 };
 
 
