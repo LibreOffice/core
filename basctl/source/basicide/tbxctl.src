@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-01 19:41:48 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 23:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ ToolBox RID_TOOLBOX
             Text [ dutch ] = "Button" ;
             Text [ swedish ] = "Kommandoknapp" ;
             Text [ danish ] = "Kommandoknap" ;
-            Text [ portuguese ] = "Botγo de comando" ;
+            Text [ portuguese ] = "Botγo" ;
             Text [ portuguese_brazilian ] = "CommandButton" ;
             /* ### ACHTUNG: Neuer Text in Resource? CommandButton einfόgen : CommandButton einf³gen */
             Text[ chinese_simplified ] = "ΓόΑξ°΄Ε₯";
@@ -290,7 +290,7 @@ ToolBox RID_TOOLBOX
             Text [ french ] = "Zone de groupe" ;
             Text [ swedish ] = "Grupperingsram" ;
             Text [ danish ] = "FrameControl" ;
-            Text [ portuguese ] = "FrameControl" ;
+            Text [ portuguese ] = "Caixa de grupo" ;
             Text [ portuguese_brazilian ] = "FrameControl" ;
             /* ### ACHTUNG: Neuer Text in Resource? GroupBox einfόgen : GroupBox einf³gen */
             Text[ chinese_simplified ] = "ΏςΏΨΦΖ";
@@ -314,7 +314,7 @@ ToolBox RID_TOOLBOX
             Text = "Horizontale Linie" ;
             Text [ english ] = "Horizontal FixedLine" ;
             Text [ english_us ] = "Horizontal Line" ;
-            Text[ portuguese ] = "HFixedLine";
+            Text[ portuguese ] = "Linha horizontal";
             Text[ russian ] = "Γξπθηξνςΰλόνΰÿ λθνθÿ";
             Text[ greek ] = "Οριζόντια γραμμή";
             Text[ dutch ] = "HFixedLine";
@@ -374,7 +374,7 @@ ToolBox RID_TOOLBOX
             Text = "Grafisches Kontrollfeld" ;
             Text [ english ] = "ImageControl" ;
             Text [ english_us ] = "Image Control" ;
-            Text[ portuguese ] = "ImageControl";
+            Text[ portuguese ] = "Controlo grαfico";
             Text[ russian ] = "Γπΰτθχερκθι ύλεμενς σοπΰβλενθÿ";
             Text[ greek ] = "Γραφικό πεδίο ελέγχου";
             Text[ dutch ] = "ImageControl";
@@ -522,7 +522,7 @@ ToolBox RID_TOOLBOX
             Text = "Fortschrittsbalken" ;
             Text [ english ] = "ProgressBar" ;
             Text [ english_us ] = "Progress Bar" ;
-            Text[ portuguese ] = "ProgressBar";
+            Text[ portuguese ] = "Barra de progressγo";
             Text[ russian ] = "Θνδθκΰςξπ ρξρςξÿνθÿ";
             Text[ greek ] = "Γραμμή προόδου";
             Text[ dutch ] = "ProgressBar";
@@ -550,7 +550,7 @@ ToolBox RID_TOOLBOX
             Text = "Vertikale Linie" ;
             Text [ english ] = "Vertical FixedLine" ;
             Text [ english_us ] = "Vertical Line" ;
-            Text[ portuguese ] = "VFixedLine";
+            Text[ portuguese ] = "Linha vertical";
             Text[ russian ] = "Βεπςθκΰλόνΰÿ λθνθÿ";
             Text[ greek ] = "Κατακόρυφη γραμμή";
             Text[ dutch ] = "VFixedLine";
@@ -632,3 +632,4 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
