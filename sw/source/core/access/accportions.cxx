@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 13:42:53 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 14:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,10 +235,6 @@ void SwAccessiblePortionData::Special(
 
     DBG_ASSERT( !bFinished, "We are already done!" );
 
-    // ignore zero/zero portions (except for terminators)
-    if( (nLength == 0) && (rText.Len() == 0) && (nType != POR_TERMINATE) )
-        return;
-
     // construct string with representation; either directly from
     // rText, or use resources for special case portions
     String sDisplay;
@@ -290,10 +286,18 @@ void SwAccessiblePortionData::Special(
                 STR_ACCESS_REPLACEMENT_FRAME, &sDescription );
         }
         break;
+        case POR_GRFNUM:
+            sDisplay = SwAccessibleContext::GetResource(
+                STR_ACCESS_REPLACEMENT_BULLET_GRAPHICS );
+            break;
         default:
             sDisplay = rText;
             break;
     }
+
+    // ignore zero/zero portions (except for terminators)
+    if( (nLength == 0) && (sDisplay.Len() == 0) && (nType != POR_TERMINATE) )
+        return;
 
     // special treatment for zero length portion at the beginning:
     // count as 'before' portion
