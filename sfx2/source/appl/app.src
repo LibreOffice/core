@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:15:21 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,7 +1534,7 @@ String STR_NOMODUL
     Text[ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is.";
     Text[ chinese_simplified ] = "ΘηΉϋStarOffice Desktop΄¦ΣΪΌ¤»ξΧ΄Μ¬\n£¬Σ¦ΣΓ³ΜΠςµΔΔ£Ώι²»ΔάΉ»µ±ΧχΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠ΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να εκτελεστούν οι λειτουργικές μονάδες εφαρμογών\nόταν είναι ενεργοποιημένο το StarOffice Desktop.";
-    Text[ korean ] = "StarOffice µ¥½ΊΕ© ΕΎΐΜ Θ°ΌΊΘ­ µΗΎξΐΦΐ»¶§.\n ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΜ ½ΓΐΫ µΙΌφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "StarOffice µ¥½ΊΕ© ΕΎΐΜ Θ°ΌΊΘ­ µΗΎξΐΦΐΈΈι.\n ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΊ ΐΐΏλΗΑ·Ξ±Χ·¥ \n·ΞΌ­ ½ΓΐΫ µΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Uygulama modόlleri, StarOffice masaόstό etkinken uygulama olarak\nηalύώtύrύlamaz.";
     Text[ language_user1 ] = " ";
 };
@@ -1933,7 +1933,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend als gevolg van ongeldige filedescriptor.";
     Text[ chinese_simplified ] = "ÒςΞήΠ§µΔΞΔΌώ±κΚ¶Φµ¶ψΞή·¨΄ςΏªΞΔΌώ $(FILE) ΅£";
     Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχτεί το αρχείο $(FILE) λόγω μή έγκυρου χειρισμού του αρχείου.";
-    Text[ korean ] = "ΐίΈψµΘ ΖΔΐΟ ΗΪµι·Ξ ΖΔΐΟ $(FILE)°΅ Ώ­Έ®Αφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ  ΖΔΐΟ ΗΪµι·Ξ ΐΞΗΨ, ΖΔΐΟ $(FILE) °΅(ΐΜ) Ώ­Έ®Αφ ΎΚ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "$(FILE) dosyasύ geηersiz bir dosya tutamacύ nedeniyle aηύlamadύ.";
     Text[ language_user1 ] = " ";
 };
@@ -3251,7 +3251,7 @@ String RID_SPECIALCONFIG_ERROR
     Text[ dutch ] = "In de speciale configuratie is een fout opgetreden. Wendt u zich s.v.p. aan uw administrator!";
     Text[ chinese_simplified ] = "ΤΪÒ»ΈφΜΨΚβµΔΕδΦΓΞΔΌώΔΪ·ΆΟΦÒ»Έφ΄νΞσ΅£\nΗλΊΝΔϊµΔΉάΐνΤ±ΑªΟµ£΅";
     Text[ greek ] = "Παρουσιάστηκε σφάλμα στην ειδική διαμόρφωση.\nΠαρακαλώ απευθυνθείτε στον διαχειριστή του δικτύου!";
-    Text[ korean ] = "Ζ―Ί° ±ΈΌΊΏ΅Ό­Ώΐ·ω°΅ Ήί»υµΗΎϊ½ΐ΄Ο΄Ω. °όΈ®ΐΪΏ΅°Τ Ή®ΐΗΗΟ½Γ±β ΉΩ¶ψ΄Ο΄Ω !";
+    Text[ korean ] = "Ζ―Όφ ΔΑΗΗ±Τ·ΉΐΜΌΗΏ΅Ό­ Ώΐ·ω°΅ Ήί»ύΗΟΏ΄½ΐ΄Ο΄Ω.°όΈ®ΐΪΏ΅°Τ Ή®ΐΗΗΟ½Γ±β ΉΩ¶ψ΄Ο΄Ω !";
     Text[ turkish ] = "Φzel konfigόrasyonda bir hata bulundu.\nLόtfen sistem yφneticinize baώvurun!";
 };
 
@@ -3426,7 +3426,7 @@ String STR_KEY_CONFIG_DIR
     Text[ dutch ] = "Configuraties";
     Text[ chinese_simplified ] = "ΕδΦΓ";
     Text[ greek ] = "Διαμόρφωση";
-    Text[ korean ] = "Ό³Α¤";
+    Text[ korean ] = "ΔΑΗΗ±Τ·ΉΐΜΌΗ";
     Text[ turkish ] = "Konfigόrasyon";
     Text[ language_user1 ] = " ";
 };
@@ -3568,7 +3568,7 @@ String STR_KEY_PALETTE_PATH
     Text[ dutch ] = "Paletten";
     Text[ chinese_simplified ] = "µχΙ«°ε";
     Text[ greek ] = "Παλέτες";
-    Text[ korean ] = "ΖΔ·ΉΖ®";
+    Text[ korean ] = "ΖΘ·ΉΖ®";
     Text[ turkish ] = "Paletler";
     Text[ language_user1 ] = " ";
 };
@@ -3652,7 +3652,7 @@ String STR_KEY_TEMPLATE_PATH
     Text[ dutch ] = "Sjablonen";
     Text[ chinese_simplified ] = "ΞΔµµΡωΚ½";
     Text[ greek ] = "Πρότυπα εγγράφου";
-    Text[ korean ] = "Ή®Ό­ ΕΫΗΓΈ®Ζ®";
+    Text[ korean ] = "Ή®Ό­ Ό­½Δ";
     Text[ turkish ] = "Belge ώablonlarύ";
     Text[ language_user1 ] = " ";
 };
@@ -3781,7 +3781,7 @@ String STR_KEY_NEW_DIR
     Text[ dutch ] = "Standaardsjablonen";
     Text[ chinese_simplified ] = "±κΧΌΡωΚ½";
     Text[ greek ] = "Πρότυπα προεπιλογής";
-    Text[ korean ] = "±βΊ» ΕΫΗΓΈ®Ζ®";
+    Text[ korean ] = "±βΊ» Ό­½Δ";
     Text[ turkish ] = "Standart ώablonlar";
     Text[ language_user1 ] = " ";
 };
@@ -3833,7 +3833,7 @@ String STR_KEY_STORAGE_DIR
     Text[ dutch ] = "Geheugen voor berichten";
     Text[ chinese_simplified ] = "µηΧΣΣΚΌώ/ΠΒΞΕ΄Ά΄ζΜε";
     Text[ greek ] = "Στοιχείο αποθήκευσης μηνυμάτων";
-    Text[ korean ] = "ΏμΖν/΄Ί½Ί ΐϊΐεΌÒ";
+    Text[ korean ] = "ΏμΖν/΄Ί½Ί ΐϊΐεΐεΌÒ";
     Text[ turkish ] = "έleti depolama alanύ";
     Text[ language_user1 ] = " ";
 };
@@ -3930,7 +3930,7 @@ String STR_KEY_FILTER_PATH
     Text[ portuguese_brazilian ] = "Filter";
     Text[ japanese ] = "Μ¨Ωΐ";
     Text[ korean ] = "ΗΚΕΝ";
-    Text[ chinese_simplified ] = "ΙΈΡ΅";
+    Text[ chinese_simplified ] = "ΉύΒΛΖχ";
     Text[ chinese_traditional ] = "ΉLΒoΎΉ";
     Text[ arabic ] = "έαΚΡ";
     Text[ turkish ] = "Filtre";
@@ -3976,7 +3976,7 @@ String STR_KEY_USERCONFIG_PATH
     Text[ polish ] = "Konfiguracje uΏytkownika";
     Text[ portuguese_brazilian ] = "User Settings";
     Text[ japanese ] = "Υ°»ή°έ’θ";
-    Text[ korean ] = "»ηΏλΐΪ Ό³Α¤";
+    Text[ korean ] = "»ηΏλΐΪ  ΔΑΗΗ±Τ·ΉΐΜΌΗ";
     Text[ chinese_simplified ] = "ΚΉΣΓΥίΕδΦΓ";
     Text[ chinese_traditional ] = "¨Ο¥ΞªΜ³]©w";
     Text[ arabic ] = "Κίζνδ ΗαγΣΚΞΟγ";
