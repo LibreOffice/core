@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:42:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@
 #include "rangelst.hxx"
 #endif
 
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
+#endif
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
+#endif
 #ifndef SC_XESTRING_HXX
 #include "xestring.hxx"
 #endif
@@ -130,7 +136,6 @@ class ScPageHFItem;
 class ScProgress;
 
 class ExcTable;
-class ExcUPN;
 
 //----------------------------------------------------------- class ExcRecord -
 
@@ -420,16 +425,11 @@ private:
 class ExcNameListEntry : public ExcRecord
 {
 protected:
-    UINT8*                  pData;
-    UINT16                  nFormLen;
-
+    XclExpTokenArrayRef     mxTokArr;
     UINT16                  nTabNum;            // Excel index, 1-based, 0==none
     UINT8                   nBuiltInKey;
 
     BOOL                    bDummy;
-
-    void                    DeleteData();
-    void                    SetCode( const ExcUPN& rUPN );
 
                             // default: save builtin key
     virtual void            SaveCont( XclExpStream& rStrm );
@@ -442,6 +442,8 @@ public:
     inline UINT16           GetTabIndex() const     { return nTabNum; }
     inline UINT8            GetBuiltInKey() const   { return nBuiltInKey; }
     inline BOOL             IsDummy() const         { return bDummy; }
+
+    inline bool             IsVolatile() const { return mxTokArr->IsVolatile(); }
 
     virtual UINT16          GetNum() const;
     virtual ULONG           GetLen() const;
@@ -538,6 +540,8 @@ private:
 public:
                             ExcNameList( RootData& rRootData );
     virtual                 ~ExcNameList();
+
+    inline const ExcNameListEntry* GetDefinedName( sal_uInt16 nXclNameIdx ) const { return _Get( nXclNameIdx - 1 ); }
 
     UINT16                  GetBuiltInIx( const ExcNameListEntry* pName );
 
