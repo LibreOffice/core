@@ -30,7 +30,6 @@ st	svtools\source\filter.vcl\igif			nmake	-	all	st_vigif NULL
 st	svtools\source\filter.vcl\jpeg			nmake	-	all	st_vjpeg NULL
 st	svtools\source\filter.vcl\ixbm			nmake	-	all	st_vixbm NULL
 st	svtools\source\filter.vcl\ixpm			nmake	-	all	st_vixpm NULL
-st	svtools\source\filter.vcl\ipng			nmake	-	all	st_vipng NULL
 st	svtools\source\brwbox				nmake	-	all	st__brw st_bmp NULL
 st  svtools\source\Accessibility                    nmake   -       all     st__access NULL
 st	svtools\source\urlobj				nmake	-	all	st__url NULL
@@ -49,4 +48,4 @@ st	svtools\source\svhtml				nmake	-	all	st_html NULL
 st	svtools\source\passwordcontainer		nmake	-	all	st_passcont NULL
 st  svtools\source\syslocale                nmake   -   all st_sysloc NULL
 st	svtools\source\filepicker               nmake	-	all	st_filepick st_bmp NULL
-st  svtools\util                            nmake   -   all st_util st__brw st__access st__ctr st__dde st__item st__misc st__url st_cmdparse st_ctl st_dial st_edit st_file st_html st_papp st_rtf st_sql st_usdde.u st_ueaimp.u st_ufilt.u st_msdde.m st_msc.m st_undo st_uno st_vfilt st_vigif st_vipng st_vixbm st_vixpm st_vjpeg st_vwmf st_passcont st_sysloc st_filepick st_not st_conf st_sbx st_mem st_num NULL
+st  svtools\util                            nmake   -   all st_util st__brw st__access st__ctr st__dde st__item st__misc st__url st_cmdparse st_ctl st_dial st_edit st_file st_html st_papp st_rtf st_sql st_usdde.u st_ueaimp.u st_ufilt.u st_msdde.m st_msc.m st_undo st_uno st_vfilt st_vigif st_vixbm st_vixpm st_vjpeg st_vwmf st_passcont st_sysloc st_filepick st_not st_conf st_sbx st_mem st_num NULL
