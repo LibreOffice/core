@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,11 +346,17 @@ PropBrw::~PropBrw()
 
 void PropBrw::implDetachController()
 {
-    implSetNewObject(Reference< XPropertySet >());
-    if (m_xMeAsFrame.is())
-        m_xMeAsFrame->setComponent(NULL, NULL);
-    m_xBrowserController = NULL;
-    m_xMeAsFrame = NULL;
+    implSetNewObject( Reference< XPropertySet >() );
+
+    if ( m_xMeAsFrame.is() )
+        m_xMeAsFrame->setComponent( NULL, NULL );
+
+    Reference< XController > xAsXController( m_xBrowserController, UNO_QUERY );
+    if ( xAsXController.is() )
+        xAsXController->attachFrame( NULL );
+
+    m_xBrowserController.clear();
+    m_xMeAsFrame.clear();
 }
 
 //----------------------------------------------------------------------------
@@ -407,17 +413,17 @@ sal_Bool PropBrw::Close()
 
 //----------------------------------------------------------------------------
 
-void PropBrw::implSetNewObject(const Reference< XPropertySet >& _rxObject)
+void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 {
-    if (m_xBrowserController.is())
+    if ( m_xBrowserController.is() )
     {
         m_xBrowserController->setPropertyValue(
-            ::rtl::OUString::createFromAscii("IntrospectedObject"),
-            makeAny(_rxObject)
+            ::rtl::OUString::createFromAscii( "IntrospectedObject" ),
+            makeAny( _rxObject )
         );
 
         // set the new title according to the selected object
-        SetText( GetHeadlineName(_rxObject) );
+        SetText( GetHeadlineName( _rxObject ) );
     }
 }
 
@@ -566,71 +572,67 @@ void PropBrw::Resize()
 
 void PropBrw::Update( SdrView* pNewView )
 {
-
     try
     {
-        if( pView )
+        if ( pView )
         {
             EndListening( *(pView->GetModel()) );
             pView = NULL;
         }
 
-        if( !pNewView )
+        if ( !pNewView )
             return;
         else
             pView = pNewView;
 
         // set focus on initialization
-        if (m_bInitialStateChange)
+        if ( m_bInitialStateChange )
         {
-            if (m_xBrowserComponentWindow.is())
+            if ( m_xBrowserComponentWindow.is() )
                 m_xBrowserComponentWindow->setFocus();
             m_bInitialStateChange = sal_False;
         }
 
-        DlgEdObj* pDlgEdObj = NULL;
         const SdrMarkList& rMarkList = pView->GetMarkList();
         sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
 
-        if (nMarkCount==1)
+        if ( nMarkCount == 1 )
         {
-            SdrObject *pObj=rMarkList.GetMark(0)->GetObj();
-
-            if( pObj->IsGroupObject() ) // group object
+            DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, rMarkList.GetMark(0)->GetObj() );
+            if ( pDlgEdObj )
             {
-                implSetNewObject( Reference< XPropertySet> (CreateCompPropSet( rMarkList )) );
+                if ( pDlgEdObj->IsGroupObject() ) // group object
+                {
+                    implSetNewObject( Reference< XPropertySet>( CreateCompPropSet( rMarkList ) ) );
+                }
+                else // single selection
+                {
+                    implSetNewObject( Reference< XPropertySet >( pDlgEdObj->GetUnoControlModel(), UNO_QUERY ) );
+                }
             }
             else
             {
-                pDlgEdObj = PTR_CAST(DlgEdObj, rMarkList.GetMark(0)->GetObj());
-
-                if ( pDlgEdObj ) // single selection
-                {
-                    implSetNewObject(Reference< XPropertySet >(pDlgEdObj->GetUnoControlModel(), UNO_QUERY));
-                }
-                else
-                    implSetNewObject(Reference< XPropertySet >());
+                implSetNewObject( Reference< XPropertySet >() );
             }
         }
-        else if (nMarkCount > 1) // multiple selection
+        else if ( nMarkCount > 1 ) // multiple selection
         {
-            implSetNewObject( Reference< XPropertySet> (CreateCompPropSet( rMarkList )) );
+            implSetNewObject( Reference< XPropertySet>( CreateCompPropSet( rMarkList ) ) );
         }
         else
         {
             EndListening( *(pView->GetModel()) );
             pView = NULL;
-            implSetNewObject(Reference< XPropertySet >());
+            implSetNewObject( Reference< XPropertySet >() );
             return;
         }
 
         StartListening( *(pView->GetModel()) );
     }
-    catch (Exception&)
+    catch ( Exception& )
     {
-        DBG_ERROR("PropBrw::Update: Exception occured!");
+        DBG_ERROR( "PropBrw::Update: Exception occured!" );
     }
 }
 
 //----------------------------------------------------------------------------
-
