@@ -7,6 +7,7 @@ Public FormPath as String
 Public WizardPath as String
 Public WebWizardPath as String
 Public WorkPath as String
+Public TempPath as String
 Public TexturePath as String
 Public sQueryName as String
 Public oDBConnection as Object
@@ -31,6 +32,10 @@ Public bDisposeDoc as Boolean
 Public bDebug as Boolean
 &apos;Public bStartUp as Boolean
 Public bConnectionIsovergiven as Boolean
+Public FormName As String
+Public sFormUrl as String
+Public oFormDocuments
+
 
 &apos; The macro can be called in 4 possible scenarios:
 &apos; Scenario 1. No parameters at given
@@ -108,14 +113,11 @@ Dim LocList() as String
 		.lblTables.Enabled = False
 		.lstSelFields.Tag = False
 		.Step = 1
-		.lstDatabases.StringItemList()= GetDatabaseNames(IsMissing(DataSourceName))
-		.lstDatabases.SelectedItems() = Array(0)
 	End With
 	oProgressBar.Value = 60
 	bConnectionIsovergiven = Not IsMissing(oConnection)
 	If Not IsMissing(DataSourceName) Then
 		sDBName = DataSourceName
-		DlgFormDB.GetControl(&quot;lstDatabases&quot;).SelectItem(DataSourceName, True)
 		If Not IsMissing(oConnection) Then
 			&apos; Scenario 3: a data source and a connection are given
 			Set oDBConnection = oConnection
@@ -153,7 +155,7 @@ Dim LocList() as String
 			End If
 		Else
 			&apos; Scenario 2: Only Datasourcename is given, but no connection and no Content
-			GetSelectedDBMetaData()
+			GetSelectedDBMetaData(sDBName)
 		End If
 	Else
 		&apos; Scenario 1: No parameters are given
@@ -171,18 +173,41 @@ Dim LocList() as String
 	DialogModel.imgTheme.BackGroundColor = RGB(0,60,126)
 	ToggleDatabasePage(True)
 	oProgressBar.Value = 100
-	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
+	DlgFormDB.GetControl(&quot;lstTables&quot;).SetFocus()
 	oProgressbar.End
 	RetValue = DlgFormDB.Execute()
 	DlgFormDB.Dispose()
-	If ((Not IsNull(oDBConnection)) And (Not bConnectionIsovergiven)) Then
-		oDBConnection.Dispose()
-	End If
 	If bDisposeDoc Then
-		DisposeDocument(oDocument)
+		Dim aPropertyValues(2) as new com.sun.star.beans.PropertyValue
+		oFormDocuments = oDataSource.getFormDocuments()
+		DlgFormDB.Dispose()
+		oDocument.dispose()
+		Dim	bLinkExists as Boolean
+		i = 1
+		Dim FormBaseName  as String
+		FormBaseName = FormName
+		Do								 
+			bLinkExists = oFormDocuments.HasbyHierarchicalName(FormName)
+			If bLinkExists Then
+				i = i + 1
+				FormName = FormBaseName &amp; &quot;_&quot; &amp; i
+			End If
+		Loop Until Not bLinkExists
+		aPropertyValues(0).Name = &quot;Name&quot;
+		aPropertyValues(0).Value = FormName
+		aPropertyValues(1).Name = &quot;Parent&quot;
+		aPropertyValues(1).Value = oFormDocuments()
+		aPropertyValues(2).Name = &quot;URL&quot;
+		aPropertyValues(2).Value = sFormUrl
+		Dim oDBDocument
+		oDBDocument = oFormDocuments.createInstanceWithArguments(&quot;com.sun.star.sdb.DocumentDefinition&quot;, aPropertyValues())
+		oFormDocuments.insertbyName(FormName, oDBDocument)
 	ElseIf RetValue = 0 Then
 		RemoveNirwanaShapes()
 	End If
+	If ((Not IsNull(oDBConnection)) And (Not bConnectionIsovergiven)) Then
+		oDBConnection.Dispose()
+	End If	
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then
 		Msgbox(sMsgErrMsg, 16, GetProductName())
@@ -279,6 +304,8 @@ Sub NextStep()
 			bDisposeDoc = False
 		Case 2
 			StoreForm()
+			DlgFormDB.EndExecute()
+			exit Sub
 	End Select
 	DialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; DialogModel.Step &amp; &quot;.bmp&quot;
 	DlgFormDB.Title = WizardTitle(DialogModel.Step)
@@ -343,6 +370,17 @@ Dim sBaseBookmarkName as String
 End Sub
 
 
+Sub StoreFormInDatabase()
+	Dim NoArgs() as new com.sun.star.beans.PropertyValue	
+	FormName = &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;
+	sFormUrl = TempPath &amp; &quot;/&quot; &amp; FormName
+	oDocument.StoreAsUrl(sFormUrl, NoArgs())
+	bdisposeDoc = true
+	DlgFormDB.Endexecute()
+End Sub
+
+
+
 Sub StoreForm()
 Dim sTargetPath as String
 Dim TypeNames(0,2) as String
@@ -353,10 +391,8 @@ Dim oTypes() as Object
 	TypeNames(0,0) = GetFilterName(&quot;StarOffice XML (Writer)&quot;)
 	TypeNames(0,1) = &quot;*.sxw&quot;
 	TypeNames(0,2) = &quot;&quot;
-	sTargetPath = StoreDocument(oDocument, TypeNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath, 1)
-	If sTargetPath &lt;&gt; &quot;&quot; Then
-		DlgFormDB.EndExecute()
-	End If
+	StoreFormInDatabase()
+&apos;	sTargetPath = StoreDocument(oDocument, TypeNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath, 1)
 End Sub
 
 
@@ -367,11 +403,6 @@ Dim NullList() as String
 	DialogModel.lstFields.StringItemList() = NullList()
 	DialogModel.lstSelFields.StringItemList() = NullList()
 	bEnableBinaryOptionGroup = False
-End Sub
-
-
-Sub DeleteFirstDBListBoxEntry()
-	DeleteFirstListBoxEntry(&quot;lstDatabases&quot;, sSelectDatasource)	
 End Sub
 
 
