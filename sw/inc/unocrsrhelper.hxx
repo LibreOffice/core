@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 12:11:48 $
+ *  last change: $Author: os $ $Date: 2000-12-15 12:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,9 @@ namespace SwUnoCursorHelper
 
     String                      GetCurPageStyle(SwPaM& rPaM);
 
-    sal_Bool                    IsStartOfPara(SwPaM& rUnoCrsr)
+    inline sal_Bool             IsStartOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetPoint()->nContent == 0;}
-    sal_Bool                    IsEndOfPara(SwPaM& rUnoCrsr)
+    inline sal_Bool             IsEndOfPara(SwPaM& rUnoCrsr)
                                         { return rUnoCrsr.GetCntntNode() &&
                                             rUnoCrsr.GetPoint()->nContent == rUnoCrsr.GetCntntNode()->Len();}
 
