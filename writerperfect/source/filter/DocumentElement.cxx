@@ -26,34 +26,20 @@
  */
 
 #include "DocumentElement.hxx"
+#include "DocumentHandler.hxx"
 #include "FilterInternal.hxx"
 #include <string.h>
 
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-
-using rtl::OUString;
-using namespace ::rtl;
-
-using com::sun::star::xml::sax::XAttributeList;
-
-#define UCS_SPACE 0x0020
+#define ASCII_SPACE 0x0020
 
 void TagElement::print() const
 {
-    WRITER_DEBUG_MSG(("%s\n", msTagName.getUTF8()));
+    WRITER_DEBUG_MSG(("%s\n", msTagName.cstr()));
 }
 
-void TagOpenElement::write(Reference < XDocumentHandler > &xHandler) const
+void TagOpenElement::write(DocumentHandler &xHandler) const
 {
-    WRITER_DEBUG_MSG(("Writing startElement (%s)\n", getTagName().getUTF8()));
-
-    SvXMLAttributeList * paAttrList = new SvXMLAttributeList(maAttrList);
-    Reference < XAttributeList > xAttrList ( paAttrList );
-
-    xHandler->startElement(OUString::createFromAscii(getTagName().getUTF8()), xAttrList);
-    WRITER_DEBUG_MSG(("Done\n"));
+    xHandler.startElement(getTagName().cstr(), maAttrList);
 }
 
 void TagOpenElement::print() const
@@ -61,62 +47,57 @@ void TagOpenElement::print() const
     TagElement::print();
 }
 
-void TagOpenElement::addAttribute(const char *szAttributeName, const char *szAttributeValue)
+void TagOpenElement::addAttribute(const char *szAttributeName, const WPXString &sAttributeValue)
 {
-    maAttrList.AddAttribute(OUString::createFromAscii(szAttributeName),
-                 OUString::createFromAscii(szAttributeValue));
+        maAttrList.insert(szAttributeName, sAttributeValue);
 }
 
-void TagCloseElement::write(Reference < XDocumentHandler > &xHandler) const
+void TagCloseElement::write(DocumentHandler &xHandler) const
 {
-    WRITER_DEBUG_MSG(("TagCloseElement: write (%s)\n", getTagName().getUTF8()));
+    WRITER_DEBUG_MSG(("TagCloseElement: write (%s)\n", getTagName().cstr()));
 
-    xHandler->endElement(OUString::createFromAscii(getTagName().getUTF8()));
+    xHandler.endElement(getTagName().cstr());
 }
 
-void CharDataElement::write(Reference < XDocumentHandler > &xHandler) const
+void CharDataElement::write(DocumentHandler &xHandler) const
 {
     WRITER_DEBUG_MSG(("TextElement: write\n"));
-    xHandler->characters(OUString::createFromAscii(msData.getUTF8()) );
+    xHandler.characters(msData);
 }
 
-TextElement::TextElement(const UCSString & sTextBuf) :
-    msTextBuf(sTextBuf)
+TextElement::TextElement(const WPXString & sTextBuf) :
+    msTextBuf(sTextBuf, false)
 {
 }
 
 // write: writes a text run, appropriately converting spaces to <text:s>
 // elements
-// FIXME: this function is appalling because OUString isn't rich enough.
-// probably should allocate some resizable buffer of UCS2 instead
-void TextElement::write(Reference < XDocumentHandler > &xHandler) const
+void TextElement::write(DocumentHandler &xHandler) const
 {
-    WRITER_DEBUG_MSG(("TextElement: write\n"));
-    SvXMLAttributeList * pAttrList = new SvXMLAttributeList;
-    Reference < XAttributeList > xBlankAttrList ( pAttrList );
+    WPXPropertyList xBlankAttrList;
 
-    OUString sTempUCS2;
+    WPXString sTemp;
+
     int iNumConsecutiveSpaces = 0;
-    for (int i=0; i<msTextBuf.getLen(); i++) {
-        if (msTextBuf.getUCS4()[i] == UCS_SPACE)
+        WPXString::Iter i(msTextBuf);
+    for (i.rewind(); i.next();)
+        {
+        if (*(i()) == ASCII_SPACE)
             iNumConsecutiveSpaces++;
         else
             iNumConsecutiveSpaces = 0;
 
         if (iNumConsecutiveSpaces > 1) {
-            if (sTempUCS2.getLength() > 0) {
-                xHandler->characters(sTempUCS2);
-                sTempUCS2 = OUString::createFromAscii("");
+            if (sTemp.len() > 0) {
+                xHandler.characters(sTemp);
+                sTemp.clear();
             }
-            xHandler->startElement(OUString::createFromAscii("text:s"), xBlankAttrList);
-            xHandler->endElement(OUString::createFromAscii("text:s"));
+            xHandler.startElement("text:s", xBlankAttrList);
+            xHandler.endElement("text:s");
         }
         else {
-            const uint32_t * ucs4 = msTextBuf.getUCS4();
-            sal_Unicode su = static_cast<sal_Unicode>(msTextBuf.getUCS4()[i]);
-            OUString aStringPart(&su,1);
-            sTempUCS2 += aStringPart;
+                        sTemp.append(i());
         }
     }
-    xHandler->characters(sTempUCS2);
+    xHandler.characters(sTemp);
 }
