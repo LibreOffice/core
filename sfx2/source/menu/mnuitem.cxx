@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:17:52 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,8 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pMenu )
                         String aCmd( pMenu->GetItemCommand( nId ) );
                         if ( !bImageSet && aCmd.Len() )
                         {
-                            Image aImage = SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode );
+                            Image aImage = SvFileInformationManager::GetImage(
+                                INetURLObject(aCmd), FALSE, bIsHiContrastMode );
                             if ( !!aImage )
                                 pMenu->SetItemImage( nId, aImage );
                         }
