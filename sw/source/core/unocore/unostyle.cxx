@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 12:06:47 $
+ *  last change: $Author: mib $ $Date: 2002-06-25 15:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2565,23 +2565,23 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
             SfxItemPropertySet& rStylePropSet = aSwMapProvider.GetPropertySet(nPropSetId);
             for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
             {
-                String sPropName(pNames[i]);
-                if(sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_NUMBERING_RULES))||
-                    sPropName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_FOLLOW_STYLE)))
+                const String& rPropName = pNames[i];
+                const SfxItemPropertyMap*   pMap =
+                    SfxItemPropertyMap::GetByName(
+                            rStylePropSet.getPropertyMap(), rPropName);
+                if(!pMap)
+                    throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+                if( FN_UNO_NUM_RULES ==  pMap->nWID ||
+                    FN_UNO_FOLLOW_STYLE == pMap->nWID )
                 {
                     pStates[i] = PropertyState_DIRECT_VALUE;
                 }
                 else if(SFX_STYLE_FAMILY_PAGE == eFamily &&
-                        (sPropName.EqualsAscii("Header", 0, 6)
-                            || sPropName.EqualsAscii("Footer", 0, 6)))
+                        (rPropName.EqualsAscii("Header", 0, 6)
+                            || rPropName.EqualsAscii("Footer", 0, 6)))
                 {
-                    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                                    rStylePropSet.getPropertyMap(), sPropName);
-                    if(!pMap)
-                        throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
-
                     sal_uInt16 nResId = lcl_ConvertFNToRES(pMap->nWID);
-                    BOOL bFooter = sPropName.EqualsAscii("Footer", 0, 6);
+                    BOOL bFooter = rPropName.EqualsAscii("Footer", 0, 6);
                     const SvxSetItem* pSetItem;
                     if(SFX_ITEM_SET == aSet.GetItemState(
                             bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
@@ -2599,7 +2599,24 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
                 }
                 else
                 {
-                    pStates[i] = rStylePropSet.getPropertyState(sPropName, aSet);
+                    pStates[i] = rStylePropSet.getPropertyState(*pMap, aSet);
+                    if( SFX_STYLE_FAMILY_PAGE == eFamily &&
+                        SID_ATTR_PAGE_SIZE == pMap->nWID &&
+                        PropertyState_DIRECT_VALUE == pStates[i] )
+                    {
+                        const SvxSizeItem& rSize =
+                            static_cast < const SvxSizeItem& >(
+                                    aSet.Get(SID_ATTR_PAGE_SIZE) );
+                        sal_uInt8 nMemberId = pMap->nMemberId & 0x7f;
+                        if( ( LONG_MAX == rSize.GetSize().Width() &&
+                              (MID_SIZE_WIDTH == nMemberId ||
+                               MID_SIZE_SIZE == nMemberId ) ) ||
+                            ( LONG_MAX == rSize.GetSize().Height() &&
+                              MID_SIZE_HEIGHT == nMemberId ) )
+                        {
+                            pStates[i] = PropertyState_DEFAULT_VALUE;
+                        }
+                    }
                 }
             }
         }
