@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: kr $ $Date: 2001-05-14 09:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,15 @@ extern "C" {
 #else
 #define SAL_MODULENAME(name) name SAL_DLLEXTENSION
 #endif
+
+#ifdef SAL_W32
+#define SAL_MODULENAME_WITH_VERSION(name, version) name version SAL_DLLEXTENSION
+
+#elif defined(SAL_UNX)
+#define SAL_MODULENAME_WITH_VERSION(name, version) SAL_DLLPREFIX name SAL_DLLEXTENSION "." version
+
+#endif
+
 
 #define SAL_LOADMODULE_DEFAULT    0x00000
 #define SAL_LOADMODULE_LAZY       0x00001
