@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-29 11:15:55 $
+ *  last change: $Author: mba $ $Date: 2001-04-09 16:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,7 +1012,9 @@ sal_Bool SfxMedium::TryStorage()
     aNewName += '/';
     aNewName += String( aTempDoku );
     CloseInStream_Impl();
-    SetPhysicalName( aNewName );
+    String aTemp;
+    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aNewName, aTemp );
+    SetPhysicalName( aTemp );
     GetStorage();
 
     if ( aStorage.Is() )
@@ -1188,7 +1190,11 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                     // Datei als Storage "offnen
                     nStorOpenMode = SFX_STREAM_READONLY;
                     aStorage = new SvStorage( aTmpName, nStorOpenMode );
-                    SetPhysicalName( aTmpName );
+
+                    String aTemp;
+                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTmpName, aTemp );
+                    SetPhysicalName( aTemp );
+
                     pImp->bIsTemp = sal_True;
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
                     DELETEZ( pImp->pVersions );
