@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 08:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ void SAL_CALL FmXFormController::propertyChange(const ::com::sun::star::beans::P
                 stopListening();
         }
 
-        if (bNewChanged)
+        if (bNewChanged && m_pView)
         {
             if (m_nToggleEvent)
                 Application::RemoveUserEvent( m_nToggleEvent );
@@ -866,7 +866,7 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
 {
     if (!m_pView)
     {
-        DBG_ERROR("FmXFormController::startFiltering : you can't filter if you created me as service !");
+        DBG_ERROR("FmXFormController::toggleAutoFields : you can't call toggleAutoFields when no view exists !");
         return;
     }
 
