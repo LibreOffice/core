@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:00:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,27 +223,6 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup& rSetup,
 |*
 \************************************************************************/
 
-void DrawDocShell::SetVisArea(const Rectangle& rRect)
-{
-//    SfxInPlaceObject::SetVisArea(rRect);
-
-    if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
-    {
-        // Setzt das Modified-Flag
-        SfxInPlaceObject::SetVisArea(rRect);
-    }
-    else
-    {
-        SvEmbeddedObject::SetVisArea(rRect);
-    }
-}
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
 {
     Rectangle aVisArea;
@@ -261,7 +240,7 @@ Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
     }
     else
     {
-        aVisArea = SfxInPlaceObject::GetVisArea(nAspect);
+        aVisArea = SfxObjectShell::GetVisArea(nAspect);
     }
 
     if (aVisArea.IsEmpty() && pViewShell)
@@ -329,18 +308,6 @@ FrameView* DrawDocShell::GetFrameView()
 Size DrawDocShell::GetFirstPageSize()
 {
     return SfxObjectShell::GetFirstPageSize();
-}
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void DrawDocShell::UIActivate( BOOL bActive )
-{
-    bUIActive = bActive;
-    SfxInPlaceObject::UIActivate( bActive );
 }
 
 /*************************************************************************
