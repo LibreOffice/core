@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-17 20:06:46 $
+ *  last change: $Author: sb $ $Date: 2001-08-21 08:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: rt $ $Date: 2001-08-17 20:06:46 $ $Revision: 1.27 $
+// $Author: sb $ $Date: 2001-08-21 08:35:29 $ $Revision: 1.28 $
 //============================================================================
 
 #define __RSC
@@ -443,10 +443,10 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "Action not allowed: $(ARG1) is the current directory";
     };
     // IOErrorCode_DEVICE_NOT_READY = 10,
-    String ( ERRCODE_UUI_IO_DEVICENOTREADY & ERRCODE_RES_MASK )
+    String ( ERRCODE_UUI_IO_NOTREADY & ERRCODE_RES_MASK )
     {
-        Text = "Das Gerдt (Laufwerk) $(ARG1) ist nicht bereit" ;
-        Text [ english ] = "The Device (drive) $(ARG1) is not ready" ;
+        Text = "$(ARG1) ist nicht bereit" ;
+        Text [ english ] = "$(ARG1) is not ready" ;
         Text[ english_us ] = "The device (drive) $(ARG1) is not ready";
         Text[ portuguese ] = "O dispositivo (unidade) $(ARG1) nгo estб preparado.";
         Text[ russian ] = "Устройство (диск) $(ARG1) не готово";
@@ -1204,6 +1204,24 @@ Resource RID_UUI_ERRHDL
     {
         Text = "Die zu der Partnerschaft $(ARG1) gespeicherten Daten sind defekt";
         Text[english] = "The data associated with the partnership $(ARG1) are corrupted";
+    };
+
+    String (ERRCODE_UUI_IO_NOTREADY_VOLUME & ERRCODE_RES_MASK)
+    {
+        Text = "Laufwerk $(ARG1) ist nicht bereit";
+        Text [ english ] = "Volume $(ARG1) is not ready";
+    };
+
+    String (ERRCODE_UUI_IO_NOTREADY_REMOVABLE & ERRCODE_RES_MASK)
+    {
+        Text = "$(ARG1) ist nicht bereit; bitte legen Sie ein Speichermedium ein";
+        Text [ english ] = "$(ARG1) is not ready; please insert a storage medium";
+    };
+
+    String (ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE & ERRCODE_RES_MASK)
+    {
+        Text = "Laufwerk $(ARG1) ist nicht bereit; bitte legen Sie ein Speichermedium ein";
+        Text [ english ] = "Volume $(ARG1) is not ready; please insert a storage medium";
     };
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-16 13:41:57 $
+ *  last change: $Author: sb $ $Date: 2001-08-21 08:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  The UUI Resources
 //
-// $Author: sb $ $Date: 2001-08-16 13:41:57 $ $Revision: 1.7 $
+// $Author: sb $ $Date: 2001-08-21 08:35:29 $ $Revision: 1.8 $
 //============================================================================
 
 #ifndef UUI_IDS_HRC
@@ -111,7 +111,7 @@
 #define ERRCODE_UUI_IO_CANTTELL           (ERRCODE_AREA_UUI +  7)
 #define ERRCODE_UUI_IO_CANTWRITE          (ERRCODE_AREA_UUI +  8)
 #define ERRCODE_UUI_IO_CURRENTDIR         (ERRCODE_AREA_UUI +  9)
-#define ERRCODE_UUI_IO_DEVICENOTREADY     (ERRCODE_AREA_UUI + 10)
+#define ERRCODE_UUI_IO_NOTREADY           (ERRCODE_AREA_UUI + 10)
 #define ERRCODE_UUI_IO_NOTSAMEDEVICE      (ERRCODE_AREA_UUI + 11)
 #define ERRCODE_UUI_IO_GENERAL            (ERRCODE_AREA_UUI + 12)
 #define ERRCODE_UUI_IO_INVALIDACCESS      (ERRCODE_AREA_UUI + 13)
@@ -145,6 +145,9 @@
 #define ERRCODE_UUI_WRONGJAVA_VERSION_MIN (ERRCODE_AREA_UUI + 41)
 #define ERRCODE_UUI_BADPARTNERSHIP        (ERRCODE_AREA_UUI + 42)
 #define ERRCODE_UUI_BADPARTNERSHIP_NAME   (ERRCODE_AREA_UUI + 43)
+#define ERRCODE_UUI_IO_NOTREADY_VOLUME    (ERRCODE_AREA_UUI + 44)
+#define ERRCODE_UUI_IO_NOTREADY_REMOVABLE (ERRCODE_AREA_UUI + 45)
+#define ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE (ERRCODE_AREA_UUI + 46)
 
 //============================================================================
 #define HID_DLG_LOGIN (HID_UUI_START + 0)

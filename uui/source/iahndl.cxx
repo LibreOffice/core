@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-20 12:31:10 $
+ *  last change: $Author: sb $ $Date: 2001-08-21 08:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,9 +357,10 @@ getAuthenticationContinuations(
     }
 }
 
-bool getArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
-                 rtl::OUString const & rKey,
-                 rtl::OUString * pValue)
+bool
+getStringArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
+                  rtl::OUString const & rKey,
+                  rtl::OUString * pValue)
     SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
@@ -379,24 +380,47 @@ bool getArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
     return false;
 }
 
+bool
+getBoolArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
+                rtl::OUString const & rKey,
+                bool * pValue)
+    SAL_THROW(())
+{
+    for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
+    {
+        star::beans::PropertyValue aProperty;
+        if ((rArguments[i] >>= aProperty) && aProperty.Name == rKey)
+        {
+            sal_Bool bValue;
+            if (aProperty.Value >>= bValue)
+            {
+                if (pValue)
+                    *pValue = bValue;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool getResourceNameArgument(star::uno::Sequence< star::uno::Any > const &
                                  rArguments,
                              rtl::OUString * pValue)
     SAL_THROW(())
 {
-    if (!getArgument(rArguments,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")),
-                     pValue))
+    if (!getStringArgument(rArguments,
+                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")),
+                           pValue))
         return false;
     // Use the resource name only for file URLs, to avoid confusion:
     //TODO! work with ucp locality concept instead of hardcoded "file"?
     if (pValue
         && pValue->matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(
                                                   "file:")))
-        getArgument(rArguments,
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "ResourceName")),
-                    pValue);
+        getStringArgument(rArguments,
+                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "ResourceName")),
+                          pValue);
     return true;
 }
 
@@ -555,8 +579,8 @@ UUIInteractionHandler::handle(
                         // CANT_WRITE
                     { ERRCODE_IO_CURRENTDIR, ERRCODE_UUI_IO_CURRENTDIR },
                         // CURRENT_DIRECTORY
-                    { ERRCODE_IO_DEVICENOTREADY,
-                      ERRCODE_UUI_IO_DEVICENOTREADY }, // DEVICE_NOT_READY
+                    { ERRCODE_IO_DEVICENOTREADY, ERRCODE_UUI_IO_NOTREADY },
+                        // DEVICE_NOT_READY
                     { ERRCODE_IO_NOTSAMEDEVICE,
                       ERRCODE_UUI_IO_NOTSAMEDEVICE }, // DIFFERENT_DEVICES
                     { ERRCODE_IO_GENERAL, ERRCODE_UUI_IO_GENERAL }, // GENERAL
@@ -678,11 +702,12 @@ UUIInteractionHandler::handle(
                                || getResourceNameArgument(aArguments,
                                                           &aArgUri))
                           && (bArgFolder
-                              || getArgument(aArguments,
-                                             rtl::OUString(
-                                                 RTL_CONSTASCII_USTRINGPARAM(
-                                                     "Folder")),
-                                             &aArgFolder)) ?
+                              || getStringArgument(
+                                     aArguments,
+                                     rtl::OUString(
+                                         RTL_CONSTASCII_USTRINGPARAM(
+                                             "Folder")),
+                                     &aArgFolder)) ?
                               *new TwoStringErrorInfo(
                                        aID[aIOException.Code][1],
                                        aArgUri,
@@ -690,15 +715,51 @@ UUIInteractionHandler::handle(
                               aID[aIOException.Code][0];
                     break;
 
+                case star::ucb::IOErrorCode_DEVICE_NOT_READY:
+                    if (bArgUri
+                        || getResourceNameArgument(aArguments, &aArgUri))
+                    {
+                        rtl::OUString aResourceType;
+                        getStringArgument(
+                            aArguments,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "ResourceType")),
+                            &aResourceType);
+                        bool bRemovable = false;
+                        getBoolArgument(
+                            aArguments,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Removable")),
+                            &bRemovable);
+                        nErrorID
+                            = aResourceType.
+                                      equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                                       "volume")) ?
+                                  *new StringErrorInfo(
+                                           bRemovable ?
+                                    ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE :
+                                               ERRCODE_UUI_IO_NOTREADY_VOLUME,
+                                           aArgUri) :
+                                  *new StringErrorInfo(
+                                           bRemovable ?
+                                           ERRCODE_UUI_IO_NOTREADY_REMOVABLE :
+                                               ERRCODE_UUI_IO_NOTREADY,
+                                           aArgUri);
+                    }
+                    else
+                        nErrorID = aID[aIOException.Code][0];
+                    break;
+
                 case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
                     nErrorID
                         = bArgVolumes
-                          || getArgument(aArguments,
-                                         rtl::OUString(
-                                             RTL_CONSTASCII_USTRINGPARAM(
-                                                 "Volume")),
-                                         &aArgVolume)
-                                 && getArgument(
+                          || getStringArgument(
+                                     aArguments,
+                                     rtl::OUString(
+                                         RTL_CONSTASCII_USTRINGPARAM(
+                                             "Volume")),
+                                     &aArgVolume)
+                                 && getStringArgument(
                                         aArguments,
                                         rtl::OUString(
                                             RTL_CONSTASCII_USTRINGPARAM(
@@ -716,10 +777,11 @@ UUIInteractionHandler::handle(
                         || getResourceNameArgument(aArguments, &aArgUri))
                     {
                         rtl::OUString aResourceType;
-                        getArgument(aArguments,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                      "ResourceType")),
-                                    &aResourceType);
+                        getStringArgument(aArguments,
+                                          rtl::OUString(
+                                              RTL_CONSTASCII_USTRINGPARAM(
+                                                  "ResourceType")),
+                                          &aResourceType);
                         nErrorID
                             = *new StringErrorInfo(
                                        aResourceType.
