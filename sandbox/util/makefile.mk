@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2001-05-21 09:14:57 $
+#   last change: $Author: jl $ $Date: 2002-10-25 06:55:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,8 @@ PRJNAME = sandbox
 TARGET  = lib_sandbox_util
 
 # --- Settings -----------------------------------------------------
+USE_UDK_EXTENDED_MANIFESTFILE=TRUE
+USE_EXTENDED_MANIFESTFILE=TRUE
 
 .INCLUDE :  settings.mk
 
