@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:08:34 $
+ *  last change: $Author: oj $ $Date: 2001-06-25 08:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #define FT_HOSTNAME             18
 #define FT_BASEDN               19
 #define FT_PORTNUMBER           20
+#define FT_LDAPROWCOUNT         21
 
 #define LB_DATATYPE             1
 #define LB_DATASOURCES          2
@@ -136,6 +137,7 @@
 #define TLB_ACTIONS             1
 
 #define NF_PORTNUMBER           1
+#define NF_LDAPROWCOUNT         2
 
 
 //========================================================================
@@ -177,6 +179,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/06/20 07:08:34  oj
+ *  #88434# new page for user admin
+ *
  *  Revision 1.18  2001/05/29 13:33:12  oj
  *  #87149# addressbook ui impl
  *
