@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-07 13:58:33 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 15:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3080,6 +3080,9 @@ BOOL SwCntntFrm::MoveFtnCntFwd( BOOL bMakePage, SwFtnBossFrm *pOldBoss )
                 {
                     pNewUp = new SwSectionFrm( *pSect, FALSE );
                     pNewUp->InsertBefore( pTmpFtn, pTmpFtn->Lower() );
+#ifdef VERTICAL_LAYOUT
+                    ((SwSectionFrm*)pNewUp)->Init();
+#endif
                     pNewUp->Frm().Pos() = pTmpFtn->Frm().Pos();
                     pNewUp->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
 

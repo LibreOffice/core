@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-09 13:30:52 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 15:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
     {
         aFrm.Pos( pUp->Frm().Pos() );
         aFrm.Pos() += pUp->Prt().Pos();
+        aFrm.Pos().Y() += pUp->Prt().Height() - aFrm.Height();
     }
     if( bNotify )
         aFrm.Pos().Y() -= 1;
@@ -242,6 +243,7 @@ void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
     {
         aFrm.Pos( pUp->Frm().Pos() );
         aFrm.Pos() += pUp->Prt().Pos();
+        aFrm.Pos().X() += pUp->Prt().Width() - aFrm.Width();
     }
     if( bNotify )
         aFrm.Pos().X() -= 1;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-17 11:36:52 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 15:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,6 +922,9 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                     //Hatte der SectionFrm ueberhaupt Inhalt? Wenn
                     //nicht kann er gleich umgehaengt werden.
                     SwSectionFrm *pSct;
+#ifdef VERTICAL_LAYOUT
+                    BOOL bInit = FALSE;
+#endif
                     if ( !rpActualSection->GetSectionFrm()->ContainsCntnt())
                     {
                         pSct = rpActualSection->GetSectionFrm();
@@ -932,11 +935,19 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                         pSct = new SwSectionFrm(
                             *rpActualSection->GetSectionFrm(), FALSE );
                         rpActualSection->GetSectionFrm()->SimpleFormat();
+#ifdef VERTICAL_LAYOUT
+                        bInit = TRUE;
+#else
                         pSct->Frm().Width( rpLay->Prt().Width() );
                         pSct->Prt().Width( rpLay->Prt().Width() );
+#endif
                     }
                     rpActualSection->SetSectionFrm( pSct );
                     pSct->InsertBehind( rpLay, 0 );
+#ifdef VERTICAL_LAYOUT
+                    if( bInit )
+                        pSct->Init();
+#endif
                     pSct->Frm().Pos() = rpLay->Frm().Pos();
                     pSct->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
 

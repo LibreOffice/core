@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:19:05 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 15:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1778,6 +1778,9 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 {
                     pSct = new SwSectionFrm( *pSct, TRUE );
                     pSct->Paste( pNewUpper );
+#ifdef VERTICAL_LAYOUT
+                    pSct->Init();
+#endif
                     pNewUpper = pSct;
                     pSct->SimpleFormat();
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-09 13:29:31 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 15:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
         if( !rSect.IsColLocked() )
             rSect.InvalidateSize();
     }
+#ifndef VERTICAL_LAYOUT
     Frm().Width( rSect.Frm().Width() );
     Prt().Width( rSect.Prt().Width() );
     const SwFmtCol &rCol = rSect.GetFmt()->GetCol();
@@ -194,7 +195,29 @@ SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
                              //Old-Wert hereingereicht wird.
         ChgColumns( aOld, rCol, IsAnyNoteAtEnd() );
     }
+#endif
 }
+
+#ifdef VERTICAL_LAYOUT
+void SwSectionFrm::Init()
+{
+    ASSERT( GetUpper(), "SwSectionFrm::Init before insertion?!" );
+    SWRECTFN( this )
+    long nWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
+    (Frm().*fnRect->fnSetWidth)( nWidth );
+    (Prt().*fnRect->fnSetWidth)( nWidth );
+    (Frm().*fnRect->fnSetHeight)( 0 );
+    (Prt().*fnRect->fnSetHeight)( 0 );
+    const SwFmtCol &rCol = GetFmt()->GetCol();
+    if( ( rCol.GetNumCols() > 1 || IsAnyNoteAtEnd() ) && !IsInFtn() )
+    {
+        const SwFmtCol *pOld = Lower() ? &rCol : new SwFmtCol;
+        ChgColumns( *pOld, rCol, IsAnyNoteAtEnd() );
+        if( pOld != &rCol )
+            delete pOld;
+    }
+}
+#endif
 
 SwSectionFrm::~SwSectionFrm()
 {
@@ -1154,13 +1177,17 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
     {
         nDiff = (*fnRect->fnYDiff)( nDeadLine, (Frm().*fnRect->fnGetTop)() );
         if( nDiff < 0 )
+        {
             nDiff = 0;
+            nDeadLine = (Frm().*fnRect->fnGetTop)();
+        }
         const Size aOldSz( Prt().SSize() );
-        Frm().Height( nDiff );
+        (Frm().*fnRect->fnSetBottom)( nDeadLine );
         nDiff = (Frm().*fnRect->fnGetHeight)();
-        if( (this->*fnRect->fnGetTopMargin)() > nDiff )
-            (Prt().*fnRect->fnSetTop)( nDiff );
-        (Prt().*fnRect->fnSetBottom)( nDiff-(this->*fnRect->fnGetTopMargin)() );
+        long nTop = (this->*fnRect->fnGetTopMargin)();
+        if( nTop > nDiff )
+            nTop = nDiff;
+        (this->*fnRect->fnSetYMargins)( nTop, 0 );
 #else
     SwTwips nDeadLine = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
                         + GetUpper()->Prt().Height();
@@ -1713,6 +1740,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
             pNew->InsertBefore( pLayLeaf, pLayLeaf->Lower() );
 
 #ifdef VERTICAL_LAYOUT
+            pNew->Init();
             SWRECTFN( pNew )
             (pNew->*fnRect->fnMakePos)( pLayLeaf, NULL, TRUE );
 #else
@@ -1897,6 +1925,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType eMakeFtn )
         pNew = new SwSectionFrm( *pSect, TRUE );
         pNew->InsertBefore( pLayLeaf, NULL );
 #ifdef VERTICAL_LAYOUT
+        pNew->Init();
         SWRECTFN( pNew )
         (pNew->*fnRect->fnMakePos)( pLayLeaf, pNew->GetPrev(), TRUE );
 #else
@@ -2014,7 +2043,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
         if ( nDist <= 0L )
             return 0L;
 
-        BOOL bInCalcCntnt = IsInFly() && FindFlyFrm()->IsLocked();
+        BOOL bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
         if ( !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
              GetSection()->GetFmt()->GetBalancedColumns().GetValue() )
         {
@@ -2033,7 +2062,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                 lcl_DeadLine( this ) - Frm().Top() - Frm().Height();
 #endif
             SwTwips nSpace = nGrow;
-            if( !bInCalcCntnt && nGrow < nDist )
+            if( !bInCalcCntnt && nGrow < nDist && GetUpper() )
                 nGrow += GetUpper()->Grow( LONG_MAX PHEIGHT, TRUE );
 
             if( nGrow > nDist )
@@ -2069,7 +2098,8 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                         SetCompletePaint();
                         InvalidatePage();
                     }
-                    if( GetUpper()->IsHeaderFrm() || GetUpper()->IsFooterFrm() )
+                    if( GetUpper() && ( GetUpper()->IsHeaderFrm() ||
+                                        GetUpper()->IsFooterFrm() ) )
                         GetUpper()->InvalidateSize();
                 }
 #ifdef VERTICAL_LAYOUT

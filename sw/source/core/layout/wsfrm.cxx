@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-09 13:30:17 $
+ *  last change: $Author: ama $ $Date: 2001-11-13 15:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2725,7 +2725,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)()
                                           + nReal - nTmp );
             if( bChgPos )
-                Frm().Pos().X() += nReal - nTmp;
+                Frm().Pos().X() += nTmp - nReal;
             nReal = nTmp;
         }
     }
