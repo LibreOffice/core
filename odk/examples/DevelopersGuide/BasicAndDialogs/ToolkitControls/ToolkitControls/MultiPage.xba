@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="MultiPage" script:language="StarBasic">REM  *****  BASIC  *****
+
+Dim oDialog As Object
+
+Sub Main()
+
+	Dim oLibContainer As Object, oLib As Object
+	Dim oInputStreamProvider As Object
+	Dim oDialogModel As Object
+			
+	Const sLibName = &quot;ToolkitControls&quot;
+	Const sDialogName = &quot;MultiPageDlg&quot;
+
+	REM load/get library and input stream provider
+	oLibContainer = DialogLibraries	
+	oLibContainer.loadLibrary( sLibName )
+	oLib = oLibContainer.getByName( sLibName )	
+	oInputStreamProvider = oLib.getByName( sDialogName )
+
+	REM create dialog control
+	oDialog = CreateUnoDialog( oInputStreamProvider )
+	
+	REM initialize dialog and controls
+	Initialize()
+											
+	REM show the dialog
+	oDialog.execute()
+				
+End Sub
+
+
+Sub Initialize()
+
+	Dim oDialogModel As Object
+	Dim oNextButton As Object, oNextButtonModel As Object
+	Dim oListBox As Object
+	Dim oCheckBoxModel As Object
+	Dim oOptionButtonModel As Object
+	Dim oCurrencyFieldModel As Object
+	Dim oNumericFieldModel As Object
+	Dim oComboBox As Object, oComboBoxModel As Object
+	Dim i As Integer
+	Dim sName As String	
+	Dim sPizzas As Variant, sToppings As Variant
+	Dim sCreditCards As Variant
+	Dim sMonths As Variant
+	Dim iCount As Integer
+		
+	REM dialog properties
+	oDialogModel = oDialog.Model
+	oDialogModel.Step = 1
+
+	REM next button properties
+	oNextButtonModel = oDialogModel.NextButton
+	oNextButtonModel.DefaultButton = True			
+	oNextButton = oDialog.getControl(&quot;NextButton&quot;)
+	oNextButton.setFocus()
+
+	REM enable/disable back button, set label of next button
+	PageChanged()
+
+	REM set control properties on dialog page 1
+
+	REM pizzas in list box
+	oListBox = oDialog.getControl(&quot;ListBox1&quot;)
+	sPizzas = Array(&quot;Margarita&quot;,&quot;Vegeterian&quot;,&quot;Ham &amp; Pineapple&quot;,&quot;Mexican&quot;,&quot;Seafood&quot;)		
+	oListBox.addItems( sPizzas, 0 )
+	oListBox.selectItem( sPizzas(0), True )
+
+	REM extra toppings 
+	sToppings = Array(&quot;Extra Cheese&quot;,&quot;Corn&quot;,&quot;Onions&quot;,&quot;Olives&quot;)	
+	For i = 0 To 3
+	    sName = &quot;CheckBox&quot; + i
+		oCheckBoxModel = oDialogModel.getByName( sName )
+		oCheckBoxModel.Label = sToppings( i )		
+	Next i
+
+	REM default pizza size
+	oOptionButtonModel = oDialogModel.OptionButton2
+	oOptionButtonModel.State = True
+
+	REM currency field properties
+	oCurrencyFieldModel = oDialogModel.CurrencyField1
+	oCurrencyFieldModel.ReadOnly = True
+	oCurrencyFieldModel.DecimalAccuracy = 2
+	oCurrencyFieldModel.CurrencySymbol = &quot;€&quot;
+	oCurrencyFieldModel.PrependCurrencySymbol = True	
+
+	REM calculate prize for default settings
+	CalculatePrize()
+	
+	REM set control properties on dialog page 2
+
+	REM numeric field properties	
+	oNumericFieldModel = oDialogModel.NumericField1
+	oNumericFieldModel.DecimalAccuracy = 0
+	
+	REM set control properties on dialog page 3
+	
+	REM default payment method
+	oOptionButtonModel = oDialogModel.OptionButton4
+	oOptionButtonModel.State = True
+		
+	REM credit cards in combo box
+	oComboBox = oDialog.getControl(&quot;ComboBox1&quot;)
+	sCreditCards = Array(&quot;Visa&quot;,&quot;Master/EuroCard&quot;,&quot;American Express&quot;)
+	oComboBox.addItems( sCreditCards, 0 )
+	oComboBoxModel = oDialogModel.ComboBox1	
+	oComboBoxModel.Text = sCreditCards(0)	
+	
+	REM expiration month			
+	oListBox = oDialog.getControl(&quot;ListBox2&quot;)
+	sMonths = Array(&quot;01&quot;,&quot;02&quot;,&quot;03&quot;,&quot;04&quot;,&quot;05&quot;,&quot;06&quot;,&quot;07&quot;,&quot;08&quot;,&quot;09&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)	
+	oListBox.addItems( sMonths, 0 )
+	oListBox.selectItemPos( Month(Date())-1, True )
+
+	REM expiration year
+	oListBox = oDialog.getControl(&quot;ListBox3&quot;)	
+	For i = Year(Date()) To Year(Date()) + 4
+		iCount = oListBox.getItemCount()
+		oListBox.addItem( Str( i ), iCount )
+	Next i	
+	oListBox.selectItemPos( 0, True )
+
+End Sub
+
+
+Sub CalculatePrize()
+
+	Dim oDialogModel As Object
+	Dim oListBox As Object
+	Dim oCheckBoxModel As Object
+	Dim oCurrencyFieldModel As Object	
+	Dim Position As Integer
+	Dim sName As String	
+	Dim i As Integer, nChecked As Integer
+	Dim Prizes As Variant
+	Dim Prize As Double
+	
+	REM prizes for medium size pizzas
+	Prizes = Array( 4, 5, 6, 6, 7 )
+		
+	REM get the position of the currently selected pizza
+	oListBox = oDialog.getControl(&quot;ListBox1&quot;)
+	Position = oListBox.getSelectedItemPos()
+	Prize = Prizes( Position )
+
+	REM small pizzas are 1€ cheaper, large pizzas are 1€ more expensive
+	oDialogModel = oDialog.Model	
+	If oDialogModel.OptionButton1.State = 1 Then
+		Prize = Prize - 1
+    ElseIf oDialogModel.OptionButton3.State = 1 Then
+    	Prize = Prize + 1
+    End If
+	
+	REM get the number of extra toppings (0.5€ per extra topping)
+	For i = 0 To 3
+	    sName = &quot;CheckBox&quot; + i
+		oCheckBoxModel = oDialogModel.getByName( sName )		
+		If oCheckBoxModel.State = 1 Then
+			nChecked = nChecked + 1
+		End If
+	Next i        			
+	Prize = Prize + nChecked * 0.5
+
+	REM set the value of the currency field
+	oCurrencyFieldModel = oDialogModel.CurrencyField1	
+	oCurrencyFieldModel.Value = Prize
+
+End Sub
+
+
+Sub PaymentMethodChanged()
+
+	Dim oDialogModel As Object
+	Dim bEnabled As Boolean
+
+	REM get dialog model
+	oDialogModel = oDialog.getModel()
+		
+	If oDialogModel.OptionButton4.State = 1 Then
+		REM enable controls for payment by credit card
+		bEnabled = True	
+	ElseIf oDialogModel.OptionButton5.State = 1 Then
+		REM disable controls for payment by check
+		bEnabled = False	
+	End If
+	
+	REM enable/disable controls
+	With oDialogModel	
+		.Label11.Enabled = bEnabled
+		.Label12.Enabled = bEnabled
+		.Label13.Enabled = bEnabled
+		.ComboBox1.Enabled = bEnabled
+		.TextField6.Enabled = bEnabled
+		.ListBox2.Enabled = bEnabled
+		.ListBox3.Enabled = bEnabled
+		.TextField7.Enabled = bEnabled	
+	End With
+	
+End Sub
+
+
+Sub NextPage()
+
+	Dim oDialogModel As Object
+
+	REM get dialog model
+	oDialogModel = oDialog.getModel()
+
+	If oDialogModel.Step &lt; 3 Then	
+		REM next page
+		oDialogModel.Step = oDialogModel.Step + 1	
+		REM enable/disable back button, set label of next button		
+		PageChanged()	
+	ElseIf oDialogModel.Step = 3 Then
+		REM submit order
+		SubmitOrder()		
+		REM hide dialog
+		oDialog.endExecute()
+	End If
+
+End Sub
+
+
+Sub PreviousPage()
+	
+	Dim oDialogModel As Object
+
+	REM get dialog model
+	oDialogModel = oDialog.getModel()
+
+	If oDialogModel.Step &gt; 1 Then	
+		REM previous page
+		oDialogModel.Step = oDialogModel.Step - 1	
+		REM enable/disable back button, set label of next button		
+		PageChanged()		
+	End If
+	
+End Sub
+
+
+Sub PageChanged()
+
+	Dim oDialogModel As Object
+	Dim oBackButtonModel As Object
+	Dim oNextButtonModel As Object
+
+	Const sLabelNext = &quot;Next &gt;&gt;&quot;
+	Const sLabelSubmit = &quot;Submit&quot;
+
+	REM get dialog model
+	oDialogModel = oDialog.getModel()
+
+	REM get back button model
+	oBackButtonModel = oDialogModel.getByName(&quot;BackButton&quot;)
+
+	REM enable/disable back button
+	If oDialogModel.Step = 1 Then	
+		oBackButtonModel.Enabled = False		
+    Else    			
+		oBackButtonModel.Enabled = True
+	End If
+	
+	REM get next button model
+	oNextButtonModel = oDialogModel.getByName(&quot;NextButton&quot;)
+
+	REM set label of next button	
+	If oDialogModel.Step = 3 Then
+		oNextButtonModel.Label = sLabelSubmit
+	Else	
+		oNextButtonModel.Label = sLabelNext		
+	End If
+
+End Sub
+
+
+Sub SubmitOrder()
+
+	MsgBox &quot;Your pizza will be delivered in 45 minutes.&quot;
+
+End Sub
+
+</script:module>
