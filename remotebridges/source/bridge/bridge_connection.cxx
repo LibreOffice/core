@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridge_connection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:45:57 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,6 @@ namespace remotebridges_bridge
         {
             // TODO possible optimization : give
             ::rtl::ByteSequence seq( nSize , ::rtl::BYTESEQ_NODEFAULT );
-
-            // #i20906#: Handle out-of-memory condition.
-            // Clean solution will be supplied with #i22343# (ByteSequence
-            // ctor will throw ::std::bad_alloc())
-            if ( seq.getHandle() == 0 )
-                return 0;
-
             sal_Int32 nRead = m->m_r->read( *(Sequence<sal_Int8>*)&seq , nSize );
             memcpy( pDest , seq.getConstArray() , nRead );
             return nRead;
@@ -124,7 +117,10 @@ namespace remotebridges_bridge
         {
             return 0;
         }
-
+        catch (::std::bad_alloc &)
+        {
+            return 0;
+        }
     }
 
     sal_Int32 OConnectionWrapper::thisWrite( remote_Connection *p ,
