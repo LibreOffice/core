@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: vg $ $Date: 2003-09-09 13:28:25 $
+#   last change: $Author: vg $ $Date: 2003-09-11 09:05:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.88 $ ';
+$id_str = ' $Revision: 1.89 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -673,7 +673,7 @@ sub FindIndepPrj {
             return $Prj if ($#PrjDeps == -1);
         };
         # If there are only dependent projects in hash - generate error
-        return '' if ($BuildAllParents && $chidren);
+        return '' if ($BuildAllParents && $children);
         if ($children) {
             $only_dependent = 1;
             return '';
