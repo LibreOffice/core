@@ -77,7 +77,7 @@ close SVERSION;
 # ================================================================================
 
 print "Chart2 project is in <$PRJ_PATH>\n";
-print "Office 6.1 is installed in <$OFF_PATH>\n";
+print "OpenOffice.org 2.0/StarOffice 8 is installed in <$OFF_PATH>\n";
 print "Are these assumptions correct? [y/n] ";
 if( <STDIN> !~ /^y?$/i )
 {
