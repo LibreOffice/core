@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-01 17:28:31 $
+ *  last change: $Author: pl $ $Date: 2002-01-15 18:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,17 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                     bBreak = FALSE;
                 break;
         }
+
+        /*
+         *  #95901# avoid mouse pointer for popup menus because
+         *  of sawfish window manager. This cannot be done in
+         *  the Unix dependant part since that cannot decide between
+         *  popup menus and other menus/floatwins.
+         */
+        if( ( (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_DOWN)  ||
+              (nArrangeAry[nArrangeIndex] == FLOATWIN_POPUPMODE_RIGHT) )
+            && ( nFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE ) )
+            aPos.X() += 1;
 
         // Evt. noch anpassen
         if ( bBreak && !(nFlags & FLOATWIN_POPUPMODE_NOAUTOARRANGE) )
