@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:42 $
+ *  last change: $Author: babak.mahbod $ $Date: 2000-09-21 20:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,15 +335,19 @@ namespace configmgr
         OSL_ASSERT(pSequenceTD);
         OSL_ASSERT(pSequenceTD->pType);
 
-        if (pSequenceTD && pSequenceTD->pType)
-        {
-    #if (SUPD >= 0x601)
-            return staruno::Type(pSequenceTD->pType);
-    #else
-            OSL_ASSERT(pSequenceTD->pType);
-            return staruno::Type(pSequenceTD->pType->pWeakRef);
-    #endif
-        }
+        if ( pSequenceTD && pSequenceTD->pType )
+            {
+                // SUPD expects a decimal constant, hence,
+                // build version comparison is made using
+                // a decimal number
+
+                #if ( SUPD >= 601 )
+                    return staruno::Type(pSequenceTD->pType);
+                #else
+                    OSL_ASSERT(pSequenceTD->pType);
+                    return staruno::Type(pSequenceTD->pType->pWeakRef);
+                #endif
+            } //if
 
         return staruno::Type();
     }
