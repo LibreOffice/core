@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-04 12:16:25 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 10:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <com/sun/star/document/XExporter.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DOCUMENT_XMIMETYPEINFO_HPP_
+#include <com/sun/star/document/XMimeTypeInfo.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -101,8 +105,8 @@
 #include <com/sun/star/util/URL.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -196,7 +200,7 @@ namespace svx
 
         @implements com.sun.star.drawing.GraphicExportFilter
     */
-    class GraphicExporter : public WeakImplHelper3< XFilter, XExporter, XServiceInfo >
+    class GraphicExporter : public WeakImplHelper4< XFilter, XExporter, XServiceInfo, XMimeTypeInfo >
     {
     public:
         GraphicExporter();
@@ -213,6 +217,10 @@ namespace svx
         virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+
+        // XMimeTypeInfo
+        virtual sal_Bool SAL_CALL supportsMimeType( const ::rtl::OUString& MimeTypeName ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException);
 
     private:
         Reference< XShape >     mxShape;
@@ -787,7 +795,7 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
     }
     while( 0 );
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
     }
 
@@ -811,5 +819,50 @@ Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
     return GraphicExporter_getSupportedServiceNames();
+}
+
+// XMimeTypeInfo
+sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& MimeTypeName ) throw (RuntimeException)
+{
+    const String aMimeTypeName( MimeTypeName );
+
+    GraphicFilter*  pFilter = GetGrfFilter();
+    sal_uInt16 nCount = pFilter->GetExportFormatCount();
+    sal_uInt16 nFilter;
+    for( nFilter = 0; nFilter < nCount; nFilter++ )
+    {
+        if( aMimeTypeName.Equals( pFilter->GetExportFormatMediaType( nFilter ) ) )
+        {
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
+
+Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) throw (RuntimeException)
+{
+    GraphicFilter*  pFilter = GetGrfFilter();
+    sal_uInt16 nCount = pFilter->GetExportFormatCount();
+    sal_uInt16 nFilter;
+    sal_uInt16 nFound = 0;
+
+    Sequence< OUString > aSeq( nCount );
+    OUString* pStr = aSeq.getArray();
+
+    for( nFilter = 0; nFilter < nCount; nFilter++ )
+    {
+        OUString aMimeType( pFilter->GetExportFormatMediaType( nFilter ) );
+        if( aMimeType.getLength() )
+        {
+            *pStr++ = aMimeType;
+            nFound++;
+        }
+    }
+
+    if( nFound < nCount )
+        aSeq.realloc( nFound );
+
+    return aSeq;
 }
 
