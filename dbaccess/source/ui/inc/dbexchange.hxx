@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:53:29 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 15:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,35 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-#ifndef DBAUI_TOKENWRITER_HXX
-#include "TokenWriter.hxx"
-#endif
 
 namespace dbaui
 {
+
+#define DCF_OBJECT_DESCRIPTOR       0x0001
+#define DCF_HTML_TABLE              0x0002
+#define DCF_RTF_TABLE               0x0004
+#define DCF_ALL                     DCF_OBJECT_DESCRIPTOR | DCF_HTML_TABLE | DCF_RTF_TABLE
+
+    class ORTFImportExport;
+    class OHTMLImportExport;
     class ODataClipboard : public TransferableHelper
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aSeq;
@@ -84,6 +101,8 @@ namespace dbaui
         OHTMLImportExport*      m_pHtml;
         ORTFImportExport*       m_pRtf;
 
+        sal_Int32               m_nFormats;
+
         sal_Int32               m_nObjectType;
             // the object type as extracted from the property sequence given in the ctor.
             // We need different clipboard formats for queries and tables, so we need this information
@@ -91,9 +110,28 @@ namespace dbaui
             // needed to provide a SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
 
     public:
-        ODataClipboard( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aSeq,
-                        OHTMLImportExport*  _pHtml/* will be hold by Reference<>*/,
-                        ORTFImportExport*   _pRtf/* will be hold by Reference<>*/);
+        ODataClipboard(
+            const ::rtl::OUString&  _rDatasource,
+            const sal_Int32         _nCommandType,
+            const ::rtl::OUString&  _rCommand,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const sal_Int32 _nFormats = DCF_ALL
+        );
+
+        /** with this ctor, only the object descriptor format will be provided
+        */
+        ODataClipboard(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLivingForm,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >& _rxComposer
+        );
+            // (the query composer could be obtained from the connection which is a property of the form,
+            // but for simplity we pass it here .... if somebody needs this class, having a form, but no composer,
+            // we can adjust this
+
+        /// add a row to the object descriptor
+        void addRow(sal_Int32 _nRow);
 
     protected:
         virtual void        AddSupportedFormats();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 10:58:42 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 15:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@
 #ifndef _DBACCESS_DBATOOLS_HXX_
 #include "dbatools.hxx"
 #endif
+#ifndef DBAUI_TOKENWRITER_HXX
+#include "TokenWriter.hxx"
+#endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 namespace dbaui
 {
@@ -84,19 +93,38 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::datatransfer;
 
     // -----------------------------------------------------------------------------
-    ODataClipboard::ODataClipboard( const Sequence< PropertyValue >& _aSeq,
-                    OHTMLImportExport*  _pHtml, ORTFImportExport*   _pRtf)
-        :m_aSeq(_aSeq)
-        ,m_xHtml(_pHtml)
-        ,m_xRtf(_pRtf)
-        ,m_pHtml(_pHtml)
-        ,m_pRtf(_pRtf)
+    ODataClipboard::ODataClipboard(
+                    const ::rtl::OUString&  _rDatasource,
+                    const sal_Int32         _nCommandType,
+                    const ::rtl::OUString&  _rCommand,
+                    const Reference< XConnection >& _rxConnection,
+                    const Reference< XNumberFormatter >& _rxFormatter,
+                    const Reference< XMultiServiceFactory >& _rxORB,
+                    const sal_Int32 _nFormats)
+        :m_pHtml(NULL)
+        ,m_pRtf(NULL)
         ,m_nObjectType(CommandType::TABLE)
+        ,m_nFormats(_nFormats)
     {
-        if (m_aSeq.getLength())
+        // build the descriptor (the property sequence)
+        m_aSeq.realloc(4);
+        m_aSeq[0].Name  = PROPERTY_DATASOURCENAME;
+        m_aSeq[0].Value <<= _rDatasource;
+        m_aSeq[1].Name  = PROPERTY_ACTIVECONNECTION;
+        m_aSeq[1].Value <<= _rxConnection;
+        m_aSeq[2].Name  = PROPERTY_COMMANDTYPE;
+        m_aSeq[2].Value <<= _nCommandType;
+        m_aSeq[3].Name  = PROPERTY_COMMAND;
+        m_aSeq[3].Value <<= _rCommand;
+
+        // calculate some stuff which helps us providing the different formats
+        if (m_nFormats && DCF_OBJECT_DESCRIPTOR)
         {
             // extract the single values from the sequence
             ::rtl::OUString sDatasourceName;
@@ -137,12 +165,109 @@ namespace dbaui
             m_sCompatibleObjectDescription += bTreatAsStatement ? sObjectName : String();
             m_sCompatibleObjectDescription += sSeparator;
         }
+
+        if (m_nFormats && DCF_HTML_TABLE)
+        {
+            m_pHtml = new OHTMLImportExport(m_aSeq, _rxORB, _rxFormatter);
+            m_xHtml = m_pHtml;
+        }
+
+        if (m_nFormats && DCF_RTF_TABLE)
+        {
+            m_pRtf = new ORTFImportExport(m_aSeq, _rxORB, _rxFormatter);
+            m_xRtf = m_pRtf;
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    ODataClipboard::ODataClipboard(const Reference< XPropertySet >& _rxLivingForm, const Reference< XSQLQueryComposer >& _rxComposer)
+        :m_pHtml(NULL)
+        ,m_pRtf(NULL)
+        ,m_nObjectType(CommandType::TABLE)
+        ,m_nFormats(DCF_OBJECT_DESCRIPTOR)
+    {
+        // collect some properties of the form
+        ::rtl::OUString sDatasourceName;
+        sal_Int32       nObjectType = CommandType::COMMAND;
+        ::rtl::OUString sObjectName;
+        try
+        {
+            _rxLivingForm->getPropertyValue(PROPERTY_COMMANDTYPE) >>= nObjectType;
+            _rxLivingForm->getPropertyValue(PROPERTY_COMMAND) >>= sObjectName;
+            _rxLivingForm->getPropertyValue(PROPERTY_DATASOURCENAME) >>= sDatasourceName;
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "ODataClipboard::ODataClipboard: could not collect essential form attributes !");
+            m_nFormats = 0;
+            return;
+        }
+
+        sal_Bool bIsStatement = CommandType::COMMAND == nObjectType;
+        String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
+
+        // check if the SQL-statement is modified
+        sal_Bool bHasFilterOrSort(sal_False);
+        ::rtl::OUString sCompleteStatement;
+        try
+        {
+            ::rtl::OUString sFilter;
+            if (::cppu::any2bool(_rxLivingForm->getPropertyValue(PROPERTY_APPLYFILTER)))
+                _rxLivingForm->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
+            ::rtl::OUString sSort;
+            _rxLivingForm->getPropertyValue(PROPERTY_ORDER) >>= sSort;
+            bHasFilterOrSort = (sFilter.len()>0) || (sSort.len()>0);
+
+            _rxLivingForm->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= sCompleteStatement;
+            if (_rxComposer.is())
+            {
+                _rxComposer->setQuery(sCompleteStatement);
+                _rxComposer->setFilter(sFilter);
+                _rxComposer->setOrder(sSort);
+                sCompleteStatement = _rxComposer->getComposedQuery();
+            }
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "ODataClipboard::ODataClipboard: could not collect essential form attributes (part two) !");
+            m_nFormats = 0;
+            return;
+        }
+
+        // build the object description (as string)
+        const sal_Unicode       cSeparator(11);
+        const ::rtl::OUString   sSeparator(&cSeparator, 1);
+
+        m_sCompatibleObjectDescription = sDatasourceName;
+        m_sCompatibleObjectDescription  += sSeparator;
+        m_sCompatibleObjectDescription  += bIsStatement ? String() : sDatasourceName;
+        m_sCompatibleObjectDescription  += sSeparator;
+        m_sCompatibleObjectDescription  += sObjectKind;
+        m_sCompatibleObjectDescription  += sSeparator;
+        m_sCompatibleObjectDescription  +=
+                (CommandType::QUERY == nObjectType) && !bHasFilterOrSort
+                ? ::rtl::OUString()
+            : sCompleteStatement;
+            // compatibility says : always add the statement, but don't if it is a "pure" query
+        m_sCompatibleObjectDescription  += sSeparator;
+    }
+
+    // -----------------------------------------------------------------------------
+    void ODataClipboard::addRow(sal_Int32 _nRow)
+    {
+        OSL_ENSURE(m_nFormats && DCF_OBJECT_DESCRIPTOR, "ODataClipboard::addRow: don't have this (object descriptor) format!");
+
+        const sal_Unicode       cSeparator(11);
+        const ::rtl::OUString   sSeparator(&cSeparator, 1);
+
+        m_sCompatibleObjectDescription += ::rtl::OUString::valueOf((sal_Int32)_nRow);
+        m_sCompatibleObjectDescription += sSeparator;
     }
 
     // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
     {
-        if(nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML)
+        if (nUserObjectId == SOT_FORMAT_RTF || nUserObjectId == SOT_FORMATSTR_ID_HTML)
         {
             ODatabaseImportExport* pExport = reinterpret_cast<ODatabaseImportExport*>(pUserObject);
             if(pExport)
@@ -157,9 +282,16 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ODataClipboard::AddSupportedFormats()
     {
-        AddFormat(SOT_FORMAT_RTF);
-        AddFormat(SOT_FORMATSTR_ID_HTML);
-        if (m_aSeq.getLength())
+        // RTF?
+        if (m_nFormats && DCF_RTF_TABLE)
+            AddFormat(SOT_FORMAT_RTF);
+
+        // HTML?
+        if (m_nFormats && DCF_HTML_TABLE)
+            AddFormat(SOT_FORMATSTR_ID_HTML);
+
+        // object descriptor?
+        if (m_nFormats && DCF_OBJECT_DESCRIPTOR)
         {
             switch (m_nObjectType)
             {
@@ -174,8 +306,15 @@ namespace dbaui
                     break;
             }
 
-            if (m_sCompatibleObjectDescription.getLength())
-                AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
+            sal_Int32 nDescriptorLen = m_sCompatibleObjectDescription.getLength();
+            if (nDescriptorLen)
+            {
+                if (m_sCompatibleObjectDescription.getStr()[nDescriptorLen] == 11)
+                    m_sCompatibleObjectDescription = m_sCompatibleObjectDescription.copy(0, nDescriptorLen - 1);
+
+                if (nDescriptorLen)
+                    AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
+            }
         }
     }
 
@@ -205,9 +344,10 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void ODataClipboard::ObjectReleased()
     {
-        m_xHtml = NULL;
-        m_xRtf  = NULL;
-        m_aSeq  = Sequence< PropertyValue >();
+        m_xHtml = m_xRtf = NULL;
+        m_pHtml = NULL;
+        m_pRtf = NULL;
+        m_aSeq.realloc(0);
     }
 
     // -----------------------------------------------------------------------------
