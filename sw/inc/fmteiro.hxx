@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmteiro.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:55:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,13 @@
 #ifndef _FORMAT_HXX //autogen
 #include <format.hxx>
 #endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 class IntlWrapper;
 
-class SwFmtEditInReadonly : public SfxBoolItem
+class SW_DLLPUBLIC SwFmtEditInReadonly : public SfxBoolItem
 {
 public:
     SwFmtEditInReadonly( USHORT nId = RES_EDIT_IN_READONLY,
