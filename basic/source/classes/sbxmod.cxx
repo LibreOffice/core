@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2002-01-08 10:57:34 $
+ *  last change: $Author: gh $ $Date: 2002-07-10 10:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,8 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 GlobalRunDeInit();
             }
         }
+        else
+               pINST->nCallLvl--;           // Call-Level wieder runter
     }
     else
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
