@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.23 2002-02-27 10:16:25 oj Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.24 2002-04-29 20:33:30 kz Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: oj $ $Date: 2002-02-27 10:16:25 $ $Revision: 1.23 $
+ //  $Author: kz $ $Date: 2002-04-29 20:33:30 $ $Revision: 1.24 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -65,6 +65,7 @@ ModalDialog DLG_REL_PROPERTIES
             Text[ turkish ] = "İlgili tablolar";
             Text[ catalan ] = "tablas implicadas";
             Text[ finnish ] = "beteiligte Tabellen";
+            Text[ thai ] = "Tables involved";
         };
 
         ListBox LB_LEFT_TABLE
@@ -113,6 +114,7 @@ ModalDialog DLG_REL_PROPERTIES
             Text[ turkish ] = "İlgili alanlar";
             Text[ catalan ] = "campos implicados";
             Text[ finnish ] = "beteiligte Felder";
+            Text[ thai ] = "Fields involved";
         };
     };
 
@@ -137,15 +139,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "æ›´æ–°é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû îáíîâëåíèÿ";
         Text[ polish ] = "Aktualizacja opcji";
-        Text[ japanese ] = "æ›´æ–°ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+        Text[ japanese ] = "æ›´æ–°ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
         Text[ chinese_traditional ] = "æ›´æ–°çš„é¸é …";
         Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÍÏíË";
         Text[ greek ] = "Åíçìİñùóç åğéëïãşí";
         Text[ korean ] = "ì—…ë°ì´íŠ¸ ì˜µì…˜";
         Text[ turkish ] = "Güncelleme seçnekleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones de actualización";
+        Text[ catalan ] = "Opcions d'actualització";
         Text[ finnish ] = "Update Optionen";
+        Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     RadioButton RB_NO_CASC_UPD
     {
@@ -167,15 +170,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "æ— æ“ä½œ(~N)";
         Text[ russian ] = "Áåç äåéñòâèÿ";
         Text[ polish ] = "Bez akcji";
-        Text[ japanese ] = "ï½±ï½¸ï½¼ï½®ï¾ãªã—(~N)";
+        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãªã—(~N)";
         Text[ chinese_traditional ] = "ç„¡å‹•ä½œ(~N)";
         Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
         Text[ greek ] = "~ÊáìéÜ åíİñãåéá";
         Text[ korean ] = "ì‹¤í–‰ ì—†ìŒ(~N)";
         Text[ turkish ] = "İşlem yok";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ninguna acción";
-        Text[ finnish ] = "~Keine Aktion";
+        Text[ catalan ] = "~Cap acció";
+        Text[ finnish ] = "~Ei toimintoa";
+        Text[ thai ] = "~No action";
     };
     RadioButton RB_CASC_UPD
     {
@@ -196,15 +200,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "æ›´æ–°å±‚å (~U)";
         Text[ russian ] = "Îáíîâëåíèå êàñêàäà";
         Text[ polish ] = "Aktualizuj kaskadê";
-        Text[ japanese ] = "ï½¶ï½½ï½¹ï½°ï¾„ï¾ã®æ›´æ–°(~U)";
+        Text[ japanese ] = "ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰ã®æ›´æ–°(~U)";
         Text[ chinese_traditional ] = "æ›´æ–°å±¤ç–Š(~U)";
         Text[ arabic ] = "ÊÍÏíË ÇáÊÊÇáí";
         Text[ greek ] = "Åíçìİñùóç åğéêÜëõøçò";
         Text[ korean ] = "ê³„ë‹¨ì‹ ì—…ë°ì´íŠ¸(~U)";
         Text[ turkish ] = "Basamakları güncelle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Actualizar ~cascada";
-        Text[ finnish ] = "K~ask. Update";
+        Text[ catalan ] = "~Actualitza en cascada";
+        Text[ finnish ] = "~Päivitä lomitus";
+        Text[ thai ] = "~Update cascade";
     };
     RadioButton RB_CASC_UPD_NULL
     {
@@ -225,15 +230,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "è®¾å®šé›¶(~S)";
         Text[ russian ] = "Óñòàíîâèòü íóëü";
         Text[ polish ] = "OsadŸ zero";
-        Text[ japanese ] = "ï½¾ï¾ï¾›ã«è¨­å®š(~S)";
+        Text[ japanese ] = "ã‚¼ãƒ­ã«è¨­å®š(~S)";
         Text[ chinese_traditional ] = "è¨­å®šé›¶(~S)";
         Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
         Text[ greek ] = "Ïñéóìüò ìçäİ~í";
         Text[ korean ] = "ë„ ì„¤ì •(~S)";
         Text[ turkish ] = "Sıfır belirle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Poner ~null";
-        Text[ finnish ] = "~Null setzen";
+        Text[ catalan ] = "~Defineix com a nul";
+        Text[ finnish ] = "~Määritä tyhjäksi";
+        Text[ thai ] = "~Set null";
     };
     RadioButton RB_CASC_UPD_DEFAULT
     {
@@ -254,15 +260,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "è®¾å®šé»˜è®¤(~D)";
         Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
         Text[ polish ] = "OsadŸ domyœlne";
-        Text[ japanese ] = "ï¾ƒï¾ï¾Œï½«ï¾™ï¾„ã®è¨­å®š(~D)";
+        Text[ japanese ] = "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¨­å®š(~D)";
         Text[ chinese_traditional ] = "è¨­å®šé»˜èª(~D)";
         Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
         Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
         Text[ korean ] = "ê¸°ë³¸ ì„¤ì •(~D)";
         Text[ turkish ] = "Standart belirle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminar";
-        Text[ finnish ] = "~Default setzen";
+        Text[ catalan ] = "Defineix el valor per ~defecte";
+        Text[ finnish ] = "Määritä ~oletusarvo";
+        Text[ thai ] = "Set ~default";
     };
 // zweite FixedLine
     FixedLine FL_CASC_DEL
@@ -283,15 +290,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "åˆ é™¤çš„é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû óäàëåíèÿ";
         Text[ polish ] = "Opcje usuwania";
-        Text[ japanese ] = "å‰Šé™¤ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+        Text[ japanese ] = "å‰Šé™¤ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
         Text[ chinese_traditional ] = "åˆªé™¤çš„é¸é …";
         Text[ arabic ] = "ÎíÇÑÇÊ ÇáÍĞİ";
         Text[ greek ] = "Åğéëïãİò äéáãñáöŞò";
         Text[ korean ] = "ì‚­ì œ ì˜µì…˜";
         Text[ turkish ] = "Silme seçenekleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones de eliminación";
+        Text[ catalan ] = "Opcions d'eliminació";
         Text[ finnish ] = "Löschoptionen";
+        Text[ thai ] = "à¸¥à¸šà¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
     };
     RadioButton RB_NO_CASC_DEL
     {
@@ -313,15 +321,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "æ— æ“ä½œ(~N)";
         Text[ russian ] = "Áåç äåéñòâèÿ";
         Text[ polish ] = "Bez akcji";
-        Text[ japanese ] = "ï½±ï½¸ï½¼ï½®ï¾ãªã—(~N)";
+        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ãªã—(~N)";
         Text[ chinese_traditional ] = "ç„¡å‹•ä½œ(~N)";
         Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
         Text[ greek ] = "ÊáìéÜ ~åíİñãåéá";
         Text[ korean ] = "ì‹¤í–‰ ì—†ìŒ(~N)";
         Text[ turkish ] = "İşlem yok";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ninguna a~cción";
-        Text[ finnish ] = "K~eine Aktion";
+        Text[ catalan ] = "~Cap acció";
+        Text[ finnish ] = "~Ei toimintoa";
+        Text[ thai ] = "~No action";
     };
     RadioButton RB_CASC_DEL
     {
@@ -342,15 +351,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "åˆ é™¤å±‚å (~C)";
         Text[ russian ] = "Óäàëèòü êàñêàä";
         Text[ polish ] = "Usuñ kaskadê";
-        Text[ japanese ] = "ï½¶ï½½ï½¹ï½°ï¾„ï¾ã®å‰Šé™¤(~C)";
+        Text[ japanese ] = "ã‚«ã‚¹ã‚±ãƒ¼ãƒ‰ã®å‰Šé™¤(~C)";
         Text[ chinese_traditional ] = "åˆªé™¤å±¤ç–Š(~C)";
         Text[ arabic ] = "ÍĞİ ÇáÊÊÇáí";
         Text[ greek ] = "ÄéáãñáöŞ åğéêÜëõøçò";
         Text[ korean ] = "ê³„ë‹¨ì‹ ì‚­ì œ(~C)";
         Text[ turkish ] = "Basamakları sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eliminar c~ascada";
-        Text[ finnish ] = "Ka~sk. Löschen";
+        Text[ catalan ] = "Suprimeix en ~cascada";
+        Text[ finnish ] = "Poista ~lomitus";
+        Text[ thai ] = "Delete ~cascade";
     };
     RadioButton RB_CASC_DEL_NULL
     {
@@ -371,15 +381,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "è®¾å®šé›¶(~S)";
         Text[ russian ] = "Óñòàíîâèòü íóëü";
         Text[ polish ] = "OsadŸ zero";
-        Text[ japanese ] = "ï½¾ï¾ï¾›ã«è¨­å®š(~S)";
+        Text[ japanese ] = "ã‚¼ãƒ­ã«è¨­å®š(~S)";
         Text[ chinese_traditional ] = "è¨­å®šé›¶(~S)";
         Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
         Text[ greek ] = "Ïñéóìüò ìçäİí";
         Text[ korean ] = "ë„ ì„¤ì •(~S)";
         Text[ turkish ] = "Sıfır belirle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Poner ~null";
-        Text[ finnish ] = "Nu~ll setzen";
+        Text[ catalan ] = "~Defineix com a nul";
+        Text[ finnish ] = "~Määritä tyhjäksi";
+        Text[ thai ] = "~Set null";
     };
     RadioButton RB_CASC_DEL_DEFAULT
     {
@@ -400,15 +411,16 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ chinese_simplified ] = "è®¾å®šé»˜è®¤(~D)";
         Text[ russian ] = "Óñòàíîâèòü ïî óìîë÷àíèş";
         Text[ polish ] = "Ustaw domyœlne";
-        Text[ japanese ] = "ï¾ƒï¾ï¾Œï½«ï¾™ï¾„ã®è¨­å®š(~D)";
+        Text[ japanese ] = "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®è¨­å®š(~D)";
         Text[ chinese_traditional ] = "è¨­å®šé»˜èª(~D)";
         Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
         Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
         Text[ korean ] = "ê¸°ë³¸ ì„¤ì •(~D)";
         Text[ turkish ] = "Standart belirle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Pre~determinar";
-        Text[ finnish ] = "De~fault setzen";
+        Text[ catalan ] = "Defineix el valor per ~defecte";
+        Text[ finnish ] = "Määritä ~oletusarvo";
+        Text[ thai ] = "Set ~default";
     };
 
     OKButton PB_OK
@@ -443,15 +455,16 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ chinese_simplified ] = "å…³ç³»";
     Text[ russian ] = "Ñâÿçè";
     Text[ polish ] = "Relacje";
-    Text[ japanese ] = "ï¾˜ï¾šï½°ï½¼ï½®ï¾";
+    Text[ japanese ] = "ãƒªãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "é—œä¿‚";
     Text[ arabic ] = "ÇáÚáÇŞÇÊ";
     Text[ greek ] = "Ó÷İóåéò";
     Text[ korean ] = "ê´€ê³„";
     Text[ turkish ] = "İlişkiler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Relaciones";
+    Text[ catalan ] = "Relacions";
     Text[ finnish ] = "Suhteet";
+    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œ";
 };
 
 
