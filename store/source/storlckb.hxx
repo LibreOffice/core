@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storlckb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 21:03:26 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 21:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORLCKB_HXX_
-#define _STORE_STORLCKB_HXX_ "$Revision: 1.2 $"
+#define _STORE_STORLCKB_HXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -305,8 +305,8 @@ private:
     indirect  *m_pDouble;
     indirect  *m_pTriple;
 
-    sal_Bool   m_bWriteable;
     sal_uInt16 m_nPageSize;
+    sal_Bool   m_bWriteable;
 
     /** Not implemented.
      */

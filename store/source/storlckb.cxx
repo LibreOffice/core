@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storlckb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 21:03:26 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 21:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORLCKB_CXX_ "$Revision: 1.2 $"
+#define _STORE_STORLCKB_CXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -395,12 +395,12 @@ const sal_uInt32 OStoreLockBytes::m_nTypeId = sal_uInt32(0x94190310);
  */
 OStoreLockBytes::OStoreLockBytes (void)
     : m_xManager   (NULL),
-      m_nPageSize  (0),
       m_pNode      (NULL),
       m_pData      (NULL),
       m_pSingle    (NULL),
       m_pDouble    (NULL),
       m_pTriple    (NULL),
+      m_nPageSize  (0),
       m_bWriteable (sal_False)
 {
 }
