@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:07:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,9 +525,11 @@ enum SwWw8ControlType
 
 class WW8FormulaControl : public OCX_Control
 {
+protected:
+    SwWW8ImplReader &rRdr;
 public:
-    WW8FormulaControl(const String& sN,SwWW8ImplReader &rR)
-        : OCX_Control(sN), rRdr(rR), fUnknown(0), fDropdownIndex(0),
+    WW8FormulaControl(const String& rN, SwWW8ImplReader &rR)
+        : OCX_Control(rN), rRdr(rR), fUnknown(0), fDropdownIndex(0),
         fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
         fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0)
     {
@@ -558,8 +560,6 @@ private:
     //No copying
     WW8FormulaControl(const WW8FormulaControl&);
     WW8FormulaControl& operator=(const WW8FormulaControl&);
-protected:
-    SwWW8ImplReader &rRdr;
 };
 
 class WW8FormulaCheckBox : public WW8FormulaControl
@@ -661,6 +661,7 @@ public:
     SwPageDesc *mpTitlePage;
     SwPageDesc *mpPage;
     SvxFrameDirection meDir;
+    short mLinkId;
 
     sal_uInt32 nPgWidth;
     sal_uInt32 nPgLeft;
@@ -669,8 +670,10 @@ public:
     BYTE mnBorders;
     bool mbHasFootnote;
     void SetDirection();
+    void SetLinkId(short sLinkId) { mLinkId = sLinkId; }
     bool DoesContainFootnote() const { return mbHasFootnote; }
     bool IsContinous() const { return maSep.bkc == 0; }
+    bool IsLinked() const { return mLinkId != 0; }
     bool IsNotProtected() const { return maSep.fUnlocked != 0; }
     bool IsVertical() const;
     sal_Int16 NoCols() const { return maSep.ccolM1 + 1; }
@@ -833,6 +836,8 @@ struct ANLDRuleMap
 class SwWW8ImplReader
 {
 private:
+    SwDocShell *mpDocShell;         // The Real DocShell
+
 friend class WW8RStyle;
 friend class WW8TabDesc;
 friend class WW8ReaderSave;
@@ -855,7 +860,6 @@ private:
     SvStream* pStrm;                // Input-(Storage)Stream
     SvStream* pTableStream;         // Input-(Storage)Stream
     SvStream* pDataStream;          // Input-(Storage)Stream
-    SvStorageRef mxDstStg;          // Ole object temp storage
 
 // allgemeines
     SwDoc& rDoc;
@@ -955,6 +959,7 @@ private:
     WW8ListManager* pLstManager;
     WW8ScannerBase* pSBase;
     WW8PLCFMan* pPlcxMan;
+    std::map<short, String> aLinkStringMap;
 
     WW8RStyle* pStyles;     // Pointer auf die Style-Einleseklasse
     SwFmt* pAktColl;        // gerade zu erzeugende Collection
@@ -1166,9 +1171,9 @@ private:
     void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;
     sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
     bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
-        const WW8_BRC pbrc[4]) const;
+        const WW8_BRC *pbrc) const;
     //returns true is a shadow was set
-    bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRC pbrc[4],
+    bool SetFlyBordersShadow(SfxItemSet& rFlySet, const WW8_BRC *pbrc,
         short *SizeArray=0) const;
     void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const;
 
