@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-28 17:11:54 $
+ *  last change: $Author: mib $ $Date: 2001-07-03 06:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,6 @@
 
 #ifndef _ZFORLIST_HXX //autogen
 #include <zforlist.hxx>
-#endif
-
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
 #endif
 
 #include "htmlout.hxx"
