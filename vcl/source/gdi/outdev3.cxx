@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-08 13:48:51 $
+ *  last change: $Author: th $ $Date: 2000-12-08 18:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,6 @@ static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
     rX = ((long)   ( nCos*nX + nSin*nY )) + nOriginX;
     rY = ((long) - ( nSin*nX - nCos*nY )) + nOriginY;
 }
-
 
 // =======================================================================
 
@@ -880,7 +879,8 @@ static ImplFontData* ImplFindScript( ImplDevFontListData* pData,
     while ( pCurFontData )
     {
         // Detect Unicode Font !!!
-        if ( pData->maMatchName.EqualsAscii( "arial unicode ms" ) )
+        if ( pData->maMatchName.EqualsAscii( "arial unicode ms" ) ||
+             pData->maMatchName.EqualsAscii( "andale wt ui" ) )
             return pCurFontData;
         if ( eScript == pCurFontData->meScript )
             return pCurFontData;
@@ -1368,7 +1368,13 @@ ImplDevFontListData* ImplDevFontList::FindStdFont( const sal_Char** pStdFontName
         ImplDevFontListData* pFoundData = ImplFind( aStdName );
         if ( pFoundData )
         {
-            if ( (eScript == SCRIPT_SYMBOL) ||
+            if ( ((eScript != SCRIPT_LATIN) &&
+                  (eScript != SCRIPT_EASTEUROPE) &&
+                  (eScript != SCRIPT_CYRILLIC) &&
+                  (eScript != SCRIPT_BALTIC) &&
+                  (eScript != SCRIPT_TURKISH) &&
+                  (eScript != SCRIPT_GREEK) &&
+                  (eScript != SCRIPT_GEORGIEN)) ||
                  ImplFindScript( pFoundData, eScript ) )
             {
                 if ( pFoundData->mpFirst->meType != TYPE_RASTER )
@@ -4028,7 +4034,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                 xub_StrLen nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                 DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
                 i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, GetSettings().GetLocale(), nPos, aHyphOptions, aUserOptions );
-                nBreakPos = aLBR.breakIndex;
+                nBreakPos = (xub_StrLen)aLBR.breakIndex;
                 if ( nBreakPos <= nPos )
                     nBreakPos = nSoftBreak;
                 nLineWidth = GetTextWidth( rStr, nPos, nBreakPos-nPos );
