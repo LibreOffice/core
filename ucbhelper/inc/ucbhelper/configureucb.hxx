@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configureucb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-03-12 09:35:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 
 #include <vector>
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
@@ -207,7 +210,7 @@ configureUcb(
     content providers have necessarily been registered due to individual
     problems).
  */
-bool
+UCBHELPER_DLLPUBLIC bool
 configureUcb(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
