@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-17 16:02:03 $
+ *  last change: $Author: dr $ $Date: 2002-07-25 12:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,9 +236,9 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Pos = MAP_APPFONT( 12, 66 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
-        Text = "Feste Text~breite";
-        Text[ english ] = "Fixed text ~width";
-        Text[ english_us ] = "Fixed text ~width";
+        Text = "Feste Spalten~breite";
+        Text[ english ] = "Fixed column ~width";
+        Text[ english_us ] = "Fixed column ~width";
     };
     OKButton BTN_OK
     {
