@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:49:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,102 +80,77 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 
-#include "worient.hxx" //@ 12.09.97
+#ifndef _VALUESET_HXX
+#include <svtools/valueset.hxx>
+#endif
 
+#ifndef SVX_DIALCONTROL_HXX
+#include "dialcontrol.hxx"
+#endif
+#ifndef SVX_WRAPFIELD_HXX
+#include "wrapfield.hxx"
+#endif
+#ifndef SVX_ORIENTHELPER_HXX
+#include "orienthelper.hxx"
+#endif
 #ifndef _SVX_FRMDIRLBOX_HXX
 #include "frmdirlbox.hxx"
 #endif
-#include "flagsdef.hxx"
-// defines ---------------------------------------------------------------
 
-//CHINA001 #define WBA_NO_ORIENTATION   ((USHORT)0x0001)
-//CHINA001 #define WBA_NO_LINEBREAK ((USHORT)0x0002)
-//CHINA001 #define WBA_NO_HORIZONTAL    ((USHORT)0x0004)
-//CHINA001 #define WBA_NO_LEFTINDENT    ((USHORT)0x0008)
-//CHINA001 #define WBA_NO_VERTICAL      ((USHORT)0x0010)
-//CHINA001 #define WBA_NO_GRIDLINES ((USHORT)0x0020)
-//CHINA001 #define WBA_NO_HYPHENATION   ((USHORT)0x0040)
+namespace svx {
 
-// class SvxAlignmentTabPage ---------------------------------------------
+// ============================================================================
 
-/*
-{k:\svx\prototyp\dialog\align.bmp}
-    [Beschreibung]
-    Mit dieser TabPage k"onnen Textausrichtungsattribute eingestellt werden
-
-    [Items]
-    <SvxHorJustifyItem>:        <SID_ATTR_ALIGN_HOR_JUSTIFY>
-    <SfxUInt16Item>             <SID_ATTR_ALIGN_INDENT>
-    <SvxVerJustifyItem>:        <SID_ATTR_ALIGN_VER_JUSTIFY>
-    <SvxOrientationItem>:       <SID_ATTR_ALIGN_ORIENTATION>
-    <SvxMarginItem>:            <SID_ATTR_ALIGN_MARGIN>
-    <SfxBoolItem>:              <SID_ATTR_ALIGN_LINEBREAK>
-    <SfxBoolItem>:              <SID_ATTR_ALIGN_HYPHENATION>
-*/
-
-class SvxAlignmentTabPage : public SfxTabPage
+class AlignmentTabPage : public SfxTabPage
 {
-private:
-                        // Controls
-    FixedLine           aFlAlignment;
-    FixedText           aFtHorAlign;
-    ListBox             aLbHorAlign;
-    FixedText           aFtIndent;
-    MetricField         aEdIndent;
-    FixedText           aFtVerAlign;
-    ListBox             aLbVerAlign;
-
-    SvxWinOrientation   aWinOrient; //@ 12.09.97
-    TriStateBox         aBtnAsianVert;
-
-    FixedLine           aFlSpace;
-    FixedText           aFtLeftSpace;
-    MetricField         aEdLeftSpace;
-    FixedText           aFtRightSpace;
-    MetricField         aEdRightSpace;
-    FixedText           aFtTopSpace;
-    MetricField         aEdTopSpace;
-    FixedText           aFtBottomSpace;
-    MetricField         aEdBottomSpace;
-
-    FixedLine           aFlWrap;
-    TriStateBox         aBtnWrap;
-    TriStateBox         aBtnHyphen;
-    FixedText           aFtTextFlow;
-    svx::FrameDirectionListBox aLbFrameDir;
-
-    BOOL                bHyphenDisabled;
-
-    SvxAlignmentTabPage( Window* pParent, const SfxItemSet& rCoreSet );
-
-    void FillForLockMode();
-
-    /** @return  Pointer to an item, if it is DEFAULT or SET; NULL, if it is DONTCARE. */
-    const SfxPoolItem*  GetUniqueItem( const SfxItemSet& rCoreSet, sal_uInt16 nSlotId ) const;
-
-#ifdef _SVX_ALIGN_CXX
-    // Handler
-    DECL_LINK( HorAlignSelectHdl_Impl, ListBox * );
-    DECL_LINK( WrapClickHdl_Impl, TriStateBox * );
-    DECL_LINK( TxtStackedClickHdl_Impl, void * );
-    void EnableHyphen_Impl();
-#endif
-
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 public:
-    ~SvxAlignmentTabPage();
+    virtual             ~AlignmentTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     static USHORT*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
-    void                SetFlags( USHORT nFlags );
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+private:
+    explicit            AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreSet );
+
+    void                InitVsRefEgde();
+    void                UpdateEnableControls();
+
+    DECL_LINK( UpdateEnableHdl, void* );
+
+private:
+    FixedLine           maFlAlignment;
+    FixedText           maFtHorAlign;
+    ListBox             maLbHorAlign;
+    FixedText           maFtIndent;
+    MetricField         maEdIndent;
+    FixedText           maFtVerAlign;
+    ListBox             maLbVerAlign;
+
+    FixedLine           maFlOrient;
+    DialControl         maCtrlDial;
+    FixedText           maFtRotate;
+    WrapField           maNfRotate;
+    FixedText           maFtRefEdge;
+    ValueSet            maVsRefEdge;
+    TriStateBox         maCbStacked;
+    TriStateBox         maCbAsianMode;
+    OrientationHelper   maOrientHlp;
+
+    FixedLine           maFlProperties;
+    TriStateBox         maBtnWrap;
+    TriStateBox         maBtnHyphen;
+    TriStateBox         maBtnShrink;
+    FixedText           maFtFrameDir;
+    FrameDirListBox     maLbFrameDir;
 };
 
+// ============================================================================
+
+} // namespace svx
 
 #endif
 
