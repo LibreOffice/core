@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:25:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
 {
     for( ; nStt < nEnd; ++nStt )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         sal_Int32 nCharType = rCC.getCharacterType( rTxt, nStt );
         sal_Int32 nChType = rCC.getType( rTxt, nStt );
 #endif
