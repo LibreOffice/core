@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:09:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #endif
 
 #include "app.hrc"
-#include "paragr.hxx"
+//CHINA001 #include "paragr.hxx"
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
@@ -97,7 +97,8 @@
 #include "ViewShell.hxx"
 #endif
 #include "drawdoc.hxx"
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "paragr.hrc" //CHINA001
 namespace sd {
 
 TYPEINIT1( FuParagraph, FuPoor );
@@ -136,8 +137,11 @@ FuParagraph::FuParagraph (
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );
 
-        SdParagraphDlg* pDlg = new SdParagraphDlg( NULL, &aNewAttr );
-
+        //CHINA001 SdParagraphDlg* pDlg = new SdParagraphDlg( NULL, &aNewAttr );
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        SfxAbstractTabDialog* pDlg = pFact->CreateSdItemSetTabDlg(ResId( TAB_PARAGRAPH ), NULL, &aNewAttr );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         USHORT nResult = pDlg->Execute();
 
         switch( nResult )
