@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkspinbutton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:58:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace toolkit
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
+        ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
         ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
         ImplRegisterProperty( BASEPROPERTY_ENABLED );
         ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
