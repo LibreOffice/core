@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: os $ $Date: 2000-10-20 09:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,12 @@
 #ifndef _SV_SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
 
 #ifndef _UIPARAM_HXX
 #include <uiparam.hxx>
@@ -90,6 +95,9 @@
 #include "tautofmt.hxx"
 #include "shellres.hxx"
 #include "tautofmt.hrc"
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 #define FRAME_OFFSET 4
 
@@ -664,9 +672,11 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         nLabelColWidth  ( (USHORT)(((aPrvSize.Width()-4)/4)-12) ),
         nDataColWidth1  ( (USHORT)(((aPrvSize.Width()-4)-(nLabelColWidth*2)) / 3) ),
         nDataColWidth2  ( (USHORT)(((aPrvSize.Width()-4)-(nLabelColWidth*2)) / 4) ),
-        nRowHeight      ( (USHORT)((aPrvSize.Height()-4) / 5) ),
-        pNumFmt         ( new SvNumberFormatter( LANGUAGE_SYSTEM ) )
+        nRowHeight      ( (USHORT)((aPrvSize.Height()-4) / 5) )
 {
+    Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+    pNumFmt = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
+
     Init();
 }
 
@@ -1714,6 +1724,9 @@ void lcl_SwLinkLine(const SwLineStruct& dLine,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:48  hr
+    initial import
+
     Revision 1.46  2000/09/18 16:06:09  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2000-10-20 09:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,13 @@
 
 #include "hintids.hxx"
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -112,6 +119,9 @@
 #include "utlui.hrc"
 #include "numfmtlb.hxx"
 
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 // STATIC DATA -----------------------------------------------------------
@@ -174,7 +184,10 @@ void NumFormatListBox::Init(short nFormatType, BOOL bUsrFmts)
         eCurLanguage = Application::GetAppInternational().GetLanguage();
 
     if (bUsrFmts == FALSE)
-        pOwnFormatter = new SvNumberFormatter(eCurLanguage);
+       {
+        Reference< XMultiServiceFactory > xMSF = ::utl::getProcessServiceFactory();
+        pOwnFormatter = new SvNumberFormatter(xMSF, eCurLanguage);
+    }
 
     SetFormatType(nFormatType);
     SetDefFormat(nDefFormat);
@@ -588,6 +601,9 @@ void NumFormatListBox::Clear()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:50  hr
+      initial import
+
       Revision 1.31  2000/09/18 16:06:18  willem.vandorp
       OpenOffice header added.
 
