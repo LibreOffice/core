@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winpluginlib.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:03:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
+
 #include <windows.h>
 #include <Winreg.h>
 #include <Shlwapi.h>
