@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:35:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 09:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class XMLParaContext : public SvXMLImportContext
     XMLHints_Impl           *pHints;
     sal_Bool                bIgnoreLeadingSpace;
     sal_Bool                bHeading;
+    sal_Bool                bIsListHeader;
 #ifdef CONV_STAR_FONTS
     sal_uInt8               nStarFontsConvFlags;
 #endif
