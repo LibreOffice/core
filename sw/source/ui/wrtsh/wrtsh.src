@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-07 19:18:25 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,7 +1634,7 @@ String STR_TRANSLITERATE
     TEXT[ russian ] = "Заглавные/строчные буквы";
     TEXT[ greek ] = "КецблбЯб/РежЬ";
     TEXT[ dutch ] = "Change case";
-    TEXT[ french ] = "Change case";
+    TEXT[ french ] = "Casse/Caractиres";
     TEXT[ spanish ] = "Mayъsculas/minъsculas";
     TEXT[ italian ] = "Change case";
     TEXT[ danish ] = "Change case";
@@ -2370,7 +2370,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ russian ] = "Поместить диакритические знаки";
     Text[ greek ] = "Псйумьт цщнзфйкюн ухмвьлщн";
     Text[ dutch ] = "Set phonetic Symbols";
-    Text[ french ] = "Set phonetic Symbols";
+    Text[ french ] = "Attribut Ruby";
     Text[ spanish ] = "Aplicar sнmbolos fonйticos";
     Text[ italian ] = "Set phonetic Symbols";
     Text[ danish ] = "Set phonetic Symbols";
