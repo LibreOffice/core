@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-21 17:49:12 $
+ *  last change: $Author: aw $ $Date: 2000-11-22 11:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,7 +493,7 @@ void SvxShape::ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet) throw
     {
         SfxItemSet aSet( pModel->GetItemPool(),
             SDRATTR_START, SDRATTR_END,
-            SID_ATTR_3D_START, SID_ATTR_3D_END,
+//-/            SID_ATTR_3D_START, SID_ATTR_3D_END,
             0);
 
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
@@ -1207,20 +1207,21 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 }
             }
 
-            if(!aSet.Count())
-            {
-                if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
+                if(!aSet.Count())
                 {
-                    // 3D-Attribut, eigenen Default
-                    // Diese sollten IMMER gesetzt sein, da TakeAttributes an
-                    // 3D-Objekten alle Items erzeugt und eintraegt
-                    DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
-                }
-                else
-                {
+//-/                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
+//-/                    {
+//-/                        // 3D-Attribut, eigenen Default
+//-/                        // Diese sollten IMMER gesetzt sein, da TakeAttributes an
+//-/                        // 3D-Objekten alle Items erzeugt und eintraegt
+//-/                        DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
+//-/                    }
+//-/                    else
+//-/                    {
                     // Default aus ItemPool holen
                     if(pModel->GetItemPool().IsWhich(pMap->nWID))
                         aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+//-/                    }
                 }
             }
 
@@ -1518,25 +1519,26 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             {
                 if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
                 {
-                    // 3D-Attribut, eigenen Default
-                    // Diese sollten IMMER gesetzt sein, da TakeAttributes an
-                    // 3D-Objekten alle Items erzeugt und eintraegt
-                    DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
-                }
-                else
-                {
+//-/                    if(pMap->nWID >= SID_ATTR_3D_START && pMap->nWID <= SID_ATTR_3D_END)
+//-/                    {
+//-/                        // 3D-Attribut, eigenen Default
+//-/                        // Diese sollten IMMER gesetzt sein, da TakeAttributes an
+//-/                        // 3D-Objekten alle Items erzeugt und eintraegt
+//-/                        DBG_ERROR("AW: Got NO default item from group SID_ATTR_3D_");
+//-/                    }
+//-/                    else
+//-/                    {
                     // Default aus ItemPool holen
                     if(pModel->GetItemPool().IsWhich(pMap->nWID))
                         aSet.Put(pModel->GetItemPool().GetDefaultItem(pMap->nWID));
+//-/                    }
+
                 }
-
-
 
             }
 
             if(aSet.Count())
                 aAny = GetAnyForItem( aSet, pMap );
-        }
         }
     }
     else
@@ -1758,6 +1760,8 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
             pObj->SetItemSetAndBroadcast(aSet);
 //-/                pObj->BroadcastItemChange(aItemChange);
         }
+        if( xPropertyState.is() )
+            xPropertyState->setPropertyToDefault( PropertyName );
     }
 
     pModel->SetChanged();
