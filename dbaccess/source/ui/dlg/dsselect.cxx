@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:47:57 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXINTITEM_HXX
+#include <svtools/intitem.hxx>
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
@@ -255,7 +258,7 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, pButton )
                     if ( xPropInfo->hasPropertyByName(PROPERTY_PASSWORD) )
                         m_pOutputSet->Put(SfxStringItem(DSID_PASSWORD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_PASSWORD))));
                     if ( xPropInfo->hasPropertyByName(PROPERTY_CACHESIZE) )
-                        m_pOutputSet->Put(SfxStringItem(DSID_CONN_CACHESIZE, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_CACHESIZE))));
+                        m_pOutputSet->Put(SfxInt32Item(DSID_CONN_CACHESIZE, ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_CACHESIZE))));
                 }
             }
         }
