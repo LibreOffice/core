@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExecutableDialog.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module ui { module dialogs {
 */
 
 
-interface XExecutableDialog: com::sun::star::uno::XInterface
+published interface XExecutableDialog: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Sets the title of the dialog.
