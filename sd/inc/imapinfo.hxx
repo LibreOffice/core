@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapinfo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ public:
 
     virtual SdrObjUserData* Clone( SdrObject* pObj ) const { return new SdIMapInfo( *this ); }
 
-    virtual void WriteData( SvStream& rOStm );
-    virtual void ReadData( SvStream& rIStm );
+//BFS02 virtual void WriteData( SvStream& rOStm );
+//BFS02 virtual void ReadData( SvStream& rIStm );
 
     void            SetImageMap( const ImageMap& rIMap ) { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const { return aImageMap; }
@@ -117,14 +117,14 @@ public:
 |*
 \************************************************************************/
 
-inline void SdIMapInfo::WriteData( SvStream& rOStm )
-{
-    SdrObjUserData::WriteData( rOStm );
-
-    SdIOCompat aIO( rOStm, STREAM_WRITE, 1 );
-
-    rOStm << aImageMap;
-}
+//BFS02inline void SdIMapInfo::WriteData( SvStream& rOStm )
+//BFS02{
+//BFS02 SdrObjUserData::WriteData( rOStm );
+//BFS02
+//BFS02 SdIOCompat aIO( rOStm, STREAM_WRITE, 1 );
+//BFS02
+//BFS02 rOStm << aImageMap;
+//BFS02}
 
 
 /*************************************************************************
@@ -133,14 +133,14 @@ inline void SdIMapInfo::WriteData( SvStream& rOStm )
 |*
 \************************************************************************/
 
-inline void SdIMapInfo::ReadData( SvStream& rIStm )
-{
-    SdrObjUserData::ReadData( rIStm );
-
-    SdIOCompat aIO( rIStm, STREAM_READ );
-
-    rIStm >> aImageMap;
-}
+//BFS02inline void SdIMapInfo::ReadData( SvStream& rIStm )
+//BFS02{
+//BFS02 SdrObjUserData::ReadData( rIStm );
+//BFS02
+//BFS02 SdIOCompat aIO( rIStm, STREAM_READ );
+//BFS02
+//BFS02 rIStm >> aImageMap;
+//BFS02}
 
 
 #endif      // _SD_IMAPINFO_HXX
