@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:33:29 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ namespace xmloff
         }
 
         // TODO: create PropertyValues for all the attributes which were not present, because they were implied
+        // this is necessary as soon as we have properties where the XML default is different from the property
+        // default
     }
 
     //---------------------------------------------------------------------
