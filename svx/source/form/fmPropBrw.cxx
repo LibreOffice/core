@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-13 09:10:30 $
+ *  last change: $Author: fs $ $Date: 2002-01-09 15:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,8 +374,15 @@ void FmPropBrw::implDetachController()
     implSetNewObject(Reference< XPropertySet >());
     if (m_xMeAsFrame.is())
         m_xMeAsFrame->setComponent(NULL, NULL);
-    m_xBrowserController = NULL;
-    m_xMeAsFrame = NULL;
+
+    // we attached a frame to the controller manually, so we need to manually tell it that it's detached, too
+    // 96068 - 09.01.2002 - fs@openoffice.org
+    Reference< XController > xAsXController( m_xBrowserController, UNO_QUERY );
+    if ( xAsXController.is() )
+        xAsXController->attachFrame( NULL );
+
+    m_xBrowserController.clear();
+    m_xMeAsFrame.clear();
 }
 
 //-----------------------------------------------------------------------
