@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:27:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ swedish ] = "Avstånd";
         Text[ polish ] = "~Odstêpy";
         Text[ portuguese_brazilian ] = "Distances";
-        Text[ japanese ] = "ŠÔŠu";
+        Text[ japanese ] = "—]”’(~A)";
         Text[ korean ] = "°£°Ý(~A)";
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ chinese_traditional ] = "¶¡¹j";
@@ -221,7 +221,7 @@ TabPage RID_SVXPAGE_BORDER
             Text[ swedish ] = "Hög~er";
             Text[ polish ] = "Z prawej";
             Text[ portuguese_brazilian ] = "Right";
-            Text[ japanese ] = "‰E";
+            Text[ japanese ] = "‰E(~R)";
             Text[ korean ] = "¿À¸¥ÂÊ";
             Text[ chinese_simplified ] = "ÓÒ";
             Text[ chinese_traditional ] = "¥k";
@@ -412,7 +412,7 @@ TabPage RID_SVXPAGE_BORDER
         Text[ swedish ] = "Avstånd";
         Text[ polish ] = "Odstêpy";
         Text[ portuguese_brazilian ] = "Distances";
-        Text[ japanese ] = "ŠÔŠu";
+        Text[ japanese ] = "—]”’";
         Text[ korean ] = "°£°Ý";
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ chinese_traditional ] = "¶¡¹j";
@@ -670,7 +670,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ finnish ] = "Varjo" ;
         Text [ danish ] = "Skygge" ;
         Text [ french ] = "Ombre" ;
-        Text [ swedish ] = "Skuggning" ;
+        Text [ swedish ] = "Skuggad" ;
         Text [ dutch ] = "Schaduw" ;
         Text [ spanish ] = "Sombra" ;
         Text [ english_us ] = "Shadow style" ;
