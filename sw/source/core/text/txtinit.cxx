@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtinit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2001-10-01 14:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ void _TextInit()
 
 void _TextFinit()
 {
+    PROTOCOL_STOP
     delete SwTxtFrm::GetTxtCache();
     delete pSwFontCache;
     delete pFntCache;
@@ -144,7 +145,6 @@ void _TextFinit()
     delete pWaveCol;
     delete pContourCache;
     SwDropPortion::DeleteDropCapCache();
-    PROTOCOL_STOP
 }
 
 
