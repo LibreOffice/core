@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:01:09 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:03:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,19 @@
 #include "ViewShell.hxx"
 #endif
 #include "app.hrc"
+#include <vcl/pdfextoutdevdata.hxx>
+#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
+#include <com/sun/star/presentation/AnimationEffect.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
+#include <com/sun/star/presentation/ClickAction.hpp>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -1540,7 +1553,6 @@ sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelect
                 nRet = 1;
         }
     }
-
     return nRet;
 }
 
@@ -1553,19 +1565,31 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
     if( NULL == pDoc )
         throw lang::DisposedException();
 
+    sal_Bool bExportNotesPages = sal_False;
+    for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+    {
+        if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+            rxOptions[ nProperty].Value >>= bExportNotesPages;
+    }
     uno::Sequence< beans::PropertyValue > aRenderer;
-
     if( pDocShell && pDoc )
     {
-        const Rectangle aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
-        awt::Size       aPageSize( aVisArea.GetWidth(), aVisArea.GetHeight() );
-
+        awt::Size aPageSize;
+        if ( bExportNotesPages )
+        {
+            Size aNotesPageSize = pDoc->GetSdPage( 0, PK_NOTES )->GetSize();
+            aPageSize = awt::Size( aNotesPageSize.Width(), aNotesPageSize.Height() );
+        }
+        else
+        {
+            const Rectangle aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
+            aPageSize = awt::Size( aVisArea.GetWidth(), aVisArea.GetHeight() );
+        }
         aRenderer.realloc( 1 );
 
         aRenderer[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         aRenderer[ 0 ].Value <<= aPageSize;
     }
-
     return aRenderer;
 }
 
@@ -1595,6 +1619,177 @@ ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView*
 
 ImplRenderPaintProc::~ImplRenderPaintProc()
 {
+}
+
+sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc )
+{
+    sal_Int32 nPage = -1;
+
+    OSL_TRACE("GotoBookmark %s",
+        ::rtl::OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
+    BOOL bFound = FALSE;
+
+    String aBookmark( rBookmark );
+
+    if( rBookmark.Len() && rBookmark.GetChar( 0 ) == sal_Unicode('#') )
+        aBookmark = rBookmark.Copy( 1 );
+
+    // is the bookmark a page ?
+    BOOL        bIsMasterPage;
+    USHORT      nPgNum = rDoc.GetPageByName( aBookmark, bIsMasterPage );
+    SdrObject*  pObj = NULL;
+
+    if ( nPgNum == SDRPAGE_NOTFOUND )
+    {
+        // is the bookmark a object ?
+        pObj = rDoc.GetObj( aBookmark );
+        if (pObj)
+            nPgNum = pObj->GetPage()->GetPageNum();
+    }
+
+    String aNumber;
+    if ( nPgNum == SDRPAGE_NOTFOUND )
+    {
+        sal_Int32 nLen = aBookmark.Len() - 1;
+        while( nLen >= 0 )
+        {
+            sal_Unicode nChar = aBookmark.GetChar( (sal_uInt16)nLen );
+            if ( ( nChar >= '0' ) && ( nChar <= '9' ) )
+                aNumber.Insert( nChar, 0 );
+            else
+                break;
+            nLen--;
+        }
+    }
+    if ( nPgNum != SDRPAGE_NOTFOUND )
+        nPage = ( nPgNum - 1 ) / 2;
+    else if ( aNumber.Len() )
+        nPage = aNumber.ToInt32() - 1;
+    return nPage;
+}
+
+void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
+{
+    const rtl::OUString sGroup   ( RTL_CONSTASCII_USTRINGPARAM( "IsPresentationObject" ) );
+    const rtl::OUString sOnClick ( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
+    const rtl::OUString sBookmark( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) );
+
+    if ( xShape->getShapeType().equals( sGroup ) )
+    {
+        uno::Reference< container::XIndexAccess > xIndexAccess( xShape, uno::UNO_QUERY );
+        if ( xIndexAccess.is() )
+        {
+            sal_Int32 i, nCount = xIndexAccess->getCount();
+            for ( i = 0; i < nCount; i++ )
+            {
+                uno::Any aAny( xIndexAccess->getByIndex( i ) );
+                uno::Reference< drawing::XShape > xShape;
+                if ( aAny >>= xShape )
+                    ImplPDFExportShapeInteraction( xShape, rDoc, rPDFExtOutDevData );
+            }
+        }
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xShapePropSet( xShape, uno::UNO_QUERY );
+        if( xShapePropSet.is() )
+        {
+            Size        aPageSize( rDoc.GetSdPage( 0, PK_STANDARD )->GetSize() );
+            Point aPoint( 0, 0 );
+            Rectangle   aPageRect( aPoint, aPageSize );
+
+            awt::Point  aShapePos( xShape->getPosition() );
+            awt::Size   aShapeSize( xShape->getSize() );
+            Rectangle   aLinkRect( Point( aShapePos.X, aShapePos.Y ), Size( aShapeSize.Width, aShapeSize.Height ) );
+
+            presentation::ClickAction eCa;
+            uno::Any aAny( xShapePropSet->getPropertyValue( sOnClick ) );
+            if ( aAny >>= eCa )
+            {
+                switch ( eCa )
+                {
+                    case presentation::ClickAction_LASTPAGE :
+                    {
+                        sal_Int32 nCount = rDoc.GetSdPageCount( PK_STANDARD );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
+                    }
+                    break;
+                    case presentation::ClickAction_FIRSTPAGE :
+                    {
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
+                    }
+                    break;
+                    case presentation::ClickAction_PREVPAGE :
+                    {
+                        sal_Int32 nDestPage = rPDFExtOutDevData.GetCurrentPageNumber();
+                        if ( nDestPage )
+                            nDestPage--;
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
+                    }
+                    break;
+                    case presentation::ClickAction_NEXTPAGE :
+                    {
+                        sal_Int32 nDestPage = rPDFExtOutDevData.GetCurrentPageNumber() + 1;
+                        sal_Int32 nLastPage = rDoc.GetSdPageCount( PK_STANDARD ) - 1;
+                        if ( nDestPage > nLastPage )
+                            nDestPage = nLastPage;
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                        rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
+                    }
+                    break;
+
+                    case presentation::ClickAction_PROGRAM :
+                    case presentation::ClickAction_BOOKMARK :
+                    case presentation::ClickAction_DOCUMENT :
+                    {
+                        rtl::OUString aBookmark;
+                        uno::Any aAny( xShapePropSet->getPropertyValue( sBookmark ) );
+                        if ( ( aAny >>= aBookmark ) && aBookmark.getLength() )
+                        {
+                            switch( eCa )
+                            {
+                                case presentation::ClickAction_DOCUMENT :
+                                case presentation::ClickAction_PROGRAM :
+                                {
+                                    sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                                    rPDFExtOutDevData.SetLinkURL( nLinkId, aBookmark );
+                                }
+                                break;
+                                case presentation::ClickAction_BOOKMARK :
+                                {
+                                    sal_Int32 nPage = ImplPDFGetBookmarkPage( aBookmark, rDoc );
+                                    if ( nPage != -1 )
+                                    {
+                                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::PDFWriter::FitRectangle );
+                                        sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect, -1 );
+                                        rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
+
+                    case presentation::ClickAction_STOPPRESENTATION :
+                    case presentation::ClickAction_SOUND :
+                    case presentation::ClickAction_INVISIBLE :
+                    case presentation::ClickAction_VERB :
+                    case presentation::ClickAction_VANISH :
+                    case presentation::ClickAction_MACRO :
+                    default :
+                    break;
+                }
+            }
+        }
+    }
 }
 
 // all default implementations just call the same methods at the original. To do something
@@ -1667,20 +1862,30 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
     {
         uno::Reference< awt::XDevice >  xRenderDevice;
         const sal_Int32                 nPageNumber = nRenderer + 1;
+        PageKind                        ePageKind = PK_STANDARD;
+        sal_Bool                        bExportNotesPages = sal_False;
 
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
             if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
                 rxOptions[ nProperty].Value >>= xRenderDevice;
+            else if ( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
+            {
+                rxOptions[ nProperty].Value >>= bExportNotesPages;
+                if ( bExportNotesPages )
+                    ePageKind = PK_NOTES;
+            }
         }
 
-        if( xRenderDevice.is() && nPageNumber && ( nPageNumber <= pDoc->GetSdPageCount( PK_STANDARD ) ) )
+        if( xRenderDevice.is() && nPageNumber && ( nPageNumber <= pDoc->GetSdPageCount( ePageKind ) ) )
         {
             VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
             OutputDevice*   pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
 
             if( pOut )
             {
+                vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
+
                 ::sd::ClientView* pView = new ::sd::ClientView( pDocShell, pOut, NULL );
                 Rectangle               aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
                 Region                  aRegion( aVisArea );
@@ -1709,7 +1914,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
 
                 if( xModel == pDocShell->GetModel() )
                 {
-                    pView->ShowPage( pDoc->GetSdPage( (USHORT)nPageNumber - 1, PK_STANDARD ), aOrigin );
+                    pView->ShowPage( pDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind ), aOrigin );
                     SdrPageView* pPV = pView->GetPageViewPvNum( 0 );
 
                     // background color for outliner :o
@@ -1720,6 +1925,147 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         rOutl.SetBackgroundColor( pPage->GetBackgroundColor( pPV ) );
                     }
                     pPV->CompleteRedraw( pOut, aRegion, 0, &aImplRenderPaintProc );
+
+                    if ( pPDFExtOutDevData )
+                    {
+                        try
+                        {
+                            uno::Any aAny;
+                            uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
+                            if ( xPage.is() )
+                            {
+                                uno::Reference< beans::XPropertySet > xPagePropSet( xPage, uno::UNO_QUERY );
+                                if( xPagePropSet.is() )
+                                {
+                                    // exporting object interactions to pdf
+
+                                    // if necessary, the master page interactions will be exported first
+                                    const rtl::OUString sIsBackgroundObjectsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) );
+                                    sal_Bool bIsBackgroundObjectsVisible;
+                                    aAny = xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible );
+                                    if ( ( aAny >>= bIsBackgroundObjectsVisible ) && bIsBackgroundObjectsVisible )
+                                    {
+                                        uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
+                                        if ( xMasterPageTarget.is() )
+                                        {
+                                            uno::Reference< drawing::XDrawPage > xMasterPage = xMasterPageTarget->getMasterPage();
+                                            if ( xMasterPage.is() )
+                                            {
+                                                uno::Reference< drawing::XShapes> xShapes( xMasterPage, uno::UNO_QUERY );
+                                                sal_Int32 i, nCount = xShapes->getCount();
+                                                for ( i = 0; i < nCount; i++ )
+                                                {
+                                                    aAny = xShapes->getByIndex( i );
+                                                    uno::Reference< drawing::XShape > xShape;
+                                                    if ( aAny >>= xShape )
+                                                        ImplPDFExportShapeInteraction( xShape, *pDoc, *pPDFExtOutDevData );
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // exporting slide page object interactions
+                                    uno::Reference< drawing::XShapes> xShapes( xPage, uno::UNO_QUERY );
+                                    sal_Int32 i, nCount = xShapes->getCount();
+                                    for ( i = 0; i < nCount; i++ )
+                                    {
+                                        aAny = xShapes->getByIndex( i );
+                                        uno::Reference< drawing::XShape > xShape;
+                                        if ( aAny >>= xShape )
+                                            ImplPDFExportShapeInteraction( xShape, *pDoc, *pPDFExtOutDevData );
+                                    }
+
+                                    // exporting transition effects to pdf
+                                    if ( pPDFExtOutDevData->GetIsExportTransitionEffects() )
+                                    {
+                                        const rtl::OUString sEffect( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) );
+                                        const rtl::OUString sSpeed ( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) );
+                                        sal_Int32 nTime = 800;
+                                        presentation::AnimationSpeed aAs;
+                                        aAny = xPagePropSet->getPropertyValue( sSpeed );
+                                        if ( aAny >>= aAs )
+                                        {
+                                            switch( aAs )
+                                            {
+                                                case presentation::AnimationSpeed_SLOW : nTime = 1500; break;
+                                                case presentation::AnimationSpeed_FAST : nTime = 300; break;
+                                                default:
+                                                case presentation::AnimationSpeed_MEDIUM : nTime = 800;
+                                            }
+                                        }
+                                        presentation::FadeEffect eFe;
+                                        aAny = xPagePropSet->getPropertyValue( sEffect );
+                                        vcl::PDFWriter::PageTransition eType = vcl::PDFWriter::Dissolve;
+                                        if ( aAny >>= eFe )
+                                        {
+                                            switch( eFe )
+                                            {
+                                                case presentation::FadeEffect_HORIZONTAL_LINES :
+                                                case presentation::FadeEffect_HORIZONTAL_CHECKERBOARD :
+                                                case presentation::FadeEffect_HORIZONTAL_STRIPES : eType = vcl::PDFWriter::BlindsHorizontal; break;
+
+                                                case presentation::FadeEffect_VERTICAL_LINES :
+                                                case presentation::FadeEffect_VERTICAL_CHECKERBOARD :
+                                                case presentation::FadeEffect_VERTICAL_STRIPES : eType = vcl::PDFWriter::BlindsVertical; break;
+
+                                                case presentation::FadeEffect_UNCOVER_TO_RIGHT :
+                                                case presentation::FadeEffect_UNCOVER_TO_UPPERRIGHT :
+                                                case presentation::FadeEffect_ROLL_FROM_LEFT :
+                                                case presentation::FadeEffect_FADE_FROM_UPPERLEFT :
+                                                case presentation::FadeEffect_MOVE_FROM_UPPERLEFT :
+                                                case presentation::FadeEffect_FADE_FROM_LEFT :
+                                                case presentation::FadeEffect_MOVE_FROM_LEFT : eType = vcl::PDFWriter::WipeLeftToRight; break;
+
+                                                case presentation::FadeEffect_UNCOVER_TO_BOTTOM :
+                                                case presentation::FadeEffect_UNCOVER_TO_LOWERRIGHT :
+                                                case presentation::FadeEffect_ROLL_FROM_TOP :
+                                                case presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
+                                                case presentation::FadeEffect_MOVE_FROM_UPPERRIGHT :
+                                                case presentation::FadeEffect_FADE_FROM_TOP :
+                                                case presentation::FadeEffect_MOVE_FROM_TOP : eType = vcl::PDFWriter::WipeTopToBottom; break;
+
+                                                case presentation::FadeEffect_UNCOVER_TO_LEFT :
+                                                case presentation::FadeEffect_UNCOVER_TO_LOWERLEFT :
+                                                case presentation::FadeEffect_ROLL_FROM_RIGHT :
+
+                                                case presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
+                                                case presentation::FadeEffect_MOVE_FROM_LOWERRIGHT :
+                                                case presentation::FadeEffect_FADE_FROM_RIGHT :
+                                                case presentation::FadeEffect_MOVE_FROM_RIGHT : eType = vcl::PDFWriter::WipeRightToLeft; break;
+
+                                                case presentation::FadeEffect_UNCOVER_TO_TOP :
+                                                case presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
+                                                case presentation::FadeEffect_ROLL_FROM_BOTTOM :
+                                                case presentation::FadeEffect_FADE_FROM_LOWERLEFT :
+                                                case presentation::FadeEffect_MOVE_FROM_LOWERLEFT :
+                                                case presentation::FadeEffect_FADE_FROM_BOTTOM :
+                                                case presentation::FadeEffect_MOVE_FROM_BOTTOM : eType = vcl::PDFWriter::WipeBottomToTop; break;
+
+                                                case presentation::FadeEffect_OPEN_VERTICAL : eType = vcl::PDFWriter::SplitHorizontalInward; break;
+                                                case presentation::FadeEffect_CLOSE_HORIZONTAL : eType = vcl::PDFWriter::SplitHorizontalOutward; break;
+
+                                                case presentation::FadeEffect_OPEN_HORIZONTAL : eType = vcl::PDFWriter::SplitVerticalInward; break;
+                                                case presentation::FadeEffect_CLOSE_VERTICAL : eType = vcl::PDFWriter::SplitVerticalOutward; break;
+
+                                                case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::PDFWriter::BoxInward; break;
+                                                case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::PDFWriter::BoxOutward; break;
+
+                                                case presentation::FadeEffect_RANDOM :
+                                                case presentation::FadeEffect_DISSOLVE :
+                                                default: eType = vcl::PDFWriter::Dissolve; break;
+
+                                            }
+                                        }
+                                        pPDFExtOutDevData->SetPageTransition( eType, nTime, -1 );
+                                    }
+                                }
+                            }
+                        }
+                        catch( uno::Exception& )
+                        {
+                        }
+
+                    }
                 }
                 else
                 {
