@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:43:36 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ public:
 template< typename RecType >
 void XclExpRecordList< RecType >::Save( XclExpStream& rStrm )
 {
-    for( RecType* pRec = First(); pRec; pRec = Next() )
+    for( RecType* pRec = this->First(); pRec; pRec = this->Next() )
         pRec->Save( rStrm );
 }
 
