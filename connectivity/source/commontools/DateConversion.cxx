@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:45:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::beans;
 // -----------------------------------------------------------------------------
 ::rtl::OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
                                               const Reference< XTypeConverter >&  _rxTypeConverter)
@@ -449,10 +450,32 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                 case NumberFormat::DATE:
                 case NumberFormat::DATETIME:
                 {
-                    double fValue = getValue(xVariant,rNullDate,nKeyType);
-                    if (!xVariant->wasNull())
-                        aString = xFormatter->convertNumberToString(nKey, toNullDate(rNullDate, fValue));
-                }   break;
+                    // get a value which represents the given date, relative to the given null date
+                    double fValue = getValue(xVariant, rNullDate, nKeyType);
+                    if ( !xVariant->wasNull() )
+                    {
+                         // get the null date of the formatter
+                         Date aFormatterNullDate( rNullDate );
+                         try
+                         {
+                             Reference< XPropertySet > xFormatterSettings;
+                             Reference< XNumberFormatsSupplier > xSupplier( xFormatter->getNumberFormatsSupplier( ) );
+                             if ( xSupplier.is() )
+                                 xFormatterSettings = xSupplier->getNumberFormatSettings();
+                             if ( xFormatterSettings.is() )
+                                 xFormatterSettings->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NullDate" ) ) ) >>= aFormatterNullDate;
+                         }
+                         catch( const Exception& )
+                         {
+                            OSL_ENSURE( sal_False, "DBTypeConversion::getValue: caught an exception while retrieving the formatter's NullDate!" );
+                         }
+                         // get a value which represents the given date, relative to the null date of the formatter
+                         fValue -= toDays( rNullDate, aFormatterNullDate );
+                         // format this value
+                        aString = xFormatter->convertNumberToString( nKey, fValue );
+                    }
+                }
+                break;
                 case NumberFormat::TIME:
                 case NumberFormat::NUMBER:
                 case NumberFormat::SCIENTIFIC:
