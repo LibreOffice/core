@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageDescriptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:34:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 #include <tools/link.hxx>
 #include <vcl/bitmap.hxx>
-#include <so3/iface.hxx>
+#include <sfx2/viewfrm.hxx>
 
 class SdPage;
 
