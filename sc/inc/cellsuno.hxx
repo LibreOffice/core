@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:03:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,7 +1086,7 @@ class ScTableSheetObj : public ScCellRangeObj,
 private:
     SfxItemPropertySet      aSheetPropSet;
 
-    USHORT                  GetTab_Impl() const;
+    SCTAB                   GetTab_Impl() const;
     void                    PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges );
 
 protected:
@@ -1100,10 +1100,10 @@ protected:
                                         ::com::sun::star::uno::RuntimeException);
 
 public:
-                            ScTableSheetObj(ScDocShell* pDocSh, USHORT nTab);
+                            ScTableSheetObj(ScDocShell* pDocSh, SCTAB nTab);
     virtual                 ~ScTableSheetObj();
 
-    void                    InitInsertSheet(ScDocShell* pDocSh, USHORT nTab);
+    void                    InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
@@ -1325,7 +1325,7 @@ protected:
                                         ::com::sun::star::uno::RuntimeException);
 
 public:
-                            ScTableColumnObj(ScDocShell* pDocSh, USHORT nCol, USHORT nTab);
+                            ScTableColumnObj(ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab);
     virtual                 ~ScTableColumnObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -1376,7 +1376,7 @@ protected:
                                         ::com::sun::star::uno::RuntimeException);
 
 public:
-                            ScTableRowObj(ScDocShell* pDocSh, USHORT nRow, USHORT nTab);
+                            ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
     virtual                 ~ScTableRowObj();
 
                             // XPropertySet ueberladen wegen Zeilen-Properties
@@ -1518,7 +1518,7 @@ class ScCellFormatsEnumeration : public cppu::WeakImplHelper2<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;
+    SCTAB                   nTab;
     ScAttrRectIterator*     pIter;
     ScRange                 aNext;
     BOOL                    bAtEnd;
