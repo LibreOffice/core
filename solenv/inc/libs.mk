@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 13:55:00 $
+#   last change: $Author: vg $ $Date: 2005-03-10 18:00:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.84 $$"
+LIBSMKREV!:="$$Revision: 1.85 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -149,8 +149,8 @@ FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
 XPLIB=-l_xp
 TKLIB=-ltk$(OFFICEUPD)$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(OFFICEUPD)$(DLLPOSTFIX)
-XMLSECLIB=-lxmlsec
-XMLSECLIB-NSS=-lxmlsec-nss
+XMLSECLIB=-lxmlsec1
+XMLSECLIB-NSS=-lxmlsec1-nss
 LIBXML2LIB=-lxml2
 NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
@@ -364,9 +364,9 @@ BTSTRPLIB=$(LIBPRE) bootstrp.lib
 TRANSEXLIB=$(LIBPRE) transex.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
-XMLSECLIB=$(LIBPRE) xmlsec.lib
-XMLSECLIB-MS=$(LIBPRE) xmlsec-mscrypto.lib
-XMLSECLIB-NSS=$(LIBPRE) xmlsec-nss.lib
+XMLSECLIB=$(LIBPRE) libxmlsec.lib
+XMLSECLIB-MS=$(LIBPRE) libxmlsec-mscrypto.lib
+XMLSECLIB-NSS=$(LIBPRE) libxmlsec-nss.lib
 LIBXML2LIB=$(LIBPRE) libxml2.lib
 NSS3LIB=$(LIBPRE) nss3.lib
 NSPR4LIB=$(LIBPRE) nspr4.lib
