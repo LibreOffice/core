@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:45:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
     { 0xFFFF, 0xFFFFFFFFL }     // End-Marke
 };
 
+
 ////////////////////////////////////////////////////////////////////////////
 
 // Die StarBASIC-Factory hat einen Hack. Wenn ein SbModule eingerichtet wird,
@@ -288,6 +289,12 @@ SbxObject* SbiFactory::CreateObject( const String& rClass )
     {
         String aEmpty;
         return new SbModule( aEmpty );
+    }
+    else
+    if( rClass.EqualsIgnoreCaseAscii( "Collection" ) )
+    {
+        String aCollectionName( RTL_CONSTASCII_USTRINGPARAM("Collection") );
+        return new BasicCollection( aCollectionName );
     }
     else
         return NULL;
@@ -1382,3 +1389,235 @@ BOOL StarBASIC::LoadOldModules( SvStream& r )
 {
     return FALSE;
 }
+
+
+//========================================================================
+// #118116 Implementation Collection object
+
+TYPEINIT1(BasicCollection,SbxObject)
+
+static const char pCount[]  = "Count";
+static const char pAdd[]    = "Add";
+static const char pItem[]   = "Item";
+static const char pRemove[] = "Remove";
+static USHORT nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
+
+BasicCollection::BasicCollection( const XubString& rClass )
+             : SbxObject( rClass )
+{
+    if( !nCountHash )
+    {
+        nCountHash  = MakeHashCode( String::CreateFromAscii( pCount ) );
+        nAddHash    = MakeHashCode( String::CreateFromAscii( pAdd ) );
+        nItemHash   = MakeHashCode( String::CreateFromAscii( pItem ) );
+        nRemoveHash = MakeHashCode( String::CreateFromAscii( pRemove ) );
+    }
+    Initialize();
+}
+
+BasicCollection::~BasicCollection()
+{}
+
+void BasicCollection::Clear()
+{
+    SbxObject::Clear();
+    Initialize();
+}
+
+void BasicCollection::Initialize()
+{
+    xItemArray = new SbxArray();
+    SetType( SbxOBJECT );
+    SetFlag( SBX_FIXED );
+    ResetFlag( SBX_WRITE );
+    SbxVariable* p;
+    p = Make( String::CreateFromAscii( pCount ), SbxCLASS_PROPERTY, SbxINTEGER );
+    p->ResetFlag( SBX_WRITE );
+    p->SetFlag( SBX_DONTSTORE );
+    p = Make( String::CreateFromAscii( pAdd ), SbxCLASS_METHOD, SbxEMPTY );
+    p->SetFlag( SBX_DONTSTORE );
+    p = Make( String::CreateFromAscii( pItem ), SbxCLASS_METHOD, SbxVARIANT );
+    p->SetFlag( SBX_DONTSTORE );
+    p = Make( String::CreateFromAscii( pRemove ), SbxCLASS_METHOD, SbxEMPTY );
+    p->SetFlag( SBX_DONTSTORE );
+}
+
+SbxVariable* BasicCollection::Find( const XubString& rName, SbxClassType t )
+{
+    SbxVariable* pFind = SbxObject::Find( rName, t );
+    return pFind;
+}
+
+void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
+                                const SfxHint& rHint, const TypeId& rId2 )
+{
+    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    if( p )
+    {
+        ULONG nId = p->GetId();
+        BOOL bRead  = BOOL( nId == SBX_HINT_DATAWANTED );
+        BOOL bWrite = BOOL( nId == SBX_HINT_DATACHANGED );
+        SbxVariable* pVar = p->GetVar();
+        SbxArray* pArg = pVar->GetParameters();
+        if( bRead || bWrite )
+        {
+            XubString aVarName( pVar->GetName() );
+            if( pVar->GetHashCode() == nCountHash
+                  && aVarName.EqualsIgnoreCaseAscii( pCount ) )
+                pVar->PutLong( xItemArray->Count32() );
+            else if( pVar->GetHashCode() == nAddHash
+                  && aVarName.EqualsIgnoreCaseAscii( pAdd ) )
+                CollAdd( pArg );
+            else if( pVar->GetHashCode() == nItemHash
+                  && aVarName.EqualsIgnoreCaseAscii( pItem ) )
+                CollItem( pArg );
+            else if( pVar->GetHashCode() == nRemoveHash
+                  && aVarName.EqualsIgnoreCaseAscii( pRemove ) )
+                CollRemove( pArg );
+            else
+                SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
+            return;
+        }
+    }
+    SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
+}
+
+INT32 BasicCollection::implGetIndex( SbxVariable* pIndexVar )
+{
+    INT32 nIndex = -1;
+    if( pIndexVar->GetType() == SbxSTRING )
+        nIndex = implGetIndexForName( pIndexVar->GetString() );
+    else
+        nIndex = pIndexVar->GetLong() - 1;
+    return nIndex;
+}
+
+INT32 BasicCollection::implGetIndexForName( const String& rName )
+{
+    INT32 nIndex = -1;
+    INT32 nCount = xItemArray->Count32();
+    INT32 nNameHash = MakeHashCode( rName );
+    for( INT32 i = 0 ; i < nCount ; i++ )
+    {
+        SbxVariable* pVar = xItemArray->Get32( i );
+        if( pVar->GetHashCode() == nNameHash &&
+            pVar->GetName().EqualsIgnoreCaseAscii( rName ) )
+        {
+            nIndex = i;
+            break;
+        }
+    }
+    return nIndex;
+}
+
+void BasicCollection::CollAdd( SbxArray* pPar )
+{
+    USHORT nCount = pPar->Count();
+    if( nCount < 2 || nCount > 5 )
+    {
+        SetError( SbxERR_WRONG_ARGS );
+        return;
+    }
+
+    SbxVariable* pItem = pPar->Get(1);
+    if( pItem )
+    {
+        int nNextIndex;
+        if( nCount < 4 )
+        {
+            nNextIndex = xItemArray->Count();
+        }
+        else
+        {
+            SbxVariable* pBefore = pPar->Get(3);
+            if( nCount == 5 )
+            {
+                if( !pBefore->IsErr() )
+                {
+                    SetError( SbERR_BAD_ARGUMENT );
+                    return;
+                }
+                SbxVariable* pAfter = pPar->Get(4);
+                INT32 nAfterIndex = implGetIndex( pAfter );
+                if( nAfterIndex == -1 )
+                {
+                    SetError( SbERR_BAD_ARGUMENT );
+                    return;
+                }
+                nNextIndex = nAfterIndex + 1;
+            }
+            else // if( nCount == 4 )
+            {
+                INT32 nBeforeIndex = implGetIndex( pBefore );
+                if( nBeforeIndex == -1 )
+                {
+                    SetError( SbERR_BAD_ARGUMENT );
+                    return;
+                }
+                nNextIndex = nBeforeIndex;
+            }
+        }
+
+        SbxVariableRef pNewItem = new SbxVariable( *pItem );
+        if( nCount >= 3 )
+        {
+            SbxVariable* pKey = pPar->Get(2);
+            if( !pKey->IsErr() )
+            {
+                if( pKey->GetType() != SbxSTRING )
+                {
+                    SetError( SbERR_BAD_ARGUMENT );
+                    return;
+                }
+                String aKey = pKey->GetString();
+                if( implGetIndexForName( aKey ) != -1 )
+                {
+                    SetError( SbERR_BAD_ARGUMENT );
+                    return;
+                }
+                pNewItem->SetName( aKey );
+            }
+        }
+        pNewItem->SetFlag( SBX_READWRITE );
+        xItemArray->Insert32( pNewItem, nNextIndex );
+    }
+    else
+    {
+        SetError( SbERR_BAD_ARGUMENT );
+        return;
+    }
+}
+
+void BasicCollection::CollItem( SbxArray* pPar )
+{
+    if( pPar->Count() != 2 )
+    {
+        SetError( SbxERR_WRONG_ARGS );
+        return;
+    }
+    SbxVariable* pRes = NULL;
+    SbxVariable* p = pPar->Get( 1 );
+    INT32 nIndex = implGetIndex( p );
+    if( nIndex >= 0 && nIndex < xItemArray->Count32() )
+        pRes = xItemArray->Get32( nIndex );
+    if( !pRes )
+        SetError( SbxERR_BAD_INDEX );
+    *(pPar->Get(0)) = *pRes;
+}
+
+void BasicCollection::CollRemove( SbxArray* pPar )
+{
+    if( pPar == NULL || pPar->Count() != 2 )
+    {
+        SetError( SbxERR_WRONG_ARGS );
+        return;
+    }
+
+    SbxVariable* p = pPar->Get( 1 );
+    INT32 nIndex = implGetIndex( p );
+    if( nIndex >= 0 && nIndex < xItemArray->Count32() )
+        xItemArray->Remove32( nIndex );
+    else
+        SetError( SbxERR_BAD_INDEX );
+}
+
