@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 16:11:05 $
+#   last change: $Author: kz $ $Date: 2005-01-21 17:21:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ EXCEPTIONSFILES=	\
         $(SLO)$/DExport.obj					\
         $(SLO)$/uiservices.obj				\
         $(SLO)$/RowSetDrop.obj				\
+        $(SLO)$/TableCopyHelper.obj			\
         $(SLO)$/moduledbu.obj
 
 
