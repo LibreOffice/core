@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genfunc.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _COM_SUN_STAR_UNO_GENFUNC_H_
 #define _COM_SUN_STAR_UNO_GENFUNC_H_
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 
 typedef struct _typelib_TypeDescriptionReference typelib_TypeDescriptionReference;
 
