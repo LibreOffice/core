@@ -3,9 +3,9 @@
  *
  *  $RCSfile: corbamaker.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ts $ $Date: 2000-12-11 14:20:04 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ int _cdecl main( int argc, char * argv[] )
         if (options.isValid("-O"))
             outPath = options.getOption("-O");
 
-        cppFile.openFile(outPath);
+        cppFile.open(outPath);
 
         if(!cppFile.isValid())
         {
@@ -181,24 +181,25 @@ int _cdecl main( int argc, char * argv[] )
 
             cppFile << "#include <"
                     << corbaHeader
-                    << ">" << endl << endl;
+                    << ">\n\n";
 
             CorbaType::dumpDefaultHxxIncludes(cppFile);
-            cppFile << endl;
+            cppFile << "\n";
         }
 
         if (options.isValid("-T"))
         {
             OString tOption(options.getOption("-T"));
-            sal_uInt32 count = tOption.getTokenCount(';');
 
             OString typeName, tmpName;
             sal_Bool ret = sal_False;
-            for (sal_uInt32 i = 0; i < count; i++)
+            sal_Int32 nIndex = 0;
+            do
             {
-                typeName = tOption.getToken(i, ';');
+                typeName = tOption.getToken(0, ';', nIndex);
 
-                tmpName = typeName.getToken(typeName.getTokenCount('.') - 1, '.');
+                sal_Int32 nPos = typeName.lastIndexOf( '.' );
+                tmpName = typeName.copy( nPos != -1 ? nPos+1 : 0 );
                 if (tmpName == "*")
                 {
                     // produce this type and his scope, but the scope is not recursively  generated.
@@ -227,7 +228,7 @@ int _cdecl main( int argc, char * argv[] )
                             OString("cannot dump Type '" + typeName + "'").getStr());
                     exit(99);
                 }
-            }
+            } while( nIndex != -1 );
         } else
         {
             // produce all types

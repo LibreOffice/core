@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-18 16:34:15 $
+#   last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ CFLAGSNOOPT+=-Ob0
 .ENDIF
 
 OBJFILES=   $(OBJ)$/cppumaker.obj	\
-            $(OBJ)$/cppuoptions.obj	\
+            $(OBJ)$/cppuoptions.obj \
             $(OBJ)$/cpputype.obj
 
 NOOPTFILES= \
@@ -88,17 +88,13 @@ NOOPTFILES= \
 APP1TARGET= $(TARGET)
 
 APP1OBJS=   $(OBJFILES)
-APP1STDLIBS=\
-            $(SALLIB) \
-            $(SALHELPERLIB) \
-            $(REGLIB) 
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
+APP1STDLIBS= \
+             $(SALLIB) \
+             $(SALHELPERLIB) \
+             $(REGLIB) 
 
 APP1LIBS= \
-        $(LB)$/codemaker.lib
+          $(LB)$/codemaker.lib
 
 .INCLUDE :  target.mk

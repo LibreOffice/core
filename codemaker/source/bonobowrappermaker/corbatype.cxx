@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corbatype.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:27:38 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,13 @@ CorbaType::CorbaType(TypeReader& typeReader,
     : m_inheritedMemberCount(0)
     , m_indentLength(0)
     , m_typeName(typeName)
-    , m_name(typeName.getToken(typeName.getTokenCount('/') - 1, '/'))
     , m_reader(typeReader)
     , m_typeMgr((TypeManager&)typeMgr)
     , m_dependencies(typeDependencies)
     , m_generatedConversions(generatedConversions)
 {
+    sal_Int32 i = typeName.lastIndexOf('/');
+    m_name = typeName.copy( i != -1 ? i+1 : 0 );
 }
 
 CorbaType::~CorbaType()
@@ -262,7 +263,7 @@ void CorbaType::dumpInclude(FileStream& o, TypeSet* allreadyDumped, const OStrin
             tmpBuf.append(prefix);
             tmpBuf.append('_');
 
-            OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toUpperCase());
+            OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
             length = 1 + typeName.getLength() + strlen(prefix);
             if (bExtended)
@@ -321,7 +322,7 @@ void CorbaType::dumpInclude(FileStream& o, TypeSet* allreadyDumped, const OStrin
                 RegistryKey key = m_typeMgr.getTypeKey(realTypeName);
                 RegistryKeyNames nestedTypeNames;
                 key.getKeyNames(OUString(), nestedTypeNames);
-                for (sal_Int32 i = 0; i < nestedTypeNames.getLength(); i++)
+                for (sal_uInt32 i = 0; i < nestedTypeNames.getLength(); i++)
                 {
                     OString nTypeName(OUStringToOString(nestedTypeNames.getElement(i), RTL_TEXTENCODING_UTF8));
 
@@ -357,7 +358,7 @@ void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OS
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
 
-    OString     sPrefix(OString(prefix).toUpperCase());
+    OString     sPrefix(OString(prefix).toAsciiUpperCase());
     sal_Bool    bSequenceDumped = sal_False;
     sal_Bool    bInterfaceDumped = sal_False;
     sal_uInt32  index = 0;
@@ -396,7 +397,7 @@ void CorbaType::dumpDepIncludes(FileStream& o, TypeSet* allreadyDumped, const OS
 
                     if (!((*iter).m_use & TYPEUSE_SUPER))
                     {
-                        o << endl;
+                        o << "\n";
                         dumpNameSpace(o, sal_True, sal_False, relType);
                         o << "\nclass " << scopedName(m_typeName, relType, sal_True) << ";\n";
                         dumpNameSpace(o, sal_False, sal_False, relType);
@@ -428,33 +429,37 @@ void CorbaType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, con
     if (typeName == "/")
         return;
 
-    sal_uInt32 count = typeName.getTokenCount('/');
-
-    if (count == 1 && !bFull)
+    if (typeName.indexOf( '/' ) == -1 && !bFull)
         return;
 
-    if (!bFull) count--;
+    if (!bFull)
+        typeName = typeName.copy( 0, typeName.lastIndexOf( '/' ) );
 
     if (bOpen)
     {
-        for (int i=0; i < count; i++)
+        sal_Int32 nIndex = 0;
+        do
         {
-            o << "namespace " << typeName.getToken(i, '/');
+            o << "namespace " << typeName.getToken(0, '/', nIndex);
             if (bOneLine)
                 o << " { ";
             else
                  o << "\n{\n";
-        }
+        } while( nIndex != -1 );
     } else
     {
-        for (int i=count-1; i >= 0; i--)
+        sal_Int32 nPos = 0;
+        do
         {
+            nPos = typeName.lastIndexOf( '/' );
             o << "}";
-            if (bOneLine)
+            if( bOneLine )
                 o << " ";
             else
-                 o << " // " << typeName.getToken(i, '/') << "\n";
-        }
+                o << " // " << typeName.copy( nPos+1 ) << "\n";
+            if( nPos != -1 )
+                typeName = typeName.copy( 0, nPos );
+        } while( nPos != -1 );
     }
 }
 
@@ -620,7 +625,7 @@ OString CorbaType::printUnoType(const OString& type, sal_Bool bConst, sal_Bool b
 
     if (bConst) ret.append("const ");
 
-    int i;
+    sal_uInt32 i;
     for (i=0; i < seqNum; i++)
     {
         ret.append("::com::sun::star::uno::Sequence< ");
@@ -698,7 +703,7 @@ OString CorbaType::printCorbaType(const OString& type, sal_Bool bConst, sal_Bool
     if (bConst) ret.append("const ");
 
 
-    int i;
+    sal_uInt32 i;
     for (i=0; i < seqNum; i++)
     {
         ret.append("CORBA_sequence_");
@@ -1018,8 +1023,9 @@ void CorbaType::dumpTypeInit(FileStream& o, const OString& typeName)
 
             if ( reader.isValid() )
             {
+                sal_Int32 nPos = type.lastIndexOf( '/' );
                 o << "(" << shortScopedName("", type, sal_False)
-                  << "::" << type.getToken(type.getTokenCount('/') - 1, '/')
+                  << "::" << type.copy( nPos != -1 ? nPos+1 : 0 )
                   << "_" << reader.getFieldName(0) << ")";
                 return;
             }
@@ -1185,7 +1191,7 @@ OString CorbaType::indent()
 {
     OStringBuffer tmp(m_indentLength);
 
-    for (int i=0; i < m_indentLength; i++)
+    for (sal_uInt32 i=0; i < m_indentLength; i++)
     {
         tmp.append(' ');
     }
@@ -1196,7 +1202,7 @@ OString CorbaType::indent(sal_uInt32 num)
 {
     OStringBuffer tmp(m_indentLength + num);
 
-    for (int i=0; i < m_indentLength + num; i++)
+    for (sal_uInt32 i=0; i < m_indentLength + num; i++)
     {
         tmp.append(' ');
     }
@@ -2317,7 +2323,7 @@ sal_Bool StructureType::dumpSuperMember(FileStream& o, const OString& superType,
             RTFieldAccess   access = RT_ACCESS_INVALID;
             OString         fieldName;
             OString         fieldType;
-            for (sal_Int16 i=0; i < fieldCount; i++)
+            for (sal_uInt16 i=0; i < fieldCount; i++)
             {
                 access = aSuperReader.getFieldAccess(i);
 
@@ -2758,21 +2764,20 @@ sal_Bool produceType(const OString& typeName,
 OString scopedName(const OString& scope, const OString& type,
        sal_Bool bNoNameSpace)
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
-
-    if (count == 1)
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if (nPos == -1)
         return type;
 
     if (bNoNameSpace)
-        return type.getToken(count - 1, '/');
+        return type.copy(nPos+1);
 
-    OStringBuffer tmpBuf(type.getLength() + count);
-    for (int i=0; i < count; i++)
+    OStringBuffer tmpBuf(type.getLength()*2);
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(type.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }
@@ -2783,12 +2788,8 @@ OString scopedName(const OString& scope, const OString& type,
 OString shortScopedName(const OString& scope, const OString& type,
                sal_Bool bNoNameSpace)
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
-
-    if (count > 1)
-        offset = count - 1;
-    else
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if( nPos == -1 )
         return OString();
 
     if (bNoNameSpace)
@@ -2798,19 +2799,21 @@ OString shortScopedName(const OString& scope, const OString& type,
     if (scope.lastIndexOf('/') > 0)
     {
         OString tmpScp(scope.copy(0, scope.lastIndexOf('/')));
-        OString tmpScp2(type.copy(0, type.lastIndexOf('/')));
+        OString tmpScp2(type.copy(0, nPos));
 
         if (tmpScp == tmpScp2)
             return OString();
     }
 
-    OStringBuffer tmpBuf(type.lastIndexOf('/') + offset);
+    OString aScope( type.copy( 0, nPos ) );
+    OStringBuffer tmpBuf(aScope.getLength()*2);
 
-    for (int i=0; i < count - 1; i++)
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(aScope.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }

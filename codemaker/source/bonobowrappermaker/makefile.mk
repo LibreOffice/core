@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-13 12:04:23 $
+#   last change: $Author: jsc $ $Date: 2001-08-17 13:15:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,28 +78,22 @@ ENABLE_EXCEPTIONS=TRUE
 
 
 CXXFILES=	corbamaker.cxx	\
-            corbaoptions.cxx	\
-            corbatype.cxx
+        corbaoptions.cxx	\
+        corbatype.cxx
 
 
 APP1TARGET= $(TARGET)
 
-APP1OBJS=   $(OBJ)$/corbamaker.obj	\
-            $(OBJ)$/corbaoptions.obj	\
-            $(OBJ)$/corbatype.obj			
+APP1OBJS= $(OBJ)$/corbamaker.obj	\
+      $(OBJ)$/corbaoptions.obj	\
+      $(OBJ)$/corbatype.obj			
 
-APP1STDLIBS=\
+APP1STDLIBS= \
             $(SALLIB) \
             $(SALHELPERLIB) \
-            $(REGLIB) \
-            $(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
+            $(REGLIB)
 
 APP1LIBS= \
-        $(LB)$/codemaker.lib
+    $(LB)$/codemaker.lib
 
 .INCLUDE :  target.mk

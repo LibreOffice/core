@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jsc $ $Date: 2001-04-17 16:15:48 $
+#   last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,29 +76,23 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	cunomaker.cxx	\
-            cunooptions.cxx	\
+CXXFILES=   cunomaker.cxx	\
+            cunooptions.cxx \
             cunotype.cxx
 
 
 APP1TARGET= $(TARGET)
 
 APP1OBJS=   $(OBJ)$/cunomaker.obj	\
-            $(OBJ)$/cunooptions.obj	\
+            $(OBJ)$/cunooptions.obj \
             $(OBJ)$/cunotype.obj			
 
-APP1STDLIBS=\
-            $(SALLIB) \
-            $(SALHELPERLIB) \
-            $(REGLIB) \
-            $(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
+APP1STDLIBS= \
+             $(SALLIB) \
+             $(SALHELPERLIB) \
+             $(REGLIB) \
 
 APP1LIBS= \
-        $(LB)$/codemaker.lib
+          $(LB)$/codemaker.lib
 
 .INCLUDE :  target.mk

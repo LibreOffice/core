@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-13 12:04:26 $
+#   last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,18 +87,13 @@ APP1OBJS=   $(OBJ)$/idlmaker.obj	\
             $(OBJ)$/idloptions.obj	\
             $(OBJ)$/idltype.obj			
 
-APP1STDLIBS=\
-            $(SALLIB) \
-            $(SALHELPERLIB) \
-            $(REGLIB) \
-            $(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
+APP1STDLIBS= \
+             $(SALLIB) \
+             $(SALHELPERLIB) \
+             $(REGLIB) \
+             $(STDLIBCPP)
 
 APP1LIBS= \
-        $(LB)$/codemaker.lib
+          $(LB)$/codemaker.lib
 
 .INCLUDE :  target.mk

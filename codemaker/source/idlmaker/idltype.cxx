@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idltype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:28:34 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@ IdlType::IdlType(TypeReader& typeReader,
     : m_inheritedMemberCount(0)
     , m_indentLength(0)
     , m_typeName(typeName)
-    , m_name(typeName.getToken(typeName.getTokenCount('/') - 1, '/'))
     , m_reader(typeReader)
     , m_typeMgr((TypeManager&)typeMgr)
     , m_dependencies(typeDependencies)
 {
+    sal_Int32 i = typeName.lastIndexOf('/');
+    m_name = typeName.copy( i != -1 ? i+1 : 0 );
 }
 
 IdlType::~IdlType()
@@ -131,9 +132,9 @@ sal_Bool IdlType::dump(IdlOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -144,7 +145,7 @@ sal_Bool IdlType::dump(IdlOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -205,9 +206,9 @@ OString IdlType::dumpHeaderDefine(FileStream& o, sal_Char* prefix )
     tmpBuf.append(prefix);
     tmpBuf.append('_');
 
-    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toUpperCase());
+    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
-    o << "#ifndef " << tmp << "\n#define " << tmp << endl;
+    o << "#ifndef " << tmp << "\n#define " << tmp << "\n";
 
     return tmp;
 }
@@ -228,7 +229,7 @@ void IdlType::dumpInclude(FileStream& o, const OString& genTypeName, const OStri
     tmpBuf.append(prefix);
     tmpBuf.append('_');
 
-    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toUpperCase());
+    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
     length = 1 + typeName.getLength() + strlen(prefix);
 
@@ -240,10 +241,16 @@ void IdlType::dumpInclude(FileStream& o, const OString& genTypeName, const OStri
     o << "#ifndef " << tmp << "\n#include <";
     tmp = tmpBuf.makeStringAndClear();
 
-    sal_Int32 nSlashes = genTypeName.getTokenCount( '/');
-    for( sal_Int32 i = 1; i < nSlashes; i++ )
-        o << "../";
-    //o << "c:/temp/";
+    sal_Int32 nIndex = 0;
+    do
+    {
+        genTypeName.getToken(0, '/', nIndex);
+         o << "../";
+    } while( nIndex != -1 );
+
+//      sal_Int32 nSlashes = genTypeName.getTokenCount( '/');
+//      for( sal_Int32 i = 1; i < nSlashes; i++ )
+//          o << "../";
     o << tmp;
     o << ">\n#endif\n";
 }
@@ -254,7 +261,7 @@ void IdlType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char* 
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
 
-    OString     sPrefix(OString(prefix).toUpperCase());
+    OString     sPrefix(OString(prefix).toAsciiUpperCase());
     sal_uInt32  index = 0;
     sal_uInt32  seqNum = 0;
     OString     relType;
@@ -277,7 +284,7 @@ void IdlType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char* 
             {
                 if (!((*iter).m_use & TYPEUSE_SUPER))
                 {
-                    o << endl;
+                    o << "\n";
                     dumpNameSpace(o, sal_True, sal_False, relType);
                     o << "\ninterface " << scopedName(m_typeName, relType, sal_True) << ";\n";
                     dumpNameSpace(o, sal_False, sal_False, relType);
@@ -299,7 +306,7 @@ void IdlType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char* 
             OString aST = relType;
             OString aScope;
             dumpNameSpace( o, sal_True, sal_False, relType );
-            for( sal_Int32 i = 0; i < seqNum; i++ )
+            for( sal_uInt32 i = 0; i < seqNum; i++ )
             {
                 o << "typedef sequence< " << scopedName("", aST) << " > ";
 
@@ -330,33 +337,37 @@ void IdlType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, const
     if (typeName == "/")
         return;
 
-    sal_uInt32 count = typeName.getTokenCount('/');
-
-    if (count == 1 && !bFull)
+    if (typeName.indexOf( '/' ) == -1 && !bFull)
         return;
 
-    if (!bFull) count--;
+    if (!bFull)
+        typeName = typeName.copy( 0, typeName.lastIndexOf( '/' ) );
 
     if (bOpen)
     {
-        for (int i=0; i < count; i++)
+        sal_Int32 nIndex = 0;
+        do
         {
-            o << "module " << typeName.getToken(i, '/');
+            o << "module " << typeName.getToken(0, '/', nIndex);
             if (bOneLine)
                 o << " { ";
             else
                  o << "\n{\n";
-        }
+        } while( nIndex != -1 );
     } else
     {
-        for (int i=count-1; i >= 0; i--)
+        sal_Int32 nPos = 0;
+        do
         {
+            nPos = typeName.lastIndexOf( '/' );
             o << "};";
-            if (bOneLine)
+            if( bOneLine )
                 o << " ";
             else
-                 o << " /* " << typeName.getToken(i, '/') << "*/\n";
-        }
+                o << " /* " << typeName.copy( nPos+1 ) << " */\n";
+            if( nPos != -1 )
+                typeName = typeName.copy( 0, nPos );
+        } while( nPos != -1 );
     }
 }
 
@@ -438,7 +449,7 @@ void IdlType::dumpType(FileStream& o, const OString& type )
 
     RTTypeClass typeClass = m_typeMgr.getTypeClass(relType);
 
-    int i;
+    sal_uInt32 i;
 /*
     for (i=0; i < seqNum; i++)
     {
@@ -739,7 +750,7 @@ OString IdlType::indent()
 {
     OStringBuffer tmp(m_indentLength);
 
-    for (int i=0; i < m_indentLength; i++)
+    for (sal_uInt32 i=0; i < m_indentLength; i++)
     {
         tmp.append(' ');
     }
@@ -750,7 +761,7 @@ OString IdlType::indent(sal_uInt32 num)
 {
     OStringBuffer tmp(m_indentLength + num);
 
-    for (int i=0; i < m_indentLength + num; i++)
+    for (sal_uInt32 i=0; i < m_indentLength + num; i++)
     {
         tmp.append(' ');
     }
@@ -780,12 +791,12 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "IDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "idl");
-    o << endl;
+    o << "\n";
     dumpNameSpace(o);
 
     // write documentation
@@ -812,7 +823,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
 //  o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
 //    << "class Type;\n} } } }\n\n";
 
-    o << "#endif /* "<< headerDefine << "*/" << endl;
+    o << "#endif /* "<< headerDefine << "*/" << "\n";
     return sal_True;
 }
 
@@ -868,7 +879,7 @@ void InterfaceType::dumpMethods(FileStream& o)
     sal_Bool bConst = sal_False;
     sal_Bool bWithRunTimeExcp = sal_True;
 
-    for (sal_uInt16 i=0; i < methodCount; i++)
+    for (sal_Int16 i=0; i < methodCount; i++)
     {
         methodName = m_reader.getMethodName(i);
         returnType = m_reader.getMethodReturnType(i);
@@ -1063,7 +1074,8 @@ sal_Bool ModuleType::dump(IdlOptions* pOptions)
     if (tmpName.equals("/"))
         tmpName = "global";
     else
-        tmpName += "/" + m_typeName.getToken(m_typeName.getTokenCount('/') - 1, '/');
+//      tmpName += "/" + m_typeName.getToken(m_typeName.getTokenCount('/') - 1, '/');
+        tmpName += "/" + m_name;
 
     OString tmpFileName;
     OString hFileName = createFileNameFromType(outPath, tmpName, ".idl");
@@ -1088,9 +1100,9 @@ sal_Bool ModuleType::dump(IdlOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -1101,7 +1113,7 @@ sal_Bool ModuleType::dump(IdlOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -1115,15 +1127,15 @@ sal_Bool ModuleType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "IDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "idl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o, sal_True, sal_True);
-    o << endl;
+    o << "\n";
 
     sal_uInt32      fieldCount = m_reader.getFieldCount();
     RTFieldAccess   access = RT_ACCESS_INVALID;
@@ -1146,9 +1158,9 @@ sal_Bool ModuleType::dumpHFile(FileStream& o)
         }
     }
 
-    o << endl;
+    o << "\n";
     dumpNameSpace(o, sal_False, sal_True);
-    o << "\n#endif /* "<< headerDefine << "*/" << endl;
+    o << "\n#endif /* "<< headerDefine << "*/" << "\n";
 
     return sal_True;
 }
@@ -1217,9 +1229,9 @@ sal_Bool ConstantsType::dump(IdlOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -1230,7 +1242,7 @@ sal_Bool ConstantsType::dump(IdlOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -1260,12 +1272,12 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "IDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "idl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -1313,7 +1325,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
 
     dumpNameSpace(o, sal_False);
 
-    o << "#endif /* "<< headerDefine << "*/" << endl;
+    o << "#endif /* "<< headerDefine << "*/" << "\n";
 
     return sal_True;
 }
@@ -1332,7 +1344,7 @@ void StructureType::dumpSuperMember(FileStream& o, const OString& superType)
             RTFieldAccess   access = RT_ACCESS_INVALID;
             OString         fieldName;
             OString         fieldType;
-            for (sal_Int16 i=0; i < fieldCount; i++)
+            for (sal_uInt16 i=0; i < fieldCount; i++)
             {
                 access = aSuperReader.getFieldAccess(i);
 
@@ -1376,12 +1388,12 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "IDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "idl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -1433,7 +1445,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
 
     dumpNameSpace(o, sal_False);
 
-    o << "#endif /* "<< headerDefine << "*/" << endl;
+    o << "#endif /* "<< headerDefine << "*/" << "\n";
 
     return sal_True;
 }
@@ -1496,10 +1508,10 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "IDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -1547,7 +1559,7 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
 
     dumpNameSpace(o, sal_False);
 
-    o << "#endif /* "<< headerDefine << "*/" << endl;
+    o << "#endif /* "<< headerDefine << "*/" << "\n";
 
     return sal_True;
 }
@@ -1573,12 +1585,12 @@ sal_Bool TypeDefType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "IDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "idl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -1588,7 +1600,7 @@ sal_Bool TypeDefType::dumpHFile(FileStream& o)
 
     dumpNameSpace(o, sal_False);
 
-    o << "#endif /* "<< headerDefine << "*/" << endl;
+    o << "#endif /* "<< headerDefine << "*/" << "\n";
 
     return sal_True;
 }
@@ -1708,21 +1720,20 @@ sal_Bool produceType(const OString& typeName,
 OString scopedName(const OString& scope, const OString& type,
                    sal_Bool bNoNameSpace)
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
-
-    if (count == 1)
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if (nPos == -1)
         return type;
 
     if (bNoNameSpace)
-        return type.getToken(count - 1, '/');
+        return type.copy(nPos+1);
 
-    OStringBuffer tmpBuf(type.getLength() + count);
-    for (int i=0; i < count; i++)
+    OStringBuffer tmpBuf(type.getLength()*2);
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(type.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }
@@ -1732,15 +1743,29 @@ OString scopedName(const OString& scope, const OString& type,
 //*************************************************************************
 OString scope(const OString& scope, const OString& type )
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if( nPos == -1 )
+        return OString();
 
-    OStringBuffer tmpBuf(type.getLength() + count);
-    for (int i=0; i < count -1; i++)
+    // scoped name only if the namespace is not equal
+    if (scope.lastIndexOf('/') > 0)
+    {
+        OString tmpScp(scope.copy(0, scope.lastIndexOf('/')));
+        OString tmpScp2(type.copy(0, nPos));
+
+        if (tmpScp == tmpScp2)
+            return OString();
+    }
+
+    OString aScope( type.copy( 0, nPos ) );
+    OStringBuffer tmpBuf(aScope.getLength()*2);
+
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(aScope.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }

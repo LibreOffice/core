@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-17 13:51:27 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,9 +191,9 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -204,7 +204,7 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -232,9 +232,9 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
         FileStream hxxFile;
 
         if ( bFileCheck )
-            hxxFile.openFile(tmpFileName);
+            hxxFile.open(tmpFileName);
         else
-            hxxFile.openFile(hxxFileName);
+            hxxFile.open(hxxFileName);
 
         if(!hxxFile.isValid())
         {
@@ -245,7 +245,7 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
 
         ret = dumpHxxFile(hxxFile);
 
-        hxxFile.closeFile();
+        hxxFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hxxFileName, tmpFileName);
@@ -317,7 +317,7 @@ OString CppuType::dumpHeaderDefine(FileStream& o, sal_Char* prefix, sal_Bool bEx
 
     OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
-    o << "#ifndef " << tmp << "\n#define " << tmp << endl;
+    o << "#ifndef " << tmp << "\n#define " << tmp << "\n";
 
     return tmp;
 }
@@ -466,7 +466,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                             iLastS = outerNamespace.lastIndexOf('/');
                             OString outerClass(outerNamespace.copy(iLastS+1));
 
-                            o << endl;
+                            o << "\n";
                             dumpNameSpace(o, sal_True, sal_False, outerNamespace);
                             o << "\nclass " << outerClass << "::" << innerClass << ";\n";
                             dumpNameSpace(o, sal_False, sal_False, outerNamespace);
@@ -474,7 +474,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                         }
                         else
                         {
-                            o << endl;
+                            o << "\n";
                             dumpNameSpace(o, sal_True, sal_False, relType);
                             o << "\nclass " << scopedName(m_typeName, relType, sal_True) << ";\n";
                             dumpNameSpace(o, sal_False, sal_False, relType);
@@ -536,7 +536,7 @@ void CppuType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             dumpDepIncludes(o, nestedName, prefix);
         }
@@ -721,7 +721,7 @@ void CppuType::dumpGetCppuType(FileStream& o)
                 o << indent() << "aMemberRefs[" << i << "] = rMemberType_"
                   << modFieldType/*i*/ << ".getTypeLibType();\n";
             }
-            o << endl;
+            o << "\n";
         }
 
         o << indent() << "typelib_static_compound_type_init( &s_pType_" << typeName << ", "
@@ -1501,12 +1501,12 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
     dumpNameSpace(o);
     dumpDeclaration(o);
     dumpNameSpace(o, sal_False);
@@ -1529,7 +1529,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             nestedName = checkRealBaseType(nestedName.copy(5));
 
@@ -1547,7 +1547,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
         }
     }
 
-    o << "#endif // "<< headerDefine << endl;
+    o << "#endif // "<< headerDefine << "\n";
     return sal_True;
 }
 
@@ -1570,7 +1570,7 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             nestedName = nestedName.copy(5);
 
@@ -1635,16 +1635,16 @@ sal_Bool InterfaceType::dumpHxxFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HPP"));
-    o << endl;
+    o << "\n";
 
     dumpInclude(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpDefaultHxxIncludes(o);
-    o << endl;
+    o << "\n";
 
     dumpDepIncludes(o, m_typeName, "hpp");
-    o << endl;
+    o << "\n";
 
     dumpGetCppuType(o);
 
@@ -1655,7 +1655,7 @@ sal_Bool InterfaceType::dumpHxxFile(FileStream& o)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             nestedName = nestedName.copy(5);
 
@@ -1704,7 +1704,7 @@ sal_Bool InterfaceType::dumpHxxFile(FileStream& o)
         }
     }
 
-    o << "\n#endif // "<< headerDefine << endl;
+    o << "\n#endif // "<< headerDefine << "\n";
     return sal_True;
 }
 
@@ -2037,7 +2037,7 @@ void InterfaceType::dumpCGetCppuType(FileStream& o)
 //      if (superType.getLength() > 0)
 //          o << indent() << "typelib_typedescription_release( pSuperTD );\n\n";
 //      else
-//          o << endl;
+//          o << "\n";
 
         o << "#if ! ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__)))\n";
         o << indent() << "static ::com::sun::star::uno::Type aType_" << typeName << "( "
@@ -2491,9 +2491,9 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -2504,7 +2504,7 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -2533,9 +2533,9 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
         FileStream hxxFile;
 
         if ( bFileCheck )
-            hxxFile.openFile(tmpFileName);
+            hxxFile.open(tmpFileName);
         else
-            hxxFile.openFile(hxxFileName);
+            hxxFile.open(hxxFileName);
 
         if(!hxxFile.isValid())
         {
@@ -2546,7 +2546,7 @@ sal_Bool ModuleType::dump(CppuOptions* pOptions)
 
         ret = dumpHxxFile(hxxFile);
 
-        hxxFile.closeFile();
+        hxxFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hxxFileName, tmpFileName);
@@ -2567,21 +2567,21 @@ sal_Bool ModuleType::dumpHFile(FileStream& o)
     }
 
     OString headerDefine(dumpHeaderDefine(o, "HDL", bSpecialDefine));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o, sal_True, sal_True);
-    o << endl;
+    o << "\n";
 
     dumpDeclaration(o);
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o, sal_False, sal_True);
-    o << "\n#endif // "<< headerDefine << endl;
+    o << "\n#endif // "<< headerDefine << "\n";
 
     return sal_True;
 }
@@ -2640,11 +2640,11 @@ sal_Bool ModuleType::dumpHxxFile(FileStream& o)
     }
 
     OString headerDefine(dumpHeaderDefine(o, "HPP", bSpecialDefine));
-    o << endl;
+    o << "\n";
 
     dumpInclude(o, m_typeName, "hdl", bSpecialDefine);
 
-    o << "\n#endif // "<< headerDefine << endl;
+    o << "\n#endif // "<< headerDefine << "\n";
 
     return sal_True;
 }
@@ -2700,9 +2700,9 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -2713,7 +2713,7 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -2741,9 +2741,9 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
         FileStream hxxFile;
 
         if ( bFileCheck )
-            hxxFile.openFile(tmpFileName);
+            hxxFile.open(tmpFileName);
         else
-            hxxFile.openFile(hxxFileName);
+            hxxFile.open(hxxFileName);
 
         if(!hxxFile.isValid())
         {
@@ -2754,7 +2754,7 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
 
         ret = dumpHxxFile(hxxFile);
 
-        hxxFile.closeFile();
+        hxxFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hxxFileName, tmpFileName);
@@ -2784,12 +2784,12 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -2808,7 +2808,7 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () );\n\n";
 
-    o << "#endif // "<< headerDefine << endl;
+    o << "#endif // "<< headerDefine << "\n";
 
     return sal_True;
 }
@@ -2895,19 +2895,19 @@ sal_Bool StructureType::dumpHxxFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HPP"));
-    o << endl;
+    o << "\n";
 
     dumpInclude(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpDefaultHxxIncludes(o);
-    o << endl;
+    o << "\n";
 
     dumpDepIncludes(o, m_typeName, "hpp");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
-    o << endl;
+    o << "\n";
 
     o << "inline " << m_name << "::" << m_name << "() SAL_THROW( () )\n";
     inc();
@@ -2944,7 +2944,7 @@ sal_Bool StructureType::dumpHxxFile(FileStream& o)
 
         o << fieldName;
         dumpTypeInit(o, fieldType);
-        o << endl;
+        o << "\n";
     }
     dec();
     o << "{\n}\n\n";
@@ -3010,10 +3010,10 @@ sal_Bool StructureType::dumpHxxFile(FileStream& o)
 
     dumpNameSpace(o, sal_False);
 
-    o << endl;
+    o << "\n";
     dumpGetCppuType(o);
 
-    o << "\n#endif // "<< headerDefine << endl;
+    o << "\n#endif // "<< headerDefine << "\n";
 
     return sal_True;
 }
@@ -3135,12 +3135,12 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -3159,7 +3159,7 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () );\n\n";
 
-    o << "#endif // "<< headerDefine << endl;
+    o << "#endif // "<< headerDefine << "\n";
 
     return sal_True;
 }
@@ -3236,19 +3236,19 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HPP"));
-    o << endl;
+    o << "\n";
 
     dumpInclude(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpDefaultHxxIncludes(o);
-    o << endl;
+    o << "\n";
 
     dumpDepIncludes(o, m_typeName, "hpp");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
-    o << endl;
+    o << "\n";
 
     o << "inline " << m_name << "::" << m_name << "() SAL_THROW( () )\n";
     inc();
@@ -3285,7 +3285,7 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
 
         o << fieldName;
         dumpTypeInit(o, fieldType);
-        o << endl;
+        o << "\n";
     }
     dec();
     if ( !m_cppuTypeDynamic )
@@ -3371,10 +3371,10 @@ sal_Bool ExceptionType::dumpHxxFile(FileStream& o)
 
     dumpNameSpace(o, sal_False);
 
-    o << endl;
+    o << "\n";
     dumpGetCppuType(o);
 
-    o << "\n#endif // "<< headerDefine << endl;
+    o << "\n#endif // "<< headerDefine << "\n";
     return sal_True;
 }
 
@@ -3495,10 +3495,10 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -3517,7 +3517,7 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
     dumpType(o, m_typeName, sal_True, sal_False);
     o << "* ) SAL_THROW( () );\n\n";
 
-    o << "#endif // "<< headerDefine << endl;
+    o << "#endif // "<< headerDefine << "\n";
 
     return sal_True;
 }
@@ -3563,17 +3563,17 @@ sal_Bool EnumType::dumpHxxFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HPP"));
-    o << endl;
+    o << "\n";
 
     dumpInclude(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpDefaultHxxIncludes(o);
-    o << endl;
+    o << "\n";
 
     dumpGetCppuType(o);
 
-    o << "\n#endif // "<< headerDefine << endl;
+    o << "\n#endif // "<< headerDefine << "\n";
     return sal_True;
 }
 
@@ -3744,12 +3744,12 @@ sal_Bool TypeDefType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HDL"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
 
     dumpNameSpace(o);
 
@@ -3762,7 +3762,7 @@ sal_Bool TypeDefType::dumpHFile(FileStream& o)
 //  o << "inline const ::com::sun::star::uno::Type& SAL_CALL get_" << m_typeName.replace('/', '_')
 //    <<  "_Type( ) SAL_THROW( () );\n\n";
 
-    o << "#endif // "<< headerDefine << endl;
+    o << "#endif // "<< headerDefine << "\n";
 
     return sal_True;
 }
@@ -3781,18 +3781,18 @@ sal_Bool TypeDefType::dumpHxxFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "HPP"));
-    o << endl;
+    o << "\n";
 
     dumpInclude(o, m_typeName, "hdl");
-    o << endl;
+    o << "\n";
     dumpDefaultHxxIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "hpp");
-    o << endl;
+    o << "\n";
 
     dumpGetCppuType(o);
 
-    o << "\n#endif // "<< headerDefine << endl;
+    o << "\n#endif // "<< headerDefine << "\n";
     return sal_True;
 }
 

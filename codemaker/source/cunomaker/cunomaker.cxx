@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunomaker.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-17 16:15:48 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,15 +158,16 @@ int _cdecl main( int argc, char * argv[] )
         if (options.isValid("-T"))
         {
             OString tOption(options.getOption("-T"));
-            sal_uInt32 count = tOption.getTokenCount(';');
 
             OString typeName, tmpName;
             sal_Bool ret = sal_False;
-            for (sal_uInt32 i = 0; i < count; i++)
+            sal_Int32 nIndex = 0;
+            do
             {
-                typeName = tOption.getToken(i, ';');
+                typeName = tOption.getToken(0, ';', nIndex);
 
-                tmpName = typeName.getToken(typeName.getTokenCount('.') - 1, '.');
+                sal_Int32 nPos = typeName.lastIndexOf( '.' );
+                tmpName = typeName.copy( nPos != -1 ? nPos+1 : 0 );
                 if (tmpName == "*")
                 {
                     // produce this type and his scope, but the scope is not recursively  generated.
@@ -195,7 +196,7 @@ int _cdecl main( int argc, char * argv[] )
                             OString("cannot dump Type '" + typeName + "'").getStr());
                     exit(99);
                 }
-            }
+            } while( nIndex != -1 );
         } else
         {
             // produce all types

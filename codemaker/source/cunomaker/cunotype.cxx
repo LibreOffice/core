@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cunotype.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-23 13:07:54 $
+ *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,9 +189,9 @@ sal_Bool CunoType::dump(CunoOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -202,7 +202,7 @@ sal_Bool CunoType::dump(CunoOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -238,9 +238,9 @@ sal_Bool CunoType::dump(CunoOptions* pOptions)
             FileStream cFile;
 
             if ( bFileCheck )
-                cFile.openFile(tmpFileName);
+                cFile.open(tmpFileName);
             else
-                cFile.openFile(cFileName);
+                cFile.open(cFileName);
 
             if(!cFile.isValid())
             {
@@ -251,7 +251,7 @@ sal_Bool CunoType::dump(CunoOptions* pOptions)
 
             ret = dumpCFile(cFile);
 
-            cFile.closeFile();
+            cFile.close();
             if (ret && bFileCheck)
             {
                 ret = checkFileContent(cFileName, tmpFileName);
@@ -321,9 +321,9 @@ OString CunoType::dumpHeaderDefine(FileStream& o, sal_Char* prefix, sal_Bool bEx
     tmpBuf.append(prefix);
     tmpBuf.append('_');
 
-    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toUpperCase());
+    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
-    o << "#ifndef " << tmp << "\n#define " << tmp << endl;
+    o << "#ifndef " << tmp << "\n#define " << tmp << "\n";
 
     return tmp;
 }
@@ -371,7 +371,7 @@ void CunoType::dumpInclude(FileStream& o, const OString& typeName, sal_Char* pre
     tmpBuf.append(prefix);
     tmpBuf.append('_');
 
-    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toUpperCase());
+    OString tmp(tmpBuf.makeStringAndClear().replace('/', '_').toAsciiUpperCase());
 
     length = 1 + typeName.getLength() + strlen(prefix);
     if (bExtended)
@@ -404,7 +404,7 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
 
     TypeUsingSet::const_iterator iter = usingSet.begin();
 
-    OString     sPrefix(OString(prefix).toUpperCase());
+    OString     sPrefix(OString(prefix).toAsciiUpperCase());
     sal_Bool    bSequenceDumped = sal_False;
     sal_uInt32  index = 0;
     sal_uInt32  seqNum = 0;
@@ -432,7 +432,7 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
             {
                 bSequenceDumped = sal_True;
                 o << "#ifndef _UNO_SEQUENCE2_" << defPrefix
-                  << "_\n#include <uno/sequence2." << defPrefix.toLowerCase()
+                  << "_\n#include <uno/sequence2." << defPrefix.toAsciiLowerCase()
                   << ">\n#endif\n";
             }
 
@@ -454,7 +454,7 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                             iLastS = outerNamespace.lastIndexOf('/');
                             OString outerClass(outerNamespace.copy(iLastS+1));
 
-//                          o << endl;
+//                          o << "\n";
 //                          dumpNameSpace(o, sal_True, sal_False, outerNamespace);
 //                          o << "\nclass " << outerClass << "::" << innerClass << ";\n";
 //                          dumpNameSpace(o, sal_False, sal_False, outerNamespace);
@@ -464,8 +464,8 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
                         {
 //                          dumpInclude(o, relType, prefix);
                             OString type(relType.replace('/', '_'));
-                            o << "\n#ifndef " << type.toUpperCase() << "\n";
-                            o << "#define " << type.toUpperCase() << "\n";
+                            o << "\n#ifndef " << type.toAsciiUpperCase() << "\n";
+                            o << "#define " << type.toAsciiUpperCase() << "\n";
                             o << "struct _" << type << ";\n"
                               << "typedef struct _" << type << "_ftab * " << type << ";\n";
                             o << "#endif\n\n";
@@ -526,7 +526,7 @@ void CunoType::dumpDepIncludes(FileStream& o, const OString& typeName, sal_Char*
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             dumpDepIncludes(o, nestedName, prefix);
         }
@@ -680,7 +680,7 @@ void CunoType::dumpGetCunoType(FileStream& o)
                     o << "  , \"" << fieldType.replace('/', '.') << "\" );\n";
                 }
             }
-            o << endl;
+            o << "\n";
         }
 
         o << indent() << "typelib_static_compound_type_init( &s_pType_" << typeName << ", "
@@ -1247,8 +1247,9 @@ void CunoType::dumpTypeInit(FileStream& o, const OString& typeName)
 
             if ( reader.isValid() )
             {
+                sal_Int32 i = type.lastIndexOf('/');
                 o << "(" << shortScopedName("", type, sal_False)
-                  << "::" << type.getToken(type.getTokenCount('/') - 1, '/')
+                  << "::" << type.copy( i != -1 ? i+1 :0 )
                   << "_" << reader.getFieldName(0) << ")";
                 return;
             }
@@ -1544,16 +1545,16 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "H"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpOpenExternC(o);
 
-    o << "#ifndef " << m_name.toUpperCase() << "\n";
-    o << "#define " << m_name.toUpperCase() << "\n";
+    o << "#ifndef " << m_name.toAsciiUpperCase() << "\n";
+    o << "#define " << m_name.toAsciiUpperCase() << "\n";
     o << "struct _" << m_name << "_ftab;\n"
       << "typedef struct _" << m_name << "_ftab * " << m_name << ";\n";
     o << "#endif\n\n";
@@ -1575,7 +1576,7 @@ sal_Bool InterfaceType::dumpHFile(FileStream& o)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             nestedName = checkRealBaseType(nestedName.copy(5));
 
@@ -1626,7 +1627,7 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             nestedName = nestedName.copy(5);
 
@@ -1689,11 +1690,11 @@ sal_Bool InterfaceType::dumpCFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpInclude(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpDefaultCIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpGetCunoType(o);
 /*
     if (getNestedTypeNames().getLength() > 0)
@@ -1703,7 +1704,7 @@ sal_Bool InterfaceType::dumpCFile(FileStream& o)
         {
             OUString s(getNestedTypeNames().getElement(i));
 
-            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_DONTKNOW);
+            OString nestedName(s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8);
 
             nestedName = nestedName.copy(5);
 
@@ -2073,7 +2074,7 @@ void InterfaceType::dumpCGetCunoType(FileStream& o)
     if (superType.getLength() > 0)
         o << indent() << "typelib_typedescription_release( pSuperType );\n\n";
     else
-        o << endl;
+        o << "\n";
 
     o << indent() << "typelib_typedescriptionreference_new( &s_pType_ " << typeName
       << "typelib_TypeClass_INTERFACE, (typelib_TypeDescription*)pTD);\n\n";
@@ -2560,7 +2561,8 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
     if (tmpName.equals("/"))
         tmpName = "global";
     else
-        tmpName += "/" + m_typeName.getToken(m_typeName.getTokenCount('/') - 1, '/');
+//      tmpName += "/" + m_typeName.getToken(m_typeName.getTokenCount('/') - 1, '/');
+        tmpName += "/" + m_name;
 
     OString tmpFileName;
     OString hFileName = createFileNameFromType(outPath, tmpName, ".hdl");
@@ -2585,9 +2587,9 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -2598,7 +2600,7 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -2627,9 +2629,9 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
         FileStream hxxFile;
 
         if ( bFileCheck )
-            cFile.openFile(tmpFileName);
+            cFile.open(tmpFileName);
         else
-            cFile.openFile(cFileName);
+            cFile.open(cFileName);
 
         if(!cFile.isValid())
         {
@@ -2640,7 +2642,7 @@ sal_Bool ModuleType::dump(CunoOptions* pOptions)
 
         ret = dumpCFile(cFile);
 
-        cFile.closeFile();
+        cFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(cFileName, tmpFileName);
@@ -2661,16 +2663,16 @@ sal_Bool ModuleType::dumpHFile(FileStream& o)
     }
 
     OString headerDefine(dumpHeaderDefine(o, "H", bSpecialDefine));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
 
     dumpOpenExternC(o);
     dumpDeclaration(o);
-    o << endl;
+    o << "\n";
     dumpCloseExternC(o);
 
     o << "\n#endif /* "<< headerDefine << " */\n";
@@ -2778,9 +2780,9 @@ sal_Bool ConstantsType::dump(CunoOptions* pOptions)
         FileStream hFile;
 
         if ( bFileCheck )
-            hFile.openFile(tmpFileName);
+            hFile.open(tmpFileName);
         else
-            hFile.openFile(hFileName);
+            hFile.open(hFileName);
 
         if(!hFile.isValid())
         {
@@ -2791,7 +2793,7 @@ sal_Bool ConstantsType::dump(CunoOptions* pOptions)
 
         ret = dumpHFile(hFile);
 
-        hFile.closeFile();
+        hFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(hFileName, tmpFileName);
@@ -2819,9 +2821,9 @@ sal_Bool ConstantsType::dump(CunoOptions* pOptions)
         FileStream cFile;
 
         if ( bFileCheck )
-            cFile.openFile(tmpFileName);
+            cFile.open(tmpFileName);
         else
-            cFile.openFile(cFileName);
+            cFile.open(cFileName);
 
         if(!cFile.isValid())
         {
@@ -2832,7 +2834,7 @@ sal_Bool ConstantsType::dump(CunoOptions* pOptions)
 
         ret = dumpCFile(cFile);
 
-        cFile.closeFile();
+        cFile.close();
         if (ret && bFileCheck)
         {
             ret = checkFileContent(cFileName, tmpFileName);
@@ -2862,12 +2864,12 @@ sal_Bool StructureType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "H"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
 
     dumpOpenExternC(o);
 
@@ -2941,11 +2943,11 @@ sal_Bool StructureType::dumpCFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpInclude(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpDefaultCIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
 
     dumpGetCunoType(o);
 
@@ -2972,12 +2974,12 @@ sal_Bool ExceptionType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "H"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
 
     dumpOpenExternC(o);
 
@@ -3051,11 +3053,11 @@ sal_Bool ExceptionType::dumpCFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpInclude(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpDefaultCIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
 
     dumpGetCunoType(o);
 
@@ -3083,10 +3085,10 @@ sal_Bool EnumType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "H"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpOpenExternC(o);
 
     dumpDeclaration(o);
@@ -3146,9 +3148,9 @@ sal_Bool EnumType::dumpCFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpInclude(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpDefaultCIncludes(o);
-    o << endl;
+    o << "\n";
     dumpGetCunoType(o);
     return sal_True;
 }
@@ -3311,12 +3313,12 @@ sal_Bool TypeDefType::dumpHFile(FileStream& o)
     throw( CannotDumpException )
 {
     OString headerDefine(dumpHeaderDefine(o, "H"));
-    o << endl;
+    o << "\n";
 
     dumpDefaultHIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
 
     dumpOpenExternC(o);
 
@@ -3350,11 +3352,11 @@ sal_Bool TypeDefType::dumpCFile(FileStream& o)
     throw( CannotDumpException )
 {
     dumpInclude(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpDefaultCIncludes(o);
-    o << endl;
+    o << "\n";
     dumpDepIncludes(o, m_typeName, "h");
-    o << endl;
+    o << "\n";
     dumpGetCunoType(o);
     return sal_True;
 }
@@ -3495,21 +3497,20 @@ sal_Bool produceType(const OString& typeName,
 OString scopedName(const OString& scope, const OString& type,
                    sal_Bool bNoNameSpace)
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
-
-    if (count == 1)
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if (nPos == -1)
         return type;
 
     if (bNoNameSpace)
-        return type.getToken(count - 1, '/');
+        return type.copy(nPos+1);
 
-    OStringBuffer tmpBuf(type.getLength() + count);
-    for (sal_uInt32 i=0; i < count; i++)
+    OStringBuffer tmpBuf(type.getLength()*2);
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(type.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }
@@ -3520,12 +3521,8 @@ OString scopedName(const OString& scope, const OString& type,
 OString shortScopedName(const OString& scope, const OString& type,
                            sal_Bool bNoNameSpace)
 {
-    sal_uInt32 count = type.getTokenCount('/');
-    sal_uInt32 offset = 0;
-
-    if (count > 1)
-        offset = count - 1;
-    else
+    sal_Int32 nPos = type.lastIndexOf( '/' );
+    if( nPos == -1 )
         return OString();
 
     if (bNoNameSpace)
@@ -3535,19 +3532,21 @@ OString shortScopedName(const OString& scope, const OString& type,
     if (scope.lastIndexOf('/') > 0)
     {
         OString tmpScp(scope.copy(0, scope.lastIndexOf('/')));
-        OString tmpScp2(type.copy(0, type.lastIndexOf('/')));
+        OString tmpScp2(type.copy(0, nPos));
 
         if (tmpScp == tmpScp2)
             return OString();
     }
 
-    OStringBuffer tmpBuf(type.lastIndexOf('/') + offset);
+    OString aScope( type.copy( 0, nPos ) );
+    OStringBuffer tmpBuf(aScope.getLength()*2);
 
-    for (sal_uInt32 i=0; i < count - 1; i++)
+    nPos = 0;
+    do
     {
         tmpBuf.append("::");
-        tmpBuf.append(type.getToken(i, '/'));
-    }
+        tmpBuf.append(aScope.getToken(0, '/', nPos));
+    } while( nPos != -1 );
 
     return tmpBuf.makeStringAndClear();
 }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-18 16:45:23 $
+#   last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,22 +89,17 @@ NOOPTFILES= \
 
 APP1TARGET= $(TARGET)
 
-APP1OBJS=   $(OBJ)$/javamaker.obj	\
-            $(OBJ)$/javaoptions.obj	\
-            $(OBJ)$/javatype.obj			
+APP1OBJS= $(OBJ)$/javamaker.obj	\
+          $(OBJ)$/javaoptions.obj	\
+          $(OBJ)$/javatype.obj			
 
-APP1STDLIBS=\
-            $(SALLIB) \
-            $(SALHELPERLIB)	\
-            $(REGLIB)
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
+APP1STDLIBS= \
+             $(SALLIB) \
+             $(SALHELPERLIB)	\
+             $(REGLIB)
 
 APP1LIBS= \
-        $(LB)$/codemaker.lib
+          $(LB)$/codemaker.lib
 
 .INCLUDE :  target.mk
 
