@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:33:20 $
+ *  last change: $Author: mtg $ $Date: 2001-02-26 13:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,5 +442,6 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     else
     {
         // Just what the hell are you, some kinda _freak_ ?!
+        ASSERT( 0, "_exportTextEmbedded called with unknown object type" );
     }
 }
