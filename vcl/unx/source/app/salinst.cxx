@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:48:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,11 +171,12 @@ X11SalInstance::~X11SalInstance()
     // deinitialize global sound resources
     X11SalSound::Release();
 
-    // eventually free OpenGL lib
+    // release (possibly open) OpenGL context
     X11SalOpenGL::Release();
 
     // close session management
     SessionManagerClient::close();
+
     // dispose SalDisplay list from SalData
     // would be done in a static destructor else which is
     // a little late
@@ -184,6 +185,13 @@ X11SalInstance::~X11SalInstance()
     pSalData->deInitNWF();
     delete pSalData;
     SetSalData( NULL );
+
+    // eventually free OpenGL lib
+    // this needs to be done after XCloseDisplay
+    // since GL may have added extension data - including a
+    // function pointer that gets called on XCloseDisplay - to
+    // the display structure
+    X11SalOpenGL::ReleaseLib();
 
       delete mpSalYieldMutex;
 }
