@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:51 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 20:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XVIEWPANE_HPP_
 #include <com/sun/star/sheet/XViewPane.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XRANGESELECTION_HPP_
+#include <com/sun/star/sheet/XRangeSelection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -117,12 +120,17 @@ class ScTabViewShell;
 
 
 typedef ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XEventListener >* XEventListenerPtr;
-SV_DECL_PTRARR_DEL( EventListenerArr, XEventListenerPtr, 4, 4 );
+            ::com::sun::star::sheet::XRangeSelectionListener >* XRangeSelectionListenerPtr;
+SV_DECL_PTRARR_DEL( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr, 4, 4 );
+
+typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::sheet::XRangeSelectionChangeListener >* XRangeSelectionChangeListenerPtr;
+SV_DECL_PTRARR_DEL( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr, 4, 4 );
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::view::XSelectionChangeListener >* XSelectionChangeListenerPtr;
 SV_DECL_PTRARR_DEL( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr, 4, 4 );
+
 
 
 //  ScViewPaneBase not derived from OWeakObject
@@ -216,11 +224,14 @@ class ScTabViewObj : public ScViewPaneBase,
                      public com::sun::star::beans::XPropertySet,
                      public com::sun::star::sheet::XViewSplitable,
                      public com::sun::star::sheet::XViewFreezable,
+                     public com::sun::star::sheet::XRangeSelection,
                      public com::sun::star::lang::XUnoTunnel
 {
 private:
-    SfxItemPropertySet                  aPropSet;
-    XSelectionChangeListenerArr_Impl    aSelectionListeners;
+    SfxItemPropertySet                      aPropSet;
+    XSelectionChangeListenerArr_Impl        aSelectionListeners;
+    XRangeSelectionListenerArr_Impl         aRangeSelListeners;
+    XRangeSelectionChangeListenerArr_Impl   aRangeChgListeners;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
 
@@ -236,6 +247,10 @@ public:
     virtual void SAL_CALL   release() throw(::com::sun::star::uno::RuntimeException);
 
     void                    SelectionChanged();
+
+    void                    RangeSelDone( const String& rText );
+    void                    RangeSelAborted( const String& rText );
+    void                    RangeSelChanged( const String& rText );
 
                             // XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection )
@@ -329,6 +344,24 @@ public:
     virtual sal_Bool SAL_CALL hasFrozenPanes() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRows )
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XRangeSelection
+    virtual void SAL_CALL   startRangeSelection( const ::com::sun::star::uno::Sequence<
+                                ::com::sun::star::beans::PropertyValue >& aArguments )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   abortRangeSelection() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addRangeSelectionListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::sheet::XRangeSelectionListener >& aListener )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeRangeSelectionListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::sheet::XRangeSelectionListener >& aListener )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addRangeSelectionChangeListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::sheet::XRangeSelectionChangeListener >& aListener )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeRangeSelectionChangeListener( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::sheet::XRangeSelectionChangeListener >& aListener )
+                                    throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()

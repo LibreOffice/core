@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:57:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 20:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,8 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
 
 //------------------------------------------------------------------------
 
-SV_IMPL_PTRARR( EventListenerArr, XEventListenerPtr );
+SV_IMPL_PTRARR( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr );
+SV_IMPL_PTRARR( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr );
 SV_IMPL_PTRARR( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr );
 
 #define SCTABVIEWOBJ_SERVICE        "com.sun.star.sheet.SpreadsheetView"
@@ -435,6 +436,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( sheet::XViewSplitable )
     SC_QUERYINTERFACE( sheet::XViewFreezable )
+    SC_QUERYINTERFACE( sheet::XRangeSelection )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
 
     uno::Any aRet = ScViewPaneBase::queryInterface( rType );
@@ -468,7 +470,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
 
         long nParentLen = nViewPaneLen + nControllerLen;
 
-        aTypes.realloc( nParentLen + 8 );
+        aTypes.realloc( nParentLen + 9 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetView>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
@@ -477,7 +479,8 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
         pPtr[nParentLen + 4] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
         pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XViewSplitable>*)0);
         pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XViewFreezable>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XRangeSelection>*)0);
+        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
 
         long i;
         for (i=0; i<nViewPaneLen; i++)
@@ -1353,6 +1356,137 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScTabViewObj )
+
+// XRangeSelection
+
+void SAL_CALL ScTabViewObj::startRangeSelection(
+                                const uno::Sequence<beans::PropertyValue>& aArguments )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScTabViewShell* pViewSh = GetViewShell();
+    if (pViewSh)
+    {
+        String aInitVal, aTitle;
+        BOOL bCloseOnButtonUp = FALSE;
+
+        rtl::OUString aStrVal;
+        const beans::PropertyValue* pPropArray = aArguments.getConstArray();
+        long nPropCount = aArguments.getLength();
+        for (long i = 0; i < nPropCount; i++)
+        {
+            const beans::PropertyValue& rProp = pPropArray[i];
+            String aPropName = rProp.Name;
+
+            if (aPropName.EqualsAscii( SC_UNONAME_CLOSEONUP ))
+                bCloseOnButtonUp = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+            else if (aPropName.EqualsAscii( SC_UNONAME_TITLE ))
+            {
+                if ( rProp.Value >>= aStrVal )
+                    aTitle = String( aStrVal );
+            }
+            else if (aPropName.EqualsAscii( SC_UNONAME_INITVAL ))
+            {
+                if ( rProp.Value >>= aStrVal )
+                    aInitVal = String( aStrVal );
+            }
+        }
+
+        pViewSh->StartSimpleRefDialog( aTitle, aInitVal, bCloseOnButtonUp );
+    }
+}
+
+void SAL_CALL ScTabViewObj::abortRangeSelection() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScTabViewShell* pViewSh = GetViewShell();
+    if (pViewSh)
+        pViewSh->StopSimpleRefDialog();
+}
+
+void SAL_CALL ScTabViewObj::addRangeSelectionListener(
+                                const uno::Reference<sheet::XRangeSelectionListener>& xListener )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference<sheet::XRangeSelectionListener>* pObj =
+            new uno::Reference<sheet::XRangeSelectionListener>( xListener );
+    aRangeSelListeners.Insert( pObj, aRangeSelListeners.Count() );
+}
+
+void SAL_CALL ScTabViewObj::removeRangeSelectionListener(
+                                const uno::Reference<sheet::XRangeSelectionListener>& xListener )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    USHORT nCount = aRangeSelListeners.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<sheet::XRangeSelectionListener> *pObj = aRangeSelListeners[n];
+        if ( *pObj == xListener )
+        {
+            aRangeSelListeners.DeleteAndDestroy( n );
+            break;
+        }
+    }
+}
+
+void SAL_CALL ScTabViewObj::addRangeSelectionChangeListener(
+                                const uno::Reference<sheet::XRangeSelectionChangeListener>& xListener )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference<sheet::XRangeSelectionChangeListener>* pObj =
+            new uno::Reference<sheet::XRangeSelectionChangeListener>( xListener );
+    aRangeChgListeners.Insert( pObj, aRangeChgListeners.Count() );
+}
+
+void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
+                                const uno::Reference<sheet::XRangeSelectionChangeListener>& xListener )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    USHORT nCount = aRangeChgListeners.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<sheet::XRangeSelectionChangeListener> *pObj = aRangeChgListeners[n];
+        if ( *pObj == xListener )
+        {
+            aRangeChgListeners.DeleteAndDestroy( n );
+            break;
+        }
+    }
+}
+
+void ScTabViewObj::RangeSelDone( const String& rText )
+{
+    sheet::RangeSelectionEvent aEvent;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.RangeDescriptor = rtl::OUString( rText );
+
+    for ( USHORT n=0; n<aRangeSelListeners.Count(); n++ )
+        (*aRangeSelListeners[n])->done( aEvent );
+}
+
+void ScTabViewObj::RangeSelAborted( const String& rText )
+{
+    sheet::RangeSelectionEvent aEvent;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.RangeDescriptor = rtl::OUString( rText );
+
+    for ( USHORT n=0; n<aRangeSelListeners.Count(); n++ )
+        (*aRangeSelListeners[n])->aborted( aEvent );
+}
+
+void ScTabViewObj::RangeSelChanged( const String& rText )
+{
+    sheet::RangeSelectionEvent aEvent;
+    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.RangeDescriptor = rtl::OUString( rText );
+
+    for ( USHORT n=0; n<aRangeChgListeners.Count(); n++ )
+        (*aRangeChgListeners[n])->descriptorChanged( aEvent );
+}
 
 // XServiceInfo
 
