@@ -107,6 +107,7 @@ OfficeConstants {
         fileName = name + ".pxl";
         Format defaultFormat = new Format();
         FontDescription fd = new FontDescription(defaultFormat);
+        fonts.add(fd);
         ExtendedFormat xf = new ExtendedFormat(0, defaultFormat);
         extendedFormats.add(xf);
     }
@@ -148,6 +149,7 @@ OfficeConstants {
             bs.write(os);
         }
         eof.write(os);
+
         for(Enumeration e = worksheets.elements();e.hasMoreElements();) {
             Worksheet ws = (Worksheet) e.nextElement();
             ws.write(os);
