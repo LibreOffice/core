@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:26:35 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³¯Â¥ 1";
         Text[ turkish ] = "Tarih 1";
         Text[ catalan ] = "Fecha 1";
+        Text[ finnish ] = "Päivämäärä 1";
     };
     String DFA_PAR_DATE2_NAME // Name of Date2 Parameter
     {
@@ -114,6 +115,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³¯Â¥ 2";
         Text[ turkish ] = "Tarih 2";
         Text[ catalan ] = "Fecha 2";
+        Text[ finnish ] = "Päivämäärä 2";
     };
     String DFA_PAR_MODE_NAME // Name of Mode Parameter
     {
@@ -140,6 +142,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "¸ðµå";
         Text[ turkish ] = "Tür";
         Text[ catalan ] = "Modo";
+        Text[ finnish ] = "Tila";
     };
 
     String DFA_PAR_DATE_NAME // Name of Date Parameter
@@ -167,6 +170,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³¯Â¥";
         Text[ turkish ] = "Tarih";
         Text[ catalan ] = "Fecha";
+        Text[ finnish ] = "Päivämäärä";
     };
 
     String DFA_PAR_DATE_DESC // Description of Date Parameter
@@ -194,6 +198,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³¯Â¥ÀÇ ³»ºÎ ¼ýÀÚ";
         Text[ turkish ] = "Dahili tarih sayýsý";
         Text[ catalan ] = "Número interno de la fecha";
+        Text[ finnish ] = "Päivämäärän sisäinen numero";
     };
 
 /*-=======================================================================*/
@@ -222,6 +227,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "ÁÖ";
         Text[ turkish ] = "Hafta";
         Text[ catalan ] = "Semanas";
+        Text[ finnish ] = "Viikot";
     };
     String DFA_WEEK_DESC // Description
     {
@@ -248,6 +254,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "µÎ ³¯Â¥ »çÀÌÀÇ ÁÖ ¼ö¸¦ °áÁ¤";
         Text[ turkish ] = "Ýki veri arasýndaki hafta farkýný bulur";
         Text[ catalan ] = "Determina la diferencia en semanas de dos fechas";
+        Text[ finnish ] = "Palauttaa kahden päivämäärän välisen eron viikkoina";
     };
     String DFA_WEEK_PAR1_DESC // Description of Parameter 1
     {
@@ -275,6 +282,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "µÎ ³¯Â¥ »çÀÌ °è»ê¿¡¼­ÀÇ ¸¶Áö¸· ³¯Â¥";
         Text[ turkish ] = "Hafta farký hesabý için daha geç olan tarih";
         Text[ catalan ] = "Fecha más reciente para la diferencia en semanas";
+        Text[ finnish ] = "Lopetuspäivämäärä laskettaessa päivämäärien välinen ero viikkoina";
     };
     String DFA_WEEK_PAR2_DESC // Description of Parameter 2
     {
@@ -301,6 +309,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "µÎ ³¯Â¥ »çÀÌ °è»ê¿¡¼­ÀÇ  ½ÃÀÛ¡¡³¯Â¥";
         Text[ turkish ] = "Hafta farký hesabý için daha erken olan tarih";
         Text[ catalan ] = "Fecha más antigua para la diferencia en semanas";
+        Text[ finnish ] = "Aloituspäivämäärä laskettaessa päivämäärien välinen ero viikkoina";
     };
     String DFA_WEEK_PAR3_DESC // Description of Parameter 3
     {
@@ -327,6 +336,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "Â÷ÀÌ °è»ê ÇüÅÂ: ¸ðµå=0 Àº  °£°ÝÀ» ÀÇ¹ÌÇÏ°í, ¸ðµå=1 Àº ÁÖ¸¦ ÀÇ¹ÌÇÑ´Ù";
         Text[ turkish ] = "Fark hesabý türü, tür=0 aralýk, tür=1 ise takvim haftasý cinsinden anlamýna gelir";
         Text[ catalan ] = "Tipo de formación de diferencia: Tipo=0 significa intervalo; tipo=1, semanas del año";
+        Text[ finnish ] = "Erotuslaskennan tyyppi: tila = 0 tarkoittaa väliä, tila = 1 tarkoittaa kalenteriviikkoja";
     };
 
 /*-=======================================================================*/
@@ -356,6 +366,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "¿ù";
         Text[ turkish ] = "Ay";
         Text[ catalan ] = "Meses";
+        Text[ finnish ] = "Kuukaudet";
     };
     String DFA_MONTHS_DESC // Description
     {
@@ -382,6 +393,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "µÎ ³¯Â¥ »çÀÌÀÇ °³¿ù¼ö¸¦ °áÁ¤";
         Text[ turkish ] = "Ýki veri arasýndaki ay farkýný belirler";
         Text[ catalan ] = "Determina la diferencia en meses entre dos fechas";
+        Text[ finnish ] = "Määrittää kahden päivämäärän välissä olevien kuukausien määrän";
     };
     String DFA_MONTHS_PAR1_DESC // Description of Parameter 1
     {
@@ -408,6 +420,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "°³¿ù ¼ö °è»ê¿¡¼­ÀÇ ¸¶Áö¸· ³¯Â¥";
         Text[ turkish ] = "Ay farký hesabý için daha geç olan tarih";
         Text[ catalan ] = "Fecha más reciente para la diferencia mensual";
+        Text[ finnish ] = "Lopetuspäivämäärä laskettaessa päivämäärien välinen ero kuukausina";
     };
     String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
     {
@@ -434,6 +447,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "°³¿ù ¼ö °è»ê¿¡¼­ÀÇ ½ÃÀÛ ³¯Â¥";
         Text[ turkish ] = "Ay farký hesabý için daha erken olan tarih";
         Text[ catalan ] = "Fecha más antigua para la diferencia mensual";
+        Text[ finnish ] = "Aloituspäivämäärä laskettaessa päivämäärien välinen ero kuukausina";
     };
     String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
     {
@@ -460,6 +474,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "Â÷ÀÌ °è»ê ÇüÅÂ: ¸ðµå=0 Àº  °£°ÝÀ» ÀÇ¹ÌÇÏ°í, ¸ðµå=1Àº °³¿ùÀ» ÀÇ¹ÌÇÑ´Ù";
         Text[ turkish ] = "Fark hesabý türü, tür=0 aralýk, tür=1 ise takvim ayý cinsinden anlamýna gelir";
         Text[ catalan ] = "Tipo de formación de diferencia: Tipo=0 significa intervalo; tipo=1, meses del año";
+        Text[ finnish ] = "Erotuslaskennan tyyppi: tila = 0 tarkoittaa väliä, tila = 1 tarkoittaa kalenterikuukausia";
     };
 
 /*-=======================================================================*/
@@ -489,6 +504,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³âµµ";
         Text[ turkish ] = "Yýl";
         Text[ catalan ] = "Años";
+        Text[ finnish ] = "Vuodet";
     };
     String DFA_YEARS_DESC // Description
     {
@@ -515,6 +531,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "µÎ ³¯Â¥ »çÀÌÀÇ ³âµµ Â÷ÀÌ °áÁ¤";
         Text[ turkish ] = "Ýki veri arasýndaki yýl farkýný bulur";
         Text[ catalan ] = "Determina la diferencia en años de dos fechas";
+        Text[ finnish ] = "Palauttaa kahden päivämäärän välisen eron vuosina";
     };
     String DFA_YEARS_PAR1_DESC // Description of Parameter 1
     {
@@ -541,6 +558,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³â Â÷ÀÌ °è»ê¿¡¼­ÀÇ ¸¶Áö¸· ³¯Â¥";
         Text[ turkish ] = "Yýl farký hesabý için daha geç olan tarih";
         Text[ catalan ] = "Fecha más reciente para la diferencia en años";
+        Text[ finnish ] = "Lopetuspäivämäärä laskettaessa päivämäärien välinen ero vuosina";
     };
     String DFA_YEARS_PAR2_DESC // Description of Parameter 2
     {
@@ -567,6 +585,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³â Â÷ÀÌ °è»ê¿¡¼­ÀÇ ½ÃÀÛ ³¯Â¥";
         Text[ turkish ] = "Yýl farký hesabý için daha erken olan tarih";
         Text[ catalan ] = "Fecha más antigua para la diferencia en años";
+        Text[ finnish ] = "Aloituspäivämäärä laskettaessa päivämäärien välinen ero vuosina";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
     {
@@ -593,6 +612,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "Â÷ÀÌ °è»ê ÇüÅÂ: ¸ðµå=0 Àº  °£°ÝÀ» ÀÇ¹ÌÇÏ°í, ¸ðµå=1Àº ³âÀ» ÀÇ¹ÌÇÑ´Ù.";
         Text[ turkish ] = "Fark hesabý türü, tür=0 aralýk, tür=1 ise takvim yýlý cinsinden anlamýna gelir";
         Text[ catalan ] = "Tipo de formación de diferencia: Tipo=0 significa intervalo; tipo=1, años naturales";
+        Text[ finnish ] = "Erotuslaskennan tyyppi: tila = 0 tarkoittaa väliä, tila = 1 tarkoittaa kalenterivuosia.";
     };
 
 /*-=======================================================================*/
@@ -622,6 +642,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "À±³â";
         Text[ turkish ] = "Artýkyýldýr";
         Text[ catalan ] = "EsAñoBisiesto";
+        Text[ finnish ] = "OnKarkausvuosi";
     };
     String DFA_ISLEAPYEAR_DESC // Description
     {
@@ -648,6 +669,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "À±³âÀÌ¸é 1(Âü)ÀÌ¡¡µÇ°í, ±×·¸Áö  ¾ÊÀ¸¸é 0(°ÅÁþ)ÀÌµÈ´Ù.";
         Text[ turkish ] = "Yýl, artýkyýl ise 1(DOÐRU) aksi halde 0(YANLIÞ) verir";
         Text[ catalan ] = "Devuelve 1(VERDADERO) si el año es bisiesto; si no, 0(FALSO)";
+        Text[ finnish ] = "Palauttaa arvon 1 (TRUE), jos karkausvuotta käytetään, muussa tapauksessa palautetaan arvo 0 (FALSE)";
     };
 
 /*-=======================================================================*/
@@ -677,6 +699,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "¿ùÀÇ ³¯Â¥ ¼ö";
         Text[ turkish ] = "AydakiGünSayýsý";
         Text[ catalan ] = "DíasEnMes";
+        Text[ finnish ] = "Päiviäkuukaudessa";
     };
     String DFA_DAYSINMONTH_DESC // Description
     {
@@ -703,6 +726,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³¯Â¥¿Í °ü·Ã, ±× ´Þ¿¡¼­ÀÇ ³¯Â¥ ¼ö¸¦ °áÁ¤";
         Text[ turkish ] = "Girilen tarihe göre ayýn gün sayýsýný bulur";
         Text[ catalan ] = "Determina la cantidad de días en un mes para una fecha";
+        Text[ finnish ] = "Palauttaa päivien määrän siinä kuukaudessa, johon liittyvä päivämäärä syötettiin";
     };
 
 /*-=======================================================================*/
@@ -732,6 +756,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³âÀÇ ³¯Â¥ ¼ö";
         Text[ turkish ] = "YýldakiGünSayýsý";
         Text[ catalan ] = "DíasEnAño";
+        Text[ finnish ] = "Päiviävuodessa";
     };
     String DFA_DAYSINYEAR_DESC // Description
     {
@@ -758,6 +783,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³¯Â¥¿Í °ü·Ã, ³âÀÇ ³¯Â¥ ¼ö¸¦ °áÁ¤";
         Text[ turkish ] = "Girilen tarihe göre yýlýn gün sayýsýný bulur";
         Text[ catalan ] = "Determina la cantidad de días en un año para una fecha";
+        Text[ finnish ] = "Palauttaa päivien määrän siinä vuodessa, johon liittyvä päivämäärä syötettiin";
     };
 
 /*-=======================================================================*/
@@ -787,6 +813,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³âÀÇ ÁÖ ¼ö";
         Text[ turkish ] = "YýldakiHaftaSayýsý";
         Text[ catalan ] = "SemanasEnAño";
+        Text[ finnish ] = "ViikkoaVuodessa";
     };
     String DFA_WEEKSINYEAR_DESC // Description
     {
@@ -813,6 +840,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ korean ] = "³¯Â¥¿Í °ü·Ã,³âÀÇ ÁÖ ¼ö¸¦ °áÁ¤";
         Text[ turkish ] = "Girilen tarihe göre yýlýn hafta sayýsýný bulur";
         Text[ catalan ] = "Determina la cantidad de semanas en un año para una fecha";
+        Text[ finnish ] = "Palauttaa viikkojen määrän siinä vuodessa, johon liittyvä päivämäärä syötettiin";
     };
 
 };
