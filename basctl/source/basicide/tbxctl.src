@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:48:53 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "¾î¦V¨÷¶b";
             Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
             Text[ greek ] = "Ïñéæüíôéá ãñáììŞ êıëéóçò";
-            Text[ korean ] = "¼öÆò ½ºÅ©·Ñ ¹Ù";
+            Text[ korean ] = "¼öÆò ½ºÅ©·Ñ¹Ù";
             Text[ turkish ] = "Yatay kaydırma çubuğu";
             Text[ language_user1 ] = " ";
         };
@@ -500,7 +500,7 @@ ToolBox RID_TOOLBOX
             Text[ chinese_traditional ] = "Áa¦V¨÷¶b";
             Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
             Text[ greek ] = "Êáôáêüñõöç ãñáììŞ êıëéóçò";
-            Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ ¹Ù";
+            Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ¹Ù";
             Text[ turkish ] = "Dikey kaydırma çubuğu";
             Text[ language_user1 ] = " ";
         };
