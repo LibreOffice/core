@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:52:39 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String ERR_INET_NAME_RESOLVE
     Text[ czech ] = "Název počítače nebylo možné rozklíčovat.\n";
     Text[ hebrew ] = "‮לא ניתן לתרגם את שם המחשב לכתובת אינטרנט.\n‬";
     Text[ hindi ] = "गणकयंत्र का नाम निर्णय नहीं कर सकते है\n";
+    Text[ slovak ] = "Názov počítača nebolo možné zistiť.\n";
 };
 String ERR_INET_CONNECT
 {
@@ -121,6 +122,7 @@ String ERR_INET_CONNECT
     Text[ czech ] = "Internetové spojení nelze navázat.";
     Text[ hebrew ] = "‮לא ניתן להתחבר לאינטרנט‬";
     Text[ hindi ] = "इन्टरनेट् कनेक्शन् स्थापित नहीं कर सकते है";
+    Text[ slovak ] = "Internetové spojenie nie je možné naviazať.";
 };
 String ERR_INET_READ
 {
@@ -150,6 +152,7 @@ String ERR_INET_READ
     Text[ czech ] = "Chyba při čtení dat z Internetu.\nChybová zpráva ze serveru: $(ARG1)";
     Text[ hebrew ] = "‮‪שגיאה בקריאת נתונים מהאינטרנט.\nהודעת השרת: $(ARG1)‪‬";
     Text[ hindi ] = "ड़ॉटा को इन्टरनेट् से पढ़ने के समय गलती ।\nसर्वर से गलती का संदेश: $(ARG1)";
+    Text[ slovak ] = "Chyba pri čítaní dát z Internetu.\nChybová správa zo serveru: $(ARG1)";
 };
 String ERR_INET_WRITE
 {
@@ -179,6 +182,7 @@ String ERR_INET_WRITE
     Text[ czech ] = "Chyba při přenosu dat na Internet.\nChybová zpráva ze serveru: $(ARG1)";
     Text[ hebrew ] = "‮שגיאה בהעברת נתונים מהאינטרנט.\nהודעת השרת: $(ARG1)‪‬";
     Text[ hindi ] = "ड़ॉटा को इन्टरनेट् से स्थानांतर करने के समय गलती ।\nसर्वर से गलती का संदेश: $(ARG1)";
+    Text[ slovak ] = "Chyba pri prenose dát na Internet.\nChybová sprava zo serveru: $(ARG1)";
 };
 String ERR_INET_GENERAL
 {
@@ -208,6 +212,7 @@ String ERR_INET_GENERAL
     Text[ czech ] = "Obecná chyba Internetu";
     Text[ hebrew ] = "‮שגיאת אינטרנט לא מפורטת‬";
     Text[ hindi ] = "सामान्य इन्टरनेट् गलती";
+    Text[ slovak ] = "Všeobecná chyba Internetu";
 };
 String ERR_WRONG_URL
 {
@@ -237,6 +242,7 @@ String ERR_WRONG_URL
     Text[ czech ] = "Chybné URL\n";
     Text[ hebrew ] = "‮URL פגום‬";
     Text[ hindi ] = "दोषयुक्त URL\n";
+    Text[ slovak ] = "Chybné URL\n";
 };
 String ERR_ACTIVEDOWNLOADS
 {
@@ -265,6 +271,7 @@ String ERR_ACTIVEDOWNLOADS
     Text[ czech ] = "Stále probíhá stahování souborů.\nJste si jist, že chcete program ukončit?\n";
     Text[ hebrew ] = "‮  הורדות מהאינטרנט מתבצעות כעת.\nהאם בכל זאת לצאת?\n‬";
     Text[ hindi ] = "क्रियाशील ड़ौनलोड़ की कार्य अभी भी बचा है।\nआप सचमुच त्यागना चाहते है?\n";
+    Text[ slovak ] = "Stále prebieha sťahovanie súborov.\nSte si istý, že chcete program ukončiť?\n";
 };
 String ERR_QUEUEDDOWNLOADS
 {
@@ -294,6 +301,7 @@ String ERR_QUEUEDDOWNLOADS
     Text[ czech ] = "Nějaké soubory jsou ještě nastaveny ke stažení.\nOpravdu chcete program ukončit?\n";
     Text[ hebrew ] = "‮נשארו הורדות מהאינטרנט לביצוע.\nהאם אכן לצאת?‬";
     Text[ hindi ] = "ड़ौनलोड़ की कार्य अभी भी बचा है।\nआप सचमुच त्यागना चाहते है?\n";
+    Text[ slovak ] = "Nejaké súbory sú ešte nastavené na stiahnutie.\nNaozaj chcete program ukončiť?\n";
 };
 String ERR_FILEISLOCAL
 {
@@ -323,6 +331,7 @@ String ERR_FILEISLOCAL
     Text[ czech ] = "Takový soubor už ve vašem počítači existuje.\nPřejete si jej přesto kopírovat?";
     Text[ hebrew ] = "‮הקובץ כבר קיים במחשב זה.\nהאם להעתיקו בכל זאת?‬";
     Text[ hindi ] = "फाइल आपके गणकयंत्र में पहिले से अस्तित्व में है ।\nआप किसी तरह से उसका प्रतिलिपि बनाना चाहते है?";
+    Text[ slovak ] = "Takýto súbor už vo vašom počítači existuje.\nPrajete si ho i napriek tomu kopírovať?";
 };
 String ERR_FILENAMECHECK83
 {
@@ -352,6 +361,7 @@ String ERR_FILENAMECHECK83
     Text[ czech ] = "Zadaný název souboru je neplatný.\nNázvy souborů nemohou překročit délku 8 znaků\na příponu souboru mohou tvořit nejvýše 3 znaky.";
     Text[ hebrew ] = "‮שם הקובץ אינו חוקי.\nאין להשתמש בשם קובץ ארוך משמונה תווים\nובסיומת ארוכה משלושה תווים.‬";
     Text[ hindi ] = "प्रविष्ट किया हुआ फाइल का नाम अमान्य है ।\nकृपया ध्यान दीजिए कि फाइल का नाम 8 अक्षरों से अधिक नहीं हो सकता है\n और फाइल का ऍक्स्टेन्शन् सिर्फ़ 3 अक्षरों का होना चाहिए ।";
+    Text[ slovak ] = "Zadaný názov súboru je neplatný.\nNázvy súborov nemôžu prekročiť dĺžku 8 znakov\na príponu súboru môžu tvori? nejviac 3 znaky.";
 };
 String ERR_INSUFFICIENTDISKSPACE
 {
@@ -380,6 +390,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ czech ] = "Soubor %1 překračuje dostupnou velikost volného místa na disku.\nPřejete si přesto pokračovat?\n";
     Text[ hebrew ] = "‮קובץ 1% גדול מהמקום הנותר בדיסק.\nהאם להמשיך בכל זאת?‬";
     Text[ hindi ] = "फाइल %1 प्राप्य डिस्क् का जगह से अधिक है। \nआप किसी तरह आगे बढ़ना चाहते है?\n";
+    Text[ slovak ] = "Súbor %1 prekračuje dostupnú veľkosť voľného miesta na disku.\nPrajete si i napriek tomu pokračovať?\n";
 };
 //= Texte "downloadcontroller" =================================================================
 String STR_DOWNLOAD_SOURCE
@@ -410,6 +421,7 @@ String STR_DOWNLOAD_SOURCE
     Text[ czech ] = "Zdroj";
     Text[ hebrew ] = "‮מקור‬";
     Text[ hindi ] = "मूल";
+    Text[ slovak ] = "Zdroj";
 };
 String STR_DOWNLOAD_DESTINATION
 {
@@ -439,6 +451,7 @@ String STR_DOWNLOAD_DESTINATION
     Text[ czech ] = "Cíl";
     Text[ hebrew ] = "‮יעד‬";
     Text[ hindi ] = "नियत स्थान";
+    Text[ slovak ] = "Cieľ";
 };
 String STR_DOWNLOAD_STATE
 {
@@ -468,6 +481,7 @@ String STR_DOWNLOAD_STATE
     Text[ czech ] = "Stav";
     Text[ hebrew ] = "‮מצב‬";
     Text[ hindi ] = "वस्तुस्थिति";
+    Text[ slovak ] = "Stav";
 };
 String STR_DOWNLOAD_REMAININGTIME
 {
@@ -497,6 +511,7 @@ String STR_DOWNLOAD_REMAININGTIME
     Text[ czech ] = "Zbývající čas";
     Text[ hebrew ] = "‮זמן נותר‬";
     Text[ hindi ] = "बचा हुआ समय";
+    Text[ slovak ] = "Zostávajúci čas";
 };
 String STR_DOWNLOAD_STATEFORMAT
 {
@@ -526,6 +541,7 @@ String STR_DOWNLOAD_STATEFORMAT
     Text[ czech ] = "$(READ) z $(TOTAL) [ $(TIME) ]";
     Text[ hebrew ] = "‮$(READ) מתוך $(TOTAL)[ $(TIME) ]‬";
     Text[ hindi ] = "$(READ) of $(TOTAL) [ $(TIME) ]";
+    Text[ slovak ] = "$(READ) z $(TOTAL) [ $(TIME) ]";
 };
 
 Resource RID_DLSTATUS2
@@ -561,6 +577,7 @@ Resource RID_DLSTATUS2
         Text[ czech ] = "Připojování k: $(HOST). Čekám na odpověď...";
         Text[ hebrew ] = "‮התחברות ל $(HOST) מתבצעת. בהמתנה לתשובה...‬";
         Text[ hindi ] = "$(HOST) केलिए कनेक्ट कर रहा है । जवाब केलिए ठहरा हुआ है...";
+        Text[ slovak ] = "Pripojovanie k: $(HOST). Čakám na odpoveď...";
     };
     String SVBINDSTATUS_CONNECTING
     {
@@ -593,6 +610,7 @@ Resource RID_DLSTATUS2
         Text[ czech ] = "Otevírá se $(TARGET) na $(HOST)";
         Text[ hebrew ] = "‮פתיחה של $(TARGET) על $(HOST) מתבצעת‬";
         Text[ hindi ] = "$(HOST) में $(TARGET) को खोल रहा है";
+        Text[ slovak ] = "Otvára sa $(TARGET) na $(HOST)";
     };
     String SVBINDSTATUS_DOWNLOADINGDATA
     {
@@ -625,6 +643,7 @@ Resource RID_DLSTATUS2
         Text[ czech ] = "Probíhá přenos: $(TARGET) Načteno: $(BYTE)";
         Text[ hebrew ] = "‮העברת $(TARGET), נקראו $(BYTE) בתים‬";
         Text[ hindi ] = "स्थानान्तर हो रहा है: $(TARGET) पढ़ा: $(BYTE)";
+        Text[ slovak ] = "Prebieha prenos: $(TARGET) Načítané: $(BYTE)";
     };
     String SVBINDSTATUS_ENDDOWNLOADDATA
     {
@@ -657,6 +676,7 @@ Resource RID_DLSTATUS2
         Text[ czech ] = "Odpojeno";
         Text[ hebrew ] = "‮מנותק‬";
         Text[ hindi ] = "डिसकनेक्ट किया";
+        Text[ slovak ] = "Spojenie prerušené";
     };
 };
 
@@ -665,6 +685,8 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
+
 
 
 
