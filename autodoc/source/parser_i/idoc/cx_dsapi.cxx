@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_dsapi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:34:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ const UINT16 nTok_at_incomplete = 100 + Tok_AtTag::incomplete;
 const UINT16 nTok_at_version = 100 + Tok_AtTag::version;
 const UINT16 nTok_at_guarantees = 100 + Tok_AtTag::guarantees;
 const UINT16 nTok_at_exception = 100 + Tok_AtTag::exception;
+const UINT16 nTok_at_since = 100 + Tok_AtTag::since;
 
 const UINT16 nTok_const_TRUE = 200 + Tok_XmlConst::e_true;
 const UINT16 nTok_const_FALSE = 200 + Tok_XmlConst::e_false;
@@ -475,6 +476,7 @@ Context_Docu::SetupStateMachine()
     aStateMachine.AddToken( "@param",   nTok_at_param,       A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@throws",  nTok_at_throws,      A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@see",     nTok_at_see,         A_nAtTagDefStatus, finAtTag );
+    aStateMachine.AddToken( "@since",   nTok_at_since,       A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@example", nTok_at_example,     A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@return",  nTok_at_return,      A_nAtTagDefStatus, finAtTag );
     aStateMachine.AddToken( "@returns", nTok_at_return,      A_nAtTagDefStatus, finAtTag );
