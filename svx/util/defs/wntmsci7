@@ -20117,3 +20117,14 @@ writeInfo
 ?end@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@V?$Sequence@VOUString@rtl@@@uno@star@sun@com@@@_STL@@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@V?$Sequence@VOUString@rtl@@@uno@star@sun@com@@@_STL@@@4@UUStringLess@comphelper@@V?$allocator@U?$pair@$$CBVOUString@rtl@@V?$Sequence@VOUString@rtl@@@uno@star@sun@com@@@_STL@@@4@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@V?$Sequence@VOUString@rtl@@@uno@star@sun@com@@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVOUString@rtl@@V?$Sequence@VOUString@rtl@@@uno@star@sun@com@@@_STL@@@2@@2@XZ
 ?ForceSwapOutObjects@SdrObjList@@QBEXXZ
 ??0SvxPopupWindowListBox@@QAE@GAAVToolBox@@AAVSfxBindings@@@Z
+??1?$Reference@VXEmbeddedObjectResolver@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXExporter@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXFilter@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXImporter@document@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?SvxDrawingLayerExport@@YAEPAVSdrModel@@V?$Reference@VXOutputStream@io@star@sun@com@@@uno@star@sun@com@@@Z
+?SvxDrawingLayerImport@@YAEPAVSdrModel@@V?$Reference@VXInputStream@io@star@sun@com@@@uno@star@sun@com@@@Z
+?__query@?$Reference@VXExporter@document@star@sun@com@@@uno@star@sun@com@@CAPAVXExporter@document@345@PAVXInterface@2345@@Z
+?__query@?$Reference@VXFilter@document@star@sun@com@@@uno@star@sun@com@@CAPAVXFilter@document@345@PAVXInterface@2345@@Z
+?__query@?$Reference@VXImporter@document@star@sun@com@@@uno@star@sun@com@@CAPAVXImporter@document@345@PAVXInterface@2345@@Z
+?set@?$Reference@VXEmbeddedObjectResolver@document@star@sun@com@@@uno@star@sun@com@@QAAEPAVXEmbeddedObjectResolver@document@345@@Z
+?setUnoModel@SdrModel@@QAEXV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z
