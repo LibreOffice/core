@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:35:11 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ String RID_STR_ERRORCHOOSEMACRO
     Text[ polish ] = "Macros from other documents are not accessible.";
     Text[ portuguese_brazilian ] = "Macros from other documents are not accessible.";
     Text[ japanese ] = "ほかのﾄﾞｷｭﾒﾝﾄのﾏｸﾛへはｱｸｾｽできません。";
-    Text[ korean ] = "Macros from other documents are not accessible.";
+    Text[ korean ] = "다른 문서의 매크로를 액세스할 수 없습니다.";
     Text[ chinese_simplified ] = "无法读取其它文档的宏。";
     Text[ chinese_traditional ] = "無法存取其他文件的巨集。";
     Text[ turkish ] = "Macros from other documents are not accessible.";
@@ -2809,6 +2809,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
