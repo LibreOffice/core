@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mba $ $Date: 2004-09-03 11:41:22 $
+#   last change: $Author: pjunck $ $Date: 2004-11-02 15:02:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,20 +64,25 @@ PRJ=..$/..$/..
 PRJNAME=extensions
 TARGET=npsoplugin
 
-
-#UNOUCRRDB=$(SOLARBINDIR)$/services.rdb
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-
 
 # --- Settings ----------------------------------
 
 .INCLUDE :  	settings.mk
 
 .IF "$(GUI)"=="UNX"
+.IF "$(ENABLE_GTK)" == ""
+
+dummy:
+    @echo GTK disabled - nothing to build
+.ENDIF
 .IF "$(OS)"=="LINUX"
 INC+= -DNP_LINUX
 .ENDIF
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE: pkg_config.mk
+CFLAGS+=$(PKGCONFIG_CFLAGS)
 .ENDIF
 .IF "$(GUI)"=="WNT"
 INC+= -DENGLISH
@@ -121,7 +126,7 @@ APP1STDLIBS=\
             $(TOOLSLIB)
 
 .IF "$(GUI)"=="UNX"
-#APP1STDLIBS+= -lgdk-x11-2.0 -lgtk-x11-2.0
+APP1STDLIBS+=$(PKGCONFIG_LIBS:s/-lpangoxft-1.0//)
 .IF "$(OS)"=="LINUX"
 .ELSE
 APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
@@ -135,7 +140,6 @@ APP1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib
 
 # --- Library -----------------------------------
 
-#SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 SHL1TARGET=$(TARGET)
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
@@ -160,3 +164,4 @@ DEF1EXPORTFILE=exports_wnt.dxp
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
