@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swacorr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-02 16:37:50 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,22 @@
 #include <svx/svxacorr.hxx>
 #endif
 
-class SvStorageRef;
+#include <com/sun/star/uno/Reference.h>
+
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+
 class SwAutoCorrect : public SvxAutoCorrect
 {
 protected:
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
-    virtual BOOL GetLongText( SvStorageRef&, const String& rShort, String& rLong );
+    virtual BOOL GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& , const String& rShort, String& rLong );
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
-    virtual BOOL PutText( SvStorage&, const String& rShort, SfxObjectShell& ,
+    virtual BOOL PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rShort, SfxObjectShell& ,
                             String& );
 
 public:
