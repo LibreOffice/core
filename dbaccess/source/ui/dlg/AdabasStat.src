@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:48:50 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ portuguese_brazilian ] = "S~YSDEVSPACE:";
         Text[ japanese ] = "S~YSDEVSPACE:";
         Text[ korean ] = "S~YSDEVSPACE:";
-        Text[ chinese_simplified ] = "S~YSDEVSPACE£º";
+        Text[ chinese_simplified ] = "SYSDEVSPACE£º";
         Text[ chinese_traditional ] = "SYSDEVSPACE¡G";
         Text[ arabic ] = "S~YSDEVSPACE:";
         Text[ turkish ] = "S~YSDEVSPACE:";
@@ -158,7 +158,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ portuguese_brazilian ] = "~TRANSACTIONLOG:";
         Text[ japanese ] = "~TRANSACTIONLOG:";
         Text[ korean ] = "~TRANSACTIONLOG:";
-        Text[ chinese_simplified ] = "~TRANSACTIONLOG£º";
+        Text[ chinese_simplified ] = "TRANSACTIONLOG£º";
         Text[ chinese_traditional ] = "TRANSACTIONLOG:";
         Text[ arabic ] = "~TRANSACTIONLOG:";
         Text[ turkish ] = "~TRANSACTIONLOG:";
@@ -193,7 +193,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ portuguese_brazilian ] = "DATAD~EVSPACE:";
         Text[ japanese ] = "DATAD~EVSPACE:";
         Text[ korean ] = "DATAD~EVSPACE:";
-        Text[ chinese_simplified ] = "DATAD~EVSPACE£º";
+        Text[ chinese_simplified ] = "DATADEVSPACE£º";
         Text[ chinese_traditional ] = "DATADEVSPACE:";
         Text[ arabic ] = "DATAD~EVSPACE:";
         Text[ turkish ] = "DATAD~EVSPACE:";
@@ -225,7 +225,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ italian ] = "Dimensioni database";
         Text[ danish ] = "Databasestørrelser";
         Text[ swedish ] = "Databasstorlekar";
-        Text[ polish ] = "Rozmiary bazy danych";
+        Text[ polish ] = "Wielkoœci baz danych";
         Text[ portuguese_brazilian ] = "database sizes";
         Text[ japanese ] = "ÃŞ°ÀÍŞ°½»²½Ş";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º Å©±â";
@@ -251,7 +251,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ italian ] = "Dimensione (MB):";
         Text[ danish ] = "Samlet størrelse (MB):";
         Text[ swedish ] = "T~otalstorlek (MB):";
-        Text[ polish ] = "Rozmiar ³¹czny (MB):";
+        Text[ polish ] = "£¹czna wielkoœæ (MB):";
         Text[ portuguese_brazilian ] = "S~ize (MB):";
         Text[ japanese ] = "‘S‘Ì‚Ì»²½Ş(MB):";
         Text[ korean ] = "ÃÑ Å©±â(~I)";
@@ -281,7 +281,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ russian ] = "Ñâîáîäíîé ïàìÿòè (ÌÁ):";
         Text[ greek ] = "Åëİõèåñç ìíŞìç (MB):";
         Text[ dutch ] = "~Vrij geheugen (MB):";
-        Text[ french ] = "~Mémoire libre (Mo) :";
+        Text[ french ] = "Mémoire ~libre (Mo) :";
         Text[ spanish ] = "~Memoria libre (MB):";
         Text[ italian ] = "Spazio libero (MB):";
         Text[ danish ] = "Ledig hukommelse (MB):";
@@ -316,7 +316,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ russian ] = "~Çàíÿòîé ïàìÿòè (â %):";
         Text[ greek ] = "ÊáôÜëçøç ìíŞìçò (óå %):";
         Text[ dutch ] = "~Gebruikt geheugen (in %):";
-        Text[ french ] = "~Mémoire utilisée (en %):";
+        Text[ french ] = "Mémoire ~utilisée (en %):";
         Text[ spanish ] = "~Memoria usada (en %):";
         Text[ italian ] = "Memoria utilizzata (in %):";
         Text[ danish ] = "Hukommelsesudnyttelse (i %):";
@@ -376,22 +376,22 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text [ English ] = "Contains the system tables" ;
     Text[ english_us ] = "Contains the system tables";
     Text[ portuguese ] = "Contains the system tables";
-    Text[ russian ] = "Contains the system tables";
+    Text[ russian ] = "Ñîäåğæèò ñèñòåìíûõ òàáëèö";
     Text[ greek ] = "Contains the system tables";
     Text[ dutch ] = "Contains the system tables";
-    Text[ french ] = "Contains the system tables";
+    Text[ french ] = "Contient les tables système";
     Text[ spanish ] = "Contains the system tables";
     Text[ italian ] = "Contiene le tabelle di sistema";
     Text[ danish ] = "Contains the system tables";
     Text[ swedish ] = "Innehåller systemtabellerna";
-    Text[ polish ] = "Contains the system tables";
+    Text[ polish ] = "Zawiera tabele systemu";
     Text[ portuguese_brazilian ] = "Contains the system tables";
     Text[ japanese ] = "¼½ÃÑÃ°ÌŞÙ‚ğŠÜ‚Ş";
     Text[ korean ] = "Contains the system tables";
-    Text[ chinese_simplified ] = "Contains the system tables";
+    Text[ chinese_simplified ] = "º¬ÓĞÏµÍ³±í¸ñ";
     Text[ chinese_traditional ] = "§t¦³¨t²Îªí®æ";
     Text[ turkish ] = "Contains the system tables";
-    Text[ arabic ] = "Contains the system tables";
+    Text[ arabic ] = "íÍÊæí Úáì ÌÏÇæá ÇáäÙÇã";
 };
 
 String STR_ADABAS_HELP_TRANSACT
@@ -400,22 +400,22 @@ String STR_ADABAS_HELP_TRANSACT
     Text [ English ] = "Contains information about transactions" ;
     Text[ english_us ] = "Contains information about transaction";
     Text[ portuguese ] = "Contains information about transactions";
-    Text[ russian ] = "Contains information about transactions";
+    Text[ russian ] = "Ñîäåğæèò èíôîğìàöèş î òğàíçàêöèè";
     Text[ greek ] = "Contains information about transactions";
     Text[ dutch ] = "Contains information about transactions";
-    Text[ french ] = "Contains information about transactions";
+    Text[ french ] = "Contient une information sur les transactions";
     Text[ spanish ] = "Contains information about transactions";
     Text[ italian ] = "Contiene informazioni sulla transazione";
     Text[ danish ] = "Contains information about transactions";
     Text[ swedish ] = "Innehåller information om transaktion";
-    Text[ polish ] = "Contains information about transactions";
+    Text[ polish ] = "Zawiera informacje o transakcji";
     Text[ portuguese_brazilian ] = "Contains information about transactions";
     Text[ japanese ] = "Ä×İ»Ş¸¼®İ‚Ìî•ñ‚ğŠÜ‚Ş";
     Text[ korean ] = "Contains information about transactions";
-    Text[ chinese_simplified ] = "Contains information about transactions";
+    Text[ chinese_simplified ] = "º¬ÓĞÓĞ¹Ø´«µİµÄĞÅÏ¢";
     Text[ chinese_traditional ] = "§t¦³¶Ç»¼ªº¸ê°T";
     Text[ turkish ] = "Contains information about transactions";
-    Text[ arabic ] = "Contains information about transactions";
+    Text[ arabic ] = "íÍÊæí Úáì ãÚáæãÇÊ Íæá ÇáÚãáíÉ";
 };
 
 String STR_ADABAS_HELP_DATADEVSPACES
@@ -424,22 +424,22 @@ String STR_ADABAS_HELP_DATADEVSPACES
     Text [ English ] = "Contains all data files" ;
     Text[ english_us ] = "Contains all data files";
     Text[ portuguese ] = "Contains all data files";
-    Text[ russian ] = "Contains all data files";
+    Text[ russian ] = "Ñîäåğæèò âñå ôàéëû äàííûõ";
     Text[ greek ] = "Contains all data files";
     Text[ dutch ] = "Contains all data files";
-    Text[ french ] = "Contains all data files";
+    Text[ french ] = "Contient tous les fichiers de données";
     Text[ spanish ] = "Contains all data files";
     Text[ italian ] = "Contiene tutti i file di dati";
     Text[ danish ] = "Contains all data files";
     Text[ swedish ] = "Innehåller alla datafiler";
-    Text[ polish ] = "Contains all data files";
+    Text[ polish ] = "Zawiera wszystkie pliki danych";
     Text[ portuguese_brazilian ] = "Contains all data files";
     Text[ japanese ] = "ÃŞ°ÀÌ§²Ù‚ğŠÜ‚Ş";
     Text[ korean ] = "Contains all data files";
-    Text[ chinese_simplified ] = "Contains all data files";
+    Text[ chinese_simplified ] = "º¬ÓĞÈ«²¿µÄÊı¾İÎÄ¼ş";
     Text[ chinese_traditional ] = "§t¦³¥ş³¡ªº¸ê®ÆÀÉ®×";
     Text[ turkish ] = "Contains all data files";
-    Text[ arabic ] = "Contains all data files";
+    Text[ arabic ] = "íÍÊæí Úáì ßÇİÉ ãáİÇÊ ÇáÈíÇäÇÊ";
 };
 
 String STR_ADABAS_HELP_SIZE
@@ -448,22 +448,22 @@ String STR_ADABAS_HELP_SIZE
     Text [ English ] = "Overall Size of the database files" ;
     Text[ english_us ] = "Total size of the database files";
     Text[ portuguese ] = "Overall Size of the database files";
-    Text[ russian ] = "Overall Size of the database files";
+    Text[ russian ] = "Îáùèé ğàçìåğ ôàéëîâ áàçû äàííûõ";
     Text[ greek ] = "Overall Size of the database files";
     Text[ dutch ] = "Overall Size of the database files";
-    Text[ french ] = "Overall Size of the database files";
+    Text[ french ] = "Taille totale des fichiers de la base de données";
     Text[ spanish ] = "Overall Size of the database files";
     Text[ italian ] = "Dimensioni dei file del database";
     Text[ danish ] = "Overall Size of the database files";
     Text[ swedish ] = "Totalstorlek på databasfilerna";
-    Text[ polish ] = "Overall Size of the database files";
+    Text[ polish ] = "£¹czna wielkoœæ plików bazy danych";
     Text[ portuguese_brazilian ] = "Overall Size of the database files";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½Ì§²Ù‘S‘Ì‚Ì»²½Ş";
     Text[ korean ] = "Overall Size of the database files";
-    Text[ chinese_simplified ] = "Overall Size of the database files";
+    Text[ chinese_simplified ] = "Êı¾İ¿âÎÄ¼şµÄ×Ü¼Æ´óĞ¡";
     Text[ chinese_traditional ] = "¸ê®Æ®wÀÉ®×ªºÁ`¤j¤p";
     Text[ turkish ] = "Overall Size of the database files";
-    Text[ arabic ] = "Overall Size of the database files";
+    Text[ arabic ] = "ÇáÍÌã ÇáÅÌãÇáí áãáİÇÊ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
 };
 
 String STR_ADABAS_HELP_FREESIZE
@@ -472,10 +472,10 @@ String STR_ADABAS_HELP_FREESIZE
     Text [ English ] = "Currently free avaliable space bevor a new datadev must be created." ;
     Text[ english_us ] = "Currently avaliable space before a new datadev file must be created.";
     Text[ portuguese ] = "Currently free avaliable space bevor a new datadev must be created.";
-    Text[ russian ] = "Currently free avaliable space bevor a new datadev must be created.";
+    Text[ russian ] = "Äîñòóïíî ïàìÿòè ïåğåä ñîçäàíèåì íîâîãî ôàéëà datadev.";
     Text[ greek ] = "Currently free avaliable space bevor a new datadev must be created.";
     Text[ dutch ] = "Currently free avaliable space bevor a new datadev must be created.";
-    Text[ french ] = "Currently free avaliable space bevor a new datadev must be created.";
+    Text[ french ] = "Mémoire encore disponible avant qu'un fichier Datadev ne doive être généré.";
     Text[ spanish ] = "Currently free avaliable space bevor a new datadev must be created.";
     Text[ italian ] = "Memoria ancora disponibile prima di dover creare un nuovo file Datadev.";
     Text[ danish ] = "Currently free avaliable space bevor a new datadev must be created.";
@@ -484,10 +484,10 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ portuguese_brazilian ] = "Currently free avaliable space bevor a new datadev must be created.";
     Text[ japanese ] = "datadev Ì§²Ù‚ğV‹Kì¬‚·‚éˆÈ‘O‚É•K—v‚ÈÒÓØ‹ó‚«—e—ÊB";
     Text[ korean ] = "Currently free avaliable space bevor a new datadev must be created.";
-    Text[ chinese_simplified ] = "Currently free avaliable space bevor a new datadev must be created.";
+    Text[ chinese_simplified ] = "ÔÚĞÂ½¨Ò»¸ö datadev ÎÄ¼şÖ®Ç°µÄ¿ÉÓÃ¿Õ¼ä¡£";
     Text[ chinese_traditional ] = "¦b·s¼W¤@­Ó datadev ÀÉ®×¤§«eªº¥i¥ÎªÅ¶¡¡C";
     Text[ turkish ] = "Currently free avaliable space bevor a new datadev must be created.";
-    Text[ arabic ] = "Currently free avaliable space bevor a new datadev must be created.";
+    Text[ arabic ] = "ÇáãÓÇÍÉ ÇáÍÑÉ ÇáãÊæİÑÉ ÍÇáíÇğ ŞÈá ÅäÔÇÁ ãáİ datadev ÌÏíÏ.";
 };
 
 String STR_ADABAS_HELP_MEMORYUSING
@@ -496,22 +496,22 @@ String STR_ADABAS_HELP_MEMORYUSING
     Text [ English ] = "Currently used memory" ;
     Text[ english_us ] = "Currently used memory";
     Text[ portuguese ] = "Currently used memory";
-    Text[ russian ] = "Currently used memory";
+    Text[ russian ] = "Â íàñòîÿùèé ìîìåíò èñïîëüçóåìîé ïàìÿòè";
     Text[ greek ] = "Currently used memory";
     Text[ dutch ] = "Currently used memory";
-    Text[ french ] = "Currently used memory";
+    Text[ french ] = "Mémoire actuellement utilisée";
     Text[ spanish ] = "Currently used memory";
     Text[ italian ] = "Memoria attualmente in uso";
     Text[ danish ] = "Currently used memory";
     Text[ swedish ] = "Currently used memory";
-    Text[ polish ] = "Currently used memory";
+    Text[ polish ] = "Aktualnie zajêta pamiêæ";
     Text[ portuguese_brazilian ] = "Currently used memory";
     Text[ japanese ] = "Œ»İ‚ÌÒÓØg—p—Ê";
     Text[ korean ] = "Currently used memory";
-    Text[ chinese_simplified ] = "Currently used memory";
+    Text[ chinese_simplified ] = "µ±Ç°Õ¼ÓÃµÄÄÚ´æ";
     Text[ chinese_traditional ] = "·í«e¥e¥Î°O¾ĞÅé";
     Text[ turkish ] = "Currently used memory";
-    Text[ arabic ] = "Currently used memory";
+    Text[ arabic ] = "ÇáĞÇßÑÉ ÇáãÓÊÎÏãÉ ÍÇáíÇğ";
 };
 
 
