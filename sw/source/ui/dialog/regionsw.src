@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:30:33 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,15 +85,13 @@
     Text [ de ] = "Mi~t Bedingung" ; \
     Text [ en-US ] = "~With Condition" ;
 
-// --> FME 2004-06-22 #114856# edit in readonly sections
 #define FL_PROPERTIES_TEXT \
-    Text = "Eigenschaften" ; \
+    Text [ de ] = "Eigenschaften" ; \
     Text [ en-US ] = "Properties" ;
 
 #define CB_EDIT_IN_READONLY_TEXT \
-    Text = "E~ditierbar in schreibgeschütztem Dokument" ; \
+    Text [ de ] = "E~ditierbar in schreibgeschütztem Dokument" ; \
     Text [ en-US ] = "E~ditable in read-only document" ;
-// <--
 
 #define FL_FILE_TEXT \
     Text [ de ] = "Verknüpfung" ; \
@@ -299,7 +297,6 @@ ModalDialog MD_EDIT_REGION
         Disable = TRUE ;
     };
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     FixedLine FL_PROPERTIES
     {
         OutputSize = TRUE ;
@@ -315,7 +312,6 @@ ModalDialog MD_EDIT_REGION
         TriStateDisable = FALSE ;
         CB_EDIT_IN_READONLY_TEXT
     };
-    // <--
 
     OKButton PB_OK
     {
@@ -617,7 +613,6 @@ TabPage TP_INSERT_SECTION
         TabStop = TRUE ;
     };
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     FixedLine FL_PROPERTIES
     {
         OutputSize = TRUE ;
@@ -631,7 +626,6 @@ TabPage TP_INSERT_SECTION
         Size = MAP_APPFONT ( 100 , 10 ) ;
         CB_EDIT_IN_READONLY_TEXT
     };
-    // <--
 
 };
 
