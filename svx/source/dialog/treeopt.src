@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:41:27 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 10:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,12 +296,14 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_INET_DLG
     {
+        //modified by jmeng begin
         ItemList [ de ] =
         {
             < "Internet" ; 0; > ;
             < "Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
             < "Suche" ;  RID_SVXPAGE_INET_SEARCH; > ;
             < "E-Mail" ;  RID_SVXPAGE_INET_MAIL; > ;
+            < "Mozilla Plug-in" ;  RID_SVXPAGE_INET_MOZPLUGIN; > ;
         };
         ItemList [ x-comment ] =
         {
@@ -309,6 +311,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "; Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
             < "; Suche" ;  RID_SVXPAGE_INET_SEARCH; > ;
             < "; E-Mail" ;  RID_SVXPAGE_INET_MAIL; > ;
+            < ";Mozilla Plug-in" ;  RID_SVXPAGE_INET_MOZPLUGIN; > ;
         };
         ItemList [ en-US ] =
         {
@@ -316,7 +319,9 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
             < "Search" ;  RID_SVXPAGE_INET_SEARCH; > ;
             < "E-mail" ;  RID_SVXPAGE_INET_MAIL; > ;
+            < "Mozilla Plug-in" ;  RID_SVXPAGE_INET_MOZPLUGIN; > ;
         };
+        //modified by jmeng end
     };
     StringArray SID_SW_EDITOPTIONS
     {
