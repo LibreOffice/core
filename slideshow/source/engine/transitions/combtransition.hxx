@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combtransition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:04:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,88 +62,42 @@
 #ifndef _SLIDESHOW_COMBTRANSITION_HXX
 #define _SLIDESHOW_COMBTRANSITION_HXX
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "slidechangebase.hxx"
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
+namespace presentation {
+namespace internal {
 
-#include <slidechangeanimation.hxx>
-#include <slidebitmap.hxx>
-#include <soundplayer.hxx>
+/** Comb transition class.
 
-
-namespace presentation
+    This class provides a SlideChangeAnimation, showing a
+    comb-like effect (stripes of alternating push effects).
+*/
+class CombTransition : public SlideChangeBase
 {
-    namespace internal
-    {
-        /** Comb transition class.
+public:
+    /** Create the comb transition effect.
 
-            This class provides a SlideChangeAnimation, showing a
-            comb-like effect (stripes of alternating push effects).
-        */
-        class CombTransition : public SlideChangeAnimation
-        {
-        public:
-            /** Create the comb transition effect.
+        @param nNumStripes
+        Number of comb-like stripes to show in this effect
+    */
+    CombTransition( ::boost::optional<SlideSharedPtr> const & leavingSlide,
+                    const SlideSharedPtr& pEnteringSlide,
+                    const SoundPlayerSharedPtr& pSoundPlayer,
+                    const ::basegfx::B2DVector& rPushDirection,
+                    sal_Int32                   nNumStripes );
 
-                @param rLeavingBitmap
-                Bitmap of slide which leaves
+    // NumberAnimation
+    virtual bool operator()( double x );
 
-                @param rEnteringBitmap
-                Bitmap of slide which enters
+private:
+    const ::basegfx::B2DVector maPushDirectionUnit;
+    sal_Int32                  mnNumStripes;
 
-                @param nNumStripes
-                Number of comb-like stripes to show in this effect
+    void renderComb( double t, UnoViewSharedPtr const & pView ) const;
+};
 
-                @param rSoundPlayer
-                Sound to play, while transition is running. Use NULL
-                for no sound.
-             */
-            CombTransition( const SlideBitmapSharedPtr& rLeavingBitmap,
-                            const SlideBitmapSharedPtr& rEnteringBitmap,
-                            const ::basegfx::B2DVector& rPushDirection,
-                            sal_Int32                   nNumStripes,
-                            const SoundPlayerSharedPtr& rSoundPlayer );
-
-            // NumberAnimation
-            virtual bool operator()( double x );
-            virtual double getUnderlyingValue() const;
-
-            // Animation
-            virtual void start( const AnimatableShapeSharedPtr&,
-                                const ShapeAttributeLayerSharedPtr& );
-            virtual void end();
-
-            // SlideChangeAnimation
-            virtual void addView( const ViewSharedPtr& rView );
-            virtual bool removeView( const ViewSharedPtr& rView );
-
-        private:
-            /** Query the size of the bitmaps in device pixel
-             */
-            ::basegfx::B2DSize getBitmapSize() const;
-
-            ViewVector                      maViews;
-
-            SlideBitmapSharedPtr            mpLeavingBitmap;
-            SlideBitmapSharedPtr            mpEnteringBitmap;
-
-            const ::basegfx::B2DSize        maBitmapSize;
-
-            const ::basegfx::B2DPolyPolygon maClipPolygon1;
-            const ::basegfx::B2DPolyPolygon maClipPolygon2;
-
-            const ::basegfx::B2DVector      maPushDirection;
-
-            SoundPlayerSharedPtr            mpSoundPlayer;
-        };
-    }
-}
+} // namespace internal
+} // namespace presentation
 
 #endif /* _SLIDESHOW_COMBTRANSITION_HXX */
