@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:05:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,16 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
 {
     STGMEDIUM stgmedium;
     HRESULT hr = m_rDataObject->GetData( aFormatEtc, &stgmedium );
+
+    // in case of failure to get a WMF metafile handle, try to get a memory block
+    if( FAILED( hr ) &&
+        ( CF_METAFILEPICT == aFormatEtc.getClipformat() ) &&
+        ( TYMED_MFPICT == aFormatEtc.getTymed() ) )
+    {
+        CFormatEtc aTempFormat( aFormatEtc );
+        aTempFormat.setTymed( TYMED_HGLOBAL );
+        hr = m_rDataObject->GetData( aTempFormat, &stgmedium );
+    }
 
     if ( FAILED( hr ) )
     {
