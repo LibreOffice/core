@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:08:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,15 @@ class TextSearch: public cppu::WeakImplHelper2
 
     ::com::sun::star::util::SearchOptions aSrchPara;
     ::rtl::OUString sSrchStr;
+    ::rtl::OUString sSrchStr2;
 
     mutable com::sun::star::uno::Reference<
         com::sun::star::i18n::XCharacterClassification > xCharClass;
 
     com::sun::star::uno::Reference<
         com::sun::star::i18n::XExtendedTransliteration > xTranslit;
+    com::sun::star::uno::Reference<
+        com::sun::star::i18n::XExtendedTransliteration > xTranslit2;
 
     // define a function pointer for the different search nethods
     typedef ::com::sun::star::util::SearchResult
@@ -119,9 +122,13 @@ class TextSearch: public cppu::WeakImplHelper2
 
     // Members and methods for the normal (Boyer-Moore) search
     TextSearchJumpTable* pJumpTable;
+    TextSearchJumpTable* pJumpTable2;
     bool bIsForwardTab;
+    bool bUsePrimarySrchStr;
     void MakeForwardTab();
+    void MakeForwardTab2();
     void MakeBackwardTab();
+    void MakeBackwardTab2();
     sal_Int32 GetDiff( const sal_Unicode ) const;
     ::com::sun::star::util::SearchResult SAL_CALL
         NSrchFrwrd( const ::rtl::OUString& searchStr,
