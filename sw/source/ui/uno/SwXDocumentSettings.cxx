@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:28:23 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,9 @@ enum SwDocumentSettingsPropertyHandles
     // DVO, OD 12.01.2004 #i11859#
     HANDLE_USE_FORMER_LINE_SPACING,
     // OD 2004-02-16 #106629#
-    HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS
+    HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS,
+    // OD 2004-03-17 #i11860#
+    HANDLE_USE_FORMER_OBJECT_POSITIONING
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -212,6 +214,9 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UseFormerLineSpacing"),       HANDLE_USE_FORMER_LINE_SPACING,         CPPUTYPE_BOOLEAN,           0,   0},
         // OD 2004-02-16 #106629#
         { RTL_CONSTASCII_STRINGPARAM("AddParaSpacingToTableCells"), HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS, CPPUTYPE_BOOLEAN,           0,   0},
+        // OD 2004-03-17 #i11860#
+        { RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   CPPUTYPE_BOOLEAN,
+ 0,   0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -566,7 +571,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDocSh->Stamp_SetPrintCancelState(bState);
         }
         break;
-        // DVO, OD 12.01.2004
+        // DVO, OD 12.01.2004 #i11859#
         case HANDLE_USE_FORMER_LINE_SPACING:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
@@ -578,6 +583,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->SetAddParaSpacingToTableCells( bTmp );
+        }
+        break;
+        // OD 2004-03-17 #i11860#
+        case HANDLE_USE_FORMER_OBJECT_POSITIONING:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetUseFormerObjectPositioning( bTmp );
         }
         break;
         default:
@@ -782,6 +794,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_ADD_PARA_SPACING_TO_TABLE_CELLS:
         {
             sal_Bool bTmp = mpDoc->IsAddParaSpacingToTableCells();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // OD 2004-03-17 #i11860#
+        case HANDLE_USE_FORMER_OBJECT_POSITIONING:
+        {
+            sal_Bool bTmp = mpDoc->IsFormerObjectPositioning();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
