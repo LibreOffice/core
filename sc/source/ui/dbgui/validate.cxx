@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-22 12:43:40 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 08:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include <basctl/basobj.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #endif
 
 #include "scresid.hxx"
@@ -506,41 +509,28 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
 {
     Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    SbMethod* pMethod = BasicIDE::ChooseMacro(FALSE, TRUE);
+    String aMacroURL = BasicIDE::SelectMacro(FALSE, TRUE);
     Application::SetDefDialogParent( pOld );
 
-    if (pMethod)
+    // aMacroURL has the following format:
+    // 'macro:///libname.modulename.macroname(args)'               => Macro via App-BasMgr
+    // 'macro://[docname|.]/libname.modulename.macroname(args)'    => Macro via corresponging Doc-BasMgr
+
+    // but for the UI we need this format:
+    // 'macroname'
+
+    if ( aMacroURL.Len() != 0 )
     {
-        SbModule* pModule = pMethod->GetModule();
-        SbxObject* pObject = pModule->GetParent();
-        DBG_ASSERT(pObject->IsA(TYPE(StarBASIC)), "Kein Basic gefunden!");
+        sal_uInt16 nHashPos = aMacroURL.Search( '/', 8 );
+        sal_uInt16 nArgsPos = aMacroURL.Search( '(' );
 
-        String aMacro = pMethod->GetName();
+        String aBasMgrName( INetURLObject::decode(aMacroURL.Copy( 8, nHashPos - 8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+        String aQualifiedName( INetURLObject::decode(aMacroURL.Copy( nHashPos + 1, nArgsPos - nHashPos - 1 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+        String aLibName    = aQualifiedName.GetToken(0, sal_Unicode('.'));
+        String aModuleName = aQualifiedName.GetToken(1, sal_Unicode('.'));
+        String aMacroName  = aQualifiedName.GetToken(2, sal_Unicode('.'));
 
-        //  zusammengesetzter Name aus Modul etc. erst, wenn er auch
-        //  zum Ausfuehren wieder aufgeloest werden kann
-#if 0
-        aMacro += '.';
-        aMacro += pModule->GetName();
-        aMacro += '.';
-        aMacro += pObject->GetName();
-        aMacro += '.';
-        if (pObject->GetParent())
-        {
-            // Dokumentenbasic
-            aMacro += pObject->GetParent()->GetName();
-        }
-        else
-        {
-            // Applikationsbasic
-            aMacro += SFX_APP()->GetName();
-        }
-        // aMacro liegt nun in folgender Form vor:
-        // "Macroname.Modulname.Libname.Dokumentname" oder
-        // "Macroname.Modulname.Libname.Applikationsname"
-#endif
-
-        aEdtTitle.SetText( aMacro );
+        aEdtTitle.SetText( aMacroName );
     }
 
     return( 0L );

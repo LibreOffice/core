@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-09 12:54:13 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 08:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,16 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
+
+#ifndef _BASMGR_HXX //autogen
+#include <basic/basmgr.hxx>
+#endif
+
 #include <svtools/sbx.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/solmath.hxx>
-#include <basctl/basobj.hxx>
 #include <math.h>
 
 
@@ -329,9 +333,32 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         aMacroStr += pMethod->GetName();
         String aBasicStr;
 
-        BasicManager* pAppBasMgr = pSfxApp->GetBasicManager();
-        BasicManager *pBasMgr = pBasic ? BasicIDE::FindBasicManager( pBasic ) : NULL;
-        if ( pBasMgr != pAppBasMgr )
+        BOOL bFound = FALSE;
+        BasicManager* pBasMgr = pSfxApp->GetBasicManager();
+        SfxObjectShell* pShell = 0;
+        while ( !bFound && pBasMgr )
+        {
+            USHORT nLibs = pBasMgr->GetLibCount();
+            for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
+            {
+                StarBASIC* pB = pBasMgr->GetLib( nLib );
+                if ( pB == pBasic )
+                {
+                    bFound = TRUE;
+                    break;
+                }
+            }
+            if ( !bFound )
+            {
+                if ( pShell  )
+                    pShell = SfxObjectShell::GetNext( *pShell );
+                else
+                    pShell = SfxObjectShell::GetFirst();
+            }
+            pBasMgr = ( pShell ? pShell->GetBasicManager() : 0 );
+        }
+
+        if ( pShell )
             aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
         else
             aBasicStr = SFX_APP()->GetName();               // Applikationsbasic
