@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:33:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,10 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
 {
     m_pConnection->acquire();
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&m_aStatementHandle);
+}
+// -----------------------------------------------------------------------------
+OStatement_Base::~OStatement_Base()
+{
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()

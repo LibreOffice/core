@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+            virtual ~OStatement_Base();
         public:
             connectivity::OSQLParseNode* getParseTree() const { return m_pParseTree;}
 

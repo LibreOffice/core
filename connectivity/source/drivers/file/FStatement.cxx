@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,10 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),    PROPERTY_ID_ESCAPEPROCESSING,   nAttrib,&m_bEscapeProcessing,::getCppuBooleanType());
 
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),        PROPERTY_ID_RESULTSETCONCURRENCY,   nAttrib,&m_nResultSetConcurrency,       ::getCppuType(reinterpret_cast<sal_Int32*>(NULL)));
+}
+// -----------------------------------------------------------------------------
+OStatement_Base::~OStatement_Base()
+{
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()
@@ -296,7 +300,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
                     aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement:\n");
                     aErr += sql;
                 }
-                throw SQLException(aErr,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                throw SQLException(aErr,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
             }
 
             OResultSet* pResult = createResultSet();
@@ -313,13 +317,13 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
                     aErr = ::rtl::OUString::createFromAscii("Unknown table name in SELECT statement:\n");
                     aErr += sql;
                 }
-                throw SQLException(aErr,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                throw SQLException(aErr,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
             }
             throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
         }
     }
     else
-        throw SQLException(aErr,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+        throw SQLException(aErr,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 
     // Execute the statement.  If execute returns true, a result
     // set exists.

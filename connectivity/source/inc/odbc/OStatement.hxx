@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:46 $
+ *  last change: $Author: oj $ $Date: 2001-05-23 14:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,8 @@ namespace connectivity
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
-            ~OStatement_Base(){}
+            virtual ~OStatement_Base();
+
         public:
             ::cppu::OBroadcastHelper& rBHelper;
             OStatement_Base(OConnection* _pConnection );
