@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:48:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,8 +236,18 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
         // the shape to fill
         Reference< XShape > xShape;
 
-        // reads from mxStrm into xShape, inserts the control into the document
-        if( ReadOCXExcelKludgeStream( mxStrm, &xShape, TRUE ) )
+        bool bReadSuccess = false;
+        try
+        {
+            // reads from mxStrm into xShape, inserts the control into the document
+            bReadSuccess = ReadOCXExcelKludgeStream( mxStrm, &xShape, TRUE );
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "XclImpOcxConverter::CreateSdrUnoObj - unexpected exception caught" );
+        }
+
+        if( bReadSuccess )
         {
             if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
             {
