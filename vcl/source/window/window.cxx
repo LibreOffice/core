@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obr $ $Date: 2002-05-17 14:24:34 $
+ *  last change: $Author: ssa $ $Date: 2002-05-17 15:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3795,9 +3795,39 @@ void Window::ImplGrabFocus( USHORT nFlags )
     if ( !IsEnabled() || !IsInputEnabled() )
         return;
 
-    // Wir brauchen Focus nur setzen, wenn es diesen noch nicht hat
+    // we only need to set the focus if it is not already set
+    // note: if some other frame is waiting for an asynchrounous focus event
+    // we also have to post an asynchronous focus event for this frame
+    // which is done using ToTop
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpFocusWin != this )
+
+    BOOL bAsyncFocusWaiting = FALSE;
+    Window *pFrame = pSVData->maWinData.mpFirstFrame;
+    while( pFrame  )
+    {
+        if( pFrame != mpFrameWindow && pFrame->mpFrameData->mnFocusId )
+        {
+            bAsyncFocusWaiting = TRUE;
+            break;
+        }
+        pFrame = pFrame->mpFrameData->mpNextFrame;
+    }
+
+    BOOL bHasFocus = TRUE;
+#ifndef REMOTE_APPSERVER
+        if ( !mpSysObj && !mpFrameData->mbHasFocus )
+            bHasFocus = FALSE;
+#else
+        if ( !mpFrameData->mbHasFocus )
+            bHasFocus = FALSE;
+#endif
+
+    BOOL bMustNotGrabFocus = FALSE;
+    if( ( mbFloatWin || ( GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( GetStyle() & WB_MOVEABLE ) )
+        bMustNotGrabFocus = TRUE;
+
+
+    if ( pSVData->maWinData.mpFocusWin != this || ( bAsyncFocusWaiting && !bHasFocus && !bMustNotGrabFocus ) )
     {
         // EndExtTextInput if it is not the same window
         if ( pSVData->maWinData.mpExtTextInputWin &&
@@ -3809,15 +3839,11 @@ void Window::ImplGrabFocus( USHORT nFlags )
         pOverlapWindow->mpLastFocusWindow = this;
         mpFrameData->mpFocusWin = this;
 
-#ifndef REMOTE_APPSERVER
-        if ( !mpSysObj && !mpFrameData->mbHasFocus )
-#else
-        if ( !mpFrameData->mbHasFocus )
-#endif
+        if( !bHasFocus )
         {
             // menue windows never get the system focus
             // the application will keep the focus
-            if( ( mbFloatWin || ( GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( GetStyle() & WB_MOVEABLE ) )
+            if( bMustNotGrabFocus )
                 return;
             else
             {
