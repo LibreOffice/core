@@ -51,9 +51,9 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core"  xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml"  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt fo v">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template match="w:footnotePr" mode="config">
-        <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol" >
+        <text:notes-configuration text:note-class="footnote" text:citation-style-name="Footnote_20_Symbol">
             <xsl:if test="w:pos">
                 <xsl:choose>
                     <xsl:when test="w:pos/@w:val = 'beneath-text'">
@@ -67,8 +67,15 @@
             <xsl:if test="w:numStart">
                 <xsl:choose>
                     <xsl:when test="w:numStart/@w:val - 1 &gt; 0">
-                    <xsl:attribute name="text:start-value"><xsl:value-of select="w:numStart/@w:val - 1"/></xsl:attribute></xsl:when>
-                    <xsl:otherwise><xsl:attribute name="text:start-value"><xsl:value-of select=" '1' "/></xsl:attribute></xsl:otherwise>
+                        <xsl:attribute name="text:start-value">
+                            <xsl:value-of select="w:numStart/@w:val - 1"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="text:start-value">
+                            <xsl:value-of select=" '1' "/>
+                        </xsl:attribute>
+                    </xsl:otherwise>
                 </xsl:choose>
                 <!--xsl:attribute name="text:start-value"><xsl:value-of select="w:numStart/@w:val - 1"/></xsl:attribute-->
             </xsl:if>
@@ -105,14 +112,18 @@
         </text:notes-configuration>
     </xsl:template>
     <xsl:template match="w:endnotePr" mode="config">
-        <text:notes-configuration text:note-class="endnote" text:citation-style-name="Endnote_20_Symbol" >
+        <text:notes-configuration text:note-class="endnote" text:citation-style-name="Endnote_20_Symbol">
             <xsl:if test="w:numStart">
                 <xsl:choose>
                     <xsl:when test="(w:numStart/@w:val - 1) &gt; 0">
-                        <xsl:attribute name="text:start-value"><xsl:value-of select="w:numStart/@w:val - 1"/></xsl:attribute>
+                        <xsl:attribute name="text:start-value">
+                            <xsl:value-of select="w:numStart/@w:val - 1"/>
+                        </xsl:attribute>
                     </xsl:when>
-                    <xsl:otherwise >
-                            <xsl:attribute name="text:start-value"><xsl:value-of select=" '1' "/></xsl:attribute>
+                    <xsl:otherwise>
+                        <xsl:attribute name="text:start-value">
+                            <xsl:value-of select=" '1' "/>
+                        </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
                 <!--xsl:attribute name="text:start-value"><xsl:value-of select="w:numStart/@w:val - 1"/></xsl:attribute -->
@@ -160,7 +171,6 @@
             <xsl:when test="$number-format = 'lower-roman'">
                 <xsl:attribute name="style:num-format">i</xsl:attribute>
             </xsl:when>
-           
             <!-- ordinal, cardinal-text, ordinal-text, hex, chicago, bullet, ideograph-zodiac-traditional, 
             vietnamese-counting, russian-lower, russian-upper, hindi-vowels, hindi-consonants, hindi-numbers, hindi-counting -->
             <xsl:otherwise>
@@ -169,42 +179,98 @@
         </xsl:choose>
     </xsl:template>
     <xsl:template match="w:sectPr" mode="page-layout">
-        <style:page-layout >
-            <xsl:attribute name="style:name">pm<xsl:number from="/w:wordDocument/w:body" level="any" count="w:sectPr" format="1"/></xsl:attribute>
+        <style:page-layout>
+            <xsl:attribute name="style:name">pm<xsl:number from="/w:wordDocument/w:body" level="any" count="w:sectPr" format="1"/>
+            </xsl:attribute>
             <style:page-layout-properties>
-                <xsl:attribute name="fo:page-width"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgSz/@w:w,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                <xsl:attribute name="fo:page-height"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgSz/@w:h,'twip')"/></xsl:call-template>cm</xsl:attribute>
+                <xsl:attribute name="fo:page-width">
+                    <xsl:call-template name="ConvertMeasure">
+                        <xsl:with-param name="value" select="concat(w:pgSz/@w:w,'twip')"/>
+                    </xsl:call-template>cm</xsl:attribute>
+                <xsl:attribute name="fo:page-height">
+                    <xsl:call-template name="ConvertMeasure">
+                        <xsl:with-param name="value" select="concat(w:pgSz/@w:h,'twip')"/>
+                    </xsl:call-template>cm</xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="/w:wordDocument/w:docPr/w:gutterAtTop">
-                        <xsl:attribute name="fo:margin-top"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:top + w:pgMar/@w:gutter,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-left"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:left,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-right"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:right,'twip')"/></xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-top">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:top + w:pgMar/@w:gutter,'twip')"/>
+                                <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
+                            </xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-left">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:left,'twip')"/>
+                            </xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-right">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:right,'twip')"/>
+                            </xsl:call-template>cm</xsl:attribute>
                     </xsl:when>
                     <xsl:when test="w:rtlGutter">
-                        <xsl:attribute name="fo:margin-top"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:top,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-left"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:left,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-right"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:right + w:pgMar/@w:gutter,'twip')"/></xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-top">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:top,'twip')"/>
+                                <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
+                            </xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-left">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:left  ,'twip')"/>
+                            </xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-right">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:right + w:pgMar/@w:gutter,'twip')"/>
+                            </xsl:call-template>cm</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="fo:margin-top"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:top,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-left"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:left + w:pgMar/@w:gutter,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                        <xsl:attribute name="fo:margin-right"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:right,'twip')"/></xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-top">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:top,'twip')"/>
+                                <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
+                            </xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-left">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value">
+                                    <xsl:choose >
+                                        <xsl:when test="w:pgMar/@w:gutter"><xsl:value-of select="concat(w:pgMar/@w:left +w:pgMar/@w:gutter, 'twip') "/></xsl:when>
+                                        <xsl:otherwise><xsl:value-of select="concat(w:pgMar/@w:left , 'twip') "/></xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:with-param>
+                            </xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:margin-right">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:pgMar/@w:right,'twip')"/>
+                            </xsl:call-template>cm</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:attribute name="fo:margin-bottom"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:bottom,'twip')"/></xsl:call-template>cm</xsl:attribute>
-                <xsl:attribute name="style:footnote-max-height"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:pgMar/@w:footer,'twip')"/></xsl:call-template>cm</xsl:attribute>
+                <xsl:attribute name="fo:margin-bottom">
+                    <xsl:call-template name="ConvertMeasure">
+                        <xsl:with-param name="value" select="concat(w:pgMar/@w:bottom,'twip')"/>
+                        <xsl:with-param name="TargetTruncate" select=" 'nonNegative' "/>
+                    </xsl:call-template>cm</xsl:attribute>
+                <xsl:attribute name="style:footnote-max-height">
+                    <xsl:call-template name="ConvertMeasure">
+                        <xsl:with-param name="value" select="concat(w:pgMar/@w:footer,'twip')"/>
+                    </xsl:call-template>cm</xsl:attribute>
                 <xsl:if test="w:pgSz/@w:orient">
-                    <xsl:attribute name="style:print-orientation"><xsl:value-of select="w:pgSz/@w:orient"/></xsl:attribute>
+                    <xsl:attribute name="style:print-orientation">
+                        <xsl:value-of select="w:pgSz/@w:orient"/>
+                    </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="w:cols/@w:num">
+                <xsl:if test="w:cols/@w:num and w:cols/@w:num &gt; 0">
                     <!-- create sction property-->
                     <style:columns>
-                        <xsl:attribute name="fo:column-count"><xsl:value-of select="w:cols/@w:num"/></xsl:attribute>
-                        <xsl:attribute name="fo:column-gap"><xsl:call-template name="ConvertMeasure"><xsl:with-param name="value" select="concat(w:cols/@w:space,'twip')"/></xsl:call-template>cm</xsl:attribute>
+                        <xsl:attribute name="fo:column-count">
+                            <xsl:value-of select="w:cols/@w:num"/>
+                        </xsl:attribute>
+                        <xsl:attribute name="fo:column-gap">
+                            <xsl:call-template name="ConvertMeasure">
+                                <xsl:with-param name="value" select="concat(w:cols/@w:space,'twip')"/>
+                            </xsl:call-template>cm</xsl:attribute>
                     </style:columns>
                 </xsl:if>
             </style:page-layout-properties>
-        </style:page-layout >
+        </style:page-layout>
     </xsl:template>
     <xsl:template match="w:sectPr" mode="master-page">
         <!-- style:page-layout style:style-->
@@ -212,8 +278,11 @@
             <xsl:variable name="master-page-name">
                 <xsl:number count="w:sectPr" from="/w:wordDocument/w:body" level="any" format="1"/>
             </xsl:variable>
-            <xsl:attribute name="style:name">Standard<xsl:value-of select="$master-page-name"/></xsl:attribute>
-            <xsl:attribute name="style:page-layout-name"><xsl:value-of select="concat('pm', $master-page-name)"/></xsl:attribute>
+            <xsl:attribute name="style:name">Standard<xsl:value-of select="$master-page-name"/>
+            </xsl:attribute>
+            <xsl:attribute name="style:page-layout-name">
+                <xsl:value-of select="concat('pm', $master-page-name)"/>
+            </xsl:attribute>
             <!-- Headers and footers-->
             <!--
             <style:header-style>
@@ -256,7 +325,7 @@
         -->
     </xsl:template>
     <xsl:template match="w:ftr">
-     <!--
+        <!--
         <xsl:choose>
             <xsl:when test="@w:type = 'odd'">
                 <style:footer>
