@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:30:58 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ BOOL IMapWindow::ReplaceActualIMapInfo( const NotifyInfo& rNewInfo )
         pIMapObj->SetURL( rNewInfo.aMarkURL );
         pIMapObj->SetDescription( rNewInfo.aMarkDescription );
         pIMapObj->SetTarget( rNewInfo.aMarkTarget );
-        pModel->SetChanged( TRUE );
+        pModel->SetChanged( sal_True );
         UpdateInfo( FALSE );
 
         bRet = TRUE;
@@ -281,7 +281,7 @@ const ImageMap& IMapWindow::GetImageMap()
                 aIMap.InsertIMapObject( *( ( (IMapUserData*) pPage->GetObj( i )->GetUserData( 0 ) )->GetObject() ) );
         }
 
-        pModel->SetChanged( FALSE );
+        pModel->SetChanged( sal_False );
     }
 
     return aIMap;
@@ -307,7 +307,7 @@ void IMapWindow::SetTargetList( TargetList& rTargetList )
     for( pStr = rTargetList.First(); pStr; pStr = rTargetList.Next() )
         aTargetList.Insert( new String( *pStr ) );
 
-    pModel->SetChanged( FALSE );
+    pModel->SetChanged( sal_False );
 }
 
 /*************************************************************************
@@ -407,10 +407,8 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             aSet.Put( XLineColorItem( String(), Color( COL_BLACK ) ) );
         }
 
-//-/        pSdrObj->SetAttributes( aSet, FALSE );
-//-/        SdrBroadcastItemChange aItemChange(*pSdrObj);
-        pSdrObj->SetItemSetAndBroadcast(aSet);
-//-/        pSdrObj->BroadcastItemChange(aItemChange);
+        //pSdrObj->SetItemSetAndBroadcast(aSet);
+        pSdrObj->SetMergedItemSetAndBroadcast(aSet);
 
         pSdrObj->InsertUserData( new IMapUserData( pCloneIMapObj ) );
         pSdrObj->SetUserCall( GetSdrUserCall() );
@@ -793,7 +791,7 @@ sal_Int8 IMapWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
             pIMapObj->SetURL( aBookMark.GetURL() );
             pIMapObj->SetDescription( aBookMark.GetDescription() );
-            pModel->SetChanged( TRUE );
+            pModel->SetChanged( sal_True );
             pView->UnmarkAll();
             pView->MarkObj( pSdrObj, pView->GetPageViewPvNum( 0 ) );
             UpdateInfo( TRUE );
@@ -940,7 +938,7 @@ void IMapWindow::DoMacroAssign()
             {
                 const SfxItemSet* pOutSet = aMacroDlg.GetOutputItemSet();
                 pIMapObj->SetMacroTable( ((const SvxMacroItem& )pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
-                pModel->SetChanged( TRUE );
+                pModel->SetChanged( sal_True );
                 UpdateInfo( FALSE );
             }
         }
@@ -979,7 +977,7 @@ void IMapWindow::DoPropertyDialog()
             pIMapObj->SetDescription( aDlg.GetDescription() );
             pIMapObj->SetTarget( aDlg.GetTarget() );
             pIMapObj->SetName( aDlg.GetName() );
-            pModel->SetChanged( TRUE );
+            pModel->SetChanged( sal_True );
             UpdateInfo( TRUE );
         }
     }
