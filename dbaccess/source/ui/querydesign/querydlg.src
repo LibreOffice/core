@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:32:44 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ ModalDialog DLG_QRY_JOIN
     Text[ russian ] = "Свойства связи";
     Text[ dutch ] = "Verbindingseigenschappen";
     Text[ french ] = "Propriйtйs de la jointure";
-    Text[ spanish ] = "Propiedades de uniуn";
+    Text[ spanish ] = "Propiedades de la uniуn";
     Text[ italian ] = "Proprietа relazioni";
     Text[ danish ] = "Forbindelsesegenskaber";
     Text[ swedish ] = "Egenskaper fцr sammanslagning (join)";
@@ -468,7 +468,7 @@ String STR_QUERY_INNER_JOIN
     Text[ russian ] = "Содержит только такие записи, при которых содержимое связанных полей обеих таблиц является одинаковым.";
     Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ french ] = "Contient uniquement les enregistrements pour lesquels les contenus des champs liйs des deux tables sont identiques.";
-    Text[ spanish ] = "Contiene solo los registros en los que los contenidos de los campos vinculados de ambas tablas con iguales.";
+    Text[ spanish ] = "Contiene sуlo los registros en los que los contenidos de los campos vinculados de ambas tablas sean iguales.";
     Text[ italian ] = "Contiene solamente i record di dati in cui i contenuti dei campi collegati di entrambe le tabelle sono uguali.";
     Text[ danish ] = "Indeholder kun de dataposter, hvor indholdet i de kжdede felter i de to tabeller er ens.";
     Text[ swedish ] = "Innehеller bara de dataposter dдr innehеllet i de lдnkade fдlten дr lika i bеda tabellerna.";
@@ -498,7 +498,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ russian ] = "Содержит ВСЕ записи из '%1', а также только такие записи из '%2', при которых содержимое связанных полей обех таблиц является одинаковым.";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ french ] = "Contient TOUS les enregistrements de '%1', et uniquement les enregistrements de '%2' pour lesquels les contenus des champs liйs des deux tables sont identiques.";
-    Text[ spanish ] = "Contiene TODOS los registros de datos de '%1' y solo los registros de '%2' en los que los contenidos de los campos vinculados de ambas tablas son iguales.";
+    Text[ spanish ] = "Contiene TODOS los registros de la tabla '%1' y sуlo los registros de la tabla '%2' para los que los contenidos de los campos vinculados de las dos tablas son iguales.";
     Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e soltanto i record di dati da '%2' in cui i campi collegati di entrambe le caselle sono uguali.";
     Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og kun de dataposter fra '%2', hvor indholdet i de kжdede felter i de to tabeller er ens.";
     Text[ swedish ] = "Innehеller ALLA dataposter frеn '%1' och bara de dataposter frеn '%2' dдr innehеllet i de lдnkade fдlten дr lika i bеda tabellerna.";

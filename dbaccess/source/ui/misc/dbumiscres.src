@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:27:11 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ Resource RSC_DATASOURCE_TYPES
         Text = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
         Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
         Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
+        Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
     };
 };
 
@@ -462,7 +463,7 @@ String STR_UNEXPECTED_ERROR
     Text[ greek ] = "Παρουσιάστηκε ένα μη αναμενόμενο σφάλμα. Δεν ήταν δυνατόν να εκτελεστεί η εντολή.";
     Text[ dutch ] = "Er is een onverwachte fout opgetreden. De opdracht kan niet worden uitgevoerd.";
     Text[ french ] = "Une erreur imprιvue s'est produite : impossible d'exιcuter l'opιration !";
-    Text[ spanish ] = "Ha ocurrido un error. No se puede ejecutar la operaciσn.";
+    Text[ spanish ] = "Se ha producido un error. Imposible ejecutar la operaciσn.";
     Text[ finnish ] = "On ilmennyt odottamaton virhe. Toimintoa ei voitu suorittaa";
     Text[ italian ] = "Si θ verificato un errore inaspettato. Impossibile terminare l'operazione.";
     Text[ danish ] = "Der er opstεet en uventet fejl. Operationen kan ikke udfψres.";
@@ -516,7 +517,7 @@ String STR_MISSING_TABLES_XDROP
     Text[ greek ] = "Δεν είναι δυνατόν να διαγραφεί ο πίνακας, επειδή δεν υπάρχει σύνδεση με την βάση δεδομένων.";
     Text[ dutch ] = "De tabel kan niet worden gewist, daar deze niet wordt ondersteund door de database.";
     Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportιe par la connexion de BD.";
-    Text[ spanish ] = "No se puede eliminar la tabla porque la conexiσn con la base de datos no apoya esta acciσn.";
+    Text[ spanish ] = "No se puede eliminar la tabla porque la conexiσn con la base de datos no apoya esta operaciσn.";
     Text[ finnish ] = "Taulukkoa ei voi poistaa, koska tietokantayhteys ei tue poistamista.";
     Text[ italian ] = "Impossibile eliminare la tabella perchι non θ supportata dal collegamento al database.";
     Text[ danish ] = "Tabellen kan ikke slettes, da databaseforbindelsen ikke understψtter den.";
@@ -619,6 +620,9 @@ String STR_REDO_COLON
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.49  2002/11/21 15:27:11  oj
+ *  #105213# impl new feature of rown mysql driver page
+ *
  *  Revision 1.48  2002/09/05 10:53:01  kz
  *  Merge SRX643: 05.09.02 - 12:49:41
  *
