@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-04 13:09:12 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ portuguese_brazilian ] = "S~YSDEVSPACE:";
         Text[ japanese ] = "S~YSDEVSPACE:";
         Text[ korean ] = "S~YSDEVSPACE:";
-        Text[ chinese_simplified ] = "SYSDEVSPACE£º";
-        Text[ chinese_traditional ] = "SYSDEVSPACE¡G";
+        Text[ chinese_simplified ] = "S~YSDEVSPACE£º";
+        Text[ chinese_traditional ] = "S~YSDEVSPACE¡G";
         Text[ arabic ] = "S~YSDEVSPACE:";
         Text[ turkish ] = "S~YSDEVSPACE:";
         Text[ catalan ] = "S~YSDEVSPACE:";
@@ -162,8 +162,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ portuguese_brazilian ] = "~TRANSACTIONLOG:";
         Text[ japanese ] = "~TRANSACTIONLOG:";
         Text[ korean ] = "~TRANSACTIONLOG:";
-        Text[ chinese_simplified ] = "TRANSACTIONLOG£º";
-        Text[ chinese_traditional ] = "TRANSACTIONLOG:";
+        Text[ chinese_simplified ] = "~TRANSACTIONLOG£º";
+        Text[ chinese_traditional ] = "~TRANSACTIONLOG:";
         Text[ arabic ] = "~TRANSACTIONLOG:";
         Text[ turkish ] = "~TRANSACTIONLOG:";
         Text[ catalan ] = "~TRANSACTIONLOG:";
@@ -199,8 +199,8 @@ ModalDialog DLG_ADABASSTAT
         Text[ portuguese_brazilian ] = "DATAD~EVSPACE:";
         Text[ japanese ] = "DATAD~EVSPACE:";
         Text[ korean ] = "DATAD~EVSPACE:";
-        Text[ chinese_simplified ] = "DATADEVSPACE£º";
-        Text[ chinese_traditional ] = "DATADEVSPACE:";
+        Text[ chinese_simplified ] = "DATAD~EVSPACE£º";
+        Text[ chinese_traditional ] = "DATAD~EVSPACE:";
         Text[ arabic ] = "DATAD~EVSPACE:";
         Text[ turkish ] = "DATAD~EVSPACE:";
         Text[ catalan ] = "DATAD~EVSPACE:";
@@ -263,10 +263,10 @@ ModalDialog DLG_ADABASSTAT
         Text[ swedish ] = "T~otalstorlek (MB):";
         Text[ polish ] = "£¹czna wielkoœæ (MB):";
         Text[ portuguese_brazilian ] = "S~ize (MB):";
-        Text[ japanese ] = "‘S‘Ì‚Ì»²½Ş(MB):";
+        Text[ japanese ] = "‘S‘Ì‚Ì»²½Ş(MB)(~I):";
         Text[ korean ] = "ÃÑ Å©±â(~I)";
-        Text[ chinese_simplified ] = "×Ü¼Æ´óĞ¡(MB)£º";
-        Text[ chinese_traditional ] = "¤j¤p(MB)¡G";
+        Text[ chinese_simplified ] = "×Ü¼Æ´óĞ¡(MB)(~I)£º";
+        Text[ chinese_traditional ] = "¤j¤p(MB)(~I)¡G";
         Text[ arabic ] = "ÇáÍÌã ÇáÅÌãÇáí (ÈÇáãíÌÇÈÇíÊ):";
         Text[ turkish ] = "Toplam büyüklük (MB):";
         Text[ catalan ] = "Tamaño ~total (MB):";
@@ -300,10 +300,10 @@ ModalDialog DLG_ADABASSTAT
         Text[ swedish ] = "~Fritt minne (MB):";
         Text[ polish ] = "~Wolna pamiêæ (MB):";
         Text[ portuguese_brazilian ] = "~Unused space (MB):";
-        Text[ japanese ] = "‹ó‚«—e—Ê(MB):";
+        Text[ japanese ] = "‹ó‚«—e—Ê(MB)(~F):";
         Text[ korean ] = "³²Àº ÀúÀå °ø°£(~F)";
-        Text[ chinese_simplified ] = "¿ÉÓÃ¿Õ¼ä(MB)£º";
-        Text[ chinese_traditional ] = "¥i¥ÎªÅ¶¡(MB)¡G";
+        Text[ chinese_simplified ] = "¿ÉÓÃ¿Õ¼ä(MB)(~F)£º";
+        Text[ chinese_traditional ] = "¥i¥ÎªÅ¶¡(MB)(~F)¡G";
         Text[ arabic ] = "ÇáãÓÇÍÉ ÇáÍÑÉ (ÈÇáãíÌÇÈÇíÊ):";
         Text[ turkish ] = "Boş bellek (MB):";
         Text[ catalan ] = "~Memoria libre (MB):";
@@ -337,10 +337,10 @@ ModalDialog DLG_ADABASSTAT
         Text[ swedish ] = "~Minnesutnyttjande (i %):";
         Text[ polish ] = "~Wykorzystana pamiêæ (w %):";
         Text[ portuguese_brazilian ] = "~Memory using (in %):";
-        Text[ japanese ] = "ÒÓØg—p—Ê(%):";
-        Text[ korean ] = "¸Ş¸ğ¸® »ç¿ë·® (%·Î)";
-        Text[ chinese_simplified ] = "ÄÚ´æÊ¹ÓÃÂÊ(%)£º";
-        Text[ chinese_traditional ] = "¥D°O¾ĞÅé¥e¥Î(%)¡G";
+        Text[ japanese ] = "ÒÓØg—p—Ê(%)(~M):";
+        Text[ korean ] = "¸Ş¸ğ¸® »ç¿ë·® (%·Î)(~M)";
+        Text[ chinese_simplified ] = "ÄÚ´æÊ¹ÓÃÂÊ(%)(~M)£º";
+        Text[ chinese_traditional ] = "¥D°O¾ĞÅé¥e¥Î(%)(~M)¡G";
         Text[ arabic ] = "ÇáĞÇßÑÉ ÇáãÓÊÎÏãÉ (ÇáäÓÈÉ ÇáãÆæíÉ):";
         Text[ turkish ] = "Bellek kullanımı (% olarak):";
         Text[ catalan ] = "~Memoria usada (en %):";
@@ -509,7 +509,7 @@ String STR_ADABAS_HELP_FREESIZE
     Text[ polish ] = "Zasób dostêpnej pamiêci przed utworzeniem pliku datadev.";
     Text[ portuguese_brazilian ] = "Currently free avaliable space bevor a new datadev must be created.";
     Text[ japanese ] = "V‚µ‚¢ datadev Ì§²Ù‚ğì¬‚·‚é‘O‚Ìc‚èÒÓØ‹ó‚«—e—ÊB";
-    Text[ korean ] = "Currently free avaliable space bevor a new datadev must be created.";
+    Text[ korean ] = "»õ datadev ÆÄÀÏÀÌ ¸¸µé¾îÁö±â Àü¿¡ »ç¿ëÇÒ ¼ö ÀÖ´Â ¿©À¯ °ø°£.";
     Text[ chinese_simplified ] = "ÔÚĞÂ½¨Ò»¸ö datadev ÎÄ¼şÖ®Ç°µÄ¿ÉÓÃ¿Õ¼ä¡£";
     Text[ chinese_traditional ] = "¦b·s¼W¤@­Ó datadev ÀÉ®×¤§«eªº¥i¥ÎªÅ¶¡¡C";
     Text[ turkish ] = "Currently free avaliable space bevor a new datadev must be created.";
@@ -548,7 +548,28 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
 {
     Text = "Es können keine Informationen angezeigt werden, da keine Zugriffsberechtigung auf die benötigten Systemtabellen besteht!" ;
     Text [ English ] = "Could no display the information. No access rights for system tables." ;
+    Text[ english_us ] = "No information could be displayed because no access rights exist for the required system tables.";
+    Text[ portuguese ] = "Could no display the information. No access rights for system tables.";
+    Text[ russian ] = "Could no display the information. No access rights for system tables.";
+    Text[ greek ] = "Could no display the information. No access rights for system tables.";
+    Text[ dutch ] = "Could no display the information. No access rights for system tables.";
+    Text[ french ] = "Could no display the information. No access rights for system tables.";
+    Text[ spanish ] = "Could no display the information. No access rights for system tables.";
+    Text[ finnish ] = "Could no display the information. No access rights for system tables.";
+    Text[ italian ] = "Could no display the information. No access rights for system tables.";
+    Text[ danish ] = "Could no display the information. No access rights for system tables.";
+    Text[ swedish ] = "Det går inte att visa någon information eftersom det saknas åtkomstbehörighet till de nödvändiga systemtabellerna.";
+    Text[ polish ] = "Z powodu braku praw dostêpu do wymaganych tabeli systemu wyœwietlenie informacji nie jest mo¿liwe.";
+    Text[ portuguese_brazilian ] = "Could no display the information. No access rights for system tables.";
+    Text[ japanese ] = "Could no display the information. No access rights for system tables.";
+    Text[ korean ] = "Could no display the information. No access rights for system tables.";
+    Text[ chinese_simplified ] = "Could no display the information. No access rights for system tables.";
+    Text[ chinese_traditional ] = "Could no display the information. No access rights for system tables.";
+    Text[ turkish ] = "Could no display the information. No access rights for system tables.";
+    Text[ arabic ] = "Could no display the information. No access rights for system tables.";
+    Text[ catalan ] = "Could no display the information. No access rights for system tables.";
 };
+
 
 
 
