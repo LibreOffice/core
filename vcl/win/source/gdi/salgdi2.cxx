@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:40:56 $
+ *  last change: $Author: thb $ $Date: 2002-11-18 13:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,9 +549,26 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry,
         else
             ImplDrawBitmap( hMaskDC, &aPosAry, rTransparentBitmap, FALSE, SRCCOPY );
 
-        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
-        ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
-        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCPAINT );
+        // now MemDC contains background, MaskDC the transparency mask
+
+        // #105055# Respect XOR mode
+        if( maGraphicsData.mbXORMode )
+        {
+            ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
+            // now MaskDC contains the bitmap area with black background
+            BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCINVERT );
+            // now MemDC contains background XORed bitmap area ontop
+        }
+        else
+        {
+            BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
+            // now MemDC contains background with masked-out bitmap area
+            ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
+            // now MaskDC contains the bitmap area with black background
+            BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCPAINT );
+            // now MemDC contains background and bitmap merged together
+        }
+        // copy to output DC
         BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC, 0, 0, SRCCOPY );
 
         ImplReleaseCachedDC( CACHED_HDC_1 );

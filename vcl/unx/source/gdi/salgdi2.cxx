@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-18 09:13:08 $
+ *  last change: $Author: thb $ $Date: 2002-11-18 13:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,16 +856,20 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 
             DBG_TESTTRANS( aFG );
 
-            // mask out background in pixmap #2 (nontransparent areas 0)
-            aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
-            XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
+            // #105055# For XOR mode, keep background behind bitmap intact
+            if( !maGraphicsData.bXORMode_ )
+            {
+                // mask out background in pixmap #2 (nontransparent areas 0)
+                aValues.function = GXand, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
+                XChangeGC( pXDisp, aTmpGC, nValues, &aValues );
 #ifdef _USE_PRINT_EXTENSION_
-            rTransBitmap.ImplDraw( pSalDisp, aBG, 1, aTmpRect, aTmpGC );
+                rTransBitmap.ImplDraw( pSalDisp, aBG, 1, aTmpRect, aTmpGC );
 #else
-            rTransBitmap.ImplDraw( aBG, 1, aTmpRect, aTmpGC );
+                rTransBitmap.ImplDraw( aBG, 1, aTmpRect, aTmpGC );
 #endif
 
-            DBG_TESTTRANS( aBG );
+                DBG_TESTTRANS( aBG );
+            }
 
             // merge pixmap #1 and pixmap #2 in pixmap #2
             aValues.function = GXxor, aValues.foreground = 0xffffffff, aValues.background = 0x00000000;
@@ -876,12 +880,18 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
                    0, 0 );
             DBG_TESTTRANS( aBG );
 
+            // #105055# Disable XOR temporarily
+            BOOL bOldXORMode( maGraphicsData.bXORMode_ );
+            maGraphicsData.bXORMode_ = FALSE;
+
             // copy pixmap #2 (result) to background
             XCopyArea( pXDisp, aBG, aDrawable, maGraphicsData.GetCopyGC(),
                        0, 0,
                        pPosAry->mnDestWidth, pPosAry->mnDestHeight,
                        pPosAry->mnDestX, pPosAry->mnDestY );
             DBG_TESTTRANS( aBG );
+
+            maGraphicsData.bXORMode_ = bOldXORMode;
 
             XFreeGC( pXDisp, aTmpGC );
             XFlush( pXDisp );
