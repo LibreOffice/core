@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 21:33:28 $
+ *  last change: $Author: cl $ $Date: 2002-05-14 09:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
  // pragma ----------------------------------------------------------------
 
  // RID_SVXDLG_IMAP ----------------------------------------------------
-FloatingWindow RID_SVXDLG_IMAP
+ModelessDialog RID_SVXDLG_IMAP
 {
     OutputSize = TRUE ;
     Hide = TRUE ;
@@ -76,12 +76,12 @@ FloatingWindow RID_SVXDLG_IMAP
     Sizeable = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Zoomable = TRUE ;
     ToolBox TBX_IMAPDLG1
     {
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         HelpId = HID_IMAPDLG_TOOLBOX ;
+
         ItemList =
         {
             ToolBoxItem

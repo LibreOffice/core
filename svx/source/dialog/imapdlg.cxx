@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 11:54:45 $
+ *  last change: $Author: cl $ $Date: 2002-05-14 09:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageM
 
 SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
                         Window* pParent, const ResId& rResId ) :
-        SfxFloatingWindow   ( pBindings, pCW, pParent, rResId ),
+        SfxModelessDialog   ( pBindings, pCW, pParent, rResId ),
         aIMapItem           ( SID_IMAP_EXEC, *this, *pBindings ),
         aTbxIMapDlg1        ( this, SVX_RES( TBX_IMAPDLG1 ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
@@ -325,7 +325,7 @@ SvxIMapDlg::~SvxIMapDlg()
 
 void SvxIMapDlg::Resize()
 {
-    SfxFloatingWindow::Resize();
+    SfxModelessDialog::Resize();
 
     Size aMinSize( GetMinOutputSizePixel() );
     Size aNewSize( GetOutputSizePixel() );
@@ -386,7 +386,7 @@ BOOL SvxIMapDlg::Close()
             bRet = FALSE;
     }
 
-    return( bRet ? SfxFloatingWindow::Close() : FALSE );
+    return( bRet ? SfxModelessDialog::Close() : FALSE );
 }
 
 
@@ -512,7 +512,7 @@ void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
 
 void SvxIMapDlg::KeyInput( const KeyEvent& rKEvt )
 {
-        SfxFloatingWindow::KeyInput( rKEvt );
+        SfxModelessDialog::KeyInput( rKEvt );
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-23 08:15:02 $
+ *  last change: $Author: cl $ $Date: 2002-05-14 09:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ public:
 
 class IMapOwnData;
 
-class SvxIMapDlg : public SfxFloatingWindow
+class SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 {
     friend class IMapOwnData;
     friend class IMapWindow;
