@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:28:51 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,19 @@
 #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #define __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 
-/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
-               with solaris headers ...
-*/
+// Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+// with solaris headers ...
 #include <vector>
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+// include files of own module
 
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
-#include <macros/generic.hxx>
+#ifndef __FRAMEWORK_HELPER_WAKEUPTHREAD_HXX_
+#include <helper/wakeupthread.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
@@ -91,21 +93,16 @@
 #include <macros/debug.hxx>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
-#include <threadhelp/threadhelpbase.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_TRANSACTIONBASE_HXX_
-#include <threadhelp/transactionbase.hxx>
+#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
+#include <macros/generic.hxx>
 #endif
 
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+// include uno interfaces
 
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -155,114 +152,143 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_URTIL_XUPDATABLE_HPP_
+#include <com/sun/star/util/XUpdatable.hpp>
+#endif
+
+//_______________________________________________
+// include others
+
 #ifndef _SV_STATUS_HXX
 #include <vcl/status.hxx>
 #endif
-
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
+
+//_______________________________________________
+// namespace
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
-//  exported const
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+// definitions
 
-//_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
-
-/*-************************************************************************************************************//**
-    @descr          These struct hold some informations about all currently running progress proccesses.
-                    We need a reference to right child indicator wrapper, his ranges and values.
-*//*-*************************************************************************************************************/
+//===============================================
+/**
+    @descr  This struct hold some informations about all currently running progress proccesses.
+            Because the can be used on a stack, we must cache her states but must paint only
+            the top most one.
+ */
 struct IndicatorInfo
 {
+    //-------------------------------------------
+    // member
     public:
-        //---------------------------------------------------------------------------------------------------------
-        // Initialize struct with new indicator and set default values for ranges and values
-        IndicatorInfo( const css::uno::Reference< css::task::XStatusIndicator >& xNewIndicator,
-                       const ::rtl::OUString&                                    sText        ,
-                             sal_Int32                                           nRange       )
+
+        /** @short  points to the indicator child, where we hold its states
+                    alive here. */
+        css::uno::Reference< css::task::XStatusIndicator > m_xIndicator;
+
+        /** @short  the last set text for this indicator */
+        ::rtl::OUString m_sText;
+
+        /** @short  the max range for this indicator. */
+        sal_Int32 m_nRange;
+
+        /** @short  the last set value for this indicator */
+        sal_Int32 m_nValue;
+
+    //-------------------------------------------
+    // interface
+    public:
+
+        //---------------------------------------
+        /** @short  initialize new instance of this class
+
+            @param  xIndicator
+                    the new child indiactor of our factory.
+
+            @param  sText
+                    its initial text.
+
+            @param  nRange
+                    the max range for this indicator.
+         */
+        IndicatorInfo(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator,
+                      const ::rtl::OUString&                                    sText     ,
+                            sal_Int32                                           nRange    )
         {
-            m_xIndicator = xNewIndicator;
-            m_sText      = sText        ;
-            m_nRange     = nRange       ;
-            m_nValue     = 0            ;
+            m_xIndicator = xIndicator;
+            m_sText      = sText     ;
+            m_nRange     = nRange    ;
+            m_nValue     = 0         ;
         }
 
-        //---------------------------------------------------------------------------------------------------------
-        // Don't forget to free used references!
+        //---------------------------------------
+        /** @short  Don't forget to free used references!
+         */
         ~IndicatorInfo()
         {
-            m_xIndicator = css::uno::Reference< css::task::XStatusIndicator >();
-            reset();
+            m_xIndicator.clear();
         }
 
         //---------------------------------------------------------------------------------------------------------
-        // Reset all values of these indicator.
-        void reset()
-        {
-            m_sText  = ::rtl::OUString();
-            m_nRange = 0                ;
-            m_nValue = 0                ;
-        }
+        /** @short  Used to locate an info struct inside a stl structure ...
 
-        //---------------------------------------------------------------------------------------------------------
-        // Used by status indicator only, if other values of struct are unknown!
-        sal_Bool operator==( const css::uno::Reference< css::task::XStatusIndicator >& xIndicator )
+            @descr  The indicator object itself is used as key. Its values
+                    are not interesting then. Because mor then one child
+                    indicator can use the same values ...
+         */
+        sal_Bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator)
         {
-            return( m_xIndicator == xIndicator );
+            return (m_xIndicator == xIndicator);
         }
-
-        //---------------------------------------------------------------------------------------------------------
-        // norm nValue to fit range of 0..100%
-        sal_Int32 calcPercentage()
-        {
-            return ::std::min( (( m_nValue * 100 )/ ::std::max( m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 );
-        }
-
-    public:
-        css::uno::Reference< css::task::XStatusIndicator >      m_xIndicator  ;
-        ::rtl::OUString                                         m_sText       ;
-        sal_Int32                                               m_nRange      ;
-        sal_Int32                                               m_nValue      ;
 };
+/*
+    //---------------------------------------------------------------------------------------------------------
+    // norm nValue to fit range of 0..100%
+    sal_Int32 calcPercentage()
+    {
+    return ::std::min( (( m_nValue * 100 )/ ::std::max( m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 );
+    }
+*/
 
+//===============================================
+/** @descr  Define a lits of child indicator objects and her data. */
 typedef ::std::vector< IndicatorInfo > IndicatorStack;
 
-/*-************************************************************************************************************//**
-    @short          implement a factory service to create new status indicator objects
+//===============================================
+/** @short          implement a factory service to create new status indicator objects
 
     @descr          Internaly it uses:
-                    - a vcl based progress
+                    - a vcl based
                     - or an uno based and by the frame layouted
                     progress implementation.
-                    This factory create different indicators and control his access to shared output device!
-                    Only the last activated component can write his state to this device.
+
+                    This factory create different indicators and control his access
+                    to a shared output device! Only the last activated component
+                    can write his state to this device. All other requests will be
+                    cached only.
 
     @devstatus      ready to use
     @threadsafe     yes
-*//*-*************************************************************************************************************/
+ */
 class StatusIndicatorFactory : public  css::lang::XTypeProvider
                              , public  css::lang::XServiceInfo
                              , public  css::lang::XInitialization
                              , public  css::task::XStatusIndicatorFactory
+                             , public  css::util::XUpdatable
                              , private ThreadHelpBase
                              , public  ::cppu::OWeakObject                   // => XInterface
 {
     //-------------------------------------------
     // member
-
     private:
 
         /** stack with all current indicator childs. */
@@ -286,11 +312,21 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
             we are plugged into such window). */
         css::uno::WeakReference< css::awt::XWindow > m_xPluggWindow;
 
-        /** static counter for rescheduling ... */
-        static sal_Int32 m_nInReschedule;
+        /** Notify us if a fix time is over. We use it to implement an
+            intelligent "Reschedule" ... */
+        WakeUpThread* m_pWakeUp;
 
-        /** time where there last start call was made. */
-        sal_Int32 m_nStartTime;
+        /** Our WakeUpThread calls us in our interface method "XUpdatable::update().
+            There we set this member m_bAllowReschedule to TRUE. Next time if our impl_reschedule()
+            method is called, we know, that an Application::Reschedule() should be made.
+            Because the last made Reschedule can be was taken long time ago ... may be.*/
+        sal_Bool m_bAllowReschedule;
+
+        /** enable/disable automatic showing of our parent window. */
+        sal_Bool m_bAllowParentShow;
+
+        /** prevent recursive calling of Application::Reschedule(). */
+        static sal_Int32 m_nInReschedule;
 
     //-------------------------------------------
     // interface
@@ -316,6 +352,11 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
         //---------------------------------------
         // XStatusIndicatorFactory
         virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
+            throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        // XUpdatable
+        virtual void SAL_CALL update()
             throw(css::uno::RuntimeException);
 
         //---------------------------------------
@@ -345,11 +386,36 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
     // helper
     private:
 
+        /** @short  show the parent window of this progress ...
+                    if it's allowed to do so.
+
+
+            @descr  By default we show the parent window automaticly
+                    if this progress is used.
+                    If that isn't a valid operation, the user of this
+                    progress can suppress this feature by initializaing
+                    us with a special parameter.
+
+            @seealso    initialize()
+         */
+        void implts_makeParentVisibleIfAllowed();
+
+        /** @short  creates a new internal used progress.
+            @descr  This factory does not paint the progress itself.
+                    It uses helper for that. They can be vcl based or
+                    layouted by the frame and provided as an uno interface.
+         */
         void impl_createProgress();
 
-        void impl_reschedule();
+        /** @short  try to "share the current thread in an intelligent manner" :-)
 
-        sal_uInt32 impl_get10ThSec();
+            @param  Overwrites our algorithm for Reschedule and force it to be shure
+                    that our progress was painted right.
+         */
+        void impl_reschedule(sal_Bool bForceUpdate);
+
+        void impl_startWakeUpThread();
+        void impl_stopWakeUpThread();
 
 }; // class StatusIndicatorFactory
 
