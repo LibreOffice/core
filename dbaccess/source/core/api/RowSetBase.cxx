@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-19 15:16:17 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 18:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex* _pM
             , m_nPosition(-1)
             , m_bIgnoreResult(sal_False)
             , m_nLastColumnIndex(-1)
+            , m_pEmptyCollection( NULL )
 {
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
@@ -182,6 +183,9 @@ ORowSetBase::~ORowSetBase()
         delete m_pColumns;
         m_pColumns = NULL;
     }
+
+    if ( m_pEmptyCollection )
+        delete m_pEmptyCollection;
 }
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
@@ -229,7 +233,6 @@ void SAL_CALL ORowSetBase::disposing(void)
         TDataColumns().swap(m_aDataColumns);
         m_pColumns->disposing();
     }
-    m_xEmptyCollection  = NULL;
     m_pCache            = NULL;
 }
 // -------------------------------------------------------------------------
@@ -555,9 +558,9 @@ Reference< XNameAccess > SAL_CALL ORowSetBase::getColumns(  ) throw(RuntimeExcep
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     if(!m_pColumns)
     {
-        if(!m_xEmptyCollection.is())
-            m_xEmptyCollection = new OEmptyCollection(*m_pMySelf,m_aColumnsMutex);
-        return m_xEmptyCollection;
+        if (!m_pEmptyCollection)
+            m_pEmptyCollection = new OEmptyCollection(*m_pMySelf,m_aColumnsMutex);
+        return m_pEmptyCollection;
     }
 
     return m_pColumns;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:42:42 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 18:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaccess
 {
+    class OEmptyCollection;
+
     typedef ::cppu::ImplHelper10<               ::com::sun::star::sdbcx::XRowLocate,
                                                 ::com::sun::star::sdbc::XRow,
                                                 ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
@@ -169,7 +171,7 @@ namespace dbaccess
         ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
         // is used when the formatkey for database types is set
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>   m_xNumberFormatTypes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xEmptyCollection;
+        OEmptyCollection*                                                               m_pEmptyCollection;
 
         sal_Int32                               m_nRowCount;        // contains the current count of rows which have been fetched
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
