@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:22:30 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ struct ProcessDocumentsRequest
     ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
     ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
     ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
-    ::osl::Condition cProcessed;    // condition to be set when the request has been processed
+    ::osl::Condition *pcProcessed;  // pointer condition to be set when the request has been processed
 };
 
 class DispatchWatcher;
@@ -129,6 +129,7 @@ class OfficeIPCThread : public vos::OThread
     int                         mnPendingRequests;
     DispatchWatcher*            mpDispatchWatcher;
     sal_Bool                    mbShutdownInProgress;
+    ::osl::Condition cProcessed;    // condition to be set when the request has been processed
 
     static ::osl::Mutex&        GetMutex();
     static const char *sc_aTerminationSequence;
