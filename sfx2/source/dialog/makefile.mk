@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ka $ $Date: 2001-05-03 08:07:49 $
+#   last change: $Author: os $ $Date: 2001-05-17 11:34:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,6 @@ SLOFILES =\
         $(SLO)$/mgetempl.obj		\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
-        $(SLO)$/oregdlg.obj			\
         $(SLO)$/passwd.obj			\
         $(SLO)$/register.obj		\
         $(SLO)$/sfxurl.obj			\
@@ -114,7 +113,7 @@ SLOFILES =\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/partwnd.obj			\
         $(SLO)$/versdlg.obj			\
-        $(SLO)$/printopt.obj		
+        $(SLO)$/printopt.obj
 
 EXCEPTIONSFILES=\
         $(SLO)$/filedlghelper.obj	\
@@ -137,12 +136,11 @@ SRCFILES =\
         mailwindow.src		\
         mgetempl.src		\
         newstyle.src		\
-        oregdlg.src			\
         passwd.src			\
         register.src		\
         templdlg.src		\
         versdlg.src			\
-        printopt.src		
+        printopt.src
 
 # --- Targets -------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-14 09:43:45 $
+ *  last change: $Author: os $ $Date: 2001-05-17 11:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,6 @@
 #include "module.hxx"
 #include "sfxdir.hxx"
 #include "event.hxx"
-#include "oregdlg.hxx"
 #include "appimp.hxx"
 
 #ifdef DBG_UTIL
