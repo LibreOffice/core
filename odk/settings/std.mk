@@ -4,6 +4,8 @@ else
 OUT=$(PRJ)/$(OS)example.out
 endif
 
+UNOPKG_EXT=uno.pkg
+
 OUT_BIN=$(OUT)/bin
 OUT_INC=$(OUT)/inc
 OUT_SLO=$(OUT)/slo
@@ -16,16 +18,17 @@ IDL_DIR=$(PRJ)/idl
 BIN_DIR=$(PRJ)/$(PLATFORM)/bin
 CLASSES_DIR=$(PRJ)/classes
 OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/classes
-COMPONENT_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
+COMP_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
 
 OFFICE_TYPE_LIBRARY=$(subst \\,\,"$(OFFICE_PROGRAM_PATH)$(PS)types.rdb")
 # DKREGISTRYNAME is only for compatibility reasons 
 DKREGISTRYNAME=$(OFFICE_TYPE_LIBRARY)
 
-DEPLOYTOOL="$(OFFICE_PROGRAM_PATH)$(PS)pkgchk" -f
+DEPLOYTOOL="$(OFFICE_PROGRAM_PATH)$(PS)unopkg" add -f
 SDK_JAVA="$(OO_SDK_JAVA_HOME)/bin/java"
 SDK_JAVAC="$(OO_SDK_JAVA_HOME)/bin/javac"
 SDK_JAR="$(OO_SDK_JAVA_HOME)/bin/jar"
+SDK_ZIP="$(OO_SDK_ZIP_HOME)/zip"
 IDLC="$(OO_SDK_HOME)/$(PLATFORM)/bin/idlc"
 CPPUMAKER="$(OO_SDK_HOME)/$(PLATFORM)/bin/cppumaker"
 JAVAMAKER="$(OO_SDK_HOME)/$(PLATFORM)/bin/javamaker"
