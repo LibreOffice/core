@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:32:38 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Vodorovně";
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "समतल";
+        Text[ slovak ] = "Vodorovne";
     };
 
     RadioButton BTN_HOR_NONE
@@ -137,6 +138,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Nic";
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~कोई नहीं";
+        Text[ slovak ] = "~Nič";
     };
 
     RadioButton BTN_HOR_LEFT
@@ -169,6 +171,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Vlevo";
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "~बायाँ";
+        Text[ slovak ] = "Vľ~avo";
     };
 
     RadioButton BTN_HOR_CENTER
@@ -201,6 +204,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Na střed";
         Text[ hebrew ] = "‮מרכז‬";
         Text[ hindi ] = "~मध्य";
+        Text[ slovak ] = "Na ~stred";
     };
 
     RadioButton BTN_HOR_DISTANCE
@@ -233,6 +237,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Mezery";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
+        Text[ slovak ] = "R~ozostupy";
     };
 
     RadioButton BTN_HOR_RIGHT
@@ -265,6 +270,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Vpravo";
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "~दाहिना";
+        Text[ slovak ] = "V~pravo";
     };
 
     FixedImage IMG_HOR_LOW {
@@ -337,6 +343,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Svisle";
         Text[ hebrew ] = "‮אנכי‬";
         Text[ hindi ] = "लम्ब";
+        Text[ slovak ] = "Zvislé";
     };
 
     RadioButton BTN_VER_NONE
@@ -369,6 +376,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Nic";
         Text[ hebrew ] = "‮אף אחד‬";
         Text[ hindi ] = "~कोई नहीं";
+        Text[ slovak ] = "N~ič";
     };
 
     RadioButton BTN_VER_TOP
@@ -401,6 +409,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Nahoře";
         Text[ hebrew ] = "‮עליון‬";
         Text[ hindi ] = "~ऊपर";
+        Text[ slovak ] = "~Navrchu";
     };
 
     RadioButton BTN_VER_CENTER
@@ -433,6 +442,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Střed";
         Text[ hebrew ] = "‮מרכז‬";
         Text[ hindi ] = "~मध्य";
+        Text[ slovak ] = "Stre~d";
     };
 
     RadioButton BTN_VER_DISTANCE
@@ -465,6 +475,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Mezery";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
+        Text[ slovak ] = "Rozostu~py";
     };
 
     RadioButton BTN_VER_BOTTOM
@@ -497,6 +508,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ czech ] = "Dole";
         Text[ hebrew ] = "‮תחתון‬";
         Text[ hindi ] = "~तल";
+        Text[ slovak ] = "Na ~spodku";
     };
 
     FixedImage IMG_VER_HIGH {
@@ -611,9 +623,12 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     Text[ czech ] = "Distribuce";
     Text[ hebrew ] = "‮תפוצה‬";
     Text[ hindi ] = "वितरण";
+    Text[ slovak ] = "Distribúcia";
 };
 
 // ********************************************************************** EOF
+
+
 
 
 
