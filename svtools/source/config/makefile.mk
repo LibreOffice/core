@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 10:23:55 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:04:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,8 +121,8 @@ LIB1TARGET= $(SLB)$/$(TARGET1).lib
 
 LIB1OBJFILES=  \
         $(SLO)$/languageoptions.obj     \
-        $(SLO)$/ctloptions.obj			\
-        $(SLO)$/cjkoptions.obj			\
+        $(SLO)$/ctloptions.obj          \
+        $(SLO)$/cjkoptions.obj          \
         $(SLO)$/colorcfg.obj
 
 # --- Targets ------------------------------------------------------
