@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:52:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,9 +990,11 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 pDefaultPageDesc = 0;
             }
         }
+        // OD 28.04.2003 #109166# - consider end node of content section in the
+        // node array.
         if ( !pDefaultPageDesc &&
              ( pSectNd->EndOfSectionNode()->GetIndex() <
-                    pSectNd->GetNodes().GetEndOfContent().GetIndex() )
+                 (pSectNd->GetNodes().GetEndOfContent().GetIndex() - 1) )
            )
         {
             // determine page description of content after table-of-content
@@ -1007,9 +1009,11 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 pDefaultPageDesc = pNdAfterTOX->FindPageDesc( FALSE );
             }
         }
+        // OD 28.04.2003 #109166# - consider start node of content section in
+        // the node array.
         if ( !pDefaultPageDesc &&
              ( pSectNd->GetIndex() >
-                    pSectNd->GetNodes().GetEndOfExtras().GetIndex() + 1 )
+                 (pSectNd->GetNodes().GetEndOfContent().StartOfSectionIndex() + 1) )
            )
         {
             // determine page description of content before table-of-content
