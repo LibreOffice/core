@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-22 16:43:59 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,25 +75,14 @@
 #ifndef _VCL_VCLENUM_HXX
 #include <vclenum.hxx>
 #endif
+#ifndef _SV_SALLAYOUT_HXX
+#include <sallayout.hxx>
+#endif // _SV_SALLAYOUT_HXX
 
 typedef unsigned short sal_MultiByte;
 
 class ImplFontMetricData;
 class ExtendedXlfd;
-
-#ifdef ENABLE_CTL
-#ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
-#endif // _SV_SALLAYOUT_HXX
-
-class X11FontLayout : public GenericSalLayout
-{
-public:
-    X11FontLayout( const ImplLayoutArgs& rArgs )
-    : GenericSalLayout( rArgs )
-    {}
-};
-#endif // ENABLE_CTL
 
 struct VerticalTextItem
 {
@@ -186,15 +175,18 @@ class ExtendedFontStruct : public SvRefBase
         sal_Size            GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray, ExtendedFontStruct *pFallback );
         ULONG               GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
-
-#ifdef ENABLE_CTL
-        X11FontLayout*      LayoutText( const ImplLayoutArgs& );
-#endif // ENABLE_CTL
 };
 
 // Declaration and Implementation for ExtendedFontStructRef: Add RefCounting
 // to ExtendedFontStruct (it's not possible to separate decl and impl into
 // a separate source file: all ref member functions are inline
 SV_DECL_IMPL_REF( ExtendedFontStruct );
+
+class X11FontLayout : public GenericSalLayout
+{
+public:
+                    X11FontLayout( const ImplLayoutArgs&, ExtendedFontStruct& );
+    virtual void    DrawText( SalGraphics& ) const;
+};
 
 #endif /* EXTENDED_FONTSTRUCT_HXX */
