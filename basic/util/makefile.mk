@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-05 10:13:37 $
+#   last change: $Author: hjs $ $Date: 2001-09-18 16:19:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..
 
 PRJNAME=basic
 TARGET=sb
-TARGETTYPE=GUI
 #basic.hid generieren
 GEN_HID=TRUE
 
@@ -149,10 +148,6 @@ SHL2STDLIBS= \
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB)
 
-.IF "$(GUI)"=="WNT"
-#SHL2STDLIBS+=$(LIBCIMT)
-.ENDIF
-
 .IF "$(GUI)" != "UNX"
 SHL2OBJS=	\
     $(SLO)$/sb.obj
@@ -167,56 +162,6 @@ DEF2DEPN	=	\
 
 DEFLIB2NAME	=sbl
 DEF2DES		=StarBasic Light
-
-
-# --- SBASIC IDE --------------------------------------------------------
-
-APP1TARGET=$(PRJNAME)
-APP1STDLIBS= \
-            $(SALLIB) \
-            $(TOOLSLIB) \
-            $(UNOTOOLSLIB) \
-            $(SVTOOLLIB) \
-            $(SVLLIB) \
-            $(SVLIB) \
-            $(SO2LIB) \
-            $(COMPHELPERLIB) \
-            $(UCBHELPERLIB) \
-            $(CPPUHELPERLIB) \
-            $(CPPULIB) \
-            $(SJLIB) \
-            $(SOTLIB) \
-            $(VOSLIB) \
-            $(SVMEMLIB)
-
-.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
-APP1STDLIBS+=$(CPPULIB)
-.ENDIF
-.IF "$(GUI)"=="UNX"
-APP1STDLIBS+= \
-            $(VOSLIB) \
-            $(SALLIB)
-.ENDIF
-
-APP1LIBS= \
-            $(LIBPRE) $(LB)$/basic.lib \
-            $(LIBPRE) $(LB)$/app.lib \
-            $(LIBPRE) $(LB)$/sample.lib
-.IF "$(GUI)"=="UNX"
-APP1STDLIBS+=	\
-            $(BASICLIB)
-.ENDIF
-
-
-APP1DEPN=	$(L)$/itools.lib $(SVLIBDEPEND) $(LB)$/basic.lib $(LB)$/app.lib $(LB)$/sample.lib
-
-APP1OBJS = $(OBJ)$/ttbasic.obj 
-
-.IF "$(GUI)" != "UNX"
-APP1OBJS+=	\
-            $(OBJ)$/app.obj \
-            $(SLO)$/sbintern.obj
-.ENDIF
 
 RES1TARGET=$(PRJNAME)
 SRS1FILES= \
