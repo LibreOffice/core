@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-04-30 14:30:10 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
 #include "DescriptionGenerator.hxx"
 #endif
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
+#include "AccessibleShapeInfo.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -88,6 +91,9 @@
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
 
 #ifndef _SVX_UNOEDSRC_HXX
 #include "unoedsrc.hxx"
@@ -97,7 +103,9 @@
 #endif
 #include "svdobj.hxx"
 #include "svdmodel.hxx"
+#ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
+#endif
 #include <com/sun/star/uno/Exception.hpp>
 
 #include "ShapeTypeHandler.hxx"
@@ -109,6 +117,9 @@
 #ifndef _SVX_DIALMGR_HXX
 #include "dialmgr.hxx"
 #endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -119,19 +130,17 @@ namespace accessibility {
 
 //=====  internal  ============================================================
 
-AccessibleShape::AccessibleShape (const uno::Reference<drawing::XShape>& rxShape,
-    const uno::Reference<XAccessible>& rxParent,
-    const AccessibleShapeTreeInfo& rShapeTreeInfo,
-    long nIndex)
-    : AccessibleContextBase (rxParent,AccessibleRole::SHAPE),
+AccessibleShape::AccessibleShape (
+    const AccessibleShapeInfo& rShapeInfo,
+    const AccessibleShapeTreeInfo& rShapeTreeInfo)
+    : AccessibleContextBase (rShapeInfo.mxParent,AccessibleRole::SHAPE),
       mpChildrenManager(NULL),
-      mxShape (rxShape),
+      mxShape (rShapeInfo.mxShape),
       mrShapeTreeInfo (rShapeTreeInfo),
-      mnIndex (nIndex),
-      mpText (NULL)
+      mnIndex (rShapeInfo.mnIndex),
+      mpText (NULL),
+      mpParent (rShapeInfo.mpChildrenManager)
 {
-    // The main part of the initialization is done in the init method which
-    // has to be called from this constructor's caller.
 }
 
 
@@ -155,6 +164,37 @@ AccessibleShape::~AccessibleShape (void)
 
 void AccessibleShape::Init (void)
 {
+    // Set the opaque state for certain shape types when their fill style is
+    // solid.
+    ::utl::AccessibleStateSetHelper* pStateSet =
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    if (pStateSet != NULL)
+        switch (ShapeTypeHandler::Instance().GetTypeId (mxShape))
+        {
+            case DRAWING_PAGE:
+            case DRAWING_RECTANGLE:
+            case DRAWING_TEXT:
+            {
+                uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
+                if (xSet.is())
+                {
+                    try
+                    {
+                        uno::Any aValue = xSet->getPropertyValue (
+                            OUString::createFromAscii ("FillStyle"));
+                        drawing::FillStyle aFillStyle;
+                        aValue >>= aFillStyle;
+                        if (aFillStyle == drawing::FillStyle_SOLID)
+                            pStateSet->AddState (AccessibleStateType::OPAQUE);
+                    }
+                    catch (::com::sun::star::beans::UnknownPropertyException)
+                    {
+                        // Ignore.
+                    }
+                }
+            }
+        }
+
     // Create a children manager when this shape has children of its own.
     Reference<drawing::XShapes> xShapes (mxShape, uno::UNO_QUERY);
     if (xShapes.is() && xShapes->getCount() > 0)
@@ -169,7 +209,8 @@ void AccessibleShape::Init (void)
         xComponent->addEventListener (this);
 
     // Beware! Here we leave the paths of the UNO API and descend into the
-    // depths of the core.  Necessary for makeing the edit engine accessible.
+    // depths of the core.  Necessary for makeing the edit engine
+    // accessible.
     SdrView* pView = mrShapeTreeInfo.GetSdrView ();
     const Window* pWindow = mrShapeTreeInfo.GetWindow ();
     if (pView != NULL && pWindow != NULL)
@@ -903,7 +944,6 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
 // protected
 void AccessibleShape::disposing (void)
-    throw (uno::RuntimeException)
 {
     CheckDisposedState ();
     OSL_TRACE ("AccessibleShape::disposing()");
