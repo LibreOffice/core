@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:49:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,26 +63,16 @@
 <oor:node oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <node oor:name="Jobs">
     <node oor:name="RegistrationRequest" oor:op="replace">
-      <prop oor:name="AdminTime">
-        <value>01.01.2001/00:00:01</value>
-      </prop>
-      <prop oor:name="UserTime">
-        <value>01.01.2001/00:00:00</value>
-      </prop>
       <prop oor:name="Service">
         <value>com.sun.star.setup.ProductRegistration</value>
       </prop>
-      <prop oor:name="Async">
-        <value>false</value>
-      </prop>
-      <node oor:name="Arguments"/>
     </node>
   </node>
   <node oor:name="Events">
     <node oor:name="onFirstVisibleTask" oor:op="replace">
-      <prop oor:name="Joblist">
-        <value oor:separator=";">RegistrationRequest</value>
-      </prop>
+      <node oor:name="JobList">
+        <node oor:name="RegistrationRequest" oor:op="replace" />
+      </node>
     </node>
   </node>
 </oor:node>
