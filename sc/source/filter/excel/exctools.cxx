@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:57:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,12 +120,10 @@ RootData::RootData( void )
     bBreakSharedFormula = TRUE;
     bChartTab = FALSE;
 
-    pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
     pAutoFilterBuffer = NULL;
     pPrintRanges = new _ScRangeListTabs;
     pPrintTitles = new _ScRangeListTabs;
 
-    pRootStorage = NULL;
     pTabId = NULL;
     pUserBViewList = NULL;
     pCellMerging = NULL;
