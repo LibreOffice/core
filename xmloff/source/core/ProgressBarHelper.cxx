@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-12-02 12:57:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+
 using namespace ::com::sun::star;
 
 const sal_Int32 nDefaultProgressBarRange = 1000000;
@@ -144,7 +148,12 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 
             double fValue(nValue);
             double fNewValue ((fValue * nRange) / nReference);
+
+            xmloff::token::IncRescheduleCount();
+
             xStatusIndicator->setValue((sal_Int32)fNewValue);
+
+            xmloff::token::DecRescheduleCount();
 
             // #95181# disabled, because we want to call setValue very often to enable a good reschedule
 //          double fPercent ((fNewValue * 100) / nRange);
