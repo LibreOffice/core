@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-07 08:41:59 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,11 +314,18 @@ namespace dbtools
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** search for a name that is NOT in the NameAcces
-        @param      _rxContainer    the NameAcces container to search in
-        @param      _rBaseName      the base name that should be created
+        @param  _rxContainer
+            the NameAccess container to search in
+        @param  _rBaseName
+            the base name that should be used to create the new name
+        @param  _bStartWithNumber
+            When <TRUE/> the name ends with number even when the name itself doesn't occur in the collection.
+        @return
+            A name which doesn't exist in the collection.
     */
     ::rtl::OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxContainer,
-                                     const ::rtl::OUString& _rBaseName);
+                                     const ::rtl::OUString& _rBaseName,
+                                     sal_Bool _bStartWithNumber = sal_True);
 
     /** create a name which is a valid SQL 92 identifier name
         @param      _rName          the string which should be converted

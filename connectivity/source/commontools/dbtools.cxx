@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:48:11 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,11 +1259,12 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     return nSearchFlag;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const ::rtl::OUString& _rBaseName)
+::rtl::OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const ::rtl::OUString& _rBaseName,sal_Bool _bStartWithNumber)
 {
     ::rtl::OUString sName(_rBaseName);
     sal_Int32 nPos = 1;
-    sName += ::rtl::OUString::valueOf(nPos);
+    if ( _bStartWithNumber )
+        sName += ::rtl::OUString::valueOf(nPos);
 
     while(_rxContainer->hasByName(sName))
     {
@@ -1787,6 +1788,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.46  2002/10/07 12:48:11  oj
+ *  #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
+ *
  *  Revision 1.45  2002/09/13 08:28:02  fs
  *  #103242# implSetObject: handle TypeClass_HYPER
  *
