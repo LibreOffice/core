@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-30 18:19:09 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,21 +99,6 @@ void ZipFile::setInputStream ( Reference < io::XInputStream > xNewStream )
     aGrabber.setInputStream ( xStream );
 }
 
-/*
-void ZipFile::updateFromManList(std::vector < ManifestEntry * > &rManList)
-{
-    sal_Int32 i=0, nSize = rManList.size();
-    aEntries.clear();
-
-    // This is a bitwise copy, = is not an overloaded operator
-    // I'm not sure how evil this is in this case...
-    for (;i < nSize ; i++)
-    {
-        ZipEntry * pEntry = &rManList[i]->aEntry;
-        aEntries[pEntry->sName] = *pEntry;
-    }
-}
-*/
 ZipFile::~ZipFile()
 {
     aEntries.clear();
