@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:37:35 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ String STR_SVT_CALENDAR_DAY
     Text[ czech ] = "Den";
     Text[ hebrew ] = "‮יום‬";
     Text[ hindi ] = "दिन";
+    Text[ slovak ] = "Deň";
 };
 String STR_SVT_CALENDAR_WEEK
 {
@@ -123,6 +124,7 @@ String STR_SVT_CALENDAR_WEEK
     Text[ czech ] = "Týden";
     Text[ hebrew ] = "‮שבוע‬";
     Text[ hindi ] = "सप्ताह";
+    Text[ slovak ] = "Týždeň";
 };
 String STR_SVT_CALENDAR_TODAY
 {
@@ -155,6 +157,7 @@ String STR_SVT_CALENDAR_TODAY
     Text[ czech ] = "Dnes";
     Text[ hebrew ] = "‮היום‬";
     Text[ hindi ] = "आज का दिन";
+    Text[ slovak ] = "Dnes";
 };
 String STR_SVT_CALENDAR_NONE
 {
@@ -187,7 +190,10 @@ String STR_SVT_CALENDAR_NONE
     Text[ czech ] = "Nic";
     Text[ hebrew ] = "‮ללא‬";
     Text[ hindi ] = "कोई नहीं";
+    Text[ slovak ] = "Žiadne";
 };
+
+
 
 
 
