@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.25 2004-03-15 12:49:12 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.26 2004-06-25 18:34:47 hjs Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2004-03-15 12:49:12 $ $Revision: 1.25 $
+//	$Author: hjs $ $Date: 2004-06-25 18:34:47 $ $Revision: 1.26 $
 //
 // Description:
 //
@@ -283,7 +283,6 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ss][Uu][Bb][Ss][Tt][Rr][Ii][Nn][Gg]			{SQL_NEW_KEYWORD(SQL_TOKEN_SUBSTRING); return SQL_TOKEN_SUBSTRING; }
 [Ss][Uu][Mm]									{SQL_NEW_KEYWORD(SQL_TOKEN_SUM); return SQL_TOKEN_SUM; }
 
-[Tt]											{SQL_NEW_KEYWORD(SQL_TOKEN_T); return SQL_TOKEN_T; }
 [Tt][Aa][Bb][Ll][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_TABLE); return SQL_TOKEN_TABLE; }
 [Tt][Aa][Nn]									{SQL_NEW_KEYWORD(SQL_TOKEN_TAN); return SQL_TOKEN_TAN; }
 [Tt][Ii][Mm][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_TIME); return SQL_TOKEN_TIME; }
@@ -299,6 +298,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Tt][Rr][Uu][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_TRUE); return SQL_TOKEN_TRUE; }
 [Tt][Rr][Uu][Nn][Cc][Aa][Tt][Ee]				{SQL_NEW_KEYWORD(SQL_TOKEN_TRUNCATE); return SQL_TOKEN_TRUNCATE; }
 [Tt][Ss]										{SQL_NEW_KEYWORD(SQL_TOKEN_TS); return SQL_TOKEN_TS; }
+[Tt]											{SQL_NEW_KEYWORD(SQL_TOKEN_T); return SQL_TOKEN_T; }
 
 [Uu][Cc][Aa][Ss][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_UCASE); return SQL_TOKEN_UCASE; }
 [Uu][Nn][Ii][Oo][Nn]							{SQL_NEW_KEYWORD(SQL_TOKEN_UNION); return SQL_TOKEN_UNION; }
