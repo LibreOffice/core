@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-27 11:52:25 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 13:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,12 @@ sal_Bool MathType::LookupChar(sal_Unicode nChar,String &rRet,sal_uInt8 nVersion,
             break;
         case ')':
             pC = " \\) ";
+            break;
+        case '[':
+            pC = " \\[ ";
+            break;
+        case ']':
+            pC = " \\] ";
             break;
         case '.':
             pC = " \".\" ";
