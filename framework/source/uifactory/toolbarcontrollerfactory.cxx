@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarcontrollerfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:03:08 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 
 //_________________________________________________________________________________________________________________
 //  Namespace
@@ -440,14 +440,14 @@ DEFINE_XINTERFACE_4                    (    ToolbarControllerFactory            
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
                                             DIRECT_INTERFACE( css::lang::XMultiComponentFactory                             ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::frame::XUIControllerRegistration    )
+                                            DIRECT_INTERFACE( ::com::sun::star::frame::XUIControllerRegistration    )
                                         )
 
 DEFINE_XTYPEPROVIDER_4                  (   ToolbarControllerFactory            ,
                                             css::lang::XTypeProvider            ,
                                             css::lang::XServiceInfo             ,
                                             css::lang::XMultiComponentFactory   ,
-                                            drafts::com::sun::star::frame::XUIControllerRegistration
+                                            ::com::sun::star::frame::XUIControllerRegistration
                                         )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   ToolbarControllerFactory                        ,
