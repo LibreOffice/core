@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:38:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@
 #endif
 #ifndef SD_SLIDE_SORTER_VIEW_SHELL_HXX
 #include "SlideSorterViewShell.hxx"
-#endif
-#ifndef SD_PREVIEW_SORTER_VIEW_SHELL_HXX
-#include "PreviewViewShell.hxx"
 #endif
 #ifndef SD_PRESENTATION_SORTER_VIEW_SHELL_HXX
 #include "PresentationViewShell.hxx"
@@ -1233,14 +1230,6 @@ ViewShellFactory::ViewShellFactory (
 
         case ViewShell::ST_SLIDE_SORTER:
             pNewShell = new ::sd::slidesorter::SlideSorterViewShell (
-                mpViewFrame,
-                mrBase,
-                pParentWindow,
-                pFrameView);
-            break;
-
-        case ViewShell::ST_PREVIEW:
-            pNewShell = new PreviewViewShell (
                 mpViewFrame,
                 mrBase,
                 pParentWindow,
