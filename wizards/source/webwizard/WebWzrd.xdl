@@ -7,17 +7,17 @@
   <dlg:button dlg:id="cbGoOn" dlg:tab-index="2" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34205" dlg:default="true" dlg:value="cbGoOn" dlg:button-type="ok"/>
   <dlg:img dlg:id="ImagePreview" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26" dlg:scale-image="false"/>
   <dlg:menulist dlg:id="lbTemplate" dlg:tab-index="4" dlg:left="6" dlg:top="53" dlg:width="110" dlg:height="94" dlg:help-url="HID:34201">
-   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.ReloadCurrentDocument" script:language="StarBasic"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:WebWizard.HtmlAutoPilotBasic.ReloadCurrentDocument?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:menulist>
   <dlg:menulist dlg:id="lbStyles" dlg:tab-index="5" dlg:left="154" dlg:top="53" dlg:width="110" dlg:height="94" dlg:help-url="HID:34202">
-   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.LoadWebPageStyles" script:language="StarBasic"/>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:WebWizard.HtmlAutoPilotBasic.LoadWebPageStyles?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:menulist>
   <dlg:text dlg:id="lblTemplate" dlg:tab-index="6" dlg:left="6" dlg:top="42" dlg:width="110" dlg:height="10"/>
   <dlg:text dlg:id="lblStyle" dlg:tab-index="7" dlg:left="154" dlg:top="42" dlg:width="110" dlg:height="10" dlg:value="lblStyle"/>
   <dlg:checkbox dlg:id="chkSaveasTemplate" dlg:tab-index="8" dlg:left="6" dlg:top="164" dlg:width="110" dlg:height="12" dlg:help-url="HID:34207" dlg:value="chkSaveasTemplate" dlg:checked="false"/>
   <dlg:radiogroup>
    <dlg:radio dlg:id="optTiled" dlg:tab-index="9" dlg:left="161" dlg:top="164" dlg:width="96" dlg:height="10" dlg:tag="11" dlg:help-url="HID:34208" dlg:value="optTiled" dlg:checked="true">
-    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle" script:language="StarBasic"/>
+    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:WebWizard.Common.SetBackGraphicStyle?language=Basic&amp;location=application" script:language="Script"/>
    </dlg:radio>
    <dlg:radio dlg:id="optArea" dlg:tab-index="10" dlg:left="161" dlg:top="177" dlg:width="96" dlg:height="10" dlg:tag="10" dlg:help-url="HID:34209" dlg:value="optArea">
     <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle" script:language="StarBasic"/>
