@@ -2,9 +2,9 @@
  *
  *  $RCSfile: warnings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-19 11:09:28 $
+ *  last change: $Author: gt $ $Date: 2004-07-20 05:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,9 @@ MacroWarning::MacroWarning( Window* _pParent )
     maDescr2FI.Hide();
 
     // move hint up to position of signer list
-    maDescr1FI.SetPosPixel( maSignsFI.GetPosPixel() );
+    maDescr1bFI.SetPosPixel( maSignsFI.GetPosPixel() );
 }
+
 MacroWarning::~MacroWarning()
 {
 }
@@ -175,8 +176,10 @@ IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
 {
     if( mbSignedMode && maAlwaysTrustCB.IsChecked() )
     {   // insert path into trusted path list
+
     }
 
+    EndDialog( RET_OK );
     return 0;
 }
 

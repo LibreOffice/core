@@ -2,9 +2,9 @@
  *
  *  $RCSfile: warnings.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-19 11:09:39 $
+ *  last change: $Author: gt $ $Date: 2004-07-20 05:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,11 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Pos = MAP_APPFONT( 0, DLGS_BOTTOM_FL_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( MW_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
     };
-    OKButton PB_ENABLE
+    PushButton PB_ENABLE
     {
         Pos = MAP_APPFONT( DLGS_BOTTOM_OK_X( MW_WIDTH ), DLGS_BOTTOM_BTN_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Default = FALSE;
+//      Default = FALSE;
         Text [ de ] = "";
         Text [ en-US ] = "Enable Macros";
     };

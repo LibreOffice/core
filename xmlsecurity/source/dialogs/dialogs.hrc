@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-19 11:08:45 $
+ *  last change: $Author: gt $ $Date: 2004-07-20 05:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #define RID_XMLSECTP_MACROSEC           1006
 #define RID_XMLSECTP_SECLEVEL           1007
 #define RID_XMLSECTP_TRUSTSOURCES       1008
-#define RID_XMLSECTP_SIGNMACROWARN      1009
+#define RID_XMLSECTP_MACROWARN          1009
 
 #define FL_BOTTOM_SEP                   50
 #define BTN_OK                          51
