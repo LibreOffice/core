@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:48:30 $
+ *  last change: $Author: dl $ $Date: 2001-03-21 16:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,7 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
 
     rIn >> (FmFormModel&) rDoc;
     rDoc.GetItemPool().LoadCompleted();
+    rDoc.SetTextDefaults();     // overwrites loaded pool defaults
 
     // Fehler ?
     if (rIn.GetError() != 0)
@@ -1825,6 +1826,7 @@ uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
     }
     catch( uno::RuntimeException& e )
     {
+        e;                              // to avoid a compiler warning...
     }
 
     return xModel;
