@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:46:00 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -146,13 +148,20 @@
 #include "app.hrc"
 #include "strings.hrc"
 
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "drviewsh.hxx"
-#include "docshell.hxx"
+#endif
+#include "DrawDocShell.hxx"
 #include "sdresid.hxx"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
+#endif
+
+namespace sd {
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -170,7 +179,7 @@ SO2_DECL_REF(SvStorage)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
+void DrawViewShell::ExecGallery(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
@@ -185,7 +194,7 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
 
         if ( pGal )
         {
-            pDocSh->SetWaitCursor( TRUE );
+            GetDocSh()->SetWaitCursor( TRUE );
 
             // Graphik einfuegen
             if (nFormats & SGA_FORMAT_GRAPHIC)
@@ -301,7 +310,7 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
                 InsertURLButton( aURL, aURL, String(), NULL );
             }
 
-            pDocSh->SetWaitCursor( FALSE );
+            GetDocSh()->SetWaitCursor( FALSE );
         }
     }
 }
@@ -313,7 +322,7 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetGalleryState(SfxItemSet& rSet)
+void DrawViewShell::GetGalleryState(SfxItemSet& rSet)
 {
 }
 
@@ -331,7 +340,7 @@ void SdDrawViewShell::GetGalleryState(SfxItemSet& rSet)
 // 4. neues attribut-item erzeugen
 // 5. item in den set eintragen
 //
-void SdDrawViewShell::AttrExec (SfxRequest &rReq)
+void DrawViewShell::AttrExec (SfxRequest &rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual && pFuActual->    GetSlotID() == SID_PRESENTATION)
@@ -340,7 +349,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
     CheckLineTo (rReq);
 
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();
-    SfxItemSet*     pAttr = new SfxItemSet ( pDoc->GetPool() );
+    SfxItemSet*     pAttr = new SfxItemSet ( GetDoc()->GetPool() );
 
     pView->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -455,7 +464,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, FALSE);
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, FALSE);
 
-                    XGradientList *pGradientList = pDoc->GetGradientList ();
+                    XGradientList *pGradientList = GetDoc()->GetGradientList ();
                     long          nCounts        = pGradientList->Count ();
                     Color         aColor ((BYTE) pRed->GetValue (),
                                           (BYTE) pGreen->GetValue (),
@@ -492,7 +501,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                                                  ? aColor
                                                  : aBlack);
 
-                        pDoc->GetGradientList ()->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
+                        GetDoc()->GetGradientList ()->Insert (new XGradientEntry (aGradient, pName->GetValue ()));
 
                         pAttr->Put (XFillStyleItem (XFILL_GRADIENT), XATTR_FILLSTYLE);
                         pAttr->Put (XFillGradientItem (pName->GetValue (), aGradient), XATTR_FILLGRADIENT);
@@ -515,7 +524,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pGreen, SfxUInt32Item, ID_VAL_GREEN, FALSE);
                     SFX_REQUEST_ARG (rReq, pBlue, SfxUInt32Item, ID_VAL_BLUE, FALSE);
 
-                    XHatchList *pHatchList = pDoc->GetHatchList ();
+                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
                     Color      aColor ((BYTE) pRed->GetValue (),
                                        (BYTE) pGreen->GetValue (),
@@ -545,7 +554,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                     {
                         XHatch aHatch (aColor);
 
-                        pDoc->GetHatchList ()->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
+                        GetDoc()->GetHatchList ()->Insert (new XHatchEntry (aHatch, pName->GetValue ()));
 
                         pAttr->Put (XFillStyleItem (XFILL_HATCH), XATTR_FILLSTYLE);
                         pAttr->Put (XFillHatchItem (pName->GetValue (), aHatch), XATTR_FILLHATCH);
@@ -580,7 +589,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_LINEDASH);
                         pAttr->ClearItem (XATTR_LINESTYLE);
 
-                        XDashList  *pDashList = pDoc->GetDashList ();
+                        XDashList  *pDashList = GetDoc()->GetDashList ();
                         long       nCounts    = pDashList->Count ();
                         XDashEntry *pEntry    = new XDashEntry (aNewDash, pName->GetValue ());
                         long i;
@@ -632,7 +641,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLGRADIENT);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XGradientList  *pGradientList = pDoc->GetGradientList ();
+                        XGradientList  *pGradientList = GetDoc()->GetGradientList ();
                         long           nCounts        = pGradientList->Count ();
                         long i;
 
@@ -698,7 +707,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->ClearItem (XATTR_FILLHATCH);
                         pAttr->ClearItem (XATTR_FILLSTYLE);
 
-                        XHatchList *pHatchList = pDoc->GetHatchList ();
+                        XHatchList *pHatchList = GetDoc()->GetHatchList ();
                         long       nCounts     = pHatchList->Count ();
                         long i;
 
@@ -748,7 +757,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, FALSE);
 
-                    XGradientList  *pGradientList = pDoc->GetGradientList ();
+                    XGradientList  *pGradientList = GetDoc()->GetGradientList ();
                     long           nCounts        = pGradientList->Count ();
 
                     for (long i = 0;
@@ -782,7 +791,7 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     SFX_REQUEST_ARG (rReq, pName, SfxStringItem, ID_VAL_INDEX, FALSE);
 
-                    XHatchList *pHatchList = pDoc->GetHatchList ();
+                    XHatchList *pHatchList = GetDoc()->GetHatchList ();
                     long       nCounts     = pHatchList->Count ();
 
                     for (long i = 0;
@@ -858,11 +867,11 @@ void SdDrawViewShell::AttrExec (SfxRequest &rReq)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::AttrState (SfxItemSet& rSet)
+void DrawViewShell::AttrState (SfxItemSet& rSet)
 {
     SfxWhichIter     aIter (rSet);
     USHORT           nWhich = aIter.FirstWhich ();
-    SfxItemSet aAttr( pDoc->GetPool() );
+    SfxItemSet aAttr( GetDoc()->GetPool() );
     pDrView->GetAttributes( aAttr );
 
     while (nWhich)
@@ -959,4 +968,4 @@ void SdDrawViewShell::AttrState (SfxItemSet& rSet)
     }
 }
 
-
+} // end of namespace sd
