@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2000-10-11 12:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,10 +228,9 @@
 SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvStorage& rStorage_ ) :
     SdrPowerPointImport( rDocStream ),
     rStorage( rStorage_ ),
-    pSdPPTImportData ( new SdPPTImportData ),
     nFilterOptions( 0 )
 {
-    pSdPPTImportData->pDoc = pDocument;
+    pDoc = pDocument;
     if ( bOk )
     {
         bDocumentFound = SeekToDocument( &aDocHd );                             // aDocHd = the latest DocumentHeader
@@ -278,7 +277,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
         }
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags );
         SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | 2 );              // SVXMSDFF_SETTINGS_IMPORT_PPT
-        SetModel( pSdPPTImportData->pDoc, 576 );
+        SetModel( pDoc, 576 );
     }
 }
 
@@ -293,7 +292,6 @@ SdPPTImport::~SdPPTImport()
     for ( void* pPtr = aSlideNameList.First(); pPtr; pPtr = aSlideNameList.Next() )
         delete (String*)pPtr;
     delete pStData;
-    delete pSdPPTImportData;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -307,13 +305,11 @@ BOOL SdPPTImport::Import()
     if ( !bOk )
         return FALSE;
 
-    SdDrawDocument* pDoc = pSdPPTImportData->pDoc;
-
     SetStarDraw();
     SdrOutliner& rOutl = pDoc->GetDrawOutliner();
     SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
-    SdrLayerID nBackgroundLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
-    SdrLayerID nBackgroundObjectsLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
+    nBackgroundLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
+    nBackgroundObjectsLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
 
     SdDrawDocShell* pDocShell = pDoc->GetDocSh();
     if ( pDocShell )
@@ -681,9 +677,12 @@ BOOL SdPPTImport::Import()
         // importing master page objects           //
         /////////////////////////////////////////////
         PptSlidePersistList* pList = GetPageList( eAktPageKind );
-        if ( !( pList && nAktPageNum < pList->Count() && (*pList)[ nAktPageNum ]->bStarDrawFiller ) )
+        PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->Count() ) )
+                                                    ? (*pList)[ nAktPageNum ] : NULL;
+
+        if ( pPersist && ( pPersist->bStarDrawFiller == FALSE ) )
         {
-            SdrObject* pObj = ImportPageBackgroundObject( *pMPage, TRUE );  // import background
+            SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pPersist->nBackgroundOffset, TRUE ); // import background
             if ( pObj )
                 pMPage->NbcInsertObject( pObj );
 
@@ -761,7 +760,7 @@ BOOL SdPPTImport::Import()
         {
             for ( USHORT nPageNum = 0; nPageNum < nPageAnz; nPageNum++ )
             {
-                pSdPPTImportData->ePresChange = PRESCHANGE_SEMIAUTO;
+                ePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPageNum, PPT_SLIDEPAGE );
                 SdPage* pPage = (SdPage*)ImportPage();
                 if ( pPage )
@@ -1148,14 +1147,25 @@ BOOL SdPPTImport::Import()
 
 void SdPPTImport::ImportPageEffect( SdPage* pPage )
 {
-    SdDrawDocument* pDoc = pSdPPTImportData->pDoc;
     ULONG nFilePosMerk = rStCtrl.Tell();
 
     // PageKind an der Seite setzen (bisher nur PK_STANDARD oder PK_NOTES)
     if ( pPage->GetPageKind() == PK_STANDARD )
     {
-        DffRecordHeader aPageRecHd;
+        PptSlidePersistList* pPersistList = GetPageList( eAktPageKind );
+        PptSlidePersistEntry* pActualSlidePersist = ( pPersistList && ( nAktPageNum < pPersistList->Count() ) )
+                                                        ? (*pPersistList)[ nAktPageNum ] : NULL;
 
+        if ( pActualSlidePersist && ( eAktPageKind == PPT_SLIDEPAGE ) )
+        {
+            if ( ! ( pActualSlidePersist->aSlideAtom.nFlags & 1 ) ) // do not follow master objects ?
+            {
+                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers( 0 );
+                aVisibleLayers.Set( nBackgroundObjectsLayerID, FALSE );
+                pPage->SetMasterPageVisibleLayers( aVisibleLayers, 0 );
+            }
+        }
+        DffRecordHeader aPageRecHd;
         if ( pPage && SeekToAktPage( &aPageRecHd ) )
         {
             ULONG nPageRecEnd = aPageRecHd.GetRecEndFilePos();
@@ -1175,13 +1185,8 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
                             bSSSlideInfoAtom = TRUE;
                             if ( eAktPageKind == PPT_MASTERPAGE )
                             {
-                                PptSlidePersistList* pPersistList = GetPageList( eAktPageKind );
-                                if ( pPersistList && nAktPageNum < pPersistList->Count() )
-                                {
-                                    PptSlidePersistEntry* pE = (*pPersistList)[ nAktPageNum ];
-                                    if ( pE )
-                                        pE->aPersistAtom.nReserved = aHd.GetRecBegFilePos();
-                                }
+                                if ( pActualSlidePersist )
+                                    pActualSlidePersist->aPersistAtom.nReserved = aHd.GetRecBegFilePos();
                             }
                             else
                             {
@@ -1345,7 +1350,7 @@ void SdPPTImport::ImportPageEffect( SdPage* pPage )
                                     pPage->SetFadeSpeed( FADE_SPEED_FAST );     // schnell
 
                                 if ( nBuildFlags & 1 )
-                                    pPage->SetPresChange( pSdPPTImportData->ePresChange );  // Diawechsel bei Klick auf Hintergrund
+                                    pPage->SetPresChange( ePresChange );    // Diawechsel bei Klick auf Hintergrund
                                 else
                                 {   // Standzeit (in Ticks)
                                     pPage->SetPresChange( PRESCHANGE_AUTO );
@@ -1982,7 +1987,7 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInf
                             }
                             if ( nPageNumber && ( nPageNumber > aSlideNameList.Count() ) )
                             {
-                                SdPage* pPage = pSdPPTImportData->pDoc->GetSdPage( 0, PK_STANDARD );
+                                SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
                                 if ( pPage )
                                 {
                                     String aName( pPage->GetName() );
@@ -2060,7 +2065,7 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
             break;
             case 2 :                                        // Beim naechsten Mausklick ausblenden
             {
-                pSdPPTImportData->ePresChange = PRESCHANGE_MANUAL;
+                ePresChange = PRESCHANGE_MANUAL;
                 pInfo->bDimHide = TRUE;                     // verstecken statt abblenden
             }
             break;
@@ -2095,7 +2100,6 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoA
 
 SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPage* pPage, SfxStyleSheet* pSheet ) const
 {
-    SdDrawDocument* pDoc = pSdPPTImportData->pDoc;
     SdrTextObj* pText = pObj;
     SdrObject* pRet = pText;
     PresObjKind ePresKind = PRESOBJ_NONE;
@@ -2410,7 +2414,6 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
 
 SdrObject* SdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pRet )
 {
-    SdDrawDocument* pDoc = pSdPPTImportData->pDoc;
     SdrObject* pObj = SdrPowerPointImport::ProcessObj( rSt, rObjData, pData, rTextRect, pRet );
     // Animationseffekte des Objektes lesen
     if ( pObj )
