@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,7 @@ public:
     void OutAnchor( const String& rName );
     void OutBookmarks();
     void OutImplicitMark( const String& rMark, const sal_Char *pMarkType );
+    void OutHyperlinkHRefValue( const String& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
     sal_Bool OutFlyFrm( sal_uInt32 nNdIdx, xub_StrLen nCntntIdx,
