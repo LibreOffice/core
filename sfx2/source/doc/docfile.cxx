@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-08 08:33:38 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,7 @@ sal_Bool SfxMedium::IsStorage()
         if ( !pImp->bIsStorage )
             bTriedStorage = TRUE;
     }
-    else
+    else if ( GetName().Len() )
     {
         pImp->bIsStorage = SotStorage::IsStorageFile( GetInStream() );
         if ( pInStream && !pInStream->GetError() && !pImp->bIsStorage )
