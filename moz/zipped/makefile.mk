@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 17:05:10 $
+#   last change: $Author: hr $ $Date: 2004-03-10 16:22:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,9 @@ dummy:
 
 .ELSE	"$(OS)" == "MACOSX"
 
-all: \
+.INCLUDE :  target.mk
+
+ALLTAR: \
     $(MISC)$/unpacked_$(TARGET)_inc \
     $(MISC)$/unpacked_$(TARGET)_lib \
     $(BIN)$/mozruntime.zip
@@ -109,5 +111,4 @@ $(BIN)$/mozruntime.zip : $(OS)$(COM)$(CPU)runtime.zip
 
 .ENDIF	# "$(OS)" == "MACOSX"
 
-.INCLUDE :  target.mk
 
