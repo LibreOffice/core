@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-04 15:57:10 $
+ *  last change: $Author: nn $ $Date: 2002-12-12 19:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,6 +1644,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         ScViewFunc* pView = pViewData->GetView();
         pView->StopRefMode();
         pViewData->ResetFillMode();
+        pView->GetFunctionSet()->SetAnchorFlag( FALSE );    // #i5819# don't use AutoFill anchor flag for selection
 
         if ( bIsDel )
         {
@@ -1676,8 +1677,10 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         USHORT nFillRow = pViewData->GetRefEndY();
         ScAddress aEndPos( nFillCol, nFillRow, nTab );
 
-        pViewData->GetView()->StopRefMode();
+        ScTabView* pView = pViewData->GetView();
+        pView->StopRefMode();
         pViewData->ResetFillMode();
+        pView->GetFunctionSet()->SetAnchorFlag( FALSE );
 
         if ( aEndPos != aBlockRange.aEnd )
         {
@@ -1687,9 +1690,11 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
     else if (pViewData->IsAnyFillMode())
     {
-                                                // Embedded-Area veraendert
-        pViewData->GetView()->StopRefMode();
+                                                // Embedded-Area has been changed
+        ScTabView* pView = pViewData->GetView();
+        pView->StopRefMode();
         pViewData->ResetFillMode();
+        pView->GetFunctionSet()->SetAnchorFlag( FALSE );
         pViewData->GetDocShell()->UpdateOle(pViewData);
     }
 
