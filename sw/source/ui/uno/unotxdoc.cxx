@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-28 11:35:08 $
+ *  last change: $Author: mtg $ $Date: 2001-03-29 17:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,9 @@
 #include <unodefaults.hxx>
 #endif
 
+#ifndef _CHCMPRSE_HXX
+#include <chcmprse.hxx>
+#endif
 
 
 using namespace ::com::sun::star;
@@ -2023,11 +2026,43 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         break;
         case WID_DOC_PRINTER_NAME:
         {
-            OUString sPrinterName;
-            aValue >>= sPrinterName;
-            SfxItemSet *pSet = new SfxItemSet ( pDocShell->GetDoc()->GetAttrPool());
-            SfxPrinter *pPrinter = new SfxPrinter ( pSet, sPrinterName );
-            pDocShell->GetDoc()->SetPrt (pPrinter);
+            SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
+            if (pPrinter)
+            {
+                OUString sPrinterName;
+                if (aValue >>= sPrinterName )
+                {
+                    SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                    if (pNewPrinter->IsKnown())
+                        pDocShell->GetDoc()->SetPrt ( pNewPrinter );
+                    else
+                        delete pNewPrinter;
+                }
+                else
+                    throw IllegalArgumentException();
+            }
+        }
+        break;
+        case WID_DOC_IS_KERN_ASIAN_PUNCTUATION:
+        {
+            sal_Bool bIsKern = *(sal_Bool*)aValue.getValue();
+            pDocShell->GetDoc()->SetKernAsianPunctuation( bIsKern );
+        }
+        break;
+        case WID_DOC_CHARACTER_COMPRESSION_TYPE:
+        {
+            sal_Int16 nMode;
+            aValue >>= nMode;
+            switch (nMode)
+            {
+                case CHARCOMPRESS_NONE:
+                case CHARCOMPRESS_PUNCTUATION:
+                case CHARCOMPRESS_PUNCTUATION_KANA:
+                    break;
+                default:
+                    throw IllegalArgumentException();
+            }
+            pDocShell->GetDoc()->SetCharCompressType(static_cast < SwCharCompressType > (nMode) );
         }
         break;
         default:
@@ -2165,6 +2200,17 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SfxPrinter *pPrinter = pDocShell->GetDoc()->GetPrt ( sal_False );
             aAny <<= OUString ( pPrinter->GetName());
+        }
+        break;
+        case WID_DOC_IS_KERN_ASIAN_PUNCTUATION:
+        {
+            sal_Bool bParaSpace = pDocShell->GetDoc()->IsKernAsianPunctuation();
+            aAny.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_CHARACTER_COMPRESSION_TYPE:
+        {
+            aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetCharCompressType());
         }
         break;
         default:
