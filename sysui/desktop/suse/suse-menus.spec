@@ -3,7 +3,7 @@ Name: openofficeorg-suse-menus
 Version: 2.0
 Release: 1
 Group: Office
-Copyright: LGPL / SISSL
+License: LGPL, SISSL
 AutoReqProv: no
 Requires: openofficeorg-core01, suse-release
 %define _unpackaged_files_terminate_build 0
@@ -183,20 +183,13 @@ fi
 %defattr(0644, root, root)
 %ghost /etc/%PREFIX
 /opt/gnome/share/application-registry/%PREFIX.applications
-/opt/gnome/share/applications/%PREFIX-writer.desktop
-/opt/gnome/share/applications/%PREFIX-calc.desktop
-/opt/gnome/share/applications/%PREFIX-draw.desktop
-/opt/gnome/share/applications/%PREFIX-impress.desktop
-/opt/gnome/share/applications/%PREFIX-math.desktop
-/opt/gnome/share/applications/%PREFIX-base.desktop
-/opt/gnome/share/applications/%PREFIX-printeradmin.desktop
-/opt/kde3/share/applnk/Office/%PREFIX-writer.desktop
-/opt/kde3/share/applnk/Office/%PREFIX-calc.desktop
-/opt/kde3/share/applnk/Office/%PREFIX-draw.desktop
-/opt/kde3/share/applnk/Office/%PREFIX-impress.desktop
-/opt/kde3/share/applnk/Office/%PREFIX-math.desktop
-/opt/kde3/share/applnk/Office/%PREFIX-base.desktop
-/opt/kde3/share/applnk/Office/%PREFIX-printeradmin.desktop
+/usr/share/applications/%PREFIX-writer.desktop
+/usr/share/applications/%PREFIX-calc.desktop
+/usr/share/applications/%PREFIX-draw.desktop
+/usr/share/applications/%PREFIX-impress.desktop
+/usr/share/applications/%PREFIX-math.desktop
+/usr/share/applications/%PREFIX-base.desktop
+/usr/share/applications/%PREFIX-printeradmin.desktop
 /opt/gnome/share/mime-info/%PREFIX.keys
 /opt/gnome/share/mime-info/%PREFIX.mime
 /opt/kde3/share/mimelnk/application/%PREFIX-text.desktop
