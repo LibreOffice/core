@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 10:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 }
 #undef NUM_EXPORTED_VIEW_SETTINGS
 
-#define NUM_EXPORTED_CONFIGURATION_SETTINGS 9
+#define NUM_EXPORTED_CONFIGURATION_SETTINGS 10
 void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference < XPropertySet > xPropSet = Reference<XPropertySet>(GetModel(), UNO_QUERY);
@@ -579,6 +579,7 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
         OUString sPrinterName ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterName" ) );
         OUString sIsKernAsianPunctuation ( RTL_CONSTASCII_USTRINGPARAM ( "IsKernAsianPunctuation" ) );
         OUString sCharacterCompressionType ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterCompressionType" ) );
+        OUString sApplyUserData ( RTL_CONSTASCII_USTRINGPARAM ( "ApplyUserData" ) );
 
         pValue[nIndex].Name = sLinkUpdateMode;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sLinkUpdateMode );
@@ -603,6 +604,9 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
 
         pValue[nIndex].Name = sCharacterCompressionType;
         pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCharacterCompressionType );
+
+        pValue[nIndex].Name = sApplyUserData;
+        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sApplyUserData );
 
         Reference < XText > xText;
         SwXText *pText = 0;
