@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:57:12 $
+ *  last change: $Author: fs $ $Date: 2001-07-25 14:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
+#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
+#include <svtools/stringtransfer.hxx>
+#endif
 
 #ifndef _SVX_FMPROP_HXX
 #include "fmprop.hxx"
@@ -132,19 +135,9 @@
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
-#endif
 
 #ifndef _SV_MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef TF_SVDATA
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
@@ -1051,9 +1044,6 @@ void DbGridControl::Construct()
     m_bHandle = sal_True;
 
     m_aBar.Show();
-#ifndef TF_SVDATA
-    EnableDrop(sal_True);
-#endif
     ImplInitSettings(sal_True,sal_True,sal_True);
 }
 
@@ -3309,10 +3299,7 @@ void DbGridControl::KeyInput( const KeyEvent& rEvt )
         if (nRow >= 0 && nRow < GetRowCount() && nColId < ColCount())
         {
             DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-#ifndef TF_SVDATA
-            Clipboard::Clear();
-            Clipboard::CopyString(GetCellText(pColumn));
-#endif
+            OStringTransfer::CopyString(GetCellText(pColumn));
             return;
         }
     }
