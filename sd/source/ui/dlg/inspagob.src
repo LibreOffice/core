@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:48:42 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ korean ] = "Ώ¬°α(~L)";
         Text[ turkish ] = "Baπlantύ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vνnculo";
     };
     CheckBox CBX_CHECK_MASTERS
     {
@@ -163,9 +164,11 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ greek ] = "Διαγραφή μη χρησιμοποιουμέ~νων σελιδών φόντου.";
         Text[ korean ] = "»ηΏλΗΟΑφ ΎΚΐΊ Ήθ°ζΒΚ »θΑ¦(~R)";
         Text[ turkish ] = "Artalandaki kullanύlmayan sayfalarύ sil";
+        Text[ catalan ] = "~Eliminar pαginas de fondo no usadas";
     };
     Text[ greek ] = "Εισαγωγή αντικειμένων/σελίδων";
     Text[ korean ] = "½½¶σΐΜµε/°³ΓΌ »πΐΤ";
     Text[ turkish ] = "Sayfa/nesne ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar pαginas/objetos";
 };
