@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:12:07 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1309,22 +1309,22 @@ String S_BUTTONID_REQUIRED
 String S_UNKNOWN_TYPE
 {
     Text = "Unbekannter Objekttyp ($Arg1) aus UId oder Methode '($Arg2)' nicht unterst¸tzt";
-    Text[ english_us ] = "Unknown object type ($Arg1) from UId";
+    Text[ english_us ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ portuguese ] = "Tipo de objecto ($Arg1) desconhecido deste UId ou mÈtodo '($Arg2)' sem suporte";
-    Text[ russian ] = "Unknown object type ($Arg1) from UId";
-    Text[ greek ] = "Unknown object type ($Arg1) from UId";
+    Text[ russian ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
+    Text[ greek ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ dutch ] = "Onbekend objecttype ($Arg1) uit UId of methode '($Arg2)' niet ondersteund";
-    Text[ french ] = "UId : Type d'objet inconnu ($Arg1)";
+    Text[ french ] = "Type d'objet inconnu ($Arg1) issu de UId ou mÈthode '($Arg2)' non supportÈe";
     Text[ spanish ] = "Tipo de objeto ($Arg1) desconocido por su UId";
     Text[ italian ] = "Unknown object type ($Arg1) from UId";
     Text[ danish ] = "Unknown object type ($Arg1) from UId";
-    Text[ swedish ] = "Unknown object type ($Arg1) from UId";
-    Text[ polish ] = "Unknown object type ($Arg1) from UId";
+    Text[ swedish ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
+    Text[ polish ] = "Nieznany typ obiektu ($Arg1) z UId lub nie obs≥ugiwana metoda '($Arg2)'";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "UId Ç†ÇÈÇ¢ÇÕ“øØƒﬁ'($Arg2)' Ç©ÇÁÇÃïsñæÇ»µÃﬁºﬁ™∏ƒÇÃéÌóﬁ ($Arg1) ÇÕéxâáÇ≥ÇÍÇ‹ÇπÇÒÅB";
     Text[ korean ] = "UId∑Œ∫Œ≈Õ¿«  æÀ∑¡¡Æ°°¿÷¡ˆæ ¿∫°°∞≥√º ≈∏¿‘ ($Arg1)";
-    Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId";
-    Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId";
+    Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
+    Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ arabic ] = "Unknown object type ($Arg1) from UId";
     Text[ turkish ] = "Unknown object type ($Arg1) from UId";
 };
@@ -1353,22 +1353,22 @@ String S_UNPACKING_STORAGE_FAILED
 String S_NO_LIST_BOX_BUTTON
 {
     Text = "ListBoxButton nicht vorhanden bei ($Arg1)";
-    Text[ english_us ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ english_us ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ portuguese ] = "ListBoxButton n„o disponÌvel em($Arg1)";
-    Text[ russian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
-    Text[ greek ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ russian ] = "ListBoxButton does not exist in ($Arg1)";
+    Text[ greek ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ dutch ] = "ListBoxButton niet voorhanden bij ($Arg1)";
-    Text[ french ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ french ] = "Bouton de zone de liste inexistant pour ($Arg1)";
     Text[ spanish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ italian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ danish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
-    Text[ swedish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ swedish ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ polish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ portuguese_brazilian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ japanese ] = "ListBoxButton ÇÕ ($Arg1) Ç…Ç†ÇËÇ‹ÇπÇÒÅB";
     Text[ korean ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
-    Text[ chinese_simplified ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
-    Text[ chinese_traditional ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ chinese_simplified ] = "ListBoxButton does not exist in ($Arg1)";
+    Text[ chinese_traditional ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ turkish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ arabic ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
 };
