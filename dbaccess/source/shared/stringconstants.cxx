@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:22:26 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 08:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CURRENTQUERY, "CurrentQuery");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_QUERYDESIGNVIEW, "QueryDesignView");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_LAYOUTINFORMATION, "LayoutInformation");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CURRENTTABLE, "CurrentTable");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DATABASENAME, "DatabaseName");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLUSER, "ControlUser");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_CONTROLPASSWORD, "ControlPassword");
 
 
 //============================================================
