@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-04 18:12:13 $
+ *  last change: $Author: os $ $Date: 2001-07-31 06:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1646,9 +1646,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     switch( nWhich )
                     {
                         case FN_FRAME_NOWRAP:
-                            bDisable |= (bHtmlMode ||
+                            bDisable |=
                                 ( nAnchorType != FLY_AT_CNTNT &&
-                                    nAnchorType != FLY_AUTO_CNTNT && nAnchorType != FLY_PAGE));
+                                    nAnchorType != FLY_AUTO_CNTNT && nAnchorType != FLY_PAGE);
                             bSet = nSurround == SURROUND_NONE;
                         break;
                         case FN_FRAME_WRAP:
