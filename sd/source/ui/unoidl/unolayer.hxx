@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
+ *  last change: $Author: af $ $Date: 2002-08-02 12:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #endif
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <unotools/servicehelper.hxx>
 
 #include <unomodel.hxx>
@@ -82,14 +82,16 @@ class SdrLayer;
 class SdView;
 class SdLayerManager;
 class SdXImpressDocument;
+class SvUnoWeakContainer;
 
 enum LayerAttribute { VISIBLE, PRINTABLE, LOCKED };
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SdLayer : public ::cppu::WeakImplHelper3< ::com::sun::star::drawing::XLayer,
+class SdLayer : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing::XLayer,
                                                 ::com::sun::star::lang::XServiceInfo,
+                                                ::com::sun::star::container::XChild,
                                                 ::com::sun::star::lang::XUnoTunnel>
 {
 private:
@@ -128,13 +130,28 @@ public:
     virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XChild
+
+    /** Returns the layer manager that manages this layer.
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    /** Not implemented.  Allways throws an exception.
+        @raises NoSupportException.
+    */
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+
 };
+
+
+
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
 
-#include <cppuhelper/implbase4.hxx>
+//#include <cppuhelper/implbase4.hxx>
 
 class SdLayerManager : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing::XLayerManager,
                                                        ::com::sun::star::container::XNameAccess,
@@ -145,6 +162,7 @@ class SdLayerManager : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing
 
 private:
     SdXImpressDocument& rModel;
+    SvUnoWeakContainer* mpLayers;
 
     SdView* GetView() const throw();
 #ifndef SVX_LIGHT
@@ -183,6 +201,20 @@ public:
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+    /** Return the <type>XLayer</type> object that is associated with the
+        given <type>SdrLayer</type> object.  If the requested object does
+        not yet exist it is created.  All calls with the same argument
+        return the same object.
+        @param pLayer
+            The <type>SdrLayer</type> object for which to return the
+            associated <type>XLayer</type> object.
+        @return
+            The returned value is the unique <type>XLayer</type> object
+            associated with the specified argument.  If no layer can be
+            created for the argument than an empty reference is returned.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> GetLayer (SdrLayer* pLayer);
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
+ *  last change: $Author: af $ $Date: 2002-08-02 12:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@
 #include "unoprnms.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_NOSUPPORTEXCEPTION_HPP_
+#include <com/sun/star/lang/NoSupportException.hpp>
+#endif
+
 #include "unohelp.hxx"
 #include "frmview.hxx"
 #include "drviewsh.hxx"
@@ -110,6 +114,7 @@
 #include "glob.hrc"
 
 #include "unokywds.hxx"
+#include "unowcntr.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -441,6 +446,28 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
     //TODO: uno::Exception?
 }
 
+
+
+
+//=====  ::com::sun::star::container::XChild  =================================
+
+uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return uno::Reference<uno::XInterface> (mxLayerManager, uno::UNO_QUERY);
+}
+
+
+void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& rxParent)
+    throw (::com::sun::star::lang::NoSupportException,
+        ::com::sun::star::uno::RuntimeException)
+{
+    throw lang::NoSupportException ();
+}
+
+
+
+
 //=============================================================================
 // class SdLayerManager
 //=============================================================================
@@ -449,11 +476,13 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
 SdLayerManager::SdLayerManager( SdXImpressDocument& rMyModel ) throw()
 :rModel(rMyModel)
 {
+    mpLayers = new SvUnoWeakContainer;
 }
 
 /** */
 SdLayerManager::~SdLayerManager() throw()
 {
+    delete mpLayers;
 }
 
 // uno helper
@@ -506,7 +535,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         SdrLayerAdmin& rLA=rModel.pDoc->GetLayerAdmin();
         const sal_Int32 nMax=rLA.GetLayerCount();
         if (nIndex>nMax) nIndex=nMax;
-        xLayer = new SdLayer( this, rLA.NewLayer(aLayerName,(USHORT)nIndex) );
+        xLayer = GetLayer (rLA.NewLayer(aLayerName,(USHORT)nIndex));
         rModel.SetModified();
     }
     return xLayer;
@@ -566,7 +595,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::getLayerForShape( con
         {
             SdrLayerID aId = pObj->GetLayer();
             SdrLayerAdmin& rLayerAdmin = rModel.pDoc->GetLayerAdmin();
-            xLayer = new SdLayer(this,rLayerAdmin.GetLayerPerID(aId));
+            xLayer = GetLayer (rLayerAdmin.GetLayerPerID(aId));
         }
     }
     return xLayer;
@@ -600,8 +629,8 @@ uno::Any SAL_CALL SdLayerManager::getByIndex( sal_Int32 nLayer )
     if( rModel.pDoc )
     {
         SdrLayerAdmin& rLayerAdmin = rModel.pDoc->GetLayerAdmin();
-        uno::Reference< drawing::XLayer > xLM( new SdLayer( (SdLayerManager*)this, rLayerAdmin.GetLayer((sal_uInt16)nLayer) ) );
-        aAny <<= xLM;
+        uno::Reference<drawing::XLayer> xLayer (GetLayer (rLayerAdmin.GetLayer((sal_uInt16)nLayer)));
+        aAny <<= xLayer;
     }
     return aAny;
 }
@@ -624,7 +653,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
         if( pLayer == NULL )
             throw container::NoSuchElementException();
 
-        xLayer = new SdLayer( (SdLayerManager*)this, pLayer );
+        xLayer = GetLayer (pLayer);
         aAny <<= xLayer;
         return aAny;
     }
@@ -716,3 +745,57 @@ SdView* SdLayerManager::GetView() const throw()
 
 
 
+namespace
+{
+/** Compare two pointers to <type>SdrLayer</type> objects.
+    @param xRef
+        The implementing SdLayer class provides the first pointer by the
+        <member>SdLayer::GetSdrLayer</member> method.
+    @param pSearchData
+        This void pointer is the second pointer to an <type>SdrLayer</type>
+        object.
+    @return
+        Return </True> if both pointers point to the same object.
+*/
+sal_Bool compare_layers (uno::WeakReference<uno::XInterface> xRef, void* pSearchData)
+{
+    uno::Reference<uno::XInterface> xLayer (xRef);
+    if (xLayer.is())
+    {
+        SdLayer* pSdLayer = SdLayer::getImplementation (xRef);
+        if (pSdLayer != NULL)
+        {
+            SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();
+            if (pSdrLayer == static_cast<SdrLayer*>(pSearchData))
+                return sal_True;
+        }
+    }
+    return sal_False;
+}
+}
+
+/** Use the <member>mpLayers</member> container of weak references to either
+    retrieve and return a previously created <type>XLayer</type> object for
+    the given <type>SdrLayer</type> object or create and remember a new one.
+*/
+uno::Reference<drawing::XLayer> SdLayerManager::GetLayer (SdrLayer* pLayer)
+{
+    uno::WeakReference<uno::XInterface> xRef;
+    uno::Reference<drawing::XLayer>  xLayer;
+
+    // Search existing xLayer for the given pLayer.
+    if (mpLayers->findRef (xRef, (void*)pLayer, compare_layers))
+        xLayer = uno::Reference<drawing::XLayer> (xRef, uno::UNO_QUERY);
+
+    // Create the xLayer if necessary.
+    if ( ! xLayer.is())
+    {
+        xLayer = new SdLayer (this, pLayer);
+
+        // Remember the new xLayer for future calls.
+        xRef = uno::Reference<uno::XInterface> (xLayer, uno::UNO_QUERY);
+        mpLayers->insert (xRef);
+    }
+
+    return xLayer;
+}
