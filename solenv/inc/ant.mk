@@ -20,7 +20,7 @@ J2EE_HOME=$(SOLARROOT)$/j2sdkee1.3
 
 # --- ANT build environment  ---------------------------------------
 
-ANT_HOME=$(SOLARBINDIR)
+ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/ant
 
 .IF "$(ANT_OPTIONAL)" ==""
 ANT_OPTIONAL=$(SOLARBINDIR)$/jakarta-ant-1.4.1-optional.jar
@@ -28,7 +28,7 @@ ANT_OPTIONAL=$(SOLARBINDIR)$/jakarta-ant-1.4.1-optional.jar
 
 .IF "$(ANT_CLASSPATH)"==""
 .IF "$(WDK3RDPARTY)"==""
-ANT_CLASSPATH:=$(SOLARBINDIR)$/xercesImpl.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/xml-apis.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(SOLARBINDIR)$/junit.jar
+ANT_CLASSPATH:=$(ANT_HOME)$/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_HOME)$/xml-apis.jar$(PATH_SEPERATOR)$(ANT_HOME)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(ANT_HOME)$/junit.jar
 .ELSE
 ANT_CLASSPATH:=$(CLASSDIR)$/xercesImpl.jar$(PATH_SEPERATOR)$(CLASSDIR)$/xml-apis.jar$(PATH_SEPERATOR)$(CLASSDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(CLASSDIR)$/junit.jar
 .ENDIF
