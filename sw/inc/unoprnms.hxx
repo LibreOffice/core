@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:20:00 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,8 +744,9 @@ enum SwPropNameIds
 /* 0664 */  UNO_NAME_CHAR_HIDDEN,
 // OD 18.09.2003 #i18732#
 /* 0665 */  UNO_NAME_IS_FOLLOWING_TEXT_FLOW,
-/* 0666 */  UNO_NAME_RUNTIME_UID,
-/* 0667 */  SW_PROPNAME_END
+/* 0666 */  UNO_NAME_WIDTH_TYPE,
+/* 0667 */  UNO_NAME_RUNTIME_UID,
+/* 0668 */  SW_PROPNAME_END
 };
 
 
