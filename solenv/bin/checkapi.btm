@@ -1,0 +1,15 @@
+@echo off
+iff ISDIR %SOLARSRC%\qadevOOo then 
+	SET QADEV=%SOLARSRC%\qadevOOo
+else
+rem if NOT ISDIR %SOLARSRC%\qadevOOo 
+	SET QADEV=%SOLARSRC%\qadevOOo.lnk
+endiff
+
+SET JARFOLDER=%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%
+SET RUNNER=%QADEV%\%INPATH%\class\OOoRunner.jar;%QADEV%\%INPATH%\class
+set JARS=%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\sandbox.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar
+set CLASSPATH=%JARS%;%RUNNER%
+
+echo java -Xmx120m -cp %CLASSPATH% org.openoffice.Runner -tdoc %QADEV%\testdocs %&
+java -Xmx120m -cp %CLASSPATH% org.openoffice.Runner -tdoc %QADEV%\testdocs %&
