@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impvect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:45:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 10:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,6 +922,60 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
 
         if( nFlags & BMP_VECTORIZE_REDUCE_EDGES )
             rPolyPoly.Optimize( POLY_OPTIMIZE_EDGES );
+
+        // #i14895#:setting the correct direction for polygons
+        // that represent holes and non-holes; non-hole polygons
+        // need to have a right orientation, holes need to have a
+        // left orientation in order to be treated correctly by
+        // several external tools like Flash viewers
+        sal_Int32   nFirstPoly = -1;
+        sal_uInt16  nCurPoly( 0 ), nCount( rPolyPoly.Count() );
+
+        for( ; nCurPoly < nCount; ++nCurPoly )
+        {
+            const Polygon&      rPoly = rPolyPoly.GetObject( nCurPoly );
+            const sal_uInt16    nSize( rPoly.GetSize() );
+            sal_uInt16          nDepth( 0 ), i( 0 );
+            const bool          bRight( rPoly.IsRightOrientated() );
+
+            for( ; i < nCount; ++i )
+                if( ( i != nCurPoly ) && rPolyPoly.GetObject( i ).IsInside( rPoly[ 0 ] ) )
+                    ++nDepth;
+
+            const bool bHole( ( nDepth & 0x0001 ) == 1 );
+
+            if( nSize && ( ( !bRight && !bHole ) || ( bRight && bHole ) ) )
+            {
+                Polygon     aNewPoly( nSize );
+                sal_uInt16  nPrim( 0 ), nSec( nSize - 1 );
+
+                if( rPoly.HasFlags() )
+                {
+                    while( nPrim < nSize )
+                    {
+                        aNewPoly.SetPoint( rPoly.GetPoint( nSec ), nPrim );
+                        aNewPoly.SetFlags( nPrim++, rPoly.GetFlags( nSec-- ) );
+                    }
+                }
+                else
+                    while( nPrim < nSize )
+                        aNewPoly.SetPoint( rPoly.GetPoint( nSec-- ), nPrim++ );
+
+                rPolyPoly.Replace( aNewPoly, nCurPoly );
+            }
+
+            if( ( 0 == nDepth ) && ( -1 == nFirstPoly ) )
+                nFirstPoly = nCurPoly;
+        }
+
+        // put outmost polygon to the front
+        if( nFirstPoly > 0 )
+        {
+            const Polygon aFirst( rPolyPoly.GetObject( static_cast< USHORT >( nFirstPoly ) ) );
+
+            rPolyPoly.Remove( static_cast< USHORT >( nFirstPoly ) );
+            rPolyPoly.Insert( aFirst, 0 );
+        }
 
         bRet = TRUE;
     }
