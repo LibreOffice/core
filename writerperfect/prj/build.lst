@@ -1,6 +1,5 @@
-wpft	writerperfect : sfx2 libwpd sot svx comphelper NULL
-
-wpft	writerperfect\source\stream	nmake	-	all	wpft_stream NULL
-wpft	writerperfect\source\filter	nmake	-	all	wpft_filter NULL
-
-wpft	writerperfect\util		nmake	-	all	wpft_util wpft_filter wpft_stream NULL
+wp	writerperfect : sfx2 libwpd sot svx comphelper NULL
+wp	writerperfect			usr1	-	all	wp_mkout NULL
+wp	writerperfect\source\stream	nmake	-	all	wp_stream NULL
+wp	writerperfect\source\filter	nmake	-	all	wp_filter NULL
+wp	writerperfect\util		nmake	-	all	wp_util wp_filter wp_stream NULL
