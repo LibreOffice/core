@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,7 +1388,7 @@ ElementBase::~ElementBase()
         _pParent->release();
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString aStr( OUStringToOString( _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "ElementBase::~ElementBase(): %s\n", aStr.getStr() );
 #endif
@@ -1451,7 +1451,7 @@ Reference< xml::XImportContext > DialogImport::createRootContext(
 DialogImport::~DialogImport()
     SAL_THROW( () )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "DialogImport::~DialogImport().\n" );
 #endif
 }
