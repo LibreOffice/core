@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:44:21 $
+ *  last change: $Author: rt $ $Date: 2002-09-17 13:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,10 +407,10 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ russian ] = "Use te~xt selection cursor in read-only text documents";
         Text[ greek ] = "Use te~xt selection cursor in read-only text documents";
         Text[ dutch ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ french ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ french ] = "Utilisation du curseur de sélection dans les textes en lecture seule";
         Text[ spanish ] = "Utilizar cursor de selección de texto en documentos de texto de sólo lectura";
         Text[ finnish ] = "Use te~xt selection cursor in read-only text documents";
-        Text[ italian ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ italian ] = "Usa il cursore per la selezione di testo nei documenti di sola lettura";
         Text[ danish ] = "Use te~xt selection cursor in read-only text documents";
         Text[ swedish ] = "Använd markör för te~xtmarkering i skrivskyddade textdokument";
         Text[ polish ] = "Use te~xt selection cursor in read-only text documents";
