@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplpitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:14:42 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 
 #include "tplpitem.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_TEMPLATE_HPP_
-#include <drafts/com/sun/star/frame/status/Template.hpp>
+#ifndef _COM_SUN_STAR_FRAME_STATUS_TEMPLATE_HPP_
+#include <com/sun/star/frame/status/Template.hpp>
 #endif
 
 
@@ -128,7 +128,7 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 //-------------------------------------------------------------------------
 sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    drafts::com::sun::star::frame::status::Template aTemplate;
+    ::com::sun::star::frame::status::Template aTemplate;
 
     aTemplate.Value = GetValue();
     aTemplate.StyleName = aStyle;
@@ -140,7 +140,7 @@ sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemb
 //-------------------------------------------------------------------------
 sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
-    drafts::com::sun::star::frame::status::Template aTemplate;
+    ::com::sun::star::frame::status::Template aTemplate;
 
     if ( rVal >>= aTemplate )
     {
