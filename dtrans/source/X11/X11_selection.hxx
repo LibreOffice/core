@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:28:21 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@ namespace x11 {
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() = 0;
         virtual void clearTransferable() = 0;
         virtual void fireContentsChanged() = 0;
+        virtual Reference< XInterface > getReference() = 0;
+        // returns a reference that will keep the SelectionAdaptor alive until the
+        // refernce is released
     };
 
     class DropTarget :
@@ -539,6 +542,7 @@ namespace x11 {
         virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() throw();
         virtual void clearTransferable() throw();
         virtual void fireContentsChanged() throw();
+        virtual Reference< XInterface > getReference() throw();
     };
 
 // ------------------------------------------------------------------------
