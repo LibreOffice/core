@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:26:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,16 +704,19 @@ void ScMyTables::DeleteTable()
     if ( xNamed.is() )
     {
         rtl::OUString sCurrentName = xNamed->getName();
-        if (sCurrentName != sCurrentSheetName)
+        if (sCurrentName != sCurrentSheetName && rImport.GetDocument())
         {
-            rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Could not create a table with the name "));
+            rImport.GetDocument()->RenameTab( static_cast<SCTAB>(nCurrentSheet),
+                sCurrentSheetName, sal_False, sal_True);
+
+/*          rtl::OUString sErrorMessage(RTL_CONSTASCII_USTRINGPARAM("Could not create a table with the name "));
             sErrorMessage += sCurrentSheetName;
             sErrorMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(". The new name is "));
             sErrorMessage += sCurrentName;
             uno::Sequence<rtl::OUString> aSeq(1);
             aSeq[0] = sErrorMessage;
             uno::Reference<xml::sax::XLocator> xLocator;
-            rImport.SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rtl::OUString(), xLocator);
+            rImport.SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rtl::OUString(), xLocator);*/
         }
     }
 
