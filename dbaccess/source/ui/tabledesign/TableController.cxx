@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 06:22:19 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,6 +1315,7 @@ void OTableController::alterColumns()
                     if(xDrop.is() && xAppend.is())
                     {
                         String aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
+                        aMessage.SearchAndReplaceAscii("$column$",pField->GetName());
                         String sTitle(ModuleRes(STR_STAT_WARNING));
                         OSQLMessageBox aMsg(getView(),sTitle,aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
                         bNotOk = aMsg.Execute() == RET_YES;
@@ -1408,7 +1409,7 @@ void OTableController::alterColumns()
                 if(xKeyColumns.is() && xKeyColumns->hasByName(*pBegin)) // check if this column is a member of the primary key
                 {
                     String aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
-                    aMsgT.SearchAndReplace(String::CreateFromAscii("$column$"),*pBegin);
+                    aMsgT.SearchAndReplaceAscii("$column$",*pBegin);
                     String aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
                     OSQLMessageBox aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
                     if(aMsg.Execute() == RET_YES)

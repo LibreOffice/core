@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:34:48 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 07:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2202,27 +2202,8 @@ Menu RID_TABLE_DESIGN_MAIN_MENU
 
 String STR_TABLEDESIGN_ALTER_ERROR
 {
-    Text = "Die Spalte \"\$column\$\" konnte nicht geändert werden. Soll sie statt dessen gelöscht und das neue Format angehängt werden?" ;
-    Text [ english_us ] = "The column \"\\$column\\$\" could not be changed. Should the column instead be deleted and the new format appended?" ;
-    Text[ portuguese ] = "Foi impossível modificar a coluna \"\\$column\\$\". Em lugar disto, eliminá-la e anexar o novo formato?";
-    Text[ russian ] = "Èçìåíèòü êîëîíêó \"\\$column\\$\" íåâîçìîæíî. Âìåñòî ıòîãî åå ìîæíî óäàëèòü è ïğèìåíèòü íîâûé ôîğìàò. Ïğîäîëæèòü?";
-    Text[ greek ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
-    Text[ dutch ] = "De kolom \"\\$column\\$\" kon niet worden gewijzigd. U kunt de kolom wissen en het nieuwe formaat toevoegen. Wilt u dat?";
-    Text[ french ] = "Impossible de modifier la colonne \"\\$column\\$\". Alternative : suppression de la colonne et application du nouveau format. Continuer ?";
-    Text[ spanish ] = "No se pudo modificar la columna \"\\$column\\$\". ¿Desea eliminarla y adjuntar el nuevo formato?";
-    Text[ finnish ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
-    Text[ italian ] = "Impossibile cambiare la colonna \"\\$column\\$\". Preferite eliminare la colonna e applicare un nuovo formato?";
-    Text[ danish ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
-    Text[ swedish ] = "Det gick inte att ändra kolumnen \"\\$column\\$\". Ska den i stället raderas och det nya formatet bifogas?";
-    Text[ polish ] = "Modyfikacja kolumny \"\\$column\\$\" nie powiod³a siê. Usun¹æ j¹ i za³¹czyæ nowy format?";
-    Text[ portuguese_brazilian ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
-    Text[ japanese ] = "åˆ— \"\\$column\\$\" ã¯å¤‰æ›´ã§ãã¾ã›ã‚“ã€‚å‰Šé™¤ã™ã‚‹ã‹ã‚ã‚Šã«æ–°ã—ãè¨­å®šã—ãŸæ›¸å¼ã‚’æ·»ä»˜ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì—´ \"\\$column\\$\"ì„(ë¥¼) ë³€ê²½í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. ëŒ€ì‹ ì— ì´ ì—´ì„ ì‚­ì œí•˜ê³  ìƒˆë¡œìš´ ì„œì‹ì„ ì¶”ê°€í•˜ê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "æ— æ³•æ›´æ”¹åˆ— \"\\$column\\$\" ã€‚è¦é‡æ–°è®¾å®šè¿™ä¸ªåˆ—çš„æ ¼å¼?";
-    Text[ chinese_traditional ] = "ç„¡æ³•è®Šæ›´æ¬„<\\$column\\$>ã€‚è¦åˆªé™¤å®ƒå†é‡æ–°è¨­å®šæ ¼å¼ï¼Ÿ";
-    Text[ turkish ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
-    Text[ arabic ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
-    Text[ catalan ] = "No s'ha pogut modificar la columna \"\\$column\\$\". Voleu eliminar-la i adjuntar el nou format?";
+    Text = "Die Spalte \"$column$\" konnte nicht geändert werden. Soll sie statt dessen gelöscht und das neue Format angehängt werden?" ;
+    Text [ english_us ] = "The column \"$column$\" could not be changed. Should the column instead be deleted and the new format appended?" ;
 };
 
 
