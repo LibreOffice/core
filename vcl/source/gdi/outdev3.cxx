@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: th $ $Date: 2001-03-08 16:53:33 $
+ *  last change: $Author: ka $ $Date: 2001-03-21 15:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6549,20 +6549,34 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
 
     BOOL bRet = FALSE;
 
+#ifdef NEW_GLYPH
+    if( GetFont().GetOrientation() )
+    {
+        PolyPolygon aPolyPoly;
+
+        if( GetGlyphOutline( cChar, aPolyPoly, bOptimize ) )
+        {
+            rRect = aPolyPoly.GetBoundRect();
+            bRet = TRUE;
+        }
+
+        return bRet;
+    }
+#endif // NEW_GLYPH
+
 #ifndef REMOTE_APPSERVER
+
     if ( mpGraphics || ImplGetGraphics() )
     {
-        Font*   pOldFont;
+        Font    aOldFont( GetFont() );
+        Font    aFont( aOldFont );
         long    nLeft, nTop, nWidth, nHeight;
         long    nFontWidth, nFontHeight;
         long    nOrgWidth, nOrgHeight;
 
         if ( bOptimize )
         {
-            pOldFont = new Font( GetFont() );
-
-            Font    aFont( *pOldFont );
-            Size    aFontSize( LogicToPixel( aFont.GetSize() ) );
+            Size aFontSize( LogicToPixel( aFont.GetSize() ) );
 
             if ( aFontSize.Width() && aFontSize.Height() )
             {
@@ -6583,20 +6597,22 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
                 ((OutputDevice*)this)->SetFont( aFont );
                 nFontWidth = aFont.GetSize().Width();
                 nFontHeight = aFont.GetSize().Height();
-                nOrgWidth = pOldFont->GetSize().Width();
-                nOrgHeight = pOldFont->GetSize().Height();
+                nOrgWidth = aOldFont.GetSize().Width();
+                nOrgHeight = aOldFont.GetSize().Height();
             }
             else
             {
                 aFont.SetSize( PixelToLogic( Size( 0, 500 ) ) );
-                ((OutputDevice*)this)->SetFont( aFont );
                 nFontWidth = nFontHeight = aFont.GetSize().Height();
-                nOrgWidth = nOrgHeight = pOldFont->GetSize().Height();
+                nOrgWidth = nOrgHeight = aOldFont.GetSize().Height();
             }
         }
 
+        ((OutputDevice*)this)->SetFont( aFont );
+
         if ( mbNewFont )
             ImplNewFont();
+
         if ( mbInitFont )
             ImplInitFont();
 
@@ -6621,11 +6637,7 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
             bRet = TRUE;
         }
 
-        if ( bOptimize )
-        {
-            ((OutputDevice*)this)->SetFont( *pOldFont );
-            delete pOldFont;
-        }
+        ((OutputDevice*)this)->SetFont( aOldFont );
     }
 #else
     if ( mbNewFont )
@@ -6650,6 +6662,7 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
         {
             if ( mbNewFont )
                 ImplNewFont();
+
             if ( mbInitFont )
                 ImplInitFont();
         }
@@ -6771,7 +6784,8 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
 #ifndef REMOTE_APPSERVER
    if ( mpGraphics || ImplGetGraphics() )
    {
-        Font*       pOldFont;
+        Font        aOldFont( GetFont() );
+        Font        aFont( aOldFont );
         USHORT*     pPolySizes = NULL;
         SalPoint*   pPoints = NULL;
         BYTE*       pFlags = NULL;
@@ -6779,14 +6793,15 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
         long        nOrgWidth, nOrgHeight;
         ULONG       nPolyCount;
 
-        if ( bOptimize )
+#ifdef NEW_GLYPH
+        aFont.SetOrientation( 0 );
+#endif // NEW_GLYPH
+
+        if( bOptimize )
         {
-            pOldFont = new Font( GetFont() );
+            Size aFontSize( LogicToPixel( aFont.GetSize() ) );
 
-            Font    aFont( *pOldFont );
-            Size    aFontSize( LogicToPixel( aFont.GetSize() ) );
-
-            if ( aFontSize.Width() && aFontSize.Height() )
+            if( aFontSize.Width() && aFontSize.Height() )
             {
                 const double fFactor = (double) aFontSize.Width() / aFontSize.Height();
 
@@ -6802,23 +6817,24 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
                 }
 
                 aFont.SetSize( PixelToLogic( aFontSize ) );
-                ((OutputDevice*)this)->SetFont( aFont );
                 nFontWidth = aFont.GetSize().Width();
                 nFontHeight = aFont.GetSize().Height();
-                nOrgWidth = pOldFont->GetSize().Width();
-                nOrgHeight = pOldFont->GetSize().Height();
+                nOrgWidth = aOldFont.GetSize().Width();
+                nOrgHeight = aOldFont.GetSize().Height();
             }
             else
             {
                 aFont.SetSize( PixelToLogic( Size( 0, 500 ) ) );
-                ((OutputDevice*)this)->SetFont( aFont );
                 nFontWidth = nFontHeight = aFont.GetSize().Height();
-                nOrgWidth = nOrgHeight = pOldFont->GetSize().Height();
+                nOrgWidth = nOrgHeight = aOldFont.GetSize().Height();
             }
         }
 
+        ((OutputDevice*)this)->SetFont( aFont );
+
         if ( mbNewFont )
             ImplNewFont();
+
         if ( mbInitFont )
             ImplInitFont();
 
@@ -6871,11 +6887,7 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
         delete[] pPoints;
         delete[] pFlags;
 
-        if ( bOptimize )
-        {
-            ((OutputDevice*)this)->SetFont( *pOldFont );
-            delete pOldFont;
-        }
+        ((OutputDevice*)this)->SetFont( aOldFont );
     }
 #else
     if ( mbNewFont )
@@ -6970,6 +6982,10 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
 
     if( !bRet )
         rPolyPoly = PolyPolygon();
+#ifdef NEW_GLYPH
+    else if( GetFont().GetOrientation() )
+        rPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
+#endif // NEW_GLYPH
 
     return bRet;
 }
