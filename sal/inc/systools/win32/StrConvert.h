@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StrConvert.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 09:21:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,14 @@
 #define _STRCONVERT_H_
 
 #include <windows.h>
+
+#ifdef NDEBUG
+#define STRCONVERT_H_HAD_NDEBUG
+#undef NDEBUG
+#endif
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 
 #ifdef __cplusplus
@@ -146,6 +154,13 @@ if( wcList ) \
 
 #ifdef __cplusplus
 }
+#endif
+
+// Restore NDEBUG state
+#ifdef STRCONVERT_H_HAD_NDEBUG
+#define NDEBUG
+#else
+#undef NDEBUG
 #endif
 
 #endif
