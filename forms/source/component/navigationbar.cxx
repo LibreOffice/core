@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigationbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:08:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,10 +521,7 @@ namespace frm
     void ONavigationBarModel::fillProperties( Sequence< Property >& /* [out] */ _rProps,
         Sequence< Property >& /* [out] */ _rAggregateProps ) const
     {
-        BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( 4, m_xAggregateSet )
-            DECL_PROP2( NAME,               ::rtl::OUString,    BOUND, MAYBEDEFAULT );
-            DECL_PROP2( CLASSID,            sal_Int16,          READONLY, TRANSIENT);
-            DECL_PROP2( TAG,                ::rtl::OUString,    BOUND, MAYBEDEFAULT );
+        BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )
             DECL_PROP2( TABINDEX,           sal_Int16,          BOUND, MAYBEDEFAULT );
         END_DESCRIBE_PROPERTIES();
 
