@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,11 @@ namespace
 Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable,
                                           const Reference<XConnection>& _xConnection,
                                           const ::rtl::OUString& _rName,
-                                          sal_Bool _bCase)
+                                          sal_Bool _bCase,
+                                          sal_Bool _bQueryForInfo,
+                                          sal_Bool _bIsAutoIncrement,
+                                          sal_Bool _bIsCurrency,
+                                          sal_Int32 _nDataType)
 {
     Reference<XPropertySet> xProp;
     OSL_ENSURE(_xTable.is(),"Table is NULL!");
@@ -454,40 +458,28 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
                 ::rtl::OUString sField13 = xRow->getString(13);
                 ::comphelper::disposeComponent(xRow);
 
-                // we need some more information about the column
-                static ::rtl::OUString STR_WHERE = ::rtl::OUString::createFromAscii(" WHERE ");
-                const ::rtl::OUString sQuote     = xMetaData->getIdentifierQuoteString();
-
-                ::rtl::OUString sSelect = ::rtl::OUString::createFromAscii("SELECT ");
-                sSelect += ::dbtools::quoteName(sQuote,_rName);
-                ::rtl::OUString sComposedName;
-                ::dbtools::composeTableName(xMetaData,getString(aCatalog),aSchema,aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
-
-                sSelect += ::rtl::OUString::createFromAscii(" FROM ");
-                sSelect += sComposedName;
-                sSelect += STR_WHERE;
-                sSelect += ::rtl::OUString::createFromAscii(" 0 = 1");
-
-                sal_Bool bAutoIncrement = sal_False
-                        ,bIsCurrency    = sal_False;
-                try
+                sal_Bool bAutoIncrement = _bIsAutoIncrement
+                        ,bIsCurrency    = _bIsCurrency;
+                if ( _bQueryForInfo )
                 {
-                    Reference<XStatement> xStmt = _xConnection->createStatement();
-                    xResult = xStmt->executeQuery(sSelect);
-                    if ( xResult.is() )
-                    {
-                        Reference<XResultSetMetaData> xMD = Reference<XResultSetMetaDataSupplier>(xResult,UNO_QUERY)->getMetaData();
-                        bAutoIncrement = xMD->isAutoIncrement(1);
-                        bIsCurrency    = xMD->isCurrency(1);
-                        if ( DataType::OTHER == nField5 )
-                            nField5 = xMD->getColumnType(1);
+                    const ::rtl::OUString sQuote = xMetaData->getIdentifierQuoteString();
+                    ::rtl::OUString sQuotedName  = ::dbtools::quoteName(sQuote,_rName);
+                    ::rtl::OUString sComposedName;
+                    ::dbtools::composeTableName(xMetaData,getString(aCatalog),aSchema,aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
 
-                        ::comphelper::disposeComponent(xStmt);
+                    ColumnInformationMap aInfo(_bCase);
+                    collectColumnInformation(_xConnection,sComposedName,sQuotedName,aInfo);
+                    ColumnInformationMap::iterator aIter = aInfo.begin();
+                    if ( aIter != aInfo.end() )
+                    {
+                        bAutoIncrement  = aIter->second.first.first;
+                        bIsCurrency     = aIter->second.first.second;
+                        if ( DataType::OTHER == nField5 )
+                            nField5     = aIter->second.second;
                     }
                 }
-                catch(SQLException&)
-                {
-                }
+                else if ( DataType::OTHER == nField5 )
+                    nField5 = _nDataType;
 
                 if ( nField11 != ColumnValue::NO_NULLS )
                 {
@@ -680,6 +672,47 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
             OSL_ENSURE(0,"Could not collect the privileges !");
     }
     return nPrivileges;
+}
+// -----------------------------------------------------------------------------
+// we need some more information about the column
+void collectColumnInformation(const Reference< XConnection>& _xConnection,
+                              const ::rtl::OUString& _sComposedName,
+                              const ::rtl::OUString& _rName,
+                              ColumnInformationMap& _rInfo)
+{
+    static ::rtl::OUString STR_WHERE = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "));
+
+    ::rtl::OUString sSelect = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "));
+    sSelect += _rName;
+    sSelect += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "));
+    sSelect += _sComposedName;
+    sSelect += STR_WHERE;
+    sSelect += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0 = 1"));
+
+    try
+    {
+        Reference<XStatement> xStmt = _xConnection->createStatement();
+        Reference<XResultSet> xResult = xStmt->executeQuery(sSelect);
+        if ( xResult.is() )
+        {
+            Reference<XResultSetMetaData> xMD = Reference<XResultSetMetaDataSupplier>(xResult,UNO_QUERY)->getMetaData();
+            if ( xMD.is() )
+            {
+                sal_Int32 nCount = xMD->getColumnCount();
+                for (sal_Int32 i=1; i <= nCount ; ++i)
+                {
+                    _rInfo.insert(ColumnInformationMap::value_type(xMD->getColumnName(i),
+                        ColumnInformation(TBoolPair(xMD->isAutoIncrement(i),xMD->isCurrency(i)),xMD->getColumnType(i))));
+                }
+                xMD = NULL;
+            }
+            xResult = NULL;
+            ::comphelper::disposeComponent(xStmt);
+        }
+    }
+    catch(SQLException&)
+    {
+    }
 }
 //.........................................................................
 }   // namespace dbtools
