@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-08 04:33:53 $
+ *  last change: $Author: fs $ $Date: 2002-08-28 14:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,7 @@ hidspecial HID_OPTIONS_COLORCONFIG_COLORLIST_WIN    { HelpID = HID_OPTIONS_COLOR
 
 hidspecial HID_FILL_ATTR_LISTBOX                { HelpID = HID_FILL_ATTR_LISTBOX ;};
 hidspecial HID_FILL_TYPE_LISTBOX                { HelpID = HID_FILL_TYPE_LISTBOX ;};
+hidspecial HID_OPTIONS_COLORCONFIG_NAME_SCHEME  { HelpID = HID_OPTIONS_COLORCONFIG_NAME_SCHEME ;};
 
 //HID_AUTOCORR_HELP_END
 
