@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ class SwTableOptimizeCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTableOptimizeCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SwTableOptimizeCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SwTableOptimizeCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
