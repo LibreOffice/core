@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:13:54 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,8 +1637,8 @@ const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwip
     return 0;
 }
 
-const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
-                          SwTwips nFuzzy, bool* pbRow, bool* pbCol )
+const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
+                              SwTwips nFuzzy, bool* pbRow, bool* pbCol )
 {
     // bMouseMoveRowCols :
     // Method is called for
@@ -1650,6 +1650,7 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
     bool bCloseToCol = false;
 
     const SwFrm *pFrm = pLay->ContainsCntnt();
+    const SwFrm* pRet = 0;
 
     if ( pFrm )
     {
@@ -1749,11 +1750,21 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
             // but disallow hotspot selection of nested tables.
             if ( bMouseMoveRowCols )
             {
+                // find the next cell frame
                 while ( pFrm && !pFrm->IsCellFrm() )
                     pFrm = pFrm->GetUpper();
             }
+            else
+            {
+                // find the most upper cell frame:
+                while ( pFrm &&
+                        ( !pFrm->IsCellFrm() ||
+                          !pFrm->GetUpper()->GetUpper()->IsTabFrm() ||
+                           pFrm->GetUpper()->GetUpper()->GetUpper()->IsInTab() ) )
+                    pFrm = pFrm->GetUpper();
+            }
 
-            if ( pFrm )
+            if ( pFrm ) // Note: this condition should be the same like the while condition!!!
             {
                 // --> FME 2004-07-30 #i32329# Enhanced table selection
                 // used for hotspot selection of tab/cols/rows
@@ -1766,7 +1777,8 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                     {
                         *pbRow = bCloseToRow;
                         *pbCol = bCloseToCol;
-                         return pFrm;
+                        pRet = pFrm;
+                        break;
                     }
                 }
                 // <--
@@ -1789,13 +1801,15 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                              ::IsSame( pFrm->Frm().Right(),rPt.X() ) )
                         {
                             if ( pbRow ) *pbRow = false;
-                            return pFrm;
+                            pRet = pFrm;
+                            break;
                         }
                         if ( ::IsSame( pFrm->Frm().Top(), rPt.Y() ) ||
                              ::IsSame( pFrm->Frm().Bottom(),rPt.Y() ) )
                         {
                             if ( pbRow ) *pbRow = true;
-                            return pFrm;
+                            pRet = pFrm;
+                            break;
                         }
                     }
                 }
@@ -1804,7 +1818,10 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
             }
         } while ( pFrm );
     }
-    return 0;
+
+    // robust:
+    ASSERT( !pRet || pRet->IsCellFrm(), "lcl_FindFrm() is supposed to find a cell frame!" )
+    return pRet && pRet->IsCellFrm() ? static_cast<const SwCellFrm*>(pRet) : 0;
 }
 
 //
@@ -1873,7 +1890,7 @@ bool SwFEShell::SelTblRowCol( const Point& rPt )
 
     if( pFrm )
     {
-        while( pFrm->Lower()->IsRowFrm() )
+        while( pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
             pFrm = (SwCellFrm*)((SwLayoutFrm*)pFrm->Lower())->Lower();
         if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
             pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
@@ -1959,7 +1976,7 @@ BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 
     if( pFrm )
     {
-        while( pFrm->Lower()->IsRowFrm() )
+        while( pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
             pFrm = (SwCellFrm*)((SwLayoutFrm*)pFrm->Lower())->Lower();
         if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
             pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
