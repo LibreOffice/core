@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-11 13:56:50 $
+ *  last change: $Author: fs $ $Date: 2002-09-18 08:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2201,7 +2201,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             // if there is no next entry, take the current one
             // this ensures that in case of _one_ entry in the list, this entry is selected when pressing
             // the cursor key
-            // 06.09.20001 - 83416 - frank.schoenheit@sun.com
+            // 06.09.20001 - 83416 - fs@openoffice.org
             if ( !pNewCursor && pCursor )
                 pNewCursor = pCursor;
 
@@ -2360,6 +2360,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     pView->Select( pCursor, TRUE );
                 }
             }
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_RETURN:
@@ -2380,6 +2382,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 aEditClickPos = Point( -1, -1 );
                 EditTimerCall( 0 );
             }
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_F8:
@@ -2391,6 +2395,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 else
                     aSelEng.AddAlways( TRUE );
             }
+            else
+                bKeyUsed = FALSE;
             break;
 
 
@@ -2423,11 +2429,15 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     }
                 }
             }
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_A:
             if( bMod1 )
                 SelAllDestrAnch( TRUE );
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_SUBTRACT:
@@ -2470,16 +2480,22 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     }
                 }
             }
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_DIVIDE :
             if( bMod1 )
                 SelAllDestrAnch( TRUE );
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_COMMA :
             if( bMod1 )
                 SelAllDestrAnch( FALSE );
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_HOME :
@@ -2492,6 +2508,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 if( !IsEntryInView( pNewCursor ) )
                     MakeVisible( pNewCursor );
             }
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_END :
@@ -2504,9 +2522,9 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 if( !IsEntryInView( pNewCursor ) )
                     MakeVisible( pNewCursor );
             }
+            else
+                bKeyUsed = FALSE;
             break;
-
-
 
         default:
             bKeyUsed = FALSE;
