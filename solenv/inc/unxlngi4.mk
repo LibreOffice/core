@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-02 11:33:36 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 13:55:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 # flags for C and C++ Compiler
-CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
+CFLAGS+=-Wuninitialized -fmessage-length=0 -c $(INCLUDE)
 
 # flags to enable build with symbols; required for crashdump feature
 .IF "$(ENABLE_SYMBOLS)"=="SMALL"
