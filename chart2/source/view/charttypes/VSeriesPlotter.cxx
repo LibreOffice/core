@@ -791,8 +791,8 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX )
     {
         double fLocalMinimum, fLocalMaximum;
         if( m_aXSlots[nN].calculateYMinAndMaxForCategoryRange(
-                            static_cast<sal_Int32>(fMinimumX+0.5)
-                            , static_cast<sal_Int32>(fMaximumX+0.5)
+                            static_cast<sal_Int32>(fMinimumX-0.5) //first category (index 0) matches with real number 1.0
+                            , static_cast<sal_Int32>(fMaximumX-0.5) //first category (index 0) matches with real number 1.0
                             , fLocalMinimum, fLocalMaximum ) )
         {
             if(fMaximum<fLocalMaximum)
@@ -822,8 +822,8 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX )
     {
         double fLocalMinimum, fLocalMaximum;
         if( m_aXSlots[nN].calculateYMinAndMaxForCategoryRange(
-                            static_cast<sal_Int32>(fMinimumX+0.5)
-                            , static_cast<sal_Int32>(fMaximumX+0.5)
+                            static_cast<sal_Int32>(fMinimumX-0.5) //first category (index 0) matches with real number 1.0
+                            , static_cast<sal_Int32>(fMaximumX-0.5) //first category (index 0) matches with real number 1.0
                             , fLocalMinimum, fLocalMaximum ) )
         {
             if(fMaximum<fLocalMaximum)
