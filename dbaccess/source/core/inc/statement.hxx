@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 18:19:10 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDBATCHEXECUTION_HDL_
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XGENERATEDRESULTSET_HPP_
+#include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
+#endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
@@ -108,7 +111,8 @@ class OStatementBase :  public comphelper::OBaseMutex,
                         public ::com::sun::star::sdbc::XWarningsSupplier,
                         public ::com::sun::star::sdbc::XPreparedBatchExecution,
                         public ::com::sun::star::sdbc::XMultipleResults,
-                        public ::com::sun::star::sdbc::XCloseable
+                        public ::com::sun::star::sdbc::XCloseable,
+                        public ::com::sun::star::sdbc::XGeneratedResultSet
 {
 protected:
     ::osl::Mutex            m_aCancelMutex;
@@ -118,10 +122,12 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCancellable > m_xAggregateAsCancellable;
     sal_Bool                m_bUseBookmarks;
 
+    virtual ~OStatementBase();
+
 public:
     OStatementBase(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > & _xConn,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & _xStatement);
-    virtual ~OStatementBase();
+
 
 // ::com::sun::star::lang::XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -175,6 +181,8 @@ public:
     virtual void SAL_CALL addBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+// ::com::sun::star::sdbc::XGeneratedResultSet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getGeneratedValues(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 // Helper
     void disposeResultSet();

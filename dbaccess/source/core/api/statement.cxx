@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@ Sequence< Type > OStatementBase::getTypes() throw (RuntimeException)
                            ::getCppuType( (const Reference< XPreparedBatchExecution > *)0 ),
                            ::getCppuType( (const Reference< ::com::sun::star::util::XCancellable > *)0 ),
                             OSubComponent::getTypes() );
+    Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
+    if ( xGRes.is() )
+        aTypes = OTypeCollection(::getCppuType( (const Reference< XGeneratedResultSet > *)0 ),aTypes.getTypes());
 
     return aTypes.getTypes();
 }
@@ -144,6 +147,7 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
 {
     Any aIface = OSubComponent::queryInterface( rType );
     if (!aIface.hasValue())
+    {
         aIface = ::cppu::queryInterface(
                     rType,
                     static_cast< XPropertySet * >( this ),
@@ -152,6 +156,13 @@ Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException
                     static_cast< XPreparedBatchExecution * >( this ),
                     static_cast< XMultipleResults * >( this ),
                     static_cast< ::com::sun::star::util::XCancellable * >( this ));
+        if ( !aIface.hasValue() )
+        {
+            Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
+            if ( ::getCppuType( (const Reference< XGeneratedResultSet > *)0 ) == rType && xGRes.is() )
+                aIface = ::cppu::queryInterface(rType,static_cast< XGeneratedResultSet * >( this ));
+        }
+    }
     return aIface;
 }
 
@@ -419,6 +430,17 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLExcepti
     disposeResultSet();
 
     return Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch();
+}
+// -----------------------------------------------------------------------------
+Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (SQLException, RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
+
+    if ( xGRes.is() )
+        return xGRes->getGeneratedValues(  );
+    return Reference< XResultSet >();
 }
 
 //************************************************************
