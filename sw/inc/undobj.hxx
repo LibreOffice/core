@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:52:03 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1604,6 +1604,7 @@ class SwUndoInsertLabel : public SwUndo
     };
 
     String sText;
+    String sCharacterStyle;
     // OD 2004-04-15 #i26791# - re-store of drawing object position no longer needed
     USHORT nFldId;
     SwLabelType eType;
@@ -1615,6 +1616,7 @@ class SwUndoInsertLabel : public SwUndo
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
                         const BOOL bBefore, const USHORT nId,
+                        const String& rCharacterStyle,
                         const BOOL bCpyBrd );
     virtual ~SwUndoInsertLabel();
 
