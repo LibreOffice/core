@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellAttrib.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:12:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,10 @@
  *
  *
  ************************************************************************/
-#pragma hdrstop
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 #ifndef _SVX_SPELL_ATTRIB
 #include <SpellAttrib.hxx>
