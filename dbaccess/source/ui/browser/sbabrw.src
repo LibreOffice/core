@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:45:27 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 09:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ dutch ] = "Actuele record opslaan";   \
     Text[ chinese_simplified ] = "´æÅÌµ±Ç°µÄÊı¾İÌõÄ¿";  \
     Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïõóáò åããñáöŞò";    \
-    Text[ korean ] = "ÇöÀç ·¹ÄÚµå ÀúÀå";    \
+    Text[ korean ] = "ÇöÀçÀÇ  ·¹ÄÚµå ÀúÀå"; \
     Text[ turkish ] = "Güncel veri kümesini kaydet";    \
     Text[ language_user1 ] = " ";
 
@@ -178,7 +178,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ dutch ] = "Ongedaan maken: gegevensinvoer";   \
     Text[ chinese_simplified ] = "³·ÏûÃüÁî£ºÊäÈëÊı¾İ";  \
     Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí"; \
-    Text[ korean ] = "½ÇÇàÃë¼Ò: ÀÔ·Â";  \
+    Text[ korean ] = "½ÇÇàÃë¼Ò:µ¥ÀÌÅÍ ÀÔ·Â";    \
     Text[ turkish ] = "Geri al: Veri girişi";   \
     Text[ language_user1 ] = " ";
 
@@ -419,7 +419,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ dutch ] = "Standaardbrief ...";   \
     Text[ chinese_simplified ] = "ÓÊ¼şºÏ²¢..."; \
     Text[ greek ] = "Åãêıêëéïò åğéóôïëŞ ...";   \
-    Text[ korean ] = "ÆíÁö ¾ç½Ä...";    \
+    Text[ korean ] = "¾ç½Ä..."; \
     Text[ turkish ] = "Mektup formu ...";   \
     Text[ language_user1 ] = " ";
 
@@ -598,7 +598,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Text[ dutch ] = "Actualiseren"; \
     Text[ chinese_simplified ] = "¸üĞÂ";    \
     Text[ greek ] = "Åíçìİñùóç";    \
-    Text[ korean ] = "»õ·Î °íÄ§";   \
+    Text[ korean ] = "°»½Å";    \
     Text[ turkish ] = "Yenile"; \
     Text[ language_user1 ] = " ";
 
@@ -863,7 +863,7 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ dutch ] = "De actuele record werd gewijzigd.\nWilt u de wijzigingen opslaan?";
     Message[ chinese_simplified ] = "Êı¾İÌõÄ¿ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª´æÅÌ¸ü¸ÄºóµÄÊı¾İ¼ÇÂ¼Âğ£¿";
     Message[ greek ] = "Ç ôñİ÷ïõóá åããñáöŞ ôñïğïğïéŞèçêå.\nÍá áğïèçêåõôïıí ïé áëëáãİò;";
-    Message[ korean ] = "ÇöÀç µ¥ÀÌÅÍ ·¹ÄÚµå°¡ º¯°æµÇ¾ú½À´Ï´Ù. º¯°æµÈ »çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ÇöÀçÀÇ  µ¥ÀÌÅÍ ·¹ÄÚµå°¡ º¯°æµÇ¾ú½À´Ï´Ù.\n º¯°æ»çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Güncel veri kümesi değiştirildi.\nDeğişiklikler saklansın mı?";
     Message[ language_user1 ] = " ";
 };
@@ -890,7 +890,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message[ chinese_traditional ] = "±z­n§R°£¿ï¤¤ªº¸ê®Æ¡S";
     Message[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";
     Message[ greek ] = "Èİëåôå íá äéáãñáöïıí ôá åğéëåãìİíá äåäïìİíá;";
-    Message[ korean ] = "¼±ÅÃµÈ µ¥ÀÌÅ¸¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "¼±ÅÃµÈ µ¥ÀÌÅÍ¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Seçilen veriler silinsin mi?";
     Message[ language_user1 ] = " ";
 };
@@ -939,7 +939,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ polish ] = "B³¹d podczas osadzania kryteriów sortowania";
     Text[ portuguese_brazilian ] = "error setting the sort criteria";
     Text[ japanese ] = "•À‚×‘Ö‚¦ğŒ‚Ìİ’è‚Ì´×°";
-    Text[ korean ] = "Á¤·Ä±âÁØ ¼³Á¤¿¡ ¿À·ù";
+    Text[ korean ] = "Á¤·Ä±âÁØ ¼³Á¤½Ã¿¡ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚÉè¶¨ÅÅĞòÌõ¼şÊ±·¢Éú´íÎó";
     Text[ chinese_traditional ] = "³]©w½s±Æ±ø¥ó®Éµo¥Í¤@­Ó¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáİÑÒ";
@@ -962,7 +962,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ polish ] = "B³¹d podczas osadzania kryteriów filtra";
     Text[ portuguese_brazilian ] = "error setting the filter criteria";
     Text[ japanese ] = "Ì¨ÙÀğŒ‚Ìİ’è‚Ì´×°";
-    Text[ korean ] = "ÇÊÅÍ±âÁØ ¼³Á¤¿¡ ¿À·ù";
+    Text[ korean ] = "ÇÊÅÍ±âÁØ ¼³Á¤½Ã¿¡ ¿À·ù";
     Text[ chinese_simplified ] = "ÔÚÉè¶¨É¸Ñ¡Ìõ¼şÊ±·¢Éú´íÎó";
     Text[ chinese_traditional ] = "³]©w¿z¿ï±ø¥ó®Éµo¥Í¤@­Ó¿ù»~";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÊÕİíÉ";
@@ -986,7 +986,7 @@ String RID_STR_CONNECTION_LOST
     Text[ polish ] = "Brak po³¹czenia";
     Text[ portuguese_brazilian ] = "connection lost";
     Text[ japanese ] = "Ú‘±‚ÍØ’f‚³‚ê‚Ü‚µ‚½";
-    Text[ korean ] = "¿¬°áÀ» ÀÒÀ½";
+    Text[ korean ] = "¿¬°á »ó½Ç";
     Text[ chinese_simplified ] = "Ê§È¥Á¬½Ó";
     Text[ chinese_traditional ] = "³s½u¤w¸g¤¤Â_";
     Text[ arabic ] = "Êã İŞÏÇä ÇáÇÊÕÇá";
