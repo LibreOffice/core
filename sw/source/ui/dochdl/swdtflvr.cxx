@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:57:22 $
+ *  last change: $Author: jp $ $Date: 2001-03-29 20:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,14 +534,12 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         // besorgen.
         SvEmbeddedObject* pObj = FindOLEObj();
         if( pObj )
-            pObj->FillTransferableObjectDescriptor( aObjDesc );
-
-        bOK = pObj && SetTransferableObjectDescriptor( aObjDesc, rFlavor );
-    }
-    else if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR == nFormat ||
-             SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR == nFormat )
-    {
-        bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
+        {
+            TransferableDataHelper aD( pObj->CreateTransferableSnapshot() );
+            ::com::sun::star::uno::Any aAny( aD.GetAny( rFlavor ));
+            if( aAny.hasValue() )
+                bOK = SetAny( aAny, rFlavor );
+        }
     }
     else
     {
@@ -554,6 +552,11 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
                                     SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
             break;
 #endif
+        case SOT_FORMATSTR_ID_OBJECTDESCRIPTOR:
+        case SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR:
+            bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
+            break;
+
         case SOT_FORMATSTR_ID_DRAWING:
             {
                 SwDoc *pDoc = pClpDocFac->GetDoc();
