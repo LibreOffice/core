@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
+ *  last change: $Author: jbu $ $Date: 2002-01-16 16:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,8 +376,8 @@ Reference< XComponentContext > SAL_CALL defaultBootstrap_InitialComponentContext
     OUString bootstrapPath;
     OUString iniDir;
     Bootstrap bootstrap( iniFile );
-    bootstrap.getIniName(iniDir);
-    iniDir = iniDir.copy(0, iniDir.lastIndexOf('/'));
+
+    osl_getProcessWorkingDir(&iniDir.pData);
 
     Reference<lang::XMultiComponentFactory> smgr_XMultiComponentFactory(
         bootstrapInitialSF(bootstrapPath) );
