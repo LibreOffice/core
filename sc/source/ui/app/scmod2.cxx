@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-02-18 18:03:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 16:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-//#define LINGUPROP_DEFLOCALE           "DefaultLocale"
-//#define LINGUPROP_CJKLOCALE           "DefaultLocale_CJK"
-//#define LINGUPROP_CTLLOCALE           "DefaultLocale_CTL"
 #define LINGUPROP_AUTOSPELL         "IsSpellAuto"
 #define LINGUPROP_HIDEAUTO          "IsSpellHide"
 
