@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:28:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ public OTextCursorHelper
     SwView*             pView;
     SfxItemPropertySet  aPropSet;
 protected:
-    virtual ~SwXTextViewCursor();
+    sal_Bool    IsTextSelection() const;
+    virtual     ~SwXTextViewCursor();
 public:
     SwXTextViewCursor(SwView* pVw);
 
