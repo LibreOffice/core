@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:31:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #define _SV_APP_CXX
 
 #include <stdio.h>
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -72,16 +71,6 @@
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
-#else
-#include "rvp.hxx"
-#include <rmwindow.hxx>
-#include <rmevents.hxx>
-#include <vos/thread.hxx>
-#ifndef _SV_MSGBOX_HXX
-#include <msgbox.hxx>
-#endif
-#endif
-
 #ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
 #endif
@@ -155,16 +144,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#ifdef REMOTE_APPSERVER
-#include <osl/signal.h>
-#include <ooffice.hxx>
-#include <cppuhelper/implbase1.hxx>
-
-#include <com/sun/star/connection/XConnectionBroadcaster.hpp>
-#include <com/sun/star/io/XStreamListener.hpp>
-#include <com/sun/star/portal/client/XRmSync.hpp>
-#endif
-
 #include <osl/module.h>
 #include <osl/file.hxx>
 
@@ -222,71 +201,11 @@ ImplReservedKey ImplReservedKeys[] = {
 // #include <usr/refl.hxx>
 class Reflection;
 
-#pragma hdrstop
+
 
 extern "C" {
     typedef UnoWrapperBase* (SAL_CALL *FN_TkCreateUnoWrapper)();
 };
-
-#ifdef REMOTE_APPSERVER
-class RVPConnectionListener : public ::cppu::WeakAggImplHelper1< ::com::sun::star::io::XStreamListener >
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnectionBroadcaster >    m_xBroadcaster;
-
-    DECL_LINK( signalSolarThread, void* );
-public:
-    RVPConnectionListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::connection::XConnectionBroadcaster >& xBroadcaster ) :
-        m_xBroadcaster( xBroadcaster ) {}
-
-    // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& ) throw();
-
-    // XStreamListener
-    virtual void SAL_CALL started() throw();
-    virtual void SAL_CALL closed() throw();
-    virtual void SAL_CALL terminated() throw();
-    virtual void SAL_CALL error( const ::com::sun::star::uno::Any& rException ) throw();
-};
-
-IMPL_LINK( RVPConnectionListener, signalSolarThread, void*, pDummy )
-{
-    osl_raiseSignal( OSL_SIGNAL_USER_RVPCONNECTIONERROR, NULL );
-    return 0;
-}
-
-void RVPConnectionListener::disposing( const ::com::sun::star::lang::EventObject& rObject ) throw()
-{
-    m_xBroadcaster.clear();
-}
-
-void RVPConnectionListener::started() throw()
-{
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "RVPConnectionListener::started\n" );
-#endif
-}
-void RVPConnectionListener::closed() throw()
-{
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "RVPConnectionListener::closed\n" );
-#endif
-}
-void RVPConnectionListener::terminated() throw()
-{
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "RVPConnectionListener::terminated\n" );
-#endif
-}
-void RVPConnectionListener::error( const ::com::sun::star::uno::Any& rException ) throw()
-{
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "connection to client lost ... terminating\n" );
-#endif
-    Application::PostUserEvent( LINK( this, RVPConnectionListener, signalSolarThread ) );
-}
-
-#endif /* REMOTE_APPSERVER */
 
 // =======================================================================
 
@@ -331,9 +250,7 @@ Application::Application()
 {
     ImplInitSVData();
     ImplGetSVData()->mpApp = this;
-#ifndef REMOTE_APPSERVER
     InitSalData();
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -341,9 +258,7 @@ Application::Application()
 Application::~Application()
 {
     ImplDeInitSVData();
-#ifndef REMOTE_APPSERVER
     DeInitSalData();
-#endif
     ImplGetSVData()->mpApp = NULL;
     ImplDestroySVData();
     GlobalDeInitTools();
@@ -520,13 +435,7 @@ USHORT Application::Exception( USHORT nError )
 
 void Application::Abort( const XubString& rErrorText )
 {
-#ifndef REMOTE_APPSERVER
     SalAbort( rErrorText );
-#else
-    ErrorBox aErrorBox( NULL, WB_OK, rErrorText );
-    aErrorBox.Execute();
-    exit(-1);
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -551,181 +460,6 @@ String Application::GetReservedKeyCodeDescription( ULONG i )
     else
         return String( ResId( ImplReservedKeys[i].mnResId, ImplGetResMgr() ) );
 }
-
-// -----------------------------------------------------------------------
-
-#ifdef REMOTE_APPSERVER
-
-ImplRemoteYieldMutex::ImplRemoteYieldMutex()
-{
-    mnCount         = 0;
-    mnMainThreadId  = vos::OThread::getCurrentIdentifier();
-    mnThreadId      = 0;
-}
-
-void SAL_CALL ImplRemoteYieldMutex::acquire()
-{
-    OMutex::acquire();
-    mnThreadId = vos::OThread::getCurrentIdentifier();
-    mnCount++;
-}
-
-void SAL_CALL ImplRemoteYieldMutex::release()
-{
-    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
-    {
-        if ( mnCount == 1 )
-            mnThreadId = 0;
-        mnCount--;
-    }
-    OMutex::release();
-}
-
-sal_Bool SAL_CALL ImplRemoteYieldMutex::tryToAcquire()
-{
-    if ( OMutex::tryToAcquire() )
-    {
-        mnThreadId = vos::OThread::getCurrentIdentifier();
-        mnCount++;
-        return sal_True;
-    }
-    else
-        return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
-#ifdef DBG_UTIL
-
-void ImplDbgTestSolarMutex()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maAppData.mpSolarMutex->GetMainThreadId() !=
-         vos::OThread::getCurrentIdentifier() )
-    {
-        if ( pSVData->maAppData.mpSolarMutex->GetThreadId() !=
-             vos::OThread::getCurrentIdentifier() )
-        {
-            DBG_ERROR( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
-        }
-    }
-    else
-    {
-        if ( pSVData->maAppData.mpSolarMutex->GetThreadId() !=
-             vos::OThread::getCurrentIdentifier() )
-        {
-            DBG_ERROR( "SolarMutex not locked in the main thread" );
-        }
-    }
-}
-
-#endif
-
-
-vos::OThreadData* getThreadLocalEnvironment();
-
-static void ImplRemoteDispatch( BOOL bWait )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // Yield-Semaphore freigeben
-    BOOL bMainThread = TRUE;
-    ULONG nAcquireCount;
-    ULONG i;
-    if ( pSVData->maAppData.mpSolarMutex->GetThreadId() ==
-         ::vos::OThread::getCurrentIdentifier() )
-    {
-        nAcquireCount = pSVData->maAppData.mpSolarMutex->GetAcquireCount();
-        for ( i = 0; i < nAcquireCount; i++ )
-            pSVData->maAppData.mpSolarMutex->release();
-    }
-    else
-    {
-        bMainThread = FALSE;
-        nAcquireCount = 0;
-    }
-
-    RmEvent* pEvent = pSVData->mpRmEventQueue->GetNextEvent( bWait );
-
-    // Yield-Semaphore wieder holen
-    while ( nAcquireCount )
-    {
-        pSVData->maAppData.mpSolarMutex->acquire();
-        nAcquireCount--;
-    }
-
-    if ( pEvent )
-    {
-        if ( !bMainThread )
-        {
-            pSVData->maAppData.mpSolarMutex->acquire();
-            ImplDispatchEvent( (ExtRmEvent*)pEvent );
-            pSVData->maAppData.mpSolarMutex->release();
-        }
-        else
-            ImplDispatchEvent( (ExtRmEvent*)pEvent );
-    }
-    else
-        ::vos::OThread::yield();
-}
-
-// -----------------------------------------------------------------------
-// Sync counter:
-// Default: Call every 100th RVP call Sync to ensure that the client side
-// counts correctly.
-// The mnSyncCounter can be set by an environment variable called
-// FORCE_RVPSYNC_EVERY_NTH_CALL
-// -----------------------------------------------------------------------
-
-RVPSync::RVPSync( const REF( NMSP_CLIENT::XRmSync )& xRVPSync ) :
-    mxRVPSync( xRVPSync ),
-    mnRVPCount( 0 ),
-    mnLastThreadId( 0 ),
-    mnForceSyncCount( 100 ),
-    mnSyncCount( 1 )
-{
-    sal_Char* pSyncEnv = getenv( "FORCE_RVPSYNC_EVERY_NTH_CALL" );
-    if ( pSyncEnv )
-    {
-        ::rtl::OString aTmp( pSyncEnv );
-        mnForceSyncCount = aTmp.toInt32();
-    }
-    if( mnForceSyncCount == 0 ) // zero setting disables forced sync
-        mnSyncCount = 0;
-}
-
-void RVPSync::CheckForRVPSync( const char* )
-{
-    vos::OThread::TThreadIdentifier aThreadId = vos::OThread::getCurrentIdentifier();
-
-    if ( mnForceSyncCount > 0 ) // zero setting disables forced sync
-        ++mnSyncCount;
-
-    if ( mnLastThreadId != aThreadId || mnSyncCount > mnForceSyncCount )
-    {
-        // thread has changed or counter has reached max, we have to send a Sync to the client once!
-        try
-        {
-            ::vos::OGuard aGuard( maMutex );
-            {
-                mnLastThreadId = aThreadId;
-                if( mnSyncCount > mnForceSyncCount )
-                    mnSyncCount = 1;
-                if ( mxRVPSync.is() )
-                    mxRVPSync->Sync( mnRVPCount );
-
-                osl_incrementInterlockedCount( &mnRVPCount );
-            }
-        }
-        catch ( ::com::sun::star::uno::RuntimeException& )
-        {
-        }
-    }
-    else
-        osl_incrementInterlockedCount( &mnRVPCount );
-}
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -756,11 +490,7 @@ void Application::Reschedule()
             ImplTimerCallbackProc();
 
     pSVData->maAppData.mnDispatchLevel++;
-#ifndef REMOTE_APPSERVER
     pSVData->mpDefInst->Yield( FALSE );
-#else
-    ImplRemoteDispatch( FALSE );
-#endif
     pSVData->maAppData.mnDispatchLevel--;
 }
 
@@ -779,11 +509,7 @@ void Application::Yield()
     // Messages, sondern verarbeiten nur noch welche, wenn noch welche
     // vorliegen
     pSVData->maAppData.mnDispatchLevel++;
-#ifndef REMOTE_APPSERVER
     pSVData->mpDefInst->Yield( !pSVData->maAppData.mbAppQuit );
-#else
-    ImplRemoteDispatch( TRUE );
-#endif
     pSVData->maAppData.mnDispatchLevel--;
 }
 
@@ -806,12 +532,8 @@ void Application::Quit()
 
 vos::IMutex& Application::GetSolarMutex()
 {
-#ifndef REMOTE_APPSERVER
     ImplSVData* pSVData = ImplGetSVData();
     return *(pSVData->mpDefInst->GetYieldMutex());
-#else
-    return *(ImplGetSVData()->maAppData.mpSolarMutex);
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -825,46 +547,16 @@ vos::OThread::TThreadIdentifier Application::GetMainThreadIdentifier()
 
 ULONG Application::ReleaseSolarMutex()
 {
-#ifndef REMOTE_APPSERVER
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->ReleaseYieldMutex();
-#else
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // Wenn wir gelockt haben, dann freigeben
-    if ( pSVData->maAppData.mpSolarMutex->GetThreadId() ==
-         vos::OThread::getCurrentIdentifier() )
-    {
-        ULONG nCount = pSVData->maAppData.mpSolarMutex->GetAcquireCount();
-        ULONG n = nCount;
-        while ( n )
-        {
-            pSVData->maAppData.mpSolarMutex->release();
-            n--;
-        }
-
-        return nCount;
-    }
-    else
-        return 0;
-#endif
 }
 
 // -----------------------------------------------------------------------
 
 void Application::AcquireSolarMutex( ULONG nCount )
 {
-#ifndef REMOTE_APPSERVER
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->AcquireYieldMutex( nCount );
-#else
-    ImplSVData* pSVData = ImplGetSVData();
-    while ( nCount )
-    {
-        pSVData->maAppData.mpSolarMutex->acquire();
-        nCount--;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -906,44 +598,7 @@ USHORT Application::GetDispatchLevel()
 
 BOOL Application::AnyInput( USHORT nType )
 {
-#ifndef REMOTE_APPSERVER
     return (BOOL)ImplGetSVData()->mpDefInst->AnyInput( nType );
-#else
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if( ( nType & ( INPUT_ANY ) ) == ( INPUT_ANY ) )
-    {
-        return( pSVData->mpRmEventQueue->HasMouseEvent() ||
-                pSVData->mpRmEventQueue->HasKeyEvent() ||
-                pSVData->mpRmEventQueue->HasPaintEvent() ||
-                pSVData->mpRmEventQueue->HasTimerEvent() ||
-                pSVData->mpRmEventQueue->HasOtherEvent() );
-    }
-    else if( ( nType & ( INPUT_MOUSEANDKEYBOARD ) ) == ( INPUT_MOUSEANDKEYBOARD ) )
-    {
-        return( pSVData->mpRmEventQueue->HasMouseEvent() ||
-                pSVData->mpRmEventQueue->HasKeyEvent() );
-    }
-    else
-    {
-        if( nType & INPUT_MOUSE )
-            return pSVData->mpRmEventQueue->HasMouseEvent();
-
-        if( nType & INPUT_KEYBOARD )
-            return pSVData->mpRmEventQueue->HasKeyEvent();
-
-        if( nType & INPUT_PAINT )
-            return pSVData->mpRmEventQueue->HasPaintEvent();
-
-        if( nType & INPUT_TIMER )
-            return pSVData->mpRmEventQueue->HasTimerEvent();
-
-        if( nType & INPUT_OTHER )
-            return pSVData->mpRmEventQueue->HasOtherEvent();
-    }
-
-    return FALSE;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1010,7 +665,6 @@ void Application::SystemSettingsChanging( AllSettings& rSettings,
 
 void Application::MergeSystemSettings( AllSettings& rSettings )
 {
-#ifndef REMOTE_APPSERVER
     Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
     if( ! pWindow )
         pWindow = ImplGetDefaultWindow();
@@ -1023,7 +677,6 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
     }
     pWindow->ImplGetFrame()->UpdateSettings( rSettings );
     pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1283,7 +936,6 @@ BOOL Application::PostUserEvent( ULONG& rEventId, ULONG nEvent, void* pEventData
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = TRUE;
     rEventId = (ULONG)pSVEvent;
-#ifndef REMOTE_APPSERVER
     if ( ImplGetDefaultWindow()->ImplGetFrame()->PostEvent( pSVEvent ) )
         return TRUE;
     else
@@ -1292,11 +944,6 @@ BOOL Application::PostUserEvent( ULONG& rEventId, ULONG nEvent, void* pEventData
         delete pSVEvent;
         return FALSE;
     }
-#else
-    ExtRmEvent* pEvt = new ExtRmEvent( RMEVENT_USEREVENT, NULL, pSVEvent );
-    ImplPostEvent( pEvt );
-    return TRUE;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1310,7 +957,6 @@ BOOL Application::PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCall
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = TRUE;
     rEventId = (ULONG)pSVEvent;
-#ifndef REMOTE_APPSERVER
     if ( ImplGetDefaultWindow()->ImplGetFrame()->PostEvent( pSVEvent ) )
         return TRUE;
     else
@@ -1319,11 +965,6 @@ BOOL Application::PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCall
         delete pSVEvent;
         return FALSE;
     }
-#else
-    ExtRmEvent* pEvt = new ExtRmEvent( RMEVENT_USEREVENT, NULL, pSVEvent );
-    ImplPostEvent( pEvt );
-    return TRUE;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1770,30 +1411,7 @@ UniqueItemId Application::CreateUniqueId()
 
 SystemInfoType Application::GetClientSystem()
 {
-#ifndef REMOTE_APPSERVER
     return GetServerSystem();
-#else
-    static SystemInfoType nImplClientSystemInfo = 0;
-    if ( !nImplClientSystemInfo )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        if ( pSVData->mxStatus.is() )
-        {
-            CHECK_FOR_RVPSYNC_NORMAL();
-            try
-            {
-                nImplClientSystemInfo = (SystemInfoType)pSVData->mxStatus->GetSystemType();
-            }
-            catch( RuntimeException &e )
-            {
-                rvpExceptionHandler();
-                nImplClientSystemInfo = 0;
-            }
-        }
-    }
-
-    return nImplClientSystemInfo;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1839,22 +1457,7 @@ SystemInfoType Application::GetServerSystem()
 
 BOOL Application::IsRemoteServer()
 {
-#ifndef REMOTE_APPSERVER
     return FALSE;
-#else
-    return TRUE;
-#endif
-}
-
-// -----------------------------------------------------------------------
-
-void* Application::GetRemoteEnvironment()
-{
-#ifndef REMOTE_APPSERVER
-    return NULL;
-#else
-    return ImplGetSVData()->mhRemoteEnv;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1864,25 +1467,6 @@ void* Application::GetRemoteEnvironment()
     const ::rtl::OUString& sObjectName )
 {
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > r;
-
-#ifdef REMOTE_APPSERVER
-    static oslInterlockedCount nRvpClientCount = 0;
-
-    if ( sObjectName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice.Startup" )))
-    {
-        if ( osl_incrementInterlockedCount( &nRvpClientCount ) == 1 )
-        {
-            // this is the first and only rvp client!
-            r = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(SAL_STATIC_CAST(::cppu::OWeakObject *, new CORmStarOffice()));
-
-            // add connection listener for vcl!
-            ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnectionBroadcaster > xBroadcaster(
-                rConnection, ::com::sun::star::uno::UNO_QUERY );
-            if( xBroadcaster.is() )
-                xBroadcaster->addStreamListener( new RVPConnectionListener( xBroadcaster ) );
-        }
-    }
-#endif
     return r;
 }
 
@@ -1935,12 +1519,8 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > Application::GetDisplayConnection()
 {
-#ifndef REMOTE_APPSERVER
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDisplayConnection ? pSVData->mpDisplayConnection : new ::vcl::DisplayConnection;
-#else
-    return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection >();
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -2301,19 +1881,6 @@ BOOL Application::IsHeadlessModeEnabled()
 }
 
 // -----------------------------------------------------------------------
-
-void Application::WaitForClientConnect()
-{
-#ifdef REMOTE_APPSERVER
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData && pSVData->mpStartUpCond )
-    {
-        pSVData->mpStartUpCond->wait();
-        delete pSVData->mpStartUpCond;
-        pSVData->mpStartUpCond = NULL;
-    }
-#endif
-}
 
 bool Application::CanToggleImeStatusWindow()
 {
