@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LTables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:58:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include <comphelper/types.hxx>
 #endif
 
+using namespace connectivity;
 using namespace ::comphelper;
 using namespace connectivity::evoab;
 using namespace connectivity::file;
@@ -101,11 +102,11 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 namespace starutil      = ::com::sun::star::util;
 
-Reference< XNamed > OEvoabTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OEvoabTables::createObject(const ::rtl::OUString& _rName)
 {
     OEvoabTable* pRet = new OEvoabTable(this,(OEvoabConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
-    Reference< XNamed > xRet = pRet;
+    sdbcx::ObjectType xRet = pRet;
     pRet->construct();
     return xRet;
 }

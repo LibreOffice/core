@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LColumns.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:54:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,15 +78,15 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 
-Reference< XNamed > OEvoabColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OEvoabColumns::createObject(const ::rtl::OUString& _rName)
 {
 
     OEvoabTable* pTable = (OEvoabTable*)m_pTable;
     ::vos::ORef<OSQLColumns> aCols = pTable->getTableColumns();
     OSQLColumns::const_iterator aIter = find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
-    Reference< XNamed > xRet;
+    sdbcx::ObjectType xRet;
     if(aIter != aCols->end())
-        xRet = Reference< XNamed >(*aIter,UNO_QUERY);
+        xRet = sdbcx::ObjectType(*aIter,UNO_QUERY);
     return xRet;
 }
 // -------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LColumns.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:54:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ namespace connectivity
         class OEvoabColumns : public file::OColumns
         {
         protected:
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         public:
             OEvoabColumns(file::OFileTable* _pTable,
                             ::osl::Mutex& _rMutex,
