@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-05 14:07:02 $
+ *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,7 @@ BOOL XColorTable::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtColor, 3 ) );
 
-        SfxMedium aMedium( aURL.PathToFileName(),
-                    STREAM_READ | STREAM_NOCREATE,
-                    TRUE,                 // direkt
-                    TRUE );               // Download
-
+        SfxMedium aMedium( aURL.PathToFileName(), STREAM_READ | STREAM_NOCREATE, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if( !pStream )
             return( FALSE );
@@ -183,10 +179,7 @@ BOOL XColorTable::Save()
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtColor, 3 ) );
 
-    SfxMedium aMedium( aURL.PathToFileName(),
-                STREAM_WRITE | STREAM_TRUNC,
-                TRUE,                 // direkt
-                FALSE );              // Upload
+    SfxMedium aMedium( aURL.PathToFileName(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabgrdt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:45:25 $
+ *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,11 +357,7 @@ BOOL XGradientList::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtGradient, 3 ) );
 
-        SfxMedium aMedium( aURL.PathToFileName(),
-                    STREAM_READ | STREAM_NOCREATE,
-                    TRUE,                 // direkt
-                    TRUE );               // Download
-
+        SfxMedium aMedium( aURL.PathToFileName(), STREAM_READ | STREAM_NOCREATE, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if( !pStream )
             return( FALSE );
@@ -398,10 +394,7 @@ BOOL XGradientList::Save()
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtGradient, 3 ) );
 
-    SfxMedium aMedium( aURL.PathToFileName(),
-                STREAM_WRITE | STREAM_TRUNC,
-                TRUE,                 // direkt
-                FALSE );              // Upload
+    SfxMedium aMedium( aURL.PathToFileName(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:28 $
+ *  last change: $Author: ka $ $Date: 2000-10-17 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,11 +336,7 @@ BOOL XDashList::Load()
         if( !aURL.getExtension().Len() )
             aURL.setExtension( String( pszExtDash, 3 ) );
 
-        SfxMedium aMedium( aURL.PathToFileName(),
-                    STREAM_READ | STREAM_NOCREATE,
-                    TRUE,                 // direkt
-                    TRUE );               // Download
-
+        SfxMedium aMedium( aURL.PathToFileName(), STREAM_READ | STREAM_NOCREATE, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if( !pStream )
             return( FALSE );
@@ -378,10 +374,7 @@ BOOL XDashList::Save()
     if( !aURL.getExtension().Len() )
         aURL.setExtension( String( pszExtDash, 3 ) );
 
-    SfxMedium aMedium( aURL.PathToFileName(),
-                STREAM_WRITE | STREAM_TRUNC,
-                TRUE,                 // direkt
-                FALSE );              // Upload
+    SfxMedium aMedium( aURL.PathToFileName(), STREAM_WRITE | STREAM_TRUNC, TRUE );
     aMedium.IsRemote();
 
     SvStream* pStream = aMedium.GetOutStream();
