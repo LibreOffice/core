@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-12 09:28:34 $
+ *  last change: $Author: tbe $ $Date: 2002-10-30 13:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,12 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             aOldValue <<= accessibility::AccessibleStateType::ENABLED;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldValue, aNewValue );
+        }
+        break;
+        case VCLEVENT_WINDOW_MOVE:
+        case VCLEVENT_WINDOW_RESIZE:
+        {
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT, aOldValue, aNewValue );
         }
         break;
     }
