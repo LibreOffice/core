@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 20:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ private:
     FixedText*      pPage4_Titel2;
     MultiLineEdit*  pPage4_Misc;
     CheckBox*       pPage4_Download;
-    CheckBox*       pPage4_Created;
+//-/    CheckBox*       pPage4_Created;
 
     // page 5 controls
 
