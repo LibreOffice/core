@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: GenericCategories.xcu,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:06:42 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-data SYSTEM "../../../../../component-update.dtd">
+<oor:component-data oor:name="GenericCategories" oor:package="org.openoffice.Office.UI" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="Commands">
+        <node oor:name="Categories">
+            <node oor:name="0" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Intern</value>
+                    <value xml:lang="en-US">Internal</value>
+                </prop>
+            </node>
+            <node oor:name="1" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Applikation</value>
+                    <value xml:lang="en-US">Application</value>
+                </prop>
+            </node>
+            <node oor:name="2" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Ansicht</value>
+                    <value xml:lang="en-US">View</value>
+                </prop>
+            </node>
+            <node oor:name="3" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Dokumente</value>
+                    <value xml:lang="en-US">Documents</value>
+                </prop>
+            </node>
+            <node oor:name="4" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Bearbeiten</value>
+                    <value xml:lang="en-US">Edit</value>
+                </prop>
+            </node>
+            <node oor:name="5" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">BASIC</value>
+                    <value xml:lang="en-US">BASIC</value>
+                </prop>
+            </node>
+            <node oor:name="6" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Extras</value>
+                    <value xml:lang="en-US">Options</value>
+                </prop>
+            </node>
+            <node oor:name="7" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Math</value>
+                    <value xml:lang="en-US">Math</value>
+                </prop>
+            </node>
+            <node oor:name="8" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Navigieren</value>
+                    <value xml:lang="en-US">Navigate</value>
+                </prop>
+            </node>
+            <node oor:name="9" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Einfügen</value>
+                    <value xml:lang="en-US">Insert</value>
+                </prop>
+            </node>
+            <node oor:name="10" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Format</value>
+                    <value xml:lang="en-US">Format</value>
+                </prop>
+            </node>
+            <node oor:name="11" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Vorlagen</value>
+                    <value xml:lang="en-US">Templates</value>
+                </prop>
+            </node>
+            <node oor:name="12" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Text</value>
+                    <value xml:lang="en-US">Text</value>
+                </prop>
+            </node>
+            <node oor:name="13" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Rahmen</value>
+                    <value xml:lang="en-US">Frame</value>
+                </prop>
+            </node>
+            <node oor:name="14" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Grafik</value>
+                    <value xml:lang="en-US">Graphic</value>
+                </prop>
+            </node>
+            <node oor:name="15" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Tabelle</value>
+                    <value xml:lang="en-US">Table</value>
+                </prop>
+            </node>
+            <node oor:name="16" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Nummerierung</value>
+                    <value xml:lang="en-US">Numbering</value>
+                </prop>
+            </node>
+            <node oor:name="17" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Daten</value>
+                    <value xml:lang="en-US">Data</value>
+                </prop>
+            </node>
+            <node oor:name="18" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Sonderfunktionen</value>
+                    <value xml:lang="en-US">Special Functions</value>
+                </prop>
+            </node>
+            <node oor:name="19" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Image</value>
+                    <value xml:lang="en-US">Image</value>
+                </prop>
+            </node>
+            <node oor:name="20" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Chart</value>
+                    <value xml:lang="en-US">Chart</value>
+                </prop>
+            </node>
+            <node oor:name="21" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Explorer</value>
+                    <value xml:lang="en-US">Explorer</value>
+                </prop>
+            </node>
+            <node oor:name="22" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Verbinder</value>
+                    <value xml:lang="en-US">Connector</value>
+                </prop>
+            </node>
+            <node oor:name="23" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Ändern</value>
+                    <value xml:lang="en-US">Modify</value>
+                </prop>
+            </node>
+            <node oor:name="24" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Zeichnen</value>
+                    <value xml:lang="en-US">Drawing</value>
+                </prop>
+            </node>
+            <node oor:name="25" oor:op="replace">
+                <prop oor:name="Name" oor:type="xs:string">
+                    <value xml:lang="de">Kontrollelemente</value>
+                    <value xml:lang="en-US">Controls</value>
+                </prop>
+            </node>
+        </node>
+    </node>
+</oor:component-data>
