@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_interface.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:26:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
                 Xml::Element &
                     rDef = aDocuList.Produce_Definition();
                 HF_IdlDocuTextDisplay
-                    aShortDisplay( Env(), &rDocu, *pCe);
+                    aShortDisplay( Env(), &rDef, *pCe);
                 pShort->Short().DisplayAt(aShortDisplay);
             }   // end if (pShort != 0)
         }   // endif ( (*i_commentedRef).Info() != 0 ) else
