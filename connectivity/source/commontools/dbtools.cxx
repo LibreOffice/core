@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 15:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,28 +1140,31 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
     static ::rtl::OUString sEmpty;
     static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
     _rComposedName = sEmpty;
-    ::rtl::OUString sCatalogSep = _rxMetaData->getCatalogSeparator();
-
-    if (_rCatalog.getLength() && _rxMetaData->isCatalogAtStart() && sCatalogSep.getLength())
+    ::rtl::OUString sCatalogSep;
+    sal_Bool bCatlogAtStart = sal_True;
+    if(_rCatalog.getLength())
     {
-        QUOTE(_rComposedName,_rCatalog);
-        _rComposedName += _rxMetaData->getCatalogSeparator();
+        sCatalogSep     = _rxMetaData->getCatalogSeparator();
+        bCatlogAtStart  = _rxMetaData->isCatalogAtStart();
+
+        if ( bCatlogAtStart && sCatalogSep.getLength())
+        {
+            QUOTE(_rComposedName,_rCatalog);
+            _rComposedName += sCatalogSep;
+        }
     }
 
     if (_rSchema.getLength())
     {
         QUOTE(_rComposedName,_rSchema);
         _rComposedName += sSeparator;
-        QUOTE(_rComposedName,_rName);
-    }
-    else
-    {
-        QUOTE(_rComposedName,_rName);
     }
 
-    if (_rCatalog.getLength() && !_rxMetaData->isCatalogAtStart() && sCatalogSep.getLength())
+    QUOTE(_rComposedName,_rName);
+
+    if (_rCatalog.getLength() && !bCatlogAtStart && sCatalogSep.getLength())
     {
-        _rComposedName += _rxMetaData->getCatalogSeparator();
+        _rComposedName += sCatalogSep;
         QUOTE(_rComposedName,_rCatalog);
     }
 }
@@ -1705,6 +1708,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.41  2001/09/20 12:51:56  oj
+ *  #92232# fixes for BIGINT type
+ *
  *  Revision 1.40  2001/08/28 14:36:17  fs
  *  encountered during #74241#: prependContextInfo uses a const SQLException& now
  *
