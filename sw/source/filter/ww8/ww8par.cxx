@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:36:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,10 +1360,10 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
         }
         break;
         case RES_FLTR_TOX:
-        case RES_FLTR_BOOKMARK:
             SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
             break;
         default:
+        case RES_FLTR_BOOKMARK:
             ASSERT(!this, "EndStck used with non field, not what we want");
             SwFltEndStack::SetAttrInDoc(rTmpPos, pEntry);
             break;
@@ -3197,7 +3197,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     nWantedVersion = nVersionPara;
     pCtrlStck   = 0;
     mpRedlineStack = 0;
-    pRefStck = 0;
+    pReffedStck = 0;
+    pReffingStck = 0;
     pAnchorStck = 0;
     pFonts = 0;
     pSBase = 0;
@@ -3636,7 +3637,8 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         RefFldStck: Keeps track of bookmarks which may be inserted as
         variables intstead.
     */
-    pRefStck = new SwWW8FltRefStack(&rDoc, nFieldFlags);
+    pReffedStck = new SwFltEndStack(&rDoc, nFieldFlags);
+    pReffingStck = new SwWW8FltRefStack(&rDoc, nFieldFlags);
 
     pAnchorStck = new SwWW8FltAnchorStack(&rDoc, nFieldFlags);
 
@@ -3996,7 +3998,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     mpRedlineStack->closeall(*pPaM->GetPoint());
     delete mpRedlineStack;
     DeleteAnchorStk();
-    DeleteRefStk();
+    DeleteRefStks();
 
     UpdateFields();
 
