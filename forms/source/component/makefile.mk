@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:29:06 $
+#   last change: $Author: fs $ $Date: 2001-08-28 14:35:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,6 +138,7 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/Button.obj \
             $(SLO)$/ImageButton.obj \
             $(SLO)$/ImageControl.obj \
+            $(SLO)$/errorbroadcaster.obj \
 
 # --- Targets ----------------------------------
 
