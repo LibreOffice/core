@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-21 12:29:38 $
+#   last change: $Author: hjs $ $Date: 2001-09-10 16:53:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -248,7 +248,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     @echo $(DEF$(TNR)EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF$(TNR)EXPORTFILE)"!=""
-    $(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@
+    +$(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP$(TNR)HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"

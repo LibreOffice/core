@@ -145,7 +145,7 @@ $(DEF1TARGETN) .PHONY : \
     @echo $(DEF1EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF1EXPORTFILE)"!=""
-    $(TYPE) $(DEF1EXPORTFILE) >> $@
+    +$(TYPE) $(DEF1EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP1HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -172,7 +172,6 @@ $(DEF1TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF2TARGETN)"!=""
@@ -320,7 +319,7 @@ $(DEF2TARGETN) .PHONY : \
     @echo $(DEF2EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF2EXPORTFILE)"!=""
-    $(TYPE) $(DEF2EXPORTFILE) >> $@
+    +$(TYPE) $(DEF2EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP2HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -347,7 +346,6 @@ $(DEF2TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF3TARGETN)"!=""
@@ -495,7 +493,7 @@ $(DEF3TARGETN) .PHONY : \
     @echo $(DEF3EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF3EXPORTFILE)"!=""
-    $(TYPE) $(DEF3EXPORTFILE) >> $@
+    +$(TYPE) $(DEF3EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP3HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -522,7 +520,6 @@ $(DEF3TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF4TARGETN)"!=""
@@ -670,7 +667,7 @@ $(DEF4TARGETN) .PHONY : \
     @echo $(DEF4EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF4EXPORTFILE)"!=""
-    $(TYPE) $(DEF4EXPORTFILE) >> $@
+    +$(TYPE) $(DEF4EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP4HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -697,7 +694,6 @@ $(DEF4TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF5TARGETN)"!=""
@@ -845,7 +841,7 @@ $(DEF5TARGETN) .PHONY : \
     @echo $(DEF5EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF5EXPORTFILE)"!=""
-    $(TYPE) $(DEF5EXPORTFILE) >> $@
+    +$(TYPE) $(DEF5EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP5HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -872,7 +868,6 @@ $(DEF5TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF6TARGETN)"!=""
@@ -1020,7 +1015,7 @@ $(DEF6TARGETN) .PHONY : \
     @echo $(DEF6EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF6EXPORTFILE)"!=""
-    $(TYPE) $(DEF6EXPORTFILE) >> $@
+    +$(TYPE) $(DEF6EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP6HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1047,7 +1042,6 @@ $(DEF6TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF7TARGETN)"!=""
@@ -1195,7 +1189,7 @@ $(DEF7TARGETN) .PHONY : \
     @echo $(DEF7EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF7EXPORTFILE)"!=""
-    $(TYPE) $(DEF7EXPORTFILE) >> $@
+    +$(TYPE) $(DEF7EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP7HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1222,7 +1216,6 @@ $(DEF7TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF8TARGETN)"!=""
@@ -1370,7 +1363,7 @@ $(DEF8TARGETN) .PHONY : \
     @echo $(DEF8EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF8EXPORTFILE)"!=""
-    $(TYPE) $(DEF8EXPORTFILE) >> $@
+    +$(TYPE) $(DEF8EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP8HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1397,7 +1390,6 @@ $(DEF8TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF9TARGETN)"!=""
@@ -1545,7 +1537,7 @@ $(DEF9TARGETN) .PHONY : \
     @echo $(DEF9EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF9EXPORTFILE)"!=""
-    $(TYPE) $(DEF9EXPORTFILE) >> $@
+    +$(TYPE) $(DEF9EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP9HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1572,7 +1564,6 @@ $(DEF9TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(DEF10TARGETN)"!=""
@@ -1720,7 +1711,7 @@ $(DEF10TARGETN) .PHONY : \
     @echo $(DEF10EXPORT20)										>>$@
 .ENDIF
 .IF "$(DEF10EXPORTFILE)"!=""
-    $(TYPE) $(DEF10EXPORTFILE) >> $@
+    +$(TYPE) $(DEF10EXPORTFILE) >> $@
 .ENDIF
 .ENDIF			# "$(APP10HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
@@ -1747,4 +1738,3 @@ $(DEF10TARGETN): \
 
 
 # Anweisungen fuer das Linken
-#next Target
