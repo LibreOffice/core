@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2004-04-20 08:58:53 $
+#   last change: $Author: jl $ $Date: 2004-04-20 10:01:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,13 @@ SLOFILES = \
 
 #LIB1TARGET=$(SLB)$/$(FRAMEWORKLIB).lib
 
-SHL1TARGET=$(FRAMEWORKLIB)
+.IF "$(UNIXVERSIONNAMES)" == ""
+SHL1TARGET = $(FRAMEWORKLIB)$(UDK_MAJOR)
+.ELSE # UNIXVERSIONNAMES
+SHL1TARGET = $(FRAMEWORKLIB)
+.ENDIF # UNIXVERSIONNAMES
+
+#SHL1TARGET=$(FRAMEWORKLIB)
 SHL1DEPN=
 SHL1IMPLIB = i$(FRAMEWORKLIB)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
