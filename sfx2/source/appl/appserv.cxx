@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-12 15:44:47 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,10 +482,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                     pObjSh; pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
                 {
-            SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjSh );
-            if ( !pFrame || !pFrame->GetWindow().IsReallyVisible() )
-                continue;
-            if ( pObjSh->IsModified() && !pObjSh->PrepareClose(2) )
+                    if ( !pObjSh->IsModified() )
+                        continue;
+
+                    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObjSh );
+                    if ( !pFrame || !pFrame->GetWindow().IsReallyVisible() )
+                        continue;
+
+                    if ( pObjSh->PrepareClose(2) )
+                        pObjSh->SetModified( FALSE );
+                    else
                         return;
                 }
 
