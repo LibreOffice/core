@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:52:13 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,7 +425,8 @@ void ResizeFrameCols(SwFmtCol& rCol,
         rArr[0]->SetWishWidth(rArr[0]->GetWishWidth() + (USHORT)nWishDiff);
     else
         rArr[rArr.Count()-1]->SetWishWidth(rArr[rArr.Count()-1]->GetWishWidth() + (USHORT)nWishDiff);
-
+    //reset auto width
+    rCol.SetOrtho(FALSE, 0, 0 );
 }
 /*--------------------------------------------------------------------
     Beschreibung:   Hier werden alle Aenderungen der Tableiste
@@ -478,252 +479,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         SvxLRSpaceItem aLR;
         DEBUGLRSPACE(aLongLR);
         BOOL bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
-        BOOL bTableColumns = 0 != rSh.GetTableFmt();
-        if(bSect && (bTableColumns || nFrmType & FRMTYPE_COLUMN))
-        {
-            SwRect aLastRect = rSh.GetAnyCurRect(RECT_SECTION);
-            long nOldLeft = (long)(aLastRect.Left() - DOCUMENTBORDER);
-            long nOldRight = (long)(nPageWidth + DOCUMENTBORDER - aLastRect.Right());
-            //welche Seite wurde veraendert? Rundungsfehler vermeiden
-            BOOL bLeftChanged = Abs(nOldLeft - aLongLR.GetLeft()) > Abs(nOldRight - aLongLR.GetRight());
-            const SwFrmFmt* pFmt = 0;
-            if(bTableColumns)
-            {
-                SwTabCols aTabCols;
-                rSh.GetTabCols(aTabCols);
-                //fuer die erste bzw. letzte Spalte wird der Tabellenrand veraendert, sonst
-                //die Spaltentrenner
-                USHORT nCurColNo = rSh.GetCurTabColNum();
-                USHORT nColCount = aTabCols.Count() + 1;
-
-                if(0 == nCurColNo && bLeftChanged)
-                {
-                    //die erste
-                    long nNewColPos = aLongLR.GetLeft();
-                    if(nNewColPos >= aTabCols.GetLeftMin())
-                        aTabCols.SetLeft((USHORT)nNewColPos - aTabCols.GetLeftMin()+ DOCUMENTBORDER);
-
-                }
-                else if(nColCount - 1 == nCurColNo && !bLeftChanged)
-                {
-                    //die letzte
-                    long nNewColPos = aLongLR.GetRight();
-                    nNewColPos = nPageWidth - nNewColPos + DOCUMENTBORDER - aTabCols.GetLeftMin();
-                    if(nNewColPos <= aTabCols.GetRightMax())
-                        aTabCols.SetRight((USHORT)nNewColPos);
-                }
-                else
-                {
-                    //mittendrin
-                    long nLeftBorder;
-                    long nRightBorder;
-                    if(bLeftChanged)
-                    {
-                        nLeftBorder = nCurColNo - 1 ? aTabCols[nCurColNo - 2] : aTabCols.GetLeft();
-                        nRightBorder =  nCurColNo < nColCount - 1 ? aTabCols[nCurColNo] : aTabCols.GetRight();
-                    }
-                    else
-                    {
-                        nLeftBorder = nCurColNo ? aTabCols[nCurColNo - 1] : aTabCols.GetLeft();
-                        nRightBorder =  nCurColNo + 1 < nColCount ? aTabCols[nCurColNo + 1] : aTabCols.GetRight();
-                    }
-
-                    long nNewColPos = bLeftChanged ? aLongLR.GetLeft() : aLongLR.GetRight();
-                    //hier muss noch die Border-Distance der Zelle eingerechnet werden
-                    if(bLeftChanged)
-                        nNewColPos = nNewColPos + DOCUMENTBORDER - aTabCols.GetLeftMin();
-                    else
-                        nNewColPos = nPageWidth - nNewColPos + DOCUMENTBORDER - aTabCols.GetLeftMin();
-
-
-                    if(nNewColPos < nLeftBorder + MINLAY)
-                        nNewColPos  = nLeftBorder + MINLAY;
-                    else if(nNewColPos > nRightBorder - MINLAY)
-                        nNewColPos = nRightBorder - MINLAY;
-                    aTabCols[nCurColNo - (bLeftChanged ? 1 : 0)] = (USHORT)nNewColPos;
-                }
-                rSh.SetTabCols(aTabCols, FALSE);
-            }
-            else if(0 != (pFmt = rSh.GetFlyFrmFmt()))
-            {
-                SwFmtCol aCol = pFmt->GetCol();
-                SwColumns& aCols = aCol.GetColumns();
-//              const SwRect &rSizeRect = rSh.GetAnyCurRect(RECT_FLY_PRT_EMBEDDED);
-                const SwRect aFlyRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
-                const long lWidth = aFlyRect.Width();
-                USHORT nCurFrameCol = rSh.GetCurOutColNum() - 1;
-                USHORT nColCount = aCols.Count();
-                SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_HORI_ORIENT, RES_HORI_ORIENT,
-                                            RES_COL, RES_COL, 0 );
-
-                if((0 == nCurFrameCol && bLeftChanged) ||
-                        (nColCount - 1 == nCurFrameCol && !bLeftChanged))
-                {
-                    //in LRSpace umsetzen
-                    long nDeltaX = bLeftChanged ?
-                                    DOCUMENTBORDER + aLongLR.GetLeft() - aFlyRect.Left()
-                                    : 0 ;
-                    SwFmtHoriOrient aHoriOrient( pFmt->GetHoriOrient() );
-                    aHoriOrient.SetHoriOrient( HORI_NONE );
-                    aHoriOrient.SetPos( aHoriOrient.GetPos() + nDeltaX );
-
-                    SwFmtFrmSize aSize( pFmt->GetFrmSize() );
-                    long nOldWidth = (long) aSize.GetWidth();
-
-                    long nWidthDiff = nOldLeft - aLongLR.GetLeft() +
-                                            nOldRight - aLongLR.GetRight();
-                    long nNewWidth = nOldWidth + nWidthDiff;
-                    if(aSize.GetWidthPercent())
-                    {
-                        SwRect aRect;
-                        rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
-                        long nPrtWidth = aRect.Width();
-                        aSize.SetWidthPercent(BYTE((
-                            nNewWidth) * 100 /nPrtWidth));
-                    }
-                    else
-                        aSize.SetWidth( nNewWidth );
-
-                    ::ResizeFrameCols(aCol, nOldWidth, (long)aSize.GetWidth(), nDeltaX );
-                    aSet.Put( aSize );
-                    aSet.Put( aHoriOrient );
-
-                }
-                else //Spalten veraendert
-                {
-                    long nLeftBorder = 0;
-                    long nRightBorder = lWidth;
-                    long nOldColPos = 0;
-                    long nNewColPos = bLeftChanged ? aLongLR.GetLeft() : aLongLR.GetRight();
-                    if(!bLeftChanged)
-                        nNewColPos = nPageWidth - nNewColPos;
-
-                    //mittendrin
-                    long nWidth = 0;
-                    for ( USHORT i = 0; i < aCols.Count(); ++i )
-                    {
-                        SwColumn* pCol = aCols[i];
-                        nWidth += aCol.CalcColWidth(i, lWidth);
-                        if( i == (bLeftChanged ? nCurFrameCol - 1 : nCurFrameCol))
-                            nOldColPos = nWidth;
-                        if( i == (bLeftChanged ? nCurFrameCol - 2 : nCurFrameCol - 1))
-                            nLeftBorder = nWidth;
-                        if(i == (bLeftChanged ? nCurFrameCol : nCurFrameCol + 1))
-                            nRightBorder = nWidth;
-                    }
-                    nNewColPos -= aFlyRect.Left();
-                    nNewColPos += DOCUMENTBORDER;
-                    if(nNewColPos < nLeftBorder + MINLAY)
-                        nNewColPos  = nLeftBorder + MINLAY;
-                    else if(nNewColPos > nRightBorder - MINLAY)
-                        nNewColPos = nRightBorder - MINLAY;
-
-
-                    // in WishWidth umrechnen:
-                    nNewColPos = nNewColPos * long(aCol.GetWishWidth()) / lWidth;
-                    nOldColPos = nOldColPos * long(aCol.GetWishWidth()) / lWidth;
-                    long nDiff = nNewColPos - nOldColPos;
-
-                    SwColumn* pCol = aCols[bLeftChanged ? nCurFrameCol : nCurFrameCol + 1];
-                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) - (USHORT)nDiff );
-                    //den Nachbarn in umgekehrter Weise veraendern
-                    pCol = aCols[bLeftChanged ? nCurFrameCol - 1 : nCurFrameCol ];
-                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) + (USHORT)nDiff );
-                }
-                aSet.Put( aCol );
-                rSh.StartAction();
-                rSh.Push();
-                rSh.SetFlyFrmAttr( aSet );
-                //die Rahmenselektion wieder aufheben
-                if(!bFrmSelection && rSh.IsFrmSelected())
-                {
-                    rSh.UnSelectFrm();
-                    rSh.LeaveSelFrmMode();
-                }
-                rSh.Pop();
-                rSh.EndAction();
-
-            }
-            else
-            {
-                //Seitenspalten
-                USHORT nCurCol = rSh.GetCurOutColNum();
-                nCurCol--;
-                const SwFrmFmt& rMaster = rDesc.GetMaster();
-                SwFmtCol aCol(rMaster.GetCol());
-                SwColumns& aCols = aCol.GetColumns();
-                //SvxColumnItem aColItem(nCurCol);
-                const SwRect aPageRect = rSh.GetAnyCurRect(RECT_PAGE_PRT);
-                const long lWidth = aPageRect.Width();
-                USHORT nColCount = aCols.Count();
-                SfxItemSet aSet( GetPool(), RES_FRM_SIZE, RES_FRM_SIZE,
-                                            RES_HORI_ORIENT, RES_HORI_ORIENT,
-                                            RES_COL, RES_COL, 0 );
-
-                if((0 == nCurCol && bLeftChanged) ||
-                        (nColCount - 1 == nCurCol && !bLeftChanged))
-                {
-                    // Seitenraender einstellen
-                    SvxLRSpaceItem aLR;
-                    aLR.SetLeft ((aPageRect.Left()/* - DOCUMENTBORDER*/));
-                    aLR.SetRight((nPageWidth + /*DOCUMENTBORDER*/ - aPageRect.Right()));
-                    if(bLeftChanged)
-                        aLR.SetLeft((USHORT)aLongLR.GetLeft());
-                    else
-                        aLR.SetRight((USHORT)aLongLR.GetRight());
-                    SwapPageMargin( rDesc, aLR );
-                    SwPageDesc aDesc( rDesc );
-                    aDesc.GetMaster().SetAttr( aLR );
-                    rSh.ChgPageDesc( nDescId, aDesc );
-                }
-                else //Spalten veraendert ?
-                {
-                    long nLeftBorder = 0;
-                    long nRightBorder = nPageWidth;
-                    long nOldColPos = 0;
-                    long nNewColPos = bLeftChanged ? aLongLR.GetLeft() : aLongLR.GetRight();
-                    if(!bLeftChanged)
-                        nNewColPos = nPageWidth - nNewColPos;
-
-                    //mittendrin
-                    long nWidth = 0;
-                    for ( USHORT i = 0; i < aCols.Count(); ++i )
-                    {
-                        SwColumn* pCol = aCols[i];
-                        nWidth += aCol.CalcColWidth(i, lWidth);
-                        if( i == (bLeftChanged ? nCurCol - 1 : nCurCol))
-                            nOldColPos = nWidth;
-                        if( i == (bLeftChanged ? nCurCol - 2 : nCurCol - 1))
-                            nLeftBorder = nWidth;
-                        if(i == (bLeftChanged ? nCurCol : nCurCol + 1))
-                            nRightBorder = nWidth;
-                    }
-                    nNewColPos -= aPageRect.Left();
-//                  nNewColPos += DOCUMENTBORDER;
-                    if(nNewColPos < nLeftBorder + MINLAY)
-                        nNewColPos  = nLeftBorder + MINLAY;
-                    else if(nNewColPos > nRightBorder - MINLAY)
-                        nNewColPos = nRightBorder - MINLAY;
-
-
-                    // in WishWidth umrechnen:
-                    nNewColPos = nNewColPos * long(aCol.GetWishWidth()) / lWidth;
-                    nOldColPos = nOldColPos * long(aCol.GetWishWidth()) / lWidth;
-                    long nDiff = nNewColPos - nOldColPos;
-
-                    SwColumn* pCol = aCols[bLeftChanged ? nCurCol : nCurCol + 1];
-                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) - (USHORT)nDiff );
-                    //den Nachbarn in umgekehrter Weise veraendern
-                    pCol = aCols[bLeftChanged ? nCurCol - 1 : nCurCol ];
-                    pCol->SetWishWidth(USHORT(pCol->GetWishWidth()) + (USHORT)nDiff );
-                }
-                SwPageDesc aDesc( rDesc );
-                aDesc.GetMaster().SetAttr( aCol );
-                rSh.ChgPageDesc( rSh.GetCurPageDesc(), aDesc );
-            }
-        }
-        else if ( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
+        if ( !bSect && (bFrmSelection || nFrmType & FRMTYPE_FLY_ANY) )
         {
             SwFrmFmt* pFmt = ((SwFrmFmt*)rSh.GetFlyFrmFmt());
             const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
@@ -811,6 +567,34 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aRect.Left( aLongLR.GetLeft() + DOCUMENTBORDER );
             aRect.Right( nPageWidth + DOCUMENTBORDER - aLongLR.GetRight());
             rSh.SetObjRect( aRect );
+        }
+        else if(bSect || rSh.IsDirectlyInSection())
+        {
+            //change the section indents and the columns if available
+            //at first determine the changes
+            SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, 0);
+            const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, 0);
+            aSectRect.Pos() += aTmpRect.Pos();
+            long nLeftDiff = aLongLR.GetLeft() - (long)(aSectRect.Left() - DOCUMENTBORDER);
+            long nRightDiff = aLongLR.GetRight() - (long)(nPageWidth + DOCUMENTBORDER - aSectRect.Right());
+            //change the LRSpaceItem of the section accordingly
+            const SwSection* pCurrSect = rSh.GetCurrSection();
+            const SwSectionFmt* pSectFmt = pCurrSect->GetFmt();
+            SvxLRSpaceItem aLR = pSectFmt->GetLRSpace();
+            aLR.SetLeft(aLR.GetLeft() + nLeftDiff);
+            aLR.SetRight(aLR.GetRight() + nRightDiff);
+            SfxItemSet aSet(rSh.GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE, RES_COL, RES_COL, 0L);
+            aSet.Put(aLR);
+            //change the first/last column
+            if(bSect)
+            {
+                SwFmtCol aCols( pSectFmt->GetCol() );
+                long nDiffWidth = nLeftDiff + nRightDiff;
+                ::ResizeFrameCols(aCols, aSectRect.Width(), aSectRect.Width() - nDiffWidth, nLeftDiff );
+                aSet.Put( aCols );
+            }
+            rSh.ChgSection( rSh.GetSectionFmtPos(*pSectFmt), *pCurrSect, &aSet );
+
         }
         else
         {   // Seitenraender einstellen
@@ -1169,7 +953,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                         pSectFmt->GetCol() :
                             (const SwFmtCol&)aSet.Get( RES_COL, FALSE ));
 
-                const long lWidth = rSh.GetAnyCurRect(bSect ? RECT_SECTION : RECT_FLY_PRT_EMBEDDED).Width();
+                const long lWidth = rSh.GetAnyCurRect(bSect ? RECT_SECTION_PRT : RECT_FLY_PRT_EMBEDDED).Width();
                 ::lcl_ConvertToCols( aColItem, USHORT(lWidth), aCols );
                 DEBUGCOLITEMS(aColItem);
                 aSet.Put( aCols );
@@ -1297,8 +1081,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             else
             {
                 SwRect aRect;
-                if( !bFrmSelection && (nFrmType & FRMTYPE_COLSECT) )
-                    aRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
+                if( !bFrmSelection && ((nFrmType & FRMTYPE_COLSECT) || rSh.IsDirectlyInSection()) )
+                {
+                    aRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, pPt);
+                    const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
+                    aRect.Pos() += aTmpRect.Pos();
+                }
+
                 else if ( bFrmSelection || nFrmType & FRMTYPE_FLY_ANY )
                     aRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
                 else if( nFrmType & FRMTYPE_DRAWOBJ)
@@ -1607,20 +1396,22 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         else
                             --nNum;
                         SvxColumnItem aColItem(nNum);
-                        const SwRect &rRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
+                        SwRect aRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, pPt);
+                        const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
+                        aRect.Pos() += aTmpRect.Pos();
 
-                        ::lcl_FillSvxColumn(rCol, USHORT(bVerticalWriting ? rRect.Height() : rRect.Width()), aColItem, 0);
+                        ::lcl_FillSvxColumn(rCol, USHORT(bVerticalWriting ? aRect.Height() : aRect.Width()), aColItem, 0);
 
                         if(bVerticalWriting)
                         {
-                            aColItem.SetLeft ((USHORT)(rRect.Top() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageHeight  - rRect.Bottom() +
+                            aColItem.SetLeft ((USHORT)(aRect.Top() - DOCUMENTBORDER ));
+                            aColItem.SetRight((USHORT)(nPageHeight  - aRect.Bottom() +
                                                                         DOCUMENTBORDER ));
                         }
                         else
                         {
-                            aColItem.SetLeft ((USHORT)(rRect.Left() - DOCUMENTBORDER ));
-                            aColItem.SetRight((USHORT)(nPageWidth   - rRect.Right() +
+                            aColItem.SetLeft ((USHORT)(aRect.Left() - DOCUMENTBORDER ));
+                            aColItem.SetRight((USHORT)(nPageWidth   - aRect.Right() +
                                                                         DOCUMENTBORDER ));
                         }
                         aColItem.SetOrtho(aColItem.CalcOrtho());
