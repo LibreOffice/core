@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TextTable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:18 $
+ *  last change:$Date: 2003-09-08 11:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,13 @@ public class _TextTable extends MultiPropertyTest {
         catch (com.sun.star.beans.UnknownPropertyException ex) {}
 
         testProperty("RelativeWidth");
+    }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
     }
 
 } // finish class _TextTable
