@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:47:15 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #ifndef _XCL97REC_HXX
 #define _XCL97REC_HXX
 
-#ifndef SC_XLESCHER_HXX
-#include "xlescher.hxx"
-#endif
-
 #include "excrecds.hxx"
 #include "xcl97esc.hxx"
+
+#ifndef SC_XLSTYLE_HXX
+#include "xlstyle.hxx"
+#endif
 
 struct SingleRefData;
 struct ScExtTabOptions;
@@ -298,7 +298,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 private:
-    XclExpStringPtr             mpString;       /// Text and formatting data.
+    XclExpStringRef             mpString;       /// Text and formatting data.
     XclTxoHorAlign              meHorAlign;     /// Horizontal alignment.
     XclTxoVerAlign              meVerAlign;     /// Vertical alignment.
     XclTxoRotation              meRotation;     /// Text rotation.
@@ -324,108 +324,6 @@ public:
 };
 
 
-// ----------------------------------------------------------------------------
-
-/** Helper to manage controls linked to the sheet. */
-class XclExpCtrlLinkHelper : protected XclExpRoot
-{
-public:
-    explicit                    XclExpCtrlLinkHelper( const XclExpRoot& rRoot );
-
-    /** Sets the address of the control's linked cell. */
-    void                        SetCellLink( const ScAddress& rCellLink );
-    /** Sets the address of the control's linked source cell range. */
-    void                        SetSourceRange( const ScRange& rSrcRange );
-
-protected:
-    /** Returns the Excel token array of the cell link, or 0, if no link present. */
-    inline const ExcUPN*        GetCellLinkTokArr() const { return mpCellLink.get(); }
-    /** Returns the Excel token array of the source range, or 0, if no link present. */
-    inline const ExcUPN*        GetSourceRangeTokArr() const { return mpSrcRange.get(); }
-    /** Returns the number of entries in the source range, or 0, if no source set. */
-    inline sal_uInt16           GetSourceEntryCount() const { return mnEntryCount; }
-
-    /** Writes a sheet link formula with special style only valid in OBJ records. */
-    void                        WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const;
-
-private:
-    typedef ::std::auto_ptr< ExcUPN > XclExpTokArrPtr;
-
-    XclExpTokArrPtr             CreateTokenArray( const ScTokenArray& rScTokArr ) const;
-    XclExpTokArrPtr             CreateTokenArray( const ScAddress& rPos ) const;
-    XclExpTokArrPtr             CreateTokenArray( const ScRange& rRange ) const;
-
-private:
-    XclExpTokArrPtr             mpCellLink;     /// Formula for linked cell.
-    XclExpTokArrPtr             mpSrcRange;     /// Formula for source data range.
-    sal_uInt16                  mnEntryCount;   /// Number of entries in source range.
-};
-
-
-// ----------------------------------------------------------------------------
-
-#if EXC_EXP_OCX_CTRL
-
-/** Represents an OBJ record for an OCX form control. */
-class XclExpObjOcxCtrl : public XclObj, public XclExpCtrlLinkHelper
-{
-public:
-                                XclExpObjOcxCtrl(
-                                    const XclExpRoot& rRoot,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::drawing::XShape >& rxShape,
-                                    const String& rClassName,
-                                    sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
-
-private:
-    virtual void                WriteSubRecs( XclExpStream& rStrm );
-
-private:
-    String                      maClassName;        /// Class name of the control.
-    sal_uInt32                  mnStrmStart;        /// Start position in 'Ctls' stream.
-    sal_uInt32                  mnStrmSize;         /// Size in 'Ctls' stream.
-};
-
-#else
-
-/** Represents an OBJ record for an TBX form control. */
-class XclExpObjTbxCtrl : public XclObj, public XclExpCtrlLinkHelper
-{
-public:
-                                XclExpObjTbxCtrl(
-                                    const XclExpRoot& rRoot,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::drawing::XShape >& rxShape,
-                                    const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::awt::XControlModel >& rxCtrlModel );
-    virtual                     ~XclExpObjTbxCtrl();
-
-private:
-    virtual void                WriteSubRecs( XclExpStream& rStrm );
-
-    /** Writes a sub structure containing a cell link, or nothing, if no link present. */
-    void                        WriteCellLinkFmla( XclExpStream& rStrm, sal_uInt16 nSubRecId );
-    /** Writes the ftSbs sub structure containing scrollbar data. */
-    void                        WriteSbs( XclExpStream& rStrm );
-
-private:
-    ScfInt16Vec                 maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    sal_Int32                   mnHeight;       /// Height of the control.
-    sal_uInt16                  mnState;        /// Checked/unchecked state.
-    sal_Int16                   mnLineCount;    /// Combobox dropdown line count.
-    sal_Int16                   mnSelEntry;     /// Selected entry in combobox (1-based).
-    sal_Int16                   mnScrollValue;  /// Scrollbar: Current value.
-    sal_Int16                   mnScrollMin;    /// Scrollbar: Minimum value.
-    sal_Int16                   mnScrollMax;    /// Scrollbar: Maximum value.
-    sal_Int16                   mnScrollStep;   /// Scrollbar: Single step.
-    sal_Int16                   mnScrollPage;   /// Scrollbar: Page step.
-    bool                        mb3DStyle;      /// true = 3D style.
-    bool                        mbMultiSel;     /// true = Multi selection in listbox.
-    bool                        mbScrollHor;    /// Scrollbar: true = horizontal.
-};
-
-#endif
-
 // --- class XclObjAny -----------------------------------------------
 
 class XclObjAny : public XclObj
@@ -439,47 +337,6 @@ public:
 
     virtual void                Save( XclExpStream& rStrm );
 };
-
-
-// ============================================================================
-
-/** Represents a NOTE record containing the author and the note object ID.
-    @descr  Creates the note Escher object internally. */
-class XclExpNote : public XclExpRecord
-{
-private:
-    XclExpString                maAuthor;       /// Name of the author.
-    ScAddress                   maPos;          /// Cell address of the note.
-    sal_uInt16                  mnObjId;        /// Escher object ID.
-    bool                        mbVisible;      /// true = permanently visible.
-
-public:
-    /** Constructs a NOTE record from the passed note object and/or the text.
-        @descr  The additional text will be separated from the note text with an empty line.
-        Creates the Escher object containing the drawing information and the note text.
-        @param rPos  The Calc cell address of the note.
-        @param pScNote  The Calc note object.
-        @param rAddText  Additional text appended to the note text. */
-    explicit                    XclExpNote(
-                                    const XclExpRoot& rRoot,
-                                    const ScAddress& rPos,
-                                    const ScPostIt* pScNote,
-                                    const String& rAddText );
-
-    /** Writes the NOTE record, if the respective Escher object is present. */
-    virtual void                Save( XclExpStream& rStrm );
-
-private:
-    /** Writes the body of the NOTE record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
-};
-
-
-/** A list of NOTE record objects. */
-typedef XclExpRecordList< XclExpNote > XclExpNoteList;
-
-
-// ============================================================================
 
 
 // --- class ExcBof8_Base --------------------------------------------
@@ -528,36 +385,6 @@ class ExcBofC8 : public ExcBof8_Base
 public:
                                 ExcBofC8();
 };
-
-// ============================================================================
-
-/** Represents a LABELSST record for a formatted or unformatted text cell. */
-class XclExpLabelSst : public ExcCell
-{
-public:
-    explicit                    XclExpLabelSst(
-                                    const XclExpRoot& rRoot,
-                                    const ScAddress& rPos,
-                                    const String& rText,
-                                    const ScPatternAttr* pPattern );
-    explicit                    XclExpLabelSst(
-                                    const XclExpRoot& rRoot,
-                                    const ScAddress& rPos,
-                                    const ScEditCell& rEditCell,
-                                    const ScPatternAttr* pPattern );
-
-    virtual UINT16              GetNum() const;
-
-private:
-    virtual void                SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
-    virtual ULONG               GetDiffLen() const;
-
-private:
-    sal_uInt32                  mnSstIndex;     /// Index to string in SST.
-};
-
-
-// ============================================================================
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
@@ -671,56 +498,6 @@ public:
     virtual UINT16          GetNum() const;
     virtual ULONG           GetLen() const;
 };
-
-
-// --- class XclExpCellMerging ---------------------------------------
-
-struct XclExpMergedCell
-{
-    sal_uInt32              mnXFId;
-    UINT16                  nCol1;
-    UINT16                  nCol2;
-    UINT16                  nRow1;
-    UINT16                  nRow2;
-
-    inline                  XclExpMergedCell( UINT16 nC1, UINT16 nC2, UINT16 nR1, UINT16 nR2, sal_uInt32 nXFId ) :
-                                nCol1( nC1 ), nCol2( nC2 ), nRow1( nR1 ), nRow2( nR2 ), mnXFId( nXFId ) {}
-};
-
-inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpMergedCell& rCell )
-{
-    return (rStrm << rCell.nRow1 << rCell.nRow2 << rCell.nCol1 << rCell.nCol2);
-}
-
-
-
-class XclExpCellMerging : public ExcEmptyRec
-{
-private:
-    List                        aCellList;
-
-    inline XclExpMergedCell*    FirstCell() { return (XclExpMergedCell*) aCellList.First(); }
-    inline XclExpMergedCell*    NextCell()  { return (XclExpMergedCell*) aCellList.Next(); }
-    inline XclExpMergedCell*    GetCell( ULONG nIndex )
-                                    { return (XclExpMergedCell*) aCellList.GetObject( nIndex ); }
-    inline void                 AppendCell( XclExpMergedCell* pNewCell )
-                                    { aCellList.Insert( pNewCell, LIST_APPEND ); }
-
-public:
-    void                        Append( UINT16 nCol1, UINT16 nColCnt, UINT16 nRow1, UINT16 nRowCnt, sal_uInt32 nXFId );
-    BOOL                        FindNextMerge( const ScAddress& rPos, UINT16& rnCol );
-    BOOL                        FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId, UINT16& rnColCount );
-    inline BOOL                 FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId );
-
-    virtual void                Save( XclExpStream& rStrm );
-};
-
-inline BOOL XclExpCellMerging::FindMergeBaseXF( const ScAddress& rPos, sal_uInt32& rnXFId )
-{
-    UINT16 nCols;
-    return FindMergeBaseXF( rPos, rnXFId, nCols );
-}
-
 
 
 // ---- class XclCodename --------------------------------------------
