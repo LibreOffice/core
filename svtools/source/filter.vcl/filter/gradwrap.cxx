@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gradwrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:28 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,8 +205,7 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
     Color aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
 
     // GDI-Objekte sichern und setzen
-    Brush aBrush( aCol );
-    aSetFillInBrushRecordHdl.Call(&aBrush);
+    aSetFillInBrushRecordHdl.Call(&aCol);
 
     // Startpolygon erzeugen (== Borderpolygon)
     Polygon     aPoly( 4 );
@@ -288,8 +287,7 @@ void GradientWrapper::WriteLinearGradient(const Rectangle& rRect,
             aCol = Color( (BYTE) nEndRed, (BYTE) nEndGreen, (BYTE) nEndBlue );
         }
 
-        aBrush.SetColor(aCol);
-        aSetFillInBrushRecordHdl.Call(&aBrush);
+        aSetFillInBrushRecordHdl.Call(&aCol);
     }
 }
 
@@ -375,8 +373,7 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
     Color           aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
 
     // GDI-Objekte sichern und setzen
-    Brush aBrush( aCol );
-    aSetFillInBrushRecordHdl.Call(&aBrush);
+    aSetFillInBrushRecordHdl.Call(&aCol);
 
     // Recteck erstmal ausgeben
     PolyPolygon aPolyPoly( 2 );
@@ -395,8 +392,7 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
     for ( long i = 0; i < nSteps; i++ )
     {
         Color aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
-        aBrush.SetColor( aCol );
-        aSetFillInBrushRecordHdl.Call(&aBrush);
+        aSetFillInBrushRecordHdl.Call(&aCol);
 
         // neues Polygon berechnen
         aRect.Left()    = (long)(fScanLeft   += fScanInc);
@@ -430,8 +426,8 @@ void GradientWrapper::WriteRadialGradient(const Rectangle& rRect,
 
     // Falls PolyPolygon-Ausgabe, muessen wir noch ein letztes
     // inneres Polygon zeichnen
-    aBrush.SetColor( Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue ) );
-    aSetFillInBrushRecordHdl.Call(&aBrush);
+    aCol = Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+    aSetFillInBrushRecordHdl.Call(&aCol);
 
     aPoly = aPolyPoly.GetObject( 1 );
     if ( !aPoly.GetBoundRect().IsEmpty() )
@@ -543,8 +539,7 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
     Color           aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
 
     // GDI-Objekte sichern und setzen
-    Brush aBrush( aCol );
-    aSetFillInBrushRecordHdl.Call(&aBrush);
+    aSetFillInBrushRecordHdl.Call(&aCol);
 
     // Recteck erstmal ausgeben
     PolyPolygon aPolyPoly( 2 );
@@ -563,8 +558,7 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
     for ( long i = 0; i < nSteps; i++ )
     {
         Color aCol( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
-        aBrush.SetColor( aCol );
-        aSetFillInBrushRecordHdl.Call(&aBrush);
+        aSetFillInBrushRecordHdl.Call(&aCol);
 
         // neues Polygon berechnen
         aRect.Left()    = (long)(fScanLeft  += fScanInc);
@@ -595,8 +589,8 @@ void GradientWrapper::WriteRectGradient(const Rectangle& rRect,
         nBlue   = MinMax( nBlue,  0, 0xFF );
     }
 
-    aBrush.SetColor( Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue ) );
-    aSetFillInBrushRecordHdl.Call(&aBrush);
+    aCol = Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue );
+    aSetFillInBrushRecordHdl.Call(&aCol);
 
     aPoly = aPolyPoly.GetObject( 1 );
     if ( !aPoly.GetBoundRect().IsEmpty() )
