@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:40 $
+#   last change: $Author: sb $ $Date: 2001-07-13 12:52:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ PACKAGE=com$/sun$/star$/java
 
 IDLFILES=\
     JavaVirtualMachine.idl\
+    WrongJavaVersionException.idl\
     XJavaThreadRegister_11.idl\
     XJavaVM.idl\
 
