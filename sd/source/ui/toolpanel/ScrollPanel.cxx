@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollPanel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-28 16:24:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "ScrollPanel.hxx"
+#include "taskpane/ScrollPanel.hxx"
 
 #include "ControlContainer.hxx"
 #include "TaskPaneFocusManager.hxx"
@@ -118,13 +118,18 @@ ScrollPanel::~ScrollPanel (void)
     sal_uInt32 nCount = mpControlContainer->GetControlCount();
     for (sal_uInt32 nIndex=0; nIndex<nCount; nIndex++)
     {
-        TitledControl* pControl = static_cast<TitledControl*>(
-            mpControlContainer->GetControl(nIndex));
-        if (pControl!=NULL
-            && pControl->GetControl()!=NULL
-            && pControl->GetControl()->GetWindow()!=NULL)
+        TreeNode* pNode = mpControlContainer->GetControl(nIndex);
+        TreeNode* pControl = pNode;
+        // When the node has been created as TitledControl then use its
+        // control instead of pNode directly.
+        TitledControl* pTitledControl = static_cast<TitledControl*>(pNode);
+        if (pTitledControl != NULL)
+            pControl = pTitledControl->GetControl(false);
+
+        // Remove this object as listener from the control.
+        if (pControl != NULL && pControl->GetWindow()!=NULL)
         {
-            pControl->GetControl()->GetWindow()->RemoveEventListener(
+            pControl->GetWindow()->RemoveEventListener(
                 LINK(this,ScrollPanel,WindowEventListener));
         }
     }
@@ -172,8 +177,10 @@ void ScrollPanel::AddControl (
         pTitledControl->GetWindow(),
         GetParent());
 
-    mpControlContainer->AddControl (pChild);
-
+    mpControlContainer->AddControl(pChild);
+    mpControlContainer->SetExpansionState(
+        mpControlContainer->GetControlCount()-1,
+        ControlContainer::ES_EXPAND);
 }
 
 
@@ -197,7 +204,9 @@ void ScrollPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
         GetParent());
 
     mpControlContainer->AddControl (pControl);
-
+    mpControlContainer->SetExpansionState(
+        mpControlContainer->GetControlCount()-1,
+        ControlContainer::ES_EXPAND);
 }
 
 
