@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-18 09:11:53 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,12 +478,7 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
         // Nun ueberpruefen wir jede Portion, die sich haette senken koennen,
         // ob sie mit dem Fly ueberlappt.
         const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
-#ifdef VERTICAL_LAYOUT
-        aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() -
-                          GetCurr()->GetLineDescent() - GetCurr()->Height();
-#else
         aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() - GetCurr()->Height();
-#endif
         aLine.Height( GetCurr()->Height() );
 
         while( pPos )
@@ -594,11 +589,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             CalcRealHeight();
 
         if ( pCurr->GetRealHeight() > nHeight )
-#ifdef VERTICAL_LAYOUT
-            nTop += pCurr->GetRealHeight() - pCurr->GetLineDescent() - nHeight;
-#else
             nTop += pCurr->GetRealHeight() - nHeight;
-#endif
         else
             // important for fixed space between lines
             nHeight = pCurr->GetRealHeight();
@@ -730,7 +721,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             rInf.Width( pFly->Fix() );
 
 #ifdef VERTICAL_LAYOUT
-        const USHORT nGridWidth = pFrm->GetGridDist( sal_True );
+        const USHORT nGridWidth = pFrm->GetGridValue( GRID_DIST );
 
         if ( nGridWidth )
         {
@@ -738,7 +729,15 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             SWRECTFN( pPageFrm )
             const long nGridOrigin = (pPageFrm->*fnRect->fnGetPrtLeft)();
 
-            const SwTwips nOfst = GetLeftMargin() - nGridOrigin;
+            SwTwips nStartX = GetLeftMargin();
+            if ( bVert )
+            {
+                Point aPoint( nStartX, 0 );
+                pFrm->SwitchHorizontalToVertical( aPoint );
+                nStartX = aPoint.Y();
+            }
+
+            const SwTwips nOfst = nStartX - nGridOrigin;
             const SwTwips nTmpWidth = rInf.Width() + nOfst;
 
             const USHORT i = nTmpWidth / nGridWidth + 1;

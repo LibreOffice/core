@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:48:46 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,6 @@ private:
     SvShorts* pSpaceAdd;// Fuer den Blocksatz
     SvUShorts* pKanaComp;
     KSHORT nRealHeight; // Die aus Zeilenabstand/Register resultierende Hoehe
-#ifdef VERTICAL_LAYOUT
-    KSHORT nLineDescent;
-#endif
     sal_Bool bFormatAdj : 1;
     sal_Bool bDummy     : 1;
     sal_Bool bFntChg    : 1;
@@ -218,11 +215,6 @@ public:
 
     inline void SetRealHeight( KSHORT nNew ) { nRealHeight = nNew; }
     inline KSHORT GetRealHeight() const { return nRealHeight; }
-
-#ifdef VERTICAL_LAYOUT
-    inline void SetLineDescent( KSHORT nNew ) { nLineDescent = nNew; }
-    inline KSHORT GetLineDescent() const { return nLineDescent; }
-#endif
 
     // Erstellt bei kurzen Zeilen die Glue-Kette.
     SwMarginPortion *CalcLeftMargin();
@@ -375,12 +367,7 @@ inline void SwLineLayout::ResetFlags()
 }
 
 inline SwLineLayout::SwLineLayout()
-#ifdef VERTICAL_LAYOUT
-    : pNext( 0 ), nRealHeight( 0 ), nLineDescent( 0 ), pSpaceAdd( 0 ),
-      pKanaComp( 0 ),
-#else
     : pNext( 0 ), nRealHeight( 0 ), pSpaceAdd( 0 ), pKanaComp( 0 ),
-#endif
       bUnderscore( sal_False )
 {
     ResetFlags();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,19 +334,33 @@ long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
     return aTmp.Y();
 }
 
-USHORT SwTxtFrm::GetGridDist( sal_Bool bInRow ) const
+USHORT SwTxtFrm::GetGridValue( BYTE nWhich ) const
 {
-#ifndef GRID_MODE
-    return 0;
-#endif
-
     const SwPageFrm* pPageFrm = FindPageFrm();
     SwPageDesc* pDesc = ((SwPageFrm*)pPageFrm)->FindPageDesc();
 
     if( pDesc )
-        return ( ( bInRow && ! IsVertical() ) || ( ! bInRow && IsVertical() ) ) ?
-                pDesc->GetRegHeight() :
-                pDesc->GetRegHeight();
+    {
+        switch ( nWhich )
+        {
+        case GRID_DIST :
+            return bGridMode ? pDesc->GetRegHeight() : 0;
+            break;
+        case RUBY_HEIGHT :
+            // for testing purposed only
+            return pDesc->GetRegHeight() / 4;
+//            return pDesc->GetRubyHeight();
+            break;
+        case INTER_LINE_HEIGHT :
+            // for testing purposed only
+            return pDesc->GetRegHeight() / 2;
+//            return pDesc->GetInterLineHeight();
+            break;
+        default :
+            ASSERT( sal_False, "Unknown grid value" )
+            break;
+        }
+    }
 
     return 0;
 }
@@ -404,6 +418,7 @@ void SwTxtFrm::InitCtor()
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
 #ifdef VERTICAL_LAYOUT
         bFieldFollow = bHasAnimation = bIsSwapped = sal_False;
+        bGridMode = sal_True;
 #else
         bFieldFollow = bHasAnimation = sal_False;
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-18 09:12:51 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 #ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
         if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
         {
             long* pKernArray = new long[rInf.GetLen()];
@@ -793,10 +793,8 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             nWidthPerChar = i * nGridWidth;
 
-            // position of first character
-            xub_Unicode nCh = rInf.GetText().GetChar( rInf.GetIdx() );
-            long nCharWidth;
-            rInf.GetOut().GetCharWidth( nCh, nCh, &nCharWidth );
+            // position of first character, we take the printer position
+            long nCharWidth = pKernArray[ 0 ];
 
             aPos.X() += ( nWidthPerChar - nCharWidth ) / 2;
             long nNextFix = nCharWidth / 2;
@@ -804,9 +802,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             // calculate offsets
             for ( xub_StrLen j = 1; j < rInf.GetLen(); ++j )
             {
-                nCh = rInf.GetText().GetChar( rInf.GetIdx() + j );
-                long nScr;
-                rInf.GetOut().GetCharWidth( nCh, nCh, &nScr );
+                long nScr = pKernArray[ j ] - pKernArray[ j - 1 ];
 
                 nNextFix += nWidthPerChar;
                 pKernArray[ j - 1 ] = nNextFix - ( nScr / 2 );
@@ -1496,7 +1492,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 #ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() && nLn )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
         if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
         {
             long nWidthPerChar = aTxtSize.Width() / nLn;
@@ -1546,7 +1542,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 #ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() && rInf.GetLen() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
         if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
         {
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
@@ -1557,7 +1553,9 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
             nWidthPerChar = i * nGridWidth;
 
-            nCnt = rInf.GetOfst() / nWidthPerChar + 1;
+            nCnt = rInf.GetOfst() / nWidthPerChar;
+            if ( 2 * ( rInf.GetOfst() - nCnt * nWidthPerChar ) > nWidthPerChar )
+                ++nCnt;
 
             delete[] pKernArray;
             return nCnt;
@@ -1728,7 +1726,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 #ifdef VERTICAL_LAYOUT
     if ( rInf.GetFrm() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridDist( sal_True );
+        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_DIST );
         if ( nGridWidth && rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
         {
             long* pKernArray = new long[rInf.GetLen()];

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-12 12:57:30 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,15 +311,22 @@ public:
 
     // calculates baseline for portion rPor
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE
+#ifdef VERTICAL_LAYOUT
+    USHORT AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
+                           USHORT nPorHeight = 0, USHORT nAscent = 0,
+                           const sal_Bool bAutoToCentered = sal_False ) const;
+#else
     USHORT AdjustBaseLine( const SwLineLayout& rLine,
                            const USHORT nPorHeight,
                            const USHORT nPorAscent,
                            const sal_Bool bAutoToCentered = sal_False ) const;
+
     inline USHORT AdjustBaseLine( const SwLineLayout& rLine,
                                   const SwLinePortion& rPor,
                                   const sal_Bool bAutoToCentered = sal_False ) const
         { return AdjustBaseLine( rLine, rPor.Height(),
                                  rPor.GetAscent(), bAutoToCentered ); };
+#endif
 
     static inline void SetRightMargin( const sal_Bool bNew ){ bRightMargin = bNew; }
     static inline sal_Bool IsRightMargin() { return bRightMargin; }

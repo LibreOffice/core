@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-21 08:30:44 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 #include "charfmt.hxx"  // SwFmtCharFmt
 #include "redlnitr.hxx" // SwRedlineItr
 #include "porrst.hxx"   // SwArrowPortion
+
+#ifdef VERTICAL_LAYOUT
+#include "pormulti.hxx"
+#endif
 
 /*************************************************************************
  *                  IsUnderlineBreak
@@ -346,7 +350,13 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
+#ifdef VERTICAL_LAYOUT
+    const USHORT nGridDist = GetTxtFrm()->GetGridValue( GRID_DIST );
+    sal_Bool bAdjustBaseLine = GetLineInfo().HasSpecialAlign() || nGridDist;
+    if ( ! bAdjustBaseLine )
+#else
     if ( ! GetLineInfo().HasSpecialAlign() )
+#endif
         GetInfo().Y( GetInfo().GetPos().Y() + nTmpAscent );
 
     // 7529: PostIts prepainten
@@ -354,11 +364,19 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     {
         SeekAndChg( GetInfo() );
 
+#ifdef VERTICAL_LAYOUT
+        if( bAdjustBaseLine )
+        {
+            const SwTwips nOldY = GetInfo().Y();
+
+            GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, 0,
+#else
         if( GetLineInfo().HasSpecialAlign() )
         {
             const SwTwips nOldY = GetInfo().Y();
 
             GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr,
+#endif
                 GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), pOut ),
                 GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), pOut )
             ) );
@@ -389,9 +407,22 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         const SwTwips nOldY = GetInfo().Y();
 
+#ifdef VERTICAL_LAYOUT
+        if ( bAdjustBaseLine )
+        {
+            // For ruby portions AdjustBaseLine returns the base line of
+            // the non-ruby line.
+            if ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsRuby() &&
+                 nGridDist )
+                GetInfo().Y( GetInfo().GetPos().Y() + pCurr->GetRealHeight() -
+                             pCurr->Height() + pPor->GetAscent() );
+            else
+                GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, pPor ) );
+#else
         if ( GetLineInfo().HasSpecialAlign() )
         {
             GetInfo().Y( GetInfo().GetPos().Y() + AdjustBaseLine( *pCurr, *pPor ) );
+#endif
 
             // we store the last portion, because a possible paragraph
             // end character has the same font as this portion
@@ -506,11 +537,19 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             const SwTmpEndPortion aEnd( *pEndTempl );
             GetFnt()->ChgPhysFnt( GetInfo().GetVsh(), pOut );
 
+#ifdef VERTICAL_LAYOUT
+            if ( bAdjustBaseLine )
+            {
+                const SwTwips nOldY = GetInfo().Y();
+                GetInfo().Y( GetInfo().GetPos().Y()
+                           + AdjustBaseLine( *pCurr, &aEnd ) );
+#else
             if ( GetLineInfo().HasSpecialAlign() )
             {
                 const SwTwips nOldY = GetInfo().Y();
                 GetInfo().Y( GetInfo().GetPos().Y()
                            + AdjustBaseLine( *pCurr, aEnd ) );
+#endif
                 aEnd.Paint( GetInfo() );
                 GetInfo().Y( nOldY );
             }

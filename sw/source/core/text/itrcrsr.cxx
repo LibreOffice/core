@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-17 15:40:17 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,9 +503,13 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     if( pPor->IsMultiPortion() )
                     {
+#ifdef VERTICAL_LAYOUT
+                        nTmpAscent = AdjustBaseLine( *pCurr, pPor );
                         GetInfo().SetMulti( sal_True );
-
+#else
+                        GetInfo().SetMulti( sal_True );
                         nTmpAscent = AdjustBaseLine( *pCurr, *pPor );
+#endif
                         pOrig->Pos().Y() += nTmpAscent - nPorAscent;
 
                         if( pCMS && pCMS->b2Lines )
@@ -832,7 +836,11 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if ( pCMS && pCMS->bRealHeight )
         {
+#ifdef VERTICAL_LAYOUT
+            nTmpAscent = AdjustBaseLine( *pCurr, 0, nPorHeight, nPorAscent );
+#else
             nTmpAscent = AdjustBaseLine( *pCurr, nPorHeight, nPorAscent );
+#endif
             if ( nTmpAscent > nPorAscent )
                 pCMS->aRealHeight.X() = nTmpAscent - nPorAscent;
             else

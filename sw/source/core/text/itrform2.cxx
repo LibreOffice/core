@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-18 09:11:53 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,7 +495,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     SwLinePortion *pPor = NewPortion( rInf );
 
 #ifdef VERTICAL_LAYOUT
-    const USHORT nGridWidth = pFrm->GetGridDist( sal_True );
+    const USHORT nGridWidth = pFrm->GetGridValue( GRID_DIST );
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
     // the width of the kerning portion has to be adjusted
@@ -592,7 +592,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             }
         }
 #ifdef VERTICAL_LAYOUT
-        else if ( nGridWidth && ! pGridKernPortion )
+        else if ( nGridWidth && ! pGridKernPortion && ! pMulti )
         {
             // insert a grid kerning portion
             if ( ! pGridKernPortion )
@@ -606,7 +606,15 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             SWRECTFN( pPageFrm )
             const long nGridOrigin = (pPageFrm->*fnRect->fnGetPrtLeft)();
 
-            const SwTwips nOfst = rInf.X() + GetLeftMargin() - nGridOrigin;
+            SwTwips nStartX = rInf.X() + GetLeftMargin();
+            if ( bVert )
+            {
+                Point aPoint( nStartX, 0 );
+                pFrm->SwitchHorizontalToVertical( aPoint );
+                nStartX = aPoint.Y();
+            }
+
+            const SwTwips nOfst = nStartX - nGridOrigin;
             if ( nOfst )
             {
                 const USHORT i = ( nOfst > 0 ) ?
@@ -728,7 +736,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         }
 
 #ifdef VERTICAL_LAYOUT
-        if ( nGridWidth && pPor != pGridKernPortion )
+        if ( nGridWidth && pPor != pGridKernPortion && ! pMulti )
         {
             xub_StrLen nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X();
@@ -740,8 +748,10 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
             // snap non-asian text to grid if next portion is ASIAN or
             // there are no more portions in this line
+            // be careful when handling an underflow event: the gridkernportion
+            // could have been deleted
             if ( nRestWidth > 0 && i18n::ScriptType::ASIAN != nCurrScript &&
-                 ( bFull || ASIAN == nNextScript ) )
+                ! rInf.IsUnderFlow() && ( bFull || ASIAN == nNextScript ) )
             {
                 ASSERT( pGridKernPortion, "No GridKernPortion available" )
 
@@ -756,7 +766,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
                 const USHORT i = nSumWidth ?
                                  ( nSumWidth - 1 ) / nGridWidth + 1 :
-                                 1;
+                                 0;
                 const SwTwips nTmpWidth = i * nGridWidth;
                 const SwTwips nKernWidth = Min( (SwTwips)(nTmpWidth - nSumWidth),
                                                 nRestWidth );
@@ -774,7 +784,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
                 pGridKernPortion = 0;
             }
-            else if ( pPor->InFixMargGrp() || pPor->IsFlyCntPortion() ||
+            else if ( pPor->IsMultiPortion() || pPor->InFixMargGrp() || pPor->IsFlyCntPortion() ||
                       nCurrScript != nNextScript )
                 // next portion should snap to grid
                 pGridKernPortion = 0;
@@ -1072,7 +1082,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
         }
 
 #ifdef VERTICAL_LAYOUT
-        if ( ! pPor && GetTxtFrm()->GetGridDist( sal_True ) &&
+        if ( ! pPor && GetTxtFrm()->GetGridValue( GRID_DIST ) &&
              ! pCurr->GetPortion() )
             pPor = new SwKernPortion( *pCurr );
 #endif
@@ -1126,7 +1136,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
             pPor = (SwLinePortion*)NewDropPortion( rInf );
 
 #ifdef VERTICAL_LAYOUT
-        if ( ! pPor && GetTxtFrm()->GetGridDist( sal_True ) &&
+        if ( ! pPor && GetTxtFrm()->GetGridValue( GRID_DIST ) &&
              ! pCurr->GetPortion() )
             pPor = new SwKernPortion( *pCurr );
 #endif
@@ -1245,8 +1255,15 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 if( SW_MC_RUBY == pCreate->nId )
                 {
                     Seek( rInf.GetIdx() );
+#ifdef VERTICAL_LAYOUT
+                    const sal_Bool bForceRubyTop =
+                            (sal_Bool)GetTxtFrm()->GetGridValue( GRID_DIST );
+                    pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
+                                              *rInf.GetDoc(), nEnd, 0, bForceRubyTop );
+#else
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
                                               *rInf.GetDoc(), nEnd );
+#endif
                 }
                 else if( SW_MC_ROTATE == pCreate->nId )
                     pTmp = new SwRotatedPortion( *pCreate, nEnd );

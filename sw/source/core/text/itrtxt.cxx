@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "flyfrm.hxx"
 #include "paratr.hxx"
 #include "errhdl.hxx"
+
+#ifdef VERTICAL_LAYOUT
+#include "pormulti.hxx"
+#endif
 
 #ifndef _SVX_LSPCITEM_HXX //autogen
 #include <svx/lspcitem.hxx>
@@ -145,12 +149,7 @@ void SwTxtIter::Init()
 void SwTxtIter::CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const
 {
     rHeight = GetLineHeight();
-#ifdef VERTICAL_LAYOUT
-    rAscent = pCurr->GetAscent() + rHeight - pCurr->GetLineDescent() -
-              pCurr->Height();
-#else
     rAscent = pCurr->GetAscent() + rHeight - pCurr->Height();
-#endif
 }
 
 /*************************************************************************
@@ -163,24 +162,30 @@ void SwTxtIter::CalcRealHeight( sal_Bool bNewLine )
     pCurr->SetClipping( sal_False );
 
 #ifdef VERTICAL_LAYOUT
-    USHORT nGridHeight = pFrm->GetGridDist( sal_False );
+    const USHORT nGridHeight = pFrm->GetGridValue( GRID_DIST );
     if ( nGridHeight )
     {
-        long i = 100;
+        const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
+        const USHORT nInterLineHeight = pFrm->GetGridValue( INTER_LINE_HEIGHT );
 
-        const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
-        if ( pSpace && SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
-            i = pSpace->GetPropLineSpace();
+        USHORT nLineHeight = nGridHeight + nRubyHeight;
+        USHORT nLineDist = nLineHeight + nInterLineHeight;
 
-        long nTmpLineHeight = 100 * nLineHeight;
+        while ( pCurr->Height() > nLineHeight )
+            nLineHeight += nLineDist;
 
-        while ( nTmpLineHeight > i * nGridHeight )
-            i += 100;
+        KSHORT nAsc = ( nRubyHeight + nLineHeight - pCurr->Height() ) / 2 +
+                      pCurr->GetAscent();
 
-        USHORT nTmpHeight = i * nGridHeight / 100;
+        pCurr->Height( nLineHeight );
+        pCurr->SetAscent( nAsc );
+        pInf->GetParaPortion()->SetFixLineHeight();
 
-        pCurr->SetLineDescent( ( nTmpHeight - pCurr->Height() ) / 2 );
-        pCurr->SetRealHeight( nTmpHeight );
+        // Zwischenraum
+        if( !IsParaLine() )
+            nLineHeight += pFrm->GetGridValue( INTER_LINE_HEIGHT );
+
+        pCurr->SetRealHeight( nLineHeight );
         return;
     }
 #endif
@@ -480,16 +485,80 @@ const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPos )
  *                      SwTxtCrsr::AdjustBaseLine()
  *************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
+                                    const SwLinePortion* pPor,
+                                    USHORT nPorHeight, USHORT nPorAscent,
+                                    const sal_Bool bAutoToCentered ) const
+{
+    if ( pPor )
+    {
+        nPorHeight = pPor->Height();
+        nPorAscent = pPor->GetAscent();
+    }
+
+    USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
+    const USHORT nGridDist = GetTxtFrm()->GetGridValue( GRID_DIST );
+
+    // always centered in grid mode
+    if ( nGridDist )
+    {
+        if ( GetInfo().IsMulti() )
+        {
+            // we are inside the GetCharRect recursion for multi portions
+            nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+        }
+        else
+        {
+            // We have to take care for ruby portions. For ruby portions only
+            // the base line is centered
+            if ( pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsRuby() )
+                nPorHeight += ((SwMultiPortion*)pPor)->GetRoot().Height();
+
+            const USHORT nRubyHeight = GetTxtFrm()->GetGridValue( RUBY_HEIGHT );
+            // Portions which are bigger than on grid distance are centered inside
+            // the whole line.
+            const USHORT nLineNetto = ( nPorHeight > nGridDist ) ?
+                                        rLine.Height() - nRubyHeight :
+                                        nGridDist;
+            nOfst += nRubyHeight + ( nLineNetto - nPorHeight ) / 2 + nPorAscent;
+        }
+    }
+    else
+    {
+        switch ( GetLineInfo().GetVertAlign() ) {
+            case SvxParaVertAlignItem::TOP :
+                nOfst += nPorAscent;
+                break;
+            case SvxParaVertAlignItem::CENTER :
+                ASSERT( rLine.Height() >= nPorHeight, "Portion height > Line height");
+                nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                break;
+            case SvxParaVertAlignItem::BOTTOM :
+                nOfst += rLine.Height() - nPorHeight + nPorAscent;
+                break;
+            case SvxParaVertAlignItem::AUTOMATIC :
+                if ( bAutoToCentered )
+                {
+                    nOfst += ( rLine.Height() - nPorHeight ) / 2 + nPorAscent;
+                    break;
+                }
+            case SvxParaVertAlignItem::BASELINE :
+                // base line
+                nOfst += rLine.GetAscent();
+                break;
+        }
+    }
+
+    return nOfst;
+}
+#else
 USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                     const USHORT nPorHeight,
                                     const USHORT nPorAscent,
                                     const sal_Bool bAutoToCentered ) const
 {
-#ifdef VERTICAL_LAYOUT
-    USHORT nOfst = rLine.GetRealHeight() - rLine.GetLineDescent() - rLine.Height();
-#else
     USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
-#endif
 
     switch ( GetLineInfo().GetVertAlign() ) {
         case SvxParaVertAlignItem::TOP :
@@ -516,9 +585,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
     return nOfst;
 }
-
-
-
+#endif
 
 /*************************************************************************
  *                      SwTxtIter::TwipsToLine()

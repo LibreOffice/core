@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-10 14:41:52 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,8 +227,14 @@ public:
     SwRubyPortion( xub_StrLen nEnd, USHORT nAdj, USHORT nPos, xub_StrLen nOfst )
         : SwMultiPortion( nEnd ), nRubyOffset( nOfst ), nAdjustment( nAdj )
         { SetRuby(); SetTop(!nPos); }
+#ifdef VERTICAL_LAYOUT
+    SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
+        const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
+        sal_Bool bForceRubyTop );
+#else
     SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs = 0 );
+#endif
     void CalcRubyOffset();
     inline void Adjust( SwTxtFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }

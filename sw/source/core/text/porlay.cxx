@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:48:40 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,9 +1049,6 @@ void SwLineLayout::Init( SwLinePortion* pNextPortion )
     SetLen( 0 );
     SetAscent( 0 );
     SetRealHeight( 0 );
-#ifdef VERTICAL_LAYOUT
-    SetLineDescent( 0 );
-#endif
     SetPortion( pNextPortion );
 }
 

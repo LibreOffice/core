@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:42:24 $
+ *  last change: $Author: fme $ $Date: 2002-01-24 13:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@ class SwStripes;
 struct SwCrsrMoveState;
 struct SwFillData;
 
+#ifdef VERTICAL_LAYOUT
+#define GRID_DIST 0
+#define RUBY_HEIGHT 1
+#define INTER_LINE_HEIGHT 2
+#endif
+
 class SwTxtFrm: public SwCntntFrm
 {
     friend class SwTxtIter;
@@ -151,6 +157,7 @@ class SwTxtFrm: public SwCntntFrm
 #ifdef VERTICAL_LAYOUT
     sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
                                         // width and height for vertical formatting
+    sal_Bool bGridMode      : 1;        // do we align to the the document grid?
 #endif
 
     void ResetPreps();
@@ -351,6 +358,8 @@ public:
 
 #ifdef VERTICAL_LAYOUT
     inline sal_Bool IsSwapped() const { return bIsSwapped; }
+    inline sal_Bool GetGridModeAllowed() const { return bGridMode; }
+    inline void SetGridModeAllowed( sal_Bool bNew ) { bGridMode = bNew; }
 #endif
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
@@ -487,8 +496,8 @@ public:
     // vertical to horizontal layout.
     long SwitchVerticalToHorizontal( long nLimit ) const;
 
-    // returns the grids distance bRow = true => horizontal distance
-    USHORT GetGridDist( sal_Bool bRow ) const;
+    // returns the size of a grid cell
+    USHORT GetGridValue( BYTE nWhich ) const;
 #endif
 };
 
