@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:55:17 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,7 +1377,10 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
         const SwWrtShell* pOldShell = pActiveShell;
         pActiveShell = pActView->GetWrtShellPtr();
         if(pActiveShell != pOldShell)
-            bRet = TRUE;
+        {
+            delete pSwGlblDocContents;
+            pSwGlblDocContents = 0;
+        }
         if(!pSwGlblDocContents)
         {
             pSwGlblDocContents = new SwGlblDocContents;
