@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Storage.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:35:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,25 @@ service Storage
     /** allows to get and set the media type of the storage.
      */
     [property] string MediaType;
+
+    // -----------------------------------------------------------------------
+    /** allows to detect whether mediatype is detected by using fallback
+        approach.
+
+        <p>
+        Can be set to true if the mediatype can not be detected in standard
+        way, but there is a fallback solution allows to do it.
+        </p>
+
+        <p>
+        Usually means that the document validity is questionable, although
+        the package itself is not corrupted. The decision about document
+        validity in this case is in application hands. It is up to user of
+        the storage to deside whether he accepts the fallback approach for
+        an implementation of this service, outputs a warning or an error.
+        </p>
+     */
+    [property, readonly] boolean MediaTypeFallbackIsUsed;
 
     // -----------------------------------------------------------------------
     /** allows to detect whether the storage is a root one.
