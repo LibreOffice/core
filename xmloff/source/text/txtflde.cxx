@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-01 19:07:14 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,6 +1176,13 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_TIME:
         // all properties (except IsDate) are optional!
+        if (xPropSetInfo->hasPropertyByName(sPropertyNumberFormat))
+        {
+            ProcessValueAndType(sal_False,
+                                GetIntProperty(sPropertyNumberFormat,rPropSet),
+                                sEmpty, sEmpty, 0.0, // not used
+                                sal_False, sal_False, sal_True);
+        }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
             // no value -> current time
@@ -1197,13 +1204,6 @@ void XMLTextFieldExport::ExportFieldHelper(
                            GetBoolProperty(sPropertyIsFixed, rPropSet),
                            sal_False);
         }
-        if (xPropSetInfo->hasPropertyByName(sPropertyNumberFormat))
-        {
-            ProcessValueAndType(sal_False,
-                                GetIntProperty(sPropertyNumberFormat,rPropSet),
-                                sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True);
-        }
         if (xPropSetInfo->hasPropertyByName(sPropertyAdjust))
         {
             // adjust value given as integer in minutes
@@ -1216,6 +1216,13 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DATE:
         // all properties (except IsDate) are optional!
+        if (xPropSetInfo->hasPropertyByName(sPropertyNumberFormat))
+        {
+            ProcessValueAndType(sal_False,
+                                GetIntProperty(sPropertyNumberFormat,rPropSet),
+                                sEmpty, sEmpty, 0.0, // not used
+                                sal_False, sal_False, sal_True);
+        }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
             // no value -> current date
@@ -1236,13 +1243,6 @@ void XMLTextFieldExport::ExportFieldHelper(
             ProcessBoolean(sXML_fixed,
                            GetBoolProperty(sPropertyIsFixed, rPropSet),
                            sal_False);
-        }
-        if (xPropSetInfo->hasPropertyByName(sPropertyNumberFormat))
-        {
-            ProcessValueAndType(sal_False,
-                                GetIntProperty(sPropertyNumberFormat,rPropSet),
-                                sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyAdjust))
         {
