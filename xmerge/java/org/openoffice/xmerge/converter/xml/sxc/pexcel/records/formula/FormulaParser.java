@@ -71,7 +71,7 @@ import org.openoffice.xmerge.util.Debug;
  * <pre>
  *  &lt;expression&gt; ::= &lt;unary op&gt; &lt;term&gt; [&lt;addop&gt;|&lt;logop&gt; &lt;term&gt;]
  *  &lt;term&gt;       ::= &lt;factor&gt; [&lt;mulop&gt; &lt;factor&gt;]
- *  &lt;factor&gt;     ::= &lt;integer&gt; | &lt;CellRef&gt; | &lt;expression&gt;
+ *  &lt;factor&gt;     ::= &lt;number&gt;[%] | &lt;CellRef&gt; | &lt;QuoteString&gt; | &lt;expression&gt;
  * </pre>
  */
 public class FormulaParser {
@@ -111,7 +111,7 @@ public class FormulaParser {
             getChar();
             expression();
         } else {
-            throw new FormulaParsingException("No equals found!");
+            throw new FormulaParsingException("No equals found!" + makeErrorString());
         }
         return tokenVector;
     }
@@ -276,7 +276,7 @@ public class FormulaParser {
              skipWhite();
          }
          else
-             throw new FormulaParsingException("Unexpected character '" + c + "'");
+             throw new FormulaParsingException("Unexpected character '" + c + "'" + makeErrorString());
      }
 
     /**
@@ -293,7 +293,7 @@ public class FormulaParser {
                 bContinue = getChar();
                 skipWhite();
             } else {
-                throw new FormulaParsingException("Unexpected character '" + symbol + "'");
+                throw new FormulaParsingException("Unexpected character '" + symbol + "'" + makeErrorString());
             }
         }
      }
@@ -426,7 +426,7 @@ public class FormulaParser {
       private String getTokenString() throws FormulaParsingException {
 
          if(!isAlpha(look) && look!='$')
-             throw new FormulaParsingException("Expected Cell Reference");
+             throw new FormulaParsingException("Expected Cell Reference" + makeErrorString());
          else {
              String cell = new String();
                         boolean status;
@@ -447,7 +447,7 @@ public class FormulaParser {
 
         Debug.log(Debug.TRACE,"getNum : ");
          if(!isDigit(look))
-             throw new FormulaParsingException("Expected Integer");
+             throw new FormulaParsingException("Expected Integer" + makeErrorString());
          else {
              String num = new String();
              boolean status;
@@ -486,7 +486,23 @@ public class FormulaParser {
 
         if(isAddOp(look)) {
             Character ch = new Character(look);
+            match(look);
             tokenVector.add(tokenFactory.getOperatorToken(ch.toString(), 1));
+        } else if (look == '"') { //Extract a quoted string...
+            StringBuffer buff = new StringBuffer();
+            boolean success = true;
+            success = getChar();
+            while (look != '"' && success) {
+                buff.append(look);
+                success = getChar();
+            }
+
+            if (look != '"') { //We've reached the end of the string without getting a closing quote
+                throw new FormulaParsingException("Expected closing quote." + makeErrorString());
+            } else {
+                tokenVector.add(tokenFactory.getOperandToken(buff.toString(), "STRING"));
+                getChar();      //Move on to the next character
+            }
         } else {
             term();
         }
@@ -536,6 +552,16 @@ public class FormulaParser {
         String op = getLogicalOperator();
         tokenVector.add(tokenFactory.getOperatorToken(op, 2));
         term();
+    }
+
+    private String makeErrorString() {
+        StringBuffer buff = new StringBuffer();
+        for (int i=0; i<index-1; i++) {
+            buff.append(' ');
+        }
+
+        buff.append('^');
+        return "\n\t" + formulaStr + "\n\t" + buff.toString();
     }
  }
 

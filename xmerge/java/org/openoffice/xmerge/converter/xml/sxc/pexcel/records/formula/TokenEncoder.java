@@ -119,6 +119,9 @@ public class TokenEncoder {
                 case TokenConstants.TNUM :
                     tmpByteArray = NumEncoder(t);
                     break;
+                case TokenConstants.TSTRING :
+                    tmpByteArray = StringEncoder(t);
+                    break;
                 default :
                     Debug.log(Debug.ERROR, "Encoder found unrecognized Token");
             }
@@ -147,6 +150,26 @@ public class TokenEncoder {
 
         Vector tmpByteArray = new Vector();
         tmpByteArray.add(new Byte((byte)t.getTokenID()));
+        return tmpByteArray;
+    }
+
+
+    /**
+     * A String Encoder.
+     *
+     * @param t <code>Token</code> to be encoded
+     * @return A <code>Vector</code> of pexcel <code>Byte</code>
+     */
+    private Vector StringEncoder(Token t) throws IOException{
+
+        Vector tmpByteArray = new Vector();
+        tmpByteArray.add(new Byte((byte)t.getTokenID()));
+        tmpByteArray.add(new Byte((byte)(t.getValue().length())));
+        tmpByteArray.add(new Byte((byte)0x01));
+        byte [] stringBytes = t.getValue().getBytes("UTF-16LE");
+        for (int i=0; i<stringBytes.length; i++) {
+            tmpByteArray.add(new Byte(stringBytes[i]));
+        }
         return tmpByteArray;
     }
 

@@ -86,6 +86,7 @@ public interface TokenConstants {
         public static final int TFUNCVAR        = 0x42;
 
     // Constant Operand Tokens
+        public static final int TSTRING         = 0x17;
         public static final int TINT            = 0x1E;
         public static final int TNUM            = 0x1F;
     // Operand Tokens

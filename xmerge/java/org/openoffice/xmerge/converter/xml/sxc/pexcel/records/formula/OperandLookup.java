@@ -89,6 +89,7 @@ public class OperandLookup implements SymbolLookup {
         addEntry("CELL_AREA_REFERENCE", TokenConstants.TAREA);
         addEntry("INTEGER", TokenConstants.TNUM);
         addEntry("NUMBER", TokenConstants.TNUM);
+        addEntry("STRING", TokenConstants.TSTRING);
     }
 
     /**

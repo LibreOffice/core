@@ -137,6 +137,10 @@ public class TokenDecoder {
                                 v.add(readFunctionToken(bis));
                                 Debug.log(Debug.TRACE, "Decoded function: " + v.lastElement());
                                 break;
+                case TokenConstants.TSTRING :
+                                v.add(readStringToken(bis));
+                                Debug.log(Debug.TRACE, "Decoded string: " + v.lastElement());
+                                break;
                 case TokenConstants.TUPLUS:
                 case TokenConstants.TUMINUS:
                 case TokenConstants.TPERCENT:
@@ -173,6 +177,32 @@ public class TokenDecoder {
      */
     private char int2Char(int i) {
         return (char) ('A' + i);
+    }
+
+    /**
+     * Reads a Cell Reference token from the <code>ByteArrayInputStream</code>
+     *
+     * @param bis The <code>ByteArrayInputStream</code> from which we read the
+     * bytes.
+     * @return The decoded String <code>Token</code>
+     */
+    private Token readStringToken(ByteArrayInputStream bis) {
+        int len = (int)bis.read();
+        byte [] stringBytes = new byte[len];
+        int numRead =0;
+        if ((numRead = bis.read(stringBytes, 0, len)) != len) {
+            //throw new IOException("Expected " + len + " bytes. Could only read " + numRead + " bytes.");
+        }
+        StringBuffer outputString = new StringBuffer();
+        outputString.append('"');
+        try {
+            outputString.append(new String(stringBytes, "UTF-16LE"));
+        } catch (IOException eIO) {
+            outputString.append(new String(stringBytes)); //fall back to default encoding
+        }
+        outputString.append('"');
+
+        return (tf.getOperandToken(outputString.toString(), "STRING"));
     }
 
     /**
