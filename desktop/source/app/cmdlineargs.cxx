@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:12:23 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,36 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_HELP, sal_True );
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpwriter" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELPWRITER, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpcalc" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELPCALC, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpdraw" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELPDRAW, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpimpress" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELPIMPRESS, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpbasic" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELPBASIC, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-helpmath" )) == sal_True )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
+        return sal_True;
+    }
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
@@ -592,6 +622,39 @@ sal_Bool CommandLineArgs::IsHelp() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_HELP ];
+}
+sal_Bool CommandLineArgs::IsHelpWriter() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELPWRITER ];
+}
+
+sal_Bool CommandLineArgs::IsHelpCalc() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELPCALC ];
+}
+
+sal_Bool CommandLineArgs::IsHelpDraw() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELPDRAW ];
+}
+
+sal_Bool CommandLineArgs::IsHelpImpress() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELPIMPRESS ];
+}
+sal_Bool CommandLineArgs::IsHelpMath() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELPMATH ];
+}
+sal_Bool CommandLineArgs::IsHelpBasic() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_HELPBASIC ];
 }
 
 sal_Bool CommandLineArgs::IsWriter() const
