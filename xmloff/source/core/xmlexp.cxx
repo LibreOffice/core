@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:11 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,16 +701,19 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
         }
 
 #ifdef TIMELOG
-        // print a trace message with the URL
-        ByteString aUrl( (String) GetModel()->getURL(),
-                         RTL_TEXTENCODING_ASCII_US );
-        RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.GetBuffer() );
+        if (GetModel().is())
+        {
+            // print a trace message with the URL
+            ByteString aUrl( (String) GetModel()->getURL(),
+                             RTL_TEXTENCODING_ASCII_US );
+            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.GetBuffer() );
 
-        // we also want a trace message with the document class
-        ByteString aClass( (String)GetXMLToken(meClass),
-                           RTL_TEXTENCODING_ASCII_US );
-        RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class=\"%s\"",
-                                    aClass.GetBuffer() );
+            // we also want a trace message with the document class
+            ByteString aClass( (String)GetXMLToken(meClass),
+                               RTL_TEXTENCODING_ASCII_US );
+            RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class=\"%s\"",
+                                        aClass.GetBuffer() );
+        }
 #endif
 
         exportDoc( meClass );
