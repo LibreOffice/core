@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-27 10:03:51 $
+ *  last change: $Author: cmc $ $Date: 2002-10-01 15:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,10 @@
 #include <limits.h>
 
 #ifndef _SOLAR_H
- #include <tools/solar.h>               // UINTXX
+#include <tools/solar.h>               // UINTXX
+#endif
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
 #endif
 
 #pragma hdrstop
@@ -1068,7 +1071,12 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
         }
         rSet.Put( XLineColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor ), DFF_Prop_lineColor ) ) );
         if ( IsProperty( DFF_Prop_lineOpacity ) )
-            rSet.Put( XLineTransparenceItem( USHORT( 100 - ( ( GetPropertyValue( DFF_Prop_lineOpacity, 0x10000 ) * 100 ) >> 16 ) ) ) );
+        {
+            double nTrans = GetPropertyValue(DFF_Prop_lineOpacity, 0x10000);
+            nTrans = (nTrans * 100) / 65536;
+            rSet.Put(XLineTransparenceItem(
+                sal_uInt16(100 - SolarMath::Round(nTrans))));
+        }
 
         rManager.ScaleEmu( nLineWidth );
         rSet.Put( XLineWidthItem( nLineWidth ) );
@@ -1162,7 +1170,12 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
         rSet.Put( XFillStyleItem( eXFill ) );
 
         if (IsProperty(DFF_Prop_fillOpacity))
-            rSet.Put( XFillTransparenceItem( sal_uInt16( 100 - ( ( GetPropertyValue( DFF_Prop_fillOpacity ) * 100 ) >> 16 ) ) ) );
+        {
+            double nTrans = GetPropertyValue(DFF_Prop_fillOpacity);
+            nTrans = (nTrans * 100) / 65536;
+            rSet.Put(XFillTransparenceItem(
+                sal_uInt16(100 - SolarMath::Round(nTrans))));
+        }
 
         if ( eXFill == XFILL_GRADIENT )
         {
