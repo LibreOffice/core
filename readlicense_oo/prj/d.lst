@@ -80,6 +80,14 @@ mkdir: %_DEST%\pck%_EXT%
 ..\source\license\%GUI%\LICENSE %_DEST%\bin%_EXT%\49\osl\LICENSE49
 ..\source\license\WNT\license.txt %_DEST%\bin%_EXT%\49\osl\license49.txt
 ..\source\license\%GUI%\license.html %_DEST%\bin%_EXT%\49\osl\LICENSE49.html
+..\source\license\%GUI%\* %_DEST%\bin%_EXT%\37\osl\*
+..\source\license\%GUI%\LICENSE %_DEST%\bin%_EXT%\37\osl\LICENSE37
+..\source\license\WNT\license.txt %_DEST%\bin%_EXT%\37\osl\license37.txt
+..\source\license\%GUI%\license.html %_DEST%\bin%_EXT%\37\osl\LICENSE37.html
+..\source\license\%GUI%\* %_DEST%\bin%_EXT%\31\osl\*
+..\source\license\%GUI%\LICENSE %_DEST%\bin%_EXT%\31\osl\LICENSE33
+..\source\license\WNT\license.txt %_DEST%\bin%_EXT%\31\osl\license31.txt
+..\source\license\%GUI%\license.html %_DEST%\bin%_EXT%\31\osl\LICENSE31.html
 ..\source\license\%GUI%\* %_DEST%\bin%_EXT%\33\osl\*
 ..\source\license\%GUI%\LICENSE %_DEST%\bin%_EXT%\33\osl\LICENSE33
 ..\source\license\WNT\license.txt %_DEST%\bin%_EXT%\33\osl\license33.txt
