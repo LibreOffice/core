@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:22:39 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 17:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ polish ] = "Zamieñ na";
             Text[ portuguese_brazilian ] = "Ersetzen durch";
             Text[ japanese ] = "’u‚«Š·‚¦";
-            Text[ korean ] = "´Ù¸¥ °ÍÀ¸·Î ¹Ù²Ù±â";
+            Text[ korean ] = "¹Ù²Ù±â";
             Text[ chinese_simplified ] = "Ìæ»»Îª";
             Text[ chinese_traditional ] = "´À¥N¥Î";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
