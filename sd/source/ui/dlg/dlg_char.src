@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:29:56 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ TabDialog TAB_CHAR
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text [ norwegian ] = "Character Extension" ;
                 Text [ italian ] = "Effetto carattere" ;
-                Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
+                Text [ portuguese_brazilian ] = "Extens?o de Caracter" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
