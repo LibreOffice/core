@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:40:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,16 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
+#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+
 //........................................................................
 namespace connectivity
 {
@@ -88,6 +98,8 @@ namespace connectivity
         {
             try
             {
+                m_xStream = NULL;
+                m_xSeek = NULL;
                 if ( m_xInputStream.is() )
                 {
                     m_xInputStream->closeInput();
@@ -100,6 +112,9 @@ namespace connectivity
                     {
                         ::comphelper::disposeComponent(m_xOutputStream);
                     }
+                    catch(DisposedException&)
+                    {
+                    }
                     catch(const Exception& e)
                     {
                         e;
@@ -107,8 +122,6 @@ namespace connectivity
                     }
                     m_xOutputStream = NULL;
                 }
-                m_xStream = NULL;
-                m_xSeek = NULL;
             }
             catch(Exception& )
             {
@@ -154,7 +167,12 @@ namespace connectivity
             return ::rtl::OUString::valueOf(s_nCount++);
         }
         // -----------------------------------------------------------------------------
-        ::rtl::OUString StorageContainer::removeURLPrefix(const ::rtl::OUString& _sURL)
+        ::rtl::OUString StorageContainer::removeURLPrefix(const ::rtl::OUString& _sURL,const ::rtl::OUString& _sFileURL)
+        {
+            return _sURL.copy(_sFileURL.getLength()+1);
+        }
+        // -----------------------------------------------------------------------------
+        ::rtl::OUString StorageContainer::removeOldURLPrefix(const ::rtl::OUString& _sURL)
         {
             ::rtl::OUString sRet = _sURL;
 #if defined(WIN) || defined(WNT)
@@ -201,32 +219,67 @@ namespace connectivity
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
                                         ::std::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>()))
+                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
                     );
             if ( aFind == rMap.end() )
             {
-                aFind = rMap.insert(TStorages::value_type(lcl_getNextCount(),TStorages::mapped_type(_xStorage,TStreamMap()))).first;
+                aFind = rMap.insert(TStorages::value_type(lcl_getNextCount(),TStorages::mapped_type(TStorageURLPair(_xStorage,_sURL),TStreamMap()))).first;
             }
 
             return aFind->first;
         }
         // -----------------------------------------------------------------------------
-        Reference< XStorage> StorageContainer::getRegisteredStorage(const ::rtl::OUString& _sKey)
+        TStorages::mapped_type StorageContainer::getRegisteredStorage(const ::rtl::OUString& _sKey)
         {
-            Reference< XStorage> xReturn;
+            TStorages::mapped_type aRet;
             TStorages& rMap = lcl_getStorageMap();
             TStorages::iterator aFind = rMap.find(_sKey);
             OSL_ENSURE(aFind != rMap.end(),"Storage could not be found in list!");
             if ( aFind != rMap.end() )
-                xReturn = aFind->second.first;
+                aRet = aFind->second;
 
-            return xReturn;
+            return aRet;
         }
         // -----------------------------------------------------------------------------
-        void StorageContainer::revokeStorage(const ::rtl::OUString& _sKey)
+        ::rtl::OUString StorageContainer::getRegisteredKey(const Reference< XStorage>& _xStorage)
+        {
+            ::rtl::OUString sKey;
+            OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
+            TStorages& rMap = lcl_getStorageMap();
+            // check if the storage is already in our map
+            TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
+                                        ::std::compose1(
+                                            ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
+                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
+                    );
+            if ( aFind != rMap.end() )
+                sKey = aFind->first;
+            return sKey;
+        }
+        // -----------------------------------------------------------------------------
+        void StorageContainer::revokeStorage(const ::rtl::OUString& _sKey,const Reference<XTransactionListener>& _xListener)
         {
             TStorages& rMap = lcl_getStorageMap();
-            rMap.erase(_sKey);
+            TStorages::iterator aFind = rMap.find(_sKey);
+            if ( aFind != rMap.end() )
+            {
+                try
+                {
+                    if ( _xListener.is() )
+                    {
+                        Reference<XTransactionBroadcaster> xBroad(aFind->second.first.first,UNO_QUERY);
+                        if ( xBroad.is() )
+                            xBroad->removeTransactionListener(_xListener);
+                        Reference<XTransactedObject> xTrans(aFind->second.first.first,UNO_QUERY);
+                        if ( xTrans.is() )
+                            xTrans->commit();
+                    }
+                }
+                catch(Exception&)
+                {
+                }
+                rMap.erase(aFind);
+            }
         }
         // -----------------------------------------------------------------------------
         TStreamMap::mapped_type StorageContainer::registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode)
@@ -238,11 +291,12 @@ namespace connectivity
             OSL_ENSURE(aFind != rMap.end(),"Storage could not be found in list!");
             if ( aFind != rMap.end() )
             {
-                Reference< XStorage> xStorage = StorageContainer::getRegisteredStorage(sKey);
-                OSL_ENSURE(xStorage.is(),"No Storage available!");
-                if ( xStorage.is() )
+                TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(sKey);
+                OSL_ENSURE(aStoragePair.first.first.is(),"No Storage available!");
+                if ( aStoragePair.first.first.is() )
                 {
-                    ::rtl::OUString sName = removeURLPrefix(jstring2ustring(env,name));
+                    ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+                    ::rtl::OUString sName = removeURLPrefix(sOrgName,aStoragePair.first.second);
                     TStreamMap::iterator aStreamFind = aFind->second.second.find(sName);
                     OSL_ENSURE( aStreamFind == aFind->second.second.end(),"A Stream was already registered for this object!");
                     if ( aStreamFind != aFind->second.second.end() )
@@ -253,7 +307,15 @@ namespace connectivity
                     {
                         try
                         {
-                            pHelper.reset(new StreamHelper(xStorage->openStreamElement(sName,_nMode)));
+                            try
+                            {
+                                pHelper.reset(new StreamHelper(aStoragePair.first.first->openStreamElement(sName,_nMode)));
+                            }
+                            catch(Exception& )
+                            {
+                                ::rtl::OUString sName = removeOldURLPrefix(sOrgName);
+                                pHelper.reset(new StreamHelper(aStoragePair.first.first->openStreamElement(sName,_nMode)));
+                            }
                             aFind->second.second.insert(TStreamMap::value_type(sName,pHelper));
                         }
                         catch(Exception& e)
@@ -279,7 +341,7 @@ namespace connectivity
             TStorages::iterator aFind = rMap.find(jstring2ustring(env,key));
             OSL_ENSURE(aFind != rMap.end(),"Storage could not be found in list!");
             if ( aFind != rMap.end() )
-                aFind->second.second.erase(removeURLPrefix(jstring2ustring(env,name)));
+                aFind->second.second.erase(removeURLPrefix(jstring2ustring(env,name),aFind->second.first.second));
         }
         // -----------------------------------------------------------------------------
         TStreamMap::mapped_type StorageContainer::getRegisteredStream( JNIEnv * env,jstring name, jstring key)
@@ -290,7 +352,7 @@ namespace connectivity
             OSL_ENSURE(aFind != rMap.end(),"Storage could not be found in list!");
             if ( aFind != rMap.end() )
             {
-                TStreamMap::iterator aStreamFind = aFind->second.second.find(removeURLPrefix(jstring2ustring(env,name)));
+                TStreamMap::iterator aStreamFind = aFind->second.second.find(removeURLPrefix(jstring2ustring(env,name),aFind->second.first.second));
                 if ( aStreamFind != aFind->second.second.end() )
                     pRet = aStreamFind->second;
             }
@@ -305,4 +367,10 @@ namespace connectivity
 }
 // namespace connectivity
 //........................................................................
-
+#if OSL_DEBUG_LEVEL > 1
+TDebugStreamMap& getStreams()
+{
+    static TDebugStreamMap streams;
+    return streams;
+}
+#endif
