@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdatebuilder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-31 13:59:15 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,9 @@
 #include <rtl/ustring.hxx>
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
     struct TemplateIdentifier;
 } } } } }
-}
 
 namespace configmgr
 {
@@ -90,7 +88,7 @@ namespace configmgr
 // -----------------------------------------------------------------------------
         using rtl::OUString;
         namespace uno = ::com::sun::star::uno;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
         class NodeUpdate;
         class PropertyUpdate;
@@ -104,8 +102,8 @@ namespace configmgr
             LayerUpdateBuilder();
 
         public:
-            /// set the context information for the update
-            bool setContext(OUString const & _aContext);
+            /// initialize the update
+            bool init();
 
             bool modifyNode(OUString const & _aName, sal_Int16 _nFlags, sal_Int16 _nFlagsMask, sal_Bool _bReset);
             bool replaceNode(OUString const & _aName, sal_Int16 _nFlags, backenduno::TemplateIdentifier const * _pTemplate = NULL);
