@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:56:13 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,8 @@
 #ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATUS_HPP_
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_FONTHEIGHT_HPP_
-#include <drafts/com/sun/star/frame/status/FontHeight.hpp>
+#ifndef _COM_SUN_STAR_FRAME_STATUS_FONTHEIGHT_HPP_
+#include <com/sun/star/frame/status/FontHeight.hpp>
 #endif
 
 #include "dialogs.hrc"
@@ -2718,7 +2718,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
             }
             else
             {
-                drafts::com::sun::star::frame::status::FontHeight aFontHeight;
+                ::com::sun::star::frame::status::FontHeight aFontHeight;
                 if ( rEvent.State >>= aFontHeight )
                 {
                     pBox->statusChanged_Impl( long( aFontHeight.Height ), eState );
