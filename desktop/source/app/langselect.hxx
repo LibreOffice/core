@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langselect.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:15:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <svtools/languageoptions.hxx>
 
 namespace desktop
 {
@@ -91,6 +92,7 @@ private:
     static rtl::OUString getUserLanguage();
     static rtl::OUString getSystemLanguage();
     static void resetUserLanguage();
+    static void setDefaultLocale(const rtl::OUString&);
 
 public:
     static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
