@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProxyProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:43:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,11 @@ package com.sun.star.lib.uno.helper;
 import com.sun.star.uno.Type;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lib.uno.environments.java.Proxy;
+import com.sun.star.lang.XEventListener;
+import com.sun.star.uno.IQueryInterface;
+//import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.lib.uno.environments.java.java_environment;
-import com.sun.star.lib.uno.environments.java.IRequester;
+//import com.sun.star.lib.uno.environments.java.IRequester;
 
 
 public class ProxyProvider
@@ -82,7 +84,7 @@ public class ProxyProvider
      * The proxy can be queried for XEventListener. On the returned proxy disposing can be called
      *
      */
-    public static Object getHolderProxy(Object obj, Class iface)
+    public static Object createProxy(Object obj, Class iface)
     {
 
         Object retVal= null;
@@ -97,17 +99,8 @@ public class ProxyProvider
         // if retVal == null then probably not registered
         if (retVal == null)
         {
-            // create the XEventListener proxy
-            Requester eventRequester = new Requester(false, false, null);
-            Object aProxyEvt = Proxy.create(eventRequester, sOid, evtType, false, false);
-            eventRequester._xEventListenerProxy= aProxyEvt;
-            String[] arOid= new String[]
-            {sOid};
-            retVal= env.registerInterface(aProxyEvt, arOid, evtType);
-
-            Requester requester = new Requester(false, false, aProxyEvt);
-            Object aProxy = Proxy.create(requester, sOid, type, false, false);
-            arOid= new String[]
+            Object aProxy = new Proxy(sOid, type);
+            String[] arOid = new String[]
             {sOid};
             retVal= env.registerInterface(aProxy, arOid, type);
         }
@@ -115,49 +108,92 @@ public class ProxyProvider
     }
 }
 
-class Requester implements IRequester
+class Proxy implements IQueryInterface, XEventListener
 {
-    int _modus;
-    boolean _virtual;
-    boolean _forceSynchronous;
-    boolean _passed = true;
-
-    Object _xEventListenerProxy;
-    int nDisposingCalled= 0;
-
-    Requester(boolean virtual, boolean forceSynchronous, Object evtListener)
-    {
-        _virtual = virtual;
-        _forceSynchronous = forceSynchronous;
-        _xEventListenerProxy= evtListener;
-
+    String oid;
+    Type type;
+    Proxy(String oid, Type t) {
+        this.oid = oid;
+        this.type = t;
     }
 
-    public Object sendRequest(Object object,
-    Type type,
-    String operation,
-    Object params[],
-    Boolean synchron[],
-    Boolean mustReply[]) throws Throwable
-    {
+    public String getOid() {
+        return oid;
+    }
 
-        Object result = null;
-        if (operation.equals("disposing"))
+    public boolean isSame(Object object) {
+        if (object instanceof IQueryInterface)
         {
-            System.out.println("Disposing called on XEventListener proxy");
-            nDisposingCalled++;
-        }
-        else if (operation.equals("queryInterface"))
-        {
-            if (params[0] instanceof Type)
+            IQueryInterface iquery = (IQueryInterface) object;
+            if (iquery != null)
             {
-                Type t= (Type) params[0];
-                if (t.equals( new Type("com.sun.star.lang.XEventListener")))
-                    result= _xEventListenerProxy;
+                if (iquery.getOid().equals(oid))
+                    return true;
+                else
+                    return false;
             }
         }
-        return result;
+
+        String oidObj = UnoRuntime.generateOid(object);
+        if (oidObj.equals(oid))
+            return true;
+        else
+            return false;
     }
+
+    public Object queryInterface(Type type) {
+        return null;
+    }
+
+    public void disposing(com.sun.star.lang.EventObject eventObject) {
+    }
+
 }
+
+
+//class Requester //implements IRequester
+//{
+//    int _modus;
+//    boolean _virtual;
+//    boolean _forceSynchronous;
+//    boolean _passed = true;
+//
+//    Object _xEventListenerProxy;
+//    int nDisposingCalled= 0;
+//
+//    Requester(boolean virtual, boolean forceSynchronous, Object evtListener)
+//    {
+//        _virtual = virtual;
+//        _forceSynchronous = forceSynchronous;
+//        _xEventListenerProxy= evtListener;
+//
+//    }
+//
+//    public Object sendRequest(Object object,
+//    Type type,
+//    String operation,
+//    Object params[],
+//    Boolean synchron[],
+//    Boolean mustReply[]) throws Throwable
+//    {
+//
+//        Object result = null;
+//        if (operation.equals("disposing"))
+//        {
+//            System.out.println("Disposing called on XEventListener proxy");
+//            nDisposingCalled++;
+//        }
+//        else if (operation.equals("queryInterface"))
+//        {
+//            if (params[0] instanceof Type)
+//            {
+//                Type t= (Type) params[0];
+//                if (t.equals( new Type("com.sun.star.lang.XEventListener")))
+//                    result= _xEventListenerProxy;
+//            }
+//        }
+//        return result;
+//    }
+//}
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultiTypeInterfaceContainer_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-11 13:43:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,13 @@ import java.util.ArrayList;
 import com.sun.star.uno.Type;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lib.uno.environments.java.Proxy;
+//import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XSingleComponentFactory;
 
 public class MultiTypeInterfaceContainer_Test
 {
-    java_environment env= new java_environment(null);
+//    java_environment env= new java_environment(null);
     /** Creates a new instance of InterfaceContainerTest */
     AWeakBase obj1,obj2,obj3,obj4;
     Object proxyObj1Weak1;
@@ -96,11 +96,12 @@ public class MultiTypeInterfaceContainer_Test
         obj2= new AWeakBase();
         obj3= new AWeakBase();
         obj4= new AWeakBase();
-        proxyObj1Weak1= ProxyProvider.getHolderProxy(obj1, XWeak.class);
-        proxyObj3Weak1= ProxyProvider.getHolderProxy(obj3, XWeak.class);
-        proxyObj3Weak2= ProxyProvider.getHolderProxy(obj3, XWeak.class);
-        proxyObj2TypeProv= ProxyProvider.getHolderProxy(obj2, XTypeProvider.class);
-        proxyObj3TypeProv= ProxyProvider.getHolderProxy(obj3, XTypeProvider.class);
+
+        proxyObj1Weak1= ProxyProvider.createProxy(obj1, XWeak.class);
+        proxyObj3Weak1= ProxyProvider.createProxy(obj3, XWeak.class);
+        proxyObj3Weak2= ProxyProvider.createProxy(obj3, XWeak.class);
+        proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
+        proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
 
         list1= new ArrayList();
         list1.add(obj1);
@@ -122,33 +123,33 @@ public class MultiTypeInterfaceContainer_Test
      *  The proxy can be queried for XEventListener. On the returned proxy disposing can be called
      *
      */
-    public Object getHolderProxy(Object obj, Class iface)
-    {
-        Object retVal= null;
-        if (obj == null || iface == null || iface.isInstance(obj) == false )
-            return retVal;
-
-        Type type= new Type(TypeDescription.getTypeDescription(iface));
-        Type evtType= new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
-        // find the object identifier
-        String sOid= UnoRuntime.generateOid(obj);
-        retVal= env.getRegisteredInterface(sOid, type);
-        // if retVal == null then probably not registered
-        if (retVal == null)
-        {
-            // create the XEventListener proxy
-            Requester eventRequester = new Requester(false, false, null);
-            Object aProxyEvt = Proxy.create(eventRequester, sOid, evtType, false, false);
-            String[] arOid= new String[]{sOid};
-            retVal= env.registerInterface(aProxyEvt, arOid, evtType);
-
-            Requester requester = new Requester(false, false, aProxyEvt);
-            Object aProxy = Proxy.create(requester, sOid, type, false, false);
-            arOid= new String[] {sOid};
-            retVal= env.registerInterface(aProxy, arOid, type);
-        }
-        return retVal;
-    }
+//    public Object getHolderProxy(Object obj, Class iface)
+//    {
+//        Object retVal= null;
+//        if (obj == null || iface == null || iface.isInstance(obj) == false )
+//            return retVal;
+//
+//        Type type= new Type(TypeDescription.getTypeDescription(iface));
+//        Type evtType= new Type(TypeDescription.getTypeDescription(com.sun.star.lang.XEventListener.class));
+//        // find the object identifier
+//        String sOid= UnoRuntime.generateOid(obj);
+//        retVal= env.getRegisteredInterface(sOid, type);
+//        // if retVal == null then probably not registered
+//        if (retVal == null)
+//        {
+//            // create the XEventListener proxy
+//            Requester eventRequester = new Requester(false, false, null);
+//            Object aProxyEvt = Proxy.create(eventRequester, sOid, evtType, false, false);
+//            String[] arOid= new String[]{sOid};
+//            retVal= env.registerInterface(aProxyEvt, arOid, evtType);
+//
+//            Requester requester = new Requester(false, false, aProxyEvt);
+//            Object aProxy = Proxy.create(requester, sOid, type, false, false);
+//            arOid= new String[] {sOid};
+//            retVal= env.registerInterface(aProxy, arOid, type);
+//        }
+//        return retVal;
+//    }
 
     public boolean addInterface()
     {
