@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:54:50 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ class   SalBitmapList;
 class   BitmapPalette;
 class   SalImage;
 class   SalBitmap;
-class   SalFrameData;
+class   SalFrame;
 class   ColorMask;
 class   SalSystemData;
 
@@ -284,7 +284,7 @@ class SalXLib
 public:
     SalXLib();
     ~SalXLib();
-    void            Init( int *pArgc, char *ppArgv[] );
+    void            Init();
 
     void            Yield( BOOL bWait );
     void            Wakeup();
@@ -376,7 +376,7 @@ class SalDisplay
     SalXEvent      *pDispatchStack_;    // Dispatch/Yield
 
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
-    SalFrameData   *pCapture_;
+    SalFrame       *pCapture_;
 
     // GDI
     SalVisual      *pVisual_;           // Visual
@@ -467,7 +467,7 @@ public:
                                XIC = NULL ) const;
 
     XLIB_Cursor     GetPointer( int ePointerStyle );
-    int             CaptureMouse( SalFrameData *pCapture );
+    int             CaptureMouse( SalFrame *pCapture );
 
     BOOL            IsLocal();
     inline  void            Insert( SalBitmap *pBitmap );
@@ -506,9 +506,9 @@ public:
     void            DisableShm() { nSharedImages_ /= 2; } // = 0
     void            GetScreenFontResolution( long& rDPIX, long& rDPIY ) const;
 
-    BOOL            MouseCaptured( const SalFrameData *pFrameData ) const
+    BOOL            MouseCaptured( const SalFrame *pFrameData ) const
     { return pCapture_ == pFrameData; }
-    SalFrameData*   GetCaptureFrame() const
+    SalFrame*   GetCaptureFrame() const
     { return pCapture_; }
     SalXLib*         GetXLib() { return pXLib_; }
 
