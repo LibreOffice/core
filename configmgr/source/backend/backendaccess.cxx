@@ -2,8 +2,8 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.20 $
- *  last change: $Author: kz $ $Date: 2005-01-18 13:27:51 $
+ *  $Revision: 1.21 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,10 +475,11 @@ static OUString getLayerURL(const uno::Reference<backenduno::XLayer> & aLayer)
     }
     catch (uno::Exception & e)
     {
-        OSL_TRACE("Warning - Configuration: Retrieving error (interaction) handler failed: [%s]\n", OU2A(e.Message));
+        OSL_TRACE("Warning - Configuration: Retrieving layer URL failed: [%s]\n", OU2A(e.Message));
     }
-    // TODO: use fallback, e.g. ServiceName
-    return OUString();
+    // TODO: use better fallback, e.g. ServiceName
+    const char * const aFallback = aLayer.is() ? "<Unknown Layer Type>" : "<NULL Layer>";
+    return OUString::createFromAscii(aFallback);
 }
 //------------------------------------------------------------------------------
 static inline
