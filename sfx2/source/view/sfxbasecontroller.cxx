@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: as $ $Date: 2002-07-08 12:00:14 $
+ *  last change: $Author: cd $ $Date: 2002-07-10 13:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMEACTIONEVENT_HPP_
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #endif
@@ -84,6 +87,12 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
 #include <com/sun/star/lang/EventObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
@@ -168,31 +177,40 @@ void reschedule()
     }
 }
 
-class SfxStatusIndicator : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XStatusIndicator >
+class SfxStatusIndicator : public ::cppu::WeakImplHelper2< ::com::sun::star::task::XStatusIndicator, ::com::sun::star::lang::XEventListener >
 {
 friend class SfxBaseController;
-    ::com::sun::star::uno::WeakReference < XCONTROLLER > wOwner;
+    ::com::sun::star::uno::Reference < XCONTROLLER > xOwner;
     SfxWorkWindow*          pWorkWindow;
     sal_Int32               _nRange;
     sal_Int32               _nValue;
     long                    _nStartTime;
 public:
                             SfxStatusIndicator(SfxBaseController* pController, SfxWorkWindow* pWork)
-                                : wOwner( pController )
+                                : xOwner( pController )
                                 , pWorkWindow( pWork )
-                            {}
+                            {
+                                ++m_refCount;
+                                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent(
+                                    SAL_STATIC_CAST(::cppu::OWeakObject*, pController ), ::com::sun::star::uno::UNO_QUERY );
+                                if (xComponent.is())
+                                    xComponent->addEventListener(this);
+                                --m_refCount;
+                            }
 
     virtual void SAL_CALL   start(const ::rtl::OUString& aText, sal_Int32 nRange) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   end(void) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setText(const ::rtl::OUString& aText) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setValue(sal_Int32 nValue) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   reset() throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL   disposing( const com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 nRange) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( wOwner.get().is() )
+    if ( xOwner.is() )
     {
         _nRange = nRange;
         _nValue = 0;
@@ -210,7 +228,7 @@ void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 
 void SAL_CALL SfxStatusIndicator::end(void) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( wOwner.get().is() )
+    if ( xOwner.is() )
     {
         SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
         if ( pMgr && pMgr->IsProgressMode() )
@@ -222,7 +240,7 @@ void SAL_CALL SfxStatusIndicator::end(void) throw(::com::sun::star::uno::Runtime
 void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( wOwner.get().is() )
+    if ( xOwner.is() )
     {
         SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
         if ( !pMgr )
@@ -258,7 +276,7 @@ void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(::
 void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( wOwner.get().is() )
+    if ( xOwner.is() )
     {
         _nValue = nValue;
         SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
@@ -273,7 +291,7 @@ void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(::com::sun:
 void SAL_CALL SfxStatusIndicator::reset() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( wOwner.get().is() )
+    if ( xOwner.is() )
     {
         SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
         if ( pMgr )
@@ -281,6 +299,12 @@ void SAL_CALL SfxStatusIndicator::reset() throw(::com::sun::star::uno::RuntimeEx
         pWorkWindow->SetTempStatusBar_Impl( FALSE );
         reschedule();
     }
+}
+
+void SAL_CALL SfxStatusIndicator::disposing( const com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    xOwner = 0;
 }
 
 //________________________________________________________________________________________________________
