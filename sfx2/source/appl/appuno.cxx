@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 11:21:54 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 17:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-                for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
+                USHORT nSub;
+                for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
                     ByteString aStr( pSlot->pUnoName );
@@ -1033,7 +1034,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     continue;
 
                 USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
-                for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
+                USHORT nArg;
+                for ( nArg=0; nArg<nFormalArgs; ++nArg )
                 {
                     const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
                     USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
