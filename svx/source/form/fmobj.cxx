@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 13:06:54 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,17 +76,24 @@
 #include "fmprop.hrc"
 #endif
 
+#ifndef _MyEDITENG_HXX
+#include "editeng.hxx"
+#endif
 
+/** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
+#include <com/sun/star/awt/XDevice.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
 #include <com/sun/star/awt/XControlContainer.hpp>
 #endif
+/** === end UNO includes === **/
 
 #ifndef _SVDIO_HXX //autogen
 #include <svdio.hxx>
@@ -134,29 +141,43 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
+#include <toolkit/awt/vclxdevice.hxx>
+#endif
+
+using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::container;
 using namespace ::svxform;
 
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
 //------------------------------------------------------------------
 FmFormObj::FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType)
-          :SdrUnoObj(rModelName, sal_False)
-          ,pTempView(0)
-          ,nEvent(0)
-          ,nPos(-1)
-          ,m_nType(_nType)
+          :SdrUnoObj                ( rModelName, sal_False )
+          ,m_pControlCreationView   ( 0                     )
+          ,m_nControlCreationEvent  ( 0                     )
+          ,m_nPos                   ( -1                    )
+          ,m_nType                  ( _nType                )
+          ,m_pLastKnownRefDevice    ( NULL                  )
 {
     DBG_CTOR(FmFormObj, NULL);
 }
 
 //------------------------------------------------------------------
-FmFormObj::FmFormObj(sal_Int32 _nType)
-          :SdrUnoObj(String(), sal_False)
-          ,nEvent(0)
-          ,pTempView(0)
-          ,nPos(-1)
-          ,m_nType(_nType)
+FmFormObj::FmFormObj( sal_Int32 _nType )
+          :SdrUnoObj                ( String(), sal_False   )
+          ,m_pControlCreationView   ( 0                     )
+          ,m_nControlCreationEvent  ( 0                     )
+          ,m_nPos                   ( -1                    )
+          ,m_nType                  ( _nType                )
+          ,m_pLastKnownRefDevice    ( NULL                  )
 {
     DBG_CTOR(FmFormObj, NULL);
 }
@@ -165,10 +186,10 @@ FmFormObj::FmFormObj(sal_Int32 _nType)
 FmFormObj::~FmFormObj()
 {
     DBG_DTOR(FmFormObj, NULL);
-    if (nEvent)
-        Application::RemoveUserEvent(nEvent);
+    if (m_nControlCreationEvent)
+        Application::RemoveUserEvent(m_nControlCreationEvent);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xHistory(m_xEnvironmentHistory, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XComponent> xHistory(m_xEnvironmentHistory, UNO_QUERY);
     if (xHistory.is())
         xHistory->dispose();
 
@@ -177,12 +198,12 @@ FmFormObj::~FmFormObj()
 }
 
 //------------------------------------------------------------------
-void FmFormObj::SetObjEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & xForm, sal_Int32 nIdx,
-                          const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& rEvts)
+void FmFormObj::SetObjEnv(const Reference< XIndexContainer > & xForm, sal_Int32 nIdx,
+                          const Sequence< ScriptEventDescriptor >& rEvts)
 {
-    xParent = xForm;
-    aEvts   = rEvts;
-    nPos    = nIdx;
+    m_xParent = xForm;
+    aEvts     = rEvts;
+    m_nPos    = nIdx;
 }
 
 //------------------------------------------------------------------
@@ -198,8 +219,8 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         return;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    xNewParent;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor>   aNewEvents;
+    Reference< XIndexContainer >    xNewParent;
+    Sequence< ScriptEventDescriptor>    aNewEvents;
 
     // calc the new parent for my model (within the new page's forms hierarchy)
     // do we have a history ? (from :Clone)
@@ -207,12 +228,12 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     {
         // the element in *m_pEnvironmentHistory which is equivalent to my new parent (which (perhaps) has to be created within _pNewPage->GetForms)
         // is the right-most element in the tree.
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xLoop = m_xEnvironmentHistory;
+        Reference< XIndexContainer >  xLoop = m_xEnvironmentHistory;
         do
         {
             if (xLoop->getCount() == 0)
                 break;
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xRightMostChild;
+            Reference< XIndexContainer >  xRightMostChild;
             xLoop->getByIndex(xLoop->getCount() - 1) >>= xRightMostChild;
             if (!xRightMostChild.is())
             {
@@ -223,7 +244,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
         }
         while (sal_True);
 
-        xNewParent = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (ensureModelEnv(xLoop, ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (pNewFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY)), ::com::sun::star::uno::UNO_QUERY);
+        xNewParent = Reference< XIndexContainer > (ensureModelEnv(xLoop, Reference< XIndexContainer > (pNewFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY)), ::com::sun::star::uno::UNO_QUERY);
         if (xNewParent.is())
             // we successfully clone the environment in m_pEnvironmentHistory, so we can use m_aEventsHistory
             // (which describes the events of our model at the moment m_pEnvironmentHistory was created)
@@ -234,29 +255,29 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     {
         // are we a valid part of our current page forms ?
         FmFormPage* pOldFormPage = PTR_CAST(FmFormPage, GetPage());
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xOldForms = pOldFormPage ? ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (pOldFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY) : ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > ();
+        Reference< XIndexContainer >  xOldForms = pOldFormPage ? Reference< XIndexContainer > (pOldFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY) : ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > ();
         if (xOldForms.is())
         {
             // search (upward from our model) for xOldForms
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xSearch(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< XChild >  xSearch(GetUnoControlModel(), UNO_QUERY);
             while (xSearch.is())
             {
                 if (xSearch == xOldForms)
                     break;
-                xSearch = ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > (xSearch->getParent(), ::com::sun::star::uno::UNO_QUERY);
+                xSearch = Reference< XChild > (xSearch->getParent(), UNO_QUERY);
             }
             if (xSearch.is())   // implies xSearch == xOldForms, which means we're a valid part of our current page forms hierarchy
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xMeAsChild(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
-                xNewParent = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (ensureModelEnv(xMeAsChild->getParent(), ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (pNewFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY)), ::com::sun::star::uno::UNO_QUERY);
+                Reference< XChild >  xMeAsChild(GetUnoControlModel(), UNO_QUERY);
+                xNewParent = Reference< XIndexContainer > (ensureModelEnv(xMeAsChild->getParent(), Reference< XIndexContainer > (pNewFormPage->GetForms(), ::com::sun::star::uno::UNO_QUERY)), ::com::sun::star::uno::UNO_QUERY);
 
                 if (xNewParent.is())
                 {
                     try
                     {
                         // transfer the events from our (model's) parent to the new (model's) parent, too
-                        ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xEventManager(xMeAsChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
-                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xManagerAsIndex(xEventManager, ::com::sun::star::uno::UNO_QUERY);
+                        Reference< XEventAttacherManager >  xEventManager(xMeAsChild->getParent(), UNO_QUERY);
+                        Reference< XIndexAccess >  xManagerAsIndex(xEventManager, UNO_QUERY);
                         if (xManagerAsIndex.is())
                         {
                             sal_Int32 nPos = getElementPos(xManagerAsIndex, xMeAsChild);
@@ -282,27 +303,27 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     // place my model within the new parent container
     if (xNewParent.is())
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xMeAsFormComp(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XFormComponent >  xMeAsFormComp(GetUnoControlModel(), UNO_QUERY);
         if (xMeAsFormComp.is())
         {
             // check if I have another parent (and remove me, if neccessary)
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xOldParent(xMeAsFormComp->getParent(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< XIndexContainer >  xOldParent(xMeAsFormComp->getParent(), UNO_QUERY);
             if (xOldParent.is())
             {
-                sal_Int32 nPos = getElementPos(::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xOldParent, ::com::sun::star::uno::UNO_QUERY), xMeAsFormComp);
+                sal_Int32 nPos = getElementPos(Reference< XIndexAccess > (xOldParent, UNO_QUERY), xMeAsFormComp);
                 if (nPos > -1)
                     xOldParent->removeByIndex(nPos);
             }
             // and insert into the new container
-            xNewParent->insertByIndex(xNewParent->getCount(), ::com::sun::star::uno::makeAny(xMeAsFormComp));
+            xNewParent->insertByIndex(xNewParent->getCount(), makeAny(xMeAsFormComp));
 
             // transfer the events
             if (aNewEvents.getLength())
             {
                 try
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xEventManager(xNewParent, ::com::sun::star::uno::UNO_QUERY);
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xManagerAsIndex(xEventManager, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< XEventAttacherManager >  xEventManager(xNewParent, UNO_QUERY);
+                    Reference< XIndexAccess >  xManagerAsIndex(xEventManager, UNO_QUERY);
                     if (xManagerAsIndex.is())
                     {
                         sal_Int32 nPos = getElementPos(xManagerAsIndex, xMeAsFormComp);
@@ -320,7 +341,7 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
     }
 
     // delete my history
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xHistory(m_xEnvironmentHistory, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XComponent> xHistory(m_xEnvironmentHistory, UNO_QUERY);
     if (xHistory.is())
         xHistory->dispose();
 
@@ -348,22 +369,22 @@ sal_uInt16 FmFormObj::GetObjIdentifier() const
 void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 {
     DBG_ASSERT(_pSource != NULL, "FmFormObj::clonedFrom : invalid source !");
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xHistory(m_xEnvironmentHistory, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XComponent> xHistory(m_xEnvironmentHistory, UNO_QUERY);
     if (xHistory.is())
         xHistory->dispose();
 
     m_xEnvironmentHistory = NULL;
     m_aEventsHistory.realloc(0);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xSourceAsChild(_pSource->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XChild >  xSourceAsChild(_pSource->GetUnoControlModel(), UNO_QUERY);
     if (!xSourceAsChild.is())
         return;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xSourceContainer = xSourceAsChild->getParent();
+    Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
-    m_xEnvironmentHistory = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >(
+    m_xEnvironmentHistory = Reference< XIndexContainer >(
         ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.Forms")),
-        ::com::sun::star::uno::UNO_QUERY);
+        UNO_QUERY);
     DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
 
     if (m_xEnvironmentHistory.is())
@@ -403,22 +424,22 @@ SdrObject* FmFormObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const
         return pReturn;
 
     // build an form environment equivalent to my own withín the destination page
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild >  xMeAsChild(GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+    Reference< XChild >  xMeAsChild(GetUnoControlModel(), UNO_QUERY);
     if (!xMeAsChild.is())
         return pReturn;
 
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xMyParent = xMeAsChild->getParent();
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xClonesParent = ensureModelEnv(xMyParent, ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (pClonesPage->GetForms(), ::com::sun::star::uno::UNO_QUERY));
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xNewParentContainer(xClonesParent, ::com::sun::star::uno::UNO_QUERY);
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xCloneAsFormComponent(PTR_CAST(FmFormObj, pReturn)->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< XInterface >  xMyParent = xMeAsChild->getParent();
+        Reference< XInterface >  xClonesParent = ensureModelEnv(xMyParent, Reference< XIndexContainer > (pClonesPage->GetForms(), ::com::sun::star::uno::UNO_QUERY));
+        Reference< XIndexContainer >  xNewParentContainer(xClonesParent, UNO_QUERY);
+        Reference< XFormComponent >  xCloneAsFormComponent(PTR_CAST(FmFormObj, pReturn)->GetUnoControlModel(), UNO_QUERY);
         if (xNewParentContainer.is() && xCloneAsFormComponent.is())
         {
             sal_Int32 nPos = xNewParentContainer->getCount();
-            xNewParentContainer->insertByIndex(nPos, ::com::sun::star::uno::makeAny(xCloneAsFormComponent));
+            xNewParentContainer->insertByIndex(nPos, makeAny(xCloneAsFormComponent));
             // transfer the events, too
-            ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xEventManager(xNewParentContainer, ::com::sun::star::uno::UNO_QUERY);
+            Reference< XEventAttacherManager >  xEventManager(xNewParentContainer, UNO_QUERY);
             if (xEventManager.is())
                 xEventManager->registerScriptEvents(nPos, pCloneAsFormObj->GetEvents());
         }
@@ -433,6 +454,41 @@ SdrObject* FmFormObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const
 }
 
 //------------------------------------------------------------------
+void FmFormObj::ReformatText()
+{
+    const FmFormModel* pModel = PTR_CAST( FmFormModel, GetModel() );
+    OutputDevice* pCurrentRefDevice = pModel ? pModel->GetRefDevice() : NULL;
+
+    if ( m_pLastKnownRefDevice != pCurrentRefDevice )
+    {
+        m_pLastKnownRefDevice = pCurrentRefDevice;
+
+        try
+        {
+            Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY );
+            Reference< XPropertySetInfo > xPropertyInfo;
+            if ( xModelProps.is() )
+                xPropertyInfo = xModelProps->getPropertySetInfo();
+
+            const ::rtl::OUString sRefDevicePropName( RTL_CONSTASCII_USTRINGPARAM( "ReferenceDevice" ) );
+            if ( xPropertyInfo.is() && xPropertyInfo->hasPropertyByName( sRefDevicePropName ) )
+            {
+                VCLXDevice* pUnoRefDevice = new VCLXDevice;
+                pUnoRefDevice->SetOutputDevice( m_pLastKnownRefDevice );
+                Reference< XDevice > xRefDevice( pUnoRefDevice );
+                xModelProps->setPropertyValue( sRefDevicePropName, makeAny( xRefDevice ) );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmFormObj::ReformatText: caught an exception!" );
+        }
+    }
+
+    SdrUnoObj::ReformatText();
+}
+
+//------------------------------------------------------------------
 void FmFormObj::operator= (const SdrObject& rObj)
 {
     SdrUnoObj::operator= (rObj);
@@ -440,18 +496,18 @@ void FmFormObj::operator= (const SdrObject& rObj)
     FmFormObj* pFormObj = PTR_CAST(FmFormObj, &rObj);
     if (pFormObj)
     {
-        // liegt das ::com::sun::star::awt::UnoControlModel in einer Eventumgebung,
+        // liegt das UnoControlModel in einer Eventumgebung,
         // dann koennen noch Events zugeordnet sein
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xContent(pFormObj->xUnoControlModel, ::com::sun::star::uno::UNO_QUERY);
+        Reference< XFormComponent >  xContent(pFormObj->xUnoControlModel, UNO_QUERY);
         if (xContent.is())
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xContent->getParent(), ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >  xManagerAsIndex(xManager, ::com::sun::star::uno::UNO_QUERY);
+            Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
+            Reference< XIndexAccess >  xManagerAsIndex(xManager, UNO_QUERY);
             if (xManagerAsIndex.is())
             {
-                sal_Int32 nPos = getElementPos(xManagerAsIndex, xContent);
-                if (nPos >= 0)
-                    aEvts = xManager->getScriptEvents(nPos);
+                sal_Int32 nPos = getElementPos( xManagerAsIndex, xContent );
+                if ( nPos >= 0 )
+                    aEvts = xManager->getScriptEvents( nPos );
             }
         }
         else
@@ -481,29 +537,29 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 }
 
 //------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  FmFormObj::ensureModelEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
+Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xTopLevelSouce;
+    Reference< XInterface >  xTopLevelSouce;
     String sAccessPath = getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
     if (!xTopLevelSouce.is())
         // somthing went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
-        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
+        return Reference< XInterface > ();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xDestContainer(_rTopLevelDestContainer);
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xSourceContainer(xTopLevelSouce, ::com::sun::star::uno::UNO_QUERY);
+    Reference< XIndexContainer >  xDestContainer(_rTopLevelDestContainer);
+    Reference< XIndexContainer >  xSourceContainer(xTopLevelSouce, UNO_QUERY);
     DBG_ASSERT(xSourceContainer.is(), "FmFormObj::ensureModelEnv : the top level source is invalid !");
 
     for (xub_StrLen i=0; i<sAccessPath.GetTokenCount('\\'); ++i)
     {
-        sal_uInt16 nIndex = sAccessPath.GetToken(i, '\\').ToInt32();
+        sal_uInt16 nIndex = (sal_uInt16)sAccessPath.GetToken(i, '\\').ToInt32();
 
         // get the DSS of the source form (we have to find an aquivalent for)
         DBG_ASSERT(nIndex<xSourceContainer->getCount(), "FmFormObj::ensureModelEnv : invalid access path !");
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSourceForm;
+        Reference< XPropertySet >  xSourceForm;
         xSourceContainer->getByIndex(nIndex) >>= xSourceForm;
         DBG_ASSERT(xSourceForm.is(), "FmFormObj::ensureModelEnv : invalid source form !");
 
-        ::com::sun::star::uno::Any aSrcCursorSource, aSrcCursorSourceType, aSrcDataSource;
+        Any aSrcCursorSource, aSrcCursorSourceType, aSrcDataSource;
         DBG_ASSERT(::comphelper::hasProperty(FM_PROP_COMMAND, xSourceForm) && ::comphelper::hasProperty(FM_PROP_COMMANDTYPE, xSourceForm)
             && ::comphelper::hasProperty(FM_PROP_DATASOURCE, xSourceForm), "FmFormObj::ensureModelEnv : invalid access path or invalid form (missing props) !");
             // the parent access path should refer to a row set
@@ -520,7 +576,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
 
         // calc the number of (source) form siblings with the same DSS
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCurrentSourceForm, xCurrentDestForm;
+        Reference< XPropertySet >  xCurrentSourceForm, xCurrentDestForm;
         sal_Int16 nCurrentSourceIndex = 0, nCurrentDestIndex = 0;
         while (nCurrentSourceIndex <= nIndex)
         {
@@ -587,15 +643,15 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 // correct this ...
                 try
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject >  xSourcePersist(xCurrentSourceForm, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< XPersistObject >  xSourcePersist(xCurrentSourceForm, UNO_QUERY);
                     DBG_ASSERT(xSourcePersist.is(), "FmFormObj::ensureModelEnv : invalid form (no persist object) !");
 
                     // create and insert (into the destination) a clone of the form
-                    xCurrentDestForm = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (cloneUsingProperties(xSourcePersist), ::com::sun::star::uno::UNO_QUERY);
+                    xCurrentDestForm = Reference< XPropertySet > (cloneUsingProperties(xSourcePersist), UNO_QUERY);
                     DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid cloned form !");
 
                     DBG_ASSERT(nCurrentDestIndex == xDestContainer->getCount(), "FmFormObj::ensureModelEnv : something went wrong with the numbers !");
-                    xDestContainer->insertByIndex(nCurrentDestIndex, ::com::sun::star::uno::makeAny(xCurrentDestForm));
+                    xDestContainer->insertByIndex(nCurrentDestIndex, makeAny(xCurrentDestForm));
 
                     ++nCurrentDestIndex;
                         // like nCurrentSourceIndex, nCurrentDestIndex now points 'behind' the form it actally means
@@ -604,7 +660,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 {
                     DBG_ERROR("FmFormObj::ensureModelEnv : something went seriously wrong while creating a new form !");
                     // no more options anymore ...
-                    return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
+                    return Reference< XInterface > ();
                 }
 
             }
@@ -614,12 +670,12 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         // of left siblings with the same DSS, which counts for all their ancestors, too)
 
         // go down
-        xDestContainer = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (xCurrentDestForm, ::com::sun::star::uno::UNO_QUERY);
-        xSourceContainer = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > (xSourceForm, ::com::sun::star::uno::UNO_QUERY);
+        xDestContainer = Reference< XIndexContainer > (xCurrentDestForm, UNO_QUERY);
+        xSourceContainer = Reference< XIndexContainer > (xSourceForm, UNO_QUERY);
         DBG_ASSERT(xDestContainer.is() && xSourceContainer.is(), "FmFormObj::ensureModelEnv : invalid container !");
     }
 
-    return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (xDestContainer, ::com::sun::star::uno::UNO_QUERY);
+    return Reference< XInterface > (xDestContainer, UNO_QUERY);
 }
 
 //------------------------------------------------------------------
@@ -628,27 +684,27 @@ FASTBOOL FmFormObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     sal_Bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
     if (bResult && SDRCREATE_FORCEEND == eCmd && rStat.GetView())
     {
-        // ist das Object teil einer ::com::sun::star::form::Form?
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xContent(xUnoControlModel, ::com::sun::star::uno::UNO_QUERY);
+        // ist das Object teil einer Form?
+        Reference< XFormComponent >  xContent(xUnoControlModel, UNO_QUERY);
         if (xContent.is() && pPage)
         {
-            // Komponente gehoert noch keiner ::com::sun::star::form::Form an
+            // Komponente gehoert noch keiner Form an
             if (!xContent->getParent().is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xTemp = ((FmFormPage*)pPage)->GetImpl()->SetDefaults(xContent);
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xForm(xTemp, ::com::sun::star::uno::UNO_QUERY);
+                Reference< XForm >  xTemp = ((FmFormPage*)pPage)->GetImpl()->SetDefaults(xContent);
+                Reference< XIndexContainer >  xForm(xTemp, UNO_QUERY);
 
                 // Position des Elements
                 sal_Int32 nPos = xForm->getCount();
-                xForm->insertByIndex(nPos, ::com::sun::star::uno::makeAny(xContent));
+                xForm->insertByIndex(nPos, makeAny(xContent));
             }
         }
 
-        if (nEvent)
-            Application::RemoveUserEvent(nEvent);
+        if ( m_nControlCreationEvent )
+            Application::RemoveUserEvent( m_nControlCreationEvent );
 
-        pTempView = (FmFormView*)rStat.GetView();
-        nEvent = Application::PostUserEvent(LINK(this,FmFormObj,OnCreate));
+        m_pControlCreationView = static_cast< FmFormView* >( rStat.GetView() );
+        m_nControlCreationEvent = Application::PostUserEvent( LINK( this, FmFormObj, OnCreate ) );
     }
     return bResult;
 }
@@ -656,9 +712,9 @@ FASTBOOL FmFormObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 //------------------------------------------------------------------------------
 IMPL_LINK(FmFormObj, OnCreate, void*, EMPTYTAG)
 {
-    nEvent = 0;
-    if (pTempView)
-        pTempView->ObjectCreated(this);
+    m_nControlCreationEvent = 0;
+    if ( m_pControlCreationView )
+        m_pControlCreationView->ObjectCreated( this );
     return 0;
 }
 // -----------------------------------------------------------------------------
