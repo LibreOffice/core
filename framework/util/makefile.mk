@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: as $ $Date: 2001-05-02 13:00:52 $
+#   last change: $Author: cd $ $Date: 2001-05-03 12:34:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,12 @@ COMP3TYPELIST=		lgd
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
+LIB1TARGET=$(SLB)$/fweobj.lib
+LIB1OBJFILES=	$(SLO)$/menuconfiguration.obj		\
+                $(SLO)$/attributelist.obj			\
+                $(SLO)$/imageproducer.obj			\
+                $(SLO)$/menudocumenthandler.obj
+
 # --- services library ----------------------------------------------------
 
 SHL1TARGET=		fwk$(UPD)$(DLLPOSTFIX)
@@ -119,10 +125,7 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/gate.obj					\
                 $(SLO)$/omenudispatcher.obj			\
                 $(SLO)$/menumanager.obj				\
-                $(SLO)$/bmkmenu.obj					\
-                $(SLO)$/menudocumenthandler.obj		\
-                $(SLO)$/menuconfiguration.obj		\
-                $(SLO)$/attributelist.obj
+                $(SLO)$/bmkmenu.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -137,6 +140,8 @@ SHL1STDLIBS=	$(CPPULIB)							\
                 $(UNOTOOLSLIB)						\
                 $(SVLLIB)							\
                 $(SOTLIB)
+
+SHL1LIBS=		$(LB)$/ifwe.lib
 
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
@@ -203,6 +208,29 @@ DEF3NAME=		$(SHL3TARGET)
 
 DEF3EXPORTFILE=	exports.dxp
 
+# --- export classes library ---------------------------------------------------
+
+SHL4TARGET=		fwe$(UPD)$(DLLPOSTFIX)
+
+SHL4IMPLIB=		ifwe
+
+SHL4LIBS= $(LIB1TARGET)
+
+SHL4STDLIBS=	$(VCLLIB)							\
+                $(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(VOSLIB)							\
+                $(SALLIB)							\
+                $(SVLIB)							\
+                $(TOOLSLIB)
+
+SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
+
+DEF4NAME=		$(SHL4TARGET)
+
+DEFLIB4NAME=	fweobj
+DEF4DEPN=		$(MISC)$/$(SHL4TARGET).flt
+
 # --- login applikation --------------------------------------------------------
 
 APP1TARGET= 	login
@@ -261,3 +289,13 @@ APP1DEF=		$(MISC)$/login.def
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+$(MISC)$/$(SHL4TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo _Impl>$@
+    @echo WEP>>$@
+    @echo m_pLoader>$@
+    @echo _TI2>>$@
+    @echo LIBMAIN>>$@
+    @echo LibMain>>$@
