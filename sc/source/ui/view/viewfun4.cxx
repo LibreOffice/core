@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:26:16 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
 #include <svtools/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/urlbmk.hxx>
-#include <vcl/system.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "viewfunc.hxx"
