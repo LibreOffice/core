@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextViewCursorSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 
     </p>@see TextDocumentView
  */
-interface XTextViewCursorSupplier: com::sun::star::uno::XInterface
+published interface XTextViewCursorSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
