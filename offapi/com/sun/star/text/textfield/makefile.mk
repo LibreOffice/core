@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: os $ $Date: 2002-01-09 08:18:49 $
+#   last change: $Author: cl $ $Date: 2002-04-12 08:52:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/text$/textfield
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    URL.idl\
     Annotation.idl\
     Author.idl\
     Bibliography.idl\
