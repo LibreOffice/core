@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbitmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:58:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace cppcanvas
@@ -80,11 +80,16 @@ namespace cppcanvas
                                 const uno::Reference< rendering::XBitmap >& rBitmap ) :
             CanvasGraphicHelper( rParentCanvas ),
             mxBitmap( rBitmap ),
-            mpBitmapCanvas(
-                new ImplBitmapCanvas( uno::Reference< rendering::XBitmapCanvas >(rBitmap,
-                                                                                 uno::UNO_QUERY) ) )
+            mpBitmapCanvas()
         {
             OSL_ENSURE( mxBitmap.is(), "ImplBitmap::ImplBitmap: no valid bitmap" );
+
+            uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( rBitmap,
+                                                                      uno::UNO_QUERY );
+            if( xBitmapCanvas.is() )
+                mpBitmapCanvas.reset( new ImplBitmapCanvas(
+                                          uno::Reference< rendering::XBitmapCanvas >(rBitmap,
+                                                                                     uno::UNO_QUERY) ) );
         }
 
         ImplBitmap::~ImplBitmap()
