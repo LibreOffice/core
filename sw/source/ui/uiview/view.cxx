@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:44:00 $
+ *  last change: $Author: os $ $Date: 2001-03-09 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,13 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCANNER_SCANNERCONTEXT_HPP_
 #include <com/sun/star/scanner/ScannerContext.hpp>
 #endif
@@ -985,6 +991,18 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
                                             pViewImpl->GetUNOObject_Impl());
 
+   uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
+
+    uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
+            OUString::createFromAscii("_beamer"), frame::FrameSearchFlag::CHILDREN);
+    if(xBeamerFrame.is())
+    {
+        SwDBData aData = pWrtShell->GetDBData();
+        pWrtShell->GetNewDBMgr()->ShowInBeamer(String(aData.sDataSource), String(aData.sCommand),
+                                            aData.nCommandType, aEmptyStr);
+    }
+
+
     if( aTimer.IsActive() )
     {
         if( bAttrChgNotifiedWithRegistrations )
@@ -1020,6 +1038,7 @@ SwView::~SwView()
 
     SetWindow( 0 );
 
+    pViewImpl->GetUNOObject_Impl()->Invalidate();
     EndListening(*GetViewFrame());
     EndListening(*GetDocShell());
     delete pScrollFill;

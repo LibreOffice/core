@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:51:32 $
+ *  last change: $Author: os $ $Date: 2001-03-09 14:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ public:
     void                    NotifySelChanged();
 
     SwView*                 GetView() {return pView;}
-    void                    Invalidate(){pView = 0;}
+    void                    Invalidate();
 };
 
 /* -----------------17.09.98 12:52-------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:42:46 $
+ *  last change: $Author: os $ $Date: 2001-03-09 15:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ class SwXDispatch : public cppu::WeakImplHelper2
     ::com::sun::star::view::XSelectionChangeListener
 >
 {
-    SwView&             m_rView;
+    SwView*             m_pView;
     StatusListenerList  m_aListenerList;
     sal_Bool            m_bOldEnable;
     sal_Bool            m_bListenerAdded;

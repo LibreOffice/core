@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:46:48 $
+ *  last change: $Author: os $ $Date: 2001-03-09 14:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,22 +260,29 @@ SwXTextView::SwXTextView(SwView* pSwView) :
   -----------------------------------------------------------------------*/
 SwXTextView::~SwXTextView()
 {
+    Invalidate();
+}
+/* -----------------------------09.03.01 15:47--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextView::Invalidate()
+{
     if(pxViewSettings)
     {
          beans::XPropertySet* pSettings = pxViewSettings->get();
         ((SwXViewSettings*)pSettings)->Invalidate();
-        delete pxViewSettings;
+        DELETEZ(pxViewSettings);
     }
     if(pxTextViewCursor)
     {
         text::XTextViewCursor* pCrsr = pxTextViewCursor->get();
         ((SwXTextViewCursor*)pCrsr)->Invalidate();
-        delete pxTextViewCursor;
+        DELETEZ(pxTextViewCursor);
     }
     sal_uInt16 nCount = aSelChangedListeners.Count();
+    m_refCount++; //prevent second d'tor call
     if(nCount)
     {
-        m_refCount++; //prevent second d'tor call
         Reference< uno::XInterface >  xInt = (cppu::OWeakObject*)(SfxBaseController*)this;
         lang::EventObject aEvent(xInt);
         for ( sal_uInt16 i = nCount; i--; )
@@ -283,9 +290,11 @@ SwXTextView::~SwXTextView()
             Reference< view::XSelectionChangeListener >  *pObj = aSelChangedListeners[i];
             (*pObj)->disposing(aEvent);
         }
-        m_refCount--;
     }
+    m_refCount--;
+    pView = 0;
 }
+
 /* -----------------------------18.05.00 10:18--------------------------------
 
  ---------------------------------------------------------------------------*/

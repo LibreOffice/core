@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-07 13:43:18 $
+ *  last change: $Author: os $ $Date: 2001-03-09 14:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ void SwXDispatchProviderInterceptor::disposing( const EventObject& Source )
 
  ---------------------------------------------------------------------------*/
 SwXDispatch::SwXDispatch(SwView& rVw) :
-    m_rView(rVw),
+    m_pView(&rVw),
     m_bOldEnable(sal_False),
     m_bListenerAdded(sal_False)
 {
@@ -241,9 +241,9 @@ SwXDispatch::SwXDispatch(SwView& rVw) :
   -----------------------------------------------------------------------*/
 SwXDispatch::~SwXDispatch()
 {
-    if(m_bListenerAdded)
+    if(m_bListenerAdded && m_pView)
     {
-        Reference<XSelectionSupplier> xSupplier = m_rView.GetUNOObject();
+        Reference<XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
         Reference<XSelectionChangeListener> xThis = this;
         xSupplier->removeSelectionChangeListener(xThis);
     }
@@ -254,7 +254,9 @@ SwXDispatch::~SwXDispatch()
 void SwXDispatch::dispatch(
     const URL& aURL, const Sequence< PropertyValue >& aArgs ) throw(RuntimeException)
 {
-    SwWrtShell& rSh = m_rView.GetWrtShell();
+    if(!m_pView)
+        throw RuntimeException();
+    SwWrtShell& rSh = m_pView->GetWrtShell();
     SwNewDBMgr* pNewDBMgr = rSh.GetNewDBMgr();
     if(!aURL.Complete.compareToAscii(cURLInsertContent))
     {
@@ -278,7 +280,9 @@ void SwXDispatch::dispatch(
 void SwXDispatch::addStatusListener(
     const Reference< XStatusListener >& xControl, const URL& aURL ) throw(RuntimeException)
 {
-    ShellModes eMode = m_rView.GetShellMode();
+    if(!m_pView)
+        throw RuntimeException();
+    ShellModes eMode = m_pView->GetShellMode();
     sal_Bool bEnable = SEL_TEXT == eMode  ||
                        SEL_LIST_TEXT == eMode  ||
                        SEL_TABLE_TEXT == eMode  ||
@@ -299,7 +303,7 @@ void SwXDispatch::addStatusListener(
 
     if(!m_bListenerAdded)
     {
-        Reference<XSelectionSupplier> xSupplier = m_rView.GetUNOObject();
+        Reference<XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
         Reference<XSelectionChangeListener> xThis = this;
         xSupplier->addSelectionChangeListener(xThis);
         m_bListenerAdded = sal_True;
@@ -321,9 +325,9 @@ void SwXDispatch::removeStatusListener(
             break;
         }
     }
-    if(m_aListenerList.empty())
+    if(m_aListenerList.empty() && m_pView)
     {
-        Reference<XSelectionSupplier> xSupplier = m_rView.GetUNOObject();
+        Reference<XSelectionSupplier> xSupplier = m_pView->GetUNOObject();
         Reference<XSelectionChangeListener> xThis = this;
         xSupplier->removeSelectionChangeListener(xThis);
         m_bListenerAdded = sal_False;
@@ -334,7 +338,7 @@ void SwXDispatch::removeStatusListener(
  ---------------------------------------------------------------------------*/
 void SwXDispatch::selectionChanged( const EventObject& aEvent ) throw(RuntimeException)
 {
-    ShellModes eMode = m_rView.GetShellMode();
+    ShellModes eMode = m_pView->GetShellMode();
     sal_Bool bEnable = SEL_TEXT == eMode  ||
                        SEL_LIST_TEXT == eMode  ||
                        SEL_TABLE_TEXT == eMode  ||
@@ -365,5 +369,15 @@ void SwXDispatch::disposing( const EventObject& rSource ) throw(RuntimeException
     Reference<XSelectionChangeListener> xThis = this;
     xSupplier->removeSelectionChangeListener(xThis);
     m_bListenerAdded = sal_False;
+
+    EventObject aObject;
+    aObject.Source = (cppu::OWeakObject*)this;
+    StatusListenerList::iterator aListIter = m_aListenerList.begin();
+    for(; aListIter != m_aListenerList.end(); ++aListIter)
+    {
+        StatusStruct_Impl aStatus = *aListIter;
+        aStatus.xListener->disposing(aObject);
+    }
+    m_pView = 0;
 }
 
