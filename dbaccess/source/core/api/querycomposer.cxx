@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-10 14:55:52 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 08:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,17 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     Reference< XNamed > OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
-        ::connectivity::OSQLColumns::const_iterator aIter = find(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
-        if(aIter != m_aColumns->end())
-            return Reference< XNamed >(*aIter,UNO_QUERY);
-        OSL_ENSURE(0,"Column not found in collection!");
+        if ( m_aColumns.isValid() )
+        {
+            ::connectivity::OSQLColumns::const_iterator aIter = find(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
+            if(aIter == m_aColumns->end())
+                aIter = findRealName(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
+
+            if(aIter != m_aColumns->end())
+                return Reference< XNamed >(*aIter,UNO_QUERY);
+
+            OSL_ENSURE(0,"Column not found in collection!");
+        }
         return NULL;
     }
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
@@ -256,10 +263,14 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     Reference< XNamed > OPrivateTables::createObject(const ::rtl::OUString& _rName)
     {
-        OSQLTables::iterator aIter = m_aTables.find(_rName);
-        OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
-        OSL_ENSURE(aIter->second.is(),"Table is null!");
-        return Reference< XNamed >(m_aTables.find(_rName)->second,UNO_QUERY);
+        if ( !m_aTables.empty() )
+        {
+            OSQLTables::iterator aIter = m_aTables.find(_rName);
+            OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
+            OSL_ENSURE(aIter->second.is(),"Table is null!");
+            return Reference< XNamed >(m_aTables.find(_rName)->second,UNO_QUERY);
+        }
+        return NULL;
     }
     // -----------------------------------------------------------------------------
 }
