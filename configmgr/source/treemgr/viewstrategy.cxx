@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:33:39 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,10 +468,11 @@ namespace configmgr
         {
             using namespace configuration;
 
+#if (OSL_DEBUG_LEVEL > 0)
+            TreeImpl * pTreeData = _aGroupNode.tree().get_impl();
+#endif
             for(SubtreeChange::ChildIterator it = rExternalChanges.begin(); it != rExternalChanges.end(); ++it)
             {
-                TreeImpl * pTreeData = _aGroupNode.tree().get_impl();
-
                 if ( it->ISA(SubtreeChange) )
                 {
                     Node aSubNode = _aGroupNode.findChild( makeNodeName(it->getNodeName(), Name::NoValidate()) );
@@ -522,26 +523,24 @@ namespace configmgr
         struct GroupMemberDispatch : data::NodeVisitor
         {
             GroupMemberDispatch(ViewStrategy& _rStrategy, GroupNode const& _aGroup, GroupMemberVisitor& rVisitor)
-            : m_aGroup(_aGroup)
+            : m_rStrategy(_rStrategy)
+            , m_aGroup(_aGroup)
             , m_rVisitor(rVisitor)
-            , m_rStrategy(_rStrategy)
             {}
 
             static Result mapResult(GroupMemberVisitor::Result _aResult)
             {
 
-                OSL_ASSERT( DONE == GroupMemberVisitor::DONE );
-                OSL_ASSERT( CONTINUE == GroupMemberVisitor::CONTINUE );
-        register int nResultValue = _aResult;
-                return static_cast<Result>(nResultValue);
+                OSL_ASSERT( DONE == Result(GroupMemberVisitor::DONE) );
+                OSL_ASSERT( CONTINUE == Result(GroupMemberVisitor::CONTINUE) );
+                return Result(_aResult);
             }
 
             static GroupMemberVisitor::Result unmapResult(Result _aResult)
             {
-                OSL_ASSERT( DONE == GroupMemberVisitor::DONE );
-                OSL_ASSERT( CONTINUE == GroupMemberVisitor::CONTINUE );
-        register int nResultValue = _aResult;
-                return static_cast<GroupMemberVisitor::Result>(nResultValue);
+                OSL_ASSERT( DONE == Result(GroupMemberVisitor::DONE) );
+                OSL_ASSERT( CONTINUE == Result(GroupMemberVisitor::CONTINUE) );
+                return GroupMemberVisitor::Result(_aResult);
             }
 
             virtual Result handle(data::ValueNodeAccess const& _aValue);
