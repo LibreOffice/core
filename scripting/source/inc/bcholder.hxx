@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcholder.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:42:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,16 @@
 namespace scripting_helper
 {
 //.........................................................................
+
+    //  ----------------------------------------------------
+    //  class OMutexHolder
+    //  ----------------------------------------------------
+
+    class OMutexHolder
+    {
+    protected:
+        ::osl::Mutex m_aMutex;
+    };
 
     //  ----------------------------------------------------
     //  class OBroadcastHelperHolder
