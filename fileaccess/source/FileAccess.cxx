@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 11:56:55 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include <tools/stream.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
@@ -88,9 +90,11 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.ucb.SimpleFileAccess"
 #define SERVICE_NAME "com.sun.star.ucb.SimpleFileAccess"
@@ -104,6 +108,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::container;
 
 namespace io_FileAccess
 {
@@ -117,6 +122,7 @@ class OCommandEnvironment;
 
 class OFileAccess : public FileAccessHelper
 {
+    Reference< XMultiServiceFactory > mxSMgr;
     Reference< XCommandEnvironment > mxEnvironment;
     OCommandEnvironment* mpEnvironment;
 
@@ -128,7 +134,8 @@ class OFileAccess : public FileAccessHelper
         throw ( Exception );
 
 public:
-    OFileAccess() : mpEnvironment( NULL ) {}
+    OFileAccess( const Reference< XMultiServiceFactory > & xSMgr )
+        : mxSMgr( xSMgr), mpEnvironment( NULL ) {}
 
     // Methods
     virtual void SAL_CALL copy( const ::rtl::OUString& SourceURL, const ::rtl::OUString& DestURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -284,19 +291,122 @@ Reference< XProgressHandler > OCommandEnvironment::getProgressHandler()
 
 //===========================================================================
 
-void OFileAccess::transferImpl( const rtl::OUString& rSource, const rtl::OUString& rDest, sal_Bool bMoveData )
+void OFileAccess::transferImpl( const rtl::OUString& rSource,
+                                const rtl::OUString& rDest,
+                                sal_Bool bMoveData )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
     // SfxContentHelper::Transfer_Impl
     INetURLObject aSourceObj( rSource, INET_PROT_FILE );
     INetURLObject aDestObj( rDest, INET_PROT_FILE );
-    String aName = aDestObj.getName( INetURLObject::LAST_SEGMENT, true,
-        INetURLObject::DECODE_WITH_CHARSET );
-    aDestObj.removeSegment();
-    aDestObj.setFinalSlash();
+    String aName = aDestObj.getName(
+        INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+    String aDestURL;
+    String aSourceURL = aSourceObj.GetMainURL( INetURLObject::NO_DECODE );
+    if ( aDestObj.removeSegment() )
+    {
+        // hierarchical URL.
 
-    ucb::Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
-    ucb::Content aSrc( aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+        aDestObj.setFinalSlash();
+        aDestURL = aDestObj.GetMainURL( INetURLObject::NO_DECODE );
+    }
+    else
+    {
+        // non-hierachical URL
+
+        // #i29648#
+        //
+#if 0
+        // Note: A hierachical UCB content implements interface XChild, which
+        // has a method getParent(). Unfortunately this does not always help
+        // here, because it is not guaranteed that a content object for a
+        // non-existing resource can be created. Thus, it will happen that an
+        // exception is thrown when trying to create a UCB content for the
+        // destination URL.
+
+        try
+        {
+            ucb::Content aFullDest(
+                aDestObj.GetMainURL(
+                    INetURLObject::NO_DECODE ), mxEnvironment );
+
+            Reference< XChild > xChild( aFullDest.get(), UNO_QUERY_THROW );
+            Reference< com::sun::star::ucb::XContent >
+                xParent( xChild->getParent(), UNO_QUERY_THROW );
+            ucb::Content aParent( xParent, mxEnvironment );
+
+            aDestURL = aParent.getURL();
+
+            rtl::OUString aNameTmp;
+            aFullDest.getPropertyValue(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) )
+                    >>= aNameTmp;
+            aName = aNameTmp;
+        }
+        catch ( Exception const & )
+        {
+            throw RuntimeException(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                   "OFileAccess::transferrImpl - Unable to "
+                                   "obtain destination folder URL!" ) ),
+                static_cast< cppu::OWeakObject * >( this ) );
+        }
+#else
+        if ( aDestObj.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
+        {
+            // Hack: Expand destination URL using Macro Expander and try again
+            //       with the hopefully hierarchical expanded URL...
+
+            try
+            {
+                Reference< XComponentContext > xCtx;
+                Reference< XPropertySet > xPropSet( mxSMgr, UNO_QUERY_THROW );
+                if ( xPropSet.is() )
+                {
+                    xPropSet->getPropertyValue(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
+                                >>= xCtx;
+                }
+
+                Reference< XMacroExpander > xExpander;
+
+                xCtx->getValueByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "/singletons/com.sun.star.util.theMacroExpander" ) ) )
+                            >>= xExpander;
+
+                OSL_ENSURE( xExpander.is(),
+                            "Unable to obtain macro expander singleton!" );
+
+                aDestURL = xExpander->expandMacros(
+                    aDestObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+            }
+            catch ( Exception const & )
+            {
+                throw RuntimeException(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "OFileAccess::transferrImpl - Unable to obtain "
+                            "destination folder URL!" ) ),
+                    static_cast< cppu::OWeakObject * >( this ) );
+            }
+
+            transferImpl( rSource, aDestURL, bMoveData );
+            return;
+        }
+
+        throw RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "OFileAccess::transferrImpl - Unable to obtain "
+                    "destination folder URL!" ) ),
+                static_cast< cppu::OWeakObject * >( this ) );
+#endif
+    }
+
+    ucb::Content aDestPath( aDestURL,   mxEnvironment );
+    ucb::Content aSrc     ( aSourceURL, mxEnvironment );
 
     try
     {
@@ -811,9 +921,9 @@ void OFileAccess::setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden )
 //==================================================================================================
 //==================================================================================================
 
-Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > &)
+Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
 {
-    return Reference < XInterface >( ( cppu::OWeakObject * ) new OFileAccess );
+    return Reference < XInterface >( ( cppu::OWeakObject * ) new OFileAccess( xSMgr ) );
 }
 
 
