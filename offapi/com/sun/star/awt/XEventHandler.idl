@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventHandler.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,24 +71,24 @@
 module com { module sun { module star { module awt {
 
 //=============================================================================
+
 /** This interface can be implemented by clients that need access to the
     toolkits window message loop.
 */
-
 interface XEventHandler: com::sun::star::uno::XInterface
 {
 
     //-------------------------------------------------------------------------
-    /** requests the implementor of this interface to handle platform dependend
-        event.
+
+    /** requests the implementor of this interface to handle a platform
+        dependend event.
 
         @returns <TRUE/> if the event was handled properly and no further
         handling should take place, <FALSE/> otherwise.
 
         @param event
-        the platform dependend event
+        the platform dependend event.
     */
-
     boolean handleEvent( [in] any event );
 
 };
