@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-27 08:26:26 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 09:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
+extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
+
 // class HelpInterceptor_Impl --------------------------------------------
 
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
@@ -154,6 +156,7 @@ void HelpInterceptor_Impl::SetFactory( const String& rFactory )
         String aURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
         aURL += rFactory;
         aURL += String( DEFINE_CONST_UNICODE("/start") );
+        AppendConfigToken_Impl( aURL, sal_True );
         m_pHistory->Insert( new HelpHistoryEntry_Impl( aURL ), ((ULONG)0x0) );
         m_nCurPos = m_pHistory->Count() - 1;
     }
