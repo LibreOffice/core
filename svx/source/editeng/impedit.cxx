@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-21 13:56:07 $
+ *  last change: $Author: mt $ $Date: 2001-05-30 11:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1561,6 +1561,8 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
+    DBG_ASSERT( pDragAndDropInfo, "Drop - No Drag&Drop info?!" );
+
     BOOL bChanges = FALSE;
 
     HideDDCursor();
@@ -1568,7 +1570,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
     // Selektion wegmalen...
     DrawSelection();
 
-    if ( pDragAndDropInfo && pDragAndDropInfo->bStarterOfDD )
+    if ( pDragAndDropInfo->bStarterOfDD )
         pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_DRAGANDDROP );
 
     uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
@@ -1579,7 +1581,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
         EditSelection aNewSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aPaM, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
         SetEditSelection( aNewSel );
         pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
-        if ( pDragAndDropInfo && pDragAndDropInfo->bStarterOfDD )
+        if ( pDragAndDropInfo->bStarterOfDD )
         {
             // Nur dann setzen, wenn in gleicher Engine!
             pDragAndDropInfo->aDropSel.nStartPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
@@ -1588,16 +1590,18 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
             pDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
             pDragAndDropInfo->bDroppedInMe = sal_True;
         }
-        else
-        {
-            delete pDragAndDropInfo;
-            pDragAndDropInfo = NULL;
-        }
     }
 
     if ( bChanges )
         rDTDE.Context->acceptDrop( rDTDE.DropAction );
+
     rDTDE.Context->dropComplete( bChanges );
+
+    if ( !pDragAndDropInfo->bStarterOfDD )
+    {
+        delete pDragAndDropInfo;
+        pDragAndDropInfo = NULL;
+    }
 }
 
 void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
@@ -1616,6 +1620,12 @@ void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTarge
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
     HideDDCursor();
+
+    if ( !pDragAndDropInfo->bStarterOfDD )
+    {
+        delete pDragAndDropInfo;
+        pDragAndDropInfo = NULL;
+    }
 }
 
 void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
@@ -1623,15 +1633,17 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
-    // Logische Einheiten...
     aMousePos = GetWindow()->PixelToLogic( aMousePos );
+
+    sal_Bool bAccept = sal_False;
 
     if ( GetOutputArea().IsInside( aMousePos ) )
     {
         sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
         if ( pDragAndDropInfo->bHasValidData && ( nSupportedActions & rDTDE.DropAction ) )
         {
-            sal_Bool bAccept = sal_True;
+            bAccept = sal_True;
+
             sal_Bool bAllowScroll = DoAutoScroll();
             if ( bAllowScroll )
             {
@@ -1686,19 +1698,15 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
                     HideDDCursor();
                     ShowDDCursor(aEditCursor );
                 }
-
                 rDTDE.Context->acceptDrag( nSupportedActions );
             }
-
-        }
-        else
-        {
-            rDTDE.Context->rejectDrag();
         }
     }
-    else
+
+    if ( !bAccept )
     {
         HideDDCursor();
+        rDTDE.Context->rejectDrag();
     }
 }
 
