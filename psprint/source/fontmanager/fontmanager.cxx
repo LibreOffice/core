@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-05 17:32:28 $
+ *  last change: $Author: pl $ $Date: 2001-06-06 13:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2508,6 +2508,14 @@ bool PrintFontManager::getFileDuplicates( fontID nFont, ::std::list< fontID >& r
     bool bRet = false;
 
     rFonts.clear();
+
+    PrintFont* pSearchFont = getFont( nFont );
+    if( ! pSearchFont ||
+        pSearchFont->m_eType != fonttype::TrueType ||
+        static_cast<TrueTypeFontFile*>(pSearchFont)->m_nCollectionEntry == -1
+        )
+        return false;
+
     OString aFile( getFontFileSysPath( nFont ) );
     if( ! aFile.getLength() )
         return false;
