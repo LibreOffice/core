@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:34:48 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,11 @@
 #include <scrrect.hxx>
 #endif
 
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
+#include <EnhancedPDFExportHelper.hxx>
+#endif
+// <--
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
@@ -387,6 +392,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 {
     if( Frm().Top() > rRect.Bottom() || Frm().Bottom() < rRect.Top() )
         return;
+
     const SwTxtNode& rTxtNode = *GetTxtNode();
     const SwDoc* pDoc = rTxtNode.GetDoc();
     const SwLineNumberInfo &rLineInf = pDoc->GetLineNumberInfo();
@@ -413,6 +419,10 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
         aLayoutModeModifier.Modify( sal_False );
 #endif
+
+        // --> FME 2004-06-24 #i16816# tagged pdf support
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
+        // <--
 
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect,
             (USHORT)rLineNum.GetStartValue(), eHor, bLineNum );
@@ -677,9 +687,16 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
  *                      SwTxtFrm::Paint()
  *************************************************************************/
 
-void SwTxtFrm::Paint(const SwRect &rRect ) const
+void SwTxtFrm::Paint( const SwRect &rRect ) const
 {
     ResetRepaint();
+
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    ViewShell *pSh = GetShell();
+    Frm_Info aFrmInfo( *this );
+    SwTaggedPDFHelper aTaggedPDFHelper( &aFrmInfo, 0, *pSh->GetOut() );
+    // <--
+
     DBG_LOOP_RESET;
     if( !IsEmpty() || !PaintEmpty( rRect, sal_True ) )
     {
@@ -755,7 +772,6 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
             SwitchRTLtoLTR( (SwRect&)rRect );
 #endif
 
-        ViewShell *pSh = GetShell();
         SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
         aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
         aInf.GetTxtFly()->SetTopRule();
