@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:40 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 14:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include "ViewDefines.hxx"
 #include "Linear3DTransformation.hxx"
 
+#ifndef _COM_SUN_STAR_DRAWING_DOUBLESEQUENCE_HPP_
+#include <com/sun/star/drawing/DoubleSequence.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
 #endif
@@ -97,6 +100,10 @@ void PlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >
 {
     m_aScales = rScales;
     m_xTransformationLogicToScene = NULL;
+}
+const uno::Sequence< ExplicitScaleData >& PlottingPositionHelper::getScales() const
+{
+    return m_aScales;
 }
 
 uno::Reference< XTransformation > PlottingPositionHelper::getTransformationLogicToScene() const
@@ -168,17 +175,28 @@ drawing::Position3D PlottingPositionHelper::transformLogicToScene(
     return SequenceToPosition3D(aSeq);
 }
 
-Rectangle PlottingPositionHelper::getTransformedClipRect() const
+void PlottingPositionHelper::transformScaledLogicToScene( drawing::PolyPolygonShape3D& rPolygon ) const
 {
-    DoubleRectangle aDoubleRect( this->getTransformedClipDoubleRect() );
-
-    Rectangle aRet( static_cast<long>(aDoubleRect.Left)
-                  , static_cast<long>(aDoubleRect.Top)
-                  , static_cast<long>(aDoubleRect.Right)
-                  , static_cast<long>(aDoubleRect.Bottom) );
-    return aRet;
+    drawing::Position3D aScenePosition;
+    for( sal_Int32 nS = rPolygon.SequenceX.getLength(); nS--;)
+    {
+        drawing::DoubleSequence& xValues = rPolygon.SequenceX[nS];
+        drawing::DoubleSequence& yValues = rPolygon.SequenceY[nS];
+        drawing::DoubleSequence& zValues = rPolygon.SequenceZ[nS];
+        for( sal_Int32 nP = xValues.getLength(); nP--; )
+        {
+            double& fX = xValues[nP];
+            double& fY = yValues[nP];
+            double& fZ = zValues[nP];
+            aScenePosition = this->transformLogicToScene( fX,fY,fZ, false );
+            fX = aScenePosition.PositionX;
+            fY = aScenePosition.PositionY;
+            fZ = aScenePosition.PositionZ;
+        }
+    }
 }
-DoubleRectangle PlottingPositionHelper::getTransformedClipDoubleRect() const
+
+DoubleRectangle PlottingPositionHelper::getScaledLogicClipDoubleRect() const
 {
     //get logic clip values:
     double MinX = getLogicMinX();
@@ -192,19 +210,7 @@ DoubleRectangle PlottingPositionHelper::getTransformedClipDoubleRect() const
     doLogicScaling( &MinX, &MinY, &MinZ );
     doLogicScaling( &MaxX, &MaxY, &MaxZ);
 
-    drawing::Position3D aMimimum( MinX, MinY, MinZ);
-    drawing::Position3D aMaximum( MaxX, MaxY, MaxZ);
-
-    //transform to screen coordinates
-    aMimimum = SequenceToPosition3D( getTransformationLogicToScene()
-                    ->transform( Position3DToSequence(aMimimum) ) );
-    aMaximum = SequenceToPosition3D( getTransformationLogicToScene()
-                    ->transform( Position3DToSequence(aMaximum) ) );
-
-    DoubleRectangle aRet( aMimimum.PositionX
-                  , aMaximum.PositionY
-                  , aMaximum.PositionX
-                  , aMimimum.PositionY );
+    DoubleRectangle aRet( MinX, MaxY, MaxX, MinY );
     return aRet;
 }
 
@@ -221,11 +227,6 @@ PolarPlottingPositionHelper::PolarPlottingPositionHelper( bool bRadiusAxisMapsTo
 
 PolarPlottingPositionHelper::~PolarPlottingPositionHelper()
 {
-}
-
-const uno::Sequence< ExplicitScaleData >& PolarPlottingPositionHelper::getScales() const
-{
-    return m_aScales;
 }
 
 uno::Reference< XTransformation > PolarPlottingPositionHelper::getTransformationLogicToScene() const

@@ -36,7 +36,8 @@ public:
     static void clipPolygonAtRectangle(
                                 const ::com::sun::star::drawing::PolyPolygonShape3D& rPolygon
                                 , const DoubleRectangle& rRectangle
-                                , ::com::sun::star::drawing::PolyPolygonShape3D& aResult );
+                                , ::com::sun::star::drawing::PolyPolygonShape3D& aResult
+                                , bool bSplitPiecesToDifferentPolygons = true );
 };
 
 //.............................................................................

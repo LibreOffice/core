@@ -48,62 +48,12 @@ using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::drafts::com::sun::star::chart2;
 
-class AreaPositionHelper : public PlottingPositionHelper
-{
-public:
-    AreaPositionHelper(); //@todo
-    virtual ~AreaPositionHelper();
-
-    //double              getSlotPos( double fCategoryX ) const;
-
-    double              getTransformedDepth() const;
-
-    double              getLogicGrounding() const;
-
-private: //member
-};
-
-AreaPositionHelper::AreaPositionHelper()
-{
-}
-
-AreaPositionHelper::~AreaPositionHelper()
-{
-}
-
-double AreaPositionHelper::getTransformedDepth() const
-{
-    //return the depth for a logic 1
-    double MinZ = getLogicMinZ();
-    double MaxZ = getLogicMaxZ();
-    if(m_aScales[2].Scaling.is())
-        MinZ = m_aScales[2].Scaling->doScaling(MinZ);
-    if(m_aScales[2].Scaling.is())
-        MaxZ = m_aScales[2].Scaling->doScaling(MaxZ);
-
-    return FIXED_SIZE_FOR_3D_CHART_VOLUME/(MaxZ-MinZ);
-}
-
-double AreaPositionHelper::getLogicGrounding() const
-{
-    //@todo get this from model axis crosses at if that value is between min and max
-    //@todo get this for other directions - so far only y
-    double fRet=0.0;
-    uno::Reference< lang::XServiceName > xServiceName( m_aScales[1].Scaling, uno::UNO_QUERY );
-    bool bIsLogarithm = ( xServiceName.is() && (xServiceName->getServiceName()).equals(
-                      C2U( "com.sun.star.chart2.LogarithmicScaling" )));
-    if( bIsLogarithm )
-        fRet = m_aScales[1].Minimum;
-    return fRet;
-}
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bCategoryXAxis, bool bNoArea )
+AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bCategoryXAxis, bool bNoArea, PlottingPositionHelper* pPlottingPositionHelper )
         : VSeriesPlotter( xChartTypeModel, bCategoryXAxis )
-        , m_pPosHelper( new AreaPositionHelper() )
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel) )
@@ -114,6 +64,11 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bC
         , m_xErrorBarTarget(0)
         , m_xTextTarget(0)
 {
+    if( pPlottingPositionHelper )
+        m_pPosHelper = pPlottingPositionHelper;
+    else
+        m_pPosHelper = new PlottingPositionHelper();
+
     try
     {
         if( m_xChartTypeModelProps.is() )
@@ -125,12 +80,9 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bC
     }
     catch( uno::Exception& e )
     {
-        if(!m_bArea)
-        {
-            ASSERT_EXCEPTION( e );
-        }
+        //the above properties are not supported by all charttypes supported by this class (e.g. area or net chart)
+        //in that cases this exception is ok
     }
-    PlotterBase::m_pPosHelper = m_pPosHelper;
 }
 
 AreaChart::~AreaChart()
@@ -144,6 +96,23 @@ double AreaChart::getMaximumZ()
         return VSeriesPlotter::getMaximumZ();
 
     return m_aXSlots.size()-0.5;
+}
+
+double AreaChart::getTransformedDepth() const
+{
+    //return the depth for a logic 1
+    double MinZ = m_pPosHelper->getLogicMinZ();
+    double MaxZ = m_pPosHelper->getLogicMaxZ();
+    m_pPosHelper->doLogicScaling( 0, 0, &MinZ );
+    m_pPosHelper->doLogicScaling( 0, 0, &MaxZ );
+    return FIXED_SIZE_FOR_3D_CHART_VOLUME/(MaxZ-MinZ);
+}
+
+double AreaChart::getLogicGrounding() const
+{
+    //@todo get this from model axis crosses at if that value is between min and max
+    double fRet=0.0;
+    return fRet;
 }
 
 //-----------------------------------------------------------------
@@ -287,35 +256,38 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     {
         drawing::PolyPolygonShape3D aSplinePoly;
         SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution );
-        Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
+        Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
     else if(CurveStyle_B_SPLINES==m_eCurveStyle)
     {
         drawing::PolyPolygonShape3D aSplinePoly;
         SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution, m_nSplineOrder );
-        Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
+        Clipping::clipPolygonAtRectangle( aSplinePoly, m_pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
     else
     {
-        Clipping::clipPolygonAtRectangle( *pSeriesPoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
+        Clipping::clipPolygonAtRectangle( *pSeriesPoly, m_pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
 
     if(isPolygonEmptyOrSinglePoint(aPoly))
         return false;
+
+    //transformation 3) -> 4)
+    m_pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create line:
     uno::Reference< drawing::XShape > xShape(NULL);
     if(m_nDimension==3)
     {
         xShape = create3DLine( xSeriesGroupShape_Shapes, m_xShapeFactory
-                , aPoly, m_pPosHelper->getTransformedDepth() );
+                , aPoly, this->getTransformedDepth() );
         this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , m_aShapePropertyMapForArea );
         //createBorder
         {
             drawing::PolyPolygonShape3D aBorderPoly = createBorderPolygon(
-                aPoly, m_pPosHelper->getTransformedDepth() );
+                aPoly, this->getTransformedDepth() );
             VLineProperties aLineProperties;
             aLineProperties.initFromPropertySet( pSeries->getPropertiesOfSeries(), true );
             uno::Reference< drawing::XShape > xBorder =
@@ -353,28 +325,22 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     {
         double fMinX = pSeries->m_fLogicMinX;
         double fMaxX = pSeries->m_fLogicMaxX;
+        double fY = this->getLogicGrounding();
+
         //clip to scale
         if(fMaxX<m_pPosHelper->getLogicMinX() || fMinX>m_pPosHelper->getLogicMaxX())
             return false;//no visible shape needed
-        if(fMaxX > m_pPosHelper->getLogicMaxX())
-            fMaxX = m_pPosHelper->getLogicMaxX();
-        if(fMinX < m_pPosHelper->getLogicMinX())
-            fMinX = m_pPosHelper->getLogicMinX();
+        m_pPosHelper->clipLogicValues( &fMinX, &fY, 0 );
+        m_pPosHelper->clipLogicValues( &fMaxX, 0, 0 );
 
         //apply scaling
         {
-            m_pPosHelper->doLogicScaling( &fMinX, NULL, &zValue );
-            m_pPosHelper->doLogicScaling( &fMaxX, NULL, NULL );
+            m_pPosHelper->doLogicScaling( &fMinX, &fY, &zValue );
+            m_pPosHelper->doLogicScaling( &fMaxX, 0, 0 );
         }
-        double fY = m_pPosHelper->getLogicGrounding();
 
-        drawing::Position3D aScaledLogicPosition2( fMaxX,fY,zValue);
-        drawing::Position3D aTransformedPosition2( SequenceToPosition3D( m_pPosHelper->getTransformationLogicToScene()->transform( Position3DToSequence(aScaledLogicPosition2) ) ) );
-        AddPointToPoly( aPoly, aTransformedPosition2 );
-
-        drawing::Position3D aScaledLogicPosition( fMinX,fY,zValue);
-        drawing::Position3D aTransformedPosition( SequenceToPosition3D( m_pPosHelper->getTransformationLogicToScene()->transform( Position3DToSequence(aScaledLogicPosition) ) ) );
-        AddPointToPoly( aPoly, aTransformedPosition );
+        AddPointToPoly( aPoly, drawing::Position3D( fMaxX,fY,zValue) );
+        AddPointToPoly( aPoly, drawing::Position3D( fMinX,fY,zValue) );
     }
     else
     {
@@ -383,24 +349,25 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     closePolygon(aPoly);
 
     //apply clipping
-    //(for more accurat clipping it would be better to first clip and than scale and transform,
-    //but as long as we only have integer Polygon clipping we need to apply scaling and transformation first ) see QQQ
     {
-        Polygon aToolsPoly = PolyToToolsPoly( aPoly );
-        aToolsPoly.Clip( m_pPosHelper->getTransformedClipRect() );
-        aPoly = ToolsPolyToPoly( aToolsPoly, zValue );
-        closePolygon(aPoly); //again necessary after clipping
+        drawing::PolyPolygonShape3D aClippedPoly;
+        Clipping::clipPolygonAtRectangle( aPoly, m_pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly, false );
+        closePolygon(aClippedPoly); //again necessary after clipping
+        aPoly = aClippedPoly;
     }
 
     if(isPolygonEmptyOrSinglePoint(aPoly))
         return false;
+
+    //transformation 3) -> 4)
+    m_pPosHelper->transformScaledLogicToScene( aPoly );
 
     //create area:
     uno::Reference< drawing::XShape > xShape(NULL);
     if(m_nDimension==3)
     {
         xShape = m_pShapeFactory->createArea3D( xSeriesGroupShape_Shapes
-                , aPoly, m_pPosHelper->getTransformedDepth() );
+                , aPoly, this->getTransformedDepth() );
     }
     else //m_nDimension!=3
     {
@@ -439,10 +406,9 @@ void AreaChart::impl_createSeriesShapes()
         //iterate through all series
         for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
         {
-            pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
-
             createRegressionCurvesShapes( **aSeriesIter, m_xErrorBarTarget );
 
+            pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
             if( m_bArea )
             {
                 if( !impl_createArea( *aSeriesIter, pSeriesPoly, pPreviousSeriesPoly ) )
@@ -558,9 +524,10 @@ void AreaChart::createShapes()
 
                 drawing::Position3D aUnscaledLogicPosition( fLogicX, fLogicY, fLogicZ );
                 //apply scaling
-                //(for more accurat clipping it would be better to first clip and than scale and transform,
-                //but as long as we only have integer Polygon clipping we need to apply scaling and transformation first ) see QQQ
                 m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
+                drawing::Position3D aScaledLogicPosition(fLogicX,fLogicY,fLogicZ);
+                //transformation 3) -> 4)
+                drawing::Position3D aScenePosition( m_pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
 
                 //store point information for series polygon
                 //for area and/or line (symbols only do not need this)
@@ -569,13 +536,7 @@ void AreaChart::createShapes()
                     && !::rtl::math::isNan(fLogicZ) && !::rtl::math::isInf(fLogicZ) )
                 {
                     drawing::PolyPolygonShape3D& rSeriesPoly = (*aSeriesIter)->m_aPolyPolygonShape3D;
-                    drawing::Position3D aScaledLogicPosition( fLogicX, fLogicY,fLogicZ);
-                    //transformation 3) -> 4)
-                    drawing::Position3D aTransformedPosition(
-                        SequenceToPosition3D(
-                            m_pPosHelper->getTransformationLogicToScene()->transform(
-                                Position3DToSequence(aScaledLogicPosition) ) ) );
-                    AddPointToPoly( rSeriesPoly, aTransformedPosition );
+                    AddPointToPoly( rSeriesPoly, aScaledLogicPosition );
                 }
 
                 //create a single datapoint if point is visible
@@ -592,13 +553,6 @@ void AreaChart::createShapes()
                         uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
 
                 {
-                    DataPointGeometry aLogicGeom( drawing::Position3D(fLogicX,fLogicY,fLogicZ)
-                                , drawing::Direction3D(1,1,1) );
-                    //transformation 3) -> 4)
-                    DataPointGeometry aTransformedGeom(
-                        TransformationHelper::transformLogicGeom(
-                            aLogicGeom,m_pPosHelper->getTransformationLogicToScene()) );
-
                     //create data point
                     drawing::Direction3D aSymbolSize(0,0,0);
                     if( m_bSymbol )
@@ -607,7 +561,7 @@ void AreaChart::createShapes()
                         {
                             /* //no symbols for 3D
                             m_pShapeFactory->createSymbol3D( xPointGroupShape_Shapes
-                                    , aTransformedGeom.m_aPosition, aTransformedGeom.m_aSize
+                                    , aScenePosition, aTransformedGeom.m_aSize
                                     , (*aSeriesIter)->getSymbolTypeOfPoint( nIndex ) );
                                     */
                         }
@@ -621,7 +575,7 @@ void AreaChart::createShapes()
                                     aSymbolSize.DirectionX = pSymbolProperties->aSize.Width;
                                     aSymbolSize.DirectionY = pSymbolProperties->aSize.Height;
                                     m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
-                                            , aTransformedGeom.m_aPosition, aSymbolSize
+                                            , aScenePosition, aSymbolSize
                                             , pSymbolProperties->nStandardSymbol
                                             , pSymbolProperties->nFillColor );
                                     }
@@ -636,9 +590,9 @@ void AreaChart::createShapes()
                     if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
                     {
                         LabelAlignment eAlignment = LABEL_ALIGN_TOP;
-                        drawing::Position3D aScenePosition3D( aTransformedGeom.m_aPosition.PositionX
-                                    , aTransformedGeom.m_aPosition.PositionY-aSymbolSize.DirectionY/2-1
-                                    , aTransformedGeom.m_aPosition.PositionZ+m_pPosHelper->getTransformedDepth() );
+                        drawing::Position3D aScenePosition3D( aScenePosition.PositionX
+                                    , aScenePosition.PositionY-aSymbolSize.DirectionY/2-1
+                                    , aScenePosition.PositionZ+this->getTransformedDepth() );
                         awt::Point aScreenPosition2D( LabelPositionHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
                             .transformSceneToScreenPosition( aScenePosition3D ) );
                         this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex

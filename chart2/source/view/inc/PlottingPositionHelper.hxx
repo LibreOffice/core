@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:38 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 14:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONSHAPE3D_HPP_
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
 #endif
@@ -105,6 +108,8 @@ public:
 
     void setScales( const ::com::sun::star::uno::Sequence<
             ::drafts::com::sun::star::chart2::ExplicitScaleData >& rScales );
+    const ::com::sun::star::uno::Sequence<
+            ::drafts::com::sun::star::chart2::ExplicitScaleData >& getScales() const;
 
     inline bool   isLogicVisible( double fX, double fY, double fZ ) const;
     inline void   doLogicScaling( double* pX, double* pY, double* pZ ) const;
@@ -115,6 +120,8 @@ public:
 
     virtual ::com::sun::star::drawing::Position3D
             transformLogicToScene( double fX, double fY, double fZ, bool bClip ) const;
+
+    void    transformScaledLogicToScene( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly ) const;
 
     inline double getLogicMinX() const;
     inline double getLogicMinY() const;
@@ -127,8 +134,7 @@ public:
     inline bool isMathematicalOrientationY() const;
     inline bool isMathematicalOrientationZ() const;
 
-    Rectangle           getTransformedClipRect() const;
-    DoubleRectangle     getTransformedClipDoubleRect() const;
+    DoubleRectangle     getScaledLogicClipDoubleRect() const;
 
 protected: //member
     ::com::sun::star::uno::Sequence<
@@ -168,8 +174,6 @@ public:
     double  getInnerLogicRadius() const;
     double  getOuterLogicRadius() const;
 
-    const ::com::sun::star::uno::Sequence<
-            ::drafts::com::sun::star::chart2::ExplicitScaleData >& getScales() const;
     /*
     // ____ XTransformation ____
     /// @see ::drafts::com::sun::star::chart2::XTransformation

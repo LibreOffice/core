@@ -21,7 +21,9 @@ class AreaChart : public VSeriesPlotter
 public:
     AreaChart( const ::com::sun::star::uno::Reference<
              ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
-             , bool bCategoryXAxis, bool bNoArea=false );
+             , bool bCategoryXAxis, bool bNoArea=false
+             , PlottingPositionHelper* pPlottingPositionHelper=NULL //takes owner ship
+             );
     virtual ~AreaChart();
 
     //-------------------------------------------------------------------------
@@ -56,9 +58,10 @@ private: //methods
     bool impl_createLine( VDataSeries* pSeries
                 , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly );
 
-private: //member
-    AreaPositionHelper*                 m_pPosHelper;
+    double  getTransformedDepth() const;
+    double  getLogicGrounding() const;
 
+private: //member
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
     bool                                m_bSymbol;

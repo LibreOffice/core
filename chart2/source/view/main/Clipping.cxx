@@ -125,7 +125,10 @@ bool lcl_clip2d_(drawing::Position3D& rPoint0, drawing::Position3D& rPoint1, con
 
 }//end anonymous namespace
 
-void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolygon, const DoubleRectangle& rRectangle, drawing::PolyPolygonShape3D& aResult )
+void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolygon
+                                      , const DoubleRectangle& rRectangle
+                                      , drawing::PolyPolygonShape3D& aResult
+                                      , bool bSplitPiecesToDifferentPolygons )
 {
     //rPolygon:    XPolygon --> drawing::PolyPolygonShape3D
     //aResult: XPolyPolygon --> drawing::PolyPolygonShape3D
@@ -160,7 +163,8 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
             }
             else
             {
-                nNewPoly++;
+                if( bSplitPiecesToDifferentPolygons || nNewPoly<0)
+                    nNewPoly++;
                 AddPointToPoly( aResult, aFrom, nNewPoly );
                 if( !(aTo==aFrom) )
                     AddPointToPoly( aResult, aTo, nNewPoly );

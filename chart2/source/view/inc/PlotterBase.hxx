@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-17 13:10:02 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 14:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ protected: //member
     //::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>          m_xCC;
 
     sal_Int32                                           m_nDimension;
-    // needs to be created by the derived class
+    // needs to be created and deleted by the derived class
     PlottingPositionHelper*                             m_pPosHelper;
 };
 //.............................................................................

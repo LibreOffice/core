@@ -692,8 +692,9 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         aRegressionPoly.SequenceZ[0].realloc(nRealPointCount);
 
         drawing::PolyPolygonShape3D aClippedPoly;
-        Clipping::clipPolygonAtRectangle( aRegressionPoly, m_pPosHelper->getTransformedClipDoubleRect(), aClippedPoly );
+        Clipping::clipPolygonAtRectangle( aRegressionPoly, m_pPosHelper->getScaledLogicClipDoubleRect(), aClippedPoly );
         aRegressionPoly = aClippedPoly;
+        m_pPosHelper->transformScaledLogicToScene( aRegressionPoly );
 
         if( !aRegressionPoly.SequenceX.getLength() || !aRegressionPoly.SequenceX[0].getLength() )
             continue;
@@ -1036,7 +1037,7 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter( const uno::Reference<XChart
     else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.PieChart")) )
         pRet = new PieChart(xChartTypeModel);
     else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.NetChart")) )
-        pRet = 0;
+        pRet = new AreaChart(xChartTypeModel,true,true,new PolarPlottingPositionHelper(false) );
     else
     {
         //@todo create other charttypes
