@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,11 +298,9 @@ sal_uInt32 OCX_Control::ExportColor(sal_uInt32 nColor) const
         else
             nColor = pColor[nColor];
     }
-    else
-    {
-        //Stored in bgr! rather than rgb
-        nColor = SwapColor(nColor);
-    }
+
+    //Stored in bgr! rather than rgb
+    nColor = SwapColor(nColor);
     return nColor;
 }
 
@@ -527,11 +525,13 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     rContents->SeekRel(8);
 
     uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
@@ -648,7 +648,8 @@ sal_Bool OCX_ImageButton::WriteContents(SvStorageStreamRef &rContents,
     rContents->SeekRel(8);
 
     uno::Any aTmp=rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Enabled"));
@@ -823,7 +824,8 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
 
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x04;
 
@@ -1086,12 +1088,14 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nTemp;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x04;
 
@@ -1266,12 +1270,14 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nTemp;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x04;
 
@@ -1600,12 +1606,14 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x2C);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
     pBlockFlags[0] |= 0x02;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x04;
 
@@ -1830,14 +1838,14 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
     pBlockFlags[0] |= 0x02;
 
-
-
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x04;
 
@@ -2379,12 +2387,14 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[3] = 0;
 
     uno::Any aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x01;
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
     pBlockFlags[0] |= 0x02;
 
@@ -2895,7 +2905,8 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("TextColor"));
-    aTmp >>= nForeColor;
+    if (aTmp.hasValue())
+        aTmp >>= nForeColor;
     *rContents << ExportColor(nForeColor);
     pBlockFlags[0] |= 0x04;
 
@@ -3229,7 +3240,8 @@ sal_Bool OCX_Image::WriteContents(SvStorageStreamRef &rContents,
 
     uno::Any aTmp = rPropSet->getPropertyValue(
         WW8_ASCII2STR("BackgroundColor"));
-    aTmp >>= nBackColor;
+    if (aTmp.hasValue())
+        aTmp >>= nBackColor;
     *rContents << ExportColor(nBackColor);
     pBlockFlags[0] |= 0x10;
 
