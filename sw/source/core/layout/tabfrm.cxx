@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:56:35 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,6 +563,37 @@ void MA_FASTCALL lcl_Recalc( SwTabFrm *pTab,
     }
 }
 
+// This is a new function to check the first condition whether
+// a tab frame may move backward. It replaces the formerly used
+// GetIndPrev(), which did not work correctly for #i5947#
+bool lcl_NoPrev( const SwFrm& rFrm )
+{
+    if ( rFrm.GetPrev() )
+        return false;
+
+    if ( !rFrm.GetIndPrev() )
+        return true;
+
+    // I do not have a direct prev, but I have an indirect prev.
+    // In section frames I have to check if I'm located inside
+    // the first column:
+    if ( rFrm.IsInSct() )
+    {
+        const SwFrm* pSct = rFrm.GetUpper();
+        if ( pSct && pSct->IsColBodyFrm() &&
+            (pSct = pSct->GetUpper()->GetUpper())->IsSctFrm() )
+        {
+            const SwFrm* pPrevCol = rFrm.GetUpper()->GetUpper()->GetPrev();
+            if ( pPrevCol )
+                // I'm not inside the first column and do not have a direct
+                // prev. I can try to go backward.
+                return true;
+        }
+    }
+
+    return false;
+}
+
 #define KEEPTAB ( !GetFollow() && !IsFollow() )
 
 void SwTabFrm::MakeAll()
@@ -795,7 +826,7 @@ void SwTabFrm::MakeAll()
         //ich zurueckfliessen kann (wenn ich mich ueberhaupt bewegen soll).
         //Damit es keine Oszillation gibt, darf ich nicht gerade vorwaerts
         //geflosssen sein.
-        if ( !GetIndPrev() && !bMovedFwd && (bMoveable || bFly) )
+        if ( !bMovedFwd && (bMoveable || bFly) && lcl_NoPrev( *this ) )
         {
             //Bei Follows muss der Master benachrichtigt
             //werden. Der Follow muss nur dann Moven, wenn er leere Blaetter
