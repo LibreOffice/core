@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:16:32 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,24 +101,120 @@
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETOOLBOX_HXX_
 #include <toolkit/awt/vclxaccessibletoolbox.hxx>
 #endif
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
 
+#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
+#endif
+#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
+#endif
+#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
+#endif
+#ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
+#endif
+#ifndef _LONGCURR_HXX
 #include <vcl/longcurr.hxx>
+#endif
+#ifndef _SV_IMGCTRL_HXX
 #include <vcl/imgctrl.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+
+namespace toolkit
+{
+    /** sets the "face color" for button like controls (scroll bar, spin button)
+    */
+    void setButtonLikeFaceColor( Window* _pWindow, const ::com::sun::star::uno::Any& _rColorValue )
+    {
+        AllSettings aSettings = _pWindow->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+
+        if ( !_rColorValue.hasValue() )
+        {
+            const StyleSettings& aAppStyle = Application::GetSettings().GetStyleSettings();
+            aStyleSettings.SetFaceColor( aAppStyle.GetFaceColor( ) );
+            aStyleSettings.SetCheckedColor( aAppStyle.GetCheckedColor( ) );
+            aStyleSettings.SetLightBorderColor( aAppStyle.GetLightBorderColor() );
+            aStyleSettings.SetLightColor( aAppStyle.GetLightColor() );
+            aStyleSettings.SetShadowColor( aAppStyle.GetShadowColor() );
+            aStyleSettings.SetDarkShadowColor( aAppStyle.GetDarkShadowColor() );
+        }
+        else
+        {
+            sal_Int32 nBackgroundColor = 0;
+            _rColorValue >>= nBackgroundColor;
+            aStyleSettings.SetFaceColor( nBackgroundColor );
+
+            // for the real background (everything except the buttons and the thumb),
+            // use an average between the desired color and "white"
+            Color aWhite( COL_WHITE );
+            Color aBackground( nBackgroundColor );
+            aBackground.SetRed( ( aBackground.GetRed() + aWhite.GetRed() ) / 2 );
+            aBackground.SetGreen( ( aBackground.GetGreen() + aWhite.GetGreen() ) / 2 );
+            aBackground.SetBlue( ( aBackground.GetBlue() + aWhite.GetBlue() ) / 2 );
+            aStyleSettings.SetCheckedColor( aBackground );
+
+            sal_Int32 nBackgroundLuminance = Color( nBackgroundColor ).GetLuminance();
+            sal_Int32 nWhiteLuminance = Color( COL_WHITE ).GetLuminance();
+
+            Color aLightShadow( nBackgroundColor );
+            aLightShadow.IncreaseLuminance( (UINT8)( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
+            aStyleSettings.SetLightBorderColor( aLightShadow );
+
+            Color aLight( nBackgroundColor );
+            aLight.IncreaseLuminance( (UINT8)( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
+            aStyleSettings.SetLightColor( aLight );
+
+            Color aShadow( nBackgroundColor );
+            aShadow.DecreaseLuminance( (UINT8)( nBackgroundLuminance * 1 / 3 ) );
+            aStyleSettings.SetShadowColor( aShadow );
+
+            Color aDarkShadow( nBackgroundColor );
+            aDarkShadow.DecreaseLuminance( (UINT8)( nBackgroundLuminance * 2 / 3 ) );
+            aStyleSettings.SetDarkShadowColor( aDarkShadow );
+        }
+
+        aSettings.SetStyleSettings( aStyleSettings );
+        _pWindow->SetSettings( aSettings, TRUE );
+    }
+
+    ::com::sun::star::uno::Any  getButtonLikeFaceColor( const Window* _pWindow )
+    {
+        sal_Int32 nBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
+        return ::com::sun::star::uno::makeAny( nBackgroundColor );
+    }
+}
+
 
 //  ----------------------------------------------------
 //  class VCLXButton
@@ -2153,6 +2249,23 @@ sal_Int32 VCLXScrollBar::getMaximum() throw(::com::sun::star::uno::RuntimeExcept
     return pScrollBar ? pScrollBar->GetRangeMax() : 0;
 }
 
+void VCLXScrollBar::setMinimum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ScrollBar* pScrollBar = static_cast< ScrollBar* >( GetWindow() );
+    if ( pScrollBar )
+        pScrollBar->SetRangeMin( n );
+}
+
+sal_Int32 VCLXScrollBar::getMinimum() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ScrollBar* pScrollBar = static_cast< ScrollBar* >( GetWindow() );
+    return pScrollBar ? pScrollBar->GetRangeMin() : 0;
+}
+
 void VCLXScrollBar::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2265,12 +2378,18 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
             }
             break;
             case BASEPROPERTY_SCROLLVALUE_MAX:
+            case BASEPROPERTY_SCROLLVALUE_MIN:
             {
                 if ( !bVoid )
                 {
                     sal_Int32 n;
                     if ( Value >>= n )
-                        setMaximum( n );
+                    {
+                        if ( nPropType == BASEPROPERTY_SCROLLVALUE_MAX )
+                            setMaximum( n );
+                        else
+                            setMinimum( n );
+                    }
                 }
             }
             break;
@@ -2314,6 +2433,15 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 }
             }
             break;
+
+            case BASEPROPERTY_BACKGROUNDCOLOR:
+            {
+                // the default implementation of the base class doesn't work here, since our
+                // interpretation for this property is slightly different
+                ::toolkit::setButtonLikeFaceColor( pScrollBar, Value);
+            }
+            break;
+
             default:
             {
                 VCLXWindow::setProperty( PropertyName, Value );
@@ -2344,6 +2472,11 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 aProp <<= (sal_Int32) getMaximum();
             }
             break;
+            case BASEPROPERTY_SCROLLVALUE_MIN:
+            {
+                aProp <<= (sal_Int32) getMinimum();
+            }
+            break;
             case BASEPROPERTY_LINEINCREMENT:
             {
                 aProp <<= (sal_Int32) getLineIncrement();
@@ -2364,6 +2497,14 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 aProp <<= (sal_Int32) getOrientation();
             }
             break;
+            case BASEPROPERTY_BACKGROUNDCOLOR:
+            {
+                // the default implementation of the base class doesn't work here, since our
+                // interpretation for this property is slightly different
+                aProp = ::toolkit::getButtonLikeFaceColor( pScrollBar );
+            }
+            break;
+
             default:
             {
                 aProp <<= VCLXWindow::getProperty( PropertyName );
