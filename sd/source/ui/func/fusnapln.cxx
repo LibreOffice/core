@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusnapln.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:18:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,11 @@
 #ifndef SD_WINDOW_SHELL_HXX
 #include "Window.hxx"
 #endif
-#include "dlgsnap.hxx"
+//CHINA001 #include "dlgsnap.hxx"
+#include "sdenumdef.hxx" //CHINA001
 #include "sdresid.hxx"
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "dlgsnap.hrc" //CHINA001
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
 #endif
@@ -143,7 +145,11 @@ FuSnapLine::FuSnapLine(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView
         aNewAttr.Put(SfxUInt32Item(ATTR_SNAPLINE_X, aLinePos.X()));
         aNewAttr.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, aLinePos.Y()));
 
-        SdSnapLineDlg* pDlg = new SdSnapLineDlg( NULL, aNewAttr, pView );
+        //CHINA001 SdSnapLineDlg* pDlg = new SdSnapLineDlg( NULL, aNewAttr, pView );
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        AbstractSdSnapLineDlg* pDlg = pFact->CreateSdSnapLineDlg(ResId( DLG_SNAPLINE ), NULL, aNewAttr, pView );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if ( bLineExist )
         {
             pDlg->HideRadioGroup();
