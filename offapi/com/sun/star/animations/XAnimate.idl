@@ -1,0 +1,189 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAnimate.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:39:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_XAnimate_idl__
+#define __com_sun_star_animations_XAnimate_idl__
+
+#ifndef __com_sun_star_animations_XAnimationNode_idl__
+#include <com/sun/star/animations/XAnimationNode.idl>
+#endif
+
+#ifndef __com_sun_star_animations_TimeFilterPair_idl__
+#include <com/sun/star/animations/TimeFilterPair.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** Interface for generic animation.
+
+    @see http://www.w3.org/TR/smil20/animation.html#edef-animate
+*/
+interface XAnimate : XAnimationNode
+{
+    /** This attribute specifies the target element to be animated.
+        <br>
+        See documentation of used animation engine for supported targets.
+    */
+    [attribute] any Target;
+
+    /** This attribute specifies an optional subitem from the target element
+        that should be animated.
+        <br>
+        A value of zero should always be the default and animate the complete target.
+        <br>
+        See documentation of used animation engine for supported subitems.
+    */
+    [attribute] short SubItem;
+
+    /** Specifies the target attribute.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-attributeName
+    */
+    [attribute] string AttributeName;
+
+    /** A sequence of one or more values, each of which must be a legal value for
+        the specified attribute.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-values
+    */
+    [attribute] sequence< any > Values;
+
+    /**
+    */
+    [attribute] sequence< double > KeyTimes;
+
+    /**
+        @see <const>AnimationValueType</const>
+    */
+    [attribute] short ValueType;
+
+    /** Specifies the interpolation mode for the animation.
+        <br>
+        If the target attribute does not support linear interpolation (e.g. for strings),
+        or if the values attribute has only one value, the CalcMode attribute is ignored
+        and discrete interpolation is used.
+
+        @see AnimationCalcMode;
+    */
+    [attribute] short CalcMode;
+
+    /** Controls whether or not the animation is cumulative.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-accumulate
+    */
+    [attribute] boolean Accumulate;
+
+    /** Controls whether or not the animation is additive.
+
+        @see <const>AnimationAdditiveMode</const>
+        @see http://www.w3.org/TR/smil20/animation.html#adef-additive
+    */
+    [attribute] short Additive;
+
+    /** Specifies the starting value of the animation.
+        <br>
+        Must be a legal value for the specified attribute.
+        Ignored if the <member>Values</member> attribute is specified.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-from
+    */
+    [attribute] any From;
+
+    /** Specifies the ending value of the animation.
+        <br>
+        Must be a legal value for the specified attribute.
+        Ignored if the <member>Values</member> attribute is specified.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-to
+    */
+    [attribute] any To;
+
+    /** Specifies a relative offset value for the animation.
+        <br>
+        Must be a legal value of a domain for which addition to the attributeType
+        domain is defined and which yields a value in the attributeType domain.
+        Ignored if the values attribute is specified.
+        Ignored if the <member>Values</member> attribute is specified.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-by
+    */
+    [attribute] any By;
+
+    /** todo: timeFilter="0,0; 0.14,0.36; 0.43,0.73; 0.71,0.91; 1.0,1.0" ?
+    */
+    [attribute] sequence< TimeFilterPair > TimeFilter;
+
+    /** if this string is set, its contents will be parsed as a formula.
+        All values are used as a parameter for this formula and the computet
+        result will be used.
+    */
+    [attribute] string Formula;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
