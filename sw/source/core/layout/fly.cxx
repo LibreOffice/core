@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:20:58 $
+ *  last change: $Author: ama $ $Date: 2002-06-04 07:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2257,7 +2257,7 @@ void SwFlyFrm::ChgSize( const Size& aNewSize )
         SwFrmFmt *pFmt = GetFmt();
         SwFmtFrmSize aSz( pFmt->GetFrmSize() );
         aSz.SetWidth( aNewSize.Width() );
-        if ( Abs(aNewSize.Height() - Frm().Height()) > 1 )
+        if ( Abs(aNewSize.Height() - aSz.GetHeight()) > 1 )
             aSz.SetHeight( aNewSize.Height() );
         // uebers Doc fuers Undo!
         pFmt->GetDoc()->SetAttr( aSz, *pFmt );
