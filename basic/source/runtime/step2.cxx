@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: ab $ $Date: 2002-08-13 08:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,10 +901,13 @@ void SbiRuntime::StepLOCAL( USHORT nOp1, USHORT nOp2 )
     if( !refLocals.Is() )
         refLocals = new SbxArray;
     String aName( pImg->GetString( nOp1 ) );
-    SbxDataType t = (SbxDataType) nOp2;
-    SbxVariable* p = new SbxVariable( t );
-    p->SetName( aName );
-    refLocals->Put( p, refLocals->Count() );
+    if( refLocals->Find( aName, SbxCLASS_DONTCARE ) == NULL )
+    {
+        SbxDataType t = (SbxDataType) nOp2;
+        SbxVariable* p = new SbxVariable( t );
+        p->SetName( aName );
+        refLocals->Put( p, refLocals->Count() );
+    }
 }
 
 // Einrichten einer modulglobalen Variablen (+StringID+Typ)
