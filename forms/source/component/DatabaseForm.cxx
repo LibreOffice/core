@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:44:45 $
+ *  last change: $Author: fs $ $Date: 2001-10-22 15:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,7 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_nResetsPending(0)
         ,m_bForwardingConnection(sal_False)
         ,m_pAggregatePropertyMultiplexer(NULL)
-        ,m_bSharingConnection ( sal_False )
+        ,m_bSharingConnection( sal_False )
 {
     DBG_CTOR(ODatabaseForm,NULL);
 
@@ -1507,9 +1507,10 @@ void ODatabaseForm::onError(SQLException& _rException, const ::rtl::OUString& _r
 }
 
 //------------------------------------------------------------------------------
-OParameterInfoImpl* ODatabaseForm::createParameterInfo() const
+void ODatabaseForm::createParameterInfo()
 {
-    OParameterInfoImpl* pParameterInfo = new OParameterInfoImpl();
+    DELETEZ( m_pParameterInfo );
+    m_pParameterInfo = new OParameterInfoImpl;
 
     // create and fill a composer
     Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(m_xAggregateSet, m_xServiceFactory);
@@ -1517,25 +1518,25 @@ OParameterInfoImpl* ODatabaseForm::createParameterInfo() const
 
     // if there is no parsable statement return
     if (!xSetParameters.is())
-        return pParameterInfo;
+        return;
 
     Reference<XIndexAccess>  xParamsAsIndicies = xSetParameters->getParameters();
     Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
     // without parameters return
     if (!xParamsAsNames.is() || (nParamCount == 0))
-        return pParameterInfo;
+        return;
 
     // now evaluate the parameters
-    pParameterInfo->nCount = nParamCount;
-    pParameterInfo->xParamsAsNames = xParamsAsNames;
-    pParameterInfo->pParameters = new OParametersImpl();
-    pParameterInfo->pParameters->acquire();
-    OParametersImpl::Parameters& rParams = pParameterInfo->pParameters->getParameters();
+    m_pParameterInfo->nCount = nParamCount;
+    m_pParameterInfo->xParamsAsNames = xParamsAsNames;
+    m_pParameterInfo->pParameters = new OParametersImpl();
+    m_pParameterInfo->pParameters->acquire();
+    OParametersImpl::Parameters& rParams = m_pParameterInfo->pParameters->getParameters();
 
     // we need to map the parameter names (which is all we can get from our parent) to indicies (which are
     // needed by the XParameters interface of the row set)
-    MapUString2INT32& rParamMapping = pParameterInfo->aParamMapping;
+    MapUString2INT32& rParamMapping = m_pParameterInfo->aParamMapping;
     Reference<XPropertySet> xParam;
     for (sal_Int32 i = 0; i<nParamCount; ++i)
     {
@@ -1563,17 +1564,17 @@ OParameterInfoImpl* ODatabaseForm::createParameterInfo() const
                 const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
 
                 OParametersImpl::ParametersIterator iter;
-                for (sal_Int32 i = 0; i < nMasterLen; i++)
+                for (sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields, ++pDetailFields)
                 {
                     Reference<XPropertySet>  xMasterField, xDetailField;
 
-                    if (xParentCols->hasByName(pMasterFields[i]) &&
-                        xParamsAsNames->hasByName(pDetailFields[i]))
+                    if (xParentCols->hasByName(*pMasterFields) &&
+                        xParamsAsNames->hasByName(*pDetailFields))
                     {
                         // parameter defined by master slave definition
-                        ::cppu::extractInterface(xDetailField, xParamsAsNames->getByName(pDetailFields[i]));
+                        ::cppu::extractInterface(xDetailField, xParamsAsNames->getByName(*pDetailFields));
 
-                        DBG_ASSERT(rParamMapping.find(pDetailFields[i]) != rParamMapping.end(), "ODatabaseForm::createParameterInfo: invalid XParametersSupplier !");
+                        DBG_ASSERT(rParamMapping.find(*pDetailFields) != rParamMapping.end(), "ODatabaseForm::createParameterInfo: invalid XParametersSupplier !");
                             // the mapping was build from the XParametersSupplier interface of the composer, and the
                             // XNameAccess interface of the composer said hasByName(...)==sal_True ... so what ?
 
@@ -1622,7 +1623,6 @@ OParameterInfoImpl* ODatabaseForm::createParameterInfo() const
             }
         }
     }
-    return pParameterInfo;
 }
 
 //------------------------------------------------------------------------------
@@ -1667,8 +1667,8 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
     }
 
     // do we have to fill the parameters again?
-    if (!m_pParameterInfo)
-        m_pParameterInfo = createParameterInfo();
+    if ( !m_pParameterInfo )
+        createParameterInfo();
 
     if (!m_pParameterInfo || m_pParameterInfo->nCount == 0)
         return true;
@@ -1694,15 +1694,15 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
                 const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
 
                 Any aParamType,aScale,aValue;
-                for (sal_Int32 i = 0; i < nMasterLen; i++)
+                for (sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields, ++pDetailFields)
                 {
                     Reference<XPropertySet>  xMasterField, xDetailField;
-                    if (xParentCols->hasByName(pMasterFields[i]) &&
-                        m_pParameterInfo->xParamsAsNames->hasByName(pDetailFields[i]))
+                    if (xParentCols->hasByName(*pMasterFields) &&
+                        m_pParameterInfo->xParamsAsNames->hasByName(*pDetailFields))
                     {
                         // parameter defined by master slave definition
-                        ::cppu::extractInterface(xMasterField, xParentCols->getByName(pMasterFields[i]));
-                        ::cppu::extractInterface(xDetailField, m_pParameterInfo->xParamsAsNames->getByName(pDetailFields[i]));
+                        ::cppu::extractInterface(xMasterField, xParentCols->getByName(*pMasterFields));
+                        ::cppu::extractInterface(xDetailField, m_pParameterInfo->xParamsAsNames->getByName(*pDetailFields));
 
                         // get the type of the param
                         aParamType = xDetailField->getPropertyValue(PROPERTY_FIELDTYPE);
@@ -1717,7 +1717,7 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
                         // and fill the param value
                         aValue = xMasterField->getPropertyValue(PROPERTY_VALUE);
                         // parameters are based at 1
-                        xExecutionParams->setObjectWithInfo(m_pParameterInfo->aParamMapping[pDetailFields[i]] + 1, aValue, getINT32(aParamType), nScale);
+                        xExecutionParams->setObjectWithInfo(m_pParameterInfo->aParamMapping[*pDetailFields] + 1, aValue, getINT32(aParamType), nScale);
                     }
                     else
                         // no column matching so leave the parameter setting
@@ -2220,9 +2220,11 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             break;
         case PROPERTY_ID_MASTERFIELDS:
             rValue >>= m_aMasterFields;
+            invlidateParameters();
             break;
         case PROPERTY_ID_DETAILFIELDS:
             rValue >>= m_aDetailFields;
+            invlidateParameters();
             break;
         case PROPERTY_ID_CYCLE:
             m_aCycle = rValue;
@@ -2363,18 +2365,18 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     if (bInsertRow)
     {
         // Iterate through all columns and set the default value
-        Reference< XColumnsSupplier > xColsSuppl(m_xAggregateSet, UNO_QUERY);
-        Reference< XIndexAccess > xIndexCols(xColsSuppl->getColumns(), UNO_QUERY);
-        for (sal_Int32 i = 0; i < xIndexCols->getCount(); i++)
-        {
-            Reference< XPropertySet > xColProps;
-            xIndexCols->getByIndex(i) >>= xColProps;
-
-            //  ::rtl::OUString sDefault;
+//      Reference< XColumnsSupplier > xColsSuppl(m_xAggregateSet, UNO_QUERY);
+//      Reference< XIndexAccess > xIndexCols(xColsSuppl->getColumns(), UNO_QUERY);
+//      for (sal_Int32 i = 0; i < xIndexCols->getCount(); i++)
+//      {
+//          Reference< XPropertySet > xColProps;
+//          xIndexCols->getByIndex(i) >>= xColProps;
+//
+//          //  ::rtl::OUString sDefault;
 //          xColProps->getPropertyValue(PROPERTY_DEFAULT_VALUE) >>= sDefault;
-            // TODO: the rowset needs columns which have a default value ....
-
-            // OJ: it isn't valid to set everything to null see #88888#
+//          // TODO: the rowset needs columns which have a default value ....
+//
+//          // OJ: it isn't valid to set everything to null see #88888#
 //          if (!::cppu::any2bool(xColProps->getPropertyValue(PROPERTY_ISREADONLY)))
 //          {
 //              try
@@ -2389,7 +2391,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 //              {
 //              }
 //          }
-        }
+//      }
 
         if (m_bSubForm)
         {
@@ -2402,17 +2404,11 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
             sal_Int32 nMasterLen = m_aMasterFields.getLength();
             if (xParentCols->hasElements() && (nMasterLen > 0))
             {
-#ifdef PARAM_COLUMN_HAS_REALNAME
-                // this is the code as it should be ....
-                // Undfortunately, it requests that the param columns returned by the query composer have a valid
-                // real name (e.g., in a clause WHERE "field" = :param it expects a param column named "param"
-                // with a real name "field".
-                // stumbled upon this while fixing 88392 - 26.06.2001 - frank.schoenheit@sun.com
                 try
                 {
                     // analyze our parameters
-                    if (!m_pParameterInfo)
-                        m_pParameterInfo = createParameterInfo();
+                    if ( !m_pParameterInfo )
+                        createParameterInfo();
 
                     Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
 
@@ -2437,7 +2433,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
 
                                         // -> transfer the value property
                                         xParentCols->getByName(*pMasterFields) >>= xMasterField;
-                                        xCols->getByName(*pMasterFields) >>= xField;
+                                        xCols->getByName(sParamColumnRealName) >>= xField;
                                         if (xField.is() && xMasterField.is())
                                             xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
                                     }
@@ -2450,35 +2446,6 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                 {
                     OSL_ENSURE(sal_False, "ODatabaseForm::reset_impl: could not initialize the mater-detail-driven parameters!");
                 }
-#else
-                // the following below is somewhat strange:
-                // if we have a master-detail connection from, let's say "a" (a master field) to ":param" (our parameter name),
-                // and we ourself have a field called "a", then we set the parent's a-value into our own a-value.
-                // In case our statement is, for example, "SELECT a, c FROM table WHERE c = :param", this may be complete
-                // nonsense!
-
-                try
-                {
-                    Reference<XNameAccess>  xCols(xColsSuppl->getColumns(), UNO_QUERY);
-                    const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-                    const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
-                    for (sal_Int32 i = 0; i < nMasterLen; ++i, ++pMasterFields)
-                    {
-                        Reference<XPropertySet>  xMasterField, xField;
-                        if (xParentCols->hasByName(*pMasterFields) && xCols->hasByName(*pMasterFields))
-                        {
-                            xParentCols->getByName(*pMasterFields) >>= xMasterField;
-                            xCols->getByName(*pMasterFields) >>= xField;
-                            if (xField.is() && xMasterField.is())
-                                xField->setPropertyValue(PROPERTY_VALUE, xMasterField->getPropertyValue(PROPERTY_VALUE));
-                        }
-                    }
-                }
-                catch(const Exception&)
-                {
-                    OSL_ENSURE(sal_False, "ODatabaseForm::reset_impl: could not initialize the mater-detail-driven parameters!");
-                }
-#endif
             }
         }
     }
@@ -2794,6 +2761,14 @@ void SAL_CALL ODatabaseForm::removeSQLErrorListener(const Reference<XSQLErrorLis
     m_aErrorListeners.removeInterface(_rListener);
 }
 
+//------------------------------------------------------------------------------
+void ODatabaseForm::invlidateParameters()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    DELETEZ(m_pParameterInfo);
+    clearParameters();
+}
+
 //==============================================================================
 // OChangeListener
 //------------------------------------------------------------------------------
@@ -2809,9 +2784,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
     else    // it was one of the statement relevant props
     {
         // if the statement has changed we have to delete the parameter info
-        ::osl::MutexGuard aGuard(m_aMutex);
-        DELETEZ(m_pParameterInfo);
-        clearParameters();
+        invlidateParameters();
     }
 }
 
@@ -3311,8 +3284,7 @@ void SAL_CALL ODatabaseForm::unload() throw( RuntimeException )
     if (m_xAggregateAsRowSet.is())
     {
         // clear the parameters if there are any
-        DELETEZ(m_pParameterInfo);
-        clearParameters();
+        invlidateParameters();
 
         try
         {
