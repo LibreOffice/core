@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:30:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 enum ScConversionType
 {
     SC_CONVERSION_SPELLCHECK,       /// Spell checker.
-    SC_CONVERSION_HANGULHANJA       /// Hangul-Hanja converter.
+    SC_CONVERSION_HANGULHANJA,      /// Hangul-Hanja converter.
+    SC_CONVERSION_CHINESE_TRANSLATION   /// Chinese simplified/traditional converter.
 };
 
 // ---------------------------------------------------------------------------
