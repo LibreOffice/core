@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-15 13:15:01 $
+ *  last change: $Author: cl $ $Date: 2002-09-23 14:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,17 +978,6 @@ ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes,
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
     msZOrder(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))
 {
-    // first add the already existing shapes in the unsorted list
-    ZOrderHint aNewHint;
-
-    sal_Int32 nCount = rShapes->getCount();
-    while( mnCurrentZ < nCount )
-    {
-        aNewHint.nIs = mnCurrentZ++;
-        aNewHint.nShould = -1;
-
-        maUnsortedList.push_back(aNewHint);
-    }
 }
 
 void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
@@ -1043,12 +1032,51 @@ void XMLShapeImportHelper::popGroupAndSort()
 
     try
     {
-        // sort shapes
         list<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
+        list<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
+
+        // sort shapes
         if( !rZList.empty() )
         {
             // only do something if we have shapes to sort
-            list<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
+
+            // check if there are more shapes than inserted with ::shapeWithZIndexAdded()
+            // This can happen if there where already shapes on the page before import
+            // Since the writer may delete some of this shapes during import, we need
+            // to do this here and not in our c'tor anymore
+
+            // check if we have more shapes than we know of
+            sal_Int32 nCount = mpImpl->mpSortContext->mxShapes->getCount();
+
+            nCount -= rZList.size();
+            nCount -= rUnsortedList.size();
+
+
+            if( nCount > 0 )
+            {
+                // first update offsets of added shapes
+                list<ZOrderHint>::iterator aIter( rZList.begin() );
+                while( aIter != rZList.end() )
+                    (*aIter++).nIs += nCount;
+
+                aIter = rUnsortedList.begin();
+                while( aIter != rUnsortedList.end() )
+                    (*aIter++).nIs += nCount;
+
+                // second add the already existing shapes in the unsorted list
+                ZOrderHint aNewHint;
+
+                do
+                {
+                    nCount--;
+
+                    aNewHint.nIs = nCount;
+                    aNewHint.nShould = -1;
+
+                    rUnsortedList.insert(rUnsortedList.begin(), aNewHint);
+                }
+                while( nCount );
+            }
 
             // sort z ordered shapes
             rZList.sort();
