@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-18 15:02:24 $
+ *  last change: $Author: aw $ $Date: 2002-02-27 10:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,11 @@
 #include "drawdoc.hxx"
 #include "fuconarc.hxx"
 #include "res_bmp.hrc"
+
+// #97016#
+#ifndef _SXCIAITM_HXX
+#include <svx/sxciaitm.hxx>
+#endif
 
 TYPEINIT1( FuConstArc, FuConstruct );
 
@@ -310,11 +315,6 @@ void FuConstArc::Deactivate()
     FuConstruct::Deactivate();
 //  FuDraw::Deactivate();
 }
-
-// #97016#
-#ifndef _SXCIAITM_HXX
-#include <svx/sxciaitm.hxx>
-#endif
 
 // #97016#
 SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
