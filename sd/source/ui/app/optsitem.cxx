@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:09:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,10 +244,16 @@ SdOptionsLayout::SdOptionsLayout(  USHORT nConfigId, BOOL bUseConfig ) :
                       ( ( SDCFG_DRAW == nConfigId ) ?
                         B2U( "Office.Draw/Layout" ) :
                         B2U( "Office.Impress/Layout" ) ) :
-                      OUString() )
+                      OUString() ),
+    bRuler( TRUE ),
+    bHelplines( TRUE ),
+    bHandlesBezier( FALSE ),
+    bMoveOutline( TRUE ),
+    bDragStripes( FALSE ),
+    nMetric(isMetricSystem() ? FUNIT_CM : FUNIT_INCH),
+    nDefTab( 1250 )
+
 {
-    EnableModify( FALSE );
-    SetDefaults();
     EnableModify( TRUE );
 }
 
@@ -423,10 +429,13 @@ SdOptionsContents::SdOptionsContents( USHORT nConfigId, BOOL bUseConfig ) :
                       ( ( SDCFG_DRAW == nConfigId ) ?
                         B2U( "Office.Draw/Content" ) :
                         B2U( "Office.Impress/Content" ) ) :
-                      OUString() )
+                      OUString() ),
+
+    bExternGraphic( FALSE ),
+    bOutlineMode( FALSE ),
+    bHairlineMode( FALSE),
+    bNoText( FALSE )
 {
-    EnableModify( FALSE );
-    SetDefaults();
     EnableModify( TRUE );
 }
 
@@ -560,10 +569,33 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
                       ( ( SDCFG_DRAW == nConfigId ) ?
                         B2U( "Office.Draw/Misc" ) :
                         B2U( "Office.Impress/Misc" ) ) :
-                      OUString() )
+                      OUString() ),
+    bStartWithTemplate( TRUE ),
+    bMarkedHitMovesAlways( TRUE ),
+    bMoveOnlyDragging( FALSE ),
+    bCrookNoContortion( FALSE ),
+    bQuickEdit( GetConfigId() != SDCFG_DRAW ),
+    bMasterPageCache( TRUE ),
+    bDragWithCopy( FALSE ),
+    bPickThrough( TRUE ),
+    bBigHandles( FALSE ),
+    bDoubleClickTextEdit( TRUE ),
+    bClickChangeRotation( FALSE ),
+    bStartWithActualPage( FALSE ),
+    bSummationOfParagraphs( FALSE ),
+    nPreviewQuality( DRAWMODE_DEFAULT ),
+    bSolidDragging( FALSE ),
+    bSolidMarkHdl( TRUE ),
+    // #90356#
+    bShowUndoDeleteWarning( TRUE ),
+    // The default for 6.1-and-above documents is to use printer-independent
+    // formatting.
+    mnPrinterIndependentLayout (1),
+    // #97016#
+    nDefaultObjectSizeWidth(8000),
+    nDefaultObjectSizeHeight(5000)
+
 {
-    EnableModify( FALSE );
-    SetDefaults();
     EnableModify( TRUE );
 }
 
@@ -857,10 +889,19 @@ SdOptionsSnap::SdOptionsSnap( USHORT nConfigId, BOOL bUseConfig ) :
                       ( ( SDCFG_DRAW == nConfigId ) ?
                         B2U( "Office.Draw/Snap" ) :
                         B2U( "Office.Impress/Snap" ) ) :
-                      OUString() )
+                      OUString() ),
+    bSnapHelplines( TRUE ),
+    bSnapBorder( TRUE ),
+    bSnapFrame( FALSE ),
+    bSnapPoints( FALSE ),
+    bOrtho( FALSE ),
+    bBigOrtho( TRUE ),
+    bRotate( FALSE ),
+    nSnapArea( 5 ),
+    nAngle( 1500 ),
+    nBezAngle( 1500 )
+
 {
-    EnableModify( FALSE );
-    SetDefaults();
     EnableModify( TRUE );
 }
 
@@ -1041,10 +1082,11 @@ void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 SdOptionsZoom::SdOptionsZoom( USHORT nConfigId, BOOL bUseConfig ) :
     SdOptionsGeneric( nConfigId, ( bUseConfig &&  ( SDCFG_DRAW == nConfigId ) ) ?
                                  B2U( "Office.Draw/Zoom" ) :
-                                 OUString() )
+                                 OUString() ),
+    nX( 1 ),
+    nY( 1 )
+
 {
-    EnableModify( FALSE );
-    SetDefaults();
     EnableModify( TRUE );
 }
 
@@ -1375,10 +1417,28 @@ SdOptionsPrint::SdOptionsPrint( USHORT nConfigId, BOOL bUseConfig ) :
                       ( ( SDCFG_DRAW == nConfigId ) ?
                         B2U( "Office.Draw/Print" ) :
                         B2U( "Office.Impress/Print" ) ) :
-                      OUString() )
+                      OUString() ),
+    bDraw( TRUE ),
+    bNotes( FALSE ),
+    bHandout( FALSE ),
+    bOutline( FALSE ),
+    bDate( FALSE ),
+    bTime( FALSE ),
+    bPagename( FALSE ),
+    bHiddenPages( TRUE ),
+    bPagesize( FALSE ),
+    bPagetile( FALSE ),
+    bWarningPrinter( TRUE ),
+    bWarningSize( FALSE ),
+    bWarningOrientation( FALSE ),
+    bBooklet( FALSE ),
+    bFront( TRUE ),
+    bBack( TRUE ),
+    bCutPage( FALSE ),
+    bPaperbin( FALSE ),
+    nQuality( 0 )
+
 {
-    EnableModify( FALSE );
-    SetDefaults();
     EnableModify( TRUE );
 }
 
