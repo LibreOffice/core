@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:22:42 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ Resource RID_ERRHDLSC
         Text[ chinese_traditional ] = "¦b¿é¤J®É°O¾ĞÅé¤£¨¬¡C";
         Text[ arabic ] = "ÇáĞÇßÑÉ áíÓÊ ßÇİíÉ ÃËäÇÁ ÇáÇÓÊíÑÇÏ.";
         Text[ greek ] = "ÊáôÜ ôçí åéóáãùãŞ ğñïİêõøå ğñüâëçìá ìíŞìçò.";
-        Text[ korean ] = "°¡Á®¿À±â¸¦ ÇÏ´Âµ¿¾È ¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
+        Text[ korean ] = "°¡Á®¿À±â¸¦ ÇÏ±â À§ÇÑ ¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù.";
         Text[ turkish ] = "İçe aktarma işleminde bellek yetersiz.";
         Text[ language_user1 ] = " ";
     };
