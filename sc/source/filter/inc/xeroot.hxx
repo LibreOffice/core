@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:05:22 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XEROOT_HXX
 #define SC_XEROOT_HXX
 
@@ -68,9 +66,9 @@
 #include "xlroot.hxx"
 #endif
 
-
 // Global data ================================================================
 
+class XclExpProgressBar;
 class XclExpSst;
 class XclExpPalette;
 class XclExpFontBuffer;
@@ -83,87 +81,92 @@ class XclExpPivotTableManager;
 /** Stores global buffers and data needed for Excel export filter. */
 struct XclExpRootData : public XclRootData
 {
+    typedef ::std::auto_ptr< XclExpProgressBar >        XclExpProgressPtr;
     typedef ::std::auto_ptr< XclExpSst >                XclExpSstPtr;
     typedef ::std::auto_ptr< XclExpPalette >            XclExpPalettePtr;
-    typedef ::std::auto_ptr< XclExpFontBuffer >         XclExpFontBufferPtr;
-    typedef ::std::auto_ptr< XclExpNumFmtBuffer >       XclExpNumFmtBufferPtr;
-    typedef ::std::auto_ptr< XclExpXFBuffer >           XclExpXFBufferPtr;
+    typedef ::std::auto_ptr< XclExpFontBuffer >         XclExpFontBfrPtr;
+    typedef ::std::auto_ptr< XclExpNumFmtBuffer >       XclExpNumFmtBfrPtr;
+    typedef ::std::auto_ptr< XclExpXFBuffer >           XclExpXFBfrPtr;
     typedef ::std::auto_ptr< XclExpTabInfo >            XclExpTabInfoPtr;
-    typedef ::std::auto_ptr< XclExpLinkManager >        XclExpLinkManagerPtr;
-    typedef ::std::auto_ptr< XclExpPivotTableManager >  XclExpPivotTableManagerPtr;
+    typedef ::std::auto_ptr< XclExpLinkManager >        XclExpLinkMgrPtr;
+    typedef ::std::auto_ptr< XclExpPivotTableManager >  XclExpPTableMgrPtr;
 
-    XclExpSstPtr                mpSst;              /// The shared string table.
+    XclExpProgressPtr   mxProgress;         /// The export progress bar.
 
-    XclExpPalettePtr            mpPalette;          /// The color buffer.
-    XclExpFontBufferPtr         mpFontBuffer;       /// All fonts in the file.
-    XclExpNumFmtBufferPtr       mpNumFmtBuffer;     /// All number formats in the file.
-    XclExpXFBufferPtr           mpXFBuffer;         /// All XF records in the file.
+    XclExpSstPtr        mxSst;              /// The shared string table.
 
-    XclExpTabInfoPtr            mpTabInfo;          /// Calc->Excel sheet index conversion.
-    XclExpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
-    XclExpPivotTableManagerPtr  mpPTManager;        /// All pivot tables and pivot caches.
+    XclExpPalettePtr    mxPalette;          /// The color buffer.
+    XclExpFontBfrPtr    mxFontBfr;          /// All fonts in the file.
+    XclExpNumFmtBfrPtr  mxNumFmtBfr;        /// All number formats in the file.
+    XclExpXFBfrPtr      mxXFBfr;            /// All XF records in the file.
 
-    bool                        mbRelUrl;           /// true = Store URLs relative.
+    XclExpTabInfoPtr    mxTabInfo;          /// Calc->Excel sheet index conversion.
+    XclExpLinkMgrPtr    mxLinkMgr;          /// Manager for internal/external links.
+    XclExpPTableMgrPtr  mxPTableMgr;        /// All pivot tables and pivot caches.
 
-    explicit                    XclExpRootData(
-                                    XclBiff eBiff,
-                                    SfxMedium& rMedium,
-                                    ScDocument& rDocument,
-                                    CharSet eCharSet,
-                                    bool bRelUrl );
-    virtual                     ~XclExpRootData();
+    bool                mbRelUrl;           /// true = Store URLs relative.
+
+    explicit            XclExpRootData(
+                            XclBiff eBiff,
+                            SfxMedium& rMedium,
+                            ScDocument& rDocument,
+                            CharSet eCharSet,
+                            bool bRelUrl );
+    virtual             ~XclExpRootData();
 };
-
 
 // ----------------------------------------------------------------------------
 
 /** Access to global data from other classes. */
 class XclExpRoot : public XclRoot
 {
-    mutable XclExpRootData&     mrExpData;      /// Reference to the global export data struct.
-
 public:
     /** Returns this root instance - for code readability in derived classes. */
-    inline const XclExpRoot&    GetRoot() const { return *this; }
+    inline const XclExpRoot& GetRoot() const { return *this; }
     /** Returns true, if URLs should be stored relative to the document location. */
-    inline bool                 IsRelUrl() const { return mrExpData.mbRelUrl; }
+    inline bool         IsRelUrl() const { return mrExpData.mbRelUrl; }
+
+    /** Returns the export progress bar. */
+    XclExpProgressBar&  GetProgressBar() const;
 
     /** Returns the shared string table. */
-    XclExpSst&                  GetSst() const;
+    XclExpSst&          GetSst() const;
 
     /** Returns the color buffer. */
-    XclExpPalette&              GetPalette() const;
+    XclExpPalette&      GetPalette() const;
     /** Returns the font buffer. */
-    XclExpFontBuffer&           GetFontBuffer() const;
+    XclExpFontBuffer&   GetFontBuffer() const;
     /** Returns the number format buffer. */
-    XclExpNumFmtBuffer&         GetNumFmtBuffer() const;
+    XclExpNumFmtBuffer& GetNumFmtBuffer() const;
     /** Returns the cell formatting attributes buffer. */
-    XclExpXFBuffer&             GetXFBuffer() const;
+    XclExpXFBuffer&     GetXFBuffer() const;
 
     /** Returns the buffer for Calc->Excel sheet index conversion. */
-    XclExpTabInfo&              GetTabInfo() const;
+    XclExpTabInfo&      GetTabInfo() const;
     /** Returns the link manager. */
-    XclExpLinkManager&          GetLinkManager() const;
+    XclExpLinkManager&  GetLinkManager() const;
     /** Returns the pivot table manager. */
-    XclExpPivotTableManager&    GetPivotTableManager() const;
+    XclExpPivotTableManager& GetPivotTableManager() const;
 
     /** Returns the Excel add-in function name for a Calc function name. */
-    String                      GetXclAddInName( const String& rScName ) const;
+    String              GetXclAddInName( const String& rScName ) const;
 
     /** Checks if the passed cell address is a valid Excel cell position.
         @descr  See XclRoot::CheckCellAddress for details. */
-    bool                        CheckCellAddress( const ScAddress& rPos ) const;
+    bool                CheckCellAddress( const ScAddress& rPos ) const;
     /** Checks and eventually crops the cell range to valid Excel dimensions.
         @descr  See XclRoot::CheckCellRange for details. */
-    bool                        CheckCellRange( ScRange& rRange ) const;
+    bool                CheckCellRange( ScRange& rRange ) const;
     /** Checks and eventually crops the cell ranges to valid Excel dimensions.
         @descr  See XclRoot::CheckCellRangeList for details. */
-    void                        CheckCellRangeList( ScRangeList& rRanges ) const;
+    void                CheckCellRangeList( ScRangeList& rRanges ) const;
 
 protected:
-    explicit                    XclExpRoot( XclExpRootData& rExpRootData );
-};
+    explicit            XclExpRoot( XclExpRootData& rExpRootData );
 
+private:
+    mutable XclExpRootData& mrExpData;      /// Reference to the global export data struct.
+};
 
 // ============================================================================
 
