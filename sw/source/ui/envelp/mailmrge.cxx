@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 16:01:08 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,12 +141,11 @@ using namespace com::sun::star::uno;
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
-
-SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
-            const String& rName,
-            const String& rTblName,
-            const String& rStat,
-            SbaSelectionListRef& pSelList):
+SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
+         const String& rSourceName,
+        const String& rTblName,
+        sal_Int32 nCommandType,
+        Sequence< sal_Int32 >& rSelection) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_MAILMERGE)),
 
@@ -190,17 +189,14 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
     aCancelBTN      (this, SW_RES(BTN_CANCEL)),
     aHelpBTN        (this, SW_RES(BTN_HELP)),
 
-    pSh             (pShell),
-    rDBName         (rName),
+    rSh             (rShell),
+    rDBName         (rSourceName),
     rTableName      (rTblName),
-    rStatement      (rStat),
-    rSelectionList  (pSelList),
+    aSelection      (rSelection),
     nMergeType      (DBMGR_MERGE_MAILING)
 
 {
     FreeResource();
-
-    DBG_ASSERT(pSh, "Shell fehlt"  );
 
     pModOpt = SW_MOD()->GetModuleConfig();
 
@@ -240,7 +236,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
     aFromNF.SetModifyHdl(aLk);
     aToNF.SetModifyHdl(aLk);
 
-    pSh->GetNewDBMgr()->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
+    rSh.GetNewDBMgr()->GetColumnNames(&aAddressFldLB, rDBName, rTableName);
     for(USHORT nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
     aAddressFldLB.SelectEntry(C2S("EMAIL"));
@@ -266,9 +262,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window *pParent, SwWrtShell *pShell,
     if (aColumnLB.GetSelectEntryCount() == 0)
         aColumnLB.SelectEntryPos(0);
 
-    const BOOL bEnable = rSelectionList->Count() != 0;
+    const BOOL bEnable = aSelection.getLength() != 0;
     aMarkedRB.Enable(bEnable);
-    if (bEnable && (long)rSelectionList->GetObject(0) != -1L)
+    if (bEnable)
         aMarkedRB.Check();
     else
     {
@@ -411,7 +407,7 @@ IMPL_LINK( SwMailMergeDlg, ModifyHdl, NumericField *, pFld )
 
 void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
 {
-    SwNewDBMgr* pMgr = pSh->GetNewDBMgr();
+    SwNewDBMgr* pMgr = rSh.GetNewDBMgr();
 
     if (aPrinterRB.IsChecked())
         nMergeType = DBMGR_MERGE_MAILMERGE;
@@ -445,7 +441,7 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
             String sName(aFilenameED.GetText());
             if (!sName.Len())
             {
-                sName = pSh->GetView().GetDocShell()->GetTitle();
+                sName = rSh.GetView().GetDocShell()->GetTitle();
                 INetURLObject aTemp(sName);
                 sName = aTemp.GetBase();
             }
@@ -469,14 +465,15 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
             nStart = nZw;
         }
 
-        rSelectionList->Clear();
-
-        for (ULONG i = nStart; i <= nEnd; i++)
-            rSelectionList->Insert((void*)i , LIST_APPEND);
+        aSelection.realloc(nStart - nEnd + 1);
+        sal_Int32* pSelection = aSelection.getArray();
+        sal_Int32 nPos = 0;
+        for (ULONG i = nStart; i <= nEnd; i++, nPos++)
+            pSelection[nPos] = i;
     }
 
     if (aAllRB.IsChecked() )
-        rSelectionList->Clear();    // Leere Selektion = Alles einfuegen
+        aSelection.realloc(0);  // Leere Selektion = Alles einfuegen
 
     pModOpt->SetSinglePrintJob(aSingleJobsCB.IsChecked());
 

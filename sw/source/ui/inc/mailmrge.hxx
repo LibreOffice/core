@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:24:26 $
+ *  last change: $Author: os $ $Date: 2000-11-13 08:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,11 @@
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
 
 class SwWrtShell;
-class SbaObject;
-class SbaSelectionListRef;
 class SwModuleOptions;
 
 class SwMailMergeDlg : public SvxStandardDialog
@@ -136,15 +137,13 @@ class SwMailMergeDlg : public SvxStandardDialog
     CancelButton    aCancelBTN;
     HelpButton      aHelpBTN;
 
-    SwWrtShell*     pSh;
-    SbaObject*      pSbaObject;
+    SwWrtShell&     rSh;
     SwModuleOptions* pModOpt;
     const String&   rDBName;
     const String&   rTableName;
-    const String&   rStatement;
-    SbaSelectionListRef& rSelectionList;
 
     USHORT          nMergeType;
+    ::com::sun::star::uno::Sequence< sal_Int32 >  aSelection;
 
     DECL_LINK( ButtonHdl, Button* pBtn );
     DECL_LINK( InsertPathHdl, PushButton * );
@@ -158,13 +157,15 @@ class SwMailMergeDlg : public SvxStandardDialog
 
 public:
 
-     SwMailMergeDlg(Window* pParent, SwWrtShell* pSh,
-         const String& rName,
+     SwMailMergeDlg(Window* pParent, SwWrtShell& rSh,
+         const String& rSourceName,
         const String& rTblName,
-                        const String& rStat, SbaSelectionListRef& pSelList);
+        sal_Int32 nCommandType,
+        ::com::sun::star::uno::Sequence< sal_Int32 >& rSelection);
     ~SwMailMergeDlg();
 
     inline USHORT   GetMergeType() { return nMergeType; }
+    const ::com::sun::star::uno::Sequence< sal_Int32 > GetSelection() const{return aSelection;}
 };
 
 #endif
