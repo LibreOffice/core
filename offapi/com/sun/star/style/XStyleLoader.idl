@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStyleLoader.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:42 $
+ *  last change: $Author: os $ $Date: 2001-02-22 16:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,28 +92,32 @@ interface XStyleLoader: com::sun::star::uno::XInterface
     /** loads styles from a document at the given URL.
 
 
-        <p>If <var>Overwrite</var> is <TRUE/>, then all styles
+        <p>If <var>OverwriteStyles</var> is <TRUE/>, then all styles
         will be loaded.  Otherwise, only styles which are not already
-        defined in this document are loaded.</p> String URL: The directory and the filename from document with the styles aOptions : Specify which of the Style families the method should load. The XPropertySetValue[]
-        has following items <ul>
-        <li> Bool LoadTextStyle </li>
-        <li> Bool LoadTextStyle </li>
-        <li> Bool LoadFrameStyle </li>
-        <li> Bool LoadPageStyle </li>
-        <li> Bool LoadNumberingStyle </li>
-        <li> Bool OverwriteStyle</li>
+        defined in this document are loaded.</p>
+         @param string URL:
+             The directory and the filename from document with the styles
+         @param aOptions :
+             Specifies which of the Style families the method should load.
+         The sequence<PropertyValue> has following optional items
+         <ul>
+        <li> boolean LoadCellStyles </li>
+        <li> boolean LoadTextStyles </li>
+        <li> boolean LoadFrameStyles </li>
+        <li> boolean LoadPageStyles </li>
+        <li> boolean LoadNumberingStyles </li>
+        <li> boolean OverwriteStyles</li>
         </ul>
+     <p>As default all supported style families are loaded and existing styles are overwritten.</p>
      */
     void loadStylesFromURL( [in] string URL,
              [in] sequence<com::sun::star::beans::PropertyValue> aOptions )
             raises( com::sun::star::io::IOException );
 
     //-------------------------------------------------------------------------
-
-    // DocMerge from idl: method com::sun::star::style::XStyleLoader::getStyleLoaderOptions
     /** @returns
-                    a sequence with arguments which can be used to give more
-                    details of how to load style sheets from a file.
+                    a sequence of the supported properties as declared in <type>loadStylesFromURL</type>
+     with their current values.
      */
     sequence<com::sun::star::beans::PropertyValue> getStyleLoaderOptions();
 
@@ -126,6 +130,9 @@ interface XStyleLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:42  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:44:12  mi
     moved from api
 
