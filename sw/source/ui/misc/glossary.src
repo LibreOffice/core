@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:59:32 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_GLOSSARY
     Text [ italian ] = "Testo automatico" ;
     Text [ portuguese_brazilian ] = "Texto autom tico" ;
     Text [ portuguese ] = "AutoTexto" ;
-    Text [ finnish ] = "Automaattiteksti" ;
+    Text [ finnish ] = "Automaattinen teksti" ;
     Text [ danish ] = "AutoTekst" ;
     Text [ french ] = "AutoTexte" ;
     Text [ swedish ] = "AutoText" ;
@@ -110,6 +110,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Previsualización";
+        Text[ finnish ] = "Esikatselu";
     };
     Window WIN_EXAMPLE
     {
@@ -142,6 +143,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "Önizlemeyi görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar pre~visualización";
+        Text[ finnish ] = "Näytä ~esikatselu";
     };
     CheckBox CB_INSERT_TIP
     {
@@ -170,6 +172,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "Giriþ sýrasýnda adýn tamamýný öneri olarak görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Muestra el resto del nombre como sugerencia durante la entrada";
+        Text[ finnish ] = "~Ehdota nimeä kirjoitettaessa";
     };
     FixedText FT_NAME
     {
@@ -222,7 +225,7 @@ ModalDialog DLG_GLOSSARY
         Text [ italian ] = "Sigla" ;
         Text [ portuguese_brazilian ] = "~Atalho" ;
         Text [ portuguese ] = "~Abreviatura" ;
-        Text [ finnish ] = "~Pikatoiminto" ;
+        Text [ finnish ] = "~Pikavalinta" ;
         Text [ danish ] = "Genvej" ;
         Text [ french ] = "~Raccourci" ;
         Text [ swedish ] = "~Förkortning" ;
@@ -282,6 +285,7 @@ ModalDialog DLG_GLOSSARY
             Text[ turkish ] = "readonly";
             Text[ arabic ] = "ááÞÑÇÁÉ ÝÞØ";
             Text[ catalan ] = "solo lectura";
+            Text[ finnish ] = "Vain luku";
         };
     };
     GroupBox GB_GLOSSARY
@@ -294,7 +298,7 @@ ModalDialog DLG_GLOSSARY
         Text [ italian ] = "Testo automatico" ;
         Text [ portuguese_brazilian ] = "Texto autom tico" ;
         Text [ portuguese ] = "AutoTexto" ;
-        Text [ finnish ] = "Automaattiteksti" ;
+        Text [ finnish ] = "Automaattinen teksti" ;
         Text [ danish ] = "AutoTekst" ;
         Text [ french ] = "AutoTexte" ;
         Text [ swedish ] = "AutoText" ;
@@ -340,6 +344,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "Dosya sistemi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En el ~sistema de archivos";
+        Text[ finnish ] = "~Tiedostojärjestelmä";
     };
     CheckBox CB_NET_REL
     {
@@ -367,6 +372,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "Internet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En I~nternet";
+        Text[ finnish ] = "~Internet";
     };
     GroupBox GB_RELATIVE
     {
@@ -394,6 +400,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "Baðlantýlarý göreceli kaydet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Guardar vínculos relativamente";
+        Text[ finnish ] = "Linkin aloituskohta";
     };
     OKButton PB_INSERT
     {
@@ -478,7 +485,7 @@ ModalDialog DLG_GLOSSARY
         Text [ italian ] = "Testo auto." ;
         Text [ portuguese_brazilian ] = "Texto autom tico" ;
         Text [ portuguese ] = "AutoTe~xto" ;
-        Text [ finnish ] = "Automaattiteksti" ;
+        Text [ finnish ] = "~Automaattinen teksti" ;
         Text [ danish ] = "AutoTekst" ;
         Text [ french ] = "~AutoTexte" ;
         Text [ swedish ] = "AutoTe~xt" ;
@@ -508,7 +515,7 @@ ModalDialog DLG_GLOSSARY
         Text [ italian ] = "Categorie..." ;
         Text [ portuguese_brazilian ] = "~Grupos..." ;
         Text [ portuguese ] = "~Categorias..." ;
-        Text [ finnish ] = "~Ryhmät..." ;
+        Text [ finnish ] = "~Luokat" ;
         Text [ danish ] = "Områder..." ;
         Text [ french ] = "Caté~gories..." ;
         Text [ swedish ] = "~Områden..." ;
@@ -555,6 +562,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "Veri yolu...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ruta...";
+        Text[ finnish ] = "~Polku";
     };
     String ST_READONLY_PATH
     {
@@ -579,6 +587,7 @@ ModalDialog DLG_GLOSSARY
         Text[ turkish ] = "The directories of 'AutoText' don't have write access. Do you want to call the path settings dialog?";
         Text[ arabic ] = "áÇ ÊÊæÝÑ ÍÞæÞ ßÊÇÈÉ áÏáÇÆá 'ÇáäÕ ÇáÊáÞÇÆí'. åá ÊÑíÏ ÝÊÍ ãÑÈÚ ÇáÍæÇÑ  ÇáÎÇÕ ÈÅÚÏÇÏÇÊ ÇáãÓÇÑ¿";
         Text[ catalan ] = "No existen derechos de escritura para los directorios 'AutoTexto'. ¿Desea abrir el diálogo de rutas?";
+        Text[ finnish ] = "Automaattisen tekstin hakemistot ovat vain luku -hakemistoja. Haluatko avata hakemistopolun määritysvalintaikkunan?";
     };
     Menu MNU_EDIT
     {
@@ -639,6 +648,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ turkish ] = "Yeni (yalnýzca metin)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Nuevo (solo ~texto)";
+                Text[ finnish ] = "Uusi (vain teksti)";
             };
             MenuItem
             {
@@ -666,6 +676,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ turkish ] = "Kopyala";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "~Copiar";
+                Text[ finnish ] = "~Kopioi";
             };
             MenuItem
             {
@@ -677,7 +688,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ italian ] = "~Sostituisci" ;
                 Text [ portuguese_brazilian ] = "~Substituir" ;
                 Text [ portuguese ] = "~Substituir" ;
-                Text [ finnish ] = "~Korvaa" ;
+                Text [ finnish ] = "Korvaa" ;
                 Text [ danish ] = "~Erstat" ;
                 Text [ french ] = "R~emplacer" ;
                 Text [ swedish ] = "~Ersätt" ;
@@ -722,6 +733,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ turkish ] = "Deðiþtir (yalnýzca metin)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Reemplazar (sólo texto)";
+                Text[ finnish ] = "E~rsetzen (nur Text)";
             };
             MenuItem
             {
@@ -749,6 +761,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ turkish ] = "Yeniden adlandýr...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "~Cambiar nombre...";
+                Text[ finnish ] = "Nimeä uudelleen";
             };
             MenuItem
             {
@@ -827,7 +840,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ italian ] = "Macro..." ;
                 Text [ portuguese_brazilian ] = "~Macro..." ;
                 Text [ portuguese ] = "~Macro..." ;
-                Text [ finnish ] = "~Makro..." ;
+                Text [ finnish ] = "~Makro" ;
                 Text [ danish ] = "~Makro..." ;
                 Text [ french ] = "~Macro..." ;
                 Text [ swedish ] = "~Makro..." ;
@@ -875,6 +888,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ arabic ] = "ÇÓÊíÑÇÏ...";
                 Text[ turkish ] = "~Ýçe aktar...";
                 Text[ catalan ] = "~Importar...";
+                Text[ finnish ] = "~Tuo";
             };
         };
     };
@@ -899,7 +913,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE [ italian ] = "La sigla è già in uso. Scegliere un altro nome." ;
     MESSAGE [ portuguese_brazilian ] = "AbreviaçÆo j  em uso. Por favor escolha outro nome!" ;
     MESSAGE [ portuguese ] = "Abreviatura já existe. Por favor escolha outro nome!" ;
-    MESSAGE [ finnish ] = "Lyhenne on jo käytössä. Valitse toinen nimi!" ;
+    MESSAGE [ finnish ] = "Pikavalinnan nimi on jo käytössä. Valitse jokin muu nimi." ;
     MESSAGE [ danish ] = "Denne genvej eksisterer allerede. Vælg venligst et andet navn!" ;
     MESSAGE [ french ] = "Abréviation déjà utilisée. Choisissez un autre nom !" ;
     MESSAGE [ swedish ] = "Kortkommandonamnet används redan. Välj ett annat namn!" ;
@@ -929,7 +943,7 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE [ italian ] = "Elimina inserimento testo automatico?." ;
     MESSAGE [ portuguese_brazilian ] = "Apagar TextoAutom tico?" ;
     MESSAGE [ portuguese ] = "Deseja apagar o AutoTexto?" ;
-    MESSAGE [ finnish ] = "Poistetaanko automaattiteksti?" ;
+    MESSAGE [ finnish ] = "Poistetaanko automaattinen teksti?" ;
     MESSAGE [ danish ] = "Skal denne AutoTekst slettes?" ;
     MESSAGE [ french ] = "Supprimer l'AutoTexte ?" ;
     MESSAGE [ swedish ] = "Skall AutoText raderas?" ;
@@ -972,6 +986,7 @@ String STR_QUERY_DELETE_GROUP1
     Text[ turkish ] = "Bölüm ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¿Desea usted eliminar  ";
+    Text[ finnish ] = "Poistetaan luokka ";
 };
 String STR_QUERY_DELETE_GROUP2
 {
@@ -998,6 +1013,7 @@ String STR_QUERY_DELETE_GROUP2
     Text[ korean ] = "»èÁ¦ÇÏ½Ã°Ú½À´Ï±î£¿";
     Text[ turkish ] = "silinsin mi?";
     Text[ catalan ] = "la categoría?";
+    Text[ finnish ] = "?";
 };
 String STR_GLOSSARY
 {
@@ -1012,7 +1028,7 @@ String STR_GLOSSARY
     Text [ spanish ] = "Módulo de texto :  " ;
     Text [ danish ] = "Tekstelement : " ;
     Text [ swedish ] = "Textblock :  " ;
-    Text [ finnish ] = "Textblock : " ;
+    Text [ finnish ] = "Automaattinen teksti : " ;
     Text [ english_us ] = "AutoText : " ;
     Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯ÌõÄ¿: ";
     Text[ russian ] = "Àâòîòåêñò : ";
@@ -1076,6 +1092,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "N~ombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_ON
     {
@@ -1113,6 +1130,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ turkish ] = "Kýsaltma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Abrev.";
+        Text[ finnish ] = "~Pikavalinta";
     };
     Edit ED_OS
     {
@@ -1148,6 +1166,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nuevo";
+        Text[ finnish ] = "~Uusi";
     };
     Edit ED_NN
     {
@@ -1184,6 +1203,7 @@ ModalDialog DLG_RENAME_GLOS
         Text[ turkish ] = "Kýsaltma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Abreviatura";
+        Text[ finnish ] = "~Pikavalinta";
     };
     Edit ED_NS
     {
@@ -1218,6 +1238,7 @@ ModalDialog DLG_RENAME_GLOS
     Text[ turkish ] = "Metin öðesini yeniden adlandýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cambiar nombre al módulo de texto";
+    Text[ finnish ] = "Nimeä automaattinen teksti uudelleen";
 };
 String STR_SAVE_GLOSSARY
 {
@@ -1243,6 +1264,7 @@ String STR_SAVE_GLOSSARY
     Text[ turkish ] = "Metin öðesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar módulo de texto";
+    Text[ finnish ] = "Tallenna automaattinen teksti";
 };
 InfoBox MSG_NO_GLOSSARIES
 {
@@ -1267,4 +1289,5 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ arabic ] = "áÇ íÍÊæí åÐÇ ÇáãáÝ Úáì ßÊá äÕíÉ.";
     MESSAGE[ turkish ] = "Bu dosya metin bileþenleri içermiyor";
     MESSAGE[ catalan ] = "Este archivo no contiene módulos de texto.";
+    MESSAGE[ finnish ] = "Tiedostossa ei ole automaattista tekstiä.";
 };
