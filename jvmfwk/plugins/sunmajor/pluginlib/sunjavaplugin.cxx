@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:59:04 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #include "jvmfwk/vendorplugin.h"
 #include "util.hxx"
 #include "sunversion.hxx"
+#include "vendorlist.hxx"
+#include "diagnostics.h"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SUN_MICRO "Sun Microsystems Inc."
@@ -239,35 +241,120 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     JavaInfo*** parJavaInfo,
     sal_Int32 *nLenInfoList)
 {
-    if (parJavaInfo == NULL || nLenInfoList == NULL)
+    OSL_ASSERT(sVendor);
+    OSL_ASSERT(sMinVersion);
+    OSL_ASSERT(sMaxVersion);
+    OSL_ASSERT(parJavaInfo);
+    OSL_ASSERT(parJavaInfo);
+    OSL_ASSERT(nLenInfoList);
+    if (!sVendor || !sMinVersion || !sMaxVersion || !parJavaInfo || !nLenInfoList)
         return JFW_PLUGIN_E_INVALID_ARG;
+
+    //nLenlist contains the number of element in arExcludeList.
+    //If no exclude list is provided then nLenList must be 0
+    OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
+    if (arExcludeList == NULL && nLenList > 0)
+        return JFW_PLUGIN_E_INVALID_ARG;
+
+    OUString ouVendor(sVendor);
+    OUString ouMinVer(sMinVersion);
+    OUString ouMaxVer(sMaxVersion);
+
+    OSL_ASSERT(ouVendor.getLength() > 0);
+    if (ouVendor.getLength() == 0)
+        return JFW_PLUGIN_E_INVALID_ARG;
+
     JavaInfo** arInfo = NULL;
-    try
+
+    //Find all JREs
+    vector<rtl::Reference<VendorBase> > vecInfos =
+        getAllJREInfos();
+    vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
+
+    typedef vector<rtl::Reference<VendorBase> >::iterator it;
+    for (it i= vecInfos.begin(); i != vecInfos.end(); i++)
     {
-        //check if we know all the required features
-        vector<OUString> vecExclude;
-        for (int i = 0; i != nLenList; i++)
+        const rtl::Reference<VendorBase>& cur = *i;
+
+        if (ouVendor.equals(cur->getVendor()) == sal_False)
+            continue;
+
+        if (ouMinVer.getLength() > 0)
         {
-            vecExclude.push_back(arExcludeList[i]);
+            try
+            {
+                if (cur->compareVersions(sMinVersion) == -1)
+                    continue;
+            }
+            catch (MalformedVersionException&)
+            {
+                //The minVersion was not recognized as valid for this vendor.
+                JFW_ENSURE(
+                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                    + ouMinVer + OUSTR(" for vendor: ") + cur->getVendor()
+                    + OUSTR(" .Check minimum Version.") );
+                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+            }
         }
 
-        std::vector<rtl::Reference<VendorBase> > vec =
-            getAllJREInfos(sVendor, sMinVersion, sMaxVersion, vecExclude);
-
-        arInfo = (JavaInfo**) rtl_allocateMemory(vec.size() * sizeof (JavaInfo*));
-
-        int j = 0;
-        typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
-        for (cit ii = vec.begin(); ii != vec.end(); ii++, j++)
+        if (ouMaxVer.getLength() > 0)
         {
-            arInfo[j] = createJavaInfo(*ii);
+            try
+            {
+                if (cur->compareVersions(sMaxVersion) == 1)
+                    continue;
+            }
+            catch (MalformedVersionException&)
+            {
+                //The maxVersion was not recognized as valid for this vendor.
+                JFW_ENSURE(
+                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                    + ouMaxVer + OUSTR(" for vendor: ") + cur->getVendor()
+                    + OUSTR(" .Check maximum Version.") );
+                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+            }
         }
-        *nLenInfoList = vec.size();
+
+        if (arExcludeList > 0)
+        {
+            bool bExclude = false;
+            for (int i = 0; i < nLenList; i++)
+            {
+                rtl::OUString sExVer(arExcludeList[i]);
+                try
+                {
+                    if (cur->compareVersions(sExVer) == 0)
+                    {
+                        bExclude = true;
+                        break;
+                    }
+                }
+                catch (MalformedVersionException&)
+                {
+                    //The excluded version was not recognized as valid for this vendor.
+                    JFW_ENSURE(
+                        0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                        + sExVer + OUSTR(" for vendor: ") + cur->getVendor()
+                        + OUSTR(" .Check excluded versions.") );
+                    return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+                }
+            }
+            if (bExclude == true)
+                continue;
+        }
+        vecVerifiedInfos.push_back(*i);
     }
-    catch(MalformedVersionException&)
+    //Now vecVerifiedInfos contains all those JREs which meet the version requirements
+    //Transfer them into the array that is passed out.
+    arInfo = (JavaInfo**) rtl_allocateMemory(vecVerifiedInfos.size() * sizeof (JavaInfo*));
+    int j = 0;
+    typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
+    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ii++, j++)
     {
-        return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        arInfo[j] = createJavaInfo(*ii);
     }
+    *nLenInfoList = vecVerifiedInfos.size();
+
 
     *parJavaInfo = arInfo;
     return JFW_PLUGIN_E_NONE;
@@ -276,6 +363,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 extern "C"
 javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString *path,
+    rtl_uString *sVendor,
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
     rtl_uString  *  *arExcludeList,
@@ -283,88 +371,105 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     JavaInfo ** ppInfo)
 {
     javaPluginError errcode = JFW_PLUGIN_E_NONE;
-    if (ppInfo == NULL)
+
+    OSL_ASSERT(path);
+    OSL_ASSERT(sVendor);
+    OSL_ASSERT(sMinVersion);
+    OSL_ASSERT(sMaxVersion);
+    if (!path || !sVendor || !sMinVersion || !sMaxVersion || !ppInfo)
         return JFW_PLUGIN_E_INVALID_ARG;
-    try
+    OUString ouPath(path);
+    OSL_ASSERT(ouPath.getLength() > 0);
+    if (ouPath.getLength() == 0)
+        return JFW_PLUGIN_E_INVALID_ARG;
+
+    //nLenlist contains the number of element in arExcludeList.
+    //If no exclude list is provided then nLenList must be 0
+    OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
+    if (arExcludeList == NULL && nLenList > 0)
+        return JFW_PLUGIN_E_INVALID_ARG;
+
+    OUString ouVendor(sVendor);
+    OUString ouMinVer(sMinVersion);
+    OUString ouMaxVer(sMaxVersion);
+
+    OSL_ASSERT(ouVendor.getLength() > 0);
+    if (ouVendor.getLength() == 0)
+        return JFW_PLUGIN_E_INVALID_ARG;
+
+    rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath(ouPath);
+    if (aVendorInfo.is() == sal_False)
+        return JFW_PLUGIN_E_NO_JRE;
+
+    //Check if the detected JRE matches the version requirements
+    if (ouVendor.equals(aVendorInfo->getVendor()) == sal_False)
+        return JFW_PLUGIN_E_NO_JRE;
+
+    if (ouMinVer.getLength() > 0)
     {
-        rtl::OUString sPath((rtl_uString*)path);
-        rtl::Reference<VendorBase> aVendorInfo =
-            getJREInfoByPath(sPath);
-
-        if (aVendorInfo.is() == sal_False)
-            return JFW_PLUGIN_E_NO_JRE;
-        //check if the version meets the requirements
-        rtl::OUString sTheMinVersion((rtl_uString*) sMinVersion);
-
-         if (sTheMinVersion.getLength() > 0)
-         {
-             int nRes = 0;
-             try
-             {
-                 nRes = aVendorInfo->compareVersions(sTheMinVersion);
-             }
-             catch (MalformedVersionException&)
-             {
-                 //The plug-in must guarantee that the versions from the vendor
-                 //are all recognized.
-                 OSL_ASSERT(0);
-                 return JFW_PLUGIN_E_NO_JRE;
-             }
-             if (nRes < 0)
-                 return JFW_PLUGIN_E_FAILED_VERSION;
-         }
-
-         rtl::OUString sTheMaxVersion((rtl_uString*) sMaxVersion);
-         if (sTheMaxVersion.getLength() > 0)
-         {
-             int nRes = 0;
-             try
-             {
-                 nRes = aVendorInfo->compareVersions(sTheMaxVersion);
-             }
-             catch (MalformedVersionException&)
-             {
-                 //The plug-in must guarantee that the versions from the vendor
-                 //are all recognized.
-                 OSL_ASSERT(0);
-                 return JFW_PLUGIN_E_NO_JRE;
-             }
-             if (nRes > 0)
-                 return JFW_PLUGIN_E_FAILED_VERSION;
-         }
-
-         if (arExcludeList > 0)
-         {
-             for (int i = 0; i < nLenList; i++)
-             {
-                 rtl::OUString sExVer((rtl_uString*) arExcludeList[i]);
-                 int nRes = 0;
-                 try
-                 {
-                     nRes = aVendorInfo->compareVersions(sExVer);
-                 }
-                 catch (MalformedVersionException&)
-                 {
-                     //The plug-in must guarantee that the versions from the vendor
-                     //are all recognized.
-                     OSL_ASSERT(0);
-                     return JFW_PLUGIN_E_NO_JRE;
-                 }
-                 if (nRes == 0)
-                     return JFW_PLUGIN_E_FAILED_VERSION;
-             }
-         }
-
-         *ppInfo = createJavaInfo(aVendorInfo);
+        int nRes = 0;
+        try
+        {
+            nRes = aVendorInfo->compareVersions(ouMinVer);
+        }
+        catch (MalformedVersionException&)
+        {
+            //The minVersion was not recognized as valid for this vendor.
+            JFW_ENSURE(
+                0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                + ouMinVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
+                + OUSTR(" .Check minimum Version.") );
+            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        }
+        if (nRes < 0)
+            return JFW_PLUGIN_E_FAILED_VERSION;
     }
-    catch(MalformedVersionException& )
+
+    if (ouMaxVer.getLength() > 0)
     {
-        errcode = JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        int nRes = 0;
+        try
+        {
+            nRes = aVendorInfo->compareVersions(ouMaxVer);
+        }
+        catch (MalformedVersionException&)
+        {
+            //The maxVersion was not recognized as valid for this vendor.
+            JFW_ENSURE(
+                0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                + ouMaxVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
+                + OUSTR(" .Check maximum Version.") );
+            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        }
+        if (nRes > 0)
+            return JFW_PLUGIN_E_FAILED_VERSION;
     }
-    catch(...)
+
+    if (arExcludeList > 0)
     {
-        errcode = JFW_PLUGIN_E_ERROR;
+        for (int i = 0; i < nLenList; i++)
+        {
+            rtl::OUString sExVer(arExcludeList[i]);
+            int nRes = 0;
+            try
+            {
+                nRes = aVendorInfo->compareVersions(sExVer);
+            }
+            catch (MalformedVersionException&)
+            {
+                //The excluded version was not recognized as valid for this vendor.
+                JFW_ENSURE(
+                    0,OUSTR("[Java framework]sunjavaplugin does not know version: ")
+                    + sExVer + OUSTR(" for vendor: ") + aVendorInfo->getVendor()
+                    + OUSTR(" .Check excluded versions.") );
+                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+            }
+            if (nRes == 0)
+                return JFW_PLUGIN_E_FAILED_VERSION;
+        }
     }
+    *ppInfo = createJavaInfo(aVendorInfo);
+
     return errcode;
 }
 
@@ -386,12 +491,15 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     javaPluginError errcode = JFW_PLUGIN_E_NONE;
     if ( pInfo == NULL || ppVm == NULL || ppEnv == NULL)
         return JFW_PLUGIN_E_INVALID_ARG;
-    //Todo check if the Vendor (pInfo->sVendor) is supported by this plugin
-    rtl::OUString sVendor(pInfo->sVendor);
+    //Check if the Vendor (pInfo->sVendor) is supported by this plugin
+    if ( ! isVendorSupported(pInfo->sVendor))
+        return JFW_PLUGIN_E_WRONG_VENDOR;
+    rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
+    JFW_TRACE2(OUSTR("[Java framework] Using Java runtime library: ")
+              + sRuntimeLib + OUSTR(".\n"));
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
     // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
     // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
-    rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
     oslModule moduleRt = 0;
 #if defined(LINUX)
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData,
@@ -400,11 +508,12 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT)) == 0)
 #endif
      {
-         OSL_ASSERT(0);
-         rtl::OString msg = rtl::OUStringToOString(
-             sRuntimeLib, osl_getThreadTextEncoding());
-         fprintf(stderr,"Could not load java runtime library : %s",
-                 msg.getStr());
+         JFW_ENSURE(0, OUSTR("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
+                             " could not load Java runtime library: \n")
+                    + sRuntimeLib + OUSTR("."));
+         JFW_TRACE0(OUSTR("[Java framework]sunjavaplugin" SAL_DLLEXTENSION
+                             " could not load Java runtime library: \n")
+                    + sRuntimeLib +  OUSTR("."));
          return JFW_PLUGIN_E_VM_CREATION_FAILED;
      }
 
@@ -417,9 +526,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     rtl::OString osJavaHome = rtl::OUStringToOString(
         javaHome, osl_getThreadTextEncoding());
     putenv(strdup(osJavaHome.getStr()));
-#if OSL_DEBUG_LEVEL >=2
-    fprintf(stderr, "Setting JAVA_HOME: %s\n", osJavaHome.getStr());
-#endif
 #endif
 
     typedef jint JNICALL JNI_InitArgs_Type(void *);
@@ -436,7 +542,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
             sRuntimeLib, osl_getThreadTextEncoding());
         rtl::OString sSymbol = rtl::OUStringToOString(
             sSymbolCreateJava, osl_getThreadTextEncoding());
-        fprintf(stderr,"Java runtime library: %s does not export symbol %s !",
+        fprintf(stderr,"[Java framework]sunjavaplugin"SAL_DLLEXTENSION
+                "Java runtime library: %s does not export symbol %s !\n",
                 sLib.getStr(), sSymbol.getStr());
         return JFW_PLUGIN_E_VM_CREATION_FAILED;
     }
@@ -467,7 +574,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // JNI_CreateJavaVM. This happens when the LD_LIBRARY_PATH does not contain
     // all some directories of the Java installation. This is necessary for
     // all versions below 1.5.1
-    options[0].optionString= "abort";
+    options[0].optionString= (char *) "abort";
     options[0].extraInfo= (void* )abort_handler;
     int index = 1;
     rtl::OString sClassPathProp("-Djava.class.path=");
@@ -482,7 +589,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         {
             char sep[] =  {SAL_PATHSEPARATOR, 0};
             sClassPathOption = sClassPath + rtl::OString(sep) +
-                getPluginJarPath(sVendor, pInfo->sLocation,pInfo->sVersion);
+                getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
             options[i+1].optionString = (char *) sClassPathOption.getStr();
             options[i+1].extraInfo = arOptions[i].extraInfo;
         }
@@ -495,9 +602,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         }
 #endif
 #if OSL_DEBUG_LEVEL >= 2
-        fprintf(stderr, "VM option: %s\n", options[i+1].optionString);
+        JFW_TRACE2(OString("VM option: ") + OString(options[i+1].optionString) +
+                   OString("\n"));
 #endif
-
     }
 
     vm_args.version= JNI_VERSION_1_2;
@@ -534,18 +641,21 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         rtl::OUString message;
         if( err < 0)
         {
-            fprintf(stderr,"Can not create Java Virtual Machine");
+            fprintf(stderr,"[Java framework] sunjavaplugin"SAL_DLLEXTENSION
+                    "Can not create Java Virtual Machine\n");
             errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
         else if( err > 0)
         {
-            fprintf(stderr,"Can not create JavaVirtualMachine, abort handler was called");
+            fprintf(stderr,"[Java framework] sunjavaplugin"SAL_DLLEXTENSION
+                    "Can not create JavaVirtualMachine, abort handler was called.\n");
             errcode = JFW_PLUGIN_E_VM_CREATION_FAILED;
         }
     }
-        else
+    else
     {
         *ppVm = pJavaVM;
+        JFW_TRACE2("[Java framework] sunjavaplugin"SAL_DLLEXTENSION " has created a VM.\n");
     }
 
 
