@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_parser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:55:09 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,15 @@ namespace /* private */
         namespace decoration e.g. meta:creator -> creator */
     const XML_Char COLON = (XML_Char)':';
 
-    const XML_Char* get_local_name(const XML_Char* RawName)
+    const XML_Char* get_local_name(const XML_Char* rawname)
     {
-        const XML_Char* p = RawName;
+        const XML_Char* p = rawname;
 
         // go to the end
         while (*p) p++;
 
         // go back until the first ':'
-        while (*p != COLON && p > RawName)
+        while (*p != COLON && p > rawname)
             p--;
 
         // if we are on a colon one step forward
@@ -121,7 +121,7 @@ xml_parser::xml_parser(const XML_Char* EncodingName) :
 }
 
 //###################################################
-xml_parser::xml_parser(const XML_Char* EncodingName, XML_Char NamespaceSeparator) :
+xml_parser::xml_parser(const XML_Char* EncodingName, XML_Char /*NamespaceSeparator*/) :
     document_handler_(0),
     xml_parser_(XML_ParserCreate(EncodingName))
 {
