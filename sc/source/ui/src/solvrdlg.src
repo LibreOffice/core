@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:31:23 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 22:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   solvrdlg.src  $
- //   $Author: vg $
- //     $Date: 2001-05-30 20:31:23 $
- // $Revision: 1.12 $
+ //   $Author: kz $
+ //     $Date: 2001-06-05 22:09:00 $
+ // $Revision: 1.13 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -273,15 +273,15 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ portuguese ] = "Definir variáveis" ;
         Text [ finnish ] = "Määritä oletusarvot" ;
         Text [ danish ] = "Forudindstillinger" ;
-        Text [ french ] = "Définir les variables" ;
+        Text [ french ] = "Définitions" ;
         Text [ swedish ] = "Förinställningar" ;
         Text [ dutch ] = "Standaard" ;
-        Text [ spanish ] = "Variables" ;
-        Text [ english_us ] = "Set defaults" ;
+        Text [ spanish ] = "Predeterminaciones" ;
+        Text [ english_us ] = "Defaults" ;
         Text[ chinese_simplified ] = "Ô¤ÖÃ";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
-        Text[ polish ] = "Ustawienia domy?lne";
-        Text[ japanese ] = "Žw’è";
+        Text[ polish ] = "Ustawienia domyœlne";
+        Text[ japanese ] = "Šù’è’l";
         Text[ chinese_traditional ] = "¹w¸m";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇÝÊÑÇÖíÉ";
         Text[ greek ] = "ÐñïåðéëïãÝò";
