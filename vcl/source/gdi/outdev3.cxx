@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: hdu $ $Date: 2002-12-05 17:07:19 $
+ *  last change: $Author: hdu $ $Date: 2002-12-12 18:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4440,29 +4440,32 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     else
         aOffset.Y() -= mpFontEntry->maMetric.mnAscent + nEmphasisYOff;
 
-    long nEmphasisWidth2     = nEmphasisWidth / 2;
-    long nEmphasisHeight2    = nEmphasisHeight / 2;
+    long nEmphasisWidth2  = nEmphasisWidth / 2;
+    long nEmphasisHeight2 = nEmphasisHeight / 2;
     aOffset += Point( nEmphasisWidth2, nEmphasisHeight2 );
 
     Point aOutPoint;
+    Rectangle aRectangle;
     for( int nStart = 0;;)
     {
-        long nGlyphIndex, nAdvance;
-        if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aOutPoint, nStart, &nAdvance ) )
+        long nGlyphIndex;
+        if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aOutPoint, nStart ) )
             break;
+
+        if( !mpGraphics->GetGlyphBoundRect( nGlyphIndex, true, aRectangle, NULL ) )
+            continue;
 
         if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
         {
-            Point aAdjOffset = aOffset;
-            aAdjOffset.X() += (nAdvance - nEmphasisWidth) / 2;
+            Point aAdjPoint = aOffset;
+            aAdjPoint.X() += aRectangle.Left() + (aRectangle.GetWidth() - nEmphasisWidth) / 2;
             if ( mpFontEntry->mnOrientation )
-                ImplRotatePos( 0, 0, aAdjOffset.X(), aAdjOffset.Y(), mpFontEntry->mnOrientation );
-            aOutPoint += aAdjOffset;
+                ImplRotatePos( 0, 0, aAdjPoint.X(), aAdjPoint.Y(), mpFontEntry->mnOrientation );
+            aOutPoint += aAdjPoint;
             aOutPoint -= Point( nEmphasisWidth2, nEmphasisHeight2 );
             ImplDrawEmphasisMark( rSalLayout.DrawBase().X(),
                                   aOutPoint.X(), aOutPoint.Y(),
-                                  aPolyPoly, bPolyLine,
-                                  aRect1, aRect2 );
+                                  aPolyPoly, bPolyLine, aRect1, aRect2 );
         }
     }
 
@@ -6900,7 +6903,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
                     = static_cast< long >(aPixelRect.Bottom() * fFactor);
             }
 
-            Point aRotatedOfs( mnTextOffX, mnTextOffY );;
+            Point aRotatedOfs( mnTextOffX, mnTextOffY );
             aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
             aPixelRect += aRotatedOfs;
             rRect = PixelToLogic( aPixelRect );
