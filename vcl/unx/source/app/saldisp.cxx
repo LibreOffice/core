@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:25:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2029,7 +2029,7 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             MAKE_CURSOR( null );
             break;
         case POINTER_ARROW:
-            aCur = XCreateFontCursor( pDisp_, XC_top_left_arrow );
+            aCur = XCreateFontCursor( pDisp_, XC_left_ptr );
             break;
         case POINTER_WAIT:
             MAKE_CURSOR( wait_ );
