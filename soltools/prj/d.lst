@@ -4,5 +4,5 @@
 ..\%__SRC%\bin\javadep.exe %_DEST%\bin%_EXT%\javadep.exe
 ..\%__SRC%\bin\javadep %_DEST%\bin%_EXT%\javadep
 ..\%__SRC%\bin\checkdll %_DEST%\bin%_EXT%\checkdll
-..\%__SRC%\bin\cppexe %_DEST%\bin%_EXT%\cpplcc.exe
+..\%__SRC%\bin\cpp.exe %_DEST%\bin%_EXT%\cpplcc.exe
 ..\%__SRC%\bin\cpp %_DEST%\bin%_EXT%\cpp.lcc
