@@ -14,4 +14,6 @@ mkdir: %_DEST%\inc%_EXT%\automation
 ..\%__SRC%\inc\keycodes %_DEST%\bin%_EXT%\keycodes
 ..\%__SRC%\inc\res_type %_DEST%\bin%_EXT%\res_type
 
+..\%COMMON_OUTDIR%\bin\images_tt.zip %COMMON_DEST%\bin%_EXT%\images_tt.zip
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
