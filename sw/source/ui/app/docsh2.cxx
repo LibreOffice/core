@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:31 $
+ *  last change: $Author: jp $ $Date: 2000-09-26 13:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,8 +722,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
             aTmpLst.Insert( &rACW.GetWordList() );
             pAFlags->pAutoCmpltList = &aTmpLst;
 
-            pOApp->GetDispatcher().Execute( SID_AUTO_CORRECT_DLG,
-                                     SFX_CALLMODE_SYNCHRON, &aSwOptions, 0L );
+            SfxViewShell* pViewShell = GetView()
+                                            ? (SfxViewShell*)GetView()
+                                            : SfxViewShell::Current();
+            pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, &aSwOptions, 0L);
 
             rACW.SetLockWordLstLocked( bOldLocked );
 
@@ -1005,7 +1008,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if(RET_YES == nRet)
                     {
                         S F X _DISPATCHER().Execute(SID_SAVEDOC,
-                                    SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
+                                    SFX_CALLMODE_SYNCHRON);
                         // der ReturnValue von SID_SAVEDOC ist etwas schwer verstaendlich
                         if(IsModified())
                             nSlot = 0;
@@ -1268,16 +1271,19 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         SfxStringItem aName( SID_FILE_NAME, aFileName );
                         SfxStringItem aReferer( SID_REFERER, aEmptyStr );
 
-                        SFX_APP()->GetDispatcher().Execute( SID_OPENDOC,
-                            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
-                                            &aName,
-                                            &aReferer,
-                                            0L );
+                        SfxViewShell* pViewShell = GetView()
+                                                ? (SfxViewShell*)GetView()
+                                                : SfxViewShell::Current();
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                                SID_OPENDOC,
+                                SFX_CALLMODE_SYNCHRON,
+                                &aName,
+                                &aReferer,
+                                0L );
                     }
                     else if( !rReq.IsAPI() )
                     {
-                        InfoBox( 0,
-                                    SW_RESSTR( STR_CANTCREATE )).Execute();
+                        InfoBox( 0, SW_RESSTR( STR_CANTCREATE )).Execute();
                     }
                 }
             }
@@ -1498,9 +1504,10 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                     ((aLibName += GetTitle()) += String::CreateFromAscii("].")) += pBasic->GetName();
                     SfxStringItem aStrItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
 
-                    pSrcView->GetViewFrame()->GetDispatcher()->Execute( SID_BASICIDE_LIBREMOVED,
-                                              SFX_CALLMODE_SYNCHRON,
-                                              &aStrItem, 0L );
+                    pSrcView->GetViewFrame()->GetDispatcher()->Execute(
+                                            SID_BASICIDE_LIBREMOVED,
+                                            SFX_CALLMODE_SYNCHRON,
+                                            &aStrItem, 0L );
 
                     // Aus der Standard-Lib werden nur die Module geloescht
                     if( nLibCount )
@@ -1662,6 +1669,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:31  hr
+    initial import
+
     Revision 1.277  2000/09/18 16:05:10  willem.vandorp
     OpenOffice header added.
 
