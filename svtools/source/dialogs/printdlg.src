@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 12:26:52 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ portuguese_brazilian ] = "~Name" ;
         Text [ swedish ] = "~Namn" ;
         Text [ danish ] = "Navn" ;
-        Text [ italian ] = "~Nome" ;
+        Text [ italian ] = "Nome" ;
         Text [ spanish ] = "~Nombre" ;
         Text [ french ] = "~Nom" ;
         Text [ dutch ] = "~Naam" ;
@@ -445,7 +445,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ portuguese_brazilian ] = "~Seiten" ;
         Text [ swedish ] = "~Sidor" ;
         Text [ danish ] = "Sider" ;
-        Text [ italian ] = "~Pagine" ;
+        Text [ italian ] = "Pagine" ;
         Text [ spanish ] = "~Páginas" ;
         Text [ french ] = "P~ages" ;
         Text [ dutch ] = "~Pagina" ;
@@ -545,7 +545,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text [ portuguese_brazilian ] = "E~xemplare" ;
         Text [ swedish ] = "E~xemplar" ;
         Text [ danish ] = "Antal kopier" ;
-        Text [ italian ] = "~Numero di copie" ;
+        Text [ italian ] = "Numero di copie" ;
         Text [ spanish ] = "~Ejemplares" ;
         Text [ french ] = "E~xemplaire(s)" ;
         Text [ dutch ] = "E~xemplaren" ;
@@ -711,6 +711,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
 
 
 
