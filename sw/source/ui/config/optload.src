@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:27:49 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ dutch ] = "Upddate";
         Text[ french ] = "Actualisation";
         Text[ spanish ] = "Actualización";
-        Text[ italian ] = "Aggiornamento";
+        Text[ italian ] = "Aggiorna";
         Text[ danish ] = "Updating";
         Text[ swedish ] = "Uppdatering";
         Text[ polish ] = "Aktualizacja";
@@ -230,7 +230,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ french ] = "Champs et diagrammes";
         Text[ spanish ] = "Campos y diagramas";
         Text[ finnish ] = "Felder und Diagramme aktualisieren";
-        Text[ italian ] = "Aggiorna campi e diagrammi";
+        Text[ italian ] = "Campi e diagrammi";
         Text[ danish ] = "Felter og diagrammer";
         Text[ swedish ] = "Fält och diagram";
         Text[ polish ] = "Pola i wykresy";
@@ -437,7 +437,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ japanese ] = "g‚¤’PˆÊ";
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ finnish ] = "Mittayksiköt" ;
-        Text[ chinese_traditional ] = "­p¶q³æ¦ì";
+        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
         Text[ korean ] = "ÃøÁ¤ ´ÜÀ§";
@@ -469,7 +469,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ english_us ] = "Tab stops";
     Text[ chinese_simplified ] = "ÖÆ±í·û¼ä¸ô";
     Text[ russian ] = "Øàã òàáóëÿöèè";
-        Text[ polish ] = "Odstêp miêdzy tabulatorami";
+        Text[ polish ] = "Tabulatory";
         Text[ japanese ] = "ÀÌŞŠÔŠu";
         Text [ norwegian ] = "Standard tabulatoravstand" ;
         Text [ finnish ] = "Sarkaimet" ;
@@ -516,8 +516,8 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "Zgodnoœæ";
         Text[ portuguese_brazilian ] = "Compatibility";
         Text[ japanese ] = "ŒİŠ·«";
-        Text[ chinese_simplified ] = "ºÍ MS Office ÎÄµµ¼æÈİ";
-        Text[ chinese_traditional ] = "©M MS Office ¤å¥ó¬Û®e";
+        Text[ chinese_simplified ] = "¼æÈİ";
+        Text[ chinese_traditional ] = "¬Û®e";
     Text[ arabic ] = "ÊæÇİŞ";
     Text[ greek ] = "Óõìâáôüôçôá";
     Text[ korean ] = "È£È¯";
@@ -545,7 +545,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs and tables";
         Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Ì’i—ŠÔŠu‚Æ•\\ŠÔŠu‚ğ‰ÁZ‚·‚é";
         Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂäµÄ¼°±í¸ñµÄ¼ä¸ôÏà¼Ó";
-        Text[ chinese_traditional ] = "¦b·í«e¤å¥ó¤ºÂX¤j©Ò¦³¬q¸¨©Mªí®æ¤§¶¡ªº¶¡¹j";
+        Text[ chinese_traditional ] = "¦b·í«e¤å¥ó¤º©Ò¦³¬q¸¨¶¡¹j¤Îªí®æ¶¡¹j¬Û¥[";
         Text[ arabic ] = "ÅÖÇİÉ ãÓÇİÉ ÇáÊÈÇÚÏ Åáì ßá İŞÑÇÊ æÌÏÇæá ÇáãÓÊäÏ ÇáÍÇáí";
         Text[ greek ] = "¢èñïéóìá üëùí ôùí ~áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ôùí ğéíÜêùí óôï ôñİ÷ïí İããñáöï";
         Text[ korean ] = "ÇöÀç ¹®¼­ÀÇ ¸ğµç ´Ü¶ô°ú Ç¥ °£°İ ÇÕ»ê";
@@ -560,7 +560,7 @@ TabPage TP_OPTLOAD_PAGE
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "A~bsatz- und Tabellenabstände an Seitenanfängen addieren";
         Text [ English ] = "Add distances at the beginning of pages" ;
-        Text[ english_us ] = "Add paragraph and table spacing to start of pages";
+        Text[ english_us ] = "Add paragraph and table spacing at tops of pages";
         Text[ portuguese ] = "A~dicionar espaços de parágrafos e tabelas no início das páginas";
         Text[ russian ] = "Ñëîæèòü èíòåğâàëû àáçàöåâ è òàáëèö â íà÷àëå ñòğàíèöû";
         Text[ greek ] = "¢èñïéóìá ôùí áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ôùí ğéíÜêùí óôçí áñ÷Ş ôçò óåëßäáò";
@@ -595,7 +595,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ dutch ] = "Align tab stop position";
         Text[ french ] = "Aligner la position de tabulation";
         Text[ spanish ] = "Ajustar posición de tabulador";
-        Text[ italian ] = "Align tab stop position";
+        Text[ italian ] = "Allinea posizione tabulazione";
         Text[ danish ] = "Align tab stop position";
         Text[ swedish ] = "Justera ~tabulatorposition";
         Text[ polish ] = "Wyrównaj pozycjê tabulatora";
@@ -841,7 +841,7 @@ TabPage TP_OPTCAPTION_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "±êÇ©";
         Text[ russian ] = "Ïîäïèñü";
-        Text[ polish ] = "Opis";
+        Text[ polish ] = "Etykieta";
         Text[ japanese ] = "}•\\”Ô†(~C)";
         Text[ chinese_traditional ] = "¼ĞÅÒ";
         Text[ arabic ] = "ÇáÊÓãíÉ ÇáÊæÖíÍíÉ";
@@ -1207,7 +1207,7 @@ TabPage TP_OPTCAPTION_PAGE
     };
     Text[ chinese_simplified ] = "±êÇ©";
     Text[ russian ] = "Ïîäïèñü";
-    Text[ polish ] = "Opis";
+    Text[ polish ] = "Etykieta";
     Text[ japanese ] = "}•\\”Ô†";
     Text[ chinese_traditional ] = "¼ĞÅÒ";
     Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
@@ -1509,5 +1509,6 @@ ItemList [ catalan ] =
         < "Point" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
