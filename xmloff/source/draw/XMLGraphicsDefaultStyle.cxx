@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLGraphicsDefaultStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_PROPERTIES;
+using ::xmloff::token::XML_TEXT_PROPERTIES;
+using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
+using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 
 // ---------------------------------------------------------------------
 
@@ -122,11 +124,21 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix && IsXMLToken( rLocalName, XML_PROPERTIES ) )
+    if( XML_NAMESPACE_STYLE == nPrefix )
     {
-        UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
-            pContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList, GetProperties(), xImpPrMap );
+        sal_uInt32 nFamily = 0;
+        if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_GRAPHIC;
+        if( nFamily )
+        {
+            UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( xImpPrMap.is() )
+                pContext = new XMLShapePropertySetContext( GetImport(), nPrefix, rLocalName, xAttrList, nFamily, GetProperties(), xImpPrMap );
+        }
     }
 
     if( !pContext )
