@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:39:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@ ModalDialog DLG_ASS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 272 , 190 ) ;
-    Text = "AutoPilot Prдsentation" ;
-    Text [ ENGLISH ]= "Autopilot Presentation" ;
+    Text = "Prдsentations-Assistent" ;
+    Text[ english_us ] = "Presentation Wizard";
 
     HelpId = HID_SD_AUTOPILOT_PAGE1 ;
     Moveable = TRUE ;
@@ -123,9 +123,8 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 144 , 154  );
         Size = MAP_APPFONT ( 122 , 10 );
         TabStop = TRUE;
-        Text = "Diesen Dialog ~nicht mehr zeigen" ;
-        Text [ ENGLISH ] = "Do not ~show this dialog again" ;
-        Text [ english_us ] = "~Do not show this dialog again" ;
+        Text = "Diesen Assistenten ~nicht mehr zeigen" ;
+        Text [ english_us ] = "~Do not show this wizard again" ;
         Text[ portuguese ] = "~Nгo mostrar mais esta caixa de diбlogo";
         Text[ russian ] = "Этот диалог впредь не показывать";
         Text[ dutch ] = "Dit dialoogvenster ~niet meer weergeven";
@@ -1455,7 +1454,6 @@ ModalDialog DLG_ASS
         Text[ hungarian ] = "~KГ©sz";
         Text[ slovenian ] = "~Ustvari";
     };
-    Text[ english_us ] = "AutoPilot Presentation";
     Text[ portuguese ] = "AutoPiloto Apresentaзгo";
     Text[ russian ] = "Мастер презентаций";
     Text[ dutch ] = "AutoPiloot Presentatie";
