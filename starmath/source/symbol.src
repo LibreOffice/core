@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:46:15 $
+ *  last change: $Author: kz $ $Date: 2001-08-10 20:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1456,8 +1456,8 @@ Resource RID_LOCALIZED_NAMES
         < "에타" ; > ;
         < "쎄타" ; > ;
         < "쎄타" ; > ;
-        < "제타" ; > ;
-        < "제타" ; > ;
+        < "요타" ; > ;
+        < "요타" ; > ;
         < "카파" ; > ;
         < "카파" ; > ;
         < "람다" ; > ;
@@ -1470,7 +1470,7 @@ Resource RID_LOCALIZED_NAMES
         < "크사이" ; > ;
         < "오미크론" ; > ;
         < "오미크론" ; > ;
-        < "PI" ; > ;
+        < "파이" ; > ;
         < "파이" ; > ;
         < "로" ; > ;
         < "로" ; > ;
@@ -1495,16 +1495,16 @@ Resource RID_LOCALIZED_NAMES
         < "바시그마" ; > ;
         < "바화이" ; > ;
         < "요소" ; > ;
-        < "요소 없슴" ; > ;
+        < "요소 없음" ; > ;
         < "더 작음" ; > ;
-        < "gro?egen" ; > ;
+        < "더 큼" ; > ;
         < "다음과 같지 않음" ; > ;
         < "EXACT" ; > ;
         < "진행" ; > ;
         < "무한대" ; > ;
         < "각도" ; > ;
         < "1000분율" ; > ;
-        < "와" ; > ;
+        < "AND" ; > ;
         < "OR" ; > ;
     };
     ItemList [ chinese_simplified ] =
@@ -1923,6 +1923,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
