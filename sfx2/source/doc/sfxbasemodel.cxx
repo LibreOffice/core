@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-07-31 10:02:50 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/salctype.hxx>
 #include <svtools/printdlg.hxx>
+#include <sot/clsids.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -457,6 +458,7 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                                 static_cast< XCLOSEBROADCASTER*     > ( this )  ,
                                             static_cast< XVIEWDATASUPPLIER*     > ( this )  ,
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
+                                               static_cast< XUNOTUNNEL*             > ( this )  ,
                                                static_cast< XEVENTSSUPPLIER*        > ( this )  ) ;
     }
     // If searched interface supported by this class ...
@@ -535,6 +537,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XTRANSFERABLE          >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XPRINTJOBBROADCASTER   >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XUNOTUNNEL             >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XCLOSEBROADCASTER      >*)NULL ) ,
                                                          aTypeCollectionFirst.getTypes()                                   );
 
@@ -928,7 +931,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
             SFX_ITEMSET_ARG( &aSet, pItem, SfxStringItem, SID_FILTER_NAME, sal_False );
             if ( pItem )
                 m_pData->m_pObjectShell->GetMedium()->SetFilter(
-                    m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter( pItem->GetValue() ) );
+                    m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( pItem->GetValue() ) );
         }
     }
 
@@ -2655,5 +2658,21 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const ::com::sun::star::uno:
         return;
 
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XPRINTJOBLISTENER >*)0), xListener );
+}
+
+sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !impl_isDisposed() && GetObjectShell() )
+    {
+        SvGlobalName aName;
+        aName.MakeFromMemory( (void*) aIdentifier.getConstArray() );
+        if ( aName == SvGlobalName( SO3_GLOBAL_CLASSID ) )
+             return (sal_Int64)(sal_Int32)(SvObject*)GetObjectShell();
+        else if ( aName == SvGlobalName( SFX_GLOBAL_CLASSID ) )
+             return (sal_Int64)(sal_Int32)(SfxObjectShell*)GetObjectShell();
+    }
+
+    return 0;
 }
 
