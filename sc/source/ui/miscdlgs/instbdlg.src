@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:23:47 $
+ *  last change: $Author: nn $ $Date: 2001-03-06 16:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     RadioButton BTN_NEW
     {
         Pos = MAP_APPFONT ( 12 , 58 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
         Text = "Neu ~erstellen" ;
         Text [ ENGLISH ] = "~Create new" ;
         Text [ DANISH ] = "Opret nyt" ;
@@ -108,7 +108,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     RadioButton BTN_FROMFILE
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
         Text = "~Aus Datei erstellen" ;
         Text [ ENGLISH ] = "F~rom file" ;
         Text [ DANISH ] = "Opret fra fil" ;
@@ -247,7 +247,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     RadioButton RB_BEHIND
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 115 , 10 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
         Text = "~Nach aktueller Tabelle" ;
         Text [ ENGLISH ] = "After selected sheet" ;
         TabStop = TRUE ;
@@ -274,7 +274,7 @@ ModalDialog RID_SCDLG_INSERT_TABLE
     RadioButton RB_BEFORE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 101 , 10 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
         Text = "~Vor aktueller Tabelle" ;
         Text [ ENGLISH ] = "Before selected sheet" ;
         TabStop = TRUE ;
