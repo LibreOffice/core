@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:49:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ chinese_traditional ] = "Äæ®æ¦¡(~F)...";
             Text[ arabic ] = "ÊäÓíÞ ÇáÃÚãÏÉ...";
             Text[ greek ] = "Ìïñ~öïðïßçóç óôÞëçò...";
-            Text[ korean ] = "¿­ Æ÷¸ËÆÃ(~F)...";
+            Text[ korean ] = "¿­ Æ÷¸ËÆÃ...";
             Text[ turkish ] = "Sütun formatý...";
             Text[ catalan ] = "Formateado de ~columnas...";
         };
@@ -347,7 +347,7 @@ String STR_VIEW_TITLE
     Text[ polish ] = "Widok #";
     Text[ portuguese_brazilian ] = "View #";
     Text[ japanese ] = "ËÞ­° #";
-    Text[ korean ] = "View #";
+    Text[ korean ] = "Àü¸é #";
     Text[ chinese_simplified ] = "ÊÓÍ¼ #";
     Text[ chinese_traditional ] = "ÀËµø #";
     Text[ turkish ] = "View #";
@@ -355,6 +355,7 @@ String STR_VIEW_TITLE
     Text[ catalan ] = "View #";
     Text[ finnish ] = "Ansicht #";
 };
+
 
 
 
