@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:37:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1268,13 +1268,15 @@ BOOL ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
 
 BOOL ScColumn::TestInsertRow( SCSIZE nSize ) const
 {
-    //  AttrArray testet nur zusammengefasste
+    //  AttrArray only looks for merged cells
 
     if ( pItems && nCount )
-        return ( pItems[nCount-1].nRow <= MAXROW-nSize && pAttrArray->TestInsertRow( nSize ) );
+        return ( nSize <= MAXROW &&
+                 pItems[nCount-1].nRow <= MAXROW-(SCROW)nSize && pAttrArray->TestInsertRow( nSize ) );
     else
         return pAttrArray->TestInsertRow( nSize );
 
+#if 0
     //!     rausgeschobene Attribute bei Undo beruecksichtigen
 
     if ( nSize > static_cast<SCSIZE>(MAXROW) )
@@ -1288,6 +1290,7 @@ BOOL ScColumn::TestInsertRow( SCSIZE nSize ) const
         return ( pItems[nVis-1].nRow <= MAXROW-nSize );
     else
         return TRUE;
+#endif
 }
 
 
