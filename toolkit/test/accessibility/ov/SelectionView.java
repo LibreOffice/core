@@ -42,18 +42,21 @@ class SelectionView
     extends ListeningObjectView
     implements ActionListener
 {
-    static public ObjectView Create (XAccessibleContext xContext)
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
     {
         XAccessibleSelection xSelection = (XAccessibleSelection)UnoRuntime.queryInterface(
                 XAccessibleSelection.class, xContext);
         if (xSelection != null)
-            return new SelectionView();
+            return new SelectionView(aContainer);
         else
             return null;
     }
 
-    public SelectionView ()
+    public SelectionView (ObjectViewContainer aContainer)
     {
+        super (aContainer);
         Layout();
     }
 
