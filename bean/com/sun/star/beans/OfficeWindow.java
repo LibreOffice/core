@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeWindow.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import com.sun.star.awt.XWindowPeer;
  * The concreate implementation of the OfficeWindow extends an
  * approperate type of visual component (java.awt.Canvas for local
  * and java.awt.Container for remote).
+ * @deprecated
  */
 public interface OfficeWindow
 {

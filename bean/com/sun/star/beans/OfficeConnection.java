@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeConnection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.uno.XComponentContext;
 /**
  * This abstract class reprecents a connection to the office
  * application.
+ * @deprecated
  */
 public interface OfficeConnection
     extends XComponent
