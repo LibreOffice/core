@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:27:22 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ struct SvxMSDffTextRectangles;
 class SvxMSDffAdjustmentHandle;
 class SvxMSDffAutoShape
 {
+        MSFilterTracer*             pTracer;
         MSO_SPT                     eSpType;
 
         sal_Int32                   nCoordWidth;
@@ -141,7 +142,7 @@ class SvxMSDffAutoShape
         static MSO_SPT              GetShapeTypeFromSdrObject( const SdrObject* );
 
         SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvStream&,
-                            DffObjData& rObjDat, Rectangle& rSnapRect, sal_Int32 nFix16Angle );
+                            DffObjData& rObjDat, Rectangle& rSnapRect, sal_Int32 nFix16Angle, MSFilterTracer* pTracer );
         ~SvxMSDffAutoShape();
 };
 
