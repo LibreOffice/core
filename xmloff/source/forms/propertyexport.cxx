@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:49:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ namespace xmloff
             {
                 DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
 
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
                 const ::rtl::OUString sPropertyName = *aProperty;
     #endif
                 // if the property state is DEFAULT, it does not need to be written
