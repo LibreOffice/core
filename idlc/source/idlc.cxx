@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:47:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #include "idlc/astdeclaration.hxx"
 #include "idlc/asttype.hxx"
 #include "idlc/asttypedef.hxx"
+
+#include "osl/diagnose.h"
 
 using namespace ::rtl;
 
@@ -301,37 +303,17 @@ Idlc* SAL_CALL setIdlc(Options* pOptions)
     return pStaticIdlc;
 }
 
-sal_Bool SAL_CALL canBeRedefined(AstDeclaration *pDecl)
-{
-    switch (pDecl->getNodeType())
-    {
-        case NT_module:
-        case NT_constants:
-        case NT_interface:
-        case NT_const:
-        case NT_exception:
-        case NT_parameter:
-        case NT_enum_val:
-        case NT_array:
-        case NT_sequence:
-        case NT_union:
-        case NT_struct:
-        case NT_enum:
-        case NT_typedef:
-//          return sal_True;
-        case NT_union_branch:
-        case NT_member:
-        case NT_attribute:
-        case NT_operation:
-        case NT_predefined:
-        default:
-            return sal_False;
-    }
-}
-
-AstType const * resolveTypedefs(AstType const * type) {
-    while (type->getNodeType() == NT_typedef) {
-        type = static_cast< AstTypeDef const * >(type)->getBaseType();
+AstDeclaration const * resolveTypedefs(AstDeclaration const * type) {
+    if (type != 0) {
+        while (type->getNodeType() == NT_typedef) {
+            type = static_cast< AstTypeDef const * >(type)->getBaseType();
+        }
     }
     return type;
+}
+
+AstInterface const * resolveInterfaceTypedefs(AstType const * type) {
+    AstDeclaration const * decl = resolveTypedefs(type);
+    OSL_ASSERT(decl->getNodeType() == NT_interface);
+    return static_cast< AstInterface const * >(decl);
 }
