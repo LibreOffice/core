@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-06 15:44:11 $
+ *  last change: $Author: cd $ $Date: 2001-11-19 16:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #define BOOTSTRAP_ITEM_PRODUCT_KEY          "ProductKey"
 #define BOOTSTRAP_ITEM_VERSIONFILE          "VersionFile"
 #define BOOTSTRAP_ITEM_LOGO                 "Logo"
+#define BOOTSTRAP_ITEM_BUILDID              "buildid"
 
 #define BOOTSTRAP_ITEM_BASEINSTALLATION     "BaseInstallation"
 #define BOOTSTRAP_ITEM_USERINSTALLATION     "UserInstallation"
@@ -695,6 +696,14 @@ OUString Bootstrap::getLogoData(OUString const& _sDefault)
     OUString const csLogoItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_LOGO));
 
     return data().getBootstrapValue( csLogoItem, _sDefault );
+}
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
+{
+    OUString const csBuildIdItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_BUILDID));
+
+    return data().getBootstrapValue( csBuildIdItem, _sDefault );
 }
 // ---------------------------------------------------------------------------------------
 
