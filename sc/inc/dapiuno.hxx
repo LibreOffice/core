@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:05:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,18 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDAUTOSHOWINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTINFO_HPP_
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
@@ -535,6 +547,14 @@ public:
     void setCurrentPage(const rtl::OUString& sPage);
     sal_Bool getUseCurrentPage() const;
     void setUseCurrentPage(sal_Bool bUse);
+    com::sun::star::sheet::DataPilotFieldAutoShowInfo getAutoShowInfo();
+    void setAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo);
+    com::sun::star::sheet::DataPilotFieldLayoutInfo getLayoutInfo();
+    void setLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo& aInfo);
+    com::sun::star::sheet::DataPilotFieldReference getReference();
+    void setReference(const com::sun::star::sheet::DataPilotFieldReference& aInfo);
+    com::sun::star::sheet::DataPilotFieldSortInfo getSortInfo();
+    void setSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
