@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2001-04-06 14:27:08 $
+#   last change: $Author: hjs $ $Date: 2001-06-22 16:06:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ TYPE*=type
 RENAME*=ren
 COPY*=copy
 COPYUPDATE=/u
+COPYRECURSE=/s
 MKDIR*=mkdir
 MKDIRHIER=$(MKDIR) 
 ECHON*=echos
@@ -80,6 +81,7 @@ GREP*=$(ENV_TOOLS)$/grep32.exe
 FIND*=$(BUILD_TOOLS)$/find.exe
 LS*=$(BUILD_TOOLS)$/ls.exe
 GNUCOPY*=$(BUILD_TOOLS)$/cp.exe
+GNUMAKE*=$(ENV_TOOLS)$/gnumake.exe
 #wraper for solenv\bin\mkdir.pl to fix mkdir /p problem
 MKDIR=+$(SOLARENV)$/bin$/mkdir.btm
 TOUCH*=$(BUILD_TOOLS)$/touch.exe
@@ -104,6 +106,7 @@ AWK=awk
 PERL=perl
 TYPE=cat
 COPY=cp -f
+COPYRECURSE=-r
 GNUCOPY=cp
 TOUCH=touch
 RENAME=mv
@@ -120,10 +123,16 @@ AWK=awk
 PERL=perl
 TYPE=cat
 COPY=cp -f
+COPYRECURSE=-r
 .IF "$(OS)"=="SOLARIS"
 GNUCOPY=gnucp
 .ELSE			# "$(OS)"=="SOLARIS"
 GNUCOPY=cp
+.ENDIF			# "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="LINUX"
+GNUMAKE=make
+.ELSE			# "$(OS)"=="SOLARIS"
+GNUMAKE=gmake
 .ENDIF			# "$(OS)"=="SOLARIS"
 TOUCH=touch
 RENAME=mv
