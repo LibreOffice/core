@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 22:11:09 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ String STR_DESCRIPTION_SCALC_DOC
 };
 String STR_DESCRIPTION_SIMPRESS_DOC
 {
-    Text [ de ] = "%PRODUCTNAME Prï¿½sentation" ;
+    Text [ de ] = "%PRODUCTNAME Präsentation" ;
     Text [ en-US ] = "%PRODUCTNAME presentation" ;
 };
 String STR_DESCRIPTION_SWRITER_DOC
@@ -311,7 +311,7 @@ String STR_DESCRIPTION_TEXTFILE
 };
 String STR_DESCRIPTION_LINK
 {
-    Text [ de ] = "Verknï¿½pfung" ;
+    Text [ de ] = "Verknüpfung" ;
     Text [ en-US ] = "Link" ;
 };
 String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
@@ -356,7 +356,7 @@ String STR_DESCRIPTION_FACTORY_CALC
 };
 String STR_DESCRIPTION_FACTORY_IMPRESS
 {
-    Text [ de ] = "Prï¿½sentation";
+    Text [ de ] = "Präsentation";
     Text [ en-US ] = "Presentation";
 };
 String STR_DESCRIPTION_FACTORY_DRAW
@@ -391,7 +391,7 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
 };
 String STR_DESCRIPTION_IMPRESS_TEMPLATE
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Prï¿½sentationsvorlage" ;
+    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentationsvorlage" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template" ;
 };
 String STR_DESCRIPTION_WRITER_TEMPLATE
@@ -463,7 +463,7 @@ String STR_DESCRIPTION_SXCALC_DOC
 
 String STR_DESCRIPTION_SXIMPRESS_DOC
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Prï¿½sentation" ;
+    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentation" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
 };
 
@@ -506,7 +506,7 @@ String STR_DESCRIPTION_OO_GLOBAL_DOC
 };
 String STR_DESCRIPTION_OO_IMPRESS_DOC
 {
-    Text [ de ] = "OpenDocument Prï¿½sentation" ;
+    Text [ de ] = "OpenDocument Präsentation" ;
     Text [ en-US ] = "OpenDocument Presentation" ;
 };
 String STR_DESCRIPTION_OO_CALC_DOC
@@ -531,7 +531,7 @@ String STR_DESCRIPTION_OO_DRAW_TEMPLATE
 };
 String STR_DESCRIPTION_OO_IMPRESS_TEMPLATE
 {
-    Text [ de ] = "OpenDocument Prï¿½sentationsdokumentvorlage" ;
+    Text [ de ] = "OpenDocument Präsentationsdokumentvorlage" ;
     Text [ en-US ] = "OpenDocument Presentation Template" ;
 };
 String STR_DESCRIPTION_OO_WRITER_TEMPLATE
