@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:59:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
@@ -224,7 +224,7 @@ typedef ::cppu::ImplHelper10    <   ::com::sun::star::frame::XModel
                             ,   ::com::sun::star::sdb::XFormDocumentsSupplier
                             ,   ::com::sun::star::sdb::XReportDocumentsSupplier
                             ,   ::com::sun::star::util::XCloseable
-                            ,   ::drafts::com::sun::star::ui::XUIConfigurationManagerSupplier
+                            ,   ::com::sun::star::ui::XUIConfigurationManagerSupplier
                             ,   ::com::sun::star::document::XDocumentSubStorageSupplier
                             , ::com::sun::star::embed::XTransactionListener
                             >   ODatabaseSource_OfficeDocument;
@@ -299,7 +299,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>                   m_xSharedConnectionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>                     m_xCurrentController;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                       m_xStorage;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >              m_xDocEventBroadcaster;
 
 
@@ -506,7 +506,7 @@ public:
     virtual void SAL_CALL removeCloseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
 // XUIConfigurationManagerSupplier
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
 // XDocumentSubStorageSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode ) throw (::com::sun::star::uno::RuntimeException);
