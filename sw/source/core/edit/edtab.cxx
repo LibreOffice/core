@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 18:48:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ FASTBOOL SwEditShell::IsTextToTableAvailable() const
 {
     FASTBOOL bOnlyText = FALSE;
     FOREACHPAM_START(this)
-        if( PCURCRSR->HasMark() )
+        if( PCURCRSR->HasMark() && *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() )
         {
             bOnlyText = TRUE;
 
