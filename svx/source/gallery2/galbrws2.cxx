@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 11:31:21 $
+ *  last change: $Author: ka $ $Date: 2002-07-08 15:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,6 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 mpPreview->PreviewSound( INetURLObject() );
 
                 mpIconView->Show();
-                mpIconView->GrabFocus();
 
                 maViewBox.EnableItem( TBX_ID_ICON, TRUE );
                 maViewBox.EnableItem( TBX_ID_LIST, TRUE );
@@ -721,7 +720,6 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
                 mpPreview->PreviewSound( INetURLObject() );
 
                 mpListView->Show();
-                mpListView->GrabFocus();
 
                 maViewBox.EnableItem( TBX_ID_ICON, TRUE );
                 maViewBox.EnableItem( TBX_ID_LIST, TRUE );
@@ -749,7 +747,6 @@ void GalleryBrowser2::SetMode( GalleryBrowserMode eMode )
 
                     mpPreview->SetGraphic( aGraphic );
                      mpPreview->Show();
-                    mpPreview->GrabFocus();
 
                     if( mpCurTheme && mpCurTheme->GetObjectKind( nPos ) == SGA_OBJ_SOUND )
                         mpPreview->PreviewSound( mpCurTheme->GetObjectURL( nPos ) );
