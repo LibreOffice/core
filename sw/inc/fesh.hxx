@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:22:47 $
+ *  last change: $Author: ama $ $Date: 2002-05-28 14:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,11 @@ struct SwGetCurColNumPara
 #define SW_ENTER_GROUP  2
 #define SW_LEAVE_FRAME  4
 
+#define SW_MOVE_UP      0
+#define SW_MOVE_DOWN    1
+#define SW_MOVE_LEFT    2
+#define SW_MOVE_RIGHT   3
+
 class SwFEShell : public SwEditShell
 {
     SdrViewUserMarker *pChainFrom,
@@ -263,6 +268,8 @@ public:
     // includen von SVDRAW.HXX zu ersparen als int deklariert.
     int IsObjSelectable( const Point& rPt );
     int IsInsideSelectedObj( const Point& rPt );
+
+    sal_Bool MoveAnchor( USHORT nDir );
 
     //Returnwerte siehe oben FrmType.
     //pPt: Crsr bzw. DocPos; bStopAtFly: Bei Flys anhalten oder ueber den Anchor weitergehen

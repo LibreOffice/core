@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:32:21 $
+ *  last change: $Author: ama $ $Date: 2002-05-28 14:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,19 @@
 #endif
 #include "shellres.hxx"
 
+class SwSdrHdl : public SdrHdl
+{
+public:
+    SwSdrHdl(const Point& rPnt ) : SdrHdl( rPnt, HDL_ANCHOR ) {}
+    virtual BOOL IsFocusHdl() const;
+};
+
+BOOL SwSdrHdl::IsFocusHdl() const
+{
+    if( HDL_ANCHOR == eKind )
+        return TRUE;
+    return SdrHdl::IsFocusHdl();
+}
 
 const SwFrm *lcl_FindAnchor( const SdrObject *pObj, FASTBOOL bAll )
 {
@@ -195,7 +208,7 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    aHdl.AddHdl(new SdrHdl(aPos ,HDL_ANCHOR));
+    aHdl.AddHdl( new SwSdrHdl( aPos ) );
 }
 
 /*************************************************************************

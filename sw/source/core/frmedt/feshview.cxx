@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:20:30 $
+ *  last change: $Author: ama $ $Date: 2002-05-28 14:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,36 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
     return bRet;
 }
 
+// First shot, has to be modified...
+
+sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
+{
+    const SdrMarkList* pMrkList;
+    if( !Imp()->GetDrawView() ||
+        0 == (pMrkList = &Imp()->GetDrawView()->GetMarkList()) ||
+        1 != pMrkList->GetMarkCount())
+        return sal_False;
+    SwFrm* pOld;
+    SdrObject *pObj = pMrkList->GetMark( 0 )->GetObj();
+    if( pObj->IsWriterFlyFrame() )
+        pOld = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchor();
+    else
+        pOld = ((SwDrawContact*)GetUserCall(pObj))->GetAnchor();
+    if( pOld )
+    {
+        Point aOld( pOld->Frm().Pos() );
+        Point aPt( aOld );
+        switch ( nDir ) {
+            case SW_MOVE_UP: aPt.Y() -= 10; break;
+            case SW_MOVE_DOWN: aPt.Y() += pOld->Frm().Height() + 10; break;
+            case SW_MOVE_LEFT: aPt.X() -= 10; break;
+            case SW_MOVE_RIGHT: aPt.X() += pOld->Frm().Width() + 10; break;
+        }
+        aPt = FindAnchorPos( aPt, sal_True );
+        return aPt != aOld;
+    }
+    return sal_False;
+}
 
 /*************************************************************************
 |*
