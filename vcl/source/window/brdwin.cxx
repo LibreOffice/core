@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:45:34 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 
 using namespace ::com::sun::star::uno;
 
+// useful caption height for title bar buttons
+#define MIN_CAPTION_HEIGHT 18
+
 // =======================================================================
 
 static void ImplGetPinImage( USHORT nStyle, BOOL bPinIn, Image& rImage )
@@ -175,8 +178,33 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
                                         const Rectangle& rRect,
                                         SymbolType eSymbol, USHORT nState )
 {
-    DecorationView aDecoView( pDev );
-    Rectangle aTempRect = aDecoView.DrawButton( rRect, nState );
+    BOOL bMouseOver = (nState & BUTTON_DRAW_HIGHLIGHT) != 0;
+    nState &= ~BUTTON_DRAW_HIGHLIGHT;
+
+    Rectangle aTempRect;
+    Window *pWin = dynamic_cast< Window* >(pDev);
+    if( pWin )
+    {
+        if( bMouseOver )
+        {
+            // provide a bright background for selection effect
+            pWin->SetFillColor( pDev->GetSettings().GetStyleSettings().GetWindowColor() );
+            pWin->SetLineColor();
+            pWin->DrawRect( rRect );
+            pWin->DrawSelectionBackground( rRect, 2, nState & BUTTON_DRAW_PRESSED,
+                                            TRUE, FALSE );
+        }
+        aTempRect = rRect;
+        aTempRect.nLeft+=3;
+        aTempRect.nRight-=4;
+        aTempRect.nTop+=3;
+        aTempRect.nBottom-=4;
+    }
+    else
+    {
+        DecorationView aDecoView( pDev );
+        aTempRect = aDecoView.DrawButton( rRect, nState|BUTTON_DRAW_FLAT );
+    }
     ImplDrawBrdWinSymbol( pDev, aTempRect, eSymbol );
 }
 
@@ -217,6 +245,13 @@ BOOL ImplBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 USHORT ImplBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelpRect )
 {
     return 0;
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle ImplBorderWindowView::GetMenuRect() const
+{
+    return Rectangle();
 }
 
 // -----------------------------------------------------------------------
@@ -267,6 +302,8 @@ USHORT ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const Poin
             return BORDERWINDOW_HITTEST_CLOSE;
         else if ( pData->maRollRect.IsInside( rPos ) )
             return BORDERWINDOW_HITTEST_ROLL;
+        else if ( pData->maMenuRect.IsInside( rPos ) )
+            return BORDERWINDOW_HITTEST_MENU;
         else if ( pData->maDockRect.IsInside( rPos ) )
             return BORDERWINDOW_HITTEST_DOCK;
         else if ( pData->maHideRect.IsInside( rPos ) )
@@ -330,6 +367,11 @@ USHORT ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const Poin
 
 BOOL ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
 {
+    USHORT oldCloseState = pData->mnCloseState;
+    USHORT oldMenuState = pData->mnMenuState;
+    pData->mnCloseState &= ~BUTTON_DRAW_HIGHLIGHT;
+    pData->mnMenuState &= ~BUTTON_DRAW_HIGHLIGHT;
+
     Point aMousePos = rMEvt.GetPosPixel();
     USHORT nHitTest = ImplHitTest( pData, aMousePos );
     PointerStyle ePtrStyle = POINTER_ARROW;
@@ -349,7 +391,17 @@ BOOL ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
         ePtrStyle = POINTER_WINDOW_NESIZE;
     else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOMLEFT )
         ePtrStyle = POINTER_WINDOW_SWSIZE;
+    else if ( nHitTest & BORDERWINDOW_HITTEST_CLOSE )
+        pData->mnCloseState |= BUTTON_DRAW_HIGHLIGHT;
+    else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
+        pData->mnMenuState |= BUTTON_DRAW_HIGHLIGHT;
     pData->mpBorderWindow->SetPointer( Pointer( ePtrStyle ) );
+
+    if( pData->mnCloseState != oldCloseState )
+        pData->mpBorderWindow->Invalidate( pData->maCloseRect );
+    if( pData->mnMenuState != oldMenuState )
+        pData->mpBorderWindow->Invalidate( pData->maMenuRect );
+
     return TRUE;
 }
 
@@ -384,6 +436,18 @@ BOOL ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
                 pData->mnDockState |= BUTTON_DRAW_PRESSED;
                 DrawWindow( BORDERWINDOW_DRAW_DOCK );
             }
+            else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_MENU )
+            {
+                pData->mnMenuState |= BUTTON_DRAW_PRESSED;
+                DrawWindow( BORDERWINDOW_DRAW_MENU );
+
+                // call handler already on mouse down
+                if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
+                {
+                    SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
+                    pClientWindow->TitleButtonClick( TITLE_BUTTON_MENU );
+                }
+            }
             else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_HIDE )
             {
                 pData->mnHideState |= BUTTON_DRAW_PRESSED;
@@ -403,20 +467,6 @@ BOOL ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
             {
                 if ( rMEvt.GetClicks() == 1 )
                 {
-                    // Bei DockingWindows wollen wir Docking
-                    if ( (pData->mnHitTest & BORDERWINDOW_HITTEST_TITLE) &&
-                         pBorderWindow->ImplGetClientWindow()->ImplGetClientWindow() &&
-                         pBorderWindow->ImplGetClientWindow()->ImplGetClientWindow()->ImplIsDockingWindow() )
-                    {
-                        if ( !pBorderWindow->mbRollUp )
-                        {
-                            Point aMousePos = pData->maMouseOff;
-                            aMousePos.X() -= pData->mnLeftBorder;
-                            aMousePos.Y() -= pData->mnTopBorder;
-                            bTracking = !(((DockingWindow*)(pBorderWindow->ImplGetClientWindow()->ImplGetClientWindow()))->ImplStartDocking( aMousePos ));
-                        }
-                    }
-
                     if ( bTracking )
                     {
                         Point   aPos         = pBorderWindow->GetPosPixel();
@@ -445,7 +495,7 @@ BOOL ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
                         if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                         {
                             SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
-                            if ( pBorderWindow->mbDockBtn )
+                            if ( TRUE /*pBorderWindow->mbDockBtn*/ )   // always perform docking on double click, no button required
                                 pClientWindow->TitleButtonClick( TITLE_BUTTON_DOCKING );
                             else if ( pBorderWindow->GetStyle() & WB_ROLLABLE )
                             {
@@ -464,15 +514,7 @@ BOOL ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
             {
                 pData->mbDragFull = FALSE;
                 if ( nDragFullTest )
-                {
-                    if ( pBorderWindow->GetSettings().GetStyleSettings().GetDragFullOptions() & nDragFullTest )
-                        pData->mbDragFull = TRUE;
-                    else
-                    {
-                        pBorderWindow->ImplUpdateAll();
-                        pBorderWindow->ImplGetFrameWindow()->ImplUpdateAll();
-                    }
-                }
+                    pData->mbDragFull = TRUE;   // always fulldrag for proper docking, ignore system settings
                 pBorderWindow->StartTracking();
             }
             else if ( bHitTest )
@@ -504,8 +546,15 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 // Bei Abbruch kein Click-Handler rufen
                 if ( !rTEvt.IsTrackingCanceled() )
                 {
-                    if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
-                        ((SystemWindow*)pBorderWindow->ImplGetClientWindow())->Close();
+                    // dispatch to correct window type (why is Close() not virtual ??? )
+                    // TODO: make Close() virtual
+                    Window *pWin = pBorderWindow->ImplGetClientWindow()->ImplGetWindow();
+                    SystemWindow  *pSysWin  = dynamic_cast<SystemWindow* >(pWin);
+                    DockingWindow *pDockWin = dynamic_cast<DockingWindow*>(pWin);
+                    if ( pSysWin )
+                        pSysWin->Close();
+                    else if ( pDockWin )
+                        pDockWin->Close();
                 }
             }
         }
@@ -547,6 +596,16 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                         pClientWindow->TitleButtonClick( TITLE_BUTTON_DOCKING );
                     }
                 }
+            }
+        }
+        else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
+        {
+            if ( pData->mnMenuState & BUTTON_DRAW_PRESSED )
+            {
+                pData->mnMenuState &= ~BUTTON_DRAW_PRESSED;
+                DrawWindow( BORDERWINDOW_DRAW_MENU );
+
+                // handler already called on mouse down
             }
         }
         else if ( nHitTest & BORDERWINDOW_HITTEST_HIDE )
@@ -685,6 +744,26 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 }
             }
         }
+        else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_MENU )
+        {
+            if ( pData->maMenuRect.IsInside( aMousePos ) )
+            {
+                if ( !(pData->mnMenuState & BUTTON_DRAW_PRESSED) )
+                {
+                    pData->mnMenuState |= BUTTON_DRAW_PRESSED;
+                    DrawWindow( BORDERWINDOW_DRAW_MENU );
+
+                }
+            }
+            else
+            {
+                if ( pData->mnMenuState & BUTTON_DRAW_PRESSED )
+                {
+                    pData->mnMenuState &= ~BUTTON_DRAW_PRESSED;
+                    DrawWindow( BORDERWINDOW_DRAW_MENU );
+                }
+            }
+        }
         else if ( pData->mnHitTest & BORDERWINDOW_HITTEST_HIDE )
         {
             if ( pData->maHideRect.IsInside( aMousePos ) )
@@ -744,6 +823,8 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else
         {
+            /*
+            // adjusting mousepos not required, we allow the whole screen (no desktop anymore...)
             Point   aFrameMousePos = pBorderWindow->ImplOutputToFrame( aMousePos );
             Size    aFrameSize = pBorderWindow->ImplGetFrameWindow()->GetOutputSizePixel();
             if ( aFrameMousePos.X() < 0 )
@@ -755,12 +836,15 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
             if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
                 aFrameMousePos.Y() = aFrameSize.Height()-1;
             aMousePos = pBorderWindow->ImplFrameToOutput( aFrameMousePos );
+            */
 
             aMousePos.X()    -= pData->maMouseOff.X();
             aMousePos.Y()    -= pData->maMouseOff.Y();
 
             if ( pData->mnHitTest & BORDERWINDOW_HITTEST_TITLE )
             {
+                pData->mpBorderWindow->SetPointer( Pointer( POINTER_MOVE ) );
+
                 Point aPos = pBorderWindow->GetPosPixel();
                 aPos.X() += aMousePos.X();
                 aPos.Y() += aMousePos.Y();
@@ -779,9 +863,9 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
             }
             else
             {
-                Point       aPos            = pBorderWindow->GetPosPixel();
+                Point       aOldPos         = pBorderWindow->GetPosPixel();
                 Size        aSize           = pBorderWindow->GetSizePixel();
-                Rectangle   aNewRect( aPos, aSize );
+                Rectangle   aNewRect( aOldPos, aSize );
                 long        nOldWidth       = aSize.Width();
                 long        nOldHeight      = aSize.Height();
                 long        nBorderWidth    = pData->mnLeftBorder+pData->mnRightBorder;
@@ -789,6 +873,8 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 long        nMinWidth       = pBorderWindow->mnMinWidth+nBorderWidth;
                 long        nMinHeight      = pBorderWindow->mnMinHeight+nBorderHeight;
                 long        nMinWidth2      = nBorderWidth;
+                long        nMaxWidth       = pBorderWindow->mnMaxWidth+nBorderWidth;
+                long        nMaxHeight      = pBorderWindow->mnMaxHeight+nBorderHeight;
 
                 if ( pData->mnTitleHeight )
                 {
@@ -804,30 +890,38 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                     aNewRect.Left() += aMousePos.X();
                     if ( aNewRect.GetWidth() < nMinWidth )
                         aNewRect.Left() = aNewRect.Right()-nMinWidth+1;
+                    else if ( aNewRect.GetWidth() > nMaxWidth )
+                        aNewRect.Left() = aNewRect.Right()-nMaxWidth+1;
                 }
                 else if ( pData->mnHitTest & (BORDERWINDOW_HITTEST_RIGHT | BORDERWINDOW_HITTEST_TOPRIGHT | BORDERWINDOW_HITTEST_BOTTOMRIGHT) )
                 {
                     aNewRect.Right() += aMousePos.X();
                     if ( aNewRect.GetWidth() < nMinWidth )
                         aNewRect.Right() = aNewRect.Left()+nMinWidth+1;
+                    else if ( aNewRect.GetWidth() > nMaxWidth )
+                        aNewRect.Right() = aNewRect.Left()+nMaxWidth+1;
                 }
                 if ( pData->mnHitTest & (BORDERWINDOW_HITTEST_TOP | BORDERWINDOW_HITTEST_TOPLEFT | BORDERWINDOW_HITTEST_TOPRIGHT) )
                 {
                     aNewRect.Top() += aMousePos.Y();
                     if ( aNewRect.GetHeight() < nMinHeight )
                         aNewRect.Top() = aNewRect.Bottom()-nMinHeight+1;
+                    else if ( aNewRect.GetHeight() > nMaxHeight )
+                        aNewRect.Top() = aNewRect.Bottom()-nMaxHeight+1;
                 }
                 else if ( pData->mnHitTest & (BORDERWINDOW_HITTEST_BOTTOM | BORDERWINDOW_HITTEST_BOTTOMLEFT | BORDERWINDOW_HITTEST_BOTTOMRIGHT) )
                 {
                     aNewRect.Bottom() += aMousePos.Y();
                     if ( aNewRect.GetHeight() < nMinHeight )
                         aNewRect.Bottom() = aNewRect.Top()+nMinHeight+1;
+                    else if ( aNewRect.GetHeight() > nMaxHeight )
+                        aNewRect.Bottom() = aNewRect.Top()+nMaxHeight+1;
                 }
 
-                // Bei SystemWindows rufen wir den Resizing-Handler
+                // call Resizing-Handler for SystemWindows
                 if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                 {
-                    // Groesse fuer Resizing-Aufruf anpassen
+                    // adjust size for Resizing-call
                     aSize = aNewRect.GetSize();
                     aSize.Width()   -= nBorderWidth;
                     aSize.Height()  -= nBorderHeight;
@@ -838,6 +932,10 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                         aSize.Width() = nMinWidth;
                     if ( aSize.Height() < nMinHeight )
                         aSize.Height() = nMinHeight;
+                    if ( aSize.Width() > nMaxWidth )
+                        aSize.Width() = nMaxWidth;
+                    if ( aSize.Height() > nMaxHeight )
+                        aSize.Height() = nMaxHeight;
                     if ( pData->mnHitTest & (BORDERWINDOW_HITTEST_LEFT | BORDERWINDOW_HITTEST_TOPLEFT | BORDERWINDOW_HITTEST_BOTTOMLEFT) )
                         aNewRect.Left() = aNewRect.Right()-aSize.Width()+1;
                     else
@@ -850,8 +948,14 @@ BOOL ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
 
                 if ( pData->mbDragFull )
                 {
-                    pBorderWindow->SetPosSizePixel( aNewRect.Left(), aNewRect.Top(),
+                    // no move (only resize) if position did not change
+                    if( aOldPos != aNewRect.TopLeft() )
+                        pBorderWindow->SetPosSizePixel( aNewRect.Left(), aNewRect.Top(),
                                                     aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_POSSIZE );
+                    else
+                        pBorderWindow->SetPosSizePixel( aNewRect.Left(), aNewRect.Top(),
+                                                    aNewRect.GetWidth(), aNewRect.GetHeight(), WINDOW_POSSIZE_SIZE );
+
                     pBorderWindow->ImplUpdateAll();
                     pBorderWindow->ImplGetFrameWindow()->ImplUpdateAll();
                     if ( pData->mnHitTest & (BORDERWINDOW_HITTEST_RIGHT | BORDERWINDOW_HITTEST_TOPRIGHT | BORDERWINDOW_HITTEST_BOTTOMRIGHT) )
@@ -902,6 +1006,12 @@ USHORT ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
             nHelpId     = SV_HELPTEXT_MAXIMIZE;
             rHelpRect   = pData->maDockRect;
         }
+        /* no help string available
+        else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
+        {
+            nHelpId     = SV_HELPTEXT_MENU;
+            rHelpRect   = pData->maMenuRect;
+        }*/
         else if ( nHitTest & BORDERWINDOW_HITTEST_HIDE )
         {
             nHelpId     = SV_HELPTEXT_MINIMIZE;
@@ -936,6 +1046,7 @@ long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData* pData 
     nTitleWidth += pData->maCloseRect.GetWidth();
     nTitleWidth += pData->maRollRect.GetWidth();
     nTitleWidth += pData->maDockRect.GetWidth();
+    nTitleWidth += pData->maMenuRect.GetWidth();
     nTitleWidth += pData->maHideRect.GetWidth();
     nTitleWidth += pData->maHelpRect.GetWidth();
     nTitleWidth += pData->mnLeftBorder+pData->mnRightBorder;
@@ -1217,6 +1328,7 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
     maFrameData.mnCloseState    = 0;
     maFrameData.mnRollState     = 0;
     maFrameData.mnDockState     = 0;
+    maFrameData.mnMenuState     = 0;
     maFrameData.mnHideState     = 0;
     maFrameData.mnHelpState     = 0;
 
@@ -1264,6 +1376,13 @@ USHORT ImplStdBorderWindowView::RequestHelp( const Point& rPos, Rectangle& rHelp
 
 // -----------------------------------------------------------------------
 
+Rectangle ImplStdBorderWindowView::GetMenuRect() const
+{
+    return maFrameData.maMenuRect;
+}
+
+// -----------------------------------------------------------------------
+
 void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeight )
 {
     ImplBorderFrameData*    pData = &maFrameData;
@@ -1299,6 +1418,14 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     ImplInitTitle( &maFrameData );
     if ( pData->mnTitleHeight )
     {
+        // to improve symbol display force a minum title height
+        if( pData->mnTitleHeight < MIN_CAPTION_HEIGHT )
+            pData->mnTitleHeight = MIN_CAPTION_HEIGHT;
+
+        // set a proper background for drawing
+        // highlighted buttons in the title
+        pBorderWindow->SetBackground( rStyleSettings.GetWindowColor() );
+
         pData->maTitleRect.Left()    = pData->mnLeftBorder;
         pData->maTitleRect.Right()   = nWidth-pData->mnRightBorder-1;
         pData->maTitleRect.Top()     = pData->mnTopBorder;
@@ -1333,6 +1460,15 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
                 pData->maCloseRect.Right()  = nRight;
                 pData->maCloseRect.Left()   = pData->maCloseRect.Right()-pData->maCloseRect.GetHeight()+1;
                 nRight -= pData->maCloseRect.GetWidth()+3;
+            }
+
+            if ( pBorderWindow->mbMenuBtn )
+            {
+                pData->maMenuRect.Top()    = nItemTop;
+                pData->maMenuRect.Bottom() = nItemBottom;
+                pData->maMenuRect.Right()  = nRight;
+                pData->maMenuRect.Left()   = pData->maMenuRect.Right()-pData->maMenuRect.GetHeight()+1;
+                nRight -= pData->maMenuRect.GetWidth();
             }
 
             if ( pBorderWindow->mbDockBtn )
@@ -1381,6 +1517,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
             pData->maPinRect.SetEmpty();
             pData->maCloseRect.SetEmpty();
             pData->maDockRect.SetEmpty();
+            pData->maMenuRect.SetEmpty();
             pData->maHideRect.SetEmpty();
             pData->maRollRect.SetEmpty();
             pData->maHelpRect.SetEmpty();
@@ -1394,6 +1531,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
         pData->maPinRect.SetEmpty();
         pData->maCloseRect.SetEmpty();
         pData->maDockRect.SetEmpty();
+        pData->maMenuRect.SetEmpty();
         pData->maHideRect.SetEmpty();
         pData->maRollRect.SetEmpty();
         pData->maHelpRect.SetEmpty();
@@ -1429,25 +1567,29 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
     Rectangle               aInRect( aTmpPoint, Size( pData->mnWidth, pData->mnHeight ) );
     const StyleSettings&    rStyleSettings = pData->mpOutDev->GetSettings().GetStyleSettings();
     DecorationView          aDecoView( pDev );
-    USHORT                  nStyle;
-    BOOL                    bActive = pBorderWindow->IsDisplayActive();
+    Color                   aFrameColor( rStyleSettings.GetFaceColor() );
+
+    aFrameColor.DecreaseContrast( (UINT8) (0.50 * 255));
 
     // Draw Frame
     if ( nDrawFlags & BORDERWINDOW_DRAW_FRAME )
-        nStyle = 0;
+    {
+        // single line frame
+        pDev->SetLineColor( aFrameColor );
+        pDev->SetFillColor();
+        pDev->DrawRect( aInRect );
+        aInRect.nLeft++; aInRect.nRight--;
+        aInRect.nTop++; aInRect.nBottom--;
+    }
     else
-        nStyle = FRAME_DRAW_NODRAW;
-    aInRect = aDecoView.DrawFrame( aInRect, FRAME_DRAW_DOUBLEOUT | nStyle );
+        aInRect = aDecoView.DrawFrame( aInRect, FRAME_DRAW_DOUBLEOUT | FRAME_DRAW_NODRAW);
 
     // Draw Border
     pDev->SetLineColor();
     long nBorderSize = pData->mnBorderSize;
     if ( (nDrawFlags & BORDERWINDOW_DRAW_BORDER) && nBorderSize )
     {
-        if ( bActive )
-            pDev->SetFillColor( rStyleSettings.GetActiveBorderColor() );
-        else
-            pDev->SetFillColor( rStyleSettings.GetDeactiveBorderColor() );
+        pDev->SetFillColor( rStyleSettings.GetFaceColor() );
         pDev->DrawRect( Rectangle( Point( aInRect.Left(), aInRect.Top() ),
                                    Size( aInRect.GetWidth(), nBorderSize ) ) );
         pDev->DrawRect( Rectangle( Point( aInRect.Left(), aInRect.Top()+nBorderSize ),
@@ -1463,64 +1605,11 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
     {
         aInRect = pData->maTitleRect;
 
-        Color aColor2;
-        if ( bActive )
-        {
-            pDev->SetFillColor( rStyleSettings.GetActiveColor() );
-            pDev->SetTextColor( rStyleSettings.GetActiveTextColor() );
-            aColor2 = rStyleSettings.GetActiveColor2();
-        }
-        else
-        {
-            pDev->SetFillColor( rStyleSettings.GetDeactiveColor() );
-            pDev->SetTextColor( rStyleSettings.GetDeactiveTextColor() );
-            aColor2 = rStyleSettings.GetDeactiveColor2();
-        }
-        BOOL bDrawRect;
-        if ( pDev->GetColorCount() >= 256 )
-        {
-            Point           aTempPoint;
-            Size            aRectSize = aInRect.GetSize();
-            VirtualDevice*  pVirDev;
-            if ( bActive )
-                pVirDev = mpATitleVirDev;
-            else
-                pVirDev = mpDTitleVirDev;
-            bDrawRect = FALSE;
-            if ( !pVirDev || (aRectSize != pVirDev->GetOutputSizePixel()) )
-            {
-                if ( !pVirDev )
-                {
-                    pVirDev = new VirtualDevice( *pDev );
-                    if ( bActive )
-                        mpATitleVirDev = pVirDev;
-                    else
-                        mpDTitleVirDev = pVirDev;
-                }
+        // use no gradient anymore, just a static titlecolor
+        pDev->SetFillColor( aFrameColor );
+        pDev->SetTextColor( rStyleSettings.GetButtonTextColor() );
+        pDev->DrawRect( aInRect );
 
-                Gradient aGradient( GRADIENT_LINEAR, pDev->GetFillColor(), aColor2 );
-                aGradient.SetAngle( 900 );
-                aGradient.SetBorder( 50 );
-                if ( pVirDev->SetOutputSizePixel( aRectSize ) )
-                    pVirDev->DrawGradient( Rectangle( aTempPoint, aRectSize ), aGradient );
-                else
-                    bDrawRect = TRUE;
-            }
-
-            if ( !bDrawRect )
-            {
-                Point aDest( aInRect.TopLeft() );
-                if ( pOffset )
-                    aDest.Move( pOffset->X(), pOffset->Y() );
-                pDev->DrawOutDev( aDest, aRectSize,
-                                  aTempPoint, aRectSize, *pVirDev );
-            }
-        }
-        else
-            bDrawRect = TRUE;
-
-        if ( bDrawRect )
-            pDev->DrawRect( aInRect );
 
         if ( pData->mnTitleType != BORDERWINDOW_TITLE_TEAROFF )
         {
@@ -1538,6 +1627,8 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
                 aInRect.Right() = pData->maHideRect.Left()-2;
             else if ( !pData->maDockRect.IsEmpty() )
                 aInRect.Right() = pData->maDockRect.Left()-2;
+            else if ( !pData->maMenuRect.IsEmpty() )
+                aInRect.Right() = pData->maMenuRect.Left()-2;
             else if ( !pData->maCloseRect.IsEmpty() )
                 aInRect.Right() = pData->maCloseRect.Left()-2;
 
@@ -1565,6 +1656,14 @@ void ImplStdBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice* pOutD
         if ( pOffset )
             aSymbolRect.Move( pOffset->X(), pOffset->Y() );
         ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_DOCK, pData->mnDockState );
+    }
+    if ( ((nDrawFlags & BORDERWINDOW_DRAW_MENU) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
+         !pData->maMenuRect.IsEmpty() )
+    {
+        Rectangle aSymbolRect( pData->maMenuRect );
+        if ( pOffset )
+            aSymbolRect.Move( pOffset->X(), pOffset->Y() );
+        ImplDrawBrdWinSymbolButton( pDev, aSymbolRect, SYMBOL_MENU, pData->mnMenuState );
     }
     if ( ((nDrawFlags & BORDERWINDOW_DRAW_HIDE) || (nDrawFlags & BORDERWINDOW_DRAW_TITLE)) &&
          !pData->maHideRect.IsEmpty() )
@@ -1634,7 +1733,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
 {
     // Alle WindowBits entfernen, die wir nicht haben wollen
     WinBits nOrgStyle = nStyle;
-    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_TOOLTIPWIN | WB_NOSHADOW);
+    WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION);
     if ( nTypeStyle & BORDERWINDOW_STYLE_APP )
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
@@ -1643,12 +1742,21 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     mbSmallOutBorder    = FALSE;
     if ( nTypeStyle & BORDERWINDOW_STYLE_FRAME )
     {
-        mbOverlapWin    = TRUE;
-        mbFrame         = TRUE;
-        mbFrameBorder   = FALSE;
-        // closeable windows may have a border as well, eg. system floating windows without caption
-        if ( (nOrgStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE/* | WB_CLOSEABLE*/)) == WB_BORDER )
-            mbSmallOutBorder = TRUE;
+        if( nStyle & WB_OWNERDRAWDECORATION )
+        {
+            mbOverlapWin    = TRUE;
+            mbFrame         = TRUE;
+            mbFrameBorder   = TRUE;
+        }
+        else
+        {
+            mbOverlapWin    = TRUE;
+            mbFrame         = TRUE;
+            mbFrameBorder   = FALSE;
+            // closeable windows may have a border as well, eg. system floating windows without caption
+            if ( (nOrgStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE/* | WB_CLOSEABLE*/)) == WB_BORDER )
+                mbSmallOutBorder = TRUE;
+        }
     }
     else if ( nTypeStyle & BORDERWINDOW_STYLE_OVERLAP )
     {
@@ -1670,12 +1778,15 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     mpMenuBarWindow = NULL;
     mnMinWidth      = 0;
     mnMinHeight     = 0;
+    mnMaxWidth      = SHRT_MAX;
+    mnMaxHeight     = SHRT_MAX;
     mnRollHeight    = 0;
     mnOrgMenuHeight = 0;
     mbPined         = FALSE;
     mbRollUp        = FALSE;
     mbMenuHide      = FALSE;
     mbDockBtn       = FALSE;
+    mbMenuBtn       = FALSE;
     mbHideBtn       = FALSE;
     mbHelpBtn       = FALSE;
     mbDisplayActive = IsActive();
@@ -1891,7 +2002,7 @@ void ImplBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        if ( !mbFrame )
+        if ( !mbFrame || (GetStyle() & WB_OWNERDRAWDECORATION) )
             UpdateView( TRUE, ImplGetWindow()->GetOutputSizePixel() );
     }
 
@@ -1905,7 +2016,12 @@ void ImplBorderWindow::InitView()
     if ( mbSmallOutBorder )
         mpBorderView = new ImplSmallBorderWindowView( this );
     else if ( mbFrame )
-        mpBorderView = new ImplNoBorderWindowView( this );
+    {
+        if( mbFrameBorder )
+            mpBorderView = new ImplStdBorderWindowView( this );
+        else
+            mpBorderView = new ImplNoBorderWindowView( this );
+    }
     else if ( !mbFrameBorder )
         mpBorderView = new ImplSmallBorderWindowView( this );
     else
@@ -2080,6 +2196,16 @@ void ImplBorderWindow::SetHelpButton( BOOL bHelpButton )
 
 // -----------------------------------------------------------------------
 
+void ImplBorderWindow::SetMenuButton( BOOL bMenuButton )
+{
+    mbMenuBtn = bMenuButton;
+    Size aSize = GetOutputSizePixel();
+    mpBorderView->Init( this, aSize.Width(), aSize.Height() );
+    InvalidateBorder();
+}
+
+// -----------------------------------------------------------------------
+
 void ImplBorderWindow::UpdateMenuHeight()
 {
     Resize();
@@ -2118,4 +2244,9 @@ void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 long ImplBorderWindow::CalcTitleWidth() const
 {
     return mpBorderView->CalcTitleWidth();
+}
+
+Rectangle ImplBorderWindow::GetMenuRect() const
+{
+    return mpBorderView->GetMenuRect();
 }
