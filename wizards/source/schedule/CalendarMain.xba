@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="CalendarMain" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="CalendarMain" script:language="StarBasic">Option Explicit
 
 Const _DEBUG = 0
 
@@ -74,7 +74,6 @@ Dim iThisMonth as Integer
 	ToggleWindow(False)
 	sCurLangLocale = oDocument.CharLocale.Language
 	sCurCountryLocale = oDocument.CharLocale.Country
-
 	DlgCalendar = LoadDialog(&quot;Schedule&quot;, &quot;DlgCalendar&quot;)
 	DlgCalModel = DlgCalendar.Model
     LoadLanguage(sCurLangLocale)
@@ -147,8 +146,7 @@ Dim SelYear as String
 	UnprotectSheets(oSheets)
 	oSheets.RemovebyName(oSheets.GetbyIndex(0).Name)
 	iSelYear = DlgCalModel.txtYear.Value
-&apos;	sCurLangLocale = &quot;ja&quot;
-&apos;	sCurCountryLocale = &quot;TW&quot;
+	sCurLangLocale = cLANGUAGE_CHINESE
 	Select Case sCurLangLocale
 		Case cLANGUAGE_GERMAN
 			If Ubound(DlgCalModel.lstHolidays.SelectedItems()) &gt; -1 Then
@@ -183,7 +181,7 @@ Dim SelYear as String
 			If sCurCountryLocale = &quot;TW&quot; Then
 				Call FindWholeYearHolidays_TW(iSelYear)
 			Else
-
+				Call FindWholeYearHolidays_CN(iSelYear)
 			End If
 	End Select
 

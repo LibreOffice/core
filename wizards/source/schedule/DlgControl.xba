@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="DlgControl" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DlgControl" script:language="StarBasic">Option Explicit
 
 Dim CalBitmap As Object
 Public bSelectByMouseMove as Boolean
@@ -36,34 +36,6 @@ Sub CalSaveOwnEventControls()
 End Sub
 
 
-
-&apos;Sub ModIntTextBox (txtYear As Object, ByVal nMax%, ByVal nMin%, ByVal sDefault$, IncFactor as Integer)
-&apos;	Dim nActVal&amp;
-&apos;	nActVal&amp; = Val(txtYear.Text)
-&apos;	If ((0 = nActVal&amp;) Or (nMax% &lt; nActVal&amp;) Or (nMin% &gt; nActVal&amp;)) Then 
-&apos;		Beep
-&apos;		txtYear.Text = sDefault$
-&apos;		Exit Sub
-&apos;	End If
-&apos;	If IncFactor = 1 Then
-&apos;		If nMax% &gt; nActVal&amp; Then
-&apos;			txtYear.Text = Trim(Str(nActVal&amp; + 1))
-&apos;		Else
-&apos;			Beep
-&apos;			txtYear.Text = nMax%
-&apos;		End if
-&apos;	ElseIf IncFactor = -1 Then
-&apos;		If nMin% &lt; nActVal&amp; Then
-&apos;			txtYear.Text = Trim(Str(nActVal&amp; - 1))
-&apos;		Else
-&apos;			Beep
-&apos;			txtYear.Text = nMin%
-&apos;		End if
-&apos;	End If
-&apos;End Sub
-
-
-
 Sub ToggleYearBox()
 &apos; Falls der RadioButton für einen Jahreskalender angeklickt
 &apos; worden ist, müssen die Controls für den Monat Disabled
@@ -83,7 +55,7 @@ Dim ListIndex as Integer
 	Select Case sCurLangLocale
 		Case  cLANGUAGE_GERMAN
 			If bSelectByMouseMove Then
-&apos;				oStatusLine.SetText(aEvent.X &amp; &quot; ; &quot; &amp; aEvent.Y)
+&apos;				oStatusLine.SetText(&quot;Position: &quot; &amp; aEvent.X &amp; &quot; ; &quot; &amp; aEvent.Y)
 				ListIndex = CalGetGermanLandAtMousePos(aEvent.X, aEvent.Y, Land$)
 				DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
 			End If

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="LocalHolidays" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="LocalHolidays" script:language="StarBasic">Option Explicit
 
 Sub Main
 	Call CalAutopilotTable()
@@ -381,11 +381,11 @@ Sub FindWholeYearHolidays_TW(YearInt as Integer)
 	CalInsertBankholiday(DateSerial(YearInt, 4, 4), &quot;兒童節&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 4, 5), &quot;民族掃墓節&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;勞動節&quot;, cHolidayType_Full)
-	CalInsertBankholiday(DateSerial(YearInt, 5, 19), &quot;佛陀誕辰紀念日&quot;, cHolidayType_Full) &apos; Todo: Wie Columbus Day
+	CalInsertBankholiday(GetNextWeekDay(YearInt, 5, 19, 2), &quot;佛陀誕辰紀念日&quot;, cHolidayType_Full) &apos; Just like Columbus Day
 	CalInsertBankholiday(DateSerial(YearInt, 6, 15), &quot;端午節&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 9, 3), &quot;軍人節&quot;, cHolidayType_Half)
 	CalInsertBankholiday(DateSerial(YearInt, 9, 21), &quot;中秋節&quot;, cHolidayType_Full)
-	CalInsertBankholiday(DateSerial(YearInt, 9, 28), &quot;孔子誕辰紀念日（教師節）&quot;, cHolidayType_Full) &apos; Todo: wie Columnbusday
+	CalInsertBankholiday(GetNextWeekDay(YearInt, 9, 28, 2), &quot;孔子誕辰紀念日（教師節）&quot;, cHolidayType_Full) &apos; Just like Columnbusday
 	CalInsertBankholiday(DateSerial(YearInt, 10, 10), &quot;國慶日&quot;, cHolidayType_Full)
 	CalInsertBankholiday(DateSerial(YearInt, 10, 25), &quot;臺灣光復節&quot;, cHolidayType_Half) 
 	CalInsertBankholiday(DateSerial(YearInt, 10, 31), &quot;先總統  蔣公誕辰紀念日&quot;, cHolidayType_Half) 
@@ -394,6 +394,32 @@ Sub FindWholeYearHolidays_TW(YearInt as Integer)
 End Sub
 
 
+Function GetNextWeekDay(iYear as Integer, iMonth as Integer, iDay as Integer, iWeekDay as Integer)
+Dim lDate as Long
+Dim iCurWeekDay as Integer
+	lDate = DateSerial(iYear, iMonth, iDay)
+	iCurWeekDay = WeekDay(lDate)
+	While iCurWeekDay &lt;&gt; iWeekDay
+		lDate = lDate + 1
+		iCurWeekDay = WeekDay(lDate)
+	Wend
+	GetNextWeekDay() = lDate
+End Function
+
+
+Sub FindWholeYearHolidays_CN(YearInt as Integer)
+	CalculateChineseNewYear(YearInt)
+	CalInsertBankholiday(DateSerial(YearInt, 1, 1), &quot;元旦&quot;, cHolidayType_Full)		&apos; New Year
+	CalInsertBankholiday(DateSerial(YearInt, 5, 8), &quot;妇女节&quot;, cHolidayType_Half)		&apos; Women&apos;s Day
+	CalInsertBankholiday(DateSerial(YearInt, 4, 5), &quot;清明节&quot;, cHolidayType_Half)		&apos; Day of the deads
+	CalInsertBankholiday(DateSerial(YearInt, 5, 1), &quot;劳动节&quot;, cHolidayType_Full)		&apos; International Labour Day
+	CalInsertBankholiday(DateSerial(YearInt, 6, 1), &quot;儿童节&quot;, cHolidayType_Half)		&apos; Children&apos;s Day
+	CalInsertBankholiday(DateSerial(YearInt, 8, 1), &quot;建军节&quot;, cHolidayType_Half)		&apos; Foundation of military
+	CalInsertBankholiday(DateSerial(YearInt, 10, 1), &quot;国庆节&quot;, cHolidayType_Full)		&apos; National festival day
+End Sub
+
+
+&apos; Unfortunately I could not find a Routine to convert a &apos;Moon Date&apos; into a gregorian date
 Sub CalculateChineseNewYear(iSelYear as Integer)
 Dim lDate as Long
 	Select Case iSelYear
@@ -468,5 +494,4 @@ Function CalculateJapaneseAutumnDay(iSelYear as Integer)
 	If (iSelYear &gt; 1979) And (iSelYear &lt; 2100) Then
 		CalculateJapaneseAutumnDay() = Int(23.8431 + 0.242194)* (iSelYear-1980) - (Int((iSelYear-1980)/4))
 	End If
-End Function
-</script:module>
+End Function</script:module>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Language" script:language="StarBasic">Option Explicit
 
 
 Public Const cLANGUAGE_SYSTEM = &quot;&quot;, cLANGUAGE_CHINESE = &quot;zh&quot;, cLANGUAGE_DANISH = &quot;da&quot;
@@ -51,7 +51,7 @@ Const dlgShortMonth = 1225
 			DlgCalModel.lstHolidays.StringItemList() = BLNameList()
 		End If
 		sWizardTitle$ = GetResText(1300)
-		sError$ = GetResText(1301)
+		sError = GetResText(1301)
 		cCalSubcmdDeleteSelect_DeleteSelEntryTitle$ = GetResText(1302)
 		cCalSubcmdDeleteSelect_DeleteSelEntry$ = GetResText(1303)
 		DlgCalendar.Title = GetResText(1000)
@@ -64,7 +64,7 @@ Const dlgShortMonth = 1225
 			.cmdCancel.Label = GetResText(1005)
 			.cmdGoOn.Label = GetResText(1004)
 			.lblHolidays.Label = GetResText(1014)
-			sBitmapFilename$ = GetResText(1099)
+			sBitmapFilename = GetResText(1099)
 			DlgCalModel.hlnCalendar.Label = GetResText(1006)
 			.optYear.Label = GetResText(1007)
 			.optMonth.Label = GetResText(1008)
@@ -84,8 +84,8 @@ Const dlgShortMonth = 1225
 				cCalShortMonthNames(i)= Left$(cCalLongMonthNames(i), 3)
 			Next
 			&apos; Load sheet names
-			sCalendarTitle$ = GetResText(1410)
-			sMonthTitle$ = GetResText(1411)
+			sCalendarTitle = GetResText(1410)
+			sMonthTitle = GetResText(1411)
 			&apos; Load names of styles
 			cCalStyleWorkday$ = GetResText(1400)
 			cCalStyleWeekend$ = GetResText(1401)

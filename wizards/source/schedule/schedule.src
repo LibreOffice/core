@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 02:04:16 $
+ *  last change: $Author: bc $ $Date: 2001-11-29 17:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,7 +740,7 @@ Text[ swedish ] = "År";
 
 String dlgBitmapFile
 {
-Text = "brd.bmp";
+Text = "germany.wmf";
 Text[ language_user1 ] = " ";
 Text[ English ] = "britain.bmp";
 Text[ English_us ] = "usa.bmp";
@@ -763,6 +763,8 @@ Text[ swedish ] = "sweden.bmp";
     Text[ turkish ] = "turkiye.bmp";
     Text[ catalan ] = "spain.bmp";
     Text[ finnish ] = "usa.bmp";
+    Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps";
+
 };
 
 // --------------------------------------------------------------------
