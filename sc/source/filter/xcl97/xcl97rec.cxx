@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: er $ $Date: 2001-07-02 10:09:39 $
+ *  last change: $Author: dr $ $Date: 2001-07-03 09:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2644,11 +2644,12 @@ inline ULONG XclHlink::GetVarLen() const
 
 XclHlink::XclHlink( RootData& rRootData, const SvxURLField& rURLField ) :
     pVarData( new SvMemoryStream ),
-    nFlags( EXC_HLINK_BODY ),
+    nFlags( 0 ),
     pRepr( NULL )
 {
-    const XubString&    rURL = rURLField.GetURL();
-    const XubString&    rRepr = rURLField.GetRepresentation();
+    const String&       rURL = rURLField.GetURL();
+    const String&       rRepr = rURLField.GetRepresentation();
+    XclExpUniString*    pTextmark = NULL;
     INetURLObject       aURLObj( rURL );
     const INetProtocol  eProtocol = aURLObj.GetProtocol();
     BOOL                bWithRepr = rRepr.Len() > 0;
@@ -2695,6 +2696,7 @@ XclHlink::XclHlink( RootData& rRootData, const SvxURLField& rURLField ) :
         }
         if( !bRel )
             nFlags |= EXC_HLINK_ABS;
+        nFlags |= EXC_HLINK_BODY;
 
         ByteString      aAsciiLink( aPathAndName, *rRootData.pCharset );
         XclExpUniString aLink( aPathAndName, 255, TRUE );   // max 255 chars, force 16 bit
@@ -2720,7 +2722,7 @@ XclHlink::XclHlink( RootData& rRootData, const SvxURLField& rURLField ) :
         if( !pRepr )
             pRepr = new String( aPathAndName );
     }
-    else
+    else if( eProtocol != INET_PROT_NOT_VALID )
     {
         XclExpUniString aURL( aURLObj.GetURLNoMark(), 255, TRUE );  // max 255 chars, force 16 bit
         aXclStrm    << (UINT32) 0x79EAC9E0
@@ -2731,20 +2733,31 @@ XclHlink::XclHlink( RootData& rRootData, const SvxURLField& rURLField ) :
         aURL.WriteBuffer( aXclStrm );
         aXclStrm    << (UINT16) 0x0000;
 
-        nFlags |= EXC_HLINK_ABS;
+        nFlags |= EXC_HLINK_BODY | EXC_HLINK_ABS;
         if( !pRepr )
             pRepr = new String( rURL );
     }
+    else if( rURL.GetChar( 0 ) == '#' )     // hack for #89066#
+    {
+        String aTextmark( rURL.Copy( 1 ) );
+        aTextmark.SearchAndReplace( '.', '!' );
+        pTextmark = new XclExpUniString( aTextmark, 255, TRUE );    // max 255 chars, force 16 bit
+    }
 
     // text mark
-    if( aURLObj.HasMark() )
+    if( !pTextmark && aURLObj.HasMark() )
+        pTextmark = new XclExpUniString( aURLObj.GetMark(), 255, TRUE );    // max 255 chars, force 16 bit
+
+    if( pTextmark )
     {
-        XclExpUniString aTextmark( aURLObj.GetMark(), 255, TRUE );  // max 255 chars, force 16 bit
-        aXclStrm    << (UINT32) (aTextmark.GetLen() + 1);           // string length + 1 trailing zero word
-        aTextmark.WriteBuffer( aXclStrm );
+        aXclStrm    << (UINT32) (pTextmark->GetLen() + 1);   // string length + 1 trailing zero word
+        pTextmark->WriteBuffer( aXclStrm );
         aXclStrm    << (UINT16) 0x0000;
 
         nFlags |= EXC_HLINK_MARK;
+
+        delete pTextmark;
+        pTextmark = NULL;
     }
 }
 
