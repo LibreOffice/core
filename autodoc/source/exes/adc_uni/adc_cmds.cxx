@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmds.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:31 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,11 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <cosv/ploc.hxx>
-#include "adc_cl.hxx"
-
+#include <ary/ary.hxx>
+#include <autodoc/displaying.hxx>
+#include <autodoc/dsp_html_std.hxx>
+#include <display/corframe.hxx>
+#include <display/uidldisp.hxx>
 
 
 namespace autodoc
@@ -76,448 +77,44 @@ namespace autodoc
 namespace command
 {
 
-Parse::InitMap Parse::aOptions_;
+extern const String C_opt_Include("-I:");
+
+extern const String C_opt_Verbose("-v");
+
+extern const String C_opt_Parse("-parse");
+extern const String C_opt_Name("-name");
+extern const String C_opt_LangAll("-lg");
+extern const String C_opt_ExtensionsAll("-extg");
+extern const String C_opt_DevmanFile("-dvgfile");
+
+extern const String C_arg_Cplusplus("c++");
+extern const String C_arg_Idl("idl");
+extern const String C_arg_Java("java");
+
+extern const String C_opt_Project("-p");
+//extern const String C_opt_Lang;
+//extern const String C_opt_Extensions;
+extern const String C_opt_SourceDir("-d");
+extern const String C_opt_SourceTree("-t");
+extern const String C_opt_SourceFile("-f");
+
+extern const String C_opt_CreateHtml("-html");
+extern const String C_opt_DevmanRoot("-dvgroot");
+extern const String C_opt_SimpleLinks("-simplelinks");
+
+//extern const String C_opt_CreateXml("-xml");
+//extern const String C_opt_Load("-load");
+//extern const String C_opt_Save("-save");
 
-
-
-inline bool
-is( char * * pArgsIterator, const char * pOption )
-{
-    return strcmp(*pArgsIterator, pOption) == 0;
-}
-
-#define CHECK( cond, text ) \
-    if ( NOT ( cond ) ) \
-        throw X_CommandLine( text )
-#define CHECKOPT( cond, miss, opt ) \
-    if ( NOT ( cond ) ) \
-    { \
-        StreamLock slMsg(100); \
-        throw X_CommandLine( slMsg() << "Missing " << miss <<" after " << opt << "." << c_str ); \
-    }
-
-
-//**************************     Parsing     ***********************//
-
-
-S_ProjectData::S_ProjectData( const char *        i_sName,
-                              const char *        i_sRootDir )
-    :   sName(i_sName),
-        aRootDirectory(i_sRootDir,true),
-        //  pLanguage,
-        bHtmlIsDefaultForDocs(false)
-        // aFiles
-{
-}
-
-S_ProjectData::~S_ProjectData()
-{
-}
-
-Parse::Parse( CommandLine & io_rCommandLine )
-    :   // sRepositoryName,
-        // sRepositoryDirectoryForUpdate
-        // pGlobal_Language
-        bGlobal_HtmlIsDefaultForDocs(false),
-        // aProjects,
-        pCommandLine(&io_rCommandLine)
-{
-}
-
-Parse::~Parse()
-{
-    csv::erase_container_of_heap_ptrs(aProjects);
-}
-
-S_ProjectData &
-Parse::CreateDefaultProject()
-{
-    if ( aProjects.size() > 0 )
-        throw new X_CommandLine("Unexpected default project in command line.");
-
-    S_ProjectData * ret = new S_ProjectData("", ".");
-    aProjects.push_back(ret);
-    return *ret;
-}
-
-char * *
-Parse::do_Init( char * *    i_nCurArgsBegin,
-                char * *    i_nEndOfAllArgs )
-{
-    for ( char * * it = i_nCurArgsBegin;
-          it != i_nEndOfAllArgs;
-          )
-    {
-         F_Init fi = FindFI(*it);
-        if (fi != 0)
-            it = (this->*fi)(it, i_nEndOfAllArgs);
-    }
-
-    return it;
-}
-
-
-const Parse::InitMap &
-Parse::Options()
-{
-     if ( aOptions_.size() > 0 )
-        return aOptions_;
-
-    // Workaround for MacOSX, gcc3 compiler bug with
-    //   assigning temporaries of member function ptrs
-    //   to const references of them:
-    F_Init fTemp = &Parse::FI_Start_ParseOptions;
-    aOptions_[udmstri(C_opt_Parse)] = fTemp;
-
-    fTemp = &Parse::FI_SetName;
-    aOptions_[udmstri(C_opt_Name)] = fTemp;
-
-    fTemp = &Parse::FI_SetUpdate;
-    aOptions_[udmstri(C_opt_Update)] = fTemp;
-
-    fTemp = &Parse::FI_SetLanguage4All;
-    aOptions_[udmstri(C_opt_LangAll)] = fTemp;
-
-    fTemp = &Parse::FI_SetExtensions4All;
-    aOptions_[udmstri(C_opt_ExtensionsAll)] = fTemp;
-
-    fTemp = &Parse::FI_SetDocAttrs4All;
-    aOptions_[udmstri(C_opt_DocAll)] = fTemp;
-
-    fTemp = &Parse::FI_Start_ProjectOptions;
-    aOptions_[udmstri(C_opt_Project)] = fTemp;
-
-    fTemp = &Parse::FI_SetLanguage;
-    aOptions_[udmstri(C_opt_Lang)] = fTemp;
-
-    fTemp = &Parse::FI_SetExtensions;
-    aOptions_[udmstri(C_opt_Extensions)] = fTemp;
-
-    fTemp = &Parse::FI_SetDocAttrs;
-    aOptions_[udmstri(C_opt_Doc)] = fTemp;
-
-    fTemp = &Parse::FI_SetSourceDirs;
-    aOptions_[udmstri(C_opt_SourceDir)] = fTemp;
-
-    fTemp = &Parse::FI_SetSourceTrees;
-    aOptions_[udmstri(C_opt_SourceTree)] = fTemp;
-
-    fTemp = &Parse::FI_SetSourceFiles;
-    aOptions_[udmstri(C_opt_SourceFile)] = fTemp;
-
-    return aOptions_;
-}
-
-Parse::F_Init
-Parse::FindFI( const char * i_pArg ) const
-{
-     InitMap::const_iterator itFound = Options().find( udmstri(i_pArg) );
-    if ( itFound == Options().end() )
-        return 0;
-
-    return (*itFound).second;
-}
-
-char * *
-Parse::FI_Start_ParseOptions( char * *            i_nCurArgsBegin,
-                              char * *            i_nEndOfAllArgs )
-{
-    return i_nCurArgsBegin + 1;
-}
-
-char * *
-Parse::FI_SetName( char * *            i_nCurArgsBegin,
-                   char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( **ret != '-' && ret != i_nEndOfAllArgs,
-              "name", C_opt_Name );
-
-    sRepositoryName = *ret;
-    return ++ret;
-}
-
-char * *
-Parse::FI_SetUpdate( char * *            i_nCurArgsBegin,
-                     char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( **ret != '-' && ret != i_nEndOfAllArgs,
-              "directory",  C_opt_Update );
-
-    sRepositoryDirectoryForUpdate = *ret;
-    pCommandLine->SetUpdate(*ret);
-    return ++ret;
-}
-
-char * *
-Parse::FI_SetLanguage4All( char * *            i_nCurArgsBegin,
-                           char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-
-    if ( is(ret, C_arg_Cplusplus) )
-    {
-        pGlobal_Language = new S_LanguageInfo(S_LanguageInfo::cpp);
-        pGlobal_Language->aExtensions.push_back(udmstri("*.hxx"));
-        pGlobal_Language->aExtensions.push_back(udmstri("*.h"));
-    }
-    else if (is(ret, C_arg_Idl) )
-    {
-        pGlobal_Language = new S_LanguageInfo(S_LanguageInfo::idl);
-        pGlobal_Language->aExtensions.push_back(udmstri("*.idl"));
-    }
-    else if (is(ret, C_arg_Corba) )
-    {
-        pGlobal_Language = new S_LanguageInfo(S_LanguageInfo::corba);
-        pGlobal_Language->aExtensions.push_back(udmstri("*.idl"));
-    }
-    else if (is(ret, C_arg_Java) )
-    {
-        pGlobal_Language = new S_LanguageInfo(S_LanguageInfo::java);
-        pGlobal_Language->aExtensions.push_back(udmstri("*.java"));
-    }
-    else
-    {
-        StreamLock slMsg(100);
-        throw X_CommandLine(
-            slMsg() << "Missing language after " << C_opt_LangAll << "." << c_str );
-    }
-
-    return ++ret;
-}
-
-char * *
-Parse::FI_SetExtensions4All( char * *            i_nCurArgsBegin,
-                             char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret == '.',
-              "extension(s)",  C_opt_ExtensionsAll );
-    StreamLock slCheck(150);
-    slCheck() << C_opt_ExtensionsAll
-              << " used without previous "
-              << C_opt_LangAll;
-
-    CHECK( pGlobal_Language != 0,
-           slCheck().c_str() );
-
-    do {
-        pGlobal_Language->aExtensions.push_back(udmstri(*ret));
-        ++ret;
-    }   while ( ret != i_nEndOfAllArgs && **ret == '.' );
-
-    return ret;
-}
-
-char * *
-Parse::FI_SetDocAttrs4All( char * *            i_nCurArgsBegin,
-                           char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "attribute", C_opt_DocAll );
-
-    if ( is(ret, C_arg_Usehtml) )
-    {
-        bGlobal_HtmlIsDefaultForDocs = true;
-        ++ret;
-    }
-    else
-    {
-        throw X_CommandLine(
-            StreamLock(100)() << "Unknown attribute after "
-                              << C_opt_DocAll
-                              << "."
-                              << c_str );
-    }
-
-    return ret;
-}
-
-char * *
-Parse::FI_Start_ProjectOptions( char * *            i_nCurArgsBegin,
-                                char * *            i_nEndOfAllArgs )
-{
-    if ( aProjects.size() == 1 )
-    {
-         if ( aProjects[0]->sName.length() == 0 )
-            throw X_CommandLine( "Both, named projects and a default project, cannot be used together." );
-    }
-
-    S_ProjectData * pProject = 0;
-
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "name",  C_opt_Project );
-    ++ret;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "root directory",  C_opt_Project );
-    ++ret;
-
-    pProject = new S_ProjectData( i_nCurArgsBegin[1], i_nCurArgsBegin[2] );
-    pCommandLine->SetCurProject(*pProject);
-    aProjects.push_back(pProject);
-
-    return ret;
-}
-
-char * *
-Parse::FI_SetLanguage( char * *            i_nCurArgsBegin,
-                       char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-
-    if ( is(ret, C_arg_Cplusplus) )
-        pCommandLine->CurProject().pLanguage
-            = new S_LanguageInfo(S_LanguageInfo::cpp);
-    else if (is(ret, C_arg_Idl) )
-        pCommandLine->CurProject().pLanguage
-            = new S_LanguageInfo(S_LanguageInfo::idl);
-    else if (is(ret, C_arg_Corba) )
-        pCommandLine->CurProject().pLanguage
-            = new S_LanguageInfo(S_LanguageInfo::corba);
-    else if (is(ret, C_arg_Java) )
-        pCommandLine->CurProject().pLanguage
-            = new S_LanguageInfo(S_LanguageInfo::java);
-    else
-        throw X_CommandLine(
-            StreamLock(100)() << "Missing language after "
-                              << C_opt_Lang
-                              << "."
-                              << c_str );
-
-    return ++ret;
-}
-
-char * *
-Parse::FI_SetExtensions( char * *            i_nCurArgsBegin,
-                         char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret == '.',
-              "extension(s)",  C_opt_Extensions );
-    CHECK( pCommandLine->CurProject().pLanguage != 0,
-           StreamLock(100)() << C_opt_Extensions
-                             << " used without previous "
-                             << C_opt_Lang
-                             << c_str );
-
-    do {
-        pCommandLine->CurProject().pLanguage
-            ->aExtensions.push_back(udmstri(*ret));
-        ++ret;
-    }   while ( ret != i_nEndOfAllArgs && **ret == '.' );
-
-    return ret;
-}
-
-char * *
-Parse::FI_SetDocAttrs( char * *            i_nCurArgsBegin,
-                       char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "attribute", C_opt_Doc );
-
-    if ( is(ret, C_arg_Usehtml) )
-    {
-        pCommandLine->CurProject().bHtmlIsDefaultForDocs = true;
-        ++ret;
-    }
-    else
-    {
-        throw X_CommandLine(
-            StreamLock(100)() << "Unknown attribute after "
-                              << C_opt_Doc
-                              << "."
-                              << c_str );
-    }
-
-    return ret;
-}
-
-char * *
-Parse::FI_SetSourceDirs( char * *            i_nCurArgsBegin,
-                         char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "directory", C_opt_SourceDir );
-    do {
-        pCommandLine->CurProject().aFiles.
-            aDirectories.push_back( udmstri(*ret) );
-        ++ret;
-    } while (ret != i_nEndOfAllArgs && **ret != '-');
-
-    return ret;
-}
-
-char * *
-Parse::FI_SetSourceTrees( char * *            i_nCurArgsBegin,
-                          char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "directory", C_opt_SourceTree );
-    do {
-        pCommandLine->CurProject().aFiles.
-            aTrees.push_back( udmstri(*ret) );
-        ++ret;
-    } while (ret != i_nEndOfAllArgs && **ret != '-');
-
-    return ret;
-}
-
-char * *
-Parse::FI_SetSourceFiles( char * *            i_nCurArgsBegin,
-                          char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "file", C_opt_SourceFile );       // KORR_FUTURE
-                                                // What about files, which start with '-'?
-    do {
-        pCommandLine->CurProject().aFiles.
-            aFiles.push_back( udmstri(*ret) );
-        ++ret;
-    } while (ret != i_nEndOfAllArgs && **ret != '-');   // KORR_FUTURE
-                                                        // What about files, which start with '-'?
-    return ret;
-}
-
-//**************************        Load        ***********************//
-
-Load::Load( const char * i_sRepositoryDirectory )
-    :   sRepositoryDirectory(i_sRepositoryDirectory)
-{
-}
-
-Load::~Load()
-{
-}
-
-char * *
-Load::do_Init( char * *            i_nCurArgsBegin,
-               char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs AND **ret != '-',
-              "directory",  C_opt_Load );
-
-    sRepositoryDirectory = *ret;
-    return ++ret;
-}
 
 
 
 //**************************        CreateHTML    ***********************//
 
 CreateHtml::CreateHtml()
-//  :   // sOutputRootDirectory,
-        // aExtLinks
+    :   sOutputRootDirectory(),
+        sDevelopersManual_HtmlRoot(),
+        bSimpleLinks(false)
 {
 }
 
@@ -525,81 +122,96 @@ CreateHtml::~CreateHtml()
 {
 }
 
-char * *
-CreateHtml::do_Init( char * *            i_nCurArgsBegin,
-                     char * *            i_nEndOfAllArgs )
+void
+CreateHtml::do_Init( opt_iter &          it,
+                     opt_iter            itEnd )
 {
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
+    ++it;
+    CHECKOPT( it != itEnd && (*it).char_at(0) != '-',
               "output directory", C_opt_CreateHtml );
-    sOutputRootDirectory = *ret;
+    sOutputRootDirectory = *it;
 
-    if ( is(++ret, C_opt_ExternLinks) )
+    for ( ++it;
+          it != itEnd AND (*it == C_opt_DevmanRoot OR *it == C_opt_SimpleLinks);
+          ++it )
     {
-        CHECKOPT( ret+1 != i_nEndOfAllArgs && **(ret+1) != '-',
-                  "namespace", C_opt_ExternLinks );
-        CHECKOPT( ret+2 != i_nEndOfAllArgs && **(ret+2) != '-',
-                  "linked root directory", C_opt_ExternLinks );
-        do {
-            aExtLinks.push_back( S_ExternLinkage(*(ret+1), *(ret+2)) );
-            ret += 3;
-        } while ( is(ret, C_opt_ExternLinks) );
-    }
-
-    return ret;
+        if (*it == C_opt_DevmanRoot)
+        {
+            ++it;
+            CHECKOPT( it != itEnd AND (*it).char_at(0) != '-',
+                      "HTML root directory of Developers Guide",
+                      C_opt_DevmanRoot );
+            sDevelopersManual_HtmlRoot = *it;
+        }
+        else if (*it == C_opt_SimpleLinks)
+        {
+            bSimpleLinks = true;
+        }
+    }   // end for
 }
 
-
-//**************************        Out XML     ***********************//
-
-CreateXml::CreateXml()
-//  :   // sOutputRootDirectory
+bool
+CreateHtml::do_Run() const
 {
+    if ( ::ary::n22::Repository::The_().HasIdl() )
+        run_Idl();
+    if ( ::ary::n22::Repository::The_().HasCpp() )
+        run_Cpp();
+    return true;
 }
 
-CreateXml::~CreateXml()
+int
+CreateHtml::inq_RunningRank() const
 {
+    return static_cast<int>(rank_CreateHtml);
 }
 
-char * *
-CreateXml::do_Init( char * *            i_nCurArgsBegin,
-                    char * *            i_nEndOfAllArgs )
+void
+CreateHtml::run_Idl() const
 {
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs && **ret != '-',
-              "output directory", C_opt_CreateXml );
+    const ary::idl::Gate &
+        rGate = ary::n22::Repository::The_().Gate_Idl();
 
-    sOutputRootDirectory = *ret;
-    return ++ret;
+    Cout() << "Creating HTML-output into the directory "
+              << sOutputRootDirectory
+              << "."
+              << Endl();
+
+    const DisplayToolsFactory_Ifc &
+        rToolsFactory = DisplayToolsFactory_Ifc::GetIt_();
+    Dyn<autodoc::HtmlDisplay_Idl_Ifc>
+        pDisplay( rToolsFactory.Create_HtmlDisplay_Idl() );
+
+    DYN display::CorporateFrame &   // KORR: Remove the need for const_cast in future.
+        drFrame = const_cast< display::CorporateFrame& >(rToolsFactory.Create_StdFrame());
+    if (NOT DevelopersManual_HtmlRoot().empty())
+        drFrame.Set_DevelopersGuideHtmlRoot( DevelopersManual_HtmlRoot() );
+    if (bSimpleLinks)
+        drFrame.Set_SimpleLinks();
+
+    pDisplay->Run( sOutputRootDirectory,
+                   rGate,
+                   drFrame );
 }
 
-
-//**************************        Save        ***********************//
-
-Save::Save()
-//    :   // sRepositoryDirectory,
+void
+CreateHtml::run_Cpp() const
 {
-}
+    const ary::n22::Repository &
+        rReposy = ary::n22::Repository::The_();
+    const ary::cpp::DisplayGate &
+        rGate = rReposy.Gate_Cpp();
 
-Save::~Save()
-{
-}
+    const DisplayToolsFactory_Ifc &
+        rToolsFactory = DisplayToolsFactory_Ifc::GetIt_();
+    Dyn< autodoc::HtmlDisplay_UdkStd >
+        pDisplay( rToolsFactory.Create_HtmlDisplay_UdkStd() );
 
-char * *
-Save::do_Init( char * *            i_nCurArgsBegin,
-               char * *            i_nEndOfAllArgs )
-{
-    char * * ret = i_nCurArgsBegin + 1;
-    CHECKOPT( ret != i_nEndOfAllArgs AND **ret != '-',
-              "directory",  C_opt_Save );
-
-    sRepositoryDirectory = *ret;
-    return ++ret;
+    pDisplay->Run( sOutputRootDirectory,
+                   rGate,
+                   rToolsFactory.Create_StdFrame() );
 }
 
 
 }   // namespace command
 }   // namespace autodoc
-
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:49 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,17 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             int                 i_count ) const;
     void                finish_Sequence(
                             int                 i_count ) const;
+    void                errorOut_UnresolvedLink(
+                            const char *        i_name ) const;
+    void                errorOut_UnresolvedLink(
+                            const StringVector &
+                                                i_module,
+                            const String &      i_ce,
+                            const String &      i_member ) const;
+    void                errorOut_UnresolvedLink(
+                            const String &      i_module,
+                            const String &      i_ce,
+                            const String &      i_member ) const;
     const ary::idl::Module *
                         referingModule() const;
     const client *      referingCe() const;

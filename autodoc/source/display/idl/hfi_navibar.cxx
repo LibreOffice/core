@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_navibar.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:38 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,11 @@ HF_IdlNavigationBar::Produce_CeMainRow( const client & i_ce )
 
     const StringVector &
         rManualDescrs = i_ce.Secondaries().Links2DescriptionInManual();
-    if (rManualDescrs.size() == 1)
+    if (rManualDescrs.size() == 2)
     {
         aNaviMain.Add_StdItem(C_sManual, Env().Link2Manual( rManualDescrs.front() ));
     }
-    else if (rManualDescrs.size() > 1)
+    else if (rManualDescrs.size() > 2)
     {
         aNaviMain.Add_StdItem(C_sManual, C_sLocalManualLinks);
     }

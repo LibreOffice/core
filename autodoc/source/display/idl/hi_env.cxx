@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_env.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:52 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ HtmlEnvironment_Idl::HtmlEnvironment_Idl( const csv::ploc::Path &           i_rO
         pData(new AryAccess(i_rGate)),
         pOutputTree(new output::Tree),
         aCurPosition(pOutputTree->Root()),
+        pCurPageCe(0),
         pLayout(&i_rLayout),
         pLinker()
 {
@@ -174,9 +175,30 @@ HtmlEnvironment_Idl::Link2Manual( const String & i_link ) const
     static StreamStr aLink_(200);
     aLink_.reset();
     aCurPosition.Get_LinkToRoot(aLink_);
-    aLink_ << "../devman/"
+    String sDvgRoot(pLayout->DevelopersGuideHtmlRoot());
+    if (sDvgRoot.empty())
+        sDvgRoot = "../DevelopersGuide";
+    aLink_ << sDvgRoot
+           << "/"
            << i_link;
     return aLink_.c_str();
 }
 
+String
+HtmlEnvironment_Idl::CurPageCe_AsText() const
+{
+    if (pCurPageCe == 0)
+        return String::Null_();
+
+    static StringVector aModule_;
+    String sCe;
+    String sDummy;
+    Data().Get_CeText(aModule_, sCe, sDummy, *pCurPageCe);
+    StreamLock slCe(500);
+    if (aModule_.size() > 0)
+        slCe().operator_join(aModule_.begin(), aModule_.end(), "/");
+    if (NOT sCe.empty())
+        slCe() << "/" << sCe << ".html";
+    return String(slCe().c_str());
+}
 

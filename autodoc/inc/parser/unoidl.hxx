@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:32 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,10 @@ namespace autodoc
 {
 
 
-class Uidl_Parser : public ::CodeParser
+class IdlParser : public ::CodeParser
 {
   public:
-                        Uidl_Parser(
+                        IdlParser(
                             ary::n22::Repository &  io_rRepository );
 
     virtual void        Run(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:44 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,9 @@ HF_IdlTag::Display_SeeAlsoAtTag( const csi::dsapi::DT_SeeAlsoAtTag & i_rTag )
     csv_assert( pTitleOut != 0 );
     *pTitleOut << "See also";
 
-    HF_IdlTypeText aLinkText(Env(),aTextOut.CurOut(),true);
+    HF_IdlTypeText aLinkText(Env(),aTextOut.CurOut(),true, &aTextOut.ScopeGivingCe());
     aLinkText.Produce_byData( i_rTag.LinkText() );
-//    aTextOut.Create_LinkToBeFound(i_rTag.LinkText(),true);
+
     aTextOut.CurOut() << new Html::LineBreak;
     PutText_Out( i_rTag.Text() );
 }
@@ -301,6 +301,16 @@ HF_IdlDocuTextDisplay::Display_EOL()
 void
 HF_IdlDocuTextDisplay::CreateTypeLink()
 {
+    if (strchr(sLinkToken,':') != 0)
+    {
+         Cerr() << "Warning: Qualified name (probably member) \""
+                << sLinkToken
+                << "\" found in <type> tag in "
+               << Env().CurPageCe_AsText()
+               << Endl();
+        CurOut() << sLinkToken;
+        return;
+    }
     HF_IdlTypeText aLink(Env(), CurOut(), true, &ScopeGivingCe());
     aLink.Produce_LinkInDocu(sScope, sLinkToken, String::Null_());
 }
@@ -312,7 +322,7 @@ HF_IdlDocuTextDisplay::CreateMemberLink()
     HF_IdlTypeText aLink(Env(), CurOut(), true, &ScopeGivingCe());
 
     const char *
-        sSplit = strstr(sLinkToken,"::");
+        sSplit = strchr(sLinkToken,':');
 
     if (sSplit != 0)
     {

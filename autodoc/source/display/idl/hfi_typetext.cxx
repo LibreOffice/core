@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:48 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
     {
         // SYNTAX_ERR, but rather logical error: Missing module.
         CurOut() << i_sFullName;
+        errorOut_UnresolvedLink(i_sFullName);
         return;
     }
 
@@ -178,6 +179,7 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
         if (sTypeEnd == 0)
         {   // SYNTAX_ERR
             CurOut() << i_sFullName;
+            errorOut_UnresolvedLink(i_sFullName);
             return;
         }
 
@@ -191,14 +193,20 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
     }
 
     csv::erase_container(aModule_);
-    bool bFound =   // KORR : Check the semantics of this, see if ce really exists in any case?
+    bool bFound =   // KORR : Check the semantics of this, see if ce really exists, if it is a member?
         Env().Data().Search_Ce( aModule_,
                                 sCe,sMember,
                                 sTypeText,
                                 *pScopeModule );
     if (NOT bFound)
     {
+        if (strchr(sTypeText,':') == 0)
+        {
+            Produce_LocalLinkInDocu(sTypeText);
+            return;
+        }
         CurOut() << i_sFullName;
+        errorOut_UnresolvedLink(i_sFullName);
         return;
     }
 
@@ -224,6 +232,7 @@ HF_IdlTypeText::Produce_LinkInDocu( const String &      i_scope,
         CurOut() << i_scope << "::" << i_name;
         if (NOT i_member.empty())
             CurOut() << "::" << i_member;
+        errorOut_UnresolvedLink(i_scope,i_name,i_member);
         return;
     }
 
@@ -237,6 +246,7 @@ HF_IdlTypeText::Produce_LinkInDocu( const String &      i_scope,
         CurOut() << i_scope << "::" << i_name;
         if (NOT i_member.empty())
             CurOut() << "::" << i_member;
+        errorOut_UnresolvedLink(i_scope,i_name,i_member);
         return;
     }
     produce_FromStd(aModule_, i_name, i_member, 0, exists_yes);
@@ -252,12 +262,19 @@ HF_IdlTypeText::Produce_LocalLinkInDocu( const String & i_member ) const
     csv_assert(referingCe() != 0);
     if ( referingModule() == Env().Linker().Search_CurModule() )
     {
+        StreamLock slLink(200);
+        if (referingCe()->SightLevel() == ary::idl::sl_Member)
+        {
+            slLink() << "#" << i_member;
+        }
+        else
+        {
+            slLink() << referingCe()->LocalName()
+                     << ".html#"
+                     << i_member;
+        }
         CurOut()
-            >> *new Html::Link( StreamLock(200)()
-                                    << referingCe()->LocalName()
-                                    << ".html#"
-                                    << i_member
-                                    << c_str )
+            >> *new Html::Link(slLink().c_str())
                << i_member;
         return;
     }
@@ -339,6 +356,11 @@ HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
                        AND i_ceExists == exists_yes;
     bool
         bHasCeOrName = NOT i_ce.empty();
+
+    if (i_ceExists == exists_no)
+    {
+        errorOut_UnresolvedLink(i_module, i_ce, i_member);
+    }
 
     if (i_sequenceCount > 0)
         start_Sequence(i_sequenceCount);
@@ -568,6 +590,59 @@ HF_IdlTypeText::finish_Sequence( int i_count ) const
     }
 }
 
+void
+HF_IdlTypeText::errorOut_UnresolvedLink( const char *        i_name ) const
+{
+    Cerr() << "\nWarning: Unresolved Link \""
+           << i_name
+           << "\" in "
+           << Env().CurPageCe_AsText()
+           << Endl();
+}
+
+void
+HF_IdlTypeText::errorOut_UnresolvedLink( const StringVector & i_module,
+                                         const String &       i_ce,
+                                         const String &       i_member ) const
+{
+    StreamLock slName(500);
+
+    if (i_module.size() > 0)
+    {
+        slName().operator_join(i_module.begin(), i_module.end(), "::");
+         if (NOT i_ce.empty())
+            slName() << "::";
+    }
+    if (NOT i_ce.empty())
+    {
+        slName() << i_ce;
+        if (NOT i_member.empty())
+            slName() << "::" << i_member;
+    }
+    errorOut_UnresolvedLink(slName().c_str());
+}
+
+void
+HF_IdlTypeText::errorOut_UnresolvedLink( const String &      i_module,
+                                         const String &      i_ce,
+                                         const String &      i_member ) const
+{
+    StreamLock slName(500);
+
+    if (i_module.size() > 0)
+    {
+        slName() << i_module;
+         if (NOT i_ce.empty())
+            slName() << "::";
+    }
+    if (NOT i_ce.empty())
+    {
+        slName() << i_ce;
+        if (NOT i_member.empty())
+            slName() << "::" << i_member;
+    }
+    errorOut_UnresolvedLink(slName().c_str());
+}
 
 
 

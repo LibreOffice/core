@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corframe.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:31 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,10 @@ namespace display
 class CorporateFrame
 {
   public:
+    // LIFECYCLE
     virtual             ~CorporateFrame() {}
 
+    // INQUIRY
     virtual DYN Html_Image *
                         LogoSrc() const = 0;
     virtual const char *
@@ -88,7 +90,16 @@ class CorporateFrame
     virtual const char *
                         CopyrightText() const = 0;
 
-    virtual const char *            CssStyle() const = 0;
+    virtual const char *
+                        CssStyle() const = 0;
+    virtual const char *
+                        DevelopersGuideHtmlRoot() const = 0;
+    virtual bool        SimpleLinks() const = 0;
+
+    // ACCESS
+    virtual void        Set_DevelopersGuideHtmlRoot(
+                            const String &      i_directory ) = 0;
+    virtual void        Set_SimpleLinks() = 0;
 };
 
 

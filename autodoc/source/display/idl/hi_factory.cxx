@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:55 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,13 +221,18 @@ HtmlFactory_Idl::write_ManualLinks( Xml::Element &  o_screen,
     HF_DocEntryList
         aDocuList( o_screen );
     aDocuList.Produce_Term("Developer Manual");
+    csv_assert(rLinks2Descrs.size() % 2 == 0);
     for ( StringVector::const_iterator it = rLinks2Descrs.begin();
           it != rLinks2Descrs.end();
           ++it )
     {
-        aDocuList.Produce_Definition()
-            >> *new Html::Link( Env().Link2Manual(*it))
-                << *it;
+        Xml::Element &
+            rLink = aDocuList.Produce_Definition() >> *new Html::Link( Env().Link2Manual(*it));
+        if ( (*(it+1)).empty() )
+            rLink << *it;
+        else
+            rLink << *(it+1);
+        ++it;
     }   // end for
 }
 

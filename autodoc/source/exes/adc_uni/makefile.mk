@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: np $ $Date: 2002-11-01 17:15:32 $
+#   last change: $Author: np $ $Date: 2002-11-14 18:02:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ PRJINC=$(PRJ)$/source
 
 OBJFILES= \
     $(OBJ)$/adc_cl.obj	        \
+    $(OBJ)$/adc_cmd_parse.obj	\
     $(OBJ)$/adc_cmds.obj        \
     $(OBJ)$/cmd_run.obj
 

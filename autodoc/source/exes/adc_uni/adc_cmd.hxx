@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: prs_cpp.hxx,v $
+ *  $RCSfile: adc_cmd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:05 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,48 +59,111 @@
  *
  ************************************************************************/
 
-#ifndef ADC_CPP_PRS_CPP_HXX
-#define ADC_CPP_PRS_CPP_HXX
+#ifndef ADC_ADC_CMD_HXX
+#define ADC_ADC_CMD_HXX
 
 
 
 // USED SERVICES
     // BASE CLASSES
-#include <autodoc/prs_code.hxx>
+#include <cosv/comdline.hxx>
     // COMPONENTS
     // PARAMETERS
 
-namespace cpp
+
+namespace autodoc
+{
+namespace command
 {
 
-struct S_RunningData;
-
-class Cpluplus_Parser : public autodoc::CodeParser_Ifc
+/** Context for a command, which can be read from the command line.
+*/
+class Context
 {
   public:
-                        Cpluplus_Parser();
-    virtual             ~Cpluplus_Parser();
+    typedef StringVector::const_iterator opt_iter;
 
+    virtual             ~Context() {}
 
-    virtual void        Setup(
-                            ary::Repository &   o_rRepository,
-                            const autodoc::DocumentationParser_Ifc &
-                                                i_rDocumentationInterpreter );
-
-    virtual void        Run(
-                            const udmstri &     i_sProjectName,
-                            const csv::ploc::Path &
-                                                i_rProjectRootDirectory,
-                            const autodoc::FileCollector_Ifc &
-                                                i_rFiles );
+    void                Init(
+                            opt_iter &          it,
+                            opt_iter            itEnd );
   private:
-    Dyn<S_RunningData>  pRunningData;
+    virtual void        do_Init(
+                            opt_iter &          it,
+                            opt_iter            itEnd ) = 0;
+};
+
+// IMPLEMENTATION
+inline void
+Context::Init( opt_iter &          i_nCurArgsBegin,
+               opt_iter            i_nEndOfAllArgs )
+
+{ do_Init(i_nCurArgsBegin, i_nEndOfAllArgs); }
+
+
+
+/** Interface for commands, autodoc is able to perform.
+*/
+class Command : public Context
+{
+  public:
+    /** Running ranks of the commands are to be maintained at one location:
+        Here!
+    */
+    enum E_Ranks
+    {
+        rank_Load       = 10,
+        rank_Parse      = 20,
+        rank_Save       = 30,
+        rank_CreateHtml = 40,
+        rank_CreateXml  = 50
+    };
+
+
+    bool                Run() const;
+    int                 RunningRank() const;
+
+  private:
+    virtual bool        do_Run() const = 0;
+    virtual int         inq_RunningRank() const = 0;
+};
+
+// IMPLEMENTATION
+inline bool
+Command::Run() const
+{ return do_Run(); }
+inline int
+Command::RunningRank() const
+{ return inq_RunningRank(); }
+
+
+
+
+/** The exception thrown, if the command line is invalid.
+*/
+class X_CommandLine
+{
+  public:
+                        X_CommandLine(
+                            const char *        i_sExplanation )
+                            :   sExplanation(i_sExplanation) {}
+
+    void                Report(
+                            ostream &           o_rOut )
+                            { o_rOut << "Error in command line: "
+                                     << sExplanation << Endl(); }
+  private:
+    String              sExplanation;
 };
 
 
-}   // namespace cpp
+
+
+
+}   // namespace command
+}   // namespace autodoc
 
 
 #endif
-
 

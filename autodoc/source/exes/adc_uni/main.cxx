@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:17 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,12 @@ int
 main( int        argc,
       char *     argv[] )
 {
-   autodoc::CommandLine    aCL;
-    autodoc::CommandRunner  aRunner;
-
+    autodoc::CommandLine    aCL;
     aCL.Init(argc, argv);
     if (NOT aCL.CheckParameters() )
         return 1;
 
-    int ret = aRunner.Run(aCL);
+    int ret = aCL.Run();
     return ret;
 }
 

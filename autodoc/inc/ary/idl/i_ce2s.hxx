@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_ce2s.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:11:08 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,13 @@ class Ce_2s
                             RCid                i_nCeClass );
     // OPERATIONS
     void                Add_Link2DescriptionInManual(
-                            const String &      i_link )
-                                                { aDescriptionsInManual.push_back(i_link); }
+                            const String &      i_link,
+                            const String &      i_linkUI )
+                                                { aDescriptionsInManual.push_back(i_link); aDescriptionsInManual.push_back(i_linkUI); }
     void                Add_Link2RefInManual(
-                            const String &      i_link )
-                                                { aRefsInManual.push_back(i_link); }
+                            const String &      i_link,
+                            const String &      i_linkUI )
+                                                { aRefsInManual.push_back(i_link); aRefsInManual.push_back(i_linkUI); }
     std::vector<Ce_id> &
                         Access_List(
                             int                 i_indexOfList );

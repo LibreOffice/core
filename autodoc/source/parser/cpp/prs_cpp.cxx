@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prs_cpp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:32 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ Cpluplus_Parser::Setup( ary::Repository &                        o_rRepository,
 
 void
 Cpluplus_Parser::Run( const udmstri &                       i_sProjectName,
-                      csv::ploc::Path &                     i_rProjectRootDirectory,
+                      const csv::ploc::Path &               i_rProjectRootDirectory,
                       const autodoc::FileCollector_Ifc &    i_rFiles )
 {
     pRunningData->aDealer.StartNewProject( i_sProjectName, i_rProjectRootDirectory );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reposy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:11 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,11 @@
 namespace ary
 {
 
+namespace
+{
+    static Dyn<RepositoryCenter> pTheOldInstance_(0);
+}
+
 
 namespace n22
 {
@@ -99,19 +104,24 @@ namespace
 }
 
 Repository &
-Repository::Create_( const String &     i_sName )
+Repository::Create_()
 {
     if ( pTheInstance_ )
         throw X_Ary(X_Ary::x_MultipleRepository);
 
-    pTheInstance_ = new RepositoryCenter( i_sName );
+    pTheInstance_ = new RepositoryCenter;
+
+    // KORR_FUTURE
+    //   Create the Cpp repository:
+    ::ary::Repository::Create_(0);
+
     return *pTheInstance_;
 }
 
 Repository &
 Repository::The_()
 {
-    if ( pTheInstance_ )
+    if ( NOT pTheInstance_ )
         throw X_Ary(X_Ary::x_MissingRepository);
 
     return *pTheInstance_;
@@ -121,14 +131,18 @@ void
 Repository::Destroy_()
 {
     pTheInstance_ = 0;
+
+    // KORR_FUTURE
+    //   Destroythe Cpp repository:
+    ::ary::Repository::Destroy_();
 }
 
 
 //*****************     RepositoryCenter          ************//
 
 
-RepositoryCenter::RepositoryCenter( const String & i_sName )
-    :   sDisplayedName(i_sName),
+RepositoryCenter::RepositoryCenter()
+    :   sDisplayedName(),
         aLocation(),
 #if 0       // Version 2.2
         pCppPartition(),
@@ -165,12 +179,29 @@ RepositoryCenter::inq_Name() const
     return sDisplayedName;
 }
 
+bool
+RepositoryCenter::inq_HasIdl() const
+{
+    return bool(pIdlPartition);
+}
+
+bool
+RepositoryCenter::inq_HasCpp() const
+{
+    return pTheOldInstance_->HasCpp();
+}
+
 const ::ary::idl::Gate &
 RepositoryCenter::inq_Gate_Idl() const
 {
     return const_cast< RepositoryCenter& >(*this).access_Gate_Idl();
 }
 
+const ::ary::cpp::DisplayGate &
+RepositoryCenter::inq_Gate_Cpp() const
+{
+    return pTheOldInstance_->DisplayGate_Cpp();
+}
 
 ::ary::idl::Gate &
 RepositoryCenter::access_Gate_Idl()
@@ -180,6 +211,20 @@ RepositoryCenter::access_Gate_Idl()
 
     return pIdlPartition->TheGate();
 }
+
+::ary::cpp::RwGate &
+RepositoryCenter::access_Gate_Cpp()
+{
+    return pTheOldInstance_->RwGate_Cpp();
+}
+
+void
+RepositoryCenter::do_Set_Name(const String & i_sName)
+{
+    sDisplayedName = i_sName;
+    pTheOldInstance_->Set_Name(i_sName);
+}
+
 
 
 #if 0       // Version 2.2
@@ -306,64 +351,70 @@ RepositoryCenter::inq_Gate_Cpp() const
 
 
 
-namespace
-{
-    static Dyn<RepositoryCenter> pTheInstance_(0);
-}
 
 struct RepositoryCenter::CheshireCat
 {
     //  DATA
-    udmstri             sName;
+    String              sName;
     Dyn<store::Storage> pStorage;
     Dyn<Storage_Ifc>    pStorage_Ifc;
     Dyn<IdGenerator>    pIdGenerator;
 
     Dyn<cpp::Gate>      pGate_Cpp;
     Dyn<loc::Gate>      pGate_Locations;
+    bool                bHasCppContent;
 
                         CheshireCat(
-                            const udmstri &     i_sName,
                             DYN IdGenerator &   let_drIds );
                         ~CheshireCat();
 };
 
 
 Repository &
-Repository::Create_( const udmstri &     i_sName,
-                     DYN IdGenerator *   let_dpIds )
+Repository::Create_( DYN IdGenerator *   let_dpIds )
 {
-    csv_assert( NOT pTheInstance_ );
+    csv_assert( NOT pTheOldInstance_ );
 
     DYN IdGenerator * dpIds =
             let_dpIds != 0
                 ?   let_dpIds
                 :   new Std_IdGenerator;
-    pTheInstance_ = new RepositoryCenter( i_sName, *dpIds );
-    return *pTheInstance_;
+    pTheOldInstance_ = new RepositoryCenter( *dpIds );
+    return *pTheOldInstance_;
 }
 
 Repository &
 Repository::The_()
 {
-    csv_assert( pTheInstance_ );
-    return *pTheInstance_;
+    csv_assert( pTheOldInstance_ );
+    return *pTheOldInstance_;
 }
 
 void
 Repository::Destroy_()
 {
-    pTheInstance_ = 0;
+    pTheOldInstance_ = 0;
 }
 
-RepositoryCenter::RepositoryCenter( const udmstri &     i_sName,
-                                    DYN IdGenerator &   let_drIds )
-    :   pi( new CheshireCat(i_sName, let_drIds) )
+RepositoryCenter::RepositoryCenter( DYN IdGenerator &   let_drIds )
+    :   pi( new CheshireCat(let_drIds) )
 {
 }
 
 RepositoryCenter::~RepositoryCenter()
 {
+}
+
+bool
+RepositoryCenter::HasCpp() const
+{
+    return pi->bHasCppContent;
+}
+
+void
+RepositoryCenter::Set_Name( const String & i_name )
+{
+     pi->sName = i_name;
 }
 
 const cpp::DisplayGate &
@@ -381,19 +432,20 @@ RepositoryCenter::inq_Name() const
 cpp::RwGate &
 RepositoryCenter::access_RwGate_Cpp()
 {
+    pi->bHasCppContent = true;
     return *pi->pGate_Cpp;
 }
 
 
 RepositoryCenter::
-CheshireCat::CheshireCat( const udmstri &     i_sName,
-                          DYN IdGenerator &   let_drIds )
-    :   sName(i_sName),
+CheshireCat::CheshireCat( DYN IdGenerator &   let_drIds )
+    :   sName(),
         pStorage(0),
         pStorage_Ifc(0),
         pIdGenerator( &let_drIds ),
         pGate_Cpp(0),
-        pGate_Locations(0)
+        pGate_Locations(0),
+        bHasCppContent(false)
 {
     pStorage                = new store::Storage;
     pStorage_Ifc            = new Storage_Ifc( *pStorage );

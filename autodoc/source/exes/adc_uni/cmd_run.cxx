@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:31 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,18 +75,18 @@
 #include <ary/idl/i_module.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <ary/idl/ip_2s.hxx>
-#include <autodoc/displaying.hxx>
-#include <autodoc/dsp_html_std.hxx>
 #include <autodoc/filecoli.hxx>
 #include <autodoc/parsing.hxx>
 #include <autodoc/prs_code.hxx>
 #include <autodoc/prs_docu.hxx>
-#include <display/uidldisp.hxx>
 #include <parser/unoidl.hxx>
 #include "adc_cl.hxx"
+#include "adc_cmd_parse.hxx"
 #include "adc_cmds.hxx"
 
 
+namespace
+{
 ary::idl::Gate * G_pGate = 0;
 
 ary::idl::Gate &
@@ -95,23 +95,235 @@ GetAryGate()
     csv_assert(G_pGate != 0);
     return *G_pGate;
 }
-
-#if 0
-namespace
-{
-
-void                Recursive_PutOutNamespace(
-                        csi::uidl::Display &        o_rDisplay,
-                        const ary::idl::Module &    i_rNamespace,
-                        const ary::idl::Gate &      i_rGate );
-
 }   // anonymous namespace
-#endif // 0
+
 
 namespace autodoc
 {
+namespace command
+{
+namespace run
+{
+
+Parser::Parser( const Parse & i_command )
+    :   rCommand(i_command),
+        pCppParser(),
+        pCppDocuInterpreter(),
+        pIdlParser()
+{
+}
+
+Parser::~Parser()
+{
+}
+
+bool
+Parser::Perform()
+{
+    Cout() << "Parsing the repository "
+              << rCommand.ReposyName()
+              << " ..."
+              << Endl();
+  try
+  {
+    ::ary::n22::Repository &
+        rAry = ::ary::n22::Repository::The_();
+    rAry.Set_Name(rCommand.ReposyName());
+
+    Dyn< FileCollector_Ifc >
+        pFiles( ParseToolsFactory().Create_FileCollector(6000) );
+
+    bool bIDL = false;
+    bool bCpp = false;
+
+    command::Parse::ProjectIterator
+        itEnd = rCommand.ProjectsEnd();
+    for ( command::Parse::ProjectIterator it = rCommand.ProjectsBegin();
+          it != itEnd;
+          ++it )
+    {
+        uintt nCount = GatherFiles( *pFiles, *(*it) );
+        Cout() << nCount
+             << " files found to parse in project "
+             << (*it)->Name()
+             << "."
+             << Endl();
+
+        switch ( (*it)->Language().eLanguage )
+        {
+            case command::S_LanguageInfo::idl:
+            {
+                Get_IdlParser().Run(*pFiles);
+                bIDL = true;
+            }   break;
+            case command::S_LanguageInfo::cpp:
+            {
+                Get_CppParser().Run( (*it)->Name(),
+                                     (*it)->RootDirectory(),
+                                     *pFiles );
+                bCpp = true;
+            }   break;
+            default:
+                Cerr() << "Project in yet unimplemented language skipped."
+                       << Endl();
+        }
+    }   // end for
+
+    if (bCpp)
+    {
+        rAry.Gate_Cpp().Connect_AllTypes_2_TheirRelated_CodeEntites();
+    }
+    if (bIDL)
+    {
+        ::ary::idl::SecondariesPilot &
+            rIdl2sPilot = rAry.Gate_Idl().Secondaries();
+
+        rIdl2sPilot.Connect_Types2Ces();
+        rIdl2sPilot.Gather_CrossReferences();
+
+        if (NOT rCommand.DevelopersManual_RefFilePath().empty())
+        {
+            csv::File
+                aFile(rCommand.DevelopersManual_RefFilePath(), csv::CFM_READ);
+            if ( aFile.open() )
+            {
+                rIdl2sPilot.Read_Links2DevManual(aFile);
+                 aFile.close();
+            }
+        }
+    }   // endif (bIDL)
+
+    return true;
+
+  }   // end try
+  catch (csv::Exception & xx)
+  {
+    xx.GetInfo(Cerr());
+    Cerr() << " program will exit." << Endl();
+
+    return false;
+  }
+}
+
+CodeParser_Ifc &
+Parser::Get_CppParser()
+{
+    if ( NOT pCppParser )
+        Create_CppParser();
+    return *pCppParser;
+}
+
+IdlParser &
+Parser::Get_IdlParser()
+{
+    if ( NOT pIdlParser )
+        Create_IdlParser();
+    return *pIdlParser;
+}
+
+void
+Parser::Create_CppParser()
+{
+    pCppParser          = ParseToolsFactory().Create_Parser_Cplusplus();
+    pCppDocuInterpreter = ParseToolsFactory().Create_DocuParser_AutodocStyle();
+
+    pCppParser->Setup( ary::Repository::The_(),
+                       *pCppDocuInterpreter );
+}
+
+void
+Parser::Create_IdlParser()
+{
+    pIdlParser = new IdlParser(ary::n22::Repository::The_());
+}
+
+const ParseToolsFactory_Ifc &
+Parser::ParseToolsFactory()
+{
+    return ParseToolsFactory_Ifc::GetIt_();
+}
+
+uintt
+Parser::GatherFiles( FileCollector_Ifc &    o_rFiles,
+                     const S_ProjectData &  i_rProject )
+{
+    uintt ret = 0;
+    o_rFiles.EraseAll();
+
+    typedef StringVector                StrVector;
+    typedef StrVector::const_iterator   StrIterator;
+    const S_Sources &
+        rSources = i_rProject.Sources();
+    const StrVector &
+        rExtensions = i_rProject.Language().aExtensions;
+
+    StrIterator     it;
+    StrIterator     itTreesEnd  = rSources.aTrees.end();
+    StrIterator     itDirsEnd   = rSources.aDirectories.end();
+    StrIterator     itFilesEnd  = rSources.aFiles.end();
+    StrIterator     itExt;
+    StrIterator     itExtEnd    = rExtensions.end();
+
+    csv::StreamStr aDir(500);
+    i_rProject.RootDirectory().Get( aDir );
+
+    uintt nProjectDir_AddPosition =
+            ( strcmp(aDir.c_str(),".\\") == 0 OR strcmp(aDir.c_str(),"./") == 0 )
+                ?   0
+                :   uintt( aDir.tellp() );
+
+    for ( it = rSources.aDirectories.begin();
+          it != itDirsEnd;
+          ++it )
+    {
+        aDir.seekp( nProjectDir_AddPosition );
+        aDir << *it;
+
+        for ( itExt = rExtensions.begin();
+              itExt != itExtEnd;
+              ++itExt )
+        {
+            ret += o_rFiles.AddFilesFrom( aDir.c_str(),
+                                          *itExt,
+                                          FileCollector_Ifc::flat );
+        }   // end for itExt
+    }   // end for it
+    for ( it = rSources.aTrees.begin();
+          it != itTreesEnd;
+          ++it )
+    {
+        aDir.seekp( nProjectDir_AddPosition );
+        aDir << *it;
+
+        for ( itExt = rExtensions.begin();
+              itExt != itExtEnd;
+              ++itExt )
+        {
+            ret += o_rFiles.AddFilesFrom( aDir.c_str(),
+                                          *itExt,
+                                          FileCollector_Ifc::recursive );
+        }   // end for itExt
+    }   // end for it
+    for ( it = rSources.aFiles.begin();
+          it != itFilesEnd;
+          ++it )
+    {
+        aDir.seekp( nProjectDir_AddPosition );
+        aDir << *it;
+
+        o_rFiles.AddFile( aDir.c_str() );
+    }   // end for it
+    ret += rSources.aFiles.size();
+
+    return ret;
+}
 
 
+}   // namespace run
+}   // namespace command
+
+
+#if 0
 inline const ParseToolsFactory_Ifc &
 CommandRunner::ParseToolsFactory()
     { return ParseToolsFactory_Ifc::GetIt_(); }
@@ -143,7 +355,7 @@ CommandRunner::CommandRunner()
         pNewReposy(0),
         nResultCode(0)
 {
-    Cout() << "\nAutodoc version 2.2"
+    Cout() << "\nAutodoc version 2.2.1"
            << "\n-------------------"
            << "\n" << Endl();
 }
@@ -154,30 +366,17 @@ CommandRunner::~CommandRunner()
     Cout() << "\n" << Endl();
 }
 
-int
+void
 CommandRunner::Run( const CommandLine & i_rCL )
 {
     ary::Repository::Destroy_();
+//  ary::n22::Repository::Destroy_();
     pReposy = 0;
+    pNewReposy = 0;
     nResultCode = 0;
     pCommandLine = &i_rCL;
 
-    if ( nResultCode == 0 AND pCommandLine->Cmd_Load() )
-        Load();
-
-    if ( nResultCode == 0 AND pCommandLine->Cmd_Parse() )
-        Parse();
-
-    if ( nResultCode == 0 AND pCommandLine->Cmd_Save() )
-        Save();
-
-    if ( nResultCode == 0 AND pCommandLine->Cmd_CreateHtml() )
-        CreateHtml();
-
-    if ( nResultCode == 0 AND pCommandLine->Cmd_CreateXml() )
-        CreateXml();
-
-    return nResultCode;
+    pCommandLine->Run();
 }
 
 void
@@ -215,7 +414,7 @@ CommandRunner::Parse()
         uintt nCount = GatherFiles( *pFiles, rCmd, *(*it) );
         Cout() << nCount
              << " files found to parse in project "
-             << (*it)->sName
+             << (*it)->Name()
              << "."
              << Endl();
 
@@ -224,8 +423,8 @@ CommandRunner::Parse()
         {
             case command::S_LanguageInfo::cpp:
             {
-                Get_CppParser().Run( (*it)->sName,
-                                     (*it)->aRootDirectory,
+                Get_CppParser().Run( (*it)->Name(),
+                                     (*it)->RootDirectory(),
                                      *pFiles );
                 bCpp = true;
             }   break;
@@ -437,7 +636,7 @@ CommandRunner::CreateHtml_OldIdlStyle()
         rAryGate            = pNewReposy->Gate_Idl();
 
     // Read DevManualLinkFile:
-    // KORR
+    // KORR_FUTURE
     csv::File
         aFile("devmanref.txt", csv::CFM_READ);
     if ( aFile.open() )
@@ -454,64 +653,10 @@ CommandRunner::CreateHtml_OldIdlStyle()
                       rAryGate,
                       DisplayToolsFactory_Ifc::GetIt_().Create_StdFrame() );
 }
-
+#endif // 0
 
 }   // namespace autodoc
 
-#if 0
-namespace
-{
-
-typedef std::vector< ary::idl::Module * > LocalSNList;
-
-inline void
-DisplayCe( csi::uidl::Display &     o_rDisplay,
-           ary::idl::Ce_id          i_nID,
-           const ary::idl::Gate &   i_rGate )
-{
-    const ary::idl::CodeEntity & rEntity = i_rGate.Ces().Find_Ce(i_nID);
-    rEntity.Visit(o_rDisplay);
-}
-
-void
-Recursive_PutOutNamespace( csi::uidl::Display &         o_rDisplay,
-                           const ary::idl::Module &     i_rNamespace,
-                           const ary::idl::Gate &       i_rGate  )
-{
-    static StreamStr  sPath(512);
-    sPath.seekp(0);
-    i_rNamespace.GetFullName( sPath, csv::ploc::Delimiter() );
-    o_rDisplay.InitModule( i_rNamespace.Name(),
-                           sPath.c_str(),
-                           i_rNamespace.Depth() );
-
-    DisplayCe(o_rDisplay, i_rNamespace.Id(), i_rGate);
-
-    const ary::idl::Module::NameMap & rMap = i_rNamespace.LocalNames();
-
-    for ( ary::idl::Module::NameMap::const_iterator iter = rMap.begin();
-          iter != rMap.end();
-          ++iter )
-    {
-        if ( uintt((*iter).second.second) > uintt(ary::uidl::CeNamespace::nok_predeclaration) )
-            DisplayCe(o_rDisplay, (*iter).second.first, i_rGate);
-    }   // for
-
-    LocalSNList aSubNamespaces;
-    i_rNamespace.GetSubNamespaces(aSubNamespaces);
-
-    for ( LocalSNList::iterator iter2 = aSubNamespaces.begin();
-          iter2 != aSubNamespaces.end();
-          ++iter2 )
-    {
-        csv_assert(*iter2 != 0);
-        Recursive_PutOutNamespace(o_rDisplay, *(*iter2), i_rGate);
-    }   // for
-}
-
-}   // anonymous namespace
-
-#endif // 0
 
 
 

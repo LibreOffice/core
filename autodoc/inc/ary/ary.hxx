@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ary.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:10:14 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,15 +74,15 @@ namespace ary
 {
     class Command;
 
-#if 0   // Version 2.2
-//  namespace cpp
-//  {
-//      class Gate;
-//  }
-#endif  // Version 2.2
     namespace idl
     {
         class Gate;
+    }
+
+    namespace cpp
+    {
+        class RwGate;
+        class DisplayGate;
     }
 
 namespace n22
@@ -95,7 +95,8 @@ namespace n22
     Create and destroy the repository and
     give access to the "Gates" for different tasks.
 
-    @collab ::ary::cpp::Gate
+    @collab ::ary::cpp::DisplayGate
+    @collab ::ary::cpp::RwGate
     @collab ::ary::idl::Gate
 */
 
@@ -104,8 +105,7 @@ class Repository
   public:
     //  LIFECYCLE
     virtual             ~Repository() { }
-    static Repository & Create_(
-                            const String &      i_sName );    /// May be 0. Then a default is used.
+    static Repository & Create_();
     static Repository & The_();
     static void         Destroy_();      /// Destroys the Repository.
 
@@ -115,28 +115,31 @@ class Repository
 
     // INQUIRY
     const String &      Name() const;
+    bool                HasIdl() const;
+    bool                HasCpp() const;
     const ::ary::idl::Gate &
                         Gate_Idl() const;
+    const ary::cpp::DisplayGate &
+                        Gate_Cpp() const;
 
     // ACCESS
     ::ary::idl::Gate &  Gate_Idl();
-
-#if 0   // Version 2.2
-//  const cpp::Gate &   Gate_Cpp() const;
-//  cpp::Gate &         Gate_Cpp();
-#endif  // Version 2.2
-
+    ::ary::cpp::RwGate &
+                        Gate_Cpp();
+    void                Set_Name(
+                            const String &      i_sName );
   private:
     // Locals
     virtual void                        do_Perform(::ary::Command & io_rCommand) = 0;
     virtual const String &              inq_Name() const = 0;
+    virtual bool                        inq_HasIdl() const = 0;
+    virtual bool                        inq_HasCpp() const = 0;
     virtual const ::ary::idl::Gate &    inq_Gate_Idl() const = 0;
+    virtual const ::ary::cpp::DisplayGate &
+                                        inq_Gate_Cpp() const = 0;
     virtual ::ary::idl::Gate &          access_Gate_Idl() = 0;
-
-#if 0   // Version 2.2
-//  virtual const cpp::Gate &   inq_Gate_Cpp() const = 0;
-//  virtual cpp::Gate &         access_Gate_Cpp() = 0;
-#endif  // Version 2.2
+    virtual ::ary::cpp::RwGate &        access_Gate_Cpp() = 0;
+    virtual void                        do_Set_Name(const String & i_sName) = 0;
 };
 
 
@@ -151,34 +154,36 @@ inline const String &
 Repository::Name() const
     { return inq_Name(); }
 
+inline bool
+Repository::HasIdl() const
+    { return inq_HasIdl(); }
+
+inline bool
+Repository::HasCpp() const
+    { return inq_HasCpp(); }
+
 inline const ::ary::idl::Gate &
 Repository::Gate_Idl() const
     { return inq_Gate_Idl(); }
+
+inline const cpp::DisplayGate &
+Repository::Gate_Cpp() const
+    { return inq_Gate_Cpp(); }
 
 inline ::ary::idl::Gate &
 Repository::Gate_Idl()
     { return access_Gate_Idl(); }
 
-#if 0   // Version 2.2
-/*
-inline const cpp::Gate &
-Repository::Gate_Cpp() const
-    { return inq_Gate_Cpp(); }
-inline cpp::Gate &
+inline cpp::RwGate &
 Repository::Gate_Cpp()
     { return access_Gate_Cpp(); }
-*/
-#endif  // Version 2.2
-
+inline void
+Repository::Set_Name( const String & i_sName )
+    { do_Set_Name(i_sName); }
 
 } // namespace n22
 
 
-    namespace cpp
-    {
-        class RwGate;
-        class DisplayGate;
-    }
 
     class IdGenerator;
 
@@ -201,7 +206,6 @@ class Repository
     //  LIFECYCLE
     virtual             ~Repository() { }
     static Repository & Create_(
-                            const udmstri &     i_sName,
                             DYN IdGenerator *   let_dpIds );    /// May be 0. Then a default is used.
     static Repository & The_();
     static void         Destroy_();      /// Destroys the Repository.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_main.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:59 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,21 @@ class Guard_CurFile
                             DocuFile_Html &     io_client,
                             HtmlEnvironment_Idl &
                                                 io_env,
-                            const String &      i_ceName,
+                            const ary::idl::CodeEntity &
+                                                i_ce,
+                            const String &      i_titlePrefix );
+                        Guard_CurFile(          /// For Use pages
+                            DocuFile_Html &     io_client,
+                            HtmlEnvironment_Idl &
+                                                io_env,
+                            const String &      i_fileName,
                             const String &      i_titlePrefix );
                         Guard_CurFile(          /// For Modules
                             DocuFile_Html &     io_client,
                             HtmlEnvironment_Idl &
-                                                io_env );
+                                                io_env,
+                            const ary::idl::CodeEntity &
+                                                i_ce );
                         Guard_CurFile(          /// For Indices
                             DocuFile_Html &     io_client,
                             HtmlEnvironment_Idl &
@@ -140,6 +149,8 @@ class Guard_CurFile
                         ~Guard_CurFile();
   private:
     DocuFile_Html &     rClient;
+    HtmlEnvironment_Idl &
+                        rEnv;
 
 };
 
@@ -165,13 +176,14 @@ class Guard_CurFactoryPtr
 };
 
 
-Guard_CurFile::Guard_CurFile( DocuFile_Html &           io_client,
-                              HtmlEnvironment_Idl &     io_env,
-                              const String &            i_ceName,
-                              const String &            i_titlePrefix )
-    :   rClient(io_client)
-{
-    io_env.Set_CurFile( StreamLock(100)() << i_ceName
+Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
+                              HtmlEnvironment_Idl &         io_env,
+                              const ary::idl::CodeEntity &  i_ce,
+                              const String &                i_titlePrefix )
+    :   rClient(io_client),
+        rEnv(io_env)
+{   // For Ces
+    io_env.Set_CurFile( StreamLock(100)() << i_ce.LocalName()
                                           << ".html"
                                           << c_str );
     StreamLock aCurFilePath(700);
@@ -179,13 +191,37 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &           io_client,
 
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
-    rClient.SetTitle( StreamLock(100)() << i_titlePrefix << " " << i_ceName << c_str );
+    rClient.SetTitle( StreamLock(100)() << i_titlePrefix << " " << i_ce.LocalName() << c_str );
+
+    io_env.Set_CurPageCe(&i_ce);
 }
 
 Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
-                              HtmlEnvironment_Idl & io_env )
-    :   rClient(io_client)
-{
+                              HtmlEnvironment_Idl & io_env,
+                              const String &        i_fileName,
+                              const String &        i_titlePrefix )
+    :   rClient(io_client),
+        rEnv(io_env)
+{   // For Use pages
+    io_env.Set_CurFile( StreamLock(100)() << i_fileName
+                                          << ".html"
+                                          << c_str );
+    StreamLock aCurFilePath(700);
+    io_env.Get_CurFilePath(aCurFilePath());
+
+    rClient.EmptyBody();
+    rClient.SetLocation( aCurFilePath().c_str() );
+    rClient.SetTitle( StreamLock(100)() << i_titlePrefix << " " << i_fileName << c_str );
+
+    io_env.Set_CurPageCe(0);
+}
+
+Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
+                              HtmlEnvironment_Idl &         io_env,
+                              const ary::idl::CodeEntity &  i_ce )
+    :   rClient(io_client),
+        rEnv(io_env)
+{   // For Modules
     io_env.Set_CurFile( output::ModuleFileName() );
     StreamLock aCurFilePath(700);
     io_env.Get_CurFilePath(aCurFilePath());
@@ -193,13 +229,16 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
     rClient.EmptyBody();
     rClient.SetLocation( aCurFilePath().c_str() );
     rClient.SetTitle( StreamLock(100)() << "Module " << io_env.CurPosition().Name() << c_str );
+
+    io_env.Set_CurPageCe(&i_ce);
 }
 
 Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
                               HtmlEnvironment_Idl & io_env,
                               char                  i_letter )
-    :   rClient(io_client)
-{
+    :   rClient(io_client),
+        rEnv(io_env)
+{   // For Index pages
     io_env.Set_CurFile( StreamLock(100)() << "index-"
                                           << ( i_letter != '_'
                                                 ?   int(i_letter)-'a'+1
@@ -221,6 +260,7 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
 Guard_CurFile::~Guard_CurFile()
 {
     rClient.CreateFile();
+    rEnv.Set_CurPageCe(0);
 }
 
 
@@ -262,7 +302,8 @@ void
 MainDisplay_Idl::do_Module( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile    gFile( *pMyFile,
-                               Env() );
+                            Env(),
+                            i_ce );
     HF_IdlModule     aFactory( *pEnv, pMyFile->Body() );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
 
@@ -316,7 +357,7 @@ MainDisplay_Idl::do_ConstantsGroup( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Constants' Group" );
     HF_IdlConstGroup    aFactory( *pEnv, pMyFile->Body() );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
@@ -329,7 +370,7 @@ MainDisplay_Idl::do_Singleton( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Singleton" );
     HF_IdlSingleton     aFactory( *pEnv, pMyFile->Body() );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
@@ -343,7 +384,7 @@ MainDisplay_Idl::do_InterfaceDescr( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Interface" );
     HF_IdlInterface     aInterface( *pEnv, pMyFile->Body() );
     Guard_CurFactoryPtr gFactory(pCurFactory,aInterface);
@@ -356,7 +397,7 @@ MainDisplay_Idl::do_ServiceDescr( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Service" );
     HF_IdlService       aFactory( *pEnv, pMyFile->Body() );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
@@ -369,7 +410,7 @@ MainDisplay_Idl::do_StructDescr( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Struct" );
     HF_IdlStruct        aFactory( *pEnv, pMyFile->Body(), false );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
@@ -382,7 +423,7 @@ MainDisplay_Idl::do_ExceptionDescr( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Exception" );
     HF_IdlStruct        aFactory( *pEnv, pMyFile->Body(), true );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
@@ -395,7 +436,7 @@ MainDisplay_Idl::do_EnumDescr( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Enum" );
     HF_IdlEnum        aFactory( *pEnv, pMyFile->Body() );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);
@@ -408,7 +449,7 @@ MainDisplay_Idl::do_TypedefDescr( const ary::idl::CodeEntity & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
-                               i_ce.LocalName(),
+                               i_ce,
                                "Typedef" );
     HF_IdlTypedef       aFactory( *pEnv, pMyFile->Body() );
     Guard_CurFactoryPtr gFactory(pCurFactory,aFactory);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_ary.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:51 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,17 +205,17 @@ AryAccess::Search_Ce( StringVector &            o_module,
     // Find member:
     if ( *pNext == 0 )
         return true;
-    if (strchr(pNext,':') != 0)
+    nextName(pNext, o_memberEntity);
+    if (strchr(o_memberEntity,':') != 0)
         return false;   // This must not happen in IDL
 
-    int nMemberLen = strlen(pNext);
+    int nMemberLen = o_memberEntity.length();
     if ( nMemberLen > 2
             ?   *(pNext + nMemberLen - 2) == '('
             : false )
     {
-        nMemberLen -= 2;
+        o_memberEntity.assign(o_memberEntity,nMemberLen-2);
     }
-    o_memberEntity.assign(pNext,nMemberLen);
 
 #if 0
 // The following code avoids false links, but is rather expensive

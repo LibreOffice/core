@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:26 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,14 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <algorithm>
+#include <cosv/x.hxx>
+#include <cosv/file.hxx>
+#include <cosv/template/tpltools.hxx>
+#include <ary/ary.hxx>
+#include <tools/tkpchars.hxx>
 #include "adc_cmds.hxx"
+#include "adc_cmd_parse.hxx"
 
 
 namespace autodoc
@@ -270,12 +277,7 @@ const char * const C_sUserGuide =
 
 CommandLine::CommandLine()
     :   nDebugStyle(0),
-        // pCmd_Parse,
-        // pCmd_Load,
-        // pCmd_CreateHtml,
-        // pCmd_CreateXml,
-        // pCmd_Save,
-        pCurProject(0),
+        aCommands(),
         bInitOk(false)
 {
     csv_assert(pTheInstance_ == 0);
@@ -284,51 +286,30 @@ CommandLine::CommandLine()
 
 CommandLine::~CommandLine()
 {
+    csv::erase_container_of_heap_ptrs(aCommands);
     pTheInstance_ = 0;
 }
 
-void
-CommandLine::SetUpdate( const char * i_sRepositoryDir )
+int
+CommandLine::Run() const
 {
-    if ( pCmd_Load )
-    {
-        if ( strcmp(pCmd_Load->ReposyDir(), i_sRepositoryDir) != 0 )
-        {
-            StreamLock slMsg(200);
-            throw command::X_CommandLine(
-                slMsg() << "Different repository directories with options "
-                        << command::C_opt_Load
-                        << " and "
-                        << command::C_opt_Update
-                        << "."
-                        << c_str );
-        }
-    }
-    else
-    {
-         pCmd_Load = new command::Load(i_sRepositoryDir);
-    }
-}
+    Cout() << "\nAutodoc version 2.2.1"
+           << "\n---------------------"
+           << "\n" << Endl();
 
-void
-CommandLine::SetCurProject( command::S_ProjectData & io_rProject )
-{
-    pCurProject = &io_rProject;
-}
+    ary::n22::Repository &
+        rAry = ary::n22::Repository::Create_();
 
-command::S_ProjectData &
-CommandLine::CurProject()
-{
-    if (pCurProject == 0)
+    bool ok = true;
+    for ( CommandList::const_iterator it = aCommands.begin();
+          ok AND it != aCommands.end();
+          ++it )
     {
-        if ( NOT pCmd_Parse )
-        {
-            pCmd_Parse = new command::Parse(*this);
-        }
-        pCurProject = &pCmd_Parse->CreateDefaultProject();
+        ok = (*it)->Run();
     }
 
-    return *pCurProject;
+    rAry.Destroy_();
+    return ok ? 0 : 1;
 }
 
 const CommandLine &
@@ -342,80 +323,66 @@ void
 CommandLine::do_Init( int                 argc,
                       char *              argv[] )
 {
+  try
+  {
     bInitOk = false;
+    StringVector    aParameters;
 
-    try
+    char * * itpEnd = &argv[0] + argc;
+    for ( char * * itp = &argv[1]; itp != itpEnd; ++itp )
     {
-
-    char * * itEnd = &argv[0] + argc;
-    for ( char * * it = &argv[1]; it != itEnd; )
-    {
-         if ( strcmp(*it, command::C_opt_Verbose) == 0 )
-        {
-            ++it;
-            if ( NOT(it != itEnd && **it >= '0' && **it <= '9') )
-            {
-                StreamLock slMsg(200);
-                throw command::X_CommandLine(
-                    slMsg() << "Missing number after "
-                            << command::C_opt_Verbose
-                            << "."
-                            << c_str );
-            }
-
-            nDebugStyle = int(**it - '0');
-            ++it;
-        }
-        else if ( strcmp(*it, command::C_opt_Load) == 0 )
-        {
-            pCmd_Load = new command::Load;
-            it = pCmd_Load->Init(it, itEnd);
-        }
-        else if ( strcmp(*it, command::C_opt_CreateHtml) == 0 )
-        {
-            pCmd_CreateHtml = new command::CreateHtml;
-            it = pCmd_CreateHtml->Init(it, itEnd);
-        }
-        else if ( strcmp(*it, command::C_opt_CreateXml) == 0 )
-        {
-            pCmd_CreateXml = new command::CreateXml;
-            it = pCmd_CreateXml->Init(it, itEnd);
-        }
-        else if ( strcmp(*it, command::C_opt_Save) == 0 )
-        {
-            pCmd_Save = new command::Save;
-            it = pCmd_Save->Init(it, itEnd);
-        }
+         if ( strncmp(*itp, "-I:", 3) != 0 )
+            aParameters.push_back(String(*itp));
         else
-        {
-            pCmd_Parse = new command::Parse(*this);
-            char * * result = pCmd_Parse->Init(it, itEnd);
-            if (result == it)
-            {
-                StreamLock slMsg(200);
-                throw command::X_CommandLine(
-                    slMsg() << "Unknown comand line option: '"
-                            << *it
-                            << "' ."
-                            << c_str );
-            }
-            else
-                it = result;
-        }
+            load_IncludedCommands(aParameters, (*itp)+3);
+    }
+
+    StringVector::const_iterator itEnd = aParameters.end();
+    for ( StringVector::const_iterator it = aParameters.begin();
+          it != itEnd;
+          )
+    {
+        if ( *it == command::C_opt_Verbose )
+            do_clVerbose(it,itEnd);
+        else if ( *it == command::C_opt_LangAll
+                  OR *it == command::C_opt_Name
+                  OR *it == command::C_opt_DevmanFile )
+            do_clParse(it,itEnd);
+        else if (*it == command::C_opt_CreateHtml)
+            do_clCreateHtml(it,itEnd);
+//        else if (*it == command::C_opt_CreateXml)
+//            do_clCreateXml(it,itEnd);
+//        else if (command::C_opt_Load)
+//            do_clLoad(it,itEnd);
+//        else if (*it == command::C_opt_Save)
+//            do_clSave(it,itEnd);
+        else if (*it == "-h" OR *it == "-?" OR *it == "?")
+            // Leads to displaying help, because bInitOk stays on false.
+             return;
+        else if ( *it == command::C_opt_Parse )
+            // Only for backwards compatibility.
+            //   Just ignore "-parse".
+            ++it;
+        else
+             throw command::X_CommandLine(
+                StreamLock(200)() << "Unknown commandline option \""
+                                  << *it
+                                  << "\"."
+                                  << c_str );
     }   // end for
+    sort_Commands();
 
     bInitOk = true;
 
-    }   // end try
-    catch ( command::X_CommandLine & xxx )
-    {
-        xxx.Report( Cerr() );
-    }
-    catch ( ... )
-    {
-        Cerr() << "Unknown error during command line parsing." << Endl();
-    }
-
+  }   // end try
+  catch ( command::X_CommandLine & xxx )
+  {
+    xxx.Report( Cerr() );
+  }
+  catch ( csv::Exception & xxx )
+  {
+    xxx.GetInfo( Cerr() );
+  }
 }
 
 void
@@ -427,25 +394,146 @@ CommandLine::do_PrintUse() const
 bool
 CommandLine::inq_CheckParameters() const
 {
-    if ( NOT pCmd_Parse AND NOT pCmd_Load)
+    if (NOT bInitOk OR aCommands.size() == 0)
         return false;
-    if ( pCmd_Parse )
-    {
-         if ( pCmd_Parse->GlobalLanguageInfo() == 0 )
-        {
-             Cerr() << "Missing language option ("
-                 << command::C_opt_LangAll
-                 << ") in command line"
-                 << Endl();
-            return false;
-        }
-    }
-    if ( NOT pCmd_Save AND NOT pCmd_CreateHtml AND NOT pCmd_CreateXml
-         AND nDebugStyle == 0 )
-        return false;
-    return bInitOk;
+    return true;
 }
 
+void
+CommandLine::load_IncludedCommands( StringVector &      out,
+                                    const char *        i_filePath )
+{
+    CharacterSource
+        aIncludedCommands;
+    csv::File
+        aFile(i_filePath, csv::CFM_READ);
+    if (NOT aFile.open())
+    {
+         Cerr() << "Command include file \""
+               << i_filePath
+               << "\" not found."
+               << Endl();
+        throw command::X_CommandLine("Invalid file in option -I:<command-file>.");
+    }
+    aIncludedCommands.LoadText(aFile);
+    aFile.close();
+
+    bool bInToken = false;
+    for ( ; NOT aIncludedCommands.IsFinished(); aIncludedCommands.MoveOn() )
+    {
+        if (bInToken)
+        {
+            if (aIncludedCommands.CurChar() <= 32)
+            {
+                const char *
+                    pToken = aIncludedCommands.CutToken();
+                bInToken = false;
+
+                 if ( strncmp(pToken, "-I:", 3) != 0 )
+                    out.push_back(String(pToken));
+                else
+                    load_IncludedCommands(out, pToken+3);
+            }
+        }
+        else
+        {
+            if (aIncludedCommands.CurChar() > 32)
+            {
+                aIncludedCommands.CutToken();
+                bInToken = true;
+            }
+        }   // endif (bInToken) else
+    }   // end while()
+}
+
+namespace
+{
+inline int
+v_nr(StringVector::const_iterator it)
+{
+     return int( *(*it).c_str() ) - int('0');
+}
+}   // anonymous namespace
+
+void
+CommandLine::do_clVerbose(  opt_iter &          it,
+                            opt_iter            itEnd )
+{
+    ++it;
+    if ( it == itEnd ? true : v_nr(it) < 0 OR v_nr(it) > 7 )
+        throw command::X_CommandLine( "Missing or invalid number in -v option." );
+    nDebugStyle = v_nr(it);
+    ++it;
+}
+
+void
+CommandLine::do_clParse( opt_iter &          it,
+                         opt_iter            itEnd )
+{
+    command::Command *
+        pCmd_Parse = new command::Parse;
+    pCmd_Parse->Init(it, itEnd);
+    aCommands.push_back(pCmd_Parse);
+}
+
+void
+CommandLine::do_clCreateHtml( opt_iter &          it,
+                              opt_iter            itEnd )
+{
+    command::Command *
+        pCmd_CreateHtml = new command::CreateHtml;
+    pCmd_CreateHtml->Init(it, itEnd);
+    aCommands.push_back(pCmd_CreateHtml);
+}
+
+//void
+//CommandLine::do_clCreateXml( opt_iter &          it,
+//                             opt_iter            itEnd )
+//{
+//    pCmd_CreateXml = new command::CreateXml;
+//    pCmd_CreateXml->Init(it, itEnd);
+//}
+//
+//void
+//CommandLine::do_clLoad( opt_iter &          it,
+//                        opt_iter            itEnd )
+//{
+//    pCmd_Load = new command::Load;
+//    pCmd_Load->Init(it, itEnd);
+//}
+//
+//void
+//CommandLine::do_clSave( opt_iter &          it,
+//                        opt_iter            itEnd )
+//{
+//    pCmd_Save = new command::Save;
+//    pCmd_Save->Init(it, itEnd);
+//}
+
+namespace
+{
+
+struct Less_RunningRank
+{
+    bool                operator()(
+                            const command::Command * const &
+                                                i1,
+                            const command::Command * const &
+                                                i2 ) const
+                        { return i1->RunningRank() < i2->RunningRank(); }
+};
+
+}   // anonymous namespace
+
+
+
+void
+CommandLine::sort_Commands()
+{
+    Less_RunningRank aCommandCompare;
+    std::sort( aCommands.begin(),
+               aCommands.end(),
+               aCommandCompare );
+}
 
 }   // namespace autodoc
-

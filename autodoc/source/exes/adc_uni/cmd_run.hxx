@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:31 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,74 +82,47 @@ namespace ary
 
 namespace autodoc
 {
-    class Uidl_Parser;
-}
-
-namespace autodoc
-{
-    namespace command
-    {
-         class Parse;
-         struct S_ProjectData;
-         struct S_LanguageInfo;
-    }
-
-    class CommandLine;
     class FileCollector_Ifc;
     class ParseToolsFactory_Ifc;
     class CodeParser_Ifc;
     class DocumentationParser_Ifc;
-    typedef autodoc::Uidl_Parser IdlParser;
+    class IdlParser;
 
 
-class CommandRunner
+namespace command
+{
+    class Parse;
+     class S_ProjectData;
+     struct S_LanguageInfo;
+
+namespace run
+{
+
+/** Performs an ::autodoc::command::Parse .
+*/
+class Parser
 {
   public:
-                        CommandRunner();
-                        ~CommandRunner();
+                        Parser(
+                            const Parse &       i_command );
+                        ~Parser();
 
+    bool                Perform();
 
-    int                 Run(
-                            const CommandLine & i_rCL );
   private:
     // Locals
-    void                Parse();
-    void                Load();
-    void                Save();
-    void                CreateHtml();
-    void                CreateXml();
-
     CodeParser_Ifc &    Get_CppParser();
     IdlParser &         Get_IdlParser();
     void                Create_CppParser();
     void                Create_IdlParser();
-
-    inline const ParseToolsFactory_Ifc &
+    const ParseToolsFactory_Ifc &
                         ParseToolsFactory();
-    inline const command::S_LanguageInfo &
-                        Get_ProjectLanguage(
-                            const command::Parse &
-                                                i_rCommand,
-                            const command::S_ProjectData &
-                                                i_rProject );
     uintt               GatherFiles(
                             FileCollector_Ifc & o_rFiles,
-                            const command::Parse &
-                                                i_rCommand,
-                            const command::S_ProjectData &
+                            const S_ProjectData &
                                                 i_rProject );
-    void                CreateHtml_NewStyle();
-    void                CreateHtml_OldIdlStyle();
-
-    bool                HasParsedCpp() const;
-    bool                HasParsedIdl() const;
-
     // DATA
-    const CommandLine * pCommandLine;
-    ary::Repository *   pReposy;
-    ary::n22::Repository *
-                        pNewReposy;
-    int                 nResultCode;
+    const Parse &       rCommand;
 
     Dyn<CodeParser_Ifc> pCppParser;
     Dyn<DocumentationParser_Ifc>
@@ -159,9 +132,12 @@ class CommandRunner
 
 
 
+
 // IMPLEMENTATION
 
 
+}   // namespace run
+}   // namespace command
 }   // namespace autodoc
 
 #endif

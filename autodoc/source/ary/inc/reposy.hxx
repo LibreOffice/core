@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reposy.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:46 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,7 @@ class RepositoryCenter : public ::ary::n22::Repository
 {
   public:
     //  LIFECYCLE
-                        RepositoryCenter(
-                            const String &      i_sDisplayedName );
+                        RepositoryCenter();
     virtual             ~RepositoryCenter();
 
     //  OPERATIONS
@@ -120,15 +119,16 @@ class RepositoryCenter : public ::ary::n22::Repository
                             action::Statistic &     io_rCommand );
   private:
     // Interface Repository:
-    virtual void                 do_Perform( ::ary::Command & io_rCommand);
-    virtual const String &       inq_Name() const;
-    virtual const idl::Gate &    inq_Gate_Idl() const;
-    virtual idl::Gate &          access_Gate_Idl();
-
-#if 0   // Version 2.2
-    virtual const cpp::Gate &   inq_Gate_Cpp() const;
-    virtual cpp::Gate &         access_Gate_Cpp();
-#endif  // Version 2.2
+    virtual void                do_Perform( ::ary::Command & io_rCommand);
+    virtual const String &      inq_Name() const;
+    virtual bool                inq_HasIdl() const;
+    virtual bool                inq_HasCpp() const;
+    virtual const idl::Gate &   inq_Gate_Idl() const;
+    virtual const ::ary::cpp::DisplayGate &
+                                inq_Gate_Cpp() const;
+    virtual idl::Gate &         access_Gate_Idl();
+    virtual ::ary::cpp::RwGate& access_Gate_Cpp();
+    virtual void                do_Set_Name(const String & i_sName);
 
     // Local
 
@@ -164,10 +164,12 @@ class RepositoryCenter : public Repository
   public:
     //  LIFECYCLE
                         RepositoryCenter(
-                            const udmstri &     i_sName,
                             DYN IdGenerator &   let_drIds );
     virtual             ~RepositoryCenter();
 
+    bool                HasCpp() const;
+    void                Set_Name(
+                            const String &      i_name );
 
   private:
     // Interface Repository:

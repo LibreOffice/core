@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_linklist.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:33 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@ HF_CommentedLink_Table::Add_Line()
                             << new Html::WidthAttr("30%")
                             << new Xml::AnAttribute("valign","top") );
     pCurCommentColumn  = & rRow.AddCell();
-
 }
 
 Xml::Element &

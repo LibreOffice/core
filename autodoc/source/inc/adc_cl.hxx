@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:27 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,51 +72,30 @@
 
 namespace autodoc
 {
-    namespace command
-    {
-        class Parse;
-        class Load;
-        class CreateHtml;
-        class CreateXml;
-        class Save;
+namespace command
+{
+    class Command;
+}
 
-        struct S_ProjectData;
-    }
-
-
+/** Reads and runs an Autodoc command line.
+*/
 class CommandLine : public csv::CommandLine_Ifc
 {
   public:
+    // LIFECYCLE
                         CommandLine();
                         ~CommandLine();
+    // OPERATIONS
+    int                 Run() const;
 
+    // INQUIRY
     bool                DebugStyle_ShowText() const;
     bool                DebugStyle_ShowStoredObjects() const;
     bool                DebugStyle_ShowTokens() const;
 
     // ACCESS
-    void                SetUpdate(
-                            const char *        i_sRepositoryDir );
-    void                SetCurProject(
-                            command::S_ProjectData &
-                                                io_rProject );
-    command::S_ProjectData &
-                        CurProject();
-
     static const CommandLine &
                         Get_();
-
-    const Dyn<command::Parse> &
-                        Cmd_Parse() const;
-    const Dyn<command::Load> &
-                        Cmd_Load() const;
-    const Dyn<command::CreateHtml> &
-                        Cmd_CreateHtml() const;
-    const Dyn<command::CreateXml> &
-                        Cmd_CreateXml() const;
-    const Dyn<command::Save> &
-                        Cmd_Save() const;
-
   private:
     // Interface cosv::CommandLine_Ifc:
     virtual void        do_Init(
@@ -126,19 +105,39 @@ class CommandLine : public csv::CommandLine_Ifc
     virtual bool        inq_CheckParameters() const;
 
     // Locals
+    typedef StringVector::const_iterator            opt_iter;
+    typedef std::vector< DYN command::Command* >    CommandList;
+
+    void                load_IncludedCommands(
+                            StringVector &      out,
+                            const char *        i_filePath );
+
+    void                do_clVerbose(
+                            opt_iter &          it,
+                            opt_iter            itEnd );
+    void                do_clParse(
+                            opt_iter &          it,
+                            opt_iter            itEnd );
+    void                do_clCreateHtml(
+                            opt_iter &          it,
+                            opt_iter            itEnd );
+
+//    void                do_clCreateXml(
+//                            opt_iter &          it,
+//                            opt_iter            itEnd );
+//    void                do_clLoad(
+//                            opt_iter &          it,
+//                            opt_iter            itEnd );
+//    void                do_clSave(
+//                            opt_iter &          it,
+//                            opt_iter            itEnd );
+
+    void                sort_Commands();
 
     // DATA
     uintt               nDebugStyle;
-    Dyn<command::Parse> pCmd_Parse;
-    Dyn<command::Load>  pCmd_Load;
-    Dyn<command::CreateHtml>
-                        pCmd_CreateHtml;
-    Dyn<command::CreateXml>
-                        pCmd_CreateXml;
-    Dyn<command::Save>  pCmd_Save;
 
-    command::S_ProjectData *
-                        pCurProject;
+    CommandList         aCommands;
     bool                bInitOk;
     static CommandLine *
                         pTheInstance_;
@@ -156,22 +155,6 @@ CommandLine::DebugStyle_ShowStoredObjects() const
 inline bool
 CommandLine::DebugStyle_ShowTokens() const
     { return (nDebugStyle & 1) != 0; }
-
-inline const Dyn<command::Parse> &
-CommandLine::Cmd_Parse() const
-    { return pCmd_Parse; }
-inline const Dyn<command::Load> &
-CommandLine::Cmd_Load() const
-    { return pCmd_Load; }
-inline const Dyn<command::CreateHtml> &
-CommandLine::Cmd_CreateHtml() const
-    { return pCmd_CreateHtml; }
-inline const Dyn<command::CreateXml> &
-CommandLine::Cmd_CreateXml() const
-    { return pCmd_CreateXml; }
-inline const Dyn<command::Save> &
-CommandLine::Cmd_Save() const
-    { return pCmd_Save; }
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_xrefpage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:49 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,20 +125,24 @@ HF_IdlXrefs::Write_ManualLinks( const client &  i_ce ) const
     Xml::Element &
         rOutCell = aList.Add_Row() >>* new Html::TableCell;
 
+    csv_assert(rLinks2Refs.size() % 2 == 0);
     for ( StringVector::const_iterator it = rLinks2Refs.begin();
           it != rLinks2Refs.end();
           ++it )
     {
-        rOutCell
-            >> *new Html::Link( Env().Link2Manual(*it))
-                << *it;
+        Xml::Element &
+            rLink = rOutCell >> *new Html::Link( Env().Link2Manual(*it));
+        if ( (*(it+1)).empty() )
+            rLink << *it;
+        else
+            rLink << *(it+1);
         rOutCell
             << new Html::LineBreak
             << C_sCRLF;
+        ++it;
     }   // end for
 
     CurOut() << new Html::HorizontalLine();
-
 }
 
 void

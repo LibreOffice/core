@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:36 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,6 @@ UnoIDL_PE::SetOptional()
 {
     if (NOT pDocu)
     {
-        Cout() << "OPTIONAL without documentation found (no dysfunction, just info)." << Endl();
         pDocu = new ary::info::CodeInformation;
     }
 

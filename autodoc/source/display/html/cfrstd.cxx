@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:21 $
+ *  last change: $Author: np $ $Date: 2002-11-14 18:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,11 @@ const char * const C_sStdStyle =
 }   // anonymous namespace
 
 
-
+StdFrame::StdFrame()
+    :   sDevelopersGuideHtmlRoot(),
+        bSimpleLinks(false)
+{
+}
 
 DYN Html_Image *
 StdFrame::LogoSrc() const
@@ -203,3 +207,34 @@ StdFrame::CssStyle() const
     return C_sStdStyle;
 }
 
+const char *
+StdFrame::DevelopersGuideHtmlRoot() const
+{
+    return sDevelopersGuideHtmlRoot;
+}
+
+bool
+StdFrame::SimpleLinks() const
+{
+    return bSimpleLinks;
+}
+
+void
+StdFrame::Set_DevelopersGuideHtmlRoot( const String & i_directory )
+{
+    if (NOT i_directory.empty())
+    {
+        if (i_directory.char_at(i_directory.length()-1) == '/')
+        {
+            sDevelopersGuideHtmlRoot.assign(i_directory,i_directory.length()-1);
+            return;
+        }
+    }
+    sDevelopersGuideHtmlRoot = i_directory;
+}
+
+void
+StdFrame::Set_SimpleLinks()
+{
+    bSimpleLinks = true;
+}
