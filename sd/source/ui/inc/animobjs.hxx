@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 10:05:14 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 
-
-#ifndef _SD_ANIMOBJS_HXX
-#define _SD_ANIMOBJS_HXX
+#ifndef SD_ANIMOBJS_HXX
+#define SD_ANIMOBJS_HXX
 
 #ifndef _SFXDOCKWIN_HXX //autogen
 #include <sfx2/dockwin.hxx>
@@ -90,6 +89,9 @@
 #ifndef _SVX_DLG_CTRL_HXX //autogen
 #include <svx/dlgctrl.hxx>
 #endif
+#ifndef _SFX_PROGRESS_HXX
+#include <sfx2/progress.hxx>
+#endif
 
 
 #ifndef _SV_LSTBOX_HXX //autogen
@@ -101,8 +103,11 @@
 #endif
 
 class SdDrawDocument;
-class SdView;
 class BitmapEx;
+
+namespace sd {
+
+class View;
 
 //------------------------------------------------------------------------
 
@@ -128,7 +133,7 @@ private:
     Fraction    aScale;
 
 public:
-    SdDisplay( Window* pWin, SdResId Id );
+    SdDisplay( ::Window* pWin, SdResId Id );
     ~SdDisplay();
 
     virtual void Paint( const Rectangle& rRect );
@@ -141,10 +146,25 @@ public:
 
 //------------------------------------------------------------------------
 
-class SdAnimationWin : public SfxDockingWindow
+class AnimationWindow : public SfxDockingWindow
 {
- friend class SdAnimationChildWindow;
- friend class SdAnimationControllerItem;
+ friend class AnimationChildWindow;
+ friend class AnimationControllerItem;
+
+public:
+    AnimationWindow( SfxBindings* pBindings, SfxChildWindow *pCW,
+        ::Window* pParent, const SdResId& rSdResId );
+    virtual ~AnimationWindow();
+
+    void    AddObj( ::sd::View& rView );
+    void    CreateAnimObj( ::sd::View& rView );
+
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+
+protected:
+    virtual BOOL    Close();
+    virtual void    Resize();
+    virtual void    FillInfo( SfxChildWinInfo& ) const;
 
 private:
     SdDisplay       aCtlDisplay;
@@ -172,7 +192,7 @@ private:
     PushButton      aBtnCreateGroup;
     FixedLine       aGrpAnimation;
 
-    Window*         pWin;
+    ::Window*       pWin;
     List            aBmpExList;
     List            aTimeList;
     SdDrawDocument* pMyDoc;
@@ -186,7 +206,7 @@ private:
     BOOL            bAllObjects;
 
     SfxBindings*                pBindings;
-    SdAnimationControllerItem*  pControllerItem;
+    AnimationControllerItem*    pControllerItem;
 
     //------------------------------------
 
@@ -207,36 +227,6 @@ private:
     void            WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
                                         SfxProgress* pStbMgr ) const;
     Fraction        GetScale();
-
-protected:
-    virtual BOOL    Close();
-    virtual void    Resize();
-    virtual void    FillInfo( SfxChildWinInfo& ) const;
-
-public:
-            SdAnimationWin( SfxBindings* pBindings, SfxChildWindow *pCW,
-                        Window* pParent, const SdResId& rSdResId );
-            ~SdAnimationWin();
-
-    void    AddObj( SdView& rView );
-    void    CreateAnimObj( SdView& rView );
-
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-};
-
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Animator
-|*
-\************************************************************************/
-
-class SdAnimationChildWindow : public SfxChildWindow
-{
- public:
-    SdAnimationChildWindow( Window*, USHORT, SfxBindings*,
-                            SfxChildWinInfo*);
-
-    SFX_DECL_CHILDWINDOW(SdAnimationChildWindow);
 };
 
 /*************************************************************************
@@ -245,17 +235,20 @@ class SdAnimationChildWindow : public SfxChildWindow
 |*
 \************************************************************************/
 
-class SdAnimationControllerItem : public SfxControllerItem
+class AnimationControllerItem : public SfxControllerItem
 {
-    SdAnimationWin* pAnimationWin;
 
- protected:
+public:
+    AnimationControllerItem( USHORT, AnimationWindow*, SfxBindings* );
+
+protected:
     virtual void StateChanged( USHORT nSId, SfxItemState eState,
-                                const SfxPoolItem* pState );
-
- public:
-    SdAnimationControllerItem( USHORT, SdAnimationWin*, SfxBindings* );
+        const SfxPoolItem* pState );
+private:
+    AnimationWindow* pAnimationWin;
 };
 
-#endif      // _SD_ANIMOBJS_HXX
+} // end of namespace sd
+
+#endif
 
