@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessBridge.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obr $ $Date: 2002-09-24 17:08:46 $
+ *  last change: $Author: obr $ $Date: 2002-10-02 16:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,8 @@ public class AccessBridge {
                     }
 
                     // Add the window fake object as top window listener to receive activate/deactivate events
-                    frameMap.put(handle, new WindowFake(xAccessible, xTopWindow, true));
+//                  frameMap.put(handle, new WindowFake(xAccessible, xTopWindow, true));
+                    frameMap.put(handle, new WindowFake(xAccessible, xTopWindow, false));
                 }
             }
 
@@ -191,7 +192,15 @@ public class AccessBridge {
                 if(bridge != null) {
                     registerVirtualFrame = bridge.getMethod("registerVirtualFrame", parameterTypes);
                     revokeVirtualFrame = bridge.getMethod("revokeVirtualFrame", parameterTypes);
+/*
+                    if( Build.DEBUG ) {
+                        Class[] debugTypes = { String.class };
+                        org.openoffice.java.accessibility.AccessibleObject.debugOut =
+                            bridge.getMethod("sendDebugString", debugTypes);
+                    }
+*/
                 }
+
             }
 
             catch(NoSuchMethodException e) {
@@ -215,10 +224,12 @@ public class AccessBridge {
 
             // Redirect output to log file on Windows for stdout / stderr are not visible
             if( Build.DEBUG && System.getProperty("AccessBridge.LogPath") != null ) {
+//          if( Build.DEBUG ) {
                 try {
                     java.io.PrintStream log = new java.io.PrintStream(
                         new java.io.FileOutputStream( System.getProperty("AccessBridge.LogPath") +
                             java.io.File.pathSeparator + "AccessBridge.log")
+//                      new java.io.FileOutputStream("AccessBridge.log")
                     );
 
                     System.setOut(log);
