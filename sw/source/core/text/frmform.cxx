@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-03 14:32:08 $
+ *  last change: $Author: ama $ $Date: 2001-05-09 09:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1762,7 +1762,30 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             else
             {
                 const sal_Bool bOrphan = IsWidow();
-                _Format( aAccess.GetPara() );
+                const SwFtnBossFrm* pFtnBoss = HasFtn() ? FindFtnBossFrm() : 0;
+                SwTwips nFtnHeight;
+                if( pFtnBoss )
+                {
+                    const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
+                    nFtnHeight = pCont ? pCont->Frm().Height() : 0;
+                }
+                do
+                {
+                    _Format( aAccess.GetPara() );
+                    if( pFtnBoss && nFtnHeight )
+                    {
+                        const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
+                        SwTwips nNewHeight = pCont ? pCont->Frm().Height() : 0;
+                        // If we lost some footnotes, we may have more space
+                        // for our main text, so we have to format again ...
+                        if( nNewHeight < nFtnHeight )
+                            nFtnHeight = nNewHeight;
+                        else
+                            break;
+                    }
+                    else
+                        break;
+                } while ( pFtnBoss );
                 if( bOrphan )
                 {
                     ValidateFrm();
