@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
     sal_uInt32                      index = 0;
     DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
+    ::rtl::OUString                 aAsTemplateArg( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate"));
 
     for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
     {
@@ -282,9 +283,24 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             if ( aObj.GetProtocol() == INET_PROT_PRIVATE )
                 aTarget = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") );
 
+            // Set "AsTemplate" argument according to request type
+            if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW ||
+                 aDispatchRequest.aRequestType == REQUEST_FORCEOPEN     )
+            {
+                sal_Int32 nIndex = aArgs.getLength();
+                aArgs.realloc( nIndex+1 );
+                aArgs[nIndex].Name = aAsTemplateArg;
+                if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW )
+                    aArgs[nIndex].Value <<= sal_True;
+                else
+                    aArgs[nIndex].Value <<= sal_False;
+            }
+
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
             xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
-            if ( aDispatchRequest.aRequestType == REQUEST_OPEN )
+            if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
+                 aDispatchRequest.aRequestType == REQUEST_FORCEOPEN ||
+                 aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
             {
                 // request is completed
                 OfficeIPCThread::RequestsCompleted( 1 );

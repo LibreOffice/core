@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,18 @@ class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
     virtual TSignalAction SAL_CALL signal(TSignalInfo *pInfo);
 };
 
+// A request for the current office
+// that was given by command line or by IPC pipe communication.
+struct ProcessDocumentsRequest
+{
+    ::rtl::OUString aOpenList;      // Documents that should be opened in the default way
+    ::rtl::OUString aPrintList;     // Documents that should be printed on default printer
+    ::rtl::OUString aForceOpenList; // Documents that should be forced to open for editing (even templates)
+    ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
+    ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
+    ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
+};
+
 class DispatchWatcher;
 class OfficeIPCThread : public vos::OThread
 {
@@ -135,11 +147,7 @@ class OfficeIPCThread : public vos::OThread
     static void                 BlockAllRequests();
     static sal_Bool             AreRequestsPending();
     static void                 RequestsCompleted( int n = 1 );
-    static void                 ExecuteCmdLineRequests(
-                                        const ::rtl::OUString& aOpenList,
-                                        const ::rtl::OUString& aPrintList,
-                                        const ::rtl::OUString& aPrintToList,
-                                        const ::rtl::OUString& aPrinterName );
+    static void                 ExecuteCmdLineRequests( const ProcessDocumentsRequest& );
 
     // return FALSE if second office
     static Status               EnableOfficeIPCThread();

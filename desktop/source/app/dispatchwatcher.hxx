@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,9 @@ class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame:
         {
             REQUEST_OPEN,
             REQUEST_PRINT,
-            REQUEST_PRINTTO
+            REQUEST_PRINTTO,
+            REQUEST_FORCEOPEN,
+            REQUEST_FORCENEW
         };
 
         struct DispatchRequest

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ class CommandLineArgs
         sal_Bool            m_bVersionString;
         sal_Bool            m_bPrintToList;
         sal_Bool            m_bPrinterName;
+        sal_Bool            m_bForceOpenList;
+        sal_Bool            m_bForceNewList;
 
         ::rtl::OUString     m_aOpenList;
         ::rtl::OUString     m_aPrintList;
@@ -108,6 +110,8 @@ class CommandLineArgs
         ::rtl::OUString     m_aVersionString;
         ::rtl::OUString     m_aPrintToList;
         ::rtl::OUString     m_aPrinterName;
+        ::rtl::OUString     m_aForceOpenList;
+        ::rtl::OUString     m_aForceNewList;
 
     public:
         CommandLineArgs();
@@ -129,6 +133,8 @@ class CommandLineArgs
         sal_Bool        GetUserDir( ::rtl::OUString& rPara){ rPara = m_aUserDir; return m_bUserDir; }
         sal_Bool        GetClientDisplay( ::rtl::OUString& rPara){ rPara = m_aClientDisplay; return m_bClientDisplay; }
         sal_Bool        GetOpenList( ::rtl::OUString& rPara){ rPara = m_aOpenList; return m_bOpenList; }
+        sal_Bool        GetForceOpenList( ::rtl::OUString& rPara){ rPara = m_aForceOpenList; return m_bForceOpenList; }
+        sal_Bool        GetForceNewList( ::rtl::OUString& rPara){ rPara = m_aForceNewList; return m_bForceNewList; }
         sal_Bool        GetPrintList( ::rtl::OUString& rPara){ rPara = m_aPrintList; return m_bPrintList; }
         sal_Bool        GetVersionString( ::rtl::OUString& rPara){ rPara =  m_aVersionString; return m_bVersionString; }
         sal_Bool        GetPrintToList( ::rtl::OUString& rPara ){ rPara = m_aPrintToList; return m_bPrintToList; }

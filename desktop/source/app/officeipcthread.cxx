@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2001-12-06 09:41:47 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,47 +109,42 @@ OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 OSecurity           OfficeIPCThread::maSecurity;
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
-class ImplForeignAppEventClass
+class ProcessEventsClass_Impl
 {
 public:
-    DECL_STATIC_LINK( ImplForeignAppEventClass, CallEvent, void* pEvent );
+    DECL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void* pEvent );
+    DECL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void* pEvent );
 };
 
-void HandleAppEvent( const ApplicationEvent& rAppEvent );
-IMPL_STATIC_LINK( ImplForeignAppEventClass, CallEvent, void*, pEvent )
+IMPL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, pEvent )
 {
     // Application events are processed by the Desktop::HandleAppEvent implementation.
-    ApplicationEvent* pAppEvent = (ApplicationEvent*)pEvent;
-
-    if ( pAppEvent->GetEvent().CompareTo( "OPENPRINTCMDLINE" ) == COMPARE_EQUAL )
-    {
-        // Special application event to execute OPEN, PRINT and PRINTTO requests from the command line
-        ::rtl::OUString aPrintToList;
-        ::rtl::OUString aPrinterName;
-        ::rtl::OUString aOpenList( pAppEvent->GetSenderAppName() );
-        ::rtl::OUString aPrintList( pAppEvent->GetData() );
-        ApplicationAddress aAppAddress;
-
-        aAppAddress = pAppEvent->GetAppAddress();
-        aPrintToList = aAppAddress.GetHost();
-        aPrinterName = aAppAddress.GetDisplay();
-
-        OfficeIPCThread* pIPCThread = OfficeIPCThread::GetOfficeIPCThread();
-        if ( pIPCThread )
-            pIPCThread->ExecuteCmdLineRequests( aOpenList, aPrintList, aPrintToList, aPrinterName );
-    }
-    else
-    {
-        Desktop::HandleAppEvent( *((ApplicationEvent*)pEvent) );
-    }
-
+    Desktop::HandleAppEvent( *((ApplicationEvent*)pEvent) );
     delete (ApplicationEvent*)pEvent;
+    return 0;
+}
+
+IMPL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent )
+{
+    // Documents requests are processed by the OfficeIPCThread implementation
+    ProcessDocumentsRequest* pDocsRequest = (ProcessDocumentsRequest*)pEvent;
+
+    if ( pDocsRequest )
+    {
+        OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
+        delete pDocsRequest;
+    }
     return 0;
 }
 
 void ImplPostForeignAppEvent( ApplicationEvent* pEvent )
 {
-    Application::PostUserEvent( STATIC_LINK( NULL, ImplForeignAppEventClass, CallEvent ), pEvent );
+    Application::PostUserEvent( STATIC_LINK( NULL, ProcessEventsClass_Impl, CallEvent ), pEvent );
+}
+
+void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
+{
+    Application::PostUserEvent( STATIC_LINK( NULL, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
 }
 
 OSignalHandler::TSignalAction SAL_CALL SalMainPipeExchangeSignalHandler::signal(TSignalInfo *pInfo)
@@ -493,10 +488,6 @@ void SAL_CALL OfficeIPCThread::run()
                     mbBlockRequests )
                     return;
 
-                ::rtl::OUString aOpenList;
-                ::rtl::OUString aPrintList;
-                ::rtl::OUString aPrintToList;
-                ::rtl::OUString aPrinter;
                 String          aEmpty;
                 CommandLineArgs aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
 
@@ -509,29 +500,32 @@ void SAL_CALL OfficeIPCThread::run()
                     ImplPostForeignAppEvent( pAppEvent );
                 }
 
-                aCmdLineArgs.GetOpenList( aOpenList );
-                aCmdLineArgs.GetPrintList( aPrintList );
-                aCmdLineArgs.GetPrintToList( aPrintToList );
-                aCmdLineArgs.GetPrinterName( aPrinter );
+                ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
 
-                // send requests to dispatch watcher
-                if ( aOpenList.getLength() > 0 ||
-                     aPrintList.getLength() > 0 ||
-                     ( aPrintToList.getLength() > 0 && aPrinter.getLength() > 0 ))
+                // Read cmdline args that can open/print documents
+                sal_Bool bDocRequestSent = sal_False;
+                if ( aCmdLineArgs.GetOpenList( pRequest->aOpenList )            ||
+                     aCmdLineArgs.GetPrintList( pRequest->aPrintList )          ||
+                     aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList )  ||
+                     aCmdLineArgs.GetForceNewList( pRequest->aForceNewList )    ||
+                     ( aCmdLineArgs.GetPrintToList( pRequest->aPrintToList ) &&
+                       aCmdLineArgs.GetPrinterName( pRequest->aPrinterName )) )
                  {
-                    // use application address to transport print to data
-                    ApplicationAddress aAppAddress( aPrintToList, aPrinter, aEmpty );
-
-                    ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aOpenList, aAppAddress, "OPENPRINTCMDLINE", aPrintList );
-
-                    ImplPostForeignAppEvent( pAppEvent );
+                    // Send requests to dispatch watcher if we have at least one. The receiver
+                    // is responsible to delete the request after processing it.
+                    bDocRequestSent = sal_True;
+                    ImplPostProcessDocumentsEvent( pRequest );
+                }
+                else
+                {
+                    // delete not used request again
+                    delete pRequest;
                 }
 
                 if (( aArguments.CompareTo( SHOW_SEQUENCE, SHOW_LENGTH ) == COMPARE_EQUAL ) ||
-                    ( aPrintList.getLength() == 0 && aOpenList.getLength() == 0 ) )
+                      !bDocRequestSent )
                 {
-                    // no document was send, just bring Office to front
+                    // no document was sent, just bring Office to front
                     ApplicationEvent* pAppEvent =
                         new ApplicationEvent( aEmpty, aEmpty,
                                               "APPEAR", aEmpty );
@@ -552,53 +546,37 @@ void SAL_CALL OfficeIPCThread::run()
     }
 }
 
-void OfficeIPCThread::ExecuteCmdLineRequests(
-    const ::rtl::OUString& aOpenList,
-    const ::rtl::OUString& aPrintList,
-    const ::rtl::OUString& aPrintToList,
-    const ::rtl::OUString& aPrinterName )
+void AddToDispatchList(
+    DispatchWatcher::DispatchList& rDispatchList,
+    const OUString& aRequestList,
+    DispatchWatcher::RequestType nType,
+    const OUString& aParam )
+{
+    if ( aRequestList.getLength() > 0 )
+    {
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aToken = aRequestList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
+            if ( aToken.getLength() > 0 )
+                rDispatchList.push_back(
+                    DispatchWatcher::DispatchRequest( nType, aToken, aParam ));
+        }
+        while ( nIndex >= 0 );
+    }
+}
+
+void OfficeIPCThread::ExecuteCmdLineRequests( const ProcessDocumentsRequest& aRequest )
 {
     ::rtl::OUString                 aEmpty;
     DispatchWatcher::DispatchList   aDispatchList;
 
-    if ( aOpenList.getLength() > 0 )
-    {
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OUString aToken = aOpenList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
-            if ( aToken.getLength() > 0 )
-                aDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_OPEN, aToken, aEmpty ));
-        }
-        while ( nIndex >= 0 );
-    }
-
-    if ( aPrintList.getLength() > 0 )
-    {
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OUString aToken = aPrintList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
-            if ( aToken.getLength() > 0 )
-                aDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_PRINT, aToken, aEmpty ));
-        }
-        while ( nIndex >= 0 );
-    }
-
-    if ( aPrintToList.getLength() > 0 && aPrinterName.getLength() > 0 )
-    {
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OUString aToken = aPrintToList.getToken( 0, APPEVENT_PARAM_DELIMITER, nIndex );
-            if ( aToken.getLength() > 0 )
-                aDispatchList.push_back(
-                    DispatchWatcher::DispatchRequest( DispatchWatcher::REQUEST_PRINTTO, aToken, aPrinterName ));
-        }
-        while ( nIndex >= 0 );
-    }
+    // Create dispatch list for dispatch watcher
+    AddToDispatchList( aDispatchList, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty );
+    AddToDispatchList( aDispatchList, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, aEmpty );
+    AddToDispatchList( aDispatchList, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName );
+    AddToDispatchList( aDispatchList, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty );
+    AddToDispatchList( aDispatchList, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, aEmpty );
 
     osl::ClearableMutexGuard aGuard( GetMutex() );
 
@@ -612,6 +590,8 @@ void OfficeIPCThread::ExecuteCmdLineRequests(
         }
 
         aGuard.clear();
+
+        // Execute dispatch requests
         pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
     }
 }

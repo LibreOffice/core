@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-21 10:13:25 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1773,22 +1773,25 @@ void Desktop::OpenClients()
 
     if ( !pArgs->IsServer() )
     {
-        ::rtl::OUString aPrinter;
-        ::rtl::OUString aOpenList;
-        ::rtl::OUString aPrintList;
-        ::rtl::OUString aPrintToList;
+        ProcessDocumentsRequest aRequest;
 
-        pArgs->GetOpenList( aOpenList );
-        pArgs->GetPrintList( aPrintList );
-        pArgs->GetPrintToList( aPrintToList );
-        pArgs->GetPrinterName( aPrinter );
+        pArgs->GetOpenList( aRequest.aOpenList );
+        pArgs->GetPrintList( aRequest.aPrintList );
+        pArgs->GetPrintToList( aRequest.aPrintToList );
+        pArgs->GetPrinterName( aRequest.aPrinterName );
+        pArgs->GetForceOpenList( aRequest.aForceOpenList );
+        pArgs->GetForceNewList( aRequest.aForceNewList );
 
-        if ( aOpenList.getLength() > 0 ||
-             aPrintList.getLength() > 0 ||
-             ( aPrintToList.getLength() > 0 && aPrinter.getLength() > 0 ))
+        if ( aRequest.aOpenList.getLength() > 0 ||
+             aRequest.aPrintList.getLength() > 0 ||
+             aRequest.aForceOpenList.getLength() > 0 ||
+             aRequest.aForceNewList.getLength() > 0 ||
+             ( aRequest.aPrintToList.getLength() > 0 && aRequest.aPrinterName.getLength() > 0 ))
         {
             bLoaded = sal_True;
-            OfficeIPCThread::ExecuteCmdLineRequests( aOpenList, aPrintList, aPrintToList, aPrinter );
+
+            // Process request
+            OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
         }
     }
 
