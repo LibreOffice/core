@@ -1,4 +1,4 @@
-xt	xmlscript :	NULL
+xt	xmlscript :	offapi NULL
 xt	xmlscript							usr1	-	all	xt_mkout NULL
 xt	xmlscript\unotypes						nmake	-	all	xt_unotypes NULL
 xt	xmlscript\source\xml_helper					nmake	-	all	xt_xml_helper xt_unotypes NULL
