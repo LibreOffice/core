@@ -6816,7 +6816,7 @@ SfxVoidItem RefreshView FN_REFRESH_VIEW
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Remove FN_NUM_BULLET_OFF
+SfxVoidItem RemoveBullets FN_NUM_BULLET_OFF
 ()
 [
     /* flags: */
@@ -7818,7 +7818,7 @@ SfxVoidItem Spelling FN_SPELLING_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem SplitCell FN_TABLE_SPLIT_CELLS
-()
+( SfxInt32Item Amount FN_TABLE_SPLIT_CELLS, SfxBoolItem Horizontal FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9532,4 +9532,3 @@ SfxVoidItem SetDropCapCharStyleName FN_DROP_CHAR_STYLE_NAME
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-

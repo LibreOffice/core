@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:58:09 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 11:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,11 +101,38 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     {
     case FN_NUM_NUMBERING_ON:
     {
-        rReq.Done();
-        if(!GetShell().GetCurNumRule())
-            GetShell().NumOn();
+        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
+        BOOL bMode = !GetShell().GetCurNumRule();
+        if ( pItem )
+            bMode = pItem->GetValue();
         else
-            GetShell().DelNumRules();
+            rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
+        if ( bMode != (GetShell().GetCurNumRule()!=NULL) )
+        {
+            rReq.Done();
+            if( bMode )
+                GetShell().NumOn();
+            else
+                GetShell().DelNumRules();
+        }
+    }
+    break;
+    case FN_NUM_BULLET_ON:
+    {
+        SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , sal_False );
+        BOOL bMode = !GetShell().GetCurNumRule();
+        if ( pItem )
+            bMode = pItem->GetValue();
+        else
+            rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
+        if ( bMode != (GetShell().GetCurNumRule()!=NULL) )
+        {
+            rReq.Done();
+            if( bMode )
+                GetShell().BulletOn();
+            else
+                GetShell().DelNumRules();
+        }
     }
     break;
     case FN_NUMBER_BULLETS:
@@ -279,15 +306,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 */
     }
     break;
-    case FN_NUM_BULLET_ON:
-    {
-        if ( !GetShell().GetCurNumRule() )
-            GetShell().BulletOn();
-        else
-            GetShell().DelNumRules();
-
-    }
-    break;
     default:
         ASSERT(FALSE,  falscher Dispatcher);
         return;
@@ -297,6 +315,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2002/06/14 07:58:09  mba
+    #100118#: recording
+
     Revision 1.2  2001/02/23 12:45:29  os
     Complete use of DefaultNumbering component
 

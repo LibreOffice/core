@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 11:11:16 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 11:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBo
 
 void SwTableShell::Execute(SfxRequest &rReq)
 {
-
+    BOOL bUseDialog = TRUE;
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
 
@@ -720,6 +720,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
             aCoreSet.Put( aInfo );
             rSh.SetTabBorders( aCoreSet );
 
+            // we must record the "real" values because otherwise the lines can't be reconstructed on playtime
+            // the coding style of the controller (setting lines with width 0) is not transportable via Query/PutValue in
+            // the SvxBoxItem
+            rReq.AppendItem( aBox );
+            rReq.AppendItem( aInfo );
+            rReq.Done();
+
 /*          if ( bPopCrsr )
             {
                 rSh.KillPams();
@@ -740,8 +747,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
             SwTableRep* pTblRep = ::lcl_TableParamToItemSet( aCoreSet, rSh );
-            SwTableTabDlg* pDlg = new SwTableTabDlg( GetView().GetWindow(),
-                                                     GetPool(), &aCoreSet, &rSh);
+            SwTableTabDlg* pDlg = NULL;
+            if ( bUseDialog )
+                pDlg = new SwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh);
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTblAttr(aCoreSet);
             // GetTblAttr buegelt den Background ueber!
@@ -751,11 +759,14 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
 
-            if ( pDlg->Execute() == RET_OK )
+            if ( !pDlg && rReq.GetArgs() || pDlg->Execute() == RET_OK )
             {
-                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                const SfxItemSet* pOutSet = pDlg ? pDlg->GetOutputItemSet() : rReq.GetArgs();
+                if ( pDlg )
+                    rReq.Done( *pOutSet );
                 ::lcl_ItemSetToTableParam( *pOutSet, rSh );
             }
+
             delete pDlg;
             delete pTblRep;
             SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
@@ -970,9 +981,37 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
         case FN_TABLE_SPLIT_CELLS:
         {
-            SwSplitTableDlg *pDlg = new SwSplitTableDlg( GetView().GetWindow(), rSh );
-            pDlg->Execute();
-            delete pDlg;
+            long nCount=0;
+            BOOL bHorizontal=TRUE;
+            SFX_REQUEST_ARG( rReq, pSplit, SfxInt32Item, FN_TABLE_SPLIT_CELLS, sal_False );
+            SFX_REQUEST_ARG( rReq, pHor, SfxBoolItem, FN_PARAM_1, sal_False );
+            if ( pSplit )
+            {
+                nCount = pSplit->GetValue();
+                if ( pHor )
+                    bHorizontal = pHor->GetValue();
+            }
+            else
+            {
+                SwSplitTableDlg *pDlg = new SwSplitTableDlg( GetView().GetWindow(), rSh );
+                if ( pDlg->Execute() == RET_OK )
+                {
+                    nCount = pDlg->GetCount();
+                    bHorizontal = pDlg->IsHorizontal();
+                    rReq.AppendItem( SfxInt32Item( FN_TABLE_SPLIT_CELLS, nCount ) );
+                    rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bHorizontal ) );
+                }
+
+                delete pDlg;
+            }
+
+            if ( nCount>1 )
+            {
+                rSh.SplitTab(!bHorizontal, nCount-1 );
+                rReq.Done();
+            }
+            else
+                rReq.Ignore();
         }
         break;
 
@@ -1346,6 +1385,8 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
                                                             Get( SID_FRAME_LINECOLOR );
                     rSh.SetTabLineStyle( &rNewColorItem.GetValue() );
                 }
+
+                rReq.Done();
 /*              if ( bPopCrsr )
                 {
                     rSh.KillPams();

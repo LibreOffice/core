@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 13:04:47 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 11:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1967,7 +1967,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
     }
     else
         GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG, FALSE);
-
+    rReq.Done();
 }
 
 /*--------------------------------------------------------------------
@@ -2142,7 +2142,10 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
                     GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
                 }
                 else
+                {
                     aBrushItem.SetColor( COL_TRANSPARENT );
+                    rReq.AppendItem( SvxColorItem( Color( COL_TRANSPARENT ), nSlot ) );
+                }
             }
             break;
 
@@ -2156,6 +2159,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         break;
         default:
 //          bMsgOk = FALSE;
+            rReq.Ignore();
             DBG_ERROR( "Unbekannte Message bei ExecuteAttr!" );
             return;
     }
@@ -2188,6 +2192,8 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         else
             rSh.SetAttr( aBrushItem );
     }
+
+    rReq.Done();
 }
 
 /*--------------------------------------------------------------------
@@ -2578,6 +2584,7 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
         }
     }
     rSh.EndAction();
+    rReq.Done();
 }
 
 void SwBaseShell::ExecField( SfxRequest& rReq )

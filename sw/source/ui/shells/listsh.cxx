@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-06-14 11:42:08 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 11:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,45 +153,59 @@ void SwListShell::Execute(SfxRequest &rReq)
         case FN_NUM_BULLET_DOWN:
             rSh.NumUpDown();
             GetView().GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );   // StatusZeile updaten!
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_NEXT:
             rSh.GotoNextNum();
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_NONUM:
             rSh.NoNum();
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_OFF:
+        {
+            rReq.Ignore();
+            SfxRequest aReq( GetView().GetViewFrame(), FN_NUM_BULLET_ON );
+            aReq.AppendItem( SfxBoolItem( FN_PARAM_1, FALSE ) );
+            aReq.Done();
             rSh.DelNumRules();
             break;
+        }
 
         case FN_NUM_BULLET_OUTLINE_DOWN:
             rSh.MoveNumParas(FALSE, FALSE);
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_OUTLINE_MOVEDOWN:
             rSh.MoveNumParas(TRUE, FALSE);
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_OUTLINE_MOVEUP:
             rSh.MoveNumParas(TRUE, TRUE);
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_OUTLINE_UP:
             rSh.MoveNumParas(FALSE, TRUE);
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_PREV:
             rSh.GotoPrevNum();
+            rReq.Done();
             break;
 
         case FN_NUM_BULLET_UP:
             rSh.NumUpDown(FALSE);
             GetView().GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );   // StatusZeile updaten!
+            rReq.Done();
             break;
-
 
         case FN_NUM_OR_NONUM:
         {
@@ -200,6 +214,8 @@ void SwListShell::Execute(SfxRequest &rReq)
             if(pArgs )
                 bDelete = ((SfxBoolItem &)pArgs->Get(rReq.GetSlot())).GetValue();
             rSh.NumOrNoNum( bDelete, !bApi );
+            rReq.AppendItem( SfxBoolItem( nSlot, bDelete ) );
+            rReq.Done();
         }
         break;
         default:

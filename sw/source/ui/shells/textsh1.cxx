@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 08:16:40 $
+ *  last change: $Author: mba $ $Date: 2002-07-19 11:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,6 +949,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rView.GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_EXT);
                 }
 
+                rReq.Done();
 /*              OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
                 SwEditWin& rEdtWin = GetView().GetEditWin();
 
@@ -988,6 +989,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rView.GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
             }
+
+            rReq.Done();
+
 /*          OS 22.02.97 18:40 Das alte Verhalten ist unerwuenscht
             if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
