@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-07 12:34:44 $
+ *  last change: $Author: ka $ $Date: 2000-11-08 10:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,8 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #include <tools/vcompat.hxx>
-#include <unotools/ucblockbytes.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cvtgrf.hxx>
