@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-01 21:35:58 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ dutch ] = "Boog";
                 Text[ french ] = "Courbe";
                 Text[ spanish ] = "Curva";
-                Text[ finnish ] = "B?zier";
+                Text[ finnish ] = "BÈzier";
                 Text[ italian ] = "Curva";
                 Text[ danish ] = "Bezier";
                 Text[ swedish ] = "Kurva";
@@ -375,7 +375,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Yay dilimi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Segmento de cÌrculo";
-                Text[ finnish ] = "Ympyr?n segmentti";
+                Text[ finnish ] = "Ympyr‰n segmentti";
             };
             ToolBoxItem
             {
@@ -433,7 +433,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Vertical Text";
                 Text[ arabic ] = "‰’ ⁄„ÊœÌ";
                 Text[ catalan ] = "Texto vertical";
-                Text[ finnish ] = "Vertikaler Text";
+                Text[ finnish ] = "Pystysuuntainen teksti";
             };
             ToolBoxItem
             {
@@ -520,7 +520,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ turkish ] = "Vertical Caption";
                 Text[ arabic ] = " ”„Ì…  Ê÷ÌÕÌ… ⁄„ÊœÌ…";
                 Text[ catalan ] = "Leyenda vertical";
-                Text[ finnish ] = "Vertikale Legende";
+                Text[ finnish ] = "Pystysuuntainen kuvateksti";
             };
         };
     };
@@ -612,7 +612,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Centrato" ;
                 Text [ portuguese_brazilian ] = "Centralizado" ;
                 Text [ portuguese ] = "Centrado" ;
-                Text [ finnish ] = "Keskell?" ;
+                Text [ finnish ] = "Keskell‰" ;
                 Text [ danish ] = "Centreret" ;
                 Text [ french ] = "CentrÈ" ;
                 Text [ swedish ] = "Centrerat" ;
@@ -670,7 +670,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text [ italian ] = "Sopra" ;
                 Text [ portuguese_brazilian ] = "Topo" ;
                 Text [ portuguese ] = "Em cima" ;
-                Text [ finnish ] = "Yl?osa" ;
+                Text [ finnish ] = "Yl‰osa" ;
                 Text [ danish ] = "ÿverst" ;
                 Text [ french ] = "En haut" ;
                 Text [ swedish ] = "÷verst" ;
@@ -762,6 +762,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ catalan ] = "AlineaciÛn";
 };
  // ********************************************************************** EOF
+
 
 
 
