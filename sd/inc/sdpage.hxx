@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:38:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ namespace sd {
 
         HeaderFooterSettings();
 
-        bool operator==( const HeaderFooterSettings& rSettings );
+        bool operator==( const HeaderFooterSettings& rSettings ) const;
     };
 };
 
@@ -431,7 +431,8 @@ public:
     */
     virtual void SetName (const String& rName);
 
-    sd::HeaderFooterSettings& getHeaderFooterSettings();
+    const sd::HeaderFooterSettings& getHeaderFooterSettings() const;
+    void setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings );
 
     /** this method returns true if the object from the ViewObjectContact should
         be visible on this page while rendering.
