@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cuigaldlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:21:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/sound.hxx>
 #include <svtools/slstitm.hxx>
 #include <svtools/transfer.hxx>
 #include <goodies/grfmgr.hxx>
@@ -80,6 +79,10 @@
 #include "galctrl.hxx"
 #include "galmisc.hxx"
 #include "galdlg.hxx" //CHINA001
+
+#ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HPP_
+#include <com/sun/star/media/XPlayer.hpp>
+#endif
 
 // ------------
 // - Forwards -
@@ -359,7 +362,6 @@ class TPGalleryThemeProperties : public SfxTabPage
     GalleryPreview      aWndPreview;
 
     ExchangeData*       pData;
-    Sound               aSound;
     StringList          aFoundList;
     List                aFilterEntryList;
     Timer               aPreviewTimer;
@@ -372,6 +374,8 @@ class TPGalleryThemeProperties : public SfxTabPage
     BOOL                bInputAllowed;
     BOOL                bTakeAll;
     BOOL                bSearchRecursive;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > xMediaPlayer;
 
     virtual void        Reset( const SfxItemSet& rSet ) {}
     virtual BOOL        FillItemSet( SfxItemSet& rSet ) { return TRUE; }
@@ -392,7 +396,6 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( SelectFileTypeHdl, void* );
                         DECL_LINK( DClickFoundHdl, void* );
                         DECL_LINK( PreviewTimerHdl, void* );
-                        DECL_LINK( SoundEndHdl, Sound* );
 
 public:
                         TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet );
