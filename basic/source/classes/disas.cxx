@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: patrick.luby $ $Date: 2000-09-25 02:53:42 $
+ *  last change: $Author: ab $ $Date: 2001-06-05 13:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,8 @@ static const char* pOp1[] = {
     "EMPTY",            // Leeren Ausdruck auf Stack
     "ERROR",            // TOS = Fehlercode
     "LSET",             // Speichern Objekt TOS ==> TOS-1
-    "RSET"              // Speichern Objekt TOS ==> TOS-1
+    "RSET",             // Speichern Objekt TOS ==> TOS-1
+    "REDIMP_ERASE"
 };
 
 #ifdef MACOSX
