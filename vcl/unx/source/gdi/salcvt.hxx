@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
+ *  last change: $Author: pl $ $Date: 2002-03-20 15:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <rtl/textcvt.h>
 #endif
 
+#include <map>
+
 extern "C" const char*
 pGetEncodingName( rtl_TextEncoding nEncoding );
 
@@ -100,14 +102,28 @@ class SalConverterCache {
 
     private:
 
-        typedef struct {
+        struct ConverterT {
             rtl_UnicodeToTextConverter  mpU2T;
             rtl_TextToUnicodeConverter  mpT2U;
             Bool                        mbSingleByteEncoding;
             Bool                        mbValid;
-        } ConverterT;
+            ConverterT() :
+                    mpU2T( NULL ),
+                    mpT2U( NULL ),
+                    mbSingleByteEncoding( False ),
+                    mbValid( False )
+            {
+            }
+            ~ConverterT()
+            {
+                if( mpU2T )
+                    rtl_destroyUnicodeToTextConverter( mpU2T );
+                if( mpT2U )
+                    rtl_destroyTextToUnicodeConverter( mpT2U );
+            }
+        };
 
-        ConverterT *mpConverter;
+    std::map< rtl_TextEncoding, ConverterT >        m_aConverters;
 };
 
 

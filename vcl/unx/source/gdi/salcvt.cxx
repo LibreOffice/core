@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-02 17:23:18 $
+ *  last change: $Author: pl $ $Date: 2002-03-20 15:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 SalConverterCache::SalConverterCache()
 {
-    mpConverter = (ConverterT*)calloc( sizeof(ConverterT), RTL_TEXTENCODING_STD_COUNT );
 }
 
 SalConverterCache*
@@ -80,14 +79,6 @@ SalConverterCache::GetInstance ()
 
 SalConverterCache::~SalConverterCache()
 {
-    for ( int i = 0; i < RTL_TEXTENCODING_STD_COUNT; i++ )
-    {
-        if ( mpConverter[i].mpU2T != NULL )
-            rtl_destroyUnicodeToTextConverter( mpConverter[i].mpU2T );
-        if ( mpConverter[i].mpT2U != NULL )
-            rtl_destroyTextToUnicodeConverter( mpConverter[i].mpT2U );
-    }
-    free( mpConverter );
 }
 
 // ---> FIXME
@@ -97,18 +88,19 @@ SalConverterCache::~SalConverterCache()
 rtl_UnicodeToTextConverter
 SalConverterCache::GetU2TConverter( rtl_TextEncoding nEncoding )
 {
-    if ( nEncoding < RTL_TEXTENCODING_STD_COUNT )
+    if( rtl_isOctetTextEncoding( nEncoding ) )
     {
-        if ( mpConverter[ nEncoding ].mpU2T == NULL )
+        ConverterT& rConverter( m_aConverters[ nEncoding ] );
+        if ( rConverter.mpU2T == NULL )
         {
-            mpConverter[ nEncoding ].mpU2T =
-                    rtl_createUnicodeToTextConverter( nEncoding );
+            rConverter.mpU2T =
+                rtl_createUnicodeToTextConverter( nEncoding );
 // ---> FIXME
-if ( mpConverter[ nEncoding ].mpU2T == NULL )
+if ( rConverter.mpU2T == NULL )
     fprintf( stderr, "failed to create Unicode -> %i converter\n", nEncoding);
 // <---
         }
-        return mpConverter[ nEncoding ].mpU2T;
+        return rConverter.mpU2T;
     }
     return NULL;
 }
@@ -116,18 +108,19 @@ if ( mpConverter[ nEncoding ].mpU2T == NULL )
 rtl_TextToUnicodeConverter
 SalConverterCache::GetT2UConverter( rtl_TextEncoding nEncoding )
 {
-    if ( nEncoding < RTL_TEXTENCODING_STD_COUNT )
+    if( rtl_isOctetTextEncoding( nEncoding ) )
     {
-        if ( mpConverter[ nEncoding ].mpT2U == NULL )
+        ConverterT& rConverter( m_aConverters[ nEncoding ] );
+        if ( rConverter.mpT2U == NULL )
         {
-            mpConverter[ nEncoding ].mpT2U =
-                    rtl_createTextToUnicodeConverter( nEncoding );
+            rConverter.mpT2U =
+                rtl_createTextToUnicodeConverter( nEncoding );
 // ---> FIXME
-if ( mpConverter[ nEncoding ].mpT2U == NULL )
+if ( rConverter.mpT2U == NULL )
     fprintf( stderr, "failed to create %i -> Unicode converter\n", nEncoding );
 // <---
         }
-        return mpConverter[ nEncoding ].mpT2U;
+        return rConverter.mpT2U;
     }
     return NULL;
 }
@@ -135,11 +128,12 @@ if ( mpConverter[ nEncoding ].mpT2U == NULL )
 Bool
 SalConverterCache::IsSingleByteEncoding( rtl_TextEncoding nEncoding )
 {
-    if ( nEncoding < RTL_TEXTENCODING_STD_COUNT )
+    if( rtl_isOctetTextEncoding( nEncoding ) )
     {
-        if ( ! mpConverter[ nEncoding ].mbValid )
+        ConverterT& rConverter( m_aConverters[ nEncoding ] );
+        if ( ! rConverter.mbValid )
         {
-            mpConverter[ nEncoding ].mbValid = True;
+            rConverter.mbValid = True;
 
             rtl_TextEncodingInfo aTextEncInfo;
             aTextEncInfo.StructSize = sizeof( aTextEncInfo );
@@ -147,12 +141,12 @@ SalConverterCache::IsSingleByteEncoding( rtl_TextEncoding nEncoding )
 
             if (   aTextEncInfo.MinimumCharSize == aTextEncInfo.MaximumCharSize
                 && aTextEncInfo.MinimumCharSize == 1)
-                mpConverter[ nEncoding ].mbSingleByteEncoding = True;
+                rConverter.mbSingleByteEncoding = True;
             else
-                mpConverter[ nEncoding ].mbSingleByteEncoding = False;
+                rConverter.mbSingleByteEncoding = False;
         }
 
-        return mpConverter[ nEncoding ].mbSingleByteEncoding;
+        return rConverter.mbSingleByteEncoding;
     }
     return False;
 }
