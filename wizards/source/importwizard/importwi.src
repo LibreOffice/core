@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:32:35 $
+ *  last change: $Author: rt $ $Date: 2002-09-13 14:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,7 +1125,7 @@ String scouldNotopenDocument
     Text[ greek ] = "Document '<1>' could not be opened";
     Text[ dutch ] = "Document '<1>' could not be opened";
     Text[ french ] = "Document '<1>' could not be opened";
-    Text[ spanish ] = "Document '<1>' could not be opened";
+    Text[ spanish ] = "El documento '<1>' no se pudo abrir.";
     Text[ finnish ] = "Document '<1>' could not be opened";
     Text[ italian ] = "Document '<1>' could not be opened";
     Text[ danish ] = "Document '<1>' could not be opened";
