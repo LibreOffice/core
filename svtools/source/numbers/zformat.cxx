@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: er $ $Date: 2001-07-12 14:04:05 $
+ *  last change: $Author: er $ $Date: 2001-07-16 17:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3089,13 +3089,8 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
     String sStr;
     long nPrecExp;
     BOOL bInteger = FALSE;
-    if (rInfo.nThousand == FLAG_STANDARD_IN_FORMAT) // Hack: "Standard"
-    {                                                            // im Format
-        bSign = FALSE;                  // dann Vorzeichen per Format, nicht per Zahl
-                                        // und keine Zahlformatiererei an dieser
-    }                                   // Stelle!
-    else
-    {
+    if ( rInfo.nThousand != FLAG_STANDARD_IN_FORMAT )
+    {   // special formatting only if no GENERAL keyword in format code
         const USHORT nThousand = rInfo.nThousand;
         for (i = 0; i < nThousand; i++)
         {
