@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-26 14:42:27 $
+ *  last change: $Author: fme $ $Date: 2001-12-12 12:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,11 @@
 
 #include <ctype.h>
 
+#ifdef VERTICAL_LAYOUT
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>     // CH_TXTATR
 #endif
@@ -103,6 +108,73 @@
 
 #ifdef DEBUG
 const sal_Char *GetLangName( const MSHORT nLang );
+#endif
+
+#ifdef VERTICAL_LAYOUT
+using namespace ::com::sun::star::i18n::ScriptType;
+
+/*************************************************************************
+ *                          lcl_AddSpace
+ * Returns if for position nPos in String rStr an extra space has to
+ * be added (for justification ).
+ *************************************************************************/
+
+sal_Bool lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString& rStr,
+                       const SwScriptInfo* pSI, const SwLinePortion& rPor,
+                       xub_StrLen nPos, xub_StrLen nEnd )
+{
+    // The last character in front of a hole or margin portion
+    // does only need some extra space if it is a BLANK
+    if ( nPos + 1 == nEnd && ( ! rPor.GetPortion() ||
+                                 rPor.GetPortion()->IsHolePortion() ||
+                                 rPor.GetPortion()->InFixMargGrp() ) )
+    {
+        return CH_BLANK == rStr.GetChar( nPos );
+    }
+
+    if( CH_BLANK == rStr.GetChar( nPos ) )
+        return sal_True;
+
+    // pSI is only valid if we are looking for regular text in regular portions.
+    // If we examine text in fields, we have to use the break iterator directly.
+    BYTE nScript = 0;
+    for ( BYTE i = 0; i < 2 && nPos < rStr.Len(); ++i )
+    {
+        if ( pSI )
+            nScript = pSI->ScriptType( nPos );
+        else if ( pBreakIt->xBreak.is() )
+            nScript = (BYTE)pBreakIt->xBreak->getScriptType( rStr, nPos );
+
+        // this character is ASIAN?
+        if( ASIAN == nScript )
+            return sal_True;
+
+        if ( ! i )
+            ++nPos;
+        else
+        {
+            // next character is inside a field?
+            if ( CH_TXTATR_BREAKWORD == rStr.GetChar( nPos ) &&
+                rPor.GetPortion() && rPor.GetPortion()->InExpGrp() &&
+                pBreakIt->xBreak.is() )
+            {
+                sal_Bool bOldOnWin = rInf.OnWin();
+                ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
+
+                XubString aStr( aEmptyStr );
+                rPor.GetPortion()->GetExpTxt( rInf, aStr );
+                ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
+
+                nScript = (BYTE)pBreakIt->xBreak->getScriptType( aStr, 0 );
+                if( ASIAN == nScript )
+                    return sal_True;
+            }
+        }
+    }
+
+    return sal_False;
+}
+
 #endif
 
 /*************************************************************************
@@ -487,8 +559,6 @@ sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) c
  * und den daraus resultierenden zusaetzlichen Zwischenraum
  *************************************************************************/
 
-
-
 xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
                                       xub_StrLen& rCharCnt ) const
 {
@@ -508,17 +578,29 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
             for ( nPos = 0; nPos < aStr.Len(); ++nPos )
             {
+#ifdef VERTICAL_LAYOUT
+                if ( lcl_AddSpace( rInf, aStr, 0, *this, nPos, aStr.Len() ) )
+#else
                 if( CH_BLANK == aStr.GetChar( nPos ) )
+#endif
                     ++nCnt;
             }
         }
     }
     else if( !IsDropPortion() )
     {
+#ifdef VERTICAL_LAYOUT
+        const SwScriptInfo& rSI =
+               ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+#endif
         xub_StrLen nEndPos = rInf.GetIdx() + GetLen();
         for ( nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
         {
+#ifdef VERTICAL_LAYOUT
+            if ( lcl_AddSpace( rInf, rInf.GetTxt(), &rSI, *this, nPos, nEndPos ) )
+#else
             if( CH_BLANK == rInf.GetChar( nPos ) )
+#endif
                 ++nCnt;
         }
         nPos = GetLen();
@@ -526,8 +608,6 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
     rCharCnt += nPos;
     return nCnt;
 }
-
-
 
 long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
@@ -548,7 +628,11 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
             {
                 for ( xub_StrLen nPos = 0; nPos < aStr.Len(); ++nPos )
                 {
+#ifdef VERTICAL_LAYOUT
+                    if ( lcl_AddSpace( rInf, aStr, 0, *this, nPos, aStr.Len() ) )
+#else
                     if( CH_BLANK == aStr.GetChar( nPos ) )
+#endif
                         ++nCnt;
                 }
             }
@@ -563,10 +647,19 @@ long SwTxtPortion::CalcSpacing( short nSpaceAdd, const SwTxtSizeInfo &rInf ) con
     {
         if( nSpaceAdd > 0 )
         {
+#ifdef VERTICAL_LAYOUT
+            const SwScriptInfo& rSI =
+                ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+#endif
             xub_StrLen nEndPos = rInf.GetIdx() + GetLen();
             for ( xub_StrLen nPos = rInf.GetIdx(); nPos < nEndPos; ++nPos )
             {
+
+#ifdef VERTICAL_LAYOUT
+                if ( lcl_AddSpace( rInf, rInf.GetTxt(), &rSI, *this, nPos, nEndPos ) )
+#else
                 if( CH_BLANK == rInf.GetChar( nPos ) )
+#endif
                     ++nCnt;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-30 09:37:17 $
+ *  last change: $Author: fme $ $Date: 2001-12-12 12:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 #include <hintids.hxx>
 #endif
 
+#ifdef VERTICAL_LAYOUT
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#endif
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
 #endif
@@ -189,6 +194,10 @@
 #ifndef PRODUCT
 // globale Variable
 SvStatistics aSvStat;
+#endif
+
+#ifdef VERTICAL_LAYOUT
+using namespace ::com::sun::star::i18n::ScriptType;
 #endif
 
 /************************************************************************
@@ -1031,9 +1040,32 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             xub_StrLen nTmpEnd = nOldIdx + nOldLen;
             if( nTmpEnd > rOldStr.Len() )
                 nTmpEnd = rOldStr.Len();
+
+#ifdef VERTICAL_LAYOUT
+            const SwScriptInfo* pSI = rInf.GetScriptInfo();
+            ASSERT( pSI, "No script info available" )
+#endif
+
+#ifdef VERTICAL_LAYOUT
+            const sal_Bool bAsianFont =
+                ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() );
+            for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
+                if( CH_BLANK == rOldStr.GetChar( nTmp ) || bAsianFont ||
+                    ( nTmp + 1 < rOldStr.Len() &&
+                      ASIAN == pSI->ScriptType( nTmp + 1 ) ) )
+#else
             for( xub_StrLen nTmp = nOldIdx; nTmp < nTmpEnd; ++nTmp )
                 if( CH_BLANK == rOldStr.GetChar( nTmp ) )
+#endif
                     ++nSpace;
+
+#ifdef VERTICAL_LAYOUT
+            // if next portion if a hole portion we do not consider any
+            // extra space added because the last character was ASIAN
+            if ( nSpace && rInf.IsSpaceStop() && bAsianFont )
+                 --nSpace;
+#endif
+
             nSpace *= rInf.GetSpace();
         }
         rInf.SetText( aStr );

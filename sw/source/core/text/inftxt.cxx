@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-15 16:40:55 $
+ *  last change: $Author: fme $ $Date: 2001-12-12 12:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,15 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     aDrawInf.SetKanaComp( nComp );
 
 #ifdef VERTICAL_LAYOUT
+    // the font is used to identify the current script via nActual
+    aDrawInf.SetFont( pFnt );
+    // the frmae is used to identify the orientation
     aDrawInf.SetFrm( GetTxtFrm() );
+    // for underlining we must know when not to add extra space behind
+    // a character in justified mode
+    aDrawInf.SetSpaceStop( ! rPor.GetPortion() ||
+                             rPor.GetPortion()->InFixMargGrp() ||
+                             rPor.GetPortion()->IsHolePortion() );
 #endif
 
     if( COL_AUTO == GetFont()->GetColor().GetColor() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-20 10:52:16 $
+ *  last change: $Author: fme $ $Date: 2001-12-12 12:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,11 @@ class SwDrawTextInfo
     BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
     BOOL bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
     BOOL bDarkBack : 1; // Dark background sets automatic font color to white
+#ifdef VERTICAL_LAYOUT
+    BOOL bSpaceStop : 1;    // For underlining we need to know, if a portion
+                            // is right in front of a hole portion or a
+                            // fix margin portion.
+#endif
     SwDrawTextInfo();       // nicht zulaessig
 public:
 #ifndef PRODUCT
@@ -250,7 +255,11 @@ public:
                     USHORT nW = 0, BOOL bB = FALSE)
     {   pSh = pS; pOut = &rO; pScriptInfo = pSI; pText = &rSt; nIdx = nI;
         nLen = nL; nKern = 0; nCompress = 0; nWidth = nW;
+#ifdef VERTICAL_LAYOUT
+        bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = bSpaceStop = FALSE;
+#else
         bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = FALSE;
+#endif
 #ifndef PRODUCT
         bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec =
             bGreyWv = TRUE;
@@ -379,6 +388,11 @@ public:
     BOOL GetDarkBack() const {
         return bDarkBack;
     }
+#ifdef VERTICAL_LAYOUT
+    BOOL IsSpaceStop() const {
+        return bSpaceStop;
+    }
+#endif
 
     void SetOut( OutputDevice &rNew ){ pOut = &rNew;
 #ifndef PRODUCT
@@ -509,6 +523,11 @@ public:
 #endif
     }
     void SetDarkBack( BOOL bNew ){ bDarkBack = bNew; }
+
+#ifdef VERTICAL_LAYOUT
+    void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew; }
+#endif
+
     void Shift( USHORT nDir );
 };
 

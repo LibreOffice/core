@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-26 14:11:11 $
+ *  last change: $Author: fme $ $Date: 2001-12-12 12:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,6 @@
 #include <txtfrm.hxx>       // SwTxtFrm
 #endif
 #endif
-
-
 
 // Enable this to use the helpclass SwRVPMark
 #ifdef DEBUG
@@ -233,6 +231,7 @@ void SwFntObj::_InitPrtFont( OutputDevice *pOut )
     const FontMetric aWinMet( pOut->GetFontMetric() );
     pOut->SetFont( aOldFnt );
     long nWidth = ( aWinMet.GetSize().Width() * nPropWidth ) / 100;
+
     if( !nWidth )
         ++nWidth;
     pPrtFont = new Font( aFont );
@@ -410,6 +409,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                     bScrSymbol = RTL_TEXTENCODING_SYMBOL ==
                                  pOut->GetFontMetric().GetCharSet();
                 Size aTmp( aMet.GetSize() );
+
                 if( aTmp.Width() && !pPrtFont->GetSize().Width() )
                 {
                     aTmp.Width() = 0;
@@ -1070,6 +1070,14 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     else
                         nSpaceSum += nHalfSpace;
                 }
+#ifdef VERTICAL_LAYOUT
+                else if ( rInf.GetFont() &&
+                          SW_CJK == rInf.GetFont()->GetActual() )
+                {
+                    nScrPos = pKernArray[i-1] + nScr;
+                    nSpaceSum += rInf.GetSpace();
+                }
+#endif
                 else
                 {
                     if ( cChPrev == CH_BLANK )
@@ -1462,9 +1470,17 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     while ( ( nRight < long( rInf.GetOfst() ) ) && ( nCnt < rInf.GetLen() ) )
     {
         nLeft = nRight;
+
+#ifdef VERTICAL_LAYOUT
+        if ( nSpaceAdd &&
+                ( CH_BLANK == rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) ||
+                ( rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() ) ) )
+            nSpaceSum += nSpaceAdd;
+#else
         if ( nSpaceAdd &&
             ( rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) == CH_BLANK ) )
             nSpaceSum += nSpaceAdd;
+#endif
         nRight = pKernArray[ nCnt++ ] + nKernSum + nSpaceSum;
         nKernSum += nKern;
     }
