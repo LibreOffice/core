@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-21 13:45:17 $
+ *  last change: $Author: th $ $Date: 2001-05-11 11:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,9 +502,9 @@ public:
     sal_Bool isActiveModified() const {return m_bActiveModified;}
     sal_Bool hasDatabaseBar() const {return m_bDatabaseBar;}
     sal_Bool canNavigate() const    {return m_xNavigationController.is();}
-    sal_Bool isParsable() const     {return m_xParser.is() && m_xParser->getQuery().len();}
+    sal_Bool isParsable() const     {return m_xParser.is() && m_xParser->getQuery().getLength();}
     sal_Bool hasFilter() const      { return isParsable() &&
-                                        (m_xParser->getFilter().len() || m_xParser->getOrder().len()); }
+                                        (m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength()); }
 
     void ShowProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rxObject, sal_Bool bShow=sal_True );
     sal_Bool IsPropBrwOpen() const;
