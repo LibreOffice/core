@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-11 15:15:08 $
+ *  last change: $Author: tl $ $Date: 2002-11-07 08:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,8 +672,6 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     // Die Aehnlichkeiten zu SwTxtFrm::_AutoSpell sind beabsichtigt ...
     // ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 
-    BOOL bCheck = FALSE;
-    BOOL bNoLang = FALSE;
     Reference<beans::XPropertySet> xProp( GetLinguPropertySet() );
     BOOL bReverse = xProp.is() ?
         *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : FALSE;
@@ -752,24 +750,8 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
             // within the word
             eActLang = GetLang( aScanner.GetBegin(), rWord.Len() );
 
-            if( rWord.Len() > 1 )
+            if( rWord.Len() > 1 && LANGUAGE_NONE != eActLang )
             {
-                // Sobald bCheck gesetzt ist, hat eine echte Pruefung stattgefunden,
-                // solange dies nicht der Fall ist, bedeutet ein gesetztes bNoLang,
-                // dass ein Wort mit [Keine] "ueberprueft" wurde. Sollte dieses Flag
-                // am Ende des zu pruefenden Abschnitts immer noch gesetzt sein, wird
-                // der Anwender auf seinen Fehler hingewiesen.
-                if ( !bCheck )
-                {
-                    if ( eActLang == LANGUAGE_NONE )
-                        bNoLang = TRUE;
-                    else
-                    {
-                        bCheck = TRUE;
-                        bNoLang = FALSE;
-                    }
-                }
-
                 if (pArgs->xSpeller.is())
                 {
                     SvxSpellWrapper::CheckSpellLang( pArgs->xSpeller, eActLang );
