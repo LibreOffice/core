@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-25 08:29:03 $
+ *  last change: $Author: mba $ $Date: 2002-09-24 14:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,9 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
             else
                 _pGroups->Append(pDef->GetGroupId());
         }
-
+#if 0
         const TypeId &rTypeId = pDef->GetType()->Type();
-        if ( rTypeId != TYPE(SfxVoidItem) && rTypeId != 0 )
+        if ( /*rTypeId != TYPE(SfxVoidItem) &&*/ rTypeId != 0 )
         {
             USHORT nPos;
             for ( nPos = 0; nPos < _pTypes->Count(); ++nPos )
@@ -205,6 +205,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
                  _pTypes->GetObject(nPos)->nId > pDef->GetSlotId() )
                 _pTypes->Append( new SfxSlotType_Impl( pDef->GetSlotId(), rTypeId ) );
         }
+#endif
     }
 }
 
@@ -212,12 +213,16 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
 TypeId SfxSlotPool::GetSlotType( USHORT nId ) const
 {
+    const SfxSlot* pSlot = (const_cast <SfxSlotPool*> (this))->GetSlot( nId );
+    return pSlot ? pSlot->GetType()->Type() : 0;
+/*
     for ( USHORT nPos = 0; nPos < _pTypes->Count(); ++nPos )
     {
         if ( _pTypes->GetObject(nPos)->nId == nId )
             return _pTypes->GetObject(nPos)->nType;
     }
     return _pParentPool ? _pParentPool->GetSlotType( nId ) : 0;
+ */
 }
 
 //====================================================================
@@ -244,8 +249,7 @@ const SfxSlot* SfxSlotPool::GetSlot( USHORT nId )
     // Zun"achst die eigenen Interfaces absuchen
     for ( USHORT nInterf = 0; nInterf < _pInterfaces->Count(); ++nInterf )
     {
-        const SfxSlot *pDef =
-            _pInterfaces->GetObject(nInterf)->GetSlot(nId);
+        const SfxSlot *pDef = _pInterfaces->GetObject(nInterf)->GetSlot(nId);
         if ( pDef )
             return pDef;
     }
