@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextFrameText.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:26 $
+ *  last change:$Date: 2003-05-27 13:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
@@ -94,7 +95,7 @@ public class SwXTextFrameText extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -137,7 +138,7 @@ public class SwXTextFrameText extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         // create testobject here
         ////////////////////////////////////
