@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-27 10:43:13 $
+ *  last change: $Author: mba $ $Date: 2001-10-12 12:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,11 +660,12 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     if ( !pImp->bHidden )
     {
+#if SUPD>638
         if ( pDoc->IsHelpDocument() )
             pFrame->GetDispatcher()->HideUI( TRUE );
         else
             pFrame->GetDispatcher()->HideUI( FALSE );
-
+#endif
         pFrame->Show();
         GetWindow().Show();
         pFrame->MakeActive_Impl( TRUE );
@@ -1024,18 +1025,24 @@ void SfxTopViewFrame::Exec_Impl(SfxRequest &rReq )
         case SID_NEWDOCDIRECT :
         {
             SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, FALSE);
-            if ( !pFactoryItem && pImp->pFactoryName )
-            {
-                SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
-                String aFact = String::CreateFromAscii("private:factory/");
-                aFact += String::CreateFromAscii( pImp->pFactoryName );
-                aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
-                aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
-                aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
-                SFX_APP()->ExecuteSlot( aReq );
-            }
+            String aFactName;
+            if ( pFactoryItem )
+                aFactName = pFactoryItem->GetValue();
+            else if ( pImp->pFactoryName )
+                aFactName = String::CreateFromAscii( pImp->pFactoryName );
             else
-                SFX_APP()->ExecuteSlot( rReq );
+            {
+                DBG_ERROR("Missing argument!");
+                break;
+            }
+
+            SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
+            String aFact = String::CreateFromAscii("private:factory/");
+            aFact += aFactName;
+            aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
+            aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
+            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii( "_blank" ) ) );
+            SFX_APP()->ExecuteSlot( aReq );
             break;
         }
 
