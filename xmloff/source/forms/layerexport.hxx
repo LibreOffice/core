@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:25:33 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ namespace xmloff
         void exportAutoStyles();
 
     protected:
-        sal_Bool implCheckPage(
+        sal_Bool impl_isFormPageContainingForms(
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage,
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxForms);
 
@@ -362,6 +362,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14.2.1  2005/03/31 07:08:01  fs
+ *  #i46288# implCheckPage renamed to impl_isFormPageContainingForms - if this were the original name, #i46288# would perhaps have been prevented :-
+ *
+ *  Revision 1.14  2005/03/23 11:25:33  vg
+ *  INTEGRATION: CWS eforms4 (1.13.430); FILE MERGED
+ *  2004/12/13 17:27:33 fs 1.13.430.1: #i36597# +exportXForms/pageContainsForms/documentContainsXForms
+ *
  *  Revision 1.13.430.1  2004/12/13 17:27:33  fs
  *  #i36597# +exportXForms/pageContainsForms/documentContainsXForms
  *
