@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:56:21 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,11 +233,11 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Transparens" ;
         Text [ portuguese_brazilian ] = "Transparenz" ;
         Text [ portuguese ] = "Transparência" ;
-        Text[ chinese_simplified ] = "Í¸Ã÷";
+        Text[ chinese_simplified ] = "Í¸Ã÷(~A)";
         Text[ russian ] = "Ïğîçğà÷íîñòü";
         Text[ polish ] = "Przezroczystoœæ";
-        Text[ japanese ] = "“§‰ß«";
-        Text[ chinese_traditional ] = "³z©ú";
+        Text[ japanese ] = "“§‰ß«(~A)";
+        Text[ chinese_traditional ] = "³z©ú(~A)";
         Text[ arabic ] = "ÔİÇİíÉ";
         Text[ greek ] = "ÄéáöÜíåéá";
         Text[ korean ] = "Åõ¸í(~A)";
@@ -315,11 +315,11 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Erstat" ;
         Text [ portuguese ] = "Substituir" ;
         Text [ portuguese_brazilian ] = "Ersetzen" ;
-        Text[ chinese_simplified ] = "¸üÌæ";
+        Text[ chinese_simplified ] = "¸üÌæ(~R)";
         Text[ russian ] = "Çàìåíèòü";
         Text[ polish ] = "Zamieñ";
-        Text[ japanese ] = "’uŠ·";
-        Text[ chinese_traditional ] = "´À¥N";
+        Text[ japanese ] = "’uŠ·(~R)";
+        Text[ chinese_traditional ] = "´À¥N(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
         Text[ korean ] = "¹Ù²Ù±â(~R)";
