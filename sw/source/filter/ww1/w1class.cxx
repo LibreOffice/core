@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:53:26 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 12:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,13 +630,13 @@ void Ww1Sprm::DeinitTab()
 {
     for (size_t i=0; i < sizeof(aTab)/sizeof(*aTab); ++i)
         delete aTab[i];
-    memset(aTab, sizeof(aTab)/sizeof(*aTab), 0);
+    memset(aTab, 0, sizeof(aTab)/sizeof(*aTab));
     delete pSingleSprm;
 }
 
 void Ww1Sprm::InitTab()
 {
-    memset( aTab, sizeof(aTab)/sizeof(*aTab), 0 );
+    memset(aTab, 0, sizeof(aTab)/sizeof(*aTab));
     pSingleSprm = new Ww1SingleSprm( 0, DUMPNAME(pUnknown));
 
     aTab[  2] = new Ww1SingleSprmByte(DUMPNAME("sprmPStc")); //   2 pap.istd (style code)
