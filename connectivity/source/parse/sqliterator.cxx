@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:59:08 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,12 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"traverseOneTableName: Exception occured!");
+            if(m_pParser)
+            {
+                ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(IParseContext::ERROR_INVALID_TABLE);
+                sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,aTableName);
+                appendWarning(sErrMsg);
+            }
         }
 
     }
@@ -1233,6 +1238,8 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
         return;
 
     Reference<XNameAccess> xColumns = _rTable->getColumns();
+    if ( !xColumns.is() )
+        return;
 
     Sequence< ::rtl::OUString > aColNames =  xColumns->getElementNames();
     const ::rtl::OUString* pBegin = aColNames.getConstArray();
