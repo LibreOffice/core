@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2001-06-26 14:52:02 $
+ *  last change: $Author: hr $ $Date: 2001-10-01 16:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,8 @@ void PasswordContainer::privateAdd( const ::rtl::OUString& Url, const ::rtl::OUS
 
         if( aIter != container.end() )
         {
-            updateVector( aIter->first, aIter->second, NamePassRecord( UserName, storePass, Mode ), sal_True, Handler );
+            NamePassRecord aNamePassRecord( UserName, storePass, Mode );
+            updateVector( aIter->first, aIter->second, aNamePassRecord, sal_True, Handler );
             return;
         }
     }
