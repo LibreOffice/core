@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usedtype.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:18 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <cosv/template/tpltools.hxx>
 #include <ary/ce.hxx>
 #include <ary/cpp/c_etypes.hxx>
+#include <ary/info/codeinfo.hxx>
 #include <cpp/c_gate.hxx>
 #include <instlist.hxx>
 #include "namechai.hxx"
@@ -84,7 +85,6 @@ typedef std::vector< ary::cpp::E_ConVol >   PtrLevelVector;
 
 struct UsedType::CheshireCat
 {
-
     ut::NameChain       aPath;
     PtrLevelVector      aPtrLevels;
     ary::cpp::E_ConVol  eConVol_Type;
@@ -314,8 +314,11 @@ UsedType::Connect2Ce( const Gate & i_rGate )
     {
         if ( DoesMatch_Ce(*it, i_rGate) )
         {
-            ret = *it;
-            nMatchCounter++;
+            if ( NOT static_cast< const info::CodeInfo& >( i_rGate.Ref_Ce(*it).Info()).IsInternal() )
+            {
+                ret = *it;
+                nMatchCounter++;
+            }
         }
     }  // end for
     if ( nMatchCounter == 1 )
