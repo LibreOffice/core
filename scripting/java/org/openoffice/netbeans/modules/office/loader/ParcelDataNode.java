@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelDataNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:33 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-21 16:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ public class ParcelDataNode extends DataNode {
 
     public ParcelDataNode(ParcelDataObject obj, Children ch) {
         super(obj, ch);
-        setIconBase("/org/openoffice/netbeans/modules/office/resources/OfficeIcon");
+        setIconBase("/org/openoffice/netbeans/modules/office/resources/ParcelIcon");
     }
 
     protected ParcelDataObject getParcelDataObject() {

@@ -46,7 +46,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         }
 
         // Provide a name in the title bar.
-        setName(NbBundle.getMessage(SelectPathVisualPanel.class, "TITLE_WizardPanel"));
+        setName(NbBundle.getMessage(SelectPathVisualPanel.class, "TITLE_SelectPathVisualPanel"));
         /*
         // Optional: provide a special description for this pane.
         // You must have turned on WizardDescriptor.WizardPanel_helpDisplayed

@@ -29,7 +29,7 @@ public class ParcelPropertiesVisualPanel extends javax.swing.JPanel {
         languagesComboBox.addItem("BeanShell");
 
         // Provide a name in the title bar.
-        setName(NbBundle.getMessage(ParcelPropertiesVisualPanel.class, "TITLE_WizardPanel"));
+        setName(NbBundle.getMessage(ParcelPropertiesVisualPanel.class, "TITLE_ParcelPropertiesVisualPanel"));
         /*
         // Optional: provide a special description for this pane.
         // You must have turned on WizardDescriptor.WizardPanel_helpDisplayed

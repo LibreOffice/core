@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentChildren.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:20 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-21 16:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public class OfficeDocumentChildren extends Children.Keys
         }
 
         private void init() {
-            setIconBase("/org/openoffice/netbeans/modules/office/resources/OfficeIcon");
+            setIconBase("/org/openoffice/netbeans/modules/office/resources/ParcelIcon");
 
             setName(name);
             setDisplayName(name.substring(name.lastIndexOf("/") + 1));
