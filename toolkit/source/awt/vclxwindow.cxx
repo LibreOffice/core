@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-12 15:49:14 $
+ *  last change: $Author: mt $ $Date: 2001-02-16 11:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -871,37 +871,42 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    if ( GetWindow() )
+    Window* pWindow = GetWindow();
+
+    if ( pWindow )
     {
         OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
         Point aPos( nX, nY );
 
-        if ( GetWindow()->GetParent() && !GetWindow()->IsVisible()
-             && ( !pDev || ( GetWindow()->GetParent() == pDev ) ) )
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        if ( pWindow->GetParent() && !pWindow->IsVisible()
+                && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
         {
-            Point aOldPos( GetWindow()->GetPosPixel() );
-            GetWindow()->SetPosPixel( aPos );
+            Point aOldPos( pWindow->GetPosPixel() );
+            pWindow->SetPosPixel( aPos );
 
             // Erstmal ein Update auf den Parent, damit nicht beim Update
             // auf dieses Fenster noch ein Paint vom Parent abgearbeitet wird,
             // wo dann ggf. dieses Fenster sofort wieder gehidet wird.
-            if( GetWindow()->GetParent() )
-                GetWindow()->GetParent()->Update();
+            if( pWindow->GetParent() )
+                pWindow->GetParent()->Update();
 
-            GetWindow()->Show();
-            GetWindow()->Update();
-            GetWindow()->SetParentUpdateMode( sal_False );
-            GetWindow()->Hide();
-            GetWindow()->SetParentUpdateMode( sal_True );
+            pWindow->Show();
+            pWindow->Update();
+            pWindow->SetParentUpdateMode( sal_False );
+            pWindow->Hide();
+            pWindow->SetParentUpdateMode( sal_True );
 
-            GetWindow()->SetPosPixel( aOldPos );
+            pWindow->SetPosPixel( aOldPos );
         }
         else if ( pDev )
         {
-            Size aSz = GetWindow()->GetSizePixel();
+            Size aSz = pWindow->GetSizePixel();
             aSz = pDev->PixelToLogic( aSz );
             Point aP = pDev->PixelToLogic( aPos );
-            GetWindow()->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
+            pWindow->Draw( pDev, aP, aSz, WINDOW_DRAW_NOCONTROLS );
         }
     }
 }
