@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_activex.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:49:30 $
+ *  last change: $Author: hr $ $Date: 2004-12-10 18:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,4 +75,3 @@ File gid_File_Lib_Regactivex_Msi
     Name = "regactivex.dll";
 End
 
-STD_LIB_FILE( gid_File_Lib_Regactivex, regactivex)
