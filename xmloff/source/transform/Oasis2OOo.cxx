@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:16:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _XMLOFF_EVENTOASISTCONTEXT_HXX
 #include "EventOASISTContext.hxx"
 #endif
+#ifndef _XMLOFF_DLGOASISTCONTEXT_HXX
+#include "DlgOASISTContext.hxx"
+#endif
 #ifndef _XMLOFF_CONTROLOASISTCONTEXT_HXX
 #include "ControlOASISTContext.hxx"
 #endif
@@ -154,6 +157,7 @@ enum XMLUserDefinedTransformerAction
     XML_ETACTION_STYLE_RENAME,
     XML_ETACTION_FRAME,
     XML_ETACTION_EVENT,
+    XML_ETACTION_DLG,
     XML_ETACTION_TAB_STOP,
     XML_ETACTION_FORM_CONTROL,
     XML_ETACTION_FORM_PROPERTY,
@@ -290,13 +294,12 @@ static XMLTransformerActionInit aActionTable[] =
             OASIS_LIST_STYLE_REF_ACTIONS ),
 
     // rename <text:note*> to <text:footnote*> or <text:endnote*>
-    ENTRY1( TEXT, NOTES_CONFIGURATION, XML_ETACTION_NOTES, sal_True ),
-    ENTRY1( TEXT, NOTE, XML_ETACTION_NOTES, sal_False ),
+    ENTRY1( TEXT, NOTES_CONFIGURATION, XML_ETACTION_NOTES,
+                                                    XML_NOTES_CONFIGURATION),
+    ENTRY1( TEXT, NOTE, XML_ETACTION_NOTES, XML_NOTE ),
 
     // rename <text:footnote> and <text:endnote> to <text:note>
-    // TODO: All note references s are currently renamed to <text:footnote-ref>
-    ENTRY1Q( TEXT, NOTE_REF, XML_ETACTION_RENAME_ELEM,
-             XML_NAMESPACE_TEXT, XML_FOOTNOTE_REF ),
+    ENTRY1( TEXT, NOTE_REF, XML_ETACTION_NOTES, XML_NOTE_REF ),
 
     // rename <text:tab> to <text:tab-stop>
     ENTRY1Q( TEXT, TAB, XML_ETACTION_RENAME_ELEM,
@@ -313,7 +316,11 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1Q( OFFICE, EVENT_LISTENERS, XML_ETACTION_RENAME_ELEM,
                       XML_NAMESPACE_OFFICE, XML_EVENTS ),
     ENTRY0( SCRIPT, EVENT_LISTENER, XML_ETACTION_EVENT ),
+    ENTRY0( SCRIPT, EVENT, XML_ETACTION_EVENT ),
     ENTRY0( PRESENTATION, EVENT_LISTENER, XML_ETACTION_EVENT ),
+
+    // process Basic dialogs
+    ENTRY0( DLG, STYLE, XML_ETACTION_DLG ),
 
     // process length attributes
     ENTRY1( DRAW, RECT, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
@@ -619,6 +626,12 @@ static XMLTransformerActionInit aEventActionTable[] =
     ENTRY0( SCRIPT, EVENT_NAME, XML_ATACTION_EVENT_NAME ),
     ENTRY0( SCRIPT, MACRO_NAME, XML_ATACTION_MACRO_NAME ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_EVENT_ELEM_ACTIONS
+static XMLTransformerActionInit aDlgActionTable[] =
+{
+    ENTRY0( DLG, BORDER, XML_ATACTION_DLG_BORDER )
 };
 
 // action table for OASIS_MASTER_PAGE_ACTIONS
@@ -1273,6 +1286,8 @@ class XMLConfigItemTContext_Impl : public XMLTransformerContext
 {
     ::rtl::OUString m_aContent;
     sal_Bool m_bIsRedlineProtectionKey;
+    sal_Bool m_bIsCursorX;
+    sal_Bool m_bIsCursorY;
 
 public:
 
@@ -1295,7 +1310,9 @@ XMLConfigItemTContext_Impl::XMLConfigItemTContext_Impl(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName ),
-    m_bIsRedlineProtectionKey( sal_False )
+    m_bIsRedlineProtectionKey( sal_False ),
+    m_bIsCursorX( sal_False ),
+    m_bIsCursorY( sal_False )
 {
 }
 
@@ -1316,15 +1333,23 @@ void XMLConfigItemTContext_Impl::StartElement(
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                  &aLocalName );
-        if( XML_NAMESPACE_CONFIG == nPrefix &&
-            IsXMLToken( aLocalName, XML_NAME ) )
+        if( XML_NAMESPACE_CONFIG == nPrefix )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( i );
-            const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
-            if( rValue.equalsAsciiL( sRedlineProtectionKey, sizeof(sRedlineProtectionKey)-1 ) )
-                m_bIsRedlineProtectionKey = sal_True;
+            if ( IsXMLToken( aLocalName, XML_NAME ) )
+            {
+                const OUString& rValue = xAttrList->getValueByIndex( i );
+                const sal_Char sRedlineProtectionKey[] = "RedlineProtectionKey";
+                const sal_Char sCursorX[] = "CursorPositionX";
+                const sal_Char sCursorY[] = "CursorPositionY";
+                if( rValue.equalsAsciiL( sRedlineProtectionKey, sizeof(sRedlineProtectionKey)-1 ) )
+                    m_bIsRedlineProtectionKey = sal_True;
+                else if( rValue.equalsAsciiL( sCursorX, sizeof(sCursorX)-1 ) )
+                    m_bIsCursorX = sal_True;
+                else if( rValue.equalsAsciiL( sCursorY, sizeof(sCursorY)-1 ) )
+                    m_bIsCursorY = sal_True;
 
-            break;
+                break;
+            }
         }
     }
 
@@ -1333,8 +1358,21 @@ void XMLConfigItemTContext_Impl::StartElement(
 
 void XMLConfigItemTContext_Impl::Characters( const ::rtl::OUString& rChars )
 {
-    m_aContent += rChars;
-    XMLTransformerContext::Characters( rChars );
+    rtl::OUString sChars(rChars);
+    if (m_bIsRedlineProtectionKey)
+        m_aContent += rChars;
+    else if (m_bIsCursorX || m_bIsCursorY)
+    {
+        sal_Int32 nPos = rChars.toInt32();
+        if (m_bIsCursorX && nPos > 255)
+            nPos = 255;
+        else if (m_bIsCursorY && nPos > 31999)
+            nPos = 31999;
+
+        sChars = ::rtl::OUString::valueOf(nPos);
+    }
+
+    XMLTransformerContext::Characters( sChars );
 }
 
 void XMLConfigItemTContext_Impl::EndElement()
@@ -1452,7 +1490,7 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
         break;
     case XML_ETACTION_NOTES:
         return new XMLNotesTransformerContext( *this, rQName,
-                static_cast< sal_Bool >( rAction.m_nParam1 ) );
+                static_cast< XMLTokenEnum>( rAction.m_nParam1 ), bPersistent );
         break;
     case XML_ETACTION_TABLE:
         return new XMLTableTransformerContext_Impl( *this, rQName );
@@ -1469,6 +1507,9 @@ XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
         break;
     case XML_ETACTION_EVENT:
         return new XMLEventOASISTransformerContext( *this, rQName );
+        break;
+    case XML_ETACTION_DLG:
+        return new XMLDlgOASISTransformerContext( *this, rQName );
         break;
     case XML_ETACTION_TAB_STOP:
         return new XMLTabStopOASISTContext_Impl( *this, rQName );
@@ -1598,6 +1639,9 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
             case OASIS_EVENT_ACTIONS:
                 m_aActions[OASIS_EVENT_ACTIONS] =
                     new XMLTransformerActions( aEventActionTable );
+            case OASIS_DLG_ACTIONS:
+                m_aActions[OASIS_DLG_ACTIONS] =
+                    new XMLTransformerActions( aDlgActionTable );
             case OASIS_FORM_CONTROL_ACTIONS:
                 m_aActions[OASIS_FORM_CONTROL_ACTIONS] =
                     new XMLTransformerActions( aFormControlActionTable );
@@ -1633,21 +1677,27 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
     return pActions;
 }
 
-OUString Oasis2OOoTransformer::GetEventName( const OUString& rName )
+OUString Oasis2OOoTransformer::GetEventName( const OUString& rName,
+                                             sal_Bool bForm )
 {
+    if( bForm && !m_pFormEventMap )
+        m_pFormEventMap =
+            XMLEventOASISTransformerContext::CreateFormEventMap();
     if( !m_pEventMap )
         m_pEventMap = XMLEventOASISTransformerContext::CreateEventMap();
 
     OUString aMacroName;
     sal_uInt16 nPrefix =
         GetNamespaceMap().GetKeyByAttrName( rName, &aMacroName );
-    return XMLEventOASISTransformerContext::GetEventName( nPrefix, aMacroName,
-                                                          *m_pEventMap );
+    return XMLEventOASISTransformerContext::GetEventName(
+                nPrefix, aMacroName, *m_pEventMap,
+                   bForm ? m_pFormEventMap : 0  );
 }
 
 Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
     XMLTransformerBase( aActionTable, aTokenMap ),
-    m_pEventMap( 0 )
+    m_pEventMap( 0 ),
+    m_pFormEventMap( 0 )
 {
     GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken(XML_N_OFFICE_OOO), XML_NAMESPACE_OFFICE );
@@ -1688,6 +1738,9 @@ Oasis2OOoTransformer::Oasis2OOoTransformer() throw() :
     GetNamespaceMap().Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
     GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT_OOO), XML_NAMESPACE_SCRIPT );
 
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_DLG), GetXMLToken(XML_N_DLG), XML_NAMESPACE_DLG );
+    GetReplaceNamespaceMap().Add( GetXMLToken(XML_NP_DLG), GetXMLToken(XML_N_DLG), XML_NAMESPACE_DLG );
+
     for( sal_uInt16 i=0; i<MAX_OASIS_ACTIONS; ++i )
         m_aActions[i] = 0;
 }
@@ -1697,6 +1750,7 @@ Oasis2OOoTransformer::~Oasis2OOoTransformer() throw()
     for( sal_uInt16 i=0; i<MAX_OASIS_ACTIONS; ++i )
         delete m_aActions[i];
     XMLEventOASISTransformerContext::FlushEventMap( m_pEventMap );
+    XMLEventOASISTransformerContext::FlushEventMap( m_pFormEventMap );
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 >  static CreateUnoTunnelId()
