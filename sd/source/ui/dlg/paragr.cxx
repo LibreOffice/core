@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:44:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
 
 #include <svx/editdata.hxx>
 
