@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,9 +257,16 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else
             throw SQLException();
     }
-    catch(Exception&) // a execption is thrown when no file exists
+    catch(Exception& e) // a execption is thrown when no file exists
     {
-        throw SQLException();
+        SQLException aError;
+        aError.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unable to create a content for the URL given."));
+        aError.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
+        aError.ErrorCode = 0;
+        aError.Context = static_cast< XConnection* >(this);
+        if (e.Message.getLength())
+            aError.NextException <<= SQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCB message: ")) += e.Message, aError.Context, ::rtl::OUString(), 0, Any());
+        throw aError;
     }
 
     if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
