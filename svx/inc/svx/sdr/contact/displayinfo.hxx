@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:25:23 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,13 +140,14 @@ namespace sdr
             sal_uInt32                                      mnOriginalDrawMode;
 
             // bitfield
-            // Flag to decide if page is painted or not. Default is sal_False. When set,
-            // the page, page borders and the rasters will be visualized. This flag is set
+            // Internal flag to know when the control layer is painted. Default is
+            // sal_False. If set to sal_True, painting of the page, page borders and
+            // the rasters will be suppressed. This flag is set
             // internally from the DoProcessDisplay mechanism to avoid double page
             // painting when the control layer needs to be painted as last layer. For
             // generally switching page painting on and off, use the PagePainting flag
             // or the according flags at the view (->Is*Visible()).
-            unsigned                                        mbTemporaryPaintPage : 1;
+            unsigned                                        mbControlLayerPainting : 1;
 
             // Flag to decide if page will be painted at all. This flag is user-defined
             // and will not be changed from the DoProcessDisplay mechanism. Default is
@@ -223,9 +224,9 @@ namespace sdr
             // Is OutDev a recording MetaFile?
             sal_Bool OutputToRecordingMetaFile() const;
 
-            // Access to TemporaryPaintPage flag
-            void SetTemporaryPaintPage(sal_Bool bDoPaint);
-            sal_Bool GetTemporaryPaintPage() const;
+            // Access to ControlLayerPainting flag
+            void SetControlLayerPainting(sal_Bool bDoPaint);
+            sal_Bool GetControlLayerPainting() const;
 
             // Access to PagePainting flag
             void SetPagePainting(sal_Bool bDoPaint);
