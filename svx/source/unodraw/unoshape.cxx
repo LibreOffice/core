@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 19:53:42 $
+ *  last change: $Author: cl $ $Date: 2000-12-08 16:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1723,20 +1723,9 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
     }
     else
     {
-        SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
-        aSet.Put(pObj->GetItem(pMap->nWID));
+        const SfxItemSet& rSet = pObj->GetItemSet();
 
-        if(!aSet.Count())
-        {
-            if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-            {
-                // Not-Persistant Attribute, hole diese extra
-                pObj->TakeNotPersistAttr(aSet, sal_False);
-            }
-        }
-
-        switch( aSet.GetItemState( pMap->nWID, sal_False ) )
+        switch( rSet.GetItemState( pMap->nWID, sal_False ) )
         {
         case SFX_ITEM_DONTCARE:
         case SFX_ITEM_DISABLED:
@@ -1784,33 +1773,7 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
     }
     else
     {
-        SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
-//-/            pObj->TakeAttributes( aSet, sal_False, sal_True );
-        aSet.Put(pObj->GetItem(pMap->nWID));
-
-        if(!aSet.Count())
-        {
-            if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-            {
-                // Not-Persistant Attribute, hole diese extra
-                pObj->TakeNotPersistAttr(aSet, sal_False);
-            }
-        }
-
-        aSet.ClearItem( pMap->nWID );
-
-        if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
-        {
-            // Not-Persist Attribute extra setzen
-            pObj->ApplyNotPersistAttr( aSet );
-        }
-        else
-        {
-//-/                pObj->SetAttributes( aSet, sal_False );
-//-/                SdrBroadcastItemChange aItemChange(*pObj);
-            pObj->SetItemSetAndBroadcast(aSet);
-//-/                pObj->BroadcastItemChange(aItemChange);
-        }
+        pObj->ClearItem( pMap->nWID );
     }
 
     pModel->SetChanged();
