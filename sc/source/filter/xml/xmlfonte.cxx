@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
+ *  last change: $Author: sab $ $Date: 2001-01-04 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
 #endif
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
+#endif
 
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
@@ -87,30 +90,28 @@
 #ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
 #endif
-
+#ifndef SC_STLPOOL_HXX
+#include "stlpool.hxx"
+#endif
+#ifndef SC_SCATTR_HXX
+#include "attrib.hxx"
+#endif
 
 class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
+    void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool);
     public:
 
     ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport );
 
 };
 
-ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
-    ScXMLExport& rExport ) :
-    XMLFontAutoStylePool( rExport )
+void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool)
 {
-    sal_uInt16 aWhichIds[3] = { ATTR_FONT, ATTR_CJK_FONT,
-                                ATTR_CTL_FONT };
-    sal_uInt16 aEditWhichIds[3] = { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
-                                    EE_CHAR_FONTINFO_CTL };
-    const SfxItemPool* pPool = rExport.GetDocument()->GetPool();
-    const SfxItemPool* pEditPool = rExport.GetDocument()->GetEditPool();
     const SfxPoolItem* pItem;
-    for( sal_uInt16 i=0; i<3; i++ )
+    for( sal_uInt16 i=0; i < nIdCount; i++ )
     {
-        sal_uInt16 nWhichId = aWhichIds[i];
+        sal_uInt16 nWhichId = pWhichIds[i];
         sal_uInt16 nItems = pPool->GetItemCount( nWhichId );
         for( sal_uInt16 j = 0; j < nItems; ++j )
         {
@@ -123,18 +124,53 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
                      pFont->GetCharSet() );
             }
         }
-        sal_uInt16 nEditWhichId = aEditWhichIds[i];
-        sal_uInt16 nEditItems = pEditPool->GetItemCount( nEditWhichId );
-        for( sal_uInt16 k = 0; k < nEditItems; ++k )
+    }
+}
+
+ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
+    ScXMLExport& rExport ) :
+    XMLFontAutoStylePool( rExport )
+{
+    sal_uInt16 aWhichIds[3] = { ATTR_FONT, ATTR_CJK_FONT,
+                                ATTR_CTL_FONT };
+    sal_uInt16 aEditWhichIds[3] = { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
+                                    EE_CHAR_FONTINFO_CTL };
+    sal_uInt16 aPageWhichIds[4] = { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
+                                    ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
+
+    const SfxItemPool* pPool = rExport.GetDocument()->GetPool();
+    AddFontItems(aWhichIds, 3, pPool);
+    const SfxItemPool* pEditPool = rExport.GetDocument()->GetEditPool();
+    AddFontItems(aEditWhichIds, 3, pEditPool);
+
+    SfxStyleSheetIterator* pItr = rExport.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF);
+    if(pItr)
+    {
+        SfxStyleSheetBase* pStyle = pItr->First();
+        SfxItemPool* pPageEditPool = EditEngine::CreatePool();
+        EditEngine aEditEngine(pPageEditPool);
+        while (pStyle)
         {
-            if( 0 != (pItem = pEditPool->GetItem( nEditWhichId, k ) ) )
+            const SfxItemPool& rPagePool = pStyle->GetPool().GetPool();
+            for (sal_uInt8 j = 0; j < 4; j++)
             {
-                const SvxFontItem *pFont =
-                            (const SvxFontItem *)pItem;
-                Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                     pFont->GetFamily(), pFont->GetPitch(),
-                     pFont->GetCharSet() );
+                sal_uInt16 nPageWhichId = aPageWhichIds[j];
+                sal_uInt16 nPageHFItems = rPagePool.GetItemCount(nPageWhichId);
+                const ScPageHFItem* pPageItem;
+                for (sal_uInt16 k = 0; k < nPageHFItems; k++)
+                {
+                    if (0 != (pPageItem = static_cast<const ScPageHFItem*>(rPagePool.GetItem(nPageWhichId, k))))
+                    {
+                        aEditEngine.SetText(*pPageItem->GetLeftArea());
+                        AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                        aEditEngine.SetText(*pPageItem->GetCenterArea());
+                        AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                        aEditEngine.SetText(*pPageItem->GetRightArea());
+                        AddFontItems(aEditWhichIds, 3, pPageEditPool);
+                    }
+                }
             }
+            pStyle = pItr->Next();
         }
     }
 }
