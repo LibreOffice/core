@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:31:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3007,7 +3007,7 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
     }
     // finally add remaining days in this month
     nDiff += aTo.nDay - aFrom.nDay;
-    return Max( nDiff, 0L );
+    return nDiff > 0 ? nDiff : 0;
 }
 
 sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
