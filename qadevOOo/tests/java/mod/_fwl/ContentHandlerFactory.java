@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentHandlerFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:28:24 $
+ *  last change:$Date: 2004-01-28 19:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._fwl;
 
+import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
 
 import lib.Status;
@@ -129,6 +130,17 @@ public class ContentHandlerFactory extends TestCase {
         XNameAccess xNA = (XNameAccess) UnoRuntime.queryInterface
             (XNameAccess.class, oObj);
         tEnv.addObjRelation("XMSF.serviceNames", xNA.getElementNames());
+        String[] dummy = xNA.getElementNames();
+
+        // com.sun.star.container.XContainerQuery
+        NamedValue[] querySequenze = new NamedValue[1];
+        NamedValue query = new NamedValue();
+        query.Name = "Name";
+        query.Value = "com.sun.star.comp.framework.SoundHandler";
+        querySequenze[0] = query;
+
+        tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
+            querySequenze);
 
         return tEnv;
     } // finish method getTestEnvironment
