@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:07:18 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -219,7 +222,14 @@ void __EXPORT ScClient::ViewChanged()
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
 
     // TODO/LEAN: working with Visual Area can switch object to running state
-    awt::Size aSz = xObj->getVisualAreaSize( GetAspect() );
+    awt::Size aSz;
+    try {
+        aSz = xObj->getVisualAreaSize( GetAspect() );
+    } catch ( embed::NoVisualAreaSizeException& )
+    {
+        DBG_ERROR("The visual area size must be available!\n");
+    }
+
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
     Size aVisSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
 
