@@ -151,6 +151,8 @@
                     </menu:menu>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:InsertAVMedia" menu:helpid="6695" menu:label="" />
+            <menu:menuitem menu:id=".uno:InsertSpreadsheet" menu:helpid="10217" menu:label="" />
             <menu:menu menu:id=".uno:ObjectMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:InsertObject" menu:helpid="5561" menu:label="" />
@@ -213,6 +215,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Gallery" menu:helpid="5960" menu:label="" />
             <menu:menuitem menu:id=".uno:BmpMask" menu:helpid="10350" menu:label="" />
+            <menu:menuitem menu:id=".uno:AVMediaPlayer" menu:helpid="6694" menu:label="" />
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
                 <menu:menupopup>
