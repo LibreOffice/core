@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XView.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:01:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     <p>This kind of object is called view-object.</p>
  */
-interface XView: com::sun::star::uno::XInterface
+published interface XView: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
