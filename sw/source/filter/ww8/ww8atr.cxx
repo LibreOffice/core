@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:56:20 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,6 +482,23 @@ bool SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
 //  Hilfsroutinen fuer Styles
 //------------------------------------------------------------
 
+void SwWW8Writer::ExportPoolItemsToCHP(sw::PoolItems &rItems, USHORT nScript)
+{
+    sw::cPoolItemIter aEnd = rItems.end();
+    for (sw::cPoolItemIter aI = rItems.begin(); aI != aEnd; ++aI)
+    {
+        const SfxPoolItem *pItem = aI->second;
+        USHORT nWhich = pItem->Which();
+        if (FnAttrOut pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN])
+        {
+            if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_TXTATR_END)
+                continue;
+            if (SwWW8Writer::CollapseScriptsforWordOk(nScript, nWhich))
+                (*pOut)(*this, *pItem);
+        }
+    }
+}
+
 /*
  * Format wie folgt ausgeben:
  *      - gebe die Attribute aus; ohne Parents!
@@ -490,7 +507,7 @@ bool SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
 void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
     bool bChpFmt, USHORT nScript)
 {
-    if( rSet.Count() )
+    if (rSet.Count())
     {
         const SfxPoolItem* pItem;
         FnAttrOut pOut;
@@ -528,28 +545,25 @@ void SwWW8Writer::Out_SfxItemSet(const SfxItemSet& rSet, bool bPapFmt,
             }
         }
 
-        SfxItemIter aIter( rSet );
-        pItem = aIter.GetCurItem();
+        sw::PoolItems aItems;
+        GetPoolItems(rSet, aItems);
+        if (bChpFmt)
+            ExportPoolItemsToCHP(aItems, nScript);
 
-        do {
-            register USHORT nWhich = pItem->Which();
+        sw::cPoolItemIter aEnd = aItems.end();
+        for (sw::cPoolItemIter aI = aItems.begin(); aI != aEnd; ++aI)
+        {
+            pItem = aI->second;
+            USHORT nWhich = pItem->Which();
             pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN];
             if( 0 != pOut && (!bPapFmt || RES_PARATR_NUMRULE != nWhich ))
             {
-                bool bChp = nWhich >= RES_CHRATR_BEGIN
-                            && nWhich < RES_TXTATR_END;
-                if ( bChp &&
-                    (!(SwWW8Writer::CollapseScriptsforWordOk(nScript,nWhich))) )
-                {
-                    bChp = false;
-                }
                 bool bPap = nWhich >= RES_PARATR_BEGIN
                             && nWhich < RES_FRMATR_END;
-                if( ( bChpFmt && bChp  ) || ( bPapFmt && bPap ) )
-                    (*pOut)( *this, *pItem );
+                if (bPapFmt && bPap)
+                    (*pOut)(*this, *pItem);
             }
-        } while( !aIter.IsAtEnd() && 0 != ( pItem = aIter.NextItem() ) );
-
+        }
         pISet = 0;                      // fuer Doppel-Attribute
     }
 }
@@ -625,8 +639,8 @@ bool SwWW8Writer::SetAktPageDescFromNode(const SwNode &rNd)
                 const SwFrmFmt& rTitleFmt = pAktPageDesc->GetMaster();
                 const SwFrmFmt& rFollowFmt = pCurrent->GetMaster();
 
-                bNewPageDesc = !sw::util::IsPlausableSingleWordSection(
-                    rTitleFmt, rFollowFmt);
+                bNewPageDesc = !IsPlausableSingleWordSection(rTitleFmt,
+                    rFollowFmt);
             }
             pAktPageDesc = pCurrent;
         }
@@ -2968,8 +2982,6 @@ static Writer& OutWW8_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
 
     return rWrt;
 }
-
-
 
 static Writer& OutWW8_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
