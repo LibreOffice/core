@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:20:02 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1093,7 +1093,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to object/page
                 aHelpText = String(SdResId(STR_CLICK_ACTION_BOOKMARK));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                aHelpText.Append( String(INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1102,7 +1102,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to document (object/page)
                 aHelpText = String(SdResId(STR_CLICK_ACTION_DOCUMENT));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                aHelpText.Append( String(INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1111,7 +1111,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // execute program
                 aHelpText = String(SdResId(STR_CLICK_ACTION_PROGRAM));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                aHelpText.Append( String(INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
