@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-21 13:59:58 $
+ *  last change: $Author: cd $ $Date: 2001-06-07 08:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,15 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -136,6 +145,9 @@
 #ifndef _SVTOOLS_TEMPLDLG_HXX
 #include <svtools/templdlg.hxx>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -180,6 +192,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::system;
 using namespace ::cppu;
 using namespace ::sfx2;
 
@@ -1082,6 +1095,93 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // SID_OPENURL does the same as SID_OPENDOC!
         rReq.SetSlot( SID_OPENDOC );
         nSID = SID_OPENDOC;
+    }
+
+    // pass URL to OS by using ShellExecuter
+    BOOL bHyperlinkUsed = FALSE;
+    SFX_REQUEST_ARG(rReq, pHyperLinkUsedItem, SfxBoolItem, SID_BROWSE, FALSE);
+    if ( pHyperLinkUsedItem )
+        bHyperlinkUsed = pHyperLinkUsedItem->GetValue();
+    if ( bHyperlinkUsed )
+    {
+        Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
+                                                                    ::comphelper::getProcessServiceFactory()->createInstance(
+                                                                    ::rtl::OUString::createFromAscii( "com.sun.star.comp.framework.TypeDetection" )),
+                                                                    UNO_QUERY );
+        if ( xTypeDetection.is() )
+        {
+            URL             aURL;
+            ::rtl::OUString aTypeName;
+            SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+            String aFileName = pFileNameItem->GetValue();
+
+            aURL.Complete = aFileName;
+            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                    ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+            xTrans->parseStrict( aURL );
+
+            aTypeName = xTypeDetection->queryTypeByURL( aURL.Complete );
+            SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+            const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
+            if ( !pFilter || !( pFilter->IsOwnFormat() ))
+            {
+                // hyperlink does not link to known type => special handling (http, ftp) browser and (file) OS
+                Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                    ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
+                if ( xSystemShellExecute.is() )
+                {
+                    INetURLObject aObj( aURL.Complete );
+
+                    INetProtocol aINetProtocol = aObj.GetProtocol();
+                    if ( aINetProtocol == INET_PROT_FTP ||
+                         aINetProtocol == INET_PROT_HTTP ||
+                         aINetProtocol == INET_PROT_HTTPS )
+                    {
+                        try
+                        {
+                            // start browser
+                            ::rtl::OUString aURLString( aURL.Complete );
+                            xSystemShellExecute->execute( aURLString, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                        }
+                        catch ( ::com::sun::star::lang::IllegalArgumentException& )
+                        {
+                        }
+                        catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                        {
+                        }
+
+                        return;
+                    }
+                    else if ( aINetProtocol == INET_PROT_FILE )
+                    {
+                        ::rtl::OUString aSysPathFileName;
+                        ::osl::FileBase::RC nError = ::osl::FileBase::getSystemPathFromFileURL( aURL.Complete, aSysPathFileName );
+                        if ( nError == ::osl::FileBase::E_None )
+                        {
+                            try
+                            {
+                                // give os this file
+                                xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                            }
+                            catch ( ::com::sun::star::lang::IllegalArgumentException& )
+                            {
+                            }
+                            catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                            {
+                            }
+                        }
+
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                // hyperlink document must be loaded into a new frame
+                rReq.RemoveItem( SID_TARGETNAME );
+                rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
+            }
+        }
     }
 
     SFX_REQUEST_ARG(rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
