@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:54:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_SPELLDIALOG_HXX
 #include "spelldialog.hxx"
 #endif
@@ -179,7 +178,7 @@ void ScSpellDialogChildWindow::Reset()
                 mpDocShell, mpViewData->GetMarkData(),
                 nOldCol, nOldRow, nTab, mxUndoDoc.release(),
                 nNewCol, nNewRow, nTab, mxRedoDoc.release(),
-                SC_CONVERSION_SPELLCHECK ) );
+                ScConversionParam( SC_CONVERSION_SPELLCHECK ) ) );
             mpDoc->SetDirty();
             mpDocShell->SetDocumentModified();
         }
