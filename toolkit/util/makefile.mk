@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:08:31 $
+#   last change: $Author: vg $ $Date: 2005-02-17 10:21:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SHL1IMPLIB= itk
 SHL1USE_EXPORTS=ordinal
 
 SHL1STDLIBS=\
+        $(VOSLIB)           \
         $(VCLLIB)			\
         $(SOTLIB)			\
         $(UNOTOOLSLIB)		\
