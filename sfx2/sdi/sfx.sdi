@@ -894,31 +894,6 @@ SfxBoolItem MultiQuickSearch SID_EXPLORER_MULTIQUICKSEARCH
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem NextWindow SID_NEXTWINDOW
-()
-[
-    UnoName = "NextWindow";
-
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
 SfxStringItem OpenUrl SID_OPENURL
 
 [
@@ -1074,31 +1049,6 @@ SfxBoolItem ExplorerPreview SID_EXPLORER_PREVIEW
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem PreviousWindow SID_PREVWINDOW
-()
-[
-    UnoName = "PreviousWindow";
-
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
 ]
 
 //--------------------------------------------------------------------------

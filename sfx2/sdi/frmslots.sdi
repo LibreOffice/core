@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2001-11-15 15:02:11 $ $Revision: 1.9 $
+    $Author: mba $ $Date: 2002-03-11 16:33:15 $ $Revision: 1.10 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -50,20 +50,6 @@ interface Window : Object
     [
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_NEXTWINDOW
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
-    ]
-
-     //---------------------------------------------------------------------
-    SID_PREVWINDOW
-    [
-        ExecMethod = MiscExec_Impl ;
-        StateMethod = MiscState_Impl ;
     ]
 
      //---------------------------------------------------------------------
@@ -438,6 +424,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/11/15 15:02:11  mba
+    #93980#: SID_BROWSE_STOP on TopFrame, not App
+
     Revision 1.8  2001/09/13 11:40:49  mba
     #88873#: some slots didn't have confignames or are overfluous
 
