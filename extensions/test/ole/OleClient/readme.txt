@@ -12,3 +12,4 @@ The project cannot be build in our environment therefore it must be an MSDEV pro
 Reason: ATL uses min and max macros defined in windef.h. Our stl header undef min and max.
 To generate the uno header use the make file. Then Set the include path directories to
 the inc directory in the build tree.
+
