@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:30:06 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,11 @@
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
+
+// module
+extern uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwUnoModule_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SwUnoModule_createInstance( const uno::Reference< XMultiServiceFactory > &rSMgr ) throw( uno::Exception );
 
 // writer documents
 extern uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw();
@@ -221,6 +226,9 @@ sal_Bool SAL_CALL component_writeInfo(
             lcl_uno_writeInfo( pKey,SwGlobalDocument_getImplementationName(),
                                SwGlobalDocument_getSupportedServiceNames() );
 
+            // module
+            lcl_uno_writeInfo( pKey, SwUnoModule_getImplementationName(),
+                               SwUnoModule_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -378,6 +386,14 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName,
                 SwGlobalDocument_getImplementationName(),
                 SwGlobalDocument_createInstance,
                 SwGlobalDocument_getSupportedServiceNames() );
+        }
+        else if( SwUnoModule_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                SwUnoModule_getImplementationName(),
+                SwUnoModule_createInstance,
+                SwUnoModule_getSupportedServiceNames() );
         }
 
         if( xFactory.is())
