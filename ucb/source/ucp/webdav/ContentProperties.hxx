@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:10 $
+ *  last change: $Author: kso $ $Date: 2002-09-18 16:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ public:
 
     const rtl::OUString & getEscapedTitle() const { return m_aEscapedTitle; }
 
-    const std::auto_ptr< PropertyValueMap > getProperties() const
+    const std::auto_ptr< PropertyValueMap > & getProperties() const
     { return m_xProps; }
 
 private:

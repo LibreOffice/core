@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-16 14:37:13 $
+ *  last change: $Author: kso $ $Date: 2002-09-18 16:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,7 +1229,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         // Append all standard UCB, DAV and HTTP properties.
 
-        const std::auto_ptr< PropertyValueMap > xProps = rData.getProperties();
+        const std::auto_ptr< PropertyValueMap > & xProps = rData.getProperties();
 
         PropertyValueMap::const_iterator it  = xProps->begin();
         PropertyValueMap::const_iterator end = xProps->end();
