@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_val.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 22:58:22 $
+ *  last change: $Author: dg $ $Date: 2002-05-19 23:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 	</xsl:template>
 
 	<xsl:template match = "group[@oor:extensible='true']">
-		<xsl:if test="count(descendant::*)">
+		<xsl:if test="count(child::prop) or count(child::set) or count(child::group) or count(child::node-ref)">
 			<xsl:message terminate="yes">ERROR: extensible groups with children are currently NOT supported!</xsl:message>
 		</xsl:if>
 	</xsl:template>
