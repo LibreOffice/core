@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,7 +727,7 @@ void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::st
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::selectionChanged(const EventObject& aEvent)
+void SAL_CALL SbaXGridPeer::selectionChanged(const EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException)
 {
     FmXGridPeer::selectionChanged(aEvent);
 
@@ -800,7 +800,7 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException)
 
 // return implementation specific data
 //------------------------------------------------------------------
-sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId )
+sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId ) throw(::com::sun::star::uno::RuntimeException)
 {
     if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
         return (sal_Int64)this;
@@ -819,7 +819,7 @@ SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rx
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::propertyChange(const PropertyChangeEvent& evt)
+void SAL_CALL SbaXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     FmXGridPeer::propertyChange(evt);
 }

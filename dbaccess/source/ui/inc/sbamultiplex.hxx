@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbamultiplex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 12:50:30 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 14:14:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,11 +175,10 @@ namespace dbaui
 
 
     #define DECLARE_MULTIPLEXER_VOID_METHOD(methodname, eventtype)                          \
-        virtual void SAL_CALL methodname(const eventtype& e);                               \
-
+        virtual void SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException); \
 
     #define DECLARE_MULTIPLEXER_BOOL_METHOD(methodname, eventtype)                          \
-        virtual sal_Bool SAL_CALL methodname(const eventtype& e);                           \
+        virtual sal_Bool SAL_CALL methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException);   \
 
 
     #define END_DECLARE_LISTENER_MULTIPLEXER()                                              \
@@ -220,7 +219,7 @@ namespace dbaui
 
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(classname, listenerclass, methodname, eventtype) \
-    void SAL_CALL classname::methodname(const eventtype& e)                                         \
+    void SAL_CALL classname::methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException) \
     {                                                                                       \
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
@@ -231,7 +230,7 @@ namespace dbaui
 
     #define IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(classname, listenerclass, methodname, eventtype) \
     /*................................................................*/                    \
-    sal_Bool SAL_CALL classname::methodname(const eventtype& e)                                     \
+    sal_Bool SAL_CALL classname::methodname(const eventtype& e) throw (::com::sun::star::uno::RuntimeException) \
     {                                                                                       \
         eventtype aMulti(e);                                                                \
         aMulti.Source = &m_rParent;                                                         \
@@ -291,7 +290,7 @@ namespace dbaui
     // declaration of property listener multiplexers
     // (with support for specialized and unspecialized property listeners)
 
-    #define DECLARE_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype)   \
+    #define DECLARE_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype, exceptions)   \
     class classname                                                                         \
             :public OSbaWeakSubObject                                                           \
             ,public listenerclass                                                           \
@@ -309,7 +308,7 @@ namespace dbaui
         /* ::com::sun::star::lang::XEventListener */                                        \
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw(::com::sun::star::uno::RuntimeException);  \
                                                                                             \
-        virtual void SAL_CALL methodname(const eventtype& e);                               \
+        virtual void SAL_CALL methodname(const eventtype& e)  throw exceptions;             \
                                                                                             \
     public:                                                                                 \
         void addInterface(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener);    \
@@ -329,7 +328,7 @@ namespace dbaui
 
     //------------------------------------------------------------------
     // implementation of property listener multiplexers
-    #define IMPLEMENT_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype) \
+    #define IMPLEMENT_PROPERTY_MULTIPLEXER(classname, listenerclass, methodname, eventtype, exceptions) \
     /*................................................................*/                    \
     classname::classname(::cppu::OWeakObject& rSource, ::osl::Mutex& rMutex)                \
             :OSbaWeakSubObject(rSource)                                                     \
@@ -355,7 +354,7 @@ namespace dbaui
     {                                                                                       \
     }                                                                                       \
                                                                                             \
-    void SAL_CALL classname::methodname(const eventtype& e)                                         \
+    void SAL_CALL classname::methodname(const eventtype& e) throw exceptions                \
     {                                                                                       \
         ::cppu::OInterfaceContainerHelper* pListeners = m_aListeners.getContainer(e.PropertyName);  \
         if (pListeners)                                                                     \
@@ -539,13 +538,13 @@ namespace dbaui
     END_DECLARE_LISTENER_MULTIPLEXER()
 
     // ::com::sun::star::beans::XPropertyChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, ::com::sun::star::beans::XPropertyChangeListener, propertyChange, ::com::sun::star::beans::PropertyChangeEvent)
+    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, ::com::sun::star::beans::XPropertyChangeListener, propertyChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::uno::RuntimeException))
 
     // ::com::sun::star::beans::XVetoableChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, ::com::sun::star::beans::XVetoableChangeListener, vetoableChange, ::com::sun::star::beans::PropertyChangeEvent)
+    DECLARE_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, ::com::sun::star::beans::XVetoableChangeListener, vetoableChange, ::com::sun::star::beans::PropertyChangeEvent, (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException))
 
     // ::com::sun::star::beans::XPropertyStateChangeListener
-    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyStateChangeMultiplexer, ::com::sun::star::beans::XPropertyStateChangeListener, propertyStateChange, ::com::sun::star::beans::PropertyStateChangeEvent)
+    DECLARE_PROPERTY_MULTIPLEXER(SbaXPropertyStateChangeMultiplexer, ::com::sun::star::beans::XPropertyStateChangeListener, propertyStateChange, ::com::sun::star::beans::PropertyStateChangeEvent, (::com::sun::star::uno::RuntimeException))
 
     // ::com::sun::star::beans::XPropertiesChangeListener
     BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXPropertiesChangeMultiplexer, ::com::sun::star::beans::XPropertiesChangeListener)

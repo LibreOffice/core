@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< ::com::su
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs)
+void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw(::com::sun::star::uno::RuntimeException)
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
@@ -659,7 +659,7 @@ void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, co
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL)
+void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(::com::sun::star::uno::RuntimeException)
 {
     // remeber the listener together with the ::com::sun::star::util::URL
     m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(_rURL, aListener));
@@ -669,7 +669,7 @@ void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star:
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL)
+void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(::com::sun::star::uno::RuntimeException)
 {
     DispatchIterator iterSearch = m_arrStatusListener.begin();
     DispatchIterator iterEnd    = m_arrStatusListener.end();
@@ -752,13 +752,13 @@ void OGenericUnoController::disposing()
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::addEventListener(const Reference< XEventListener > & aListener)
+void OGenericUnoController::addEventListener(const Reference< XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
 {
     OGenericUnoController_COMPBASE::addEventListener(aListener);
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::removeEventListener(const Reference< XEventListener > & aListener)
+void OGenericUnoController::removeEventListener(const Reference< XEventListener > & aListener) throw(::com::sun::star::uno::RuntimeException)
 {
     OGenericUnoController_COMPBASE::removeEventListener(aListener);
 }

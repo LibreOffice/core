@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:35:11 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,7 @@ void SbaTableQueryBrowser::transferChangedControlProperty(const ::rtl::OUString&
 }
 
 // -----------------------------------------------------------------------
-void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
+void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
     SbaXDataBrowserController::propertyChange(evt);
 

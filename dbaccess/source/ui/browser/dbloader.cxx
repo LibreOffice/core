@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 07:24:45 $
+ *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,8 @@ public:
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const ::rtl::OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener);
-    virtual void SAL_CALL cancel(void);
+                                const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancel(void) throw();
 };
 
 DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -228,7 +228,7 @@ extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey)
 // -----------------------------------------------------------------------
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::rtl::OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener)
+        const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
     m_xFrame    = rFrame;
     m_xListener = rListener;
@@ -291,6 +291,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 }
 
 // -----------------------------------------------------------------------
-void DBContentLoader::cancel(void)
+void DBContentLoader::cancel(void) throw()
 {
 }
