@@ -13,15 +13,15 @@ import com.sun.star.frame.XModel;
 
 /*
     Import XScriptContext class. An instance of this class is available
-    to all BeanShell scripts in the global variable "context". This
+    to all BeanShell scripts in the global variable "XSCRIPTCONTEXT". This
     variable can be used to access the document for which this script
     was invoked.
 
     Methods available are: 
 
-        context.getDocument() returns XModel
-        context.getDesktop() returns XDesktop
-        context.getComponentContext() returns XComponentContext
+        XSCRIPTCONTEXT.getDocument() returns XModel
+        XSCRIPTCONTEXT.getDesktop() returns XDesktop
+        XSCRIPTCONTEXT.getComponentContext() returns XComponentContext
 
     For more information on using this class see the scripting
     developer guides at:
@@ -36,7 +36,7 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextRange;
 
-oDoc = context.getDocument();
+oDoc = XSCRIPTCONTEXT.getDocument();
 xTextDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,oDoc);
 xText = xTextDoc.getText();
 xTextRange = xText.getEnd();
