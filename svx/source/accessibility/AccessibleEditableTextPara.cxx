@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 09:46:38 $
+ *  last change: $Author: thb $ $Date: 2002-06-25 12:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ namespace accessibility
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         pStateSet->AddState( AccessibleStateType::VISIBLE );
         pStateSet->AddState( AccessibleStateType::SHOWING );
+        pStateSet->AddState( AccessibleStateType::ENABLED );
     }
 
     AccessibleEditableTextPara::~AccessibleEditableTextPara()
@@ -653,7 +654,7 @@ namespace accessibility
     sal_Int16 SAL_CALL AccessibleEditableTextPara::getAccessibleRole() throw (uno::RuntimeException)
     {
         // TODO
-        return AccessibleRole::TEXT;
+        return AccessibleRole::PARAGRAPH;
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getAccessibleDescription() throw (uno::RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 09:46:38 $
+ *  last change: $Author: thb $ $Date: 2002-06-25 12:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace accessibility
         // these are always on
         pStateSet->AddState( AccessibleStateType::VISIBLE );
         pStateSet->AddState( AccessibleStateType::SHOWING );
+        pStateSet->AddState( AccessibleStateType::ENABLED );
     }
 
     AccessibleImageBullet::~AccessibleImageBullet()
