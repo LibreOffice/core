@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:02:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ japanese ] = "ºİÄÛ°Ù‚É‚ ‚éÌ«°Ñ‚ÍAŒ»“_‚Å‚Ü‚¾ÃŞ°À¿°½‚ÉÚ‘±‚³‚ê‚Ä‚¢‚È‚¢‚©AŠ®‘S‚ÉI‚í‚Á‚Ä‚¢‚È‚¢‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n\nÃŞ°À¿°½‚ÆÃ°ÌŞÙ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n\n‚Ü‚½A‚±‚ÌÍß°¼Ş‚ÅÌ«°Ñ‚Ìİ’è‚ğs‚¤‚ÆAÍß°¼Ş‚ğ•Â‚¶‚é‚Æ‚·‚®—LŒø‚É‚È‚è‚Ü‚·‚Ì‚ÅA‚²’ˆÓ‚­‚¾‚³‚¢B";
         Text[ korean ] = "ÄÁÆ®·Ñ ÇÊµå¿¡ ¼ÓÇØ ÀÖ´Â ¾ç½ÄÀº, ÇöÀç µ¥ÀÌÅÍ ¼Ò½º¿Í ¾ÆÁ÷ °ü·ÃµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù (¶Ç´Â ¿ÏÀüÈ÷ °ü·ÃµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù).\n\nµ¥ÀÌÅÍ ¼Ò½º¿Í Å×ÀÌºíÀ» ¼±ÅÃÇÏ½Ê½Ã¿À.\n\n\nÀÌ ÆäÀÌÁö¿¡¼­ ¸¸µé¾îÁø ¼³Á¤Àº ÀÌ ÆäÀÌÁö¸¦ ´İÀº ÈÄºÎÅÍ Áï½Ã Àû¿ëµÈ´Ù´Â Á¡¿¡ À¯ÀÇÇÏ½Ê½Ã¿À.";
         Text[ chinese_simplified ] = "µ±Ç°´ÓÊôÓÚÕâ¸ö±íµ¥µÄ¿ØÖÆÉĞÎ´(»òÃ»ÓĞÍêÈ«)ºÍÒ»¸öÊı¾İÔ´Á¬½á¡£\n\n\nÇëÑ¡ÔñÒ»¸öÊı¾İÔ´ºÍÒ»¸öÊı¾İ±í¸ñ¡£\n\n\nÇë×¢Òâ£ºÀë¿ªÕâ¸ö±íµ¥Ò³ÃæÊ±ËùÓĞµÄĞÂÉè¶¨¾Í»áÁ¢¿ÌÉúĞ§¡£";
-        Text[ chinese_traditional ] = "·í«e±qÄİ©ó³o­Óªí³æªº±±¨î¶µ©|¥¼(©Î¨S¦³§¹¥ş)©M¤@­Ó¸ê®Æ·½³sµ²¡C\n\n\n½Ğ±z¿ï¾Ü¤@­Ó¸ê®Æ·½©M¤@­Ó¸ê®Æªí®æ¡C\n\n\n½Ğª`·N¡GÖÃ¶}³o­Óªí³æ­¶­±®É©Ò¦³ªº·s³]©w´N·|¥ß¨è¥Í®Ä¡C";
+        Text[ chinese_traditional ] = "·í«e±qÄİ©ó³o­Óªí³æªº±±»s¶µ©|¥¼(©Î¨S¦³§¹¥ş)©M¤@­Ó¸ê®Æ·½³sµ²¡C\n\n\n½Ğ±z¿ï¾Ü¤@­Ó¸ê®Æ·½©M¤@­Ó¸ê®Æªí®æ¡C\n\n\n½Ğª`·N¡GÖÃ¶}³o­Óªí³æ­¶­±®É©Ò¦³ªº·s³]©w´N·|¥ß¨è¥Í®Ä¡C";
         Text[ turkish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ arabic ] = "ÇáÇÓÊãÇÑÉ ÇáÊí íäÊãí ÅáíåÇ ÚäÕÑ ÇáÊÍßã ÛíÑ ãÑÊÈØÉ ÇáÂä ÈãÕÏÑ ÈíÇäÇÊ¡ Ãæ áã ÊßÊãá ÚãáíÉ ÇÑÊÈÇØåÇ ÈÚÏ.\n\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÕÏÑ ÈíÇäÇÊ æÌÏæá.\n\n\nÇ?";
         Text[ catalan ] = "De momento, el formulario al que pertenece el campo de control no está (quizás no totalmente) conectado a una fuente de datos.\n\nSeleccione una fuente de datos y una tabla.\n\n\nNo olvide que la configuración que realice en este registro tendrá validez inmediatamente después de que abandone el registro.";
@@ -578,6 +578,9 @@ String RID_STR_TYPE_COMMAND
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/07/13 21:02:10  kz
+ *  Merge SRC638: 13.07.01 - 23:01:19
+ *
  *  Revision 1.17  2001/07/04 14:27:07  kz
  *  Merge SRC633: 04.07.01 - 16:27:03
  *
@@ -632,6 +635,7 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
 
 
 
