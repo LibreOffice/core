@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplemapi.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-14 08:09:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,77 +59,39 @@
  *
  ************************************************************************/
 
-#ifndef _SIMPLEMAPI_HXX_
+#ifndef INCLUDED_SIMPLEMAPI_HXX
 #include "simplemapi.hxx"
 #endif
 
-//----------------------------------------------------------
-// static variables
-//----------------------------------------------------------
+#include <string>
+#include <stdexcept>
 
-CSimpleMapi*    CSimpleMapi::s_Instance     = NULL;
-osl::Mutex      CSimpleMapi::s_aMutex;
-CSimpleMapi::SIMPLEMAPI_SINGLETON_DESTROYER_T CSimpleMapi::s_SingletonDestroyer;
-
-//----------------------------------------------------------
-//
-//----------------------------------------------------------
-
-CSimpleMapi* CSimpleMapi::create( )
+CSimpleMapi::CSimpleMapi() :
+    m_lpfnMapiLogon(NULL),
+    m_lpfnMapiLogoff(NULL),
+    m_lpfnMapiSendMail(NULL)
 {
-    if ( !s_Instance )
-    {
-        osl::MutexGuard aGuard( s_aMutex );
+    m_hMapiDll = LoadLibrary("mapi32.dll");
+    if ((m_hMapiDll == INVALID_HANDLE_VALUE) || (m_hMapiDll == NULL))
+        throw std::runtime_error("Couldn't load MAPI library");
 
-        if ( !s_Instance )
-        {
-            s_Instance = new CSimpleMapi( );
-            s_SingletonDestroyer.reset( s_Instance );
-        }
-    }
+    m_lpfnMapiLogon = reinterpret_cast<LPMAPILOGON>(GetProcAddress(m_hMapiDll, "MAPILogon"));
+    if (!m_lpfnMapiLogon)
+        throw std::runtime_error("Couldn't find method MAPILogon");
 
-    return s_Instance;
+    m_lpfnMapiLogoff = reinterpret_cast<LPMAPILOGOFF>(GetProcAddress(m_hMapiDll, "MAPILogoff"));
+    if (!m_lpfnMapiLogoff)
+        throw std::runtime_error("Couldn't find method MAPILogoff");
+
+    m_lpfnMapiSendMail = reinterpret_cast<LPMAPISENDMAIL>(GetProcAddress(m_hMapiDll, "MAPISendMail"));
+    if (!m_lpfnMapiSendMail)
+        throw std::runtime_error("Couldn't find method MAPISendMail");
 }
 
-//----------------------------------------------------------
-//
-//----------------------------------------------------------
-
-CSimpleMapi::CSimpleMapi( ) :
-    m_lpfnMapiLogon( NULL ),
-    m_lpfnMapiLogoff( NULL ),
-    m_lpfnMapiSendMail( NULL )
+CSimpleMapi::~CSimpleMapi()
 {
-    // load the library
-    m_hMapiDll = LoadLibrary( "mapi32.dll" );
-
-    if ( m_hMapiDll )
-    {
-        // initialize the function pointer
-        m_lpfnMapiLogon = reinterpret_cast< LPMAPILOGON >(
-            GetProcAddress( m_hMapiDll, "MAPILogon" ) );
-
-        m_lpfnMapiLogoff = reinterpret_cast< LPMAPILOGOFF >(
-            GetProcAddress( m_hMapiDll, "MAPILogoff" ) );
-
-        m_lpfnMapiSendMail = reinterpret_cast< LPMAPISENDMAIL >(
-            GetProcAddress( m_hMapiDll, "MAPISendMail" ) );
-    }
+    FreeLibrary(m_hMapiDll);
 }
-
-//----------------------------------------------------------
-//
-//----------------------------------------------------------
-
-CSimpleMapi::~CSimpleMapi( )
-{
-    if ( m_hMapiDll )
-        FreeLibrary( m_hMapiDll );
-}
-
-//----------------------------------------------------------
-//
-//----------------------------------------------------------
 
 ULONG CSimpleMapi::MAPILogon(
     ULONG ulUIParam,
@@ -139,23 +101,14 @@ ULONG CSimpleMapi::MAPILogon(
     ULONG ulReserved,
     LPLHANDLE lplhSession )
 {
-    ULONG ulRet = MAPI_E_FAILURE;
-
-    if ( m_lpfnMapiLogon )
-        ulRet = m_lpfnMapiLogon(
-            ulUIParam,
-            lpszProfileName,
-            lpszPassword,
-            flFlags,
-            ulReserved,
-            lplhSession );
-
-    return ulRet;
+    return m_lpfnMapiLogon(
+        ulUIParam,
+        lpszProfileName,
+        lpszPassword,
+        flFlags,
+        ulReserved,
+        lplhSession );
 }
-
-//----------------------------------------------------------
-//
-//----------------------------------------------------------
 
 ULONG CSimpleMapi::MAPILogoff(
     LHANDLE lhSession,
@@ -163,18 +116,8 @@ ULONG CSimpleMapi::MAPILogoff(
     FLAGS flFlags,
     ULONG ulReserved )
 {
-    ULONG ulRet = MAPI_E_FAILURE;
-
-    if ( m_lpfnMapiLogoff )
-        ulRet = m_lpfnMapiLogoff(
-            lhSession, ulUIParam, flFlags, ulReserved );
-
-    return ulRet;
+    return m_lpfnMapiLogoff(lhSession, ulUIParam, flFlags, ulReserved);
 }
-
-//----------------------------------------------------------
-//
-//----------------------------------------------------------
 
 ULONG CSimpleMapi::MAPISendMail(
     LHANDLE lhSession,
@@ -183,12 +126,6 @@ ULONG CSimpleMapi::MAPISendMail(
     FLAGS flFlags,
     ULONG ulReserved )
 {
-    ULONG ulRet = MAPI_E_FAILURE;
-
-    if ( m_lpfnMapiSendMail )
-        ulRet = m_lpfnMapiSendMail(
-            lhSession, ulUIParam, lpMessage, flFlags, ulReserved );
-
-    return ulRet;
+    return m_lpfnMapiSendMail(lhSession, ulUIParam, lpMessage, flFlags, ulReserved);
 }
 
