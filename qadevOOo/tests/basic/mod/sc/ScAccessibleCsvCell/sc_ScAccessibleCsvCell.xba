@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAccessibleCsvCell.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:09:54 $ 
+'*  last change:$Date: 2003-06-11 16:27:29 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -74,6 +74,7 @@ option explicit
 ' REQUIRED VARIABLES for interface/service tests:
 Global accText As String
 Global accButton As Object
+Global readOnly as Boolean
 
 
 Sub CreateObj()
@@ -95,12 +96,15 @@ On Error Goto ErrHndl
     wait(3000)
     oWin = tk.getActiveTopWindow()
     xRoot = utils.at_getAccessibleObject(oWin)
-    oParent = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TABLE)
+    oParent = utils.at_getAccessibleObjectForRole(xRoot,_
+                                com.sun.star.accessibility.AccessibleRole.TABLE)
     oObj = oParent.getAccessibleChild(3).getAccessibleContext()
     Out.Log("Child: "+oObj.getAccessibleName())
     Out.Log("Implementation name: "+oObj.getImplementationName())
-    accButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Cancel")
+    accButton = utils.at_getAccessibleObjectForRole(xRoot,_
+                 com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Cancel")
     accText = oObj.getText()
+    readOnly = true
 
 Exit Sub
 ErrHndl:
