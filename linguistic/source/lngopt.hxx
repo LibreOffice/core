@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 15:39:32 $
+ *  last change: $Author: tl $ $Date: 2001-05-08 12:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,12 +150,6 @@ public:
 
     const ::com::sun::star::uno::Sequence< rtl::OUString >
             GetActiveDics() const   { return pData->aActiveDics; }
-
-    // OtherLingu functions
-    INT16   GetOtherIndex() const           { return pData->nOtherIndex; }
-    BOOL    IsStandardSpell() const         { return pData->bIsStdSpell; }
-    BOOL    IsStandardHyph() const          { return pData->bIsStdHyph; }
-    BOOL    IsStandardThes() const          { return pData->bIsStdThes; }
 };
 
 

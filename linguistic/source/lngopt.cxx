@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 11:50:08 $
+ *  last change: $Author: tl $ $Date: 2001-05-08 12:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,10 +191,6 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
         case WID_IS_SPELL_SPECIAL :         pbVal = &pData->bIsSpellSpecial;    break;
         case WID_IS_WRAP_REVERSE :          pbVal = &pData->bIsSpellReverse;    break;
         case WID_DEFAULT_LANGUAGE :         pnVal = &pData->nDefaultLanguage;   break;
-        case WID_IS_STANDARD_HYPHENATOR :   pbVal = &pData->bIsStdHyph; break;
-        case WID_IS_STANDARD_SPELL_CHECKER :pbVal = &pData->bIsStdSpell;    break;
-        case WID_IS_STANDARD_THESAURUS :    pbVal = &pData->bIsStdThes; break;
-        case WID_OTHER_LINGU_INDEX :        pnVal = &pData->nOtherIndex;    break;
         case WID_IS_SPELL_CAPITALIZATION :  pbVal = &pData->bIsSpellCapitalization;     break;
         case WID_IS_SPELL_WITH_DIGITS :     pbVal = &pData->bIsSpellWithDigits; break;
         case WID_IS_SPELL_UPPER_CASE :      pbVal = &pData->bIsSpellUpperCase;      break;
@@ -272,10 +268,6 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
         case WID_IS_SPELL_SPECIAL :         pbVal = &pData->bIsSpellSpecial;    break;
         case WID_IS_WRAP_REVERSE :          pbVal = &pData->bIsSpellReverse;    break;
         case WID_DEFAULT_LANGUAGE :         pnVal = &pData->nDefaultLanguage;   break;
-        case WID_IS_STANDARD_HYPHENATOR :   pbVal = &pData->bIsStdHyph; break;
-        case WID_IS_STANDARD_SPELL_CHECKER :pbVal = &pData->bIsStdSpell;    break;
-        case WID_IS_STANDARD_THESAURUS :    pbVal = &pData->bIsStdThes; break;
-        case WID_OTHER_LINGU_INDEX :        pnVal = &pData->nOtherIndex;    break;
         case WID_IS_SPELL_CAPITALIZATION :  pbVal = &pData->bIsSpellCapitalization;     break;
         case WID_IS_SPELL_WITH_DIGITS :     pbVal = &pData->bIsSpellWithDigits; break;
         case WID_IS_SPELL_UPPER_CASE :      pbVal = &pData->bIsSpellUpperCase;      break;
@@ -340,10 +332,10 @@ WID_Name aWID_Name[] =
     WID_IS_HYPH_AUTO,                   UPN_IS_HYPH_AUTO,
     WID_IS_HYPH_SPECIAL,                UPN_IS_HYPH_SPECIAL,
     WID_IS_WRAP_REVERSE,                UPN_IS_WRAP_REVERSE,
-    WID_IS_STANDARD_HYPHENATOR,         UPN_IS_STANDARD_HYPHENATOR,
-    WID_IS_STANDARD_SPELL_CHECKER,      UPN_IS_STANDARD_SPELL_CHECKER,
-    WID_IS_STANDARD_THESAURUS,          UPN_IS_STANDARD_THESAURUS,
-    WID_OTHER_LINGU_INDEX,              UPN_OTHER_LINGU_INDEX,
+    0,                                  0,
+    0,                                  0,
+    0,                                  0,
+    0,                                  0,
     WID_DEFAULT_LANGUAGE,               UPN_DEFAULT_LANGUAGE,
     WID_DEFAULT_LOCALE_CJK,             UPN_DEFAULT_LOCALE_CJK,
     WID_DEFAULT_LOCALE_CTL,             UPN_DEFAULT_LOCALE_CTL
@@ -413,18 +405,10 @@ static SfxItemPropertyMap aLinguProps[] =
             &::getBooleanCppuType(),            0, 0 },
     { MAP_CHAR_LEN(UPN_IS_SPELL_WITH_DIGITS),       WID_IS_SPELL_WITH_DIGITS,
             &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_STANDARD_HYPHENATOR),     WID_IS_STANDARD_HYPHENATOR,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_STANDARD_SPELL_CHECKER),  WID_IS_STANDARD_SPELL_CHECKER,
-            &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_IS_STANDARD_THESAURUS),      WID_IS_STANDARD_THESAURUS,
-            &::getBooleanCppuType(),            0, 0 },
     { MAP_CHAR_LEN(UPN_IS_USE_DICTIONARY_LIST),     WID_IS_USE_DICTIONARY_LIST,
             &::getBooleanCppuType(),            0, 0 },
     { MAP_CHAR_LEN(UPN_IS_WRAP_REVERSE),            WID_IS_WRAP_REVERSE,
             &::getBooleanCppuType(),            0, 0 },
-    { MAP_CHAR_LEN(UPN_OTHER_LINGU_INDEX),          WID_OTHER_LINGU_INDEX,
-            &::getCppuType( (sal_Int16*)0 ),    0, 0 },
     { 0,0,0,0 }
 };
 
