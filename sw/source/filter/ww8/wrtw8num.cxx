@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:40:46 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
