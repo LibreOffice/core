@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:13:38 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,9 +274,9 @@ namespace css = ::com::sun::star;
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_OS2
 #endif
 
-sal_uInt32 ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
+WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
 {
-    sal_uInt32 nWinBits = 0;
+    WinBits nWinBits = 0;
 
     sal_Bool bMessBox = sal_False;
     if ( ( nCompType == WINDOW_INFOBOX ) ||
@@ -689,7 +689,7 @@ void SAL_CALL VCLXToolkit::disposing()
             pParent = pParentComponent->GetWindow();
     }
 
-    sal_uInt32 nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
+    WinBits nWinBits = ImplGetWinBits( rDescriptor.WindowAttributes,
         ImplGetComponentType( rDescriptor.WindowServiceName ) );
 
     VCLXWindow* pNewComp = NULL;
@@ -821,7 +821,8 @@ void SAL_CALL VCLXToolkit::disposing()
 }
 
 Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
-    const ::com::sun::star::awt::WindowDescriptor& rDescriptor, Window* pParent, sal_uInt32 nWinBits )
+    const ::com::sun::star::awt::WindowDescriptor& rDescriptor,
+    Window* pParent, WinBits nWinBits )
 {
     String aServiceName( rDescriptor.WindowServiceName );
     aServiceName.ToLowerAscii();
