@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:36:39 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5772,360 +5772,30 @@ String RID_STR_TEXT
     Text[ slovak ] = "Text";
 };
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.51.6.1  2003/07/16 17:08:05  ihi
- *  rc-3 merge all languages
- *
- *  Revision 1.51  2003/07/03 17:28:53  hr
- *  INTEGRATION: CWS rc2merge (1.50.8); FILE MERGED
- *  2003/07/03 14:40:48 ihi 1.50.8.1: rc-2 merge all languages
- *
- *  Revision 1.50.8.1  2003/07/03 14:40:48  ihi
- *  rc-2 merge all languages
- *
- *  Revision 1.50  2003/06/13 12:48:37  hr
- *  INTEGRATION: CWS rcmerge (1.49.26); FILE MERGED
- *  2003/06/12 11:10:05 gh 1.49.26.1: final Merge RC
- *
- *  Revision 1.49.26.1  2003/06/12 11:10:05  gh
- *  final Merge RC
- *
- *  Revision 1.49  2003/04/29 17:45:35  hr
- *  INTEGRATION: CWS mergem8 (1.47.2.1.26); FILE MERGED
- *  2003/04/29 08:35:44 gh 1.47.2.1.26.3: final merge for Beta2
- *  2003/04/16 18:51:05 gh 1.47.2.1.26.2: RESYNC: (1.47.2.1-1.48); FILE MERGED
- *  2003/04/14 14:46:45 gh 1.47.2.1.26.1: merging all languages
- *
- *  Revision 1.47.2.1.26.3  2003/04/29 08:35:44  gh
- *  final merge for Beta2
- *
- *  Revision 1.47.2.1.26.2  2003/04/16 18:51:05  gh
- *  RESYNC: (1.47.2.1-1.48); FILE MERGED
- *
- *  Revision 1.47.2.1.26.1  2003/04/14 14:46:45  gh
- *  merging all languages
- *
- *  Revision 1.48  2003/03/25 16:03:53  hr
- *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
- *
- *  Revision 1.47.2.1  2003/02/22 16:38:13  hr
- *  INTEGRATION: CWS mergep (1.47.20); FILE MERGED
- *  2003/02/22 10:35:07 nf 1.47.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *  2003/01/31 12:52:42 hjs 1.47.20.1: #107113# merge on SRX644p
- *
- *  Revision 1.47.20.2  2003/02/22 10:35:07  nf
- *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *
- *  Revision 1.47.20.1  2003/01/31 12:52:42  hjs
- *  #107113# merge on SRX644p
- *
- *  Revision 1.47  2002/11/27 16:55:04  vg
- *  Merge SRX644: 27.11.02 - 17:50:59
- *
- *  Revision 1.46  2002/11/04 17:46:23  rt
- *  Merge SRX644: 04.11.02 - 18:42:01
- *
- *  Revision 1.45  2002/08/05 20:44:40  kz
- *  Merge SRX643: 05.08.02 - 22:41:00
- *
- *  Revision 1.44  2002/08/02 20:18:44  kz
- *  Merge SRX643: 02.08.02 - 22:15:18
- *
- *  Revision 1.43  2002/02/28 16:58:12  rt
- *  Merge SRC641: 28.02.02 - 17:57:35
- *
- *  Revision 1.42  2002/01/16 21:17:52  kz
- *  Merge SRC641: 16.01.02 - 22:12:40
- *
- *  Revision 1.41  2001/12/21 21:16:17  kz
- *  Merge SRC641: 21.12.01 - 22:10:32
- *
- *  Revision 1.40  2001/12/14 16:45:28  obo
- *  Merge SRC641: 14.12.01 - 17:43:10
- *
- *  Revision 1.39  2001/12/04 18:43:58  rt
- *  Merge SRC641: 04.12.01 - 18:43:13
- *
- *  Revision 1.38  2001/11/27 23:19:32  rt
- *  Merge SRC641: 27.11.01 - 23:17:43
- *
- *  Revision 1.37  2001/11/22 23:34:38  obo
- *  Merge SRC641: 22.11.01 - 23:34:56
- *
- *  Revision 1.36  2001/11/13 22:54:50  kz
- *  Merge SRC641: 13.11.01 - 22:54:26
- *
- *  Revision 1.35  2001/11/08 17:39:12  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.34  2001/11/08 11:43:54  fs
- *  #94300# removed ShowCentury property
- *
- *  Revision 1.33  2001/10/30 15:20:02  fs
- *  +RID_STR_UNABLETOCONNECT
- *
- *  Revision 1.32  2001/10/25 20:32:04  kz
- *  Merge SRC641: 25.10.01 - 22:32:38
- *
- *  Revision 1.31  2001/10/23 15:41:57  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.30  2001/10/22 20:45:25  vg
- *  Merge SRC641: 22.10.01 - 22:45:46
- *
- *  Revision 1.29  2001/10/19 12:58:51  tbe
- *  #92755# Assign Standard Values for Basic Controls in Designmode
- *
- *  Revision 1.28  2001/10/12 20:59:02  kz
- *  Merge SRC641: 12.10.01 - 22:58:19
- *
- *  Revision 1.27  2001/09/28 14:54:09  tbe
- *  #92258# click handler for Basic Scrollbar
- *
- *  Revision 1.26  2001/07/17 20:31:27  kz
- *  Merge SRC638: 17.07.01 - 22:30:59
- *
- *  Revision 1.25  2001/07/13 20:58:16  kz
- *  Merge SRC638: 13.07.01 - 22:56:55
- *
- *  Revision 1.24  2001/06/29 02:11:47  kz
- *  Merge SRC633: 06/29/01 - 04:12:08
- *
- *  Revision 1.23  2001/06/21 21:44:52  kz
- *  Merge SRC633: 21.06.01 - 23:46:17
- *
- *  Revision 1.22  2001/06/13 22:40:43  kz
- *  Merge SRC633: 14.06.01 - 00:40:24
- *
- *  Revision 1.21  2001/06/08 22:22:11  kz
- *  Merge SRC633: 09.06.01 - 00:22:44
- *
- *  Revision 1.20  2001/06/06 10:36:52  fs
- *  #86837# +RID_STR_ENUM_SIDE_ALIGN
- *
- *  Revision 1.19  2001/05/16 15:45:14  kz
- *  Merge SRC632: 05/16/01 - 17:44:33 (NoBranch)
- *
- *  Revision 1.18  2001/05/11 05:19:44  hjs
- *  Merge SRC631: 11.05.01 - 07:19:04 (NoBranch)
- *
- *  Revision 1.17  2001/05/07 13:24:17  fs
- *  changed a german text (wished by MSC :)
- *
- *  Revision 1.16  2001/05/02 12:42:31  tbe
- *  added scrollbar properties
- *
- *  Revision 1.15  2001/04/26 09:16:13  tbe
- *  added progressbar properties
- *
- *  Revision 1.14  2001/04/17 10:06:29  fs
- *  grammar
- *
- *  Revision 1.13  2001/04/12 07:24:54  kz
- *  Merge SRC627: 12.04.01 - 10:24:48
- *
- *  Revision 1.12  2001/04/06 07:39:29  kz
- *  Merge SRC627: 06.04.01 - 09:38:59
- *
- *  Revision 1.11  2001/04/03 19:24:41  kz
- *  Merge SRC627: 03.04.01 - 22:25:35
- *
- *  Revision 1.10  2001/03/31 06:06:03  kz
- *  Merge SRC627: 31.03.01 - 08:05:26 (NoBranch)
- *
- *  Revision 1.9  2001/03/21 15:38:09  fs
- *  #82696# new font dialog
- *
- *  Revision 1.8  2001/03/20 16:33:11  fs
- *  removed some english duplicates
- *
- *  Revision 1.7  2001/03/09 20:46:22  kz
- *  Merge SRC624: 09.03.01 - 21:46:00 (NoBranch)
- *
- *  Revision 1.6  2001/03/07 14:36:18  tbe
- *  added step property
- *
- *  Revision 1.5  2001/03/02 16:28:47  tbe
- *  added title property
- *
- *  Revision 1.4  2001/02/22 09:32:15  tbe
- *  added properties for dialog controls
- *
- *  Revision 1.3  2001/02/05 09:33:13  fs
- *  #83424# +RID_STR_ENUM_SUBMIT_TARGET
- *
- *  Revision 1.2  2001/01/17 08:43:01  fs
- *  #82726# renamed the display text for the navigation bar
- *
- *  Revision 1.1  2001/01/12 11:28:49  fs
- *  initial checkin - outsourced the form property browser
- *
- *
- *  Revision 1.0 08.01.01 14:53:11  fs
- ************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_STR_BOUND_CELL
+{
+    Text = "Verknüpfte Zelle";
+    Text [ english ]= "Linked cell";
+    Text [ english_us ]= "Linked cell";
+};
+
+String RID_STR_LIST_CELL_RANGE
+{
+    Text = "Quellzellenbereich";
+    Text [ english ]= "Source cell range";
+    Text [ english_us ]= "Source cell range";
+};
+
+String RID_STR_CELL_EXCHANGE_TYPE
+{
+    Text = "Inhalt der verknüpften Zelle";
+    Text [ english ] = "Contents of the linked cell";
+    Text [ english_us ] = "Contents of the linked cell";
+};
+
+String RID_STR_ENUM_CELL_EXCHANGE_TYPE
+{
+    Text = "Der ausgewählte Eintrag;Position des ausgewählten Eintrags";
+    Text [ english ] = "The selected entry;Position of the selected entry";
+};
 
