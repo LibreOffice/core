@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckOption.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 // DocMerge from idl: constants com::sun::star::sdbcx::CheckOption
 /** determines the check option for a view.
  */
-constants CheckOption
+published constants CheckOption
 {
 
     // DocMerge from idl: value com::sun::star::sdbcx::CheckOption::NONE
