@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:12:11 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,6 +1002,130 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
     //_exit( 333 );
 }
 
+/*
+ * Save all open documents so they will be reopened
+ * the next time the application ist started
+ *
+ * returns sal_True if at least one document could be saved...
+ *
+ */
+
+sal_Bool Desktop::SaveTasks(sal_Int32 options)
+{
+    sal_Bool bReturn = sal_False;
+
+    if( Application::IsInExecute() &&
+            (options & DESKTOP_SAVETASKS_MOD ||
+             options & DESKTOP_SAVETASKS_UNMOD) )
+    {
+        // get backup path
+        String aSavePath( SvtPathOptions().GetBackupPath() );
+        SvtInternalOptions aOpt;
+
+        // iterate tasks
+        Reference< ::com::sun::star::frame::XFramesSupplier >
+                xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                UNO_QUERY );
+        Reference< ::com::sun::star::frame::XFrame > xTask;
+        Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+        sal_Int32 nCount = xList->getCount();
+        bReturn = sal_True;
+
+        for( sal_Int32 i=0; i<nCount; ++i )
+        {
+            ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
+            if ( !(aVal>>=xTask) || !xTask.is() )
+                continue;
+            try
+            {
+                // ask for controller
+                Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
+                if ( xCtrl.is() )
+                {
+                    // ask for model
+                    Reference< ::com::sun::star::frame::XModel > xModel( xCtrl->getModel(), UNO_QUERY );
+                    Reference< ::com::sun::star::util::XModifiable > xModifiable( xModel, UNO_QUERY );
+
+                    // get URL and Name
+                    OUString aOrigURL = xModel->getURL();
+                    OUString aOldName = INetURLObject(aOrigURL).GetMainURL(
+                            INetURLObject::DECODE_WITH_CHARSET);
+
+                    // get the media descriptor and retrieve filter name and password
+                    OUString aOrigPassword, aOrigFilterName, aTitle;
+                    Sequence < PropertyValue > aArgs( xModel->getArgs() );
+                       sal_Int32 nProps = aArgs.getLength();
+                       for ( sal_Int32 nProp = 0; nProp<nProps; nProp++ )
+                       {
+                           const PropertyValue& rProp = aArgs[nProp];
+                        if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+                            rProp.Value >>= aOrigFilterName;
+                        if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
+                            rProp.Value >>= aOrigPassword;
+                        if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
+                            rProp.Value >>= aTitle;
+                    }
+
+                    // store modified tasks to backup dir
+                    if ( xModifiable.is() && xModifiable->isModified() && (options & DESKTOP_SAVETASKS_MOD))
+                    {
+                        Reference< ::com::sun::star::frame::XStorable > xStor( xModel, UNO_QUERY );
+                        if ( xStor.is() )
+                        {
+                            OUString aSaveURL;
+                            // save document as tempfile in backup directory
+                            // remember old name or title
+                            if ( aOrigURL.getLength() )
+                            {
+                                ::utl::TempFile aTempFile( &aSavePath );
+                                aSaveURL = aTempFile.GetURL();
+                            }
+                            else
+                            {
+                                // untitled document
+                                String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
+                                ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ),
+                                        &aExt, &aSavePath );
+                                aSaveURL = aTempFile.GetURL();
+                                aOldName = aTitle;
+                            }
+
+                            if ( aOrigPassword.getLength() )
+                            {
+                                // if the document was loaded with a password, it should be
+                                // stored with password
+                                Sequence < PropertyValue > aSaveArgs(1);
+                                aSaveArgs[0].Name = DEFINE_CONST_UNICODE("Password");
+                                aSaveArgs[0].Value <<= aOrigPassword;
+
+                                xStor->storeToURL(aSaveURL, aSaveArgs);
+                            }
+                            else
+                                xStor->storeToURL(aSaveURL, Sequence < PropertyValue >());
+
+                            // remember original name and filter
+                            aOpt.PushRecoveryItem(aOldName, aOrigFilterName, aSaveURL);
+                            bReturn = sal_True;
+                        }
+                    } else if (options & DESKTOP_SAVETASKS_UNMOD) {
+                        // remember saved item
+                        aOpt.PushRecoveryItem(aOldName, aOrigFilterName, aOldName);
+                        bReturn = sal_True;
+                    }
+                }
+            } catch (::com::sun::star::uno::Exception&) {
+                // not much we can do
+                // we continue and try to save other documents
+            }
+        } // for...
+        // store configuration data
+        ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+    } // if...
+
+    return bReturn;
+}
+
 USHORT Desktop::Exception(USHORT nError)
 {
     // protect against recursive calls
@@ -1022,109 +1146,15 @@ USHORT Desktop::Exception(USHORT nError)
     CommandLineArgs* pArgs = GetCommandLineArgs();
 
     // save all modified documents
-    if( Application::IsInExecute() )
-    {
-        // store to backup path
-        String aSavePath( SvtPathOptions().GetBackupPath() );
-        SvtInternalOptions aOpt;
-
-        // iterate tasks
-        Reference< ::com::sun::star::frame::XFramesSupplier >
-                xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
-                UNO_QUERY );
-        Reference< ::com::sun::star::frame::XFrame > xTask;
-        Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
-        sal_Int32 nCount = xList->getCount();
-        for( sal_Int32 i=0; i<nCount; ++i )
-        {
-            ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
-            if ( !(aVal>>=xTask) || !xTask.is() )
-                continue;
-
-            try
-            {
-                // ask for controller
-                Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
-                if ( xCtrl.is() )
-                {
-                    // ask for model
-                    Reference< ::com::sun::star::frame::XModel > xModel( xCtrl->getModel(), UNO_QUERY );
-                    Reference< ::com::sun::star::util::XModifiable > xModifiable( xModel, UNO_QUERY );
-                    if ( xModifiable.is() && xModifiable->isModified() )
-                    {
-                        // ask if modified
-                        Reference< ::com::sun::star::frame::XStorable > xStor( xModel, UNO_QUERY );
-                        if ( xStor.is() )
-                        {
-                            // get the media descriptor and retrieve filter name and password
-                            ::rtl::OUString aOrigPassword, aOrigFilterName, aTitle;
-                            Sequence < PropertyValue > aArgs( xModel->getArgs() );
-                            sal_Int32 nProps = aArgs.getLength();
-                            for ( sal_Int32 nProp = 0; nProp<nProps; nProp++ )
-                            {
-                                const PropertyValue& rProp = aArgs[nProp];
-                                if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
-                                    rProp.Value >>= aOrigFilterName;
-                                if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
-                                    rProp.Value >>= aOrigPassword;
-                                if( rProp.Name == OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
-                                    rProp.Value >>= aTitle;
-                            }
-
-                            // save document as tempfile in backup directory
-                            // remember old name or title
-                            ::rtl::OUString aOrigURL = xModel->getURL();
-                            ::rtl::OUString aOldName, aSaveURL;
-                            if ( aOrigURL.getLength() )
-                            {
-                                ::utl::TempFile aTempFile( &aSavePath );
-                                aSaveURL = aTempFile.GetURL();
-                                aOldName = INetURLObject( aOrigURL ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-                            }
-                            else
-                            {
-                                // untitled document
-                                String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
-                                ::utl::TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
-                                aSaveURL = aTempFile.GetURL();
-                                aOldName = aTitle;
-                            }
-
-                            if ( aOrigPassword.getLength() )
-                            {
-                                // if the document was loaded with a password, it should be stored with password
-                                Sequence < PropertyValue > aSaveArgs(1);
-                                aSaveArgs[0].Name = DEFINE_CONST_UNICODE("Password");
-                                aSaveArgs[0].Value <<= aOrigPassword;
-
-                                xStor->storeToURL( aSaveURL, aSaveArgs );
-                            }
-                            else
-                                xStor->storeToURL( aSaveURL, Sequence < PropertyValue >() );
-
-                            // remember original name and filter
-                            aOpt.PushRecoveryItem(  aOldName, aOrigFilterName, aSaveURL );
-                            bRecovery = TRUE;
-                        }
-                    }
-                }
-            }
-            // ignore tasks, which are realy dead.
-            // They can't be recovered ... but may some follow ones.
-            catch( ::com::sun::star::uno::Exception& )
-            {}
-        }
-
-        if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
+    SaveTasks(DESKTOP_SAVETASKS_MOD);
+    if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
             WarningBox( NULL, DesktopResId(STR_RECOVER_PREPARED) ).Execute();
-    }
-
-    // store configuration data
-    ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 
     // because there is no method to flush the condiguration data, we must dispose the ConfigManager
+    /*
     Reference < XComponent > xComp( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
     xComp->dispose();
+    */
 
     switch( nError & EXC_MAJORTYPE )
     {
@@ -1661,7 +1691,7 @@ void Desktop::EnableOleAutomation()
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.bridge.OleApplicationRegistration"));
     xSMgr->createInstance(DEFINE_CONST_UNICODE("com.sun.star.comp.ole.EmbedServer"));
-#endif
+#endif"SaveDocuments"
 }
 
 sal_Bool Desktop::CheckOEM()
@@ -1712,10 +1742,15 @@ void Desktop::OpenClients()
                 ::com::sun::star::uno::UNO_QUERY );
 
         // create the parameter array
-        Sequence < PropertyValue > aArgs( 3 );
+        Sequence < PropertyValue > aArgs( 1 );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
-        aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
-        aArgs[2].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
+        // only set if file is realy salvaged
+        if (sName != sTempName)
+        {
+            aArgs.realloc(3);
+            aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            aArgs[2].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
+        }
 
         // mark it as a user request
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
@@ -1741,17 +1776,20 @@ void Desktop::OpenClients()
                 case RET_YES:
                 {
                     // recover a file
-                    if ( bIsURL )
+                    if ( sName != sTempName )
                     {
-                        // get the original URL for the recovered document
-                        aArgs[1].Value <<= sal_False;
-                        aArgs[2].Value <<= ::rtl::OUString( sRealFileName );
-                    }
-                    else
-                    {
-                        // this was an untitled document ( open as template )
-                        aArgs[1].Value <<= sal_True;
-                        aArgs[2].Value <<= ::rtl::OUString();
+                        if ( bIsURL )
+                        {
+                            // get the original URL for the recovered document
+                            aArgs[1].Value <<= sal_False;
+                            aArgs[2].Value <<= ::rtl::OUString( sRealFileName );
+                        }
+                        else
+                        {
+                            // this was an untitled document ( open as template )
+                            aArgs[1].Value <<= sal_True;
+                            aArgs[2].Value <<= ::rtl::OUString();
+                        }
                     }
 
                     // load the document
@@ -1795,21 +1833,24 @@ void Desktop::OpenClients()
                 case RET_NO:
                 {
                     // skip this file
-                    ::utl::UCBContentHelper::Kill( sTempFileName );
+                    if ( sName != sTempName )
+                        ::utl::UCBContentHelper::Kill( sTempFileName );
                     break;
                 }
 
                 case RET_CANCEL:
                 {
                     // cancel recovering
-                    ::utl::UCBContentHelper::Kill( sTempFileName );
+                    if ( sName != sTempName )
+                        ::utl::UCBContentHelper::Kill( sTempFileName );
                     bUserCancel = sal_True;
 
                     // delete recovery list and all files
                     while( aInternalOptions.IsRecoveryListEmpty() == sal_False )
                     {
                         aInternalOptions.PopRecoveryItem( sName, sFilter, sTempName );
-                        ::utl::UCBContentHelper::Kill( sTempName );
+                        if ( sName != sTempName )
+                            ::utl::UCBContentHelper::Kill( sTempName );
                     }
 
                     break;
@@ -2153,6 +2194,11 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         // try to remove corresponding acceptor
         OUString aUnAcceptString(rAppEvent.GetData().GetBuffer());
         destroyAcceptor(aUnAcceptString);
+    }
+    else if ( rAppEvent.GetEvent() == "SaveDocuments" )
+    {
+        SaveTasks(DESKTOP_SAVETASKS_ALL);
+        // SaveTasks(DESKTOP_SAVETASKS_MOD);
     }
 #ifndef UNX
     else if ( rAppEvent.GetEvent() == "HELP" )
