@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-14 19:03:07 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ Text[ swedish ] = "sweden.bmp";
     Text[ polish ] = "polska.bmp";
     Text[ portuguese_brazilian ] = "usa.bmp";
     Text[ japanese ] = "japan.bmp";
-    Text[ korean ] = "korea.bmp";
+    Text[ korean ] = "germany.wmf";
     Text[ chinese_simplified ] = "china.bmp";
     Text[ chinese_traditional ] = "taiwan.bmp";
     Text[ arabic ] = "egypt.bmp";
@@ -1364,6 +1364,7 @@ Text[ English_us ] = "Progress:";
     Text[ catalan ] = "Progreso:";
     Text[ finnish ] = "Tilanne:";
 };
+
 
 
 
