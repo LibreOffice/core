@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:15:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,8 +786,10 @@ void SwLayAction::InternalAction()
         Window *pWin = pImp->GetShell()->GetWin();
         if ( pWin )
         {
-            pWin->Push( PUSH_FILLCOLOR );
+            // OD 2004-04-23 #116347#
+            pWin->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pWin->SetFillColor( COL_WHITE );
+            pWin->SetLineColor();
             Point aOfst( pImp->GetShell()->VisArea().Pos() );
             pWin->DrawRect( Rectangle( aOfst, Size( 2000, 1000 )));
             pWin->DrawText( Point( 500, 500 ) + aOfst, pPage->GetPhyPageNum() );
@@ -2841,8 +2843,10 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
         {
             Rectangle aRect( 0, 0, 5, 5 );
             aRect = pWin->PixelToLogic( aRect );
-            pWin->Push( PUSH_FILLCOLOR );
+            // OD 2004-04-23 #116347#
+            pWin->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pWin->SetFillColor( eColorData );
+            pWin->SetLineColor();
             pWin->DrawRect( aRect );
             pWin->Pop();
         }
