@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:40:36 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@ extern "C"
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
 // ---------------
@@ -785,6 +789,90 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
 
 void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const
 {
+    // Convert to B2DPolyPolygon, temporarily. It might be
+    // advantageous in the future, to have a PolyPolygon adaptor that
+    // just simulates a B2DPolyPolygon here...
+    ::basegfx::B2DPolyPolygon aMergePolyPolygonA( getB2DPolyPolygon() );
+    ::basegfx::B2DPolyPolygon aMergePolyPolygonB( rPolyPoly.getB2DPolyPolygon() );
+
+    // normalize the two polypolygons before. Force properly oriented
+    // polygons.
+    if( aMergePolyPolygonA.areControlPointsUsed() )
+        aMergePolyPolygonA = ::basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonA);
+    ::basegfx::tools::correctOrientations( aMergePolyPolygonA );
+
+    if( aMergePolyPolygonB.areControlPointsUsed() )
+        aMergePolyPolygonB = ::basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonB);
+    ::basegfx::tools::correctOrientations( aMergePolyPolygonB );
+
+    switch( nOperation )
+    {
+        // All code extracted from svx/source/svdraw/svedtv2.cxx
+        // -----------------------------------------------------
+
+        case GPC_UNION:
+        {
+            // simple merge all contained parts (OR)
+            aMergePolyPolygonA.append(aMergePolyPolygonB);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            break;
+        }
+
+        case GPC_DIFF:
+        {
+            // take selected poly 2..n (is in Polygon B), merge them, flipdirections
+            // and merge with poly 1
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonB, sal_False);
+            aMergePolyPolygonB.flip();
+            aMergePolyPolygonA.append(aMergePolyPolygonB);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+
+            // #72995# one more call to resolve self intersections which
+            // may have been built by substracting (see bug)
+            //aMergePolyPolygonA.Merge(FALSE);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            break;
+        }
+
+        case GPC_XOR:
+        {
+            // compute XOR between poly A and B. As basegfx clipper
+            // has no direct support for this, we first compute the
+            // intersection and the union of the two polygons, and
+            // then subtract the intersection from the union
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonB, sal_False);
+            ::basegfx::B2DPolyPolygon aAintersectsB( aMergePolyPolygonA );
+
+            // A /\ B
+            aAintersectsB.append(aMergePolyPolygonB);
+            ::basegfx::tools::removeIntersections(aAintersectsB, sal_False, sal_True);
+
+            // A + B
+            aMergePolyPolygonA.append(aMergePolyPolygonB);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+
+            // (A+B) \ (A/\B)
+            aAintersectsB.flip();
+            aMergePolyPolygonA.append(aAintersectsB);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            break;
+        }
+
+        default:
+        case GPC_INT:
+        {
+            // cut poly 1 against polys 2..n (AND)
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonB, sal_False);
+            aMergePolyPolygonA.append(aMergePolyPolygonB);
+            ::basegfx::tools::removeIntersections(aMergePolyPolygonA, sal_False, sal_True);
+            break;
+        }
+    }
+
+    rResult = PolyPolygon( aMergePolyPolygonA );
 }
 
 #endif // HAVE_LIBART_H
