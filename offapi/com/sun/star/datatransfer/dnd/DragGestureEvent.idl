@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragGestureEvent.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-07 14:35:19 $
+ *  last change: $Author: obr $ $Date: 2001-02-20 09:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,6 @@
 #ifndef __com_sun_star_datatransfer_dnd_DragGestureEvent_idl__
 #define __com_sun_star_datatransfer_dnd_DragGestureEvent_idl__
 
-#ifndef __com_sun_star_awt_Point_idl__
-#include <com/sun/star/awt/Point.idl>
-#endif
-
-#ifndef __com_sun_star_awt_InputEvent_idl__
-#include <com/sun/star/awt/InputEvent.idl>
-#endif
-
 #ifndef __com_sun_star_lang_EventObject_idl__
 #include <com/sun/star/lang/EventObject.idl>
 #endif
@@ -92,13 +84,20 @@ struct DragGestureEvent: com::sun::star::lang::EventObject
     //-------------------------------------------------------------------------
     /** the action selected by the user.
      */
+
     byte DragAction;
 
     //-------------------------------------------------------------------------
-    /** the Point where the drag originated in Component coords.
+    /** the x coordinate where the drag originated in Component coords.
      */
 
-    com::sun::star::awt::Point DragOrigin;
+    long DragOriginX;
+
+    //-------------------------------------------------------------------------
+    /** the y coordinate where the drag originated in Component coords.
+     */
+
+    long DragOriginY;
 
     //-------------------------------------------------------------------------
     /** the DragSource associated with this drag action.
