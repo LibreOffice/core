@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-11 10:48:06 $
+ *  last change: $Author: fs $ $Date: 2002-11-14 10:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,7 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
 void SvxIMapDlg::DoOpen()
 {
-       sfx2::FileDialogHelper aDlg( FILEOPEN_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
 
     ImageMap        aLoadIMap;
     const String    aFilter( DEFINE_CONST_UNICODE( IMAP_ALL_FILTER ) );
@@ -722,7 +722,7 @@ void SvxIMapDlg::DoOpen()
 
 BOOL SvxIMapDlg::DoSave()
 {
-       sfx2::FileDialogHelper aDlg( FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
 
     const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
     const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );

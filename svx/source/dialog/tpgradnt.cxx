@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-23 07:24:34 $
+ *  last change: $Author: fs $ $Date: 2002-11-14 10:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,7 +707,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
 
     if ( nReturn != RET_CANCEL )
     {
-        sfx2::FileDialogHelper aDlg( FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
         String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
         INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -796,7 +796,7 @@ IMPL_LINK( SvxGradientTabPage, ClickLoadHdl_Impl, void *, p )
 
 IMPL_LINK( SvxGradientTabPage, ClickSaveHdl_Impl, void *, p )
 {
-       sfx2::FileDialogHelper aDlg( FILESAVE_SIMPLE, 0 );
+       ::sfx2::FileDialogHelper aDlg( ::sfx2::FILESAVE_SIMPLE, 0 );
     String aStrFilterType( RTL_CONSTASCII_USTRINGPARAM( "*.sog" ) );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
