@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-28 11:07:44 $
+ *  last change: $Author: cl $ $Date: 2001-03-06 17:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,10 @@
 #include "txtprmap.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLCLIPPROPERTYHANDLER_HXX
+#include "XMLClipPropertyHandler.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -279,6 +283,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "AdjustRed",                      XML_NAMESPACE_DRAW, sXML_red,                   XML_TYPE_PERCENT16, 0 },        // signed?
     { "AdjustGreen",                    XML_NAMESPACE_DRAW, sXML_green,                 XML_TYPE_PERCENT16, 0 },        // signed?
     { "AdjustBlue",                     XML_NAMESPACE_DRAW, sXML_blue,                  XML_TYPE_PERCENT16, 0 },        // signed?
+    { "GraphicCrop",                    XML_NAMESPACE_FO,   sXML_clip,                  XML_TYPE_TEXT_CLIP, 0 },
 
     // animation text attributes
     { "TextAnimationKind",              XML_NAMESPACE_STYLE,sXML_text_blinking,         XML_TYPE_TEXT_ANIMATION_BLINKING|MID_FLAG_MULTI_ATTRIBUTE, CTF_TEXTANIMATION_BLINKING },
@@ -849,11 +854,15 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLEnumPropertyHdl( pXML_Measure_VAlign_Enum, ::getCppuType((const com::sun::star::drawing::MeasureTextVertPos*)0) );
                 break;
             case XML_SD_TYPE_MEASURE_PLACING:
-                const OUString aTrueStr( OUString::createFromAscii(sXML_below) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_above) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                {
+                    const OUString aTrueStr( OUString::createFromAscii(sXML_below) );
+                    const OUString aFalseStr( OUString::createFromAscii(sXML_above) );
+                    pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                }
                 break;
-
+            case XML_TYPE_TEXT_CLIP:
+                pHdl = new XMLClipPropertyHandler;
+                break;
         }
 
         if(pHdl)
