@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:37:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,6 @@
 #ifndef SC_COMPILER_HXX
 #include "compiler.hxx"
 #endif
-
-
-#include "excdefs.hxx"
 
 
 // ============================================================================
