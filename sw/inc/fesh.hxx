@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:19:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,8 @@ public:
                           const Point &rPt );
 
     // --> FME 2004-07-30 #i20126# Enhanced table selection
-    bool SelTblRowCol( const Point& rPt );
+    // pEnd will be used during MouseMove
+    bool SelTblRowCol( const Point& rPt, const Point* pEnd = 0 );
     // <--
 
     // #i24134# adjustment of table rows via Ruler
