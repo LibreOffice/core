@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 09:25:56 $
+ *  last change: $Author: vg $ $Date: 2001-07-17 20:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,7 @@ ModalDialog RID_FONTSIZEDIALOG
     Text[ russian ] = "Ğàçìåğû øğèôòà";
     Text[ polish ] = "Rozmiar czcionek";
     Text[ japanese ] = "Ì«İÄ»²½Ş";
-    Text[ chinese_traditional ] = "¦r«¬";
+    Text[ chinese_traditional ] = "¦r«¬¤j¤p";
     Text[ arabic ] = "ÃÍÌÇã ÇáÎØ";
     Text[ greek ] = "Ìİãåèïò ãñáììáôïóåéñÜò";
     Text[ korean ] = "±Û²Ã Å©±â";
@@ -4864,11 +4864,11 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ dutch ] = "Aaneenschakeling";
                 TEXT[ spanish ] = "Encadenamiento";
                 TEXT[ english_us ] = "Concatenate";
-    TEXT[ chinese_simplified ] = "Á¬Ëø";
+    TEXT[ chinese_simplified ] = "Á¬½á";
                 TEXT[ russian ] = "Ñâÿçûâàíèå";
                 TEXT[ polish ] = "Z³¹czenie";
                 TEXT[ japanese ] = "˜AŒ‹";
-                TEXT[ chinese_traditional ] = "³sÂê";
+                TEXT[ chinese_traditional ] = "³sµ²";
                 TEXT[ arabic ] = "ÓóáÓóáÉ";
                 TEXT[ greek ] = "Äçìéïõñãßá áëëçëïõ÷ßáò";
                 TEXT[ korean ] = "¿¬°á";
@@ -7481,6 +7481,26 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_ACUTEX ;
                 Text = "Akzent nach rechts oben" ;
                 Text [ ENGLISH ] = "Accent to the upper-right" ;
+                Text[ english_us ] = "Accent To The Right";
+                Text[ portuguese ] = "Acento para a direita";
+                Text[ russian ] = "Óäàğåíèå âïğàâî";
+                Text[ greek ] = "Ôüíïò ğñïò ôá äåîéÜ";
+                Text[ dutch ] = "Accent naar rechts";
+                Text[ french ] = "Accent aigu";
+                Text[ spanish ] = "Acento hacia la derecha";
+                Text[ finnish ] = "Aksenttimerkki oikealla";
+                Text[ italian ] = "Accento verso destra";
+                Text[ danish ] = "accent aigu";
+                Text[ swedish ] = "Accent till höger";
+                Text[ polish ] = "Akcent w prawo";
+                Text[ portuguese_brazilian ] = "Accent nach rechts";
+                Text[ japanese ] = "±·­°Ä";
+                Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ¾Ç¼¾Æ®";
+                Text[ chinese_simplified ] = "ÓÒÏòÖØÒô×ÖÄ¸";
+                Text[ chinese_traditional ] = "¥k¦V­«­µ¦r¥À";
+                Text[ turkish ] = "Sağa vurgu";
+                Text[ arabic ] = "ÇáÚáÇãÉ ÇáäØŞíÉ Åáì Çáíãíä";
+                Text[ catalan ] = "Acento hacia la derecha";
             };
             ToolBoxItem
             {
@@ -7488,6 +7508,26 @@ FloatingWindow RID_TOOLBOXWINDOW
                 HelpId = HID_SMA_GRAVEX ;
                 Text = "Akzent nach rechts unten" ;
                 Text [ ENGLISH ] = "Accent to the lower-right" ;
+                Text[ english_us ] = "Accent To The Left";
+                Text[ portuguese ] = "Acento grave";
+                Text[ russian ] = "Óäàğåíèå âëåâî";
+                Text[ greek ] = "Ôüíïò ğñïò ôá áñéóôåñÜ";
+                Text[ dutch ] = "Accent naar links";
+                Text[ french ] = "Accent grave";
+                Text[ spanish ] = "Acento hacia la izquierda";
+                Text[ finnish ] = "Aksenttimerkki vasemmalla";
+                Text[ italian ] = "Accento verso sinistra";
+                Text[ danish ] = "accent grave";
+                Text[ swedish ] = "Accent till vänster";
+                Text[ polish ] = "Akcent w lewo";
+                Text[ portuguese_brazilian ] = "Accent nach links";
+                Text[ japanese ] = "¸ŞÚ°ÌŞ";
+                Text[ korean ] = "¾Ç¼¾Æ® ¿ŞÂÊÀ¸·Î";
+                Text[ chinese_simplified ] = "×óÏòÖØÒô·ûºÅ";
+                Text[ chinese_traditional ] = "¥ª¦V­«­µ²Å¸¹";
+                Text[ turkish ] = "Sola vurgu";
+                Text[ arabic ] = "ÇáÚáÇãÉ ÇáäØŞíÉ Åáì ÇáíÓÇÑ";
+                Text[ catalan ] = "Acento hacia la izquierda";
             };
             ToolBoxItem
             {
@@ -8085,7 +8125,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "modificer skrifttype" ;
                 Text [ italian ] = "Cambia font" ;
                 Text [ spanish ] = "Cambiar fuente" ;
-                Text [ french ] = "Modifier la fonte" ;
+                Text [ french ] = "Modifier la police" ;
                 Text [ dutch ] = "Lettertype veranderen" ;
                 Text [ portuguese ] = "Modificar tipo de letra" ;
                 Text[ chinese_simplified ] = "¸ü¸Ä×ÖÌå";
@@ -11162,6 +11202,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
